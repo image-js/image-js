@@ -7,6 +7,7 @@ Get inspired:
 * http://inspirit.github.io/jsfeat/#imgproc
 * ImageJ
 * http://imagejs.org
+* http://camanjs.com/
 * 
 
 
