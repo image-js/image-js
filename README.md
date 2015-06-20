@@ -10,6 +10,9 @@ Get inspired:
 * http://camanjs.com/
 * 
 
+Webworkers:
+* http://blogs.msdn.com/b/eternalcoding/archive/2012/09/20/using-web-workers-to-improve-performance-of-image-manipulation.aspx
+
 
 
 
