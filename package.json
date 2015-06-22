@@ -1,0 +1,32 @@
+{
+  "name": "ij",
+  "version": "0.0.1",
+  "description": "Image manipulation in JavaScript",
+  "keywords": [
+    "image",
+    "analysis",
+    "histogram",
+    "rgb",
+    "hsb",
+    "hsl"
+  ],
+  "author": "Michaël Zasso",
+  "contributors": [
+    "Luc Patiny"
+  ],
+  "repository": "image-js/ij",
+  "bugs": {
+    "url": "https://github.com/image-js/ij/issues"
+  },
+  "homepage": "https://github.com/image-js/ij",
+  "license": "MIT",
+  "main": "./src/ij.js",
+  "scripts": {
+    "test": "mocha --require should --reporter mocha-better-spec-reporter --recursive"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "mocha-better-spec-reporter": "^2.1.1",
+    "should": "^7.0.1"
+  }
+}
