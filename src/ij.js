@@ -1,34 +1,61 @@
 'use strict';
 
-var Types = require('./types');
-var canvas = require('./canvas');
-var Image = canvas.Image;
-var Canvas = canvas.Canvas;
+import Types from './types';
+import {Image, ImageData, Canvas} from './canvas';
+import extend from './extend';
 
-function IJ(width, height, data) {
-    this.width = width;
-    this.height = height;
-    this.data = data;
+export default class IJ {
+    constructor(width, height, data) {
+        this.width = width;
+        this.height = height;
+
+        this.components = 3;
+        this.alpha = false;
+        this.bitDepth = 8;
+
+        this.data = data;
+    }
+
+    static load(url) {
+        return new Promise(function (resolve, reject) {
+            let image = new Image();
+
+            // see https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
+            image.crossOrigin = 'Anonymous';
+
+            image.onload = function () {
+                let w = image.width, h = image.height;
+                let canvas = new Canvas(w, h);
+                let ctx = canvas.getContext('2d');
+                ctx.drawImage(image, 0, 0, w, h);
+                let data = ctx.getImageData(0, 0, w, h).data;
+                resolve(new IJ(w, h, data));
+            };
+            image.onerror = reject;
+            image.src = url;
+        });
+    }
+
+    toDataURL() {
+        let imgData = new ImageData(this.data, this.width, this.height);
+        let canvas = new Canvas(this.width, this.height);
+        let ctx = canvas.getContext('2d');
+        ctx.putImageData(imgData, 0, 0);
+        return canvas.toDataURL();
+    }
+
+    static extend(name, method, inplace = false) {
+        if (inplace) {
+            IJ.prototype[name] = function (...args) {
+                method(this, ...args);
+                return this;
+            };
+        } else {
+            IJ.prototype[name] = function (...args) {
+                return method(this, ...args);
+            };
+        }
+    }
 }
 
-IJ.load = function load(url) {
-    return new Promise(function (resolve, reject) {
-        var image = new Image();
-
-        // see https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
-        image.crossOrigin = 'Anonymous';
-
-        image.onload = function () {
-            var w = image.width, h = image.height;
-            var canvas = new Canvas(w, h);
-            var ctx = canvas.getContext('2d');
-            ctx.drawImage(image, 0, 0, w, h);
-            var data = ctx.getImageData(0, 0, w, h).data;
-            resolve(new IJ(w, h, data));
-        };
-        image.onerror = reject;
-        image.src = url;
-    });
-};
-
-module.exports = IJ;
+extend(IJ);

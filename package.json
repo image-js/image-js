@@ -20,12 +20,21 @@
   },
   "homepage": "https://github.com/image-js/ij",
   "license": "MIT",
-  "main": "./src/ij.js",
+  "main": "./lib/ij.js",
+  "files": [
+    "./lib",
+    "./dist"
+  ],
   "scripts": {
-    "test": "mocha test/node/ij.js --require should --reporter mocha-better-spec-reporter --recursive",
-    "build": "mkdir -p dist && browserify src/ij.js -o dist/ij.js --standalone IJ --exclude canvas"
+    "test": "npm run compile && npm run test-mocha",
+    "test-mocha": "mocha --require should --reporter mocha-better-spec-reporter --recursive test/node",
+    "build": "npm run compile && npm run browserify",
+    "browserify": "mkdir -p dist && browserify lib/ij.js -o dist/ij.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings",
+    "compile": "babel src --out-dir lib",
+    "prepublish": "npm run compile"
   },
   "devDependencies": {
+    "babel": "^5.6.4",
     "browserify": "^10.2.4",
     "mocha": "^2.2.5",
     "mocha-better-spec-reporter": "^2.1.1",
@@ -33,5 +42,8 @@
   },
   "optionalDependencies": {
     "canvas": "^1.2.3"
+  },
+  "dependencies": {
+    "ij-filter-invert": "0.0.1"
   }
 }
