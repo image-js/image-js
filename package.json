@@ -22,11 +22,16 @@
   "license": "MIT",
   "main": "./src/ij.js",
   "scripts": {
-    "test": "mocha --require should --reporter mocha-better-spec-reporter --recursive"
+    "test": "mocha test/node/ij.js --require should --reporter mocha-better-spec-reporter --recursive",
+    "build": "mkdir -p dist && browserify src/ij.js -o dist/ij.js --standalone IJ --exclude canvas"
   },
   "devDependencies": {
+    "browserify": "^10.2.4",
     "mocha": "^2.2.5",
     "mocha-better-spec-reporter": "^2.1.1",
     "should": "^7.0.1"
+  },
+  "optionalDependencies": {
+    "canvas": "^1.2.3"
   }
 }
