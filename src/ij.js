@@ -56,12 +56,12 @@ export default class IJ {
     static extend(name, method, inplace = false) {
         if (inplace) {
             IJ.prototype[name] = function (...args) {
-                method(this, ...args);
+                method.apply(this, args);
                 return this;
             };
         } else {
             IJ.prototype[name] = function (...args) {
-                return method(this, ...args);
+                return method.apply(this, args);
             };
         }
     }
