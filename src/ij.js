@@ -65,11 +65,6 @@ export default class IJ {
             };
         }
     }
-
-    // Node.js only. Exposes demo images for tests
-    static loadDemo(name) {
-        return IJ.load(__dirname + '/../img/' + name);
-    }
 }
 
 extend(IJ);
