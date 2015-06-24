@@ -53,6 +53,10 @@ export default class IJ {
         return new IJ(this.width, this.height, newData);
     }
 
+    newIJ(...args) {
+        return new IJ(...args);
+    }
+
     static extend(name, method, inplace = false) {
         if (inplace) {
             IJ.prototype[name] = function (...args) {
