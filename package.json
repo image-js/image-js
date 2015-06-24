@@ -44,6 +44,6 @@
     "canvas": "^1.2.3"
   },
   "dependencies": {
-    "ij-filter-invert": "0.0.2"
+    "ij-filter-invert": "0.0.3"
   }
 }
