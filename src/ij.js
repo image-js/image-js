@@ -1,7 +1,7 @@
 'use strict';
 
 import Types from './types';
-import {Image, ImageData, Canvas} from './canvas';
+import {Image, ImageData, Canvas, PixelArray} from './canvas';
 import extend from './extend';
 
 export default class IJ {
@@ -42,6 +42,15 @@ export default class IJ {
         let ctx = canvas.getContext('2d');
         ctx.putImageData(imgData, 0, 0);
         return canvas.toDataURL();
+    }
+
+    clone() {
+        let data = this.data;
+        let newData = PixelArray(this.width, this.height);
+        for (let i = 0; i < newData.length; i++) {
+            newData[i] = data[i];
+        }
+        return new IJ(this.width, this.height, newData);
     }
 
     static extend(name, method, inplace = false) {
