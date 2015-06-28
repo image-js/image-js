@@ -30,7 +30,7 @@ Notes:
   It is therefore necessary to have the compiler.
   On OsX you will have to instlal xcode and start it once to accept the licence.
 * in order to test you need to install the npm 'canvas'.
-  On OsX you should first install brew and then
+  On OsX you should first install brew (http://brew.sh/) and then
 ````
 brew update
 brew install cairo
