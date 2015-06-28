@@ -23,6 +23,24 @@ git clone git@github.com:image-js/ij.git
 cd ij
 npm install
 ```
+
+
+Notes:
+* npm install may require the compilation of some code.
+  It is therefore necessary to have the compiler.
+  On OsX you will have to instlal xcode and start it once to accept the licence.
+* in order to test you need to install the npm 'canvas'.
+  On OsX you should first install brew and then
+````
+brew update
+brew install cairo
+brew link pixman
+brew link cairo
+## and then from the image-js/ij folder
+npm install canvas
+```
+
+
 ### Other projects installation
 
 For each other project you should do:
@@ -35,8 +53,4 @@ npm install
 npm run test
 ```
 
-
-Notes:
-* npm install may require the compilation of some code. It is therefore necessary to have the compiler. On OsX you will have to instlal xcode and start it once to accept the licence.
-* in order to test you need to install the npm 'canvas'. On OsX the procedure is https://github.com/Automattic/node-canvas/wiki/installation---osx
 
