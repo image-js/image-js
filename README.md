@@ -23,7 +23,20 @@ git clone git@github.com:image-js/ij.git
 cd ij
 npm install
 ```
+### Other projects installation
+
+For each other project you should do:
+
+````
+cd image-js
+git clone git@github.com:image-js/filter-invert.git
+cd filter-invert
+npm install
+npm run test
+```
+
 
 Notes:
 * npm install may require the compilation of some code. It is therefore necessary to have the compiler. On OsX you will have to instlal xcode and start it once to accept the licence.
 * in order to test you need to install the npm 'canvas'. On OsX the procedure is https://github.com/Automattic/node-canvas/wiki/installation---osx
+
