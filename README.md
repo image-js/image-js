@@ -13,6 +13,7 @@ Image manipulation in JavaScript
 ## Developement
 
 * You will have first to install nodejs : https://nodejs.org/
+* For the developement we are using https://www.jetbrains.com/webstorm/
 * In order to be able to connect to github easily it is interesting to add your public SSH key in the preferences of your github account. Detailed procedure is available at https://help.github.com/articles/generating-ssh-keys/.
 * After you may clone and install the project from a console:
 
