@@ -5,6 +5,7 @@ const kinds = {};
 export const BINARY = 'BINARY';
 kinds[BINARY] = {
     components: 1,
+    channels: 1,
     alpha: false,
     bitDepth: 1
 };
@@ -12,6 +13,7 @@ kinds[BINARY] = {
 export const GREY8 = 'GREY8';
 kinds[GREY8] = {
     components: 1,
+    channels: 1,
     alpha: false,
     bitDepth: 8
 };
@@ -19,6 +21,7 @@ kinds[GREY8] = {
 export const GREY16 = 'GREY16';
 kinds[GREY16] = {
     components: 1,
+    channels: 1,
     alpha: false,
     bitDepth: 16
 };
@@ -26,13 +29,15 @@ kinds[GREY16] = {
 export const COLOR32 = 'COLOR32';
 kinds[COLOR32] = {
     components: 3,
+    channels: 4,
     alpha: true,
     bitDepth: 8
 };
 
 export const COLOR64 = 'COLOR64';
 kinds[COLOR64] = {
-    components: 1,
+    components: 3,
+    channels: 4,
     alpha: true,
     bitDepth: 16
 };
