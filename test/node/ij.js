@@ -1,11 +1,8 @@
 'use strict';
 
-var IJ = require('../..');
-var getImage = require('ij-test').getImage;
-
-function load(name) {
-    return IJ.load(getImage(name));
-}
+var common = require('../common');
+var IJ = common.IJ;
+var load = common.load;
 
 describe('IJ core', function () {
     it('constructor defaults', function () {

@@ -3,12 +3,12 @@
   "version": "0.0.1",
   "description": "Image manipulation in JavaScript",
   "keywords": [
-    "image",
     "analysis",
     "histogram",
-    "rgb",
     "hsb",
-    "hsl"
+    "hsl",
+    "image",
+    "rgb"
   ],
   "author": "Michaël Zasso",
   "contributors": [
@@ -22,16 +22,16 @@
   "license": "MIT",
   "main": "./lib/ij.js",
   "files": [
-    "./lib",
-    "./dist"
+    "./dist",
+    "./lib"
   ],
   "scripts": {
-    "test": "npm run compile && npm run test-mocha",
-    "test-mocha": "mocha --require should --reporter mocha-better-spec-reporter --recursive test/node",
+    "browserify": "mkdir -p dist && browserify lib/ij.js -o dist/ij.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --exclude fs",
     "build": "npm run compile && npm run browserify",
-    "browserify": "mkdir -p dist && browserify lib/ij.js -o dist/ij.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings",
     "compile": "babel src --out-dir lib",
-    "prepublish": "npm run compile"
+    "prepublish": "npm run compile",
+    "test": "npm run compile && npm run test-mocha",
+    "test-mocha": "mocha --require should --reporter mocha-better-spec-reporter --recursive test/node"
   },
   "devDependencies": {
     "babel": "^5.6.4",
@@ -39,6 +39,7 @@
     "ij-test": "^1.0.0",
     "mocha": "^2.2.5",
     "mocha-better-spec-reporter": "^2.1.1",
+    "rimraf": "^2.4.0",
     "should": "^7.0.1"
   },
   "optionalDependencies": {

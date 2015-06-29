@@ -3,6 +3,7 @@
 import {getKind, getPixelArray, COLOR32} from './kinds';
 import {Image, getImageData, Canvas} from './canvas';
 import extend from './extend';
+import {createWriteStream} from 'fs';
 
 export default class IJ {
     constructor(width, height, data, options) {
@@ -57,7 +58,7 @@ export default class IJ {
                 let ctx = canvas.getContext('2d');
                 ctx.drawImage(image, 0, 0, w, h);
                 let data = ctx.getImageData(0, 0, w, h).data;
-                resolve(new IJ(w, h, {data}));
+                resolve(new IJ(w, h, data));
             };
             image.onerror = reject;
             image.src = url;
@@ -78,11 +79,15 @@ export default class IJ {
     }
 
     toDataURL() {
+        return this.getCanvas().toDataURL();
+    }
+
+    getCanvas() {
         let data = getImageData(this.data, this.width, this.height);
         let canvas = new Canvas(this.width, this.height);
         let ctx = canvas.getContext('2d');
         ctx.putImageData(data, 0, 0);
-        return canvas.toDataURL();
+        return canvas;
     }
 
     clone() {
@@ -93,6 +98,28 @@ export default class IJ {
             newData[i] = data[i];
         }
         return nemImage;
+    }
+
+    save(path, {format = 'png'} = {}) { // Node.JS only
+        return new Promise((resolve, reject) => {
+            let out = createWriteStream(path);
+            let canvas = this.getCanvas();
+            let stream;
+            switch (format) {
+                case 'png':
+                    stream = canvas.pngStream();
+                    break;
+                case 'jpg':
+                case 'jpeg':
+                    stream = canvas.jpegStream();
+                    break;
+                default:
+                    return reject(new RangeError('invalid output format: ' + format));
+            }
+            out.on('finish', resolve);
+            out.on('error', reject);
+            stream.pipe(out);
+        });
     }
 }
 
