@@ -35,6 +35,8 @@ Notes:
 ````
 brew update
 brew install cairo
+brew install giflib
+brew install libjpeg
 brew link pixman
 brew link cairo
 ## and then from the image-js/ij folder
