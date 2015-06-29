@@ -1,17 +1,45 @@
 'use strict';
 
-import Types from './types';
-import {Image, ImageData, Canvas, PixelArray} from './canvas';
+import {getKind, getPixelArray, COLOR32} from './kinds';
+import {Image, getImageData, Canvas} from './canvas';
 import extend from './extend';
 
 export default class IJ {
-    constructor(width, height, data) {
+    constructor(width, height, data, options) {
+        if (width === undefined) width = 1;
+        if (height === undefined) height = 1;
+        if (data && !data.length) {
+            options = data;
+            data = null;
+        }
+        if (options === undefined) options = {};
+
+        let kind = options.kind || COLOR32;
+
+        if (!(width > 0))
+            throw new RangeError('width must be greater than 0');
+        if (!(height > 0))
+            throw new RangeError('height must be greater than 0');
+
+        let map = getKind(kind);
+        if (!map)
+            throw new RangeError('invalid image kind: ' + kind);
+
+        this.kind = kind;
+        this.components = map.components;
+        this.alpha = map.alpha;
+        this.bitDepth = map.bitDepth;
+
         this.width = width;
         this.height = height;
+        this.size = width * height;
 
-        this.components = 3;
-        this.alpha = false;
-        this.bitDepth = 8;
+        let length = width * height * (map.components + map.alpha);
+
+        if (!data)
+            data = getPixelArray(kind, length);
+        else if (data.length !== length)
+            throw new RangeError(`incorrect data size. Expected ${length} but got ${data.length}`);
 
         this.data = data;
     }
@@ -29,32 +57,11 @@ export default class IJ {
                 let ctx = canvas.getContext('2d');
                 ctx.drawImage(image, 0, 0, w, h);
                 let data = ctx.getImageData(0, 0, w, h).data;
-                resolve(new IJ(w, h, data));
+                resolve(new IJ(w, h, {data}));
             };
             image.onerror = reject;
             image.src = url;
         });
-    }
-
-    toDataURL() {
-        let imgData = new ImageData(this.data, this.width, this.height);
-        let canvas = new Canvas(this.width, this.height);
-        let ctx = canvas.getContext('2d');
-        ctx.putImageData(imgData, 0, 0);
-        return canvas.toDataURL();
-    }
-
-    clone() {
-        let data = this.data;
-        let newData = PixelArray(this.width, this.height);
-        for (let i = 0; i < newData.length; i++) {
-            newData[i] = data[i];
-        }
-        return new IJ(this.width, this.height, newData);
-    }
-
-    newIJ(...args) {
-        return new IJ(...args);
     }
 
     static extend(name, method, inplace = false) {
@@ -68,6 +75,24 @@ export default class IJ {
                 return method.apply(this, args);
             };
         }
+    }
+
+    toDataURL() {
+        let data = getImageData(this.data, this.width, this.height);
+        let canvas = new Canvas(this.width, this.height);
+        let ctx = canvas.getContext('2d');
+        ctx.putImageData(data, 0, 0);
+        return canvas.toDataURL();
+    }
+
+    clone() {
+        let nemImage = new IJ(this.width, this.height, {kind: this.kind});
+        let data = this.data;
+        let newData = nemImage.data;
+        for (let i = 0; i < newData.length; i++) {
+            newData[i] = data[i];
+        }
+        return nemImage;
     }
 }
 
