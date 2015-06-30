@@ -22,6 +22,7 @@ describe('IJ core', function () {
         return load('rgb8.png').then(function (img) {
             img.width.should.be.greaterThan(0);
             img.height.should.be.greaterThan(0);
+            img.maxValue.should.equal(255);
         });
     });
 

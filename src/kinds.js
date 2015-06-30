@@ -15,7 +15,8 @@ kinds[GREY8] = {
     components: 1,
     alpha: false,
     channels: 1,
-    bitDepth: 8
+    bitDepth: 8,
+    maxValue: 0xff
 };
 
 export const GREY16 = 'GREY16';
@@ -23,23 +24,26 @@ kinds[GREY16] = {
     components: 1,
     alpha: false,
     channels: 1,
-    bitDepth: 16
+    bitDepth: 16,
+    maxValue: 0xffff
 };
 
-export const COLOR32 = 'COLOR32';
-kinds[COLOR32] = {
+export const COLOR8 = 'COLOR8';
+kinds[COLOR8] = {
     components: 3,
     alpha: true,
     channels: 4,
-    bitDepth: 8
+    bitDepth: 8,
+    maxValue: 0xff
 };
 
-export const COLOR64 = 'COLOR64';
-kinds[COLOR64] = {
+export const COLOR16 = 'COLOR16';
+kinds[COLOR16] = {
     components: 3,
     alpha: true,
     channels: 4,
-    bitDepth: 16
+    bitDepth: 16,
+    maxValue: 0xffff
 };
 
 export function getKind(kind) {
@@ -47,12 +51,24 @@ export function getKind(kind) {
 }
 
 export function getPixelArray(kind, length) {
-    // TODO support 16bit and binary
-    var arr = new Uint8ClampedArray(length);
+    var arr;
+    switch(kind.bitDepth) {
+        case 8:
+            arr = new Uint8ClampedArray(length);
+            break;
+        case 16:
+            arr = new Uint16Array(length);
+            break;
+        default:
+            // TODO binary
+            throw new Error('Cannot create pixel array for bit depth ' + kind.bitDepth);
+    }
 
     // alpha channel is 100% by default
-    for (var i = 3; i < arr.length; i += 4) {
-        arr[i] = 255;
+    if (kind.alpha) {
+        for (var i = kind.components; i < arr.length; i += kind.channels) {
+            arr[i] = kind.maxValue;
+        }
     }
 
     return arr;

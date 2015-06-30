@@ -7,7 +7,7 @@ load('rgb8.png').then(function (a) {
 });
 */
 
-load('rgb8.png').then(function (a) {
+/*load('rgb8.png').then(function (a) {
     setLeft(a);
 
     setInterval(move, 25);
@@ -16,4 +16,14 @@ load('rgb8.png').then(function (a) {
     function move() {
         setRight(a.crop(x++, 0, 200, 200));
     }
+});
+*/
+
+load('rgb8.png').then(function (a) {
+    setLeft(a);
+
+    var newImage = a.grey();
+
+    setRight(newImage);
+
 });

@@ -17,6 +17,10 @@ export default class IJ {
 
         let kind = options.kind || COLOR32;
 
+        // TODO do something with colorModel
+        let colorModel = options.colorModel || 'RGB';
+        this.colorModel = colorModel;
+
         if (!(width > 0))
             throw new RangeError('width must be greater than 0');
         if (!(height > 0))
@@ -32,14 +36,16 @@ export default class IJ {
         this.channels = map.channels;
         this.bitDepth = map.bitDepth;
 
+        this.maxValue = (1 << map.bitDepth) - 1;
+
         this.width = width;
         this.height = height;
         this.size = width * height;
 
-        let length = width * height * (map.components + map.alpha);
+        let length = this.size * (map.components + map.alpha);
 
         if (!data)
-            data = getPixelArray(kind, length);
+            data = getPixelArray(map, length);
         else if (data.length !== length)
             throw new RangeError(`incorrect data size. Expected ${length} but got ${data.length}`);
 
@@ -92,6 +98,13 @@ export default class IJ {
     }
 
     getCanvas() {
+        /*
+            TODO
+            clone data if needed
+            ensure color model is RGB
+            ensure kind is COLOR32
+         */
+
         let data = getImageData(this.data, this.width, this.height);
         let canvas = new Canvas(this.width, this.height);
         let ctx = canvas.getContext('2d');
@@ -100,7 +113,7 @@ export default class IJ {
     }
 
     clone() {
-        let nemImage = new IJ(this.width, this.height, {kind: this.kind});
+        let nemImage = new IJ(this.width, this.height, {kind: this.kind, colorModel: this.colorModel});
         let data = this.data;
         let newData = nemImage.data;
         for (let i = 0; i < newData.length; i++) {

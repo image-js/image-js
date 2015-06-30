@@ -15,12 +15,13 @@ if (typeof self !== 'undefined') { // Browser
     };
     getImageData = function (data, width, height) {
         let validData = data;
-        if (data.constructor.name !== 'Uint8ClampedArray') {
+        // TODO for now we always copy the array because we don't know if it can be modified after we put it in the canvas
+        //if (data.constructor.name !== 'Uint8ClampedArray') {
             validData = new Uint8ClampedArray(data.length);
             for (let i = 0; i < data.length; i++) {
                 validData[i] = data[i];
             }
-        }
+        //}
         return new ImageData(validData, width, height);
     };
 
