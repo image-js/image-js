@@ -26,7 +26,7 @@
     "./lib"
   ],
   "scripts": {
-    "browserify": "mkdir -p dist && browserify lib/ij.js -o dist/ij.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --exclude fs",
+    "browserify": "mkdir -p dist && browserify lib/ij.js -o dist/ij.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs",
     "build": "npm run compile && npm run browserify",
     "compile": "babel src --out-dir lib",
     "prepublish": "npm run compile",
@@ -44,8 +44,5 @@
   },
   "optionalDependencies": {
     "canvas": "^1.2.3"
-  },
-  "dependencies": {
-    "ij-filter-invert": "0.0.3"
   }
 }

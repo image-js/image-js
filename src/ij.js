@@ -29,6 +29,7 @@ export default class IJ {
         this.kind = kind;
         this.components = map.components;
         this.alpha = map.alpha;
+        this.channels = map.channels;
         this.bitDepth = map.bitDepth;
 
         this.width = width;
@@ -76,6 +77,14 @@ export default class IJ {
                 return method.apply(this, args);
             };
         }
+    }
+
+    static createFrom(other, {
+        width = other.width,
+        height = other.height,
+        kind = other.kind
+        } = {}) {
+        return new IJ(width, height, {kind});
     }
 
     toDataURL() {

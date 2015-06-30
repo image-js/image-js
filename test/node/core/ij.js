@@ -1,6 +1,6 @@
 'use strict';
 
-var common = require('../common');
+var common = require('../../common');
 var IJ = common.IJ;
 var load = common.load;
 

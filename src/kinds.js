@@ -5,40 +5,40 @@ const kinds = {};
 export const BINARY = 'BINARY';
 kinds[BINARY] = {
     components: 1,
-    channels: 1,
     alpha: false,
+    channels: 1,
     bitDepth: 1
 };
 
 export const GREY8 = 'GREY8';
 kinds[GREY8] = {
     components: 1,
-    channels: 1,
     alpha: false,
+    channels: 1,
     bitDepth: 8
 };
 
 export const GREY16 = 'GREY16';
 kinds[GREY16] = {
     components: 1,
-    channels: 1,
     alpha: false,
+    channels: 1,
     bitDepth: 16
 };
 
 export const COLOR32 = 'COLOR32';
 kinds[COLOR32] = {
     components: 3,
-    channels: 4,
     alpha: true,
+    channels: 4,
     bitDepth: 8
 };
 
 export const COLOR64 = 'COLOR64';
 kinds[COLOR64] = {
     components: 3,
-    channels: 4,
     alpha: true,
+    channels: 4,
     bitDepth: 16
 };
 

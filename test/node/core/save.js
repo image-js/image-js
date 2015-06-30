@@ -1,8 +1,8 @@
 'use strict';
 
-var common = require('../common');
+var common = require('../../common');
 var IJ = common.IJ;
-var getSha = require('ij-test').getHash;
+var getSha = common.getHash;
 var load = common.load;
 
 common.refreshTmpDir();

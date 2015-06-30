@@ -2,9 +2,12 @@
 
 var rimraf = require('rimraf');
 var fs = require('fs');
+var Test = require('ij-test');
 
 var IJ = require('..');
-var getImage = require('ij-test').getImage;
+var getImage = Test.getImage;
+
+exports.getHash = Test.getHash;
 
 exports.IJ = IJ;
 exports.load = function load(name) {
