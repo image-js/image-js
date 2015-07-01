@@ -14,7 +14,7 @@ load('rgb8.png').then(function (a) {
 
     var x = 0;
     function move() {
-        setRight(a.crop(x++, 0, 200, 200));
+        setRight(a.crop({x: x++, width: 200, height:200}));
     }
 });
 */

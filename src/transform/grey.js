@@ -2,7 +2,7 @@
 
 import IJ from '../ij';
 
-export default function grey(algorithm = 'luminance') {
+export default function grey({algorithm = 'luminance'}) {
 
     if (this.kind.startsWith('GREY')) {
         return this.clone();

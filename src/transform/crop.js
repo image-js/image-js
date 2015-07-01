@@ -2,10 +2,12 @@
 
 import IJ from '../ij';
 
-export default function crop(x = 0,
-                             y = 0,
-                             width = this.width - x,
-                             height = this.height - y) {
+export default function crop({
+    x = 0,
+    y = 0,
+    width = this.width - x,
+    height = this.height - y
+    }) {
 
     if (x > (this.width - 1) || y > (this.height - 1))
         throw new RangeError(`origin (${x}; ${y}) out of range (${this.width - 1}; ${this.height - 1})`);
