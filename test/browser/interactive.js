@@ -5,6 +5,7 @@ load('rgb8.png').then(function (a) {
 
     var editor = ace.edit('editor');
     editor.$blockScrolling = Infinity;
+    editor.getSession().setMode('ace/mode/javascript');
     editor.getSession().on('change', execute);
 
     var oldCode = localStorage.getItem('ij-test-code');
