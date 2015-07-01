@@ -1,17 +1,17 @@
 'use strict';
 
+import * as KindNames from './kindNames';
+
 const kinds = {};
 
-export const BINARY = 'BINARY';
-kinds[BINARY] = {
+kinds[KindNames.BINARY] = {
     components: 1,
     alpha: false,
     channels: 1,
     bitDepth: 1
 };
 
-export const GREY8 = 'GREY8';
-kinds[GREY8] = {
+kinds[KindNames.GREY8] = {
     components: 1,
     alpha: false,
     channels: 1,
@@ -19,8 +19,7 @@ kinds[GREY8] = {
     maxValue: 0xff
 };
 
-export const GREY16 = 'GREY16';
-kinds[GREY16] = {
+kinds[KindNames.GREY16] = {
     components: 1,
     alpha: false,
     channels: 1,
@@ -28,8 +27,7 @@ kinds[GREY16] = {
     maxValue: 0xffff
 };
 
-export const COLOR8 = 'COLOR8';
-kinds[COLOR8] = {
+kinds[KindNames.COLOR8] = {
     components: 3,
     alpha: true,
     channels: 4,
@@ -37,8 +35,7 @@ kinds[COLOR8] = {
     maxValue: 0xff
 };
 
-export const COLOR16 = 'COLOR16';
-kinds[COLOR16] = {
+kinds[KindNames.COLOR16] = {
     components: 3,
     alpha: true,
     channels: 4,

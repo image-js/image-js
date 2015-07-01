@@ -1,6 +1,7 @@
 'use strict';
 
-import {getKind, getPixelArray, COLOR32} from './kinds';
+import {getKind, getPixelArray} from './kind';
+import {COLOR8} from './kindNames';
 import {Image, getImageData, Canvas} from './canvas';
 import extend from './extend';
 import {createWriteStream} from 'fs';
@@ -15,7 +16,7 @@ export default class IJ {
         }
         if (options === undefined) options = {};
 
-        let kind = options.kind || COLOR32;
+        let kind = options.kind || COLOR8;
 
         // TODO do something with colorModel
         let colorModel = options.colorModel || 'RGB';
