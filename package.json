@@ -26,21 +26,26 @@
     "./lib"
   ],
   "scripts": {
-    "browserify": "mkdir -p dist && browserify lib/ij.js -o dist/ij.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs",
-    "build": "npm run compile && npm run browserify",
-    "compile": "babel src --out-dir lib",
+    "browserify": "npm run clean && browserify src/ij.js -o dist/ij.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --transform babelify",
+    "build": "npm run browserify",
+    "compile": "npm run clean && babel src --out-dir lib",
+    "clean": "rm -rf dist lib && mkdir dist",
     "prepublish": "npm run compile",
     "test": "npm run compile && npm run test-mocha",
-    "test-mocha": "mocha --require should --reporter mocha-better-spec-reporter --recursive test/node"
+    "test-mocha": "mocha --require should --reporter mocha-better-spec-reporter --recursive test/node",
+    "watch-browser": "watchify src/ij.js -o dist/ij.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --transform babelify",
+    "watch-node": "babel --watch src --out-dir lib"
   },
   "devDependencies": {
     "babel": "^5.6.4",
+    "babelify": "^6.1.2",
     "browserify": "^10.2.4",
     "ij-test": "^1.1.0",
     "mocha": "^2.2.5",
     "mocha-better-spec-reporter": "^2.1.1",
     "rimraf": "^2.4.0",
-    "should": "^7.0.1"
+    "should": "^7.0.1",
+    "watchify": "^3.2.3"
   },
   "optionalDependencies": {
     "canvas": "^1.2.3"

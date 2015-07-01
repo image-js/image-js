@@ -6,11 +6,9 @@ Image manipulation in JavaScript
 
 `npm install ij`
 
-## License
-
-  [MIT](./LICENSE)
-
 ## Developement
+
+### Setup
 
 * You will have first to install nodejs : https://nodejs.org/
 * For the developement we are using https://www.jetbrains.com/webstorm/
@@ -44,17 +42,20 @@ brew link cairo
 npm install canvas
 ```
 
+### NPM scripts
 
-### Other projects installation
+NPM cripts allow to run easily certain tasks  
+To run any script, use the command `npm run script-name`.
 
-For each other project you should do:
+Script name | Description
+----------- | -----------
+build | build the browser files
+compile | build the Node.js files
+test | compile and run the test suite
+test-mocha | Run the test suite (need to compile first)
+watch-browser | build continuously the browser file
+watch-node | build continuously the Node.js files
 
-````
-cd image-js
-git clone git@github.com:image-js/filter-invert.git
-cd filter-invert
-npm install
-npm run test
-```
+## License
 
-
+  [MIT](./LICENSE)
