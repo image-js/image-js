@@ -49,11 +49,12 @@ To run any script, use the command `npm run script-name`.
 
 Script name | Description
 ----------- | -----------
-build | build the browser files
+build | build the browser files (for release)
+build-test | build the browser test file
 compile | build the Node.js files
 test | compile and run the test suite
 test-mocha | Run the test suite (need to compile first)
-watch-browser | build continuously the browser file
+watch-browser | build continuously the browser test file
 watch-node | build continuously the Node.js files
 
 ## License

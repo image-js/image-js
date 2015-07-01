@@ -26,14 +26,14 @@
     "./lib"
   ],
   "scripts": {
-    "browserify": "npm run clean && browserify src/ij.js -o dist/ij.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --transform babelify",
-    "build": "npm run browserify",
+    "build": "npm run clean && browserify src/ij.js -o dist/ij.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --transform babelify",
+    "build-test": "browserify src/ij.js -o test/browser/ij.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --transform babelify",
     "compile": "npm run clean && babel src --out-dir lib",
     "clean": "rm -rf dist lib && mkdir dist",
     "prepublish": "npm run compile",
     "test": "npm run compile && npm run test-mocha",
     "test-mocha": "mocha --require should --reporter mocha-better-spec-reporter --recursive test/node",
-    "watch-browser": "watchify src/ij.js -o dist/ij.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --transform babelify",
+    "watch-browser": "watchify src/ij.js -o test/browser/ij.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --transform babelify",
     "watch-node": "babel --watch src --out-dir lib"
   },
   "devDependencies": {
