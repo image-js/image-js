@@ -123,6 +123,14 @@ export default class IJ {
         return this.getCanvas().toDataURL();
     }
 
+    setValue(value, row, column, channel) {
+        this.data[(row*this.width+column)*this.channels+channel]=value;
+    }
+
+    getValue(row, column, channel) {
+        return this.data[(row*this.width+column)*this.channels+channel];
+    }
+
     setMatrix(matrix, channel) {
         // the user is expected to know what he is doing !
         // we blinding put the matrix result

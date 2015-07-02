@@ -1,0 +1,46 @@
+'use strict';
+/*
+load('rgb8.png').then(function (a) {
+    var b = a.clone().invert();
+    setLeft(a);
+    setRight(b);
+});
+*/
+
+/*load('rgb8.png').then(function (a) {
+    setLeft(a);
+
+    setInterval(move, 25);
+
+    var x = 0;
+    function move() {
+        setRight(a.crop({x: x++, width: 200, height:200}));
+    }
+});
+*/
+
+load('rgb8.png').then(function (a) {
+    setLeft(a);
+
+    console.time("invert");
+    for (var i=0; i<200; i++) {
+        a.invert();
+    }
+    console.timeEnd("invert");
+
+    console.time("invertMatrix");
+    for (var i=0; i<200; i++) {
+        a.invertMatrix();
+    }
+    console.timeEnd("invertMatrix");
+
+    console.time("invertGetterSetter");
+    for (var i=0; i<200; i++) {
+        a.invertGetterSetter();
+    }
+    console.timeEnd("invertGetterSetter");
+
+
+    setRight(a);
+
+});
