@@ -1,6 +1,6 @@
 'use strict';
 
-let Image, Canvas, getImageData;
+let Image, Canvas, getImageData, getCanvasArray;
 
 if (typeof self !== 'undefined') { // Browser
 
@@ -24,6 +24,9 @@ if (typeof self !== 'undefined') { // Browser
         //}
         return new ImageData(validData, width, height);
     };
+    getCanvasArray = function (width, height) {
+        return new Uint8ClampedArray(width * height * 4);
+    };
 
 } else if (typeof module !== 'undefined' && module.exports) { // Node.js
 
@@ -42,7 +45,9 @@ if (typeof self !== 'undefined') { // Browser
         }
         return new ImageData(validData, width, height);
     };
-
+    getCanvasArray = function (width, height) {
+        return new canvas.PixelArray(width, height);
+    };
 }
 
-export {Image, Canvas, getImageData};
+export {Image, Canvas, getImageData, getCanvasArray};

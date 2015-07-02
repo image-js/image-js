@@ -2,9 +2,10 @@
 
 import {getKind, getPixelArray} from './kind';
 import {COLOR8} from './kindNames';
-import {Image, getImageData, Canvas} from './canvas';
+import {Image, getImageData, Canvas, getCanvasArray} from './canvas';
 import extend from './extend';
 import {createWriteStream} from 'fs';
+import * as ColorModels from './model/models';
 
 let computedPropertyDescriptor = {
     configurable: true,
@@ -24,10 +25,6 @@ export default class IJ {
 
         let kind = options.kind || COLOR8;
 
-        // TODO do something with colorModel
-        let colorModel = options.colorModel || 'RGB';
-        this.colorModel = colorModel;
-
         if (!(width > 0))
             throw new RangeError('width must be greater than 0');
         if (!(height > 0))
@@ -37,13 +34,15 @@ export default class IJ {
         if (!map)
             throw new RangeError('invalid image kind: ' + kind);
 
+        this.colorModel = options.colorModel || ColorModels.RGB;
+
         this.kind = kind;
         this.info = map;
         this.computed = {};
 
         this.width = width;
         this.height = height;
-        var size = width * height;
+        let size = width * height;
 
         let length = size * (map.components + map.alpha);
 
@@ -131,11 +130,44 @@ export default class IJ {
             ensure kind is COLOR32
          */
 
-        let data = getImageData(this.data, this.width, this.height);
+        let data = getImageData(this.getRGBAData(), this.width, this.height);
         let canvas = new Canvas(this.width, this.height);
         let ctx = canvas.getContext('2d');
         ctx.putImageData(data, 0, 0);
         return canvas;
+    }
+
+    getRGBAData() {
+        this.checkProcessable("getRGBAData",{components:[1,3]});
+        let size = this.size;
+        let newData=getCanvasArray(this.width, this.height);
+        if (this.components===1) {
+            for (let i=0; i<size; i++) {
+                newData[i*4]=this.data[i]>>(this.bitDepth-8);
+                newData[i*4+1]=this.data[i]>>(this.bitDepth-8);
+                newData[i*4+2]=this.data[i]>>(this.bitDepth-8);
+            }
+        } else if (this.components===3) {
+            this.checkProcessable("getRGBAData",{colorModel:[ColorModels.RGB]});
+            if (this.colorModel===ColorModels.RGB) {
+                for (let i=0; i<size; i++) {
+                    newData[i*4]=this.data[i*4]>>(this.bitDepth-8);
+                    newData[i*4+1]=this.data[i*4+1]>>(this.bitDepth-8);
+                    newData[i*4+2]=this.data[i*4+2]>>(this.bitDepth-8);
+                }
+            }
+        }
+        if (this.alpha) {
+            this.checkProcessable("getRGBAData",{bitDepth:[8,16]});
+            for (let i=0; i<size; i++) {
+                newData[i*4+3]=this.data[i*this.channels+this.components]>>(this.bitDepth-8);
+            }
+        } else {
+            for (let i=0; i<size; i++) {
+                newData[i*4+3]=255;
+            }
+        }
+        return newData;
     }
 
     clone() {
@@ -172,7 +204,7 @@ export default class IJ {
 
     // this method check if a process can be applied on the current image
     checkProcessable(processName, {
-            bitDepth, alpha, model, components
+            bitDepth, alpha, colorModel, components
         } = {}) {
         if (bitDepth) {
             if (! Array.isArray(bitDepth)) bitDepth=[bitDepth];
@@ -186,10 +218,10 @@ export default class IJ {
                 throw new Error ('The process: '+processName+' can only be apply if alpha is in: '+alpha);
             }
         }
-        if (model) {
-            if (! Array.isArray(model)) model=[model];
-            if (model.indexOf(this.model)==-1) {
-                throw new Error ('The process: '+processName+' can only be apply if color model is in: '+model);
+        if (colorModel) {
+            if (! Array.isArray(colorModel)) colorModel=[colorModel];
+            if (colorModel.indexOf(this.colorModel)==-1) {
+                throw new Error ('The process: '+processName+' can only be apply if color model is in: '+colorModel);
             }
         }
         if (components) {
