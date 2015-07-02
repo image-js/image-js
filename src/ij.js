@@ -6,6 +6,12 @@ import {Image, getImageData, Canvas} from './canvas';
 import extend from './extend';
 import {createWriteStream} from 'fs';
 
+let computedPropertyDescriptor = {
+    configurable: true,
+    enumerable: true,
+    get: undefined
+};
+
 export default class IJ {
     constructor(width, height, data, options) {
         if (width === undefined) width = 1;
@@ -33,6 +39,7 @@ export default class IJ {
 
         this.kind = kind;
         this.info = map;
+        this.computed = {};
 
         this.width = width;
         this.height = height;
@@ -68,10 +75,15 @@ export default class IJ {
         });
     }
 
-    static extend(name, method, inplace = false) {
+    static extendMethod(name, method, inplace = false) {
+        if (IJ.prototype.hasOwnProperty(name)) {
+            console.warn(`Method '${name}' already exists and will be overwritten`);
+        }
         if (inplace) {
             IJ.prototype[name] = function (...args) {
                 method.apply(this, args);
+                // reset computed properties
+                this.computed = {};
                 return this;
             };
         } else {
@@ -79,6 +91,24 @@ export default class IJ {
                 return method.apply(this, args);
             };
         }
+        return IJ;
+    }
+
+    static extendProperty(name, method) {
+        if (IJ.prototype.hasOwnProperty(name)) {
+            console.warn(`Property getter '${name}' already exists and will be overwritten`);
+        }
+        computedPropertyDescriptor.get = function () {
+            if (this.computed.hasOwnProperty(name)) {
+                return this.computed[name];
+            } else {
+                let result = method.call(this);
+                this.computed[name] = result;
+                return result;
+            }
+        };
+        Object.defineProperty(IJ.prototype, name, computedPropertyDescriptor);
+        return IJ;
     }
 
     static createFrom(other, {
