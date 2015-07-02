@@ -1,21 +1,18 @@
 'use strict';
 
-var common = require('../../common');
-var IJ = common.IJ;
-var getSha = common.getHash;
-var load = common.load;
+import {IJ, load, getHash, refreshTmpDir, tmpDir, getSquare} from '../common';
 
-common.refreshTmpDir();
+refreshTmpDir();
 
 describe('save to disk', function () {
 
     it('load then save', function () {
         return load('rgb8.png').then(function (img) {
-            var sha = getSha(img);
-            return img.save(common.tmpDir + '/img1.png').then(function () {
+            let sha = getHash(img);
+            return img.save(tmpDir + '/img1.png').then(function () {
                 // reload the new file to check that the image is identical
-                return IJ.load(common.tmpDir + '/img1.png').then(function (img) {
-                    getSha(img).should.equal(sha);
+                return IJ.load(tmpDir + '/img1.png').then(function (img) {
+                    getHash(img).should.equal(sha);
                 });
             });
         });
@@ -23,13 +20,13 @@ describe('save to disk', function () {
 
     it('load then save (jpg)', function () {
         return load('rgb8.png').then(function (img) {
-            return img.save(common.tmpDir + '/img1.jpg', {format: 'jpeg'});
+            return img.save(tmpDir + '/img1.jpg', {format: 'jpeg'});
         });
     });
 
     it('new then save', function () {
-        var img = common.getSquare();
-        return img.save(common.tmpDir + '/img2.png');
+        let img = getSquare();
+        return img.save(tmpDir + '/img2.png');
     });
 
 });

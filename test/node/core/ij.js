@@ -1,12 +1,10 @@
 'use strict';
 
-var common = require('../../common');
-var IJ = common.IJ;
-var load = common.load;
+import {IJ, load} from '../common';
 
 describe('IJ core', function () {
     it('constructor defaults', function () {
-        var img = new IJ();
+        let img = new IJ();
         img.width.should.equal(1);
         img.width.should.equal(1);
         img.data.length.should.equal(4);
@@ -28,7 +26,7 @@ describe('IJ core', function () {
 
     it('should clone', function () {
         return load('rgb8.png').then(function (img) {
-            var clone = img.clone();
+            let clone = img.clone();
             clone.should.be.an.instanceOf(IJ);
             clone.should.not.be.equal(img);
             clone.toDataURL().should.equal(img.toDataURL());
