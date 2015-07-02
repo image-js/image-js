@@ -1,46 +1,27 @@
 'use strict';
 
 import * as KindNames from './kindNames';
+import {RGB} from './model/models';
 
 const kinds = {};
 
 kinds[KindNames.BINARY] = {
     components: 1,
     alpha: 0,
-    channels: 1,
     bitDepth: 1
 };
 
-kinds[KindNames.GREY8] = {
+kinds[KindNames.GREY] = {
     components: 1,
-    alpha: 0,
-    channels: 1,
-    bitDepth: 8,
-    maxValue: 0xff
+    alpha: 1,
+    bitDepth: 8
 };
 
-kinds[KindNames.GREY16] = {
-    components: 1,
-    alpha: 0,
-    channels: 1,
-    bitDepth: 16,
-    maxValue: 0xffff
-};
-
-kinds[KindNames.COLOR8] = {
+kinds[KindNames.RGBA] = {
     components: 3,
     alpha: 1,
-    channels: 4,
     bitDepth: 8,
-    maxValue: 0xff
-};
-
-kinds[KindNames.COLOR16] = {
-    components: 3,
-    alpha: 1,
-    channels: 4,
-    bitDepth: 16,
-    maxValue: 0xffff
+    colorModel: RGB
 };
 
 export function getKind(kind) {

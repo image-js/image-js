@@ -1,7 +1,7 @@
 'use strict';
 
 import {getKind, getPixelArray} from './kind';
-import {COLOR8} from './kindNames';
+import {RGBA} from './kindNames';
 import {Image, getImageData, Canvas, getCanvasArray} from './canvas';
 import extend from './extend';
 import {createWriteStream} from 'fs';
@@ -23,31 +23,32 @@ export default class IJ {
         }
         if (options === undefined) options = {};
 
-        let kind = options.kind || COLOR8;
-
         if (!(width > 0))
             throw new RangeError('width must be greater than 0');
         if (!(height > 0))
             throw new RangeError('height must be greater than 0');
 
-        let map = getKind(kind);
-        if (!map)
-            throw new RangeError('invalid image kind: ' + kind);
-
-        this.colorModel = options.colorModel || ColorModels.RGB;
-
-        this.kind = kind;
-        this.info = map;
-        this.computed = {};
-
         this.width = width;
         this.height = height;
-        let size = width * height;
 
-        let length = size * (map.components + map.alpha);
+        let kind = options.kind || RGBA;
+        if (typeof kind === 'string') kind = getKind(kind);
+        if (!kind) throw new RangeError('invalid image kind: ' + kind);
 
+        this.components = kind.components;
+        this.alpha = kind.alpha;
+        this.bitDepth = kind.bitDepth;
+        this.colorModel = kind.colorModel;
+
+        this.channels = this.components + this.alpha;
+        this.maxValue = (1 << this.bitDepth) - 1;
+        this.size = this.width * this.height;
+
+        this.computed = {};
+
+        let length = this.size * this.channels;
         if (!data)
-            data = getPixelArray(map, length);
+            data = getPixelArray(kind, length);
         else if (data.length !== length)
             throw new RangeError(`incorrect data size. Expected ${length} but got ${data.length}`);
 
@@ -113,7 +114,7 @@ export default class IJ {
     static createFrom(other, {
         width = other.width,
         height = other.height,
-        kind = other.kind
+        kind = {} // TODO if property is not present, take it from other
         } = {}) {
         return new IJ(width, height, {kind});
     }
@@ -143,9 +144,9 @@ export default class IJ {
         let newData=getCanvasArray(this.width, this.height);
         if (this.components===1) {
             for (let i=0; i<size; i++) {
-                newData[i*4]=this.data[i]>>(this.bitDepth-8);
-                newData[i*4+1]=this.data[i]>>(this.bitDepth-8);
-                newData[i*4+2]=this.data[i]>>(this.bitDepth-8);
+                newData[i*4]=this.data[i*(1+this.alpha)]>>(this.bitDepth-8);
+                newData[i*4+1]=this.data[i*(1+this.alpha)]>>(this.bitDepth-8);
+                newData[i*4+2]=this.data[i*(1+this.alpha)]>>(this.bitDepth-8);
             }
         } else if (this.components===3) {
             this.checkProcessable("getRGBAData",{colorModel:[ColorModels.RGB]});
@@ -209,47 +210,27 @@ export default class IJ {
         if (bitDepth) {
             if (! Array.isArray(bitDepth)) bitDepth=[bitDepth];
             if (bitDepth.indexOf(this.bitDepth)==-1) {
-                throw new Error ('The process: '+processName+' can only be apply if bit depth is in: '+bitDepth);
+                throw new Error ('The process: '+processName+' can only be applied if bit depth is in: '+bitDepth);
             }
         }
         if (alpha) {
             if (! Array.isArray(alpha)) alpha=[alpha];
             if (alpha.indexOf(this.alpha)==-1) {
-                throw new Error ('The process: '+processName+' can only be apply if alpha is in: '+alpha);
+                throw new Error ('The process: '+processName+' can only be applied if alpha is in: '+alpha);
             }
         }
         if (colorModel) {
             if (! Array.isArray(colorModel)) colorModel=[colorModel];
             if (colorModel.indexOf(this.colorModel)==-1) {
-                throw new Error ('The process: '+processName+' can only be apply if color model is in: '+colorModel);
+                throw new Error ('The process: '+processName+' can only be applied if color model is in: '+colorModel);
             }
         }
         if (components) {
             if (! Array.isArray(components)) components=[components];
             if (components.indexOf(this.components)==-1) {
-                throw new Error ('The process: '+processName+' can only be apply if the number of channels is in: '+components);
+                throw new Error ('The process: '+processName+' can only be applied if the number of channels is in: '+components);
             }
         }
-    }
-    
-    // Dynamic accessors
-    get components() {
-        return this.info.components;
-    }
-    get alpha() {
-        return this.info.alpha;
-    }
-    get channels() {
-        return this.info.components + this.info.alpha;
-    }
-    get bitDepth() {
-        return this.info.bitDepth;
-    }
-    get maxValue() {
-        return (1 << this.info.bitDepth) - 1;
-    }
-    get size() {
-        return this.width * this.height;
     }
 }
 

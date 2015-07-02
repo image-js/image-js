@@ -2,9 +2,9 @@
 
 export default function invert() {
     this.checkProcessable("invert",{
-        alpha:[0,1],
-        components:[1,2,3,4,5,6],
-        bitDepth:[1,2]
+        alpha:[1],
+        components:[3],
+        bitDepth:[8,16]
     });
 
 
