@@ -2,8 +2,6 @@
 
 export default function invert() {
     this.checkProcessable("invert",{
-        alpha:[1],
-        components:[3],
         bitDepth:[8,16]
     });
 
@@ -13,9 +11,9 @@ export default function invert() {
 
 function invert3Components(image) {
     var data = image.data;
-    for (let i = 0; i < data.length; i += 4) {
-        data[i] = image.maxValue - data[i];
-        data[i + 1] = image.maxValue - data[i + 1];
-        data[i + 2] = image.maxValue - data[i + 2];
+    for (let i = 0; i < data.length; i += image.channels) {
+        for (let j=0; j<image.components; j++) {
+            data[i+j] = image.maxValue - data[i+j];
+        }
     }
 }
