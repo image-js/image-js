@@ -6,14 +6,12 @@ export default function invert() {
     });
 
 
-    invert3Components(this);
-};
-
-function invert3Components(image) {
-    var data = image.data;
-    for (let i = 0; i < data.length; i += image.channels) {
-        for (let j=0; j<image.components; j++) {
-            data[i+j] = image.maxValue - data[i+j];
+    var data = this.data;
+    for (let i = 0; i < data.length; i += this.channels) {
+        for (let j=0; j<this.components; j++) {
+            data[i+j] = this.maxValue - data[i+j];
         }
     }
-}
+
+};
+
