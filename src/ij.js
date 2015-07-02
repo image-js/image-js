@@ -15,6 +15,7 @@ let computedPropertyDescriptor = {
 
 export default class IJ {
     constructor(width, height, data, options) {
+        console.log("CONSTRUCT");
         if (width === undefined) width = 1;
         if (height === undefined) height = 1;
         if (data && !data.length) {
@@ -45,6 +46,12 @@ export default class IJ {
         this.size = this.width * this.height;
 
         this.computed = {};
+        this.computed.histogram=function() {
+            this.computed.histogram=this.getHistogram();
+        }
+        this.computed.histograms=function() {
+            this.computed.histograms=this.getHistograms();
+        }
 
         let length = this.size * this.channels;
         if (!data)
@@ -225,6 +232,8 @@ export default class IJ {
         return nemImage;
     }
 
+
+
     save(path, {format = 'png'} = {}) { // Node.JS only
         return new Promise((resolve, reject) => {
             let out = createWriteStream(path);
@@ -276,6 +285,18 @@ export default class IJ {
             }
         }
     }
+
+
+    get histogram() {
+        console.log("XXX")
+        console.log(this.computed.histogram);
+        return this.computed.histogram;
+    }
+
+    get histograms() {
+        return this.computed.histograms;
+    }
+
 }
 
 extend(IJ);

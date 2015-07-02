@@ -9,6 +9,11 @@ import invertGetterSetter from './filter/invertGetterSetter';
 import crop from './transform/crop';
 import grey from './transform/grey';
 
+// computers
+import getHistogram from './compute/histogram'
+import getHistograms from './compute/histogram'
+
+
 export default function extend(IJ) {
     IJ.extendMethod('invert', invert, true);
     IJ.extendMethod('invertMatrix', invertMatrix, true);
@@ -17,4 +22,7 @@ export default function extend(IJ) {
     IJ.extendMethod('crop', crop);
     IJ.extendMethod('grey', grey).extendMethod('gray', grey);
 
+
+    IJ.extendMethod('getHistogram', getHistogram);
+    IJ.extendMethod('getHistograms', getHistograms);
 }

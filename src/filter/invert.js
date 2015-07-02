@@ -12,6 +12,5 @@ export default function invert() {
             data[i+j] = this.maxValue - data[i+j];
         }
     }
-
 };
 
