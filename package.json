@@ -32,7 +32,7 @@
     "clean": "rm -rf dist lib && mkdir dist",
     "prepublish": "npm run compile",
     "test": "npm run compile && npm run test-mocha",
-    "test-mocha": "mocha --require should --reporter mocha-better-spec-reporter --recursive test/node",
+    "test-mocha": "mocha --compilers js:babel/register --require should --reporter mocha-better-spec-reporter --recursive test/node",
     "watch-browser": "watchify src/ij.js -o test/browser/ij.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --transform babelify",
     "watch-node": "babel --watch src --out-dir lib"
   },
