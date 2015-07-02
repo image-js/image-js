@@ -32,18 +32,13 @@ export default class IJ {
             throw new RangeError('invalid image kind: ' + kind);
 
         this.kind = kind;
-        this.components = map.components;
-        this.alpha = map.alpha;
-        this.channels = map.channels;
-        this.bitDepth = map.bitDepth;
-
-        this.maxValue = (1 << map.bitDepth) - 1;
+        this.info = map;
 
         this.width = width;
         this.height = height;
-        this.size = width * height;
+        var size = width * height;
 
-        let length = this.size * (map.components + map.alpha);
+        let length = size * (map.components + map.alpha);
 
         if (!data)
             data = getPixelArray(map, length);
@@ -143,6 +138,26 @@ export default class IJ {
             out.on('error', reject);
             stream.pipe(out);
         });
+    }
+
+    // Dynamic accessors
+    get components() {
+        return this.info.components;
+    }
+    get alpha() {
+        return this.info.alpha;
+    }
+    get channels() {
+        return this.info.components + this.info.alpha;
+    }
+    get bitDepth() {
+        return this.info.bitDepth;
+    }
+    get maxValue() {
+        return (1 << this.info.bitDepth) - 1;
+    }
+    get size() {
+        return this.width * this.height;
     }
 }
 
