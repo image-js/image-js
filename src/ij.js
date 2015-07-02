@@ -15,7 +15,6 @@ let computedPropertyDescriptor = {
 
 export default class IJ {
     constructor(width, height, data, options) {
-        console.log("CONSTRUCT");
         if (width === undefined) width = 1;
         if (height === undefined) height = 1;
         if (data && !data.length) {
@@ -46,12 +45,7 @@ export default class IJ {
         this.size = this.width * this.height;
 
         this.computed = {};
-        this.computed.histogram=function() {
-            this.computed.histogram=this.getHistogram();
-        }
-        this.computed.histograms=function() {
-            this.computed.histograms=this.getHistograms();
-        }
+
 
         let length = this.size * this.channels;
         if (!data)
@@ -288,12 +282,12 @@ export default class IJ {
 
 
     get histogram() {
-        console.log("XXX")
-        console.log(this.computed.histogram);
+        this.computed.histogram = this.computed.histogram || this.getHistogram();
         return this.computed.histogram;
     }
 
     get histograms() {
+        this.computed.histograms = this.computed.histograms || this.getHistograms();
         return this.computed.histograms;
     }
 

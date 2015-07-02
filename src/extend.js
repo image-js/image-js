@@ -11,7 +11,8 @@ import grey from './transform/grey';
 
 // computers
 import getHistogram from './compute/histogram'
-import getHistograms from './compute/histogram'
+import getHistograms from './compute/histograms'
+
 
 
 export default function extend(IJ) {
