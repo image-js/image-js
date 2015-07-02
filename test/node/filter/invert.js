@@ -1,7 +1,6 @@
 'use strict';
 
 var IJ = require('../../..');
-var invertRGBA = require('../../../lib/filter/invert').invertRGBA;
 
 describe('invert 3 components', function () {
     it('should invert colors, not alpha', function () {
