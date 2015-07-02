@@ -6,14 +6,14 @@ const kinds = {};
 
 kinds[KindNames.BINARY] = {
     components: 1,
-    alpha: false,
+    alpha: 0,
     channels: 1,
     bitDepth: 1
 };
 
 kinds[KindNames.GREY8] = {
     components: 1,
-    alpha: false,
+    alpha: 0,
     channels: 1,
     bitDepth: 8,
     maxValue: 0xff
@@ -21,7 +21,7 @@ kinds[KindNames.GREY8] = {
 
 kinds[KindNames.GREY16] = {
     components: 1,
-    alpha: false,
+    alpha: 0,
     channels: 1,
     bitDepth: 16,
     maxValue: 0xffff
@@ -29,7 +29,7 @@ kinds[KindNames.GREY16] = {
 
 kinds[KindNames.COLOR8] = {
     components: 3,
-    alpha: true,
+    alpha: 1,
     channels: 4,
     bitDepth: 8,
     maxValue: 0xff
@@ -37,7 +37,7 @@ kinds[KindNames.COLOR8] = {
 
 kinds[KindNames.COLOR16] = {
     components: 3,
-    alpha: true,
+    alpha: 1,
     channels: 4,
     bitDepth: 16,
     maxValue: 0xffff
