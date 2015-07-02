@@ -123,6 +123,32 @@ export default class IJ {
         return this.getCanvas().toDataURL();
     }
 
+    setMatrix(matrix) {
+        // the user is expected to know what he is doing !
+        // we blinding put the matrix result
+        for (let i=0; i<this.height; i++) {
+            for (let j=0; j<this.width; j++) {
+                for (let k=0; k<this.channels; k++) {
+                    this.data[i*this.height+j*this.width+k]=matrix[i][j][k];
+                }
+            }
+        }
+    }
+
+    getMatrix() {
+        var matrix=new Array(this.height);
+        for (let i=0; i<this.height; i++) {
+            matrix[i]=new Array(this.width);
+            for (let j=0; j<this.width; j++) {
+                matrix[i][j]=new Array(this.channels)
+                for (let k=0; k<this.channels; k++) {
+                    matrix[i][j][k]=this.data[i*this.height+j*this.width+k]
+                }
+            }
+        }
+        return matrix;
+    }
+
     getCanvas() {
         /*
             TODO
