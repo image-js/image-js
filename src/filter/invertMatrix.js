@@ -10,13 +10,9 @@ export default function invertMatrix() {
     this.checkProcessable("invert",{
         bitDepth:[8,16]
     });
-console.log("GET")
     let matrix=this.getMatrix();
-
-    console.log(matrix);
     for (let i=0; i<matrix.length; i++) {
         let row=matrix[i];
-        console.log(i);
         for (let j=0; j<row.length; j++) {
             var pixel=row[j];
             for (let k=0; k<this.components; k++) {
