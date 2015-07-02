@@ -170,6 +170,36 @@ export default class IJ {
         });
     }
 
+    // this method check if a process can be applied on the current image
+    checkProcessable(processName, {
+            bitDepth, alpha, model, components
+        } = {}) {
+        if (bitDepth) {
+            if (! Array.isArray(bitDepth)) bitDepth=[bitDepth];
+            if (bitDepth.indexOf(this.bitDepth)==-1) {
+                throw new Error ('The process: '+processName+' can only be apply if bit depth is in: '+bitDepth);
+            }
+        }
+        if (alpha) {
+            if (! Array.isArray(alpha)) alpha=[alpha];
+            if (alpha.indexOf(this.alpha)==-1) {
+                throw new Error ('The process: '+processName+' can only be apply if alpha is in: '+alpha);
+            }
+        }
+        if (model) {
+            if (! Array.isArray(model)) model=[model];
+            if (model.indexOf(this.model)==-1) {
+                throw new Error ('The process: '+processName+' can only be apply if color model is in: '+model);
+            }
+        }
+        if (components) {
+            if (! Array.isArray(components)) components=[components];
+            if (components.indexOf(this.components)==-1) {
+                throw new Error ('The process: '+processName+' can only be apply if the number of channels is in: '+components);
+            }
+        }
+    }
+    
     // Dynamic accessors
     get components() {
         return this.info.components;

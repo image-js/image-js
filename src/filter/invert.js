@@ -1,10 +1,13 @@
 'use strict';
 
 export default function invert() {
-    // TODO support other types
-    if (this.components !== 3) {
-        throw new TypeError('Invert is only implemented for 3 components images');
-    }
+    this.checkProcessable("invert",{
+        alpha:[0,1],
+        components:[1,2,3,4,5,6],
+        bitDepth:[1,2]
+    });
+
+
     invert3Components(this);
 };
 
