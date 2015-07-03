@@ -11,7 +11,7 @@ kinds[KindNames.BINARY] = {
     bitDepth: 1
 };
 
-kinds[KindNames.GREY] = {
+kinds[KindNames.GREYA] = {
     components: 1,
     alpha: 1,
     bitDepth: 8
@@ -29,8 +29,10 @@ export function getKind(kind) {
 }
 
 export function getPixelArray(kind, length) {
-    var arr;
     switch(kind.bitDepth) {
+        case 1:
+            arr = new Uint8Array(Math.ceil(length/8));
+            break;
         case 8:
             arr = new Uint8ClampedArray(length);
             break;
@@ -38,9 +40,9 @@ export function getPixelArray(kind, length) {
             arr = new Uint16Array(length);
             break;
         default:
-            // TODO binary
             throw new Error('Cannot create pixel array for bit depth ' + kind.bitDepth);
     }
+    var arr;
 
     // alpha channel is 100% by default
     if (kind.alpha) {

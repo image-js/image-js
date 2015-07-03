@@ -210,6 +210,36 @@ export default class IJ {
         return newData;
     }
 
+    // those methods can only apply on binary images ... but we will not loose time to check !
+    setBit(x,y) {
+        var target=y*this.width+x;
+        var shift=target & 0b00000111;
+        var slot=target>>3;
+        this.data[slot] |= 1<<shift;
+    }
+
+    clearBit(x,y) {
+        var target=y*this.width+x;
+        var shift=target & 0b00000111;
+        var slot=target>>3;
+        this.data[slot] &= ~(1<<shift);
+    }
+
+    toggleBit(x,y) {
+        var target=y*this.width+x;
+        var shift=target & 0b00000111;
+        var slot=target>>3;
+        this.data[slot] ^= 1<<shift;
+    }
+
+    getBit(x,y) {
+        var target=y*this.width+x;
+        var shift=target & 0b00000111;
+        var slot=target>>3;
+        return (this.data[slot] & 1<<shift) ? 1 : 0;
+    }
+
+
     clone() {
         let nemImage = IJ.createFrom(this);
         let data = this.data;
