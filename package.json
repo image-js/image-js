@@ -39,6 +39,7 @@
   "devDependencies": {
     "babel": "^5.6.4",
     "babelify": "^6.1.2",
+    "benchmark": "^1.0.0",
     "browserify": "^10.2.4",
     "ij-test": "^1.2.0",
     "mocha": "^2.2.5",

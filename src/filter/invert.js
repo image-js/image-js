@@ -5,7 +5,6 @@ export default function invert() {
         bitDepth: [8, 16]
     });
 
-
     var data = this.data;
     for (let i = 0; i < data.length; i += this.channels) {
         for (let j = 0; j < this.components; j++) {
