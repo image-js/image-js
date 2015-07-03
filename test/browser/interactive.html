@@ -4,11 +4,18 @@
     <meta charset="UTF-8">
     <title></title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.9/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <style>
         #editor {
             margin-top: 25px;
             width: 600px;
             height: 300px;
+        }
+        #image-selector {
+            margin-top: 15px;
+        }
+        #error {
+            color: red;
         }
     </style>
 </head>
@@ -16,6 +23,11 @@
 <div>
     <img id="left"/>&nbsp;&nbsp;&nbsp;&nbsp;
     <img id="right"/>
+</div>
+<div>
+    Select an image: <select id="image-selector"></select>&nbsp;&nbsp;&nbsp;&nbsp;
+    <button id="run-script" value="Run script">run script</button>&nbsp;&nbsp;&nbsp;&nbsp;
+    <span id="error"></span>
 </div>
 <div id="editor">img.invert();
 

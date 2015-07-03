@@ -1,30 +1,64 @@
 'use strict';
 
-load('rgb8.png').then(function (a) {
-    setLeft(a);
+// load data from localStorage
+var oldCode = localStorage.getItem('ij-test-code');
+var oldImg = localStorage.getItem('ij-test-img') || 'rgb8.png';
 
-    var editor = ace.edit('editor');
-    editor.$blockScrolling = Infinity;
-    editor.getSession().setMode('ace/mode/javascript');
-    editor.getSession().on('change', execute);
-
-    var oldCode = localStorage.getItem('ij-test-code');
-    if (oldCode) {
-        editor.setValue(oldCode, -1);
+var selectElement = $('#image-selector');
+images.forEach(function (img) {
+    var option = $('<option>' + img + '</option>').attr('value', img);
+    if (img === oldImg) {
+        option.attr('selected', 'selected');
     }
 
-    function execute() {
-        var img = a.clone();
+    selectElement.append(option);
+});
+
+selectElement.on('change', function () {
+    loadNewImage($(this).val());
+    execute();
+});
+
+var loading;
+function loadNewImage(img) {
+    loading = load(img).then(function (img) {
+        setLeft(img);
+        return img;
+    });
+}
+
+$('#run-script').on('click', execute);
+
+var editor = ace.edit('editor');
+editor.$blockScrolling = Infinity;
+editor.getSession().setMode('ace/mode/javascript');
+
+if (oldCode) {
+    editor.setValue(oldCode, -1);
+}
+
+var error = $('#error');
+var empty = new IJ(1, 1);
+
+function execute() {
+    loading.then(function (img) {
+        img = img.clone();
+
         var code = editor.getValue();
 
         localStorage.setItem('ij-test-code', code);
 
         try {
             eval(code);
+            error.text('');
         } catch (e) {
-            console.warn('Error: ' + e.message);
+            var text = 'Error: ' + e.message;
+            console.warn(text);
+            error.text(text);
+            setRight(empty);
         }
-    }
+    });
+}
 
-    execute();
-});
+loadNewImage(oldImg);
+execute();
