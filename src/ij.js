@@ -76,16 +76,18 @@ export default class IJ {
         });
     }
 
-    static extendMethod(name, method, inplace = false) {
+    static extendMethod(name, method, inplace = false, returnThis = true) {
         if (IJ.prototype.hasOwnProperty(name)) {
             console.warn(`Method '${name}' already exists and will be overwritten`);
         }
         if (inplace) {
             IJ.prototype[name] = function (...args) {
-                method.apply(this, args);
                 // reset computed properties
                 this.computed = {};
-                return this;
+                let result = method.apply(this, args);
+                if (returnThis)
+                    return this;
+                return result;
             };
         } else {
             IJ.prototype[name] = function (...args) {
@@ -115,8 +117,9 @@ export default class IJ {
     static createFrom(other, {
         width = other.width,
         height = other.height,
-        kind = {} // TODO if property is not present, take it from other
+        kind = other.kind
         } = {}) {
+        // TODO if kind is incomplete, take values from this
         return new IJ(width, height, {kind});
     }
 
@@ -210,7 +213,7 @@ export default class IJ {
     }
 
     clone() {
-        let nemImage = new IJ(this.width, this.height, {kind: this.kind, colorModel: this.colorModel});
+        let nemImage = IJ.createFrom(this);
         let data = this.data;
         let newData = nemImage.data;
         for (let i = 0; i < newData.length; i++) {
