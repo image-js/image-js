@@ -11,7 +11,7 @@ kinds[KindNames.BINARY] = {
     bitDepth: 1
 };
 
-kinds[KindNames.GREY] = {
+kinds[KindNames.GREYA] = {
     components: 1,
     alpha: 1,
     bitDepth: 8

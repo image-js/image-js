@@ -15,7 +15,7 @@ export default function invertMatrix() {
         for (let j=0; j<this.width; j++) {
             for (let k=0; k<this.components; k++) {
                 var value=this.getValue(i, j, k);
-                this.setValue(this.maxValue-value, i,j,k);
+                this.setValue(this.maxValue-value, i, j, k);
             }
         }
     }
