@@ -6,6 +6,8 @@
 // may be easier to implement some algorithm
 // but it will likely be much slower
 
+// this method is 50 times SLOWER than invert !!!!!!
+
 export default function invertMatrix() {
     this.checkProcessable("invert",{
         bitDepth:[8,16]
