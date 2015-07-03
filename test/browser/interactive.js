@@ -15,7 +15,9 @@ images.forEach(function (img) {
 });
 
 selectElement.on('change', function () {
-    loadNewImage($(this).val());
+    var imgName = $(this).val();
+    localStorage.setItem('ij-test-img', imgName);
+    loadNewImage(imgName);
     execute();
 });
 
