@@ -10,10 +10,7 @@ import crop from './transform/crop';
 import grey from './transform/grey';
 
 // computers
-import getHistogram from './compute/histogram'
-import getHistograms from './compute/histograms'
-
-
+import {getHistogram, getHistograms} from './compute/histogram';
 
 export default function extend(IJ) {
     IJ.extendMethod('invert', invert, true);
@@ -24,6 +21,6 @@ export default function extend(IJ) {
     IJ.extendMethod('grey', grey).extendMethod('gray', grey);
 
 
-    IJ.extendMethod('getHistogram', getHistogram);
-    IJ.extendMethod('getHistograms', getHistograms);
+    IJ.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);
+    IJ.extendMethod('getHistograms', getHistograms).extendProperty('histograms', getHistograms);
 }

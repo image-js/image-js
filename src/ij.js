@@ -9,7 +9,7 @@ import * as ColorModels from './model/models';
 
 let computedPropertyDescriptor = {
     configurable: true,
-    enumerable: true,
+    enumerable: false,
     get: undefined
 };
 
@@ -120,28 +120,24 @@ export default class IJ {
         return new IJ(width, height, {kind});
     }
 
-    toDataURL() {
-        return this.getCanvas().toDataURL();
-    }
-
     setValue(value, row, column, channel) {
-        this.data[(row*this.width+column)*this.channels+channel]=value;
+        this.data[(row * this.width + column) * this.channels + channel] = value;
     }
 
     getValue(row, column, channel) {
-        return this.data[(row*this.width+column)*this.channels+channel];
+        return this.data[(row * this.width + column) * this.channels + channel];
     }
 
     setMatrix(matrix, channel) {
         // the user is expected to know what he is doing !
         // we blinding put the matrix result
-        for (let i=0; i<this.height; i++) {
-            for (let j=0; j<this.width; j++) {
-                for (let k=0; k<this.channels; k++) {
+        for (let i = 0; i < this.height; i++) {
+            for (let j = 0; j < this.width; j++) {
+                for (let k = 0; k < this.channels; k++) {
                     if (channel) {
-                        this.data[(i*this.width+j)*this.channels+channel]=matrix[i][j];
+                        this.data[(i * this.width + j) * this.channels + channel] = matrix[i][j];
                     } else {
-                        this.data[(i*this.width+j)*this.channels+k]=matrix[i][j][k];
+                        this.data[(i * this.width + j) * this.channels + k] = matrix[i][j][k];
                     }
 
                 }
@@ -150,16 +146,16 @@ export default class IJ {
     }
 
     getMatrix(channel) {
-        var matrix=new Array(this.height);
-        for (let i=0; i<this.height; i++) {
-            matrix[i]=new Array(this.width);
-            for (let j=0; j<this.width; j++) {
+        let matrix = new Array(this.height);
+        for (let i = 0; i < this.height; i++) {
+            matrix[i] = new Array(this.width);
+            for (let j = 0; j < this.width; j++) {
                 if (channel) {
-                    matrix[i][j]=this.data[(i*this.width+j)*this.channels+channel]
+                    matrix[i][j] = this.data[(i * this.width + j) * this.channels + channel]
                 } else {
-                    matrix[i][j]=new Array(this.channels)
-                    for (let k=0; k<this.channels; k++) {
-                        matrix[i][j][k]=this.data[(i*this.width+j)*this.channels+k]
+                    matrix[i][j] = new Array(this.channels);
+                    for (let k = 0; k < this.channels; k++) {
+                        matrix[i][j][k] = this.data[(i * this.width + j) * this.channels + k]
                     }
                 }
 
@@ -168,14 +164,11 @@ export default class IJ {
         return matrix;
     }
 
-    getCanvas() {
-        /*
-            TODO
-            clone data if needed
-            ensure color model is RGB
-            ensure kind is COLOR32
-         */
+    toDataURL() {
+        return this.getCanvas().toDataURL();
+    }
 
+    getCanvas() {
         let data = getImageData(this.getRGBAData(), this.width, this.height);
         let canvas = new Canvas(this.width, this.height);
         let ctx = canvas.getContext('2d');
@@ -184,33 +177,33 @@ export default class IJ {
     }
 
     getRGBAData() {
-        this.checkProcessable("getRGBAData",{components:[1,3]});
+        this.checkProcessable("getRGBAData", {components: [1, 3]});
         let size = this.size;
-        let newData=getCanvasArray(this.width, this.height);
-        if (this.components===1) {
-            for (let i=0; i<size; i++) {
-                newData[i*4]=this.data[i*(1+this.alpha)]>>(this.bitDepth-8);
-                newData[i*4+1]=this.data[i*(1+this.alpha)]>>(this.bitDepth-8);
-                newData[i*4+2]=this.data[i*(1+this.alpha)]>>(this.bitDepth-8);
+        let newData = getCanvasArray(this.width, this.height);
+        if (this.components === 1) {
+            for (let i = 0; i < size; i++) {
+                newData[i * 4] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
+                newData[i * 4 + 1] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
+                newData[i * 4 + 2] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
             }
-        } else if (this.components===3) {
-            this.checkProcessable("getRGBAData",{colorModel:[ColorModels.RGB]});
-            if (this.colorModel===ColorModels.RGB) {
-                for (let i=0; i<size; i++) {
-                    newData[i*4]=this.data[i*4]>>(this.bitDepth-8);
-                    newData[i*4+1]=this.data[i*4+1]>>(this.bitDepth-8);
-                    newData[i*4+2]=this.data[i*4+2]>>(this.bitDepth-8);
+        } else if (this.components === 3) {
+            this.checkProcessable("getRGBAData", {colorModel: [ColorModels.RGB]});
+            if (this.colorModel === ColorModels.RGB) {
+                for (let i = 0; i < size; i++) {
+                    newData[i * 4] = this.data[i * 4] >> (this.bitDepth - 8);
+                    newData[i * 4 + 1] = this.data[i * 4 + 1] >> (this.bitDepth - 8);
+                    newData[i * 4 + 2] = this.data[i * 4 + 2] >> (this.bitDepth - 8);
                 }
             }
         }
         if (this.alpha) {
-            this.checkProcessable("getRGBAData",{bitDepth:[8,16]});
-            for (let i=0; i<size; i++) {
-                newData[i*4+3]=this.data[i*this.channels+this.components]>>(this.bitDepth-8);
+            this.checkProcessable("getRGBAData", {bitDepth: [8, 16]});
+            for (let i = 0; i < size; i++) {
+                newData[i * 4 + 3] = this.data[i * this.channels + this.components] >> (this.bitDepth - 8);
             }
         } else {
-            for (let i=0; i<size; i++) {
-                newData[i*4+3]=255;
+            for (let i = 0; i < size; i++) {
+                newData[i * 4 + 3] = 255;
             }
         }
         return newData;
@@ -225,8 +218,6 @@ export default class IJ {
         }
         return nemImage;
     }
-
-
 
     save(path, {format = 'png'} = {}) { // Node.JS only
         return new Promise((resolve, reject) => {
@@ -252,45 +243,33 @@ export default class IJ {
 
     // this method check if a process can be applied on the current image
     checkProcessable(processName, {
-            bitDepth, alpha, colorModel, components
+        bitDepth, alpha, colorModel, components
         } = {}) {
         if (bitDepth) {
-            if (! Array.isArray(bitDepth)) bitDepth=[bitDepth];
-            if (bitDepth.indexOf(this.bitDepth)==-1) {
-                throw new Error ('The process: '+processName+' can only be applied if bit depth is in: '+bitDepth);
+            if (!Array.isArray(bitDepth)) bitDepth = [bitDepth];
+            if (bitDepth.indexOf(this.bitDepth) == -1) {
+                throw new TypeError('The process: ' + processName + ' can only be applied if bit depth is in: ' + bitDepth);
             }
         }
         if (alpha) {
-            if (! Array.isArray(alpha)) alpha=[alpha];
-            if (alpha.indexOf(this.alpha)==-1) {
-                throw new Error ('The process: '+processName+' can only be applied if alpha is in: '+alpha);
+            if (!Array.isArray(alpha)) alpha = [alpha];
+            if (alpha.indexOf(this.alpha) == -1) {
+                throw new TypeError('The process: ' + processName + ' can only be applied if alpha is in: ' + alpha);
             }
         }
         if (colorModel) {
-            if (! Array.isArray(colorModel)) colorModel=[colorModel];
-            if (colorModel.indexOf(this.colorModel)==-1) {
-                throw new Error ('The process: '+processName+' can only be applied if color model is in: '+colorModel);
+            if (!Array.isArray(colorModel)) colorModel = [colorModel];
+            if (colorModel.indexOf(this.colorModel) == -1) {
+                throw new TypeError('The process: ' + processName + ' can only be applied if color model is in: ' + colorModel);
             }
         }
         if (components) {
-            if (! Array.isArray(components)) components=[components];
-            if (components.indexOf(this.components)==-1) {
-                throw new Error ('The process: '+processName+' can only be applied if the number of channels is in: '+components);
+            if (!Array.isArray(components)) components = [components];
+            if (components.indexOf(this.components) == -1) {
+                throw new TypeError('The process: ' + processName + ' can only be applied if the number of channels is in: ' + components);
             }
         }
     }
-
-
-    get histogram() {
-        this.computed.histogram = this.computed.histogram || this.getHistogram();
-        return this.computed.histogram;
-    }
-
-    get histograms() {
-        this.computed.histograms = this.computed.histograms || this.getHistograms();
-        return this.computed.histograms;
-    }
-
 }
 
 extend(IJ);
