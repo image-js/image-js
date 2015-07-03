@@ -33,6 +33,12 @@ var editor = ace.edit('editor');
 editor.$blockScrolling = Infinity;
 editor.getSession().setMode('ace/mode/javascript');
 
+editor.commands.addCommand({
+    name: "run",
+    bindKey: {win: "Ctrl-Return", mac: "Command-Return"},
+    exec: execute
+});
+
 if (oldCode) {
     editor.setValue(oldCode, -1);
 }
