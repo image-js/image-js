@@ -76,16 +76,18 @@ export default class IJ {
         });
     }
 
-    static extendMethod(name, method, inplace = false) {
+    static extendMethod(name, method, inplace = false, returnThis = true) {
         if (IJ.prototype.hasOwnProperty(name)) {
             console.warn(`Method '${name}' already exists and will be overwritten`);
         }
         if (inplace) {
             IJ.prototype[name] = function (...args) {
-                method.apply(this, args);
                 // reset computed properties
                 this.computed = {};
-                return this;
+                let result = method.apply(this, args);
+                if (returnThis)
+                    return this;
+                return result;
             };
         } else {
             IJ.prototype[name] = function (...args) {
@@ -115,8 +117,9 @@ export default class IJ {
     static createFrom(other, {
         width = other.width,
         height = other.height,
-        kind = {} // TODO if property is not present, take it from other
+        kind = other.kind
         } = {}) {
+        // TODO if kind is incomplete, take values from this
         return new IJ(width, height, {kind});
     }
 
@@ -131,34 +134,32 @@ export default class IJ {
     setMatrix(matrix, channel) {
         // the user is expected to know what he is doing !
         // we blinding put the matrix result
-        for (let i = 0; i < this.height; i++) {
-            for (let j = 0; j < this.width; j++) {
+        for (let i = 0; i < this.width; i++) {
+            for (let j = 0; j < this.height; j++) {
                 for (let k = 0; k < this.channels; k++) {
                     if (channel) {
-                        this.data[(i * this.width + j) * this.channels + channel] = matrix[i][j];
+                        this.data[(j * this.width + i) * this.channels + channel] = matrix[i][j];
                     } else {
-                        this.data[(i * this.width + j) * this.channels + k] = matrix[i][j][k];
+                        this.data[(j * this.width + i) * this.channels + k] = matrix[i][j][k];
                     }
-
                 }
             }
         }
     }
 
     getMatrix(channel) {
-        let matrix = new Array(this.height);
-        for (let i = 0; i < this.height; i++) {
-            matrix[i] = new Array(this.width);
-            for (let j = 0; j < this.width; j++) {
+        let matrix = new Array(this.width);
+        for (let i = 0; i < this.width; i++) {
+            matrix[i] = new Array(this.height);
+            for (let j = 0; j < this.height; j++) {
                 if (channel) {
-                    matrix[i][j] = this.data[(i * this.width + j) * this.channels + channel]
+                    matrix[i][j] = this.data[(j * this.width + i) * this.channels + channel]
                 } else {
                     matrix[i][j] = new Array(this.channels);
                     for (let k = 0; k < this.channels; k++) {
-                        matrix[i][j][k] = this.data[(i * this.width + j) * this.channels + k]
+                        matrix[i][j][k] = this.data[(j * this.width + i) * this.channels + k]
                     }
                 }
-
             }
         }
         return matrix;
@@ -240,7 +241,7 @@ export default class IJ {
 
 
     clone() {
-        let nemImage = new IJ(this.width, this.height, {kind: this.kind, colorModel: this.colorModel});
+        let nemImage = IJ.createFrom(this);
         let data = this.data;
         let newData = nemImage.data;
         for (let i = 0; i < newData.length; i++) {
