@@ -1,14 +1,22 @@
 'use strict';
 
-export default function invert() {
-    this.checkProcessable("invert", {
-        bitDepth: [8, 16]
+
+// this code gives the same result as invert()
+// but is based on a matrix of pixels
+// may be easier to implement some algorithm
+// but it will likely be much slower
+
+export default function invertMatrix() {
+    this.checkProcessable("invert",{
+        bitDepth:[8,16]
     });
 
-    var data = this.data;
-    for (let i = 0; i < data.length; i += this.channels) {
-        for (let j = 0; j < this.components; j++) {
-            data[i + j] = this.maxValue - data[i + j];
+    for (let i=0; i<this.height; i++) {
+        for (let j=0; j<this.width; j++) {
+            for (let k=0; k<this.components; k++) {
+                var value=this.getValue(i, j, k);
+                this.setValue(i, j, k, this.maxValue-value);
+            }
         }
     }
 };

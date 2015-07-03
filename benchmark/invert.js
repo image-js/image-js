@@ -15,8 +15,8 @@ IJ.load(Test.getImage('rgb8.png')).then(function (img) {
         .add('invertMatrix', function () {
             img.invertMatrix();
         })
-        .add('invertGetterSetter', function () {
-            img.invertGetterSetter();
+        .add('invertOneLoop', function () {
+            img.invertOneLoop();
         })
         .on('cycle', function (event) {
             console.log(String(event.target));

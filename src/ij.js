@@ -123,7 +123,7 @@ export default class IJ {
         return new IJ(width, height, {kind});
     }
 
-    setValue(value, row, column, channel) {
+    setValue(row, column, channel, value) {
         this.data[(row * this.width + column) * this.channels + channel] = value;
     }
 

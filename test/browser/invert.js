@@ -19,28 +19,28 @@ load('rgb8.png').then(function (a) {
 });
 */
 
-load('rgb8.png').then(function (a) {
-    setLeft(a);
+load('rgb8.png').then(function (img) {
+    //setLeft(a);
 
     console.time("invert");
     for (var i=0; i<200; i++) {
-        a.invert();
+        img.invert();
     }
     console.timeEnd("invert");
 
     console.time("invertMatrix");
     for (var i=0; i<200; i++) {
-        a.invertMatrix();
+        img.invertMatrix();
     }
     console.timeEnd("invertMatrix");
 
-    console.time("invertGetterSetter");
+    console.time("invertOneLoop");
     for (var i=0; i<200; i++) {
-        a.invertGetterSetter();
+        img.invertOneLoop();
     }
-    console.timeEnd("invertGetterSetter");
+    console.timeEnd("invertOneLoop");
 
 
-    setRight(a);
+   // setRight(a);
 
 });
