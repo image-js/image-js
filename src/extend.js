@@ -9,6 +9,8 @@ import invertOneLoop from './filter/invertOneLoop';
 import crop from './transform/crop';
 import grey from './transform/grey';
 
+import split from './utility/split';
+
 // computers
 import {getHistogram, getHistograms} from './compute/histogram';
 
@@ -20,6 +22,7 @@ export default function extend(IJ) {
     IJ.extendMethod('crop', crop); // last parameter is "false" because it creates a new image
     IJ.extendMethod('grey', grey).extendMethod('gray', grey);
 
+    IJ.extendMethod('split', split);
 
     IJ.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);
     IJ.extendMethod('getHistograms', getHistograms).extendProperty('histograms', getHistograms);
