@@ -19,7 +19,7 @@ export default function paintMasks(rois, options) {
         var roi=rois[i];
         for (let x=0; x<roi.width; x++) {
             for (let y=0; y<roi.height; y++) {
-                if (roi.getBit(x,y)) {
+                if (roi.getBitXY(x,y)) {
                     for (let component=0; component<this.components; component++) {
                         this.setValueXY(x+roi.position[0], y+roi.position[1], component, color[component]);
                     }
@@ -27,6 +27,4 @@ export default function paintMasks(rois, options) {
             }
         }
     }
-
-
 }

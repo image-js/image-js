@@ -16,7 +16,6 @@ export default function mapMask({} = {}) {
     var negativeID=0;
     var self=this;
 
-
     for (let x=0; x<this.width; x++) {
         for (let y=0; y<this.height; y++) {
             if (pixels[y*this.width+x]===0) {
@@ -27,11 +26,11 @@ export default function mapMask({} = {}) {
     }
 
     function analyseSurface(x,y) {
-        let MAX_ARRAY=0x0ffff;
+        let MAX_ARRAY=0x00ffff; // should be enough for most of the cases
         let targetState=self.getBitXY(x,y);
         let id=targetState ? ++positiveID : --negativeID;
         let xToProcess=new Uint16Array(MAX_ARRAY+1); // assign dynamically ????
-        let yToProcess=new Uint16Array(MAX_ARRAY+1);
+        let yToProcess=new Uint16Array(MAX_ARRAY+1); // this +1 is of course mandatory !!!
         let from=0;
         let to=0;
         xToProcess[0]=x;

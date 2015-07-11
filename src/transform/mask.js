@@ -18,7 +18,6 @@ export default function mask({algorithm = '', options = {}} = {}) {
         }
     );
 
-
     if (this.alpha && useAlpha) {
         for (let i = 0; i < data.length; i += 2) {
             if ((data[i]*data[i+1]/this.maxValue)>=threshold) {
@@ -32,7 +31,6 @@ export default function mask({algorithm = '', options = {}} = {}) {
             }
         }
     }
-
 
     return newImage;
 }

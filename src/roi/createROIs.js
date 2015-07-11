@@ -24,13 +24,10 @@ export default function createROIs({} = {}) {
         });
         for (let x=0; x<width; x++) {
             for (let y=0; y<height; y++) {
-                if (pixels[x+roi.minX+(y+roi.minY)*this.width]===roi.id) img.setBit(x,y);
+                if (pixels[x+roi.minX+(y+roi.minY)*this.width]===roi.id) img.setBitXY(x,y);
             }
         }
-
-
         images[i]=img;
-
     }
     return images;
 }
