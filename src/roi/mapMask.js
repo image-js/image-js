@@ -27,11 +27,11 @@ export default function mapMask({} = {}) {
     }
 
     function analyseSurface(x,y) {
-        let MAX_ARRAY=0x000f;
+        let MAX_ARRAY=0x0ffff;
         let targetState=self.getBitXY(x,y);
         let id=targetState ? ++positiveID : --negativeID;
-        let xToProcess=new Uint16Array(MAX_ARRAY); // assign dynamically ????
-        let yToProcess=new Uint16Array(MAX_ARRAY);
+        let xToProcess=new Uint16Array(MAX_ARRAY+1); // assign dynamically ????
+        let yToProcess=new Uint16Array(MAX_ARRAY+1);
         let from=0;
         let to=0;
         xToProcess[0]=x;
@@ -46,26 +46,31 @@ export default function mapMask({} = {}) {
                     to++;
                     xToProcess[to & MAX_ARRAY]=currentX-1;
                     yToProcess[to & MAX_ARRAY]=currentY;
+                    pixels[currentY*self.width+currentX-1]=-32765;
             }
             if (currentY>0 && pixels[(currentY-1)*self.width+currentX]===0 &&
                 self.getBitXY(currentX,currentY-1)==targetState) {
                     to++;
                     xToProcess[to & MAX_ARRAY]=currentX;
                     yToProcess[to & MAX_ARRAY]=currentY-1;
+                    pixels[(currentY-1)*self.width+currentX]=-32766;
             }
             if (currentX<self.width-1 && pixels[currentY*self.width+currentX+1]===0 &&
                 self.getBitXY(currentX+1,currentY)==targetState) {
                     to++;
                     xToProcess[to & MAX_ARRAY]=currentX+1;
                     yToProcess[to & MAX_ARRAY]=currentY;
+                    pixels[currentY*self.width+currentX+1]=-32767;
             }
             if (currentY<self.height-1 && pixels[(currentY+1)*self.width+currentX]===0 &&
                 self.getBitXY(currentX,currentY+1)==targetState) {
                     to++;
                     xToProcess[to & MAX_ARRAY]=currentX;
                     yToProcess[to & MAX_ARRAY]=currentY+1;
+                    pixels[(currentY+1)*self.width+currentX]=-32768;
             }
             from++;
+
             if ((to-from)>MAX_ARRAY) {
                 throw new Error ("analyseMask can not finish, the array to manage internal data is not big enough." +
                 "You could improve this by changing MAX_ARRAY");
