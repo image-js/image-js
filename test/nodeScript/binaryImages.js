@@ -1,31 +1,20 @@
 'use strict';
 
+v
 var IJ = require('../..');
 
-var img=new IJ(16,1,{
+var data=new Uint8Array(2);
+data[0]=63;
+data[1]=192;
+
+var img=new IJ(4,4, data, {
     kind: 'BINARY'
 });
 
 
-img.setBitXY(15,0);
-img.setBitXY(1,0);
 
-console.log(img.getBitXY(0,0),img.getBitXY(1,0),img.getBitXY(15,0));
+var pixels=img.analyseMask();
 
-img.toggleBitXY(1,0);
-img.toggleBitXY(0,0);
-
-console.log(img.getBitXY(0,0),img.getBitXY(1,0),img.getBitXY(15,0));
-
-img.clearBitXY(15,0);
+console.log(pixels);
 
 
-console.log(img.data);
-
-img.invert();
-
-console.log(img.data);
-
-var rgba=img.getRGBAData();
-
-console.log(rgba);

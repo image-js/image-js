@@ -9,13 +9,18 @@ export default function splitBinary({} = {}) {
         bitDepth: [1]
     });
 
+
+
+
+    var maskInfo=this.analyseMask();
+
+
+    var rois=this.createROIs(maskInfo);
+
+
+
+
     var images=[];
-
-
-    // based on a binary image we will create plently of small images
-    var pixels=this.mark();
-
-
 
     return images;
 }

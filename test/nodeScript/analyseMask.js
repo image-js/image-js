@@ -11,7 +11,8 @@ var img=new IJ(4,4, data, {
 });
 
 
+var maskInfo=img.analyseMask();
 
-var pixels=img.analyseMask();
+var rois=img.createROIs(maskInfo);
 
-console.log(pixels);
+console.log(rois);
