@@ -48,10 +48,13 @@ export default class IJ {
 
 
         let length = this.size * this.channels;
+        if (this.bitDepth==1) length=Math.ceil(length/8);
+
         if (!data)
             data = getPixelArray(kind, length);
         else if (data.length !== length)
             throw new RangeError(`incorrect data size. Expected ${length} but got ${data.length}`);
+
 
         this.data = data;
     }
