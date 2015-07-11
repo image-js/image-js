@@ -42,7 +42,7 @@ editor.commands.addCommand({
 });
 
 if (oldCode) {
-    editor.setValueXY(oldCode, -1);
+    editor.setValue(oldCode, -1);
 }
 
 var error = $('#error');
@@ -52,7 +52,7 @@ function execute() {
     loading.then(function (img) {
         img = img.clone();
 
-        var code = editor.getValueXY();
+        var code = editor.getValue();
 
         localStorage.setItem('ij-test-code', code);
 
