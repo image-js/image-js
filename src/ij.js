@@ -31,6 +31,8 @@ export default class IJ {
         this.width = width;
         this.height = height;
 
+        this.position = options.position || [0,0];
+
         let kind = options.kind || RGBA;
         if (typeof kind === 'string') kind = getKind(kind);
         if (!kind) throw new RangeError('invalid image kind: ' + kind);
