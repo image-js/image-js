@@ -45,21 +45,21 @@ export default function mapMask({} = {}) {
                     to++;
                     xToProcess[to & MAX_ARRAY]=currentX-1;
                     yToProcess[to & MAX_ARRAY]=currentY;
-                    pixels[currentY*self.width+currentX-1]=-32765;
+                    pixels[currentY*self.width+currentX-1]=-32768;
             }
             if (currentY>0 && pixels[(currentY-1)*self.width+currentX]===0 &&
                 self.getBitXY(currentX,currentY-1)==targetState) {
                     to++;
                     xToProcess[to & MAX_ARRAY]=currentX;
                     yToProcess[to & MAX_ARRAY]=currentY-1;
-                    pixels[(currentY-1)*self.width+currentX]=-32766;
+                    pixels[(currentY-1)*self.width+currentX]=-32768;
             }
             if (currentX<self.width-1 && pixels[currentY*self.width+currentX+1]===0 &&
                 self.getBitXY(currentX+1,currentY)==targetState) {
                     to++;
                     xToProcess[to & MAX_ARRAY]=currentX+1;
                     yToProcess[to & MAX_ARRAY]=currentY;
-                    pixels[currentY*self.width+currentX+1]=-32767;
+                    pixels[currentY*self.width+currentX+1]=-32768;
             }
             if (currentY<self.height-1 && pixels[(currentY+1)*self.width+currentX]===0 &&
                 self.getBitXY(currentX,currentY+1)==targetState) {
