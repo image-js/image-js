@@ -12,7 +12,7 @@ describe('mark a binary image 4 x 4 in 3 zones and create ROIs', function () {
         kind: 'BINARY'
     });
 
-    var result=img.createROIs(img.analyseMask());
+    var result=img.mapInfo(img.mapMask());
 
     var expected=[ { id: -2, minX: 0, maxX: 3, minY: 2, maxY: 3, surface: 6 },
         { id: -1, minX: 0, maxX: 1, minY: 0, maxY: 0, surface: 2 },

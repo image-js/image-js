@@ -2,7 +2,7 @@
 
 import {IJ} from '../common';
 
-describe('mark a binary image 2 x 2', function () {
+describe('map a binary image (mask) 2 x 2', function () {
     var data=new Uint8Array(1);
     data[0]=192;
 
@@ -10,7 +10,7 @@ describe('mark a binary image 2 x 2', function () {
         kind: 'BINARY'
     });
 
-    var result=img.analyseMask();
+    var result=img.mapMask();
     var pixels=result.pixels;
 
     it('should have 4 pixels in 2 zones', function () {
@@ -29,7 +29,7 @@ describe('mark a binary image 2 x 2', function () {
 
 });
 
-describe('mark a binary image 4 x 4 in 2 zones', function () {
+describe('map a binary image 4 x 4 in 2 zones', function () {
     var data=new Uint8Array(2);
     data[0]=255;
     data[1]=0;
@@ -38,7 +38,7 @@ describe('mark a binary image 4 x 4 in 2 zones', function () {
         kind: 'BINARY'
     });
 
-    var result=img.analyseMask();
+    var result=img.mapMask();
     var pixels=result.pixels;
 
     it('should have 16 pixels in 2 zones', function () {
@@ -57,7 +57,7 @@ describe('mark a binary image 4 x 4 in 2 zones', function () {
 
 });
 
-describe('mark a binary image 4 x 4 in 2 zones', function () {
+describe('map a binary image 4 x 4 in 2 zones', function () {
     var data=new Uint8Array(2);
     data[0]=63;
     data[1]=192;
@@ -66,7 +66,7 @@ describe('mark a binary image 4 x 4 in 2 zones', function () {
         kind: 'BINARY'
     });
 
-    var result=img.analyseMask();
+    var result=img.mapMask();
     var pixels=result.pixels;
 
     it('should have 16 pixels in 3 zones', function () {

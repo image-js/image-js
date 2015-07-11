@@ -3,15 +3,15 @@
 import IJ from '../ij';
 
 
-export default function splitBinary({} = {}) {
+export default function createROIs({} = {}) {
 
     this.checkProcessable('mark', {
         bitDepth: [1]
     });
 
-    var maskInfo=this.analyseMask();
+    var maskInfo=this.mapMask();
     var pixels=maskInfo.pixels;
-    var rois=this.createROIs(maskInfo);
+    var rois=this.mapInfo(maskInfo);
 
     var images=new Array(rois.length);
     for (let i=0; i<rois.length; i++) {
@@ -32,6 +32,5 @@ export default function splitBinary({} = {}) {
         images[i]=img;
 
     }
-
     return images;
 }

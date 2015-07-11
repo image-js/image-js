@@ -12,9 +12,9 @@ import grey from './transform/grey';
 import mask from './transform/mask';
 
 import split from './utility/split';
-import splitBinary from './utility/splitBinary';
-import analyseMask from './utility/analyseMask';
-import createROIs from './utility/createROIs';
+import createROIs from './roi/createROIs';
+import mapMask from './roi/mapMask';
+import mapInfo from './roi/mapInfo';
 
 // computers
 import {getHistogram, getHistograms} from './compute/histogram';
@@ -30,9 +30,9 @@ export default function extend(IJ) {
     IJ.extendMethod('mask', mask);
 
     IJ.extendMethod('split', split);
-    IJ.extendMethod('splitBinary', splitBinary);
-    IJ.extendMethod('analyseMask', analyseMask);
     IJ.extendMethod('createROIs', createROIs);
+    IJ.extendMethod('mapMask', mapMask);
+    IJ.extendMethod('mapInfo', mapInfo);
 
     IJ.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);
     IJ.extendMethod('getHistograms', getHistograms).extendProperty('histograms', getHistograms);

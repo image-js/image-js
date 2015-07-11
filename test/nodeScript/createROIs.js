@@ -10,9 +10,7 @@ var img=new IJ(4,4, data, {
     kind: 'BINARY'
 });
 
+var rois=img.createROIs();
 
-var maskInfo=img.analyseMask();
-
-var rois=img.createROIs(maskInfo);
 
 console.log(rois);

@@ -2,16 +2,14 @@
 
 import IJ from '../ij';
 
-export default function analseMask({} = {}) {
+export default function mapMask({} = {}) {
 
-    this.checkProcessable('analyseMask', {
+    this.checkProcessable('mapMask', {
         bitDepth: [1]
     });
 
-
     // based on a binary image we will create plently of small images
     var pixels=new Int16Array(this.size); // maxValue: 32767, minValue: -32768
-
 
     // split will always return an array of images
     var positiveID=0;

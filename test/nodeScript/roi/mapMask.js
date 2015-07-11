@@ -1,6 +1,6 @@
 'use strict';
 
-var IJ = require('../..');
+var IJ = require('../../../../lib/ij.js');
 
 var data=new Uint8Array(2);
 data[0]=63;
@@ -11,8 +11,8 @@ var img=new IJ(4,4, data, {
 });
 
 
-var rois=img.splitBinary();
+var maskInfo=img.analyseMask();
 
-
+var rois=img.createROIs(maskInfo);
 
 console.log(rois);
