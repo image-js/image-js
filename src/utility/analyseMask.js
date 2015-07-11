@@ -29,57 +29,49 @@ export default function analseMask({} = {}) {
     }
 
     function analyseSurface(x,y) {
+        let MAX_ARRAY=0x000f;
         let targetState=self.getBitXY(x,y);
-        console.log(x,y);
-        console.log("target state ", targetState)
-
         let id=targetState ? ++positiveID : --negativeID;
-        console.log("ID ",id)
-        let xToProcess=new Uint16Array(8); // assign dynamically ????
-        let yToProcess=new Uint16Array(8);
+        let xToProcess=new Uint16Array(MAX_ARRAY); // assign dynamically ????
+        let yToProcess=new Uint16Array(MAX_ARRAY);
         let from=0;
         let to=0;
         xToProcess[0]=x;
         yToProcess[0]=y;
         while(from<=to) {
-            let currentX=xToProcess[from & 0xffff];
-            let currentY=yToProcess[from & 0xffff];
-            console.log("Processing: ",currentX, " ", currentY)
+            let currentX=xToProcess[from & MAX_ARRAY];
+            let currentY=yToProcess[from & MAX_ARRAY];
             pixels[currentY*self.width+currentX]=id;
             // need to check all around this pixel
             if (currentX>0 && pixels[currentY*self.width+currentX-1]===0 &&
                 self.getBitXY(currentX-1,currentY)==targetState) {
-                    console.log("left")
                     to++;
-                    xToProcess[to & 0xffff]=currentX-1;
-                    yToProcess[to & 0xffff]=currentY;
+                    xToProcess[to & MAX_ARRAY]=currentX-1;
+                    yToProcess[to & MAX_ARRAY]=currentY;
             }
             if (currentY>0 && pixels[(currentY-1)*self.width+currentX]===0 &&
                 self.getBitXY(currentX,currentY-1)==targetState) {
-                console.log("top")
                     to++;
-                    xToProcess[to & 0xffff]=currentX;
-                    yToProcess[to & 0xffff]=currentY-1;
+                    xToProcess[to & MAX_ARRAY]=currentX;
+                    yToProcess[to & MAX_ARRAY]=currentY-1;
             }
             if (currentX<self.width-1 && pixels[currentY*self.width+currentX+1]===0 &&
                 self.getBitXY(currentX+1,currentY)==targetState) {
-                console.log("right")
                     to++;
-                console.log("--- ",to)
-                    xToProcess[to & 0xffff]=currentX+1;
-                    yToProcess[to & 0xffff]=currentY;
+                    xToProcess[to & MAX_ARRAY]=currentX+1;
+                    yToProcess[to & MAX_ARRAY]=currentY;
             }
             if (currentY<self.height-1 && pixels[(currentY+1)*self.width+currentX]===0 &&
                 self.getBitXY(currentX,currentY+1)==targetState) {
-                console.log("bottom")
                     to++;
-                    xToProcess[to & 0xffff]=currentX;
-                    yToProcess[to & 0xffff]=currentY+1;
+                    xToProcess[to & MAX_ARRAY]=currentX;
+                    yToProcess[to & MAX_ARRAY]=currentY+1;
             }
-            console.log(xToProcess);
-            console.log(yToProcess);
             from++;
-            console.log(from, to);
+            if ((to-from)>MAX_ARRAY) {
+                throw new Error ("analyseMask can not finish, the array to manage internal data is not big enough." +
+                "You could improve this by changing MAX_ARRAY");
+            }
         }
     }
 
