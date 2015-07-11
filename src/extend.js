@@ -8,6 +8,7 @@ import invertOneLoop from './filter/invertOneLoop';
 // transformers
 import crop from './transform/crop';
 import grey from './transform/grey';
+import mask from './transform/mask';
 
 import split from './utility/split';
 
@@ -21,6 +22,7 @@ export default function extend(IJ) {
 
     IJ.extendMethod('crop', crop); // last parameter is "false" because it creates a new image
     IJ.extendMethod('grey', grey).extendMethod('gray', grey);
+    IJ.extendMethod('mask', mask);
 
     IJ.extendMethod('split', split);
 
