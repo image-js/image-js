@@ -21,7 +21,7 @@ load('rgb8.png').then(function (a) {
 
 
 
-IJ.load('rgb8.png').then(function (img) {
+load('rgb8.png').then(function (img) {
     //setLeft(a);
 
     console.time("invert");
