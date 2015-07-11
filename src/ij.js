@@ -131,6 +131,14 @@ export default class IJ {
         return this.data[(row * this.width + column) * this.channels + channel];
     }
 
+    setValue(target, channel, value) {
+        this.data[target * this.channels + channel] = value;
+    }
+
+    getValue(target, channel) {
+        return this.data[target * this.channels + channel];
+    }
+
     setMatrix(matrix, channel) {
         // the user is expected to know what he is doing !
         // we blinding put the matrix result
