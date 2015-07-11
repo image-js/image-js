@@ -7,18 +7,25 @@ var img=new IJ(16,1,{
 });
 
 
-img.setBit(15,0);
-img.setBit(1,0);
+img.setBitXY(15,0);
+img.setBitXY(1,0);
 
-console.log(img.getBit(0,0),img.getBit(1,0),img.getBit(15,0));
+console.log(img.getBitXY(0,0),img.getBitXY(1,0),img.getBitXY(15,0));
 
-img.toggleBit(1,0);
-img.toggleBit(0,0);
+img.toggleBitXY(1,0);
+img.toggleBitXY(0,0);
 
-console.log(img.getBit(0,0),img.getBit(1,0),img.getBit(15,0));
+console.log(img.getBitXY(0,0),img.getBitXY(1,0),img.getBitXY(15,0));
 
-img.clearBit(15,0);
-img.clearBit(1,0);
+img.clearBitXY(15,0);
+
 
 console.log(img.data);
 
+img.invert();
+
+console.log(img.data);
+
+var rgba=img.getRGBAData();
+
+console.log(rgba);

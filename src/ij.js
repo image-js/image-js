@@ -123,11 +123,11 @@ export default class IJ {
         return new IJ(width, height, {kind});
     }
 
-    setValue(row, column, channel, value) {
+    setValueXY(row, column, channel, value) {
         this.data[(row * this.width + column) * this.channels + channel] = value;
     }
 
-    getValue(row, column, channel) {
+    getValueXY(row, column, channel) {
         return this.data[(row * this.width + column) * this.channels + channel];
     }
 
@@ -178,22 +178,34 @@ export default class IJ {
     }
 
     getRGBAData() {
-        this.checkProcessable("getRGBAData", {components: [1, 3]});
+        this.checkProcessable("getRGBAData", {
+            components: [1, 3],
+            bitDepth: [1, 8, 16]
+        });
         let size = this.size;
         let newData = getCanvasArray(this.width, this.height);
-        if (this.components === 1) {
+        if (this.bitDepth==1) {
             for (let i = 0; i < size; i++) {
-                newData[i * 4] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
-                newData[i * 4 + 1] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
-                newData[i * 4 + 2] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
+                var value=this.getBit(i);
+                newData[i * 4] = value*255;
+                newData[i * 4 + 1] = value*255;
+                newData[i * 4 + 2] = value*255;
             }
-        } else if (this.components === 3) {
-            this.checkProcessable("getRGBAData", {colorModel: [ColorModels.RGB]});
-            if (this.colorModel === ColorModels.RGB) {
+        } else {
+            if (this.components === 1) {
                 for (let i = 0; i < size; i++) {
-                    newData[i * 4] = this.data[i * 4] >> (this.bitDepth - 8);
-                    newData[i * 4 + 1] = this.data[i * 4 + 1] >> (this.bitDepth - 8);
-                    newData[i * 4 + 2] = this.data[i * 4 + 2] >> (this.bitDepth - 8);
+                    newData[i * 4] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
+                    newData[i * 4 + 1] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
+                    newData[i * 4 + 2] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
+                }
+            } else if (this.components === 3) {
+                this.checkProcessable("getRGBAData", {colorModel: [ColorModels.RGB]});
+                if (this.colorModel === ColorModels.RGB) {
+                    for (let i = 0; i < size; i++) {
+                        newData[i * 4] = this.data[i * 4] >> (this.bitDepth - 8);
+                        newData[i * 4 + 1] = this.data[i * 4 + 1] >> (this.bitDepth - 8);
+                        newData[i * 4 + 2] = this.data[i * 4 + 2] >> (this.bitDepth - 8);
+                    }
                 }
             }
         }
@@ -211,30 +223,54 @@ export default class IJ {
     }
 
     // those methods can only apply on binary images ... but we will not loose time to check !
-    setBit(x,y) {
+    setBitXY(x,y) {
         var target=y*this.width+x;
-        var shift=target & 0b00000111;
+        var shift=7 - (target & 0b00000111);
         var slot=target>>3;
         this.data[slot] |= 1<<shift;
     }
 
-    clearBit(x,y) {
+    clearBitXY(x,y) {
         var target=y*this.width+x;
-        var shift=target & 0b00000111;
+        var shift=7 - (target & 0b00000111);
         var slot=target>>3;
         this.data[slot] &= ~(1<<shift);
     }
 
-    toggleBit(x,y) {
+    toggleBitXY(x,y) {
         var target=y*this.width+x;
-        var shift=target & 0b00000111;
+        var shift=7 - (target & 0b00000111);
         var slot=target>>3;
         this.data[slot] ^= 1<<shift;
     }
 
-    getBit(x,y) {
+    getBitXY(x,y) {
         var target=y*this.width+x;
-        var shift=target & 0b00000111;
+        var shift=7 - (target & 0b00000111);
+        var slot=target>>3;
+        return (this.data[slot] & 1<<shift) ? 1 : 0;
+    }
+
+    setBit(target) {
+        var shift=7 - (target & 0b00000111);
+        var slot=target>>3;
+        this.data[slot] |= 1<<shift;
+    }
+
+    clearBit(target) {
+        var shift=7 - (target & 0b00000111);
+        var slot=target>>3;
+        this.data[slot] &= ~(1<<shift);
+    }
+
+    toggleBit(target) {
+        var shift=7 - (target & 0b00000111);
+        var slot=target>>3;
+        this.data[slot] ^= 1<<shift;
+    }
+
+    getBit(target) {
+        var shift=7 - (target & 0b00000111);
         var slot=target>>3;
         return (this.data[slot] & 1<<shift) ? 1 : 0;
     }
