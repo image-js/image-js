@@ -8,14 +8,24 @@
 
 export default function invertMatrix() {
     this.checkProcessable("invert",{
-        bitDepth:[8,16]
+        bitDepth:[1,8,16]
     });
 
-    for (let i=0; i<this.height; i++) {
-        for (let j=0; j<this.width; j++) {
-            for (let k=0; k<this.components; k++) {
-                var value=this.getValue(i, j, k);
-                this.setValue(i, j, k, this.maxValue-value);
+    if (this.bitDepth==1) {
+        // we simply invert all the integers value
+        // there could be a small mistake if the number of points
+        // is not a multiple of 8 but it is not important
+        var data=this.data;
+        for (var i=0; i<data.length; i++) {
+            data[i]= ~data[i];
+        }
+    } else {
+        for (let i=0; i<this.height; i++) {
+            for (let j=0; j<this.width; j++) {
+                for (let k=0; k<this.components; k++) {
+                    var value=this.getValueXY(i, j, k);
+                    this.setValueXY(i, j, k, this.maxValue-value);
+                }
             }
         }
     }
