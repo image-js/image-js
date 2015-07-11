@@ -19,7 +19,9 @@ load('rgb8.png').then(function (a) {
 });
 */
 
-load('rgb8.png').then(function (img) {
+
+
+IJ.load('rgb8.png').then(function (img) {
     //setLeft(a);
 
     console.time("invert");

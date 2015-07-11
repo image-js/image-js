@@ -6,7 +6,7 @@ describe('IJ core', function () {
     it('constructor defaults', function () {
         let img = new IJ();
         img.width.should.equal(1);
-        img.width.should.equal(1);
+        img.height.should.equal(1);
         img.data.length.should.equal(4);
     });
 
