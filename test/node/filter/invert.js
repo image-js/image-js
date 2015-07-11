@@ -14,3 +14,17 @@ describe('invert 3 components', function () {
 
     });
 });
+
+describe('invert binary image', function () {
+    it('should invert a binary image', function () {
+        let image = new IJ(8,1,{
+            kind: 'BINARY'
+        });
+        image.setBitXY(0,0);
+        let inverted = new Uint8Array(1);
+        inverted[0]=127;
+
+        image.invert();
+        image.data.should.eql(inverted);
+    });
+});
