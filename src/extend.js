@@ -4,6 +4,7 @@
 import invert from './filter/invert';
 import invertMatrix from './filter/invertMatrix';
 import invertOneLoop from './filter/invertOneLoop';
+import invertBinaryLoop from './filter/invertBinaryLoop';
 
 // transformers
 import crop from './transform/crop';
@@ -19,6 +20,7 @@ export default function extend(IJ) {
     IJ.extendMethod('invert', invert, true); // true means the process is in-place
     IJ.extendMethod('invertMatrix', invertMatrix, true);
     IJ.extendMethod('invertOneLoop', invertOneLoop, true);
+    IJ.extendMethod('invertBinaryLoop', invertBinaryLoop, true);
 
     IJ.extendMethod('crop', crop); // last parameter is "false" because it creates a new image
     IJ.extendMethod('grey', grey).extendMethod('gray', grey);

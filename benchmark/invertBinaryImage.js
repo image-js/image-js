@@ -6,16 +6,17 @@ var Test = require('ij-test');
 
 var suite = new Benchmark.Suite;
 
+
+
 IJ.load(Test.getImage('rgb8.png')).then(function (img) {
+    var mask=img.split()[0].mask();
+
     suite
         .add('invert', function () {
-            img.invert();
+            mask.invert();
         })
-        .add('invertMatrix', function () {
-            img.invertMatrix();
-        })
-        .add('invertOneLoop', function () {
-            img.invertOneLoop();
+        .add('invertBinaryLoop', function () {
+            mask.invertBinaryLoop();
         })
         .on('cycle', function (event) {
             console.log(String(event.target));
