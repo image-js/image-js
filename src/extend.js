@@ -15,6 +15,7 @@ import split from './utility/split';
 import createROIs from './roi/createROIs';
 import mapMask from './roi/mapMask';
 import mapInfo from './roi/mapInfo';
+import paintMasks from './operator/paintMasks';
 
 // computers
 import {getHistogram, getHistograms} from './compute/histogram';
@@ -33,6 +34,8 @@ export default function extend(IJ) {
     IJ.extendMethod('createROIs', createROIs);
     IJ.extendMethod('mapMask', mapMask);
     IJ.extendMethod('mapInfo', mapInfo);
+
+    IJ.extendMethod('paintMasks', paintMasks);
 
     IJ.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);
     IJ.extendMethod('getHistograms', getHistograms).extendProperty('histograms', getHistograms);

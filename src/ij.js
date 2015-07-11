@@ -1,6 +1,6 @@
 'use strict';
 
-import {getKind, getPixelArray} from './kind';
+import {getKind, getPixelArray, getPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
 import {Image, getImageData, Canvas, getCanvasArray} from './canvas';
 import extend from './extend';
@@ -48,15 +48,14 @@ export default class IJ {
 
         this.computed = {};
 
-
-        let length = this.size * this.channels;
-        if (this.bitDepth==1) length=Math.ceil(length/8);
-
         if (!data)
-            data = getPixelArray(kind, length);
-        else if (data.length !== length)
-            throw new RangeError(`incorrect data size. Expected ${length} but got ${data.length}`);
-
+            data = getPixelArray(kind, this.size);
+        else {
+            let theoreticalSize=getPixelArraySize(kind, this.size);
+            if (theoreticalSize!=data.length) {
+                throw new RangeError(`incorrect data size. Should be ${theoreticalSize} and found ${data.length}`);
+            }
+        }
 
         this.data = data;
     }
@@ -128,11 +127,11 @@ export default class IJ {
         return new IJ(width, height, {kind});
     }
 
-    setValueXY(row, column, channel, value) {
+    setValueXY(column, row, channel, value) {
         this.data[(row * this.width + column) * this.channels + channel] = value;
     }
 
-    getValueXY(row, column, channel) {
+    getValueXY(column, row, channel) {
         return this.data[(row * this.width + column) * this.channels + channel];
     }
 
