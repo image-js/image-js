@@ -32,7 +32,7 @@ export default function mask({algorithm = 'threshold', threshold = 127, useAlpha
             }
             break;
         default:
-            throw new Error('grey transform unknown algorithm: '+algorithm);
+            throw new Error('mask transform unknown algorithm: '+algorithm);
     }
 
 
