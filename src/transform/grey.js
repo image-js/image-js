@@ -69,6 +69,8 @@ export default function grey({algorithm = 'luma709'} = {}) {
                 }
             }
             break;
+        default:
+            throw new Error ("Unsupported algorithm: "+algorithm);
     }
 
 
