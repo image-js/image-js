@@ -1,14 +1,19 @@
 {
-  "name": "ij",
+  "name": "image-js",
   "version": "0.0.1",
-  "description": "Image manipulation in JavaScript",
+  "description": "Image processing and manipulation in JavaScript",
   "keywords": [
+    "image",
+    "processing",
+    "manipulation",
     "analysis",
     "histogram",
     "hsb",
     "hsl",
-    "image",
-    "rgb"
+    "rgb",
+    "roi",
+    "rois",
+    "mask"
   ],
   "author": "Michaël Zasso",
   "contributors": [
