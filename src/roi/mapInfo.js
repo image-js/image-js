@@ -20,6 +20,8 @@ export default function mapInfo(map, {} = {}) {
             maxX: Number.NEGATIVE_INFINITY,
             minY: Number.POSITIVE_INFINITY,
             maxY: Number.NEGATIVE_INFINITY,
+            meanX: 0,
+            meanY: 0,
             surface: 0,
             id: mapID
         }
@@ -28,14 +30,22 @@ export default function mapInfo(map, {} = {}) {
     for (let x=0; x<this.width; x++) {
         for (let y=0; y<this.height; y++) {
             let target=y*this.width+x;
-            let mspID=pixels[target]+map.negative;
-            if (mspID>map.negative) mspID--;
-            if (x<mapInfos[mspID].minX) mapInfos[mspID].minX=x;
-            if (x>mapInfos[mspID].maxX) mapInfos[mspID].maxX=x;
-            if (y<mapInfos[mspID].minY) mapInfos[mspID].minY=y;
-            if (y>mapInfos[mspID].maxY) mapInfos[mspID].maxY=y;
-            mapInfos[mspID].surface++;
+            let mapID=pixels[target]+map.negative;
+            if (mapID>map.negative) mapID--;
+            if (x<mapInfos[mapID].minX) mapInfos[mapID].minX=x;
+            if (x>mapInfos[mapID].maxX) mapInfos[mapID].maxX=x;
+            if (y<mapInfos[mapID].minY) mapInfos[mapID].minY=y;
+            if (y>mapInfos[mapID].maxY) mapInfos[mapID].maxY=y;
+            mapInfos[mapID].meanX+=x;
+            mapInfos[mapID].meanY+=y;
+            mapInfos[mapID].surface++;
         }
+    }
+    for (var i=0; i<size; i++) {
+        let mapID=-map.negative+i;
+        if (i>=map.negative) mapID++;
+        mapInfos[i].meanX/=mapInfos[i].surface;
+        mapInfos[i].meanY/=mapInfos[i].surface;
     }
     return mapInfos;
 }
