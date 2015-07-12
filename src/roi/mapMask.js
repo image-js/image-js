@@ -2,7 +2,7 @@
 
 import IJ from '../ij';
 
-export default function mapMask({} = {}) {
+export default function mapMask({allowCorner = false} = {}) {
 
     this.checkProcessable('mapMask', {
         bitDepth: [1]
@@ -42,6 +42,7 @@ export default function mapMask({} = {}) {
             // need to check all around this pixel
             if (currentX>0 && pixels[currentY*self.width+currentX-1]===0 &&
                 self.getBitXY(currentX-1,currentY)==targetState) {
+                // LEFT
                     to++;
                     xToProcess[to & MAX_ARRAY]=currentX-1;
                     yToProcess[to & MAX_ARRAY]=currentY;
@@ -49,6 +50,7 @@ export default function mapMask({} = {}) {
             }
             if (currentY>0 && pixels[(currentY-1)*self.width+currentX]===0 &&
                 self.getBitXY(currentX,currentY-1)==targetState) {
+                // TOP
                     to++;
                     xToProcess[to & MAX_ARRAY]=currentX;
                     yToProcess[to & MAX_ARRAY]=currentY-1;
@@ -56,6 +58,7 @@ export default function mapMask({} = {}) {
             }
             if (currentX<self.width-1 && pixels[currentY*self.width+currentX+1]===0 &&
                 self.getBitXY(currentX+1,currentY)==targetState) {
+                // RIGHT
                     to++;
                     xToProcess[to & MAX_ARRAY]=currentX+1;
                     yToProcess[to & MAX_ARRAY]=currentY;
@@ -63,11 +66,48 @@ export default function mapMask({} = {}) {
             }
             if (currentY<self.height-1 && pixels[(currentY+1)*self.width+currentX]===0 &&
                 self.getBitXY(currentX,currentY+1)==targetState) {
+                // BOTTOM
                     to++;
                     xToProcess[to & MAX_ARRAY]=currentX;
                     yToProcess[to & MAX_ARRAY]=currentY+1;
                     pixels[(currentY+1)*self.width+currentX]=-32768;
             }
+            if (allowCorner) {
+                if (currentX>0 && currentY>0 && pixels[(currentY-1)*self.width+currentX-1]===0 &&
+                    self.getBitXY(currentX-1,currentY-1)==targetState) {
+                    // TOP LEFT
+                    to++;
+                    xToProcess[to & MAX_ARRAY]=currentX-1;
+                    yToProcess[to & MAX_ARRAY]=currentY-1;
+                    pixels[(currentY-1)*self.width+currentX-1]=-32768;
+                }
+                if (currentX<self.width-1 && currentY>0 && pixels[(currentY-1)*self.width+currentX+1]===0 &&
+                    self.getBitXY(currentX+1,currentY-1)==targetState) {
+                    // TOP RIGHT
+                    to++;
+                    xToProcess[to & MAX_ARRAY]=currentX+1;
+                    yToProcess[to & MAX_ARRAY]=currentY-1;
+                    pixels[(currentY-1)*self.width+currentX+1]=-32768;
+                }
+                if (currentX>0 && currentY<self.height-1 && pixels[(currentY+1)*self.width+currentX-1]===0 &&
+                    self.getBitXY(currentX-1,currentY+1)==targetState) {
+                    // BOTTOM LEFT
+                    to++;
+                    xToProcess[to & MAX_ARRAY]=currentX-1;
+                    yToProcess[to & MAX_ARRAY]=currentY+1;
+                    pixels[(currentY+1)*self.width+currentX-1]=-32768;
+                }
+                if (currentX<self.width-1 && currentY<self.height-1 && pixels[(currentY+1)*self.width+currentX+1]===0 &&
+                    self.getBitXY(currentX+1,currentY+1)==targetState) {
+                    // BOTTOM RIGHT
+                    to++;
+                    xToProcess[to & MAX_ARRAY]=currentX+1;
+                    yToProcess[to & MAX_ARRAY]=currentY+1;
+                    pixels[(currentY+1)*self.width+currentX+1]=-32768;
+                }
+            }
+
+
             from++;
 
             if ((to-from)>MAX_ARRAY) {
