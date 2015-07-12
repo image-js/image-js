@@ -4,11 +4,11 @@
   [![build status][travis-image]][travis-url]
   [![npm download][download-image]][download-url]
 
-Image manipulation in JavaScript
+Image processing and manipulation in JavaScript
 
 ## Installation
 
-`npm install ij`
+`npm install image-js`
 
 ## Developement
 
@@ -64,9 +64,9 @@ watch-node | build continuously the Node.js files
 
   [MIT](./LICENSE)
 
-[npm-image]: https://img.shields.io/npm/v/ij.svg?style=flat-square
-[npm-url]: https://www.npmjs.com/package/ij
+[npm-image]: https://img.shields.io/npm/v/image-js.svg?style=flat-square
+[npm-url]: https://www.npmjs.com/package/image-js
 [travis-image]: https://img.shields.io/travis/image-js/ij/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/image-js/ij
-[download-image]: https://img.shields.io/npm/dm/ij.svg?style=flat-square
-[download-url]: https://www.npmjs.com/package/ij
+[download-image]: https://img.shields.io/npm/dm/image-js.svg?style=flat-square
+[download-url]: https://www.npmjs.com/package/image-js
