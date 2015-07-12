@@ -57,6 +57,5 @@
     "canvas": "^1.2.3"
   },
   "dependencies": {
-    "buffer": "^3.3.1"
   }
 }
