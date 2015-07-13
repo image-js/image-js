@@ -4,11 +4,15 @@ var IJ = require('../..');
 
 
 
-var image = new IJ(4,1,[255, 255, 0, 255, 255, 0, 0, 0], {
+var image = new IJ(4,1,[0, 255, 63, 255, 127, 255, 255, 255], {
     kind: 'GREYA'
 });
 
-var mask=image.mask({useAlpha: false});
+
+// var mask=image.mask(127, {useAlpha: true});
+
+
+var mask=image.mask('percentile', {useAlpha: true});
+
 
 console.log(mask);
-console.log(mask.data);
