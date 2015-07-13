@@ -8,8 +8,8 @@ import invertBinaryLoop from './filter/invertBinaryLoop';
 
 // transformers
 import crop from './transform/crop';
-import grey from './transform/grey';
-import mask from './transform/mask';
+import grey from './transform/grey/grey';
+import mask from './transform/mask/mask';
 
 import split from './utility/split';
 import createROIs from './roi/createROIs';
