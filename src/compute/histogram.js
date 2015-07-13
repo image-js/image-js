@@ -1,30 +1,43 @@
 'use strict';
 
-export function getHistogram({maxSlots=256} = {}) {
+export function getHistogram({channel=0, useAlpha=true} = {}) {
     this.checkProcessable("getHistogram", {
         bitDepth: [8]
     });
 
-    var data = this.data;
-    var result = new Uint32Array(Math.pow(2, this.bitDepth));
-    for (let i = 0; i < data.length; i += this.channels) {
-        result[data[i]]++;
-    }
-    return result;
+    return getChannelHistogram.call(this, channel, useAlpha);
 }
 
-export function getHistograms({maxSlots=256} = {}) {
+export function getHistograms({useAlpha=true} = {}) {
     this.checkProcessable("getHistograms", {
         bitDepth: [8]
     });
 
-    var data = this.data;
-    var result = new Array(this.channels);
+    var results = new Array(this.channels);
     for (let i = 0; i < this.channels; i++) {
-        result[i] = new Uint32Array(Math.pow(2, this.bitDepth));
-        for (let j = 0; j < data.length; j += this.channels) {
-            result[i][data[j + i]]++;
+        results[i] = getChannelHistogram.call(this, i, useAlpha);
+    }
+    return results;
+}
+
+
+
+function getChannelHistogram(channel, useAlpha) {
+    var data = this.data;
+    var result = new Uint32Array(Math.pow(2, this.bitDepth));
+    if (useAlpha && this.alpha) {
+        let alphaChannelDiff=this.channels-channel-1;
+
+        for (let i = channel; i < data.length; i += this.channels) {
+            if (data[i+alphaChannelDiff]>0) { // we add a point in the histogram only if the value is not completely transparent
+                result[Math.floor(data[i]*data[i+alphaChannelDiff]/this.maxValue)]++;
+            }
+        }
+    } else {
+        for (let i = channel; i < data.length; i += this.channels) {
+            result[data[i]]++;
         }
     }
+
     return result;
 }
