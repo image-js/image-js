@@ -5,20 +5,20 @@ import IJ from '../ij';
 export default function split({preserveAlpha = true} = {}) {
 
     this.checkProcessable('split', {
-        bitDepth: [8,16]
+        bitDepth: [8, 16]
     });
 
     // split will always return an array of images
-    var images=[];
-
     if (this.components === 1) {
-        return images.push(this.clone());
+        return [this.clone()];
     }
 
-    var data = this.data;
+    let images = [];
+
+    let data = this.data;
     if (this.alpha && preserveAlpha) {
-        for (let i=0; i<this.components; i++) {
-            var newImage = IJ.createFrom(this, {
+        for (let i = 0; i < this.components; i++) {
+            let newImage = IJ.createFrom(this, {
                 kind: {
                     components: 1,
                     alpha: true,
@@ -26,16 +26,16 @@ export default function split({preserveAlpha = true} = {}) {
                     colorModel: null
                 }
             });
-            let ptr=0;
-            for (let j=0; j<data.length; j+=this.channels) {
+            let ptr = 0;
+            for (let j = 0; j < data.length; j += this.channels) {
                 newImage.data[ptr++] = data[j + i];
-                newImage.data[ptr++]=data[j + this.components];
+                newImage.data[ptr++] = data[j + this.components];
             }
             images.push(newImage);
         }
     } else {
-        for (let i=0; i<this.channels; i++) {
-            var newImage = IJ.createFrom(this, {
+        for (let i = 0; i < this.channels; i++) {
+            let newImage = IJ.createFrom(this, {
                 kind: {
                     components: 1,
                     alpha: false,
@@ -43,8 +43,8 @@ export default function split({preserveAlpha = true} = {}) {
                     colorModel: null
                 }
             });
-            let ptr=0;
-            for (let j=0; j<data.length; j+=this.channels) {
+            let ptr = 0;
+            for (let j = 0; j < data.length; j += this.channels) {
                 newImage.data[ptr++] = data[j + i];
             }
             images.push(newImage);
