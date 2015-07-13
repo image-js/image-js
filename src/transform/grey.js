@@ -3,6 +3,8 @@
 import IJ from '../ij';
 import {RGB} from '../model/models';
 
+import luma709 from './grey-algorithm/luma709';
+
 export default function grey({algorithm = 'luma709'} = {}) {
 
     if (this.components === 1) {
@@ -23,15 +25,9 @@ export default function grey({algorithm = 'luma709'} = {}) {
     var ptr = 0;
     var data = this.data;
 
-    switch (algorithm) {
+    switch (algorithm.toLowerCase()) {
         case 'luma709': // sRGB
-            for (let i = 0; i < data.length; i += this.channels) {
-                var greyPixel = data[i] * 0.2126 + data[i + 1] * 0.7152 + data[i + 2] * 0.0722;
-                newImage.data[ptr++] = greyPixel;
-                if (this.alpha) {
-                    newImage.data[ptr++]=data[i + 3];
-                }
-            }
+            luma709.call(this, newImage, data);
             break;
         case 'luma601': // NTSC
             for (let i = 0; i < data.length; i += this.channels) {
