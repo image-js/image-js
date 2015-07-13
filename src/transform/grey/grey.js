@@ -43,9 +43,8 @@ export default function grey({algorithm = 'luma709'} = {}) {
             average.call(this, newImage);
             break;
         default:
-            throw new Error ("Unsupported algorithm: "+algorithm);
+            throw new Error('Unsupported grey algorithm: ' + algorithm);
     }
-
 
     return newImage;
 }
