@@ -1,8 +1,9 @@
 'use strict';
 
 import {IJ} from '../common';
+/*
 
-describe('map a binary image (mask) 2 x 2', function () {
+describe.skip('map a binary image (mask) 2 x 2', function () {
     var data=new Uint8Array(1);
     data[0]=192;
 
@@ -29,7 +30,7 @@ describe('map a binary image (mask) 2 x 2', function () {
 
 });
 
-describe('map a binary image 4 x 4 in 2 zones', function () {
+describe.skip('map a binary image 4 x 4 in 2 zones', function () {
     var data=new Uint8Array(2);
     data[0]=255;
     data[1]=0;
@@ -57,7 +58,7 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
 
 });
 
-describe('map a binary image 4 x 4 in 2 zones', function () {
+describe.skip('map a binary image 4 x 4 in 2 zones', function () {
     var data=new Uint8Array(2);
     data[0]=63;
     data[1]=192;
@@ -85,4 +86,4 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
         result.positive.should.equal(1);
     });
 
-});
+});*/

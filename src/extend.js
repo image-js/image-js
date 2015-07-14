@@ -12,9 +12,6 @@ import grey from './transform/grey/grey';
 import mask from './transform/mask/mask';
 
 import split from './utility/split';
-import createROIs from './roi/createROIs';
-import mapMask from './roi/mapMask';
-import mapInfo from './roi/mapInfo';
 import paintMasks from './operator/paintMasks';
 
 // computers
@@ -31,9 +28,6 @@ export default function extend(IJ) {
     IJ.extendMethod('mask', mask);
 
     IJ.extendMethod('split', split);
-    IJ.extendMethod('createROIs', createROIs);
-    IJ.extendMethod('mapMask', mapMask);
-    IJ.extendMethod('mapInfo', mapInfo);
 
     IJ.extendMethod('paintMasks', paintMasks);
 

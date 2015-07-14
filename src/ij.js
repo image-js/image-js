@@ -1,4 +1,5 @@
 'use strict';
+require("babel/polyfill");
 
 import {getKind, getPixelArray, getPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
@@ -6,6 +7,7 @@ import {Image, getImageData, Canvas, getCanvasArray} from './canvas';
 import extend from './extend';
 import {createWriteStream} from 'fs';
 import * as ColorModels from './model/models';
+import ROIManager from './roi/manager';
 
 let computedPropertyDescriptor = {
     configurable: true,
@@ -287,6 +289,9 @@ export default class IJ {
         return (this.data[slot] & 1<<shift) ? 1 : 0;
     }
 
+    getROIManager(mask, options) {
+        return new ROIManager(this, options);
+    }
 
     clone() {
         let nemImage = IJ.createFrom(this);
