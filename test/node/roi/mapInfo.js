@@ -11,7 +11,7 @@ import {IJ} from '../common';
 
 
 
-describe.skip('mark a binary image 4 x 4 in 3 zones and create ROIs', function () {
+describe('mark a binary image 4 x 4 in 3 zones and create ROIs', function () {
     var data=new Uint8Array(2);
     data[0]=63;
     data[1]=192;
@@ -30,6 +30,11 @@ describe.skip('mark a binary image 4 x 4 in 3 zones and create ROIs', function (
         { id: -1, meanX: 0.5, meanY: 0, minX: 0, maxX: 1, minY: 0, maxY: 0, surface: 2 },
         { id: 1, meanX: 1.5, meanY: 1, minX: 0, maxX: 3, minY: 0, maxY: 2, surface: 8 } ];
 
-    result.should.eql(expected);
+
+    result.should.have.lengthOf(3);
+
+    result[0].should.containEql(expected[0]);
+    result[1].should.containEql(expected[1]);
+    result[2].should.containEql(expected[2]);
 });
 

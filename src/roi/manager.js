@@ -17,6 +17,11 @@ export default class ROIManager {
         this._layers[maskLabel] = new ROILayer(mask, opt);
     }
 
+    getROIMap(maskLabel = 'default') {
+        if (! this._layers[maskLabel]) return;
+        return  this._layers[maskLabel].roiMap;
+    }
+
     getROI(maskLabel = 'default', {
             positive=true,
             negative=true,
