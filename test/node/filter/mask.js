@@ -35,7 +35,7 @@ describe('Create a mask from a greyA image', function () {
         data.should.instanceOf(Uint8Array);
         data.length.should.equal(1);
 
-        data[0].should.equal(192);
+        data[0].should.equal(0b10100000);
     });
 
 });
@@ -57,7 +57,7 @@ describe('Create a mask from a greyA image using percentile algorithm', function
     data.should.instanceOf(Uint8Array);
     data.length.should.equal(1);
 
-    data[0].should.equal(224);
+    data[0].should.equal(112);
 
 
 });

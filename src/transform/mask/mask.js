@@ -40,18 +40,22 @@ export default function mask(algorithm = 127, {
         }
     );
 
+    console.log(threshold);
+
     var ptr=0;
     if (this.alpha && useAlpha) {
         for (let i = 0; i < this.data.length; i += this.channels) {
             if ((this.data[i]*this.data[i+1]/this.maxValue)>=threshold) {
-                newImage.setBit(ptr++);
+                newImage.setBit(ptr);
             }
+            ptr++;
         }
     } else {
         for (let i = 0; i < this.data.length; i += this.channels) {
             if (this.data[i]>=threshold) {
-                newImage.setBit(ptr++);
+                newImage.setBit(ptr);
             }
+            ptr++;
         }
     }
 
