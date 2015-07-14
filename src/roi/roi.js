@@ -14,4 +14,22 @@ export default class ROI {
         this.surface = 0;
     }
 
+    getMask() {
+        if (this.mask) return this.mask;
+
+        let width = this.maxX - this.minX + 1;
+        let height = this.maxY - this.minY + 1;
+        let img = new IJ(width, height, {
+            kind: 'BINARY',
+            position: [this.minX, this.minY]
+        });
+        for (let x = 0; x < width; x++) {
+            for (let y = 0; y < height; y++) {
+                if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id) img.setBitXY(x, y);
+            }
+        }
+
+        return this.mask = img;
+    }
+
 }
