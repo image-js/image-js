@@ -34,5 +34,32 @@ export default function createROI(roiMap) {
         rois[i].meanX /= rois[i].surface;
         rois[i].meanY /= rois[i].surface;
     }
+    for (var i=0; i<rois.length; i++) {
+        rois[i].surround=getSurroundingID(rois[i], roiMap);
+    }
     return rois;
+}
+
+
+
+function getSurroundingID(roi, roiMap) {
+    var pixels=roiMap.pixels;
+    // we check the first line and the last line
+    for (let y in [0, roiMap.height - 1]) {
+        for (let x = 1; x < roiMap.width-1; x++) {
+            let target = y * roiMap.width + x;
+            if (pixels[target] == roiMap.id && pixels[target - 1] != roiMap.id) return pixels[target - 1];
+            if (pixels[target] == roiMap.id && pixels[target + 1] != roiMap.id) return pixels[target + 1];
+        }
+    }
+    // we check the first column and the last column
+    for (let x in [0, roiMap.width - 1]) {
+        for (let y = 1; x < roiMap.height-1; x++) {
+            let target = y * roiMap.width + x;
+            if (pixels[target] == roiMap.id && pixels[target - roiMap.width] != roiMap.id) return pixels[target - roiMap.width];
+            if (pixels[target] == roiMap.id && pixels[target + roiMap.width] != roiMap.id) return pixels[target + roiMap.width];
+        }
+    }
+
+    return 0;
 }

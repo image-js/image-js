@@ -5,6 +5,7 @@ export default class ROI {
     constructor(map, id) {
         this.map = map;
         this.id = id;
+        this.surround = 0; // what is the map value surrounding
         this.minX = Number.POSITIVE_INFINITY;
         this.maxX = Number.NEGATIVE_INFINITY;
         this.minY = Number.POSITIVE_INFINITY;
