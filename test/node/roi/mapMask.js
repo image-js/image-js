@@ -1,7 +1,7 @@
 'use strict';
 
 import {IJ} from '../common';
-/*
+
 
 describe.skip('map a binary image (mask) 2 x 2', function () {
     var data=new Uint8Array(1);
@@ -11,8 +11,9 @@ describe.skip('map a binary image (mask) 2 x 2', function () {
         kind: 'BINARY'
     });
 
-    var result=img.mapMask();
-    var pixels=result.pixels;
+    var roiManager=img.getROIManager();
+    roiManager.putMask(img);
+    var pixels=roiManager.getPixels();
 
     it('should have 4 pixels in 2 zones', function () {
         pixels.should.instanceOf(Int16Array).and.have.lengthOf(4);;
@@ -39,8 +40,9 @@ describe.skip('map a binary image 4 x 4 in 2 zones', function () {
         kind: 'BINARY'
     });
 
-    var result=img.mapMask();
-    var pixels=result.pixels;
+    var roiManager=img.getROIManager();
+    roiManager.putMask(img);
+    var pixels=roiManager.getPixels();
 
     it('should have 16 pixels in 2 zones', function () {
         pixels.should.instanceOf(Int16Array).and.have.lengthOf(16);;
@@ -67,8 +69,9 @@ describe.skip('map a binary image 4 x 4 in 2 zones', function () {
         kind: 'BINARY'
     });
 
-    var result=img.mapMask();
-    var pixels=result.pixels;
+    var roiManager=img.getROIManager();
+    roiManager.putMask(img);
+    var pixels=roiManager.getPixels();
 
     it('should have 16 pixels in 3 zones', function () {
         pixels.should.instanceOf(Int16Array).and.have.lengthOf(16);;

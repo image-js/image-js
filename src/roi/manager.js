@@ -47,10 +47,16 @@ export default class ROIManager {
         return masks;
     }
 
+    getPixels(maskLabel = 'default', options = {}) {
+        if (this._layers[maskLabel]) {
+            return this._layers[maskLabel].roiMap.pixels;
+        }
+        return;
+    }
+
     paint(maskLabel = 'default', options = {}) {
         if (!this._painted) this._painted=this._image.clone();
         var masks=this.getROIMasks(maskLabel, options);
-        console.log(masks.length);
         this._painted.paintMasks(masks, options);
         return this._painted;
     }
