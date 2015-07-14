@@ -1,6 +1,7 @@
 'use strict';
 
-export default class ROI {
+export default
+class ROI {
 
     constructor(map, id) {
         this.map = map;
@@ -12,12 +13,20 @@ export default class ROI {
         this.meanX = 0;
         this.meanY = 0;
         this.surface = 0;
-        this.computed={}; // what is the map value surrounding
+        this.computed = {}; // what is the map value surrounding
+    }
+
+    get width() {
+        return this.maxX - this.minX;
+    }
+
+    get height() {
+        return this.maxY - this.minY;
     }
 
     get surround() {
         if (this.computed.surround) return this.computed.surround;
-
+        return this.computed.surround = getSurroundingID(this);
     }
 
     get mask() {
@@ -40,22 +49,29 @@ export default class ROI {
 }
 
 
-function getSurroundingID(roi, roiMap) {
-    var pixels=roiMap.pixels;
+function getSurroundingID(roi) {
+    console.log(roi);
+    var roiMap = roi.map;
+    var pixels = roiMap.pixels;
     // we check the first line and the last line
-    for (let y in [0, roiMap.height - 1]) {
-        for (let x = 1; x < roiMap.width-1; x++) {
-            let target = y * roiMap.width + x;
-            if (pixels[target] == roiMap.id && pixels[target - 1] != roiMap.id) return pixels[target - 1];
-            if (pixels[target] == roiMap.id && pixels[target + 1] != roiMap.id) return pixels[target + 1];
+
+    // TODO calculate fromX, fromY, toX, toY when not on border
+
+
+    for (let y = 0; y < roi.height; y += roi.height - 1) {
+        for (let x = 1; x < roi.width - 1; x++) {
+            let target = (y + roi.minY) * roiMap.width + x + roi.minX;
+            console.log(pixels[target], roi.id);
+            if (pixels[target] == roi.id && pixels[target - 1] != roi.id) return pixels[target - 1];
+            if (pixels[target] == roi.id && pixels[target + 1] != roi.id) return pixels[target + 1];
         }
     }
     // we check the first column and the last column
-    for (let x in [0, roiMap.width - 1]) {
-        for (let y = 1; x < roiMap.height-1; x++) {
-            let target = y * roiMap.width + x;
-            if (pixels[target] == roiMap.id && pixels[target - roiMap.width] != roiMap.id) return pixels[target - roiMap.width];
-            if (pixels[target] == roiMap.id && pixels[target + roiMap.width] != roiMap.id) return pixels[target + roiMap.width];
+    for (let x = 0; x < roiMap.width; x += roiMap.width - 1) {
+        for (let y = 1; x < roiMap.height - 1; x++) {
+            let target = (y + roi.minY) * roiMap.width + x + roi.minX;
+            if (pixels[target] == roi.id && pixels[target - roiMap.width] != roiMap.id) return pixels[target - roiMap.width];
+            if (pixels[target] == roi.id && pixels[target + roiMap.width] != roiMap.id) return pixels[target + roiMap.width];
         }
     }
 

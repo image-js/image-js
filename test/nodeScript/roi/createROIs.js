@@ -15,6 +15,11 @@ var roiManager=mask.getROIManager();
 roiManager.putMask(mask);
 var rois=roiManager.getROI();
 
-console.log(rois);
+for (var i=0; i<rois.length; i++) {
+    console.log(rois[i].width, rois[i].width)
+}
 
-console.log(roiManager.getPixels());
+console.log(rois[1].surround)
+
+//console.log(rois);
+
