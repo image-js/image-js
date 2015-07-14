@@ -13,24 +13,22 @@ export default function percentile(histogram) {
     let percentile= 0.5; // default fraction of foreground pixels
     let avec = new Float32Array(256);
 
-    let total = partialSum(histogram, 255);
+    let total = partialSum(histogram, histogram.lengh);
     let temp = 1.0;
-    for (let i=0; i<256; i++) {
+    for (let i=1; i<histogram.length; i++) {
         avec[i]=Math.abs((partialSum(histogram, i)/total)-percentile);
         if (avec[i]<temp) {
             temp = avec[i];
             threshold = i;
         }
     }
-
     return threshold;
+}
 
-
-    function partialSum(histogram, endIndex) {
-        let x = 0;
-        for (let i=0; i<=endIndex; i++) {
-            x+=histogram[i];
-        }
-        return x;
+function partialSum(histogram, endIndex) {
+    let x = 0;
+    for (let i=0; i<endIndex; i++) {
+        x+=histogram[i];
     }
+    return x;
 }

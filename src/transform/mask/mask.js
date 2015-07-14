@@ -12,7 +12,7 @@ If the algorithm is a number, it is the threshold value
  */
 
 
-export default function mask(algorithm = 127, {
+export default function mask(algorithm = 0.5, {
         useAlpha = true
     } = {}) {
     this.checkProcessable('mask', {
@@ -22,8 +22,8 @@ export default function mask(algorithm = 127, {
 
     let threshold=0;
 
-    if (! isNaN(algorithm)) {
-        threshold=algorithm<<0;
+    if (typeof algorithm==="number") {
+        threshold=algorithm*this.maxValue;
     } else {
         let histogram=this.getHistogram();
         switch (algorithm.toLowerCase()) {
