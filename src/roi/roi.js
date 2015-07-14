@@ -5,7 +5,6 @@ export default class ROI {
     constructor(map, id) {
         this.map = map;
         this.id = id;
-        this.surround = 0; // what is the map value surrounding
         this.minX = Number.POSITIVE_INFINITY;
         this.maxX = Number.NEGATIVE_INFINITY;
         this.minY = Number.POSITIVE_INFINITY;
@@ -13,10 +12,16 @@ export default class ROI {
         this.meanX = 0;
         this.meanY = 0;
         this.surface = 0;
+        this.computed={}; // what is the map value surrounding
     }
 
-    getMask() {
-        if (this.mask) return this.mask;
+    get surround() {
+        if (this.computed.surround) return this.computed.surround;
+
+    }
+
+    get mask() {
+        if (this.computed.mask) return this.computed.mask;
 
         let width = this.maxX - this.minX + 1;
         let height = this.maxY - this.minY + 1;
@@ -30,7 +35,29 @@ export default class ROI {
             }
         }
 
-        return this.mask = img;
+        return this.computed.mask = img;
+    }
+}
+
+
+function getSurroundingID(roi, roiMap) {
+    var pixels=roiMap.pixels;
+    // we check the first line and the last line
+    for (let y in [0, roiMap.height - 1]) {
+        for (let x = 1; x < roiMap.width-1; x++) {
+            let target = y * roiMap.width + x;
+            if (pixels[target] == roiMap.id && pixels[target - 1] != roiMap.id) return pixels[target - 1];
+            if (pixels[target] == roiMap.id && pixels[target + 1] != roiMap.id) return pixels[target + 1];
+        }
+    }
+    // we check the first column and the last column
+    for (let x in [0, roiMap.width - 1]) {
+        for (let y = 1; x < roiMap.height-1; x++) {
+            let target = y * roiMap.width + x;
+            if (pixels[target] == roiMap.id && pixels[target - roiMap.width] != roiMap.id) return pixels[target - roiMap.width];
+            if (pixels[target] == roiMap.id && pixels[target + roiMap.width] != roiMap.id) return pixels[target + roiMap.width];
+        }
     }
 
+    return 0;
 }
