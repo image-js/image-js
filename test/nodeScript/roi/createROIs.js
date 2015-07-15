@@ -19,7 +19,7 @@ for (var i=0; i<rois.length; i++) {
     console.log(rois[i].width, rois[i].width)
 }
 
-console.log(rois[1].surround)
+console.log(rois[2].surround)
 
 //console.log(rois);
 

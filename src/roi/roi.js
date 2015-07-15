@@ -17,11 +17,11 @@ class ROI {
     }
 
     get width() {
-        return this.maxX - this.minX;
+        return this.maxX - this.minX + 1;
     }
 
     get height() {
-        return this.maxY - this.minY;
+        return this.maxY - this.minY + 1;
     }
 
     get surround() {
@@ -50,30 +50,33 @@ class ROI {
 
 
 function getSurroundingID(roi) {
-    console.log(roi);
-    var roiMap = roi.map;
-    var pixels = roiMap.pixels;
+    let roiMap = roi.map;
+    let pixels = roiMap.pixels;
     // we check the first line and the last line
+    let fromX=Math.max(roi.minX,1);
+    let toX=Math.min(roi.width,roiMap.width-2);
 
-    // TODO calculate fromX, fromY, toX, toY when not on border
-
-
-    for (let y = 0; y < roi.height; y += roi.height - 1) {
-        for (let x = 1; x < roi.width - 1; x++) {
+    // not optimized  if height=1 !
+    for (let y of [0, roi.height - 1]) {
+        for (let x = 0; x < roi.width; x++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            console.log(pixels[target], roi.id);
-            if (pixels[target] == roi.id && pixels[target - 1] != roi.id) return pixels[target - 1];
-            if (pixels[target] == roi.id && pixels[target + 1] != roi.id) return pixels[target + 1];
+            if (Math.max(roi.minX,x)>0 && pixels[target] == roi.id && pixels[target - 1] != roi.id) return pixels[target - 1];
+            if (Math.min(roi.maxX,x)<(roiMap.width-1) && pixels[target] == roi.id && pixels[target + 1] != roi.id) return pixels[target + 1];
         }
     }
+
+
     // we check the first column and the last column
-    for (let x = 0; x < roiMap.width; x += roiMap.width - 1) {
-        for (let y = 1; x < roiMap.height - 1; x++) {
+    let fromY=Math.max(roi.minY,1);
+    let toY=Math.min(roi.height,roiMap.height-2);
+    // not optimized  if width=1 !
+    for (let x of [0, roi.width-1]) {
+        for (let y = 0; y < roi.height; y++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            if (pixels[target] == roi.id && pixels[target - roiMap.width] != roiMap.id) return pixels[target - roiMap.width];
-            if (pixels[target] == roi.id && pixels[target + roiMap.width] != roiMap.id) return pixels[target + roiMap.width];
+            if (Math.max(roi.minY,y)>0 && pixels[target] == roi.id && pixels[target - roiMap.width] != roiMap.id) return pixels[target - roiMap.width];
+            if (Math.min(roi.maxY,y)<(roiMap.height-1) && pixels[target] == roi.id && pixels[target + roiMap.width] != roiMap.id) return pixels[target + roiMap.width];
         }
     }
 
-    return 0;
+    return 0; // the selection takes the whole rectangle
 }
