@@ -47,7 +47,7 @@ export default class ROIManager {
         var rois=this.getROI(maskLabel, options);
         var masks=new Array(rois.length);
         for (var i=0; i<rois.length; i++) {
-            masks[i]=rois[i].getMask();
+            masks[i]=rois[i].mask;
         }
         return masks;
     }

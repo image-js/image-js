@@ -1,7 +1,8 @@
 'use strict';
 
-export default
-class ROI {
+import Image from '../image';
+
+export default class ROI {
 
     constructor(map, id) {
         this.map = map;
@@ -38,6 +39,7 @@ class ROI {
             kind: 'BINARY',
             position: [this.minX, this.minY]
         });
+
         for (let x = 0; x < width; x++) {
             for (let y = 0; y < height; y++) {
                 if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id) img.setBitXY(x, y);
