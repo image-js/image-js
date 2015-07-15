@@ -26,10 +26,6 @@
   "homepage": "https://github.com/image-js/core",
   "license": "MIT",
   "main": "./lib/image.js",
-  "files": [
-    "./dist",
-    "./lib"
-  ],
   "scripts": {
     "build": "npm run clean-dist && browserify src/image.js -o dist/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --transform babelify",
     "build-test": "browserify test/browser/bootstrap.js -o test/browser/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --transform babelify",
