@@ -2,7 +2,7 @@
 
 export function getHistogram({maxSlots=256, channel=undefined, useAlpha=true} = {}) {
     this.checkProcessable("getHistogram", {
-        bitDepth: [8]
+        bitDepth: [8,16]
     });
     if (channel===undefined) {
         if (this.components > 1) {
@@ -15,7 +15,7 @@ export function getHistogram({maxSlots=256, channel=undefined, useAlpha=true} = 
 
 export function getHistograms({maxSlots=256, useAlpha=true} = {}) {
     this.checkProcessable("getHistograms", {
-        bitDepth: [8]
+        bitDepth: [8.16]
     });
 
     var results = new Array(this.channels);
