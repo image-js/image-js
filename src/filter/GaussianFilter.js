@@ -26,6 +26,7 @@ function get_gaussian_kernel(n, sigma){
 			kernel.push(value);
 		}
 	}
+
 	for(var i = 0; i < kernel.length; i++){
 		kernel[i] /= sum;
 	}
