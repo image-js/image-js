@@ -54,7 +54,8 @@ Script name | Description
 build | build the browser files (for release, do not use it for tests)
 build-test | build the browser test file (test/browser/ij.js)
 compile | build the Node.js files (in lib folder)
-clean | delete build files
+clean-dist | delete browser build files
+clean-lib | delete node build files
 test | compile and run the test suite
 test-mocha | Run the test suite (need to compile first)
 watch-browser | build continuously the browser test file
