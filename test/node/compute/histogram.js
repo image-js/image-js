@@ -18,8 +18,6 @@ describe('calculate the histogram', function () {
         histogram[13].should.equal(1);
         histogram[120].should.equal(1);
         histogram[255].should.equal(0);
-
-
     });
 
 
