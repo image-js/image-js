@@ -18,7 +18,10 @@
             color: red;
         }
 
-        img{
+        .img {
+            display: inline-block;
+        }
+        canvas{
             width:100%;
             height:100%;
             max-width:500px;
@@ -31,13 +34,13 @@
 </head>
 <body>
 <div>
-    <img id="left"/>&nbsp;&nbsp;&nbsp;&nbsp;
-    <img id="right"/>
+    <div class="img" id="left"></div>&nbsp;&nbsp;&nbsp;&nbsp;
+    <div class="img" id="right"></div>
 </div>
 <div>
     Select an image: <select id="image-selector"></select>&nbsp;&nbsp;&nbsp;&nbsp;
     <button id="run-script" value="Run script">run script</button>&nbsp;&nbsp;&nbsp;&nbsp;
-    <span id="error"></span>
+    <span id="error"></span><span id="log"></span>
 </div>
 <div id="editor">img.invert();
 
