@@ -16,10 +16,15 @@ roiManager.putMask(mask);
 var rois=roiManager.getROI();
 
 for (var i=0; i<rois.length; i++) {
-    console.log(rois[i].width, rois[i].width)
+    console.log("ROIs width and height: ",rois[i].width, rois[i].height)
 }
 
-console.log(rois[2].surround)
+
+for (var i=0; i<rois.length; i++) {
+    console.log("ROI ID and surrounding ids: ",rois[i].id, rois[i].surround)
+}
+
+
 
 //console.log(rois);
 
