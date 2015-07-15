@@ -1,11 +1,11 @@
 'use strict';
 
-import {IJ} from '../common';
+import {Image} from '../common';
 
 describe('calculate the histogram', function () {
     it('check histogram property', function () {
 
-        let image = new IJ(1,2,[230, 83, 120, 255, 100, 140, 13, 1]);
+        let image = new Image(1,2,[230, 83, 120, 255, 100, 140, 13, 1]);
 
 
         let histogram=image.histogram;

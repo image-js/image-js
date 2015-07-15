@@ -1,6 +1,6 @@
 'use strict';
 
-import IJ from '../ij';
+import Image from '../image';
 
 export default function rgba() {
 
@@ -8,7 +8,7 @@ export default function rgba() {
         return this.clone();
     }
 
-    var newImage = IJ.createFrom(this, {
+    var newImage = Image.createFrom(this, {
         kind: 'COLOR' + this.bitDepth
     });
 

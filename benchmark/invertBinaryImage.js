@@ -1,14 +1,14 @@
 'use strict';
 
 var Benchmark = require('benchmark');
-var IJ = require('..');
+var Image = require('..');
 var Test = require('ij-test');
 
 var suite = new Benchmark.Suite;
 
 
 
-IJ.load(Test.getImage('rgb8.png')).then(function (img) {
+Image.load(Test.getImage('rgb8.png')).then(function (img) {
     var mask=img.split()[0].mask();
 
     suite

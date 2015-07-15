@@ -34,7 +34,7 @@ class ROI {
 
         let width = this.maxX - this.minX + 1;
         let height = this.maxY - this.minY + 1;
-        let img = new IJ(width, height, {
+        let img = new Image(width, height, {
             kind: 'BINARY',
             position: [this.minX, this.minY]
         });

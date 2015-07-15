@@ -22,8 +22,8 @@ Image processing and manipulation in JavaScript
 ```
 mkdir image-js
 cd image-js
-git clone git@github.com:image-js/ij.git
-cd ij
+git clone git@github.com:image-js/core.git
+cd core
 npm install
 ```
 
@@ -40,7 +40,7 @@ brew install cairo
 brew install giflib
 brew install libjpeg
 brew install pkg-config
-## and then from the image-js/ij folder
+## and then from the image-js/core folder
 npm install canvas
 ```
 
@@ -52,7 +52,7 @@ To run any script, use the command `npm run script-name`.
 Script name | Description
 ----------- | -----------
 build | build the browser files (for release, do not use it for tests)
-build-test | build the browser test file (test/browser/ij.js)
+build-test | build the browser test file (test/browser/image.js)
 compile | build the Node.js files (in lib folder)
 clean-dist | delete browser build files
 clean-lib | delete node build files
@@ -67,7 +67,7 @@ watch-node | build continuously the Node.js files
 
 [npm-image]: https://img.shields.io/npm/v/image-js.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/image-js
-[travis-image]: https://img.shields.io/travis/image-js/ij/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/image-js/ij
+[travis-image]: https://img.shields.io/travis/image-js/core/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/image-js/core
 [download-image]: https://img.shields.io/npm/dm/image-js.svg?style=flat-square
 [download-url]: https://www.npmjs.com/package/image-js

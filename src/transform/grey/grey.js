@@ -1,6 +1,6 @@
 'use strict';
 
-import IJ from '../../ij';
+import Image from '../../image';
 import {RGB} from '../../model/models';
 
 import luma709 from './luma709';
@@ -17,7 +17,7 @@ export default function grey({algorithm = 'luma709'} = {}) {
 
     this.checkProcessable('grey', {colorModel: RGB});
 
-    var newImage = IJ.createFrom(this, {
+    var newImage = Image.createFrom(this, {
         kind: {
             components: 1,
             alpha: this.alpha,

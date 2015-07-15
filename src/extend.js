@@ -17,20 +17,20 @@ import paintMasks from './operator/paintMasks';
 // computers
 import {getHistogram, getHistograms} from './compute/histogram';
 
-export default function extend(IJ) {
-    IJ.extendMethod('invert', invert, true); // true means the process is in-place
-    IJ.extendMethod('invertMatrix', invertMatrix, true);
-    IJ.extendMethod('invertOneLoop', invertOneLoop, true);
-    IJ.extendMethod('invertBinaryLoop', invertBinaryLoop, true);
+export default function extend(Image) {
+    Image.extendMethod('invert', invert, true); // true means the process is in-place
+    Image.extendMethod('invertMatrix', invertMatrix, true);
+    Image.extendMethod('invertOneLoop', invertOneLoop, true);
+    Image.extendMethod('invertBinaryLoop', invertBinaryLoop, true);
 
-    IJ.extendMethod('crop', crop); // last parameter is "false" because it creates a new image
-    IJ.extendMethod('grey', grey).extendMethod('gray', grey);
-    IJ.extendMethod('mask', mask);
+    Image.extendMethod('crop', crop); // last parameter is "false" because it creates a new image
+    Image.extendMethod('grey', grey).extendMethod('gray', grey);
+    Image.extendMethod('mask', mask);
 
-    IJ.extendMethod('split', split);
+    Image.extendMethod('split', split);
 
-    IJ.extendMethod('paintMasks', paintMasks);
+    Image.extendMethod('paintMasks', paintMasks);
 
-    IJ.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);
-    IJ.extendMethod('getHistograms', getHistograms).extendProperty('histograms', getHistograms);
+    Image.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);
+    Image.extendMethod('getHistograms', getHistograms).extendProperty('histograms', getHistograms);
 }

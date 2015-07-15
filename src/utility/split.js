@@ -1,6 +1,6 @@
 'use strict';
 
-import IJ from '../ij';
+import Image from '../image';
 
 export default function split({preserveAlpha = true} = {}) {
 
@@ -18,7 +18,7 @@ export default function split({preserveAlpha = true} = {}) {
     let data = this.data;
     if (this.alpha && preserveAlpha) {
         for (let i = 0; i < this.components; i++) {
-            let newImage = IJ.createFrom(this, {
+            let newImage = Image.createFrom(this, {
                 kind: {
                     components: 1,
                     alpha: true,
@@ -35,7 +35,7 @@ export default function split({preserveAlpha = true} = {}) {
         }
     } else {
         for (let i = 0; i < this.channels; i++) {
-            let newImage = IJ.createFrom(this, {
+            let newImage = Image.createFrom(this, {
                 kind: {
                     components: 1,
                     alpha: false,

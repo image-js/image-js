@@ -1,8 +1,8 @@
 'use strict';
 
-var IJ = require('../..');
+var Image = require('../..');
 
-var img=new IJ(16,1,{
+var img=new Image(16,1,{
     kind: 'BINARY'
 });
 

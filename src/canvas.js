@@ -1,12 +1,12 @@
 'use strict';
 
-let Image, Canvas, getImageData, getCanvasArray;
+let DOMImage, Canvas, getImageData, getCanvasArray;
 
 if (typeof self !== 'undefined') { // Browser
 
     let ImageData = self.ImageData;
 
-    Image = self.Image;
+    DOMImage = self.Image;
     Canvas = function Canvas(width, height) {
         let canvas = self.document.createElement('canvas');
         canvas.width = width;
@@ -33,7 +33,7 @@ if (typeof self !== 'undefined') { // Browser
     let canvas = require('canvas');
     let ImageData = require('canvas/lib/bindings').ImageData;
 
-    Image = canvas.Image;
+    DOMImage = canvas.Image;
     Canvas = canvas;
     getImageData = function (data, width, height) {
         let validData = data;
@@ -50,4 +50,4 @@ if (typeof self !== 'undefined') { // Browser
     };
 }
 
-export {Image, Canvas, getImageData, getCanvasArray};
+export {DOMImage, Canvas, getImageData, getCanvasArray};

@@ -1,10 +1,10 @@
 'use strict';
 
-import {IJ} from '../common';
+import {Image} from '../common';
 
 describe('Create a mask from a greyA image', function () {
 
-    let image = new IJ(4,1,[255, 255, 0, 255, 255, 0, 0, 0], {
+    let image = new Image(4,1,[255, 255, 0, 255, 255, 0, 0, 0], {
         kind: 'GREYA'
     });
 
@@ -42,7 +42,7 @@ describe('Create a mask from a greyA image', function () {
 
 describe('Create a mask from a greyA image using percentile algorithm', function () {
 
-    var image = new IJ(4,1,[0, 255, 63, 255, 127, 255, 255, 255], {
+    var image = new Image(4,1,[0, 255, 63, 255, 127, 255, 255, 255], {
         kind: 'GREYA'
     });
 

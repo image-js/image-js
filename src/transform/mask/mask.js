@@ -1,6 +1,6 @@
 'use strict';
 
-import IJ from '../../ij';
+import Image from '../../image';
 
 import percentile from './percentile';
 
@@ -35,7 +35,7 @@ export default function mask(algorithm = 0.5, {
         }
     }
 
-    let newImage = IJ.createFrom(this, {
+    let newImage = Image.createFrom(this, {
             kind: 'BINARY'
         }
     );

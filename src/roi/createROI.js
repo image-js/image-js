@@ -1,7 +1,5 @@
 'use strict';
 
-import IJ from '../ij';
-
 import ROI from './roi';
 
 export default function createROI(roiMap) {

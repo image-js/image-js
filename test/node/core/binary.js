@@ -1,11 +1,11 @@
 'use strict';
 
-import {IJ, load} from '../common';
+import {Image, load} from '../common';
 
-describe('IJ core - Binary images', function () {
+describe('Image core - Binary images', function () {
 
     it('check binary image of 16 points', function () {
-        var img=new IJ(8,2,{
+        var img=new Image(8,2,{
             kind: 'BINARY'
         });
 

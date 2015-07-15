@@ -46,7 +46,7 @@ if (oldCode) {
 }
 
 var error = $('#error');
-var empty = new IJ(1, 1);
+var empty = new Image(1, 1);
 
 function execute() {
     loading.then(function (img) {

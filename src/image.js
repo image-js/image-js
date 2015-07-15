@@ -3,7 +3,7 @@ require("babel/polyfill");
 
 import {getKind, getPixelArray, getPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
-import {Image, getImageData, Canvas, getCanvasArray} from './canvas';
+import {DOMImage, getImageData, Canvas, getCanvasArray} from './canvas';
 import extend from './extend';
 import {createWriteStream} from 'fs';
 import * as ColorModels from './model/models';
@@ -15,7 +15,7 @@ let computedPropertyDescriptor = {
     get: undefined
 };
 
-export default class IJ {
+export default class Image {
     constructor(width, height, data, options) {
         if (width === undefined) width = 1;
         if (height === undefined) height = 1;
@@ -64,7 +64,7 @@ export default class IJ {
 
     static load(url) {
         return new Promise(function (resolve, reject) {
-            let image = new Image();
+            let image = new DOMImage();
 
             // see https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
             image.crossOrigin = 'Anonymous';
@@ -75,7 +75,7 @@ export default class IJ {
                 let ctx = canvas.getContext('2d');
                 ctx.drawImage(image, 0, 0, w, h);
                 let data = ctx.getImageData(0, 0, w, h).data;
-                resolve(new IJ(w, h, data));
+                resolve(new Image(w, h, data));
             };
             image.onerror = reject;
             image.src = url;
@@ -83,11 +83,11 @@ export default class IJ {
     }
 
     static extendMethod(name, method, inplace = false, returnThis = true) {
-        if (IJ.prototype.hasOwnProperty(name)) {
+        if (Image.prototype.hasOwnProperty(name)) {
             console.warn(`Method '${name}' already exists and will be overwritten`);
         }
         if (inplace) {
-            IJ.prototype[name] = function (...args) {
+            Image.prototype[name] = function (...args) {
                 // reset computed properties
                 this.computed = {};
                 let result = method.apply(this, args);
@@ -96,15 +96,15 @@ export default class IJ {
                 return result;
             };
         } else {
-            IJ.prototype[name] = function (...args) {
+            Image.prototype[name] = function (...args) {
                 return method.apply(this, args);
             };
         }
-        return IJ;
+        return Image;
     }
 
     static extendProperty(name, method) {
-        if (IJ.prototype.hasOwnProperty(name)) {
+        if (Image.prototype.hasOwnProperty(name)) {
             console.warn(`Property getter '${name}' already exists and will be overwritten`);
         }
         computedPropertyDescriptor.get = function () {
@@ -116,8 +116,8 @@ export default class IJ {
                 return result;
             }
         };
-        Object.defineProperty(IJ.prototype, name, computedPropertyDescriptor);
-        return IJ;
+        Object.defineProperty(Image.prototype, name, computedPropertyDescriptor);
+        return Image;
     }
 
     static createFrom(other, {
@@ -126,7 +126,7 @@ export default class IJ {
         kind = other.kind
         } = {}) {
         // TODO if kind is incomplete, take values from this
-        return new IJ(width, height, {kind});
+        return new Image(width, height, {kind});
     }
 
     setValueXY(column, row, channel, value) {
@@ -294,7 +294,7 @@ export default class IJ {
     }
 
     clone() {
-        let nemImage = IJ.createFrom(this);
+        let nemImage = Image.createFrom(this);
         let data = this.data;
         let newData = nemImage.data;
         for (let i = 0; i < newData.length; i++) {
@@ -356,4 +356,4 @@ export default class IJ {
     }
 }
 
-extend(IJ);
+extend(Image);

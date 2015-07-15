@@ -1,6 +1,6 @@
 'use strict';
 
-import {IJ} from '../common';
+import {Image} from '../common';
 
 /* Image to test:
 0011
@@ -16,7 +16,7 @@ describe('mark a binary image 4 x 4 in 3 zones and create ROIs', function () {
     data[0]=63;
     data[1]=192;
 
-    var mask=new IJ(4,4, data, {
+    var mask=new Image(4,4, data, {
         kind: 'BINARY'
     });
 

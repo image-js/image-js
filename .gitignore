@@ -2,5 +2,5 @@ lib
 node_modules
 .idea
 *.log
-test/TMP
-test/browser/ij.js
+test/node/TMP
+test/browser/image.js

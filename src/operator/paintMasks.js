@@ -1,6 +1,5 @@
 'use strict';
 
-import IJ from '../ij';
 import {RGB} from '../model/models';
 
 export default function paintMasks(masks, options) {
@@ -18,8 +17,6 @@ export default function paintMasks(masks, options) {
     if (! Array.isArray(masks)) masks=[masks];
 
     var numberChannels=Math.min(this.channels, color.length);
-
-    console.log(this.channels, numberChannels, color.length);
 
     for (let i=0; i<masks.length; i++) {
         var roi=masks[i];

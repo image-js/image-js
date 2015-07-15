@@ -6,16 +6,16 @@ import {getImage} from 'ij-test';
 
 export {getImage, getHash} from 'ij-test';
 
-import IJ from '../..';
+import Image from '../..';
 
-export {IJ};
+export {Image};
 
 export function load(name) {
-    return IJ.load(getImage(name));
+    return Image.load(getImage(name));
 }
 
 export function getSquare() {
-    return new IJ(3,3,[
+    return new Image(3,3,[
         0,  0,  255,255, // red
         0,  255,0,  255, // green
         255,0,  0,  255, // blue

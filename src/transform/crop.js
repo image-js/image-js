@@ -1,6 +1,6 @@
 'use strict';
 
-import IJ from '../ij';
+import Image from '../image';
 
 export default function crop({
     x = 0,
@@ -16,7 +16,7 @@ export default function crop({
     if (width > (this.width - x) || height > (this.height - y))
         throw new RangeError('size is out of range');
 
-    var newImage = IJ.createFrom(this, {width, height});
+    var newImage = Image.createFrom(this, {width, height});
 
     var xWidth = width * this.channels;
     var y1 = y + height;

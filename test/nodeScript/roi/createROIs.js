@@ -1,12 +1,12 @@
 'use strict';
 
-var IJ = require('../../../lib/ij.js');
+var Image = require('../../..');
 
 var data=new Uint8Array(2);
 data[0]=63;
 data[1]=192;
 
-var mask=new IJ(4,4, data, {
+var mask=new Image(4,4, data, {
     kind: 'BINARY'
 });
 

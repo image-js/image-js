@@ -1,13 +1,13 @@
 'use strict';
 
-import {IJ} from '../common';
+import {Image} from '../common';
 
 
 describe('map a binary image (mask) 2 x 2', function () {
     var data=new Uint8Array(1);
     data[0]=192;
 
-    var img=new IJ(2,2, data, {
+    var img=new Image(2,2, data, {
         kind: 'BINARY'
     });
 
@@ -39,7 +39,7 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
     data[0]=255;
     data[1]=0;
 
-    var img=new IJ(4,4, data, {
+    var img=new Image(4,4, data, {
         kind: 'BINARY'
     });
 
@@ -69,7 +69,7 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
     data[0]=63;
     data[1]=192;
 
-    var img=new IJ(4,4, data, {
+    var img=new Image(4,4, data, {
         kind: 'BINARY'
     });
 
