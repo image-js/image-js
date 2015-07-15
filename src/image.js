@@ -129,12 +129,12 @@ export default class Image {
         return new Image(width, height, {kind});
     }
 
-    setValueXY(column, row, channel, value) {
-        this.data[(row * this.width + column) * this.channels + channel] = value;
+    setValueXY(x, y, channel, value) {
+        this.data[(y * this.width + x) * this.channels + channel] = value;
     }
 
-    getValueXY(column, row, channel) {
-        return this.data[(row * this.width + column) * this.channels + channel];
+    getValueXY(x, y, channel) {
+        return this.data[(y * this.width + x) * this.channels + channel];
     }
 
     setValue(target, channel, value) {

@@ -20,11 +20,11 @@ export default function invertMatrix() {
             data[i]= ~data[i];
         }
     } else {
-        for (let i=0; i<this.height; i++) {
-            for (let j=0; j<this.width; j++) {
+        for (let x=0; x<this.width; x++) {
+            for (let y=0; y<this.height; y++) {
                 for (let k=0; k<this.components; k++) {
-                    var value=this.getValueXY(i, j, k);
-                    this.setValueXY(i, j, k, this.maxValue-value);
+                    var value=this.getValueXY(x, y, k);
+                    this.setValueXY(x, y, k, this.maxValue-value);
                 }
             }
         }
