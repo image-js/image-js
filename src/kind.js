@@ -29,18 +29,18 @@ export function getKind(kind) {
 }
 
 export function getPixelArraySize(kind, numberPixels) {
-    let length=(kind.components+kind.alpha)*numberPixels;
-    if (kind.bitDepth===1) {
-        length=Math.ceil(length/8);
+    let length = (kind.components + kind.alpha) * numberPixels;
+    if (kind.bitDepth === 1) {
+        length = Math.ceil(length / 8);
     }
     return length;
 }
 
 export function getPixelArray(kind, numberPixels) {
-    let length=(kind.components+kind.alpha)*numberPixels;
-    switch(kind.bitDepth) {
+    let length = (kind.components + kind.alpha) * numberPixels;
+    switch (kind.bitDepth) {
         case 1:
-            arr = new Uint8Array(Math.ceil(length/8));
+            arr = new Uint8Array(Math.ceil(length / 8));
             break;
         case 8:
             arr = new Uint8ClampedArray(length);
