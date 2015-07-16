@@ -18,7 +18,7 @@ export function getHistograms({maxSlots=256, useAlpha=true} = {}) {
 
     let results = new Array(this.channels);
     for (let i = 0; i < this.channels; i++) {
-        results[i] = getChannelHistogram.call(this, i, useAlpha);
+        results[i] = getChannelHistogram.call(this, i, useAlpha, maxSlots);
     }
     return results;
 }
