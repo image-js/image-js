@@ -60,8 +60,8 @@ function execute() {
             eval(code);
             error.text('');
         } catch (e) {
+            console.error(e);
             var text = 'Error: ' + e.message;
-            console.warn(text);
             error.text(text);
             setRight(empty);
         }
