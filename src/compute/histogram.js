@@ -40,14 +40,12 @@ function getChannelHistogram(channel, useAlpha, maxSlots) {
     if (this.bitDepth>bitSlots) bitShift=this.bitDepth-bitSlots;
 
     var data = this.data;
-    var result = new Uint32Array(Math.pow(2, Math.min(this.bitDepth, bitSlots)));
+    var result = new Float32Array(Math.pow(2, Math.min(this.bitDepth, bitSlots)));
     if (useAlpha && this.alpha) {
         let alphaChannelDiff=this.channels-channel-1;
 
         for (let i = channel; i < data.length; i += this.channels) {
-            if (data[i+alphaChannelDiff]>0) { // we add a point in the histogram only if the value is not completely transparent
-                result[Math.floor((data[i]>>bitShift)*data[i+alphaChannelDiff]/this.maxValue)]++;
-            }
+            result[data[i]>>bitShift]+=data[i+alphaChannelDiff]/this.maxValue);
         }
     } else {
         for (let i = channel; i < data.length; i += this.channels) {
