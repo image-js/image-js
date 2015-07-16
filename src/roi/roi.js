@@ -30,6 +30,21 @@ export default class ROI {
         return this.computed.surround = getSurroundingIDs(this);
     }
 
+    get boxPixels() {
+        if (this.computed.boxPixels) return this.computed.boxPixels;
+        return this.computed.boxPixels = getBoxPixels(this);
+    }
+
+    get contour() {
+        if (this.computed.contour) return this.computed.contour;
+        return this.computed.contour = getContour(this);
+    }
+
+    get border() {
+        if (this.computed.border) return this.computed.border;
+        return this.computed.border = getBorder(this);
+    }
+
     get mask() {
         if (this.computed.mask) return this.computed.mask;
 
@@ -121,4 +136,95 @@ function getSurroundingIDs(roi) {
     }
     if (surrounding[0]==undefined) return [0];
     return surrounding; // the selection takes the whole rectangle
+}
+
+
+/*
+We get the number of pixels of the ROI that touch the rectangle
+This is useful for the calculation of the border
+because we will ignore those special pixels of the rectangle
+border that don't have neighbourgs all around them.
+ */
+
+function getBoxPixels(roi) {
+    var total=0;
+    let roiMap = roi.map;
+    let pixels = roiMap.pixels;
+
+    // not optimized  if height=1 !
+    for (let y of [0, roi.height - 1]) {
+        for (let x = 1; x < roi.width-1; x++) {
+            let target = (y + roi.minY) * roiMap.width + x + roi.minX;
+            if (pixels[target]===roi.id) {
+                total++;
+            }
+        }
+    }
+
+    for (let x of [0, roi.width-1]) {
+        for (let y = 0; y < roi.height; y++) {
+            let target = (y + roi.minY) * roiMap.width + x + roi.minX;
+            if (pixels[target]===roi.id) {
+                total++;
+            }
+        }
+    }
+    return total;
+}
+
+/*
+    We will calculate the number of pixels that are involved in border
+    Border are all the pixels that touch another "zone". It could be external
+    or internal
+    All the pixels that touch the box are part of the border and
+    are calculated in the getBoxPixels procedure
+ */
+function getBorder(roi) {
+    var total=0;
+    let roiMap = roi.map;
+    let pixels = roiMap.pixels;
+
+    for (let x = 1; x < roi.width-1; i++) {
+        for (let y = 1; y < roi.height-1; y++) {
+            let target = (y + roi.minY) * roiMap.width + x + roi.minX;
+            if (pixels[target]===roi.id) {
+                // if a pixel around is not roi.id it is a border
+                if ((pixels[target-1]!==roi.id) ||
+                    (pixels[target+1]!==roi.id) ||
+                    (pixels[target-roiMap.width]!==roi.id) ||
+                    (pixels[target+roiMap.width]!==roi.id)) {
+                    total++;
+                }
+            }
+        }
+    }
+    return total+roi.boxPixels;
+}
+
+/*
+ We will calculate the number of pixels that are in the external border
+ Contour are all the pixels that touch an external "zone".
+ All the pixels that touch the box are part of the border and
+ are calculated in the getBoxPixels procedure
+ */
+function getContour(roi) {
+    var total=0;
+    let roiMap = roi.map;
+    let pixels = roiMap.pixels;
+
+    for (let x = 1; x < roi.width-1; i++) {
+        for (let y = 1; y < roi.height-1; y++) {
+            let target = (y + roi.minY) * roiMap.width + x + roi.minX;
+            if (pixels[target]===roi.id) {
+                // if a pixel around is not roi.id it is a border
+                if (surround.indexOf((pixels[target-1])!==-1) ||
+                    (surround.indexOf(pixels[target+1])!==-1) ||
+                    (surround.indexOf(pixels[target-roiMap.width])!==-1) ||
+                    (surround.indexOf(pixels[target+roiMap.width])!==-1)) {
+                    total++;
+                }
+            }
+        }
+    }
+    return total+roi.boxPixels;
 }
