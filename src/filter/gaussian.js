@@ -1,9 +1,9 @@
-import IJ from '../ij';
+import Image from '../image';
 
-export default function gaussian_filter(n, sigma){
+export default function gaussianFilter(n, sigma){
 	var cols = this.width;
 	var new_img = this.clone();
-	var kernel = get_gaussian_kernel(n, sigma);
+	var kernel = getGaussiankernel(n, sigma);
 	var temp = cols*n; //variable for checking the image border
 	for(var p = cols*n+n; p < this.data.length - cols*n; p++){
 		if(p == temp+cols-n){
@@ -14,14 +14,14 @@ export default function gaussian_filter(n, sigma){
 	}
 }
 
-function get_gaussian_kernel(n, sigma){
+function getGaussiankernel(n, sigma){
 	var kernel = [];
 	var sigma2 = 2*(sigma*sigma);//2*sigma^2
 	var sum = 0;
 	for(var y = -n; y <= n; y++){
 		for(var x = -n; x <= n; x++){
 			var value = -((x*x) + (y*y))/sigma2;
-			value = Math.pow(Math.E, value);
+			value = Math.exp(value);
 			sum += value;
 			kernel.push(value);
 		}
@@ -36,7 +36,7 @@ function get_gaussian_kernel(n, sigma){
 function convolution(p, data, kernel){
 	var result = 0;
 	var n = (int)(Math.sqrt(kernel.length) - 1)/2;
-	var neighbors = get_neighbors(data, this.width, p, n);
+	var neighbors = getNeighbors(data, this.width, p, n);
 
 	var j = -(kernel.length-1);
 	for(var i = 0; i < kernel.length; i++){
@@ -46,7 +46,7 @@ function convolution(p, data, kernel){
 	return result;
 }
 
-function get_neighbors(data, cols, p, n){
+function getNeighbors(data, cols, p, n){
 	var neighbors = [];
 
 	for(var i = -n; i <= n; i++){
