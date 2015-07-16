@@ -183,7 +183,7 @@ function getBorder(roi) {
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
 
-    for (let x = 1; x < roi.width - 1; i++) {
+    for (let x = 1; x < roi.width - 1; x++) {
         for (let y = 1; y < roi.height - 1; y++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (pixels[target] === roi.id) {
@@ -211,15 +211,15 @@ function getContour(roi) {
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
 
-    for (let x = 1; x < roi.width - 1; i++) {
+    for (let x = 1; x < roi.width - 1; x++) {
         for (let y = 1; y < roi.height - 1; y++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (pixels[target] === roi.id) {
                 // if a pixel around is not roi.id it is a border
-                if (surround.indexOf((pixels[target - 1]) !== -1) ||
-                    (surround.indexOf(pixels[target + 1]) !== -1) ||
-                    (surround.indexOf(pixels[target - roiMap.width]) !== -1) ||
-                    (surround.indexOf(pixels[target + roiMap.width]) !== -1)) {
+                if (this.surround.indexOf((pixels[target - 1]) !== -1) ||
+                    (this.surround.indexOf(pixels[target + 1]) !== -1) ||
+                    (this.surround.indexOf(pixels[target - roiMap.width]) !== -1) ||
+                    (this.surround.indexOf(pixels[target + roiMap.width]) !== -1)) {
                     total++;
                 }
             }

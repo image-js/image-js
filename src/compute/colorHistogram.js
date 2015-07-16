@@ -12,7 +12,7 @@ export function getColorHistogram({
         throw new Error('nbSlots must be a power of 8. Usually 8, 64, 512 or 4096');
     }
 
-    let bitShift = bitDepth - nbSlotsCheck;
+    let bitShift = this.bitDepth - nbSlotsCheck;
 
     let data = this.data;
     let result = new Float32Array(Math.pow(8, nbSlotsCheck));
