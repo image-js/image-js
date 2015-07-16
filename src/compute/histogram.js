@@ -45,7 +45,7 @@ function getChannelHistogram(channel, useAlpha, maxSlots) {
         let alphaChannelDiff=this.channels-channel-1;
 
         for (let i = channel; i < data.length; i += this.channels) {
-            result[data[i]>>bitShift]+=data[i+alphaChannelDiff]/this.maxValue);
+            result[data[i]>>bitShift]+=data[i+alphaChannelDiff]/this.maxValue;
         }
     } else {
         for (let i = channel; i < data.length; i += this.channels) {
