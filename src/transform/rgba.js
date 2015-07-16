@@ -1,5 +1,3 @@
-'use strict';
-
 import Image from '../image';
 
 export default function rgba() {
@@ -8,12 +6,12 @@ export default function rgba() {
         return this.clone();
     }
 
-    var newImage = Image.createFrom(this, {
+    let newImage = Image.createFrom(this, {
         kind: 'COLOR' + this.bitDepth
     });
 
-    var ptr = 0;
-    var data = this.data;
+    let ptr = 0;
+    let data = this.data;
     for (let i = 0; i < data.length; i += this.channels) {
         newImage.data[ptr++] = data[i];
         newImage.data[ptr++] = data[i];

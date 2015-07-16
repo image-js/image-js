@@ -1,5 +1,4 @@
-'use strict';
-require("babel/polyfill");
+require('babel/polyfill');
 
 import {getKind, getPixelArray, getPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
@@ -33,7 +32,7 @@ export default class Image {
         this.width = width;
         this.height = height;
 
-        this.position = options.position || [0,0];
+        this.position = options.position || [0, 0];
 
         let kind = options.kind || RGBA;
         if (typeof kind === 'string') kind = getKind(kind);
@@ -53,8 +52,8 @@ export default class Image {
         if (!data)
             data = getPixelArray(kind, this.size);
         else {
-            let theoreticalSize=getPixelArraySize(kind, this.size);
-            if (theoreticalSize!=data.length) {
+            let theoreticalSize = getPixelArraySize(kind, this.size);
+            if (theoreticalSize != data.length) {
                 throw new RangeError(`incorrect data size. Should be ${theoreticalSize} and found ${data.length}`);
             }
         }
@@ -83,9 +82,6 @@ export default class Image {
     }
 
     static extendMethod(name, method, inplace = false, returnThis = true) {
-        if (Image.prototype.hasOwnProperty(name)) {
-            console.warn(`Method '${name}' already exists and will be overwritten`);
-        }
         if (inplace) {
             Image.prototype[name] = function (...args) {
                 // reset computed properties
@@ -104,9 +100,6 @@ export default class Image {
     }
 
     static extendProperty(name, method) {
-        if (Image.prototype.hasOwnProperty(name)) {
-            console.warn(`Property getter '${name}' already exists and will be overwritten`);
-        }
         computedPropertyDescriptor.get = function () {
             if (this.computed.hasOwnProperty(name)) {
                 return this.computed[name];
@@ -129,12 +122,12 @@ export default class Image {
         return new Image(width, height, {kind});
     }
 
-    setValueXY(column, row, channel, value) {
-        this.data[(row * this.width + column) * this.channels + channel] = value;
+    setValueXY(x, y, channel, value) {
+        this.data[(y * this.width + x) * this.channels + channel] = value;
     }
 
-    getValueXY(column, row, channel) {
-        return this.data[(row * this.width + column) * this.channels + channel];
+    getValueXY(x, y, channel) {
+        return this.data[(y * this.width + x) * this.channels + channel];
     }
 
     setValue(target, channel, value) {
@@ -198,12 +191,12 @@ export default class Image {
         });
         let size = this.size;
         let newData = getCanvasArray(this.width, this.height);
-        if (this.bitDepth==1) {
+        if (this.bitDepth == 1) {
             for (let i = 0; i < size; i++) {
-                var value=this.getBit(i);
-                newData[i * 4] = value*255;
-                newData[i * 4 + 1] = value*255;
-                newData[i * 4 + 2] = value*255;
+                let value = this.getBit(i);
+                newData[i * 4] = value * 255;
+                newData[i * 4 + 1] = value * 255;
+                newData[i * 4 + 2] = value * 255;
             }
         } else {
             if (this.components === 1) {
@@ -237,56 +230,56 @@ export default class Image {
     }
 
     // those methods can only apply on binary images ... but we will not loose time to check !
-    setBitXY(x,y) {
-        var target=y*this.width+x;
-        var shift=7 - (target & 0b00000111);
-        var slot=target>>3;
-        this.data[slot] |= 1<<shift;
+    setBitXY(x, y) {
+        let target = y * this.width + x;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
+        this.data[slot] |= 1 << shift;
     }
 
-    clearBitXY(x,y) {
-        var target=y*this.width+x;
-        var shift=7 - (target & 0b00000111);
-        var slot=target>>3;
-        this.data[slot] &= ~(1<<shift);
+    clearBitXY(x, y) {
+        let target = y * this.width + x;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
+        this.data[slot] &= ~(1 << shift);
     }
 
-    toggleBitXY(x,y) {
-        var target=y*this.width+x;
-        var shift=7 - (target & 0b00000111);
-        var slot=target>>3;
-        this.data[slot] ^= 1<<shift;
+    toggleBitXY(x, y) {
+        let target = y * this.width + x;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
+        this.data[slot] ^= 1 << shift;
     }
 
-    getBitXY(x,y) {
-        var target=y*this.width+x;
-        var shift=7 - (target & 0b00000111);
-        var slot=target>>3;
-        return (this.data[slot] & 1<<shift) ? 1 : 0;
+    getBitXY(x, y) {
+        let target = y * this.width + x;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
+        return (this.data[slot] & 1 << shift) ? 1 : 0;
     }
 
     setBit(target) {
-        var shift=7 - (target & 0b00000111);
-        var slot=target>>3;
-        this.data[slot] |= 1<<shift;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
+        this.data[slot] |= 1 << shift;
     }
 
     clearBit(target) {
-        var shift=7 - (target & 0b00000111);
-        var slot=target>>3;
-        this.data[slot] &= ~(1<<shift);
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
+        this.data[slot] &= ~(1 << shift);
     }
 
     toggleBit(target) {
-        var shift=7 - (target & 0b00000111);
-        var slot=target>>3;
-        this.data[slot] ^= 1<<shift;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
+        this.data[slot] ^= 1 << shift;
     }
 
     getBit(target) {
-        var shift=7 - (target & 0b00000111);
-        var slot=target>>3;
-        return (this.data[slot] & 1<<shift) ? 1 : 0;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
+        return (this.data[slot] & 1 << shift) ? 1 : 0;
     }
 
     getROIManager(mask, options) {

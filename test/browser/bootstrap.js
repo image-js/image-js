@@ -14,12 +14,14 @@ window.load = function load(name) {
 
 var left = document.getElementById('left');
 window.setLeft = function setLeft(img) {
-    left.src = img.toDataURL();
+    left.innerHTML = '';
+    left.appendChild(img.getCanvas());
 };
 
 var right = document.getElementById('right');
 window.setRight = function setRight(img) {
-    right.src = img.toDataURL();
+    right.innerHTML = '';
+    right.appendChild(img.getCanvas());
 };
 
 export default Image;

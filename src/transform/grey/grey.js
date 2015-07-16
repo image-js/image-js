@@ -1,5 +1,3 @@
-'use strict';
-
 import Image from '../../image';
 import {RGB} from '../../model/models';
 
@@ -17,7 +15,7 @@ export default function grey({algorithm = 'luma709'} = {}) {
 
     this.checkProcessable('grey', {colorModel: RGB});
 
-    var newImage = Image.createFrom(this, {
+    let newImage = Image.createFrom(this, {
         kind: {
             components: 1,
             alpha: this.alpha,

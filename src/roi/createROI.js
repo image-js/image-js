@@ -1,17 +1,15 @@
-'use strict';
-
 import ROI from './roi';
 
 export default function createROI(roiMap) {
 
-    var size = roiMap.total;
-    var rois = new Array(size);
-    for (var i = 0; i < size; i++) {
+    let size = roiMap.total;
+    let rois = new Array(size);
+    for (let i = 0; i < size; i++) {
         let mapID = -roiMap.negative + i;
         if (i >= roiMap.negative) mapID++;
         rois[i] = new ROI(roiMap, mapID);
     }
-    var pixels = roiMap.pixels;
+    let pixels = roiMap.pixels;
     for (let x = 0; x < roiMap.width; x++) {
         for (let y = 0; y < roiMap.height; y++) {
             let target = y * roiMap.width + x;
@@ -26,7 +24,7 @@ export default function createROI(roiMap) {
             rois[mapID].surface++;
         }
     }
-    for (var i = 0; i < size; i++) {
+    for (let i = 0; i < size; i++) {
         let mapID = -roiMap.negative + i;
         if (i >= roiMap.negative) mapID++;
         rois[i].meanX /= rois[i].surface;

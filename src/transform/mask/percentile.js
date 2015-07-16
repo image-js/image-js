@@ -1,5 +1,3 @@
-'use strict';
-
 export default function percentile(histogram) {
     // See http://imagej.nih.gov/ij/download/tools/source/ij/process/AutoThresholder.java
     // W. Doyle, "Operation useful for similarity-invariant pattern recognition,"
@@ -10,14 +8,14 @@ export default function percentile(histogram) {
     // and the original Matlab code.
 
     let threshold = -1;
-    let percentile= 0.5; // default fraction of foreground pixels
+    let percentile = 0.5; // default fraction of foreground pixels
     let avec = new Float32Array(256);
 
     let total = partialSum(histogram, histogram.lengh);
     let temp = 1.0;
-    for (let i=1; i<histogram.length; i++) {
-        avec[i]=Math.abs((partialSum(histogram, i)/total)-percentile);
-        if (avec[i]<temp) {
+    for (let i = 1; i < histogram.length; i++) {
+        avec[i] = Math.abs((partialSum(histogram, i) / total) - percentile);
+        if (avec[i] < temp) {
             temp = avec[i];
             threshold = i;
         }
@@ -27,8 +25,8 @@ export default function percentile(histogram) {
 
 function partialSum(histogram, endIndex) {
     let x = 0;
-    for (let i=0; i<endIndex; i++) {
-        x+=histogram[i];
+    for (let i = 0; i < endIndex; i++) {
+        x += histogram[i];
     }
     return x;
 }

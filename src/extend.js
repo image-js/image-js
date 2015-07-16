@@ -1,5 +1,3 @@
-'use strict';
-
 // filters
 import invert from './filter/invert';
 import invertMatrix from './filter/invertMatrix';
@@ -16,6 +14,7 @@ import paintMasks from './operator/paintMasks';
 
 // computers
 import {getHistogram, getHistograms} from './compute/histogram';
+import getColorHistogram from './compute/colorHistogram';
 
 export default function extend(Image) {
     Image.extendMethod('invert', invert, true); // true means the process is in-place
@@ -33,4 +32,5 @@ export default function extend(Image) {
 
     Image.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);
     Image.extendMethod('getHistograms', getHistograms).extendProperty('histograms', getHistograms);
+    Image.extendMethod('getColorHistogram', getColorHistogram).extendProperty('colorHistogram', getColorHistogram);
 }

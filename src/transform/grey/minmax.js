@@ -1,5 +1,3 @@
-'use strict';
-
 export default function minmax(newImage) {
     let ptr = 0;
     for (let i = 0; i < this.data.length; i += this.channels) {

@@ -46,7 +46,7 @@ if (oldCode) {
 }
 
 var error = $('#error');
-var empty = new Image(1, 1);
+var empty = new IJ(1, 1);
 
 function execute() {
     loading.then(function (img) {
@@ -60,8 +60,8 @@ function execute() {
             eval(code);
             error.text('');
         } catch (e) {
+            console.error(e);
             var text = 'Error: ' + e.message;
-            console.warn(text);
             error.text(text);
             setRight(empty);
         }
