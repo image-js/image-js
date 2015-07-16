@@ -40,5 +40,10 @@ rules:
   valid-typeof: 2
   no-unexpected-multiline: 2
 
+  # Strict mode
+  strict:
+    - 2
+    - "global"
+
   # ES6
   no-var: 2

@@ -1,5 +1,3 @@
-'use strict';
-
 export default function invert() {
     this.checkProcessable('invertOneLoop', {
         bitDepth: [8, 16]

@@ -1,5 +1,4 @@
-'use strict';
-require("babel/polyfill");
+require('babel/polyfill');
 
 import {getKind, getPixelArray, getPixelArraySize} from './kind';
 import {RGBA} from './kindNames';

@@ -1,6 +1,3 @@
-'use strict';
-
-
 // this code gives the same result as invert()
 // but is based on a matrix of pixels
 // may be easier to implement some algorithm

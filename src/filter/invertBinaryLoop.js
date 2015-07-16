@@ -1,5 +1,3 @@
-'use strict';
-
 export default function invertBinaryLoop() {
     this.checkProcessable('invertBinaryLoop', {
         bitDepth: [1]

@@ -1,5 +1,3 @@
-'use strict';
-
 import Image from '../image';
 
 export default function crop({

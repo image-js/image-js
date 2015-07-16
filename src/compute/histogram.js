@@ -1,5 +1,3 @@
-'use strict';
-
 export function getHistogram({maxSlots=256, channel=undefined, useAlpha=true} = {}) {
     this.checkProcessable("getHistogram", {
         bitDepth: [8, 16]

@@ -1,5 +1,3 @@
-'use strict';
-
 // filters
 import invert from './filter/invert';
 import invertMatrix from './filter/invertMatrix';

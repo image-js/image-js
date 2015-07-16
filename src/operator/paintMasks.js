@@ -1,5 +1,3 @@
-'use strict';
-
 import {RGB} from '../model/models';
 
 export default function paintMasks(masks, {

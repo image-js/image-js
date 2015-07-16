@@ -1,5 +1,3 @@
-'use strict';
-
 import * as KindNames from './kindNames';
 import {RGB} from './model/models';
 

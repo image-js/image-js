@@ -1,5 +1,3 @@
-'use strict';
-
 export default function createROIMap(mask, {allowCorner = false} = {}) {
 
     // based on a binary image we will create plenty of small images

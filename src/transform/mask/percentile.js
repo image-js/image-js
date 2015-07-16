@@ -1,5 +1,3 @@
-'use strict';
-
 export default function percentile(histogram) {
     // See http://imagej.nih.gov/ij/download/tools/source/ij/process/AutoThresholder.java
     // W. Doyle, "Operation useful for similarity-invariant pattern recognition,"

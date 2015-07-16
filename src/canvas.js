@@ -1,5 +1,3 @@
-'use strict';
-
 let DOMImage, Canvas, getImageData, getCanvasArray;
 
 if (typeof self !== 'undefined') { // Browser

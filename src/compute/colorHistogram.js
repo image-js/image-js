@@ -1,5 +1,3 @@
-'use strict';
-
 export function getColorHistogram({
     useAlpha = true,
     nbSlots = 512

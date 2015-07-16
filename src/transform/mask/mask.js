@@ -1,5 +1,3 @@
-'use strict';
-
 import Image from '../../image';
 
 import percentile from './percentile';

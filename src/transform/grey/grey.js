@@ -1,5 +1,3 @@
-'use strict';
-
 import Image from '../../image';
 import {RGB} from '../../model/models';
 

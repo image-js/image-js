@@ -1,5 +1,3 @@
-'use strict';
-
 import createROIMap from './createROIMap';
 import createROI from './createROI';
 
