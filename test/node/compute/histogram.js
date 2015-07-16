@@ -29,9 +29,11 @@ describe('calculate the histogram', function () {
 
         let histogram=image.histogram;
 
-        histogram[0].should.equal(1);
-        histogram[230].should.equal(3);
+        histogram[0].should.equal(0);
+        histogram[1].should.equal(0);
+        histogram[13].should.approximately(0.0039, 0.0001);
         histogram[100].should.equal(0);
+        histogram[230].should.equal(3);
         histogram[255].should.equal(0);
     });
 
@@ -43,9 +45,9 @@ describe('calculate the histogram', function () {
 
         let histogram=image.getHistogram({maxSlots: 16});
 
-        histogram[0].should.equal(1);
-        histogram[14].should.equal(3);
+        histogram[0].should.approximately(0.0039, 0.0001);
         histogram[1].should.equal(0);
+        histogram[14].should.equal(3);
         histogram[15].should.equal(0);
     });
 
