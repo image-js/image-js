@@ -3,6 +3,7 @@ import invert from './filter/invert';
 import invertMatrix from './filter/invertMatrix';
 import invertOneLoop from './filter/invertOneLoop';
 import invertBinaryLoop from './filter/invertBinaryLoop';
+import meanFilter from './filter/blur';
 
 // transformers
 import crop from './transform/crop';
@@ -21,6 +22,7 @@ export default function extend(Image) {
     Image.extendMethod('invertMatrix', invertMatrix, true);
     Image.extendMethod('invertOneLoop', invertOneLoop, true);
     Image.extendMethod('invertBinaryLoop', invertBinaryLoop, true);
+    Image.extendMethod('meanFilter', meanFilter);
 
     Image.extendMethod('crop', crop); // last parameter is "false" because it creates a new image
     Image.extendMethod('grey', grey).extendMethod('gray', grey);
