@@ -14,10 +14,10 @@ export default function paintMasks(masks, {
 
     if (!Array.isArray(masks)) masks = [masks];
 
-    var numberChannels = Math.min(this.channels, color.length);
+    let numberChannels = Math.min(this.channels, color.length);
 
     for (let i = 0; i < masks.length; i++) {
-        var roi = masks[i];
+        let roi = masks[i];
         for (let x = 0; x < roi.width; x++) {
             for (let y = 0; y < roi.height; y++) {
                 if (roi.getBitXY(x, y)) {

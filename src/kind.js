@@ -38,6 +38,7 @@ export function getPixelArraySize(kind, numberPixels) {
 
 export function getPixelArray(kind, numberPixels) {
     let length = (kind.components + kind.alpha) * numberPixels;
+    let arr;
     switch (kind.bitDepth) {
         case 1:
             arr = new Uint8Array(Math.ceil(length / 8));
@@ -51,11 +52,10 @@ export function getPixelArray(kind, numberPixels) {
         default:
             throw new Error('Cannot create pixel array for bit depth ' + kind.bitDepth);
     }
-    var arr;
 
     // alpha channel is 100% by default
     if (kind.alpha) {
-        for (var i = kind.components; i < arr.length; i += kind.channels) {
+        for (let i = kind.components; i < arr.length; i += kind.channels) {
             arr[i] = kind.maxValue;
         }
     }

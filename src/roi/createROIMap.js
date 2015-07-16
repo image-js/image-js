@@ -3,11 +3,11 @@
 export default function createROIMap(mask, {allowCorner = false} = {}) {
 
     // based on a binary image we will create plenty of small images
-    var pixels = new Int16Array(mask.size); // maxValue: 32767, minValue: -32768
+    let pixels = new Int16Array(mask.size); // maxValue: 32767, minValue: -32768
 
     // split will always return an array of images
-    var positiveID = 0;
-    var negativeID = 0;
+    let positiveID = 0;
+    let negativeID = 0;
 
     let MAX_ARRAY = 0x00ffff; // should be enough for most of the cases
     let xToProcess = new Uint16Array(MAX_ARRAY + 1); // assign dynamically ????

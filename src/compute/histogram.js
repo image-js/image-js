@@ -38,8 +38,8 @@ function getChannelHistogram(channel, useAlpha, maxSlots) {
     let bitShift = 0;
     if (this.bitDepth > bitSlots) bitShift = this.bitDepth - bitSlots;
 
-    var data = this.data;
-    var result = new Float32Array(Math.pow(2, Math.min(this.bitDepth, bitSlots)));
+    let data = this.data;
+    let result = new Float32Array(Math.pow(2, Math.min(this.bitDepth, bitSlots)));
     if (useAlpha && this.alpha) {
         let alphaChannelDiff = this.channels - channel - 1;
 

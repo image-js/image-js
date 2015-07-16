@@ -32,8 +32,9 @@
     "compile": "npm run clean-lib && babel src --out-dir lib",
     "clean-dist": "rm -rf dist && mkdir dist",
     "clean-lib": "rm -rf lib",
+    "eslint": "eslint src",
     "prepublish": "npm run compile",
-    "test": "npm run compile && npm run test-mocha",
+    "test": "npm run compile && npm run test-mocha && npm run eslint",
     "test-mocha": "mocha --compilers js:babel/register --require should --reporter mocha-better-spec-reporter --recursive test/node",
     "watch-browser": "watchify test/browser/bootstrap.js -o test/browser/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --debug --transform [ babelify --sourceMap ]",
     "watch-node": "babel --watch src --out-dir lib"
@@ -43,6 +44,7 @@
     "babelify": "^6.1.2",
     "benchmark": "^1.0.0",
     "browserify": "^10.2.4",
+    "eslint": "^1.0.0-rc-1",
     "ij-test": "^1.4.0",
     "mocha": "^2.2.5",
     "mocha-better-spec-reporter": "^2.1.1",
@@ -53,6 +55,5 @@
   "optionalDependencies": {
     "canvas": "^1.2.3"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

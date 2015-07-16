@@ -21,4 +21,4 @@ export default function invertMatrix() {
         }
     }
     this.setMatrix(matrix);
-};
+}

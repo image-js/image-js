@@ -8,4 +8,4 @@ export default function invertBinaryLoop() {
     for (let i = 0; i < this.size; i++) {
         this.toggleBit(i);
     }
-};
+}

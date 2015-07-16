@@ -16,19 +16,18 @@ export default function crop({
     if (width > (this.width - x) || height > (this.height - y))
         throw new RangeError('size is out of range');
 
-    var newImage = Image.createFrom(this, {width, height});
+    let newImage = Image.createFrom(this, {width, height});
 
-    var xWidth = width * this.channels;
-    var y1 = y + height;
+    let xWidth = width * this.channels;
+    let y1 = y + height;
 
-    var ptr = 0; // pointer for new array
+    let ptr = 0; // pointer for new array
 
-    var i, j, jL;
-    var jLeft = x * this.channels;
+    let jLeft = x * this.channels;
 
-    for (i = y; i < y1; i++) {
-        j = (i * this.width * this.channels) + jLeft;
-        jL = j + xWidth;
+    for (let i = y; i < y1; i++) {
+        let j = (i * this.width * this.channels) + jLeft;
+        let jL = j + xWidth;
         for (; j < jL; j++) {
             newImage.data[ptr++] = this.data[j];
         }

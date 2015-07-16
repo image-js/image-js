@@ -85,9 +85,9 @@ export default class ROI {
  */
 
 function getSurroundingIDs(roi) {
-    var surrounding = new Array(1);
+    let surrounding = new Array(1);
 
-    var ptr = 0;
+    let ptr = 0;
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
     // we check the first line and the last line
@@ -148,7 +148,7 @@ function getSurroundingIDs(roi) {
  */
 
 function getBoxPixels(roi) {
-    var total = 0;
+    let total = 0;
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
 
@@ -181,7 +181,7 @@ function getBoxPixels(roi) {
  are calculated in the getBoxPixels procedure
  */
 function getBorder(roi) {
-    var total = 0;
+    let total = 0;
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
 
@@ -209,7 +209,7 @@ function getBorder(roi) {
  are calculated in the getBoxPixels procedure
  */
 function getContour(roi) {
-    var total = 0;
+    let total = 0;
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
 

@@ -83,9 +83,6 @@ export default class Image {
     }
 
     static extendMethod(name, method, inplace = false, returnThis = true) {
-        if (Image.prototype.hasOwnProperty(name)) {
-            console.warn(`Method '${name}' already exists and will be overwritten`);
-        }
         if (inplace) {
             Image.prototype[name] = function (...args) {
                 // reset computed properties
@@ -104,9 +101,6 @@ export default class Image {
     }
 
     static extendProperty(name, method) {
-        if (Image.prototype.hasOwnProperty(name)) {
-            console.warn(`Property getter '${name}' already exists and will be overwritten`);
-        }
         computedPropertyDescriptor.get = function () {
             if (this.computed.hasOwnProperty(name)) {
                 return this.computed[name];
@@ -238,54 +232,54 @@ export default class Image {
 
     // those methods can only apply on binary images ... but we will not loose time to check !
     setBitXY(x, y) {
-        var target = y * this.width + x;
-        var shift = 7 - (target & 0b00000111);
-        var slot = target >> 3;
+        let target = y * this.width + x;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
         this.data[slot] |= 1 << shift;
     }
 
     clearBitXY(x, y) {
-        var target = y * this.width + x;
-        var shift = 7 - (target & 0b00000111);
-        var slot = target >> 3;
+        let target = y * this.width + x;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
         this.data[slot] &= ~(1 << shift);
     }
 
     toggleBitXY(x, y) {
-        var target = y * this.width + x;
-        var shift = 7 - (target & 0b00000111);
-        var slot = target >> 3;
+        let target = y * this.width + x;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
         this.data[slot] ^= 1 << shift;
     }
 
     getBitXY(x, y) {
-        var target = y * this.width + x;
-        var shift = 7 - (target & 0b00000111);
-        var slot = target >> 3;
+        let target = y * this.width + x;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
         return (this.data[slot] & 1 << shift) ? 1 : 0;
     }
 
     setBit(target) {
-        var shift = 7 - (target & 0b00000111);
-        var slot = target >> 3;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
         this.data[slot] |= 1 << shift;
     }
 
     clearBit(target) {
-        var shift = 7 - (target & 0b00000111);
-        var slot = target >> 3;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
         this.data[slot] &= ~(1 << shift);
     }
 
     toggleBit(target) {
-        var shift = 7 - (target & 0b00000111);
-        var slot = target >> 3;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
         this.data[slot] ^= 1 << shift;
     }
 
     getBit(target) {
-        var shift = 7 - (target & 0b00000111);
-        var slot = target >> 3;
+        let shift = 7 - (target & 0b00000111);
+        let slot = target >> 3;
         return (this.data[slot] & 1 << shift) ? 1 : 0;
     }
 
