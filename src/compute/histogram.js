@@ -15,7 +15,7 @@ export function getHistogram({maxSlots=256, channel=undefined, useAlpha=true} = 
 
 export function getHistograms({maxSlots=256, useAlpha=true} = {}) {
     this.checkProcessable("getHistograms", {
-        bitDepth: [8.16]
+        bitDepth: [8, 16]
     });
 
     let results = new Array(this.channels);
