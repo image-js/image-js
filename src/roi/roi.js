@@ -96,15 +96,15 @@ function getSurroundingIDs(roi) {
     for (let y of [0, roi.height - 1]) {
         for (let x = 0; x < roi.width; x++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            if ((x - roi.minX) > 0 && pixels[target] == roi.id && pixels[target - 1] != roi.id) {
+            if ((x - roi.minX) > 0 && pixels[target] === roi.id && pixels[target - 1] !== roi.id) {
                 let value = pixels[target - 1];
-                if (surrounding.indexOf(value) == -1) {
+                if (surrounding.indexOf(value) === -1) {
                     surrounding[ptr++] = value;
                 }
             }
-            if ((roiMap.width - x - roi.minX) > 1 && pixels[target] == roi.id && pixels[target + 1] != roi.id) {
+            if ((roiMap.width - x - roi.minX) > 1 && pixels[target] === roi.id && pixels[target + 1] !== roi.id) {
                 let value = pixels[target + 1];
-                if (surrounding.indexOf(value) == -1) {
+                if (surrounding.indexOf(value) === -1) {
                     surrounding[ptr++] = value;
                 }
             }
@@ -119,21 +119,21 @@ function getSurroundingIDs(roi) {
     for (let x of [0, roi.width - 1]) {
         for (let y = 0; y < roi.height; y++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            if ((y - roi.minY) > 0 && pixels[target] == roi.id && pixels[target - roiMap.width] != roi.id) {
+            if ((y - roi.minY) > 0 && pixels[target] === roi.id && pixels[target - roiMap.width] !== roi.id) {
                 let value = pixels[target - roiMap.width];
-                if (surrounding.indexOf(value) == -1) {
+                if (surrounding.indexOf(value) === -1) {
                     surrounding[ptr++] = value;
                 }
             }
-            if ((roiMap.height - y - roi.minY) > 1 && pixels[target] == roi.id && pixels[target + roiMap.width] != roi.id) {
+            if ((roiMap.height - y - roi.minY) > 1 && pixels[target] === roi.id && pixels[target + roiMap.width] !== roi.id) {
                 let value = pixels[target + roiMap.width];
-                if (surrounding.indexOf(value) == -1) {
+                if (surrounding.indexOf(value) === -1) {
                     surrounding[ptr++] = value;
                 }
             }
         }
     }
-    if (surrounding[0] == undefined) return [0];
+    if (surrounding[0] === undefined) return [0];
     return surrounding; // the selection takes the whole rectangle
 }
 
@@ -150,8 +150,9 @@ function getBoxPixels(roi) {
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
 
-    // not optimized  if height=1 !
-    for (let y of [0, roi.height - 1]) {
+    let topBottom=[0];
+    if (roi.height>1) topBottom[1]=roi.height - 1;
+    for (let y of topBottom) {
         for (let x = 1; x < roi.width - 1; x++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (pixels[target] === roi.id) {
@@ -160,7 +161,9 @@ function getBoxPixels(roi) {
         }
     }
 
-    for (let x of [0, roi.width - 1]) {
+    let leftRight=[0];
+    if (roi.width>1) leftRight[1]=roi.width - 1;
+    for (let x of leftRight) {
         for (let y = 0; y < roi.height; y++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (pixels[target] === roi.id) {
@@ -216,10 +219,10 @@ function getContour(roi) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (pixels[target] === roi.id) {
                 // if a pixel around is not roi.id it is a border
-                if (this.surround.indexOf((pixels[target - 1]) !== -1) ||
-                    (this.surround.indexOf(pixels[target + 1]) !== -1) ||
-                    (this.surround.indexOf(pixels[target - roiMap.width]) !== -1) ||
-                    (this.surround.indexOf(pixels[target + roiMap.width]) !== -1)) {
+                if ((roi.surround.indexOf(pixels[target - 1]) !== -1) ||
+                    (roi.surround.indexOf(pixels[target + 1]) !== -1) ||
+                    (roi.surround.indexOf(pixels[target - roiMap.width]) !== -1) ||
+                    (roi.surround.indexOf(pixels[target + roiMap.width]) !== -1)) {
                     total++;
                 }
             }

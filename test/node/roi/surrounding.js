@@ -1,5 +1,3 @@
-'use strict';
-
 import {Image} from '../common';
 
 /* Image to test:
@@ -12,18 +10,18 @@ import {Image} from '../common';
 
 
 describe('we check that each ROI is surrounded by the expect zones', function () {
-    var data=new Uint8Array(2);
+    let data=new Uint8Array(2);
     data[0]=63;
     data[1]=192;
 
-    var mask=new Image(4,4, data, {
+    let mask=new Image(4,4, data, {
         kind: 'BINARY'
     });
 
-    var roiManager=mask.getROIManager();
+    let roiManager=mask.getROIManager();
     roiManager.putMask(mask);
 
-    var result=roiManager.getROI();
+    let result=roiManager.getROI();
     result.should.have.lengthOf(3);
 
     result[0].surround.should.eql([1]);
@@ -31,4 +29,3 @@ describe('we check that each ROI is surrounded by the expect zones', function ()
     result[2].surround.should.eql([-1,-2]);
 
 });
-

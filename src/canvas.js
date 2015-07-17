@@ -1,6 +1,8 @@
-let DOMImage, Canvas, getImageData, getCanvasArray;
+let DOMImage, Canvas, getImageData, getCanvasArray, env;
 
 if (typeof self !== 'undefined') { // Browser
+
+    env = 'browser';
 
     let ImageData = self.ImageData;
 
@@ -28,6 +30,8 @@ if (typeof self !== 'undefined') { // Browser
 
 } else if (typeof module !== 'undefined' && module.exports) { // Node.js
 
+    env = 'node';
+
     let canvas = require('canvas');
     let ImageData = require('canvas/lib/bindings').ImageData;
 
@@ -48,4 +52,4 @@ if (typeof self !== 'undefined') { // Browser
     };
 }
 
-export {DOMImage, Canvas, getImageData, getCanvasArray};
+export {DOMImage, Canvas, getImageData, getCanvasArray, env};

@@ -4,7 +4,7 @@ export function getHistogram({maxSlots=256, channel=undefined, useAlpha=true} = 
     });
     if (channel === undefined) {
         if (this.components > 1) {
-            throw new Error('You need to define the channel for an image that contains more than one channel');
+            throw new RangeError('You need to define the channel for an image that contains more than one channel');
         }
         channel = 0;
     }
@@ -25,9 +25,9 @@ export function getHistograms({maxSlots=256, useAlpha=true} = {}) {
 
 
 function getChannelHistogram(channel, useAlpha, maxSlots) {
-    let bitSlots = Math.log(maxSlots) / Math.log(2);
-    if (bitSlots != Math.floor(bitSlots)) {
-        throw new Error('maxSlots must be a power of 2, for example: 64, 256, 1024');
+    let bitSlots = Math.log2(maxSlots);
+    if (!Number.isInteger(bitSlots)) {
+        throw new RangeError('maxSlots must be a power of 2, for example: 64, 256, 1024');
     }
     // we will compare the bitSlots to the bitDepth of the image
     // based on this we will shift the values. This allows to generate a histogram

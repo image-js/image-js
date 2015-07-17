@@ -1,5 +1,3 @@
-'use strict';
-
 import {Image, load, getHash, refreshTmpDir, tmpDir, getSquare} from '../common';
 
 refreshTmpDir();

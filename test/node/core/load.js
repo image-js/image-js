@@ -1,5 +1,3 @@
-'use strict';
-
 import {Image, load} from '../common';
 
 describe('Image core', function () {

@@ -7,6 +7,7 @@ import extend from './extend';
 import {createWriteStream} from 'fs';
 import * as ColorModels from './model/models';
 import ROIManager from './roi/manager';
+import {getType, canWrite} from './mediaTypes';
 
 let computedPropertyDescriptor = {
     configurable: true,
@@ -53,7 +54,7 @@ export default class Image {
             data = getPixelArray(kind, this.size);
         else {
             let theoreticalSize = getPixelArraySize(kind, this.size);
-            if (theoreticalSize != data.length) {
+            if (theoreticalSize !== data.length) {
                 throw new RangeError(`incorrect data size. Should be ${theoreticalSize} and found ${data.length}`);
             }
         }
@@ -122,6 +123,18 @@ export default class Image {
         return new Image(width, height, {kind});
     }
 
+    static isTypeSupported(type, operation = 'write') {
+        if (typeof type !== 'string') {
+            throw new TypeError('type argument must be a string');
+        }
+        type = getType(type);
+        if (operation === 'write') {
+            return canWrite(type);
+        } else {
+            throw new TypeError('unknown operation: ' + operation);
+        }
+    }
+
     setValueXY(x, y, channel, value) {
         this.data[(y * this.width + x) * this.channels + channel] = value;
     }
@@ -172,8 +185,8 @@ export default class Image {
         return matrix;
     }
 
-    toDataURL() {
-        return this.getCanvas().toDataURL();
+    toDataURL(type = 'image/png') {
+        return this.getCanvas().toDataURL(getType(type));
     }
 
     getCanvas() {
@@ -185,13 +198,13 @@ export default class Image {
     }
 
     getRGBAData() {
-        this.checkProcessable("getRGBAData", {
+        this.checkProcessable('getRGBAData', {
             components: [1, 3],
             bitDepth: [1, 8, 16]
         });
         let size = this.size;
         let newData = getCanvasArray(this.width, this.height);
-        if (this.bitDepth == 1) {
+        if (this.bitDepth === 1) {
             for (let i = 0; i < size; i++) {
                 let value = this.getBit(i);
                 newData[i * 4] = value * 255;
@@ -206,7 +219,7 @@ export default class Image {
                     newData[i * 4 + 2] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
                 }
             } else if (this.components === 3) {
-                this.checkProcessable("getRGBAData", {colorModel: [ColorModels.RGB]});
+                this.checkProcessable('getRGBAData', {colorModel: [ColorModels.RGB]});
                 if (this.colorModel === ColorModels.RGB) {
                     for (let i = 0; i < size; i++) {
                         newData[i * 4] = this.data[i * 4] >> (this.bitDepth - 8);
@@ -217,7 +230,7 @@ export default class Image {
             }
         }
         if (this.alpha) {
-            this.checkProcessable("getRGBAData", {bitDepth: [8, 16]});
+            this.checkProcessable('getRGBAData', {bitDepth: [8, 16]});
             for (let i = 0; i < size; i++) {
                 newData[i * 4 + 3] = this.data[i * this.channels + this.components] >> (this.bitDepth - 8);
             }
@@ -324,25 +337,25 @@ export default class Image {
         } = {}) {
         if (bitDepth) {
             if (!Array.isArray(bitDepth)) bitDepth = [bitDepth];
-            if (bitDepth.indexOf(this.bitDepth) == -1) {
+            if (bitDepth.indexOf(this.bitDepth) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if bit depth is in: ' + bitDepth);
             }
         }
         if (alpha) {
             if (!Array.isArray(alpha)) alpha = [alpha];
-            if (alpha.indexOf(this.alpha) == -1) {
+            if (alpha.indexOf(this.alpha) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if alpha is in: ' + alpha);
             }
         }
         if (colorModel) {
             if (!Array.isArray(colorModel)) colorModel = [colorModel];
-            if (colorModel.indexOf(this.colorModel) == -1) {
+            if (colorModel.indexOf(this.colorModel) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if color model is in: ' + colorModel);
             }
         }
         if (components) {
             if (!Array.isArray(components)) components = [components];
-            if (components.indexOf(this.components) == -1) {
+            if (components.indexOf(this.components) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if the number of channels is in: ' + components);
             }
         }
