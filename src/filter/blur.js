@@ -4,7 +4,7 @@ import Image from '../image';
 import convolution from '../operator/convolution';
 
 // first release of mean filter
-export default function meanFilter(k){
+export default function meanFilter(k, boundary){
 
     this.checkProcessable({
         components:[1],
@@ -40,7 +40,7 @@ export default function meanFilter(k){
         kernel[i] = 1;
     }
 
-    convolution.call(this, newImage, kernel);
+    convolution.call(this, newImage, kernel, boundary);
 
     return newImage;
 }
