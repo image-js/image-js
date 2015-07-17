@@ -21,11 +21,12 @@ describe('we check that each ROI is surrounded by the expect zones', function ()
     let roiManager=mask.getROIManager();
     roiManager.putMask(mask);
 
-    let result=roiManager.getROI();
-    result.should.have.lengthOf(3);
+    it('should yield the right result', function () {
+        let result=roiManager.getROI();
+        result.should.have.lengthOf(3);
 
-    result[0].surround.should.eql([1]);
-    result[1].surround.should.eql([1]);
-    result[2].surround.should.eql([-1,-2]);
-
+        result[0].surround.should.eql([1]);
+        result[1].surround.should.eql([1]);
+        result[2].surround.should.eql([-1,-2]);
+    });
 });
