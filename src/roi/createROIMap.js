@@ -34,7 +34,7 @@ export default function createROIMap(mask, {allowCorner = false} = {}) {
             pixels[currentY * mask.width + currentX] = id;
             // need to check all around mask pixel
             if (currentX > 0 && pixels[currentY * mask.width + currentX - 1] === 0 &&
-                mask.getBitXY(currentX - 1, currentY) == targetState) {
+                mask.getBitXY(currentX - 1, currentY) === targetState) {
                 // LEFT
                 to++;
                 xToProcess[to & MAX_ARRAY] = currentX - 1;
@@ -42,7 +42,7 @@ export default function createROIMap(mask, {allowCorner = false} = {}) {
                 pixels[currentY * mask.width + currentX - 1] = -32768;
             }
             if (currentY > 0 && pixels[(currentY - 1) * mask.width + currentX] === 0 &&
-                mask.getBitXY(currentX, currentY - 1) == targetState) {
+                mask.getBitXY(currentX, currentY - 1) === targetState) {
                 // TOP
                 to++;
                 xToProcess[to & MAX_ARRAY] = currentX;
@@ -50,7 +50,7 @@ export default function createROIMap(mask, {allowCorner = false} = {}) {
                 pixels[(currentY - 1) * mask.width + currentX] = -32768;
             }
             if (currentX < mask.width - 1 && pixels[currentY * mask.width + currentX + 1] === 0 &&
-                mask.getBitXY(currentX + 1, currentY) == targetState) {
+                mask.getBitXY(currentX + 1, currentY) === targetState) {
                 // RIGHT
                 to++;
                 xToProcess[to & MAX_ARRAY] = currentX + 1;
@@ -58,7 +58,7 @@ export default function createROIMap(mask, {allowCorner = false} = {}) {
                 pixels[currentY * mask.width + currentX + 1] = -32768;
             }
             if (currentY < mask.height - 1 && pixels[(currentY + 1) * mask.width + currentX] === 0 &&
-                mask.getBitXY(currentX, currentY + 1) == targetState) {
+                mask.getBitXY(currentX, currentY + 1) === targetState) {
                 // BOTTOM
                 to++;
                 xToProcess[to & MAX_ARRAY] = currentX;
@@ -67,7 +67,7 @@ export default function createROIMap(mask, {allowCorner = false} = {}) {
             }
             if (allowCorner) {
                 if (currentX > 0 && currentY > 0 && pixels[(currentY - 1) * mask.width + currentX - 1] === 0 &&
-                    mask.getBitXY(currentX - 1, currentY - 1) == targetState) {
+                    mask.getBitXY(currentX - 1, currentY - 1) === targetState) {
                     // TOP LEFT
                     to++;
                     xToProcess[to & MAX_ARRAY] = currentX - 1;
@@ -75,7 +75,7 @@ export default function createROIMap(mask, {allowCorner = false} = {}) {
                     pixels[(currentY - 1) * mask.width + currentX - 1] = -32768;
                 }
                 if (currentX < mask.width - 1 && currentY > 0 && pixels[(currentY - 1) * mask.width + currentX + 1] === 0 &&
-                    mask.getBitXY(currentX + 1, currentY - 1) == targetState) {
+                    mask.getBitXY(currentX + 1, currentY - 1) === targetState) {
                     // TOP RIGHT
                     to++;
                     xToProcess[to & MAX_ARRAY] = currentX + 1;
@@ -83,7 +83,7 @@ export default function createROIMap(mask, {allowCorner = false} = {}) {
                     pixels[(currentY - 1) * mask.width + currentX + 1] = -32768;
                 }
                 if (currentX > 0 && currentY < mask.height - 1 && pixels[(currentY + 1) * mask.width + currentX - 1] === 0 &&
-                    mask.getBitXY(currentX - 1, currentY + 1) == targetState) {
+                    mask.getBitXY(currentX - 1, currentY + 1) === targetState) {
                     // BOTTOM LEFT
                     to++;
                     xToProcess[to & MAX_ARRAY] = currentX - 1;
@@ -91,7 +91,7 @@ export default function createROIMap(mask, {allowCorner = false} = {}) {
                     pixels[(currentY + 1) * mask.width + currentX - 1] = -32768;
                 }
                 if (currentX < mask.width - 1 && currentY < mask.height - 1 && pixels[(currentY + 1) * mask.width + currentX + 1] === 0 &&
-                    mask.getBitXY(currentX + 1, currentY + 1) == targetState) {
+                    mask.getBitXY(currentX + 1, currentY + 1) === targetState) {
                     // BOTTOM RIGHT
                     to++;
                     xToProcess[to & MAX_ARRAY] = currentX + 1;

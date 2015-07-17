@@ -8,8 +8,8 @@ export function getColorHistogram({
     });
 
     let nbSlotsCheck = Math.log(nbSlots) / Math.log(8);
-    if (nbSlotsCheck != Math.floor(nbSlotsCheck)) {
-        throw new Error('nbSlots must be a power of 8. Usually 8, 64, 512 or 4096');
+    if (nbSlotsCheck !== Math.floor(nbSlotsCheck)) {
+        throw new RangeError('nbSlots must be a power of 8. Usually 8, 64, 512 or 4096');
     }
 
     let bitShift = this.bitDepth - nbSlotsCheck;

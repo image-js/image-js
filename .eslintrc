@@ -40,6 +40,9 @@ rules:
   valid-typeof: 2
   no-unexpected-multiline: 2
 
+  # Best practices
+  eqeqeq: 2
+
   # Strict mode
   strict:
     - 2
