@@ -19,10 +19,10 @@ export default class ROI {
     extract(image) {
         let width = this.maxX - this.minX + 1;
         let height = this.maxY - this.minY + 1;
-        let img = image.clone({
-            width: img.width,
-            height: img.height,
-            position: [this.minX, this.minY]
+        let img=Image.createFrom(image, {
+                width: this.width,
+                height: this.height,
+                position: [this.minX, this.minY]
         });
 
         for (let x = 0; x < width; x++) {
@@ -30,10 +30,10 @@ export default class ROI {
                 let target=x + this.minX + (y + this.minY) * this.map.width;
                 if (this.map.pixels[target] === this.id) {
                     img.setPixelXY(x, y, image.getPixel(target));
-                }
+                } // by default a pixel is to 0 so no problems, it will be transparent
             }
         }
-
+        return img;
     }
 
     get width() {
