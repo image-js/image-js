@@ -219,7 +219,7 @@ function getContour(roi) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (pixels[target] === roi.id) {
                 // if a pixel around is not roi.id it is a border
-                if (roi.surround.indexOf((pixels[target - 1]) !== -1) ||
+                if ((roi.surround.indexOf(pixels[target - 1]) !== -1) ||
                     (roi.surround.indexOf(pixels[target + 1]) !== -1) ||
                     (roi.surround.indexOf(pixels[target - roiMap.width]) !== -1) ||
                     (roi.surround.indexOf(pixels[target + roiMap.width]) !== -1)) {
