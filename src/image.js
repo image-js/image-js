@@ -115,13 +115,17 @@ class Image {
         return Image;
     }
 
-    static createFrom(other, {
-        width = other.width,
-        height = other.height,
-        kind = other.kind
-        } = {}) {
-        // TODO if kind is incomplete, take values from this
-        return new Image(width, height, {kind});
+    static createFrom(other, options) {
+        let newOptions={
+            width: other.width,
+            height: other.height,
+            components: other.components,
+            alpha: other.alpha,
+            colorModel: other.colorModel,
+            bitDepth: other.bitDepth
+        };
+        Object.assign(newOptions, options);
+        return new Image(newOptions.width, newOptions.height, newOptions);
     }
 
     static isTypeSupported(type, operation = 'write') {
