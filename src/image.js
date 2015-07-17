@@ -361,14 +361,18 @@ export default class Image {
         }
     }
 
+    // TODO experimental, not finished, need to check performance
     *pixels(channel) {
+        let toYield = {x: 0, y:0, value:0};
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
-                yield this.getValueXY(x, y, channel);
+                toYield.x = x;
+                toYield.y = y;
+                toYield.value = this.getValueXY(x, y, channel);
+                yield toYield;
             }
         }
     }
-
 }
 
 extend(Image);
