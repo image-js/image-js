@@ -15,7 +15,8 @@ let computedPropertyDescriptor = {
     get: undefined
 };
 
-export default class Image {
+export default
+class Image {
     constructor(width, height, data, options) {
         if (width === undefined) width = 1;
         if (height === undefined) height = 1;
@@ -143,12 +144,36 @@ export default class Image {
         return this.data[(y * this.width + x) * this.channels + channel];
     }
 
-    setValue(target, channel, value) {
-        this.data[target * this.channels + channel] = value;
+    setValue(pixel, channel, value) {
+        this.data[pixel * this.channels + channel] = value;
     }
 
-    getValue(target, channel) {
-        return this.data[target * this.channels + channel];
+    getValue(pixel, channel) {
+        return this.data[pixel * this.channels + channel];
+    }
+
+    setPixelXY(x, y, value) {
+        this.setPixel(y * this.width + x, value);
+    }
+
+    getPixelXY(x, y) {
+        return this.getPixel(y * this.width + x);
+    }
+
+    setPixel(pixel, value) {
+        let target = pixel * this.channels;
+        for (let i = 0; i < value.length; i++) {
+            this.data[target + i] = value[i];
+        }
+    }
+
+    getPixel(pixel) {
+        let value = new Array(this.channels);
+        let target = pixel * this.channels;
+        for (let i = 0; i < this.channels; i++) {
+            value[i] = this.data[target + i];
+        }
+        return value;
     }
 
     setMatrix(matrix, channel) {
@@ -271,27 +296,27 @@ export default class Image {
         return (this.data[slot] & 1 << shift) ? 1 : 0;
     }
 
-    setBit(target) {
-        let shift = 7 - (target & 0b00000111);
-        let slot = target >> 3;
+    setBit(pixel) {
+        let shift = 7 - (pixel & 0b00000111);
+        let slot = pixel >> 3;
         this.data[slot] |= 1 << shift;
     }
 
-    clearBit(target) {
-        let shift = 7 - (target & 0b00000111);
-        let slot = target >> 3;
+    clearBit(pixel) {
+        let shift = 7 - (pixel & 0b00000111);
+        let slot = pixel >> 3;
         this.data[slot] &= ~(1 << shift);
     }
 
-    toggleBit(target) {
-        let shift = 7 - (target & 0b00000111);
-        let slot = target >> 3;
+    toggleBit(pixel) {
+        let shift = 7 - (pixel & 0b00000111);
+        let slot = pixel >> 3;
         this.data[slot] ^= 1 << shift;
     }
 
-    getBit(target) {
-        let shift = 7 - (target & 0b00000111);
-        let slot = target >> 3;
+    getBit(pixel) {
+        let shift = 7 - (pixel & 0b00000111);
+        let slot = pixel >> 3;
         return (this.data[slot] & 1 << shift) ? 1 : 0;
     }
 
@@ -363,7 +388,7 @@ export default class Image {
 
     // TODO experimental, not finished, need to check performance
     *pixels(channel) {
-        let toYield = {x: 0, y:0, value:0};
+        let toYield = {x: 0, y: 0, value: 0};
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
                 toYield.x = x;

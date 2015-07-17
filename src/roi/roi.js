@@ -15,6 +15,25 @@ export default class ROI {
         this.computed = {}; // what is the map value surrounding
     }
 
+    // extract the ROI from the original image
+    extract(image) {
+        let width = this.maxX - this.minX + 1;
+        let height = this.maxY - this.minY + 1;
+        let img = image.clone({
+            width: img.width,
+            height: img.height,
+            position: [this.minX, this.minY]
+        });
+
+        for (let x = 0; x < width; x++) {
+            for (let y = 0; y < height; y++) {
+                if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id)
+                    img.setBitXY(x, y);
+            }
+        }
+
+    }
+
     get width() {
         return this.maxX - this.minX + 1;
     }
