@@ -9,6 +9,10 @@ Image.load('./node_modules/ij-test/img/BW11x11.png').then(function (img) {
     var mask=img.grey().mask();
     roiManager.putMask(mask);
     var rois=roiManager.getROI();
+
+    rois.length.should.equal(4);
+
+    /*
     for (var i=0; i<rois.length; i++) {
         var roi=rois[i];
         console.log("ROI ID:",roi.id,
@@ -18,6 +22,7 @@ Image.load('./node_modules/ij-test/img/BW11x11.png').then(function (img) {
             ' contour:', roi.contour,
             ' border:', roi.border)
     }
+    */
   //  console.log(rois);
 
 });
