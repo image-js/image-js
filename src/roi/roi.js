@@ -28,9 +28,9 @@ export default class ROI {
         return this.computed.surround = getSurroundingIDs(this);
     }
 
-    get boxPixels() {
-        if (this.computed.boxPixels) return this.computed.boxPixels;
-        return this.computed.boxPixels = getBoxPixels(this);
+    get external() { // points of the ROI that touch the rectangular shape
+        if (this.computed.external) return this.computed.external;
+        return this.computed.external = getExternal(this);
     }
 
     get contour() {
@@ -145,7 +145,7 @@ function getSurroundingIDs(roi) {
  border that don't have neighbourgs all around them.
  */
 
-function getBoxPixels(roi) {
+function getExternal(roi) {
     let total = 0;
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
@@ -200,7 +200,7 @@ function getBorder(roi) {
             }
         }
     }
-    return total + roi.boxPixels;
+    return total + roi.external;
 }
 
 /*
@@ -228,5 +228,5 @@ function getContour(roi) {
             }
         }
     }
-    return total + roi.boxPixels;
+    return total + roi.external;
 }
