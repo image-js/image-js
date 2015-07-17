@@ -324,12 +324,14 @@ class Image {
         return new ROIManager(this, options);
     }
 
-    clone() {
+    clone({copyData=true}={}) {
         let nemImage = Image.createFrom(this);
-        let data = this.data;
-        let newData = nemImage.data;
-        for (let i = 0; i < newData.length; i++) {
-            newData[i] = data[i];
+        if (copyData) {
+            let data = this.data;
+            let newData = nemImage.data;
+            for (let i = 0; i < newData.length; i++) {
+                newData[i] = data[i];
+            }
         }
         return nemImage;
     }

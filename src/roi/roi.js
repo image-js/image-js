@@ -27,8 +27,10 @@ export default class ROI {
 
         for (let x = 0; x < width; x++) {
             for (let y = 0; y < height; y++) {
-                if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id)
-                    img.setBitXY(x, y);
+                let target=x + this.minX + (y + this.minY) * this.map.width;
+                if (this.map.pixels[target] === this.id) {
+                    img.setPixelXY(x, y, image.getPixel(target));
+                }
             }
         }
 
