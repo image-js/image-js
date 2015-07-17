@@ -25,8 +25,8 @@ export function getHistograms({maxSlots=256, useAlpha=true} = {}) {
 
 
 function getChannelHistogram(channel, useAlpha, maxSlots) {
-    let bitSlots = Math.log(maxSlots) / Math.log(2);
-    if (bitSlots != Math.floor(bitSlots)) {
+    let bitSlots = Math.log2(maxSlots);
+    if (!Math.isInteger(bitSlots)) {
         throw new Error('maxSlots must be a power of 2, for example: 64, 256, 1024');
     }
     // we will compare the bitSlots to the bitDepth of the image
