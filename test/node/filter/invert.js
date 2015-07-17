@@ -1,5 +1,3 @@
-'use strict';
-
 import {Image} from '../common';
 
 describe('invert 3 components', function () {

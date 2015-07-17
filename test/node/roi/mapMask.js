@@ -1,25 +1,21 @@
-'use strict';
-
 import {Image} from '../common';
 
 
 describe('map a binary image (mask) 2 x 2', function () {
-    var data=new Uint8Array(1);
+    let data=new Uint8Array(1);
     data[0]=192;
 
-    var img=new Image(2,2, data, {
+    let img=new Image(2,2, data, {
         kind: 'BINARY'
     });
 
-    var roiManager=img.getROIManager();
+    let roiManager=img.getROIManager();
     roiManager.putMask(img);
-    var pixels=roiManager.getPixels();
-    var result=roiManager.getROIMap();
-
-    console.log(result);
+    let pixels=roiManager.getPixels();
+    let result=roiManager.getROIMap();
 
     it('should have 4 pixels in 2 zones', function () {
-        pixels.should.instanceOf(Int16Array).and.have.lengthOf(4);;
+        pixels.should.instanceOf(Int16Array).and.have.lengthOf(4);
         pixels[0].should.equal(1);
         pixels[1].should.equal(1);
         pixels[2].should.equal(-1);
@@ -35,21 +31,21 @@ describe('map a binary image (mask) 2 x 2', function () {
 });
 
 describe('map a binary image 4 x 4 in 2 zones', function () {
-    var data=new Uint8Array(2);
+    let data=new Uint8Array(2);
     data[0]=255;
     data[1]=0;
 
-    var img=new Image(4,4, data, {
+    let img=new Image(4,4, data, {
         kind: 'BINARY'
     });
 
-    var roiManager=img.getROIManager();
+    let roiManager=img.getROIManager();
     roiManager.putMask(img);
-    var pixels=roiManager.getPixels();
-    var result=roiManager.getROIMap();
+    let pixels=roiManager.getPixels();
+    let result=roiManager.getROIMap();
 
     it('should have 16 pixels in 2 zones', function () {
-        pixels.should.instanceOf(Int16Array).and.have.lengthOf(16);;
+        pixels.should.instanceOf(Int16Array).and.have.lengthOf(16);
         pixels[0].should.equal(1);
         pixels[7].should.equal(1);
         pixels[8].should.equal(-1);
@@ -65,21 +61,21 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
 });
 
 describe('map a binary image 4 x 4 in 2 zones', function () {
-    var data=new Uint8Array(2);
+    let data=new Uint8Array(2);
     data[0]=63;
     data[1]=192;
 
-    var img=new Image(4,4, data, {
+    let img=new Image(4,4, data, {
         kind: 'BINARY'
     });
 
-    var roiManager=img.getROIManager();
+    let roiManager=img.getROIManager();
     roiManager.putMask(img);
-    var pixels=roiManager.getPixels();
-    var result=roiManager.getROIMap();
+    let pixels=roiManager.getPixels();
+    let result=roiManager.getROIMap();
 
     it('should have 16 pixels in 3 zones', function () {
-        pixels.should.instanceOf(Int16Array).and.have.lengthOf(16);;
+        pixels.should.instanceOf(Int16Array).and.have.lengthOf(16);
         pixels[0].should.equal(-1);
         pixels[1].should.equal(-1);
         pixels[2].should.equal(1);

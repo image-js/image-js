@@ -1,11 +1,9 @@
-'use strict';
-
 import {Image, load} from '../common';
 
 describe('Image core - Binary images', function () {
 
     it('check binary image of 16 points', function () {
-        var img=new Image(8,2,{
+        let img=new Image(8,2,{
             kind: 'BINARY'
         });
 

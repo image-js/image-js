@@ -1,5 +1,3 @@
-'use strict';
-
 import {Image} from '../common';
 
 describe('calculate the histogram', function () {
