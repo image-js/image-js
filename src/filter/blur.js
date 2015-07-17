@@ -5,16 +5,14 @@ import Image from '../image';
 // first release of mean filter
 export default function meanFilter(k){
 
-    if(this.components > 1){
-        throw new Error('Only support for image in gray scale');
-    }
-
-    if(k < 1){
-        throw new Error('k must be grater than 0');
-    }
+    this.checkProcessable({
+        components:[1],
+        bitDepth:[8,16]
+    });
 
     //mean filter do not is in place
-    var newImage = Image.createFrom(this, {
+
+    let newImage = Image.createFrom(this, {
         kind: {
             components: 1,
             alpha: this.alpha,
@@ -29,30 +27,33 @@ export default function meanFilter(k){
     1   1   1
     1   1   1
     */
-    var n = 2*k + 1;
-    var kernel = new Int8Array(n*n);
+    let n = 2*k + 1;
+    let size = n*n;
+    let kernel = new Int8Array(size);
+    let div = 0;
 
     for(let i = 0; i < kernel.length; i++){
         kernel[i] = 1;
+        div++;
     }
 
-    var div = n*n;
-
     //convolution
-    var sum;
-    for(let y = 0; y < this.height; y++){
-        for(let x = 0; x < this.width; x++){
+    let sum, newValue;
+    for(let y = k; y < this.height-k; y++){
+        for(let x = k; x < this.width-k; x++){
             sum = 0;
             for(let i = -k; i <= k; i++){
                 for(let j = -k; j <= k; j++){
                     sum += this.getValueXY(x + i, y + j, 0)*kernel[(i + k)*n + (j + k)];
                 }
             }
-            var newValue = Math.floor(sum/div);
+            newValue = Math.floor(sum/div);
             newImage.setValueXY(x, y, 0, newValue);
+            if(this.alpha){
+                newImage.setValueXY(x,y,1, this.getValueXY(x,y,1));
+            }
         }
     }
-
 
     return newImage;
 }
