@@ -5,6 +5,7 @@ import invertOneLoop from './filter/invertOneLoop';
 import invertBinaryLoop from './filter/invertBinaryLoop';
 import meanFilter from './filter/blur';
 import medianFilter from './filter/median';
+import gaussianFilter from './filter/gaussian';
 
 // transformers
 import crop from './transform/crop';
@@ -25,6 +26,7 @@ export default function extend(Image) {
     Image.extendMethod('invertBinaryLoop', invertBinaryLoop, true);
     Image.extendMethod('meanFilter', meanFilter);
     Image.extendMethod('medianFilter', medianFilter);
+    Image.extendMethod('gaussianFilter', gaussianFilter);
 
     Image.extendMethod('crop', crop); // last parameter is "false" because it creates a new image
     Image.extendMethod('grey', grey).extendMethod('gray', grey);

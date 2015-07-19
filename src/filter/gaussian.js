@@ -1,58 +1,46 @@
 import Image from '../image';
+import convolution from '../operator/convolution';
 
-export default function gaussianFilter(n, sigma){
-	var cols = this.width;
-	var new_img = this.clone();
-	var kernel = getGaussiankernel(n, sigma);
-	var temp = cols*n; //variable for checking the image border
-	for(var p = cols*n+n; p < this.data.length - cols*n; p++){
-		if(p == temp+cols-n){
-			p += 2*n - 1;
-		}else{
-			new_img.data[p] = convolution(p, this.data, kernel);
+export default function gaussianFilter(k) {
+
+	this.checkProcessable({
+		components: [1],
+		bitDepth: [8, 16]
+	});
+
+	if (k < 1) {
+		throw new Error('Number of neighbors should be grater than 0');
+	}
+
+	//gaussian filter do not is in place
+	let newImage = Image.createFrom(this, {
+		kind: {
+			components: 1,
+			alpha: this.alpha,
+			bitDepth: this.bitDepth,
+			colorModel: null
+		}
+	});
+
+	let n = 2 * k + 1;
+	// sigma approximation using k
+	let sigma = 0.3 * (k - 1) + 0.8;
+	let kernel = [n * n];
+
+	//gaussian kernel is calculated
+	let sigma2 = 2 * (sigma * sigma); //2*sigma^2
+	let PI2sigma2 = Math.PI * sigma2; //2*PI*sigma^2
+
+	for(let y = -k; y <= k; y++){
+		for(let x = -k; x <= k; x++){
+			let value = Math.exp(-((x * x) + (y * y))/sigma2) / PI2sigma2;
+			kernel[(y + k)*n + (x + k)] = value;
 		}
 	}
+
+	convolution.call(this, newImage, kernel, 'copy');
+
+	return newImage;
 }
 
-function getGaussiankernel(n, sigma){
-	var kernel = [];
-	var sigma2 = 2*(sigma*sigma);//2*sigma^2
-	var sum = 0;
-	for(var y = -n; y <= n; y++){
-		for(var x = -n; x <= n; x++){
-			var value = -((x*x) + (y*y))/sigma2;
-			value = Math.exp(value);
-			sum += value;
-			kernel.push(value);
-		}
-	}
 
-	for(var i = 0; i < kernel.length; i++){
-		kernel[i] /= sum;
-	}
-	return kernel;
-}
-
-function convolution(p, data, kernel){
-	var result = 0;
-	var n = (int)(Math.sqrt(kernel.length) - 1)/2;
-	var neighbors = getNeighbors(data, this.width, p, n);
-
-	var j = -(kernel.length-1);
-	for(var i = 0; i < kernel.length; i++){
-		result = kernel[i]*neighbors[j];
-		j--;
-	}
-	return result;
-}
-
-function getNeighbors(data, cols, p, n){
-	var neighbors = [];
-
-	for(var i = -n; i <= n; i++){
-		for(var k = -n; k <= n; k++){
-			neighbors.push(data[p+(i*cols)+k]);
-		}
-	}
-	return neighbors;
-}

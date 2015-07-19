@@ -23,7 +23,13 @@ export default function convolution(newImage, kernel, edgeHandling){
                         sum += val*kernel[(i + k)*kernelWidth + (j + k)];
                 }
             }
-            let newValue = Math.floor(sum/div);
+            let newValue;
+            if(div >= 1){
+                newValue = Math.floor(sum/div);
+            }else{
+                newValue = sum;
+            }
+
             newImage.setValueXY(x, y, 0, newValue);
             if(this.alpha){
                 newImage.setValueXY(x, y, 1, this.getValueXY(x, y, 1));
