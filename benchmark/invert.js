@@ -17,6 +17,15 @@ Image.load(Test.getImage('rgb8.png')).then(function (img) {
         .add('invertOneLoop', function () {
             img.invertOneLoop();
         })
+        .add('invertIterator', function () {
+            img.invertIterator();
+        })
+        .add('invertApply', function () {
+            img.invertApply();
+        })
+        .add('invertPixel', function () {
+            img.invertPixel();
+        })
         .on('cycle', function (event) {
             console.log(String(event.target));
         })

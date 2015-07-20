@@ -1,8 +1,9 @@
 import {Image, load, getHash, refreshTmpDir, tmpDir, getSquare} from '../common';
 
-refreshTmpDir();
-
 describe('save to disk', function () {
+
+    beforeEach(refreshTmpDir);
+    afterEach(refreshTmpDir);
 
     it('load then save', function () {
         return load('rgb8.png').then(function (img) {

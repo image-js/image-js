@@ -1,7 +1,10 @@
 // filters
 import invert from './filter/invert';
+import invertIterator from './filter/invertIterator';
 import invertMatrix from './filter/invertMatrix';
 import invertOneLoop from './filter/invertOneLoop';
+import invertPixel from './filter/invertPixel';
+import invertApply from './filter/invertApply';
 import invertBinaryLoop from './filter/invertBinaryLoop';
 
 // transformers
@@ -18,8 +21,11 @@ import getColorHistogram from './compute/colorHistogram';
 
 export default function extend(Image) {
     Image.extendMethod('invert', invert, true); // true means the process is in-place
+    Image.extendMethod('invertIterator', invertIterator, true);
     Image.extendMethod('invertMatrix', invertMatrix, true);
+    Image.extendMethod('invertPixel', invertPixel, true);
     Image.extendMethod('invertOneLoop', invertOneLoop, true);
+    Image.extendMethod('invertApply', invertApply, true);
     Image.extendMethod('invertBinaryLoop', invertBinaryLoop, true);
 
     Image.extendMethod('crop', crop); // last parameter is "false" because it creates a new image

@@ -30,6 +30,7 @@
     "build": "npm run clean-dist && browserify src/image.js -o dist/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --transform babelify",
     "build-test": "browserify test/browser/bootstrap.js -o test/browser/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --debug --transform [ babelify --sourceMap ]",
     "compile": "npm run clean-lib && babel src --out-dir lib",
+    "compile-es6": "npm run clean-lib && babel src --out-dir lib --blacklist=es3.memberExpressionLiterals,es3.propertyLiterals,es5.properties.mutators,es6.blockScoping,es6.classes,es6.constants,es6.forOf,es6.properties.shorthand,es6.templateLiterals,regenerator",
     "clean-dist": "rm -rf dist && mkdir dist",
     "clean-lib": "rm -rf lib",
     "eslint": "eslint src test/node",

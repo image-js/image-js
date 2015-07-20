@@ -392,14 +392,27 @@ class Image {
         }
     }
 
-    // TODO experimental, not finished, need to check performance
-    *pixels(channel) {
-        let toYield = {x: 0, y: 0, value: 0};
-        for (let x = 0; x < this.width; x++) {
-            for (let y = 0; y < this.height; y++) {
+    apply(filter) {
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                let index = (y * this.width + x) * this.channels;
+                filter.call(this, index);
+
+            }
+        }
+    }
+
+    // This approach is SOOOO slow .... for now just forget about it !
+    *pixels() {
+        let toYield = {x: 0, y: 0, index: 0, pixel: new Array(this.channels)};
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
                 toYield.x = x;
                 toYield.y = y;
-                toYield.value = this.getValueXY(x, y, channel);
+                toYield.index = y * this.width + x;
+                for (let c = 0; c < this.channels; c++) {
+                    toYield.pixel[c] = this.data[toYield.index * this.channels + c];
+                }
                 yield toYield;
             }
         }
