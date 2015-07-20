@@ -27,3 +27,14 @@ export default function invert() {
         }
     }
 }
+
+/* Please note that the speed is exactly the same with
+ for (let x = 0; x < this.width; x++) {
+     for (let y = 0; y < this.height; y++) {
+     var position = (y * this.width + x) * this.channels;
+         for (let k = 0; k < this.components; k++) {
+            this.data[position+k]=this.maxValue - this.data[position+k];
+         }
+     }
+ }
+ */
