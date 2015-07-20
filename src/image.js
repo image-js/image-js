@@ -366,6 +366,9 @@ class Image {
     checkProcessable(processName, {
         bitDepth, alpha, colorModel, components
         } = {}) {
+        if (typeof processName !== 'string') {
+            throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
+        }
         if (bitDepth) {
             if (!Array.isArray(bitDepth)) bitDepth = [bitDepth];
             if (bitDepth.indexOf(this.bitDepth) === -1) {
