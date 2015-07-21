@@ -1,5 +1,5 @@
 import Image from './image';
-import {env} from './canvas';
+import {env} from './environment';
 
 let types = new Map();
 let image;

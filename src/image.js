@@ -2,7 +2,7 @@ require('babel/polyfill');
 
 import {getKind, getPixelArray, getPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
-import {DOMImage, getImageData, Canvas, getCanvasArray} from './canvas';
+import {DOMImage, getImageData, Canvas, getCanvasArray, isDifferentOrigin} from './environment';
 import extend from './extend';
 import {createWriteStream} from 'fs';
 import * as ColorModels from './model/models';
@@ -67,8 +67,10 @@ class Image {
         return new Promise(function (resolve, reject) {
             let image = new DOMImage();
 
-            // see https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
-            image.crossOrigin = 'Anonymous';
+            if (isDifferentOrigin(url)) {
+                // see https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
+                image.crossOrigin = 'Anonymous';
+            }
 
             image.onload = function () {
                 let w = image.width, h = image.height;
