@@ -6,7 +6,7 @@
 import Image from '../image';
 //k: size of kernel (k*k)
 export default function medianFilter(k){
-    this.checkProcessable({
+    this.checkProcessable('medianFilter', {
         components:[1],
         bitDepth:[8,16]
     });

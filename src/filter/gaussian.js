@@ -1,9 +1,9 @@
 import Image from '../image';
 import convolution from '../operator/convolution';
 
-export default function gaussianFilter(k) {
+export default function gaussianFilter(k, boundary = 'copy') {
 
-	this.checkProcessable({
+	this.checkProcessable('gaussianFilter', {
 		components: [1],
 		bitDepth: [8, 16]
 	});
@@ -31,14 +31,21 @@ export default function gaussianFilter(k) {
 	let sigma2 = 2 * (sigma * sigma); //2*sigma^2
 	let PI2sigma2 = Math.PI * sigma2; //2*PI*sigma^2
 
-	for(let y = -k; y <= k; y++){
-		for(let x = -k; x <= k; x++){
-			let value = Math.exp(-((x * x) + (y * y))/sigma2) / PI2sigma2;
-			kernel[(y + k)*n + (x + k)] = value;
+	for(let i = 0; i <= k; i++){
+		for(let j = i; j <= k; j++){
+			let value = Math.exp(-((i * i) + (j * j))/sigma2) / PI2sigma2;
+			kernel[(i + k)*n + (j + k)] = value;
+			kernel[(i + k)*n + (-j + k)] = value;
+			kernel[(-i + k)*n + (j + k)] = value;
+			kernel[(-i + k)*n + (-j + k)] = value;
+			kernel[(j + k)*n + (i + k)] = value;
+			kernel[(j + k)*n + (-i + k)] = value;
+			kernel[(-j + k)*n + (i + k)] = value;
+			kernel[(-j + k)*n + (-i + k)] = value;
 		}
 	}
 
-	convolution.call(this, newImage, kernel, 'copy');
+	convolution.call(this, newImage, kernel, boundary);
 
 	return newImage;
 }

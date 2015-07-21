@@ -6,7 +6,7 @@ import convolution from '../operator/convolution';
 // first release of mean filter
 export default function meanFilter(k, boundary){
 
-    this.checkProcessable({
+    this.checkProcessable('meanFilter', {
         components:[1],
         bitDepth:[8,16]
     });
