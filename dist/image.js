@@ -3738,81 +3738,6 @@ process.umask = function() { return 0; };
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
-var DOMImage = undefined,
-    Canvas = undefined,
-    getImageData = undefined,
-    getCanvasArray = undefined,
-    env = undefined;
-
-if (typeof self !== 'undefined') {
-    (function () {
-        // Browser
-
-        exports.env = env = 'browser';
-
-        var ImageData = self.ImageData;
-
-        exports.DOMImage = DOMImage = self.Image;
-        exports.Canvas = Canvas = function Canvas(width, height) {
-            var canvas = self.document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
-            return canvas;
-        };
-        exports.getImageData = getImageData = function (data, width, height) {
-            var validData = data;
-            // TODO for now we always copy the array because we don't know if it can be modified after we put it in the canvas
-            //if (data.constructor.name !== 'Uint8ClampedArray') {
-            validData = new Uint8ClampedArray(data.length);
-            for (var i = 0; i < data.length; i++) {
-                validData[i] = data[i];
-            }
-            //}
-            return new ImageData(validData, width, height);
-        };
-        exports.getCanvasArray = getCanvasArray = function (width, height) {
-            return new Uint8ClampedArray(width * height * 4);
-        };
-    })();
-} else if (typeof module !== 'undefined' && module.exports) {
-    (function () {
-        // Node.js
-
-        exports.env = env = 'node';
-
-        var canvas = require('canvas');
-        var ImageData = require('canvas/lib/bindings').ImageData;
-
-        exports.DOMImage = DOMImage = canvas.Image;
-        exports.Canvas = Canvas = canvas;
-        exports.getImageData = getImageData = function (data, width, height) {
-            var validData = data;
-            if (!(data instanceof canvas.PixelArray)) {
-                validData = new canvas.PixelArray(width, height);
-                for (var i = 0; i < data.length; i++) {
-                    validData[i] = data[i];
-                }
-            }
-            return new ImageData(validData, width, height);
-        };
-        exports.getCanvasArray = getCanvasArray = function (width, height) {
-            return new canvas.PixelArray(width, height);
-        };
-    })();
-}
-
-exports.DOMImage = DOMImage;
-exports.Canvas = Canvas;
-exports.getImageData = getImageData;
-exports.getCanvasArray = getCanvasArray;
-exports.env = env;
-
-},{"canvas":undefined,"canvas/lib/bindings":undefined}],97:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
 exports.getColorHistogram = getColorHistogram;
 
 function getColorHistogram() {
@@ -3853,7 +3778,7 @@ function getColorHistogram() {
     }
 }
 
-},{}],98:[function(require,module,exports){
+},{}],97:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3932,7 +3857,97 @@ function getChannelHistogram(channel, useAlpha, maxSlots) {
     return result;
 }
 
-},{}],99:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+var DOMImage = undefined,
+    Canvas = undefined,
+    getImageData = undefined,
+    getCanvasArray = undefined,
+    isDifferentOrigin = undefined,
+    env = undefined;
+
+if (typeof self !== 'undefined') {
+    (function () {
+        // Browser
+
+        exports.env = env = 'browser';
+        var origin = self.location.href;
+        exports.isDifferentOrigin = isDifferentOrigin = function (url) {
+            try {
+                var parsedURL = new self.URL(url);
+                return parsedURL.origin !== origin;
+            } catch (e) {
+                // may be a relative URL. In this case, it cannot be parsed but is effectively from same origin
+                return false;
+            }
+        };
+
+        var ImageData = self.ImageData;
+
+        exports.DOMImage = DOMImage = self.Image;
+        exports.Canvas = Canvas = function Canvas(width, height) {
+            var canvas = self.document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            return canvas;
+        };
+        exports.getImageData = getImageData = function (data, width, height) {
+            var validData = data;
+            // TODO for now we always copy the array because we don't know if it can be modified after we put it in the canvas
+            //if (data.constructor.name !== 'Uint8ClampedArray') {
+            validData = new Uint8ClampedArray(data.length);
+            for (var i = 0; i < data.length; i++) {
+                validData[i] = data[i];
+            }
+            //}
+            return new ImageData(validData, width, height);
+        };
+        exports.getCanvasArray = getCanvasArray = function (width, height) {
+            return new Uint8ClampedArray(width * height * 4);
+        };
+    })();
+} else if (typeof module !== 'undefined' && module.exports) {
+    (function () {
+        // Node.js
+
+        exports.env = env = 'node';
+        exports.isDifferentOrigin = isDifferentOrigin = function (url) {
+            return false;
+        };
+
+        var canvas = require('canvas');
+        var ImageData = require('canvas/lib/bindings').ImageData;
+
+        exports.DOMImage = DOMImage = canvas.Image;
+        exports.Canvas = Canvas = canvas;
+        exports.getImageData = getImageData = function (data, width, height) {
+            var validData = data;
+            if (!(data instanceof canvas.PixelArray)) {
+                validData = new canvas.PixelArray(width, height);
+                for (var i = 0; i < data.length; i++) {
+                    validData[i] = data[i];
+                }
+            }
+            return new ImageData(validData, width, height);
+        };
+        exports.getCanvasArray = getCanvasArray = function (width, height) {
+            return new canvas.PixelArray(width, height);
+        };
+    })();
+}
+
+exports.DOMImage = DOMImage;
+exports.Canvas = Canvas;
+exports.getImageData = getImageData;
+exports.getCanvasArray = getCanvasArray;
+exports.isDifferentOrigin = isDifferentOrigin;
+exports.env = env;
+
+},{"canvas":undefined,"canvas/lib/bindings":undefined}],99:[function(require,module,exports){
 // filters
 'use strict';
 
@@ -3947,6 +3962,10 @@ var _filterInvert = require('./filter/invert');
 
 var _filterInvert2 = _interopRequireDefault(_filterInvert);
 
+var _filterInvertIterator = require('./filter/invertIterator');
+
+var _filterInvertIterator2 = _interopRequireDefault(_filterInvertIterator);
+
 var _filterInvertMatrix = require('./filter/invertMatrix');
 
 var _filterInvertMatrix2 = _interopRequireDefault(_filterInvertMatrix);
@@ -3954,6 +3973,14 @@ var _filterInvertMatrix2 = _interopRequireDefault(_filterInvertMatrix);
 var _filterInvertOneLoop = require('./filter/invertOneLoop');
 
 var _filterInvertOneLoop2 = _interopRequireDefault(_filterInvertOneLoop);
+
+var _filterInvertPixel = require('./filter/invertPixel');
+
+var _filterInvertPixel2 = _interopRequireDefault(_filterInvertPixel);
+
+var _filterInvertApply = require('./filter/invertApply');
+
+var _filterInvertApply2 = _interopRequireDefault(_filterInvertApply);
 
 var _filterInvertBinaryLoop = require('./filter/invertBinaryLoop');
 
@@ -3991,8 +4018,11 @@ var _computeColorHistogram2 = _interopRequireDefault(_computeColorHistogram);
 
 function extend(Image) {
     Image.extendMethod('invert', _filterInvert2['default'], true); // true means the process is in-place
+    Image.extendMethod('invertIterator', _filterInvertIterator2['default'], true);
     Image.extendMethod('invertMatrix', _filterInvertMatrix2['default'], true);
+    Image.extendMethod('invertPixel', _filterInvertPixel2['default'], true);
     Image.extendMethod('invertOneLoop', _filterInvertOneLoop2['default'], true);
+    Image.extendMethod('invertApply', _filterInvertApply2['default'], true);
     Image.extendMethod('invertBinaryLoop', _filterInvertBinaryLoop2['default'], true);
 
     Image.extendMethod('crop', _transformCrop2['default']); // last parameter is "false" because it creates a new image
@@ -4010,7 +4040,7 @@ function extend(Image) {
 
 module.exports = exports['default'];
 
-},{"./compute/colorHistogram":97,"./compute/histogram":98,"./filter/invert":100,"./filter/invertBinaryLoop":101,"./filter/invertMatrix":102,"./filter/invertOneLoop":103,"./operator/paintMasks":109,"./transform/crop":114,"./transform/grey/grey":116,"./transform/mask/mask":121,"./utility/split":123}],100:[function(require,module,exports){
+},{"./compute/colorHistogram":96,"./compute/histogram":97,"./filter/invert":100,"./filter/invertApply":101,"./filter/invertBinaryLoop":102,"./filter/invertIterator":103,"./filter/invertMatrix":104,"./filter/invertOneLoop":105,"./filter/invertPixel":106,"./operator/paintMasks":112,"./transform/crop":117,"./transform/grey/grey":119,"./transform/mask/mask":124,"./utility/split":126}],100:[function(require,module,exports){
 // this code gives the same result as invert()
 // but is based on a matrix of pixels
 // may be easier to implement some algorithm
@@ -4051,6 +4081,35 @@ function invert() {
 module.exports = exports['default'];
 
 },{}],101:[function(require,module,exports){
+// this code gives the same result as invert()
+// but is based on a matrix of pixels
+// may be easier to implement some algorithm
+// but it will likely be much slower
+
+// this method is 50 times SLOWER than invert !!!!!!
+
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports['default'] = invertApply;
+
+function invertApply() {
+    this.checkProcessable('invertApply', {
+        bitDepth: [8, 16]
+    });
+
+    this.apply(function (index) {
+        for (var k = 0; k < this.components; k++) {
+            this.data[index + k] = this.maxValue - this.data[index + k];
+        }
+    });
+}
+
+module.exports = exports['default'];
+
+},{}],102:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4070,7 +4129,67 @@ function invertBinaryLoop() {
 
 module.exports = exports['default'];
 
-},{}],102:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
+// this code gives the same result as invert()
+// but is based on a matrix of pixels
+// may be easier to implement some algorithm
+// but it will likely be much slower
+
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports['default'] = invertIterator;
+
+function invertIterator() {
+    this.checkProcessable('invert', {
+        bitDepth: [1, 8, 16]
+    });
+
+    if (this.bitDepth === 1) {
+        // we simply invert all the integers value
+        // there could be a small mistake if the number of points
+        // is not a multiple of 8 but it is not important
+        var data = this.data;
+        for (var i = 0; i < data.length; i++) {
+            data[i] = ~data[i];
+        }
+    } else {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+            for (var _iterator = this.pixels()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var _step$value = _step.value;
+                var index = _step$value.index;
+                var pixel = _step$value.pixel;
+
+                for (var k = 0; k < this.components; k++) {
+                    this.setValue(index, k, this.maxValue - pixel[k]);
+                }
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion && _iterator['return']) {
+                    _iterator['return']();
+                }
+            } finally {
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+    }
+}
+
+module.exports = exports['default'];
+
+},{}],104:[function(require,module,exports){
 // this code gives the same result as invert()
 // but is based on a matrix of pixels
 // may be easier to implement some algorithm
@@ -4102,7 +4221,7 @@ function invertMatrix() {
 
 module.exports = exports['default'];
 
-},{}],103:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4125,7 +4244,38 @@ function invert() {
 
 module.exports = exports['default'];
 
-},{}],104:[function(require,module,exports){
+},{}],106:[function(require,module,exports){
+// this code gives the same result as invert()
+// but is based on a matrix of pixels
+// may be easier to implement some algorithm
+// but it will likely be much slower
+
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports['default'] = invertPixel;
+
+function invertPixel() {
+    this.checkProcessable('invertPixel', {
+        bitDepth: [8, 16]
+    });
+
+    for (var x = 0; x < this.width; x++) {
+        for (var y = 0; y < this.height; y++) {
+            var value = this.getPixel(x, y);
+            for (var k = 0; k < this.components; k++) {
+                value[k] = this.maxValue - value[k];
+            }
+            this.setPixel(x, y, value);
+        }
+    }
+}
+
+module.exports = exports['default'];
+
+},{}],107:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4144,7 +4294,7 @@ var _kind = require('./kind');
 
 var _kindNames = require('./kindNames');
 
-var _canvas = require('./canvas');
+var _environment = require('./environment');
 
 var _extend = require('./extend');
 
@@ -4227,13 +4377,41 @@ var Image = (function () {
         }
     }, {
         key: 'setValue',
-        value: function setValue(target, channel, value) {
-            this.data[target * this.channels + channel] = value;
+        value: function setValue(pixel, channel, value) {
+            this.data[pixel * this.channels + channel] = value;
         }
     }, {
         key: 'getValue',
-        value: function getValue(target, channel) {
-            return this.data[target * this.channels + channel];
+        value: function getValue(pixel, channel) {
+            return this.data[pixel * this.channels + channel];
+        }
+    }, {
+        key: 'setPixelXY',
+        value: function setPixelXY(x, y, value) {
+            this.setPixel(y * this.width + x, value);
+        }
+    }, {
+        key: 'getPixelXY',
+        value: function getPixelXY(x, y) {
+            return this.getPixel(y * this.width + x);
+        }
+    }, {
+        key: 'setPixel',
+        value: function setPixel(pixel, value) {
+            var target = pixel * this.channels;
+            for (var i = 0; i < value.length; i++) {
+                this.data[target + i] = value[i];
+            }
+        }
+    }, {
+        key: 'getPixel',
+        value: function getPixel(pixel) {
+            var value = new Array(this.channels);
+            var target = pixel * this.channels;
+            for (var i = 0; i < this.channels; i++) {
+                value[i] = this.data[target + i];
+            }
+            return value;
         }
     }, {
         key: 'setMatrix',
@@ -4281,8 +4459,8 @@ var Image = (function () {
     }, {
         key: 'getCanvas',
         value: function getCanvas() {
-            var data = (0, _canvas.getImageData)(this.getRGBAData(), this.width, this.height);
-            var canvas = new _canvas.Canvas(this.width, this.height);
+            var data = (0, _environment.getImageData)(this.getRGBAData(), this.width, this.height);
+            var canvas = new _environment.Canvas(this.width, this.height);
             var ctx = canvas.getContext('2d');
             ctx.putImageData(data, 0, 0);
             return canvas;
@@ -4295,7 +4473,7 @@ var Image = (function () {
                 bitDepth: [1, 8, 16]
             });
             var size = this.size;
-            var newData = (0, _canvas.getCanvasArray)(this.width, this.height);
+            var newData = (0, _environment.getCanvasArray)(this.width, this.height);
             if (this.bitDepth === 1) {
                 for (var i = 0; i < size; i++) {
                     var value = this.getBit(i);
@@ -4369,30 +4547,30 @@ var Image = (function () {
         }
     }, {
         key: 'setBit',
-        value: function setBit(target) {
-            var shift = 7 - (target & 7);
-            var slot = target >> 3;
+        value: function setBit(pixel) {
+            var shift = 7 - (pixel & 7);
+            var slot = pixel >> 3;
             this.data[slot] |= 1 << shift;
         }
     }, {
         key: 'clearBit',
-        value: function clearBit(target) {
-            var shift = 7 - (target & 7);
-            var slot = target >> 3;
+        value: function clearBit(pixel) {
+            var shift = 7 - (pixel & 7);
+            var slot = pixel >> 3;
             this.data[slot] &= ~(1 << shift);
         }
     }, {
         key: 'toggleBit',
-        value: function toggleBit(target) {
-            var shift = 7 - (target & 7);
-            var slot = target >> 3;
+        value: function toggleBit(pixel) {
+            var shift = 7 - (pixel & 7);
+            var slot = pixel >> 3;
             this.data[slot] ^= 1 << shift;
         }
     }, {
         key: 'getBit',
-        value: function getBit(target) {
-            var shift = 7 - (target & 7);
-            var slot = target >> 3;
+        value: function getBit(pixel) {
+            var shift = 7 - (pixel & 7);
+            var slot = pixel >> 3;
             return this.data[slot] & 1 << shift ? 1 : 0;
         }
     }, {
@@ -4403,11 +4581,18 @@ var Image = (function () {
     }, {
         key: 'clone',
         value: function clone() {
+            var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+            var _ref$copyData = _ref.copyData;
+            var copyData = _ref$copyData === undefined ? true : _ref$copyData;
+
             var nemImage = Image.createFrom(this);
-            var data = this.data;
-            var newData = nemImage.data;
-            for (var i = 0; i < newData.length; i++) {
-                newData[i] = data[i];
+            if (copyData) {
+                var data = this.data;
+                var newData = nemImage.data;
+                for (var i = 0; i < newData.length; i++) {
+                    newData[i] = data[i];
+                }
             }
             return nemImage;
         }
@@ -4416,10 +4601,10 @@ var Image = (function () {
         value: function save(path) {
             var _this = this;
 
-            var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+            var _ref2 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-            var _ref$format = _ref.format;
-            var format = _ref$format === undefined ? 'png' : _ref$format;
+            var _ref2$format = _ref2.format;
+            var format = _ref2$format === undefined ? 'png' : _ref2$format;
             // Node.JS only
             return new Promise(function (resolve, reject) {
                 var out = (0, _fs.createWriteStream)(path);
@@ -4446,13 +4631,16 @@ var Image = (function () {
 
         // this method check if a process can be applied on the current image
         value: function checkProcessable(processName) {
-            var _ref2 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+            var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-            var bitDepth = _ref2.bitDepth;
-            var alpha = _ref2.alpha;
-            var colorModel = _ref2.colorModel;
-            var components = _ref2.components;
+            var bitDepth = _ref3.bitDepth;
+            var alpha = _ref3.alpha;
+            var colorModel = _ref3.colorModel;
+            var components = _ref3.components;
 
+            if (typeof processName !== 'string') {
+                throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
+            }
             if (bitDepth) {
                 if (!Array.isArray(bitDepth)) bitDepth = [bitDepth];
                 if (bitDepth.indexOf(this.bitDepth) === -1) {
@@ -4479,42 +4667,61 @@ var Image = (function () {
             }
         }
     }, {
+        key: 'apply',
+        value: function apply(filter) {
+            for (var y = 0; y < this.height; y++) {
+                for (var x = 0; x < this.width; x++) {
+                    var index = (y * this.width + x) * this.channels;
+                    filter.call(this, index);
+                }
+            }
+        }
+    }, {
         key: 'pixels',
-        value: regeneratorRuntime.mark(function pixels(channel) {
-            var x, y;
+
+        // This approach is SOOOO slow .... for now just forget about it !
+        value: regeneratorRuntime.mark(function pixels() {
+            var toYield, y, x, c;
             return regeneratorRuntime.wrap(function pixels$(context$2$0) {
                 while (1) switch (context$2$0.prev = context$2$0.next) {
                     case 0:
-                        x = 0;
-
-                    case 1:
-                        if (!(x < this.width)) {
-                            context$2$0.next = 12;
-                            break;
-                        }
-
+                        toYield = { x: 0, y: 0, index: 0, pixel: new Array(this.channels) };
                         y = 0;
 
-                    case 3:
+                    case 2:
                         if (!(y < this.height)) {
-                            context$2$0.next = 9;
+                            context$2$0.next = 17;
                             break;
                         }
 
-                        context$2$0.next = 6;
-                        return this.getValueXY(x, y, channel);
+                        x = 0;
 
-                    case 6:
-                        y++;
-                        context$2$0.next = 3;
-                        break;
+                    case 4:
+                        if (!(x < this.width)) {
+                            context$2$0.next = 14;
+                            break;
+                        }
 
-                    case 9:
+                        toYield.x = x;
+                        toYield.y = y;
+                        toYield.index = y * this.width + x;
+                        for (c = 0; c < this.channels; c++) {
+                            toYield.pixel[c] = this.data[toYield.index * this.channels + c];
+                        }
+                        context$2$0.next = 11;
+                        return toYield;
+
+                    case 11:
                         x++;
-                        context$2$0.next = 1;
+                        context$2$0.next = 4;
                         break;
 
-                    case 12:
+                    case 14:
+                        y++;
+                        context$2$0.next = 2;
+                        break;
+
+                    case 17:
                     case 'end':
                         return context$2$0.stop();
                 }
@@ -4524,15 +4731,17 @@ var Image = (function () {
         key: 'load',
         value: function load(url) {
             return new Promise(function (resolve, reject) {
-                var image = new _canvas.DOMImage();
+                var image = new _environment.DOMImage();
 
-                // see https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
-                image.crossOrigin = 'Anonymous';
+                if ((0, _environment.isDifferentOrigin)(url)) {
+                    // see https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
+                    image.crossOrigin = 'Anonymous';
+                }
 
                 image.onload = function () {
                     var w = image.width,
                         h = image.height;
-                    var canvas = new _canvas.Canvas(w, h);
+                    var canvas = new _environment.Canvas(w, h);
                     var ctx = canvas.getContext('2d');
                     ctx.drawImage(image, 0, 0, w, h);
                     var data = ctx.getImageData(0, 0, w, h).data;
@@ -4589,18 +4798,17 @@ var Image = (function () {
         }
     }, {
         key: 'createFrom',
-        value: function createFrom(other) {
-            var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-            var _ref3$width = _ref3.width;
-            var width = _ref3$width === undefined ? other.width : _ref3$width;
-            var _ref3$height = _ref3.height;
-            var height = _ref3$height === undefined ? other.height : _ref3$height;
-            var _ref3$kind = _ref3.kind;
-            var kind = _ref3$kind === undefined ? other.kind : _ref3$kind;
-
-            // TODO if kind is incomplete, take values from this
-            return new Image(width, height, { kind: kind });
+        value: function createFrom(other, options) {
+            var newOptions = {
+                width: other.width,
+                height: other.height,
+                components: other.components,
+                alpha: other.alpha,
+                colorModel: other.colorModel,
+                bitDepth: other.bitDepth
+            };
+            Object.assign(newOptions, options);
+            return new Image(newOptions.width, newOptions.height, newOptions);
         }
     }, {
         key: 'isTypeSupported',
@@ -4627,7 +4835,7 @@ exports['default'] = Image;
 (0, _extend2['default'])(Image);
 module.exports = exports['default'];
 
-},{"./canvas":96,"./extend":99,"./kind":105,"./kindNames":106,"./mediaTypes":107,"./model/models":108,"./roi/manager":112,"babel/polyfill":93,"fs":94}],105:[function(require,module,exports){
+},{"./environment":98,"./extend":99,"./kind":108,"./kindNames":109,"./mediaTypes":110,"./model/models":111,"./roi/manager":115,"babel/polyfill":93,"fs":94}],108:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4705,7 +4913,7 @@ function getPixelArray(kind, numberPixels) {
     return arr;
 }
 
-},{"./kindNames":106,"./model/models":108}],106:[function(require,module,exports){
+},{"./kindNames":109,"./model/models":111}],109:[function(require,module,exports){
 // Shortcuts for common image kinds
 'use strict';
 
@@ -4719,7 +4927,7 @@ exports.GREYA = GREYA;
 var RGBA = 'RGBA';
 exports.RGBA = RGBA;
 
-},{}],107:[function(require,module,exports){
+},{}],110:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4739,7 +4947,7 @@ var _image = require('./image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _canvas = require('./canvas');
+var _environment = require('./environment');
 
 var types = new Map();
 var image = undefined;
@@ -4757,7 +4965,7 @@ function getMediaType(type) {
 }
 
 function canWrite(type) {
-    if (_canvas.env === 'node' && type !== 'image/png') {
+    if (_environment.env === 'node' && type !== 'image/png') {
         return false; // node-canvas throws for other types
     } else {
         return getMediaType(type).canWrite();
@@ -4792,7 +5000,7 @@ function getType(type) {
     return type;
 }
 
-},{"./canvas":96,"./image":104}],108:[function(require,module,exports){
+},{"./environment":98,"./image":107}],111:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4805,7 +5013,7 @@ exports.HSL = HSL;
 var HSV = 2;
 exports.HSV = HSV;
 
-},{}],109:[function(require,module,exports){
+},{}],112:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4847,7 +5055,7 @@ function paintMasks(masks) {
 
 module.exports = exports['default'];
 
-},{"../model/models":108}],110:[function(require,module,exports){
+},{"../model/models":111}],113:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -4896,7 +5104,7 @@ function createROI(roiMap) {
 
 module.exports = exports['default'];
 
-},{"./roi":113}],111:[function(require,module,exports){
+},{"./roi":116}],114:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5027,7 +5235,7 @@ var ROIMap = function ROIMap(width, height, pixels, negativeID, positiveID) {
 
 module.exports = exports["default"];
 
-},{}],112:[function(require,module,exports){
+},{}],115:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5162,7 +5370,7 @@ var ROILayer = function ROILayer(mask, options) {
 
 module.exports = exports['default'];
 
-},{"./createROI":110,"./createROIMap":111}],113:[function(require,module,exports){
+},{"./createROI":113,"./createROIMap":114}],116:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5196,6 +5404,29 @@ var ROI = (function () {
     }
 
     _createClass(ROI, [{
+        key: 'extract',
+
+        // extract the ROI from the original image
+        value: function extract(image) {
+            var width = this.maxX - this.minX + 1;
+            var height = this.maxY - this.minY + 1;
+            var img = _image2['default'].createFrom(image, {
+                width: this.width,
+                height: this.height,
+                position: [this.minX, this.minY]
+            });
+
+            for (var x = 0; x < width; x++) {
+                for (var y = 0; y < height; y++) {
+                    var target = x + this.minX + (y + this.minY) * this.map.width;
+                    if (this.map.pixels[target] === this.id) {
+                        img.setPixelXY(x, y, image.getPixel(target));
+                    } // by default a pixel is to 0 so no problems, it will be transparent
+                }
+            }
+            return img;
+        }
+    }, {
         key: 'width',
         get: function get() {
             return this.maxX - this.minX + 1;
@@ -5212,10 +5443,11 @@ var ROI = (function () {
             return this.computed.surround = getSurroundingIDs(this);
         }
     }, {
-        key: 'boxPixels',
+        key: 'external',
         get: function get() {
-            if (this.computed.boxPixels) return this.computed.boxPixels;
-            return this.computed.boxPixels = getBoxPixels(this);
+            // points of the ROI that touch the rectangular shape
+            if (this.computed.external) return this.computed.external;
+            return this.computed.external = getExternal(this);
         }
     }, {
         key: 'contour',
@@ -5339,7 +5571,7 @@ function getSurroundingIDs(roi) {
  border that don't have neighbourgs all around them.
  */
 
-function getBoxPixels(roi) {
+function getExternal(roi) {
     var total = 0;
     var roiMap = roi.map;
     var pixels = roiMap.pixels;
@@ -5434,7 +5666,7 @@ function getBorder(roi) {
             }
         }
     }
-    return total + roi.boxPixels;
+    return total + roi.external;
 }
 
 /*
@@ -5459,11 +5691,11 @@ function getContour(roi) {
             }
         }
     }
-    return total + roi.boxPixels;
+    return total + roi.external;
 }
 module.exports = exports['default'];
 
-},{"../image":104}],114:[function(require,module,exports){
+},{"../image":107}],117:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5515,7 +5747,7 @@ function crop() {
 
 module.exports = exports['default'];
 
-},{"../image":104}],115:[function(require,module,exports){
+},{"../image":107}],118:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5535,7 +5767,7 @@ function average(newImage) {
 
 module.exports = exports["default"];
 
-},{}],116:[function(require,module,exports){
+},{}],119:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5621,7 +5853,7 @@ function grey() {
 
 module.exports = exports['default'];
 
-},{"../../image":104,"../../model/models":108,"./average":115,"./luma601":117,"./luma709":118,"./maximum":119,"./minmax":120}],117:[function(require,module,exports){
+},{"../../image":107,"../../model/models":111,"./average":118,"./luma601":120,"./luma709":121,"./maximum":122,"./minmax":123}],120:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5641,7 +5873,7 @@ function luma601(newImage) {
 
 module.exports = exports["default"];
 
-},{}],118:[function(require,module,exports){
+},{}],121:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5661,7 +5893,7 @@ function luma709(newImage) {
 
 module.exports = exports["default"];
 
-},{}],119:[function(require,module,exports){
+},{}],122:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5681,7 +5913,7 @@ function maximum(newImage) {
 
 module.exports = exports["default"];
 
-},{}],120:[function(require,module,exports){
+},{}],123:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5701,7 +5933,7 @@ function minmax(newImage) {
 
 module.exports = exports["default"];
 
-},{}],121:[function(require,module,exports){
+},{}],124:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5779,7 +6011,7 @@ function mask() {
 
 module.exports = exports['default'];
 
-},{"../../image":104,"./percentile":122}],122:[function(require,module,exports){
+},{"../../image":107,"./percentile":125}],125:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5821,7 +6053,7 @@ function partialSum(histogram, endIndex) {
 }
 module.exports = exports["default"];
 
-},{}],123:[function(require,module,exports){
+},{}],126:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -5893,5 +6125,5 @@ function split() {
 
 module.exports = exports['default'];
 
-},{"../image":104}]},{},[104])(104)
+},{"../image":107}]},{},[107])(107)
 });
