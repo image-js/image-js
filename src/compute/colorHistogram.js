@@ -1,6 +1,6 @@
 let newArray = require('new-array');
 
-export function getColorHistogram({
+export default function getColorHistogram({
     useAlpha = true,
     nbSlots = 512
     } = {}) {
@@ -34,4 +34,6 @@ export function getColorHistogram({
             result[slot]++;
         }
     }
+
+    return result;
 }
