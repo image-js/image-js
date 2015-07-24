@@ -3,7 +3,7 @@ let DOMImage, Canvas, getImageData, getCanvasArray, isDifferentOrigin, env;
 if (typeof self !== 'undefined') { // Browser
 
     env = 'browser';
-    let origin = self.location.href;
+    let origin = self.location.origin;
     isDifferentOrigin = function (url) {
         try {
             let parsedURL = new self.URL(url);
