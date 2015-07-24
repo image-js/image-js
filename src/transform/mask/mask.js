@@ -33,7 +33,7 @@ export default function mask(algorithm = 0.5, {
         }
     }
 
-    let newImage = Image.createFrom(this, {
+    let newImage = new Image (this.width, this.height, {
         kind: 'BINARY'
     });
 
