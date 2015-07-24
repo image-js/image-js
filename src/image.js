@@ -35,14 +35,20 @@ class Image {
 
         this.position = options.position || [0, 0];
 
-        let kind = options.kind || RGBA;
-        if (typeof kind === 'string') kind = getKind(kind);
-        if (!kind) throw new RangeError('invalid image kind: ' + kind);
+        let theKind;
+        if (typeof options.kind === 'string') {
+            theKind = getKind(options.kind);
+            if (!theKind) throw new RangeError('invalid image kind: ' + options.kind);
+        } else {
+            theKind = getKind(RGBA);
+        }
 
-        this.components = kind.components;
-        this.alpha = kind.alpha;
-        this.bitDepth = kind.bitDepth;
-        this.colorModel = kind.colorModel;
+        let kindDefinition = extendObject({}, theKind, options);
+
+        this.components = kindDefinition.components;
+        this.alpha = kindDefinition.alpha;
+        this.bitDepth = kindDefinition.bitDepth;
+        this.colorModel = kindDefinition.colorModel;
 
         this.channels = this.components + this.alpha;
         this.maxValue = (1 << this.bitDepth) - 1;
@@ -51,9 +57,9 @@ class Image {
         this.computed = {};
 
         if (!data)
-            data = getPixelArray(kind, this.size);
+            data = getPixelArray(kindDefinition, this.size);
         else {
-            let theoreticalSize = getPixelArraySize(kind, this.size);
+            let theoreticalSize = getPixelArraySize(kindDefinition, this.size);
             if (theoreticalSize !== data.length) {
                 throw new RangeError(`incorrect data size. Should be ${theoreticalSize} and found ${data.length}`);
             }
@@ -117,9 +123,10 @@ class Image {
     }
 
     static createFrom(other, options) {
-        let newOptions={
+        let newOptions = {
             width: other.width,
             height: other.height,
+            position: other.position,
             components: other.components,
             alpha: other.alpha,
             colorModel: other.colorModel,
