@@ -1,5 +1,3 @@
-require('babel/polyfill');
-
 import {getKind, getPixelArray, getPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
 import {DOMImage, getImageData, Canvas, getCanvasArray, isDifferentOrigin} from './environment';
@@ -8,6 +6,7 @@ import {createWriteStream} from 'fs';
 import * as ColorModels from './model/models';
 import ROIManager from './roi/manager';
 import {getType, canWrite} from './mediaTypes';
+import extendObject from 'extend';
 
 let computedPropertyDescriptor = {
     configurable: true,
@@ -126,7 +125,7 @@ class Image {
             colorModel: other.colorModel,
             bitDepth: other.bitDepth
         };
-        Object.assign(newOptions, options);
+        extendObject(newOptions, options);
         return new Image(newOptions.width, newOptions.height, newOptions);
     }
 
