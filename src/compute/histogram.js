@@ -1,3 +1,5 @@
+let newArray = require('new-array');
+
 export function getHistogram({maxSlots=256, channel=undefined, useAlpha=true} = {}) {
     this.checkProcessable("getHistogram", {
         bitDepth: [8, 16]
@@ -37,7 +39,7 @@ function getChannelHistogram(channel, useAlpha, maxSlots) {
     if (this.bitDepth > bitSlots) bitShift = this.bitDepth - bitSlots;
 
     let data = this.data;
-    let result = new Float32Array(Math.pow(2, Math.min(this.bitDepth, bitSlots)));
+    let result = newArray(Math.pow(2, Math.min(this.bitDepth, bitSlots)),0);
     if (useAlpha && this.alpha) {
         let alphaChannelDiff = this.channels - channel - 1;
 
