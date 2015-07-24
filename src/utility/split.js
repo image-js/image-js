@@ -17,12 +17,9 @@ export default function split({preserveAlpha = true} = {}) {
     if (this.alpha && preserveAlpha) {
         for (let i = 0; i < this.components; i++) {
             let newImage = Image.createFrom(this, {
-                kind: {
-                    components: 1,
-                    alpha: true,
-                    bitDepth: this.bitDepth,
-                    colorModel: null
-                }
+                components: 1,
+                alpha: true,
+                colorModel: null
             });
             let ptr = 0;
             for (let j = 0; j < data.length; j += this.channels) {
@@ -34,12 +31,9 @@ export default function split({preserveAlpha = true} = {}) {
     } else {
         for (let i = 0; i < this.channels; i++) {
             let newImage = Image.createFrom(this, {
-                kind: {
-                    components: 1,
-                    alpha: false,
-                    bitDepth: this.bitDepth,
-                    colorModel: null
-                }
+                components: 1,
+                alpha: false,
+                colorModel: null
             });
             let ptr = 0;
             for (let j = 0; j < data.length; j += this.channels) {

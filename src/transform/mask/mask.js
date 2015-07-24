@@ -34,9 +34,8 @@ export default function mask(algorithm = 0.5, {
     }
 
     let newImage = Image.createFrom(this, {
-            kind: 'BINARY'
-        }
-    );
+        kind: 'BINARY'
+    });
 
     let ptr = 0;
     if (this.alpha && useAlpha) {
