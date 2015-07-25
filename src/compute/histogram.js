@@ -1,6 +1,6 @@
-let newArray = require('new-array');
+import newArray from 'new-array';
 
-export function getHistogram({maxSlots=256, channel=undefined, useAlpha=true} = {}) {
+export function getHistogram({maxSlots=256, channel, useAlpha=true} = {}) {
     this.checkProcessable("getHistogram", {
         bitDepth: [8, 16]
     });

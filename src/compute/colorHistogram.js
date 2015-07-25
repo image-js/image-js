@@ -1,4 +1,4 @@
-let newArray = require('new-array');
+import newArray from 'new-array';
 
 export default function getColorHistogram({
     useAlpha = true,
