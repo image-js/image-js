@@ -1,4 +1,5 @@
 import newArray from 'new-array';
+import isInteger from 'is-integer';
 
 export function getHistogram({maxSlots=256, channel, useAlpha=true} = {}) {
     this.checkProcessable('getHistogram', {
@@ -28,7 +29,7 @@ export function getHistograms({maxSlots=256, useAlpha=true} = {}) {
 
 function getChannelHistogram(channel, useAlpha, maxSlots) {
     let bitSlots = Math.log2(maxSlots);
-    if (!Number.isInteger(bitSlots)) {
+    if (!isInteger(bitSlots)) {
         throw new RangeError('maxSlots must be a power of 2, for example: 64, 256, 1024');
     }
     // we will compare the bitSlots to the bitDepth of the image
