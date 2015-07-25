@@ -414,7 +414,7 @@ class Image {
     }
 
     // This approach is SOOOO slow .... for now just forget about it !
-    *pixels() {
+    /**pixels() {
         let toYield = {x: 0, y: 0, index: 0, pixel: new Array(this.channels)};
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
@@ -427,7 +427,7 @@ class Image {
                 yield toYield;
             }
         }
-    }
+    }*/
 }
 
 extend(Image);
