@@ -1,5 +1,6 @@
 import Image from './image';
 import {env} from './environment';
+import includes from 'string-includes';
 
 let types = new Map();
 let image;
@@ -39,7 +40,7 @@ class MediaType {
 }
 
 export function getType(type) {
-    if (!type.includes('/')) {
+    if (!includes(type, '/')) {
         type = 'image/' + type;
     }
     return type;
