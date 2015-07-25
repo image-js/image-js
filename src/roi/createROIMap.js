@@ -104,8 +104,8 @@ export default function createROIMap(mask, {allowCorner = false} = {}) {
             from++;
 
             if ((to - from) > MAX_ARRAY) {
-                throw new Error("analyseMask can not finish, the array to manage internal data is not big enough." +
-                    "You could improve mask by changing MAX_ARRAY");
+                throw new Error('analyseMask can not finish, the array to manage internal data is not big enough.' +
+                    'You could improve mask by changing MAX_ARRAY');
             }
         }
     }

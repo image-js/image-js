@@ -57,3 +57,9 @@ rules:
 
   # ES6
   no-var: 2
+
+  # Stylistic issues
+  quotes:
+    - 2
+    - "single"
+    - "avoid-escape"
