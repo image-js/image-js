@@ -45,7 +45,7 @@ npm install canvas
 
 Well sometimes on OSX it really does not work. In those cases this could help after installing [X11](http://xquartz.macosforge.org/landing/).
 ````
-wget https://raw.githubusercontent.com/LearnBoost/node-canvas/master/install -O - | sh
+wget https://raw.githubusercontent.com/Automattic/node-canvas/master/install -O - | sh
 cp /usr/X11/lib/libfreetype.dylib /usr/local/lib/
 ````
 
