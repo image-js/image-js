@@ -54,7 +54,7 @@
     "watchify": "^3.2.3"
   },
   "optionalDependencies": {
-    "canvas": "1.2.3"
+    "canvas": "^1.2.5"
   },
   "dependencies": {
     "extend": "^3.0.0",
