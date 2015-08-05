@@ -1,7 +1,7 @@
 language: node_js
 node_js:
   - "0.12"
-  - "iojs"
+  - "iojs-v2"
 sudo: false
 addons:
   apt:
