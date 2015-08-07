@@ -53,6 +53,7 @@ class Image {
         this.channels = this.components + this.alpha;
         this.maxValue = (1 << this.bitDepth) - 1;
         this.size = this.width * this.height;
+        this.dimension = 2;
 
         this.computed = {};
 
@@ -372,7 +373,7 @@ class Image {
 
     // this method check if a process can be applied on the current image
     checkProcessable(processName, {
-        bitDepth, alpha, colorModel, components
+        bitDepth, alpha, colorModel, components, dimension
         } = {}) {
         if (typeof processName !== 'string') {
             throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
@@ -381,6 +382,12 @@ class Image {
             if (!Array.isArray(bitDepth)) bitDepth = [bitDepth];
             if (bitDepth.indexOf(this.bitDepth) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if bit depth is in: ' + bitDepth);
+            }
+        }
+        if (dimension) {
+            if (!Array.isArray(dimension)) dimension = [dimension];
+            if (dimension.indexOf(this.dimension) === -1) {
+                throw new TypeError('The process: ' + processName + ' can only be applied if the image has as dimension: ' + dimension);
             }
         }
         if (alpha) {

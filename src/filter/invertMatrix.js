@@ -7,7 +7,8 @@
 
 export default function invertMatrix() {
     this.checkProcessable('invertMatrix', {
-        bitDepth: [8, 16]
+        bitDepth: [8, 16],
+        dimension: 2
     });
     let matrix = this.getMatrix();
     for (let x = 0; x < this.width; x++) {

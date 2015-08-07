@@ -1,6 +1,7 @@
 export default function invert() {
     this.checkProcessable('invertOneLoop', {
-        bitDepth: [8, 16]
+        bitDepth: [8, 16],
+        dimension: 2
     });
 
     let data = this.data;
