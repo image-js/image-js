@@ -19,6 +19,7 @@ import paintMasks from './operator/paintMasks';
 import {getHistogram, getHistograms} from './compute/histogram';
 import getColorHistogram from './compute/colorHistogram';
 import getPixelsArray from './compute/pixelsArray';
+import getSVD from './compute/svd';
 
 export default function extend(Image) {
     Image.extendMethod('invertGetSet', invertGetSet, true); // true means the process is in-place
@@ -42,5 +43,5 @@ export default function extend(Image) {
     Image.extendMethod('getHistograms', getHistograms).extendProperty('histograms', getHistograms);
     Image.extendMethod('getColorHistogram', getColorHistogram).extendProperty('colorHistogram', getColorHistogram);
     Image.extendMethod('getPixelsArray', getPixelsArray).extendProperty('pixelsArray', getPixelsArray);
-
+    Image.extendMethod('getSVD', getSVD).extendProperty('svd', getSVD);
 }

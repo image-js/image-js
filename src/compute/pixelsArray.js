@@ -17,8 +17,6 @@ export default function getPixelsArray({threshold, channel, useAlpha=true} = {})
         }
         pixels.length=counter;
         return pixels;
-    } else {
-
     }
 }
 

@@ -1,7 +1,7 @@
 import {Image} from '../common';
 
 describe('calculate the pixels array', function () {
-    it.only('check the array', function () {
+    it('check the array', function () {
 
         let img=new Image(8,2,[255,0],{
             kind: 'BINARY'

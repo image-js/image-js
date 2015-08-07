@@ -17,16 +17,14 @@ export default class ROI {
 
     // extract the ROI from the original image
     extract(image) {
-        let width = this.maxX - this.minX + 1;
-        let height = this.maxY - this.minY + 1;
         let img=Image.createFrom(image, {
                 width: this.width,
                 height: this.height,
                 position: [this.minX, this.minY]
         });
 
-        for (let x = 0; x < width; x++) {
-            for (let y = 0; y < height; y++) {
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
                 let target=x + this.minX + (y + this.minY) * this.map.width;
                 if (this.map.pixels[target] === this.id) {
                     img.setPixelXY(x, y, image.getPixel(target));
@@ -67,15 +65,13 @@ export default class ROI {
     get mask() {
         if (this.computed.mask) return this.computed.mask;
 
-        let width = this.maxX - this.minX + 1;
-        let height = this.maxY - this.minY + 1;
-        let img = new Image(width, height, {
+        let img = new Image(this.width, this.height, {
             kind: 'BINARY',
             position: [this.minX, this.minY]
         });
 
-        for (let x = 0; x < width; x++) {
-            for (let y = 0; y < height; y++) {
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
                 if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id) img.setBitXY(x, y);
             }
         }
