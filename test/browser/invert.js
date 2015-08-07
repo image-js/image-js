@@ -21,23 +21,24 @@ load('rgb8.png').then(function (a) {
 
 
 
-load('rgb8.png').then(function (img) {
+load('cells.jpg').then(function (img) {
     //setLeft(a);
 
     console.time("invert");
-    for (var i=0; i<200; i++) {
+    for (var i=0; i<20; i++) {
         img.invert();
     }
     console.timeEnd("invert");
 
-    console.time("invertMatrix");
-    for (var i=0; i<200; i++) {
-        img.invertMatrix();
+
+    console.time("invertApply");
+    for (var i=0; i<20; i++) {
+        img.invertApply();
     }
-    console.timeEnd("invertMatrix");
+    console.timeEnd("invertApply");
 
     console.time("invertOneLoop");
-    for (var i=0; i<200; i++) {
+    for (var i=0; i<20; i++) {
         img.invertOneLoop();
     }
     console.timeEnd("invertOneLoop");
