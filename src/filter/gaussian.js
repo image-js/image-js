@@ -16,6 +16,7 @@ export default function gaussianFilter({
 	if (sigma) {
 		kernel = getSigmaKernel(sigma);
 	} else {
+		// sigma approximation using neighbors
 		sigma = 0.3 * (neighbors - 1) + 0.8;
 		kernel = getKernel(neighbors, sigma);
 	}
@@ -40,8 +41,8 @@ function getKernel(neighbors, sigma) {
 		throw new RangeError('Number of neighbors should be grater than 0');
 	}
 	let n = 2 * neighbors + 1;
-	// sigma approximation using k
-	let kernel = [n * n];
+
+	let kernel = new Array(n * n);
 
 	//gaussian kernel is calculated
 	let sigma2 = 2 * (sigma * sigma); //2*sigma^2
