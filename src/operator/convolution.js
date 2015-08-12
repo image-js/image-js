@@ -1,5 +1,3 @@
-'use strict'
-
 import edgeHandlingMethod from './edgeHandlingMethod'
 
 //convolution using a square kernel
@@ -16,10 +14,10 @@ export default function convolution(newImage, kernel, edgeHandling){
             let sum = 0;
             for(let i = -k; i <= k; i++){
                 for(let j = -k; j <= k; j++){
-                    let val = edgeHandling.toLowerCase() == 'mirror'
+                    let val = edgeHandling.toLowerCase() === 'mirror'
                         ? mirrorValue(x, y, i, j, this)
                         : (isOutSidePixel(x, y, this) ? undefined : this.getValueXY(x + i, y + j, 0));
-                    if(val != undefined)
+                    if(val !== undefined)
                         sum += val*kernel[(i + k)*kernelWidth + (j + k)];
                 }
             }
@@ -37,7 +35,7 @@ export default function convolution(newImage, kernel, edgeHandling){
         }
     }
 
-    if(edgeHandling.toLowerCase() != 'mirror'){
+    if(edgeHandling.toLowerCase() !== 'mirror'){
         edgeHandlingMethod.call(this, newImage, edgeHandling.toLowerCase(), k);
     }
 
