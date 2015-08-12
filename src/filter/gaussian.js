@@ -1,15 +1,23 @@
 import Image from '../image';
 import convolution from '../operator/convolution';
 
-export default function gaussianFilter(k, boundary = 'copy') {
+export default function gaussianFilter({
+	neighbors = 1,
+	sigma,
+	boundary = 'copy'
+	} = {}) {
 
 	this.checkProcessable('gaussianFilter', {
 		components: [1],
 		bitDepth: [8, 16]
 	});
 
-	if (k < 1) {
-		throw new Error('Number of neighbors should be grater than 0');
+	let kernel;
+	if (sigma) {
+		kernel = getSigmaKernel(sigma);
+	} else {
+		sigma = 0.3 * (neighbors - 1) + 0.8;
+		kernel = getKernel(neighbors, sigma);
 	}
 
 	//gaussian filter do not is in place
@@ -22,32 +30,65 @@ export default function gaussianFilter(k, boundary = 'copy') {
 		}
 	});
 
-	let n = 2 * k + 1;
+	convolution.call(this, newImage, kernel, boundary);
+
+	return newImage;
+}
+
+function getKernel(neighbors, sigma) {
+	if (neighbors < 1) {
+		throw new RangeError('Number of neighbors should be grater than 0');
+	}
+	let n = 2 * neighbors + 1;
 	// sigma approximation using k
-	let sigma = 0.3 * (k - 1) + 0.8;
 	let kernel = [n * n];
 
 	//gaussian kernel is calculated
 	let sigma2 = 2 * (sigma * sigma); //2*sigma^2
 	let PI2sigma2 = Math.PI * sigma2; //2*PI*sigma^2
 
-	for(let i = 0; i <= k; i++){
-		for(let j = i; j <= k; j++){
+	for(let i = 0; i <= neighbors; i++){
+		for(let j = i; j <= neighbors; j++){
 			let value = Math.exp(-((i * i) + (j * j))/sigma2) / PI2sigma2;
-			kernel[(i + k)*n + (j + k)] = value;
-			kernel[(i + k)*n + (-j + k)] = value;
-			kernel[(-i + k)*n + (j + k)] = value;
-			kernel[(-i + k)*n + (-j + k)] = value;
-			kernel[(j + k)*n + (i + k)] = value;
-			kernel[(j + k)*n + (-i + k)] = value;
-			kernel[(-j + k)*n + (i + k)] = value;
-			kernel[(-j + k)*n + (-i + k)] = value;
+			kernel[(i + neighbors)*n + (j + neighbors)] = value;
+			kernel[(i + neighbors)*n + (-j + neighbors)] = value;
+			kernel[(-i + neighbors)*n + (j + neighbors)] = value;
+			kernel[(-i + neighbors)*n + (-j + neighbors)] = value;
+			kernel[(j + neighbors)*n + (i + neighbors)] = value;
+			kernel[(j + neighbors)*n + (-i + neighbors)] = value;
+			kernel[(-j + neighbors)*n + (i + neighbors)] = value;
+			kernel[(-j + neighbors)*n + (-i + neighbors)] = value;
 		}
 	}
-
-	convolution.call(this, newImage, kernel, boundary);
-
-	return newImage;
+	return kernel;
 }
 
+function getSigmaKernel(sigma) {
+	if (sigma <= 0) {
+		throw new RangeError('Sigma should be grater than 0');
+	}
+	let sigma2 = 2 * (sigma * sigma); //2*sigma^2
+	let PI2sigma2 = Math.PI * sigma2; //2*PI*sigma^2
+	let value = 1/PI2sigma2;
+	let sum = value;
+	let neighbors = 0;
 
+	while(sum < 0.99){
+		neighbors++;
+		value = Math.exp(-(neighbors * neighbors)/sigma2) / PI2sigma2;
+		sum += 4 * value;
+		for(let i = 1; i < neighbors; i++){
+			value = Math.exp(-((i * i) + (neighbors * neighbors))/sigma2) / PI2sigma2;
+			sum += 8 * value;
+		}
+		value = 4 * Math.exp(-(2* neighbors * neighbors)/sigma2) / PI2sigma2;
+		sum +=  value;
+	}
+
+	// What does this case mean ?
+	if(sum > 1){
+		throw new Error('unexpected sum over 1');
+	}
+
+	return getKernel(neighbors, sigma);
+}
