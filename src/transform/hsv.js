@@ -46,7 +46,7 @@ export default function hsv() {
 
         newImage.data[ptr++] = hue/360*255;
         newImage.data[ptr++] = saturation*255;
-        newImage.data[ptr++] = value*255;
+        newImage.data[ptr++] = value;
         if (this.alpha) {
             newImage.data[ptr++] = data[i+3];
         }
