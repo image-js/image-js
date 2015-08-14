@@ -279,17 +279,12 @@ function getInternalMapIDs(roi) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (internal.indexOf(pixels[target])>=0) {
                 // we check if one of the neighbour is not yet in
-                if (internal.indexOf(pixels[target - 1]) === -1) {
-                    internal.push(pixels[target - 1]);
-                }
-                if (internal.indexOf(pixels[target + 1]) === -1) {
-                    internal.push(pixels[target + 1]);
-                }
-                if (internal.indexOf(pixels[target - roiMap.width]) === -1) {
-                    internal.push(pixels[target - roiMap.width]);
-                }
-                if (internal.indexOf(pixels[target + roiMap.width]) === -1) {
-                    internal.push(pixels[target + roiMap.width]);
+                let id=pixels[target - 1];
+
+                for (let id of [pixels[target - 1], pixels[target + 1], pixels[target - roiMap.width], pixels[target + roiMap.width]]) {
+                    if ((internal.indexOf(id) === -1) && (roi.surround.indexOf(id)===-1)) {
+                        internal.push(id);
+                    }
                 }
             }
         }
