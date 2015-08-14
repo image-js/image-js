@@ -13,6 +13,7 @@ import gaussianFilter from './filter/gaussian';
 // transformers
 import crop from './transform/crop';
 import hsv from './transform/hsv';
+import hsl from './transform/hsl';
 import grey from './transform/grey/grey';
 import mask from './transform/mask/mask';
 import pad from './transform/pad';
@@ -42,6 +43,7 @@ export default function extend(Image) {
 
     Image.extendMethod('crop', crop); // last parameter is "false" because it creates a new image
     Image.extendMethod('hsv', hsv);
+    Image.extendMethod('hsl', hsl);
     Image.extendMethod('grey', grey).extendMethod('gray', grey);
     Image.extendMethod('mask', mask);
     Image.extendMethod('pad', pad);

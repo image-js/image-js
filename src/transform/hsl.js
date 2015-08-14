@@ -1,4 +1,6 @@
-// TODO: REDO based on https://bgrins.github.io/TinyColor/docs/tinycolor.html
+// http://www.easyrgb.com/index.php?X=MATH&H=18#text18
+// check rgbToHsl : https://bgrins.github.io/TinyColor/docs/tinycolor.html
+
 
 import Image from '../image';
 
@@ -12,7 +14,7 @@ export default function hsv() {
     });
 
     let newImage = Image.createFrom(this, {
-        colorModel:2
+        colorModel:1
     });
 
     let ptr = 0;
@@ -22,14 +24,14 @@ export default function hsv() {
         let green=data[i+1];
         let blue=data[i+2];
 
-        let min = Math.min( red, green, blue );
-        let max = Math.max( red, green, blue );
-        let delta = max - min;
+        let max = Math.max(red, green, blue);
+        let min = Math.min(red, green, blue);
         let hue = 0;
-        let saturation = max === 0 ? 0 : delta / max;
-        let value = max;
-
-        if (max !== min ) {
+        let saturation = 0;
+        let luminance = (max + min) / 2;
+        if (max !== min) {
+            var delta = max - min;
+            saturation = luminance > 127 ? delta / (2 - max - min) : delta / (max + min);
             switch(max) {
                 case red:
                     hue = (green - blue) / delta + (green < blue ? 6 : 0);
@@ -44,9 +46,10 @@ export default function hsv() {
             hue /= 6;
         }
 
+
         newImage.data[ptr++] = hue*255;
         newImage.data[ptr++] = saturation*255;
-        newImage.data[ptr++] = value;
+        newImage.data[ptr++] = luminance;
         if (this.alpha) {
             newImage.data[ptr++] = data[i+3];
         }
