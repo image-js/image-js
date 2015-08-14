@@ -30,7 +30,7 @@ export default function hsv() {
         let saturation = 0;
         let luminance = (max + min) / 2;
         if (max !== min) {
-            var delta = max - min;
+            let delta = max - min;
             saturation = luminance > 127 ? delta / (2 - max - min) : delta / (max + min);
             switch(max) {
                 case red:
