@@ -12,25 +12,37 @@ export default class ROI {
         this.meanX = 0;
         this.meanY = 0;
         this.surface = 0;
-        this.computed = {}; // what is the map value surrounding
+        this.computed = {};
     }
 
     // extract the ROI from the original image
-    extract(image) {
+    extract(image, {fill=false}={}) {
         let img=Image.createFrom(image, {
                 width: this.width,
                 height: this.height,
                 position: [this.minX, this.minY]
         });
 
-        for (let x = 0; x < this.width; x++) {
-            for (let y = 0; y < this.height; y++) {
-                let target=x + this.minX + (y + this.minY) * this.map.width;
-                if (this.map.pixels[target] === this.id) {
-                    img.setPixelXY(x, y, image.getPixel(target));
-                } // by default a pixel is to 0 so no problems, it will be transparent
+        if (! fill) {
+            for (let x = 0; x < this.width; x++) {
+                for (let y = 0; y < this.height; y++) {
+                    let target=x + this.minX + (y + this.minY) * this.map.width;
+                    if (this.map.pixels[target] === this.id) {
+                        img.setPixelXY(x, y, image.getPixel(target));
+                    } // by default a pixel is to 0 so no problems, it will be transparent
+                }
+            }
+        } else {
+            for (let x = 0; x < this.width; x++) {
+                for (let y = 0; y < this.height; y++) {
+                    let target=x + this.minX + (y + this.minY) * this.map.width;
+                    if (this.internalMapIDs.indexOf(this.map.pixels[target]) >= 0) {
+                        img.setPixelXY(x, y, image.getPixel(target));
+                    } // by default a pixel is to 0 so no problems, it will be transparent
+                }
             }
         }
+
         return img;
     }
 
@@ -45,6 +57,11 @@ export default class ROI {
     get surround() {
         if (this.computed.surround) return this.computed.surround;
         return this.computed.surround = getSurroundingIDs(this);
+    }
+
+    get internalMapIDs() {
+        if (this.computed.internalMapIDs) return this.computed.internalMapIDs;
+        return this.computed.internalMapIDs = getInternalMapIDs(this);
     }
 
     get external() { // points of the ROI that touch the rectangular shape
@@ -246,4 +263,37 @@ function getContour(roi) {
         }
     }
     return total + roi.external;
+}
+
+/*
+We will calculate all the ids of the map that are "internal"
+This will allow to extract the 'plain' image
+ */
+function getInternalMapIDs(roi) {
+    let internal=[roi.id];
+    let roiMap = roi.map;
+    let pixels = roiMap.pixels;
+
+    for (let x = 1; x < roi.width - 1; x++) {
+        for (let y = 1; y < roi.height - 1; y++) {
+            let target = (y + roi.minY) * roiMap.width + x + roi.minX;
+            if (internal.indexOf(pixels[target])>=0) {
+                // we check if one of the neighbour is not yet in
+                if (internal.indexOf(pixels[target - 1]) === -1) {
+                    internal.push(pixels[target - 1]);
+                }
+                if (internal.indexOf(pixels[target + 1]) === -1) {
+                    internal.push(pixels[target + 1]);
+                }
+                if (internal.indexOf(pixels[target - roiMap.width]) === -1) {
+                    internal.push(pixels[target - roiMap.width]);
+                }
+                if (internal.indexOf(pixels[target + roiMap.width]) === -1) {
+                    internal.push(pixels[target + roiMap.width]);
+                }
+            }
+        }
+    }
+
+    return internal;
 }

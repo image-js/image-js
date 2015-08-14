@@ -24,6 +24,7 @@ import {getHistogram, getHistograms} from './compute/histogram';
 import getColorHistogram from './compute/colorHistogram';
 import getPixelsArray from './compute/pixelsArray';
 import getSVD from './compute/svd';
+import countPixels from './compute/countPixels';
 
 export default function extend(Image) {
     Image.extendMethod('invertGetSet', invertGetSet, true); // true means the process is in-place
@@ -47,6 +48,7 @@ export default function extend(Image) {
 
     Image.extendMethod('paintMasks', paintMasks);
 
+    Image.extendMethod('countPixels', countPixels);
     Image.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);
     Image.extendMethod('getHistograms', getHistograms).extendProperty('histograms', getHistograms);
     Image.extendMethod('getColorHistogram', getColorHistogram).extendProperty('colorHistogram', getColorHistogram);
