@@ -1,4 +1,4 @@
-// TODO: REDO based on https://bgrins.github.io/TinyColor/docs/tinycolor.html
+// based on https://bgrins.github.io/TinyColor/docs/tinycolor.html
 
 import Image from '../image';
 
