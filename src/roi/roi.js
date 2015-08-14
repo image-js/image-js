@@ -15,6 +15,37 @@ export default class ROI {
         this.computed = {};
     }
 
+
+    // extract the ROI from the original image
+    scaledExtract(image, {scale=0.5}={}) {
+        let width=Math.round(this.width*scale);
+        let height=Math.round(this.height*scale);
+        let shiftX=Math.round((this.width-width)/2);
+        let shiftY=Math.round((this.height-height)/2);
+        let halfX=this.width/2;
+        let halfY=this.height/2;
+
+        let img=Image.createFrom(image, {
+            width: width,
+            height: height,
+            position: [this.minX+shiftX, this.minY+shiftY]
+        });
+
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
+                let target=x + this.minX + (y + this.minY) * this.map.width;
+                if (this.internalMapIDs.indexOf(this.map.pixels[target]) >= 0) {
+                    let sourceX=Math.round(halfX-(halfX-x)*scale);
+                    let sourceY=Math.round(halfY-(halfY-y)*scale);
+                    let source=sourceX + this.minX + (sourceY + this.minY) * this.map.width;
+                    img.setPixelXY(Math.round(x*scale), Math.round(y*scale), image.getPixel(source));
+                } // by default a pixel is to 0 so no problems, it will be transparent
+            }
+        }
+
+        return img;
+    }
+
     // extract the ROI from the original image
     extract(image, {fill=false}={}) {
         let img=Image.createFrom(image, {
