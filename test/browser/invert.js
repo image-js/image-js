@@ -24,11 +24,11 @@ load('rgb8.png').then(function (a) {
 load('cells.jpg').then(function (img) {
     //setLeft(a);
 
-    console.time("invert");
+    console.time("invertGetSet");
     for (var i=0; i<20; i++) {
-        img.invert();
+        img.invertGetSet();
     }
-    console.timeEnd("invert");
+    console.timeEnd("invertGetSet");
 
 
     console.time("invertApply");
