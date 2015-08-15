@@ -1,6 +1,6 @@
 {
   "name": "image-js",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "Image processing and manipulation in JavaScript",
   "keywords": [
     "image",
@@ -27,25 +27,26 @@
   "license": "MIT",
   "main": "./lib/image.js",
   "scripts": {
-    "build": "npm run clean-dist && browserify src/image.js -o dist/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --transform babelify",
-    "build-test": "browserify test/browser/bootstrap.js -o test/browser/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --debug --transform [ babelify --sourceMap ]",
-    "compile": "npm run clean-lib && babel src --out-dir lib",
+    "build": "npm run clean-dist && browserify src/image.js -o dist/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --transform [ babelify --blacklist=regenerator ]",
+    "build-test": "browserify test/browser/bootstrap.js -o test/browser/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --debug --transform [ babelify --sourceMap --blacklist=regenerator ]",
+    "compile": "npm run clean-lib && babel src --out-dir lib --blacklist=regenerator",
+    "compile-es6": "npm run clean-lib && babel src --out-dir lib --blacklist=es3.memberExpressionLiterals,es3.propertyLiterals,es5.properties.mutators,es6.blockScoping,es6.classes,es6.constants,es6.forOf,es6.properties.shorthand,es6.templateLiterals,regenerator",
     "clean-dist": "rm -rf dist && mkdir dist",
     "clean-lib": "rm -rf lib",
-    "eslint": "eslint src",
+    "eslint": "eslint src test/node",
     "prepublish": "npm run compile",
     "test": "npm run compile && npm run test-mocha && npm run eslint",
     "test-mocha": "mocha --compilers js:babel/register --require should --reporter mocha-better-spec-reporter --recursive test/node",
-    "watch-browser": "watchify test/browser/bootstrap.js -o test/browser/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --debug --transform [ babelify --sourceMap ]",
-    "watch-node": "babel --watch src --out-dir lib"
+    "watch-browser": "watchify test/browser/bootstrap.js -o test/browser/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore fs --debug --transform [ babelify --sourceMap --blacklist=regenerator ]",
+    "watch-node": "babel --watch src --out-dir lib --blacklist=regenerator"
   },
   "devDependencies": {
     "babel": "^5.6.4",
     "babelify": "^6.1.2",
     "benchmark": "^1.0.0",
     "browserify": "^10.2.4",
-    "eslint": "^1.0.0-rc-1",
-    "ij-test": "^1.5.0",
+    "eslint": "^1.0.0",
+    "ij-test": "^1.7.1",
     "mocha": "^2.2.5",
     "mocha-better-spec-reporter": "^2.1.1",
     "rimraf": "^2.4.0",
@@ -53,7 +54,13 @@
     "watchify": "^3.2.3"
   },
   "optionalDependencies": {
-    "canvas": "^1.2.3"
+    "canvas": "^1.2.5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "extend": "^3.0.0",
+    "is-integer": "^1.0.4",
+    "ml-matrix": "^0.1.0",
+    "new-array": "^1.0.0",
+    "string-includes": "^1.0.0"
+  }
 }

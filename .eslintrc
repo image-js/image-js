@@ -33,12 +33,14 @@ rules:
   no-negated-in-lhs: 2
   no-obj-calls: 2
   no-regex-spaces: 2
-  no-reserved-keys: 2
   no-sparse-arrays: 2
   no-unreachable: 2
   use-isnan: 2
   valid-typeof: 2
   no-unexpected-multiline: 2
+
+  # Best practices
+  eqeqeq: 2
 
   # Strict mode
   strict:
@@ -54,3 +56,9 @@ rules:
 
   # ES6
   no-var: 2
+
+  # Stylistic issues
+  quotes:
+    - 2
+    - "single"
+    - "avoid-escape"

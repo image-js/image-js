@@ -1,6 +1,18 @@
-let DOMImage, Canvas, getImageData, getCanvasArray;
+let DOMImage, Canvas, getImageData, getCanvasArray, isDifferentOrigin, env;
 
 if (typeof self !== 'undefined') { // Browser
+
+    env = 'browser';
+    let origin = self.location.origin;
+    isDifferentOrigin = function (url) {
+        try {
+            let parsedURL = new self.URL(url);
+            return parsedURL.origin !== origin;
+        } catch (e) {
+            // may be a relative URL. In this case, it cannot be parsed but is effectively from same origin
+            return false;
+        }
+    };
 
     let ImageData = self.ImageData;
 
@@ -28,6 +40,11 @@ if (typeof self !== 'undefined') { // Browser
 
 } else if (typeof module !== 'undefined' && module.exports) { // Node.js
 
+    env = 'node';
+    isDifferentOrigin = function (url) {
+        return false;
+    };
+
     let canvas = require('canvas');
     let ImageData = require('canvas/lib/bindings').ImageData;
 
@@ -48,4 +65,4 @@ if (typeof self !== 'undefined') { // Browser
     };
 }
 
-export {DOMImage, Canvas, getImageData, getCanvasArray};
+export {DOMImage, Canvas, getImageData, getCanvasArray, isDifferentOrigin, env};

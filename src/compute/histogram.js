@@ -1,10 +1,13 @@
-export function getHistogram({maxSlots=256, channel=undefined, useAlpha=true} = {}) {
-    this.checkProcessable("getHistogram", {
+import newArray from 'new-array';
+import isInteger from 'is-integer';
+
+export function getHistogram({maxSlots=256, channel, useAlpha=true} = {}) {
+    this.checkProcessable('getHistogram', {
         bitDepth: [8, 16]
     });
     if (channel === undefined) {
         if (this.components > 1) {
-            throw new Error('You need to define the channel for an image that contains more than one channel');
+            throw new RangeError('You need to define the channel for an image that contains more than one channel');
         }
         channel = 0;
     }
@@ -12,7 +15,7 @@ export function getHistogram({maxSlots=256, channel=undefined, useAlpha=true} = 
 }
 
 export function getHistograms({maxSlots=256, useAlpha=true} = {}) {
-    this.checkProcessable("getHistograms", {
+    this.checkProcessable('getHistograms', {
         bitDepth: [8, 16]
     });
 
@@ -25,9 +28,9 @@ export function getHistograms({maxSlots=256, useAlpha=true} = {}) {
 
 
 function getChannelHistogram(channel, useAlpha, maxSlots) {
-    let bitSlots = Math.log(maxSlots) / Math.log(2);
-    if (bitSlots != Math.floor(bitSlots)) {
-        throw new Error('maxSlots must be a power of 2, for example: 64, 256, 1024');
+    let bitSlots = Math.log2(maxSlots);
+    if (!isInteger(bitSlots)) {
+        throw new RangeError('maxSlots must be a power of 2, for example: 64, 256, 1024');
     }
     // we will compare the bitSlots to the bitDepth of the image
     // based on this we will shift the values. This allows to generate a histogram
@@ -37,7 +40,7 @@ function getChannelHistogram(channel, useAlpha, maxSlots) {
     if (this.bitDepth > bitSlots) bitShift = this.bitDepth - bitSlots;
 
     let data = this.data;
-    let result = new Float32Array(Math.pow(2, Math.min(this.bitDepth, bitSlots)));
+    let result = newArray(Math.pow(2, Math.min(this.bitDepth, bitSlots)),0);
     if (useAlpha && this.alpha) {
         let alphaChannelDiff = this.channels - channel - 1;
 

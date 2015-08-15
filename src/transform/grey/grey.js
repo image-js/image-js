@@ -16,12 +16,8 @@ export default function grey({algorithm = 'luma709'} = {}) {
     this.checkProcessable('grey', {colorModel: RGB});
 
     let newImage = Image.createFrom(this, {
-        kind: {
-            components: 1,
-            alpha: this.alpha,
-            bitDepth: this.bitDepth,
-            colorModel: null
-        }
+        components: 1,
+        colorModel: null
     });
 
     switch (algorithm.toLowerCase()) {

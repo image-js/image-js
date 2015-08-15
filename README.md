@@ -10,14 +10,14 @@ Image processing and manipulation in JavaScript
 
 `npm install image-js`
 
-## Developement
+## Development
 
 ### Setup
 
-* You will have first to install nodejs : https://nodejs.org/
+* You will have first to install Node.js : https://nodejs.org/
 * For the developement we are using https://www.jetbrains.com/webstorm/
-* In order to be able to connect to github easily it is interesting to add your public SSH key in the preferences of your github account. Detailed procedure is available at https://help.github.com/articles/generating-ssh-keys/.
-* After you may clone and install the project from a console:
+* In order to be able to connect to GitHub easily it is interesting to add your public SSH key in the preferences of your GitHub account. Detailed procedure is available at https://help.github.com/articles/generating-ssh-keys/.
+* After, you may clone and install the project from a console:
 
 ```
 mkdir image-js
@@ -27,13 +27,12 @@ cd core
 npm install
 ```
 
-
 Notes:
 * npm install may require the compilation of some code.
   It is therefore necessary to have the compiler.
-  On OsX you will have to instlal xcode and start it once to accept the licence.
+  On OSX you will have to instlal xcode and start it once to accept the licence.
 * in order to test you need to install the npm 'canvas'.
-  On OsX you should first install brew (http://brew.sh/) and then
+  On OSX you should first install brew (http://brew.sh/) and then
 ````
 brew update
 brew install cairo
@@ -44,9 +43,16 @@ brew install pkg-config
 npm install canvas
 ```
 
+Well sometimes on OSX it really does not work. In those cases this could help after installing [X11](http://xquartz.macosforge.org/landing/).
+````
+wget https://raw.githubusercontent.com/Automattic/node-canvas/master/install -O - | sh
+cp /usr/X11/lib/libfreetype.dylib /usr/local/lib/
+````
+
+
 ### NPM scripts
 
-NPM cripts allow to run easily certain tasks  
+NPM scripts allow to run easily certain tasks.  
 To run any script, use the command `npm run script-name`.
 
 Script name | Description

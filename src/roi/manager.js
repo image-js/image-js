@@ -1,5 +1,6 @@
 import createROIMap from './createROIMap';
 import createROI from './createROI';
+import extendObject from 'extend';
 
 export default class ROIManager {
 
@@ -11,7 +12,7 @@ export default class ROIManager {
     }
 
     putMask(mask, maskLabel = 'default', options = {}) {
-        let opt = Object.assign({}, this._options, options);
+        let opt = extendObject({}, this._options, options);
         this._layers[maskLabel] = new ROILayer(mask, opt);
     }
 

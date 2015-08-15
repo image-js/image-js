@@ -1,18 +1,16 @@
-'use strict';
-
 import {Image, load} from '../common';
 
 describe('Image core - Binary images', function () {
 
     it('check binary image of 16 points', function () {
-        var img=new Image(8,2,{
+        let img=new Image(8,2,{
             kind: 'BINARY'
         });
 
         it('check the size', function() {
             img.width.should.equal(8);
             img.height.should.equal(2);
-            img.size.should.equal(1);
+            img.size.should.equal(16);
             img.data.length.should.equal(2);
         });
 

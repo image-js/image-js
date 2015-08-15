@@ -1,21 +1,23 @@
-export function getColorHistogram({
+import newArray from 'new-array';
+
+export default function getColorHistogram({
     useAlpha = true,
     nbSlots = 512
     } = {}) {
-    this.checkProcessable('getHistogram512', {
+    this.checkProcessable('getColorHistogram', {
         bitDepth: [8, 16],
         components: [3]
     });
 
     let nbSlotsCheck = Math.log(nbSlots) / Math.log(8);
-    if (nbSlotsCheck != Math.floor(nbSlotsCheck)) {
-        throw new Error('nbSlots must be a power of 8. Usually 8, 64, 512 or 4096');
+    if (nbSlotsCheck !== Math.floor(nbSlotsCheck)) {
+        throw new RangeError('nbSlots must be a power of 8. Usually 8, 64, 512 or 4096');
     }
 
     let bitShift = this.bitDepth - nbSlotsCheck;
 
     let data = this.data;
-    let result = new Float32Array(Math.pow(8, nbSlotsCheck));
+    let result = newArray(Math.pow(8, nbSlotsCheck),0);
     let factor2 = Math.pow(2, nbSlotsCheck * 2);
     let factor1 = Math.pow(2, nbSlotsCheck);
 
@@ -32,4 +34,6 @@ export function getColorHistogram({
             result[slot]++;
         }
     }
+
+    return result;
 }

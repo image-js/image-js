@@ -1,5 +1,3 @@
-'use strict';
-
 import {sync as rmSync} from 'rimraf';
 import {mkdirSync} from 'fs';
 import {getImage} from 'ij-test';

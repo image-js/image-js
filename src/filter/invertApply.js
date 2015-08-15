@@ -3,12 +3,16 @@
 // may be easier to implement some algorithm
 // but it will likely be much slower
 
-export default function invert() {
-    this.checkProcessable('invert', {
-        bitDepth: [1, 8, 16]
-    });
+// this method is 50 times SLOWER than invert !!!!!!
+
+export default function invertApply() {
+
+
 
     if (this.bitDepth === 1) {
+        this.checkProcessable('invertApply', {
+            dimension: 2
+        });
         // we simply invert all the integers value
         // there could be a small mistake if the number of points
         // is not a multiple of 8 but it is not important
@@ -17,13 +21,13 @@ export default function invert() {
             data[i] = ~data[i];
         }
     } else {
-        for (let x = 0; x < this.width; x++) {
-            for (let y = 0; y < this.height; y++) {
-                for (let k = 0; k < this.components; k++) {
-                    let value = this.getValueXY(x, y, k);
-                    this.setValueXY(x, y, k, this.maxValue - value);
-                }
+        this.checkProcessable('invertApply', {
+            bitDepth: [8, 16]
+        });
+        this.apply(function (index) {
+            for (let k = 0; k < this.components; k++) {
+                this.data[index + k] = this.maxValue - this.data[index + k];
             }
-        }
+        });
     }
 }

@@ -1,12 +1,12 @@
-require('babel/polyfill');
-
 import {getKind, getPixelArray, getPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
-import {DOMImage, getImageData, Canvas, getCanvasArray} from './canvas';
+import {DOMImage, getImageData, Canvas, getCanvasArray, isDifferentOrigin} from './environment';
 import extend from './extend';
 import {createWriteStream} from 'fs';
 import * as ColorModels from './model/models';
 import ROIManager from './roi/manager';
+import {getType, canWrite} from './mediaTypes';
+import extendObject from 'extend';
 
 let computedPropertyDescriptor = {
     configurable: true,
@@ -14,7 +14,8 @@ let computedPropertyDescriptor = {
     get: undefined
 };
 
-export default class Image {
+export default
+class Image {
     constructor(width, height, data, options) {
         if (width === undefined) width = 1;
         if (height === undefined) height = 1;
@@ -34,26 +35,33 @@ export default class Image {
 
         this.position = options.position || [0, 0];
 
-        let kind = options.kind || RGBA;
-        if (typeof kind === 'string') kind = getKind(kind);
-        if (!kind) throw new RangeError('invalid image kind: ' + kind);
+        let theKind;
+        if (typeof options.kind === 'string') {
+            theKind = getKind(options.kind);
+            if (!theKind) throw new RangeError('invalid image kind: ' + options.kind);
+        } else {
+            theKind = getKind(RGBA);
+        }
 
-        this.components = kind.components;
-        this.alpha = kind.alpha;
-        this.bitDepth = kind.bitDepth;
-        this.colorModel = kind.colorModel;
+        let kindDefinition = extendObject({}, theKind, options);
+
+        this.components = kindDefinition.components;
+        this.alpha = kindDefinition.alpha;
+        this.bitDepth = kindDefinition.bitDepth;
+        this.colorModel = kindDefinition.colorModel;
 
         this.channels = this.components + this.alpha;
         this.maxValue = (1 << this.bitDepth) - 1;
         this.size = this.width * this.height;
+        this.dimension = 2;
 
         this.computed = {};
 
         if (!data)
-            data = getPixelArray(kind, this.size);
+            data = getPixelArray(kindDefinition, this.size);
         else {
-            let theoreticalSize = getPixelArraySize(kind, this.size);
-            if (theoreticalSize != data.length) {
+            let theoreticalSize = getPixelArraySize(kindDefinition, this.size);
+            if (theoreticalSize !== data.length) {
                 throw new RangeError(`incorrect data size. Should be ${theoreticalSize} and found ${data.length}`);
             }
         }
@@ -65,8 +73,10 @@ export default class Image {
         return new Promise(function (resolve, reject) {
             let image = new DOMImage();
 
-            // see https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
-            image.crossOrigin = 'Anonymous';
+            if (isDifferentOrigin(url)) {
+                // see https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
+                image.crossOrigin = 'Anonymous';
+            }
 
             image.onload = function () {
                 let w = image.width, h = image.height;
@@ -113,13 +123,30 @@ export default class Image {
         return Image;
     }
 
-    static createFrom(other, {
-        width = other.width,
-        height = other.height,
-        kind = other.kind
-        } = {}) {
-        // TODO if kind is incomplete, take values from this
-        return new Image(width, height, {kind});
+    static createFrom(other, options) {
+        let newOptions = {
+            width: other.width,
+            height: other.height,
+            position: other.position,
+            components: other.components,
+            alpha: other.alpha,
+            colorModel: other.colorModel,
+            bitDepth: other.bitDepth
+        };
+        extendObject(newOptions, options);
+        return new Image(newOptions.width, newOptions.height, newOptions);
+    }
+
+    static isTypeSupported(type, operation = 'write') {
+        if (typeof type !== 'string') {
+            throw new TypeError('type argument must be a string');
+        }
+        type = getType(type);
+        if (operation === 'write') {
+            return canWrite(type);
+        } else {
+            throw new TypeError('unknown operation: ' + operation);
+        }
     }
 
     setValueXY(x, y, channel, value) {
@@ -130,12 +157,36 @@ export default class Image {
         return this.data[(y * this.width + x) * this.channels + channel];
     }
 
-    setValue(target, channel, value) {
-        this.data[target * this.channels + channel] = value;
+    setValue(pixel, channel, value) {
+        this.data[pixel * this.channels + channel] = value;
     }
 
-    getValue(target, channel) {
-        return this.data[target * this.channels + channel];
+    getValue(pixel, channel) {
+        return this.data[pixel * this.channels + channel];
+    }
+
+    setPixelXY(x, y, value) {
+        this.setPixel(y * this.width + x, value);
+    }
+
+    getPixelXY(x, y) {
+        return this.getPixel(y * this.width + x);
+    }
+
+    setPixel(pixel, value) {
+        let target = pixel * this.channels;
+        for (let i = 0; i < value.length; i++) {
+            this.data[target + i] = value[i];
+        }
+    }
+
+    getPixel(pixel) {
+        let value = new Array(this.channels);
+        let target = pixel * this.channels;
+        for (let i = 0; i < this.channels; i++) {
+            value[i] = this.data[target + i];
+        }
+        return value;
     }
 
     setMatrix(matrix, channel) {
@@ -172,8 +223,8 @@ export default class Image {
         return matrix;
     }
 
-    toDataURL() {
-        return this.getCanvas().toDataURL();
+    toDataURL(type = 'image/png') {
+        return this.getCanvas().toDataURL(getType(type));
     }
 
     getCanvas() {
@@ -185,13 +236,13 @@ export default class Image {
     }
 
     getRGBAData() {
-        this.checkProcessable("getRGBAData", {
+        this.checkProcessable('getRGBAData', {
             components: [1, 3],
             bitDepth: [1, 8, 16]
         });
         let size = this.size;
         let newData = getCanvasArray(this.width, this.height);
-        if (this.bitDepth == 1) {
+        if (this.bitDepth === 1) {
             for (let i = 0; i < size; i++) {
                 let value = this.getBit(i);
                 newData[i * 4] = value * 255;
@@ -206,7 +257,7 @@ export default class Image {
                     newData[i * 4 + 2] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
                 }
             } else if (this.components === 3) {
-                this.checkProcessable("getRGBAData", {colorModel: [ColorModels.RGB]});
+                this.checkProcessable('getRGBAData', {colorModel: [ColorModels.RGB]});
                 if (this.colorModel === ColorModels.RGB) {
                     for (let i = 0; i < size; i++) {
                         newData[i * 4] = this.data[i * 4] >> (this.bitDepth - 8);
@@ -217,7 +268,7 @@ export default class Image {
             }
         }
         if (this.alpha) {
-            this.checkProcessable("getRGBAData", {bitDepth: [8, 16]});
+            this.checkProcessable('getRGBAData', {bitDepth: [8, 16]});
             for (let i = 0; i < size; i++) {
                 newData[i * 4 + 3] = this.data[i * this.channels + this.components] >> (this.bitDepth - 8);
             }
@@ -258,27 +309,27 @@ export default class Image {
         return (this.data[slot] & 1 << shift) ? 1 : 0;
     }
 
-    setBit(target) {
-        let shift = 7 - (target & 0b00000111);
-        let slot = target >> 3;
+    setBit(pixel) {
+        let shift = 7 - (pixel & 0b00000111);
+        let slot = pixel >> 3;
         this.data[slot] |= 1 << shift;
     }
 
-    clearBit(target) {
-        let shift = 7 - (target & 0b00000111);
-        let slot = target >> 3;
+    clearBit(pixel) {
+        let shift = 7 - (pixel & 0b00000111);
+        let slot = pixel >> 3;
         this.data[slot] &= ~(1 << shift);
     }
 
-    toggleBit(target) {
-        let shift = 7 - (target & 0b00000111);
-        let slot = target >> 3;
+    toggleBit(pixel) {
+        let shift = 7 - (pixel & 0b00000111);
+        let slot = pixel >> 3;
         this.data[slot] ^= 1 << shift;
     }
 
-    getBit(target) {
-        let shift = 7 - (target & 0b00000111);
-        let slot = target >> 3;
+    getBit(pixel) {
+        let shift = 7 - (pixel & 0b00000111);
+        let slot = pixel >> 3;
         return (this.data[slot] & 1 << shift) ? 1 : 0;
     }
 
@@ -286,12 +337,14 @@ export default class Image {
         return new ROIManager(this, options);
     }
 
-    clone() {
+    clone({copyData=true}={}) {
         let nemImage = Image.createFrom(this);
-        let data = this.data;
-        let newData = nemImage.data;
-        for (let i = 0; i < newData.length; i++) {
-            newData[i] = data[i];
+        if (copyData) {
+            let data = this.data;
+            let newData = nemImage.data;
+            for (let i = 0; i < newData.length; i++) {
+                newData[i] = data[i];
+            }
         }
         return nemImage;
     }
@@ -320,33 +373,68 @@ export default class Image {
 
     // this method check if a process can be applied on the current image
     checkProcessable(processName, {
-        bitDepth, alpha, colorModel, components
+        bitDepth, alpha, colorModel, components, dimension
         } = {}) {
+        if (typeof processName !== 'string') {
+            throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
+        }
         if (bitDepth) {
             if (!Array.isArray(bitDepth)) bitDepth = [bitDepth];
-            if (bitDepth.indexOf(this.bitDepth) == -1) {
+            if (bitDepth.indexOf(this.bitDepth) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if bit depth is in: ' + bitDepth);
+            }
+        }
+        if (dimension) {
+            if (!Array.isArray(dimension)) dimension = [dimension];
+            if (dimension.indexOf(this.dimension) === -1) {
+                throw new TypeError('The process: ' + processName + ' can only be applied if the image has as dimension: ' + dimension);
             }
         }
         if (alpha) {
             if (!Array.isArray(alpha)) alpha = [alpha];
-            if (alpha.indexOf(this.alpha) == -1) {
+            if (alpha.indexOf(this.alpha) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if alpha is in: ' + alpha);
             }
         }
         if (colorModel) {
             if (!Array.isArray(colorModel)) colorModel = [colorModel];
-            if (colorModel.indexOf(this.colorModel) == -1) {
+            if (colorModel.indexOf(this.colorModel) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if color model is in: ' + colorModel);
             }
         }
         if (components) {
             if (!Array.isArray(components)) components = [components];
-            if (components.indexOf(this.components) == -1) {
+            if (components.indexOf(this.components) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if the number of channels is in: ' + components);
             }
         }
     }
+
+    apply(filter) {
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                let index = (y * this.width + x) * this.channels;
+                filter.call(this, index);
+
+            }
+        }
+    }
+
+    // This approach is SOOOO slow .... for now just forget about it !
+    /**pixels() {
+        let toYield = {x: 0, y: 0, index: 0, pixel: new Array(this.channels)};
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                toYield.x = x;
+                toYield.y = y;
+                toYield.index = y * this.width + x;
+                for (let c = 0; c < this.channels; c++) {
+                    toYield.pixel[c] = this.data[toYield.index * this.channels + c];
+                }
+                yield toYield;
+            }
+        }
+    }*/
 }
 
 extend(Image);

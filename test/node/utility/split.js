@@ -1,5 +1,3 @@
-'use strict';
-
 import {Image} from '../common';
 
 describe('split an image of 3 components and keep alpha', function () {
@@ -7,7 +5,7 @@ describe('split an image of 3 components and keep alpha', function () {
     let images=image.split();
 
     it('should yield 3 grey images with alpha', function () {
-        images.should.instanceOf(Array).and.have.lengthOf(3);;
+        images.should.instanceOf(Array).and.have.lengthOf(3);
         images[0].components.should.equal(1);
         images[0].channels.should.equal(2);
     });
@@ -33,7 +31,7 @@ describe('split an image of 3 components and have alpha separately', function ()
     let images=image.split({preserveAlpha: false});
 
     it('should yield 4 grey images with alpha', function () {
-        images.should.instanceOf(Array).and.have.lengthOf(4);;
+        images.should.instanceOf(Array).and.have.lengthOf(4);
         images[0].components.should.equal(1);
         images[0].channels.should.equal(1);
     });
