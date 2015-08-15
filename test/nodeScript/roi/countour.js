@@ -13,3 +13,6 @@ Image.load('./node_modules/ij-test/img/BW15x15.png').then(function (img) {
     console.log()
 
 });
+
+
+
