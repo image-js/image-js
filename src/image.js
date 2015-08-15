@@ -16,9 +16,16 @@ let computedPropertyDescriptor = {
 
 export default
 class Image {
-    constructor(width, height, data, options) {
-        if (width === undefined) width = 1;
-        if (height === undefined) height = 1;
+    constructor(width, height, data, options) { // or (sizes, data, options)
+        if (Array.isArray(width)) { // we need to give an array with ALL the dimensions
+            options=data;
+            data=height;
+            this.sizes=width;
+        } else {
+            if (width === undefined) width = 1;
+            if (height === undefined) height = 1;
+            this.sizes=[width, height];
+        }
         if (data && !data.length) {
             options = data;
             data = null;
@@ -30,8 +37,6 @@ class Image {
         if (!(height > 0))
             throw new RangeError('height must be greater than 0');
 
-        this.width = width;
-        this.height = height;
 
         this.position = options.position || [0, 0];
 
@@ -50,10 +55,6 @@ class Image {
         this.bitDepth = kindDefinition.bitDepth;
         this.colorModel = kindDefinition.colorModel;
 
-        this.channels = this.components + this.alpha;
-        this.maxValue = (1 << this.bitDepth) - 1;
-        this.size = this.width * this.height;
-        this.dimension = 2;
 
         this.computed = {};
 
@@ -67,6 +68,36 @@ class Image {
         }
 
         this.data = data;
+    }
+
+    get dimension() {
+        return this.sizes.length;
+    }
+
+    get width() {
+        return this.sizes[0];
+    }
+
+    get height() {
+        return this.sizes[1];
+    }
+
+    get size() { // total number of pixels
+        let size=1;
+        for (let i=0; i<this.sizes.length; i++) {
+            if (i!==2) {
+                size*=this.sizes[i];
+            }
+        }
+        return size;
+    }
+
+    get channels() {
+        return this.components + this.alpha;
+    }
+
+    get maxValue() {
+        return (1 << this.bitDepth) - 1;
     }
 
     static load(url) {
