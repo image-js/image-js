@@ -17,6 +17,7 @@ export default function hsv() {
         colorModel:1
     });
 
+    let threshold = Math.floor(this.maxValue/2);
     let ptr = 0;
     let data = this.data;
     for (let i = 0; i < data.length; i += this.channels) {
@@ -31,7 +32,7 @@ export default function hsv() {
         let luminance = (max + min) / 2;
         if (max !== min) {
             let delta = max - min;
-            saturation = luminance > 127 ? delta / (2 - max - min) : delta / (max + min);
+            saturation = luminance > threshold ? delta / (2 - max - min) : delta / (max + min);
             switch(max) {
                 case red:
                     hue = (green - blue) / delta + (green < blue ? 6 : 0);
@@ -47,8 +48,8 @@ export default function hsv() {
         }
 
 
-        newImage.data[ptr++] = hue*255;
-        newImage.data[ptr++] = saturation*255;
+        newImage.data[ptr++] = hue*this.maxValue;
+        newImage.data[ptr++] = saturation*this.maxValue;
         newImage.data[ptr++] = luminance;
         if (this.alpha) {
             newImage.data[ptr++] = data[i+3];
