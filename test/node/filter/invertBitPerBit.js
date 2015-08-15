@@ -1,3 +1,5 @@
+import {Image} from '../common';
+
 describe('invert binary image bit by bit', function () {
     it('should invert a binary image', function () {
         let image = new Image(8,1,{

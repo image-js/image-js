@@ -32,9 +32,9 @@ class Image {
         }
         if (options === undefined) options = {};
 
-        if (!(width > 0))
+        if (!(this.sizes[0] > 0))
             throw new RangeError('width must be greater than 0');
-        if (!(height > 0))
+        if (!(this.sizes[1] > 0))
             throw new RangeError('height must be greater than 0');
 
 
@@ -55,8 +55,9 @@ class Image {
         this.bitDepth = kindDefinition.bitDepth;
         this.colorModel = kindDefinition.colorModel;
 
-
         this.computed = {};
+
+        this.initialize();
 
         if (!data)
             data = getPixelArray(kindDefinition, this.size);
@@ -70,35 +71,31 @@ class Image {
         this.data = data;
     }
 
-    get dimension() {
-        return this.sizes.length;
-    }
+    initialize() {
+        this.dimension=this.sizes.length;
+        this.width=this.sizes[0];
+        this.height=this.sizes[1];
 
-    get width() {
-        return this.sizes[0];
-    }
-
-    get height() {
-        return this.sizes[1];
-    }
-
-    get size() { // total number of pixels
         let size=1;
         for (let i=0; i<this.sizes.length; i++) {
             if (i!==2) {
                 size*=this.sizes[i];
             }
         }
-        return size;
+        this.size=size;
+
+        this.channels=this.components + this.alpha;
+        this.maxValue=(1 << this.bitDepth) - 1;
+
+        let multipliers=[this.dimension];
+        multipliers[0]=this.channels;
+        for (let i=1; i<this.dimension; i++) {
+            multipliers[i]=multipliers[i-1]*this.sizes[i-1];
+        }
+        this.multipliers=multipliers;
     }
 
-    get channels() {
-        return this.components + this.alpha;
-    }
 
-    get maxValue() {
-        return (1 << this.bitDepth) - 1;
-    }
 
     static load(url) {
         return new Promise(function (resolve, reject) {
@@ -178,6 +175,14 @@ class Image {
         } else {
             throw new TypeError('unknown operation: ' + operation);
         }
+    }
+
+    getPixelIndex(indices) {
+        let shift=0;
+        for (let i=0; i<indices.length; i++) {
+            shift+=this.multipliers[i]*indices[i];
+        }
+        return shift;
     }
 
     setValueXY(x, y, channel, value) {
@@ -452,20 +457,25 @@ class Image {
     }
 
     applyAll(filter) {
-        let maxValue=this.sizes.slice();
+        let maxValue=new Array(this.sizes.length);
+        for (let i=0; i<this.sizes.length; i++) {
+            maxValue[i]=this.sizes[i]-1;
+        }
         let currents=new Uint16Array(this.dimension);
         let position=0;
         let running=true;
         while (running) {
-            let index = (currents[1] * this.width + currents[0]) * this.channels;
+            // TODO this may be quite the limiting step and inline does not help
+            // we could optimize it by keeping track of previously partical
+            // calculated indices
+            let index=this.getPixelIndex(currents);
             filter.call(this, index);
-            process(currents);
             if (currents[position]===maxValue[position]) {
-                while (position<length && currents[position]===maxValue[position]) {
+                while (position<currents.length && currents[position]===maxValue[position]) {
                     currents[position]=0;
                     position++;
                 }
-                if (position===length) {
+                if (position===currents.length) {
                     running=0;
                 }
                 currents[position]++;

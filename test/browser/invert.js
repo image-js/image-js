@@ -37,6 +37,12 @@ load('cells.jpg').then(function (img) {
     }
     console.timeEnd("invertApply");
 
+    console.time("invertApplyAll");
+    for (var i=0; i<20; i++) {
+        img.invertApplyAll();
+    }
+    console.timeEnd("invertApplyAll");
+
     console.time("invertOneLoop");
     for (var i=0; i<20; i++) {
         img.invertOneLoop();

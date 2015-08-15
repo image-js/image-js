@@ -29,6 +29,9 @@ Image.load(Test.getImage(filename)).then(function (img) {
         .add('invertApply', function () {
             img.invertApply();
         })
+        .add('invertApplyAll', function () {
+            img.invertApplyAll();
+        })
         .add('invertPixel', function () {
             img.invertPixel();
         })
