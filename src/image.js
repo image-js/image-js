@@ -451,6 +451,33 @@ class Image {
         }
     }
 
+    applyAll(filter) {
+        let maxValue=this.sizes.slice();
+        let currents=new Uint16Array(this.dimension);
+        let position=0;
+        let running=true;
+        while (running) {
+            let index = (currents[1] * this.width + currents[0]) * this.channels;
+            filter.call(this, index);
+            process(currents);
+            if (currents[position]===maxValue[position]) {
+                while (position<length && currents[position]===maxValue[position]) {
+                    currents[position]=0;
+                    position++;
+                }
+                if (position===length) {
+                    running=0;
+                }
+                currents[position]++;
+                position=0;
+            } else {
+                currents[position]++;
+            }
+        }
+    }
+
+
+
     // This approach is SOOOO slow .... for now just forget about it !
     /**pixels() {
         let toYield = {x: 0, y: 0, index: 0, pixel: new Array(this.channels)};

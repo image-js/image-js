@@ -12,11 +12,11 @@ export default function invertPixel() {
 
     for (let x = 0; x < this.width; x++) {
         for (let y = 0; y < this.height; y++) {
-            let value = this.getPixel(x, y);
+            let value = this.getPixelXY(x, y);
             for (let k = 0; k < this.components; k++) {
                 value[k]= this.maxValue - value[k];
             }
-            this.setPixel(x, y, value);
+            this.setPixelXY(x, y, value);
         }
     }
 
