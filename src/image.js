@@ -135,12 +135,12 @@ class Image {
         return Image;
     }
 
-    static extendProperty(name, method, ...args) {
+    static extendProperty(name, method, {partialArgs = []} = {}) {
         computedPropertyDescriptor.get = function () {
             if (this.computed.hasOwnProperty(name)) {
                 return this.computed[name];
             } else {
-                let result = method.apply(this, args);
+                let result = method.apply(this, partialArgs);
                 this.computed[name] = result;
                 return result;
             }

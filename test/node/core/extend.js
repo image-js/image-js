@@ -37,8 +37,8 @@ describe('Image extensions', function () {
         count++;
         return this.width;
     });
-    Image.extendProperty('testProp2', sub, 5);
-    Image.extendProperty('testProp3', sub, 18, 3);
+    Image.extendProperty('testProp2', sub, {partialArgs: [5]});
+    Image.extendProperty('testProp3', sub, {partialArgs: [18, 3]});
     describe('extendProperty', function () {
         let img;
         beforeEach(function () {
