@@ -1,5 +1,5 @@
 import Image from '../../image';
-import {RGB} from '../../model/models';
+import {RGB} from '../../model/model';
 
 import luma709 from './luma709';
 import luma601 from './luma601';

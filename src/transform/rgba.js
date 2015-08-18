@@ -1,4 +1,5 @@
 import Image from '../image';
+import {RGB} from '../model/model';
 
 export default function rgba() {
 
@@ -6,7 +7,7 @@ export default function rgba() {
     // should be renamed ro rgb ?
     // should be another method to force the addition of alpha channel ?
 
-    if (this.colorModel === 0 && this.alpha) {
+    if (this.colorModel === RGB && this.alpha) {
         return this.clone();
     }
 

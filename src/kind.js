@@ -1,5 +1,5 @@
 import * as KindNames from './kindNames';
-import {RGB} from './model/models';
+import {RGB} from './model/model';
 
 const kinds = {};
 

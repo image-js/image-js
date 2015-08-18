@@ -30,20 +30,21 @@ import getSVD from './compute/svd';
 import countPixels from './compute/countPixels';
 
 export default function extend(Image) {
-    Image.extendMethod('invertGetSet', invertGetSet, true); // true means the process is in-place
-    Image.extendMethod('invertIterator', invertIterator, true);
-    Image.extendMethod('invertMatrix', invertMatrix, true);
-    Image.extendMethod('invertPixel', invertPixel, true);
-    Image.extendMethod('invertOneLoop', invertOneLoop, true);
-    Image.extendMethod('invertApply', invertApply, true);
-    Image.extendMethod('invertApplyAll', invertApplyAll, true);
-    Image.extendMethod('invert', invertApply, true);
-    Image.extendMethod('invertBinaryLoop', invertBinaryLoop, true);
+    let inPlace = {inPlace: true};
+    Image.extendMethod('invertGetSet', invertGetSet, inPlace);
+    Image.extendMethod('invertIterator', invertIterator, inPlace);
+    Image.extendMethod('invertMatrix', invertMatrix, inPlace);
+    Image.extendMethod('invertPixel', invertPixel, inPlace);
+    Image.extendMethod('invertOneLoop', invertOneLoop, inPlace);
+    Image.extendMethod('invertApply', invertApply, inPlace);
+    Image.extendMethod('invertApplyAll', invertApplyAll, inPlace);
+    Image.extendMethod('invert', invertApply, inPlace);
+    Image.extendMethod('invertBinaryLoop', invertBinaryLoop, inPlace);
     Image.extendMethod('meanFilter', meanFilter);
     Image.extendMethod('medianFilter', medianFilter);
     Image.extendMethod('gaussianFilter', gaussianFilter);
 
-    Image.extendMethod('crop', crop); // last parameter is "false" because it creates a new image
+    Image.extendMethod('crop', crop);
     Image.extendMethod('hsv', hsv);
     Image.extendMethod('hsl', hsl);
     Image.extendMethod('grey', grey).extendMethod('gray', grey);

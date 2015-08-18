@@ -1,7 +1,7 @@
 // http://www.easyrgb.com/index.php?X=MATH&H=18#text18
 // check rgbToHsl : https://bgrins.github.io/TinyColor/docs/tinycolor.html
 
-
+import {RGB, HSL} from '../model/model';
 import Image from '../image';
 
 export default function hsv() {
@@ -9,12 +9,12 @@ export default function hsv() {
         bitDepth: [8, 16],
         dimension: 2,
         alpha: [0,1],
-        colorModel: [0]
+        colorModel: [RGB]
 
     });
 
     let newImage = Image.createFrom(this, {
-        colorModel:1
+        colorModel:HSL
     });
 
     let threshold = Math.floor(this.maxValue/2);

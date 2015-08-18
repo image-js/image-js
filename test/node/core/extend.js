@@ -1,28 +1,34 @@
 import {Image, getSquare} from '../common';
 
-function add(a = 1, b = 2) {
-    return a + b;
+function sub(a = 1, b = 2) {
+    return a - b;
 }
 
 describe('Image extensions', function () {
-    Image.extendMethod('testMethod1', add);
+    Image.extendMethod('testMethod1', sub);
     Image.extendMethod('testMethod2', function () {
         return this.width;
-    }, true, false);
+    }, {inPlace: true, returnThis: false});
     Image.extendMethod('testMethod3', function () {
         this.clone();
-    }, true);
+    }, {inPlace: true});
+    Image.extendMethod('testMethod4', sub, {partialArgs: [6]});
     describe('extendMethod', function () {
         let img = getSquare();
         it('should add methods to the prototype', function () {
             img.testMethod1.should.be.a.Function();
             img.testMethod2.should.be.a.Function();
+            Image.prototype.testMethod1.should.equal(img.testMethod1);
         });
         it('inplace and returnThis options', function () {
-            img.testMethod1().should.equal(3);
-            img.testMethod1(5).should.equal(7);
+            img.testMethod1().should.equal(-1);
+            img.testMethod1(5).should.equal(3);
             img.testMethod2().should.equal(3);
             img.testMethod3().should.equal(img);
+        });
+        it('partial arguments', function () {
+            img.testMethod4().should.equal(4);
+            img.testMethod4(3).should.equal(3);
         });
     });
 
@@ -31,8 +37,8 @@ describe('Image extensions', function () {
         count++;
         return this.width;
     });
-    Image.extendProperty('testProp2', add, 5);
-    Image.extendProperty('testProp3', add, 3, 12);
+    Image.extendProperty('testProp2', sub, 5);
+    Image.extendProperty('testProp3', sub, 18, 3);
     describe('extendProperty', function () {
         let img;
         beforeEach(function () {
@@ -57,7 +63,7 @@ describe('Image extensions', function () {
             count.should.equal(2);
         });
         it('should pass parameters', function () {
-            img.testProp2.should.equal(7);
+            img.testProp2.should.equal(3);
             img.testProp3.should.equal(15);
         });
     });

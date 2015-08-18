@@ -3,7 +3,7 @@ import {RGBA} from './kindNames';
 import {DOMImage, getImageData, Canvas, getCanvasArray, isDifferentOrigin} from './environment';
 import extend from './extend';
 import {createWriteStream} from 'fs';
-import * as ColorModels from './model/models';
+import {RGB} from './model/model';
 import ROIManager from './roi/manager';
 import {getType, canWrite} from './mediaTypes';
 import extendObject from 'extend';
@@ -117,19 +117,19 @@ class Image {
         });
     }
 
-    static extendMethod(name, method, inplace = false, returnThis = true) {
-        if (inplace) {
+    static extendMethod(name, method, {inPlace = false, returnThis = true, partialArgs = []} = {}) {
+        if (inPlace) {
             Image.prototype[name] = function (...args) {
                 // reset computed properties
                 this.computed = {};
-                let result = method.apply(this, args);
+                let result = method.apply(this, [...partialArgs, ...args]);
                 if (returnThis)
                     return this;
                 return result;
             };
         } else {
             Image.prototype[name] = function (...args) {
-                return method.apply(this, args);
+                return method.apply(this, [...partialArgs, ...args]);
             };
         }
         return Image;
@@ -291,8 +291,8 @@ class Image {
                     newData[i * 4 + 2] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
                 }
             } else if (this.components === 3) {
-                this.checkProcessable('getRGBAData', {colorModel: [ColorModels.RGB]});
-                if (this.colorModel === ColorModels.RGB) {
+                this.checkProcessable('getRGBAData', {colorModel: [RGB]});
+                if (this.colorModel === RGB) {
                     for (let i = 0; i < size; i++) {
                         newData[i * 4] = this.data[i * 4] >> (this.bitDepth - 8);
                         newData[i * 4 + 1] = this.data[i * 4 + 1] >> (this.bitDepth - 8);

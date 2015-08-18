@@ -1,4 +1,4 @@
-import {RGB} from '../model/models';
+import {RGB} from '../model/model';
 
 export default function paintMasks(masks, {
     color = [this.maxValue, 0, 0]
