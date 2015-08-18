@@ -463,8 +463,7 @@ class Image {
         }
         let currents=new Uint16Array(this.dimension);
         let position=0;
-        let running=true;
-        while (running) {
+        while (true) {
             // TODO this may be quite the limiting step and inline does not help
             // we could optimize it by keeping track of previously partical
             // calculated indices
@@ -476,7 +475,7 @@ class Image {
                     position++;
                 }
                 if (position===currents.length) {
-                    running=0;
+                    break;
                 }
                 currents[position]++;
                 position=0;
