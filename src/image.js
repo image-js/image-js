@@ -78,11 +78,9 @@ class Image {
 
         let size=1;
         for (let i=0; i<this.sizes.length; i++) {
-            if (i!==2) {
-                size*=this.sizes[i];
-            }
+            size*=this.sizes[i];
         }
-        this.size=size;
+        this.size=size; // the number of pixels
 
         this.channels=this.components + this.alpha;
         this.maxValue=(1 << this.bitDepth) - 1;
