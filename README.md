@@ -14,7 +14,7 @@ Image processing and manipulation in JavaScript
 
 ### Setup
 
-* You will have first to install Node.js : https://nodejs.org/
+* You will have first to install Node.js. We recommend to use [nvm](https://github.com/creationix/nvm) to install and keep node up to date
 * For the developement we are using https://www.jetbrains.com/webstorm/
 * In order to be able to connect to GitHub easily it is interesting to add your public SSH key in the preferences of your GitHub account. Detailed procedure is available at https://help.github.com/articles/generating-ssh-keys/.
 * After, you may clone and install the project from a console:
