@@ -6,6 +6,7 @@ describe('Create a mask from a greyA image', function () {
         kind: 'GREYA'
     });
 
+
     it('should create a mask for a threshold of 0.5 using alpha channel', function () {
         let mask=image.mask(0.5);
 
@@ -18,7 +19,22 @@ describe('Create a mask from a greyA image', function () {
         data.should.instanceOf(Uint8Array);
         data.length.should.equal(1);
 
-        data[0].should.equal(128);
+        data[0].should.equal(64);
+    });
+
+    it('should create a mask for a threshold of 0.5 using alpha channel', function () {
+        let mask=image.mask(0.5, {invert: true});
+
+        mask.channels.should.equal(1);
+        mask.bitDepth.should.equal(1);
+        mask.width.should.equal(4);
+        mask.height.should.equal(1);
+
+        let data=mask.data;
+        data.should.instanceOf(Uint8Array);
+        data.length.should.equal(1);
+
+        data[0].should.equal(176);
     });
 
     it('should create a mask for a threshold of 0.5 not using alpha channel', function () {
