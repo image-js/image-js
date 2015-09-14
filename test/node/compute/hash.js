@@ -1,4 +1,4 @@
-import {Image} from '../common';
+import Image from '../common';
 
 describe('calculate the hash', function () {
     it('check getHash method', function () {
