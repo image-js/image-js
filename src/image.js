@@ -8,6 +8,8 @@ import ROIManager from './roi/manager';
 import {getType, canWrite} from './mediaTypes';
 import extendObject from 'extend';
 
+
+
 let computedPropertyDescriptor = {
     configurable: true,
     enumerable: false,
@@ -16,7 +18,7 @@ let computedPropertyDescriptor = {
 
 export default
 class Image {
-    constructor(width, height, data, options) { // or (sizes, data, options)
+        constructor(width, height, data, options) { // or (sizes, data, options)
         if (Array.isArray(width)) { // we need to give an array with ALL the dimensions
             options=data;
             data=height;
@@ -32,12 +34,15 @@ class Image {
         }
         if (options === undefined) options = {};
 
-        if (!(this.sizes[0] > 0))
+        if (!(this.sizes[0] > 0)) {
             throw new RangeError('width must be greater than 0');
-        if (!(this.sizes[1] > 0))
+        }
+        if (!(this.sizes[1] > 0)) {
             throw new RangeError('height must be greater than 0');
+        }
 
-
+        // We will set the parent image for relative position
+        this.parent = options.parent;
         this.position = options.position || [0, 0];
 
         let theKind;
@@ -149,6 +154,7 @@ class Image {
         return Image;
     }
 
+
     static createFrom(other, options) {
         let newOptions = {
             width: other.width,
@@ -157,7 +163,8 @@ class Image {
             components: other.components,
             alpha: other.alpha,
             colorModel: other.colorModel,
-            bitDepth: other.bitDepth
+            bitDepth: other.bitDepth,
+            parent: other
         };
         extendObject(newOptions, options);
         return new Image(newOptions.width, newOptions.height, newOptions);

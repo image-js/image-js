@@ -61,6 +61,7 @@
     "is-integer": "^1.0.4",
     "ml-matrix": "^0.1.0",
     "new-array": "^1.0.0",
+    "sha.js": "^2.4.2",
     "string-includes": "^1.0.0"
   }
 }
