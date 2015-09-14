@@ -11,7 +11,8 @@ import percentile from './percentile';
 
 
 export default function mask(algorithm = 0.5, {
-    useAlpha = true
+    useAlpha = true,
+    invert = false
     } = {}) {
     this.checkProcessable('mask', {
         components: 1,
@@ -40,14 +41,15 @@ export default function mask(algorithm = 0.5, {
     let ptr = 0;
     if (this.alpha && useAlpha) {
         for (let i = 0; i < this.data.length; i += this.channels) {
-            if ((this.data[i] + (this.maxValue - this.data[i]) * (this.maxValue - this.data[i + 1]) / this.maxValue) >= threshold) {
+            let value=this.data[i] + (this.maxValue - this.data[i]) * (this.maxValue - this.data[i + 1]) / this.maxValue;
+            if ((invert && value >= threshold) || (! invert && value <= threshold)) {
                 newImage.setBit(ptr);
             }
             ptr++;
         }
     } else {
         for (let i = 0; i < this.data.length; i += this.channels) {
-            if (this.data[i] >= threshold) {
+            if ((invert && this.data[i] <= threshold) || (! invert && this.data[i] >= threshold)) {
                 newImage.setBit(ptr);
             }
             ptr++;
