@@ -40,7 +40,7 @@ export default function mask(algorithm = 0.5, {
     let ptr = 0;
     if (this.alpha && useAlpha) {
         for (let i = 0; i < this.data.length; i += this.channels) {
-            if ((this.data[i] * this.data[i + 1] / this.maxValue) >= threshold) {
+            if ((this.data[i] * (this.maxValue - this.data[i + 1]) / this.maxValue) >= threshold) {
                 newImage.setBit(ptr);
             }
             ptr++;
