@@ -36,14 +36,14 @@ describe('Image core - Binary images', function () {
         });
 
         it('set XY / clear XY bit', function() {
-            img.setBit(0,0);
-            img.setBit(7,1);
-            img.getBit(0,0).should.equal(1);
-            img.getBit(7,1).should.equal(1);
-            img.clearBit(0,0);
-            img.clearBit(7,1);
-            img.getBit(0,0).should.equal(0);
-            img.getBit(7,1).should.equal(0);
+            img.setBitXY(0,0);
+            img.setBitXY(7,1);
+            img.getBitXY(0,0).should.equal(1);
+            img.getBitXY(7,1).should.equal(1);
+            img.clearBitXY(0,0);
+            img.clearBitXY(7,1);
+            img.getBitXY(0,0).should.equal(0);
+            img.getBitXY(7,1).should.equal(0);
         });
 
         it('toggle bit', function() {
