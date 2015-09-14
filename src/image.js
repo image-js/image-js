@@ -1,6 +1,6 @@
 import {getKind, getPixelArray, getPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
-import {DOMImage, getImageData, Canvas, getCanvasArray, isDifferentOrigin} from './environment';
+import {DOMImage, ImageData, Canvas, isDifferentOrigin} from './environment';
 import extend from './extend';
 import {createWriteStream} from 'fs';
 import {RGB} from './model/model';
@@ -262,7 +262,7 @@ class Image {
     }
 
     getCanvas() {
-        let data = getImageData(this.getRGBAData(), this.width, this.height);
+        let data = new ImageData(this.getRGBAData(), this.width, this.height);
         let canvas = new Canvas(this.width, this.height);
         let ctx = canvas.getContext('2d');
         ctx.putImageData(data, 0, 0);
@@ -275,7 +275,7 @@ class Image {
             bitDepth: [1, 8, 16]
         });
         let size = this.size;
-        let newData = getCanvasArray(this.width, this.height);
+        let newData = new Uint8ClampedArray(this.width * this.height * 4);
         if (this.bitDepth === 1) {
             for (let i = 0; i < size; i++) {
                 let value = this.getBit(i);
