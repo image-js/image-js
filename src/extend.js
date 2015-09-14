@@ -21,7 +21,7 @@ import pad from './transform/pad';
 
 import split from './utility/split';
 import paintMasks from './operator/paintMasks';
-import copyUsingMask from './operator/copyUsingMask';
+import extract from './operator/extract';
 
 // computers
 import {getHistogram, getHistograms} from './compute/histogram';
@@ -56,7 +56,7 @@ export default function extend(Image) {
     Image.extendMethod('split', split);
 
     Image.extendMethod('paintMasks', paintMasks);
-    Image.extendMethod('copyUsingMask', copyUsingMask);
+    Image.extendMethod('extract', extract);
 
     Image.extendMethod('countPixels', countPixels);
     Image.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);
