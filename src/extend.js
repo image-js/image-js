@@ -24,6 +24,7 @@ import resizeBinary from './transform/resizeBinary';
 import split from './utility/split';
 import paintMasks from './operator/paintMasks';
 import extract from './operator/extract';
+import convolutionApply from './operator/convolutionApply';
 
 // computers
 import {getHistogram, getHistograms} from './compute/histogram';
@@ -61,6 +62,7 @@ export default function extend(Image) {
 
     Image.extendMethod('paintMasks', paintMasks);
     Image.extendMethod('extract', extract);
+    Image.extendMethod('convolution', convolutionApply);
 
     Image.extendMethod('countAlphaPixels', countAlphaPixels);
     Image.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);

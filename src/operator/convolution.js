@@ -1,62 +1,48 @@
-import edgeHandlingMethod from './edgeHandlingMethod'
+import isInteger from 'is-integer';
 
-//convolution using a square kernel
-export default function convolution(newImage, kernel, edgeHandling){
-    let kernelWidth = Math.sqrt(kernel.length);
-    let k = Math.floor(kernelWidth/2);
-    let div = 0;
-    edgeHandling = edgeHandling || 'copy';
+export default function convolution(newImage, kernel) {
+    let kernelWidth, kWidth, kHeight;
+    let div = 0, sum = 0, newValue = 0;
+    let twoDim = Array.isArray(kernel[0]);
 
-    for(let i = 0; i < kernel.length; i++){div += kernel[i];}
+    if (Array.isArray(kernel) && !twoDim) {
+        if (isInteger(Math.sqrt(kernel.length))) {
+            kernelWidth = Math.sqrt(kernel.length);
+            kWidth = kHeight = Math.floor(kernelWidth / 2);
+        } else {
+            throw new RangeError('Number of neighbors should be grater than 0');
+        }
+        //calculate div
+        for (let i = 0; i < kernel.length; i++) div += kernel[i];
+    } else if (twoDim) {
+        if ((kernel.width & 1 === 0) || (kernel.height & 1 === 0))
+            throw new RangeError('Kernel rows and columns should be odd numbers');
+        else {
+            kWidth = Math.floor(kernel.length / 2);
+            kHeight = Math.floor(kernel[0].length / 2);
+        }
+        //calculate div
+        for (let i = 0; i < kernel.length; i++)
+            for (let j = 0; j < kernel[0].length; j++)
+                div += kernel[i][j];
+    } else {
+        throw new Error('Invalid Kernel: ' + kernel);
+    }
 
-
-
-    for(let x = 0; x < this.width ; x++){
-        for(let y = 0; y < this.height ; y++){
-            let sum = 0;
-            for(let i = -k; i <= k; i++){
-                for(let j = -k; j <= k; j++){
-                    let val = edgeHandling.toLowerCase() === 'mirror'
-                        ? mirrorValue(x, y, i, j, this)
-                        : (isOutSidePixel(x, y, this) ? undefined : this.getValueXY(x + i, y + j, 0));
-                    if(val !== undefined)
-                        sum += val*kernel[(i + k)*kernelWidth + (j + k)];
+    for (let x = kWidth; x < this.width - kWidth; x++) {
+        for (let y = kHeight; y < this.height - kHeight; y++) {
+            sum = 0;
+            for (let i = -kWidth; i <= kWidth; i++) {
+                for (let j = -kHeight; j <= kHeight; j++) {
+                    let kVal = !twoDim ? kernel[(i + kWidth) * kernelWidth + (j + kWidth)] : kernel[kWidth + i][kHeight + j];
+                    sum += this.getValueXY(x + i, y + j, 0) * kVal;
                 }
             }
-            let newValue;
-            if(div >= 1){
-                newValue = Math.floor(sum/div);
-            }else{
-                newValue = sum;
-            }
+            if (div >= 1) newValue = Math.floor(sum / div);
+            else newValue = sum;
 
             newImage.setValueXY(x, y, 0, newValue);
-            if(this.alpha){
-                newImage.setValueXY(x, y, 1, this.getValueXY(x, y, 1));
-            }
+            if (this.alpha) newImage.setValueXY(x, y, 1, this.getValueXY(x, y, 1));
         }
-    }
-
-    if(edgeHandling.toLowerCase() !== 'mirror'){
-        edgeHandlingMethod.call(this, newImage, edgeHandling.toLowerCase(), k);
-    }
-
-}
-
-function isOutSidePixel(x,y,im){
-    return x > im.width || x < 0 || y > im.height || y < 0;
-}
-
-function mirrorValue(x,y,i,j,im){
-    if(!isOutSidePixel(x+i,y+j,im)){
-        return im.getValueXY(x+i,y+j,0);
-    }else if(!isOutSidePixel(x-i,y+j,im)){
-        return im.getValueXY(x-i,y+j,0);
-    }else if(!isOutSidePixel(x+i,y-j,im)){
-        return im.getValueXY(x+i,y-j,0);
-    }else if(!isOutSidePixel(x-i,y-j,im)){
-        return im.getValueXY(x-i,y-j,0);
-    }else{
-        return 0;
     }
 }
