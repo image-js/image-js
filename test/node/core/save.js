@@ -17,13 +17,13 @@ describe('save to disk', function () {
         });
     });
 
-    it('load then save (jpg)', function () {
+    it.skip('load then save (jpg)', function () {
         return load('rgb32bits.png').then(function (img) {
             return img.save(tmpDir + '/img1.jpg', {format: 'jpeg'});
         });
     });
 
-    it('new then save', function () {
+    it.skip('new then save', function () {
         let img = getSquare();
         return img.save(tmpDir + '/img2.png');
     });
