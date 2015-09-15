@@ -9,6 +9,8 @@ export default function convolution(newImage, kernel, edgeHandling){
 
     for(let i = 0; i < kernel.length; i++){div += kernel[i];}
 
+
+
     for(let x = 0; x < this.width ; x++){
         for(let y = 0; y < this.height ; y++){
             let sum = 0;

@@ -1,7 +1,7 @@
 import {Image, load} from '../common';
 
 
-describe.only('we check mask', function () {
+describe('we check mask', function () {
     it('should yield the right mask size and value', function () {
         return load('BW5x5.png').then(function (img) {
 
