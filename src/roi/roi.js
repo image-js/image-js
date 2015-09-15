@@ -46,12 +46,15 @@ export default class ROI {
         return img;
     }
 
-    // extract the ROI from the original image
+    /*
+    // extract the ROI from a parent image
     extract(image, {fill=false}={}) {
+        // we need to find the relative position to the parent
+        let position = getRelativePosition(this.map.parent, image, this.minX, this.minY);
         let img=Image.createFrom(image, {
-                width: this.width,
-                height: this.height,
-                position: [this.minX, this.minY]
+            width: this.width,
+            height: this.height,
+            position: position
         });
 
         if (! fill) {
@@ -73,9 +76,9 @@ export default class ROI {
                 }
             }
         }
-
         return img;
     }
+    */
 
     get width() {
         return this.maxX - this.minX + 1;
@@ -115,16 +118,39 @@ export default class ROI {
 
         let img = new Image(this.width, this.height, {
             kind: 'BINARY',
-            position: [this.minX, this.minY]
+            position: [this.minX, this.minY],
+            parent: this.map.parent
         });
 
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
-                if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id) img.setBitXY(x, y);
+                if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
+                    img.setBitXY(x, y);
+                }
+            }
+        }
+        return this.computed.mask = img;
+    }
+
+    get filledMask() {
+        if (this.computed.filledMask) return this.computed.filledMask;
+
+        let img = new Image(this.width, this.height, {
+            kind: 'BINARY',
+            position: [this.minX, this.minY],
+            parent: this.map.parent
+        });
+
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
+                let target=x + this.minX + (y + this.minY) * this.map.width;
+                if (this.internalMapIDs.indexOf(this.map.pixels[target]) >= 0) {
+                    img.setBitXY(x, y);
+                } // by default a pixel is to 0 so no problems, it will be transparent
             }
         }
 
-        return this.computed.mask = img;
+        return this.computed.filledMask = img;
     }
 }
 
@@ -305,13 +331,25 @@ function getInternalMapIDs(roi) {
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
 
+
+
+    if (roi.height>2) {
+        for (let x = 0; x < roi.width; x++) {
+            let target = (roi.minY) * roiMap.width + x + roi.minX;
+            if (internal.indexOf(pixels[target])>=0) {
+                let id = pixels[target + roiMap.width];
+                if ((internal.indexOf(id) === -1) && (roi.surround.indexOf(id) === -1)) {
+                    internal.push(id);
+                }
+            }
+        }
+    }
+
     for (let x = 1; x < roi.width - 1; x++) {
         for (let y = 1; y < roi.height - 1; y++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (internal.indexOf(pixels[target])>=0) {
                 // we check if one of the neighbour is not yet in
-                let id=pixels[target - 1];
-
                 for (let id of [pixels[target - 1], pixels[target + 1], pixels[target - roiMap.width], pixels[target + roiMap.width]]) {
                     if ((internal.indexOf(id) === -1) && (roi.surround.indexOf(id)===-1)) {
                         internal.push(id);

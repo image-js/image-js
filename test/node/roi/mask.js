@@ -1,7 +1,7 @@
 import {Image, load} from '../common';
 
 
-describe('we check mask', function () {
+describe.only('we check mask', function () {
     it('should yield the right mask size and value', function () {
         return load('BW5x5.png').then(function (img) {
 
@@ -16,14 +16,17 @@ describe('we check mask', function () {
 
             rois.should.be.an.instanceof(Array).and.lengthOf(3);
 
-            rois[0].mask.sizes.should.eql([1,1]);
-            rois[1].mask.sizes.should.eql([5,5]);
-            rois[2].mask.sizes.should.eql([3,3]);
 
-            let roiMask=rois[0].mask;
+            rois[0].mask.sizes.should.eql([3,3]);
+            rois[1].mask.sizes.should.eql([5,5]);
+            rois[2].mask.sizes.should.eql([1,1]);
+
+
+
+            let roiMask=rois[2].mask;
             Array.from(roiMask.data).should.eql([128]);
 
-            let roiFilledMask=rois[0].filledMask;
+            let roiFilledMask=rois[2].filledMask;
             Array.from(roiFilledMask.data).should.eql([128]);
 
             roiMask=rois[1].mask;
@@ -32,10 +35,10 @@ describe('we check mask', function () {
             roiFilledMask=rois[1].filledMask;
             Array.from(roiFilledMask.data).should.eql([255, 255, 255, 128]);
 
-            roiMask=rois[2].mask;
+            roiMask=rois[0].mask;
             Array.from(roiMask.data).should.eql([247, 128]);
 
-            roiFilledMask=rois[2].filledMask;
+            roiFilledMask=rois[0].filledMask;
             Array.from(roiFilledMask.data).should.eql([255, 128]);
 
         });

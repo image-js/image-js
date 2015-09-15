@@ -13,7 +13,7 @@ describe('we check the internalMapID', function () {
         return load('BW5x5.png').then(function (img) {
 
             let roiManager = img.getROIManager();
-            let mask = img.grey().mask();
+            let mask = img.grey().mask(0.5, {invert:true});
             roiManager.putMask(mask);
 
             let rois = roiManager.getROI();
@@ -36,7 +36,7 @@ describe('we check the internalMapID with complex image', function () {
         return load('BW15x15transparent.png').then(function (img) {
 
             let roiManager = img.getROIManager();
-            let mask = img.grey().mask();
+            let mask = img.grey().mask(0.5, {invert: true});
             roiManager.putMask(mask);
 
             let rois = roiManager.getROI();

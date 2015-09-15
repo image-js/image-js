@@ -1,5 +1,12 @@
 import ROI from './roi';
 
+
+/*
+ROI are created from a roiMap
+The roiMap contains mainty an array of identifiers that define
+for each pixels to which ROI it belongs
+ */
+
 export default function createROI(roiMap) {
 
     let size = roiMap.total;
@@ -10,9 +17,13 @@ export default function createROI(roiMap) {
         rois[i] = new ROI(roiMap, mapID);
     }
     let pixels = roiMap.pixels;
-    for (let x = 0; x < roiMap.width; x++) {
-        for (let y = 0; y < roiMap.height; y++) {
-            let target = y * roiMap.width + x;
+
+    let width=roiMap.parent.width;
+    let height=roiMap.parent.height;
+
+    for (let x = 0; x < width; x++) {
+        for (let y = 0; y < height; y++) {
+            let target = y * width + x;
             let mapID = pixels[target] + roiMap.negative;
             if (mapID > roiMap.negative) mapID--;
             if (x < rois[mapID].minX) rois[mapID].minX = x;

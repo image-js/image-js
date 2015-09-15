@@ -11,7 +11,7 @@ describe('we check we can extract a part of B/W image', function () {
         mask.setBitXY(1,1);
 
         return load('BW4x4.png').then(function (image) {
-            var extract = image.extract(mask);
+            let extract = image.extract(mask);
             image.hash.should.equal(extract.parent.hash);
             extract.width.should.equal(2);
             extract.height.should.equal(2);
@@ -33,7 +33,7 @@ describe('we check we can extract a part of B/W image', function () {
         mask.setBitXY(1, 0);
 
         return load('BW4x4.png').then(function (image) {
-            var extract = image.extract(mask);
+            let extract = image.extract(mask);
             image.hash.should.equal(extract.parent.hash);
             extract.width.should.equal(2);
             extract.height.should.equal(2);

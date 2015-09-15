@@ -14,8 +14,12 @@ export default function paintMasks(masks, {
 
     let numberChannels = Math.min(this.channels, color.length);
 
+
+
     for (let i = 0; i < masks.length; i++) {
         let roi = masks[i];
+        // we need to find the parent image to calculate the relative position
+
         for (let x = 0; x < roi.width; x++) {
             for (let y = 0; y < roi.height; y++) {
                 if (roi.getBitXY(x, y)) {
