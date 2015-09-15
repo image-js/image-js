@@ -45,8 +45,8 @@
     "babelify": "^6.1.2",
     "benchmark": "^1.0.0",
     "browserify": "^10.2.4",
-    "eslint": "^1.0.0",
-    "ij-test": "^1.7.1",
+    "eslint": "^1.4.1",
+    "ij-test": "^1.11.0",
     "mocha": "^2.2.5",
     "mocha-better-spec-reporter": "^2.1.1",
     "rimraf": "^2.4.0",
@@ -54,7 +54,7 @@
     "watchify": "^3.2.3"
   },
   "optionalDependencies": {
-    "canvas": "^1.2.5"
+    "canvas": "^1.2.9"
   },
   "dependencies": {
     "extend": "^3.0.0",
