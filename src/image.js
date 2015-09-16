@@ -388,7 +388,7 @@ class Image {
             let out = createWriteStream(path);
             let canvas = this.getCanvas();
             let stream;
-            switch (format) {
+            switch (format.toLowerCase()) {
                 case 'png':
                     stream = canvas.pngStream();
                     break;
