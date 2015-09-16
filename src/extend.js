@@ -12,6 +12,7 @@ import medianFilter from './filter/median';
 import gaussianFilter from './filter/gaussian';
 
 // transformers
+import sampling from './transform/shrinking/sampling';
 import crop from './transform/crop';
 import hsv from './transform/hsv';
 import hsl from './transform/hsl';
@@ -44,6 +45,7 @@ export default function extend(Image) {
     Image.extendMethod('medianFilter', medianFilter);
     Image.extendMethod('gaussianFilter', gaussianFilter);
 
+    Image.extendMethod('sampling', sampling);
     Image.extendMethod('crop', crop);
     Image.extendMethod('hsv', hsv);
     Image.extendMethod('hsl', hsl);
