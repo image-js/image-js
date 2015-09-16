@@ -42,6 +42,8 @@ class Image {
         }
 
         // We will set the parent image for relative position
+
+        Object.defineProperty(this, 'parent', {enumerable:false, writable: true});
         this.parent = options.parent;
         this.position = options.position || [0, 0];
 

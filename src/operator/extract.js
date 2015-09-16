@@ -38,6 +38,4 @@ export default function extract(mask, {
     }
 
     return extract;
-
-
 }

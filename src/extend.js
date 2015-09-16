@@ -18,6 +18,7 @@ import hsl from './transform/hsl';
 import grey from './transform/grey/grey';
 import mask from './transform/mask/mask';
 import pad from './transform/pad';
+import resizeBinary from './transform/resizeBinary';
 
 import split from './utility/split';
 import paintMasks from './operator/paintMasks';
@@ -51,6 +52,7 @@ export default function extend(Image) {
     Image.extendMethod('grey', grey).extendMethod('gray', grey);
     Image.extendMethod('mask', mask);
     Image.extendMethod('pad', pad);
+    Image.extendMethod('resizeBinary', resizeBinary);
 
     Image.extendMethod('split', split);
 

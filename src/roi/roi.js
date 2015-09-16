@@ -1,4 +1,5 @@
 import Image from '../image';
+import * as KindNames from '../kindNames';
 
 export default class ROI {
 
@@ -15,70 +16,22 @@ export default class ROI {
         this.computed = {};
     }
 
+    extract(image, {fill=false, scale=1}={}) {
+        // we use a slow way
 
-    // extract the ROI from the original image
-    scaledExtract(image, {scale=0.5}={}) {
-        let width=Math.round(this.width*scale);
-        let height=Math.round(this.height*scale);
-        let shiftX=Math.round((this.width-width)/2);
-        let shiftY=Math.round((this.height-height)/2);
-        let halfX=this.width/2;
-        let halfY=this.height/2;
-
-        let img=Image.createFrom(image, {
-            width: width,
-            height: height,
-            position: [this.minX+shiftX, this.minY+shiftY]
-        });
-
-        for (let x = 0; x < this.width; x++) {
-            for (let y = 0; y < this.height; y++) {
-                let target=x + this.minX + (y + this.minY) * this.map.width;
-                if (this.internalMapIDs.indexOf(this.map.pixels[target]) >= 0) {
-                    let sourceX=Math.round(halfX-(halfX-x)*scale);
-                    let sourceY=Math.round(halfY-(halfY-y)*scale);
-                    let source=sourceX + this.minX + (sourceY + this.minY) * this.map.width;
-                    img.setPixelXY(Math.round(x*scale), Math.round(y*scale), image.getPixel(source));
-                } // by default a pixel is to 0 so no problems, it will be transparent
-            }
-        }
-
-        return img;
-    }
-
-    /*
-    // extract the ROI from a parent image
-    extract(image, {fill=false}={}) {
-        // we need to find the relative position to the parent
-        let position = getRelativePosition(this.map.parent, image, this.minX, this.minY);
-        let img=Image.createFrom(image, {
-            width: this.width,
-            height: this.height,
-            position: position
-        });
-
-        if (! fill) {
-            for (let x = 0; x < this.width; x++) {
-                for (let y = 0; y < this.height; y++) {
-                    let target=x + this.minX + (y + this.minY) * this.map.width;
-                    if (this.map.pixels[target] === this.id) {
-                        img.setPixelXY(x, y, image.getPixel(target));
-                    } // by default a pixel is to 0 so no problems, it will be transparent
-                }
-            }
+        let mask;
+        if (fill) {
+            mask = this.filledMask;
         } else {
-            for (let x = 0; x < this.width; x++) {
-                for (let y = 0; y < this.height; y++) {
-                    let target=x + this.minX + (y + this.minY) * this.map.width;
-                    if (this.internalMapIDs.indexOf(this.map.pixels[target]) >= 0) {
-                        img.setPixelXY(x, y, image.getPixel(target));
-                    } // by default a pixel is to 0 so no problems, it will be transparent
-                }
-            }
+            mask = this.mask;
         }
-        return img;
+
+        if (scale<1) {
+            mask = mask.resizeBinary(scale);
+        }
+
+        return image.extract(mask);
     }
-    */
 
     get width() {
         return this.maxX - this.minX + 1;
@@ -117,7 +70,7 @@ export default class ROI {
         if (this.computed.mask) return this.computed.mask;
 
         let img = new Image(this.width, this.height, {
-            kind: 'BINARY',
+            kind: KindNames.BINARY,
             position: [this.minX, this.minY],
             parent: this.map.parent
         });
@@ -136,7 +89,7 @@ export default class ROI {
         if (this.computed.filledMask) return this.computed.filledMask;
 
         let img = new Image(this.width, this.height, {
-            kind: 'BINARY',
+            kind: KindNames.BINARY,
             position: [this.minX, this.minY],
             parent: this.map.parent
         });
