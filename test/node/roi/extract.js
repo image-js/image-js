@@ -9,21 +9,13 @@ describe('we check that we can extract correctly a ROI', function () {
             img.height.should.equal(15);
 
             let roiManager=img.getROIManager();
-            let mask=img.grey().mask();
+            let grey=img.grey();
+            let mask=grey.mask();
             roiManager.putMask(mask);
 
             let rois=roiManager.getROI();
 
             rois.should.be.an.instanceof(Array).and.lengthOf(5);
-
-
-            console.log(rois[0].internalMapIDs);
-            console.log(rois[1].internalMapIDs);
-            console.log(rois[2].internalMapIDs);
-            console.log(rois[3].internalMapIDs);
-            console.log(rois[4].internalMapIDs);
-
-
 
             rois[0].internalMapIDs.should.eql([-2,3,2]);
 

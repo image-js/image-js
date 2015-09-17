@@ -1,23 +1,32 @@
 // we will create a small image from a mask
 
-import getRelativePosition from '../utility/relativePosition'
+
 import Image from '../image';
 
 export default function extract(mask, {
-    scale = 1} = {}) {
+    scale = 1,
+    position} = {}) {
 
     this.checkProcessable('extract', {
         bitDepth: [8, 16]
     });
 
     // we need to find the relative position to the parent
-    let position = getRelativePosition(mask, this);
+    if (! position) {
+        position = mask.getRelativePosition(this);
+        if (! position) {
+            throw new Error('extract : can not extract an image because the relative position can not be' +
+                'determined, try to specify manualy the position as an array of 2 elements [x,y].')
+        }
+    }
     let extract=Image.createFrom(this, {
         width: mask.width,
         height: mask.height,
         position: position,
         parent: this
     });
+
+
 
     for (let x = 0; x < mask.width; x++) {
         for (let y = 0; y < mask.height; y++) {

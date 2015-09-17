@@ -35,7 +35,8 @@ export default function mask(algorithm = 0.5, {
     }
 
     let newImage = new Image (this.width, this.height, {
-        kind: 'BINARY'
+        kind: 'BINARY',
+        parent: this
     });
 
     let ptr = 0;

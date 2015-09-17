@@ -28,6 +28,7 @@ import extract from './operator/extract';
 import {getHistogram, getHistograms} from './compute/histogram';
 import getColorHistogram from './compute/colorHistogram';
 import getPixelsArray from './compute/pixelsArray';
+import getRelativePosition from './compute/relativePosition';
 import getSVD from './compute/svd';
 import countPixels from './compute/countPixels';
 
@@ -64,5 +65,6 @@ export default function extend(Image) {
     Image.extendMethod('getHistograms', getHistograms).extendProperty('histograms', getHistograms);
     Image.extendMethod('getColorHistogram', getColorHistogram).extendProperty('colorHistogram', getColorHistogram);
     Image.extendMethod('getPixelsArray', getPixelsArray).extendProperty('pixelsArray', getPixelsArray);
+    Image.extendMethod('getRelativePosition', getRelativePosition);
     Image.extendMethod('getSVD', getSVD).extendProperty('svd', getSVD);
 }
