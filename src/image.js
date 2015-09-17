@@ -278,17 +278,17 @@ class Image {
         } else {
             if (this.components === 1) {
                 for (let i = 0; i < size; i++) {
-                    newData[i * 4] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
-                    newData[i * 4 + 1] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
-                    newData[i * 4 + 2] = this.data[i * (1 + this.alpha)] >> (this.bitDepth - 8);
+                    newData[i * 4] = this.data[i * this.channels] >>> (this.bitDepth - 8);
+                    newData[i * 4 + 1] = this.data[i * this.channels] >>> (this.bitDepth - 8);
+                    newData[i * 4 + 2] = this.data[i * this.channels] >>> (this.bitDepth - 8);
                 }
             } else if (this.components === 3) {
                 this.checkProcessable('getRGBAData', {colorModel: [RGB]});
                 if (this.colorModel === RGB) {
                     for (let i = 0; i < size; i++) {
-                        newData[i * 4] = this.data[i * 4] >> (this.bitDepth - 8);
-                        newData[i * 4 + 1] = this.data[i * 4 + 1] >> (this.bitDepth - 8);
-                        newData[i * 4 + 2] = this.data[i * 4 + 2] >> (this.bitDepth - 8);
+                        newData[i * 4] = this.data[i * this.channels] >>> (this.bitDepth - 8);
+                        newData[i * 4 + 1] = this.data[i * this.channels + 1] >>> (this.bitDepth - 8);
+                        newData[i * 4 + 2] = this.data[i * this.channels + 2] >>> (this.bitDepth - 8);
                     }
                 }
             }
