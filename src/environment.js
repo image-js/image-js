@@ -1,4 +1,4 @@
-let DOMImage, Canvas, ImageData, isDifferentOrigin, env;
+let loadBinary, DOMImage, Canvas, ImageData, isDifferentOrigin, env;
 
 if (typeof self !== 'undefined') { // Browser
     env = 'browser';
@@ -22,6 +22,20 @@ if (typeof self !== 'undefined') { // Browser
         canvas.height = height;
         return canvas;
     };
+
+    loadBinary = function (url) {
+        return new Promise(function (resolve, reject) {
+            let xhr = new self.XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'arraybuffer';
+
+            xhr.onload = function (e) {
+                this.status === 200 ? resolve(this.response) : reject('wrong status', e);
+            };
+            xhr.onerror = reject;
+            xhr.send();
+        });
+    };
 } else if (typeof module !== 'undefined' && module.exports) { // Node.js
     env = 'node';
     isDifferentOrigin = function (url) {
@@ -33,6 +47,15 @@ if (typeof self !== 'undefined') { // Browser
     let canvas = require('canvas');
     DOMImage = canvas.Image;
     Canvas = canvas;
+
+    let fs = require('fs');
+    loadBinary = function (path) {
+        return new Promise(function (resolve, reject) {
+            fs.readFile(path, function (err, data) {
+                err ? reject(err) : resolve(data.buffer);
+            });
+        });
+    }
 }
 
-export {DOMImage, Canvas, ImageData, isDifferentOrigin, env};
+export {loadBinary, DOMImage, Canvas, ImageData, isDifferentOrigin, env};

@@ -6,7 +6,7 @@ describe('save to disk', function () {
     afterEach(refreshTmpDir);
 
     it('load then save', function () {
-        return load('rgb32bits.png').then(function (img) {
+        return load('format/rgba32.png').then(function (img) {
             let sha = getHash(img);
             return img.save(tmpDir + '/img1.png').then(function () {
                 // reload the new file to check that the image is identical
@@ -18,7 +18,7 @@ describe('save to disk', function () {
     });
 
     it.skip('load then save (jpg)', function () {
-        return load('rgb32bits.png').then(function (img) {
+        return load('format/rgba32.png').then(function (img) {
             return img.save(tmpDir + '/img1.jpg', {format: 'jpeg'});
         });
     });

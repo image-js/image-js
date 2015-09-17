@@ -1,12 +1,13 @@
 import {getKind, getPixelArray, getPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
-import {DOMImage, ImageData, Canvas, isDifferentOrigin} from './environment';
+import {ImageData, Canvas} from './environment';
 import extend from './extend';
 import {createWriteStream} from 'fs';
 import {RGB} from './model/model';
 import ROIManager from './roi/manager';
 import {getType, canWrite} from './mediaTypes';
 import extendObject from 'extend';
+import {loadURL} from './load';
 
 
 
@@ -103,25 +104,7 @@ class Image {
 
 
     static load(url) {
-        return new Promise(function (resolve, reject) {
-            let image = new DOMImage();
-
-            if (isDifferentOrigin(url)) {
-                // see https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
-                image.crossOrigin = 'Anonymous';
-            }
-
-            image.onload = function () {
-                let w = image.width, h = image.height;
-                let canvas = new Canvas(w, h);
-                let ctx = canvas.getContext('2d');
-                ctx.drawImage(image, 0, 0, w, h);
-                let data = ctx.getImageData(0, 0, w, h).data;
-                resolve(new Image(w, h, data));
-            };
-            image.onerror = reject;
-            image.src = url;
-        });
+        return loadURL(url);
     }
 
     static extendMethod(name, method, {inPlace = false, returnThis = true, partialArgs = []} = {}) {
