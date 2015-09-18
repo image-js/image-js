@@ -1,5 +1,4 @@
 import Image from '../image';
-import {RGB} from '../model/model';
 import validateChannel from '../misc/validateChannel';
 
 export default function getChannel( channel ) {
