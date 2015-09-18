@@ -4,3 +4,4 @@ node_modules
 *.log
 test/node/TMP
 test/browser/image.js
+.DS_Store
