@@ -35,12 +35,23 @@ describe('we check we can extract a part of B/W image', function () {
             getHash(image).should.equal(getHash(extract.parent));
             extract.width.should.equal(2);
             extract.height.should.equal(2);
+
+            Array.from(extract.data).should.eql([
+                0, 255,
+                255, 255,
+                255, 0,
+                255, 0
+            ]);
+
+            /* This corresponds to an extract if it was RGBA image */
+            /*
             Array.from(extract.data).should.eql([
                 0, 0, 0, 255,
                 255, 255, 255, 255,
                 255, 255, 255, 0,
                 255, 255, 255, 0
             ]);
+            */
         });
     });
 });
