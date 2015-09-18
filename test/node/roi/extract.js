@@ -20,12 +20,12 @@ describe('we check that we can extract correctly a ROI', function () {
             rois[0].internalMapIDs.should.eql([-2,3,2]);
 
             let extract=rois[0].extract(img);
-            extract.countPixels({alpha: 0}).should.equal(27);
-            extract.countPixels({alpha: 255}).should.equal(54);
+            extract.countAlphaPixels({alpha: 0}).should.equal(27);
+            extract.countAlphaPixels({alpha: 255}).should.equal(54);
 
             extract=rois[0].extract(img, {fill: true});
-            extract.countPixels({alpha: 0}).should.equal(1);
-            extract.countPixels({alpha: 255}).should.equal(80);
+            extract.countAlphaPixels({alpha: 0}).should.equal(1);
+            extract.countAlphaPixels({alpha: 255}).should.equal(80);
         });
     });
 });
