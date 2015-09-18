@@ -30,7 +30,7 @@ import getColorHistogram from './compute/colorHistogram';
 import getPixelsArray from './compute/pixelsArray';
 import getRelativePosition from './compute/relativePosition';
 import getSVD from './compute/svd';
-import countPixels from './compute/countPixels';
+import countAlphaPixels from './compute/countAlphaPixels';
 
 export default function extend(Image) {
     let inPlace = {inPlace: true};
@@ -60,7 +60,7 @@ export default function extend(Image) {
     Image.extendMethod('paintMasks', paintMasks);
     Image.extendMethod('extract', extract);
 
-    Image.extendMethod('countPixels', countPixels);
+    Image.extendMethod('countAlphaPixels', countAlphaPixels);
     Image.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);
     Image.extendMethod('getHistograms', getHistograms).extendProperty('histograms', getHistograms);
     Image.extendMethod('getColorHistogram', getColorHistogram).extendProperty('colorHistogram', getColorHistogram);

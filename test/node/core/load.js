@@ -15,7 +15,7 @@ describe('Image core', function () {
     });
 
     it('should load from URL', function () {
-        return load('rgb32bits.png').then(function (img) {
+        return load('format/rgba32.png').then(function (img) {
             img.width.should.be.greaterThan(0);
             img.height.should.be.greaterThan(0);
             img.maxValue.should.equal(255);
@@ -23,7 +23,7 @@ describe('Image core', function () {
     });
 
     it('should clone', function () {
-        return load('rgb32bits.png').then(function (img) {
+        return load('format/rgba32.png').then(function (img) {
             let clone = img.clone();
             clone.should.be.an.instanceOf(Image);
             clone.should.not.be.equal(img);

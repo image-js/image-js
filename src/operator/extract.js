@@ -22,6 +22,7 @@ export default function extract(mask, {
     let extract=Image.createFrom(this, {
         width: mask.width,
         height: mask.height,
+        alpha: 1,   // we force the alpha, otherwise dificult to extract a mask ...
         position: position,
         parent: this
     });
