@@ -32,7 +32,6 @@ describe('get a specific channel from an image', function () {
         Array.from(alpha.data).should.eql([255,240]);
 
       });
-
 });
 
 

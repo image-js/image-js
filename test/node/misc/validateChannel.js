@@ -1,7 +1,7 @@
 import {Image} from '../common';
 import validateChannel from '../../../src/misc/validateChannel';
 
-describe.only('we check the validateChannel method', function () {
+describe('we check the validateChannel method', function () {
     it('check for a RGB image', function () {
         let image=new Image(2,2,{
             kind: 'RGB'
