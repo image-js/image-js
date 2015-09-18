@@ -1,6 +1,6 @@
 export default function nearestNeighbor(newImage, newWidth, newHeight) {
-    var wRatio = this.width / newWidth;
-    var hRatio = this.height / newHeight;
+    const wRatio = this.width / newWidth;
+    const hRatio = this.height / newHeight;
     for (let i = 0; i < newWidth; i++) {
         let w = Math.floor(i * wRatio);
         for (let j = 0; j < newHeight; j++) {

@@ -4,7 +4,7 @@
  */
 export function getFactor(value) {
     if (typeof value === 'string') {
-        var last = value[value.length - 1];
+        const last = value[value.length - 1];
         value = parseFloat(value);
         if (last === '%') {
             value /= 100;
