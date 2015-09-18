@@ -6,12 +6,12 @@ describe('save to disk', function () {
     afterEach(refreshTmpDir);
 
     it('load then save', function () {
-        return load('format/rgba32.png').then(function (img) {
-            let sha = getHash(img);
+        return load('format/rgb24.png').then(function (img) {
+            let dataURL = img.toDataURL();
             return img.save(tmpDir + '/img1.png').then(function () {
                 // reload the new file to check that the image is identical
                 return Image.load(tmpDir + '/img1.png').then(function (img) {
-                    getHash(img).should.equal(sha);
+                    img.toDataURL().should.equal(dataURL);
                 });
             });
         });
