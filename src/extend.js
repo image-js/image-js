@@ -13,6 +13,7 @@ import gaussianFilter from './filter/gaussian';
 
 // transformers
 import crop from './transform/crop';
+import scale from './transform/scale/scale';
 import hsv from './transform/hsv';
 import hsl from './transform/hsl';
 import grey from './transform/grey/grey';
@@ -48,6 +49,7 @@ export default function extend(Image) {
     Image.extendMethod('gaussianFilter', gaussianFilter);
 
     Image.extendMethod('crop', crop);
+    Image.extendMethod('scale', scale);
     Image.extendMethod('hsv', hsv);
     Image.extendMethod('hsl', hsl);
     Image.extendMethod('grey', grey).extendMethod('gray', grey);
