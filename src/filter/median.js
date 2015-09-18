@@ -1,7 +1,6 @@
 /**
  * Created by Cristian on 18/07/2015.
  */
-//'use strict'
 
 import Image from '../image';
 //k: size of kernel (k*k)
