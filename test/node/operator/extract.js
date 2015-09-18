@@ -1,6 +1,4 @@
-import {Image, load} from '../common';
-import {getHash} from 'ij-test';
-
+import {Image, load, getHash} from '../common';
 
 describe('we check we can extract a part of B/W image', function () {
     it('check the extract without specify position', function () {
@@ -55,6 +53,3 @@ describe('we check we can extract a part of B/W image', function () {
         });
     });
 });
-
-
-

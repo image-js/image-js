@@ -1,6 +1,4 @@
-import {Image, load} from '../common';
-import {getHash} from 'ij-test';
-
+import {Image, load, getHash} from '../common';
 
 describe('we check the relative position', function () {
     it('check the extract without specify position', function () {
@@ -34,6 +32,3 @@ describe('we check the relative position', function () {
         });
     });
 });
-
-
-

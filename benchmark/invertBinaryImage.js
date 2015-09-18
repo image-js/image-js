@@ -2,7 +2,7 @@
 
 var Benchmark = require('benchmark');
 var Image = require('..');
-var Test = require('ij-test');
+var Test = require('../test/test');
 
 var suite = new Benchmark.Suite;
 

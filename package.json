@@ -46,10 +46,10 @@
     "benchmark": "^1.0.0",
     "browserify": "^10.2.4",
     "eslint": "^1.4.1",
-    "ij-test": "^1.14.1",
     "mocha": "^2.2.5",
     "mocha-better-spec-reporter": "^2.1.1",
     "rimraf": "^2.4.0",
+    "sha.js": "^2.4.3",
     "should": "^7.0.1",
     "watchify": "^3.2.3"
   },
@@ -64,5 +64,7 @@
     "png.js": "^0.1.1",
     "string-includes": "^1.0.0"
   },
-  "engines": { "node": ">= 4.0.0" }
+  "engines": {
+    "node": ">= 4.0.0"
+  }
 }

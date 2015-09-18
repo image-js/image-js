@@ -1,8 +1,8 @@
 import {sync as rmSync} from 'rimraf';
 import {mkdirSync} from 'fs';
-import {getImage} from 'ij-test';
+import {getImage} from '../test';
 
-export {getImage, getHash} from 'ij-test';
+export {getImage, getHash} from '../test';
 
 import Image from '../..';
 

@@ -1,12 +1,12 @@
 'use strict';
 
 import Image from '../../src/image';
-import {imageList, getHash} from 'ij-test';
+import {imageList, getHash} from '../test';
 
 window.images = imageList;
 window.getHash = getHash;
 
-let root = '../../node_modules/ij-test/img/';
+let root = '../img/';
 
 window.load = function load(name) {
     return Image.load(root + name);
