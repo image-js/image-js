@@ -11,16 +11,17 @@ export default function level({algorithm='full'}={}) {
 
     switch (algorithm) {
         case 'full':
-
+            let delta=1e-5; // sorry no better value that this "best guess"
             let min=this.min;
             let max=this.max;
             let factor=new Array(this.channels);
             for (let c=0; c<this.components; c++) {
                 if (max[c]!==min[c]) {
-                    factor[c]=this.maxValue/(max[c]-min[c]);
+                    factor[c]=(this.maxValue+1-delta)/(max[c]-min[c]);
                 } else {
                     factor[c]=0;
                 }
+                min[c]+=((0.5-delta/2)/factor[c])
             }
 
             /*
