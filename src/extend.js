@@ -22,6 +22,7 @@ import pad from './transform/pad';
 import resizeBinary from './transform/resizeBinary';
 
 import split from './utility/split';
+import getChannel from './utility/getChannel';
 import paintMasks from './operator/paintMasks';
 import extract from './operator/extract';
 import convolutionApply from './operator/convolutionApply';
@@ -59,6 +60,7 @@ export default function extend(Image) {
     Image.extendMethod('resizeBinary', resizeBinary);
 
     Image.extendMethod('split', split);
+    Image.extendMethod('getChannel', getChannel);
 
     Image.extendMethod('paintMasks', paintMasks);
     Image.extendMethod('extract', extract);

@@ -1,26 +1,40 @@
-import * as KindNames from './kindNames';
+import * as Kind from './kindNames';
 import {RGB} from './model/model';
 
 const kinds = {};
 
-kinds[KindNames.BINARY] = {
+kinds[Kind.BINARY] = {
     components: 1,
     alpha: 0,
     bitDepth: 1
 };
 
-kinds[KindNames.GREYA] = {
+kinds[Kind.GREYA] = {
     components: 1,
     alpha: 1,
     bitDepth: 8
 };
 
-kinds[KindNames.RGBA] = {
+kinds[Kind.GREY] = {
+    components: 1,
+    alpha: 0,
+    bitDepth: 8
+};
+
+kinds[Kind.RGBA] = {
     components: 3,
     alpha: 1,
     bitDepth: 8,
     colorModel: RGB
 };
+
+kinds[Kind.RGB] = {
+    components: 3,
+    alpha: 0,
+    bitDepth: 8,
+    colorModel: RGB
+};
+
 
 export function getKind(kind) {
     return kinds[kind];
