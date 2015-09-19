@@ -298,12 +298,20 @@ function getInternalMapIDs(roi) {
         }
     }
 
+    var array=new Array(4);
     for (let x = 1; x < roi.width - 1; x++) {
         for (let y = 1; y < roi.height - 1; y++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (internal.indexOf(pixels[target])>=0) {
                 // we check if one of the neighbour is not yet in
-                for (let id of [pixels[target - 1], pixels[target + 1], pixels[target - roiMap.width], pixels[target + roiMap.width]]) {
+
+                array[0]=pixels[target - 1];
+                array[1]=pixels[target + 1];
+                array[2]=pixels[target - roiMap.width];
+                array[3]=pixels[target + roiMap.width];
+
+                for (let i=0; i<4; i++) {
+                    let id=array[i];
                     if ((internal.indexOf(id) === -1) && (roi.surround.indexOf(id)===-1)) {
                         internal.push(id);
                     }
