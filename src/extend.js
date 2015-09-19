@@ -26,6 +26,7 @@ import resizeBinary from './transform/resizeBinary';
 import split from './utility/split';
 import getChannel from './utility/getChannel';
 import setChannel from './utility/setChannel';
+import getSimilarity from './utility/getSimilarity';
 import paintMasks from './operator/paintMasks';
 import extract from './operator/extract';
 import convolutionApply from './operator/convolutionApply';
@@ -70,6 +71,7 @@ export default function extend(Image) {
     Image.extendMethod('split', split);
     Image.extendMethod('getChannel', getChannel);
     Image.extendMethod('setChannel', setChannel);
+    Image.extendMethod('getSimilarity', getSimilarity);
 
     Image.extendMethod('paintMasks', paintMasks);
     Image.extendMethod('extract', extract);
