@@ -1,17 +1,20 @@
 import Image from './image';
 import {env, loadBinary, DOMImage, ImageData, Canvas, isDifferentOrigin} from './environment';
 import PNGReader from 'png.js';
+import {TIFFDecoder} from 'tiff';
 
 const isPNG = /\.png$/i;
+const isTIFF = /\.tiff?$/i;
 
 function swap16(val) {
-    return ((val & 0xFF) << 8)
-        | ((val >> 8) & 0xFF);
+    return ((val & 0xFF) << 8) | ((val >> 8) & 0xFF);
 }
 
 export function loadURL(url) {
     if (url.match(isPNG)) {
         return loadPNG(url);
+    } else if (url.match(isTIFF)) {
+        return loadTIFF(url);
     } else {
         return loadGeneric(url);
     }
@@ -43,6 +46,20 @@ function loadPNG(url) {
                     bitDepth: bitDepth
                 }));
             });
+        });
+    });
+}
+
+function loadTIFF(url) {
+    return loadBinary(url).then(function (data) {
+        let decoder = new TIFFDecoder(data);
+        let result = decoder.decode();
+        let image = result.ifd[0];
+        return new Image(image.width, image.height, image.data, {
+            components: 1,
+            alpha: 0,
+            colorModel: null,
+            bitDepth: image.bitsPerSample
         });
     });
 }
