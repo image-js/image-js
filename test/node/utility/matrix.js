@@ -1,7 +1,7 @@
 import Matrix from '../../../src/utility/matrix';
 
 
-describe.only('check matrix class', function () {
+describe('check matrix class', function () {
     let matrix = new Matrix(9,5,1);
     matrix[4][2]=2;
     matrix[4][3]=3;

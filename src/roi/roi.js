@@ -298,7 +298,7 @@ function getInternalMapIDs(roi) {
         }
     }
 
-    var array=new Array(4);
+    let array=new Array(4);
     for (let x = 1; x < roi.width - 1; x++) {
         for (let y = 1; y < roi.height - 1; y++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;

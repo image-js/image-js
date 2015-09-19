@@ -28,8 +28,8 @@ export default function Matrix(width,height,defaultValue) {
     Object.defineProperty(this.matrix, 'localMin', {writable:true});
 
     this.matrix.localMin=function(x,y) {
-        var min=this[x][y];
-        var position=[x,y];
+        let min=this[x][y];
+        let position=[x,y];
         for (let i=(Math.max(0,x-1)); i<Math.min(this.length,x+2); i++) {
             for (let j=(Math.max(0,y-1)); j<Math.min(this[0].length,y+2); j++) {
                 if (this[i][j]<min) {
@@ -47,8 +47,8 @@ export default function Matrix(width,height,defaultValue) {
     Object.defineProperty(this.matrix, 'localMax', {writable:true});
 
     this.matrix.localMax=function(x,y) {
-        var max=this[x][y];
-        var position=[x,y];
+        let max=this[x][y];
+        let position=[x,y];
         for (let i=(Math.max(0,x-1)); i<Math.min(this.length,x+2); i++) {
             for (let j=(Math.max(0,y-1)); j<Math.min(this[0].length,y+2); j++) {
                 if (this[i][j]>max) {
@@ -64,7 +64,7 @@ export default function Matrix(width,height,defaultValue) {
     }
 
     this.matrix.localSearch=function(x,y,value) {
-        var results=[];
+        let results=[];
         for (let i=(Math.max(0,x-1)); i<Math.min(this.length,x+2); i++) {
             for (let j=(Math.max(0,y-1)); j<Math.min(this[0].length,y+2); j++) {
                 if (this[i][j]===value) {
