@@ -1,12 +1,12 @@
 import validateArrayOfChannels from '../misc/validateArrayOfChannels';
 
-export default function level({algorithm='full', components}={}) {
+export default function level({algorithm='full', channels}={}) {
     this.checkProcessable('level', {
         bitDepth: [8, 16],
         dimension: 2
     });
 
-    let channels = validateArrayOfChannels(this, components, false);
+    channels = validateArrayOfChannels(this, {channels:channels});
 
     switch (algorithm) {
         case 'full':

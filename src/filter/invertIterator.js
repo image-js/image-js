@@ -1,8 +1,3 @@
-// this code gives the same result as invert()
-// but is based on a matrix of pixels
-// may be easier to implement some algorithm
-// but it will likely be much slower
-
 export default function invertIterator() {
     this.checkProcessable('invert', {
         bitDepth: [1, 8, 16],

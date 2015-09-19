@@ -1,4 +1,4 @@
-export default function invert() {
+export default function invertOneLoop() {
     this.checkProcessable('invertOneLoop', {
         bitDepth: [8, 16],
         dimension: 2

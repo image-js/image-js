@@ -12,14 +12,14 @@ describe('level', function() {
         it('should just change red channel', function () {
             let image = new Image(1,3,[0, 10, 255, 100, 0, 20, 255, 255, 0, 30, 255, 255]);
             let leveled = [0, 10, 255, 100, 0, 20, 255, 255, 0, 30, 255, 255];
-            image.level({components:[0]});
+            image.level({channels:[0]});
             image.data.should.eql(leveled);
         });
 
         it('should change only red and green channe', function () {
             let image = new Image(1,3,[0, 10, 255, 100, 0, 20, 255, 255, 0, 30, 255, 255]);
             let leveled = [0, -0, 255, 100, 0, 128, 255, 255, 0, 255, 255, 255];
-            image.level({components:['r','g']});
+            image.level({channels:['r','g']});
             image.data.should.eql(leveled);
         });
 
