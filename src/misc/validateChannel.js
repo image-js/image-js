@@ -1,24 +1,33 @@
 import * as Model from '../model/model';
 
-export default function validateChannel(image, channel) {
+export default function validateChannel(image, channel, allowAlpha=true) {
     if (channel===undefined) {
         throw new RangeError('validateChannel : the channel has to be >=0 and <'+image.channels);
     }
 
     if (typeof channel === 'string') {
-        if (image.colorModel!==Model.RGB) throw new Error('getChannel : not a RGB image');
-        switch (channel) {
-            case 'r':
-                return 0;
-            case 'g':
-                return 1;
-            case 'b':
-                return 2;
-            case 'a':
-                if (! image.alpha) throw new Error('validateChannel : the image does not contain alpha channel');
-                return 3;
-            default:
-                throw new Error('validateChannel : undefined channel: '+channel);
+        if ('rgb'.indexOf(channel)>-1) {
+            if (image.colorModel!==Model.RGB) throw new Error('getChannel : not a RGB image');
+            switch (channel) {
+                case 'r':
+                    channel=0;
+                    break;
+                case 'g':
+                    channel=1;
+                    break;
+                case 'b':
+                    channel=2;
+                    break;
+            }
+        }
+
+        if (channel === 'a') {
+            if (! image.alpha) throw new Error('validateChannel : the image does not contain alpha channel');
+            channel = image.components;
+        }
+
+        if (typeof channel === 'string') {
+            throw new Error('validateChannel : undefined channel: '+channel);
         }
     }
 
@@ -26,6 +35,9 @@ export default function validateChannel(image, channel) {
         throw new RangeError('validateChannel : the channel has to be >=0 and <'+image.channels);
     }
 
-    return channel;
+    if (! allowAlpha && channel>=image.components) {
+        throw new RangeError('validateChannel : alpha channel may not be selected');
+    }
 
+    return channel;
 }

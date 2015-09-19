@@ -1,13 +1,25 @@
-// this code gives the same result as invert()
-// but is based on a matrix of pixels
-// may be easier to implement some algorithm
-// but it will likely be much slower
+import validateChannel from '../misc/validateChannel';
 
-export default function level({algorithm='full'}={}) {
+
+export default function level({algorithm='full', components}={}) {
     this.checkProcessable('level', {
         bitDepth: [8, 16],
         dimension: 2
     });
+
+    // we have the possibility to select on which channel we want to apply the code
+    // we will check that really all the channels are present !
+    if (Array.isArray(components)) {
+        for (let c=0; c<channels.length; c++) {
+            components[c] = validateChannel(this,channels[c]);
+        }
+    } else {
+        channels=new Array(this.components);
+        for (let c=0; c<this.components; c++) {
+            channels[c]=c;
+        }
+    }
+
 
     switch (algorithm) {
         case 'full':
@@ -15,7 +27,7 @@ export default function level({algorithm='full'}={}) {
             let min=this.min;
             let max=this.max;
             let factor=new Array(this.channels);
-            for (let c=0; c<this.components; c++) {
+            for (let c of channels) {
                 if (max[c]!==min[c]) {
                     factor[c]=(this.maxValue+1-delta)/(max[c]-min[c]);
                 } else {
