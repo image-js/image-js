@@ -63,6 +63,18 @@ export default function Matrix(width,height,defaultValue) {
         };
     }
 
+    this.matrix.localSearch=function(x,y,value) {
+        var results=[];
+        for (let i=(Math.max(0,x-1)); i<Math.min(this.length,x+2); i++) {
+            for (let j=(Math.max(0,y-1)); j<Math.min(this[0].length,y+2); j++) {
+                if (this[i][j]===value) {
+                   results.push([i,j]);
+                }
+            }
+        }
+        return results;
+    }
+
     return this.matrix;
 }
 

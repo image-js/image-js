@@ -20,5 +20,10 @@ describe.only('check matrix class', function () {
         min.position.should.eql([3,2]);
     });
 
+    it('check localSearch', function () {
+        let results=matrix.localSearch(4,3,1);
+        results.should.eql([[3,2],[3,3],[3,4],[5,2],[5,3],[5,4]]);
+    });
+
 });
 
