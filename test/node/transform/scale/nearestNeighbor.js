@@ -1,6 +1,6 @@
 import {load, getHash} from '../../common';
 
-describe.only('Scale - nearest neighbor', function () {
+describe('Scale - nearest neighbor', function () {
     let original;
     before(function () {
         return load('resize/5x5a_5.png').then(function (img) {
