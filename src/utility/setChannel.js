@@ -13,6 +13,10 @@ export default function setChannel(channel, image) {
         components: [1]
     });
 
+    if (image.width!==this.width || image.height!==this.height) {
+        throw new Error('Images must have exactly the same width and height');
+    }
+
     channel = validateChannel(this,channel);
 
     let ptr=channel;
