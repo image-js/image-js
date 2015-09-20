@@ -28,6 +28,15 @@ describe('check the crop transform', function () {
         Array.from(result.data).should.eql([2,2,2,2,4,3,2,3,3]);
 
         result=image.crop({
+            x:0,
+            y:0,
+            height: 2,
+            width: 2
+        });
+        Array.from(result.data).should.eql([0,0,0,1]);
+
+
+        result=image.crop({
             x:2,
             y:2,
             height: 2,
