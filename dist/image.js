@@ -4203,7 +4203,7 @@ PNGReader.prototype.parse = function (options, callback) {
 module.exports = PNGReader;
 
 }).call(this,require('_process'),require("buffer").Buffer)
-},{"./PNG":18,"./stream":20,"_process":3,"buffer":undefined,"zlib":undefined}],20:[function(require,module,exports){
+},{"./PNG":18,"./stream":20,"_process":3,"buffer":2,"zlib":2}],20:[function(require,module,exports){
 /**
  * Extract from pdf.js
  * https://github.com/mozilla/pdf.js
@@ -7385,9 +7385,17 @@ var _atobLite = require('atob-lite');
 
 var _atobLite2 = _interopRequireDefault(_atobLite);
 
-var isDataURL = /data:[a-z]+\/(\[a-z]+);base64,(.+)/;
+var isDataURL = /data:[a-z]+\/([a-z]+);base64,(.+)/;
 var isPNG = /\.png$/i;
 var isTIFF = /\.tiff?$/i;
+
+function str2ab(str) {
+    var arr = new Uint8Array(str.length);
+    for (var i = 0; i < str.length; i++) {
+        arr[i] = str.charCodeAt(i);
+    }
+    return arr;
+}
 
 function swap16(val) {
     return (val & 0xFF) << 8 | val >> 8 & 0xFF;
@@ -7398,9 +7406,9 @@ function loadURL(url) {
     if (dataURL) {
         var mimetype = dataURL[1];
         if (mimetype === 'png') {
-            return Promise.resolve((0, _atobLite2['default'])(dataURL[2])).then(loadPNG);
+            return Promise.resolve(str2ab((0, _atobLite2['default'])(dataURL[2]))).then(loadPNG);
         } else if (mimetype === 'tiff') {
-            return Promise.resolve((0, _atobLite2['default'])(dataURL[2])).then(loadTIFF);
+            return Promise.resolve(str2ab((0, _atobLite2['default'])(dataURL[2]))).then(loadTIFF);
         }
     }
 
