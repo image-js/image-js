@@ -8,6 +8,15 @@ const isDataURL = /data:[a-z]+\/([a-z]+);base64,(.+)/;
 const isPNG = /\.png$/i;
 const isTIFF = /\.tiff?$/i;
 
+function str2ab(str) {
+    var buf = new ArrayBuffer(str.length * 2); // 2 bytes for each char
+    var bufView = new Uint16Array(buf);
+    for (var i = 0; i < str.length; i++) {
+        bufView[i] = str.charCodeAt(i);
+    }
+    return buf;
+}
+
 function swap16(val) {
     return ((val & 0xFF) << 8) | ((val >> 8) & 0xFF);
 }
@@ -16,10 +25,10 @@ export function loadURL(url) {
     const dataURL = isDataURL.exec(url);
     if (dataURL) {
         const mimetype = dataURL[1];
-        if(mimetype === 'png') {
-            return Promise.resolve(atob(dataURL[2])).then(loadPNG);
+        if (mimetype === 'png') {
+            return Promise.resolve(str2ab(atob(dataURL[2]))).then(loadPNG);
         } else if (mimetype === 'tiff') {
-            return Promise.resolve(atob(dataURL[2])).then(loadTIFF);
+            return Promise.resolve(str2ab(atob(dataURL[2]))).then(loadTIFF);
         }
     }
 
