@@ -9,12 +9,11 @@ const isPNG = /\.png$/i;
 const isTIFF = /\.tiff?$/i;
 
 function str2ab(str) {
-    var buf = new ArrayBuffer(str.length * 2); // 2 bytes for each char
-    var bufView = new Uint16Array(buf);
+    var arr = new Uint8Array(str.length);
     for (var i = 0; i < str.length; i++) {
-        bufView[i] = str.charCodeAt(i);
+        arr[i] = str.charCodeAt(i);
     }
-    return buf;
+    return arr;
 }
 
 function swap16(val) {
