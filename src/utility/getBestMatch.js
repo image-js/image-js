@@ -23,22 +23,29 @@ export default function match( image, {}={} ) {
     // there could be many algorithms
     let similarityMatrix = new Matrix(image.width, image.height, -Infinity);
 
-    let currentX=Math.round(image.width/2);
-    let currentY=Math.round(image.height/2);
-    let currentSimilarity=-Infinity;
+    let currentX = Math.floor(image.width/2);
+    let currentY = Math.floor(image.height/2);
+    let middleX = currentX;
+    let middleY = currentY;
+    let theEnd = false;
 
-  //  console.log(similarityMatrix);
+    while (! theEnd) {
+        let toCalculatePositions=similarityMatrix.localSearch(currentX, currentY, -Infinity);
+        for (let i=0; i<toCalculatePositions.length; i++) {
+            let position=toCalculatePositions[i];
+            let similarity=this.getSimilarity(image, {shift: [middleX-position[0], middleY-position[1]]});
+            similarityMatrix[position[0]][position[1]]=similarity;
+        }
 
-    // we need to calculate all the similarity around the current point that was
-    // not yet calculated
+        let max=similarityMatrix.localMax(currentX, currentY);
+        if (max.position[0]!==currentX || max.position[1]!==currentY) {
+            currentX=max.position[0];
+            currentY=max.position[1];
+        } else {
+            theEnd=true;
+        }
+    }
 
+    return [currentX-middleX, currentY-middleY];
 }
 
-
-function calculateMissing() {
-
-}
-
-function getBestMatch(similarityMatrix,x,y) {
-
-}
