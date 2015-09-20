@@ -20,7 +20,11 @@ export default function invert({channels}={}) {
         let channels = validateArrayOfChannels(this, channels, true);
 
         let data = this.data;
-        for (let j of channels) {
+
+        // for (let j of channels) { WOULD SLOW DO OF A FACTOR 10 !
+
+        for (let c=0; c<channels.length; c++) {
+            let j=channels[c];
             for (let i = j; i < data.length; i += this.channels) {
                 data[i] = this.maxValue - data[i];
             }

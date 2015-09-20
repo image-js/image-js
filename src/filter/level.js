@@ -33,7 +33,8 @@ export default function level({algorithm='full', channels}={}) {
               */
 
 
-            for (let c of channels) {
+            for (let j=0; j<channels.length; j++) {
+                let c=channels[j];
                 if (factor[c]!==0) {
                     for (let i=0; i<this.data.length; i+=this.channels) {
                         this.data[i+c]=((this.data[i+c]-min[c])*factor[c]+0.5) | 0;
