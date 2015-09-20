@@ -36,7 +36,7 @@ export default function level({algorithm='full', channels}={}) {
             for (let c of channels) {
                 if (factor[c]!==0) {
                     for (let i=0; i<this.data.length; i+=this.channels) {
-                        this.data[i+c]=Math.round((this.data[i+c]-min[c])*factor[c])
+                        this.data[i+c]=((this.data[i+c]-min[c])*factor[c]+0.5) | 0;
                     }
                 }
             }
