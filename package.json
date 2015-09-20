@@ -35,9 +35,8 @@
     "clean-lib": "rm -rf lib",
     "eslint": "eslint src test/node",
     "prepublish": "npm run compile",
-    "test": "npm run compile && npm run test-mocha && npm run eslint",
+    "test": "sh test/checkOnly.sh && npm run compile && npm run test-mocha && npm run eslint",
     "test-mocha": "mocha --compilers js:babel/register --require should --reporter mocha-better-spec-reporter --recursive test/node",
-    "test-travis": "npm run test && sh test/checkOnly.sh",
     "watch-browser": "watchify test/browser/bootstrap.js -o test/browser/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --exclude buffer --exclude zlib --exclude process --ignore fs --debug --transform [ babelify --sourceMap --blacklist=regenerator ]",
     "watch-node": "babel --watch src --out-dir lib --blacklist=regenerator"
   },
