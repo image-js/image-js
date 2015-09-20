@@ -4,7 +4,7 @@ import PNGReader from 'png.js';
 import {TIFFDecoder} from 'tiff';
 import atob from 'atob-lite';
 
-const isDataURL = /data:[a-z]+\/(\[a-z]+);base64,(.+)/;
+const isDataURL = /data:[a-z]+\/([a-z]+);base64,(.+)/;
 const isPNG = /\.png$/i;
 const isTIFF = /\.tiff?$/i;
 
