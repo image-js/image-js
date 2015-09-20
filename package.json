@@ -59,6 +59,7 @@
     "canvas": "^1.2.9"
   },
   "dependencies": {
+    "atob-lite": "^1.0.0",
     "extend": "^3.0.0",
     "is-integer": "^1.0.4",
     "ml-matrix": "^0.1.0",

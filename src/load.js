@@ -2,7 +2,9 @@ import Image from './image';
 import {env, loadBinary, DOMImage, ImageData, Canvas, isDifferentOrigin} from './environment';
 import PNGReader from 'png.js';
 import {TIFFDecoder} from 'tiff';
+import atob from 'atob-lite';
 
+const isDataURL = /data:[a-z]+\/(\[a-z]+);base64,(.+)/;
 const isPNG = /\.png$/i;
 const isTIFF = /\.tiff?$/i;
 
@@ -11,56 +13,62 @@ function swap16(val) {
 }
 
 export function loadURL(url) {
-    if (url.match(isPNG)) {
-        return loadPNG(url);
-    } else if (url.match(isTIFF)) {
-        return loadTIFF(url);
-    } else {
-        return loadGeneric(url);
+    const dataURL = isDataURL.exec(url);
+    if (dataURL) {
+        const mimetype = dataURL[1];
+        if(mimetype === 'png') {
+            return Promise.resolve(atob(dataURL[2])).then(loadPNG);
+        } else if (mimetype === 'tiff') {
+            return Promise.resolve(atob(dataURL[2])).then(loadTIFF);
+        }
     }
+
+    if (isPNG.test(url)) {
+        return loadBinary(url).then(loadPNG);
+    } else if (isTIFF.test(url)) {
+        return loadBinary(url).then(loadTIFF);
+    }
+
+    return loadGeneric(url);
 }
 
-function loadPNG(url) {
-    return loadBinary(url).then(function (data) {
-        return new Promise(function (resolve, reject) {
-            const reader = new PNGReader(data);
-            reader.parse(function (err, png) {
-                if (err) return reject(err);
-                const bitDepth = png.getBitDepth();
-                const buffer = png.pixels.buffer;
-                const offset = png.pixels.byteOffset;
-                const length = png.pixels.length;
-                let data;
-                if (bitDepth === 8) {
-                    data = new Uint8ClampedArray(buffer, offset, length);
-                } else if (bitDepth === 16) {
-                    data = new Uint16Array(buffer, offset, length / 2);
-                    for (let i = 0; i < data.length; i++) {
-                        data[i] = swap16(data[i]);
-                    }
+function loadPNG(data) {
+    return new Promise(function (resolve, reject) {
+        const reader = new PNGReader(data);
+        reader.parse(function (err, png) {
+            if (err) return reject(err);
+            const bitDepth = png.getBitDepth();
+            const buffer = png.pixels.buffer;
+            const offset = png.pixels.byteOffset;
+            const length = png.pixels.length;
+            let data;
+            if (bitDepth === 8) {
+                data = new Uint8ClampedArray(buffer, offset, length);
+            } else if (bitDepth === 16) {
+                data = new Uint16Array(buffer, offset, length / 2);
+                for (let i = 0; i < data.length; i++) {
+                    data[i] = swap16(data[i]);
                 }
+            }
 
-                resolve(new Image(png.width, png.height, data, {
-                    components: png.colors - png.alpha,
-                    alpha: png.alpha,
-                    bitDepth: bitDepth
-                }));
-            });
+            resolve(new Image(png.width, png.height, data, {
+                components: png.colors - png.alpha,
+                alpha: png.alpha,
+                bitDepth: bitDepth
+            }));
         });
     });
 }
 
-function loadTIFF(url) {
-    return loadBinary(url).then(function (data) {
-        let decoder = new TIFFDecoder(data);
-        let result = decoder.decode();
-        let image = result.ifd[0];
-        return new Image(image.width, image.height, image.data, {
-            components: 1,
-            alpha: 0,
-            colorModel: null,
-            bitDepth: image.bitsPerSample
-        });
+function loadTIFF(data) {
+    let decoder = new TIFFDecoder(data);
+    let result = decoder.decode();
+    let image = result.ifd[0];
+    return new Image(image.width, image.height, image.data, {
+        components: 1,
+        alpha: 0,
+        colorModel: null,
+        bitDepth: image.bitsPerSample
     });
 }
 
@@ -81,7 +89,9 @@ function loadGeneric(url) {
             let data = ctx.getImageData(0, 0, w, h).data;
             resolve(new Image(w, h, data));
         };
-        image.onerror = reject;
+        image.onerror = function () {
+            reject(new Error('Could not load ' + url));
+        };
         image.src = url;
     });
 }
