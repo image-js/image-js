@@ -16,7 +16,7 @@ describe('we check we can extract a part of B/W image', function () {
         });
     });
 
-    it('check by specify 1,1 position with parent', function () {
+    it.skip('check by specify 1,1 position with parent', function () {
 
         return load('BW4x4.png').then(function (image) {
 
