@@ -1,6 +1,6 @@
 import newArray from 'new-array';
 
-// returns an array with the minimal value of each component
+// returns an array with the maximal value of each channel
 
 export default function max() {
     this.checkProcessable('max', {

@@ -10,7 +10,8 @@ import percentile from './percentile';
  */
 
 
-export default function mask(algorithm = 0.5, {
+export default function mask({
+    algorithm = 0.5,
     useAlpha = true,
     invert = false
     } = {}) {
@@ -43,14 +44,14 @@ export default function mask(algorithm = 0.5, {
     if (this.alpha && useAlpha) {
         for (let i = 0; i < this.data.length; i += this.channels) {
             let value=this.data[i] + (this.maxValue - this.data[i]) * (this.maxValue - this.data[i + 1]) / this.maxValue;
-            if ((invert && value >= threshold) || (! invert && value <= threshold)) {
+            if ((invert && value <= threshold) || (! invert && value >= threshold)) {
                 newImage.setBit(ptr);
             }
             ptr++;
         }
     } else {
         for (let i = 0; i < this.data.length; i += this.channels) {
-            if ((invert && this.data[i] <= threshold) || (! invert && this.data[i] >= threshold)) {
+            if ((invert && this.data[i] >= threshold) || (! invert && this.data[i] <= threshold)) {
                 newImage.setBit(ptr);
             }
             ptr++;

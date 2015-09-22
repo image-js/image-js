@@ -16,7 +16,7 @@ describe('we check that each ROI is surrounded by the expected border', function
             img.height.should.equal(11);
 
             let roiManager=img.getROIManager();
-            let mask=img.grey().mask();
+            let mask=img.grey().mask({invert:true});
             roiManager.putMask(mask);
 
             let rois=roiManager.getROI();

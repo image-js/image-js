@@ -10,7 +10,7 @@ describe('we check that we can extract correctly a ROI', function () {
 
             let roiManager=img.getROIManager();
             let grey=img.grey();
-            let mask=grey.mask();
+            let mask=grey.mask({invert: true});
             roiManager.putMask(mask);
 
             let rois=roiManager.getROI();
