@@ -38,7 +38,7 @@ describe('we check we can extract a part of B/W image', function () {
                 0, 255,
                 255, 255,
                 255, 0,
-                255, 0
+                0, 0
             ]);
 
             /* This corresponds to an extract if it was RGBA image */

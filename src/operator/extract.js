@@ -31,18 +31,14 @@ export default function extract(mask, {
 
     for (let x = 0; x < mask.width; x++) {
         for (let y = 0; y < mask.height; y++) {
-            if (mask.getBitXY(x, y)) {
-                for (let channel = 0; channel < this.channels; channel++) {
-                    let value=this.getValueXY(x + position[0], y + position[1], channel);
-                    extract.setValueXY(x, y, channel, value);
-                }
-            } else { // no match, we make a white transparent
-                for (let component = 0; component < this.components; component++) {
-                    extract.setValueXY(x, y, component, this.maxValue);
-                }
-                if (this.alpha) {
-                    extract.setValueXY(x, y, this.components, 0);
-                }
+            // we copy the point
+            for (let channel = 0; channel < this.channels; channel++) {
+                let value=this.getValueXY(x + position[0], y + position[1], channel);
+                extract.setValueXY(x, y, channel, value);
+            }
+            // we make it transparent in case it is not in the mask
+            if (! mask.getBitXY(x, y)) {
+                extract.setValueXY(x, y, this.components, 0);
             }
         }
     }
