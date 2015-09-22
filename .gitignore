@@ -5,3 +5,4 @@ node_modules
 test/node/TMP
 test/browser/image.js
 .DS_Store
+coverage

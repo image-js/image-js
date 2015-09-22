@@ -2,6 +2,7 @@
 
   [![NPM version][npm-image]][npm-url]
   [![build status][travis-image]][travis-url]
+  [![Test coverage][coveralls-image]][coveralls-url]
   [![npm download][download-image]][download-url]
 
 Image processing and manipulation in JavaScript
@@ -59,13 +60,10 @@ Script name | Description
 ----------- | -----------
 build | build the browser files (for release, do not use it for tests)
 build-test | build the browser test file (test/browser/image.js)
-compile | build the Node.js files (in lib folder)
 clean-dist | delete browser build files
-clean-lib | delete node build files
-test | compile and run the test suite
-test-mocha | Run the test suite (need to compile first)
+test | Run the test suite and other checks. Always run this before pushing to GitHub
+test-mocha | Run the test suite
 watch-browser | build continuously the browser test file
-watch-node | build continuously the Node.js files
 
 ## License
 
@@ -75,5 +73,7 @@ watch-node | build continuously the Node.js files
 [npm-url]: https://www.npmjs.com/package/image-js
 [travis-image]: https://img.shields.io/travis/image-js/core/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/image-js/core
+[coveralls-image]: https://img.shields.io/coveralls/image-js/core.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/github/image-js/core
 [download-image]: https://img.shields.io/npm/dm/image-js.svg?style=flat-square
 [download-url]: https://www.npmjs.com/package/image-js

@@ -35,13 +35,15 @@
     "clean-lib": "rm -rf lib",
     "eslint": "eslint src test/node",
     "prepublish": "npm run compile",
-    "test": "sh test/checkOnly.sh && npm run compile && npm run test-mocha && npm run eslint",
-    "test-mocha": "mocha --compilers js:babel/register --require should --reporter mocha-better-spec-reporter --recursive test/node",
-    "watch-browser": "watchify test/browser/bootstrap.js -o test/browser/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore buffer --ignore zlib --ignore fs --debug --transform [ babelify --sourceMap --blacklist=regenerator ]",
-    "watch-node": "babel --watch src --out-dir lib --blacklist=regenerator"
+    "test": "sh test/checkOnly.sh && npm run test-mocha && npm run eslint",
+    "test-cov": "babel-node node_modules/.bin/babel-istanbul cover _mocha -- --require should --reporter dot --recursive test/node",
+    "test-mocha": "babel-node node_modules/.bin/_mocha --require should --reporter mocha-better-spec-reporter --recursive test/node",
+    "test-travis": "sh test/checkOnly.sh && babel-node node_modules/.bin/babel-istanbul cover _mocha --report lcovonly -- --require should --reporter mocha-better-spec-reporter --recursive test/node && npm run eslint",
+    "watch-browser": "watchify test/browser/bootstrap.js -o test/browser/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore buffer --ignore zlib --ignore fs --debug --transform [ babelify --sourceMap --blacklist=regenerator ]"
   },
   "devDependencies": {
     "babel": "^5.6.4",
+    "babel-istanbul": "^0.3.20",
     "babelify": "^6.1.2",
     "benchmark": "^1.0.0",
     "browserify": "^10.2.4",
