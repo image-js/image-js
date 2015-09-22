@@ -27,8 +27,8 @@
   "license": "MIT",
   "main": "./lib/image.js",
   "scripts": {
-    "build": "npm run clean-dist && browserify src/image.js -o dist/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore buffer --ignore zlib --ignore process --ignore fs --global-transform [ babelify --blacklist=regenerator ]",
-    "build-test": "browserify test/browser/bootstrap.js -o test/browser/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore buffer --ignore zlib --ignore process --ignore fs --debug --global-transform [ babelify --sourceMap --blacklist=regenerator ]",
+    "build": "npm run clean-dist && browserify src/image.js -o dist/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore buffer --ignore zlib --ignore fs --global-transform [ babelify --blacklist=regenerator ]",
+    "build-test": "browserify test/browser/bootstrap.js -o test/browser/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore buffer --ignore zlib --ignore fs --debug --global-transform [ babelify --sourceMap --blacklist=regenerator ]",
     "compile": "npm run clean-lib && babel src --out-dir lib --blacklist=regenerator",
     "compile-es6": "npm run clean-lib && babel src --out-dir lib --blacklist=es3.memberExpressionLiterals,es3.propertyLiterals,es5.properties.mutators,es6.blockScoping,es6.classes,es6.constants,es6.forOf,es6.properties.shorthand,es6.templateLiterals,regenerator",
     "clean-dist": "rm -rf dist && mkdir dist",
@@ -37,7 +37,7 @@
     "prepublish": "npm run compile",
     "test": "sh test/checkOnly.sh && npm run compile && npm run test-mocha && npm run eslint",
     "test-mocha": "mocha --compilers js:babel/register --require should --reporter mocha-better-spec-reporter --recursive test/node",
-    "watch-browser": "watchify test/browser/bootstrap.js -o test/browser/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore buffer --ignore zlib --ignore process --ignore fs --debug --transform [ babelify --sourceMap --blacklist=regenerator ]",
+    "watch-browser": "watchify test/browser/bootstrap.js -o test/browser/image.js --standalone IJ --exclude canvas --exclude canvas/lib/bindings --ignore buffer --ignore zlib --ignore fs --debug --transform [ babelify --sourceMap --blacklist=regenerator ]",
     "watch-node": "babel --watch src --out-dir lib --blacklist=regenerator"
   },
   "devDependencies": {
