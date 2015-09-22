@@ -9,8 +9,8 @@ const isPNG = /\.png$/i;
 const isTIFF = /\.tiff?$/i;
 
 function str2ab(str) {
-    var arr = new Uint8Array(str.length);
-    for (var i = 0; i < str.length; i++) {
+    const arr = new Uint8Array(str.length);
+    for (let i = 0; i < str.length; i++) {
         arr[i] = str.charCodeAt(i);
     }
     return arr;
