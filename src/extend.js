@@ -38,6 +38,8 @@ import getColorHistogram from './compute/colorHistogram';
 import getMin from './compute/min';
 import getMax from './compute/max';
 import getSum from './compute/sum';
+import getAverage from './compute/average';
+import getMedian from './compute/median';
 import getPixelsArray from './compute/pixelsArray';
 import getRelativePosition from './compute/relativePosition';
 import getSVD from './compute/svd';
@@ -86,6 +88,8 @@ export default function extend(Image) {
     Image.extendMethod('getMin', getMin).extendProperty('min', getMin);
     Image.extendMethod('getMax', getMax).extendProperty('max', getMax);
     Image.extendMethod('getSum', getSum).extendProperty('sum', getSum);
+    Image.extendMethod('getMedian', getSum).extendProperty('median', getMedian);
+    Image.extendMethod('getAverage', getSum).extendProperty('average', getAverage);
     Image.extendMethod('getPixelsArray', getPixelsArray).extendProperty('pixelsArray', getPixelsArray);
     Image.extendMethod('getRelativePosition', getRelativePosition);
     Image.extendMethod('getSVD', getSVD).extendProperty('svd', getSVD);

@@ -3,13 +3,10 @@ import medianFromHistogram from '../utility/medianFromHistogram'
 
 export default function median() {
     let result=new Array(this.channels);
-    let histograms=this.getHistograms({maxSlots:this.maxValue});
+    let histograms=this.getHistograms({maxSlots:this.maxValue+1});
     for (let c=0; c<histograms.length; c++) {
         let histogram=histograms[c];
         result[c]=medianFromHistogram(histogram);
     }
     return result;
 }
-
-
-
