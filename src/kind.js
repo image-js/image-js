@@ -51,10 +51,6 @@ export function getPixelArraySize(kind, numberPixels) {
 export function getPixelArray(kind, numberPixels) {
     let length = (kind.components + kind.alpha) * numberPixels;
     let arr;
-
-    new Uint16Array(0);   // TODO temporary fix to prevent
-
-
     switch (kind.bitDepth) {
         case 1:
             arr = new Uint8Array(Math.ceil(length / 8));
