@@ -42,7 +42,7 @@ describe('level', function() {
         });
 
         it('should change for a normal picture', function() {
-            return load('cat.jpg').then(
+            return load('cat-small.png').then(
                 function(image) {
                     let hash=getHash(image);
                     image.level();
