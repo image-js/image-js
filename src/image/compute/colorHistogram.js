@@ -21,16 +21,14 @@ export default function getColorHistogram({
     let factor2 = Math.pow(2, nbSlotsCheck * 2);
     let factor1 = Math.pow(2, nbSlotsCheck);
 
-    if (useAlpha && this.alpha) {
-        for (let i = 0; i < data.length; i += this.channels) {
-            let slot = ((data[i]) >> bitShift) * factor2 +
-                ((data[i + 1]) >> bitShift) * factor1 +
-                ((data[i + 2]) >> bitShift);
+
+    for (let i = 0; i < data.length; i += this.channels) {
+        let slot = ((data[i]) >> bitShift) * factor2 +
+            ((data[i + 1]) >> bitShift) * factor1 +
+            ((data[i + 2]) >> bitShift);
+        if (useAlpha && this.alpha) {
             result[slot] += data[i + this.channels - 1] / this.maxValue;
-        }
-    } else {
-        for (let i = 0; i < data.length; i += this.channels) {
-            let slot = (data[i] >> bitShift) * 64 + (data[i + 1] >> bitShift) * 8 + (data[i + 2] >> bitShift);
+        } else {
             result[slot]++;
         }
     }
