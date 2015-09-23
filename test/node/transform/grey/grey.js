@@ -51,6 +51,10 @@ describe('Grey transform', function () {
             ]
         );
 
+        (function() {
+            image.grey({algorithm: 'XXX'}).should.throw(/Unsupported grey algorithm/);
+        })
+
     });
 
 
