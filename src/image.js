@@ -63,7 +63,7 @@ export default class Image {
         this.bitDepth = kindDefinition.bitDepth;
         this.colorModel = kindDefinition.colorModel;
 
-        this.computed = {};
+        this.computed = null;
 
         this.initialize();
 
@@ -109,8 +109,8 @@ export default class Image {
     static extendMethod(name, method, {inPlace = false, returnThis = true, partialArgs = []} = {}) {
         if (inPlace) {
             Image.prototype[name] = function (...args) {
-                // reset computed properties
-                this.computed = {};
+                // remove computed properties
+                this.computed = null;
                 let result = method.apply(this, [...partialArgs, ...args]);
                 if (returnThis)
                     return this;
@@ -126,13 +126,14 @@ export default class Image {
 
     static extendProperty(name, method, {partialArgs = []} = {}) {
         computedPropertyDescriptor.get = function () {
-            if (this.computed.hasOwnProperty(name)) {
+            if (this.computed === null) {
+                this.computed = {};
+            } else if (this.computed.hasOwnProperty(name)) {
                 return this.computed[name];
-            } else {
-                let result = method.apply(this, partialArgs);
-                this.computed[name] = result;
-                return result;
             }
+            let result = method.apply(this, partialArgs);
+            this.computed[name] = result;
+            return result;
         };
         Object.defineProperty(Image.prototype, name, computedPropertyDescriptor);
         return Image;
@@ -176,6 +177,8 @@ export default class Image {
 
     setValueXY(x, y, channel, value) {
         this.data[(y * this.width + x) * this.channels + channel] = value;
+        this.computed = null;
+        return this;
     }
 
     getValueXY(x, y, channel) {
@@ -184,6 +187,8 @@ export default class Image {
 
     setValue(pixel, channel, value) {
         this.data[pixel * this.channels + channel] = value;
+        this.computed = null;
+        return this;
     }
 
     getValue(pixel, channel) {
@@ -191,7 +196,7 @@ export default class Image {
     }
 
     setPixelXY(x, y, value) {
-        this.setPixel(y * this.width + x, value);
+        return this.setPixel(y * this.width + x, value);
     }
 
     getPixelXY(x, y) {
@@ -203,6 +208,8 @@ export default class Image {
         for (let i = 0; i < value.length; i++) {
             this.data[target + i] = value[i];
         }
+        this.computed = null;
+        return this;
     }
 
     getPixel(pixel) {
@@ -228,6 +235,8 @@ export default class Image {
                 }
             }
         }
+        this.computed = null;
+        return this;
     }
 
     getMatrix(channel) {
@@ -305,7 +314,7 @@ export default class Image {
         return newData;
     }
 
-    // those methods can only apply on binary images ... but we will not loose time to check !
+    // those methods can only apply on binary images... but we will not lose time to check!
     setBitXY(x, y) {
         let target = y * this.width + x;
         let shift = 7 - (target & 0b00000111);
