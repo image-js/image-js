@@ -61,9 +61,11 @@ Script name | Description
 build | build the browser files (for release, do not use it for tests)
 build-test | build the browser test file (test/browser/image.js)
 clean-dist | delete browser build files
+compile | build the Node.js lib files
 test | Run the test suite and other checks. Always run this before pushing to GitHub
 test-mocha | Run the test suite
 watch-browser | build continuously the browser test file
+watch-node | build continuously the lib files
 
 ## License
 
