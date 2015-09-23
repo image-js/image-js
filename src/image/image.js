@@ -2,6 +2,7 @@ import {getKind, getPixelArray, getPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
 import {ImageData, Canvas} from './environment';
 import extend from './extend';
+import bitMethods from './bitMethods';
 import {createWriteStream} from 'fs';
 import {RGB} from './model/model';
 import ROIManager from './roi/manager';
@@ -314,59 +315,6 @@ export default class Image {
         return newData;
     }
 
-    // those methods can only apply on binary images... but we will not lose time to check!
-    setBitXY(x, y) {
-        let target = y * this.width + x;
-        let shift = 7 - (target & 0b00000111);
-        let slot = target >> 3;
-        this.data[slot] |= 1 << shift;
-    }
-
-    clearBitXY(x, y) {
-        let target = y * this.width + x;
-        let shift = 7 - (target & 0b00000111);
-        let slot = target >> 3;
-        this.data[slot] &= ~(1 << shift);
-    }
-
-    toggleBitXY(x, y) {
-        let target = y * this.width + x;
-        let shift = 7 - (target & 0b00000111);
-        let slot = target >> 3;
-        this.data[slot] ^= 1 << shift;
-    }
-
-    getBitXY(x, y) {
-        let target = y * this.width + x;
-        let shift = 7 - (target & 0b00000111);
-        let slot = target >> 3;
-        return (this.data[slot] & 1 << shift) ? 1 : 0;
-    }
-
-    setBit(pixel) {
-        let shift = 7 - (pixel & 0b00000111);
-        let slot = pixel >> 3;
-        this.data[slot] |= 1 << shift;
-    }
-
-    clearBit(pixel) {
-        let shift = 7 - (pixel & 0b00000111);
-        let slot = pixel >> 3;
-        this.data[slot] &= ~(1 << shift);
-    }
-
-    toggleBit(pixel) {
-        let shift = 7 - (pixel & 0b00000111);
-        let slot = pixel >> 3;
-        this.data[slot] ^= 1 << shift;
-    }
-
-    getBit(pixel) {
-        let shift = 7 - (pixel & 0b00000111);
-        let slot = pixel >> 3;
-        return (this.data[slot] & 1 << shift) ? 1 : 0;
-    }
-
     getROIManager(mask, options) {
         return new ROIManager(this, options);
     }
@@ -502,3 +450,4 @@ export default class Image {
 }
 
 extend(Image);
+bitMethods(Image);
