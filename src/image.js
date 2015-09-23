@@ -9,25 +9,22 @@ import {getType, canWrite} from './mediaTypes';
 import extendObject from 'extend';
 import {loadURL} from './load';
 
-
-
 let computedPropertyDescriptor = {
     configurable: true,
     enumerable: false,
     get: undefined
 };
 
-export default
-class Image {
-        constructor(width, height, data, options) { // or (sizes, data, options)
+export default class Image {
+    constructor(width, height, data, options) { // or (sizes, data, options)
         if (Array.isArray(width)) { // we need to give an array with ALL the dimensions
-            options=data;
-            data=height;
-            this.sizes=width;
+            options = data;
+            data = height;
+            this.sizes = width;
         } else {
             if (width === undefined) width = 1;
             if (height === undefined) height = 1;
-            this.sizes=[width, height];
+            this.sizes = [width, height];
         }
         if (data && !data.length) {
             options = data;
@@ -44,7 +41,10 @@ class Image {
 
         // We will set the parent image for relative position
 
-        Object.defineProperty(this, 'parent', {enumerable:false, writable: true});
+        Object.defineProperty(this, 'parent', {
+            enumerable: false,
+            writable: true
+        });
         this.parent = options.parent;
         this.position = options.position || [0, 0];
 
@@ -80,27 +80,26 @@ class Image {
     }
 
     initialize() {
-        this.dimension=this.sizes.length;
-        this.width=this.sizes[0];
-        this.height=this.sizes[1];
+        this.dimension = this.sizes.length;
+        this.width = this.sizes[0];
+        this.height = this.sizes[1];
 
-        let size=1;
-        for (let i=0; i<this.sizes.length; i++) {
-            size*=this.sizes[i];
+        let size = 1;
+        for (let i = 0; i < this.sizes.length; i++) {
+            size *= this.sizes[i];
         }
-        this.size=size; // the number of pixels
+        this.size = size; // the number of pixels
 
-        this.channels=this.components + this.alpha;
-        this.maxValue=(1 << this.bitDepth) - 1;
+        this.channels = this.components + this.alpha;
+        this.maxValue = (1 << this.bitDepth) - 1;
 
-        let multipliers=[this.dimension];
-        multipliers[0]=this.channels;
-        for (let i=1; i<this.dimension; i++) {
-            multipliers[i]=multipliers[i-1]*this.sizes[i-1];
+        let multipliers = [this.dimension];
+        multipliers[0] = this.channels;
+        for (let i = 1; i < this.dimension; i++) {
+            multipliers[i] = multipliers[i - 1] * this.sizes[i - 1];
         }
-        this.multipliers=multipliers;
+        this.multipliers = multipliers;
     }
-
 
 
     static load(url) {
@@ -168,9 +167,9 @@ class Image {
     }
 
     getPixelIndex(indices) {
-        let shift=0;
-        for (let i=0; i<indices.length; i++) {
-            shift+=this.multipliers[i]*indices[i];
+        let shift = 0;
+        for (let i = 0; i < indices.length; i++) {
+            shift += this.multipliers[i] * indices[i];
         }
         return shift;
     }
@@ -447,34 +446,33 @@ class Image {
     }
 
     applyAll(filter) {
-        let maxValue=new Array(this.sizes.length);
-        for (let i=0; i<this.sizes.length; i++) {
-            maxValue[i]=this.sizes[i]-1;
+        let maxValue = new Array(this.sizes.length);
+        for (let i = 0; i < this.sizes.length; i++) {
+            maxValue[i] = this.sizes[i] - 1;
         }
-        let currents=new Uint16Array(this.dimension);
-        let position=0;
+        let currents = new Uint16Array(this.dimension);
+        let position = 0;
         while (true) {
             // TODO this may be quite the limiting step and inline does not help
             // we could optimize it by keeping track of previously partical
             // calculated indices
-            let index=this.getPixelIndex(currents);
+            let index = this.getPixelIndex(currents);
             filter.call(this, index);
-            if (currents[position]===maxValue[position]) {
-                while (position<currents.length && currents[position]===maxValue[position]) {
-                    currents[position]=0;
+            if (currents[position] === maxValue[position]) {
+                while (position < currents.length && currents[position] === maxValue[position]) {
+                    currents[position] = 0;
                     position++;
                 }
-                if (position===currents.length) {
+                if (position === currents.length) {
                     break;
                 }
                 currents[position]++;
-                position=0;
+                position = 0;
             } else {
                 currents[position]++;
             }
         }
     }
-
 
 
     // This approach is SOOOO slow .... for now just forget about it !
