@@ -18,11 +18,7 @@ Image.load(Test.getImage(filename)).then(function (img) {
         .add('invertOneLoop', function () {
             img.invertOneLoop();
         })
-        /*
-         .add('invertMatrix', function () {
-         img.invertMatrix();
-         })
-        .add('invertIterator', function () {
+        /*.add('invertIterator', function () {
             img.invertIterator();
         })
          */

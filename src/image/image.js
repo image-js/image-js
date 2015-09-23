@@ -222,42 +222,6 @@ export default class Image {
         return value;
     }
 
-    setMatrix(matrix, channel) {
-        // the user is expected to know what he is doing !
-        // we blinding put the matrix result
-        for (let i = 0; i < this.width; i++) {
-            for (let j = 0; j < this.height; j++) {
-                for (let k = 0; k < this.channels; k++) {
-                    if (channel) {
-                        this.data[(j * this.width + i) * this.channels + channel] = matrix[i][j];
-                    } else {
-                        this.data[(j * this.width + i) * this.channels + k] = matrix[i][j][k];
-                    }
-                }
-            }
-        }
-        this.computed = null;
-        return this;
-    }
-
-    getMatrix(channel) {
-        let matrix = new Array(this.width);
-        for (let i = 0; i < this.width; i++) {
-            matrix[i] = new Array(this.height);
-            for (let j = 0; j < this.height; j++) {
-                if (channel) {
-                    matrix[i][j] = this.data[(j * this.width + i) * this.channels + channel]
-                } else {
-                    matrix[i][j] = new Array(this.channels);
-                    for (let k = 0; k < this.channels; k++) {
-                        matrix[i][j][k] = this.data[(j * this.width + i) * this.channels + k]
-                    }
-                }
-            }
-        }
-        return matrix;
-    }
-
     toDataURL(type = 'image/png') {
         return this.getCanvas().toDataURL(getType(type));
     }
@@ -430,23 +394,6 @@ export default class Image {
             }
         }
     }
-
-
-    // This approach is SOOOO slow .... for now just forget about it !
-    /**pixels() {
-        let toYield = {x: 0, y: 0, index: 0, pixel: new Array(this.channels)};
-        for (let y = 0; y < this.height; y++) {
-            for (let x = 0; x < this.width; x++) {
-                toYield.x = x;
-                toYield.y = y;
-                toYield.index = y * this.width + x;
-                for (let c = 0; c < this.channels; c++) {
-                    toYield.pixel[c] = this.data[toYield.index * this.channels + c];
-                }
-                yield toYield;
-            }
-        }
-    }*/
 }
 
 extend(Image);

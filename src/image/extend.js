@@ -1,7 +1,6 @@
 // filters
 import invertGetSet from './filter/invertGetSet';
 import invertIterator from './filter/invertIterator';
-import invertMatrix from './filter/invertMatrix';
 import invertOneLoop from './filter/invertOneLoop';
 import invertPixel from './filter/invertPixel';
 import invertApply from './filter/invertApply';
@@ -49,7 +48,6 @@ export default function extend(Image) {
     let inPlace = {inPlace: true};
     Image.extendMethod('invertGetSet', invertGetSet, inPlace);
     Image.extendMethod('invertIterator', invertIterator, inPlace);
-    Image.extendMethod('invertMatrix', invertMatrix, inPlace);
     Image.extendMethod('invertPixel', invertPixel, inPlace);
     Image.extendMethod('invertOneLoop', invertOneLoop, inPlace);
     Image.extendMethod('invertApply', invertApply, inPlace);
