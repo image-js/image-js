@@ -1,7 +1,7 @@
 import {Image, getHash} from '../common';
 
 describe('check the pad transform', function () {
-    it.only('check the right pad extract for GREY image', function () {
+    it('check the right pad extract for GREY image', function () {
 
         let image=new Image(2, 2,
             [
