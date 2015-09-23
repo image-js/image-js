@@ -1,5 +1,5 @@
 import Image from '../image';
-import validateArrayOfChannels from '../misc/validateArrayOfChannels';
+import validateArrayOfChannels from './validateArrayOfChannels';
 import newArray from 'new-array';
 
 // Try to match the current pictures with another one

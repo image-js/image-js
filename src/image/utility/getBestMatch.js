@@ -1,6 +1,6 @@
 import Image from '../image';
 import newArray from 'new-array';
-import Matrix from './matrix';
+import Matrix from '../../util/matrix';
 
 // Try to match the current pictures with another one
 

@@ -1,5 +1,5 @@
 import Image from '../image';
-import validateChannel from '../misc/validateChannel';
+import validateChannel from './validateChannel';
 
 export default function getChannel( channel ) {
 

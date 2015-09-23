@@ -1,4 +1,4 @@
-import validateArrayOfChannels from '../misc/validateArrayOfChannels';
+import validateArrayOfChannels from '../utility/validateArrayOfChannels';
 
 export default function level({algorithm='full', channels}={}) {
     this.checkProcessable('level', {

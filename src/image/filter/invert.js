@@ -1,6 +1,6 @@
 // we try the faster methods
 
-import validateArrayOfChannels from '../misc/validateArrayOfChannels';
+import validateArrayOfChannels from '../utility/validateArrayOfChannels';
 
 export default function invert({channels}={}) {
     this.checkProcessable('invertOneLoop', {

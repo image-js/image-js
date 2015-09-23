@@ -1,7 +1,7 @@
 import Image from '../../image';
 
 import nearestNeighbor from './nearestNeighbor';
-import {factorDimensions} from '../../utility/converter';
+import {factorDimensions} from '../../../util/converter';
 
 export default function scale({
     width = this.width,

@@ -1,4 +1,4 @@
-import Matrix from '../../../src/image/utility/matrix';
+import Matrix from '../../../src/util/matrix';
 
 
 describe('check matrix class', function () {
