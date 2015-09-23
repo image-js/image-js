@@ -1,5 +1,5 @@
 import {Image} from '../common';
-import validateChannel from '../../../src/misc/validateChannel';
+import validateChannel from '../../../src/image/misc/validateChannel';
 
 describe('we check the validateChannel method', function () {
     it('check for a RGB image', function () {

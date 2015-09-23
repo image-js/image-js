@@ -1,4 +1,4 @@
-import {getFactor, factorDimensions} from '../../../src/utility/converter';
+import {getFactor, factorDimensions} from '../../../src/image/utility/converter';
 
 describe('Converter tests', function () {
     describe('getFactor', function () {

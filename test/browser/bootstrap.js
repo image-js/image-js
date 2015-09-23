@@ -1,6 +1,6 @@
 'use strict';
 
-import Image from '../../src/image';
+import Image from '../../src';
 import {imageList, getHash} from '../test';
 
 window.images = imageList;

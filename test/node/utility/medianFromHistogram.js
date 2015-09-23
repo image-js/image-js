@@ -1,4 +1,4 @@
-import medianFromHistogram from '../../../src/utility/medianFromHistogram';
+import medianFromHistogram from '../../../src/image/utility/medianFromHistogram';
 
 describe('check medianFromHistogram', function () {
 

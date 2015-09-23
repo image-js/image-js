@@ -4,7 +4,7 @@ import {getImage} from '../test';
 
 export {getImage, getHash} from '../test';
 
-import Image from '../../src/image';
+import Image from '../../src';
 
 export {Image};
 

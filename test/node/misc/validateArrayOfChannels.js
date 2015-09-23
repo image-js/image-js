@@ -1,5 +1,5 @@
 import {Image} from '../common';
-import validateArrayOfChannels from '../../../src/misc/validateArrayOfChannels';
+import validateArrayOfChannels from '../../../src/image/misc/validateArrayOfChannels';
 
 describe('we check the validateArrayOfChannels method', function () {
     it('check for a RGB image', function () {
