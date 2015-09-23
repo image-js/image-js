@@ -80,6 +80,37 @@ describe('calculate the overlap with another image', function () {
         similarity.should.eql([0, 0, 0]);
     });
 
+    it('check different images with size error', function () {
+        let image = new Image(3,1,[0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30]);
+        (function() {
+            let image2 = new Image(3,1,[0, 0],{kind:'GREY'});
+            image.getSimilarity(image2, {average: false});
+        }).should.throw(/incorrect data size/);
+    });
+
+    it('check different images with other kind', function () {
+        let image = new Image(3,1,[0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30]);
+        let image2 = new Image(3,1,[0, 0, 0],{kind:'GREY'});
+        (function() {
+            image.getSimilarity(image2, {average: false});
+        }).should.throw(/number of channel/);
+    });
+
+    it('check different images with other bitDepth', function () {
+        let image = new Image(3,1,[0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30]);
+        let image2 = new Image(3,1,[0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30],{bitDepth: 16});
+        (function() {
+            image.getSimilarity(image2, {average: false});
+        }).should.throw(/the same bitDepth/);
+    });
+
+    it('check different images with other bitDepth', function () {
+        let image = new Image(3,1,[0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30]);
+        let image2 = new Image(3,1,[0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30],{colorModel: 'HSL'});
+        (function() {
+            image.getSimilarity(image2, {average: false});
+        }).should.throw(/the same colorModel/);
+    });
 
 });
 
