@@ -5,8 +5,7 @@
 
 export default function invertPixel() {
     this.checkProcessable('invertPixel', {
-        bitDepth: [8, 16],
-        dimension: 2
+        bitDepth: [8, 16]
     });
 
 

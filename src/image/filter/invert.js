@@ -4,8 +4,7 @@ import validateArrayOfChannels from '../utility/validateArrayOfChannels';
 
 export default function invert({channels}={}) {
     this.checkProcessable('invertOneLoop', {
-        bitDepth: [1, 8, 16],
-        dimension: 2
+        bitDepth: [1, 8, 16]
     });
 
     if (this.bitDepth === 1) {

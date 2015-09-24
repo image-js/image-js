@@ -2,8 +2,7 @@ import validateArrayOfChannels from '../utility/validateArrayOfChannels';
 
 export default function level({algorithm='full', channels}={}) {
     this.checkProcessable('level', {
-        bitDepth: [8, 16],
-        dimension: 2
+        bitDepth: [8, 16]
     });
 
     channels = validateArrayOfChannels(this, {channels:channels});

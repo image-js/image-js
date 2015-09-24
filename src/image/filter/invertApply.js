@@ -10,9 +10,6 @@ export default function invertApply() {
 
 
     if (this.bitDepth === 1) {
-        this.checkProcessable('invertApply', {
-            dimension: 2
-        });
         // we simply invert all the integers value
         // there could be a small mistake if the number of points
         // is not a multiple of 8 but it is not important

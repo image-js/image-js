@@ -10,8 +10,7 @@ export default function pad({
     } = {}) {
 
     this.checkProcessable('pad', {
-        bitDepth: [8, 16],
-        dimension: 2
+        bitDepth: [8, 16]
     });
 
     if (algorithm==='set') {

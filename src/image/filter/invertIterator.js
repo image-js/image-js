@@ -1,7 +1,6 @@
 export default function invertIterator() {
     this.checkProcessable('invert', {
-        bitDepth: [1, 8, 16],
-        dimension: 2
+        bitDepth: [1, 8, 16]
     });
 
     if (this.bitDepth === 1) {

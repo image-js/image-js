@@ -6,8 +6,7 @@ import * as KindNames from '../kindNames';
 
 export default function resizeBinary(scale=0.5, options = {}) {
     this.checkProcessable('resizeBinary', {
-        bitDepth: [1],
-        dimension: 2
+        bitDepth: [1]
     });
 
     let width=Math.floor(this.width*scale);
