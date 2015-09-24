@@ -1,5 +1,5 @@
-import {Image, getHash} from '../common';
-import matchAndCrop from '../../../src/image/static/matchAndCrop';
+import {Image, getHash} from '../../common';
+import matchAndCrop from '../../../../src/stack/transform/matchAndCrop';
 
 describe('check matchAndCrop method', function () {
     it ('should return an array of 3 images cropped and moved', function() {
