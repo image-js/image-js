@@ -6,10 +6,9 @@ import Image from '../image';
 
 export default function hsv() {
     this.checkProcessable('hsv', {
-        bitDepth: [8, 16]
+        bitDepth: [8, 16],
         alpha: [0,1],
         colorModel: [RGB]
-
     });
 
     let newImage = Image.createFrom(this, {
