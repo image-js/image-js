@@ -8,7 +8,7 @@ export default function histograms(images, options) {
     let histogramLength=histograms[0].length;
     for (let i=1; i<images.length; i++) {
         let secondHistograms=images[i].getHistograms(options);
-        for (let c=0; c<histograms.length; i++) {
+        for (let c=0; c<histograms.length; c++) {
             for (let j=0; j<histogramLength; j++) {
                 histograms[c][j]+=secondHistograms[c][j];
             }

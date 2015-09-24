@@ -1,16 +1,16 @@
-import {Image, getHash} from '../../common';
-import histogram from '../../../../src/stack/compute/histogram';
+import {Image} from '../../common';
+import median from '../../../../src/stack/compute/median';
 
-describe('check stack histogram method', function () {
-    it ('should return global histogram for GREY image', function() {
+describe('check stack median method', function () {
+    it('should return global median for GREY image', function() {
 
         let images=[];
 
         images.push(
             new Image(2, 2,
                 [
-                    4, 170,
-                    6, 7
+                    1, 2,
+                    100, 101
                 ],
                 {kind: 'GREY'}
             )
@@ -20,7 +20,7 @@ describe('check stack histogram method', function () {
             new Image(2, 2,
                 [
                     2, 3,
-                    4, 5
+                    200,201
                 ],
                 {kind: 'GREY'}
             )
@@ -29,18 +29,18 @@ describe('check stack histogram method', function () {
         images.push(
             new Image(2, 2,
                 [
-                    1, 255,
-                    6, 7
+                    4, 5,
+                    200,240
                 ],
                 {kind: 'GREY'}
             )
         );
 
-        histogram(images, {maxSlots:4}).should.eql([10,0,1,1]);
+        median(images).should.eql([52.5]);
     });
 
 
-    it('should return global histogram for RGBA image', function() {
+    it('should return global median for RGBA image', function() {
 
         let images=[];
 
@@ -71,7 +71,7 @@ describe('check stack histogram method', function () {
             )
         );
 
-        histogram(images, {maxSlots:4, channel:0}).should.eql([6, 0, 0, 0]);
+        median(images).should.eql([4, 4.5, 6.5, 255]);
     });
 
 });
