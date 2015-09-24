@@ -10,6 +10,10 @@ import meanFilter from './filter/blur';
 import medianFilter from './filter/median';
 import gaussianFilter from './filter/gaussian';
 import level from './filter/level';
+import add from './filter/add';
+import substract from './filter/substract';
+import multiply from './filter/multiply';
+import divide from './filter/divide';
 
 // transformers
 import crop from './transform/crop';
@@ -53,6 +57,10 @@ export default function extend(Image) {
     Image.extendMethod('invert', invert, inPlace);
     Image.extendMethod('invertBinaryLoop', invertBinaryLoop, inPlace);
     Image.extendMethod('level', level, inPlace);
+    Image.extendMethod('add', add, inPlace);
+    Image.extendMethod('substract', substract, inPlace);
+    Image.extendMethod('multiply', multiply, inPlace);
+    Image.extendMethod('divide', divide, inPlace);
 
     Image.extendMethod('meanFilter', meanFilter);
     Image.extendMethod('medianFilter', medianFilter);

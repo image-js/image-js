@@ -68,7 +68,7 @@ Stack.prototype.checkProcessable = function(processName, options = {}) {
         throw new TypeError('The process: ' + processName + ' can not be applied on an empty stack');
     }
     this[0].checkProcessable(processName, options)
-    for (var i=1; i<this.length; i++) {
+    for (let i=1; i<this.length; i++) {
         if ((options.sameSize===undefined || options.sameSize) && this[0].width!==this[i].width) {
             throw new TypeError('The process: ' + processName + ' can not be applied if width is not identical in all images');
         }
