@@ -42,8 +42,8 @@ export default function overlap( image, {shift=[0,0], average, channels, default
         if (sumThis!==0 && sumImage!==0) {
             for (let x=minX; x<maxX; x++) {
                 for (let y=minY; y<maxY; y++) {
-                    let indexThis=x*this.multipliers[0]+y*this.multipliers[1]+c;
-                    let indexImage=indexThis+shift[0]*this.multipliers[0]+shift[1]*this.multipliers[1];
+                    let indexThis=x*this.multiplierX+y*this.multiplierY+c;
+                    let indexImage=indexThis+shift[0]*this.multiplierX+shift[1]*this.multiplierY;
                     results[i]+=Math.min(this.data[indexThis]/sumThis, image.data[indexImage]/sumImage);
                 }
             }

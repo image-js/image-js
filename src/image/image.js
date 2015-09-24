@@ -17,26 +17,23 @@ let computedPropertyDescriptor = {
 };
 
 export default class Image {
-    constructor(width, height, data, options) { // or (sizes, data, options)
-        if (Array.isArray(width)) { // we need to give an array with ALL the dimensions
-            options = data;
-            data = height;
-            this.sizes = width;
-        } else {
-            if (width === undefined) width = 1;
-            if (height === undefined) height = 1;
-            this.sizes = [width, height];
-        }
+    constructor(width, height, data, options) {
+        if (width === undefined) width = 1;
+        if (height === undefined) height = 1;
+
         if (data && !data.length) {
             options = data;
             data = null;
         }
         if (options === undefined) options = {};
 
-        if (!(this.sizes[0] > 0)) {
+        this.width=width;
+        this.height=height;
+
+        if (this.width <= 0) {
             throw new RangeError('width must be greater than 0');
         }
-        if (!(this.sizes[1] > 0)) {
+        if (this.height <= 0) {
             throw new RangeError('height must be greater than 0');
         }
 
@@ -58,9 +55,8 @@ export default class Image {
         }
 
         let kindDefinition = extendObject({}, theKind, options);
-
         this.components = kindDefinition.components;
-        this.alpha = kindDefinition.alpha;
+        this.alpha = kindDefinition.alpha+0;
         this.bitDepth = kindDefinition.bitDepth;
         this.colorModel = kindDefinition.colorModel;
 
@@ -81,25 +77,13 @@ export default class Image {
     }
 
     initialize() {
-        this.dimension = this.sizes.length;
-        this.width = this.sizes[0];
-        this.height = this.sizes[1];
-
-        let size = 1;
-        for (let i = 0; i < this.sizes.length; i++) {
-            size *= this.sizes[i];
-        }
-        this.size = size; // the number of pixels
-
+        this.size = this.width * this.height;
+        this.sizes = [this.width, this.height];
         this.channels = this.components + this.alpha;
         this.maxValue = (1 << this.bitDepth) - 1;
 
-        let multipliers = [this.dimension];
-        multipliers[0] = this.channels;
-        for (let i = 1; i < this.dimension; i++) {
-            multipliers[i] = multipliers[i - 1] * this.sizes[i - 1];
-        }
-        this.multipliers = multipliers;
+        this.multiplierX = this.channels;
+        this.multiplierY = this.channels * this.width;
     }
 
 
@@ -318,9 +302,7 @@ export default class Image {
     }
 
     // this method check if a process can be applied on the current image
-    checkProcessable(processName, {
-        bitDepth, alpha, colorModel, components, dimension
-        } = {}) {
+    checkProcessable(processName, {bitDepth, alpha, colorModel, components} = {}) {
         if (typeof processName !== 'string') {
             throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
         }
@@ -328,12 +310,6 @@ export default class Image {
             if (!Array.isArray(bitDepth)) bitDepth = [bitDepth];
             if (bitDepth.indexOf(this.bitDepth) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if bit depth is in: ' + bitDepth);
-            }
-        }
-        if (dimension) {
-            if (!Array.isArray(dimension)) dimension = [dimension];
-            if (dimension.indexOf(this.dimension) === -1) {
-                throw new TypeError('The process: ' + processName + ' can only be applied if the image has as dimension: ' + dimension);
             }
         }
         if (alpha) {
@@ -362,35 +338,6 @@ export default class Image {
                 let index = (y * this.width + x) * this.channels;
                 filter.call(this, index);
 
-            }
-        }
-    }
-
-    applyAll(filter) {
-        let maxValue = new Array(this.sizes.length);
-        for (let i = 0; i < this.sizes.length; i++) {
-            maxValue[i] = this.sizes[i] - 1;
-        }
-        let currents = new Uint16Array(this.dimension);
-        let position = 0;
-        while (true) {
-            // TODO this may be quite the limiting step and inline does not help
-            // we could optimize it by keeping track of previously partical
-            // calculated indices
-            let index = this.getPixelIndex(currents);
-            filter.call(this, index);
-            if (currents[position] === maxValue[position]) {
-                while (position < currents.length && currents[position] === maxValue[position]) {
-                    currents[position] = 0;
-                    position++;
-                }
-                if (position === currents.length) {
-                    break;
-                }
-                currents[position]++;
-                position = 0;
-            } else {
-                currents[position]++;
             }
         }
     }

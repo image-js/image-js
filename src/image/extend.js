@@ -4,7 +4,6 @@ import invertIterator from './filter/invertIterator';
 import invertOneLoop from './filter/invertOneLoop';
 import invertPixel from './filter/invertPixel';
 import invertApply from './filter/invertApply';
-import invertApplyAll from './filter/invertApplyAll';
 import invertBinaryLoop from './filter/invertBinaryLoop';
 import invert from './filter/invert';
 import meanFilter from './filter/blur';
@@ -51,7 +50,6 @@ export default function extend(Image) {
     Image.extendMethod('invertPixel', invertPixel, inPlace);
     Image.extendMethod('invertOneLoop', invertOneLoop, inPlace);
     Image.extendMethod('invertApply', invertApply, inPlace);
-    Image.extendMethod('invertApplyAll', invertApplyAll, inPlace);
     Image.extendMethod('invert', invert, inPlace);
     Image.extendMethod('invertBinaryLoop', invertBinaryLoop, inPlace);
     Image.extendMethod('level', level, inPlace);
