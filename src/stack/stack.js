@@ -15,6 +15,8 @@ export default function Stack(images) {
         }
     } else if (typeof images === 'number') {
         stack = new Array(images);
+    } else {
+        stack = new Array();
     }
     stack.computed = null;
     stack.__proto__ = Stack.prototype;
@@ -55,5 +57,38 @@ Stack.extendProperty = function extendProperty(name, method, {partialArgs = []} 
 };
 
 Stack.prototype.push = Array.prototype.push;
+
+
+// this method check if a process can be applied on the current image
+Stack.prototype.checkProcessable = function(processName, options = {}) {
+    if (typeof processName !== 'string') {
+        throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
+    }
+    if (this.size===0) {
+        throw new TypeError('The process: ' + processName + ' can not be applied on an empty stack');
+    }
+    this[0].checkProcessable(processName, options)
+    for (var i=1; i<this.length; i++) {
+        if ((options.sameSize===undefined || options.sameSize) && this[0].width!==this[i].width) {
+            throw new TypeError('The process: ' + processName + ' can not be applied if width is not identical in all images');
+        }
+        if ((options.sameSize===undefined || options.sameSize) && this[0].height!==this[i].height) {
+            throw new TypeError('The process: ' + processName + ' can not be applied if height is not identical in all images');
+        }
+        if ((options.sameAlpha===undefined || options.sameAlpha) && this[0].alpha!==this[i].alpha) {
+            throw new TypeError('The process: ' + processName + ' can not be applied if alpha is not identical in all images');
+        }
+        if ((options.sameBitDepth===undefined || options.sameBitDepth) && this[0].bitDepth!==this[i].bitDepth) {
+            throw new TypeError('The process: ' + processName + ' can not be applied if bitDepth is not identical in all images');
+        }
+        if ((options.sameColorModel===undefined || options.sameColorModel) && this[0].colorModel!==this[i].colorModel) {
+            throw new TypeError('The process: ' + processName + ' can not be applied if colorModel is not identical in all images');
+        }
+        if ((options.sameNumberChannels===undefined || options.sameNumberChannels) && this[0].channels!==this[i].channels) {
+            throw new TypeError('The process: ' + processName + ' can not be applied if channels is not identical in all images');
+        }
+    }
+}
+
 
 extend(Stack);

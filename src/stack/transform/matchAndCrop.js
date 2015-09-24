@@ -2,26 +2,24 @@
  We will try to move a set of images in order to get only the best common part of them
  The match is always done on the first image ?
 */
+import Stack from '../stack';
 
-
-export default function matchAndCrop(images, {} = {}) {
-
-    let parent=images[0];
-    parent.checkProcessable('matchAndCrop', {
+export default function matchAndCrop({} = {}) {
+    this.checkProcessable('matchAndCrop', {
         bitDepth: [8, 16]
     });
 
-
+    let parent=this[0];
     let results=[];
     results[0]={
         position:[0,0],
-        image: images[0]
+        image: this[0]
     }
     // we calculate the best relative position to the parent image
-    for (let i=1; i<images.length; i++) {
+    for (let i=1; i<this.length; i++) {
         results[i]={
-            position: parent.getBestMatch(images[i]),
-            image: images[i]
+            position: parent.getBestMatch(this[i]),
+            image: this[i]
         }
     }
     // now we can calculate the cropping that we need to do
@@ -56,5 +54,5 @@ export default function matchAndCrop(images, {} = {}) {
         newImages[i]=results[i].crop;
     }
 
-    return newImages;
+    return new Stack(newImages);
 }

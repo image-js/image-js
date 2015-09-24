@@ -1,14 +1,14 @@
-
 import getHistograms from './histograms';
 import medianFromHistogram from '../../util/medianFromHistogram'
 
-export default function median(images) {
+export default function median() {
 
-    // TODO check all the images are the same kind
-    if (images.length===0) return;
+    this.checkProcessable('median', {
+        bitDepth: [8, 16]
+    });
 
-    let result=new Array(images[0].channels);
-    let histograms = getHistograms(images, {maxSlots: images[0].maxValue + 1});
+    let result=new Array(this[0].channels);
+    let histograms = this.getHistograms({maxSlots: this[0].maxValue + 1});
     for (let c = 0; c < histograms.length; c++) {
         let histogram = histograms[c];
         result[c] = medianFromHistogram(histogram);

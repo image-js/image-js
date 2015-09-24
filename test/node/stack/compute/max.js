@@ -1,10 +1,9 @@
-import {Image, getHash} from '../../common';
-import max from '../../../../src/stack/compute/max';
+import {Image, Stack, getHash} from '../../common';
 
 describe('check stack max method', function () {
     it ('should return global maximal for GREY image', function() {
 
-        let images=[];
+        let images=new Stack();
 
         images.push(
             new Image(2, 2,
@@ -36,13 +35,13 @@ describe('check stack max method', function () {
             )
         );
 
-        max(images).should.eql([7]);
+        images.getMax().should.eql([7]);
     });
 
 
     it ('should return global maximal for RGBA image', function() {
 
-        let images=[];
+        let images=new Stack();
 
         images.push(
             new Image(2, 1,
@@ -71,7 +70,7 @@ describe('check stack max method', function () {
             )
         );
 
-        max(images).should.eql([10, 8, 12, 10]);
+        images.getMax().should.eql([10, 8, 12, 10]);
     });
 
 });

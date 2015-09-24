@@ -1,13 +1,13 @@
-export default function max(images) {
+export default function max() {
 
-    // TODO check all the images are the same kind
+    this.checkProcessable('min', {
+        bitDepth: [8, 16]
+    });
 
-    if (images.length===0) return;
-
-    let max=images[0].max;
-    for (let i=1; i<images.length; i++) {
+    let max=this[0].max;
+    for (let i=1; i<this.length; i++) {
         for (let j=0; j<max.length; j++) {
-            max[j]=Math.max(max[j], images[i].max[j]);
+            max[j]=Math.max(max[j], this[i].max[j]);
         }
     }
     return max;

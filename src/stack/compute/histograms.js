@@ -1,13 +1,13 @@
-export default function histograms(images, options) {
+export default function histograms(options) {
 
-    // TODO check all the images are the same kind
+    this.checkProcessable('min', {
+        bitDepth: [8, 16]
+    });
 
-    if (images.length===0) return;
-
-    let histograms=images[0].getHistograms(options);
+    let histograms=this[0].getHistograms(options);
     let histogramLength=histograms[0].length;
-    for (let i=1; i<images.length; i++) {
-        let secondHistograms=images[i].getHistograms(options);
+    for (let i=1; i<this.length; i++) {
+        let secondHistograms=this[i].getHistograms(options);
         for (let c=0; c<histograms.length; c++) {
             for (let j=0; j<histogramLength; j++) {
                 histograms[c][j]+=secondHistograms[c][j];

@@ -5,8 +5,9 @@ import {getImage} from '../test';
 export {getImage, getHash} from '../test';
 
 import Image from '../../src';
+import Stack from '../../src/stack/stack';
 
-export {Image};
+export {Image, Stack};
 
 export function load(name) {
     return Image.load(getImage(name));

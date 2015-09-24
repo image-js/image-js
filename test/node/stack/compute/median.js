@@ -1,10 +1,9 @@
-import {Image} from '../../common';
-import median from '../../../../src/stack/compute/median';
+import {Image, Stack} from '../../common';
 
 describe('check stack median method', function () {
     it('should return global median for GREY image', function() {
 
-        let images=[];
+        let images=new Stack();
 
         images.push(
             new Image(2, 2,
@@ -36,13 +35,13 @@ describe('check stack median method', function () {
             )
         );
 
-        median(images).should.eql([52.5]);
+        images.getMedian().should.eql([52.5]);
     });
 
 
     it('should return global median for RGBA image', function() {
 
-        let images=[];
+        let images=new Stack();
 
         images.push(
             new Image(2, 1,
@@ -71,7 +70,7 @@ describe('check stack median method', function () {
             )
         );
 
-        median(images).should.eql([4, 4.5, 6.5, 255]);
+        images.getMedian().should.eql([4, 4.5, 6.5, 255]);
     });
 
 });

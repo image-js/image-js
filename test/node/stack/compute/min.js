@@ -1,10 +1,9 @@
-import {Image, getHash} from '../../common';
-import min from '../../../../src/stack/compute/min';
+import {Image, Stack, getHash} from '../../common';
 
 describe('check stack min method', function () {
     it ('should return global minimal for GREY image', function() {
 
-        let images=[];
+        let images=new Stack();
 
         images.push(
             new Image(2, 2,
@@ -36,13 +35,13 @@ describe('check stack min method', function () {
             )
         );
 
-        min(images).should.eql([1]);
+        images.getMin().should.eql([1]);
     });
 
 
     it ('should return global minimal for RGBA image', function() {
 
-        let images=[];
+        let images=new Stack();
 
         images.push(
             new Image(2, 1,
@@ -71,7 +70,7 @@ describe('check stack min method', function () {
             )
         );
 
-        min(images).should.eql([1,1,1,4]);
+        images.getMin().should.eql([1,1,1,4]);
     });
 
 });

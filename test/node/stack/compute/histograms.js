@@ -1,10 +1,9 @@
-import {Image, getHash} from '../../common';
-import histograms from '../../../../src/stack/compute/histograms';
+import {Image, Stack, getHash} from '../../common';
 
 describe('check stack histograms method', function () {
     it ('should return global histograms for GREY image', function() {
 
-        let images=[];
+        let images=new Stack();
 
         images.push(
             new Image(2, 2,
@@ -36,13 +35,13 @@ describe('check stack histograms method', function () {
             )
         );
 
-        histograms(images, {maxSlots:4}).should.eql([[10,0,1,1]]);
+        images.getHistograms({maxSlots:4}).should.eql([[10,0,1,1]]);
     });
 
 
     it('should return global histograms for RGBA image', function() {
 
-        let images=[];
+        let images=new Stack();
 
         images.push(
             new Image(2, 1,
@@ -71,7 +70,7 @@ describe('check stack histograms method', function () {
             )
         );
 
-        histograms(images, {maxSlots:4}).should.eql([
+        images.getHistograms({maxSlots:4}).should.eql([
             [6, 0, 0, 0],
             [6, 0, 0, 0],
             [6, 0, 0, 0],
