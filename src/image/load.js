@@ -4,7 +4,7 @@ import PNGReader from 'png.js';
 import {TIFFDecoder} from 'tiff';
 import atob from 'atob-lite';
 
-const isDataURL = /data:[a-z]+\/([a-z]+);base64,(.+)/;
+const isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
 const isPNG = /\.png$/i;
 const isTIFF = /\.tiff?$/i;
 
@@ -21,13 +21,16 @@ function swap16(val) {
 }
 
 export function loadURL(url) {
-    const dataURL = isDataURL.exec(url);
+    const dataURL = url.slice(0, 64).match(isDataURL);
     if (dataURL) {
         const mimetype = dataURL[1];
+        const offset = dataURL[0].length;
         if (mimetype === 'png') {
-            return Promise.resolve(str2ab(atob(dataURL[2]))).then(loadPNG);
+            let slice = url.slice(offset);
+            return Promise.resolve(str2ab(atob(slice))).then(loadPNG);
         } else if (mimetype === 'tiff') {
-            return Promise.resolve(str2ab(atob(dataURL[2]))).then(loadTIFF);
+            let slice = url.slice(offset);
+            return Promise.resolve(str2ab(atob(slice))).then(loadTIFF);
         }
     }
 
