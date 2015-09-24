@@ -16,7 +16,7 @@ export default function Stack(images) {
     } else if (typeof images === 'number') {
         stack = new Array(images);
     } else {
-        stack = new Array();
+        stack = [];
     }
     stack.computed = null;
     stack.__proto__ = Stack.prototype;
@@ -57,7 +57,17 @@ Stack.extendProperty = function extendProperty(name, method, {partialArgs = []} 
 };
 
 Stack.prototype.push = Array.prototype.push;
-
+Stack.prototype.forEach = Array.prototype.forEach;
+Stack.prototype.map = function (cb, thisArg) {
+    if (typeof cb !== 'function') {
+        throw new TypeError(cb + ' is not a function');
+    }
+    let newStack = new Stack(this.length);
+    for (let i = 0; i < this.length; i++) {
+        newStack[i] = cb.call(thisArg, this[i], i, this);
+    }
+    return newStack;
+};
 
 // this method check if a process can be applied on the current image
 Stack.prototype.checkProcessable = function(processName, options = {}) {
