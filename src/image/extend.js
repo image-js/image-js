@@ -24,6 +24,8 @@ import grey from './transform/grey/grey';
 import mask from './transform/mask/mask';
 import pad from './transform/pad';
 import resizeBinary from './transform/resizeBinary';
+import bitDepth8 from './transform/bitDepth8';
+import bitDepth16 from './transform/bitDepth16';
 
 import split from './utility/split';
 import getChannel from './utility/getChannel';
@@ -77,6 +79,8 @@ export default function extend(Image) {
     Image.extendMethod('mask', mask);
     Image.extendMethod('pad', pad);
     Image.extendMethod('resizeBinary', resizeBinary);
+    Image.extendMethod('bitDepth8', bitDepth8);
+    Image.extendMethod('bitDepth16', bitDepth16);
 
     Image.extendMethod('split', split);
     Image.extendMethod('getChannel', getChannel);
