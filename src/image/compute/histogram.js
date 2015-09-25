@@ -1,7 +1,7 @@
 import newArray from 'new-array';
 import isInteger from 'is-integer';
 
-export function getHistogram({maxSlots=256, channel, useAlpha=true} = {}) {
+export function getHistogram({maxSlots = 256, channel, useAlpha = true} = {}) {
     this.checkProcessable('getHistogram', {
         bitDepth: [8, 16]
     });
@@ -14,7 +14,7 @@ export function getHistogram({maxSlots=256, channel, useAlpha=true} = {}) {
     return getChannelHistogram.call(this, channel, useAlpha, maxSlots);
 }
 
-export function getHistograms({maxSlots=256, useAlpha=true} = {}) {
+export function getHistograms({maxSlots = 256, useAlpha = true} = {}) {
     this.checkProcessable('getHistograms', {
         bitDepth: [8, 16]
     });

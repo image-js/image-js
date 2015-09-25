@@ -17,19 +17,19 @@ export default function hsv() {
     let ptr = 0;
     let data = this.data;
     for (let i = 0; i < data.length; i += this.channels) {
-        let red=data[i];
-        let green=data[i+1];
-        let blue=data[i+2];
+        let red = data[i];
+        let green = data[i + 1];
+        let blue = data[i + 2];
 
-        let min = Math.min( red, green, blue );
-        let max = Math.max( red, green, blue );
+        let min = Math.min(red, green, blue);
+        let max = Math.max(red, green, blue);
         let delta = max - min;
         let hue = 0;
         let saturation = max === 0 ? 0 : delta / max;
         let value = max;
 
-        if (max !== min ) {
-            switch(max) {
+        if (max !== min) {
+            switch (max) {
                 case red:
                     hue = (green - blue) / delta + (green < blue ? 6 : 0);
                     break;
@@ -43,11 +43,11 @@ export default function hsv() {
             hue /= 6;
         }
 
-        newImage.data[ptr++] = hue*this.maxValue;
-        newImage.data[ptr++] = saturation*this.maxValue;
+        newImage.data[ptr++] = hue * this.maxValue;
+        newImage.data[ptr++] = saturation * this.maxValue;
         newImage.data[ptr++] = value;
         if (this.alpha) {
-            newImage.data[ptr++] = data[i+3];
+            newImage.data[ptr++] = data[i + 3];
         }
     }
 

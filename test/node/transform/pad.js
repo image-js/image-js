@@ -3,7 +3,7 @@ import {Image, getHash} from '../common';
 describe('check the pad transform', function () {
     it('check the right pad extract for GREY image', function () {
 
-        let image=new Image(2, 2,
+        let image = new Image(2, 2,
             [
                 1, 2,
                 3, 4
@@ -47,7 +47,7 @@ describe('check the pad transform', function () {
             ]
         );
 
-        (function() {
+        (function () {
             image.pad({algorithm: 'set', size: 1, color: [0, 1]});
         }).should.throw(/the color array must have the same/);
     });

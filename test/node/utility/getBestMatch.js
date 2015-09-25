@@ -2,7 +2,7 @@ import {Image} from '../common';
 
 
 describe('check getBestMatch class', function () {
-    it ('should move the image to the bottom right', function() {
+    it ('should move the image to the bottom right', function () {
         let image1 = new Image(5, 5,
             [
                 0, 0, 0, 0, 0,
@@ -28,7 +28,7 @@ describe('check getBestMatch class', function () {
         image1.getBestMatch(image2).should.eql([2, 2]);
     });
 
-    it ('should move the image to the bottom', function() {
+    it ('should move the image to the bottom', function () {
         let image1 = new Image(5, 5,
             [
                 0, 0, 0, 0, 0,
@@ -54,7 +54,7 @@ describe('check getBestMatch class', function () {
         image1.getBestMatch(image2).should.eql([0, 2]);
     });
 
-    it ('should move the image to the top left', function() {
+    it ('should move the image to the top left', function () {
         let image1 = new Image(5, 5,
             [
                 6, 0, 0, 0, 0,

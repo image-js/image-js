@@ -1,9 +1,9 @@
 import {Image, Stack, getHash} from '../../common';
 
 describe('check stack max method', function () {
-    it ('should return global maximal for GREY image', function() {
+    it ('should return global maximal for GREY image', function () {
 
-        let images=new Stack();
+        let images = new Stack();
 
         images.push(
             new Image(2, 2,
@@ -39,9 +39,9 @@ describe('check stack max method', function () {
     });
 
 
-    it ('should return global maximal for RGBA image', function() {
+    it ('should return global maximal for RGBA image', function () {
 
-        let images=new Stack();
+        let images = new Stack();
 
         images.push(
             new Image(2, 1,

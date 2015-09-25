@@ -1,6 +1,6 @@
 import {Image} from '../common';
 
-describe('invertOneLoop', function() {
+describe('invertOneLoop', function () {
 
 
     describe('invert 3 components', function () {

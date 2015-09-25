@@ -1,6 +1,6 @@
 import {Image} from '../common';
 
-describe('invertApply', function() {
+describe('invertApply', function () {
 
 
     describe('invert 3 components', function () {
@@ -23,7 +23,7 @@ describe('invertApply', function() {
             });
             image.setBitXY(0,0);
             let inverted = new Uint8Array(1);
-            inverted[0]=127;
+            inverted[0] = 127;
 
             image.invertApply();
             image.data.should.eql(inverted);

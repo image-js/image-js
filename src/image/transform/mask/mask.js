@@ -43,15 +43,15 @@ export default function mask({
     let ptr = 0;
     if (this.alpha && useAlpha) {
         for (let i = 0; i < this.data.length; i += this.channels) {
-            let value=this.data[i] + (this.maxValue - this.data[i]) * (this.maxValue - this.data[i + 1]) / this.maxValue;
-            if ((invert && value <= threshold) || (! invert && value >= threshold)) {
+            let value = this.data[i] + (this.maxValue - this.data[i]) * (this.maxValue - this.data[i + 1]) / this.maxValue;
+            if ((invert && value <= threshold) || (!invert && value >= threshold)) {
                 newImage.setBit(ptr);
             }
             ptr++;
         }
     } else {
         for (let i = 0; i < this.data.length; i += this.channels) {
-            if ((invert && this.data[i] >= threshold) || (! invert && this.data[i] <= threshold)) {
+            if ((invert && this.data[i] >= threshold) || (!invert && this.data[i] <= threshold)) {
                 newImage.setBit(ptr);
             }
             ptr++;

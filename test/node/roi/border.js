@@ -15,11 +15,11 @@ describe('we check that each ROI is surrounded by the expected border', function
             img.width.should.equal(11);
             img.height.should.equal(11);
 
-            let roiManager=img.getROIManager();
-            let mask=img.grey().mask({invert:true});
+            let roiManager = img.getROIManager();
+            let mask = img.grey().mask({invert:true});
             roiManager.putMask(mask);
 
-            let rois=roiManager.getROI();
+            let rois = roiManager.getROI();
 
             rois.should.be.an.instanceof(Array).and.lengthOf(4);
 

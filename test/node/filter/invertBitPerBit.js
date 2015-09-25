@@ -7,7 +7,7 @@ describe('invert binary image bit by bit', function () {
         });
         image.setBitXY(0,0);
         let inverted = new Uint8Array(1);
-        inverted[0]=127;
+        inverted[0] = 127;
 
         image.invertBinaryLoop();
         image.data.should.eql(inverted);

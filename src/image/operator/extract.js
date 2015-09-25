@@ -12,14 +12,14 @@ export default function extract(mask, {
     });
 
     // we need to find the relative position to the parent
-    if (! position) {
+    if (!position) {
         position = mask.getRelativePosition(this);
-        if (! position) {
+        if (!position) {
             throw new Error('extract : can not extract an image because the relative position can not be' +
                 'determined, try to specify manualy the position as an array of 2 elements [x,y].');
         }
     }
-    let extract=Image.createFrom(this, {
+    let extract = Image.createFrom(this, {
         width: mask.width,
         height: mask.height,
         alpha: 1,   // we force the alpha, otherwise dificult to extract a mask ...
@@ -33,11 +33,11 @@ export default function extract(mask, {
         for (let y = 0; y < mask.height; y++) {
             // we copy the point
             for (let channel = 0; channel < this.channels; channel++) {
-                let value=this.getValueXY(x + position[0], y + position[1], channel);
+                let value = this.getValueXY(x + position[0], y + position[1], channel);
                 extract.setValueXY(x, y, channel, value);
             }
             // we make it transparent in case it is not in the mask
-            if (! mask.getBitXY(x, y)) {
+            if (!mask.getBitXY(x, y)) {
                 extract.setValueXY(x, y, this.components, 0);
             }
         }

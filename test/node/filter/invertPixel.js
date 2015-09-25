@@ -1,6 +1,6 @@
 import {Image} from '../common';
 
-describe('invertPixel', function() {
+describe('invertPixel', function () {
     describe('invert 3 components', function () {
         it('should invert colors, not alpha', function () {
 

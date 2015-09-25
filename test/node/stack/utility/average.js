@@ -1,8 +1,8 @@
 import {Image, Stack} from '../../common';
 
 describe('check stack average method', function () {
-    it ('should return a correct new RGBA image', function() {
-        let images=new Stack();
+    it ('should return a correct new RGBA image', function () {
+        let images = new Stack();
 
         images.push(
             new Image(2, 1,

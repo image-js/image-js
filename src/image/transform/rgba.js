@@ -19,8 +19,8 @@ export default function rgba() {
     let data = this.data;
     for (let i = 0; i < data.length; i += this.channels) {
         newImage.data[ptr++] = data[i];
-        newImage.data[ptr++] = data[i+1];
-        newImage.data[ptr++] = data[i+2];
+        newImage.data[ptr++] = data[i + 1];
+        newImage.data[ptr++] = data[i + 2];
         ptr++;
     }
 

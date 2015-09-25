@@ -1,7 +1,7 @@
 import Image from '../image';
 import validateChannel from './validateChannel';
 
-export default function getChannel( channel ) {
+export default function getChannel(channel) {
 
     this.checkProcessable('getChannel', {
         bitDepth: [8, 16]

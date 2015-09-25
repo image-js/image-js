@@ -297,7 +297,7 @@ export default class Image {
         return new ROIManager(this, options);
     }
 
-    clone({copyData=true}={}) {
+    clone({copyData = true} = {}) {
         let nemImage = Image.createFrom(this);
         if (copyData) {
             let data = this.data;

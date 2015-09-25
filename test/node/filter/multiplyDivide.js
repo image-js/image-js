@@ -1,6 +1,6 @@
 import {Image} from '../common';
 
-describe('multiply', function() {
+describe('multiply', function () {
     it('should multiply a fix value to all channels of RGBA image, we dont touch alpha', function () {
 
         let image = new Image(1,2,[230, 83, 120, 255, 100, 140, 13, 240]);
@@ -10,13 +10,13 @@ describe('multiply', function() {
         image.multiply(2);
         image.data.should.eql(newImage);
 
-        (function() {
+        (function () {
             image.add(0);
         }).should.throw(/the value must be greater/);
     });
 });
 
-describe('divide', function() {
+describe('divide', function () {
     it('should divide a fix value to all channels of RGBA image, we dont touch alpha', function () {
 
         let image = new Image(1,2,[230, 83, 120, 255, 100, 140, 13, 240]);
@@ -26,7 +26,7 @@ describe('divide', function() {
         image.divide(2);
         image.data.should.eql(newImage);
 
-        (function() {
+        (function () {
             image.substract(0);
         }).should.throw(/the value must be greater/);
     });

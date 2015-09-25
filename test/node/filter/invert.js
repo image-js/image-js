@@ -1,6 +1,6 @@
 import {Image} from '../common';
 
-describe('invert', function() {
+describe('invert', function () {
     it('should invert colors of 3 components of RGBA, not alpha', function () {
 
         let image = new Image(1,2,[230, 83, 120, 255, 100, 140, 13, 240]);
@@ -38,7 +38,7 @@ describe('invert', function() {
 
     it('should invert data if BINARY image', function () {
 
-        let data=new Uint8Array(1);
+        let data = new Uint8Array(1);
         data[0] = 85;
 
         let image = new Image(2, 4,data,

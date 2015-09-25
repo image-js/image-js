@@ -3,7 +3,7 @@ import {Image, getHash} from '../common';
 describe('check the crop transform', function () {
     it('check the right extract for GREY image', function () {
 
-        let image=new Image(5, 5,
+        let image = new Image(5, 5,
             [
                 0, 0, 0, 0, 0,
                 0, 1, 1, 1, 1,
@@ -14,20 +14,20 @@ describe('check the crop transform', function () {
             {kind: 'GREY'}
         );
 
-        let result=image.crop({
+        let result = image.crop({
             x:0,
             y:0
         });
 
         getHash(result).should.equal(getHash(image));
 
-        result=image.crop({
+        result = image.crop({
             x:2,
             y:2
         });
         Array.from(result.data).should.eql([2,2,2,2,4,3,2,3,3]);
 
-        result=image.crop({
+        result = image.crop({
             x:0,
             y:0,
             height: 2,
@@ -36,7 +36,7 @@ describe('check the crop transform', function () {
         Array.from(result.data).should.eql([0,0,0,1]);
 
 
-        result=image.crop({
+        result = image.crop({
             x:2,
             y:2,
             height: 2,
@@ -44,7 +44,7 @@ describe('check the crop transform', function () {
         });
         Array.from(result.data).should.eql([2,2,2,4]);
 
-        result=image.crop({
+        result = image.crop({
             x:1,
             y:3,
             height: 1,

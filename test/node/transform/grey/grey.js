@@ -1,8 +1,8 @@
 import {Image} from '../../common';
 
 describe('Grey transform', function () {
-    it('From RGBA image give a grey image', function() {
-        let image=new Image(2, 1,
+    it('From RGBA image give a grey image', function () {
+        let image = new Image(2, 1,
             [
                 100, 150, 200, 255,
                 100, 150, 200, 0
@@ -51,15 +51,15 @@ describe('Grey transform', function () {
             ]
         );
 
-        (function() {
+        (function () {
             image.grey({algorithm: 'XXX'}).should.throw(/Unsupported grey algorithm/);
         });
 
     });
 
 
-    it('From GreyA image give a copy image', function() {
-        let image=new Image(2, 1,
+    it('From GreyA image give a copy image', function () {
+        let image = new Image(2, 1,
             [
                 100, 255,
                 100, 0

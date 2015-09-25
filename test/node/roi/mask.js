@@ -8,11 +8,11 @@ describe('we check mask', function () {
             img.width.should.equal(5);
             img.height.should.equal(5);
 
-            let roiManager=img.getROIManager();
-            let mask=img.grey().mask({invert:true});
+            let roiManager = img.getROIManager();
+            let mask = img.grey().mask({invert:true});
             roiManager.putMask(mask);
 
-            let rois=roiManager.getROI();
+            let rois = roiManager.getROI();
 
             rois.should.be.an.instanceof(Array).and.lengthOf(3);
 
@@ -28,22 +28,22 @@ describe('we check mask', function () {
 
 
 
-            let roiMask=rois[0].mask;
+            let roiMask = rois[0].mask;
             Array.from(roiMask.data).should.eql([128]);
 
-            let roiFilledMask=rois[0].filledMask;
+            let roiFilledMask = rois[0].filledMask;
             Array.from(roiFilledMask.data).should.eql([128]);
 
-            roiMask=rois[1].mask;
+            roiMask = rois[1].mask;
             Array.from(roiMask.data).should.eql([252, 99, 31, 128]);
 
-            roiFilledMask=rois[1].filledMask;
+            roiFilledMask = rois[1].filledMask;
             Array.from(roiFilledMask.data).should.eql([255, 255, 255, 128]);
 
-            roiMask=rois[2].mask;
+            roiMask = rois[2].mask;
             Array.from(roiMask.data).should.eql([247, 128]);
 
-            roiFilledMask=rois[2].filledMask;
+            roiFilledMask = rois[2].filledMask;
             Array.from(roiFilledMask.data).should.eql([255, 128]);
 
         });

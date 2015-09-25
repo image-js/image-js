@@ -2,9 +2,9 @@ import {Image, Stack, getHash} from '../../common';
 import matchAndCrop from '../../../../src/stack/transform/matchAndCrop';
 
 describe('check matchAndCrop method', function () {
-    it ('should return an array of 3 images cropped and moved', function() {
+    it ('should return an array of 3 images cropped and moved', function () {
 
-        let images=new Stack();
+        let images = new Stack();
 
         images.push(
             new Image(5, 5,
@@ -45,11 +45,11 @@ describe('check matchAndCrop method', function () {
             )
         );
 
-        let results=images.matchAndCrop();
+        let results = images.matchAndCrop();
         results.should.be.instanceOf(Stack).and.have.lengthOf(3);
         getHash(results[1]).should.equal(getHash(results[2]));
 
-        let result=results[0];
+        let result = results[0];
         result.width.should.equal(4);
         result.height.should.equal(3);
         Array.from(result.data).should.eql(

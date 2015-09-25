@@ -22,10 +22,10 @@ export default class ROIManager {
     }
 
     getROI(maskLabel = 'default', {
-        positive=true,
-        negative=true,
-        minSurface=0,
-        maxSurface=Number.POSITIVE_INFINITY
+        positive = true,
+        negative = true,
+        minSurface = 0,
+        maxSurface = Number.POSITIVE_INFINITY
         } = {}) {
         let allROIs = this._layers[maskLabel].roi;
         let rois = new Array(allROIs.length);

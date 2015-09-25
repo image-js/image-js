@@ -5,10 +5,10 @@ describe('calculate the colorHistogram', function () {
 
         let image = new Image(1,2,[0, 0, 0, 255, 255, 255, 255, 255]);
 
-        let histogram=image.getColorHistogram({useAlpha: false, nbSlots: 8});
+        let histogram = image.getColorHistogram({useAlpha: false, nbSlots: 8});
         Array.from(histogram).should.eql([1,0,0,0,0,0,0,1]);
 
-        histogram=image.getColorHistogram({useAlpha: true, nbSlots: 8});
+        histogram = image.getColorHistogram({useAlpha: true, nbSlots: 8});
         Array.from(histogram).should.eql([1,0,0,0,0,0,0,1]);
     });
 
@@ -16,10 +16,10 @@ describe('calculate the colorHistogram', function () {
 
         let image = new Image(1,2,[0, 0, 0, 255, 255, 255, 255, 0]);
 
-        let histogram=image.getColorHistogram({useAlpha: false, nbSlots: 8});
+        let histogram = image.getColorHistogram({useAlpha: false, nbSlots: 8});
         Array.from(histogram).should.eql([1,0,0,0,0,0,0,1]);
 
-        histogram=image.getColorHistogram({useAlpha: true, nbSlots: 8});
+        histogram = image.getColorHistogram({useAlpha: true, nbSlots: 8});
         Array.from(histogram).should.eql([1,0,0,0,0,0,0,0]);
     });
 
@@ -27,7 +27,7 @@ describe('calculate the colorHistogram', function () {
 
         let image = new Image(1,4,[0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 255, 255]);
 
-        let histogram=image.colorHistogram;
+        let histogram = image.colorHistogram;
         Array.from(histogram).length.should.equal(512);
         Array.from(histogram)[0].should.equal(2);
         Array.from(histogram)[511].should.equal(1);

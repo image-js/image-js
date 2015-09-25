@@ -3,7 +3,7 @@ import validateArrayOfChannels from '../../../src/image/utility/validateArrayOfC
 
 describe('we check the validateArrayOfChannels method', function () {
     it('check for a RGB image', function () {
-        let image=new Image(2,2,{
+        let image = new Image(2,2,{
             kind: 'RGB'
         });
 
@@ -17,16 +17,16 @@ describe('we check the validateArrayOfChannels method', function () {
         validateArrayOfChannels(image, {allowAlpha: true}).should.eql([0,1,2]);
         validateArrayOfChannels(image, {allowAlpha: false}).should.eql([0,1,2]);
         validateArrayOfChannels(image, {defaultAlpha: true}).should.eql([0,1,2]);
-        (function() {
+        (function () {
             validateArrayOfChannels(image, {channels: 'a'});
         }).should.throw(/does not contain alpha/);
-        (function() {
+        (function () {
             validateArrayOfChannels(image, {channels: ['r','a']});
         }).should.throw(/does not contain alpha/);
     });
 
     it('check for a RGBA image', function () {
-        let image=new Image(2,2,{
+        let image = new Image(2,2,{
             kind: 'RGBA'
         });
 
@@ -42,13 +42,13 @@ describe('we check the validateArrayOfChannels method', function () {
         validateArrayOfChannels(image, {allowAlpha: true, defaultAlpha: true}).should.eql([0,1,2,3]);
         validateArrayOfChannels(image, {channels: 'a'}).should.eql([3]);
         validateArrayOfChannels(image, {channels: ['r','a']}).should.eql([0,3]);
-        (function() {
+        (function () {
             validateArrayOfChannels(image, {channels: 'a', allowAlpha: false});
         }).should.throw(/alpha channel may not be selected/);
     });
 
     it('check for a GreyA image', function () {
-        let image=new Image(2,2,{
+        let image = new Image(2,2,{
             kind: 'GREYA'
         });
 
@@ -57,10 +57,10 @@ describe('we check the validateArrayOfChannels method', function () {
         validateArrayOfChannels(image).should.eql([0]);
         validateArrayOfChannels(image, {defaultAlpha: true}).should.eql([0,1]);
         validateArrayOfChannels(image, {defaultAlpha:  false}).should.eql([0]);
-        (function() {
+        (function () {
             validateArrayOfChannels(image, {channels: ['r']});
         }).should.throw(/not a RGB/);
-        (function() {
+        (function () {
             validateArrayOfChannels(image, {allowAlpha: false, channels: ['a']});
         }).should.throw(/alpha channel may not be selected/);
     });

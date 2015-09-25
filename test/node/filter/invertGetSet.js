@@ -1,6 +1,6 @@
 import {Image} from '../common';
 
-describe('invertGetSet', function() {
+describe('invertGetSet', function () {
 
 
     describe('invert 3 components', function () {
@@ -23,7 +23,7 @@ describe('invertGetSet', function() {
             });
             image.setBitXY(0,0);
             let inverted = new Uint8Array(1);
-            inverted[0]=127;
+            inverted[0] = 127;
 
             image.invertGetSet();
             image.data.should.eql(inverted);

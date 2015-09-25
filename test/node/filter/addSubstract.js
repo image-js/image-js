@@ -1,6 +1,6 @@
 import {Image} from '../common';
 
-describe('add', function() {
+describe('add', function () {
     it('should add a fix value to all channels of RGBA image, we dont touch alpha', function () {
 
         let image = new Image(1,2,[230, 83, 120, 255, 100, 140, 13, 240]);
@@ -10,13 +10,13 @@ describe('add', function() {
         image.add(100);
         image.data.should.eql(newImage);
 
-        (function() {
+        (function () {
             image.add(-10);
         }).should.throw(/the value must be greater/);
     });
 });
 
-describe('substract', function() {
+describe('substract', function () {
     it('should substract a fix value to all channels of RGBA image, we dont touch alpha', function () {
 
         let image = new Image(1,2,[230, 83, 120, 255, 100, 140, 13, 240]);
@@ -26,7 +26,7 @@ describe('substract', function() {
         image.substract(100);
         image.data.should.eql(newImage);
 
-        (function() {
+        (function () {
             image.substract(-10);
         }).should.throw(/the value must be greater/);
     });

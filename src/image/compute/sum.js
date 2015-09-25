@@ -10,8 +10,8 @@ export default function sum() {
     let result = newArray(this.channels,0);
 
     for (let i = 0; i < this.data.length; i += this.channels) {
-        for (let c=0; c<this.channels; c++) {
-            result[c]+=this.data[i+c];
+        for (let c = 0; c < this.channels; c++) {
+            result[c] += this.data[i + c];
         }
     }
     return result;

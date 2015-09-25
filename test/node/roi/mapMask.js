@@ -2,17 +2,17 @@ import {Image} from '../common';
 
 
 describe('map a binary image (mask) 2 x 2', function () {
-    let data=new Uint8Array(1);
-    data[0]=192;
+    let data = new Uint8Array(1);
+    data[0] = 192;
 
-    let img=new Image(2,2, data, {
+    let img = new Image(2,2, data, {
         kind: 'BINARY'
     });
 
-    let roiManager=img.getROIManager();
+    let roiManager = img.getROIManager();
     roiManager.putMask(img);
-    let pixels=roiManager.getPixels();
-    let result=roiManager.getROIMap();
+    let pixels = roiManager.getPixels();
+    let result = roiManager.getROIMap();
 
     it('should have 4 pixels in 2 zones', function () {
         pixels.should.instanceOf(Int16Array).and.have.lengthOf(4);
@@ -31,18 +31,18 @@ describe('map a binary image (mask) 2 x 2', function () {
 });
 
 describe('map a binary image 4 x 4 in 2 zones', function () {
-    let data=new Uint8Array(2);
-    data[0]=255;
-    data[1]=0;
+    let data = new Uint8Array(2);
+    data[0] = 255;
+    data[1] = 0;
 
-    let img=new Image(4,4, data, {
+    let img = new Image(4,4, data, {
         kind: 'BINARY'
     });
 
-    let roiManager=img.getROIManager();
+    let roiManager = img.getROIManager();
     roiManager.putMask(img);
-    let pixels=roiManager.getPixels();
-    let result=roiManager.getROIMap();
+    let pixels = roiManager.getPixels();
+    let result = roiManager.getROIMap();
 
     it('should have 16 pixels in 2 zones', function () {
         pixels.should.instanceOf(Int16Array).and.have.lengthOf(16);
@@ -61,18 +61,18 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
 });
 
 describe('map a binary image 4 x 4 in 2 zones', function () {
-    let data=new Uint8Array(2);
-    data[0]=63;
-    data[1]=192;
+    let data = new Uint8Array(2);
+    data[0] = 63;
+    data[1] = 192;
 
-    let img=new Image(4,4, data, {
+    let img = new Image(4,4, data, {
         kind: 'BINARY'
     });
 
-    let roiManager=img.getROIManager();
+    let roiManager = img.getROIManager();
     roiManager.putMask(img);
-    let pixels=roiManager.getPixels();
-    let result=roiManager.getROIMap();
+    let pixels = roiManager.getPixels();
+    let result = roiManager.getROIMap();
 
     it('should have 16 pixels in 3 zones', function () {
         pixels.should.instanceOf(Int16Array).and.have.lengthOf(16);

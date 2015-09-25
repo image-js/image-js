@@ -2,7 +2,7 @@
 
 import validateArrayOfChannels from '../utility/validateArrayOfChannels';
 
-export default function invert({channels}={}) {
+export default function invert({channels} = {}) {
     this.checkProcessable('invertOneLoop', {
         bitDepth: [1, 8, 16]
     });
@@ -22,8 +22,8 @@ export default function invert({channels}={}) {
 
         // for (let j of channels) { WOULD SLOW DO OF A FACTOR 10 !
 
-        for (let c=0; c<channels.length; c++) {
-            let j=channels[c];
+        for (let c = 0; c < channels.length; c++) {
+            let j = channels[c];
             for (let i = j; i < data.length; i += this.channels) {
                 data[i] = this.maxValue - data[i];
             }

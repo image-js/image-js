@@ -17,7 +17,7 @@ import convolution from '../operator/convolution';
  example of 5x3 kernel:
  kernel = [[1,1,1,1,1],[1,1,-15,1,1],[1,1,1,1,1]];
  */
-export default function convolutionApply(kernel){
+export default function convolutionApply(kernel) {
 
     this.checkProcessable('convolutionApply', {
         components:[1],

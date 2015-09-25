@@ -18,8 +18,8 @@ export default function createROI(roiMap) {
     }
     let pixels = roiMap.pixels;
 
-    let width=roiMap.parent.width;
-    let height=roiMap.parent.height;
+    let width = roiMap.parent.width;
+    let height = roiMap.parent.height;
 
     for (let x = 0; x < width; x++) {
         for (let y = 0; y < height; y++) {

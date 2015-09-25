@@ -16,7 +16,7 @@ export default class ROI {
         this.computed = {};
     }
 
-    extract(image, {fill=false, scale=1}={}) {
+    extract(image, {fill = false, scale = 1} = {}) {
         // we use a slow way
 
         let mask;
@@ -26,7 +26,7 @@ export default class ROI {
             mask = this.mask;
         }
 
-        if (scale<1) {
+        if (scale < 1) {
             mask = mask.resizeBinary(scale);
         }
 
@@ -96,7 +96,7 @@ export default class ROI {
 
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
-                let target=x + this.minX + (y + this.minY) * this.map.width;
+                let target = x + this.minX + (y + this.minY) * this.map.width;
                 if (this.internalMapIDs.indexOf(this.map.pixels[target]) >= 0) {
                     img.setBitXY(x, y);
                 } // by default a pixel is to 0 so no problems, it will be transparent
@@ -194,8 +194,8 @@ function getExternal(roi) {
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
 
-    let topBottom=[0];
-    if (roi.height>1) topBottom[1]=roi.height - 1;
+    let topBottom = [0];
+    if (roi.height > 1) topBottom[1] = roi.height - 1;
     for (let y of topBottom) {
         for (let x = 1; x < roi.width - 1; x++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
@@ -205,8 +205,8 @@ function getExternal(roi) {
         }
     }
 
-    let leftRight=[0];
-    if (roi.width>1) leftRight[1]=roi.width - 1;
+    let leftRight = [0];
+    if (roi.width > 1) leftRight[1] = roi.width - 1;
     for (let x of leftRight) {
         for (let y = 0; y < roi.height; y++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
@@ -280,16 +280,16 @@ We will calculate all the ids of the map that are "internal"
 This will allow to extract the 'plain' image
  */
 function getInternalMapIDs(roi) {
-    let internal=[roi.id];
+    let internal = [roi.id];
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
 
 
 
-    if (roi.height>2) {
+    if (roi.height > 2) {
         for (let x = 0; x < roi.width; x++) {
             let target = (roi.minY) * roiMap.width + x + roi.minX;
-            if (internal.indexOf(pixels[target])>=0) {
+            if (internal.indexOf(pixels[target]) >= 0) {
                 let id = pixels[target + roiMap.width];
                 if ((internal.indexOf(id) === -1) && (roi.surround.indexOf(id) === -1)) {
                     internal.push(id);
@@ -298,21 +298,21 @@ function getInternalMapIDs(roi) {
         }
     }
 
-    let array=new Array(4);
+    let array = new Array(4);
     for (let x = 1; x < roi.width - 1; x++) {
         for (let y = 1; y < roi.height - 1; y++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            if (internal.indexOf(pixels[target])>=0) {
+            if (internal.indexOf(pixels[target]) >= 0) {
                 // we check if one of the neighbour is not yet in
 
-                array[0]=pixels[target - 1];
-                array[1]=pixels[target + 1];
-                array[2]=pixels[target - roiMap.width];
-                array[3]=pixels[target + roiMap.width];
+                array[0] = pixels[target - 1];
+                array[1] = pixels[target + 1];
+                array[2] = pixels[target - roiMap.width];
+                array[3] = pixels[target + roiMap.width];
 
-                for (let i=0; i<4; i++) {
-                    let id=array[i];
-                    if ((internal.indexOf(id) === -1) && (roi.surround.indexOf(id)===-1)) {
+                for (let i = 0; i < 4; i++) {
+                    let id = array[i];
+                    if ((internal.indexOf(id) === -1) && (roi.surround.indexOf(id) === -1)) {
                         internal.push(id);
                     }
                 }

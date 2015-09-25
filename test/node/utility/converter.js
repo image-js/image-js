@@ -30,7 +30,7 @@ describe('Converter tests', function () {
         it('non integer result', function () {
             factorDimensions(0.5, 11, 13).should.eql({width: 6, height: 7});
             factorDimensions('25%', 15, 25).should.eql({width: 4, height: 6});
-            factorDimensions(1/3, 100, 122).should.eql({width: 33, height: 41});
+            factorDimensions(1 / 3, 100, 122).should.eql({width: 33, height: 41});
         });
     });
 });

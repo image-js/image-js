@@ -13,15 +13,15 @@ export default function setChannel(channel, image) {
         components: [1]
     });
 
-    if (image.width!==this.width || image.height!==this.height) {
+    if (image.width !== this.width || image.height !== this.height) {
         throw new Error('Images must have exactly the same width and height');
     }
 
     channel = validateChannel(this,channel);
 
-    let ptr=channel;
-    for (let i=0; i<image.data.length; i++) {
-        this.data[ptr]=image.data[i];
-        ptr+=this.channels;
+    let ptr = channel;
+    for (let i = 0; i < image.data.length; i++) {
+        this.data[ptr] = image.data[i];
+        ptr += this.channels;
     }
 }
