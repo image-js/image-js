@@ -28,8 +28,8 @@ export default class Image {
         }
         if (options === undefined) options = {};
 
-        this.width=width;
-        this.height=height;
+        this.width = width;
+        this.height = height;
 
         if (this.width <= 0) {
             throw new RangeError('width must be greater than 0');
@@ -57,7 +57,7 @@ export default class Image {
 
         let kindDefinition = extendObject({}, theKind, options);
         this.components = kindDefinition.components;
-        this.alpha = kindDefinition.alpha+0;
+        this.alpha = kindDefinition.alpha + 0;
         this.bitDepth = kindDefinition.bitDepth;
         this.colorModel = kindDefinition.colorModel;
 
