@@ -56,8 +56,8 @@ Stack.extendProperty = function extendProperty(name, method, {partialArgs = []} 
     return Stack;
 };
 
-Stack.prototype.push = Array.prototype.push;
-Stack.prototype.forEach = Array.prototype.forEach;
+Stack.__proto__ = Array;
+Stack.prototype.__proto__ = Array.prototype;
 Stack.prototype.map = function (cb, thisArg) {
     if (typeof cb !== 'function') {
         throw new TypeError(cb + ' is not a function');
@@ -98,7 +98,6 @@ Stack.prototype.checkProcessable = function(processName, options = {}) {
             throw new TypeError('The process: ' + processName + ' can not be applied if channels is not identical in all images');
         }
     }
-}
-
+};
 
 extend(Stack);

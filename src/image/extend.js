@@ -49,12 +49,15 @@ import countAlphaPixels from './compute/countAlphaPixels';
 
 export default function extend(Image) {
     let inPlace = {inPlace: true};
+    let inPlaceStack = {inPlace: true, stack: true};
+    let stack = {stack: true};
+
     Image.extendMethod('invertGetSet', invertGetSet, inPlace);
     Image.extendMethod('invertIterator', invertIterator, inPlace);
     Image.extendMethod('invertPixel', invertPixel, inPlace);
     Image.extendMethod('invertOneLoop', invertOneLoop, inPlace);
     Image.extendMethod('invertApply', invertApply, inPlace);
-    Image.extendMethod('invert', invert, inPlace);
+    Image.extendMethod('invert', invert, inPlaceStack);
     Image.extendMethod('invertBinaryLoop', invertBinaryLoop, inPlace);
     Image.extendMethod('level', level, inPlace);
     Image.extendMethod('add', add, inPlace);
@@ -66,8 +69,8 @@ export default function extend(Image) {
     Image.extendMethod('medianFilter', medianFilter);
     Image.extendMethod('gaussianFilter', gaussianFilter);
 
-    Image.extendMethod('crop', crop);
-    Image.extendMethod('scale', scale);
+    Image.extendMethod('crop', crop, stack);
+    Image.extendMethod('scale', scale, stack);
     Image.extendMethod('hsv', hsv);
     Image.extendMethod('hsl', hsl);
     Image.extendMethod('grey', grey).extendMethod('gray', grey);

@@ -9,6 +9,7 @@ import ROIManager from './roi/manager';
 import {getType, canWrite} from './mediaTypes';
 import extendObject from 'extend';
 import {loadURL} from './load';
+import Stack from '../stack/stack';
 
 let computedPropertyDescriptor = {
     configurable: true,
@@ -91,7 +92,7 @@ export default class Image {
         return loadURL(url);
     }
 
-    static extendMethod(name, method, {inPlace = false, returnThis = true, partialArgs = []} = {}) {
+    static extendMethod(name, method, {inPlace = false, returnThis = true, partialArgs = [], stack = false} = {}) {
         if (inPlace) {
             Image.prototype[name] = function (...args) {
                 // remove computed properties
@@ -101,10 +102,39 @@ export default class Image {
                     return this;
                 return result;
             };
+            if (stack) {
+                const stackName = typeof stack === 'string' ? stack : name;
+                if (returnThis) {
+                    Stack.prototype[stackName] = function (...args) {
+                        for (let image of this) {
+                            image[name](...args);
+                        }
+                        return this;
+                    };
+                } else {
+                    Stack.prototype[stackName] = function (...args) {
+                        let result = new Stack(this.length);
+                        for (let i = 0; i < this.length; i++) {
+                            result[i] = this[i][name](...args);
+                        }
+                        return result;
+                    };
+                }
+            }
         } else {
             Image.prototype[name] = function (...args) {
                 return method.apply(this, [...partialArgs, ...args]);
             };
+            if (stack) {
+                const stackName = typeof stack === 'string' ? stack : name;
+                Stack.prototype[stackName] = function (...args) {
+                    let result = new Stack(this.length);
+                    for (let i = 0; i < this.length; i++) {
+                        result[i] = this[i][name](...args);
+                    }
+                    return result;
+                };
+            }
         }
         return Image;
     }
