@@ -21,7 +21,7 @@ export default function level({algorithm='full', channels}={}) {
                 } else {
                     factor[c]=(this.maxValue+1-delta)/(max[c]-min[c]);
                 }
-                min[c]+=((0.5-delta/2)/factor[c])
+                min[c]+=((0.5-delta/2)/factor[c]);
             }
 
             /*

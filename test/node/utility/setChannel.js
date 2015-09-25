@@ -7,22 +7,22 @@ describe('get a specific channel from an image', function () {
 
         let red = new Image(1,2,[230,100],{
             kind:'GREY'
-        })
+        });
         image.setChannel(0, red);
 
         let green = new Image(1,2,[83,140],{
             kind:'GREY'
-        })
+        });
         image.setChannel('g', green);
 
         let blue = new Image(1,2,[120,13],{
             kind:'GREY'
-        })
+        });
         image.setChannel(2, blue);
 
         let alpha = new Image(1,2,[55,77],{
             kind:'GREY'
-        })
+        });
         image.setChannel('a', alpha);
 
         image.components.should.equal(3);

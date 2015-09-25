@@ -34,6 +34,7 @@
     "clean-dist": "rm -rf dist && mkdir dist",
     "clean-lib": "rm -rf lib",
     "eslint": "eslint src test/node",
+    "eslint-fix": "eslint src test/node --fix",
     "prepublish": "npm run compile",
     "test": "sh test/checkOnly.sh && npm run test-mocha && npm run eslint",
     "test-cov": "babel-node node_modules/.bin/babel-istanbul cover _mocha -- --require should --reporter dot --recursive test/node",

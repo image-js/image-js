@@ -28,6 +28,6 @@ describe('Image core', function () {
             clone.should.be.an.instanceOf(Image);
             clone.should.not.be.equal(img);
             clone.toDataURL().should.equal(img.toDataURL());
-        })
+        });
     });
 });

@@ -1,4 +1,4 @@
-import medianFromHistogram from '../../util/medianFromHistogram'
+import medianFromHistogram from '../../util/medianFromHistogram';
 // returns an array with the median value of each component
 
 export default function median() {

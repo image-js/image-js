@@ -50,7 +50,7 @@ describe('level', function() {
                     hash.should.not.equal(hash2);
                 }
             );
-        })
+        });
 
 
     });

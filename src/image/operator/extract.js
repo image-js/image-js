@@ -16,7 +16,7 @@ export default function extract(mask, {
         position = mask.getRelativePosition(this);
         if (! position) {
             throw new Error('extract : can not extract an image because the relative position can not be' +
-                'determined, try to specify manualy the position as an array of 2 elements [x,y].')
+                'determined, try to specify manualy the position as an array of 2 elements [x,y].');
         }
     }
     let extract=Image.createFrom(this, {

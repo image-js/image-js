@@ -1,5 +1,5 @@
 import getHistograms from './histograms';
-import medianFromHistogram from '../../util/medianFromHistogram'
+import medianFromHistogram from '../../util/medianFromHistogram';
 
 export default function median() {
 

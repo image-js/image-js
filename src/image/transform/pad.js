@@ -21,7 +21,7 @@ export default function pad({
             if (color[i]===0) color[i]=0.001;
         }
     } else {
-        color = array(this.channels, null)
+        color = array(this.channels, null);
     }
 
     if (! Array.isArray(size)) {

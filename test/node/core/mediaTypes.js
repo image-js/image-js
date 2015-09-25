@@ -23,10 +23,10 @@ describe('Media Type support checks', function () {
 
     it.skip('static method - bad arguments', function () {
         (function () {
-            Image.isTypeSupported('', 'other')
+            Image.isTypeSupported('', 'other');
         }).should.throw(/unknown operation/);
         (function () {
-            Image.isTypeSupported(123)
+            Image.isTypeSupported(123);
         }).should.throw(TypeError);
     });
 

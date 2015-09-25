@@ -16,7 +16,7 @@ describe('check the pad transform', function () {
                 1, 2,
                 3, 4
             ]
-        )
+        );
 
         Array.from(image.pad({size:1}).data).should.eql(
             [
@@ -48,7 +48,7 @@ describe('check the pad transform', function () {
         );
 
         (function() {
-            image.pad({algorithm: 'set', size: 1, color: [0, 1]})
+            image.pad({algorithm: 'set', size: 1, color: [0, 1]});
         }).should.throw(/the color array must have the same/);
     });
 

@@ -14,13 +14,13 @@ export default function matchAndCrop({} = {}) {
     results[0]={
         position:[0,0],
         image: this[0]
-    }
+    };
     // we calculate the best relative position to the parent image
     for (let i=1; i<this.length; i++) {
         results[i]={
             position: parent.getBestMatch(this[i]),
             image: this[i]
-        }
+        };
     }
     // now we can calculate the cropping that we need to do
 

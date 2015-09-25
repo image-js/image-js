@@ -55,7 +55,7 @@ if (typeof self !== 'undefined') { // Browser
                 err ? reject(err) : resolve(data.buffer);
             });
         });
-    }
+    };
 }
 
 export {loadBinary, DOMImage, Canvas, ImageData, isDifferentOrigin, env};
