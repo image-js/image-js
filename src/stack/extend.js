@@ -6,6 +6,7 @@ import median from './compute/median';
 import histogram from './compute/histogram';
 import histograms from './compute/histograms';
 
+import average from './utility/average';
 
 export default function extend(Stack) {
     let inPlace = {inPlace: true};
@@ -16,4 +17,6 @@ export default function extend(Stack) {
     Stack.extendMethod('getMedian', median);
     Stack.extendMethod('getHistogram', histogram);
     Stack.extendMethod('getHistograms', histograms);
+
+    Stack.extendMethod('getAverage', average);
 }
