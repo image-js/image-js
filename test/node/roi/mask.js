@@ -46,6 +46,12 @@ describe('we check mask', function () {
             roiFilledMask = rois[2].filledMask;
             Array.from(roiFilledMask.data).should.eql([255, 128]);
 
+            let masks = roiManager.getROIMasks();
+
+            let painted = new Image(5,5);
+            painted.paintMasks(masks);
+
+            Array.from(painted.data).slice(0,8).should.eql([255,0,0,255,255,0,0,255]);
         });
     });
 });

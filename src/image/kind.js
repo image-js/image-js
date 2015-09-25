@@ -40,18 +40,18 @@ export function getKind(kind) {
     return kinds[kind];
 }
 
-export function getPixelArraySize(kind, numberPixels) {
-    let length = (kind.components + kind.alpha) * numberPixels;
-    if (kind.bitDepth === 1) {
+export function getTheoreticalPixelArraySize(image) {
+    let length = image.channels * image.size;
+    if (image.bitDepth === 1) {
         length = Math.ceil(length / 8);
     }
     return length;
 }
 
-export function getPixelArray(kind, numberPixels) {
-    let length = (kind.components + kind.alpha) * numberPixels;
+export function createPixelArray(image) {
+    let length = image.channels * image.size;
     let arr;
-    switch (kind.bitDepth) {
+    switch (image.bitDepth) {
         case 1:
             arr = new Uint8Array(Math.ceil(length / 8));
             break;
@@ -62,15 +62,14 @@ export function getPixelArray(kind, numberPixels) {
             arr = new Uint16Array(length);
             break;
         default:
-            throw new Error('Cannot create pixel array for bit depth ' + kind.bitDepth);
+            throw new Error('Cannot create pixel array for bit depth ' + image.bitDepth);
     }
 
     // alpha channel is 100% by default
-    if (kind.alpha) {
-        for (let i = kind.components; i < arr.length; i += kind.channels) {
-            arr[i] = kind.maxValue;
+    if (image.alpha) {
+        for (let i = image.components; i < arr.length; i += image.channels) {
+            arr[i] = image.maxValue;
         }
     }
-
-    return arr;
+    image.data = arr;
 }

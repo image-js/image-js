@@ -1,4 +1,4 @@
-import {getKind, getPixelArray, getPixelArraySize} from './kind';
+import {getKind, createPixelArray, getTheoreticalPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
 import {ImageData, Canvas} from './environment';
 import extend from './extend';
@@ -66,15 +66,14 @@ export default class Image {
         this.initialize();
 
         if (!data)
-            data = getPixelArray(kindDefinition, this.size);
+             createPixelArray(this);
         else {
-            let theoreticalSize = getPixelArraySize(kindDefinition, this.size);
-            if (theoreticalSize !== data.length) {
-                throw new RangeError(`incorrect data size. Should be ${theoreticalSize} and found ${data.length}`);
+            let length = getTheoreticalPixelArraySize(this);
+            if (length !== data.length) {
+                throw new RangeError(`incorrect data size. Should be ${length} and found ${data.length}`);
             }
+            this.data = data;
         }
-
-        this.data = data;
     }
 
     initialize() {
