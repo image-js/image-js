@@ -9,7 +9,7 @@ export default function percentile(histogram) {
 
     let threshold = -1;
     let percentile = 0.5; // default fraction of foreground pixels
-    let avec = new Float32Array(256);
+    let avec = new Float32Array(histogram.length);
 
     let total = partialSum(histogram, histogram.lengh);
     let temp = 1.0;

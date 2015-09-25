@@ -17,7 +17,7 @@ export default function mask({
     } = {}) {
     this.checkProcessable('mask', {
         components: 1,
-        bitDepth: [8]
+        bitDepth: [8,16]
     });
 
     let threshold = 0;
