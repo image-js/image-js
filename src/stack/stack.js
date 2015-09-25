@@ -1,4 +1,5 @@
 import extend from './extend';
+import Image from '../image/image';
 
 let computedPropertyDescriptor = {
     configurable: true,
@@ -22,6 +23,10 @@ export default function Stack(images) {
     stack.__proto__ = Stack.prototype;
     return stack;
 }
+
+Stack.load = function (urls) {
+    return Promise.all(urls.map(Image.load)).then(Stack);
+};
 
 Stack.extendMethod = function extendMethod(name, method, {inPlace = false, returnThis = true, partialArgs = []} = {}) {
     if (inPlace) {

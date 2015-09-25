@@ -1,8 +1,28 @@
-import {Image, Stack, getSquare} from '../common';
+import {Image, Stack, getSquare, getImage} from '../common';
 
 describe('Core methods of Stack objects', function () {
 
     let stack = new Stack([getSquare(), getSquare()]);
+
+    it('Stack.load', function () {
+        return Stack.load([getImage('BW2x2.png'), getImage('BW3x3.png')]).then(function (images) {
+            images.should.have.lengthOf(2);
+            images.should.be.instanceOf(Stack);
+            images[0].should.be.instanceOf(Image);
+            images[1].should.be.instanceOf(Image);
+            images[0].width.should.equal(2);
+            images[1].width.should.equal(3);
+        });
+    });
+
+    it('Stack.load with error', function () {
+        return Stack.load([getImage('BW2x2.png'), getImage('inexistant')]).catch(function (e) {
+            e.message.should.match(/Could not load/);
+            return 42;
+        }).then(function (value) {
+            value.should.equal(42);
+        });
+    });
 
     it('should be an Array', function () {
         stack.should.be.instanceOf(Stack);
