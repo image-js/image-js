@@ -4,7 +4,7 @@ import convolution from '../operator/convolution';
 export default function gaussianFilter({
 	neighbors = 1,
 	sigma,
-	boundary = 'copy'
+	border = 'copy'
 	} = {}) {
 
 	this.checkProcessable('gaussianFilter', {
@@ -21,8 +21,9 @@ export default function gaussianFilter({
 		kernel = getKernel(neighbors, sigma);
 	}
 
-
-	return convolution.call(this, kernel, boundary);
+	return convolution.call(this, kernel, {
+		border: border
+	});
 }
 
 function getKernel(neighbors, sigma) {

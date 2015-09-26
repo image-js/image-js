@@ -1,7 +1,7 @@
 import isInteger from 'is-integer';
 import Image from '../image';
 
-export default function convolution(kernel, {normalize = false, divisor = 1} = {}) {
+export default function convolution(kernel, {normalize = false, divisor = 1, border = 'copy'} = {}) {
 
     let newImage = Image.createFrom(this);
 
@@ -67,7 +67,7 @@ export default function convolution(kernel, {normalize = false, divisor = 1} = {
         }
     }
 
-    newImage.setBorder({size:[kWidth, kHeight]});
+    newImage.setBorder({size:[kWidth, kHeight], algorithm: border});
 
     return newImage;
 }
