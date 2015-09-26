@@ -16,7 +16,7 @@ export default function level({algorithm = 'full', channels, min, max} = {}) {
             break;
 
         case 'range':
-            if (!min || !max) {
+            if (min === undefined || max === undefined) {
                 throw new Error('level: you need to specify min and max values');
             }
             if (min < 0) min = 0;
