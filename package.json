@@ -64,10 +64,10 @@
   "dependencies": {
     "atob-lite": "^1.0.0",
     "extend": "^3.0.0",
+    "fast-png": "0.0.3",
     "is-integer": "^1.0.4",
     "ml-matrix": "^0.1.0",
     "new-array": "^1.0.0",
-    "png.js": "^0.1.1",
     "string-includes": "^1.0.0",
     "tiff": "0.0.2"
   },

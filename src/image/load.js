@@ -1,6 +1,6 @@
 import Image from './image';
 import {env, loadBinary, DOMImage, ImageData, Canvas, isDifferentOrigin} from './environment';
-import PNGReader from 'png.js';
+import {PNGDecoder} from 'fast-png';
 import {TIFFDecoder} from 'tiff';
 import atob from 'atob-lite';
 
@@ -44,31 +44,30 @@ export function loadURL(url) {
 }
 
 function loadPNG(data) {
-    return new Promise(function (resolve, reject) {
-        const reader = new PNGReader(data);
-        reader.parse(function (err, png) {
-            if (err) return reject(err);
-            const bitDepth = png.getBitDepth();
-            const buffer = png.pixels.buffer;
-            const offset = png.pixels.byteOffset;
-            const length = png.pixels.length;
-            let data;
-            if (bitDepth === 8) {
-                data = new Uint8ClampedArray(buffer, offset, length);
-            } else if (bitDepth === 16) {
-                data = new Uint16Array(buffer, offset, length / 2);
-                for (let i = 0; i < data.length; i++) {
-                    data[i] = swap16(data[i]);
-                }
-            }
+    const decoder = new PNGDecoder(data);
+    const png = decoder.decode();
+    const bitDepth = png.bitDepth;
+    const buffer = png.data.buffer;
+    let bitmap;
+    if (bitDepth === 8) {
+        bitmap = new Uint8ClampedArray(buffer);
+    } else if (bitDepth === 16) {
+        bitmap = new Uint16Array(buffer);
+        for (let i = 0; i < bitmap.length; i++) {
+            bitmap[i] = swap16(bitmap[i]);
+        }
+    }
 
-            resolve(new Image(png.width, png.height, data, {
-                components: png.colors - png.alpha,
-                alpha: png.alpha,
-                bitDepth: bitDepth
-            }));
-        });
-    });
+    const type = png.colourType;
+    let components, alpha = 0;
+    switch (type) {
+        case 0: components = 1; break;
+        case 2: components = 3; break;
+        case 4: components = 1; alpha = 1; break;
+        case 6: components = 3; alpha = 1; break;
+    }
+
+    return new Image(png.width, png.height, bitmap, {components, alpha, bitDepth});
 }
 
 function loadTIFF(data) {
