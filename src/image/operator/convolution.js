@@ -40,8 +40,9 @@ export default function convolution(kernel, {normalize = false, divisor = 1} = {
 
     //calculate divisor
     if (normalize) {
-        for (let i = 0; i < kHeight; i++)
-            for (let j = 0; j < kWidth; j++)
+        divisor = 0;
+        for (let i = 0; i < kernel.length; i++)
+            for (let j = 0; j < kernel[0].length; j++)
                 divisor += kernel[i][j];
     }
 
