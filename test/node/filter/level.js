@@ -68,5 +68,26 @@ describe('level', function () {
             });
         });
     });
+
+    describe('extend the image to specific levels', function () {
+        it('should expand from 100-110 not touch alpha', function () {
+            let image = new Image(1, 3, [
+                0, 100, 50, 100,
+                100, 105, 105, 255,
+                110, 110, 150, 255]);
+            let leveled = [
+                0, 0, 0, 100,
+                0, 128, 128, 255,
+                255, 255, 255, 255
+            ];
+            image.level({
+                algorithm: 'range',
+                min: 100,
+                max: 110
+            });
+
+            image.data.should.eql(leveled);
+        });
+    });
 });
 
