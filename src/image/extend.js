@@ -35,7 +35,7 @@ import getSimilarity from './utility/getSimilarity';
 import getBestMatch from './utility/getBestMatch';
 import paintMasks from './operator/paintMasks';
 import extract from './operator/extract';
-import convolutionApply from './operator/convolutionApply';
+import convolution from './operator/convolution';
 
 // computers
 import {getHistogram, getHistograms} from './compute/histogram';
@@ -92,7 +92,7 @@ export default function extend(Image) {
 
     Image.extendMethod('paintMasks', paintMasks);
     Image.extendMethod('extract', extract);
-    Image.extendMethod('convolution', convolutionApply);
+    Image.extendMethod('convolution', convolution);
 
     Image.extendMethod('countAlphaPixels', countAlphaPixels);
     Image.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);

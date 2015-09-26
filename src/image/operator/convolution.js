@@ -1,48 +1,72 @@
 import isInteger from 'is-integer';
+import Image from '../image';
 
-export default function convolution(newImage, kernel) {
-    let kernelWidth, kWidth, kHeight;
-    let div = 0, sum = 0, newValue = 0;
-    let twoDim = Array.isArray(kernel[0]);
+export default function convolution(kernel, {normalize = false, divisor = 1} = {}) {
 
-    if (Array.isArray(kernel) && !twoDim) {
-        if (isInteger(Math.sqrt(kernel.length))) {
-            kernelWidth = Math.sqrt(kernel.length);
-            kWidth = kHeight = Math.floor(kernelWidth / 2);
+    let newImage = Image.createFrom(this);
+
+    let kWidth, kHeight;
+
+
+    if (Array.isArray(kernel)) {
+        if (Array.isArray(kernel[0])) { // 2D array
+            if (((kernel.length & 1) === 0) || ((kernel[0].length & 1) === 0))
+                throw new RangeError('convolution: Kernel rows and columns should be odd numbers');
+            else {
+                kHeight = Math.floor(kernel.length / 2);
+                kWidth = Math.floor(kernel[0].length / 2);
+            }
         } else {
-            throw new RangeError('Number of neighbors should be grater than 0');
-        }
-        //calculate div
-        for (let i = 0; i < kernel.length; i++) div += kernel[i];
-    } else if (twoDim) {
-        if ((kernel.width & 1 === 0) || (kernel.height & 1 === 0))
-            throw new RangeError('Kernel rows and columns should be odd numbers');
-        else {
-            kWidth = Math.floor(kernel.length / 2);
-            kHeight = Math.floor(kernel[0].length / 2);
-        }
-        //calculate div
-        for (let i = 0; i < kernel.length; i++)
-            for (let j = 0; j < kernel[0].length; j++)
-                div += kernel[i][j];
-    } else {
-        throw new Error('Invalid Kernel: ' + kernel);
-    }
-
-    for (let x = kWidth; x < this.width - kWidth; x++) {
-        for (let y = kHeight; y < this.height - kHeight; y++) {
-            sum = 0;
-            for (let i = -kWidth; i <= kWidth; i++) {
-                for (let j = -kHeight; j <= kHeight; j++) {
-                    let kVal = !twoDim ? kernel[(i + kWidth) * kernelWidth + (j + kWidth)] : kernel[kWidth + i][kHeight + j];
-                    sum += this.getValueXY(x + i, y + j, 0) * kVal;
+            let kernelWidth = Math.sqrt(kernel.length);
+            if (isInteger(kernelWidth)) {
+                kWidth = kHeight = Math.floor(Math.sqrt(kernel.length) / 2);
+            } else {
+                throw new RangeError('convolution: Kernel array should be a square');
+            }
+            // we convert the array to a matrix
+            let newKernel = new Array(kWidth);
+            for (let i = 0; i < kernelWidth; i++) {
+                newKernel[i] = new Array(kernelWidth);
+                for (let j = 0; j < kernelWidth; j++) {
+                    newKernel[i][j] = kernel[i * kernelWidth + j];
                 }
             }
-            if (div >= 1) newValue = Math.floor(sum / div);
-            else newValue = sum;
+            kernel = newKernel;
 
-            newImage.setValueXY(x, y, 0, newValue);
-            if (this.alpha) newImage.setValueXY(x, y, 1, this.getValueXY(x, y, 1));
+        }
+    } else {
+        throw new Error('convolution: Invalid Kernel: ' + kernel);
+    }
+
+    //calculate divisor
+    if (normalize) {
+        for (let i = 0; i < kHeight; i++)
+            for (let j = 0; j < kWidth; j++)
+                divisor += kernel[i][j];
+    }
+
+    if (divisor === 0) {
+        throw new RangeError('convolution: The divisor is equal to zero');
+    }
+
+    for (let y = kHeight; y < this.height - kHeight; y++) {
+        for (let x = kWidth; x < this.width - kWidth; x++) {
+            let sum = 0;
+            for (let j = -kHeight; j <= kHeight; j++) {
+                for (let i = -kWidth; i <= kWidth; i++) {
+                    let kVal = kernel[kHeight + j][kWidth + i];
+                    let index = ((y + j) * this.width + x + i) * this.channels;
+                    sum += this.data[index] * kVal;
+                }
+            }
+
+            let index = (y * this.width + x) * this.channels;
+            newImage.data[index] = Math.min(Math.max(Math.round(sum / divisor),0),this.maxValue);
+            if (this.alpha) newImage.data[index + 1] = this.data[index + 1];
         }
     }
+
+    newImage.setBorder({size:[kWidth, kHeight]});
+
+    return newImage;
 }

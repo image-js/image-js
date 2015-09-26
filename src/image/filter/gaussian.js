@@ -21,19 +21,8 @@ export default function gaussianFilter({
 		kernel = getKernel(neighbors, sigma);
 	}
 
-	//gaussian filter do not is in place
-	let newImage = Image.createFrom(this, {
-		kind: {
-			components: 1,
-			alpha: this.alpha,
-			bitDepth: this.bitDepth,
-			colorModel: null
-		}
-	});
 
-	convolution.call(this, newImage, kernel, boundary);
-
-	return newImage;
+	return convolution.call(this, kernel, boundary);
 }
 
 function getKernel(neighbors, sigma) {

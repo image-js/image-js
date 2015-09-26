@@ -11,22 +11,13 @@ export default function meanFilter(k) {
 
     if (k < 1) {throw new Error('Number of neighbors should be grater than 0');}
 
-    //mean filter do not is in place
-    let newImage = Image.createFrom(this, {
-        kind: {
-            components: 1,
-            alpha: this.alpha,
-            bitDepth: this.bitDepth,
-            colorModel: null
-        }
-    });
-
     let n = 2 * k + 1;
     let size = n * n;
     let kernel = new Array(size);
 
-    for (let i = 0; i < kernel.length; i++) {kernel[i] = 1;}
-    convolution.call(this, newImage, kernel);
+    for (let i = 0; i < kernel.length; i++) {
+        kernel[i] = 1;
+    }
 
-    return newImage;
+    return convolution.call(this, kernel);
 }
