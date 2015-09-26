@@ -27,6 +27,7 @@ import resizeBinary from './transform/resizeBinary';
 import bitDepth8 from './transform/bitDepth8';
 import bitDepth16 from './transform/bitDepth16';
 
+import setBorder from './utility/setBorder';
 import split from './utility/split';
 import getChannel from './utility/getChannel';
 import setChannel from './utility/setChannel';
@@ -81,6 +82,7 @@ export default function extend(Image) {
     Image.extendMethod('resizeBinary', resizeBinary);
     Image.extendMethod('bitDepth8', bitDepth8);
     Image.extendMethod('bitDepth16', bitDepth16);
+    Image.extendMethod('setBorder', setBorder, inPlace);
 
     Image.extendMethod('split', split);
     Image.extendMethod('getChannel', getChannel);
