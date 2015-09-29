@@ -10,10 +10,10 @@ describe('check the bitDepth transform', function () {
             {kind: 'GREY'}
         );
 
-        let newImage = image.bitDepth8();
+        let newImage = image.bitDepth(8);
         Array.from(newImage.data).should.eql([0, 127, 255]);
 
-        newImage = image.bitDepth16();
+        newImage = image.bitDepth(16);
         Array.from(newImage.data).should.eql([0, 32512, 65280]);
     });
 
@@ -27,11 +27,20 @@ describe('check the bitDepth transform', function () {
         );
 
 
-        let newImage = image.bitDepth8();
+        let newImage = image.bitDepth(8);
         Array.from(newImage.data).should.eql([0, 127, 255]);
 
-        newImage = image.bitDepth16();
+        newImage = image.bitDepth(16);
         Array.from(newImage.data).should.eql([0, 32767, 65535]);
+
+        (function () {
+            image.bitDepth();
+        }).should.throw(/You need to specify the new bitDepth/);
+
+        (function () {
+            image.bitDepth(15);
+        }).should.throw(/You need to specify the new bitDepth/);
+
     });
 
 });
