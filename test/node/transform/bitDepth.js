@@ -40,4 +40,3 @@ describe('check the bitDepth transform', function () {
     });
 
 });
-

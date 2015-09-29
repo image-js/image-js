@@ -58,6 +58,8 @@ rules:
   no-var: 2
 
   # Stylistic issues
+  eol-last: 2
+  no-trailing-spaces: 2
   quotes:
     - 2
     - "single"
