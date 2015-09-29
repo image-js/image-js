@@ -3,43 +3,39 @@ import {Image} from '../common';
 describe('check the bitDepth transform', function () {
     it('check the right bitDepth for GREY image 8 bit', function () {
 
-        let image = new Image(3, 1,
+        let image = new Image(4, 1,
             [
-                0, 127, 255
+                0x00, 0x7f, 0xff, 0x12
             ],
             {kind: 'GREY'}
         );
 
-        let newImage = image.bitDepth(8);
-        Array.from(newImage.data).should.eql([0, 127, 255]);
+        let newImage = image.colorDepth(8);
+        Array.from(newImage.data).should.eql([0x00, 0x7f, 0xff, 0x12]);
 
-        newImage = image.bitDepth(16);
-        Array.from(newImage.data).should.eql([0, 32512, 65280]);
+        newImage = image.colorDepth(16);
+        Array.from(newImage.data).should.eql([0x0000, 0x7f7f, 0xffff, 0x1212]);
     });
 
     it('check the right bitDepth for GREY image 8 bit', function () {
 
-        let image = new Image(3, 1,
+        let image = new Image(4, 1,
             [
-                0, 32767, 65535
+                0x0000, 0x7fff, 0xffff, 0x1234
             ],
             {kind: 'GREY', bitDepth: 16}
         );
 
 
-        let newImage = image.bitDepth(8);
-        Array.from(newImage.data).should.eql([0, 127, 255]);
+        let newImage = image.colorDepth(8);
+        Array.from(newImage.data).should.eql([0x00, 0x7f, 0xff, 0x12]);
 
-        newImage = image.bitDepth(16);
-        Array.from(newImage.data).should.eql([0, 32767, 65535]);
-
-        (function () {
-            image.bitDepth();
-        }).should.throw(/You need to specify the new bitDepth/);
+        newImage = image.colorDepth(16);
+        Array.from(newImage.data).should.eql([0x0000, 0x7fff, 0xffff, 0x1234]);
 
         (function () {
-            image.bitDepth(15);
-        }).should.throw(/You need to specify the new bitDepth/);
+            image.colorDepth(15);
+        }).should.throw(/You need to specify the new bitDepth as 8 or 16/);
 
     });
 

@@ -1,6 +1,6 @@
 import Image from '../image';
 
-export default function bitDepth(newBitDepth) {
+export default function bitDepth(newBitDepth = 8) {
 
     this.checkProcessable('bitDepth', {
         bitDepth: [8, 16]
@@ -18,7 +18,7 @@ export default function bitDepth(newBitDepth) {
         }
     } else {
         for (let i = 0; i < this.data.length; i++) {
-            newImage.data[i] = this.data[i] << 8;
+            newImage.data[i] = this.data[i] << 8 | this.data[i];
         }
     }
 

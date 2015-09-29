@@ -80,7 +80,7 @@ export default function extend(Image) {
     Image.extendMethod('mask', mask);
     Image.extendMethod('pad', pad);
     Image.extendMethod('resizeBinary', resizeBinary);
-    Image.extendMethod('bitDepth', bitDepth);
+    Image.extendMethod('colorDepth', bitDepth);
     Image.extendMethod('setBorder', setBorder, inPlace);
 
     Image.extendMethod('split', split);
