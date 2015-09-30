@@ -11,7 +11,10 @@ describe('Image core', function () {
     it('invalid constructor use', function () {
         (function () {
             new Image(0, 0);
-        }).should.throw(RangeError);
+        }).should.throw(/width must be greater than 0/);
+        (function () {
+            new Image(5, 0);
+        }).should.throw(/height must be greater than 0/);
     });
 
     it('should load from URL', function () {
