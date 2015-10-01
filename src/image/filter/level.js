@@ -2,7 +2,7 @@ import newArray from 'new-array';
 
 import validateArrayOfChannels from '../utility/validateArrayOfChannels';
 
-export default function level({algorithm = 'full', channels, min, max} = {}) {
+export default function level({algorithm = 'full', channels, min = this.min, max = this.max} = {}) {
     this.checkProcessable('level', {
         bitDepth: [8, 16]
     });
@@ -16,9 +16,6 @@ export default function level({algorithm = 'full', channels, min, max} = {}) {
             break;
 
         case 'range':
-            if (min === undefined || max === undefined) {
-                throw new Error('level: you need to specify min and max values');
-            }
             if (min < 0) min = 0;
             if (max > this.maxValue) max = this.maxValue;
 
