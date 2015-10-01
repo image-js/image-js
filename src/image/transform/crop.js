@@ -11,6 +11,8 @@ export default function crop({
         throw new RangeError(`origin (${x}; ${y}) out of range (${this.width - 1}; ${this.height - 1})`);
     if (width <= 0 || height <= 0)
         throw new RangeError('width and height must be positive numbers');
+    if (x < 0 || y < 0)
+        throw new RangeError('x and y must be positive numbers');
     if (width > (this.width - x) || height > (this.height - y))
         throw new RangeError('size is out of range');
 

@@ -52,6 +52,42 @@ describe('check the crop transform', function () {
         });
         Array.from(result.data).should.eql([1,2,4,3]);
 
+        (function () {
+            result = image.crop({
+                x:-2,
+                y:2,
+                height: 2,
+                width: 2
+            });
+        }).should.throw(/x and y must be positive numbers/);
+
+        (function () {
+            result = image.crop({
+                x:2,
+                y:2,
+                height: -2,
+                width: 2
+            });
+        }).should.throw(/width and height must be positive numbers/);
+
+        (function () {
+            result = image.crop({
+                x:100,
+                y:2,
+                height: 2,
+                width: 2
+            });
+        }).should.throw(/origin .* out of range/);
+
+        (function () {
+            result = image.crop({
+                x:2,
+                y:2,
+                height: 2,
+                width: 100
+            });
+        }).should.throw(/size is out of range/);
+
     });
 
 
