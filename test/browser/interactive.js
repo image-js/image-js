@@ -4,6 +4,18 @@
 var oldCode = localStorage.getItem('ij-test-code');
 var oldImg = localStorage.getItem('ij-test-img') || 'rgb8.png';
 
+var uploadElement = $('#image-upload');
+uploadElement.change(function () {
+    if (this.files && this.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            loadImageFromURL(e.target.result);
+            execute();
+        };
+        reader.readAsDataURL(this.files[0]);
+    }
+});
+
 var selectElement = $('#image-selector');
 images.forEach(function (img) {
     var option = $('<option>' + img + '</option>').attr('value', img);
@@ -22,11 +34,15 @@ selectElement.on('change', function () {
 });
 
 var loading;
+function loadImageFromURL(url) {
+    loading = IJ.load(url).then(setLeftImage);
+}
 function loadNewImage(img) {
-    loading = load(img).then(function (img) {
-        setLeft(img);
-        return img;
-    });
+    loading = load(img).then(setLeftImage);
+}
+function setLeftImage(img) {
+    setLeft(img);
+    return img;
 }
 
 $('#run-script').on('click', execute);
