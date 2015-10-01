@@ -59,7 +59,7 @@ describe('check the crop transform', function () {
                 height: 2,
                 width: 2
             });
-        }).should.throw(/x and y must be positive numbers/);
+        }).should.throw(/x and y .* must be positive numbers/);
 
         (function () {
             result = image.crop({
@@ -68,7 +68,7 @@ describe('check the crop transform', function () {
                 height: -2,
                 width: 2
             });
-        }).should.throw(/width and height must be positive numbers/);
+        }).should.throw(/width and height .* must be positive numbers/);
 
         (function () {
             result = image.crop({
