@@ -13,7 +13,7 @@ describe('we check mask', function () {
             roiManager.putMask(mask);
 
             let roiIDs = roiManager.getROIIDs();
-            roiIDs.should.eql([-2,-1,1]);
+            roiIDs.should.eql([-1, 1, 2]);
 
             let rois = roiManager.getROI();
 
@@ -25,16 +25,16 @@ describe('we check mask', function () {
             console.log( rois[2].mask.sizes);
 */
 
-            rois[2].mask.sizes.should.eql([3,3]);
+            rois[2].mask.sizes.should.eql([1,1]);
             rois[1].mask.sizes.should.eql([5,5]);
-            rois[0].mask.sizes.should.eql([1,1]);
+            rois[0].mask.sizes.should.eql([3,3]);
 
 
 
-            let roiMask = rois[0].mask;
+            let roiMask = rois[2].mask;
             Array.from(roiMask.data).should.eql([128]);
 
-            let roiFilledMask = rois[0].filledMask;
+            let roiFilledMask = rois[2].filledMask;
             Array.from(roiFilledMask.data).should.eql([128]);
 
             roiMask = rois[1].mask;
@@ -43,10 +43,10 @@ describe('we check mask', function () {
             roiFilledMask = rois[1].filledMask;
             Array.from(roiFilledMask.data).should.eql([255, 255, 255, 128]);
 
-            roiMask = rois[2].mask;
+            roiMask = rois[0].mask;
             Array.from(roiMask.data).should.eql([247, 128]);
 
-            roiFilledMask = rois[2].filledMask;
+            roiFilledMask = rois[0].filledMask;
             Array.from(roiFilledMask.data).should.eql([255, 128]);
 
             let masks = roiManager.getROIMasks();

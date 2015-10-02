@@ -26,9 +26,9 @@ describe('we check the internalMapID', function () {
             */
 
             rois.should.be.an.instanceof(Array).and.lengthOf(3);
-            rois[2].mask.sizes.should.eql([1, 1]);
+            rois[2].mask.sizes.should.eql([3, 3]);
             rois[1].mask.sizes.should.eql([5, 5]);
-            rois[0].mask.sizes.should.eql([3, 3]);
+            rois[0].mask.sizes.should.eql([1, 1]);
 
 /*
              console.log( rois[0].internalMapIDs);
@@ -36,9 +36,9 @@ describe('we check the internalMapID', function () {
              console.log( rois[2].internalMapIDs);
 */
 
-            rois[0].internalMapIDs.should.eql([-1, 2]);
-            rois[1].internalMapIDs.should.eql([1, -1, 2]);
-            rois[2].internalMapIDs.should.eql([2]);
+            rois[2].internalMapIDs.should.eql([1, -2]);
+            rois[1].internalMapIDs.should.eql([-1, 1, -2]);
+            rois[0].internalMapIDs.should.eql([-2]);
         });
     });
 });

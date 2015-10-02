@@ -49,7 +49,7 @@ describe('Create a mask from a greyA image', function () {
         data.should.instanceOf(Uint8Array);
         data.length.should.equal(1);
 
-        data[0].should.equal(0b01010000);
+        data[0].should.equal(0b10100000);
     });
 
 });
@@ -61,7 +61,7 @@ describe('Create a mask from a greyA image using percentile algorithm', function
             kind: 'GREYA'
         });
 
-        let mask = image.mask({algorithm: 'percentile', useAlpha: false, invert: true});
+        let mask = image.mask({algorithm: 'percentile', useAlpha: false, invert: false});
 
         mask.channels.should.equal(1);
         mask.bitDepth.should.equal(1);
