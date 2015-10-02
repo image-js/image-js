@@ -51,7 +51,7 @@ export default function mask({
         }
     } else {
         for (let i = 0; i < this.data.length; i += this.channels) {
-            if ((invert && this.data[i] >= threshold) || (!invert && this.data[i] <= threshold)) {
+            if ((invert && this.data[i] <= threshold) || (!invert && this.data[i] >= threshold)) {
                 newImage.setBit(ptr);
             }
             ptr++;
