@@ -39,7 +39,7 @@ function processImage(image, i) {
     // we take the biggest ROI and we crop based on the center of it the
     // original image
     var rois=roiManager.getROI('default',{
-        positive: false, minSurface: 10
+        negative: false, minSurface: 10
     });
 
     // we corner is the correct one ... we need to find the corner that
@@ -61,19 +61,19 @@ function processImage(image, i) {
  //   console.log(mask.toDataURL())
 
     if (Math.abs(minX-meanX) > Math.abs(maxX-meanX)) {
-        var fromX=maxX-width/2;
+        var fromX=maxX-width;
         var toX=maxX;
     } else {
         var fromX=minX;
-        var toX=minX+width/2;
+        var toX=minX+width;
     }
 
     if (Math.abs(minY-meanY) > Math.abs(maxY-meanY)) {
-        var fromY=maxY-height/2;
-        var toY=maxX;
+        var fromY=maxY-height;
+        var toY=maxY;
     } else {
         var fromY=minY;
-        var toY=minY+height/2;
+        var toY=minY+height;
     }
     var options={x:fromX-frameBorder, y:fromY-frameBorder, width:width+2*frameBorder, height:height+2*frameBorder};
     console.log(fromX, fromY, meanX, meanY, options);
