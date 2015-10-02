@@ -57,6 +57,5 @@ export default function mask({
             ptr++;
         }
     }
-
     return newImage;
 }
