@@ -1,6 +1,7 @@
 import Image from '../../image';
 
 import percentile from './percentile';
+import otsu from './otsu';
 
 
 /*
@@ -26,9 +27,13 @@ export default function mask({
         threshold = algorithm * this.maxValue;
     } else {
         let histogram = this.getHistogram();
+
         switch (algorithm.toLowerCase()) {
             case 'percentile':
                 threshold = percentile(histogram);
+                break;
+            case 'otsu':
+                threshold = otsu(histogram);
                 break;
             default:
                 throw new Error('mask transform unknown algorithm: ' + algorithm);
