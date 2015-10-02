@@ -4,10 +4,17 @@
 */
 import Stack from '../stack';
 
-export default function matchAndCrop({} = {}) {
+// in a stack we compare 2 consecutive images
+// or directly to a parent
+
+// algorithm: matchToPrevious || matchToFirst
+
+export default function matchAndCrop({algorithm = 'matchToPrevious'} = {}) {
     this.checkProcessable('matchAndCrop', {
         bitDepth: [8, 16]
     });
+
+    let matchToPrevious = (algorithm === 'matchToPrevious') ? true : false;
 
     let parent = this[0];
     let results = [];
@@ -15,12 +22,23 @@ export default function matchAndCrop({} = {}) {
         position:[0,0],
         image: this[0]
     };
+
+    let relativePosition = [0,0];
+
     // we calculate the best relative position to the parent image
     for (let i = 1; i < this.length; i++) {
+        let position = parent.getBestMatch(this[i]);
         results[i] = {
-            position: parent.getBestMatch(this[i]),
+            position: [position[0] + relativePosition[0], position[1] + relativePosition[1]],
             image: this[i]
         };
+        if (matchToPrevious) {
+            relativePosition[0] += position[0];
+            relativePosition[1] += position[1];
+            parent = this[i];
+        }
+
+
     }
     // now we can calculate the cropping that we need to do
 
@@ -36,13 +54,15 @@ export default function matchAndCrop({} = {}) {
         if (result.position[1] > topShift) topShift = result.position[1];
         if (result.position[1] < bottomShift) bottomShift = result.position[1];
     }
+    rightShift *= -1;
+    bottomShift *= -1;
 
     for (let i = 0; i < results.length; i++) {
         let result = results[i];
 
         result.crop = result.image.crop({
-            x:leftShift - result.position[0],
-            y:topShift - result.position[1],
+            x: leftShift - result.position[0],
+            y: topShift - result.position[1],
             width:parent.width - rightShift - leftShift,
             height:parent.height - bottomShift - topShift
         });
