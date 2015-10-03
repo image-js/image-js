@@ -60,10 +60,7 @@ export default function convolution(kernel, {bitDepth, normalize = false, diviso
     }
 
 
-    let maxValue = newImage.maxValue;
-    if (newImage.bitDepth === 64) {
-        maxValue = 0;
-    }
+    let clamped = (newImage.bitDepth <= 32) ? true : false;
 
     for (let y = kHeight; y < this.height - kHeight; y++) {
         for (let x = kWidth; x < this.width - kWidth; x++) {
@@ -77,10 +74,10 @@ export default function convolution(kernel, {bitDepth, normalize = false, diviso
             }
 
             let index = (y * this.width + x) * this.channels;
-            if (maxValue === 0) { // we calculate the exact result
-                newImage.data[index] = sum / divisor;
+            if (clamped) { // we calculate the clamped result
+                newImage.data[index] = Math.min(Math.max(Math.round(sum / divisor),0),newImage.maxValue);
             } else {
-                newImage.data[index] = Math.min(Math.max(Math.round(sum / divisor),0),this.maxValue);
+                newImage.data[index] = sum / divisor;
             }
 
             if (this.alpha) newImage.data[index + 1] = this.data[index + 1];

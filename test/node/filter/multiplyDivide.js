@@ -27,7 +27,7 @@ describe('divide', function () {
         image.data.should.eql(newImage);
 
         (function () {
-            image.substract(0);
+            image.divide(0);
         }).should.throw(/the value must be greater/);
     });
 });

@@ -11,7 +11,7 @@ export default function setBorder({
     } = {}) {
 
     this.checkProcessable('setBorder', {
-        bitDepth: [8, 16]
+        bitDepth: [8, 16, 32, 64]
     });
 
     if (algorithm === 'set') {

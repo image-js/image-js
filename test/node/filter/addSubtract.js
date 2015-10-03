@@ -16,18 +16,18 @@ describe('add', function () {
     });
 });
 
-describe('substract', function () {
-    it('should substract a fix value to all channels of RGBA image, we dont touch alpha', function () {
+describe('subtract', function () {
+    it('should subtract a fix value to all channels of RGBA image, we dont touch alpha', function () {
 
         let image = new Image(1,2,[230, 83, 120, 255, 100, 140, 13, 240]);
 
         let newImage = [130, 0, 20, 255, 0, 40, 0, 240];
 
-        image.substract(100);
+        image.subtract(100);
         image.data.should.eql(newImage);
 
         (function () {
-            image.substract(-10);
+            image.subtract(-10);
         }).should.throw(/the value must be greater/);
     });
 });

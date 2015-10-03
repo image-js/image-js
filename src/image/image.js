@@ -80,7 +80,11 @@ export default class Image {
         this.size = this.width * this.height;
         this.sizes = [this.width, this.height];
         this.channels = this.components + this.alpha;
-        this.maxValue = (1 << this.bitDepth) - 1;
+        if (this.bitDepth === 64) {
+            this.maxValue = Number.MAX_VALUE;
+        } else {
+            this.maxValue = Math.pow(2, this.bitDepth) - 1;  // we may not use 1 << this.bitDepth for 32 bits images
+        }
 
         this.multiplierX = this.channels;
         this.multiplierY = this.channels * this.width;
