@@ -1,10 +1,10 @@
 import validateArrayOfChannels from '../utility/validateArrayOfChannels';
 
-export default function substract(value, {channels} = {}) {
-    this.checkProcessable('substract', {
+export default function subtract(value, {channels} = {}) {
+    this.checkProcessable('subtract', {
         bitDepth: [8, 16]
     });
-    if (value <= 0) throw new Error('substract: the value must be greater than 0');
+    if (value <= 0) throw new Error('subtract: the value must be greater than 0');
 
     channels = validateArrayOfChannels(this, {channels:channels});
 
