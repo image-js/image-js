@@ -1,4 +1,4 @@
-import validateArrayOfChannels from '../utility/validateArrayOfChannels';
+import {validateArrayOfChannels} from '../../util/channel';
 
 export default function subtract(value, {channels} = {}) {
     this.checkProcessable('subtract', {

@@ -1,5 +1,5 @@
 import Image from '../image';
-import validateChannel from './validateChannel';
+import {validateChannel} from './../../util/channel';
 
 export default function setChannel(channel, image) {
 

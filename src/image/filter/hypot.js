@@ -1,4 +1,4 @@
-import validateArrayOfChannels from '../utility/validateArrayOfChannels';
+import {validateArrayOfChannels} from '../../util/channel';
 import Image from '../image';
 
 export default function hypot(otherImage, {bitDepth, channels} = {}) {

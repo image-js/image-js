@@ -1,6 +1,6 @@
 
 import Image from '../image';
-import validateArrayOfChannels from '../utility/validateArrayOfChannels';
+import {validateArrayOfChannels} from '../../util/channel';
 import {validateKernel} from '../../util/kernel';
 /**
  *

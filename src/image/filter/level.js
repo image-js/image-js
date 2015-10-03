@@ -1,6 +1,6 @@
 import newArray from 'new-array';
 
-import validateArrayOfChannels from '../utility/validateArrayOfChannels';
+import {validateArrayOfChannels} from '../../util/channel';
 
 export default function level({algorithm = 'full', channels, min = this.min, max = this.max} = {}) {
     this.checkProcessable('level', {

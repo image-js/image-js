@@ -1,4 +1,4 @@
-import validateArrayOfChannels from '../utility/validateArrayOfChannels';
+import {validateArrayOfChannels} from '../../util/channel';
 
 export default function add(value, {channels} = {}) {
     this.checkProcessable('divide', {
