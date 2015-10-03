@@ -11,15 +11,17 @@ export default function percentile(histogram) {
     let percentile = 0.5; // default fraction of foreground pixels
     let avec = new Float32Array(histogram.length);
 
-    let total = partialSum(histogram, histogram.lengh);
+    let total = partialSum(histogram, histogram.length);
     let temp = 1.0;
-    for (let i = 1; i < histogram.length; i++) {
+
+    for (let i = 0; i < histogram.length; i++) {
         avec[i] = Math.abs((partialSum(histogram, i) / total) - percentile);
         if (avec[i] < temp) {
             temp = avec[i];
             threshold = i;
         }
     }
+
     return threshold;
 }
 
