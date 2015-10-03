@@ -1,5 +1,6 @@
 import isInteger from 'is-integer';
 import Image from '../image';
+import validateArrayOfChannels from '../utility/validateArrayOfChannels';
 
 /**
  *
@@ -10,12 +11,14 @@ import Image from '../image';
  * @param border
  * @returns {*}
  */
-export default function convolution(kernel, {bitDepth, normalize = false, divisor = 1, border = 'copy'} = {}) {
+export default function convolution(kernel, {channels, bitDepth, normalize = false, divisor = 1, border = 'copy'} = {}) {
 
     let newImage = Image.createFrom(this, {bitDepth: bitDepth});
 
     let kWidth, kHeight;
 
+
+    channels = validateArrayOfChannels(this, channels, true);
 
     if (Array.isArray(kernel)) {
         if (Array.isArray(kernel[0])) { // 2D array
@@ -62,25 +65,32 @@ export default function convolution(kernel, {bitDepth, normalize = false, diviso
 
     let clamped = (newImage.bitDepth <= 32) ? true : false;
 
-    for (let y = kHeight; y < this.height - kHeight; y++) {
-        for (let x = kWidth; x < this.width - kWidth; x++) {
-            let sum = 0;
-            for (let j = -kHeight; j <= kHeight; j++) {
-                for (let i = -kWidth; i <= kWidth; i++) {
-                    let kVal = kernel[kHeight + j][kWidth + i];
-                    let index = ((y + j) * this.width + x + i) * this.channels;
-                    sum += this.data[index] * kVal;
+    for (let channel = 0; channel < channels.length; channel++) {
+        let c = channels[channel];
+        for (let y = kHeight; y < this.height - kHeight; y++) {
+            for (let x = kWidth; x < this.width - kWidth; x++) {
+                let sum = 0;
+                for (let j = -kHeight; j <= kHeight; j++) {
+                    for (let i = -kWidth; i <= kWidth; i++) {
+                        let kVal = kernel[kHeight + j][kWidth + i];
+                        let index = ((y + j) * this.width + x + i) * this.channels + c;
+                        sum += this.data[index] * kVal;
+                    }
+                }
+
+                let index = (y * this.width + x) * this.channels + c;
+                if (clamped) { // we calculate the clamped result
+                    newImage.data[index] = Math.min(Math.max(Math.round(sum / divisor), 0), newImage.maxValue);
+                } else {
+                    newImage.data[index] = sum / divisor;
                 }
             }
-
-            let index = (y * this.width + x) * this.channels;
-            if (clamped) { // we calculate the clamped result
-                newImage.data[index] = Math.min(Math.max(Math.round(sum / divisor),0),newImage.maxValue);
-            } else {
-                newImage.data[index] = sum / divisor;
-            }
-
-            if (this.alpha) newImage.data[index + 1] = this.data[index + 1];
+        }
+    }
+    // if the kernel was not applied on the alpha channel we just copy it
+    if (this.alpha && channels.indexOf(this.channels) === -1) {
+        for (let i = this.components; i < this.data.length; i = i + this.channels) {
+            newImage.data[i] = this.data[i];
         }
     }
 
