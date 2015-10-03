@@ -41,7 +41,7 @@ describe('check the convolution operator', function () {
     });
 
 
-    it('check the convolution for GREY image', function () {
+    it('check the convolution for GREY image 3 x 3 kernel', function () {
         let image = new Image(4, 4,
             [
                 1, 1, 1, 1,
@@ -63,7 +63,7 @@ describe('check the convolution operator', function () {
 
     });
 
-    it('check the convolution non square for GREY image', function () {
+    it('check the convolution non square for GREY image - matrix kernel', function () {
         let image = new Image(4, 4,
             [
                 1, 1, 1, 1,
@@ -101,6 +101,39 @@ describe('check the convolution operator', function () {
             ]
         );
 
+    });
+
+    it('check the convolution for GREYA image', function () {
+        let image = new Image(2, 2,
+            [
+                1, 255, 2, 255,
+                3, 255, 4, 255
+            ],
+            {kind: 'GREYA'}
+        );
+
+        Array.from(image.convolution([1]).data).should.eql(
+            [
+                1, 255, 2, 255,
+                3, 255, 4, 255
+            ]
+        );
+
+        Array.from(image.convolution([[1]]).data).should.eql(
+            [
+                1, 255, 2, 255,
+                3, 255, 4, 255
+            ]
+        );
+
+
+        (function () {
+            image.convolution([1,2,3]);
+        }).should.throw(/array should be a square/);
+
+        (function () {
+            image.convolution([[1],[1,2,3]]);
+        }).should.throw(/rows and columns should be odd number/);
     });
 });
 
