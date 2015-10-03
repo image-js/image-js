@@ -5,10 +5,10 @@
  * @returns {number} - the threshold
  */
 
-export default function otsu(histogram){
+export default function otsu(histogram) {
 
     let sum = 0;            //Total Intensities of the histogram
-    let total=0;            //Total pixels in the image
+    let total = 0;          //Total pixels in the image
     let sumB = 0;           //Total intensities in the 1-class histogram
     let wB = 0;             //Total pixels in the 1-class histogram
     let wF = 0;             //Total pixels in the 2-class histogram
@@ -19,18 +19,18 @@ export default function otsu(histogram){
     let threshold = 0.0;
 
 
-    for (let i = 1; i < histogram.length; ++i){
+    for (let i = 1; i < histogram.length; ++i) {
         sum += i * histogram[i];
-        total+=histogram[i];
+        total += histogram[i];
     }
 
     for (let i = 1; i <  histogram.length; ++i) {
         wB += histogram[i];
 
-        if (wB == 0)
+        if (wB === 0)
             continue;
         wF = total - wB;
-        if (wF == 0)
+        if (wF === 0)
             break;
 
         sumB += i * histogram[i];
@@ -38,7 +38,7 @@ export default function otsu(histogram){
         mF = (sum - sumB) / wF;
         between = wB * wF * (mB - mF) * (mB - mF);
 
-        if ( between >= max ) {
+        if (between >= max) {
             threshold = i;
             max = between;
         }
