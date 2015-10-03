@@ -61,6 +61,8 @@ export function createPixelArray(image) {
         case 16:
             arr = new Uint16Array(length);
             break;
+        case 64:
+            arr = new Float64Array(length);
         default:
             throw new Error('Cannot create pixel array for bit depth ' + image.bitDepth);
     }
