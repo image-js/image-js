@@ -1,9 +1,18 @@
 import isInteger from 'is-integer';
 import Image from '../image';
 
-export default function convolution(kernel, {normalize = false, divisor = 1, border = 'copy'} = {}) {
+/**
+ *
+ * @param kernel
+ * @param bitDepth : We can specify a new bitDepth for the image. This allow to specify 64 bits in order no to clamp
+ * @param normalize
+ * @param divisor
+ * @param border
+ * @returns {*}
+ */
+export default function convolution(kernel, {bitDepth, normalize = false, divisor = 1, border = 'copy'} = {}) {
 
-    let newImage = Image.createFrom(this);
+    let newImage = Image.createFrom(this, {bitDepth: bitDepth});
 
     let kWidth, kHeight;
 
@@ -50,6 +59,12 @@ export default function convolution(kernel, {normalize = false, divisor = 1, bor
         throw new RangeError('convolution: The divisor is equal to zero');
     }
 
+
+    let maxValue = newImage.maxValue;
+    if (newImage.bitDepth === 64) {
+        maxValue = 0;
+    }
+
     for (let y = kHeight; y < this.height - kHeight; y++) {
         for (let x = kWidth; x < this.width - kWidth; x++) {
             let sum = 0;
@@ -62,7 +77,12 @@ export default function convolution(kernel, {normalize = false, divisor = 1, bor
             }
 
             let index = (y * this.width + x) * this.channels;
-            newImage.data[index] = Math.min(Math.max(Math.round(sum / divisor),0),this.maxValue);
+            if (maxValue === 0) { // we calculate the exact result
+                newImage.data[index] = sum / divisor;
+            } else {
+                newImage.data[index] = Math.min(Math.max(Math.round(sum / divisor),0),this.maxValue);
+            }
+
             if (this.alpha) newImage.data[index + 1] = this.data[index + 1];
         }
     }
