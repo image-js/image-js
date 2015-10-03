@@ -23,14 +23,14 @@ export default function sobelFilter({
 	let gX = convolution.call(this, kernelX, {
 		channels: channels,
 		border: border,
-		bitDepth: 64
+		bitDepth: 32
 	});
 
 	let gY = convolution.call(this, kernelY, {
 		channels: channels,
 		border: border,
-		bitDepth: 64
+		bitDepth: 32
 	});
 
-	return gX.hypot(gY, {bitDepth: this.bitDepth, channels: channels});
+	return gX.hypotenuse(gY, {bitDepth: this.bitDepth, channels: channels});
 }

@@ -33,7 +33,7 @@ export default function convolution(kernel, {channels, bitDepth, normalize = fal
     }
 
 
-    let clamped = (newImage.bitDepth <= 32) ? true : false;
+    let clamped = newImage.isClamped;
 
     for (let channel = 0; channel < channels.length; channel++) {
         let c = channels[channel];

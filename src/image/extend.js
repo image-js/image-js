@@ -13,7 +13,7 @@ import sobelFilter from './filter/sobel';
 import level from './filter/level';
 import add from './filter/add';
 import subtract from './filter/subtract';
-import hypot from './filter/hypot';
+import hypotenuse from './filter/hypotenuse';
 import multiply from './filter/multiply';
 import divide from './filter/divide';
 
@@ -69,7 +69,7 @@ export default function extend(Image) {
     Image.extendMethod('subtract', subtract, inPlace);
     Image.extendMethod('multiply', multiply, inPlace);
     Image.extendMethod('divide', divide, inPlace);
-    Image.extendMethod('hypot', hypot);
+    Image.extendMethod('hypotenuse', hypotenuse);
 
     Image.extendMethod('meanFilter', meanFilter);
     Image.extendMethod('medianFilter', medianFilter);

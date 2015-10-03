@@ -80,7 +80,7 @@ export default class Image {
         this.size = this.width * this.height;
         this.sizes = [this.width, this.height];
         this.channels = this.components + this.alpha;
-        if (this.bitDepth === 64) {
+        if (this.bitDepth === 32) {
             this.maxValue = Number.MAX_VALUE;
         } else {
             this.maxValue = Math.pow(2, this.bitDepth) - 1;  // we may not use 1 << this.bitDepth for 32 bits images
@@ -88,6 +88,7 @@ export default class Image {
 
         this.multiplierX = this.channels;
         this.multiplierY = this.channels * this.width;
+        this.isClamped = (this.bitDepth < 32) ? true : false;
     }
 
 

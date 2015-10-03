@@ -1,6 +1,6 @@
 import {Image} from '../common';
 
-describe('check hypot', function () {
+describe('check hypotenuse', function () {
     it('should yield the correct array', function () {
 
         let image1 = new Image(5,1,
@@ -24,7 +24,7 @@ describe('check hypot', function () {
                 5, 13, 17, 25, 41
             ];
 
-        Array.from(image1.hypot(image2).data).should.eql(theoretical);
+        Array.from(image1.hypotenuse(image2).data).should.eql(theoretical);
     });
 });
 
