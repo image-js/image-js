@@ -4,30 +4,24 @@
 import {validateArrayOfChannels} from '../../util/channel';
 import Image from '../image';
 
-//k: size of kernel (k*k)
-export default function medianFilter(k, channels, border = 'copy') {
+
+export default function medianFilter(radius, channels, border = 'copy') {
     this.checkProcessable('medianFilter', {
         bitDepth:[8,16]
     });
 
-    if (k < 1) {
-        throw new Error('Kernel size should be greater than 0');
+    if (radius < 1) {
+        throw new Error('Kernel radius should be greater than 0');
     }
 
     channels = validateArrayOfChannels(this, channels, true);
 
-    let kWidth = k;
-    let kHeight = k;
-    let newImage = Image.createFrom(this, {
-        kind: {
-            components: 1,
-            alpha: this.alpha,
-            bitDepth: this.bitDepth,
-            colorModel: null
-        }
-    });
+    let kWidth = radius;
+    let kHeight = radius;
+    let newImage = Image.createFrom(this);
 
-    let size = kWidth * kHeight;
+    let size = (kWidth * 2 + 1) * (kHeight * 2 + 1);
+    let middle = Math.floor(size / 2);
     let kernel = new Array(size);
 
     for (let channel = 0; channel < channels.length; channel++) {
@@ -42,7 +36,7 @@ export default function medianFilter(k, channels, border = 'copy') {
                     }
                 }
                 let index = (y * this.width + x) * this.channels + c;
-                let newValue = kernel.sort()[Math.floor(size / 2)];
+                let newValue = kernel.sort()[middle];
                 newImage.data[index] = newValue;
             }
         }
