@@ -1,17 +1,10 @@
 import Image from '../image';
 import convolution from '../operator/convolution';
+import {GRADIENT_X, GRADIENT_Y} from '../../util/kernels';
 
 export default function sobelFilter({
-	kernelX = [
-		[-1, 0, +1],
-		[-2, 0, +2],
-		[-1, 0, +1]
-	],
-	kernelY = [
-		[-1, -2, -1],
-		[0, 0, 0],
-		[+1, +2, +1]
-	],
+	kernelX = GRADIENT_X,
+	kernelY = GRADIENT_Y,
 	border = 'copy',
 	channels
 	} = {}) {
