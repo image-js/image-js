@@ -31,5 +31,5 @@ export function validateKernel(kernel) {
     } else {
         throw new Error('validateKernel: Invalid Kernel: ' + kernel);
     }
-    return {kernel: kernel, kWidth: kWidth, kHeight: kHeight};
+    return {kernel, kWidth, kHeight};
 }
