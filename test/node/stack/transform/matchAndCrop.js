@@ -45,8 +45,34 @@ describe('check matchAndCrop method', function () {
             )
         );
 
+        images.push(
+            new Image(5, 5,
+                [
+                    0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0,
+                    0, 0, 4, 0, 0,
+                    0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0
+                ],
+                {kind: 'GREY'}
+            )
+        );
+
+        images.push(
+            new Image(5, 5,
+                [
+                    0, 0, 0, 0, 0,
+                    0, 0, 4, 0, 0,
+                    0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0
+                ],
+                {kind: 'GREY'}
+            )
+        );
+
         let results = images.matchAndCrop();
-        results.should.be.instanceOf(Stack).and.have.lengthOf(3);
+        results.should.be.instanceOf(Stack).and.have.lengthOf(5);
         getHash(results[1]).should.equal(getHash(results[2]));
 
         let result = results[0];
@@ -82,6 +108,29 @@ describe('check matchAndCrop method', function () {
                 0, 0, 0, 0
             ]
         );
+
+        result = results[3];
+        result.width.should.equal(4);
+        result.height.should.equal(3);
+        Array.from(result.data).should.eql(
+            [
+                0, 0, 0, 0,
+                0, 0, 4, 0,
+                0, 0, 0, 0
+            ]
+        );
+
+        result = results[4];
+        result.width.should.equal(4);
+        result.height.should.equal(3);
+        Array.from(result.data).should.eql(
+            [
+                0, 0, 0, 0,
+                0, 0, 4, 0,
+                0, 0, 0, 0
+            ]
+        );
+
     });
 
 

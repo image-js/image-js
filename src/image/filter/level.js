@@ -2,7 +2,12 @@ import newArray from 'new-array';
 
 import {validateArrayOfChannels} from '../../util/channel';
 
-export default function level({algorithm = 'full', channels, min = this.min, max = this.max} = {}) {
+export default function level({
+    algorithm = 'range',
+    channels,
+    min = this.min,
+    max = this.max
+    } = {}) {
     this.checkProcessable('level', {
         bitDepth: [8, 16]
     });
@@ -10,10 +15,6 @@ export default function level({algorithm = 'full', channels, min = this.min, max
     channels = validateArrayOfChannels(this, {channels:channels});
 
     switch (algorithm) {
-
-        case 'full':
-            processImage(this, this.min, this.max, channels);
-            break;
 
         case 'range':
             if (min < 0) min = 0;
