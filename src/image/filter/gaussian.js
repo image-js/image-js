@@ -2,7 +2,7 @@ import Image from '../image';
 import convolution from '../operator/convolution';
 
 export default function gaussianFilter({
-	neighbors = 1,
+	radius = 1,
 	sigma,
 	channels,
 	border = 'copy'
@@ -16,9 +16,9 @@ export default function gaussianFilter({
 	if (sigma) {
 		kernel = getSigmaKernel(sigma);
 	} else {
-		// sigma approximation using neighbors
-		sigma = 0.3 * (neighbors - 1) + 0.8;
-		kernel = getKernel(neighbors, sigma);
+		// sigma approximation using radius
+		sigma = 0.3 * (radius - 1) + 0.8;
+		kernel = getKernel(radius, sigma);
 	}
 
 	return convolution.call(this, kernel, {
@@ -27,11 +27,11 @@ export default function gaussianFilter({
 	});
 }
 
-function getKernel(neighbors, sigma) {
-	if (neighbors < 1) {
-		throw new RangeError('Number of neighbors should be grater than 0');
+function getKernel(radius, sigma) {
+	if (radius < 1) {
+		throw new RangeError('Radius should be grater than 0');
 	}
-	let n = 2 * neighbors + 1;
+	let n = 2 * radius + 1;
 
 	let kernel = new Array(n * n);
 
@@ -39,17 +39,17 @@ function getKernel(neighbors, sigma) {
 	let sigma2 = 2 * (sigma * sigma); //2*sigma^2
 	let PI2sigma2 = Math.PI * sigma2; //2*PI*sigma^2
 
-	for (let i = 0; i <= neighbors; i++) {
-		for (let j = i; j <= neighbors; j++) {
+	for (let i = 0; i <= radius; i++) {
+		for (let j = i; j <= radius; j++) {
 			let value = Math.exp(-((i * i) + (j * j)) / sigma2) / PI2sigma2;
-			kernel[(i + neighbors) * n + (j + neighbors)] = value;
-			kernel[(i + neighbors) * n + (-j + neighbors)] = value;
-			kernel[(-i + neighbors) * n + (j + neighbors)] = value;
-			kernel[(-i + neighbors) * n + (-j + neighbors)] = value;
-			kernel[(j + neighbors) * n + (i + neighbors)] = value;
-			kernel[(j + neighbors) * n + (-i + neighbors)] = value;
-			kernel[(-j + neighbors) * n + (i + neighbors)] = value;
-			kernel[(-j + neighbors) * n + (-i + neighbors)] = value;
+			kernel[(i + radius) * n + (j + radius)] = value;
+			kernel[(i + radius) * n + (-j + radius)] = value;
+			kernel[(-i + radius) * n + (j + radius)] = value;
+			kernel[(-i + radius) * n + (-j + radius)] = value;
+			kernel[(j + radius) * n + (i + radius)] = value;
+			kernel[(j + radius) * n + (-i + radius)] = value;
+			kernel[(-j + radius) * n + (i + radius)] = value;
+			kernel[(-j + radius) * n + (-i + radius)] = value;
 		}
 	}
 	return kernel;
