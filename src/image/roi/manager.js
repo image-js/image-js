@@ -21,8 +21,8 @@ export default class ROIManager {
         return this._layers[maskLabel].roiMap;
     }
 
-    getROIIDs(options) {
-        let rois = this.getROI(options);
+    getROIIDs(maskLabel = 'default', options) {
+        let rois = this.getROI(maskLabel, options);
         if (!rois) return;
         let ids = new Array(rois.length);
         for (let i = 0; i < rois.length; i++) {
