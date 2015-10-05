@@ -52,7 +52,7 @@ export default function minErrorI(histogram, total) {
         if (isNaN(temp)) {
             threshold = Tprev;
         }
-        else{
+        else {
             threshold = Math.floor(temp);
         }
 
@@ -64,7 +64,7 @@ export default function minErrorI(histogram, total) {
 
 function A(y, j) {
     let x = 0;
-    for (let i = 0;i <= j; i++){
+    for (let i = 0;i <= j; i++) {
         x += y[i];
     }
     return x;
@@ -80,7 +80,7 @@ function B(y, j) {
 
 function C(y, j) {
     let x = 0;
-    for (let i = 0; i <= j; i++){
+    for (let i = 0; i <= j; i++) {
         x += i * i * y[i];
     }
     return x;
