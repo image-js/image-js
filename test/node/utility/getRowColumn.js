@@ -31,7 +31,7 @@ describe('check getRow and getColumn class', function () {
         image.getRow(1,1).should.eql([7,9,11]);
         image.getColumn(1,0).should.eql([2,8,14]);
         image.getColumn(1,1).should.eql([3,9,15]);
-        
+
         (function () {
             image.getRow(5);
         }).should.throw(/row should be included between 0 and 2/);
