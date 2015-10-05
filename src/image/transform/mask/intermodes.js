@@ -30,7 +30,6 @@ export default function intermodes(histogram) {
         if (iter > 10000) {
             threshold = -1;
             throw new Error('Intermodes Threshold not found after 10000 iterations');
-            return threshold;
         }
     }
 
