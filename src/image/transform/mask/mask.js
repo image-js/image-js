@@ -1,6 +1,7 @@
 import Image from '../../image';
 
 import percentile from './percentile';
+import intermodes from './intermodes';
 import {getThreshold} from '../../../util/converter';
 
 /*
@@ -28,6 +29,9 @@ export default function mask({
             break;
         case 'percentile':
             threshold = percentile(histogram);
+            break;
+        case 'intermodes':
+            threshold = intermodes(histogram);
             break;
         default:
             throw new Error('mask transform unknown algorithm: ' + algorithm);
