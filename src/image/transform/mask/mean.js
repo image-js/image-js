@@ -7,8 +7,6 @@
  * @returns {number} - the threshold
  */
 
-'use strict';
-
 export default function mean(histogram, total) {
 
     let threshold = -1;
