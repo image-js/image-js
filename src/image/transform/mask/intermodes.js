@@ -1,7 +1,9 @@
 /**
+ *
  * see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
  * Intermodes: This assumes a bimodal histogram. Implements the thresholding Prewitt, JMS & Mendelsohn, ML (1966),
  * "The analysis of cell images", Annals of the NewYork Academy of Sciences 128: 1035-1053
+ *
  */
 
 export default function intermodes(histogram) {
