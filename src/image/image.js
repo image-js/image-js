@@ -66,7 +66,7 @@ export default class Image {
         this.initialize();
 
         if (!data)
-             createPixelArray(this);
+            createPixelArray(this);
         else {
             let length = getTheoreticalPixelArraySize(this);
             if (length !== data.length) {
@@ -367,20 +367,20 @@ export default class Image {
     }
 
     checkColumn(column) {
-        if ((column<0) || (column>=this.width)) {
-            throw new RangeError(`checkColumn: column should be included between 0 and ${this.width-1}. Current value: ${column}`);
+        if ((column < 0) || (column >= this.width)) {
+            throw new RangeError(`checkColumn: column should be included between 0 and ${this.width - 1}. Current value: ${column}`);
         }
     }
 
     checkRow(row) {
-        if ((row<0) || (row>=this.height)) {
-            throw new RangeError(`checkRow: row should be included between 0 and ${this.height-1}. Current value: ${row}`);
+        if ((row < 0) || (row >= this.height)) {
+            throw new RangeError(`checkRow: row should be included between 0 and ${this.height - 1}. Current value: ${row}`);
         }
     }
 
     checkChannel(channel) {
-        if ((channel<0) || (channel>=this.channels)) {
-            throw new RangeError(`checkChannel: channel should be included between 0 and ${this.channels-1}. Current value: ${channel}`);
+        if ((channel < 0) || (channel >= this.channels)) {
+            throw new RangeError(`checkChannel: channel should be included between 0 and ${this.channels - 1}. Current value: ${channel}`);
         }
     }
 

@@ -1,7 +1,7 @@
 import {Image} from '../common';
 
 
-describe.only('check getRow and getColumn class', function () {
+describe('check getRow and getColumn class', function () {
     it ('should yield the third row and third column for GREY image', function () {
         let image = new Image(5,4,
             [
@@ -31,20 +31,20 @@ describe.only('check getRow and getColumn class', function () {
         image.getRow(1,1).should.eql([7,9,11]);
         image.getColumn(1,0).should.eql([2,8,14]);
         image.getColumn(1,1).should.eql([3,9,15]);
-
-        (function() {
+        
+        (function () {
             image.getRow(5);
         }).should.throw(/row should be included between 0 and 2/);
 
-        (function() {
+        (function () {
             image.getRow(1,2);
         }).should.throw(/channel should be included between 0 and 1/);
 
-        (function() {
+        (function () {
             image.getColumn(5);
         }).should.throw(/column should be included between 0 and 2/);
 
-        (function() {
+        (function () {
             image.getColumn(1,2);
         }).should.throw(/channel should be included between 0 and 1/);
 
