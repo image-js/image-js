@@ -33,7 +33,7 @@ export default function renyiEntropy(histogram, total) {
     P1[0] = norm_histo[0];
     P2[0] = 1.0 - P1[0];
     for (let ih = 1; ih < histogram.length; ih++) {
-        P1[ih] = P1[ih-1] + norm_histo[ih];
+        P1[ih] = P1[ih - 1] + norm_histo[ih];
         P2[ih] = 1.0 - P1[ih];
     }
 
@@ -66,7 +66,7 @@ export default function renyiEntropy(histogram, total) {
         let ent_back2 = 0.0;
         let ent_back3 = 0.0;
         for (let ih = 0; ih <= it; ih++) {
-            if (histogram[ih] != 0) {
+            if (histogram[ih] !== 0) {
                 ent_back1 -= (norm_histo[ih] / P1[it]) * Math.log(norm_histo[ih] / P1[it]);
             }
             ent_back2 += Math.sqrt(norm_histo[ih] / P1[it]);
@@ -78,7 +78,7 @@ export default function renyiEntropy(histogram, total) {
         let ent_obj2 = 0.0;
         let ent_obj3 = 0.0;
         for (let ih = it + 1; ih < histogram.length; ih++) {
-            if (histogram[ih] != 0) {
+            if (histogram[ih] !== 0) {
                 ent_obj1 -= (norm_histo[ih] / P2[it]) * Math.log(norm_histo[ih] / P2[it]);
             }
             ent_obj2 += Math.sqrt(norm_histo[ih] / P2[it]);
@@ -95,12 +95,12 @@ export default function renyiEntropy(histogram, total) {
             threshold1 = it;
         }
 
-        if (tot_ent2 > max_ent2){
+        if (tot_ent2 > max_ent2) {
             max_ent2 = tot_ent2;
             threshold2 = it;
         }
 
-        if (tot_ent3 > max_ent3){
+        if (tot_ent3 > max_ent3) {
             max_ent3 = tot_ent3;
             threshold3 = it;
         }
@@ -114,7 +114,7 @@ export default function renyiEntropy(histogram, total) {
 
     /* Adjust beta values */
     if (Math.abs(t_stars[0] - t_stars[1]) <= 5) {
-        if (Math.abs(t_stars[1] - t_stars[2] ) <= 5) {
+        if (Math.abs(t_stars[1] - t_stars[2]) <= 5) {
             betas = [1,2,1];
         }
         else {
@@ -130,7 +130,6 @@ export default function renyiEntropy(histogram, total) {
         }
     }
 
-    //voy aqui
     /* Determine the optimal threshold value */
     let omega = P1[t_stars[2]] - P1[t_stars[0]];
     opt_threshold = Math.round(t_stars[0] * (P1[t_stars[0]] + 0.25 * omega * betas[0]) + 0.25 * t_stars[1] * omega * betas[1]  + t_stars[2] * (P2[t_stars[2]] + 0.25 * omega * betas[2]));
