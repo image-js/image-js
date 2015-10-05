@@ -39,7 +39,7 @@ export default function li(histogram, total) {
     /* Initial estimate */
     new_thresh = mean;
 
-    do {
+    do{
         old_thresh = new_thresh;
         threshold = old_thresh + 0.5;	/* range */
 
@@ -52,7 +52,7 @@ export default function li(histogram, total) {
             sum_back += ih * histogram[ih];
             num_back += histogram[ih];
         }
-        mean_back = (num_back == 0 ? 0.0 : (sum_back / num_back));
+        mean_back = (num_back === 0 ? 0.0 : (sum_back / num_back));
 
         /* Object */
         sum_obj = 0;
@@ -61,7 +61,7 @@ export default function li(histogram, total) {
             sum_obj += ih * histogram[ih];
             num_obj += histogram[ih];
         }
-        mean_obj = (num_obj == 0 ? 0.0 : (sum_obj / num_obj));
+        mean_obj = (num_obj === 0 ? 0.0 : (sum_obj / num_obj));
         temp = (mean_back - mean_obj) / (Math.log(mean_back) - Math.log(mean_obj));
 
         if (temp < -2.220446049250313E-16) {
@@ -72,9 +72,7 @@ export default function li(histogram, total) {
         }
         /*  Stop the iterations when the difference between the
          new and old threshold values is less than the tolerance */
-    }
-
-    while(Math.abs(new_thresh - old_thresh) > tolerance);
+    } while(Math.abs(new_thresh - old_thresh) > tolerance);
 
     return threshold;
 }
