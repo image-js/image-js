@@ -1,6 +1,7 @@
 import Image from '../../image';
 
 import percentile from './percentile';
+import huang from './huang';
 import intermodes from './intermodes';
 import isodata from './isodata';
 import li from './li';
@@ -39,6 +40,9 @@ export default function mask({
             break;
         case 'percentile':
             threshold = percentile(histogram);
+            break;
+        case 'huang':
+            threshold = huang(histogram);
             break;
         case 'intermodes':
             threshold = intermodes(histogram);

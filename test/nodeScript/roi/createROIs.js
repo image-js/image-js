@@ -2,11 +2,11 @@
 
 var Image = require('../../..');
 
-var data=new Uint8Array(2);
-data[0]=63;
-data[1]=192;
+var histogram=new Uint8Array(2);
+histogram[0]=63;
+histogram[1]=192;
 
-var mask=new Image(4,4, data, {
+var mask=new Image(4,4, histogram, {
     kind: 'BINARY'
 });
 
