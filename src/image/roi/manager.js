@@ -1,6 +1,11 @@
 import createROIMapFromMask from './createROIMapFromMask';
+import createROIMapFromExtrema from './createROIMapFromExtrema';
 import createROI from './createROI';
 import extendObject from 'extend';
+
+
+let FROM_EXTREMA = 1;
+let FROM_MASK = 2;
 
 export default class ROIManager {
 
@@ -11,8 +16,15 @@ export default class ROIManager {
         this._painted = null;
     }
 
+    generateROIFromExtrema(maskLabel = 'default', options = {}) {
+        let opt = extendObject({}, this._options, options);
+        opt.type = FROM_EXTREMA;
+        this._layers[maskLabel] = new ROILayer(undefined, opt);
+    }
+
     putMask(mask, maskLabel = 'default', options = {}) {
         let opt = extendObject({}, this._options, options);
+        opt.type = FROM_MASK;
         this._layers[maskLabel] = new ROILayer(mask, opt);
     }
 
@@ -21,7 +33,7 @@ export default class ROIManager {
         return this._layers[maskLabel].roiMap;
     }
 
-    getROIIDs(maskLabel = 'default', options) {
+    getROIIDs(maskLabel = 'default', options = {}) {
         let rois = this.getROI(maskLabel, options);
         if (!rois) return;
         let ids = new Array(rois.length);
@@ -78,14 +90,20 @@ export default class ROIManager {
     resetPainted() {
         this._painted = undefined;
     }
-
 }
 
 class ROILayer {
     constructor(mask, options) {
         this.mask = mask;
         this.options = options;
-        this.roiMap = createROIMapFromMask(this.mask, options);
+        switch (options.type) {
+            case FROM_MASK:
+                this.roiMap = createROIMapFromMask(this.mask, options);
+                break;
+            case FROM_EXTREMA:
+                this.roiMap = createROIMapFromExtrema(this.mask, options);
+                break;
+        }
         this.roi = createROI(this.roiMap);
     }
 }
