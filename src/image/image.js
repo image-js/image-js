@@ -89,6 +89,7 @@ export default class Image {
         this.multiplierX = this.channels;
         this.multiplierY = this.channels * this.width;
         this.isClamped = (this.bitDepth < 32) ? true : false;
+        this.borderSizes = [0,0]; // when a filter create a border it may have impact on future processing like ROI
     }
 
 

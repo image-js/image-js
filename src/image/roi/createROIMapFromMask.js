@@ -2,6 +2,8 @@
 We will annotate each point to define to which area it belongs
  */
 
+import ROIMap from './ROIMap';
+
 export default function createROIMapFromMask(mask, {allowCorner = false} = {}) {
 
     // based on a binary image we will create plenty of small images
@@ -116,16 +118,4 @@ export default function createROIMapFromMask(mask, {allowCorner = false} = {}) {
 
     return new ROIMap(mask, pixels, negativeID, positiveID);
 
-}
-
-class ROIMap {
-    constructor(parent, pixels, negativeID, positiveID) {
-        this.parent = parent;
-        this.width = parent.width;
-        this.height = parent.height;
-        this.pixels = pixels; // pixels containing the annotations
-        this.negative = -negativeID; // number of negative zones
-        this.positive = positiveID; // number of positivie zones
-        this.total = positiveID - negativeID; // total number of zones
-    }
 }

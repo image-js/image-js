@@ -3,7 +3,7 @@ import {Image} from '../common';
 
 
 
-describe.only('we check createROIMapFromMaxima', function () {
+describe('we check createROIMapFromMaxima', function () {
     it('should yield the right map', function () {
 
         let image = new Image(5, 5,
@@ -17,8 +17,31 @@ describe.only('we check createROIMapFromMaxima', function () {
             {kind: 'GREY'}
         );
 
-        let map = ROIMapper(image);
+        let roiMap = ROIMapper(image);
 
+
+//        console.log(roiMap);
 
     });
+
+    it('should yield the right map', function () {
+
+        let image = new Image(5, 5,
+            [
+                0, 0, 0, 0, 0,
+                0, 1, 1, 1, 1,
+                0, 1, 2, 2, 2,
+                0, 1, 2, 3, 2,
+                0, 1, 2, 2, 2
+            ],
+            {kind: 'GREY'}
+        );
+
+        let roiMap = ROIMapper(image);
+
+
+        console.log(roiMap);
+
+    });
+
 });
