@@ -1,6 +1,7 @@
 import Image from '../../image';
 
 import percentile from './percentile';
+import mean from './mean';
 import {getThreshold} from '../../../util/converter';
 
 /*
@@ -28,6 +29,9 @@ export default function mask({
             break;
         case 'percentile':
             threshold = percentile(histogram);
+            break;
+        case 'mean':
+            threshold = mean(histogram, this.size);
             break;
         default:
             throw new Error('mask transform unknown algorithm: ' + algorithm);
