@@ -5,7 +5,7 @@ export default function createROIMapFromExtrema(
     {
         allowCorner = true,
         invert = false} = {}
-    ) {
+) {
 
     image.checkProcessable('createROIMapFromExtrema',{components:[1]});
 
@@ -28,9 +28,6 @@ export default function createROIMapFromExtrema(
     let to = 0;
 
     appendExtrema(image, {maxima:!invert});
-
-
-
 
     return new ROIMap(image, pixels, negativeID, positiveID);
 
@@ -82,15 +79,13 @@ export default function createROIMapFromExtrema(
                         from++;
                     }
                 }
-
-
             }
         }
     }
 
     /*
-    For a specific point we will check the points around, increase the area of interests and add
-    them to the processing list
+     For a specific point we will check the points around, increase the area of interests and add
+     them to the processing list
      */
     function process(xCenter,yCenter) {
         let currentID = pixels[yCenter * image.width + xCenter];
