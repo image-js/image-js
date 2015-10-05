@@ -28,7 +28,7 @@ export default function maxEntropy(histogram, total) {
     P2[0] = 1.0 - P1[0];
 
     for (let ih = 1; ih < histogram.length; ih++) {
-        P1[ih] = P1[ih-1] + norm_histo[ih];
+        P1[ih] = P1[ih - 1] + norm_histo[ih];
         P2[ih] = 1.0 - P1[ih];
     }
 
@@ -58,7 +58,7 @@ export default function maxEntropy(histogram, total) {
         /* Entropy of the background pixels */
         ent_back = 0.0;
         for (let ih = 0; ih <= it; ih++) {
-            if (histogram[ih] != 0) {
+            if (histogram[ih] !== 0) {
                 ent_back -= (norm_histo[ih] / P1[it]) * Math.log(norm_histo[ih] / P1[it]);
             }
         }
@@ -66,7 +66,7 @@ export default function maxEntropy(histogram, total) {
         /* Entropy of the object pixels */
         ent_obj = 0.0;
         for (let ih = it + 1; ih < histogram.length; ih++) {
-            if (histogram[ih]!= 0) {
+            if (histogram[ih] !== 0) {
                 ent_obj -= (norm_histo[ih] / P2[it]) * Math.log(norm_histo[ih] / P2[it]);
             }
         }
