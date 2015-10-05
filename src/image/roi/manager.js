@@ -12,29 +12,29 @@ export default class ROIManager {
     constructor(image, options = {}) {
         this._image = image;
         this._options = options;
+        if (!this._options.lebel) this._options.label = 'default';
         this._layers = {};
         this._painted = null;
     }
 
-    generateROIFromExtrema(maskLabel = 'default', options = {}) {
+    generateROIFromExtrema(options = {}) {
         let opt = extendObject({}, this._options, options);
-        opt.type = FROM_EXTREMA;
-        this._layers[maskLabel] = new ROILayer(this._image, opt);
+        this._layers[opt.label] = new ROILayer(this._image, FROM_EXTREMA, opt);
     }
 
-    putMask(mask, maskLabel = 'default', options = {}) {
+    putMask(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
-        opt.type = FROM_MASK;
-        this._layers[maskLabel] = new ROILayer(mask, opt);
+        this._layers[opt.label] = new ROILayer(mask, FROM_MASK, opt);
     }
 
-    getROIMap(maskLabel = 'default') {
-        if (!this._layers[maskLabel]) return;
-        return this._layers[maskLabel].roiMap;
+    getROIMap(options = {}) {
+        let opt = extendObject({}, this._options, options);
+        if (!this._layers[opt.label]) return;
+        return this._layers[opt.label].roiMap;
     }
 
-    getROIIDs(maskLabel = 'default', options = {}) {
-        let rois = this.getROI(maskLabel, options);
+    getROIIDs(options = {}) {
+        let rois = this.getROI(options);
         if (!rois) return;
         let ids = new Array(rois.length);
         for (let i = 0; i < rois.length; i++) {
@@ -43,14 +43,15 @@ export default class ROIManager {
         return ids;
     }
 
-    getROI(maskLabel = 'default', {
+    getROI({
+        label = this._options.label,
         positive = true,
         negative = true,
         minSurface = 0,
         maxSurface = Number.POSITIVE_INFINITY
         } = {}) {
 
-        let allROIs = this._layers[maskLabel].roi;
+        let allROIs = this._layers[label].roi;
         let rois = new Array(allROIs.length);
         let ptr = 0;
         for (let i = 0; i < allROIs.length; i++) {
@@ -65,8 +66,8 @@ export default class ROIManager {
         return rois;
     }
 
-    getROIMasks(maskLabel = 'default', options = {}) {
-        let rois = this.getROI(maskLabel, options);
+    getROIMasks(options = {}) {
+        let rois = this.getROI(options);
         let masks = new Array(rois.length);
         for (let i = 0; i < rois.length; i++) {
             masks[i] = rois[i].mask;
@@ -74,15 +75,16 @@ export default class ROIManager {
         return masks;
     }
 
-    getPixels(maskLabel = 'default', options = {}) {
-        if (this._layers[maskLabel]) {
-            return this._layers[maskLabel].roiMap.pixels;
+    getPixels(options = {}) {
+        let opt = extendObject({}, this._options, options);
+        if (this._layers[opt.label]) {
+            return this._layers[opt.label].roiMap.pixels;
         }
     }
 
-    paint(maskLabel = 'default', options = {}) {
+    paint(options = {}) {
         if (!this._painted) this._painted = this._image.clone();
-        let masks = this.getROIMasks(maskLabel, options);
+        let masks = this.getROIMasks(options);
         this._painted.paintMasks(masks, options);
         return this._painted;
     }
@@ -94,15 +96,14 @@ export default class ROIManager {
 }
 
 class ROILayer {
-    constructor(mask, options) {
-        this.mask = mask;
+    constructor(image, type, options) {
         this.options = options;
-        switch (options.type) {
+        switch (type) {
             case FROM_MASK:
-                this.roiMap = createROIMapFromMask(this.mask, options);
+                this.roiMap = createROIMapFromMask(image, options);
                 break;
             case FROM_EXTREMA:
-                this.roiMap = createROIMapFromExtrema(this.mask, options);
+                this.roiMap = createROIMapFromExtrema(image, options);
                 break;
         }
         this.roi = createROI(this.roiMap);
