@@ -35,6 +35,8 @@ import getChannel from './utility/getChannel';
 import setChannel from './utility/setChannel';
 import getSimilarity from './utility/getSimilarity';
 import getBestMatch from './utility/getBestMatch';
+import getRow from './utility/getRow';
+import getColumn from './utility/getColumn';
 import paintMasks from './operator/paintMasks';
 import extract from './operator/extract';
 import convolution from './operator/convolution';
@@ -86,6 +88,9 @@ export default function extend(Image) {
     Image.extendMethod('resizeBinary', resizeBinary);
     Image.extendMethod('colorDepth', bitDepth);
     Image.extendMethod('setBorder', setBorder, inPlace);
+
+    Image.extendMethod('getRow', getRow);
+    Image.extendMethod('getColumn', getColumn);
 
     Image.extendMethod('split', split);
     Image.extendMethod('getChannel', getChannel);

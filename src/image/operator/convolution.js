@@ -5,7 +5,7 @@ import {validateKernel} from '../../util/kernel';
 /**
  *
  * @param kernel
- * @param bitDepth : We can specify a new bitDepth for the image. This allow to specify 64 bits in order no to clamp
+ * @param bitDepth : We can specify a new bitDepth for the image. This allow to specify 32 bits in order no to clamp
  * @param normalize
  * @param divisor
  * @param border
@@ -58,6 +58,9 @@ export default function convolution(kernel, {channels, bitDepth, normalize = fal
         }
     }
     // if the kernel was not applied on the alpha channel we just copy it
+    // TODO: in general we should copy the channels that where not changed
+    // TODO: probably we should just copy the image at the beginning ?
+
     if (this.alpha && channels.indexOf(this.channels) === -1) {
         for (let i = this.components; i < this.data.length; i = i + this.channels) {
             newImage.data[i] = this.data[i];

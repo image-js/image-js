@@ -366,6 +366,25 @@ export default class Image {
         }
     }
 
+    checkColumn(column) {
+        if ((column<0) || (column>=this.width)) {
+            throw new RangeError(`checkColumn: column should be included between 0 and ${this.width-1}. Current value: ${column}`);
+        }
+    }
+
+    checkRow(row) {
+        if ((row<0) || (row>=this.height)) {
+            throw new RangeError(`checkRow: row should be included between 0 and ${this.height-1}. Current value: ${row}`);
+        }
+    }
+
+    checkChannel(channel) {
+        if ((channel<0) || (channel>=this.channels)) {
+            throw new RangeError(`checkChannel: channel should be included between 0 and ${this.channels-1}. Current value: ${channel}`);
+        }
+    }
+
+
     apply(filter) {
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
