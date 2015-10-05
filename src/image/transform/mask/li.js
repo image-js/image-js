@@ -39,7 +39,7 @@ export default function li(histogram, total) {
     /* Initial estimate */
     new_thresh = mean;
 
-    do{
+    do {
         old_thresh = new_thresh;
         threshold = old_thresh + 0.5;	/* range */
 
@@ -72,7 +72,8 @@ export default function li(histogram, total) {
         }
         /*  Stop the iterations when the difference between the
          new and old threshold values is less than the tolerance */
-    } while(Math.abs(new_thresh - old_thresh) > tolerance);
+    }
+    while (Math.abs(new_thresh - old_thresh) > tolerance);
 
     return threshold;
 }
