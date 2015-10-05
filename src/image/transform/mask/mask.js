@@ -31,7 +31,7 @@ export default function mask({
             threshold = percentile(histogram);
             break;
         case 'minerrori':
-            threshold = minErrorI(histogram, this.size)
+            threshold = minErrorI(histogram, this.size);
             break;
         default:
             throw new Error('mask transform unknown algorithm: ' + algorithm);
