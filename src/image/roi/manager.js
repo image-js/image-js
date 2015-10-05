@@ -1,4 +1,4 @@
-import createROIMap from './createROIMap';
+import createROIMapFromMask from './createROIMapFromMask';
 import createROI from './createROI';
 import extendObject from 'extend';
 
@@ -85,7 +85,7 @@ class ROILayer {
     constructor(mask, options) {
         this.mask = mask;
         this.options = options;
-        this.roiMap = createROIMap(this.mask, options);
+        this.roiMap = createROIMapFromMask(this.mask, options);
         this.roi = createROI(this.roiMap);
     }
 }
