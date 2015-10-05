@@ -33,7 +33,7 @@ export default function mask({
                 threshold = percentile(histogram);
                 break;
             case 'otsu':
-                threshold = otsu(histogram);
+                threshold = otsu(histogram, this.size);
                 break;
             default:
                 throw new Error('mask transform unknown algorithm: ' + algorithm);
