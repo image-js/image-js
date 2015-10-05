@@ -50,7 +50,7 @@ function bimodalTest(iHisto) {
     let modes = 0;
 
     for (let k = 1; k < len - 1; k++) {
-        if (iHisto[k-1] < iHisto[k] && iHisto[k+1] < iHisto[k]) {
+        if (iHisto[k - 1] < iHisto[k] && iHisto[k + 1] < iHisto[k]) {
             modes++;
             if (modes > 2) {
                 return false;
