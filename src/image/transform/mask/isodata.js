@@ -13,7 +13,7 @@ export default function isodata(histogram) {
     let g = 0;  //threshold value
 
     for (let i = 1; i < histogram.length; i++) {
-        if (histogram[i] > 0){
+        if (histogram[i] > 0) {
             g = i + 1;
             break;
         }
@@ -30,7 +30,7 @@ export default function isodata(histogram) {
         toth = 0;
         for (let i = g + 1; i < histogram.length; i++) {
             toth += histogram[i];
-            h += (histogram[i]*i);
+            h += (histogram[i] * i);
         }
         if (totl > 0 && toth > 0) {
             l /= totl;
@@ -39,9 +39,8 @@ export default function isodata(histogram) {
                 break;
         }
         g++;
-        if (g > histogram.length-2) {
+        if (g > histogram.length - 2) {
             throw new Error('Threshold not found');
-            return -1;
         }
     }
     return g;
