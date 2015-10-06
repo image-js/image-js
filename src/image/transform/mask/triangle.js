@@ -23,14 +23,14 @@ export default function triangle(histogram) {
     // Here I propose to find out to which side of the max point the data is furthest, and use that as
     //  the other extreme.
     for (let i = histogram.length - 1; i > 0; i--) {
-        if (histogram[i] > 0){
+        if (histogram[i] > 0) {
             min2 = i;
             break;
         }
     }
     if (min2 < histogram.length - 1) min2++; // line to the (p==0) point, not to data[min]
 
-    for (let i =0; i < histogram.length; i++) {
+    for (let i = 0; i < histogram.length; i++) {
         if (histogram[i] > dmax) {
             max = i;
             dmax = histogram[i];
