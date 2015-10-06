@@ -83,15 +83,15 @@ export default class ROIManager {
     }
 
     paint(options = {}) {
-        if (!this._painted) this._painted = this._image.clone();
+        if (!this._painted) this._painted = this._image.rgba8();
         let masks = this.getROIMasks(options);
         this._painted.paintMasks(masks, options);
         return this._painted;
     }
 
 
-    resetPainted() {
-        this._painted = undefined;
+    resetPainted(image) {
+        this._painted = image;
     }
 }
 
