@@ -1,7 +1,7 @@
 import Image from '../../image';
 
 import percentile from './percentile';
-import yen from './yen'
+import yen from './yen';
 import {getThreshold} from '../../../util/converter';
 
 /*
