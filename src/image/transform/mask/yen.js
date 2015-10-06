@@ -30,7 +30,7 @@ export default function yen(histogram, total) {
 
     P1_sq[0] = norm_histo[0] * norm_histo[0];
     for (let ih = 1; ih < histogram.length; ih++)
-        P1_sq[ih] = P1_sq[ih-1] + norm_histo[ih] * norm_histo[ih];
+        P1_sq[ih] = P1_sq[ih - 1] + norm_histo[ih] * norm_histo[ih];
 
     P2_sq[histogram.length - 1] = 0.0;
     for (let ih = histogram.length - 2; ih >= 0; ih--)
@@ -40,7 +40,7 @@ export default function yen(histogram, total) {
     threshold = -1;
     max_crit = Number.MIN_VALUE;
     for (let it = 0; it < histogram.length; it++) {
-        crit = -1.0 * ((P1_sq[it] * P2_sq[it]) > 0.0 ? Math.log(P1_sq[it] * P2_sq[it]) : 0.0) + 2 * ((P1[it] * (1.0 - P1[it])) > 0.0 ? Math.log(P1[it] * (1.0 - P1[it])): 0.0);
+        crit = -1.0 * ((P1_sq[it] * P2_sq[it]) > 0.0 ? Math.log(P1_sq[it] * P2_sq[it]) : 0.0) + 2 * ((P1[it] * (1.0 - P1[it])) > 0.0 ? Math.log(P1[it] * (1.0 - P1[it])) : 0.0);
         if (crit > max_crit) {
             max_crit = crit;
             threshold = it;
