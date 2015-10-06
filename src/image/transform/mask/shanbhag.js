@@ -23,7 +23,7 @@ export default function shanbhag(histogram, total) {
     P2[0] = 1.0 - P1[0];
     for (let ih = 1; ih < histogram.length; ih++) {
         P1[ih] = P1[ih - 1] + norm_histo[ih];
-        P2[ih]= 1.0 - P1[ih];
+        P2[ih] = 1.0 - P1[ih];
     }
 
     /* Determine the first non-zero bin */
@@ -61,7 +61,7 @@ export default function shanbhag(histogram, total) {
         /* Entropy of the object pixels */
         ent_obj = 0.0;
         term = 0.5 / P2[it];
-        for (let ih = it + 1; ih < histogram.length; ih++){
+        for (let ih = it + 1; ih < histogram.length; ih++) {
             ent_obj -= norm_histo[ih] * Math.log(1.0 - term * P2[ih]);
         }
         ent_obj *= term;
