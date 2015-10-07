@@ -1,6 +1,5 @@
 import Image from '../../image';
 
-import percentile from './percentile';
 import huang from './huang';
 import intermodes from './intermodes';
 import isodata from './isodata';
@@ -9,6 +8,7 @@ import maxEntropy from './maxEntropy';
 import mean from './mean';
 import minError from './minError';
 import otsu from './otsu';
+import percentile from './percentile';
 import renyiEntropy from './renyiEntropy.js';
 import shanbhag from  './shanbhag';
 import triangle from './triangle';
@@ -38,9 +38,6 @@ export default function mask({
         case 'threshold':
             threshold = getThreshold(threshold, this.maxValue);
             break;
-        case 'percentile':
-            threshold = percentile(histogram);
-            break;
         case 'huang':
             threshold = huang(histogram);
             break;
@@ -64,6 +61,9 @@ export default function mask({
             break;
         case 'otsu':
             threshold = otsu(histogram, this.size);
+            break;
+        case 'percentile':
+            threshold = percentile(histogram);
             break;
         case 'renyientropy':
             threshold = renyiEntropy(histogram, this.size);
