@@ -35,7 +35,8 @@ npm install
 Notes:
 * npm install may require the compilation of some code.
   It is therefore necessary to have the compiler.
-  On OSX you will have to instlal xcode and start it once to accept the licence.
+  On OSX you will have to install the command line tools
+  Run `xcode-select --install` and click on "install"
 * in order to test you need to install the npm 'canvas'.
   On OSX you should first install brew (http://brew.sh/) and then
 ````
