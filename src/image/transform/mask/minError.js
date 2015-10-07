@@ -7,15 +7,14 @@
  * @returns {number} - the threshold
  */
 
-export default function minErrorI(histogram, total) {
+export default function minError(histogram, total) {
 
     let threshold;
     let Tprev = -2;
     let mu, nu, p, q, sigma2, tau2, w0, w1, w2, sqterm, temp;
-    let mean; /* mean gray-level in the image */
 
     /* Calculate the mean gray-level */
-    mean = 0.0;
+    let mean = 0.0;
     for (let ih = 0; ih < histogram.length; ih++) {
         mean += ih * histogram[ih];
     }
@@ -26,13 +25,19 @@ export default function minErrorI(histogram, total) {
 
     while (threshold !== Tprev) {
         //Calculate some statistics.
+        let sumA1 = sumA(histogram, threshold);
+        let sumA2 = sumA(histogram, histogram.length - 1);
+        let sumB1 = sumB(histogram, threshold);
+        let sumB2 = sumB(histogram, histogram.length - 1);
+        let sumC1 = sumC(histogram, threshold);
+        let sumC2 = sumC(histogram, histogram.length - 1);
 
-        mu = B(histogram, threshold) / A(histogram, threshold);
-        nu = (B(histogram, histogram.length - 1) - B(histogram, threshold)) / (A(histogram, histogram.length - 1) - A(histogram, threshold));
-        p = A(histogram, threshold) / A(histogram, histogram.length - 1);
-        q = (A(histogram, histogram.length - 1) - A(histogram, threshold)) / A(histogram, histogram.length - 1);
-        sigma2 = C(histogram, threshold) / A(histogram, threshold) - (mu * mu);
-        tau2 = (C(histogram, histogram.length - 1) - C(histogram, threshold)) / (A(histogram, histogram.length - 1) - A(histogram, threshold)) - (nu * nu);
+        mu = sumB1 / sumA1;
+        nu = (sumB2 - sumB1) / (sumA2 - sumA1);
+        p = sumA1 / sumA2;
+        q = (sumA2 - sumA1) / sumA2;
+        sigma2 = sumC1 / sumA1 - (mu * mu);
+        tau2 = (sumC2 - sumC1) / (sumA2 - sumA1) - (nu * nu);
 
         //The terms of the quadratic equation to be solved.
         w0 = 1.0 / sigma2 - 1.0 / tau2;
@@ -62,7 +67,7 @@ export default function minErrorI(histogram, total) {
 
 //aux func
 
-function A(y, j) {
+function sumA(y, j) {
     let x = 0;
     for (let i = 0;i <= j; i++) {
         x += y[i];
@@ -70,7 +75,7 @@ function A(y, j) {
     return x;
 }
 
-function B(y, j) {
+function sumB(y, j) {
     let x = 0;
     for (let i = 0; i <= j; i++) {
         x += i * y[i];
@@ -78,7 +83,7 @@ function B(y, j) {
     return x;
 }
 
-function C(y, j) {
+function sumC(y, j) {
     let x = 0;
     for (let i = 0; i <= j; i++) {
         x += i * i * y[i];

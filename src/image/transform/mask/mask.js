@@ -6,7 +6,7 @@ import isodata from './isodata';
 import li from './li';
 import maxEntropy from './maxEntropy';
 import mean from './mean';
-import minErrorI from './minErrorI';
+import minError from './minError';
 import otsu from './otsu';
 import renyiEntropy from './renyiEntropy.js';
 import shanbhag from  './shanbhag';
@@ -55,8 +55,8 @@ export default function mask({
         case 'mean':
             threshold = mean(histogram, this.size);
             break;
-        case 'minerrori':
-            threshold = minErrorI(histogram, this.size);
+        case 'minerror':
+            threshold = minError(histogram, this.size);
             break;
         case 'otsu':
             threshold = otsu(histogram, this.size);
