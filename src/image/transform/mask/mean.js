@@ -8,16 +8,9 @@
  */
 
 export default function mean(histogram, total) {
-
-    let threshold = -1;
     let sum = 0;
-
     for (let i = 0; i < histogram.length; i++) {
         sum += i * histogram[i];
     }
-
-    threshold = Math.floor(sum / total);
-
-    return threshold;
+    return Math.floor(sum / total);
 }
-
