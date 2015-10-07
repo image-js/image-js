@@ -2,6 +2,7 @@ import Image from '../../image';
 
 import percentile from './percentile';
 import li from './li';
+import triangle from './triangle';
 import yen from './yen';
 import {getThreshold} from '../../../util/converter';
 
@@ -33,6 +34,9 @@ export default function mask({
             break;
         case 'li':
             threshold = li(histogram, this.size);
+            break;
+        case 'triangle':
+            threshold = triangle(histogram);
             break;
         case 'yen':
             threshold = yen(histogram, this.size);
