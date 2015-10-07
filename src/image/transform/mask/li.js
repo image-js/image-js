@@ -41,7 +41,7 @@ export default function li(histogram, total) {
 
     do {
         old_thresh = new_thresh;
-        threshold = old_thresh + 0.5;	/* range */
+        threshold = (old_thresh + 0.5)|0;	/* range */
 
         /* Calculate the means of background and object pixels */
         /* Background */
@@ -64,11 +64,11 @@ export default function li(histogram, total) {
         mean_obj = (num_obj === 0 ? 0.0 : (sum_obj / num_obj));
         temp = (mean_back - mean_obj) / (Math.log(mean_back) - Math.log(mean_obj));
 
-        if (temp < -2.220446049250313E-16) {
-            new_thresh = temp - 0.5;
+        if (temp < -Number.EPSILON) {
+            new_thresh = (temp - 0.5)|0;
         }
         else {
-            new_thresh = temp + 0.5;
+            new_thresh = (temp + 0.5)|0;
         }
         /*  Stop the iterations when the difference between the
          new and old threshold values is less than the tolerance */
