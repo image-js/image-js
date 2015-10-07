@@ -7,13 +7,13 @@
 // Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
 
 export default function renyiEntropy(histogram, total) {
-    let opt_threshold;					//Optimal threshold
-    let first_bin;						//First non-zero bin
-    let last_bin;						//last non-zero bin
+    let opt_threshold; //Optimal threshold
+    let first_bin; //First non-zero bin
+    let last_bin; //last non-zero bin
 
-    let norm_histo = new Float32Array(histogram.length);		//normalized histogram
-    let P1 = new Float32Array(histogram.length);				//acumulative normalized histogram
-    let P2 = new Float32Array(histogram.length);                //acumulative normalized histogram
+    let norm_histo = new Array(histogram.length); //normalized histogram
+    let P1 = new Array(histogram.length); //acumulative normalized histogram
+    let P2 = new Array(histogram.length); //acumulative normalized histogram
 
     //Entropy Variables
     let threshold1 = 0;
@@ -40,7 +40,7 @@ export default function renyiEntropy(histogram, total) {
     /* Determine the first non-zero bin */
     first_bin = 0;
     for (let ih = 0; ih < histogram.length; ih++) {
-        if (Math.abs(P1[ih]) >= 2.220446049250313E-16) {
+        if (Math.abs(P1[ih]) >= Number.EPSILON) {
             first_bin = ih;
             break;
         }
@@ -49,7 +49,7 @@ export default function renyiEntropy(histogram, total) {
     /* Determine the last non-zero bin */
     last_bin = histogram.length - 1;
     for (let ih = histogram.length - 1; ih >= first_bin; ih--) {
-        if (Math.abs(P2[ih]) >= 2.220446049250313E-16) {
+        if (Math.abs(P2[ih]) >= Number.EPSILON) {
             last_bin = ih;
             break;
         }
@@ -115,24 +115,24 @@ export default function renyiEntropy(histogram, total) {
     /* Adjust beta values */
     if (Math.abs(t_stars[0] - t_stars[1]) <= 5) {
         if (Math.abs(t_stars[1] - t_stars[2]) <= 5) {
-            betas = [1,2,1];
+            betas = [1, 2, 1];
         }
         else {
-            betas = [0,1,3];
+            betas = [0, 1, 3];
         }
     }
     else {
         if (Math.abs(t_stars[1] - t_stars[2]) <= 5) {
-            betas = [3,1,0];
+            betas = [3, 1, 0];
         }
         else {
-            betas = [1,2,1];
+            betas = [1, 2, 1];
         }
     }
 
     /* Determine the optimal threshold value */
     let omega = P1[t_stars[2]] - P1[t_stars[0]];
-    opt_threshold = Math.round(t_stars[0] * (P1[t_stars[0]] + 0.25 * omega * betas[0]) + 0.25 * t_stars[1] * omega * betas[1]  + t_stars[2] * (P2[t_stars[2]] + 0.25 * omega * betas[2]));
+    opt_threshold = Math.round(t_stars[0] * (P1[t_stars[0]] + 0.25 * omega * betas[0]) + 0.25 * t_stars[1] * omega * betas[1] + t_stars[2] * (P2[t_stars[2]] + 0.25 * omega * betas[2]));
 
     return opt_threshold;
 }
