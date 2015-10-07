@@ -13,32 +13,29 @@
 // Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
 
 export default function yen(histogram, total) {
-    let threshold;
-    let crit;
-    let max_crit;
-    let norm_histo = []; /* normalized histogram */
-    let P1 = []; /* cumulative normalized histogram */
-    let P1_sq = [];
-    let P2_sq = [];
-
+    let norm_histo = new Array(histogram.length); // normalized histogram
     for (let ih = 0; ih < histogram.length; ih++)
         norm_histo[ih] = histogram[ih] / total;
 
+    let P1 = new Array(histogram.length); // cumulative normalized histogram
     P1[0] = norm_histo[0];
     for (let ih = 1; ih < histogram.length; ih++)
         P1[ih] = P1[ih - 1] + norm_histo[ih];
 
+    let P1_sq = new Array(histogram.length);
     P1_sq[0] = norm_histo[0] * norm_histo[0];
     for (let ih = 1; ih < histogram.length; ih++)
         P1_sq[ih] = P1_sq[ih - 1] + norm_histo[ih] * norm_histo[ih];
 
+    let P2_sq = new Array(histogram.length);
     P2_sq[histogram.length - 1] = 0.0;
     for (let ih = histogram.length - 2; ih >= 0; ih--)
         P2_sq[ih] = P2_sq[ih + 1] + norm_histo[ih + 1] * norm_histo[ih + 1];
 
     /* Find the threshold that maximizes the criterion */
-    threshold = -1;
-    max_crit = Number.MIN_VALUE;
+    let threshold = -1;
+    let max_crit = Number.MIN_VALUE;
+    let crit;
     for (let it = 0; it < histogram.length; it++) {
         crit = -1.0 * ((P1_sq[it] * P2_sq[it]) > 0.0 ? Math.log(P1_sq[it] * P2_sq[it]) : 0.0) + 2 * ((P1[it] * (1.0 - P1[it])) > 0.0 ? Math.log(P1[it] * (1.0 - P1[it])) : 0.0);
         if (crit > max_crit) {
