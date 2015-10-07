@@ -4,21 +4,12 @@
 // Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
 
 export default function shanbhag(histogram, total) {
-    let threshold;
-    let first_bin;
-    let last_bin;
-    let term;
-    let tot_ent;  /* total entropy */
-    let min_ent;  /* max entropy */
-    let ent_back; /* entropy of the background pixels at a given threshold */
-    let ent_obj;  /* entropy of the object pixels at a given threshold */
-    let norm_histo = []; /* normalized histogram */
-    let P1 = []; /* cumulative normalized histogram */
-    let P2 = [];
-
+    let norm_histo = new Array(histogram.length); // normalized histogram
     for (let ih = 0; ih < histogram.length; ih++)
         norm_histo[ih] = histogram[ih] / total;
 
+    let P1 = new Array(histogram.length); // cumulative normalized histogram
+    let P2 = new Array(histogram.length);
     P1[0] = norm_histo[0];
     P2[0] = 1.0 - P1[0];
     for (let ih = 1; ih < histogram.length; ih++) {
@@ -27,18 +18,18 @@ export default function shanbhag(histogram, total) {
     }
 
     /* Determine the first non-zero bin */
-    first_bin = 0;
+    let first_bin = 0;
     for (let ih = 0; ih < histogram.length; ih++) {
-        if (Math.abs(P1[ih]) >= 2.220446049250313E-16) {
+        if (Math.abs(P1[ih]) >= Number.EPSILON) {
             first_bin = ih;
             break;
         }
     }
 
     /* Determine the last non-zero bin */
-    last_bin = histogram.length - 1;
+    let last_bin = histogram.length - 1;
     for (let ih = histogram.length - 1; ih >= first_bin; ih--) {
-        if (Math.abs(P2[ih]) >= 2.220446049250313E-16) {
+        if (Math.abs(P2[ih]) >= Number.EPSILON) {
             last_bin = ih;
             break;
         }
@@ -46,9 +37,13 @@ export default function shanbhag(histogram, total) {
 
     // Calculate the total entropy each gray-level
     // and find the threshold that maximizes it
-    threshold = -1;
-    min_ent = Number.MAX_VALUE;
+    let threshold = -1;
+    let min_ent = Number.MAX_VALUE; // min entropy
 
+    let term;
+    let tot_ent; // total entropy
+    let ent_back; // entropy of the background pixels at a given threshold
+    let ent_obj;  // entropy of the object pixels at a given threshold
     for (let it = first_bin; it <= last_bin; it++) {
         /* Entropy of the background pixels */
         ent_back = 0.0;
