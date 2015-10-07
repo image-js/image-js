@@ -1,6 +1,7 @@
 import Image from '../../image';
 
 import percentile from './percentile';
+import intermodes from './intermodes';
 import li from './li';
 import otsu from './otsu';
 import shanbhag from  './shanbhag';
@@ -33,6 +34,9 @@ export default function mask({
             break;
         case 'percentile':
             threshold = percentile(histogram);
+            break;
+        case 'intermodes':
+            threshold = intermodes(histogram);
             break;
         case 'li':
             threshold = li(histogram, this.size);
