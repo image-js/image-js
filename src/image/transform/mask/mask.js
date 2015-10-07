@@ -4,6 +4,7 @@ import percentile from './percentile';
 import intermodes from './intermodes';
 import isodata from './isodata';
 import li from './li';
+import mean from './mean';
 import otsu from './otsu';
 import shanbhag from  './shanbhag';
 import triangle from './triangle';
@@ -44,6 +45,9 @@ export default function mask({
             break;
         case 'li':
             threshold = li(histogram, this.size);
+            break;
+        case 'mean':
+            threshold = mean(histogram, this.size);
             break;
         case 'otsu':
             threshold = otsu(histogram, this.size);
