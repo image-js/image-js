@@ -2,6 +2,7 @@ import Image from '../../image';
 
 import percentile from './percentile';
 import li from './li';
+import otsu from './otsu';
 import shanbhag from  './shanbhag';
 import triangle from './triangle';
 import yen from './yen';
@@ -35,6 +36,9 @@ export default function mask({
             break;
         case 'li':
             threshold = li(histogram, this.size);
+            break;
+        case 'otsu':
+            threshold = otsu(histogram, this.size);
             break;
         case 'shanbhag':
             threshold = shanbhag(histogram, this.size);
