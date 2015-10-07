@@ -7,6 +7,7 @@ import li from './li';
 import maxEntropy from './maxEntropy';
 import mean from './mean';
 import otsu from './otsu';
+import renyiEntropy from './renyiEntropy.js';
 import shanbhag from  './shanbhag';
 import triangle from './triangle';
 import yen from './yen';
@@ -55,6 +56,9 @@ export default function mask({
             break;
         case 'otsu':
             threshold = otsu(histogram, this.size);
+            break;
+        case 'renyientropy':
+            threshold = renyiEntropy(histogram, this.size);
             break;
         case 'shanbhag':
             threshold = shanbhag(histogram, this.size);
