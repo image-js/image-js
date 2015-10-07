@@ -13,6 +13,10 @@ Image processing and manipulation in JavaScript
 
 ## Development
 
+### JavaScript tips and tricks
+
+https://github.com/image-js/core/wiki/JavaScript-tips-and-tricks
+
 ### Setup
 
 * You will have first to install Node.js. We recommend to use [nvm](https://github.com/creationix/nvm) to install and keep node up to date
