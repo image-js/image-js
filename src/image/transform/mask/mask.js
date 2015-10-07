@@ -4,6 +4,7 @@ import percentile from './percentile';
 import intermodes from './intermodes';
 import isodata from './isodata';
 import li from './li';
+import maxEntropy from './maxEntropy';
 import mean from './mean';
 import otsu from './otsu';
 import shanbhag from  './shanbhag';
@@ -45,6 +46,9 @@ export default function mask({
             break;
         case 'li':
             threshold = li(histogram, this.size);
+            break;
+        case 'maxentropy':
+            threshold = maxEntropy(histogram, this.size);
             break;
         case 'mean':
             threshold = mean(histogram, this.size);
