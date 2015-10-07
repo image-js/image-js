@@ -27,7 +27,7 @@ export default function percentile(histogram) {
 
 function partialSum(histogram, endIndex) {
     let x = 0;
-    for (let i = 0; i < endIndex; i++) {
+    for (let i = 0; i <= endIndex; i++) {
         x += histogram[i];
     }
     return x;
