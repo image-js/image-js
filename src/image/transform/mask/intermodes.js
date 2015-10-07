@@ -7,15 +7,8 @@
  */
 
 export default function intermodes(histogram) {
-
-    let iHisto = new Array(histogram.length);
+    let iHisto = histogram.slice();
     let iter = 0;
-    let threshold = -1;
-
-    for (let i = 0; i < histogram.length; i++) {
-        iHisto[i] = histogram[i];
-    }
-
     while (!bimodalTest(iHisto)) {
         //smooth with a 3 point running mean filter
         let previous = 0, current = 0, next = iHisto[0];
@@ -28,7 +21,6 @@ export default function intermodes(histogram) {
         iHisto[histogram.length - 1] = (current + next) / 3;
         iter++;
         if (iter > 10000) {
-            threshold = -1;
             throw new Error('Intermodes Threshold not found after 10000 iterations');
         }
     }
@@ -40,16 +32,14 @@ export default function intermodes(histogram) {
             tt += i;
         }
     }
-    threshold = Math.floor(tt / 2.0);
-    return threshold;
+    return Math.floor(tt / 2.0);
 }
 
 function bimodalTest(iHisto) {
-    let len = iHisto.length;
     let b = false;
     let modes = 0;
 
-    for (let k = 1; k < len - 1; k++) {
+    for (let k = 1; k < iHisto.length - 1; k++) {
         if (iHisto[k - 1] < iHisto[k] && iHisto[k + 1] < iHisto[k]) {
             modes++;
             if (modes > 2) {
