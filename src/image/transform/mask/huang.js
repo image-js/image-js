@@ -7,19 +7,8 @@
  */
 
 export default function huang(histogram) {
-
-    let threshold = -1;
-    let first_bin;
-    let last_bin;
-    let sum_pix;
-    let num_pix;
-    let term;
-    let ent;           //entropy
-    let min_ent;       //min entropy
-    let mu_x;
-
     /* Determine the first non-zero bin */
-    first_bin = 0;
+    let first_bin = 0;
     for (let ih = 0; ih < histogram.length; ih++) {
         if (histogram[ih] !== 0) {
             first_bin = ih;
@@ -28,23 +17,25 @@ export default function huang(histogram) {
     }
 
     /* Determine the last non-zero bin */
-    last_bin = 255;
-    for (let ih = 255; ih >= first_bin; ih--) {
+    let last_bin = histogram.length - 1;
+    for (let ih = histogram.length - 1; ih >= first_bin; ih--) {
         if (histogram[ih] !== 0) {
             last_bin = ih;
             break;
         }
     }
-    term = 1.0 / (last_bin - first_bin);
-    let  mu_0 = new Array(256);
-    sum_pix = num_pix = 0;
-    for (let ih = first_bin; ih < 256; ih++) {
+
+    let term = 1.0 / (last_bin - first_bin);
+    let mu_0 = new Array(histogram.length);
+    let sum_pix = 0;
+    let num_pix = 0;
+    for (let ih = first_bin; ih < histogram.length; ih++) {
         sum_pix += ih * histogram[ih];
         num_pix += histogram[ih];
         mu_0[ih] = sum_pix / num_pix;
     }
 
-    let mu_1 = new Array(256);
+    let mu_1 = new Array(histogram.length);
     sum_pix = num_pix = 0;
     for (let ih = last_bin; ih > 0; ih--) {
         sum_pix += ih * histogram[ih];
@@ -53,25 +44,26 @@ export default function huang(histogram) {
     }
 
     /* Determine the threshold that minimizes the fuzzy entropy*/
-    threshold = -1;
-    min_ent = Number.MAX_VALUE;
-    for (let it = 0; it < 256; it++) {
-        ent = 0.0;
+    let threshold = -1;
+    let min_ent = Number.MAX_VALUE;
+    for (let it = 0; it < histogram.length; it++) {
+        let ent = 0;
+        let mu_x;
         for (let ih = 0; ih <= it; ih++) {
             /* Equation (4) in Ref. 1 */
-            mu_x = 1.0 / (1.0 + term * Math.abs(ih - mu_0[it]));
+            mu_x = 1 / (1 + term * Math.abs(ih - mu_0[it]));
             if (!((mu_x  < 1e-06) || (mu_x > 0.999999))) {
                 /* Equation (6) & (8) in Ref. 1 */
-                ent += histogram[ih] * (-mu_x * Math.log (mu_x) - (1.0 - mu_x) * Math.log (1.0 - mu_x));
+                ent += histogram[ih] * (-mu_x * Math.log (mu_x) - (1 - mu_x) * Math.log (1 - mu_x));
             }
         }
 
-        for (let ih = it + 1; ih < 256; ih++) {
+        for (let ih = it + 1; ih < histogram.length; ih++) {
             /* Equation (4) in Ref. 1 */
-            mu_x = 1.0 / (1.0 + term * Math.abs (ih - mu_1[it]));
+            mu_x = 1 / (1 + term * Math.abs (ih - mu_1[it]));
             if (!((mu_x  < 1e-06) || (mu_x > 0.999999))) {
                 /* Equation (6) & (8) in Ref. 1 */
-                ent += histogram[ih] * (-mu_x * Math.log (mu_x) - (1.0 - mu_x) * Math.log(1.0 - mu_x));
+                ent += histogram[ih] * (-mu_x * Math.log (mu_x) - (1 - mu_x) * Math.log(1 - mu_x));
             }
         }
 
