@@ -7,6 +7,7 @@ import li from './li';
 import maxEntropy from './maxEntropy';
 import mean from './mean';
 import minError from './minError';
+import minimum from './minimum';
 import moments from './moments';
 import otsu from './otsu';
 import percentile from './percentile';
@@ -59,6 +60,9 @@ export default function mask({
             break;
         case 'minerror':
             threshold = minError(histogram, this.size);
+            break;
+        case 'minimum':
+            threshold = minimum(histogram);
             break;
         case 'moments':
             threshold = moments(histogram, this.size);
