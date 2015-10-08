@@ -7,6 +7,7 @@ import li from './li';
 import maxEntropy from './maxEntropy';
 import mean from './mean';
 import minError from './minError';
+import moments from './moments';
 import otsu from './otsu';
 import percentile from './percentile';
 import renyiEntropy from './renyiEntropy.js';
@@ -58,6 +59,9 @@ export default function mask({
             break;
         case 'minerror':
             threshold = minError(histogram, this.size);
+            break;
+        case 'moments':
+            threshold = moments(histogram, this.size);
             break;
         case 'otsu':
             threshold = otsu(histogram, this.size);
