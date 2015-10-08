@@ -35,7 +35,7 @@ selectElement.on('change', function () {
 
 var loading;
 function loadImageFromURL(url) {
-    loading = IJ.load(url).then(setLeftImage);
+    loading = IJS.load(url).then(setLeftImage);
 }
 function loadNewImage(img) {
     loading = load(img).then(setLeftImage);
@@ -62,7 +62,7 @@ if (oldCode) {
 }
 
 var error = $('#error');
-var empty = new IJ(1, 1);
+var empty = new IJS(1, 1);
 
 function execute() {
     loading.then(function (img) {

@@ -1,6 +1,6 @@
 console.clear()
 
-var stack=new IJ.Stack();
+var stack=new IJS.Stack();
 var baseName="moon/crop/BloodMoonTest-";
 var images=[];
 var toLoad=[];
