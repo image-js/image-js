@@ -3,7 +3,7 @@ import {validateChannel} from './../../util/channel';
 
 export default function getColumn(column, channel = 0) {
 
-    this.checkProcessable('getRow', {
+    this.checkProcessable('getColumn', {
         bitDepth: [8, 16]
     });
 
