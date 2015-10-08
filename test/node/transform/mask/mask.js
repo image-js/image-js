@@ -14,7 +14,7 @@ describe('Create mask from a GREY image', function () {
         image.mask({threshold: 128}).data[0].should.equal(0b00011000);
         image.mask({threshold: '50%'}).data[0].should.equal(0b00011000);
         image.mask({threshold: '50%', invert: true}).data[0].should.equal(0b11100000);
-        image.mask({algorithm: 'percentile'}).data[0].should.equal(0b000111000);
+        image.mask({algorithm: 'percentile'}).data[0].should.equal(0b01111000);
         (function () {
             image.mask({algorithm: 'XXX'});
         }).should.throw(/mask transform unknown algorithm/);
@@ -94,8 +94,6 @@ describe('Create a mask from a greyA image using percentile algorithm', function
         data.should.instanceOf(Uint8Array);
         data.length.should.equal(1);
 
-        console.log(data);
-
-        data[0].should.equal(0b00110000);
+        data[0].should.equal(0b01110000);
     });
 });
