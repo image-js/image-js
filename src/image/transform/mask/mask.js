@@ -13,6 +13,7 @@ import renyiEntropy from './renyiEntropy.js';
 import shanbhag from  './shanbhag';
 import triangle from './triangle';
 import yen from './yen';
+import minimum from './minimum';
 import {getThreshold} from '../../../util/converter';
 
 /*
@@ -76,6 +77,9 @@ export default function mask({
             break;
         case 'yen':
             threshold = yen(histogram, this.size);
+            break;
+        case 'minimum':
+            threshold = minimum(histogram, this.size);
             break;
         default:
             throw new Error('mask transform unknown algorithm: ' + algorithm);
