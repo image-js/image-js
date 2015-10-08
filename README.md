@@ -13,6 +13,10 @@ Image processing and manipulation in JavaScript
 
 ## Development
 
+### JavaScript tips and tricks
+
+https://github.com/image-js/core/wiki/JavaScript-tips-and-tricks
+
 ### Setup
 
 * You will have first to install Node.js. We recommend to use [nvm](https://github.com/creationix/nvm) to install and keep node up to date
@@ -31,7 +35,8 @@ npm install
 Notes:
 * npm install may require the compilation of some code.
   It is therefore necessary to have the compiler.
-  On OSX you will have to instlal xcode and start it once to accept the licence.
+  On OSX you will have to install the command line tools
+  Run `xcode-select --install` and click on "install"
 * in order to test you need to install the npm 'canvas'.
   On OSX you should first install brew (http://brew.sh/) and then
 ````

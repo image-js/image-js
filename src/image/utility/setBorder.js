@@ -29,8 +29,6 @@ export default function setBorder({
         size = [size,size];
     }
 
-    // we will store the border size in the image !
-    this.borderSizes = size;
 
     let leftRightSize = size[0];
     let topBottomSize = size[1];

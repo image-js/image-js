@@ -1,6 +1,18 @@
 import Image from '../../image';
 
+import huang from './huang';
+import intermodes from './intermodes';
+import isodata from './isodata';
+import li from './li';
+import maxEntropy from './maxEntropy';
+import mean from './mean';
+import minError from './minError';
+import otsu from './otsu';
 import percentile from './percentile';
+import renyiEntropy from './renyiEntropy.js';
+import shanbhag from  './shanbhag';
+import triangle from './triangle';
+import yen from './yen';
 import {getThreshold} from '../../../util/converter';
 
 /*
@@ -26,8 +38,44 @@ export default function mask({
         case 'threshold':
             threshold = getThreshold(threshold, this.maxValue);
             break;
+        case 'huang':
+            threshold = huang(histogram);
+            break;
+        case 'intermodes':
+            threshold = intermodes(histogram);
+            break;
+        case 'isodata':
+            threshold = isodata(histogram);
+            break;
+        case 'li':
+            threshold = li(histogram, this.size);
+            break;
+        case 'maxentropy':
+            threshold = maxEntropy(histogram, this.size);
+            break;
+        case 'mean':
+            threshold = mean(histogram, this.size);
+            break;
+        case 'minerror':
+            threshold = minError(histogram, this.size);
+            break;
+        case 'otsu':
+            threshold = otsu(histogram, this.size);
+            break;
         case 'percentile':
             threshold = percentile(histogram);
+            break;
+        case 'renyientropy':
+            threshold = renyiEntropy(histogram, this.size);
+            break;
+        case 'shanbhag':
+            threshold = shanbhag(histogram, this.size);
+            break;
+        case 'triangle':
+            threshold = triangle(histogram);
+            break;
+        case 'yen':
+            threshold = yen(histogram, this.size);
             break;
         default:
             throw new Error('mask transform unknown algorithm: ' + algorithm);

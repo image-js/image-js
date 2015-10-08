@@ -22,6 +22,7 @@ import crop from './transform/crop';
 import scale from './transform/scale/scale';
 import hsv from './transform/hsv';
 import hsl from './transform/hsl';
+import rgba8 from './transform/rgba8';
 import grey from './transform/grey/grey';
 import mask from './transform/mask/mask';
 import pad from './transform/pad';
@@ -82,6 +83,7 @@ export default function extend(Image) {
     Image.extendMethod('scale', scale, stack);
     Image.extendMethod('hsv', hsv);
     Image.extendMethod('hsl', hsl);
+    Image.extendMethod('rgba8', rgba8);
     Image.extendMethod('grey', grey).extendMethod('gray', grey);
     Image.extendMethod('mask', mask);
     Image.extendMethod('pad', pad);
