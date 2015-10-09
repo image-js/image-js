@@ -17,7 +17,7 @@ export default function moments(histogram,total) {
     let cd, c0, c1, z0, z1; /* auxiliary variables */
     let threshold = -1;
     let histogramLength = histogram.length;
-    let normalizedHistogram = [histogramLength];
+    let normalizedHistogram = new Array(histogramLength);
     for (let i = 0; i < histogramLength; i++) {
         normalizedHistogram[i] = histogram[i] / total;
     }
