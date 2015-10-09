@@ -1,4 +1,4 @@
-import ROIMapper from '../../../src/image/roi/createROIMapFromExtrema';
+import ROIMapper from '../../../src/image/roi/creator/fromExtrema';
 import {Image} from '../common';
 
 

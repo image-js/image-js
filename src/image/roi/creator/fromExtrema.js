@@ -1,4 +1,4 @@
-import ROIMap from './ROIMap';
+import ROIMap from './../ROIMap';
 
 export default function createROIMapFromExtrema(
     image,

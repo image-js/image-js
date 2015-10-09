@@ -2,7 +2,7 @@
 We will annotate each point to define to which area it belongs
  */
 
-import ROIMap from './ROIMap';
+import ROIMap from './../ROIMap';
 
 export default function createROIMapFromMask(mask, {allowCorner = false} = {}) {
 

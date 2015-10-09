@@ -1,5 +1,5 @@
-import createROIMapFromMask from './createROIMapFromMask';
-import createROIMapFromExtrema from './createROIMapFromExtrema';
+import createROIMapFromMask from './creator/fromKask';
+import createROIMapFromExtrema from './creator/fromExtrema';
 import createROI from './createROI';
 import extendObject from 'extend';
 
