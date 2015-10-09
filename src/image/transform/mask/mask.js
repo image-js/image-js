@@ -79,7 +79,7 @@ export default function mask({
             threshold = yen(histogram, this.size);
             break;
         case 'minimum':
-            threshold = minimum(histogram, this.size);
+            threshold = minimum(histogram);
             break;
         default:
             throw new Error('mask transform unknown algorithm: ' + algorithm);
