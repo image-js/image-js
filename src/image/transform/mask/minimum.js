@@ -12,7 +12,7 @@ export default function minimum(histogram) {
     let iterations = 0; //number of iterations of the smoothing process
     let threshold = -1;
     let max = -1; // maximum color value with a greater number of pixels to 0
-    let histogramCopy = [histogram.length]; //a copy of the histogram
+    let histogramCopy = new Array(histogram.length); //a copy of the histogram
     for (let i = 0; i < histogram.length; i++) {
         histogramCopy[i] = histogram[i];
         if (histogram[i] > 0){
@@ -30,7 +30,7 @@ export default function minimum(histogram) {
     return threshold;
 }
 function smoothed(histogram) {//Smooth with a 3 point running mean filter
-    let auHistogram = [histogram.length]; // a copy of the histograma for the smoothing process
+    let auHistogram = new Array(histogram.length); // a copy of the histograma for the smoothing process
     for (let i = 1; i < histogram.length - 1; i++){
         auHistogram[i] = (histogram[i-1] + histogram[i] +histogram[i+1])/3;
     }
