@@ -7,6 +7,12 @@ let cross=[
     [0,0,1,0,0]
 ];
 
+let smallCross=[
+    [0,1,0],
+    [1,1,1],
+    [0,1,0]
+];
+
 function getOn(shape) {
     let matrix=shape.matrix;
     let on=[[],[]];
@@ -24,10 +30,14 @@ function getOn(shape) {
 
 
 export default class Shape {
-    constructor({shape='cross', size, filled}={}) {
-        switch(shape) {
+    constructor({predefined='cross', shape, size, filled}={}) {
+        if (shape) predefined=undefined;
+        switch(predefined) {
             case 'cross':
                 this.matrix=cross;
+                break;
+            case 'smallCross':
+                this.matrix=smallCross;
                 break;
         }
         this.height=this.matrix.length;
