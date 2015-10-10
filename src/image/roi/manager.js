@@ -1,11 +1,9 @@
-import createROIMapFromMask from './creator/fromKask';
-import createROIMapFromExtrema from './creator/fromExtrema';
+import fromMask from './creator/fromMask';
+import fromExtrema from './creator/fromExtrema';
+import fromPoints from './creator/fromPoints';
 import createROI from './createROI';
 import extendObject from 'extend';
 
-
-let FROM_EXTREMA = 1;
-let FROM_MASK = 2;
 
 export default class ROIManager {
 
@@ -19,12 +17,20 @@ export default class ROIManager {
 
     generateROIFromExtrema(options = {}) {
         let opt = extendObject({}, this._options, options);
-        this._layers[opt.label] = new ROILayer(this._image, FROM_EXTREMA, opt);
+        let roiMap = fromExtrema.call(this._image, options);
+        this._layers[opt.label] = new ROILayer(roiMap, opt);
+    }
+
+    generateROIFromPoints(points, options = {}) {
+        let opt = extendObject({}, this._options, options);
+        let roiMap = fromPoints.call(this._image, points, options);
+        this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
 
     putMask(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
-        this._layers[opt.label] = new ROILayer(mask, FROM_MASK, opt);
+        let roiMap = fromMask.call(this._image, mask, options);
+        this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
 
     getROIMap(options = {}) {
@@ -96,16 +102,9 @@ export default class ROIManager {
 }
 
 class ROILayer {
-    constructor(image, type, options) {
+    constructor(roiMap, options) {
+        this.roiMap = roiMap;
         this.options = options;
-        switch (type) {
-            case FROM_MASK:
-                this.roiMap = createROIMapFromMask(image, options);
-                break;
-            case FROM_EXTREMA:
-                this.roiMap = createROIMapFromExtrema(image, options);
-                break;
-        }
         this.roi = createROI(this.roiMap);
     }
 }

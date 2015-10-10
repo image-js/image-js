@@ -1,13 +1,13 @@
 import ROIMap from './../ROIMap';
 
 export default function createROIMapFromExtrema(
-    image,
     {
         allowCorner = true,
         onlyTop,
         invert = false} = {}
 ) {
 
+    let image = this;
     image.checkProcessable('createROIMapFromExtrema',{components:[1]});
 
 
