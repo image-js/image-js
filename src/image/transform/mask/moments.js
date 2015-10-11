@@ -22,7 +22,7 @@ export default function moments(histogram,total) {
         normalizedHistogram[i] = histogram[i] / total;
     }
     /* Calculate the first, second, and third order moments */
-    for (let i = 0; i < histogramLength; i++ ) {
+    for (let i = 0; i < histogramLength; i++) {
         m1 += i * normalizedHistogram[i];
         m2 += i * i * normalizedHistogram[i];
         m3 += i * i * i * normalizedHistogram[i];
@@ -33,16 +33,16 @@ export default function moments(histogram,total) {
      are given in the Appendix of Ref. 1
      */
     cd = m0 * m2 - m1 * m1; //determinant of the matriz of hankel for moments 2x2
-    c0 = ( -m2 * m2 + m1 * m3 ) / cd;
-    c1 = ( m0 * -m3 + m2 * m1 ) / cd;
+    c0 = (-m2 * m2 + m1 * m3) / cd;
+    c1 = (m0 * -m3 + m2 * m1) / cd;
 //new two gray values where z0<z1
-    z0 = 0.5 * ( -c1 - Math.sqrt ( c1 * c1 - 4.0 * c0 ) );
-    z1 = 0.5 * ( -c1 + Math.sqrt ( c1 * c1 - 4.0 * c0 ) );
-    p0 = ( z1 - m1 ) / ( z1 - z0 ); /* Fraction of the object pixels in the target binary image (p0z0+p1z1=m1) */
+    z0 = 0.5 * (-c1 - Math.sqrt (c1 * c1 - 4.0 * c0));
+    z1 = 0.5 * (-c1 + Math.sqrt (c1 * c1 - 4.0 * c0));
+    p0 = (z1 - m1) / (z1 - z0); /* Fraction of the object pixels in the target binary image (p0z0+p1z1=m1) */
 // The threshold is the gray-level closest to the p0-tile of the normalized histogram
     for (let i = 0; i < histogramLength; i++) {
         sum += normalizedHistogram[i];
-        if(sum > p0) {
+        if (sum > p0) {
             threshold = i;
             break;
         }
@@ -51,7 +51,7 @@ export default function moments(histogram,total) {
 }
 function partialSum(histogram, limite) {//a partial sum is calculated according to the value limit
     let sum = 0;
-    for (let i = 0; i <= limite; i++){
+    for (let i = 0; i <= limite; i++) {
         sum += histogram[i];
     }
     return sum;

@@ -6,7 +6,7 @@
 // See http://www.cs.tut.fi/~ant/histthresh/ for an excellent slide presentation
 // and the original Matlab code
 export default function minimum(histogram) {
-    if(histogram.length < 2){//validate that the histogram has at least two color values
+    if (histogram.length < 2) {//validate that the histogram has at least two color values
         return 0;
     }
     let iterations = 0; //number of iterations of the smoothing process
@@ -15,14 +15,14 @@ export default function minimum(histogram) {
     let histogramCopy = new Array(histogram.length); //a copy of the histogram
     for (let i = 0; i < histogram.length; i++) {
         histogramCopy[i] = histogram[i];
-        if (histogram[i] > 0){
+        if (histogram[i] > 0) {
             max = i;
         }
     }
     while (!bimodalTest(histogramCopy)) {
         histogramCopy = smoothed(histogramCopy);
         iterations++;
-        if (iterations > 10000){ //if they occur more than 10000 iterations it returns -1
+        if (iterations > 10000) { //if they occur more than 10000 iterations it returns -1
             return threshold;
         }
     }
@@ -31,17 +31,17 @@ export default function minimum(histogram) {
 }
 function smoothed(histogram) {//Smooth with a 3 point running mean filter
     let auHistogram = new Array(histogram.length); // a copy of the histograma for the smoothing process
-    for (let i = 1; i < histogram.length - 1; i++){
-        auHistogram[i] = (histogram[i-1] + histogram[i] +histogram[i+1])/3;
+    for (let i = 1; i < histogram.length - 1; i++) {
+        auHistogram[i] = (histogram[i - 1] + histogram[i] + histogram[i + 1]) / 3;
     }
     auHistogram[0] = (histogram[0] + histogram[1]) / 3;
-    auHistogram[histogram.length - 1] = (histogram[histogram.length - 2]+histogram[histogram.length - 1]) /3;
+    auHistogram[histogram.length - 1] = (histogram[histogram.length - 2] + histogram[histogram.length - 1]) / 3;
     return auHistogram;
 }
 function minimumBetweenPeeks(histogramBimodal, max) {
     let threshold;
     for (let i = 1; i < max; i++) {
-        if (histogramBimodal[i-1] > histogramBimodal[i] && histogramBimodal[i+1] >= histogramBimodal[i]){
+        if (histogramBimodal[i - 1] > histogramBimodal[i] && histogramBimodal[i + 1] >= histogramBimodal[i]) {
             threshold = i;
             break;
         }
@@ -52,14 +52,14 @@ function bimodalTest(histogram) {//It is responsible for determining if a histog
     let len = histogram.length;
     let isBimodal = false;
     let peaks = 0;
-    for (let k = 1;k < len - 1;k++){
-        if (histogram[k-1] < histogram[k] && histogram[k+1] < histogram[k]) {
+    for (let k = 1;k < len - 1;k++) {
+        if (histogram[k - 1] < histogram[k] && histogram[k + 1] < histogram[k]) {
             peaks++;
             if (peaks > 2)
                 return false;
         }
     }
-    if (peaks == 2)
+    if (peaks === 2)
         isBimodal = true;
     return isBimodal;
 }
