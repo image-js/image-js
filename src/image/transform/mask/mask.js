@@ -14,6 +14,7 @@ import percentile from './percentile';
 import renyiEntropy from './renyiEntropy.js';
 import shanbhag from  './shanbhag';
 import triangle from './triangle';
+import moments from './moments';
 import yen from './yen';
 import {getThreshold} from '../../../util/converter';
 
@@ -84,6 +85,9 @@ export default function mask({
             break;
         case 'yen':
             threshold = yen(histogram, this.size);
+            break;
+        case 'moments':
+            threshold = moments(histogram, this.size);
             break;
         default:
             throw new Error('mask transform unknown algorithm: ' + algorithm);
