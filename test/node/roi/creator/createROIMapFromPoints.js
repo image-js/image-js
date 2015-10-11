@@ -1,5 +1,5 @@
-import ROIMapper from '../../../src/image/roi/creator/fromPoints';
-import {Image} from '../common';
+import ROIMapper from '../../../../src/image/roi/creator/fromPoints';
+import {Image} from '../../common';
 
 describe('we check createROIMapFromPoints', function () {
     it('should yield the right map', function () {
@@ -7,7 +7,7 @@ describe('we check createROIMapFromPoints', function () {
 
         let points = [[1,3,4,5],[1,2,4,0]];
 
-        let pixels = ROIMapper.call(image, points, {predefined: 'smallCross'}).pixels;
+        let pixels = ROIMapper.call(image, points, {kind: 'smallCross'}).pixels;
 
         Array.from(pixels).should.eql([
             0, 1, 0, 0, 4,

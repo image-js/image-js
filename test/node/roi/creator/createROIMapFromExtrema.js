@@ -1,5 +1,5 @@
-import ROIMapper from '../../../src/image/roi/creator/fromExtrema';
-import {Image} from '../common';
+import ROIMapper from '../../../../src/image/roi/creator/fromExtrema';
+import {Image} from '../../common';
 
 
 
