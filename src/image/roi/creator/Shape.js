@@ -81,7 +81,7 @@ export default class Shape {
 }
 
 function rectangle(width, height) {
-    let matrix = new Matrix(height, width).fill(0);
+    let matrix = Matrix.zeros(height, width);
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
             matrix[y][x] = 1;
@@ -91,7 +91,7 @@ function rectangle(width, height) {
 }
 
 function ellipse(width, height) {
-    let matrix = new Matrix(height, width).fill(0);
+    let matrix = Matrix.zeros(height, width);
     let a = Math.floor(width / 2);
     let b = Math.floor(height / 2);
     for (let y = 0; y < height; y++) {
@@ -105,7 +105,7 @@ function ellipse(width, height) {
 }
 
 function triangle(width, height) {
-    let matrix = new Matrix(height, width).fill(0);
+    let matrix = Matrix.zeros(height, width);
     for (let y = 0; y < height; y++) {
         let shift = Math.floor((1 - y / height) * width / 2);
         for (let x = shift; x < (width - shift); x++) {
