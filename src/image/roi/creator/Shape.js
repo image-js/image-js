@@ -1,3 +1,5 @@
+let Matrix = require('ml-matrix');
+
 
 let cross = [
     [0,0,1,0,0],
@@ -18,7 +20,7 @@ function getOn(shape) {
     let on = [[],[]];
     for (let y = 0; y < matrix.length; y++) {
         for (let x = 0; x < matrix[0].length; x++) {
-            if (matrix[x][y]) {
+            if (matrix[y][x]) {
                 on[0].push(x - shape.halfWidth);
                 on[1].push(y - shape.halfHeight);
             }
@@ -60,8 +62,8 @@ export default class Shape {
                     this.matrix = rectangle(width, height);
                     break;
                 case 'circle':
-                case 'eclipse':
-                    this.matrix = eclipse(width, height);
+                case 'ellipse':
+                    this.matrix = ellipse(width, height);
                     break;
                 case 'triangle':
                     this.matrix = triangle(width, height);
@@ -79,41 +81,35 @@ export default class Shape {
 }
 
 function rectangle(width, height) {
-    let matrix = new Array(height);
-    for (let x = 0; x < width; x++) {
-        matrix[x] = new Array(width);
-    }
+    let matrix = new Matrix(height, width).fill(0);
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-            matrix[x][y] = 1;
+            matrix[y][x] = 1;
         }
     }
     return matrix;
 }
 
-function eclipse(width, height) {
-    let matrix = new Array(height);
-    for (let x = 0; x < width; x++) {
-        matrix[x] = new Array(width);
-    }
+function ellipse(width, height) {
+    let matrix = new Matrix(height, width).fill(0);
+    let a = Math.floor(width / 2);
+    let b = Math.floor(height / 2);
     for (let y = 0; y < height; y++) {
-        let shift = Math.floor((y / height) * width / 2);
+        let yp = Math.floor(y / 2);
+        let shift = Math.floor(width / 2 - Math.sqrt((a * a * b * b - a * a * yp * yp) / b * b));
         for (let x = shift; x < (width - shift); x++) {
-            matrix[x][y] = 1;
+            matrix[y][x] = 1;
         }
     }
     return matrix;
 }
 
 function triangle(width, height) {
-    let matrix = new Array(height);
-    for (let x = 0; x < width; x++) {
-        matrix[x] = new Array(width);
-    }
+    let matrix = new Matrix(height, width).fill(0);
     for (let y = 0; y < height; y++) {
-        let shift = Math.floor((y / height) * width / 2);
+        let shift = Math.floor((1 - y / height) * width / 2);
         for (let x = shift; x < (width - shift); x++) {
-            matrix[x][y] = 1;
+            matrix[y][x] = 1;
         }
     }
     return matrix;

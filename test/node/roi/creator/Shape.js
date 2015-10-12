@@ -27,7 +27,7 @@ describe('we check Shape', function () {
         );
     });
 
-    it.skip('should yield the right square', function () {
+    it('should yield the right square', function () {
         let shape = new Shape({shape:'square', size:5});
         shape.matrix.should.eql(
             [
@@ -47,10 +47,43 @@ describe('we check Shape', function () {
                 [1,1,1,1,1]
             ]
         );
-
     });
 
+    it('should yield the right triangle', function () {
+        let shape = new Shape({shape:'triangle', size:5});
+            shape.matrix.should.eql(
+            [
+                [0,0,1,0,0],
+                [0,0,1,0,0],
+                [0,1,1,1,0],
+                [0,1,1,1,0],
+                [1,1,1,1,1]
+            ]
+        );
 
+        let shape2 = new Shape({shape:'triangle', width:5, height:3});
+        shape2.matrix.should.eql(
+            [
+                [0,0,1,0,0],
+                [0,1,1,1,0],
+                [1,1,1,1,1]
+            ]
+        );
+    });
+
+    it.skip('should yield the right ellipse', function () {
+        let shape = new Shape({shape:'ellipse', size:5});
+        shape.matrix.should.eql(
+            [
+                [0,0,1,0,0],
+                [0,1,1,1,0],
+                [1,1,1,1,1],
+                [0,1,1,1,0],
+                [0,0,1,0,0]
+            ]
+        );
+
+    });
 });
 
 
