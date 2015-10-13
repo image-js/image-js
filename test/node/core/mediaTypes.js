@@ -8,20 +8,20 @@ describe('Media Type support checks', function () {
         getType('image/png').should.equal('image/png');
     });
 
-    it.skip('direct calls', function () {
+    it('direct calls', function () {
         canWrite('image/png').should.be.true();
         canWrite('image/jpeg').should.be.false();
         canWrite('image/abc').should.be.false();
     });
 
-    it.skip('static method', function () {
+    it('static method', function () {
         Image.isTypeSupported('png').should.be.true();
         Image.isTypeSupported('image/png').should.be.true();
         Image.isTypeSupported('image/jpeg').should.be.false();
         Image.isTypeSupported('abc').should.be.false();
     });
 
-    it.skip('static method - bad arguments', function () {
+    it('static method - bad arguments', function () {
         (function () {
             Image.isTypeSupported('', 'other');
         }).should.throw(/unknown operation/);

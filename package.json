@@ -59,7 +59,7 @@
     "watchify": "^3.2.3"
   },
   "optionalDependencies": {
-    "canvas": "^1.2.9"
+    "canvas": "^1.2.10"
   },
   "dependencies": {
     "atob-lite": "^1.0.0",
