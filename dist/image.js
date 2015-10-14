@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.IJ = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.IJS = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 
 module.exports = function _atob(str) {
@@ -11389,7 +11389,7 @@ function median() {
 
 module.exports = exports['default'];
 
-},{"../../util/medianFromHistogram":124}],52:[function(require,module,exports){
+},{"../../util/medianFromHistogram":148}],52:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -11687,6 +11687,10 @@ var _filterGaussian = require('./filter/gaussian');
 
 var _filterGaussian2 = _interopRequireDefault(_filterGaussian);
 
+var _filterSobel = require('./filter/sobel');
+
+var _filterSobel2 = _interopRequireDefault(_filterSobel);
+
 var _filterLevel = require('./filter/level');
 
 var _filterLevel2 = _interopRequireDefault(_filterLevel);
@@ -11695,9 +11699,13 @@ var _filterAdd = require('./filter/add');
 
 var _filterAdd2 = _interopRequireDefault(_filterAdd);
 
-var _filterSubstract = require('./filter/substract');
+var _filterSubtract = require('./filter/subtract');
 
-var _filterSubstract2 = _interopRequireDefault(_filterSubstract);
+var _filterSubtract2 = _interopRequireDefault(_filterSubtract);
+
+var _filterHypotenuse = require('./filter/hypotenuse');
+
+var _filterHypotenuse2 = _interopRequireDefault(_filterHypotenuse);
 
 var _filterMultiply = require('./filter/multiply');
 
@@ -11724,6 +11732,10 @@ var _transformHsv2 = _interopRequireDefault(_transformHsv);
 var _transformHsl = require('./transform/hsl');
 
 var _transformHsl2 = _interopRequireDefault(_transformHsl);
+
+var _transformRgba8 = require('./transform/rgba8');
+
+var _transformRgba82 = _interopRequireDefault(_transformRgba8);
 
 var _transformGreyGrey = require('./transform/grey/grey');
 
@@ -11768,6 +11780,14 @@ var _utilityGetSimilarity2 = _interopRequireDefault(_utilityGetSimilarity);
 var _utilityGetBestMatch = require('./utility/getBestMatch');
 
 var _utilityGetBestMatch2 = _interopRequireDefault(_utilityGetBestMatch);
+
+var _utilityGetRow = require('./utility/getRow');
+
+var _utilityGetRow2 = _interopRequireDefault(_utilityGetRow);
+
+var _utilityGetColumn = require('./utility/getColumn');
+
+var _utilityGetColumn2 = _interopRequireDefault(_utilityGetColumn);
 
 var _operatorPaintMasks = require('./operator/paintMasks');
 
@@ -11839,24 +11859,30 @@ function extend(Image) {
     Image.extendMethod('invertBinaryLoop', _filterInvertBinaryLoop2['default'], inPlace);
     Image.extendMethod('level', _filterLevel2['default'], inPlace);
     Image.extendMethod('add', _filterAdd2['default'], inPlace);
-    Image.extendMethod('substract', _filterSubstract2['default'], inPlace);
+    Image.extendMethod('subtract', _filterSubtract2['default'], inPlace);
     Image.extendMethod('multiply', _filterMultiply2['default'], inPlace);
     Image.extendMethod('divide', _filterDivide2['default'], inPlace);
+    Image.extendMethod('hypotenuse', _filterHypotenuse2['default']);
 
     Image.extendMethod('meanFilter', _filterBlur2['default']);
     Image.extendMethod('medianFilter', _filterMedian2['default']);
     Image.extendMethod('gaussianFilter', _filterGaussian2['default']);
+    Image.extendMethod('sobelFilter', _filterSobel2['default']);
 
     Image.extendMethod('crop', _transformCrop2['default'], stack);
     Image.extendMethod('scale', _transformScaleScale2['default'], stack);
     Image.extendMethod('hsv', _transformHsv2['default']);
     Image.extendMethod('hsl', _transformHsl2['default']);
+    Image.extendMethod('rgba8', _transformRgba82['default']);
     Image.extendMethod('grey', _transformGreyGrey2['default']).extendMethod('gray', _transformGreyGrey2['default']);
     Image.extendMethod('mask', _transformMaskMask2['default']);
     Image.extendMethod('pad', _transformPad2['default']);
     Image.extendMethod('resizeBinary', _transformResizeBinary2['default']);
     Image.extendMethod('colorDepth', _transformBitDepth2['default']);
     Image.extendMethod('setBorder', _utilitySetBorder2['default'], inPlace);
+
+    Image.extendMethod('getRow', _utilityGetRow2['default']);
+    Image.extendMethod('getColumn', _utilityGetColumn2['default']);
 
     Image.extendMethod('split', _utilitySplit2['default']);
     Image.extendMethod('getChannel', _utilityGetChannel2['default']);
@@ -11884,7 +11910,7 @@ function extend(Image) {
 
 module.exports = exports['default'];
 
-},{"./compute/colorHistogram":46,"./compute/countAlphaPixels":47,"./compute/histogram":48,"./compute/max":49,"./compute/mean":50,"./compute/median":51,"./compute/min":52,"./compute/pixelsArray":53,"./compute/relativePosition":54,"./compute/sum":55,"./compute/svd":56,"./filter/add":59,"./filter/blur":60,"./filter/divide":61,"./filter/gaussian":62,"./filter/invert":63,"./filter/invertApply":64,"./filter/invertBinaryLoop":65,"./filter/invertGetSet":66,"./filter/invertIterator":67,"./filter/invertOneLoop":68,"./filter/invertPixel":69,"./filter/level":70,"./filter/median":71,"./filter/multiply":72,"./filter/substract":73,"./operator/convolution":80,"./operator/extract":81,"./operator/paintMasks":82,"./transform/bitDepth":87,"./transform/crop":88,"./transform/grey/grey":90,"./transform/hsl":95,"./transform/hsv":96,"./transform/mask/mask":97,"./transform/pad":99,"./transform/resizeBinary":100,"./transform/scale/scale":102,"./utility/getBestMatch":104,"./utility/getChannel":105,"./utility/getSimilarity":106,"./utility/setBorder":107,"./utility/setChannel":108,"./utility/split":109}],59:[function(require,module,exports){
+},{"./compute/colorHistogram":46,"./compute/countAlphaPixels":47,"./compute/histogram":48,"./compute/max":49,"./compute/mean":50,"./compute/median":51,"./compute/min":52,"./compute/pixelsArray":53,"./compute/relativePosition":54,"./compute/sum":55,"./compute/svd":56,"./filter/add":59,"./filter/blur":60,"./filter/divide":61,"./filter/gaussian":62,"./filter/hypotenuse":63,"./filter/invert":64,"./filter/invertApply":65,"./filter/invertBinaryLoop":66,"./filter/invertGetSet":67,"./filter/invertIterator":68,"./filter/invertOneLoop":69,"./filter/invertPixel":70,"./filter/level":71,"./filter/median":72,"./filter/multiply":73,"./filter/sobel":74,"./filter/subtract":75,"./operator/convolution":82,"./operator/extract":83,"./operator/paintMasks":84,"./transform/bitDepth":93,"./transform/crop":94,"./transform/grey/grey":96,"./transform/hsl":101,"./transform/hsv":102,"./transform/mask/mask":107,"./transform/pad":119,"./transform/resizeBinary":120,"./transform/rgba8":121,"./transform/scale/scale":123,"./utility/getBestMatch":125,"./utility/getChannel":126,"./utility/getColumn":127,"./utility/getRow":128,"./utility/getSimilarity":129,"./utility/setBorder":130,"./utility/setChannel":131,"./utility/split":132}],59:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -11892,11 +11918,7 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports['default'] = add;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _utilityValidateArrayOfChannels = require('../utility/validateArrayOfChannels');
-
-var _utilityValidateArrayOfChannels2 = _interopRequireDefault(_utilityValidateArrayOfChannels);
+var _utilChannel = require('../../util/channel');
 
 function add(value) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -11908,7 +11930,7 @@ function add(value) {
     });
     if (value <= 0) throw new Error('add: the value must be greater than 0');
 
-    channels = (0, _utilityValidateArrayOfChannels2['default'])(this, { channels: channels });
+    channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
 
     for (var j = 0; j < channels.length; j++) {
         var c = channels[j];
@@ -11920,7 +11942,7 @@ function add(value) {
 
 module.exports = exports['default'];
 
-},{"../utility/validateArrayOfChannels":110}],60:[function(require,module,exports){
+},{"../../util/channel":143}],60:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -11964,7 +11986,7 @@ function meanFilter(k) {
 
 module.exports = exports['default'];
 
-},{"../image":74,"../operator/convolution":80}],61:[function(require,module,exports){
+},{"../image":76,"../operator/convolution":82}],61:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -11972,11 +11994,7 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports['default'] = add;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _utilityValidateArrayOfChannels = require('../utility/validateArrayOfChannels');
-
-var _utilityValidateArrayOfChannels2 = _interopRequireDefault(_utilityValidateArrayOfChannels);
+var _utilChannel = require('../../util/channel');
 
 function add(value) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -11988,7 +12006,7 @@ function add(value) {
     });
     if (value <= 0) throw new Error('divide: the value must be greater than 0');
 
-    channels = (0, _utilityValidateArrayOfChannels2['default'])(this, { channels: channels });
+    channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
 
     for (var j = 0; j < channels.length; j++) {
         var c = channels[j];
@@ -12000,7 +12018,7 @@ function add(value) {
 
 module.exports = exports['default'];
 
-},{"../utility/validateArrayOfChannels":110}],62:[function(require,module,exports){
+},{"../../util/channel":143}],62:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -12021,14 +12039,14 @@ var _operatorConvolution2 = _interopRequireDefault(_operatorConvolution);
 function gaussianFilter() {
 	var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-	var _ref$neighbors = _ref.neighbors;
-	var neighbors = _ref$neighbors === undefined ? 1 : _ref$neighbors;
+	var _ref$radius = _ref.radius;
+	var radius = _ref$radius === undefined ? 1 : _ref$radius;
 	var sigma = _ref.sigma;
+	var channels = _ref.channels;
 	var _ref$border = _ref.border;
 	var border = _ref$border === undefined ? 'copy' : _ref$border;
 
 	this.checkProcessable('gaussianFilter', {
-		components: [1],
 		bitDepth: [8, 16]
 	});
 
@@ -12036,21 +12054,22 @@ function gaussianFilter() {
 	if (sigma) {
 		kernel = getSigmaKernel(sigma);
 	} else {
-		// sigma approximation using neighbors
-		sigma = 0.3 * (neighbors - 1) + 0.8;
-		kernel = getKernel(neighbors, sigma);
+		// sigma approximation using radius
+		sigma = 0.3 * (radius - 1) + 0.8;
+		kernel = getKernel(radius, sigma);
 	}
 
 	return _operatorConvolution2['default'].call(this, kernel, {
-		border: border
+		border: border,
+		channels: channels
 	});
 }
 
-function getKernel(neighbors, sigma) {
-	if (neighbors < 1) {
-		throw new RangeError('Number of neighbors should be grater than 0');
+function getKernel(radius, sigma) {
+	if (radius < 1) {
+		throw new RangeError('Radius should be grater than 0');
 	}
-	var n = 2 * neighbors + 1;
+	var n = 2 * radius + 1;
 
 	var kernel = new Array(n * n);
 
@@ -12058,17 +12077,17 @@ function getKernel(neighbors, sigma) {
 	var sigma2 = 2 * (sigma * sigma); //2*sigma^2
 	var PI2sigma2 = Math.PI * sigma2; //2*PI*sigma^2
 
-	for (var i = 0; i <= neighbors; i++) {
-		for (var j = i; j <= neighbors; j++) {
+	for (var i = 0; i <= radius; i++) {
+		for (var j = i; j <= radius; j++) {
 			var value = Math.exp(-(i * i + j * j) / sigma2) / PI2sigma2;
-			kernel[(i + neighbors) * n + (j + neighbors)] = value;
-			kernel[(i + neighbors) * n + (-j + neighbors)] = value;
-			kernel[(-i + neighbors) * n + (j + neighbors)] = value;
-			kernel[(-i + neighbors) * n + (-j + neighbors)] = value;
-			kernel[(j + neighbors) * n + (i + neighbors)] = value;
-			kernel[(j + neighbors) * n + (-i + neighbors)] = value;
-			kernel[(-j + neighbors) * n + (i + neighbors)] = value;
-			kernel[(-j + neighbors) * n + (-i + neighbors)] = value;
+			kernel[(i + radius) * n + (j + radius)] = value;
+			kernel[(i + radius) * n + (-j + radius)] = value;
+			kernel[(-i + radius) * n + (j + radius)] = value;
+			kernel[(-i + radius) * n + (-j + radius)] = value;
+			kernel[(j + radius) * n + (i + radius)] = value;
+			kernel[(j + radius) * n + (-i + radius)] = value;
+			kernel[(-j + radius) * n + (i + radius)] = value;
+			kernel[(-j + radius) * n + (-i + radius)] = value;
 		}
 	}
 	return kernel;
@@ -12105,7 +12124,66 @@ function getSigmaKernel(sigma) {
 }
 module.exports = exports['default'];
 
-},{"../image":74,"../operator/convolution":80}],63:[function(require,module,exports){
+},{"../image":76,"../operator/convolution":82}],63:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports['default'] = hypotenuse;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _utilChannel = require('../../util/channel');
+
+var _image = require('../image');
+
+var _image2 = _interopRequireDefault(_image);
+
+function hypotenuse(otherImage) {
+    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+    var bitDepth = _ref.bitDepth;
+    var channels = _ref.channels;
+
+    this.checkProcessable('hypotenuse', {
+        bitDepth: [8, 16, 32]
+    });
+    if (this.width !== otherImage.width || this.height !== otherImage.height) {
+        throw new Error('hypotenuse: both images must have the same size');
+    }
+    if (this.alpha !== otherImage.alpha || this.bitDepth !== otherImage.bitDepth) {
+        throw new Error('hypotenuse: both images must have the same alpha and bitDepth');
+    }
+    if (this.channels !== otherImage.channels) {
+        throw new Error('hypotenuse: both images must have the same number of channels');
+    }
+
+    var newImage = _image2['default'].createFrom(this, { bitDepth: bitDepth });
+
+    channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
+
+    var clamped = newImage.isClamped;
+
+    for (var j = 0; j < channels.length; j++) {
+        var c = channels[j];
+        for (var i = c; i < this.data.length; i += this.channels) {
+            var value = Math.sqrt(this.data[i] * this.data[i] + otherImage.data[i] * otherImage.data[i]);
+            if (clamped) {
+                // we calculate the clamped result
+                newImage.data[i] = Math.min(Math.max(Math.round(value), 0), newImage.maxValue);
+            } else {
+                newImage.data[i] = value;
+            }
+        }
+    }
+
+    return newImage;
+}
+
+module.exports = exports['default'];
+
+},{"../../util/channel":143,"../image":76}],64:[function(require,module,exports){
 // we try the faster methods
 
 'use strict';
@@ -12115,11 +12193,7 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports['default'] = invert;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _utilityValidateArrayOfChannels = require('../utility/validateArrayOfChannels');
-
-var _utilityValidateArrayOfChannels2 = _interopRequireDefault(_utilityValidateArrayOfChannels);
+var _utilChannel = require('../../util/channel');
 
 function invert() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -12139,7 +12213,7 @@ function invert() {
             data[i] = ~data[i];
         }
     } else {
-        var _channels = (0, _utilityValidateArrayOfChannels2['default'])(this, _channels, true);
+        var _channels = (0, _utilChannel.validateArrayOfChannels)(this, _channels, true);
 
         var data = this.data;
 
@@ -12156,7 +12230,7 @@ function invert() {
 
 module.exports = exports['default'];
 
-},{"../utility/validateArrayOfChannels":110}],64:[function(require,module,exports){
+},{"../../util/channel":143}],65:[function(require,module,exports){
 // this code gives the same result as invert()
 // but is based on a matrix of pixels
 // may be easier to implement some algorithm
@@ -12195,7 +12269,7 @@ function invertApply() {
 
 module.exports = exports['default'];
 
-},{}],65:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -12215,7 +12289,7 @@ function invertBinaryLoop() {
 
 module.exports = exports['default'];
 
-},{}],66:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -12250,7 +12324,7 @@ function invert() {
 
 module.exports = exports['default'];
 
-},{}],67:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -12305,7 +12379,7 @@ function invertIterator() {
 
 module.exports = exports['default'];
 
-},{}],68:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -12328,7 +12402,7 @@ function invertOneLoop() {
 
 module.exports = exports['default'];
 
-},{}],69:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 // this code gives the same result as invert()
 // but is based on a matrix of pixels
 // may be easier to implement some algorithm
@@ -12359,7 +12433,7 @@ function invertPixel() {
 
 module.exports = exports['default'];
 
-},{}],70:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -12373,15 +12447,13 @@ var _newArray = require('new-array');
 
 var _newArray2 = _interopRequireDefault(_newArray);
 
-var _utilityValidateArrayOfChannels = require('../utility/validateArrayOfChannels');
-
-var _utilityValidateArrayOfChannels2 = _interopRequireDefault(_utilityValidateArrayOfChannels);
+var _utilChannel = require('../../util/channel');
 
 function level() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
     var _ref$algorithm = _ref.algorithm;
-    var algorithm = _ref$algorithm === undefined ? 'full' : _ref$algorithm;
+    var algorithm = _ref$algorithm === undefined ? 'range' : _ref$algorithm;
     var channels = _ref.channels;
     var _ref$min = _ref.min;
     var min = _ref$min === undefined ? this.min : _ref$min;
@@ -12392,13 +12464,9 @@ function level() {
         bitDepth: [8, 16]
     });
 
-    channels = (0, _utilityValidateArrayOfChannels2['default'])(this, { channels: channels });
+    channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
 
     switch (algorithm) {
-
-        case 'full':
-            processImage(this, this.min, this.max, channels);
-            break;
 
         case 'range':
             if (min < 0) min = 0;
@@ -12469,11 +12537,10 @@ function processImage(image, min, max, channels) {
 }
 module.exports = exports['default'];
 
-},{"../utility/validateArrayOfChannels":110,"new-array":37}],71:[function(require,module,exports){
+},{"../../util/channel":143,"new-array":37}],72:[function(require,module,exports){
 /**
  * Created by Cristian on 18/07/2015.
  */
-
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -12483,77 +12550,66 @@ exports['default'] = medianFilter;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+var _utilChannel = require('../../util/channel');
+
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-//k: size of kernel (k*k)
+function medianFilter(radius, channels) {
+    var border = arguments.length <= 2 || arguments[2] === undefined ? 'copy' : arguments[2];
 
-function medianFilter(k) {
     this.checkProcessable('medianFilter', {
-        components: [1],
         bitDepth: [8, 16]
     });
 
-    if (k < 1) {
-        throw new Error('Kernel size should be grater than 0');
+    if (radius < 1) {
+        throw new Error('Kernel radius should be greater than 0');
     }
 
-    var newImage = _image2['default'].createFrom(this, {
-        kind: {
-            components: 1,
-            alpha: this.alpha,
-            bitDepth: this.bitDepth,
-            colorModel: null
-        }
-    });
+    channels = (0, _utilChannel.validateArrayOfChannels)(this, channels, true);
 
-    var size = k * k;
+    var kWidth = radius;
+    var kHeight = radius;
+    var newImage = _image2['default'].createFrom(this);
+
+    var size = (kWidth * 2 + 1) * (kHeight * 2 + 1);
+    var middle = Math.floor(size / 2);
     var kernel = new Array(size);
 
-    for (var x = 0; x < this.width; x++) {
-        for (var y = 0; y < this.height; y++) {
-            var n = 0;
-            for (var i = -k; i <= k; i++) {
-                for (var j = -k; j <= k; j++) {
-                    var val = isOutSidePixel(x + i, y + j, this) ? mirrorValue(x, y, i, j, this) : this.getValueXY(x + i, y + j, 0);
-                    kernel[n] = val;
-                    n++;
+    for (var channel = 0; channel < channels.length; channel++) {
+        var c = channels[channel];
+        for (var y = kHeight; y < this.height - kHeight; y++) {
+            for (var x = kWidth; x < this.width - kWidth; x++) {
+                var n = 0;
+                for (var j = -kHeight; j <= kHeight; j++) {
+                    for (var i = -kWidth; i <= kWidth; i++) {
+                        var _index = ((y + j) * this.width + x + i) * this.channels + c;
+                        kernel[n++] = this.data[_index];
+                    }
                 }
-            }
-            var newValue = kernel.sort()[Math.floor(kernel.length / 2)];
-            newImage.setValueXY(x, y, 0, newValue);
-            if (this.alpha) {
-                newImage.setValueXY(x, y, 1, this.getValueXY(x, y, 1));
+                var index = (y * this.width + x) * this.channels + c;
+                var newValue = kernel.sort()[middle];
+                newImage.data[index] = newValue;
             }
         }
     }
+
+    if (this.alpha && channels.indexOf(this.channels) === -1) {
+        for (var i = this.components; i < this.data.length; i = i + this.channels) {
+            newImage.data[i] = this.data[i];
+        }
+    }
+
+    newImage.setBorder({ size: [kWidth, kHeight], algorithm: border });
 
     return newImage;
 }
 
 //End medianFilter function
-
-function isOutSidePixel(x, y, im) {
-    return x > im.width || x < 0 || y > im.height || y < 0;
-}
-
-function mirrorValue(x, y, i, j, im) {
-    if (!isOutSidePixel(x + i, y + j, im)) {
-        return im.getValueXY(x + i, y + j, 0);
-    } else if (!isOutSidePixel(x - i, y + j, im)) {
-        return im.getValueXY(x - i, y + j, 0);
-    } else if (!isOutSidePixel(x + i, y - j, im)) {
-        return im.getValueXY(x + i, y - j, 0);
-    } else if (!isOutSidePixel(x - i, y - j, im)) {
-        return im.getValueXY(x - i, y - j, 0);
-    } else {
-        return 0;
-    }
-}
 module.exports = exports['default'];
 
-},{"../image":74}],72:[function(require,module,exports){
+},{"../../util/channel":143,"../image":76}],73:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -12561,11 +12617,7 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports['default'] = add;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _utilityValidateArrayOfChannels = require('../utility/validateArrayOfChannels');
-
-var _utilityValidateArrayOfChannels2 = _interopRequireDefault(_utilityValidateArrayOfChannels);
+var _utilChannel = require('../../util/channel');
 
 function add(value) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -12577,7 +12629,7 @@ function add(value) {
     });
     if (value <= 0) throw new Error('multiply: the value must be greater than 0');
 
-    channels = (0, _utilityValidateArrayOfChannels2['default'])(this, { channels: channels });
+    channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
 
     for (var j = 0; j < channels.length; j++) {
         var c = channels[j];
@@ -12589,31 +12641,79 @@ function add(value) {
 
 module.exports = exports['default'];
 
-},{"../utility/validateArrayOfChannels":110}],73:[function(require,module,exports){
+},{"../../util/channel":143}],74:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+exports['default'] = sobelFilter;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _image = require('../image');
+
+var _image2 = _interopRequireDefault(_image);
+
+var _operatorConvolution = require('../operator/convolution');
+
+var _operatorConvolution2 = _interopRequireDefault(_operatorConvolution);
+
+var _utilKernels = require('../../util/kernels');
+
+function sobelFilter() {
+	var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	var _ref$kernelX = _ref.kernelX;
+	var kernelX = _ref$kernelX === undefined ? _utilKernels.GRADIENT_X : _ref$kernelX;
+	var _ref$kernelY = _ref.kernelY;
+	var kernelY = _ref$kernelY === undefined ? _utilKernels.GRADIENT_Y : _ref$kernelY;
+	var _ref$border = _ref.border;
+	var border = _ref$border === undefined ? 'copy' : _ref$border;
+	var channels = _ref.channels;
+
+	this.checkProcessable('sobelFilter', {
+		bitDepth: [8, 16]
+	});
+
+	var gX = _operatorConvolution2['default'].call(this, kernelX, {
+		channels: channels,
+		border: border,
+		bitDepth: 32
+	});
+
+	var gY = _operatorConvolution2['default'].call(this, kernelY, {
+		channels: channels,
+		border: border,
+		bitDepth: 32
+	});
+
+	return gX.hypotenuse(gY, { bitDepth: this.bitDepth, channels: channels });
+}
+
+module.exports = exports['default'];
+
+},{"../../util/kernels":146,"../image":76,"../operator/convolution":82}],75:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
-exports['default'] = substract;
+exports['default'] = subtract;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _utilChannel = require('../../util/channel');
 
-var _utilityValidateArrayOfChannels = require('../utility/validateArrayOfChannels');
-
-var _utilityValidateArrayOfChannels2 = _interopRequireDefault(_utilityValidateArrayOfChannels);
-
-function substract(value) {
+function subtract(value) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     var channels = _ref.channels;
 
-    this.checkProcessable('substract', {
+    this.checkProcessable('subtract', {
         bitDepth: [8, 16]
     });
-    if (value <= 0) throw new Error('substract: the value must be greater than 0');
+    if (value <= 0) throw new Error('subtract: the value must be greater than 0');
 
-    channels = (0, _utilityValidateArrayOfChannels2['default'])(this, { channels: channels });
+    channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
 
     for (var j = 0; j < channels.length; j++) {
         var c = channels[j];
@@ -12625,7 +12725,7 @@ function substract(value) {
 
 module.exports = exports['default'];
 
-},{"../utility/validateArrayOfChannels":110}],74:[function(require,module,exports){
+},{"../../util/channel":143}],76:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -12745,10 +12845,16 @@ var Image = (function () {
             this.size = this.width * this.height;
             this.sizes = [this.width, this.height];
             this.channels = this.components + this.alpha;
-            this.maxValue = (1 << this.bitDepth) - 1;
+            if (this.bitDepth === 32) {
+                this.maxValue = Number.MAX_VALUE;
+            } else {
+                this.maxValue = Math.pow(2, this.bitDepth) - 1; // we may not use 1 << this.bitDepth for 32 bits images
+            }
 
             this.multiplierX = this.channels;
             this.multiplierY = this.channels * this.width;
+            this.isClamped = this.bitDepth < 32 ? true : false;
+            this.borderSizes = [0, 0]; // when a filter create a border it may have impact on future processing like ROI
         }
     }, {
         key: 'getPixelIndex',
@@ -12969,6 +13075,27 @@ var Image = (function () {
             }
         }
     }, {
+        key: 'checkColumn',
+        value: function checkColumn(column) {
+            if (column < 0 || column >= this.width) {
+                throw new RangeError('checkColumn: column should be included between 0 and ' + (this.width - 1) + '. Current value: ' + column);
+            }
+        }
+    }, {
+        key: 'checkRow',
+        value: function checkRow(row) {
+            if (row < 0 || row >= this.height) {
+                throw new RangeError('checkRow: row should be included between 0 and ' + (this.height - 1) + '. Current value: ' + row);
+            }
+        }
+    }, {
+        key: 'checkChannel',
+        value: function checkChannel(channel) {
+            if (channel < 0 || channel >= this.channels) {
+                throw new RangeError('checkChannel: channel should be included between 0 and ' + (this.channels - 1) + '. Current value: ' + channel);
+            }
+        }
+    }, {
         key: 'apply',
         value: function apply(filter) {
             for (var y = 0; y < this.height; y++) {
@@ -13139,7 +13266,7 @@ exports['default'] = Image;
 (0, _bitMethods2['default'])(Image);
 module.exports = exports['default'];
 
-},{"../stack/stack":119,"./bitMethods":45,"./environment":57,"./extend":58,"./kind":75,"./kindNames":76,"./load":77,"./mediaTypes":78,"./model/model":79,"./roi/manager":85,"extend":3,"fs":2}],75:[function(require,module,exports){
+},{"../stack/stack":140,"./bitMethods":45,"./environment":57,"./extend":58,"./kind":77,"./kindNames":78,"./load":79,"./mediaTypes":80,"./model/model":81,"./roi/manager":91,"extend":3,"fs":2}],77:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -13216,6 +13343,9 @@ function createPixelArray(image) {
         case 16:
             arr = new Uint16Array(length);
             break;
+        case 32:
+            arr = new Float32Array(length);
+            break;
         default:
             throw new Error('Cannot create pixel array for bit depth ' + image.bitDepth);
     }
@@ -13229,7 +13359,7 @@ function createPixelArray(image) {
     image.data = arr;
 }
 
-},{"./kindNames":76,"./model/model":79}],76:[function(require,module,exports){
+},{"./kindNames":78,"./model/model":81}],78:[function(require,module,exports){
 // Shortcuts for common image kinds
 
 'use strict';
@@ -13248,7 +13378,7 @@ exports.RGB = RGB;
 var GREY = 'GREY';
 exports.GREY = GREY;
 
-},{}],77:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -13380,7 +13510,7 @@ function loadGeneric(url) {
     });
 }
 
-},{"./environment":57,"./image":74,"atob-lite":1,"fast-png":24,"tiff":44}],78:[function(require,module,exports){
+},{"./environment":57,"./image":76,"atob-lite":1,"fast-png":24,"tiff":44}],80:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -13457,7 +13587,7 @@ function getType(type) {
     return type;
 }
 
-},{"./environment":57,"./image":74,"string-includes":38}],79:[function(require,module,exports){
+},{"./environment":57,"./image":76,"string-includes":38}],81:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -13470,7 +13600,7 @@ exports.HSL = HSL;
 var HSV = 'HSV';
 exports.HSV = HSV;
 
-},{}],80:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -13480,17 +13610,29 @@ exports['default'] = convolution;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _isInteger = require('is-integer');
-
-var _isInteger2 = _interopRequireDefault(_isInteger);
-
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
+var _utilChannel = require('../../util/channel');
+
+var _utilKernel = require('../../util/kernel');
+
+/**
+ *
+ * @param kernel
+ * @param bitDepth : We can specify a new bitDepth for the image. This allow to specify 32 bits in order no to clamp
+ * @param normalize
+ * @param divisor
+ * @param border
+ * @returns {*}
+ */
+
 function convolution(kernel) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
+    var channels = _ref.channels;
+    var bitDepth = _ref.bitDepth;
     var _ref$normalize = _ref.normalize;
     var normalize = _ref$normalize === undefined ? false : _ref$normalize;
     var _ref$divisor = _ref.divisor;
@@ -13498,40 +13640,20 @@ function convolution(kernel) {
     var _ref$border = _ref.border;
     var border = _ref$border === undefined ? 'copy' : _ref$border;
 
-    var newImage = _image2['default'].createFrom(this);
+    var newImage = _image2['default'].createFrom(this, { bitDepth: bitDepth });
+
+    channels = (0, _utilChannel.validateArrayOfChannels)(this, channels, true);
 
     var kWidth = undefined,
         kHeight = undefined;
 
-    if (Array.isArray(kernel)) {
-        if (Array.isArray(kernel[0])) {
-            // 2D array
-            if ((kernel.length & 1) === 0 || (kernel[0].length & 1) === 0) throw new RangeError('convolution: Kernel rows and columns should be odd numbers');else {
-                kHeight = Math.floor(kernel.length / 2);
-                kWidth = Math.floor(kernel[0].length / 2);
-            }
-        } else {
-            var kernelWidth = Math.sqrt(kernel.length);
-            if ((0, _isInteger2['default'])(kernelWidth)) {
-                kWidth = kHeight = Math.floor(Math.sqrt(kernel.length) / 2);
-            } else {
-                throw new RangeError('convolution: Kernel array should be a square');
-            }
-            // we convert the array to a matrix
-            var newKernel = new Array(kWidth);
-            for (var i = 0; i < kernelWidth; i++) {
-                newKernel[i] = new Array(kernelWidth);
-                for (var j = 0; j < kernelWidth; j++) {
-                    newKernel[i][j] = kernel[i * kernelWidth + j];
-                }
-            }
-            kernel = newKernel;
-        }
-    } else {
-        throw new Error('convolution: Invalid Kernel: ' + kernel);
-    }
-
     //calculate divisor
+
+    var _validateKernel = (0, _utilKernel.validateKernel)(kernel);
+
+    kWidth = _validateKernel.kWidth;
+    kHeight = _validateKernel.kHeight;
+    kernel = _validateKernel.kernel;
     if (normalize) {
         divisor = 0;
         for (var i = 0; i < kernel.length; i++) {
@@ -13545,20 +13667,38 @@ function convolution(kernel) {
         throw new RangeError('convolution: The divisor is equal to zero');
     }
 
-    for (var y = kHeight; y < this.height - kHeight; y++) {
-        for (var x = kWidth; x < this.width - kWidth; x++) {
-            var sum = 0;
-            for (var j = -kHeight; j <= kHeight; j++) {
-                for (var i = -kWidth; i <= kWidth; i++) {
-                    var kVal = kernel[kHeight + j][kWidth + i];
-                    var _index = ((y + j) * this.width + x + i) * this.channels;
-                    sum += this.data[_index] * kVal;
+    var clamped = newImage.isClamped;
+
+    for (var channel = 0; channel < channels.length; channel++) {
+        var c = channels[channel];
+        for (var y = kHeight; y < this.height - kHeight; y++) {
+            for (var x = kWidth; x < this.width - kWidth; x++) {
+                var sum = 0;
+                for (var j = -kHeight; j <= kHeight; j++) {
+                    for (var i = -kWidth; i <= kWidth; i++) {
+                        var kVal = kernel[kHeight + j][kWidth + i];
+                        var _index = ((y + j) * this.width + x + i) * this.channels + c;
+                        sum += this.data[_index] * kVal;
+                    }
+                }
+
+                var index = (y * this.width + x) * this.channels + c;
+                if (clamped) {
+                    // we calculate the clamped result
+                    newImage.data[index] = Math.min(Math.max(Math.round(sum / divisor), 0), newImage.maxValue);
+                } else {
+                    newImage.data[index] = sum / divisor;
                 }
             }
+        }
+    }
+    // if the kernel was not applied on the alpha channel we just copy it
+    // TODO: in general we should copy the channels that where not changed
+    // TODO: probably we should just copy the image at the beginning ?
 
-            var index = (y * this.width + x) * this.channels;
-            newImage.data[index] = Math.min(Math.max(Math.round(sum / divisor), 0), this.maxValue);
-            if (this.alpha) newImage.data[index + 1] = this.data[index + 1];
+    if (this.alpha && channels.indexOf(this.channels) === -1) {
+        for (var i = this.components; i < this.data.length; i = i + this.channels) {
+            newImage.data[i] = this.data[i];
         }
     }
 
@@ -13569,7 +13709,7 @@ function convolution(kernel) {
 
 module.exports = exports['default'];
 
-},{"../image":74,"is-integer":25}],81:[function(require,module,exports){
+},{"../../util/channel":143,"../../util/kernel":145,"../image":76}],83:[function(require,module,exports){
 // we will create a small image from a mask
 
 'use strict';
@@ -13630,7 +13770,7 @@ function extract(mask) {
 
 module.exports = exports['default'];
 
-},{"../image":74}],82:[function(require,module,exports){
+},{"../image":76}],84:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -13674,7 +13814,31 @@ function paintMasks(masks) {
 
 module.exports = exports['default'];
 
-},{"../model/model":79}],83:[function(require,module,exports){
+},{"../model/model":81}],85:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ROIMap = function ROIMap(parent, pixels, negativeID, positiveID) {
+    _classCallCheck(this, ROIMap);
+
+    this.parent = parent;
+    this.width = parent.width;
+    this.height = parent.height;
+    this.pixels = pixels; // pixels containing the annotations
+    this.negative = -negativeID; // number of negative zones
+    this.positive = positiveID; // number of positivie zones
+    this.total = positiveID - negativeID; // total number of zones
+};
+
+exports["default"] = ROIMap;
+module.exports = exports["default"];
+
+},{}],86:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -13733,7 +13897,346 @@ function createROI(roiMap) {
 
 module.exports = exports['default'];
 
-},{"./roi":86}],84:[function(require,module,exports){
+},{"./roi":92}],87:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var Matrix = require('ml-matrix');
+
+var cross = [[0, 0, 1, 0, 0], [0, 0, 1, 0, 0], [1, 1, 1, 1, 1], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0]];
+
+var smallCross = [[0, 1, 0], [1, 1, 1], [0, 1, 0]];
+
+function getOn(shape) {
+    var matrix = shape.matrix;
+    var on = [[], []];
+    for (var y = 0; y < matrix.length; y++) {
+        for (var x = 0; x < matrix[0].length; x++) {
+            if (matrix[y][x]) {
+                on[0].push(x - shape.halfWidth);
+                on[1].push(y - shape.halfHeight);
+            }
+        }
+    }
+    return on;
+}
+
+var Shape = function Shape() {
+    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+    var _ref$kind = _ref.kind;
+    var kind = _ref$kind === undefined ? 'cross' : _ref$kind;
+    var shape = _ref.shape;
+    var size = _ref.size;
+    var width = _ref.width;
+    var height = _ref.height;
+    var filled = _ref.filled;
+
+    _classCallCheck(this, Shape);
+
+    if (shape) kind = undefined;
+    if (size) {
+        width = size;
+        height = size;
+    }
+    if (width && 1 !== 1 || height && 1 !== 1) {
+        throw Error('Shape: The width and height has to be odd numbers.');
+    }
+    if (kind) {
+        switch (kind) {
+            case 'cross':
+                this.matrix = cross;
+                break;
+            case 'smallCross':
+                this.matrix = smallCross;
+                break;
+        }
+        this.height = this.matrix.length;
+        this.width = this.matrix[0].length;
+        if (this.height & 1 === 0 || this.width & 1 === 0) {
+            throw new Error('Shapes must have an odd height and width');
+        }
+    } else {
+        switch (shape) {
+            case 'square':
+            case 'rectangle':
+                this.matrix = rectangle(width, height);
+                break;
+            case 'circle':
+            case 'ellipse':
+                this.matrix = ellipse(width, height);
+                break;
+            case 'triangle':
+                this.matrix = triangle(width, height);
+                break;
+            default:
+
+        }
+    }
+
+    this.halfHeight = this.height / 2 >> 0;
+    this.halfWidth = this.width / 2 >> 0;
+    this.on = getOn(this);
+};
+
+exports['default'] = Shape;
+
+function rectangle(width, height) {
+    var matrix = Matrix.zeros(height, width);
+    for (var y = 0; y < height; y++) {
+        for (var x = 0; x < width; x++) {
+            matrix[y][x] = 1;
+        }
+    }
+    return matrix;
+}
+
+function ellipse(width, height) {
+    var matrix = Matrix.zeros(height, width);
+    var a = Math.floor(width / 2);
+    var b = Math.floor(height / 2);
+    for (var y = 0; y < height; y++) {
+        var yp = Math.floor(y / 2);
+        var shift = Math.floor(width / 2 - Math.sqrt((a * a * b * b - a * a * yp * yp) / b * b));
+        for (var x = shift; x < width - shift; x++) {
+            matrix[y][x] = 1;
+        }
+    }
+    return matrix;
+}
+
+function triangle(width, height) {
+    var matrix = Matrix.zeros(height, width);
+    for (var y = 0; y < height; y++) {
+        var shift = Math.floor((1 - y / height) * width / 2);
+        for (var x = shift; x < width - shift; x++) {
+            matrix[y][x] = 1;
+        }
+    }
+    return matrix;
+}
+module.exports = exports['default'];
+
+},{"ml-matrix":35}],88:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports['default'] = createROIMapFromExtrema;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _ROIMap = require('./../ROIMap');
+
+var _ROIMap2 = _interopRequireDefault(_ROIMap);
+
+function createROIMapFromExtrema() {
+    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+    var _ref$allowCorner = _ref.allowCorner;
+    var allowCorner = _ref$allowCorner === undefined ? true : _ref$allowCorner;
+    var onlyTop = _ref.onlyTop;
+    var _ref$invert = _ref.invert;
+    var invert = _ref$invert === undefined ? false : _ref$invert;
+
+    var image = this;
+    image.checkProcessable('createROIMapFromExtrema', { components: [1] });
+
+    var PROCESS_TOP = 1;
+    var PROCESS_NORMAL = 2;
+
+    // split will always return an array of images
+    var positiveID = 0;
+    var negativeID = 0;
+
+    var MIN_VALUE = -32768;
+
+    var pixels = new Int16Array(image.size); // maxValue: 32767, minValue: -32768
+    var processed = new Int8Array(image.size);
+    var variations = new Float32Array(image.size);
+
+    var MAX_ARRAY = 0x0fffff; // should be enough for most of the cases
+    var xToProcess = new Uint16Array(MAX_ARRAY + 1); // assign dynamically ????
+    var yToProcess = new Uint16Array(MAX_ARRAY + 1); // mask +1 is of course mandatory !!!
+
+    var from = 0;
+    var to = 0;
+
+    var xToProcessTop = new Uint16Array(MAX_ARRAY + 1); // assign dynamically ????
+    var yToProcessTop = new Uint16Array(MAX_ARRAY + 1); // mask +1 is of course mandatory !!!
+
+    var fromTop = 0;
+    var toTop = 0;
+
+    appendExtrema(image, { maxima: !invert });
+
+    while (from < to) {
+        var currentX = xToProcess[from & MAX_ARRAY];
+        var currentY = yToProcess[from & MAX_ARRAY];
+        process(currentX, currentY, PROCESS_NORMAL);
+        from++;
+    }
+
+    return new _ROIMap2['default'](image, pixels, negativeID, positiveID);
+
+    // we will look for the maxima (or minima) that is present in the picture
+    // a maxima is a point that is surrounded by lower values
+    // should deal with allowCorner and invert
+    function appendExtrema(_ref2) {
+        var _ref2$maxima = _ref2.maxima;
+        var maxima = _ref2$maxima === undefined ? true : _ref2$maxima;
+
+        for (var y = 1; y < image.height - 1; y++) {
+            for (var x = 1; x < image.width - 1; x++) {
+                var index = x + y * image.width;
+                if (processed[index] === 0) {
+                    var currentValue = maxima ? image.data[index] : -image.data[x + y * image.width];
+                    if (image.data[y * image.width + x - 1] > currentValue) {
+                        // LEFT
+                        continue;
+                    }
+                    if (image.data[y * image.width + x + 1] > currentValue) {
+                        // RIGHT
+                        continue;
+                    }
+                    if (image.data[(y - 1) * image.width + x] > currentValue) {
+                        // TOP
+                        continue;
+                    }
+                    if (image.data[(y + 1) * image.width + x] > currentValue) {
+                        // BOTTOM
+                        continue;
+                    }
+                    if (allowCorner) {
+                        if (image.data[(y - 1) * image.width + x - 1] > currentValue) {
+                            // LEFT TOP
+                            continue;
+                        }
+                        if (image.data[(y - 1) * image.width + x + 1] > currentValue) {
+                            // RIGHT TOP
+                            continue;
+                        }
+                        if (image.data[(y + 1) * image.width + x - 1] > currentValue) {
+                            // LEFT BOTTOM
+                            continue;
+                        }
+                        if (image.data[(y + 1) * image.width + x + 1] > currentValue) {
+                            // RIGHT BOTTOM
+                            continue;
+                        }
+                    }
+
+                    pixels[index] = maxima ? ++positiveID : --negativeID;
+
+                    // console.log('---',pixels[index]);
+
+                    processTop(x, y, PROCESS_TOP);
+                }
+            }
+        }
+    }
+
+    // we will try to get all the points of the top (same value)
+    // and to check if the whole group is surrounded by lower value
+    // as soon as one of them if not part we need to reverse the process
+    // and just for get those points
+    function processTop(xToProcess, yToProcess) {
+        // console.log('process top');
+        var currentTo = to; // in case if fails we come back
+        fromTop = 0;
+        toTop = 1;
+        xToProcessTop[0] = xToProcess;
+        yToProcessTop[0] = yToProcess;
+        var valid = true;
+        while (fromTop < toTop) {
+            var currentX = xToProcessTop[fromTop & MAX_ARRAY];
+            var currentY = yToProcessTop[fromTop & MAX_ARRAY];
+            valid &= process(currentX, currentY, PROCESS_TOP);
+            fromTop++;
+        }
+        if (!valid) {
+            // console.log('REVERT');
+            // need to clear all the calculated pixels because the top is not surrounded by negative values
+            for (var i = 0; i < toTop; i++) {
+                var currentX = xToProcessTop[i & MAX_ARRAY];
+                var currentY = yToProcessTop[i & MAX_ARRAY];
+                var index = currentY * image.width + currentX;
+                pixels[index] = 0;
+            }
+            to = currentTo;
+        }
+    }
+
+    /*
+     For a specific point we will check the points around, increase the area of interests and add
+     them to the processing list
+     type=0 : top
+     type=1 : normal
+     */
+    function process(xCenter, yCenter, type) {
+        // console.log('PROCESS', xCenter, yCenter);
+        var currentID = pixels[yCenter * image.width + xCenter];
+        var currentValue = image.data[yCenter * image.width + xCenter];
+        var currentVariation = variations[yCenter * image.width + xCenter];
+        for (var y = yCenter - 1; y <= yCenter + 1; y++) {
+            for (var x = xCenter - 1; x <= xCenter + 1; x++) {
+                var index = y * image.width + x;
+                if (processed[index] === 0) {
+                    processed[index] = 1;
+                    // we store the variation compare to the parent pixel
+                    variations[index] = image.data[index] - currentValue;
+                    switch (type) {
+                        case PROCESS_TOP:
+                            // console.log(x, y, variations[index]);
+                            if (variations[index] === 0) {
+                                // we look for maxima
+                                // console.log('ZERO', currentID, x, y);
+                                // if we are next to a border ... it is not surrounded !
+                                if (x === 0 || y === 0 || x === image.width - 1 || y === image.height - 1) return false;
+                                pixels[index] = currentID;
+                                xToProcessTop[toTop & MAX_ARRAY] = x;
+                                yToProcessTop[toTop & MAX_ARRAY] = y;
+                                toTop++;
+                            } else if (variations[index] > 0) {
+                                // not a global maximum
+                                // console.log('LARGER');
+                                return false;
+                            } else {
+                                // a point we will have to process
+                                if (!onlyTop) {
+                                    pixels[index] = currentID;
+                                    xToProcess[to & MAX_ARRAY] = x;
+                                    yToProcess[to & MAX_ARRAY] = y;
+                                    to++;
+                                }
+                            }
+                            break;
+                        case PROCESS_NORMAL:
+                            if (variations[index] <= 0) {
+                                // we look for maxima
+                                pixels[index] = currentID;
+                                xToProcess[to & MAX_ARRAY] = x;
+                                yToProcess[to & MAX_ARRAY] = y;
+                                to++;
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+}
+
+module.exports = exports['default'];
+
+},{"./../ROIMap":85}],89:[function(require,module,exports){
 /*
 We will annotate each point to define to which area it belongs
  */
@@ -13743,11 +14246,15 @@ We will annotate each point to define to which area it belongs
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
-exports['default'] = createROIMap;
+exports['default'] = createROIMapFromMask;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-function createROIMap(mask) {
+var _ROIMap = require('./../ROIMap');
+
+var _ROIMap2 = _interopRequireDefault(_ROIMap);
+
+function createROIMapFromMask(mask) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     var _ref$allowCorner = _ref.allowCorner;
@@ -13852,24 +14359,59 @@ function createROIMap(mask) {
         }
     }
 
-    return new ROIMap(mask, pixels, negativeID, positiveID);
+    return new _ROIMap2['default'](mask, pixels, negativeID, positiveID);
 }
-
-var ROIMap = function ROIMap(parent, pixels, negativeID, positiveID) {
-    _classCallCheck(this, ROIMap);
-
-    this.parent = parent;
-    this.width = parent.width;
-    this.height = parent.height;
-    this.pixels = pixels; // pixels containing the annotations
-    this.negative = -negativeID; // number of negative zones
-    this.positive = positiveID; // number of positivie zones
-    this.total = positiveID - negativeID; // total number of zones
-};
 
 module.exports = exports['default'];
 
-},{}],85:[function(require,module,exports){
+},{"./../ROIMap":85}],90:[function(require,module,exports){
+/*
+We will annotate each point to define to which area it belongs
+ */
+
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports['default'] = fromPoints;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _ROIMap = require('./../ROIMap');
+
+var _ROIMap2 = _interopRequireDefault(_ROIMap);
+
+var _Shape = require('./Shape');
+
+var _Shape2 = _interopRequireDefault(_Shape);
+
+function fromPoints(points) {
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+    var shape = new _Shape2['default'](options);
+    // based on a binary image we will create plenty of small images
+    var pixels = new Int16Array(this.size); // maxValue: 32767, minValue: -32768
+    var positiveID = 0;
+    for (var i = 0; i < points[0].length; i++) {
+        positiveID++;
+        var xP = points[0][i];
+        var yP = points[1][i];
+        for (var j = 0; j < shape.on[0].length; j++) {
+            var xS = shape.on[0][j];
+            var yS = shape.on[1][j];
+            if (xP + xS >= 0 && yP + yS >= 0 && xP + xS < this.width && yP + yS < this.height) {
+                pixels[xP + xS + (yP + yS) * this.width] = positiveID;
+            }
+        }
+    }
+
+    return new _ROIMap2['default'](this, pixels, 0, positiveID);
+}
+
+module.exports = exports['default'];
+
+},{"./../ROIMap":85,"./Shape":87}],91:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -13882,9 +14424,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _createROIMap = require('./fromMask');
+var _creatorFromMask = require('./creator/fromMask');
 
-var _createROIMap2 = _interopRequireDefault(_createROIMap);
+var _creatorFromMask2 = _interopRequireDefault(_creatorFromMask);
+
+var _creatorFromExtrema = require('./creator/fromExtrema');
+
+var _creatorFromExtrema2 = _interopRequireDefault(_creatorFromExtrema);
+
+var _creatorFromPoints = require('./creator/fromPoints');
+
+var _creatorFromPoints2 = _interopRequireDefault(_creatorFromPoints);
 
 var _createROI = require('./createROI');
 
@@ -13902,30 +14452,52 @@ var ROIManager = (function () {
 
         this._image = image;
         this._options = options;
+        if (!this._options.lebel) this._options.label = 'default';
         this._layers = {};
         this._painted = null;
     }
 
     _createClass(ROIManager, [{
-        key: 'putMask',
-        value: function putMask(mask) {
-            var maskLabel = arguments.length <= 1 || arguments[1] === undefined ? 'default' : arguments[1];
-            var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+        key: 'generateROIFromExtrema',
+        value: function generateROIFromExtrema() {
+            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
             var opt = (0, _extend2['default'])({}, this._options, options);
-            this._layers[maskLabel] = new ROILayer(mask, opt);
+            var roiMap = _creatorFromExtrema2['default'].call(this._image, options);
+            this._layers[opt.label] = new ROILayer(roiMap, opt);
+        }
+    }, {
+        key: 'generateROIFromPoints',
+        value: function generateROIFromPoints(points) {
+            var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+            var opt = (0, _extend2['default'])({}, this._options, options);
+            var roiMap = _creatorFromPoints2['default'].call(this._image, points, options);
+            this._layers[opt.label] = new ROILayer(roiMap, opt);
+        }
+    }, {
+        key: 'putMask',
+        value: function putMask(mask) {
+            var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+            var opt = (0, _extend2['default'])({}, this._options, options);
+            var roiMap = _creatorFromMask2['default'].call(this._image, mask, options);
+            this._layers[opt.label] = new ROILayer(roiMap, opt);
         }
     }, {
         key: 'getROIMap',
         value: function getROIMap() {
-            var maskLabel = arguments.length <= 0 || arguments[0] === undefined ? 'default' : arguments[0];
+            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-            if (!this._layers[maskLabel]) return;
-            return this._layers[maskLabel].roiMap;
+            var opt = (0, _extend2['default'])({}, this._options, options);
+            if (!this._layers[opt.label]) return;
+            return this._layers[opt.label].roiMap;
         }
     }, {
         key: 'getROIIDs',
-        value: function getROIIDs(options) {
+        value: function getROIIDs() {
+            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
             var rois = this.getROI(options);
             if (!rois) return;
             var ids = new Array(rois.length);
@@ -13937,10 +14509,10 @@ var ROIManager = (function () {
     }, {
         key: 'getROI',
         value: function getROI() {
-            var maskLabel = arguments.length <= 0 || arguments[0] === undefined ? 'default' : arguments[0];
+            var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-            var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
+            var _ref$label = _ref.label;
+            var label = _ref$label === undefined ? this._options.label : _ref$label;
             var _ref$positive = _ref.positive;
             var positive = _ref$positive === undefined ? true : _ref$positive;
             var _ref$negative = _ref.negative;
@@ -13950,7 +14522,7 @@ var ROIManager = (function () {
             var _ref$maxSurface = _ref.maxSurface;
             var maxSurface = _ref$maxSurface === undefined ? Number.POSITIVE_INFINITY : _ref$maxSurface;
 
-            var allROIs = this._layers[maskLabel].roi;
+            var allROIs = this._layers[label].roi;
             var rois = new Array(allROIs.length);
             var ptr = 0;
             for (var i = 0; i < allROIs.length; i++) {
@@ -13965,10 +14537,9 @@ var ROIManager = (function () {
     }, {
         key: 'getROIMasks',
         value: function getROIMasks() {
-            var maskLabel = arguments.length <= 0 || arguments[0] === undefined ? 'default' : arguments[0];
-            var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-            var rois = this.getROI(maskLabel, options);
+            var rois = this.getROI(options);
             var masks = new Array(rois.length);
             for (var i = 0; i < rois.length; i++) {
                 masks[i] = rois[i].mask;
@@ -13978,28 +14549,27 @@ var ROIManager = (function () {
     }, {
         key: 'getPixels',
         value: function getPixels() {
-            var maskLabel = arguments.length <= 0 || arguments[0] === undefined ? 'default' : arguments[0];
-            var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-            if (this._layers[maskLabel]) {
-                return this._layers[maskLabel].roiMap.pixels;
+            var opt = (0, _extend2['default'])({}, this._options, options);
+            if (this._layers[opt.label]) {
+                return this._layers[opt.label].roiMap.pixels;
             }
         }
     }, {
         key: 'paint',
         value: function paint() {
-            var maskLabel = arguments.length <= 0 || arguments[0] === undefined ? 'default' : arguments[0];
-            var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-            if (!this._painted) this._painted = this._image.clone();
-            var masks = this.getROIMasks(maskLabel, options);
+            if (!this._painted) this._painted = this._image.rgba8();
+            var masks = this.getROIMasks(options);
             this._painted.paintMasks(masks, options);
             return this._painted;
         }
     }, {
         key: 'resetPainted',
-        value: function resetPainted() {
-            this._painted = undefined;
+        value: function resetPainted(image) {
+            this._painted = image;
         }
     }]);
 
@@ -14008,18 +14578,17 @@ var ROIManager = (function () {
 
 exports['default'] = ROIManager;
 
-var ROILayer = function ROILayer(mask, options) {
+var ROILayer = function ROILayer(roiMap, options) {
     _classCallCheck(this, ROILayer);
 
-    this.mask = mask;
+    this.roiMap = roiMap;
     this.options = options;
-    this.roiMap = (0, _createROIMap2['default'])(this.mask, options);
     this.roi = (0, _createROI2['default'])(this.roiMap);
 };
 
 module.exports = exports['default'];
 
-},{"./createROI":83,"./createROIMap":84,"extend":3}],86:[function(require,module,exports){
+},{"./createROI":86,"./creator/fromExtrema":88,"./creator/fromMask":89,"./creator/fromPoints":90,"extend":3}],92:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -14425,7 +14994,7 @@ function getInternalMapIDs(roi) {
 }
 module.exports = exports['default'];
 
-},{"../image":74,"../kindNames":76}],87:[function(require,module,exports){
+},{"../image":76,"../kindNames":78}],93:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -14467,7 +15036,7 @@ function bitDepth() {
 
 module.exports = exports['default'];
 
-},{"../image":74}],88:[function(require,module,exports){
+},{"../image":76}],94:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -14493,9 +15062,10 @@ function crop() {
     var _ref$height = _ref.height;
     var height = _ref$height === undefined ? this.height - y : _ref$height;
 
-    if (x > this.width - 1 || y > this.height - 1) throw new RangeError('origin (' + x + '; ' + y + ') out of range (' + (this.width - 1) + '; ' + (this.height - 1) + ')');
-    if (width <= 0 || height <= 0) throw new RangeError('width and height must be positive numbers');
-    if (width > this.width - x || height > this.height - y) throw new RangeError('size is out of range');
+    if (x > this.width - 1 || y > this.height - 1) throw new RangeError('crop: origin (x:' + x + ', y:' + y + ') out of range (' + (this.width - 1) + '; ' + (this.height - 1) + ')');
+    if (width <= 0 || height <= 0) throw new RangeError('crop: width and height (width:' + width + '; height:' + height + ') must be positive numbers');
+    if (x < 0 || y < 0) throw new RangeError('crop: x and y (x:' + x + ', y:' + y + ') must be positive numbers');
+    if (width > this.width - x || height > this.height - y) throw new RangeError('crop: (x: ' + x + ', y:' + y + ', width:' + width + ', height:' + height + ') size is out of range');
 
     var newImage = _image2['default'].createFrom(this, { width: width, height: height });
 
@@ -14519,7 +15089,7 @@ function crop() {
 
 module.exports = exports['default'];
 
-},{"../image":74}],89:[function(require,module,exports){
+},{"../image":76}],95:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14539,7 +15109,7 @@ function average(newImage) {
 
 module.exports = exports["default"];
 
-},{}],90:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -14621,7 +15191,7 @@ function grey() {
 
 module.exports = exports['default'];
 
-},{"../../image":74,"../../model/model":79,"./average":89,"./luma601":91,"./luma709":92,"./maximum":93,"./minmax":94}],91:[function(require,module,exports){
+},{"../../image":76,"../../model/model":81,"./average":95,"./luma601":97,"./luma709":98,"./maximum":99,"./minmax":100}],97:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14641,7 +15211,7 @@ function luma601(newImage) {
 
 module.exports = exports["default"];
 
-},{}],92:[function(require,module,exports){
+},{}],98:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14661,7 +15231,7 @@ function luma709(newImage) {
 
 module.exports = exports["default"];
 
-},{}],93:[function(require,module,exports){
+},{}],99:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14681,7 +15251,7 @@ function maximum(newImage) {
 
 module.exports = exports["default"];
 
-},{}],94:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14701,7 +15271,7 @@ function minmax(newImage) {
 
 module.exports = exports["default"];
 
-},{}],95:[function(require,module,exports){
+},{}],101:[function(require,module,exports){
 // http://www.easyrgb.com/index.php?X=MATH&H=18#text18
 // check rgbToHsl : https://bgrins.github.io/TinyColor/docs/tinycolor.html
 
@@ -14774,7 +15344,7 @@ function hsv() {
 
 module.exports = exports['default'];
 
-},{"../image":74,"../model/model":79}],96:[function(require,module,exports){
+},{"../image":76,"../model/model":81}],102:[function(require,module,exports){
 // based on https://bgrins.github.io/TinyColor/docs/tinycolor.html
 
 'use strict';
@@ -14845,7 +15415,304 @@ function hsv() {
 
 module.exports = exports['default'];
 
-},{"../image":74,"../model/model":79}],97:[function(require,module,exports){
+},{"../image":76,"../model/model":81}],103:[function(require,module,exports){
+/***
+ *
+ * see http://rsb.info.nih.gov/ij/developer/source/ij/process/AutoThresholder.java.html.
+ * Huang: Implements Huang's fuzzy thresholding method: Huang, L-K & Wang, M-J J (1995),
+ * "Image thresholding by minimizing the measure of fuzziness", Pattern Recognition 28(1): 41-51
+ *
+ */
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = huang;
+
+function huang(histogram) {
+    /* Determine the first non-zero bin */
+    var first_bin = 0;
+    for (var ih = 0; ih < histogram.length; ih++) {
+        if (histogram[ih] !== 0) {
+            first_bin = ih;
+            break;
+        }
+    }
+
+    /* Determine the last non-zero bin */
+    var last_bin = histogram.length - 1;
+    for (var ih = histogram.length - 1; ih >= first_bin; ih--) {
+        if (histogram[ih] !== 0) {
+            last_bin = ih;
+            break;
+        }
+    }
+
+    var term = 1.0 / (last_bin - first_bin);
+    var mu_0 = new Array(histogram.length);
+    var sum_pix = 0;
+    var num_pix = 0;
+    for (var ih = first_bin; ih < histogram.length; ih++) {
+        sum_pix += ih * histogram[ih];
+        num_pix += histogram[ih];
+        mu_0[ih] = sum_pix / num_pix;
+    }
+
+    var mu_1 = new Array(histogram.length);
+    sum_pix = num_pix = 0;
+    for (var ih = last_bin; ih > 0; ih--) {
+        sum_pix += ih * histogram[ih];
+        num_pix += histogram[ih];
+        mu_1[ih - 1] = sum_pix / num_pix;
+    }
+
+    /* Determine the threshold that minimizes the fuzzy entropy*/
+    var threshold = -1;
+    var min_ent = Number.MAX_VALUE;
+    for (var it = 0; it < histogram.length; it++) {
+        var ent = 0;
+        var mu_x = undefined;
+        for (var ih = 0; ih <= it; ih++) {
+            /* Equation (4) in Ref. 1 */
+            mu_x = 1 / (1 + term * Math.abs(ih - mu_0[it]));
+            if (!(mu_x < 1e-06 || mu_x > 0.999999)) {
+                /* Equation (6) & (8) in Ref. 1 */
+                ent += histogram[ih] * (-mu_x * Math.log(mu_x) - (1 - mu_x) * Math.log(1 - mu_x));
+            }
+        }
+
+        for (var ih = it + 1; ih < histogram.length; ih++) {
+            /* Equation (4) in Ref. 1 */
+            mu_x = 1 / (1 + term * Math.abs(ih - mu_1[it]));
+            if (!(mu_x < 1e-06 || mu_x > 0.999999)) {
+                /* Equation (6) & (8) in Ref. 1 */
+                ent += histogram[ih] * (-mu_x * Math.log(mu_x) - (1 - mu_x) * Math.log(1 - mu_x));
+            }
+        }
+
+        if (ent < min_ent) {
+            min_ent = ent;
+            threshold = it;
+        }
+    }
+    return threshold;
+}
+
+module.exports = exports["default"];
+
+},{}],104:[function(require,module,exports){
+/***
+ *
+ * see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
+ * Intermodes: This assumes a bimodal histogram. Implements the thresholding Prewitt, JMS & Mendelsohn, ML (1966),
+ * "The analysis of cell images", Annals of the NewYork Academy of Sciences 128: 1035-1053
+ *
+ */
+
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports['default'] = intermodes;
+
+function intermodes(histogram) {
+    var iHisto = histogram.slice();
+    var iter = 0;
+    while (!bimodalTest(iHisto)) {
+        //smooth with a 3 point running mean filter
+        var previous = 0,
+            current = 0,
+            next = iHisto[0];
+        for (var i = 0; i < histogram.length - 1; i++) {
+            previous = current;
+            current = next;
+            next = iHisto[i + 1];
+            iHisto[i] = (previous + current + next) / 3;
+        }
+        iHisto[histogram.length - 1] = (current + next) / 3;
+        iter++;
+        if (iter > 10000) {
+            throw new Error('Intermodes Threshold not found after 10000 iterations');
+        }
+    }
+
+    // The threshold is the mean between the two peaks.
+    var tt = 0;
+    for (var i = 1; i < histogram.length - 1; i++) {
+        if (iHisto[i - 1] < iHisto[i] && iHisto[i + 1] < iHisto[i]) {
+            tt += i;
+        }
+    }
+    return Math.floor(tt / 2.0);
+}
+
+function bimodalTest(iHisto) {
+    var b = false;
+    var modes = 0;
+
+    for (var k = 1; k < iHisto.length - 1; k++) {
+        if (iHisto[k - 1] < iHisto[k] && iHisto[k + 1] < iHisto[k]) {
+            modes++;
+            if (modes > 2) {
+                return false;
+            }
+        }
+    }
+    if (modes === 2) {
+        b = true;
+    }
+    return b;
+}
+module.exports = exports['default'];
+
+},{}],105:[function(require,module,exports){
+/**
+ * see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
+ * Isodata: Ridler, TW & Calvard, S (1978), "Picture thresholding using an iterative selection method"
+ * IEEE Transactions on Systems, Man and Cybernetics 8: 630-632.
+ *
+ */
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports['default'] = isodata;
+
+function isodata(histogram) {
+
+    var l = undefined; //the average grey value of pixels with intensities < g
+    var toth = undefined; //the the average grey value of pixels with intensities > g
+    var totl = undefined; //the total the average grey value of pixels with intensities < g
+    var h = undefined; //the average grey value of pixels with intensities > g
+    var g = 0; //threshold value
+
+    for (var i = 1; i < histogram.length; i++) {
+        if (histogram[i] > 0) {
+            g = i + 1;
+            break;
+        }
+    }
+
+    while (true) {
+        l = 0;
+        totl = 0;
+        for (var i = 0; i < g; i++) {
+            totl = totl + histogram[i];
+            l = l + histogram[i] * i;
+        }
+        h = 0;
+        toth = 0;
+        for (var i = g + 1; i < histogram.length; i++) {
+            toth += histogram[i];
+            h += histogram[i] * i;
+        }
+        if (totl > 0 && toth > 0) {
+            l /= totl;
+            h /= toth;
+            if (g === Math.round((l + h) / 2.0)) break;
+        }
+        g++;
+        if (g > histogram.length - 2) {
+            throw new Error('Threshold not found');
+        }
+    }
+    return g;
+}
+
+module.exports = exports['default'];
+
+},{}],106:[function(require,module,exports){
+/*
+ * see http://rsb.info.nih.gov/ij/developer/source/ij/process/AutoThresholder.java.html
+ * The method is present in: Implements Li's Minimum Cross Entropy thresholding method
+ * This implementation is based on the iterative version (Ref. 2nd reference below) of the algorithm.
+ *  1) Li, CH & Lee, CK (1993), "Minimum Cross 	Entropy Thresholding", Pattern Recognition 26(4): 61 625
+ *  2) Li, CH & Tam, PKS (1998), "An Iterative 	Algorithm for Minimum Cross Entropy Thresholding",
+ *     Pattern 	Recognition Letters 18(8): 771-776
+ *  3) Sezgin, M & Sankur, B (2004), "Survey 	over Image Thresholding Techniques and Quantitative Performance
+ *     Evaluation",Journal of Electronic Imaging 13(1): 146-165
+ * @param histogram - the histogram of the image
+ *        total - the number of pixels in the image
+ * @returns {number} - the threshold
+ */
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = li;
+
+function li(histogram, total) {
+
+    var threshold = undefined;
+    var sum_back = undefined; /* sum of the background pixels at a given threshold */
+    var sum_obj = undefined; /* sum of the object pixels at a given threshold */
+    var num_back = undefined; /* number of background pixels at a given threshold */
+    var num_obj = undefined; /* number of object pixels at a given threshold */
+    var old_thresh = undefined;
+    var new_thresh = undefined;
+    var mean_back = undefined; /* mean of the background pixels at a given threshold */
+    var mean_obj = undefined; /* mean of the object pixels at a given threshold */
+    var mean = undefined; /* mean gray-level in the image */
+    var tolerance = undefined; /* threshold tolerance */
+    var temp = undefined;
+    tolerance = 0.5;
+
+    /* Calculate the mean gray-level */
+    mean = 0.0;
+    for (var ih = 0; ih < histogram.length; ih++) {
+        mean += ih * histogram[ih];
+    }
+
+    mean /= total;
+    /* Initial estimate */
+    new_thresh = mean;
+
+    do {
+        old_thresh = new_thresh;
+        threshold = old_thresh + 0.5 | 0; /* range */
+
+        /* Calculate the means of background and object pixels */
+        /* Background */
+        sum_back = 0;
+        num_back = 0;
+
+        for (var ih = 0; ih <= threshold; ih++) {
+            sum_back += ih * histogram[ih];
+            num_back += histogram[ih];
+        }
+        mean_back = num_back === 0 ? 0.0 : sum_back / num_back;
+
+        /* Object */
+        sum_obj = 0;
+        num_obj = 0;
+        for (var ih = threshold + 1; ih < histogram.length; ih++) {
+            sum_obj += ih * histogram[ih];
+            num_obj += histogram[ih];
+        }
+        mean_obj = num_obj === 0 ? 0.0 : sum_obj / num_obj;
+        temp = (mean_back - mean_obj) / (Math.log(mean_back) - Math.log(mean_obj));
+
+        if (temp < -Number.EPSILON) {
+            new_thresh = temp - 0.5 | 0;
+        } else {
+            new_thresh = temp + 0.5 | 0;
+        }
+        /*  Stop the iterations when the difference between the
+         new and old threshold values is less than the tolerance */
+    } while (Math.abs(new_thresh - old_thresh) > tolerance);
+
+    return threshold;
+}
+
+module.exports = exports["default"];
+
+},{}],107:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -14859,21 +15726,80 @@ var _image = require('../../image');
 
 var _image2 = _interopRequireDefault(_image);
 
+var _huang = require('./huang');
+
+var _huang2 = _interopRequireDefault(_huang);
+
+var _intermodes = require('./intermodes');
+
+var _intermodes2 = _interopRequireDefault(_intermodes);
+
+var _isodata = require('./isodata');
+
+var _isodata2 = _interopRequireDefault(_isodata);
+
+var _li = require('./li');
+
+var _li2 = _interopRequireDefault(_li);
+
+var _maxEntropy = require('./maxEntropy');
+
+var _maxEntropy2 = _interopRequireDefault(_maxEntropy);
+
+var _mean = require('./mean');
+
+var _mean2 = _interopRequireDefault(_mean);
+
+var _minError = require('./minError');
+
+var _minError2 = _interopRequireDefault(_minError);
+
+var _minimum = require('./minimum');
+
+var _minimum2 = _interopRequireDefault(_minimum);
+
+var _moments = require('./moments');
+
+var _moments2 = _interopRequireDefault(_moments);
+
+var _otsu = require('./otsu');
+
+var _otsu2 = _interopRequireDefault(_otsu);
+
 var _percentile = require('./percentile');
 
 var _percentile2 = _interopRequireDefault(_percentile);
 
+var _renyiEntropyJs = require('./renyiEntropy.js');
+
+var _renyiEntropyJs2 = _interopRequireDefault(_renyiEntropyJs);
+
+var _shanbhag = require('./shanbhag');
+
+var _shanbhag2 = _interopRequireDefault(_shanbhag);
+
+var _triangle = require('./triangle');
+
+var _triangle2 = _interopRequireDefault(_triangle);
+
+var _yen = require('./yen');
+
+var _yen2 = _interopRequireDefault(_yen);
+
+var _utilConverter = require('../../../util/converter');
+
 /*
  Creation of binary mask is based on the determination of a threshold
  You may either choose among the provided algorithm or just specify a threshold value
- If the algorithm is a number, it is the threshold value
  */
 
 function mask() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
     var _ref$algorithm = _ref.algorithm;
-    var algorithm = _ref$algorithm === undefined ? 0.5 : _ref$algorithm;
+    var algorithm = _ref$algorithm === undefined ? 'threshold' : _ref$algorithm;
+    var _ref$threshold = _ref.threshold;
+    var threshold = _ref$threshold === undefined ? 0.5 : _ref$threshold;
     var _ref$useAlpha = _ref.useAlpha;
     var useAlpha = _ref$useAlpha === undefined ? true : _ref$useAlpha;
     var _ref$invert = _ref.invert;
@@ -14884,19 +15810,58 @@ function mask() {
         bitDepth: [8, 16]
     });
 
-    var threshold = 0;
-
-    if (typeof algorithm === 'number') {
-        threshold = algorithm * this.maxValue;
-    } else {
-        var histogram = this.getHistogram();
-        switch (algorithm.toLowerCase()) {
-            case 'percentile':
-                threshold = (0, _percentile2['default'])(histogram);
-                break;
-            default:
-                throw new Error('mask transform unknown algorithm: ' + algorithm);
-        }
+    var histogram = this.getHistogram();
+    switch (algorithm.toLowerCase()) {
+        case 'threshold':
+            threshold = (0, _utilConverter.getThreshold)(threshold, this.maxValue);
+            break;
+        case 'huang':
+            threshold = (0, _huang2['default'])(histogram);
+            break;
+        case 'intermodes':
+            threshold = (0, _intermodes2['default'])(histogram);
+            break;
+        case 'isodata':
+            threshold = (0, _isodata2['default'])(histogram);
+            break;
+        case 'li':
+            threshold = (0, _li2['default'])(histogram, this.size);
+            break;
+        case 'maxentropy':
+            threshold = (0, _maxEntropy2['default'])(histogram, this.size);
+            break;
+        case 'mean':
+            threshold = (0, _mean2['default'])(histogram, this.size);
+            break;
+        case 'minerror':
+            threshold = (0, _minError2['default'])(histogram, this.size);
+            break;
+        case 'minimum':
+            threshold = (0, _minimum2['default'])(histogram);
+            break;
+        case 'moments':
+            threshold = (0, _moments2['default'])(histogram, this.size);
+            break;
+        case 'otsu':
+            threshold = (0, _otsu2['default'])(histogram, this.size);
+            break;
+        case 'percentile':
+            threshold = (0, _percentile2['default'])(histogram);
+            break;
+        case 'renyientropy':
+            threshold = (0, _renyiEntropyJs2['default'])(histogram, this.size);
+            break;
+        case 'shanbhag':
+            threshold = (0, _shanbhag2['default'])(histogram, this.size);
+            break;
+        case 'triangle':
+            threshold = (0, _triangle2['default'])(histogram);
+            break;
+        case 'yen':
+            threshold = (0, _yen2['default'])(histogram, this.size);
+            break;
+        default:
+            throw new Error('mask transform unknown algorithm: ' + algorithm);
     }
 
     var newImage = new _image2['default'](this.width, this.height, {
@@ -14915,19 +15880,448 @@ function mask() {
         }
     } else {
         for (var i = 0; i < this.data.length; i += this.channels) {
-            if (invert && this.data[i] >= threshold || !invert && this.data[i] <= threshold) {
+            if (invert && this.data[i] <= threshold || !invert && this.data[i] >= threshold) {
                 newImage.setBit(ptr);
             }
             ptr++;
         }
     }
-
     return newImage;
 }
 
 module.exports = exports['default'];
 
-},{"../../image":74,"./percentile":98}],98:[function(require,module,exports){
+},{"../../../util/converter":144,"../../image":76,"./huang":103,"./intermodes":104,"./isodata":105,"./li":106,"./maxEntropy":108,"./mean":109,"./minError":110,"./minimum":111,"./moments":112,"./otsu":113,"./percentile":114,"./renyiEntropy.js":115,"./shanbhag":116,"./triangle":117,"./yen":118}],108:[function(require,module,exports){
+/*
+ * see http://rsb.info.nih.gov/ij/developer/source/ij/process/AutoThresholder.java.html
+ * The method is present in: Implements Kapur-Sahoo-Wong (Maximum Entropy) thresholding method:
+ * Kapur, JN; Sahoo, PK & Wong, ACK (1985), "A New Method for Gray-Level Picture Thresholding Using the Entropy of the Histogram",
+ * Graphical Models and Image Processing 29(3): 273-285
+ * @param histogram - the histogram of the image
+ *        total - the number of pixels in the image
+ * @returns {number} - the threshold
+ */
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = maxEntropy;
+
+function maxEntropy(histogram, total) {
+    var norm_histo = new Array(histogram.length); // normalized histogram
+    for (var ih = 0; ih < histogram.length; ih++) {
+        norm_histo[ih] = histogram[ih] / total;
+    }var P1 = new Array(histogram.length); // cumulative normalized histogram
+    var P2 = new Array(histogram.length);
+    P1[0] = norm_histo[0];
+    P2[0] = 1.0 - P1[0];
+
+    for (var ih = 1; ih < histogram.length; ih++) {
+        P1[ih] = P1[ih - 1] + norm_histo[ih];
+        P2[ih] = 1.0 - P1[ih];
+    }
+
+    /* Determine the first non-zero bin */
+    var first_bin = 0;
+    for (var ih = 0; ih < histogram.length; ih++) {
+        if (Math.abs(P1[ih]) >= Number.EPSILON) {
+            first_bin = ih;
+            break;
+        }
+    }
+
+    /* Determine the last non-zero bin */
+    var last_bin = histogram.length - 1;
+    for (var ih = histogram.length - 1; ih >= first_bin; ih--) {
+        if (Math.abs(P2[ih]) >= Number.EPSILON) {
+            last_bin = ih;
+            break;
+        }
+    }
+
+    // Calculate the total entropy each gray-level
+    // and find the threshold that maximizes it
+    var threshold = -1;
+    var tot_ent = undefined; // total entropy
+    var max_ent = Number.MIN_VALUE; // max entropy
+    var ent_back = undefined; // entropy of the background pixels at a given threshold
+    var ent_obj = undefined; // entropy of the object pixels at a given threshold
+
+    for (var it = first_bin; it <= last_bin; it++) {
+        /* Entropy of the background pixels */
+        ent_back = 0.0;
+        for (var ih = 0; ih <= it; ih++) {
+            if (histogram[ih] !== 0) {
+                ent_back -= norm_histo[ih] / P1[it] * Math.log(norm_histo[ih] / P1[it]);
+            }
+        }
+
+        /* Entropy of the object pixels */
+        ent_obj = 0.0;
+        for (var ih = it + 1; ih < histogram.length; ih++) {
+            if (histogram[ih] !== 0) {
+                ent_obj -= norm_histo[ih] / P2[it] * Math.log(norm_histo[ih] / P2[it]);
+            }
+        }
+
+        /* Total entropy */
+        tot_ent = ent_back + ent_obj;
+
+        if (max_ent < tot_ent) {
+            max_ent = tot_ent;
+            threshold = it;
+        }
+    }
+    return threshold;
+}
+
+module.exports = exports["default"];
+
+},{}],109:[function(require,module,exports){
+/*
+ * The method is present in: Uses the 	mean of grey levels as the threshold. It is described in:
+ * Glasbey, CA (1993), "An analysis of histogram-based thresholding algorithms",
+ * CVGIP: Graphical Models and Image Processing 55: 532-537
+ * @param histogram - the histogram of the image
+ *        total - the number of pixels in the image
+ * @returns {number} - the threshold
+ */
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = mean;
+
+function mean(histogram, total) {
+    var sum = 0;
+    for (var i = 0; i < histogram.length; i++) {
+        sum += i * histogram[i];
+    }
+    return Math.floor(sum / total);
+}
+
+module.exports = exports["default"];
+
+},{}],110:[function(require,module,exports){
+/*
+ * see http://rsb.info.nih.gov/ij/developer/source/ij/process/AutoThresholder.java.html
+ * The method is present in: An 	iterative implementation of Kittler and Illingworth's Minimum Error
+ * thresholding:Kittler, J & Illingworth, J (1986), "Minimum error thresholding", Pattern Recognition 19: 41-47
+ * @param histogram - the histogram of the image
+ *        total - the number of pixels in the image
+ * @returns {number} - the threshold
+ */
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = minError;
+
+function minError(histogram, total) {
+
+    var threshold = undefined;
+    var Tprev = -2;
+    var mu = undefined,
+        nu = undefined,
+        p = undefined,
+        q = undefined,
+        sigma2 = undefined,
+        tau2 = undefined,
+        w0 = undefined,
+        w1 = undefined,
+        w2 = undefined,
+        sqterm = undefined,
+        temp = undefined;
+
+    /* Calculate the mean gray-level */
+    var mean = 0.0;
+    for (var ih = 0; ih < histogram.length; ih++) {
+        mean += ih * histogram[ih];
+    }
+
+    mean /= total;
+
+    threshold = mean;
+
+    while (threshold !== Tprev) {
+        //Calculate some statistics.
+        var sumA1 = sumA(histogram, threshold);
+        var sumA2 = sumA(histogram, histogram.length - 1);
+        var sumB1 = sumB(histogram, threshold);
+        var sumB2 = sumB(histogram, histogram.length - 1);
+        var sumC1 = sumC(histogram, threshold);
+        var sumC2 = sumC(histogram, histogram.length - 1);
+
+        mu = sumB1 / sumA1;
+        nu = (sumB2 - sumB1) / (sumA2 - sumA1);
+        p = sumA1 / sumA2;
+        q = (sumA2 - sumA1) / sumA2;
+        sigma2 = sumC1 / sumA1 - mu * mu;
+        tau2 = (sumC2 - sumC1) / (sumA2 - sumA1) - nu * nu;
+
+        //The terms of the quadratic equation to be solved.
+        w0 = 1.0 / sigma2 - 1.0 / tau2;
+        w1 = mu / sigma2 - nu / tau2;
+        w2 = mu * mu / sigma2 - nu * nu / tau2 + Math.log10(sigma2 * (q * q) / (tau2 * (p * p)));
+
+        //If the next threshold would be imaginary, return with the current one.
+        sqterm = w1 * w1 - w0 * w2;
+        if (sqterm < 0) {
+            return threshold;
+        }
+
+        //The updated threshold is the integer part of the solution of the quadratic equation.
+        Tprev = threshold;
+        temp = (w1 + Math.sqrt(sqterm)) / w0;
+
+        if (isNaN(temp)) {
+            threshold = Tprev;
+        } else {
+            threshold = Math.floor(temp);
+        }
+    }
+    return threshold;
+}
+
+//aux func
+
+function sumA(y, j) {
+    var x = 0;
+    for (var i = 0; i <= j; i++) {
+        x += y[i];
+    }
+    return x;
+}
+
+function sumB(y, j) {
+    var x = 0;
+    for (var i = 0; i <= j; i++) {
+        x += i * y[i];
+    }
+    return x;
+}
+
+function sumC(y, j) {
+    var x = 0;
+    for (var i = 0; i <= j; i++) {
+        x += i * i * y[i];
+    }
+    return x;
+}
+module.exports = exports["default"];
+
+},{}],111:[function(require,module,exports){
+//see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
+// J. M. S. Prewitt and M. L. Mendelsohn, "The analysis of cell images," in
+// Annals of the New York Academy of Sciences, vol. 128, pp. 1035-1053, 1966.
+// ported to ImageJ plugin by G.Landini from Antti Niemisto's Matlab code (GPL)
+// Original Matlab code Copyright (C) 2004 Antti Niemisto
+// See http://www.cs.tut.fi/~ant/histthresh/ for an excellent slide presentation
+// and the original Matlab code
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = minimum;
+
+function minimum(histogram) {
+    if (histogram.length < 2) {
+        //validate that the histogram has at least two color values
+        return 0;
+    }
+    var iterations = 0; //number of iterations of the smoothing process
+    var threshold = -1;
+    var max = -1; // maximum color value with a greater number of pixels to 0
+    var histogramCopy = new Array(histogram.length); //a copy of the histogram
+    for (var i = 0; i < histogram.length; i++) {
+        histogramCopy[i] = histogram[i];
+        if (histogram[i] > 0) {
+            max = i;
+        }
+    }
+    while (!bimodalTest(histogramCopy)) {
+        histogramCopy = smoothed(histogramCopy);
+        iterations++;
+        if (iterations > 10000) {
+            //if they occur more than 10000 iterations it returns -1
+            return threshold;
+        }
+    }
+    threshold = minimumBetweenPeeks(histogramCopy, max);
+    return threshold;
+}
+
+function smoothed(histogram) {
+    //Smooth with a 3 point running mean filter
+    var auHistogram = new Array(histogram.length); // a copy of the histograma for the smoothing process
+    for (var i = 1; i < histogram.length - 1; i++) {
+        auHistogram[i] = (histogram[i - 1] + histogram[i] + histogram[i + 1]) / 3;
+    }
+    auHistogram[0] = (histogram[0] + histogram[1]) / 3;
+    auHistogram[histogram.length - 1] = (histogram[histogram.length - 2] + histogram[histogram.length - 1]) / 3;
+    return auHistogram;
+}
+function minimumBetweenPeeks(histogramBimodal, max) {
+    var threshold = undefined;
+    for (var i = 1; i < max; i++) {
+        if (histogramBimodal[i - 1] > histogramBimodal[i] && histogramBimodal[i + 1] >= histogramBimodal[i]) {
+            threshold = i;
+            break;
+        }
+    }
+    return threshold;
+}
+function bimodalTest(histogram) {
+    //It is responsible for determining if a histogram is bimodal
+    var len = histogram.length;
+    var isBimodal = false;
+    var peaks = 0;
+    for (var k = 1; k < len - 1; k++) {
+        if (histogram[k - 1] < histogram[k] && histogram[k + 1] < histogram[k]) {
+            peaks++;
+            if (peaks > 2) return false;
+        }
+    }
+    if (peaks === 2) isBimodal = true;
+    return isBimodal;
+}
+module.exports = exports["default"];
+
+},{}],112:[function(require,module,exports){
+//see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
+// W. Tsai, "Moment-preserving thresholding: a new approach," Computer Vision,
+// Graphics, and Image Processing, vol. 29, pp. 377-393, 1985.
+// Ported to ImageJ plugin by G.Landini from the the open source project FOURIER 0.8
+// by M. Emre Celebi , Department of Computer Science, Louisiana State University in Shreveport
+// Shreveport, LA 71115, USA
+// http://sourceforge.net/projects/fourier-ipal
+// http://www.lsus.edu/faculty/~ecelebi/fourier.htm
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = moments;
+
+function moments(histogram, total) {
+    //moments
+    var m0 = 1.0;
+    var m1 = 0.0;
+    var m2 = 0.0;
+    var m3 = 0.0;
+    var sum = 0.0;
+    var p0 = undefined;
+    var cd = undefined,
+        c0 = undefined,
+        c1 = undefined,
+        z0 = undefined,
+        z1 = undefined; /* auxiliary variables */
+    var threshold = -1;
+    var histogramLength = histogram.length;
+    var normalizedHistogram = new Array(histogramLength);
+    for (var i = 0; i < histogramLength; i++) {
+        normalizedHistogram[i] = histogram[i] / total;
+    }
+    /* Calculate the first, second, and third order moments */
+    for (var i = 0; i < histogramLength; i++) {
+        m1 += i * normalizedHistogram[i];
+        m2 += i * i * normalizedHistogram[i];
+        m3 += i * i * i * normalizedHistogram[i];
+    }
+    /*
+     First 4 moments of the gray-level image should match the first 4 moments
+     of the target binary image. This leads to 4 equalities whose solutions
+     are given in the Appendix of Ref. 1
+     */
+    cd = m0 * m2 - m1 * m1; //determinant of the matriz of hankel for moments 2x2
+    c0 = (-m2 * m2 + m1 * m3) / cd;
+    c1 = (m0 * -m3 + m2 * m1) / cd;
+    //new two gray values where z0<z1
+    z0 = 0.5 * (-c1 - Math.sqrt(c1 * c1 - 4.0 * c0));
+    z1 = 0.5 * (-c1 + Math.sqrt(c1 * c1 - 4.0 * c0));
+    p0 = (z1 - m1) / (z1 - z0); /* Fraction of the object pixels in the target binary image (p0z0+p1z1=m1) */
+    // The threshold is the gray-level closest to the p0-tile of the normalized histogram
+    for (var i = 0; i < histogramLength; i++) {
+        sum += normalizedHistogram[i];
+        if (sum > p0) {
+            threshold = i;
+            break;
+        }
+    }
+    return threshold;
+}
+
+function partialSum(histogram, limite) {
+    //a partial sum is calculated according to the value limit
+    var sum = 0;
+    for (var i = 0; i <= limite; i++) {
+        sum += histogram[i];
+    }
+    return sum;
+}
+module.exports = exports["default"];
+
+},{}],113:[function(require,module,exports){
+/**
+ * The method is present in: Otsu, N (1979), "A threshold selection method from gray-level histograms", IEEE Trans. Sys., Man., Cyber. 9: 62-66
+ * The Otsu implementation is based on: https://en.wikipedia.org/wiki/Otsu's_method
+ * @param histogram - the histogram of the image
+ * @returns {number} - the threshold
+ */
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = otsu;
+
+function otsu(histogram, total) {
+
+    var sum = 0; //Total Intensities of the histogram
+    var sumB = 0; //Total intensities in the 1-class histogram
+    var wB = 0; //Total pixels in the 1-class histogram
+    var wF = 0; //Total pixels in the 2-class histogram
+    var mB = undefined; //Mean of 1-class intensities
+    var mF = undefined; //Mean of 2-class intensities
+    var max = 0.0; //Auxiliary variable to save temporarily the max variance
+    var between = 0.0; //To save the current variance
+    var threshold = 0.0;
+
+    for (var i = 1; i < histogram.length; ++i) {
+        sum += i * histogram[i];
+    }
+
+    for (var i = 1; i < histogram.length; ++i) {
+        wB += histogram[i];
+
+        if (wB === 0) continue;
+        wF = total - wB;
+        if (wF === 0) break;
+
+        sumB += i * histogram[i];
+        mB = sumB / wB;
+        mF = (sum - sumB) / wF;
+        between = wB * wF * (mB - mF) * (mB - mF);
+
+        if (between >= max) {
+            threshold = i;
+            max = between;
+        }
+    }
+    return threshold;
+}
+
+module.exports = exports["default"];
+
+},{}],114:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14946,30 +16340,427 @@ function percentile(histogram) {
 
     var threshold = -1;
     var percentile = 0.5; // default fraction of foreground pixels
-    var avec = new Float32Array(histogram.length);
+    var avec = new Array(histogram.length);
 
-    var total = partialSum(histogram, histogram.lengh);
+    var total = partialSum(histogram, histogram.length - 1);
     var temp = 1.0;
-    for (var i = 1; i < histogram.length; i++) {
+
+    for (var i = 0; i < histogram.length; i++) {
         avec[i] = Math.abs(partialSum(histogram, i) / total - percentile);
         if (avec[i] < temp) {
             temp = avec[i];
             threshold = i;
         }
     }
+
     return threshold;
 }
 
 function partialSum(histogram, endIndex) {
     var x = 0;
-    for (var i = 0; i < endIndex; i++) {
+    for (var i = 0; i <= endIndex; i++) {
         x += histogram[i];
     }
     return x;
 }
 module.exports = exports["default"];
 
-},{}],99:[function(require,module,exports){
+},{}],115:[function(require,module,exports){
+// see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
+// Kapur J.N., Sahoo P.K., and Wong A.K.C. (1985) "A New Method for
+// Gray-Level Picture Thresholding Using the Entropy of the Histogram"
+// Graphical Models and Image Processing, 29(3): 273-285
+// M. Emre Celebi
+// 06.15.2007
+// Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = renyiEntropy;
+
+function renyiEntropy(histogram, total) {
+    var opt_threshold = undefined; //Optimal threshold
+    var first_bin = undefined; //First non-zero bin
+    var last_bin = undefined; //last non-zero bin
+
+    var norm_histo = new Array(histogram.length); //normalized histogram
+    var P1 = new Array(histogram.length); //acumulative normalized histogram
+    var P2 = new Array(histogram.length); //acumulative normalized histogram
+
+    //Entropy Variables
+    var threshold1 = 0;
+    var threshold2 = 0;
+    var threshold3 = 0;
+    var max_ent1 = 0.0;
+    var max_ent2 = 0.0;
+    var max_ent3 = 0.0;
+    var alpha2 = 0.5;
+    var term2 = 1.0 / (1.0 - alpha2);
+    var alpha3 = 2.0;
+    var term3 = 1.0 / (1.0 - alpha3);
+
+    for (var ih = 0; ih < histogram.length; ih++) {
+        norm_histo[ih] = histogram[ih] / total;
+    }P1[0] = norm_histo[0];
+    P2[0] = 1.0 - P1[0];
+    for (var ih = 1; ih < histogram.length; ih++) {
+        P1[ih] = P1[ih - 1] + norm_histo[ih];
+        P2[ih] = 1.0 - P1[ih];
+    }
+
+    /* Determine the first non-zero bin */
+    first_bin = 0;
+    for (var ih = 0; ih < histogram.length; ih++) {
+        if (Math.abs(P1[ih]) >= Number.EPSILON) {
+            first_bin = ih;
+            break;
+        }
+    }
+
+    /* Determine the last non-zero bin */
+    last_bin = histogram.length - 1;
+    for (var ih = histogram.length - 1; ih >= first_bin; ih--) {
+        if (Math.abs(P2[ih]) >= Number.EPSILON) {
+            last_bin = ih;
+            break;
+        }
+    }
+
+    /* Maximum Entropy Thresholding - BEGIN */
+    /* ALPHA = 1.0 */
+    /* Calculate the total entropy each gray-level
+     and find the threshold that maximizes it
+     */
+    for (var it = first_bin; it <= last_bin; it++) {
+        /* Entropy of the background pixels */
+        var ent_back1 = 0.0;
+        var ent_back2 = 0.0;
+        var ent_back3 = 0.0;
+        for (var ih = 0; ih <= it; ih++) {
+            if (histogram[ih] !== 0) {
+                ent_back1 -= norm_histo[ih] / P1[it] * Math.log(norm_histo[ih] / P1[it]);
+            }
+            ent_back2 += Math.sqrt(norm_histo[ih] / P1[it]);
+            ent_back3 += norm_histo[ih] * norm_histo[ih] / (P1[it] * P1[it]);
+        }
+
+        /* Entropy of the object pixels */
+        var ent_obj1 = 0.0;
+        var ent_obj2 = 0.0;
+        var ent_obj3 = 0.0;
+        for (var ih = it + 1; ih < histogram.length; ih++) {
+            if (histogram[ih] !== 0) {
+                ent_obj1 -= norm_histo[ih] / P2[it] * Math.log(norm_histo[ih] / P2[it]);
+            }
+            ent_obj2 += Math.sqrt(norm_histo[ih] / P2[it]);
+            ent_obj3 += norm_histo[ih] * norm_histo[ih] / (P2[it] * P2[it]);
+        }
+
+        /* Total entropy */
+        var tot_ent1 = ent_back1 + ent_obj1;
+        var tot_ent2 = term2 * (ent_back2 * ent_obj2 > 0.0 ? Math.log(ent_back2 * ent_obj2) : 0.0);
+        var tot_ent3 = term3 * (ent_back3 * ent_obj3 > 0.0 ? Math.log(ent_back3 * ent_obj3) : 0.0);
+
+        if (tot_ent1 > max_ent1) {
+            max_ent1 = tot_ent1;
+            threshold1 = it;
+        }
+
+        if (tot_ent2 > max_ent2) {
+            max_ent2 = tot_ent2;
+            threshold2 = it;
+        }
+
+        if (tot_ent3 > max_ent3) {
+            max_ent3 = tot_ent3;
+            threshold3 = it;
+        }
+    }
+    /* End Maximum Entropy Thresholding */
+
+    var t_stars = [threshold1, threshold2, threshold3];
+    t_stars.sort();
+
+    var betas = undefined;
+
+    /* Adjust beta values */
+    if (Math.abs(t_stars[0] - t_stars[1]) <= 5) {
+        if (Math.abs(t_stars[1] - t_stars[2]) <= 5) {
+            betas = [1, 2, 1];
+        } else {
+            betas = [0, 1, 3];
+        }
+    } else {
+        if (Math.abs(t_stars[1] - t_stars[2]) <= 5) {
+            betas = [3, 1, 0];
+        } else {
+            betas = [1, 2, 1];
+        }
+    }
+
+    /* Determine the optimal threshold value */
+    var omega = P1[t_stars[2]] - P1[t_stars[0]];
+    opt_threshold = Math.round(t_stars[0] * (P1[t_stars[0]] + 0.25 * omega * betas[0]) + 0.25 * t_stars[1] * omega * betas[1] + t_stars[2] * (P2[t_stars[2]] + 0.25 * omega * betas[2]));
+
+    return opt_threshold;
+}
+
+module.exports = exports["default"];
+
+},{}],116:[function(require,module,exports){
+// see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
+// Shanhbag A.G. (1994) "Utilization of Information Measure as a Means of
+// Image Thresholding" Graphical Models and Image Processing, 56(5): 414-419
+// Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = shanbhag;
+
+function shanbhag(histogram, total) {
+    var norm_histo = new Array(histogram.length); // normalized histogram
+    for (var ih = 0; ih < histogram.length; ih++) {
+        norm_histo[ih] = histogram[ih] / total;
+    }var P1 = new Array(histogram.length); // cumulative normalized histogram
+    var P2 = new Array(histogram.length);
+    P1[0] = norm_histo[0];
+    P2[0] = 1.0 - P1[0];
+    for (var ih = 1; ih < histogram.length; ih++) {
+        P1[ih] = P1[ih - 1] + norm_histo[ih];
+        P2[ih] = 1.0 - P1[ih];
+    }
+
+    /* Determine the first non-zero bin */
+    var first_bin = 0;
+    for (var ih = 0; ih < histogram.length; ih++) {
+        if (Math.abs(P1[ih]) >= Number.EPSILON) {
+            first_bin = ih;
+            break;
+        }
+    }
+
+    /* Determine the last non-zero bin */
+    var last_bin = histogram.length - 1;
+    for (var ih = histogram.length - 1; ih >= first_bin; ih--) {
+        if (Math.abs(P2[ih]) >= Number.EPSILON) {
+            last_bin = ih;
+            break;
+        }
+    }
+
+    // Calculate the total entropy each gray-level
+    // and find the threshold that maximizes it
+    var threshold = -1;
+    var min_ent = Number.MAX_VALUE; // min entropy
+
+    var term = undefined;
+    var tot_ent = undefined; // total entropy
+    var ent_back = undefined; // entropy of the background pixels at a given threshold
+    var ent_obj = undefined; // entropy of the object pixels at a given threshold
+    for (var it = first_bin; it <= last_bin; it++) {
+        /* Entropy of the background pixels */
+        ent_back = 0.0;
+        term = 0.5 / P1[it];
+        for (var ih = 1; ih <= it; ih++) {
+            ent_back -= norm_histo[ih] * Math.log(1.0 - term * P1[ih - 1]);
+        }
+        ent_back *= term;
+
+        /* Entropy of the object pixels */
+        ent_obj = 0.0;
+        term = 0.5 / P2[it];
+        for (var ih = it + 1; ih < histogram.length; ih++) {
+            ent_obj -= norm_histo[ih] * Math.log(1.0 - term * P2[ih]);
+        }
+        ent_obj *= term;
+
+        /* Total entropy */
+        tot_ent = Math.abs(ent_back - ent_obj);
+
+        if (tot_ent < min_ent) {
+            min_ent = tot_ent;
+            threshold = it;
+        }
+    }
+    return threshold;
+}
+
+module.exports = exports["default"];
+
+},{}],117:[function(require,module,exports){
+// see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
+// Zack, G. W., Rogers, W. E. and Latt, S. A., 1977,
+// Automatic Measurement of Sister Chromatid Exchange Frequency,
+// Journal of Histochemistry and Cytochemistry 25 (7), pp. 741-753
+//
+//  modified from Johannes Schindelin plugin
+//
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = triangle;
+
+function triangle(histogram) {
+
+    // find min and max
+    var min = 0,
+        dmax = 0,
+        max = 0,
+        min2 = 0;
+    for (var i = 0; i < histogram.length; i++) {
+        if (histogram[i] > 0) {
+            min = i;
+            break;
+        }
+    }
+    if (min > 0) min--; // line to the (p==0) point, not to histogram[min]
+
+    // The Triangle algorithm cannot tell whether the data is skewed to one side or another.
+    // This causes a problem as there are 2 possible thresholds between the max and the 2 extremes
+    // of the histogram.
+    // Here I propose to find out to which side of the max point the data is furthest, and use that as
+    //  the other extreme.
+    for (var i = histogram.length - 1; i > 0; i--) {
+        if (histogram[i] > 0) {
+            min2 = i;
+            break;
+        }
+    }
+    if (min2 < histogram.length - 1) min2++; // line to the (p==0) point, not to data[min]
+
+    for (var i = 0; i < histogram.length; i++) {
+        if (histogram[i] > dmax) {
+            max = i;
+            dmax = histogram[i];
+        }
+    }
+
+    // find which is the furthest side
+    var inverted = false;
+    if (max - min < min2 - max) {
+        // reverse the histogram
+        inverted = true;
+        var left = 0; // index of leftmost element
+        var right = histogram.length - 1; // index of rightmost element
+        while (left < right) {
+            // exchange the left and right elements
+            var temp = histogram[left];
+            histogram[left] = histogram[right];
+            histogram[right] = temp;
+            // move the bounds toward the center
+            left++;
+            right--;
+        }
+        min = histogram.length - 1 - min2;
+        max = histogram.length - 1 - max;
+    }
+
+    if (min === max) return min;
+
+    // describe line by nx * x + ny * y - d = 0
+    var nx = undefined,
+        ny = undefined,
+        d = undefined;
+    // nx is just the max frequency as the other point has freq=0
+    nx = histogram[max]; //-min; // data[min]; //  lowest value bmin = (p=0)% in the image
+    ny = min - max;
+    d = Math.sqrt(nx * nx + ny * ny);
+    nx /= d;
+    ny /= d;
+    d = nx * min + ny * histogram[min];
+
+    // find split point
+    var split = min;
+    var splitDistance = 0;
+    for (var i = min + 1; i <= max; i++) {
+        var newDistance = nx * i + ny * histogram[i] - d;
+        if (newDistance > splitDistance) {
+            split = i;
+            splitDistance = newDistance;
+        }
+    }
+    split--;
+
+    if (inverted) {
+        // The histogram might be used for something else, so let's reverse it back
+        var left = 0;
+        var right = histogram.length - 1;
+        while (left < right) {
+            var temp = histogram[left];
+            histogram[left] = histogram[right];
+            histogram[right] = temp;
+            left++;
+            right--;
+        }
+        return histogram.length - 1 - split;
+    } else return split;
+}
+
+module.exports = exports["default"];
+
+},{}],118:[function(require,module,exports){
+// see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
+// Implements Yen  thresholding method
+// 1) Yen J.C., Chang F.J., and Chang S. (1995) "A New Criterion
+//    for Automatic Multilevel Thresholding" IEEE Trans. on Image
+//    Processing, 4(3): 370-378
+// 2) Sezgin M. and Sankur B. (2004) "Survey over Image Thresholding
+//    Techniques and Quantitative Performance Evaluation" Journal of
+//    Electronic Imaging, 13(1): 146-165
+//    http://citeseer.ist.psu.edu/sezgin04survey.html
+//
+// M. Emre Celebi
+// 06.15.2007
+// Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = yen;
+
+function yen(histogram, total) {
+    var norm_histo = new Array(histogram.length); // normalized histogram
+    for (var ih = 0; ih < histogram.length; ih++) {
+        norm_histo[ih] = histogram[ih] / total;
+    }var P1 = new Array(histogram.length); // cumulative normalized histogram
+    P1[0] = norm_histo[0];
+    for (var ih = 1; ih < histogram.length; ih++) {
+        P1[ih] = P1[ih - 1] + norm_histo[ih];
+    }var P1_sq = new Array(histogram.length);
+    P1_sq[0] = norm_histo[0] * norm_histo[0];
+    for (var ih = 1; ih < histogram.length; ih++) {
+        P1_sq[ih] = P1_sq[ih - 1] + norm_histo[ih] * norm_histo[ih];
+    }var P2_sq = new Array(histogram.length);
+    P2_sq[histogram.length - 1] = 0.0;
+    for (var ih = histogram.length - 2; ih >= 0; ih--) {
+        P2_sq[ih] = P2_sq[ih + 1] + norm_histo[ih + 1] * norm_histo[ih + 1];
+    } /* Find the threshold that maximizes the criterion */
+    var threshold = -1;
+    var max_crit = Number.MIN_VALUE;
+    var crit = undefined;
+    for (var it = 0; it < histogram.length; it++) {
+        crit = -1.0 * (P1_sq[it] * P2_sq[it] > 0.0 ? Math.log(P1_sq[it] * P2_sq[it]) : 0.0) + 2 * (P1[it] * (1.0 - P1[it]) > 0.0 ? Math.log(P1[it] * (1.0 - P1[it])) : 0.0);
+        if (crit > max_crit) {
+            max_crit = crit;
+            threshold = it;
+        }
+    }
+    return threshold;
+}
+
+module.exports = exports["default"];
+
+},{}],119:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15058,7 +16849,7 @@ function pad() {
 
 module.exports = exports['default'];
 
-},{"../image":74,"../utility/copy":103,"new-array":37}],100:[function(require,module,exports){
+},{"../image":76,"../utility/copy":124,"new-array":37}],120:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15114,7 +16905,35 @@ function resizeBinary() {
 
 module.exports = exports['default'];
 
-},{"../image":74,"../kindNames":76}],101:[function(require,module,exports){
+},{"../image":76,"../kindNames":78}],121:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports['default'] = rgba8;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _image = require('../image');
+
+var _image2 = _interopRequireDefault(_image);
+
+var _modelModel = require('../model/model');
+
+function rgba8() {
+
+    var newImage = new _image2['default'](this.width, this.height, {
+        kind: 'RGBA'
+    });
+
+    newImage.data = this.getRGBAData();
+    return newImage;
+}
+
+module.exports = exports['default'];
+
+},{"../image":76,"../model/model":81}],122:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15138,7 +16957,7 @@ function nearestNeighbor(newImage, newWidth, newHeight) {
 
 module.exports = exports["default"];
 
-},{}],102:[function(require,module,exports){
+},{}],123:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15191,7 +17010,7 @@ function scale() {
 
 module.exports = exports['default'];
 
-},{"../../../util/converter":122,"../../image":74,"./nearestNeighbor":101}],103:[function(require,module,exports){
+},{"../../../util/converter":144,"../../image":76,"./nearestNeighbor":122}],124:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15218,7 +17037,7 @@ function copyImage(fromImage, toImage, x, y) {
 
 module.exports = exports["default"];
 
-},{}],104:[function(require,module,exports){
+},{}],125:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15294,7 +17113,7 @@ function match(image) {
 
 module.exports = exports['default'];
 
-},{"../../util/matrix":123,"../image":74,"new-array":37}],105:[function(require,module,exports){
+},{"../../util/matrix":147,"../image":76,"new-array":37}],126:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15308,9 +17127,7 @@ var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _validateChannel = require('./validateChannel');
-
-var _validateChannel2 = _interopRequireDefault(_validateChannel);
+var _utilChannel = require('./../../util/channel');
 
 function getChannel(channel) {
 
@@ -15318,7 +17135,7 @@ function getChannel(channel) {
         bitDepth: [8, 16]
     });
 
-    channel = (0, _validateChannel2['default'])(this, channel);
+    channel = (0, _utilChannel.validateChannel)(this, channel);
 
     var newImage = _image2['default'].createFrom(this, {
         components: 1,
@@ -15335,7 +17152,83 @@ function getChannel(channel) {
 
 module.exports = exports['default'];
 
-},{"../image":74,"./validateChannel":111}],106:[function(require,module,exports){
+},{"../image":76,"./../../util/channel":143}],127:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports['default'] = getColumn;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _image = require('../image');
+
+var _image2 = _interopRequireDefault(_image);
+
+var _utilChannel = require('./../../util/channel');
+
+function getColumn(column) {
+    var channel = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+    this.checkProcessable('getColumn', {
+        bitDepth: [8, 16]
+    });
+
+    this.checkColumn(column);
+    this.checkChannel(channel);
+
+    var array = new Array(this.height);
+    var ptr = 0;
+    var step = this.width * this.channels;
+    for (var j = channel + column * this.channels; j < this.data.length; j += step) {
+        array[ptr++] = this.data[j];
+    }
+    return array;
+}
+
+module.exports = exports['default'];
+
+},{"../image":76,"./../../util/channel":143}],128:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports['default'] = getRow;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _image = require('../image');
+
+var _image2 = _interopRequireDefault(_image);
+
+var _utilChannel = require('./../../util/channel');
+
+function getRow(row) {
+    var channel = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+    this.checkProcessable('getRow', {
+        bitDepth: [8, 16]
+    });
+
+    this.checkRow(row);
+    this.checkChannel(channel);
+
+    var array = new Array(this.width);
+    var ptr = 0;
+    var begin = row * this.width * this.channels + channel;
+    var end = begin + this.width * this.channels;
+    for (var j = begin; j < end; j += this.channels) {
+        array[ptr++] = this.data[j];
+    }
+
+    return array;
+}
+
+module.exports = exports['default'];
+
+},{"../image":76,"./../../util/channel":143}],129:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15349,9 +17242,7 @@ var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _validateArrayOfChannels = require('./validateArrayOfChannels');
-
-var _validateArrayOfChannels2 = _interopRequireDefault(_validateArrayOfChannels);
+var _utilChannel = require('./../../util/channel');
 
 var _newArray = require('new-array');
 
@@ -15375,7 +17266,7 @@ function overlap(image) {
         bitDepth: [8, 16]
     });
 
-    channels = (0, _validateArrayOfChannels2['default'])(this, { channels: channels, defaultAlpha: defaultAlpha });
+    channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels, defaultAlpha: defaultAlpha });
 
     if (this.bitDepth !== image.bitDepth) {
         throw new Error('Both images must have the same bitDepth');
@@ -15424,7 +17315,7 @@ function overlap(image) {
 
 module.exports = exports['default'];
 
-},{"../image":74,"./validateArrayOfChannels":110,"new-array":37}],107:[function(require,module,exports){
+},{"../image":76,"./../../util/channel":143,"new-array":37}],130:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15455,7 +17346,7 @@ function setBorder() {
     var color = _ref.color;
 
     this.checkProcessable('setBorder', {
-        bitDepth: [8, 16]
+        bitDepth: [8, 16, 32, 64]
     });
 
     if (algorithm === 'set') {
@@ -15506,7 +17397,7 @@ function setBorder() {
 
 module.exports = exports['default'];
 
-},{"../image":74,"new-array":37}],108:[function(require,module,exports){
+},{"../image":76,"new-array":37}],131:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15520,9 +17411,7 @@ var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _validateChannel = require('./validateChannel');
-
-var _validateChannel2 = _interopRequireDefault(_validateChannel);
+var _utilChannel = require('./../../util/channel');
 
 function setChannel(channel, image) {
 
@@ -15540,7 +17429,7 @@ function setChannel(channel, image) {
         throw new Error('Images must have exactly the same width and height');
     }
 
-    channel = (0, _validateChannel2['default'])(this, channel);
+    channel = (0, _utilChannel.validateChannel)(this, channel);
 
     var ptr = channel;
     for (var i = 0; i < image.data.length; i++) {
@@ -15551,7 +17440,7 @@ function setChannel(channel, image) {
 
 module.exports = exports['default'];
 
-},{"../image":74,"./validateChannel":111}],109:[function(require,module,exports){
+},{"../image":76,"./../../util/channel":143}],132:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15617,124 +17506,14 @@ function split() {
 
 module.exports = exports['default'];
 
-},{"../image":74}],110:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-exports['default'] = arrayOfChannels;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _validateChannel = require('./validateChannel');
-
-var _validateChannel2 = _interopRequireDefault(_validateChannel);
-
-function arrayOfChannels(image) {
-    var _ref = arguments.length <= 1 || arguments[1] === undefined ? // are we allowing the selection of an alpha channel ?
-    // if no channels are selected should we take the alpha channel ?
-    {} : arguments[1];
-
-    var channels = _ref.channels;
-    var allowAlpha = _ref.allowAlpha;
-    var defaultAlpha = _ref.defaultAlpha;
-
-    if (typeof allowAlpha !== 'boolean') allowAlpha = true;
-
-    if (typeof channels === 'undefined') {
-        return allChannels(image, defaultAlpha);
-    } else {
-        return validateChannels(image, channels, allowAlpha);
-    }
-}
-
-function allChannels(image, defaultAlpha) {
-    var length = defaultAlpha ? image.channels : image.components;
-    var array = new Array(length);
-    for (var i = 0; i < length; i++) {
-        array[i] = i;
-    }
-    return array;
-}
-
-function validateChannels(image, channels, allowAlpha) {
-    if (!Array.isArray(channels)) channels = [channels];
-    for (var c = 0; c < channels.length; c++) {
-        channels[c] = (0, _validateChannel2['default'])(image, channels[c], allowAlpha);
-    }
-    return channels;
-}
-module.exports = exports['default'];
-
-},{"./validateChannel":111}],111:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-exports['default'] = validateChannel;
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
-
-var _modelModel = require('../model/model');
-
-var Model = _interopRequireWildcard(_modelModel);
-
-function validateChannel(image, channel) {
-    var allowAlpha = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
-
-    if (channel === undefined) {
-        throw new RangeError('validateChannel : the channel has to be >=0 and <' + image.channels);
-    }
-
-    if (typeof channel === 'string') {
-        if ('rgb'.indexOf(channel) > -1) {
-            if (image.colorModel !== Model.RGB) throw new Error('getChannel : not a RGB image');
-            switch (channel) {
-                case 'r':
-                    channel = 0;
-                    break;
-                case 'g':
-                    channel = 1;
-                    break;
-                case 'b':
-                    channel = 2;
-                    break;
-            }
-        }
-
-        if (channel === 'a') {
-            if (!image.alpha) throw new Error('validateChannel : the image does not contain alpha channel');
-            channel = image.components;
-        }
-
-        if (typeof channel === 'string') {
-            throw new Error('validateChannel : undefined channel: ' + channel);
-        }
-    }
-
-    if (channel >= image.channels) {
-        throw new RangeError('validateChannel : the channel has to be >=0 and <' + image.channels);
-    }
-
-    if (!allowAlpha && channel >= image.components) {
-        throw new RangeError('validateChannel : alpha channel may not be selected');
-    }
-
-    return channel;
-}
-
-module.exports = exports['default'];
-
-},{"../model/model":79}],112:[function(require,module,exports){
+},{"../image":76}],133:[function(require,module,exports){
 /* eslint-disable strict */
 'use strict';
 
 module.exports = exports = require('./image/image');
 exports.Stack = require('./stack/stack');
 
-},{"./image/image":74,"./stack/stack":119}],113:[function(require,module,exports){
+},{"./image/image":76,"./stack/stack":140}],134:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15760,7 +17539,7 @@ function histogram(options) {
 
 module.exports = exports['default'];
 
-},{}],114:[function(require,module,exports){
+},{}],135:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15789,7 +17568,7 @@ function histograms(options) {
 
 module.exports = exports['default'];
 
-},{}],115:[function(require,module,exports){
+},{}],136:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15814,7 +17593,7 @@ function max() {
 
 module.exports = exports['default'];
 
-},{}],116:[function(require,module,exports){
+},{}],137:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15849,7 +17628,7 @@ function median() {
 
 module.exports = exports['default'];
 
-},{"../../util/medianFromHistogram":124,"./histograms":114}],117:[function(require,module,exports){
+},{"../../util/medianFromHistogram":148,"./histograms":135}],138:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15873,7 +17652,7 @@ function min() {
 
 module.exports = exports['default'];
 
-},{}],118:[function(require,module,exports){
+},{}],139:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15926,7 +17705,7 @@ function extend(Stack) {
 
 module.exports = exports['default'];
 
-},{"./compute/histogram":113,"./compute/histograms":114,"./compute/max":115,"./compute/median":116,"./compute/min":117,"./transform/matchAndCrop":120,"./utility/average":121}],119:[function(require,module,exports){
+},{"./compute/histogram":134,"./compute/histograms":135,"./compute/max":136,"./compute/median":137,"./compute/min":138,"./transform/matchAndCrop":141,"./utility/average":142}],140:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -16077,7 +17856,7 @@ Stack.prototype.checkProcessable = function (processName) {
 (0, _extend2['default'])(Stack);
 module.exports = exports['default'];
 
-},{"../image/image":74,"./extend":118}],120:[function(require,module,exports){
+},{"../image/image":76,"./extend":139}],141:[function(require,module,exports){
 /*
  We will try to move a set of images in order to get only the best common part of them
  The match is always done on the first image ?
@@ -16091,20 +17870,26 @@ exports['default'] = matchAndCrop;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError('Cannot destructure undefined'); }
-
 var _stack = require('../stack');
 
 var _stack2 = _interopRequireDefault(_stack);
 
+// in a stack we compare 2 consecutive images
+// or directly to a parent
+
+// algorithm: matchToPrevious || matchToFirst
+
 function matchAndCrop() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-    _objectDestructuringEmpty(_ref);
+    var _ref$algorithm = _ref.algorithm;
+    var algorithm = _ref$algorithm === undefined ? 'matchToPrevious' : _ref$algorithm;
 
     this.checkProcessable('matchAndCrop', {
         bitDepth: [8, 16]
     });
+
+    var matchToPrevious = algorithm === 'matchToPrevious' ? true : false;
 
     var parent = this[0];
     var results = [];
@@ -16112,12 +17897,21 @@ function matchAndCrop() {
         position: [0, 0],
         image: this[0]
     };
+
+    var relativePosition = [0, 0];
+
     // we calculate the best relative position to the parent image
     for (var i = 1; i < this.length; i++) {
+        var position = parent.getBestMatch(this[i]);
         results[i] = {
-            position: parent.getBestMatch(this[i]),
+            position: [position[0] + relativePosition[0], position[1] + relativePosition[1]],
             image: this[i]
         };
+        if (matchToPrevious) {
+            relativePosition[0] += position[0];
+            relativePosition[1] += position[1];
+            parent = this[i];
+        }
     }
     // now we can calculate the cropping that we need to do
 
@@ -16133,6 +17927,8 @@ function matchAndCrop() {
         if (result.position[1] > topShift) topShift = result.position[1];
         if (result.position[1] < bottomShift) bottomShift = result.position[1];
     }
+    rightShift *= -1;
+    bottomShift *= -1;
 
     for (var i = 0; i < results.length; i++) {
         var result = results[i];
@@ -16156,7 +17952,7 @@ function matchAndCrop() {
 
 module.exports = exports['default'];
 
-},{"../stack":119}],121:[function(require,module,exports){
+},{"../stack":140}],142:[function(require,module,exports){
 /*
  We will try to move a set of images in order to get only the best common part of them
  The match is always done on the first image ?
@@ -16209,7 +18005,101 @@ function average() {
 
 module.exports = exports['default'];
 
-},{"../../image/image":74,"../stack":119}],122:[function(require,module,exports){
+},{"../../image/image":76,"../stack":140}],143:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports.validateArrayOfChannels = validateArrayOfChannels;
+exports.validateChannel = validateChannel;
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
+var _imageModelModel = require('../image/model/model');
+
+var Model = _interopRequireWildcard(_imageModelModel);
+
+function validateArrayOfChannels(image) {
+    var _ref = arguments.length <= 1 || arguments[1] === undefined ? // are we allowing the selection of an alpha channel ?
+    // if no channels are selected should we take the alpha channel ?
+    {} : arguments[1];
+
+    var channels = _ref.channels;
+    var allowAlpha = _ref.allowAlpha;
+    var defaultAlpha = _ref.defaultAlpha;
+
+    if (typeof allowAlpha !== 'boolean') allowAlpha = true;
+
+    if (typeof channels === 'undefined') {
+        return allChannels(image, defaultAlpha);
+    } else {
+        return validateChannels(image, channels, allowAlpha);
+    }
+}
+
+function allChannels(image, defaultAlpha) {
+    var length = defaultAlpha ? image.channels : image.components;
+    var array = new Array(length);
+    for (var i = 0; i < length; i++) {
+        array[i] = i;
+    }
+    return array;
+}
+
+function validateChannels(image, channels, allowAlpha) {
+    if (!Array.isArray(channels)) channels = [channels];
+    for (var c = 0; c < channels.length; c++) {
+        channels[c] = validateChannel(image, channels[c], allowAlpha);
+    }
+    return channels;
+}
+
+function validateChannel(image, channel) {
+    var allowAlpha = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
+
+    if (channel === undefined) {
+        throw new RangeError('validateChannel : the channel has to be >=0 and <' + image.channels);
+    }
+
+    if (typeof channel === 'string') {
+        if ('rgb'.indexOf(channel) > -1) {
+            if (image.colorModel !== Model.RGB) throw new Error('getChannel : not a RGB image');
+            switch (channel) {
+                case 'r':
+                    channel = 0;
+                    break;
+                case 'g':
+                    channel = 1;
+                    break;
+                case 'b':
+                    channel = 2;
+                    break;
+            }
+        }
+
+        if (channel === 'a') {
+            if (!image.alpha) throw new Error('validateChannel : the image does not contain alpha channel');
+            channel = image.components;
+        }
+
+        if (typeof channel === 'string') {
+            throw new Error('validateChannel : undefined channel: ' + channel);
+        }
+    }
+
+    if (channel >= image.channels) {
+        throw new RangeError('validateChannel : the channel has to be >=0 and <' + image.channels);
+    }
+
+    if (!allowAlpha && channel >= image.components) {
+        throw new RangeError('validateChannel : alpha channel may not be selected');
+    }
+
+    return channel;
+}
+
+},{"../image/model/model":81}],144:[function(require,module,exports){
 /**
  * Converts a factor value to a number between 0 and 1
  * @param value
@@ -16220,6 +18110,7 @@ Object.defineProperty(exports, '__esModule', {
     value: true
 });
 exports.getFactor = getFactor;
+exports.getThreshold = getThreshold;
 exports.factorDimensions = factorDimensions;
 
 function getFactor(value) {
@@ -16233,6 +18124,34 @@ function getFactor(value) {
     return value;
 }
 
+/**
+ * We can specify a threshold as "0.4", "40%" or 123
+ * @param value
+ * @param maxValue
+ * @returns {*}
+ */
+
+function getThreshold(value, maxValue) {
+    if (!maxValue) {
+        throw Error('getThreshold : the maxValue should be specified');
+    }
+    if (typeof value === 'string') {
+        var last = value[value.length - 1];
+        if (last !== '%') {
+            throw Error('getThreshold : if the value is a string it must finish by %');
+        }
+        return parseFloat(value) / 100 * maxValue;
+    } else if (typeof value === 'number') {
+        if (value < 1) {
+            return value * maxValue;
+        }
+        return value;
+    } else {
+        throw Error('getThreshold : the value is not valid');
+    }
+    return value;
+}
+
 function factorDimensions(factor, width, height) {
     factor = getFactor(factor);
     return {
@@ -16241,7 +18160,78 @@ function factorDimensions(factor, width, height) {
     };
 }
 
-},{}],123:[function(require,module,exports){
+},{}],145:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports.validateKernel = validateKernel;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _isInteger = require('is-integer');
+
+var _isInteger2 = _interopRequireDefault(_isInteger);
+
+function validateKernel(kernel) {
+    var kHeight = undefined,
+        kWidth = undefined;
+    if (Array.isArray(kernel)) {
+        if (Array.isArray(kernel[0])) {
+            // 2D array
+            if ((kernel.length & 1) === 0 || (kernel[0].length & 1) === 0) throw new RangeError('validateKernel: Kernel rows and columns should be odd numbers');else {
+                kHeight = Math.floor(kernel.length / 2);
+                kWidth = Math.floor(kernel[0].length / 2);
+            }
+        } else {
+            var kernelWidth = Math.sqrt(kernel.length);
+            if ((0, _isInteger2['default'])(kernelWidth)) {
+                kWidth = kHeight = Math.floor(Math.sqrt(kernel.length) / 2);
+            } else {
+                throw new RangeError('validateKernel: Kernel array should be a square');
+            }
+            // we convert the array to a matrix
+            var newKernel = new Array(kWidth);
+            for (var i = 0; i < kernelWidth; i++) {
+                newKernel[i] = new Array(kernelWidth);
+                for (var j = 0; j < kernelWidth; j++) {
+                    newKernel[i][j] = kernel[i * kernelWidth + j];
+                }
+            }
+            kernel = newKernel;
+        }
+    } else {
+        throw new Error('validateKernel: Invalid Kernel: ' + kernel);
+    }
+    return { kernel: kernel, kWidth: kWidth, kHeight: kHeight };
+}
+
+},{"is-integer":25}],146:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var DISCRETE_LAPLACE_4 = [[0, 1, 0], [1, -4, 1], [0, 1, 0]];
+
+exports.DISCRETE_LAPLACE_4 = DISCRETE_LAPLACE_4;
+var DISCRETE_LAPLACE_8 = [[1, 1, 1], [1, -8, 1], [1, 1, 1]];
+
+exports.DISCRETE_LAPLACE_8 = DISCRETE_LAPLACE_8;
+var GRADIENT_X = [[-1, 0, +1], [-2, 0, +2], [-1, 0, +1]];
+
+exports.GRADIENT_X = GRADIENT_X;
+var GRADIENT_Y = [[-1, -2, -1], [0, 0, 0], [+1, +2, +1]];
+
+exports.GRADIENT_Y = GRADIENT_Y;
+var SECOND_DERIVATIVE = [[-1, -2, 0, 2, 1], [-2, -4, 0, 4, 2], [0, 0, 0, 0, 0], [1, 2, 0, -2, -1], [2, 4, 0, -4, -2]];
+
+exports.SECOND_DERIVATIVE = SECOND_DERIVATIVE;
+var SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
+exports.SECOND_DERIVATIVE_INV = SECOND_DERIVATIVE_INV;
+
+},{}],147:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16314,7 +18304,7 @@ Matrix.prototype.localSearch = function (x, y, value) {
 };
 module.exports = exports["default"];
 
-},{}],124:[function(require,module,exports){
+},{}],148:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16353,5 +18343,5 @@ function medianFromHistogram(histogram) {
 
 module.exports = exports["default"];
 
-},{}]},{},[112])(112)
+},{}]},{},[133])(133)
 });
