@@ -5,28 +5,35 @@ export default function rotate(degrees, {
     width = this.width,
     height = this.height
     } = {}) {
-    if (width > this.width || width < 0)
-        throw new RangeError('width is out of range ' + ((width < 0) ? ' < 0' : (' > ' + this.width)));
-    if (height > this.height || height < 0)
-        throw new RangeError('height is out of range ' + (height < 0) ? ' < 0' : (' > ' + this.height));
     const radians = (degrees * Math.PI) / 180;
-    const newImage = Image.createFrom(this, {width, height});
+    const newWidth = Math.round(Math.abs(width * Math.cos(radians))+Math.abs(height * Math.sin(radians)));
+    const newHeight = Math.round(Math.abs(height * Math.cos(radians)) + Math.abs(width * Math.sin(radians)));
+    const newImageRotated = Image.createFrom(this, { width: newWidth, height: newHeight });
     const cos = Math.cos(-radians);
     const sin = Math.sin(-radians);
-    const halfW = Math.round(width / 2);
-    const halfH = Math.round(height / 2);
-    for (let i = 0; i < width; i += 1) {
-        for (let j = 0; j < height; j += 1) {
+    const x0=Math.round(newWidth / 2);
+    const y0=Math.round(newHeight / 2);
+    const incrementX=Math.round(width / 2 - x0);
+    const incrementY=Math.round(height / 2 - y0);
+
+
+
+    for (let i = 0; i < newWidth; i += 1) {
+        for (let j = 0; j < newHeight; j += 1) {
             for (let c = 0; c < this.channels; c++) {
-                let x = Math.round((i - (width / 2)) * cos - (j - (height / 2)) * sin) + halfW;
-                let y = Math.round((j - (height / 2)) * cos + (i - (width / 2)) * sin) + halfH;
-                if (x > 0 && x < width) {
-                    if (y > 0 && y < height) {
-                        newImage.setValueXY(i, j, c, this.getValueXY(x, y, c));
-                    }
-                }
+                let x = Math.round((i - x0) * cos - (j - y0) * sin + x0);
+                let y = Math.round((j - y0) * cos + (i - x0) * sin + y0);
+
+                        if(x <= -incrementX || x >= width - incrementX || y <= -incrementY || y >= height - incrementY) {
+                            newImageRotated.setValueXY(i, j, c, 255);
+                        }
+                        else {
+                            newImageRotated.setValueXY(i, j, c, this.getValueXY(x + incrementX, y + incrementY, c));
+                        }
             }
         }
     }
-    return newImage;
+
+
+    return newImageRotated;
 }
