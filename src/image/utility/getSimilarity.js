@@ -6,12 +6,13 @@ import newArray from 'new-array';
 
 // if normalize we normalize separately the 2 images
 
-export default function overlap(image, {shift = [0,0], average, channels, defaultAlpha, normalize} = {}) {
+export default function getSimilarity(image, {shift = [0,0], average, channels, defaultAlpha, normalize, border = [0,0]} = {}) {
 
-    this.checkProcessable('overlap', {
+    this.checkProcessable('getSimilarity', {
         bitDepth: [8, 16]
     });
 
+    if (!Array.isArray(border)) border = [border, border];
     channels = validateArrayOfChannels(this, {channels:channels, defaultAlpha:defaultAlpha});
 
     if (this.bitDepth !== image.bitDepth) {
@@ -28,10 +29,10 @@ export default function overlap(image, {shift = [0,0], average, channels, defaul
 
     // we allow a shift
     // we need to find the minX, maxX, minY, maxY
-    let minX = Math.max(0, -shift[0]);
-    let maxX = Math.min(this.width, this.width - shift[0]);
-    let minY = Math.max(0, -shift[1]);
-    let maxY = Math.min(this.height, this.height - shift[1]);
+    let minX = Math.max(border[0], -shift[0]);
+    let maxX = Math.min(this.width - border[0], this.width - shift[0]);
+    let minY = Math.max(border[1], -shift[1]);
+    let maxY = Math.min(this.height - border[1], this.height - shift[1]);
 
     let results = newArray(channels.length,0);
     for (let i = 0; i < channels.length; i++) {
@@ -53,6 +54,5 @@ export default function overlap(image, {shift = [0,0], average, channels, defaul
     if (average) {
         return results.reduce((sum, x) => sum + x) / results.length;
     }
-
     return results;
 }

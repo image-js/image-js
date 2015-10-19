@@ -27,7 +27,9 @@ export default function matchAndCrop({algorithm = 'matchToPrevious'} = {}) {
 
     // we calculate the best relative position to the parent image
     for (let i = 1; i < this.length; i++) {
-        let position = parent.getBestMatch(this[i]);
+        // in order to calculate the similarity we need to add a border that will not be compared
+        // by default we take as border 1/8 of the image width and height
+        let position = parent.getBestMatch(this[i],{border:[parent.width >> 3,parent.height >> 3]});
         results[i] = {
             position: [position[0] + relativePosition[0], position[1] + relativePosition[1]],
             image: this[i]
