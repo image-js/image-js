@@ -1,7 +1,3 @@
-/*
- We will try to move a set of images in order to get only the best common part of them
- The match is always done on the first image ?
-*/
 import Stack from '../stack';
 import Image from '../../image/image';
 

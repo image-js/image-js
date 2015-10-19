@@ -30,6 +30,7 @@ export default function matchAndCrop({algorithm = 'matchToPrevious'} = {}) {
         // in order to calculate the similarity we need to add a border that will not be compared
         // by default we take as border 1/8 of the image width and height
         let position = parent.getBestMatch(this[i],{border:[parent.width >> 3,parent.height >> 3]});
+
         results[i] = {
             position: [position[0] + relativePosition[0], position[1] + relativePosition[1]],
             image: this[i]
@@ -59,8 +60,18 @@ export default function matchAndCrop({algorithm = 'matchToPrevious'} = {}) {
     rightShift *= -1;
     bottomShift *= -1;
 
+
     for (let i = 0; i < results.length; i++) {
         let result = results[i];
+
+        /*
+        console.log("CROP",
+            leftShift - result.position[0],
+            topShift - result.position[1],
+            parent.width - rightShift - leftShift,
+            parent.height - bottomShift - topShift
+        )
+        */
 
         result.crop = result.image.crop({
             x: leftShift - result.position[0],

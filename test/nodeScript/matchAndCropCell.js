@@ -7,10 +7,11 @@ var Image = require('../..');
 // we will create a stack and load all the images
 
 var baseDir=__dirname+"/../img/cells/fluorescent/";
-var files=fs.readdirSync(baseDir);
+var files=fs.readdirSync(baseDir).slice(0,5);
+console.log(files);
 var images=[];
 var toLoad=[];
-for (var i=1; i<files.length; i++) {
+for (var i=0; i<files.length; i++) {
     var image={};
     images.push(image);
     image.name=baseDir+files[i];
