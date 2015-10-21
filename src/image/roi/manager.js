@@ -63,9 +63,6 @@ export default class ROIManager {
         let ptr = 0;
         for (let i = 0; i < allROIs.length; i++) {
             let roi = allROIs[i];
-
-            console.log(negative, positive, roi.surface, minSurface, maxSurface);
-
             if (((roi.id < 0 && negative) || roi.id > 0 && positive)
                 && roi.surface >= minSurface
                 && roi.surface <= maxSurface) {
@@ -103,7 +100,6 @@ export default class ROIManager {
     getMask(options = {}) {
         let mask = new Image(this._image.width, this._image.height, {kind:'BINARY'});
         let masks = this.getROIMasks(options);
-        console.log(masks);
         for (let i = 0; i < masks.length; i++) {
             let roi = masks[i];
             // we need to find the parent image to calculate the relative position

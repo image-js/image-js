@@ -24,15 +24,17 @@ export default function createROI(roiMap) {
     for (let x = 0; x < width; x++) {
         for (let y = 0; y < height; y++) {
             let target = y * width + x;
-            let mapID = pixels[target] + roiMap.negative;
-            if (mapID > roiMap.negative) mapID--;
-            if (x < rois[mapID].minX) rois[mapID].minX = x;
-            if (x > rois[mapID].maxX) rois[mapID].maxX = x;
-            if (y < rois[mapID].minY) rois[mapID].minY = y;
-            if (y > rois[mapID].maxY) rois[mapID].maxY = y;
-            rois[mapID].meanX += x;
-            rois[mapID].meanY += y;
-            rois[mapID].surface++;
+            if (pixels[target] !== 0) {
+                let mapID = pixels[target] + roiMap.negative;
+                if (mapID > roiMap.negative) mapID--;
+                if (x < rois[mapID].minX) rois[mapID].minX = x;
+                if (x > rois[mapID].maxX) rois[mapID].maxX = x;
+                if (y < rois[mapID].minY) rois[mapID].minY = y;
+                if (y > rois[mapID].maxY) rois[mapID].maxY = y;
+                rois[mapID].meanX += x;
+                rois[mapID].meanY += y;
+                rois[mapID].surface++;
+            }
         }
     }
     for (let i = 0; i < size; i++) {

@@ -27,6 +27,5 @@ export default function fromPoints(points, options = {}) {
             }
         }
     }
-
     return new ROIMap(this, pixels, 0, positiveID);
 }
