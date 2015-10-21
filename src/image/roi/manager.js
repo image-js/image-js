@@ -3,6 +3,7 @@ import fromExtrema from './creator/fromExtrema';
 import fromPoints from './creator/fromPoints';
 import createROI from './createROI';
 import extendObject from 'extend';
+import Image from '../image';
 
 
 export default class ROIManager {
@@ -93,6 +94,25 @@ export default class ROIManager {
         let masks = this.getROIMasks(options);
         this._painted.paintMasks(masks, options);
         return this._painted;
+    }
+
+    // return a mask corresponding to all the selected masks
+    getMask(options = {}) {
+        let mask = Image.create(this._image.width, this._image.height, {kind:'BINARY'});
+        let masks = this.getROIMasks(options);
+        for (let i = 0; i < masks.length; i++) {
+            let roi = masks[i];
+            // we need to find the parent image to calculate the relative position
+
+            for (let x = 0; x < roi.width; x++) {
+                for (let y = 0; y < roi.height; y++) {
+                    if (roi.getBitXY(x, y)) {
+                        mask.setBitXY(x + roi.position[0], y + roi.position[1]);
+                    }
+                }
+            }
+        }
+        return mask;
     }
 
 
