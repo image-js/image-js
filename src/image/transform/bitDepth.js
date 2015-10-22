@@ -6,7 +6,7 @@ export default function bitDepth(newBitDepth = 8) {
         bitDepth: [8, 16]
     });
 
-    if (![8,16].includes(newBitDepth)) throw Error('You need to specify the new bitDepth as 8 or 16');
+    if (!~[8,16].indexOf(newBitDepth)) throw Error('You need to specify the new bitDepth as 8 or 16');
 
     if (this.bitDepth === newBitDepth) return this.clone();
 
