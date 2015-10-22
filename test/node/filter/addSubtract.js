@@ -13,6 +13,18 @@ describe('add', function () {
         (function () {
             image.add(-10);
         }).should.throw(/the value must be greater/);
+
+        (function () {
+            image.add('abc');
+        }).should.throw(/should be either a/);
+
+        (function () {
+            image.add([1,2,3]);
+        }).should.throw(/the data size is different/);
+
+        let image2 = new Image(1,2,[1,2,3,4,5,6,7,8]);
+        // by default alpha is untouched
+        image2.add([1,2,3,4,5,6,7,8]).data.should.eql([2,4,6,4,10,12,14,8]);
     });
 });
 
