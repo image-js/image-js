@@ -1,7 +1,7 @@
 import {Image} from '../common';
 
-describe('check the bitDepth transform', function () {
-    it('check the right bitDepth for GREY image 8 bit', function () {
+describe('check the colorDepth transform', function () {
+    it('check the right colorDepth for GREY image 8 bit', function () {
 
         let image = new Image(4, 1,
             [
@@ -17,7 +17,7 @@ describe('check the bitDepth transform', function () {
         Array.from(newImage.data).should.eql([0x0000, 0x7f7f, 0xffff, 0x1212]);
     });
 
-    it('check the right bitDepth for GREY image 8 bit', function () {
+    it('check the right colorDepth for GREY image 8 bit', function () {
 
         let image = new Image(4, 1,
             [
@@ -35,7 +35,7 @@ describe('check the bitDepth transform', function () {
 
         (function () {
             image.colorDepth(15);
-        }).should.throw(/You need to specify the new bitDepth as 8 or 16/);
+        }).should.throw(/You need to specify the new colorDepth as 8 or 16/);
 
     });
 

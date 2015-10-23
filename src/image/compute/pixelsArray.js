@@ -1,6 +1,6 @@
 // this function will return an array containing an array of XY
 
-export default function getPixelsArray({threshold, channel, useAlpha = true} = {}) {
+export default function getPixelsArray() {
     this.checkProcessable('getPixelsArray', {
         bitDepth: [1]
     });
