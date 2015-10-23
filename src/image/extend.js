@@ -35,10 +35,12 @@ import split from './utility/split';
 import getChannel from './utility/getChannel';
 import setChannel from './utility/setChannel';
 import getSimilarity from './utility/getSimilarity';
+import getPixelsGrid from './utility/getPixelsGrid';
 import getBestMatch from './utility/getBestMatch';
 import getRow from './utility/getRow';
 import getColumn from './utility/getColumn';
 import paintMasks from './operator/paintMasks';
+import paintPixels from './operator/paintPixels';
 import extract from './operator/extract';
 import convolution from './operator/convolution';
 
@@ -98,9 +100,11 @@ export default function extend(Image) {
     Image.extendMethod('getChannel', getChannel);
     Image.extendMethod('setChannel', setChannel);
     Image.extendMethod('getSimilarity', getSimilarity);
+    Image.extendMethod('getPixelsGrid', getPixelsGrid);
     Image.extendMethod('getBestMatch', getBestMatch);
 
-    Image.extendMethod('paintMasks', paintMasks);
+    Image.extendMethod('paintMasks', paintMasks, inPlace);
+    Image.extendMethod('paintPixels', paintPixels, inPlace);
     Image.extendMethod('extract', extract);
     Image.extendMethod('convolution', convolution);
 

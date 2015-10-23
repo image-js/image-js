@@ -14432,7 +14432,7 @@ var _creatorFromExtrema = require('./creator/fromExtrema');
 
 var _creatorFromExtrema2 = _interopRequireDefault(_creatorFromExtrema);
 
-var _creatorFromPoints = require('./creator/fromPoints');
+var _creatorFromPoints = require('./creator/fromCoordinates');
 
 var _creatorFromPoints2 = _interopRequireDefault(_creatorFromPoints);
 
