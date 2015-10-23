@@ -7140,7 +7140,7 @@ CholeskyDecomposition.prototype = Object.defineProperties({
         return B;
     }
 }, {
-    leftTriangularFactor: {
+    lowerTriangularMatrix: {
         get: function get() {
             return this.L;
         },
@@ -7155,7 +7155,9 @@ module.exports = CholeskyDecomposition;
 'use strict';
 
 var Matrix = require('../matrix');
-var hypotenuse = require('./util').hypotenuse;
+var util = require('./util');
+var hypotenuse = util.hypotenuse;
+var getFilled2DArray = util.getFilled2DArray;
 
 // https://github.com/lutzroeder/Mapack/blob/master/Source/EigenvalueDecomposition.cs
 function EigenvalueDecomposition(matrix) {
@@ -7168,7 +7170,7 @@ function EigenvalueDecomposition(matrix) {
     }
 
     var n = matrix.columns,
-        V = Matrix.zeros(n, n),
+        V = getFilled2DArray(n, n, 0),
         d = new Array(n),
         e = new Array(n),
         value = matrix,
@@ -7184,7 +7186,7 @@ function EigenvalueDecomposition(matrix) {
         tred2(n, e, d, V);
         tql2(n, e, d, V);
     } else {
-        var H = Matrix.zeros(n, n),
+        var H = getFilled2DArray(n, n, 0),
             ort = new Array(n);
         for (j = 0; j < n; j++) {
             for (i = 0; i < n; i++) {
@@ -7218,6 +7220,9 @@ EigenvalueDecomposition.prototype = Object.defineProperties({}, {
     },
     eigenvectorMatrix: {
         get: function get() {
+            if (!Matrix.isMatrix(this.V)) {
+                this.V = new Matrix(this.V);
+            }
             return this.V;
         },
         configurable: true,
@@ -8089,7 +8094,7 @@ LuDecomposition.prototype = Object.defineProperties({
         configurable: true,
         enumerable: true
     },
-    lowerTriangularFactor: {
+    lowerTriangularMatrix: {
         get: function get() {
             var data = this.LU,
                 rows = data.rows,
@@ -8111,7 +8116,7 @@ LuDecomposition.prototype = Object.defineProperties({
         configurable: true,
         enumerable: true
     },
-    upperTriangularFactor: {
+    upperTriangularMatrix: {
         get: function get() {
             var data = this.LU,
                 rows = data.rows,
@@ -8248,7 +8253,7 @@ QrDecomposition.prototype = Object.defineProperties({
         return true;
     }
 }, {
-    upperTriangularFactor: {
+    upperTriangularMatrix: {
         get: function get() {
             var qr = this.QR,
                 n = qr.columns,
@@ -8271,7 +8276,7 @@ QrDecomposition.prototype = Object.defineProperties({
         configurable: true,
         enumerable: true
     },
-    orthogonalFactor: {
+    orthogonalMatrix: {
         get: function get() {
             var qr = this.QR,
                 rows = qr.rows,
@@ -8315,7 +8320,9 @@ module.exports = QrDecomposition;
 'use strict';
 
 var Matrix = require('../matrix');
-var hypotenuse = require('./util').hypotenuse;
+var util = require('./util');
+var hypotenuse = util.hypotenuse;
+var getFilled2DArray = util.getFilled2DArray;
 
 // https://github.com/lutzroeder/Mapack/blob/master/Source/SingularValueDecomposition.cs
 function SingularValueDecomposition(value, options) {
@@ -8326,8 +8333,7 @@ function SingularValueDecomposition(value, options) {
 
     options = options || {};
 
-    var a = value.clone(),
-        m = value.rows,
+    var m = value.rows,
         n = value.columns,
         nu = Math.min(m, n);
 
@@ -8338,11 +8344,13 @@ function SingularValueDecomposition(value, options) {
     var autoTranspose = options.autoTranspose === true;
 
     var swapped = false;
+    var a;
     if (m < n) {
         if (!autoTranspose) {
+            a = value.clone();
             console.warn('Computing SVD on a matrix with more columns than rows. Consider enabling autoTranspose');
         } else {
-            a = a.transpose();
+            a = value.transpose();
             m = a.rows;
             n = a.columns;
             swapped = true;
@@ -8350,11 +8358,13 @@ function SingularValueDecomposition(value, options) {
             wantu = wantv;
             wantv = aux;
         }
+    } else {
+        a = value.clone();
     }
 
     var s = new Array(Math.min(m + 1, n)),
-        U = Matrix.zeros(m, nu),
-        V = Matrix.zeros(n, n),
+        U = getFilled2DArray(m, nu, 0),
+        V = getFilled2DArray(n, n, 0),
         e = new Array(n),
         work = new Array(m);
 
@@ -8717,9 +8727,12 @@ SingularValueDecomposition.prototype = Object.defineProperties({
             }
         }
 
-        var VL = this.V.mmul(Ls),
-            vrows = this.V.rows,
-            urows = this.U.rows,
+        var U = this.U;
+        var V = this.rightSingularVectors;
+
+        var VL = V.mmul(Ls),
+            vrows = V.rows,
+            urows = U.length,
             VLU = Matrix.zeros(vrows, urows),
             j,
             k,
@@ -8729,7 +8742,7 @@ SingularValueDecomposition.prototype = Object.defineProperties({
             for (j = 0; j < urows; j++) {
                 sum = 0;
                 for (k = 0; k < scols; k++) {
-                    sum += VL[i][k] * this.U[j][k];
+                    sum += VL[i][k] * U[j][k];
                 }
                 VLU[i][j] = sum;
             }
@@ -8741,9 +8754,10 @@ SingularValueDecomposition.prototype = Object.defineProperties({
         return this.solve(Matrix.diag(value));
     },
     inverse: function inverse() {
+        var V = this.V;
         var e = this.threshold,
-            vrows = this.V.rows,
-            vcols = this.V.columns,
+            vrows = V.length,
+            vcols = V[0].length,
             X = new Matrix(vrows, this.s.length),
             i,
             j;
@@ -8751,15 +8765,17 @@ SingularValueDecomposition.prototype = Object.defineProperties({
         for (i = 0; i < vrows; i++) {
             for (j = 0; j < vcols; j++) {
                 if (Math.abs(this.s[j]) > e) {
-                    X[i][j] = this.V[i][j] / this.s[j];
+                    X[i][j] = V[i][j] / this.s[j];
                 } else {
                     X[i][j] = 0;
                 }
             }
         }
 
-        var urows = this.U.rows,
-            ucols = this.U.columns,
+        var U = this.U;
+
+        var urows = U.length,
+            ucols = U[0].length,
             Y = new Matrix(vrows, urows),
             k,
             sum;
@@ -8768,7 +8784,7 @@ SingularValueDecomposition.prototype = Object.defineProperties({
             for (j = 0; j < urows; j++) {
                 sum = 0;
                 for (k = 0; k < ucols; k++) {
-                    sum += X[i][k] * this.U[j][k];
+                    sum += X[i][k] * U[j][k];
                 }
                 Y[i][j] = sum;
             }
@@ -8825,6 +8841,9 @@ SingularValueDecomposition.prototype = Object.defineProperties({
     },
     leftSingularVectors: {
         get: function get() {
+            if (!Matrix.isMatrix(this.U)) {
+                this.U = new Matrix(this.U);
+            }
             return this.U;
         },
         configurable: true,
@@ -8832,6 +8851,9 @@ SingularValueDecomposition.prototype = Object.defineProperties({
     },
     rightSingularVectors: {
         get: function get() {
+            if (!Matrix.isMatrix(this.V)) {
+                this.V = new Matrix(this.V);
+            }
             return this.V;
         },
         configurable: true,
@@ -8852,16 +8874,38 @@ module.exports = SingularValueDecomposition;
 'use strict';
 
 exports.hypotenuse = function hypotenuse(a, b) {
-    var r;
     if (Math.abs(a) > Math.abs(b)) {
-        r = b / a;
+        var r = b / a;
         return Math.abs(a) * Math.sqrt(1 + r * r);
     }
     if (b !== 0) {
-        r = a / b;
+        var r = a / b;
         return Math.abs(b) * Math.sqrt(1 + r * r);
     }
     return 0;
+};
+
+// For use in the decomposition algorithms. With big matrices, access time is
+// too long on elements from array subclass
+// todo check when it is fixed in v8
+// http://jsperf.com/access-and-write-array-subclass
+exports.getEmpty2DArray = function (rows, columns) {
+    var array = new Array(rows);
+    for (var i = 0; i < rows; i++) {
+        array[i] = new Array(columns);
+    }
+    return array;
+};
+
+exports.getFilled2DArray = function (rows, columns, value) {
+    var array = new Array(rows);
+    for (var i = 0; i < rows; i++) {
+        array[i] = new Array(columns);
+        for (var j = 0; j < columns; j++) {
+            array[i][j] = value;
+        }
+    }
+    return array;
 };
 
 },{}],34:[function(require,module,exports){
@@ -8876,17 +8920,22 @@ var QrDecomposition = require('./dc/qr');
 var CholeskyDecomposition = require('./dc/cholesky');
 
 function inverse(matrix) {
+    matrix = Matrix.checkMatrix(matrix);
     return solve(matrix, Matrix.eye(matrix.rows));
 }
 
-Matrix.prototype.inverse = function () {
+Matrix.inverse = Matrix.inv = inverse;
+Matrix.prototype.inverse = Matrix.prototype.inv = function () {
     return inverse(this);
 };
 
 function solve(leftHandSide, rightHandSide) {
+    leftHandSide = Matrix.checkMatrix(leftHandSide);
+    rightHandSide = Matrix.checkMatrix(rightHandSide);
     return leftHandSide.isSquare() ? new LuDecomposition(leftHandSide).solve(rightHandSide) : new QrDecomposition(leftHandSide).solve(rightHandSide);
 }
 
+Matrix.solve = solve;
 Matrix.prototype.solve = function (other) {
     return solve(this, other);
 };
@@ -8915,1484 +8964,1505 @@ module.exports.Decompositions = module.exports.DC = require('./decompositions');
 },{"./decompositions":34,"./matrix":36}],36:[function(require,module,exports){
 'use strict';
 
-var Asplice = Array.prototype.splice,
-    Aconcat = Array.prototype.concat;
-
-// For performance : http://jsperf.com/clone-array-slice-vs-while-vs-for
-function slice(arr) {
-    var i = 0,
-        ii = arr.length,
-        result = new Array(ii);
-    for (; i < ii; i++) {
-        result[i] = arr[i];
-    }
-    return result;
-}
-
 /**
- * Real matrix.
- * @constructor
- * @param {number|Array} nRows - Number of rows of the new matrix or a 2D array containing the data.
- * @param {number|boolean} [nColumns] - Number of columns of the new matrix or a boolean specifying if the input array should be cloned
+ * Real matrix
  */
-function Matrix(nRows, nColumns) {
-    var i = 0,
-        rows,
-        columns,
-        matrix,
-        newInstance;
-    if (Array.isArray(nRows)) {
-        newInstance = nColumns;
-        matrix = newInstance ? slice(nRows) : nRows;
-        nRows = matrix.length;
-        nColumns = matrix[0].length;
-        if (typeof nColumns === 'undefined') {
-            throw new TypeError('Data must be a 2D array');
-        }
-        if (nRows > 0 && nColumns > 0) {
-            for (; i < nRows; i++) {
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Matrix = (function (_Array) {
+    _inherits(Matrix, _Array);
+
+    /**
+     * @constructor
+     * @param {number|Array|Matrix} nRows - Number of rows of the new matrix,
+     * 2D array containing the data or Matrix instance to clone
+     * @param {number} [nColumns] - Number of columns of the new matrix
+     */
+
+    function Matrix(nRows, nColumns) {
+        _classCallCheck(this, Matrix);
+
+        if (Matrix.isMatrix(nRows)) {
+            return nRows.clone();
+        } else if (Number.isInteger(nRows) && nRows > 0) {
+            // Create an empty matrix
+            _get(Object.getPrototypeOf(Matrix.prototype), 'constructor', this).call(this, nRows);
+            if (Number.isInteger(nColumns) && nColumns > 0) {
+                for (var i = 0; i < nRows; i++) {
+                    this[i] = new Array(nColumns);
+                }
+            } else {
+                throw new TypeError('nColumns must be a positive integer');
+            }
+        } else if (Array.isArray(nRows)) {
+            // Copy the values from the 2D array
+            var matrix = nRows;
+            nRows = matrix.length;
+            nColumns = matrix[0].length;
+            if (typeof nColumns !== 'number' || nColumns === 0) {
+                throw new TypeError('Data must be a 2D array with at least one element');
+            }
+            _get(Object.getPrototypeOf(Matrix.prototype), 'constructor', this).call(this, nRows);
+            for (var i = 0; i < nRows; i++) {
                 if (matrix[i].length !== nColumns) {
                     throw new RangeError('Inconsistent array dimensions');
-                } else if (newInstance) {
-                    matrix[i] = slice(matrix[i]);
                 }
+                this[i] = [].concat(matrix[i]);
             }
         } else {
-            throw new RangeError('Invalid dimensions: ' + nRows + 'x' + nColumns);
+            throw new TypeError('First argument must be a positive number or an array');
         }
-    } else if (typeof nRows === 'number') {
-        // Create empty matrix
-        if (nRows > 0 && nColumns > 0) {
-            matrix = new Array(nRows);
-            for (; i < nRows; i++) {
-                matrix[i] = new Array(nColumns);
-            }
-        } else {
-            throw new RangeError('Invalid dimensions: ' + nRows + 'x' + nColumns);
-        }
-    } else {
-        throw new TypeError('Invalid arguments');
+        this.rows = nRows;
+        this.columns = nColumns;
     }
 
-    Object.defineProperty(matrix, 'rows', { writable: true, value: nRows });
-    Object.defineProperty(matrix, 'columns', { writable: true, value: nColumns });
+    /**
+     * Constructs a Matrix with the chosen dimensions from a 1D array
+     * @param {number} newRows - Number of rows
+     * @param {number} newColumns - Number of columns
+     * @param {Array} newData - A 1D array containing data for the matrix
+     * @returns {Matrix} - The new matrix
+     */
 
-    matrix.__proto__ = Matrix.prototype;
+    _createClass(Matrix, [{
+        key: 'apply',
 
-    return matrix;
+        /**
+         * Applies a callback for each element of the matrix. The function is called in the matrix (this) context.
+         * @param {function} callback - Function that will be called with two parameters : i (row) and j (column)
+         * @returns {Matrix} this
+         */
+        value: function apply(callback) {
+            if (typeof callback !== 'function') {
+                throw new TypeError('callback must be a function');
+            }
+            var ii = this.rows;
+            var jj = this.columns;
+            for (var i = 0; i < ii; i++) {
+                for (var j = 0; j < jj; j++) {
+                    callback.call(this, i, j);
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Creates an exact and independent copy of the matrix
+         * @returns {Matrix}
+         */
+    }, {
+        key: 'clone',
+        value: function clone() {
+            var newMatrix = new Matrix(this.rows, this.columns);
+            for (var row = 0; row < this.rows; row++) {
+                for (var column = 0; column < this.columns; column++) {
+                    newMatrix[row][column] = this[row][column];
+                }
+            }
+            return newMatrix;
+        }
+
+        /**
+         * Returns a new 1D array filled row by row with the matrix values
+         * @returns {Array}
+         */
+    }, {
+        key: 'to1DArray',
+        value: function to1DArray() {
+            var array = new Array(this.size);
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    array[i * this.columns + j] = this[i][j];
+                }
+            }
+            return array;
+        }
+
+        /**
+         * Returns a 2D array containing a copy of the data
+         * @returns {Array}
+         */
+    }, {
+        key: 'to2DArray',
+        value: function to2DArray() {
+            var copy = new Array(this.rows);
+            for (var i = 0; i < this.rows; i++) {
+                copy[i] = [].concat(this[i]);
+            }
+            return copy;
+        }
+
+        /**
+         * @returns {boolean} true if the matrix has one row
+         */
+    }, {
+        key: 'isRowVector',
+        value: function isRowVector() {
+            return this.rows === 1;
+        }
+
+        /**
+         * @returns {boolean} true if the matrix has one column
+         */
+    }, {
+        key: 'isColumnVector',
+        value: function isColumnVector() {
+            return this.columns === 1;
+        }
+
+        /**
+         * @returns {boolean} true if the matrix has one row or one column
+         */
+    }, {
+        key: 'isVector',
+        value: function isVector() {
+            return this.rows === 1 || this.columns === 1;
+        }
+
+        /**
+         * @returns {boolean} true if the matrix has the same number of rows and columns
+         */
+    }, {
+        key: 'isSquare',
+        value: function isSquare() {
+            return this.rows === this.columns;
+        }
+
+        /**
+         * @returns {boolean} true if the matrix is square and has the same values on both sides of the diagonal
+         */
+    }, {
+        key: 'isSymmetric',
+        value: function isSymmetric() {
+            if (this.isSquare()) {
+                for (var i = 0; i < this.rows; i++) {
+                    for (var j = 0; j <= i; j++) {
+                        if (this[i][j] !== this[j][i]) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * Sets a given element of the matrix. mat.set(3,4,1) is equivalent to mat[3][4]=1
+         * @param {number} rowIndex - Index of the row
+         * @param {number} columnIndex - Index of the column
+         * @param {number} value - The new value for the element
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'set',
+        value: function set(rowIndex, columnIndex, value) {
+            this[rowIndex][columnIndex] = value;
+            return this;
+        }
+
+        /**
+         * Returns the given element of the matrix. mat.get(3,4) is equivalent to matrix[3][4]
+         * @param {number} rowIndex - Index of the row
+         * @param {number} columnIndex - Index of the column
+         * @returns {number}
+         */
+    }, {
+        key: 'get',
+        value: function get(rowIndex, columnIndex) {
+            return this[rowIndex][columnIndex];
+        }
+
+        /**
+         * Fills the matrix with a given value. All elements will be set to this value.
+         * @param {number} value - New value
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'fill',
+        value: function fill(value) {
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    this[i][j] = value;
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Negates the matrix. All elements will be multiplied by (-1)
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'neg',
+        value: function neg() {
+            return this.mulS(-1);
+        }
+
+        /**
+         * Returns a new array from the given row index
+         * @param {number} index - Row index
+         * @returns {Array}
+         */
+    }, {
+        key: 'getRow',
+        value: function getRow(index) {
+            checkRowIndex(this, index);
+            return [].concat(this[index]);
+        }
+
+        /**
+         * Returns a new row vector from the given row index
+         * @param {number} index - Row index
+         * @returns {Matrix}
+         */
+    }, {
+        key: 'getRowVector',
+        value: function getRowVector(index) {
+            return Matrix.rowVector(this.getRow(index));
+        }
+
+        /**
+         * Sets a row at the given index
+         * @param {number} index - Row index
+         * @param {Array|Matrix} array - Array or vector
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'setRow',
+        value: function setRow(index, array) {
+            checkRowIndex(this, index);
+            array = checkRowVector(this, array, true);
+            this[index] = array;
+            return this;
+        }
+
+        /**
+         * Removes a row from the given index
+         * @param {number} index - Row index
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'removeRow',
+        value: function removeRow(index) {
+            checkRowIndex(this, index);
+            if (this.rows === 1) throw new RangeError('A matrix cannot have less than one row');
+            this.splice(index, 1);
+            this.rows -= 1;
+            return this;
+        }
+
+        /**
+         * Adds a row at the given index
+         * @param {number} [index = this.rows] - Row index
+         * @param {Array|Matrix} array - Array or vector
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'addRow',
+        value: function addRow(index, array) {
+            if (array === undefined) {
+                array = index;
+                index = this.rows;
+            }
+            checkRowIndex(this, index, true);
+            array = checkRowVector(this, array, true);
+            this.splice(index, 0, array);
+            this.rows += 1;
+            return this;
+        }
+
+        /**
+         * Swaps two rows
+         * @param {number} row1 - First row index
+         * @param {number} row2 - Second row index
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'swapRows',
+        value: function swapRows(row1, row2) {
+            checkRowIndex(this, row1);
+            checkRowIndex(this, row2);
+            var temp = this[row1];
+            this[row1] = this[row2];
+            this[row2] = temp;
+            return this;
+        }
+
+        /**
+         * Returns a new array from the given column index
+         * @param {number} index - Column index
+         * @returns {Array}
+         */
+    }, {
+        key: 'getColumn',
+        value: function getColumn(index) {
+            checkColumnIndex(this, index);
+            var column = new Array(this.rows);
+            for (var i = 0; i < this.rows; i++) {
+                column[i] = this[i][index];
+            }
+            return column;
+        }
+
+        /**
+         * Returns a new column vector from the given column index
+         * @param {number} index - Column index
+         * @returns {Matrix}
+         */
+    }, {
+        key: 'getColumnVector',
+        value: function getColumnVector(index) {
+            return Matrix.columnVector(this.getColumn(index));
+        }
+
+        /**
+         * Sets a column at the given index
+         * @param {number} index - Column index
+         * @param {Array|Matrix} array - Array or vector
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'setColumn',
+        value: function setColumn(index, array) {
+            checkColumnIndex(this, index);
+            array = checkColumnVector(this, array);
+            for (var i = 0; i < this.rows; i++) {
+                this[i][index] = array[i];
+            }
+            return this;
+        }
+
+        /**
+         * Removes a column from the given index
+         * @param {number} index - Column index
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'removeColumn',
+        value: function removeColumn(index) {
+            checkColumnIndex(this, index);
+            if (this.columns === 1) throw new RangeError('A matrix cannot have less than one column');
+            for (var i = 0; i < this.rows; i++) {
+                this[i].splice(index, 1);
+            }
+            this.columns -= 1;
+            return this;
+        }
+
+        /**
+         * Adds a column at the given index
+         * @param {number} [index = this.columns] - Column index
+         * @param {Array|Matrix} array - Array or vector
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'addColumn',
+        value: function addColumn(index, array) {
+            if (typeof array === 'undefined') {
+                array = index;
+                index = this.columns;
+            }
+            checkColumnIndex(this, index, true);
+            array = checkColumnVector(this, array);
+            for (var i = 0; i < this.rows; i++) {
+                this[i].splice(index, 0, array[i]);
+            }
+            this.columns += 1;
+            return this;
+        }
+
+        /**
+         * Swaps two columns
+         * @param {number} column1 - First column index
+         * @param {number} column2 - Second column index
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'swapColumns',
+        value: function swapColumns(column1, column2) {
+            checkColumnIndex(this, column1);
+            checkColumnIndex(this, column2);
+            var temp, row;
+            for (var i = 0; i < this.rows; i++) {
+                row = this[i];
+                temp = row[column1];
+                row[column1] = row[column2];
+                row[column2] = temp;
+            }
+            return this;
+        }
+
+        /**
+         * Adds the values of a vector to each row
+         * @param {Array|Matrix} vector - Array or vector
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'addRowVector',
+        value: function addRowVector(vector) {
+            vector = checkRowVector(this, vector);
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    this[i][j] += vector[j];
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Subtracts the values of a vector from each row
+         * @param {Array|Matrix} vector - Array or vector
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'subRowVector',
+        value: function subRowVector(vector) {
+            vector = checkRowVector(this, vector);
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    this[i][j] -= vector[j];
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Multiplies the values of a vector with each row
+         * @param {Array|Matrix} vector - Array or vector
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'mulRowVector',
+        value: function mulRowVector(vector) {
+            vector = checkRowVector(this, vector);
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    this[i][j] *= vector[j];
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Divides the values of each row by those of a vector
+         * @param {Array|Matrix} vector - Array or vector
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'divRowVector',
+        value: function divRowVector(vector) {
+            vector = checkRowVector(this, vector);
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    this[i][j] /= vector[j];
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Adds the values of a vector to each column
+         * @param {Array|Matrix} vector - Array or vector
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'addColumnVector',
+        value: function addColumnVector(vector) {
+            vector = checkColumnVector(this, vector);
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    this[i][j] += vector[i];
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Subtracts the values of a vector from each column
+         * @param {Array|Matrix} vector - Array or vector
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'subColumnVector',
+        value: function subColumnVector(vector) {
+            vector = checkColumnVector(this, vector);
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    this[i][j] -= vector[i];
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Multiplies the values of a vector with each column
+         * @param {Array|Matrix} vector - Array or vector
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'mulColumnVector',
+        value: function mulColumnVector(vector) {
+            vector = checkColumnVector(this, vector);
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    this[i][j] *= vector[i];
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Divides the values of each column by those of a vector
+         * @param {Array|Matrix} vector - Array or vector
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'divColumnVector',
+        value: function divColumnVector(vector) {
+            vector = checkColumnVector(this, vector);
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    this[i][j] /= vector[i];
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Multiplies the values of a row with a scalar
+         * @param {number} index - Row index
+         * @param {number} value
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'mulRow',
+        value: function mulRow(index, value) {
+            checkRowIndex(this, index);
+            for (var i = 0; i < this.columns; i++) {
+                this[index][i] *= value;
+            }
+            return this;
+        }
+
+        /**
+         * Multiplies the values of a column with a scalar
+         * @param {number} index - Column index
+         * @param {number} value
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'mulColumn',
+        value: function mulColumn(index, value) {
+            checkColumnIndex(this, index);
+            for (var i = 0; i < this.rows; i++) {
+                this[i][index] *= value;
+            }
+        }
+
+        /**
+         * Returns the maximum value of the matrix
+         * @returns {number}
+         */
+    }, {
+        key: 'max',
+        value: function max() {
+            var v = this[0][0];
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    if (this[i][j] > v) {
+                        v = this[i][j];
+                    }
+                }
+            }
+            return v;
+        }
+
+        /**
+         * Returns the index of the maximum value
+         * @returns {Array}
+         */
+    }, {
+        key: 'maxIndex',
+        value: function maxIndex() {
+            var v = this[0][0];
+            var idx = [0, 0];
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    if (this[i][j] > v) {
+                        v = this[i][j];
+                        idx[0] = i;
+                        idx[1] = j;
+                    }
+                }
+            }
+            return idx;
+        }
+
+        /**
+         * Returns the minimum value of the matrix
+         * @returns {number}
+         */
+    }, {
+        key: 'min',
+        value: function min() {
+            var v = this[0][0];
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    if (this[i][j] < v) {
+                        v = this[i][j];
+                    }
+                }
+            }
+            return v;
+        }
+
+        /**
+         * Returns the index of the minimum value
+         * @returns {Array}
+         */
+    }, {
+        key: 'minIndex',
+        value: function minIndex() {
+            var v = this[0][0];
+            var idx = [0, 0];
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    if (this[i][j] < v) {
+                        v = this[i][j];
+                        idx[0] = i;
+                        idx[1] = j;
+                    }
+                }
+            }
+            return idx;
+        }
+
+        /**
+         * Returns the maximum value of one row
+         * @param {number} row - Row index
+         * @returns {number}
+         */
+    }, {
+        key: 'maxRow',
+        value: function maxRow(row) {
+            checkRowIndex(this, row);
+            var v = this[row][0];
+            for (var i = 1; i < this.columns; i++) {
+                if (this[row][i] > v) {
+                    v = this[row][i];
+                }
+            }
+            return v;
+        }
+
+        /**
+         * Returns the index of the maximum value of one row
+         * @param {number} row - Row index
+         * @returns {Array}
+         */
+    }, {
+        key: 'maxRowIndex',
+        value: function maxRowIndex(row) {
+            checkRowIndex(this, row);
+            var v = this[row][0];
+            var idx = [row, 0];
+            for (var i = 1; i < this.columns; i++) {
+                if (this[row][i] > v) {
+                    v = this[row][i];
+                    idx[1] = i;
+                }
+            }
+            return idx;
+        }
+
+        /**
+         * Returns the minimum value of one row
+         * @param {number} row - Row index
+         * @returns {number}
+         */
+    }, {
+        key: 'minRow',
+        value: function minRow(row) {
+            checkRowIndex(this, row);
+            var v = this[row][0];
+            for (var i = 1; i < this.columns; i++) {
+                if (this[row][i] < v) {
+                    v = this[row][i];
+                }
+            }
+            return v;
+        }
+
+        /**
+         * Returns the index of the maximum value of one row
+         * @param {number} row - Row index
+         * @returns {Array}
+         */
+    }, {
+        key: 'minRowIndex',
+        value: function minRowIndex(row) {
+            checkRowIndex(this, row);
+            var v = this[row][0];
+            var idx = [row, 0];
+            for (var i = 1; i < this.columns; i++) {
+                if (this[row][i] < v) {
+                    v = this[row][i];
+                    idx[1] = i;
+                }
+            }
+            return idx;
+        }
+
+        /**
+         * Returns the maximum value of one column
+         * @param {number} column - Column index
+         * @returns {number}
+         */
+    }, {
+        key: 'maxColumn',
+        value: function maxColumn(column) {
+            checkColumnIndex(this, column);
+            var v = this[0][column];
+            for (var i = 1; i < this.rows; i++) {
+                if (this[i][column] > v) {
+                    v = this[i][column];
+                }
+            }
+            return v;
+        }
+
+        /**
+         * Returns the index of the maximum value of one column
+         * @param {number} column - Column index
+         * @returns {Array}
+         */
+    }, {
+        key: 'maxColumnIndex',
+        value: function maxColumnIndex(column) {
+            checkColumnIndex(this, column);
+            var v = this[0][column];
+            var idx = [0, column];
+            for (var i = 1; i < this.rows; i++) {
+                if (this[i][column] > v) {
+                    v = this[i][column];
+                    idx[0] = i;
+                }
+            }
+            return idx;
+        }
+
+        /**
+         * Returns the minimum value of one column
+         * @param {number} column - Column index
+         * @returns {number}
+         */
+    }, {
+        key: 'minColumn',
+        value: function minColumn(column) {
+            checkColumnIndex(this, column);
+            var v = this[0][column];
+            for (var i = 1; i < this.rows; i++) {
+                if (this[i][column] < v) {
+                    v = this[i][column];
+                }
+            }
+            return v;
+        }
+
+        /**
+         * Returns the index of the minimum value of one column
+         * @param {number} column - Column index
+         * @returns {Array}
+         */
+    }, {
+        key: 'minColumnIndex',
+        value: function minColumnIndex(column) {
+            checkColumnIndex(this, column);
+            var v = this[0][column];
+            var idx = [0, column];
+            for (var i = 1; i < this.rows; i++) {
+                if (this[i][column] < v) {
+                    v = this[i][column];
+                    idx[0] = i;
+                }
+            }
+            return idx;
+        }
+
+        /**
+         * Returns an array containing the diagonal values of the matrix
+         * @returns {Array}
+         */
+    }, {
+        key: 'diag',
+        value: function diag() {
+            var min = Math.min(this.rows, this.columns);
+            var diag = new Array(min);
+            for (var i = 0; i < min; i++) {
+                diag[i] = this[i][i];
+            }
+            return diag;
+        }
+
+        /**
+         * Returns the sum of all elements of the matrix
+         * @returns {number}
+         */
+    }, {
+        key: 'sum',
+        value: function sum() {
+            var v = 0;
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    v += this[i][j];
+                }
+            }
+            return v;
+        }
+
+        /**
+         * Returns the mean of all elements of the matrix
+         * @returns {number}
+         */
+    }, {
+        key: 'mean',
+        value: function mean() {
+            return this.sum() / this.size;
+        }
+
+        /**
+         * Returns the product of all elements of the matrix
+         * @returns {number}
+         */
+    }, {
+        key: 'prod',
+        value: function prod() {
+            var prod = 1;
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    prod *= this[i][j];
+                }
+            }
+            return prod;
+        }
+
+        /**
+         * Computes the cumulative sum of the matrix elements (in place, row by row)
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'cumulativeSum',
+        value: function cumulativeSum() {
+            var sum = 0;
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    sum += this[i][j];
+                    this[i][j] = sum;
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Computes the dot (scalar) product between the matrix and another
+         * @param {Matrix} vector2 vector
+         * @returns {number}
+         */
+    }, {
+        key: 'dot',
+        value: function dot(vector2) {
+            if (Matrix.isMatrix(vector2)) vector2 = vector2.to1DArray();
+            var vector1 = this.to1DArray();
+            if (vector1.length !== vector2.length) {
+                throw new RangeError('vectors do not have the same size');
+            }
+            var dot = 0;
+            for (var i = 0; i < vector1.length; i++) {
+                dot += vector1[i] * vector2[i];
+            }
+            return dot;
+        }
+
+        /**
+         * Returns the matrix product between this and other
+         * @returns {Matrix}
+         */
+    }, {
+        key: 'mmul',
+        value: function mmul(other) {
+            other = Matrix.checkMatrix(other);
+            if (this.columns !== other.rows) console.warn('Number of columns of left matrix are not equal to number of rows of right matrix.');
+
+            var m = this.rows;
+            var n = this.columns;
+            var p = other.columns;
+
+            var result = new Matrix(m, p);
+
+            var Bcolj = new Array(n);
+            for (var j = 0; j < p; j++) {
+                for (var k = 0; k < n; k++) Bcolj[k] = other[k][j];
+
+                for (var i = 0; i < m; i++) {
+                    var Arowi = this[i];
+
+                    var s = 0;
+                    for (k = 0; k < n; k++) s += Arowi[k] * Bcolj[k];
+
+                    result[i][j] = s;
+                }
+            }
+            return result;
+        }
+
+        /**
+         * Transposes the matrix and returns a new one containing the result
+         * @returns {Matrix}
+         */
+    }, {
+        key: 'transpose',
+        value: function transpose() {
+            var result = new Matrix(this.columns, this.rows);
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j < this.columns; j++) {
+                    result[j][i] = this[i][j];
+                }
+            }
+            return result;
+        }
+
+        /**
+         * Sorts the rows (in place)
+         * @param {function} compareFunction - usual Array.prototype.sort comparison function
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'sortRows',
+        value: function sortRows(compareFunction) {
+            if (compareFunction === undefined) compareFunction = compareNumbers;
+            for (var i = 0; i < this.rows; i++) {
+                this[i].sort(compareFunction);
+            }
+            return this;
+        }
+
+        /**
+         * Sorts the columns (in place)
+         * @param {function} compareFunction - usual Array.prototype.sort comparison function
+         * @returns {Matrix} this
+         */
+    }, {
+        key: 'sortColumns',
+        value: function sortColumns(compareFunction) {
+            if (compareFunction === undefined) compareFunction = compareNumbers;
+            for (var i = 0; i < this.columns; i++) {
+                this.setColumn(i, this.getColumn(i).sort(compareFunction));
+            }
+            return this;
+        }
+
+        /**
+         * Returns a subset of the matrix
+         * @param {number} startRow - First row index
+         * @param {number} endRow - Last row index
+         * @param {number} startColumn - First column index
+         * @param {number} endColumn - Last column index
+         * @returns {Matrix}
+         */
+    }, {
+        key: 'subMatrix',
+        value: function subMatrix(startRow, endRow, startColumn, endColumn) {
+            if (startRow > endRow || startColumn > endColumn || startRow < 0 || startRow >= this.rows || endRow < 0 || endRow >= this.rows || startColumn < 0 || startColumn >= this.columns || endColumn < 0 || endColumn >= this.columns) {
+                throw new RangeError('Argument out of range');
+            }
+            var newMatrix = new Matrix(endRow - startRow + 1, endColumn - startColumn + 1);
+            for (var i = startRow; i <= endRow; i++) {
+                for (var j = startColumn; j <= endColumn; j++) {
+                    newMatrix[i - startRow][j - startColumn] = this[i][j];
+                }
+            }
+            return newMatrix;
+        }
+
+        /**
+         * Returns a subset of the matrix based on an array of row indices
+         * @param {Array} indices - Array containing the row indices
+         * @param {number} [startColumn = 0] - First column index
+         * @param {number} [endColumn = this.columns-1] - Last column index
+         * @returns {Matrix}
+         */
+    }, {
+        key: 'subMatrixRow',
+        value: function subMatrixRow(indices, startColumn, endColumn) {
+            if (startColumn === undefined) startColumn = 0;
+            if (endColumn === undefined) endColumn = this.columns - 1;
+            if (startColumn > endColumn || startColumn < 0 || startColumn >= this.columns || endColumn < 0 || endColumn >= this.columns) {
+                throw new RangeError('Argument out of range');
+            }
+
+            var newMatrix = new Matrix(indices.length, endColumn - startColumn + 1);
+            for (var i = 0; i < indices.length; i++) {
+                for (var j = startColumn; j <= endColumn; j++) {
+                    if (indices[i] < 0 || indices[i] >= this.rows) {
+                        throw new RangeError('Row index out of range: ' + indices[i]);
+                    }
+                    newMatrix[i][j - startColumn] = this[indices[i]][j];
+                }
+            }
+            return newMatrix;
+        }
+
+        /**
+         * Returns a subset of the matrix based on an array of column indices
+         * @param {Array} indices - Array containing the column indices
+         * @param {number} [startRow = 0] - First row index
+         * @param {number} [endRow = this.rows-1] - Last row index
+         * @returns {Matrix}
+         */
+    }, {
+        key: 'subMatrixColumn',
+        value: function subMatrixColumn(indices, startRow, endRow) {
+            if (startRow === undefined) startRow = 0;
+            if (endRow === undefined) endRow = this.rows - 1;
+            if (startRow > endRow || startRow < 0 || startRow >= this.rows || endRow < 0 || endRow >= this.rows) {
+                throw new RangeError('Argument out of range');
+            }
+
+            var newMatrix = new Matrix(endRow - startRow + 1, indices.length);
+            for (var i = 0; i < indices.length; i++) {
+                for (var j = startRow; j <= endRow; j++) {
+                    if (indices[i] < 0 || indices[i] >= this.columns) {
+                        throw new RangeError('Column index out of range: ' + indices[i]);
+                    }
+                    newMatrix[j - startRow][i] = this[j][indices[i]];
+                }
+            }
+            return newMatrix;
+        }
+
+        /**
+         * Returns the trace of the matrix (sum of the diagonal elements)
+         * @returns {number}
+         */
+    }, {
+        key: 'trace',
+        value: function trace() {
+            var min = Math.min(this.rows, this.columns);
+            var trace = 0;
+            for (var i = 0; i < min; i++) {
+                trace += this[i][i];
+            }
+            return trace;
+        }
+    }, {
+        key: 'size',
+
+        /**
+         * @property {number} - The number of elements in the matrix.
+         */
+        get: function get() {
+            return this.rows * this.columns;
+        }
+    }], [{
+        key: 'from1DArray',
+        value: function from1DArray(newRows, newColumns, newData) {
+            var length = newRows * newColumns;
+            if (length !== newData.length) {
+                throw new RangeError('Data length does not match given dimensions');
+            }
+            var newMatrix = new Matrix(newRows, newColumns);
+            for (var row = 0; row < newRows; row++) {
+                for (var column = 0; column < newColumns; column++) {
+                    newMatrix[row][column] = newData[row * newColumns + column];
+                }
+            }
+            return newMatrix;
+        }
+
+        /**
+         * Creates a row vector, a matrix with only one row.
+         * @param {Array} newData - A 1D array containing data for the vector
+         * @returns {Matrix} - The new matrix
+         */
+    }, {
+        key: 'rowVector',
+        value: function rowVector(newData) {
+            var vector = new Matrix(1, newData.length);
+            for (var i = 0; i < newData.length; i++) {
+                vector[0][i] = newData[i];
+            }
+            return vector;
+        }
+
+        /**
+         * Creates a column vector, a matrix with only one column.
+         * @param {Array} newData - A 1D array containing data for the vector
+         * @returns {Matrix} - The new matrix
+         */
+    }, {
+        key: 'columnVector',
+        value: function columnVector(newData) {
+            var vector = new Matrix(newData.length, 1);
+            for (var i = 0; i < newData.length; i++) {
+                vector[i][0] = newData[i];
+            }
+            return vector;
+        }
+
+        /**
+         * Creates an empty matrix with the given dimensions. Values will be undefined. Same as using new Matrix(rows, columns).
+         * @param {number} rows - Number of rows
+         * @param {number} columns - Number of columns
+         * @returns {Matrix} - The new matrix
+         */
+    }, {
+        key: 'empty',
+        value: function empty(rows, columns) {
+            return new Matrix(rows, columns);
+        }
+
+        /**
+         * Creates a matrix with the given dimensions. Values will be set to zero.
+         * @param {number} rows - Number of rows
+         * @param {number} columns - Number of columns
+         * @returns {Matrix} - The new matrix
+         */
+    }, {
+        key: 'zeros',
+        value: function zeros(rows, columns) {
+            return Matrix.empty(rows, columns).fill(0);
+        }
+
+        /**
+         * Creates a matrix with the given dimensions. Values will be set to one.
+         * @param {number} rows - Number of rows
+         * @param {number} columns - Number of columns
+         * @returns {Matrix} - The new matrix
+         */
+    }, {
+        key: 'ones',
+        value: function ones(rows, columns) {
+            return Matrix.empty(rows, columns).fill(1);
+        }
+
+        /**
+         * Creates a matrix with the given dimensions. Values will be randomly set.
+         * @param {number} rows - Number of rows
+         * @param {number} columns - Number of columns
+         * @param {function} [rng] - Random number generator (default: Math.random)
+         * @returns {Matrix} The new matrix
+         */
+    }, {
+        key: 'rand',
+        value: function rand(rows, columns, rng) {
+            if (rng === undefined) rng = Math.random;
+            var matrix = Matrix.empty(rows, columns);
+            for (var i = 0; i < rows; i++) {
+                for (var j = 0; j < rows; j++) {
+                    matrix[i][j] = rng();
+                }
+            }
+            return matrix;
+        }
+
+        /**
+         * Creates an identity matrix with the given dimension. Values of the diagonal will be 1 and others will be 0.
+         * @param {number} rows - Number of rows
+         * @param {number} [columns] - Number of columns (Default: rows)
+         * @returns {Matrix} - The new identity matrix
+         */
+    }, {
+        key: 'eye',
+        value: function eye(rows, columns) {
+            if (columns === undefined) columns = rows;
+            var min = Math.min(rows, columns);
+            var matrix = Matrix.zeros(rows, columns);
+            for (var i = 0; i < min; i++) {
+                matrix[i][i] = 1;
+            }
+            return matrix;
+        }
+
+        /**
+         * Creates a diagonal matrix based on the given array.
+         * @param {Array} data - Array containing the data for the diagonal
+         * @param {number} [rows] - Number of rows (Default: data.length)
+         * @param {number} [columns] - Number of columns (Default: rows)
+         * @returns {Matrix} - The new diagonal matrix
+         */
+    }, {
+        key: 'diag',
+        value: function diag(data, rows, columns) {
+            var l = data.length;
+            if (rows === undefined) rows = l;
+            if (columns === undefined) columns = rows;
+            var min = Math.min(l, rows, columns);
+            var matrix = Matrix.zeros(rows, columns);
+            for (var i = 0; i < min; i++) {
+                matrix[i][i] = data[i];
+            }
+            return matrix;
+        }
+
+        /**
+         * Returns a matrix whose elements are the minimum between matrix1 and matrix2
+         * @param matrix1
+         * @param matrix2
+         * @returns {Matrix}
+         */
+    }, {
+        key: 'min',
+        value: function min(matrix1, matrix2) {
+            var rows = matrix1.length;
+            var columns = matrix1[0].length;
+            var result = new Matrix(rows, columns);
+            for (var i = 0; i < rows; i++) {
+                for (var j = 0; j < columns; j++) {
+                    result[i][j] = Math.min(matrix1[i][j], matrix2[i][j]);
+                }
+            }
+            return result;
+        }
+
+        /**
+         * Returns a matrix whose elements are the maximum between matrix1 and matrix2
+         * @param matrix1
+         * @param matrix2
+         * @returns {Matrix}
+         */
+    }, {
+        key: 'max',
+        value: function max(matrix1, matrix2) {
+            var rows = matrix1.length;
+            var columns = matrix1[0].length;
+            var result = new Matrix(rows, columns);
+            for (var i = 0; i < rows; i++) {
+                for (var j = 0; j < columns; j++) {
+                    result[i][j] = Math.max(matrix1[i][j], matrix2[i][j]);
+                }
+            }
+            return result;
+        }
+
+        /**
+         * Check that the provided value is a Matrix and tries to instantiate one if not
+         * @param value - The value to check
+         * @returns {Matrix}
+         */
+    }, {
+        key: 'checkMatrix',
+        value: function checkMatrix(value) {
+            return Matrix.isMatrix(value) ? value : new Matrix(value);
+        }
+
+        /**
+         * Returns true if the argument is a Matrix, false otherwise
+         * @param value - The value to check
+         * @return {boolean}
+         */
+    }, {
+        key: 'isMatrix',
+        value: function isMatrix(value) {
+            return value != null && value.klass === 'Matrix';
+        }
+    }]);
+
+    return Matrix;
+})(Array);
+
+Matrix.prototype.klass = 'Matrix';
+
+module.exports = Matrix;
+
+/**
+ * @private
+ * Check that a row index is not out of bounds
+ * @param {Matrix} matrix
+ * @param {number} index
+ * @param {boolean} [outer]
+ */
+function checkRowIndex(matrix, index, outer) {
+    var max = outer ? matrix.rows : matrix.rows - 1;
+    if (index < 0 || index > max) throw new RangeError('Row index out of range');
 }
 
 /**
- * Constructs a Matrix with the chosen dimensions from a 1D array.
- * @param {number} newRows - Number of rows
- * @param {number} newColumns - Number of columns
- * @param {Array} newData - A 1D array containing data for the matrix
- * @returns {Matrix} - The new matrix
- */
-Matrix.from1DArray = function from1DArray(newRows, newColumns, newData) {
-    var length,
-        data,
-        i = 0;
-
-    length = newRows * newColumns;
-    if (length !== newData.length) throw new RangeError('Data length does not match given dimensions');
-
-    data = new Array(newRows);
-    for (; i < newRows; i++) {
-        data[i] = newData.slice(i * newColumns, (i + 1) * newColumns);
-    }
-    return new Matrix(data);
-};
-
-/**
- * Creates a row vector, a matrix with only one row.
- * @param {Array} newData - A 1D array containing data for the vector
- * @returns {Matrix} - The new matrix
- */
-Matrix.rowVector = function rowVector(newData) {
-    return new Matrix([newData]);
-};
-
-/**
- * Creates a column vector, a matrix with only one column.
- * @param {Array} newData - A 1D array containing data for the vector
- * @returns {Matrix} - The new matrix
- */
-Matrix.columnVector = function columnVector(newData) {
-    var l = newData.length,
-        vector = new Array(l);
-    for (var i = 0; i < l; i++) vector[i] = [newData[i]];
-    return new Matrix(vector);
-};
-
-/**
- * Creates an empty matrix with the given dimensions. Values will be undefined. Same as using new Matrix(rows, columns).
- * @param {number} rows - Number of rows
- * @param {number} columns - Number of columns
- * @returns {Matrix} - The new matrix
- */
-Matrix.empty = function empty(rows, columns) {
-    return new Matrix(rows, columns);
-};
-
-/**
- * Creates a matrix with the given dimensions. Values will be set to zero.
- * @param {number} rows - Number of rows
- * @param {number} columns - Number of columns
- * @returns {Matrix} - The new matrix
- */
-Matrix.zeros = function zeros(rows, columns) {
-    return Matrix.empty(rows, columns).fill(0);
-};
-
-/**
- * Creates a matrix with the given dimensions. Values will be set to one.
- * @param {number} rows - Number of rows
- * @param {number} columns - Number of columns
- * @returns {Matrix} - The new matrix
- */
-Matrix.ones = function ones(rows, columns) {
-    return Matrix.empty(rows, columns).fill(1);
-};
-
-/**
- * Creates a matrix with the given dimensions. Values will be randomly set using Math.random().
- * @param {number} rows - Number of rows
- * @param {number} columns - Number of columns
- * @returns {Matrix} The new matrix
- */
-Matrix.rand = function rand(rows, columns) {
-    var matrix = Matrix.empty(rows, columns);
-    for (var i = 0, ii = matrix.rows; i < ii; i++) {
-        for (var j = 0, jj = matrix.columns; j < jj; j++) {
-            matrix[i][j] = Math.random();
-        }
-    }
-    return matrix;
-};
-
-/**
- * Creates an identity matrix with the given dimension. Values of the diagonal will be 1 and other will be 0.
- * @param {number} n - Number of rows and columns
- * @returns {Matrix} - The new matrix
- */
-Matrix.eye = function eye(n) {
-    var matrix = Matrix.zeros(n, n),
-        l = matrix.rows;
-    for (var i = 0; i < l; i++) {
-        matrix[i][i] = 1;
-    }
-    return matrix;
-};
-
-/**
- * Creates a diagonal matrix based on the given array.
- * @param {Array} data - Array containing the data for the diagonal
- * @returns {Matrix} - The new matrix
- */
-Matrix.diag = function diag(data) {
-    var l = data.length,
-        matrix = Matrix.zeros(l, l);
-    for (var i = 0; i < l; i++) {
-        matrix[i][i] = data[i];
-    }
-    return matrix;
-};
-
-/**
- * Creates an array of indices between two values
- * @param {number} from
- * @param {number} to
+ * @private
+ * Check that the provided vector is an array with the right length
+ * @param {Matrix} matrix
+ * @param {Array|Matrix} vector
+ * @param {boolean} copy
  * @returns {Array}
+ * @throws {RangeError}
  */
-Matrix.indices = function indices(from, to) {
-    var vector = new Array(to - from);
-    for (var i = 0; i < vector.length; i++) vector[i] = from++;
+function checkRowVector(matrix, vector, copy) {
+    if (Matrix.isMatrix(vector)) {
+        vector = vector.to1DArray();
+    } else if (copy) {
+        vector = [].concat(vector);
+    }
+    if (vector.length !== matrix.columns) throw new RangeError('vector size must be the same as the number of columns');
     return vector;
-};
-
-// TODO DOC
-Matrix.stack = function stack(arg1) {
-    var i, j, k;
-    if (Matrix.isMatrix(arg1)) {
-        var rows = 0,
-            cols = 0;
-        for (i = 0; i < arguments.length; i++) {
-            rows += arguments[i].rows;
-            if (arguments[i].columns > cols) cols = arguments[i].columns;
-        }
-
-        var r = Matrix.zeros(rows, cols);
-        var c = 0;
-        for (i = 0; i < arguments.length; i++) {
-            var current = arguments[i];
-            for (j = 0; j < current.rows; j++) {
-                for (k = 0; k < current.columns; k++) r[c][k] = current[j][k];
-                c++;
-            }
-        }
-        return r;
-    } else if (Array.isArray(arg1)) {
-        var matrix = Matrix.empty(arguments.length, arg1.length);
-        for (i = 0; i < arguments.length; i++) matrix.setRow(i, arguments[i]);
-        return matrix;
-    }
-};
-
-// TODO DOC
-Matrix.expand = function expand(base, count) {
-    var expansion = [];
-    for (var i = 0; i < count.length; i++) for (var j = 0; j < count[i]; j++) expansion.push(base[i]);
-    return new Matrix(expansion);
-};
-
-/**
- * Check that the provided value is a Matrix and tries to instantiate one if not
- * @param value - The value to check
- * @returns {Matrix}
- * @throws {TypeError}
- */
-Matrix.checkMatrix = function checkMatrix(value) {
-    if (!value) {
-        throw new TypeError('Argument has to be a matrix');
-    }
-    if (value.klass !== 'Matrix') {
-        value = new Matrix(value);
-    }
-    return value;
-};
-
-/**
- * Returns true if the argument is a Matrix, false otherwise
- * @param value - The value to check
- * @returns {boolean}
- */
-Matrix.isMatrix = function isMatrix(value) {
-    return value ? value.klass === 'Matrix' : false;
-};
-
-/**
- * @property {string} - The name of this class.
- */
-Object.defineProperty(Matrix.prototype, 'klass', {
-    get: function klass() {
-        return 'Matrix';
-    }
-});
-
-/**
- * @property {number} - The number of elements in the matrix.
- */
-Object.defineProperty(Matrix.prototype, 'size', {
-    get: function size() {
-        return this.rows * this.columns;
-    }
-});
+}
 
 /**
  * @private
- * Internal check that a row index is not out of bounds
+ * Check that the provided vector is an array with the right length
+ * @param {Matrix} matrix
+ * @param {Array|Matrix} vector
+ * @param {boolean} copy
+ * @returns {Array}
+ * @throws {RangeError}
+ */
+function checkColumnVector(matrix, vector, copy) {
+    if (Matrix.isMatrix(vector)) {
+        vector = vector.to1DArray();
+    } else if (copy) {
+        vector = [].concat(vector);
+    }
+    if (vector.length !== matrix.rows) throw new RangeError('vector size must be the same as the number of rows');
+    return vector;
+}
+
+/**
+ * @private
+ * Check that a column index is not out of bounds
+ * @param {Matrix} matrix
  * @param {number} index
+ * @param {boolean} [outer]
  */
-Matrix.prototype.checkRowIndex = function checkRowIndex(index) {
-    if (index < 0 || index > this.rows - 1) throw new RangeError('Row index out of range.');
-};
+function checkColumnIndex(matrix, index, outer) {
+    var max = outer ? matrix.columns : matrix.columns - 1;
+    if (index < 0 || index > max) throw new RangeError('Column index out of range');
+}
 
 /**
  * @private
- * Internal check that a column index is not out of bounds
- * @param {number} index
- */
-Matrix.prototype.checkColumnIndex = function checkColumnIndex(index) {
-    if (index < 0 || index > this.columns - 1) throw new RangeError('Column index out of range.');
-};
-
-/**
- * @private
- * Internal check that two matrices have the same dimensions
+ * Check that two matrices have the same dimensions
+ * @param {Matrix} matrix
  * @param {Matrix} otherMatrix
  */
-Matrix.prototype.checkDimensions = function checkDimensions(otherMatrix) {
-    if (this.rows !== otherMatrix.rows || this.columns !== otherMatrix.columns) throw new RangeError('Matrices dimensions must be equal.');
-};
+function checkDimensions(matrix, otherMatrix) {
+    if (matrix.rows !== otherMatrix.length || matrix.columns !== otherMatrix[0].length) {
+        throw new RangeError('Matrices dimensions must be equal');
+    }
+}
 
-/**
- * Applies a callback for each element of the matrix. The function is called in the matrix (this) context.
- * @param {function} callback - Function that will be called with two parameters : i (row) and j (column)
- * @returns {Matrix} this
+function compareNumbers(a, b) {
+    return a - b;
+}
+
+/*
+Synonyms
  */
-Matrix.prototype.apply = function apply(callback) {
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            callback.call(this, i, j);
+
+Matrix.random = Matrix.rand;
+Matrix.diagonal = Matrix.diag;
+Matrix.prototype.diagonal = Matrix.prototype.diag;
+Matrix.identity = Matrix.eye;
+Matrix.prototype.negate = Matrix.prototype.neg;
+
+/*
+Add dynamically instance and static methods for mathematical operations
+ */
+
+var inplaceOperator = '\n(function %name%(value) {\n    if (typeof value === \'number\') return this.%name%S(value);\n    return this.%name%M(value);\n})\n';
+
+var inplaceOperatorScalar = '\n(function %name%S(value) {\n    for (var i = 0; i < this.rows; i++) {\n        for (var j = 0; j < this.columns; j++) {\n            this[i][j] = this[i][j] %op% value;\n        }\n    }\n    return this;\n})\n';
+
+var inplaceOperatorMatrix = '\n(function %name%M(matrix) {\n    checkDimensions(this, matrix);\n    for (var i = 0; i < this.rows; i++) {\n        for (var j = 0; j < this.columns; j++) {\n            this[i][j] = this[i][j] %op% matrix[i][j];\n        }\n    }\n    return this;\n})\n';
+
+var staticOperator = '\n(function %name%(matrix, value) {\n    var newMatrix = new Matrix(matrix);\n    return newMatrix.%name%(value);\n})\n';
+
+var inplaceMethod = '\n(function %name%() {\n    for (var i = 0; i < this.rows; i++) {\n        for (var j = 0; j < this.columns; j++) {\n            this[i][j] = %method%(this[i][j]);\n        }\n    }\n    return this;\n})\n';
+
+var staticMethod = '\n(function %name%(matrix) {\n    var newMatrix = new Matrix(matrix);\n    return newMatrix.%name%();\n})\n';
+
+var operators = [
+// Arithmetic operators
+['+', 'add'], ['-', 'sub', 'subtract'], ['*', 'mul', 'multiply'], ['/', 'div', 'divide'], ['%', 'mod', 'modulus'],
+// Bitwise operators
+['&', 'and'], ['|', 'or'], ['^', 'xor'], ['<<', 'leftShift'], ['>>', 'signPropagatingRightShift'], ['>>>', 'rightShift', 'zeroFillRightShift']];
+
+var _iteratorNormalCompletion = true;
+var _didIteratorError = false;
+var _iteratorError = undefined;
+
+try {
+    for (var _iterator = operators[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var operator = _step.value;
+
+        for (var i = 1; i < operator.length; i++) {
+            Matrix.prototype[operator[i]] = eval(fillTemplateFunction(inplaceOperator, { name: operator[i], op: operator[0] }));
+            Matrix.prototype[operator[i] + 'S'] = eval(fillTemplateFunction(inplaceOperatorScalar, { name: operator[i] + 'S', op: operator[0] }));
+            Matrix.prototype[operator[i] + 'M'] = eval(fillTemplateFunction(inplaceOperatorMatrix, { name: operator[i] + 'M', op: operator[0] }));
+
+            Matrix[operator[i]] = eval(fillTemplateFunction(staticOperator, { name: operator[i] }));
         }
     }
-    return this;
-};
-
-/**
- * Creates an exact and independent copy of the matrix
- * @returns {Matrix}
- */
-Matrix.prototype.clone = function clone() {
-    return new Matrix(this.to2DArray());
-};
-
-/**
- * Returns a new 1D array filled row by row with the matrix values
- * @returns {Array}
- */
-Matrix.prototype.to1DArray = function to1DArray() {
-    return Aconcat.apply([], this);
-};
-
-/**
- * Returns a 2D array containing a copy of the data
- * @returns {Array}
- */
-Matrix.prototype.to2DArray = function to2DArray() {
-    var l = this.rows,
-        copy = new Array(l);
-    for (var i = 0; i < l; i++) {
-        copy[i] = slice(this[i]);
-    }
-    return copy;
-};
-
-/**
- * @returns {boolean} true if the matrix has one row
- */
-Matrix.prototype.isRowVector = function isRowVector() {
-    return this.rows === 1;
-};
-
-/**
- * @returns {boolean} true if the matrix has one column
- */
-Matrix.prototype.isColumnVector = function isColumnVector() {
-    return this.columns === 1;
-};
-
-/**
- * @returns {boolean} true if the matrix has one row or one column
- */
-Matrix.prototype.isVector = function isVector() {
-    return this.rows === 1 || this.columns === 1;
-};
-
-/**
- * @returns {boolean} true if the matrix has the same number of rows and columns
- */
-Matrix.prototype.isSquare = function isSquare() {
-    return this.rows === this.columns;
-};
-
-/**
- * @returns {boolean} true if the matrix is square and has the same values on both sides of the diagonal
- */
-Matrix.prototype.isSymmetric = function isSymmetric() {
-    if (this.isSquare()) {
-        var l = this.rows;
-        for (var i = 0; i < l; i++) {
-            for (var j = 0; j <= i; j++) {
-                if (this[i][j] !== this[j][i]) {
-                    return false;
-                }
-            }
+} catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+} finally {
+    try {
+        if (!_iteratorNormalCompletion && _iterator['return']) {
+            _iterator['return']();
         }
-        return true;
-    }
-    return false;
-};
-
-/**
- * Sets a given element of the matrix. mat.set(3,4,1) is equivalent to mat[3][4]=1
- * @param {number} rowIndex - Index of the row
- * @param {number} columnIndex - Index of the column
- * @param {number} value - The new value for the element
- * @returns {Matrix} this
- */
-Matrix.prototype.set = function set(rowIndex, columnIndex, value) {
-    this[rowIndex][columnIndex] = value;
-    return this;
-};
-
-/**
- * Returns the given element of the matrix. mat.get(3,4) is equivalent to matrix[3][4]
- * @param {number} rowIndex - Index of the row
- * @param {number} columnIndex - Index of the column
- * @returns {number}
- */
-Matrix.prototype.get = function get(rowIndex, columnIndex) {
-    return this[rowIndex][columnIndex];
-};
-
-/**
- * Fills the matrix with a given value. All elements will be set to this value.
- * @param {number} value - New value
- * @returns {Matrix} this
- */
-Matrix.prototype.fill = function fill(value) {
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] = value;
+    } finally {
+        if (_didIteratorError) {
+            throw _iteratorError;
         }
     }
-    return this;
-};
+}
 
-/**
- * Negates the matrix. All elements will be multiplied by (-1)
- * @returns {Matrix} this
- */
-Matrix.prototype.neg = function neg() {
-    return this.mulS(-1);
-};
+var methods = [['~', 'not']];
 
-/**
- * Adds a scalar or values from another matrix (in place)
- * @param {number|Matrix} value
- * @returns {Matrix} this
- */
-Matrix.prototype.add = function add(value) {
-    if (typeof value === 'number') return this.addS(value);
-    value = Matrix.checkMatrix(value);
-    return this.addM(value);
-};
+['abs', 'acos', 'acosh', 'asin', 'asinh', 'atan', 'atanh', 'cbrt', 'ceil', 'clz32', 'cos', 'cosh', 'exp', 'expm1', 'floor', 'fround', 'log', 'log1p', 'log10', 'log2', 'round', 'sign', 'sin', 'sinh', 'sqrt', 'tan', 'tanh', 'trunc'].forEach(function (mathMethod) {
+    methods.push(['Math.' + mathMethod, mathMethod]);
+});
 
-/**
- * Adds a scalar to each element of the matrix
- * @param {number} value
- * @returns {Matrix} this
- */
-Matrix.prototype.addS = function addS(value) {
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] += value;
+var _iteratorNormalCompletion2 = true;
+var _didIteratorError2 = false;
+var _iteratorError2 = undefined;
+
+try {
+    for (var _iterator2 = methods[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var method = _step2.value;
+
+        for (var i = 1; i < method.length; i++) {
+            Matrix.prototype[method[i]] = eval(fillTemplateFunction(inplaceMethod, { name: method[i], method: method[0] }));
+            Matrix[method[i]] = eval(fillTemplateFunction(staticMethod, { name: method[i] }));
         }
     }
-    return this;
-};
-
-/**
- * Adds the value of each element of matrix to the corresponding element of this
- * @param {Matrix} matrix
- * @returns {Matrix} this
- */
-Matrix.prototype.addM = function addM(matrix) {
-    this.checkDimensions(matrix);
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] += matrix[i][j];
+} catch (err) {
+    _didIteratorError2 = true;
+    _iteratorError2 = err;
+} finally {
+    try {
+        if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+            _iterator2['return']();
+        }
+    } finally {
+        if (_didIteratorError2) {
+            throw _iteratorError2;
         }
     }
-    return this;
-};
+}
 
-/**
- * Subtracts a scalar or values from another matrix (in place)
- * @param {number|Matrix} value
- * @returns {Matrix} this
- */
-Matrix.prototype.sub = function sub(value) {
-    if (typeof value === 'number') return this.subS(value);
-    value = Matrix.checkMatrix(value);
-    return this.subM(value);
-};
-
-/**
- * Subtracts a scalar from each element of the matrix
- * @param {number} value
- * @returns {Matrix} this
- */
-Matrix.prototype.subS = function subS(value) {
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] -= value;
-        }
+function fillTemplateFunction(template, values) {
+    for (var i in values) {
+        template = template.replace(new RegExp('%' + i + '%', 'g'), values[i]);
     }
-    return this;
-};
-
-/**
- * Subtracts the value of each element of matrix from the corresponding element of this
- * @param {Matrix} matrix
- * @returns {Matrix} this
- */
-Matrix.prototype.subM = function subM(matrix) {
-    this.checkDimensions(matrix);
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] -= matrix[i][j];
-        }
-    }
-    return this;
-};
-
-/**
- * Multiplies a scalar or values from another matrix (in place)
- * @param {number|Matrix} value
- * @returns {Matrix} this
- */
-Matrix.prototype.mul = function mul(value) {
-    if (typeof value === 'number') return this.mulS(value);
-    value = Matrix.checkMatrix(value);
-    return this.mulM(value);
-};
-
-/**
- * Multiplies a scalar with each element of the matrix
- * @param {number} value
- * @returns {Matrix} this
- */
-Matrix.prototype.mulS = function mulS(value) {
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] *= value;
-        }
-    }
-    return this;
-};
-
-/**
- * Multiplies the value of each element of matrix with the corresponding element of this
- * @param {Matrix} matrix
- * @returns {Matrix} this
- */
-Matrix.prototype.mulM = function mulM(matrix) {
-    this.checkDimensions(matrix);
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] *= matrix[i][j];
-        }
-    }
-    return this;
-};
-
-/**
- * Divides by a scalar or values from another matrix (in place)
- * @param {number|Matrix} value
- * @returns {Matrix} this
- */
-Matrix.prototype.div = function div(value) {
-    if (typeof value === 'number') return this.divS(value);
-    value = Matrix.checkMatrix(value);
-    return this.divM(value);
-};
-
-/**
- * Divides each element of the matrix by a scalar
- * @param {number} value
- * @returns {Matrix} this
- */
-Matrix.prototype.divS = function divS(value) {
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] /= value;
-        }
-    }
-    return this;
-};
-
-/**
- * Divides each element of this by the corresponding element of matrix
- * @param {Matrix} matrix
- * @returns {Matrix} this
- */
-Matrix.prototype.divM = function divM(matrix) {
-    this.checkDimensions(matrix);
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] /= matrix[i][j];
-        }
-    }
-    return this;
-};
-
-/**
- * Returns a new array from the given row index
- * @param {number} index - Row index
- * @returns {Array}
- */
-Matrix.prototype.getRow = function getRow(index) {
-    this.checkRowIndex(index);
-    return slice(this[index]);
-};
-
-/**
- * Returns a new row vector from the given row index
- * @param {number} index - Row index
- * @returns {Matrix}
- */
-Matrix.prototype.getRowVector = function getRowVector(index) {
-    return Matrix.rowVector(this.getRow(index));
-};
-
-/**
- * Sets a row at the given index
- * @param {number} index - Row index
- * @param {Array|Matrix} array - Array or vector
- * @returns {Matrix} this
- */
-Matrix.prototype.setRow = function setRow(index, array) {
-    this.checkRowIndex(index);
-    if (Matrix.isMatrix(array)) array = array.to1DArray();
-    if (array.length !== this.columns) throw new RangeError('Invalid row size');
-    this[index] = slice(array);
-    return this;
-};
-
-/**
- * Removes a row from the given index
- * @param {number} index - Row index
- * @returns {Matrix} this
- */
-Matrix.prototype.removeRow = function removeRow(index) {
-    this.checkRowIndex(index);
-    if (this.rows === 1) throw new RangeError('A matrix cannot have less than one row');
-    Asplice.call(this, index, 1);
-    this.rows -= 1;
-    return this;
-};
-
-/**
- * Adds a row at the given index
- * @param {number} [index = this.rows] - Row index
- * @param {Array|Matrix} array - Array or vector
- * @returns {Matrix} this
- */
-Matrix.prototype.addRow = function addRow(index, array) {
-    if (typeof array === 'undefined') {
-        array = index;
-        index = this.rows;
-    }
-    if (index < 0 || index > this.rows) throw new RangeError('Row index out of range.');
-    if (Matrix.isMatrix(array)) array = array.to1DArray();
-    if (array.length !== this.columns) throw new RangeError('Invalid row size');
-    Asplice.call(this, index, 0, slice(array));
-    this.rows += 1;
-    return this;
-};
-
-/**
- * Swaps two rows
- * @param {number} row1 - First row index
- * @param {number} row2 - Second row index
- * @returns {Matrix} this
- */
-Matrix.prototype.swapRows = function swapRows(row1, row2) {
-    this.checkRowIndex(row1);
-    this.checkRowIndex(row2);
-    var temp = this[row1];
-    this[row1] = this[row2];
-    this[row2] = temp;
-    return this;
-};
-
-/**
- * Returns a new array from the given column index
- * @param {number} index - Column index
- * @returns {Array}
- */
-Matrix.prototype.getColumn = function getColumn(index) {
-    this.checkColumnIndex(index);
-    var l = this.rows,
-        column = new Array(l);
-    for (var i = 0; i < l; i++) {
-        column[i] = this[i][index];
-    }
-    return column;
-};
-
-/**
- * Returns a new column vector from the given column index
- * @param {number} index - Column index
- * @returns {Matrix}
- */
-Matrix.prototype.getColumnVector = function getColumnVector(index) {
-    return Matrix.columnVector(this.getColumn(index));
-};
-
-/**
- * Sets a column at the given index
- * @param {number} index - Column index
- * @param {Array|Matrix} array - Array or vector
- * @returns {Matrix} this
- */
-Matrix.prototype.setColumn = function setColumn(index, array) {
-    this.checkColumnIndex(index);
-    if (Matrix.isMatrix(array)) array = array.to1DArray();
-    var l = this.rows;
-    if (array.length !== l) throw new RangeError('Invalid column size');
-    for (var i = 0; i < l; i++) {
-        this[i][index] = array[i];
-    }
-    return this;
-};
-
-/**
- * Removes a column from the given index
- * @param {number} index - Column index
- * @returns {Matrix} this
- */
-Matrix.prototype.removeColumn = function removeColumn(index) {
-    this.checkColumnIndex(index);
-    if (this.columns === 1) throw new RangeError('A matrix cannot have less than one column');
-    for (var i = 0, ii = this.rows; i < ii; i++) {
-        this[i].splice(index, 1);
-    }
-    this.columns -= 1;
-    return this;
-};
-
-/**
- * Adds a column at the given index
- * @param {number} [index = this.columns] - Column index
- * @param {Array|Matrix} array - Array or vector
- * @returns {Matrix} this
- */
-Matrix.prototype.addColumn = function addColumn(index, array) {
-    if (typeof array === 'undefined') {
-        array = index;
-        index = this.columns;
-    }
-    if (index < 0 || index > this.columns) throw new RangeError('Column index out of range.');
-    if (Matrix.isMatrix(array)) array = array.to1DArray();
-    var l = this.rows;
-    if (array.length !== l) throw new RangeError('Invalid column size');
-    for (var i = 0; i < l; i++) {
-        this[i].splice(index, 0, array[i]);
-    }
-    this.columns += 1;
-    return this;
-};
-
-/**
- * Swaps two columns
- * @param {number} column1 - First column index
- * @param {number} column2 - Second column index
- * @returns {Matrix} this
- */
-Matrix.prototype.swapColumns = function swapColumns(column1, column2) {
-    this.checkRowIndex(column1);
-    this.checkRowIndex(column2);
-    var l = this.rows,
-        temp,
-        row;
-    for (var i = 0; i < l; i++) {
-        row = this[i];
-        temp = row[column1];
-        row[column1] = row[column2];
-        row[column2] = temp;
-    }
-    return this;
-};
-
-/**
- * @private
- * Internal check that the provided vector is an array with the right length
- * @param {Array|Matrix} vector
- * @returns {Array}
- * @throws {RangeError}
- */
-Matrix.prototype.checkRowVector = function checkRowVector(vector) {
-    if (Matrix.isMatrix(vector)) vector = vector.to1DArray();
-    if (vector.length !== this.columns) throw new RangeError('vector size must be the same as the number of columns');
-    return vector;
-};
-
-/**
- * @private
- * Internal check that the provided vector is an array with the right length
- * @param {Array|Matrix} vector
- * @returns {Array}
- * @throws {RangeError}
- */
-Matrix.prototype.checkColumnVector = function checkColumnVector(vector) {
-    if (Matrix.isMatrix(vector)) vector = vector.to1DArray();
-    if (vector.length !== this.rows) throw new RangeError('vector size must be the same as the number of rows');
-    return vector;
-};
-
-/**
- * Adds the values of a vector to each row
- * @param {Array|Matrix} vector - Array or vector
- * @returns {Matrix} this
- */
-Matrix.prototype.addRowVector = function addRowVector(vector) {
-    vector = this.checkRowVector(vector);
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] += vector[j];
-        }
-    }
-    return this;
-};
-
-/**
- * Subtracts the values of a vector from each row
- * @param {Array|Matrix} vector - Array or vector
- * @returns {Matrix} this
- */
-Matrix.prototype.subRowVector = function subRowVector(vector) {
-    vector = this.checkRowVector(vector);
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] -= vector[j];
-        }
-    }
-    return this;
-};
-
-/**
- * Multiplies the values of a vector with each row
- * @param {Array|Matrix} vector - Array or vector
- * @returns {Matrix} this
- */
-Matrix.prototype.mulRowVector = function mulRowVector(vector) {
-    vector = this.checkRowVector(vector);
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] *= vector[j];
-        }
-    }
-    return this;
-};
-
-/**
- * Divides the values of each row by those of a vector
- * @param {Array|Matrix} vector - Array or vector
- * @returns {Matrix} this
- */
-Matrix.prototype.divRowVector = function divRowVector(vector) {
-    vector = this.checkRowVector(vector);
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] /= vector[j];
-        }
-    }
-    return this;
-};
-
-/**
- * Adds the values of a vector to each column
- * @param {Array|Matrix} vector - Array or vector
- * @returns {Matrix} this
- */
-Matrix.prototype.addColumnVector = function addColumnVector(vector) {
-    vector = this.checkColumnVector(vector);
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] += vector[i];
-        }
-    }
-    return this;
-};
-
-/**
- * Subtracts the values of a vector from each column
- * @param {Array|Matrix} vector - Array or vector
- * @returns {Matrix} this
- */
-Matrix.prototype.subColumnVector = function subColumnVector(vector) {
-    vector = this.checkColumnVector(vector);
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] -= vector[i];
-        }
-    }
-    return this;
-};
-
-/**
- * Multiplies the values of a vector with each column
- * @param {Array|Matrix} vector - Array or vector
- * @returns {Matrix} this
- */
-Matrix.prototype.mulColumnVector = function mulColumnVector(vector) {
-    vector = this.checkColumnVector(vector);
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] *= vector[i];
-        }
-    }
-    return this;
-};
-
-/**
- * Divides the values of each column by those of a vector
- * @param {Array|Matrix} vector - Array or vector
- * @returns {Matrix} this
- */
-Matrix.prototype.divColumnVector = function divColumnVector(vector) {
-    vector = this.checkColumnVector(vector);
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] /= vector[i];
-        }
-    }
-    return this;
-};
-
-/**
- * Multiplies the values of a row with a scalar
- * @param {number} index - Row index
- * @param {number} value
- * @returns {Matrix} this
- */
-Matrix.prototype.mulRow = function mulRow(index, value) {
-    this.checkRowIndex(index);
-    var i = 0,
-        l = this.columns;
-    for (; i < l; i++) {
-        this[index][i] *= value;
-    }
-    return this;
-};
-
-/**
- * Multiplies the values of a column with a scalar
- * @param {number} index - Column index
- * @param {number} value
- * @returns {Matrix} this
- */
-Matrix.prototype.mulColumn = function mulColumn(index, value) {
-    this.checkColumnIndex(index);
-    var i = 0,
-        l = this.rows;
-    for (; i < l; i++) {
-        this[i][index] *= value;
-    }
-};
-
-/**
- * A matrix index
- * @typedef {Object} MatrixIndex
- * @property {number} row
- * @property {number} column
- */
-
-/**
- * Returns the maximum value of the matrix
- * @returns {number}
- */
-Matrix.prototype.max = function max() {
-    var v = -Infinity;
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            if (this[i][j] > v) {
-                v = this[i][j];
-            }
-        }
-    }
-    return v;
-};
-
-/**
- * Returns the index of the maximum value
- * @returns {MatrixIndex}
- */
-Matrix.prototype.maxIndex = function maxIndex() {
-    var v = -Infinity;
-    var idx = {};
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            if (this[i][j] > v) {
-                v = this[i][j];
-                idx.row = i;
-                idx.column = j;
-            }
-        }
-    }
-    return idx;
-};
-
-/**
- * Returns the minimum value of the matrix
- * @returns {number}
- */
-Matrix.prototype.min = function min() {
-    var v = Infinity;
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            if (this[i][j] < v) {
-                v = this[i][j];
-            }
-        }
-    }
-    return v;
-};
-
-/**
- * Returns the index of the minimum value
- * @returns {MatrixIndex}
- */
-Matrix.prototype.minIndex = function minIndex() {
-    var v = Infinity;
-    var idx = {};
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            if (this[i][j] < v) {
-                v = this[i][j];
-                idx.row = i;
-                idx.column = j;
-            }
-        }
-    }
-    return idx;
-};
-
-/**
- * Returns the maximum value of one row
- * @param {number} index - Row index
- * @returns {number}
- */
-Matrix.prototype.maxRow = function maxRow(index) {
-    this.checkRowIndex(index);
-    var v = -Infinity;
-    for (var i = 0, ii = this.columns; i < ii; i++) {
-        if (this[index][i] > v) {
-            v = this[index][i];
-        }
-    }
-    return v;
-};
-
-/**
- * Returns the index of the maximum value of one row
- * @param {number} index - Row index
- * @returns {MatrixIndex}
- */
-Matrix.prototype.maxRowIndex = function maxRowIndex(index) {
-    this.checkRowIndex(index);
-    var v = -Infinity;
-    var idx = {
-        row: index
-    };
-    for (var i = 0, ii = this.columns; i < ii; i++) {
-        if (this[index][i] > v) {
-            v = this[index][i];
-            idx.column = i;
-        }
-    }
-    return idx;
-};
-
-/**
- * Returns the minimum value of one row
- * @param {number} index - Row index
- * @returns {number}
- */
-Matrix.prototype.minRow = function minRow(index) {
-    this.checkRowIndex(index);
-    var v = Infinity;
-    for (var i = 0, ii = this.columns; i < ii; i++) {
-        if (this[index][i] < v) {
-            v = this[index][i];
-        }
-    }
-    return v;
-};
-
-/**
- * Returns the index of the maximum value of one row
- * @param {number} index - Row index
- * @returns {MatrixIndex}
- */
-Matrix.prototype.minRowIndex = function minRowIndex(index) {
-    this.checkRowIndex(index);
-    var v = Infinity;
-    var idx = {
-        row: index,
-        column: 0
-    };
-    for (var i = 0, ii = this.columns; i < ii; i++) {
-        if (this[index][i] < v) {
-            v = this[index][i];
-            idx.column = i;
-        }
-    }
-    return idx;
-};
-
-/**
- * Returns the maximum value of one column
- * @param {number} index - Column index
- * @returns {number}
- */
-Matrix.prototype.maxColumn = function maxColumn(index) {
-    this.checkColumnIndex(index);
-    var v = -Infinity;
-    for (var i = 0, ii = this.rows; i < ii; i++) {
-        if (this[i][index] > v) {
-            v = this[i][index];
-        }
-    }
-    return v;
-};
-
-/**
- * Returns the index of the maximum value of one column
- * @param {number} index - Column index
- * @returns {MatrixIndex}
- */
-Matrix.prototype.maxColumnIndex = function maxColumnIndex(index) {
-    this.checkColumnIndex(index);
-    var v = -Infinity;
-    var idx = {
-        row: 0,
-        column: index
-    };
-    for (var i = 0, ii = this.rows; i < ii; i++) {
-        if (this[i][index] > v) {
-            v = this[i][index];
-            idx.row = i;
-        }
-    }
-    return idx;
-};
-
-/**
- * Returns the minimum value of one column
- * @param {number} index - Column index
- * @returns {number}
- */
-Matrix.prototype.minColumn = function minColumn(index) {
-    this.checkColumnIndex(index);
-    var v = Infinity;
-    for (var i = 0, ii = this.rows; i < ii; i++) {
-        if (this[i][index] < v) {
-            v = this[i][index];
-        }
-    }
-    return v;
-};
-
-/**
- * Returns the index of the minimum value of one column
- * @param {number} index - Column index
- * @returns {MatrixIndex}
- */
-Matrix.prototype.minColumnIndex = function minColumnIndex(index) {
-    this.checkColumnIndex(index);
-    var v = Infinity;
-    var idx = {
-        row: 0,
-        column: index
-    };
-    for (var i = 0, ii = this.rows; i < ii; i++) {
-        if (this[i][index] < v) {
-            v = this[i][index];
-            idx.row = i;
-        }
-    }
-    return idx;
-};
-
-/**
- * Returns an array containing the diagonal values of the matrix
- * @returns {Array}
- */
-Matrix.prototype.diag = function diag() {
-    if (!this.isSquare()) throw new TypeError('Only square matrices have a diagonal.');
-    var diag = new Array(this.rows);
-    for (var i = 0, ii = this.rows; i < ii; i++) {
-        diag[i] = this[i][i];
-    }
-    return diag;
-};
-
-/**
- * Returns the sum of all elements of the matrix
- * @returns {number}
- */
-Matrix.prototype.sum = function sum() {
-    var v = 0;
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            v += this[i][j];
-        }
-    }
-    return v;
-};
-
-/**
- * Returns the mean of all elements of the matrix
- * @returns {number}
- */
-Matrix.prototype.mean = function mean() {
-    return this.sum() / this.size;
-};
-
-/**
- * Returns the product of all elements of the matrix
- * @returns {number}
- */
-Matrix.prototype.prod = function prod() {
-    var prod = 1;
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            prod *= this[i][j];
-        }
-    }
-    return prod;
-};
-
-/**
- * Computes the cumulative sum of the matrix elements (in place, row by row)
- * @returns {Matrix} this
- */
-Matrix.prototype.cumulativeSum = function cumulativeSum() {
-    var sum = 0;
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            sum += this[i][j];
-            this[i][j] = sum;
-        }
-    }
-    return this;
-};
-
-/**
- * Computes the dot (scalar) product between the matrix and another
- * @param {Matrix} other vector
- * @returns {number}
- */
-Matrix.prototype.dot = function dot(other) {
-    if (this.size !== other.size) throw new RangeError('vectors do not have the same size');
-    var vector1 = this.to1DArray();
-    var vector2 = other.to1DArray();
-    var dot = 0,
-        l = vector1.length;
-    for (var i = 0; i < l; i++) {
-        dot += vector1[i] * vector2[i];
-    }
-    return dot;
-};
-
-/**
- * Returns the matrix product between this and other
- * @returns {Matrix}
- */
-Matrix.prototype.mmul = function mmul(other) {
-    if (!Matrix.isMatrix(other)) throw new TypeError('parameter "other" must be a matrix');
-    if (this.columns !== other.rows) console.warn('Number of columns of left matrix are not equal to number of rows of right matrix.');
-
-    var m = this.rows,
-        n = this.columns,
-        p = other.columns;
-    var result = new Matrix(m, p);
-
-    var Bcolj = new Array(n);
-    var i, j, k;
-    for (j = 0; j < p; j++) {
-        for (k = 0; k < n; k++) Bcolj[k] = other[k][j];
-
-        for (i = 0; i < m; i++) {
-            var Arowi = this[i];
-
-            var s = 0;
-            for (k = 0; k < n; k++) s += Arowi[k] * Bcolj[k];
-
-            result[i][j] = s;
-        }
-    }
-    return result;
-};
-
-/**
- * Sorts the rows (in place)
- * @param {function} compareFunction - usual Array.prototype.sort comparison function
- * @returns {Matrix} this
- */
-Matrix.prototype.sortRows = function sortRows(compareFunction) {
-    for (var i = 0, ii = this.rows; i < ii; i++) {
-        this[i].sort(compareFunction);
-    }
-    return this;
-};
-
-/**
- * Sorts the columns (in place)
- * @param {function} compareFunction - usual Array.prototype.sort comparison function
- * @returns {Matrix} this
- */
-Matrix.prototype.sortColumns = function sortColumns(compareFunction) {
-    for (var i = 0, ii = this.columns; i < ii; i++) {
-        this.setColumn(i, this.getColumn(i).sort(compareFunction));
-    }
-    return this;
-};
-
-/**
- * Transposes the matrix and returns a new one containing the result
- * @returns {Matrix}
- */
-Matrix.prototype.transpose = function transpose() {
-    var result = new Matrix(this.columns, this.rows);
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            result[j][i] = this[i][j];
-        }
-    }
-    return result;
-};
-
-/**
- * Returns a subset of the matrix
- * @param {number} startRow - First row index
- * @param {number} endRow - Last row index
- * @param {number} startColumn - First column index
- * @param {number} endColumn - Last column index
- * @returns {Matrix}
- */
-Matrix.prototype.subMatrix = function subMatrix(startRow, endRow, startColumn, endColumn) {
-    if (startRow > endRow || startColumn > endColumn || startRow < 0 || startRow >= this.rows || endRow < 0 || endRow >= this.rows || startColumn < 0 || startColumn >= this.columns || endColumn < 0 || endColumn >= this.columns) throw new RangeError('Argument out of range');
-    var newMatrix = new Matrix(endRow - startRow + 1, endColumn - startColumn + 1);
-    for (var i = startRow; i <= endRow; i++) {
-        for (var j = startColumn; j <= endColumn; j++) {
-            newMatrix[i - startRow][j - startColumn] = this[i][j];
-        }
-    }
-    return newMatrix;
-};
-
-/**
- * Returns a subset of the matrix based on an array of row indices
- * @param {Array} indices - Array containing the row indices
- * @param {number} [startColumn = 0] - First column index
- * @param {number} [endColumn = this.columns-1] - Last column index
- * @returns {Matrix}
- */
-Matrix.prototype.subMatrixRow = function subMatrixRow(indices, startColumn, endColumn) {
-    if (typeof startColumn === 'undefined') {
-        startColumn = 0;
-        endColumn = this.columns - 1;
-    } else if (typeof endColumn === 'undefined') {
-        endColumn = this.columns - 1;
-    }
-    if (startColumn > endColumn || startColumn < 0 || startColumn >= this.columns || endColumn < 0 || endColumn >= this.columns) throw new RangeError('Argument out of range.');
-    var l = indices.length,
-        rows = this.rows,
-        X = new Matrix(l, endColumn - startColumn + 1);
-    for (var i = 0; i < l; i++) {
-        for (var j = startColumn; j <= endColumn; j++) {
-            if (indices[i] < 0 || indices[i] >= rows) throw new RangeError('Argument out of range.');
-            X[i][j - startColumn] = this[indices[i]][j];
-        }
-    }
-    return X;
-};
-
-/**
- * Returns a subset of the matrix based on an array of column indices
- * @param {Array} indices - Array containing the column indices
- * @param {number} [startRow = 0] - First row index
- * @param {number} [endRow = this.rows-1] - Last row index
- * @returns {Matrix}
- */
-Matrix.prototype.subMatrixColumn = function subMatrixColumn(indices, startRow, endRow) {
-    if (typeof startRow === 'undefined') {
-        startRow = 0;
-        endRow = this.rows - 1;
-    } else if (typeof endRow === 'undefined') {
-        endRow = this.rows - 1;
-    }
-    if (startRow > endRow || startRow < 0 || startRow >= this.rows || endRow < 0 || endRow >= this.rows) throw new RangeError('Argument out of range.');
-    var l = indices.length,
-        columns = this.columns,
-        X = new Matrix(endRow - startRow + 1, l);
-    for (var i = 0; i < l; i++) {
-        for (var j = startRow; j <= endRow; j++) {
-            if (indices[i] < 0 || indices[i] >= columns) throw new RangeError('Argument out of range.');
-            X[j - startRow][i] = this[j][indices[i]];
-        }
-    }
-    return X;
-};
-
-/**
- * Returns the trace of the matrix (sum of the diagonal elements)
- * @returns {number}
- */
-Matrix.prototype.trace = function trace() {
-    if (!this.isSquare()) throw new TypeError('The matrix is not square');
-    var trace = 0,
-        i = 0,
-        l = this.rows;
-    for (; i < l; i++) {
-        trace += this[i][i];
-    }
-    return trace;
-};
-
-/**
- * Sets each element of the matrix to its absolute value
- * @returns {Matrix} this
- */
-Matrix.prototype.abs = function abs() {
-    var ii = this.rows,
-        jj = this.columns;
-    for (var i = 0; i < ii; i++) {
-        for (var j = 0; j < jj; j++) {
-            this[i][j] = Math.abs(this[i][j]);
-        }
-    }
-};
-
-module.exports = Matrix;
+    return template;
+}
 
 },{}],37:[function(require,module,exports){
 "use strict";
@@ -11389,7 +11459,7 @@ function median() {
 
 module.exports = exports['default'];
 
-},{"../../util/medianFromHistogram":148}],52:[function(require,module,exports){
+},{"../../util/medianFromHistogram":149}],52:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -11433,13 +11503,6 @@ Object.defineProperty(exports, '__esModule', {
 exports['default'] = getPixelsArray;
 
 function getPixelsArray() {
-    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-    var threshold = _ref.threshold;
-    var channel = _ref.channel;
-    var _ref$useAlpha = _ref.useAlpha;
-    var useAlpha = _ref$useAlpha === undefined ? true : _ref$useAlpha;
-
     this.checkProcessable('getPixelsArray', {
         bitDepth: [1]
     });
@@ -11753,9 +11816,9 @@ var _transformResizeBinary = require('./transform/resizeBinary');
 
 var _transformResizeBinary2 = _interopRequireDefault(_transformResizeBinary);
 
-var _transformBitDepth = require('./transform/bitDepth');
+var _transformColorDepth = require('./transform/colorDepth');
 
-var _transformBitDepth2 = _interopRequireDefault(_transformBitDepth);
+var _transformColorDepth2 = _interopRequireDefault(_transformColorDepth);
 
 var _utilitySetBorder = require('./utility/setBorder');
 
@@ -11777,6 +11840,10 @@ var _utilityGetSimilarity = require('./utility/getSimilarity');
 
 var _utilityGetSimilarity2 = _interopRequireDefault(_utilityGetSimilarity);
 
+var _utilityGetPixelsGrid = require('./utility/getPixelsGrid');
+
+var _utilityGetPixelsGrid2 = _interopRequireDefault(_utilityGetPixelsGrid);
+
 var _utilityGetBestMatch = require('./utility/getBestMatch');
 
 var _utilityGetBestMatch2 = _interopRequireDefault(_utilityGetBestMatch);
@@ -11792,6 +11859,10 @@ var _utilityGetColumn2 = _interopRequireDefault(_utilityGetColumn);
 var _operatorPaintMasks = require('./operator/paintMasks');
 
 var _operatorPaintMasks2 = _interopRequireDefault(_operatorPaintMasks);
+
+var _operatorPaintPixels = require('./operator/paintPixels');
+
+var _operatorPaintPixels2 = _interopRequireDefault(_operatorPaintPixels);
 
 var _operatorExtract = require('./operator/extract');
 
@@ -11878,7 +11949,7 @@ function extend(Image) {
     Image.extendMethod('mask', _transformMaskMask2['default']);
     Image.extendMethod('pad', _transformPad2['default']);
     Image.extendMethod('resizeBinary', _transformResizeBinary2['default']);
-    Image.extendMethod('colorDepth', _transformBitDepth2['default']);
+    Image.extendMethod('colorDepth', _transformColorDepth2['default']);
     Image.extendMethod('setBorder', _utilitySetBorder2['default'], inPlace);
 
     Image.extendMethod('getRow', _utilityGetRow2['default']);
@@ -11888,9 +11959,11 @@ function extend(Image) {
     Image.extendMethod('getChannel', _utilityGetChannel2['default']);
     Image.extendMethod('setChannel', _utilitySetChannel2['default']);
     Image.extendMethod('getSimilarity', _utilityGetSimilarity2['default']);
+    Image.extendMethod('getPixelsGrid', _utilityGetPixelsGrid2['default']);
     Image.extendMethod('getBestMatch', _utilityGetBestMatch2['default']);
 
-    Image.extendMethod('paintMasks', _operatorPaintMasks2['default']);
+    Image.extendMethod('paintMasks', _operatorPaintMasks2['default'], inPlace);
+    Image.extendMethod('paintPixels', _operatorPaintPixels2['default'], inPlace);
     Image.extendMethod('extract', _operatorExtract2['default']);
     Image.extendMethod('convolution', _operatorConvolution2['default']);
 
@@ -11910,7 +11983,7 @@ function extend(Image) {
 
 module.exports = exports['default'];
 
-},{"./compute/colorHistogram":46,"./compute/countAlphaPixels":47,"./compute/histogram":48,"./compute/max":49,"./compute/mean":50,"./compute/median":51,"./compute/min":52,"./compute/pixelsArray":53,"./compute/relativePosition":54,"./compute/sum":55,"./compute/svd":56,"./filter/add":59,"./filter/blur":60,"./filter/divide":61,"./filter/gaussian":62,"./filter/hypotenuse":63,"./filter/invert":64,"./filter/invertApply":65,"./filter/invertBinaryLoop":66,"./filter/invertGetSet":67,"./filter/invertIterator":68,"./filter/invertOneLoop":69,"./filter/invertPixel":70,"./filter/level":71,"./filter/median":72,"./filter/multiply":73,"./filter/sobel":74,"./filter/subtract":75,"./operator/convolution":82,"./operator/extract":83,"./operator/paintMasks":84,"./transform/bitDepth":93,"./transform/crop":94,"./transform/grey/grey":96,"./transform/hsl":101,"./transform/hsv":102,"./transform/mask/mask":107,"./transform/pad":119,"./transform/resizeBinary":120,"./transform/rgba8":121,"./transform/scale/scale":123,"./utility/getBestMatch":125,"./utility/getChannel":126,"./utility/getColumn":127,"./utility/getRow":128,"./utility/getSimilarity":129,"./utility/setBorder":130,"./utility/setChannel":131,"./utility/split":132}],59:[function(require,module,exports){
+},{"./compute/colorHistogram":46,"./compute/countAlphaPixels":47,"./compute/histogram":48,"./compute/max":49,"./compute/mean":50,"./compute/median":51,"./compute/min":52,"./compute/pixelsArray":53,"./compute/relativePosition":54,"./compute/sum":55,"./compute/svd":56,"./filter/add":59,"./filter/blur":60,"./filter/divide":61,"./filter/gaussian":62,"./filter/hypotenuse":63,"./filter/invert":64,"./filter/invertApply":65,"./filter/invertBinaryLoop":66,"./filter/invertGetSet":67,"./filter/invertIterator":68,"./filter/invertOneLoop":69,"./filter/invertPixel":70,"./filter/level":71,"./filter/median":72,"./filter/multiply":73,"./filter/sobel":74,"./filter/subtract":75,"./operator/convolution":82,"./operator/extract":83,"./operator/paintMasks":84,"./operator/paintPixels":85,"./transform/colorDepth":93,"./transform/crop":94,"./transform/grey/grey":96,"./transform/hsl":101,"./transform/hsv":102,"./transform/mask/mask":107,"./transform/pad":119,"./transform/resizeBinary":120,"./transform/rgba8":121,"./transform/scale/scale":123,"./utility/getBestMatch":125,"./utility/getChannel":126,"./utility/getColumn":127,"./utility/getPixelsGrid":128,"./utility/getRow":129,"./utility/getSimilarity":130,"./utility/setBorder":131,"./utility/setChannel":132,"./utility/split":133}],59:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -11918,7 +11991,15 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports['default'] = add;
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 var _utilChannel = require('../../util/channel');
+
+var _image = require('../image');
+
+var _image2 = _interopRequireDefault(_image);
+
+var _utilValue = require('../../util/value');
 
 function add(value) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -11928,21 +12009,34 @@ function add(value) {
     this.checkProcessable('add', {
         bitDepth: [8, 16]
     });
-    if (value <= 0) throw new Error('add: the value must be greater than 0');
 
     channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
+    value = (0, _utilValue.checkNumberArray)(value);
 
-    for (var j = 0; j < channels.length; j++) {
-        var c = channels[j];
-        for (var i = 0; i < this.data.length; i += this.channels) {
-            this.data[i + c] = Math.min(this.maxValue, this.data[i + c] + value >> 0);
+    // we allow 3 cases, the value may be an array (1D), an image or a single value
+    if (!isNaN(value)) {
+        for (var j = 0; j < channels.length; j++) {
+            var c = channels[j];
+            for (var i = 0; i < this.data.length; i += this.channels) {
+                this.data[i + c] = Math.min(this.maxValue, this.data[i + c] + value >> 0);
+            }
+        }
+    } else {
+        if (this.data.length !== value.length) {
+            throw new Error('add: the data size is different');
+        }
+        for (var j = 0; j < channels.length; j++) {
+            var c = channels[j];
+            for (var i = 0; i < this.data.length; i += this.channels) {
+                this.data[i + c] = Math.max(0, Math.min(this.maxValue, this.data[i + c] + value[i + c] >> 0));
+            }
         }
     }
 }
 
 module.exports = exports['default'];
 
-},{"../../util/channel":143}],60:[function(require,module,exports){
+},{"../../util/channel":144,"../../util/value":151,"../image":76}],60:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -11994,7 +12088,15 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports['default'] = add;
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 var _utilChannel = require('../../util/channel');
+
+var _image = require('../image');
+
+var _image2 = _interopRequireDefault(_image);
+
+var _utilValue = require('../../util/value');
 
 function add(value) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -12004,21 +12106,33 @@ function add(value) {
     this.checkProcessable('divide', {
         bitDepth: [8, 16]
     });
-    if (value <= 0) throw new Error('divide: the value must be greater than 0');
 
     channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
+    value = (0, _utilValue.checkNumberArray)(value);
 
-    for (var j = 0; j < channels.length; j++) {
-        var c = channels[j];
-        for (var i = 0; i < this.data.length; i += this.channels) {
-            this.data[i + c] = Math.min(this.maxValue, this.data[i + c] / value >> 0);
+    if (!isNaN(value)) {
+        for (var j = 0; j < channels.length; j++) {
+            var c = channels[j];
+            for (var i = 0; i < this.data.length; i += this.channels) {
+                this.data[i + c] = Math.min(this.maxValue, this.data[i + c] / value >> 0);
+            }
+        }
+    } else {
+        if (this.data.length !== value.length) {
+            throw new Error('divide: the: the data size is different');
+        }
+        for (var j = 0; j < channels.length; j++) {
+            var c = channels[j];
+            for (var i = 0; i < this.data.length; i += this.channels) {
+                this.data[i + c] = Math.max(0, Math.min(this.maxValue, this.data[i + c] / value[i + c] >> 0));
+            }
         }
     }
 }
 
 module.exports = exports['default'];
 
-},{"../../util/channel":143}],62:[function(require,module,exports){
+},{"../../util/channel":144,"../../util/value":151,"../image":76}],62:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -12183,7 +12297,7 @@ function hypotenuse(otherImage) {
 
 module.exports = exports['default'];
 
-},{"../../util/channel":143,"../image":76}],64:[function(require,module,exports){
+},{"../../util/channel":144,"../image":76}],64:[function(require,module,exports){
 // we try the faster methods
 
 'use strict';
@@ -12230,7 +12344,7 @@ function invert() {
 
 module.exports = exports['default'];
 
-},{"../../util/channel":143}],65:[function(require,module,exports){
+},{"../../util/channel":144}],65:[function(require,module,exports){
 // this code gives the same result as invert()
 // but is based on a matrix of pixels
 // may be easier to implement some algorithm
@@ -12537,7 +12651,7 @@ function processImage(image, min, max, channels) {
 }
 module.exports = exports['default'];
 
-},{"../../util/channel":143,"new-array":37}],72:[function(require,module,exports){
+},{"../../util/channel":144,"new-array":37}],72:[function(require,module,exports){
 /**
  * Created by Cristian on 18/07/2015.
  */
@@ -12609,7 +12723,7 @@ function medianFilter(radius, channels) {
 //End medianFilter function
 module.exports = exports['default'];
 
-},{"../../util/channel":143,"../image":76}],73:[function(require,module,exports){
+},{"../../util/channel":144,"../image":76}],73:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -12617,7 +12731,15 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports['default'] = add;
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 var _utilChannel = require('../../util/channel');
+
+var _image = require('../image');
+
+var _image2 = _interopRequireDefault(_image);
+
+var _utilValue = require('../../util/value');
 
 function add(value) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -12630,18 +12752,31 @@ function add(value) {
     if (value <= 0) throw new Error('multiply: the value must be greater than 0');
 
     channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
+    value = (0, _utilValue.checkNumberArray)(value);
 
-    for (var j = 0; j < channels.length; j++) {
-        var c = channels[j];
-        for (var i = 0; i < this.data.length; i += this.channels) {
-            this.data[i + c] = Math.min(this.maxValue, this.data[i + c] * value >> 0);
+    if (!isNaN(value)) {
+        for (var j = 0; j < channels.length; j++) {
+            var c = channels[j];
+            for (var i = 0; i < this.data.length; i += this.channels) {
+                this.data[i + c] = Math.min(this.maxValue, this.data[i + c] * value >> 0);
+            }
+        }
+    } else {
+        if (this.data.length !== value.length) {
+            throw new Error('multiply: the data size is different');
+        }
+        for (var j = 0; j < channels.length; j++) {
+            var c = channels[j];
+            for (var i = 0; i < this.data.length; i += this.channels) {
+                this.data[i + c] = Math.max(0, Math.min(this.maxValue, this.data[i + c] * value[i + c] >> 0));
+            }
         }
     }
 }
 
 module.exports = exports['default'];
 
-},{"../../util/channel":143}],74:[function(require,module,exports){
+},{"../../util/channel":144,"../../util/value":151,"../image":76}],74:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -12693,7 +12828,7 @@ function sobelFilter() {
 
 module.exports = exports['default'];
 
-},{"../../util/kernels":146,"../image":76,"../operator/convolution":82}],75:[function(require,module,exports){
+},{"../../util/kernels":147,"../image":76,"../operator/convolution":82}],75:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -12701,7 +12836,15 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports['default'] = subtract;
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 var _utilChannel = require('../../util/channel');
+
+var _image = require('../image');
+
+var _image2 = _interopRequireDefault(_image);
+
+var _utilValue = require('../../util/value');
 
 function subtract(value) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -12711,21 +12854,33 @@ function subtract(value) {
     this.checkProcessable('subtract', {
         bitDepth: [8, 16]
     });
-    if (value <= 0) throw new Error('subtract: the value must be greater than 0');
 
     channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
+    value = (0, _utilValue.checkNumberArray)(value);
 
-    for (var j = 0; j < channels.length; j++) {
-        var c = channels[j];
-        for (var i = 0; i < this.data.length; i += this.channels) {
-            this.data[i + c] = Math.max(0, this.data[i + c] - value >> 0);
+    if (!isNaN(value)) {
+        for (var j = 0; j < channels.length; j++) {
+            var c = channels[j];
+            for (var i = 0; i < this.data.length; i += this.channels) {
+                this.data[i + c] = Math.max(0, this.data[i + c] - value >> 0);
+            }
+        }
+    } else {
+        if (this.data.length !== value.length) {
+            throw new Error('substract: the data size is different');
+        }
+        for (var j = 0; j < channels.length; j++) {
+            var c = channels[j];
+            for (var i = 0; i < this.data.length; i += this.channels) {
+                this.data[i + c] = Math.max(0, Math.min(this.maxValue, this.data[i + c] + value[i + c] >> 0));
+            }
         }
     }
 }
 
 module.exports = exports['default'];
 
-},{"../../util/channel":143}],76:[function(require,module,exports){
+},{"../../util/channel":144,"../../util/value":151,"../image":76}],76:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -13266,7 +13421,7 @@ exports['default'] = Image;
 (0, _bitMethods2['default'])(Image);
 module.exports = exports['default'];
 
-},{"../stack/stack":140,"./bitMethods":45,"./environment":57,"./extend":58,"./kind":77,"./kindNames":78,"./load":79,"./mediaTypes":80,"./model/model":81,"./roi/manager":91,"extend":3,"fs":2}],77:[function(require,module,exports){
+},{"../stack/stack":141,"./bitMethods":45,"./environment":57,"./extend":58,"./kind":77,"./kindNames":78,"./load":79,"./mediaTypes":80,"./model/model":81,"./roi/manager":91,"extend":3,"fs":2}],77:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -13709,7 +13864,7 @@ function convolution(kernel) {
 
 module.exports = exports['default'];
 
-},{"../../util/channel":143,"../../util/kernel":145,"../image":76}],83:[function(require,module,exports){
+},{"../../util/channel":144,"../../util/kernel":146,"../image":76}],83:[function(require,module,exports){
 // we will create a small image from a mask
 
 'use strict';
@@ -13815,6 +13970,57 @@ function paintMasks(masks) {
 module.exports = exports['default'];
 
 },{"../model/model":81}],85:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports['default'] = paintPixels;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _modelModel = require('../model/model');
+
+var _utilShape = require('../../util/shape');
+
+var _utilShape2 = _interopRequireDefault(_utilShape);
+
+function paintPixels(pixels) {
+    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+    var _ref$color = _ref.color;
+    var color = _ref$color === undefined ? [this.maxValue, 0, 0] : _ref$color;
+    var shape = _ref.shape;
+
+    this.checkProcessable('paintPixels', {
+        components: 3,
+        bitDepth: [8, 16],
+        colorModel: _modelModel.RGB
+    });
+
+    var shapePixels = new _utilShape2['default'](shape).getPixels();
+
+    var numberChannels = Math.min(this.channels, color.length);
+
+    for (var i = 0; i < pixels.length; i++) {
+        var xP = pixels[i][0];
+        var yP = pixels[i][1];
+        for (var j = 0; j < shapePixels.length; j++) {
+            var xS = shapePixels[j][0];
+            var yS = shapePixels[j][1];
+            if (xP + xS >= 0 && yP + yS >= 0 && xP + xS < this.width && yP + yS < this.height) {
+                var position = (xP + xS + (yP + yS) * this.width) * this.channels;
+                for (var channel = 0; channel < numberChannels; channel++) {
+                    this.data[position + channel] = color[channel];
+                }
+            }
+        }
+    }
+}
+
+module.exports = exports['default'];
+
+},{"../../util/shape":150,"../model/model":81}],86:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13838,7 +14044,7 @@ var ROIMap = function ROIMap(parent, pixels, negativeID, positiveID) {
 exports["default"] = ROIMap;
 module.exports = exports["default"];
 
-},{}],86:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -13875,15 +14081,17 @@ function createROI(roiMap) {
     for (var x = 0; x < width; x++) {
         for (var y = 0; y < height; y++) {
             var target = y * width + x;
-            var mapID = pixels[target] + roiMap.negative;
-            if (mapID > roiMap.negative) mapID--;
-            if (x < rois[mapID].minX) rois[mapID].minX = x;
-            if (x > rois[mapID].maxX) rois[mapID].maxX = x;
-            if (y < rois[mapID].minY) rois[mapID].minY = y;
-            if (y > rois[mapID].maxY) rois[mapID].maxY = y;
-            rois[mapID].meanX += x;
-            rois[mapID].meanY += y;
-            rois[mapID].surface++;
+            if (pixels[target] !== 0) {
+                var mapID = pixels[target] + roiMap.negative;
+                if (mapID > roiMap.negative) mapID--;
+                if (x < rois[mapID].minX) rois[mapID].minX = x;
+                if (x > rois[mapID].maxX) rois[mapID].maxX = x;
+                if (y < rois[mapID].minY) rois[mapID].minY = y;
+                if (y > rois[mapID].maxY) rois[mapID].maxY = y;
+                rois[mapID].meanX += x;
+                rois[mapID].meanY += y;
+                rois[mapID].surface++;
+            }
         }
     }
     for (var i = 0; i < size; i++) {
@@ -13897,132 +14105,7 @@ function createROI(roiMap) {
 
 module.exports = exports['default'];
 
-},{"./roi":92}],87:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var Matrix = require('ml-matrix');
-
-var cross = [[0, 0, 1, 0, 0], [0, 0, 1, 0, 0], [1, 1, 1, 1, 1], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0]];
-
-var smallCross = [[0, 1, 0], [1, 1, 1], [0, 1, 0]];
-
-function getOn(shape) {
-    var matrix = shape.matrix;
-    var on = [[], []];
-    for (var y = 0; y < matrix.length; y++) {
-        for (var x = 0; x < matrix[0].length; x++) {
-            if (matrix[y][x]) {
-                on[0].push(x - shape.halfWidth);
-                on[1].push(y - shape.halfHeight);
-            }
-        }
-    }
-    return on;
-}
-
-var Shape = function Shape() {
-    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-    var _ref$kind = _ref.kind;
-    var kind = _ref$kind === undefined ? 'cross' : _ref$kind;
-    var shape = _ref.shape;
-    var size = _ref.size;
-    var width = _ref.width;
-    var height = _ref.height;
-    var filled = _ref.filled;
-
-    _classCallCheck(this, Shape);
-
-    if (shape) kind = undefined;
-    if (size) {
-        width = size;
-        height = size;
-    }
-    if (width && 1 !== 1 || height && 1 !== 1) {
-        throw Error('Shape: The width and height has to be odd numbers.');
-    }
-    if (kind) {
-        switch (kind) {
-            case 'cross':
-                this.matrix = cross;
-                break;
-            case 'smallCross':
-                this.matrix = smallCross;
-                break;
-        }
-        this.height = this.matrix.length;
-        this.width = this.matrix[0].length;
-        if (this.height & 1 === 0 || this.width & 1 === 0) {
-            throw new Error('Shapes must have an odd height and width');
-        }
-    } else {
-        switch (shape) {
-            case 'square':
-            case 'rectangle':
-                this.matrix = rectangle(width, height);
-                break;
-            case 'circle':
-            case 'ellipse':
-                this.matrix = ellipse(width, height);
-                break;
-            case 'triangle':
-                this.matrix = triangle(width, height);
-                break;
-            default:
-
-        }
-    }
-
-    this.halfHeight = this.height / 2 >> 0;
-    this.halfWidth = this.width / 2 >> 0;
-    this.on = getOn(this);
-};
-
-exports['default'] = Shape;
-
-function rectangle(width, height) {
-    var matrix = Matrix.zeros(height, width);
-    for (var y = 0; y < height; y++) {
-        for (var x = 0; x < width; x++) {
-            matrix[y][x] = 1;
-        }
-    }
-    return matrix;
-}
-
-function ellipse(width, height) {
-    var matrix = Matrix.zeros(height, width);
-    var a = Math.floor(width / 2);
-    var b = Math.floor(height / 2);
-    for (var y = 0; y < height; y++) {
-        var yp = Math.floor(y / 2);
-        var shift = Math.floor(width / 2 - Math.sqrt((a * a * b * b - a * a * yp * yp) / b * b));
-        for (var x = shift; x < width - shift; x++) {
-            matrix[y][x] = 1;
-        }
-    }
-    return matrix;
-}
-
-function triangle(width, height) {
-    var matrix = Matrix.zeros(height, width);
-    for (var y = 0; y < height; y++) {
-        var shift = Math.floor((1 - y / height) * width / 2);
-        for (var x = shift; x < width - shift; x++) {
-            matrix[y][x] = 1;
-        }
-    }
-    return matrix;
-}
-module.exports = exports['default'];
-
-},{"ml-matrix":35}],88:[function(require,module,exports){
+},{"./roi":92}],88:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -14236,7 +14319,7 @@ function createROIMapFromExtrema() {
 
 module.exports = exports['default'];
 
-},{"./../ROIMap":85}],89:[function(require,module,exports){
+},{"./../ROIMap":86}],89:[function(require,module,exports){
 /*
 We will annotate each point to define to which area it belongs
  */
@@ -14364,7 +14447,7 @@ function createROIMapFromMask(mask) {
 
 module.exports = exports['default'];
 
-},{"./../ROIMap":85}],90:[function(require,module,exports){
+},{"./../ROIMap":86}],90:[function(require,module,exports){
 /*
 We will annotate each point to define to which area it belongs
  */
@@ -14374,7 +14457,7 @@ We will annotate each point to define to which area it belongs
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
-exports['default'] = fromPoints;
+exports['default'] = fromCoordinates;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -14382,36 +14465,37 @@ var _ROIMap = require('./../ROIMap');
 
 var _ROIMap2 = _interopRequireDefault(_ROIMap);
 
-var _Shape = require('./Shape');
+var _utilShape = require('./../../../util/shape');
 
-var _Shape2 = _interopRequireDefault(_Shape);
+var _utilShape2 = _interopRequireDefault(_utilShape);
 
-function fromPoints(points) {
+function fromCoordinates(pixelsToPaint) {
     var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-    var shape = new _Shape2['default'](options);
+    var shape = new _utilShape2['default'](options);
+
     // based on a binary image we will create plenty of small images
-    var pixels = new Int16Array(this.size); // maxValue: 32767, minValue: -32768
+    var mapPixels = new Int16Array(this.size); // maxValue: 32767, minValue: -32768
     var positiveID = 0;
-    for (var i = 0; i < points[0].length; i++) {
+    var shapePixels = shape.getPixels();
+    for (var i = 0; i < pixelsToPaint.length; i++) {
         positiveID++;
-        var xP = points[0][i];
-        var yP = points[1][i];
-        for (var j = 0; j < shape.on[0].length; j++) {
-            var xS = shape.on[0][j];
-            var yS = shape.on[1][j];
+        var xP = pixelsToPaint[i][0];
+        var yP = pixelsToPaint[i][1];
+        for (var j = 0; j < shapePixels.length; j++) {
+            var xS = shapePixels[j][0];
+            var yS = shapePixels[j][1];
             if (xP + xS >= 0 && yP + yS >= 0 && xP + xS < this.width && yP + yS < this.height) {
-                pixels[xP + xS + (yP + yS) * this.width] = positiveID;
+                mapPixels[xP + xS + (yP + yS) * this.width] = positiveID;
             }
         }
     }
-
-    return new _ROIMap2['default'](this, pixels, 0, positiveID);
+    return new _ROIMap2['default'](this, mapPixels, 0, positiveID);
 }
 
 module.exports = exports['default'];
 
-},{"./../ROIMap":85,"./Shape":87}],91:[function(require,module,exports){
+},{"./../../../util/shape":150,"./../ROIMap":86}],91:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -14432,9 +14516,9 @@ var _creatorFromExtrema = require('./creator/fromExtrema');
 
 var _creatorFromExtrema2 = _interopRequireDefault(_creatorFromExtrema);
 
-var _creatorFromPoints = require('./creator/fromCoordinates');
+var _creatorFromPixels = require('./creator/fromPixels');
 
-var _creatorFromPoints2 = _interopRequireDefault(_creatorFromPoints);
+var _creatorFromPixels2 = _interopRequireDefault(_creatorFromPixels);
 
 var _createROI = require('./createROI');
 
@@ -14443,6 +14527,10 @@ var _createROI2 = _interopRequireDefault(_createROI);
 var _extend = require('extend');
 
 var _extend2 = _interopRequireDefault(_extend);
+
+var _image = require('../image');
+
+var _image2 = _interopRequireDefault(_image);
 
 var ROIManager = (function () {
     function ROIManager(image) {
@@ -14467,12 +14555,12 @@ var ROIManager = (function () {
             this._layers[opt.label] = new ROILayer(roiMap, opt);
         }
     }, {
-        key: 'generateROIFromPoints',
-        value: function generateROIFromPoints(points) {
+        key: 'generateROIFromPixels',
+        value: function generateROIFromPixels(pixels) {
             var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
             var opt = (0, _extend2['default'])({}, this._options, options);
-            var roiMap = _creatorFromPoints2['default'].call(this._image, points, options);
+            var roiMap = _creatorFromPixels2['default'].call(this._image, pixels, options);
             this._layers[opt.label] = new ROILayer(roiMap, opt);
         }
     }, {
@@ -14527,7 +14615,7 @@ var ROIManager = (function () {
             var ptr = 0;
             for (var i = 0; i < allROIs.length; i++) {
                 var roi = allROIs[i];
-                if ((roi.id < 0 && negative || roi.id > 0 && positive) && roi.surface > minSurface && roi.surface < maxSurface) {
+                if ((roi.id < 0 && negative || roi.id > 0 && positive) && roi.surface >= minSurface && roi.surface <= maxSurface) {
                     rois[ptr++] = roi;
                 }
             }
@@ -14566,6 +14654,29 @@ var ROIManager = (function () {
             this._painted.paintMasks(masks, options);
             return this._painted;
         }
+
+        // return a mask corresponding to all the selected masks
+    }, {
+        key: 'getMask',
+        value: function getMask() {
+            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+            var mask = new _image2['default'](this._image.width, this._image.height, { kind: 'BINARY' });
+            var masks = this.getROIMasks(options);
+            for (var i = 0; i < masks.length; i++) {
+                var roi = masks[i];
+                // we need to find the parent image to calculate the relative position
+
+                for (var x = 0; x < roi.width; x++) {
+                    for (var y = 0; y < roi.height; y++) {
+                        if (roi.getBitXY(x, y)) {
+                            mask.setBitXY(x + roi.position[0], y + roi.position[1]);
+                        }
+                    }
+                }
+            }
+            return mask;
+        }
     }, {
         key: 'resetPainted',
         value: function resetPainted(image) {
@@ -14588,7 +14699,7 @@ var ROILayer = function ROILayer(roiMap, options) {
 
 module.exports = exports['default'];
 
-},{"./createROI":86,"./creator/fromExtrema":88,"./creator/fromMask":89,"./creator/fromPoints":90,"extend":3}],92:[function(require,module,exports){
+},{"../image":76,"./createROI":87,"./creator/fromExtrema":88,"./creator/fromMask":89,"./creator/fromPixels":90,"extend":3}],92:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -15000,7 +15111,7 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
-exports['default'] = bitDepth;
+exports['default'] = colorDepth;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -15008,20 +15119,20 @@ var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-function bitDepth() {
-    var newBitDepth = arguments.length <= 0 || arguments[0] === undefined ? 8 : arguments[0];
+function colorDepth() {
+    var newColorDepth = arguments.length <= 0 || arguments[0] === undefined ? 8 : arguments[0];
 
-    this.checkProcessable('bitDepth', {
+    this.checkProcessable('colorDepth', {
         bitDepth: [8, 16]
     });
 
-    if (![8, 16].includes(newBitDepth)) throw Error('You need to specify the new bitDepth as 8 or 16');
+    if (! ~[8, 16].indexOf(newColorDepth)) throw Error('You need to specify the new colorDepth as 8 or 16');
 
-    if (this.bitDepth === newBitDepth) return this.clone();
+    if (this.bitDepth === newColorDepth) return this.clone();
 
-    var newImage = _image2['default'].createFrom(this, { bitDepth: newBitDepth });
+    var newImage = _image2['default'].createFrom(this, { bitDepth: newColorDepth });
 
-    if (newBitDepth === 8) {
+    if (newColorDepth === 8) {
         for (var i = 0; i < this.data.length; i++) {
             newImage.data[i] = this.data[i] >> 8;
         }
@@ -15891,7 +16002,7 @@ function mask() {
 
 module.exports = exports['default'];
 
-},{"../../../util/converter":144,"../../image":76,"./huang":103,"./intermodes":104,"./isodata":105,"./li":106,"./maxEntropy":108,"./mean":109,"./minError":110,"./minimum":111,"./moments":112,"./otsu":113,"./percentile":114,"./renyiEntropy.js":115,"./shanbhag":116,"./triangle":117,"./yen":118}],108:[function(require,module,exports){
+},{"../../../util/converter":145,"../../image":76,"./huang":103,"./intermodes":104,"./isodata":105,"./li":106,"./maxEntropy":108,"./mean":109,"./minError":110,"./minimum":111,"./moments":112,"./otsu":113,"./percentile":114,"./renyiEntropy.js":115,"./shanbhag":116,"./triangle":117,"./yen":118}],108:[function(require,module,exports){
 /*
  * see http://rsb.info.nih.gov/ij/developer/source/ij/process/AutoThresholder.java.html
  * The method is present in: Implements Kapur-Sahoo-Wong (Maximum Entropy) thresholding method:
@@ -17010,7 +17121,7 @@ function scale() {
 
 module.exports = exports['default'];
 
-},{"../../../util/converter":144,"../../image":76,"./nearestNeighbor":122}],124:[function(require,module,exports){
+},{"../../../util/converter":145,"../../image":76,"./nearestNeighbor":122}],124:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17047,8 +17158,6 @@ exports['default'] = match;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError('Cannot destructure undefined'); }
-
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
@@ -17066,7 +17175,7 @@ var _utilMatrix2 = _interopRequireDefault(_utilMatrix);
 function match(image) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-    _objectDestructuringEmpty(_ref);
+    var border = _ref.border;
 
     this.checkProcessable('getChannel', {
         bitDepth: [8, 16]
@@ -17095,7 +17204,7 @@ function match(image) {
         var toCalculatePositions = similarityMatrix.localSearch(currentX, currentY, -Infinity);
         for (var i = 0; i < toCalculatePositions.length; i++) {
             var position = toCalculatePositions[i];
-            var similarity = this.getSimilarity(image, { shift: [middleX - position[0], middleY - position[1]] });
+            var similarity = this.getSimilarity(image, { border: border, shift: [middleX - position[0], middleY - position[1]] });
             similarityMatrix[position[0]][position[1]] = similarity;
         }
 
@@ -17113,7 +17222,7 @@ function match(image) {
 
 module.exports = exports['default'];
 
-},{"../../util/matrix":147,"../image":76,"new-array":37}],126:[function(require,module,exports){
+},{"../../util/matrix":148,"../image":76,"new-array":37}],126:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -17152,7 +17261,7 @@ function getChannel(channel) {
 
 module.exports = exports['default'];
 
-},{"../image":76,"./../../util/channel":143}],127:[function(require,module,exports){
+},{"../image":76,"./../../util/channel":144}],127:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -17189,7 +17298,77 @@ function getColumn(column) {
 
 module.exports = exports['default'];
 
-},{"../image":76,"./../../util/channel":143}],128:[function(require,module,exports){
+},{"../image":76,"./../../util/channel":144}],128:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports['default'] = getPixelsGrid;
+
+function getPixelsGrid() {
+    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+    var _ref$sampling = _ref.sampling;
+    var sampling = _ref$sampling === undefined ? [10, 10] : _ref$sampling;
+    var _ref$painted = _ref.painted;
+    var painted = _ref$painted === undefined ? false : _ref$painted;
+    var mask = _ref.mask;
+    var _ref$format = _ref.format;
+    var format = _ref$format === undefined ? 'xy z' : _ref$format;
+
+    this.checkProcessable('getPixelsGrid', {
+        bitDepth: [8, 16],
+        channels: 1
+    });
+
+    var toReturn = {};
+
+    if (!Array.isArray(sampling)) sampling = [sampling, sampling];
+
+    var xSampling = sampling[0];
+    var ySampling = sampling[1];
+    var nbSamples = xSampling * ySampling;
+
+    var xyS = new Array(nbSamples);
+    var zS = new Array(nbSamples);
+
+    var xStep = this.width / xSampling;
+    var yStep = this.height / ySampling;
+    var currentX = Math.floor(xStep / 2);
+
+    var position = 0;
+    for (var i = 0; i < xSampling; i++) {
+        var currentY = Math.floor(yStep / 2);
+        for (var j = 0; j < ySampling; j++) {
+            var x = Math.round(currentX);
+            var y = Math.round(currentY);
+            if (!mask || mask.getBitXY(x, y)) {
+                xyS[position] = [x, y];
+                zS[position] = this.getValueXY(x, y, 0);
+                position++;
+            }
+            currentY += yStep;
+        }
+        currentX += xStep;
+    }
+
+    xyS.length = position;
+    zS.length = position;
+
+    toReturn.xyS = xyS;
+    toReturn.zS = zS;
+
+    if (painted) {
+        toReturn.painted = this.rgba8().paintPixels(xyS);
+    }
+
+    return toReturn;
+}
+
+module.exports = exports['default'];
+
+},{}],129:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -17228,13 +17407,13 @@ function getRow(row) {
 
 module.exports = exports['default'];
 
-},{"../image":76,"./../../util/channel":143}],129:[function(require,module,exports){
+},{"../image":76,"./../../util/channel":144}],130:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
     value: true
 });
-exports['default'] = overlap;
+exports['default'] = getSimilarity;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -17252,7 +17431,7 @@ var _newArray2 = _interopRequireDefault(_newArray);
 
 // if normalize we normalize separately the 2 images
 
-function overlap(image) {
+function getSimilarity(image) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     var _ref$shift = _ref.shift;
@@ -17261,11 +17440,14 @@ function overlap(image) {
     var channels = _ref.channels;
     var defaultAlpha = _ref.defaultAlpha;
     var normalize = _ref.normalize;
+    var _ref$border = _ref.border;
+    var border = _ref$border === undefined ? [0, 0] : _ref$border;
 
-    this.checkProcessable('overlap', {
+    this.checkProcessable('getSimilarity', {
         bitDepth: [8, 16]
     });
 
+    if (!Array.isArray(border)) border = [border, border];
     channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels, defaultAlpha: defaultAlpha });
 
     if (this.bitDepth !== image.bitDepth) {
@@ -17282,10 +17464,10 @@ function overlap(image) {
 
     // we allow a shift
     // we need to find the minX, maxX, minY, maxY
-    var minX = Math.max(0, -shift[0]);
-    var maxX = Math.min(this.width, this.width - shift[0]);
-    var minY = Math.max(0, -shift[1]);
-    var maxY = Math.min(this.height, this.height - shift[1]);
+    var minX = Math.max(border[0], -shift[0]);
+    var maxX = Math.min(this.width - border[0], this.width - shift[0]);
+    var minY = Math.max(border[1], -shift[1]);
+    var maxY = Math.min(this.height - border[1], this.height - shift[1]);
 
     var results = (0, _newArray2['default'])(channels.length, 0);
     for (var i = 0; i < channels.length; i++) {
@@ -17309,13 +17491,12 @@ function overlap(image) {
             return sum + x;
         }) / results.length;
     }
-
     return results;
 }
 
 module.exports = exports['default'];
 
-},{"../image":76,"./../../util/channel":143,"new-array":37}],130:[function(require,module,exports){
+},{"../image":76,"./../../util/channel":144,"new-array":37}],131:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -17397,7 +17578,7 @@ function setBorder() {
 
 module.exports = exports['default'];
 
-},{"../image":76,"new-array":37}],131:[function(require,module,exports){
+},{"../image":76,"new-array":37}],132:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -17440,7 +17621,7 @@ function setChannel(channel, image) {
 
 module.exports = exports['default'];
 
-},{"../image":76,"./../../util/channel":143}],132:[function(require,module,exports){
+},{"../image":76,"./../../util/channel":144}],133:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -17506,14 +17687,14 @@ function split() {
 
 module.exports = exports['default'];
 
-},{"../image":76}],133:[function(require,module,exports){
+},{"../image":76}],134:[function(require,module,exports){
 /* eslint-disable strict */
 'use strict';
 
 module.exports = exports = require('./image/image');
 exports.Stack = require('./stack/stack');
 
-},{"./image/image":76,"./stack/stack":140}],134:[function(require,module,exports){
+},{"./image/image":76,"./stack/stack":141}],135:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -17539,7 +17720,7 @@ function histogram(options) {
 
 module.exports = exports['default'];
 
-},{}],135:[function(require,module,exports){
+},{}],136:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -17568,7 +17749,7 @@ function histograms(options) {
 
 module.exports = exports['default'];
 
-},{}],136:[function(require,module,exports){
+},{}],137:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -17593,7 +17774,7 @@ function max() {
 
 module.exports = exports['default'];
 
-},{}],137:[function(require,module,exports){
+},{}],138:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -17628,7 +17809,7 @@ function median() {
 
 module.exports = exports['default'];
 
-},{"../../util/medianFromHistogram":148,"./histograms":135}],138:[function(require,module,exports){
+},{"../../util/medianFromHistogram":149,"./histograms":136}],139:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -17652,7 +17833,7 @@ function min() {
 
 module.exports = exports['default'];
 
-},{}],139:[function(require,module,exports){
+},{}],140:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -17705,7 +17886,7 @@ function extend(Stack) {
 
 module.exports = exports['default'];
 
-},{"./compute/histogram":134,"./compute/histograms":135,"./compute/max":136,"./compute/median":137,"./compute/min":138,"./transform/matchAndCrop":141,"./utility/average":142}],140:[function(require,module,exports){
+},{"./compute/histogram":135,"./compute/histograms":136,"./compute/max":137,"./compute/median":138,"./compute/min":139,"./transform/matchAndCrop":142,"./utility/average":143}],141:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -17856,7 +18037,7 @@ Stack.prototype.checkProcessable = function (processName) {
 (0, _extend2['default'])(Stack);
 module.exports = exports['default'];
 
-},{"../image/image":76,"./extend":139}],141:[function(require,module,exports){
+},{"../image/image":76,"./extend":140}],142:[function(require,module,exports){
 /*
  We will try to move a set of images in order to get only the best common part of them
  The match is always done on the first image ?
@@ -17902,7 +18083,10 @@ function matchAndCrop() {
 
     // we calculate the best relative position to the parent image
     for (var i = 1; i < this.length; i++) {
-        var position = parent.getBestMatch(this[i]);
+        // in order to calculate the similarity we need to add a border that will not be compared
+        // by default we take as border 1/8 of the image width and height
+        var position = parent.getBestMatch(this[i], { border: [parent.width >> 3, parent.height >> 3] });
+
         results[i] = {
             position: [position[0] + relativePosition[0], position[1] + relativePosition[1]],
             image: this[i]
@@ -17933,6 +18117,15 @@ function matchAndCrop() {
     for (var i = 0; i < results.length; i++) {
         var result = results[i];
 
+        /*
+        console.log("CROP",
+            leftShift - result.position[0],
+            topShift - result.position[1],
+            parent.width - rightShift - leftShift,
+            parent.height - bottomShift - topShift
+        )
+        */
+
         result.crop = result.image.crop({
             x: leftShift - result.position[0],
             y: topShift - result.position[1],
@@ -17952,11 +18145,7 @@ function matchAndCrop() {
 
 module.exports = exports['default'];
 
-},{"../stack":140}],142:[function(require,module,exports){
-/*
- We will try to move a set of images in order to get only the best common part of them
- The match is always done on the first image ?
-*/
+},{"../stack":141}],143:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -18005,7 +18194,7 @@ function average() {
 
 module.exports = exports['default'];
 
-},{"../../image/image":76,"../stack":140}],143:[function(require,module,exports){
+},{"../../image/image":76,"../stack":141}],144:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -18099,7 +18288,7 @@ function validateChannel(image, channel) {
     return channel;
 }
 
-},{"../image/model/model":81}],144:[function(require,module,exports){
+},{"../image/model/model":81}],145:[function(require,module,exports){
 /**
  * Converts a factor value to a number between 0 and 1
  * @param value
@@ -18160,7 +18349,7 @@ function factorDimensions(factor, width, height) {
     };
 }
 
-},{}],145:[function(require,module,exports){
+},{}],146:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -18207,7 +18396,7 @@ function validateKernel(kernel) {
     return { kernel: kernel, kWidth: kWidth, kHeight: kHeight };
 }
 
-},{"is-integer":25}],146:[function(require,module,exports){
+},{"is-integer":25}],147:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18231,7 +18420,7 @@ exports.SECOND_DERIVATIVE = SECOND_DERIVATIVE;
 var SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
 exports.SECOND_DERIVATIVE_INV = SECOND_DERIVATIVE_INV;
 
-},{}],147:[function(require,module,exports){
+},{}],148:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18304,7 +18493,7 @@ Matrix.prototype.localSearch = function (x, y, value) {
 };
 module.exports = exports["default"];
 
-},{}],148:[function(require,module,exports){
+},{}],149:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18343,5 +18532,158 @@ function medianFromHistogram(histogram) {
 
 module.exports = exports["default"];
 
-},{}]},{},[133])(133)
+},{}],150:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var Matrix = require('ml-matrix');
+
+var cross = [[0, 0, 1, 0, 0], [0, 0, 1, 0, 0], [1, 1, 1, 1, 1], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0]];
+
+var smallCross = [[0, 1, 0], [1, 1, 1], [0, 1, 0]];
+
+var Shape = function Shape() {
+    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+    var _ref$kind = _ref.kind;
+    var kind = _ref$kind === undefined ? 'cross' : _ref$kind;
+    var shape = _ref.shape;
+    var size = _ref.size;
+    var width = _ref.width;
+    var height = _ref.height;
+    var filled = _ref.filled;
+
+    _classCallCheck(this, Shape);
+
+    if (shape) kind = undefined;
+    if (size) {
+        width = size;
+        height = size;
+    }
+    if (width && 1 !== 1 || height && 1 !== 1) {
+        throw Error('Shape: The width and height has to be odd numbers.');
+    }
+    if (kind) {
+        switch (kind) {
+            case 'cross':
+                this.matrix = cross;
+                break;
+            case 'smallCross':
+                this.matrix = smallCross;
+                break;
+        }
+        this.height = this.matrix.length;
+        this.width = this.matrix[0].length;
+        if (this.height & 1 === 0 || this.width & 1 === 0) {
+            throw new Error('Shapes must have an odd height and width');
+        }
+    } else {
+        switch (shape) {
+            case 'square':
+            case 'rectangle':
+                this.matrix = rectangle(width, height);
+                break;
+            case 'circle':
+            case 'ellipse':
+                this.matrix = ellipse(width, height);
+                break;
+            case 'triangle':
+                this.matrix = triangle(width, height);
+                break;
+            default:
+
+        }
+    }
+
+    this.halfHeight = this.height / 2 >> 0;
+    this.halfWidth = this.width / 2 >> 0;
+};
+
+exports['default'] = Shape;
+
+Shape.prototype.getPixels = function () {
+    var matrix = this.matrix;
+    var pixels = new Array(matrix.size);
+    var position = 0;
+    for (var y = 0; y < matrix.length; y++) {
+        for (var x = 0; x < matrix[0].length; x++) {
+            if (matrix[y][x]) {
+                pixels[position++] = [x - this.halfWidth, y - this.halfHeight];
+            }
+        }
+    }
+    return pixels;
+};
+
+function rectangle(width, height) {
+    var matrix = Matrix.zeros(height, width);
+    for (var y = 0; y < height; y++) {
+        for (var x = 0; x < width; x++) {
+            matrix[y][x] = 1;
+        }
+    }
+    return matrix;
+}
+
+function ellipse(width, height) {
+    var matrix = Matrix.zeros(height, width);
+    var a = Math.floor(width / 2);
+    var b = Math.floor(height / 2);
+    for (var y = 0; y < height; y++) {
+        var yp = Math.floor(y / 2);
+        var shift = Math.floor(width / 2 - Math.sqrt((a * a * b * b - a * a * yp * yp) / b * b));
+        for (var x = shift; x < width - shift; x++) {
+            matrix[y][x] = 1;
+        }
+    }
+    return matrix;
+}
+
+function triangle(width, height) {
+    var matrix = Matrix.zeros(height, width);
+    for (var y = 0; y < height; y++) {
+        var shift = Math.floor((1 - y / height) * width / 2);
+        for (var x = shift; x < width - shift; x++) {
+            matrix[y][x] = 1;
+        }
+    }
+    return matrix;
+}
+module.exports = exports['default'];
+
+},{"ml-matrix":35}],151:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+exports.checkNumberArray = checkNumberArray;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _imageImage = require('../image/image');
+
+var _imageImage2 = _interopRequireDefault(_imageImage);
+
+function checkNumberArray(value) {
+    if (!isNaN(value)) {
+        if (value <= 0) throw new Error('checkNumberArray: the value must be greater than 0');
+        return value;
+    } else {
+        if (value instanceof _imageImage2['default']) {
+            return _imageImage2['default'].data;
+        }
+        if (!Array.isArray(value)) {
+            throw new Error('checkNumberArray: the value should be either a number, array or Image');
+        }
+        return value;
+    }
+}
+
+},{"../image/image":76}]},{},[134])(134)
 });
