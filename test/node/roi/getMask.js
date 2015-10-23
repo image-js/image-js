@@ -4,10 +4,10 @@ describe('we check ROI.getMask', function () {
     it('should yield the right mask', function () {
         let image = new Image(5, 5, {kind: 'GREY'});
 
-        let points = [[1,3,4,5],[1,2,4,0]];
+        let points = [[1,1],[3,2],[4,4],[5,0]];
 
         let roiManager = image.getROIManager();
-        roiManager.generateROIFromPoints(points, {kind: 'smallCross'});
+        roiManager.generateROIFromPixels(points, {kind: 'smallCross'});
         Array.from(roiManager.getPixels()).should.eql([
             0, 1, 0, 0, 4,
             1, 1, 1, 2, 0,

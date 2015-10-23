@@ -15,19 +15,6 @@ let smallCross = [
     [0,1,0]
 ];
 
-function getOn(shape) {
-    let matrix = shape.matrix;
-    let on = [[],[]];
-    for (let y = 0; y < matrix.length; y++) {
-        for (let x = 0; x < matrix[0].length; x++) {
-            if (matrix[y][x]) {
-                on[0].push(x - shape.halfWidth);
-                on[1].push(y - shape.halfHeight);
-            }
-        }
-    }
-    return on;
-}
 
 
 
@@ -76,9 +63,24 @@ export default class Shape {
 
         this.halfHeight = (this.height / 2) >> 0;
         this.halfWidth = (this.width / 2) >> 0;
-        this.on = getOn(this);
     }
 }
+
+Shape.prototype.getPixels = function () {
+    let matrix = this.matrix;
+    let pixels = new Array(matrix.size);
+    let position = 0;
+    for (let y = 0; y < matrix.length; y++) {
+        for (let x = 0; x < matrix[0].length; x++) {
+            if (matrix[y][x]) {
+                pixels[position++] = [x - this.halfWidth, y - this.halfHeight];
+            }
+        }
+    }
+    return pixels;
+};
+
+
 
 function rectangle(width, height) {
     let matrix = Matrix.zeros(height, width);

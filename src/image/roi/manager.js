@@ -1,6 +1,6 @@
 import fromMask from './creator/fromMask';
 import fromExtrema from './creator/fromExtrema';
-import fromPoints from './creator/fromPoints';
+import fromCoordinates from './creator/fromPixels';
 import createROI from './createROI';
 import extendObject from 'extend';
 import Image from '../image';
@@ -22,9 +22,9 @@ export default class ROIManager {
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
 
-    generateROIFromPoints(points, options = {}) {
+    generateROIFromPixels(pixels, options = {}) {
         let opt = extendObject({}, this._options, options);
-        let roiMap = fromPoints.call(this._image, points, options);
+        let roiMap = fromCoordinates.call(this._image, pixels, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
 
