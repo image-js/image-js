@@ -25,7 +25,7 @@ let bitMethods = {
         let target = y * this.width + x;
         let shift = 7 - (target & 0b00000111);
         let slot = target >> 3;
-        return (this.data[slot] & 1 << shift) ? 1 : 0;
+        return (this.data[slot] & (1 << shift)) ? 1 : 0;
     },
 
     setBit(pixel) {
@@ -49,7 +49,7 @@ let bitMethods = {
     getBit(pixel) {
         let shift = 7 - (pixel & 0b00000111);
         let slot = pixel >> 3;
-        return (this.data[slot] & 1 << shift) ? 1 : 0;
+        return (this.data[slot] & (1 << shift)) ? 1 : 0;
     }
 };
 

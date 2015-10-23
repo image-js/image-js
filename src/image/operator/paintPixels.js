@@ -5,7 +5,7 @@ export default function paintPixels(pixels, {
     color = [this.maxValue, 0, 0],
     shape} = {}) {
 
-    this.checkProcessable('paintPoints', {
+    this.checkProcessable('paintPixels', {
         components: 3,
         bitDepth: [8, 16],
         colorModel: RGB

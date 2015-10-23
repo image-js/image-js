@@ -35,9 +35,9 @@ export default function getPixelsGrid({
             if (!mask || mask.getBitXY(x,y)) {
                 xyS[position] = [x,y];
                 zS[position] = this.getValueXY(x,y,0);
-                currentY += yStep;
                 position++;
             }
+            currentY += yStep;
         }
         currentX += xStep;
     }
