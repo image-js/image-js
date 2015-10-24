@@ -7,7 +7,7 @@ export function checkNumberArray(value) {
         return value;
     } else {
         if (value instanceof Image) {
-            return Image.data;
+            return value.data;
         }
         if (!isArray(value)) {
             throw new Error('checkNumberArray: the value should be either a number, array or Image');
