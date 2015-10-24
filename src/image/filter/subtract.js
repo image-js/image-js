@@ -24,7 +24,7 @@ export default function subtract(value, {channels} = {}) {
         for (let j = 0; j < channels.length; j++) {
             let c = channels[j];
             for (let i = 0; i < this.data.length; i += this.channels) {
-                this.data[i + c] = Math.max(0, Math.min(this.maxValue, (this.data[i + c] + value[i + c]) >> 0));
+                this.data[i + c] = Math.max(0, Math.min(this.maxValue, (this.data[i + c] - value[i + c]) >> 0));
             }
         }
     }
