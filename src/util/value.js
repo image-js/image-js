@@ -1,4 +1,5 @@
 import Image from '../image/image';
+import isArray from 'is-array-type';
 
 export function checkNumberArray(value) {
     if (!isNaN(value)) {
@@ -8,7 +9,7 @@ export function checkNumberArray(value) {
         if (value instanceof Image) {
             return Image.data;
         }
-        if (!Array.isArray(value)) {
+        if (!isArray(value)) {
             throw new Error('checkNumberArray: the value should be either a number, array or Image');
         }
         return value;

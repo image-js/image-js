@@ -66,6 +66,7 @@
     "atob-lite": "^1.0.0",
     "extend": "^3.0.0",
     "fast-png": "0.0.4",
+    "is-array-type": "^1.0.0",
     "is-integer": "^1.0.4",
     "ml-matrix": "^1.0.2",
     "new-array": "^1.0.0",
