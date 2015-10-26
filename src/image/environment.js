@@ -2,7 +2,7 @@ let loadBinary, DOMImage, Canvas, ImageData, isDifferentOrigin, env;
 
 if (typeof self !== 'undefined') { // Browser
     env = 'browser';
-    let origin = self.location.origin;
+    const origin = self.location.origin;
     isDifferentOrigin = function (url) {
         try {
             let parsedURL = new self.URL(url);
@@ -42,13 +42,12 @@ if (typeof self !== 'undefined') { // Browser
         return false;
     };
 
-    ImageData = require('canvas/lib/bindings').ImageData;
-
-    let canvas = require('canvas');
+    const canvas = require('canvas');
     DOMImage = canvas.Image;
     Canvas = canvas;
+    ImageData = canvas.ImageData;
 
-    let fs = require('fs');
+    const fs = require('fs');
     loadBinary = function (path) {
         return new Promise(function (resolve, reject) {
             fs.readFile(path, function (err, data) {
