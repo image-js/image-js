@@ -30,7 +30,12 @@ export default class ROI {
             mask = mask.resizeBinary(scale);
         }
 
-        return image.extract(mask);
+        // we need to deal with the extract from a parent image
+        return image.extract(mask, {
+            position: [this.minX, this.minY],
+            parent: this.map.parent
+        });
+
     }
 
     get width() {
