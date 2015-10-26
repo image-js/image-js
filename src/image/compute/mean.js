@@ -1,10 +1,13 @@
+import {mean as histogramMean} from '../../util/histogram';
 
 // returns an array with the average value of each component
 
 export default function mean() {
-    let result = new Array(this.channels);
-    for (let c = 0; c < result.length; c++) {
-        result[c] = this.sum[c] / this.size;
+    let histograms = this.getHistograms({maxSlots:this.maxValue + 1});
+    let result = new Array(histograms.length);
+    for (let c = 0; c < histograms.length; c++) {
+        let histogram = histograms[c];
+        result[c] = histogramMean(histogram);
     }
     return result;
 }

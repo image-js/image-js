@@ -1,8 +1,7 @@
-export default function medianFromHistogram(histogram) {
+export function median(histogram) {
     let total = histogram.reduce((sum, x) => sum + x);
 
     if (total <= 0) return undefined;
-
 
     let position = 0;
     let currentTotal = 0;
@@ -21,9 +20,21 @@ export default function medianFromHistogram(histogram) {
                 previous = position;
             }
         }
-
         position++;
     }
+}
 
+export function mean(histogram) {
+    let total = 0;
+    let sum = 0;
+
+    for (let i = 0; i < histogram.length; i++) {
+        total += histogram[i];
+        sum += histogram[i] * i;
+    }
+
+    if (total <= 0) return undefined;
+
+    return sum / total;
 }
 

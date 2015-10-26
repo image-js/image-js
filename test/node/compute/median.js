@@ -38,8 +38,7 @@ describe('check median', function () {
                 3,4,5,255
             ]
         );
-
-        image.median.should.eql([2,3,4,255]);
+        image.median.should.eql([2,3,4]);
     });
 
     it('for a RGBA image with alpha', function () {
@@ -52,7 +51,7 @@ describe('check median', function () {
             ]
         );
 
-        image.median.should.eql([2.5,3.5,4.5,150]);
+        image.median.should.eql([2.5,3.5,4.5]);
     });
 
 });

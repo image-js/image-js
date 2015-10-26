@@ -70,7 +70,7 @@ describe('check stack median method', function () {
             )
         );
 
-        images.getMedian().should.eql([4, 4.5, 6.5, 255]);
+        images.getMedian().should.eql([4, 4.5, 6.5]);
     });
 
 });

@@ -2,7 +2,7 @@ import {Image, load} from '../common';
 
 
 describe('we check that we can extract correctly a ROI', function () {
-    it.only('should yield the right extract number of pixels', function () {
+    it('should yield the right extract number of pixels', function () {
         return load('BW15x15.png').then(function (img) {
 
             img.width.should.equal(15);

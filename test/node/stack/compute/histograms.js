@@ -73,10 +73,8 @@ describe('check stack histograms method', function () {
         images.getHistograms({maxSlots:4}).should.eql([
             [6, 0, 0, 0],
             [6, 0, 0, 0],
-            [6, 0, 0, 0],
-            [0, 0, 0, 6]
+            [6, 0, 0, 0]
         ]);
     });
-
 });
 
