@@ -22,13 +22,13 @@ export default class ROIManager {
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
 
-    generateROIFromPixels(pixels, options = {}) {
+    putPixels(pixels, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromCoordinates.call(this._image, pixels, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
 
-    setMap(roiMap, options = {}) {
+    putMap(roiMap, options = {}) {
         let opt = extendObject({}, this._options, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }

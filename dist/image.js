@@ -14555,7 +14555,7 @@ var ROIManager = (function () {
             this._layers[opt.label] = new ROILayer(roiMap, opt);
         }
     }, {
-        key: 'generateROIFromPixels',
+        key: 'putPixels',
         value: function generateROIFromPixels(pixels) {
             var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
