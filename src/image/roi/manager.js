@@ -28,13 +28,18 @@ export default class ROIManager {
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
 
+    setMap(roiMap, options = {}) {
+        let opt = extendObject({}, this._options, options);
+        this._layers[opt.label] = new ROILayer(roiMap, opt);
+    }
+
     putMask(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromMask.call(this._image, mask, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
 
-    getROIMap(options = {}) {
+    getMap(options = {}) {
         let opt = extendObject({}, this._options, options);
         if (!this._layers[opt.label]) return;
         return this._layers[opt.label].roiMap;

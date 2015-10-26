@@ -14573,7 +14573,7 @@ var ROIManager = (function () {
             this._layers[opt.label] = new ROILayer(roiMap, opt);
         }
     }, {
-        key: 'getROIMap',
+        key: 'getMap',
         value: function getROIMap() {
             var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 

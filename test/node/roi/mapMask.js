@@ -12,7 +12,7 @@ describe('map a binary image (mask) 2 x 2', function () {
     let roiManager = img.getROIManager();
     roiManager.putMask(img);
     let pixels = roiManager.getPixels();
-    let result = roiManager.getROIMap();
+    let result = roiManager.getMap();
 
     it('should have 4 pixels in 2 zones', function () {
         pixels.should.instanceOf(Int16Array).and.have.lengthOf(4);
@@ -42,7 +42,7 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
     let roiManager = img.getROIManager();
     roiManager.putMask(img);
     let pixels = roiManager.getPixels();
-    let result = roiManager.getROIMap();
+    let result = roiManager.getMap();
 
     it('should have 16 pixels in 2 zones', function () {
         pixels.should.instanceOf(Int16Array).and.have.lengthOf(16);
@@ -72,7 +72,7 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
     let roiManager = img.getROIManager();
     roiManager.putMask(img);
     let pixels = roiManager.getPixels();
-    let result = roiManager.getROIMap();
+    let result = roiManager.getMap();
 
     it('should have 16 pixels in 3 zones', function () {
         pixels.should.instanceOf(Int16Array).and.have.lengthOf(16);
