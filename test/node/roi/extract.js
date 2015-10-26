@@ -2,7 +2,7 @@ import {Image, load} from '../common';
 
 
 describe('we check that we can extract correctly a ROI', function () {
-    it('should yield the right extract number of pixels', function () {
+    it.only('should yield the right extract number of pixels', function () {
         return load('BW15x15.png').then(function (img) {
 
             img.width.should.equal(15);
@@ -19,11 +19,13 @@ describe('we check that we can extract correctly a ROI', function () {
 
             rois[0].internalMapIDs.should.eql([-2,3,2]);
 
-            let extract = rois[0].extract(img);
+            let roiMask = rois[0].getMask();
+            let extract = img.extract(roiMask);
             extract.countAlphaPixels({alpha: 0}).should.equal(27);
             extract.countAlphaPixels({alpha: 255}).should.equal(54);
 
-            extract = rois[0].extract(img, {fill: true});
+            roiMask = rois[0].getMask({fill: true});
+            extract = img.extract(roiMask);
             extract.countAlphaPixels({alpha: 0}).should.equal(1);
             extract.countAlphaPixels({alpha: 255}).should.equal(80);
         });

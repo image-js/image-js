@@ -16,9 +16,7 @@ export default class ROI {
         this.computed = {};
     }
 
-    extract(image, {fill = false, scale = 1} = {}) {
-        // we use a slow way
-
+    getMask({fill = false, scale = 1} = {}) {
         let mask;
         if (fill) {
             mask = this.filledMask;
@@ -30,12 +28,7 @@ export default class ROI {
             mask = mask.resizeBinary(scale);
         }
 
-        // we need to deal with the extract from a parent image
-        return image.extract(mask, {
-            position: [this.minX, this.minY],
-            parent: this.map.parent
-        });
-
+        return mask;
     }
 
     get width() {
