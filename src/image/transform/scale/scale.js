@@ -1,6 +1,7 @@
 import Image from '../../image';
 
 import nearestNeighbor from './nearestNeighbor';
+import bilinear from './bilinear';
 import {factorDimensions} from '../../../util/converter';
 
 export default function scale({
@@ -18,6 +19,9 @@ export default function scale({
         case 'nearestneighbor':
         case 'nearestneighbour':
             nearestNeighbor.call(this, newImage, newWidth, newHeight);
+            break;
+        case 'bilinear':
+            bilinear.call(this, newImage, newWidth, newHeight);
             break;
         default:
             throw new Error('Unsupported scale algorithm: ' + algorithm);
