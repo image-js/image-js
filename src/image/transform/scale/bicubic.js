@@ -49,7 +49,7 @@ function R(x) {
     p1 = p1 * p1 * p1;
 
     let p2 = x + 1 > 0 ? x + 1 : 0;
-    p2 = p2 * p2* p2;
+    p2 = p2 * p2 * p2;
 
     let p3 = x > 0 ? x : 0;
     p3 = p3 * p3 * p3;
