@@ -37,7 +37,7 @@ export default function bilinear(newImage, newWidth, newHeight) {
                 let result = (A * (1 - x_diff) * (1 - y_diff) + B * (x_diff) * (1 - y_diff) + C * (y_diff) * (1 - x_diff)
                     + D * (x_diff * y_diff)) | 0;
 
-                newImage.data[offset++] = result;
+                newImage.data[offset++] = result; 
 
             }
         }
