@@ -44,7 +44,7 @@
     "watch-node": "babel --watch src --out-dir lib --blacklist=regenerator"
   },
   "devDependencies": {
-    "babel": "^5.6.4",
+    "babel": "^6.0.14",
     "babel-istanbul": "^0.4.0",
     "babelify": "^6.1.2",
     "benchmark": "^1.0.0",
