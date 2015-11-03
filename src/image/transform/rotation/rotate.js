@@ -18,21 +18,28 @@ export default function rotate(degrees, {
 
 
 
+
     for (let i = 0; i < newWidth; i += 1) {
         for (let j = 0; j < newHeight; j += 1) {
             for (let c = 0; c < this.channels; c++) {
                 let x = Math.round((i - x0) * cos - (j - y0) * sin + x0);
                 let y = Math.round((j - y0) * cos + (i - x0) * sin + y0);
 
-                        if(x <= -incrementX || x >= width - incrementX || y <= -incrementY || y >= height - incrementY) {
-                            newImageRotated.setValueXY(i, j, c, 255);
-                        }
-                        else {
-                            newImageRotated.setValueXY(i, j, c, this.getValueXY(x + incrementX, y + incrementY, c));
-                        }
+                if(x <= -incrementX || x >= width - incrementX || y <= -incrementY || y >= height - incrementY) {
+                    if(this.alpha){
+                        newImageRotated.setValueXY(i, j, c, this.alpha);
+                    }else{
+                        newImageRotated.setValueXY(i, j, c, this.maxValue);
+                    }
+
+                }
+                else {
+                    newImageRotated.setValueXY(i, j, c, this.getValueXY(x + incrementX, y + incrementY, c));
+                }
             }
         }
     }
+
 
 
     return newImageRotated;
