@@ -17,7 +17,7 @@ export default function rotate(degrees, interpolation, {
     const incrementY=Math.floor(height / 2 - y0);
 
 
-    if(interpolation === 'bilinear' && degrees%45 != 0){
+    if(interpolation === 'bilinear' && degrees % 45 != 0){
         for (let i = 0; i < newWidth; i += 1) {
             for (let j = 0; j < newHeight; j += 1) {
                 let x = ((i - x0) * cos - (j - y0) * sin + x0) + incrementX;
@@ -29,7 +29,7 @@ export default function rotate(degrees, interpolation, {
                 for (let c = 0; c < this.channels; c++) {
 
 
-                    if(x <= 0 || x >= width|| y <= 0 || y >= height) {
+                    if(x < 0 || x > width|| y < 0 || y > height) {
                         if(this.alpha){
                             newImageRotated.setValueXY(i, j, c, this.alpha);
                         }else{
@@ -60,7 +60,7 @@ export default function rotate(degrees, interpolation, {
                     let x = Math.round((i - x0) * cos - (j - y0) * sin + x0)+incrementX;
                     let y = Math.round((j - y0) * cos + (i - x0) * sin + y0)+incrementY;
 
-                    if(x <= 0 || x >= width || y <= 0 || y >= height) {
+                    if(x < 0 || x > width || y < 0 || y > height) {
                         if(this.alpha){
                             newImageRotated.setValueXY(i, j, c, this.alpha);
                         }else{
