@@ -27,28 +27,29 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "scripts": {
-    "build": "npm run compile && npm run clean-dist && browserify src/index.js -o dist/image.js --standalone IJS --exclude canvas --exclude canvas/lib/bindings --ignore buffer --ignore zlib --ignore fs --global-transform [ babelify --blacklist=regenerator ]",
-    "build-test": "browserify test/browser/bootstrap.js -o test/browser/image.js --standalone IJS --exclude canvas --exclude canvas/lib/bindings --ignore buffer --ignore zlib --ignore fs --debug --global-transform [ babelify --sourceMap --blacklist=regenerator ]",
-    "compile": "npm run clean-lib && babel src --out-dir lib --blacklist=regenerator",
-    "compile-es6": "npm run clean-lib && babel src --out-dir lib --blacklist=es3.memberExpressionLiterals,es3.propertyLiterals,es5.properties.mutators,es6.blockScoping,es6.classes,es6.constants,es6.forOf,es6.properties.shorthand,es6.templateLiterals,regenerator",
+    "build": "npm run compile && npm run clean-dist && browserify src/index.js -o dist/image.js --standalone IJS --exclude canvas --ignore buffer --ignore zlib --ignore fs --global-transform [ babelify --presets=es2015 ]",
+    "build-test": "browserify test/browser/bootstrap.js -o test/browser/image.js --standalone IJS --exclude canvas --ignore buffer --ignore zlib --ignore fs --debug --global-transform [ babelify --sourceMap --presets=es2015 ]",
+    "compile": "npm run clean-lib && babel src --out-dir lib --presets=es2015",
     "clean-dist": "rm -rf dist && mkdir dist",
     "clean-lib": "rm -rf lib",
     "eslint": "eslint src test/node",
     "eslint-fix": "eslint src test/node --fix",
     "prepublish": "npm run compile",
     "test": "eslint src test/node --fix && sh test/checkOnly.sh && npm run test-mocha && npm run eslint",
-    "test-cov": "node -r babel/register-without-polyfill node_modules/.bin/babel-istanbul cover _mocha -- --require should --reporter dot --recursive test/node",
-    "test-mocha": "node -r babel/register-without-polyfill node_modules/.bin/_mocha --require should --reporter mocha-better-spec-reporter --recursive test/node",
-    "test-travis": "sh test/checkOnly.sh && node -r babel/register-without-polyfill node_modules/.bin/babel-istanbul cover _mocha --report lcovonly -- --require should --reporter mocha-better-spec-reporter --recursive test/node && npm run eslint",
-    "watch-browser": "watchify test/browser/bootstrap.js -o test/browser/image.js --standalone IJS --exclude canvas --exclude canvas/lib/bindings --ignore buffer --ignore zlib --ignore fs --debug --global-transform [ babelify --sourceMap --blacklist=regenerator ]",
-    "watch-node": "babel --watch src --out-dir lib --blacklist=regenerator"
+    "test-cov": "node -r ./test/node/babel node_modules/.bin/babel-istanbul cover _mocha -- --require should --reporter dot --recursive test/node",
+    "test-mocha": "node -r ./test/node/babel node_modules/.bin/_mocha --require should --reporter mocha-better-spec-reporter --recursive test/node",
+    "test-travis": "sh test/checkOnly.sh && node -r ./test/node/babel node_modules/.bin/babel-istanbul cover _mocha --report lcovonly -- --require should --reporter mocha-better-spec-reporter --recursive test/node && npm run eslint",
+    "watch-browser": "watchify test/browser/bootstrap.js -o test/browser/image.js --standalone IJS --exclude canvas --ignore buffer --ignore zlib --ignore fs --debug --global-transform [ babelify --sourceMap --presets=es2015 ]",
+    "watch-node": "babel --watch src --out-dir lib --presets=es2015"
   },
   "devDependencies": {
-    "babel": "^5.6.4",
-    "babel-istanbul": "^0.4.0",
-    "babelify": "^6.1.2",
+    "babel-cli": "^6.1.2",
+    "babel-core": "^6.1.2",
+    "babel-istanbul": "^0.4.1",
+    "babel-preset-es2015": "^6.1.2",
+    "babelify": "^7.2.0",
     "benchmark": "^1.0.0",
-    "browserify": "^12.0.0",
+    "browserify": "^12.0.1",
     "eslint": "^1.4.1",
     "estraverse": "^4.1.0",
     "mocha": "^2.2.5",
@@ -56,7 +57,7 @@
     "rimraf": "^2.4.0",
     "sha.js": "^2.4.3",
     "should": "^7.0.1",
-    "watchify": "^3.2.3"
+    "watchify": "^3.6.0"
   },
   "optionalDependencies": {
     "canvas": "^1.3.0"

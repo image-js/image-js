@@ -24,4 +24,4 @@ window.setRight = function setRight(img) {
     right.appendChild(img.getCanvas());
 };
 
-export default Image;
+module.exports = Image;

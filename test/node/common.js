@@ -4,7 +4,8 @@ import {getImage} from '../test';
 
 export {getImage, getHash} from '../test';
 
-import {default as Image, Stack} from '../../src';
+import Image from '../../src/image/image';
+import Stack from '../../src/stack/stack';
 
 export {Image, Stack};
 
