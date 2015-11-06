@@ -29,7 +29,7 @@ export default function rotate(degrees, interpolation, {
                 for (let c = 0; c < this.channels; c++) {
 
 
-                    if(x < 0 || x > width|| y < 0 || y > height) {
+                    if(x <= 0 || x >= width|| y <= 0 || y >= height) {
                         if(this.alpha){
                             newImageRotated.setValueXY(i, j, c, this.alpha);
                         }else{
@@ -60,7 +60,7 @@ export default function rotate(degrees, interpolation, {
                     let x = Math.round((i - x0) * cos - (j - y0) * sin + x0)+incrementX;
                     let y = Math.round((j - y0) * cos + (i - x0) * sin + y0)+incrementY;
 
-                    if(x < 0 || x > width || y < 0 || y > height) {
+                    if(x <= 0 || x >= width || y <= 0 || y >= height) {
                         if(this.alpha){
                             newImageRotated.setValueXY(i, j, c, this.alpha);
                         }else{
