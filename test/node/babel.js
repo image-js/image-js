@@ -1,6 +1,6 @@
 /* eslint-disable strict */
 'use strict';
 
-require('babel-core/register')({
+require('babel-register')({
     presets: ['es2015']
 });
