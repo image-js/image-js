@@ -11,13 +11,30 @@ export default function rotate(degrees, interpolation, {
     const newImageRotated = Image.createFrom(this, { width: newWidth, height: newHeight });
     const cos = Math.cos(-radians);
     const sin = Math.sin(-radians);
-    const x0=Math.floor(newWidth / 2);
-    const y0=Math.floor(newHeight / 2);
+
+    let x0=(newWidth / 2);
+    let y0=(newHeight / 2);
+    if(newWidth % 2 == 0){
+        x0= x0 - 0.5;
+        if(newHeight % 2 == 0){
+            y0= y0 - 0.5;
+        }else{
+            y0=Math.floor(y0);
+        }
+    }else{
+        x0=Math.floor(x0);
+        if(newHeight % 2 == 0){
+            y0= y0 - 0.5;
+        }else{
+            y0=Math.floor(y0);
+        }
+    }
+
     const incrementX=Math.floor(width / 2 - x0);
     const incrementY=Math.floor(height / 2 - y0);
 
 
-    if(interpolation === 'bilinear' && degrees % 45 != 0){
+    if(interpolation === 'bilinear'){
         for (let i = 0; i < newWidth; i += 1) {
             for (let j = 0; j < newHeight; j += 1) {
                 let x = ((i - x0) * cos - (j - y0) * sin + x0) + incrementX;
@@ -57,10 +74,10 @@ export default function rotate(degrees, interpolation, {
         for (let i = 0; i < newWidth; i += 1) {
             for (let j = 0; j < newHeight; j += 1) {
                 for (let c = 0; c < this.channels; c++) {
-                    let x = Math.round((i - x0) * cos - (j - y0) * sin + x0)+incrementX;
-                    let y = Math.round((j - y0) * cos + (i - x0) * sin + y0)+incrementY;
+                    let x = Math.round((i - x0) * cos - ((j - y0) * sin) + x0)+incrementX;
+                    let y = Math.round((j - y0) * cos + ((i - x0) * sin) + y0)+incrementY;
 
-                    if(x < 0 || x > width || y < 0 || y > height) {
+                    if(x < 0 || x >= width || y < 0 || y >= height) {
                         if(this.alpha){
                             newImageRotated.setValueXY(i, j, c, this.alpha);
                         }else{

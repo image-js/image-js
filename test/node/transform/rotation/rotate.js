@@ -19,44 +19,15 @@ describe.only('check the rotate transform', function () {
         getHash(result).should.equal(getHash(image));
 
         result = image.rotate(45);
-        let image2 = new Image(5, 5,
-            [
-                0, 0, 0, 0, 0,
-                0, 1, 1, 1, 1,
-                0, 1, 2, 2, 2,
-                0, 1, 2, 4, 3,
-                0, 1, 2, 3, 3
-            ],
-            {kind: 'GREY'}
-        );
-        Array.from(result.data).should.eql(image2);
+        Array.from(result.data).should.eql([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 2, 1, 1, 0, 0, 1, 2, 4, 2, 1, 0, 0, 0, 3, 4, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0
+        ]);
 
         result = image.rotate(90);
-        let image3 = new Image(5, 5,
-            [
-                0, 0, 0, 0, 0,
-                1, 1, 1, 1, 0,
-                2, 2, 2, 1, 0,
-                3, 4, 2, 1, 0,
-                3, 3, 2, 1, 0
-            ],
-            {kind: 'GREY'}
-        );
-        Array.from(result.data).should.eql(image3);
+        Array.from(result.data).should.eql([0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 2, 2, 2, 1, 0, 3, 4, 2, 1, 0, 3, 3, 2, 1, 0]);
 
 
         result = image.rotate(180);
-        let image4 = new Image(5, 5,
-            [
-                0, 1, 2, 3, 3,
-                0, 1, 2, 4, 3,
-                0, 1, 2, 2, 2,
-                0, 1, 1, 1, 1,
-                0, 0, 0, 0, 0
-            ],
-            {kind: 'GREY'}
-        );
-        Array.from(result.data).should.eql(image4);
+        Array.from(result.data).should.eql([0, 1, 2, 3, 3, 0, 1, 2, 4, 3, 0, 1, 2, 2, 2, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0]);
 
 
     });
