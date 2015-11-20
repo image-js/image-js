@@ -70,10 +70,12 @@
     "fast-png": "0.0.4",
     "is-array-type": "^1.0.0",
     "is-integer": "^1.0.6",
-    "ml-matrix": "^1.0.2",
+    "ml-matrix": "^1.0.3",
+    "ml-regression": "^1.1.0",
     "new-array": "^1.0.0",
     "string-includes": "^1.0.0",
-    "tiff": "0.0.2"
+    "tiff": "0.0.2",
+    "web-worker-manager": "^0.2.0"
   },
   "engines": {
     "node": ">= 4.0.0"
