@@ -1,3 +1,4 @@
+import WorkerManager from 'web-worker-manager';
 import Image from '../image/image';
 import extend from './extend';
 
@@ -22,10 +23,26 @@ class Worker {
         this._deps[0] = value;
     }
     static extendMethod(name, method) {
-        Worker.prototype[name] = function (...args) {
-            this.checkUrl();
-            return method.call(this, ...args);
+        let manager;
+        let url;
+        let runner = {};
+        function run(...args) {
+            if (!manager) {
+                this.checkUrl();
+                url = this.url;
+                manager = new WorkerManager(method.work, {deps: url});
+                runner.manager = manager;
+            }
+            return method.run.call(runner, ...args);
+        }
+        run.reset = function () {
+            if (manager) {
+                manager.terminate();
+                manager = new WorkerManager(method.work, {deps: url});
+                runner.manager = manager;
+            }
         };
+        Worker.prototype[name] = run;
     }
 }
 
