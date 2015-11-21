@@ -1,8 +1,7 @@
 export default function getPixelsGrid({
     sampling = [10,10],
     painted = false,
-    mask,
-    format = 'xy z'
+    mask
     } = {}) {
 
     this.checkProcessable('getPixelsGrid', {
@@ -10,21 +9,18 @@ export default function getPixelsGrid({
         channels: 1
     });
 
-    let toReturn = {};
-
     if (!Array.isArray(sampling)) sampling = [sampling,sampling];
 
-    let xSampling = sampling[0];
-    let ySampling = sampling[1];
-    let nbSamples = xSampling * ySampling;
+    const xSampling = sampling[0];
+    const ySampling = sampling[1];
+    const nbSamples = xSampling * ySampling;
 
-    let xyS = new Array(nbSamples);
-    let zS = new Array(nbSamples);
+    const xyS = new Array(nbSamples);
+    const zS = new Array(nbSamples);
 
-    let xStep = this.width / xSampling;
-    let yStep = this.height / ySampling;
+    const xStep = this.width / xSampling;
+    const yStep = this.height / ySampling;
     let currentX = Math.floor(xStep / 2);
-
 
     let position = 0;
     for (let i = 0; i < xSampling; i++) {
@@ -42,11 +38,11 @@ export default function getPixelsGrid({
         currentX += xStep;
     }
 
+    // resize arrays if needed
     xyS.length = position;
     zS.length = position;
 
-    toReturn.xyS = xyS;
-    toReturn.zS = zS;
+    let toReturn = {xyS, zS};
 
     if (painted) {
         toReturn.painted = this.rgba8().paintPixels(xyS);
