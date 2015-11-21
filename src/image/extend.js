@@ -16,6 +16,7 @@ import subtract from './filter/subtract';
 import hypotenuse from './filter/hypotenuse';
 import multiply from './filter/multiply';
 import divide from './filter/divide';
+import getBackground from './filter/getBackground';
 
 // transformers
 import crop from './transform/crop';
@@ -75,6 +76,7 @@ export default function extend(Image) {
     Image.extendMethod('multiply', multiply, inPlace);
     Image.extendMethod('divide', divide, inPlace);
     Image.extendMethod('hypotenuse', hypotenuse);
+    Image.extendMethod('getBackground', getBackground);
 
     Image.extendMethod('meanFilter', meanFilter);
     Image.extendMethod('medianFilter', medianFilter);

@@ -7,7 +7,7 @@ function run(image, options) {
 function work() {
     worker.on('data', function (send, image, options) {
         image = new IJS(image);
-        var grey = image.grey();
+        const grey = image.grey();
         send(grey, grey.data.buffer);
     });
 }
