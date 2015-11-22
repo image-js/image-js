@@ -30,7 +30,7 @@ export default function getPixelsGrid({
             let y = Math.round(currentY);
             if (!mask || mask.getBitXY(x,y)) {
                 xyS[position] = [x,y];
-                zS[position] = this.getValueXY(x,y,0);
+                zS[position] = this.getPixelXY(x, y);
                 position++;
             }
             currentY += yStep;
