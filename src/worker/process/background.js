@@ -1,4 +1,5 @@
 import extend from 'extend';
+import Image from '../../image/image';
 
 const defaultOptions = {
     regression: {
@@ -32,7 +33,7 @@ function run(image, options) {
 
 function runOnce(manager, image, options) {
     return manager.post('data', [image, options]).then(function (response) {
-        return new IJS(response);
+        return new Image(response);
     });
 }
 
