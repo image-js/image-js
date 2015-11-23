@@ -76,7 +76,7 @@
     "ml-regression": "^1.1.1",
     "new-array": "^1.0.0",
     "string-includes": "^1.0.0",
-    "tiff": "0.0.2",
+    "tiff": "1.0.0",
     "web-worker-manager": "^0.2.0"
   },
   "engines": {
