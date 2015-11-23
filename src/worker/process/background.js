@@ -15,14 +15,14 @@ const defaultOptions = {
     include: []
 };
 
-function run(image, options) {
+function run(image, options, onStep) {
     options = extend({}, defaultOptions, options);
     const manager = this.manager;
     if (Array.isArray(image)) {
         return Promise.all(image.map(function (img) {
             const run = runOnce(manager, img, options);
-            if (typeof options.onStep === 'function') {
-                run.then(options.onStep);
+            if (typeof onStep === 'function') {
+                run.then(onStep);
             }
             return run;
         }));
