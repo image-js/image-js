@@ -33,7 +33,10 @@ function run(image, options) {
 
 function runOnce(manager, image, options) {
     return manager.post('data', [image, options]).then(function (response) {
-        return new Image(response);
+        for (var i in response) {
+            response[i] = new Image(response[i]);
+        }
+        return response;
     });
 }
 
