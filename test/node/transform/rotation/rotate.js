@@ -19,7 +19,14 @@ describe.only('check the rotate transform', function () {
         getHash(result).should.equal(getHash(image));
 
         result = image.rotate(45);
-        Array.from(result.data).should.eql([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 2, 1, 1, 0, 0, 1, 2, 4, 2, 1, 0, 0, 0, 3, 4, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0
+        Array.from(result.data).should.eql([
+            255, 255, 255, 0, 255, 255, 255,
+            255, 255,  0,  1,  0,  255, 255,
+            255,  0,   1,  1,  1,   0,  255,
+            0,   1,   1,  2,  1,   1,   0,
+            0,   1,   2,  4,  2,   1,   0,
+            255,  0,   3,  4,  3,   0,  255,
+            255, 255,  0,  3,  0,  255, 255
         ]);
 
         result = image.rotate(90);
