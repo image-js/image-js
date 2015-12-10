@@ -16,7 +16,7 @@ export default function invert({channels} = {}) {
             data[i] = ~data[i];
         }
     } else {
-        let channels = validateArrayOfChannels(this, channels, true);
+        channels = validateArrayOfChannels(this, channels, true);
 
         let data = this.data;
 

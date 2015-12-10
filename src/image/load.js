@@ -1,4 +1,5 @@
 import Image from './image';
+import Stack from '../stack/stack';
 import {env, loadBinary, DOMImage, ImageData, Canvas, isDifferentOrigin} from './environment';
 import {PNGDecoder} from 'fast-png';
 import {TIFFDecoder} from 'tiff';
@@ -73,7 +74,14 @@ function loadPNG(data) {
 function loadTIFF(data) {
     let decoder = new TIFFDecoder(data);
     let result = decoder.decode();
-    let image = result.ifd[0];
+    if (result.length === 1) {
+        return getImageFromIFD(result.ifd[0]);
+    } else {
+        return new Stack(result.ifd.map(getImageFromIFD));
+    }
+}
+
+function getImageFromIFD(image) {
     return new Image(image.width, image.height, image.data, {
         components: 1,
         alpha: 0,

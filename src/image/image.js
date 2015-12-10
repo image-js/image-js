@@ -22,6 +22,22 @@ export default class Image {
         if (width === undefined) width = 1;
         if (height === undefined) height = 1;
 
+        // copy another image
+        if (typeof width === 'object') {
+            const otherImage = width;
+            const cloneData = height === true;
+            width = otherImage.width;
+            height = otherImage.height;
+            data = cloneData ? otherImage.data.slice() : otherImage.data;
+            options = {
+                position: otherImage.position,
+                components: otherImage.components,
+                alpha: otherImage.alpha,
+                bitDepth: otherImage.bitDepth,
+                colorModel: otherImage.colorModel
+            };
+        }
+
         if (data && !data.length) {
             options = data;
             data = null;
@@ -88,7 +104,7 @@ export default class Image {
 
         this.multiplierX = this.channels;
         this.multiplierY = this.channels * this.width;
-        this.isClamped = (this.bitDepth < 32) ? true : false;
+        this.isClamped = this.bitDepth < 32;
         this.borderSizes = [0,0]; // when a filter create a border it may have impact on future processing like ROI
     }
 
@@ -303,15 +319,7 @@ export default class Image {
     }
 
     clone({copyData = true} = {}) {
-        let nemImage = Image.createFrom(this);
-        if (copyData) {
-            let data = this.data;
-            let newData = nemImage.data;
-            for (let i = 0; i < newData.length; i++) {
-                newData[i] = data[i];
-            }
-        }
-        return nemImage;
+        return new Image(this, copyData);
     }
 
     save(path, {format = 'png'} = {}) { // Node.JS only

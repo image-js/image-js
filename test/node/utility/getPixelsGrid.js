@@ -41,7 +41,7 @@ describe('we check getPixelsGrid', function () {
         });
 
         pixels.xyS.should.eql([[1,1],[4,1]]);
-        pixels.zS.should.eql([7,10]);
+        pixels.zS.should.eql([[7],[10]]);
         (typeof pixels.painted).should.equal('undefined');
 
 
