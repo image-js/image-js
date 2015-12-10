@@ -9,7 +9,15 @@ import Stack from '../stack';
 
 // algorithm: matchToPrevious || matchToFirst
 
-export default function matchAndCrop({algorithm = 'matchToPrevious'} = {}) {
+// Ignoring border may be dangerous ! Is there is a shape on the side of the image there will be a
+// continuous shift if you ignore border. By default it is better to leave it to 0,0
+// TODO this code seems also buggy if it is not 0,0
+
+export default function matchAndCrop({
+    algorithm = 'matchToPrevious',
+    ignoreBorder = [0,0]
+    } = {}
+) {
     this.checkProcessable('matchAndCrop', {
         bitDepth: [8, 16]
     });
@@ -27,9 +35,8 @@ export default function matchAndCrop({algorithm = 'matchToPrevious'} = {}) {
 
     // we calculate the best relative position to the parent image
     for (let i = 1; i < this.length; i++) {
-        // in order to calculate the similarity we need to add a border that will not be compared
-        // by default we take as border 1/8 of the image width and height
-        let position = parent.getBestMatch(this[i],{border:[parent.width >> 3,parent.height >> 3]});
+
+        let position = parent.getBestMatch(this[i],{border:ignoreBorder});
 
         results[i] = {
             position: [position[0] + relativePosition[0], position[1] + relativePosition[1]],

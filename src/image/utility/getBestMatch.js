@@ -6,6 +6,7 @@ import Matrix from '../../util/matrix';
 
 export default function match(image, {border} = {}) {
 
+
     this.checkProcessable('getChannel', {
         bitDepth: [8, 16]
     });
@@ -45,6 +46,19 @@ export default function match(image, {border} = {}) {
             theEnd = true;
         }
     }
+
+    /*
+    for (let i=0; i<similarityMatrix.length; i++) {
+        let line=[];
+        for (let j=0; j<similarityMatrix[i].length; j++) {
+            line.push(similarityMatrix[i][j]);
+        }
+        console.log(line.join(" "));
+    }
+    console.log(currentX, middleX, currentY, middleY);
+    */
+
+
 
     return [currentX - middleX, currentY - middleY];
 }
