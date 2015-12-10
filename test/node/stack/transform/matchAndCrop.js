@@ -263,9 +263,6 @@ describe('check matchAndCrop method', function () {
         let results = images.matchAndCrop({algorithm:'matchToFirst'});
         results.should.be.instanceOf(Stack).and.have.lengthOf(3);
 
-        console.log(results[1].data);
-        console.log(results[2].data);
-
         getHash(results[1]).should.equal(getHash(results[2]));
 
         let result = results[0];
@@ -278,6 +275,29 @@ describe('check matchAndCrop method', function () {
                 1, 2, 3, 3
             ]
         );
+
+        result = results[1];
+        result.width.should.equal(4);
+        result.height.should.equal(3);
+        Array.from(result.data).should.eql(
+            [
+                0, 0, 0, 0,
+                0, 0, 4, 0,
+                0, 0, 0, 0
+            ]
+        );
+
+        result = results[2];
+        result.width.should.equal(4);
+        result.height.should.equal(3);
+        Array.from(result.data).should.eql(
+            [
+                0, 0, 0, 0,
+                0, 0, 4, 0,
+                0, 0, 0, 0
+            ]
+        );
+
     });
 
 });
