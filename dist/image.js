@@ -103,102 +103,290 @@ module.exports = function extend() {
 },{}],4:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var IOBuffer = require('iobuffer');
+var Inflator = require('pako').Inflate;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var empty = new Uint8Array(0);
+var NULL = '\0';
+var pngSignature = [137, 80, 78, 71, 13, 10, 26, 10];
 
-var Buffer = (function () {
-    function Buffer() {
-        _classCallCheck(this, Buffer);
-
-        this.buffer = null;
-        this.length = 0;
-        this.offset = 0;
-        this.littleEndian = true;
-        this._mark = 0;
-        this._data = null;
+class PNGDecoder extends IOBuffer {
+    constructor(data) {
+        super(data);
+        this._decoded = false;
+        this._inflator = new Inflator();
+        this._png = null;
+        this._end = false;
+        // PNG is always big endian
+        // http://www.w3.org/TR/PNG/#7Integers-and-byte-order
+        this.setBigEndian();
     }
 
-    _createClass(Buffer, [{
-        key: 'available',
-        value: function available(byteLength) {
-            if (byteLength === undefined) byteLength = 1;
-            return this.offset + byteLength <= this.length;
+    decode() {
+        if (this._decoded) return this._png;
+        this._png = {
+            tEXt: {}
+        };
+        this.decodeSignature();
+        while (!this._end) {
+            this.decodeChunk();
         }
-    }, {
-        key: 'isLittleEndian',
-        value: function isLittleEndian() {
-            return this.littleEndian;
-        }
-    }, {
-        key: 'setLittleEndian',
-        value: function setLittleEndian() {
-            this.littleEndian = true;
-        }
-    }, {
-        key: 'isBigEndian',
-        value: function isBigEndian() {
-            return !this.littleEndian;
-        }
-    }, {
-        key: 'setBigEndian',
-        value: function setBigEndian() {
-            this.littleEndian = false;
-        }
-    }, {
-        key: 'skip',
-        value: function skip(n) {
-            if (n === undefined) n = 1;
-            this.offset += n;
-        }
-    }, {
-        key: 'seek',
-        value: function seek(offset) {
-            this.offset = offset;
-        }
-    }, {
-        key: 'mark',
-        value: function mark() {
-            this._mark = this.offset;
-        }
-    }, {
-        key: 'reset',
-        value: function reset() {
-            this.offset = this._mark;
-        }
-    }, {
-        key: 'rewind',
-        value: function rewind() {
-            this.offset = 0;
-        }
-    }]);
+        this.decodeImage();
+        return this._png;
+    }
 
-    return Buffer;
-})();
+    // http://www.w3.org/TR/PNG/#5PNG-file-signature
+    decodeSignature() {
+        for (var i = 0; i < 8; i++) {
+            if (this.readUint8() !== pngSignature[i]) {
+                throw new Error(`Wrong PNG signature. Byte at ${ i } should be ${ pngSignature[i] }.`);
+            }
+        }
+    }
 
-module.exports = Buffer;
+    // http://www.w3.org/TR/PNG/#5Chunk-layout
+    decodeChunk() {
+        var length = this.readUint32();
+        var type = this.readChars(4);
+        var offset = this.offset;
+        switch (type) {
+            case 'IHDR':
+                this.decodeIHDR();
+                break;
+            case 'PLTE':
+                throw new Error('Palette image type not supported');
+            case 'IDAT':
+                this.decodeIDAT(length);
+                break;
+            case 'tEXt':
+                this.decodetEXt(length);
+                break;
+            case 'IEND':
+                this._end = true;
+                break;
+            default:
+                this.skip(length);
+                break;
+        }
+        if (this.offset - offset !== length) {
+            throw new Error('Length mismatch while decoding chunk ' + type);
+        }
+        // TODO compute and validate CRC ?
+        // http://www.w3.org/TR/PNG/#5CRC-algorithm
+        var crc = this.readUint32();
+    }
 
-},{}],5:[function(require,module,exports){
+    // http://www.w3.org/TR/PNG/#11IHDR
+    decodeIHDR() {
+        var image = this._png;
+        image.width = this.readUint32();
+        image.height = this.readUint32();
+        image.bitDepth = this.readUint8();
+        image.colourType = this.readUint8();
+        image.compressionMethod = this.readUint8();
+        image.filterMethod = this.readUint8();
+        image.interlaceMethod = this.readUint8();
+        if (this._png.compressionMethod !== 0) {
+            throw new Error('Unsupported compression method: ' + image.compressionMethod);
+        }
+    }
+
+    // http://www.w3.org/TR/PNG/#11IDAT
+    decodeIDAT(length) {
+        this._inflator.push(new Uint8Array(this.buffer, this.offset, length));
+        this.skip(length);
+    }
+
+    // http://www.w3.org/TR/PNG/#11tEXt
+    decodetEXt(length) {
+        var keyword = '';
+        var char;
+        while ((char = this.readChar()) !== NULL) {
+            keyword += char;
+        }
+        this._png.tEXt[keyword] = this.readChars(length - keyword.length - 1);
+    }
+
+    decodeImage() {
+        this._inflator.push(empty, true);
+        if (this._inflator.err) {
+            throw new Error('Error while decompressing the data');
+        }
+        var data = this._inflator.result;
+        this._inflator = null;
+
+        if (this._png.filterMethod !== 0) {
+            throw new Error('Filter method ' + this._png.interlaceMethod + ' not supported');
+        }
+
+        if (this._png.interlaceMethod === 0) {
+            this.decodeInterlaceNull(data);
+        } else {
+            throw new Error('Interlace method ' + this._png.interlaceMethod + ' not supported');
+        }
+    }
+
+    decodeInterlaceNull(data) {
+
+        var channels;
+        switch (this._png.colourType) {
+            case 0:
+                channels = 1;break;
+            case 2:
+                channels = 3;break;
+            case 3:
+                throw new Error('Indexed-colour images are not supported');
+            case 4:
+                channels = 2;break;
+            case 6:
+                channels = 4;break;
+            default:
+                throw new Error('Unknown colour type: ' + this._png.colourType);
+        }
+
+        var height = this._png.height;
+        var bytesPerPixel = channels * this._png.bitDepth / 8;
+        var bytesPerLine = this._png.width * bytesPerPixel;
+        var newData = new Uint8Array(this._png.height * bytesPerLine);
+
+        var prevLine = empty;
+        var offset = 0;
+        var currentLine, newLine;
+
+        for (var i = 0; i < height; i++) {
+            currentLine = data.subarray(offset + 1, offset + 1 + bytesPerLine);
+            newLine = newData.subarray(i * bytesPerLine, (i + 1) * bytesPerLine);
+            switch (data[offset]) {
+                case 0:
+                    unfilterNone(currentLine, newLine, bytesPerLine);
+                    break;
+                case 1:
+                    unfilterSub(currentLine, newLine, bytesPerLine, bytesPerPixel);
+                    break;
+                case 2:
+                    unfilterUp(currentLine, newLine, prevLine, bytesPerLine);
+                    break;
+                case 3:
+                    unfilterAverage(currentLine, newLine, prevLine, bytesPerLine, bytesPerPixel);
+                    break;
+                case 4:
+                    unfilterPaeth(currentLine, newLine, prevLine, bytesPerLine, bytesPerPixel);
+                    break;
+                default:
+                    throw new Error('Unsupported filter: ' + data[offset]);
+            }
+            prevLine = newLine;
+            offset += bytesPerLine + 1;
+        }
+
+        this._png.data = newData;
+    }
+
+}
+
+module.exports = PNGDecoder;
+
+function unfilterNone(currentLine, newLine, bytesPerLine) {
+    for (var i = 0; i < bytesPerLine; i++) {
+        newLine[i] = currentLine[i];
+    }
+}
+
+function unfilterSub(currentLine, newLine, bytesPerLine, bytesPerPixel) {
+    var i = 0;
+    for (; i < bytesPerPixel; i++) {
+        // just copy first bytes
+        newLine[i] = currentLine[i];
+    }
+    for (; i < bytesPerLine; i++) {
+        newLine[i] = currentLine[i] + newLine[i - bytesPerPixel] & 0xFF;
+    }
+}
+
+function unfilterUp(currentLine, newLine, prevLine, bytesPerLine) {
+    var i = 0;
+    if (prevLine.length === 0) {
+        // just copy bytes for first line
+        for (; i < bytesPerLine; i++) {
+            newLine[i] = currentLine[i];
+        }
+    } else {
+        for (; i < bytesPerLine; i++) {
+            newLine[i] = currentLine[i] + prevLine[i] & 0xFF;
+        }
+    }
+}
+
+function unfilterAverage(currentLine, newLine, prevLine, bytesPerLine, bytesPerPixel) {
+    var i = 0;
+    if (prevLine.length === 0) {
+        for (; i < bytesPerPixel; i++) {
+            newLine[i] = currentLine[i];
+        }
+        for (; i < bytesPerLine; i++) {
+            newLine[i] = currentLine[i] + (newLine[i - bytesPerPixel] >> 1) & 0xFF;
+        }
+    } else {
+        for (; i < bytesPerPixel; i++) {
+            newLine[i] = currentLine[i] + (prevLine[i] >> 1) & 0xFF;
+        }
+        for (; i < bytesPerLine; i++) {
+            newLine[i] = currentLine[i] + (newLine[i - bytesPerPixel] + prevLine[i] >> 1) & 0xFF;
+        }
+    }
+}
+
+function unfilterPaeth(currentLine, newLine, prevLine, bytesPerLine, bytesPerPixel) {
+    var i = 0;
+    if (prevLine.length === 0) {
+        for (; i < bytesPerPixel; i++) {
+            newLine[i] = currentLine[i];
+        }
+        for (; i < bytesPerLine; i++) {
+            newLine[i] = currentLine[i] + newLine[i - bytesPerPixel] & 0xFF;
+        }
+    } else {
+        for (; i < bytesPerPixel; i++) {
+            newLine[i] = currentLine[i] + prevLine[i] & 0xFF;
+        }
+        for (; i < bytesPerLine; i++) {
+            newLine[i] = currentLine[i] + paethPredictor(newLine[i - bytesPerPixel], prevLine[i], prevLine[i - bytesPerPixel]) & 0xFF;
+        }
+    }
+}
+
+function paethPredictor(a, b, c) {
+    var p = a + b - c;
+    var pa = Math.abs(p - a);
+    var pb = Math.abs(p - b);
+    var pc = Math.abs(p - c);
+    if (pa <= pb && pa <= pc) return a;else if (pb <= pc) return b;else return c;
+}
+
+},{"iobuffer":6,"pako":29}],5:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+exports.PNGDecoder = require('./PNGDecoder');
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+},{"./PNGDecoder":4}],6:[function(require,module,exports){
+'use strict';
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var defaultByteLength = 1024 * 8;
+var charArray = [];
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Buffer = require('./Buffer');
-
-var InputBuffer = (function (_Buffer) {
-    _inherits(InputBuffer, _Buffer);
-
-    function InputBuffer(data) {
-        _classCallCheck(this, InputBuffer);
-
-        _get(Object.getPrototypeOf(InputBuffer.prototype), 'constructor', this).call(this);
+class IOBuffer {
+    constructor(data) {
+        var length = 0;
+        if (data === undefined) {
+            data = defaultByteLength;
+        }
+        if (typeof data === 'number') {
+            length = data;
+            data = new ArrayBuffer(data);
+        }
+        length = data.byteLength;
         if (data.buffer) {
+            length = data.byteLength;
             if (data.byteLength !== data.buffer.byteLength) {
                 // Node.js buffer from pool
                 data = data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength);
@@ -207,111 +395,3707 @@ var InputBuffer = (function (_Buffer) {
             }
         }
         this.buffer = data;
-        this.length = data.byteLength;
-        this._data = new DataView(data);
+        this.length = length;
+        this.offset = 0;
+        this.littleEndian = true;
+        this._data = new DataView(this.buffer);
+        this._increment = length || defaultByteLength;
+        this._mark = 0;
     }
 
-    _createClass(InputBuffer, [{
-        key: 'readBoolean',
-        value: function readBoolean() {
-            return this.readUint8() !== 0;
-        }
-    }, {
-        key: 'readInt8',
-        value: function readInt8() {
-            return this._data.getInt8(this.offset++);
-        }
-    }, {
-        key: 'readUint8',
-        value: function readUint8() {
-            return this._data.getUint8(this.offset++);
-        }
-    }, {
-        key: 'readByte',
-        value: function readByte() {
-            return this.readUint8();
-        }
-    }, {
-        key: 'readBytes',
-        value: function readBytes(n) {
-            if (n === undefined) n = 1;
-            var bytes = new Uint8Array(n);
-            for (var i = 0; i < n; i++) {
-                bytes[i] = this.readByte();
-            }
-            return bytes;
-        }
-    }, {
-        key: 'readInt16',
-        value: function readInt16() {
-            var value = this._data.getInt16(this.offset, this.littleEndian);
-            this.offset += 2;
-            return value;
-        }
-    }, {
-        key: 'readUint16',
-        value: function readUint16() {
-            var value = this._data.getUint16(this.offset, this.littleEndian);
-            this.offset += 2;
-            return value;
-        }
-    }, {
-        key: 'readInt32',
-        value: function readInt32() {
-            var value = this._data.getInt32(this.offset, this.littleEndian);
-            this.offset += 4;
-            return value;
-        }
-    }, {
-        key: 'readUint32',
-        value: function readUint32() {
-            var value = this._data.getUint32(this.offset, this.littleEndian);
-            this.offset += 4;
-            return value;
-        }
-    }, {
-        key: 'readFloat32',
-        value: function readFloat32() {
-            var value = this._data.getFloat32(this.offset, this.littleEndian);
-            this.offset += 4;
-            return value;
-        }
-    }, {
-        key: 'readFloat64',
-        value: function readFloat64() {
-            var value = this._data.getFloat64(this.offset, this.littleEndian);
-            this.offset += 8;
-            return value;
-        }
-    }, {
-        key: 'readChar',
-        value: function readChar() {
-            return String.fromCharCode(this.readInt8());
-        }
-    }, {
-        key: 'readChars',
-        value: function readChars(n) {
-            if (n === undefined) n = 1;
-            var str = '';
-            for (var i = 0; i < n; i++) {
-                str += this.readChar();
-            }
-            return str;
-        }
-    }]);
+    available(byteLength) {
+        if (byteLength === undefined) byteLength = 1;
+        return this.offset + byteLength <= this.length;
+    }
 
-    return InputBuffer;
-})(Buffer);
+    isLittleEndian() {
+        return this.littleEndian;
+    }
 
-module.exports = InputBuffer;
+    setLittleEndian() {
+        this.littleEndian = true;
+    }
 
-},{"./Buffer":4}],6:[function(require,module,exports){
+    isBigEndian() {
+        return !this.littleEndian;
+    }
+
+    setBigEndian() {
+        this.littleEndian = false;
+    }
+
+    skip(n) {
+        if (n === undefined) n = 1;
+        this.offset += n;
+    }
+
+    seek(offset) {
+        this.offset = offset;
+    }
+
+    mark() {
+        this._mark = this.offset;
+    }
+
+    reset() {
+        this.offset = this._mark;
+    }
+
+    rewind() {
+        this.offset = 0;
+    }
+
+    ensureAvailable(byteLength) {
+        if (byteLength === undefined) byteLength = 1;
+        if (!this.available(byteLength)) {
+            var newIncrement = this._increment + this._increment;
+            this._increment = newIncrement;
+            var newLength = this.length + newIncrement;
+            var newArray = new Uint8Array(newLength);
+            newArray.set(new Uint8Array(this.buffer));
+            this.buffer = newArray.buffer;
+            this.length = newLength;
+            this._data = new DataView(this.buffer);
+        }
+    }
+
+    readBoolean() {
+        return this.readUint8() !== 0;
+    }
+
+    readInt8() {
+        return this._data.getInt8(this.offset++);
+    }
+
+    readUint8() {
+        return this._data.getUint8(this.offset++);
+    }
+
+    readByte() {
+        return this.readUint8();
+    }
+
+    readBytes(n) {
+        if (n === undefined) n = 1;
+        var bytes = new Uint8Array(n);
+        for (var i = 0; i < n; i++) {
+            bytes[i] = this.readByte();
+        }
+        return bytes;
+    }
+
+    readInt16() {
+        var value = this._data.getInt16(this.offset, this.littleEndian);
+        this.offset += 2;
+        return value;
+    }
+
+    readUint16() {
+        var value = this._data.getUint16(this.offset, this.littleEndian);
+        this.offset += 2;
+        return value;
+    }
+
+    readInt32() {
+        var value = this._data.getInt32(this.offset, this.littleEndian);
+        this.offset += 4;
+        return value;
+    }
+
+    readUint32() {
+        var value = this._data.getUint32(this.offset, this.littleEndian);
+        this.offset += 4;
+        return value;
+    }
+
+    readFloat32() {
+        var value = this._data.getFloat32(this.offset, this.littleEndian);
+        this.offset += 4;
+        return value;
+    }
+
+    readFloat64() {
+        var value = this._data.getFloat64(this.offset, this.littleEndian);
+        this.offset += 8;
+        return value;
+    }
+
+    readChar() {
+        return String.fromCharCode(this.readInt8());
+    }
+
+    readChars(n) {
+        if (n === undefined) n = 1;
+        charArray.length = n;
+        for (var i = 0; i < n; i++) {
+            charArray[i] = this.readChar();
+        }
+        return charArray.join('');
+    }
+
+    writeBoolean(bool) {
+        this.writeUint8(bool ? 0xff : 0x00);
+    }
+
+    writeInt8(value) {
+        this.ensureAvailable(1);
+        this._data.setInt8(this.offset++, value);
+    }
+
+    writeUint8(value) {
+        this.ensureAvailable(1);
+        this._data.setUint8(this.offset++, value);
+    }
+
+    writeByte(value) {
+        this.writeUint8(value);
+    }
+
+    writeBytes(bytes) {
+        this.ensureAvailable(bytes.length);
+        for (var i = 0; i < bytes.length; i++) {
+            this._data.setUint8(this.offset++, bytes[i]);
+        }
+    }
+
+    writeInt16(value) {
+        this.ensureAvailable(2);
+        this._data.setInt16(this.offset, value, this.littleEndian);
+        this.offset += 2;
+    }
+
+    writeUint16(value) {
+        this.ensureAvailable(2);
+        this._data.setUint16(this.offset, value, this.littleEndian);
+        this.offset += 2;
+    }
+
+    writeInt32(value) {
+        this.ensureAvailable(4);
+        this._data.setInt32(this.offset, value, this.littleEndian);
+        this.offset += 4;
+    }
+
+    writeUint32(value) {
+        this.ensureAvailable(4);
+        this._data.setUint32(this.offset, value, this.littleEndian);
+        this.offset += 4;
+    }
+
+    writeFloat32(value) {
+        this.ensureAvailable(4);
+        this._data.setFloat32(this.offset, value, this.littleEndian);
+        this.offset += 4;
+    }
+
+    writeFloat64(value) {
+        this.ensureAvailable(8);
+        this._data.setFloat64(this.offset, value, this.littleEndian);
+        this.offset += 8;
+    }
+
+    writeChar(str) {
+        this.writeUint8(str.charCodeAt(0));
+    }
+
+    writeChars(str) {
+        for (var i = 0; i < str.length; i++) {
+            this.writeUint8(str.charCodeAt(i));
+        }
+    }
+
+    toArray() {
+        return new Uint8Array(this.buffer, 0, this.offset);
+    }
+}
+
+module.exports = IOBuffer;
+
+},{}],7:[function(require,module,exports){
 'use strict';
 
-exports.Buffer = require('./Buffer');
-exports.InputBuffer = require('./InputBuffer');
+var toString = Object.prototype.toString;
 
-},{"./Buffer":4,"./InputBuffer":5}],7:[function(require,module,exports){
+module.exports = function isArrayType(value) {
+    return toString.call(value).substr(-6, 5) === 'Array';
+};
+
+},{}],8:[function(require,module,exports){
+'use strict';
+
+var numberIsNan = require('number-is-nan');
+
+module.exports = Number.isFinite || function (val) {
+	return !(typeof val !== 'number' || numberIsNan(val) || val === Infinity || val === -Infinity);
+};
+
+},{"number-is-nan":28}],9:[function(require,module,exports){
+"use strict";
+
+// https://github.com/paulmillr/es6-shim
+// http://people.mozilla.org/~jorendorff/es6-draft.html#sec-number.isinteger
+var isFinite = require("is-finite");
+module.exports = Number.isInteger || function (val) {
+  return typeof val === "number" && isFinite(val) && Math.floor(val) === val;
+};
+
+},{"is-finite":8}],10:[function(require,module,exports){
+'use strict';
+
+function squaredEuclidean(p, q) {
+    var d = 0;
+    for (var i = 0; i < p.length; i++) {
+        d += (p[i] - q[i]) * (p[i] - q[i]);
+    }
+    return d;
+}
+
+function euclidean(p, q) {
+    return Math.sqrt(squaredEuclidean(p, q));
+}
+
+module.exports = euclidean;
+euclidean.squared = squaredEuclidean;
+
+},{}],11:[function(require,module,exports){
+'use strict';
+
+var squaredEuclidean = require('ml-euclidean-distance').squared;
+
+var defaultOptions = {
+    sigma: 1
+};
+
+class GaussianKernel {
+    constructor(options) {
+        options = Object.assign({}, defaultOptions, options);
+        this.sigma = options.sigma;
+        this.divisor = 2 * options.sigma * options.sigma;
+    }
+
+    compute(x, y) {
+        var distance = squaredEuclidean(x, y);
+        return Math.exp(-distance / this.divisor);
+    }
+}
+
+module.exports = GaussianKernel;
+
+},{"ml-euclidean-distance":10}],12:[function(require,module,exports){
+'use strict';
+
+var Matrix = require('ml-matrix');
+
+var GaussianKernel = require('ml-gaussian-kernel');
+var PolynomialKernel = require('ml-polynomial-kernel');
+
+class Kernel {
+    constructor(type, options) {
+        if (typeof type === 'string') {
+            switch (type.toLowerCase()) {
+                case 'gaussian':
+                case 'rbf':
+                    this.kernelFunction = new GaussianKernel(options);
+                    break;
+                case 'polynomial':
+                case 'poly':
+                    this.kernelFunction = new PolynomialKernel(options);
+                    break;
+                default:
+                    throw new Error('unsupported kernel type: ' + type);
+            }
+        } else if (typeof type === 'object' && typeof type.compute === 'function') {
+            this.kernelFunction = type;
+        } else {
+            throw new TypeError('first argument must be a valid kernel type or instance');
+        }
+    }
+
+    compute(inputs, landmarks) {
+        if (landmarks === undefined) {
+            landmarks = inputs;
+        }
+        var kernelMatrix = new Matrix(inputs.length, landmarks.length);
+        if (inputs === landmarks) {
+            // fast path, matrix is symmetric
+            for (var i = 0; i < inputs.length; i++) {
+                for (var j = i; j < inputs.length; j++) {
+                    kernelMatrix[i][j] = kernelMatrix[j][i] = this.kernelFunction.compute(inputs[i], inputs[j]);
+                }
+            }
+        } else {
+            for (var i = 0; i < inputs.length; i++) {
+                for (var j = 0; j < landmarks.length; j++) {
+                    kernelMatrix[i][j] = this.kernelFunction.compute(inputs[i], landmarks[j]);
+                }
+            }
+        }
+        return kernelMatrix;
+    }
+}
+
+module.exports = Kernel;
+
+},{"ml-gaussian-kernel":11,"ml-matrix":20,"ml-polynomial-kernel":22}],13:[function(require,module,exports){
+'use strict';
+
+var Matrix = require('../matrix');
+
+// https://github.com/lutzroeder/Mapack/blob/master/Source/CholeskyDecomposition.cs
+function CholeskyDecomposition(value) {
+    if (!(this instanceof CholeskyDecomposition)) {
+        return new CholeskyDecomposition(value);
+    }
+    value = Matrix.checkMatrix(value);
+    if (!value.isSymmetric()) throw new Error('Matrix is not symmetric');
+
+    var a = value,
+        dimension = a.rows,
+        l = new Matrix(dimension, dimension),
+        positiveDefinite = true,
+        i,
+        j,
+        k;
+
+    for (j = 0; j < dimension; j++) {
+        var Lrowj = l[j];
+        var d = 0;
+        for (k = 0; k < j; k++) {
+            var Lrowk = l[k];
+            var s = 0;
+            for (i = 0; i < k; i++) {
+                s += Lrowk[i] * Lrowj[i];
+            }
+            Lrowj[k] = s = (a[j][k] - s) / l[k][k];
+            d = d + s * s;
+        }
+
+        d = a[j][j] - d;
+
+        positiveDefinite &= d > 0;
+        l[j][j] = Math.sqrt(Math.max(d, 0));
+        for (k = j + 1; k < dimension; k++) {
+            l[j][k] = 0;
+        }
+    }
+
+    if (!positiveDefinite) {
+        throw new Error('Matrix is not positive definite');
+    }
+
+    this.L = l;
+}
+
+CholeskyDecomposition.prototype = {
+    get lowerTriangularMatrix() {
+        return this.L;
+    },
+    solve: function solve(value) {
+        value = Matrix.checkMatrix(value);
+
+        var l = this.L,
+            dimension = l.rows;
+
+        if (value.rows !== dimension) {
+            throw new Error('Matrix dimensions do not match');
+        }
+
+        var count = value.columns,
+            B = value.clone(),
+            i,
+            j,
+            k;
+
+        for (k = 0; k < dimension; k++) {
+            for (j = 0; j < count; j++) {
+                for (i = 0; i < k; i++) {
+                    B[k][j] -= B[i][j] * l[k][i];
+                }
+                B[k][j] /= l[k][k];
+            }
+        }
+
+        for (k = dimension - 1; k >= 0; k--) {
+            for (j = 0; j < count; j++) {
+                for (i = k + 1; i < dimension; i++) {
+                    B[k][j] -= B[i][j] * l[i][k];
+                }
+                B[k][j] /= l[k][k];
+            }
+        }
+
+        return B;
+    }
+};
+
+module.exports = CholeskyDecomposition;
+
+},{"../matrix":21}],14:[function(require,module,exports){
+'use strict';
+
+var Matrix = require('../matrix');
+var util = require('./util');
+var hypotenuse = util.hypotenuse;
+var getFilled2DArray = util.getFilled2DArray;
+
+// https://github.com/lutzroeder/Mapack/blob/master/Source/EigenvalueDecomposition.cs
+function EigenvalueDecomposition(matrix) {
+    if (!(this instanceof EigenvalueDecomposition)) {
+        return new EigenvalueDecomposition(matrix);
+    }
+    matrix = Matrix.checkMatrix(matrix);
+    if (!matrix.isSquare()) {
+        throw new Error('Matrix is not a square matrix');
+    }
+
+    var n = matrix.columns,
+        V = getFilled2DArray(n, n, 0),
+        d = new Array(n),
+        e = new Array(n),
+        value = matrix,
+        i,
+        j;
+
+    if (matrix.isSymmetric()) {
+        for (i = 0; i < n; i++) {
+            for (j = 0; j < n; j++) {
+                V[i][j] = value[i][j];
+            }
+        }
+        tred2(n, e, d, V);
+        tql2(n, e, d, V);
+    } else {
+        var H = getFilled2DArray(n, n, 0),
+            ort = new Array(n);
+        for (j = 0; j < n; j++) {
+            for (i = 0; i < n; i++) {
+                H[i][j] = value[i][j];
+            }
+        }
+        orthes(n, H, ort, V);
+        hqr2(n, e, d, V, H);
+    }
+
+    this.n = n;
+    this.e = e;
+    this.d = d;
+    this.V = V;
+}
+
+EigenvalueDecomposition.prototype = {
+    get realEigenvalues() {
+        return this.d;
+    },
+    get imaginaryEigenvalues() {
+        return this.e;
+    },
+    get eigenvectorMatrix() {
+        if (!Matrix.isMatrix(this.V)) {
+            this.V = new Matrix(this.V);
+        }
+        return this.V;
+    },
+    get diagonalMatrix() {
+        var n = this.n,
+            e = this.e,
+            d = this.d,
+            X = new Matrix(n, n),
+            i,
+            j;
+        for (i = 0; i < n; i++) {
+            for (j = 0; j < n; j++) {
+                X[i][j] = 0;
+            }
+            X[i][i] = d[i];
+            if (e[i] > 0) {
+                X[i][i + 1] = e[i];
+            } else if (e[i] < 0) {
+                X[i][i - 1] = e[i];
+            }
+        }
+        return X;
+    }
+};
+
+function tred2(n, e, d, V) {
+
+    var f, g, h, i, j, k, hh, scale;
+
+    for (j = 0; j < n; j++) {
+        d[j] = V[n - 1][j];
+    }
+
+    for (i = n - 1; i > 0; i--) {
+        scale = 0;
+        h = 0;
+        for (k = 0; k < i; k++) {
+            scale = scale + Math.abs(d[k]);
+        }
+
+        if (scale === 0) {
+            e[i] = d[i - 1];
+            for (j = 0; j < i; j++) {
+                d[j] = V[i - 1][j];
+                V[i][j] = 0;
+                V[j][i] = 0;
+            }
+        } else {
+            for (k = 0; k < i; k++) {
+                d[k] /= scale;
+                h += d[k] * d[k];
+            }
+
+            f = d[i - 1];
+            g = Math.sqrt(h);
+            if (f > 0) {
+                g = -g;
+            }
+
+            e[i] = scale * g;
+            h = h - f * g;
+            d[i - 1] = f - g;
+            for (j = 0; j < i; j++) {
+                e[j] = 0;
+            }
+
+            for (j = 0; j < i; j++) {
+                f = d[j];
+                V[j][i] = f;
+                g = e[j] + V[j][j] * f;
+                for (k = j + 1; k <= i - 1; k++) {
+                    g += V[k][j] * d[k];
+                    e[k] += V[k][j] * f;
+                }
+                e[j] = g;
+            }
+
+            f = 0;
+            for (j = 0; j < i; j++) {
+                e[j] /= h;
+                f += e[j] * d[j];
+            }
+
+            hh = f / (h + h);
+            for (j = 0; j < i; j++) {
+                e[j] -= hh * d[j];
+            }
+
+            for (j = 0; j < i; j++) {
+                f = d[j];
+                g = e[j];
+                for (k = j; k <= i - 1; k++) {
+                    V[k][j] -= f * e[k] + g * d[k];
+                }
+                d[j] = V[i - 1][j];
+                V[i][j] = 0;
+            }
+        }
+        d[i] = h;
+    }
+
+    for (i = 0; i < n - 1; i++) {
+        V[n - 1][i] = V[i][i];
+        V[i][i] = 1;
+        h = d[i + 1];
+        if (h !== 0) {
+            for (k = 0; k <= i; k++) {
+                d[k] = V[k][i + 1] / h;
+            }
+
+            for (j = 0; j <= i; j++) {
+                g = 0;
+                for (k = 0; k <= i; k++) {
+                    g += V[k][i + 1] * V[k][j];
+                }
+                for (k = 0; k <= i; k++) {
+                    V[k][j] -= g * d[k];
+                }
+            }
+        }
+
+        for (k = 0; k <= i; k++) {
+            V[k][i + 1] = 0;
+        }
+    }
+
+    for (j = 0; j < n; j++) {
+        d[j] = V[n - 1][j];
+        V[n - 1][j] = 0;
+    }
+
+    V[n - 1][n - 1] = 1;
+    e[0] = 0;
+}
+
+function tql2(n, e, d, V) {
+
+    var g, h, i, j, k, l, m, p, r, dl1, c, c2, c3, el1, s, s2, iter;
+
+    for (i = 1; i < n; i++) {
+        e[i - 1] = e[i];
+    }
+
+    e[n - 1] = 0;
+
+    var f = 0,
+        tst1 = 0,
+        eps = Math.pow(2, -52);
+
+    for (l = 0; l < n; l++) {
+        tst1 = Math.max(tst1, Math.abs(d[l]) + Math.abs(e[l]));
+        m = l;
+        while (m < n) {
+            if (Math.abs(e[m]) <= eps * tst1) {
+                break;
+            }
+            m++;
+        }
+
+        if (m > l) {
+            iter = 0;
+            do {
+                iter = iter + 1;
+
+                g = d[l];
+                p = (d[l + 1] - g) / (2 * e[l]);
+                r = hypotenuse(p, 1);
+                if (p < 0) {
+                    r = -r;
+                }
+
+                d[l] = e[l] / (p + r);
+                d[l + 1] = e[l] * (p + r);
+                dl1 = d[l + 1];
+                h = g - d[l];
+                for (i = l + 2; i < n; i++) {
+                    d[i] -= h;
+                }
+
+                f = f + h;
+
+                p = d[m];
+                c = 1;
+                c2 = c;
+                c3 = c;
+                el1 = e[l + 1];
+                s = 0;
+                s2 = 0;
+                for (i = m - 1; i >= l; i--) {
+                    c3 = c2;
+                    c2 = c;
+                    s2 = s;
+                    g = c * e[i];
+                    h = c * p;
+                    r = hypotenuse(p, e[i]);
+                    e[i + 1] = s * r;
+                    s = e[i] / r;
+                    c = p / r;
+                    p = c * d[i] - s * g;
+                    d[i + 1] = h + s * (c * g + s * d[i]);
+
+                    for (k = 0; k < n; k++) {
+                        h = V[k][i + 1];
+                        V[k][i + 1] = s * V[k][i] + c * h;
+                        V[k][i] = c * V[k][i] - s * h;
+                    }
+                }
+
+                p = -s * s2 * c3 * el1 * e[l] / dl1;
+                e[l] = s * p;
+                d[l] = c * p;
+            } while (Math.abs(e[l]) > eps * tst1);
+        }
+        d[l] = d[l] + f;
+        e[l] = 0;
+    }
+
+    for (i = 0; i < n - 1; i++) {
+        k = i;
+        p = d[i];
+        for (j = i + 1; j < n; j++) {
+            if (d[j] < p) {
+                k = j;
+                p = d[j];
+            }
+        }
+
+        if (k !== i) {
+            d[k] = d[i];
+            d[i] = p;
+            for (j = 0; j < n; j++) {
+                p = V[j][i];
+                V[j][i] = V[j][k];
+                V[j][k] = p;
+            }
+        }
+    }
+}
+
+function orthes(n, H, ort, V) {
+
+    var low = 0,
+        high = n - 1,
+        f,
+        g,
+        h,
+        i,
+        j,
+        m,
+        scale;
+
+    for (m = low + 1; m <= high - 1; m++) {
+        scale = 0;
+        for (i = m; i <= high; i++) {
+            scale = scale + Math.abs(H[i][m - 1]);
+        }
+
+        if (scale !== 0) {
+            h = 0;
+            for (i = high; i >= m; i--) {
+                ort[i] = H[i][m - 1] / scale;
+                h += ort[i] * ort[i];
+            }
+
+            g = Math.sqrt(h);
+            if (ort[m] > 0) {
+                g = -g;
+            }
+
+            h = h - ort[m] * g;
+            ort[m] = ort[m] - g;
+
+            for (j = m; j < n; j++) {
+                f = 0;
+                for (i = high; i >= m; i--) {
+                    f += ort[i] * H[i][j];
+                }
+
+                f = f / h;
+                for (i = m; i <= high; i++) {
+                    H[i][j] -= f * ort[i];
+                }
+            }
+
+            for (i = 0; i <= high; i++) {
+                f = 0;
+                for (j = high; j >= m; j--) {
+                    f += ort[j] * H[i][j];
+                }
+
+                f = f / h;
+                for (j = m; j <= high; j++) {
+                    H[i][j] -= f * ort[j];
+                }
+            }
+
+            ort[m] = scale * ort[m];
+            H[m][m - 1] = scale * g;
+        }
+    }
+
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            V[i][j] = i === j ? 1 : 0;
+        }
+    }
+
+    for (m = high - 1; m >= low + 1; m--) {
+        if (H[m][m - 1] !== 0) {
+            for (i = m + 1; i <= high; i++) {
+                ort[i] = H[i][m - 1];
+            }
+
+            for (j = m; j <= high; j++) {
+                g = 0;
+                for (i = m; i <= high; i++) {
+                    g += ort[i] * V[i][j];
+                }
+
+                g = g / ort[m] / H[m][m - 1];
+                for (i = m; i <= high; i++) {
+                    V[i][j] += g * ort[i];
+                }
+            }
+        }
+    }
+}
+
+function hqr2(nn, e, d, V, H) {
+    var n = nn - 1,
+        low = 0,
+        high = nn - 1,
+        eps = Math.pow(2, -52),
+        exshift = 0,
+        norm = 0,
+        p = 0,
+        q = 0,
+        r = 0,
+        s = 0,
+        z = 0,
+        iter = 0,
+        i,
+        j,
+        k,
+        l,
+        m,
+        t,
+        w,
+        x,
+        y,
+        ra,
+        sa,
+        vr,
+        vi,
+        notlast,
+        cdivres;
+
+    for (i = 0; i < nn; i++) {
+        if (i < low || i > high) {
+            d[i] = H[i][i];
+            e[i] = 0;
+        }
+
+        for (j = Math.max(i - 1, 0); j < nn; j++) {
+            norm = norm + Math.abs(H[i][j]);
+        }
+    }
+
+    while (n >= low) {
+        l = n;
+        while (l > low) {
+            s = Math.abs(H[l - 1][l - 1]) + Math.abs(H[l][l]);
+            if (s === 0) {
+                s = norm;
+            }
+            if (Math.abs(H[l][l - 1]) < eps * s) {
+                break;
+            }
+            l--;
+        }
+
+        if (l === n) {
+            H[n][n] = H[n][n] + exshift;
+            d[n] = H[n][n];
+            e[n] = 0;
+            n--;
+            iter = 0;
+        } else if (l === n - 1) {
+            w = H[n][n - 1] * H[n - 1][n];
+            p = (H[n - 1][n - 1] - H[n][n]) / 2;
+            q = p * p + w;
+            z = Math.sqrt(Math.abs(q));
+            H[n][n] = H[n][n] + exshift;
+            H[n - 1][n - 1] = H[n - 1][n - 1] + exshift;
+            x = H[n][n];
+
+            if (q >= 0) {
+                z = p >= 0 ? p + z : p - z;
+                d[n - 1] = x + z;
+                d[n] = d[n - 1];
+                if (z !== 0) {
+                    d[n] = x - w / z;
+                }
+                e[n - 1] = 0;
+                e[n] = 0;
+                x = H[n][n - 1];
+                s = Math.abs(x) + Math.abs(z);
+                p = x / s;
+                q = z / s;
+                r = Math.sqrt(p * p + q * q);
+                p = p / r;
+                q = q / r;
+
+                for (j = n - 1; j < nn; j++) {
+                    z = H[n - 1][j];
+                    H[n - 1][j] = q * z + p * H[n][j];
+                    H[n][j] = q * H[n][j] - p * z;
+                }
+
+                for (i = 0; i <= n; i++) {
+                    z = H[i][n - 1];
+                    H[i][n - 1] = q * z + p * H[i][n];
+                    H[i][n] = q * H[i][n] - p * z;
+                }
+
+                for (i = low; i <= high; i++) {
+                    z = V[i][n - 1];
+                    V[i][n - 1] = q * z + p * V[i][n];
+                    V[i][n] = q * V[i][n] - p * z;
+                }
+            } else {
+                d[n - 1] = x + p;
+                d[n] = x + p;
+                e[n - 1] = z;
+                e[n] = -z;
+            }
+
+            n = n - 2;
+            iter = 0;
+        } else {
+            x = H[n][n];
+            y = 0;
+            w = 0;
+            if (l < n) {
+                y = H[n - 1][n - 1];
+                w = H[n][n - 1] * H[n - 1][n];
+            }
+
+            if (iter === 10) {
+                exshift += x;
+                for (i = low; i <= n; i++) {
+                    H[i][i] -= x;
+                }
+                s = Math.abs(H[n][n - 1]) + Math.abs(H[n - 1][n - 2]);
+                x = y = 0.75 * s;
+                w = -0.4375 * s * s;
+            }
+
+            if (iter === 30) {
+                s = (y - x) / 2;
+                s = s * s + w;
+                if (s > 0) {
+                    s = Math.sqrt(s);
+                    if (y < x) {
+                        s = -s;
+                    }
+                    s = x - w / ((y - x) / 2 + s);
+                    for (i = low; i <= n; i++) {
+                        H[i][i] -= s;
+                    }
+                    exshift += s;
+                    x = y = w = 0.964;
+                }
+            }
+
+            iter = iter + 1;
+
+            m = n - 2;
+            while (m >= l) {
+                z = H[m][m];
+                r = x - z;
+                s = y - z;
+                p = (r * s - w) / H[m + 1][m] + H[m][m + 1];
+                q = H[m + 1][m + 1] - z - r - s;
+                r = H[m + 2][m + 1];
+                s = Math.abs(p) + Math.abs(q) + Math.abs(r);
+                p = p / s;
+                q = q / s;
+                r = r / s;
+                if (m === l) {
+                    break;
+                }
+                if (Math.abs(H[m][m - 1]) * (Math.abs(q) + Math.abs(r)) < eps * (Math.abs(p) * (Math.abs(H[m - 1][m - 1]) + Math.abs(z) + Math.abs(H[m + 1][m + 1])))) {
+                    break;
+                }
+                m--;
+            }
+
+            for (i = m + 2; i <= n; i++) {
+                H[i][i - 2] = 0;
+                if (i > m + 2) {
+                    H[i][i - 3] = 0;
+                }
+            }
+
+            for (k = m; k <= n - 1; k++) {
+                notlast = k !== n - 1;
+                if (k !== m) {
+                    p = H[k][k - 1];
+                    q = H[k + 1][k - 1];
+                    r = notlast ? H[k + 2][k - 1] : 0;
+                    x = Math.abs(p) + Math.abs(q) + Math.abs(r);
+                    if (x !== 0) {
+                        p = p / x;
+                        q = q / x;
+                        r = r / x;
+                    }
+                }
+
+                if (x === 0) {
+                    break;
+                }
+
+                s = Math.sqrt(p * p + q * q + r * r);
+                if (p < 0) {
+                    s = -s;
+                }
+
+                if (s !== 0) {
+                    if (k !== m) {
+                        H[k][k - 1] = -s * x;
+                    } else if (l !== m) {
+                        H[k][k - 1] = -H[k][k - 1];
+                    }
+
+                    p = p + s;
+                    x = p / s;
+                    y = q / s;
+                    z = r / s;
+                    q = q / p;
+                    r = r / p;
+
+                    for (j = k; j < nn; j++) {
+                        p = H[k][j] + q * H[k + 1][j];
+                        if (notlast) {
+                            p = p + r * H[k + 2][j];
+                            H[k + 2][j] = H[k + 2][j] - p * z;
+                        }
+
+                        H[k][j] = H[k][j] - p * x;
+                        H[k + 1][j] = H[k + 1][j] - p * y;
+                    }
+
+                    for (i = 0; i <= Math.min(n, k + 3); i++) {
+                        p = x * H[i][k] + y * H[i][k + 1];
+                        if (notlast) {
+                            p = p + z * H[i][k + 2];
+                            H[i][k + 2] = H[i][k + 2] - p * r;
+                        }
+
+                        H[i][k] = H[i][k] - p;
+                        H[i][k + 1] = H[i][k + 1] - p * q;
+                    }
+
+                    for (i = low; i <= high; i++) {
+                        p = x * V[i][k] + y * V[i][k + 1];
+                        if (notlast) {
+                            p = p + z * V[i][k + 2];
+                            V[i][k + 2] = V[i][k + 2] - p * r;
+                        }
+
+                        V[i][k] = V[i][k] - p;
+                        V[i][k + 1] = V[i][k + 1] - p * q;
+                    }
+                }
+            }
+        }
+    }
+
+    if (norm === 0) {
+        return;
+    }
+
+    for (n = nn - 1; n >= 0; n--) {
+        p = d[n];
+        q = e[n];
+
+        if (q === 0) {
+            l = n;
+            H[n][n] = 1;
+            for (i = n - 1; i >= 0; i--) {
+                w = H[i][i] - p;
+                r = 0;
+                for (j = l; j <= n; j++) {
+                    r = r + H[i][j] * H[j][n];
+                }
+
+                if (e[i] < 0) {
+                    z = w;
+                    s = r;
+                } else {
+                    l = i;
+                    if (e[i] === 0) {
+                        H[i][n] = w !== 0 ? -r / w : -r / (eps * norm);
+                    } else {
+                        x = H[i][i + 1];
+                        y = H[i + 1][i];
+                        q = (d[i] - p) * (d[i] - p) + e[i] * e[i];
+                        t = (x * s - z * r) / q;
+                        H[i][n] = t;
+                        H[i + 1][n] = Math.abs(x) > Math.abs(z) ? (-r - w * t) / x : (-s - y * t) / z;
+                    }
+
+                    t = Math.abs(H[i][n]);
+                    if (eps * t * t > 1) {
+                        for (j = i; j <= n; j++) {
+                            H[j][n] = H[j][n] / t;
+                        }
+                    }
+                }
+            }
+        } else if (q < 0) {
+            l = n - 1;
+
+            if (Math.abs(H[n][n - 1]) > Math.abs(H[n - 1][n])) {
+                H[n - 1][n - 1] = q / H[n][n - 1];
+                H[n - 1][n] = -(H[n][n] - p) / H[n][n - 1];
+            } else {
+                cdivres = cdiv(0, -H[n - 1][n], H[n - 1][n - 1] - p, q);
+                H[n - 1][n - 1] = cdivres[0];
+                H[n - 1][n] = cdivres[1];
+            }
+
+            H[n][n - 1] = 0;
+            H[n][n] = 1;
+            for (i = n - 2; i >= 0; i--) {
+                ra = 0;
+                sa = 0;
+                for (j = l; j <= n; j++) {
+                    ra = ra + H[i][j] * H[j][n - 1];
+                    sa = sa + H[i][j] * H[j][n];
+                }
+
+                w = H[i][i] - p;
+
+                if (e[i] < 0) {
+                    z = w;
+                    r = ra;
+                    s = sa;
+                } else {
+                    l = i;
+                    if (e[i] === 0) {
+                        cdivres = cdiv(-ra, -sa, w, q);
+                        H[i][n - 1] = cdivres[0];
+                        H[i][n] = cdivres[1];
+                    } else {
+                        x = H[i][i + 1];
+                        y = H[i + 1][i];
+                        vr = (d[i] - p) * (d[i] - p) + e[i] * e[i] - q * q;
+                        vi = (d[i] - p) * 2 * q;
+                        if (vr === 0 && vi === 0) {
+                            vr = eps * norm * (Math.abs(w) + Math.abs(q) + Math.abs(x) + Math.abs(y) + Math.abs(z));
+                        }
+                        cdivres = cdiv(x * r - z * ra + q * sa, x * s - z * sa - q * ra, vr, vi);
+                        H[i][n - 1] = cdivres[0];
+                        H[i][n] = cdivres[1];
+                        if (Math.abs(x) > Math.abs(z) + Math.abs(q)) {
+                            H[i + 1][n - 1] = (-ra - w * H[i][n - 1] + q * H[i][n]) / x;
+                            H[i + 1][n] = (-sa - w * H[i][n] - q * H[i][n - 1]) / x;
+                        } else {
+                            cdivres = cdiv(-r - y * H[i][n - 1], -s - y * H[i][n], z, q);
+                            H[i + 1][n - 1] = cdivres[0];
+                            H[i + 1][n] = cdivres[1];
+                        }
+                    }
+
+                    t = Math.max(Math.abs(H[i][n - 1]), Math.abs(H[i][n]));
+                    if (eps * t * t > 1) {
+                        for (j = i; j <= n; j++) {
+                            H[j][n - 1] = H[j][n - 1] / t;
+                            H[j][n] = H[j][n] / t;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (i = 0; i < nn; i++) {
+        if (i < low || i > high) {
+            for (j = i; j < nn; j++) {
+                V[i][j] = H[i][j];
+            }
+        }
+    }
+
+    for (j = nn - 1; j >= low; j--) {
+        for (i = low; i <= high; i++) {
+            z = 0;
+            for (k = low; k <= Math.min(j, high); k++) {
+                z = z + V[i][k] * H[k][j];
+            }
+            V[i][j] = z;
+        }
+    }
+}
+
+function cdiv(xr, xi, yr, yi) {
+    var r, d;
+    if (Math.abs(yr) > Math.abs(yi)) {
+        r = yi / yr;
+        d = yr + r * yi;
+        return [(xr + r * xi) / d, (xi - r * xr) / d];
+    } else {
+        r = yr / yi;
+        d = yi + r * yr;
+        return [(r * xr + xi) / d, (r * xi - xr) / d];
+    }
+}
+
+module.exports = EigenvalueDecomposition;
+
+},{"../matrix":21,"./util":18}],15:[function(require,module,exports){
+'use strict';
+
+var Matrix = require('../matrix');
+
+// https://github.com/lutzroeder/Mapack/blob/master/Source/LuDecomposition.cs
+function LuDecomposition(matrix) {
+    if (!(this instanceof LuDecomposition)) {
+        return new LuDecomposition(matrix);
+    }
+    matrix = Matrix.checkMatrix(matrix);
+
+    var lu = matrix.clone(),
+        rows = lu.rows,
+        columns = lu.columns,
+        pivotVector = new Array(rows),
+        pivotSign = 1,
+        i,
+        j,
+        k,
+        p,
+        s,
+        t,
+        v,
+        LUrowi,
+        LUcolj,
+        kmax;
+
+    for (i = 0; i < rows; i++) {
+        pivotVector[i] = i;
+    }
+
+    LUcolj = new Array(rows);
+
+    for (j = 0; j < columns; j++) {
+
+        for (i = 0; i < rows; i++) {
+            LUcolj[i] = lu[i][j];
+        }
+
+        for (i = 0; i < rows; i++) {
+            LUrowi = lu[i];
+            kmax = Math.min(i, j);
+            s = 0;
+            for (k = 0; k < kmax; k++) {
+                s += LUrowi[k] * LUcolj[k];
+            }
+            LUrowi[j] = LUcolj[i] -= s;
+        }
+
+        p = j;
+        for (i = j + 1; i < rows; i++) {
+            if (Math.abs(LUcolj[i]) > Math.abs(LUcolj[p])) {
+                p = i;
+            }
+        }
+
+        if (p !== j) {
+            for (k = 0; k < columns; k++) {
+                t = lu[p][k];
+                lu[p][k] = lu[j][k];
+                lu[j][k] = t;
+            }
+
+            v = pivotVector[p];
+            pivotVector[p] = pivotVector[j];
+            pivotVector[j] = v;
+
+            pivotSign = -pivotSign;
+        }
+
+        if (j < rows && lu[j][j] !== 0) {
+            for (i = j + 1; i < rows; i++) {
+                lu[i][j] /= lu[j][j];
+            }
+        }
+    }
+
+    this.LU = lu;
+    this.pivotVector = pivotVector;
+    this.pivotSign = pivotSign;
+}
+
+LuDecomposition.prototype = {
+    isSingular: function isSingular() {
+        var data = this.LU,
+            col = data.columns;
+        for (var j = 0; j < col; j++) {
+            if (data[j][j] === 0) {
+                return true;
+            }
+        }
+        return false;
+    },
+    get determinant() {
+        var data = this.LU;
+        if (!data.isSquare()) throw new Error('Matrix must be square');
+        var determinant = this.pivotSign,
+            col = data.columns;
+        for (var j = 0; j < col; j++) {
+            determinant *= data[j][j];
+        }return determinant;
+    },
+    get lowerTriangularMatrix() {
+        var data = this.LU,
+            rows = data.rows,
+            columns = data.columns,
+            X = new Matrix(rows, columns);
+        for (var i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
+                if (i > j) {
+                    X[i][j] = data[i][j];
+                } else if (i === j) {
+                    X[i][j] = 1;
+                } else {
+                    X[i][j] = 0;
+                }
+            }
+        }
+        return X;
+    },
+    get upperTriangularMatrix() {
+        var data = this.LU,
+            rows = data.rows,
+            columns = data.columns,
+            X = new Matrix(rows, columns);
+        for (var i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
+                if (i <= j) {
+                    X[i][j] = data[i][j];
+                } else {
+                    X[i][j] = 0;
+                }
+            }
+        }
+        return X;
+    },
+    get pivotPermutationVector() {
+        return this.pivotVector.slice();
+    },
+    solve: function solve(value) {
+        value = Matrix.checkMatrix(value);
+
+        var lu = this.LU,
+            rows = lu.rows;
+
+        if (rows !== value.rows) throw new Error('Invalid matrix dimensions');
+        if (this.isSingular()) throw new Error('LU matrix is singular');
+
+        var count = value.columns,
+            X = value.subMatrixRow(this.pivotVector, 0, count - 1),
+            columns = lu.columns,
+            i,
+            j,
+            k;
+
+        for (k = 0; k < columns; k++) {
+            for (i = k + 1; i < columns; i++) {
+                for (j = 0; j < count; j++) {
+                    X[i][j] -= X[k][j] * lu[i][k];
+                }
+            }
+        }
+        for (k = columns - 1; k >= 0; k--) {
+            for (j = 0; j < count; j++) {
+                X[k][j] /= lu[k][k];
+            }
+            for (i = 0; i < k; i++) {
+                for (j = 0; j < count; j++) {
+                    X[i][j] -= X[k][j] * lu[i][k];
+                }
+            }
+        }
+        return X;
+    }
+};
+
+module.exports = LuDecomposition;
+
+},{"../matrix":21}],16:[function(require,module,exports){
+'use strict';
+
+var Matrix = require('../matrix');
+var hypotenuse = require('./util').hypotenuse;
+
+//https://github.com/lutzroeder/Mapack/blob/master/Source/QrDecomposition.cs
+function QrDecomposition(value) {
+    if (!(this instanceof QrDecomposition)) {
+        return new QrDecomposition(value);
+    }
+    value = Matrix.checkMatrix(value);
+
+    var qr = value.clone(),
+        m = value.rows,
+        n = value.columns,
+        rdiag = new Array(n),
+        i,
+        j,
+        k,
+        s;
+
+    for (k = 0; k < n; k++) {
+        var nrm = 0;
+        for (i = k; i < m; i++) {
+            nrm = hypotenuse(nrm, qr[i][k]);
+        }
+        if (nrm !== 0) {
+            if (qr[k][k] < 0) {
+                nrm = -nrm;
+            }
+            for (i = k; i < m; i++) {
+                qr[i][k] /= nrm;
+            }
+            qr[k][k] += 1;
+            for (j = k + 1; j < n; j++) {
+                s = 0;
+                for (i = k; i < m; i++) {
+                    s += qr[i][k] * qr[i][j];
+                }
+                s = -s / qr[k][k];
+                for (i = k; i < m; i++) {
+                    qr[i][j] += s * qr[i][k];
+                }
+            }
+        }
+        rdiag[k] = -nrm;
+    }
+
+    this.QR = qr;
+    this.Rdiag = rdiag;
+}
+
+QrDecomposition.prototype = {
+    solve: function solve(value) {
+        value = Matrix.checkMatrix(value);
+
+        var qr = this.QR,
+            m = qr.rows;
+
+        if (value.rows !== m) throw new Error('Matrix row dimensions must agree');
+        if (!this.isFullRank()) throw new Error('Matrix is rank deficient');
+
+        var count = value.columns,
+            X = value.clone(),
+            n = qr.columns,
+            i,
+            j,
+            k,
+            s;
+
+        for (k = 0; k < n; k++) {
+            for (j = 0; j < count; j++) {
+                s = 0;
+                for (i = k; i < m; i++) {
+                    s += qr[i][k] * X[i][j];
+                }
+                s = -s / qr[k][k];
+                for (i = k; i < m; i++) {
+                    X[i][j] += s * qr[i][k];
+                }
+            }
+        }
+        for (k = n - 1; k >= 0; k--) {
+            for (j = 0; j < count; j++) {
+                X[k][j] /= this.Rdiag[k];
+            }
+            for (i = 0; i < k; i++) {
+                for (j = 0; j < count; j++) {
+                    X[i][j] -= X[k][j] * qr[i][k];
+                }
+            }
+        }
+
+        return X.subMatrix(0, n - 1, 0, count - 1);
+    },
+    isFullRank: function isFullRank() {
+        var columns = this.QR.columns;
+        for (var i = 0; i < columns; i++) {
+            if (this.Rdiag[i] === 0) {
+                return false;
+            }
+        }
+        return true;
+    },
+    get upperTriangularMatrix() {
+        var qr = this.QR,
+            n = qr.columns,
+            X = new Matrix(n, n),
+            i,
+            j;
+        for (i = 0; i < n; i++) {
+            for (j = 0; j < n; j++) {
+                if (i < j) {
+                    X[i][j] = qr[i][j];
+                } else if (i === j) {
+                    X[i][j] = this.Rdiag[i];
+                } else {
+                    X[i][j] = 0;
+                }
+            }
+        }
+        return X;
+    },
+    get orthogonalMatrix() {
+        var qr = this.QR,
+            rows = qr.rows,
+            columns = qr.columns,
+            X = new Matrix(rows, columns),
+            i,
+            j,
+            k,
+            s;
+
+        for (k = columns - 1; k >= 0; k--) {
+            for (i = 0; i < rows; i++) {
+                X[i][k] = 0;
+            }
+            X[k][k] = 1;
+            for (j = k; j < columns; j++) {
+                if (qr[k][k] !== 0) {
+                    s = 0;
+                    for (i = k; i < rows; i++) {
+                        s += qr[i][k] * X[i][j];
+                    }
+
+                    s = -s / qr[k][k];
+
+                    for (i = k; i < rows; i++) {
+                        X[i][j] += s * qr[i][k];
+                    }
+                }
+            }
+        }
+        return X;
+    }
+};
+
+module.exports = QrDecomposition;
+
+},{"../matrix":21,"./util":18}],17:[function(require,module,exports){
+'use strict';
+
+var Matrix = require('../matrix');
+var util = require('./util');
+var hypotenuse = util.hypotenuse;
+var getFilled2DArray = util.getFilled2DArray;
+
+// https://github.com/lutzroeder/Mapack/blob/master/Source/SingularValueDecomposition.cs
+function SingularValueDecomposition(value, options) {
+    if (!(this instanceof SingularValueDecomposition)) {
+        return new SingularValueDecomposition(value, options);
+    }
+    value = Matrix.checkMatrix(value);
+
+    options = options || {};
+
+    var m = value.rows,
+        n = value.columns,
+        nu = Math.min(m, n);
+
+    var wantu = true,
+        wantv = true;
+    if (options.computeLeftSingularVectors === false) wantu = false;
+    if (options.computeRightSingularVectors === false) wantv = false;
+    var autoTranspose = options.autoTranspose === true;
+
+    var swapped = false;
+    var a;
+    if (m < n) {
+        if (!autoTranspose) {
+            a = value.clone();
+            console.warn('Computing SVD on a matrix with more columns than rows. Consider enabling autoTranspose');
+        } else {
+            a = value.transpose();
+            m = a.rows;
+            n = a.columns;
+            swapped = true;
+            var aux = wantu;
+            wantu = wantv;
+            wantv = aux;
+        }
+    } else {
+        a = value.clone();
+    }
+
+    var s = new Array(Math.min(m + 1, n)),
+        U = getFilled2DArray(m, nu, 0),
+        V = getFilled2DArray(n, n, 0),
+        e = new Array(n),
+        work = new Array(m);
+
+    var nct = Math.min(m - 1, n);
+    var nrt = Math.max(0, Math.min(n - 2, m));
+
+    var i, j, k, p, t, ks, f, cs, sn, max, kase, scale, sp, spm1, epm1, sk, ek, b, c, shift, g;
+
+    for (k = 0, max = Math.max(nct, nrt); k < max; k++) {
+        if (k < nct) {
+            s[k] = 0;
+            for (i = k; i < m; i++) {
+                s[k] = hypotenuse(s[k], a[i][k]);
+            }
+            if (s[k] !== 0) {
+                if (a[k][k] < 0) {
+                    s[k] = -s[k];
+                }
+                for (i = k; i < m; i++) {
+                    a[i][k] /= s[k];
+                }
+                a[k][k] += 1;
+            }
+            s[k] = -s[k];
+        }
+
+        for (j = k + 1; j < n; j++) {
+            if (k < nct && s[k] !== 0) {
+                t = 0;
+                for (i = k; i < m; i++) {
+                    t += a[i][k] * a[i][j];
+                }
+                t = -t / a[k][k];
+                for (i = k; i < m; i++) {
+                    a[i][j] += t * a[i][k];
+                }
+            }
+            e[j] = a[k][j];
+        }
+
+        if (wantu && k < nct) {
+            for (i = k; i < m; i++) {
+                U[i][k] = a[i][k];
+            }
+        }
+
+        if (k < nrt) {
+            e[k] = 0;
+            for (i = k + 1; i < n; i++) {
+                e[k] = hypotenuse(e[k], e[i]);
+            }
+            if (e[k] !== 0) {
+                if (e[k + 1] < 0) e[k] = -e[k];
+                for (i = k + 1; i < n; i++) {
+                    e[i] /= e[k];
+                }
+                e[k + 1] += 1;
+            }
+            e[k] = -e[k];
+            if (k + 1 < m && e[k] !== 0) {
+                for (i = k + 1; i < m; i++) {
+                    work[i] = 0;
+                }
+                for (j = k + 1; j < n; j++) {
+                    for (i = k + 1; i < m; i++) {
+                        work[i] += e[j] * a[i][j];
+                    }
+                }
+                for (j = k + 1; j < n; j++) {
+                    t = -e[j] / e[k + 1];
+                    for (i = k + 1; i < m; i++) {
+                        a[i][j] += t * work[i];
+                    }
+                }
+            }
+            if (wantv) {
+                for (i = k + 1; i < n; i++) {
+                    V[i][k] = e[i];
+                }
+            }
+        }
+    }
+
+    p = Math.min(n, m + 1);
+    if (nct < n) {
+        s[nct] = a[nct][nct];
+    }
+    if (m < p) {
+        s[p - 1] = 0;
+    }
+    if (nrt + 1 < p) {
+        e[nrt] = a[nrt][p - 1];
+    }
+    e[p - 1] = 0;
+
+    if (wantu) {
+        for (j = nct; j < nu; j++) {
+            for (i = 0; i < m; i++) {
+                U[i][j] = 0;
+            }
+            U[j][j] = 1;
+        }
+        for (k = nct - 1; k >= 0; k--) {
+            if (s[k] !== 0) {
+                for (j = k + 1; j < nu; j++) {
+                    t = 0;
+                    for (i = k; i < m; i++) {
+                        t += U[i][k] * U[i][j];
+                    }
+                    t = -t / U[k][k];
+                    for (i = k; i < m; i++) {
+                        U[i][j] += t * U[i][k];
+                    }
+                }
+                for (i = k; i < m; i++) {
+                    U[i][k] = -U[i][k];
+                }
+                U[k][k] = 1 + U[k][k];
+                for (i = 0; i < k - 1; i++) {
+                    U[i][k] = 0;
+                }
+            } else {
+                for (i = 0; i < m; i++) {
+                    U[i][k] = 0;
+                }
+                U[k][k] = 1;
+            }
+        }
+    }
+
+    if (wantv) {
+        for (k = n - 1; k >= 0; k--) {
+            if (k < nrt && e[k] !== 0) {
+                for (j = k + 1; j < n; j++) {
+                    t = 0;
+                    for (i = k + 1; i < n; i++) {
+                        t += V[i][k] * V[i][j];
+                    }
+                    t = -t / V[k + 1][k];
+                    for (i = k + 1; i < n; i++) {
+                        V[i][j] += t * V[i][k];
+                    }
+                }
+            }
+            for (i = 0; i < n; i++) {
+                V[i][k] = 0;
+            }
+            V[k][k] = 1;
+        }
+    }
+
+    var pp = p - 1,
+        iter = 0,
+        eps = Math.pow(2, -52);
+    while (p > 0) {
+        for (k = p - 2; k >= -1; k--) {
+            if (k === -1) {
+                break;
+            }
+            if (Math.abs(e[k]) <= eps * (Math.abs(s[k]) + Math.abs(s[k + 1]))) {
+                e[k] = 0;
+                break;
+            }
+        }
+        if (k === p - 2) {
+            kase = 4;
+        } else {
+            for (ks = p - 1; ks >= k; ks--) {
+                if (ks === k) {
+                    break;
+                }
+                t = (ks !== p ? Math.abs(e[ks]) : 0) + (ks !== k + 1 ? Math.abs(e[ks - 1]) : 0);
+                if (Math.abs(s[ks]) <= eps * t) {
+                    s[ks] = 0;
+                    break;
+                }
+            }
+            if (ks === k) {
+                kase = 3;
+            } else if (ks === p - 1) {
+                kase = 1;
+            } else {
+                kase = 2;
+                k = ks;
+            }
+        }
+
+        k++;
+
+        switch (kase) {
+            case 1:
+                {
+                    f = e[p - 2];
+                    e[p - 2] = 0;
+                    for (j = p - 2; j >= k; j--) {
+                        t = hypotenuse(s[j], f);
+                        cs = s[j] / t;
+                        sn = f / t;
+                        s[j] = t;
+                        if (j !== k) {
+                            f = -sn * e[j - 1];
+                            e[j - 1] = cs * e[j - 1];
+                        }
+                        if (wantv) {
+                            for (i = 0; i < n; i++) {
+                                t = cs * V[i][j] + sn * V[i][p - 1];
+                                V[i][p - 1] = -sn * V[i][j] + cs * V[i][p - 1];
+                                V[i][j] = t;
+                            }
+                        }
+                    }
+                    break;
+                }
+            case 2:
+                {
+                    f = e[k - 1];
+                    e[k - 1] = 0;
+                    for (j = k; j < p; j++) {
+                        t = hypotenuse(s[j], f);
+                        cs = s[j] / t;
+                        sn = f / t;
+                        s[j] = t;
+                        f = -sn * e[j];
+                        e[j] = cs * e[j];
+                        if (wantu) {
+                            for (i = 0; i < m; i++) {
+                                t = cs * U[i][j] + sn * U[i][k - 1];
+                                U[i][k - 1] = -sn * U[i][j] + cs * U[i][k - 1];
+                                U[i][j] = t;
+                            }
+                        }
+                    }
+                    break;
+                }
+            case 3:
+                {
+                    scale = Math.max(Math.max(Math.max(Math.max(Math.abs(s[p - 1]), Math.abs(s[p - 2])), Math.abs(e[p - 2])), Math.abs(s[k])), Math.abs(e[k]));
+                    sp = s[p - 1] / scale;
+                    spm1 = s[p - 2] / scale;
+                    epm1 = e[p - 2] / scale;
+                    sk = s[k] / scale;
+                    ek = e[k] / scale;
+                    b = ((spm1 + sp) * (spm1 - sp) + epm1 * epm1) / 2;
+                    c = sp * epm1 * (sp * epm1);
+                    shift = 0;
+                    if (b !== 0 || c !== 0) {
+                        shift = Math.sqrt(b * b + c);
+                        if (b < 0) {
+                            shift = -shift;
+                        }
+                        shift = c / (b + shift);
+                    }
+                    f = (sk + sp) * (sk - sp) + shift;
+                    g = sk * ek;
+                    for (j = k; j < p - 1; j++) {
+                        t = hypotenuse(f, g);
+                        cs = f / t;
+                        sn = g / t;
+                        if (j !== k) {
+                            e[j - 1] = t;
+                        }
+                        f = cs * s[j] + sn * e[j];
+                        e[j] = cs * e[j] - sn * s[j];
+                        g = sn * s[j + 1];
+                        s[j + 1] = cs * s[j + 1];
+                        if (wantv) {
+                            for (i = 0; i < n; i++) {
+                                t = cs * V[i][j] + sn * V[i][j + 1];
+                                V[i][j + 1] = -sn * V[i][j] + cs * V[i][j + 1];
+                                V[i][j] = t;
+                            }
+                        }
+                        t = hypotenuse(f, g);
+                        cs = f / t;
+                        sn = g / t;
+                        s[j] = t;
+                        f = cs * e[j] + sn * s[j + 1];
+                        s[j + 1] = -sn * e[j] + cs * s[j + 1];
+                        g = sn * e[j + 1];
+                        e[j + 1] = cs * e[j + 1];
+                        if (wantu && j < m - 1) {
+                            for (i = 0; i < m; i++) {
+                                t = cs * U[i][j] + sn * U[i][j + 1];
+                                U[i][j + 1] = -sn * U[i][j] + cs * U[i][j + 1];
+                                U[i][j] = t;
+                            }
+                        }
+                    }
+                    e[p - 2] = f;
+                    iter = iter + 1;
+                    break;
+                }
+            case 4:
+                {
+                    if (s[k] <= 0) {
+                        s[k] = s[k] < 0 ? -s[k] : 0;
+                        if (wantv) {
+                            for (i = 0; i <= pp; i++) {
+                                V[i][k] = -V[i][k];
+                            }
+                        }
+                    }
+                    while (k < pp) {
+                        if (s[k] >= s[k + 1]) {
+                            break;
+                        }
+                        t = s[k];
+                        s[k] = s[k + 1];
+                        s[k + 1] = t;
+                        if (wantv && k < n - 1) {
+                            for (i = 0; i < n; i++) {
+                                t = V[i][k + 1];
+                                V[i][k + 1] = V[i][k];
+                                V[i][k] = t;
+                            }
+                        }
+                        if (wantu && k < m - 1) {
+                            for (i = 0; i < m; i++) {
+                                t = U[i][k + 1];
+                                U[i][k + 1] = U[i][k];
+                                U[i][k] = t;
+                            }
+                        }
+                        k++;
+                    }
+                    iter = 0;
+                    p--;
+                    break;
+                }
+        }
+    }
+
+    if (swapped) {
+        var tmp = V;
+        V = U;
+        U = tmp;
+    }
+
+    this.m = m;
+    this.n = n;
+    this.s = s;
+    this.U = U;
+    this.V = V;
+}
+
+SingularValueDecomposition.prototype = {
+    get condition() {
+        return this.s[0] / this.s[Math.min(this.m, this.n) - 1];
+    },
+    get norm2() {
+        return this.s[0];
+    },
+    get rank() {
+        var eps = Math.pow(2, -52),
+            tol = Math.max(this.m, this.n) * this.s[0] * eps,
+            r = 0,
+            s = this.s;
+        for (var i = 0, ii = s.length; i < ii; i++) {
+            if (s[i] > tol) {
+                r++;
+            }
+        }
+        return r;
+    },
+    get diagonal() {
+        return this.s;
+    },
+    // https://github.com/accord-net/framework/blob/development/Sources/Accord.Math/Decompositions/SingularValueDecomposition.cs
+    get threshold() {
+        return Math.pow(2, -52) / 2 * Math.max(this.m, this.n) * this.s[0];
+    },
+    get leftSingularVectors() {
+        if (!Matrix.isMatrix(this.U)) {
+            this.U = new Matrix(this.U);
+        }
+        return this.U;
+    },
+    get rightSingularVectors() {
+        if (!Matrix.isMatrix(this.V)) {
+            this.V = new Matrix(this.V);
+        }
+        return this.V;
+    },
+    get diagonalMatrix() {
+        return Matrix.diag(this.s);
+    },
+    solve: function solve(value) {
+
+        var Y = value,
+            e = this.threshold,
+            scols = this.s.length,
+            Ls = Matrix.zeros(scols, scols),
+            i;
+
+        for (i = 0; i < scols; i++) {
+            if (Math.abs(this.s[i]) <= e) {
+                Ls[i][i] = 0;
+            } else {
+                Ls[i][i] = 1 / this.s[i];
+            }
+        }
+
+        var U = this.U;
+        var V = this.rightSingularVectors;
+
+        var VL = V.mmul(Ls),
+            vrows = V.rows,
+            urows = U.length,
+            VLU = Matrix.zeros(vrows, urows),
+            j,
+            k,
+            sum;
+
+        for (i = 0; i < vrows; i++) {
+            for (j = 0; j < urows; j++) {
+                sum = 0;
+                for (k = 0; k < scols; k++) {
+                    sum += VL[i][k] * U[j][k];
+                }
+                VLU[i][j] = sum;
+            }
+        }
+
+        return VLU.mmul(Y);
+    },
+    solveForDiagonal: function solveForDiagonal(value) {
+        return this.solve(Matrix.diag(value));
+    },
+    inverse: function inverse() {
+        var V = this.V;
+        var e = this.threshold,
+            vrows = V.length,
+            vcols = V[0].length,
+            X = new Matrix(vrows, this.s.length),
+            i,
+            j;
+
+        for (i = 0; i < vrows; i++) {
+            for (j = 0; j < vcols; j++) {
+                if (Math.abs(this.s[j]) > e) {
+                    X[i][j] = V[i][j] / this.s[j];
+                } else {
+                    X[i][j] = 0;
+                }
+            }
+        }
+
+        var U = this.U;
+
+        var urows = U.length,
+            ucols = U[0].length,
+            Y = new Matrix(vrows, urows),
+            k,
+            sum;
+
+        for (i = 0; i < vrows; i++) {
+            for (j = 0; j < urows; j++) {
+                sum = 0;
+                for (k = 0; k < ucols; k++) {
+                    sum += X[i][k] * U[j][k];
+                }
+                Y[i][j] = sum;
+            }
+        }
+
+        return Y;
+    }
+};
+
+module.exports = SingularValueDecomposition;
+
+},{"../matrix":21,"./util":18}],18:[function(require,module,exports){
+'use strict';
+
+exports.hypotenuse = function hypotenuse(a, b) {
+    if (Math.abs(a) > Math.abs(b)) {
+        var r = b / a;
+        return Math.abs(a) * Math.sqrt(1 + r * r);
+    }
+    if (b !== 0) {
+        var r = a / b;
+        return Math.abs(b) * Math.sqrt(1 + r * r);
+    }
+    return 0;
+};
+
+// For use in the decomposition algorithms. With big matrices, access time is
+// too long on elements from array subclass
+// todo check when it is fixed in v8
+// http://jsperf.com/access-and-write-array-subclass
+exports.getEmpty2DArray = function (rows, columns) {
+    var array = new Array(rows);
+    for (var i = 0; i < rows; i++) {
+        array[i] = new Array(columns);
+    }
+    return array;
+};
+
+exports.getFilled2DArray = function (rows, columns, value) {
+    var array = new Array(rows);
+    for (var i = 0; i < rows; i++) {
+        array[i] = new Array(columns);
+        for (var j = 0; j < columns; j++) {
+            array[i][j] = value;
+        }
+    }
+    return array;
+};
+
+},{}],19:[function(require,module,exports){
+'use strict';
+
+var Matrix = require('./matrix');
+
+var SingularValueDecomposition = require('./dc/svd');
+var EigenvalueDecomposition = require('./dc/evd');
+var LuDecomposition = require('./dc/lu');
+var QrDecomposition = require('./dc/qr');
+var CholeskyDecomposition = require('./dc/cholesky');
+
+function inverse(matrix) {
+    matrix = Matrix.checkMatrix(matrix);
+    return solve(matrix, Matrix.eye(matrix.rows));
+}
+
+Matrix.inverse = Matrix.inv = inverse;
+Matrix.prototype.inverse = Matrix.prototype.inv = function () {
+    return inverse(this);
+};
+
+function solve(leftHandSide, rightHandSide) {
+    leftHandSide = Matrix.checkMatrix(leftHandSide);
+    rightHandSide = Matrix.checkMatrix(rightHandSide);
+    return leftHandSide.isSquare() ? new LuDecomposition(leftHandSide).solve(rightHandSide) : new QrDecomposition(leftHandSide).solve(rightHandSide);
+}
+
+Matrix.solve = solve;
+Matrix.prototype.solve = function (other) {
+    return solve(this, other);
+};
+
+module.exports = {
+    SingularValueDecomposition: SingularValueDecomposition,
+    SVD: SingularValueDecomposition,
+    EigenvalueDecomposition: EigenvalueDecomposition,
+    EVD: EigenvalueDecomposition,
+    LuDecomposition: LuDecomposition,
+    LU: LuDecomposition,
+    QrDecomposition: QrDecomposition,
+    QR: QrDecomposition,
+    CholeskyDecomposition: CholeskyDecomposition,
+    CHO: CholeskyDecomposition,
+    inverse: inverse,
+    solve: solve
+};
+
+},{"./dc/cholesky":13,"./dc/evd":14,"./dc/lu":15,"./dc/qr":16,"./dc/svd":17,"./matrix":21}],20:[function(require,module,exports){
+'use strict';
+
+module.exports = require('./matrix');
+module.exports.Decompositions = module.exports.DC = require('./decompositions');
+
+},{"./decompositions":19,"./matrix":21}],21:[function(require,module,exports){
+'use strict'
+
+/**
+ * Real matrix
+ */
+;
+class Matrix extends Array {
+    /**
+     * @constructor
+     * @param {number|Array|Matrix} nRows - Number of rows of the new matrix,
+     * 2D array containing the data or Matrix instance to clone
+     * @param {number} [nColumns] - Number of columns of the new matrix
+     */
+    constructor(nRows, nColumns) {
+        if (Matrix.isMatrix(nRows)) {
+            return nRows.clone();
+        } else if (Number.isInteger(nRows) && nRows > 0) {
+            // Create an empty matrix
+            super(nRows);
+            if (Number.isInteger(nColumns) && nColumns > 0) {
+                for (var i = 0; i < nRows; i++) {
+                    this[i] = new Array(nColumns);
+                }
+            } else {
+                throw new TypeError('nColumns must be a positive integer');
+            }
+        } else if (Array.isArray(nRows)) {
+            // Copy the values from the 2D array
+            var matrix = nRows;
+            nRows = matrix.length;
+            nColumns = matrix[0].length;
+            if (typeof nColumns !== 'number' || nColumns === 0) {
+                throw new TypeError('Data must be a 2D array with at least one element');
+            }
+            super(nRows);
+            for (var i = 0; i < nRows; i++) {
+                if (matrix[i].length !== nColumns) {
+                    throw new RangeError('Inconsistent array dimensions');
+                }
+                this[i] = [].concat(matrix[i]);
+            }
+        } else {
+            throw new TypeError('First argument must be a positive number or an array');
+        }
+        this.rows = nRows;
+        this.columns = nColumns;
+    }
+
+    /**
+     * Constructs a Matrix with the chosen dimensions from a 1D array
+     * @param {number} newRows - Number of rows
+     * @param {number} newColumns - Number of columns
+     * @param {Array} newData - A 1D array containing data for the matrix
+     * @returns {Matrix} - The new matrix
+     */
+    static from1DArray(newRows, newColumns, newData) {
+        var length = newRows * newColumns;
+        if (length !== newData.length) {
+            throw new RangeError('Data length does not match given dimensions');
+        }
+        var newMatrix = new Matrix(newRows, newColumns);
+        for (var row = 0; row < newRows; row++) {
+            for (var column = 0; column < newColumns; column++) {
+                newMatrix[row][column] = newData[row * newColumns + column];
+            }
+        }
+        return newMatrix;
+    }
+
+    /**
+     * Creates a row vector, a matrix with only one row.
+     * @param {Array} newData - A 1D array containing data for the vector
+     * @returns {Matrix} - The new matrix
+     */
+    static rowVector(newData) {
+        var vector = new Matrix(1, newData.length);
+        for (var i = 0; i < newData.length; i++) {
+            vector[0][i] = newData[i];
+        }
+        return vector;
+    }
+
+    /**
+     * Creates a column vector, a matrix with only one column.
+     * @param {Array} newData - A 1D array containing data for the vector
+     * @returns {Matrix} - The new matrix
+     */
+    static columnVector(newData) {
+        var vector = new Matrix(newData.length, 1);
+        for (var i = 0; i < newData.length; i++) {
+            vector[i][0] = newData[i];
+        }
+        return vector;
+    }
+
+    /**
+     * Creates an empty matrix with the given dimensions. Values will be undefined. Same as using new Matrix(rows, columns).
+     * @param {number} rows - Number of rows
+     * @param {number} columns - Number of columns
+     * @returns {Matrix} - The new matrix
+     */
+    static empty(rows, columns) {
+        return new Matrix(rows, columns);
+    }
+
+    /**
+     * Creates a matrix with the given dimensions. Values will be set to zero.
+     * @param {number} rows - Number of rows
+     * @param {number} columns - Number of columns
+     * @returns {Matrix} - The new matrix
+     */
+    static zeros(rows, columns) {
+        return Matrix.empty(rows, columns).fill(0);
+    }
+
+    /**
+     * Creates a matrix with the given dimensions. Values will be set to one.
+     * @param {number} rows - Number of rows
+     * @param {number} columns - Number of columns
+     * @returns {Matrix} - The new matrix
+     */
+    static ones(rows, columns) {
+        return Matrix.empty(rows, columns).fill(1);
+    }
+
+    /**
+     * Creates a matrix with the given dimensions. Values will be randomly set.
+     * @param {number} rows - Number of rows
+     * @param {number} columns - Number of columns
+     * @param {function} [rng] - Random number generator (default: Math.random)
+     * @returns {Matrix} The new matrix
+     */
+    static rand(rows, columns, rng) {
+        if (rng === undefined) rng = Math.random;
+        var matrix = Matrix.empty(rows, columns);
+        for (var i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
+                matrix[i][j] = rng();
+            }
+        }
+        return matrix;
+    }
+
+    /**
+     * Creates an identity matrix with the given dimension. Values of the diagonal will be 1 and others will be 0.
+     * @param {number} rows - Number of rows
+     * @param {number} [columns] - Number of columns (Default: rows)
+     * @returns {Matrix} - The new identity matrix
+     */
+    static eye(rows, columns) {
+        if (columns === undefined) columns = rows;
+        var min = Math.min(rows, columns);
+        var matrix = Matrix.zeros(rows, columns);
+        for (var i = 0; i < min; i++) {
+            matrix[i][i] = 1;
+        }
+        return matrix;
+    }
+
+    /**
+     * Creates a diagonal matrix based on the given array.
+     * @param {Array} data - Array containing the data for the diagonal
+     * @param {number} [rows] - Number of rows (Default: data.length)
+     * @param {number} [columns] - Number of columns (Default: rows)
+     * @returns {Matrix} - The new diagonal matrix
+     */
+    static diag(data, rows, columns) {
+        var l = data.length;
+        if (rows === undefined) rows = l;
+        if (columns === undefined) columns = rows;
+        var min = Math.min(l, rows, columns);
+        var matrix = Matrix.zeros(rows, columns);
+        for (var i = 0; i < min; i++) {
+            matrix[i][i] = data[i];
+        }
+        return matrix;
+    }
+
+    /**
+     * Returns a matrix whose elements are the minimum between matrix1 and matrix2
+     * @param matrix1
+     * @param matrix2
+     * @returns {Matrix}
+     */
+    static min(matrix1, matrix2) {
+        var rows = matrix1.length;
+        var columns = matrix1[0].length;
+        var result = new Matrix(rows, columns);
+        for (var i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
+                result[i][j] = Math.min(matrix1[i][j], matrix2[i][j]);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns a matrix whose elements are the maximum between matrix1 and matrix2
+     * @param matrix1
+     * @param matrix2
+     * @returns {Matrix}
+     */
+    static max(matrix1, matrix2) {
+        var rows = matrix1.length;
+        var columns = matrix1[0].length;
+        var result = new Matrix(rows, columns);
+        for (var i = 0; i < rows; i++) {
+            for (var j = 0; j < columns; j++) {
+                result[i][j] = Math.max(matrix1[i][j], matrix2[i][j]);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Check that the provided value is a Matrix and tries to instantiate one if not
+     * @param value - The value to check
+     * @returns {Matrix}
+     */
+    static checkMatrix(value) {
+        return Matrix.isMatrix(value) ? value : new Matrix(value);
+    }
+
+    /**
+     * Returns true if the argument is a Matrix, false otherwise
+     * @param value - The value to check
+     * @return {boolean}
+     */
+    static isMatrix(value) {
+        return value != null && value.klass === 'Matrix';
+    }
+
+    /**
+     * @property {number} - The number of elements in the matrix.
+     */
+    get size() {
+        return this.rows * this.columns;
+    }
+
+    /**
+     * Applies a callback for each element of the matrix. The function is called in the matrix (this) context.
+     * @param {function} callback - Function that will be called with two parameters : i (row) and j (column)
+     * @returns {Matrix} this
+     */
+    apply(callback) {
+        if (typeof callback !== 'function') {
+            throw new TypeError('callback must be a function');
+        }
+        var ii = this.rows;
+        var jj = this.columns;
+        for (var i = 0; i < ii; i++) {
+            for (var j = 0; j < jj; j++) {
+                callback.call(this, i, j);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Creates an exact and independent copy of the matrix
+     * @returns {Matrix}
+     */
+    clone() {
+        var newMatrix = new Matrix(this.rows, this.columns);
+        for (var row = 0; row < this.rows; row++) {
+            for (var column = 0; column < this.columns; column++) {
+                newMatrix[row][column] = this[row][column];
+            }
+        }
+        return newMatrix;
+    }
+
+    /**
+     * Returns a new 1D array filled row by row with the matrix values
+     * @returns {Array}
+     */
+    to1DArray() {
+        var array = new Array(this.size);
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                array[i * this.columns + j] = this[i][j];
+            }
+        }
+        return array;
+    }
+
+    /**
+     * Returns a 2D array containing a copy of the data
+     * @returns {Array}
+     */
+    to2DArray() {
+        var copy = new Array(this.rows);
+        for (var i = 0; i < this.rows; i++) {
+            copy[i] = [].concat(this[i]);
+        }
+        return copy;
+    }
+
+    /**
+     * @returns {boolean} true if the matrix has one row
+     */
+    isRowVector() {
+        return this.rows === 1;
+    }
+
+    /**
+     * @returns {boolean} true if the matrix has one column
+     */
+    isColumnVector() {
+        return this.columns === 1;
+    }
+
+    /**
+     * @returns {boolean} true if the matrix has one row or one column
+     */
+    isVector() {
+        return this.rows === 1 || this.columns === 1;
+    }
+
+    /**
+     * @returns {boolean} true if the matrix has the same number of rows and columns
+     */
+    isSquare() {
+        return this.rows === this.columns;
+    }
+
+    /**
+     * @returns {boolean} true if the matrix is square and has the same values on both sides of the diagonal
+     */
+    isSymmetric() {
+        if (this.isSquare()) {
+            for (var i = 0; i < this.rows; i++) {
+                for (var j = 0; j <= i; j++) {
+                    if (this[i][j] !== this[j][i]) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Sets a given element of the matrix. mat.set(3,4,1) is equivalent to mat[3][4]=1
+     * @param {number} rowIndex - Index of the row
+     * @param {number} columnIndex - Index of the column
+     * @param {number} value - The new value for the element
+     * @returns {Matrix} this
+     */
+    set(rowIndex, columnIndex, value) {
+        this[rowIndex][columnIndex] = value;
+        return this;
+    }
+
+    /**
+     * Returns the given element of the matrix. mat.get(3,4) is equivalent to matrix[3][4]
+     * @param {number} rowIndex - Index of the row
+     * @param {number} columnIndex - Index of the column
+     * @returns {number}
+     */
+    get(rowIndex, columnIndex) {
+        return this[rowIndex][columnIndex];
+    }
+
+    /**
+     * Fills the matrix with a given value. All elements will be set to this value.
+     * @param {number} value - New value
+     * @returns {Matrix} this
+     */
+    fill(value) {
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                this[i][j] = value;
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Negates the matrix. All elements will be multiplied by (-1)
+     * @returns {Matrix} this
+     */
+    neg() {
+        return this.mulS(-1);
+    }
+
+    /**
+     * Returns a new array from the given row index
+     * @param {number} index - Row index
+     * @returns {Array}
+     */
+    getRow(index) {
+        checkRowIndex(this, index);
+        return [].concat(this[index]);
+    }
+
+    /**
+     * Returns a new row vector from the given row index
+     * @param {number} index - Row index
+     * @returns {Matrix}
+     */
+    getRowVector(index) {
+        return Matrix.rowVector(this.getRow(index));
+    }
+
+    /**
+     * Sets a row at the given index
+     * @param {number} index - Row index
+     * @param {Array|Matrix} array - Array or vector
+     * @returns {Matrix} this
+     */
+    setRow(index, array) {
+        checkRowIndex(this, index);
+        array = checkRowVector(this, array, true);
+        this[index] = array;
+        return this;
+    }
+
+    /**
+     * Removes a row from the given index
+     * @param {number} index - Row index
+     * @returns {Matrix} this
+     */
+    removeRow(index) {
+        checkRowIndex(this, index);
+        if (this.rows === 1) throw new RangeError('A matrix cannot have less than one row');
+        this.splice(index, 1);
+        this.rows -= 1;
+        return this;
+    }
+
+    /**
+     * Adds a row at the given index
+     * @param {number} [index = this.rows] - Row index
+     * @param {Array|Matrix} array - Array or vector
+     * @returns {Matrix} this
+     */
+    addRow(index, array) {
+        if (array === undefined) {
+            array = index;
+            index = this.rows;
+        }
+        checkRowIndex(this, index, true);
+        array = checkRowVector(this, array, true);
+        this.splice(index, 0, array);
+        this.rows += 1;
+        return this;
+    }
+
+    /**
+     * Swaps two rows
+     * @param {number} row1 - First row index
+     * @param {number} row2 - Second row index
+     * @returns {Matrix} this
+     */
+    swapRows(row1, row2) {
+        checkRowIndex(this, row1);
+        checkRowIndex(this, row2);
+        var temp = this[row1];
+        this[row1] = this[row2];
+        this[row2] = temp;
+        return this;
+    }
+
+    /**
+     * Returns a new array from the given column index
+     * @param {number} index - Column index
+     * @returns {Array}
+     */
+    getColumn(index) {
+        checkColumnIndex(this, index);
+        var column = new Array(this.rows);
+        for (var i = 0; i < this.rows; i++) {
+            column[i] = this[i][index];
+        }
+        return column;
+    }
+
+    /**
+     * Returns a new column vector from the given column index
+     * @param {number} index - Column index
+     * @returns {Matrix}
+     */
+    getColumnVector(index) {
+        return Matrix.columnVector(this.getColumn(index));
+    }
+
+    /**
+     * Sets a column at the given index
+     * @param {number} index - Column index
+     * @param {Array|Matrix} array - Array or vector
+     * @returns {Matrix} this
+     */
+    setColumn(index, array) {
+        checkColumnIndex(this, index);
+        array = checkColumnVector(this, array);
+        for (var i = 0; i < this.rows; i++) {
+            this[i][index] = array[i];
+        }
+        return this;
+    }
+
+    /**
+     * Removes a column from the given index
+     * @param {number} index - Column index
+     * @returns {Matrix} this
+     */
+    removeColumn(index) {
+        checkColumnIndex(this, index);
+        if (this.columns === 1) throw new RangeError('A matrix cannot have less than one column');
+        for (var i = 0; i < this.rows; i++) {
+            this[i].splice(index, 1);
+        }
+        this.columns -= 1;
+        return this;
+    }
+
+    /**
+     * Adds a column at the given index
+     * @param {number} [index = this.columns] - Column index
+     * @param {Array|Matrix} array - Array or vector
+     * @returns {Matrix} this
+     */
+    addColumn(index, array) {
+        if (typeof array === 'undefined') {
+            array = index;
+            index = this.columns;
+        }
+        checkColumnIndex(this, index, true);
+        array = checkColumnVector(this, array);
+        for (var i = 0; i < this.rows; i++) {
+            this[i].splice(index, 0, array[i]);
+        }
+        this.columns += 1;
+        return this;
+    }
+
+    /**
+     * Swaps two columns
+     * @param {number} column1 - First column index
+     * @param {number} column2 - Second column index
+     * @returns {Matrix} this
+     */
+    swapColumns(column1, column2) {
+        checkColumnIndex(this, column1);
+        checkColumnIndex(this, column2);
+        var temp, row;
+        for (var i = 0; i < this.rows; i++) {
+            row = this[i];
+            temp = row[column1];
+            row[column1] = row[column2];
+            row[column2] = temp;
+        }
+        return this;
+    }
+
+    /**
+     * Adds the values of a vector to each row
+     * @param {Array|Matrix} vector - Array or vector
+     * @returns {Matrix} this
+     */
+    addRowVector(vector) {
+        vector = checkRowVector(this, vector);
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                this[i][j] += vector[j];
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Subtracts the values of a vector from each row
+     * @param {Array|Matrix} vector - Array or vector
+     * @returns {Matrix} this
+     */
+    subRowVector(vector) {
+        vector = checkRowVector(this, vector);
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                this[i][j] -= vector[j];
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Multiplies the values of a vector with each row
+     * @param {Array|Matrix} vector - Array or vector
+     * @returns {Matrix} this
+     */
+    mulRowVector(vector) {
+        vector = checkRowVector(this, vector);
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                this[i][j] *= vector[j];
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Divides the values of each row by those of a vector
+     * @param {Array|Matrix} vector - Array or vector
+     * @returns {Matrix} this
+     */
+    divRowVector(vector) {
+        vector = checkRowVector(this, vector);
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                this[i][j] /= vector[j];
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Adds the values of a vector to each column
+     * @param {Array|Matrix} vector - Array or vector
+     * @returns {Matrix} this
+     */
+    addColumnVector(vector) {
+        vector = checkColumnVector(this, vector);
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                this[i][j] += vector[i];
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Subtracts the values of a vector from each column
+     * @param {Array|Matrix} vector - Array or vector
+     * @returns {Matrix} this
+     */
+    subColumnVector(vector) {
+        vector = checkColumnVector(this, vector);
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                this[i][j] -= vector[i];
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Multiplies the values of a vector with each column
+     * @param {Array|Matrix} vector - Array or vector
+     * @returns {Matrix} this
+     */
+    mulColumnVector(vector) {
+        vector = checkColumnVector(this, vector);
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                this[i][j] *= vector[i];
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Divides the values of each column by those of a vector
+     * @param {Array|Matrix} vector - Array or vector
+     * @returns {Matrix} this
+     */
+    divColumnVector(vector) {
+        vector = checkColumnVector(this, vector);
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                this[i][j] /= vector[i];
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Multiplies the values of a row with a scalar
+     * @param {number} index - Row index
+     * @param {number} value
+     * @returns {Matrix} this
+     */
+    mulRow(index, value) {
+        checkRowIndex(this, index);
+        for (var i = 0; i < this.columns; i++) {
+            this[index][i] *= value;
+        }
+        return this;
+    }
+
+    /**
+     * Multiplies the values of a column with a scalar
+     * @param {number} index - Column index
+     * @param {number} value
+     * @returns {Matrix} this
+     */
+    mulColumn(index, value) {
+        checkColumnIndex(this, index);
+        for (var i = 0; i < this.rows; i++) {
+            this[i][index] *= value;
+        }
+    }
+
+    /**
+     * Returns the maximum value of the matrix
+     * @returns {number}
+     */
+    max() {
+        var v = this[0][0];
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                if (this[i][j] > v) {
+                    v = this[i][j];
+                }
+            }
+        }
+        return v;
+    }
+
+    /**
+     * Returns the index of the maximum value
+     * @returns {Array}
+     */
+    maxIndex() {
+        var v = this[0][0];
+        var idx = [0, 0];
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                if (this[i][j] > v) {
+                    v = this[i][j];
+                    idx[0] = i;
+                    idx[1] = j;
+                }
+            }
+        }
+        return idx;
+    }
+
+    /**
+     * Returns the minimum value of the matrix
+     * @returns {number}
+     */
+    min() {
+        var v = this[0][0];
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                if (this[i][j] < v) {
+                    v = this[i][j];
+                }
+            }
+        }
+        return v;
+    }
+
+    /**
+     * Returns the index of the minimum value
+     * @returns {Array}
+     */
+    minIndex() {
+        var v = this[0][0];
+        var idx = [0, 0];
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                if (this[i][j] < v) {
+                    v = this[i][j];
+                    idx[0] = i;
+                    idx[1] = j;
+                }
+            }
+        }
+        return idx;
+    }
+
+    /**
+     * Returns the maximum value of one row
+     * @param {number} row - Row index
+     * @returns {number}
+     */
+    maxRow(row) {
+        checkRowIndex(this, row);
+        var v = this[row][0];
+        for (var i = 1; i < this.columns; i++) {
+            if (this[row][i] > v) {
+                v = this[row][i];
+            }
+        }
+        return v;
+    }
+
+    /**
+     * Returns the index of the maximum value of one row
+     * @param {number} row - Row index
+     * @returns {Array}
+     */
+    maxRowIndex(row) {
+        checkRowIndex(this, row);
+        var v = this[row][0];
+        var idx = [row, 0];
+        for (var i = 1; i < this.columns; i++) {
+            if (this[row][i] > v) {
+                v = this[row][i];
+                idx[1] = i;
+            }
+        }
+        return idx;
+    }
+
+    /**
+     * Returns the minimum value of one row
+     * @param {number} row - Row index
+     * @returns {number}
+     */
+    minRow(row) {
+        checkRowIndex(this, row);
+        var v = this[row][0];
+        for (var i = 1; i < this.columns; i++) {
+            if (this[row][i] < v) {
+                v = this[row][i];
+            }
+        }
+        return v;
+    }
+
+    /**
+     * Returns the index of the maximum value of one row
+     * @param {number} row - Row index
+     * @returns {Array}
+     */
+    minRowIndex(row) {
+        checkRowIndex(this, row);
+        var v = this[row][0];
+        var idx = [row, 0];
+        for (var i = 1; i < this.columns; i++) {
+            if (this[row][i] < v) {
+                v = this[row][i];
+                idx[1] = i;
+            }
+        }
+        return idx;
+    }
+
+    /**
+     * Returns the maximum value of one column
+     * @param {number} column - Column index
+     * @returns {number}
+     */
+    maxColumn(column) {
+        checkColumnIndex(this, column);
+        var v = this[0][column];
+        for (var i = 1; i < this.rows; i++) {
+            if (this[i][column] > v) {
+                v = this[i][column];
+            }
+        }
+        return v;
+    }
+
+    /**
+     * Returns the index of the maximum value of one column
+     * @param {number} column - Column index
+     * @returns {Array}
+     */
+    maxColumnIndex(column) {
+        checkColumnIndex(this, column);
+        var v = this[0][column];
+        var idx = [0, column];
+        for (var i = 1; i < this.rows; i++) {
+            if (this[i][column] > v) {
+                v = this[i][column];
+                idx[0] = i;
+            }
+        }
+        return idx;
+    }
+
+    /**
+     * Returns the minimum value of one column
+     * @param {number} column - Column index
+     * @returns {number}
+     */
+    minColumn(column) {
+        checkColumnIndex(this, column);
+        var v = this[0][column];
+        for (var i = 1; i < this.rows; i++) {
+            if (this[i][column] < v) {
+                v = this[i][column];
+            }
+        }
+        return v;
+    }
+
+    /**
+     * Returns the index of the minimum value of one column
+     * @param {number} column - Column index
+     * @returns {Array}
+     */
+    minColumnIndex(column) {
+        checkColumnIndex(this, column);
+        var v = this[0][column];
+        var idx = [0, column];
+        for (var i = 1; i < this.rows; i++) {
+            if (this[i][column] < v) {
+                v = this[i][column];
+                idx[0] = i;
+            }
+        }
+        return idx;
+    }
+
+    /**
+     * Returns an array containing the diagonal values of the matrix
+     * @returns {Array}
+     */
+    diag() {
+        var min = Math.min(this.rows, this.columns);
+        var diag = new Array(min);
+        for (var i = 0; i < min; i++) {
+            diag[i] = this[i][i];
+        }
+        return diag;
+    }
+
+    /**
+     * Returns the sum of all elements of the matrix
+     * @returns {number}
+     */
+    sum() {
+        var v = 0;
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                v += this[i][j];
+            }
+        }
+        return v;
+    }
+
+    /**
+     * Returns the mean of all elements of the matrix
+     * @returns {number}
+     */
+    mean() {
+        return this.sum() / this.size;
+    }
+
+    /**
+     * Returns the product of all elements of the matrix
+     * @returns {number}
+     */
+    prod() {
+        var prod = 1;
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                prod *= this[i][j];
+            }
+        }
+        return prod;
+    }
+
+    /**
+     * Computes the cumulative sum of the matrix elements (in place, row by row)
+     * @returns {Matrix} this
+     */
+    cumulativeSum() {
+        var sum = 0;
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                sum += this[i][j];
+                this[i][j] = sum;
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Computes the dot (scalar) product between the matrix and another
+     * @param {Matrix} vector2 vector
+     * @returns {number}
+     */
+    dot(vector2) {
+        if (Matrix.isMatrix(vector2)) vector2 = vector2.to1DArray();
+        var vector1 = this.to1DArray();
+        if (vector1.length !== vector2.length) {
+            throw new RangeError('vectors do not have the same size');
+        }
+        var dot = 0;
+        for (var i = 0; i < vector1.length; i++) {
+            dot += vector1[i] * vector2[i];
+        }
+        return dot;
+    }
+
+    /**
+     * Returns the matrix product between this and other
+     * @returns {Matrix}
+     */
+    mmul(other) {
+        other = Matrix.checkMatrix(other);
+        if (this.columns !== other.rows) console.warn('Number of columns of left matrix are not equal to number of rows of right matrix.');
+
+        var m = this.rows;
+        var n = this.columns;
+        var p = other.columns;
+
+        var result = new Matrix(m, p);
+
+        var Bcolj = new Array(n);
+        for (var j = 0; j < p; j++) {
+            for (var k = 0; k < n; k++) {
+                Bcolj[k] = other[k][j];
+            }for (var i = 0; i < m; i++) {
+                var Arowi = this[i];
+
+                var s = 0;
+                for (k = 0; k < n; k++) {
+                    s += Arowi[k] * Bcolj[k];
+                }result[i][j] = s;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Transposes the matrix and returns a new one containing the result
+     * @returns {Matrix}
+     */
+    transpose() {
+        var result = new Matrix(this.columns, this.rows);
+        for (var i = 0; i < this.rows; i++) {
+            for (var j = 0; j < this.columns; j++) {
+                result[j][i] = this[i][j];
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Sorts the rows (in place)
+     * @param {function} compareFunction - usual Array.prototype.sort comparison function
+     * @returns {Matrix} this
+     */
+    sortRows(compareFunction) {
+        if (compareFunction === undefined) compareFunction = compareNumbers;
+        for (var i = 0; i < this.rows; i++) {
+            this[i].sort(compareFunction);
+        }
+        return this;
+    }
+
+    /**
+     * Sorts the columns (in place)
+     * @param {function} compareFunction - usual Array.prototype.sort comparison function
+     * @returns {Matrix} this
+     */
+    sortColumns(compareFunction) {
+        if (compareFunction === undefined) compareFunction = compareNumbers;
+        for (var i = 0; i < this.columns; i++) {
+            this.setColumn(i, this.getColumn(i).sort(compareFunction));
+        }
+        return this;
+    }
+
+    /**
+     * Returns a subset of the matrix
+     * @param {number} startRow - First row index
+     * @param {number} endRow - Last row index
+     * @param {number} startColumn - First column index
+     * @param {number} endColumn - Last column index
+     * @returns {Matrix}
+     */
+    subMatrix(startRow, endRow, startColumn, endColumn) {
+        if (startRow > endRow || startColumn > endColumn || startRow < 0 || startRow >= this.rows || endRow < 0 || endRow >= this.rows || startColumn < 0 || startColumn >= this.columns || endColumn < 0 || endColumn >= this.columns) {
+            throw new RangeError('Argument out of range');
+        }
+        var newMatrix = new Matrix(endRow - startRow + 1, endColumn - startColumn + 1);
+        for (var i = startRow; i <= endRow; i++) {
+            for (var j = startColumn; j <= endColumn; j++) {
+                newMatrix[i - startRow][j - startColumn] = this[i][j];
+            }
+        }
+        return newMatrix;
+    }
+
+    /**
+     * Returns a subset of the matrix based on an array of row indices
+     * @param {Array} indices - Array containing the row indices
+     * @param {number} [startColumn = 0] - First column index
+     * @param {number} [endColumn = this.columns-1] - Last column index
+     * @returns {Matrix}
+     */
+    subMatrixRow(indices, startColumn, endColumn) {
+        if (startColumn === undefined) startColumn = 0;
+        if (endColumn === undefined) endColumn = this.columns - 1;
+        if (startColumn > endColumn || startColumn < 0 || startColumn >= this.columns || endColumn < 0 || endColumn >= this.columns) {
+            throw new RangeError('Argument out of range');
+        }
+
+        var newMatrix = new Matrix(indices.length, endColumn - startColumn + 1);
+        for (var i = 0; i < indices.length; i++) {
+            for (var j = startColumn; j <= endColumn; j++) {
+                if (indices[i] < 0 || indices[i] >= this.rows) {
+                    throw new RangeError('Row index out of range: ' + indices[i]);
+                }
+                newMatrix[i][j - startColumn] = this[indices[i]][j];
+            }
+        }
+        return newMatrix;
+    }
+
+    /**
+     * Returns a subset of the matrix based on an array of column indices
+     * @param {Array} indices - Array containing the column indices
+     * @param {number} [startRow = 0] - First row index
+     * @param {number} [endRow = this.rows-1] - Last row index
+     * @returns {Matrix}
+     */
+    subMatrixColumn(indices, startRow, endRow) {
+        if (startRow === undefined) startRow = 0;
+        if (endRow === undefined) endRow = this.rows - 1;
+        if (startRow > endRow || startRow < 0 || startRow >= this.rows || endRow < 0 || endRow >= this.rows) {
+            throw new RangeError('Argument out of range');
+        }
+
+        var newMatrix = new Matrix(endRow - startRow + 1, indices.length);
+        for (var i = 0; i < indices.length; i++) {
+            for (var j = startRow; j <= endRow; j++) {
+                if (indices[i] < 0 || indices[i] >= this.columns) {
+                    throw new RangeError('Column index out of range: ' + indices[i]);
+                }
+                newMatrix[j - startRow][i] = this[j][indices[i]];
+            }
+        }
+        return newMatrix;
+    }
+
+    /**
+     * Returns the trace of the matrix (sum of the diagonal elements)
+     * @returns {number}
+     */
+    trace() {
+        var min = Math.min(this.rows, this.columns);
+        var trace = 0;
+        for (var i = 0; i < min; i++) {
+            trace += this[i][i];
+        }
+        return trace;
+    }
+}
+
+Matrix.prototype.klass = 'Matrix';
+
+module.exports = Matrix;
+
+/**
+ * @private
+ * Check that a row index is not out of bounds
+ * @param {Matrix} matrix
+ * @param {number} index
+ * @param {boolean} [outer]
+ */
+function checkRowIndex(matrix, index, outer) {
+    var max = outer ? matrix.rows : matrix.rows - 1;
+    if (index < 0 || index > max) throw new RangeError('Row index out of range');
+}
+
+/**
+ * @private
+ * Check that the provided vector is an array with the right length
+ * @param {Matrix} matrix
+ * @param {Array|Matrix} vector
+ * @param {boolean} copy
+ * @returns {Array}
+ * @throws {RangeError}
+ */
+function checkRowVector(matrix, vector, copy) {
+    if (Matrix.isMatrix(vector)) {
+        vector = vector.to1DArray();
+    } else if (copy) {
+        vector = [].concat(vector);
+    }
+    if (vector.length !== matrix.columns) throw new RangeError('vector size must be the same as the number of columns');
+    return vector;
+}
+
+/**
+ * @private
+ * Check that the provided vector is an array with the right length
+ * @param {Matrix} matrix
+ * @param {Array|Matrix} vector
+ * @param {boolean} copy
+ * @returns {Array}
+ * @throws {RangeError}
+ */
+function checkColumnVector(matrix, vector, copy) {
+    if (Matrix.isMatrix(vector)) {
+        vector = vector.to1DArray();
+    } else if (copy) {
+        vector = [].concat(vector);
+    }
+    if (vector.length !== matrix.rows) throw new RangeError('vector size must be the same as the number of rows');
+    return vector;
+}
+
+/**
+ * @private
+ * Check that a column index is not out of bounds
+ * @param {Matrix} matrix
+ * @param {number} index
+ * @param {boolean} [outer]
+ */
+function checkColumnIndex(matrix, index, outer) {
+    var max = outer ? matrix.columns : matrix.columns - 1;
+    if (index < 0 || index > max) throw new RangeError('Column index out of range');
+}
+
+/**
+ * @private
+ * Check that two matrices have the same dimensions
+ * @param {Matrix} matrix
+ * @param {Matrix} otherMatrix
+ */
+function checkDimensions(matrix, otherMatrix) {
+    if (matrix.rows !== otherMatrix.length || matrix.columns !== otherMatrix[0].length) {
+        throw new RangeError('Matrices dimensions must be equal');
+    }
+}
+
+function compareNumbers(a, b) {
+    return a - b;
+}
+
+/*
+Synonyms
+ */
+
+Matrix.random = Matrix.rand;
+Matrix.diagonal = Matrix.diag;
+Matrix.prototype.diagonal = Matrix.prototype.diag;
+Matrix.identity = Matrix.eye;
+Matrix.prototype.negate = Matrix.prototype.neg;
+
+/*
+Add dynamically instance and static methods for mathematical operations
+ */
+
+var inplaceOperator = `
+(function %name%(value) {
+    if (typeof value === 'number') return this.%name%S(value);
+    return this.%name%M(value);
+})
+`;
+
+var inplaceOperatorScalar = `
+(function %name%S(value) {
+    for (var i = 0; i < this.rows; i++) {
+        for (var j = 0; j < this.columns; j++) {
+            this[i][j] = this[i][j] %op% value;
+        }
+    }
+    return this;
+})
+`;
+
+var inplaceOperatorMatrix = `
+(function %name%M(matrix) {
+    checkDimensions(this, matrix);
+    for (var i = 0; i < this.rows; i++) {
+        for (var j = 0; j < this.columns; j++) {
+            this[i][j] = this[i][j] %op% matrix[i][j];
+        }
+    }
+    return this;
+})
+`;
+
+var staticOperator = `
+(function %name%(matrix, value) {
+    var newMatrix = new Matrix(matrix);
+    return newMatrix.%name%(value);
+})
+`;
+
+var inplaceMethod = `
+(function %name%() {
+    for (var i = 0; i < this.rows; i++) {
+        for (var j = 0; j < this.columns; j++) {
+            this[i][j] = %method%(this[i][j]);
+        }
+    }
+    return this;
+})
+`;
+
+var staticMethod = `
+(function %name%(matrix) {
+    var newMatrix = new Matrix(matrix);
+    return newMatrix.%name%();
+})
+`;
+
+var operators = [
+// Arithmetic operators
+['+', 'add'], ['-', 'sub', 'subtract'], ['*', 'mul', 'multiply'], ['/', 'div', 'divide'], ['%', 'mod', 'modulus'],
+// Bitwise operators
+['&', 'and'], ['|', 'or'], ['^', 'xor'], ['<<', 'leftShift'], ['>>', 'signPropagatingRightShift'], ['>>>', 'rightShift', 'zeroFillRightShift']];
+
+for (var operator of operators) {
+    for (var i = 1; i < operator.length; i++) {
+        Matrix.prototype[operator[i]] = eval(fillTemplateFunction(inplaceOperator, { name: operator[i], op: operator[0] }));
+        Matrix.prototype[operator[i] + 'S'] = eval(fillTemplateFunction(inplaceOperatorScalar, { name: operator[i] + 'S', op: operator[0] }));
+        Matrix.prototype[operator[i] + 'M'] = eval(fillTemplateFunction(inplaceOperatorMatrix, { name: operator[i] + 'M', op: operator[0] }));
+
+        Matrix[operator[i]] = eval(fillTemplateFunction(staticOperator, { name: operator[i] }));
+    }
+}
+
+var methods = [['~', 'not']];
+
+['abs', 'acos', 'acosh', 'asin', 'asinh', 'atan', 'atanh', 'cbrt', 'ceil', 'clz32', 'cos', 'cosh', 'exp', 'expm1', 'floor', 'fround', 'log', 'log1p', 'log10', 'log2', 'round', 'sign', 'sin', 'sinh', 'sqrt', 'tan', 'tanh', 'trunc'].forEach(function (mathMethod) {
+    methods.push(['Math.' + mathMethod, mathMethod]);
+});
+
+for (var method of methods) {
+    for (var i = 1; i < method.length; i++) {
+        Matrix.prototype[method[i]] = eval(fillTemplateFunction(inplaceMethod, { name: method[i], method: method[0] }));
+        Matrix[method[i]] = eval(fillTemplateFunction(staticMethod, { name: method[i] }));
+    }
+}
+
+function fillTemplateFunction(template, values) {
+    for (var i in values) {
+        template = template.replace(new RegExp('%' + i + '%', 'g'), values[i]);
+    }
+    return template;
+}
+
+},{}],22:[function(require,module,exports){
+'use strict';
+
+var defaultOptions = {
+    degree: 1,
+    constant: 1,
+    scale: 1
+};
+
+class PolynomialKernel {
+    constructor(options) {
+        options = Object.assign({}, defaultOptions, options);
+
+        this.degree = options.degree;
+        this.constant = options.constant;
+        this.scale = options.scale;
+    }
+
+    compute(x, y) {
+        var sum = 0;
+        for (var i = 0; i < x.length; i++) {
+            sum += x[i] * y[i];
+        }
+        return Math.pow(this.scale * sum + this.constant, this.degree);
+    }
+}
+
+module.exports = PolynomialKernel;
+
+},{}],23:[function(require,module,exports){
+'use strict';
+
+exports.SimpleLinearRegression = exports.SLR = require('./regression/simple-linear-regression');
+exports.KernelRidgeRegression = exports.KRR = require('./regression/kernel-ridge-regression');
+//exports.MultipleLinearRegression = exports.MLR = require('./regression/multiple-linear-regression');
+//exports.MultivariateLinearRegression = exports.MVLR = require('./regression/multivariate-linear-regression');
+
+},{"./regression/kernel-ridge-regression":24,"./regression/simple-linear-regression":25}],24:[function(require,module,exports){
+'use strict';
+
+var Matrix = require('ml-matrix');
+var Kernel = require('ml-kernel');
+
+var defaultOptions = {
+    lambda: 0.1,
+    kernelType: 'gaussian',
+    kernelOptions: {}
+};
+
+// Implements the Kernel ridge regression algorithm.
+// http://www.ics.uci.edu/~welling/classnotes/papers_class/Kernel-Ridge.pdf
+class KernelRidgeRegression {
+    constructor(inputs, outputs, options) {
+        if (inputs === true) {
+            // reloading model
+            this.alpha = outputs.alpha;
+            this.inputs = outputs.inputs;
+            this.kernelType = outputs.kernelType;
+            this.kernelOptions = outputs.kernelOptions;
+            this.kernel = new Kernel(outputs.kernelType, outputs.kernelOptions);
+        } else {
+            options = Object.assign({}, defaultOptions, options);
+
+            var kernelFunction = new Kernel(options.kernelType, options.kernelOptions);
+            var K = kernelFunction.compute(inputs);
+            var n = inputs.length;
+            K.add(Matrix.eye(n, n).mul(options.lambda));
+
+            this.alpha = K.solve(outputs);
+            this.inputs = inputs;
+            this.kernelType = options.kernelType;
+            this.kernelOptions = options.kernelOptions;
+            this.kernel = kernelFunction;
+        }
+    }
+
+    predict(newInputs) {
+        return this.kernel.compute(newInputs, this.inputs).mmul(this.alpha);
+    }
+
+    toJSON() {
+        return {
+            name: 'kernelRidgeRegression',
+            alpha: this.alpha,
+            inputs: this.inputs,
+            kernelType: this.kernelType,
+            kernelOptions: this.kernelOptions
+        };
+    }
+
+    static load(json) {
+        if (json.name !== 'kernelRidgeRegression') {
+            throw new TypeError('not a KRR model');
+        }
+        return new KernelRidgeRegression(true, json);
+    }
+}
+
+module.exports = KernelRidgeRegression;
+
+},{"ml-kernel":12,"ml-matrix":20}],25:[function(require,module,exports){
+'use strict';
+
+var maybeToPrecision = require('./util').maybeToPrecision;
+
+function SimpleLinearRegression(x, y) {
+    if (!(this instanceof SimpleLinearRegression)) {
+        return new SimpleLinearRegression(x, y);
+    }
+
+    var n = x.length;
+    if (n !== y.length) {
+        throw new RangeError('input and output array have a different length');
+    }
+
+    var xSum = 0;
+    var ySum = 0;
+
+    var xSquared = 0;
+    var ySquared = 0;
+    var xY = 0;
+
+    for (var i = 0; i < n; i++) {
+        xSum += x[i];
+        ySum += y[i];
+        xSquared += x[i] * x[i];
+        ySquared += y[i] * y[i];
+        xY += x[i] * y[i];
+    }
+
+    var numerator = n * xY - xSum * ySum;
+
+    this.slope = numerator / (n * xSquared - xSum * xSum);
+    this.intercept = 1 / n * ySum - this.slope * (1 / n) * xSum;
+    this.coefficients = [this.intercept, this.slope];
+
+    this.r = numerator / Math.sqrt((n * xSquared - xSum * xSum) * (n * ySquared - ySum * ySum));
+    this.coefficientOfDetermination = this.r2 = this.r * this.r;
+}
+
+SimpleLinearRegression.prototype.compute = function compute(input) {
+    return this.slope * input + this.intercept;
+};
+
+SimpleLinearRegression.prototype.computeX = function computeX(input) {
+    return (input - this.intercept) / this.slope;
+};
+
+SimpleLinearRegression.prototype.toString = function toString(precision) {
+    var result = 'y = ';
+    if (this.slope) {
+        var xFactor = maybeToPrecision(this.slope, precision);
+        result += (xFactor == 1 ? '' : xFactor) + 'x';
+        if (this.intercept) {
+            var absIntercept = Math.abs(this.intercept);
+            var operator = absIntercept === this.intercept ? '+' : '-';
+            result += ' ' + operator + ' ' + maybeToPrecision(absIntercept, precision);
+        }
+    } else {
+        result += maybeToPrecision(this.intercept, precision);
+    }
+    return result;
+};
+
+module.exports = SimpleLinearRegression;
+
+},{"./util":26}],26:[function(require,module,exports){
+'use strict';
+
+exports.maybeToPrecision = function maybeToPrecision(value, digits) {
+    if (digits) return value.toPrecision(digits);else return value.toString();
+};
+
+},{}],27:[function(require,module,exports){
+"use strict";
+
+module.exports = newArray;
+
+function newArray(n, value) {
+  n = n || 0;
+  var array = new Array(n);
+  for (var i = 0; i < n; i++) {
+    array[i] = value;
+  }
+  return array;
+}
+
+},{}],28:[function(require,module,exports){
+'use strict';
+
+module.exports = Number.isNaN || function (x) {
+	return x !== x;
+};
+
+},{}],29:[function(require,module,exports){
 // Top level file is just a mixin of submodules & constants
 'use strict';
 
@@ -327,7 +4111,7 @@ assign(pako, deflate, inflate, constants);
 
 module.exports = pako;
 
-},{"./lib/deflate":8,"./lib/inflate":9,"./lib/utils/common":10,"./lib/zlib/constants":13}],8:[function(require,module,exports){
+},{"./lib/deflate":30,"./lib/inflate":31,"./lib/utils/common":32,"./lib/zlib/constants":35}],30:[function(require,module,exports){
 'use strict';
 
 var zlib_deflate = require('./zlib/deflate.js');
@@ -691,7 +4475,7 @@ exports.deflate = deflate;
 exports.deflateRaw = deflateRaw;
 exports.gzip = gzip;
 
-},{"./utils/common":10,"./utils/strings":11,"./zlib/deflate.js":15,"./zlib/messages":20,"./zlib/zstream":22}],9:[function(require,module,exports){
+},{"./utils/common":32,"./utils/strings":33,"./zlib/deflate.js":37,"./zlib/messages":42,"./zlib/zstream":44}],31:[function(require,module,exports){
 'use strict';
 
 var zlib_inflate = require('./zlib/inflate.js');
@@ -1087,7 +4871,7 @@ exports.inflate = inflate;
 exports.inflateRaw = inflateRaw;
 exports.ungzip = inflate;
 
-},{"./utils/common":10,"./utils/strings":11,"./zlib/constants":13,"./zlib/gzheader":16,"./zlib/inflate.js":18,"./zlib/messages":20,"./zlib/zstream":22}],10:[function(require,module,exports){
+},{"./utils/common":32,"./utils/strings":33,"./zlib/constants":35,"./zlib/gzheader":38,"./zlib/inflate.js":40,"./zlib/messages":42,"./zlib/zstream":44}],32:[function(require,module,exports){
 'use strict';
 
 var TYPED_OK = typeof Uint8Array !== 'undefined' && typeof Uint16Array !== 'undefined' && typeof Int32Array !== 'undefined';
@@ -1190,7 +4974,7 @@ exports.setTyped = function (on) {
 
 exports.setTyped(TYPED_OK);
 
-},{}],11:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 // String encode/decode helpers
 'use strict';
 
@@ -1397,13 +5181,14 @@ exports.utf8border = function (buf, max) {
   return pos + _utf8len[buf[pos]] > max ? pos : max;
 };
 
-},{"./common":10}],12:[function(require,module,exports){
-'use strict';
+},{"./common":32}],34:[function(require,module,exports){
+'use strict'
 
 // Note: adler32 takes 12% for level 0 and 2% for level 6.
 // It doesn't worth to make additional optimizationa as in original.
 // Small size is preferable.
 
+;
 function adler32(adler, buf, len, pos) {
   var s1 = adler & 0xffff | 0,
       s2 = adler >>> 16 & 0xffff | 0,
@@ -1430,7 +5215,7 @@ function adler32(adler, buf, len, pos) {
 
 module.exports = adler32;
 
-},{}],13:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 "use strict";
 
 module.exports = {
@@ -1480,14 +5265,15 @@ module.exports = {
   //Z_NULL:                 null // Use -1 or null inline, depending on var type
 };
 
-},{}],14:[function(require,module,exports){
-'use strict';
+},{}],36:[function(require,module,exports){
+'use strict'
 
 // Note: we can't get significant speed boost here.
 // So write code to minimize size - no pregenerated tables
 // and array tools dependencies.
 
 // Use ordinary array, since untyped makes no boost here
+;
 function makeTable() {
   var c,
       table = [];
@@ -1521,7 +5307,7 @@ function crc32(crc, buf, len, pos) {
 
 module.exports = crc32;
 
-},{}],15:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -2106,8 +5892,8 @@ function deflate_fast(s, flush) {
     /* Insert the string window[strstart .. strstart+2] in the
      * dictionary, and set hash_head to the head of the hash chain:
      */
-    hash_head = 0;
-    /*NIL*/if (s.lookahead >= MIN_MATCH) {
+    hash_head = 0 /*NIL*/;
+    if (s.lookahead >= MIN_MATCH) {
       /*** INSERT_STRING(s, s.strstart, hash_head); ***/
       s.ins_h = (s.ins_h << s.hash_shift ^ s.window[s.strstart + MIN_MATCH - 1]) & s.hash_mask;
       hash_head = s.prev[s.strstart & s.w_mask] = s.head[s.ins_h];
@@ -2236,8 +6022,8 @@ function deflate_slow(s, flush) {
     /* Insert the string window[strstart .. strstart+2] in the
      * dictionary, and set hash_head to the head of the hash chain:
      */
-    hash_head = 0;
-    /*NIL*/if (s.lookahead >= MIN_MATCH) {
+    hash_head = 0 /*NIL*/;
+    if (s.lookahead >= MIN_MATCH) {
       /*** INSERT_STRING(s, s.strstart, hash_head); ***/
       s.ins_h = (s.ins_h << s.hash_shift ^ s.window[s.strstart + MIN_MATCH - 1]) & s.hash_mask;
       hash_head = s.prev[s.strstart & s.w_mask] = s.head[s.ins_h];
@@ -3236,7 +7022,7 @@ exports.deflatePrime = deflatePrime;
 exports.deflateTune = deflateTune;
 */
 
-},{"../utils/common":10,"./adler32":12,"./crc32":14,"./messages":20,"./trees":21}],16:[function(require,module,exports){
+},{"../utils/common":32,"./adler32":34,"./crc32":36,"./messages":42,"./trees":43}],38:[function(require,module,exports){
 'use strict';
 
 function GZheader() {
@@ -3277,10 +7063,11 @@ function GZheader() {
 
 module.exports = GZheader;
 
-},{}],17:[function(require,module,exports){
-'use strict';
+},{}],39:[function(require,module,exports){
+'use strict'
 
 // See state defs from inflate.js
+;
 var BAD = 30; /* got a data error -- remain here until reset */
 var TYPE = 12; /* i: waiting for type bits, including last-flag bit */
 
@@ -3389,20 +7176,20 @@ module.exports = function inflate_fast(strm, start) {
 
     dolen: for (;;) {
       // Goto emulation
-      op = here >>> 24;
-      /*here.bits*/hold >>>= op;
+      op = here >>> 24 /*here.bits*/;
+      hold >>>= op;
       bits -= op;
-      op = here >>> 16 & 0xff;
-      /*here.op*/if (op === 0) {
+      op = here >>> 16 & 0xff /*here.op*/;
+      if (op === 0) {
         /* literal */
         //Tracevv((stderr, here.val >= 0x20 && here.val < 0x7f ?
         //        "inflate:         literal '%c'\n" :
         //        "inflate:         literal 0x%02x\n", here.val));
-        output[_out++] = here & 0xffff;
-      } else /*here.val*/if (op & 16) {
+        output[_out++] = here & 0xffff /*here.val*/;
+      } else if (op & 16) {
           /* length base */
-          len = here & 0xffff;
-          /*here.val*/op &= 15; /* number of extra bits */
+          len = here & 0xffff /*here.val*/;
+          op &= 15; /* number of extra bits */
           if (op) {
             if (bits < op) {
               hold += input[_in++] << bits;
@@ -3423,15 +7210,15 @@ module.exports = function inflate_fast(strm, start) {
 
           dodist: for (;;) {
             // goto emulation
-            op = here >>> 24;
-            /*here.bits*/hold >>>= op;
+            op = here >>> 24 /*here.bits*/;
+            hold >>>= op;
             bits -= op;
-            op = here >>> 16 & 0xff;
+            op = here >>> 16 & 0xff /*here.op*/;
 
-            /*here.op*/if (op & 16) {
+            if (op & 16) {
               /* distance base */
-              dist = here & 0xffff;
-              /*here.val*/op &= 15; /* number of extra bits */
+              dist = here & 0xffff /*here.val*/;
+              op &= 15; /* number of extra bits */
               if (bits < op) {
                 hold += input[_in++] << bits;
                 bits += 8;
@@ -3608,7 +7395,7 @@ module.exports = function inflate_fast(strm, start) {
   return;
 };
 
-},{}],18:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -3774,8 +7561,8 @@ function inflateResetKeep(strm) {
   state.last = 0;
   state.havedict = 0;
   state.dmax = 32768;
-  state.head = null;
-  /*Z_NULL*/state.hold = 0;
+  state.head = null /*Z_NULL*/;
+  state.hold = 0;
   state.bits = 0;
   //state.lencode = state.distcode = state.next = state.codes;
   state.lencode = state.lendyn = new utils.Buf32(ENOUGH_LENS);
@@ -3849,12 +7636,12 @@ function inflateInit2(strm, windowBits) {
   //if (state === Z_NULL) return Z_MEM_ERROR;
   //Tracev((stderr, "inflate: allocated\n"));
   strm.state = state;
-  state.window = null;
-  /*Z_NULL*/ret = inflateReset2(strm, windowBits);
+  state.window = null /*Z_NULL*/;
+  ret = inflateReset2(strm, windowBits);
   if (ret !== Z_OK) {
-    strm.state = null;
+    strm.state = null /*Z_NULL*/;
   }
-  /*Z_NULL*/return ret;
+  return ret;
 }
 
 function inflateInit(strm) {
@@ -4046,9 +7833,9 @@ function inflate(strm, flush) {
         //===//
         if (state.wrap & 2 && hold === 0x8b1f) {
           /* gzip header */
-          state.check = 0;
+          state.check = 0 /*crc32(0L, Z_NULL, 0)*/;
           //=== CRC2(state.check, hold);
-          /*crc32(0L, Z_NULL, 0)*/hbuf[0] = hold & 0xff;
+          hbuf[0] = hold & 0xff;
           hbuf[1] = hold >>> 8 & 0xff;
           state.check = crc32(state.check, hbuf, 2, 0);
           //===//
@@ -4089,8 +7876,8 @@ function inflate(strm, flush) {
         }
         state.dmax = 1 << len;
         //Tracev((stderr, "inflate:   zlib header ok\n"));
-        strm.adler = state.check = 1;
-        /*adler32(0L, Z_NULL, 0)*/state.mode = hold & 0x200 ? DICTID : TYPE;
+        strm.adler = state.check = 1 /*adler32(0L, Z_NULL, 0)*/;
+        state.mode = hold & 0x200 ? DICTID : TYPE;
         //=== INITBITS();
         hold = 0;
         bits = 0;
@@ -4219,9 +8006,9 @@ function inflate(strm, flush) {
           bits = 0;
           //===//
         } else if (state.head) {
-            state.head.extra = null;
+            state.head.extra = null /*Z_NULL*/;
           }
-        /*Z_NULL*/state.mode = EXTRA;
+        state.mode = EXTRA;
       /* falls through */
       case EXTRA:
         if (state.flags & 0x0400) {
@@ -4341,8 +8128,8 @@ function inflate(strm, flush) {
           state.head.hcrc = state.flags >> 9 & 1;
           state.head.done = true;
         }
-        strm.adler = state.check = 0;
-        /*crc32(0L, Z_NULL, 0)*/state.mode = TYPE;
+        strm.adler = state.check = 0 /*crc32(0L, Z_NULL, 0)*/;
+        state.mode = TYPE;
         break;
       case DICTID:
         //=== NEEDBITS(32); */
@@ -4374,8 +8161,8 @@ function inflate(strm, flush) {
           //---
           return Z_NEED_DICT;
         }
-        strm.adler = state.check = 1;
-        /*adler32(0L, Z_NULL, 0)*/state.mode = TYPE;
+        strm.adler = state.check = 1 /*adler32(0L, Z_NULL, 0)*/;
+        state.mode = TYPE;
       /* falls through */
       case TYPE:
         if (flush === Z_BLOCK || flush === Z_TREES) {
@@ -4401,9 +8188,9 @@ function inflate(strm, flush) {
           bits += 8;
         }
         //===//
-        state.last = hold & 0x01;
+        state.last = hold & 0x01 /*BITS(1)*/;
         //--- DROPBITS(1) ---//
-        /*BITS(1)*/hold >>>= 1;
+        hold >>>= 1;
         bits -= 1;
         //---//
 
@@ -4860,9 +8647,9 @@ function inflate(strm, flush) {
             bits += 8;
           }
           //===//
-          state.length += hold & (1 << state.extra) - 1;
+          state.length += hold & (1 << state.extra) - 1 /*BITS(state.extra)*/;
           //--- DROPBITS(state.extra) ---//
-          /*BITS(state.extra)*/hold >>>= state.extra;
+          hold >>>= state.extra;
           bits -= state.extra;
           //---//
           state.back += state.extra;
@@ -4945,9 +8732,9 @@ function inflate(strm, flush) {
             bits += 8;
           }
           //===//
-          state.offset += hold & (1 << state.extra) - 1;
+          state.offset += hold & (1 << state.extra) - 1 /*BITS(state.extra)*/;
           //--- DROPBITS(state.extra) ---//
-          /*BITS(state.extra)*/hold >>>= state.extra;
+          hold >>>= state.extra;
           bits -= state.extra;
           //---//
           state.back += state.extra;
@@ -5197,7 +8984,7 @@ exports.inflateSyncPoint = inflateSyncPoint;
 exports.inflateUndermine = inflateUndermine;
 */
 
-},{"../utils/common":10,"./adler32":12,"./crc32":14,"./inffast":17,"./inftrees":19}],19:[function(require,module,exports){
+},{"../utils/common":32,"./adler32":34,"./crc32":36,"./inffast":39,"./inftrees":41}],41:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -5511,7 +9298,7 @@ module.exports = function inflate_table(type, lens, lens_index, codes, table, ta
   return 0;
 };
 
-},{"../utils/common":10}],20:[function(require,module,exports){
+},{"../utils/common":32}],42:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -5526,7 +9313,7 @@ module.exports = {
   '-6': 'incompatible version' /* Z_VERSION_ERROR (-6) */
 };
 
-},{}],21:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -5723,7 +9510,7 @@ function send_bits(s, value, length) {
 }
 
 function send_code(s, c, tree) {
-  send_bits(s, tree[c * 2], /*.Code*/tree[c * 2 + 1] /*.Len*/);
+  send_bits(s, tree[c * 2] /*.Code*/, tree[c * 2 + 1] /*.Len*/);
 }
 
 /* ===========================================================================
@@ -5812,8 +9599,8 @@ function gen_bitlen(s, desc)
     if (n >= base) {
       xbits = extra[n - base];
     }
-    f = tree[n * 2];
-    /*.Freq*/s.opt_len += f * (bits + xbits);
+    f = tree[n * 2] /*.Freq*/;
+    s.opt_len += f * (bits + xbits);
     if (has_stree) {
       s.static_len += f * (stree[n * 2 + 1] /*.Len*/ + xbits);
     }
@@ -5854,8 +9641,8 @@ function gen_bitlen(s, desc)
       }
       if (tree[m * 2 + 1] /*.Len*/ !== bits) {
         // Trace((stderr,"code %d bits %d->%d\n", m, tree[m].Len, bits));
-        s.opt_len += (bits - tree[m * 2 + 1]) /*.Len*/ * tree[m * 2];
-        /*.Freq*/tree[m * 2 + 1] /*.Len*/ = bits;
+        s.opt_len += (bits - tree[m * 2 + 1] /*.Len*/) * tree[m * 2] /*.Freq*/;
+        tree[m * 2 + 1] /*.Len*/ = bits;
       }
       n--;
     }
@@ -6215,11 +10002,11 @@ function build_tree(s, desc)
     s.opt_len--;
 
     if (has_stree) {
-      s.static_len -= stree[node * 2 + 1];
+      s.static_len -= stree[node * 2 + 1] /*.Len*/;
     }
     /* node is 0 or 1 so it does not have extra bits */
   }
-  /*.Len*/desc.max_code = max_code;
+  desc.max_code = max_code;
 
   /* The elements heap[heap_len/2+1 .. heap_len] are leaves of the tree,
    * establish sub-heaps of increasing lengths:
@@ -6246,8 +10033,8 @@ function build_tree(s, desc)
     s.heap[--s.heap_max] = m;
 
     /* Create a new node father of n and m */
-    tree[node * 2] /*.Freq*/ = tree[n * 2] /*.Freq*/ + tree[m * 2];
-    /*.Freq*/s.depth[node] = (s.depth[n] >= s.depth[m] ? s.depth[n] : s.depth[m]) + 1;
+    tree[node * 2] /*.Freq*/ = tree[n * 2] /*.Freq*/ + tree[m * 2] /*.Freq*/;
+    s.depth[node] = (s.depth[n] >= s.depth[m] ? s.depth[n] : s.depth[m]) + 1;
     tree[n * 2 + 1] /*.Dad*/ = tree[m * 2 + 1] /*.Dad*/ = node;
 
     /* and insert the new node in the heap */
@@ -6293,9 +10080,9 @@ function scan_tree(s, tree, max_code)
 
   for (n = 0; n <= max_code; n++) {
     curlen = nextlen;
-    nextlen = tree[(n + 1) * 2 + 1];
+    nextlen = tree[(n + 1) * 2 + 1] /*.Len*/;
 
-    /*.Len*/if (++count < max_count && curlen === nextlen) {
+    if (++count < max_count && curlen === nextlen) {
       continue;
     } else if (count < min_count) {
       s.bl_tree[curlen * 2] /*.Freq*/ += count;
@@ -6354,9 +10141,9 @@ function send_tree(s, tree, max_code)
 
   for (n = 0; n <= max_code; n++) {
     curlen = nextlen;
-    nextlen = tree[(n + 1) * 2 + 1];
+    nextlen = tree[(n + 1) * 2 + 1] /*.Len*/;
 
-    /*.Len*/if (++count < max_count && curlen === nextlen) {
+    if (++count < max_count && curlen === nextlen) {
       continue;
     } else if (count < min_count) {
       do {
@@ -6447,7 +10234,7 @@ function send_all_trees(s, lcodes, dcodes, blcodes)
   send_bits(s, blcodes - 4, 4); /* not -3 as stated in appnote.txt */
   for (rank = 0; rank < blcodes; rank++) {
     //Tracev((stderr, "\nbl code %2d ", bl_order[rank]));
-    send_bits(s, s.bl_tree[bl_order[rank] * 2 + 1], /*.Len*/3);
+    send_bits(s, s.bl_tree[bl_order[rank] * 2 + 1] /*.Len*/, 3);
   }
   //Tracev((stderr, "\nbl tree: sent %ld", s->bits_sent));
 
@@ -6702,7 +10489,7 @@ exports._tr_flush_block = _tr_flush_block;
 exports._tr_tally = _tr_tally;
 exports._tr_align = _tr_align;
 
-},{"../utils/common":10}],22:[function(require,module,exports){
+},{"../utils/common":32}],44:[function(require,module,exports){
 'use strict';
 
 function ZStream() {
@@ -6721,3764 +10508,18 @@ function ZStream() {
   /* total number of bytes output so far */
   this.total_out = 0;
   /* last error message, NULL if no error */
-  this.msg = '';
+  this.msg = '' /*Z_NULL*/;
   /* not visible by applications */
-  /*Z_NULL*/this.state = null;
+  this.state = null;
   /* best guess about the data type: binary or text */
-  this.data_type = 2;
+  this.data_type = 2 /*Z_UNKNOWN*/;
   /* adler32 value of the uncompressed data */
-  /*Z_UNKNOWN*/this.adler = 0;
+  this.adler = 0;
 }
 
 module.exports = ZStream;
 
-},{}],23:[function(require,module,exports){
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var InputBuffer = require('iobuffer').InputBuffer;
-var Inflator = require('pako').Inflate;
-
-var empty = new Uint8Array(0);
-var NULL = '\0';
-var pngSignature = [137, 80, 78, 71, 13, 10, 26, 10];
-
-var PNGDecoder = (function (_InputBuffer) {
-    _inherits(PNGDecoder, _InputBuffer);
-
-    function PNGDecoder(data) {
-        _classCallCheck(this, PNGDecoder);
-
-        _get(Object.getPrototypeOf(PNGDecoder.prototype), 'constructor', this).call(this, data);
-        this._decoded = false;
-        this._inflator = new Inflator();
-        this._png = null;
-        this._end = false;
-        // PNG is always big endian
-        // http://www.w3.org/TR/PNG/#7Integers-and-byte-order
-        this.setBigEndian();
-    }
-
-    _createClass(PNGDecoder, [{
-        key: 'decode',
-        value: function decode() {
-            if (this._decoded) return this._png;
-            this._png = {
-                tEXt: {}
-            };
-            this.decodeSignature();
-            while (!this._end) {
-                this.decodeChunk();
-            }
-            this.decodeImage();
-            return this._png;
-        }
-
-        // http://www.w3.org/TR/PNG/#5PNG-file-signature
-    }, {
-        key: 'decodeSignature',
-        value: function decodeSignature() {
-            for (var i = 0; i < 8; i++) {
-                if (this.readUint8() !== pngSignature[i]) {
-                    throw new Error('Wrong PNG signature. Byte at ' + i + ' should be ' + pngSignature[i] + '.');
-                }
-            }
-        }
-
-        // http://www.w3.org/TR/PNG/#5Chunk-layout
-    }, {
-        key: 'decodeChunk',
-        value: function decodeChunk() {
-            var length = this.readUint32();
-            var type = this.readChars(4);
-            var offset = this.offset;
-            switch (type) {
-                case 'IHDR':
-                    this.decodeIHDR();
-                    break;
-                case 'PLTE':
-                    throw new Error('Palette image type not supported');
-                case 'IDAT':
-                    this.decodeIDAT(length);
-                    break;
-                case 'tEXt':
-                    this.decodetEXt(length);
-                    break;
-                case 'IEND':
-                    this._end = true;
-                    break;
-                default:
-                    this.skip(length);
-                    break;
-            }
-            if (this.offset - offset !== length) {
-                throw new Error('Length mismatch while decoding chunk ' + type);
-            }
-            // TODO compute and validate CRC ?
-            // http://www.w3.org/TR/PNG/#5CRC-algorithm
-            var crc = this.readUint32();
-        }
-
-        // http://www.w3.org/TR/PNG/#11IHDR
-    }, {
-        key: 'decodeIHDR',
-        value: function decodeIHDR() {
-            var image = this._png;
-            image.width = this.readUint32();
-            image.height = this.readUint32();
-            image.bitDepth = this.readUint8();
-            image.colourType = this.readUint8();
-            image.compressionMethod = this.readUint8();
-            image.filterMethod = this.readUint8();
-            image.interlaceMethod = this.readUint8();
-            if (this._png.compressionMethod !== 0) {
-                throw new Error('Unsupported compression method: ' + image.compressionMethod);
-            }
-        }
-
-        // http://www.w3.org/TR/PNG/#11IDAT
-    }, {
-        key: 'decodeIDAT',
-        value: function decodeIDAT(length) {
-            this._inflator.push(new Uint8Array(this.buffer, this.offset, length));
-            this.skip(length);
-        }
-
-        // http://www.w3.org/TR/PNG/#11tEXt
-    }, {
-        key: 'decodetEXt',
-        value: function decodetEXt(length) {
-            var keyword = '';
-            var char;
-            while ((char = this.readChar()) !== NULL) {
-                keyword += char;
-            }
-            this._png.tEXt[keyword] = this.readChars(length - keyword.length - 1);
-        }
-    }, {
-        key: 'decodeImage',
-        value: function decodeImage() {
-            this._inflator.push(empty, true);
-            if (this._inflator.err) {
-                throw new Error('Error while decompressing the data');
-            }
-            var data = this._inflator.result;
-            this._inflator = null;
-
-            if (this._png.filterMethod !== 0) {
-                throw new Error('Filter method ' + this._png.interlaceMethod + ' not supported');
-            }
-
-            if (this._png.interlaceMethod === 0) {
-                this.decodeInterlaceNull(data);
-            } else {
-                throw new Error('Interlace method ' + this._png.interlaceMethod + ' not supported');
-            }
-        }
-    }, {
-        key: 'decodeInterlaceNull',
-        value: function decodeInterlaceNull(data) {
-
-            var channels;
-            switch (this._png.colourType) {
-                case 0:
-                    channels = 1;break;
-                case 2:
-                    channels = 3;break;
-                case 3:
-                    throw new Error('Indexed-colour images are not supported');
-                case 4:
-                    channels = 2;break;
-                case 6:
-                    channels = 4;break;
-                default:
-                    throw new Error('Unknown colour type: ' + this._png.colourType);
-            }
-
-            var height = this._png.height;
-            var bytesPerPixel = channels * this._png.bitDepth / 8;
-            var bytesPerLine = this._png.width * bytesPerPixel;
-            var newData = new Uint8Array(this._png.height * bytesPerLine);
-
-            var prevLine = empty;
-            var offset = 0;
-            var currentLine, newLine;
-
-            for (var i = 0; i < height; i++) {
-                currentLine = data.subarray(offset + 1, offset + 1 + bytesPerLine);
-                newLine = newData.subarray(i * bytesPerLine, (i + 1) * bytesPerLine);
-                switch (data[offset]) {
-                    case 0:
-                        unfilterNone(currentLine, newLine, bytesPerLine);
-                        break;
-                    case 1:
-                        unfilterSub(currentLine, newLine, bytesPerLine, bytesPerPixel);
-                        break;
-                    case 2:
-                        unfilterUp(currentLine, newLine, prevLine, bytesPerLine);
-                        break;
-                    case 3:
-                        unfilterAverage(currentLine, newLine, prevLine, bytesPerLine, bytesPerPixel);
-                        break;
-                    case 4:
-                        unfilterPaeth(currentLine, newLine, prevLine, bytesPerLine, bytesPerPixel);
-                        break;
-                    default:
-                        throw new Error('Unsupported filter: ' + data[offset]);
-                }
-                prevLine = newLine;
-                offset += bytesPerLine + 1;
-            }
-
-            this._png.data = newData;
-        }
-    }]);
-
-    return PNGDecoder;
-})(InputBuffer);
-
-module.exports = PNGDecoder;
-
-function unfilterNone(currentLine, newLine, bytesPerLine) {
-    for (var i = 0; i < bytesPerLine; i++) {
-        newLine[i] = currentLine[i];
-    }
-}
-
-function unfilterSub(currentLine, newLine, bytesPerLine, bytesPerPixel) {
-    var i = 0;
-    for (; i < bytesPerPixel; i++) {
-        // just copy first bytes
-        newLine[i] = currentLine[i];
-    }
-    for (; i < bytesPerLine; i++) {
-        newLine[i] = currentLine[i] + newLine[i - bytesPerPixel] & 0xFF;
-    }
-}
-
-function unfilterUp(currentLine, newLine, prevLine, bytesPerLine) {
-    var i = 0;
-    if (prevLine.length === 0) {
-        // just copy bytes for first line
-        for (; i < bytesPerLine; i++) {
-            newLine[i] = currentLine[i];
-        }
-    } else {
-        for (; i < bytesPerLine; i++) {
-            newLine[i] = currentLine[i] + prevLine[i] & 0xFF;
-        }
-    }
-}
-
-function unfilterAverage(currentLine, newLine, prevLine, bytesPerLine, bytesPerPixel) {
-    var i = 0;
-    if (prevLine.length === 0) {
-        for (; i < bytesPerPixel; i++) {
-            newLine[i] = currentLine[i];
-        }
-        for (; i < bytesPerLine; i++) {
-            newLine[i] = currentLine[i] + (newLine[i - bytesPerPixel] >> 1) & 0xFF;
-        }
-    } else {
-        for (; i < bytesPerPixel; i++) {
-            newLine[i] = currentLine[i] + (prevLine[i] >> 1) & 0xFF;
-        }
-        for (; i < bytesPerLine; i++) {
-            newLine[i] = currentLine[i] + (newLine[i - bytesPerPixel] + prevLine[i] >> 1) & 0xFF;
-        }
-    }
-}
-
-function unfilterPaeth(currentLine, newLine, prevLine, bytesPerLine, bytesPerPixel) {
-    var i = 0;
-    if (prevLine.length === 0) {
-        for (; i < bytesPerPixel; i++) {
-            newLine[i] = currentLine[i];
-        }
-        for (; i < bytesPerLine; i++) {
-            newLine[i] = currentLine[i] + newLine[i - bytesPerPixel] & 0xFF;
-        }
-    } else {
-        for (; i < bytesPerPixel; i++) {
-            newLine[i] = currentLine[i] + prevLine[i] & 0xFF;
-        }
-        for (; i < bytesPerLine; i++) {
-            newLine[i] = currentLine[i] + paethPredictor(newLine[i - bytesPerPixel], prevLine[i], prevLine[i - bytesPerPixel]) & 0xFF;
-        }
-    }
-}
-
-function paethPredictor(a, b, c) {
-    var p = a + b - c;
-    var pa = Math.abs(p - a);
-    var pb = Math.abs(p - b);
-    var pc = Math.abs(p - c);
-    if (pa <= pb && pa <= pc) return a;else if (pb <= pc) return b;else return c;
-}
-
-},{"iobuffer":6,"pako":7}],24:[function(require,module,exports){
-'use strict';
-
-exports.PNGDecoder = require('./PNGDecoder');
-
-},{"./PNGDecoder":23}],25:[function(require,module,exports){
-// https://github.com/paulmillr/es6-shim
-// http://people.mozilla.org/~jorendorff/es6-draft.html#sec-number.isinteger
-"use strict";
-
-var isFinite = require("is-finite");
-module.exports = Number.isInteger || function (val) {
-  return typeof val === "number" && isFinite(val) && Math.floor(val) === val;
-};
-
-},{"is-finite":26}],26:[function(require,module,exports){
-'use strict';
-var numberIsNan = require('number-is-nan');
-
-module.exports = Number.isFinite || function (val) {
-	return !(typeof val !== 'number' || numberIsNan(val) || val === Infinity || val === -Infinity);
-};
-
-},{"number-is-nan":27}],27:[function(require,module,exports){
-'use strict';
-module.exports = Number.isNaN || function (x) {
-	return x !== x;
-};
-
-},{}],28:[function(require,module,exports){
-'use strict';
-
-var Matrix = require('../matrix');
-
-// https://github.com/lutzroeder/Mapack/blob/master/Source/CholeskyDecomposition.cs
-function CholeskyDecomposition(value) {
-    if (!(this instanceof CholeskyDecomposition)) {
-        return new CholeskyDecomposition(value);
-    }
-    value = Matrix.checkMatrix(value);
-    if (!value.isSymmetric()) throw new Error('Matrix is not symmetric');
-
-    var a = value,
-        dimension = a.rows,
-        l = new Matrix(dimension, dimension),
-        positiveDefinite = true,
-        i,
-        j,
-        k;
-
-    for (j = 0; j < dimension; j++) {
-        var Lrowj = l[j];
-        var d = 0;
-        for (k = 0; k < j; k++) {
-            var Lrowk = l[k];
-            var s = 0;
-            for (i = 0; i < k; i++) {
-                s += Lrowk[i] * Lrowj[i];
-            }
-            Lrowj[k] = s = (a[j][k] - s) / l[k][k];
-            d = d + s * s;
-        }
-
-        d = a[j][j] - d;
-
-        positiveDefinite &= d > 0;
-        l[j][j] = Math.sqrt(Math.max(d, 0));
-        for (k = j + 1; k < dimension; k++) {
-            l[j][k] = 0;
-        }
-    }
-
-    if (!positiveDefinite) {
-        throw new Error('Matrix is not positive definite');
-    }
-
-    this.L = l;
-}
-
-CholeskyDecomposition.prototype = Object.defineProperties({
-    solve: function solve(value) {
-        value = Matrix.checkMatrix(value);
-
-        var l = this.L,
-            dimension = l.rows;
-
-        if (value.rows !== dimension) {
-            throw new Error('Matrix dimensions do not match');
-        }
-
-        var count = value.columns,
-            B = value.clone(),
-            i,
-            j,
-            k;
-
-        for (k = 0; k < dimension; k++) {
-            for (j = 0; j < count; j++) {
-                for (i = 0; i < k; i++) {
-                    B[k][j] -= B[i][j] * l[k][i];
-                }
-                B[k][j] /= l[k][k];
-            }
-        }
-
-        for (k = dimension - 1; k >= 0; k--) {
-            for (j = 0; j < count; j++) {
-                for (i = k + 1; i < dimension; i++) {
-                    B[k][j] -= B[i][j] * l[i][k];
-                }
-                B[k][j] /= l[k][k];
-            }
-        }
-
-        return B;
-    }
-}, {
-    lowerTriangularMatrix: {
-        get: function get() {
-            return this.L;
-        },
-        configurable: true,
-        enumerable: true
-    }
-});
-
-module.exports = CholeskyDecomposition;
-
-},{"../matrix":36}],29:[function(require,module,exports){
-'use strict';
-
-var Matrix = require('../matrix');
-var util = require('./util');
-var hypotenuse = util.hypotenuse;
-var getFilled2DArray = util.getFilled2DArray;
-
-// https://github.com/lutzroeder/Mapack/blob/master/Source/EigenvalueDecomposition.cs
-function EigenvalueDecomposition(matrix) {
-    if (!(this instanceof EigenvalueDecomposition)) {
-        return new EigenvalueDecomposition(matrix);
-    }
-    matrix = Matrix.checkMatrix(matrix);
-    if (!matrix.isSquare()) {
-        throw new Error('Matrix is not a square matrix');
-    }
-
-    var n = matrix.columns,
-        V = getFilled2DArray(n, n, 0),
-        d = new Array(n),
-        e = new Array(n),
-        value = matrix,
-        i,
-        j;
-
-    if (matrix.isSymmetric()) {
-        for (i = 0; i < n; i++) {
-            for (j = 0; j < n; j++) {
-                V[i][j] = value[i][j];
-            }
-        }
-        tred2(n, e, d, V);
-        tql2(n, e, d, V);
-    } else {
-        var H = getFilled2DArray(n, n, 0),
-            ort = new Array(n);
-        for (j = 0; j < n; j++) {
-            for (i = 0; i < n; i++) {
-                H[i][j] = value[i][j];
-            }
-        }
-        orthes(n, H, ort, V);
-        hqr2(n, e, d, V, H);
-    }
-
-    this.n = n;
-    this.e = e;
-    this.d = d;
-    this.V = V;
-}
-
-EigenvalueDecomposition.prototype = Object.defineProperties({}, {
-    realEigenvalues: {
-        get: function get() {
-            return this.d;
-        },
-        configurable: true,
-        enumerable: true
-    },
-    imaginaryEigenvalues: {
-        get: function get() {
-            return this.e;
-        },
-        configurable: true,
-        enumerable: true
-    },
-    eigenvectorMatrix: {
-        get: function get() {
-            if (!Matrix.isMatrix(this.V)) {
-                this.V = new Matrix(this.V);
-            }
-            return this.V;
-        },
-        configurable: true,
-        enumerable: true
-    },
-    diagonalMatrix: {
-        get: function get() {
-            var n = this.n,
-                e = this.e,
-                d = this.d,
-                X = new Matrix(n, n),
-                i,
-                j;
-            for (i = 0; i < n; i++) {
-                for (j = 0; j < n; j++) {
-                    X[i][j] = 0;
-                }
-                X[i][i] = d[i];
-                if (e[i] > 0) {
-                    X[i][i + 1] = e[i];
-                } else if (e[i] < 0) {
-                    X[i][i - 1] = e[i];
-                }
-            }
-            return X;
-        },
-        configurable: true,
-        enumerable: true
-    }
-});
-
-function tred2(n, e, d, V) {
-
-    var f, g, h, i, j, k, hh, scale;
-
-    for (j = 0; j < n; j++) {
-        d[j] = V[n - 1][j];
-    }
-
-    for (i = n - 1; i > 0; i--) {
-        scale = 0;
-        h = 0;
-        for (k = 0; k < i; k++) {
-            scale = scale + Math.abs(d[k]);
-        }
-
-        if (scale === 0) {
-            e[i] = d[i - 1];
-            for (j = 0; j < i; j++) {
-                d[j] = V[i - 1][j];
-                V[i][j] = 0;
-                V[j][i] = 0;
-            }
-        } else {
-            for (k = 0; k < i; k++) {
-                d[k] /= scale;
-                h += d[k] * d[k];
-            }
-
-            f = d[i - 1];
-            g = Math.sqrt(h);
-            if (f > 0) {
-                g = -g;
-            }
-
-            e[i] = scale * g;
-            h = h - f * g;
-            d[i - 1] = f - g;
-            for (j = 0; j < i; j++) {
-                e[j] = 0;
-            }
-
-            for (j = 0; j < i; j++) {
-                f = d[j];
-                V[j][i] = f;
-                g = e[j] + V[j][j] * f;
-                for (k = j + 1; k <= i - 1; k++) {
-                    g += V[k][j] * d[k];
-                    e[k] += V[k][j] * f;
-                }
-                e[j] = g;
-            }
-
-            f = 0;
-            for (j = 0; j < i; j++) {
-                e[j] /= h;
-                f += e[j] * d[j];
-            }
-
-            hh = f / (h + h);
-            for (j = 0; j < i; j++) {
-                e[j] -= hh * d[j];
-            }
-
-            for (j = 0; j < i; j++) {
-                f = d[j];
-                g = e[j];
-                for (k = j; k <= i - 1; k++) {
-                    V[k][j] -= f * e[k] + g * d[k];
-                }
-                d[j] = V[i - 1][j];
-                V[i][j] = 0;
-            }
-        }
-        d[i] = h;
-    }
-
-    for (i = 0; i < n - 1; i++) {
-        V[n - 1][i] = V[i][i];
-        V[i][i] = 1;
-        h = d[i + 1];
-        if (h !== 0) {
-            for (k = 0; k <= i; k++) {
-                d[k] = V[k][i + 1] / h;
-            }
-
-            for (j = 0; j <= i; j++) {
-                g = 0;
-                for (k = 0; k <= i; k++) {
-                    g += V[k][i + 1] * V[k][j];
-                }
-                for (k = 0; k <= i; k++) {
-                    V[k][j] -= g * d[k];
-                }
-            }
-        }
-
-        for (k = 0; k <= i; k++) {
-            V[k][i + 1] = 0;
-        }
-    }
-
-    for (j = 0; j < n; j++) {
-        d[j] = V[n - 1][j];
-        V[n - 1][j] = 0;
-    }
-
-    V[n - 1][n - 1] = 1;
-    e[0] = 0;
-}
-
-function tql2(n, e, d, V) {
-
-    var g, h, i, j, k, l, m, p, r, dl1, c, c2, c3, el1, s, s2, iter;
-
-    for (i = 1; i < n; i++) {
-        e[i - 1] = e[i];
-    }
-
-    e[n - 1] = 0;
-
-    var f = 0,
-        tst1 = 0,
-        eps = Math.pow(2, -52);
-
-    for (l = 0; l < n; l++) {
-        tst1 = Math.max(tst1, Math.abs(d[l]) + Math.abs(e[l]));
-        m = l;
-        while (m < n) {
-            if (Math.abs(e[m]) <= eps * tst1) {
-                break;
-            }
-            m++;
-        }
-
-        if (m > l) {
-            iter = 0;
-            do {
-                iter = iter + 1;
-
-                g = d[l];
-                p = (d[l + 1] - g) / (2 * e[l]);
-                r = hypotenuse(p, 1);
-                if (p < 0) {
-                    r = -r;
-                }
-
-                d[l] = e[l] / (p + r);
-                d[l + 1] = e[l] * (p + r);
-                dl1 = d[l + 1];
-                h = g - d[l];
-                for (i = l + 2; i < n; i++) {
-                    d[i] -= h;
-                }
-
-                f = f + h;
-
-                p = d[m];
-                c = 1;
-                c2 = c;
-                c3 = c;
-                el1 = e[l + 1];
-                s = 0;
-                s2 = 0;
-                for (i = m - 1; i >= l; i--) {
-                    c3 = c2;
-                    c2 = c;
-                    s2 = s;
-                    g = c * e[i];
-                    h = c * p;
-                    r = hypotenuse(p, e[i]);
-                    e[i + 1] = s * r;
-                    s = e[i] / r;
-                    c = p / r;
-                    p = c * d[i] - s * g;
-                    d[i + 1] = h + s * (c * g + s * d[i]);
-
-                    for (k = 0; k < n; k++) {
-                        h = V[k][i + 1];
-                        V[k][i + 1] = s * V[k][i] + c * h;
-                        V[k][i] = c * V[k][i] - s * h;
-                    }
-                }
-
-                p = -s * s2 * c3 * el1 * e[l] / dl1;
-                e[l] = s * p;
-                d[l] = c * p;
-            } while (Math.abs(e[l]) > eps * tst1);
-        }
-        d[l] = d[l] + f;
-        e[l] = 0;
-    }
-
-    for (i = 0; i < n - 1; i++) {
-        k = i;
-        p = d[i];
-        for (j = i + 1; j < n; j++) {
-            if (d[j] < p) {
-                k = j;
-                p = d[j];
-            }
-        }
-
-        if (k !== i) {
-            d[k] = d[i];
-            d[i] = p;
-            for (j = 0; j < n; j++) {
-                p = V[j][i];
-                V[j][i] = V[j][k];
-                V[j][k] = p;
-            }
-        }
-    }
-}
-
-function orthes(n, H, ort, V) {
-
-    var low = 0,
-        high = n - 1,
-        f,
-        g,
-        h,
-        i,
-        j,
-        m,
-        scale;
-
-    for (m = low + 1; m <= high - 1; m++) {
-        scale = 0;
-        for (i = m; i <= high; i++) {
-            scale = scale + Math.abs(H[i][m - 1]);
-        }
-
-        if (scale !== 0) {
-            h = 0;
-            for (i = high; i >= m; i--) {
-                ort[i] = H[i][m - 1] / scale;
-                h += ort[i] * ort[i];
-            }
-
-            g = Math.sqrt(h);
-            if (ort[m] > 0) {
-                g = -g;
-            }
-
-            h = h - ort[m] * g;
-            ort[m] = ort[m] - g;
-
-            for (j = m; j < n; j++) {
-                f = 0;
-                for (i = high; i >= m; i--) {
-                    f += ort[i] * H[i][j];
-                }
-
-                f = f / h;
-                for (i = m; i <= high; i++) {
-                    H[i][j] -= f * ort[i];
-                }
-            }
-
-            for (i = 0; i <= high; i++) {
-                f = 0;
-                for (j = high; j >= m; j--) {
-                    f += ort[j] * H[i][j];
-                }
-
-                f = f / h;
-                for (j = m; j <= high; j++) {
-                    H[i][j] -= f * ort[j];
-                }
-            }
-
-            ort[m] = scale * ort[m];
-            H[m][m - 1] = scale * g;
-        }
-    }
-
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
-            V[i][j] = i === j ? 1 : 0;
-        }
-    }
-
-    for (m = high - 1; m >= low + 1; m--) {
-        if (H[m][m - 1] !== 0) {
-            for (i = m + 1; i <= high; i++) {
-                ort[i] = H[i][m - 1];
-            }
-
-            for (j = m; j <= high; j++) {
-                g = 0;
-                for (i = m; i <= high; i++) {
-                    g += ort[i] * V[i][j];
-                }
-
-                g = g / ort[m] / H[m][m - 1];
-                for (i = m; i <= high; i++) {
-                    V[i][j] += g * ort[i];
-                }
-            }
-        }
-    }
-}
-
-function hqr2(nn, e, d, V, H) {
-    var n = nn - 1,
-        low = 0,
-        high = nn - 1,
-        eps = Math.pow(2, -52),
-        exshift = 0,
-        norm = 0,
-        p = 0,
-        q = 0,
-        r = 0,
-        s = 0,
-        z = 0,
-        iter = 0,
-        i,
-        j,
-        k,
-        l,
-        m,
-        t,
-        w,
-        x,
-        y,
-        ra,
-        sa,
-        vr,
-        vi,
-        notlast,
-        cdivres;
-
-    for (i = 0; i < nn; i++) {
-        if (i < low || i > high) {
-            d[i] = H[i][i];
-            e[i] = 0;
-        }
-
-        for (j = Math.max(i - 1, 0); j < nn; j++) {
-            norm = norm + Math.abs(H[i][j]);
-        }
-    }
-
-    while (n >= low) {
-        l = n;
-        while (l > low) {
-            s = Math.abs(H[l - 1][l - 1]) + Math.abs(H[l][l]);
-            if (s === 0) {
-                s = norm;
-            }
-            if (Math.abs(H[l][l - 1]) < eps * s) {
-                break;
-            }
-            l--;
-        }
-
-        if (l === n) {
-            H[n][n] = H[n][n] + exshift;
-            d[n] = H[n][n];
-            e[n] = 0;
-            n--;
-            iter = 0;
-        } else if (l === n - 1) {
-            w = H[n][n - 1] * H[n - 1][n];
-            p = (H[n - 1][n - 1] - H[n][n]) / 2;
-            q = p * p + w;
-            z = Math.sqrt(Math.abs(q));
-            H[n][n] = H[n][n] + exshift;
-            H[n - 1][n - 1] = H[n - 1][n - 1] + exshift;
-            x = H[n][n];
-
-            if (q >= 0) {
-                z = p >= 0 ? p + z : p - z;
-                d[n - 1] = x + z;
-                d[n] = d[n - 1];
-                if (z !== 0) {
-                    d[n] = x - w / z;
-                }
-                e[n - 1] = 0;
-                e[n] = 0;
-                x = H[n][n - 1];
-                s = Math.abs(x) + Math.abs(z);
-                p = x / s;
-                q = z / s;
-                r = Math.sqrt(p * p + q * q);
-                p = p / r;
-                q = q / r;
-
-                for (j = n - 1; j < nn; j++) {
-                    z = H[n - 1][j];
-                    H[n - 1][j] = q * z + p * H[n][j];
-                    H[n][j] = q * H[n][j] - p * z;
-                }
-
-                for (i = 0; i <= n; i++) {
-                    z = H[i][n - 1];
-                    H[i][n - 1] = q * z + p * H[i][n];
-                    H[i][n] = q * H[i][n] - p * z;
-                }
-
-                for (i = low; i <= high; i++) {
-                    z = V[i][n - 1];
-                    V[i][n - 1] = q * z + p * V[i][n];
-                    V[i][n] = q * V[i][n] - p * z;
-                }
-            } else {
-                d[n - 1] = x + p;
-                d[n] = x + p;
-                e[n - 1] = z;
-                e[n] = -z;
-            }
-
-            n = n - 2;
-            iter = 0;
-        } else {
-            x = H[n][n];
-            y = 0;
-            w = 0;
-            if (l < n) {
-                y = H[n - 1][n - 1];
-                w = H[n][n - 1] * H[n - 1][n];
-            }
-
-            if (iter === 10) {
-                exshift += x;
-                for (i = low; i <= n; i++) {
-                    H[i][i] -= x;
-                }
-                s = Math.abs(H[n][n - 1]) + Math.abs(H[n - 1][n - 2]);
-                x = y = 0.75 * s;
-                w = -0.4375 * s * s;
-            }
-
-            if (iter === 30) {
-                s = (y - x) / 2;
-                s = s * s + w;
-                if (s > 0) {
-                    s = Math.sqrt(s);
-                    if (y < x) {
-                        s = -s;
-                    }
-                    s = x - w / ((y - x) / 2 + s);
-                    for (i = low; i <= n; i++) {
-                        H[i][i] -= s;
-                    }
-                    exshift += s;
-                    x = y = w = 0.964;
-                }
-            }
-
-            iter = iter + 1;
-
-            m = n - 2;
-            while (m >= l) {
-                z = H[m][m];
-                r = x - z;
-                s = y - z;
-                p = (r * s - w) / H[m + 1][m] + H[m][m + 1];
-                q = H[m + 1][m + 1] - z - r - s;
-                r = H[m + 2][m + 1];
-                s = Math.abs(p) + Math.abs(q) + Math.abs(r);
-                p = p / s;
-                q = q / s;
-                r = r / s;
-                if (m === l) {
-                    break;
-                }
-                if (Math.abs(H[m][m - 1]) * (Math.abs(q) + Math.abs(r)) < eps * (Math.abs(p) * (Math.abs(H[m - 1][m - 1]) + Math.abs(z) + Math.abs(H[m + 1][m + 1])))) {
-                    break;
-                }
-                m--;
-            }
-
-            for (i = m + 2; i <= n; i++) {
-                H[i][i - 2] = 0;
-                if (i > m + 2) {
-                    H[i][i - 3] = 0;
-                }
-            }
-
-            for (k = m; k <= n - 1; k++) {
-                notlast = k !== n - 1;
-                if (k !== m) {
-                    p = H[k][k - 1];
-                    q = H[k + 1][k - 1];
-                    r = notlast ? H[k + 2][k - 1] : 0;
-                    x = Math.abs(p) + Math.abs(q) + Math.abs(r);
-                    if (x !== 0) {
-                        p = p / x;
-                        q = q / x;
-                        r = r / x;
-                    }
-                }
-
-                if (x === 0) {
-                    break;
-                }
-
-                s = Math.sqrt(p * p + q * q + r * r);
-                if (p < 0) {
-                    s = -s;
-                }
-
-                if (s !== 0) {
-                    if (k !== m) {
-                        H[k][k - 1] = -s * x;
-                    } else if (l !== m) {
-                        H[k][k - 1] = -H[k][k - 1];
-                    }
-
-                    p = p + s;
-                    x = p / s;
-                    y = q / s;
-                    z = r / s;
-                    q = q / p;
-                    r = r / p;
-
-                    for (j = k; j < nn; j++) {
-                        p = H[k][j] + q * H[k + 1][j];
-                        if (notlast) {
-                            p = p + r * H[k + 2][j];
-                            H[k + 2][j] = H[k + 2][j] - p * z;
-                        }
-
-                        H[k][j] = H[k][j] - p * x;
-                        H[k + 1][j] = H[k + 1][j] - p * y;
-                    }
-
-                    for (i = 0; i <= Math.min(n, k + 3); i++) {
-                        p = x * H[i][k] + y * H[i][k + 1];
-                        if (notlast) {
-                            p = p + z * H[i][k + 2];
-                            H[i][k + 2] = H[i][k + 2] - p * r;
-                        }
-
-                        H[i][k] = H[i][k] - p;
-                        H[i][k + 1] = H[i][k + 1] - p * q;
-                    }
-
-                    for (i = low; i <= high; i++) {
-                        p = x * V[i][k] + y * V[i][k + 1];
-                        if (notlast) {
-                            p = p + z * V[i][k + 2];
-                            V[i][k + 2] = V[i][k + 2] - p * r;
-                        }
-
-                        V[i][k] = V[i][k] - p;
-                        V[i][k + 1] = V[i][k + 1] - p * q;
-                    }
-                }
-            }
-        }
-    }
-
-    if (norm === 0) {
-        return;
-    }
-
-    for (n = nn - 1; n >= 0; n--) {
-        p = d[n];
-        q = e[n];
-
-        if (q === 0) {
-            l = n;
-            H[n][n] = 1;
-            for (i = n - 1; i >= 0; i--) {
-                w = H[i][i] - p;
-                r = 0;
-                for (j = l; j <= n; j++) {
-                    r = r + H[i][j] * H[j][n];
-                }
-
-                if (e[i] < 0) {
-                    z = w;
-                    s = r;
-                } else {
-                    l = i;
-                    if (e[i] === 0) {
-                        H[i][n] = w !== 0 ? -r / w : -r / (eps * norm);
-                    } else {
-                        x = H[i][i + 1];
-                        y = H[i + 1][i];
-                        q = (d[i] - p) * (d[i] - p) + e[i] * e[i];
-                        t = (x * s - z * r) / q;
-                        H[i][n] = t;
-                        H[i + 1][n] = Math.abs(x) > Math.abs(z) ? (-r - w * t) / x : (-s - y * t) / z;
-                    }
-
-                    t = Math.abs(H[i][n]);
-                    if (eps * t * t > 1) {
-                        for (j = i; j <= n; j++) {
-                            H[j][n] = H[j][n] / t;
-                        }
-                    }
-                }
-            }
-        } else if (q < 0) {
-            l = n - 1;
-
-            if (Math.abs(H[n][n - 1]) > Math.abs(H[n - 1][n])) {
-                H[n - 1][n - 1] = q / H[n][n - 1];
-                H[n - 1][n] = -(H[n][n] - p) / H[n][n - 1];
-            } else {
-                cdivres = cdiv(0, -H[n - 1][n], H[n - 1][n - 1] - p, q);
-                H[n - 1][n - 1] = cdivres[0];
-                H[n - 1][n] = cdivres[1];
-            }
-
-            H[n][n - 1] = 0;
-            H[n][n] = 1;
-            for (i = n - 2; i >= 0; i--) {
-                ra = 0;
-                sa = 0;
-                for (j = l; j <= n; j++) {
-                    ra = ra + H[i][j] * H[j][n - 1];
-                    sa = sa + H[i][j] * H[j][n];
-                }
-
-                w = H[i][i] - p;
-
-                if (e[i] < 0) {
-                    z = w;
-                    r = ra;
-                    s = sa;
-                } else {
-                    l = i;
-                    if (e[i] === 0) {
-                        cdivres = cdiv(-ra, -sa, w, q);
-                        H[i][n - 1] = cdivres[0];
-                        H[i][n] = cdivres[1];
-                    } else {
-                        x = H[i][i + 1];
-                        y = H[i + 1][i];
-                        vr = (d[i] - p) * (d[i] - p) + e[i] * e[i] - q * q;
-                        vi = (d[i] - p) * 2 * q;
-                        if (vr === 0 && vi === 0) {
-                            vr = eps * norm * (Math.abs(w) + Math.abs(q) + Math.abs(x) + Math.abs(y) + Math.abs(z));
-                        }
-                        cdivres = cdiv(x * r - z * ra + q * sa, x * s - z * sa - q * ra, vr, vi);
-                        H[i][n - 1] = cdivres[0];
-                        H[i][n] = cdivres[1];
-                        if (Math.abs(x) > Math.abs(z) + Math.abs(q)) {
-                            H[i + 1][n - 1] = (-ra - w * H[i][n - 1] + q * H[i][n]) / x;
-                            H[i + 1][n] = (-sa - w * H[i][n] - q * H[i][n - 1]) / x;
-                        } else {
-                            cdivres = cdiv(-r - y * H[i][n - 1], -s - y * H[i][n], z, q);
-                            H[i + 1][n - 1] = cdivres[0];
-                            H[i + 1][n] = cdivres[1];
-                        }
-                    }
-
-                    t = Math.max(Math.abs(H[i][n - 1]), Math.abs(H[i][n]));
-                    if (eps * t * t > 1) {
-                        for (j = i; j <= n; j++) {
-                            H[j][n - 1] = H[j][n - 1] / t;
-                            H[j][n] = H[j][n] / t;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    for (i = 0; i < nn; i++) {
-        if (i < low || i > high) {
-            for (j = i; j < nn; j++) {
-                V[i][j] = H[i][j];
-            }
-        }
-    }
-
-    for (j = nn - 1; j >= low; j--) {
-        for (i = low; i <= high; i++) {
-            z = 0;
-            for (k = low; k <= Math.min(j, high); k++) {
-                z = z + V[i][k] * H[k][j];
-            }
-            V[i][j] = z;
-        }
-    }
-}
-
-function cdiv(xr, xi, yr, yi) {
-    var r, d;
-    if (Math.abs(yr) > Math.abs(yi)) {
-        r = yi / yr;
-        d = yr + r * yi;
-        return [(xr + r * xi) / d, (xi - r * xr) / d];
-    } else {
-        r = yr / yi;
-        d = yi + r * yr;
-        return [(r * xr + xi) / d, (r * xi - xr) / d];
-    }
-}
-
-module.exports = EigenvalueDecomposition;
-
-},{"../matrix":36,"./util":33}],30:[function(require,module,exports){
-'use strict';
-
-var Matrix = require('../matrix');
-
-// https://github.com/lutzroeder/Mapack/blob/master/Source/LuDecomposition.cs
-function LuDecomposition(matrix) {
-    if (!(this instanceof LuDecomposition)) {
-        return new LuDecomposition(matrix);
-    }
-    matrix = Matrix.checkMatrix(matrix);
-
-    var lu = matrix.clone(),
-        rows = lu.rows,
-        columns = lu.columns,
-        pivotVector = new Array(rows),
-        pivotSign = 1,
-        i,
-        j,
-        k,
-        p,
-        s,
-        t,
-        v,
-        LUrowi,
-        LUcolj,
-        kmax;
-
-    for (i = 0; i < rows; i++) {
-        pivotVector[i] = i;
-    }
-
-    LUcolj = new Array(rows);
-
-    for (j = 0; j < columns; j++) {
-
-        for (i = 0; i < rows; i++) {
-            LUcolj[i] = lu[i][j];
-        }
-
-        for (i = 0; i < rows; i++) {
-            LUrowi = lu[i];
-            kmax = Math.min(i, j);
-            s = 0;
-            for (k = 0; k < kmax; k++) {
-                s += LUrowi[k] * LUcolj[k];
-            }
-            LUrowi[j] = LUcolj[i] -= s;
-        }
-
-        p = j;
-        for (i = j + 1; i < rows; i++) {
-            if (Math.abs(LUcolj[i]) > Math.abs(LUcolj[p])) {
-                p = i;
-            }
-        }
-
-        if (p !== j) {
-            for (k = 0; k < columns; k++) {
-                t = lu[p][k];
-                lu[p][k] = lu[j][k];
-                lu[j][k] = t;
-            }
-
-            v = pivotVector[p];
-            pivotVector[p] = pivotVector[j];
-            pivotVector[j] = v;
-
-            pivotSign = -pivotSign;
-        }
-
-        if (j < rows && lu[j][j] !== 0) {
-            for (i = j + 1; i < rows; i++) {
-                lu[i][j] /= lu[j][j];
-            }
-        }
-    }
-
-    this.LU = lu;
-    this.pivotVector = pivotVector;
-    this.pivotSign = pivotSign;
-}
-
-LuDecomposition.prototype = Object.defineProperties({
-    isSingular: function isSingular() {
-        var data = this.LU,
-            col = data.columns;
-        for (var j = 0; j < col; j++) {
-            if (data[j][j] === 0) {
-                return true;
-            }
-        }
-        return false;
-    },
-
-    solve: function solve(value) {
-        value = Matrix.checkMatrix(value);
-
-        var lu = this.LU,
-            rows = lu.rows;
-
-        if (rows !== value.rows) throw new Error('Invalid matrix dimensions');
-        if (this.isSingular()) throw new Error('LU matrix is singular');
-
-        var count = value.columns,
-            X = value.subMatrixRow(this.pivotVector, 0, count - 1),
-            columns = lu.columns,
-            i,
-            j,
-            k;
-
-        for (k = 0; k < columns; k++) {
-            for (i = k + 1; i < columns; i++) {
-                for (j = 0; j < count; j++) {
-                    X[i][j] -= X[k][j] * lu[i][k];
-                }
-            }
-        }
-        for (k = columns - 1; k >= 0; k--) {
-            for (j = 0; j < count; j++) {
-                X[k][j] /= lu[k][k];
-            }
-            for (i = 0; i < k; i++) {
-                for (j = 0; j < count; j++) {
-                    X[i][j] -= X[k][j] * lu[i][k];
-                }
-            }
-        }
-        return X;
-    }
-}, {
-    determinant: {
-        get: function get() {
-            var data = this.LU;
-            if (!data.isSquare()) throw new Error('Matrix must be square');
-            var determinant = this.pivotSign,
-                col = data.columns;
-            for (var j = 0; j < col; j++) determinant *= data[j][j];
-            return determinant;
-        },
-        configurable: true,
-        enumerable: true
-    },
-    lowerTriangularMatrix: {
-        get: function get() {
-            var data = this.LU,
-                rows = data.rows,
-                columns = data.columns,
-                X = new Matrix(rows, columns);
-            for (var i = 0; i < rows; i++) {
-                for (var j = 0; j < columns; j++) {
-                    if (i > j) {
-                        X[i][j] = data[i][j];
-                    } else if (i === j) {
-                        X[i][j] = 1;
-                    } else {
-                        X[i][j] = 0;
-                    }
-                }
-            }
-            return X;
-        },
-        configurable: true,
-        enumerable: true
-    },
-    upperTriangularMatrix: {
-        get: function get() {
-            var data = this.LU,
-                rows = data.rows,
-                columns = data.columns,
-                X = new Matrix(rows, columns);
-            for (var i = 0; i < rows; i++) {
-                for (var j = 0; j < columns; j++) {
-                    if (i <= j) {
-                        X[i][j] = data[i][j];
-                    } else {
-                        X[i][j] = 0;
-                    }
-                }
-            }
-            return X;
-        },
-        configurable: true,
-        enumerable: true
-    },
-    pivotPermutationVector: {
-        get: function get() {
-            return this.pivotVector.slice();
-        },
-        configurable: true,
-        enumerable: true
-    }
-});
-
-module.exports = LuDecomposition;
-
-},{"../matrix":36}],31:[function(require,module,exports){
-'use strict';
-
-var Matrix = require('../matrix');
-var hypotenuse = require('./util').hypotenuse;
-
-//https://github.com/lutzroeder/Mapack/blob/master/Source/QrDecomposition.cs
-function QrDecomposition(value) {
-    if (!(this instanceof QrDecomposition)) {
-        return new QrDecomposition(value);
-    }
-    value = Matrix.checkMatrix(value);
-
-    var qr = value.clone(),
-        m = value.rows,
-        n = value.columns,
-        rdiag = new Array(n),
-        i,
-        j,
-        k,
-        s;
-
-    for (k = 0; k < n; k++) {
-        var nrm = 0;
-        for (i = k; i < m; i++) {
-            nrm = hypotenuse(nrm, qr[i][k]);
-        }
-        if (nrm !== 0) {
-            if (qr[k][k] < 0) {
-                nrm = -nrm;
-            }
-            for (i = k; i < m; i++) {
-                qr[i][k] /= nrm;
-            }
-            qr[k][k] += 1;
-            for (j = k + 1; j < n; j++) {
-                s = 0;
-                for (i = k; i < m; i++) {
-                    s += qr[i][k] * qr[i][j];
-                }
-                s = -s / qr[k][k];
-                for (i = k; i < m; i++) {
-                    qr[i][j] += s * qr[i][k];
-                }
-            }
-        }
-        rdiag[k] = -nrm;
-    }
-
-    this.QR = qr;
-    this.Rdiag = rdiag;
-}
-
-QrDecomposition.prototype = Object.defineProperties({
-    solve: function solve(value) {
-        value = Matrix.checkMatrix(value);
-
-        var qr = this.QR,
-            m = qr.rows;
-
-        if (value.rows !== m) throw new Error('Matrix row dimensions must agree');
-        if (!this.isFullRank()) throw new Error('Matrix is rank deficient');
-
-        var count = value.columns,
-            X = value.clone(),
-            n = qr.columns,
-            i,
-            j,
-            k,
-            s;
-
-        for (k = 0; k < n; k++) {
-            for (j = 0; j < count; j++) {
-                s = 0;
-                for (i = k; i < m; i++) {
-                    s += qr[i][k] * X[i][j];
-                }
-                s = -s / qr[k][k];
-                for (i = k; i < m; i++) {
-                    X[i][j] += s * qr[i][k];
-                }
-            }
-        }
-        for (k = n - 1; k >= 0; k--) {
-            for (j = 0; j < count; j++) {
-                X[k][j] /= this.Rdiag[k];
-            }
-            for (i = 0; i < k; i++) {
-                for (j = 0; j < count; j++) {
-                    X[i][j] -= X[k][j] * qr[i][k];
-                }
-            }
-        }
-
-        return X.subMatrix(0, n - 1, 0, count - 1);
-    },
-    isFullRank: function isFullRank() {
-        var columns = this.QR.columns;
-        for (var i = 0; i < columns; i++) {
-            if (this.Rdiag[i] === 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-}, {
-    upperTriangularMatrix: {
-        get: function get() {
-            var qr = this.QR,
-                n = qr.columns,
-                X = new Matrix(n, n),
-                i,
-                j;
-            for (i = 0; i < n; i++) {
-                for (j = 0; j < n; j++) {
-                    if (i < j) {
-                        X[i][j] = qr[i][j];
-                    } else if (i === j) {
-                        X[i][j] = this.Rdiag[i];
-                    } else {
-                        X[i][j] = 0;
-                    }
-                }
-            }
-            return X;
-        },
-        configurable: true,
-        enumerable: true
-    },
-    orthogonalMatrix: {
-        get: function get() {
-            var qr = this.QR,
-                rows = qr.rows,
-                columns = qr.columns,
-                X = new Matrix(rows, columns),
-                i,
-                j,
-                k,
-                s;
-
-            for (k = columns - 1; k >= 0; k--) {
-                for (i = 0; i < rows; i++) {
-                    X[i][k] = 0;
-                }
-                X[k][k] = 1;
-                for (j = k; j < columns; j++) {
-                    if (qr[k][k] !== 0) {
-                        s = 0;
-                        for (i = k; i < rows; i++) {
-                            s += qr[i][k] * X[i][j];
-                        }
-
-                        s = -s / qr[k][k];
-
-                        for (i = k; i < rows; i++) {
-                            X[i][j] += s * qr[i][k];
-                        }
-                    }
-                }
-            }
-            return X;
-        },
-        configurable: true,
-        enumerable: true
-    }
-});
-
-module.exports = QrDecomposition;
-
-},{"../matrix":36,"./util":33}],32:[function(require,module,exports){
-'use strict';
-
-var Matrix = require('../matrix');
-var util = require('./util');
-var hypotenuse = util.hypotenuse;
-var getFilled2DArray = util.getFilled2DArray;
-
-// https://github.com/lutzroeder/Mapack/blob/master/Source/SingularValueDecomposition.cs
-function SingularValueDecomposition(value, options) {
-    if (!(this instanceof SingularValueDecomposition)) {
-        return new SingularValueDecomposition(value, options);
-    }
-    value = Matrix.checkMatrix(value);
-
-    options = options || {};
-
-    var m = value.rows,
-        n = value.columns,
-        nu = Math.min(m, n);
-
-    var wantu = true,
-        wantv = true;
-    if (options.computeLeftSingularVectors === false) wantu = false;
-    if (options.computeRightSingularVectors === false) wantv = false;
-    var autoTranspose = options.autoTranspose === true;
-
-    var swapped = false;
-    var a;
-    if (m < n) {
-        if (!autoTranspose) {
-            a = value.clone();
-            console.warn('Computing SVD on a matrix with more columns than rows. Consider enabling autoTranspose');
-        } else {
-            a = value.transpose();
-            m = a.rows;
-            n = a.columns;
-            swapped = true;
-            var aux = wantu;
-            wantu = wantv;
-            wantv = aux;
-        }
-    } else {
-        a = value.clone();
-    }
-
-    var s = new Array(Math.min(m + 1, n)),
-        U = getFilled2DArray(m, nu, 0),
-        V = getFilled2DArray(n, n, 0),
-        e = new Array(n),
-        work = new Array(m);
-
-    var nct = Math.min(m - 1, n);
-    var nrt = Math.max(0, Math.min(n - 2, m));
-
-    var i, j, k, p, t, ks, f, cs, sn, max, kase, scale, sp, spm1, epm1, sk, ek, b, c, shift, g;
-
-    for (k = 0, max = Math.max(nct, nrt); k < max; k++) {
-        if (k < nct) {
-            s[k] = 0;
-            for (i = k; i < m; i++) {
-                s[k] = hypotenuse(s[k], a[i][k]);
-            }
-            if (s[k] !== 0) {
-                if (a[k][k] < 0) {
-                    s[k] = -s[k];
-                }
-                for (i = k; i < m; i++) {
-                    a[i][k] /= s[k];
-                }
-                a[k][k] += 1;
-            }
-            s[k] = -s[k];
-        }
-
-        for (j = k + 1; j < n; j++) {
-            if (k < nct && s[k] !== 0) {
-                t = 0;
-                for (i = k; i < m; i++) {
-                    t += a[i][k] * a[i][j];
-                }
-                t = -t / a[k][k];
-                for (i = k; i < m; i++) {
-                    a[i][j] += t * a[i][k];
-                }
-            }
-            e[j] = a[k][j];
-        }
-
-        if (wantu && k < nct) {
-            for (i = k; i < m; i++) {
-                U[i][k] = a[i][k];
-            }
-        }
-
-        if (k < nrt) {
-            e[k] = 0;
-            for (i = k + 1; i < n; i++) {
-                e[k] = hypotenuse(e[k], e[i]);
-            }
-            if (e[k] !== 0) {
-                if (e[k + 1] < 0) e[k] = -e[k];
-                for (i = k + 1; i < n; i++) {
-                    e[i] /= e[k];
-                }
-                e[k + 1] += 1;
-            }
-            e[k] = -e[k];
-            if (k + 1 < m && e[k] !== 0) {
-                for (i = k + 1; i < m; i++) {
-                    work[i] = 0;
-                }
-                for (j = k + 1; j < n; j++) {
-                    for (i = k + 1; i < m; i++) {
-                        work[i] += e[j] * a[i][j];
-                    }
-                }
-                for (j = k + 1; j < n; j++) {
-                    t = -e[j] / e[k + 1];
-                    for (i = k + 1; i < m; i++) {
-                        a[i][j] += t * work[i];
-                    }
-                }
-            }
-            if (wantv) {
-                for (i = k + 1; i < n; i++) {
-                    V[i][k] = e[i];
-                }
-            }
-        }
-    }
-
-    p = Math.min(n, m + 1);
-    if (nct < n) {
-        s[nct] = a[nct][nct];
-    }
-    if (m < p) {
-        s[p - 1] = 0;
-    }
-    if (nrt + 1 < p) {
-        e[nrt] = a[nrt][p - 1];
-    }
-    e[p - 1] = 0;
-
-    if (wantu) {
-        for (j = nct; j < nu; j++) {
-            for (i = 0; i < m; i++) {
-                U[i][j] = 0;
-            }
-            U[j][j] = 1;
-        }
-        for (k = nct - 1; k >= 0; k--) {
-            if (s[k] !== 0) {
-                for (j = k + 1; j < nu; j++) {
-                    t = 0;
-                    for (i = k; i < m; i++) {
-                        t += U[i][k] * U[i][j];
-                    }
-                    t = -t / U[k][k];
-                    for (i = k; i < m; i++) {
-                        U[i][j] += t * U[i][k];
-                    }
-                }
-                for (i = k; i < m; i++) {
-                    U[i][k] = -U[i][k];
-                }
-                U[k][k] = 1 + U[k][k];
-                for (i = 0; i < k - 1; i++) {
-                    U[i][k] = 0;
-                }
-            } else {
-                for (i = 0; i < m; i++) {
-                    U[i][k] = 0;
-                }
-                U[k][k] = 1;
-            }
-        }
-    }
-
-    if (wantv) {
-        for (k = n - 1; k >= 0; k--) {
-            if (k < nrt && e[k] !== 0) {
-                for (j = k + 1; j < n; j++) {
-                    t = 0;
-                    for (i = k + 1; i < n; i++) {
-                        t += V[i][k] * V[i][j];
-                    }
-                    t = -t / V[k + 1][k];
-                    for (i = k + 1; i < n; i++) {
-                        V[i][j] += t * V[i][k];
-                    }
-                }
-            }
-            for (i = 0; i < n; i++) {
-                V[i][k] = 0;
-            }
-            V[k][k] = 1;
-        }
-    }
-
-    var pp = p - 1,
-        iter = 0,
-        eps = Math.pow(2, -52);
-    while (p > 0) {
-        for (k = p - 2; k >= -1; k--) {
-            if (k === -1) {
-                break;
-            }
-            if (Math.abs(e[k]) <= eps * (Math.abs(s[k]) + Math.abs(s[k + 1]))) {
-                e[k] = 0;
-                break;
-            }
-        }
-        if (k === p - 2) {
-            kase = 4;
-        } else {
-            for (ks = p - 1; ks >= k; ks--) {
-                if (ks === k) {
-                    break;
-                }
-                t = (ks !== p ? Math.abs(e[ks]) : 0) + (ks !== k + 1 ? Math.abs(e[ks - 1]) : 0);
-                if (Math.abs(s[ks]) <= eps * t) {
-                    s[ks] = 0;
-                    break;
-                }
-            }
-            if (ks === k) {
-                kase = 3;
-            } else if (ks === p - 1) {
-                kase = 1;
-            } else {
-                kase = 2;
-                k = ks;
-            }
-        }
-
-        k++;
-
-        switch (kase) {
-            case 1:
-                {
-                    f = e[p - 2];
-                    e[p - 2] = 0;
-                    for (j = p - 2; j >= k; j--) {
-                        t = hypotenuse(s[j], f);
-                        cs = s[j] / t;
-                        sn = f / t;
-                        s[j] = t;
-                        if (j !== k) {
-                            f = -sn * e[j - 1];
-                            e[j - 1] = cs * e[j - 1];
-                        }
-                        if (wantv) {
-                            for (i = 0; i < n; i++) {
-                                t = cs * V[i][j] + sn * V[i][p - 1];
-                                V[i][p - 1] = -sn * V[i][j] + cs * V[i][p - 1];
-                                V[i][j] = t;
-                            }
-                        }
-                    }
-                    break;
-                }
-            case 2:
-                {
-                    f = e[k - 1];
-                    e[k - 1] = 0;
-                    for (j = k; j < p; j++) {
-                        t = hypotenuse(s[j], f);
-                        cs = s[j] / t;
-                        sn = f / t;
-                        s[j] = t;
-                        f = -sn * e[j];
-                        e[j] = cs * e[j];
-                        if (wantu) {
-                            for (i = 0; i < m; i++) {
-                                t = cs * U[i][j] + sn * U[i][k - 1];
-                                U[i][k - 1] = -sn * U[i][j] + cs * U[i][k - 1];
-                                U[i][j] = t;
-                            }
-                        }
-                    }
-                    break;
-                }
-            case 3:
-                {
-                    scale = Math.max(Math.max(Math.max(Math.max(Math.abs(s[p - 1]), Math.abs(s[p - 2])), Math.abs(e[p - 2])), Math.abs(s[k])), Math.abs(e[k]));
-                    sp = s[p - 1] / scale;
-                    spm1 = s[p - 2] / scale;
-                    epm1 = e[p - 2] / scale;
-                    sk = s[k] / scale;
-                    ek = e[k] / scale;
-                    b = ((spm1 + sp) * (spm1 - sp) + epm1 * epm1) / 2;
-                    c = sp * epm1 * (sp * epm1);
-                    shift = 0;
-                    if (b !== 0 || c !== 0) {
-                        shift = Math.sqrt(b * b + c);
-                        if (b < 0) {
-                            shift = -shift;
-                        }
-                        shift = c / (b + shift);
-                    }
-                    f = (sk + sp) * (sk - sp) + shift;
-                    g = sk * ek;
-                    for (j = k; j < p - 1; j++) {
-                        t = hypotenuse(f, g);
-                        cs = f / t;
-                        sn = g / t;
-                        if (j !== k) {
-                            e[j - 1] = t;
-                        }
-                        f = cs * s[j] + sn * e[j];
-                        e[j] = cs * e[j] - sn * s[j];
-                        g = sn * s[j + 1];
-                        s[j + 1] = cs * s[j + 1];
-                        if (wantv) {
-                            for (i = 0; i < n; i++) {
-                                t = cs * V[i][j] + sn * V[i][j + 1];
-                                V[i][j + 1] = -sn * V[i][j] + cs * V[i][j + 1];
-                                V[i][j] = t;
-                            }
-                        }
-                        t = hypotenuse(f, g);
-                        cs = f / t;
-                        sn = g / t;
-                        s[j] = t;
-                        f = cs * e[j] + sn * s[j + 1];
-                        s[j + 1] = -sn * e[j] + cs * s[j + 1];
-                        g = sn * e[j + 1];
-                        e[j + 1] = cs * e[j + 1];
-                        if (wantu && j < m - 1) {
-                            for (i = 0; i < m; i++) {
-                                t = cs * U[i][j] + sn * U[i][j + 1];
-                                U[i][j + 1] = -sn * U[i][j] + cs * U[i][j + 1];
-                                U[i][j] = t;
-                            }
-                        }
-                    }
-                    e[p - 2] = f;
-                    iter = iter + 1;
-                    break;
-                }
-            case 4:
-                {
-                    if (s[k] <= 0) {
-                        s[k] = s[k] < 0 ? -s[k] : 0;
-                        if (wantv) {
-                            for (i = 0; i <= pp; i++) {
-                                V[i][k] = -V[i][k];
-                            }
-                        }
-                    }
-                    while (k < pp) {
-                        if (s[k] >= s[k + 1]) {
-                            break;
-                        }
-                        t = s[k];
-                        s[k] = s[k + 1];
-                        s[k + 1] = t;
-                        if (wantv && k < n - 1) {
-                            for (i = 0; i < n; i++) {
-                                t = V[i][k + 1];
-                                V[i][k + 1] = V[i][k];
-                                V[i][k] = t;
-                            }
-                        }
-                        if (wantu && k < m - 1) {
-                            for (i = 0; i < m; i++) {
-                                t = U[i][k + 1];
-                                U[i][k + 1] = U[i][k];
-                                U[i][k] = t;
-                            }
-                        }
-                        k++;
-                    }
-                    iter = 0;
-                    p--;
-                    break;
-                }
-        }
-    }
-
-    if (swapped) {
-        var tmp = V;
-        V = U;
-        U = tmp;
-    }
-
-    this.m = m;
-    this.n = n;
-    this.s = s;
-    this.U = U;
-    this.V = V;
-}
-
-SingularValueDecomposition.prototype = Object.defineProperties({
-    solve: function solve(value) {
-
-        var Y = value,
-            e = this.threshold,
-            scols = this.s.length,
-            Ls = Matrix.zeros(scols, scols),
-            i;
-
-        for (i = 0; i < scols; i++) {
-            if (Math.abs(this.s[i]) <= e) {
-                Ls[i][i] = 0;
-            } else {
-                Ls[i][i] = 1 / this.s[i];
-            }
-        }
-
-        var U = this.U;
-        var V = this.rightSingularVectors;
-
-        var VL = V.mmul(Ls),
-            vrows = V.rows,
-            urows = U.length,
-            VLU = Matrix.zeros(vrows, urows),
-            j,
-            k,
-            sum;
-
-        for (i = 0; i < vrows; i++) {
-            for (j = 0; j < urows; j++) {
-                sum = 0;
-                for (k = 0; k < scols; k++) {
-                    sum += VL[i][k] * U[j][k];
-                }
-                VLU[i][j] = sum;
-            }
-        }
-
-        return VLU.mmul(Y);
-    },
-    solveForDiagonal: function solveForDiagonal(value) {
-        return this.solve(Matrix.diag(value));
-    },
-    inverse: function inverse() {
-        var V = this.V;
-        var e = this.threshold,
-            vrows = V.length,
-            vcols = V[0].length,
-            X = new Matrix(vrows, this.s.length),
-            i,
-            j;
-
-        for (i = 0; i < vrows; i++) {
-            for (j = 0; j < vcols; j++) {
-                if (Math.abs(this.s[j]) > e) {
-                    X[i][j] = V[i][j] / this.s[j];
-                } else {
-                    X[i][j] = 0;
-                }
-            }
-        }
-
-        var U = this.U;
-
-        var urows = U.length,
-            ucols = U[0].length,
-            Y = new Matrix(vrows, urows),
-            k,
-            sum;
-
-        for (i = 0; i < vrows; i++) {
-            for (j = 0; j < urows; j++) {
-                sum = 0;
-                for (k = 0; k < ucols; k++) {
-                    sum += X[i][k] * U[j][k];
-                }
-                Y[i][j] = sum;
-            }
-        }
-
-        return Y;
-    }
-}, {
-    condition: {
-        get: function get() {
-            return this.s[0] / this.s[Math.min(this.m, this.n) - 1];
-        },
-        configurable: true,
-        enumerable: true
-    },
-    norm2: {
-        get: function get() {
-            return this.s[0];
-        },
-        configurable: true,
-        enumerable: true
-    },
-    rank: {
-        get: function get() {
-            var eps = Math.pow(2, -52),
-                tol = Math.max(this.m, this.n) * this.s[0] * eps,
-                r = 0,
-                s = this.s;
-            for (var i = 0, ii = s.length; i < ii; i++) {
-                if (s[i] > tol) {
-                    r++;
-                }
-            }
-            return r;
-        },
-        configurable: true,
-        enumerable: true
-    },
-    diagonal: {
-        get: function get() {
-            return this.s;
-        },
-        configurable: true,
-        enumerable: true
-    },
-    threshold: {
-        // https://github.com/accord-net/framework/blob/development/Sources/Accord.Math/Decompositions/SingularValueDecomposition.cs
-
-        get: function get() {
-            return Math.pow(2, -52) / 2 * Math.max(this.m, this.n) * this.s[0];
-        },
-        configurable: true,
-        enumerable: true
-    },
-    leftSingularVectors: {
-        get: function get() {
-            if (!Matrix.isMatrix(this.U)) {
-                this.U = new Matrix(this.U);
-            }
-            return this.U;
-        },
-        configurable: true,
-        enumerable: true
-    },
-    rightSingularVectors: {
-        get: function get() {
-            if (!Matrix.isMatrix(this.V)) {
-                this.V = new Matrix(this.V);
-            }
-            return this.V;
-        },
-        configurable: true,
-        enumerable: true
-    },
-    diagonalMatrix: {
-        get: function get() {
-            return Matrix.diag(this.s);
-        },
-        configurable: true,
-        enumerable: true
-    }
-});
-
-module.exports = SingularValueDecomposition;
-
-},{"../matrix":36,"./util":33}],33:[function(require,module,exports){
-'use strict';
-
-exports.hypotenuse = function hypotenuse(a, b) {
-    if (Math.abs(a) > Math.abs(b)) {
-        var r = b / a;
-        return Math.abs(a) * Math.sqrt(1 + r * r);
-    }
-    if (b !== 0) {
-        var r = a / b;
-        return Math.abs(b) * Math.sqrt(1 + r * r);
-    }
-    return 0;
-};
-
-// For use in the decomposition algorithms. With big matrices, access time is
-// too long on elements from array subclass
-// todo check when it is fixed in v8
-// http://jsperf.com/access-and-write-array-subclass
-exports.getEmpty2DArray = function (rows, columns) {
-    var array = new Array(rows);
-    for (var i = 0; i < rows; i++) {
-        array[i] = new Array(columns);
-    }
-    return array;
-};
-
-exports.getFilled2DArray = function (rows, columns, value) {
-    var array = new Array(rows);
-    for (var i = 0; i < rows; i++) {
-        array[i] = new Array(columns);
-        for (var j = 0; j < columns; j++) {
-            array[i][j] = value;
-        }
-    }
-    return array;
-};
-
-},{}],34:[function(require,module,exports){
-'use strict';
-
-var Matrix = require('./matrix');
-
-var SingularValueDecomposition = require('./dc/svd');
-var EigenvalueDecomposition = require('./dc/evd');
-var LuDecomposition = require('./dc/lu');
-var QrDecomposition = require('./dc/qr');
-var CholeskyDecomposition = require('./dc/cholesky');
-
-function inverse(matrix) {
-    matrix = Matrix.checkMatrix(matrix);
-    return solve(matrix, Matrix.eye(matrix.rows));
-}
-
-Matrix.inverse = Matrix.inv = inverse;
-Matrix.prototype.inverse = Matrix.prototype.inv = function () {
-    return inverse(this);
-};
-
-function solve(leftHandSide, rightHandSide) {
-    leftHandSide = Matrix.checkMatrix(leftHandSide);
-    rightHandSide = Matrix.checkMatrix(rightHandSide);
-    return leftHandSide.isSquare() ? new LuDecomposition(leftHandSide).solve(rightHandSide) : new QrDecomposition(leftHandSide).solve(rightHandSide);
-}
-
-Matrix.solve = solve;
-Matrix.prototype.solve = function (other) {
-    return solve(this, other);
-};
-
-module.exports = {
-    SingularValueDecomposition: SingularValueDecomposition,
-    SVD: SingularValueDecomposition,
-    EigenvalueDecomposition: EigenvalueDecomposition,
-    EVD: EigenvalueDecomposition,
-    LuDecomposition: LuDecomposition,
-    LU: LuDecomposition,
-    QrDecomposition: QrDecomposition,
-    QR: QrDecomposition,
-    CholeskyDecomposition: CholeskyDecomposition,
-    CHO: CholeskyDecomposition,
-    inverse: inverse,
-    solve: solve
-};
-
-},{"./dc/cholesky":28,"./dc/evd":29,"./dc/lu":30,"./dc/qr":31,"./dc/svd":32,"./matrix":36}],35:[function(require,module,exports){
-'use strict';
-
-module.exports = require('./matrix');
-module.exports.Decompositions = module.exports.DC = require('./decompositions');
-
-},{"./decompositions":34,"./matrix":36}],36:[function(require,module,exports){
-'use strict';
-
-/**
- * Real matrix
- */
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Matrix = (function (_Array) {
-    _inherits(Matrix, _Array);
-
-    /**
-     * @constructor
-     * @param {number|Array|Matrix} nRows - Number of rows of the new matrix,
-     * 2D array containing the data or Matrix instance to clone
-     * @param {number} [nColumns] - Number of columns of the new matrix
-     */
-
-    function Matrix(nRows, nColumns) {
-        _classCallCheck(this, Matrix);
-
-        if (Matrix.isMatrix(nRows)) {
-            return nRows.clone();
-        } else if (Number.isInteger(nRows) && nRows > 0) {
-            // Create an empty matrix
-            _get(Object.getPrototypeOf(Matrix.prototype), 'constructor', this).call(this, nRows);
-            if (Number.isInteger(nColumns) && nColumns > 0) {
-                for (var i = 0; i < nRows; i++) {
-                    this[i] = new Array(nColumns);
-                }
-            } else {
-                throw new TypeError('nColumns must be a positive integer');
-            }
-        } else if (Array.isArray(nRows)) {
-            // Copy the values from the 2D array
-            var matrix = nRows;
-            nRows = matrix.length;
-            nColumns = matrix[0].length;
-            if (typeof nColumns !== 'number' || nColumns === 0) {
-                throw new TypeError('Data must be a 2D array with at least one element');
-            }
-            _get(Object.getPrototypeOf(Matrix.prototype), 'constructor', this).call(this, nRows);
-            for (var i = 0; i < nRows; i++) {
-                if (matrix[i].length !== nColumns) {
-                    throw new RangeError('Inconsistent array dimensions');
-                }
-                this[i] = [].concat(matrix[i]);
-            }
-        } else {
-            throw new TypeError('First argument must be a positive number or an array');
-        }
-        this.rows = nRows;
-        this.columns = nColumns;
-    }
-
-    /**
-     * Constructs a Matrix with the chosen dimensions from a 1D array
-     * @param {number} newRows - Number of rows
-     * @param {number} newColumns - Number of columns
-     * @param {Array} newData - A 1D array containing data for the matrix
-     * @returns {Matrix} - The new matrix
-     */
-
-    _createClass(Matrix, [{
-        key: 'apply',
-
-        /**
-         * Applies a callback for each element of the matrix. The function is called in the matrix (this) context.
-         * @param {function} callback - Function that will be called with two parameters : i (row) and j (column)
-         * @returns {Matrix} this
-         */
-        value: function apply(callback) {
-            if (typeof callback !== 'function') {
-                throw new TypeError('callback must be a function');
-            }
-            var ii = this.rows;
-            var jj = this.columns;
-            for (var i = 0; i < ii; i++) {
-                for (var j = 0; j < jj; j++) {
-                    callback.call(this, i, j);
-                }
-            }
-            return this;
-        }
-
-        /**
-         * Creates an exact and independent copy of the matrix
-         * @returns {Matrix}
-         */
-    }, {
-        key: 'clone',
-        value: function clone() {
-            var newMatrix = new Matrix(this.rows, this.columns);
-            for (var row = 0; row < this.rows; row++) {
-                for (var column = 0; column < this.columns; column++) {
-                    newMatrix[row][column] = this[row][column];
-                }
-            }
-            return newMatrix;
-        }
-
-        /**
-         * Returns a new 1D array filled row by row with the matrix values
-         * @returns {Array}
-         */
-    }, {
-        key: 'to1DArray',
-        value: function to1DArray() {
-            var array = new Array(this.size);
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    array[i * this.columns + j] = this[i][j];
-                }
-            }
-            return array;
-        }
-
-        /**
-         * Returns a 2D array containing a copy of the data
-         * @returns {Array}
-         */
-    }, {
-        key: 'to2DArray',
-        value: function to2DArray() {
-            var copy = new Array(this.rows);
-            for (var i = 0; i < this.rows; i++) {
-                copy[i] = [].concat(this[i]);
-            }
-            return copy;
-        }
-
-        /**
-         * @returns {boolean} true if the matrix has one row
-         */
-    }, {
-        key: 'isRowVector',
-        value: function isRowVector() {
-            return this.rows === 1;
-        }
-
-        /**
-         * @returns {boolean} true if the matrix has one column
-         */
-    }, {
-        key: 'isColumnVector',
-        value: function isColumnVector() {
-            return this.columns === 1;
-        }
-
-        /**
-         * @returns {boolean} true if the matrix has one row or one column
-         */
-    }, {
-        key: 'isVector',
-        value: function isVector() {
-            return this.rows === 1 || this.columns === 1;
-        }
-
-        /**
-         * @returns {boolean} true if the matrix has the same number of rows and columns
-         */
-    }, {
-        key: 'isSquare',
-        value: function isSquare() {
-            return this.rows === this.columns;
-        }
-
-        /**
-         * @returns {boolean} true if the matrix is square and has the same values on both sides of the diagonal
-         */
-    }, {
-        key: 'isSymmetric',
-        value: function isSymmetric() {
-            if (this.isSquare()) {
-                for (var i = 0; i < this.rows; i++) {
-                    for (var j = 0; j <= i; j++) {
-                        if (this[i][j] !== this[j][i]) {
-                            return false;
-                        }
-                    }
-                }
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         * Sets a given element of the matrix. mat.set(3,4,1) is equivalent to mat[3][4]=1
-         * @param {number} rowIndex - Index of the row
-         * @param {number} columnIndex - Index of the column
-         * @param {number} value - The new value for the element
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'set',
-        value: function set(rowIndex, columnIndex, value) {
-            this[rowIndex][columnIndex] = value;
-            return this;
-        }
-
-        /**
-         * Returns the given element of the matrix. mat.get(3,4) is equivalent to matrix[3][4]
-         * @param {number} rowIndex - Index of the row
-         * @param {number} columnIndex - Index of the column
-         * @returns {number}
-         */
-    }, {
-        key: 'get',
-        value: function get(rowIndex, columnIndex) {
-            return this[rowIndex][columnIndex];
-        }
-
-        /**
-         * Fills the matrix with a given value. All elements will be set to this value.
-         * @param {number} value - New value
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'fill',
-        value: function fill(value) {
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    this[i][j] = value;
-                }
-            }
-            return this;
-        }
-
-        /**
-         * Negates the matrix. All elements will be multiplied by (-1)
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'neg',
-        value: function neg() {
-            return this.mulS(-1);
-        }
-
-        /**
-         * Returns a new array from the given row index
-         * @param {number} index - Row index
-         * @returns {Array}
-         */
-    }, {
-        key: 'getRow',
-        value: function getRow(index) {
-            checkRowIndex(this, index);
-            return [].concat(this[index]);
-        }
-
-        /**
-         * Returns a new row vector from the given row index
-         * @param {number} index - Row index
-         * @returns {Matrix}
-         */
-    }, {
-        key: 'getRowVector',
-        value: function getRowVector(index) {
-            return Matrix.rowVector(this.getRow(index));
-        }
-
-        /**
-         * Sets a row at the given index
-         * @param {number} index - Row index
-         * @param {Array|Matrix} array - Array or vector
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'setRow',
-        value: function setRow(index, array) {
-            checkRowIndex(this, index);
-            array = checkRowVector(this, array, true);
-            this[index] = array;
-            return this;
-        }
-
-        /**
-         * Removes a row from the given index
-         * @param {number} index - Row index
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'removeRow',
-        value: function removeRow(index) {
-            checkRowIndex(this, index);
-            if (this.rows === 1) throw new RangeError('A matrix cannot have less than one row');
-            this.splice(index, 1);
-            this.rows -= 1;
-            return this;
-        }
-
-        /**
-         * Adds a row at the given index
-         * @param {number} [index = this.rows] - Row index
-         * @param {Array|Matrix} array - Array or vector
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'addRow',
-        value: function addRow(index, array) {
-            if (array === undefined) {
-                array = index;
-                index = this.rows;
-            }
-            checkRowIndex(this, index, true);
-            array = checkRowVector(this, array, true);
-            this.splice(index, 0, array);
-            this.rows += 1;
-            return this;
-        }
-
-        /**
-         * Swaps two rows
-         * @param {number} row1 - First row index
-         * @param {number} row2 - Second row index
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'swapRows',
-        value: function swapRows(row1, row2) {
-            checkRowIndex(this, row1);
-            checkRowIndex(this, row2);
-            var temp = this[row1];
-            this[row1] = this[row2];
-            this[row2] = temp;
-            return this;
-        }
-
-        /**
-         * Returns a new array from the given column index
-         * @param {number} index - Column index
-         * @returns {Array}
-         */
-    }, {
-        key: 'getColumn',
-        value: function getColumn(index) {
-            checkColumnIndex(this, index);
-            var column = new Array(this.rows);
-            for (var i = 0; i < this.rows; i++) {
-                column[i] = this[i][index];
-            }
-            return column;
-        }
-
-        /**
-         * Returns a new column vector from the given column index
-         * @param {number} index - Column index
-         * @returns {Matrix}
-         */
-    }, {
-        key: 'getColumnVector',
-        value: function getColumnVector(index) {
-            return Matrix.columnVector(this.getColumn(index));
-        }
-
-        /**
-         * Sets a column at the given index
-         * @param {number} index - Column index
-         * @param {Array|Matrix} array - Array or vector
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'setColumn',
-        value: function setColumn(index, array) {
-            checkColumnIndex(this, index);
-            array = checkColumnVector(this, array);
-            for (var i = 0; i < this.rows; i++) {
-                this[i][index] = array[i];
-            }
-            return this;
-        }
-
-        /**
-         * Removes a column from the given index
-         * @param {number} index - Column index
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'removeColumn',
-        value: function removeColumn(index) {
-            checkColumnIndex(this, index);
-            if (this.columns === 1) throw new RangeError('A matrix cannot have less than one column');
-            for (var i = 0; i < this.rows; i++) {
-                this[i].splice(index, 1);
-            }
-            this.columns -= 1;
-            return this;
-        }
-
-        /**
-         * Adds a column at the given index
-         * @param {number} [index = this.columns] - Column index
-         * @param {Array|Matrix} array - Array or vector
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'addColumn',
-        value: function addColumn(index, array) {
-            if (typeof array === 'undefined') {
-                array = index;
-                index = this.columns;
-            }
-            checkColumnIndex(this, index, true);
-            array = checkColumnVector(this, array);
-            for (var i = 0; i < this.rows; i++) {
-                this[i].splice(index, 0, array[i]);
-            }
-            this.columns += 1;
-            return this;
-        }
-
-        /**
-         * Swaps two columns
-         * @param {number} column1 - First column index
-         * @param {number} column2 - Second column index
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'swapColumns',
-        value: function swapColumns(column1, column2) {
-            checkColumnIndex(this, column1);
-            checkColumnIndex(this, column2);
-            var temp, row;
-            for (var i = 0; i < this.rows; i++) {
-                row = this[i];
-                temp = row[column1];
-                row[column1] = row[column2];
-                row[column2] = temp;
-            }
-            return this;
-        }
-
-        /**
-         * Adds the values of a vector to each row
-         * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'addRowVector',
-        value: function addRowVector(vector) {
-            vector = checkRowVector(this, vector);
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    this[i][j] += vector[j];
-                }
-            }
-            return this;
-        }
-
-        /**
-         * Subtracts the values of a vector from each row
-         * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'subRowVector',
-        value: function subRowVector(vector) {
-            vector = checkRowVector(this, vector);
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    this[i][j] -= vector[j];
-                }
-            }
-            return this;
-        }
-
-        /**
-         * Multiplies the values of a vector with each row
-         * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'mulRowVector',
-        value: function mulRowVector(vector) {
-            vector = checkRowVector(this, vector);
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    this[i][j] *= vector[j];
-                }
-            }
-            return this;
-        }
-
-        /**
-         * Divides the values of each row by those of a vector
-         * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'divRowVector',
-        value: function divRowVector(vector) {
-            vector = checkRowVector(this, vector);
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    this[i][j] /= vector[j];
-                }
-            }
-            return this;
-        }
-
-        /**
-         * Adds the values of a vector to each column
-         * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'addColumnVector',
-        value: function addColumnVector(vector) {
-            vector = checkColumnVector(this, vector);
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    this[i][j] += vector[i];
-                }
-            }
-            return this;
-        }
-
-        /**
-         * Subtracts the values of a vector from each column
-         * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'subColumnVector',
-        value: function subColumnVector(vector) {
-            vector = checkColumnVector(this, vector);
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    this[i][j] -= vector[i];
-                }
-            }
-            return this;
-        }
-
-        /**
-         * Multiplies the values of a vector with each column
-         * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'mulColumnVector',
-        value: function mulColumnVector(vector) {
-            vector = checkColumnVector(this, vector);
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    this[i][j] *= vector[i];
-                }
-            }
-            return this;
-        }
-
-        /**
-         * Divides the values of each column by those of a vector
-         * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'divColumnVector',
-        value: function divColumnVector(vector) {
-            vector = checkColumnVector(this, vector);
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    this[i][j] /= vector[i];
-                }
-            }
-            return this;
-        }
-
-        /**
-         * Multiplies the values of a row with a scalar
-         * @param {number} index - Row index
-         * @param {number} value
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'mulRow',
-        value: function mulRow(index, value) {
-            checkRowIndex(this, index);
-            for (var i = 0; i < this.columns; i++) {
-                this[index][i] *= value;
-            }
-            return this;
-        }
-
-        /**
-         * Multiplies the values of a column with a scalar
-         * @param {number} index - Column index
-         * @param {number} value
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'mulColumn',
-        value: function mulColumn(index, value) {
-            checkColumnIndex(this, index);
-            for (var i = 0; i < this.rows; i++) {
-                this[i][index] *= value;
-            }
-        }
-
-        /**
-         * Returns the maximum value of the matrix
-         * @returns {number}
-         */
-    }, {
-        key: 'max',
-        value: function max() {
-            var v = this[0][0];
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    if (this[i][j] > v) {
-                        v = this[i][j];
-                    }
-                }
-            }
-            return v;
-        }
-
-        /**
-         * Returns the index of the maximum value
-         * @returns {Array}
-         */
-    }, {
-        key: 'maxIndex',
-        value: function maxIndex() {
-            var v = this[0][0];
-            var idx = [0, 0];
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    if (this[i][j] > v) {
-                        v = this[i][j];
-                        idx[0] = i;
-                        idx[1] = j;
-                    }
-                }
-            }
-            return idx;
-        }
-
-        /**
-         * Returns the minimum value of the matrix
-         * @returns {number}
-         */
-    }, {
-        key: 'min',
-        value: function min() {
-            var v = this[0][0];
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    if (this[i][j] < v) {
-                        v = this[i][j];
-                    }
-                }
-            }
-            return v;
-        }
-
-        /**
-         * Returns the index of the minimum value
-         * @returns {Array}
-         */
-    }, {
-        key: 'minIndex',
-        value: function minIndex() {
-            var v = this[0][0];
-            var idx = [0, 0];
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    if (this[i][j] < v) {
-                        v = this[i][j];
-                        idx[0] = i;
-                        idx[1] = j;
-                    }
-                }
-            }
-            return idx;
-        }
-
-        /**
-         * Returns the maximum value of one row
-         * @param {number} row - Row index
-         * @returns {number}
-         */
-    }, {
-        key: 'maxRow',
-        value: function maxRow(row) {
-            checkRowIndex(this, row);
-            var v = this[row][0];
-            for (var i = 1; i < this.columns; i++) {
-                if (this[row][i] > v) {
-                    v = this[row][i];
-                }
-            }
-            return v;
-        }
-
-        /**
-         * Returns the index of the maximum value of one row
-         * @param {number} row - Row index
-         * @returns {Array}
-         */
-    }, {
-        key: 'maxRowIndex',
-        value: function maxRowIndex(row) {
-            checkRowIndex(this, row);
-            var v = this[row][0];
-            var idx = [row, 0];
-            for (var i = 1; i < this.columns; i++) {
-                if (this[row][i] > v) {
-                    v = this[row][i];
-                    idx[1] = i;
-                }
-            }
-            return idx;
-        }
-
-        /**
-         * Returns the minimum value of one row
-         * @param {number} row - Row index
-         * @returns {number}
-         */
-    }, {
-        key: 'minRow',
-        value: function minRow(row) {
-            checkRowIndex(this, row);
-            var v = this[row][0];
-            for (var i = 1; i < this.columns; i++) {
-                if (this[row][i] < v) {
-                    v = this[row][i];
-                }
-            }
-            return v;
-        }
-
-        /**
-         * Returns the index of the maximum value of one row
-         * @param {number} row - Row index
-         * @returns {Array}
-         */
-    }, {
-        key: 'minRowIndex',
-        value: function minRowIndex(row) {
-            checkRowIndex(this, row);
-            var v = this[row][0];
-            var idx = [row, 0];
-            for (var i = 1; i < this.columns; i++) {
-                if (this[row][i] < v) {
-                    v = this[row][i];
-                    idx[1] = i;
-                }
-            }
-            return idx;
-        }
-
-        /**
-         * Returns the maximum value of one column
-         * @param {number} column - Column index
-         * @returns {number}
-         */
-    }, {
-        key: 'maxColumn',
-        value: function maxColumn(column) {
-            checkColumnIndex(this, column);
-            var v = this[0][column];
-            for (var i = 1; i < this.rows; i++) {
-                if (this[i][column] > v) {
-                    v = this[i][column];
-                }
-            }
-            return v;
-        }
-
-        /**
-         * Returns the index of the maximum value of one column
-         * @param {number} column - Column index
-         * @returns {Array}
-         */
-    }, {
-        key: 'maxColumnIndex',
-        value: function maxColumnIndex(column) {
-            checkColumnIndex(this, column);
-            var v = this[0][column];
-            var idx = [0, column];
-            for (var i = 1; i < this.rows; i++) {
-                if (this[i][column] > v) {
-                    v = this[i][column];
-                    idx[0] = i;
-                }
-            }
-            return idx;
-        }
-
-        /**
-         * Returns the minimum value of one column
-         * @param {number} column - Column index
-         * @returns {number}
-         */
-    }, {
-        key: 'minColumn',
-        value: function minColumn(column) {
-            checkColumnIndex(this, column);
-            var v = this[0][column];
-            for (var i = 1; i < this.rows; i++) {
-                if (this[i][column] < v) {
-                    v = this[i][column];
-                }
-            }
-            return v;
-        }
-
-        /**
-         * Returns the index of the minimum value of one column
-         * @param {number} column - Column index
-         * @returns {Array}
-         */
-    }, {
-        key: 'minColumnIndex',
-        value: function minColumnIndex(column) {
-            checkColumnIndex(this, column);
-            var v = this[0][column];
-            var idx = [0, column];
-            for (var i = 1; i < this.rows; i++) {
-                if (this[i][column] < v) {
-                    v = this[i][column];
-                    idx[0] = i;
-                }
-            }
-            return idx;
-        }
-
-        /**
-         * Returns an array containing the diagonal values of the matrix
-         * @returns {Array}
-         */
-    }, {
-        key: 'diag',
-        value: function diag() {
-            var min = Math.min(this.rows, this.columns);
-            var diag = new Array(min);
-            for (var i = 0; i < min; i++) {
-                diag[i] = this[i][i];
-            }
-            return diag;
-        }
-
-        /**
-         * Returns the sum of all elements of the matrix
-         * @returns {number}
-         */
-    }, {
-        key: 'sum',
-        value: function sum() {
-            var v = 0;
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    v += this[i][j];
-                }
-            }
-            return v;
-        }
-
-        /**
-         * Returns the mean of all elements of the matrix
-         * @returns {number}
-         */
-    }, {
-        key: 'mean',
-        value: function mean() {
-            return this.sum() / this.size;
-        }
-
-        /**
-         * Returns the product of all elements of the matrix
-         * @returns {number}
-         */
-    }, {
-        key: 'prod',
-        value: function prod() {
-            var prod = 1;
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    prod *= this[i][j];
-                }
-            }
-            return prod;
-        }
-
-        /**
-         * Computes the cumulative sum of the matrix elements (in place, row by row)
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'cumulativeSum',
-        value: function cumulativeSum() {
-            var sum = 0;
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    sum += this[i][j];
-                    this[i][j] = sum;
-                }
-            }
-            return this;
-        }
-
-        /**
-         * Computes the dot (scalar) product between the matrix and another
-         * @param {Matrix} vector2 vector
-         * @returns {number}
-         */
-    }, {
-        key: 'dot',
-        value: function dot(vector2) {
-            if (Matrix.isMatrix(vector2)) vector2 = vector2.to1DArray();
-            var vector1 = this.to1DArray();
-            if (vector1.length !== vector2.length) {
-                throw new RangeError('vectors do not have the same size');
-            }
-            var dot = 0;
-            for (var i = 0; i < vector1.length; i++) {
-                dot += vector1[i] * vector2[i];
-            }
-            return dot;
-        }
-
-        /**
-         * Returns the matrix product between this and other
-         * @returns {Matrix}
-         */
-    }, {
-        key: 'mmul',
-        value: function mmul(other) {
-            other = Matrix.checkMatrix(other);
-            if (this.columns !== other.rows) console.warn('Number of columns of left matrix are not equal to number of rows of right matrix.');
-
-            var m = this.rows;
-            var n = this.columns;
-            var p = other.columns;
-
-            var result = new Matrix(m, p);
-
-            var Bcolj = new Array(n);
-            for (var j = 0; j < p; j++) {
-                for (var k = 0; k < n; k++) Bcolj[k] = other[k][j];
-
-                for (var i = 0; i < m; i++) {
-                    var Arowi = this[i];
-
-                    var s = 0;
-                    for (k = 0; k < n; k++) s += Arowi[k] * Bcolj[k];
-
-                    result[i][j] = s;
-                }
-            }
-            return result;
-        }
-
-        /**
-         * Transposes the matrix and returns a new one containing the result
-         * @returns {Matrix}
-         */
-    }, {
-        key: 'transpose',
-        value: function transpose() {
-            var result = new Matrix(this.columns, this.rows);
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    result[j][i] = this[i][j];
-                }
-            }
-            return result;
-        }
-
-        /**
-         * Sorts the rows (in place)
-         * @param {function} compareFunction - usual Array.prototype.sort comparison function
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'sortRows',
-        value: function sortRows(compareFunction) {
-            if (compareFunction === undefined) compareFunction = compareNumbers;
-            for (var i = 0; i < this.rows; i++) {
-                this[i].sort(compareFunction);
-            }
-            return this;
-        }
-
-        /**
-         * Sorts the columns (in place)
-         * @param {function} compareFunction - usual Array.prototype.sort comparison function
-         * @returns {Matrix} this
-         */
-    }, {
-        key: 'sortColumns',
-        value: function sortColumns(compareFunction) {
-            if (compareFunction === undefined) compareFunction = compareNumbers;
-            for (var i = 0; i < this.columns; i++) {
-                this.setColumn(i, this.getColumn(i).sort(compareFunction));
-            }
-            return this;
-        }
-
-        /**
-         * Returns a subset of the matrix
-         * @param {number} startRow - First row index
-         * @param {number} endRow - Last row index
-         * @param {number} startColumn - First column index
-         * @param {number} endColumn - Last column index
-         * @returns {Matrix}
-         */
-    }, {
-        key: 'subMatrix',
-        value: function subMatrix(startRow, endRow, startColumn, endColumn) {
-            if (startRow > endRow || startColumn > endColumn || startRow < 0 || startRow >= this.rows || endRow < 0 || endRow >= this.rows || startColumn < 0 || startColumn >= this.columns || endColumn < 0 || endColumn >= this.columns) {
-                throw new RangeError('Argument out of range');
-            }
-            var newMatrix = new Matrix(endRow - startRow + 1, endColumn - startColumn + 1);
-            for (var i = startRow; i <= endRow; i++) {
-                for (var j = startColumn; j <= endColumn; j++) {
-                    newMatrix[i - startRow][j - startColumn] = this[i][j];
-                }
-            }
-            return newMatrix;
-        }
-
-        /**
-         * Returns a subset of the matrix based on an array of row indices
-         * @param {Array} indices - Array containing the row indices
-         * @param {number} [startColumn = 0] - First column index
-         * @param {number} [endColumn = this.columns-1] - Last column index
-         * @returns {Matrix}
-         */
-    }, {
-        key: 'subMatrixRow',
-        value: function subMatrixRow(indices, startColumn, endColumn) {
-            if (startColumn === undefined) startColumn = 0;
-            if (endColumn === undefined) endColumn = this.columns - 1;
-            if (startColumn > endColumn || startColumn < 0 || startColumn >= this.columns || endColumn < 0 || endColumn >= this.columns) {
-                throw new RangeError('Argument out of range');
-            }
-
-            var newMatrix = new Matrix(indices.length, endColumn - startColumn + 1);
-            for (var i = 0; i < indices.length; i++) {
-                for (var j = startColumn; j <= endColumn; j++) {
-                    if (indices[i] < 0 || indices[i] >= this.rows) {
-                        throw new RangeError('Row index out of range: ' + indices[i]);
-                    }
-                    newMatrix[i][j - startColumn] = this[indices[i]][j];
-                }
-            }
-            return newMatrix;
-        }
-
-        /**
-         * Returns a subset of the matrix based on an array of column indices
-         * @param {Array} indices - Array containing the column indices
-         * @param {number} [startRow = 0] - First row index
-         * @param {number} [endRow = this.rows-1] - Last row index
-         * @returns {Matrix}
-         */
-    }, {
-        key: 'subMatrixColumn',
-        value: function subMatrixColumn(indices, startRow, endRow) {
-            if (startRow === undefined) startRow = 0;
-            if (endRow === undefined) endRow = this.rows - 1;
-            if (startRow > endRow || startRow < 0 || startRow >= this.rows || endRow < 0 || endRow >= this.rows) {
-                throw new RangeError('Argument out of range');
-            }
-
-            var newMatrix = new Matrix(endRow - startRow + 1, indices.length);
-            for (var i = 0; i < indices.length; i++) {
-                for (var j = startRow; j <= endRow; j++) {
-                    if (indices[i] < 0 || indices[i] >= this.columns) {
-                        throw new RangeError('Column index out of range: ' + indices[i]);
-                    }
-                    newMatrix[j - startRow][i] = this[j][indices[i]];
-                }
-            }
-            return newMatrix;
-        }
-
-        /**
-         * Returns the trace of the matrix (sum of the diagonal elements)
-         * @returns {number}
-         */
-    }, {
-        key: 'trace',
-        value: function trace() {
-            var min = Math.min(this.rows, this.columns);
-            var trace = 0;
-            for (var i = 0; i < min; i++) {
-                trace += this[i][i];
-            }
-            return trace;
-        }
-    }, {
-        key: 'size',
-
-        /**
-         * @property {number} - The number of elements in the matrix.
-         */
-        get: function get() {
-            return this.rows * this.columns;
-        }
-    }], [{
-        key: 'from1DArray',
-        value: function from1DArray(newRows, newColumns, newData) {
-            var length = newRows * newColumns;
-            if (length !== newData.length) {
-                throw new RangeError('Data length does not match given dimensions');
-            }
-            var newMatrix = new Matrix(newRows, newColumns);
-            for (var row = 0; row < newRows; row++) {
-                for (var column = 0; column < newColumns; column++) {
-                    newMatrix[row][column] = newData[row * newColumns + column];
-                }
-            }
-            return newMatrix;
-        }
-
-        /**
-         * Creates a row vector, a matrix with only one row.
-         * @param {Array} newData - A 1D array containing data for the vector
-         * @returns {Matrix} - The new matrix
-         */
-    }, {
-        key: 'rowVector',
-        value: function rowVector(newData) {
-            var vector = new Matrix(1, newData.length);
-            for (var i = 0; i < newData.length; i++) {
-                vector[0][i] = newData[i];
-            }
-            return vector;
-        }
-
-        /**
-         * Creates a column vector, a matrix with only one column.
-         * @param {Array} newData - A 1D array containing data for the vector
-         * @returns {Matrix} - The new matrix
-         */
-    }, {
-        key: 'columnVector',
-        value: function columnVector(newData) {
-            var vector = new Matrix(newData.length, 1);
-            for (var i = 0; i < newData.length; i++) {
-                vector[i][0] = newData[i];
-            }
-            return vector;
-        }
-
-        /**
-         * Creates an empty matrix with the given dimensions. Values will be undefined. Same as using new Matrix(rows, columns).
-         * @param {number} rows - Number of rows
-         * @param {number} columns - Number of columns
-         * @returns {Matrix} - The new matrix
-         */
-    }, {
-        key: 'empty',
-        value: function empty(rows, columns) {
-            return new Matrix(rows, columns);
-        }
-
-        /**
-         * Creates a matrix with the given dimensions. Values will be set to zero.
-         * @param {number} rows - Number of rows
-         * @param {number} columns - Number of columns
-         * @returns {Matrix} - The new matrix
-         */
-    }, {
-        key: 'zeros',
-        value: function zeros(rows, columns) {
-            return Matrix.empty(rows, columns).fill(0);
-        }
-
-        /**
-         * Creates a matrix with the given dimensions. Values will be set to one.
-         * @param {number} rows - Number of rows
-         * @param {number} columns - Number of columns
-         * @returns {Matrix} - The new matrix
-         */
-    }, {
-        key: 'ones',
-        value: function ones(rows, columns) {
-            return Matrix.empty(rows, columns).fill(1);
-        }
-
-        /**
-         * Creates a matrix with the given dimensions. Values will be randomly set.
-         * @param {number} rows - Number of rows
-         * @param {number} columns - Number of columns
-         * @param {function} [rng] - Random number generator (default: Math.random)
-         * @returns {Matrix} The new matrix
-         */
-    }, {
-        key: 'rand',
-        value: function rand(rows, columns, rng) {
-            if (rng === undefined) rng = Math.random;
-            var matrix = Matrix.empty(rows, columns);
-            for (var i = 0; i < rows; i++) {
-                for (var j = 0; j < rows; j++) {
-                    matrix[i][j] = rng();
-                }
-            }
-            return matrix;
-        }
-
-        /**
-         * Creates an identity matrix with the given dimension. Values of the diagonal will be 1 and others will be 0.
-         * @param {number} rows - Number of rows
-         * @param {number} [columns] - Number of columns (Default: rows)
-         * @returns {Matrix} - The new identity matrix
-         */
-    }, {
-        key: 'eye',
-        value: function eye(rows, columns) {
-            if (columns === undefined) columns = rows;
-            var min = Math.min(rows, columns);
-            var matrix = Matrix.zeros(rows, columns);
-            for (var i = 0; i < min; i++) {
-                matrix[i][i] = 1;
-            }
-            return matrix;
-        }
-
-        /**
-         * Creates a diagonal matrix based on the given array.
-         * @param {Array} data - Array containing the data for the diagonal
-         * @param {number} [rows] - Number of rows (Default: data.length)
-         * @param {number} [columns] - Number of columns (Default: rows)
-         * @returns {Matrix} - The new diagonal matrix
-         */
-    }, {
-        key: 'diag',
-        value: function diag(data, rows, columns) {
-            var l = data.length;
-            if (rows === undefined) rows = l;
-            if (columns === undefined) columns = rows;
-            var min = Math.min(l, rows, columns);
-            var matrix = Matrix.zeros(rows, columns);
-            for (var i = 0; i < min; i++) {
-                matrix[i][i] = data[i];
-            }
-            return matrix;
-        }
-
-        /**
-         * Returns a matrix whose elements are the minimum between matrix1 and matrix2
-         * @param matrix1
-         * @param matrix2
-         * @returns {Matrix}
-         */
-    }, {
-        key: 'min',
-        value: function min(matrix1, matrix2) {
-            var rows = matrix1.length;
-            var columns = matrix1[0].length;
-            var result = new Matrix(rows, columns);
-            for (var i = 0; i < rows; i++) {
-                for (var j = 0; j < columns; j++) {
-                    result[i][j] = Math.min(matrix1[i][j], matrix2[i][j]);
-                }
-            }
-            return result;
-        }
-
-        /**
-         * Returns a matrix whose elements are the maximum between matrix1 and matrix2
-         * @param matrix1
-         * @param matrix2
-         * @returns {Matrix}
-         */
-    }, {
-        key: 'max',
-        value: function max(matrix1, matrix2) {
-            var rows = matrix1.length;
-            var columns = matrix1[0].length;
-            var result = new Matrix(rows, columns);
-            for (var i = 0; i < rows; i++) {
-                for (var j = 0; j < columns; j++) {
-                    result[i][j] = Math.max(matrix1[i][j], matrix2[i][j]);
-                }
-            }
-            return result;
-        }
-
-        /**
-         * Check that the provided value is a Matrix and tries to instantiate one if not
-         * @param value - The value to check
-         * @returns {Matrix}
-         */
-    }, {
-        key: 'checkMatrix',
-        value: function checkMatrix(value) {
-            return Matrix.isMatrix(value) ? value : new Matrix(value);
-        }
-
-        /**
-         * Returns true if the argument is a Matrix, false otherwise
-         * @param value - The value to check
-         * @return {boolean}
-         */
-    }, {
-        key: 'isMatrix',
-        value: function isMatrix(value) {
-            return value != null && value.klass === 'Matrix';
-        }
-    }]);
-
-    return Matrix;
-})(Array);
-
-Matrix.prototype.klass = 'Matrix';
-
-module.exports = Matrix;
-
-/**
- * @private
- * Check that a row index is not out of bounds
- * @param {Matrix} matrix
- * @param {number} index
- * @param {boolean} [outer]
- */
-function checkRowIndex(matrix, index, outer) {
-    var max = outer ? matrix.rows : matrix.rows - 1;
-    if (index < 0 || index > max) throw new RangeError('Row index out of range');
-}
-
-/**
- * @private
- * Check that the provided vector is an array with the right length
- * @param {Matrix} matrix
- * @param {Array|Matrix} vector
- * @param {boolean} copy
- * @returns {Array}
- * @throws {RangeError}
- */
-function checkRowVector(matrix, vector, copy) {
-    if (Matrix.isMatrix(vector)) {
-        vector = vector.to1DArray();
-    } else if (copy) {
-        vector = [].concat(vector);
-    }
-    if (vector.length !== matrix.columns) throw new RangeError('vector size must be the same as the number of columns');
-    return vector;
-}
-
-/**
- * @private
- * Check that the provided vector is an array with the right length
- * @param {Matrix} matrix
- * @param {Array|Matrix} vector
- * @param {boolean} copy
- * @returns {Array}
- * @throws {RangeError}
- */
-function checkColumnVector(matrix, vector, copy) {
-    if (Matrix.isMatrix(vector)) {
-        vector = vector.to1DArray();
-    } else if (copy) {
-        vector = [].concat(vector);
-    }
-    if (vector.length !== matrix.rows) throw new RangeError('vector size must be the same as the number of rows');
-    return vector;
-}
-
-/**
- * @private
- * Check that a column index is not out of bounds
- * @param {Matrix} matrix
- * @param {number} index
- * @param {boolean} [outer]
- */
-function checkColumnIndex(matrix, index, outer) {
-    var max = outer ? matrix.columns : matrix.columns - 1;
-    if (index < 0 || index > max) throw new RangeError('Column index out of range');
-}
-
-/**
- * @private
- * Check that two matrices have the same dimensions
- * @param {Matrix} matrix
- * @param {Matrix} otherMatrix
- */
-function checkDimensions(matrix, otherMatrix) {
-    if (matrix.rows !== otherMatrix.length || matrix.columns !== otherMatrix[0].length) {
-        throw new RangeError('Matrices dimensions must be equal');
-    }
-}
-
-function compareNumbers(a, b) {
-    return a - b;
-}
-
-/*
-Synonyms
- */
-
-Matrix.random = Matrix.rand;
-Matrix.diagonal = Matrix.diag;
-Matrix.prototype.diagonal = Matrix.prototype.diag;
-Matrix.identity = Matrix.eye;
-Matrix.prototype.negate = Matrix.prototype.neg;
-
-/*
-Add dynamically instance and static methods for mathematical operations
- */
-
-var inplaceOperator = '\n(function %name%(value) {\n    if (typeof value === \'number\') return this.%name%S(value);\n    return this.%name%M(value);\n})\n';
-
-var inplaceOperatorScalar = '\n(function %name%S(value) {\n    for (var i = 0; i < this.rows; i++) {\n        for (var j = 0; j < this.columns; j++) {\n            this[i][j] = this[i][j] %op% value;\n        }\n    }\n    return this;\n})\n';
-
-var inplaceOperatorMatrix = '\n(function %name%M(matrix) {\n    checkDimensions(this, matrix);\n    for (var i = 0; i < this.rows; i++) {\n        for (var j = 0; j < this.columns; j++) {\n            this[i][j] = this[i][j] %op% matrix[i][j];\n        }\n    }\n    return this;\n})\n';
-
-var staticOperator = '\n(function %name%(matrix, value) {\n    var newMatrix = new Matrix(matrix);\n    return newMatrix.%name%(value);\n})\n';
-
-var inplaceMethod = '\n(function %name%() {\n    for (var i = 0; i < this.rows; i++) {\n        for (var j = 0; j < this.columns; j++) {\n            this[i][j] = %method%(this[i][j]);\n        }\n    }\n    return this;\n})\n';
-
-var staticMethod = '\n(function %name%(matrix) {\n    var newMatrix = new Matrix(matrix);\n    return newMatrix.%name%();\n})\n';
-
-var operators = [
-// Arithmetic operators
-['+', 'add'], ['-', 'sub', 'subtract'], ['*', 'mul', 'multiply'], ['/', 'div', 'divide'], ['%', 'mod', 'modulus'],
-// Bitwise operators
-['&', 'and'], ['|', 'or'], ['^', 'xor'], ['<<', 'leftShift'], ['>>', 'signPropagatingRightShift'], ['>>>', 'rightShift', 'zeroFillRightShift']];
-
-var _iteratorNormalCompletion = true;
-var _didIteratorError = false;
-var _iteratorError = undefined;
-
-try {
-    for (var _iterator = operators[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var operator = _step.value;
-
-        for (var i = 1; i < operator.length; i++) {
-            Matrix.prototype[operator[i]] = eval(fillTemplateFunction(inplaceOperator, { name: operator[i], op: operator[0] }));
-            Matrix.prototype[operator[i] + 'S'] = eval(fillTemplateFunction(inplaceOperatorScalar, { name: operator[i] + 'S', op: operator[0] }));
-            Matrix.prototype[operator[i] + 'M'] = eval(fillTemplateFunction(inplaceOperatorMatrix, { name: operator[i] + 'M', op: operator[0] }));
-
-            Matrix[operator[i]] = eval(fillTemplateFunction(staticOperator, { name: operator[i] }));
-        }
-    }
-} catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
-} finally {
-    try {
-        if (!_iteratorNormalCompletion && _iterator['return']) {
-            _iterator['return']();
-        }
-    } finally {
-        if (_didIteratorError) {
-            throw _iteratorError;
-        }
-    }
-}
-
-var methods = [['~', 'not']];
-
-['abs', 'acos', 'acosh', 'asin', 'asinh', 'atan', 'atanh', 'cbrt', 'ceil', 'clz32', 'cos', 'cosh', 'exp', 'expm1', 'floor', 'fround', 'log', 'log1p', 'log10', 'log2', 'round', 'sign', 'sin', 'sinh', 'sqrt', 'tan', 'tanh', 'trunc'].forEach(function (mathMethod) {
-    methods.push(['Math.' + mathMethod, mathMethod]);
-});
-
-var _iteratorNormalCompletion2 = true;
-var _didIteratorError2 = false;
-var _iteratorError2 = undefined;
-
-try {
-    for (var _iterator2 = methods[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-        var method = _step2.value;
-
-        for (var i = 1; i < method.length; i++) {
-            Matrix.prototype[method[i]] = eval(fillTemplateFunction(inplaceMethod, { name: method[i], method: method[0] }));
-            Matrix[method[i]] = eval(fillTemplateFunction(staticMethod, { name: method[i] }));
-        }
-    }
-} catch (err) {
-    _didIteratorError2 = true;
-    _iteratorError2 = err;
-} finally {
-    try {
-        if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-            _iterator2['return']();
-        }
-    } finally {
-        if (_didIteratorError2) {
-            throw _iteratorError2;
-        }
-    }
-}
-
-function fillTemplateFunction(template, values) {
-    for (var i in values) {
-        template = template.replace(new RegExp('%' + i + '%', 'g'), values[i]);
-    }
-    return template;
-}
-
-},{}],37:[function(require,module,exports){
-"use strict";
-
-module.exports = newArray;
-
-function newArray(n, value) {
-  n = n || 0;
-  var array = new Array(n);
-  for (var i = 0; i < n; i++) {
-    array[i] = value;
-  }
-  return array;
-}
-
-},{}],38:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 'use strict';
 
 module.exports = function (str, search, pos) {
@@ -10491,282 +10532,114 @@ module.exports = function (str, search, pos) {
 	return str.indexOf(search, pos) !== -1;
 };
 
-},{}],39:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var BinaryReader = (function () {
-    function BinaryReader(imageData) {
-        _classCallCheck(this, BinaryReader);
-
-        if (imageData.buffer) {
-            imageData = imageData.buffer;
-        }
-        this.data = new DataView(imageData);
-        this.offset = 0;
-        this.littleEndian = true;
-    }
-
-    _createClass(BinaryReader, [{
-        key: 'readInt8',
-        value: function readInt8() {
-            return this.data.getInt8(this.offset++);
-        }
-    }, {
-        key: 'readUint8',
-        value: function readUint8() {
-            return this.data.getUint8(this.offset++);
-        }
-    }, {
-        key: 'readInt16',
-        value: function readInt16() {
-            var value = this.data.getInt16(this.offset, this.littleEndian);
-            this.offset += 2;
-            return value;
-        }
-    }, {
-        key: 'readUint16',
-        value: function readUint16() {
-            var value = this.data.getUint16(this.offset, this.littleEndian);
-            this.offset += 2;
-            return value;
-        }
-    }, {
-        key: 'readInt32',
-        value: function readInt32() {
-            var value = this.data.getInt32(this.offset, this.littleEndian);
-            this.offset += 4;
-            return value;
-        }
-    }, {
-        key: 'readUint32',
-        value: function readUint32() {
-            var value = this.data.getUint32(this.offset, this.littleEndian);
-            this.offset += 4;
-            return value;
-        }
-    }, {
-        key: 'readFloat32',
-        value: function readFloat32() {
-            var value = this.data.getFloat32(this.offset, this.littleEndian);
-            this.offset += 4;
-            return value;
-        }
-    }, {
-        key: 'readFloat64',
-        value: function readFloat64() {
-            var value = this.data.getFloat64(this.offset, this.littleEndian);
-            this.offset += 8;
-            return value;
-        }
-    }, {
-        key: 'setBigEndian',
-        value: function setBigEndian() {
-            this.littleEndian = false;
-        }
-    }, {
-        key: 'setLittleEndian',
-        value: function setLittleEndian() {
-            this.littleEndian = true;
-        }
-    }, {
-        key: 'forward',
-        value: function forward(n) {
-            this.offset += n;
-        }
-    }, {
-        key: 'goto',
-        value: function goto(offset) {
-            this.offset = offset;
-        }
-    }]);
-
-    return BinaryReader;
-})();
-
-module.exports = BinaryReader;
-
-},{}],40:[function(require,module,exports){
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var dateTimeRegex = /^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
 
-var IFD = (function () {
-    function IFD() {
-        _classCallCheck(this, IFD);
-
+class IFD {
+    constructor() {
         this.fields = new Map();
     }
 
     // Custom fields
+    get size() {
+        return this.width * this.height;
+    }
+    get width() {
+        return this.imageWidth;
+    }
+    get height() {
+        return this.imageLength;
+    }
+    get components() {
+        return this.samplesPerPixel;
+    }
+    get date() {
+        var date = new Date();
+        var result = dateTimeRegex.exec(this.dateTime);
+        date.setFullYear(result[1], result[2] - 1, result[3]);
+        date.setHours(result[4], result[5], result[6]);
+        return date;
+    }
 
-    _createClass(IFD, [{
-        key: 'size',
-        get: function get() {
-            return this.width * this.height;
-        }
-    }, {
-        key: 'width',
-        get: function get() {
-            return this.imageWidth;
-        }
-    }, {
-        key: 'height',
-        get: function get() {
-            return this.imageLength;
-        }
-    }, {
-        key: 'components',
-        get: function get() {
-            return this.samplesPerPixel;
-        }
-    }, {
-        key: 'date',
-        get: function get() {
-            var date = new Date();
-            var result = dateTimeRegex.exec(this.dateTime);
-            date.setFullYear(result[1], result[2] - 1, result[3]);
-            date.setHours(result[4], result[5], result[6]);
-            return date;
-        }
-
-        // IFD fields
-    }, {
-        key: 'newSubfileType',
-        get: function get() {
-            return this.fields.get(254);
-        }
-    }, {
-        key: 'imageWidth',
-        get: function get() {
-            return this.fields.get(256);
-        }
-    }, {
-        key: 'imageLength',
-        get: function get() {
-            return this.fields.get(257);
-        }
-    }, {
-        key: 'bitsPerSample',
-        get: function get() {
-            return this.fields.get(258);
-        }
-    }, {
-        key: 'compression',
-        get: function get() {
-            return this.fields.get(259);
-        }
-    }, {
-        key: 'type',
-        get: function get() {
-            return this.fields.get(262);
-        }
-    }, {
-        key: 'fillOrder',
-        get: function get() {
-            return this.fields.get(266) || 1;
-        }
-    }, {
-        key: 'documentName',
-        get: function get() {
-            return this.fields.get(269);
-        }
-    }, {
-        key: 'imageDescription',
-        get: function get() {
-            return this.fields.get(270);
-        }
-    }, {
-        key: 'stripOffsets',
-        get: function get() {
-            return alwaysArray(this.fields.get(273));
-        }
-    }, {
-        key: 'orientation',
-        get: function get() {
-            return this.fields.get(274);
-        }
-    }, {
-        key: 'samplesPerPixel',
-        get: function get() {
-            return this.fields.get(277);
-        }
-    }, {
-        key: 'rowsPerStrip',
-        get: function get() {
-            return this.fields.get(278);
-        }
-    }, {
-        key: 'stripByteCounts',
-        get: function get() {
-            return alwaysArray(this.fields.get(279));
-        }
-    }, {
-        key: 'minSampleValue',
-        get: function get() {
-            return this.fields.get(280) || 0;
-        }
-    }, {
-        key: 'maxSampleValue',
-        get: function get() {
-            return this.fields.get(281) || (1 << this.bitsPerSample) - 1;
-        }
-    }, {
-        key: 'xResolution',
-        get: function get() {
-            return this.fields.get(282);
-        }
-    }, {
-        key: 'yResolution',
-        get: function get() {
-            return this.fields.get(283);
-        }
-    }, {
-        key: 'planarConfiguration',
-        get: function get() {
-            return this.fields.get(284) || 1;
-        }
-    }, {
-        key: 'resolutionUnit',
-        get: function get() {
-            return this.fields.get(296) || 2;
-        }
-    }, {
-        key: 'dateTime',
-        get: function get() {
-            return this.fields.get(306);
-        }
-    }, {
-        key: 'predictor',
-        get: function get() {
-            return this.fields.get(317) || 1;
-        }
-    }, {
-        key: 'sampleFormat',
-        get: function get() {
-            return this.fields.get(339) || 1;
-        }
-    }, {
-        key: 'sMinSampleValue',
-        get: function get() {
-            return this.fields.get(340) || this.minSampleValue;
-        }
-    }, {
-        key: 'sMaxSampleValue',
-        get: function get() {
-            return this.fields.get(341) || this.maxSampleValue;
-        }
-    }]);
-
-    return IFD;
-})();
+    // IFD fields
+    get newSubfileType() {
+        return this.fields.get(254);
+    }
+    get imageWidth() {
+        return this.fields.get(256);
+    }
+    get imageLength() {
+        return this.fields.get(257);
+    }
+    get bitsPerSample() {
+        return this.fields.get(258);
+    }
+    get compression() {
+        return this.fields.get(259);
+    }
+    get type() {
+        return this.fields.get(262);
+    }
+    get fillOrder() {
+        return this.fields.get(266) || 1;
+    }
+    get documentName() {
+        return this.fields.get(269);
+    }
+    get imageDescription() {
+        return this.fields.get(270);
+    }
+    get stripOffsets() {
+        return alwaysArray(this.fields.get(273));
+    }
+    get orientation() {
+        return this.fields.get(274);
+    }
+    get samplesPerPixel() {
+        return this.fields.get(277);
+    }
+    get rowsPerStrip() {
+        return this.fields.get(278);
+    }
+    get stripByteCounts() {
+        return alwaysArray(this.fields.get(279));
+    }
+    get minSampleValue() {
+        return this.fields.get(280) || 0;
+    }
+    get maxSampleValue() {
+        return this.fields.get(281) || Math.pow(2, this.bitsPerSample) - 1;
+    }
+    get xResolution() {
+        return this.fields.get(282);
+    }
+    get yResolution() {
+        return this.fields.get(283);
+    }
+    get planarConfiguration() {
+        return this.fields.get(284) || 1;
+    }
+    get resolutionUnit() {
+        return this.fields.get(296) || 2;
+    }
+    get dateTime() {
+        return this.fields.get(306);
+    }
+    get predictor() {
+        return this.fields.get(317) || 1;
+    }
+    get sampleFormat() {
+        return this.fields.get(339) || 1;
+    }
+    get sMinSampleValue() {
+        return this.fields.get(340) || this.minSampleValue;
+    }
+    get sMaxSampleValue() {
+        return this.fields.get(341) || this.maxSampleValue;
+    }
+}
 
 module.exports = IFD;
 
@@ -10775,7 +10648,7 @@ function alwaysArray(value) {
     return value;
 }
 
-},{}],41:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 'use strict';
 
 var types = new Map([[1, [1, readByte]], // BYTE
@@ -10913,198 +10786,179 @@ function readDouble(decoder, count) {
     return array;
 }
 
-},{}],42:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 'use strict';
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var TIFF = function TIFF() {
-    _classCallCheck(this, TIFF);
-
-    this.ifd = [];
-};
+class TIFF {
+    constructor() {
+        this.ifd = [];
+    }
+}
 
 module.exports = TIFF;
 
-},{}],43:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var BinaryReader = require('./BinaryReader');
+var IOBuffer = require('iobuffer');
 var IFD = require('./IFD');
 var IFDValue = require('./IFDValue');
 var TIFF = require('./TIFF');
 
-var TIFFDecoder = (function (_BinaryReader) {
-    _inherits(TIFFDecoder, _BinaryReader);
-
-    function TIFFDecoder(data) {
-        _classCallCheck(this, TIFFDecoder);
-
-        _get(Object.getPrototypeOf(TIFFDecoder.prototype), 'constructor', this).call(this, data);
-        this.decoded = false;
-        this.tiff = null;
-        this.nextIFD = 0;
+class TIFFDecoder extends IOBuffer {
+    constructor(data) {
+        super(data);
+        this._decoded = false;
+        this._tiff = null;
+        this._nextIFD = 0;
     }
 
-    _createClass(TIFFDecoder, [{
-        key: 'decode',
-        value: function decode() {
-            if (this.decoded) return this.tiff;
-            this.tiff = new TIFF();
-            this.decodeHeader();
-            while (this.nextIFD) {
-                this.decodeIFD();
-            }
-            return this.tiff;
+    decode() {
+        if (this._decoded) return this._tiff;
+        this._tiff = new TIFF();
+        this.decodeHeader();
+        while (this._nextIFD) {
+            this.decodeIFD();
         }
-    }, {
-        key: 'decodeHeader',
-        value: function decodeHeader() {
-            // Byte offset
-            var value = this.readUint16();
-            if (value === 0x4949) {
-                this.setLittleEndian();
-            } else if (value === 0x4D4D) {
-                this.setBigEndian();
+        return this._tiff;
+    }
+
+    decodeHeader() {
+        // Byte offset
+        var value = this.readUint16();
+        if (value === 0x4949) {
+            this.setLittleEndian();
+        } else if (value === 0x4D4D) {
+            this.setBigEndian();
+        } else {
+            throw new Error('invalid byte order: 0x' + value.toString(16));
+        }
+
+        // Magic number
+        value = this.readUint16();
+        if (value !== 42) {
+            throw new Error('not a TIFF file');
+        }
+
+        // Offset of the first IFD
+        this._nextIFD = this.readUint32();
+    }
+
+    decodeIFD() {
+        this.seek(this._nextIFD);
+        var ifd = new IFD();
+        this._tiff.ifd.push(ifd);
+        var numEntries = this.readUint16();
+        for (var i = 0; i < numEntries; i++) {
+            this.decodeIFDEntry(ifd);
+        }
+        this.decodeImageData(ifd);
+        this._nextIFD = this.readUint32();
+    }
+
+    decodeIFDEntry(ifd) {
+        this.mark();
+        var tag = this.readUint16();
+        var type = this.readUint16();
+        var numValues = this.readUint32();
+
+        if (type < 1 || type > 12) {
+            this.skip(4); // unknown type, skip this value
+            return;
+        }
+
+        var valueByteLength = IFDValue.getByteLength(type, numValues);
+        if (valueByteLength > 4) {
+            this.seek(this.readUint32());
+        }
+
+        var value = IFDValue.readData(this, type, numValues);
+        ifd.fields.set(tag, value);
+
+        // go to the next entry
+        this.reset();
+        this.skip(12);
+    }
+
+    decodeImageData(ifd) {
+        var orientation = ifd.orientation;
+        if (orientation && orientation !== 1) {
+            unsupported('orientation', orientation);
+        }
+        switch (ifd.type) {
+            case 1:
+                // BlackIsZero
+                this.decodeBilevelOrGrey(ifd);
+                break;
+            default:
+                unsupported('image type', ifd.type);
+                break;
+        }
+    }
+
+    decodeBilevelOrGrey(ifd) {
+        var width = ifd.width;
+        var height = ifd.height;
+
+        var bitDepth = ifd.bitsPerSample;
+        var sampleFormat = ifd.sampleFormat;
+        var size = width * height;
+        var data = getDataArray(size, 1, bitDepth, sampleFormat);
+
+        var compression = ifd.compression;
+        var rowsPerStrip = ifd.rowsPerStrip;
+        var maxPixels = rowsPerStrip * width;
+        var stripOffsets = ifd.stripOffsets;
+        var stripByteCounts = ifd.stripByteCounts;
+
+        var pixel = 0;
+        for (var i = 0; i < stripOffsets.length; i++) {
+            var stripData = this.getStripData(compression, stripOffsets[i], stripByteCounts[i]);
+            // Last strip can be smaller
+            var length = size > maxPixels ? maxPixels : size;
+            size -= length;
+            if (bitDepth === 8) {
+                pixel = fill8bit(data, stripData, pixel, length);
+            } else if (bitDepth === 16) {
+                pixel = fill16bit(data, stripData, pixel, length, this.isLittleEndian());
+            } else if (bitDepth === 32 && sampleFormat === 3) {
+                pixel = fillFloat32(data, stripData, pixel, length, this.isLittleEndian());
             } else {
-                throw new Error('invalid byte order: 0x' + value.toString(16));
-            }
-
-            // Magic number
-            value = this.readUint16();
-            if (value !== 42) {
-                throw new Error('not a TIFF file');
-            }
-
-            // Offset of the first IFD
-            this.nextIFD = this.readUint32();
-        }
-    }, {
-        key: 'decodeIFD',
-        value: function decodeIFD() {
-            this.goto(this.nextIFD);
-            var ifd = new IFD();
-            this.tiff.ifd.push(ifd);
-            var numEntries = this.readUint16();
-            for (var i = 0; i < numEntries; i++) {
-                this.decodeIFDEntry(ifd);
-            }
-            this.decodeImageData(ifd);
-            this.nextIFD = this.readUint32();
-        }
-    }, {
-        key: 'decodeIFDEntry',
-        value: function decodeIFDEntry(ifd) {
-            var offset = this.offset;
-            var tag = this.readUint16();
-            var type = this.readUint16();
-            var numValues = this.readUint32();
-
-            if (type < 1 || type > 12) {
-                this.forward(4); // unknown type, skip this value
-                return;
-            }
-
-            var valueByteLength = IFDValue.getByteLength(type, numValues);
-            if (valueByteLength > 4) {
-                this.goto(this.readUint32());
-            }
-
-            var value = IFDValue.readData(this, type, numValues);
-            ifd.fields.set(tag, value);
-
-            // goto offset of next entry
-            this.goto(offset + 12);
-        }
-    }, {
-        key: 'decodeImageData',
-        value: function decodeImageData(ifd) {
-            var orientation = ifd.orientation;
-            if (orientation && orientation !== 1) {
-                unsupported('orientation', orientation);
-            }
-            switch (ifd.type) {
-                case 1:
-                    // BlackIsZero
-                    this.decodeBilevelOrGrey(ifd);
-                    break;
-                default:
-                    unsupported('image type', ifd.type);
-                    break;
+                unsupported('bitDepth', bitDepth);
             }
         }
-    }, {
-        key: 'decodeBilevelOrGrey',
-        value: function decodeBilevelOrGrey(ifd) {
-            var width = ifd.width;
-            var height = ifd.height;
 
-            var bitDepth = ifd.bitsPerSample;
-            var size = width * height;
-            var data = getDataArray(size, 1, bitDepth);
+        ifd.data = data;
+    }
 
-            var compression = ifd.compression;
-            var rowsPerStrip = ifd.rowsPerStrip;
-            var maxPixels = rowsPerStrip * width;
-            var stripOffsets = ifd.stripOffsets;
-            var stripByteCounts = ifd.stripByteCounts;
-
-            var pixel = 0;
-            for (var i = 0; i < stripOffsets.length; i++) {
-                var stripData = this.getStripData(compression, stripOffsets[i], stripByteCounts[i]);
-                // Last strip can be smaller
-                var length = size > maxPixels ? maxPixels : size;
-                size -= length;
-                if (bitDepth === 8) {
-                    pixel = fill8bit(data, stripData, pixel, length);
-                } else if (bitDepth === 16) {
-                    pixel = fill16bit(data, stripData, pixel, length, this.littleEndian);
-                } else {
-                    unsupported('bitDepth: ', bitDepth);
-                }
-            }
-
-            ifd.data = data;
+    getStripData(compression, offset, byteCounts) {
+        switch (compression) {
+            case 1:
+                // No compression
+                return new DataView(this.buffer, offset, byteCounts);
+                break;
+            case 2: // CCITT Group 3 1-Dimensional Modified Huffman run length encoding
+            case 32773:
+                // PackBits compression
+                unsupported('Compression', compression);
+                break;
+            default:
+                throw new Error('invalid compression: ' + compression);
         }
-    }, {
-        key: 'getStripData',
-        value: function getStripData(compression, offset, byteCounts) {
-            switch (compression) {
-                case 1:
-                    // No compression
-                    return new DataView(this.data.buffer, offset, byteCounts);
-                    break;
-                case 2: // CCITT Group 3 1-Dimensional Modified Huffman run length encoding
-                case 32773:
-                    // PackBits compression
-                    unsupported('Compression', compression);
-                    break;
-                default:
-                    throw new Error('invalid compression: ' + compression);
-            }
-        }
-    }]);
-
-    return TIFFDecoder;
-})(BinaryReader);
+    }
+}
 
 module.exports = TIFFDecoder;
 
-function getDataArray(size, channels, bitDepth) {
+function getDataArray(size, channels, bitDepth, sampleFormat) {
     if (bitDepth === 8) {
         return new Uint8Array(size * channels);
     } else if (bitDepth === 16) {
         return new Uint16Array(size * channels);
+    } else if (bitDepth === 32 && sampleFormat === 3) {
+        return new Float32Array(size * channels);
     } else {
-        unsupported('bit depth', bitDepth);
+        unsupported('bit depth / sample format', bitDepth + ' / ' + sampleFormat);
     }
 }
 
@@ -11122,97 +10976,306 @@ function fill16bit(dataTo, dataFrom, index, length, littleEndian) {
     return index;
 }
 
+function fillFloat32(dataTo, dataFrom, index, length, littleEndian) {
+    for (var i = 0; i < length * 4; i += 4) {
+        dataTo[index++] = dataFrom.getFloat32(i, littleEndian);
+    }
+    return index;
+}
+
 function unsupported(type, value) {
     throw new Error('Unsupported ' + type + ': ' + value);
 }
 
-},{"./BinaryReader":39,"./IFD":40,"./IFDValue":41,"./TIFF":42}],44:[function(require,module,exports){
+},{"./IFD":46,"./IFDValue":47,"./TIFF":48,"iobuffer":6}],50:[function(require,module,exports){
 'use strict';
 
 exports.TIFFDecoder = require('./TIFFDecoder');
 
-},{"./TIFFDecoder":43}],45:[function(require,module,exports){
-// those methods can only apply on binary images... but we will not lose time to check!
+},{"./TIFFDecoder":49}],51:[function(require,module,exports){
+'use strict';
+
+var workerTemplate = require('./workerTemplate');
+
+var CORES = navigator.hardwareConcurrency || 1;
+
+var noop = Function.prototype;
+
+function WorkerManager(func, options) {
+    // Check arguments
+    if (typeof func !== 'string' && typeof func !== 'function') throw new TypeError('func argument must be a function');
+    if (options === undefined) options = {};
+    if (typeof options !== 'object' || options === null) throw new TypeError('options argument must be an object');
+
+    this._workerCode = func.toString();
+
+    // Parse options
+    if (options.maxWorkers === undefined || options.maxWorkers === 'auto') {
+        this._numWorkers = Math.min(CORES - 1, 1);
+    } else if (options.maxWorkers > 0) {
+        this._numWorkers = Math.min(options.maxWorkers, CORES);
+    } else {
+        this._numWorkers = CORES;
+    }
+
+    this._workers = new Map();
+    this._timeout = options.timeout || 0;
+    this._terminateOnError = !!options.terminateOnError;
+
+    var deps = options.deps;
+    if (typeof deps === 'string') deps = [deps];
+    if (!Array.isArray(deps)) deps = undefined;
+
+    this._id = 0;
+    this._terminated = false;
+    this._working = 0;
+    this._waiting = [];
+
+    this._init(deps);
+}
+
+WorkerManager.prototype._init = function (deps) {
+    var workerURL = workerTemplate.newWorkerURL(this._workerCode, deps);
+
+    for (var i = 0; i < this._numWorkers; i++) {
+        var worker = new Worker(workerURL);
+        worker.onmessage = this._onmessage.bind(this, worker);
+        worker.onerror = this._onerror.bind(this, worker);
+        worker.running = false;
+        worker.id = i;
+        this._workers.set(worker, null);
+    }
+
+    URL.revokeObjectURL(workerURL);
+};
+
+WorkerManager.prototype._onerror = function (worker, error) {
+    if (this._terminated) return;
+    this._working--;
+    worker.running = false;
+    var callback = this._workers.get(worker);
+    if (callback) {
+        callback[1](error.message);
+    }
+    this._workers.set(worker, null);
+    if (this._terminateOnError) {
+        this.terminate();
+    } else {
+        this._exec();
+    }
+};
+
+WorkerManager.prototype._onmessage = function (worker, event) {
+    if (this._terminated) return;
+    this._working--;
+    worker.running = false;
+    var callback = this._workers.get(worker);
+    if (callback) {
+        callback[0](event.data.data);
+    }
+    this._workers.set(worker, null);
+    this._exec();
+};
+
+WorkerManager.prototype._exec = function () {
+    for (var worker of this._workers.keys()) {
+        if (this._working === this._numWorkers || this._waiting.length === 0) {
+            return;
+        }
+        if (!worker.running) {
+            for (var i = 0; i < this._waiting.length; i++) {
+                var execInfo = this._waiting[i];
+                if (typeof execInfo[4] === 'number' && execInfo[4] !== worker.id) {
+                    // this message is intended to another worker, let's ignore it
+                    continue;
+                }
+                this._waiting.splice(i, 1);
+                worker.postMessage({
+                    action: 'exec',
+                    event: execInfo[0],
+                    args: execInfo[1]
+                }, execInfo[2]);
+                worker.running = true;
+                worker.time = Date.now();
+                this._workers.set(worker, execInfo[3]);
+                this._working++;
+                break;
+            }
+        }
+    }
+};
+
+WorkerManager.prototype.terminate = function () {
+    if (this._terminated) return;
+    for (var entry of this._workers) {
+        entry[0].terminate();
+        if (entry[1]) {
+            entry[1][1](new Error('Terminated'));
+        }
+    }
+    this._workers.clear();
+    this._waiting = [];
+    this._working = 0;
+    this._terminated = true;
+};
+
+WorkerManager.prototype.postAll = function (event, args) {
+    if (this._terminated) throw new Error('Cannot post (terminated)');
+    var promises = [];
+    for (var worker of this._workers.keys()) {
+        promises.push(this.post(event, args, [], worker.id));
+    }
+    return Promise.all(promises);
+};
+
+WorkerManager.prototype.post = function (event, args, transferable, id) {
+    if (args === undefined) args = [];
+    if (transferable === undefined) transferable = [];
+    if (!Array.isArray(args)) {
+        args = [args];
+    }
+    if (!Array.isArray(transferable)) {
+        transferable = [transferable];
+    }
+
+    var self = this;
+    return new Promise(function (resolve, reject) {
+        if (self._terminated) throw new Error('Cannot post (terminated)');
+        self._waiting.push([event, args, transferable, [resolve, reject], id]);
+        self._exec();
+    });
+};
+
+module.exports = WorkerManager;
+
+},{"./workerTemplate":52}],52:[function(require,module,exports){
+'use strict';
+
+var worker = function worker() {
+    var window = self.window = self;
+    function ManagedWorker() {
+        this._listeners = {};
+    }
+    ManagedWorker.prototype.on = function (event, callback) {
+        if (this._listeners[event]) throw new RangeError('there is already a listener for ' + event);
+        if (typeof callback !== 'function') throw new TypeError('callback argument must be a function');
+        this._listeners[event] = callback;
+    };
+    ManagedWorker.prototype._send = function (id, data, transferable) {
+        if (transferable === undefined) {
+            transferable = [];
+        } else if (!Array.isArray(transferable)) {
+            transferable = [transferable];
+        }
+        self.postMessage({
+            id: id,
+            data: data
+        }, transferable);
+    };
+    ManagedWorker.prototype._trigger = function (event, args) {
+        if (!this._listeners[event]) throw new Error('event ' + event + ' is not defined');
+        this._listeners[event].apply(null, args);
+    };
+    var worker = new ManagedWorker();
+    self.onmessage = function (event) {
+        switch (event.data.action) {
+            case 'exec':
+                event.data.args.unshift(function (data, transferable) {
+                    worker._send(event.data.id, data, transferable);
+                });
+                worker._trigger(event.data.event, event.data.args);
+                break;
+            case 'ping':
+                worker._send(event.data.id, 'pong');
+                break;
+            default:
+                throw new Error('unexpected action: ' + event.data.action);
+        }
+    };
+    "CODE";
+};
+
+var workerStr = worker.toString().split('"CODE";');
+
+exports.newWorkerURL = function newWorkerURL(code, deps) {
+    var blob = new Blob(['(', workerStr[0], 'importScripts.apply(self, ' + JSON.stringify(deps) + ');\n', '(', code, ')();', workerStr[1], ')();'], { type: 'application/javascript' });
+    return URL.createObjectURL(blob);
+};
+
+},{}],53:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var bitMethods = {
-    setBitXY: function setBitXY(x, y) {
-        var target = y * this.width + x;
-        var shift = 7 - (target & 7);
-        var slot = target >> 3;
-        this.data[slot] |= 1 << shift;
-    },
 
-    clearBitXY: function clearBitXY(x, y) {
-        var target = y * this.width + x;
-        var shift = 7 - (target & 7);
-        var slot = target >> 3;
-        this.data[slot] &= ~(1 << shift);
-    },
-
-    toggleBitXY: function toggleBitXY(x, y) {
-        var target = y * this.width + x;
-        var shift = 7 - (target & 7);
-        var slot = target >> 3;
-        this.data[slot] ^= 1 << shift;
-    },
-
-    getBitXY: function getBitXY(x, y) {
-        var target = y * this.width + x;
-        var shift = 7 - (target & 7);
-        var slot = target >> 3;
-        return this.data[slot] & 1 << shift ? 1 : 0;
-    },
-
-    setBit: function setBit(pixel) {
-        var shift = 7 - (pixel & 7);
-        var slot = pixel >> 3;
-        this.data[slot] |= 1 << shift;
-    },
-
-    clearBit: function clearBit(pixel) {
-        var shift = 7 - (pixel & 7);
-        var slot = pixel >> 3;
-        this.data[slot] &= ~(1 << shift);
-    },
-
-    toggleBit: function toggleBit(pixel) {
-        var shift = 7 - (pixel & 7);
-        var slot = pixel >> 3;
-        this.data[slot] ^= 1 << shift;
-    },
-
-    getBit: function getBit(pixel) {
-        var shift = 7 - (pixel & 7);
-        var slot = pixel >> 3;
-        return this.data[slot] & 1 << shift ? 1 : 0;
-    }
-};
-
-exports["default"] = function (Image) {
+exports.default = function (Image) {
     for (var i in bitMethods) {
         Image.prototype[i] = bitMethods[i];
     }
 };
 
-module.exports = exports["default"];
+// those methods can only apply on binary images... but we will not lose time to check!
+var bitMethods = {
+    setBitXY: function setBitXY(x, y) {
+        var target = y * this.width + x;
+        var shift = 7 - (target & 0b00000111);
+        var slot = target >> 3;
+        this.data[slot] |= 1 << shift;
+    },
+    clearBitXY: function clearBitXY(x, y) {
+        var target = y * this.width + x;
+        var shift = 7 - (target & 0b00000111);
+        var slot = target >> 3;
+        this.data[slot] &= ~(1 << shift);
+    },
+    toggleBitXY: function toggleBitXY(x, y) {
+        var target = y * this.width + x;
+        var shift = 7 - (target & 0b00000111);
+        var slot = target >> 3;
+        this.data[slot] ^= 1 << shift;
+    },
+    getBitXY: function getBitXY(x, y) {
+        var target = y * this.width + x;
+        var shift = 7 - (target & 0b00000111);
+        var slot = target >> 3;
+        return this.data[slot] & 1 << shift ? 1 : 0;
+    },
+    setBit: function setBit(pixel) {
+        var shift = 7 - (pixel & 0b00000111);
+        var slot = pixel >> 3;
+        this.data[slot] |= 1 << shift;
+    },
+    clearBit: function clearBit(pixel) {
+        var shift = 7 - (pixel & 0b00000111);
+        var slot = pixel >> 3;
+        this.data[slot] &= ~(1 << shift);
+    },
+    toggleBit: function toggleBit(pixel) {
+        var shift = 7 - (pixel & 0b00000111);
+        var slot = pixel >> 3;
+        this.data[slot] ^= 1 << shift;
+    },
+    getBit: function getBit(pixel) {
+        var shift = 7 - (pixel & 0b00000111);
+        var slot = pixel >> 3;
+        return this.data[slot] & 1 << shift ? 1 : 0;
+    }
+};
 
-},{}],46:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = getColorHistogram;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = getColorHistogram;
 
 var _newArray = require('new-array');
 
 var _newArray2 = _interopRequireDefault(_newArray);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getColorHistogram() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -11235,7 +11298,7 @@ function getColorHistogram() {
     var bitShift = this.bitDepth - nbSlotsCheck;
 
     var data = this.data;
-    var result = (0, _newArray2['default'])(Math.pow(8, nbSlotsCheck), 0);
+    var result = (0, _newArray2.default)(Math.pow(8, nbSlotsCheck), 0);
     var factor2 = Math.pow(2, nbSlotsCheck * 2);
     var factor1 = Math.pow(2, nbSlotsCheck);
 
@@ -11251,18 +11314,15 @@ function getColorHistogram() {
     return result;
 }
 
-module.exports = exports['default'];
-
-},{"new-array":37}],47:[function(require,module,exports){
-
-// returns the number of transparent
-
+},{"new-array":27}],55:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = countAlphaPixels;
+exports.default = countAlphaPixels;
+
+// returns the number of transparent
 
 function countAlphaPixels() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -11287,18 +11347,14 @@ function countAlphaPixels() {
     }
 }
 
-module.exports = exports['default'];
-
-},{}],48:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.getHistogram = getHistogram;
 exports.getHistograms = getHistograms;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _newArray = require('new-array');
 
@@ -11307,6 +11363,8 @@ var _newArray2 = _interopRequireDefault(_newArray);
 var _isInteger = require('is-integer');
 
 var _isInteger2 = _interopRequireDefault(_isInteger);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getHistogram() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -11340,9 +11398,8 @@ function getHistograms() {
     this.checkProcessable('getHistograms', {
         bitDepth: [8, 16]
     });
-
-    var results = new Array(this.channels);
-    for (var i = 0; i < this.channels; i++) {
+    var results = new Array(useAlpha ? this.components : this.channels);
+    for (var i = 0; i < results.length; i++) {
         results[i] = getChannelHistogram.call(this, i, useAlpha, maxSlots);
     }
     return results;
@@ -11350,7 +11407,7 @@ function getHistograms() {
 
 function getChannelHistogram(channel, useAlpha, maxSlots) {
     var bitSlots = Math.log2(maxSlots);
-    if (!(0, _isInteger2['default'])(bitSlots)) {
+    if (!(0, _isInteger2.default)(bitSlots)) {
         throw new RangeError('maxSlots must be a power of 2, for example: 64, 256, 1024');
     }
     // we will compare the bitSlots to the bitDepth of the image
@@ -11361,7 +11418,7 @@ function getChannelHistogram(channel, useAlpha, maxSlots) {
     if (this.bitDepth > bitSlots) bitShift = this.bitDepth - bitSlots;
 
     var data = this.data;
-    var result = (0, _newArray2['default'])(Math.pow(2, Math.min(this.bitDepth, bitSlots)), 0);
+    var result = (0, _newArray2.default)(Math.pow(2, Math.min(this.bitDepth, bitSlots)), 0);
     if (useAlpha && this.alpha) {
         var alphaChannelDiff = this.channels - channel - 1;
 
@@ -11377,19 +11434,19 @@ function getChannelHistogram(channel, useAlpha, maxSlots) {
     return result;
 }
 
-},{"is-integer":25,"new-array":37}],49:[function(require,module,exports){
+},{"is-integer":9,"new-array":27}],57:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = max;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = max;
 
 var _newArray = require('new-array');
 
 var _newArray2 = _interopRequireDefault(_newArray);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // returns an array with the maximal value of each channel
 
@@ -11398,7 +11455,7 @@ function max() {
         bitDepth: [8, 16]
     });
 
-    var result = (0, _newArray2['default'])(this.channels, -Infinity);
+    var result = (0, _newArray2.default)(this.channels, -Infinity);
 
     for (var i = 0; i < this.data.length; i += this.channels) {
         for (var c = 0; c < this.channels; c++) {
@@ -11408,70 +11465,63 @@ function max() {
     return result;
 }
 
-module.exports = exports['default'];
-
-},{"new-array":37}],50:[function(require,module,exports){
-
-// returns an array with the average value of each component
-
-"use strict";
+},{"new-array":27}],58:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports["default"] = mean;
+exports.default = mean;
+
+var _histogram = require('../../util/histogram');
+
+// returns an array with the average value of each component
 
 function mean() {
-    var result = new Array(this.channels);
-    for (var c = 0; c < result.length; c++) {
-        result[c] = this.sum[c] / this.size;
+    var histograms = this.getHistograms({ maxSlots: this.maxValue + 1 });
+    var result = new Array(histograms.length);
+    for (var c = 0; c < histograms.length; c++) {
+        var histogram = histograms[c];
+        result[c] = (0, _histogram.mean)(histogram);
     }
     return result;
 }
 
-module.exports = exports["default"];
-
-},{}],51:[function(require,module,exports){
+},{"../../util/histogram":155}],59:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = median;
+exports.default = median;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _utilMedianFromHistogram = require('../../util/medianFromHistogram');
-
-var _utilMedianFromHistogram2 = _interopRequireDefault(_utilMedianFromHistogram);
+var _histogram = require('../../util/histogram');
 
 // returns an array with the median value of each component
 
 function median() {
-    var result = new Array(this.channels);
     var histograms = this.getHistograms({ maxSlots: this.maxValue + 1 });
+    var result = new Array(histograms.length);
     for (var c = 0; c < histograms.length; c++) {
         var histogram = histograms[c];
-        result[c] = (0, _utilMedianFromHistogram2['default'])(histogram);
+        result[c] = (0, _histogram.median)(histogram);
     }
     return result;
 }
 
-module.exports = exports['default'];
-
-},{"../../util/medianFromHistogram":149}],52:[function(require,module,exports){
+},{"../../util/histogram":155}],60:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = min;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = min;
 
 var _newArray = require('new-array');
 
 var _newArray2 = _interopRequireDefault(_newArray);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // returns an array with the minimal value of each channel
 
@@ -11480,7 +11530,7 @@ function min() {
         bitDepth: [8, 16]
     });
 
-    var result = (0, _newArray2['default'])(this.channels, +Infinity);
+    var result = (0, _newArray2.default)(this.channels, +Infinity);
 
     for (var i = 0; i < this.data.length; i += this.channels) {
         for (var c = 0; c < this.channels; c++) {
@@ -11490,17 +11540,14 @@ function min() {
     return result;
 }
 
-module.exports = exports['default'];
-
-},{"new-array":37}],53:[function(require,module,exports){
-// this function will return an array containing an array of XY
-
+},{"new-array":27}],61:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = getPixelsArray;
+exports.default = getPixelsArray;
+// this function will return an array containing an array of XY
 
 function getPixelsArray() {
     this.checkProcessable('getPixelsArray', {
@@ -11522,9 +11569,13 @@ function getPixelsArray() {
     }
 }
 
-module.exports = exports['default'];
+},{}],62:[function(require,module,exports){
+"use strict";
 
-},{}],54:[function(require,module,exports){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = getRelativePosition;
 /*
  An image may be derived from another image either by a crop
  or because it is a ROI (region of interest)
@@ -11535,13 +11586,6 @@ module.exports = exports['default'];
  relative position of one image in another
  This methods takes care of this.
  */
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports["default"] = getRelativePosition;
 
 function getRelativePosition(targetImage) {
     if (this === targetImage) return [0, 0];
@@ -11561,21 +11605,19 @@ function getRelativePosition(targetImage) {
     // throw Error('Parent image was not found, can not get relative position.')
 }
 
-module.exports = exports["default"];
-
-},{}],55:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = sum;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = sum;
 
 var _newArray = require('new-array');
 
 var _newArray2 = _interopRequireDefault(_newArray);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // returns an array with the sum values of each channel
 
@@ -11584,7 +11626,7 @@ function sum() {
         bitDepth: [8, 16]
     });
 
-    var result = (0, _newArray2['default'])(this.channels, 0);
+    var result = (0, _newArray2.default)(this.channels, 0);
 
     for (var i = 0; i < this.data.length; i += this.channels) {
         for (var c = 0; c < this.channels; c++) {
@@ -11594,15 +11636,13 @@ function sum() {
     return result;
 }
 
-module.exports = exports['default'];
-
-},{"new-array":37}],56:[function(require,module,exports){
+},{"new-array":27}],64:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = getSVD;
+exports.default = getSVD;
 var Matrix = require('ml-matrix');
 
 function getSVD() {
@@ -11613,12 +11653,10 @@ function getSVD() {
     return Matrix.DC.SVD(this.pixelsArray);
 }
 
-module.exports = exports['default'];
-
-},{"ml-matrix":35}],57:[function(require,module,exports){
+},{"ml-matrix":20}],65:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 var loadBinary = undefined,
@@ -11675,11 +11713,10 @@ if (typeof self !== 'undefined') {
             return false;
         };
 
-        exports.ImageData = ImageData = require('canvas/lib/bindings').ImageData;
-
         var canvas = require('canvas');
         exports.DOMImage = DOMImage = canvas.Image;
         exports.Canvas = Canvas = canvas;
+        exports.ImageData = ImageData = canvas.ImageData;
 
         var fs = require('fs');
         exports.loadBinary = loadBinary = function (path) {
@@ -11699,307 +11736,309 @@ exports.ImageData = ImageData;
 exports.isDifferentOrigin = isDifferentOrigin;
 exports.env = env;
 
-},{"canvas":undefined,"canvas/lib/bindings":undefined,"fs":2}],58:[function(require,module,exports){
-// filters
+},{"canvas":undefined,"fs":2}],66:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = extend;
+exports.default = extend;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _invertGetSet = require('./filter/invertGetSet');
 
-var _filterInvertGetSet = require('./filter/invertGetSet');
+var _invertGetSet2 = _interopRequireDefault(_invertGetSet);
 
-var _filterInvertGetSet2 = _interopRequireDefault(_filterInvertGetSet);
+var _invertIterator = require('./filter/invertIterator');
 
-var _filterInvertIterator = require('./filter/invertIterator');
+var _invertIterator2 = _interopRequireDefault(_invertIterator);
 
-var _filterInvertIterator2 = _interopRequireDefault(_filterInvertIterator);
+var _invertOneLoop = require('./filter/invertOneLoop');
 
-var _filterInvertOneLoop = require('./filter/invertOneLoop');
+var _invertOneLoop2 = _interopRequireDefault(_invertOneLoop);
 
-var _filterInvertOneLoop2 = _interopRequireDefault(_filterInvertOneLoop);
+var _invertPixel = require('./filter/invertPixel');
 
-var _filterInvertPixel = require('./filter/invertPixel');
+var _invertPixel2 = _interopRequireDefault(_invertPixel);
 
-var _filterInvertPixel2 = _interopRequireDefault(_filterInvertPixel);
+var _invertApply = require('./filter/invertApply');
 
-var _filterInvertApply = require('./filter/invertApply');
+var _invertApply2 = _interopRequireDefault(_invertApply);
 
-var _filterInvertApply2 = _interopRequireDefault(_filterInvertApply);
+var _invertBinaryLoop = require('./filter/invertBinaryLoop');
 
-var _filterInvertBinaryLoop = require('./filter/invertBinaryLoop');
+var _invertBinaryLoop2 = _interopRequireDefault(_invertBinaryLoop);
 
-var _filterInvertBinaryLoop2 = _interopRequireDefault(_filterInvertBinaryLoop);
+var _invert = require('./filter/invert');
 
-var _filterInvert = require('./filter/invert');
+var _invert2 = _interopRequireDefault(_invert);
 
-var _filterInvert2 = _interopRequireDefault(_filterInvert);
+var _blur = require('./filter/blur');
 
-var _filterBlur = require('./filter/blur');
+var _blur2 = _interopRequireDefault(_blur);
 
-var _filterBlur2 = _interopRequireDefault(_filterBlur);
+var _median = require('./filter/median');
 
-var _filterMedian = require('./filter/median');
+var _median2 = _interopRequireDefault(_median);
 
-var _filterMedian2 = _interopRequireDefault(_filterMedian);
+var _gaussian = require('./filter/gaussian');
 
-var _filterGaussian = require('./filter/gaussian');
+var _gaussian2 = _interopRequireDefault(_gaussian);
 
-var _filterGaussian2 = _interopRequireDefault(_filterGaussian);
+var _sobel = require('./filter/sobel');
 
-var _filterSobel = require('./filter/sobel');
+var _sobel2 = _interopRequireDefault(_sobel);
 
-var _filterSobel2 = _interopRequireDefault(_filterSobel);
+var _level = require('./filter/level');
 
-var _filterLevel = require('./filter/level');
+var _level2 = _interopRequireDefault(_level);
 
-var _filterLevel2 = _interopRequireDefault(_filterLevel);
+var _add = require('./filter/add');
 
-var _filterAdd = require('./filter/add');
+var _add2 = _interopRequireDefault(_add);
 
-var _filterAdd2 = _interopRequireDefault(_filterAdd);
+var _subtract = require('./filter/subtract');
 
-var _filterSubtract = require('./filter/subtract');
+var _subtract2 = _interopRequireDefault(_subtract);
 
-var _filterSubtract2 = _interopRequireDefault(_filterSubtract);
+var _hypotenuse = require('./filter/hypotenuse');
 
-var _filterHypotenuse = require('./filter/hypotenuse');
+var _hypotenuse2 = _interopRequireDefault(_hypotenuse);
 
-var _filterHypotenuse2 = _interopRequireDefault(_filterHypotenuse);
+var _multiply = require('./filter/multiply');
 
-var _filterMultiply = require('./filter/multiply');
+var _multiply2 = _interopRequireDefault(_multiply);
 
-var _filterMultiply2 = _interopRequireDefault(_filterMultiply);
+var _divide = require('./filter/divide');
 
-var _filterDivide = require('./filter/divide');
+var _divide2 = _interopRequireDefault(_divide);
 
-var _filterDivide2 = _interopRequireDefault(_filterDivide);
+var _getBackground = require('./filter/getBackground');
+
+var _getBackground2 = _interopRequireDefault(_getBackground);
+
+var _crop = require('./transform/crop');
+
+var _crop2 = _interopRequireDefault(_crop);
+
+var _scale = require('./transform/scale/scale');
+
+var _scale2 = _interopRequireDefault(_scale);
+
+var _hsv = require('./transform/hsv');
+
+var _hsv2 = _interopRequireDefault(_hsv);
+
+var _hsl = require('./transform/hsl');
+
+var _hsl2 = _interopRequireDefault(_hsl);
+
+var _rgba = require('./transform/rgba8');
+
+var _rgba2 = _interopRequireDefault(_rgba);
+
+var _grey = require('./transform/grey/grey');
+
+var _grey2 = _interopRequireDefault(_grey);
+
+var _mask = require('./transform/mask/mask');
+
+var _mask2 = _interopRequireDefault(_mask);
+
+var _pad = require('./transform/pad');
+
+var _pad2 = _interopRequireDefault(_pad);
+
+var _resizeBinary = require('./transform/resizeBinary');
+
+var _resizeBinary2 = _interopRequireDefault(_resizeBinary);
+
+var _colorDepth = require('./transform/colorDepth');
+
+var _colorDepth2 = _interopRequireDefault(_colorDepth);
+
+var _setBorder = require('./utility/setBorder');
+
+var _setBorder2 = _interopRequireDefault(_setBorder);
+
+var _split = require('./utility/split');
+
+var _split2 = _interopRequireDefault(_split);
+
+var _getChannel = require('./utility/getChannel');
+
+var _getChannel2 = _interopRequireDefault(_getChannel);
+
+var _setChannel = require('./utility/setChannel');
+
+var _setChannel2 = _interopRequireDefault(_setChannel);
+
+var _getSimilarity = require('./utility/getSimilarity');
+
+var _getSimilarity2 = _interopRequireDefault(_getSimilarity);
+
+var _getPixelsGrid = require('./utility/getPixelsGrid');
+
+var _getPixelsGrid2 = _interopRequireDefault(_getPixelsGrid);
+
+var _getBestMatch = require('./utility/getBestMatch');
+
+var _getBestMatch2 = _interopRequireDefault(_getBestMatch);
+
+var _getRow = require('./utility/getRow');
+
+var _getRow2 = _interopRequireDefault(_getRow);
+
+var _getColumn = require('./utility/getColumn');
+
+var _getColumn2 = _interopRequireDefault(_getColumn);
+
+var _paintMasks = require('./operator/paintMasks');
+
+var _paintMasks2 = _interopRequireDefault(_paintMasks);
+
+var _paintPixels = require('./operator/paintPixels');
+
+var _paintPixels2 = _interopRequireDefault(_paintPixels);
+
+var _extract = require('./operator/extract');
+
+var _extract2 = _interopRequireDefault(_extract);
+
+var _convolution = require('./operator/convolution');
+
+var _convolution2 = _interopRequireDefault(_convolution);
+
+var _histogram = require('./compute/histogram');
+
+var _colorHistogram = require('./compute/colorHistogram');
+
+var _colorHistogram2 = _interopRequireDefault(_colorHistogram);
+
+var _min = require('./compute/min');
+
+var _min2 = _interopRequireDefault(_min);
+
+var _max = require('./compute/max');
+
+var _max2 = _interopRequireDefault(_max);
+
+var _sum = require('./compute/sum');
+
+var _sum2 = _interopRequireDefault(_sum);
+
+var _mean = require('./compute/mean');
+
+var _mean2 = _interopRequireDefault(_mean);
+
+var _median3 = require('./compute/median');
+
+var _median4 = _interopRequireDefault(_median3);
+
+var _pixelsArray = require('./compute/pixelsArray');
+
+var _pixelsArray2 = _interopRequireDefault(_pixelsArray);
+
+var _relativePosition = require('./compute/relativePosition');
+
+var _relativePosition2 = _interopRequireDefault(_relativePosition);
+
+var _svd = require('./compute/svd');
+
+var _svd2 = _interopRequireDefault(_svd);
+
+var _countAlphaPixels = require('./compute/countAlphaPixels');
+
+var _countAlphaPixels2 = _interopRequireDefault(_countAlphaPixels);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // transformers
-
-var _transformCrop = require('./transform/crop');
-
-var _transformCrop2 = _interopRequireDefault(_transformCrop);
-
-var _transformScaleScale = require('./transform/scale/scale');
-
-var _transformScaleScale2 = _interopRequireDefault(_transformScaleScale);
-
-var _transformHsv = require('./transform/hsv');
-
-var _transformHsv2 = _interopRequireDefault(_transformHsv);
-
-var _transformHsl = require('./transform/hsl');
-
-var _transformHsl2 = _interopRequireDefault(_transformHsl);
-
-var _transformRgba8 = require('./transform/rgba8');
-
-var _transformRgba82 = _interopRequireDefault(_transformRgba8);
-
-var _transformGreyGrey = require('./transform/grey/grey');
-
-var _transformGreyGrey2 = _interopRequireDefault(_transformGreyGrey);
-
-var _transformMaskMask = require('./transform/mask/mask');
-
-var _transformMaskMask2 = _interopRequireDefault(_transformMaskMask);
-
-var _transformPad = require('./transform/pad');
-
-var _transformPad2 = _interopRequireDefault(_transformPad);
-
-var _transformResizeBinary = require('./transform/resizeBinary');
-
-var _transformResizeBinary2 = _interopRequireDefault(_transformResizeBinary);
-
-var _transformColorDepth = require('./transform/colorDepth');
-
-var _transformColorDepth2 = _interopRequireDefault(_transformColorDepth);
-
-var _utilitySetBorder = require('./utility/setBorder');
-
-var _utilitySetBorder2 = _interopRequireDefault(_utilitySetBorder);
-
-var _utilitySplit = require('./utility/split');
-
-var _utilitySplit2 = _interopRequireDefault(_utilitySplit);
-
-var _utilityGetChannel = require('./utility/getChannel');
-
-var _utilityGetChannel2 = _interopRequireDefault(_utilityGetChannel);
-
-var _utilitySetChannel = require('./utility/setChannel');
-
-var _utilitySetChannel2 = _interopRequireDefault(_utilitySetChannel);
-
-var _utilityGetSimilarity = require('./utility/getSimilarity');
-
-var _utilityGetSimilarity2 = _interopRequireDefault(_utilityGetSimilarity);
-
-var _utilityGetPixelsGrid = require('./utility/getPixelsGrid');
-
-var _utilityGetPixelsGrid2 = _interopRequireDefault(_utilityGetPixelsGrid);
-
-var _utilityGetBestMatch = require('./utility/getBestMatch');
-
-var _utilityGetBestMatch2 = _interopRequireDefault(_utilityGetBestMatch);
-
-var _utilityGetRow = require('./utility/getRow');
-
-var _utilityGetRow2 = _interopRequireDefault(_utilityGetRow);
-
-var _utilityGetColumn = require('./utility/getColumn');
-
-var _utilityGetColumn2 = _interopRequireDefault(_utilityGetColumn);
-
-var _operatorPaintMasks = require('./operator/paintMasks');
-
-var _operatorPaintMasks2 = _interopRequireDefault(_operatorPaintMasks);
-
-var _operatorPaintPixels = require('./operator/paintPixels');
-
-var _operatorPaintPixels2 = _interopRequireDefault(_operatorPaintPixels);
-
-var _operatorExtract = require('./operator/extract');
-
-var _operatorExtract2 = _interopRequireDefault(_operatorExtract);
-
-var _operatorConvolution = require('./operator/convolution');
-
-var _operatorConvolution2 = _interopRequireDefault(_operatorConvolution);
-
-// computers
-
-var _computeHistogram = require('./compute/histogram');
-
-var _computeColorHistogram = require('./compute/colorHistogram');
-
-var _computeColorHistogram2 = _interopRequireDefault(_computeColorHistogram);
-
-var _computeMin = require('./compute/min');
-
-var _computeMin2 = _interopRequireDefault(_computeMin);
-
-var _computeMax = require('./compute/max');
-
-var _computeMax2 = _interopRequireDefault(_computeMax);
-
-var _computeSum = require('./compute/sum');
-
-var _computeSum2 = _interopRequireDefault(_computeSum);
-
-var _computeMean = require('./compute/mean');
-
-var _computeMean2 = _interopRequireDefault(_computeMean);
-
-var _computeMedian = require('./compute/median');
-
-var _computeMedian2 = _interopRequireDefault(_computeMedian);
-
-var _computePixelsArray = require('./compute/pixelsArray');
-
-var _computePixelsArray2 = _interopRequireDefault(_computePixelsArray);
-
-var _computeRelativePosition = require('./compute/relativePosition');
-
-var _computeRelativePosition2 = _interopRequireDefault(_computeRelativePosition);
-
-var _computeSvd = require('./compute/svd');
-
-var _computeSvd2 = _interopRequireDefault(_computeSvd);
-
-var _computeCountAlphaPixels = require('./compute/countAlphaPixels');
-
-var _computeCountAlphaPixels2 = _interopRequireDefault(_computeCountAlphaPixels);
-
+// filters
 function extend(Image) {
     var inPlace = { inPlace: true };
     var inPlaceStack = { inPlace: true, stack: true };
     var stack = { stack: true };
 
-    Image.extendMethod('invertGetSet', _filterInvertGetSet2['default'], inPlace);
-    Image.extendMethod('invertIterator', _filterInvertIterator2['default'], inPlace);
-    Image.extendMethod('invertPixel', _filterInvertPixel2['default'], inPlace);
-    Image.extendMethod('invertOneLoop', _filterInvertOneLoop2['default'], inPlace);
-    Image.extendMethod('invertApply', _filterInvertApply2['default'], inPlace);
-    Image.extendMethod('invert', _filterInvert2['default'], inPlaceStack);
-    Image.extendMethod('invertBinaryLoop', _filterInvertBinaryLoop2['default'], inPlace);
-    Image.extendMethod('level', _filterLevel2['default'], inPlace);
-    Image.extendMethod('add', _filterAdd2['default'], inPlace);
-    Image.extendMethod('subtract', _filterSubtract2['default'], inPlace);
-    Image.extendMethod('multiply', _filterMultiply2['default'], inPlace);
-    Image.extendMethod('divide', _filterDivide2['default'], inPlace);
-    Image.extendMethod('hypotenuse', _filterHypotenuse2['default']);
+    Image.extendMethod('invertGetSet', _invertGetSet2.default, inPlace);
+    Image.extendMethod('invertIterator', _invertIterator2.default, inPlace);
+    Image.extendMethod('invertPixel', _invertPixel2.default, inPlace);
+    Image.extendMethod('invertOneLoop', _invertOneLoop2.default, inPlace);
+    Image.extendMethod('invertApply', _invertApply2.default, inPlace);
+    Image.extendMethod('invert', _invert2.default, inPlaceStack);
+    Image.extendMethod('invertBinaryLoop', _invertBinaryLoop2.default, inPlace);
+    Image.extendMethod('level', _level2.default, inPlace);
+    Image.extendMethod('add', _add2.default, inPlace);
+    Image.extendMethod('subtract', _subtract2.default, inPlace);
+    Image.extendMethod('multiply', _multiply2.default, inPlace);
+    Image.extendMethod('divide', _divide2.default, inPlace);
+    Image.extendMethod('hypotenuse', _hypotenuse2.default);
+    Image.extendMethod('getBackground', _getBackground2.default);
 
-    Image.extendMethod('meanFilter', _filterBlur2['default']);
-    Image.extendMethod('medianFilter', _filterMedian2['default']);
-    Image.extendMethod('gaussianFilter', _filterGaussian2['default']);
-    Image.extendMethod('sobelFilter', _filterSobel2['default']);
+    Image.extendMethod('meanFilter', _blur2.default);
+    Image.extendMethod('medianFilter', _median2.default);
+    Image.extendMethod('gaussianFilter', _gaussian2.default);
+    Image.extendMethod('sobelFilter', _sobel2.default);
 
-    Image.extendMethod('crop', _transformCrop2['default'], stack);
-    Image.extendMethod('scale', _transformScaleScale2['default'], stack);
-    Image.extendMethod('hsv', _transformHsv2['default']);
-    Image.extendMethod('hsl', _transformHsl2['default']);
-    Image.extendMethod('rgba8', _transformRgba82['default']);
-    Image.extendMethod('grey', _transformGreyGrey2['default']).extendMethod('gray', _transformGreyGrey2['default']);
-    Image.extendMethod('mask', _transformMaskMask2['default']);
-    Image.extendMethod('pad', _transformPad2['default']);
-    Image.extendMethod('resizeBinary', _transformResizeBinary2['default']);
-    Image.extendMethod('colorDepth', _transformColorDepth2['default']);
-    Image.extendMethod('setBorder', _utilitySetBorder2['default'], inPlace);
+    Image.extendMethod('crop', _crop2.default, stack);
+    Image.extendMethod('scale', _scale2.default, stack);
+    Image.extendMethod('hsv', _hsv2.default);
+    Image.extendMethod('hsl', _hsl2.default);
+    Image.extendMethod('rgba8', _rgba2.default);
+    Image.extendMethod('grey', _grey2.default).extendMethod('gray', _grey2.default);
+    Image.extendMethod('mask', _mask2.default);
+    Image.extendMethod('pad', _pad2.default);
+    Image.extendMethod('resizeBinary', _resizeBinary2.default);
+    Image.extendMethod('colorDepth', _colorDepth2.default);
+    Image.extendMethod('setBorder', _setBorder2.default, inPlace);
 
-    Image.extendMethod('getRow', _utilityGetRow2['default']);
-    Image.extendMethod('getColumn', _utilityGetColumn2['default']);
+    Image.extendMethod('getRow', _getRow2.default);
+    Image.extendMethod('getColumn', _getColumn2.default);
 
-    Image.extendMethod('split', _utilitySplit2['default']);
-    Image.extendMethod('getChannel', _utilityGetChannel2['default']);
-    Image.extendMethod('setChannel', _utilitySetChannel2['default']);
-    Image.extendMethod('getSimilarity', _utilityGetSimilarity2['default']);
-    Image.extendMethod('getPixelsGrid', _utilityGetPixelsGrid2['default']);
-    Image.extendMethod('getBestMatch', _utilityGetBestMatch2['default']);
+    Image.extendMethod('split', _split2.default);
+    Image.extendMethod('getChannel', _getChannel2.default);
+    Image.extendMethod('setChannel', _setChannel2.default);
+    Image.extendMethod('getSimilarity', _getSimilarity2.default);
+    Image.extendMethod('getPixelsGrid', _getPixelsGrid2.default);
+    Image.extendMethod('getBestMatch', _getBestMatch2.default);
 
-    Image.extendMethod('paintMasks', _operatorPaintMasks2['default'], inPlace);
-    Image.extendMethod('paintPixels', _operatorPaintPixels2['default'], inPlace);
-    Image.extendMethod('extract', _operatorExtract2['default']);
-    Image.extendMethod('convolution', _operatorConvolution2['default']);
+    Image.extendMethod('paintMasks', _paintMasks2.default, inPlace);
+    Image.extendMethod('paintPixels', _paintPixels2.default, inPlace);
+    Image.extendMethod('extract', _extract2.default);
+    Image.extendMethod('convolution', _convolution2.default);
 
-    Image.extendMethod('countAlphaPixels', _computeCountAlphaPixels2['default']);
-    Image.extendMethod('getHistogram', _computeHistogram.getHistogram).extendProperty('histogram', _computeHistogram.getHistogram);
-    Image.extendMethod('getHistograms', _computeHistogram.getHistograms).extendProperty('histograms', _computeHistogram.getHistograms);
-    Image.extendMethod('getColorHistogram', _computeColorHistogram2['default']).extendProperty('colorHistogram', _computeColorHistogram2['default']);
-    Image.extendMethod('getMin', _computeMin2['default']).extendProperty('min', _computeMin2['default']);
-    Image.extendMethod('getMax', _computeMax2['default']).extendProperty('max', _computeMax2['default']);
-    Image.extendMethod('getSum', _computeSum2['default']).extendProperty('sum', _computeSum2['default']);
-    Image.extendMethod('getMedian', _computeSum2['default']).extendProperty('median', _computeMedian2['default']);
-    Image.extendMethod('getMean', _computeMean2['default']).extendProperty('mean', _computeMean2['default']);
-    Image.extendMethod('getPixelsArray', _computePixelsArray2['default']).extendProperty('pixelsArray', _computePixelsArray2['default']);
-    Image.extendMethod('getRelativePosition', _computeRelativePosition2['default']);
-    Image.extendMethod('getSVD', _computeSvd2['default']).extendProperty('svd', _computeSvd2['default']);
+    Image.extendMethod('countAlphaPixels', _countAlphaPixels2.default);
+    Image.extendMethod('getHistogram', _histogram.getHistogram).extendProperty('histogram', _histogram.getHistogram);
+    Image.extendMethod('getHistograms', _histogram.getHistograms).extendProperty('histograms', _histogram.getHistograms);
+    Image.extendMethod('getColorHistogram', _colorHistogram2.default).extendProperty('colorHistogram', _colorHistogram2.default);
+    Image.extendMethod('getMin', _min2.default).extendProperty('min', _min2.default);
+    Image.extendMethod('getMax', _max2.default).extendProperty('max', _max2.default);
+    Image.extendMethod('getSum', _sum2.default).extendProperty('sum', _sum2.default);
+    Image.extendMethod('getMedian', _sum2.default).extendProperty('median', _median4.default);
+    Image.extendMethod('getMean', _mean2.default).extendProperty('mean', _mean2.default);
+    Image.extendMethod('getPixelsArray', _pixelsArray2.default).extendProperty('pixelsArray', _pixelsArray2.default);
+    Image.extendMethod('getRelativePosition', _relativePosition2.default);
+    Image.extendMethod('getSVD', _svd2.default).extendProperty('svd', _svd2.default);
 }
 
-module.exports = exports['default'];
+// computers
 
-},{"./compute/colorHistogram":46,"./compute/countAlphaPixels":47,"./compute/histogram":48,"./compute/max":49,"./compute/mean":50,"./compute/median":51,"./compute/min":52,"./compute/pixelsArray":53,"./compute/relativePosition":54,"./compute/sum":55,"./compute/svd":56,"./filter/add":59,"./filter/blur":60,"./filter/divide":61,"./filter/gaussian":62,"./filter/hypotenuse":63,"./filter/invert":64,"./filter/invertApply":65,"./filter/invertBinaryLoop":66,"./filter/invertGetSet":67,"./filter/invertIterator":68,"./filter/invertOneLoop":69,"./filter/invertPixel":70,"./filter/level":71,"./filter/median":72,"./filter/multiply":73,"./filter/sobel":74,"./filter/subtract":75,"./operator/convolution":82,"./operator/extract":83,"./operator/paintMasks":84,"./operator/paintPixels":85,"./transform/colorDepth":93,"./transform/crop":94,"./transform/grey/grey":96,"./transform/hsl":101,"./transform/hsv":102,"./transform/mask/mask":107,"./transform/pad":119,"./transform/resizeBinary":120,"./transform/rgba8":121,"./transform/scale/scale":123,"./utility/getBestMatch":125,"./utility/getChannel":126,"./utility/getColumn":127,"./utility/getPixelsGrid":128,"./utility/getRow":129,"./utility/getSimilarity":130,"./utility/setBorder":131,"./utility/setChannel":132,"./utility/split":133}],59:[function(require,module,exports){
+},{"./compute/colorHistogram":54,"./compute/countAlphaPixels":55,"./compute/histogram":56,"./compute/max":57,"./compute/mean":58,"./compute/median":59,"./compute/min":60,"./compute/pixelsArray":61,"./compute/relativePosition":62,"./compute/sum":63,"./compute/svd":64,"./filter/add":67,"./filter/blur":68,"./filter/divide":69,"./filter/gaussian":70,"./filter/getBackground":71,"./filter/hypotenuse":72,"./filter/invert":73,"./filter/invertApply":74,"./filter/invertBinaryLoop":75,"./filter/invertGetSet":76,"./filter/invertIterator":77,"./filter/invertOneLoop":78,"./filter/invertPixel":79,"./filter/level":80,"./filter/median":81,"./filter/multiply":82,"./filter/sobel":83,"./filter/subtract":84,"./operator/convolution":91,"./operator/extract":92,"./operator/paintMasks":93,"./operator/paintPixels":94,"./transform/colorDepth":102,"./transform/crop":103,"./transform/grey/grey":105,"./transform/hsl":110,"./transform/hsv":111,"./transform/mask/mask":116,"./transform/pad":128,"./transform/resizeBinary":129,"./transform/rgba8":130,"./transform/scale/scale":132,"./utility/getBestMatch":134,"./utility/getChannel":135,"./utility/getColumn":136,"./utility/getPixelsGrid":137,"./utility/getRow":138,"./utility/getSimilarity":139,"./utility/setBorder":140,"./utility/setChannel":141,"./utility/split":142}],67:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = add;
+exports.default = add;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _utilChannel = require('../../util/channel');
+var _channel = require('../../util/channel');
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _utilValue = require('../../util/value');
+var _value = require('../../util/value');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function add(value) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -12010,8 +12049,8 @@ function add(value) {
         bitDepth: [8, 16]
     });
 
-    channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
-    value = (0, _utilValue.checkNumberArray)(value);
+    channels = (0, _channel.validateArrayOfChannels)(this, { channels: channels });
+    value = (0, _value.checkNumberArray)(value);
 
     // we allow 3 cases, the value may be an array (1D), an image or a single value
     if (!isNaN(value)) {
@@ -12034,28 +12073,25 @@ function add(value) {
     }
 }
 
-module.exports = exports['default'];
-
-},{"../../util/channel":144,"../../util/value":151,"../image":76}],60:[function(require,module,exports){
+},{"../../util/channel":153,"../../util/value":160,"../image":85}],68:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = meanFilter;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = meanFilter;
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _operatorConvolution = require('../operator/convolution');
+var _convolution = require('../operator/convolution');
 
-var _operatorConvolution2 = _interopRequireDefault(_operatorConvolution);
+var _convolution2 = _interopRequireDefault(_convolution);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // first release of mean filter
-
 function meanFilter(k) {
 
     this.checkProcessable('meanFilter', {
@@ -12075,28 +12111,26 @@ function meanFilter(k) {
         kernel[i] = 1;
     }
 
-    return _operatorConvolution2['default'].call(this, kernel);
+    return _convolution2.default.call(this, kernel);
 }
 
-module.exports = exports['default'];
-
-},{"../image":76,"../operator/convolution":82}],61:[function(require,module,exports){
+},{"../image":85,"../operator/convolution":91}],69:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = add;
+exports.default = add;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _utilChannel = require('../../util/channel');
+var _channel = require('../../util/channel');
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _utilValue = require('../../util/value');
+var _value = require('../../util/value');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function add(value) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -12107,8 +12141,8 @@ function add(value) {
         bitDepth: [8, 16]
     });
 
-    channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
-    value = (0, _utilValue.checkNumberArray)(value);
+    channels = (0, _channel.validateArrayOfChannels)(this, { channels: channels });
+    value = (0, _value.checkNumberArray)(value);
 
     if (!isNaN(value)) {
         for (var j = 0; j < channels.length; j++) {
@@ -12130,25 +12164,23 @@ function add(value) {
     }
 }
 
-module.exports = exports['default'];
-
-},{"../../util/channel":144,"../../util/value":151,"../image":76}],62:[function(require,module,exports){
+},{"../../util/channel":153,"../../util/value":160,"../image":85}],70:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports['default'] = gaussianFilter;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = gaussianFilter;
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _operatorConvolution = require('../operator/convolution');
+var _convolution = require('../operator/convolution');
 
-var _operatorConvolution2 = _interopRequireDefault(_operatorConvolution);
+var _convolution2 = _interopRequireDefault(_convolution);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function gaussianFilter() {
 	var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -12173,7 +12205,7 @@ function gaussianFilter() {
 		kernel = getKernel(radius, sigma);
 	}
 
-	return _operatorConvolution2['default'].call(this, kernel, {
+	return _convolution2.default.call(this, kernel, {
 		border: border,
 		channels: channels
 	});
@@ -12236,23 +12268,54 @@ function getSigmaKernel(sigma) {
 
 	return getKernel(neighbors, sigma);
 }
-module.exports = exports['default'];
 
-},{"../image":76,"../operator/convolution":82}],63:[function(require,module,exports){
+},{"../image":85,"../operator/convolution":91}],71:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = hypotenuse;
+exports.default = getBackground;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _utilChannel = require('../../util/channel');
+var _mlRegression = require('ml-regression');
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getBackground(coordinates, values, options) {
+    var model = new _mlRegression.KernelRidgeRegression(coordinates, values, options);
+    var allCoordinates = new Array(this.size);
+    for (var i = 0; i < this.width; i++) {
+        for (var j = 0; j < this.height; j++) {
+            allCoordinates[j * this.width + i] = [i, j];
+        }
+    }
+    var result = model.predict(allCoordinates);
+    var background = _image2.default.createFrom(this);
+    for (var i = 0; i < this.size; i++) {
+        background.data[i] = Math.min(this.maxValue, Math.max(0, result[i][0]));
+    }
+    return background;
+}
+
+},{"../image":85,"ml-regression":23}],72:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = hypotenuse;
+
+var _channel = require('../../util/channel');
+
+var _image = require('../image');
+
+var _image2 = _interopRequireDefault(_image);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function hypotenuse(otherImage) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -12273,9 +12336,9 @@ function hypotenuse(otherImage) {
         throw new Error('hypotenuse: both images must have the same number of channels');
     }
 
-    var newImage = _image2['default'].createFrom(this, { bitDepth: bitDepth });
+    var newImage = _image2.default.createFrom(this, { bitDepth: bitDepth });
 
-    channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
+    channels = (0, _channel.validateArrayOfChannels)(this, { channels: channels });
 
     var clamped = newImage.isClamped;
 
@@ -12295,19 +12358,15 @@ function hypotenuse(otherImage) {
     return newImage;
 }
 
-module.exports = exports['default'];
-
-},{"../../util/channel":144,"../image":76}],64:[function(require,module,exports){
-// we try the faster methods
-
+},{"../../util/channel":153,"../image":85}],73:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = invert;
+exports.default = invert;
 
-var _utilChannel = require('../../util/channel');
+var _channel = require('../../util/channel');
 
 function invert() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -12327,37 +12386,34 @@ function invert() {
             data[i] = ~data[i];
         }
     } else {
-        var _channels = (0, _utilChannel.validateArrayOfChannels)(this, _channels, true);
+        channels = (0, _channel.validateArrayOfChannels)(this, channels, true);
 
         var data = this.data;
 
         // for (let j of channels) { WOULD SLOW DO OF A FACTOR 10 !
 
-        for (var c = 0; c < _channels.length; c++) {
-            var j = _channels[c];
+        for (var c = 0; c < channels.length; c++) {
+            var j = channels[c];
             for (var i = j; i < data.length; i += this.channels) {
                 data[i] = this.maxValue - data[i];
             }
         }
     }
-}
+} // we try the faster methods
 
-module.exports = exports['default'];
+},{"../../util/channel":153}],74:[function(require,module,exports){
+'use strict';
 
-},{"../../util/channel":144}],65:[function(require,module,exports){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = invertApply;
 // this code gives the same result as invert()
 // but is based on a matrix of pixels
 // may be easier to implement some algorithm
 // but it will likely be much slower
 
 // this method is 50 times SLOWER than invert !!!!!!
-
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-exports['default'] = invertApply;
 
 function invertApply() {
 
@@ -12381,16 +12437,13 @@ function invertApply() {
     }
 }
 
-module.exports = exports['default'];
-
-},{}],66:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = invertBinaryLoop;
-
+exports.default = invertBinaryLoop;
 function invertBinaryLoop() {
     this.checkProcessable('invertBinaryLoop', {
         bitDepth: [1]
@@ -12401,16 +12454,13 @@ function invertBinaryLoop() {
     }
 }
 
-module.exports = exports['default'];
-
-},{}],67:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = invert;
-
+exports.default = invert;
 function invert() {
     this.checkProcessable('invert', {
         bitDepth: [1, 8, 16]
@@ -12436,16 +12486,13 @@ function invert() {
     }
 }
 
-module.exports = exports['default'];
-
-},{}],68:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = invertIterator;
-
+exports.default = invertIterator;
 function invertIterator() {
     this.checkProcessable('invert', {
         bitDepth: [1, 8, 16]
@@ -12460,47 +12507,24 @@ function invertIterator() {
             data[i] = ~data[i];
         }
     } else {
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
+        for (var _ref of this.pixels()) {
+            var index = _ref.index;
+            var pixel = _ref.pixel;
 
-        try {
-            for (var _iterator = this.pixels()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                var _step$value = _step.value;
-                var index = _step$value.index;
-                var pixel = _step$value.pixel;
-
-                for (var k = 0; k < this.components; k++) {
-                    this.setValue(index, k, this.maxValue - pixel[k]);
-                }
-            }
-        } catch (err) {
-            _didIteratorError = true;
-            _iteratorError = err;
-        } finally {
-            try {
-                if (!_iteratorNormalCompletion && _iterator['return']) {
-                    _iterator['return']();
-                }
-            } finally {
-                if (_didIteratorError) {
-                    throw _iteratorError;
-                }
+            for (var k = 0; k < this.components; k++) {
+                this.setValue(index, k, this.maxValue - pixel[k]);
             }
         }
     }
 }
 
-module.exports = exports['default'];
-
-},{}],69:[function(require,module,exports){
+},{}],78:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = invertOneLoop;
-
+exports.default = invertOneLoop;
 function invertOneLoop() {
     this.checkProcessable('invertOneLoop', {
         bitDepth: [8, 16]
@@ -12514,20 +12538,17 @@ function invertOneLoop() {
     }
 }
 
-module.exports = exports['default'];
+},{}],79:[function(require,module,exports){
+'use strict';
 
-},{}],70:[function(require,module,exports){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = invertPixel;
 // this code gives the same result as invert()
 // but is based on a matrix of pixels
 // may be easier to implement some algorithm
 // but it will likely be much slower
-
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-exports['default'] = invertPixel;
 
 function invertPixel() {
     this.checkProcessable('invertPixel', {
@@ -12545,23 +12566,21 @@ function invertPixel() {
     }
 }
 
-module.exports = exports['default'];
-
-},{}],71:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = level;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = level;
 
 var _newArray = require('new-array');
 
 var _newArray2 = _interopRequireDefault(_newArray);
 
-var _utilChannel = require('../../util/channel');
+var _channel = require('../../util/channel');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function level() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -12578,7 +12597,7 @@ function level() {
         bitDepth: [8, 16]
     });
 
-    channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
+    channels = (0, _channel.validateArrayOfChannels)(this, { channels: channels });
 
     switch (algorithm) {
 
@@ -12586,8 +12605,8 @@ function level() {
             if (min < 0) min = 0;
             if (max > this.maxValue) max = this.maxValue;
 
-            if (!Array.isArray(min)) min = (0, _newArray2['default'])(channels.length, min);
-            if (!Array.isArray(max)) max = (0, _newArray2['default'])(channels.length, max);
+            if (!Array.isArray(min)) min = (0, _newArray2.default)(channels.length, min);
+            if (!Array.isArray(max)) max = (0, _newArray2.default)(channels.length, max);
 
             processImage(this, min, max, channels);
             break;
@@ -12601,44 +12620,23 @@ function processImage(image, min, max, channels) {
     var delta = 1e-5; // sorry no better value that this "best guess"
     var factor = new Array(image.channels);
 
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-        for (var _iterator = channels[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var c = _step.value;
-
-            if (min[c] === 0 && max[c] === image.maxValue) {
-                factor[c] = 0;
-            } else if (max[c] === min[c]) {
-                factor[c] = 0;
-            } else {
-                factor[c] = (image.maxValue + 1 - delta) / (max[c] - min[c]);
-            }
-            min[c] += (0.5 - delta / 2) / factor[c];
+    for (var c of channels) {
+        if (min[c] === 0 && max[c] === image.maxValue) {
+            factor[c] = 0;
+        } else if (max[c] === min[c]) {
+            factor[c] = 0;
+        } else {
+            factor[c] = (image.maxValue + 1 - delta) / (max[c] - min[c]);
         }
-
-        /*
-         Note on border effect
-         For 8 bits images we should calculate for the space between -0.5 and 255.5
-         so that after ronding the first and last points still have the same population
-         But doing this we need to deal with Math.round that gives 256 if the value is 255.5
-         */
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator['return']) {
-                _iterator['return']();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
-        }
+        min[c] += (0.5 - delta / 2) / factor[c];
     }
+
+    /*
+     Note on border effect
+     For 8 bits images we should calculate for the space between -0.5 and 255.5
+     so that after ronding the first and last points still have the same population
+     But doing this we need to deal with Math.round that gives 256 if the value is 255.5
+     */
 
     for (var j = 0; j < channels.length; j++) {
         var c = channels[j];
@@ -12649,27 +12647,26 @@ function processImage(image, min, max, channels) {
         }
     }
 }
-module.exports = exports['default'];
 
-},{"../../util/channel":144,"new-array":37}],72:[function(require,module,exports){
-/**
- * Created by Cristian on 18/07/2015.
- */
+},{"../../util/channel":153,"new-array":27}],81:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = medianFilter;
+exports.default = medianFilter;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _utilChannel = require('../../util/channel');
+var _channel = require('../../util/channel');
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Created by Cristian on 18/07/2015.
+ */
 function medianFilter(radius, channels) {
     var border = arguments.length <= 2 || arguments[2] === undefined ? 'copy' : arguments[2];
 
@@ -12681,11 +12678,11 @@ function medianFilter(radius, channels) {
         throw new Error('Kernel radius should be greater than 0');
     }
 
-    channels = (0, _utilChannel.validateArrayOfChannels)(this, channels, true);
+    channels = (0, _channel.validateArrayOfChannels)(this, channels, true);
 
     var kWidth = radius;
     var kHeight = radius;
-    var newImage = _image2['default'].createFrom(this);
+    var newImage = _image2.default.createFrom(this);
 
     var size = (kWidth * 2 + 1) * (kHeight * 2 + 1);
     var middle = Math.floor(size / 2);
@@ -12718,28 +12715,25 @@ function medianFilter(radius, channels) {
     newImage.setBorder({ size: [kWidth, kHeight], algorithm: border });
 
     return newImage;
-}
+} //End medianFilter function
 
-//End medianFilter function
-module.exports = exports['default'];
-
-},{"../../util/channel":144,"../image":76}],73:[function(require,module,exports){
+},{"../../util/channel":153,"../image":85}],82:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = add;
+exports.default = add;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _utilChannel = require('../../util/channel');
+var _channel = require('../../util/channel');
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _utilValue = require('../../util/value');
+var _value = require('../../util/value');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function add(value) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -12751,8 +12745,8 @@ function add(value) {
     });
     if (value <= 0) throw new Error('multiply: the value must be greater than 0');
 
-    channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
-    value = (0, _utilValue.checkNumberArray)(value);
+    channels = (0, _channel.validateArrayOfChannels)(this, { channels: channels });
+    value = (0, _value.checkNumberArray)(value);
 
     if (!isNaN(value)) {
         for (var j = 0; j < channels.length; j++) {
@@ -12774,35 +12768,33 @@ function add(value) {
     }
 }
 
-module.exports = exports['default'];
-
-},{"../../util/channel":144,"../../util/value":151,"../image":76}],74:[function(require,module,exports){
+},{"../../util/channel":153,"../../util/value":160,"../image":85}],83:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports['default'] = sobelFilter;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = sobelFilter;
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _operatorConvolution = require('../operator/convolution');
+var _convolution = require('../operator/convolution');
 
-var _operatorConvolution2 = _interopRequireDefault(_operatorConvolution);
+var _convolution2 = _interopRequireDefault(_convolution);
 
-var _utilKernels = require('../../util/kernels');
+var _kernels = require('../../util/kernels');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function sobelFilter() {
 	var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
 	var _ref$kernelX = _ref.kernelX;
-	var kernelX = _ref$kernelX === undefined ? _utilKernels.GRADIENT_X : _ref$kernelX;
+	var kernelX = _ref$kernelX === undefined ? _kernels.GRADIENT_X : _ref$kernelX;
 	var _ref$kernelY = _ref.kernelY;
-	var kernelY = _ref$kernelY === undefined ? _utilKernels.GRADIENT_Y : _ref$kernelY;
+	var kernelY = _ref$kernelY === undefined ? _kernels.GRADIENT_Y : _ref$kernelY;
 	var _ref$border = _ref.border;
 	var border = _ref$border === undefined ? 'copy' : _ref$border;
 	var channels = _ref.channels;
@@ -12811,13 +12803,13 @@ function sobelFilter() {
 		bitDepth: [8, 16]
 	});
 
-	var gX = _operatorConvolution2['default'].call(this, kernelX, {
+	var gX = _convolution2.default.call(this, kernelX, {
 		channels: channels,
 		border: border,
 		bitDepth: 32
 	});
 
-	var gY = _operatorConvolution2['default'].call(this, kernelY, {
+	var gY = _convolution2.default.call(this, kernelY, {
 		channels: channels,
 		border: border,
 		bitDepth: 32
@@ -12826,25 +12818,23 @@ function sobelFilter() {
 	return gX.hypotenuse(gY, { bitDepth: this.bitDepth, channels: channels });
 }
 
-module.exports = exports['default'];
-
-},{"../../util/kernels":147,"../image":76,"../operator/convolution":82}],75:[function(require,module,exports){
+},{"../../util/kernels":157,"../image":85,"../operator/convolution":91}],84:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = subtract;
+exports.default = subtract;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _utilChannel = require('../../util/channel');
+var _channel = require('../../util/channel');
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _utilValue = require('../../util/value');
+var _value = require('../../util/value');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function subtract(value) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -12855,8 +12845,8 @@ function subtract(value) {
         bitDepth: [8, 16]
     });
 
-    channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels });
-    value = (0, _utilValue.checkNumberArray)(value);
+    channels = (0, _channel.validateArrayOfChannels)(this, { channels: channels });
+    value = (0, _value.checkNumberArray)(value);
 
     if (!isNaN(value)) {
         for (var j = 0; j < channels.length; j++) {
@@ -12872,28 +12862,18 @@ function subtract(value) {
         for (var j = 0; j < channels.length; j++) {
             var c = channels[j];
             for (var i = 0; i < this.data.length; i += this.channels) {
-                this.data[i + c] = Math.max(0, Math.min(this.maxValue, this.data[i + c] + value[i + c] >> 0));
+                this.data[i + c] = Math.max(0, Math.min(this.maxValue, this.data[i + c] - value[i + c] >> 0));
             }
         }
     }
 }
 
-module.exports = exports['default'];
-
-},{"../../util/channel":144,"../../util/value":151,"../image":76}],76:[function(require,module,exports){
+},{"../../util/channel":153,"../../util/value":160,"../image":85}],85:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var _kind = require('./kind');
 
@@ -12911,11 +12891,11 @@ var _bitMethods2 = _interopRequireDefault(_bitMethods);
 
 var _fs = require('fs');
 
-var _modelModel = require('./model/model');
+var _model = require('./model/model');
 
-var _roiManager = require('./roi/manager');
+var _manager = require('./roi/manager');
 
-var _roiManager2 = _interopRequireDefault(_roiManager);
+var _manager2 = _interopRequireDefault(_manager);
 
 var _mediaTypes = require('./mediaTypes');
 
@@ -12925,9 +12905,13 @@ var _extend4 = _interopRequireDefault(_extend3);
 
 var _load = require('./load');
 
-var _stackStack = require('../stack/stack');
+var _stack = require('../stack/stack');
 
-var _stackStack2 = _interopRequireDefault(_stackStack);
+var _stack2 = _interopRequireDefault(_stack);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var computedPropertyDescriptor = {
     configurable: true,
@@ -12935,12 +12919,26 @@ var computedPropertyDescriptor = {
     get: undefined
 };
 
-var Image = (function () {
-    function Image(width, height, data, options) {
-        _classCallCheck(this, Image);
-
+class Image {
+    constructor(width, height, data, options) {
         if (width === undefined) width = 1;
         if (height === undefined) height = 1;
+
+        // copy another image
+        if (typeof width === 'object') {
+            var otherImage = width;
+            var cloneData = height === true;
+            width = otherImage.width;
+            height = otherImage.height;
+            data = cloneData ? otherImage.data.slice() : otherImage.data;
+            options = {
+                position: otherImage.position,
+                components: otherImage.components,
+                alpha: otherImage.alpha,
+                bitDepth: otherImage.bitDepth,
+                colorModel: otherImage.colorModel
+            };
+        }
 
         if (data && !data.length) {
             options = data;
@@ -12975,7 +12973,7 @@ var Image = (function () {
             theKind = (0, _kind.getKind)(_kindNames.RGBA);
         }
 
-        var kindDefinition = (0, _extend4['default'])({}, theKind, options);
+        var kindDefinition = (0, _extend4.default)({}, theKind, options);
         this.components = kindDefinition.components;
         this.alpha = kindDefinition.alpha + 0;
         this.bitDepth = kindDefinition.bitDepth;
@@ -12986,458 +12984,393 @@ var Image = (function () {
         this.initialize();
 
         if (!data) (0, _kind.createPixelArray)(this);else {
-            var _length = (0, _kind.getTheoreticalPixelArraySize)(this);
-            if (_length !== data.length) {
-                throw new RangeError('incorrect data size. Should be ' + _length + ' and found ' + data.length);
+            var length = (0, _kind.getTheoreticalPixelArraySize)(this);
+            if (length !== data.length) {
+                throw new RangeError(`incorrect data size. Should be ${ length } and found ${ data.length }`);
             }
             this.data = data;
         }
     }
 
-    _createClass(Image, [{
-        key: 'initialize',
-        value: function initialize() {
-            this.size = this.width * this.height;
-            this.sizes = [this.width, this.height];
-            this.channels = this.components + this.alpha;
-            if (this.bitDepth === 32) {
-                this.maxValue = Number.MAX_VALUE;
-            } else {
-                this.maxValue = Math.pow(2, this.bitDepth) - 1; // we may not use 1 << this.bitDepth for 32 bits images
-            }
+    initialize() {
+        this.size = this.width * this.height;
+        this.sizes = [this.width, this.height];
+        this.channels = this.components + this.alpha;
+        if (this.bitDepth === 32) {
+            this.maxValue = Number.MAX_VALUE;
+        } else {
+            this.maxValue = Math.pow(2, this.bitDepth) - 1; // we may not use 1 << this.bitDepth for 32 bits images
+        }
 
-            this.multiplierX = this.channels;
-            this.multiplierY = this.channels * this.width;
-            this.isClamped = this.bitDepth < 32 ? true : false;
-            this.borderSizes = [0, 0]; // when a filter create a border it may have impact on future processing like ROI
-        }
-    }, {
-        key: 'getPixelIndex',
-        value: function getPixelIndex(indices) {
-            var shift = 0;
-            for (var i = 0; i < indices.length; i++) {
-                shift += this.multipliers[i] * indices[i];
-            }
-            return shift;
-        }
-    }, {
-        key: 'setValueXY',
-        value: function setValueXY(x, y, channel, value) {
-            this.data[(y * this.width + x) * this.channels + channel] = value;
-            this.computed = null;
-            return this;
-        }
-    }, {
-        key: 'getValueXY',
-        value: function getValueXY(x, y, channel) {
-            return this.data[(y * this.width + x) * this.channels + channel];
-        }
-    }, {
-        key: 'setValue',
-        value: function setValue(pixel, channel, value) {
-            this.data[pixel * this.channels + channel] = value;
-            this.computed = null;
-            return this;
-        }
-    }, {
-        key: 'getValue',
-        value: function getValue(pixel, channel) {
-            return this.data[pixel * this.channels + channel];
-        }
-    }, {
-        key: 'setPixelXY',
-        value: function setPixelXY(x, y, value) {
-            return this.setPixel(y * this.width + x, value);
-        }
-    }, {
-        key: 'getPixelXY',
-        value: function getPixelXY(x, y) {
-            return this.getPixel(y * this.width + x);
-        }
-    }, {
-        key: 'setPixel',
-        value: function setPixel(pixel, value) {
-            var target = pixel * this.channels;
-            for (var i = 0; i < value.length; i++) {
-                this.data[target + i] = value[i];
-            }
-            this.computed = null;
-            return this;
-        }
-    }, {
-        key: 'getPixel',
-        value: function getPixel(pixel) {
-            var value = new Array(this.channels);
-            var target = pixel * this.channels;
-            for (var i = 0; i < this.channels; i++) {
-                value[i] = this.data[target + i];
-            }
-            return value;
-        }
-    }, {
-        key: 'toDataURL',
-        value: function toDataURL() {
-            var type = arguments.length <= 0 || arguments[0] === undefined ? 'image/png' : arguments[0];
+        this.multiplierX = this.channels;
+        this.multiplierY = this.channels * this.width;
+        this.isClamped = this.bitDepth < 32;
+        this.borderSizes = [0, 0]; // when a filter create a border it may have impact on future processing like ROI
+    }
 
-            return this.getCanvas().toDataURL((0, _mediaTypes.getType)(type));
-        }
-    }, {
-        key: 'getCanvas',
-        value: function getCanvas() {
-            var data = new _environment.ImageData(this.getRGBAData(), this.width, this.height);
-            var canvas = new _environment.Canvas(this.width, this.height);
-            var ctx = canvas.getContext('2d');
-            ctx.putImageData(data, 0, 0);
-            return canvas;
-        }
-    }, {
-        key: 'getRGBAData',
-        value: function getRGBAData() {
-            this.checkProcessable('getRGBAData', {
-                components: [1, 3],
-                bitDepth: [1, 8, 16]
-            });
-            var size = this.size;
-            var newData = new Uint8ClampedArray(this.width * this.height * 4);
-            if (this.bitDepth === 1) {
-                for (var i = 0; i < size; i++) {
-                    var value = this.getBit(i);
-                    newData[i * 4] = value * 255;
-                    newData[i * 4 + 1] = value * 255;
-                    newData[i * 4 + 2] = value * 255;
+    static load(url) {
+        return (0, _load.loadURL)(url);
+    }
+
+    static extendMethod(name, method) {
+        var _ref = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
+        var _ref$inPlace = _ref.inPlace;
+        var inPlace = _ref$inPlace === undefined ? false : _ref$inPlace;
+        var _ref$returnThis = _ref.returnThis;
+        var returnThis = _ref$returnThis === undefined ? true : _ref$returnThis;
+        var _ref$partialArgs = _ref.partialArgs;
+        var partialArgs = _ref$partialArgs === undefined ? [] : _ref$partialArgs;
+        var _ref$stack = _ref.stack;
+        var stack = _ref$stack === undefined ? false : _ref$stack;
+
+        if (inPlace) {
+            Image.prototype[name] = function () {
+                // remove computed properties
+                this.computed = null;
+
+                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                    args[_key] = arguments[_key];
                 }
-            } else {
-                if (this.components === 1) {
-                    for (var i = 0; i < size; i++) {
-                        newData[i * 4] = this.data[i * this.channels] >>> this.bitDepth - 8;
-                        newData[i * 4 + 1] = this.data[i * this.channels] >>> this.bitDepth - 8;
-                        newData[i * 4 + 2] = this.data[i * this.channels] >>> this.bitDepth - 8;
-                    }
-                } else if (this.components === 3) {
-                    this.checkProcessable('getRGBAData', { colorModel: [_modelModel.RGB] });
-                    if (this.colorModel === _modelModel.RGB) {
-                        for (var i = 0; i < size; i++) {
-                            newData[i * 4] = this.data[i * this.channels] >>> this.bitDepth - 8;
-                            newData[i * 4 + 1] = this.data[i * this.channels + 1] >>> this.bitDepth - 8;
-                            newData[i * 4 + 2] = this.data[i * this.channels + 2] >>> this.bitDepth - 8;
+
+                var result = method.apply(this, [].concat(_toConsumableArray(partialArgs), args));
+                if (returnThis) return this;
+                return result;
+            };
+            if (stack) {
+                var stackName = typeof stack === 'string' ? stack : name;
+                if (returnThis) {
+                    _stack2.default.prototype[stackName] = function () {
+                        for (var image of this) {
+                            image[name].apply(image, arguments);
                         }
-                    }
-                }
-            }
-            if (this.alpha) {
-                this.checkProcessable('getRGBAData', { bitDepth: [8, 16] });
-                for (var i = 0; i < size; i++) {
-                    newData[i * 4 + 3] = this.data[i * this.channels + this.components] >> this.bitDepth - 8;
-                }
-            } else {
-                for (var i = 0; i < size; i++) {
-                    newData[i * 4 + 3] = 255;
-                }
-            }
-            return newData;
-        }
-    }, {
-        key: 'getROIManager',
-        value: function getROIManager(mask, options) {
-            return new _roiManager2['default'](this, options);
-        }
-    }, {
-        key: 'clone',
-        value: function clone() {
-            var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-            var _ref$copyData = _ref.copyData;
-            var copyData = _ref$copyData === undefined ? true : _ref$copyData;
-
-            var nemImage = Image.createFrom(this);
-            if (copyData) {
-                var data = this.data;
-                var newData = nemImage.data;
-                for (var i = 0; i < newData.length; i++) {
-                    newData[i] = data[i];
-                }
-            }
-            return nemImage;
-        }
-    }, {
-        key: 'save',
-        value: function save(path) {
-            var _this = this;
-
-            var _ref2 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-            var _ref2$format = _ref2.format;
-            var format = _ref2$format === undefined ? 'png' : _ref2$format;
-            // Node.JS only
-            return new Promise(function (resolve, reject) {
-                var out = (0, _fs.createWriteStream)(path);
-                var canvas = _this.getCanvas();
-                var stream = undefined;
-                switch (format.toLowerCase()) {
-                    case 'png':
-                        stream = canvas.pngStream();
-                        break;
-                    case 'jpg':
-                    case 'jpeg':
-                        stream = canvas.jpegStream();
-                        break;
-                    default:
-                        return reject(new RangeError('invalid output format: ' + format));
-                }
-                out.on('finish', resolve);
-                out.on('error', reject);
-                stream.pipe(out);
-            });
-        }
-
-        // this method check if a process can be applied on the current image
-    }, {
-        key: 'checkProcessable',
-        value: function checkProcessable(processName) {
-            var _ref3 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-            var bitDepth = _ref3.bitDepth;
-            var alpha = _ref3.alpha;
-            var colorModel = _ref3.colorModel;
-            var components = _ref3.components;
-
-            if (typeof processName !== 'string') {
-                throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
-            }
-            if (bitDepth) {
-                if (!Array.isArray(bitDepth)) bitDepth = [bitDepth];
-                if (bitDepth.indexOf(this.bitDepth) === -1) {
-                    throw new TypeError('The process: ' + processName + ' can only be applied if bit depth is in: ' + bitDepth);
-                }
-            }
-            if (alpha) {
-                if (!Array.isArray(alpha)) alpha = [alpha];
-                if (alpha.indexOf(this.alpha) === -1) {
-                    throw new TypeError('The process: ' + processName + ' can only be applied if alpha is in: ' + alpha);
-                }
-            }
-            if (colorModel) {
-                if (!Array.isArray(colorModel)) colorModel = [colorModel];
-                if (colorModel.indexOf(this.colorModel) === -1) {
-                    throw new TypeError('The process: ' + processName + ' can only be applied if color model is in: ' + colorModel);
-                }
-            }
-            if (components) {
-                if (!Array.isArray(components)) components = [components];
-                if (components.indexOf(this.components) === -1) {
-                    throw new TypeError('The process: ' + processName + ' can only be applied if the number of channels is in: ' + components);
-                }
-            }
-        }
-    }, {
-        key: 'checkColumn',
-        value: function checkColumn(column) {
-            if (column < 0 || column >= this.width) {
-                throw new RangeError('checkColumn: column should be included between 0 and ' + (this.width - 1) + '. Current value: ' + column);
-            }
-        }
-    }, {
-        key: 'checkRow',
-        value: function checkRow(row) {
-            if (row < 0 || row >= this.height) {
-                throw new RangeError('checkRow: row should be included between 0 and ' + (this.height - 1) + '. Current value: ' + row);
-            }
-        }
-    }, {
-        key: 'checkChannel',
-        value: function checkChannel(channel) {
-            if (channel < 0 || channel >= this.channels) {
-                throw new RangeError('checkChannel: channel should be included between 0 and ' + (this.channels - 1) + '. Current value: ' + channel);
-            }
-        }
-    }, {
-        key: 'apply',
-        value: function apply(filter) {
-            for (var y = 0; y < this.height; y++) {
-                for (var x = 0; x < this.width; x++) {
-                    var index = (y * this.width + x) * this.channels;
-                    filter.call(this, index);
-                }
-            }
-        }
-    }], [{
-        key: 'load',
-        value: function load(url) {
-            return (0, _load.loadURL)(url);
-        }
-    }, {
-        key: 'extendMethod',
-        value: function extendMethod(name, method) {
-            var _ref4 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-
-            var _ref4$inPlace = _ref4.inPlace;
-            var inPlace = _ref4$inPlace === undefined ? false : _ref4$inPlace;
-            var _ref4$returnThis = _ref4.returnThis;
-            var returnThis = _ref4$returnThis === undefined ? true : _ref4$returnThis;
-            var _ref4$partialArgs = _ref4.partialArgs;
-            var partialArgs = _ref4$partialArgs === undefined ? [] : _ref4$partialArgs;
-            var _ref4$stack = _ref4.stack;
-            var stack = _ref4$stack === undefined ? false : _ref4$stack;
-
-            if (inPlace) {
-                Image.prototype[name] = function () {
-                    // remove computed properties
-                    this.computed = null;
-
-                    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                        args[_key] = arguments[_key];
-                    }
-
-                    var result = method.apply(this, [].concat(_toConsumableArray(partialArgs), args));
-                    if (returnThis) return this;
-                    return result;
-                };
-                if (stack) {
-                    var stackName = typeof stack === 'string' ? stack : name;
-                    if (returnThis) {
-                        _stackStack2['default'].prototype[stackName] = function () {
-                            var _iteratorNormalCompletion = true;
-                            var _didIteratorError = false;
-                            var _iteratorError = undefined;
-
-                            try {
-                                for (var _iterator = this[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                                    var image = _step.value;
-
-                                    image[name].apply(image, arguments);
-                                }
-                            } catch (err) {
-                                _didIteratorError = true;
-                                _iteratorError = err;
-                            } finally {
-                                try {
-                                    if (!_iteratorNormalCompletion && _iterator['return']) {
-                                        _iterator['return']();
-                                    }
-                                } finally {
-                                    if (_didIteratorError) {
-                                        throw _iteratorError;
-                                    }
-                                }
-                            }
-
-                            return this;
-                        };
-                    } else {
-                        _stackStack2['default'].prototype[stackName] = function () {
-                            var result = new _stackStack2['default'](this.length);
-                            for (var i = 0; i < this.length; i++) {
-                                var _i;
-
-                                result[i] = (_i = this[i])[name].apply(_i, arguments);
-                            }
-                            return result;
-                        };
-                    }
-                }
-            } else {
-                Image.prototype[name] = function () {
-                    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-                        args[_key2] = arguments[_key2];
-                    }
-
-                    return method.apply(this, [].concat(_toConsumableArray(partialArgs), args));
-                };
-                if (stack) {
-                    var stackName = typeof stack === 'string' ? stack : name;
-                    _stackStack2['default'].prototype[stackName] = function () {
-                        var result = new _stackStack2['default'](this.length);
+                        return this;
+                    };
+                } else {
+                    _stack2.default.prototype[stackName] = function () {
+                        var result = new _stack2.default(this.length);
                         for (var i = 0; i < this.length; i++) {
-                            var _i2;
+                            var _i;
 
-                            result[i] = (_i2 = this[i])[name].apply(_i2, arguments);
+                            result[i] = (_i = this[i])[name].apply(_i, arguments);
                         }
                         return result;
                     };
                 }
             }
-            return Image;
-        }
-    }, {
-        key: 'extendProperty',
-        value: function extendProperty(name, method) {
-            var _ref5 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-
-            var _ref5$partialArgs = _ref5.partialArgs;
-            var partialArgs = _ref5$partialArgs === undefined ? [] : _ref5$partialArgs;
-
-            computedPropertyDescriptor.get = function () {
-                if (this.computed === null) {
-                    this.computed = {};
-                } else if (this.computed.hasOwnProperty(name)) {
-                    return this.computed[name];
+        } else {
+            Image.prototype[name] = function () {
+                for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                    args[_key2] = arguments[_key2];
                 }
-                var result = method.apply(this, partialArgs);
-                this.computed[name] = result;
-                return result;
-            };
-            Object.defineProperty(Image.prototype, name, computedPropertyDescriptor);
-            return Image;
-        }
-    }, {
-        key: 'createFrom',
-        value: function createFrom(other, options) {
-            var newOptions = {
-                width: other.width,
-                height: other.height,
-                position: other.position,
-                components: other.components,
-                alpha: other.alpha,
-                colorModel: other.colorModel,
-                bitDepth: other.bitDepth,
-                parent: other
-            };
-            (0, _extend4['default'])(newOptions, options);
-            return new Image(newOptions.width, newOptions.height, newOptions);
-        }
-    }, {
-        key: 'isTypeSupported',
-        value: function isTypeSupported(type) {
-            var operation = arguments.length <= 1 || arguments[1] === undefined ? 'write' : arguments[1];
 
-            if (typeof type !== 'string') {
-                throw new TypeError('type argument must be a string');
-            }
-            type = (0, _mediaTypes.getType)(type);
-            if (operation === 'write') {
-                return (0, _mediaTypes.canWrite)(type);
-            } else {
-                throw new TypeError('unknown operation: ' + operation);
+                return method.apply(this, [].concat(_toConsumableArray(partialArgs), args));
+            };
+            if (stack) {
+                var stackName = typeof stack === 'string' ? stack : name;
+                _stack2.default.prototype[stackName] = function () {
+                    var result = new _stack2.default(this.length);
+                    for (var i = 0; i < this.length; i++) {
+                        var _i2;
+
+                        result[i] = (_i2 = this[i])[name].apply(_i2, arguments);
+                    }
+                    return result;
+                };
             }
         }
-    }]);
+        return Image;
+    }
 
-    return Image;
-})();
+    static extendProperty(name, method) {
+        var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
-exports['default'] = Image;
+        var _ref2$partialArgs = _ref2.partialArgs;
+        var partialArgs = _ref2$partialArgs === undefined ? [] : _ref2$partialArgs;
 
-(0, _extend2['default'])(Image);
-(0, _bitMethods2['default'])(Image);
-module.exports = exports['default'];
+        computedPropertyDescriptor.get = function () {
+            if (this.computed === null) {
+                this.computed = {};
+            } else if (this.computed.hasOwnProperty(name)) {
+                return this.computed[name];
+            }
+            var result = method.apply(this, partialArgs);
+            this.computed[name] = result;
+            return result;
+        };
+        Object.defineProperty(Image.prototype, name, computedPropertyDescriptor);
+        return Image;
+    }
 
-},{"../stack/stack":141,"./bitMethods":45,"./environment":57,"./extend":58,"./kind":77,"./kindNames":78,"./load":79,"./mediaTypes":80,"./model/model":81,"./roi/manager":91,"extend":3,"fs":2}],77:[function(require,module,exports){
+    static createFrom(other, options) {
+        var newOptions = {
+            width: other.width,
+            height: other.height,
+            position: other.position,
+            components: other.components,
+            alpha: other.alpha,
+            colorModel: other.colorModel,
+            bitDepth: other.bitDepth,
+            parent: other
+        };
+        (0, _extend4.default)(newOptions, options);
+        return new Image(newOptions.width, newOptions.height, newOptions);
+    }
+
+    static isTypeSupported(type) {
+        var operation = arguments.length <= 1 || arguments[1] === undefined ? 'write' : arguments[1];
+
+        if (typeof type !== 'string') {
+            throw new TypeError('type argument must be a string');
+        }
+        type = (0, _mediaTypes.getType)(type);
+        if (operation === 'write') {
+            return (0, _mediaTypes.canWrite)(type);
+        } else {
+            throw new TypeError('unknown operation: ' + operation);
+        }
+    }
+
+    getPixelIndex(indices) {
+        var shift = 0;
+        for (var i = 0; i < indices.length; i++) {
+            shift += this.multipliers[i] * indices[i];
+        }
+        return shift;
+    }
+
+    setValueXY(x, y, channel, value) {
+        this.data[(y * this.width + x) * this.channels + channel] = value;
+        this.computed = null;
+        return this;
+    }
+
+    getValueXY(x, y, channel) {
+        return this.data[(y * this.width + x) * this.channels + channel];
+    }
+
+    setValue(pixel, channel, value) {
+        this.data[pixel * this.channels + channel] = value;
+        this.computed = null;
+        return this;
+    }
+
+    getValue(pixel, channel) {
+        return this.data[pixel * this.channels + channel];
+    }
+
+    setPixelXY(x, y, value) {
+        return this.setPixel(y * this.width + x, value);
+    }
+
+    getPixelXY(x, y) {
+        return this.getPixel(y * this.width + x);
+    }
+
+    setPixel(pixel, value) {
+        var target = pixel * this.channels;
+        for (var i = 0; i < value.length; i++) {
+            this.data[target + i] = value[i];
+        }
+        this.computed = null;
+        return this;
+    }
+
+    getPixel(pixel) {
+        var value = new Array(this.channels);
+        var target = pixel * this.channels;
+        for (var i = 0; i < this.channels; i++) {
+            value[i] = this.data[target + i];
+        }
+        return value;
+    }
+
+    toDataURL() {
+        var type = arguments.length <= 0 || arguments[0] === undefined ? 'image/png' : arguments[0];
+
+        return this.getCanvas().toDataURL((0, _mediaTypes.getType)(type));
+    }
+
+    getCanvas() {
+        var data = new _environment.ImageData(this.getRGBAData(), this.width, this.height);
+        var canvas = new _environment.Canvas(this.width, this.height);
+        var ctx = canvas.getContext('2d');
+        ctx.putImageData(data, 0, 0);
+        return canvas;
+    }
+
+    getRGBAData() {
+        this.checkProcessable('getRGBAData', {
+            components: [1, 3],
+            bitDepth: [1, 8, 16]
+        });
+        var size = this.size;
+        var newData = new Uint8ClampedArray(this.width * this.height * 4);
+        if (this.bitDepth === 1) {
+            for (var i = 0; i < size; i++) {
+                var value = this.getBit(i);
+                newData[i * 4] = value * 255;
+                newData[i * 4 + 1] = value * 255;
+                newData[i * 4 + 2] = value * 255;
+            }
+        } else {
+            if (this.components === 1) {
+                for (var i = 0; i < size; i++) {
+                    newData[i * 4] = this.data[i * this.channels] >>> this.bitDepth - 8;
+                    newData[i * 4 + 1] = this.data[i * this.channels] >>> this.bitDepth - 8;
+                    newData[i * 4 + 2] = this.data[i * this.channels] >>> this.bitDepth - 8;
+                }
+            } else if (this.components === 3) {
+                this.checkProcessable('getRGBAData', { colorModel: [_model.RGB] });
+                if (this.colorModel === _model.RGB) {
+                    for (var i = 0; i < size; i++) {
+                        newData[i * 4] = this.data[i * this.channels] >>> this.bitDepth - 8;
+                        newData[i * 4 + 1] = this.data[i * this.channels + 1] >>> this.bitDepth - 8;
+                        newData[i * 4 + 2] = this.data[i * this.channels + 2] >>> this.bitDepth - 8;
+                    }
+                }
+            }
+        }
+        if (this.alpha) {
+            this.checkProcessable('getRGBAData', { bitDepth: [8, 16] });
+            for (var i = 0; i < size; i++) {
+                newData[i * 4 + 3] = this.data[i * this.channels + this.components] >> this.bitDepth - 8;
+            }
+        } else {
+            for (var i = 0; i < size; i++) {
+                newData[i * 4 + 3] = 255;
+            }
+        }
+        return newData;
+    }
+
+    getROIManager(mask, options) {
+        return new _manager2.default(this, options);
+    }
+
+    clone() {
+        var _ref3 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+        var _ref3$copyData = _ref3.copyData;
+        var copyData = _ref3$copyData === undefined ? true : _ref3$copyData;
+
+        return new Image(this, copyData);
+    }
+
+    save(path) {
+        var _ref4 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+        var _ref4$format = _ref4.format;
+        var format = _ref4$format === undefined ? 'png' : _ref4$format;
+        // Node.JS only
+        return new Promise((resolve, reject) => {
+            var out = (0, _fs.createWriteStream)(path);
+            var canvas = this.getCanvas();
+            var stream = undefined;
+            switch (format.toLowerCase()) {
+                case 'png':
+                    stream = canvas.pngStream();
+                    break;
+                case 'jpg':
+                case 'jpeg':
+                    stream = canvas.jpegStream();
+                    break;
+                default:
+                    return reject(new RangeError('invalid output format: ' + format));
+            }
+            out.on('finish', resolve);
+            out.on('error', reject);
+            stream.pipe(out);
+        });
+    }
+
+    // this method check if a process can be applied on the current image
+    checkProcessable(processName) {
+        var _ref5 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+        var bitDepth = _ref5.bitDepth;
+        var alpha = _ref5.alpha;
+        var colorModel = _ref5.colorModel;
+        var components = _ref5.components;
+
+        if (typeof processName !== 'string') {
+            throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
+        }
+        if (bitDepth) {
+            if (!Array.isArray(bitDepth)) bitDepth = [bitDepth];
+            if (bitDepth.indexOf(this.bitDepth) === -1) {
+                throw new TypeError('The process: ' + processName + ' can only be applied if bit depth is in: ' + bitDepth);
+            }
+        }
+        if (alpha) {
+            if (!Array.isArray(alpha)) alpha = [alpha];
+            if (alpha.indexOf(this.alpha) === -1) {
+                throw new TypeError('The process: ' + processName + ' can only be applied if alpha is in: ' + alpha);
+            }
+        }
+        if (colorModel) {
+            if (!Array.isArray(colorModel)) colorModel = [colorModel];
+            if (colorModel.indexOf(this.colorModel) === -1) {
+                throw new TypeError('The process: ' + processName + ' can only be applied if color model is in: ' + colorModel);
+            }
+        }
+        if (components) {
+            if (!Array.isArray(components)) components = [components];
+            if (components.indexOf(this.components) === -1) {
+                throw new TypeError('The process: ' + processName + ' can only be applied if the number of channels is in: ' + components);
+            }
+        }
+    }
+
+    checkColumn(column) {
+        if (column < 0 || column >= this.width) {
+            throw new RangeError(`checkColumn: column should be included between 0 and ${ this.width - 1 }. Current value: ${ column }`);
+        }
+    }
+
+    checkRow(row) {
+        if (row < 0 || row >= this.height) {
+            throw new RangeError(`checkRow: row should be included between 0 and ${ this.height - 1 }. Current value: ${ row }`);
+        }
+    }
+
+    checkChannel(channel) {
+        if (channel < 0 || channel >= this.channels) {
+            throw new RangeError(`checkChannel: channel should be included between 0 and ${ this.channels - 1 }. Current value: ${ channel }`);
+        }
+    }
+
+    apply(filter) {
+        for (var y = 0; y < this.height; y++) {
+            for (var x = 0; x < this.width; x++) {
+                var index = (y * this.width + x) * this.channels;
+                filter.call(this, index);
+            }
+        }
+    }
+}
+
+exports.default = Image;
+(0, _extend2.default)(Image);
+(0, _bitMethods2.default)(Image);
+
+},{"../stack/stack":150,"./bitMethods":53,"./environment":65,"./extend":66,"./kind":86,"./kindNames":87,"./load":88,"./mediaTypes":89,"./model/model":90,"./roi/manager":100,"extend":3,"fs":2}],86:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.getKind = getKind;
 exports.getTheoreticalPixelArraySize = getTheoreticalPixelArraySize;
 exports.createPixelArray = createPixelArray;
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
-
 var _kindNames = require('./kindNames');
 
 var Kind = _interopRequireWildcard(_kindNames);
 
-var _modelModel = require('./model/model');
+var _model = require('./model/model');
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var kinds = {};
 
@@ -13463,14 +13396,14 @@ kinds[Kind.RGBA] = {
     components: 3,
     alpha: 1,
     bitDepth: 8,
-    colorModel: _modelModel.RGB
+    colorModel: _model.RGB
 };
 
 kinds[Kind.RGB] = {
     components: 3,
     alpha: 0,
     bitDepth: 8,
-    colorModel: _modelModel.RGB
+    colorModel: _model.RGB
 };
 
 function getKind(kind) {
@@ -13514,38 +13447,35 @@ function createPixelArray(image) {
     image.data = arr;
 }
 
-},{"./kindNames":78,"./model/model":81}],78:[function(require,module,exports){
-// Shortcuts for common image kinds
-
+},{"./kindNames":87,"./model/model":90}],87:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var BINARY = 'BINARY';
-exports.BINARY = BINARY;
-var GREYA = 'GREYA';
-exports.GREYA = GREYA;
-var RGBA = 'RGBA';
-exports.RGBA = RGBA;
-var RGB = 'RGB';
-exports.RGB = RGB;
-var GREY = 'GREY';
-exports.GREY = GREY;
+// Shortcuts for common image kinds
 
-},{}],79:[function(require,module,exports){
+var BINARY = exports.BINARY = 'BINARY';
+var GREYA = exports.GREYA = 'GREYA';
+var RGBA = exports.RGBA = 'RGBA';
+var RGB = exports.RGB = 'RGB';
+var GREY = exports.GREY = 'GREY';
+
+},{}],88:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.loadURL = loadURL;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
 var _image = require('./image');
 
 var _image2 = _interopRequireDefault(_image);
+
+var _stack = require('../stack/stack');
+
+var _stack2 = _interopRequireDefault(_stack);
 
 var _environment = require('./environment');
 
@@ -13556,6 +13486,8 @@ var _tiff = require('tiff');
 var _atobLite = require('atob-lite');
 
 var _atobLite2 = _interopRequireDefault(_atobLite);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
 var isPNG = /\.png$/i;
@@ -13580,10 +13512,10 @@ function loadURL(url) {
         var offset = dataURL[0].length;
         if (mimetype === 'png') {
             var slice = url.slice(offset);
-            return Promise.resolve(str2ab((0, _atobLite2['default'])(slice))).then(loadPNG);
+            return Promise.resolve(str2ab((0, _atobLite2.default)(slice))).then(loadPNG);
         } else if (mimetype === 'tiff') {
             var slice = url.slice(offset);
-            return Promise.resolve(str2ab((0, _atobLite2['default'])(slice))).then(loadTIFF);
+            return Promise.resolve(str2ab((0, _atobLite2.default)(slice))).then(loadTIFF);
         }
     }
 
@@ -13625,14 +13557,21 @@ function loadPNG(data) {
             components = 3;alpha = 1;break;
     }
 
-    return new _image2['default'](png.width, png.height, bitmap, { components: components, alpha: alpha, bitDepth: bitDepth });
+    return new _image2.default(png.width, png.height, bitmap, { components, alpha, bitDepth });
 }
 
 function loadTIFF(data) {
     var decoder = new _tiff.TIFFDecoder(data);
     var result = decoder.decode();
-    var image = result.ifd[0];
-    return new _image2['default'](image.width, image.height, image.data, {
+    if (result.length === 1) {
+        return getImageFromIFD(result.ifd[0]);
+    } else {
+        return new _stack2.default(result.ifd.map(getImageFromIFD));
+    }
+}
+
+function getImageFromIFD(image) {
+    return new _image2.default(image.width, image.height, image.data, {
         components: 1,
         alpha: 0,
         colorModel: null,
@@ -13656,7 +13595,7 @@ function loadGeneric(url) {
             var ctx = canvas.getContext('2d');
             ctx.drawImage(image, 0, 0, w, h);
             var data = ctx.getImageData(0, 0, w, h).data;
-            resolve(new _image2['default'](w, h, data));
+            resolve(new _image2.default(w, h, data));
         };
         image.onerror = function () {
             reject(new Error('Could not load ' + url));
@@ -13665,21 +13604,14 @@ function loadGeneric(url) {
     });
 }
 
-},{"./environment":57,"./image":76,"atob-lite":1,"fast-png":24,"tiff":44}],80:[function(require,module,exports){
+},{"../stack/stack":150,"./environment":65,"./image":85,"atob-lite":1,"fast-png":5,"tiff":50}],89:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 exports.canWrite = canWrite;
 exports.getType = getType;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var _image = require('./image');
 
@@ -13691,12 +13623,14 @@ var _stringIncludes = require('string-includes');
 
 var _stringIncludes2 = _interopRequireDefault(_stringIncludes);
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var types = new Map();
 var image = undefined;
 
 function getMediaType(type) {
     if (!image) {
-        image = new _image2['default'](1, 1);
+        image = new _image2.default(1, 1);
     }
     var theType = types.get(type);
     if (!theType) {
@@ -13714,64 +13648,54 @@ function canWrite(type) {
         }
 }
 
-var MediaType = (function () {
-    function MediaType(type) {
-        _classCallCheck(this, MediaType);
-
+class MediaType {
+    constructor(type) {
         this.type = type;
         this._canWrite = null;
     }
 
-    _createClass(MediaType, [{
-        key: 'canWrite',
-        value: function canWrite() {
-            if (this._canWrite === null) {
-                this._canWrite = image.toDataURL(this.type).startsWith('data:' + this.type);
-            }
-            return this._canWrite;
+    canWrite() {
+        if (this._canWrite === null) {
+            this._canWrite = image.toDataURL(this.type).startsWith('data:' + this.type);
         }
-    }]);
-
-    return MediaType;
-})();
+        return this._canWrite;
+    }
+}
 
 function getType(type) {
-    if (!(0, _stringIncludes2['default'])(type, '/')) {
+    if (!(0, _stringIncludes2.default)(type, '/')) {
         type = 'image/' + type;
     }
     return type;
 }
 
-},{"./environment":57,"./image":76,"string-includes":38}],81:[function(require,module,exports){
+},{"./environment":65,"./image":85,"string-includes":45}],90:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var RGB = 'RGB';
-exports.RGB = RGB;
-var HSL = 'HSL';
-exports.HSL = HSL;
-var HSV = 'HSV';
-exports.HSV = HSV;
+var RGB = exports.RGB = 'RGB';
+var HSL = exports.HSL = 'HSL';
+var HSV = exports.HSV = 'HSV';
 
-},{}],82:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = convolution;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = convolution;
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _utilChannel = require('../../util/channel');
+var _channel = require('../../util/channel');
 
-var _utilKernel = require('../../util/kernel');
+var _kernel = require('../../util/kernel');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  *
@@ -13782,7 +13706,6 @@ var _utilKernel = require('../../util/kernel');
  * @param border
  * @returns {*}
  */
-
 function convolution(kernel) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
@@ -13795,16 +13718,16 @@ function convolution(kernel) {
     var _ref$border = _ref.border;
     var border = _ref$border === undefined ? 'copy' : _ref$border;
 
-    var newImage = _image2['default'].createFrom(this, { bitDepth: bitDepth });
+    var newImage = _image2.default.createFrom(this, { bitDepth: bitDepth });
 
-    channels = (0, _utilChannel.validateArrayOfChannels)(this, channels, true);
+    channels = (0, _channel.validateArrayOfChannels)(this, channels, true);
 
     var kWidth = undefined,
         kHeight = undefined;
 
     //calculate divisor
 
-    var _validateKernel = (0, _utilKernel.validateKernel)(kernel);
+    var _validateKernel = (0, _kernel.validateKernel)(kernel);
 
     kWidth = _validateKernel.kWidth;
     kHeight = _validateKernel.kHeight;
@@ -13862,23 +13785,19 @@ function convolution(kernel) {
     return newImage;
 }
 
-module.exports = exports['default'];
-
-},{"../../util/channel":144,"../../util/kernel":146,"../image":76}],83:[function(require,module,exports){
-// we will create a small image from a mask
-
+},{"../../util/channel":153,"../../util/kernel":156,"../image":85}],92:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = extract;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = extract;
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function extract(mask) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -13895,10 +13814,10 @@ function extract(mask) {
     if (!position) {
         position = mask.getRelativePosition(this);
         if (!position) {
-            throw new Error('extract : can not extract an image because the relative position can not be' + 'determined, try to specify manualy the position as an array of 2 elements [x,y].');
+            throw new Error('extract : can not extract an image because the relative position can not be ' + 'determined, try to specify manualy the position as an array of 2 elements [x,y].');
         }
     }
-    var extract = _image2['default'].createFrom(this, {
+    var extract = _image2.default.createFrom(this, {
         width: mask.width,
         height: mask.height,
         alpha: 1, // we force the alpha, otherwise dificult to extract a mask ...
@@ -13921,19 +13840,17 @@ function extract(mask) {
     }
 
     return extract;
-}
+} // we will create a small image from a mask
 
-module.exports = exports['default'];
-
-},{"../image":76}],84:[function(require,module,exports){
+},{"../image":85}],93:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = paintMasks;
+exports.default = paintMasks;
 
-var _modelModel = require('../model/model');
+var _model = require('../model/model');
 
 function paintMasks(masks) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -13944,7 +13861,7 @@ function paintMasks(masks) {
     this.checkProcessable('paintMasks', {
         components: 3,
         bitDepth: [8, 16],
-        colorModel: _modelModel.RGB
+        colorModel: _model.RGB
     });
 
     if (!Array.isArray(masks)) masks = [masks];
@@ -13967,23 +13884,21 @@ function paintMasks(masks) {
     }
 }
 
-module.exports = exports['default'];
-
-},{"../model/model":81}],85:[function(require,module,exports){
+},{"../model/model":90}],94:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = paintPixels;
+exports.default = paintPixels;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _model = require('../model/model');
 
-var _modelModel = require('../model/model');
+var _shape = require('../../util/shape');
 
-var _utilShape = require('../../util/shape');
+var _shape2 = _interopRequireDefault(_shape);
 
-var _utilShape2 = _interopRequireDefault(_utilShape);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function paintPixels(pixels) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -13995,10 +13910,10 @@ function paintPixels(pixels) {
     this.checkProcessable('paintPixels', {
         components: 3,
         bitDepth: [8, 16],
-        colorModel: _modelModel.RGB
+        colorModel: _model.RGB
     });
 
-    var shapePixels = new _utilShape2['default'](shape).getPixels();
+    var shapePixels = new _shape2.default(shape).getPixels();
 
     var numberChannels = Math.min(this.channels, color.length);
 
@@ -14018,45 +13933,38 @@ function paintPixels(pixels) {
     }
 }
 
-module.exports = exports['default'];
-
-},{"../../util/shape":150,"../model/model":81}],86:[function(require,module,exports){
+},{"../../util/shape":159,"../model/model":90}],95:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+class ROIMap {
+    constructor(parent, pixels, negativeID, positiveID) {
+        this.parent = parent;
+        this.width = parent.width;
+        this.height = parent.height;
+        this.pixels = pixels; // pixels containing the annotations
+        this.negative = -negativeID; // number of negative zones
+        this.positive = positiveID; // number of positivie zones
+        this.total = positiveID - negativeID; // total number of zones
+    }
+}
+exports.default = ROIMap;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var ROIMap = function ROIMap(parent, pixels, negativeID, positiveID) {
-    _classCallCheck(this, ROIMap);
-
-    this.parent = parent;
-    this.width = parent.width;
-    this.height = parent.height;
-    this.pixels = pixels; // pixels containing the annotations
-    this.negative = -negativeID; // number of negative zones
-    this.positive = positiveID; // number of positivie zones
-    this.total = positiveID - negativeID; // total number of zones
-};
-
-exports["default"] = ROIMap;
-module.exports = exports["default"];
-
-},{}],87:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = createROI;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = createROI;
 
 var _roi = require('./roi');
 
 var _roi2 = _interopRequireDefault(_roi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /*
 ROI are created from a roiMap
@@ -14071,7 +13979,7 @@ function createROI(roiMap) {
     for (var i = 0; i < size; i++) {
         var mapID = -roiMap.negative + i;
         if (i >= roiMap.negative) mapID++;
-        rois[i] = new _roi2['default'](roiMap, mapID);
+        rois[i] = new _roi2.default(roiMap, mapID);
     }
     var pixels = roiMap.pixels;
 
@@ -14103,21 +14011,19 @@ function createROI(roiMap) {
     return rois;
 }
 
-module.exports = exports['default'];
-
-},{"./roi":92}],88:[function(require,module,exports){
+},{"./roi":101}],97:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = createROIMapFromExtrema;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = createROIMapFromExtrema;
 
 var _ROIMap = require('./../ROIMap');
 
 var _ROIMap2 = _interopRequireDefault(_ROIMap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function createROIMapFromExtrema() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -14166,7 +14072,7 @@ function createROIMapFromExtrema() {
         from++;
     }
 
-    return new _ROIMap2['default'](image, pixels, negativeID, positiveID);
+    return new _ROIMap2.default(image, pixels, negativeID, positiveID);
 
     // we will look for the maxima (or minima) that is present in the picture
     // a maxima is a point that is surrounded by lower values
@@ -14317,25 +14223,19 @@ function createROIMapFromExtrema() {
     }
 }
 
-module.exports = exports['default'];
-
-},{"./../ROIMap":86}],89:[function(require,module,exports){
-/*
-We will annotate each point to define to which area it belongs
- */
-
+},{"./../ROIMap":95}],98:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = createROIMapFromMask;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = createROIMapFromMask;
 
 var _ROIMap = require('./../ROIMap');
 
 var _ROIMap2 = _interopRequireDefault(_ROIMap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function createROIMapFromMask(mask) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -14442,37 +14342,37 @@ function createROIMapFromMask(mask) {
         }
     }
 
-    return new _ROIMap2['default'](mask, pixels, negativeID, positiveID);
-}
+    return new _ROIMap2.default(mask, pixels, negativeID, positiveID);
+} /*
+  We will annotate each point to define to which area it belongs
+   */
 
-module.exports = exports['default'];
-
-},{"./../ROIMap":86}],90:[function(require,module,exports){
-/*
-We will annotate each point to define to which area it belongs
- */
-
+},{"./../ROIMap":95}],99:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = fromCoordinates;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = fromCoordinates;
 
 var _ROIMap = require('./../ROIMap');
 
 var _ROIMap2 = _interopRequireDefault(_ROIMap);
 
-var _utilShape = require('./../../../util/shape');
+var _shape = require('./../../../util/shape');
 
-var _utilShape2 = _interopRequireDefault(_utilShape);
+var _shape2 = _interopRequireDefault(_shape);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*
+We will annotate each point to define to which area it belongs
+ */
 
 function fromCoordinates(pixelsToPaint) {
     var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-    var shape = new _utilShape2['default'](options);
+    var shape = new _shape2.default(options);
 
     // based on a binary image we will create plenty of small images
     var mapPixels = new Int16Array(this.size); // maxValue: 32767, minValue: -32768
@@ -14490,35 +14390,27 @@ function fromCoordinates(pixelsToPaint) {
             }
         }
     }
-    return new _ROIMap2['default'](this, mapPixels, 0, positiveID);
+    return new _ROIMap2.default(this, mapPixels, 0, positiveID);
 }
 
-module.exports = exports['default'];
-
-},{"./../../../util/shape":150,"./../ROIMap":86}],91:[function(require,module,exports){
+},{"./../../../util/shape":159,"./../ROIMap":95}],100:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _fromMask = require('./creator/fromMask');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _fromMask2 = _interopRequireDefault(_fromMask);
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var _fromExtrema = require('./creator/fromExtrema');
 
-var _creatorFromMask = require('./creator/fromMask');
+var _fromExtrema2 = _interopRequireDefault(_fromExtrema);
 
-var _creatorFromMask2 = _interopRequireDefault(_creatorFromMask);
+var _fromPixels = require('./creator/fromPixels');
 
-var _creatorFromExtrema = require('./creator/fromExtrema');
-
-var _creatorFromExtrema2 = _interopRequireDefault(_creatorFromExtrema);
-
-var _creatorFromPixels = require('./creator/fromPixels');
-
-var _creatorFromPixels2 = _interopRequireDefault(_creatorFromPixels);
+var _fromPixels2 = _interopRequireDefault(_fromPixels);
 
 var _createROI = require('./createROI');
 
@@ -14532,11 +14424,12 @@ var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var ROIManager = (function () {
-    function ROIManager(image) {
-        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-        _classCallCheck(this, ROIManager);
+class ROIManager {
+
+    constructor(image) {
+        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
         this._image = image;
         this._options = options;
@@ -14545,174 +14438,154 @@ var ROIManager = (function () {
         this._painted = null;
     }
 
-    _createClass(ROIManager, [{
-        key: 'generateROIFromExtrema',
-        value: function generateROIFromExtrema() {
-            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    generateROIFromExtrema() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-            var opt = (0, _extend2['default'])({}, this._options, options);
-            var roiMap = _creatorFromExtrema2['default'].call(this._image, options);
-            this._layers[opt.label] = new ROILayer(roiMap, opt);
+        var opt = (0, _extend2.default)({}, this._options, options);
+        var roiMap = _fromExtrema2.default.call(this._image, options);
+        this._layers[opt.label] = new ROILayer(roiMap, opt);
+    }
+
+    putPixels(pixels) {
+        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+        var opt = (0, _extend2.default)({}, this._options, options);
+        var roiMap = _fromPixels2.default.call(this._image, pixels, options);
+        this._layers[opt.label] = new ROILayer(roiMap, opt);
+    }
+
+    putMap(roiMap) {
+        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+        var opt = (0, _extend2.default)({}, this._options, options);
+        this._layers[opt.label] = new ROILayer(roiMap, opt);
+    }
+
+    putMask(mask) {
+        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+        var opt = (0, _extend2.default)({}, this._options, options);
+        var roiMap = _fromMask2.default.call(this._image, mask, options);
+        this._layers[opt.label] = new ROILayer(roiMap, opt);
+    }
+
+    getMap() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+        var opt = (0, _extend2.default)({}, this._options, options);
+        if (!this._layers[opt.label]) return;
+        return this._layers[opt.label].roiMap;
+    }
+
+    getROIIDs() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+        var rois = this.getROI(options);
+        if (!rois) return;
+        var ids = new Array(rois.length);
+        for (var i = 0; i < rois.length; i++) {
+            ids[i] = rois[i].id;
         }
-    }, {
-        key: 'putPixels',
-        value: function generateROIFromPixels(pixels) {
-            var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        return ids;
+    }
 
-            var opt = (0, _extend2['default'])({}, this._options, options);
-            var roiMap = _creatorFromPixels2['default'].call(this._image, pixels, options);
-            this._layers[opt.label] = new ROILayer(roiMap, opt);
-        }
-    }, {
-        key: 'putMask',
-        value: function putMask(mask) {
-            var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    getROI() {
+        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-            var opt = (0, _extend2['default'])({}, this._options, options);
-            var roiMap = _creatorFromMask2['default'].call(this._image, mask, options);
-            this._layers[opt.label] = new ROILayer(roiMap, opt);
-        }
-    }, {
-        key: 'getMap',
-        value: function getROIMap() {
-            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+        var _ref$label = _ref.label;
+        var label = _ref$label === undefined ? this._options.label : _ref$label;
+        var _ref$positive = _ref.positive;
+        var positive = _ref$positive === undefined ? true : _ref$positive;
+        var _ref$negative = _ref.negative;
+        var negative = _ref$negative === undefined ? true : _ref$negative;
+        var _ref$minSurface = _ref.minSurface;
+        var minSurface = _ref$minSurface === undefined ? 0 : _ref$minSurface;
+        var _ref$maxSurface = _ref.maxSurface;
+        var maxSurface = _ref$maxSurface === undefined ? Number.POSITIVE_INFINITY : _ref$maxSurface;
 
-            var opt = (0, _extend2['default'])({}, this._options, options);
-            if (!this._layers[opt.label]) return;
-            return this._layers[opt.label].roiMap;
-        }
-    }, {
-        key: 'getROIIDs',
-        value: function getROIIDs() {
-            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-            var rois = this.getROI(options);
-            if (!rois) return;
-            var ids = new Array(rois.length);
-            for (var i = 0; i < rois.length; i++) {
-                ids[i] = rois[i].id;
-            }
-            return ids;
-        }
-    }, {
-        key: 'getROI',
-        value: function getROI() {
-            var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-            var _ref$label = _ref.label;
-            var label = _ref$label === undefined ? this._options.label : _ref$label;
-            var _ref$positive = _ref.positive;
-            var positive = _ref$positive === undefined ? true : _ref$positive;
-            var _ref$negative = _ref.negative;
-            var negative = _ref$negative === undefined ? true : _ref$negative;
-            var _ref$minSurface = _ref.minSurface;
-            var minSurface = _ref$minSurface === undefined ? 0 : _ref$minSurface;
-            var _ref$maxSurface = _ref.maxSurface;
-            var maxSurface = _ref$maxSurface === undefined ? Number.POSITIVE_INFINITY : _ref$maxSurface;
-
-            var allROIs = this._layers[label].roi;
-            var rois = new Array(allROIs.length);
-            var ptr = 0;
-            for (var i = 0; i < allROIs.length; i++) {
-                var roi = allROIs[i];
-                if ((roi.id < 0 && negative || roi.id > 0 && positive) && roi.surface >= minSurface && roi.surface <= maxSurface) {
-                    rois[ptr++] = roi;
-                }
-            }
-            rois.length = ptr;
-            return rois;
-        }
-    }, {
-        key: 'getROIMasks',
-        value: function getROIMasks() {
-            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-            var rois = this.getROI(options);
-            var masks = new Array(rois.length);
-            for (var i = 0; i < rois.length; i++) {
-                masks[i] = rois[i].mask;
-            }
-            return masks;
-        }
-    }, {
-        key: 'getPixels',
-        value: function getPixels() {
-            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-            var opt = (0, _extend2['default'])({}, this._options, options);
-            if (this._layers[opt.label]) {
-                return this._layers[opt.label].roiMap.pixels;
+        var allROIs = this._layers[label].roi;
+        var rois = new Array(allROIs.length);
+        var ptr = 0;
+        for (var i = 0; i < allROIs.length; i++) {
+            var roi = allROIs[i];
+            if ((roi.id < 0 && negative || roi.id > 0 && positive) && roi.surface >= minSurface && roi.surface <= maxSurface) {
+                rois[ptr++] = roi;
             }
         }
-    }, {
-        key: 'paint',
-        value: function paint() {
-            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+        rois.length = ptr;
+        return rois;
+    }
 
-            if (!this._painted) this._painted = this._image.rgba8();
-            var masks = this.getROIMasks(options);
-            this._painted.paintMasks(masks, options);
-            return this._painted;
+    getROIMasks() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+        var rois = this.getROI(options);
+        var masks = new Array(rois.length);
+        for (var i = 0; i < rois.length; i++) {
+            masks[i] = rois[i].mask;
         }
+        return masks;
+    }
 
-        // return a mask corresponding to all the selected masks
-    }, {
-        key: 'getMask',
-        value: function getMask() {
-            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    getPixels() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-            var mask = new _image2['default'](this._image.width, this._image.height, { kind: 'BINARY' });
-            var masks = this.getROIMasks(options);
-            for (var i = 0; i < masks.length; i++) {
-                var roi = masks[i];
-                // we need to find the parent image to calculate the relative position
+        var opt = (0, _extend2.default)({}, this._options, options);
+        if (this._layers[opt.label]) {
+            return this._layers[opt.label].roiMap.pixels;
+        }
+    }
 
-                for (var x = 0; x < roi.width; x++) {
-                    for (var y = 0; y < roi.height; y++) {
-                        if (roi.getBitXY(x, y)) {
-                            mask.setBitXY(x + roi.position[0], y + roi.position[1]);
-                        }
+    paint() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+        if (!this._painted) this._painted = this._image.rgba8();
+        var masks = this.getROIMasks(options);
+        this._painted.paintMasks(masks, options);
+        return this._painted;
+    }
+
+    // return a mask corresponding to all the selected masks
+    getMask() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+        var mask = new _image2.default(this._image.width, this._image.height, { kind: 'BINARY' });
+        var masks = this.getROIMasks(options);
+        for (var i = 0; i < masks.length; i++) {
+            var roi = masks[i];
+            // we need to find the parent image to calculate the relative position
+
+            for (var x = 0; x < roi.width; x++) {
+                for (var y = 0; y < roi.height; y++) {
+                    if (roi.getBitXY(x, y)) {
+                        mask.setBitXY(x + roi.position[0], y + roi.position[1]);
                     }
                 }
             }
-            return mask;
         }
-    }, {
-        key: 'resetPainted',
-        value: function resetPainted(image) {
-            this._painted = image;
-        }
-    }]);
+        return mask;
+    }
 
-    return ROIManager;
-})();
+    resetPainted(image) {
+        this._painted = image;
+    }
+}
 
-exports['default'] = ROIManager;
+exports.default = ROIManager;
+class ROILayer {
+    constructor(roiMap, options) {
+        this.roiMap = roiMap;
+        this.options = options;
+        this.roi = (0, _createROI2.default)(this.roiMap);
+    }
+}
 
-var ROILayer = function ROILayer(roiMap, options) {
-    _classCallCheck(this, ROILayer);
-
-    this.roiMap = roiMap;
-    this.options = options;
-    this.roi = (0, _createROI2['default'])(this.roiMap);
-};
-
-module.exports = exports['default'];
-
-},{"../image":76,"./createROI":87,"./creator/fromExtrema":88,"./creator/fromMask":89,"./creator/fromPixels":90,"extend":3}],92:[function(require,module,exports){
+},{"../image":85,"./createROI":96,"./creator/fromExtrema":97,"./creator/fromMask":98,"./creator/fromPixels":99,"extend":3}],101:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var _image = require('../image');
 
@@ -14722,10 +14595,13 @@ var _kindNames = require('../kindNames');
 
 var KindNames = _interopRequireWildcard(_kindNames);
 
-var ROI = (function () {
-    function ROI(map, id) {
-        _classCallCheck(this, ROI);
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class ROI {
+
+    constructor(map, id) {
         this.map = map;
         this.id = id;
         this.minX = Number.POSITIVE_INFINITY;
@@ -14738,138 +14614,121 @@ var ROI = (function () {
         this.computed = {};
     }
 
-    /* it should really be an array to solve complex cases related to border effect
-     Like the image
-     0000
-     1111
-     0000
-     1111
-    
-     The first row of 1 will be surrouned by 2 differents zones
-    
-     Or even worse
-     010
-     111
-     010
-     The cross will be surrouned by 4 differents zones
-    
-     However in most of the cases it will be an array of one element
-     */
+    getMask() {
+        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-    _createClass(ROI, [{
-        key: 'extract',
-        value: function extract(image) {
-            var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        var _ref$fill = _ref.fill;
+        var fill = _ref$fill === undefined ? false : _ref$fill;
+        var _ref$scale = _ref.scale;
+        var scale = _ref$scale === undefined ? 1 : _ref$scale;
 
-            var _ref$fill = _ref.fill;
-            var fill = _ref$fill === undefined ? false : _ref$fill;
-            var _ref$scale = _ref.scale;
-            var scale = _ref$scale === undefined ? 1 : _ref$scale;
+        var mask = undefined;
+        if (fill) {
+            mask = this.filledMask;
+        } else {
+            mask = this.mask;
+        }
 
-            // we use a slow way
+        if (scale < 1) {
+            mask = mask.resizeBinary(scale);
+        }
 
-            var mask = undefined;
-            if (fill) {
-                mask = this.filledMask;
-            } else {
-                mask = this.mask;
-            }
+        return mask;
+    }
 
-            if (scale < 1) {
-                mask = mask.resizeBinary(scale);
-            }
+    get width() {
+        return this.maxX - this.minX + 1;
+    }
 
-            return image.extract(mask);
-        }
-    }, {
-        key: 'width',
-        get: function get() {
-            return this.maxX - this.minX + 1;
-        }
-    }, {
-        key: 'height',
-        get: function get() {
-            return this.maxY - this.minY + 1;
-        }
-    }, {
-        key: 'surround',
-        get: function get() {
-            if (this.computed.surround) return this.computed.surround;
-            return this.computed.surround = getSurroundingIDs(this);
-        }
-    }, {
-        key: 'internalMapIDs',
-        get: function get() {
-            if (this.computed.internalMapIDs) return this.computed.internalMapIDs;
-            return this.computed.internalMapIDs = getInternalMapIDs(this);
-        }
-    }, {
-        key: 'external',
-        get: function get() {
-            // points of the ROI that touch the rectangular shape
-            if (this.computed.external) return this.computed.external;
-            return this.computed.external = getExternal(this);
-        }
-    }, {
-        key: 'contour',
-        get: function get() {
-            if (this.computed.contour) return this.computed.contour;
-            return this.computed.contour = getContour(this);
-        }
-    }, {
-        key: 'border',
-        get: function get() {
-            if (this.computed.border) return this.computed.border;
-            return this.computed.border = getBorder(this);
-        }
-    }, {
-        key: 'mask',
-        get: function get() {
-            if (this.computed.mask) return this.computed.mask;
+    get height() {
+        return this.maxY - this.minY + 1;
+    }
 
-            var img = new _image2['default'](this.width, this.height, {
-                kind: KindNames.BINARY,
-                position: [this.minX, this.minY],
-                parent: this.map.parent
-            });
+    get surround() {
+        if (this.computed.surround) return this.computed.surround;
+        return this.computed.surround = getSurroundingIDs(this);
+    }
 
-            for (var x = 0; x < this.width; x++) {
-                for (var y = 0; y < this.height; y++) {
-                    if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
-                        img.setBitXY(x, y);
-                    }
+    get internalMapIDs() {
+        if (this.computed.internalMapIDs) return this.computed.internalMapIDs;
+        return this.computed.internalMapIDs = getInternalMapIDs(this);
+    }
+
+    get external() {
+        // points of the ROI that touch the rectangular shape
+        if (this.computed.external) return this.computed.external;
+        return this.computed.external = getExternal(this);
+    }
+
+    get contour() {
+        if (this.computed.contour) return this.computed.contour;
+        return this.computed.contour = getContour(this);
+    }
+
+    get border() {
+        if (this.computed.border) return this.computed.border;
+        return this.computed.border = getBorder(this);
+    }
+
+    get mask() {
+        if (this.computed.mask) return this.computed.mask;
+
+        var img = new _image2.default(this.width, this.height, {
+            kind: KindNames.BINARY,
+            position: [this.minX, this.minY],
+            parent: this.map.parent
+        });
+
+        for (var x = 0; x < this.width; x++) {
+            for (var y = 0; y < this.height; y++) {
+                if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
+                    img.setBitXY(x, y);
                 }
             }
-            return this.computed.mask = img;
         }
-    }, {
-        key: 'filledMask',
-        get: function get() {
-            if (this.computed.filledMask) return this.computed.filledMask;
+        return this.computed.mask = img;
+    }
 
-            var img = new _image2['default'](this.width, this.height, {
-                kind: KindNames.BINARY,
-                position: [this.minX, this.minY],
-                parent: this.map.parent
-            });
+    get filledMask() {
+        if (this.computed.filledMask) return this.computed.filledMask;
 
-            for (var x = 0; x < this.width; x++) {
-                for (var y = 0; y < this.height; y++) {
-                    var target = x + this.minX + (y + this.minY) * this.map.width;
-                    if (this.internalMapIDs.indexOf(this.map.pixels[target]) >= 0) {
-                        img.setBitXY(x, y);
-                    } // by default a pixel is to 0 so no problems, it will be transparent
-                }
+        var img = new _image2.default(this.width, this.height, {
+            kind: KindNames.BINARY,
+            position: [this.minX, this.minY],
+            parent: this.map.parent
+        });
+
+        for (var x = 0; x < this.width; x++) {
+            for (var y = 0; y < this.height; y++) {
+                var target = x + this.minX + (y + this.minY) * this.map.width;
+                if (this.internalMapIDs.indexOf(this.map.pixels[target]) >= 0) {
+                    img.setBitXY(x, y);
+                } // by default a pixel is to 0 so no problems, it will be transparent
             }
-
-            return this.computed.filledMask = img;
         }
-    }]);
 
-    return ROI;
-})();
+        return this.computed.filledMask = img;
+    }
+}
 
-exports['default'] = ROI;
+exports.default = ROI; /* it should really be an array to solve complex cases related to border effect
+                        Like the image
+                        0000
+                        1111
+                        0000
+                        1111
+                       
+                        The first row of 1 will be surrouned by 2 differents zones
+                       
+                        Or even worse
+                        010
+                        111
+                        010
+                        The cross will be surrouned by 4 differents zones
+                       
+                        However in most of the cases it will be an array of one element
+                        */
+
 function getSurroundingIDs(roi) {
     var surrounding = new Array(1);
 
@@ -14881,9 +14740,7 @@ function getSurroundingIDs(roi) {
     var toX = Math.min(roi.width, roiMap.width - 2);
 
     // not optimized  if height=1 !
-    var _arr = [0, roi.height - 1];
-    for (var _i = 0; _i < _arr.length; _i++) {
-        var y = _arr[_i];
+    for (var y of [0, roi.height - 1]) {
         for (var x = 0; x < roi.width; x++) {
             var target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (x - roi.minX > 0 && pixels[target] === roi.id && pixels[target - 1] !== roi.id) {
@@ -14905,9 +14762,7 @@ function getSurroundingIDs(roi) {
     var fromY = Math.max(roi.minY, 1);
     var toY = Math.min(roi.height, roiMap.height - 2);
     // not optimized  if width=1 !
-    var _arr2 = [0, roi.width - 1];
-    for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
-        var x = _arr2[_i2];
+    for (var x of [0, roi.width - 1]) {
         for (var y = 0; y < roi.height; y++) {
             var target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (y - roi.minY > 0 && pixels[target] === roi.id && pixels[target - roiMap.width] !== roi.id) {
@@ -14942,68 +14797,25 @@ function getExternal(roi) {
 
     var topBottom = [0];
     if (roi.height > 1) topBottom[1] = roi.height - 1;
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-        for (var _iterator = topBottom[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var y = _step.value;
-
-            for (var x = 1; x < roi.width - 1; x++) {
-                var target = (y + roi.minY) * roiMap.width + x + roi.minX;
-                if (pixels[target] === roi.id) {
-                    total++;
-                }
-            }
-        }
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator['return']) {
-                _iterator['return']();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
+    for (var y of topBottom) {
+        for (var x = 1; x < roi.width - 1; x++) {
+            var target = (y + roi.minY) * roiMap.width + x + roi.minX;
+            if (pixels[target] === roi.id) {
+                total++;
             }
         }
     }
 
     var leftRight = [0];
     if (roi.width > 1) leftRight[1] = roi.width - 1;
-    var _iteratorNormalCompletion2 = true;
-    var _didIteratorError2 = false;
-    var _iteratorError2 = undefined;
-
-    try {
-        for (var _iterator2 = leftRight[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var x = _step2.value;
-
-            for (var y = 0; y < roi.height; y++) {
-                var target = (y + roi.minY) * roiMap.width + x + roi.minX;
-                if (pixels[target] === roi.id) {
-                    total++;
-                }
-            }
-        }
-    } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-                _iterator2['return']();
-            }
-        } finally {
-            if (_didIteratorError2) {
-                throw _iteratorError2;
+    for (var x of leftRight) {
+        for (var y = 0; y < roi.height; y++) {
+            var target = (y + roi.minY) * roiMap.width + x + roi.minX;
+            if (pixels[target] === roi.id) {
+                total++;
             }
         }
     }
-
     return total;
 }
 
@@ -15103,21 +14915,20 @@ function getInternalMapIDs(roi) {
 
     return internal;
 }
-module.exports = exports['default'];
 
-},{"../image":76,"../kindNames":78}],93:[function(require,module,exports){
+},{"../image":85,"../kindNames":87}],102:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = colorDepth;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = colorDepth;
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function colorDepth() {
     var newColorDepth = arguments.length <= 0 || arguments[0] === undefined ? 8 : arguments[0];
@@ -15130,7 +14941,7 @@ function colorDepth() {
 
     if (this.bitDepth === newColorDepth) return this.clone();
 
-    var newImage = _image2['default'].createFrom(this, { bitDepth: newColorDepth });
+    var newImage = _image2.default.createFrom(this, { bitDepth: newColorDepth });
 
     if (newColorDepth === 8) {
         for (var i = 0; i < this.data.length; i++) {
@@ -15145,21 +14956,19 @@ function colorDepth() {
     return newImage;
 }
 
-module.exports = exports['default'];
-
-},{"../image":76}],94:[function(require,module,exports){
+},{"../image":85}],103:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = crop;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = crop;
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function crop() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -15173,12 +14982,12 @@ function crop() {
     var _ref$height = _ref.height;
     var height = _ref$height === undefined ? this.height - y : _ref$height;
 
-    if (x > this.width - 1 || y > this.height - 1) throw new RangeError('crop: origin (x:' + x + ', y:' + y + ') out of range (' + (this.width - 1) + '; ' + (this.height - 1) + ')');
-    if (width <= 0 || height <= 0) throw new RangeError('crop: width and height (width:' + width + '; height:' + height + ') must be positive numbers');
-    if (x < 0 || y < 0) throw new RangeError('crop: x and y (x:' + x + ', y:' + y + ') must be positive numbers');
-    if (width > this.width - x || height > this.height - y) throw new RangeError('crop: (x: ' + x + ', y:' + y + ', width:' + width + ', height:' + height + ') size is out of range');
+    if (x > this.width - 1 || y > this.height - 1) throw new RangeError(`crop: origin (x:${ x }, y:${ y }) out of range (${ this.width - 1 }; ${ this.height - 1 })`);
+    if (width <= 0 || height <= 0) throw new RangeError(`crop: width and height (width:${ width }; height:${ height }) must be positive numbers`);
+    if (x < 0 || y < 0) throw new RangeError(`crop: x and y (x:${ x }, y:${ y }) must be positive numbers`);
+    if (width > this.width - x || height > this.height - y) throw new RangeError(`crop: (x: ${ x }, y:${ y }, width:${ width }, height:${ height }) size is out of range`);
 
-    var newImage = _image2['default'].createFrom(this, { width: width, height: height });
+    var newImage = _image2.default.createFrom(this, { width, height });
 
     var xWidth = width * this.channels;
     var y1 = y + height;
@@ -15198,16 +15007,13 @@ function crop() {
     return newImage;
 }
 
-module.exports = exports['default'];
-
-},{"../image":76}],95:[function(require,module,exports){
+},{"../image":85}],104:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports["default"] = average;
-
+exports.default = average;
 function average(newImage) {
     var ptr = 0;
     for (var i = 0; i < this.data.length; i += this.channels) {
@@ -15218,31 +15024,27 @@ function average(newImage) {
     }
 }
 
-module.exports = exports["default"];
-
-},{}],96:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = grey;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = grey;
 
 var _image = require('../../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _modelModel = require('../../model/model');
+var _model = require('../../model/model');
 
-var _luma709 = require('./luma709');
+var _luma = require('./luma709');
 
-var _luma7092 = _interopRequireDefault(_luma709);
+var _luma2 = _interopRequireDefault(_luma);
 
-var _luma601 = require('./luma601');
+var _luma3 = require('./luma601');
 
-var _luma6012 = _interopRequireDefault(_luma601);
+var _luma4 = _interopRequireDefault(_luma3);
 
 var _minmax = require('./minmax');
 
@@ -15256,6 +15058,8 @@ var _average = require('./average');
 
 var _average2 = _interopRequireDefault(_average);
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function grey() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
@@ -15266,9 +15070,9 @@ function grey() {
         return this.clone();
     }
 
-    this.checkProcessable('grey', { colorModel: _modelModel.RGB });
+    this.checkProcessable('grey', { colorModel: _model.RGB });
 
-    var newImage = _image2['default'].createFrom(this, {
+    var newImage = _image2.default.createFrom(this, {
         components: 1,
         colorModel: null
     });
@@ -15276,22 +15080,22 @@ function grey() {
     switch (algorithm.toLowerCase()) {
         case 'luma709':
             // sRGB
-            _luma7092['default'].call(this, newImage);
+            _luma2.default.call(this, newImage);
             break;
         case 'luma601':
             // NTSC
-            _luma6012['default'].call(this, newImage);
+            _luma4.default.call(this, newImage);
             break;
         case 'minmax':
             // used in HSL color model
-            _minmax2['default'].call(this, newImage);
+            _minmax2.default.call(this, newImage);
             break;
         case 'maximum':
-            _maximum2['default'].call(this, newImage);
+            _maximum2.default.call(this, newImage);
             break;
         case 'average':
             // used in HSI color model
-            _average2['default'].call(this, newImage);
+            _average2.default.call(this, newImage);
             break;
         default:
             throw new Error('Unsupported grey algorithm: ' + algorithm);
@@ -15300,16 +15104,13 @@ function grey() {
     return newImage;
 }
 
-module.exports = exports['default'];
-
-},{"../../image":76,"../../model/model":81,"./average":95,"./luma601":97,"./luma709":98,"./maximum":99,"./minmax":100}],97:[function(require,module,exports){
+},{"../../image":85,"../../model/model":90,"./average":104,"./luma601":106,"./luma709":107,"./maximum":108,"./minmax":109}],106:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports["default"] = luma601;
-
+exports.default = luma601;
 function luma601(newImage) {
     var ptr = 0;
     for (var i = 0; i < this.data.length; i += this.channels) {
@@ -15320,16 +15121,13 @@ function luma601(newImage) {
     }
 }
 
-module.exports = exports["default"];
-
-},{}],98:[function(require,module,exports){
+},{}],107:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports["default"] = luma709;
-
+exports.default = luma709;
 function luma709(newImage) {
     var ptr = 0;
     for (var i = 0; i < this.data.length; i += this.channels) {
@@ -15340,16 +15138,13 @@ function luma709(newImage) {
     }
 }
 
-module.exports = exports["default"];
-
-},{}],99:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports["default"] = maximum;
-
+exports.default = maximum;
 function maximum(newImage) {
     var ptr = 0;
     for (var i = 0; i < this.data.length; i += this.channels) {
@@ -15360,16 +15155,13 @@ function maximum(newImage) {
     }
 }
 
-module.exports = exports["default"];
-
-},{}],100:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports["default"] = minmax;
-
+exports.default = minmax;
 function minmax(newImage) {
     var ptr = 0;
     for (var i = 0; i < this.data.length; i += this.channels) {
@@ -15380,36 +15172,34 @@ function minmax(newImage) {
     }
 }
 
-module.exports = exports["default"];
-
-},{}],101:[function(require,module,exports){
-// http://www.easyrgb.com/index.php?X=MATH&H=18#text18
-// check rgbToHsl : https://bgrins.github.io/TinyColor/docs/tinycolor.html
-
+},{}],110:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = hsv;
+exports.default = hsv;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _modelModel = require('../model/model');
+var _model = require('../model/model');
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// http://www.easyrgb.com/index.php?X=MATH&H=18#text18
+// check rgbToHsl : https://bgrins.github.io/TinyColor/docs/tinycolor.html
+
 function hsv() {
     this.checkProcessable('hsv', {
         bitDepth: [8, 16],
         alpha: [0, 1],
-        colorModel: [_modelModel.RGB]
+        colorModel: [_model.RGB]
     });
 
-    var newImage = _image2['default'].createFrom(this, {
-        colorModel: _modelModel.HSL
+    var newImage = _image2.default.createFrom(this, {
+        colorModel: _model.HSL
     });
 
     var threshold = Math.floor(this.maxValue / 2);
@@ -15453,35 +15243,33 @@ function hsv() {
     return newImage;
 }
 
-module.exports = exports['default'];
-
-},{"../image":76,"../model/model":81}],102:[function(require,module,exports){
-// based on https://bgrins.github.io/TinyColor/docs/tinycolor.html
-
+},{"../image":85,"../model/model":90}],111:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = hsv;
+exports.default = hsv;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _modelModel = require('../model/model');
+var _model = require('../model/model');
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// based on https://bgrins.github.io/TinyColor/docs/tinycolor.html
+
 function hsv() {
     this.checkProcessable('hsv', {
         bitDepth: [8, 16],
         alpha: [0, 1],
-        colorModel: [_modelModel.RGB]
+        colorModel: [_model.RGB]
     });
 
-    var newImage = _image2['default'].createFrom(this, {
-        colorModel: _modelModel.HSV
+    var newImage = _image2.default.createFrom(this, {
+        colorModel: _model.HSV
     });
 
     var ptr = 0;
@@ -15524,9 +15312,13 @@ function hsv() {
     return newImage;
 }
 
-module.exports = exports['default'];
+},{"../image":85,"../model/model":90}],112:[function(require,module,exports){
+"use strict";
 
-},{"../image":76,"../model/model":81}],103:[function(require,module,exports){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = huang;
 /***
  *
  * see http://rsb.info.nih.gov/ij/developer/source/ij/process/AutoThresholder.java.html.
@@ -15534,13 +15326,6 @@ module.exports = exports['default'];
  * "Image thresholding by minimizing the measure of fuzziness", Pattern Recognition 28(1): 41-51
  *
  */
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports["default"] = huang;
 
 function huang(histogram) {
     /* Determine the first non-zero bin */
@@ -15611,9 +15396,13 @@ function huang(histogram) {
     return threshold;
 }
 
-module.exports = exports["default"];
+},{}],113:[function(require,module,exports){
+'use strict';
 
-},{}],104:[function(require,module,exports){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = intermodes;
 /***
  *
  * see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
@@ -15621,13 +15410,6 @@ module.exports = exports["default"];
  * "The analysis of cell images", Annals of the NewYork Academy of Sciences 128: 1035-1053
  *
  */
-
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-exports['default'] = intermodes;
 
 function intermodes(histogram) {
     var iHisto = histogram.slice();
@@ -15677,22 +15459,20 @@ function bimodalTest(iHisto) {
     }
     return b;
 }
-module.exports = exports['default'];
 
-},{}],105:[function(require,module,exports){
+},{}],114:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = isodata;
 /**
  * see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
  * Isodata: Ridler, TW & Calvard, S (1978), "Picture thresholding using an iterative selection method"
  * IEEE Transactions on Systems, Man and Cybernetics 8: 630-632.
  *
  */
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-exports['default'] = isodata;
-
 function isodata(histogram) {
 
     var l = undefined; //the average grey value of pixels with intensities < g
@@ -15734,9 +15514,13 @@ function isodata(histogram) {
     return g;
 }
 
-module.exports = exports['default'];
+},{}],115:[function(require,module,exports){
+"use strict";
 
-},{}],106:[function(require,module,exports){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = li;
 /*
  * see http://rsb.info.nih.gov/ij/developer/source/ij/process/AutoThresholder.java.html
  * The method is present in: Implements Li's Minimum Cross Entropy thresholding method
@@ -15750,13 +15534,6 @@ module.exports = exports['default'];
  *        total - the number of pixels in the image
  * @returns {number} - the threshold
  */
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports["default"] = li;
 
 function li(histogram, total) {
 
@@ -15821,17 +15598,13 @@ function li(histogram, total) {
     return threshold;
 }
 
-module.exports = exports["default"];
-
-},{}],107:[function(require,module,exports){
+},{}],116:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = mask;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = mask;
 
 var _image = require('../../image');
 
@@ -15881,9 +15654,9 @@ var _percentile = require('./percentile');
 
 var _percentile2 = _interopRequireDefault(_percentile);
 
-var _renyiEntropyJs = require('./renyiEntropy.js');
+var _renyiEntropy = require('./renyiEntropy.js');
 
-var _renyiEntropyJs2 = _interopRequireDefault(_renyiEntropyJs);
+var _renyiEntropy2 = _interopRequireDefault(_renyiEntropy);
 
 var _shanbhag = require('./shanbhag');
 
@@ -15897,7 +15670,9 @@ var _yen = require('./yen');
 
 var _yen2 = _interopRequireDefault(_yen);
 
-var _utilConverter = require('../../../util/converter');
+var _converter = require('../../../util/converter');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /*
  Creation of binary mask is based on the determination of a threshold
@@ -15924,58 +15699,58 @@ function mask() {
     var histogram = this.getHistogram();
     switch (algorithm.toLowerCase()) {
         case 'threshold':
-            threshold = (0, _utilConverter.getThreshold)(threshold, this.maxValue);
+            threshold = (0, _converter.getThreshold)(threshold, this.maxValue);
             break;
         case 'huang':
-            threshold = (0, _huang2['default'])(histogram);
+            threshold = (0, _huang2.default)(histogram);
             break;
         case 'intermodes':
-            threshold = (0, _intermodes2['default'])(histogram);
+            threshold = (0, _intermodes2.default)(histogram);
             break;
         case 'isodata':
-            threshold = (0, _isodata2['default'])(histogram);
+            threshold = (0, _isodata2.default)(histogram);
             break;
         case 'li':
-            threshold = (0, _li2['default'])(histogram, this.size);
+            threshold = (0, _li2.default)(histogram, this.size);
             break;
         case 'maxentropy':
-            threshold = (0, _maxEntropy2['default'])(histogram, this.size);
+            threshold = (0, _maxEntropy2.default)(histogram, this.size);
             break;
         case 'mean':
-            threshold = (0, _mean2['default'])(histogram, this.size);
+            threshold = (0, _mean2.default)(histogram, this.size);
             break;
         case 'minerror':
-            threshold = (0, _minError2['default'])(histogram, this.size);
+            threshold = (0, _minError2.default)(histogram, this.size);
             break;
         case 'minimum':
-            threshold = (0, _minimum2['default'])(histogram);
+            threshold = (0, _minimum2.default)(histogram);
             break;
         case 'moments':
-            threshold = (0, _moments2['default'])(histogram, this.size);
+            threshold = (0, _moments2.default)(histogram, this.size);
             break;
         case 'otsu':
-            threshold = (0, _otsu2['default'])(histogram, this.size);
+            threshold = (0, _otsu2.default)(histogram, this.size);
             break;
         case 'percentile':
-            threshold = (0, _percentile2['default'])(histogram);
+            threshold = (0, _percentile2.default)(histogram);
             break;
         case 'renyientropy':
-            threshold = (0, _renyiEntropyJs2['default'])(histogram, this.size);
+            threshold = (0, _renyiEntropy2.default)(histogram, this.size);
             break;
         case 'shanbhag':
-            threshold = (0, _shanbhag2['default'])(histogram, this.size);
+            threshold = (0, _shanbhag2.default)(histogram, this.size);
             break;
         case 'triangle':
-            threshold = (0, _triangle2['default'])(histogram);
+            threshold = (0, _triangle2.default)(histogram);
             break;
         case 'yen':
-            threshold = (0, _yen2['default'])(histogram, this.size);
+            threshold = (0, _yen2.default)(histogram, this.size);
             break;
         default:
             throw new Error('mask transform unknown algorithm: ' + algorithm);
     }
 
-    var newImage = new _image2['default'](this.width, this.height, {
+    var newImage = new _image2.default(this.width, this.height, {
         kind: 'BINARY',
         parent: this
     });
@@ -16000,9 +15775,13 @@ function mask() {
     return newImage;
 }
 
-module.exports = exports['default'];
+},{"../../../util/converter":154,"../../image":85,"./huang":112,"./intermodes":113,"./isodata":114,"./li":115,"./maxEntropy":117,"./mean":118,"./minError":119,"./minimum":120,"./moments":121,"./otsu":122,"./percentile":123,"./renyiEntropy.js":124,"./shanbhag":125,"./triangle":126,"./yen":127}],117:[function(require,module,exports){
+"use strict";
 
-},{"../../../util/converter":145,"../../image":76,"./huang":103,"./intermodes":104,"./isodata":105,"./li":106,"./maxEntropy":108,"./mean":109,"./minError":110,"./minimum":111,"./moments":112,"./otsu":113,"./percentile":114,"./renyiEntropy.js":115,"./shanbhag":116,"./triangle":117,"./yen":118}],108:[function(require,module,exports){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = maxEntropy;
 /*
  * see http://rsb.info.nih.gov/ij/developer/source/ij/process/AutoThresholder.java.html
  * The method is present in: Implements Kapur-Sahoo-Wong (Maximum Entropy) thresholding method:
@@ -16012,13 +15791,6 @@ module.exports = exports['default'];
  *        total - the number of pixels in the image
  * @returns {number} - the threshold
  */
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports["default"] = maxEntropy;
 
 function maxEntropy(histogram, total) {
     var norm_histo = new Array(histogram.length); // normalized histogram
@@ -16088,9 +15860,13 @@ function maxEntropy(histogram, total) {
     return threshold;
 }
 
-module.exports = exports["default"];
+},{}],118:[function(require,module,exports){
+"use strict";
 
-},{}],109:[function(require,module,exports){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = mean;
 /*
  * The method is present in: Uses the 	mean of grey levels as the threshold. It is described in:
  * Glasbey, CA (1993), "An analysis of histogram-based thresholding algorithms",
@@ -16100,13 +15876,6 @@ module.exports = exports["default"];
  * @returns {number} - the threshold
  */
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports["default"] = mean;
-
 function mean(histogram, total) {
     var sum = 0;
     for (var i = 0; i < histogram.length; i++) {
@@ -16115,9 +15884,13 @@ function mean(histogram, total) {
     return Math.floor(sum / total);
 }
 
-module.exports = exports["default"];
+},{}],119:[function(require,module,exports){
+"use strict";
 
-},{}],110:[function(require,module,exports){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = minError;
 /*
  * see http://rsb.info.nih.gov/ij/developer/source/ij/process/AutoThresholder.java.html
  * The method is present in: An 	iterative implementation of Kittler and Illingworth's Minimum Error
@@ -16126,13 +15899,6 @@ module.exports = exports["default"];
  *        total - the number of pixels in the image
  * @returns {number} - the threshold
  */
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports["default"] = minError;
 
 function minError(histogram, total) {
 
@@ -16225,9 +15991,14 @@ function sumC(y, j) {
     }
     return x;
 }
-module.exports = exports["default"];
 
-},{}],111:[function(require,module,exports){
+},{}],120:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = minimum;
 //see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
 // J. M. S. Prewitt and M. L. Mendelsohn, "The analysis of cell images," in
 // Annals of the New York Academy of Sciences, vol. 128, pp. 1035-1053, 1966.
@@ -16235,13 +16006,6 @@ module.exports = exports["default"];
 // Original Matlab code Copyright (C) 2004 Antti Niemisto
 // See http://www.cs.tut.fi/~ant/histthresh/ for an excellent slide presentation
 // and the original Matlab code
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports["default"] = minimum;
-
 function minimum(histogram) {
     if (histogram.length < 2) {
         //validate that the histogram has at least two color values
@@ -16268,7 +16032,6 @@ function minimum(histogram) {
     threshold = minimumBetweenPeeks(histogramCopy, max);
     return threshold;
 }
-
 function smoothed(histogram) {
     //Smooth with a 3 point running mean filter
     var auHistogram = new Array(histogram.length); // a copy of the histograma for the smoothing process
@@ -16303,9 +16066,14 @@ function bimodalTest(histogram) {
     if (peaks === 2) isBimodal = true;
     return isBimodal;
 }
-module.exports = exports["default"];
 
-},{}],112:[function(require,module,exports){
+},{}],121:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = moments;
 //see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
 // W. Tsai, "Moment-preserving thresholding: a new approach," Computer Vision,
 // Graphics, and Image Processing, vol. 29, pp. 377-393, 1985.
@@ -16314,13 +16082,6 @@ module.exports = exports["default"];
 // Shreveport, LA 71115, USA
 // http://sourceforge.net/projects/fourier-ipal
 // http://www.lsus.edu/faculty/~ecelebi/fourier.htm
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports["default"] = moments;
-
 function moments(histogram, total) {
     //moments
     var m0 = 1.0;
@@ -16368,7 +16129,6 @@ function moments(histogram, total) {
     }
     return threshold;
 }
-
 function partialSum(histogram, limite) {
     //a partial sum is calculated according to the value limit
     var sum = 0;
@@ -16377,22 +16137,20 @@ function partialSum(histogram, limite) {
     }
     return sum;
 }
-module.exports = exports["default"];
 
-},{}],113:[function(require,module,exports){
+},{}],122:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = otsu;
 /**
  * The method is present in: Otsu, N (1979), "A threshold selection method from gray-level histograms", IEEE Trans. Sys., Man., Cyber. 9: 62-66
  * The Otsu implementation is based on: https://en.wikipedia.org/wiki/Otsu's_method
  * @param histogram - the histogram of the image
  * @returns {number} - the threshold
  */
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports["default"] = otsu;
 
 function otsu(histogram, total) {
 
@@ -16430,16 +16188,13 @@ function otsu(histogram, total) {
     return threshold;
 }
 
-module.exports = exports["default"];
-
-},{}],114:[function(require,module,exports){
+},{}],123:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports["default"] = percentile;
-
+exports.default = percentile;
 function percentile(histogram) {
     // See http://imagej.nih.gov/ij/download/tools/source/ij/process/AutoThresholder.java
     // W. Doyle, "Operation useful for similarity-invariant pattern recognition,"
@@ -16474,9 +16229,14 @@ function partialSum(histogram, endIndex) {
     }
     return x;
 }
-module.exports = exports["default"];
 
-},{}],115:[function(require,module,exports){
+},{}],124:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = renyiEntropy;
 // see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
 // Kapur J.N., Sahoo P.K., and Wong A.K.C. (1985) "A New Method for
 // Gray-Level Picture Thresholding Using the Entropy of the Histogram"
@@ -16484,13 +16244,6 @@ module.exports = exports["default"];
 // M. Emre Celebi
 // 06.15.2007
 // Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports["default"] = renyiEntropy;
 
 function renyiEntropy(histogram, total) {
     var opt_threshold = undefined; //Optimal threshold
@@ -16619,20 +16372,17 @@ function renyiEntropy(histogram, total) {
     return opt_threshold;
 }
 
-module.exports = exports["default"];
-
-},{}],116:[function(require,module,exports){
-// see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
-// Shanhbag A.G. (1994) "Utilization of Information Measure as a Means of
-// Image Thresholding" Graphical Models and Image Processing, 56(5): 414-419
-// Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
-
+},{}],125:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports["default"] = shanbhag;
+exports.default = shanbhag;
+// see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
+// Shanhbag A.G. (1994) "Utilization of Information Measure as a Means of
+// Image Thresholding" Graphical Models and Image Processing, 56(5): 414-419
+// Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
 
 function shanbhag(histogram, total) {
     var norm_histo = new Array(histogram.length); // normalized histogram
@@ -16702,9 +16452,13 @@ function shanbhag(histogram, total) {
     return threshold;
 }
 
-module.exports = exports["default"];
+},{}],126:[function(require,module,exports){
+"use strict";
 
-},{}],117:[function(require,module,exports){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = triangle;
 // see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
 // Zack, G. W., Rogers, W. E. and Latt, S. A., 1977,
 // Automatic Measurement of Sister Chromatid Exchange Frequency,
@@ -16712,13 +16466,6 @@ module.exports = exports["default"];
 //
 //  modified from Johannes Schindelin plugin
 //
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports["default"] = triangle;
-
 function triangle(histogram) {
 
     // find min and max
@@ -16815,9 +16562,13 @@ function triangle(histogram) {
     } else return split;
 }
 
-module.exports = exports["default"];
+},{}],127:[function(require,module,exports){
+"use strict";
 
-},{}],118:[function(require,module,exports){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = yen;
 // see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
 // Implements Yen  thresholding method
 // 1) Yen J.C., Chang F.J., and Chang S. (1995) "A New Criterion
@@ -16831,13 +16582,6 @@ module.exports = exports["default"];
 // M. Emre Celebi
 // 06.15.2007
 // Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports["default"] = yen;
 
 function yen(histogram, total) {
     var norm_histo = new Array(histogram.length); // normalized histogram
@@ -16869,17 +16613,13 @@ function yen(histogram, total) {
     return threshold;
 }
 
-module.exports = exports["default"];
-
-},{}],119:[function(require,module,exports){
+},{}],128:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = pad;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = pad;
 
 var _image = require('../image');
 
@@ -16889,9 +16629,11 @@ var _newArray = require('new-array');
 
 var _newArray2 = _interopRequireDefault(_newArray);
 
-var _utilityCopy = require('../utility/copy');
+var _copy = require('../utility/copy');
 
-var _utilityCopy2 = _interopRequireDefault(_utilityCopy);
+var _copy2 = _interopRequireDefault(_copy);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function pad() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -16914,7 +16656,7 @@ function pad() {
             if (color[i] === 0) color[i] = 0.001;
         }
     } else {
-        color = (0, _newArray2['default'])(this.channels, null);
+        color = (0, _newArray2.default)(this.channels, null);
     }
 
     if (!Array.isArray(size)) {
@@ -16925,9 +16667,9 @@ function pad() {
     var newHeight = this.height + size[1] * 2;
     var channels = this.channels;
 
-    var newImage = _image2['default'].createFrom(this, { width: newWidth, height: newHeight });
+    var newImage = _image2.default.createFrom(this, { width: newWidth, height: newHeight });
 
-    (0, _utilityCopy2['default'])(this, newImage, size[0], size[1]);
+    (0, _copy2.default)(this, newImage, size[0], size[1]);
 
     for (var i = size[0]; i < newWidth - size[0]; i++) {
         for (var k = 0; k < channels; k++) {
@@ -16958,19 +16700,13 @@ function pad() {
     return newImage;
 }
 
-module.exports = exports['default'];
-
-},{"../image":76,"../utility/copy":124,"new-array":37}],120:[function(require,module,exports){
+},{"../image":85,"../utility/copy":133,"new-array":27}],129:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = resizeBinary;
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = resizeBinary;
 
 var _image = require('../image');
 
@@ -16979,6 +16715,10 @@ var _image2 = _interopRequireDefault(_image);
 var _kindNames = require('../kindNames');
 
 var KindNames = _interopRequireWildcard(_kindNames);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // This is a temporary code that should be placed in the more generate resize method
 // it only works for scaled down !
@@ -16996,7 +16736,7 @@ function resizeBinary() {
     var shiftX = Math.round((this.width - width) / 2);
     var shiftY = Math.round((this.height - height) / 2);
 
-    var newImage = _image2['default'].createFrom(this, {
+    var newImage = _image2.default.createFrom(this, {
         kind: KindNames.BINARY,
         width: width,
         height: height,
@@ -17014,27 +16754,25 @@ function resizeBinary() {
     return newImage;
 }
 
-module.exports = exports['default'];
-
-},{"../image":76,"../kindNames":78}],121:[function(require,module,exports){
+},{"../image":85,"../kindNames":87}],130:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = rgba8;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = rgba8;
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _modelModel = require('../model/model');
+var _model = require('../model/model');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function rgba8() {
 
-    var newImage = new _image2['default'](this.width, this.height, {
+    var newImage = new _image2.default(this.width, this.height, {
         kind: 'RGBA'
     });
 
@@ -17042,16 +16780,13 @@ function rgba8() {
     return newImage;
 }
 
-module.exports = exports['default'];
-
-},{"../image":76,"../model/model":81}],122:[function(require,module,exports){
+},{"../image":85,"../model/model":90}],131:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports["default"] = nearestNeighbor;
-
+exports.default = nearestNeighbor;
 function nearestNeighbor(newImage, newWidth, newHeight) {
     var wRatio = this.width / newWidth;
     var hRatio = this.height / newHeight;
@@ -17066,17 +16801,13 @@ function nearestNeighbor(newImage, newWidth, newHeight) {
     }
 }
 
-module.exports = exports["default"];
-
-},{}],123:[function(require,module,exports){
+},{}],132:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = scale;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = scale;
 
 var _image = require('../../image');
 
@@ -17086,7 +16817,9 @@ var _nearestNeighbor = require('./nearestNeighbor');
 
 var _nearestNeighbor2 = _interopRequireDefault(_nearestNeighbor);
 
-var _utilConverter = require('../../../util/converter');
+var _converter = require('../../../util/converter');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function scale() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -17100,17 +16833,17 @@ function scale() {
     var _ref$algorithm = _ref.algorithm;
     var algorithm = _ref$algorithm === undefined ? 'nearestNeighbor' : _ref$algorithm;
 
-    var _factorDimensions = (0, _utilConverter.factorDimensions)(factor, width, height);
+    var _factorDimensions = (0, _converter.factorDimensions)(factor, width, height);
 
     var newWidth = _factorDimensions.width;
     var newHeight = _factorDimensions.height;
 
-    var newImage = _image2['default'].createFrom(this, { width: newWidth, height: newHeight });
+    var newImage = _image2.default.createFrom(this, { width: newWidth, height: newHeight });
 
     switch (algorithm.toLowerCase()) {
         case 'nearestneighbor':
         case 'nearestneighbour':
-            _nearestNeighbor2['default'].call(this, newImage, newWidth, newHeight);
+            _nearestNeighbor2.default.call(this, newImage, newWidth, newHeight);
             break;
         default:
             throw new Error('Unsupported scale algorithm: ' + algorithm);
@@ -17119,16 +16852,13 @@ function scale() {
     return newImage;
 }
 
-module.exports = exports['default'];
-
-},{"../../../util/converter":145,"../../image":76,"./nearestNeighbor":122}],124:[function(require,module,exports){
+},{"../../../util/converter":154,"../../image":85,"./nearestNeighbor":131}],133:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports["default"] = copyImage;
-
+exports.default = copyImage;
 function copyImage(fromImage, toImage, x, y) {
     var fromWidth = fromImage.width;
     var fromHeight = fromImage.height;
@@ -17146,17 +16876,13 @@ function copyImage(fromImage, toImage, x, y) {
     }
 }
 
-module.exports = exports["default"];
-
-},{}],125:[function(require,module,exports){
+},{}],134:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = match;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = match;
 
 var _image = require('../image');
 
@@ -17166,9 +16892,11 @@ var _newArray = require('new-array');
 
 var _newArray2 = _interopRequireDefault(_newArray);
 
-var _utilMatrix = require('../../util/matrix');
+var _matrix = require('../../util/matrix');
 
-var _utilMatrix2 = _interopRequireDefault(_utilMatrix);
+var _matrix2 = _interopRequireDefault(_matrix);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Try to match the current pictures with another one
 
@@ -17192,7 +16920,7 @@ function match(image) {
     }
 
     // there could be many algorithms
-    var similarityMatrix = new _utilMatrix2['default'](image.width, image.height, -Infinity);
+    var similarityMatrix = new _matrix2.default(image.width, image.height, -Infinity);
 
     var currentX = Math.floor(image.width / 2);
     var currentY = Math.floor(image.height / 2);
@@ -17217,26 +16945,35 @@ function match(image) {
         }
     }
 
+    /*
+    for (let i=0; i<similarityMatrix.length; i++) {
+        let line=[];
+        for (let j=0; j<similarityMatrix[i].length; j++) {
+            line.push(similarityMatrix[i][j]);
+        }
+        console.log(line.join(" "));
+    }
+    console.log(currentX, middleX, currentY, middleY);
+    */
+
     return [currentX - middleX, currentY - middleY];
 }
 
-module.exports = exports['default'];
-
-},{"../../util/matrix":148,"../image":76,"new-array":37}],126:[function(require,module,exports){
+},{"../../util/matrix":158,"../image":85,"new-array":27}],135:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = getChannel;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = getChannel;
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _utilChannel = require('./../../util/channel');
+var _channel = require('./../../util/channel');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getChannel(channel) {
 
@@ -17244,9 +16981,9 @@ function getChannel(channel) {
         bitDepth: [8, 16]
     });
 
-    channel = (0, _utilChannel.validateChannel)(this, channel);
+    channel = (0, _channel.validateChannel)(this, channel);
 
-    var newImage = _image2['default'].createFrom(this, {
+    var newImage = _image2.default.createFrom(this, {
         components: 1,
         alpha: false,
         colorModel: null
@@ -17259,23 +16996,21 @@ function getChannel(channel) {
     return newImage;
 }
 
-module.exports = exports['default'];
-
-},{"../image":76,"./../../util/channel":144}],127:[function(require,module,exports){
+},{"../image":85,"./../../util/channel":153}],136:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = getColumn;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = getColumn;
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _utilChannel = require('./../../util/channel');
+var _channel = require('./../../util/channel');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getColumn(column) {
     var channel = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
@@ -17296,16 +17031,13 @@ function getColumn(column) {
     return array;
 }
 
-module.exports = exports['default'];
-
-},{"../image":76,"./../../util/channel":144}],128:[function(require,module,exports){
+},{"../image":85,"./../../util/channel":153}],137:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = getPixelsGrid;
-
+exports.default = getPixelsGrid;
 function getPixelsGrid() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
@@ -17314,15 +17046,11 @@ function getPixelsGrid() {
     var _ref$painted = _ref.painted;
     var painted = _ref$painted === undefined ? false : _ref$painted;
     var mask = _ref.mask;
-    var _ref$format = _ref.format;
-    var format = _ref$format === undefined ? 'xy z' : _ref$format;
 
     this.checkProcessable('getPixelsGrid', {
         bitDepth: [8, 16],
         channels: 1
     });
-
-    var toReturn = {};
 
     if (!Array.isArray(sampling)) sampling = [sampling, sampling];
 
@@ -17345,7 +17073,7 @@ function getPixelsGrid() {
             var y = Math.round(currentY);
             if (!mask || mask.getBitXY(x, y)) {
                 xyS[position] = [x, y];
-                zS[position] = this.getValueXY(x, y, 0);
+                zS[position] = this.getPixelXY(x, y);
                 position++;
             }
             currentY += yStep;
@@ -17353,11 +17081,11 @@ function getPixelsGrid() {
         currentX += xStep;
     }
 
+    // resize arrays if needed
     xyS.length = position;
     zS.length = position;
 
-    toReturn.xyS = xyS;
-    toReturn.zS = zS;
+    var toReturn = { xyS, zS };
 
     if (painted) {
         toReturn.painted = this.rgba8().paintPixels(xyS);
@@ -17366,23 +17094,21 @@ function getPixelsGrid() {
     return toReturn;
 }
 
-module.exports = exports['default'];
-
-},{}],129:[function(require,module,exports){
+},{}],138:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = getRow;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = getRow;
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _utilChannel = require('./../../util/channel');
+var _channel = require('./../../util/channel');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getRow(row) {
     var channel = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
@@ -17405,27 +17131,25 @@ function getRow(row) {
     return array;
 }
 
-module.exports = exports['default'];
-
-},{"../image":76,"./../../util/channel":144}],130:[function(require,module,exports){
+},{"../image":85,"./../../util/channel":153}],139:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = getSimilarity;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = getSimilarity;
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _utilChannel = require('./../../util/channel');
+var _channel = require('./../../util/channel');
 
 var _newArray = require('new-array');
 
 var _newArray2 = _interopRequireDefault(_newArray);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Try to match the current pictures with another one
 
@@ -17448,7 +17172,7 @@ function getSimilarity(image) {
     });
 
     if (!Array.isArray(border)) border = [border, border];
-    channels = (0, _utilChannel.validateArrayOfChannels)(this, { channels: channels, defaultAlpha: defaultAlpha });
+    channels = (0, _channel.validateArrayOfChannels)(this, { channels: channels, defaultAlpha: defaultAlpha });
 
     if (this.bitDepth !== image.bitDepth) {
         throw new Error('Both images must have the same bitDepth');
@@ -17469,7 +17193,7 @@ function getSimilarity(image) {
     var minY = Math.max(border[1], -shift[1]);
     var maxY = Math.min(this.height - border[1], this.height - shift[1]);
 
-    var results = (0, _newArray2['default'])(channels.length, 0);
+    var results = (0, _newArray2.default)(channels.length, 0);
     for (var i = 0; i < channels.length; i++) {
         var c = channels[i];
         var sumThis = normalize ? this.sum[c] : Math.max(this.sum[c], image.sum[c]);
@@ -17487,24 +17211,18 @@ function getSimilarity(image) {
     }
 
     if (average) {
-        return results.reduce(function (sum, x) {
-            return sum + x;
-        }) / results.length;
+        return results.reduce((sum, x) => sum + x) / results.length;
     }
     return results;
 }
 
-module.exports = exports['default'];
-
-},{"../image":76,"./../../util/channel":144,"new-array":37}],131:[function(require,module,exports){
+},{"../image":85,"./../../util/channel":153,"new-array":27}],140:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = setBorder;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = setBorder;
 
 var _image = require('../image');
 
@@ -17513,6 +17231,8 @@ var _image2 = _interopRequireDefault(_image);
 var _newArray = require('new-array');
 
 var _newArray2 = _interopRequireDefault(_newArray);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // this method will change the border
 // that may not be calculated
@@ -17538,7 +17258,7 @@ function setBorder() {
             if (color[i] === 0) color[i] = 0.001;
         }
     } else {
-        color = (0, _newArray2['default'])(this.channels, null);
+        color = (0, _newArray2.default)(this.channels, null);
     }
 
     if (!Array.isArray(size)) {
@@ -17576,23 +17296,21 @@ function setBorder() {
     }
 }
 
-module.exports = exports['default'];
-
-},{"../image":76,"new-array":37}],132:[function(require,module,exports){
+},{"../image":85,"new-array":27}],141:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = setChannel;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = setChannel;
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _utilChannel = require('./../../util/channel');
+var _channel = require('./../../util/channel');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function setChannel(channel, image) {
 
@@ -17610,7 +17328,7 @@ function setChannel(channel, image) {
         throw new Error('Images must have exactly the same width and height');
     }
 
-    channel = (0, _utilChannel.validateChannel)(this, channel);
+    channel = (0, _channel.validateChannel)(this, channel);
 
     var ptr = channel;
     for (var i = 0; i < image.data.length; i++) {
@@ -17619,21 +17337,19 @@ function setChannel(channel, image) {
     }
 }
 
-module.exports = exports['default'];
-
-},{"../image":76,"./../../util/channel":144}],133:[function(require,module,exports){
+},{"../image":85,"./../../util/channel":153}],142:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = split;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = split;
 
 var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function split() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -17655,7 +17371,7 @@ function split() {
     var data = this.data;
     if (this.alpha && preserveAlpha) {
         for (var i = 0; i < this.components; i++) {
-            var newImage = _image2['default'].createFrom(this, {
+            var newImage = _image2.default.createFrom(this, {
                 components: 1,
                 alpha: true,
                 colorModel: null
@@ -17669,7 +17385,7 @@ function split() {
         }
     } else {
         for (var i = 0; i < this.channels; i++) {
-            var newImage = _image2['default'].createFrom(this, {
+            var newImage = _image2.default.createFrom(this, {
                 components: 1,
                 alpha: false,
                 colorModel: null
@@ -17685,23 +17401,25 @@ function split() {
     return images;
 }
 
-module.exports = exports['default'];
-
-},{"../image":76}],134:[function(require,module,exports){
-/* eslint-disable strict */
+},{"../image":85}],143:[function(require,module,exports){
 'use strict';
 
-module.exports = exports = require('./image/image');
-exports.Stack = require('./stack/stack');
+var _environment = require('./image/environment');
 
-},{"./image/image":76,"./stack/stack":141}],135:[function(require,module,exports){
+module.exports = exports = require('./image/image').default;
+exports.Stack = require('./stack/stack').default;
+
+if (_environment.env === 'browser') {
+    exports.Worker = require('./worker/worker').default;
+}
+
+},{"./image/environment":65,"./image/image":85,"./stack/stack":150,"./worker/worker":163}],144:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = histogram;
-
+exports.default = histogram;
 function histogram(options) {
 
     this.checkProcessable('min', {
@@ -17718,16 +17436,13 @@ function histogram(options) {
     return histogram;
 }
 
-module.exports = exports['default'];
-
-},{}],136:[function(require,module,exports){
+},{}],145:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = histograms;
-
+exports.default = histograms;
 function histograms(options) {
 
     this.checkProcessable('min', {
@@ -17747,16 +17462,13 @@ function histograms(options) {
     return histograms;
 }
 
-module.exports = exports['default'];
-
-},{}],137:[function(require,module,exports){
+},{}],146:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = max;
-
+exports.default = max;
 function max() {
 
     this.checkProcessable('min', {
@@ -17772,25 +17484,21 @@ function max() {
     return max;
 }
 
-module.exports = exports['default'];
-
-},{}],138:[function(require,module,exports){
+},{}],147:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = median;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = median;
 
 var _histograms = require('./histograms');
 
 var _histograms2 = _interopRequireDefault(_histograms);
 
-var _utilMedianFromHistogram = require('../../util/medianFromHistogram');
+var _histogram = require('../../util/histogram');
 
-var _utilMedianFromHistogram2 = _interopRequireDefault(_utilMedianFromHistogram);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function median() {
 
@@ -17798,25 +17506,22 @@ function median() {
         bitDepth: [8, 16]
     });
 
-    var result = new Array(this[0].channels);
     var histograms = this.getHistograms({ maxSlots: this[0].maxValue + 1 });
+    var result = new Array(histograms.length);
     for (var c = 0; c < histograms.length; c++) {
         var histogram = histograms[c];
-        result[c] = (0, _utilMedianFromHistogram2['default'])(histogram);
+        result[c] = (0, _histogram.median)(histogram);
     }
     return result;
 }
 
-module.exports = exports['default'];
-
-},{"../../util/medianFromHistogram":149,"./histograms":136}],139:[function(require,module,exports){
+},{"../../util/histogram":155,"./histograms":145}],148:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = min;
-
+exports.default = min;
 function min() {
     this.checkProcessable('min', {
         bitDepth: [8, 16]
@@ -17831,80 +17536,76 @@ function min() {
     return min;
 }
 
-module.exports = exports['default'];
-
-},{}],140:[function(require,module,exports){
+},{}],149:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = extend;
+exports.default = extend;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _matchAndCrop = require('./transform/matchAndCrop');
 
-var _transformMatchAndCrop = require('./transform/matchAndCrop');
+var _matchAndCrop2 = _interopRequireDefault(_matchAndCrop);
 
-var _transformMatchAndCrop2 = _interopRequireDefault(_transformMatchAndCrop);
+var _min = require('./compute/min');
 
-var _computeMin = require('./compute/min');
+var _min2 = _interopRequireDefault(_min);
 
-var _computeMin2 = _interopRequireDefault(_computeMin);
+var _max = require('./compute/max');
 
-var _computeMax = require('./compute/max');
+var _max2 = _interopRequireDefault(_max);
 
-var _computeMax2 = _interopRequireDefault(_computeMax);
+var _median = require('./compute/median');
 
-var _computeMedian = require('./compute/median');
+var _median2 = _interopRequireDefault(_median);
 
-var _computeMedian2 = _interopRequireDefault(_computeMedian);
+var _histogram = require('./compute/histogram');
 
-var _computeHistogram = require('./compute/histogram');
+var _histogram2 = _interopRequireDefault(_histogram);
 
-var _computeHistogram2 = _interopRequireDefault(_computeHistogram);
+var _histograms = require('./compute/histograms');
 
-var _computeHistograms = require('./compute/histograms');
+var _histograms2 = _interopRequireDefault(_histograms);
 
-var _computeHistograms2 = _interopRequireDefault(_computeHistograms);
+var _average = require('./utility/average');
 
-var _utilityAverage = require('./utility/average');
+var _average2 = _interopRequireDefault(_average);
 
-var _utilityAverage2 = _interopRequireDefault(_utilityAverage);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function extend(Stack) {
     var inPlace = { inPlace: true };
-    Stack.extendMethod('matchAndCrop', _transformMatchAndCrop2['default']);
+    Stack.extendMethod('matchAndCrop', _matchAndCrop2.default);
 
-    Stack.extendMethod('getMin', _computeMin2['default']);
-    Stack.extendMethod('getMax', _computeMax2['default']);
-    Stack.extendMethod('getMedian', _computeMedian2['default']);
-    Stack.extendMethod('getHistogram', _computeHistogram2['default']);
-    Stack.extendMethod('getHistograms', _computeHistograms2['default']);
+    Stack.extendMethod('getMin', _min2.default);
+    Stack.extendMethod('getMax', _max2.default);
+    Stack.extendMethod('getMedian', _median2.default);
+    Stack.extendMethod('getHistogram', _histogram2.default);
+    Stack.extendMethod('getHistograms', _histograms2.default);
 
-    Stack.extendMethod('getAverage', _utilityAverage2['default']);
+    Stack.extendMethod('getAverage', _average2.default);
 }
 
-module.exports = exports['default'];
-
-},{"./compute/histogram":135,"./compute/histograms":136,"./compute/max":137,"./compute/median":138,"./compute/min":139,"./transform/matchAndCrop":142,"./utility/average":143}],141:[function(require,module,exports){
+},{"./compute/histogram":144,"./compute/histograms":145,"./compute/max":146,"./compute/median":147,"./compute/min":148,"./transform/matchAndCrop":151,"./utility/average":152}],150:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = Stack;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+exports.default = Stack;
 
 var _extend = require('./extend');
 
 var _extend2 = _interopRequireDefault(_extend);
 
-var _imageImage = require('../image/image');
+var _image = require('../image/image');
 
-var _imageImage2 = _interopRequireDefault(_imageImage);
+var _image2 = _interopRequireDefault(_image);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var computedPropertyDescriptor = {
     configurable: true,
@@ -17930,7 +17631,7 @@ function Stack(images) {
 }
 
 Stack.load = function (urls) {
-    return Promise.all(urls.map(_imageImage2['default'].load)).then(Stack);
+    return Promise.all(urls.map(_image2.default.load)).then(Stack);
 };
 
 Stack.extendMethod = function extendMethod(name, method) {
@@ -18034,37 +17735,40 @@ Stack.prototype.checkProcessable = function (processName) {
     }
 };
 
-(0, _extend2['default'])(Stack);
-module.exports = exports['default'];
+(0, _extend2.default)(Stack);
 
-},{"../image/image":76,"./extend":140}],142:[function(require,module,exports){
-/*
- We will try to move a set of images in order to get only the best common part of them
- The match is always done on the first image ?
-*/
+},{"../image/image":85,"./extend":149}],151:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = matchAndCrop;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = matchAndCrop;
 
 var _stack = require('../stack');
 
 var _stack2 = _interopRequireDefault(_stack);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // in a stack we compare 2 consecutive images
 // or directly to a parent
 
 // algorithm: matchToPrevious || matchToFirst
 
+// Ignoring border may be dangerous ! Is there is a shape on the side of the image there will be a
+// continuous shift if you ignore border. By default it is better to leave it to 0,0
+// Now if the background is not black there will also be no way to shift ...
+// It may therefore be much better to make a background correction before trying to match and crop
+// TODO this code seems also buggy if it is not 0,0
+
 function matchAndCrop() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
     var _ref$algorithm = _ref.algorithm;
     var algorithm = _ref$algorithm === undefined ? 'matchToPrevious' : _ref$algorithm;
+    var _ref$ignoreBorder = _ref.ignoreBorder;
+    var ignoreBorder = _ref$ignoreBorder === undefined ? [0, 0] : _ref$ignoreBorder;
 
     this.checkProcessable('matchAndCrop', {
         bitDepth: [8, 16]
@@ -18083,9 +17787,8 @@ function matchAndCrop() {
 
     // we calculate the best relative position to the parent image
     for (var i = 1; i < this.length; i++) {
-        // in order to calculate the similarity we need to add a border that will not be compared
-        // by default we take as border 1/8 of the image width and height
-        var position = parent.getBestMatch(this[i], { border: [parent.width >> 3, parent.height >> 3] });
+
+        var position = parent.getBestMatch(this[i], { border: ignoreBorder });
 
         results[i] = {
             position: [position[0] + relativePosition[0], position[1] + relativePosition[1]],
@@ -18140,30 +17843,31 @@ function matchAndCrop() {
         newImages[i] = results[i].crop;
     }
 
-    return new _stack2['default'](newImages);
-}
+    return new _stack2.default(newImages);
+} /*
+   We will try to move a set of images in order to get only the best common part of them
+   The match is always done on the first image ?
+  */
 
-module.exports = exports['default'];
-
-},{"../stack":141}],143:[function(require,module,exports){
+},{"../stack":150}],152:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports['default'] = average;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError('Cannot destructure undefined'); }
+exports.default = average;
 
 var _stack = require('../stack');
 
 var _stack2 = _interopRequireDefault(_stack);
 
-var _imageImage = require('../../image/image');
+var _image = require('../../image/image');
 
-var _imageImage2 = _interopRequireDefault(_imageImage);
+var _image2 = _interopRequireDefault(_image);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("Cannot destructure undefined"); }
 
 function average() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -18182,7 +17886,7 @@ function average() {
         }
     }
 
-    var image = _imageImage2['default'].createFrom(this[0]);
+    var image = _image2.default.createFrom(this[0]);
     var newData = image.data;
 
     for (var i = 0; i < this[0].data.length; i++) {
@@ -18192,22 +17896,20 @@ function average() {
     return image;
 }
 
-module.exports = exports['default'];
-
-},{"../../image/image":76,"../stack":141}],144:[function(require,module,exports){
+},{"../../image/image":85,"../stack":150}],153:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.validateArrayOfChannels = validateArrayOfChannels;
 exports.validateChannel = validateChannel;
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+var _model = require('../image/model/model');
 
-var _imageModelModel = require('../image/model/model');
+var Model = _interopRequireWildcard(_model);
 
-var Model = _interopRequireWildcard(_imageModelModel);
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function validateArrayOfChannels(image) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? // are we allowing the selection of an alpha channel ?
@@ -18288,20 +17990,19 @@ function validateChannel(image, channel) {
     return channel;
 }
 
-},{"../image/model/model":81}],145:[function(require,module,exports){
-/**
- * Converts a factor value to a number between 0 and 1
- * @param value
- */
+},{"../image/model/model":90}],154:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.getFactor = getFactor;
 exports.getThreshold = getThreshold;
 exports.factorDimensions = factorDimensions;
-
+/**
+ * Converts a factor value to a number between 0 and 1
+ * @param value
+ */
 function getFactor(value) {
     if (typeof value === 'string') {
         var last = value[value.length - 1];
@@ -18319,7 +18020,6 @@ function getFactor(value) {
  * @param maxValue
  * @returns {*}
  */
-
 function getThreshold(value, maxValue) {
     if (!maxValue) {
         throw Error('getThreshold : the maxValue should be specified');
@@ -18349,19 +18049,67 @@ function factorDimensions(factor, width, height) {
     };
 }
 
-},{}],146:[function(require,module,exports){
+},{}],155:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.median = median;
+exports.mean = mean;
+function median(histogram) {
+    var total = histogram.reduce((sum, x) => sum + x);
+
+    if (total <= 0) return undefined;
+
+    var position = 0;
+    var currentTotal = 0;
+    var middle = total / 2;
+    var previous = undefined;
+
+    while (true) {
+        if (histogram[position] > 0) {
+            if (previous !== undefined) {
+                return (previous + position) / 2;
+            }
+            currentTotal += histogram[position];
+            if (currentTotal > middle) {
+                return position;
+            } else if (currentTotal === middle) {
+                previous = position;
+            }
+        }
+        position++;
+    }
+}
+
+function mean(histogram) {
+    var total = 0;
+    var sum = 0;
+
+    for (var i = 0; i < histogram.length; i++) {
+        total += histogram[i];
+        sum += histogram[i] * i;
+    }
+
+    if (total <= 0) return undefined;
+
+    return sum / total;
+}
+
+},{}],156:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.validateKernel = validateKernel;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
 var _isInteger = require('is-integer');
 
 var _isInteger2 = _interopRequireDefault(_isInteger);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function validateKernel(kernel) {
     var kHeight = undefined,
@@ -18375,7 +18123,7 @@ function validateKernel(kernel) {
             }
         } else {
             var kernelWidth = Math.sqrt(kernel.length);
-            if ((0, _isInteger2['default'])(kernelWidth)) {
+            if ((0, _isInteger2.default)(kernelWidth)) {
                 kWidth = kHeight = Math.floor(Math.sqrt(kernel.length) / 2);
             } else {
                 throw new RangeError('validateKernel: Kernel array should be a square');
@@ -18393,41 +18141,34 @@ function validateKernel(kernel) {
     } else {
         throw new Error('validateKernel: Invalid Kernel: ' + kernel);
     }
-    return { kernel: kernel, kWidth: kWidth, kHeight: kHeight };
+    return { kernel, kWidth, kHeight };
 }
 
-},{"is-integer":25}],147:[function(require,module,exports){
+},{"is-integer":9}],157:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var DISCRETE_LAPLACE_4 = [[0, 1, 0], [1, -4, 1], [0, 1, 0]];
+var DISCRETE_LAPLACE_4 = exports.DISCRETE_LAPLACE_4 = [[0, 1, 0], [1, -4, 1], [0, 1, 0]];
 
-exports.DISCRETE_LAPLACE_4 = DISCRETE_LAPLACE_4;
-var DISCRETE_LAPLACE_8 = [[1, 1, 1], [1, -8, 1], [1, 1, 1]];
+var DISCRETE_LAPLACE_8 = exports.DISCRETE_LAPLACE_8 = [[1, 1, 1], [1, -8, 1], [1, 1, 1]];
 
-exports.DISCRETE_LAPLACE_8 = DISCRETE_LAPLACE_8;
-var GRADIENT_X = [[-1, 0, +1], [-2, 0, +2], [-1, 0, +1]];
+var GRADIENT_X = exports.GRADIENT_X = [[-1, 0, +1], [-2, 0, +2], [-1, 0, +1]];
 
-exports.GRADIENT_X = GRADIENT_X;
-var GRADIENT_Y = [[-1, -2, -1], [0, 0, 0], [+1, +2, +1]];
+var GRADIENT_Y = exports.GRADIENT_Y = [[-1, -2, -1], [0, 0, 0], [+1, +2, +1]];
 
-exports.GRADIENT_Y = GRADIENT_Y;
-var SECOND_DERIVATIVE = [[-1, -2, 0, 2, 1], [-2, -4, 0, 4, 2], [0, 0, 0, 0, 0], [1, 2, 0, -2, -1], [2, 4, 0, -4, -2]];
+var SECOND_DERIVATIVE = exports.SECOND_DERIVATIVE = [[-1, -2, 0, 2, 1], [-2, -4, 0, 4, 2], [0, 0, 0, 0, 0], [1, 2, 0, -2, -1], [2, 4, 0, -4, -2]];
 
-exports.SECOND_DERIVATIVE = SECOND_DERIVATIVE;
-var SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
-exports.SECOND_DERIVATIVE_INV = SECOND_DERIVATIVE_INV;
+var SECOND_DERIVATIVE_INV = exports.SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
 
-},{}],148:[function(require,module,exports){
+},{}],158:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports["default"] = Matrix;
-
+exports.default = Matrix;
 function Matrix(width, height, defaultValue) {
     var matrix = new Array(width);
     for (var x = 0; x < width; x++) {
@@ -18491,121 +18232,77 @@ Matrix.prototype.localSearch = function (x, y, value) {
     }
     return results;
 };
-module.exports = exports["default"];
 
-},{}],149:[function(require,module,exports){
-"use strict";
+},{}],159:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports["default"] = medianFromHistogram;
-
-function medianFromHistogram(histogram) {
-    var total = histogram.reduce(function (sum, x) {
-        return sum + x;
-    });
-
-    if (total <= 0) return undefined;
-
-    var position = 0;
-    var currentTotal = 0;
-    var middle = total / 2;
-    var previous = undefined;
-
-    while (true) {
-        if (histogram[position] > 0) {
-            if (previous !== undefined) {
-                return (previous + position) / 2;
-            }
-            currentTotal += histogram[position];
-            if (currentTotal > middle) {
-                return position;
-            } else if (currentTotal === middle) {
-                previous = position;
-            }
-        }
-
-        position++;
-    }
-}
-
-module.exports = exports["default"];
-
-},{}],150:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
 var Matrix = require('ml-matrix');
 
 var cross = [[0, 0, 1, 0, 0], [0, 0, 1, 0, 0], [1, 1, 1, 1, 1], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0]];
 
 var smallCross = [[0, 1, 0], [1, 1, 1], [0, 1, 0]];
 
-var Shape = function Shape() {
-    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+class Shape {
+    constructor() {
+        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-    var _ref$kind = _ref.kind;
-    var kind = _ref$kind === undefined ? 'cross' : _ref$kind;
-    var shape = _ref.shape;
-    var size = _ref.size;
-    var width = _ref.width;
-    var height = _ref.height;
-    var filled = _ref.filled;
+        var _ref$kind = _ref.kind;
+        var kind = _ref$kind === undefined ? 'cross' : _ref$kind;
+        var shape = _ref.shape;
+        var size = _ref.size;
+        var width = _ref.width;
+        var height = _ref.height;
+        var filled = _ref.filled;
 
-    _classCallCheck(this, Shape);
-
-    if (shape) kind = undefined;
-    if (size) {
-        width = size;
-        height = size;
-    }
-    if (width && 1 !== 1 || height && 1 !== 1) {
-        throw Error('Shape: The width and height has to be odd numbers.');
-    }
-    if (kind) {
-        switch (kind) {
-            case 'cross':
-                this.matrix = cross;
-                break;
-            case 'smallCross':
-                this.matrix = smallCross;
-                break;
+        if (shape) kind = undefined;
+        if (size) {
+            width = size;
+            height = size;
         }
-        this.height = this.matrix.length;
-        this.width = this.matrix[0].length;
-        if (this.height & 1 === 0 || this.width & 1 === 0) {
-            throw new Error('Shapes must have an odd height and width');
+        if (width && 1 !== 1 || height && 1 !== 1) {
+            throw Error('Shape: The width and height has to be odd numbers.');
         }
-    } else {
-        switch (shape) {
-            case 'square':
-            case 'rectangle':
-                this.matrix = rectangle(width, height);
-                break;
-            case 'circle':
-            case 'ellipse':
-                this.matrix = ellipse(width, height);
-                break;
-            case 'triangle':
-                this.matrix = triangle(width, height);
-                break;
-            default:
+        if (kind) {
+            switch (kind) {
+                case 'cross':
+                    this.matrix = cross;
+                    break;
+                case 'smallCross':
+                    this.matrix = smallCross;
+                    break;
+            }
+            this.height = this.matrix.length;
+            this.width = this.matrix[0].length;
+            if (this.height & 1 === 0 || this.width & 1 === 0) {
+                throw new Error('Shapes must have an odd height and width');
+            }
+        } else {
+            switch (shape) {
+                case 'square':
+                case 'rectangle':
+                    this.matrix = rectangle(width, height);
+                    break;
+                case 'circle':
+                case 'ellipse':
+                    this.matrix = ellipse(width, height);
+                    break;
+                case 'triangle':
+                    this.matrix = triangle(width, height);
+                    break;
+                default:
 
+            }
         }
+
+        this.halfHeight = this.height / 2 >> 0;
+        this.halfWidth = this.width / 2 >> 0;
     }
+}
 
-    this.halfHeight = this.height / 2 >> 0;
-    this.halfWidth = this.width / 2 >> 0;
-};
-
-exports['default'] = Shape;
-
+exports.default = Shape;
 Shape.prototype.getPixels = function () {
     var matrix = this.matrix;
     var pixels = new Array(matrix.size);
@@ -18654,36 +18351,233 @@ function triangle(width, height) {
     }
     return matrix;
 }
-module.exports = exports['default'];
 
-},{"ml-matrix":35}],151:[function(require,module,exports){
+},{"ml-matrix":20}],160:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.checkNumberArray = checkNumberArray;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _image = require('../image/image');
 
-var _imageImage = require('../image/image');
+var _image2 = _interopRequireDefault(_image);
 
-var _imageImage2 = _interopRequireDefault(_imageImage);
+var _isArrayType = require('is-array-type');
+
+var _isArrayType2 = _interopRequireDefault(_isArrayType);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function checkNumberArray(value) {
     if (!isNaN(value)) {
         if (value <= 0) throw new Error('checkNumberArray: the value must be greater than 0');
         return value;
     } else {
-        if (value instanceof _imageImage2['default']) {
-            return _imageImage2['default'].data;
+        if (value instanceof _image2.default) {
+            return value.data;
         }
-        if (!Array.isArray(value)) {
+        if (!(0, _isArrayType2.default)(value)) {
             throw new Error('checkNumberArray: the value should be either a number, array or Image');
         }
         return value;
     }
 }
 
-},{"../image/image":76}]},{},[134])(134)
+},{"../image/image":85,"is-array-type":7}],161:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = extend;
+
+var _background = require('./process/background');
+
+var _background2 = _interopRequireDefault(_background);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function extend(Worker) {
+    Worker.extendMethod('background', _background2.default);
+}
+
+},{"./process/background":162}],162:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extend = require('extend');
+
+var _extend2 = _interopRequireDefault(_extend);
+
+var _image = require('../../image/image');
+
+var _image2 = _interopRequireDefault(_image);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var defaultOptions = {
+    regression: {
+        kernelType: 'polynomial',
+        kernelOptions: { degree: 2, constant: 1 }
+    },
+    threshold: 0.02,
+    roi: {
+        minSurface: 100,
+        positive: false
+    },
+    sampling: 20,
+    include: []
+};
+
+function run(image, options, onStep) {
+    options = (0, _extend2.default)({}, defaultOptions, options);
+    var manager = this.manager;
+    if (Array.isArray(image)) {
+        return Promise.all(image.map(function (img) {
+            var run = runOnce(manager, img, options);
+            if (typeof onStep === 'function') {
+                run.then(onStep);
+            }
+            return run;
+        }));
+    } else {
+        return runOnce(manager, image, options);
+    }
+}
+
+function runOnce(manager, image, options) {
+    return manager.post('data', [image, options]).then(function (response) {
+        for (var i in response) {
+            response[i] = new _image2.default(response[i]);
+        }
+        return response;
+    });
+}
+
+function work() {
+    worker.on('data', function (send, image, options) {
+        image = new IJS(image);
+        var result = {};
+        var toTransfer = [];
+
+        var grey = image.grey();
+
+        var sobel = grey.sobelFilter();
+        maybeInclude('sobel', sobel);
+
+        var mask = sobel.level().mask({ threshold: options.threshold });
+        maybeInclude('mask', mask);
+
+        var roiManager = sobel.getROIManager();
+        roiManager.putMask(mask);
+        var realMask = roiManager.getMask(options.roi);
+        maybeInclude('realMask', realMask);
+
+        var pixels = grey.getPixelsGrid({
+            sampling: options.sampling,
+            mask: realMask
+        });
+
+        var background = image.getBackground(pixels.xyS, pixels.zS, options.regression);
+        maybeInclude('background', background);
+
+        var corrected = image.subtract(background);
+
+        result.result = corrected;
+        toTransfer.push(corrected.data.buffer);
+        send(result, toTransfer);
+
+        function maybeInclude(name, image) {
+            if (options.include.indexOf(name) !== -1) {
+                result[name] = image;
+                toTransfer.push(image.data.buffer);
+            }
+        }
+    });
+}
+
+exports.default = { run, work };
+
+},{"../../image/image":85,"extend":3}],163:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _webWorkerManager = require('web-worker-manager');
+
+var _webWorkerManager2 = _interopRequireDefault(_webWorkerManager);
+
+var _image = require('../image/image');
+
+var _image2 = _interopRequireDefault(_image);
+
+var _extend = require('./extend');
+
+var _extend2 = _interopRequireDefault(_extend);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class Worker {
+    constructor() {
+        this._url = null;
+        this._deps = [null];
+    }
+    checkUrl() {
+        if (this._url === null) {
+            throw new Error('image worker must be initialized with an URL');
+        }
+    }
+    get url() {
+        return this._url;
+    }
+    set url(value) {
+        if (typeof value !== 'string') {
+            throw new TypeError('worker URL must be a string');
+        }
+        this._url = value;
+        this._deps[0] = value;
+    }
+    static extendMethod(name, method) {
+        var manager = undefined;
+        var url = undefined;
+        var runner = {};
+        function run() {
+            var _method$run;
+
+            if (!manager) {
+                this.checkUrl();
+                url = this.url;
+                manager = new _webWorkerManager2.default(method.work, { deps: url });
+                runner.manager = manager;
+            }
+
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
+            }
+
+            return (_method$run = method.run).call.apply(_method$run, [runner].concat(args));
+        }
+        run.reset = function () {
+            if (manager) {
+                manager.terminate();
+                manager = new _webWorkerManager2.default(method.work, { deps: url });
+                runner.manager = manager;
+            }
+        };
+        Worker.prototype[name] = run;
+    }
+}
+
+(0, _extend2.default)(Worker);
+
+exports.default = new Worker();
+
+},{"../image/image":85,"./extend":161,"web-worker-manager":51}]},{},[143])(143)
 });
