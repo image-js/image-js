@@ -11,6 +11,8 @@ import Stack from '../stack';
 
 // Ignoring border may be dangerous ! Is there is a shape on the side of the image there will be a
 // continuous shift if you ignore border. By default it is better to leave it to 0,0
+// Now if the background is not black there will also be no way to shift ...
+// It may therefore be much better to make a background correction before trying to match and crop
 // TODO this code seems also buggy if it is not 0,0
 
 export default function matchAndCrop({
