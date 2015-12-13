@@ -29,6 +29,7 @@ import pad from './transform/pad';
 import resizeBinary from './transform/resizeBinary';
 import bitDepth from './transform/bitDepth';
 import rotate from './transform/rotation/rotate';
+import yuv from './transform/yuv';
 
 import setBorder from './utility/setBorder';
 import split from './utility/split';
@@ -91,6 +92,7 @@ export default function extend(Image) {
     Image.extendMethod('colorDepth', bitDepth);
     Image.extendMethod('setBorder', setBorder, inPlace);
     Image.extendMethod('rotate', rotate);
+    Image.extendMethod('yuv', yuv);
 
     Image.extendMethod('getRow', getRow);
     Image.extendMethod('getColumn', getColumn);
