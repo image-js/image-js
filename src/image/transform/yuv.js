@@ -4,7 +4,11 @@ import {RGB, YUV} from '../model/model';
 import Image from '../image';
 
 export default function yuv() {
-
+    this.checkProcessable('yuv', {
+        bitDepth: [8, 16],
+        alpha: [0,1],
+        colorModel: [RGB]
+    });
 
     let newImage = Image.createFrom(this, {
         colorModel: YUV

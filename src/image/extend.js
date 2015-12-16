@@ -30,6 +30,7 @@ import resizeBinary from './transform/resizeBinary';
 import bitDepth from './transform/bitDepth';
 import rotate from './transform/rotation/rotate';
 import yuv from './transform/yuv';
+import ycbcr from './transform/ycbcr';
 
 import setBorder from './utility/setBorder';
 import split from './utility/split';
@@ -93,6 +94,7 @@ export default function extend(Image) {
     Image.extendMethod('setBorder', setBorder, inPlace);
     Image.extendMethod('rotate', rotate);
     Image.extendMethod('yuv', yuv);
+    Image.extendMethod('ycbcr', ycbcr);
 
     Image.extendMethod('getRow', getRow);
     Image.extendMethod('getColumn', getColumn);
