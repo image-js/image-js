@@ -11,7 +11,7 @@ export default function ycbcr() {
     });
 
     let newImage = Image.createFrom(this, {
-        colorModel: YCBCR
+        colorModel: RGB
     });
 
     let ptr = 0;
@@ -20,19 +20,16 @@ export default function ycbcr() {
         let red = data[i];
         let green = data[i + 1];
         let blue = data[i + 2];
-        let Y= Math.floor((((0.299 * red) + (0.587 * green) + (0.114 * blue))));
-        let Cb= Math.floor((((-0.16874 * red - 0.33126 * green + 0.50000 * blue))));
-        let Cr=Math.floor((( 0.50000 * red - 0.41869 * green - 0.08131 * blue)));
+        let Y= Math.floor((((0.299 * red) + (0.587 * green) + (0.114 * blue))))+16;
+        let Cb= Math.floor((((-0.16874 * red - 0.33126 * green + 0.50000 * blue))))+128;
+        let Cr=Math.floor((( 0.50000 * red - 0.41869 * green - 0.08131 * blue)))+128;
 
 
-        newImage.data[ptr] = Y;
-        newImage.data[ptr+1] = Cb;
-        newImage.data[ptr+2] = Cr;
+        newImage.data[ptr++] = Y;
+        newImage.data[ptr++] = Cb;
+        newImage.data[ptr++] = Cr;
         if (this.alpha) {
-            newImage.data[ptr+3] = data[i + 3];
-            ptr=ptr+4;
-        }else{
-            ptr=ptr+3;
+            newImage.data[ptr++] = data[i + 3];
         }
 
 
