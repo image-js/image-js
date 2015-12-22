@@ -9,6 +9,7 @@ import invert from './filter/invert';
 import meanFilter from './filter/blur';
 import medianFilter from './filter/median';
 import gaussianFilter from './filter/gaussian';
+import LoG from './filter/LoG';
 import sobelFilter from './filter/sobel';
 import level from './filter/level';
 import add from './filter/add';
@@ -80,6 +81,7 @@ export default function extend(Image) {
     Image.extendMethod('medianFilter', medianFilter);
     Image.extendMethod('gaussianFilter', gaussianFilter);
     Image.extendMethod('sobelFilter', sobelFilter);
+    Image.extendMethod('LoG', LoG);
 
     Image.extendMethod('crop', crop, stack);
     Image.extendMethod('scale', scale, stack);
