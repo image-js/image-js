@@ -56,7 +56,7 @@
     "eslint": "^1.10.1",
     "mocha": "^2.3.4",
     "mocha-better-spec-reporter": "^3.0.1",
-    "rimraf": "^2.4.0",
+    "rimraf": "^2.4.5",
     "sha.js": "^2.4.3",
     "should": "^8.0.0",
     "watchify": "^3.6.0",
