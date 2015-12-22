@@ -64,16 +64,17 @@ function getSigmaKernel(sigma) {
     let value = 1 / PI2sigma2;
     let sum = value;
     let neighbors = 0;
+    let sigma4 = sigma*sigma*sigma*sigma;
 
     while (sum < 0.99) {
         neighbors++;
-        value = Math.exp(-(neighbors * neighbors) / sigma2) *(((i * i) + (j * j) -sigma2)/(sigma*sigma*sigma*sigma));
+        value = Math.exp(-(neighbors * neighbors) / sigma2) *(((i * i) + (j * j) -sigma2)/(sigma4));
         sum += 4 * value;
         for (let i = 1; i < neighbors; i++) {
-            value = Math.exp(-((i * i) + (neighbors * neighbors)) / sigma2) *(((i * i) + (j * j) -sigma2)/(sigma*sigma*sigma*sigma));
+            value = Math.exp(-((i * i) + (neighbors * neighbors)) / sigma2) *(((i * i) + (j * j) -sigma2)/(sigma4));
             sum += 8 * value;
         }
-        value = 4 * Math.exp(-(2 * neighbors * neighbors) / sigma2) *(((i * i) + (j * j) -sigma2)/(sigma*sigma*sigma*sigma));
+        value = 4 * Math.exp(-(2 * neighbors * neighbors) / sigma2) *(((i * i) + (j * j) -sigma2)/(sigma4));
         sum +=  value;
     }
 
