@@ -1,7 +1,7 @@
 import {load, Image, Stack} from '../../common';
 import matchAndCrop from '../../../../src/stack/transform/matchAndCrop';
 
-describe('check matchAndCrop on real images', function () {
+describe.skip('check matchAndCrop on real images', function () {
     it('should return an array of 2 images cropped and moved using matchToPrevious', function () {
             this.timeout(30000); // we can increase the timeout for the test that is by default 2s
 
