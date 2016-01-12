@@ -52,7 +52,7 @@
     "babel-register": "^6.2.0",
     "babelify": "^7.2.0",
     "benchmark": "^1.0.0",
-    "browserify": "^12.0.1",
+    "browserify": "^13.0.0",
     "eslint": "^1.10.1",
     "mocha": "^2.3.4",
     "mocha-better-spec-reporter": "^3.0.1",
