@@ -2,7 +2,7 @@ import Image from '../image';
 import convolution from '../operator/convolution';
 
 export default function gaussianFilter({
-    radius = 1,
+    radius = 2,
     sigma,
     channels,
     border = 'copy'
