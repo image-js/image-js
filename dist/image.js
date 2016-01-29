@@ -2565,12 +2565,12 @@ module.exports = require('./matrix');
 module.exports.Decompositions = module.exports.DC = require('./decompositions');
 
 },{"./decompositions":19,"./matrix":21}],21:[function(require,module,exports){
-'use strict'
+'use strict';
 
 /**
  * Real matrix
  */
-;
+
 class Matrix extends Array {
     /**
      * @constructor
@@ -5182,13 +5182,12 @@ exports.utf8border = function (buf, max) {
 };
 
 },{"./common":32}],34:[function(require,module,exports){
-'use strict'
+'use strict';
 
 // Note: adler32 takes 12% for level 0 and 2% for level 6.
 // It doesn't worth to make additional optimizationa as in original.
 // Small size is preferable.
 
-;
 function adler32(adler, buf, len, pos) {
   var s1 = adler & 0xffff | 0,
       s2 = adler >>> 16 & 0xffff | 0,
@@ -5266,14 +5265,14 @@ module.exports = {
 };
 
 },{}],36:[function(require,module,exports){
-'use strict'
+'use strict';
 
 // Note: we can't get significant speed boost here.
 // So write code to minimize size - no pregenerated tables
 // and array tools dependencies.
 
 // Use ordinary array, since untyped makes no boost here
-;
+
 function makeTable() {
   var c,
       table = [];
@@ -7064,10 +7063,10 @@ function GZheader() {
 module.exports = GZheader;
 
 },{}],39:[function(require,module,exports){
-'use strict'
+'use strict';
 
 // See state defs from inflate.js
-;
+
 var BAD = 30; /* got a data error -- remain here until reset */
 var TYPE = 12; /* i: waiting for type bits, including last-flag bit */
 
@@ -11217,46 +11216,53 @@ exports.default = function (Image) {
 
 // those methods can only apply on binary images... but we will not lose time to check!
 var bitMethods = {
-    setBitXY: function setBitXY(x, y) {
+    setBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         this.data[slot] |= 1 << shift;
     },
-    clearBitXY: function clearBitXY(x, y) {
+
+    clearBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         this.data[slot] &= ~(1 << shift);
     },
-    toggleBitXY: function toggleBitXY(x, y) {
+
+    toggleBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         this.data[slot] ^= 1 << shift;
     },
-    getBitXY: function getBitXY(x, y) {
+
+    getBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         return this.data[slot] & 1 << shift ? 1 : 0;
     },
-    setBit: function setBit(pixel) {
+
+    setBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         this.data[slot] |= 1 << shift;
     },
-    clearBit: function clearBit(pixel) {
+
+    clearBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         this.data[slot] &= ~(1 << shift);
     },
-    toggleBit: function toggleBit(pixel) {
+
+    toggleBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         this.data[slot] ^= 1 << shift;
     },
-    getBit: function getBit(pixel) {
+
+    getBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         return this.data[slot] & 1 << shift ? 1 : 0;
@@ -11671,7 +11677,7 @@ if (typeof self !== 'undefined') {
         // Browser
         exports.env = env = 'browser';
         var origin = self.location.origin;
-        exports.isDifferentOrigin = isDifferentOrigin = function (url) {
+        exports.isDifferentOrigin = isDifferentOrigin = function isDifferentOrigin(url) {
             try {
                 var parsedURL = new self.URL(url);
                 return parsedURL.origin !== origin;
@@ -11691,7 +11697,7 @@ if (typeof self !== 'undefined') {
             return canvas;
         };
 
-        exports.loadBinary = loadBinary = function (url) {
+        exports.loadBinary = loadBinary = function loadBinary(url) {
             return new Promise(function (resolve, reject) {
                 var xhr = new self.XMLHttpRequest();
                 xhr.open('GET', url, true);
@@ -11709,7 +11715,7 @@ if (typeof self !== 'undefined') {
     (function () {
         // Node.js
         exports.env = env = 'node';
-        exports.isDifferentOrigin = isDifferentOrigin = function (url) {
+        exports.isDifferentOrigin = isDifferentOrigin = function isDifferentOrigin(url) {
             return false;
         };
 
@@ -11719,7 +11725,7 @@ if (typeof self !== 'undefined') {
         exports.ImageData = ImageData = canvas.ImageData;
 
         var fs = require('fs');
-        exports.loadBinary = loadBinary = function (path) {
+        exports.loadBinary = loadBinary = function loadBinary(path) {
             return new Promise(function (resolve, reject) {
                 fs.readFile(path, function (err, data) {
                     err ? reject(err) : resolve(data.buffer);
@@ -13563,7 +13569,7 @@ function loadPNG(data) {
 function loadTIFF(data) {
     var decoder = new _tiff.TIFFDecoder(data);
     var result = decoder.decode();
-    if (result.length === 1) {
+    if (result.ifd.length === 1) {
         return getImageFromIFD(result.ifd[0]);
     } else {
         return new _stack2.default(result.ifd.map(getImageFromIFD));
