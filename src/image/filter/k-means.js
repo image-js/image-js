@@ -1,5 +1,4 @@
 
-
 function kmeans( arrayToProcess, Clusters )
 {
 
@@ -7,8 +6,23 @@ function kmeans( arrayToProcess, Clusters )
     var Centroids = new Array();
     var oldCentroids = new Array();
     var changed = false;
+    var data= [1,2,3,4,5,5,6,4,4,4,5,6,3,4,5,6,7,8]
 
     // initialise group arrays
+    var R=[];
+    var G= [];
+    var B= [];
+    var j=0;
+    for(i=0;i<data.length;i=i+3){
+        R[j]=data[i];
+        G[j]=data[i+1];
+        B[j]=data[i+2];
+        j=j+1;
+    }
+
+    console.log(R);
+
+
     for( initGroups=0; initGroups < Clusters; initGroups++ )
     {
 
@@ -107,9 +121,9 @@ function kmeans( arrayToProcess, Clusters )
     }
     while( changed==true );
 
-    return Groups;
+    return oldCentroids;
 
 }
-prueba =[4,5,6,7,8,9];
+prueba =[20,10,15,6,7,8,9, 12,5, 4];
 var valor= 3;
-console.log(kmeans(prueba, 2));
+console.log(kmeans(prueba, 4));
