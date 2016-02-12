@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.2.0",
-    "babel-core": "^6.2.1",
+    "babel-core": "^6.5.2",
     "babel-istanbul": "^0.5.8",
     "babel-plugin-transform-es2015-block-scoping": "^6.1.18",
     "babel-preset-es2015-node4": "^2.0.1",
