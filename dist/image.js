@@ -10576,7 +10576,7 @@ class IFD {
         return this.fields.get(258);
     }
     get compression() {
-        return this.fields.get(259);
+        return this.fields.get(259) || 1;
     }
     get type() {
         return this.fields.get(262);
@@ -11216,53 +11216,46 @@ exports.default = function (Image) {
 
 // those methods can only apply on binary images... but we will not lose time to check!
 var bitMethods = {
-    setBitXY(x, y) {
+    setBitXY: function setBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         this.data[slot] |= 1 << shift;
     },
-
-    clearBitXY(x, y) {
+    clearBitXY: function clearBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         this.data[slot] &= ~(1 << shift);
     },
-
-    toggleBitXY(x, y) {
+    toggleBitXY: function toggleBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         this.data[slot] ^= 1 << shift;
     },
-
-    getBitXY(x, y) {
+    getBitXY: function getBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         return this.data[slot] & 1 << shift ? 1 : 0;
     },
-
-    setBit(pixel) {
+    setBit: function setBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         this.data[slot] |= 1 << shift;
     },
-
-    clearBit(pixel) {
+    clearBit: function clearBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         this.data[slot] &= ~(1 << shift);
     },
-
-    toggleBit(pixel) {
+    toggleBit: function toggleBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         this.data[slot] ^= 1 << shift;
     },
-
-    getBit(pixel) {
+    getBit: function getBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         return this.data[slot] & 1 << shift ? 1 : 0;
@@ -11432,8 +11425,8 @@ function getChannelHistogram(channel, useAlpha, maxSlots) {
             result[data[i] >> bitShift] += data[i + alphaChannelDiff] / this.maxValue;
         }
     } else {
-        for (var i = channel; i < data.length; i += this.channels) {
-            result[data[i] >> bitShift]++;
+        for (var _i = channel; _i < data.length; _i += this.channels) {
+            result[data[_i] >> bitShift]++;
         }
     }
 
@@ -11665,12 +11658,12 @@ function getSVD() {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var loadBinary = undefined,
-    DOMImage = undefined,
-    Canvas = undefined,
-    ImageData = undefined,
-    isDifferentOrigin = undefined,
-    env = undefined;
+var loadBinary = void 0,
+    DOMImage = void 0,
+    Canvas = void 0,
+    ImageData = void 0,
+    isDifferentOrigin = void 0,
+    env = void 0;
 
 if (typeof self !== 'undefined') {
     (function () {
@@ -12070,10 +12063,10 @@ function add(value) {
         if (this.data.length !== value.length) {
             throw new Error('add: the data size is different');
         }
-        for (var j = 0; j < channels.length; j++) {
-            var c = channels[j];
-            for (var i = 0; i < this.data.length; i += this.channels) {
-                this.data[i + c] = Math.max(0, Math.min(this.maxValue, this.data[i + c] + value[i + c] >> 0));
+        for (var _j = 0; _j < channels.length; _j++) {
+            var _c = channels[_j];
+            for (var _i = 0; _i < this.data.length; _i += this.channels) {
+                this.data[_i + _c] = Math.max(0, Math.min(this.maxValue, this.data[_i + _c] + value[_i + _c] >> 0));
             }
         }
     }
@@ -12161,10 +12154,10 @@ function add(value) {
         if (this.data.length !== value.length) {
             throw new Error('divide: the: the data size is different');
         }
-        for (var j = 0; j < channels.length; j++) {
-            var c = channels[j];
-            for (var i = 0; i < this.data.length; i += this.channels) {
-                this.data[i + c] = Math.max(0, Math.min(this.maxValue, this.data[i + c] / value[i + c] >> 0));
+        for (var _j = 0; _j < channels.length; _j++) {
+            var _c = channels[_j];
+            for (var _i = 0; _i < this.data.length; _i += this.channels) {
+                this.data[_i + _c] = Math.max(0, Math.min(this.maxValue, this.data[_i + _c] / value[_i + _c] >> 0));
             }
         }
     }
@@ -12198,11 +12191,12 @@ function gaussianFilter() {
 	var _ref$border = _ref.border;
 	var border = _ref$border === undefined ? 'copy' : _ref$border;
 
+
 	this.checkProcessable('gaussianFilter', {
 		bitDepth: [8, 16]
 	});
 
-	var kernel = undefined;
+	var kernel = void 0;
 	if (sigma) {
 		kernel = getSigmaKernel(sigma);
 	} else {
@@ -12301,8 +12295,8 @@ function getBackground(coordinates, values, options) {
     }
     var result = model.predict(allCoordinates);
     var background = _image2.default.createFrom(this);
-    for (var i = 0; i < this.size; i++) {
-        background.data[i] = Math.min(this.maxValue, Math.max(0, result[i][0]));
+    for (var _i = 0; _i < this.size; _i++) {
+        background.data[_i] = Math.min(this.maxValue, Math.max(0, result[_i][0]));
     }
     return background;
 }
@@ -12394,14 +12388,14 @@ function invert() {
     } else {
         channels = (0, _channel.validateArrayOfChannels)(this, channels, true);
 
-        var data = this.data;
+        var _data = this.data;
 
         // for (let j of channels) { WOULD SLOW DO OF A FACTOR 10 !
 
         for (var c = 0; c < channels.length; c++) {
             var j = channels[c];
-            for (var i = j; i < data.length; i += this.channels) {
-                data[i] = this.maxValue - data[i];
+            for (var _i = j; _i < _data.length; _i += this.channels) {
+                _data[_i] = this.maxValue - _data[_i];
             }
         }
     }
@@ -12645,10 +12639,10 @@ function processImage(image, min, max, channels) {
      */
 
     for (var j = 0; j < channels.length; j++) {
-        var c = channels[j];
-        if (factor[c] !== 0) {
+        var _c = channels[j];
+        if (factor[_c] !== 0) {
             for (var i = 0; i < image.data.length; i += image.channels) {
-                image.data[i + c] = Math.min(Math.max(0, (image.data[i + c] - min[c]) * factor[c] + 0.5 | 0), image.maxValue);
+                image.data[i + _c] = Math.min(Math.max(0, (image.data[i + _c] - min[_c]) * factor[_c] + 0.5 | 0), image.maxValue);
             }
         }
     }
@@ -12713,8 +12707,8 @@ function medianFilter(radius, channels) {
     }
 
     if (this.alpha && channels.indexOf(this.channels) === -1) {
-        for (var i = this.components; i < this.data.length; i = i + this.channels) {
-            newImage.data[i] = this.data[i];
+        for (var _i = this.components; _i < this.data.length; _i = _i + this.channels) {
+            newImage.data[_i] = this.data[_i];
         }
     }
 
@@ -12765,10 +12759,10 @@ function add(value) {
         if (this.data.length !== value.length) {
             throw new Error('multiply: the data size is different');
         }
-        for (var j = 0; j < channels.length; j++) {
-            var c = channels[j];
-            for (var i = 0; i < this.data.length; i += this.channels) {
-                this.data[i + c] = Math.max(0, Math.min(this.maxValue, this.data[i + c] * value[i + c] >> 0));
+        for (var _j = 0; _j < channels.length; _j++) {
+            var _c = channels[_j];
+            for (var _i = 0; _i < this.data.length; _i += this.channels) {
+                this.data[_i + _c] = Math.max(0, Math.min(this.maxValue, this.data[_i + _c] * value[_i + _c] >> 0));
             }
         }
     }
@@ -12804,6 +12798,7 @@ function sobelFilter() {
 	var _ref$border = _ref.border;
 	var border = _ref$border === undefined ? 'copy' : _ref$border;
 	var channels = _ref.channels;
+
 
 	this.checkProcessable('sobelFilter', {
 		bitDepth: [8, 16]
@@ -12865,10 +12860,10 @@ function subtract(value) {
         if (this.data.length !== value.length) {
             throw new Error('substract: the data size is different');
         }
-        for (var j = 0; j < channels.length; j++) {
-            var c = channels[j];
-            for (var i = 0; i < this.data.length; i += this.channels) {
-                this.data[i + c] = Math.max(0, Math.min(this.maxValue, this.data[i + c] - value[i + c] >> 0));
+        for (var _j = 0; _j < channels.length; _j++) {
+            var _c = channels[_j];
+            for (var _i = 0; _i < this.data.length; _i += this.channels) {
+                this.data[_i + _c] = Math.max(0, Math.min(this.maxValue, this.data[_i + _c] - value[_i + _c] >> 0));
             }
         }
     }
@@ -12971,7 +12966,7 @@ class Image {
         this.parent = options.parent;
         this.position = options.position || [0, 0];
 
-        var theKind = undefined;
+        var theKind = void 0;
         if (typeof options.kind === 'string') {
             theKind = (0, _kind.getKind)(options.kind);
             if (!theKind) throw new RangeError('invalid image kind: ' + options.kind);
@@ -13073,8 +13068,8 @@ class Image {
                 return method.apply(this, [].concat(_toConsumableArray(partialArgs), args));
             };
             if (stack) {
-                var stackName = typeof stack === 'string' ? stack : name;
-                _stack2.default.prototype[stackName] = function () {
+                var _stackName = typeof stack === 'string' ? stack : name;
+                _stack2.default.prototype[_stackName] = function () {
                     var result = new _stack2.default(this.length);
                     for (var i = 0; i < this.length; i++) {
                         var _i2;
@@ -13221,30 +13216,30 @@ class Image {
             }
         } else {
             if (this.components === 1) {
-                for (var i = 0; i < size; i++) {
-                    newData[i * 4] = this.data[i * this.channels] >>> this.bitDepth - 8;
-                    newData[i * 4 + 1] = this.data[i * this.channels] >>> this.bitDepth - 8;
-                    newData[i * 4 + 2] = this.data[i * this.channels] >>> this.bitDepth - 8;
+                for (var _i3 = 0; _i3 < size; _i3++) {
+                    newData[_i3 * 4] = this.data[_i3 * this.channels] >>> this.bitDepth - 8;
+                    newData[_i3 * 4 + 1] = this.data[_i3 * this.channels] >>> this.bitDepth - 8;
+                    newData[_i3 * 4 + 2] = this.data[_i3 * this.channels] >>> this.bitDepth - 8;
                 }
             } else if (this.components === 3) {
                 this.checkProcessable('getRGBAData', { colorModel: [_model.RGB] });
                 if (this.colorModel === _model.RGB) {
-                    for (var i = 0; i < size; i++) {
-                        newData[i * 4] = this.data[i * this.channels] >>> this.bitDepth - 8;
-                        newData[i * 4 + 1] = this.data[i * this.channels + 1] >>> this.bitDepth - 8;
-                        newData[i * 4 + 2] = this.data[i * this.channels + 2] >>> this.bitDepth - 8;
+                    for (var _i4 = 0; _i4 < size; _i4++) {
+                        newData[_i4 * 4] = this.data[_i4 * this.channels] >>> this.bitDepth - 8;
+                        newData[_i4 * 4 + 1] = this.data[_i4 * this.channels + 1] >>> this.bitDepth - 8;
+                        newData[_i4 * 4 + 2] = this.data[_i4 * this.channels + 2] >>> this.bitDepth - 8;
                     }
                 }
             }
         }
         if (this.alpha) {
             this.checkProcessable('getRGBAData', { bitDepth: [8, 16] });
-            for (var i = 0; i < size; i++) {
-                newData[i * 4 + 3] = this.data[i * this.channels + this.components] >> this.bitDepth - 8;
+            for (var _i5 = 0; _i5 < size; _i5++) {
+                newData[_i5 * 4 + 3] = this.data[_i5 * this.channels + this.components] >> this.bitDepth - 8;
             }
         } else {
-            for (var i = 0; i < size; i++) {
-                newData[i * 4 + 3] = 255;
+            for (var _i6 = 0; _i6 < size; _i6++) {
+                newData[_i6 * 4 + 3] = 255;
             }
         }
         return newData;
@@ -13272,7 +13267,7 @@ class Image {
         return new Promise((resolve, reject) => {
             var out = (0, _fs.createWriteStream)(path);
             var canvas = this.getCanvas();
-            var stream = undefined;
+            var stream = void 0;
             switch (format.toLowerCase()) {
                 case 'png':
                     stream = canvas.pngStream();
@@ -13426,7 +13421,7 @@ function getTheoreticalPixelArraySize(image) {
 
 function createPixelArray(image) {
     var length = image.channels * image.size;
-    var arr = undefined;
+    var arr = void 0;
     switch (image.bitDepth) {
         case 1:
             arr = new Uint8Array(Math.ceil(length / 8));
@@ -13520,8 +13515,8 @@ function loadURL(url) {
             var slice = url.slice(offset);
             return Promise.resolve(str2ab((0, _atobLite2.default)(slice))).then(loadPNG);
         } else if (mimetype === 'tiff') {
-            var slice = url.slice(offset);
-            return Promise.resolve(str2ab((0, _atobLite2.default)(slice))).then(loadTIFF);
+            var _slice = url.slice(offset);
+            return Promise.resolve(str2ab((0, _atobLite2.default)(_slice))).then(loadTIFF);
         }
     }
 
@@ -13539,7 +13534,7 @@ function loadPNG(data) {
     var png = decoder.decode();
     var bitDepth = png.bitDepth;
     var buffer = png.data.buffer;
-    var bitmap = undefined;
+    var bitmap = void 0;
     if (bitDepth === 8) {
         bitmap = new Uint8ClampedArray(buffer);
     } else if (bitDepth === 16) {
@@ -13550,7 +13545,7 @@ function loadPNG(data) {
     }
 
     var type = png.colourType;
-    var components = undefined,
+    var components = void 0,
         alpha = 0;
     switch (type) {
         case 0:
@@ -13563,7 +13558,7 @@ function loadPNG(data) {
             components = 3;alpha = 1;break;
     }
 
-    return new _image2.default(png.width, png.height, bitmap, { components, alpha, bitDepth });
+    return new _image2.default(png.width, png.height, bitmap, { components: components, alpha: alpha, bitDepth: bitDepth });
 }
 
 function loadTIFF(data) {
@@ -13632,7 +13627,7 @@ var _stringIncludes2 = _interopRequireDefault(_stringIncludes);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var types = new Map();
-var image = undefined;
+var image = void 0;
 
 function getMediaType(type) {
     if (!image) {
@@ -13724,12 +13719,14 @@ function convolution(kernel) {
     var _ref$border = _ref.border;
     var border = _ref$border === undefined ? 'copy' : _ref$border;
 
+
     var newImage = _image2.default.createFrom(this, { bitDepth: bitDepth });
 
     channels = (0, _channel.validateArrayOfChannels)(this, channels, true);
 
-    var kWidth = undefined,
-        kHeight = undefined;
+    var kWidth = void 0,
+        kHeight = void 0;
+
 
     //calculate divisor
 
@@ -13758,10 +13755,10 @@ function convolution(kernel) {
         for (var y = kHeight; y < this.height - kHeight; y++) {
             for (var x = kWidth; x < this.width - kWidth; x++) {
                 var sum = 0;
-                for (var j = -kHeight; j <= kHeight; j++) {
-                    for (var i = -kWidth; i <= kWidth; i++) {
-                        var kVal = kernel[kHeight + j][kWidth + i];
-                        var _index = ((y + j) * this.width + x + i) * this.channels + c;
+                for (var _j = -kHeight; _j <= kHeight; _j++) {
+                    for (var _i = -kWidth; _i <= kWidth; _i++) {
+                        var kVal = kernel[kHeight + _j][kWidth + _i];
+                        var _index = ((y + _j) * this.width + x + _i) * this.channels + c;
                         sum += this.data[_index] * kVal;
                     }
                 }
@@ -13781,8 +13778,8 @@ function convolution(kernel) {
     // TODO: probably we should just copy the image at the beginning ?
 
     if (this.alpha && channels.indexOf(this.channels) === -1) {
-        for (var i = this.components; i < this.data.length; i = i + this.channels) {
-            newImage.data[i] = this.data[i];
+        for (var _i2 = this.components; _i2 < this.data.length; _i2 = _i2 + this.channels) {
+            newImage.data[_i2] = this.data[_i2];
         }
     }
 
@@ -13811,6 +13808,7 @@ function extract(mask) {
     var _ref$scale = _ref.scale;
     var scale = _ref$scale === undefined ? 1 : _ref$scale;
     var position = _ref.position;
+
 
     this.checkProcessable('extract', {
         bitDepth: [8, 16]
@@ -13864,6 +13862,7 @@ function paintMasks(masks) {
     var _ref$color = _ref.color;
     var color = _ref$color === undefined ? [this.maxValue, 0, 0] : _ref$color;
 
+
     this.checkProcessable('paintMasks', {
         components: 3,
         bitDepth: [8, 16],
@@ -13912,6 +13911,7 @@ function paintPixels(pixels) {
     var _ref$color = _ref.color;
     var color = _ref$color === undefined ? [this.maxValue, 0, 0] : _ref$color;
     var shape = _ref.shape;
+
 
     this.checkProcessable('paintPixels', {
         components: 3,
@@ -13996,23 +13996,23 @@ function createROI(roiMap) {
         for (var y = 0; y < height; y++) {
             var target = y * width + x;
             if (pixels[target] !== 0) {
-                var mapID = pixels[target] + roiMap.negative;
-                if (mapID > roiMap.negative) mapID--;
-                if (x < rois[mapID].minX) rois[mapID].minX = x;
-                if (x > rois[mapID].maxX) rois[mapID].maxX = x;
-                if (y < rois[mapID].minY) rois[mapID].minY = y;
-                if (y > rois[mapID].maxY) rois[mapID].maxY = y;
-                rois[mapID].meanX += x;
-                rois[mapID].meanY += y;
-                rois[mapID].surface++;
+                var _mapID = pixels[target] + roiMap.negative;
+                if (_mapID > roiMap.negative) _mapID--;
+                if (x < rois[_mapID].minX) rois[_mapID].minX = x;
+                if (x > rois[_mapID].maxX) rois[_mapID].maxX = x;
+                if (y < rois[_mapID].minY) rois[_mapID].minY = y;
+                if (y > rois[_mapID].maxY) rois[_mapID].maxY = y;
+                rois[_mapID].meanX += x;
+                rois[_mapID].meanY += y;
+                rois[_mapID].surface++;
             }
         }
     }
-    for (var i = 0; i < size; i++) {
-        var mapID = -roiMap.negative + i;
-        if (i >= roiMap.negative) mapID++;
-        rois[i].meanX /= rois[i].surface;
-        rois[i].meanY /= rois[i].surface;
+    for (var _i = 0; _i < size; _i++) {
+        var _mapID2 = -roiMap.negative + _i;
+        if (_i >= roiMap.negative) _mapID2++;
+        rois[_i].meanX /= rois[_i].surface;
+        rois[_i].meanY /= rois[_i].surface;
     }
     return rois;
 }
@@ -14039,6 +14039,7 @@ function createROIMapFromExtrema() {
     var onlyTop = _ref.onlyTop;
     var _ref$invert = _ref.invert;
     var invert = _ref$invert === undefined ? false : _ref$invert;
+
 
     var image = this;
     image.checkProcessable('createROIMapFromExtrema', { components: [1] });
@@ -14150,18 +14151,18 @@ function createROIMapFromExtrema() {
         yToProcessTop[0] = yToProcess;
         var valid = true;
         while (fromTop < toTop) {
-            var currentX = xToProcessTop[fromTop & MAX_ARRAY];
-            var currentY = yToProcessTop[fromTop & MAX_ARRAY];
-            valid &= process(currentX, currentY, PROCESS_TOP);
+            var _currentX = xToProcessTop[fromTop & MAX_ARRAY];
+            var _currentY = yToProcessTop[fromTop & MAX_ARRAY];
+            valid &= process(_currentX, _currentY, PROCESS_TOP);
             fromTop++;
         }
         if (!valid) {
             // console.log('REVERT');
             // need to clear all the calculated pixels because the top is not surrounded by negative values
             for (var i = 0; i < toTop; i++) {
-                var currentX = xToProcessTop[i & MAX_ARRAY];
-                var currentY = yToProcessTop[i & MAX_ARRAY];
-                var index = currentY * image.width + currentX;
+                var _currentX2 = xToProcessTop[i & MAX_ARRAY];
+                var _currentY2 = yToProcessTop[i & MAX_ARRAY];
+                var index = _currentY2 * image.width + _currentX2;
                 pixels[index] = 0;
             }
             to = currentTo;
@@ -14248,6 +14249,7 @@ function createROIMapFromMask(mask) {
 
     var _ref$allowCorner = _ref.allowCorner;
     var allowCorner = _ref$allowCorner === undefined ? false : _ref$allowCorner;
+
 
     // based on a binary image we will create plenty of small images
     var pixels = new Int16Array(mask.size); // maxValue: 32767, minValue: -32768
@@ -14509,6 +14511,7 @@ class ROIManager {
         var _ref$maxSurface = _ref.maxSurface;
         var maxSurface = _ref$maxSurface === undefined ? Number.POSITIVE_INFINITY : _ref$maxSurface;
 
+
         var allROIs = this._layers[label].roi;
         var rois = new Array(allROIs.length);
         var ptr = 0;
@@ -14628,7 +14631,7 @@ class ROI {
         var _ref$scale = _ref.scale;
         var scale = _ref$scale === undefined ? 1 : _ref$scale;
 
-        var mask = undefined;
+        var mask = void 0;
         if (fill) {
             mask = this.filledMask;
         } else {
@@ -14756,9 +14759,9 @@ function getSurroundingIDs(roi) {
                 }
             }
             if (roiMap.width - x - roi.minX > 1 && pixels[target] === roi.id && pixels[target + 1] !== roi.id) {
-                var value = pixels[target + 1];
-                if (surrounding.indexOf(value) === -1) {
-                    surrounding[ptr++] = value;
+                var _value = pixels[target + 1];
+                if (surrounding.indexOf(_value) === -1) {
+                    surrounding[ptr++] = _value;
                 }
             }
         }
@@ -14768,19 +14771,19 @@ function getSurroundingIDs(roi) {
     var fromY = Math.max(roi.minY, 1);
     var toY = Math.min(roi.height, roiMap.height - 2);
     // not optimized  if width=1 !
-    for (var x of [0, roi.width - 1]) {
-        for (var y = 0; y < roi.height; y++) {
-            var target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            if (y - roi.minY > 0 && pixels[target] === roi.id && pixels[target - roiMap.width] !== roi.id) {
-                var value = pixels[target - roiMap.width];
-                if (surrounding.indexOf(value) === -1) {
-                    surrounding[ptr++] = value;
+    for (var _x2 of [0, roi.width - 1]) {
+        for (var _y = 0; _y < roi.height; _y++) {
+            var _target = (_y + roi.minY) * roiMap.width + _x2 + roi.minX;
+            if (_y - roi.minY > 0 && pixels[_target] === roi.id && pixels[_target - roiMap.width] !== roi.id) {
+                var _value2 = pixels[_target - roiMap.width];
+                if (surrounding.indexOf(_value2) === -1) {
+                    surrounding[ptr++] = _value2;
                 }
             }
-            if (roiMap.height - y - roi.minY > 1 && pixels[target] === roi.id && pixels[target + roiMap.width] !== roi.id) {
-                var value = pixels[target + roiMap.width];
-                if (surrounding.indexOf(value) === -1) {
-                    surrounding[ptr++] = value;
+            if (roiMap.height - _y - roi.minY > 1 && pixels[_target] === roi.id && pixels[_target + roiMap.width] !== roi.id) {
+                var _value3 = pixels[_target + roiMap.width];
+                if (surrounding.indexOf(_value3) === -1) {
+                    surrounding[ptr++] = _value3;
                 }
             }
         }
@@ -14814,10 +14817,10 @@ function getExternal(roi) {
 
     var leftRight = [0];
     if (roi.width > 1) leftRight[1] = roi.width - 1;
-    for (var x of leftRight) {
-        for (var y = 0; y < roi.height; y++) {
-            var target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            if (pixels[target] === roi.id) {
+    for (var _x3 of leftRight) {
+        for (var _y2 = 0; _y2 < roi.height; _y2++) {
+            var _target2 = (_y2 + roi.minY) * roiMap.width + _x3 + roi.minX;
+            if (pixels[_target2] === roi.id) {
                 total++;
             }
         }
@@ -14898,21 +14901,21 @@ function getInternalMapIDs(roi) {
     }
 
     var array = new Array(4);
-    for (var x = 1; x < roi.width - 1; x++) {
+    for (var _x4 = 1; _x4 < roi.width - 1; _x4++) {
         for (var y = 1; y < roi.height - 1; y++) {
-            var target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            if (internal.indexOf(pixels[target]) >= 0) {
+            var _target3 = (y + roi.minY) * roiMap.width + _x4 + roi.minX;
+            if (internal.indexOf(pixels[_target3]) >= 0) {
                 // we check if one of the neighbour is not yet in
 
-                array[0] = pixels[target - 1];
-                array[1] = pixels[target + 1];
-                array[2] = pixels[target - roiMap.width];
-                array[3] = pixels[target + roiMap.width];
+                array[0] = pixels[_target3 - 1];
+                array[1] = pixels[_target3 + 1];
+                array[2] = pixels[_target3 - roiMap.width];
+                array[3] = pixels[_target3 + roiMap.width];
 
                 for (var i = 0; i < 4; i++) {
-                    var id = array[i];
-                    if (internal.indexOf(id) === -1 && roi.surround.indexOf(id) === -1) {
-                        internal.push(id);
+                    var _id = array[i];
+                    if (internal.indexOf(_id) === -1 && roi.surround.indexOf(_id) === -1) {
+                        internal.push(_id);
                     }
                 }
             }
@@ -14939,6 +14942,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function colorDepth() {
     var newColorDepth = arguments.length <= 0 || arguments[0] === undefined ? 8 : arguments[0];
 
+
     this.checkProcessable('colorDepth', {
         bitDepth: [8, 16]
     });
@@ -14954,8 +14958,8 @@ function colorDepth() {
             newImage.data[i] = this.data[i] >> 8;
         }
     } else {
-        for (var i = 0; i < this.data.length; i++) {
-            newImage.data[i] = this.data[i] << 8 | this.data[i];
+        for (var _i = 0; _i < this.data.length; _i++) {
+            newImage.data[_i] = this.data[_i] << 8 | this.data[_i];
         }
     }
 
@@ -14988,12 +14992,13 @@ function crop() {
     var _ref$height = _ref.height;
     var height = _ref$height === undefined ? this.height - y : _ref$height;
 
+
     if (x > this.width - 1 || y > this.height - 1) throw new RangeError(`crop: origin (x:${ x }, y:${ y }) out of range (${ this.width - 1 }; ${ this.height - 1 })`);
     if (width <= 0 || height <= 0) throw new RangeError(`crop: width and height (width:${ width }; height:${ height }) must be positive numbers`);
     if (x < 0 || y < 0) throw new RangeError(`crop: x and y (x:${ x }, y:${ y }) must be positive numbers`);
     if (width > this.width - x || height > this.height - y) throw new RangeError(`crop: (x: ${ x }, y:${ y }, width:${ width }, height:${ height }) size is out of range`);
 
-    var newImage = _image2.default.createFrom(this, { width, height });
+    var newImage = _image2.default.createFrom(this, { width: width, height: height });
 
     var xWidth = width * this.channels;
     var y1 = y + height;
@@ -15071,6 +15076,7 @@ function grey() {
 
     var _ref$algorithm = _ref.algorithm;
     var algorithm = _ref$algorithm === undefined ? 'luma709' : _ref$algorithm;
+
 
     if (this.components === 1) {
         return this.clone();
@@ -15345,9 +15351,9 @@ function huang(histogram) {
 
     /* Determine the last non-zero bin */
     var last_bin = histogram.length - 1;
-    for (var ih = histogram.length - 1; ih >= first_bin; ih--) {
-        if (histogram[ih] !== 0) {
-            last_bin = ih;
+    for (var _ih = histogram.length - 1; _ih >= first_bin; _ih--) {
+        if (histogram[_ih] !== 0) {
+            last_bin = _ih;
             break;
         }
     }
@@ -15356,18 +15362,18 @@ function huang(histogram) {
     var mu_0 = new Array(histogram.length);
     var sum_pix = 0;
     var num_pix = 0;
-    for (var ih = first_bin; ih < histogram.length; ih++) {
-        sum_pix += ih * histogram[ih];
-        num_pix += histogram[ih];
-        mu_0[ih] = sum_pix / num_pix;
+    for (var _ih2 = first_bin; _ih2 < histogram.length; _ih2++) {
+        sum_pix += _ih2 * histogram[_ih2];
+        num_pix += histogram[_ih2];
+        mu_0[_ih2] = sum_pix / num_pix;
     }
 
     var mu_1 = new Array(histogram.length);
     sum_pix = num_pix = 0;
-    for (var ih = last_bin; ih > 0; ih--) {
-        sum_pix += ih * histogram[ih];
-        num_pix += histogram[ih];
-        mu_1[ih - 1] = sum_pix / num_pix;
+    for (var _ih3 = last_bin; _ih3 > 0; _ih3--) {
+        sum_pix += _ih3 * histogram[_ih3];
+        num_pix += histogram[_ih3];
+        mu_1[_ih3 - 1] = sum_pix / num_pix;
     }
 
     /* Determine the threshold that minimizes the fuzzy entropy*/
@@ -15375,22 +15381,22 @@ function huang(histogram) {
     var min_ent = Number.MAX_VALUE;
     for (var it = 0; it < histogram.length; it++) {
         var ent = 0;
-        var mu_x = undefined;
-        for (var ih = 0; ih <= it; ih++) {
+        var mu_x = void 0;
+        for (var _ih4 = 0; _ih4 <= it; _ih4++) {
             /* Equation (4) in Ref. 1 */
-            mu_x = 1 / (1 + term * Math.abs(ih - mu_0[it]));
+            mu_x = 1 / (1 + term * Math.abs(_ih4 - mu_0[it]));
             if (!(mu_x < 1e-06 || mu_x > 0.999999)) {
                 /* Equation (6) & (8) in Ref. 1 */
-                ent += histogram[ih] * (-mu_x * Math.log(mu_x) - (1 - mu_x) * Math.log(1 - mu_x));
+                ent += histogram[_ih4] * (-mu_x * Math.log(mu_x) - (1 - mu_x) * Math.log(1 - mu_x));
             }
         }
 
-        for (var ih = it + 1; ih < histogram.length; ih++) {
+        for (var _ih5 = it + 1; _ih5 < histogram.length; _ih5++) {
             /* Equation (4) in Ref. 1 */
-            mu_x = 1 / (1 + term * Math.abs(ih - mu_1[it]));
+            mu_x = 1 / (1 + term * Math.abs(_ih5 - mu_1[it]));
             if (!(mu_x < 1e-06 || mu_x > 0.999999)) {
                 /* Equation (6) & (8) in Ref. 1 */
-                ent += histogram[ih] * (-mu_x * Math.log(mu_x) - (1 - mu_x) * Math.log(1 - mu_x));
+                ent += histogram[_ih5] * (-mu_x * Math.log(mu_x) - (1 - mu_x) * Math.log(1 - mu_x));
             }
         }
 
@@ -15440,9 +15446,9 @@ function intermodes(histogram) {
 
     // The threshold is the mean between the two peaks.
     var tt = 0;
-    for (var i = 1; i < histogram.length - 1; i++) {
-        if (iHisto[i - 1] < iHisto[i] && iHisto[i + 1] < iHisto[i]) {
-            tt += i;
+    for (var _i = 1; _i < histogram.length - 1; _i++) {
+        if (iHisto[_i - 1] < iHisto[_i] && iHisto[_i + 1] < iHisto[_i]) {
+            tt += _i;
         }
     }
     return Math.floor(tt / 2.0);
@@ -15481,10 +15487,10 @@ exports.default = isodata;
  */
 function isodata(histogram) {
 
-    var l = undefined; //the average grey value of pixels with intensities < g
-    var toth = undefined; //the the average grey value of pixels with intensities > g
-    var totl = undefined; //the total the average grey value of pixels with intensities < g
-    var h = undefined; //the average grey value of pixels with intensities > g
+    var l = void 0; //the average grey value of pixels with intensities < g
+    var toth = void 0; //the the average grey value of pixels with intensities > g
+    var totl = void 0; //the total the average grey value of pixels with intensities < g
+    var h = void 0; //the average grey value of pixels with intensities > g
     var g = 0; //threshold value
 
     for (var i = 1; i < histogram.length; i++) {
@@ -15497,15 +15503,15 @@ function isodata(histogram) {
     while (true) {
         l = 0;
         totl = 0;
-        for (var i = 0; i < g; i++) {
-            totl = totl + histogram[i];
-            l = l + histogram[i] * i;
+        for (var _i = 0; _i < g; _i++) {
+            totl = totl + histogram[_i];
+            l = l + histogram[_i] * _i;
         }
         h = 0;
         toth = 0;
-        for (var i = g + 1; i < histogram.length; i++) {
-            toth += histogram[i];
-            h += histogram[i] * i;
+        for (var _i2 = g + 1; _i2 < histogram.length; _i2++) {
+            toth += histogram[_i2];
+            h += histogram[_i2] * _i2;
         }
         if (totl > 0 && toth > 0) {
             l /= totl;
@@ -15543,18 +15549,18 @@ exports.default = li;
 
 function li(histogram, total) {
 
-    var threshold = undefined;
-    var sum_back = undefined; /* sum of the background pixels at a given threshold */
-    var sum_obj = undefined; /* sum of the object pixels at a given threshold */
-    var num_back = undefined; /* number of background pixels at a given threshold */
-    var num_obj = undefined; /* number of object pixels at a given threshold */
-    var old_thresh = undefined;
-    var new_thresh = undefined;
-    var mean_back = undefined; /* mean of the background pixels at a given threshold */
-    var mean_obj = undefined; /* mean of the object pixels at a given threshold */
-    var mean = undefined; /* mean gray-level in the image */
-    var tolerance = undefined; /* threshold tolerance */
-    var temp = undefined;
+    var threshold = void 0;
+    var sum_back = void 0; /* sum of the background pixels at a given threshold */
+    var sum_obj = void 0; /* sum of the object pixels at a given threshold */
+    var num_back = void 0; /* number of background pixels at a given threshold */
+    var num_obj = void 0; /* number of object pixels at a given threshold */
+    var old_thresh = void 0;
+    var new_thresh = void 0;
+    var mean_back = void 0; /* mean of the background pixels at a given threshold */
+    var mean_obj = void 0; /* mean of the object pixels at a given threshold */
+    var mean = void 0; /* mean gray-level in the image */
+    var tolerance = void 0; /* threshold tolerance */
+    var temp = void 0;
     tolerance = 0.5;
 
     /* Calculate the mean gray-level */
@@ -15576,18 +15582,18 @@ function li(histogram, total) {
         sum_back = 0;
         num_back = 0;
 
-        for (var ih = 0; ih <= threshold; ih++) {
-            sum_back += ih * histogram[ih];
-            num_back += histogram[ih];
+        for (var _ih = 0; _ih <= threshold; _ih++) {
+            sum_back += _ih * histogram[_ih];
+            num_back += histogram[_ih];
         }
         mean_back = num_back === 0 ? 0.0 : sum_back / num_back;
 
         /* Object */
         sum_obj = 0;
         num_obj = 0;
-        for (var ih = threshold + 1; ih < histogram.length; ih++) {
-            sum_obj += ih * histogram[ih];
-            num_obj += histogram[ih];
+        for (var _ih2 = threshold + 1; _ih2 < histogram.length; _ih2++) {
+            sum_obj += _ih2 * histogram[_ih2];
+            num_obj += histogram[_ih2];
         }
         mean_obj = num_obj === 0 ? 0.0 : sum_obj / num_obj;
         temp = (mean_back - mean_obj) / (Math.log(mean_back) - Math.log(mean_obj));
@@ -15697,6 +15703,7 @@ function mask() {
     var _ref$invert = _ref.invert;
     var invert = _ref$invert === undefined ? false : _ref$invert;
 
+
     this.checkProcessable('mask', {
         components: 1,
         bitDepth: [8, 16]
@@ -15771,8 +15778,8 @@ function mask() {
             ptr++;
         }
     } else {
-        for (var i = 0; i < this.data.length; i += this.channels) {
-            if (invert && this.data[i] <= threshold || !invert && this.data[i] >= threshold) {
+        for (var _i = 0; _i < this.data.length; _i += this.channels) {
+            if (invert && this.data[_i] <= threshold || !invert && this.data[_i] >= threshold) {
                 newImage.setBit(ptr);
             }
             ptr++;
@@ -15807,25 +15814,25 @@ function maxEntropy(histogram, total) {
     P1[0] = norm_histo[0];
     P2[0] = 1.0 - P1[0];
 
-    for (var ih = 1; ih < histogram.length; ih++) {
-        P1[ih] = P1[ih - 1] + norm_histo[ih];
-        P2[ih] = 1.0 - P1[ih];
+    for (var _ih = 1; _ih < histogram.length; _ih++) {
+        P1[_ih] = P1[_ih - 1] + norm_histo[_ih];
+        P2[_ih] = 1.0 - P1[_ih];
     }
 
     /* Determine the first non-zero bin */
     var first_bin = 0;
-    for (var ih = 0; ih < histogram.length; ih++) {
-        if (Math.abs(P1[ih]) >= Number.EPSILON) {
-            first_bin = ih;
+    for (var _ih2 = 0; _ih2 < histogram.length; _ih2++) {
+        if (Math.abs(P1[_ih2]) >= Number.EPSILON) {
+            first_bin = _ih2;
             break;
         }
     }
 
     /* Determine the last non-zero bin */
     var last_bin = histogram.length - 1;
-    for (var ih = histogram.length - 1; ih >= first_bin; ih--) {
-        if (Math.abs(P2[ih]) >= Number.EPSILON) {
-            last_bin = ih;
+    for (var _ih3 = histogram.length - 1; _ih3 >= first_bin; _ih3--) {
+        if (Math.abs(P2[_ih3]) >= Number.EPSILON) {
+            last_bin = _ih3;
             break;
         }
     }
@@ -15833,25 +15840,25 @@ function maxEntropy(histogram, total) {
     // Calculate the total entropy each gray-level
     // and find the threshold that maximizes it
     var threshold = -1;
-    var tot_ent = undefined; // total entropy
+    var tot_ent = void 0; // total entropy
     var max_ent = Number.MIN_VALUE; // max entropy
-    var ent_back = undefined; // entropy of the background pixels at a given threshold
-    var ent_obj = undefined; // entropy of the object pixels at a given threshold
+    var ent_back = void 0; // entropy of the background pixels at a given threshold
+    var ent_obj = void 0; // entropy of the object pixels at a given threshold
 
     for (var it = first_bin; it <= last_bin; it++) {
         /* Entropy of the background pixels */
         ent_back = 0.0;
-        for (var ih = 0; ih <= it; ih++) {
-            if (histogram[ih] !== 0) {
-                ent_back -= norm_histo[ih] / P1[it] * Math.log(norm_histo[ih] / P1[it]);
+        for (var _ih4 = 0; _ih4 <= it; _ih4++) {
+            if (histogram[_ih4] !== 0) {
+                ent_back -= norm_histo[_ih4] / P1[it] * Math.log(norm_histo[_ih4] / P1[it]);
             }
         }
 
         /* Entropy of the object pixels */
         ent_obj = 0.0;
-        for (var ih = it + 1; ih < histogram.length; ih++) {
-            if (histogram[ih] !== 0) {
-                ent_obj -= norm_histo[ih] / P2[it] * Math.log(norm_histo[ih] / P2[it]);
+        for (var _ih5 = it + 1; _ih5 < histogram.length; _ih5++) {
+            if (histogram[_ih5] !== 0) {
+                ent_obj -= norm_histo[_ih5] / P2[it] * Math.log(norm_histo[_ih5] / P2[it]);
             }
         }
 
@@ -15908,19 +15915,19 @@ exports.default = minError;
 
 function minError(histogram, total) {
 
-    var threshold = undefined;
+    var threshold = void 0;
     var Tprev = -2;
-    var mu = undefined,
-        nu = undefined,
-        p = undefined,
-        q = undefined,
-        sigma2 = undefined,
-        tau2 = undefined,
-        w0 = undefined,
-        w1 = undefined,
-        w2 = undefined,
-        sqterm = undefined,
-        temp = undefined;
+    var mu = void 0,
+        nu = void 0,
+        p = void 0,
+        q = void 0,
+        sigma2 = void 0,
+        tau2 = void 0,
+        w0 = void 0,
+        w1 = void 0,
+        w2 = void 0,
+        sqterm = void 0,
+        temp = void 0;
 
     /* Calculate the mean gray-level */
     var mean = 0.0;
@@ -16049,7 +16056,7 @@ function smoothed(histogram) {
     return auHistogram;
 }
 function minimumBetweenPeeks(histogramBimodal, max) {
-    var threshold = undefined;
+    var threshold = void 0;
     for (var i = 1; i < max; i++) {
         if (histogramBimodal[i - 1] > histogramBimodal[i] && histogramBimodal[i + 1] >= histogramBimodal[i]) {
             threshold = i;
@@ -16095,12 +16102,12 @@ function moments(histogram, total) {
     var m2 = 0.0;
     var m3 = 0.0;
     var sum = 0.0;
-    var p0 = undefined;
-    var cd = undefined,
-        c0 = undefined,
-        c1 = undefined,
-        z0 = undefined,
-        z1 = undefined; /* auxiliary variables */
+    var p0 = void 0;
+    var cd = void 0,
+        c0 = void 0,
+        c1 = void 0,
+        z0 = void 0,
+        z1 = void 0; /* auxiliary variables */
     var threshold = -1;
     var histogramLength = histogram.length;
     var normalizedHistogram = new Array(histogramLength);
@@ -16108,10 +16115,10 @@ function moments(histogram, total) {
         normalizedHistogram[i] = histogram[i] / total;
     }
     /* Calculate the first, second, and third order moments */
-    for (var i = 0; i < histogramLength; i++) {
-        m1 += i * normalizedHistogram[i];
-        m2 += i * i * normalizedHistogram[i];
-        m3 += i * i * i * normalizedHistogram[i];
+    for (var _i = 0; _i < histogramLength; _i++) {
+        m1 += _i * normalizedHistogram[_i];
+        m2 += _i * _i * normalizedHistogram[_i];
+        m3 += _i * _i * _i * normalizedHistogram[_i];
     }
     /*
      First 4 moments of the gray-level image should match the first 4 moments
@@ -16126,10 +16133,10 @@ function moments(histogram, total) {
     z1 = 0.5 * (-c1 + Math.sqrt(c1 * c1 - 4.0 * c0));
     p0 = (z1 - m1) / (z1 - z0); /* Fraction of the object pixels in the target binary image (p0z0+p1z1=m1) */
     // The threshold is the gray-level closest to the p0-tile of the normalized histogram
-    for (var i = 0; i < histogramLength; i++) {
-        sum += normalizedHistogram[i];
+    for (var _i2 = 0; _i2 < histogramLength; _i2++) {
+        sum += normalizedHistogram[_i2];
         if (sum > p0) {
-            threshold = i;
+            threshold = _i2;
             break;
         }
     }
@@ -16164,8 +16171,8 @@ function otsu(histogram, total) {
     var sumB = 0; //Total intensities in the 1-class histogram
     var wB = 0; //Total pixels in the 1-class histogram
     var wF = 0; //Total pixels in the 2-class histogram
-    var mB = undefined; //Mean of 1-class intensities
-    var mF = undefined; //Mean of 2-class intensities
+    var mB = void 0; //Mean of 1-class intensities
+    var mF = void 0; //Mean of 2-class intensities
     var max = 0.0; //Auxiliary variable to save temporarily the max variance
     var between = 0.0; //To save the current variance
     var threshold = 0.0;
@@ -16174,20 +16181,20 @@ function otsu(histogram, total) {
         sum += i * histogram[i];
     }
 
-    for (var i = 1; i < histogram.length; ++i) {
-        wB += histogram[i];
+    for (var _i = 1; _i < histogram.length; ++_i) {
+        wB += histogram[_i];
 
         if (wB === 0) continue;
         wF = total - wB;
         if (wF === 0) break;
 
-        sumB += i * histogram[i];
+        sumB += _i * histogram[_i];
         mB = sumB / wB;
         mF = (sum - sumB) / wF;
         between = wB * wF * (mB - mF) * (mB - mF);
 
         if (between >= max) {
-            threshold = i;
+            threshold = _i;
             max = between;
         }
     }
@@ -16252,9 +16259,9 @@ exports.default = renyiEntropy;
 // Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
 
 function renyiEntropy(histogram, total) {
-    var opt_threshold = undefined; //Optimal threshold
-    var first_bin = undefined; //First non-zero bin
-    var last_bin = undefined; //last non-zero bin
+    var opt_threshold = void 0; //Optimal threshold
+    var first_bin = void 0; //First non-zero bin
+    var last_bin = void 0; //last non-zero bin
 
     var norm_histo = new Array(histogram.length); //normalized histogram
     var P1 = new Array(histogram.length); //acumulative normalized histogram
@@ -16276,25 +16283,25 @@ function renyiEntropy(histogram, total) {
         norm_histo[ih] = histogram[ih] / total;
     }P1[0] = norm_histo[0];
     P2[0] = 1.0 - P1[0];
-    for (var ih = 1; ih < histogram.length; ih++) {
-        P1[ih] = P1[ih - 1] + norm_histo[ih];
-        P2[ih] = 1.0 - P1[ih];
+    for (var _ih = 1; _ih < histogram.length; _ih++) {
+        P1[_ih] = P1[_ih - 1] + norm_histo[_ih];
+        P2[_ih] = 1.0 - P1[_ih];
     }
 
     /* Determine the first non-zero bin */
     first_bin = 0;
-    for (var ih = 0; ih < histogram.length; ih++) {
-        if (Math.abs(P1[ih]) >= Number.EPSILON) {
-            first_bin = ih;
+    for (var _ih2 = 0; _ih2 < histogram.length; _ih2++) {
+        if (Math.abs(P1[_ih2]) >= Number.EPSILON) {
+            first_bin = _ih2;
             break;
         }
     }
 
     /* Determine the last non-zero bin */
     last_bin = histogram.length - 1;
-    for (var ih = histogram.length - 1; ih >= first_bin; ih--) {
-        if (Math.abs(P2[ih]) >= Number.EPSILON) {
-            last_bin = ih;
+    for (var _ih3 = histogram.length - 1; _ih3 >= first_bin; _ih3--) {
+        if (Math.abs(P2[_ih3]) >= Number.EPSILON) {
+            last_bin = _ih3;
             break;
         }
     }
@@ -16309,24 +16316,24 @@ function renyiEntropy(histogram, total) {
         var ent_back1 = 0.0;
         var ent_back2 = 0.0;
         var ent_back3 = 0.0;
-        for (var ih = 0; ih <= it; ih++) {
-            if (histogram[ih] !== 0) {
-                ent_back1 -= norm_histo[ih] / P1[it] * Math.log(norm_histo[ih] / P1[it]);
+        for (var _ih4 = 0; _ih4 <= it; _ih4++) {
+            if (histogram[_ih4] !== 0) {
+                ent_back1 -= norm_histo[_ih4] / P1[it] * Math.log(norm_histo[_ih4] / P1[it]);
             }
-            ent_back2 += Math.sqrt(norm_histo[ih] / P1[it]);
-            ent_back3 += norm_histo[ih] * norm_histo[ih] / (P1[it] * P1[it]);
+            ent_back2 += Math.sqrt(norm_histo[_ih4] / P1[it]);
+            ent_back3 += norm_histo[_ih4] * norm_histo[_ih4] / (P1[it] * P1[it]);
         }
 
         /* Entropy of the object pixels */
         var ent_obj1 = 0.0;
         var ent_obj2 = 0.0;
         var ent_obj3 = 0.0;
-        for (var ih = it + 1; ih < histogram.length; ih++) {
-            if (histogram[ih] !== 0) {
-                ent_obj1 -= norm_histo[ih] / P2[it] * Math.log(norm_histo[ih] / P2[it]);
+        for (var _ih5 = it + 1; _ih5 < histogram.length; _ih5++) {
+            if (histogram[_ih5] !== 0) {
+                ent_obj1 -= norm_histo[_ih5] / P2[it] * Math.log(norm_histo[_ih5] / P2[it]);
             }
-            ent_obj2 += Math.sqrt(norm_histo[ih] / P2[it]);
-            ent_obj3 += norm_histo[ih] * norm_histo[ih] / (P2[it] * P2[it]);
+            ent_obj2 += Math.sqrt(norm_histo[_ih5] / P2[it]);
+            ent_obj3 += norm_histo[_ih5] * norm_histo[_ih5] / (P2[it] * P2[it]);
         }
 
         /* Total entropy */
@@ -16354,7 +16361,7 @@ function renyiEntropy(histogram, total) {
     var t_stars = [threshold1, threshold2, threshold3];
     t_stars.sort();
 
-    var betas = undefined;
+    var betas = void 0;
 
     /* Adjust beta values */
     if (Math.abs(t_stars[0] - t_stars[1]) <= 5) {
@@ -16398,25 +16405,25 @@ function shanbhag(histogram, total) {
     var P2 = new Array(histogram.length);
     P1[0] = norm_histo[0];
     P2[0] = 1.0 - P1[0];
-    for (var ih = 1; ih < histogram.length; ih++) {
-        P1[ih] = P1[ih - 1] + norm_histo[ih];
-        P2[ih] = 1.0 - P1[ih];
+    for (var _ih = 1; _ih < histogram.length; _ih++) {
+        P1[_ih] = P1[_ih - 1] + norm_histo[_ih];
+        P2[_ih] = 1.0 - P1[_ih];
     }
 
     /* Determine the first non-zero bin */
     var first_bin = 0;
-    for (var ih = 0; ih < histogram.length; ih++) {
-        if (Math.abs(P1[ih]) >= Number.EPSILON) {
-            first_bin = ih;
+    for (var _ih2 = 0; _ih2 < histogram.length; _ih2++) {
+        if (Math.abs(P1[_ih2]) >= Number.EPSILON) {
+            first_bin = _ih2;
             break;
         }
     }
 
     /* Determine the last non-zero bin */
     var last_bin = histogram.length - 1;
-    for (var ih = histogram.length - 1; ih >= first_bin; ih--) {
-        if (Math.abs(P2[ih]) >= Number.EPSILON) {
-            last_bin = ih;
+    for (var _ih3 = histogram.length - 1; _ih3 >= first_bin; _ih3--) {
+        if (Math.abs(P2[_ih3]) >= Number.EPSILON) {
+            last_bin = _ih3;
             break;
         }
     }
@@ -16426,24 +16433,24 @@ function shanbhag(histogram, total) {
     var threshold = -1;
     var min_ent = Number.MAX_VALUE; // min entropy
 
-    var term = undefined;
-    var tot_ent = undefined; // total entropy
-    var ent_back = undefined; // entropy of the background pixels at a given threshold
-    var ent_obj = undefined; // entropy of the object pixels at a given threshold
+    var term = void 0;
+    var tot_ent = void 0; // total entropy
+    var ent_back = void 0; // entropy of the background pixels at a given threshold
+    var ent_obj = void 0; // entropy of the object pixels at a given threshold
     for (var it = first_bin; it <= last_bin; it++) {
         /* Entropy of the background pixels */
         ent_back = 0.0;
         term = 0.5 / P1[it];
-        for (var ih = 1; ih <= it; ih++) {
-            ent_back -= norm_histo[ih] * Math.log(1.0 - term * P1[ih - 1]);
+        for (var _ih4 = 1; _ih4 <= it; _ih4++) {
+            ent_back -= norm_histo[_ih4] * Math.log(1.0 - term * P1[_ih4 - 1]);
         }
         ent_back *= term;
 
         /* Entropy of the object pixels */
         ent_obj = 0.0;
         term = 0.5 / P2[it];
-        for (var ih = it + 1; ih < histogram.length; ih++) {
-            ent_obj -= norm_histo[ih] * Math.log(1.0 - term * P2[ih]);
+        for (var _ih5 = it + 1; _ih5 < histogram.length; _ih5++) {
+            ent_obj -= norm_histo[_ih5] * Math.log(1.0 - term * P2[_ih5]);
         }
         ent_obj *= term;
 
@@ -16492,18 +16499,18 @@ function triangle(histogram) {
     // of the histogram.
     // Here I propose to find out to which side of the max point the data is furthest, and use that as
     //  the other extreme.
-    for (var i = histogram.length - 1; i > 0; i--) {
-        if (histogram[i] > 0) {
-            min2 = i;
+    for (var _i = histogram.length - 1; _i > 0; _i--) {
+        if (histogram[_i] > 0) {
+            min2 = _i;
             break;
         }
     }
     if (min2 < histogram.length - 1) min2++; // line to the (p==0) point, not to data[min]
 
-    for (var i = 0; i < histogram.length; i++) {
-        if (histogram[i] > dmax) {
-            max = i;
-            dmax = histogram[i];
+    for (var _i2 = 0; _i2 < histogram.length; _i2++) {
+        if (histogram[_i2] > dmax) {
+            max = _i2;
+            dmax = histogram[_i2];
         }
     }
 
@@ -16530,9 +16537,9 @@ function triangle(histogram) {
     if (min === max) return min;
 
     // describe line by nx * x + ny * y - d = 0
-    var nx = undefined,
-        ny = undefined,
-        d = undefined;
+    var nx = void 0,
+        ny = void 0,
+        d = void 0;
     // nx is just the max frequency as the other point has freq=0
     nx = histogram[max]; //-min; // data[min]; //  lowest value bmin = (p=0)% in the image
     ny = min - max;
@@ -16544,10 +16551,10 @@ function triangle(histogram) {
     // find split point
     var split = min;
     var splitDistance = 0;
-    for (var i = min + 1; i <= max; i++) {
-        var newDistance = nx * i + ny * histogram[i] - d;
+    for (var _i3 = min + 1; _i3 <= max; _i3++) {
+        var newDistance = nx * _i3 + ny * histogram[_i3] - d;
         if (newDistance > splitDistance) {
-            split = i;
+            split = _i3;
             splitDistance = newDistance;
         }
     }
@@ -16555,14 +16562,14 @@ function triangle(histogram) {
 
     if (inverted) {
         // The histogram might be used for something else, so let's reverse it back
-        var left = 0;
-        var right = histogram.length - 1;
-        while (left < right) {
-            var temp = histogram[left];
-            histogram[left] = histogram[right];
-            histogram[right] = temp;
-            left++;
-            right--;
+        var _left = 0;
+        var _right = histogram.length - 1;
+        while (_left < _right) {
+            var _temp = histogram[_left];
+            histogram[_left] = histogram[_right];
+            histogram[_right] = _temp;
+            _left++;
+            _right--;
         }
         return histogram.length - 1 - split;
     } else return split;
@@ -16595,20 +16602,20 @@ function yen(histogram, total) {
         norm_histo[ih] = histogram[ih] / total;
     }var P1 = new Array(histogram.length); // cumulative normalized histogram
     P1[0] = norm_histo[0];
-    for (var ih = 1; ih < histogram.length; ih++) {
-        P1[ih] = P1[ih - 1] + norm_histo[ih];
+    for (var _ih = 1; _ih < histogram.length; _ih++) {
+        P1[_ih] = P1[_ih - 1] + norm_histo[_ih];
     }var P1_sq = new Array(histogram.length);
     P1_sq[0] = norm_histo[0] * norm_histo[0];
-    for (var ih = 1; ih < histogram.length; ih++) {
-        P1_sq[ih] = P1_sq[ih - 1] + norm_histo[ih] * norm_histo[ih];
+    for (var _ih2 = 1; _ih2 < histogram.length; _ih2++) {
+        P1_sq[_ih2] = P1_sq[_ih2 - 1] + norm_histo[_ih2] * norm_histo[_ih2];
     }var P2_sq = new Array(histogram.length);
     P2_sq[histogram.length - 1] = 0.0;
-    for (var ih = histogram.length - 2; ih >= 0; ih--) {
-        P2_sq[ih] = P2_sq[ih + 1] + norm_histo[ih + 1] * norm_histo[ih + 1];
+    for (var _ih3 = histogram.length - 2; _ih3 >= 0; _ih3--) {
+        P2_sq[_ih3] = P2_sq[_ih3 + 1] + norm_histo[_ih3 + 1] * norm_histo[_ih3 + 1];
     } /* Find the threshold that maximizes the criterion */
     var threshold = -1;
     var max_crit = Number.MIN_VALUE;
-    var crit = undefined;
+    var crit = void 0;
     for (var it = 0; it < histogram.length; it++) {
         crit = -1.0 * (P1_sq[it] * P2_sq[it] > 0.0 ? Math.log(P1_sq[it] * P2_sq[it]) : 0.0) + 2 * (P1[it] * (1.0 - P1[it]) > 0.0 ? Math.log(P1[it] * (1.0 - P1[it])) : 0.0);
         if (crit > max_crit) {
@@ -16650,6 +16657,7 @@ function pad() {
     var algorithm = _ref$algorithm === undefined ? 'copy' : _ref$algorithm;
     var color = _ref.color;
 
+
     this.checkProcessable('pad', {
         bitDepth: [8, 16]
     });
@@ -16677,28 +16685,28 @@ function pad() {
 
     (0, _copy2.default)(this, newImage, size[0], size[1]);
 
-    for (var i = size[0]; i < newWidth - size[0]; i++) {
+    for (var _i = size[0]; _i < newWidth - size[0]; _i++) {
         for (var k = 0; k < channels; k++) {
-            var value = color[k] || newImage.data[(size[1] * newWidth + i) * channels + k];
+            var value = color[k] || newImage.data[(size[1] * newWidth + _i) * channels + k];
             for (var j = 0; j < size[1]; j++) {
-                newImage.data[(j * newWidth + i) * channels + k] = value;
+                newImage.data[(j * newWidth + _i) * channels + k] = value;
             }
-            value = color[k] || newImage.data[((newHeight - size[1] - 1) * newWidth + i) * channels + k];
-            for (var j = newHeight - size[1]; j < newHeight; j++) {
-                newImage.data[(j * newWidth + i) * channels + k] = value;
+            value = color[k] || newImage.data[((newHeight - size[1] - 1) * newWidth + _i) * channels + k];
+            for (var _j = newHeight - size[1]; _j < newHeight; _j++) {
+                newImage.data[(_j * newWidth + _i) * channels + k] = value;
             }
         }
     }
 
-    for (var j = 0; j < newHeight; j++) {
-        for (var k = 0; k < channels; k++) {
-            var value = color[k] || newImage.data[(j * newWidth + size[0]) * channels + k];
-            for (var i = 0; i < size[0]; i++) {
-                newImage.data[(j * newWidth + i) * channels + k] = value;
+    for (var _j2 = 0; _j2 < newHeight; _j2++) {
+        for (var _k = 0; _k < channels; _k++) {
+            var _value = color[_k] || newImage.data[(_j2 * newWidth + size[0]) * channels + _k];
+            for (var _i2 = 0; _i2 < size[0]; _i2++) {
+                newImage.data[(_j2 * newWidth + _i2) * channels + _k] = _value;
             }
-            value = color[k] || newImage.data[(j * newWidth + newWidth - size[0] - 1) * channels + k];
-            for (var i = newWidth - size[0]; i < newWidth; i++) {
-                newImage.data[(j * newWidth + i) * channels + k] = value;
+            _value = color[_k] || newImage.data[(_j2 * newWidth + newWidth - size[0] - 1) * channels + _k];
+            for (var _i3 = newWidth - size[0]; _i3 < newWidth; _i3++) {
+                newImage.data[(_j2 * newWidth + _i3) * channels + _k] = _value;
             }
         }
     }
@@ -16844,6 +16852,7 @@ function scale() {
     var newWidth = _factorDimensions.width;
     var newHeight = _factorDimensions.height;
 
+
     var newImage = _image2.default.createFrom(this, { width: newWidth, height: newHeight });
 
     switch (algorithm.toLowerCase()) {
@@ -16910,6 +16919,7 @@ function match(image) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     var border = _ref.border;
+
 
     this.checkProcessable('getChannel', {
         bitDepth: [8, 16]
@@ -17021,6 +17031,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function getColumn(column) {
     var channel = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
+
     this.checkProcessable('getColumn', {
         bitDepth: [8, 16]
     });
@@ -17052,6 +17063,7 @@ function getPixelsGrid() {
     var _ref$painted = _ref.painted;
     var painted = _ref$painted === undefined ? false : _ref$painted;
     var mask = _ref.mask;
+
 
     this.checkProcessable('getPixelsGrid', {
         bitDepth: [8, 16],
@@ -17091,7 +17103,7 @@ function getPixelsGrid() {
     xyS.length = position;
     zS.length = position;
 
-    var toReturn = { xyS, zS };
+    var toReturn = { xyS: xyS, zS: zS };
 
     if (painted) {
         toReturn.painted = this.rgba8().paintPixels(xyS);
@@ -17118,6 +17130,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function getRow(row) {
     var channel = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
 
     this.checkProcessable('getRow', {
         bitDepth: [8, 16]
@@ -17172,6 +17185,7 @@ function getSimilarity(image) {
     var normalize = _ref.normalize;
     var _ref$border = _ref.border;
     var border = _ref$border === undefined ? [0, 0] : _ref$border;
+
 
     this.checkProcessable('getSimilarity', {
         bitDepth: [8, 16]
@@ -17252,6 +17266,7 @@ function setBorder() {
     var algorithm = _ref$algorithm === undefined ? 'copy' : _ref$algorithm;
     var color = _ref.color;
 
+
     this.checkProcessable('setBorder', {
         bitDepth: [8, 16, 32, 64]
     });
@@ -17275,28 +17290,28 @@ function setBorder() {
     var topBottomSize = size[1];
     var channels = this.channels;
 
-    for (var i = leftRightSize; i < this.width - leftRightSize; i++) {
+    for (var _i = leftRightSize; _i < this.width - leftRightSize; _i++) {
         for (var k = 0; k < channels; k++) {
-            var value = color[k] || this.data[(i + this.width * topBottomSize) * channels + k];
+            var value = color[k] || this.data[(_i + this.width * topBottomSize) * channels + k];
             for (var j = 0; j < topBottomSize; j++) {
-                this.data[(j * this.width + i) * channels + k] = value;
+                this.data[(j * this.width + _i) * channels + k] = value;
             }
-            value = color[k] || this.data[(i + this.width * (this.height - topBottomSize - 1)) * channels + k];
-            for (var j = this.height - topBottomSize; j < this.height; j++) {
-                this.data[(j * this.width + i) * channels + k] = value;
+            value = color[k] || this.data[(_i + this.width * (this.height - topBottomSize - 1)) * channels + k];
+            for (var _j = this.height - topBottomSize; _j < this.height; _j++) {
+                this.data[(_j * this.width + _i) * channels + k] = value;
             }
         }
     }
 
-    for (var j = 0; j < this.height; j++) {
-        for (var k = 0; k < channels; k++) {
-            var value = color[k] || this.data[(j * this.width + leftRightSize) * channels + k];
-            for (var i = 0; i < leftRightSize; i++) {
-                this.data[(j * this.width + i) * channels + k] = value;
+    for (var _j2 = 0; _j2 < this.height; _j2++) {
+        for (var _k = 0; _k < channels; _k++) {
+            var _value = color[_k] || this.data[(_j2 * this.width + leftRightSize) * channels + _k];
+            for (var _i2 = 0; _i2 < leftRightSize; _i2++) {
+                this.data[(_j2 * this.width + _i2) * channels + _k] = _value;
             }
-            value = color[k] || this.data[(j * this.width + this.width - leftRightSize - 1) * channels + k];
-            for (var i = this.width - leftRightSize; i < this.width; i++) {
-                this.data[(j * this.width + i) * channels + k] = value;
+            _value = color[_k] || this.data[(_j2 * this.width + this.width - leftRightSize - 1) * channels + _k];
+            for (var _i3 = this.width - leftRightSize; _i3 < this.width; _i3++) {
+                this.data[(_j2 * this.width + _i3) * channels + _k] = _value;
             }
         }
     }
@@ -17363,6 +17378,7 @@ function split() {
     var _ref$preserveAlpha = _ref.preserveAlpha;
     var preserveAlpha = _ref$preserveAlpha === undefined ? true : _ref$preserveAlpha;
 
+
     this.checkProcessable('split', {
         bitDepth: [8, 16]
     });
@@ -17390,17 +17406,17 @@ function split() {
             images.push(newImage);
         }
     } else {
-        for (var i = 0; i < this.channels; i++) {
-            var newImage = _image2.default.createFrom(this, {
+        for (var _i = 0; _i < this.channels; _i++) {
+            var _newImage = _image2.default.createFrom(this, {
                 components: 1,
                 alpha: false,
                 colorModel: null
             });
-            var ptr = 0;
-            for (var j = 0; j < data.length; j += this.channels) {
-                newImage.data[ptr++] = data[j + i];
+            var _ptr = 0;
+            for (var _j = 0; _j < data.length; _j += this.channels) {
+                _newImage.data[_ptr++] = data[_j + _i];
             }
-            images.push(newImage);
+            images.push(_newImage);
         }
     }
 
@@ -17620,7 +17636,7 @@ var computedPropertyDescriptor = {
 };
 
 function Stack(images) {
-    var stack = undefined;
+    var stack = void 0;
     if (Array.isArray(images)) {
         stack = new Array(images.length);
         for (var i = 0; i < images.length; i++) {
@@ -17813,8 +17829,8 @@ function matchAndCrop() {
     var topShift = 0;
     var bottomShift = 0;
 
-    for (var i = 0; i < results.length; i++) {
-        var result = results[i];
+    for (var _i = 0; _i < results.length; _i++) {
+        var result = results[_i];
         if (result.position[0] > leftShift) leftShift = result.position[0];
         if (result.position[0] < rightShift) rightShift = result.position[0];
         if (result.position[1] > topShift) topShift = result.position[1];
@@ -17823,8 +17839,8 @@ function matchAndCrop() {
     rightShift *= -1;
     bottomShift *= -1;
 
-    for (var i = 0; i < results.length; i++) {
-        var result = results[i];
+    for (var _i2 = 0; _i2 < results.length; _i2++) {
+        var _result = results[_i2];
 
         /*
         console.log("CROP",
@@ -17835,9 +17851,9 @@ function matchAndCrop() {
         )
         */
 
-        result.crop = result.image.crop({
-            x: leftShift - result.position[0],
-            y: topShift - result.position[1],
+        _result.crop = _result.image.crop({
+            x: leftShift - _result.position[0],
+            y: topShift - _result.position[1],
             width: parent.width - rightShift - leftShift,
             height: parent.height - bottomShift - topShift
         });
@@ -17845,8 +17861,8 @@ function matchAndCrop() {
 
     // finally we crop and create a new array of images
     var newImages = [];
-    for (var i = 0; i < results.length; i++) {
-        newImages[i] = results[i].crop;
+    for (var _i3 = 0; _i3 < results.length; _i3++) {
+        newImages[_i3] = results[_i3].crop;
     }
 
     return new _stack2.default(newImages);
@@ -17895,8 +17911,8 @@ function average() {
     var image = _image2.default.createFrom(this[0]);
     var newData = image.data;
 
-    for (var i = 0; i < this[0].data.length; i++) {
-        newData[i] = data[i] / this.length;
+    for (var _i = 0; _i < this[0].data.length; _i++) {
+        newData[_i] = data[_i] / this.length;
     }
 
     return image;
@@ -17925,6 +17941,7 @@ function validateArrayOfChannels(image) {
     var channels = _ref.channels;
     var allowAlpha = _ref.allowAlpha;
     var defaultAlpha = _ref.defaultAlpha;
+
 
     if (typeof allowAlpha !== 'boolean') allowAlpha = true;
 
@@ -18044,7 +18061,6 @@ function getThreshold(value, maxValue) {
     } else {
         throw Error('getThreshold : the value is not valid');
     }
-    return value;
 }
 
 function factorDimensions(factor, width, height) {
@@ -18071,7 +18087,7 @@ function median(histogram) {
     var position = 0;
     var currentTotal = 0;
     var middle = total / 2;
-    var previous = undefined;
+    var previous = void 0;
 
     while (true) {
         if (histogram[position] > 0) {
@@ -18118,8 +18134,8 @@ var _isInteger2 = _interopRequireDefault(_isInteger);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function validateKernel(kernel) {
-    var kHeight = undefined,
-        kWidth = undefined;
+    var kHeight = void 0,
+        kWidth = void 0;
     if (Array.isArray(kernel)) {
         if (Array.isArray(kernel[0])) {
             // 2D array
@@ -18147,7 +18163,7 @@ function validateKernel(kernel) {
     } else {
         throw new Error('validateKernel: Invalid Kernel: ' + kernel);
     }
-    return { kernel, kWidth, kHeight };
+    return { kernel: kernel, kWidth: kWidth, kHeight: kHeight };
 }
 
 },{"is-integer":9}],157:[function(require,module,exports){
@@ -18181,9 +18197,9 @@ function Matrix(width, height, defaultValue) {
         matrix[x] = new Array(height);
     }
     if (defaultValue) {
-        for (var x = 0; x < width; x++) {
+        for (var _x = 0; _x < width; _x++) {
             for (var y = 0; y < height; y++) {
-                matrix[x][y] = defaultValue;
+                matrix[_x][y] = defaultValue;
             }
         }
     }
@@ -18507,7 +18523,7 @@ function work() {
     });
 }
 
-exports.default = { run, work };
+exports.default = { run: run, work: work };
 
 },{"../../image/image":85,"extend":3}],163:[function(require,module,exports){
 'use strict';
@@ -18551,8 +18567,8 @@ class Worker {
         this._deps[0] = value;
     }
     static extendMethod(name, method) {
-        var manager = undefined;
-        var url = undefined;
+        var manager = void 0;
+        var url = void 0;
         var runner = {};
         function run() {
             var _method$run;
