@@ -37,7 +37,6 @@ export function getThreshold(value, maxValue) {
     } else {
         throw Error('getThreshold : the value is not valid');
     }
-    return value;
 }
 
 

@@ -3,6 +3,8 @@ env:
   node: true
   es6: true
 
+parser: babel-eslint
+
 ecmaFeatures:
   modules: true
 
@@ -10,10 +12,10 @@ rules:
   # Possible errors
   comma-dangle:
     - 2
-    - "never"
+    - never
   no-cond-assign:
     - 2
-    - "always"
+    - always
   no-console: 2
   no-constant-condition: 0
   no-control-regex: 2
@@ -45,7 +47,7 @@ rules:
   # Strict mode
   strict:
     - 2
-    - "global"
+    - global
 
   # Variables
   no-delete-var: 2
@@ -59,17 +61,15 @@ rules:
 
   # Stylistic issues
   eol-last: 2
+  keyword-spacing: 2
   no-trailing-spaces: 2
   quotes:
     - 2
-    - "single"
-    - "avoid-escape"
+    - single
+    - avoid-escape
   semi: 2
-  space-after-keywords: 2
-  space-before-keywords: 2
   space-before-blocks: 2
-  space-before-function-paren: [2, {anonymous: "always", named: "never"}]
+  space-before-function-paren: [2, {anonymous: always, named: never}]
   space-in-parens: 2
   space-infix-ops: [2, {int32Hint: true}]
-  space-return-throw-case: 2
   space-unary-ops: 2
