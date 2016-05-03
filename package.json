@@ -44,7 +44,7 @@
     "watch-node": "babel --watch src --out-dir lib"
   },
   "devDependencies": {
-    "babel-cli": "^6.2.0",
+    "babel-cli": "^6.8.0",
     "babel-core": "^6.2.1",
     "babel-eslint": "^6.0.3",
     "babel-istanbul": "^0.8.0",
