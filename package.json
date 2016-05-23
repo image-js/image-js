@@ -55,7 +55,7 @@
     "benchmark": "^2.1.0",
     "browserify": "^13.0.0",
     "eslint": "^2.8.0",
-    "mocha": "^2.3.4",
+    "mocha": "^2.5.0",
     "mocha-better-spec-reporter": "^3.0.1",
     "rimraf": "^2.4.0",
     "sha.js": "^2.4.3",
