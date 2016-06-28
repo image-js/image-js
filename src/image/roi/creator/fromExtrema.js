@@ -92,7 +92,8 @@ export default function createROIMapFromExtrema(
 
                     // console.log('---',pixels[index]);
 
-                    processTop(x, y, PROCESS_TOP);
+                    var vaéod?processTop(x, y, PROCESS_TOP);
+                    if (! valid) (maxima) ? --positiveID : ++negativeID;
                 }
             }
         }
@@ -127,6 +128,7 @@ export default function createROIMapFromExtrema(
             }
             to = currentTo;
         }
+        return valid;
     }
 
     /*
