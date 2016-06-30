@@ -54,7 +54,7 @@
     "babelify": "^7.2.0",
     "benchmark": "^2.1.0",
     "browserify": "^13.0.0",
-    "eslint": "^2.8.0",
+    "eslint": "^2.10.0",
     "mocha": "^2.3.4",
     "mocha-better-spec-reporter": "^3.0.1",
     "rimraf": "^2.4.0",
