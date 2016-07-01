@@ -59,7 +59,7 @@
     "mocha-better-spec-reporter": "^3.0.1",
     "rimraf": "^2.4.0",
     "sha.js": "^2.4.3",
-    "should": "^8.0.0",
+    "should": "^9.0.2",
     "watchify": "^3.6.0",
     "which": "^1.2.0"
   },
