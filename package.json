@@ -61,7 +61,7 @@
     "benchmark": "^2.1.0",
     "browserify": "^13.0.0",
     "documentation": "^4.0.0-beta5",
-    "eslint": "^3.0.0",
+    "eslint": "^3.0.1",
     "mocha": "^2.3.4",
     "mocha-better-spec-reporter": "^3.0.1",
     "rimraf": "^2.4.0",
