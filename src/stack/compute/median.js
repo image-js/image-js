@@ -1,5 +1,9 @@
-import getHistograms from './histograms';
 import {median as medianFromHistogram} from '../../util/histogram';
+
+/**
+ * @memberof Stack
+ * @instance
+ */
 
 export default function median() {
 

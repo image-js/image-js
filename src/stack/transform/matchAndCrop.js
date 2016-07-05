@@ -15,6 +15,11 @@ import Stack from '../stack';
 // It may therefore be much better to make a background correction before trying to match and crop
 // TODO this code seems also buggy if it is not 0,0
 
+/**
+ * @memberof Stack
+ * @instance
+ */
+
 export default function matchAndCrop({
     algorithm = 'matchToPrevious',
     ignoreBorder = [0,0]

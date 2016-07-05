@@ -1,6 +1,12 @@
 import Image from '../image';
 import * as KindNames from '../kindNames';
 
+/**
+ * Class to manage Region Of Interests
+ * @class ROI
+ */
+
+
 export default class ROI {
 
     constructor(map, id) {

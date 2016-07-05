@@ -1,3 +1,8 @@
+/**
+ * @memberof Stack
+ * @instance
+ */
+
 export default function histogram(options) {
 
     this.checkProcessable('min', {

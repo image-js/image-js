@@ -1,10 +1,11 @@
 import ROI from './roi';
 
-
-/*
-ROI are created from a roiMap
-The roiMap contains mainty an array of identifiers that define
-for each pixels to which ROI it belongs
+/**
+ * ROI are created from a roiMap
+ * The roiMap contains mainty an array of identifiers that define
+ * for each pixels to which ROI it belongs
+ * @memberof ROIManager
+ * @instance
  */
 
 export default function createROI(roiMap) {

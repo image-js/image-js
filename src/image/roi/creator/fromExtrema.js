@@ -1,5 +1,10 @@
 import ROIMap from './../ROIMap';
 
+/**
+ * @memberof ROIManager
+ * @instance
+ */
+
 export default function createROIMapFromExtrema(
     {
         allowCorner = true,

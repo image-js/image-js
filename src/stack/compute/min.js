@@ -1,3 +1,8 @@
+/**
+ * @memberof Stack
+ * @instance
+ */
+
 export default function min() {
     this.checkProcessable('min', {
         bitDepth: [8, 16]

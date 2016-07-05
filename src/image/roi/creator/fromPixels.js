@@ -1,5 +1,6 @@
-/*
-We will annotate each point to define to which area it belongs
+/**
+ * @memberof ROIManager
+ * @instance
  */
 
 import ROIMap from './../ROIMap';

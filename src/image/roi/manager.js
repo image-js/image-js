@@ -5,6 +5,11 @@ import createROI from './createROI';
 import extendObject from 'extend';
 import Image from '../image';
 
+/**
+ * A manager of Region of Interests
+ * @class ROIManager
+ */
+
 
 export default class ROIManager {
 

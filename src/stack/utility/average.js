@@ -1,5 +1,9 @@
-import Stack from '../stack';
 import Image from '../../image/image';
+
+/**
+ * @memberof Stack
+ * @instance
+ */
 
 export default function average({} = {}) {
     this.checkProcessable('average', {

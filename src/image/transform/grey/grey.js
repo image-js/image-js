@@ -9,6 +9,7 @@ import average from './average';
 
 /**
  * Converts the current image to grey scale
+ * @memberof Image
  * @instance
  * @returns {Image} - Grey scale image
  */

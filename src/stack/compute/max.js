@@ -1,3 +1,8 @@
+/**
+ * @memberof Stack
+ * @instance
+ */
+
 export default function max() {
 
     this.checkProcessable('min', {
