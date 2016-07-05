@@ -1,6 +1,12 @@
 import newArray from 'new-array';
 
-// returns an array with the sum values of each channel
+/**
+ * Returns an array with the sum of the values of each channel
+ * @memberof Image
+ * @instance
+ * @returns {[number]} Array having has size the number of channels
+ */
+
 
 export default function sum() {
     this.checkProcessable('sum', {

@@ -1,8 +1,16 @@
 
 // returns the number of transparent
 
+/**
+ * Returns the number of transparent pixels
+ * @memberof Image
+ * @instance
+ * @param {number} [$1.alpha=1] - Value of the alpha value to count. By default 1.
+ * @returns {number} Number of transparent pixel
+ */
+
 export default function countAlphaPixels({
-    alpha
+    alpha = 1
     } = {}) {
     this.checkProcessable('countAlphaPixels', {
         bitDepth: [8, 16],

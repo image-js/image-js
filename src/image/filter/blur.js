@@ -1,5 +1,11 @@
-import Image from '../image';
+
 import convolution from '../operator/convolution';
+
+/**
+ * @memberof Image
+ * @instance
+ * @returns {Image}
+ */
 
 // first release of mean filter
 export default function meanFilter(k) {

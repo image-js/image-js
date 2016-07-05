@@ -1,8 +1,11 @@
-import Image from '../image';
-import newArray from 'new-array';
 import Matrix from '../../util/matrix';
 
 // Try to match the current pictures with another one
+
+/**
+ * @memberof Image
+ * @instance
+ */
 
 export default function match(image, {border} = {}) {
 

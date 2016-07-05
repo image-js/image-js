@@ -3,6 +3,12 @@ import Image from '../../image';
 import nearestNeighbor from './nearestNeighbor';
 import {factorDimensions} from '../../../util/converter';
 
+/**
+ * @memberof Image
+ * @instance
+ */
+
+
 export default function scale({
     width = this.width,
     height = this.height,

@@ -1,6 +1,12 @@
 import {validateArrayOfChannels} from '../../util/channel';
 import Image from '../image';
 
+/**
+ * @memberof Image
+ * @instance
+ * @returns {Image}
+ */
+
 export default function hypotenuse(otherImage, {bitDepth, channels} = {}) {
     this.checkProcessable('hypotenuse', {
         bitDepth: [8, 16, 32]

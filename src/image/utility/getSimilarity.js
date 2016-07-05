@@ -6,6 +6,11 @@ import newArray from 'new-array';
 
 // if normalize we normalize separately the 2 images
 
+/**
+ * @memberof Image
+ * @instance
+ */
+
 export default function getSimilarity(image, {shift = [0,0], average, channels, defaultAlpha, normalize, border = [0,0]} = {}) {
 
     this.checkProcessable('getSimilarity', {

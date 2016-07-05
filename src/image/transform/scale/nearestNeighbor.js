@@ -1,3 +1,7 @@
+/**
+ * @memberof Image
+ * @instance
+ */
 export default function nearestNeighbor(newImage, newWidth, newHeight) {
     const wRatio = this.width / newWidth;
     const hRatio = this.height / newHeight;

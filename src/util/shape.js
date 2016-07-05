@@ -17,9 +17,13 @@ let smallCross = [
 
 
 
+/**
+ * Class representing a shape
+ * @class Shape
+ */
 
 export default class Shape {
-    constructor({kind = 'cross', shape, size, width, height, filled} = {}) {
+    constructor({kind = 'cross', shape, size, width, height} = {}) {
         if (shape) kind = undefined;
         if (size) {
             width = size;

@@ -2,6 +2,12 @@
 
 import {validateArrayOfChannels} from '../../util/channel';
 
+/**
+ * @memberof Image
+ * @instance
+ * @returns {Image}
+ */
+
 export default function invert({channels} = {}) {
     this.checkProcessable('invertOneLoop', {
         bitDepth: [1, 8, 16]

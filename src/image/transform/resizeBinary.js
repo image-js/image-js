@@ -1,8 +1,13 @@
 import Image from '../image';
 import * as KindNames from '../kindNames';
 
-// This is a temporary code that should be placed in the more generate resize method
-// it only works for scaled down !
+
+/**
+ * This is a temporary code that should be placed in the more generate resize method
+ * it only works for scaled down !
+ * @memberof Image
+ * @instance
+ */
 
 export default function resizeBinary(scale = 0.5, options = {}) {
     this.checkProcessable('resizeBinary', {

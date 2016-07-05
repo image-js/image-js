@@ -1,3 +1,8 @@
+/**
+ * @memberof Image
+ * @instance
+ */
+
 export default function getPixelsGrid({
     sampling = [10,10],
     painted = false,

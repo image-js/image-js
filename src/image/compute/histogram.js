@@ -1,6 +1,11 @@
 import newArray from 'new-array';
 import isInteger from 'is-integer';
 
+/**
+ * @memberof Image
+ * @instance
+ */
+
 export function getHistogram({maxSlots = 256, channel, useAlpha = true} = {}) {
     this.checkProcessable('getHistogram', {
         bitDepth: [8, 16]
@@ -14,6 +19,11 @@ export function getHistogram({maxSlots = 256, channel, useAlpha = true} = {}) {
     return getChannelHistogram.call(this, channel, useAlpha, maxSlots);
 }
 
+/**
+ * @memberof Image
+ * @instance
+ */
+
 export function getHistograms({maxSlots = 256, useAlpha = true} = {}) {
     this.checkProcessable('getHistograms', {
         bitDepth: [8, 16]
@@ -24,6 +34,7 @@ export function getHistograms({maxSlots = 256, useAlpha = true} = {}) {
     }
     return results;
 }
+
 
 
 function getChannelHistogram(channel, useAlpha, maxSlots) {

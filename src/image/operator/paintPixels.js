@@ -1,6 +1,17 @@
 import {RGB} from '../model/model';
 import Shape from '../../util/shape';
 
+
+/**
+ * Paint pixels on the current image.
+ * @memberof Image
+ * @instance
+ * @param {[[pixels]]} pixels - Array of [x,y] points
+ * @param {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
+ * @param {array} [$1.shape] - Array of 3 elements (R, G, B), default is red.
+ * @returns {Image} The original painted image
+ */
+
 export default function paintPixels(pixels, {
     color = [this.maxValue, 0, 0],
     shape} = {}) {

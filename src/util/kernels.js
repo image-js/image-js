@@ -1,3 +1,5 @@
+
+
 export const DISCRETE_LAPLACE_4 = [
     [0,  1, 0],
     [1, -4, 1],

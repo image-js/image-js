@@ -17,11 +17,14 @@ import triangle from './triangle';
 import yen from './yen';
 import {getThreshold} from '../../../util/converter';
 
-/*
- Creation of binary mask is based on the determination of a threshold
- You may either choose among the provided algorithm or just specify a threshold value
- */
 
+/**
+ * Creation of binary mask is based on the determination of a threshold
+ * You may either choose among the provided algorithm or just specify a threshold value
+ * @memberof Image
+ * @instance
+ * @returns {Image} - Binary image containins the mask
+ */
 
 export default function mask({
     algorithm = 'threshold',

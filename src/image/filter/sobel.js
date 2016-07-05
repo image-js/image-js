@@ -2,6 +2,12 @@ import Image from '../image';
 import convolution from '../operator/convolution';
 import {GRADIENT_X, GRADIENT_Y} from '../../util/kernels';
 
+/**
+ * @memberof Image
+ * @instance
+ * @returns {Image}
+ */
+
 export default function sobelFilter({
 	kernelX = GRADIENT_X,
 	kernelY = GRADIENT_Y,

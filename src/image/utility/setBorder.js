@@ -4,6 +4,11 @@ import array from 'new-array';
 // this method will change the border
 // that may not be calculated
 
+/**
+ * @memberof Image
+ * @instance
+ */
+
 export default function setBorder({
     size = 0,
     algorithm = 'copy',

@@ -1,6 +1,11 @@
 import {validateArrayOfChannels} from '../../util/channel';
 import Image from '../image';
 
+/**
+ * @memberof Image
+ * @instance
+ * @returns {Image}
+ */
 
 export default function medianFilter(radius, channels, border = 'copy') {
     this.checkProcessable('medianFilter', {

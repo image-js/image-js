@@ -7,6 +7,11 @@ let computedPropertyDescriptor = {
     get: undefined
 };
 
+/**
+ * Class representing stack of images
+ * @class Stack
+ */
+
 export default function Stack(images) {
     let stack;
     if (Array.isArray(images)) {

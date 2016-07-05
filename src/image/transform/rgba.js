@@ -1,6 +1,11 @@
 import Image from '../image';
 import {RGB} from '../model/model';
 
+/**
+ * @memberof Image
+ * @instance
+ */
+
 export default function rgba() {
 
     // TODO

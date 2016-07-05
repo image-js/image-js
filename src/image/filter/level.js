@@ -2,6 +2,12 @@ import newArray from 'new-array';
 
 import {validateArrayOfChannels} from '../../util/channel';
 
+/**
+ * @memberof Image
+ * @instance
+ * @returns {Image}
+ */
+
 export default function level({
     algorithm = 'range',
     channels,

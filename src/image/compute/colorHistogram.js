@@ -1,5 +1,10 @@
 import newArray from 'new-array';
 
+/**
+ * @memberof Image
+ * @instance
+ */
+
 export default function getColorHistogram({
     useAlpha = true,
     nbSlots = 512

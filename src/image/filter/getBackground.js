@@ -1,6 +1,12 @@
 import {KernelRidgeRegression} from 'ml-regression';
 import Image from '../image';
 
+/**
+ * @memberof Image
+ * @instance
+ * @returns {Image}
+ */
+
 export default function getBackground(coordinates, values, options) {
     const model = new KernelRidgeRegression(coordinates, values, options);
     const allCoordinates = new Array(this.size);

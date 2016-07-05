@@ -1,8 +1,16 @@
 import {RGB} from '../model/model';
 
+/**
+ * Paint a mask or masks on the current image.
+ * @memberof Image
+ * @instance
+ * @param {(Image|Image[])} mask - Image containing a binary mask
+ * @param {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
+ * @returns {Image} The original painted image
+ */
+
 export default function paintMasks(masks, {
-    color = [this.maxValue, 0, 0]
-    } = {}) {
+    color = [this.maxValue, 0, 0]} = {}) {
 
     this.checkProcessable('paintMasks', {
         components: 3,

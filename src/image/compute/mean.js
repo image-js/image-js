@@ -1,6 +1,13 @@
 import {mean as histogramMean} from '../../util/histogram';
 
-// returns an array with the average value of each component
+
+/**
+ * Returns an array with the average value of each channel
+ * @memberof Image
+ * @instance
+ * @returns {[number]} Array having has size the number of channels
+ */
+
 
 export default function mean() {
     let histograms = this.getHistograms({maxSlots:this.maxValue + 1});

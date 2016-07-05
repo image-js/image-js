@@ -1,6 +1,12 @@
 import {validateArrayOfChannels} from '../../util/channel';
-import Image from '../image';
 import {checkNumberArray} from '../../util/value';
+
+/**
+ * Add a specific integer on the specified points of the specified channels
+ * @memberof Image
+ * @instance
+ * @returns {Image} Modified current image
+ */
 
 export default function add(value, {channels} = {}) {
     this.checkProcessable('add', {

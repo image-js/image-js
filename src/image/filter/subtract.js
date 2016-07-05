@@ -1,6 +1,11 @@
 import {validateArrayOfChannels} from '../../util/channel';
-import Image from '../image';
 import {checkNumberArray} from '../../util/value';
+
+/**
+ * @memberof Image
+ * @instance
+ * @returns {Image}
+ */
 
 export default function subtract(value, {channels} = {}) {
     this.checkProcessable('subtract', {

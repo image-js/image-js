@@ -1,5 +1,10 @@
 import Image from '../image';
 
+/**
+ * @memberof Image
+ * @instance
+ */
+
 export default function colorDepth(newColorDepth = 8) {
 
     this.checkProcessable('colorDepth', {

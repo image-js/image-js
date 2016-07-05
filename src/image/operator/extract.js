@@ -3,9 +3,16 @@
 
 import Image from '../image';
 
-export default function extract(mask, {
-    scale = 1,
-    position} = {}) {
+/**
+ * Extracts a part of an original image based on a mask. By default the mask may contain
+ * a relative position and this part of the original image will be extracted.
+ * @memberof Image
+ * @instance
+ * @param [Image] mask - Image containing a binary mask
+ * @param {array} [$1.position] - Array of 2 elements containing the x,y coordinates
+ * @returns {Image} A new image
+ */
+export default function extract(mask, {position} = {}) {
 
     this.checkProcessable('extract', {
         bitDepth: [8, 16]

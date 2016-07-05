@@ -1,5 +1,10 @@
 import Image from '../image';
 
+/**
+ * @memberof Image
+ * @instance
+ */
+
 export default function split({preserveAlpha = true} = {}) {
 
     this.checkProcessable('split', {

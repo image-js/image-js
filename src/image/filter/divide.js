@@ -2,7 +2,13 @@ import {validateArrayOfChannels} from '../../util/channel';
 import Image from '../image';
 import {checkNumberArray} from '../../util/value';
 
-export default function add(value, {channels} = {}) {
+/**
+ * @memberof Image
+ * @instance
+ * @returns {Image}
+ */
+
+export default function divide(value, {channels} = {}) {
     this.checkProcessable('divide', {
         bitDepth: [8, 16]
     });

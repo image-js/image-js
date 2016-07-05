@@ -1,6 +1,11 @@
 import newArray from 'new-array';
 
-// returns an array with the minimal value of each channel
+/**
+ * Returns an array with the minimal value of each channel
+ * @memberof Image
+ * @instance
+ * @returns {[number]} Array having has size the number of channels
+ */
 
 export default function min() {
     this.checkProcessable('min', {

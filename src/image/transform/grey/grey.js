@@ -7,6 +7,12 @@ import minmax from './minmax';
 import maximum from './maximum';
 import average from './average';
 
+/**
+ * Converts the current image to grey scale
+ * @instance
+ * @returns {Image} - Grey scale image
+ */
+
 export default function grey({algorithm = 'luma709'} = {}) {
 
     if (this.components === 1) {

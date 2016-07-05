@@ -3,6 +3,11 @@ import array from 'new-array';
 
 import copy from '../utility/copy';
 
+/**
+ * @memberof Image
+ * @instance
+ */
+
 export default function pad({
     size = 0,
     algorithm = 'copy',

@@ -4,6 +4,11 @@
 import {RGB, HSL} from '../model/model';
 import Image from '../image';
 
+/**
+ * @memberof Image
+ * @instance
+ */
+
 export default function hsv() {
     this.checkProcessable('hsv', {
         bitDepth: [8, 16],

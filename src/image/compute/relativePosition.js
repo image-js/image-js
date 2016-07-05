@@ -9,6 +9,11 @@
  This methods takes care of this.
  */
 
+/**
+ * @memberof Image
+ * @instance
+ */
+
 export default function getRelativePosition(targetImage) {
     if (this === targetImage) return [0,0];
     let position = [0,0];

@@ -1,6 +1,11 @@
 import Image from '../image';
 import {validateChannel} from './../../util/channel';
 
+/**
+ * @memberof Image
+ * @instance
+ */
+
 export default function getColumn(column, channel = 0) {
 
     this.checkProcessable('getColumn', {
