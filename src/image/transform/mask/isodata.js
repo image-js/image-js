@@ -1,4 +1,4 @@
-/**
+/*
  * see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
  * Isodata: Ridler, TW & Calvard, S (1978), "Picture thresholding using an iterative selection method"
  * IEEE Transactions on Systems, Man and Cybernetics 8: 630-632.

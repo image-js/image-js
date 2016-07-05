@@ -1,4 +1,5 @@
 /**
+ * @private
  * Converts a factor value to a number between 0 and 1
  * @param value
  */
@@ -14,6 +15,7 @@ export function getFactor(value) {
 }
 
 /**
+ * @private
  * We can specify a threshold as "0.4", "40%" or 123
  * @param value
  * @param maxValue

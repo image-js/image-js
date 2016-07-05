@@ -26,8 +26,13 @@
   "homepage": "https://github.com/image-js/core",
   "license": "MIT",
   "main": "./lib/index.js",
+  "files": [
+    "dist",
+    "lib"
+  ],
   "scripts": {
     "build-dist": "browserify src/index.js -o dist/image.js --standalone IJS --exclude canvas --ignore buffer --ignore zlib --ignore fs --global-transform [ babelify ]",
+    "build-doc": "documentation build src/index.js --github --output doc --format html",
     "build": "npm run compile && npm run clean-dist && npm run build-dist",
     "build-test": "browserify test/browser/bootstrap.js -o test/browser/image.js --standalone IJS --exclude canvas --ignore buffer --ignore zlib --ignore fs --debug --global-transform [ babelify --sourceMap ]",
     "compile": "npm run clean-lib && babel src --out-dir lib",
@@ -54,7 +59,8 @@
     "babelify": "^7.2.0",
     "benchmark": "^2.1.0",
     "browserify": "^13.0.0",
-    "eslint": "^2.8.0",
+    "documentation": "^4.0.0-beta5",
+    "eslint": "^3.0.0",
     "mocha": "^2.3.4",
     "mocha-better-spec-reporter": "^3.0.1",
     "rimraf": "^2.4.0",

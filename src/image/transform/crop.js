@@ -1,5 +1,15 @@
 import Image from '../image';
 
+/**
+ * @memberof Image
+ * @instance
+ * @param {object} $0 - options
+ * @param {number} [$0.x=0] - x coordinate to place the zero of the new image
+ * @param {number} [$0.y=0] - y coordinate to place the zero of the new image
+ * @param {number} [$0.width=this.width-x] - width of the new image
+ * @param {number} [$0.height=this.height-x] - height of the new image
+ * @return {Image} The new cropped image
+ */
 export default function crop({
     x = 0,
     y = 0,

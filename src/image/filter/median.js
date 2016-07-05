@@ -1,6 +1,3 @@
-/**
- * Created by Cristian on 18/07/2015.
- */
 import {validateArrayOfChannels} from '../../util/channel';
 import Image from '../image';
 

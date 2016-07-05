@@ -17,6 +17,14 @@ let computedPropertyDescriptor = {
     get: undefined
 };
 
+/**
+ * Class representing an image
+ * @class Image
+ * @param {number} [width=1]
+ * @param {number} [height=1]
+ * @param {array} [data] - Image data to load
+ * @param {object} options
+ */
 export default class Image {
     constructor(width, height, data, options) {
         if (width === undefined) width = 1;
@@ -108,7 +116,11 @@ export default class Image {
         this.borderSizes = [0,0]; // when a filter create a border it may have impact on future processing like ROI
     }
 
-
+    /**
+     * Load an image
+     * @param {string} url - URL of the image (browser, can be a dataURL) or path (Node.js)
+     * @return {Promise} - Resolves with the Image
+     */
     static load(url) {
         return loadURL(url);
     }
@@ -174,7 +186,6 @@ export default class Image {
         Object.defineProperty(Image.prototype, name, computedPropertyDescriptor);
         return Image;
     }
-
 
     static createFrom(other, options) {
         let newOptions = {
@@ -257,10 +268,19 @@ export default class Image {
         return value;
     }
 
+    /**
+     * Creates a dataURL string from the image.
+     * @param {string} [type='image/png']
+     * @return {string}
+     */
     toDataURL(type = 'image/png') {
         return this.getCanvas().toDataURL(getType(type));
     }
 
+    /**
+     * Creates a new canvas element and draw the image inside it
+     * @return {Canvas}
+     */
     getCanvas() {
         let data = new ImageData(this.getRGBAData(), this.width, this.height);
         let canvas = new Canvas(this.width, this.height);
@@ -322,7 +342,13 @@ export default class Image {
         return new Image(this, copyData);
     }
 
-    save(path, {format = 'png'} = {}) { // Node.JS only
+    /**
+     * Save the image (Node.js only)
+     * @param {string} path
+     * @param {string} [format='png']
+     * @return {Promise} - Resolves when the file is fully written
+     */
+    save(path, {format = 'png'} = {}) {
         return new Promise((resolve, reject) => {
             let out = createWriteStream(path);
             let canvas = this.getCanvas();

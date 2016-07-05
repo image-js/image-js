@@ -1,15 +1,18 @@
-
 import Image from '../image';
 import {validateArrayOfChannels} from '../../util/channel';
 import {validateKernel} from '../../util/kernel';
+
 /**
- *
- * @param kernel
- * @param bitDepth : We can specify a new bitDepth for the image. This allow to specify 32 bits in order no to clamp
- * @param normalize
- * @param divisor
- * @param border
- * @returns {*}
+ * @memberof Image
+ * @instance
+ * @param {[[number]]} kernel
+ * @param {object} $1 - options
+ * @param {array} [$1.channels] - Array of channels to treat. Defaults to all channels
+ * @param {number} [$1.bitDepth=this.bitDepth] - A new bit depth can be specified. This allows to use 32 bits to avoid clamping of floating-point numbers.
+ * @param {boolean} [$1.normalize=false]
+ * @param {number} [$1.divisor=1]
+ * @param {string} [$1.border='copy']
+ * @returns {Image}
  */
 export default function convolution(kernel, {channels, bitDepth, normalize = false, divisor = 1, border = 'copy'} = {}) {
 

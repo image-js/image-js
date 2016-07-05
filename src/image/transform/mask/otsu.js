@@ -1,4 +1,4 @@
-/**
+/*
  * The method is present in: Otsu, N (1979), "A threshold selection method from gray-level histograms", IEEE Trans. Sys., Man., Cyber. 9: 62-66
  * The Otsu implementation is based on: https://en.wikipedia.org/wiki/Otsu's_method
  * @param histogram - the histogram of the image
