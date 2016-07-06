@@ -441,10 +441,45 @@
                 
                 <li><a
                   href='#ROI'
-                  class="">
+                  class=" toggle-sibling">
                   ROI
-                  
+                  <span class='icon'>▸</span>
                 </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'>Instance members</li>
+                      
+                      <li><a
+                        href='#ROI#surround'
+                        class='regular pre-open'>
+                        #surround
+                      </a></li>
+                      
+                      <li><a
+                        href='#ROI#external'
+                        class='regular pre-open'>
+                        #external
+                      </a></li>
+                      
+                      <li><a
+                        href='#ROI#contour'
+                        class='regular pre-open'>
+                        #contour
+                      </a></li>
+                      
+                      <li><a
+                        href='#ROI#border'
+                        class='regular pre-open'>
+                        #border
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -530,7 +565,7 @@
       Image
     </h2>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/69de38a21ae78e4c1c1861b5a360f66fb2004a58/src/image/image.js#L28-L432'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/d137453044c745d488617c5618831be450d193ab/src/image/image.js#L28-L432'>
       <span>src/image/image.js</span>
       </a>
     
@@ -4998,7 +5033,7 @@ a relative position and this part of the original image will be extracted.</p>
       Shape
     </h2>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/69de38a21ae78e4c1c1861b5a360f66fb2004a58/src/util/shape.js#L25-L71'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/d137453044c745d488617c5618831be450d193ab/src/util/shape.js#L25-L71'>
       <span>src/util/shape.js</span>
       </a>
     
@@ -5046,7 +5081,7 @@ a relative position and this part of the original image will be extracted.</p>
       ROIManager
     </h2>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/69de38a21ae78e4c1c1861b5a360f66fb2004a58/src/image/roi/manager.js#L16-L147'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/d137453044c745d488617c5618831be450d193ab/src/image/roi/manager.js#L16-L147'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -5434,7 +5469,7 @@ for each pixels to which ROI it belongs</p>
       ROIMap
     </h2>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/69de38a21ae78e4c1c1861b5a360f66fb2004a58/src/image/roi/ROIMap.js#L7-L17'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/d137453044c745d488617c5618831be450d193ab/src/image/roi/ROIMap.js#L7-L17'>
       <span>src/image/roi/ROIMap.js</span>
       </a>
     
@@ -5483,7 +5518,7 @@ the region to which belongs each of the pixels</p>
       ROI
     </h2>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/69de38a21ae78e4c1c1861b5a360f66fb2004a58/src/image/roi/roi.js#L10-L112'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/d137453044c745d488617c5618831be450d193ab/src/image/roi/roi.js#L10-L156'>
       <span>src/image/roi/roi.js</span>
       </a>
     
@@ -5516,6 +5551,223 @@ the region to which belongs each of the pixels</p>
   
 
   
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='keyline-bottom' id='ROI#surround'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>surround</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  <p>Retrieve all the IDs (array of number) of the region surrounding a specific region
+It should really be an array to solve complex cases related to border effect</p>
+<p>Like the image</p>
+<pre>
+0000
+1111
+0000
+1111
+</pre>
+<p>The first row of 1 will be surrouned by 2 differents zones</p>
+<p>Or even worse</p>
+<pre>
+010
+111
+010
+</pre>
+The cross will be surrouned by 4 differents zones
+<p>However in most of the cases it will be an array of one element</p>
+
+
+  <div class='pre p1 fill-light'>surround</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='keyline-bottom' id='ROI#external'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>external</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  <p>Number of pixels of the ROI that touch the rectangle
+This is useful for the calculation of the border
+because we will ignore those special pixels of the rectangle
+border that don&#x27;t have neighbours all around them.</p>
+
+
+  <div class='pre p1 fill-light'>external</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='keyline-bottom' id='ROI#contour'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>contour</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  <p>Calculates the number of pixels that are in the external border
+Contour are all the pixels that touch an external &quot;zone&quot;.
+All the pixels that touch the box are part of the border and
+are calculated in the getBoxPixels procedure</p>
+
+
+  <div class='pre p1 fill-light'>contour</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='keyline-bottom' id='ROI#border'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>border</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  <p>Calculates the number of pixels that are involved in border
+Border are all the pixels that touch another &quot;zone&quot;. It could be external
+or internal
+All the pixels that touch the box are part of the border and
+are calculated in the getBoxPixels procedure</p>
+
+
+  <div class='pre p1 fill-light'>border</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
 
   
 </section>
@@ -5531,7 +5783,7 @@ the region to which belongs each of the pixels</p>
       Stack
     </h2>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/69de38a21ae78e4c1c1861b5a360f66fb2004a58/src/stack/stack.js#L15-L30'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/d137453044c745d488617c5618831be450d193ab/src/stack/stack.js#L15-L30'>
       <span>src/stack/stack.js</span>
       </a>
     

@@ -45,6 +45,31 @@ export default class ROI {
         return this.maxY - this.minY + 1;
     }
 
+    /**
+     Retrieve all the IDs (array of number) of the region surrounding a specific region
+     It should really be an array to solve complex cases related to border effect
+
+     Like the image
+     <pre>
+     0000
+     1111
+     0000
+     1111
+     </pre>
+
+     The first row of 1 will be surrouned by 2 differents zones
+
+     Or even worse
+     <pre>
+     010
+     111
+     010
+     </pre>
+     The cross will be surrouned by 4 differents zones
+
+     However in most of the cases it will be an array of one element
+     */
+    
     get surround() {
         if (this.computed.surround) return this.computed.surround;
         return this.computed.surround = getSurroundingIDs(this);
@@ -55,16 +80,35 @@ export default class ROI {
         return this.computed.internalMapIDs = getInternalMapIDs(this);
     }
 
+    /**
+     Number of pixels of the ROI that touch the rectangle
+     This is useful for the calculation of the border
+     because we will ignore those special pixels of the rectangle
+     border that don't have neighbours all around them.
+     */
     get external() { // points of the ROI that touch the rectangular shape
         if (this.computed.external) return this.computed.external;
         return this.computed.external = getExternal(this);
     }
 
+    /**
+     Calculates the number of pixels that are in the external border
+     Contour are all the pixels that touch an external "zone".
+     All the pixels that touch the box are part of the border and
+     are calculated in the getBoxPixels procedure
+     */
     get contour() {
         if (this.computed.contour) return this.computed.contour;
         return this.computed.contour = getContour(this);
     }
 
+    /**
+     Calculates the number of pixels that are involved in border
+     Border are all the pixels that touch another "zone". It could be external
+     or internal
+     All the pixels that touch the box are part of the border and
+     are calculated in the getBoxPixels procedure
+     */
     get border() {
         if (this.computed.border) return this.computed.border;
         return this.computed.border = getBorder(this);
@@ -112,23 +156,7 @@ export default class ROI {
 }
 
 
-/* it should really be an array to solve complex cases related to border effect
- Like the image
- 0000
- 1111
- 0000
- 1111
 
- The first row of 1 will be surrouned by 2 differents zones
-
- Or even worse
- 010
- 111
- 010
- The cross will be surrouned by 4 differents zones
-
- However in most of the cases it will be an array of one element
- */
 
 function getSurroundingIDs(roi) {
     let surrounding = new Array(1);
@@ -186,12 +214,7 @@ function getSurroundingIDs(roi) {
 }
 
 
-/*
- We get the number of pixels of the ROI that touch the rectangle
- This is useful for the calculation of the border
- because we will ignore those special pixels of the rectangle
- border that don't have neighbourgs all around them.
- */
+
 
 function getExternal(roi) {
     let total = 0;
@@ -222,13 +245,7 @@ function getExternal(roi) {
     return total;
 }
 
-/*
- We will calculate the number of pixels that are involved in border
- Border are all the pixels that touch another "zone". It could be external
- or internal
- All the pixels that touch the box are part of the border and
- are calculated in the getBoxPixels procedure
- */
+
 function getBorder(roi) {
     let total = 0;
     let roiMap = roi.map;
@@ -251,12 +268,7 @@ function getBorder(roi) {
     return total + roi.external;
 }
 
-/*
- We will calculate the number of pixels that are in the external border
- Contour are all the pixels that touch an external "zone".
- All the pixels that touch the box are part of the border and
- are calculated in the getBoxPixels procedure
- */
+
 function getContour(roi) {
     let total = 0;
     let roiMap = roi.map;
