@@ -6,13 +6,14 @@ import extendObject from 'extend';
 import Image from '../image';
 
 /**
- * A manager of Region of Interests
+ * A manager of Region of Interests. A ROIManager is ralated to a specific Image
+ * and may contain many layers. Each layer is characterized by a label that is
+ * name by default 'default'
  * @class ROIManager
+ * @param {Image} image
+ * @param {object} [options]
  */
-
-
 export default class ROIManager {
-
     constructor(image, options = {}) {
         this._image = image;
         this._options = options;
@@ -20,12 +21,19 @@ export default class ROIManager {
         this._layers = {};
         this._painted = null;
     }
-
+    
     generateROIFromExtrema(options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromExtrema.call(this._image, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
+
+    /*
+     * @memberof ROIManager
+     * @instance
+     * @param {[[number]]} pixels - an array of [x,y] pixels
+     * @param {object} $1 - options
+     */
 
     putPixels(pixels, options = {}) {
         let opt = extendObject({}, this._options, options);
@@ -33,10 +41,14 @@ export default class ROIManager {
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
 
+
+
     putMap(roiMap, options = {}) {
         let opt = extendObject({}, this._options, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
+
+
 
     putMask(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
@@ -44,11 +56,15 @@ export default class ROIManager {
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
 
+
+
     getMap(options = {}) {
         let opt = extendObject({}, this._options, options);
         if (!this._layers[opt.label]) return;
         return this._layers[opt.label].roiMap;
     }
+
+
 
     getROIIDs(options = {}) {
         let rois = this.getROI(options);
@@ -59,6 +75,7 @@ export default class ROIManager {
         }
         return ids;
     }
+
 
     getROI({
         label = this._options.label,
@@ -82,6 +99,7 @@ export default class ROIManager {
         rois.length = ptr;
         return rois;
     }
+
 
     getROIMasks(options = {}) {
         let rois = this.getROI(options);

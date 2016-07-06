@@ -181,6 +181,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#Image#grey'
+                        class='regular pre-open'>
+                        #grey
+                      </a></li>
+                      
+                      <li><a
                         href='#Image#mask'
                         class='regular pre-open'>
                         #mask
@@ -373,11 +379,129 @@
               
                 
                 <li><a
-                  href='#Stack'
+                  href='#ROIManager'
+                  class=" toggle-sibling">
+                  ROIManager
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'>Instance members</li>
+                      
+                      <li><a
+                        href='#ROIManager#ROIMap'
+                        class='regular pre-open'>
+                        #ROIMap
+                      </a></li>
+                      
+                      <li><a
+                        href='#ROIManager#ROIMap'
+                        class='regular pre-open'>
+                        #ROIMap
+                      </a></li>
+                      
+                      <li><a
+                        href='#ROIManager#fromExtrema'
+                        class='regular pre-open'>
+                        #fromExtrema
+                      </a></li>
+                      
+                      <li><a
+                        href='#ROIManager#createROI'
+                        class='regular pre-open'>
+                        #createROI
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#ROIMap'
                   class="">
-                  Stack
+                  ROIMap
                   
                 </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#ROI'
+                  class="">
+                  ROI
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#Stack'
+                  class=" toggle-sibling">
+                  Stack
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'>Instance members</li>
+                      
+                      <li><a
+                        href='#Stack#matchAndCrop'
+                        class='regular pre-open'>
+                        #matchAndCrop
+                      </a></li>
+                      
+                      <li><a
+                        href='#Stack#min'
+                        class='regular pre-open'>
+                        #min
+                      </a></li>
+                      
+                      <li><a
+                        href='#Stack#max'
+                        class='regular pre-open'>
+                        #max
+                      </a></li>
+                      
+                      <li><a
+                        href='#Stack#median'
+                        class='regular pre-open'>
+                        #median
+                      </a></li>
+                      
+                      <li><a
+                        href='#Stack#histogram'
+                        class='regular pre-open'>
+                        #histogram
+                      </a></li>
+                      
+                      <li><a
+                        href='#Stack#histograms'
+                        class='regular pre-open'>
+                        #histograms
+                      </a></li>
+                      
+                      <li><a
+                        href='#Stack#average'
+                        class='regular pre-open'>
+                        #average
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -400,7 +524,7 @@
       Image
     </h2>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/7411705c859eb5d852c51becc5707ea751f1fd1d/src/image/image.js#L28-L432'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/15fc4beb8d4170c8817d8a369add069fd4f40d9b/src/image/image.js#L28-L432'>
       <span>src/image/image.js</span>
       </a>
     
@@ -2388,6 +2512,98 @@
       </div>
     </div>
   
+    <div class='keyline-bottom' id='Image#grey'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>grey</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  <p>Converts the current image to grey scale</p>
+
+
+  <div class='pre p1 fill-light'>grey</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            (default <code>{}</code>)
+            )</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <td>Name</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'></code>
+                  
+                    (default <code>&#39;luma709&#39;</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#Image">Image</a></code>:
+        Grey scale image
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='keyline-bottom' id='Image#mask'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="pad1y contain">
@@ -3913,7 +4129,7 @@ a relative position and this part of the original image will be extracted.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$1</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {}))</code> options
+            <span class='code bold'>$1</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</code> options
 
           </div>
           
@@ -4776,7 +4992,7 @@ a relative position and this part of the original image will be extracted.</p>
       Shape
     </h2>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/7411705c859eb5d852c51becc5707ea751f1fd1d/src/util/shape.js#L25-L71'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/15fc4beb8d4170c8817d8a369add069fd4f40d9b/src/util/shape.js#L25-L71'>
       <span>src/util/shape.js</span>
       </a>
     
@@ -4820,11 +5036,431 @@ a relative position and this part of the original image will be extracted.</p>
 
   
   <div class='clearfix'>
+    <h2 class='fl' id='ROIManager'>
+      ROIManager
+    </h2>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/15fc4beb8d4170c8817d8a369add069fd4f40d9b/src/image/roi/manager.js#L16-L150'>
+      <span>src/image/roi/manager.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>A manager of Region of Interests. A ROIManager is ralated to a specific Image
+and may contain many layers. Each layer is characterized by a label that is
+name by default &#x27;default&#x27;</p>
+
+
+  <div class='pre p1 fill-light'>ROIManager(image: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>, options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>image</span> <code class='quiet'>(<a href="#Image">Image</a>)</code> 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</code> 
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='keyline-bottom' id='ROIManager#ROIMap'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>ROIMap</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  <p>Annotates each point to define to which area it belongs</p>
+
+
+  <div class='pre p1 fill-light'>ROIMap</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='keyline-bottom' id='ROIManager#ROIMap'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>ROIMap</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light'>ROIMap</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='keyline-bottom' id='ROIManager#fromExtrema'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>fromExtrema</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light'>fromExtrema</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            (default <code>{}</code>)
+            )</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <td>Name</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.allowCorner</span> <code class='quiet'></code>
+                  
+                    (default <code>true</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.onlyTop</span> <code class='quiet'></code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.invert</span> <code class='quiet'></code>
+                  
+                    (default <code>false</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='keyline-bottom' id='ROIManager#createROI'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>createROI</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  <p>ROI are created from a roiMap
+The roiMap contains mainty an array of identifiers that define
+for each pixels to which ROI it belongs</p>
+
+
+  <div class='pre p1 fill-light'>createROI</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>roiMap</span> <code class='quiet'>()</code> 
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+</section>
+
+            
+          
+            
+              <section class='py2 clearfix'>
+
+  
+  <div class='clearfix'>
+    <h2 class='fl' id='ROIMap'>
+      ROIMap
+    </h2>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/15fc4beb8d4170c8817d8a369add069fd4f40d9b/src/image/roi/ROIMap.js#L7-L17'>
+      <span>src/image/roi/ROIMap.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Contains an array of the same size of the original image containings
+the region to which belongs each of the pixels</p>
+
+
+  <div class='pre p1 fill-light'>ROIMap()</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+            
+          
+            
+              <section class='py2 clearfix'>
+
+  
+  <div class='clearfix'>
+    <h2 class='fl' id='ROI'>
+      ROI
+    </h2>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/15fc4beb8d4170c8817d8a369add069fd4f40d9b/src/image/roi/roi.js#L10-L112'>
+      <span>src/image/roi/roi.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Class to manage Region Of Interests</p>
+
+
+  <div class='pre p1 fill-light'>ROI()</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+            
+          
+            
+              <section class='py2 clearfix'>
+
+  
+  <div class='clearfix'>
     <h2 class='fl' id='Stack'>
       Stack
     </h2>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/7411705c859eb5d852c51becc5707ea751f1fd1d/src/stack/stack.js#L15-L30'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/15fc4beb8d4170c8817d8a369add069fd4f40d9b/src/stack/stack.js#L15-L30'>
       <span>src/stack/stack.js</span>
       </a>
     
@@ -4867,6 +5503,411 @@ a relative position and this part of the original image will be extracted.</p>
   
 
   
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='keyline-bottom' id='Stack#matchAndCrop'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>matchAndCrop</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light'>matchAndCrop</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            (default <code>{}</code>)
+            )</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <td>Name</td>
+                <td>Description</td>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'></code>
+                  
+                    (default <code>&#39;matchToPrevious&#39;</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.ignoreBorder</span> <code class='quiet'></code>
+                  
+                    (default <code>[0,0]</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='keyline-bottom' id='Stack#min'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>min</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light'>min</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='keyline-bottom' id='Stack#max'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>max</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light'>max</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='keyline-bottom' id='Stack#median'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>median</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light'>median</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='keyline-bottom' id='Stack#histogram'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>histogram</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light'>histogram</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>()</code> 
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='keyline-bottom' id='Stack#histograms'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>histograms</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light'>histograms</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>()</code> 
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='keyline-bottom' id='Stack#average'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="pad1y contain">
+            <a class='icon pin-right pad1y dark-link caret-right'></a>
+            <span class='code strong strong truncate'>average</span>
+            <span class='quiet code space-right2'></span>
+        </div>
+      </div>
+      <div class="clearfix hidden toggle-target">
+        <section class='py2 clearfix'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light'>average</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            (default <code>{}</code>)
+            )</code> 
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
