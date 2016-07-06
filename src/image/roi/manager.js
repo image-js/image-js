@@ -21,20 +21,17 @@ export default class ROIManager {
         this._layers = {};
         this._painted = null;
     }
-    
+
     generateROIFromExtrema(options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromExtrema.call(this._image, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
 
-    /*
-     * @memberof ROIManager
-     * @instance
-     * @param {[[number]]} pixels - an array of [x,y] pixels
-     * @param {object} $1 - options
+    /**
+     * @param {[[number]]} pixels - an array of pixels
+     * @param {object} options
      */
-
     putPixels(pixels, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromCoordinates.call(this._image, pixels, options);
