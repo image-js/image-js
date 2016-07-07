@@ -25,7 +25,7 @@
               
                 
                 <li><a
-                  href='#Image'
+                  href='#image'
                   class=" toggle-sibling">
                   Image
                   <span class='icon'>▸</span>
@@ -34,7 +34,7 @@
                 <div class='toggle-target display-none'>
                   
                   <ul class='list-reset py1-ul pl1'>
-                    <li class='h5'>Static members</li>
+                    <li class='h5'><span>Static members</span></li>
                     
                       <li><a
                         href='#Image.load'
@@ -46,7 +46,7 @@
                   
                   
                     <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'>Instance members</li>
+                      <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
                         href='#Image#toDataURL'
@@ -369,7 +369,7 @@
               
                 
                 <li><a
-                  href='#Shape'
+                  href='#shape'
                   class="">
                   Shape
                   
@@ -379,7 +379,7 @@
               
                 
                 <li><a
-                  href='#ROIManager'
+                  href='#roimanager'
                   class=" toggle-sibling">
                   ROIManager
                   <span class='icon'>▸</span>
@@ -389,7 +389,7 @@
                   
                   
                     <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'>Instance members</li>
+                      <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
                         href='#ROIManager#putPixels'
@@ -430,7 +430,7 @@
               
                 
                 <li><a
-                  href='#ROIMap'
+                  href='#roimap'
                   class="">
                   ROIMap
                   
@@ -440,7 +440,7 @@
               
                 
                 <li><a
-                  href='#ROI'
+                  href='#roi'
                   class=" toggle-sibling">
                   ROI
                   <span class='icon'>▸</span>
@@ -450,7 +450,7 @@
                   
                   
                     <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'>Instance members</li>
+                      <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
                         href='#ROI#surround'
@@ -485,7 +485,7 @@
               
                 
                 <li><a
-                  href='#Stack'
+                  href='#stack'
                   class=" toggle-sibling">
                   Stack
                   <span class='icon'>▸</span>
@@ -495,7 +495,7 @@
                   
                   
                     <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'>Instance members</li>
+                      <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
                         href='#Stack#matchAndCrop'
@@ -554,18 +554,17 @@
         </div>
       </div>
       <div class='fix-margin-3'>
-        <div class='px2'>
+        
           
-            
-              <section class='py2 clearfix'>
+            <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
-    <h2 class='fl' id='Image'>
+    <h3 class='fl m0' id='image'>
       Image
-    </h2>
+    </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/edb23d229a7481252529f10842595d0d730e0278/src/image/image.js#L28-L432'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/4630f54163e4adc50648a6632f5c51ab1676c426/src/image/image.js#L28-L432'>
       <span>src/image/image.js</span>
       </a>
     
@@ -575,7 +574,7 @@
   <p>Class representing an image</p>
 
 
-  <div class='pre p1 fill-light'>Image(width: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>], height: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>], data: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>], options: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</div>
+  <div class='pre p1 fill-light mt0'>new Image(width: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>], height: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>], data: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>], options: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</div>
 
   
 
@@ -637,23 +636,22 @@
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
   
-    <div class='keyline-bottom' id='Image.load'>
+    <div class='border-bottom' id='Image.load'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
-            <span class='code strong strong truncate'>load</span>
-            <span class='quiet code space-right2'>(url)</span>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
+            <span class='code strong strong truncate'>load(url)</span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Load an image</p>
 
 
-  <div class='pre p1 fill-light'>load(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  <div class='pre p1 fill-light mt0'>load(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
 
   
 
@@ -712,23 +710,22 @@
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='keyline-bottom' id='Image#toDataURL'>
+    <div class='border-bottom' id='Image#toDataURL'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
-            <span class='code strong strong truncate'>toDataURL</span>
-            <span class='quiet code space-right2'>([type])</span>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
+            <span class='code strong strong truncate'>toDataURL([type])</span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Creates a dataURL string from the image.</p>
 
 
-  <div class='pre p1 fill-light'>toDataURL(type: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+  <div class='pre p1 fill-light mt0'>toDataURL(type: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
 
   
 
@@ -779,23 +776,22 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#getCanvas'>
+    <div class='border-bottom' id='Image#getCanvas'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
-            <span class='code strong strong truncate'>getCanvas</span>
-            <span class='quiet code space-right2'>()</span>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
+            <span class='code strong strong truncate'>getCanvas()</span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Creates a new canvas element and draw the image inside it</p>
 
 
-  <div class='pre p1 fill-light'>getCanvas(): Canvas</div>
+  <div class='pre p1 fill-light mt0'>getCanvas(): Canvas</div>
 
   
 
@@ -832,23 +828,22 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#save'>
+    <div class='border-bottom' id='Image#save'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
-            <span class='code strong strong truncate'>save</span>
-            <span class='quiet code space-right2'>(path, [format], $1)</span>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
+            <span class='code strong strong truncate'>save(path, [format], $1)</span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Save the image (Node.js only)</p>
 
 
-  <div class='pre p1 fill-light'>save(path: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, format: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>], $1: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  <div class='pre p1 fill-light mt0'>save(path: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, format: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>], $1: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
 
   
 
@@ -885,21 +880,21 @@
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$1.format</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$1.format</span> <code class='quiet'>Any</code>
                   
                     (default <code>&#39;png&#39;</code>)
                   </td>
@@ -940,22 +935,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#invert'>
+    <div class='border-bottom' id='Image#invert'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>invert</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>invert</div>
+  <div class='pre p1 fill-light mt0'>invert</div>
 
   
 
@@ -976,21 +970,21 @@
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.channels</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.channels</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
@@ -1008,7 +1002,7 @@
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         
       
     
@@ -1028,22 +1022,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#blur'>
+    <div class='border-bottom' id='Image#blur'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>blur</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>blur</div>
+  <div class='pre p1 fill-light mt0'>blur</div>
 
   
 
@@ -1059,7 +1052,7 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>k</span> <code class='quiet'>()</code> 
+            <span class='code bold'>k</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -1072,7 +1065,7 @@
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         
       
     
@@ -1092,22 +1085,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#median'>
+    <div class='border-bottom' id='Image#median'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>median</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>median</div>
+  <div class='pre p1 fill-light mt0'>median</div>
 
   
 
@@ -1123,21 +1115,21 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>radius</span> <code class='quiet'>()</code> 
+            <span class='code bold'>radius</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>channels</span> <code class='quiet'>()</code> 
+            <span class='code bold'>channels</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>border</span> <code class='quiet'>(
+            <span class='code bold'>border</span> <code class='quiet'>(Any
             (default <code>&#39;copy&#39;</code>)
             )</code> 
           </div>
@@ -1152,7 +1144,7 @@
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         
       
     
@@ -1172,23 +1164,22 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#median'>
+    <div class='border-bottom' id='Image#median'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>median</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Returns an array with the median value of each channel</p>
 
 
-  <div class='pre p1 fill-light'>median</div>
+  <div class='pre p1 fill-light mt0'>median</div>
 
   
 
@@ -1226,22 +1217,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#gaussian'>
+    <div class='border-bottom' id='Image#gaussian'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>gaussian</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>gaussian</div>
+  <div class='pre p1 fill-light mt0'>gaussian</div>
 
   
 
@@ -1262,21 +1252,21 @@
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.radius</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.radius</span> <code class='quiet'>Any</code>
                   
                     (default <code>1</code>)
                   </td>
@@ -1284,19 +1274,19 @@
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.sigma</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.sigma</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.channels</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.channels</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.border</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.border</span> <code class='quiet'>Any</code>
                   
                     (default <code>&#39;copy&#39;</code>)
                   </td>
@@ -1316,7 +1306,7 @@
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         
       
     
@@ -1336,22 +1326,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#sobel'>
+    <div class='border-bottom' id='Image#sobel'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>sobel</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>sobel</div>
+  <div class='pre p1 fill-light mt0'>sobel</div>
 
   
 
@@ -1372,21 +1361,21 @@
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.kernelX</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.kernelX</span> <code class='quiet'>Any</code>
                   
                     (default <code>GRADIENT_X</code>)
                   </td>
@@ -1394,7 +1383,7 @@
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.kernelY</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.kernelY</span> <code class='quiet'>Any</code>
                   
                     (default <code>GRADIENT_Y</code>)
                   </td>
@@ -1402,7 +1391,7 @@
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.border</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.border</span> <code class='quiet'>Any</code>
                   
                     (default <code>&#39;copy&#39;</code>)
                   </td>
@@ -1410,7 +1399,7 @@
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.channels</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.channels</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
@@ -1428,7 +1417,7 @@
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         
       
     
@@ -1448,22 +1437,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#level'>
+    <div class='border-bottom' id='Image#level'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>level</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>level</div>
+  <div class='pre p1 fill-light mt0'>level</div>
 
   
 
@@ -1484,21 +1472,21 @@
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'>Any</code>
                   
                     (default <code>&#39;range&#39;</code>)
                   </td>
@@ -1506,13 +1494,13 @@
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.channels</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.channels</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.min</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.min</span> <code class='quiet'>Any</code>
                   
                     (default <code>this.min</code>)
                   </td>
@@ -1520,7 +1508,7 @@
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.max</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.max</span> <code class='quiet'>Any</code>
                   
                     (default <code>this.max</code>)
                   </td>
@@ -1540,7 +1528,7 @@
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         
       
     
@@ -1560,23 +1548,22 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#add'>
+    <div class='border-bottom' id='Image#add'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>add</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Add a specific integer on the specified points of the specified channels</p>
 
 
-  <div class='pre p1 fill-light'>add</div>
+  <div class='pre p1 fill-light mt0'>add</div>
 
   
 
@@ -1592,7 +1579,7 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>value</span> <code class='quiet'>()</code> 
+            <span class='code bold'>value</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -1604,21 +1591,21 @@
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
@@ -1636,7 +1623,7 @@
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         Modified current image
 
       
@@ -1657,22 +1644,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#subtract'>
+    <div class='border-bottom' id='Image#subtract'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>subtract</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>subtract</div>
+  <div class='pre p1 fill-light mt0'>subtract</div>
 
   
 
@@ -1688,7 +1674,7 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>value</span> <code class='quiet'>()</code> 
+            <span class='code bold'>value</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -1700,21 +1686,21 @@
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
@@ -1732,7 +1718,7 @@
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         
       
     
@@ -1752,22 +1738,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#hypotenuse'>
+    <div class='border-bottom' id='Image#hypotenuse'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>hypotenuse</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>hypotenuse</div>
+  <div class='pre p1 fill-light mt0'>hypotenuse</div>
 
   
 
@@ -1783,7 +1768,7 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>otherImage</span> <code class='quiet'>()</code> 
+            <span class='code bold'>otherImage</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -1795,27 +1780,27 @@
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$1.bitDepth</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$1.bitDepth</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
@@ -1833,7 +1818,7 @@
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         
       
     
@@ -1853,22 +1838,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#multiply'>
+    <div class='border-bottom' id='Image#multiply'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>multiply</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>multiply</div>
+  <div class='pre p1 fill-light mt0'>multiply</div>
 
   
 
@@ -1884,7 +1868,7 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>value</span> <code class='quiet'>()</code> 
+            <span class='code bold'>value</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -1896,21 +1880,21 @@
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
@@ -1928,7 +1912,7 @@
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         
       
     
@@ -1948,22 +1932,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#divide'>
+    <div class='border-bottom' id='Image#divide'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>divide</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>divide</div>
+  <div class='pre p1 fill-light mt0'>divide</div>
 
   
 
@@ -1979,7 +1962,7 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>value</span> <code class='quiet'>()</code> 
+            <span class='code bold'>value</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -1991,21 +1974,21 @@
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
@@ -2023,7 +2006,7 @@
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         
       
     
@@ -2043,22 +2026,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#getBackground'>
+    <div class='border-bottom' id='Image#getBackground'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>getBackground</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>getBackground</div>
+  <div class='pre p1 fill-light mt0'>getBackground</div>
 
   
 
@@ -2074,21 +2056,21 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>coordinates</span> <code class='quiet'>()</code> 
+            <span class='code bold'>coordinates</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>values</span> <code class='quiet'>()</code> 
+            <span class='code bold'>values</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>()</code> 
+            <span class='code bold'>options</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -2101,7 +2083,7 @@
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         
       
     
@@ -2121,22 +2103,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#crop'>
+    <div class='border-bottom' id='Image#crop'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>crop</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>crop</div>
+  <div class='pre p1 fill-light mt0'>crop</div>
 
   
 
@@ -2156,15 +2137,15 @@
 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
@@ -2218,7 +2199,7 @@
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         The new cropped image
 
       
@@ -2239,22 +2220,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#scale'>
+    <div class='border-bottom' id='Image#scale'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>scale</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>scale</div>
+  <div class='pre p1 fill-light mt0'>scale</div>
 
   
 
@@ -2275,21 +2255,21 @@
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.width</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.width</span> <code class='quiet'>Any</code>
                   
                     (default <code>this.width</code>)
                   </td>
@@ -2297,7 +2277,7 @@
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.height</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.height</span> <code class='quiet'>Any</code>
                   
                     (default <code>this.height</code>)
                   </td>
@@ -2305,7 +2285,7 @@
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.factor</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.factor</span> <code class='quiet'>Any</code>
                   
                     (default <code>1</code>)
                   </td>
@@ -2313,7 +2293,7 @@
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'>Any</code>
                   
                     (default <code>&#39;nearestNeighbor&#39;</code>)
                   </td>
@@ -2346,22 +2326,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#nearestNeighbor'>
+    <div class='border-bottom' id='Image#nearestNeighbor'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>nearestNeighbor</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>nearestNeighbor</div>
+  <div class='pre p1 fill-light mt0'>nearestNeighbor</div>
 
   
 
@@ -2377,21 +2356,21 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>newImage</span> <code class='quiet'>()</code> 
+            <span class='code bold'>newImage</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>newWidth</span> <code class='quiet'>()</code> 
+            <span class='code bold'>newWidth</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>newHeight</span> <code class='quiet'>()</code> 
+            <span class='code bold'>newHeight</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -2417,22 +2396,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#hsv'>
+    <div class='border-bottom' id='Image#hsv'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>hsv</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>hsv</div>
+  <div class='pre p1 fill-light mt0'>hsv</div>
 
   
 
@@ -2462,22 +2440,21 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#hsl'>
+    <div class='border-bottom' id='Image#hsl'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>hsl</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>hsl</div>
+  <div class='pre p1 fill-light mt0'>hsl</div>
 
   
 
@@ -2507,23 +2484,22 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#rgba8'>
+    <div class='border-bottom' id='Image#rgba8'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>rgba8</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Make a copy of the current image and convert to a RGBA 8 bits</p>
 
 
-  <div class='pre p1 fill-light'>rgba8</div>
+  <div class='pre p1 fill-light mt0'>rgba8</div>
 
   
 
@@ -2553,23 +2529,22 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#grey'>
+    <div class='border-bottom' id='Image#grey'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>grey</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Converts the current image to grey scale</p>
 
 
-  <div class='pre p1 fill-light'>grey</div>
+  <div class='pre p1 fill-light mt0'>grey</div>
 
   
 
@@ -2590,21 +2565,21 @@
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'>Any</code>
                   
                     (default <code>&#39;luma709&#39;</code>)
                   </td>
@@ -2624,7 +2599,7 @@
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         Grey scale image
 
       
@@ -2645,16 +2620,15 @@
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#mask'>
+    <div class='border-bottom' id='Image#mask'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>mask</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
@@ -2662,7 +2636,7 @@
 You may either choose among the provided algorithm or just specify a threshold value</p>
 
 
-  <div class='pre p1 fill-light'>mask</div>
+  <div class='pre p1 fill-light mt0'>mask</div>
 
   
 
@@ -2683,21 +2657,21 @@ You may either choose among the provided algorithm or just specify a threshold v
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'>Any</code>
                   
                     (default <code>&#39;threshold&#39;</code>)
                   </td>
@@ -2705,7 +2679,7 @@ You may either choose among the provided algorithm or just specify a threshold v
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.threshold</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.threshold</span> <code class='quiet'>Any</code>
                   
                     (default <code>0.5</code>)
                   </td>
@@ -2713,7 +2687,7 @@ You may either choose among the provided algorithm or just specify a threshold v
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.useAlpha</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.useAlpha</span> <code class='quiet'>Any</code>
                   
                     (default <code>true</code>)
                   </td>
@@ -2721,7 +2695,7 @@ You may either choose among the provided algorithm or just specify a threshold v
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.invert</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.invert</span> <code class='quiet'>Any</code>
                   
                     (default <code>false</code>)
                   </td>
@@ -2741,7 +2715,7 @@ You may either choose among the provided algorithm or just specify a threshold v
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         Binary image containins the mask
 
       
@@ -2762,22 +2736,21 @@ You may either choose among the provided algorithm or just specify a threshold v
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#pad'>
+    <div class='border-bottom' id='Image#pad'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>pad</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>pad</div>
+  <div class='pre p1 fill-light mt0'>pad</div>
 
   
 
@@ -2798,21 +2771,21 @@ You may either choose among the provided algorithm or just specify a threshold v
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.size</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.size</span> <code class='quiet'>Any</code>
                   
                     (default <code>0</code>)
                   </td>
@@ -2820,7 +2793,7 @@ You may either choose among the provided algorithm or just specify a threshold v
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'>Any</code>
                   
                     (default <code>&#39;copy&#39;</code>)
                   </td>
@@ -2828,7 +2801,7 @@ You may either choose among the provided algorithm or just specify a threshold v
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.color</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.color</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
@@ -2859,23 +2832,22 @@ You may either choose among the provided algorithm or just specify a threshold v
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#copy'>
+    <div class='border-bottom' id='Image#copy'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>copy</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Make a copy of the current image</p>
 
 
-  <div class='pre p1 fill-light'>copy</div>
+  <div class='pre p1 fill-light mt0'>copy</div>
 
   
 
@@ -2891,28 +2863,28 @@ You may either choose among the provided algorithm or just specify a threshold v
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>fromImage</span> <code class='quiet'>()</code> 
+            <span class='code bold'>fromImage</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>toImage</span> <code class='quiet'>()</code> 
+            <span class='code bold'>toImage</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>x</span> <code class='quiet'>()</code> 
+            <span class='code bold'>x</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>y</span> <code class='quiet'>()</code> 
+            <span class='code bold'>y</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -2938,16 +2910,15 @@ You may either choose among the provided algorithm or just specify a threshold v
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#resizeBinary'>
+    <div class='border-bottom' id='Image#resizeBinary'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>resizeBinary</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
@@ -2955,7 +2926,7 @@ You may either choose among the provided algorithm or just specify a threshold v
 it only works for scaled down !</p>
 
 
-  <div class='pre p1 fill-light'>resizeBinary</div>
+  <div class='pre p1 fill-light mt0'>resizeBinary</div>
 
   
 
@@ -2971,7 +2942,7 @@ it only works for scaled down !</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>scale</span> <code class='quiet'>(
+            <span class='code bold'>scale</span> <code class='quiet'>(Any
             (default <code>0.5</code>)
             )</code> 
           </div>
@@ -2980,7 +2951,7 @@ it only works for scaled down !</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(
+            <span class='code bold'>options</span> <code class='quiet'>(Any
             (default <code>{}</code>)
             )</code> 
           </div>
@@ -3008,22 +2979,21 @@ it only works for scaled down !</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#colorDepth'>
+    <div class='border-bottom' id='Image#colorDepth'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>colorDepth</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>colorDepth</div>
+  <div class='pre p1 fill-light mt0'>colorDepth</div>
 
   
 
@@ -3039,7 +3009,7 @@ it only works for scaled down !</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>newColorDepth</span> <code class='quiet'>(
+            <span class='code bold'>newColorDepth</span> <code class='quiet'>(Any
             (default <code>8</code>)
             )</code> 
           </div>
@@ -3067,22 +3037,21 @@ it only works for scaled down !</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#setBorder'>
+    <div class='border-bottom' id='Image#setBorder'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>setBorder</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>setBorder</div>
+  <div class='pre p1 fill-light mt0'>setBorder</div>
 
   
 
@@ -3103,21 +3072,21 @@ it only works for scaled down !</p>
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.size</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.size</span> <code class='quiet'>Any</code>
                   
                     (default <code>0</code>)
                   </td>
@@ -3125,7 +3094,7 @@ it only works for scaled down !</p>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'>Any</code>
                   
                     (default <code>&#39;copy&#39;</code>)
                   </td>
@@ -3133,7 +3102,7 @@ it only works for scaled down !</p>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.color</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.color</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
@@ -3164,22 +3133,21 @@ it only works for scaled down !</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#split'>
+    <div class='border-bottom' id='Image#split'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>split</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>split</div>
+  <div class='pre p1 fill-light mt0'>split</div>
 
   
 
@@ -3200,21 +3168,21 @@ it only works for scaled down !</p>
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.preserveAlpha</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.preserveAlpha</span> <code class='quiet'>Any</code>
                   
                     (default <code>true</code>)
                   </td>
@@ -3247,22 +3215,21 @@ it only works for scaled down !</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#getChannel'>
+    <div class='border-bottom' id='Image#getChannel'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>getChannel</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>getChannel</div>
+  <div class='pre p1 fill-light mt0'>getChannel</div>
 
   
 
@@ -3278,7 +3245,7 @@ it only works for scaled down !</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>channel</span> <code class='quiet'>()</code> 
+            <span class='code bold'>channel</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -3304,22 +3271,21 @@ it only works for scaled down !</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#setChannel'>
+    <div class='border-bottom' id='Image#setChannel'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>setChannel</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>setChannel</div>
+  <div class='pre p1 fill-light mt0'>setChannel</div>
 
   
 
@@ -3335,14 +3301,14 @@ it only works for scaled down !</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>channel</span> <code class='quiet'>()</code> 
+            <span class='code bold'>channel</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>image</span> <code class='quiet'>()</code> 
+            <span class='code bold'>image</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -3368,22 +3334,21 @@ it only works for scaled down !</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#getSimilarity'>
+    <div class='border-bottom' id='Image#getSimilarity'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>getSimilarity</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>getSimilarity</div>
+  <div class='pre p1 fill-light mt0'>getSimilarity</div>
 
   
 
@@ -3399,7 +3364,7 @@ it only works for scaled down !</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>image</span> <code class='quiet'>()</code> 
+            <span class='code bold'>image</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -3411,21 +3376,21 @@ it only works for scaled down !</p>
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$1.shift</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$1.shift</span> <code class='quiet'>Any</code>
                   
                     (default <code>[0,0]</code>)
                   </td>
@@ -3433,31 +3398,31 @@ it only works for scaled down !</p>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$1.average</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$1.average</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$1.defaultAlpha</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$1.defaultAlpha</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$1.normalize</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$1.normalize</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$1.border</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$1.border</span> <code class='quiet'>Any</code>
                   
                     (default <code>[0,0]</code>)
                   </td>
@@ -3490,22 +3455,21 @@ it only works for scaled down !</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#getPixelsGrid'>
+    <div class='border-bottom' id='Image#getPixelsGrid'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>getPixelsGrid</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>getPixelsGrid</div>
+  <div class='pre p1 fill-light mt0'>getPixelsGrid</div>
 
   
 
@@ -3526,21 +3490,21 @@ it only works for scaled down !</p>
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.sampling</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.sampling</span> <code class='quiet'>Any</code>
                   
                     (default <code>[10,10]</code>)
                   </td>
@@ -3548,7 +3512,7 @@ it only works for scaled down !</p>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.painted</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.painted</span> <code class='quiet'>Any</code>
                   
                     (default <code>false</code>)
                   </td>
@@ -3556,7 +3520,7 @@ it only works for scaled down !</p>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.mask</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.mask</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
@@ -3587,22 +3551,21 @@ it only works for scaled down !</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#getBestMatch'>
+    <div class='border-bottom' id='Image#getBestMatch'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>getBestMatch</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>getBestMatch</div>
+  <div class='pre p1 fill-light mt0'>getBestMatch</div>
 
   
 
@@ -3618,7 +3581,7 @@ it only works for scaled down !</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>image</span> <code class='quiet'>()</code> 
+            <span class='code bold'>image</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -3630,21 +3593,21 @@ it only works for scaled down !</p>
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$1.border</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$1.border</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
@@ -3675,22 +3638,21 @@ it only works for scaled down !</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#getRow'>
+    <div class='border-bottom' id='Image#getRow'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>getRow</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>getRow</div>
+  <div class='pre p1 fill-light mt0'>getRow</div>
 
   
 
@@ -3706,14 +3668,14 @@ it only works for scaled down !</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>row</span> <code class='quiet'>()</code> 
+            <span class='code bold'>row</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>channel</span> <code class='quiet'>(
+            <span class='code bold'>channel</span> <code class='quiet'>(Any
             (default <code>0</code>)
             )</code> 
           </div>
@@ -3741,22 +3703,21 @@ it only works for scaled down !</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#getColumn'>
+    <div class='border-bottom' id='Image#getColumn'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>getColumn</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>getColumn</div>
+  <div class='pre p1 fill-light mt0'>getColumn</div>
 
   
 
@@ -3772,14 +3733,14 @@ it only works for scaled down !</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>column</span> <code class='quiet'>()</code> 
+            <span class='code bold'>column</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>channel</span> <code class='quiet'>(
+            <span class='code bold'>channel</span> <code class='quiet'>(Any
             (default <code>0</code>)
             )</code> 
           </div>
@@ -3807,23 +3768,22 @@ it only works for scaled down !</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#paintMasks'>
+    <div class='border-bottom' id='Image#paintMasks'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>paintMasks</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Paint a mask or masks on the current image.</p>
 
 
-  <div class='pre p1 fill-light'>paintMasks</div>
+  <div class='pre p1 fill-light mt0'>paintMasks</div>
 
   
 
@@ -3839,7 +3799,7 @@ it only works for scaled down !</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>mask</span> <code class='quiet'>((<a href="#Image">Image</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="#Image">Image</a>&gt;))</code> Image containing a binary mask
+            <span class='code bold'>mask</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>&gt;))</code> Image containing a binary mask
 
           </div>
           
@@ -3847,7 +3807,7 @@ it only works for scaled down !</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>masks</span> <code class='quiet'>()</code> 
+            <span class='code bold'>masks</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -3859,15 +3819,15 @@ it only works for scaled down !</p>
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
@@ -3894,7 +3854,7 @@ it only works for scaled down !</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         The original painted image
 
       
@@ -3915,23 +3875,22 @@ it only works for scaled down !</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#paintPixels'>
+    <div class='border-bottom' id='Image#paintPixels'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>paintPixels</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Paint pixels on the current image.</p>
 
 
-  <div class='pre p1 fill-light'>paintPixels</div>
+  <div class='pre p1 fill-light mt0'>paintPixels</div>
 
   
 
@@ -3962,15 +3921,15 @@ it only works for scaled down !</p>
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
@@ -4004,7 +3963,7 @@ it only works for scaled down !</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         The original painted image
 
       
@@ -4025,16 +3984,15 @@ it only works for scaled down !</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#extract'>
+    <div class='border-bottom' id='Image#extract'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>extract</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
@@ -4042,7 +4000,7 @@ it only works for scaled down !</p>
 a relative position and this part of the original image will be extracted.</p>
 
 
-  <div class='pre p1 fill-light'>extract</div>
+  <div class='pre p1 fill-light mt0'>extract</div>
 
   
 
@@ -4058,7 +4016,7 @@ a relative position and this part of the original image will be extracted.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>Image</span> <code class='quiet'>()</code> mask - Image containing a binary mask
+            <span class='code bold'>Image</span> <code class='quiet'>(Any)</code> mask - Image containing a binary mask
 
           </div>
           
@@ -4066,7 +4024,7 @@ a relative position and this part of the original image will be extracted.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>mask</span> <code class='quiet'>()</code> 
+            <span class='code bold'>mask</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -4078,15 +4036,15 @@ a relative position and this part of the original image will be extracted.</p>
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
@@ -4111,7 +4069,7 @@ a relative position and this part of the original image will be extracted.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         A new image
 
       
@@ -4132,22 +4090,21 @@ a relative position and this part of the original image will be extracted.</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#convolution'>
+    <div class='border-bottom' id='Image#convolution'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>convolution</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>convolution</div>
+  <div class='pre p1 fill-light mt0'>convolution</div>
 
   
 
@@ -4174,15 +4131,15 @@ a relative position and this part of the original image will be extracted.</p>
 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
@@ -4240,7 +4197,7 @@ a relative position and this part of the original image will be extracted.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#Image">Image</a></code>:
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
         
       
     
@@ -4260,22 +4217,21 @@ a relative position and this part of the original image will be extracted.</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#getHistogram'>
+    <div class='border-bottom' id='Image#getHistogram'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>getHistogram</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>getHistogram</div>
+  <div class='pre p1 fill-light mt0'>getHistogram</div>
 
   
 
@@ -4296,21 +4252,21 @@ a relative position and this part of the original image will be extracted.</p>
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.maxSlots</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.maxSlots</span> <code class='quiet'>Any</code>
                   
                     (default <code>256</code>)
                   </td>
@@ -4318,13 +4274,13 @@ a relative position and this part of the original image will be extracted.</p>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.channel</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.channel</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.useAlpha</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.useAlpha</span> <code class='quiet'>Any</code>
                   
                     (default <code>true</code>)
                   </td>
@@ -4357,22 +4313,21 @@ a relative position and this part of the original image will be extracted.</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#getHistograms'>
+    <div class='border-bottom' id='Image#getHistograms'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>getHistograms</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>getHistograms</div>
+  <div class='pre p1 fill-light mt0'>getHistograms</div>
 
   
 
@@ -4393,21 +4348,21 @@ a relative position and this part of the original image will be extracted.</p>
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.maxSlots</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.maxSlots</span> <code class='quiet'>Any</code>
                   
                     (default <code>256</code>)
                   </td>
@@ -4415,7 +4370,7 @@ a relative position and this part of the original image will be extracted.</p>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.useAlpha</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.useAlpha</span> <code class='quiet'>Any</code>
                   
                     (default <code>true</code>)
                   </td>
@@ -4448,22 +4403,21 @@ a relative position and this part of the original image will be extracted.</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#colorHistogram'>
+    <div class='border-bottom' id='Image#colorHistogram'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>colorHistogram</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>colorHistogram</div>
+  <div class='pre p1 fill-light mt0'>colorHistogram</div>
 
   
 
@@ -4484,21 +4438,21 @@ a relative position and this part of the original image will be extracted.</p>
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.useAlpha</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.useAlpha</span> <code class='quiet'>Any</code>
                   
                     (default <code>true</code>)
                   </td>
@@ -4506,7 +4460,7 @@ a relative position and this part of the original image will be extracted.</p>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.nbSlots</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.nbSlots</span> <code class='quiet'>Any</code>
                   
                     (default <code>512</code>)
                   </td>
@@ -4539,23 +4493,22 @@ a relative position and this part of the original image will be extracted.</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#min'>
+    <div class='border-bottom' id='Image#min'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>min</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Returns an array with the minimal value of each channel</p>
 
 
-  <div class='pre p1 fill-light'>min</div>
+  <div class='pre p1 fill-light mt0'>min</div>
 
   
 
@@ -4593,23 +4546,22 @@ a relative position and this part of the original image will be extracted.</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#max'>
+    <div class='border-bottom' id='Image#max'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>max</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Returns an array with the maximal value of each channel</p>
 
 
-  <div class='pre p1 fill-light'>max</div>
+  <div class='pre p1 fill-light mt0'>max</div>
 
   
 
@@ -4647,23 +4599,22 @@ a relative position and this part of the original image will be extracted.</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#sum'>
+    <div class='border-bottom' id='Image#sum'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>sum</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Returns an array with the sum of the values of each channel</p>
 
 
-  <div class='pre p1 fill-light'>sum</div>
+  <div class='pre p1 fill-light mt0'>sum</div>
 
   
 
@@ -4701,23 +4652,22 @@ a relative position and this part of the original image will be extracted.</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#mean'>
+    <div class='border-bottom' id='Image#mean'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>mean</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Returns an array with the average value of each channel</p>
 
 
-  <div class='pre p1 fill-light'>mean</div>
+  <div class='pre p1 fill-light mt0'>mean</div>
 
   
 
@@ -4755,23 +4705,22 @@ a relative position and this part of the original image will be extracted.</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#pixelsArray'>
+    <div class='border-bottom' id='Image#pixelsArray'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>pixelsArray</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Allows to generate an  array of pixels for an image binary image (bit depth = 1)</p>
 
 
-  <div class='pre p1 fill-light'>pixelsArray</div>
+  <div class='pre p1 fill-light mt0'>pixelsArray</div>
 
   
 
@@ -4811,22 +4760,21 @@ a relative position and this part of the original image will be extracted.</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#relativePosition'>
+    <div class='border-bottom' id='Image#relativePosition'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>relativePosition</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>relativePosition</div>
+  <div class='pre p1 fill-light mt0'>relativePosition</div>
 
   
 
@@ -4842,7 +4790,7 @@ a relative position and this part of the original image will be extracted.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>targetImage</span> <code class='quiet'>()</code> 
+            <span class='code bold'>targetImage</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -4868,22 +4816,21 @@ a relative position and this part of the original image will be extracted.</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#svd'>
+    <div class='border-bottom' id='Image#svd'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>svd</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>svd</div>
+  <div class='pre p1 fill-light mt0'>svd</div>
 
   
 
@@ -4913,23 +4860,22 @@ a relative position and this part of the original image will be extracted.</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Image#countAlphaPixels'>
+    <div class='border-bottom' id='Image#countAlphaPixels'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>countAlphaPixels</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Returns the number of transparent pixels</p>
 
 
-  <div class='pre p1 fill-light'>countAlphaPixels</div>
+  <div class='pre p1 fill-light mt0'>countAlphaPixels</div>
 
   
 
@@ -4960,21 +4906,21 @@ a relative position and this part of the original image will be extracted.</p>
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.alpha</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.alpha</span> <code class='quiet'>Any</code>
                   
                     (default <code>1</code>)
                   </td>
@@ -5022,18 +4968,18 @@ a relative position and this part of the original image will be extracted.</p>
   
 </section>
 
-            
           
-            
-              <section class='py2 clearfix'>
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
-    <h2 class='fl' id='Shape'>
+    <h3 class='fl m0' id='shape'>
       Shape
-    </h2>
+    </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/edb23d229a7481252529f10842595d0d730e0278/src/util/shape.js#L25-L71'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/4630f54163e4adc50648a6632f5c51ab1676c426/src/util/shape.js#L25-L71'>
       <span>src/util/shape.js</span>
       </a>
     
@@ -5043,7 +4989,7 @@ a relative position and this part of the original image will be extracted.</p>
   <p>Class representing a shape</p>
 
 
-  <div class='pre p1 fill-light'>Shape()</div>
+  <div class='pre p1 fill-light mt0'>new Shape()</div>
 
   
 
@@ -5070,18 +5016,18 @@ a relative position and this part of the original image will be extracted.</p>
   
 </section>
 
-            
           
-            
-              <section class='py2 clearfix'>
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
-    <h2 class='fl' id='ROIManager'>
+    <h3 class='fl m0' id='roimanager'>
       ROIManager
-    </h2>
+    </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/edb23d229a7481252529f10842595d0d730e0278/src/image/roi/manager.js#L16-L147'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/4630f54163e4adc50648a6632f5c51ab1676c426/src/image/roi/manager.js#L16-L147'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -5093,7 +5039,7 @@ and may contain many layers. Each layer is characterized by a label that is
 name by default &#x27;default&#x27;</p>
 
 
-  <div class='pre p1 fill-light'>ROIManager(image: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>, options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</div>
+  <div class='pre p1 fill-light mt0'>new ROIManager(image: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>, options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</div>
 
   
 
@@ -5109,7 +5055,7 @@ name by default &#x27;default&#x27;</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>image</span> <code class='quiet'>(<a href="#Image">Image</a>)</code> 
+            <span class='code bold'>image</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>)</code> 
           </div>
           
         </div>
@@ -5138,22 +5084,21 @@ name by default &#x27;default&#x27;</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='keyline-bottom' id='ROIManager#putPixels'>
+    <div class='border-bottom' id='ROIManager#putPixels'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
-            <span class='code strong strong truncate'>putPixels</span>
-            <span class='quiet code space-right2'>(pixels, [options])</span>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
+            <span class='code strong strong truncate'>putPixels(pixels, [options])</span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>putPixels(pixels: [[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]], options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {}))</div>
+  <div class='pre p1 fill-light mt0'>putPixels(pixels: [[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]], options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {}))</div>
 
   
 
@@ -5203,23 +5148,22 @@ name by default &#x27;default&#x27;</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='ROIManager#ROIMap'>
+    <div class='border-bottom' id='ROIManager#ROIMap'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>ROIMap</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   <p>Annotates each point to define to which area it belongs</p>
 
 
-  <div class='pre p1 fill-light'>ROIMap</div>
+  <div class='pre p1 fill-light mt0'>ROIMap</div>
 
   
 
@@ -5249,22 +5193,21 @@ name by default &#x27;default&#x27;</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='ROIManager#ROIMap'>
+    <div class='border-bottom' id='ROIManager#ROIMap'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>ROIMap</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>ROIMap</div>
+  <div class='pre p1 fill-light mt0'>ROIMap</div>
 
   
 
@@ -5294,22 +5237,21 @@ name by default &#x27;default&#x27;</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='ROIManager#fromExtrema'>
+    <div class='border-bottom' id='ROIManager#fromExtrema'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>fromExtrema</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>fromExtrema</div>
+  <div class='pre p1 fill-light mt0'>fromExtrema</div>
 
   
 
@@ -5330,21 +5272,21 @@ name by default &#x27;default&#x27;</p>
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.allowCorner</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.allowCorner</span> <code class='quiet'>Any</code>
                   
                     (default <code>true</code>)
                   </td>
@@ -5352,13 +5294,13 @@ name by default &#x27;default&#x27;</p>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.onlyTop</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.onlyTop</span> <code class='quiet'>Any</code>
                   </td>
                   <td class='break-word'><span></span></td>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.invert</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.invert</span> <code class='quiet'>Any</code>
                   
                     (default <code>false</code>)
                   </td>
@@ -5391,16 +5333,15 @@ name by default &#x27;default&#x27;</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='ROIManager#createROI'>
+    <div class='border-bottom' id='ROIManager#createROI'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>createROI</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
@@ -5409,7 +5350,7 @@ The roiMap contains mainty an array of identifiers that define
 for each pixels to which ROI it belongs</p>
 
 
-  <div class='pre p1 fill-light'>createROI</div>
+  <div class='pre p1 fill-light mt0'>createROI</div>
 
   
 
@@ -5425,7 +5366,7 @@ for each pixels to which ROI it belongs</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>roiMap</span> <code class='quiet'>()</code> 
+            <span class='code bold'>roiMap</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -5458,18 +5399,18 @@ for each pixels to which ROI it belongs</p>
   
 </section>
 
-            
           
-            
-              <section class='py2 clearfix'>
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
-    <h2 class='fl' id='ROIMap'>
+    <h3 class='fl m0' id='roimap'>
       ROIMap
-    </h2>
+    </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/edb23d229a7481252529f10842595d0d730e0278/src/image/roi/ROIMap.js#L7-L17'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/4630f54163e4adc50648a6632f5c51ab1676c426/src/image/roi/ROIMap.js#L7-L17'>
       <span>src/image/roi/ROIMap.js</span>
       </a>
     
@@ -5480,7 +5421,7 @@ for each pixels to which ROI it belongs</p>
 the region to which belongs each of the pixels</p>
 
 
-  <div class='pre p1 fill-light'>ROIMap()</div>
+  <div class='pre p1 fill-light mt0'>new ROIMap()</div>
 
   
 
@@ -5507,18 +5448,18 @@ the region to which belongs each of the pixels</p>
   
 </section>
 
-            
           
-            
-              <section class='py2 clearfix'>
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
-    <h2 class='fl' id='ROI'>
+    <h3 class='fl m0' id='roi'>
       ROI
-    </h2>
+    </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/edb23d229a7481252529f10842595d0d730e0278/src/image/roi/roi.js#L10-L156'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/4630f54163e4adc50648a6632f5c51ab1676c426/src/image/roi/roi.js#L10-L156'>
       <span>src/image/roi/roi.js</span>
       </a>
     
@@ -5528,7 +5469,7 @@ the region to which belongs each of the pixels</p>
   <p>Class to manage Region Of Interests</p>
 
 
-  <div class='pre p1 fill-light'>ROI()</div>
+  <div class='pre p1 fill-light mt0'>new ROI()</div>
 
   
 
@@ -5554,16 +5495,15 @@ the region to which belongs each of the pixels</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='keyline-bottom' id='ROI#surround'>
+    <div class='border-bottom' id='ROI#surround'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>surround</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
@@ -5587,7 +5527,7 @@ The cross will be surrouned by 4 differents zones
 <p>However in most of the cases it will be an array of one element</p>
 
 
-  <div class='pre p1 fill-light'>surround</div>
+  <div class='pre p1 fill-light mt0'>surround</div>
 
   
 
@@ -5617,16 +5557,15 @@ The cross will be surrouned by 4 differents zones
       </div>
     </div>
   
-    <div class='keyline-bottom' id='ROI#external'>
+    <div class='border-bottom' id='ROI#external'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>external</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
@@ -5636,7 +5575,7 @@ because we will ignore those special pixels of the rectangle
 border that don&#x27;t have neighbours all around them.</p>
 
 
-  <div class='pre p1 fill-light'>external</div>
+  <div class='pre p1 fill-light mt0'>external</div>
 
   
 
@@ -5666,16 +5605,15 @@ border that don&#x27;t have neighbours all around them.</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='ROI#contour'>
+    <div class='border-bottom' id='ROI#contour'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>contour</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
@@ -5685,7 +5623,7 @@ All the pixels that touch the box are part of the border and
 are calculated in the getBoxPixels procedure</p>
 
 
-  <div class='pre p1 fill-light'>contour</div>
+  <div class='pre p1 fill-light mt0'>contour</div>
 
   
 
@@ -5715,16 +5653,15 @@ are calculated in the getBoxPixels procedure</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='ROI#border'>
+    <div class='border-bottom' id='ROI#border'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>border</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
@@ -5735,7 +5672,7 @@ All the pixels that touch the box are part of the border and
 are calculated in the getBoxPixels procedure</p>
 
 
-  <div class='pre p1 fill-light'>border</div>
+  <div class='pre p1 fill-light mt0'>border</div>
 
   
 
@@ -5772,18 +5709,18 @@ are calculated in the getBoxPixels procedure</p>
   
 </section>
 
-            
           
-            
-              <section class='py2 clearfix'>
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
   <div class='clearfix'>
-    <h2 class='fl' id='Stack'>
+    <h3 class='fl m0' id='stack'>
       Stack
-    </h2>
+    </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/edb23d229a7481252529f10842595d0d730e0278/src/stack/stack.js#L15-L30'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/4630f54163e4adc50648a6632f5c51ab1676c426/src/stack/stack.js#L15-L30'>
       <span>src/stack/stack.js</span>
       </a>
     
@@ -5793,7 +5730,7 @@ are calculated in the getBoxPixels procedure</p>
   <p>Class representing stack of images</p>
 
 
-  <div class='pre p1 fill-light'>Stack(images: )</div>
+  <div class='pre p1 fill-light mt0'>new Stack(images: Any)</div>
 
   
 
@@ -5809,7 +5746,7 @@ are calculated in the getBoxPixels procedure</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>images</span> <code class='quiet'>()</code> 
+            <span class='code bold'>images</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -5831,22 +5768,21 @@ are calculated in the getBoxPixels procedure</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
-    <div class='keyline-bottom' id='Stack#matchAndCrop'>
+    <div class='border-bottom' id='Stack#matchAndCrop'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>matchAndCrop</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>matchAndCrop</div>
+  <div class='pre p1 fill-light mt0'>matchAndCrop</div>
 
   
 
@@ -5867,21 +5803,21 @@ are calculated in the getBoxPixels procedure</p>
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5'>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
             <colgroup>
               <col width='30%' />
               <col width='70%' />
             </colgroup>
             <thead>
               <tr class='bold fill-light'>
-                <td>Name</td>
-                <td>Description</td>
+                <th>Name</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'>Any</code>
                   
                     (default <code>&#39;matchToPrevious&#39;</code>)
                   </td>
@@ -5889,7 +5825,7 @@ are calculated in the getBoxPixels procedure</p>
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.ignoreBorder</span> <code class='quiet'></code>
+                  <td class='break-word'><span class='code bold'>$0.ignoreBorder</span> <code class='quiet'>Any</code>
                   
                     (default <code>[0,0]</code>)
                   </td>
@@ -5922,22 +5858,21 @@ are calculated in the getBoxPixels procedure</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Stack#min'>
+    <div class='border-bottom' id='Stack#min'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>min</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>min</div>
+  <div class='pre p1 fill-light mt0'>min</div>
 
   
 
@@ -5967,22 +5902,21 @@ are calculated in the getBoxPixels procedure</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Stack#max'>
+    <div class='border-bottom' id='Stack#max'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>max</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>max</div>
+  <div class='pre p1 fill-light mt0'>max</div>
 
   
 
@@ -6012,22 +5946,21 @@ are calculated in the getBoxPixels procedure</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Stack#median'>
+    <div class='border-bottom' id='Stack#median'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>median</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>median</div>
+  <div class='pre p1 fill-light mt0'>median</div>
 
   
 
@@ -6057,22 +5990,21 @@ are calculated in the getBoxPixels procedure</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Stack#histogram'>
+    <div class='border-bottom' id='Stack#histogram'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>histogram</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>histogram</div>
+  <div class='pre p1 fill-light mt0'>histogram</div>
 
   
 
@@ -6088,7 +6020,7 @@ are calculated in the getBoxPixels procedure</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>()</code> 
+            <span class='code bold'>options</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -6114,22 +6046,21 @@ are calculated in the getBoxPixels procedure</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Stack#histograms'>
+    <div class='border-bottom' id='Stack#histograms'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>histograms</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>histograms</div>
+  <div class='pre p1 fill-light mt0'>histograms</div>
 
   
 
@@ -6145,7 +6076,7 @@ are calculated in the getBoxPixels procedure</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>()</code> 
+            <span class='code bold'>options</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
@@ -6171,22 +6102,21 @@ are calculated in the getBoxPixels procedure</p>
       </div>
     </div>
   
-    <div class='keyline-bottom' id='Stack#average'>
+    <div class='border-bottom' id='Stack#average'>
       <div class="clearfix small pointer toggle-sibling">
-        <div class="pad1y contain">
-            <a class='icon pin-right pad1y dark-link caret-right'></a>
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'></a>
             <span class='code strong strong truncate'>average</span>
-            <span class='quiet code space-right2'></span>
         </div>
       </div>
-      <div class="clearfix hidden toggle-target">
-        <section class='py2 clearfix'>
+      <div class="clearfix hide toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
 
   
 
   
 
-  <div class='pre p1 fill-light'>average</div>
+  <div class='pre p1 fill-light mt0'>average</div>
 
   
 
@@ -6237,9 +6167,8 @@ are calculated in the getBoxPixels procedure</p>
   
 </section>
 
-            
           
-        </div>
+        
       </div>
     </div>
   </div>
