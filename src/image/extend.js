@@ -40,6 +40,8 @@ import getPixelsGrid from './utility/getPixelsGrid';
 import getBestMatch from './utility/getBestMatch';
 import getRow from './utility/getRow';
 import getColumn from './utility/getColumn';
+import getMatrix from './utility/getMatrix';
+import setMatrix from './utility/setMatrix';
 import paintMasks from './operator/paintMasks';
 import paintPixels from './operator/paintPixels';
 import extract from './operator/extract';
@@ -97,6 +99,8 @@ export default function extend(Image) {
 
     Image.extendMethod('getRow', getRow);
     Image.extendMethod('getColumn', getColumn);
+    Image.extendMethod('getMatrix', getMatrix);
+    Image.extendMethod('setMatrix', setMatrix);
 
     Image.extendMethod('split', split);
     Image.extendMethod('getChannel', getChannel);

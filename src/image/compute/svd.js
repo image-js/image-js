@@ -1,6 +1,7 @@
 let Matrix = require('ml-matrix');
 
 /**
+ * TODO would be suprised if this stuff works
  * @memberof Image
  * @instance
  */

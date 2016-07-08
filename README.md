@@ -58,7 +58,7 @@ cp /usr/X11/lib/libfreetype.dylib /usr/local/lib/
 
 ### NPM scripts
 
-NPM scripts allow to run easily certain tasks.  
+NPM scripts allow to run easily certain tasks. They are defined in the script section of the package.json file.
 To run any script, use the command `npm run script-name`.
 
 Script name | Description
@@ -71,6 +71,10 @@ test | Run the test suite and other checks. Always run this before pushing to Gi
 test-mocha | Run the test suite
 watch-browser | build continuously the browser test file
 watch-node | build continuously the lib files
+build-doc | build the documentation in the doc folder",
+publish-doc | publish the documentation in gh-pages branch that is available on https://image-js.github.io/core
+eslint-fix | try to fix as well as it can the syntax errors in the code
+
 
 ## License
 

@@ -69,7 +69,7 @@ export default class ROI {
 
      However in most of the cases it will be an array of one element
      */
-    
+
     get surround() {
         if (this.computed.surround) return this.computed.surround;
         return this.computed.surround = getSurroundingIDs(this);
