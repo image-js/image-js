@@ -21,7 +21,7 @@ describe('check getMatrix class', function () {
 
         let image2 = new Image(5,4, {kind:'GREY'});
         image2.setMatrix(matrix);
-        
+
         image.data.should.eql(Array.from(image2.data));
     });
 });
