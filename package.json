@@ -76,6 +76,7 @@
   "dependencies": {
     "array-includes": "^3.0.1",
     "atob-lite": "^1.0.0",
+    "disjoint-set": "^1.1.8",
     "extend": "^3.0.0",
     "fast-png": "1.1.0",
     "is-array-type": "^1.0.0",
