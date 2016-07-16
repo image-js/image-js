@@ -18,7 +18,7 @@ export default class ROIManager {
     constructor(image, options = {}) {
         this._image = image;
         this._options = options;
-        if (!this._options.lebel) this._options.label = 'default';
+        if (!this._options.label) this._options.label = 'default';
         this._layers = {};
         this._painted = null;
     }
