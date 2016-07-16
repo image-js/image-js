@@ -4,13 +4,33 @@ import ROIMap from './../ROIMap';
 
 const direction4X = [-1,  0];
 const direction4Y = [ 0, -1];
-const neighbors4 = [null, null];
+const neighbours4 = [null, null];
 
 const direction8X = [-1, -1,  0,  1];
 const direction8Y = [ 0, -1, -1, -1];
-const neighbors8 = [null, null, null, null];
+const neighbours8 = [null, null, null, null];
 
-export default function createROIMapFromMask2(mask) {
+/*
+Implementation of the connected-component labeling algorithm
+ */
+export default function createROIMapFromMask2(mask, {
+    neighbours = 8
+} = {}) {
+    
+    let directionX;
+    let directionY;
+    let neighboursList;
+    if (neighbours === 8) {
+        directionX = direction8X;
+        directionY = direction8Y;
+        neighboursList = neighbours8;
+    } else if (neighbours === 4) {
+        directionX = direction4X;
+        directionY = direction4Y;
+        neighboursList = neighbours4;
+    } else {
+        throw new RangeError('unsupported neighbours count: ' + neighbours);
+    }
 
     const size = mask.size;
     const width = mask.width;
@@ -24,17 +44,17 @@ export default function createROIMapFromMask2(mask) {
             // true means out of background
             if (mask.getBitXY(i, j)) {
                 let smallestNeighbor;
-                for (let k = 0; k < 2; k++) {
-                    let ii = i + direction4X[k];
-                    let jj = j + direction4Y[k];
+                for (let k = 0; k < neighboursList.length; k++) {
+                    let ii = i + directionX[k];
+                    let jj = j + directionY[k];
                     if (ii >= 0 && jj >= 0 && ii < width && jj < height) {
                         let neighbor = mask.getBitXY(ii, jj);
                         if (!neighbor) {
-                            neighbors4[k] = null;
+                            neighboursList[k] = null;
                         } else {
-                            neighbors4[k] = labels[ii + jj * width];
-                            if (!smallestNeighbor || neighbors4[k].label < smallestNeighbor.label) {
-                                smallestNeighbor = neighbors4[k];
+                            neighboursList[k] = labels[ii + jj * width];
+                            if (!smallestNeighbor || neighboursList[k].label < smallestNeighbor.label) {
+                                smallestNeighbor = neighboursList[k];
                             }
                         }
                     }
@@ -45,9 +65,9 @@ export default function createROIMapFromMask2(mask) {
                     labels[i + j * width] = label;
                 } else {
                     labels[i + j * width] = smallestNeighbor;
-                    for (let k = 0; k < 2; k++) {
-                        if (neighbors4[k]) {
-                            linked.union(smallestNeighbor, neighbors4[k]);
+                    for (let k = 0; k < neighboursList.length; k++) {
+                        if (neighboursList[k]) {
+                            linked.union(smallestNeighbor, neighboursList[k]);
                         }
                     }
                 }
