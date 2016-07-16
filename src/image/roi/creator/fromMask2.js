@@ -16,7 +16,7 @@ Implementation of the connected-component labeling algorithm
 export default function createROIMapFromMask2(mask, {
     neighbours = 8
 } = {}) {
-    
+
     let directionX;
     let directionY;
     let neighboursList;
