@@ -7,11 +7,15 @@ Image.load('./test/img/moon/nocrop/BloodMoonTest-6.png').then(function (img) {
     var roiManager = img.getROIManager();
     var mask = img.grey().mask();
 
-    console.time('test');
+    console.time('mask1');
+    roiManager.putMask(mask);
+    console.timeEnd('mask1');
+
+    console.time('mask2');
     //for(var i = 0; i < 10000; i++) {
         roiManager.putMask2(mask);
     //}
-    console.timeEnd('test');
+    console.timeEnd('mask2');
 
 }, function (err) {
     console.error(err);

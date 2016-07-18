@@ -1,5 +1,6 @@
 import DisjointSet from 'ml-disjoint-set';
 
+import SequenceId from './SequenceId';
 import ROIMap from './../ROIMap';
 
 const direction4X = [-1,  0];
@@ -76,15 +77,16 @@ export default function createROIMapFromMask2(mask, {
     }
 
     const pixels = new Int16Array(size);
-    for (let i = 0; i < width; i++) {
-        for (let j = 0; j < height; j++) {
+    const sequenceId = new SequenceId();
+    for (let j = 0; j < height; j++) {
+        for (let i = 0; i < width; i++) {
             const index = i + j * width;
             if (mask.getBit(index)) {
-                pixels[index] = linked.find(labels[index]).value;
+                pixels[index] = sequenceId.getId(linked.find(labels[index]));
             }
         }
     }
 
-    return new ROIMap(mask, pixels, 0, currentLabel);
+    return new ROIMap(mask, pixels, 0, sequenceId.id);
 
 }
