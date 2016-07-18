@@ -26,8 +26,12 @@ load('cells/cells.jpg').then(function (img) {
 
     var mask = img.grey().mask();
     var manager = img.getROIManager();
+    console.time('1');
     manager.putMask(mask, {label: 'mask1'});
+    console.timeEnd('1');
+    console.time('2');
     manager.putMask2(mask, {label: 'mask2'});
+    console.timeEnd('2');
     console.log(manager);
 
 });

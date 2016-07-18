@@ -1,4 +1,4 @@
-import disjointSet from 'disjoint-set';
+import DisjointSet from 'ml-disjoint-set';
 
 import ROIMap from './../ROIMap';
 
@@ -36,7 +36,7 @@ export default function createROIMapFromMask2(mask, {
     const width = mask.width;
     const height = mask.height;
     const labels = new Array(size);
-    const linked = disjointSet();
+    const linked = new DisjointSet();
 
     let currentLabel = 1;
     for (let j = 0; j < height; j++) {
@@ -53,16 +53,14 @@ export default function createROIMapFromMask2(mask, {
                             neighboursList[k] = null;
                         } else {
                             neighboursList[k] = labels[ii + jj * width];
-                            if (!smallestNeighbor || neighboursList[k].label < smallestNeighbor.label) {
+                            if (!smallestNeighbor || neighboursList[k].value < smallestNeighbor.value) {
                                 smallestNeighbor = neighboursList[k];
                             }
                         }
                     }
                 }
                 if (!smallestNeighbor) {
-                    let label = {label:currentLabel++};
-                    linked.add(label);
-                    labels[i + j * width] = label;
+                    labels[i + j * width] = linked.add(currentLabel++);
                 } else {
                     labels[i + j * width] = smallestNeighbor;
                     for (let k = 0; k < neighboursList.length; k++) {
@@ -79,7 +77,7 @@ export default function createROIMapFromMask2(mask, {
     for (let i = 0; i < width; i++) {
         for (let j = 0; j < height; j++) {
             if (mask.getBitXY(i, j)) {
-                pixels[i + j * width] = linked.find(labels[i + j * width]) + 1;
+                pixels[i + j * width] = linked.find(labels[i + j * width]).value;
             }
         }
     }
