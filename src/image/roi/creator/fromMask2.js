@@ -42,17 +42,19 @@ export default function createROIMapFromMask2(mask, {
     for (let j = 0; j < height; j++) {
         for (let i = 0; i < width; i++) {
             // true means out of background
-            if (mask.getBitXY(i, j)) {
+            const index = i + j * width;
+            if (mask.getBit(index)) {
                 let smallestNeighbor;
                 for (let k = 0; k < neighboursList.length; k++) {
                     let ii = i + directionX[k];
                     let jj = j + directionY[k];
                     if (ii >= 0 && jj >= 0 && ii < width && jj < height) {
-                        let neighbor = mask.getBitXY(ii, jj);
+                        let index = ii + jj * width;
+                        let neighbor = mask.getBit(index);
                         if (!neighbor) {
                             neighboursList[k] = null;
                         } else {
-                            neighboursList[k] = labels[ii + jj * width];
+                            neighboursList[k] = labels[index];
                             if (!smallestNeighbor || neighboursList[k].value < smallestNeighbor.value) {
                                 smallestNeighbor = neighboursList[k];
                             }
@@ -60,11 +62,11 @@ export default function createROIMapFromMask2(mask, {
                     }
                 }
                 if (!smallestNeighbor) {
-                    labels[i + j * width] = linked.add(currentLabel++);
+                    labels[index] = linked.add(currentLabel++);
                 } else {
-                    labels[i + j * width] = smallestNeighbor;
+                    labels[index] = smallestNeighbor;
                     for (let k = 0; k < neighboursList.length; k++) {
-                        if (neighboursList[k]) {
+                        if (neighboursList[k] && neighboursList[k] !== smallestNeighbor) {
                             linked.union(smallestNeighbor, neighboursList[k]);
                         }
                     }
@@ -76,8 +78,9 @@ export default function createROIMapFromMask2(mask, {
     const pixels = new Int16Array(size);
     for (let i = 0; i < width; i++) {
         for (let j = 0; j < height; j++) {
-            if (mask.getBitXY(i, j)) {
-                pixels[i + j * width] = linked.find(labels[i + j * width]).value;
+            const index = i + j * width;
+            if (mask.getBit(index)) {
+                pixels[index] = linked.find(labels[index]).value;
             }
         }
     }
