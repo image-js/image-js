@@ -1,6 +1,4 @@
-'use strict';
-
-class SequenceId {
+export default class SequenceId {
     constructor() {
         this.id = 0;
         this.map = new Map();
@@ -14,5 +12,3 @@ class SequenceId {
         return id;
     }
 }
-
-module.exports = SequenceId;

@@ -8,15 +8,11 @@ Image.load('./test/img/moon/nocrop/BloodMoonTest-6.png').then(function (img) {
     var mask = img.grey().mask();
 
     console.time('mask1');
-    roiManager.putMask(mask);
+    roiManager.putMask(mask, {label: 'mask1'});
     console.timeEnd('mask1');
 
     console.time('mask2');
-    //for(var i = 0; i < 10000; i++) {
-        roiManager.putMask2(mask);
-    //}
+    roiManager.putMask2(mask, {label: 'mask2', neighbours: 4});
     console.timeEnd('mask2');
 
-}, function (err) {
-    console.error(err);
-});
+}).catch(console.error);

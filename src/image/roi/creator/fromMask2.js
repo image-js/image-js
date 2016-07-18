@@ -37,56 +37,66 @@ export default function createROIMapFromMask2(mask, {
     const width = mask.width;
     const height = mask.height;
     const labels = new Array(size);
-    const linked = new DisjointSet();
+    const pixels = new Int16Array(size);
+    const linkedPositive = new DisjointSet();
+    const linkedNegative = new DisjointSet();
 
     let currentLabel = 1;
+    let linked, bool;
     for (let j = 0; j < height; j++) {
         for (let i = 0; i < width; i++) {
             // true means out of background
             const index = i + j * width;
             if (mask.getBit(index)) {
-                let smallestNeighbor;
-                for (let k = 0; k < neighboursList.length; k++) {
-                    let ii = i + directionX[k];
-                    let jj = j + directionY[k];
-                    if (ii >= 0 && jj >= 0 && ii < width && jj < height) {
-                        let index = ii + jj * width;
-                        let neighbor = mask.getBit(index);
-                        if (!neighbor) {
-                            neighboursList[k] = null;
-                        } else {
-                            neighboursList[k] = labels[index];
-                            if (!smallestNeighbor || neighboursList[k].value < smallestNeighbor.value) {
-                                smallestNeighbor = neighboursList[k];
-                            }
+                linked = linkedPositive;
+                bool = 1;
+            } else {
+                linked = linkedNegative;
+                bool = 0;
+            }
+            let smallestNeighbor;
+            for (let k = 0; k < neighboursList.length; k++) {
+                let ii = i + directionX[k];
+                let jj = j + directionY[k];
+                if (ii >= 0 && jj >= 0 && ii < width && jj < height) {
+                    let index = ii + jj * width;
+                    let neighbor = mask.getBit(index);
+                    if (neighbor ^ bool) {
+                        neighboursList[k] = null;
+                    } else {
+                        neighboursList[k] = labels[index];
+                        if (!smallestNeighbor || neighboursList[k].value < smallestNeighbor.value) {
+                            smallestNeighbor = neighboursList[k];
                         }
                     }
                 }
-                if (!smallestNeighbor) {
-                    labels[index] = linked.add(currentLabel++);
-                } else {
-                    labels[index] = smallestNeighbor;
-                    for (let k = 0; k < neighboursList.length; k++) {
-                        if (neighboursList[k] && neighboursList[k] !== smallestNeighbor) {
-                            linked.union(smallestNeighbor, neighboursList[k]);
-                        }
+            }
+            if (!smallestNeighbor) {
+                labels[index] = linked.add(currentLabel++);
+            } else {
+                labels[index] = smallestNeighbor;
+                for (let k = 0; k < neighboursList.length; k++) {
+                    if (neighboursList[k] && neighboursList[k] !== smallestNeighbor) {
+                        linked.union(smallestNeighbor, neighboursList[k]);
                     }
                 }
             }
         }
     }
 
-    const pixels = new Int16Array(size);
-    const sequenceId = new SequenceId();
+    const sequenceIdPositive = new SequenceId();
+    const sequenceIdNegative = new SequenceId();
     for (let j = 0; j < height; j++) {
         for (let i = 0; i < width; i++) {
             const index = i + j * width;
             if (mask.getBit(index)) {
-                pixels[index] = sequenceId.getId(linked.find(labels[index]));
+                pixels[index] = sequenceIdPositive.getId(linkedPositive.find(labels[index]));
+            } else {
+                pixels[index] = 0 - sequenceIdNegative.getId(linkedNegative.find(labels[index]));
             }
         }
     }
 
-    return new ROIMap(mask, pixels, 0, sequenceId.id);
+    return new ROIMap(mask, pixels, 0 - sequenceIdNegative.id, sequenceIdPositive.id);
 
 }
