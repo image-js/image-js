@@ -109,8 +109,6 @@ export default class ROIManager {
     getROIMasks(options = {}) {
         let rois = this.getROI(options);
 
-        console.log('ASDFASASDFASASDF',rois);
-
         let masks = new Array(rois.length);
         for (let i = 0; i < rois.length; i++) {
             masks[i] = rois[i].mask;
