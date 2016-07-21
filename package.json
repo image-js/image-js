@@ -82,7 +82,7 @@
     "is-integer": "^1.0.6",
     "ml-disjoint-set": "^1.0.0",
     "ml-matrix": "^1.0.3",
-    "ml-regression": "^1.1.1",
+    "ml-regression": "^3.1.0",
     "new-array": "^1.0.0",
     "string-includes": "^1.0.0",
     "tiff": "^1.1.1",
