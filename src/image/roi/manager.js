@@ -90,6 +90,7 @@ export default class ROIManager {
         } = {}) {
 
         let allROIs = this._layers[label].roi;
+
         let rois = new Array(allROIs.length);
         let ptr = 0;
         for (let i = 0; i < allROIs.length; i++) {
@@ -107,6 +108,9 @@ export default class ROIManager {
 
     getROIMasks(options = {}) {
         let rois = this.getROI(options);
+
+        console.log('ASDFASASDFASASDF',rois);
+
         let masks = new Array(rois.length);
         for (let i = 0; i < rois.length; i++) {
             masks[i] = rois[i].mask;
@@ -132,6 +136,7 @@ export default class ROIManager {
     getMask(options = {}) {
         let mask = new Image(this._image.width, this._image.height, {kind:'BINARY'});
         let masks = this.getROIMasks(options);
+
         for (let i = 0; i < masks.length; i++) {
             let roi = masks[i];
             // we need to find the parent image to calculate the relative position

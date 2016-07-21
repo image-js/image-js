@@ -1,6 +1,5 @@
 import DisjointSet from 'ml-disjoint-set';
 
-import SequenceId from './SequenceId';
 import ROIMap from './../ROIMap';
 
 const direction4X = [-1,  0];
@@ -84,6 +83,7 @@ export default function createROIMapFromMask2(mask, {
         }
     }
 
+
     const sequenceIdPositive = new SequenceId();
     const sequenceIdNegative = new SequenceId();
     for (let j = 0; j < height; j++) {
@@ -97,6 +97,7 @@ export default function createROIMapFromMask2(mask, {
         }
     }
 
-    return new ROIMap(mask, pixels, 0 - sequenceIdNegative.id, sequenceIdPositive.id);
+
+    return new ROIMap(mask, pixels);
 
 }

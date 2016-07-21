@@ -25,6 +25,10 @@ describe('we check that each ROI is surrounded by the expect zones', function ()
         let result = roiManager.getROI();
         result.should.have.lengthOf(3);
 
+        result.sort(function (a,b) {
+            return b.surround[0] - a.surround[0];
+        });
+
         result[0].surround.should.eql([1]);
         result[1].surround.should.eql([1]);
         result[2].surround.should.eql([-1,-2]);

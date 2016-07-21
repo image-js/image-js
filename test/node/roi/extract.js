@@ -17,6 +17,10 @@ describe('we check that we can extract correctly a ROI', function () {
 
             rois.should.be.an.instanceof(Array).and.lengthOf(5);
 
+            rois.sort(function (a,b) {
+                return a.meanX - b.meanX;
+            });
+
             rois[0].internalMapIDs.should.eql([-2,3,2]);
 
             let roiMask = rois[0].getMask();

@@ -8,6 +8,7 @@ describe('we check ROI.getMask', function () {
 
         let roiManager = image.getROIManager();
         roiManager.putPixels(points, {kind: 'smallCross'});
+
         Array.from(roiManager.getPixels()).should.eql([
             0, 1, 0, 0, 4,
             1, 1, 1, 2, 0,
@@ -17,6 +18,8 @@ describe('we check ROI.getMask', function () {
         ]);
 
         let mask = roiManager.getMask({minSurface:5, maxSurface:5});
+
+        // only 2 ROI will be selected !
 
         // should be
         // 01000

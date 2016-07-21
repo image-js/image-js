@@ -30,5 +30,6 @@ export default function fromCoordinates(pixelsToPaint, options = {}) {
             }
         }
     }
-    return new ROIMap(this, mapPixels, 0, positiveID);
+
+    return new ROIMap(this, mapPixels);
 }

@@ -1,7 +1,7 @@
 import ROIMapper from '../../../../src/image/roi/creator/fromMask2';
 import {Image} from '../../common';
 
-describe('we check createROIMapFromMask2', function () {
+describe.only('we check createROIMapFromMask2', function () {
 
     /*
      We will create the following mask

@@ -10,24 +10,33 @@ import ROI from './roi';
 
 export default function createROI(roiMap) {
 
-    let size = roiMap.total;
-    let rois = new Array(size);
-    for (let i = 0; i < size; i++) {
-        let mapID = -roiMap.negative + i;
-        if (i >= roiMap.negative) mapID++;
-        rois[i] = new ROI(roiMap, mapID);
-    }
+    // we need to find all all the different IDs there is in the pixels
     let pixels = roiMap.pixels;
+    let mapIDs = {};
+    for (let i = 0; i < pixels.length; i++) {
+        if (pixels[i] && !mapIDs[pixels[i]]) {
+            mapIDs[pixels[i]] = true;
+            if (pixels[i] > 0) {
+                roiMap.positive++;
+            } else {
+                roiMap.negative++;
+            }
+        }
+    }
 
-    let width = roiMap.parent.width;
-    let height = roiMap.parent.height;
+    let rois = {};
+    for (let mapID in mapIDs) {
+        rois[mapID] = new ROI(roiMap, mapID * 1);
+    }
+
+    let width = roiMap.width;
+    let height = roiMap.height;
 
     for (let x = 0; x < width; x++) {
         for (let y = 0; y < height; y++) {
             let target = y * width + x;
             if (pixels[target] !== 0) {
-                let mapID = pixels[target] + roiMap.negative;
-                if (mapID > roiMap.negative) mapID--;
+                let mapID = pixels[target];
                 if (x < rois[mapID].minX) rois[mapID].minX = x;
                 if (x > rois[mapID].maxX) rois[mapID].maxX = x;
                 if (y < rois[mapID].minY) rois[mapID].minY = y;
@@ -38,11 +47,13 @@ export default function createROI(roiMap) {
             }
         }
     }
-    for (let i = 0; i < size; i++) {
-        let mapID = -roiMap.negative + i;
-        if (i >= roiMap.negative) mapID++;
-        rois[i].meanX /= rois[i].surface;
-        rois[i].meanY /= rois[i].surface;
+
+    let roiArray = [];
+    for (let mapID in mapIDs) {
+        rois[mapID].meanX /= rois[mapID].surface;
+        rois[mapID].meanY /= rois[mapID].surface;
+        roiArray.push(rois[mapID]);
     }
-    return rois;
+
+    return roiArray;
 }

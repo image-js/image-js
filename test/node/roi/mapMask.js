@@ -14,6 +14,10 @@ describe('map a binary image (mask) 2 x 2', function () {
     let pixels = roiManager.getPixels();
     let result = roiManager.getMap();
 
+    pixels.sort(function (a,b) {
+        return b - a;
+    });
+
     it('should have 4 pixels in 2 zones', function () {
         pixels.should.instanceOf(Int16Array).and.have.lengthOf(4);
         pixels[0].should.equal(1);
