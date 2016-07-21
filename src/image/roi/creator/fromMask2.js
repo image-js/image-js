@@ -54,7 +54,7 @@ export default function createROIMapFromMask2(mask, {
                 linked = linkedNegative;
                 bool = 0;
             }
-            let smallestNeighbor;
+            let smallestNeighbor = null;
             for (let k = 0; k < neighboursList.length; k++) {
                 let ii = i + directionX[k];
                 let jj = j + directionY[k];
