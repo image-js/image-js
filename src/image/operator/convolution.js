@@ -1,6 +1,8 @@
 import Image from '../image';
 import {validateArrayOfChannels} from '../../util/channel';
 import {validateKernel} from '../../util/kernel';
+let conv = require('ml-matrix-convolution');
+
 
 /**
  * @memberof Image
@@ -19,58 +21,71 @@ export default function convolution(kernel, {channels, bitDepth, normalize = fal
     let newImage = Image.createFrom(this, {bitDepth: bitDepth});
 
     channels = validateArrayOfChannels(this, channels, true);
-
+    console.log(channels, this.channels);
     let kWidth, kHeight;
+    //Very misterious function. If the kernel is an array only one quadrant is copied to the output matrix,
+    //but if the kernel is already a matrix, nothing is done.
+    //On the other hand, it only consider odd, squared and symmetric kernels. A too restrictive
     ({kWidth, kHeight, kernel} = validateKernel(kernel));
 
-    //calculate divisor
-    if (normalize) {
-        divisor = 0;
-        for (let i = 0; i < kernel.length; i++)
-            for (let j = 0; j < kernel[0].length; j++)
-                divisor += kernel[i][j];
-    }
 
-    if (divisor === 0) {
-        throw new RangeError('convolution: The divisor is equal to zero');
-    }
-
-
+    var halfHeight = Math.floor(kernel.length / 2);
+    var halfWidth = Math.floor(kernel[0].length / 2);
     let clamped = newImage.isClamped;
 
-    for (let channel = 0; channel < channels.length; channel++) {
-        let c = channels[channel];
-        for (let y = kHeight; y < this.height - kHeight; y++) {
-            for (let x = kWidth; x < this.width - kWidth; x++) {
-                let sum = 0;
-                for (let j = -kHeight; j <= kHeight; j++) {
-                    for (let i = -kWidth; i <= kWidth; i++) {
-                        let kVal = kernel[kHeight + j][kWidth + i];
-                        let index = ((y + j) * this.width + x + i) * this.channels + c;
-                        sum += this.data[index] * kVal;
-                    }
-                }
-
-                let index = (y * this.width + x) * this.channels + c;
-                if (clamped) { // we calculate the clamped result
-                    newImage.data[index] = Math.min(Math.max(Math.round(sum / divisor), 0), newImage.maxValue);
-                } else {
-                    newImage.data[index] = sum / divisor;
-                }
+    var tmpData = new Array(this.height * this.width);
+    var index, x, y, channel, c, tmpResult;
+    for (channel = 0; channel < channels.length; channel++) {
+        c = channels[channel];
+        //Copy the channel in a single array
+        for (y = 0; y < this.height; y++) {
+            for (x = 0; x < this.width; x++) {
+                index = y * this.width + x;
+                tmpData[index] = this.data[index * this.channels + c];
             }
         }
+        console.log(JSON.stringify(Array.from(tmpData)));
+        debugger;
+        tmpResult = conv.fft(tmpData, kernel, {
+            rows: this.height,
+            cols: this.width,
+            normalize: normalize,
+            divisor: divisor
+        });
+
+        console.log(JSON.stringify(Array.from(tmpResult)));
+        //console.log(tmpResult);
+        //Copy the result to the output image
+        for (y = 0; y < this.height; y++) {
+            for (x = 0; x < this.width; x++) {
+                index = y * this.width + x;
+                if (clamped)
+                    newImage.data[index * this.channels + c] = Math.min(Math.max(tmpResult[index], 0), newImage.maxValue);
+                else
+                    newImage.data[index * this.channels + c] = tmpResult[index];
+            }
+        }
+        console.log(JSON.stringify(Array.from(newImage.data)));
     }
     // if the kernel was not applied on the alpha channel we just copy it
     // TODO: in general we should copy the channels that where not changed
     // TODO: probably we should just copy the image at the beginning ?
-
     if (this.alpha && channels.indexOf(this.channels) === -1) {
-        for (let i = this.components; i < this.data.length; i = i + this.channels) {
-            newImage.data[i] = this.data[i];
+        for (x = this.components; x < this.data.length; x = x + this.channels) {
+            newImage.data[x] = this.data[x];
         }
     }
 
-    newImage.setBorder({size:[kWidth, kHeight], algorithm: border});
+    //I only can have 3 types of borders:
+    //  1. Considering the image as periodic: periodic
+    //  2. Extend the interior borders: copy
+    //  3. fill with a color: set
+    //console.log(JSON.stringify(Array.from(newImage.data)));
+    //debugger;
+    if ( border != 'periodic' ){
+        newImage.setBorder({size: [halfWidth, halfHeight], algorithm: border});
+    }
+    //console.log(JSON.stringify(Array.from(newImage.data)));
 
     return newImage;
 }

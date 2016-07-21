@@ -103,7 +103,7 @@ describe('check the convolution operator', function () {
 
     });
 
-    it('check the convolution for GREYA image', function () {
+    it.only('check the convolution for GREYA image', function () {
         let image = new Image(2, 2,
             [
                 1, 255, 2, 255,
