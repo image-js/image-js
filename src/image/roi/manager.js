@@ -5,10 +5,11 @@ import fromCoordinates from './creator/fromPixels';
 import createROI from './createROI';
 import extendObject from 'extend';
 import Image from '../image';
+import ROIMap from './ROIMap';
 
 /**
- * A manager of Region of Interests. A ROIManager is ralated to a specific Image
- * and may contain many layers. Each layer is characterized by a label that is
+ * A manager of Regions of Interest. A ROIManager is related to a specific Image
+ * and may contain multiple layers. Each layer is characterized by a label whose is
  * name by default 'default'
  * @class ROIManager
  * @param {Image} image
@@ -40,10 +41,14 @@ export default class ROIManager {
     }
 
 
-
+    /**
+     * @param {number[]} roiMap
+     * @param options
+     */
     putMap(roiMap, options = {}) {
+        let map = new ROIMap(this._image, roiMap);
         let opt = extendObject({}, this._options, options);
-        this._layers[opt.label] = new ROILayer(roiMap, opt);
+        this._layers[opt.label] = new ROILayer(map, opt);
     }
 
 
