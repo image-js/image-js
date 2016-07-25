@@ -20,6 +20,11 @@ describe('Get the maxLength of the ROI and the points', function () {
 
     let roiManager = mask.getROIManager();
     roiManager.putMask(mask);
+    it('vectors X and Y', function () {
+        let result = roiManager.getROI();
+        result[0].pointsXY[0].should.eql([2, 0]);
+    });
+
 
     it('maxLengthPoints', function () {
         let result = roiManager.getROI();

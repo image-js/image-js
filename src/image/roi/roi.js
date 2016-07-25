@@ -154,34 +154,39 @@ export default class ROI {
         return this.computed.filledMask = img;
     }
 
+    get pointsXY() {
+        if (this.computed.pointsXY) return this.computed.pointsXY;
+
+        let vXY = [];
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                if(this.map.pixels[x + this.minX + (y + this.minY) * this.width] === this.id){
+                    vXY.push([x, y])
+                }
+            }
+        }
+        return this.computed.pointsXY = vXY;
+    }
+
 
 
     get maxLengthPoints() {
         if (this.computed.maxLengthPoints) return this.computed.maxLengthPoints;
         let maxLength = 0;
-        let pixels = this.map.pixels;
         let maxLengthPoints = new Map();
-        for (let x1 = 0; x1 < this.map.width; x1++) {
-            for (let y1 = 0; y1 < this.map.height; y1++) {
-                let currentPixel1 = (y1 + this.minY) * this.map.width + x1 + this.minX;
-                if (pixels[currentPixel1] === this.id) {
-                    for (let x2 = 0; x2 < this.map.width; x2++) {
-                        for (let y2 = 0; y2 < this.map.height; y2++) {
-                            let currentPixel2 = (y2 + this.minY) * this.map.width + x2 + this.minX;
-                            if (pixels[currentPixel2] === this.id && currentPixel1 !== currentPixel2) {
-                                let currentML = Math.sqrt(
-                                    Math.pow(x1 - x2, 2) +
-                                    Math.pow(y1 - y2, 2)
-                                );
-                                if (currentML >= maxLength) {
-                                    maxLength = currentML;
-                                    maxLengthPoints = {x1: x1, y1: y1, x2: x2, y2: y2};
-                                }
-                            }
-                        }
-                    }
+        let k = 1;
+        for (let i = 0; i < this.pointsXY.length; i++) {
+            for (let j = k; j < this.pointsXY.length; j++){
+                let currentML = Math.sqrt(
+                    Math.pow(this.pointsXY[i][0] - this.pointsXY[j][0], 2) +
+                    Math.pow(this.pointsXY[i][1] - this.pointsXY[j][1], 2)
+                );
+                if (currentML >= maxLength) {
+                    maxLength = currentML;
+                    maxLengthPoints = {x1: this.pointsXY[i][0], y1: this.pointsXY[i][1], x2: this.pointsXY[j][0], y2: this.pointsXY[j][1]};
                 }
             }
+            k++;
         }
         return this.computed.maxLengthPoints = maxLengthPoints;
     }
