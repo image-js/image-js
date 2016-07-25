@@ -153,6 +153,52 @@ export default class ROI {
 
         return this.computed.filledMask = img;
     }
+
+
+
+    get maxLengthPoints() {
+        if (this.computed.maxLength) return this.computed.maxLength;
+        let maxLength = 0;
+        let pixels = this.map.pixels;
+        let maxLengthPoints = new Map();
+        for (let x1 = 0; x1 < this.map.width; x1++) {
+            for (let y1 = 0; y1 < this.map.height; y1++) {
+                let currentPixel1 = (y1 + this.minY) * this.map.width + x1 + this.minX;
+                if (pixels[currentPixel1] === this.id) {
+                    for (let x2 = 0; x2 < this.map.width; x2++) {
+                        for (let y2 = 0; y2 < this.map.height; y2++) {
+                            let currentPixel2 = (y2 + this.minY) * this.map.width + x2 + this.minX;
+                            if (pixels[currentPixel2] === this.id && currentPixel1 !== currentPixel2) {
+                                let currentML = Math.sqrt(
+                                    Math.pow(x1 - x2, 2) +
+                                    Math.pow(y1 - y2, 2)
+                                );
+                                if (currentML >= maxLength) {
+                                    maxLength = currentML;
+                                    maxLengthPoints = {x1: x1, y1: y1, x2: x2, y2: y2};
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return this.computed.maxLengthPoints = maxLengthPoints;
+    }
+
+
+    /**
+     Calculates the maximum length between two pixels of the ROI.
+     */
+    get maxLength() {
+        if (this.computed.maxLength) return this.computed.maxLength;
+        let maxLength = Math.sqrt(
+            Math.pow(this.maxLengthPoints.x1 - this.maxLengthPoints.x2, 2) +
+            Math.pow(this.maxLengthPoints.y1 - this.maxLengthPoints.y2, 2)
+        );
+        return this.computed.maxLengthPoints = maxLength;
+    }
+
 }
 
 
