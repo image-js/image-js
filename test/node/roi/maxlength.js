@@ -29,6 +29,7 @@ describe('Get the maxLength of the ROI and the points', function () {
         result[0].maxLengthPoints.y2.should.equal(3);
     });
 
+
     it('maxLength', function () {
         let result = roiManager.getROI();
         result[0].maxLength.should.equal(Math.sqrt(13));
