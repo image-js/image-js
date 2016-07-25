@@ -156,11 +156,10 @@ export default class ROI {
 
     get pointsXY() {
         if (this.computed.pointsXY) return this.computed.pointsXY;
-
         let vXY = [];
-        for (let y = 0; y < this.height; y++) {
-            for (let x = 0; x < this.width; x++) {
-                if (this.map.pixels[x + this.minX + (y + this.minY) * this.width] === this.id) {
+        for (let y = 0; y < this.map.height; y++) {
+            for (let x = 0; x < this.map.width; x++) {
+                if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
                     vXY.push([x, y]);
                 }
             }
