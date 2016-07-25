@@ -157,7 +157,7 @@ export default class ROI {
 
 
     get maxLengthPoints() {
-        if (this.computed.maxLength) return this.computed.maxLength;
+        if (this.computed.maxLengthPoints) return this.computed.maxLengthPoints;
         let maxLength = 0;
         let pixels = this.map.pixels;
         let maxLengthPoints = new Map();
@@ -196,7 +196,7 @@ export default class ROI {
             Math.pow(this.maxLengthPoints.x1 - this.maxLengthPoints.x2, 2) +
             Math.pow(this.maxLengthPoints.y1 - this.maxLengthPoints.y2, 2)
         );
-        return this.computed.maxLengthPoints = maxLength;
+        return this.computed.maxLength = maxLength;
     }
 
 }
