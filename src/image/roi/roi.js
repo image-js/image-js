@@ -173,17 +173,18 @@ export default class ROI {
     get maxLengthPoints() {
         if (this.computed.maxLengthPoints) return this.computed.maxLengthPoints;
         let maxLength = 0;
-        let maxLengthPoints = new Map();
+        let maxLengthPoints;
         let k = 1;
-        for (let i = 0; i < this.pointsXY.length; i++) {
-            for (let j = k; j < this.pointsXY.length; j++) {
+        const pointsXY = this.pointsXY;
+        for (let i = 0; i < pointsXY.length; i++) {
+            for (let j = k; j < pointsXY.length; j++) {
                 let currentML = Math.sqrt(
-                    Math.pow(this.pointsXY[i][0] - this.pointsXY[j][0], 2) +
-                    Math.pow(this.pointsXY[i][1] - this.pointsXY[j][1], 2)
+                    Math.pow(pointsXY[i][0] - pointsXY[j][0], 2) +
+                    Math.pow(pointsXY[i][1] - pointsXY[j][1], 2)
                 );
                 if (currentML >= maxLength) {
                     maxLength = currentML;
-                    maxLengthPoints = {x1: this.pointsXY[i][0], y1: this.pointsXY[i][1], x2: this.pointsXY[j][0], y2: this.pointsXY[j][1]};
+                    maxLengthPoints = {x1: pointsXY[i][0], y1: pointsXY[i][1], x2: pointsXY[j][0], y2: pointsXY[j][1]};
                 }
             }
             k++;
