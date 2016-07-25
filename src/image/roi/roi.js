@@ -160,8 +160,8 @@ export default class ROI {
         let vXY = [];
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
-                if(this.map.pixels[x + this.minX + (y + this.minY) * this.width] === this.id){
-                    vXY.push([x, y])
+                if (this.map.pixels[x + this.minX + (y + this.minY) * this.width] === this.id) {
+                    vXY.push([x, y]);
                 }
             }
         }
@@ -176,7 +176,7 @@ export default class ROI {
         let maxLengthPoints = new Map();
         let k = 1;
         for (let i = 0; i < this.pointsXY.length; i++) {
-            for (let j = k; j < this.pointsXY.length; j++){
+            for (let j = k; j < this.pointsXY.length; j++) {
                 let currentML = Math.sqrt(
                     Math.pow(this.pointsXY[i][0] - this.pointsXY[j][0], 2) +
                     Math.pow(this.pointsXY[i][1] - this.pointsXY[j][1], 2)
