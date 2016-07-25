@@ -157,9 +157,10 @@ export default class ROI {
     get pointsXY() {
         if (this.computed.pointsXY) return this.computed.pointsXY;
         let vXY = [];
-        for (let y = 0; y < this.map.height; y++) {
-            for (let x = 0; x < this.map.width; x++) {
-                if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                let target = (y + this.minY) * this.map.width + x + this.minX;
+                if (this.map.pixels[target] === this.id) {
                     vXY.push([x, y]);
                 }
             }
@@ -202,6 +203,38 @@ export default class ROI {
             Math.pow(this.maxLengthPoints.y1 - this.maxLengthPoints.y2, 2)
         );
         return this.computed.maxLength = maxLength;
+    }
+
+    /**
+     Calculates the number of pixels touching between the ROI and each of its neighbours.
+     The result is given as an array, with the same order as the array from the getSurroundingIDs function.
+     */
+    get contourByZone() {
+        if (this.computed.contourByZone) return this.computed.contourByZone;
+
+        let countByZone = (new Array(this.surround.length)).fill(0);
+        let roiMap = this.map;
+        let pixels = roiMap.pixels;
+        let dx = [+1, 0, -1, 0];
+        let dy = [0, +1, 0, -1];
+
+        for (let y = 0; y < this.height ; y++) {
+            for (let x = 0; x < this.width; x++) {
+                let target = x + this.minX + (y + this.minY) * this.map.width;
+                if (pixels[target] === this.id) {
+
+                    for (let dir = 0; dir < 4; dir++) {
+                        let neigh = x + dx[dir] + this.minX + (y + dy[dir] + this.minY) * this.map.width;
+                        if (y + dy[dir] + this.minY >= 0 && x + dx[dir] + this.minX >= 0 && y + dy[dir] + this.minY < this.map.height && x + dx[dir] + this.minX < this.map.width) {
+                            if (this.surround.indexOf(pixels[neigh]) !== -1) {
+                                countByZone[this.surround.indexOf(pixels[neigh])]++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return this.computed.contourByZone = countByZone;
     }
 
 }
