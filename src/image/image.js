@@ -125,6 +125,17 @@ export default class Image {
         return loadURL(url);
     }
 
+    /**
+     * Creates an image from an HTML Canvas object
+     * @param canvas
+     * @return {Image}
+     */
+    static fromCanvas(canvas) {
+        const ctx = canvas.getContext('2d');
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        return new Image(imageData.width, imageData.height, imageData.data);
+    }
+
     static extendMethod(name, method, {inPlace = false, returnThis = true, partialArgs = [], stack = false} = {}) {
         if (inPlace) {
             Image.prototype[name] = function (...args) {

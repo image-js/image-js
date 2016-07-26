@@ -1,7 +1,7 @@
 import {Image} from '../common';
 
 
-describe.only('Get the number of pixels touching the adjacent zones', function () {
+describe('Get the number of pixels touching the adjacent zones', function () {
 
     let map = [
         0,0,1,1,1,2,
