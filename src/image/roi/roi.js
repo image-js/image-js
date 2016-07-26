@@ -174,10 +174,9 @@ export default class ROI {
         if (this.computed.maxLengthPoints) return this.computed.maxLengthPoints;
         let maxLength = 0;
         let maxLengthPoints;
-        let k = 1;
         const pointsXY = this.pointsXY;
         for (let i = 0; i < pointsXY.length; i++) {
-            for (let j = k; j < pointsXY.length; j++) {
+            for (let j = i + 1; j < pointsXY.length; j++) {
                 let currentML = Math.sqrt(
                     Math.pow(pointsXY[i][0] - pointsXY[j][0], 2) +
                     Math.pow(pointsXY[i][1] - pointsXY[j][1], 2)
@@ -187,7 +186,6 @@ export default class ROI {
                     maxLengthPoints = {x1: pointsXY[i][0], y1: pointsXY[i][1], x2: pointsXY[j][0], y2: pointsXY[j][1]};
                 }
             }
-            k++;
         }
         return this.computed.maxLengthPoints = maxLengthPoints;
     }
@@ -215,6 +213,7 @@ export default class ROI {
         let countByZone = (new Array(this.surround.length)).fill(0);
         let roiMap = this.map;
         let pixels = roiMap.pixels;
+        let neighList = new Set();
         let dx = [+1, 0, -1, 0];
         let dy = [0, +1, 0, -1];
 
@@ -226,8 +225,9 @@ export default class ROI {
                     for (let dir = 0; dir < 4; dir++) {
                         let neigh = x + dx[dir] + this.minX + (y + dy[dir] + this.minY) * this.map.width;
                         if (y + dy[dir] + this.minY >= 0 && x + dx[dir] + this.minX >= 0 && y + dy[dir] + this.minY < this.map.height && x + dx[dir] + this.minX < this.map.width) {
-                            if (this.surround.indexOf(pixels[neigh]) !== -1) {
+                            if (!neighList.has(neigh) && this.surround.indexOf(pixels[neigh]) !== -1) {
                                 countByZone[this.surround.indexOf(pixels[neigh])]++;
+                                neighList.add(neigh);
                             }
                         }
                     }
