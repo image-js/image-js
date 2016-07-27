@@ -237,6 +237,15 @@ export default class ROI {
         return this.computed.contourByZone = countByZone;
     }
 
+    get angle() {
+        if (this.computed.angle) return this.computed.angle;
+
+        let points = this.maxLengthPoints;
+        let angle = -Math.atan2(points.y1 - points.y2, points.x1 - points.x2) * 180 / Math.PI;
+
+        return this.computed.angle = angle;
+    }
+
 }
 
 
