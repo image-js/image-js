@@ -210,7 +210,7 @@ export default class ROI {
     get contourByZone() {
         if (this.computed.contourByZone) return this.computed.contourByZone;
 
-        let countByZone = (new Array(this.surround.length)).fill(0);
+        let countByZone = (new Array(this.neighID.length)).fill(0);
         let roiMap = this.map;
         let pixels = roiMap.pixels;
         let neighList = new Set();
@@ -225,8 +225,8 @@ export default class ROI {
                     for (let dir = 0; dir < 4; dir++) {
                         let neigh = x + dx[dir] + this.minX + (y + dy[dir] + this.minY) * this.map.width;
                         if (y + dy[dir] + this.minY >= 0 && x + dx[dir] + this.minX >= 0 && y + dy[dir] + this.minY < this.map.height && x + dx[dir] + this.minX < this.map.width) {
-                            if (!neighList.has(neigh) && this.surround.indexOf(pixels[neigh]) !== -1) {
-                                countByZone[this.surround.indexOf(pixels[neigh])]++;
+                            if (!neighList.has(neigh) && this.neighID.indexOf(pixels[neigh]) !== -1) {
+                                countByZone[this.neighID.indexOf(pixels[neigh])]++;
                                 neighList.add(neigh);
                             }
                         }
@@ -246,64 +246,78 @@ export default class ROI {
         return this.computed.angle = angle;
     }
 
+
+    get neighID() {
+        if (this.computed.neighID) return this.computed.neighID;
+
+        let roiMap = this.map;
+        let pixels = roiMap.pixels;
+        let neighID = [];
+        let dx = [+1, 0, -1, 0];
+        let dy = [0, +1, 0, -1];
+
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                let target = x + this.minX + (y + this.minY) * this.map.width;
+                if (pixels[target] === this.id) {
+                    for (let dir = 0; dir < 4; dir++) {
+                        let neigh = x + dx[dir] + this.minX + (y + dy[dir] + this.minY) * this.map.width;
+                        if (y + dy[dir] + this.minY >= 0 && x + dx[dir] + this.minX >= 0 && y + dy[dir] + this.minY < this.map.height && x + dx[dir] + this.minX < this.map.width) {
+                            if (pixels[neigh] !== this.id && neighID.indexOf(pixels[neigh]) === -1) {
+                                neighID.push(pixels[neigh]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return this.computed.neighID = neighID;
+
+    }
+
 }
 
 
 
 
 function getSurroundingIDs(roi) {
-    let surrounding = new Array(1);
+    let surrounding = new Set();
 
-    let ptr = 0;
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
-    // we check the first line and the last line
-    let fromX = Math.max(roi.minX, 1);
-    let toX = Math.min(roi.width, roiMap.width - 2);
 
-    // not optimized  if height=1 !
+    // we check the first line and the last line
     for (let y of [0, roi.height - 1]) {
         for (let x = 0; x < roi.width; x++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if ((x - roi.minX) > 0 && pixels[target] === roi.id && pixels[target - 1] !== roi.id) {
                 let value = pixels[target - 1];
-                if (surrounding.indexOf(value) === -1) {
-                    surrounding[ptr++] = value;
-                }
+                surrounding.add(value);
             }
             if ((roiMap.width - x - roi.minX) > 1 && pixels[target] === roi.id && pixels[target + 1] !== roi.id) {
                 let value = pixels[target + 1];
-                if (surrounding.indexOf(value) === -1) {
-                    surrounding[ptr++] = value;
-                }
+                surrounding.add(value);
             }
         }
     }
 
-
     // we check the first column and the last column
-    let fromY = Math.max(roi.minY, 1);
-    let toY = Math.min(roi.height, roiMap.height - 2);
-    // not optimized  if width=1 !
     for (let x of [0, roi.width - 1]) {
         for (let y = 0; y < roi.height; y++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if ((y - roi.minY) > 0 && pixels[target] === roi.id && pixels[target - roiMap.width] !== roi.id) {
                 let value = pixels[target - roiMap.width];
-                if (surrounding.indexOf(value) === -1) {
-                    surrounding[ptr++] = value;
-                }
+                surrounding.add(value);
             }
             if ((roiMap.height - y - roi.minY) > 1 && pixels[target] === roi.id && pixels[target + roiMap.width] !== roi.id) {
                 let value = pixels[target + roiMap.width];
-                if (surrounding.indexOf(value) === -1) {
-                    surrounding[ptr++] = value;
-                }
+                surrounding.add(value);
             }
         }
     }
-    if (surrounding[0] === undefined) return [0];
-    return surrounding; // the selection takes the whole rectangle
+
+    return Array.from(surrounding); // the selection takes the whole rectangle
 }
 
 
