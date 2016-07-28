@@ -38,7 +38,7 @@ export default class ROIManager {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromCoordinates.call(this._image, pixels, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
-        return this
+        return this;
     }
 
 
@@ -50,7 +50,7 @@ export default class ROIManager {
         let map = new ROIMap(this._image, roiMap);
         let opt = extendObject({}, this._options, options);
         this._layers[opt.label] = new ROILayer(map, opt);
-        return this
+        return this;
     }
 
 
@@ -59,7 +59,7 @@ export default class ROIManager {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromMask.call(this._image, mask, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
-        return this
+        return this;
     }
 
 
@@ -67,7 +67,7 @@ export default class ROIManager {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromMask2.call(this._image, mask, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
-        return this
+        return this;
     }
 
 
