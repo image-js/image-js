@@ -154,18 +154,33 @@ export default class ROI {
         return this.computed.filledMask = img;
     }
 
-    get pointsXY() {
-        if (this.computed.pointsXY) return this.computed.pointsXY;
-        let vXY = [];
+    get pointsY() {
+        if (this.computed.pointsY) return this.computed.pointsY;
+        let vY = [];
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
                 let target = (y + this.minY) * this.map.width + x + this.minX;
                 if (this.map.pixels[target] === this.id) {
-                    vXY.push([x, y]);
+                    vY.push(y);
                 }
             }
         }
-        return this.computed.pointsXY = vXY;
+        return this.computed.pointsY = vY;
+    }
+
+
+    get pointsX() {
+        if (this.computed.pointsX) return this.computed.pointsX;
+        let vX = [];
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                let target = (y + this.minY) * this.map.width + x + this.minX;
+                if (this.map.pixels[target] === this.id) {
+                    vX.push(x);
+                }
+            }
+        }
+        return this.computed.pointsX = vX;
     }
 
 
@@ -174,16 +189,17 @@ export default class ROI {
         if (this.computed.maxLengthPoints) return this.computed.maxLengthPoints;
         let maxLength = 0;
         let maxLengthPoints;
-        const pointsXY = this.pointsXY;
-        for (let i = 0; i < pointsXY.length; i++) {
-            for (let j = i + 1; j < pointsXY.length; j++) {
+        const pointsX = this.pointsX;
+        const pointsY = this.pointsY;
+        for (let i = 0; i < pointsX.length; i++) {
+            for (let j = i + 1; j < pointsX.length; j++) {
                 let currentML = Math.sqrt(
-                    Math.pow(pointsXY[i][0] - pointsXY[j][0], 2) +
-                    Math.pow(pointsXY[i][1] - pointsXY[j][1], 2)
+                    Math.pow(pointsX[i] - pointsX[j], 2) +
+                    Math.pow(pointsY[i] - pointsY[j], 2)
                 );
                 if (currentML >= maxLength) {
                     maxLength = currentML;
-                    maxLengthPoints = {x1: pointsXY[i][0], y1: pointsXY[i][1], x2: pointsXY[j][0], y2: pointsXY[j][1]};
+                    maxLengthPoints = {x1: pointsX[i], y1: pointsY[i], x2: pointsX[j], y2: pointsY[j]};
                 }
             }
         }
@@ -205,7 +221,7 @@ export default class ROI {
 
     /**
      Calculates the number of pixels touching between the ROI and each of its neighbours.
-     The result is given as an array, with the same order as the array from the getSurroundingIDs function.
+     The result is given as an array, with the same order as the array from the 'get neighID' function.
      */
     get contourByZone() {
         if (this.computed.contourByZone) return this.computed.contourByZone;
@@ -246,7 +262,9 @@ export default class ROI {
         return this.computed.angle = angle;
     }
 
-
+    /**
+     Return an array with the ids of neighbours of this ROI.
+     */
     get neighID() {
         if (this.computed.neighID) return this.computed.neighID;
 
