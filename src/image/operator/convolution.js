@@ -28,12 +28,12 @@ export default function convolution(kernel, {channels, bitDepth, normalize = fal
     ({kWidth, kHeight, kernel} = validateKernel(kernel));
 
 
-    var halfHeight = Math.floor(kernel.length / 2);
-    var halfWidth = Math.floor(kernel[0].length / 2);
+    let halfHeight = Math.floor(kernel.length / 2);
+    let halfWidth = Math.floor(kernel[0].length / 2);
     let clamped = newImage.isClamped;
 
-    var tmpData = new Array(this.height * this.width);
-    var index, x, y, channel, c, tmpResult;
+    let tmpData = new Array(this.height * this.width);
+    let index, x, y, channel, c, tmpResult;
     for (channel = 0; channel < channels.length; channel++) {
         c = channels[channel];
         //Copy the channel in a single array

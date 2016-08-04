@@ -18,8 +18,6 @@ export default function gaussianFilter({
 		bitDepth: [8, 16]
 	});
 
-	debugger;
-
 	let kernel;
 	if (sigma) {
 		kernel = getSigmaKernel(sigma);
