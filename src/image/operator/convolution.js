@@ -43,7 +43,7 @@ export default function convolution(kernel, {channels, bitDepth, normalize = fal
                 tmpData[index] = this.data[index * this.channels + c];
             }
         }
-        if(type=='direct'){
+        if (type === 'direct'){
             tmpResult = conv.direct(tmpData, kernel, {
                 rows: this.height,
                 cols: this.width,
@@ -51,7 +51,7 @@ export default function convolution(kernel, {channels, bitDepth, normalize = fal
                 divisor: divisor
             });
         }
-        else{
+        else {
             tmpResult = conv.fft(tmpData, kernel, {
                 rows: this.height,
                 cols: this.width,
@@ -84,7 +84,7 @@ export default function convolution(kernel, {channels, bitDepth, normalize = fal
     //  1. Considering the image as periodic: periodic
     //  2. Extend the interior borders: copy
     //  3. fill with a color: set
-    if ( border != 'periodic' ){
+    if (border !== 'periodic'){
         newImage.setBorder({size: [halfWidth, halfHeight], algorithm: border});
     }
 
