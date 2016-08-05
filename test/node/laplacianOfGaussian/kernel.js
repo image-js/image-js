@@ -1,4 +1,4 @@
-import laplacianOfGaussian from '../../../src/kernel/laplacianOfGaussian';
+import {laplacianOfGaussian} from '../../../src/kernel/laplacianOfGaussian';
 
 describe('we check Shape class', function () {
     it('should yield a cross', function () {

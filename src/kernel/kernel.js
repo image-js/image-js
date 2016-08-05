@@ -1,2 +1,2 @@
 export * from '../util/kernels';
-export laplacianOfGaussian from './laplacianOfGaussian';
+export {laplacianOfGaussian} from './laplacianOfGaussian';

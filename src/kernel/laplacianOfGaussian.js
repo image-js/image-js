@@ -1,4 +1,4 @@
-export default function laplacianOfGaussian(sigma, nPoints, factor) {
+export function laplacianOfGaussian(sigma, nPoints, factor) {
     let kernel = new Array(nPoints);
     let i, j, x2, y2;
     if (!factor) {
