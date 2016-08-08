@@ -1,6 +1,7 @@
 import fromMask from './creator/fromMask';
 import fromMask2 from './creator/fromMask2';
 import fromExtrema from './creator/fromExtrema';
+import fromWaterShed from './creator/fromWaterShed';
 import fromCoordinates from './creator/fromPixels';
 import createROI from './createROI';
 import extendObject from 'extend';
@@ -54,6 +55,11 @@ export default class ROIManager {
     }
 
 
+    generateROIByWaterShed(options = {}) {
+        let opt = extendObject({}, this._options, options);
+        let roiMap = fromWaterShed.call(this._image, options);
+        this._layers[opt.label] = new ROILayer(roiMap, opt);
+    }
 
     putMask(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
