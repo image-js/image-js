@@ -23,7 +23,6 @@ export default function createROIMapFromWaterShed(
     if (!points) {
         points = localExtrema(image, {algorithm:'min'});
     }
-
     let map = new Array(image.width * image.height).fill(0);
     let width = image.width;
     let toProcess = [];
