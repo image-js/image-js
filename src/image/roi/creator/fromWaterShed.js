@@ -4,7 +4,6 @@
  */
 
 import ROIMap from './../ROIMap';
-import localExtrema from '../../compute/localExtrema';
 
 /**
  *
@@ -31,11 +30,11 @@ export default function createROIMapFromWaterShed(
     });
 
     //WaterShed is done from points in the image. We can either specify those points in options,
-    // or it is gonna take the minima locals of the image by default.
+    // or it is gonna take the minimum locals of the image by default.
     if (!points) {
         points = image.getLocalExtrema({algorithm:'min'});
     }
-    let map = new Array(image.width * image.height).fill(0);
+    let map = new Int16Array(image.size);
     let width = image.width;
     let toProcess = [];
     for (let i = 0; i < points.length; i++) {
@@ -72,11 +71,8 @@ export default function createROIMapFromWaterShed(
                     toProcess.splice(i, 1);
                     i--;
                 }
-
             }
         }
-
     }
     return new ROIMap(image, map);
-
 }

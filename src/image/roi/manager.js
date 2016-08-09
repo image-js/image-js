@@ -55,7 +55,7 @@ export default class ROIManager {
     }
 
 
-    generateROIByWaterShed(options = {}) {
+    generateROIFromWaterShed(options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromWaterShed.call(this._image, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
@@ -163,6 +163,20 @@ export default class ROIManager {
             }
         }
         return mask;
+    }
+
+    paintIDs(options = {}) {
+        let image = this._image;
+        let imageCanvas = image.getCanvas();
+        let ctx = imageCanvas.getContext('2d');
+        let rois = this.getROI();
+
+        ctx.fillStyle = 'red';
+        for (let i = 0; i < rois.length; i++) {
+            ctx.fillText(rois[i].id, rois[i].meanX - 3, rois[i].meanY + 3);
+        }
+        this._painted = Image.fromCanvas(imageCanvas);
+        return this._painted;
     }
 
 

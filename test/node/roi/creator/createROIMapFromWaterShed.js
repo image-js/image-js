@@ -31,7 +31,7 @@ describe('fin local', function () {
 
         }
         let map = ROIMapper.call(image, {fillMaxValue:5, mask:mask, interval: 1});
-        map.pixels.should.eql(
+        Array.from(map.pixels).should.eql(
             [
                 1,1,1,1,1,1,1,1,0,0,
                 1,1,1,1,1,1,1,1,0,0,
@@ -65,18 +65,10 @@ describe('fin local', function () {
             ],
             {kind: 'GREY'}
         );
-        let mask = new Image(10, 10, {kind: 'BINARY'});
-        for (let i = 0; i < 10; i++) {
-            for (let j = 0; j < 10; j++) {
-                if (image.data[i + j * 10] !== 0) {
-                    mask.setBitXY(i, j);
 
-                }
-            }
-
-        }
         let map = ROIMapper.call(image, {fillMaxValue:5, interval: 1});
-        map.pixels.should.eql(
+
+        Array.from(map.pixels).should.eql(
             [
                 1,1,1,1,1,1,1,1,1,1,
                 1,1,1,1,1,1,1,1,1,1,
@@ -122,7 +114,7 @@ describe('fin local', function () {
 
         }
         let map = ROIMapper.call(image, {fillMaxValue:5, mask:mask, interval: 1});
-        map.pixels.should.eql(
+        Array.from(map.pixels).should.eql(
             [
                 2,1,1,1,1,1,2,2,2,2,
                 2,1,1,1,1,1,2,2,2,0,
