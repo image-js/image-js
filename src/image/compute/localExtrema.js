@@ -52,7 +52,7 @@ export default function localExtrema (
                 }
             }
             if (counter === region) {
-                points.push({x: currentX, y: currentY, z: image.data[currentX + currentY * image.width]});
+                points.push({x: currentX, y: currentY});
             }
         }
     }
@@ -62,7 +62,6 @@ export default function localExtrema (
                 if (Math.sqrt(Math.pow(points[i].x - points[j].x, 2) + Math.pow(points[i].y - points[j].y, 2)) < removeClosePoints) {
                     points[i].x=(points[i].x+points[j].x)>>1;
                     points[i].y=(points[i].y+points[j].y)>>1;
-                    points[i].z=(points[i].z+points[j].z)>>1;
                     points.splice(j, 1);
                     j--;
                 }
