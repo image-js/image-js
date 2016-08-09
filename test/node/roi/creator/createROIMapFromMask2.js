@@ -33,12 +33,12 @@ describe('we check createROIMapFromMask2', function () {
         let mapPixels = ROIMapper(mask, {neighbours: 4}).pixels;
 
         const expected = [
-            -1, 1,-2, 2,-3, 3,
-            -1,-1, 2, 2,-3, 3,
-            -1, 4,-1,-1, 5,-4,
-            -1,-1,-1,-1,-1, 6,
-            -1, 7, 7, 7,-1,-1,
-            -1,-1,-1,-1,-1,-1
+            0, 1, 0, 2, 0, 3,
+            0, 0, 2, 2, 0, 3,
+            0, 5, 0, 0, 6, 0,
+            0, 0, 0, 0, 0, 7,
+            0, 8, 8, 8, 0, 0,
+            0, 0, 0, 0, 0, 0
         ];
 
         Array.from(mapPixels).should.eql(expected);
@@ -48,12 +48,12 @@ describe('we check createROIMapFromMask2', function () {
         let mapPixels = ROIMapper(mask, {neighbours: 8}).pixels;
 
         const expected = [
-            -1, 1,-1, 1,-1, 1,
-            -1,-1, 1, 1,-1, 1,
-            -1, 1,-1,-1, 1,-1,
-            -1,-1,-1,-1,-1, 1,
-            -1, 2, 2, 2,-1,-1,
-            -1,-1,-1,-1,-1,-1
+            0, 1, 0, 1, 0, 1,
+            0, 0, 1, 1, 0, 1,
+            0, 1, 0, 0, 1, 0,
+            0, 0, 0, 0, 0, 1,
+            0, 4, 4, 4, 0, 0,
+            0, 0, 0, 0, 0, 0
         ];
 
         Array.from(mapPixels).should.eql(expected);

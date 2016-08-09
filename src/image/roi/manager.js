@@ -1,14 +1,16 @@
 import fromMask from './creator/fromMask';
 import fromMask2 from './creator/fromMask2';
 import fromExtrema from './creator/fromExtrema';
+import fromWaterShed from './creator/fromWaterShed';
 import fromCoordinates from './creator/fromPixels';
 import createROI from './createROI';
 import extendObject from 'extend';
 import Image from '../image';
+import ROIMap from './ROIMap';
 
 /**
- * A manager of Region of Interests. A ROIManager is ralated to a specific Image
- * and may contain many layers. Each layer is characterized by a label that is
+ * A manager of Regions of Interest. A ROIManager is related to a specific Image
+ * and may contain multiple layers. Each layer is characterized by a label whose is
  * name by default 'default'
  * @class ROIManager
  * @param {Image} image
@@ -37,21 +39,33 @@ export default class ROIManager {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromCoordinates.call(this._image, pixels, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
+        return this;
     }
 
 
-
+    /**
+     * @param {number[]} roiMap
+     * @param options
+     */
     putMap(roiMap, options = {}) {
+        let map = new ROIMap(this._image, roiMap);
         let opt = extendObject({}, this._options, options);
+        this._layers[opt.label] = new ROILayer(map, opt);
+        return this;
+    }
+
+
+    generateROIFromWaterShed(options = {}) {
+        let opt = extendObject({}, this._options, options);
+        let roiMap = fromWaterShed.call(this._image, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
-
-
 
     putMask(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromMask.call(this._image, mask, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
+        return this;
     }
 
 
@@ -59,6 +73,7 @@ export default class ROIManager {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromMask2.call(this._image, mask, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
+        return this;
     }
 
 
@@ -90,6 +105,7 @@ export default class ROIManager {
         } = {}) {
 
         let allROIs = this._layers[label].roi;
+
         let rois = new Array(allROIs.length);
         let ptr = 0;
         for (let i = 0; i < allROIs.length; i++) {
@@ -107,6 +123,7 @@ export default class ROIManager {
 
     getROIMasks(options = {}) {
         let rois = this.getROI(options);
+
         let masks = new Array(rois.length);
         for (let i = 0; i < rois.length; i++) {
             masks[i] = rois[i].mask;
@@ -132,6 +149,7 @@ export default class ROIManager {
     getMask(options = {}) {
         let mask = new Image(this._image.width, this._image.height, {kind:'BINARY'});
         let masks = this.getROIMasks(options);
+
         for (let i = 0; i < masks.length; i++) {
             let roi = masks[i];
             // we need to find the parent image to calculate the relative position
@@ -145,6 +163,20 @@ export default class ROIManager {
             }
         }
         return mask;
+    }
+
+    paintIDs(options = {}) {
+        let image = this._image;
+        let imageCanvas = image.getCanvas();
+        let ctx = imageCanvas.getContext('2d');
+        let rois = this.getROI();
+
+        ctx.fillStyle = 'red';
+        for (let i = 0; i < rois.length; i++) {
+            ctx.fillText(rois[i].id, rois[i].meanX - 3, rois[i].meanY + 3);
+        }
+        this._painted = Image.fromCanvas(imageCanvas);
+        return this._painted;
     }
 
 

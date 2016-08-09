@@ -1,4 +1,5 @@
 import {Image, load} from '../common';
+import Canvas from 'canvas';
 
 describe('Image core', function () {
     it('constructor defaults', function () {
@@ -15,6 +16,18 @@ describe('Image core', function () {
         (function () {
             new Image(5, 0);
         }).should.throw(/height must be greater than 0/);
+    });
+
+    it('create from Canvas', function () {
+        let canvas = new Canvas(2, 2);
+        let ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'red';
+        ctx.fillRect(0, 0, 2, 1);
+        let img = Image.fromCanvas(canvas);
+        Array.from(img.data).should.eql([
+            255,   0,   0, 255, 255,   0,   0, 255,
+              0,   0,   0,   0,   0,   0,   0,   0
+        ]);
     });
 
     it('should load from URL', function () {

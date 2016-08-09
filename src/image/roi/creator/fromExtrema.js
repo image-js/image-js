@@ -55,7 +55,7 @@ export default function createROIMapFromExtrema(
     }
 
 
-    return new ROIMap(image, pixels, negativeID, positiveID);
+    return new ROIMap(image, pixels);
 
     // we will look for the maxima (or minima) that is present in the picture
     // a maxima is a point that is surrounded by lower values

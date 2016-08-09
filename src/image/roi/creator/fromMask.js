@@ -120,6 +120,6 @@ export default function createROIMapFromMask(mask, {allowCorner = false} = {}) {
         }
     }
 
-    return new ROIMap(mask, pixels, negativeID, positiveID);
+    return new ROIMap(mask, pixels);
 
 }

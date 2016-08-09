@@ -19,26 +19,19 @@ describe('we check the internalMapID', function () {
 
             let rois = roiManager.getROI();
 
-            /*
-            console.log( rois[0].mask.sizes);
-            console.log( rois[1].mask.sizes);
-            console.log( rois[2].mask.sizes);
-            */
+            rois.sort(function (a,b) {
+                return a.mask.sizes[0] - b.mask.sizes[0];
+            });
 
             rois.should.be.an.instanceof(Array).and.lengthOf(3);
-            rois[2].mask.sizes.should.eql([3, 3]);
-            rois[1].mask.sizes.should.eql([5, 5]);
             rois[0].mask.sizes.should.eql([1, 1]);
+            rois[1].mask.sizes.should.eql([3, 3]);
+            rois[2].mask.sizes.should.eql([5, 5]);
 
-/*
-             console.log( rois[0].internalMapIDs);
-             console.log( rois[1].internalMapIDs);
-             console.log( rois[2].internalMapIDs);
-*/
-
-            rois[2].internalMapIDs.should.eql([1, -2]);
-            rois[1].internalMapIDs.should.eql([-1, 1, -2]);
             rois[0].internalMapIDs.should.eql([-2]);
+            rois[1].internalMapIDs.should.eql([1, -2]);
+            rois[2].internalMapIDs.should.eql([-1, 1, -2]);
+
         });
     });
 });
@@ -54,6 +47,9 @@ describe('we check the internalMapID with complex image', function () {
 
             let rois = roiManager.getROI();
 
+            rois.sort(function (a,b) {
+                return a.internalMapIDs[0] - b.internalMapIDs[0];
+            });
 
             rois.should.be.an.instanceof(Array).and.lengthOf(4);
 

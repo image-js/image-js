@@ -5,13 +5,16 @@
  */
 
 export default class ROIMap {
-    constructor(parent, pixels, negativeID, positiveID) {
+    constructor(parent, pixels) {
         this.parent = parent;
         this.width = parent.width;
         this.height = parent.height;
         this.pixels = pixels; // pixels containing the annotations
-        this.negative = 0 - negativeID; // number of negative zones
-        this.positive = positiveID; // number of positive zones
-        this.total = positiveID - negativeID; // total number of zones
+        this.negative = 0;
+        this.positive = 0;
+    }
+
+    get total() {
+        return this.negative + this.positive;
     }
 }

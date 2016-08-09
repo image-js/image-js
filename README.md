@@ -37,24 +37,7 @@ Notes:
   It is therefore necessary to have the compiler.
   On OSX you will have to install the command line tools
   Run `xcode-select --install` and click on "install"
-* in order to test you need to install the npm 'canvas'.
-  On OSX you should first install brew (http://brew.sh/) and then
-````
-brew update
-brew install cairo
-brew install giflib
-brew install libjpeg
-brew install pkg-config
-## and then from the image-js/core folder
-npm install canvas
-```
-
-Well sometimes on OSX it really does not work. In those cases this could help after installing [X11](http://xquartz.macosforge.org/landing/).
-````
-wget https://raw.githubusercontent.com/Automattic/node-canvas/master/install -O - | sh
-cp /usr/X11/lib/libfreetype.dylib /usr/local/lib/
-````
-
+* in order to test you need to install the npm 'canvas'. Follow the instructions for your OS [here](https://github.com/Automattic/node-canvas#installation)
 
 ### NPM scripts
 

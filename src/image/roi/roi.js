@@ -153,64 +153,189 @@ export default class ROI {
 
         return this.computed.filledMask = img;
     }
+
+    get pointsY() {
+        if (this.computed.pointsY) return this.computed.pointsY;
+        let vY = [];
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                let target = (y + this.minY) * this.map.width + x + this.minX;
+                if (this.map.pixels[target] === this.id) {
+                    vY.push(y);
+                }
+            }
+        }
+        return this.computed.pointsY = vY;
+    }
+
+
+    get pointsX() {
+        if (this.computed.pointsX) return this.computed.pointsX;
+        let vX = [];
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                let target = (y + this.minY) * this.map.width + x + this.minX;
+                if (this.map.pixels[target] === this.id) {
+                    vX.push(x);
+                }
+            }
+        }
+        return this.computed.pointsX = vX;
+    }
+
+
+
+    get maxLengthPoints() {
+        if (this.computed.maxLengthPoints) return this.computed.maxLengthPoints;
+        let maxLength = 0;
+        let maxLengthPoints;
+        const pointsX = this.pointsX;
+        const pointsY = this.pointsY;
+        for (let i = 0; i < pointsX.length; i++) {
+            for (let j = i + 1; j < pointsX.length; j++) {
+                let currentML = Math.sqrt(
+                    Math.pow(pointsX[i] - pointsX[j], 2) +
+                    Math.pow(pointsY[i] - pointsY[j], 2)
+                );
+                if (currentML >= maxLength) {
+                    maxLength = currentML;
+                    maxLengthPoints = {x1: pointsX[i], y1: pointsY[i], x2: pointsX[j], y2: pointsY[j]};
+                }
+            }
+        }
+        return this.computed.maxLengthPoints = maxLengthPoints;
+    }
+
+
+    /**
+     Calculates the maximum length between two pixels of the ROI.
+     */
+    get maxLength() {
+        if (this.computed.maxLength) return this.computed.maxLength;
+        let maxLength = Math.sqrt(
+            Math.pow(this.maxLengthPoints.x1 - this.maxLengthPoints.x2, 2) +
+            Math.pow(this.maxLengthPoints.y1 - this.maxLengthPoints.y2, 2)
+        );
+        return this.computed.maxLength = maxLength;
+    }
+
+    /**
+     Calculates the number of pixels touching between the ROI and each of its neighbours.
+     The result is given as an array, with the same order as the array from the 'get neighID' function.
+     */
+    get contourByZone() {
+        if (this.computed.contourByZone) return this.computed.contourByZone;
+
+        let countByZone = (new Array(this.neighID.length)).fill(0);
+        let roiMap = this.map;
+        let pixels = roiMap.pixels;
+        let neighList = new Set();
+        let dx = [+1, 0, -1, 0];
+        let dy = [0, +1, 0, -1];
+
+        for (let y = 0; y < this.height ; y++) {
+            for (let x = 0; x < this.width; x++) {
+                let target = x + this.minX + (y + this.minY) * this.map.width;
+                if (pixels[target] === this.id) {
+
+                    for (let dir = 0; dir < 4; dir++) {
+                        let neigh = x + dx[dir] + this.minX + (y + dy[dir] + this.minY) * this.map.width;
+                        if (y + dy[dir] + this.minY >= 0 && x + dx[dir] + this.minX >= 0 && y + dy[dir] + this.minY < this.map.height && x + dx[dir] + this.minX < this.map.width) {
+                            if (!neighList.has(neigh) && this.neighID.indexOf(pixels[neigh]) !== -1) {
+                                countByZone[this.neighID.indexOf(pixels[neigh])]++;
+                                neighList.add(neigh);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return this.computed.contourByZone = countByZone;
+    }
+
+    get angle() {
+        if (this.computed.angle) return this.computed.angle;
+
+        let points = this.maxLengthPoints;
+        let angle = -Math.atan2(points.y1 - points.y2, points.x1 - points.x2) * 180 / Math.PI;
+
+        return this.computed.angle = angle;
+    }
+
+    /**
+     Return an array with the ids of neighbours of this ROI.
+     */
+    get neighID() {
+        if (this.computed.neighID) return this.computed.neighID;
+
+        let roiMap = this.map;
+        let pixels = roiMap.pixels;
+        let neighID = [];
+        let dx = [+1, 0, -1, 0];
+        let dy = [0, +1, 0, -1];
+
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                let target = x + this.minX + (y + this.minY) * this.map.width;
+                if (pixels[target] === this.id) {
+                    for (let dir = 0; dir < 4; dir++) {
+                        let neigh = x + dx[dir] + this.minX + (y + dy[dir] + this.minY) * this.map.width;
+                        if (y + dy[dir] + this.minY >= 0 && x + dx[dir] + this.minX >= 0 && y + dy[dir] + this.minY < this.map.height && x + dx[dir] + this.minX < this.map.width) {
+                            if (pixels[neigh] !== this.id && neighID.indexOf(pixels[neigh]) === -1) {
+                                neighID.push(pixels[neigh]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return this.computed.neighID = neighID;
+
+    }
+
 }
 
 
 
 
 function getSurroundingIDs(roi) {
-    let surrounding = new Array(1);
+    let surrounding = new Set();
 
-    let ptr = 0;
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
-    // we check the first line and the last line
-    let fromX = Math.max(roi.minX, 1);
-    let toX = Math.min(roi.width, roiMap.width - 2);
 
-    // not optimized  if height=1 !
+    // we check the first line and the last line
     for (let y of [0, roi.height - 1]) {
         for (let x = 0; x < roi.width; x++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if ((x - roi.minX) > 0 && pixels[target] === roi.id && pixels[target - 1] !== roi.id) {
                 let value = pixels[target - 1];
-                if (surrounding.indexOf(value) === -1) {
-                    surrounding[ptr++] = value;
-                }
+                surrounding.add(value);
             }
             if ((roiMap.width - x - roi.minX) > 1 && pixels[target] === roi.id && pixels[target + 1] !== roi.id) {
                 let value = pixels[target + 1];
-                if (surrounding.indexOf(value) === -1) {
-                    surrounding[ptr++] = value;
-                }
+                surrounding.add(value);
             }
         }
     }
 
-
     // we check the first column and the last column
-    let fromY = Math.max(roi.minY, 1);
-    let toY = Math.min(roi.height, roiMap.height - 2);
-    // not optimized  if width=1 !
     for (let x of [0, roi.width - 1]) {
         for (let y = 0; y < roi.height; y++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if ((y - roi.minY) > 0 && pixels[target] === roi.id && pixels[target - roiMap.width] !== roi.id) {
                 let value = pixels[target - roiMap.width];
-                if (surrounding.indexOf(value) === -1) {
-                    surrounding[ptr++] = value;
-                }
+                surrounding.add(value);
             }
             if ((roiMap.height - y - roi.minY) > 1 && pixels[target] === roi.id && pixels[target + roiMap.width] !== roi.id) {
                 let value = pixels[target + roiMap.width];
-                if (surrounding.indexOf(value) === -1) {
-                    surrounding[ptr++] = value;
-                }
+                surrounding.add(value);
             }
         }
     }
-    if (surrounding[0] === undefined) return [0];
-    return surrounding; // the selection takes the whole rectangle
+
+    return Array.from(surrounding); // the selection takes the whole rectangle
 }
 
 
