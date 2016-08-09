@@ -2,11 +2,10 @@
  *  Return a new roiMAP changed with the fusion of certain ROIs.
  * @param rois is an array of ROIs which shares the same roiMAP.
  * @param algorithm ; algorithm used to decide which ROIs are merged.
- * @param value is an integer.
+ * @param value is an integer, determine the strength of the merging.
  * @returns {*}
  */
 
-//To Add: other algorithm to fusion. This one is relative to the length of the wall between two neighbours.
 
 export default function joinROI(rois,
     {
@@ -16,9 +15,11 @@ export default function joinROI(rois,
 ) {
     let toFusion = new Map();
     switch (algorithm.toLocaleLowerCase()) {
+        //Algorithms. We can add more algorithm to create other types of merging.
         case 'cells' :
             for (let i = 0; i < rois.length; i++) {
                 for (let k = 0; k < rois[i].neighID.length; k++) {
+                    //If the length of wall of the current region and his neighbour is big enough, we join the rois.
                     if (rois[i].neighID[k] !== 0 && rois[i].contourByZone[k] * value >= rois[i].contour) {
                         for (let j = 0; j < rois.length; j++) {
                             if (rois[j].id === rois[i].neighID[k] && !toFusion.has(rois[i].id + ':' + rois[j].id) && !toFusion.has(rois[j].id + ':' + rois[i].id)) {

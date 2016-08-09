@@ -2,8 +2,8 @@ import ROIMapper from '../../../src/image/roi/creator/fromWaterShed';
 import {Image} from '../common';
 import joinROI from '../../../src/image/roi/joinROI';
 
-describe('fin local', function () {
-    it('Fusion 2 ROIs from 3 ROIs', function () {
+describe('Fusion ROIs', function () {
+    it('should fusion 2 ROIs', function () {
 
         let image = new Image(10,10,
             [

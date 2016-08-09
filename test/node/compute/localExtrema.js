@@ -1,5 +1,4 @@
 import {Image} from '../common';
-import localExtrema from '../../../src/image/compute/localExtrema';
 
 
 describe('fin local', function () {
@@ -21,7 +20,7 @@ describe('fin local', function () {
             ],
             {kind: 'GREY'}
         );
-        localExtrema(image).should.eql([{id:1, x:3, y:2}, {id:2, x:6, y:7}]);
+        image.getLocalExtrema().should.eql([{id:1, x:3, y:2}, {id:2, x:6, y:7}]);
     });
     it('minimum for a GREY image', function () {
 
@@ -42,6 +41,6 @@ describe('fin local', function () {
             {kind: 'GREY'}
         );
 
-        localExtrema(image, {algorithm:'min'}).should.eql([{id:1, x:3, y:2}, {id:2, x:6, y:7}]);
+        image.getLocalExtrema({algorithm:'min'}).should.eql([{id:1, x:3, y:2}, {id:2, x:6, y:7}]);
     });
 });

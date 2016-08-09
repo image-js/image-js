@@ -122,7 +122,7 @@ export default function extend(Image) {
     Image.extendMethod('getMin', getMin).extendProperty('min', getMin);
     Image.extendMethod('getMax', getMax).extendProperty('max', getMax);
     Image.extendMethod('getSum', getSum).extendProperty('sum', getSum);
-    Image.extendMethod('getLocalExtrema', getLocalExtrema).extendProperty('localExtrema', getSum);
+    Image.extendMethod('getLocalExtrema', getLocalExtrema);
     Image.extendMethod('getMedian', getSum).extendProperty('median', getMedian);
     Image.extendMethod('getMean', getMean).extendProperty('mean', getMean);
     Image.extendMethod('getPixelsArray', getPixelsArray).extendProperty('pixelsArray', getPixelsArray);

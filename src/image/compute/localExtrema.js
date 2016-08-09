@@ -3,7 +3,6 @@
  * Returns an array of object with position.
  * @memberof Image
  * @param mask region of the image that is analyzed. The rest is omitted.
- * @param image that need to be analyzed.
  * @param region 1, 2 or 3. Define the region around each points that is analyzed.
  * @param removeClosePts Remove pts which have a distance between them smaller than this param.
  * @param algorithm chose between min or max local.
@@ -11,7 +10,7 @@
  */
 
 
-export default function localExtrema(image,
+export default function localExtrema(
     {
         removeClosePts = 0,
         region = 3,
@@ -19,7 +18,8 @@ export default function localExtrema(image,
         mask
     } = {}
 ) {
-    image.checkProcessable('localExtrema', {
+    let image = this;
+    this.checkProcessable('localExtrema', {
         bitDepth: [8, 16],
         components: 1
     });
