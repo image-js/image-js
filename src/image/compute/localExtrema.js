@@ -58,6 +58,12 @@ export default function localExtrema (
             }
         }
     }
+    // TODO How to make a more performant and general way
+    // we don't deal correctly here with groups of points that should be grouped if at the 
+    // beginning one of them is closer to another
+    // Seems that we would ened to calculate a matrix and then split this matrix in 'independant matrices'
+    // Or to assign a cluster to each point and regroup them if 2 clusters are close to each other
+    // later approach seems much better
     if (removeClosePoints > 0) {
         for (let i = 0; i < points.length; i++) {
             for (let j = i + 1; j < points.length; j++) {

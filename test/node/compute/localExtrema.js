@@ -1,7 +1,7 @@
 import {Image} from '../common';
 
 
-describe.only('Find local extrema', function () {
+describe('Find local extrema', function () {
     it('maximum for a GREY image', function () {
 
         let image = new Image(10,10,
