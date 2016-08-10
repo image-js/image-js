@@ -4,6 +4,7 @@
  */
 
 import ROIMap from './../ROIMap';
+import PriorityQueue from 'js-priority-queue';
 
 /**
  *
@@ -18,9 +19,8 @@ export default function createROIMapFromWaterShed(
     {
         fillMaxValue = this.maxValue,
         points,
-        interval = 200,
         mask
-} = {}
+    } = {}
 )
 {
     let image = this;
@@ -34,45 +34,46 @@ export default function createROIMapFromWaterShed(
     if (!points) {
         points = image.getLocalExtrema({algorithm:'min'});
     }
+    
     let map = new Int16Array(image.size);
     let width = image.width;
-    let toProcess = [];
+    let toProcess = new PriorityQueue(
+        {
+            comparator: function(a, b) { return a[2] - b[2];},
+            strategy: PriorityQueue.BinaryHeapStrategy
+        }
+    );
     for (let i = 0; i < points.length; i++) {
-        map[points[i].x + points[i].y * width] = points[i].id;
-        toProcess.push([points[i].x, points[i].y]);
+        let index = points[i].x + points[i].y * width;
+        map[index] = i+1;
+        var intensity=image.data[index];
+        if (intensity<=fillMaxValue) {
+            toProcess.queue([points[i].x, points[i].y, intensity]);
+        }
     }
     //dx and dy is to iterate through neighbour up down left and right.
     let dx =  [+1, 0, -1, 0];
     let dy =  [0, +1, 0, -1];
 
-    //We iterate from interval to fillMaxValue in the image.
-    for (let threshold = interval; threshold <= fillMaxValue; threshold += interval) {
 
-        //Then we iterate through each points
-        for (let i = 0; i < toProcess.length; i++) {
-            let currentValueIndex = toProcess[i][0] + toProcess[i][1] * width;
-
-            //condition if the current pixel is in the interval
-            if (map[currentValueIndex] !== 0 && image.data[currentValueIndex] < threshold) {
-                let bool = false;
-                for (let dir = 0; dir < 4; dir++) {
-                    let currentNeighIndex = toProcess[i][0] + dx[dir] + (toProcess[i][1] + dy[dir]) * width;
-                    if (mask && !mask.getBitXY(toProcess[i][0] + dx[dir], toProcess[i][1] + dy[dir])) {
-                        continue;
-                    }
+    //Then we iterate through each points
+    while (toProcess.length>0) {
+        var currentPoint = toProcess.dequeue();
+        let currentValueIndex = currentPoint[0] + currentPoint[1] * width;
+        
+        for (let dir = 0; dir < 4; dir++) {
+            var currentNeighIndex = currentPoint[0] + dx[dir] + (currentPoint[1] + dy[dir]) * width;
+            if (! mask || mask.getBit(currentNeighIndex)) {
+                var intensity=image.data[currentNeighIndex];
+                if (intensity<=fillMaxValue) {
                     if (map[currentNeighIndex] === 0) {
                         map[currentNeighIndex] = map[currentValueIndex];
-                        toProcess.push([toProcess[i][0] + dx[dir], toProcess[i][1] + dy[dir]]);
-                        bool = true;
+                        toProcess.queue([currentPoint[0] + dx[dir], currentPoint[1] + dy[dir], intensity]);
                     }
-                }
-                //We need to take off the point which has been processed. Accelerate the filling. (we don't process pixels two times).
-                if (!bool) {
-                    toProcess.splice(i, 1);
-                    i--;
                 }
             }
         }
     }
+
     return new ROIMap(image, map);
 }

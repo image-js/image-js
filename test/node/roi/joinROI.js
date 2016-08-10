@@ -26,17 +26,16 @@ describe('Fusion ROIs', function () {
             for (let j = 0; j < 10; j++) {
                 if (image.data[i + j * 10] !== 4) {
                     mask.setBitXY(i, j);
-
                 }
             }
-
         }
+        
         let map = ROIMapper.call(image, {fillMaxValue:5, mask:mask, interval: 1});
         let roiManager = image.getROIManager();
         roiManager.putMap(map.pixels);
         let rois = roiManager.getROI();
         map = joinROI(rois, {value:3});
-        map.pixels.should.eql(
+        Array.from(map.pixels).should.eql(
             [
                 1,1,1,1,1,1,1,1,1,1,
                 1,1,1,1,1,1,1,1,1,0,
@@ -49,6 +48,5 @@ describe('Fusion ROIs', function () {
                 0,0,0,0,3,3,3,3,3,3,
                 0,0,0,0,3,3,3,3,3,3]
         );
-
     });
 });
