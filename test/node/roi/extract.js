@@ -21,7 +21,7 @@ describe('we check that we can extract correctly a ROI', function () {
                 return a.meanX - b.meanX;
             });
 
-            rois[0].internalMapIDs.should.eql([-2,3,2]);
+            rois[0].internalIDs.should.eql([-2,3,2]);
 
             let roiMask = rois[0].getMask();
             let extract = img.extract(roiMask);

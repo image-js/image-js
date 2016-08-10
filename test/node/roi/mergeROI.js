@@ -1,9 +1,8 @@
 import ROIMapper from '../../../src/image/roi/creator/fromWaterShed';
 import {Image} from '../common';
-import joinROI from '../../../src/image/roi/joinROI';
 
-describe('Fusion ROIs', function () {
-    it.only('should fusion 2 ROIs', function () {
+describe('Merge ROI', function () {
+    it('should fusion 2 ROIs', function () {
 
         let image = new Image(10,10,
             [
@@ -17,7 +16,6 @@ describe('Fusion ROIs', function () {
                 4,4,3,3,3,3,2,1,2,2,
                 4,4,4,4,3,2,2,2,2,3,
                 4,4,4,4,3,3,3,3,2,3
-
             ],
             {kind: 'GREY'}
         );
@@ -31,36 +29,24 @@ describe('Fusion ROIs', function () {
         }
 
         let map = ROIMapper.call(image, {fillMaxValue:5, mask:mask, interval: 1});
-        console.log(JSON.stringify(Array.from(map.pixels)));
         let roiManager = image.getROIManager();
         roiManager.putMap(map.pixels);
-        let rois = roiManager.getROI();
-        map = joinROI(rois, {value:3});
+
+        roiManager.mergeROI({minCommonBorderLength:3});
+
         Array.from(map.pixels).should.eql(
             [
                 1,1,1,1,1,1,1,1,1,1,
                 1,1,1,1,1,1,1,1,1,0,
                 0,1,1,1,1,1,1,1,1,0,
                 0,1,1,1,1,1,1,1,1,0,
-                0,0,0,1,1,1,3,1,1,0,
-                0,0,0,1,1,3,3,3,3,3,
-                0,1,1,1,3,3,3,3,3,3,
-                0,0,3,3,3,3,3,3,3,3,
-                0,0,0,0,3,3,3,3,3,3,
-                0,0,0,0,3,3,3,3,3,3]
-        );
-        let test =
-            [
-                1,1,1,1,1,1,2,2,2,2,
-                2,1,1,1,1,1,2,2,2,0,
-                0,1,1,1,1,1,2,2,2,0,
-                0,1,1,1,1,1,1,2,2,0,
                 0,0,0,1,1,1,1,1,1,0,
                 0,0,0,3,1,3,3,3,3,3,
                 0,3,3,3,3,3,3,3,3,3,
                 0,0,3,3,3,3,3,3,3,3,
                 0,0,0,0,3,3,3,3,3,3,
-                0,0,0,0,3,3,3,3,3,3];
-
+                0,0,0,0,3,3,3,3,3,3
+            ]
+        );
     });
 });

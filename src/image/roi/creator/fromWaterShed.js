@@ -37,6 +37,7 @@ export default function createROIMapFromWaterShed(
 
     let map = new Int16Array(image.size);
     let width = image.width;
+    let height = image.height;
     let toProcess = new PriorityQueue(
         {
             comparator: function (a, b) { return a[2] - b[2];},
@@ -46,7 +47,7 @@ export default function createROIMapFromWaterShed(
     for (let i = 0; i < points.length; i++) {
         let index = points[i].x + points[i].y * width;
         map[index] = i + 1;
-        var intensity = image.data[index];
+        let intensity = image.data[index];
         if (intensity <= fillMaxValue) {
             toProcess.queue([points[i].x, points[i].y, intensity]);
         }
@@ -62,13 +63,17 @@ export default function createROIMapFromWaterShed(
         let currentValueIndex = currentPoint[0] + currentPoint[1] * width;
 
         for (let dir = 0; dir < 4; dir++) {
-            let currentNeighIndex = currentPoint[0] + dx[dir] + (currentPoint[1] + dy[dir]) * width;
-            if (!mask || mask.getBit(currentNeighIndex)) {
-                var intensity = image.data[currentNeighIndex];
-                if (intensity <= fillMaxValue) {
-                    if (map[currentNeighIndex] === 0) {
-                        map[currentNeighIndex] = map[currentValueIndex];
-                        toProcess.queue([currentPoint[0] + dx[dir], currentPoint[1] + dy[dir], intensity]);
+            let newX = currentPoint[0] + dx[dir];
+            let newY = currentPoint[1] + dy[dir];
+            if (newX >= 0 && newY >= 0 && newX < width && newY < height) {
+                let currentNeighbourIndex = newX + newY * width;
+                if (!mask || mask.getBit(currentNeighbourIndex)) {
+                    let intensity = image.data[currentNeighbourIndex];
+                    if (intensity <= fillMaxValue) {
+                        if (map[currentNeighbourIndex] === 0) {
+                            map[currentNeighbourIndex] = map[currentValueIndex];
+                            toProcess.queue([currentPoint[0] + dx[dir], currentPoint[1] + dy[dir], intensity]);
+                        }
                     }
                 }
             }

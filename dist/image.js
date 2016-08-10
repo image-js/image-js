@@ -17955,7 +17955,7 @@ class ROI {
     }
 
     get internalMapIDs() {
-        if (this.computed.internalMapIDs) return this.computed.internalMapIDs;
+        if (this.computed.internalIDs) return this.computed.internalIDs;
         return this.computed.internalMapIDs = getInternalMapIDs(this);
     }
 
@@ -17967,7 +17967,7 @@ class ROI {
      */
     get external() {
         // points of the ROI that touch the rectangular shape
-        if (this.computed.external) return this.computed.external;
+        if (this.computed.box) return this.computed.box;
         return this.computed.external = getExternal(this);
     }
 
@@ -17978,7 +17978,7 @@ class ROI {
      are calculated in the getBoxPixels procedure
      */
     get contour() {
-        if (this.computed.contour) return this.computed.contour;
+        if (this.computed.external) return this.computed.external;
         return this.computed.contour = getContour(this);
     }
 
@@ -18079,7 +18079,7 @@ class ROI {
      The result is given as an array, with the same order as the array from the getSurroundingIDs function.
      */
     get contourByZone() {
-        if (this.computed.neighboursBorderLength) return this.computed.neighboursBorderLength;
+        if (this.computed.getSurroundingBorderLengths) return this.computed.getSurroundingBorderLengths;
 
         var countByZone = new Array(this.neighID.length).fill(0);
         var roiMap = this.map;
@@ -18232,7 +18232,7 @@ function getBorder(roi) {
             }
         }
     }
-    return total + roi.external;
+    return total + roi.box;
 }
 
 function getContour(roi) {
@@ -18251,7 +18251,7 @@ function getContour(roi) {
             }
         }
     }
-    return total + roi.external;
+    return total + roi.box;
 }
 
 /*

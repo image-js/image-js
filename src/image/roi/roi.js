@@ -45,8 +45,58 @@ export default class ROI {
         return this.maxY - this.minY + 1;
     }
 
+    get externalIDs() {
+        if (this.computed.externalIDs) return this.computed.externalIDs;
+        // take all the borders and remove the internal one ...
+
+        let borders = this.borderIDs;
+        let lengths = this.borderLengths;
+
+
+        this.computed.externalIDs = [];
+        this.computed.externalLengths = [];
+
+        let internals = this.internalIDs;
+
+        for (let i = 0; i < borders.length; i++) {
+            if (internals.indexOf(borders[i]) === -1) {
+                this.computed.externalIDs.push(borders[i]);
+                this.computed.externalLengths.push(lengths[i]);
+            }
+        }
+        return this.computed.externalIDs;
+    }
+
+    get externalLengths() {
+        if (this.computed.externalLengths) return this.computed.externalLengths;
+        this.externalIDs;
+        return this.computed.externalLengths;
+    }
+
+
     /**
-     Retrieve all the IDs (array of number) of the region surrounding a specific region
+     Retrieve all the IDs (array of number) of the regions that are in contact with this
+     specific region. It may be external or internal
+     */
+
+    get borderIDs() {
+        if (this.computed.borderIDs) return this.computed.borderIDs;
+        let borders = getBorders(this);
+        this.computed.borderIDs = borders.ids;
+        this.computed.borderLengths = borders.lengths;
+        return this.computed.borderIDs;
+    }
+
+    get borderLengths() {
+        if (this.computed.borderLengths) return this.computed.borderLengths;
+        this.borderIDs;
+        return this.computed.borderLengths;
+    }
+
+
+    /**
+     Retrieve all the IDs or the ROI touching the box surrouding the region
+
      It should really be an array to solve complex cases related to border effect
 
      Like the image
@@ -70,14 +120,14 @@ export default class ROI {
      However in most of the cases it will be an array of one element
      */
 
-    get surround() {
-        if (this.computed.surround) return this.computed.surround;
-        return this.computed.surround = getSurroundingIDs(this);
+    get boxIDs() {
+        if (this.computed.boxIDs) return this.computed.boxIDs;
+        return this.computed.surroundBorderIDs = getBoxIDs(this);
     }
 
-    get internalMapIDs() {
-        if (this.computed.internalMapIDs) return this.computed.internalMapIDs;
-        return this.computed.internalMapIDs = getInternalMapIDs(this);
+    get internalIDs() {
+        if (this.computed.internalIDs) return this.computed.internalIDs;
+        return this.computed.internalMapIDs = getInternalIDs(this);
     }
 
     /**
@@ -86,26 +136,26 @@ export default class ROI {
      because we will ignore those special pixels of the rectangle
      border that don't have neighbours all around them.
      */
-    get external() { // points of the ROI that touch the rectangular shape
-        if (this.computed.external) return this.computed.external;
-        return this.computed.external = getExternal(this);
+    get box() { // points of the ROI that touch the rectangular shape
+        if (this.computed.box) return this.computed.box;
+        return this.computed.external = getBox(this);
     }
 
     /**
-     Calculates the number of pixels that are in the external border
+     Calculates the number of pixels that are in the external border of the ROI
      Contour are all the pixels that touch an external "zone".
      All the pixels that touch the box are part of the border and
      are calculated in the getBoxPixels procedure
      */
-    get contour() {
-        if (this.computed.contour) return this.computed.contour;
-        return this.computed.contour = getContour(this);
+    get external() {
+        if (this.computed.external) return this.computed.external;
+        return this.computed.contour = getExternal(this);
     }
 
     /**
      Calculates the number of pixels that are involved in border
      Border are all the pixels that touch another "zone". It could be external
-     or internal
+     or internal. If there is a hole in the zone it will be counted as a border.
      All the pixels that touch the box are part of the border and
      are calculated in the getBoxPixels procedure
      */
@@ -145,7 +195,7 @@ export default class ROI {
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
                 let target = x + this.minX + (y + this.minY) * this.map.width;
-                if (this.internalMapIDs.indexOf(this.map.pixels[target]) >= 0) {
+                if (this.internalIDs.indexOf(this.map.pixels[target]) >= 0) {
                     img.setBitXY(x, y);
                 } // by default a pixel is to 0 so no problems, it will be transparent
             }
@@ -193,10 +243,7 @@ export default class ROI {
         const pointsY = this.pointsY;
         for (let i = 0; i < pointsX.length; i++) {
             for (let j = i + 1; j < pointsX.length; j++) {
-                let currentML = Math.sqrt(
-                    Math.pow(pointsX[i] - pointsX[j], 2) +
-                    Math.pow(pointsY[i] - pointsY[j], 2)
-                );
+                let currentML = Math.pow(pointsX[i] - pointsX[j], 2) + Math.pow(pointsY[i] - pointsY[j], 2);
                 if (currentML >= maxLength) {
                     maxLength = currentML;
                     maxLengthPoints = {x1: pointsX[i], y1: pointsY[i], x2: pointsX[j], y2: pointsY[j]};
@@ -208,7 +255,7 @@ export default class ROI {
 
 
     /**
-     Calculates the maximum length between two pixels of the ROI.
+        Calculates the maximum length between two pixels of the ROI.
      */
     get maxLength() {
         if (this.computed.maxLength) return this.computed.maxLength;
@@ -219,40 +266,6 @@ export default class ROI {
         return this.computed.maxLength = maxLength;
     }
 
-    /**
-     Calculates the number of pixels touching between the ROI and each of its neighbours.
-     The result is given as an array, with the same order as the array from the 'get neighboursID' function.
-     */
-    get neighboursBorderLength() {
-        if (this.computed.neighboursBorderLength) return this.computed.neighboursBorderLength;
-
-        let countByZone = (new Array(this.neighboursID.length)).fill(0);
-        let roiMap = this.map;
-        let pixels = roiMap.pixels;
-        let neighList = new Set();
-        let dx = [+1, 0, -1, 0];
-        let dy = [0, +1, 0, -1];
-
-        for (let y = 0; y < this.height ; y++) {
-            for (let x = 0; x < this.width; x++) {
-                let target = x + this.minX + (y + this.minY) * this.map.width;
-                if (pixels[target] === this.id) {
-
-                    for (let dir = 0; dir < 4; dir++) {
-                        let neigh = x + dx[dir] + this.minX + (y + dy[dir] + this.minY) * this.map.width;
-                        if (y + dy[dir] + this.minY >= 0 && x + dx[dir] + this.minX >= 0 && y + dy[dir] + this.minY < this.map.height && x + dx[dir] + this.minX < this.map.width) {
-                            if (!neighList.has(neigh) && this.neighboursID.indexOf(pixels[neigh]) !== -1) {
-                                countByZone[this.neighboursID.indexOf(pixels[neigh])]++;
-                                neighList.add(neigh);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return this.computed.contourByZone = countByZone;
-    }
-
     get angle() {
         if (this.computed.angle) return this.computed.angle;
 
@@ -261,46 +274,59 @@ export default class ROI {
 
         return this.computed.angle = angle;
     }
+}
 
-    /**
-     Return an array with the ids of neighbours of this ROI.
-     */
-    get neighboursID() {
-        if (this.computed.neighboursID) return this.computed.neighboursID;
 
-        let roiMap = this.map;
-        let pixels = roiMap.pixels;
-        let neighID = [];
-        let dx = [+1, 0, -1, 0];
-        let dy = [0, +1, 0, -1];
+// TODO we should follow the region in order to increase the speed
 
-        for (let y = 0; y < this.height; y++) {
-            for (let x = 0; x < this.width; x++) {
-                let target = x + this.minX + (y + this.minY) * this.map.width;
-                if (pixels[target] === this.id) {
-                    for (let dir = 0; dir < 4; dir++) {
-                        let neigh = x + dx[dir] + this.minX + (y + dy[dir] + this.minY) * this.map.width;
-                        if (y + dy[dir] + this.minY >= 0 && x + dx[dir] + this.minX >= 0 && y + dy[dir] + this.minY < this.map.height && x + dx[dir] + this.minX < this.map.width) {
-                            if (pixels[neigh] !== this.id && neighID.indexOf(pixels[neigh]) === -1) {
-                                neighID.push(pixels[neigh]);
+function getBorders(roi) {
+    let roiMap = roi.map;
+    let pixels = roiMap.pixels;
+    let surroudingIDs = new Set(); // allows to get a unique list without indexOf
+    let surroundingBorders = new Map();
+    let visitedPixels = new Set();
+    let dx = [+1, 0, -1, 0];
+    let dy = [0, +1, 0, -1];
+
+    for (let x = roi.minX; x <= roi.maxX; x++) {
+        for (let y = roi.minY; y <= roi.maxY; y++) {
+            let target = x + y * roiMap.width;
+            if (pixels[target] === roi.id) {
+                for (let dir = 0; dir < 4; dir++) {
+                    let newX = x + dx[dir];
+                    let newY = y + dy[dir];
+                    if (newX >= 0 && newY >= 0 && newX < roiMap.width && newY < roiMap.height) {
+                        let neighbour = newX + newY * roiMap.width;
+
+                        if (pixels[neighbour] !== roi.id && !visitedPixels.has(neighbour)) {
+                            visitedPixels.add(neighbour);
+                            surroudingIDs.add(pixels[neighbour]);
+                            let surroundingBorder = surroundingBorders.get(pixels[neighbour]);
+                            if (!surroundingBorder) {
+                                surroundingBorders.set(pixels[neighbour], 1);
+                            } else {
+                                surroundingBorders.set(pixels[neighbour], ++surroundingBorder);
                             }
                         }
                     }
                 }
             }
         }
-
-        return this.computed.neighID = neighID;
-
     }
-
+    let ids = Array.from(surroudingIDs);
+    let borderLengths = ids.map(function (id) {
+        return surroundingBorders.get(id);
+    });
+    return {
+        ids: ids,
+        lengths: borderLengths
+    };
 }
 
 
 
-
-function getSurroundingIDs(roi) {
-    let surrounding = new Set();
+function getBoxIDs(roi) {
+    let surroundingIDs = new Set(); // allows to get a unique list without indexOf
 
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
@@ -311,11 +337,11 @@ function getSurroundingIDs(roi) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if ((x - roi.minX) > 0 && pixels[target] === roi.id && pixels[target - 1] !== roi.id) {
                 let value = pixels[target - 1];
-                surrounding.add(value);
+                surroundingIDs.add(value);
             }
             if ((roiMap.width - x - roi.minX) > 1 && pixels[target] === roi.id && pixels[target + 1] !== roi.id) {
                 let value = pixels[target + 1];
-                surrounding.add(value);
+                surroundingIDs.add(value);
             }
         }
     }
@@ -326,22 +352,22 @@ function getSurroundingIDs(roi) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if ((y - roi.minY) > 0 && pixels[target] === roi.id && pixels[target - roiMap.width] !== roi.id) {
                 let value = pixels[target - roiMap.width];
-                surrounding.add(value);
+                surroundingIDs.add(value);
             }
             if ((roiMap.height - y - roi.minY) > 1 && pixels[target] === roi.id && pixels[target + roiMap.width] !== roi.id) {
                 let value = pixels[target + roiMap.width];
-                surrounding.add(value);
+                surroundingIDs.add(value);
             }
         }
     }
 
-    return Array.from(surrounding); // the selection takes the whole rectangle
+    return Array.from(surroundingIDs); // the selection takes the whole rectangle
 }
 
 
 
 
-function getExternal(roi) {
+function getBox(roi) {
     let total = 0;
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
@@ -390,11 +416,11 @@ function getBorder(roi) {
             }
         }
     }
-    return total + roi.external;
+    return total + roi.box;
 }
 
 
-function getContour(roi) {
+function getExternal(roi) {
     let total = 0;
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
@@ -404,35 +430,33 @@ function getContour(roi) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (pixels[target] === roi.id) {
                 // if a pixel around is not roi.id it is a border
-                if ((roi.surround.indexOf(pixels[target - 1]) !== -1) ||
-                    (roi.surround.indexOf(pixels[target + 1]) !== -1) ||
-                    (roi.surround.indexOf(pixels[target - roiMap.width]) !== -1) ||
-                    (roi.surround.indexOf(pixels[target + roiMap.width]) !== -1)) {
+                if ((roi.borderIDs.indexOf(pixels[target - 1]) !== -1) ||
+                    (roi.borderIDs.indexOf(pixels[target + 1]) !== -1) ||
+                    (roi.borderIDs.indexOf(pixels[target - roiMap.width]) !== -1) ||
+                    (roi.borderIDs.indexOf(pixels[target + roiMap.width]) !== -1)) {
                     total++;
                 }
             }
         }
     }
-    return total + roi.external;
+    return total + roi.box;
 }
 
 /*
 We will calculate all the ids of the map that are "internal"
 This will allow to extract the 'plain' image
  */
-function getInternalMapIDs(roi) {
+function getInternalIDs(roi) {
     let internal = [roi.id];
     let roiMap = roi.map;
     let pixels = roiMap.pixels;
-
-
 
     if (roi.height > 2) {
         for (let x = 0; x < roi.width; x++) {
             let target = (roi.minY) * roiMap.width + x + roi.minX;
             if (internal.indexOf(pixels[target]) >= 0) {
                 let id = pixels[target + roiMap.width];
-                if ((internal.indexOf(id) === -1) && (roi.surround.indexOf(id) === -1)) {
+                if ((internal.indexOf(id) === -1) && (roi.boxIDs.indexOf(id) === -1)) {
                     internal.push(id);
                 }
             }
@@ -453,7 +477,7 @@ function getInternalMapIDs(roi) {
 
                 for (let i = 0; i < 4; i++) {
                     let id = array[i];
-                    if ((internal.indexOf(id) === -1) && (roi.surround.indexOf(id) === -1)) {
+                    if ((internal.indexOf(id) === -1) && (roi.boxIDs.indexOf(id) === -1)) {
                         internal.push(id);
                     }
                 }

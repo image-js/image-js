@@ -14,7 +14,7 @@ Image.load('./node_modules/ij-test/img/BW15x15.png').then(function (img) {
         console.log(rois[i].surface);
     }
 
-    console.log(rois[4].internalMapIDs);
+    console.log(rois[4].internalIDs);
 
 
     console.log("Not filled")

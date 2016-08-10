@@ -138,6 +138,14 @@ export default class ROIManager {
         }
     }
 
+    /**
+     *
+     * @param options
+     *  id: true / false
+     *  color
+     * @returns {*|null}
+     */
+
     paint(options = {}) {
         if (!this._painted) this._painted = this._image.rgba8();
         let masks = this.getROIMasks(options);
@@ -182,6 +190,51 @@ export default class ROIManager {
 
     resetPainted(image) {
         this._painted = image;
+    }
+
+
+
+    /**
+     *  Return a new roiMAP changed with the fusion of certain ROIs.
+     * @param rois is an array of ROIs which shares the same roiMAP.
+     * @param algorithm ; algorithm used to decide which ROIs are merged.
+     * @param value is an integer, determine the strength of the merging.
+     * @returns {*}
+     */
+
+    mergeROI(options = {}) {
+        let opt = extendObject({}, this._options, options);
+        let algorithm = opt.algorithm || 'commonBorder';
+        let minCommonBorderLength = opt.minCommonBorderLength || 5;
+        let rois = this.getROI(opt);
+        let toMerge = new Set();
+        switch (algorithm.toLowerCase()) {
+            //Algorithms. We can add more algorithm to create other types of merging.
+            case 'commonborder' :
+                for (let i = 0; i < rois.length; i++) {
+                    for (let k = 0; k < rois[i].borderIDs.length; k++) {
+                        //If the length of wall of the current region and his neighbour is big enough, we join the rois.
+                        if (rois[i].borderIDs[k] !== 0 && rois[i].borderIDs[k] < rois[i].id && rois[i].borderLengths[k] * minCommonBorderLength >= rois[i].external) {
+                            toMerge.add([rois[i].id, rois[i].borderIDs[k]]);
+                        }
+                    }
+                }
+                break;
+        }
+
+
+        //Now we can modify the roiMap by merging each region determined before
+        let pixels = this.getMap(opt).pixels;
+        for (let index = 0; index < pixels.length; index++) {
+            if (pixels[index] !== 0) {
+                for (let array of toMerge) {
+                    if (pixels[index] === array[0]) {
+                        pixels[index] = array[1];
+                    }
+                }
+            }
+        }
+        this.putMap(pixels, opt);
     }
 }
 

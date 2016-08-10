@@ -13,6 +13,9 @@ export default function createROI(roiMap) {
     // we need to find all all the different IDs there is in the pixels
     let pixels = roiMap.pixels;
     let mapIDs = {};
+    roiMap.positive = 0;
+    roiMap.negative = 0;
+
     for (let i = 0; i < pixels.length; i++) {
         if (pixels[i] && !mapIDs[pixels[i]]) {
             mapIDs[pixels[i]] = true;
@@ -25,12 +28,16 @@ export default function createROI(roiMap) {
     }
 
     let rois = {};
+
     for (let mapID in mapIDs) {
         rois[mapID] = new ROI(roiMap, mapID * 1);
     }
 
     let width = roiMap.width;
     let height = roiMap.height;
+
+
+
 
     for (let x = 0; x < width; x++) {
         for (let y = 0; y < height; y++) {

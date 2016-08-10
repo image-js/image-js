@@ -27,10 +27,10 @@ describe('we check that each ROI is surrounded by the expected border', function
 
             rois.should.be.an.instanceof(Array).and.lengthOf(4);
 
-            rois[0].should.containEql({surround: [-1], surface:1, external: 1, contour: 1, border: 1});
-            rois[1].should.containEql({surround: [1], surface:9, external: 8, contour: 8, border: 8});
-            rois[2].should.containEql({surround: [2], surface:39, external: 39, contour: 39, border: 39});
-            rois[3].should.containEql({surround: [-1], surface:72, external: 32, contour: 32, border: 44});
+            rois[0].should.containEql({externalIDs: [-1], surface:1, external: 1, box: 1, border: 1});
+            rois[1].should.containEql({externalIDs: [1], surface:9, external: 8, box: 8, border: 8});
+            rois[2].should.containEql({externalIDs: [2], surface:39, external: 39, box: 39, border: 39});
+            rois[3].should.containEql({externalIDs: [-1], surface:72, external: 32, box: 32, border: 44});
 
         });
     });

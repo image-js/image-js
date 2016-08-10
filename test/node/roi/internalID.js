@@ -28,9 +28,9 @@ describe('we check the internalMapID', function () {
             rois[1].mask.sizes.should.eql([3, 3]);
             rois[2].mask.sizes.should.eql([5, 5]);
 
-            rois[0].internalMapIDs.should.eql([-2]);
-            rois[1].internalMapIDs.should.eql([1, -2]);
-            rois[2].internalMapIDs.should.eql([-1, 1, -2]);
+            rois[0].internalIDs.should.eql([-2]);
+            rois[1].internalIDs.should.eql([1, -2]);
+            rois[2].internalIDs.should.eql([-1, 1, -2]);
 
         });
     });
@@ -48,7 +48,7 @@ describe('we check the internalMapID with complex image', function () {
             let rois = roiManager.getROI();
 
             rois.sort(function (a,b) {
-                return a.internalMapIDs[0] - b.internalMapIDs[0];
+                return a.internalIDs[0] - b.internalIDs[0];
             });
 
             rois.should.be.an.instanceof(Array).and.lengthOf(4);
@@ -58,10 +58,10 @@ describe('we check the internalMapID with complex image', function () {
             rois[2].mask.sizes.should.eql([15, 15]);
             rois[3].mask.sizes.should.eql([9, 2]);
 
-            rois[0].internalMapIDs.should.eql([-2, 2]);
-            rois[1].internalMapIDs.should.eql([-1]);
-            rois[2].internalMapIDs.should.eql([1, -1, -2, 2]);
-            rois[3].internalMapIDs.should.eql([2]);
+            rois[0].internalIDs.should.eql([-2, 2]);
+            rois[1].internalIDs.should.eql([-1]);
+            rois[2].internalIDs.should.eql([1, -1, -2, 2]);
+            rois[3].internalIDs.should.eql([2]);
 
         });
     });

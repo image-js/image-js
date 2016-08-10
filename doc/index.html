@@ -473,13 +473,13 @@
                       <li><a
                         href='#ROI#external'
                         class='regular pre-open'>
-                        #external
+                        #box
                       </a></li>
                       
                       <li><a
                         href='#ROI#contour'
                         class='regular pre-open'>
-                        #contour
+                        #external
                       </a></li>
                       
                       <li><a
@@ -5742,7 +5742,7 @@ The cross will be surrouned by 4 differents zones
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>external</span>
+            <span class='code strong strong truncate'>box</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -5756,7 +5756,7 @@ because we will ignore those special pixels of the rectangle
 border that don&#x27;t have neighbours all around them.</p>
 
 
-  <div class='pre p1 fill-light mt0'>external</div>
+  <div class='pre p1 fill-light mt0'>box</div>
 
   
 
@@ -5790,7 +5790,7 @@ border that don&#x27;t have neighbours all around them.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>contour</span>
+            <span class='code strong strong truncate'>external</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -5798,13 +5798,13 @@ border that don&#x27;t have neighbours all around them.</p>
 
   
 
-  <p>Calculates the number of pixels that are in the external border
-Contour are all the pixels that touch an external &quot;zone&quot;.
+  <p>Calculates the number of pixels that are in the box border
+Contour are all the pixels that touch an box &quot;zone&quot;.
 All the pixels that touch the box are part of the border and
 are calculated in the getBoxPixels procedure</p>
 
 
-  <div class='pre p1 fill-light mt0'>contour</div>
+  <div class='pre p1 fill-light mt0'>external</div>
 
   
 
@@ -5847,7 +5847,7 @@ are calculated in the getBoxPixels procedure</p>
   
 
   <p>Calculates the number of pixels that are involved in border
-Border are all the pixels that touch another &quot;zone&quot;. It could be external
+Border are all the pixels that touch another &quot;zone&quot;. It could be box
 or internal
 All the pixels that touch the box are part of the border and
 are calculated in the getBoxPixels procedure</p>
