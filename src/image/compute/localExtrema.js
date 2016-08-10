@@ -68,8 +68,8 @@ export default function localExtrema (
         for (let i = 0; i < points.length; i++) {
             for (let j = i + 1; j < points.length; j++) {
                 if (Math.sqrt(Math.pow(points[i].x - points[j].x, 2) + Math.pow(points[i].y - points[j].y, 2)) < removeClosePoints) {
-                    points[i].x=(points[i].x+points[j].x)>>1;
-                    points[i].y=(points[i].y+points[j].y)>>1;
+                    points[i].x = (points[i].x + points[j].x)>>1;
+                    points[i].y = (points[i].y + points[j].y)>>1;
                     points.splice(j, 1);
                     j--;
                 }

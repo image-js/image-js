@@ -18079,7 +18079,7 @@ class ROI {
      The result is given as an array, with the same order as the array from the getSurroundingIDs function.
      */
     get contourByZone() {
-        if (this.computed.contourByZone) return this.computed.contourByZone;
+        if (this.computed.neighboursBorderLength) return this.computed.neighboursBorderLength;
 
         var countByZone = new Array(this.neighID.length).fill(0);
         var roiMap = this.map;
@@ -18118,7 +18118,7 @@ class ROI {
     }
 
     get neighID() {
-        if (this.computed.neighID) return this.computed.neighID;
+        if (this.computed.neighboursID) return this.computed.neighboursID;
 
         var roiMap = this.map;
         var pixels = roiMap.pixels;

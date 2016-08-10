@@ -18,8 +18,8 @@ describe('Get the ids of neighbour touching the ROI', function () {
     roiManager.putMap(map);
     it('IDs of neighbour', function () {
         let result = roiManager.getROI();
-        result[0].neighID.should.eql([0, 2, 3]);
-        result[1].neighID.should.eql([1, 3]);
-        result[2].neighID.should.eql([1, 2]);
+        result[0].neighboursID.should.eql([0, 2, 3]);
+        result[1].neighboursID.should.eql([1, 3]);
+        result[2].neighboursID.should.eql([1, 2]);
     });
 });

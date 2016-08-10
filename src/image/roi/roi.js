@@ -221,12 +221,12 @@ export default class ROI {
 
     /**
      Calculates the number of pixels touching between the ROI and each of its neighbours.
-     The result is given as an array, with the same order as the array from the 'get neighID' function.
+     The result is given as an array, with the same order as the array from the 'get neighboursID' function.
      */
-    get contourByZone() {
-        if (this.computed.contourByZone) return this.computed.contourByZone;
+    get neighboursBorderLength() {
+        if (this.computed.neighboursBorderLength) return this.computed.neighboursBorderLength;
 
-        let countByZone = (new Array(this.neighID.length)).fill(0);
+        let countByZone = (new Array(this.neighboursID.length)).fill(0);
         let roiMap = this.map;
         let pixels = roiMap.pixels;
         let neighList = new Set();
@@ -241,8 +241,8 @@ export default class ROI {
                     for (let dir = 0; dir < 4; dir++) {
                         let neigh = x + dx[dir] + this.minX + (y + dy[dir] + this.minY) * this.map.width;
                         if (y + dy[dir] + this.minY >= 0 && x + dx[dir] + this.minX >= 0 && y + dy[dir] + this.minY < this.map.height && x + dx[dir] + this.minX < this.map.width) {
-                            if (!neighList.has(neigh) && this.neighID.indexOf(pixels[neigh]) !== -1) {
-                                countByZone[this.neighID.indexOf(pixels[neigh])]++;
+                            if (!neighList.has(neigh) && this.neighboursID.indexOf(pixels[neigh]) !== -1) {
+                                countByZone[this.neighboursID.indexOf(pixels[neigh])]++;
                                 neighList.add(neigh);
                             }
                         }
@@ -265,8 +265,8 @@ export default class ROI {
     /**
      Return an array with the ids of neighbours of this ROI.
      */
-    get neighID() {
-        if (this.computed.neighID) return this.computed.neighID;
+    get neighboursID() {
+        if (this.computed.neighboursID) return this.computed.neighboursID;
 
         let roiMap = this.map;
         let pixels = roiMap.pixels;

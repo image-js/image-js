@@ -32,22 +32,22 @@ export default function createROIMapFromWaterShed(
     //WaterShed is done from points in the image. We can either specify those points in options,
     // or it is gonna take the minimum locals of the image by default.
     if (!points) {
-        points = image.getLocalExtrema({algorithm:'min'});
+        points = image.getLocalExtrema({algorithm:'min', mask:mask});
     }
-    
+
     let map = new Int16Array(image.size);
     let width = image.width;
     let toProcess = new PriorityQueue(
         {
-            comparator: function(a, b) { return a[2] - b[2];},
+            comparator: function (a, b) { return a[2] - b[2];},
             strategy: PriorityQueue.BinaryHeapStrategy
         }
     );
     for (let i = 0; i < points.length; i++) {
         let index = points[i].x + points[i].y * width;
-        map[index] = i+1;
-        var intensity=image.data[index];
-        if (intensity<=fillMaxValue) {
+        map[index] = i + 1;
+        var intensity = image.data[index];
+        if (intensity <= fillMaxValue) {
             toProcess.queue([points[i].x, points[i].y, intensity]);
         }
     }
@@ -57,15 +57,15 @@ export default function createROIMapFromWaterShed(
 
 
     //Then we iterate through each points
-    while (toProcess.length>0) {
-        var currentPoint = toProcess.dequeue();
+    while (toProcess.length > 0) {
+        let currentPoint = toProcess.dequeue();
         let currentValueIndex = currentPoint[0] + currentPoint[1] * width;
-        
+
         for (let dir = 0; dir < 4; dir++) {
-            var currentNeighIndex = currentPoint[0] + dx[dir] + (currentPoint[1] + dy[dir]) * width;
-            if (! mask || mask.getBit(currentNeighIndex)) {
-                var intensity=image.data[currentNeighIndex];
-                if (intensity<=fillMaxValue) {
+            let currentNeighIndex = currentPoint[0] + dx[dir] + (currentPoint[1] + dy[dir]) * width;
+            if (!mask || mask.getBit(currentNeighIndex)) {
+                var intensity = image.data[currentNeighIndex];
+                if (intensity <= fillMaxValue) {
                     if (map[currentNeighIndex] === 0) {
                         map[currentNeighIndex] = map[currentValueIndex];
                         toProcess.queue([currentPoint[0] + dx[dir], currentPoint[1] + dy[dir], intensity]);

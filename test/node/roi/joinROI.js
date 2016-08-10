@@ -3,7 +3,7 @@ import {Image} from '../common';
 import joinROI from '../../../src/image/roi/joinROI';
 
 describe('Fusion ROIs', function () {
-    it('should fusion 2 ROIs', function () {
+    it.only('should fusion 2 ROIs', function () {
 
         let image = new Image(10,10,
             [
@@ -29,8 +29,9 @@ describe('Fusion ROIs', function () {
                 }
             }
         }
-        
+
         let map = ROIMapper.call(image, {fillMaxValue:5, mask:mask, interval: 1});
+        console.log(JSON.stringify(Array.from(map.pixels)));
         let roiManager = image.getROIManager();
         roiManager.putMap(map.pixels);
         let rois = roiManager.getROI();
@@ -48,5 +49,18 @@ describe('Fusion ROIs', function () {
                 0,0,0,0,3,3,3,3,3,3,
                 0,0,0,0,3,3,3,3,3,3]
         );
+        let test =
+            [
+                1,1,1,1,1,1,2,2,2,2,
+                2,1,1,1,1,1,2,2,2,0,
+                0,1,1,1,1,1,2,2,2,0,
+                0,1,1,1,1,1,1,2,2,0,
+                0,0,0,1,1,1,1,1,1,0,
+                0,0,0,3,1,3,3,3,3,3,
+                0,3,3,3,3,3,3,3,3,3,
+                0,0,3,3,3,3,3,3,3,3,
+                0,0,0,0,3,3,3,3,3,3,
+                0,0,0,0,3,3,3,3,3,3];
+
     });
 });

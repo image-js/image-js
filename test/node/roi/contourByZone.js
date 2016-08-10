@@ -18,8 +18,8 @@ describe('Get the number of pixels touching the adjacent zones', function () {
     roiManager.putMap(map);
     it('Number of pixels adjacent to another zone', function () {
         let result = roiManager.getROI();
-        result[0].contourByZone.should.eql([2, 4, 3]);
-        result[1].contourByZone.should.eql([4, 2]);
-        result[2].contourByZone.should.eql([3, 3]);
+        result[0].neighboursBorderLength.should.eql([2, 4, 3]);
+        result[1].neighboursBorderLength.should.eql([4, 2]);
+        result[2].neighboursBorderLength.should.eql([3, 3]);
     });
 });

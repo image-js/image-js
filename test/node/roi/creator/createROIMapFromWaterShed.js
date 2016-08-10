@@ -64,8 +64,8 @@ describe('Test WaterShed ROI generation', function () {
             ]
         );
     });
-    
-    
+
+
     it('with 3 minimum, and a mask', function () {
 
         let image = new Image(10,10,
