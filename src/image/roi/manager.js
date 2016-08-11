@@ -169,7 +169,7 @@ export default class ROIManager {
             for (let i = 0; i < rois.length; i++) {
                 ctx.fillText(rois[i].id, rois[i].meanX - 3, rois[i].meanY + 3);
             }
-            // this._painted.data=canvas.getImageData(0, 0, _painted.width, _painted.height).data;
+            this._painted.data=canvas.getImageData(0, 0, this._painted.width, this._painted.height).data;
         }
         return this._painted;
     }
