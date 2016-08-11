@@ -45,11 +45,11 @@ export default function createROIMapFromWaterShed(
         }
     );
     for (let i = 0; i < points.length; i++) {
-        let index = points[i].x + points[i].y * width;
+        let index = points[i][0] + points[i][1] * width;
         map[index] = i + 1;
         let intensity = image.data[index];
         if (intensity <= fillMaxValue) {
-            toProcess.queue([points[i].x, points[i].y, intensity]);
+            toProcess.queue([points[i][0], points[i][1], intensity]);
         }
     }
     //dx and dy is to iterate through neighbour up down left and right.

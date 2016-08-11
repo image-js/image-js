@@ -54,7 +54,7 @@ export default function localExtrema(
                 }
             }
             if (counter === region) {
-                points.push({x: currentX, y: currentY});
+                points.push([currentX, currentY]);
             }
         }
     }
@@ -67,9 +67,9 @@ export default function localExtrema(
     if (removeClosePoints > 0) {
         for (let i = 0; i < points.length; i++) {
             for (let j = i + 1; j < points.length; j++) {
-                if (Math.sqrt(Math.pow(points[i].x - points[j].x, 2) + Math.pow(points[i].y - points[j].y, 2)) < removeClosePoints) {
-                    points[i].x = (points[i].x + points[j].x) >> 1;
-                    points[i].y = (points[i].y + points[j].y) >> 1;
+                if (Math.sqrt(Math.pow(points[i][0] - points[j][0], 2) + Math.pow(points[i][1] - points[j][1], 2)) < removeClosePoints) {
+                    points[i][0] = (points[i][0] + points[j][0]) >> 1;
+                    points[i][1] = (points[i][1] + points[j][1]) >> 1;
                     points.splice(j, 1);
                     j--;
                 }
