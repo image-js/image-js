@@ -141,8 +141,11 @@ export default class ROIManager {
     /**
      * Paint the ROI on a copy of the image adn return this image.
      * @param options
-     * @param randomColors Paint the masks with random colors !
-     * @param distinctColors Paint the masks with distinct colors !
+     * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
+     * @param alpha Value from 0 to 255 to specify the alpha. Will be used if it is unspecified
+     * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask.
+     * @param randomColors If we we would like to paint each mask with a random color
+     * @param distinctColors If we we would like to paint each mask with a different color (default: false);
      * @param showLabels Paint the masks ID on the image (default: false). Requires a RGBA image !
      * @param labelColor Define the color to paint the labels (default : 'blue')
      *  id: true / false

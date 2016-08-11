@@ -310,9 +310,10 @@ export default class Image {
             bitDepth: [8]
         });
         if (!this.data.constructor.name === 'Uint8ClampedArray') throw new Error('getInPlaceCanvas : requires Uint8ClampedArray');
+        let data = new ImageData(this.data, this.width, this.height);
         let canvas = new Canvas(this.width, this.height);
         let ctx = canvas.getContext('2d');
-        ctx.putImageData(this.data, 0, 0);
+        ctx.putImageData(data, 0, 0);
         return canvas;
     }
 

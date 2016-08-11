@@ -1,11 +1,13 @@
 import {RGB} from '../model/model';
-import {Color} from '../../util/color';
+import {getDistinctColors, getRandomColor} from '../../util/color';
+
 /**
  * Paint a mask or masks on the current image.
  * @memberof Image
  * @instance
  * @param masks {(Image|Image[])} mask - Image containing a binary mask
  * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
+ * @param alpha Value from 0 to 255 to specify the alpha. Will be used if it is unspecified
  * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask.
  * @param randomColors If we we would like to paint each mask with a random color
  * @param distinctColors If we we would like to paint each mask with a different color (default: false);
@@ -15,12 +17,13 @@ import {Color} from '../../util/color';
 export default function paintMasks(masks, {
     color = [this.maxValue, 0, 0],
     colors,
+    alpha,
     randomColors = false,
     distinctColors = false
 } = {}) {
 
     this.checkProcessable('paintMasks', {
-        components: 3,
+        channels: 4,
         bitDepth: [8, 16],
         colorModel: RGB
     });
@@ -28,7 +31,7 @@ export default function paintMasks(masks, {
     if (!Array.isArray(masks)) masks = [masks];
 
     let numberChannels = Math.min(this.channels, color.length);
-    if (distinctColors) colors = Color.getDistinctColors(masks.length);
+    if (distinctColors) colors = getDistinctColors(masks.length);
 
 
     for (let i = 0; i < masks.length; i++) {
@@ -36,16 +39,19 @@ export default function paintMasks(masks, {
         // we need to find the parent image to calculate the relative position
 
         if (colors) {
-            color = colors[i % masks.legnth];
+            color = colors[i % colors.length];
         } else if (randomColors) {
-            color = Color.getRandom();
+            color = getRandomColor();
         }
 
         for (let x = 0; x < roi.width; x++) {
             for (let y = 0; y < roi.height; y++) {
                 if (roi.getBitXY(x, y)) {
-                    for (let channel = 0; channel < numberChannels; channel++) {
+                    for (let channel = 0; channel < Math.min(numberChannels, color.length); channel++) {
                         this.setValueXY(x + roi.position[0], y + roi.position[1], channel, color[channel]);
+                    }
+                    if (color.length !== numberChannels && alpha) {
+                        this.setValueXY(x + roi.position[0], y + roi.position[1], 3, alpha);
                     }
                 }
             }

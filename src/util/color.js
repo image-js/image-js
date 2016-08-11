@@ -62,9 +62,9 @@ function hsl2rgb(h, s, l) {
 
         m1 = l * 2 - m2;
         hue = h / 360;
-        r = exports.hue2rgb(m1, m2, hue + 1 / 3);
-        g = exports.hue2rgb(m1, m2, hue);
-        b = exports.hue2rgb(m1, m2, hue - 1 / 3);
+        r = hue2rgb(m1, m2, hue + 1 / 3);
+        g = hue2rgb(m1, m2, hue);
+        b = hue2rgb(m1, m2, hue - 1 / 3);
     }
     return {r: r, g: g, b: b};
 }
@@ -74,7 +74,7 @@ export function getDistinctColors(numColors) {
     let j = 0;
     for (let i = 0; i < 360; i += 360 / numColors) {
         j++;
-        let color = exports.hsl2rgb(i, 100, 30 + j % 4 * 15);
+        let color = hsl2rgb(i, 100, 30 + j % 4 * 15);
         colors[j - 1] = [Math.round(color.r * 255), Math.round(color.g * 255), Math.round(color.b * 255)];
     }
     return colors;
@@ -86,10 +86,10 @@ export function getRandomColor() {
 
 
 function getDistinctColorsAsString(numColors) {
-    let colors = exports.getDistinctColors(numColors);
+    let colors = getDistinctColors(numColors);
     let colorsString = new Array(numColors);
     for (let i = 0; i < numColors; i++) {
-        colorsString[i] = exports.getColor(colors[i]);
+        colorsString[i] = getColor(colors[i]);
     }
     return colorsString;
 }
