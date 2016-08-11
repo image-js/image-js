@@ -140,7 +140,7 @@ export default class ROIManager {
 
     /**
      * Paint the ROI on a copy of the image adn return this image.
-     * @param options
+     * @param options : all the options to select ROIs
      * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
      * @param alpha Value from 0 to 255 to specify the alpha. Will be used if it is unspecified
      * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask.
@@ -148,6 +148,7 @@ export default class ROIManager {
      * @param distinctColors If we we would like to paint each mask with a different color (default: false);
      * @param showLabels Paint the masks ID on the image (default: false). Requires a RGBA image !
      * @param labelColor Define the color to paint the labels (default : 'blue')
+     * @param labelFont Define the size of the labels ID (default : '12px Helvetica')
      *  id: true / false
      *  color
      * @returns {*|null}
@@ -156,6 +157,7 @@ export default class ROIManager {
     paint(options = {}) {
         let showLabels = options.showLabels;
         let labelColor = options.labelColor || 'blue';
+        let labelFont = options.labelFont || '12px Helvetica';
 
         if (!this._painted) this._painted = this._image.rgba8();
         let masks = this.getROIMasks(options);
@@ -165,6 +167,7 @@ export default class ROIManager {
             let canvas = this._painted.getCanvas({originalData: true});
             let ctx = canvas.getContext('2d');
             ctx.fillStyle = labelColor;
+            ctx.font = labelFont;
             let rois = this.getROI(options);
             for (let i = 0; i < rois.length; i++) {
                 ctx.fillText(rois[i].id, rois[i].meanX - 3, rois[i].meanY + 3);
