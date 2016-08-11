@@ -50,7 +50,7 @@ export default function paintMasks(masks, {
                         this.setValueXY(x + roi.position[0], y + roi.position[1], channel, color[channel]);
                     }
                     if (color.length !== this.channels && alpha) {
-                        this.setValueXY(x + roi.position[0], y + roi.position[1], this.channels-1, alpha);
+                        this.setValueXY(x + roi.position[0], y + roi.position[1], this.channels - 1, alpha);
                     }
                 }
             }

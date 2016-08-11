@@ -162,13 +162,14 @@ export default class ROIManager {
         this._painted.paintMasks(masks, options);
 
         if (showLabels) {
-            let canvas = this._painted.getInPlaceCanvas();
+            let canvas = this._painted.getCanvas({originalData: true});
             let ctx = canvas.getContext('2d');
             ctx.fillStyle = labelColor;
             let rois = this.getROI();
             for (let i = 0; i < rois.length; i++) {
                 ctx.fillText(rois[i].id, rois[i].meanX - 3, rois[i].meanY + 3);
             }
+            // this._painted.data=canvas.getImageData(0, 0, _painted.width, _painted.height).data;
         }
         return this._painted;
     }

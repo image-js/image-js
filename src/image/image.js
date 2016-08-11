@@ -290,27 +290,20 @@ export default class Image {
 
     /**
      * Creates a new canvas element and draw the image inside it
+     * #originalData
      * @return {Canvas}
      */
-    getCanvas() {
-        let data = new ImageData(this.getRGBAData(), this.width, this.height);
-        let canvas = new Canvas(this.width, this.height);
-        let ctx = canvas.getContext('2d');
-        ctx.putImageData(data, 0, 0);
-        return canvas;
-    }
-
-    /**
-     * Creates a canvas element based on the current data that must be RGBA and Uint8ClampedArray !
-     * @return {Canvas}
-     */
-    getInPlaceCanvas() {
-        this.checkProcessable('getInPlaceCanvas', {
-            channels: [4],
-            bitDepth: [8]
-        });
-        if (!this.data.constructor.name === 'Uint8ClampedArray') throw new Error('getInPlaceCanvas : requires Uint8ClampedArray');
-        let data = new ImageData(this.data, this.width, this.height);
+    getCanvas({originalData = false} = {}) {
+        let data;
+        if (!originalData) {
+            data = new ImageData(this.getRGBAData(), this.width, this.height);
+        } else {
+            this.checkProcessable('getInPlaceCanvas', {
+                channels: [4],
+                bitDepth: [8]
+            });
+            data = new ImageData(this.data, this.width, this.height);
+        }
         let canvas = new Canvas(this.width, this.height);
         let ctx = canvas.getContext('2d');
         ctx.putImageData(data, 0, 0);
