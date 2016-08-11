@@ -30,7 +30,6 @@ export default function paintMasks(masks, {
 
     if (!Array.isArray(masks)) masks = [masks];
 
-    let numberChannels = Math.min(this.channels, color.length);
     if (distinctColors) colors = getDistinctColors(masks.length);
 
 
@@ -47,11 +46,11 @@ export default function paintMasks(masks, {
         for (let x = 0; x < roi.width; x++) {
             for (let y = 0; y < roi.height; y++) {
                 if (roi.getBitXY(x, y)) {
-                    for (let channel = 0; channel < Math.min(numberChannels, color.length); channel++) {
+                    for (let channel = 0; channel < Math.min(this.channels, color.length); channel++) {
                         this.setValueXY(x + roi.position[0], y + roi.position[1], channel, color[channel]);
                     }
-                    if (color.length !== numberChannels && alpha) {
-                        this.setValueXY(x + roi.position[0], y + roi.position[1], 3, alpha);
+                    if (color.length !== this.channels && alpha) {
+                        this.setValueXY(x + roi.position[0], y + roi.position[1], this.channels-1, alpha);
                     }
                 }
             }
