@@ -37,6 +37,10 @@ export default class ROI {
         return mask;
     }
 
+    get mean() {
+        return [this.meanX,this.meanY];
+    }
+
     get width() {
         return this.maxX - this.minX + 1;
     }
@@ -204,33 +208,18 @@ export default class ROI {
         return this.computed.filledMask = img;
     }
 
-    get pointsY() {
-        if (this.computed.pointsY) return this.computed.pointsY;
-        let vY = [];
+    get points() {
+        if (this.computed.points) return this.computed.points;
+        let points = [];
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
                 let target = (y + this.minY) * this.map.width + x + this.minX;
                 if (this.map.pixels[target] === this.id) {
-                    vY.push(y);
+                    points.push([x,y]);
                 }
             }
         }
-        return this.computed.pointsY = vY;
-    }
-
-
-    get pointsX() {
-        if (this.computed.pointsX) return this.computed.pointsX;
-        let vX = [];
-        for (let y = 0; y < this.height; y++) {
-            for (let x = 0; x < this.width; x++) {
-                let target = (y + this.minY) * this.map.width + x + this.minX;
-                if (this.map.pixels[target] === this.id) {
-                    vX.push(x);
-                }
-            }
-        }
-        return this.computed.pointsX = vX;
+        return this.computed.points = points;
     }
 
 
@@ -239,14 +228,14 @@ export default class ROI {
         if (this.computed.maxLengthPoints) return this.computed.maxLengthPoints;
         let maxLength = 0;
         let maxLengthPoints;
-        const pointsX = this.pointsX;
-        const pointsY = this.pointsY;
-        for (let i = 0; i < pointsX.length; i++) {
-            for (let j = i + 1; j < pointsX.length; j++) {
-                let currentML = Math.pow(pointsX[i] - pointsX[j], 2) + Math.pow(pointsY[i] - pointsY[j], 2);
+        const points = this.points;
+
+        for (let i = 0; i < points.length; i++) {
+            for (let j = i + 1; j < points.length; j++) {
+                let currentML = Math.pow(points[i][0] - points[j][0], 2) + Math.pow(points[i][1] - points[j][1], 2);
                 if (currentML >= maxLength) {
                     maxLength = currentML;
-                    maxLengthPoints = {x1: pointsX[i], y1: pointsY[i], x2: pointsX[j], y2: pointsY[j]};
+                    maxLengthPoints = [points[i], points[j]];
                 }
             }
         }
@@ -260,17 +249,16 @@ export default class ROI {
     get maxLength() {
         if (this.computed.maxLength) return this.computed.maxLength;
         let maxLength = Math.sqrt(
-            Math.pow(this.maxLengthPoints.x1 - this.maxLengthPoints.x2, 2) +
-            Math.pow(this.maxLengthPoints.y1 - this.maxLengthPoints.y2, 2)
+            Math.pow(this.maxLengthPoints[0][0] - this.maxLengthPoints[1][0], 2) +
+            Math.pow(this.maxLengthPoints[0][1] - this.maxLengthPoints[1][1], 2)
         );
         return this.computed.maxLength = maxLength;
     }
 
     get angle() {
         if (this.computed.angle) return this.computed.angle;
-
         let points = this.maxLengthPoints;
-        let angle = -Math.atan2(points.y1 - points.y2, points.x1 - points.x2) * 180 / Math.PI;
+        let angle = -Math.atan2(points[0][1] - points[1][1], points[0][0] - points[1][0]) * 180 / Math.PI;
 
         return this.computed.angle = angle;
     }
