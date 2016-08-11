@@ -165,7 +165,7 @@ export default class ROIManager {
             let canvas = this._painted.getCanvas({originalData: true});
             let ctx = canvas.getContext('2d');
             ctx.fillStyle = labelColor;
-            let rois = this.getROI();
+            let rois = this.getROI(options);
             for (let i = 0; i < rois.length; i++) {
                 ctx.fillText(rois[i].id, rois[i].meanX - 3, rois[i].meanY + 3);
             }
