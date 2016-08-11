@@ -139,17 +139,33 @@ export default class ROIManager {
     }
 
     /**
-     *
+     * Paint the ROI on a copy of the image adn return this image.
      * @param options
+     * @param randomColors Paint the masks with random colors !
+     * @param distinctColors Paint the masks with distinct colors !
+     * @param showLabels Paint the masks ID on the image (default: false). Requires a RGBA image !
+     * @param labelColor Define the color to paint the labels (default : 'blue')
      *  id: true / false
      *  color
      * @returns {*|null}
      */
 
     paint(options = {}) {
+        let showLabels = options.showLabels;
+        let labelColor = options.labelColor || 'blue';
+
         if (!this._painted) this._painted = this._image.rgba8();
         let masks = this.getROIMasks(options);
         this._painted.paintMasks(masks, options);
+
+        if (showLabels) {
+            let ctx = this._painted.getInPlaceCanvas().getContext('2d');
+            ctx.fillStyle = labelColor;
+            let rois = this.getROI();
+            for (let i = 0; i < rois.length; i++) {
+                ctx.fillText(rois[i].id, rois[i].meanX - 3, rois[i].meanY + 3);
+            }
+        }
         return this._painted;
     }
 
@@ -173,26 +189,9 @@ export default class ROIManager {
         return mask;
     }
 
-    paintIDs(options = {}) {
-        let image = this._image;
-        let imageCanvas = image.getCanvas();
-        let ctx = imageCanvas.getContext('2d');
-        let rois = this.getROI();
-
-        ctx.fillStyle = 'red';
-        for (let i = 0; i < rois.length; i++) {
-            ctx.fillText(rois[i].id, rois[i].meanX - 3, rois[i].meanY + 3);
-        }
-        this._painted = Image.fromCanvas(imageCanvas);
-        return this._painted;
-    }
-
-
     resetPainted(image) {
         this._painted = image;
     }
-
-
 
     /**
      *  Return a new roiMAP changed with the fusion of certain ROIs.

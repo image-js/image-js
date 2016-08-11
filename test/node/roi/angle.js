@@ -8,7 +8,6 @@ import {Image} from '../common';
  */
 
 
-
 describe('Get the angle of the region, relative to the maxlength', function () {
     let data = new Uint8Array(2);
     data[0] = 63;
@@ -23,6 +22,5 @@ describe('Get the angle of the region, relative to the maxlength', function () {
     it('angle', function () {
         let result = roiManager.getROI();
         result[0].angle.should.eql(-Math.atan2(0 - 3, 3 - 1) * 180 / Math.PI);
-
     });
 });

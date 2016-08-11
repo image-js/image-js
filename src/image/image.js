@@ -300,6 +300,22 @@ export default class Image {
         return canvas;
     }
 
+    /**
+     * Creates a canvas element based on the current data that must be RGBA and Uint8ClampedArray !
+     * @return {Canvas}
+     */
+    getInPlaceCanvas() {
+        this.checkProcessable('getInPlaceCanvas', {
+            channels: [4],
+            bitDepth: [8]
+        });
+        if (!this.data.constructor.name === 'Uint8ClampedArray') throw new Error('getInPlaceCanvas : requires Uint8ClampedArray');
+        let canvas = new Canvas(this.width, this.height);
+        let ctx = canvas.getContext('2d');
+        ctx.putImageData(this.data, 0, 0);
+        return canvas;
+    }
+
     getRGBAData() {
         this.checkProcessable('getRGBAData', {
             components: [1, 3],
