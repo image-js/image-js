@@ -42,7 +42,8 @@ export default class Image {
                 components: otherImage.components,
                 alpha: otherImage.alpha,
                 bitDepth: otherImage.bitDepth,
-                colorModel: otherImage.colorModel
+                colorModel: otherImage.colorModel,
+                parent: otherImage
             };
         }
 
