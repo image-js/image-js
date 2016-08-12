@@ -166,8 +166,6 @@ export default class ROIManager {
         if (showLabels) {
             let canvas = this._painted.getCanvas({originalData: true});
             let ctx = canvas.getContext('2d');
-            canvas.width = this._image.width;
-            canvas.height = this._image.height;
             ctx.fillStyle = labelColor;
             ctx.font = labelFont;
             let rois = this.getROI(options);
