@@ -16,7 +16,8 @@ export default function localExtrema(
         removeClosePoints = 0,
         region = 3,
         algorithm = 'max',
-        mask
+        mask,
+        maxEquals = 2
     } = {}
 ) {
     let searchMaxima = true;
@@ -41,19 +42,23 @@ export default function localExtrema(
                 continue;
             }
             let counter = 0;
+            let nbEquals = 0;
             let currentValue = image.data[currentX + currentY * image.width];
             for (let dir = 0; dir < region; dir++) {
                 if (searchMaxima) {
-                    if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] <= currentValue) {
+                    if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] < currentValue) {
                         counter++;
                     }
                 } else {
-                    if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] >= currentValue) {
+                    if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] > currentValue) {
                         counter++;
                     }
                 }
+                if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] === currentValue) {
+                    nbEquals++;
+                }
             }
-            if (counter === region) {
+            if ((counter + nbEquals) === region && nbEquals<=maxEquals) {
                 points.push([currentX, currentY]);
             }
         }
