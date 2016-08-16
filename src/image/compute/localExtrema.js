@@ -44,11 +44,11 @@ export default function localExtrema(
             let currentValue = image.data[currentX + currentY * image.width];
             for (let dir = 0; dir < region; dir++) {
                 if (searchMaxima) {
-                    if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] < currentValue) {
+                    if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] <= currentValue) {
                         counter++;
                     }
                 } else {
-                    if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] > currentValue) {
+                    if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] >= currentValue) {
                         counter++;
                     }
                 }
