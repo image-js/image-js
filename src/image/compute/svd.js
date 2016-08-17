@@ -1,4 +1,4 @@
-let Matrix = require('ml-matrix');
+import {DC} from 'ml-matrix';
 
 /**
  * TODO would be suprised if this stuff works
@@ -12,5 +12,5 @@ export default function getSVD() {
         bitDepth: [1]
     });
 
-    return Matrix.DC.SVD(this.pixelsArray);
+    return DC.SVD(this.pixelsArray);
 }

@@ -1,4 +1,3 @@
-
 import Matrix from 'ml-matrix';
 
 
@@ -7,9 +6,7 @@ import Matrix from 'ml-matrix';
  * @memberof Image
  * @instance
  */
-
 export default function setMatrix(matrix, {channel} = {}) {
-
     this.checkProcessable('getMatrix', {
         bitDepth: [8, 16]
     });
@@ -27,9 +24,7 @@ export default function setMatrix(matrix, {channel} = {}) {
 
     for (let x = 0; x < this.height; x++) {
         for (let y = 0; y < this.width; y++) {
-            this.setValueXY(y, x, channel, matrix[x][y]);
+            this.setValueXY(y, x, channel, matrix.get(x, y));
         }
     }
-
-    return new Matrix(matrix);
 }
