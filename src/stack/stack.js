@@ -100,7 +100,7 @@ export default class Stack extends Array {
     }
 }
 
-if (!Symbol.species) { // support old engines
+if (!Array[Symbol.species]) { // support old engines
     Stack.prototype.map = function (cb, thisArg) {
         if (typeof cb !== 'function') {
             throw new TypeError(cb + ' is not a function');
