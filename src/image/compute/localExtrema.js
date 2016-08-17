@@ -58,7 +58,7 @@ export default function localExtrema(
                     nbEquals++;
                 }
             }
-            if ((counter + nbEquals) === region && nbEquals<=maxEquals) {
+            if ((counter + nbEquals) === region && nbEquals <= maxEquals) {
                 points.push([currentX, currentY]);
             }
         }
