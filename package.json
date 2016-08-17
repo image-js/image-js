@@ -42,7 +42,7 @@
     "eslint": "eslint src test/node",
     "eslint-fix": "eslint src test/node --fix",
     "prepublish": "npm run compile",
-    "test": "sh test/checkOnly.sh && npm run test-mocha && npm run eslint",
+    "test": "npm run test-mocha && sh test/checkOnly.sh && npm run eslint",
     "test-cov": "babel-istanbul cover _mocha -- --compilers js:babel-register --require should --reporter dot --recursive test/node",
     "test-mocha": "mocha --compilers js:babel-register --require should --reporter mocha-better-spec-reporter --recursive test/node",
     "test-travis": "sh test/checkOnly.sh && babel-istanbul cover _mocha --report lcovonly -- --compilers js:babel-register --require should --reporter mocha-better-spec-reporter --recursive test/node && npm run eslint",
