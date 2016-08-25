@@ -23,14 +23,15 @@ if (typeof self !== 'undefined') { // Browser
         return canvas;
     };
 
-    loadBinary = function (url) {
+    loadBinary = function (url, {withCredentials = false} = {}) {
         return new Promise(function (resolve, reject) {
             let xhr = new self.XMLHttpRequest();
             xhr.open('GET', url, true);
             xhr.responseType = 'arraybuffer';
+            xhr.withCredentials = withCredentials;
 
             xhr.onload = function (e) {
-                this.status === 200 ? resolve(this.response) : reject('wrong status', e);
+                this.status === 200 ? resolve(this.response) : reject(e);
             };
             xhr.onerror = reject;
             xhr.send();

@@ -21,7 +21,7 @@ function swap16(val) {
     return ((val & 0xFF) << 8) | ((val >> 8) & 0xFF);
 }
 
-export function loadURL(url) {
+export function loadURL(url, options) {
     const dataURL = url.slice(0, 64).match(isDataURL);
     if (dataURL) {
         const mimetype = dataURL[1];
@@ -36,9 +36,9 @@ export function loadURL(url) {
     }
 
     if (isPNG.test(url)) {
-        return loadBinary(url).then(loadPNG);
+        return loadBinary(url, options).then(loadPNG);
     } else if (isTIFF.test(url)) {
-        return loadBinary(url).then(loadTIFF);
+        return loadBinary(url, options).then(loadTIFF);
     }
 
     return loadGeneric(url);

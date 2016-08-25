@@ -120,10 +120,11 @@ export default class Image {
     /**
      * Load an image
      * @param {string} url - URL of the image (browser, can be a dataURL) or path (Node.js)
+     * @param {object} [options]
      * @return {Promise} - Resolves with the Image
      */
-    static load(url) {
-        return loadURL(url);
+    static load(url, options) {
+        return loadURL(url, options);
     }
 
     /**
