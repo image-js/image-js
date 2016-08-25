@@ -16,8 +16,8 @@ export default function resizeBinary(scale = 0.5, options = {}) {
 
     let width = Math.floor(this.width * scale);
     let height = Math.floor(this.height * scale);
-    let shiftX = Math.round((this.width - width) / 2);
-    let shiftY = Math.round((this.height - height) / 2);
+    let shiftX = Math.round((this.width - width) / 2) + this.position[0];
+    let shiftY = Math.round((this.height - height) / 2) + this.position[1];
 
     let newImage = Image.createFrom(this, {
         kind: KindNames.BINARY,
