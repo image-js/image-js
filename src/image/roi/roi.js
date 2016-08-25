@@ -70,8 +70,6 @@ export default class ROI {
                 this.computed.externalLengths.push(lengths[i]);
             }
         }
-        console.log("----",this.id,this.surface, this.internalIDs, this.externalIDs, this.border, this.external)
-        
         return this.computed.externalIDs;
     }
 
@@ -425,10 +423,10 @@ function getExternal(roi) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (pixels[target] === roi.id) {
                 // if a pixel around is not roi.id it is a border
-                if ((roi.borderIDs.indexOf(pixels[target - 1]) !== -1) ||
-                    (roi.borderIDs.indexOf(pixels[target + 1]) !== -1) ||
-                    (roi.borderIDs.indexOf(pixels[target - roiMap.width]) !== -1) ||
-                    (roi.borderIDs.indexOf(pixels[target + roiMap.width]) !== -1)) {
+                if ((roi.externalIDs.indexOf(pixels[target - 1]) !== -1) ||
+                    (roi.externalIDs.indexOf(pixels[target + 1]) !== -1) ||
+                    (roi.externalIDs.indexOf(pixels[target - roiMap.width]) !== -1) ||
+                    (roi.externalIDs.indexOf(pixels[target + roiMap.width]) !== -1)) {
                     total++;
                 }
             }

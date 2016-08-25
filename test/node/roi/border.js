@@ -7,7 +7,7 @@ import {load} from '../common';
 0000
  */
 describe('we check that each ROI is surrounded by the expected border', function () {
-    it.only('should yield the right contours size', function () {
+    it('should yield the right contours size', function () {
         return load('BW11x11.png').then(function (img) {
 
             img.width.should.equal(11);
@@ -29,8 +29,7 @@ describe('we check that each ROI is surrounded by the expected border', function
             rois[0].should.containDeep({externalIDs: [-1], surface:1, external: 1, box: 1, border: 1});
             rois[1].should.containDeep({externalIDs: [1], surface:9, external: 8, box: 8, border: 8});
             rois[2].should.containDeep({externalIDs: [2], surface:39, external: 39, box: 39, border: 39});
-        //    rois[3].should.containDeep({externalIDs: [-1], surface:72, external: 32, box: 32, border: 44});
-console.log("---------",rois[3].id,rois[3].externalIDs, rois[3].internalIDs)
+            rois[3].should.containDeep({externalIDs: [-1], surface:72, external: 32, box: 32, border: 44});
         });
     });
 });
