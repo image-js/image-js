@@ -62,18 +62,22 @@ export default class ROI {
 
         let internals = this.internalIDs;
 
+        
+        
         for (let i = 0; i < borders.length; i++) {
             if (internals.indexOf(borders[i]) === -1) {
                 this.computed.externalIDs.push(borders[i]);
                 this.computed.externalLengths.push(lengths[i]);
             }
         }
+        console.log("----",this.id,this.surface, this.internalIDs, this.externalIDs, this.border, this.external)
+        
         return this.computed.externalIDs;
     }
 
     get externalLengths() {
         if (this.computed.externalLengths) return this.computed.externalLengths;
-        this.externalIDs;
+        this.externalIDs; // force the recalculation
         return this.computed.externalLengths;
     }
 
@@ -82,7 +86,6 @@ export default class ROI {
      Retrieve all the IDs (array of number) of the regions that are in contact with this
      specific region. It may be external or internal
      */
-
     get borderIDs() {
         if (this.computed.borderIDs) return this.computed.borderIDs;
         let borders = getBorders(this);
@@ -91,6 +94,10 @@ export default class ROI {
         return this.computed.borderIDs;
     }
 
+    /**
+     Retrieve all the length (array of number) of the contacts with this
+     specific region. It may be external or internal
+     */
     get borderLengths() {
         if (this.computed.borderLengths) return this.computed.borderLengths;
         this.borderIDs;
