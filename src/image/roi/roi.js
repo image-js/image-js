@@ -126,12 +126,12 @@ export default class ROI {
 
     get boxIDs() {
         if (this.computed.boxIDs) return this.computed.boxIDs;
-        return this.computed.surroundBorderIDs = getBoxIDs(this);
+        return this.computed.boxIDs = getBoxIDs(this);
     }
 
     get internalIDs() {
         if (this.computed.internalIDs) return this.computed.internalIDs;
-        return this.computed.internalMapIDs = getInternalIDs(this);
+        return this.computed.internalIDs = getInternalIDs(this);
     }
 
     /**
@@ -142,7 +142,7 @@ export default class ROI {
      */
     get box() { // points of the ROI that touch the rectangular shape
         if (this.computed.box) return this.computed.box;
-        return this.computed.external = getBox(this);
+        return this.computed.box = getBox(this);
     }
 
     /**
@@ -153,7 +153,7 @@ export default class ROI {
      */
     get external() {
         if (this.computed.external) return this.computed.external;
-        return this.computed.contour = getExternal(this);
+        return this.computed.external = getExternal(this);
     }
 
     /**
