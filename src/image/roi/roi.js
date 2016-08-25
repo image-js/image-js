@@ -62,8 +62,8 @@ export default class ROI {
 
         let internals = this.internalIDs;
 
-        
-        
+
+
         for (let i = 0; i < borders.length; i++) {
             if (internals.indexOf(borders[i]) === -1) {
                 this.computed.externalIDs.push(borders[i]);
