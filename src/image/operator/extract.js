@@ -1,6 +1,3 @@
-// we will create a small image from a mask
-
-
 import Image from '../image';
 
 /**
@@ -8,7 +5,7 @@ import Image from '../image';
  * a relative position and this part of the original image will be extracted.
  * @memberof Image
  * @instance
- * @param [Image] mask - Image containing a binary mask
+ * @param {Image} mask - Image containing a binary mask
  * @param {array} [$1.position] - Array of 2 elements containing the x,y coordinates
  * @returns {Image} A new image
  */
@@ -23,18 +20,17 @@ export default function extract(mask, {position} = {}) {
         position = mask.getRelativePosition(this);
         if (!position) {
             throw new Error('extract : can not extract an image because the relative position can not be ' +
-                'determined, try to specify manualy the position as an array of 2 elements [x,y].');
+                'determined, try to specify manually the position as an array of 2 elements [x,y].');
         }
     }
+
     let extract = Image.createFrom(this, {
         width: mask.width,
         height: mask.height,
-        alpha: 1,   // we force the alpha, otherwise dificult to extract a mask ...
+        alpha: 1,   // we force the alpha, otherwise difficult to extract a mask ...
         position: position,
         parent: this
     });
-
-
 
     for (let x = 0; x < mask.width; x++) {
         for (let y = 0; y < mask.height; y++) {
