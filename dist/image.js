@@ -15725,13 +15725,19 @@ if (typeof self !== 'undefined') {
         };
 
         exports.loadBinary = loadBinary = function loadBinary(url) {
+            var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+            var _ref$withCredentials = _ref.withCredentials;
+            var withCredentials = _ref$withCredentials === undefined ? false : _ref$withCredentials;
+
             return new Promise(function (resolve, reject) {
                 var xhr = new self.XMLHttpRequest();
                 xhr.open('GET', url, true);
                 xhr.responseType = 'arraybuffer';
+                xhr.withCredentials = withCredentials;
 
                 xhr.onload = function (e) {
-                    this.status === 200 ? resolve(this.response) : reject('wrong status', e);
+                    this.status === 200 ? resolve(this.response) : reject(e);
                 };
                 xhr.onerror = reject;
                 xhr.send();
@@ -17124,10 +17130,11 @@ class Image {
     /**
      * Load an image
      * @param {string} url - URL of the image (browser, can be a dataURL) or path (Node.js)
+     * @param {object} [options]
      * @return {Promise} - Resolves with the Image
      */
-    static load(url) {
-        return (0, _load.loadURL)(url);
+    static load(url, options) {
+        return (0, _load.loadURL)(url, options);
     }
 
     /**
@@ -17664,7 +17671,7 @@ function swap16(val) {
     return (val & 0xFF) << 8 | val >> 8 & 0xFF;
 }
 
-function loadURL(url) {
+function loadURL(url, options) {
     var dataURL = url.slice(0, 64).match(isDataURL);
     if (dataURL) {
         var mimetype = dataURL[1];
@@ -17679,9 +17686,9 @@ function loadURL(url) {
     }
 
     if (isPNG.test(url)) {
-        return (0, _environment.loadBinary)(url).then(loadPNG);
+        return (0, _environment.loadBinary)(url, options).then(loadPNG);
     } else if (isTIFF.test(url)) {
-        return (0, _environment.loadBinary)(url).then(loadTIFF);
+        return (0, _environment.loadBinary)(url, options).then(loadTIFF);
     }
 
     return loadGeneric(url);
@@ -19263,7 +19270,7 @@ class ROI {
 
     get externalLengths() {
         if (this.computed.externalLengths) return this.computed.externalLengths;
-        this.externalIDs;
+        this.externalIDs; // force the recalculation
         return this.computed.externalLengths;
     }
 
@@ -19271,7 +19278,6 @@ class ROI {
      Retrieve all the IDs (array of number) of the regions that are in contact with this
      specific region. It may be external or internal
      */
-
     get borderIDs() {
         if (this.computed.borderIDs) return this.computed.borderIDs;
         var borders = getBorders(this);
@@ -19280,6 +19286,10 @@ class ROI {
         return this.computed.borderIDs;
     }
 
+    /**
+     Retrieve all the length (array of number) of the contacts with this
+     specific region. It may be external or internal
+     */
     get borderLengths() {
         if (this.computed.borderLengths) return this.computed.borderLengths;
         this.borderIDs;
@@ -19309,12 +19319,12 @@ class ROI {
 
     get boxIDs() {
         if (this.computed.boxIDs) return this.computed.boxIDs;
-        return this.computed.surroundBorderIDs = getBoxIDs(this);
+        return this.computed.boxIDs = getBoxIDs(this);
     }
 
     get internalIDs() {
         if (this.computed.internalIDs) return this.computed.internalIDs;
-        return this.computed.internalMapIDs = getInternalIDs(this);
+        return this.computed.internalIDs = getInternalIDs(this);
     }
 
     /**
@@ -19326,7 +19336,7 @@ class ROI {
     get box() {
         // points of the ROI that touch the rectangular shape
         if (this.computed.box) return this.computed.box;
-        return this.computed.external = getBox(this);
+        return this.computed.box = getBox(this);
     }
 
     /**
@@ -19337,7 +19347,7 @@ class ROI {
      */
     get external() {
         if (this.computed.external) return this.computed.external;
-        return this.computed.contour = getExternal(this);
+        return this.computed.external = getExternal(this);
     }
 
     /**
@@ -19585,7 +19595,7 @@ function getExternal(roi) {
             var target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (pixels[target] === roi.id) {
                 // if a pixel around is not roi.id it is a border
-                if (roi.borderIDs.indexOf(pixels[target - 1]) !== -1 || roi.borderIDs.indexOf(pixels[target + 1]) !== -1 || roi.borderIDs.indexOf(pixels[target - roiMap.width]) !== -1 || roi.borderIDs.indexOf(pixels[target + roiMap.width]) !== -1) {
+                if (roi.externalIDs.indexOf(pixels[target - 1]) !== -1 || roi.externalIDs.indexOf(pixels[target + 1]) !== -1 || roi.externalIDs.indexOf(pixels[target - roiMap.width]) !== -1 || roi.externalIDs.indexOf(pixels[target + roiMap.width]) !== -1) {
                     total++;
                 }
             }
@@ -21506,8 +21516,8 @@ function resizeBinary() {
 
     var width = Math.floor(this.width * scale);
     var height = Math.floor(this.height * scale);
-    var shiftX = Math.round((this.width - width) / 2);
-    var shiftY = Math.round((this.height - height) / 2);
+    var shiftX = Math.round((this.width - width) / 2) + this.position[0];
+    var shiftY = Math.round((this.height - height) / 2) + this.position[1];
 
     var newImage = _image2.default.createFrom(this, {
         kind: KindNames.BINARY,
