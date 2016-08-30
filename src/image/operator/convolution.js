@@ -14,9 +14,10 @@ let conv = require('ml-matrix-convolution');
  * @param {boolean} [$1.normalize=false]
  * @param {number} [$1.divisor=1]
  * @param {string} [$1.border='copy']
+ * @param {string} [$1.algorithm='direct'] - Either direct or 'fft'. fft is much faster for large kernel.
  * @returns {Image}
  */
-export default function convolution(kernel, {channels, bitDepth, normalize = false, divisor = 1, border = 'copy', type = 'direct'} = {}) {
+export default function convolution(kernel, {channels, bitDepth, normalize = false, divisor = 1, border = 'copy', algorithm = 'direct'} = {}) {
 
     let newImage = Image.createFrom(this, {bitDepth: bitDepth});
 
@@ -43,7 +44,7 @@ export default function convolution(kernel, {channels, bitDepth, normalize = fal
                 tmpData[index] = this.data[index * this.channels + c];
             }
         }
-        if (type === 'direct') {
+        if (algorithm === 'direct') {
             tmpResult = conv.direct(tmpData, kernel, {
                 rows: this.height,
                 cols: this.width,
