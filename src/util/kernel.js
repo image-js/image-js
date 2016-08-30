@@ -18,7 +18,7 @@ export function validateKernel(kernel) {
                 throw new RangeError('validateKernel: Kernel array should be a square');
             }
             // we convert the array to a matrix
-            let newKernel = new Array(kWidth);
+            let newKernel = new Array(kernelWidth);
             for (let i = 0; i < kernelWidth; i++) {
                 newKernel[i] = new Array(kernelWidth);
                 for (let j = 0; j < kernelWidth; j++) {
