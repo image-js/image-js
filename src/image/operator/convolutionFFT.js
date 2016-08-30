@@ -12,6 +12,6 @@
  */
 
 export default function convolutionFFT(kernel, options = {}) {
-    options.algorithm='fft';
+    options.algorithm = 'fft';
     return this.convolution(kernel, options);
 }
