@@ -153,7 +153,8 @@ export default class ROIManager {
      * @param options : all the options to select ROIs
      * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
      * @param alpha Value from 0 to 255 to specify the alpha. Will be used if it is unspecified
-     * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask.
+     * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask
+     * @param contour {boolean} true if display only the contour
      * @param randomColors If we we would like to paint each mask with a random color
      * @param distinctColors If we we would like to paint each mask with a different color (default: false);
      * @param showLabels Paint a mask property on the image (default: false). If true will display the 'id'.
@@ -171,7 +172,13 @@ export default class ROIManager {
         let labelFont = options.labelFont || '12px Helvetica';
 
         if (!this._painted) this._painted = this._image.rgba8();
-        let masks = this.getMasks(options);
+        let masks;
+        if (options.contour) {
+            masks = this.getContours(options);
+        } else {
+            masks = this.getMasks(options);
+        }
+
         this._painted.paintMasks(masks, options);
 
         if (showLabels) {
