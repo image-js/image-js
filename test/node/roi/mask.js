@@ -50,7 +50,7 @@ describe('we check mask', function () {
 
 
 
-            let masks = roiManager.getROIMasks();
+            let masks = roiManager.getMasks();
 
             let painted = new Image(5,5);
             painted.paintMasks(masks);

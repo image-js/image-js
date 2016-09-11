@@ -121,7 +121,7 @@ export default class ROIManager {
     }
 
 
-    getROIMasks(options = {}) {
+    getMasks(options = {}) {
         let rois = this.getROI(options);
 
         let masks = new Array(rois.length);
@@ -129,6 +129,16 @@ export default class ROIManager {
             masks[i] = rois[i].mask;
         }
         return masks;
+    }
+
+    getContours(options = {}) {
+        let rois = this.getROI(options);
+
+        let contours = new Array(rois.length);
+        for (let i = 0; i < rois.length; i++) {
+            contours[i] = rois[i].contour;
+        }
+        return contours;
     }
 
     getPixels(options = {}) {
@@ -161,7 +171,7 @@ export default class ROIManager {
         let labelFont = options.labelFont || '12px Helvetica';
 
         if (!this._painted) this._painted = this._image.rgba8();
-        let masks = this.getROIMasks(options);
+        let masks = this.getMasks(options);
         this._painted.paintMasks(masks, options);
 
         if (showLabels) {
@@ -182,7 +192,7 @@ export default class ROIManager {
     // return a mask corresponding to all the selected masks
     getMask(options = {}) {
         let mask = new Image(this._image.width, this._image.height, {kind:'BINARY'});
-        let masks = this.getROIMasks(options);
+        let masks = this.getMasks(options);
 
         for (let i = 0; i < masks.length; i++) {
             let roi = masks[i];

@@ -189,7 +189,7 @@ export default class ROI {
             for (let y = 0; y < this.height; y++) {
                 if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
                     // it also has to be on a border ...
-                    if (x>0 && x<(this.width-1) && y>0 && y<(this.height-1)) {
+                    if (x > 0 && x < (this.width - 1) && y > 0 && y < (this.height - 1)) {
                         if (
                             (this.map.pixels[x - 1 + this.minX + (y + this.minY) * this.map.width] !== this.id) ||
                             (this.map.pixels[x + 1 + this.minX + (y + this.minY) * this.map.width] !== this.id) ||
