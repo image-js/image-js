@@ -31,12 +31,19 @@ export default function paintMasks(masks, {
 
     if (!Array.isArray(color)) {
         color = css2array(color);
+        if (alpha) {
+            color[3] = alpha;
+        }
     }
 
     if (colors) {
         colors = colors.map(function (color) {
             if (!Array.isArray(color)) {
-                return css2array(color);
+                let color = css2array(color);
+                if (alpha) {
+                    color[3] = alpha;
+                }
+                return color;
             }
         });
     }
