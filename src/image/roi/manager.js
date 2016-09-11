@@ -146,7 +146,8 @@ export default class ROIManager {
      * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask.
      * @param randomColors If we we would like to paint each mask with a random color
      * @param distinctColors If we we would like to paint each mask with a different color (default: false);
-     * @param showLabels Paint the masks ID on the image (default: false). Requires a RGBA image !
+     * @param showLabels Paint a mask property on the image (default: false). If true will display the 'id'.
+     *                      May be any property of the ROI. . Requires a RGBA image !
      * @param labelColor Define the color to paint the labels (default : 'blue')
      * @param labelFont Define the size of the labels ID (default : '12px Helvetica')
      *  id: true / false
@@ -164,13 +165,14 @@ export default class ROIManager {
         this._painted.paintMasks(masks, options);
 
         if (showLabels) {
+            if (showLabels === true) showLabels = 'id';
             let canvas = this._painted.getCanvas({originalData: true});
             let ctx = canvas.getContext('2d');
             ctx.fillStyle = labelColor;
             ctx.font = labelFont;
             let rois = this.getROI(options);
             for (let i = 0; i < rois.length; i++) {
-                ctx.fillText(rois[i].id, rois[i].meanX - 3, rois[i].meanY + 3);
+                ctx.fillText(rois[i][showLabels], rois[i].meanX - 3, rois[i].meanY + 3);
             }
             this._painted.data = ctx.getImageData(0, 0, this._painted.width, this._painted.height).data;
         }
