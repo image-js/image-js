@@ -10,6 +10,7 @@ import {getType, canWrite} from './mediaTypes';
 import extendObject from 'extend';
 import {loadURL} from './load';
 import Stack from '../stack/stack';
+import {canvasToBlob} from 'blob-util';
 
 let computedPropertyDescriptor = {
     configurable: true,
@@ -289,6 +290,17 @@ export default class Image {
     toDataURL(type = 'image/png') {
         return this.getCanvas().toDataURL(getType(type));
     }
+
+    /**
+     * Creates a blob from the image and return a Promise.
+     * @param {string} [type='image/png'] A String indicating the image format. The default type is image/png.
+     * @param {string} [quality=0.8] A Number between 0 and 1 indicating image quality if the requested type is image/jpeg or image/webp. If this argument is anything else, the default value for image quality is used. Other arguments are ignored.
+     * @return {Promise}
+     */
+    toBlob(type = 'image/png', quality = 0.8) {
+        return canvasToBlob(this.getCanvas({originalData: true}), type, quality)
+    }
+
 
     /**
      * Creates a new canvas element and draw the image inside it
