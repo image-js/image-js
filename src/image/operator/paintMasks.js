@@ -1,12 +1,13 @@
 import {RGB} from '../model/model';
 import {getDistinctColors, getRandomColor} from '../../util/color';
+import {css2array} from '../../util/color';
 
 /**
  * Paint a mask or masks on the current image.
  * @memberof Image
  * @instance
  * @param masks {(Image|Image[])} mask - Image containing a binary mask
- * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
+ * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red. You may also give a valid css color.
  * @param alpha Value from 0 to 255 to specify the alpha. Will be used if it is unspecified
  * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask.
  * @param randomColors If we we would like to paint each mask with a random color
@@ -27,6 +28,18 @@ export default function paintMasks(masks, {
         bitDepth: [8, 16],
         colorModel: RGB
     });
+
+    if (!Array.isArray(color)) {
+        color = css2array(color);
+    }
+
+    if (colors) {
+        colors = colors.map(function (color) {
+            if (!Array.isArray(color)) {
+                return css2array(color);
+            }
+        });
+    }
 
     if (!Array.isArray(masks)) masks = [masks];
 

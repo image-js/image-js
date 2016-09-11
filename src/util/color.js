@@ -1,3 +1,10 @@
+import {cssColor} from 'color-functions';
+
+export function css2array(string) {
+    let color = cssColor(string);
+    return [color.r, color.g, color.b, Math.round(color.a * 255 / 100)];
+}
+
 function hex2rgb(hex) {
     let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? [
