@@ -173,6 +173,43 @@ export default class ROI {
         return this.computed.border = getBorder(this);
     }
 
+    /**
+        Returns a binary image containing only the border of the mask
+     */
+    get contour() {
+        if (this.computed.contour) return this.computed.contour;
+
+        let img = new Image(this.width, this.height, {
+            kind: KindNames.BINARY,
+            position: [this.minX, this.minY],
+            parent: this.map.parent
+        });
+
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
+                if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
+                    // it also has to be on a border ...
+                    if (x>0 && x<(this.width-1) && y>0 && y<(this.height-1)) {
+                        if (
+                            (this.map.pixels[x - 1 + this.minX + (y + this.minY) * this.map.width] !== this.id) ||
+                            (this.map.pixels[x + 1 + this.minX + (y + this.minY) * this.map.width] !== this.id) ||
+                            (this.map.pixels[x + this.minX + (y - 1 + this.minY) * this.map.width] !== this.id) ||
+                            (this.map.pixels[x + this.minX + (y + 1 + this.minY) * this.map.width] !== this.id)
+                        ) {
+                            img.setBitXY(x, y);
+                        }
+                    } else {
+                        img.setBitXY(x, y);
+                    }
+                }
+            }
+        }
+        return this.computed.contour = img;
+    }
+
+    /**
+     Returns a binary image containing the mask
+     */
     get mask() {
         if (this.computed.mask) return this.computed.mask;
 
