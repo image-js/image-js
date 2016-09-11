@@ -18,7 +18,7 @@ import {css2array} from '../../util/color';
 export default function paintMasks(masks, {
     color = [this.maxValue, 0, 0],
     colors,
-    alpha,
+    alpha = 255,
     randomColors = false,
     distinctColors = false
 } = {}) {
@@ -31,18 +31,12 @@ export default function paintMasks(masks, {
 
     if (!Array.isArray(color)) {
         color = css2array(color);
-        if (alpha) {
-            color[3] = alpha;
-        }
     }
 
     if (colors) {
         colors = colors.map(function (color) {
             if (!Array.isArray(color)) {
                 let color = css2array(color);
-                if (alpha) {
-                    color[3] = alpha;
-                }
                 return color;
             }
         });
@@ -66,11 +60,14 @@ export default function paintMasks(masks, {
         for (let x = 0; x < roi.width; x++) {
             for (let y = 0; y < roi.height; y++) {
                 if (roi.getBitXY(x, y)) {
-                    for (let channel = 0; channel < Math.min(this.channels, color.length); channel++) {
-                        this.setValueXY(x + roi.position[0], y + roi.position[1], channel, color[channel]);
-                    }
-                    if (color.length !== this.channels && alpha) {
-                        this.setValueXY(x + roi.position[0], y + roi.position[1], this.channels - 1, alpha);
+                    for (let component = 0; component < Math.min(this.components, color.length); component++) {
+                        if (alpha === 255) {
+                            this.setValueXY(x + roi.position[0], y + roi.position[1], component, color[component]);
+                        } else {
+                            let value = this.getValueXY(x + roi.position[0], y + roi.position[1], component);
+                            value = Math.round((value * (255 - alpha) + color[component] * alpha) / 255);
+                            this.setValueXY(x + roi.position[0], y + roi.position[1], component, value);
+                        }
                     }
                 }
             }
