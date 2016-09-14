@@ -43,8 +43,8 @@
     "eslint-fix": "npm run eslint -- --fix",
     "prepublish": "npm run compile",
     "test": "npm run test-mocha && sh test/checkOnly.sh && npm run eslint",
-    "test-cov": "babel-istanbul cover _mocha -- --compilers js:babel-register --require should --reporter dot --recursive test/node src/**/__tests__/**/*.js",
-    "test-mocha": "mocha --compilers js:babel-register --require should --reporter mocha-better-spec-reporter --recursive test/node src/**/__tests__/**/*.js",
+    "test-cov": "babel-istanbul cover _mocha -- --compilers js:babel-register --require should --reporter dot --recursive src/**/__tests__/**/*.js",
+    "test-mocha": "mocha --compilers js:babel-register --require should --reporter mocha-better-spec-reporter --recursive src/**/__tests__/**/*.js",
     "test-travis": "sh test/checkOnly.sh && babel-istanbul cover _mocha --report lcovonly -- --compilers js:babel-register --require should --reporter mocha-better-spec-reporter --recursive test/node src/**/__tests__/**/*.js && npm run eslint",
     "watch-browser": "watchify test/browser/bootstrap.js -o test/browser/image.js --standalone IJS --exclude canvas --ignore buffer --ignore zlib --ignore fs --debug --global-transform [ babelify --sourceMap ]",
     "watch-node": "babel --watch src --out-dir lib"
