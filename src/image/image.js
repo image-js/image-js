@@ -298,7 +298,7 @@ export default class Image {
      * @return {Promise}
      */
     toBlob(type = 'image/png', quality = 0.8) {
-        return canvasToBlob(this.getCanvas({originalData: true}), type, quality)
+        return canvasToBlob(this.getCanvas({originalData: true}), type, quality);
     }
 
 
