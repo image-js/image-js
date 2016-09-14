@@ -1,4 +1,4 @@
-import {Image} from '../../../../test/node/common';
+import {Image} from 'test/common';
 
 describe('calculate svd', function () {
     it('check the result', function () {

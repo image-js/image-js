@@ -1,4 +1,4 @@
-import {Image} from '../../../../test/node/common';
+import {Image} from 'test/common';
 
 describe('invertPixel', function () {
     describe('invert 3 components', function () {

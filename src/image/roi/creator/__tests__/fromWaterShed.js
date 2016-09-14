@@ -1,5 +1,5 @@
 import ROIMapper from '../fromWaterShed';
-import {Image} from '../../../../../test/node/common';
+import {Image} from 'test/common';
 
 describe('Test WaterShed ROI generation', function () {
     it('basic', function () {

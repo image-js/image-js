@@ -1,4 +1,4 @@
-import {Image, load} from '../../../../test/node/common';
+import {Image, load} from 'test/common';
 
 /*
 Image

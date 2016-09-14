@@ -1,4 +1,4 @@
-import {Image, getHash} from '../../../../test/node/common';
+import {Image, getHash} from 'test/common';
 
 describe('check the pad transform', function () {
     it('check the right pad extract for GREY image', function () {

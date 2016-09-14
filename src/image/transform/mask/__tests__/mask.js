@@ -1,4 +1,4 @@
-import {Image} from '../../../../../test/node/common';
+import {Image} from 'test/common';
 
 describe('Create mask from a GREY image', function () {
     it('From GREY image give a mask image', function () {

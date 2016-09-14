@@ -1,5 +1,5 @@
 import ROIMapper from '../fromPixels';
-import {Image} from '../../../../../test/node/common';
+import {Image} from 'test/common';
 
 describe('we check createROIMapFromPixels', function () {
     it('should yield the right map', function () {

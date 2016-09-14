@@ -1,4 +1,4 @@
-import {Image, load, getHash} from '../../../../test/node/common';
+import {Image, load} from 'test/common';
 
 describe('we check the relative position', function () {
     it('check the extract without specify position', function () {

@@ -1,4 +1,4 @@
-import {Image, load, getHash} from '../../../../test/node/common';
+import {Image, load, getHash} from 'test/common';
 
 describe('level', function () {
     describe('extend the image to cover all levels', function () {

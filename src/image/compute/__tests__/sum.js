@@ -1,4 +1,4 @@
-import {Image} from '../../../../test/node/common';
+import {Image} from 'test/common';
 
 describe('check sum', function () {
     it('should yield the correct array', function () {

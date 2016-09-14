@@ -1,4 +1,4 @@
-import {Image, getHash} from '../../../../test/node/common';
+import {Image, getHash} from 'test/common';
 
 describe('check the crop transform', function () {
     it('check the right extract for GREY image', function () {

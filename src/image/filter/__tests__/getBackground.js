@@ -1,4 +1,4 @@
-import {Image} from '../../../../test/node/common';
+import {Image} from 'test/common';
 
 describe('getBackground filter', function () {
     it('grey image with 0 values', function () {

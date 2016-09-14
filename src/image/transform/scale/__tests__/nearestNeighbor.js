@@ -1,4 +1,4 @@
-import {load, getHash} from '../../../../../test/node/common';
+import {load, getHash} from 'test/common';
 
 describe('Scale - nearest neighbor', function () {
     let original;

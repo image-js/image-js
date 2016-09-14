@@ -1,5 +1,5 @@
 import ROIMapper from '../fromMask2';
-import {Image} from '../../../../../test/node/common';
+import {Image} from 'test/common';
 
 describe('we check createROIMapFromMask2', function () {
 

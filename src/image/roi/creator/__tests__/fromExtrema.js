@@ -1,5 +1,5 @@
 import ROIMapper from '../fromExtrema';
-import {Image} from '../../../../../test/node/common';
+import {Image} from 'test/common';
 
 
 

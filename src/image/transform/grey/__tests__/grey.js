@@ -1,4 +1,4 @@
-import {Image} from '../../../../../test/node/common';
+import {Image} from 'test/common';
 
 describe('Grey transform', function () {
     it('From RGBA image give a grey image', function () {

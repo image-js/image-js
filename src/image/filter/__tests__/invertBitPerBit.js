@@ -1,4 +1,4 @@
-import {Image} from '../../../../test/node/common';
+import {Image} from 'test/common';
 
 describe('invert binary image bit by bit', function () {
     it('should invert a binary image', function () {

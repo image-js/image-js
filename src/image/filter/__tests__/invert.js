@@ -1,4 +1,4 @@
-import {Image} from '../../../../test/node/common';
+import {Image} from 'test/common';
 
 describe('invert', function () {
     it('should invert colors of 3 components of RGBA, not alpha', function () {

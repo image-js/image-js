@@ -1,4 +1,4 @@
-import {load} from '../../../../../test/node/common';
+import {load} from 'test/common';
 import percentile from '../percentile';
 
 describe('Percentile threshold', function () {

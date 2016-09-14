@@ -1,4 +1,4 @@
-import {Image} from '../../../../test/node/common';
+import {Image} from 'test/common';
 
 describe('check the rgba8 transform', function () {
     it('check the right result for GREY image 8 bit', function () {

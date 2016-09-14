@@ -1,4 +1,4 @@
-import {Image} from '../../../../test/node/common';
+import {Image} from 'test/common';
 
 describe('check the medianFilter filter', function () {
     it('check for GREY image', function () {

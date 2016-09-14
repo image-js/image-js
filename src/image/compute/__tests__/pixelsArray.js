@@ -1,4 +1,4 @@
-import {Image} from '../../../../test/node/common';
+import {Image} from 'test/common';
 
 describe('calculate the pixels array', function () {
     it('check the array', function () {
