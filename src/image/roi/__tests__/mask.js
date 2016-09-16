@@ -10,7 +10,7 @@ describe('we check mask', function () {
 
             let roiManager = img.getROIManager();
             let mask = img.grey().mask({invert:true});
-            roiManager.putMask(mask);
+            roiManager.fromMask(mask);
 
             let roiIDs = roiManager.getROIIDs().sort();
             roiIDs.should.eql([-1, 1, 2]);

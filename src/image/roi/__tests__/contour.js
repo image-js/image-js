@@ -20,7 +20,7 @@ describe('we check contour', function () {
 
         let roiManager = img.getROIManager();
         let mask = img.mask({invert:true});
-        roiManager.putMask(mask);
+        roiManager.fromMask(mask);
 
         let rois = roiManager.getROI();
         rois.should.be.an.instanceof(Array).and.lengthOf(2);

@@ -12,7 +12,7 @@ var mask=new Image(4,4, histogram, {
 
 
 var roiManager=mask.getROIManager();
-roiManager.putMask(mask);
+roiManager.fromMask(mask);
 var rois=roiManager.getROI();
 
 for (var i=0; i<rois.length; i++) {

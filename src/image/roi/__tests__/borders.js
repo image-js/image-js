@@ -26,7 +26,7 @@ describe('we check that each ROI is surrounded by the expected zones', function 
     });
 
     let roiManager = mask.getROIManager();
-    roiManager.putMask(mask);
+    roiManager.fromMask(mask);
 
     it('should yield the right boxIDs', function () {
         let result = roiManager.getROI();

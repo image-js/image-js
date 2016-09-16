@@ -55,7 +55,7 @@ function work() {
         maybeInclude('mask', mask);
 
         const roiManager = sobel.getROIManager();
-        roiManager.putMask(mask);
+        roiManager.fromMask(mask);
         const realMask = roiManager.getMask(options.roi);
         maybeInclude('realMask', realMask);
 

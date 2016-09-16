@@ -7,7 +7,7 @@ Image.load('./node_modules/ij-test/img/BW15x15.png').then(function (img) {
     console.log('Height: ',img.height);
     var roiManager=img.getROIManager();
     var mask=img.grey().mask();
-    roiManager.putMask(mask);
+    roiManager.fromMask(mask);
     var rois=roiManager.getROI();
 
     for (var i=0; i<rois.length; i++) {

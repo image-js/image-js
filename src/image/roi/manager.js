@@ -61,7 +61,7 @@ export default class ROIManager {
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
 
-    putMask(mask, options = {}) {
+    fromMask(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromMask.call(this._image, mask, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
@@ -69,7 +69,7 @@ export default class ROIManager {
     }
 
 
-    putMask2(mask, options = {}) {
+    fromMask2(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromMask2.call(this._image, mask, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);

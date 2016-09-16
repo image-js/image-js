@@ -7,7 +7,7 @@ Image.load('./node_modules/ij-test/img/BW11x11.png').then(function (img) {
     console.log('Height: ',img.height);
     var roiManager=img.getROIManager();
     var mask=img.grey().mask();
-    roiManager.putMask(mask);
+    roiManager.fromMask(mask);
     var rois=roiManager.getROI();
 
     rois.length.should.equal(4);

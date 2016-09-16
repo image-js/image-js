@@ -33,7 +33,7 @@ function processImage(image, i) {
     var grey=image.grey();
     var mask=grey.mask({algorithm: 0.1});
     var roiManager=image.getROIManager();
-    roiManager.putMask(mask);
+    roiManager.fromMask(mask);
     images[i].grey={type:'png', value:grey.toDataURL()};
     images[i].mask={type:'png', value:mask.toDataURL()};
     // we take the biggest ROI and we crop based on the center of it the
