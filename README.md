@@ -7,6 +7,8 @@
 
 Image processing and manipulation in JavaScript
 
+## [API Documentation](https://image-js.github.io/core/)
+
 ## Installation
 
 `npm install image-js`
