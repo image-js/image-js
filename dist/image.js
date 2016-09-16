@@ -6,9 +6,891 @@ module.exports = function _atob(str) {
 };
 
 },{}],2:[function(require,module,exports){
+'use strict';
+
+/* jshint -W079 */
+
+var Blob = require('blob');
+var Promise = require('native-or-lie');
+
+//
+// PRIVATE
+//
+
+// From http://stackoverflow.com/questions/14967647/ (continues on next line)
+// encode-decode-image-with-base64-breaks-image (2013-04-21)
+function binaryStringToArrayBuffer(binary) {
+  var length = binary.length;
+  var buf = new ArrayBuffer(length);
+  var arr = new Uint8Array(buf);
+  var i = -1;
+  while (++i < length) {
+    arr[i] = binary.charCodeAt(i);
+  }
+  return buf;
+}
+
+// Can't find original post, but this is close
+// http://stackoverflow.com/questions/6965107/ (continues on next line)
+// converting-between-strings-and-arraybuffers
+function arrayBufferToBinaryString(buffer) {
+  var binary = '';
+  var bytes = new Uint8Array(buffer);
+  var length = bytes.byteLength;
+  var i = -1;
+  while (++i < length) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return binary;
+}
+
+// doesn't download the image more than once, because
+// browsers aren't dumb. uses the cache
+function loadImage(src, crossOrigin) {
+  return new Promise(function (resolve, reject) {
+    var img = new Image();
+    if (crossOrigin) {
+      img.crossOrigin = crossOrigin;
+    }
+    img.onload = function () {
+      resolve(img);
+    };
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+function imgToCanvas(img) {
+  var canvas = document.createElement('canvas');
+
+  canvas.width = img.width;
+  canvas.height = img.height;
+
+  // copy the image contents to the canvas
+  var context = canvas.getContext('2d');
+  context.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+
+  return canvas;
+}
+
+//
+// PUBLIC
+//
+
+/**
+ * Shim for
+ * [new Blob()]{@link https://developer.mozilla.org/en-US/docs/Web/API/Blob.Blob}
+ * to support
+ * [older browsers that use the deprecated <code>BlobBuilder</code> API]{@link http://caniuse.com/blob}.
+ *
+ * @param {Array} parts - content of the <code>Blob</code>
+ * @param {Object} options - usually just <code>{type: myContentType}</code>
+ * @returns {Blob}
+ */
+function createBlob(parts, options) {
+  options = options || {};
+  if (typeof options === 'string') {
+    options = { type: options }; // do you a solid here
+  }
+  return new Blob(parts, options);
+}
+
+/**
+ * Shim for
+ * [URL.createObjectURL()]{@link https://developer.mozilla.org/en-US/docs/Web/API/URL.createObjectURL}
+ * to support browsers that only have the prefixed
+ * <code>webkitURL</code> (e.g. Android <4.4).
+ * @param {Blob} blob
+ * @returns {string} url
+ */
+function createObjectURL(blob) {
+  return (window.URL || window.webkitURL).createObjectURL(blob);
+}
+
+/**
+ * Shim for
+ * [URL.revokeObjectURL()]{@link https://developer.mozilla.org/en-US/docs/Web/API/URL.revokeObjectURL}
+ * to support browsers that only have the prefixed
+ * <code>webkitURL</code> (e.g. Android <4.4).
+ * @param {string} url
+ */
+function revokeObjectURL(url) {
+  return (window.URL || window.webkitURL).revokeObjectURL(url);
+}
+
+/**
+ * Convert a <code>Blob</code> to a binary string. Returns a Promise.
+ *
+ * @param {Blob} blob
+ * @returns {Promise} Promise that resolves with the binary string
+ */
+function blobToBinaryString(blob) {
+  return new Promise(function (resolve, reject) {
+    var reader = new FileReader();
+    var hasBinaryString = typeof reader.readAsBinaryString === 'function';
+    reader.onloadend = function (e) {
+      var result = e.target.result || '';
+      if (hasBinaryString) {
+        return resolve(result);
+      }
+      resolve(arrayBufferToBinaryString(result));
+    };
+    reader.onerror = reject;
+    if (hasBinaryString) {
+      reader.readAsBinaryString(blob);
+    } else {
+      reader.readAsArrayBuffer(blob);
+    }
+  });
+}
+
+/**
+ * Convert a base64-encoded string to a <code>Blob</code>. Returns a Promise.
+ * @param {string} base64
+ * @param {string|undefined} type - the content type (optional)
+ * @returns {Promise} Promise that resolves with the <code>Blob</code>
+ */
+function base64StringToBlob(base64, type) {
+  return Promise.resolve().then(function () {
+    var parts = [binaryStringToArrayBuffer(atob(base64))];
+    return type ? createBlob(parts, { type: type }) : createBlob(parts);
+  });
+}
+
+/**
+ * Convert a binary string to a <code>Blob</code>. Returns a Promise.
+ * @param {string} binary
+ * @param {string|undefined} type - the content type (optional)
+ * @returns {Promise} Promise that resolves with the <code>Blob</code>
+ */
+function binaryStringToBlob(binary, type) {
+  return Promise.resolve().then(function () {
+    return base64StringToBlob(btoa(binary), type);
+  });
+}
+
+/**
+ * Convert a <code>Blob</code> to a binary string. Returns a Promise.
+ * @param {Blob} blob
+ * @returns {Promise} Promise that resolves with the binary string
+ */
+function blobToBase64String(blob) {
+  return blobToBinaryString(blob).then(function (binary) {
+    return btoa(binary);
+  });
+}
+
+/**
+ * Convert a data URL string
+ * (e.g. <code>'data:image/png;base64,iVBORw0KG...'</code>)
+ * to a <code>Blob</code>. Returns a Promise.
+ * @param {string} dataURL
+ * @returns {Promise} Promise that resolves with the <code>Blob</code>
+ */
+function dataURLToBlob(dataURL) {
+  return Promise.resolve().then(function () {
+    var type = dataURL.match(/data:([^;]+)/)[1];
+    var base64 = dataURL.replace(/^[^,]+,/, '');
+
+    var buff = binaryStringToArrayBuffer(atob(base64));
+    return createBlob([buff], { type: type });
+  });
+}
+
+/**
+ * Convert an image's <code>src</code> URL to a data URL by loading the image and painting
+ * it to a <code>canvas</code>. Returns a Promise.
+ *
+ * <p/>Note: this will coerce the image to the desired content type, and it
+ * will only paint the first frame of an animated GIF.
+ *
+ * @param {string} src
+ * @param {string|undefined} type - the content type (optional, defaults to 'image/png')
+ * @param {string|undefined} crossOrigin - for CORS-enabled images, set this to
+ *                                         'Anonymous' to avoid "tainted canvas" errors
+ * @param {number|undefined} quality - a number between 0 and 1 indicating image quality
+ *                                     if the requested type is 'image/jpeg' or 'image/webp'
+ * @returns {Promise} Promise that resolves with the data URL string
+ */
+function imgSrcToDataURL(src, type, crossOrigin, quality) {
+  type = type || 'image/png';
+
+  return loadImage(src, crossOrigin).then(function (img) {
+    return imgToCanvas(img);
+  }).then(function (canvas) {
+    return canvas.toDataURL(type, quality);
+  });
+}
+
+/**
+ * Convert a <code>canvas</code> to a <code>Blob</code>. Returns a Promise.
+ * @param {string} canvas
+ * @param {string|undefined} type - the content type (optional, defaults to 'image/png')
+ * @param {number|undefined} quality - a number between 0 and 1 indicating image quality
+ *                                     if the requested type is 'image/jpeg' or 'image/webp'
+ * @returns {Promise} Promise that resolves with the <code>Blob</code>
+ */
+function canvasToBlob(canvas, type, quality) {
+  return Promise.resolve().then(function () {
+    if (typeof canvas.toBlob === 'function') {
+      return new Promise(function (resolve) {
+        canvas.toBlob(resolve, type, quality);
+      });
+    }
+    return dataURLToBlob(canvas.toDataURL(type, quality));
+  });
+}
+
+/**
+ * Convert an image's <code>src</code> URL to a <code>Blob</code> by loading the image and painting
+ * it to a <code>canvas</code>. Returns a Promise.
+ *
+ * <p/>Note: this will coerce the image to the desired content type, and it
+ * will only paint the first frame of an animated GIF.
+ *
+ * @param {string} src
+ * @param {string|undefined} type - the content type (optional, defaults to 'image/png')
+ * @param {string|undefined} crossOrigin - for CORS-enabled images, set this to
+ *                                         'Anonymous' to avoid "tainted canvas" errors
+ * @param {number|undefined} quality - a number between 0 and 1 indicating image quality
+ *                                     if the requested type is 'image/jpeg' or 'image/webp'
+ * @returns {Promise} Promise that resolves with the <code>Blob</code>
+ */
+function imgSrcToBlob(src, type, crossOrigin, quality) {
+  type = type || 'image/png';
+
+  return loadImage(src, crossOrigin).then(function (img) {
+    return imgToCanvas(img);
+  }).then(function (canvas) {
+    return canvasToBlob(canvas, type, quality);
+  });
+}
+
+/**
+ * Convert an <code>ArrayBuffer</code> to a <code>Blob</code>. Returns a Promise.
+ *
+ * @param {ArrayBuffer} buffer
+ * @param {string|undefined} type - the content type (optional)
+ * @returns {Promise} Promise that resolves with the <code>Blob</code>
+ */
+function arrayBufferToBlob(buffer, type) {
+  return Promise.resolve().then(function () {
+    return createBlob([buffer], type);
+  });
+}
+
+/**
+ * Convert a <code>Blob</code> to an <code>ArrayBuffer</code>. Returns a Promise.
+ * @param {Blob} blob
+ * @returns {Promise} Promise that resolves with the <code>ArrayBuffer</code>
+ */
+function blobToArrayBuffer(blob) {
+  return new Promise(function (resolve, reject) {
+    var reader = new FileReader();
+    reader.onloadend = function (e) {
+      var result = e.target.result || new ArrayBuffer(0);
+      resolve(result);
+    };
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(blob);
+  });
+}
+
+module.exports = {
+  createBlob: createBlob,
+  createObjectURL: createObjectURL,
+  revokeObjectURL: revokeObjectURL,
+  imgSrcToBlob: imgSrcToBlob,
+  imgSrcToDataURL: imgSrcToDataURL,
+  canvasToBlob: canvasToBlob,
+  dataURLToBlob: dataURLToBlob,
+  blobToBase64String: blobToBase64String,
+  base64StringToBlob: base64StringToBlob,
+  binaryStringToBlob: binaryStringToBlob,
+  blobToBinaryString: blobToBinaryString,
+  arrayBufferToBlob: arrayBufferToBlob,
+  blobToArrayBuffer: blobToArrayBuffer
+};
+
+},{"blob":3,"native-or-lie":140}],3:[function(require,module,exports){
+(function (global){
+'use strict';
+
+/**
+ * Create a blob builder even when vendor prefixes exist
+ */
+
+var BlobBuilder = global.BlobBuilder || global.WebKitBlobBuilder || global.MSBlobBuilder || global.MozBlobBuilder;
+
+/**
+ * Check if Blob constructor is supported
+ */
+
+var blobSupported = function () {
+  try {
+    var a = new Blob(['hi']);
+    return a.size === 2;
+  } catch (e) {
+    return false;
+  }
+}();
+
+/**
+ * Check if Blob constructor supports ArrayBufferViews
+ * Fails in Safari 6, so we need to map to ArrayBuffers there.
+ */
+
+var blobSupportsArrayBufferView = blobSupported && function () {
+  try {
+    var b = new Blob([new Uint8Array([1, 2])]);
+    return b.size === 2;
+  } catch (e) {
+    return false;
+  }
+}();
+
+/**
+ * Check if BlobBuilder is supported
+ */
+
+var blobBuilderSupported = BlobBuilder && BlobBuilder.prototype.append && BlobBuilder.prototype.getBlob;
+
+/**
+ * Helper function that maps ArrayBufferViews to ArrayBuffers
+ * Used by BlobBuilder constructor and old browsers that didn't
+ * support it in the Blob constructor.
+ */
+
+function mapArrayBufferViews(ary) {
+  for (var i = 0; i < ary.length; i++) {
+    var chunk = ary[i];
+    if (chunk.buffer instanceof ArrayBuffer) {
+      var buf = chunk.buffer;
+
+      // if this is a subarray, make a copy so we only
+      // include the subarray region from the underlying buffer
+      if (chunk.byteLength !== buf.byteLength) {
+        var copy = new Uint8Array(chunk.byteLength);
+        copy.set(new Uint8Array(buf, chunk.byteOffset, chunk.byteLength));
+        buf = copy.buffer;
+      }
+
+      ary[i] = buf;
+    }
+  }
+}
+
+function BlobBuilderConstructor(ary, options) {
+  options = options || {};
+
+  var bb = new BlobBuilder();
+  mapArrayBufferViews(ary);
+
+  for (var i = 0; i < ary.length; i++) {
+    bb.append(ary[i]);
+  }
+
+  return options.type ? bb.getBlob(options.type) : bb.getBlob();
+};
+
+function BlobConstructor(ary, options) {
+  mapArrayBufferViews(ary);
+  return new Blob(ary, options || {});
+};
+
+module.exports = function () {
+  if (blobSupported) {
+    return blobSupportsArrayBufferView ? global.Blob : BlobConstructor;
+  } else if (blobBuilderSupported) {
+    return BlobBuilderConstructor;
+  } else {
+    return undefined;
+  }
+}();
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],4:[function(require,module,exports){
 "use strict";
 
-},{}],3:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
+'use strict';
+
+module.exports = {
+  hex2rgb: require('./lib/hex2rgb'),
+  hsv2hex: require('./lib/hsv2hex'),
+  hsv2rgb: require('./lib/hsv2rgb'),
+  rgb2hex: require('./lib/rgb2hex'),
+  rgb2hsv: require('./lib/rgb2hsv'),
+  rgba: require('./lib/rgba'),
+  rgba2rgb: require('./lib/rgba2rgb'),
+  rgba2hex: require('./lib/rgba2hex'),
+  hsl2hsv: require('./lib/hsl2hsv'),
+  hsv2hsl: require('./lib/hsv2hsl'),
+  hsl2rgb: require('./lib/hsl2rgb'),
+  cssColor: require('./lib/css-color')
+};
+
+},{"./lib/css-color":7,"./lib/hex2rgb":8,"./lib/hsl2hsv":9,"./lib/hsl2rgb":10,"./lib/hsv2hex":11,"./lib/hsv2hsl":12,"./lib/hsv2rgb":13,"./lib/rgb2hex":14,"./lib/rgb2hsv":15,"./lib/rgba":16,"./lib/rgba2hex":17,"./lib/rgba2rgb":18}],6:[function(require,module,exports){
+"use strict";
+
+module.exports = {
+  aliceblue: [240, 248, 255],
+  antiquewhite: [250, 235, 215],
+  aqua: [0, 255, 255],
+  aquamarine: [127, 255, 212],
+  azure: [240, 255, 255],
+  beige: [245, 245, 220],
+  bisque: [255, 228, 196],
+  black: [0, 0, 0],
+  blanchedalmond: [255, 235, 205],
+  blue: [0, 0, 255],
+  blueviolet: [138, 43, 226],
+  brown: [165, 42, 42],
+  burlywood: [222, 184, 135],
+  cadetblue: [95, 158, 160],
+  chartreuse: [127, 255, 0],
+  chocolate: [210, 105, 30],
+  coral: [255, 127, 80],
+  cornflowerblue: [100, 149, 237],
+  cornsilk: [255, 248, 220],
+  crimson: [220, 20, 60],
+  cyan: [0, 255, 255],
+  darkblue: [0, 0, 139],
+  darkcyan: [0, 139, 139],
+  darkgoldenrod: [184, 132, 11],
+  darkgray: [169, 169, 169],
+  darkgreen: [0, 100, 0],
+  darkgrey: [169, 169, 169],
+  darkkhaki: [189, 183, 107],
+  darkmagenta: [139, 0, 139],
+  darkolivegreen: [85, 107, 47],
+  darkorange: [255, 140, 0],
+  darkorchid: [153, 50, 204],
+  darkred: [139, 0, 0],
+  darksalmon: [233, 150, 122],
+  darkseagreen: [143, 188, 143],
+  darkslateblue: [72, 61, 139],
+  darkslategray: [47, 79, 79],
+  darkslategrey: [47, 79, 79],
+  darkturquoise: [0, 206, 209],
+  darkviolet: [148, 0, 211],
+  deeppink: [255, 20, 147],
+  deepskyblue: [0, 191, 255],
+  dimgray: [105, 105, 105],
+  dimgrey: [105, 105, 105],
+  dodgerblue: [30, 144, 255],
+  firebrick: [178, 34, 34],
+  floralwhite: [255, 255, 240],
+  forestgreen: [34, 139, 34],
+  fuchsia: [255, 0, 255],
+  gainsboro: [220, 220, 220],
+  ghostwhite: [248, 248, 255],
+  gold: [255, 215, 0],
+  goldenrod: [218, 165, 32],
+  gray: [128, 128, 128],
+  green: [0, 128, 0],
+  greenyellow: [173, 255, 47],
+  grey: [128, 128, 128],
+  honeydew: [240, 255, 240],
+  hotpink: [255, 105, 180],
+  indianred: [205, 92, 92],
+  indigo: [75, 0, 130],
+  ivory: [255, 255, 240],
+  khaki: [240, 230, 140],
+  lavender: [230, 230, 250],
+  lavenderblush: [255, 240, 245],
+  lawngreen: [124, 252, 0],
+  lemonchiffon: [255, 250, 205],
+  lightblue: [173, 216, 230],
+  lightcoral: [240, 128, 128],
+  lightcyan: [224, 255, 255],
+  lightgoldenrodyellow: [250, 250, 210],
+  lightgray: [211, 211, 211],
+  lightgreen: [144, 238, 144],
+  lightgrey: [211, 211, 211],
+  lightpink: [255, 182, 193],
+  lightsalmon: [255, 160, 122],
+  lightseagreen: [32, 178, 170],
+  lightskyblue: [135, 206, 250],
+  lightslategray: [119, 136, 153],
+  lightslategrey: [119, 136, 153],
+  lightsteelblue: [176, 196, 222],
+  lightyellow: [255, 255, 224],
+  lime: [0, 255, 0],
+  limegreen: [50, 205, 50],
+  linen: [250, 240, 230],
+  magenta: [255, 0, 255],
+  maroon: [128, 0, 0],
+  mediumaquamarine: [102, 205, 170],
+  mediumblue: [0, 0, 205],
+  mediumorchid: [186, 85, 211],
+  mediumpurple: [147, 112, 219],
+  mediumseagreen: [60, 179, 113],
+  mediumslateblue: [123, 104, 238],
+  mediumspringgreen: [0, 250, 154],
+  mediumturquoise: [72, 209, 204],
+  mediumvioletred: [199, 21, 133],
+  midnightblue: [25, 25, 112],
+  mintcream: [245, 255, 250],
+  mistyrose: [255, 228, 225],
+  moccasin: [255, 228, 181],
+  navajowhite: [255, 222, 173],
+  navy: [0, 0, 128],
+  oldlace: [253, 245, 230],
+  olive: [128, 128, 0],
+  olivedrab: [107, 142, 35],
+  orange: [255, 165, 0],
+  orangered: [255, 69, 0],
+  orchid: [218, 112, 214],
+  palegoldenrod: [238, 232, 170],
+  palegreen: [152, 251, 152],
+  paleturquoise: [175, 238, 238],
+  palevioletred: [219, 112, 147],
+  papayawhip: [255, 239, 213],
+  peachpuff: [255, 218, 185],
+  peru: [205, 133, 63],
+  pink: [255, 192, 203],
+  plum: [221, 160, 203],
+  powderblue: [176, 224, 230],
+  purple: [128, 0, 128],
+  rebeccapurple: [102, 51, 153],
+  red: [255, 0, 0],
+  rosybrown: [188, 143, 143],
+  royalblue: [65, 105, 225],
+  saddlebrown: [139, 69, 19],
+  salmon: [250, 128, 114],
+  sandybrown: [244, 164, 96],
+  seagreen: [46, 139, 87],
+  seashell: [255, 245, 238],
+  sienna: [160, 82, 45],
+  silver: [192, 192, 192],
+  skyblue: [135, 206, 235],
+  slateblue: [106, 90, 205],
+  slategray: [119, 128, 144],
+  slategrey: [119, 128, 144],
+  snow: [255, 255, 250],
+  springgreen: [0, 255, 127],
+  steelblue: [70, 130, 180],
+  tan: [210, 180, 140],
+  teal: [0, 128, 128],
+  thistle: [216, 191, 216],
+  tomato: [255, 99, 71],
+  turquoise: [64, 224, 208],
+  violet: [238, 130, 238],
+  wheat: [245, 222, 179],
+  white: [255, 255, 255],
+  whitesmoke: [245, 245, 245],
+  yellow: [255, 255, 0],
+  yellowgreen: [154, 205, 5]
+};
+
+},{}],7:[function(require,module,exports){
+'use strict';
+
+// based on component/color-parser
+
+var hsl2rgb = require('./hsl2rgb');
+var colors = require('./_colors');
+
+function parse(str) {
+  return named(str) || hex3(str) || hex6(str) || rgb(str) || rgba(str) || hsl(str) || hsla(str);
+}
+
+function named(str) {
+  var c = colors[str.toLowerCase()];
+  if (!c) return;
+  return {
+    r: c[0],
+    g: c[1],
+    b: c[2],
+    a: 100
+  };
+}
+
+function rgb(str) {
+  if (0 == str.indexOf('rgb(')) {
+    str = str.match(/rgb\(([^)]+)\)/)[1];
+    var parts = str.split(/ *, */).map(Number);
+    return {
+      r: parts[0],
+      g: parts[1],
+      b: parts[2],
+      a: 100
+    };
+  }
+}
+
+function rgba(str) {
+  if (str.indexOf('rgba(') === 0) {
+    str = str.match(/rgba\(([^)]+)\)/)[1];
+    var parts = str.split(/ *, */).map(Number);
+
+    return {
+      r: parts[0],
+      g: parts[1],
+      b: parts[2],
+      a: parts[3] * 100
+    };
+  }
+}
+
+function hex6(str) {
+  if ('#' === str[0] && 7 === str.length) {
+    return {
+      r: parseInt(str.slice(1, 3), 16),
+      g: parseInt(str.slice(3, 5), 16),
+      b: parseInt(str.slice(5, 7), 16),
+      a: 100
+    };
+  }
+}
+
+function hex3(str) {
+  if ('#' === str[0] && 4 === str.length) {
+    return {
+      r: parseInt(str[1] + str[1], 16),
+      g: parseInt(str[2] + str[2], 16),
+      b: parseInt(str[3] + str[3], 16),
+      a: 100
+    };
+  }
+}
+
+function hsl(str) {
+  if (str.indexOf('hsl(') === 0) {
+    str = str.match(/hsl\(([^)]+)\)/)[1];
+    var parts = str.split(/ *, */);
+
+    var h = parseInt(parts[0], 10);
+    var s = parseInt(parts[1], 10);
+    var l = parseInt(parts[2], 10);
+
+    var rgba = hsl2rgb(h, s, l);
+    rgba.a = 100;
+
+    return rgba;
+  }
+}
+
+function hsla(str) {
+  if (str.indexOf('hsla(') === 0) {
+    str = str.match(/hsla\(([^)]+)\)/)[1];
+    var parts = str.split(/ *, */);
+
+    var h = parseInt(parts[0], 10);
+    var s = parseInt(parts[1], 10);
+    var l = parseInt(parts[2], 10);
+    var a = parseInt(parts[3] * 100, 10);
+
+    var rgba = hsl2rgb(h, s, l);
+    rgba.a = a;
+
+    return rgba;
+  }
+}
+
+module.exports = parse;
+
+},{"./_colors":6,"./hsl2rgb":10}],8:[function(require,module,exports){
+'use strict';
+
+module.exports = function (hex) {
+  if (hex[0] === '#') hex = hex.substr(1);
+
+  if (hex.length === 6) {
+    return {
+      r: parseInt(hex.substr(0, 2), 16),
+      g: parseInt(hex.substr(2, 2), 16),
+      b: parseInt(hex.substr(4, 2), 16)
+    };
+  } else if (hex.length === 3) {
+    return {
+      r: parseInt(hex[0] + hex[0], 16),
+      g: parseInt(hex[1] + hex[1], 16),
+      b: parseInt(hex[2] + hex[2], 16)
+    };
+  }
+};
+
+},{}],9:[function(require,module,exports){
+'use strict';
+
+module.exports = function (h, s, l) {
+  s *= (l < 50 ? l : 100 - l) / 100;
+
+  console.log('s', s);
+
+  return {
+    h: h,
+    s: 2 * s / (l + s) * 100,
+    v: l + s
+  };
+};
+
+},{}],10:[function(require,module,exports){
+'use strict';
+
+var hsl2hsv = require('./hsl2hsv');
+var hsv2rgb = require('./hsv2rgb');
+
+module.exports = function (h, s, l) {
+  var hsv = hsl2hsv(h, s, l);
+  return hsv2rgb(hsv.h, hsv.s, hsv.v);
+};
+
+},{"./hsl2hsv":9,"./hsv2rgb":13}],11:[function(require,module,exports){
+'use strict';
+
+var hsv2rgb = require('./hsv2rgb');
+var rgb2hex = require('./rgb2hex');
+
+module.exports = function (h, s, v) {
+  var rgb = hsv2rgb(h, s, v);
+  return rgb2hex(rgb.r, rgb.g, rgb.b);
+};
+
+},{"./hsv2rgb":13,"./rgb2hex":14}],12:[function(require,module,exports){
+"use strict";
+
+module.exports = function (h, s, v) {
+  var hh = (200 - s) * v / 100;
+
+  return {
+    h: h,
+    s: s * v / (hh < 100 ? hh : 200 - hh),
+    l: hh / 2
+  };
+};
+
+},{}],13:[function(require,module,exports){
+"use strict";
+
+// http://www.rapidtables.com/convert/color/hsv-to-rgb.htm
+module.exports = function (h, s, v) {
+  var s = s / 100,
+      v = v / 100;
+  var rgb = [];
+
+  var c = v * s;
+  var hh = h / 60;
+  var x = c * (1 - Math.abs(hh % 2 - 1));
+  var m = v - c;
+
+  switch (parseInt(hh, 10)) {
+    case 0:
+      rgb = [c, x, 0];
+      break;
+
+    case 1:
+      rgb = [x, c, 0];
+      break;
+
+    case 2:
+      rgb = [0, c, x];
+      break;
+
+    case 3:
+      rgb = [0, x, c];
+      break;
+
+    case 4:
+      rgb = [x, 0, c];
+      break;
+
+    case 5:
+      rgb = [c, 0, x];
+      break;
+  }
+
+  return {
+    r: Math.round(255 * (rgb[0] + m)),
+    g: Math.round(255 * (rgb[1] + m)),
+    b: Math.round(255 * (rgb[2] + m))
+  };
+};
+
+},{}],14:[function(require,module,exports){
+'use strict';
+
+module.exports = function (r, g, b) {
+  return [_convert(r), _convert(g), _convert(b)].join('');
+
+  function _convert(num) {
+    var hex = num.toString(16);
+    return hex.length === 1 ? '0' + hex : hex;
+  }
+};
+
+},{}],15:[function(require,module,exports){
+"use strict";
+
+// http://www.rapidtables.com/convert/color/rgb-to-hsv.htm
+module.exports = function (r, g, b) {
+  var h, s, v;
+  var max = Math.max(r, g, b);
+  var min = Math.min(r, g, b);
+  var delta = max - min;
+
+  // hue
+  if (delta === 0) {
+    h = 0;
+  } else if (r === max) {
+    h = (g - b) / delta % 6;
+  } else if (g === max) {
+    h = (b - r) / delta + 2;
+  } else if (b === max) {
+    h = (r - g) / delta + 4;
+  }
+
+  h = Math.round(h * 60);
+  if (h < 0) h += 360;
+
+  // saturation
+  s = Math.round((max === 0 ? 0 : delta / max) * 100);
+
+  // value
+  v = Math.round(max / 255 * 100);
+
+  return {
+    h: h,
+    s: s,
+    v: v
+  };
+};
+
+},{}],16:[function(require,module,exports){
+'use strict';
+
+module.exports = function (r, g, b, a) {
+  return 'rgba(' + [r, g, b, a / 100].join(',') + ')';
+};
+
+},{}],17:[function(require,module,exports){
+'use strict';
+
+var rgba2rgb = require('./rgba2rgb');
+var rgb2hex = require('./rgb2hex');
+
+module.exports = function (r, g, b, a) {
+  var rgb = rgba2rgb(r, g, b, a);
+  return rgb2hex(rgb.r, rgb.g, rgb.b);
+};
+
+},{"./rgb2hex":14,"./rgba2rgb":18}],18:[function(require,module,exports){
+"use strict";
+
+// https://en.wikipedia.org/wiki/Alpha_compositing#Alpha_blending
+module.exports = function (r, g, b, a) {
+  a = a / 100;
+
+  return {
+    r: parseInt((1 - a) * 255 + a * r, 10),
+    g: parseInt((1 - a) * 255 + a * g, 10),
+    b: parseInt((1 - a) * 255 + a * b, 10)
+  };
+};
+
+},{}],19:[function(require,module,exports){
 'use strict';
 
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -100,7 +982,7 @@ module.exports = function extend() {
 	return target;
 };
 
-},{}],4:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 // Top level file is just a mixin of submodules & constants
 'use strict';
 
@@ -116,7 +998,7 @@ assign(pako, deflate, inflate, constants);
 
 module.exports = pako;
 
-},{"./lib/deflate":5,"./lib/inflate":6,"./lib/utils/common":7,"./lib/zlib/constants":10}],5:[function(require,module,exports){
+},{"./lib/deflate":21,"./lib/inflate":22,"./lib/utils/common":23,"./lib/zlib/constants":26}],21:[function(require,module,exports){
 'use strict';
 
 var zlib_deflate = require('./zlib/deflate');
@@ -504,7 +1386,7 @@ exports.deflate = deflate;
 exports.deflateRaw = deflateRaw;
 exports.gzip = gzip;
 
-},{"./utils/common":7,"./utils/strings":8,"./zlib/deflate":12,"./zlib/messages":17,"./zlib/zstream":19}],6:[function(require,module,exports){
+},{"./utils/common":23,"./utils/strings":24,"./zlib/deflate":28,"./zlib/messages":33,"./zlib/zstream":35}],22:[function(require,module,exports){
 'use strict';
 
 var zlib_inflate = require('./zlib/inflate');
@@ -917,7 +1799,7 @@ exports.inflate = inflate;
 exports.inflateRaw = inflateRaw;
 exports.ungzip = inflate;
 
-},{"./utils/common":7,"./utils/strings":8,"./zlib/constants":10,"./zlib/gzheader":13,"./zlib/inflate":15,"./zlib/messages":17,"./zlib/zstream":19}],7:[function(require,module,exports){
+},{"./utils/common":23,"./utils/strings":24,"./zlib/constants":26,"./zlib/gzheader":29,"./zlib/inflate":31,"./zlib/messages":33,"./zlib/zstream":35}],23:[function(require,module,exports){
 'use strict';
 
 var TYPED_OK = typeof Uint8Array !== 'undefined' && typeof Uint16Array !== 'undefined' && typeof Int32Array !== 'undefined';
@@ -1020,7 +1902,7 @@ exports.setTyped = function (on) {
 
 exports.setTyped(TYPED_OK);
 
-},{}],8:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 // String encode/decode helpers
 'use strict';
 
@@ -1228,7 +2110,7 @@ exports.utf8border = function (buf, max) {
   return pos + _utf8len[buf[pos]] > max ? pos : max;
 };
 
-},{"./common":7}],9:[function(require,module,exports){
+},{"./common":23}],25:[function(require,module,exports){
 'use strict';
 
 // Note: adler32 takes 12% for level 0 and 2% for level 6.
@@ -1261,7 +2143,7 @@ function adler32(adler, buf, len, pos) {
 
 module.exports = adler32;
 
-},{}],10:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -1311,7 +2193,7 @@ module.exports = {
   //Z_NULL:                 null // Use -1 or null inline, depending on var type
 };
 
-},{}],11:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 
 // Note: we can't get significant speed boost here.
@@ -1354,7 +2236,7 @@ function crc32(crc, buf, len, pos) {
 
 module.exports = crc32;
 
-},{}],12:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -3154,7 +4036,7 @@ exports.deflatePrime = deflatePrime;
 exports.deflateTune = deflateTune;
 */
 
-},{"../utils/common":7,"./adler32":9,"./crc32":11,"./messages":17,"./trees":18}],13:[function(require,module,exports){
+},{"../utils/common":23,"./adler32":25,"./crc32":27,"./messages":33,"./trees":34}],29:[function(require,module,exports){
 'use strict';
 
 function GZheader() {
@@ -3195,7 +4077,7 @@ function GZheader() {
 
 module.exports = GZheader;
 
-},{}],14:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 // See state defs from inflate.js
@@ -3527,7 +4409,7 @@ module.exports = function inflate_fast(strm, start) {
   return;
 };
 
-},{}],15:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -5153,7 +6035,7 @@ exports.inflateSyncPoint = inflateSyncPoint;
 exports.inflateUndermine = inflateUndermine;
 */
 
-},{"../utils/common":7,"./adler32":9,"./crc32":11,"./inffast":14,"./inftrees":16}],16:[function(require,module,exports){
+},{"../utils/common":23,"./adler32":25,"./crc32":27,"./inffast":30,"./inftrees":32}],32:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -5467,7 +6349,7 @@ module.exports = function inflate_table(type, lens, lens_index, codes, table, ta
   return 0;
 };
 
-},{"../utils/common":7}],17:[function(require,module,exports){
+},{"../utils/common":23}],33:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -5482,7 +6364,7 @@ module.exports = {
   '-6': 'incompatible version' /* Z_VERSION_ERROR (-6) */
 };
 
-},{}],18:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -6661,7 +7543,7 @@ exports._tr_flush_block = _tr_flush_block;
 exports._tr_tally = _tr_tally;
 exports._tr_align = _tr_align;
 
-},{"../utils/common":7}],19:[function(require,module,exports){
+},{"../utils/common":23}],35:[function(require,module,exports){
 'use strict';
 
 function ZStream() {
@@ -6691,7 +7573,7 @@ function ZStream() {
 
 module.exports = ZStream;
 
-},{}],20:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 'use strict';
 
 var IOBuffer = require('iobuffer');
@@ -6973,12 +7855,86 @@ function paethPredictor(a, b, c) {
     if (pa <= pb && pa <= pc) return a;else if (pb <= pc) return b;else return c;
 }
 
-},{"iobuffer":22,"pako":4}],21:[function(require,module,exports){
+},{"iobuffer":39,"pako":20}],37:[function(require,module,exports){
 'use strict';
 
 exports.PNGDecoder = require('./PNGDecoder');
 
-},{"./PNGDecoder":20}],22:[function(require,module,exports){
+},{"./PNGDecoder":36}],38:[function(require,module,exports){
+(function (global){
+'use strict';
+
+var Mutation = global.MutationObserver || global.WebKitMutationObserver;
+
+var scheduleDrain;
+
+{
+  if (Mutation) {
+    var called = 0;
+    var observer = new Mutation(nextTick);
+    var element = global.document.createTextNode('');
+    observer.observe(element, {
+      characterData: true
+    });
+    scheduleDrain = function scheduleDrain() {
+      element.data = called = ++called % 2;
+    };
+  } else if (!global.setImmediate && typeof global.MessageChannel !== 'undefined') {
+    var channel = new global.MessageChannel();
+    channel.port1.onmessage = nextTick;
+    scheduleDrain = function scheduleDrain() {
+      channel.port2.postMessage(0);
+    };
+  } else if ('document' in global && 'onreadystatechange' in global.document.createElement('script')) {
+    scheduleDrain = function scheduleDrain() {
+
+      // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+      // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
+      var scriptEl = global.document.createElement('script');
+      scriptEl.onreadystatechange = function () {
+        nextTick();
+
+        scriptEl.onreadystatechange = null;
+        scriptEl.parentNode.removeChild(scriptEl);
+        scriptEl = null;
+      };
+      global.document.documentElement.appendChild(scriptEl);
+    };
+  } else {
+    scheduleDrain = function scheduleDrain() {
+      setTimeout(nextTick, 0);
+    };
+  }
+}
+
+var draining;
+var queue = [];
+//named nextTick for less confusing stack traces
+function nextTick() {
+  draining = true;
+  var i, oldQueue;
+  var len = queue.length;
+  while (len) {
+    oldQueue = queue;
+    queue = [];
+    i = -1;
+    while (++i < len) {
+      oldQueue[i]();
+    }
+    len = queue.length;
+  }
+  draining = false;
+}
+
+module.exports = immediate;
+function immediate(task) {
+  if (queue.push(task) === 1 && !draining) {
+    scheduleDrain();
+  }
+}
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],39:[function(require,module,exports){
 'use strict';
 
 var defaultByteLength = 1024 * 8;
@@ -7221,7 +8177,7 @@ class IOBuffer {
 
 module.exports = IOBuffer;
 
-},{}],23:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 'use strict';
 
 var toString = Object.prototype.toString;
@@ -7230,7 +8186,7 @@ module.exports = function isArrayType(value) {
     return toString.call(value).substr(-6, 5) === 'Array';
 };
 
-},{}],24:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 'use strict';
 
 var numberIsNan = require('number-is-nan');
@@ -7239,7 +8195,7 @@ module.exports = Number.isFinite || function (val) {
 	return !(typeof val !== 'number' || numberIsNan(val) || val === Infinity || val === -Infinity);
 };
 
-},{"number-is-nan":79}],25:[function(require,module,exports){
+},{"number-is-nan":142}],42:[function(require,module,exports){
 "use strict";
 
 // https://github.com/paulmillr/es6-shim
@@ -7249,7 +8205,7 @@ module.exports = Number.isInteger || function (val) {
   return typeof val === "number" && isFinite(val) && Math.floor(val) === val;
 };
 
-},{"is-finite":24}],26:[function(require,module,exports){
+},{"is-finite":41}],43:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -7666,7 +8622,262 @@ module.exports = Number.isInteger || function (val) {
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],27:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
+'use strict';
+
+var immediate = require('immediate');
+
+/* istanbul ignore next */
+function INTERNAL() {}
+
+var handlers = {};
+
+var REJECTED = ['REJECTED'];
+var FULFILLED = ['FULFILLED'];
+var PENDING = ['PENDING'];
+
+module.exports = Promise;
+
+function Promise(resolver) {
+  if (typeof resolver !== 'function') {
+    throw new TypeError('resolver must be a function');
+  }
+  this.state = PENDING;
+  this.queue = [];
+  this.outcome = void 0;
+  if (resolver !== INTERNAL) {
+    safelyResolveThenable(this, resolver);
+  }
+}
+
+Promise.prototype["catch"] = function (onRejected) {
+  return this.then(null, onRejected);
+};
+Promise.prototype.then = function (onFulfilled, onRejected) {
+  if (typeof onFulfilled !== 'function' && this.state === FULFILLED || typeof onRejected !== 'function' && this.state === REJECTED) {
+    return this;
+  }
+  var promise = new this.constructor(INTERNAL);
+  if (this.state !== PENDING) {
+    var resolver = this.state === FULFILLED ? onFulfilled : onRejected;
+    unwrap(promise, resolver, this.outcome);
+  } else {
+    this.queue.push(new QueueItem(promise, onFulfilled, onRejected));
+  }
+
+  return promise;
+};
+function QueueItem(promise, onFulfilled, onRejected) {
+  this.promise = promise;
+  if (typeof onFulfilled === 'function') {
+    this.onFulfilled = onFulfilled;
+    this.callFulfilled = this.otherCallFulfilled;
+  }
+  if (typeof onRejected === 'function') {
+    this.onRejected = onRejected;
+    this.callRejected = this.otherCallRejected;
+  }
+}
+QueueItem.prototype.callFulfilled = function (value) {
+  handlers.resolve(this.promise, value);
+};
+QueueItem.prototype.otherCallFulfilled = function (value) {
+  unwrap(this.promise, this.onFulfilled, value);
+};
+QueueItem.prototype.callRejected = function (value) {
+  handlers.reject(this.promise, value);
+};
+QueueItem.prototype.otherCallRejected = function (value) {
+  unwrap(this.promise, this.onRejected, value);
+};
+
+function unwrap(promise, func, value) {
+  immediate(function () {
+    var returnValue;
+    try {
+      returnValue = func(value);
+    } catch (e) {
+      return handlers.reject(promise, e);
+    }
+    if (returnValue === promise) {
+      handlers.reject(promise, new TypeError('Cannot resolve promise with itself'));
+    } else {
+      handlers.resolve(promise, returnValue);
+    }
+  });
+}
+
+handlers.resolve = function (self, value) {
+  var result = tryCatch(getThen, value);
+  if (result.status === 'error') {
+    return handlers.reject(self, result.value);
+  }
+  var thenable = result.value;
+
+  if (thenable) {
+    safelyResolveThenable(self, thenable);
+  } else {
+    self.state = FULFILLED;
+    self.outcome = value;
+    var i = -1;
+    var len = self.queue.length;
+    while (++i < len) {
+      self.queue[i].callFulfilled(value);
+    }
+  }
+  return self;
+};
+handlers.reject = function (self, error) {
+  self.state = REJECTED;
+  self.outcome = error;
+  var i = -1;
+  var len = self.queue.length;
+  while (++i < len) {
+    self.queue[i].callRejected(error);
+  }
+  return self;
+};
+
+function getThen(obj) {
+  // Make sure we only access the accessor once as required by the spec
+  var then = obj && obj.then;
+  if (obj && typeof obj === 'object' && typeof then === 'function') {
+    return function appyThen() {
+      then.apply(obj, arguments);
+    };
+  }
+}
+
+function safelyResolveThenable(self, thenable) {
+  // Either fulfill, reject or reject with error
+  var called = false;
+  function onError(value) {
+    if (called) {
+      return;
+    }
+    called = true;
+    handlers.reject(self, value);
+  }
+
+  function onSuccess(value) {
+    if (called) {
+      return;
+    }
+    called = true;
+    handlers.resolve(self, value);
+  }
+
+  function tryToUnwrap() {
+    thenable(onSuccess, onError);
+  }
+
+  var result = tryCatch(tryToUnwrap);
+  if (result.status === 'error') {
+    onError(result.value);
+  }
+}
+
+function tryCatch(func, value) {
+  var out = {};
+  try {
+    out.value = func(value);
+    out.status = 'success';
+  } catch (e) {
+    out.status = 'error';
+    out.value = e;
+  }
+  return out;
+}
+
+Promise.resolve = resolve;
+function resolve(value) {
+  if (value instanceof this) {
+    return value;
+  }
+  return handlers.resolve(new this(INTERNAL), value);
+}
+
+Promise.reject = reject;
+function reject(reason) {
+  var promise = new this(INTERNAL);
+  return handlers.reject(promise, reason);
+}
+
+Promise.all = all;
+function all(iterable) {
+  var self = this;
+  if (Object.prototype.toString.call(iterable) !== '[object Array]') {
+    return this.reject(new TypeError('must be an array'));
+  }
+
+  var len = iterable.length;
+  var called = false;
+  if (!len) {
+    return this.resolve([]);
+  }
+
+  var values = new Array(len);
+  var resolved = 0;
+  var i = -1;
+  var promise = new this(INTERNAL);
+
+  while (++i < len) {
+    allResolver(iterable[i], i);
+  }
+  return promise;
+  function allResolver(value, i) {
+    self.resolve(value).then(resolveFromAll, function (error) {
+      if (!called) {
+        called = true;
+        handlers.reject(promise, error);
+      }
+    });
+    function resolveFromAll(outValue) {
+      values[i] = outValue;
+      if (++resolved === len && !called) {
+        called = true;
+        handlers.resolve(promise, values);
+      }
+    }
+  }
+}
+
+Promise.race = race;
+function race(iterable) {
+  var self = this;
+  if (Object.prototype.toString.call(iterable) !== '[object Array]') {
+    return this.reject(new TypeError('must be an array'));
+  }
+
+  var len = iterable.length;
+  var called = false;
+  if (!len) {
+    return this.resolve([]);
+  }
+
+  var i = -1;
+  var promise = new this(INTERNAL);
+
+  while (++i < len) {
+    resolver(iterable[i]);
+  }
+  return promise;
+  function resolver(value) {
+    self.resolve(value).then(function (response) {
+      if (!called) {
+        called = true;
+        handlers.resolve(promise, response);
+      }
+    }, function (error) {
+      if (!called) {
+        called = true;
+        handlers.reject(promise, error);
+      }
+    });
+  }
+}
+
+},{"immediate":38}],45:[function(require,module,exports){
 'use strict';
 
 var Stat = require('ml-stat').array;
@@ -7888,7 +9099,7 @@ module.exports = {
     scale: scale
 };
 
-},{"ml-stat":76}],28:[function(require,module,exports){
+},{"ml-stat":139}],46:[function(require,module,exports){
 'use strict';
 
 /**
@@ -8140,7 +9351,7 @@ function integral(x0, x1, slope, intercept) {
 exports.getEquallySpacedData = getEquallySpacedData;
 exports.integral = integral;
 
-},{}],29:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 'use strict';
 
 module.exports = exports = require('./ArrayUtils');
@@ -8148,7 +9359,7 @@ exports.getEquallySpacedData = require('./getEquallySpaced').getEquallySpacedDat
 exports.SNV = require('./snv').SNV;
 exports.binarySearch = require('ml-binary-search');
 
-},{"./ArrayUtils":27,"./getEquallySpaced":28,"./snv":30,"ml-binary-search":31}],30:[function(require,module,exports){
+},{"./ArrayUtils":45,"./getEquallySpaced":46,"./snv":48,"ml-binary-search":49}],48:[function(require,module,exports){
 'use strict';
 
 exports.SNV = SNV;
@@ -8170,7 +9381,7 @@ function SNV(data) {
     return result;
 }
 
-},{"ml-stat":76}],31:[function(require,module,exports){
+},{"ml-stat":139}],49:[function(require,module,exports){
 "use strict";
 
 /**
@@ -8200,7 +9411,7 @@ function binarySearch(array, value) {
 
 module.exports = binarySearch;
 
-},{}],32:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 /**
@@ -8284,7 +9495,7 @@ function DisjointSetNode(value) {
     this.rank = 0;
 }
 
-},{}],33:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 function squaredEuclidean(p, q) {
@@ -8302,7 +9513,566 @@ function euclidean(p, q) {
 module.exports = euclidean;
 euclidean.squared = squaredEuclidean;
 
-},{}],34:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
+'use strict';
+
+var FFT = require('./fftlib');
+
+var FFTUtils = {
+    DEBUG: false,
+
+    /**
+     * Calculates the inverse of a 2D Fourier transform
+     *
+     * @param ft
+     * @param ftRows
+     * @param ftCols
+     * @return
+     */
+    ifft2DArray: function ifft2DArray(ft, ftRows, ftCols) {
+        var tempTransform = new Array(ftRows * ftCols);
+        var nRows = ftRows / 2;
+        var nCols = (ftCols - 1) * 2;
+        // reverse transform columns
+        FFT.init(nRows);
+        var tmpCols = { re: new Array(nRows), im: new Array(nRows) };
+        for (var iCol = 0; iCol < ftCols; iCol++) {
+            for (var iRow = nRows - 1; iRow >= 0; iRow--) {
+                tmpCols.re[iRow] = ft[iRow * 2 * ftCols + iCol];
+                tmpCols.im[iRow] = ft[(iRow * 2 + 1) * ftCols + iCol];
+            }
+            //Unnormalized inverse transform
+            FFT.bt(tmpCols.re, tmpCols.im);
+            for (var iRow = nRows - 1; iRow >= 0; iRow--) {
+                tempTransform[iRow * 2 * ftCols + iCol] = tmpCols.re[iRow];
+                tempTransform[(iRow * 2 + 1) * ftCols + iCol] = tmpCols.im[iRow];
+            }
+        }
+
+        // reverse row transform
+        var finalTransform = new Array(nRows * nCols);
+        FFT.init(nCols);
+        var tmpRows = { re: new Array(nCols), im: new Array(nCols) };
+        var scale = nCols * nRows;
+        for (var iRow = 0; iRow < ftRows; iRow += 2) {
+            tmpRows.re[0] = tempTransform[iRow * ftCols];
+            tmpRows.im[0] = tempTransform[(iRow + 1) * ftCols];
+            for (var iCol = 1; iCol < ftCols; iCol++) {
+                tmpRows.re[iCol] = tempTransform[iRow * ftCols + iCol];
+                tmpRows.im[iCol] = tempTransform[(iRow + 1) * ftCols + iCol];
+                tmpRows.re[nCols - iCol] = tempTransform[iRow * ftCols + iCol];
+                tmpRows.im[nCols - iCol] = -tempTransform[(iRow + 1) * ftCols + iCol];
+            }
+            //Unnormalized inverse transform
+            FFT.bt(tmpRows.re, tmpRows.im);
+
+            var indexB = iRow / 2 * nCols;
+            for (var iCol = nCols - 1; iCol >= 0; iCol--) {
+                finalTransform[indexB + iCol] = tmpRows.re[iCol] / scale;
+            }
+        }
+        return finalTransform;
+    },
+    /**
+     * Calculates the fourier transform of a matrix of size (nRows,nCols) It is
+     * assumed that both nRows and nCols are a power of two
+     *
+     * On exit the matrix has dimensions (nRows * 2, nCols / 2 + 1) where the
+     * even rows contain the real part and the odd rows the imaginary part of the
+     * transform
+     * @param data
+     * @param nRows
+     * @param nCols
+     * @return
+     */
+    fft2DArray: function fft2DArray(data, nRows, nCols, opt) {
+        var options = Object.assign({}, { inplace: true });
+        var ftCols = nCols / 2 + 1;
+        var ftRows = nRows * 2;
+        var tempTransform = new Array(ftRows * ftCols);
+        FFT.init(nCols);
+        // transform rows
+        var tmpRows = { re: new Array(nCols), im: new Array(nCols) };
+        var row1 = { re: new Array(nCols), im: new Array(nCols) };
+        var row2 = { re: new Array(nCols), im: new Array(nCols) };
+        var index, iRow0, iRow1, iRow2, iRow3;
+        for (var iRow = 0; iRow < nRows / 2; iRow++) {
+            index = iRow * 2 * nCols;
+            tmpRows.re = data.slice(index, index + nCols);
+
+            index = (iRow * 2 + 1) * nCols;
+            tmpRows.im = data.slice(index, index + nCols);
+
+            FFT.fft1d(tmpRows.re, tmpRows.im);
+
+            this.reconstructTwoRealFFT(tmpRows, row1, row2);
+            //Now lets put back the result into the output array
+            iRow0 = iRow * 4 * ftCols;
+            iRow1 = (iRow * 4 + 1) * ftCols;
+            iRow2 = (iRow * 4 + 2) * ftCols;
+            iRow3 = (iRow * 4 + 3) * ftCols;
+            for (var k = ftCols - 1; k >= 0; k--) {
+                tempTransform[iRow0 + k] = row1.re[k];
+                tempTransform[iRow1 + k] = row1.im[k];
+                tempTransform[iRow2 + k] = row2.re[k];
+                tempTransform[iRow3 + k] = row2.im[k];
+            }
+        }
+
+        //console.log(tempTransform);
+        row1 = null;
+        row2 = null;
+        // transform columns
+        var finalTransform = new Array(ftRows * ftCols);
+
+        FFT.init(nRows);
+        var tmpCols = { re: new Array(nRows), im: new Array(nRows) };
+        for (var iCol = ftCols - 1; iCol >= 0; iCol--) {
+            for (var iRow = nRows - 1; iRow >= 0; iRow--) {
+                tmpCols.re[iRow] = tempTransform[iRow * 2 * ftCols + iCol];
+                tmpCols.im[iRow] = tempTransform[(iRow * 2 + 1) * ftCols + iCol];
+                //TODO Chech why this happens
+                if (isNaN(tmpCols.re[iRow])) {
+                    tmpCols.re[iRow] = 0;
+                }
+                if (isNaN(tmpCols.im[iRow])) {
+                    tmpCols.im[iRow] = 0;
+                }
+            }
+            FFT.fft1d(tmpCols.re, tmpCols.im);
+            for (var iRow = nRows - 1; iRow >= 0; iRow--) {
+                finalTransform[iRow * 2 * ftCols + iCol] = tmpCols.re[iRow];
+                finalTransform[(iRow * 2 + 1) * ftCols + iCol] = tmpCols.im[iRow];
+            }
+        }
+
+        //console.log(finalTransform);
+        return finalTransform;
+    },
+    /**
+     *
+     * @param fourierTransform
+     * @param realTransform1
+     * @param realTransform2
+     *
+     * Reconstructs the individual Fourier transforms of two simultaneously
+     * transformed series. Based on the Symmetry relationships (the asterisk
+     * denotes the complex conjugate)
+     *
+     * F_{N-n} = F_n^{*} for a purely real f transformed to F
+     *
+     * G_{N-n} = G_n^{*} for a purely imaginary g transformed to G
+     *
+     */
+    reconstructTwoRealFFT: function reconstructTwoRealFFT(fourierTransform, realTransform1, realTransform2) {
+        var length = fourierTransform.re.length;
+
+        // the components n=0 are trivial
+        realTransform1.re[0] = fourierTransform.re[0];
+        realTransform1.im[0] = 0.0;
+        realTransform2.re[0] = fourierTransform.im[0];
+        realTransform2.im[0] = 0.0;
+        var rm, rp, im, ip, j;
+        for (var i = length / 2; i > 0; i--) {
+            j = length - i;
+            rm = 0.5 * (fourierTransform.re[i] - fourierTransform.re[j]);
+            rp = 0.5 * (fourierTransform.re[i] + fourierTransform.re[j]);
+            im = 0.5 * (fourierTransform.im[i] - fourierTransform.im[j]);
+            ip = 0.5 * (fourierTransform.im[i] + fourierTransform.im[j]);
+            realTransform1.re[i] = rp;
+            realTransform1.im[i] = im;
+            realTransform1.re[j] = rp;
+            realTransform1.im[j] = -im;
+            realTransform2.re[i] = ip;
+            realTransform2.im[i] = -rm;
+            realTransform2.re[j] = ip;
+            realTransform2.im[j] = rm;
+        }
+    },
+
+    /**
+     * In place version of convolute 2D
+     *
+     * @param ftSignal
+     * @param ftFilter
+     * @param ftRows
+     * @param ftCols
+     * @return
+     */
+    convolute2DI: function convolute2DI(ftSignal, ftFilter, ftRows, ftCols) {
+        var re, im;
+        for (var iRow = 0; iRow < ftRows / 2; iRow++) {
+            for (var iCol = 0; iCol < ftCols; iCol++) {
+                //
+                re = ftSignal[iRow * 2 * ftCols + iCol] * ftFilter[iRow * 2 * ftCols + iCol] - ftSignal[(iRow * 2 + 1) * ftCols + iCol] * ftFilter[(iRow * 2 + 1) * ftCols + iCol];
+                im = ftSignal[iRow * 2 * ftCols + iCol] * ftFilter[(iRow * 2 + 1) * ftCols + iCol] + ftSignal[(iRow * 2 + 1) * ftCols + iCol] * ftFilter[iRow * 2 * ftCols + iCol];
+                //
+                ftSignal[iRow * 2 * ftCols + iCol] = re;
+                ftSignal[(iRow * 2 + 1) * ftCols + iCol] = im;
+            }
+        }
+    },
+    /**
+     *
+     * @param data
+     * @param kernel
+     * @param nRows
+     * @param nCols
+     * @returns {*}
+     */
+    convolute: function convolute(data, kernel, nRows, nCols, opt) {
+        var ftSpectrum = new Array(nCols * nRows);
+        for (var i = 0; i < nRows * nCols; i++) {
+            ftSpectrum[i] = data[i];
+        }
+
+        ftSpectrum = this.fft2DArray(ftSpectrum, nRows, nCols);
+
+        var dimR = kernel.length;
+        var dimC = kernel[0].length;
+        var ftFilterData = new Array(nCols * nRows);
+        for (var i = 0; i < nCols * nRows; i++) {
+            ftFilterData[i] = 0;
+        }
+
+        var iRow, iCol;
+        var shiftR = Math.floor((dimR - 1) / 2);
+        var shiftC = Math.floor((dimC - 1) / 2);
+        for (var ir = 0; ir < dimR; ir++) {
+            iRow = (ir - shiftR + nRows) % nRows;
+            for (var ic = 0; ic < dimC; ic++) {
+                iCol = (ic - shiftC + nCols) % nCols;
+                ftFilterData[iRow * nCols + iCol] = kernel[ir][ic];
+            }
+        }
+        ftFilterData = this.fft2DArray(ftFilterData, nRows, nCols);
+
+        var ftRows = nRows * 2;
+        var ftCols = nCols / 2 + 1;
+        this.convolute2DI(ftSpectrum, ftFilterData, ftRows, ftCols);
+
+        return this.ifft2DArray(ftSpectrum, ftRows, ftCols);
+    },
+
+    toRadix2: function toRadix2(data, nRows, nCols) {
+        var i, j, irow, icol;
+        var cols = nCols,
+            rows = nRows,
+            prows = 0,
+            pcols = 0;
+        if (!(nCols !== 0 && (nCols & nCols - 1) === 0)) {
+            //Then we have to make a pading to next radix2
+            cols = 0;
+            while (nCols >> ++cols != 0) {}
+            cols = 1 << cols;
+            pcols = cols - nCols;
+        }
+        if (!(nRows !== 0 && (nRows & nRows - 1) === 0)) {
+            //Then we have to make a pading to next radix2
+            rows = 0;
+            while (nRows >> ++rows != 0) {}
+            rows = 1 << rows;
+            prows = (rows - nRows) * cols;
+        }
+        if (rows == nRows && cols == nCols) //Do nothing. Returns the same input!!! Be careful
+            return { data: data, rows: nRows, cols: nCols };
+
+        var output = new Array(rows * cols);
+        var shiftR = Math.floor((rows - nRows) / 2) - nRows;
+        var shiftC = Math.floor((cols - nCols) / 2) - nCols;
+
+        for (i = 0; i < rows; i++) {
+            irow = i * cols;
+            icol = (i - shiftR) % nRows * nCols;
+            for (j = 0; j < cols; j++) {
+                output[irow + j] = data[icol + (j - shiftC) % nCols];
+            }
+        }
+        return { data: output, rows: rows, cols: cols };
+    },
+
+    /**
+     * Crop the given matrix to fit the corresponding number of rows and columns
+     */
+    crop: function crop(data, rows, cols, nRows, nCols, opt) {
+
+        if (rows == nRows && cols == nCols) //Do nothing. Returns the same input!!! Be careful
+            return data;
+
+        var options = Object.assign({}, opt);
+
+        var output = new Array(nCols * nRows);
+
+        var shiftR = Math.floor((rows - nRows) / 2);
+        var shiftC = Math.floor((cols - nCols) / 2);
+        var irow, icol, i, j;
+
+        for (i = 0; i < nRows; i++) {
+            irow = i * nRows;
+            icol = (i + shiftR) * cols;
+            for (j = 0; j < nCols; j++) {
+                output[irow + j] = data[icol + (j + shiftC)];
+            }
+        }
+
+        return output;
+    }
+};
+
+module.exports = FFTUtils;
+
+},{"./fftlib":53}],53:[function(require,module,exports){
+'use strict';
+
+/**
+ * Fast Fourier Transform module
+ * 1D-FFT/IFFT, 2D-FFT/IFFT (radix-2)
+ */
+var FFT = function () {
+  var FFT;
+
+  if (typeof exports !== 'undefined') {
+    FFT = exports; // for CommonJS
+  } else {
+    FFT = {};
+  }
+
+  var version = {
+    release: '0.3.0',
+    date: '2013-03'
+  };
+  FFT.toString = function () {
+    return "version " + version.release + ", released " + version.date;
+  };
+
+  // core operations
+  var _n = 0,
+      // order
+  _bitrev = null,
+      // bit reversal table
+  _cstb = null; // sin/cos table
+
+  var core = {
+    init: function init(n) {
+      if (n !== 0 && (n & n - 1) === 0) {
+        _n = n;
+        core._initArray();
+        core._makeBitReversalTable();
+        core._makeCosSinTable();
+      } else {
+        throw new Error("init: radix-2 required");
+      }
+    },
+    // 1D-FFT
+    fft1d: function fft1d(re, im) {
+      core.fft(re, im, 1);
+    },
+    // 1D-IFFT
+    ifft1d: function ifft1d(re, im) {
+      var n = 1 / _n;
+      core.fft(re, im, -1);
+      for (var i = 0; i < _n; i++) {
+        re[i] *= n;
+        im[i] *= n;
+      }
+    },
+    // 1D-IFFT
+    bt1d: function bt1d(re, im) {
+      core.fft(re, im, -1);
+    },
+    // 2D-FFT Not very useful if the number of rows have to be equal to cols
+    fft2d: function fft2d(re, im) {
+      var tre = [],
+          tim = [],
+          i = 0;
+      // x-axis
+      for (var y = 0; y < _n; y++) {
+        i = y * _n;
+        for (var x1 = 0; x1 < _n; x1++) {
+          tre[x1] = re[x1 + i];
+          tim[x1] = im[x1 + i];
+        }
+        core.fft1d(tre, tim);
+        for (var x2 = 0; x2 < _n; x2++) {
+          re[x2 + i] = tre[x2];
+          im[x2 + i] = tim[x2];
+        }
+      }
+      // y-axis
+      for (var x = 0; x < _n; x++) {
+        for (var y1 = 0; y1 < _n; y1++) {
+          i = x + y1 * _n;
+          tre[y1] = re[i];
+          tim[y1] = im[i];
+        }
+        core.fft1d(tre, tim);
+        for (var y2 = 0; y2 < _n; y2++) {
+          i = x + y2 * _n;
+          re[i] = tre[y2];
+          im[i] = tim[y2];
+        }
+      }
+    },
+    // 2D-IFFT
+    ifft2d: function ifft2d(re, im) {
+      var tre = [],
+          tim = [],
+          i = 0;
+      // x-axis
+      for (var y = 0; y < _n; y++) {
+        i = y * _n;
+        for (var x1 = 0; x1 < _n; x1++) {
+          tre[x1] = re[x1 + i];
+          tim[x1] = im[x1 + i];
+        }
+        core.ifft1d(tre, tim);
+        for (var x2 = 0; x2 < _n; x2++) {
+          re[x2 + i] = tre[x2];
+          im[x2 + i] = tim[x2];
+        }
+      }
+      // y-axis
+      for (var x = 0; x < _n; x++) {
+        for (var y1 = 0; y1 < _n; y1++) {
+          i = x + y1 * _n;
+          tre[y1] = re[i];
+          tim[y1] = im[i];
+        }
+        core.ifft1d(tre, tim);
+        for (var y2 = 0; y2 < _n; y2++) {
+          i = x + y2 * _n;
+          re[i] = tre[y2];
+          im[i] = tim[y2];
+        }
+      }
+    },
+    // core operation of FFT
+    fft: function fft(re, im, inv) {
+      var d,
+          h,
+          ik,
+          m,
+          tmp,
+          wr,
+          wi,
+          xr,
+          xi,
+          n4 = _n >> 2;
+      // bit reversal
+      for (var l = 0; l < _n; l++) {
+        m = _bitrev[l];
+        if (l < m) {
+          tmp = re[l];
+          re[l] = re[m];
+          re[m] = tmp;
+          tmp = im[l];
+          im[l] = im[m];
+          im[m] = tmp;
+        }
+      }
+      // butterfly operation
+      for (var k = 1; k < _n; k <<= 1) {
+        h = 0;
+        d = _n / (k << 1);
+        for (var j = 0; j < k; j++) {
+          wr = _cstb[h + n4];
+          wi = inv * _cstb[h];
+          for (var i = j; i < _n; i += k << 1) {
+            ik = i + k;
+            xr = wr * re[ik] + wi * im[ik];
+            xi = wr * im[ik] - wi * re[ik];
+            re[ik] = re[i] - xr;
+            re[i] += xr;
+            im[ik] = im[i] - xi;
+            im[i] += xi;
+          }
+          h += d;
+        }
+      }
+    },
+    // initialize the array (supports TypedArray)
+    _initArray: function _initArray() {
+      if (typeof Uint32Array !== 'undefined') {
+        _bitrev = new Uint32Array(_n);
+      } else {
+        _bitrev = [];
+      }
+      if (typeof Float64Array !== 'undefined') {
+        _cstb = new Float64Array(_n * 1.25);
+      } else {
+        _cstb = [];
+      }
+    },
+    // zero padding
+    _paddingZero: function _paddingZero() {
+      // TODO
+    },
+    // makes bit reversal table
+    _makeBitReversalTable: function _makeBitReversalTable() {
+      var i = 0,
+          j = 0,
+          k = 0;
+      _bitrev[0] = 0;
+      while (++i < _n) {
+        k = _n >> 1;
+        while (k <= j) {
+          j -= k;
+          k >>= 1;
+        }
+        j += k;
+        _bitrev[i] = j;
+      }
+    },
+    // makes trigonometiric function table
+    _makeCosSinTable: function _makeCosSinTable() {
+      var n2 = _n >> 1,
+          n4 = _n >> 2,
+          n8 = _n >> 3,
+          n2p4 = n2 + n4,
+          t = Math.sin(Math.PI / _n),
+          dc = 2 * t * t,
+          ds = Math.sqrt(dc * (2 - dc)),
+          c = _cstb[n4] = 1,
+          s = _cstb[0] = 0;
+      t = 2 * dc;
+      for (var i = 1; i < n8; i++) {
+        c -= dc;
+        dc += t * c;
+        s += ds;
+        ds -= t * s;
+        _cstb[i] = s;
+        _cstb[n4 - i] = c;
+      }
+      if (n8 !== 0) {
+        _cstb[n8] = Math.sqrt(0.5);
+      }
+      for (var j = 0; j < n4; j++) {
+        _cstb[n2 - j] = _cstb[j];
+      }
+      for (var k = 0; k < n2p4; k++) {
+        _cstb[k + n2] = -_cstb[k];
+      }
+    }
+  };
+  // aliases (public APIs)
+  var apis = ['init', 'fft1d', 'ifft1d', 'fft2d', 'ifft2d'];
+  for (var i = 0; i < apis.length; i++) {
+    FFT[apis[i]] = core[apis[i]];
+  }
+  FFT.bt = core.bt1d;
+  FFT.fft = core.fft1d;
+  FFT.ifft = core.ifft1d;
+
+  return FFT;
+}.call(undefined);
+
+},{}],54:[function(require,module,exports){
+'use strict';
+
+exports.FFTUtils = require("./FFTUtils");
+exports.FFT = require('./fftlib');
+
+},{"./FFTUtils":52,"./fftlib":53}],55:[function(require,module,exports){
 'use strict';
 
 var squaredEuclidean = require('ml-distance-euclidean').squared;
@@ -8326,7 +10096,7 @@ class GaussianKernel {
 
 module.exports = GaussianKernel;
 
-},{"ml-distance-euclidean":33}],35:[function(require,module,exports){
+},{"ml-distance-euclidean":51}],56:[function(require,module,exports){
 'use strict';
 
 var defaultOptions = {
@@ -8355,7 +10125,7 @@ class PolynomialKernel {
 
 module.exports = PolynomialKernel;
 
-},{}],36:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 'use strict';
 
 var defaultOptions = {
@@ -8381,249 +10151,7 @@ class SigmoidKernel {
 
 module.exports = SigmoidKernel;
 
-},{}],37:[function(require,module,exports){
-'use strict';
-
-var Matrix = require('ml-matrix');
-
-var GaussianKernel = require('ml-kernel-gaussian');
-var PolynomialKernel = require('ml-kernel-polynomial');
-var ANOVAKernel = require('./kernels/anova-kernel');
-var CauchyKernel = require('./kernels/cauchy-kernel');
-var ExponentialKernel = require('./kernels/exponential-kernel');
-var HistogramKernel = require('./kernels/histogram-intersection-kernel');
-var LaplacianKernel = require('./kernels/laplacian-kernel');
-var MultiquadraticKernel = require('./kernels/multiquadratic-kernel');
-var RationalKernel = require('./kernels/rational-quadratic-kernel');
-var SigmoidKernel = require('ml-kernel-sigmoid');
-
-var kernelType = {
-    gaussian: GaussianKernel,
-    rbf: GaussianKernel,
-    polynomial: PolynomialKernel,
-    poly: PolynomialKernel,
-    anova: ANOVAKernel,
-    cauchy: CauchyKernel,
-    exponential: ExponentialKernel,
-    histogram: HistogramKernel,
-    min: HistogramKernel,
-    laplacian: LaplacianKernel,
-    multiquadratic: MultiquadraticKernel,
-    rational: RationalKernel,
-    sigmoid: SigmoidKernel,
-    mlp: SigmoidKernel
-};
-
-class Kernel {
-    constructor(type, options) {
-        this.kernelType = type;
-        if (type === 'linear') return;
-
-        if (typeof type === 'string') {
-            type = type.toLowerCase();
-
-            var KernelConstructor = kernelType[type];
-            if (KernelConstructor) {
-                this.kernelFunction = new KernelConstructor(options);
-            } else {
-                throw new Error('unsupported kernel type: ' + type);
-            }
-        } else if (typeof type === 'object' && typeof type.compute === 'function') {
-            this.kernelFunction = type;
-        } else {
-            throw new TypeError('first argument must be a valid kernel type or instance');
-        }
-    }
-
-    compute(inputs, landmarks) {
-        if (landmarks === undefined) {
-            landmarks = inputs;
-        }
-
-        if (this.kernelType === 'linear') {
-            var matrix = new Matrix(inputs);
-            return matrix.mmul(new Matrix(landmarks).transpose());
-        }
-
-        var kernelMatrix = new Matrix(inputs.length, landmarks.length);
-        var i, j;
-        if (inputs === landmarks) {
-            // fast path, matrix is symmetric
-            for (i = 0; i < inputs.length; i++) {
-                for (j = i; j < inputs.length; j++) {
-                    kernelMatrix[i][j] = kernelMatrix[j][i] = this.kernelFunction.compute(inputs[i], inputs[j]);
-                }
-            }
-        } else {
-            for (i = 0; i < inputs.length; i++) {
-                for (j = 0; j < landmarks.length; j++) {
-                    kernelMatrix[i][j] = this.kernelFunction.compute(inputs[i], landmarks[j]);
-                }
-            }
-        }
-        return kernelMatrix;
-    }
-}
-
-module.exports = Kernel;
-
-},{"./kernels/anova-kernel":38,"./kernels/cauchy-kernel":39,"./kernels/exponential-kernel":40,"./kernels/histogram-intersection-kernel":41,"./kernels/laplacian-kernel":42,"./kernels/multiquadratic-kernel":43,"./kernels/rational-quadratic-kernel":44,"ml-kernel-gaussian":34,"ml-kernel-polynomial":35,"ml-kernel-sigmoid":36,"ml-matrix":53}],38:[function(require,module,exports){
-'use strict';
-
-var defaultOptions = {
-    sigma: 1,
-    degree: 1
-};
-
-class ANOVAKernel {
-    constructor(options) {
-        options = Object.assign({}, defaultOptions, options);
-        this.sigma = options.sigma;
-        this.degree = options.degree;
-    }
-
-    compute(x, y) {
-        var sum = 0;
-        var len = Math.min(x.length, y.length);
-        for (var i = 1; i <= len; ++i) {
-            sum += Math.pow(Math.exp(-this.sigma * Math.pow(Math.pow(x[i - 1], i) - Math.pow(y[i - 1], i), 2)), this.degree);
-        }
-        return sum;
-    }
-}
-
-module.exports = ANOVAKernel;
-
-},{}],39:[function(require,module,exports){
-'use strict';
-
-var squaredEuclidean = require('ml-distance-euclidean').squared;
-
-var defaultOptions = {
-    sigma: 1
-};
-
-class CauchyKernel {
-    constructor(options) {
-        options = Object.assign({}, defaultOptions, options);
-        this.sigma = options.sigma;
-    }
-
-    compute(x, y) {
-        return 1 / (1 + squaredEuclidean(x, y) / (this.sigma * this.sigma));
-    }
-}
-
-module.exports = CauchyKernel;
-
-},{"ml-distance-euclidean":33}],40:[function(require,module,exports){
-'use strict';
-
-var euclidean = require('ml-distance-euclidean');
-
-var defaultOptions = {
-    sigma: 1
-};
-
-class ExponentialKernel {
-    constructor(options) {
-        options = Object.assign({}, defaultOptions, options);
-        this.sigma = options.sigma;
-        this.divisor = 2 * options.sigma * options.sigma;
-    }
-
-    compute(x, y) {
-        var distance = euclidean(x, y);
-        return Math.exp(-distance / this.divisor);
-    }
-}
-
-module.exports = ExponentialKernel;
-
-},{"ml-distance-euclidean":33}],41:[function(require,module,exports){
-'use strict';
-
-class HistogramIntersectionKernel {
-    compute(x, y) {
-        var min = Math.min(x.length, y.length);
-        var sum = 0;
-        for (var i = 0; i < min; ++i) {
-            sum += Math.min(x[i], y[i]);
-        }return sum;
-    }
-}
-
-module.exports = HistogramIntersectionKernel;
-
-},{}],42:[function(require,module,exports){
-'use strict';
-
-var euclidean = require('ml-distance-euclidean');
-
-var defaultOptions = {
-    sigma: 1
-};
-
-class LaplacianKernel {
-    constructor(options) {
-        options = Object.assign({}, defaultOptions, options);
-        this.sigma = options.sigma;
-    }
-
-    compute(x, y) {
-        var distance = euclidean(x, y);
-        return Math.exp(-distance / this.sigma);
-    }
-}
-
-module.exports = LaplacianKernel;
-
-},{"ml-distance-euclidean":33}],43:[function(require,module,exports){
-'use strict';
-
-var squaredEuclidean = require('ml-distance-euclidean').squared;
-
-var defaultOptions = {
-    constant: 1
-};
-
-class MultiquadraticKernel {
-    constructor(options) {
-        options = Object.assign({}, defaultOptions, options);
-        this.constant = options.constant;
-    }
-
-    compute(x, y) {
-        return Math.sqrt(squaredEuclidean(x, y) + this.constant * this.constant);
-    }
-}
-
-module.exports = MultiquadraticKernel;
-
-},{"ml-distance-euclidean":33}],44:[function(require,module,exports){
-'use strict';
-
-var squaredEuclidean = require('ml-distance-euclidean').squared;
-
-var defaultOptions = {
-    constant: 1
-};
-
-class RationalQuadraticKernel {
-    constructor(options) {
-        options = Object.assign({}, defaultOptions, options);
-        this.constant = options.constant;
-    }
-
-    compute(x, y) {
-        var distance = squaredEuclidean(x, y);
-        return 1 - distance / (distance + this.constant);
-    }
-}
-
-module.exports = RationalQuadraticKernel;
-
-},{"ml-distance-euclidean":33}],45:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 'use strict';
 
 module.exports = abstractMatrix;
@@ -10075,7 +11603,7 @@ function abstractMatrix(superCtor) {
     return Matrix;
 }
 
-},{"./util":56,"./views/column":58,"./views/flipColumn":59,"./views/flipRow":60,"./views/row":61,"./views/selection":62,"./views/sub":63,"./views/transpose":64,"ml-array-utils":29}],46:[function(require,module,exports){
+},{"./util":69,"./views/column":71,"./views/flipColumn":72,"./views/flipRow":73,"./views/row":74,"./views/selection":75,"./views/sub":76,"./views/transpose":77,"ml-array-utils":47}],59:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -10169,7 +11697,7 @@ CholeskyDecomposition.prototype = {
 
 module.exports = CholeskyDecomposition;
 
-},{"../matrix":54}],47:[function(require,module,exports){
+},{"../matrix":67}],60:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -10965,7 +12493,7 @@ function cdiv(xr, xi, yr, yi) {
 
 module.exports = EigenvalueDecomposition;
 
-},{"../matrix":54,"./util":51}],48:[function(require,module,exports){
+},{"../matrix":67,"./util":64}],61:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -11144,7 +12672,7 @@ LuDecomposition.prototype = {
 
 module.exports = LuDecomposition;
 
-},{"../matrix":54}],49:[function(require,module,exports){
+},{"../matrix":67}],62:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -11304,7 +12832,7 @@ QrDecomposition.prototype = {
 
 module.exports = QrDecomposition;
 
-},{"../matrix":54,"./util":51}],50:[function(require,module,exports){
+},{"../matrix":67,"./util":64}],63:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -11824,7 +13352,7 @@ SingularValueDecomposition.prototype = {
 
 module.exports = SingularValueDecomposition;
 
-},{"../matrix":54,"./util":51}],51:[function(require,module,exports){
+},{"../matrix":67,"./util":64}],64:[function(require,module,exports){
 'use strict';
 
 exports.hypotenuse = function hypotenuse(a, b) {
@@ -11862,7 +13390,7 @@ exports.getFilled2DArray = function (rows, columns, value) {
     return array;
 };
 
-},{}],52:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('./matrix');
@@ -11909,13 +13437,13 @@ module.exports = {
     solve: solve
 };
 
-},{"./dc/cholesky":46,"./dc/evd":47,"./dc/lu":48,"./dc/qr":49,"./dc/svd":50,"./matrix":54}],53:[function(require,module,exports){
+},{"./dc/cholesky":59,"./dc/evd":60,"./dc/lu":61,"./dc/qr":62,"./dc/svd":63,"./matrix":67}],66:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./matrix');
 module.exports.Decompositions = module.exports.DC = require('./decompositions');
 
-},{"./decompositions":52,"./matrix":54}],54:[function(require,module,exports){
+},{"./decompositions":65,"./matrix":67}],67:[function(require,module,exports){
 'use strict';
 
 require('./symbol-species');
@@ -12054,14 +13582,14 @@ class Matrix extends abstractMatrix(Array) {
 module.exports = Matrix;
 Matrix.abstractMatrix = abstractMatrix;
 
-},{"./abstractMatrix":45,"./symbol-species":55,"./util":56}],55:[function(require,module,exports){
+},{"./abstractMatrix":58,"./symbol-species":68,"./util":69}],68:[function(require,module,exports){
 'use strict';
 
 if (!Symbol.species) {
     Symbol.species = Symbol.for('@@species');
 }
 
-},{}],56:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 'use strict';
 
 /**
@@ -12173,7 +13701,7 @@ exports.getRange = function getRange(from, to) {
     return arr;
 };
 
-},{}],57:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 'use strict';
 
 var abstractMatrix = require('../abstractMatrix');
@@ -12197,7 +13725,7 @@ class BaseView extends abstractMatrix() {
 
 module.exports = BaseView;
 
-},{"../abstractMatrix":45,"../matrix":54}],58:[function(require,module,exports){
+},{"../abstractMatrix":58,"../matrix":67}],71:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -12220,7 +13748,7 @@ class MatrixColumnView extends BaseView {
 
 module.exports = MatrixColumnView;
 
-},{"./base":57}],59:[function(require,module,exports){
+},{"./base":70}],72:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -12242,7 +13770,7 @@ class MatrixFlipColumnView extends BaseView {
 
 module.exports = MatrixFlipColumnView;
 
-},{"./base":57}],60:[function(require,module,exports){
+},{"./base":70}],73:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -12264,7 +13792,7 @@ class MatrixFlipRowView extends BaseView {
 
 module.exports = MatrixFlipRowView;
 
-},{"./base":57}],61:[function(require,module,exports){
+},{"./base":70}],74:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -12287,7 +13815,7 @@ class MatrixRowView extends BaseView {
 
 module.exports = MatrixRowView;
 
-},{"./base":57}],62:[function(require,module,exports){
+},{"./base":70}],75:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -12313,7 +13841,7 @@ class MatrixSelectionView extends BaseView {
 
 module.exports = MatrixSelectionView;
 
-},{"../util":56,"./base":57}],63:[function(require,module,exports){
+},{"../util":69,"./base":70}],76:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -12339,7 +13867,7 @@ class MatrixSubView extends BaseView {
 
 module.exports = MatrixSubView;
 
-},{"../util":56,"./base":57}],64:[function(require,module,exports){
+},{"../util":69,"./base":70}],77:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -12361,7 +13889,487 @@ class MatrixTransposeView extends BaseView {
 
 module.exports = MatrixTransposeView;
 
-},{"./base":57}],65:[function(require,module,exports){
+},{"./base":70}],78:[function(require,module,exports){
+'use strict';
+
+var Matrix = require('ml-matrix');
+
+var GaussianKernel = require('ml-kernel-gaussian');
+var PolynomialKernel = require('ml-kernel-polynomial');
+var ANOVAKernel = require('./kernels/anova-kernel');
+var CauchyKernel = require('./kernels/cauchy-kernel');
+var ExponentialKernel = require('./kernels/exponential-kernel');
+var HistogramKernel = require('./kernels/histogram-intersection-kernel');
+var LaplacianKernel = require('./kernels/laplacian-kernel');
+var MultiquadraticKernel = require('./kernels/multiquadratic-kernel');
+var RationalKernel = require('./kernels/rational-quadratic-kernel');
+var SigmoidKernel = require('ml-kernel-sigmoid');
+
+var kernelType = {
+    gaussian: GaussianKernel,
+    rbf: GaussianKernel,
+    polynomial: PolynomialKernel,
+    poly: PolynomialKernel,
+    anova: ANOVAKernel,
+    cauchy: CauchyKernel,
+    exponential: ExponentialKernel,
+    histogram: HistogramKernel,
+    min: HistogramKernel,
+    laplacian: LaplacianKernel,
+    multiquadratic: MultiquadraticKernel,
+    rational: RationalKernel,
+    sigmoid: SigmoidKernel,
+    mlp: SigmoidKernel
+};
+
+class Kernel {
+    constructor(type, options) {
+        this.kernelType = type;
+        if (type === 'linear') return;
+
+        if (typeof type === 'string') {
+            type = type.toLowerCase();
+
+            var KernelConstructor = kernelType[type];
+            if (KernelConstructor) {
+                this.kernelFunction = new KernelConstructor(options);
+            } else {
+                throw new Error('unsupported kernel type: ' + type);
+            }
+        } else if (typeof type === 'object' && typeof type.compute === 'function') {
+            this.kernelFunction = type;
+        } else {
+            throw new TypeError('first argument must be a valid kernel type or instance');
+        }
+    }
+
+    compute(inputs, landmarks) {
+        if (landmarks === undefined) {
+            landmarks = inputs;
+        }
+
+        if (this.kernelType === 'linear') {
+            var matrix = new Matrix(inputs);
+            return matrix.mmul(new Matrix(landmarks).transpose());
+        }
+
+        var kernelMatrix = new Matrix(inputs.length, landmarks.length);
+        var i, j;
+        if (inputs === landmarks) {
+            // fast path, matrix is symmetric
+            for (i = 0; i < inputs.length; i++) {
+                for (j = i; j < inputs.length; j++) {
+                    kernelMatrix[i][j] = kernelMatrix[j][i] = this.kernelFunction.compute(inputs[i], inputs[j]);
+                }
+            }
+        } else {
+            for (i = 0; i < inputs.length; i++) {
+                for (j = 0; j < landmarks.length; j++) {
+                    kernelMatrix[i][j] = this.kernelFunction.compute(inputs[i], landmarks[j]);
+                }
+            }
+        }
+        return kernelMatrix;
+    }
+}
+
+module.exports = Kernel;
+
+},{"./kernels/anova-kernel":79,"./kernels/cauchy-kernel":80,"./kernels/exponential-kernel":81,"./kernels/histogram-intersection-kernel":82,"./kernels/laplacian-kernel":83,"./kernels/multiquadratic-kernel":84,"./kernels/rational-quadratic-kernel":85,"ml-kernel-gaussian":55,"ml-kernel-polynomial":56,"ml-kernel-sigmoid":57,"ml-matrix":66}],79:[function(require,module,exports){
+'use strict';
+
+var defaultOptions = {
+    sigma: 1,
+    degree: 1
+};
+
+class ANOVAKernel {
+    constructor(options) {
+        options = Object.assign({}, defaultOptions, options);
+        this.sigma = options.sigma;
+        this.degree = options.degree;
+    }
+
+    compute(x, y) {
+        var sum = 0;
+        var len = Math.min(x.length, y.length);
+        for (var i = 1; i <= len; ++i) {
+            sum += Math.pow(Math.exp(-this.sigma * Math.pow(Math.pow(x[i - 1], i) - Math.pow(y[i - 1], i), 2)), this.degree);
+        }
+        return sum;
+    }
+}
+
+module.exports = ANOVAKernel;
+
+},{}],80:[function(require,module,exports){
+'use strict';
+
+var squaredEuclidean = require('ml-distance-euclidean').squared;
+
+var defaultOptions = {
+    sigma: 1
+};
+
+class CauchyKernel {
+    constructor(options) {
+        options = Object.assign({}, defaultOptions, options);
+        this.sigma = options.sigma;
+    }
+
+    compute(x, y) {
+        return 1 / (1 + squaredEuclidean(x, y) / (this.sigma * this.sigma));
+    }
+}
+
+module.exports = CauchyKernel;
+
+},{"ml-distance-euclidean":51}],81:[function(require,module,exports){
+'use strict';
+
+var euclidean = require('ml-distance-euclidean');
+
+var defaultOptions = {
+    sigma: 1
+};
+
+class ExponentialKernel {
+    constructor(options) {
+        options = Object.assign({}, defaultOptions, options);
+        this.sigma = options.sigma;
+        this.divisor = 2 * options.sigma * options.sigma;
+    }
+
+    compute(x, y) {
+        var distance = euclidean(x, y);
+        return Math.exp(-distance / this.divisor);
+    }
+}
+
+module.exports = ExponentialKernel;
+
+},{"ml-distance-euclidean":51}],82:[function(require,module,exports){
+'use strict';
+
+class HistogramIntersectionKernel {
+    compute(x, y) {
+        var min = Math.min(x.length, y.length);
+        var sum = 0;
+        for (var i = 0; i < min; ++i) {
+            sum += Math.min(x[i], y[i]);
+        }return sum;
+    }
+}
+
+module.exports = HistogramIntersectionKernel;
+
+},{}],83:[function(require,module,exports){
+'use strict';
+
+var euclidean = require('ml-distance-euclidean');
+
+var defaultOptions = {
+    sigma: 1
+};
+
+class LaplacianKernel {
+    constructor(options) {
+        options = Object.assign({}, defaultOptions, options);
+        this.sigma = options.sigma;
+    }
+
+    compute(x, y) {
+        var distance = euclidean(x, y);
+        return Math.exp(-distance / this.sigma);
+    }
+}
+
+module.exports = LaplacianKernel;
+
+},{"ml-distance-euclidean":51}],84:[function(require,module,exports){
+'use strict';
+
+var squaredEuclidean = require('ml-distance-euclidean').squared;
+
+var defaultOptions = {
+    constant: 1
+};
+
+class MultiquadraticKernel {
+    constructor(options) {
+        options = Object.assign({}, defaultOptions, options);
+        this.constant = options.constant;
+    }
+
+    compute(x, y) {
+        return Math.sqrt(squaredEuclidean(x, y) + this.constant * this.constant);
+    }
+}
+
+module.exports = MultiquadraticKernel;
+
+},{"ml-distance-euclidean":51}],85:[function(require,module,exports){
+'use strict';
+
+var squaredEuclidean = require('ml-distance-euclidean').squared;
+
+var defaultOptions = {
+    constant: 1
+};
+
+class RationalQuadraticKernel {
+    constructor(options) {
+        options = Object.assign({}, defaultOptions, options);
+        this.constant = options.constant;
+    }
+
+    compute(x, y) {
+        var distance = squaredEuclidean(x, y);
+        return 1 - distance / (distance + this.constant);
+    }
+}
+
+module.exports = RationalQuadraticKernel;
+
+},{"ml-distance-euclidean":51}],86:[function(require,module,exports){
+"use strict";
+'use strict;';
+/**
+ * Created by acastillo on 7/7/16.
+ */
+
+var FFTUtils = require("ml-fft").FFTUtils;
+
+function convolutionFFT(input, kernel, opt) {
+    var tmp = matrix2Array(input);
+    var inputData = tmp.data;
+    var options = Object.assign({ normalize: false, divisor: 1, rows: tmp.rows, cols: tmp.cols }, opt);
+
+    var nRows, nCols;
+    if (options.rows && options.cols) {
+        nRows = options.rows;
+        nCols = options.cols;
+    } else {
+        throw new Error("Invalid number of rows or columns " + nRows + " " + nCols);
+    }
+
+    var divisor = options.divisor;
+    var i, j;
+    var kHeight = kernel.length;
+    var kWidth = kernel[0].length;
+    if (options.normalize) {
+        divisor = 0;
+        for (i = 0; i < kHeight; i++) {
+            for (j = 0; j < kWidth; j++) {
+                divisor += kernel[i][j];
+            }
+        }
+    }
+    if (divisor === 0) {
+        throw new RangeError('convolution: The divisor is equal to zero');
+    }
+
+    var radix2Sized = FFTUtils.toRadix2(inputData, nRows, nCols);
+    var conv = FFTUtils.convolute(radix2Sized.data, kernel, radix2Sized.rows, radix2Sized.cols);
+    conv = FFTUtils.crop(conv, radix2Sized.rows, radix2Sized.cols, nRows, nCols);
+
+    if (divisor != 0 && divisor != 1) {
+        for (i = 0; i < conv.length; i++) {
+            conv[i] /= divisor;
+        }
+    }
+
+    return conv;
+}
+
+function convolutionDirect(input, kernel, opt) {
+    var tmp = matrix2Array(input);
+    var inputData = tmp.data;
+    var options = Object.assign({ normalize: false, divisor: 1, rows: tmp.rows, cols: tmp.cols }, opt);
+
+    var nRows, nCols;
+    if (options.rows && options.cols) {
+        nRows = options.rows;
+        nCols = options.cols;
+    } else {
+        throw new Error("Invalid number of rows or columns " + nRows + " " + nCols);
+    }
+
+    var divisor = options.divisor;
+    var kHeight = kernel.length;
+    var kWidth = kernel[0].length;
+    var i, j, x, y, index, sum, kVal, row, col;
+    if (options.normalize) {
+        divisor = 0;
+        for (i = 0; i < kHeight; i++) {
+            for (j = 0; j < kWidth; j++) {
+                divisor += kernel[i][j];
+            }
+        }
+    }
+    if (divisor === 0) {
+        throw new RangeError('convolution: The divisor is equal to zero');
+    }
+
+    var output = new Array(nRows * nCols);
+
+    var hHeight = Math.floor(kHeight / 2);
+    var hWidth = Math.floor(kWidth / 2);
+
+    for (y = 0; y < nRows; y++) {
+        for (x = 0; x < nCols; x++) {
+            sum = 0;
+            for (j = 0; j < kHeight; j++) {
+                for (i = 0; i < kWidth; i++) {
+                    kVal = kernel[kHeight - j - 1][kWidth - i - 1];
+                    row = (y + j - hHeight + nRows) % nRows;
+                    col = (x + i - hWidth + nCols) % nCols;
+                    index = row * nCols + col;
+                    sum += inputData[index] * kVal;
+                }
+            }
+            index = y * nCols + x;
+            output[index] = sum / divisor;
+        }
+    }
+    return output;
+}
+
+function LoG(sigma, nPoints, options) {
+    var factor = 1000;
+    if (options && options.factor) {
+        factor = options.factor;
+    }
+
+    var kernel = new Array(nPoints);
+    var i, j, tmp, y2, tmp2;
+
+    factor *= -1; //-1/(Math.PI*Math.pow(sigma,4));
+    var center = (nPoints - 1) / 2;
+    var sigma2 = 2 * sigma * sigma;
+    for (i = 0; i < nPoints; i++) {
+        kernel[i] = new Array(nPoints);
+        y2 = (i - center) * (i - center);
+        for (j = 0; j < nPoints; j++) {
+            tmp = -((j - center) * (j - center) + y2) / sigma2;
+            kernel[i][j] = Math.round(factor * (1 + tmp) * Math.exp(tmp));
+        }
+    }
+
+    return kernel;
+}
+
+function matrix2Array(input) {
+    var inputData = input;
+    var nRows, nCols;
+    if (typeof input[0] != "number") {
+        nRows = input.length;
+        nCols = input[0].length;
+        inputData = new Array(nRows * nCols);
+        for (var i = 0; i < nRows; i++) {
+            for (var j = 0; j < nCols; j++) {
+                inputData[i * nCols + j] = input[i][j];
+            }
+        }
+    } else {
+        var tmp = Math.sqrt(input.length);
+        if (Number.isInteger(tmp)) {
+            nRows = tmp;
+            nCols = tmp;
+        }
+    }
+
+    return { data: inputData, rows: nRows, cols: nCols };
+}
+
+module.exports = {
+    fft: convolutionFFT,
+    direct: convolutionDirect,
+    kernelFactory: { LoG: LoG },
+    matrix2Array: matrix2Array
+};
+
+},{"ml-fft":54}],87:[function(require,module,exports){
+arguments[4][58][0].apply(exports,arguments)
+},{"./util":98,"./views/column":100,"./views/flipColumn":101,"./views/flipRow":102,"./views/row":103,"./views/selection":104,"./views/sub":105,"./views/transpose":106,"dup":58,"ml-array-utils":47}],88:[function(require,module,exports){
+arguments[4][59][0].apply(exports,arguments)
+},{"../matrix":96,"dup":59}],89:[function(require,module,exports){
+arguments[4][60][0].apply(exports,arguments)
+},{"../matrix":96,"./util":93,"dup":60}],90:[function(require,module,exports){
+arguments[4][61][0].apply(exports,arguments)
+},{"../matrix":96,"dup":61}],91:[function(require,module,exports){
+arguments[4][62][0].apply(exports,arguments)
+},{"../matrix":96,"./util":93,"dup":62}],92:[function(require,module,exports){
+arguments[4][63][0].apply(exports,arguments)
+},{"../matrix":96,"./util":93,"dup":63}],93:[function(require,module,exports){
+arguments[4][64][0].apply(exports,arguments)
+},{"dup":64}],94:[function(require,module,exports){
+arguments[4][65][0].apply(exports,arguments)
+},{"./dc/cholesky":88,"./dc/evd":89,"./dc/lu":90,"./dc/qr":91,"./dc/svd":92,"./matrix":96,"dup":65}],95:[function(require,module,exports){
+arguments[4][66][0].apply(exports,arguments)
+},{"./decompositions":94,"./matrix":96,"dup":66}],96:[function(require,module,exports){
+arguments[4][67][0].apply(exports,arguments)
+},{"./abstractMatrix":87,"./symbol-species":97,"./util":98,"dup":67}],97:[function(require,module,exports){
+arguments[4][68][0].apply(exports,arguments)
+},{"dup":68}],98:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],99:[function(require,module,exports){
+arguments[4][70][0].apply(exports,arguments)
+},{"../abstractMatrix":87,"../matrix":96,"dup":70}],100:[function(require,module,exports){
+arguments[4][71][0].apply(exports,arguments)
+},{"./base":99,"dup":71}],101:[function(require,module,exports){
+arguments[4][72][0].apply(exports,arguments)
+},{"./base":99,"dup":72}],102:[function(require,module,exports){
+arguments[4][73][0].apply(exports,arguments)
+},{"./base":99,"dup":73}],103:[function(require,module,exports){
+arguments[4][74][0].apply(exports,arguments)
+},{"./base":99,"dup":74}],104:[function(require,module,exports){
+arguments[4][75][0].apply(exports,arguments)
+},{"../util":98,"./base":99,"dup":75}],105:[function(require,module,exports){
+arguments[4][76][0].apply(exports,arguments)
+},{"../util":98,"./base":99,"dup":76}],106:[function(require,module,exports){
+arguments[4][77][0].apply(exports,arguments)
+},{"./base":99,"dup":77}],107:[function(require,module,exports){
+arguments[4][58][0].apply(exports,arguments)
+},{"./util":118,"./views/column":120,"./views/flipColumn":121,"./views/flipRow":122,"./views/row":123,"./views/selection":124,"./views/sub":125,"./views/transpose":126,"dup":58,"ml-array-utils":47}],108:[function(require,module,exports){
+arguments[4][59][0].apply(exports,arguments)
+},{"../matrix":116,"dup":59}],109:[function(require,module,exports){
+arguments[4][60][0].apply(exports,arguments)
+},{"../matrix":116,"./util":113,"dup":60}],110:[function(require,module,exports){
+arguments[4][61][0].apply(exports,arguments)
+},{"../matrix":116,"dup":61}],111:[function(require,module,exports){
+arguments[4][62][0].apply(exports,arguments)
+},{"../matrix":116,"./util":113,"dup":62}],112:[function(require,module,exports){
+arguments[4][63][0].apply(exports,arguments)
+},{"../matrix":116,"./util":113,"dup":63}],113:[function(require,module,exports){
+arguments[4][64][0].apply(exports,arguments)
+},{"dup":64}],114:[function(require,module,exports){
+arguments[4][65][0].apply(exports,arguments)
+},{"./dc/cholesky":108,"./dc/evd":109,"./dc/lu":110,"./dc/qr":111,"./dc/svd":112,"./matrix":116,"dup":65}],115:[function(require,module,exports){
+arguments[4][66][0].apply(exports,arguments)
+},{"./decompositions":114,"./matrix":116,"dup":66}],116:[function(require,module,exports){
+arguments[4][67][0].apply(exports,arguments)
+},{"./abstractMatrix":107,"./symbol-species":117,"./util":118,"dup":67}],117:[function(require,module,exports){
+arguments[4][68][0].apply(exports,arguments)
+},{"dup":68}],118:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"dup":69}],119:[function(require,module,exports){
+arguments[4][70][0].apply(exports,arguments)
+},{"../abstractMatrix":107,"../matrix":116,"dup":70}],120:[function(require,module,exports){
+arguments[4][71][0].apply(exports,arguments)
+},{"./base":119,"dup":71}],121:[function(require,module,exports){
+arguments[4][72][0].apply(exports,arguments)
+},{"./base":119,"dup":72}],122:[function(require,module,exports){
+arguments[4][73][0].apply(exports,arguments)
+},{"./base":119,"dup":73}],123:[function(require,module,exports){
+arguments[4][74][0].apply(exports,arguments)
+},{"./base":119,"dup":74}],124:[function(require,module,exports){
+arguments[4][75][0].apply(exports,arguments)
+},{"../util":118,"./base":119,"dup":75}],125:[function(require,module,exports){
+arguments[4][76][0].apply(exports,arguments)
+},{"../util":118,"./base":119,"dup":76}],126:[function(require,module,exports){
+arguments[4][77][0].apply(exports,arguments)
+},{"./base":119,"dup":77}],127:[function(require,module,exports){
 'use strict';
 
 exports.SimpleLinearRegression = exports.SLR = require('./regression/simple-linear-regression');
@@ -12376,7 +14384,7 @@ exports.KernelRidgeRegression = exports.KRR = require('./regression/kernel-ridge
 //exports.MultivariateLinearRegression = exports.MVLR = require('./regression/multivariate-linear-regression');
 exports.PolinomialFitting2D = require('./regression/poly-fit-regression2d');
 
-},{"./regression/exp-regression":67,"./regression/kernel-ridge-regression":68,"./regression/poly-fit-regression2d":69,"./regression/polynomial-regression":70,"./regression/potential-regression":71,"./regression/power-regression":72,"./regression/simple-linear-regression":73}],66:[function(require,module,exports){
+},{"./regression/exp-regression":129,"./regression/kernel-ridge-regression":130,"./regression/poly-fit-regression2d":131,"./regression/polynomial-regression":132,"./regression/potential-regression":133,"./regression/power-regression":134,"./regression/simple-linear-regression":135}],128:[function(require,module,exports){
 'use strict';
 
 class BaseRegression {
@@ -12450,7 +14458,7 @@ class BaseRegression {
 
 module.exports = BaseRegression;
 
-},{}],67:[function(require,module,exports){
+},{}],129:[function(require,module,exports){
 'use strict';
 
 /*
@@ -12534,7 +14542,7 @@ class ExpRegression extends BaseRegression {
 
 module.exports = ExpRegression;
 
-},{"./base-regression":66,"./simple-linear-regression":73,"./util":74}],68:[function(require,module,exports){
+},{"./base-regression":128,"./simple-linear-regression":135,"./util":136}],130:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('ml-matrix');
@@ -12613,7 +14621,7 @@ class KernelRidgeRegression extends BaseRegression {
 
 module.exports = KernelRidgeRegression;
 
-},{"./base-regression":66,"ml-kernel":37,"ml-matrix":53}],69:[function(require,module,exports){
+},{"./base-regression":128,"ml-kernel":78,"ml-matrix":115}],131:[function(require,module,exports){
 "use strict";
 
 var Matrix = require("ml-matrix");
@@ -12808,7 +14816,7 @@ function abs(i, j) {
     this[i][j] = Math.abs(this[i][j]);
 }
 
-},{"./base-regression":66,"is-integer":25,"ml-matrix":53}],70:[function(require,module,exports){
+},{"./base-regression":128,"is-integer":42,"ml-matrix":115}],132:[function(require,module,exports){
 'use strict';
 
 /**
@@ -12955,7 +14963,7 @@ class PolynomialRegression extends BaseRegression {
 
 module.exports = PolynomialRegression;
 
-},{"./base-regression":66,"./util":74,"ml-matrix":53}],71:[function(require,module,exports){
+},{"./base-regression":128,"./util":136,"ml-matrix":115}],133:[function(require,module,exports){
 'use strict';
 
 /*
@@ -13036,7 +15044,7 @@ class PotentialRegression extends BaseRegression {
 
 module.exports = PotentialRegression;
 
-},{"./base-regression":66,"./polynomial-regression":70,"./util":74}],72:[function(require,module,exports){
+},{"./base-regression":128,"./polynomial-regression":132,"./util":136}],134:[function(require,module,exports){
 'use strict';
 
 /**
@@ -13120,7 +15128,7 @@ class PowerRegression extends BaseRegression {
 
 module.exports = PowerRegression;
 
-},{"./base-regression":66,"./simple-linear-regression":73,"./util":74}],73:[function(require,module,exports){
+},{"./base-regression":128,"./simple-linear-regression":135,"./util":136}],135:[function(require,module,exports){
 'use strict';
 
 var maybeToPrecision = require('./util').maybeToPrecision;
@@ -13224,14 +15232,14 @@ class SimpleLinearRegression extends BaseRegression {
 
 module.exports = SimpleLinearRegression;
 
-},{"./base-regression":66,"./util":74}],74:[function(require,module,exports){
+},{"./base-regression":128,"./util":136}],136:[function(require,module,exports){
 'use strict';
 
 exports.maybeToPrecision = function maybeToPrecision(value, digits) {
     if (digits) return value.toPrecision(digits);else return value.toString();
 };
 
-},{}],75:[function(require,module,exports){
+},{}],137:[function(require,module,exports){
 'use strict';
 
 function compareNumbers(a, b) {
@@ -13714,13 +15722,7 @@ exports.cumulativeSum = function cumulativeSum(array) {
     }return result;
 };
 
-},{}],76:[function(require,module,exports){
-'use strict';
-
-exports.array = require('./array');
-exports.matrix = require('./matrix');
-
-},{"./array":75,"./matrix":77}],77:[function(require,module,exports){
+},{}],138:[function(require,module,exports){
 'use strict';
 
 var arrayStat = require('./array');
@@ -14367,7 +16369,18 @@ exports.weightedScatter = function weightedScatter(matrix, weights, means, facto
     return cov;
 };
 
-},{"./array":75}],78:[function(require,module,exports){
+},{"./array":137}],139:[function(require,module,exports){
+'use strict';
+
+exports.array = require('./array');
+exports.matrix = require('./matrix');
+
+},{"./array":137,"./matrix":138}],140:[function(require,module,exports){
+'use strict';
+
+module.exports = typeof Promise === 'function' ? Promise : require('lie');
+
+},{"lie":44}],141:[function(require,module,exports){
 "use strict";
 
 module.exports = newArray;
@@ -14381,14 +16394,14 @@ function newArray(n, value) {
   return array;
 }
 
-},{}],79:[function(require,module,exports){
+},{}],142:[function(require,module,exports){
 'use strict';
 
 module.exports = Number.isNaN || function (x) {
 	return x !== x;
 };
 
-},{}],80:[function(require,module,exports){
+},{}],143:[function(require,module,exports){
 'use strict';
 
 module.exports = function (str, search, pos) {
@@ -14401,7 +16414,7 @@ module.exports = function (str, search, pos) {
 	return str.indexOf(search, pos) !== -1;
 };
 
-},{}],81:[function(require,module,exports){
+},{}],144:[function(require,module,exports){
 'use strict';
 
 var dateTimeRegex = /^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
@@ -14517,7 +16530,7 @@ function alwaysArray(value) {
     return value;
 }
 
-},{}],82:[function(require,module,exports){
+},{}],145:[function(require,module,exports){
 'use strict';
 
 var types = new Map([[1, [1, readByte]], // BYTE
@@ -14655,7 +16668,7 @@ function readDouble(decoder, count) {
     return array;
 }
 
-},{}],83:[function(require,module,exports){
+},{}],146:[function(require,module,exports){
 'use strict';
 
 class TIFF {
@@ -14666,7 +16679,7 @@ class TIFF {
 
 module.exports = TIFF;
 
-},{}],84:[function(require,module,exports){
+},{}],147:[function(require,module,exports){
 'use strict';
 
 var IOBuffer = require('iobuffer');
@@ -14856,12 +16869,12 @@ function unsupported(type, value) {
     throw new Error('Unsupported ' + type + ': ' + value);
 }
 
-},{"./IFD":81,"./IFDValue":82,"./TIFF":83,"iobuffer":22}],85:[function(require,module,exports){
+},{"./IFD":144,"./IFDValue":145,"./TIFF":146,"iobuffer":39}],148:[function(require,module,exports){
 'use strict';
 
 exports.TIFFDecoder = require('./TIFFDecoder');
 
-},{"./TIFFDecoder":84}],86:[function(require,module,exports){
+},{"./TIFFDecoder":147}],149:[function(require,module,exports){
 'use strict';
 
 var workerTemplate = require('./workerTemplate');
@@ -15017,7 +17030,7 @@ WorkerManager.prototype.post = function (event, args, transferable, id) {
 
 module.exports = WorkerManager;
 
-},{"./workerTemplate":87}],87:[function(require,module,exports){
+},{"./workerTemplate":150}],150:[function(require,module,exports){
 'use strict';
 
 var worker = function worker() {
@@ -15071,7 +17084,7 @@ exports.newWorkerURL = function newWorkerURL(code, deps) {
     return URL.createObjectURL(blob);
 };
 
-},{}],88:[function(require,module,exports){
+},{}],151:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15132,7 +17145,7 @@ var bitMethods = {
     }
 };
 
-},{}],89:[function(require,module,exports){
+},{}],152:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15188,7 +17201,7 @@ function getColorHistogram() {
     return result;
 }
 
-},{"new-array":78}],90:[function(require,module,exports){
+},{"new-array":141}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15230,7 +17243,7 @@ function countAlphaPixels() {
     }
 }
 
-},{}],91:[function(require,module,exports){
+},{}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15327,7 +17340,7 @@ function getChannelHistogram(channel, useAlpha, maxSlots) {
     return result;
 }
 
-},{"is-integer":25,"new-array":78}],92:[function(require,module,exports){
+},{"is-integer":42,"new-array":141}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15423,7 +17436,7 @@ function localExtrema() {
     return points;
 }
 
-},{}],93:[function(require,module,exports){
+},{}],156:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15459,7 +17472,7 @@ function max() {
     return result;
 }
 
-},{"new-array":78}],94:[function(require,module,exports){
+},{"new-array":141}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15486,7 +17499,7 @@ function mean() {
     return result;
 }
 
-},{"../../util/histogram":198}],95:[function(require,module,exports){
+},{"../../util/histogram":263}],158:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15513,7 +17526,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":198}],96:[function(require,module,exports){
+},{"../../util/histogram":263}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15549,7 +17562,7 @@ function min() {
     return result;
 }
 
-},{"new-array":78}],97:[function(require,module,exports){
+},{"new-array":141}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15585,7 +17598,7 @@ function getPixelsArray() {
     }
 }
 
-},{}],98:[function(require,module,exports){
+},{}],161:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15626,7 +17639,7 @@ function getRelativePosition(targetImage) {
     // throw Error('Parent image was not found, can not get relative position.')
 }
 
-},{}],99:[function(require,module,exports){
+},{}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15662,7 +17675,7 @@ function sum() {
     return result;
 }
 
-},{"new-array":78}],100:[function(require,module,exports){
+},{"new-array":141}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15686,7 +17699,7 @@ function getSVD() {
     return _mlMatrix.DC.SVD(this.pixelsArray);
 }
 
-},{"ml-matrix":53}],101:[function(require,module,exports){
+},{"ml-matrix":95}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15775,7 +17788,7 @@ exports.ImageData = ImageData;
 exports.isDifferentOrigin = isDifferentOrigin;
 exports.env = env;
 
-},{"canvas":undefined,"fs":2}],102:[function(require,module,exports){
+},{"canvas":undefined,"fs":4}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15955,6 +17968,10 @@ var _convolution = require('./operator/convolution');
 
 var _convolution2 = _interopRequireDefault(_convolution);
 
+var _convolutionFFT = require('./operator/convolutionFFT');
+
+var _convolutionFFT2 = _interopRequireDefault(_convolutionFFT);
+
 var _histogram = require('./compute/histogram');
 
 var _colorHistogram = require('./compute/colorHistogram');
@@ -16004,6 +18021,10 @@ var _countAlphaPixels2 = _interopRequireDefault(_countAlphaPixels);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // computers
+
+
+// transformers
+// filters
 function extend(Image) {
     var inPlace = { inPlace: true };
     var inPlaceStack = { inPlace: true, stack: true };
@@ -16057,6 +18078,7 @@ function extend(Image) {
     Image.extendMethod('paintPixels', _paintPixels2.default, inPlace);
     Image.extendMethod('extract', _extract2.default);
     Image.extendMethod('convolution', _convolution2.default);
+    Image.extendMethod('convolutionFFT', _convolutionFFT2.default);
 
     Image.extendMethod('countAlphaPixels', _countAlphaPixels2.default);
     Image.extendMethod('getHistogram', _histogram.getHistogram).extendProperty('histogram', _histogram.getHistogram);
@@ -16073,10 +18095,7 @@ function extend(Image) {
     Image.extendMethod('getSVD', _svd2.default).extendProperty('svd', _svd2.default);
 }
 
-// transformers
-// filters
-
-},{"./compute/colorHistogram":89,"./compute/countAlphaPixels":90,"./compute/histogram":91,"./compute/localExtrema":92,"./compute/max":93,"./compute/mean":94,"./compute/median":95,"./compute/min":96,"./compute/pixelsArray":97,"./compute/relativePosition":98,"./compute/sum":99,"./compute/svd":100,"./filter/add":103,"./filter/blur":104,"./filter/divide":105,"./filter/gaussian":106,"./filter/getBackground":107,"./filter/hypotenuse":108,"./filter/invert":109,"./filter/invertApply":110,"./filter/invertBinaryLoop":111,"./filter/invertGetSet":112,"./filter/invertIterator":113,"./filter/invertOneLoop":114,"./filter/invertPixel":115,"./filter/level":116,"./filter/median":117,"./filter/multiply":118,"./filter/sobel":119,"./filter/subtract":120,"./operator/convolution":127,"./operator/extract":128,"./operator/paintMasks":129,"./operator/paintPixels":130,"./transform/colorDepth":140,"./transform/crop":141,"./transform/grey/grey":143,"./transform/hsl":148,"./transform/hsv":149,"./transform/mask/mask":154,"./transform/pad":166,"./transform/resizeBinary":167,"./transform/rgba8":168,"./transform/scale/scale":170,"./utility/getBestMatch":172,"./utility/getChannel":173,"./utility/getColumn":174,"./utility/getMatrix":175,"./utility/getPixelsGrid":176,"./utility/getRow":177,"./utility/getSimilarity":178,"./utility/setBorder":179,"./utility/setChannel":180,"./utility/setMatrix":181,"./utility/split":182}],103:[function(require,module,exports){
+},{"./compute/colorHistogram":152,"./compute/countAlphaPixels":153,"./compute/histogram":154,"./compute/localExtrema":155,"./compute/max":156,"./compute/mean":157,"./compute/median":158,"./compute/min":159,"./compute/pixelsArray":160,"./compute/relativePosition":161,"./compute/sum":162,"./compute/svd":163,"./filter/add":166,"./filter/blur":167,"./filter/divide":168,"./filter/gaussian":169,"./filter/getBackground":170,"./filter/hypotenuse":171,"./filter/invert":172,"./filter/invertApply":173,"./filter/invertBinaryLoop":174,"./filter/invertGetSet":175,"./filter/invertIterator":176,"./filter/invertOneLoop":177,"./filter/invertPixel":178,"./filter/level":179,"./filter/median":180,"./filter/multiply":181,"./filter/sobel":182,"./filter/subtract":183,"./operator/convolution":190,"./operator/convolutionFFT":191,"./operator/extract":192,"./operator/paintMasks":193,"./operator/paintPixels":194,"./transform/colorDepth":204,"./transform/crop":205,"./transform/grey/grey":207,"./transform/hsl":212,"./transform/hsv":213,"./transform/mask/mask":218,"./transform/pad":230,"./transform/resizeBinary":231,"./transform/rgba8":232,"./transform/scale/scale":234,"./utility/getBestMatch":236,"./utility/getChannel":237,"./utility/getColumn":238,"./utility/getMatrix":239,"./utility/getPixelsGrid":240,"./utility/getRow":241,"./utility/getSimilarity":242,"./utility/setBorder":243,"./utility/setChannel":244,"./utility/setMatrix":245,"./utility/split":246}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16128,7 +18147,7 @@ function add(value) {
     }
 }
 
-},{"../../util/channel":195,"../../util/value":203}],104:[function(require,module,exports){
+},{"../../util/channel":259,"../../util/value":268}],167:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16136,9 +18155,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = meanFilter;
 
-var _convolution = require('../operator/convolution');
+var _convolutionFFT = require('../operator/convolutionFFT');
 
-var _convolution2 = _interopRequireDefault(_convolution);
+var _convolutionFFT2 = _interopRequireDefault(_convolutionFFT);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16168,10 +18187,10 @@ function meanFilter(k) {
         kernel[i] = 1;
     }
 
-    return _convolution2.default.call(this, kernel);
+    return _convolutionFFT2.default.call(this, kernel);
 }
 
-},{"../operator/convolution":127}],105:[function(require,module,exports){
+},{"../operator/convolutionFFT":191}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16227,7 +18246,7 @@ function divide(value) {
     }
 }
 
-},{"../../util/channel":195,"../../util/value":203,"../image":121}],106:[function(require,module,exports){
+},{"../../util/channel":259,"../../util/value":268,"../image":184}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16239,9 +18258,9 @@ var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _convolution = require('../operator/convolution');
+var _convolutionFFT = require('../operator/convolutionFFT');
 
-var _convolution2 = _interopRequireDefault(_convolution);
+var _convolutionFFT2 = _interopRequireDefault(_convolutionFFT);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16275,7 +18294,7 @@ function gaussianFilter() {
 		kernel = getKernel(radius, sigma);
 	}
 
-	return _convolution2.default.call(this, kernel, {
+	return _convolutionFFT2.default.call(this, kernel, {
 		border: border,
 		channels: channels
 	});
@@ -16339,7 +18358,7 @@ function getSigmaKernel(sigma) {
 	return getKernel(neighbors, sigma);
 }
 
-},{"../image":121,"../operator/convolution":127}],107:[function(require,module,exports){
+},{"../image":184,"../operator/convolutionFFT":191}],170:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16377,7 +18396,7 @@ function getBackground(coordinates, values, options) {
     return background;
 }
 
-},{"../image":121,"ml-regression":65}],108:[function(require,module,exports){
+},{"../image":184,"ml-regression":127}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16440,7 +18459,7 @@ function hypotenuse(otherImage) {
     return newImage;
 }
 
-},{"../../util/channel":195,"../image":121}],109:[function(require,module,exports){
+},{"../../util/channel":259,"../image":184}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16489,7 +18508,7 @@ function invert() {
     }
 } // we try the faster methods
 
-},{"../../util/channel":195}],110:[function(require,module,exports){
+},{"../../util/channel":259}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16525,7 +18544,7 @@ function invertApply() {
     }
 }
 
-},{}],111:[function(require,module,exports){
+},{}],174:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16542,7 +18561,7 @@ function invertBinaryLoop() {
     }
 }
 
-},{}],112:[function(require,module,exports){
+},{}],175:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16574,7 +18593,7 @@ function invert() {
     }
 }
 
-},{}],113:[function(require,module,exports){
+},{}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16606,7 +18625,7 @@ function invertIterator() {
     }
 }
 
-},{}],114:[function(require,module,exports){
+},{}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16626,7 +18645,7 @@ function invertOneLoop() {
     }
 }
 
-},{}],115:[function(require,module,exports){
+},{}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16654,7 +18673,7 @@ function invertPixel() {
     }
 }
 
-},{}],116:[function(require,module,exports){
+},{}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16742,7 +18761,7 @@ function processImage(image, min, max, channels) {
     }
 }
 
-},{"../../util/channel":195,"new-array":78}],117:[function(require,module,exports){
+},{"../../util/channel":259,"new-array":141}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16814,7 +18833,7 @@ function medianFilter(radius, channels) {
     return newImage;
 } //End medianFilter function
 
-},{"../../util/channel":195,"../image":121}],118:[function(require,module,exports){
+},{"../../util/channel":259,"../image":184}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16871,7 +18890,7 @@ function multiply(value) {
     }
 }
 
-},{"../../util/channel":195,"../../util/value":203,"../image":121}],119:[function(require,module,exports){
+},{"../../util/channel":259,"../../util/value":268,"../image":184}],182:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16928,7 +18947,7 @@ function sobelFilter() {
 	return gX.hypotenuse(gY, { bitDepth: this.bitDepth, channels: channels });
 }
 
-},{"../../util/kernels":200,"../image":121,"../operator/convolution":127}],120:[function(require,module,exports){
+},{"../../util/kernels":265,"../image":184,"../operator/convolution":190}],183:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16978,7 +18997,7 @@ function subtract(value) {
     }
 }
 
-},{"../../util/channel":195,"../../util/value":203}],121:[function(require,module,exports){
+},{"../../util/channel":259,"../../util/value":268}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17018,6 +19037,8 @@ var _load = require('./load');
 var _stack = require('../stack/stack');
 
 var _stack2 = _interopRequireDefault(_stack);
+
+var _blobUtil = require('blob-util');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -17333,6 +19354,19 @@ class Image {
     }
 
     /**
+     * Creates a blob from the image and return a Promise.
+     * @param {string} [type='image/png'] A String indicating the image format. The default type is image/png.
+     * @param {string} [quality=0.8] A Number between 0 and 1 indicating image quality if the requested type is image/jpeg or image/webp. If this argument is anything else, the default value for image quality is used. Other arguments are ignored.
+     * @return {Promise}
+     */
+    toBlob() {
+        var type = arguments.length <= 0 || arguments[0] === undefined ? 'image/png' : arguments[0];
+        var quality = arguments.length <= 1 || arguments[1] === undefined ? 0.8 : arguments[1];
+
+        return (0, _blobUtil.canvasToBlob)(this.getCanvas({ originalData: true }), type, quality);
+    }
+
+    /**
      * Creates a new canvas element and draw the image inside it
      * #originalData
      * @return {Canvas}
@@ -17520,7 +19554,7 @@ exports.default = Image;
 (0, _extend2.default)(Image);
 (0, _bitMethods2.default)(Image);
 
-},{"../stack/stack":192,"./bitMethods":88,"./environment":101,"./extend":102,"./kind":122,"./kindNames":123,"./load":124,"./mediaTypes":125,"./model/model":126,"./roi/manager":138,"extend":3,"fs":2}],122:[function(require,module,exports){
+},{"../stack/stack":256,"./bitMethods":151,"./environment":164,"./extend":165,"./kind":185,"./kindNames":186,"./load":187,"./mediaTypes":188,"./model/model":189,"./roi/manager":202,"blob-util":2,"extend":19,"fs":4}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17613,7 +19647,7 @@ function createPixelArray(image) {
     image.data = arr;
 }
 
-},{"./kindNames":123,"./model/model":126}],123:[function(require,module,exports){
+},{"./kindNames":186,"./model/model":189}],186:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17627,7 +19661,7 @@ var RGBA = exports.RGBA = 'RGBA';
 var RGB = exports.RGB = 'RGB';
 var GREY = exports.GREY = 'GREY';
 
-},{}],124:[function(require,module,exports){
+},{}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17770,7 +19804,7 @@ function loadGeneric(url) {
     });
 }
 
-},{"../stack/stack":192,"./environment":101,"./image":121,"atob-lite":1,"fast-png":21,"tiff":85}],125:[function(require,module,exports){
+},{"../stack/stack":256,"./environment":164,"./image":184,"atob-lite":1,"fast-png":37,"tiff":148}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17835,7 +19869,7 @@ function getType(type) {
     return type;
 }
 
-},{"./environment":101,"./image":121,"string-includes":80}],126:[function(require,module,exports){
+},{"./environment":164,"./image":184,"string-includes":143}],189:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17845,7 +19879,7 @@ var RGB = exports.RGB = 'RGB';
 var HSL = exports.HSL = 'HSL';
 var HSV = exports.HSV = 'HSV';
 
-},{}],127:[function(require,module,exports){
+},{}],190:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17863,6 +19897,8 @@ var _kernel = require('../../util/kernel');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var conv = require('ml-matrix-convolution');
+
 /**
  * @memberof Image
  * @instance
@@ -17873,6 +19909,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {boolean} [$1.normalize=false]
  * @param {number} [$1.divisor=1]
  * @param {string} [$1.border='copy']
+ * @param {string} [$1.algorithm='direct'] - Either direct or 'fft'. fft is much faster for large kernel.
  * @returns {Image}
  */
 function convolution(kernel) {
@@ -17886,75 +19923,118 @@ function convolution(kernel) {
     var divisor = _ref$divisor === undefined ? 1 : _ref$divisor;
     var _ref$border = _ref.border;
     var border = _ref$border === undefined ? 'copy' : _ref$border;
+    var _ref$algorithm = _ref.algorithm;
+    var algorithm = _ref$algorithm === undefined ? 'direct' : _ref$algorithm;
 
 
     var newImage = _image2.default.createFrom(this, { bitDepth: bitDepth });
 
     channels = (0, _channel.validateArrayOfChannels)(this, channels, true);
-
     var kWidth = void 0,
         kHeight = void 0;
+    //Very misterious function. If the kernel is an array only one quadrant is copied to the output matrix,
+    //but if the kernel is already a matrix, nothing is done.
+    //On the other hand, it only consider odd, squared and symmetric kernels. A too restrictive
 
-    //calculate divisor
     var _validateKernel = (0, _kernel.validateKernel)(kernel);
 
     kWidth = _validateKernel.kWidth;
     kHeight = _validateKernel.kHeight;
     kernel = _validateKernel.kernel;
-    if (normalize) {
-        divisor = 0;
-        for (var i = 0; i < kernel.length; i++) {
-            for (var j = 0; j < kernel[0].length; j++) {
-                divisor += kernel[i][j];
-            }
-        }
-    }
 
-    if (divisor === 0) {
-        throw new RangeError('convolution: The divisor is equal to zero');
-    }
 
+    var halfHeight = Math.floor(kernel.length / 2);
+    var halfWidth = Math.floor(kernel[0].length / 2);
     var clamped = newImage.isClamped;
 
-    for (var channel = 0; channel < channels.length; channel++) {
-        var c = channels[channel];
-        for (var y = kHeight; y < this.height - kHeight; y++) {
-            for (var x = kWidth; x < this.width - kWidth; x++) {
-                var sum = 0;
-                for (var _j = -kHeight; _j <= kHeight; _j++) {
-                    for (var _i = -kWidth; _i <= kWidth; _i++) {
-                        var kVal = kernel[kHeight + _j][kWidth + _i];
-                        var _index = ((y + _j) * this.width + x + _i) * this.channels + c;
-                        sum += this.data[_index] * kVal;
-                    }
-                }
+    var tmpData = new Array(this.height * this.width);
+    var index = void 0,
+        x = void 0,
+        y = void 0,
+        channel = void 0,
+        c = void 0,
+        tmpResult = void 0;
+    for (channel = 0; channel < channels.length; channel++) {
+        c = channels[channel];
+        //Copy the channel in a single array
+        for (y = 0; y < this.height; y++) {
+            for (x = 0; x < this.width; x++) {
+                index = y * this.width + x;
+                tmpData[index] = this.data[index * this.channels + c];
+            }
+        }
+        if (algorithm === 'direct') {
+            tmpResult = conv.direct(tmpData, kernel, {
+                rows: this.height,
+                cols: this.width,
+                normalize: normalize,
+                divisor: divisor
+            });
+        } else {
+            tmpResult = conv.fft(tmpData, kernel, {
+                rows: this.height,
+                cols: this.width,
+                normalize: normalize,
+                divisor: divisor
+            });
+        }
 
-                var index = (y * this.width + x) * this.channels + c;
-                if (clamped) {
-                    // we calculate the clamped result
-                    newImage.data[index] = Math.min(Math.max(Math.round(sum / divisor), 0), newImage.maxValue);
-                } else {
-                    newImage.data[index] = sum / divisor;
-                }
+        //Copy the result to the output image
+        for (y = 0; y < this.height; y++) {
+            for (x = 0; x < this.width; x++) {
+                index = y * this.width + x;
+                if (clamped) newImage.data[index * this.channels + c] = Math.min(Math.max(tmpResult[index], 0), newImage.maxValue);else newImage.data[index * this.channels + c] = tmpResult[index];
             }
         }
     }
     // if the kernel was not applied on the alpha channel we just copy it
     // TODO: in general we should copy the channels that where not changed
     // TODO: probably we should just copy the image at the beginning ?
-
     if (this.alpha && channels.indexOf(this.channels) === -1) {
-        for (var _i2 = this.components; _i2 < this.data.length; _i2 = _i2 + this.channels) {
-            newImage.data[_i2] = this.data[_i2];
+        for (x = this.components; x < this.data.length; x = x + this.channels) {
+            newImage.data[x] = this.data[x];
         }
     }
 
-    newImage.setBorder({ size: [kWidth, kHeight], algorithm: border });
+    //I only can have 3 types of borders:
+    //  1. Considering the image as periodic: periodic
+    //  2. Extend the interior borders: copy
+    //  3. fill with a color: set
+    if (border !== 'periodic') {
+        newImage.setBorder({ size: [halfWidth, halfHeight], algorithm: border });
+    }
 
     return newImage;
 }
 
-},{"../../util/channel":195,"../../util/kernel":199,"../image":121}],128:[function(require,module,exports){
+},{"../../util/channel":259,"../../util/kernel":264,"../image":184,"ml-matrix-convolution":86}],191:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = convolutionFFT;
+/**
+ * @memberof Image
+ * @instance
+ * @param {[[number]]} kernel
+ * @param {object} [$1] - options
+ * @param {array} [$1.channels] - Array of channels to treat. Defaults to all channels
+ * @param {number} [$1.bitDepth=this.bitDepth] - A new bit depth can be specified. This allows to use 32 bits to avoid clamping of floating-point numbers.
+ * @param {boolean} [$1.normalize=false]
+ * @param {number} [$1.divisor=1]
+ * @param {string} [$1.border='copy']
+ * @returns {Image}
+ */
+
+function convolutionFFT(kernel) {
+  var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+  options.algorithm = 'fft';
+  return this.convolution(kernel, options);
+}
+
+},{}],192:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17973,7 +20053,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * a relative position and this part of the original image will be extracted.
  * @memberof Image
  * @instance
- * @param [Image] mask - Image containing a binary mask
+ * @param {Image} mask - Image containing a binary mask
  * @param {array} [$1.position] - Array of 2 elements containing the x,y coordinates
  * @returns {Image} A new image
  */
@@ -17991,13 +20071,14 @@ function extract(mask) {
     if (!position) {
         position = mask.getRelativePosition(this);
         if (!position) {
-            throw new Error('extract : can not extract an image because the relative position can not be ' + 'determined, try to specify manualy the position as an array of 2 elements [x,y].');
+            throw new Error('extract : can not extract an image because the relative position can not be ' + 'determined, try to specify manually the position as an array of 2 elements [x,y].');
         }
     }
+
     var extract = _image2.default.createFrom(this, {
         width: mask.width,
         height: mask.height,
-        alpha: 1, // we force the alpha, otherwise dificult to extract a mask ...
+        alpha: 1, // we force the alpha, otherwise difficult to extract a mask ...
         position: position,
         parent: this
     });
@@ -18017,9 +20098,9 @@ function extract(mask) {
     }
 
     return extract;
-} // we will create a small image from a mask
+}
 
-},{"../image":121}],129:[function(require,module,exports){
+},{"../image":184}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18029,14 +20110,14 @@ exports.default = paintMasks;
 
 var _model = require('../model/model');
 
-var _color = require('../../util/color');
+var _color2 = require('../../util/color');
 
 /**
  * Paint a mask or masks on the current image.
  * @memberof Image
  * @instance
  * @param masks {(Image|Image[])} mask - Image containing a binary mask
- * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
+ * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red. You may also give a valid css color.
  * @param alpha Value from 0 to 255 to specify the alpha. Will be used if it is unspecified
  * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask.
  * @param randomColors If we we would like to paint each mask with a random color
@@ -18050,7 +20131,8 @@ function paintMasks(masks) {
     var _ref$color = _ref.color;
     var color = _ref$color === undefined ? [this.maxValue, 0, 0] : _ref$color;
     var colors = _ref.colors;
-    var alpha = _ref.alpha;
+    var _ref$alpha = _ref.alpha;
+    var alpha = _ref$alpha === undefined ? 255 : _ref$alpha;
     var _ref$randomColors = _ref.randomColors;
     var randomColors = _ref$randomColors === undefined ? false : _ref$randomColors;
     var _ref$distinctColors = _ref.distinctColors;
@@ -18063,9 +20145,22 @@ function paintMasks(masks) {
         colorModel: _model.RGB
     });
 
+    if (!Array.isArray(color)) {
+        color = (0, _color2.css2array)(color);
+    }
+
+    if (colors) {
+        colors = colors.map(function (color) {
+            if (!Array.isArray(color)) {
+                var _color = (0, _color2.css2array)(_color);
+                return _color;
+            }
+        });
+    }
+
     if (!Array.isArray(masks)) masks = [masks];
 
-    if (distinctColors) colors = (0, _color.getDistinctColors)(masks.length);
+    if (distinctColors) colors = (0, _color2.getDistinctColors)(masks.length);
 
     for (var i = 0; i < masks.length; i++) {
         var roi = masks[i];
@@ -18074,17 +20169,20 @@ function paintMasks(masks) {
         if (colors) {
             color = colors[i % colors.length];
         } else if (randomColors) {
-            color = (0, _color.getRandomColor)();
+            color = (0, _color2.getRandomColor)();
         }
 
         for (var x = 0; x < roi.width; x++) {
             for (var y = 0; y < roi.height; y++) {
                 if (roi.getBitXY(x, y)) {
-                    for (var channel = 0; channel < Math.min(this.channels, color.length); channel++) {
-                        this.setValueXY(x + roi.position[0], y + roi.position[1], channel, color[channel]);
-                    }
-                    if (color.length !== this.channels && alpha) {
-                        this.setValueXY(x + roi.position[0], y + roi.position[1], this.channels - 1, alpha);
+                    for (var component = 0; component < Math.min(this.components, color.length); component++) {
+                        if (alpha === 255) {
+                            this.setValueXY(x + roi.position[0], y + roi.position[1], component, color[component]);
+                        } else {
+                            var value = this.getValueXY(x + roi.position[0], y + roi.position[1], component);
+                            value = Math.round((value * (255 - alpha) + color[component] * alpha) / 255);
+                            this.setValueXY(x + roi.position[0], y + roi.position[1], component, value);
+                        }
                     }
                 }
             }
@@ -18092,7 +20190,7 @@ function paintMasks(masks) {
     }
 }
 
-},{"../../util/color":196,"../model/model":126}],130:[function(require,module,exports){
+},{"../../util/color":260,"../model/model":189}],194:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18152,7 +20250,7 @@ function paintPixels(pixels) {
     }
 }
 
-},{"../../util/shape":202,"../model/model":126}],131:[function(require,module,exports){
+},{"../../util/shape":267,"../model/model":189}],195:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18180,7 +20278,7 @@ class ROIMap {
 }
 exports.default = ROIMap;
 
-},{}],132:[function(require,module,exports){
+},{}],196:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18256,13 +20354,13 @@ function createROI(roiMap) {
     return roiArray;
 }
 
-},{"./roi":139}],133:[function(require,module,exports){
+},{"./roi":203}],197:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = createROIMapFromExtrema;
+exports.default = fromExtrema;
 
 var _ROIMap = require('./../ROIMap');
 
@@ -18275,7 +20373,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @instance
  */
 
-function createROIMapFromExtrema() {
+function fromExtrema() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
     var _ref$allowCorner = _ref.allowCorner;
@@ -18286,7 +20384,7 @@ function createROIMapFromExtrema() {
 
 
     var image = this;
-    image.checkProcessable('createROIMapFromExtrema', { components: [1] });
+    image.checkProcessable('fromExtrema', { components: [1] });
 
     var PROCESS_TOP = 1;
     var PROCESS_NORMAL = 2;
@@ -18477,13 +20575,13 @@ function createROIMapFromExtrema() {
     }
 }
 
-},{"./../ROIMap":131}],134:[function(require,module,exports){
+},{"./../ROIMap":195}],198:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = createROIMapFromMask;
+exports.default = fromMask;
 
 var _ROIMap = require('./../ROIMap');
 
@@ -18491,7 +20589,7 @@ var _ROIMap2 = _interopRequireDefault(_ROIMap);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function createROIMapFromMask(mask) {
+function fromMask(mask) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     var _ref$allowCorner = _ref.allowCorner;
@@ -18605,13 +20703,13 @@ function createROIMapFromMask(mask) {
    * @instance
    */
 
-},{"./../ROIMap":131}],135:[function(require,module,exports){
+},{"./../ROIMap":195}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = createROIMapFromMask2;
+exports.default = fromMask2;
 
 var _mlDisjointSet = require('ml-disjoint-set');
 
@@ -18634,7 +20732,7 @@ var neighbours8 = [null, null, null, null];
 /*
 Implementation of the connected-component labeling algorithm
  */
-function createROIMapFromMask2(mask) {
+function fromMask2(mask) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     var _ref$neighbours = _ref.neighbours;
@@ -18712,13 +20810,13 @@ function createROIMapFromMask2(mask) {
     return new _ROIMap2.default(mask, pixels);
 }
 
-},{"./../ROIMap":131,"ml-disjoint-set":32}],136:[function(require,module,exports){
+},{"./../ROIMap":195,"ml-disjoint-set":50}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = fromCoordinates;
+exports.default = fromPoints;
 
 var _ROIMap = require('./../ROIMap');
 
@@ -18735,7 +20833,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @instance
  */
 
-function fromCoordinates(pixelsToPaint) {
+function fromPoints(pointsToPaint) {
     var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     var shape = new _shape2.default(options);
@@ -18744,10 +20842,10 @@ function fromCoordinates(pixelsToPaint) {
     var mapPixels = new Int16Array(this.size); // maxValue: 32767, minValue: -32768
     var positiveID = 0;
     var shapePixels = shape.getPixels();
-    for (var i = 0; i < pixelsToPaint.length; i++) {
+    for (var i = 0; i < pointsToPaint.length; i++) {
         positiveID++;
-        var xP = pixelsToPaint[i][0];
-        var yP = pixelsToPaint[i][1];
+        var xP = pointsToPaint[i][0];
+        var yP = pointsToPaint[i][1];
         for (var j = 0; j < shapePixels.length; j++) {
             var xS = shapePixels[j][0];
             var yS = shapePixels[j][1];
@@ -18760,13 +20858,13 @@ function fromCoordinates(pixelsToPaint) {
     return new _ROIMap2.default(this, mapPixels);
 }
 
-},{"./../../../util/shape":202,"./../ROIMap":131}],137:[function(require,module,exports){
+},{"./../../../util/shape":267,"./../ROIMap":195}],201:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = createROIMapFromWaterShed;
+exports.default = fromWaterShed;
 
 var _ROIMap = require('./../ROIMap');
 
@@ -18775,6 +20873,8 @@ var _ROIMap2 = _interopRequireDefault(_ROIMap);
 var _jsPriorityQueue = require('js-priority-queue');
 
 var _jsPriorityQueue2 = _interopRequireDefault(_jsPriorityQueue);
+
+var _dxdy = require('./../../../util/dxdy.js');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18787,12 +20887,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @returns {ROIMap}
  */
 
-/**
- * @memberof ROIManager
- * @instance
- */
-
-function createROIMapFromWaterShed() {
+function fromWaterShed() {
     var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
     var _ref$fillMaxValue = _ref.fillMaxValue;
@@ -18801,7 +20896,7 @@ function createROIMapFromWaterShed() {
     var mask = _ref.mask;
 
     var image = this;
-    image.checkProcessable('createROIMapFromWaterShed', {
+    image.checkProcessable('fromWaterShed', {
         bitDepth: [8, 16],
         components: 1
     });
@@ -18829,9 +20924,6 @@ function createROIMapFromWaterShed() {
             toProcess.queue([points[i][0], points[i][1], intensity]);
         }
     }
-    //dx and dy is to iterate through neighbour up down left and right.
-    var dx = [+1, 0, -1, 0];
-    var dy = [0, +1, 0, -1];
 
     //Then we iterate through each points
     while (toProcess.length > 0) {
@@ -18839,8 +20931,8 @@ function createROIMapFromWaterShed() {
         var currentValueIndex = currentPoint[0] + currentPoint[1] * width;
 
         for (var dir = 0; dir < 4; dir++) {
-            var newX = currentPoint[0] + dx[dir];
-            var newY = currentPoint[1] + dy[dir];
+            var newX = currentPoint[0] + _dxdy.dx[dir];
+            var newY = currentPoint[1] + _dxdy.dy[dir];
             if (newX >= 0 && newY >= 0 && newX < width && newY < height) {
                 var currentNeighbourIndex = newX + newY * width;
                 if (!mask || mask.getBit(currentNeighbourIndex)) {
@@ -18848,7 +20940,7 @@ function createROIMapFromWaterShed() {
                     if (_intensity <= fillMaxValue) {
                         if (map[currentNeighbourIndex] === 0) {
                             map[currentNeighbourIndex] = map[currentValueIndex];
-                            toProcess.queue([currentPoint[0] + dx[dir], currentPoint[1] + dy[dir], _intensity]);
+                            toProcess.queue([currentPoint[0] + _dxdy.dx[dir], currentPoint[1] + _dxdy.dy[dir], _intensity]);
                         }
                     }
                 }
@@ -18857,9 +20949,12 @@ function createROIMapFromWaterShed() {
     }
 
     return new _ROIMap2.default(image, map);
-}
+} /**
+   * @memberof ROIManager
+   * @instance
+   */
 
-},{"./../ROIMap":131,"js-priority-queue":26}],138:[function(require,module,exports){
+},{"./../../../util/dxdy.js":262,"./../ROIMap":195,"js-priority-queue":43}],202:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18882,9 +20977,9 @@ var _fromWaterShed = require('./creator/fromWaterShed');
 
 var _fromWaterShed2 = _interopRequireDefault(_fromWaterShed);
 
-var _fromPixels = require('./creator/fromPixels');
+var _fromPoints = require('./creator/fromPoints');
 
-var _fromPixels2 = _interopRequireDefault(_fromPixels);
+var _fromPoints2 = _interopRequireDefault(_fromPoints);
 
 var _createROI = require('./createROI');
 
@@ -18923,7 +21018,7 @@ class ROIManager {
         this._painted = null;
     }
 
-    generateROIFromExtrema() {
+    fromExtrema() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
         var opt = (0, _extend2.default)({}, this._options, options);
@@ -18935,11 +21030,11 @@ class ROIManager {
      * @param {[[number]]} pixels - an array of pixels
      * @param {object} options
      */
-    putPixels(pixels) {
+    fromPoints(pixels) {
         var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
         var opt = (0, _extend2.default)({}, this._options, options);
-        var roiMap = _fromPixels2.default.call(this._image, pixels, options);
+        var roiMap = _fromPoints2.default.call(this._image, pixels, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
         return this;
     }
@@ -18957,7 +21052,7 @@ class ROIManager {
         return this;
     }
 
-    generateROIFromWaterShed() {
+    fromWaterShed() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
         var opt = (0, _extend2.default)({}, this._options, options);
@@ -19032,7 +21127,7 @@ class ROIManager {
         return rois;
     }
 
-    getROIMasks() {
+    getMasks() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
         var rois = this.getROI(options);
@@ -19042,6 +21137,18 @@ class ROIManager {
             masks[i] = rois[i].mask;
         }
         return masks;
+    }
+
+    getContours() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+        var rois = this.getROI(options);
+
+        var contours = new Array(rois.length);
+        for (var i = 0; i < rois.length; i++) {
+            contours[i] = rois[i].contour;
+        }
+        return contours;
     }
 
     getPixels() {
@@ -19058,10 +21165,12 @@ class ROIManager {
      * @param options : all the options to select ROIs
      * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
      * @param alpha Value from 0 to 255 to specify the alpha. Will be used if it is unspecified
-     * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask.
+     * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask
+     * @param contour {boolean} true if display only the contour
      * @param randomColors If we we would like to paint each mask with a random color
      * @param distinctColors If we we would like to paint each mask with a different color (default: false);
-     * @param showLabels Paint the masks ID on the image (default: false). Requires a RGBA image !
+     * @param showLabels Paint a mask property on the image (default: false). If true will display the 'id'.
+     *                      May be any property of the ROI. . Requires a RGBA image !
      * @param labelColor Define the color to paint the labels (default : 'blue')
      * @param labelFont Define the size of the labels ID (default : '12px Helvetica')
      *  id: true / false
@@ -19077,17 +21186,24 @@ class ROIManager {
         var labelFont = options.labelFont || '12px Helvetica';
 
         if (!this._painted) this._painted = this._image.rgba8();
-        var masks = this.getROIMasks(options);
+        var masks = void 0;
+        if (options.contour) {
+            masks = this.getContours(options);
+        } else {
+            masks = this.getMasks(options);
+        }
+
         this._painted.paintMasks(masks, options);
 
         if (showLabels) {
+            if (showLabels === true) showLabels = 'id';
             var canvas = this._painted.getCanvas({ originalData: true });
             var ctx = canvas.getContext('2d');
             ctx.fillStyle = labelColor;
             ctx.font = labelFont;
             var rois = this.getROI(options);
             for (var i = 0; i < rois.length; i++) {
-                ctx.fillText(rois[i].id, rois[i].meanX - 3, rois[i].meanY + 3);
+                ctx.fillText(rois[i][showLabels], rois[i].meanX - 3, rois[i].meanY + 3);
             }
             this._painted.data = ctx.getImageData(0, 0, this._painted.width, this._painted.height).data;
         }
@@ -19099,7 +21215,7 @@ class ROIManager {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
         var mask = new _image2.default(this._image.width, this._image.height, { kind: 'BINARY' });
-        var masks = this.getROIMasks(options);
+        var masks = this.getMasks(options);
 
         for (var i = 0; i < masks.length; i++) {
             var roi = masks[i];
@@ -19174,7 +21290,7 @@ class ROILayer {
     }
 }
 
-},{"../image":121,"./ROIMap":131,"./createROI":132,"./creator/fromExtrema":133,"./creator/fromMask":134,"./creator/fromMask2":135,"./creator/fromPixels":136,"./creator/fromWaterShed":137,"extend":3}],139:[function(require,module,exports){
+},{"../image":184,"./ROIMap":195,"./createROI":196,"./creator/fromExtrema":197,"./creator/fromMask":198,"./creator/fromMask2":199,"./creator/fromPoints":200,"./creator/fromWaterShed":201,"extend":19}],203:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19362,6 +21478,38 @@ class ROI {
         return this.computed.border = getBorder(this);
     }
 
+    /**
+        Returns a binary image containing only the border of the mask
+     */
+    get contour() {
+        if (this.computed.contour) return this.computed.contour;
+
+        var img = new _image2.default(this.width, this.height, {
+            kind: KindNames.BINARY,
+            position: [this.minX, this.minY],
+            parent: this.map.parent
+        });
+
+        for (var x = 0; x < this.width; x++) {
+            for (var y = 0; y < this.height; y++) {
+                if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
+                    // it also has to be on a border ...
+                    if (x > 0 && x < this.width - 1 && y > 0 && y < this.height - 1) {
+                        if (this.map.pixels[x - 1 + this.minX + (y + this.minY) * this.map.width] !== this.id || this.map.pixels[x + 1 + this.minX + (y + this.minY) * this.map.width] !== this.id || this.map.pixels[x + this.minX + (y - 1 + this.minY) * this.map.width] !== this.id || this.map.pixels[x + this.minX + (y + 1 + this.minY) * this.map.width] !== this.id) {
+                            img.setBitXY(x, y);
+                        }
+                    } else {
+                        img.setBitXY(x, y);
+                    }
+                }
+            }
+        }
+        return this.computed.contour = img;
+    }
+
+    /**
+     Returns a binary image containing the mask
+     */
     get mask() {
         if (this.computed.mask) return this.computed.mask;
 
@@ -19650,7 +21798,7 @@ function getInternalIDs(roi) {
     return internal;
 }
 
-},{"../image":121,"../kindNames":123}],140:[function(require,module,exports){
+},{"../image":184,"../kindNames":186}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19696,7 +21844,7 @@ function colorDepth() {
     return newImage;
 }
 
-},{"../image":121}],141:[function(require,module,exports){
+},{"../image":184}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19758,7 +21906,7 @@ function crop() {
     return newImage;
 }
 
-},{"../image":121}],142:[function(require,module,exports){
+},{"../image":184}],206:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19775,7 +21923,7 @@ function average(newImage) {
     }
 }
 
-},{}],143:[function(require,module,exports){
+},{}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19863,7 +22011,7 @@ function grey() {
     return newImage;
 }
 
-},{"../../image":121,"../../model/model":126,"./average":142,"./luma601":144,"./luma709":145,"./maximum":146,"./minmax":147}],144:[function(require,module,exports){
+},{"../../image":184,"../../model/model":189,"./average":206,"./luma601":208,"./luma709":209,"./maximum":210,"./minmax":211}],208:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19880,7 +22028,7 @@ function luma601(newImage) {
     }
 }
 
-},{}],145:[function(require,module,exports){
+},{}],209:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19897,7 +22045,7 @@ function luma709(newImage) {
     }
 }
 
-},{}],146:[function(require,module,exports){
+},{}],210:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19914,7 +22062,7 @@ function maximum(newImage) {
     }
 }
 
-},{}],147:[function(require,module,exports){
+},{}],211:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19931,7 +22079,7 @@ function minmax(newImage) {
     }
 }
 
-},{}],148:[function(require,module,exports){
+},{}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20007,7 +22155,7 @@ function hsv() {
     return newImage;
 }
 
-},{"../image":121,"../model/model":126}],149:[function(require,module,exports){
+},{"../image":184,"../model/model":189}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20081,7 +22229,7 @@ function hsv() {
     return newImage;
 }
 
-},{"../image":121,"../model/model":126}],150:[function(require,module,exports){
+},{"../image":184,"../model/model":189}],214:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20165,7 +22313,7 @@ function huang(histogram) {
     return threshold;
 }
 
-},{}],151:[function(require,module,exports){
+},{}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20229,7 +22377,7 @@ function bimodalTest(iHisto) {
     return b;
 }
 
-},{}],152:[function(require,module,exports){
+},{}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20283,7 +22431,7 @@ function isodata(histogram) {
     return g;
 }
 
-},{}],153:[function(require,module,exports){
+},{}],217:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20367,7 +22515,7 @@ function li(histogram, total) {
     return threshold;
 }
 
-},{}],154:[function(require,module,exports){
+},{}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20548,7 +22696,7 @@ function mask() {
     return newImage;
 }
 
-},{"../../../util/converter":197,"../../image":121,"./huang":150,"./intermodes":151,"./isodata":152,"./li":153,"./maxEntropy":155,"./mean":156,"./minError":157,"./minimum":158,"./moments":159,"./otsu":160,"./percentile":161,"./renyiEntropy.js":162,"./shanbhag":163,"./triangle":164,"./yen":165}],155:[function(require,module,exports){
+},{"../../../util/converter":261,"../../image":184,"./huang":214,"./intermodes":215,"./isodata":216,"./li":217,"./maxEntropy":219,"./mean":220,"./minError":221,"./minimum":222,"./moments":223,"./otsu":224,"./percentile":225,"./renyiEntropy.js":226,"./shanbhag":227,"./triangle":228,"./yen":229}],219:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20633,7 +22781,7 @@ function maxEntropy(histogram, total) {
     return threshold;
 }
 
-},{}],156:[function(require,module,exports){
+},{}],220:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20657,7 +22805,7 @@ function mean(histogram, total) {
     return Math.floor(sum / total);
 }
 
-},{}],157:[function(require,module,exports){
+},{}],221:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20765,7 +22913,7 @@ function sumC(y, j) {
     return x;
 }
 
-},{}],158:[function(require,module,exports){
+},{}],222:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20840,7 +22988,7 @@ function bimodalTest(histogram) {
     return isBimodal;
 }
 
-},{}],159:[function(require,module,exports){
+},{}],223:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20911,7 +23059,7 @@ function partialSum(histogram, limite) {
     return sum;
 }
 
-},{}],160:[function(require,module,exports){
+},{}],224:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20961,7 +23109,7 @@ function otsu(histogram, total) {
     return threshold;
 }
 
-},{}],161:[function(require,module,exports){
+},{}],225:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21003,7 +23151,7 @@ function partialSum(histogram, endIndex) {
     return x;
 }
 
-},{}],162:[function(require,module,exports){
+},{}],226:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21145,7 +23293,7 @@ function renyiEntropy(histogram, total) {
     return opt_threshold;
 }
 
-},{}],163:[function(require,module,exports){
+},{}],227:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21225,7 +23373,7 @@ function shanbhag(histogram, total) {
     return threshold;
 }
 
-},{}],164:[function(require,module,exports){
+},{}],228:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21335,7 +23483,7 @@ function triangle(histogram) {
     } else return split;
 }
 
-},{}],165:[function(require,module,exports){
+},{}],229:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21386,7 +23534,7 @@ function yen(histogram, total) {
     return threshold;
 }
 
-},{}],166:[function(require,module,exports){
+},{}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21479,7 +23627,7 @@ function pad() {
     return newImage;
 }
 
-},{"../image":121,"../utility/copy":171,"new-array":78}],167:[function(require,module,exports){
+},{"../image":184,"../utility/copy":235,"new-array":141}],231:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21516,14 +23664,15 @@ function resizeBinary() {
 
     var width = Math.floor(this.width * scale);
     var height = Math.floor(this.height * scale);
-    var shiftX = Math.round((this.width - width) / 2) + this.position[0];
-    var shiftY = Math.round((this.height - height) / 2) + this.position[1];
+    var shiftX = Math.round((this.width - width) / 2);
+    var shiftY = Math.round((this.height - height) / 2);
 
     var newImage = _image2.default.createFrom(this, {
         kind: KindNames.BINARY,
         width: width,
         height: height,
-        position: [shiftX, shiftY]
+        position: [shiftX, shiftY],
+        parent: this
     });
 
     for (var x = 0; x < this.width; x++) {
@@ -21537,7 +23686,7 @@ function resizeBinary() {
     return newImage;
 }
 
-},{"../image":121,"../kindNames":123}],168:[function(require,module,exports){
+},{"../image":184,"../kindNames":186}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21569,7 +23718,7 @@ function rgba8() {
     return newImage;
 }
 
-},{"../image":121,"../model/model":126}],169:[function(require,module,exports){
+},{"../image":184,"../model/model":189}],233:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21594,7 +23743,7 @@ function nearestNeighbor(newImage, newWidth, newHeight) {
     }
 }
 
-},{}],170:[function(require,module,exports){
+},{}],234:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21651,7 +23800,7 @@ function scale() {
     return newImage;
 }
 
-},{"../../../util/converter":197,"../../image":121,"./nearestNeighbor":169}],171:[function(require,module,exports){
+},{"../../../util/converter":261,"../../image":184,"./nearestNeighbor":233}],235:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21682,7 +23831,7 @@ function copyImage(fromImage, toImage, x, y) {
     }
 }
 
-},{}],172:[function(require,module,exports){
+},{}],236:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21763,7 +23912,7 @@ function match(image) {
     return [currentX - middleX, currentY - middleY];
 }
 
-},{"../../util/matrix":201}],173:[function(require,module,exports){
+},{"../../util/matrix":266}],237:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21805,7 +23954,7 @@ function getChannel(channel) {
     return newImage;
 }
 
-},{"../image":121,"./../../util/channel":195}],174:[function(require,module,exports){
+},{"../image":184,"./../../util/channel":259}],238:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21846,7 +23995,7 @@ function getColumn(column) {
     return array;
 }
 
-},{"../image":121,"./../../util/channel":195}],175:[function(require,module,exports){
+},{"../image":184,"./../../util/channel":259}],239:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21890,7 +24039,7 @@ function getMatrix() {
     return matrix;
 }
 
-},{"ml-matrix":53}],176:[function(require,module,exports){
+},{"ml-matrix":95}],240:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21959,7 +24108,7 @@ function getPixelsGrid() {
     return toReturn;
 }
 
-},{}],177:[function(require,module,exports){
+},{}],241:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22002,7 +24151,7 @@ function getRow(row) {
     return array;
 }
 
-},{"../image":121,"./../../util/channel":195}],178:[function(require,module,exports){
+},{"../image":184,"./../../util/channel":259}],242:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22093,7 +24242,7 @@ function getSimilarity(image) {
     return results;
 }
 
-},{"../image":121,"./../../util/channel":195,"new-array":78}],179:[function(require,module,exports){
+},{"../image":184,"./../../util/channel":259,"new-array":141}],243:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22179,7 +24328,7 @@ function setBorder() {
     }
 }
 
-},{"../image":121,"new-array":78}],180:[function(require,module,exports){
+},{"../image":184,"new-array":141}],244:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22225,7 +24374,7 @@ function setChannel(channel, image) {
     }
 }
 
-},{"../image":121,"./../../util/channel":195}],181:[function(require,module,exports){
+},{"../image":184,"./../../util/channel":259}],245:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22271,7 +24420,7 @@ function setMatrix(matrix) {
     }
 }
 
-},{"ml-matrix":53}],182:[function(require,module,exports){
+},{"ml-matrix":95}],246:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22341,7 +24490,7 @@ function split() {
     return images;
 }
 
-},{"../image":121}],183:[function(require,module,exports){
+},{"../image":184}],247:[function(require,module,exports){
 'use strict';
 
 var _environment = require('./image/environment');
@@ -22354,7 +24503,7 @@ if (_environment.env === 'browser') {
     exports.Worker = require('./worker/worker').default;
 }
 
-},{"./image/environment":101,"./image/image":121,"./kernel/kernel":184,"./stack/stack":192,"./worker/worker":206}],184:[function(require,module,exports){
+},{"./image/environment":164,"./image/image":184,"./kernel/kernel":248,"./stack/stack":256,"./worker/worker":271}],248:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22382,7 +24531,7 @@ Object.defineProperty(exports, 'laplacianOfGaussian', {
   }
 });
 
-},{"../util/kernels":200,"./laplacianOfGaussian":185}],185:[function(require,module,exports){
+},{"../util/kernels":265,"./laplacianOfGaussian":249}],249:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22413,7 +24562,7 @@ function laplacianOfGaussian(sigma, nPoints, factor) {
     return kernel;
 }
 
-},{}],186:[function(require,module,exports){
+},{}],250:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22441,7 +24590,7 @@ function histogram(options) {
     return histogram;
 }
 
-},{}],187:[function(require,module,exports){
+},{}],251:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22472,7 +24621,7 @@ function histograms(options) {
     return histograms;
 }
 
-},{}],188:[function(require,module,exports){
+},{}],252:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22499,7 +24648,7 @@ function max() {
     return max;
 }
 
-},{}],189:[function(require,module,exports){
+},{}],253:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22529,7 +24678,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":198}],190:[function(require,module,exports){
+},{"../../util/histogram":263}],254:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22555,7 +24704,7 @@ function min() {
     return min;
 }
 
-},{}],191:[function(require,module,exports){
+},{}],255:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22606,7 +24755,7 @@ function extend(Stack) {
     Stack.extendMethod('getAverage', _average2.default);
 }
 
-},{"./compute/histogram":186,"./compute/histograms":187,"./compute/max":188,"./compute/median":189,"./compute/min":190,"./transform/matchAndCrop":193,"./utility/average":194}],192:[function(require,module,exports){
+},{"./compute/histogram":250,"./compute/histograms":251,"./compute/max":252,"./compute/median":253,"./compute/min":254,"./transform/matchAndCrop":257,"./utility/average":258}],256:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22765,7 +24914,7 @@ if (!Array[Symbol.species]) {
 
 (0, _extend2.default)(Stack);
 
-},{"../image/image":121,"./extend":191}],193:[function(require,module,exports){
+},{"../image/image":184,"./extend":255}],257:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22882,7 +25031,7 @@ function matchAndCrop() {
    The match is always done on the first image ?
   */
 
-},{"../stack":192}],194:[function(require,module,exports){
+},{"../stack":256}],258:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22930,7 +25079,7 @@ function average() {
     return image;
 }
 
-},{"../../image/image":121}],195:[function(require,module,exports){
+},{"../../image/image":184}],259:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23023,14 +25172,23 @@ function validateChannel(image, channel) {
     return channel;
 }
 
-},{"../image/model/model":126}],196:[function(require,module,exports){
+},{"../image/model/model":189}],260:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.css2array = css2array;
 exports.getDistinctColors = getDistinctColors;
 exports.getRandomColor = getRandomColor;
+
+var _colorFunctions = require('color-functions');
+
+function css2array(string) {
+    var color = (0, _colorFunctions.cssColor)(string);
+    return [color.r, color.g, color.b, Math.round(color.a * 255 / 100)];
+}
+
 function hex2rgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : [0, 0, 0];
@@ -23145,7 +25303,7 @@ function getBrightness(color) {
     return (color[0] / 255 * 299 + color[1] / 255 * 587 + color[2] / 255 * 114) / (color[3] || 1);
 }
 
-},{}],197:[function(require,module,exports){
+},{"color-functions":5}],261:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23205,7 +25363,16 @@ function factorDimensions(factor, width, height) {
     };
 }
 
-},{}],198:[function(require,module,exports){
+},{}],262:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var dx = exports.dx = [+1, 0, -1, 0, +1, +1, -1, -1];
+var dy = exports.dy = [0, +1, 0, -1, +1, -1, +1, -1];
+
+},{}],263:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23213,6 +25380,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.median = median;
 exports.mean = mean;
+/**
+ * Returns the median of an histogram
+ * @param histogram
+ * @returns {*}
+ */
+
 function median(histogram) {
     var total = histogram.reduce((sum, x) => sum + x);
 
@@ -23239,6 +25412,11 @@ function median(histogram) {
     }
 }
 
+/**
+ * Retuns the mean of an histogram
+ * @param histogram
+ * @returns {*}
+ */
 function mean(histogram) {
     var total = 0;
     var sum = 0;
@@ -23253,7 +25431,7 @@ function mean(histogram) {
     return sum / total;
 }
 
-},{}],199:[function(require,module,exports){
+},{}],264:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23285,7 +25463,7 @@ function validateKernel(kernel) {
                 throw new RangeError('validateKernel: Kernel array should be a square');
             }
             // we convert the array to a matrix
-            var newKernel = new Array(kWidth);
+            var newKernel = new Array(kernelWidth);
             for (var i = 0; i < kernelWidth; i++) {
                 newKernel[i] = new Array(kernelWidth);
                 for (var j = 0; j < kernelWidth; j++) {
@@ -23300,7 +25478,7 @@ function validateKernel(kernel) {
     return { kernel: kernel, kWidth: kWidth, kHeight: kHeight };
 }
 
-},{"is-integer":25}],200:[function(require,module,exports){
+},{"is-integer":42}],265:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23318,7 +25496,7 @@ var SECOND_DERIVATIVE = exports.SECOND_DERIVATIVE = [[-1, -2, 0, 2, 1], [-2, -4,
 
 var SECOND_DERIVATIVE_INV = exports.SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
 
-},{}],201:[function(require,module,exports){
+},{}],266:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23389,7 +25567,7 @@ Matrix.prototype.localSearch = function (x, y, value) {
     return results;
 };
 
-},{}],202:[function(require,module,exports){
+},{}],267:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23517,7 +25695,7 @@ function triangle(width, height) {
     return matrix;
 }
 
-},{"ml-matrix":53}],203:[function(require,module,exports){
+},{"ml-matrix":95}],268:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23550,7 +25728,7 @@ function checkNumberArray(value) {
     }
 }
 
-},{"../image/image":121,"is-array-type":23}],204:[function(require,module,exports){
+},{"../image/image":184,"is-array-type":40}],269:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23568,7 +25746,7 @@ function extend(Worker) {
     Worker.extendMethod('background', _background2.default);
 }
 
-},{"./process/background":205}],205:[function(require,module,exports){
+},{"./process/background":270}],270:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23668,7 +25846,7 @@ function work() {
 
 exports.default = { run: run, work: work };
 
-},{"../../image/image":121,"extend":3}],206:[function(require,module,exports){
+},{"../../image/image":184,"extend":19}],271:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23744,5 +25922,5 @@ class Worker {
 
 exports.default = new Worker();
 
-},{"../image/image":121,"./extend":204,"web-worker-manager":86}]},{},[183])(183)
+},{"../image/image":184,"./extend":269,"web-worker-manager":149}]},{},[247])(247)
 });
