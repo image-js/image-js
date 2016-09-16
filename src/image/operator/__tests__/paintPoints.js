@@ -11,8 +11,8 @@ describe('we check paintPoints', function () {
         let image = new Image(size, size, data, {kind: 'RGB'});
 
 
-        let pixels = [[1,1],[3,2]];
-        image.paintPixels(pixels, {shape:{kind:'smallCross'}});
+        let points = [[1,1],[3,2]];
+        image.paintPoints(points, {shape:{kind:'smallCross'}});
 
 
         let marked = [

@@ -50,7 +50,7 @@ export default function getPixelsGrid({
     let toReturn = {xyS, zS};
 
     if (painted) {
-        toReturn.painted = this.rgba8().paintPixels(xyS);
+        toReturn.painted = this.rgba8().paintPoints(xyS);
     }
 
     return toReturn;

@@ -43,7 +43,7 @@ import getColumn from './utility/getColumn';
 import getMatrix from './utility/getMatrix';
 import setMatrix from './utility/setMatrix';
 import paintMasks from './operator/paintMasks';
-import paintPixels from './operator/paintPoints';
+import paintPoints from './operator/paintPoints';
 import extract from './operator/extract';
 import convolution from './operator/convolution';
 import convolutionFFT from './operator/convolutionFFT';
@@ -112,7 +112,7 @@ export default function extend(Image) {
     Image.extendMethod('getBestMatch', getBestMatch);
 
     Image.extendMethod('paintMasks', paintMasks, inPlace);
-    Image.extendMethod('paintPoints', paintPixels, inPlace);
+    Image.extendMethod('paintPoints', paintPoints, inPlace);
     Image.extendMethod('extract', extract);
     Image.extendMethod('convolution', convolution);
     Image.extendMethod('convolutionFFT', convolutionFFT);
