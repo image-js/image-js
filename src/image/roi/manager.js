@@ -2,7 +2,7 @@ import fromMask from './creator/fromMask';
 import fromMask2 from './creator/fromMask2';
 import fromExtrema from './creator/fromExtrema';
 import fromWaterShed from './creator/fromWaterShed';
-import fromCoordinates from './creator/fromPixels';
+import fromCoordinates from './creator/fromCoordinates';
 import createROI from './createROI';
 import extendObject from 'extend';
 import Image from '../image';
@@ -25,7 +25,7 @@ export default class ROIManager {
         this._painted = null;
     }
 
-    generateROIFromExtrema(options = {}) {
+    fromExtrema(options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromExtrema.call(this._image, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
@@ -35,7 +35,7 @@ export default class ROIManager {
      * @param {[[number]]} pixels - an array of pixels
      * @param {object} options
      */
-    putPixels(pixels, options = {}) {
+    fromCoordinates(pixels, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromCoordinates.call(this._image, pixels, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
@@ -55,7 +55,7 @@ export default class ROIManager {
     }
 
 
-    generateROIFromWaterShed(options = {}) {
+    fromWaterShed(options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromWaterShed.call(this._image, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);

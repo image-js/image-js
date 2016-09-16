@@ -1,4 +1,4 @@
-import ROIMapper from '../fromPixels';
+import ROIMapper from '../fromCoordinates';
 import {Image} from 'test/common';
 
 describe('we check createROIMapFromPixels', function () {

@@ -15,7 +15,7 @@ import PriorityQueue from 'js-priority-queue';
  * @returns {ROIMap}
  */
 
-export default function createROIMapFromWaterShed(
+export default function fromWaterShed(
     {
         fillMaxValue = this.maxValue,
         points,
@@ -24,7 +24,7 @@ export default function createROIMapFromWaterShed(
 )
 {
     let image = this;
-    image.checkProcessable('createROIMapFromWaterShed', {
+    image.checkProcessable('fromWaterShed', {
         bitDepth: [8, 16],
         components: 1
     });

@@ -13,7 +13,7 @@ const neighbours8 = [null, null, null, null];
 /*
 Implementation of the connected-component labeling algorithm
  */
-export default function createROIMapFromMask2(mask, {
+export default function fromMask2(mask, {
     neighbours = 8
 } = {}) {
 

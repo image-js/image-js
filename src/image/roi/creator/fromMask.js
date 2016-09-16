@@ -8,7 +8,7 @@
 
 import ROIMap from './../ROIMap';
 
-export default function createROIMapFromMask(mask, {allowCorner = false} = {}) {
+export default function fromMask(mask, {allowCorner = false} = {}) {
 
     // based on a binary image we will create plenty of small images
     let pixels = new Int16Array(mask.size); // maxValue: 32767, minValue: -32768
