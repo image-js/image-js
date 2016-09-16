@@ -5,7 +5,7 @@
 
 import ROIMap from './../ROIMap';
 import PriorityQueue from 'js-priority-queue';
-
+import {dx, dy} from './../../../util/dxdy.js';
 /**
  *
  * @param fillMaxValue Limit of filling. By example, we can fill to a maximum value 32000 of a 16 bitDepth image.
@@ -52,9 +52,6 @@ export default function fromWaterShed(
             toProcess.queue([points[i][0], points[i][1], intensity]);
         }
     }
-    //dx and dy is to iterate through neighbour up down left and right.
-    let dx =  [+1, 0, -1, 0];
-    let dy =  [0, +1, 0, -1];
 
 
     //Then we iterate through each points

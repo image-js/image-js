@@ -2,7 +2,7 @@ import fromMask from './creator/fromMask';
 import fromMask2 from './creator/fromMask2';
 import fromExtrema from './creator/fromExtrema';
 import fromWaterShed from './creator/fromWaterShed';
-import fromCoordinates from './creator/fromCoordinates';
+import fromPoints from './creator/fromPoints';
 import createROI from './createROI';
 import extendObject from 'extend';
 import Image from '../image';
@@ -35,9 +35,9 @@ export default class ROIManager {
      * @param {[[number]]} pixels - an array of pixels
      * @param {object} options
      */
-    fromCoordinates(pixels, options = {}) {
+    fromPoints(pixels, options = {}) {
         let opt = extendObject({}, this._options, options);
-        let roiMap = fromCoordinates.call(this._image, pixels, options);
+        let roiMap = fromPoints.call(this._image, pixels, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
         return this;
     }
