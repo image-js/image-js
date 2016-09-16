@@ -12,7 +12,7 @@ export default function fromPoints(pointsToPaint, options = {}) {
     // based on a binary image we will create plenty of small images
     let mapPixels = new Int16Array(this.size); // maxValue: 32767, minValue: -32768
     let positiveID = 0;
-    let shapePixels = shape.getPixels();
+    let shapePixels = shape.getPoints();
     for (let i = 0; i < pointsToPaint.length; i++) {
         positiveID++;
         let xP = pointsToPaint[i][0];

@@ -17956,7 +17956,7 @@ var _paintMasks = require('./operator/paintMasks');
 
 var _paintMasks2 = _interopRequireDefault(_paintMasks);
 
-var _paintPixels = require('./operator/paintPixels');
+var _paintPixels = require('./operator/paintPoints');
 
 var _paintPixels2 = _interopRequireDefault(_paintPixels);
 
@@ -20230,7 +20230,7 @@ function paintPixels(pixels) {
         colorModel: _model.RGB
     });
 
-    var shapePixels = new _shape2.default(shape).getPixels();
+    var shapePixels = new _shape2.default(shape).getPoints();
 
     var numberChannels = Math.min(this.channels, color.length);
 
@@ -20841,7 +20841,7 @@ function fromPoints(pointsToPaint) {
     // based on a binary image we will create plenty of small images
     var mapPixels = new Int16Array(this.size); // maxValue: 32767, minValue: -32768
     var positiveID = 0;
-    var shapePixels = shape.getPixels();
+    var shapePixels = shape.getPoints();
     for (var i = 0; i < pointsToPaint.length; i++) {
         positiveID++;
         var xP = pointsToPaint[i][0];

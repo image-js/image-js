@@ -1,6 +1,6 @@
 import {Image} from 'test/common';
 
-describe('we check paintPixels', function () {
+describe('we check paintPoints', function () {
     it('should yield the painted image', function () {
 
         let size = 5;

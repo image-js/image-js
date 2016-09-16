@@ -66,18 +66,18 @@ export default class Shape {
         this.halfWidth = (this.width / 2) >> 0;
     }
 
-    getPixels() {
+    getPoints() {
         let matrix = this.matrix;
-        let pixels = new Array(matrix.size);
+        let points = new Array(matrix.size);
         let position = 0;
         for (let y = 0; y < matrix.length; y++) {
             for (let x = 0; x < matrix[0].length; x++) {
                 if (matrix[y][x]) {
-                    pixels[position++] = [x - this.halfWidth, y - this.halfHeight];
+                    points[position++] = [x - this.halfWidth, y - this.halfHeight];
                 }
             }
         }
-        return pixels;
+        return points;
     }
 }
 

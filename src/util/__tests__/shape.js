@@ -4,7 +4,7 @@ describe('we check Shape class', function () {
     it('should yield a cross', function () {
         let shape = new Shape();
 
-        shape.getPixels().should.eql([
+        shape.getPoints().should.eql([
             [0,-2],
             [0,-1],
             [-2,0],

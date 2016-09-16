@@ -11,7 +11,7 @@ describe('map a binary image (mask) 2 x 2', function () {
 
     let roiManager = img.getROIManager();
     roiManager.fromMask(img);
-    let pixels = roiManager.getPixels();
+    let pixels = roiManager.getPoints();
     let result = roiManager.getMap();
 
     pixels.sort(function (a,b) {
@@ -45,7 +45,7 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
 
     let roiManager = img.getROIManager();
     roiManager.fromMask(img);
-    let pixels = roiManager.getPixels();
+    let pixels = roiManager.getPoints();
     let result = roiManager.getMap();
 
     it('should have 16 pixels in 2 zones', function () {
@@ -75,7 +75,7 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
 
     let roiManager = img.getROIManager();
     roiManager.fromMask(img);
-    let pixels = roiManager.getPixels();
+    let pixels = roiManager.getPoints();
     let result = roiManager.getMap();
 
     it('should have 16 pixels in 3 zones', function () {
