@@ -11,11 +11,11 @@ import {validateChannel} from './../../util/channel';
 
 export default function getChannel(channel, {
     keepAlpha = false,
-    joinAlpha = false
+    applyAlpha = false
 } = {}) {
 
     keepAlpha &= this.alpha;
-    joinAlpha &= this.alpha;
+    applyAlpha &= this.alpha;
 
     this.checkProcessable('getChannel', {
         bitDepth: [8, 16]
@@ -30,7 +30,7 @@ export default function getChannel(channel, {
     });
     let ptr = 0;
     for (let j = 0; j < this.data.length; j += this.channels) {
-        if (joinAlpha) {
+        if (applyAlpha) {
             newImage.data[ptr++] = this.data[j + channel] * this.data[j + this.components] / this.maxValue;
         } else {
             newImage.data[ptr++] = this.data[j + channel];

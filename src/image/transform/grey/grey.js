@@ -16,8 +16,11 @@ import average from './average';
 
 export default function grey({
     algorithm = 'luma709',
-    keepAlpha = false
+    keepAlpha = false,
+    applyAlpha = false
 } = {}) {
+
+    let channelOptions = {keepAlpha, applyAlpha};
 
     if (this.components === 1) {
         return this.clone();
@@ -34,25 +37,25 @@ export default function grey({
     // TODO: Should decide how to deal with alpha channel !
     switch (algorithm.toLowerCase()) {
         case 'red':
-            return this.getChannel(0);
+            return this.getChannel(0, channelOptions);
         case 'green':
-            return this.getChannel(1);
+            return this.getChannel(1, channelOptions);
         case 'blue':
-            return this.getChannel(2);
-        case 'cyan':
-            return this.cmyk().getChannel(0);
+            return this.getChannel(2, channelOptions);
+        case 'cyan': // TODO: could use combineChannels with callback
+            return this.cmyk().getChannel(0, channelOptions);
         case 'magenta':
-            return this.cmyk().getChannel(1);
+            return this.cmyk().getChannel(1, channelOptions);
         case 'yellow':
-            return this.cmyk().getChannel(2);
+            return this.cmyk().getChannel(2, channelOptions);
         case 'black':
-            return this.cmyk().getChannel(3);
+            return this.cmyk().getChannel(3, channelOptions);
         case 'hue':
-            return this.hsl().getChannel(0);
+            return this.hsl().getChannel(0, channelOptions);
         case 'saturation':
-            return this.hsl().getChannel(1);
+            return this.hsl().getChannel(1, channelOptions);
         case 'lightness':
-            return this.hsl().getChannel(2);
+            return this.hsl().getChannel(2, channelOptions);
     }
 
 
