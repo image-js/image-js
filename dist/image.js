@@ -17956,9 +17956,9 @@ var _paintMasks = require('./operator/paintMasks');
 
 var _paintMasks2 = _interopRequireDefault(_paintMasks);
 
-var _paintPixels = require('./operator/paintPoints');
+var _paintPoints = require('./operator/paintPoints');
 
-var _paintPixels2 = _interopRequireDefault(_paintPixels);
+var _paintPoints2 = _interopRequireDefault(_paintPoints);
 
 var _extract = require('./operator/extract');
 
@@ -18075,7 +18075,7 @@ function extend(Image) {
     Image.extendMethod('getBestMatch', _getBestMatch2.default);
 
     Image.extendMethod('paintMasks', _paintMasks2.default, inPlace);
-    Image.extendMethod('paintPixels', _paintPixels2.default, inPlace);
+    Image.extendMethod('paintPoints', _paintPoints2.default, inPlace);
     Image.extendMethod('extract', _extract2.default);
     Image.extendMethod('convolution', _convolution2.default);
     Image.extendMethod('convolutionFFT', _convolutionFFT2.default);
@@ -18095,7 +18095,7 @@ function extend(Image) {
     Image.extendMethod('getSVD', _svd2.default).extendProperty('svd', _svd2.default);
 }
 
-},{"./compute/colorHistogram":152,"./compute/countAlphaPixels":153,"./compute/histogram":154,"./compute/localExtrema":155,"./compute/max":156,"./compute/mean":157,"./compute/median":158,"./compute/min":159,"./compute/pixelsArray":160,"./compute/relativePosition":161,"./compute/sum":162,"./compute/svd":163,"./filter/add":166,"./filter/blur":167,"./filter/divide":168,"./filter/gaussian":169,"./filter/getBackground":170,"./filter/hypotenuse":171,"./filter/invert":172,"./filter/invertApply":173,"./filter/invertBinaryLoop":174,"./filter/invertGetSet":175,"./filter/invertIterator":176,"./filter/invertOneLoop":177,"./filter/invertPixel":178,"./filter/level":179,"./filter/median":180,"./filter/multiply":181,"./filter/sobel":182,"./filter/subtract":183,"./operator/convolution":190,"./operator/convolutionFFT":191,"./operator/extract":192,"./operator/paintMasks":193,"./operator/paintPixels":194,"./transform/colorDepth":204,"./transform/crop":205,"./transform/grey/grey":207,"./transform/hsl":212,"./transform/hsv":213,"./transform/mask/mask":218,"./transform/pad":230,"./transform/resizeBinary":231,"./transform/rgba8":232,"./transform/scale/scale":234,"./utility/getBestMatch":236,"./utility/getChannel":237,"./utility/getColumn":238,"./utility/getMatrix":239,"./utility/getPixelsGrid":240,"./utility/getRow":241,"./utility/getSimilarity":242,"./utility/setBorder":243,"./utility/setChannel":244,"./utility/setMatrix":245,"./utility/split":246}],166:[function(require,module,exports){
+},{"./compute/colorHistogram":152,"./compute/countAlphaPixels":153,"./compute/histogram":154,"./compute/localExtrema":155,"./compute/max":156,"./compute/mean":157,"./compute/median":158,"./compute/min":159,"./compute/pixelsArray":160,"./compute/relativePosition":161,"./compute/sum":162,"./compute/svd":163,"./filter/add":166,"./filter/blur":167,"./filter/divide":168,"./filter/gaussian":169,"./filter/getBackground":170,"./filter/hypotenuse":171,"./filter/invert":172,"./filter/invertApply":173,"./filter/invertBinaryLoop":174,"./filter/invertGetSet":175,"./filter/invertIterator":176,"./filter/invertOneLoop":177,"./filter/invertPixel":178,"./filter/level":179,"./filter/median":180,"./filter/multiply":181,"./filter/sobel":182,"./filter/subtract":183,"./operator/convolution":190,"./operator/convolutionFFT":191,"./operator/extract":192,"./operator/paintMasks":193,"./operator/paintPoints":194,"./transform/colorDepth":204,"./transform/crop":205,"./transform/grey/grey":207,"./transform/hsl":212,"./transform/hsv":213,"./transform/mask/mask":218,"./transform/pad":230,"./transform/resizeBinary":231,"./transform/rgba8":232,"./transform/scale/scale":234,"./utility/getBestMatch":236,"./utility/getChannel":237,"./utility/getColumn":238,"./utility/getMatrix":239,"./utility/getPixelsGrid":240,"./utility/getRow":241,"./utility/getSimilarity":242,"./utility/setBorder":243,"./utility/setChannel":244,"./utility/setMatrix":245,"./utility/split":246}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20196,7 +20196,7 @@ function paintMasks(masks) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = paintPixels;
+exports.default = paintPoints;
 
 var _model = require('../model/model');
 
@@ -20210,13 +20210,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Paint pixels on the current image.
  * @memberof Image
  * @instance
- * @param {[[pixels]]} pixels - Array of [x,y] points
+ * @param {[[pixels]]} points - Array of [x,y] points
  * @param {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
  * @param {array} [$1.shape] - Array of 3 elements (R, G, B), default is red.
  * @returns {Image} The original painted image
  */
 
-function paintPixels(pixels) {
+function paintPoints(points) {
     var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     var _ref$color = _ref.color;
@@ -20224,7 +20224,7 @@ function paintPixels(pixels) {
     var shape = _ref.shape;
 
 
-    this.checkProcessable('paintPixels', {
+    this.checkProcessable('paintPoints', {
         components: 3,
         bitDepth: [8, 16],
         colorModel: _model.RGB
@@ -20234,9 +20234,9 @@ function paintPixels(pixels) {
 
     var numberChannels = Math.min(this.channels, color.length);
 
-    for (var i = 0; i < pixels.length; i++) {
-        var xP = pixels[i][0];
-        var yP = pixels[i][1];
+    for (var i = 0; i < points.length; i++) {
+        var xP = points[i][0];
+        var yP = points[i][1];
         for (var j = 0; j < shapePixels.length; j++) {
             var xS = shapePixels[j][0];
             var yS = shapePixels[j][1];
@@ -21060,7 +21060,7 @@ class ROIManager {
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
 
-    putMask(mask) {
+    fromMask(mask) {
         var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
         var opt = (0, _extend2.default)({}, this._options, options);
@@ -21069,7 +21069,7 @@ class ROIManager {
         return this;
     }
 
-    putMask2(mask) {
+    fromMask2(mask) {
         var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
         var opt = (0, _extend2.default)({}, this._options, options);
@@ -21113,8 +21113,14 @@ class ROIManager {
         var maxSurface = _ref$maxSurface === undefined ? Number.POSITIVE_INFINITY : _ref$maxSurface;
 
 
+        if (!this._layers[label]) {
+            console.log('getROI: This ROI layer (' + label + ') does not exists.');
+            return [];
+        }
+
         var allROIs = this._layers[label].roi;
 
+        // todo Is this old way to change the array size still faster ?
         var rois = new Array(allROIs.length);
         var ptr = 0;
         for (var i = 0; i < allROIs.length; i++) {
@@ -24102,7 +24108,7 @@ function getPixelsGrid() {
     var toReturn = { xyS: xyS, zS: zS };
 
     if (painted) {
-        toReturn.painted = this.rgba8().paintPixels(xyS);
+        toReturn.painted = this.rgba8().paintPoints(xyS);
     }
 
     return toReturn;
@@ -25644,18 +25650,18 @@ class Shape {
         this.halfWidth = this.width / 2 >> 0;
     }
 
-    getPixels() {
+    getPoints() {
         var matrix = this.matrix;
-        var pixels = new Array(matrix.size);
+        var points = new Array(matrix.size);
         var position = 0;
         for (var y = 0; y < matrix.length; y++) {
             for (var x = 0; x < matrix[0].length; x++) {
                 if (matrix[y][x]) {
-                    pixels[position++] = [x - this.halfWidth, y - this.halfHeight];
+                    points[position++] = [x - this.halfWidth, y - this.halfHeight];
                 }
             }
         }
-        return pixels;
+        return points;
     }
 }
 
@@ -25672,13 +25678,18 @@ function rectangle(width, height) {
 
 function ellipse(width, height) {
     var matrix = _mlMatrix2.default.zeros(height, width);
-    var a = Math.floor(width / 2);
-    var b = Math.floor(height / 2);
-    for (var y = 0; y < height; y++) {
-        var yp = Math.floor(y / 2);
-        var shift = Math.floor(width / 2 - Math.sqrt((a * a * b * b - a * a * yp * yp) / b * b));
-        for (var x = shift; x < width - shift; x++) {
-            matrix.set(y, x, 1);
+    var yEven = 1 - height % 2;
+    var a = Math.floor((width - 1) / 2); // horizontal ellipse axe
+    var b = Math.floor((height - 1) / 2); // vertical ellipse axe
+    var a2 = a * a;
+    var b2 = b * b;
+    for (var y = 0; y <= b; y++) {
+        var shift = Math.floor(Math.sqrt(a2 - a2 * y * y / b2));
+        for (var x = a - shift; x <= a; x++) {
+            matrix.set(b - y, x, 1);
+            matrix.set(b + y + yEven, x, 1);
+            matrix.set(b - y, width - x - 1, 1);
+            matrix.set(b + y + yEven, width - x - 1, 1);
         }
     }
     return matrix;
