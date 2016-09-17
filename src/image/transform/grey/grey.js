@@ -14,13 +14,41 @@ import average from './average';
  * @returns {Image} - Grey scale image
  */
 
-export default function grey({algorithm = 'luma709'} = {}) {
+export default function grey({
+    algorithm = 'luma709'
+} = {}) {
 
     if (this.components === 1) {
         return this.clone();
     }
 
     this.checkProcessable('grey', {colorModel: RGB});
+
+    // TODO: Could be optimized !
+    // TODO: Should decide how to deal with alpha channel !
+    switch (algorithm.toLowerCase()) {
+        case 'red':
+            return this.getChannel(0);
+        case 'green':
+            return this.getChannel(1);
+        case 'blue':
+            return this.getChannel(2);
+        case 'cyan':
+            return this.cmyk().getChannel(0);
+        case 'magenta':
+            return this.cmyk().getChannel(1);
+        case 'yellow':
+            return this.cmyk().getChannel(2);
+        case 'black':
+            return this.cmyk().getChannel(3);
+        case 'hue':
+            return this.hsl().getChannel(0);
+        case 'saturation':
+            return this.hsl().getChannel(1);
+        case 'lightness':
+            return this.hsl().getChannel(2);
+    }
+
 
     let newImage = Image.createFrom(this, {
         components: 1,
