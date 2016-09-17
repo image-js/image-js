@@ -103,9 +103,15 @@ export default class ROIManager {
         minSurface = 0,
         maxSurface = Number.POSITIVE_INFINITY
         } = {}) {
+        
+        if (! this._layers[label]) {
+            console.log('getROI: This ROI layer ('+label+') does not exists.');
+            return [];
+        }
 
         let allROIs = this._layers[label].roi;
 
+        // todo Is this old way to change the array size still faster ?
         let rois = new Array(allROIs.length);
         let ptr = 0;
         for (let i = 0; i < allROIs.length; i++) {
