@@ -103,9 +103,9 @@ export default class ROIManager {
         minSurface = 0,
         maxSurface = Number.POSITIVE_INFINITY
         } = {}) {
-        
-        if (! this._layers[label]) {
-            throw new Error('getROI: This ROI layer ('+label+') does not exists.');
+
+        if (!this._layers[label]) {
+            throw new Error('getROI: This ROI layer (' + label + ') does not exists.');
         }
 
         let allROIs = this._layers[label].roi;
