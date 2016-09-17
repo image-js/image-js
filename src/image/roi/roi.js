@@ -174,7 +174,7 @@ export default class ROI {
     }
 
     /**
-        Returns a binary image containing only the border of the mask
+        Returns a binary image (mask) containing only the border of the mask
      */
     get contour() {
         if (this.computed.contour) return this.computed.contour;

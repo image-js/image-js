@@ -38,11 +38,10 @@ export default class Shape {
                     this.matrix = smallCross;
                     break;
             }
-            this.height = this.matrix.length;
-            this.width = this.matrix[0].length;
-            if ((this.height & 1 === 0) || (this.width & 1 === 0)) {
-                throw new Error('Shapes must have an odd height and width');
-            }
+            //
+            // if ((this.height & 1 === 0) || (this.width & 1 === 0)) {
+            //     throw new Error('Shapes must have an odd height and width');
+            // }
         } else {
             switch (shape) {
                 case 'square':
@@ -57,11 +56,10 @@ export default class Shape {
                     this.matrix = triangle(width, height);
                     break;
                 default:
-
             }
         }
-
-
+        this.height = this.matrix.length;
+        this.width = this.matrix[0].length;
         this.halfHeight = (this.height / 2) >> 0;
         this.halfWidth = (this.width / 2) >> 0;
     }
