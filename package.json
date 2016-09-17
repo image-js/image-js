@@ -59,6 +59,7 @@
     "babel-register": "^6.2.0",
     "babelify": "^7.2.0",
     "benchmark": "^2.1.0",
+    "better-console": "^0.2.4",
     "browserify": "^13.1.0",
     "documentation": "^4.0.0-beta10",
     "eslint": "^3.0.0",
@@ -76,7 +77,6 @@
   "dependencies": {
     "array-includes": "^3.0.1",
     "atob-lite": "^1.0.0",
-    "better-console": "^0.2.4",
     "blob-util": "^1.2.1",
     "color-functions": "^1.1.0",
     "extend": "^3.0.0",
