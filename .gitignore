@@ -2,7 +2,7 @@ lib
 /node_modules/
 .idea
 *.log
-test/node/TMP
+test/TMP
 test/browser/image.js
 .DS_Store
 coverage
