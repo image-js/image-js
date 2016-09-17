@@ -68,12 +68,11 @@ export default class Shape {
 
     getPoints() {
         let matrix = this.matrix;
-        let points = new Array(matrix.size);
-        let position = 0;
+        let points = [];
         for (let y = 0; y < matrix.length; y++) {
             for (let x = 0; x < matrix[0].length; x++) {
                 if (matrix[y][x]) {
-                    points[position++] = [x - this.halfWidth, y - this.halfHeight];
+                    points.push([x - this.halfWidth, y - this.halfHeight]);
                 }
             }
         }
