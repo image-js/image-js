@@ -56,6 +56,11 @@ export default function grey({
             return this.hsl().getChannel(1, channelOptions);
         case 'lightness':
             return this.hsl().getChannel(2, channelOptions);
+        case 'luma709callback':
+            return this.combineChannels(function(pixel) {
+                return pixel[0] * 0.2126 + pixel[1] * 0.7152 + pixel[2] * 0.0722;
+            }, channelOptions);
+        
     }
 
 
