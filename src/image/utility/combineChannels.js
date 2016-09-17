@@ -9,7 +9,10 @@ import {validateChannel} from './../../util/channel';
  * @instance
  */
 
-export default function getChannel(channel, {
+export default function combineChannels(
+    method = function (pixel) {
+        return (pixel[0] + pixel[1] + pixel[2]) / 3;
+    }, {
     keepAlpha = false,
     joinAlpha = false
 } = {}) {
@@ -17,25 +20,25 @@ export default function getChannel(channel, {
     keepAlpha &= this.alpha;
     joinAlpha &= this.alpha;
 
-    this.checkProcessable('getChannel', {
+    this.checkProcessable('combineChannels', {
         bitDepth: [8, 16]
     });
-
-    channel = validateChannel(this, channel);
 
     let newImage = Image.createFrom(this, {
         components: 1,
         alpha: keepAlpha,
         colorModel: null
     });
+
     let ptr = 0;
-    for (let j = 0; j < this.data.length; j += this.channels) {
+    for (let i = 0; i < this.size; i++) {
+        let value = method(this.getPixel(i));
         if (joinAlpha) {
-            newImage.data[ptr++] = this.data[j + channel] * this.data[j + this.components] / this.maxValue;
+            newImage.data[ptr++] = value * this.data[i * this.channels + this.components] / this.maxValue;
         } else {
-            newImage.data[ptr++] = this.data[j + channel];
+            newImage.data[ptr++] = value;
             if (keepAlpha) {
-                newImage.data[ptr++] = this.data[j + this.components];
+                newImage.data[ptr++] = this.data[i * this.channels + this.components];
             }
         }
     }

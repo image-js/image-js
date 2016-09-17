@@ -35,6 +35,7 @@ import colorDepth from './transform/colorDepth';
 import setBorder from './utility/setBorder';
 import split from './utility/split';
 import getChannel from './utility/getChannel';
+import combineChannels from './utility/combineChannels';
 import setChannel from './utility/setChannel';
 import getSimilarity from './utility/getSimilarity';
 import getPixelsGrid from './utility/getPixelsGrid';
@@ -108,6 +109,7 @@ export default function extend(Image) {
 
     Image.extendMethod('split', split);
     Image.extendMethod('getChannel', getChannel);
+    Image.extendMethod('combineChannels', combineChannels);
     Image.extendMethod('setChannel', setChannel);
     Image.extendMethod('getSimilarity', getSimilarity);
     Image.extendMethod('getPixelsGrid', getPixelsGrid);
