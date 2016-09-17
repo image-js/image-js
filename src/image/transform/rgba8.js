@@ -1,5 +1,4 @@
 import Image from '../image';
-import {RGB} from '../model/model';
 
 /**
  * Make a copy of the current image and convert to a RGBA 8 bits

@@ -1,5 +1,5 @@
 import * as Kind from './kindNames';
-import {RGB} from './model/model';
+import {RGB, CMYK} from './model/model';
 
 const kinds = {};
 
@@ -35,6 +35,19 @@ kinds[Kind.RGB] = {
     colorModel: RGB
 };
 
+kinds[Kind.CMYK] = {
+    components: 4,
+    alpha: 1,
+    bitDepth: 8,
+    colorModel: CMYK
+};
+
+kinds[Kind.CMYKA] = {
+    components: 4,
+    alpha: 0,
+    bitDepth: 8,
+    colorModel: CMYK
+};
 
 export function getKind(kind) {
     return kinds[kind];
