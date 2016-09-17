@@ -15,14 +15,20 @@ import average from './average';
  */
 
 export default function grey({
-    algorithm = 'luma709'
+    algorithm = 'luma709',
+    keepAlpha = false
 } = {}) {
 
     if (this.components === 1) {
         return this.clone();
     }
 
-    this.checkProcessable('grey', {colorModel: RGB});
+    let alpha = keepAlpha && this.alpha;
+
+    this.checkProcessable('grey', {
+        colorModel: RGB,
+        alpha: alpha
+    });
 
     // TODO: Could be optimized !
     // TODO: Should decide how to deal with alpha channel !

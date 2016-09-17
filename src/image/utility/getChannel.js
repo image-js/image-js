@@ -3,10 +3,19 @@ import {validateChannel} from './../../util/channel';
 
 /**
  * @memberof Image
+ *
+ * alpha  String : possible values: 'skip', 'keep', 'join' (default: 'skip')
+ *
  * @instance
  */
 
-export default function getChannel(channel) {
+export default function getChannel(channel, {
+    keepAlpha = false,
+    joinAlpha = false
+} = {}) {
+
+    keepAlpha &= this.alpha;
+    joinAlpha &= this.alpha;
 
     this.checkProcessable('getChannel', {
         bitDepth: [8, 16]
@@ -14,15 +23,21 @@ export default function getChannel(channel) {
 
     channel = validateChannel(this,channel);
 
-
     let newImage = Image.createFrom(this, {
         components: 1,
-        alpha: false,
+        alpha: keepAlpha,
         colorModel: null
     });
     let ptr = 0;
-    for (let j = channel; j < this.data.length; j += this.channels) {
-        newImage.data[ptr++] = this.data[j];
+    for (let j = 0; j < this.data.length; j += this.channels) {
+        if (joinAlpha) {
+            newImage.data[ptr++] = this.data[j + channel] * this.data[j + this.components] / this.maxValue;
+        } else {
+            newImage.data[ptr++] = this.data[j + channel];
+            if (keepAlpha) {
+                newImage.data[ptr++] = this.data[j + this.components];
+            }
+        }
     }
 
     return newImage;
