@@ -28,10 +28,10 @@ export default function cmyk() {
         let green = data[i + 1];
         let blue = data[i + 2];
 
-        let black = Math.min(this.maxValue-red, this.maxValue-green, this.maxValue-blue);
-        let cyan = (this.maxValue-red-black)/(1-black/this.maxValue);
-        let magenta = (this.maxValue-green-black)/(1-black/this.maxValue);
-        let yellow = (this.maxValue-blue-black)/(1-black/this.maxValue);
+        let black = Math.min(this.maxValue - red, this.maxValue - green, this.maxValue - blue);
+        let cyan = (this.maxValue - red - black) / (1 - black / this.maxValue);
+        let magenta = (this.maxValue - green - black) / (1 - black / this.maxValue);
+        let yellow = (this.maxValue - blue - black) / (1 - black / this.maxValue);
 
         newImage.data[ptr++] = cyan;
         newImage.data[ptr++] = magenta;
