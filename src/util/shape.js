@@ -1,6 +1,6 @@
 import Matrix from 'ml-matrix';
 
-let cross = [
+const cross = [
     [0,0,1,0,0],
     [0,0,1,0,0],
     [1,1,1,1,1],
@@ -8,7 +8,7 @@ let cross = [
     [0,0,1,0,0]
 ];
 
-let smallCross = [
+const smallCross = [
     [0,1,0],
     [1,1,1],
     [0,1,0]
@@ -93,13 +93,18 @@ function rectangle(width, height) {
 
 function ellipse(width, height) {
     const matrix = Matrix.zeros(height, width);
-    let a = Math.floor(width / 2);
-    let b = Math.floor(height / 2);
-    for (let y = 0; y < height; y++) {
-        let yp = Math.floor(y / 2);
-        let shift = Math.floor(width / 2 - Math.sqrt((a * a * b * b - a * a * yp * yp) / b * b));
-        for (let x = shift; x < (width - shift); x++) {
-            matrix.set(y, x, 1);
+    let yEven = 1 - height % 2;
+    let a = Math.floor((width - 1) / 2); // horizontal ellipse axe
+    let b = Math.floor((height - 1) / 2); // vertical ellipse axe
+    let a2 = a * a;
+    let b2 = b * b;
+    for (let y = 0; y <= b; y++) {
+        let shift = Math.floor(Math.sqrt(a2 - a2 * y * y / b2));
+        for (let x = a - shift; x <= a; x++) {
+            matrix.set(b - y, x, 1);
+            matrix.set(b + y + yEven, x, 1);
+            matrix.set(b - y, width - x - 1, 1);
+            matrix.set(b + y + yEven, width - x - 1, 1);
         }
     }
     return matrix;

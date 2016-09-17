@@ -1,5 +1,7 @@
 import Shape from '../shape';
 
+import console from 'better-console';
+
 describe('we check Shape class', function () {
     it('should yield a cross', function () {
         let shape = new Shape();
@@ -87,9 +89,9 @@ describe('we check Shape class', function () {
         );
     });
 
-    it.skip('should yield the right ellipse', function () {
-        let shape = new Shape({shape:'ellipse', size:5});
-        shape.matrix.should.eql(
+    it('should yield the right circle', function () {
+        let shape = new Shape({shape:'circle', size:5});
+        Array.from(shape.matrix).should.eql(
             [
                 [0,0,1,0,0],
                 [0,1,1,1,0],
@@ -98,7 +100,34 @@ describe('we check Shape class', function () {
                 [0,0,1,0,0]
             ]
         );
+    });
 
+    it('should yield the right circle even size', function () {
+        let shape = new Shape({shape:'circle', size:6});
+        Array.from(shape.matrix).should.eql(
+            [
+                [0,0,1,1,0,0],
+                [0,1,1,1,1,0],
+                [1,1,1,1,1,1],
+                [1,1,1,1,1,1],
+                [0,1,1,1,1,0],
+                [0,0,1,1,0,0]
+            ]
+        );
+    });
+
+
+    it('should yield the right ellipse', function () {
+        let shape = new Shape({shape:'ellipse', width: 9, height: 5});
+        Array.from(shape.matrix).should.eql(
+            [
+                [0,0,0,0,1,0,0,0,0],
+                [0,1,1,1,1,1,1,1,0],
+                [1,1,1,1,1,1,1,1,1],
+                [0,1,1,1,1,1,1,1,0],
+                [0,0,0,0,1,0,0,0,0]
+            ]
+        );
     });
 });
 
