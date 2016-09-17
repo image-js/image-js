@@ -105,8 +105,7 @@ export default class ROIManager {
         } = {}) {
         
         if (! this._layers[label]) {
-            console.log('getROI: This ROI layer ('+label+') does not exists.');
-            return [];
+            throw new Error('getROI: This ROI layer ('+label+') does not exists.');
         }
 
         let allROIs = this._layers[label].roi;
