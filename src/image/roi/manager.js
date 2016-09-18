@@ -177,12 +177,7 @@ export default class ROIManager {
         let labelFont = options.labelFont || '12px Helvetica';
 
         if (!this._painted) this._painted = this._image.rgba8();
-        let masks;
-        if (options.contour) {
-            masks = this.getContours(options);
-        } else {
-            masks = this.getMasks(options);
-        }
+        let masks = this.getMasks(options);
 
         this._painted.paintMasks(masks, options);
 
