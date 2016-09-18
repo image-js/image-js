@@ -18,8 +18,6 @@ export default function mask({
     invert = false
     } = {}) {
 
-    algorithm = algorithm.toLowerCase();
-
     this.checkProcessable('mask', {
         components: 1,
         bitDepth: [8,16]
