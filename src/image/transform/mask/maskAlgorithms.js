@@ -31,7 +31,7 @@ export const methods = {
     shanbhag,
     triangle,
     yen
-}
+};
 
 
 

@@ -18,14 +18,14 @@ export default function mask({
     invert = false
     } = {}) {
 
-    algorithm=algorithm.toLowerCase();
-    
+    algorithm = algorithm.toLowerCase();
+
     this.checkProcessable('mask', {
         components: 1,
         bitDepth: [8,16]
     });
-    
-    if (algorithm==='threshold') {
+
+    if (algorithm === 'threshold') {
         threshold = getThreshold(threshold, this.maxValue);
     } else {
         let method = methods[algorithm];
@@ -36,7 +36,7 @@ export default function mask({
             throw new Error('mask transform unknown algorithm: ' + algorithm);
         }
     }
-    
+
     let newImage = new Image (this.width, this.height, {
         kind: 'BINARY',
         parent: this
