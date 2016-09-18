@@ -81,8 +81,10 @@ export const transformers = {
     }
 };
 
-transformers.luminosity = transformers.lightness;
-transformers.luminance = transformers.lightness;
-transformers.min = transformers.minimum;
-transformers.max = transformers.maximum;
-transformers.brightness = transformers.maximum;
+Object.defineProperty(transformers, 'luminosity', {enumerable: false, value: transformers.lightness});
+Object.defineProperty(transformers, 'luminance', {enumerable: false, value: transformers.lightness});
+Object.defineProperty(transformers, 'min', {enumerable: false, value: transformers.minimum});
+Object.defineProperty(transformers, 'max', {enumerable: false, value: transformers.maximum});
+Object.defineProperty(transformers, 'brightness', {enumerable: false, value: transformers.maximum});
+
+export const algorithms = Object.keys(transformers);

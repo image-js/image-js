@@ -431,13 +431,13 @@ export default class Image {
         if (components) {
             if (!Array.isArray(components)) components = [components];
             if (components.indexOf(this.components) === -1) {
-                throw new TypeError('The process: ' + processName + ' can only be applied if the number of components is in: ' + components);
+                throw new TypeError('The process: ' + processName + ' can only be applied if the number of channels is in: ' + components);
             }
         }
         if (channels) {
             if (!Array.isArray(channels)) channels = [channels];
             if (channels.indexOf(this.channels) === -1) {
-                throw new TypeError('The process: ' + processName + ' can only be applied if the number of channels is in: ' + channels);
+                throw new TypeError('The process: ' + processName + ' can only be applied if the number of components is in: ' + channels);
             }
         }
     }
