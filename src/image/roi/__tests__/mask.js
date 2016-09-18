@@ -9,7 +9,8 @@ describe('we check mask', function () {
             img.height.should.equal(5);
 
             let roiManager = img.getROIManager();
-            let mask = img.grey().mask({invert:true});
+
+            let mask = img.mask({invert:true});
             roiManager.fromMask(mask);
 
             let roiIDs = roiManager.getROIIDs().sort();

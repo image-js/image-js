@@ -13,12 +13,12 @@ export default function combineChannels(
     method = function (pixel) {
         return (pixel[0] + pixel[1] + pixel[2]) / 3;
     }, {
-        applyAlpha = false,
+        mergeAlpha = false,
         keepAlpha = false
     } = {}
 ) {
 
-    applyAlpha &= this.alpha;
+    mergeAlpha &= this.alpha;
     keepAlpha &= this.alpha;
 
     this.checkProcessable('combineChannels', {
@@ -33,8 +33,9 @@ export default function combineChannels(
 
     let ptr = 0;
     for (let i = 0; i < this.size; i++) {
+        // TODO quite slow because we create a new pixel each time
         let value = method(this.getPixel(i));
-        if (applyAlpha) {
+        if (mergeAlpha) {
             newImage.data[ptr++] = value * this.data[i * this.channels + this.components] / this.maxValue;
         } else {
             newImage.data[ptr++] = value;

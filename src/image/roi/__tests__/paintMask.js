@@ -6,7 +6,7 @@ describe('we check paint mask', function () {
 
 
             let roiManager = img.getROIManager();
-            let mask = img.grey().mask({invert:true});
+            let mask = img.mask({invert:true});
             roiManager.fromMask(mask);
 
 

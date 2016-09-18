@@ -25,7 +25,7 @@ import hsv from './transform/hsv';
 import hsl from './transform/hsl';
 import cmyk from './transform/cmyk';
 import rgba8 from './transform/rgba8';
-import grey from './transform/grey/grey';
+import grey from './transform/grey';
 import mask from './transform/mask/mask';
 import pad from './transform/pad';
 import resizeBinary from './transform/resizeBinary';

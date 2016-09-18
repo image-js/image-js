@@ -22,7 +22,7 @@ describe('combine specific channels from an image', function () {
         let combined = image.combineChannels(function (pixel) {
             return (pixel[0] + pixel[1] + pixel[2]) / 3;
         },{
-            applyAlpha: true
+            mergeAlpha: true
         });
 
         combined.components.should.equal(1);

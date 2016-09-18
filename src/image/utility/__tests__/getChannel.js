@@ -37,7 +37,7 @@ describe('get a specific channel from an image', function () {
         let image = new Image(1,2,[230, 83, 120, 255, 100, 140, 13, 0]);
 
         let red = image.getChannel('r', {
-            applyAlpha: true
+            mergeAlpha: true
         });
 
         red.components.should.equal(1);

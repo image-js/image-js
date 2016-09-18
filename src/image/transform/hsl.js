@@ -50,7 +50,6 @@ export default function hsv() {
             hue /= 6;
         }
 
-
         newImage.data[ptr++] = hue * this.maxValue;
         newImage.data[ptr++] = saturation * this.maxValue;
         newImage.data[ptr++] = luminance;

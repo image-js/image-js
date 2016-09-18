@@ -7,23 +7,26 @@ var Test = require('../test/test');
 var suite = new Benchmark.Suite;
 
 var filename='cells/cells.jpg';
-//filename='ecoli.png';
-// filename='cat.jpg';
+
+
+// TODO Order of testing is EXTREMELY important !!!!!
+// So basically this test is really useless ...
 
 Image.load(Test.getImage(filename)).then(function (img) {
     suite
-        .add('red', function () {
-            img.grey({algorithm:'lightness'});
+        .add('yellow', function () {
+            img.grey({algorithm:'luma709'});
         })
         .add('grey', function () {
             img.grey({algorithm:'luma709'});
         })
-        .add('grey callback', function () {
-            img.grey({algorithm:'luma709callback'});
+        .add('red', function () {
+            img.grey({algorithm:'red'});
         })
-        .add('grey lightness', function () {
-            img.grey({algorithm:'lightness'});
-        })
+        
+        // .add('grey lightness', function () {
+        //     img.grey({algorithm:'lightness'});
+        // })
         .on('cycle', function (event) {
             console.log(String(event.target));
         })
