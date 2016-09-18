@@ -22,9 +22,11 @@ export default class ROI {
         this.computed = {};
     }
 
-    getMask({fill = false, scale = 1} = {}) {
+    getMask({fill = false, scale = 1, contour = false} = {}) {
         let mask;
-        if (fill) {
+        if (contour) {
+            mask = this.contour;
+        } else if (fill) {
             mask = this.filledMask;
         } else {
             mask = this.mask;
@@ -61,8 +63,6 @@ export default class ROI {
         this.computed.externalLengths = [];
 
         let internals = this.internalIDs;
-
-
 
         for (let i = 0; i < borders.length; i++) {
             if (internals.indexOf(borders[i]) === -1) {

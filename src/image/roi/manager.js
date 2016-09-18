@@ -131,20 +131,20 @@ export default class ROIManager {
 
         let masks = new Array(rois.length);
         for (let i = 0; i < rois.length; i++) {
-            masks[i] = rois[i].mask;
+            masks[i] = rois[i].getMask(options);
         }
         return masks;
     }
 
-    getContours(options = {}) {
-        let rois = this.getROI(options);
-
-        let contours = new Array(rois.length);
-        for (let i = 0; i < rois.length; i++) {
-            contours[i] = rois[i].contour;
-        }
-        return contours;
-    }
+    // getContours(options = {}) {
+    //     let rois = this.getROI(options);
+    //
+    //     let contours = new Array(rois.length);
+    //     for (let i = 0; i < rois.length; i++) {
+    //         contours[i] = rois[i].contour;
+    //     }
+    //     return contours;
+    // }
 
     getPixels(options = {}) {
         let opt = extendObject({}, this._options, options);
