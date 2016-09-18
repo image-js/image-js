@@ -24,7 +24,7 @@ export default function match(image, {border} = {}) {
         throw new Error('Both images must have the same colorModel');
     }
 
-    // there could be many algorithms
+    // there could be many names
     let similarityMatrix = new Matrix(image.width, image.height, -Infinity);
 
     let currentX = Math.floor(image.width / 2);

@@ -18,7 +18,7 @@ import multiply from './filter/multiply';
 import divide from './filter/divide';
 import getBackground from './filter/getBackground';
 
-// transformers
+// methods
 import crop from './transform/crop';
 import scale from './transform/scale/scale';
 import hsv from './transform/hsv';

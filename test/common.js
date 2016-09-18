@@ -6,8 +6,9 @@ export {getImage, getHash} from './test';
 
 import Image from '../src/image/image';
 import Stack from '../src/stack/stack';
+import IJS from '../src/index';
 
-export {Image, Stack};
+export {Image, Stack, IJS};
 
 export function load(name) {
     return Image.load(getImage(name));

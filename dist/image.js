@@ -13767,7 +13767,7 @@ exports.hypotenuse = function hypotenuse(a, b) {
     return 0;
 };
 
-// For use in the decomposition algorithms. With big matrices, access time is
+// For use in the decomposition names. With big matrices, access time is
 // too long on elements from array subclass
 // todo check when it is fixed in v8
 // http://jsperf.com/access-and-write-array-subclass
@@ -17943,7 +17943,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // computers
 
 
-// transformers
+// methods
 // filters
 function extend(Image) {
     var inPlace = { inPlace: true };
@@ -22716,7 +22716,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = mean;
 /*
  * The method is present in: Uses the 	mean of grey levels as the threshold. It is described in:
- * Glasbey, CA (1993), "An analysis of histogram-based thresholding algorithms",
+ * Glasbey, CA (1993), "An analysis of histogram-based thresholding names",
  * CVGIP: Graphical Models and Image Processing 55: 532-537
  * @param histogram - the histogram of the image
  *        total - the number of pixels in the image
@@ -23798,7 +23798,7 @@ function match(image) {
         throw new Error('Both images must have the same colorModel');
     }
 
-    // there could be many algorithms
+    // there could be many names
     var similarityMatrix = new _matrix2.default(image.width, image.height, -Infinity);
 
     var currentX = Math.floor(image.width / 2);

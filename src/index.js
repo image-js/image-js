@@ -5,7 +5,8 @@ exports.Stack = require('./stack/stack').default;
 exports.Kernel = require('./kernel/kernel');
 
 exports.Algorithms = {
-    grey : require('./image/transform/transformers').algorithms
+    grey : require('./image/transform/greyAlgorithms').names,
+    mask : require('./image/transform/mask/maskAlgorithms').names
 };
 
 if (env === 'browser') {

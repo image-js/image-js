@@ -1,4 +1,4 @@
-export const transformers = {
+export const methods = {
     luma709: function (data, i) { // sRGB
         // return data[i] * 0.2126 + data[i + 1] * 0.7152 + data[i + 2] * 0.0722;
         // Let's do a little trick ... in order not convert the integer to a double we do
@@ -34,23 +34,23 @@ export const transformers = {
         return data[i + 2];
     },
     cyan: function (data, i, image) {
-        let black = transformers.black(data, i, image);
+        let black = methods.black(data, i, image);
         return (image.maxValue - data[0] - black) / (1 - black / image.maxValue) >> 0;
     },
     magenta: function (data, i, image) {
-        let black = transformers.black(data, i, image);
+        let black = methods.black(data, i, image);
         return (image.maxValue - data[1] - black) / (1 - black / image.maxValue) >> 0;
     },
     yellow: function (data, i, image) {
-        let black = transformers.black(data, i, image);
+        let black = methods.black(data, i, image);
         return (image.maxValue - data[2] - black) / (1 - black / image.maxValue) >> 0;
     },
     black: function (data, i, image) {
         return Math.min(image.maxValue - data[i], image.maxValue - data[i + 1], image.maxValue - data[i + 2]);
     },
     hue: function (data, i, image) {
-        let min = transformers.min(data, i);
-        let max = transformers.max(data, i);
+        let min = methods.min(data, i);
+        let max = methods.max(data, i);
         if (max === min) return 0;
         let hue = 0;
         let delta = max - min;
@@ -69,22 +69,22 @@ export const transformers = {
         return (hue / 6 * image.maxValue) >> 0 ;
     },
     saturation: function (data, i, image) { // from HSV model
-        let min = transformers.min(data, i);
-        let max = transformers.max(data, i);
+        let min = methods.min(data, i);
+        let max = methods.max(data, i);
         let delta = max - min;
         return (max === 0) ? 0 : delta / max * image.maxValue;
     },
     lightness: function (data, i) {
-        let min = transformers.min(data, i);
-        let max = transformers.max(data, i);
+        let min = methods.min(data, i);
+        let max = methods.max(data, i);
         return (max + min) / 2;
     }
 };
 
-Object.defineProperty(transformers, 'luminosity', {enumerable: false, value: transformers.lightness});
-Object.defineProperty(transformers, 'luminance', {enumerable: false, value: transformers.lightness});
-Object.defineProperty(transformers, 'min', {enumerable: false, value: transformers.minimum});
-Object.defineProperty(transformers, 'max', {enumerable: false, value: transformers.maximum});
-Object.defineProperty(transformers, 'brightness', {enumerable: false, value: transformers.maximum});
+Object.defineProperty(methods, 'luminosity', {enumerable: false, value: methods.lightness});
+Object.defineProperty(methods, 'luminance', {enumerable: false, value: methods.lightness});
+Object.defineProperty(methods, 'min', {enumerable: false, value: methods.minimum});
+Object.defineProperty(methods, 'max', {enumerable: false, value: methods.maximum});
+Object.defineProperty(methods, 'brightness', {enumerable: false, value: methods.maximum});
 
-export const algorithms = Object.keys(transformers);
+export const names = Object.keys(methods);
