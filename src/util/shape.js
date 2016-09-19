@@ -78,7 +78,7 @@ export default class Shape {
         }
         return points;
     }
-    
+
     getMask() {
         let img = new Image(this.width, this.height, {
             kind: KindNames.BINARY

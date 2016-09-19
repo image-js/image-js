@@ -1,5 +1,6 @@
 import Image from '../image';
 import * as KindNames from '../kindNames';
+import Shape from '../../util/shape';
 
 /**
  * Class to manage Region Of Interests
@@ -30,10 +31,9 @@ export default class ROI {
      */
     getMask({scale = 1, kind = ''} = {}) {
         let mask;
-        if (fill) kind='filled'; // only for compatibility
         switch (kind) {
             case 'contour':
-                mask = this.contour;
+                mask = this.contourMask;
                 break;
             case 'box':
                 mask = this.boxMask;
@@ -47,7 +47,7 @@ export default class ROI {
             default:
                 mask = this.mask;
         }
-        
+
         if (scale < 1) {
             mask = mask.resizeBinary(scale);
         }
@@ -56,8 +56,15 @@ export default class ROI {
     }
 
     get mean() {
-        return [this.meanX,this.meanY];
+        throw new Error('ROI mean not implemented yet');
+        // return [this.meanX,this.meanY];
     }
+
+    get center() {
+        if (this.computed.center) return this.computed.center;
+        return this.computed.center = [(this.width / 2) >> 0, (this.height / 2) >> 0];
+    }
+
 
     get width() {
         return this.maxX - this.minX + 1;
@@ -192,8 +199,8 @@ export default class ROI {
     /**
         Returns a binary image (mask) containing only the border of the mask
      */
-    get contour() {
-        if (this.computed.contour) return this.computed.contour;
+    get contourMask() {
+        if (this.computed.contourMask) return this.computed.contourMask;
 
         let img = new Image(this.width, this.height, {
             kind: KindNames.BINARY,
@@ -241,11 +248,11 @@ export default class ROI {
             }
             for (let y = 0; y < this.height; y++) {
                 img.setBitXY(0, y);
-                img.setBitXY(this.width-1, y);
+                img.setBitXY(this.width - 1, y);
             }
             return this.computed.boxMask = img;
     }
-    
+
     /**
      Returns a binary image containing the mask
      */
@@ -291,23 +298,14 @@ export default class ROI {
     get centerMask() {
         if (this.computed.centerMask) return this.computed.centerMask;
 
-        let img = new Image(this.width, this.height, {
-            kind: KindNames.BINARY,
-            position: [this.minX, this.minY],
-            parent: this.map.parent
-        });
+        let img = new Shape({kind:'smallCross'}).getMask();
 
-        for (let x = 0; x < this.width; x++) {
-            for (let y = 0; y < this.height; y++) {
-                let target = x + this.minX + (y + this.minY) * this.map.width;
-                if (this.internalIDs.indexOf(this.map.pixels[target]) >= 0) {
-                    img.setBitXY(x, y);
-                } // by default a pixel is to 0 so no problems, it will be transparent
-            }
-        }
+        img.parent = this.map.parent;
+        img.position = [this.minX + this.center[0] - 1, this.minY + this.center[1] - 1];
+
         return this.computed.centerMask = img;
     }
-    
+
     get points() {
         if (this.computed.points) return this.computed.points;
         let points = [];

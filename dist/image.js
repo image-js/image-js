@@ -21072,7 +21072,7 @@ class ROIManager {
 
         var contours = new Array(rois.length);
         for (var i = 0; i < rois.length; i++) {
-            contours[i] = rois[i].contour;
+            contours[i] = rois[i].contourMask;
         }
         return contours;
     }
@@ -21092,7 +21092,7 @@ class ROIManager {
      * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
      * @param alpha Value from 0 to 255 to specify the alpha. Will be used if it is unspecified
      * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask
-     * @param contour {boolean} true if display only the contour
+     * @param contourMask {boolean} true if display only the contourMask
      * @param randomColors If we we would like to paint each mask with a random color
      * @param distinctColors If we we would like to paint each mask with a different color (default: false);
      * @param showLabels Paint a mask property on the image (default: false). If true will display the 'id'.
@@ -21113,7 +21113,7 @@ class ROIManager {
 
         if (!this._painted) this._painted = this._image.rgba8();
         var masks = void 0;
-        if (options.contour) {
+        if (options.contourMask) {
             masks = this.getContours(options);
         } else {
             masks = this.getMasks(options);
@@ -21408,7 +21408,7 @@ class ROI {
         Returns a binary image containing only the border of the mask
      */
     get contour() {
-        if (this.computed.contour) return this.computed.contour;
+        if (this.computed.contourMask) return this.computed.contourMask;
 
         var img = new _image2.default(this.width, this.height, {
             kind: KindNames.BINARY,

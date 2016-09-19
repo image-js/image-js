@@ -1,8 +1,8 @@
 import {Image} from 'test/common';
 
 
-describe('we check contour', function () {
-    it('should yield the right contour size and value', function () {
+describe('we check contourMask', function () {
+    it('should yield the right contourMask size and value', function () {
 
         let img = new Image(5,5,
             [
@@ -39,7 +39,7 @@ describe('we check contour', function () {
         let roiFilledMask = rois[0].filledMask;
         Array.from(roiFilledMask.data).should.eql([255,128]);
 
-        let roiContour = rois[0].contour;
+        let roiContour = rois[0].contourMask;
         Array.from(roiContour.data).should.eql([247,128]);
 
         roiMask = rois[1].mask;
@@ -48,7 +48,7 @@ describe('we check contour', function () {
         roiFilledMask = rois[1].filledMask;
         Array.from(roiFilledMask.data).should.eql([255, 255, 255, 128]);
 
-        roiContour = rois[1].contour;
+        roiContour = rois[1].contourMask;
         Array.from(roiContour.data).should.eql([ 252, 99, 31, 128 ]);
     });
 });

@@ -19,7 +19,7 @@ Image.load('./node_modules/ij-test/img/BW11x11.png').then(function (img) {
             ' surround:', roi.surround,
             ' surface:', roi.surface,
             ' boxPixels:', roi.boxPixels,
-            ' contour:', roi.contour,
+            ' contourMask:', roi.contourMask,
             ' border:', roi.border)
     }
     */

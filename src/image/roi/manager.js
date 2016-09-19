@@ -141,7 +141,7 @@ export default class ROIManager {
     //
     //     let contours = new Array(rois.length);
     //     for (let i = 0; i < rois.length; i++) {
-    //         contours[i] = rois[i].contour;
+    //         contours[i] = rois[i].contourMask;
     //     }
     //     return contours;
     // }
@@ -159,7 +159,7 @@ export default class ROIManager {
      * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
      * @param alpha Value from 0 to 255 to specify the alpha. Will be used if it is unspecified
      * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask
-     * @param contour {boolean} true if display only the contour
+     * @param contourMask {boolean} true if display only the contourMask
      * @param randomColors If we we would like to paint each mask with a random color
      * @param distinctColors If we we would like to paint each mask with a different color (default: false);
      * @param showLabels Paint a mask property on the image (default: false). If true will display the 'id'.

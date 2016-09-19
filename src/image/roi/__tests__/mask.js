@@ -49,8 +49,14 @@ describe('we check mask', function () {
             roiFilledMask = rois[2].filledMask;
             Array.from(roiFilledMask.data).should.eql([255, 255, 255, 128]);
 
+            let centerMask = rois[0].centerMask;
+            centerMask.position.should.eql([1,1]);
+            Array.from(centerMask.data).should.eql([93,0]);
 
-
+            let contourMask = rois[1].contourMask;
+            contourMask.position.should.eql([1,1]);
+            Array.from(contourMask.data).should.eql([247,128]);
+            
             let masks = roiManager.getMasks();
 
             let painted = new Image(5,5);

@@ -28,7 +28,7 @@ describe('we check that we can extract correctly a ROI', function () {
             extract.countAlphaPixels({alpha: 0}).should.equal(27);
             extract.countAlphaPixels({alpha: 255}).should.equal(54);
 
-            roiMask = rois[0].getMask({fill: true});
+            roiMask = rois[0].getMask({kind: 'filled'});
             extract = img.extract(roiMask);
             extract.countAlphaPixels({alpha: 0}).should.equal(1);
             extract.countAlphaPixels({alpha: 255}).should.equal(80);
