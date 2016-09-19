@@ -56,7 +56,7 @@ describe('we check mask', function () {
             let contourMask = rois[1].contourMask;
             contourMask.position.should.eql([1,1]);
             Array.from(contourMask.data).should.eql([247,128]);
-            
+
             let masks = roiManager.getMasks();
 
             let painted = new Image(5,5);
