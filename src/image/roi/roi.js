@@ -22,16 +22,32 @@ export default class ROI {
         this.computed = {};
     }
 
-    getMask({fill = false, scale = 1, contour = false} = {}) {
+    /**
+     *
+     * @param scale Scaling factor to apply to the mask
+     * @param kind 'contour', 'box', 'filled' or '' (default '')
+     * @returns {*}
+     */
+    getMask({scale = 1, kind = ''} = {}) {
         let mask;
-        if (contour) {
-            mask = this.contour;
-        } else if (fill) {
-            mask = this.filledMask;
-        } else {
-            mask = this.mask;
+        if (fill) kind='filled'; // only for compatibility
+        switch (kind) {
+            case 'contour':
+                mask = this.contour;
+                break;
+            case 'box':
+                mask = this.boxMask;
+                break;
+            case 'filled':
+                mask = this.filledMask;
+                break;
+            case 'center':
+                mask = this.centerMask;
+                break;
+            default:
+                mask = this.mask;
         }
-
+        
         if (scale < 1) {
             mask = mask.resizeBinary(scale);
         }
@@ -207,6 +223,29 @@ export default class ROI {
         return this.computed.contour = img;
     }
 
+    get boxMask() {
+        /**
+         Returns a binary image containing the mask
+         */
+            if (this.computed.boxMask) return this.computed.boxMask;
+
+            let img = new Image(this.width, this.height, {
+                kind: KindNames.BINARY,
+                position: [this.minX, this.minY],
+                parent: this.map.parent
+            });
+
+            for (let x = 0; x < this.width; x++) {
+                img.setBitXY(x, 0);
+                img.setBitXY(x, this.height - 1);
+            }
+            for (let y = 0; y < this.height; y++) {
+                img.setBitXY(0, y);
+                img.setBitXY(this.width-1, y);
+            }
+            return this.computed.boxMask = img;
+    }
+    
     /**
      Returns a binary image containing the mask
      */
@@ -246,10 +285,29 @@ export default class ROI {
                 } // by default a pixel is to 0 so no problems, it will be transparent
             }
         }
-
         return this.computed.filledMask = img;
     }
 
+    get centerMask() {
+        if (this.computed.centerMask) return this.computed.centerMask;
+
+        let img = new Image(this.width, this.height, {
+            kind: KindNames.BINARY,
+            position: [this.minX, this.minY],
+            parent: this.map.parent
+        });
+
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
+                let target = x + this.minX + (y + this.minY) * this.map.width;
+                if (this.internalIDs.indexOf(this.map.pixels[target]) >= 0) {
+                    img.setBitXY(x, y);
+                } // by default a pixel is to 0 so no problems, it will be transparent
+            }
+        }
+        return this.computed.centerMask = img;
+    }
+    
     get points() {
         if (this.computed.points) return this.computed.points;
         let points = [];

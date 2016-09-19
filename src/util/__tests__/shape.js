@@ -31,6 +31,12 @@ describe('we check Shape class', function () {
         );
     });
 
+    it('should yield the right mask', function () {
+        let shape = new Shape({kind: 'smallCross'});
+        var img=shape.getMask();
+        Array.from(img.data).should.eql([93,0]);
+    });
+    
     it('should yield the right cross', function () {
         let shape = new Shape({kind: 'cross'});
 

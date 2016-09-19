@@ -1,4 +1,6 @@
 import Matrix from 'ml-matrix';
+import Image from '../image/image';
+import * as KindNames from '../image/kindNames';
 
 const cross = [
     [0,0,1,0,0],
@@ -75,6 +77,20 @@ export default class Shape {
             }
         }
         return points;
+    }
+    
+    getMask() {
+        let img = new Image(this.width, this.height, {
+            kind: KindNames.BINARY
+        });
+        for (let y = 0; y < this.matrix.length; y++) {
+            for (let x = 0; x < this.matrix[0].length; x++) {
+                if (this.matrix[y][x]) {
+                    img.setBitXY(x, y);
+                }
+            }
+        }
+        return img;
     }
 }
 
