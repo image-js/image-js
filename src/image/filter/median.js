@@ -38,12 +38,12 @@ export default function medianFilter(radius, channels, border = 'copy') {
                     }
                 }
                 let index = (y * this.width + x) * this.channels + c;
-                let newValue = kernel.sort()[middle];
+                let newValue = kernel.sort((a,b) => a-b)[middle];
+                
                 newImage.data[index] = newValue;
             }
         }
     }
-
     if (this.alpha && channels.indexOf(this.channels) === -1) {
         for (let i = this.components; i < this.data.length; i = i + this.channels) {
             newImage.data[i] = this.data[i];
