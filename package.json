@@ -39,7 +39,7 @@
     "compile": "npm run clean-lib && babel src --out-dir lib",
     "clean-dist": "rm -rf dist && mkdir dist",
     "clean-lib": "rm -rf lib",
-    "eslint": "eslint src",
+    "eslint": "eslint src --cache",
     "eslint-fix": "npm run eslint -- --fix",
     "prepublish": "npm run compile",
     "test": "npm run test-mocha && sh test/checkOnly.sh && npm run eslint",
