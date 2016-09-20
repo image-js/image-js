@@ -9,6 +9,9 @@ parser: babel-eslint
 ecmaFeatures:
   modules: true
 
+plugins:
+  - no-only-tests
+
 rules:
   # Possible errors
   comma-dangle:
@@ -74,3 +77,6 @@ rules:
   space-in-parens: 2
   space-infix-ops: [2, {int32Hint: true}]
   space-unary-ops: 2
+
+  # Plugins
+  no-only-tests/no-only-tests: 2
