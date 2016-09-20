@@ -13,6 +13,7 @@ describe('Load TIFF', function () {
                 img.components.should.equal(test[1]);
                 img.alpha.should.equal(test[2]);
                 img.bitDepth.should.equal(test[3]);
+                img.meta.should.have.properties(['tiff', 'exif']);
             });
         });
     });

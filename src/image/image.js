@@ -44,7 +44,8 @@ export default class Image {
                 alpha: otherImage.alpha,
                 bitDepth: otherImage.bitDepth,
                 colorModel: otherImage.colorModel,
-                parent: otherImage
+                parent: otherImage,
+                meta: otherImage.meta
             };
         }
 
@@ -86,6 +87,7 @@ export default class Image {
         this.alpha = kindDefinition.alpha + 0;
         this.bitDepth = kindDefinition.bitDepth;
         this.colorModel = kindDefinition.colorModel;
+        this.meta = options.meta || {};
 
         this.computed = null;
 

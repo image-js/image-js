@@ -2,12 +2,12 @@ import Image from './image';
 import Stack from '../stack/stack';
 import {env, loadBinary, DOMImage, ImageData, Canvas, isDifferentOrigin} from './environment';
 import {PNGDecoder} from 'fast-png';
-import {TIFFDecoder} from 'tiff';
+import {decode as decodeJpeg} from 'fast-jpeg';
+import {decode as decodeTiff} from 'tiff';
 import atob from 'atob-lite';
+import imageType from 'image-type';
 
 const isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
-const isPNG = /\.png$/i;
-const isTIFF = /\.tiff?$/i;
 
 function str2ab(str) {
     const arr = new Uint8Array(str.length);
@@ -23,25 +23,32 @@ function swap16(val) {
 
 export function loadURL(url, options) {
     const dataURL = url.slice(0, 64).match(isDataURL);
+    let binaryDataP;
     if (dataURL) {
-        const mimetype = dataURL[1];
-        const offset = dataURL[0].length;
-        if (mimetype === 'png') {
-            let slice = url.slice(offset);
-            return Promise.resolve(str2ab(atob(slice))).then(loadPNG);
-        } else if (mimetype === 'tiff') {
-            let slice = url.slice(offset);
-            return Promise.resolve(str2ab(atob(slice))).then(loadTIFF);
+        binaryDataP = Promise.resolve(str2ab(atob(url.slice(dataURL[0].length))));
+    } else {
+        binaryDataP = loadBinary(url, options);
+    }
+    return binaryDataP.then(function (binaryData) {
+        const uint8 = new Uint8Array(binaryData);
+        const type = imageType(uint8);
+        if (type) {
+            switch (type.ext) {
+                case 'png':
+                    return loadPNG(binaryData);
+                case 'jpg':
+                    const decoded = decodeJpeg(binaryData);
+                    let meta;
+                    if (decoded.exif) {
+                        meta = getMetadata(decoded.exif);
+                    }
+                    return loadGeneric(url, {meta});
+                case 'tif':
+                    return loadTIFF(binaryData);
+            }
         }
-    }
-
-    if (isPNG.test(url)) {
-        return loadBinary(url, options).then(loadPNG);
-    } else if (isTIFF.test(url)) {
-        return loadBinary(url, options).then(loadTIFF);
-    }
-
-    return loadGeneric(url);
+        return loadGeneric(url);
+    });
 }
 
 function loadPNG(data) {
@@ -72,13 +79,25 @@ function loadPNG(data) {
 }
 
 function loadTIFF(data) {
-    let decoder = new TIFFDecoder(data);
-    let result = decoder.decode();
-    if (result.ifd.length === 1) {
-        return getImageFromIFD(result.ifd[0]);
+    let result = decodeTiff(data);
+    if (result.length === 1) {
+        return getImageFromIFD(result[0]);
     } else {
-        return new Stack(result.ifd.map(getImageFromIFD));
+        return new Stack(result.map(getImageFromIFD));
     }
+}
+
+function getMetadata(image) {
+    const metadata = {
+        tiff: image
+    };
+    if (image.exif) {
+        metadata.exif = image.exif;
+    }
+    if (image.gps) {
+        metadata.gps = image.gps;
+    }
+    return metadata;
 }
 
 function getImageFromIFD(image) {
@@ -86,11 +105,13 @@ function getImageFromIFD(image) {
         components: 1,
         alpha: 0,
         colorModel: null,
-        bitDepth: image.bitsPerSample
+        bitDepth: image.bitsPerSample,
+        meta: getMetadata(image)
     });
 }
 
-function loadGeneric(url) {
+function loadGeneric(url, options) {
+    options = options || {};
     return new Promise(function (resolve, reject) {
         let image = new DOMImage();
 
@@ -105,7 +126,7 @@ function loadGeneric(url) {
             let ctx = canvas.getContext('2d');
             ctx.drawImage(image, 0, 0, w, h);
             let data = ctx.getImageData(0, 0, w, h).data;
-            resolve(new Image(w, h, data));
+            resolve(new Image(w, h, data, options));
         };
         image.onerror = function () {
             reject(new Error('Could not load ' + url));

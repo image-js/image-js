@@ -17,7 +17,7 @@ describe('Core methods of Stack objects', function () {
 
     it('Stack.load with error', function () {
         return Stack.load([getImage('BW2x2.png'), getImage('inexistant')]).catch(function (e) {
-            e.message.should.match(/Could not load/);
+            e.code.should.equal('ENOENT');
             return 42;
         }).then(function (value) {
             value.should.equal(42);
