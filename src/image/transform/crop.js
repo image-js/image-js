@@ -1,6 +1,7 @@
 import Image from '../image';
 
 /**
+ * Crops the image
  * @memberof Image
  * @instance
  * @param {object} options
@@ -9,6 +10,11 @@ import Image from '../image';
  * @param {number} [options.width=this.width-x] - width of the new image
  * @param {number} [options.height=this.height-x] - height of the new image
  * @return {Image} The new cropped image
+ * @example
+ * var cropped = image.crop({
+ *   x:0,
+ *   y:0
+ * });
  */
 export default function crop(options = {}) {
     const {

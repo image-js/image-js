@@ -5,7 +5,7 @@ import {validateArrayOfChannels} from '../../util/channel';
 /**
  * @memberof Image
  * @instance
- * @returns {Image}
+ * @returns {this}
  */
 
 export default function invert({channels} = {}) {
