@@ -90,7 +90,7 @@
     "ml-disjoint-set": "^1.0.0",
     "ml-matrix": "^2.0.0",
     "ml-matrix-convolution": "0.4.0",
-    "ml-regression": "^4.0.0",
+    "ml-regression": "^4.1.1",
     "new-array": "^1.0.0",
     "string-includes": "^1.0.0",
     "tiff": "^2.0.1",
