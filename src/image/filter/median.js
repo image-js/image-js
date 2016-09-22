@@ -2,12 +2,24 @@ import {validateArrayOfChannels} from '../../util/channel';
 import Image from '../image';
 
 /**
+* Each pixel of the image becomes the median of the neightbour
+ * pixels.
  * @memberof Image
- * @instance
- * @returns {Image}
- */
+* @instance
+* @param {object} options
+* @param {(undefined|number|string|[number]|[string])} [options.channels=undefined] Specify which channels should be processed
+*      * undefined : we take all the channels but alpha
+*      * number : this specific channel
+*      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
+*      * [number] : array of channels as numbers
+*      * [string] : array of channels as one letter string
+* @param {number} [radius=1] distance of the square to take the mean of.
+* @param {string} [border='copy'] algorithm that will be applied after to deal with borders
+* @returns {Image}
+*/
+export default function medianFilter(options = {}) {
+    let {radius = 1, channels, border = 'copy'} = options;
 
-export default function medianFilter(radius, channels, border = 'copy') {
     this.checkProcessable('medianFilter', {
         bitDepth:[8,16]
     });

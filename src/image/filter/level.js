@@ -13,8 +13,8 @@ import {validateArrayOfChannels} from '../../util/channel';
  *      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
  *      * [number] : array of channels as numbers
  *      * [string] : array of channels as one letter string
- * @param {number} [min=0] minimal value after levelling
- * @param {number} [max=this.max] maximal value after levelling
+ * @param {number} [options.min=this.min] minimal value after levelling
+ * @param {number} [options.max=this.max] maximal value after levelling
  * @returns {Image}
  */
 
