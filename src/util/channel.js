@@ -1,11 +1,12 @@
 import * as Model from '../image/model/model';
 
 
-export function validateArrayOfChannels(image, {
-    channels,
-    allowAlpha,  // are we allowing the selection of an alpha channel ?
-    defaultAlpha // if no channels are selected should we take the alpha channel ?
-    } = {}) {
+export function validateArrayOfChannels(image, options = {}) {
+    let {
+        channels,
+        allowAlpha,  // are we allowing the selection of an alpha channel ?
+        defaultAlpha // if no channels are selected should we take the alpha channel ?
+    } = options;
 
     if (typeof allowAlpha !== 'boolean') allowAlpha = true;
 
@@ -51,6 +52,28 @@ export function validateChannel(image, channel, allowAlpha = true) {
                     break;
                 case 'b':
                     channel = 2;
+                    break;
+                case 'h':
+                    channel = 0;
+                    break;
+                case 's':
+                    channel = 1;
+                    break;
+                case 'l':
+                case 'v':
+                    channel = 2;
+                    break;
+                case 'c':
+                    channel = 0;
+                    break;
+                case 'm':
+                    channel = 1;
+                    break;
+                case 'y':
+                    channel = 2;
+                    break;
+                case 'k':
+                    channel = 3;
                     break;
             }
         }
