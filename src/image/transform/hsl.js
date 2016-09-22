@@ -5,8 +5,15 @@ import {RGB, HSL} from '../model/model';
 import Image from '../image';
 
 /**
+ * Change the color model of the current image to HSL
+ * The source image has to be RGB !
  * @memberof Image
  * @instance
+  * @returns {Image} - New image in HSL color model
+ * @example
+ * var hslImage = image.hsl();
+ * // we can create one image per channel
+ * var channels = hslImage.split();
  */
 
 export default function hsl() {
