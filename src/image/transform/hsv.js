@@ -4,8 +4,15 @@ import {RGB, HSV} from '../model/model';
 import Image from '../image';
 
 /**
+ * Change the color model of the current image to HSV
+ * The source image has to be RGB !
  * @memberof Image
  * @instance
+ * @returns {Image} - New image in HSV color model
+ * @example
+ * var hsvImage = image.hsv();
+ * // we can create one image per channel
+ * var channels = hsvImage.split();
  */
 
 export default function hsv() {
