@@ -9,8 +9,8 @@ import Image from '../image';
  * @instance
  */
 
-export default function hsv() {
-    this.checkProcessable('hsv', {
+export default function hsl() {
+    this.checkProcessable('hsl', {
         bitDepth: [8, 16],
         alpha: [0,1],
         colorModel: [RGB]
