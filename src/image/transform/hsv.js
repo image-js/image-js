@@ -4,7 +4,7 @@ import {RGB, HSV} from '../model/model';
 import Image from '../image';
 
 /**
- * Change the color model of the current image to HSV
+ * Make a copy of the current image and convert the color model to HSV
  * The source image has to be RGB !
  * @memberof Image
  * @instance

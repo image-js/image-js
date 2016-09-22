@@ -17796,7 +17796,7 @@ var _scale = require('./transform/scale/scale');
 
 var _scale2 = _interopRequireDefault(_scale);
 
-var _hsv = require('./transform/hsv');
+var _hsv = require('./transform/hsl');
 
 var _hsv2 = _interopRequireDefault(_hsv);
 

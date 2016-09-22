@@ -4,7 +4,8 @@ import {RGB} from '../model/model';
 /**
  * Make a copy of the current image and convert to RGBA
  * The source image must have RGB color model, 8 or 16 bits.
- * This method will add an alpha channel if required.
+ * This method will add an alpha channel if required. In this case
+ * the value for the alpha channel will be 100% opacity.
  * @memberof Image
  * @instance
  * @returns {Image} - New image in RGB color model with alpha channel

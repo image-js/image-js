@@ -24,7 +24,27 @@ export function getHistogram({maxSlots = 256, channel, useAlpha = true} = {}) {
  * @instance
  */
 
-export function getHistograms({maxSlots = 256, useAlpha = true} = {}) {
+/**
+ * Returns an array (number of channels) of array (number of slots) containing
+ * the number of data of a specific intensity.
+ * Intensity may be grouped by the maxSlots parameter.
+ * @param {object} [options]
+ * @param {number} [options.maxSlots] - Number of slots in the resulting
+ *      array. The intensity will be evently distributed between 0 and
+ *      the maxValue allowed for this image (255 for usual images).
+ *      If maxSlots = 8, all the intensities between 0 and 31 will be
+ *      placed in the slot 0, 32 to 63 in slot 1, ...
+ * @param {number} [options.maxSlots] -
+ * @return {Promise} - Resolves with the Image
+ * @example
+ *      image.getHistograms({
+ *          maxSlots: 8,
+ *          useAlpha: false
+ *      });
+ */
+
+export function getHistograms(options = {}) {
+    const {maxSlots = 256, useAlpha = true} = options;
     this.checkProcessable('getHistograms', {
         bitDepth: [8, 16]
     });

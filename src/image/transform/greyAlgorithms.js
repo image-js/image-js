@@ -1,3 +1,5 @@
+
+
 export const methods = {
     luma709: function (data, i) { // sRGB
         // return data[i] * 0.2126 + data[i + 1] * 0.7152 + data[i + 2] * 0.0722;
@@ -86,5 +88,6 @@ Object.defineProperty(methods, 'luminance', {enumerable: false, value: methods.l
 Object.defineProperty(methods, 'min', {enumerable: false, value: methods.minimum});
 Object.defineProperty(methods, 'max', {enumerable: false, value: methods.maximum});
 Object.defineProperty(methods, 'brightness', {enumerable: false, value: methods.maximum});
+
 
 export const names = Object.keys(methods);

@@ -5,8 +5,15 @@ import {RGB, CMYK} from '../model/model';
 import Image from '../image';
 
 /**
+ * Make a copy of the current image and convert the color model to CMYK
+ * The source image has to be RGB !
  * @memberof Image
  * @instance
+ * @returns {Image} - New image in CMYK color model
+ * @example
+ * var cmykImage = image.cmyk();
+ * // we can create one image per channel
+ * var channels = cmykImage.split();
  */
 
 export default function cmyk() {

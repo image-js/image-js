@@ -3,7 +3,7 @@ import * as KindNames from '../kindNames';
 
 
 /**
- * This is a temporary code that should be placed in the more generate resize method
+ * This is a temporary code that should be placed in the more general resize method
  * it only works for scaled down !
  * @memberof Image
  * @instance
