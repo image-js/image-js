@@ -1,9 +1,21 @@
 import Image from '../image';
 
 /**
+ * Change the image color depth.
+ * The color depth is the number of bits that is assigned to each point of a channel.
+ * For normal images it is 8 bits meaning the value is between 0 and 255.
+ * Currently only conversion from 8 to 16 bits and 16 to 8 bits is allowed.
  * @memberof Image
  * @instance
+ * @param {number} [newColorDepth=8]
+ * @return {Image} The new image
+ * @example
+ * var newImage = image.colorDepth({
+ *   newColorDepth:8
+ * });
  */
+
+
 
 export default function colorDepth(newColorDepth = 8) {
 
