@@ -8,7 +8,8 @@ import {checkNumberArray} from '../../util/value';
  * @returns {Image}
  */
 
-export default function multiply(value, {channels} = {}) {
+export default function multiply(value, options = {}) {
+    let {channels} = options;
     this.checkProcessable('multiply', {
         bitDepth: [8, 16]
     });
