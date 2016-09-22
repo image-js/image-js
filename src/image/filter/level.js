@@ -18,7 +18,7 @@ import {validateArrayOfChannels} from '../../util/channel';
  * @returns {Image}
  */
 
-export default function level(options) {
+export default function level(options = {}) {
     let {
         algorithm = 'range',
         channels,
