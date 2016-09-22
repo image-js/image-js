@@ -7,13 +7,13 @@ import convolutionFFT from '../operator/convolutionFFT';
  * @returns {Image}
  */
 
-export default function gaussianFilter({
-	radius = 1,
-	sigma,
-	channels,
-	border = 'copy'
-	} = {}) {
-
+export default function gaussianFilter(options = {}) {
+	let {
+		radius = 1,
+		sigma,
+		channels,
+		border = 'copy'
+	} = options;
 	this.checkProcessable('gaussianFilter', {
 		bitDepth: [8, 16]
 	});

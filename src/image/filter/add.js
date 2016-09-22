@@ -8,7 +8,8 @@ import {checkNumberArray} from '../../util/value';
  * @returns {Image} Modified current image
  */
 
-export default function add(value, {channels} = {}) {
+export default function add(value, options = {}) {
+    let {channels} = options;
     this.checkProcessable('add', {
         bitDepth: [8, 16]
     });

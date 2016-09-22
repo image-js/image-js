@@ -8,7 +8,8 @@ import {checkNumberArray} from '../../util/value';
  * @returns {Image}
  */
 
-export default function divide(value, {channels} = {}) {
+export default function divide(value, options = {}) {
+    let {channels} = options;
     this.checkProcessable('divide', {
         bitDepth: [8, 16]
     });
