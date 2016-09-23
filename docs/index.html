@@ -61,6 +61,18 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
+                        href='#Image#setValueXY'
+                        class='regular pre-open'>
+                        #setValueXY
+                      </a></li>
+                      
+                      <li><a
+                        href='#Image#getValueXY'
+                        class='regular pre-open'>
+                        #getValueXY
+                      </a></li>
+                      
+                      <li><a
                         href='#Image#toDataURL'
                         class='regular pre-open'>
                         #toDataURL
@@ -76,6 +88,18 @@
                         href='#Image#getCanvas'
                         class='regular pre-open'>
                         #getCanvas
+                      </a></li>
+                      
+                      <li><a
+                        href='#Image#getRGBAData'
+                        class='regular pre-open'>
+                        #getRGBAData
+                      </a></li>
+                      
+                      <li><a
+                        href='#Image#clone'
+                        class='regular pre-open'>
+                        #clone
                       </a></li>
                       
                       <li><a
@@ -193,6 +217,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#Image#cmyk'
+                        class='regular pre-open'>
+                        #cmyk
+                      </a></li>
+                      
+                      <li><a
                         href='#Image#rgba8'
                         class='regular pre-open'>
                         #rgba8
@@ -244,12 +274,6 @@
                         href='#Image#split'
                         class='regular pre-open'>
                         #split
-                      </a></li>
-                      
-                      <li><a
-                        href='#Image#getChannel'
-                        class='regular pre-open'>
-                        #getChannel
                       </a></li>
                       
                       <li><a
@@ -396,6 +420,54 @@
                         #countAlphaPixels
                       </a></li>
                       
+                      <li><a
+                        href='#Image#setBitXY'
+                        class='regular pre-open'>
+                        #setBitXY
+                      </a></li>
+                      
+                      <li><a
+                        href='#Image#clearBitXY'
+                        class='regular pre-open'>
+                        #clearBitXY
+                      </a></li>
+                      
+                      <li><a
+                        href='#Image#toggleBitXY'
+                        class='regular pre-open'>
+                        #toggleBitXY
+                      </a></li>
+                      
+                      <li><a
+                        href='#Image#getBitXY'
+                        class='regular pre-open'>
+                        #getBitXY
+                      </a></li>
+                      
+                      <li><a
+                        href='#Image#setBit'
+                        class='regular pre-open'>
+                        #setBit
+                      </a></li>
+                      
+                      <li><a
+                        href='#Image#clearBit'
+                        class='regular pre-open'>
+                        #clearBit
+                      </a></li>
+                      
+                      <li><a
+                        href='#Image#toggleBit'
+                        class='regular pre-open'>
+                        #toggleBit
+                      </a></li>
+                      
+                      <li><a
+                        href='#Image#getBit'
+                        class='regular pre-open'>
+                        #getBit
+                      </a></li>
+                      
                     </ul>
                   
                   
@@ -405,9 +477,39 @@
               
                 
                 <li><a
+                  href='#getchannel'
+                  class="">
+                  getChannel
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#combinechannels'
+                  class="">
+                  combineChannels
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#shape'
                   class="">
                   Shape
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#gethistograms'
+                  class="">
+                  getHistograms
                   
                 </a>
                 
@@ -533,6 +635,12 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
+                        href='#ROI#getMask'
+                        class='regular pre-open'>
+                        #getMask
+                      </a></li>
+                      
+                      <li><a
                         href='#ROI#borderIDs'
                         class='regular pre-open'>
                         #borderIDs
@@ -569,9 +677,9 @@
                       </a></li>
                       
                       <li><a
-                        href='#ROI#contour'
+                        href='#ROI#contourMask'
                         class='regular pre-open'>
-                        #contour
+                        #contourMask
                       </a></li>
                       
                       <li><a
@@ -590,6 +698,16 @@
                   
                   
                 </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#boxmask'
+                  class="">
+                  boxMask
+                  
+                </a>
                 
                 </li>
               
@@ -684,14 +802,45 @@
       Image
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/5a15c564e3aa59468bd943e905253cc51d2fc269/src/image/image.js#L29-L467'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/image.js#L61-L557'>
       <span>src/image/image.js</span>
       </a>
     
   </div>
   
 
-  <p>Class representing an image</p>
+  <p>Class representing an image.
+This class allows to manipulate easily images directly in the browser.</p>
+<p>This library is designed to deal with scientific images (8 or 16 bit depth) and will be able to open
+and process jpeg, png and uncompressed tiff images.</p>
+<p>An image is characterized by:</p>
+<ul>
+<li>width and height</li>
+<li>colorModel (RGB, HSL, CMYK, GREY, ...)</li>
+<li>components: number of components, Grey scale images will have 1 component while RGB will have 3 and CMYK 4.</li>
+<li>alpha: 0 or 1 depending if there is an alpha channel. The
+alpha channel define the opacity of each pixel</li>
+<li>channels: number of channels (components + alpha)</li>
+<li>bitDepth : number of bits to define the intensity of a point.
+The values may be 1 for a binary image (mask), 8 for a normal image (each
+channel contains values between 0 and 255) and 16 for scientific images
+(each channel contains values between 0 and 65535).
+The png library and tiff library included in image-js allow to deal correctly with
+8 and 16 bit depth images.</li>
+<li>position : an array of 2 elements that allows to define a relative position
+to a parent image. This will be used in a crop or in the management
+of Region Of Interests (ROI) for exmaple</li>
+<li>data : an array that contains all the points of the image.
+Depending the bitDepth Uint8Array (1 bit), Uint8ClampedArray (8 bits),
+Uint16Array (16 bits), Float32Array (32 bits)</li>
+</ul>
+<p>In an image we have pixels and points:</p>
+<ul>
+<li>A pixel is an array that has as size the number of channels
+and that contains all the values that define a particular pixel of the image.</li>
+<li>A point is an array of 2 elements that contains the x / y coordinate
+of a specific pixel of the image</li>
+</ul>
 
 
   <div class='pre p1 fill-light mt0'>new Image(width: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>], height: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>], data: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>], options: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</div>
@@ -817,6 +966,18 @@
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>Image.load(<span class="hljs-string">'http://xxxx'</span>).then(
+     <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">image</span>) </span>{
+         <span class="hljs-built_in">console</span>.log(image);
+         <span class="hljs-comment">// we can display the histogram of the first channel</span>
+         <span class="hljs-built_in">console</span>.log(image.histograms[<span class="hljs-number">0</span>]);
+     }
+ )</pre>
+    
   
 
   
@@ -1055,6 +1216,175 @@ the 8 points around and 3 to the 12 points around the central pixel
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
+    <div class='border-bottom' id='Image#setValueXY'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setValueXY(x, y, channel, value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set the value of specific pixel channel</p>
+
+
+  <div class='pre p1 fill-light mt0'>setValueXY(x: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, y: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, channel: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, value: Any): this</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> x coordinate (0 = left)
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> y coordinate (0 = top)
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>channel</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(Any)</code> the new value of this pixel channel
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>this</code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Image#getValueXY'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getValueXY(x, y, channel)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get the value of specific pixel channel</p>
+
+
+  <div class='pre p1 fill-light mt0'>getValueXY(x: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, y: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, channel: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> x coordinate (0 = left)
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> y coordinate (0 = top)
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>channel</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> 
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        the value of this pixel channel
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='Image#toDataURL'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -1289,6 +1619,169 @@ the 8 points around and 3 to the 12 points around the central pixel
       </div>
     </div>
   
+    <div class='border-bottom' id='Image#getRGBAData'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getRGBAData()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Retrieve the data of the current image as RGBA 8 bits
+The source image may be:</p>
+<ul>
+<li>a mask (binary image)</li>
+<li>a grey image (8 or 16 bits) with or without alpha channel</li>
+<li>a color image (8 or 16 bits) with or without alpha channel in with RGB model</li>
+</ul>
+
+
+  <div class='pre p1 fill-light mt0'>getRGBAData(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray">Uint8ClampedArray</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray">Uint8ClampedArray</a></code>:
+        Array with the data
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> imageData = image.getRGBAData();</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Image#clone'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>clone([options])</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a new image based on the current image.
+By default the method will copy the data</p>
+
+
+  <div class='pre p1 fill-light mt0'>clone(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {})): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {}))</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.copyData</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>]</code>
+                  
+                    (default <code>true</code>)
+                  </td>
+                  <td class='break-word'><span>Specify if we want also to clone
+the data or only the image parameters (size, colorModel, ...)
+</span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
+        The source image clone
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> emptyImage = image.clone({<span class="hljs-attr">copyData</span>:<span class="hljs-literal">false</span>});</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='Image#save'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -1408,7 +1901,8 @@ the 8 points around and 3 to the 12 points around the central pixel
 
   
 
-  
+  <p>Invert an image. The image</p>
+
 
   <div class='pre p1 fill-light mt0'>invert</div>
 
@@ -1426,9 +1920,7 @@ the 8 points around and 3 to the 12 points around the central pixel
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
-            (default <code>{}</code>)
-            )</code> 
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {}))</code> 
           </div>
           
           <table class='mt1 mb2 fixed-table h5 col-12'>
@@ -1445,9 +1937,18 @@ the 8 points around and 3 to the 12 points around the central pixel
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.channels</span> <code class='quiet'>Any</code>
+                  <td class='break-word'><span class='code bold'>options.channels</span> <code class='quiet'>[(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>])]</code>
+                  
+                    (default <code>undefined</code>)
                   </td>
-                  <td class='break-word'><span></span></td>
+                  <td class='break-word'><span>Specify which channels should be processed
+<pre><code> * undefined : we take all the channels but alpha
+ * number : this specific channel
+ * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
+ * [number] : array of channels as numbers
+ * [string] : array of channels as one letter string
+</code></pre>
+</span></td>
                 </tr>
               
             </tbody>
@@ -1463,7 +1964,7 @@ the 8 points around and 3 to the 12 points around the central pixel
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
+      <code>this</code>:
         
       
     
@@ -1910,7 +2411,8 @@ the 8 points around and 3 to the 12 points around the central pixel
 
   
 
-  
+  <p>Level the image for by default have the minimal and maximal values.</p>
+
 
   <div class='pre p1 fill-light mt0'>level</div>
 
@@ -1928,9 +2430,7 @@ the 8 points around and 3 to the 12 points around the central pixel
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
-            (default <code>{}</code>)
-            )</code> 
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {}))</code> 
           </div>
           
           <table class='mt1 mb2 fixed-table h5 col-12'>
@@ -1947,37 +2447,42 @@ the 8 points around and 3 to the 12 points around the central pixel
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'>Any</code>
+                  <td class='break-word'><span class='code bold'>options.channels</span> <code class='quiet'>[(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>])]</code>
                   
-                    (default <code>&#39;range&#39;</code>)
+                    (default <code>undefined</code>)
                   </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.channels</span> <code class='quiet'>Any</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.min</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>this.min</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.max</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>this.max</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
+                  <td class='break-word'><span>Specify which channels should be processed
+<pre><code> * undefined : we take all the channels but alpha
+ * number : this specific channel
+ * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
+ * [number] : array of channels as numbers
+ * [string] : array of channels as one letter string
+</code></pre>
+</span></td>
                 </tr>
               
             </tbody>
           </table>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>min</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]
+            (default <code>0</code>)
+            )</code> minimal value after levelling
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>max</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]
+            (default <code>this.max</code>)
+            )</code> maximal value after levelling
+
+          </div>
           
         </div>
       
@@ -2576,7 +3081,8 @@ the 8 points around and 3 to the 12 points around the central pixel
 
   
 
-  
+  <p>Crops the image</p>
+
 
   <div class='pre p1 fill-light mt0'>crop</div>
 
@@ -2594,8 +3100,7 @@ the 8 points around and 3 to the 12 points around the central pixel
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$0</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {}))</code> options
-
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {}))</code> 
           </div>
           
           <table class='mt1 mb2 fixed-table h5 col-12'>
@@ -2612,7 +3117,7 @@ the 8 points around and 3 to the 12 points around the central pixel
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.x</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  <td class='break-word'><span class='code bold'>options.x</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
                   
                     (default <code>0</code>)
                   </td>
@@ -2621,7 +3126,7 @@ the 8 points around and 3 to the 12 points around the central pixel
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.y</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  <td class='break-word'><span class='code bold'>options.y</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
                   
                     (default <code>0</code>)
                   </td>
@@ -2630,7 +3135,7 @@ the 8 points around and 3 to the 12 points around the central pixel
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.width</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  <td class='break-word'><span class='code bold'>options.width</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
                   
                     (default <code>this.width-x</code>)
                   </td>
@@ -2639,7 +3144,7 @@ the 8 points around and 3 to the 12 points around the central pixel
                 </tr>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.height</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  <td class='break-word'><span class='code bold'>options.height</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
                   
                     (default <code>this.height-x</code>)
                   </td>
@@ -2669,6 +3174,15 @@ the 8 points around and 3 to the 12 points around the central pixel
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> cropped = image.crop({
+  <span class="hljs-attr">x</span>:<span class="hljs-number">0</span>,
+  <span class="hljs-attr">y</span>:<span class="hljs-number">0</span>
+});</pre>
+    
   
 
   
@@ -2869,7 +3383,9 @@ the 8 points around and 3 to the 12 points around the central pixel
 
   
 
-  
+  <p>Make a copy of the current image and convert the color model to HSV
+The source image has to be RGB !</p>
+
 
   <div class='pre p1 fill-light mt0'>hsv</div>
 
@@ -2886,9 +3402,25 @@ the 8 points around and 3 to the 12 points around the central pixel
   
 
   
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
+        New image in HSV color model
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> hsvImage = image.hsv();
+<span class="hljs-comment">// we can create one image per channel</span>
+<span class="hljs-keyword">var</span> channels = hsvImage.split();</pre>
+    
   
 
   
@@ -2913,7 +3445,9 @@ the 8 points around and 3 to the 12 points around the central pixel
 
   
 
-  
+  <p>Make a copy of the current image and convert the color model to HSL
+The source image has to be RGB !</p>
+
 
   <div class='pre p1 fill-light mt0'>hsl</div>
 
@@ -2930,9 +3464,87 @@ the 8 points around and 3 to the 12 points around the central pixel
   
 
   
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
+        New image in HSL color model
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> hslImage = image.hsl();
+<span class="hljs-comment">// we can create one image per channel</span>
+<span class="hljs-keyword">var</span> channels = hslImage.split();</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Image#cmyk'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>cmyk</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Make a copy of the current image and convert the color model to CMYK
+The source image has to be RGB !</p>
+
+
+  <div class='pre p1 fill-light mt0'>cmyk</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
+        New image in CMYK color model
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> cmykImage = image.cmyk();
+<span class="hljs-comment">// we can create one image per channel</span>
+<span class="hljs-keyword">var</span> channels = cmykImage.split();</pre>
+    
   
 
   
@@ -2957,7 +3569,16 @@ the 8 points around and 3 to the 12 points around the central pixel
 
   
 
-  <p>Make a copy of the current image and convert to a RGBA 8 bits</p>
+  <p>Make a copy of the current image and convert to RGBA 8 bits
+Those images are the one that are displayed in a canvas.
+RGB model in 8 bits per channel and containing as well an alpha channel.
+The source image may be:</p>
+<ul>
+<li>a mask (binary image)</li>
+<li>a grey image (8 or 16 bits) with or without alpha channel</li>
+<li>a color image (8 or 16 bits) with or without alpha channel in with RGB model
+The conversion is based on <a href="#imagegetrgbadata">Image#getRGBAData</a>.</li>
+</ul>
 
 
   <div class='pre p1 fill-light mt0'>rgba8</div>
@@ -2975,9 +3596,23 @@ the 8 points around and 3 to the 12 points around the central pixel
   
 
   
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
+        New image in RGB color model with alpha channel
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> rgbaImage = image.rgba8();</pre>
+    
   
 
   
@@ -3002,7 +3637,13 @@ the 8 points around and 3 to the 12 points around the central pixel
 
   
 
-  <p>Converts the current image to grey scale</p>
+  <p>Converts the current image to grey scale
+The source image has to be RGB !
+If there is an alpha channel we need to decide what to do:</p>
+<ul>
+<li>keepAlpha : we will keep the alpha channel and you will get a GREY / A image</li>
+<li>mergeAlpha : we will multiply each pixel of the image by the alpha</li>
+</ul>
 
 
   <div class='pre p1 fill-light mt0'>grey</div>
@@ -3021,9 +3662,7 @@ the 8 points around and 3 to the 12 points around the central pixel
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
-            (default <code>{}</code>)
-            )</code> 
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {}))</code> 
           </div>
           
           <table class='mt1 mb2 fixed-table h5 col-12'>
@@ -3040,11 +3679,44 @@ the 8 points around and 3 to the 12 points around the central pixel
             <tbody class='mt1'>
               
                 <tr>
-                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'>Any</code>
+                  <td class='break-word'><span class='code bold'>options.algorithm</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]</code>
                   
                     (default <code>&#39;luma709&#39;</code>)
                   </td>
-                  <td class='break-word'><span></span></td>
+                  <td class='break-word'><span>Algorithm to get the grey image
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.keepAlpha</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>]</code>
+                  
+                    (default <code>false</code>)
+                  </td>
+                  <td class='break-word'><span>If true the RGB values are treated
+separately from the alpha channel and the method returns a GREYA image.
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.mergeAlpha</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>]</code>
+                  
+                    (default <code>true</code>)
+                  </td>
+                  <td class='break-word'><span>If true the alpha channel will be applied on each pixel.
+This means that if for an 8bits RGBA image we have an alpha channel value of 0,
+this grey scale value will always be 0 (black pixel)
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.allowGrey</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>]</code>
+                  
+                    (default <code>false</code>)
+                  </td>
+                  <td class='break-word'><span>By default only RGB images are allowed.
+If true grey images are also allowed and will either return a copy or
+apply the alpha channel depending the options
+</span></td>
                 </tr>
               
             </tbody>
@@ -3061,7 +3733,7 @@ the 8 points around and 3 to the 12 points around the central pixel
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
-        Grey scale image
+        Grey scale image (with or without alpha depending the options)
 
       
     
@@ -3069,6 +3741,12 @@ the 8 points around and 3 to the 12 points around the central pixel
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> grey = image.grey();</pre>
+    
   
 
   
@@ -3383,7 +4061,7 @@ You may either choose among the provided algorithm or just specify a threshold v
 
   
 
-  <p>This is a temporary code that should be placed in the more generate resize method
+  <p>This is a temporary code that should be placed in the more general resize method
 it only works for scaled down !</p>
 
 
@@ -3452,7 +4130,11 @@ it only works for scaled down !</p>
 
   
 
-  
+  <p>Change the image color depth.
+The color depth is the number of bits that is assigned to each point of a channel.
+For normal images it is 8 bits meaning the value is between 0 and 255.
+Currently only conversion from 8 to 16 bits and 16 to 8 bits is allowed.</p>
+
 
   <div class='pre p1 fill-light mt0'>colorDepth</div>
 
@@ -3470,7 +4152,7 @@ it only works for scaled down !</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>newColorDepth</span> <code class='quiet'>(Any
+            <span class='code bold'>newColorDepth</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]
             (default <code>8</code>)
             )</code> 
           </div>
@@ -3483,9 +4165,25 @@ it only works for scaled down !</p>
   
 
   
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
+        The new image
+
+      
+    
+  
 
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> newImage = image.colorDepth({
+  <span class="hljs-attr">newColorDepth</span>:<span class="hljs-number">8</span>
+});</pre>
+    
   
 
   
@@ -3652,62 +4350,6 @@ it only works for scaled down !</p>
               
             </tbody>
           </table>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='Image#getChannel'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getChannel</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>getChannel</div>
-
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>channel</span> <code class='quiet'>(Any)</code> 
-          </div>
           
         </div>
       
@@ -5174,42 +5816,10 @@ a relative position and this part of the original image will be extracted.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            <span class='code bold'>options</span> <code class='quiet'>(Any
             (default <code>{}</code>)
             )</code> 
           </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.maxSlots</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>256</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.useAlpha</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>true</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
           
         </div>
       
@@ -5793,7 +6403,723 @@ a relative position and this part of the original image will be extracted.</p>
       </div>
     </div>
   
+    <div class='border-bottom' id='Image#setBitXY'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setBitXY(x, y)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set a specific pixel using XY coordinates from a binary image (mask)</p>
+
+
+  <div class='pre p1 fill-light mt0'>setBitXY(x: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, y: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> x coordinate (0 = left)
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> y coordinate (0 = top)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Image#clearBitXY'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>clearBitXY(x, y)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Clear (unset) a specific pixel using XY coordinates from a binary image (mask)</p>
+
+
+  <div class='pre p1 fill-light mt0'>clearBitXY(x: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, y: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> x coordinate (0 = left)
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> y coordinate (0 = top)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Image#toggleBitXY'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toggleBitXY(x, y)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Toggle (invert) a specific pixel using XY coordinates from a binary image (mask)</p>
+
+
+  <div class='pre p1 fill-light mt0'>toggleBitXY(x: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, y: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> x coordinate (0 = left)
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> y coordinate (0 = top)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Image#getBitXY'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getBitXY(x, y)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get the state of a specific pixel using XY coordinates from a binary image (mask)</p>
+
+
+  <div class='pre p1 fill-light mt0'>getBitXY(x: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, y: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> x coordinate (0 = left)
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> y coordinate (0 = top)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        0: bit is unset, 1: bit is set
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Image#setBit'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setBit(pixel)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Set a specific pixel from a binary image (mask)</p>
+
+
+  <div class='pre p1 fill-light mt0'>setBit(pixel: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pixel</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> the pixel number which correspond to x * image.width + y
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Image#clearBit'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>clearBit(pixel)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Clear (unset) a specific pixel from a binary image (mask)</p>
+
+
+  <div class='pre p1 fill-light mt0'>clearBit(pixel: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pixel</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> the pixel number which correspond to x * image.width + y
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Image#toggleBit'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toggleBit(pixel)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Toggle (invert) a specific pixel from a binary image (mask)</p>
+
+
+  <div class='pre p1 fill-light mt0'>toggleBit(pixel: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pixel</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> the pixel number which correspond to x * image.width + y
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='Image#getBit'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getBit(pixel)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get the state of a specific pixel using XY coordinates from a binary image (mask)</p>
+
+
+  <div class='pre p1 fill-light mt0'>getBit(pixel: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>pixel</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code> the pixel number which correspond to x * image.width + y
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        0: bit is unset, 1: bit is set
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
 </div>
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='getchannel'>
+      getChannel
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/utility/getChannel.js#L12-L44'>
+      <span>src/image/utility/getChannel.js</span>
+      </a>
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>getChannel</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>channel</span> <code class='quiet'>(Any)</code> 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$1</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            (default <code>{}</code>)
+            )</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$1.keepAlpha</span> <code class='quiet'>Any</code>
+                  
+                    (default <code>false</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$1.mergeAlpha</span> <code class='quiet'>Any</code>
+                  
+                    (default <code>false</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='combinechannels'>
+      combineChannels
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/utility/combineChannels.js#L12-L49'>
+      <span>src/image/utility/combineChannels.js</span>
+      </a>
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>combineChannels</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>method</span> <code class='quiet'>(Any
+            (default <code>function (pixel) {
+        return (pixel[0] + pixel[1] + pixel[2]) / 3;
+    }</code>)
+            )</code> 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$1</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            (default <code>{}</code>)
+            )</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$1.mergeAlpha</span> <code class='quiet'>Any</code>
+                  
+                    (default <code>false</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$1.keepAlpha</span> <code class='quiet'>Any</code>
+                  
+                    (default <code>false</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 
@@ -5811,7 +7137,7 @@ a relative position and this part of the original image will be extracted.</p>
       Shape
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/5a15c564e3aa59468bd943e905253cc51d2fc269/src/util/shape.js#L22-L81'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/util/shape.js#L24-L95'>
       <span>src/util/shape.js</span>
       </a>
     
@@ -5855,11 +7181,124 @@ a relative position and this part of the original image will be extracted.</p>
 
   
   <div class='clearfix'>
+    <h3 class='fl m0' id='gethistograms'>
+      getHistograms
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/compute/histogram.js#L46-L56'>
+      <span>src/image/compute/histogram.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Returns an array (number of channels) of array (number of slots) containing
+the number of data of a specific intensity.
+Intensity may be grouped by the maxSlots parameter.</p>
+
+
+  <div class='pre p1 fill-light mt0'>getHistograms</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.maxSlots</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  </td>
+                  <td class='break-word'><span>Number of slots in the resulting
+array. The intensity will be evently distributed between 0 and
+the maxValue allowed for this image (255 for usual images).
+If maxSlots = 8, all the intensities between 0 and 31 will be
+placed in the slot 0, 32 to 63 in slot 1, ...
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.maxSlots</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  </td>
+                  <td class='break-word'><span>-
+</span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        Resolves with the Image
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>image.getHistograms({
+         <span class="hljs-attr">maxSlots</span>: <span class="hljs-number">8</span>,
+         <span class="hljs-attr">useAlpha</span>: <span class="hljs-literal">false</span>
+     });</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
     <h3 class='fl m0' id='median'>
       median
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/5a15c564e3aa59468bd943e905253cc51d2fc269/src/util/histogram.js#L7-L31'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/util/histogram.js#L7-L31'>
       <span>src/util/histogram.js</span>
       </a>
     
@@ -5926,7 +7365,7 @@ a relative position and this part of the original image will be extracted.</p>
       mean
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/5a15c564e3aa59468bd943e905253cc51d2fc269/src/util/histogram.js#L38-L50'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/util/histogram.js#L38-L50'>
       <span>src/util/histogram.js</span>
       </a>
     
@@ -5993,7 +7432,7 @@ a relative position and this part of the original image will be extracted.</p>
       ROIManager
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/5a15c564e3aa59468bd943e905253cc51d2fc269/src/image/roi/manager.js#L19-L271'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/roi/manager.js#L19-L265'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -6181,7 +7620,7 @@ name by default &#x27;default&#x27;</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>paint(options, color, alpha, colors, contour, randomColors, distinctColors, showLabels, labelColor, labelFont)</span>
+            <span class='code strong strong truncate'>paint(options, color, alpha, colors, contourMask, randomColors, distinctColors, showLabels, labelColor, labelFont)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -6192,7 +7631,7 @@ name by default &#x27;default&#x27;</p>
   <p>Paint the ROI on a copy of the image adn return this image.</p>
 
 
-  <div class='pre p1 fill-light mt0'>paint(options: Any, color: Any, alpha: Any, colors: Any, contour: Any, randomColors: Any, distinctColors: Any, showLabels: Any, labelColor: Any, labelFont: Any): (Any | null)</div>
+  <div class='pre p1 fill-light mt0'>paint(options: Any, color: Any, alpha: Any, colors: Any, contourMask: Any, randomColors: Any, distinctColors: Any, showLabels: Any, labelColor: Any, labelFont: Any): (Any | null)</div>
 
   
 
@@ -6242,7 +7681,7 @@ name by default &#x27;default&#x27;</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>contour</span> <code class='quiet'>(Any)</code> {boolean} true if display only the contour
+            <span class='code bold'>contourMask</span> <code class='quiet'>(Any)</code> {boolean} true if display only the contourMask
 
           </div>
           
@@ -6715,7 +8154,7 @@ for each pixels to which ROI it belongs</p>
       fromWaterShed
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/5a15c564e3aa59468bd943e905253cc51d2fc269/src/image/roi/creator/fromWaterShed.js#L18-L81'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/roi/creator/fromWaterShed.js#L18-L81'>
       <span>src/image/roi/creator/fromWaterShed.js</span>
       </a>
     
@@ -6853,7 +8292,7 @@ for each pixels to which ROI it belongs</p>
       ROI
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/5a15c564e3aa59468bd943e905253cc51d2fc269/src/image/roi/roi.js#L10-L307'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/roi/roi.js#L11-L363'>
       <span>src/image/roi/roi.js</span>
       </a>
     
@@ -6888,6 +8327,119 @@ for each pixels to which ROI it belongs</p>
   
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
+  
+    <div class='border-bottom' id='ROI#getMask'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getMask(scale, kind, $0)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>getMask(scale: Any, kind: Any, $0: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): Any</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>scale</span> <code class='quiet'>(Any)</code> Scaling factor to apply to the mask
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>kind</span> <code class='quiet'>(Any)</code> &#x27;contour&#x27;, &#x27;box&#x27;, &#x27;filled&#x27; or &#x27;&#x27; (default &#x27;&#x27;)
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            (default <code>{}</code>)
+            )</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.scale</span> <code class='quiet'>Any</code>
+                  
+                    (default <code>1</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.kind</span> <code class='quiet'>Any</code>
+                  
+                    (default <code>&#39;&#39;</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>Any</code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
   
     <div class='border-bottom' id='ROI#borderIDs'>
       <div class="clearfix small pointer toggle-sibling">
@@ -7188,11 +8740,11 @@ are calculated in the getBoxPixels procedure</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='ROI#contour'>
+    <div class='border-bottom' id='ROI#contourMask'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>contour</span>
+            <span class='code strong strong truncate'>contourMask</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -7200,10 +8752,10 @@ are calculated in the getBoxPixels procedure</p>
 
   
 
-  <p>Returns a binary image containing only the border of the mask</p>
+  <p>Returns a binary image (mask) containing only the border of the mask</p>
 
 
-  <div class='pre p1 fill-light mt0'>contour</div>
+  <div class='pre p1 fill-light mt0'>contourMask</div>
 
   
 
@@ -7337,11 +8889,59 @@ are calculated in the getBoxPixels procedure</p>
 
   
   <div class='clearfix'>
+    <h3 class='fl m0' id='boxmask'>
+      boxMask
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/roi/roi.js#L237-L237'>
+      <span>src/image/roi/roi.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Returns a binary image containing the mask</p>
+
+
+  <div class='pre p1 fill-light mt0'>boxMask</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
     <h3 class='fl m0' id='roimap'>
       ROIMap
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/5a15c564e3aa59468bd943e905253cc51d2fc269/src/image/roi/ROIMap.js#L7-L20'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/roi/ROIMap.js#L7-L20'>
       <span>src/image/roi/ROIMap.js</span>
       </a>
     
@@ -7390,7 +8990,7 @@ the region to which belongs each of the pixels</p>
       Stack
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/5a15c564e3aa59468bd943e905253cc51d2fc269/src/stack/stack.js#L14-L101'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/stack/stack.js#L14-L101'>
       <span>src/stack/stack.js</span>
       </a>
     

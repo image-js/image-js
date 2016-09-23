@@ -5,12 +5,19 @@ import {RGB, HSL} from '../model/model';
 import Image from '../image';
 
 /**
+ * Make a copy of the current image and convert the color model to HSL
+ * The source image has to be RGB !
  * @memberof Image
  * @instance
+  * @returns {Image} - New image in HSL color model
+ * @example
+ * var hslImage = image.hsl();
+ * // we can create one image per channel
+ * var channels = hslImage.split();
  */
 
-export default function hsv() {
-    this.checkProcessable('hsv', {
+export default function hsl() {
+    this.checkProcessable('hsl', {
         bitDepth: [8, 16],
         alpha: [0,1],
         colorModel: [RGB]

@@ -13,7 +13,7 @@ describe('check the medianFilter filter', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.medianFilter(1).data).should.eql(
+        Array.from(image.medianFilter().data).should.eql(
             [
                 2, 2, 3, 4, 4,
                 2, 2, 3, 4, 4,
@@ -36,7 +36,7 @@ describe('check the medianFilter filter', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.medianFilter(1).data).should.eql(
+        Array.from(image.medianFilter({radius:1}).data).should.eql(
             [
                 10, 10, 4, 5, 5,
                 10, 10, 4, 5, 5,

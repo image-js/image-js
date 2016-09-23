@@ -7,7 +7,8 @@ import Image from '../image';
  * @returns {Image}
  */
 
-export default function hypotenuse(otherImage, {bitDepth, channels} = {}) {
+export default function hypotenuse(otherImage, options = {}) {
+    let {bitDepth, channels} = options;
     this.checkProcessable('hypotenuse', {
         bitDepth: [8, 16, 32]
     });

@@ -19,7 +19,39 @@ let computedPropertyDescriptor = {
 };
 
 /**
- * Class representing an image
+ * Class representing an image.
+ * This class allows to manipulate easily images directly in the browser.
+ *
+ * This library is designed to deal with scientific images (8 or 16 bit depth) and will be able to open
+ * and process jpeg, png and uncompressed tiff images.
+ *
+ * An image is characterized by:
+ * * width and height
+ * * colorModel (RGB, HSL, CMYK, GREY, ...)
+ * * components: number of components, Grey scale images will have 1 component while RGB will have 3 and CMYK 4.
+ * * alpha: 0 or 1 depending if there is an alpha channel. The
+ *      alpha channel define the opacity of each pixel
+ * * channels: number of channels (components + alpha)
+ * * bitDepth : number of bits to define the intensity of a point.
+ *      The values may be 1 for a binary image (mask), 8 for a normal image (each
+ *      channel contains values between 0 and 255) and 16 for scientific images
+ *      (each channel contains values between 0 and 65535).
+ *      The png library and tiff library included in image-js allow to deal correctly with
+ *      8 and 16 bit depth images.
+ * * position : an array of 2 elements that allows to define a relative position
+ *      to a parent image. This will be used in a crop or in the management
+ *      of Region Of Interests (ROI) for exmaple
+ * * data : an array that contains all the points of the image.
+ *      Depending the bitDepth Uint8Array (1 bit), Uint8ClampedArray (8 bits),
+ *      Uint16Array (16 bits), Float32Array (32 bits)
+ *
+ * In an image we have pixels and points:
+ * * A pixel is an array that has as size the number of channels
+ * and that contains all the values that define a particular pixel of the image.
+ * * A point is an array of 2 elements that contains the x / y coordinate
+ * of a specific pixel of the image
+ *
+ *
  * @class Image
  * @param {number} [width=1]
  * @param {number} [height=1]
@@ -125,6 +157,14 @@ export default class Image {
      * @param {string} url - URL of the image (browser, can be a dataURL) or path (Node.js)
      * @param {object} [options]
      * @return {Promise} - Resolves with the Image
+     * @example
+     *  Image.load('http://xxxx').then(
+     *      function(image) {
+     *          console.log(image);
+     *          // we can display the histogram of the first channel
+     *          console.log(image.histograms[0]);
+     *      }
+     *  )
      */
     static load(url, options) {
         return loadURL(url, options);
@@ -238,12 +278,27 @@ export default class Image {
         return shift;
     }
 
+    /**
+     * Set the value of specific pixel channel
+     * @param {number} x - x coordinate (0 = left)
+     * @param {number} y - y coordinate (0 = top)
+     * @param {number} channel
+     * @param value - the new value of this pixel channel
+     * @returns {this}
+     */
     setValueXY(x, y, channel, value) {
         this.data[(y * this.width + x) * this.channels + channel] = value;
         this.computed = null;
         return this;
     }
 
+    /**
+     * Get the value of specific pixel channel
+     * @param {number} x - x coordinate (0 = left)
+     * @param {number} y - y coordinate (0 = top)
+     * @param {number} channel
+     * @returns {number} - the value of this pixel channel
+     */
     getValueXY(x, y, channel) {
         return this.data[(y * this.width + x) * this.channels + channel];
     }
@@ -326,6 +381,18 @@ export default class Image {
         return canvas;
     }
 
+    /**
+     * Retrieve the data of the current image as RGBA 8 bits
+     * The source image may be:
+     * * a mask (binary image)
+     * * a grey image (8 or 16 bits) with or without alpha channel
+     * * a color image (8 or 16 bits) with or without alpha channel in with RGB model
+     * @instance
+     * @returns {Uint8ClampedArray} - Array with the data
+     * @example
+     * var imageData = image.getRGBAData();
+     */
+
     getRGBAData() {
         this.checkProcessable('getRGBAData', {
             components: [1, 3],
@@ -371,11 +438,26 @@ export default class Image {
         return newData;
     }
 
+
+
     getROIManager(mask, options) {
         return new ROIManager(this, options);
     }
 
-    clone({copyData = true} = {}) {
+    /**
+     * Create a new image based on the current image.
+     * By default the method will copy the data
+     * @instance
+     * @param {object} options
+     * @param {boolean} [options.copyData=true] - Specify if we want also to clone
+     *          the data or only the image parameters (size, colorModel, ...)
+     * @returns {Image} - The source image clone
+     * @example
+     * var emptyImage = image.clone({copyData:false});
+     */
+
+    clone(options = {}) {
+        const {copyData = true} = options;
         return new Image(this, copyData);
     }
 

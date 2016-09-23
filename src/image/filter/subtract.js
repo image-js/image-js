@@ -7,7 +7,8 @@ import {checkNumberArray} from '../../util/value';
  * @returns {Image}
  */
 
-export default function subtract(value, {channels} = {}) {
+export default function subtract(value, options = {}) {
+    let {channels} = options;
     this.checkProcessable('subtract', {
         bitDepth: [8, 16]
     });

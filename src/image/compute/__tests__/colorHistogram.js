@@ -9,6 +9,10 @@ describe('calculate the colorHistogram', function () {
 
         histogram = image.getColorHistogram({useAlpha: true, nbSlots: 8});
         Array.from(histogram).should.eql([1, 0, 0, 0, 0, 0, 0, 1]);
+
+        (function () {
+            image.getColorHistogram({nbSlots: 3});
+        }).should.throw(/nbSlots must be a power of 8/);
     });
 
     it('check getColorHistogram method with transparency', function () {

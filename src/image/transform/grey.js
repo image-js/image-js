@@ -10,15 +10,28 @@ import {methods} from './greyAlgorithms';
  * * mergeAlpha : we will multiply each pixel of the image by the alpha
  * @memberof Image
  * @instance
- * @returns {Image} - Grey scale image
+ * @param {object} options
+ * @param {string} [options.algorithm='luma709'] - Algorithm to get the grey image
+ * @param {boolean} [options.keepAlpha=false] - If true the RGB values are treated
+ *          separately from the alpha channel and the method returns a GREYA image.
+ * @param {boolean} [options.mergeAlpha=true] - If true the alpha channel will be applied on each pixel.
+ *          This means that if for an 8bits RGBA image we have an alpha channel value of 0,
+ *          this grey scale value will always be 0 (black pixel)
+ * @param {boolean} [options.allowGrey=false] - By default only RGB images are allowed.
+ *          If true grey images are also allowed and will either return a copy or
+ *          apply the alpha channel depending the options
+ * @returns {Image} - Grey scale image (with or without alpha depending the options)
+ * @example
+ * var grey = image.grey();
  */
 
-export default function grey({
-    algorithm = 'luma709',
-    keepAlpha = false,
-    mergeAlpha = true,
-    allowGrey = false
-} = {}) {
+export default function grey(options = {}) {
+    let {
+        algorithm = 'luma709',
+        keepAlpha = false,
+        mergeAlpha = true,
+        allowGrey = false
+    } = options;
 
     let valid = {
         bitDepth: [8, 16],
