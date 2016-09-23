@@ -517,26 +517,6 @@
               
                 
                 <li><a
-                  href='#median'
-                  class="">
-                  median
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#mean'
-                  class="">
-                  mean
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#roimanager'
                   class=" toggle-sibling">
                   ROIManager
@@ -784,6 +764,26 @@
                 
                 </li>
               
+                
+                <li><a
+                  href='#median'
+                  class="">
+                  median
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#mean'
+                  class="">
+                  mean
+                  
+                </a>
+                
+                </li>
+              
             </ul>
           </div>
           <div class='mt1 h6 quiet'>
@@ -802,7 +802,7 @@
       Image
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/image.js#L61-L557'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/293a97fdeecc40c310d7cb4f5fc128a03ac2fda0/src/image/image.js#L61-L557'>
       <span>src/image/image.js</span>
       </a>
     
@@ -1768,7 +1768,7 @@ the data or only the image parameters (size, colorModel, ...)
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> emptyImage = image.clone({<span class="hljs-attr">copyData</span>:<span class="hljs-literal">false</span>});</pre>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> emptyImage = image.clone({copyData:<span class="hljs-literal">false</span>});</pre>
     
   
 
@@ -2059,7 +2059,9 @@ the data or only the image parameters (size, colorModel, ...)
 
   
 
-  
+  <p>Each pixel of the image becomes the median of the neightbour
+pixels.</p>
+
 
   <div class='pre p1 fill-light mt0'>median</div>
 
@@ -2077,23 +2079,58 @@ the data or only the image parameters (size, colorModel, ...)
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>radius</span> <code class='quiet'>(Any)</code> 
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {}))</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.channels</span> <code class='quiet'>[(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>])]</code>
+                  
+                    (default <code>undefined</code>)
+                  </td>
+                  <td class='break-word'><span>Specify which channels should be processed
+<pre><code> * undefined : we take all the channels but alpha
+ * number : this specific channel
+ * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
+ * [number] : array of channels as numbers
+ * [string] : array of channels as one letter string
+</code></pre>
+</span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>radius</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]
+            (default <code>1</code>)
+            )</code> distance of the square to take the mean of.
+
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>channels</span> <code class='quiet'>(Any)</code> 
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>border</span> <code class='quiet'>(Any
+            <span class='code bold'>border</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]
             (default <code>&#39;copy&#39;</code>)
-            )</code> 
+            )</code> algorithm that will be applied after to deal with borders
+
           </div>
           
         </div>
@@ -2209,54 +2246,10 @@ the data or only the image parameters (size, colorModel, ...)
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            <span class='code bold'>options</span> <code class='quiet'>(Any
             (default <code>{}</code>)
             )</code> 
           </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.radius</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>1</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.sigma</span> <code class='quiet'>Any</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.channels</span> <code class='quiet'>Any</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.border</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>&#39;copy&#39;</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
           
         </div>
       
@@ -2318,56 +2311,10 @@ the data or only the image parameters (size, colorModel, ...)
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            <span class='code bold'>options</span> <code class='quiet'>(Any
             (default <code>{}</code>)
             )</code> 
           </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.kernelX</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>GRADIENT_X</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.kernelY</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>GRADIENT_Y</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.border</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>&#39;copy&#39;</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.channels</span> <code class='quiet'>Any</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
           
         </div>
       
@@ -2461,28 +2408,26 @@ the data or only the image parameters (size, colorModel, ...)
 </span></td>
                 </tr>
               
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.min</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  
+                    (default <code>this.min</code>)
+                  </td>
+                  <td class='break-word'><span>minimal value after levelling
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.max</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  
+                    (default <code>this.max</code>)
+                  </td>
+                  <td class='break-word'><span>maximal value after levelling
+</span></td>
+                </tr>
+              
             </tbody>
           </table>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>min</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]
-            (default <code>0</code>)
-            )</code> minimal value after levelling
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>max</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]
-            (default <code>this.max</code>)
-            )</code> maximal value after levelling
-
-          </div>
           
         </div>
       
@@ -2552,32 +2497,10 @@ the data or only the image parameters (size, colorModel, ...)
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$1</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            <span class='code bold'>options</span> <code class='quiet'>(Any
             (default <code>{}</code>)
             )</code> 
           </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'>Any</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
           
         </div>
       
@@ -2647,32 +2570,10 @@ the data or only the image parameters (size, colorModel, ...)
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$1</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            <span class='code bold'>options</span> <code class='quiet'>(Any
             (default <code>{}</code>)
             )</code> 
           </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'>Any</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
           
         </div>
       
@@ -2741,38 +2642,10 @@ the data or only the image parameters (size, colorModel, ...)
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$1</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            <span class='code bold'>options</span> <code class='quiet'>(Any
             (default <code>{}</code>)
             )</code> 
           </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$1.bitDepth</span> <code class='quiet'>Any</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'>Any</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
           
         </div>
       
@@ -2841,32 +2714,10 @@ the data or only the image parameters (size, colorModel, ...)
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$1</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            <span class='code bold'>options</span> <code class='quiet'>(Any
             (default <code>{}</code>)
             )</code> 
           </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'>Any</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
           
         </div>
       
@@ -2935,32 +2786,10 @@ the data or only the image parameters (size, colorModel, ...)
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$1</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            <span class='code bold'>options</span> <code class='quiet'>(Any
             (default <code>{}</code>)
             )</code> 
           </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$1.channels</span> <code class='quiet'>Any</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
           
         </div>
       
@@ -3179,8 +3008,8 @@ the data or only the image parameters (size, colorModel, ...)
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> cropped = image.crop({
-  <span class="hljs-attr">x</span>:<span class="hljs-number">0</span>,
-  <span class="hljs-attr">y</span>:<span class="hljs-number">0</span>
+  x:<span class="hljs-number">0</span>,
+  y:<span class="hljs-number">0</span>
 });</pre>
     
   
@@ -4181,7 +4010,7 @@ Currently only conversion from 8 to 16 bits and 16 to 8 bits is allowed.</p>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> newImage = image.colorDepth({
-  <span class="hljs-attr">newColorDepth</span>:<span class="hljs-number">8</span>
+  newColorDepth:<span class="hljs-number">8</span>
 });</pre>
     
   
@@ -6933,7 +6762,7 @@ a relative position and this part of the original image will be extracted.</p>
       getChannel
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/utility/getChannel.js#L12-L44'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/293a97fdeecc40c310d7cb4f5fc128a03ac2fda0/src/image/utility/getChannel.js#L12-L44'>
       <span>src/image/utility/getChannel.js</span>
       </a>
     
@@ -7033,7 +6862,7 @@ a relative position and this part of the original image will be extracted.</p>
       combineChannels
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/utility/combineChannels.js#L12-L49'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/293a97fdeecc40c310d7cb4f5fc128a03ac2fda0/src/image/utility/combineChannels.js#L12-L49'>
       <span>src/image/utility/combineChannels.js</span>
       </a>
     
@@ -7137,7 +6966,7 @@ a relative position and this part of the original image will be extracted.</p>
       Shape
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/util/shape.js#L24-L95'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/293a97fdeecc40c310d7cb4f5fc128a03ac2fda0/src/util/shape.js#L24-L95'>
       <span>src/util/shape.js</span>
       </a>
     
@@ -7185,7 +7014,7 @@ a relative position and this part of the original image will be extracted.</p>
       getHistograms
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/compute/histogram.js#L46-L56'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/293a97fdeecc40c310d7cb4f5fc128a03ac2fda0/src/image/compute/histogram.js#L46-L56'>
       <span>src/image/compute/histogram.js</span>
       </a>
     
@@ -7274,144 +7103,10 @@ placed in the slot 0, 32 to 63 in slot 1, ...
     
       
       <pre class='p1 overflow-auto round fill-light'>image.getHistograms({
-         <span class="hljs-attr">maxSlots</span>: <span class="hljs-number">8</span>,
-         <span class="hljs-attr">useAlpha</span>: <span class="hljs-literal">false</span>
+         maxSlots: <span class="hljs-number">8</span>,
+         useAlpha: <span class="hljs-literal">false</span>
      });</pre>
     
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    <h3 class='fl m0' id='median'>
-      median
-    </h3>
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/util/histogram.js#L7-L31'>
-      <span>src/util/histogram.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Returns the median of an histogram</p>
-
-
-  <div class='pre p1 fill-light mt0'>median</div>
-
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>histogram</span> <code class='quiet'>(Any)</code> 
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>Any</code>:
-        
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    <h3 class='fl m0' id='mean'>
-      mean
-    </h3>
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/util/histogram.js#L38-L50'>
-      <span>src/util/histogram.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Retuns the mean of an histogram</p>
-
-
-  <div class='pre p1 fill-light mt0'>mean</div>
-
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>histogram</span> <code class='quiet'>(Any)</code> 
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>Any</code>:
-        
-      
-    
-  
-
-  
-
   
 
   
@@ -7432,7 +7127,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
       ROIManager
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/roi/manager.js#L19-L265'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/293a97fdeecc40c310d7cb4f5fc128a03ac2fda0/src/image/roi/manager.js#L19-L265'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -8154,7 +7849,7 @@ for each pixels to which ROI it belongs</p>
       fromWaterShed
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/roi/creator/fromWaterShed.js#L18-L81'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/293a97fdeecc40c310d7cb4f5fc128a03ac2fda0/src/image/roi/creator/fromWaterShed.js#L18-L81'>
       <span>src/image/roi/creator/fromWaterShed.js</span>
       </a>
     
@@ -8292,7 +7987,7 @@ for each pixels to which ROI it belongs</p>
       ROI
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/roi/roi.js#L11-L363'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/293a97fdeecc40c310d7cb4f5fc128a03ac2fda0/src/image/roi/roi.js#L11-L363'>
       <span>src/image/roi/roi.js</span>
       </a>
     
@@ -8893,7 +8588,7 @@ are calculated in the getBoxPixels procedure</p>
       boxMask
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/roi/roi.js#L237-L237'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/293a97fdeecc40c310d7cb4f5fc128a03ac2fda0/src/image/roi/roi.js#L237-L237'>
       <span>src/image/roi/roi.js</span>
       </a>
     
@@ -8941,7 +8636,7 @@ are calculated in the getBoxPixels procedure</p>
       ROIMap
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/image/roi/ROIMap.js#L7-L20'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/293a97fdeecc40c310d7cb4f5fc128a03ac2fda0/src/image/roi/ROIMap.js#L7-L20'>
       <span>src/image/roi/ROIMap.js</span>
       </a>
     
@@ -8990,7 +8685,7 @@ the region to which belongs each of the pixels</p>
       Stack
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/a73e52811e77c1bdf763e036343e7c83fa0a3efd/src/stack/stack.js#L14-L101'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/293a97fdeecc40c310d7cb4f5fc128a03ac2fda0/src/stack/stack.js#L14-L101'>
       <span>src/stack/stack.js</span>
       </a>
     
@@ -9426,6 +9121,140 @@ the region to which belongs each of the pixels</p>
     </div>
   
 </div>
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='median'>
+      median
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/293a97fdeecc40c310d7cb4f5fc128a03ac2fda0/src/util/histogram.js#L7-L31'>
+      <span>src/util/histogram.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Returns the median of an histogram</p>
+
+
+  <div class='pre p1 fill-light mt0'>median</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>histogram</span> <code class='quiet'>(Any)</code> 
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>Any</code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='mean'>
+      mean
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/293a97fdeecc40c310d7cb4f5fc128a03ac2fda0/src/util/histogram.js#L38-L50'>
+      <span>src/util/histogram.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Retuns the mean of an histogram</p>
+
+
+  <div class='pre p1 fill-light mt0'>mean</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>histogram</span> <code class='quiet'>(Any)</code> 
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>Any</code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
 
   
 
