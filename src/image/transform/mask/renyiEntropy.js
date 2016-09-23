@@ -108,7 +108,7 @@ export default function renyiEntropy(histogram, total) {
     /* End Maximum Entropy Thresholding */
 
     let t_stars = [threshold1, threshold2, threshold3];
-    t_stars.sort();
+    t_stars.sort((a,b) => a - b);
 
     let betas;
 

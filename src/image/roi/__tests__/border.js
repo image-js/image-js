@@ -19,9 +19,7 @@ describe('we check that each ROI is surrounded by the expected border', function
 
             let rois = roiManager.getROI();
 
-            rois.sort(function (a,b) {
-                return a.border - b.border;
-            });
+            rois.sort((a,b) => a.border - b.border);
 
             rois.should.be.an.instanceof(Array).and.lengthOf(4);
 
