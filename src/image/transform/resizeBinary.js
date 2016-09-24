@@ -23,7 +23,7 @@ export default function resizeBinary(scale = 0.5, options = {}) {
         kind: KindNames.BINARY,
         width: width,
         height: height,
-        position: [shiftX, shiftY],
+        position: [shiftX + this.position[0], shiftY + this.position[1]],
         parent: this
     });
 

@@ -467,7 +467,8 @@ export default class Image {
      * @param {string} [format='png']
      * @return {Promise} - Resolves when the file is fully written
      */
-    save(path, {format = 'png'} = {}) {
+    save(path, options = {}) {
+        const {format = 'png'} = options;
         return new Promise((resolve, reject) => {
             let out = createWriteStream(path);
             let canvas = this.getCanvas();
