@@ -1,6 +1,6 @@
 {
   "name": "image-js",
-  "version": "0.2.3",
+  "version": "0.5.0",
   "description": "Image processing and manipulation in JavaScript",
   "keywords": [
     "image",
