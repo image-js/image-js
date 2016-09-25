@@ -312,7 +312,7 @@ module.exports = {
   blobToArrayBuffer: blobToArrayBuffer
 };
 
-},{"blob":3,"native-or-lie":100}],3:[function(require,module,exports){
+},{"blob":3,"native-or-lie":107}],3:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -983,6 +983,295 @@ module.exports = function extend() {
 };
 
 },{}],20:[function(require,module,exports){
+'use strict';
+
+var defaultByteLength = 1024 * 8;
+var charArray = [];
+
+class IOBuffer {
+    constructor(data, options) {
+        options = options || {};
+        if (data === undefined) {
+            data = defaultByteLength;
+        }
+        if (typeof data === 'number') {
+            data = new ArrayBuffer(data);
+        }
+        var length = data.byteLength;
+        var offset = options.offset ? options.offset >>> 0 : 0;
+        if (data.buffer) {
+            length = data.byteLength - offset;
+            if (data.byteLength !== data.buffer.byteLength) {
+                // Node.js buffer from pool
+                data = data.buffer.slice(data.byteOffset + offset, data.byteOffset + data.byteLength);
+            } else if (offset) {
+                data = data.buffer.slice(offset);
+            } else {
+                data = data.buffer;
+            }
+        }
+        this.buffer = data;
+        this.length = length;
+        this.byteLength = length;
+        this.byteOffset = 0;
+        this.offset = 0;
+        this.littleEndian = true;
+        this._data = new DataView(this.buffer);
+        this._increment = length || defaultByteLength;
+        this._mark = 0;
+    }
+
+    available(byteLength) {
+        if (byteLength === undefined) byteLength = 1;
+        return this.offset + byteLength <= this.length;
+    }
+
+    isLittleEndian() {
+        return this.littleEndian;
+    }
+
+    setLittleEndian() {
+        this.littleEndian = true;
+    }
+
+    isBigEndian() {
+        return !this.littleEndian;
+    }
+
+    setBigEndian() {
+        this.littleEndian = false;
+    }
+
+    skip(n) {
+        if (n === undefined) n = 1;
+        this.offset += n;
+    }
+
+    seek(offset) {
+        this.offset = offset;
+    }
+
+    mark() {
+        this._mark = this.offset;
+    }
+
+    reset() {
+        this.offset = this._mark;
+    }
+
+    rewind() {
+        this.offset = 0;
+    }
+
+    ensureAvailable(byteLength) {
+        if (byteLength === undefined) byteLength = 1;
+        if (!this.available(byteLength)) {
+            var newIncrement = this._increment + this._increment;
+            this._increment = newIncrement;
+            var newLength = this.length + newIncrement;
+            var newArray = new Uint8Array(newLength);
+            newArray.set(new Uint8Array(this.buffer));
+            this.buffer = newArray.buffer;
+            this.length = newLength;
+            this._data = new DataView(this.buffer);
+        }
+    }
+
+    readBoolean() {
+        return this.readUint8() !== 0;
+    }
+
+    readInt8() {
+        return this._data.getInt8(this.offset++);
+    }
+
+    readUint8() {
+        return this._data.getUint8(this.offset++);
+    }
+
+    readByte() {
+        return this.readUint8();
+    }
+
+    readBytes(n) {
+        if (n === undefined) n = 1;
+        var bytes = new Uint8Array(n);
+        for (var i = 0; i < n; i++) {
+            bytes[i] = this.readByte();
+        }
+        return bytes;
+    }
+
+    readInt16() {
+        var value = this._data.getInt16(this.offset, this.littleEndian);
+        this.offset += 2;
+        return value;
+    }
+
+    readUint16() {
+        var value = this._data.getUint16(this.offset, this.littleEndian);
+        this.offset += 2;
+        return value;
+    }
+
+    readInt32() {
+        var value = this._data.getInt32(this.offset, this.littleEndian);
+        this.offset += 4;
+        return value;
+    }
+
+    readUint32() {
+        var value = this._data.getUint32(this.offset, this.littleEndian);
+        this.offset += 4;
+        return value;
+    }
+
+    readFloat32() {
+        var value = this._data.getFloat32(this.offset, this.littleEndian);
+        this.offset += 4;
+        return value;
+    }
+
+    readFloat64() {
+        var value = this._data.getFloat64(this.offset, this.littleEndian);
+        this.offset += 8;
+        return value;
+    }
+
+    readChar() {
+        return String.fromCharCode(this.readInt8());
+    }
+
+    readChars(n) {
+        if (n === undefined) n = 1;
+        charArray.length = n;
+        for (var i = 0; i < n; i++) {
+            charArray[i] = this.readChar();
+        }
+        return charArray.join('');
+    }
+
+    writeBoolean(bool) {
+        this.writeUint8(bool ? 0xff : 0x00);
+    }
+
+    writeInt8(value) {
+        this.ensureAvailable(1);
+        this._data.setInt8(this.offset++, value);
+    }
+
+    writeUint8(value) {
+        this.ensureAvailable(1);
+        this._data.setUint8(this.offset++, value);
+    }
+
+    writeByte(value) {
+        this.writeUint8(value);
+    }
+
+    writeBytes(bytes) {
+        this.ensureAvailable(bytes.length);
+        for (var i = 0; i < bytes.length; i++) {
+            this._data.setUint8(this.offset++, bytes[i]);
+        }
+    }
+
+    writeInt16(value) {
+        this.ensureAvailable(2);
+        this._data.setInt16(this.offset, value, this.littleEndian);
+        this.offset += 2;
+    }
+
+    writeUint16(value) {
+        this.ensureAvailable(2);
+        this._data.setUint16(this.offset, value, this.littleEndian);
+        this.offset += 2;
+    }
+
+    writeInt32(value) {
+        this.ensureAvailable(4);
+        this._data.setInt32(this.offset, value, this.littleEndian);
+        this.offset += 4;
+    }
+
+    writeUint32(value) {
+        this.ensureAvailable(4);
+        this._data.setUint32(this.offset, value, this.littleEndian);
+        this.offset += 4;
+    }
+
+    writeFloat32(value) {
+        this.ensureAvailable(4);
+        this._data.setFloat32(this.offset, value, this.littleEndian);
+        this.offset += 4;
+    }
+
+    writeFloat64(value) {
+        this.ensureAvailable(8);
+        this._data.setFloat64(this.offset, value, this.littleEndian);
+        this.offset += 8;
+    }
+
+    writeChar(str) {
+        this.writeUint8(str.charCodeAt(0));
+    }
+
+    writeChars(str) {
+        for (var i = 0; i < str.length; i++) {
+            this.writeUint8(str.charCodeAt(i));
+        }
+    }
+
+    toArray() {
+        return new Uint8Array(this.buffer, 0, this.offset);
+    }
+}
+
+module.exports = IOBuffer;
+
+},{}],21:[function(require,module,exports){
+'use strict';
+
+var IOBuffer = require('iobuffer');
+var tiff = require('tiff');
+
+function decode(data) {
+    var buffer = new IOBuffer(data);
+    var result = {};
+    buffer.setBigEndian();
+    var val = buffer.readUint16();
+    if (val !== 0xffd8) {
+        throw new Error('SOI marker not found. Not a valid JPEG file');
+    }
+    var next = buffer.readUint16();
+    if (next === 0xffe1) {
+        var length = buffer.readUint16();
+        var header = buffer.readBytes(6);
+        if (header[0] === 69 && // E
+        header[1] === 120 && // x
+        header[2] === 105 && // i
+        header[3] === 102 && // f
+        header[4] === 0 && header[5] === 0) {
+            //     buffer.skip(2);
+            var exif = tiff.decode(buffer, {
+                onlyFirst: true,
+                ignoreImageData: true,
+                offset: buffer.offset
+            });
+            result.exif = exif;
+        }
+    }
+    return result;
+}
+
+module.exports = decode;
+
+},{"iobuffer":20,"tiff":115}],22:[function(require,module,exports){
+'use strict';
+
+exports.decode = require('./decode');
+
+},{"./decode":21}],23:[function(require,module,exports){
 // Top level file is just a mixin of submodules & constants
 'use strict';
 
@@ -998,7 +1287,7 @@ assign(pako, deflate, inflate, constants);
 
 module.exports = pako;
 
-},{"./lib/deflate":21,"./lib/inflate":22,"./lib/utils/common":23,"./lib/zlib/constants":26}],21:[function(require,module,exports){
+},{"./lib/deflate":24,"./lib/inflate":25,"./lib/utils/common":26,"./lib/zlib/constants":29}],24:[function(require,module,exports){
 'use strict';
 
 var zlib_deflate = require('./zlib/deflate');
@@ -1386,7 +1675,7 @@ exports.deflate = deflate;
 exports.deflateRaw = deflateRaw;
 exports.gzip = gzip;
 
-},{"./utils/common":23,"./utils/strings":24,"./zlib/deflate":28,"./zlib/messages":33,"./zlib/zstream":35}],22:[function(require,module,exports){
+},{"./utils/common":26,"./utils/strings":27,"./zlib/deflate":31,"./zlib/messages":36,"./zlib/zstream":38}],25:[function(require,module,exports){
 'use strict';
 
 var zlib_inflate = require('./zlib/inflate');
@@ -1799,7 +2088,7 @@ exports.inflate = inflate;
 exports.inflateRaw = inflateRaw;
 exports.ungzip = inflate;
 
-},{"./utils/common":23,"./utils/strings":24,"./zlib/constants":26,"./zlib/gzheader":29,"./zlib/inflate":31,"./zlib/messages":33,"./zlib/zstream":35}],23:[function(require,module,exports){
+},{"./utils/common":26,"./utils/strings":27,"./zlib/constants":29,"./zlib/gzheader":32,"./zlib/inflate":34,"./zlib/messages":36,"./zlib/zstream":38}],26:[function(require,module,exports){
 'use strict';
 
 var TYPED_OK = typeof Uint8Array !== 'undefined' && typeof Uint16Array !== 'undefined' && typeof Int32Array !== 'undefined';
@@ -1902,7 +2191,7 @@ exports.setTyped = function (on) {
 
 exports.setTyped(TYPED_OK);
 
-},{}],24:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 // String encode/decode helpers
 'use strict';
 
@@ -2110,7 +2399,7 @@ exports.utf8border = function (buf, max) {
   return pos + _utf8len[buf[pos]] > max ? pos : max;
 };
 
-},{"./common":23}],25:[function(require,module,exports){
+},{"./common":26}],28:[function(require,module,exports){
 'use strict';
 
 // Note: adler32 takes 12% for level 0 and 2% for level 6.
@@ -2143,7 +2432,7 @@ function adler32(adler, buf, len, pos) {
 
 module.exports = adler32;
 
-},{}],26:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -2193,7 +2482,7 @@ module.exports = {
   //Z_NULL:                 null // Use -1 or null inline, depending on var type
 };
 
-},{}],27:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 // Note: we can't get significant speed boost here.
@@ -2236,7 +2525,7 @@ function crc32(crc, buf, len, pos) {
 
 module.exports = crc32;
 
-},{}],28:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -4036,7 +4325,7 @@ exports.deflatePrime = deflatePrime;
 exports.deflateTune = deflateTune;
 */
 
-},{"../utils/common":23,"./adler32":25,"./crc32":27,"./messages":33,"./trees":34}],29:[function(require,module,exports){
+},{"../utils/common":26,"./adler32":28,"./crc32":30,"./messages":36,"./trees":37}],32:[function(require,module,exports){
 'use strict';
 
 function GZheader() {
@@ -4077,7 +4366,7 @@ function GZheader() {
 
 module.exports = GZheader;
 
-},{}],30:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 'use strict';
 
 // See state defs from inflate.js
@@ -4409,7 +4698,7 @@ module.exports = function inflate_fast(strm, start) {
   return;
 };
 
-},{}],31:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -6035,7 +6324,7 @@ exports.inflateSyncPoint = inflateSyncPoint;
 exports.inflateUndermine = inflateUndermine;
 */
 
-},{"../utils/common":23,"./adler32":25,"./crc32":27,"./inffast":30,"./inftrees":32}],32:[function(require,module,exports){
+},{"../utils/common":26,"./adler32":28,"./crc32":30,"./inffast":33,"./inftrees":35}],35:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -6349,7 +6638,7 @@ module.exports = function inflate_table(type, lens, lens_index, codes, table, ta
   return 0;
 };
 
-},{"../utils/common":23}],33:[function(require,module,exports){
+},{"../utils/common":26}],36:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -6364,7 +6653,7 @@ module.exports = {
   '-6': 'incompatible version' /* Z_VERSION_ERROR (-6) */
 };
 
-},{}],34:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -7543,7 +7832,7 @@ exports._tr_flush_block = _tr_flush_block;
 exports._tr_tally = _tr_tally;
 exports._tr_align = _tr_align;
 
-},{"../utils/common":23}],35:[function(require,module,exports){
+},{"../utils/common":26}],38:[function(require,module,exports){
 'use strict';
 
 function ZStream() {
@@ -7573,7 +7862,7 @@ function ZStream() {
 
 module.exports = ZStream;
 
-},{}],36:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 'use strict';
 
 var IOBuffer = require('iobuffer');
@@ -7855,12 +8144,442 @@ function paethPredictor(a, b, c) {
     if (pa <= pb && pa <= pc) return a;else if (pb <= pc) return b;else return c;
 }
 
-},{"iobuffer":39,"pako":20}],37:[function(require,module,exports){
+},{"iobuffer":44,"pako":23}],40:[function(require,module,exports){
 'use strict';
 
 exports.PNGDecoder = require('./PNGDecoder');
 
-},{"./PNGDecoder":36}],38:[function(require,module,exports){
+},{"./PNGDecoder":39}],41:[function(require,module,exports){
+'use strict';
+
+module.exports = function (buf) {
+	if (!(buf && buf.length > 1)) {
+		return null;
+	}
+
+	if (buf[0] === 0xFF && buf[1] === 0xD8 && buf[2] === 0xFF) {
+		return {
+			ext: 'jpg',
+			mime: 'image/jpeg'
+		};
+	}
+
+	if (buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4E && buf[3] === 0x47) {
+		return {
+			ext: 'png',
+			mime: 'image/png'
+		};
+	}
+
+	if (buf[0] === 0x47 && buf[1] === 0x49 && buf[2] === 0x46) {
+		return {
+			ext: 'gif',
+			mime: 'image/gif'
+		};
+	}
+
+	if (buf[8] === 0x57 && buf[9] === 0x45 && buf[10] === 0x42 && buf[11] === 0x50) {
+		return {
+			ext: 'webp',
+			mime: 'image/webp'
+		};
+	}
+
+	// needs to be before `tif` check
+	if ((buf[0] === 0x49 && buf[1] === 0x49 && buf[2] === 0x2A && buf[3] === 0x0 || buf[0] === 0x4D && buf[1] === 0x4D && buf[2] === 0x0 && buf[3] === 0x2A) && buf[8] === 0x43 && buf[9] === 0x52) {
+		return {
+			ext: 'cr2',
+			mime: 'image/x-canon-cr2'
+		};
+	}
+
+	if (buf[0] === 0x49 && buf[1] === 0x49 && buf[2] === 0x2A && buf[3] === 0x0 || buf[0] === 0x4D && buf[1] === 0x4D && buf[2] === 0x0 && buf[3] === 0x2A) {
+		return {
+			ext: 'tif',
+			mime: 'image/tiff'
+		};
+	}
+
+	if (buf[0] === 0x42 && buf[1] === 0x4D) {
+		return {
+			ext: 'bmp',
+			mime: 'image/bmp'
+		};
+	}
+
+	if (buf[0] === 0x49 && buf[1] === 0x49 && buf[2] === 0xBC) {
+		return {
+			ext: 'jxr',
+			mime: 'image/vnd.ms-photo'
+		};
+	}
+
+	if (buf[0] === 0x38 && buf[1] === 0x42 && buf[2] === 0x50 && buf[3] === 0x53) {
+		return {
+			ext: 'psd',
+			mime: 'image/vnd.adobe.photoshop'
+		};
+	}
+
+	// needs to be before `zip` check
+	if (buf[0] === 0x50 && buf[1] === 0x4B && buf[2] === 0x3 && buf[3] === 0x4 && buf[30] === 0x6D && buf[31] === 0x69 && buf[32] === 0x6D && buf[33] === 0x65 && buf[34] === 0x74 && buf[35] === 0x79 && buf[36] === 0x70 && buf[37] === 0x65 && buf[38] === 0x61 && buf[39] === 0x70 && buf[40] === 0x70 && buf[41] === 0x6C && buf[42] === 0x69 && buf[43] === 0x63 && buf[44] === 0x61 && buf[45] === 0x74 && buf[46] === 0x69 && buf[47] === 0x6F && buf[48] === 0x6E && buf[49] === 0x2F && buf[50] === 0x65 && buf[51] === 0x70 && buf[52] === 0x75 && buf[53] === 0x62 && buf[54] === 0x2B && buf[55] === 0x7A && buf[56] === 0x69 && buf[57] === 0x70) {
+		return {
+			ext: 'epub',
+			mime: 'application/epub+zip'
+		};
+	}
+
+	// needs to be before `zip` check
+	// assumes signed .xpi from addons.mozilla.org
+	if (buf[0] === 0x50 && buf[1] === 0x4B && buf[2] === 0x3 && buf[3] === 0x4 && buf[30] === 0x4D && buf[31] === 0x45 && buf[32] === 0x54 && buf[33] === 0x41 && buf[34] === 0x2D && buf[35] === 0x49 && buf[36] === 0x4E && buf[37] === 0x46 && buf[38] === 0x2F && buf[39] === 0x6D && buf[40] === 0x6F && buf[41] === 0x7A && buf[42] === 0x69 && buf[43] === 0x6C && buf[44] === 0x6C && buf[45] === 0x61 && buf[46] === 0x2E && buf[47] === 0x72 && buf[48] === 0x73 && buf[49] === 0x61) {
+		return {
+			ext: 'xpi',
+			mime: 'application/x-xpinstall'
+		};
+	}
+
+	if (buf[0] === 0x50 && buf[1] === 0x4B && (buf[2] === 0x3 || buf[2] === 0x5 || buf[2] === 0x7) && (buf[3] === 0x4 || buf[3] === 0x6 || buf[3] === 0x8)) {
+		return {
+			ext: 'zip',
+			mime: 'application/zip'
+		};
+	}
+
+	if (buf[257] === 0x75 && buf[258] === 0x73 && buf[259] === 0x74 && buf[260] === 0x61 && buf[261] === 0x72) {
+		return {
+			ext: 'tar',
+			mime: 'application/x-tar'
+		};
+	}
+
+	if (buf[0] === 0x52 && buf[1] === 0x61 && buf[2] === 0x72 && buf[3] === 0x21 && buf[4] === 0x1A && buf[5] === 0x7 && (buf[6] === 0x0 || buf[6] === 0x1)) {
+		return {
+			ext: 'rar',
+			mime: 'application/x-rar-compressed'
+		};
+	}
+
+	if (buf[0] === 0x1F && buf[1] === 0x8B && buf[2] === 0x8) {
+		return {
+			ext: 'gz',
+			mime: 'application/gzip'
+		};
+	}
+
+	if (buf[0] === 0x42 && buf[1] === 0x5A && buf[2] === 0x68) {
+		return {
+			ext: 'bz2',
+			mime: 'application/x-bzip2'
+		};
+	}
+
+	if (buf[0] === 0x37 && buf[1] === 0x7A && buf[2] === 0xBC && buf[3] === 0xAF && buf[4] === 0x27 && buf[5] === 0x1C) {
+		return {
+			ext: '7z',
+			mime: 'application/x-7z-compressed'
+		};
+	}
+
+	if (buf[0] === 0x78 && buf[1] === 0x01) {
+		return {
+			ext: 'dmg',
+			mime: 'application/x-apple-diskimage'
+		};
+	}
+
+	if (buf[0] === 0x0 && buf[1] === 0x0 && buf[2] === 0x0 && (buf[3] === 0x18 || buf[3] === 0x20) && buf[4] === 0x66 && buf[5] === 0x74 && buf[6] === 0x79 && buf[7] === 0x70 || buf[0] === 0x33 && buf[1] === 0x67 && buf[2] === 0x70 && buf[3] === 0x35 || buf[0] === 0x0 && buf[1] === 0x0 && buf[2] === 0x0 && buf[3] === 0x1C && buf[4] === 0x66 && buf[5] === 0x74 && buf[6] === 0x79 && buf[7] === 0x70 && buf[8] === 0x6D && buf[9] === 0x70 && buf[10] === 0x34 && buf[11] === 0x32 && buf[16] === 0x6D && buf[17] === 0x70 && buf[18] === 0x34 && buf[19] === 0x31 && buf[20] === 0x6D && buf[21] === 0x70 && buf[22] === 0x34 && buf[23] === 0x32 && buf[24] === 0x69 && buf[25] === 0x73 && buf[26] === 0x6F && buf[27] === 0x6D || buf[0] === 0x0 && buf[1] === 0x0 && buf[2] === 0x0 && buf[3] === 0x1C && buf[4] === 0x66 && buf[5] === 0x74 && buf[6] === 0x79 && buf[7] === 0x70 && buf[8] === 0x69 && buf[9] === 0x73 && buf[10] === 0x6F && buf[11] === 0x6D || buf[0] === 0x0 && buf[1] === 0x0 && buf[2] === 0x0 && buf[3] === 0x1c && buf[4] === 0x66 && buf[5] === 0x74 && buf[6] === 0x79 && buf[7] === 0x70 && buf[8] === 0x6D && buf[9] === 0x70 && buf[10] === 0x34 && buf[11] === 0x32 && buf[12] === 0x0 && buf[13] === 0x0 && buf[14] === 0x0 && buf[15] === 0x0) {
+		return {
+			ext: 'mp4',
+			mime: 'video/mp4'
+		};
+	}
+
+	if (buf[0] === 0x0 && buf[1] === 0x0 && buf[2] === 0x0 && buf[3] === 0x1C && buf[4] === 0x66 && buf[5] === 0x74 && buf[6] === 0x79 && buf[7] === 0x70 && buf[8] === 0x4D && buf[9] === 0x34 && buf[10] === 0x56) {
+		return {
+			ext: 'm4v',
+			mime: 'video/x-m4v'
+		};
+	}
+
+	if (buf[0] === 0x4D && buf[1] === 0x54 && buf[2] === 0x68 && buf[3] === 0x64) {
+		return {
+			ext: 'mid',
+			mime: 'audio/midi'
+		};
+	}
+
+	// needs to be before the `webm` check
+	if (buf[31] === 0x6D && buf[32] === 0x61 && buf[33] === 0x74 && buf[34] === 0x72 && buf[35] === 0x6f && buf[36] === 0x73 && buf[37] === 0x6B && buf[38] === 0x61) {
+		return {
+			ext: 'mkv',
+			mime: 'video/x-matroska'
+		};
+	}
+
+	if (buf[0] === 0x1A && buf[1] === 0x45 && buf[2] === 0xDF && buf[3] === 0xA3) {
+		return {
+			ext: 'webm',
+			mime: 'video/webm'
+		};
+	}
+
+	if (buf[0] === 0x0 && buf[1] === 0x0 && buf[2] === 0x0 && buf[3] === 0x14 && buf[4] === 0x66 && buf[5] === 0x74 && buf[6] === 0x79 && buf[7] === 0x70) {
+		return {
+			ext: 'mov',
+			mime: 'video/quicktime'
+		};
+	}
+
+	if (buf[0] === 0x52 && buf[1] === 0x49 && buf[2] === 0x46 && buf[3] === 0x46 && buf[8] === 0x41 && buf[9] === 0x56 && buf[10] === 0x49) {
+		return {
+			ext: 'avi',
+			mime: 'video/x-msvideo'
+		};
+	}
+
+	if (buf[0] === 0x30 && buf[1] === 0x26 && buf[2] === 0xB2 && buf[3] === 0x75 && buf[4] === 0x8E && buf[5] === 0x66 && buf[6] === 0xCF && buf[7] === 0x11 && buf[8] === 0xA6 && buf[9] === 0xD9) {
+		return {
+			ext: 'wmv',
+			mime: 'video/x-ms-wmv'
+		};
+	}
+
+	if (buf[0] === 0x0 && buf[1] === 0x0 && buf[2] === 0x1 && buf[3].toString(16)[0] === 'b') {
+		return {
+			ext: 'mpg',
+			mime: 'video/mpeg'
+		};
+	}
+
+	if (buf[0] === 0x49 && buf[1] === 0x44 && buf[2] === 0x33 || buf[0] === 0xFF && buf[1] === 0xfb) {
+		return {
+			ext: 'mp3',
+			mime: 'audio/mpeg'
+		};
+	}
+
+	if (buf[4] === 0x66 && buf[5] === 0x74 && buf[6] === 0x79 && buf[7] === 0x70 && buf[8] === 0x4D && buf[9] === 0x34 && buf[10] === 0x41 || buf[0] === 0x4D && buf[1] === 0x34 && buf[2] === 0x41 && buf[3] === 0x20) {
+		return {
+			ext: 'm4a',
+			mime: 'audio/m4a'
+		};
+	}
+
+	// needs to be before `ogg` check
+	if (buf[28] === 0x4F && buf[29] === 0x70 && buf[30] === 0x75 && buf[31] === 0x73 && buf[32] === 0x48 && buf[33] === 0x65 && buf[34] === 0x61 && buf[35] === 0x64) {
+		return {
+			ext: 'opus',
+			mime: 'audio/opus'
+		};
+	}
+
+	if (buf[0] === 0x4F && buf[1] === 0x67 && buf[2] === 0x67 && buf[3] === 0x53) {
+		return {
+			ext: 'ogg',
+			mime: 'audio/ogg'
+		};
+	}
+
+	if (buf[0] === 0x66 && buf[1] === 0x4C && buf[2] === 0x61 && buf[3] === 0x43) {
+		return {
+			ext: 'flac',
+			mime: 'audio/x-flac'
+		};
+	}
+
+	if (buf[0] === 0x52 && buf[1] === 0x49 && buf[2] === 0x46 && buf[3] === 0x46 && buf[8] === 0x57 && buf[9] === 0x41 && buf[10] === 0x56 && buf[11] === 0x45) {
+		return {
+			ext: 'wav',
+			mime: 'audio/x-wav'
+		};
+	}
+
+	if (buf[0] === 0x23 && buf[1] === 0x21 && buf[2] === 0x41 && buf[3] === 0x4D && buf[4] === 0x52 && buf[5] === 0x0A) {
+		return {
+			ext: 'amr',
+			mime: 'audio/amr'
+		};
+	}
+
+	if (buf[0] === 0x25 && buf[1] === 0x50 && buf[2] === 0x44 && buf[3] === 0x46) {
+		return {
+			ext: 'pdf',
+			mime: 'application/pdf'
+		};
+	}
+
+	if (buf[0] === 0x4D && buf[1] === 0x5A) {
+		return {
+			ext: 'exe',
+			mime: 'application/x-msdownload'
+		};
+	}
+
+	if ((buf[0] === 0x43 || buf[0] === 0x46) && buf[1] === 0x57 && buf[2] === 0x53) {
+		return {
+			ext: 'swf',
+			mime: 'application/x-shockwave-flash'
+		};
+	}
+
+	if (buf[0] === 0x7B && buf[1] === 0x5C && buf[2] === 0x72 && buf[3] === 0x74 && buf[4] === 0x66) {
+		return {
+			ext: 'rtf',
+			mime: 'application/rtf'
+		};
+	}
+
+	if (buf[0] === 0x77 && buf[1] === 0x4F && buf[2] === 0x46 && buf[3] === 0x46 && (buf[4] === 0x00 && buf[5] === 0x01 && buf[6] === 0x00 && buf[7] === 0x00 || buf[4] === 0x4F && buf[5] === 0x54 && buf[6] === 0x54 && buf[7] === 0x4F)) {
+		return {
+			ext: 'woff',
+			mime: 'application/font-woff'
+		};
+	}
+
+	if (buf[0] === 0x77 && buf[1] === 0x4F && buf[2] === 0x46 && buf[3] === 0x32 && (buf[4] === 0x00 && buf[5] === 0x01 && buf[6] === 0x00 && buf[7] === 0x00 || buf[4] === 0x4F && buf[5] === 0x54 && buf[6] === 0x54 && buf[7] === 0x4F)) {
+		return {
+			ext: 'woff2',
+			mime: 'application/font-woff'
+		};
+	}
+
+	if (buf[34] === 0x4C && buf[35] === 0x50 && (buf[8] === 0x00 && buf[9] === 0x00 && buf[10] === 0x01 || buf[8] === 0x01 && buf[9] === 0x00 && buf[10] === 0x02 || buf[8] === 0x02 && buf[9] === 0x00 && buf[10] === 0x02)) {
+		return {
+			ext: 'eot',
+			mime: 'application/octet-stream'
+		};
+	}
+
+	if (buf[0] === 0x00 && buf[1] === 0x01 && buf[2] === 0x00 && buf[3] === 0x00 && buf[4] === 0x00) {
+		return {
+			ext: 'ttf',
+			mime: 'application/font-sfnt'
+		};
+	}
+
+	if (buf[0] === 0x4F && buf[1] === 0x54 && buf[2] === 0x54 && buf[3] === 0x4F && buf[4] === 0x00) {
+		return {
+			ext: 'otf',
+			mime: 'application/font-sfnt'
+		};
+	}
+
+	if (buf[0] === 0x00 && buf[1] === 0x00 && buf[2] === 0x01 && buf[3] === 0x00) {
+		return {
+			ext: 'ico',
+			mime: 'image/x-icon'
+		};
+	}
+
+	if (buf[0] === 0x46 && buf[1] === 0x4C && buf[2] === 0x56 && buf[3] === 0x01) {
+		return {
+			ext: 'flv',
+			mime: 'video/x-flv'
+		};
+	}
+
+	if (buf[0] === 0x25 && buf[1] === 0x21) {
+		return {
+			ext: 'ps',
+			mime: 'application/postscript'
+		};
+	}
+
+	if (buf[0] === 0xFD && buf[1] === 0x37 && buf[2] === 0x7A && buf[3] === 0x58 && buf[4] === 0x5A && buf[5] === 0x00) {
+		return {
+			ext: 'xz',
+			mime: 'application/x-xz'
+		};
+	}
+
+	if (buf[0] === 0x53 && buf[1] === 0x51 && buf[2] === 0x4C && buf[3] === 0x69) {
+		return {
+			ext: 'sqlite',
+			mime: 'application/x-sqlite3'
+		};
+	}
+
+	if (buf[0] === 0x4E && buf[1] === 0x45 && buf[2] === 0x53 && buf[3] === 0x1A) {
+		return {
+			ext: 'nes',
+			mime: 'application/x-nintendo-nes-rom'
+		};
+	}
+
+	if (buf[0] === 0x43 && buf[1] === 0x72 && buf[2] === 0x32 && buf[3] === 0x34) {
+		return {
+			ext: 'crx',
+			mime: 'application/x-google-chrome-extension'
+		};
+	}
+
+	if (buf[0] === 0x4D && buf[1] === 0x53 && buf[2] === 0x43 && buf[3] === 0x46 || buf[0] === 0x49 && buf[1] === 0x53 && buf[2] === 0x63 && buf[3] === 0x28) {
+		return {
+			ext: 'cab',
+			mime: 'application/vnd.ms-cab-compressed'
+		};
+	}
+
+	// needs to be before `ar` check
+	if (buf[0] === 0x21 && buf[1] === 0x3C && buf[2] === 0x61 && buf[3] === 0x72 && buf[4] === 0x63 && buf[5] === 0x68 && buf[6] === 0x3E && buf[7] === 0x0A && buf[8] === 0x64 && buf[9] === 0x65 && buf[10] === 0x62 && buf[11] === 0x69 && buf[12] === 0x61 && buf[13] === 0x6E && buf[14] === 0x2D && buf[15] === 0x62 && buf[16] === 0x69 && buf[17] === 0x6E && buf[18] === 0x61 && buf[19] === 0x72 && buf[20] === 0x79) {
+		return {
+			ext: 'deb',
+			mime: 'application/x-deb'
+		};
+	}
+
+	if (buf[0] === 0x21 && buf[1] === 0x3C && buf[2] === 0x61 && buf[3] === 0x72 && buf[4] === 0x63 && buf[5] === 0x68 && buf[6] === 0x3E) {
+		return {
+			ext: 'ar',
+			mime: 'application/x-unix-archive'
+		};
+	}
+
+	if (buf[0] === 0xED && buf[1] === 0xAB && buf[2] === 0xEE && buf[3] === 0xDB) {
+		return {
+			ext: 'rpm',
+			mime: 'application/x-rpm'
+		};
+	}
+
+	if (buf[0] === 0x1F && buf[1] === 0xA0 || buf[0] === 0x1F && buf[1] === 0x9D) {
+		return {
+			ext: 'Z',
+			mime: 'application/x-compress'
+		};
+	}
+
+	if (buf[0] === 0x4C && buf[1] === 0x5A && buf[2] === 0x49 && buf[3] === 0x50) {
+		return {
+			ext: 'lz',
+			mime: 'application/x-lzip'
+		};
+	}
+
+	if (buf[0] === 0xD0 && buf[1] === 0xCF && buf[2] === 0x11 && buf[3] === 0xE0 && buf[4] === 0xA1 && buf[5] === 0xB1 && buf[6] === 0x1A && buf[7] === 0xE1) {
+		return {
+			ext: 'msi',
+			mime: 'application/x-msi'
+		};
+	}
+
+	return null;
+};
+
+},{}],42:[function(require,module,exports){
+'use strict';
+
+var fileType = require('file-type');
+
+module.exports = function (buf) {
+	var imageExts = ['jpg', 'png', 'gif', 'webp', 'tif', 'bmp', 'jxr', 'psd'];
+
+	var ret = fileType(buf);
+
+	return imageExts.indexOf(ret && ret.ext) !== -1 ? ret : null;
+};
+
+},{"file-type":41}],43:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -7934,7 +8653,7 @@ function immediate(task) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],39:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 'use strict';
 
 var defaultByteLength = 1024 * 8;
@@ -8177,7 +8896,7 @@ class IOBuffer {
 
 module.exports = IOBuffer;
 
-},{}],40:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 'use strict';
 
 var toString = Object.prototype.toString;
@@ -8186,7 +8905,7 @@ module.exports = function isArrayType(value) {
     return toString.call(value).substr(-6, 5) === 'Array';
 };
 
-},{}],41:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 'use strict';
 
 var numberIsNan = require('number-is-nan');
@@ -8195,7 +8914,7 @@ module.exports = Number.isFinite || function (val) {
 	return !(typeof val !== 'number' || numberIsNan(val) || val === Infinity || val === -Infinity);
 };
 
-},{"number-is-nan":102}],42:[function(require,module,exports){
+},{"number-is-nan":109}],47:[function(require,module,exports){
 "use strict";
 
 // https://github.com/paulmillr/es6-shim
@@ -8205,7 +8924,7 @@ module.exports = Number.isInteger || function (val) {
   return typeof val === "number" && isFinite(val) && Math.floor(val) === val;
 };
 
-},{"is-finite":41}],43:[function(require,module,exports){
+},{"is-finite":46}],48:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -8622,7 +9341,7 @@ module.exports = Number.isInteger || function (val) {
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],44:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 'use strict';
 
 var immediate = require('immediate');
@@ -8877,7 +9596,7 @@ function race(iterable) {
   }
 }
 
-},{"immediate":38}],45:[function(require,module,exports){
+},{"immediate":43}],50:[function(require,module,exports){
 'use strict';
 
 var Stat = require('ml-stat').array;
@@ -9099,7 +9818,7 @@ module.exports = {
     scale: scale
 };
 
-},{"ml-stat":98}],46:[function(require,module,exports){
+},{"ml-stat":106}],51:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9351,7 +10070,7 @@ function integral(x0, x1, slope, intercept) {
 exports.getEquallySpacedData = getEquallySpacedData;
 exports.integral = integral;
 
-},{}],47:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 'use strict';
 
 module.exports = exports = require('./ArrayUtils');
@@ -9359,7 +10078,7 @@ exports.getEquallySpacedData = require('./getEquallySpaced').getEquallySpacedDat
 exports.SNV = require('./snv').SNV;
 exports.binarySearch = require('ml-binary-search');
 
-},{"./ArrayUtils":45,"./getEquallySpaced":46,"./snv":48,"ml-binary-search":49}],48:[function(require,module,exports){
+},{"./ArrayUtils":50,"./getEquallySpaced":51,"./snv":53,"ml-binary-search":54}],53:[function(require,module,exports){
 'use strict';
 
 exports.SNV = SNV;
@@ -9381,7 +10100,7 @@ function SNV(data) {
     return result;
 }
 
-},{"ml-stat":98}],49:[function(require,module,exports){
+},{"ml-stat":106}],54:[function(require,module,exports){
 "use strict";
 
 /**
@@ -9411,7 +10130,7 @@ function binarySearch(array, value) {
 
 module.exports = binarySearch;
 
-},{}],50:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 'use strict';
 
 /**
@@ -9495,7 +10214,7 @@ function DisjointSetNode(value) {
     this.rank = 0;
 }
 
-},{}],51:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 'use strict';
 
 function squaredEuclidean(p, q) {
@@ -9513,7 +10232,7 @@ function euclidean(p, q) {
 module.exports = euclidean;
 euclidean.squared = squaredEuclidean;
 
-},{}],52:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 'use strict';
 
 var FFT = require('./fftlib');
@@ -9821,7 +10540,7 @@ var FFTUtils = {
 
 module.exports = FFTUtils;
 
-},{"./fftlib":53}],53:[function(require,module,exports){
+},{"./fftlib":58}],58:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10066,13 +10785,13 @@ var FFT = function () {
   return FFT;
 }.call(undefined);
 
-},{}],54:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 'use strict';
 
 exports.FFTUtils = require("./FFTUtils");
 exports.FFT = require('./fftlib');
 
-},{"./FFTUtils":52,"./fftlib":53}],55:[function(require,module,exports){
+},{"./FFTUtils":57,"./fftlib":58}],60:[function(require,module,exports){
 'use strict';
 
 var squaredEuclidean = require('ml-distance-euclidean').squared;
@@ -10096,7 +10815,7 @@ class GaussianKernel {
 
 module.exports = GaussianKernel;
 
-},{"ml-distance-euclidean":51}],56:[function(require,module,exports){
+},{"ml-distance-euclidean":56}],61:[function(require,module,exports){
 'use strict';
 
 var defaultOptions = {
@@ -10125,7 +10844,7 @@ class PolynomialKernel {
 
 module.exports = PolynomialKernel;
 
-},{}],57:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 'use strict';
 
 var defaultOptions = {
@@ -10151,7 +10870,7 @@ class SigmoidKernel {
 
 module.exports = SigmoidKernel;
 
-},{}],58:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('ml-matrix');
@@ -10237,7 +10956,7 @@ class Kernel {
 
 module.exports = Kernel;
 
-},{"./kernels/anova-kernel":59,"./kernels/cauchy-kernel":60,"./kernels/exponential-kernel":61,"./kernels/histogram-intersection-kernel":62,"./kernels/laplacian-kernel":63,"./kernels/multiquadratic-kernel":64,"./kernels/rational-quadratic-kernel":65,"ml-kernel-gaussian":55,"ml-kernel-polynomial":56,"ml-kernel-sigmoid":57,"ml-matrix":75}],59:[function(require,module,exports){
+},{"./kernels/anova-kernel":64,"./kernels/cauchy-kernel":65,"./kernels/exponential-kernel":66,"./kernels/histogram-intersection-kernel":67,"./kernels/laplacian-kernel":68,"./kernels/multiquadratic-kernel":69,"./kernels/rational-quadratic-kernel":70,"ml-kernel-gaussian":60,"ml-kernel-polynomial":61,"ml-kernel-sigmoid":62,"ml-matrix":80}],64:[function(require,module,exports){
 'use strict';
 
 var defaultOptions = {
@@ -10264,7 +10983,7 @@ class ANOVAKernel {
 
 module.exports = ANOVAKernel;
 
-},{}],60:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 'use strict';
 
 var squaredEuclidean = require('ml-distance-euclidean').squared;
@@ -10286,7 +11005,7 @@ class CauchyKernel {
 
 module.exports = CauchyKernel;
 
-},{"ml-distance-euclidean":51}],61:[function(require,module,exports){
+},{"ml-distance-euclidean":56}],66:[function(require,module,exports){
 'use strict';
 
 var euclidean = require('ml-distance-euclidean');
@@ -10310,7 +11029,7 @@ class ExponentialKernel {
 
 module.exports = ExponentialKernel;
 
-},{"ml-distance-euclidean":51}],62:[function(require,module,exports){
+},{"ml-distance-euclidean":56}],67:[function(require,module,exports){
 'use strict';
 
 class HistogramIntersectionKernel {
@@ -10325,7 +11044,7 @@ class HistogramIntersectionKernel {
 
 module.exports = HistogramIntersectionKernel;
 
-},{}],63:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 'use strict';
 
 var euclidean = require('ml-distance-euclidean');
@@ -10348,7 +11067,7 @@ class LaplacianKernel {
 
 module.exports = LaplacianKernel;
 
-},{"ml-distance-euclidean":51}],64:[function(require,module,exports){
+},{"ml-distance-euclidean":56}],69:[function(require,module,exports){
 'use strict';
 
 var squaredEuclidean = require('ml-distance-euclidean').squared;
@@ -10370,7 +11089,7 @@ class MultiquadraticKernel {
 
 module.exports = MultiquadraticKernel;
 
-},{"ml-distance-euclidean":51}],65:[function(require,module,exports){
+},{"ml-distance-euclidean":56}],70:[function(require,module,exports){
 'use strict';
 
 var squaredEuclidean = require('ml-distance-euclidean').squared;
@@ -10393,7 +11112,7 @@ class RationalQuadraticKernel {
 
 module.exports = RationalQuadraticKernel;
 
-},{"ml-distance-euclidean":51}],66:[function(require,module,exports){
+},{"ml-distance-euclidean":56}],71:[function(require,module,exports){
 "use strict";
 'use strict;';
 /**
@@ -10551,7 +11270,7 @@ module.exports = {
     matrix2Array: matrix2Array
 };
 
-},{"ml-fft":54}],67:[function(require,module,exports){
+},{"ml-fft":59}],72:[function(require,module,exports){
 'use strict';
 
 module.exports = abstractMatrix;
@@ -12003,7 +12722,7 @@ function abstractMatrix(superCtor) {
     return Matrix;
 }
 
-},{"./util":78,"./views/column":80,"./views/flipColumn":81,"./views/flipRow":82,"./views/row":83,"./views/selection":84,"./views/sub":85,"./views/transpose":86,"ml-array-utils":47}],68:[function(require,module,exports){
+},{"./util":83,"./views/column":85,"./views/flipColumn":86,"./views/flipRow":87,"./views/row":88,"./views/selection":89,"./views/sub":90,"./views/transpose":91,"ml-array-utils":52}],73:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -12097,7 +12816,7 @@ CholeskyDecomposition.prototype = {
 
 module.exports = CholeskyDecomposition;
 
-},{"../matrix":76}],69:[function(require,module,exports){
+},{"../matrix":81}],74:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -12893,7 +13612,7 @@ function cdiv(xr, xi, yr, yi) {
 
 module.exports = EigenvalueDecomposition;
 
-},{"../matrix":76,"./util":73}],70:[function(require,module,exports){
+},{"../matrix":81,"./util":78}],75:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -13072,7 +13791,7 @@ LuDecomposition.prototype = {
 
 module.exports = LuDecomposition;
 
-},{"../matrix":76}],71:[function(require,module,exports){
+},{"../matrix":81}],76:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -13232,7 +13951,7 @@ QrDecomposition.prototype = {
 
 module.exports = QrDecomposition;
 
-},{"../matrix":76,"./util":73}],72:[function(require,module,exports){
+},{"../matrix":81,"./util":78}],77:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -13752,7 +14471,7 @@ SingularValueDecomposition.prototype = {
 
 module.exports = SingularValueDecomposition;
 
-},{"../matrix":76,"./util":73}],73:[function(require,module,exports){
+},{"../matrix":81,"./util":78}],78:[function(require,module,exports){
 'use strict';
 
 exports.hypotenuse = function hypotenuse(a, b) {
@@ -13767,7 +14486,7 @@ exports.hypotenuse = function hypotenuse(a, b) {
     return 0;
 };
 
-// For use in the decomposition names. With big matrices, access time is
+// For use in the decomposition algorithms. With big matrices, access time is
 // too long on elements from array subclass
 // todo check when it is fixed in v8
 // http://jsperf.com/access-and-write-array-subclass
@@ -13790,7 +14509,7 @@ exports.getFilled2DArray = function (rows, columns, value) {
     return array;
 };
 
-},{}],74:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('./matrix');
@@ -13837,13 +14556,13 @@ module.exports = {
     solve: solve
 };
 
-},{"./dc/cholesky":68,"./dc/evd":69,"./dc/lu":70,"./dc/qr":71,"./dc/svd":72,"./matrix":76}],75:[function(require,module,exports){
+},{"./dc/cholesky":73,"./dc/evd":74,"./dc/lu":75,"./dc/qr":76,"./dc/svd":77,"./matrix":81}],80:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./matrix');
 module.exports.Decompositions = module.exports.DC = require('./decompositions');
 
-},{"./decompositions":74,"./matrix":76}],76:[function(require,module,exports){
+},{"./decompositions":79,"./matrix":81}],81:[function(require,module,exports){
 'use strict';
 
 require('./symbol-species');
@@ -13982,14 +14701,14 @@ class Matrix extends abstractMatrix(Array) {
 module.exports = Matrix;
 Matrix.abstractMatrix = abstractMatrix;
 
-},{"./abstractMatrix":67,"./symbol-species":77,"./util":78}],77:[function(require,module,exports){
+},{"./abstractMatrix":72,"./symbol-species":82,"./util":83}],82:[function(require,module,exports){
 'use strict';
 
 if (!Symbol.species) {
     Symbol.species = Symbol.for('@@species');
 }
 
-},{}],78:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 'use strict';
 
 /**
@@ -14101,7 +14820,7 @@ exports.getRange = function getRange(from, to) {
     return arr;
 };
 
-},{}],79:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 'use strict';
 
 var abstractMatrix = require('../abstractMatrix');
@@ -14125,7 +14844,7 @@ class BaseView extends abstractMatrix() {
 
 module.exports = BaseView;
 
-},{"../abstractMatrix":67,"../matrix":76}],80:[function(require,module,exports){
+},{"../abstractMatrix":72,"../matrix":81}],85:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -14148,7 +14867,7 @@ class MatrixColumnView extends BaseView {
 
 module.exports = MatrixColumnView;
 
-},{"./base":79}],81:[function(require,module,exports){
+},{"./base":84}],86:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -14170,7 +14889,7 @@ class MatrixFlipColumnView extends BaseView {
 
 module.exports = MatrixFlipColumnView;
 
-},{"./base":79}],82:[function(require,module,exports){
+},{"./base":84}],87:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -14192,7 +14911,7 @@ class MatrixFlipRowView extends BaseView {
 
 module.exports = MatrixFlipRowView;
 
-},{"./base":79}],83:[function(require,module,exports){
+},{"./base":84}],88:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -14215,7 +14934,7 @@ class MatrixRowView extends BaseView {
 
 module.exports = MatrixRowView;
 
-},{"./base":79}],84:[function(require,module,exports){
+},{"./base":84}],89:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -14241,7 +14960,7 @@ class MatrixSelectionView extends BaseView {
 
 module.exports = MatrixSelectionView;
 
-},{"../util":78,"./base":79}],85:[function(require,module,exports){
+},{"../util":83,"./base":84}],90:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -14267,7 +14986,7 @@ class MatrixSubView extends BaseView {
 
 module.exports = MatrixSubView;
 
-},{"../util":78,"./base":79}],86:[function(require,module,exports){
+},{"../util":83,"./base":84}],91:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -14289,7 +15008,493 @@ class MatrixTransposeView extends BaseView {
 
 module.exports = MatrixTransposeView;
 
-},{"./base":79}],87:[function(require,module,exports){
+},{"./base":84}],92:[function(require,module,exports){
+'use strict';
+
+function compareNumbers(a, b) {
+    return a - b;
+}
+
+/**
+ * Computes the sum of the given values
+ * @param {Array} values
+ * @returns {number}
+ */
+exports.sum = function sum(values) {
+    var sum = 0;
+    for (var i = 0; i < values.length; i++) {
+        sum += values[i];
+    }
+    return sum;
+};
+
+/**
+ * Computes the maximum of the given values
+ * @param {Array} values
+ * @returns {number}
+ */
+exports.max = function max(values) {
+    var max = values[0];
+    var l = values.length;
+    for (var i = 1; i < l; i++) {
+        if (values[i] > max) max = values[i];
+    }
+    return max;
+};
+
+/**
+ * Computes the minimum of the given values
+ * @param {Array} values
+ * @returns {number}
+ */
+exports.min = function min(values) {
+    var min = values[0];
+    var l = values.length;
+    for (var i = 1; i < l; i++) {
+        if (values[i] < min) min = values[i];
+    }
+    return min;
+};
+
+/**
+ * Computes the min and max of the given values
+ * @param {Array} values
+ * @returns {{min: number, max: number}}
+ */
+exports.minMax = function minMax(values) {
+    var min = values[0];
+    var max = values[0];
+    var l = values.length;
+    for (var i = 1; i < l; i++) {
+        if (values[i] < min) min = values[i];
+        if (values[i] > max) max = values[i];
+    }
+    return {
+        min: min,
+        max: max
+    };
+};
+
+/**
+ * Computes the arithmetic mean of the given values
+ * @param {Array} values
+ * @returns {number}
+ */
+exports.arithmeticMean = function arithmeticMean(values) {
+    var sum = 0;
+    var l = values.length;
+    for (var i = 0; i < l; i++) {
+        sum += values[i];
+    }
+    return sum / l;
+};
+
+/**
+ * {@link arithmeticMean}
+ */
+exports.mean = exports.arithmeticMean;
+
+/**
+ * Computes the geometric mean of the given values
+ * @param {Array} values
+ * @returns {number}
+ */
+exports.geometricMean = function geometricMean(values) {
+    var mul = 1;
+    var l = values.length;
+    for (var i = 0; i < l; i++) {
+        mul *= values[i];
+    }
+    return Math.pow(mul, 1 / l);
+};
+
+/**
+ * Computes the mean of the log of the given values
+ * If the return value is exponentiated, it gives the same result as the
+ * geometric mean.
+ * @param {Array} values
+ * @returns {number}
+ */
+exports.logMean = function logMean(values) {
+    var lnsum = 0;
+    var l = values.length;
+    for (var i = 0; i < l; i++) {
+        lnsum += Math.log(values[i]);
+    }
+    return lnsum / l;
+};
+
+/**
+ * Computes the weighted grand mean for a list of means and sample sizes
+ * @param {Array} means - Mean values for each set of samples
+ * @param {Array} samples - Number of original values for each set of samples
+ * @returns {number}
+ */
+exports.grandMean = function grandMean(means, samples) {
+    var sum = 0;
+    var n = 0;
+    var l = means.length;
+    for (var i = 0; i < l; i++) {
+        sum += samples[i] * means[i];
+        n += samples[i];
+    }
+    return sum / n;
+};
+
+/**
+ * Computes the truncated mean of the given values using a given percentage
+ * @param {Array} values
+ * @param {number} percent - The percentage of values to keep (range: [0,1])
+ * @param {boolean} [alreadySorted=false]
+ * @returns {number}
+ */
+exports.truncatedMean = function truncatedMean(values, percent, alreadySorted) {
+    if (alreadySorted === undefined) alreadySorted = false;
+    if (!alreadySorted) {
+        values = [].concat(values).sort(compareNumbers);
+    }
+    var l = values.length;
+    var k = Math.floor(l * percent);
+    var sum = 0;
+    for (var i = k; i < l - k; i++) {
+        sum += values[i];
+    }
+    return sum / (l - 2 * k);
+};
+
+/**
+ * Computes the harmonic mean of the given values
+ * @param {Array} values
+ * @returns {number}
+ */
+exports.harmonicMean = function harmonicMean(values) {
+    var sum = 0;
+    var l = values.length;
+    for (var i = 0; i < l; i++) {
+        if (values[i] === 0) {
+            throw new RangeError('value at index ' + i + 'is zero');
+        }
+        sum += 1 / values[i];
+    }
+    return l / sum;
+};
+
+/**
+ * Computes the contraharmonic mean of the given values
+ * @param {Array} values
+ * @returns {number}
+ */
+exports.contraHarmonicMean = function contraHarmonicMean(values) {
+    var r1 = 0;
+    var r2 = 0;
+    var l = values.length;
+    for (var i = 0; i < l; i++) {
+        r1 += values[i] * values[i];
+        r2 += values[i];
+    }
+    if (r2 < 0) {
+        throw new RangeError('sum of values is negative');
+    }
+    return r1 / r2;
+};
+
+/**
+ * Computes the median of the given values
+ * @param {Array} values
+ * @param {boolean} [alreadySorted=false]
+ * @returns {number}
+ */
+exports.median = function median(values, alreadySorted) {
+    if (alreadySorted === undefined) alreadySorted = false;
+    if (!alreadySorted) {
+        values = [].concat(values).sort(compareNumbers);
+    }
+    var l = values.length;
+    var half = Math.floor(l / 2);
+    if (l % 2 === 0) {
+        return (values[half - 1] + values[half]) * 0.5;
+    } else {
+        return values[half];
+    }
+};
+
+/**
+ * Computes the variance of the given values
+ * @param {Array} values
+ * @param {boolean} [unbiased=true] - if true, divide by (n-1); if false, divide by n.
+ * @returns {number}
+ */
+exports.variance = function variance(values, unbiased) {
+    if (unbiased === undefined) unbiased = true;
+    var theMean = exports.mean(values);
+    var theVariance = 0;
+    var l = values.length;
+
+    for (var i = 0; i < l; i++) {
+        var x = values[i] - theMean;
+        theVariance += x * x;
+    }
+
+    if (unbiased) {
+        return theVariance / (l - 1);
+    } else {
+        return theVariance / l;
+    }
+};
+
+/**
+ * Computes the standard deviation of the given values
+ * @param {Array} values
+ * @param {boolean} [unbiased=true] - if true, divide by (n-1); if false, divide by n.
+ * @returns {number}
+ */
+exports.standardDeviation = function standardDeviation(values, unbiased) {
+    return Math.sqrt(exports.variance(values, unbiased));
+};
+
+exports.standardError = function standardError(values) {
+    return exports.standardDeviation(values) / Math.sqrt(values.length);
+};
+
+/**
+ * IEEE Transactions on biomedical engineering, vol. 52, no. 1, january 2005, p. 76-
+ * Calculate the standard deviation via the Median of the absolute deviation
+ *  The formula for the standard deviation only holds for Gaussian random variables.
+ * @returns {{mean: number, stdev: number}}
+ */
+exports.robustMeanAndStdev = function robustMeanAndStdev(y) {
+    var mean = 0,
+        stdev = 0;
+    var length = y.length,
+        i = 0;
+    for (i = 0; i < length; i++) {
+        mean += y[i];
+    }
+    mean /= length;
+    var averageDeviations = new Array(length);
+    for (i = 0; i < length; i++) {
+        averageDeviations[i] = Math.abs(y[i] - mean);
+    }averageDeviations.sort(compareNumbers);
+    if (length % 2 === 1) {
+        stdev = averageDeviations[(length - 1) / 2] / 0.6745;
+    } else {
+        stdev = 0.5 * (averageDeviations[length / 2] + averageDeviations[length / 2 - 1]) / 0.6745;
+    }
+
+    return {
+        mean: mean,
+        stdev: stdev
+    };
+};
+
+exports.quartiles = function quartiles(values, alreadySorted) {
+    if (typeof alreadySorted === 'undefined') alreadySorted = false;
+    if (!alreadySorted) {
+        values = [].concat(values).sort(compareNumbers);
+    }
+
+    var quart = values.length / 4;
+    var q1 = values[Math.ceil(quart) - 1];
+    var q2 = exports.median(values, true);
+    var q3 = values[Math.ceil(quart * 3) - 1];
+
+    return { q1: q1, q2: q2, q3: q3 };
+};
+
+exports.pooledStandardDeviation = function pooledStandardDeviation(samples, unbiased) {
+    return Math.sqrt(exports.pooledVariance(samples, unbiased));
+};
+
+exports.pooledVariance = function pooledVariance(samples, unbiased) {
+    if (typeof unbiased === 'undefined') unbiased = true;
+    var sum = 0;
+    var length = 0,
+        l = samples.length;
+    for (var i = 0; i < l; i++) {
+        var values = samples[i];
+        var vari = exports.variance(values);
+
+        sum += (values.length - 1) * vari;
+
+        if (unbiased) length += values.length - 1;else length += values.length;
+    }
+    return sum / length;
+};
+
+exports.mode = function mode(values) {
+    var l = values.length,
+        itemCount = new Array(l),
+        i;
+    for (i = 0; i < l; i++) {
+        itemCount[i] = 0;
+    }
+    var itemArray = new Array(l);
+    var count = 0;
+
+    for (i = 0; i < l; i++) {
+        var index = itemArray.indexOf(values[i]);
+        if (index >= 0) itemCount[index]++;else {
+            itemArray[count] = values[i];
+            itemCount[count] = 1;
+            count++;
+        }
+    }
+
+    var maxValue = 0,
+        maxIndex = 0;
+    for (i = 0; i < count; i++) {
+        if (itemCount[i] > maxValue) {
+            maxValue = itemCount[i];
+            maxIndex = i;
+        }
+    }
+
+    return itemArray[maxIndex];
+};
+
+exports.covariance = function covariance(vector1, vector2, unbiased) {
+    if (typeof unbiased === 'undefined') unbiased = true;
+    var mean1 = exports.mean(vector1);
+    var mean2 = exports.mean(vector2);
+
+    if (vector1.length !== vector2.length) throw 'Vectors do not have the same dimensions';
+
+    var cov = 0,
+        l = vector1.length;
+    for (var i = 0; i < l; i++) {
+        var x = vector1[i] - mean1;
+        var y = vector2[i] - mean2;
+        cov += x * y;
+    }
+
+    if (unbiased) return cov / (l - 1);else return cov / l;
+};
+
+exports.skewness = function skewness(values, unbiased) {
+    if (typeof unbiased === 'undefined') unbiased = true;
+    var theMean = exports.mean(values);
+
+    var s2 = 0,
+        s3 = 0,
+        l = values.length;
+    for (var i = 0; i < l; i++) {
+        var dev = values[i] - theMean;
+        s2 += dev * dev;
+        s3 += dev * dev * dev;
+    }
+    var m2 = s2 / l;
+    var m3 = s3 / l;
+
+    var g = m3 / Math.pow(m2, 3 / 2.0);
+    if (unbiased) {
+        var a = Math.sqrt(l * (l - 1));
+        var b = l - 2;
+        return a / b * g;
+    } else {
+        return g;
+    }
+};
+
+exports.kurtosis = function kurtosis(values, unbiased) {
+    if (typeof unbiased === 'undefined') unbiased = true;
+    var theMean = exports.mean(values);
+    var n = values.length,
+        s2 = 0,
+        s4 = 0;
+
+    for (var i = 0; i < n; i++) {
+        var dev = values[i] - theMean;
+        s2 += dev * dev;
+        s4 += dev * dev * dev * dev;
+    }
+    var m2 = s2 / n;
+    var m4 = s4 / n;
+
+    if (unbiased) {
+        var v = s2 / (n - 1);
+        var a = n * (n + 1) / ((n - 1) * (n - 2) * (n - 3));
+        var b = s4 / (v * v);
+        var c = (n - 1) * (n - 1) / ((n - 2) * (n - 3));
+
+        return a * b - 3 * c;
+    } else {
+        return m4 / (m2 * m2) - 3;
+    }
+};
+
+exports.entropy = function entropy(values, eps) {
+    if (typeof eps === 'undefined') eps = 0;
+    var sum = 0,
+        l = values.length;
+    for (var i = 0; i < l; i++) {
+        sum += values[i] * Math.log(values[i] + eps);
+    }return -sum;
+};
+
+exports.weightedMean = function weightedMean(values, weights) {
+    var sum = 0,
+        l = values.length;
+    for (var i = 0; i < l; i++) {
+        sum += values[i] * weights[i];
+    }return sum;
+};
+
+exports.weightedStandardDeviation = function weightedStandardDeviation(values, weights) {
+    return Math.sqrt(exports.weightedVariance(values, weights));
+};
+
+exports.weightedVariance = function weightedVariance(values, weights) {
+    var theMean = exports.weightedMean(values, weights);
+    var vari = 0,
+        l = values.length;
+    var a = 0,
+        b = 0;
+
+    for (var i = 0; i < l; i++) {
+        var z = values[i] - theMean;
+        var w = weights[i];
+
+        vari += w * (z * z);
+        b += w;
+        a += w * w;
+    }
+
+    return vari * (b / (b * b - a));
+};
+
+exports.center = function center(values, inPlace) {
+    if (typeof inPlace === 'undefined') inPlace = false;
+
+    var result = values;
+    if (!inPlace) result = [].concat(values);
+
+    var theMean = exports.mean(result),
+        l = result.length;
+    for (var i = 0; i < l; i++) {
+        result[i] -= theMean;
+    }
+};
+
+exports.standardize = function standardize(values, standardDev, inPlace) {
+    if (typeof standardDev === 'undefined') standardDev = exports.standardDeviation(values);
+    if (typeof inPlace === 'undefined') inPlace = false;
+    var l = values.length;
+    var result = inPlace ? values : new Array(l);
+    for (var i = 0; i < l; i++) {
+        result[i] = values[i] / standardDev;
+    }return result;
+};
+
+exports.cumulativeSum = function cumulativeSum(array) {
+    var l = array.length;
+    var result = new Array(l);
+    result[0] = array[0];
+    for (var i = 1; i < l; i++) {
+        result[i] = result[i - 1] + array[i];
+    }return result;
+};
+
+},{}],93:[function(require,module,exports){
 'use strict';
 
 exports.SimpleLinearRegression = exports.SLR = require('./regression/simple-linear-regression');
@@ -14303,8 +15508,9 @@ exports.KernelRidgeRegression = exports.KRR = require('./regression/kernel-ridge
 //exports.MultipleLinearRegression = exports.MLR = require('./regression/multiple-linear-regression');
 //exports.MultivariateLinearRegression = exports.MVLR = require('./regression/multivariate-linear-regression');
 exports.PolinomialFitting2D = require('./regression/poly-fit-regression2d');
+exports.TheilSenRegression = require('./regression/theil-sen-regression');
 
-},{"./regression/exp-regression":89,"./regression/kernel-ridge-regression":90,"./regression/poly-fit-regression2d":91,"./regression/polynomial-regression":92,"./regression/potential-regression":93,"./regression/power-regression":94,"./regression/simple-linear-regression":95}],88:[function(require,module,exports){
+},{"./regression/exp-regression":95,"./regression/kernel-ridge-regression":96,"./regression/poly-fit-regression2d":97,"./regression/polynomial-regression":98,"./regression/potential-regression":99,"./regression/power-regression":100,"./regression/simple-linear-regression":101,"./regression/theil-sen-regression":102}],94:[function(require,module,exports){
 'use strict';
 
 class BaseRegression {
@@ -14332,18 +15538,18 @@ class BaseRegression {
     }
 
     toString(precision) {
-        return "";
+        return '';
     }
 
     toLaTeX(precision) {
-        return "";
+        return '';
     }
 
     /**
      * Return the correlation coefficient of determination (r) and chi-square.
      * @param x
      * @param y
-     * @returns {number}
+     * @returns {object}
      */
     modelQuality(x, y) {
         var n = x.length;
@@ -14359,26 +15565,31 @@ class BaseRegression {
         var ySquared = 0;
         var xY = 0;
 
-        for (var i = 0; i < n; i++) {
-            xSum += y2[i];
-            ySum += y[i];
-            xSquared += y2[i] * y2[i];
-            ySquared += y[i] * y[i];
-            xY += y2[i] * y[i];
-            if (y[i] != 0) chi2 += (y[i] - y2[i]) * (y[i] - y2[i]) / y[i];
-            rmsd = (y[i] - y2[i]) * (y[i] - y2[i]);
+        for (var _i = 0; _i < n; _i++) {
+            xSum += y2[_i];
+            ySum += y[_i];
+            xSquared += y2[_i] * y2[_i];
+            ySquared += y[_i] * y[_i];
+            xY += y2[_i] * y[_i];
+            if (y[_i] !== 0) chi2 += (y[_i] - y2[_i]) * (y[_i] - y2[_i]) / y[_i];
+            rmsd = (y[_i] - y2[_i]) * (y[_i] - y2[_i]);
         }
 
         var r = (n * xY - xSum * ySum) / Math.sqrt((n * xSquared - xSum * xSum) * (n * ySquared - ySum * ySum));
 
-        return { r: r, r2: r * r, chi2: chi2, rmsd: rmsd * rmsd / n };
+        return {
+            r: r,
+            r2: r * r,
+            chi2: chi2,
+            rmsd: rmsd * rmsd / n
+        };
     }
 
 }
 
 module.exports = BaseRegression;
 
-},{}],89:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 'use strict';
 
 /*
@@ -14408,8 +15619,8 @@ class ExpRegression extends BaseRegression {
         var opt = options || {};
         if (x === true) {
             // reloading model
-            this.A = outputs.A;
-            this.C = outputs.C;
+            this.A = y.A;
+            this.C = y.C;
             if (y.quality) {
                 this.quality = y.quality;
             }
@@ -14445,24 +15656,24 @@ class ExpRegression extends BaseRegression {
     }
 
     toString(precision) {
-        return "y = " + maybeToPrecision(this.C, precision) + "*exp(" + maybeToPrecision(this.A, precision) + "*x)";
+        return 'y = ' + maybeToPrecision(this.C, precision) + '*exp(' + maybeToPrecision(this.A, precision) + '*x)';
     }
 
     toLaTeX(precision) {
-        if (this.A >= 0) return "y = " + maybeToPrecision(this.C, precision) + "e^{" + maybeToPrecision(this.A, precision) + "x}";else return "y = \\frac{" + maybeToPrecision(this.C, precision) + "}{e^{" + maybeToPrecision(-this.A, precision) + "x}}";
+        if (this.A >= 0) return 'y = ' + maybeToPrecision(this.C, precision) + 'e^{' + maybeToPrecision(this.A, precision) + 'x}';else return 'y = \\frac{' + maybeToPrecision(this.C, precision) + '}{e^{' + maybeToPrecision(-this.A, precision) + 'x}}';
     }
 
     static load(json) {
         if (json.name !== 'expRegression') {
             throw new TypeError('not a exp regression model');
         }
-        return new expRegression(true, json);
+        return new ExpRegression(true, json);
     }
 }
 
 module.exports = ExpRegression;
 
-},{"./base-regression":88,"./simple-linear-regression":95,"./util":96}],90:[function(require,module,exports){
+},{"./base-regression":94,"./simple-linear-regression":101,"./util":103}],96:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('ml-matrix');
@@ -14541,11 +15752,10 @@ class KernelRidgeRegression extends BaseRegression {
 
 module.exports = KernelRidgeRegression;
 
-},{"./base-regression":88,"ml-kernel":58,"ml-matrix":75}],91:[function(require,module,exports){
-"use strict";
+},{"./base-regression":94,"ml-kernel":63,"ml-matrix":80}],97:[function(require,module,exports){
+'use strict';
 
-var Matrix = require("ml-matrix");
-var isInteger = require("is-integer");
+var Matrix = require('ml-matrix');
 var SVD = Matrix.DC.SingularValueDecomposition;
 var BaseRegression = require('./base-regression');
 
@@ -14558,8 +15768,9 @@ class PolynomialFitRegression2D extends BaseRegression {
     /**
      * Constructor for the 2D polynomial fitting
      *
-     * @param reload - for load purposes
-     * @param model - for load purposes
+     * @param inputs
+     * @param outputs
+     * @param options
      * @constructor
      */
     constructor(inputs, outputs, options) {
@@ -14603,11 +15814,11 @@ class PolynomialFitRegression2D extends BaseRegression {
         if (!Matrix.isMatrix(X)) X = new Matrix(X);
         if (!Matrix.isMatrix(y)) y = Matrix.columnVector(y);
 
-        if (y.rows != X.rows) //Perhaps y is transpose
+        if (y.rows !== X.rows) //Perhaps y is transpose
             y = y.transpose();
 
-        if (X.columns !== 2) throw new RangeError("You give X with " + X.columns + " columns and it must be 2");
-        if (X.rows !== y.rows) throw new RangeError("X and y must have the same rows");
+        if (X.columns !== 2) throw new RangeError('You give X with ' + X.columns + ' columns and it must be 2');
+        if (X.rows !== y.rows) throw new RangeError('X and y must have the same rows');
 
         var examples = X.rows;
         var coefficients = (this.order + 2) * (this.order + 1) / 2;
@@ -14689,7 +15900,7 @@ class PolynomialFitRegression2D extends BaseRegression {
 
     toJSON() {
         var out = {
-            name: "polyfit2D",
+            name: 'polyfit2D',
             order: this.order,
             coefficients: this.coefficients
         };
@@ -14736,7 +15947,7 @@ function abs(i, j) {
     this[i][j] = Math.abs(this[i][j]);
 }
 
-},{"./base-regression":88,"is-integer":42,"ml-matrix":75}],92:[function(require,module,exports){
+},{"./base-regression":94,"ml-matrix":80}],98:[function(require,module,exports){
 'use strict';
 
 /**
@@ -14753,7 +15964,7 @@ function abs(i, j) {
 
 var maybeToPrecision = require('./util').maybeToPrecision;
 var BaseRegression = require('./base-regression');
-var Matrix = require("ml-matrix");
+var Matrix = require('ml-matrix');
 
 class PolynomialRegression extends BaseRegression {
     /**
@@ -14768,9 +15979,9 @@ class PolynomialRegression extends BaseRegression {
         var opt = options || {};
         if (x === true) {
             // reloading model
-            this.coefficients = outputs.coefficients;
-            this.powers = outputs.powers;
-            this.M = outputs.M;
+            this.coefficients = y.coefficients;
+            this.powers = y.powers;
+            this.M = y.M;
             if (y.quality) {
                 this.quality = y.quality;
             }
@@ -14779,12 +15990,14 @@ class PolynomialRegression extends BaseRegression {
             if (n !== y.length) {
                 throw new RangeError('input and output array have a different length');
             }
+
+            var powers = void 0;
             if (Array.isArray(M)) {
-                var powers = M;
+                powers = M;
                 M = powers.length;
             } else {
                 M++;
-                var powers = new Array(M);
+                powers = new Array(M);
                 for (k = 0; k < M; k++) {
                     powers[k] = k;
                 }
@@ -14794,7 +16007,7 @@ class PolynomialRegression extends BaseRegression {
             var k, i;
             for (k = 0; k < M; k++) {
                 for (i = 0; i < n; i++) {
-                    if (powers[k] == 0) F[i][k] = 1;else {
+                    if (powers[k] === 0) F[i][k] = 1;else {
                         F[i][k] = Math.pow(x[i], powers[k]);
                     }
                 }
@@ -14843,34 +16056,34 @@ class PolynomialRegression extends BaseRegression {
     }
 
     _toFormula(precision, isLaTeX) {
-        var sup = "^";
-        var closeSup = "";
-        var times = "*";
+        var sup = '^';
+        var closeSup = '';
+        var times = '*';
         if (isLaTeX) {
-            sup = "^{";
-            closeSup = "}";
-            times = "";
+            sup = '^{';
+            closeSup = '}';
+            times = '';
         }
 
-        var fn = "",
+        var fn = '',
             str;
         for (var k = 0; k < this.coefficients.length; k++) {
-            str = "";
-            if (this.coefficients[k] != 0) {
-                if (this.powers[k] == 0) str = maybeToPrecision(this.coefficients[k], precision);else {
-                    if (this.powers[k] == 1) str = maybeToPrecision(this.coefficients[k], precision) + times + "x";else {
-                        str = maybeToPrecision(this.coefficients[k], precision) + times + "x" + sup + this.powers[k] + closeSup;
+            str = '';
+            if (this.coefficients[k] !== 0) {
+                if (this.powers[k] === 0) str = maybeToPrecision(this.coefficients[k], precision);else {
+                    if (this.powers[k] === 1) str = maybeToPrecision(this.coefficients[k], precision) + times + 'x';else {
+                        str = maybeToPrecision(this.coefficients[k], precision) + times + 'x' + sup + this.powers[k] + closeSup;
                     }
                 }
-                if (this.coefficients[k] > 0) str = "+" + str;
+                if (this.coefficients[k] > 0) str = '+' + str;
             }
             fn = str + fn;
         }
-        if (fn.charAt(0) == '+') {
+        if (fn.charAt(0) === '+') {
             fn = fn.slice(1);
         }
 
-        return "y = " + fn;
+        return 'y = ' + fn;
     }
 
     static load(json) {
@@ -14883,7 +16096,7 @@ class PolynomialRegression extends BaseRegression {
 
 module.exports = PolynomialRegression;
 
-},{"./base-regression":88,"./util":96,"ml-matrix":75}],93:[function(require,module,exports){
+},{"./base-regression":94,"./util":103,"ml-matrix":80}],99:[function(require,module,exports){
 'use strict';
 
 /*
@@ -14899,6 +16112,7 @@ module.exports = PolynomialRegression;
 
 var maybeToPrecision = require('./util').maybeToPrecision;
 var PolynomialRegression = require('./polynomial-regression');
+var PowerRegression = require('./power-regression');
 var BaseRegression = require('./base-regression');
 
 class PotentialRegression extends BaseRegression {
@@ -14913,8 +16127,8 @@ class PotentialRegression extends BaseRegression {
         var opt = options || {};
         if (x === true) {
             // reloading model
-            this.A = outputs.A;
-            this.M = outputs.M;
+            this.A = y.A;
+            this.M = y.M;
             if (y.quality) {
                 this.quality = y.quality;
             }
@@ -14946,12 +16160,12 @@ class PotentialRegression extends BaseRegression {
     }
 
     toString(precision) {
-        return "y = " + maybeToPrecision(this.A, precision) + "*x^" + this.M;
+        return 'y = ' + maybeToPrecision(this.A, precision) + '*x^' + this.M;
     }
 
     toLaTeX(precision) {
 
-        if (this.M >= 0) return "y = " + maybeToPrecision(this.A, precision) + "x^{" + this.M + "}";else return "y = \\frac{" + maybeToPrecision(this.A, precision) + "}{x^{" + -this.M + "}}";
+        if (this.M >= 0) return 'y = ' + maybeToPrecision(this.A, precision) + 'x^{' + this.M + '}';else return 'y = \\frac{' + maybeToPrecision(this.A, precision) + '}{x^{' + -this.M + '}}';
     }
 
     static load(json) {
@@ -14964,7 +16178,7 @@ class PotentialRegression extends BaseRegression {
 
 module.exports = PotentialRegression;
 
-},{"./base-regression":88,"./polynomial-regression":92,"./util":96}],94:[function(require,module,exports){
+},{"./base-regression":94,"./polynomial-regression":98,"./power-regression":100,"./util":103}],100:[function(require,module,exports){
 'use strict';
 
 /**
@@ -14988,14 +16202,15 @@ class PowerRegression extends BaseRegression {
         var opt = options || {};
         if (x === true) {
             // reloading model
-            this.A = outputs.A;
-            this.B = outputs.B;
-            if (y.r) {
-                this.r = y.r;
-                this.r2 = y.r2;
+            this.A = y.A;
+            this.B = y.B;
+            this.quality = y.quality || {};
+            if (y.quality.r) {
+                this.quality.r = y.quality.r;
+                this.quality.r2 = y.quality.r2;
             }
-            if (y.chi2) {
-                this.chi2 = y.chi2;
+            if (y.quality.chi2) {
+                this.quality.chi2 = y.quality.chi2;
             }
         } else {
             var n = x.length;
@@ -15031,11 +16246,11 @@ class PowerRegression extends BaseRegression {
     }
 
     toString(precision) {
-        return "y = " + maybeToPrecision(this.A, precision) + "*x^" + maybeToPrecision(this.B, precision);
+        return 'y = ' + maybeToPrecision(this.A, precision) + '*x^' + maybeToPrecision(this.B, precision);
     }
 
     toLaTeX(precision) {
-        if (this.B >= 0) return "y = " + maybeToPrecision(this.A, precision) + "x^{" + maybeToPrecision(this.B, precision) + "}";else return "y = \\frac{" + maybeToPrecision(this.A, precision) + "}{x^{" + maybeToPrecision(-this.B, precision) + "}}";
+        if (this.B >= 0) return 'y = ' + maybeToPrecision(this.A, precision) + 'x^{' + maybeToPrecision(this.B, precision) + '}';else return 'y = \\frac{' + maybeToPrecision(this.A, precision) + '}{x^{' + maybeToPrecision(-this.B, precision) + '}}';
     }
 
     static load(json) {
@@ -15048,7 +16263,7 @@ class PowerRegression extends BaseRegression {
 
 module.exports = PowerRegression;
 
-},{"./base-regression":88,"./simple-linear-regression":95,"./util":96}],95:[function(require,module,exports){
+},{"./base-regression":94,"./simple-linear-regression":101,"./util":103}],101:[function(require,module,exports){
 'use strict';
 
 var maybeToPrecision = require('./util').maybeToPrecision;
@@ -15062,12 +16277,13 @@ class SimpleLinearRegression extends BaseRegression {
         if (x === true) {
             this.slope = y.slope;
             this.intercept = y.intercept;
-            if (y.r) {
-                this.r = y.r;
-                this.r2 = y.r2;
+            this.quality = y.quality || {};
+            if (y.quality.r) {
+                this.quality.r = y.quality.r;
+                this.quality.r2 = y.quality.r2;
             }
-            if (y.chi2) {
-                this.chi2 = y.chi2;
+            if (y.quality.chi2) {
+                this.quality.chi2 = y.quality.chi2;
             }
         } else {
             var n = x.length;
@@ -15103,7 +16319,7 @@ class SimpleLinearRegression extends BaseRegression {
 
     toJSON() {
         var out = {
-            name: "simpleLinearRegression",
+            name: 'simpleLinearRegression',
             slope: this.slope,
             intercept: this.intercept
         };
@@ -15139,7 +16355,7 @@ class SimpleLinearRegression extends BaseRegression {
     }
 
     toLaTeX(precision) {
-        return toString(precision);
+        return this.toString(precision);
     }
 
     static load(json) {
@@ -15152,14 +16368,135 @@ class SimpleLinearRegression extends BaseRegression {
 
 module.exports = SimpleLinearRegression;
 
-},{"./base-regression":88,"./util":96}],96:[function(require,module,exports){
+},{"./base-regression":94,"./util":103}],102:[function(require,module,exports){
+'use strict';
+
+var BaseRegression = require('./base-regression');
+var maybeToPrecision = require('./util').maybeToPrecision;
+var median = require('ml-stat/array').median;
+
+/**
+ * Theil–Sen estimator
+ *
+ * https://en.wikipedia.org/wiki/Theil%E2%80%93Sen_estimator
+ * @class
+ */
+class TheilSenRegression extends BaseRegression {
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @param options
+     * @constructor
+     */
+    constructor(x, y, options) {
+        options = options || {};
+        super();
+        if (x === true) {
+            // loads the model
+            this.slope = y.slope;
+            this.intercept = y.intercept;
+            this.quality = y.quality || {};
+            if (y.quality.r) {
+                this.quality.r = y.quality.r;
+                this.quality.r2 = y.quality.r2;
+            }
+            if (y.quality.chi2) {
+                this.quality.chi2 = y.quality.chi2;
+            }
+        } else {
+            // creates the model
+            var len = x.length;
+            if (len !== y.length) {
+                throw new RangeError('Input and output array have a different length');
+            }
+
+            var slopes = new Array(len * len);
+            var count = 0;
+            for (var i = 0; i < len; ++i) {
+                for (var j = i + 1; j < len; ++j) {
+                    if (x[i] !== x[j]) {
+                        slopes[count++] = (y[j] - y[i]) / (x[j] - x[i]);
+                    }
+                }
+            }
+            slopes.length = count;
+            var medianSlope = median(slopes);
+
+            var cuts = new Array(len);
+            for (var _i = 0; _i < len; ++_i) {
+                cuts[_i] = y[_i] - medianSlope * x[_i];
+            }
+
+            this.slope = medianSlope;
+            this.intercept = median(cuts);
+            this.coefficients = [this.intercept, this.slope];
+            if (options.computeQuality) {
+                this.quality = this.modelQuality(x, y);
+            }
+        }
+    }
+
+    toJSON() {
+        var out = {
+            name: 'TheilSenRegression',
+            slope: this.slope,
+            intercept: this.intercept
+        };
+        if (this.quality) {
+            out.quality = this.quality;
+        }
+
+        return out;
+    }
+
+    _predict(input) {
+        return this.slope * input + this.intercept;
+    }
+
+    computeX(input) {
+        return (input - this.intercept) / this.slope;
+    }
+
+    toString(precision) {
+        var result = 'y = ';
+        if (this.slope) {
+            var xFactor = maybeToPrecision(this.slope, precision);
+            result += (Math.abs(xFactor - 1) < 1e-5 ? '' : xFactor) + 'x';
+            if (this.intercept) {
+                var absIntercept = Math.abs(this.intercept);
+                var operator = absIntercept === this.intercept ? '+' : '-';
+                result += ' ' + operator + ' ' + maybeToPrecision(absIntercept, precision);
+            }
+        } else {
+            result += maybeToPrecision(this.intercept, precision);
+        }
+        return result;
+    }
+
+    toLaTeX(precision) {
+        return this.toString(precision);
+    }
+
+    static load(json) {
+        if (json.name !== 'TheilSenRegression') {
+            throw new TypeError('not a Theil-Sen model');
+        }
+        return new TheilSenRegression(true, json);
+    }
+}
+
+module.exports = TheilSenRegression;
+
+},{"./base-regression":94,"./util":103,"ml-stat/array":92}],103:[function(require,module,exports){
 'use strict';
 
 exports.maybeToPrecision = function maybeToPrecision(value, digits) {
     if (digits) return value.toPrecision(digits);else return value.toString();
 };
 
-},{}],97:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 'use strict';
 
 function compareNumbers(a, b) {
@@ -15642,13 +16979,7 @@ exports.cumulativeSum = function cumulativeSum(array) {
     }return result;
 };
 
-},{}],98:[function(require,module,exports){
-'use strict';
-
-exports.array = require('./array');
-exports.matrix = require('./matrix');
-
-},{"./array":97,"./matrix":99}],99:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 'use strict';
 
 var arrayStat = require('./array');
@@ -16295,12 +17626,18 @@ exports.weightedScatter = function weightedScatter(matrix, weights, means, facto
     return cov;
 };
 
-},{"./array":97}],100:[function(require,module,exports){
+},{"./array":104}],106:[function(require,module,exports){
+'use strict';
+
+exports.array = require('./array');
+exports.matrix = require('./matrix');
+
+},{"./array":104,"./matrix":105}],107:[function(require,module,exports){
 'use strict';
 
 module.exports = typeof Promise === 'function' ? Promise : require('lie');
 
-},{"lie":44}],101:[function(require,module,exports){
+},{"lie":49}],108:[function(require,module,exports){
 "use strict";
 
 module.exports = newArray;
@@ -16314,14 +17651,14 @@ function newArray(n, value) {
   return array;
 }
 
-},{}],102:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 'use strict';
 
 module.exports = Number.isNaN || function (x) {
 	return x !== x;
 };
 
-},{}],103:[function(require,module,exports){
+},{}],110:[function(require,module,exports){
 'use strict';
 
 module.exports = function (str, search, pos) {
@@ -16334,123 +17671,63 @@ module.exports = function (str, search, pos) {
 	return str.indexOf(search, pos) !== -1;
 };
 
-},{}],104:[function(require,module,exports){
+},{}],111:[function(require,module,exports){
+arguments[4][20][0].apply(exports,arguments)
+},{"dup":20}],112:[function(require,module,exports){
 'use strict';
 
-var dateTimeRegex = /^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+var TIFFDecoder = require('./tiffDecoder');
+
+module.exports = function decodeTIFF(data, options) {
+    var decoder = new TIFFDecoder(data, options);
+    return decoder.decode(options);
+};
+
+},{"./tiffDecoder":119}],113:[function(require,module,exports){
+'use strict';
+
+var tags = {
+    standard: require('./tags/standard'),
+    exif: require('./tags/exif'),
+    gps: require('./tags/gps')
+};
 
 class IFD {
-    constructor() {
+    constructor(kind) {
+        if (!kind) {
+            throw new Error('missing kind');
+        }
+        this.data = null;
         this.fields = new Map();
+        this.kind = kind;
+        this._map = null;
     }
 
-    // Custom fields
-    get size() {
-        return this.width * this.height;
-    }
-    get width() {
-        return this.imageWidth;
-    }
-    get height() {
-        return this.imageLength;
-    }
-    get components() {
-        return this.samplesPerPixel;
-    }
-    get date() {
-        var date = new Date();
-        var result = dateTimeRegex.exec(this.dateTime);
-        date.setFullYear(result[1], result[2] - 1, result[3]);
-        date.setHours(result[4], result[5], result[6]);
-        return date;
+    get(tag) {
+        if (typeof tag === 'number') {
+            return this.fields.get(tag);
+        } else if (typeof tag === 'string') {
+            return this.fields.get(tags[this.kind].tagsByName[tag]);
+        }
     }
 
-    // IFD fields
-    get newSubfileType() {
-        return this.fields.get(254);
-    }
-    get imageWidth() {
-        return this.fields.get(256);
-    }
-    get imageLength() {
-        return this.fields.get(257);
-    }
-    get bitsPerSample() {
-        return this.fields.get(258);
-    }
-    get compression() {
-        return this.fields.get(259) || 1;
-    }
-    get type() {
-        return this.fields.get(262);
-    }
-    get fillOrder() {
-        return this.fields.get(266) || 1;
-    }
-    get documentName() {
-        return this.fields.get(269);
-    }
-    get imageDescription() {
-        return this.fields.get(270);
-    }
-    get stripOffsets() {
-        return alwaysArray(this.fields.get(273));
-    }
-    get orientation() {
-        return this.fields.get(274);
-    }
-    get samplesPerPixel() {
-        return this.fields.get(277);
-    }
-    get rowsPerStrip() {
-        return this.fields.get(278);
-    }
-    get stripByteCounts() {
-        return alwaysArray(this.fields.get(279));
-    }
-    get minSampleValue() {
-        return this.fields.get(280) || 0;
-    }
-    get maxSampleValue() {
-        return this.fields.get(281) || Math.pow(2, this.bitsPerSample) - 1;
-    }
-    get xResolution() {
-        return this.fields.get(282);
-    }
-    get yResolution() {
-        return this.fields.get(283);
-    }
-    get planarConfiguration() {
-        return this.fields.get(284) || 1;
-    }
-    get resolutionUnit() {
-        return this.fields.get(296) || 2;
-    }
-    get dateTime() {
-        return this.fields.get(306);
-    }
-    get predictor() {
-        return this.fields.get(317) || 1;
-    }
-    get sampleFormat() {
-        return this.fields.get(339) || 1;
-    }
-    get sMinSampleValue() {
-        return this.fields.get(340) || this.minSampleValue;
-    }
-    get sMaxSampleValue() {
-        return this.fields.get(341) || this.maxSampleValue;
+    get map() {
+        if (!this._map) {
+            this._map = {};
+            var taglist = tags[this.kind].tagsById;
+            for (var key of this.fields.keys()) {
+                if (taglist[key]) {
+                    this._map[taglist[key]] = this.fields.get(key);
+                }
+            }
+        }
+        return this._map;
     }
 }
 
 module.exports = IFD;
 
-function alwaysArray(value) {
-    if (typeof value === 'number') return [value];
-    return value;
-}
-
-},{}],105:[function(require,module,exports){
+},{"./tags/exif":116,"./tags/gps":117,"./tags/standard":118}],114:[function(require,module,exports){
 'use strict';
 
 var types = new Map([[1, [1, readByte]], // BYTE
@@ -16523,11 +17800,11 @@ function readLong(decoder, count) {
 
 function readRational(decoder, count) {
     if (count === 1) {
-        return [decoder.readUint32(), decoder.readUint32()];
+        return decoder.readUint32() / decoder.readUint32();
     }
     var rationals = new Array(count);
     for (var i = 0; i < count; i++) {
-        rationals[i] = [decoder.readUint32(), decoder.readUint32()];
+        rationals[i] = decoder.readUint32() / decoder.readUint32();
     }
     return rationals;
 }
@@ -16561,11 +17838,11 @@ function readSLong(decoder, count) {
 
 function readSRational(decoder, count) {
     if (count === 1) {
-        return [decoder.readInt32(), decoder.readInt32()];
+        return decoder.readInt32() / decoder.readInt32();
     }
     var rationals = new Array(count);
     for (var i = 0; i < count; i++) {
-        rationals[i] = [decoder.readInt32(), decoder.readInt32()];
+        rationals[i] = decoder.readInt32() / decoder.readInt32();
     }
     return rationals;
 }
@@ -16588,41 +17865,361 @@ function readDouble(decoder, count) {
     return array;
 }
 
-},{}],106:[function(require,module,exports){
+},{}],115:[function(require,module,exports){
+arguments[4][22][0].apply(exports,arguments)
+},{"./decode":112,"dup":22}],116:[function(require,module,exports){
 'use strict';
 
-class TIFF {
-    constructor() {
-        this.ifd = [];
-    }
+var tagsById = {
+    0x829A: 'ExposureTime',
+    0x829D: 'FNumber',
+    0x8822: 'ExposureProgram',
+    0x8824: 'SpectralSensitivity',
+    0x8827: 'ISOSpeedRatings',
+    0x8828: 'OECF',
+    0x8830: 'SensitivityType',
+    0x8831: 'StandardOutputSensitivity',
+    0x8832: 'RecommendedExposureIndex',
+    0x8833: 'ISOSpeed',
+    0x8834: 'ISOSpeedLatitudeyyy',
+    0x8835: 'ISOSpeedLatitudezzz',
+    0x9000: 'ExifVersion',
+    0x9003: 'DateTimeOriginal',
+    0x9004: 'DateTimeDigitized',
+    0x9101: 'ComponentsConfiguration',
+    0x9102: 'CompressedBitsPerPixel',
+    0x9201: 'ShutterSpeedValue',
+    0x9202: 'ApertureValue',
+    0x9203: 'BrightnessValue',
+    0x9204: 'ExposureBiasValue',
+    0x9205: 'MaxApertureValue',
+    0x9206: 'SubjectDistance',
+    0x9207: 'MeteringMode',
+    0x9208: 'LightSource',
+    0x9209: 'Flash',
+    0x920A: 'FocalLength',
+    0x9214: 'SubjectArea',
+    0x927C: 'MakerNote',
+    0x9286: 'UserComment',
+    0x9290: 'SubsecTime',
+    0x9291: 'SubsecTimeOriginal',
+    0x9292: 'SubsecTimeDigitized',
+    0xA000: 'FlashpixVersion',
+    0xA001: 'ColorSpace',
+    0xA002: 'PixelXDimension',
+    0xA003: 'PixelYDimension',
+    0xA004: 'RelatedSoundFile',
+    0xA20B: 'FlashEnergy',
+    0xA20C: 'SpatialFrequencyResponse',
+    0xA20E: 'FocalPlaneXResolution',
+    0xA20F: 'FocalPlaneYResolution',
+    0xA210: 'FocalPlaneResolutionUnit',
+    0xA214: 'SubjectLocation',
+    0xA215: 'ExposureIndex',
+    0xA217: 'SensingMethod',
+    0xA300: 'FileSource',
+    0xA301: 'SceneType',
+    0xA302: 'CFAPattern',
+    0xA401: 'CustomRendered',
+    0xA402: 'ExposureMode',
+    0xA403: 'WhiteBalance',
+    0xA404: 'DigitalZoomRatio',
+    0xA405: 'FocalLengthIn35mmFilm',
+    0xA406: 'SceneCaptureType',
+    0xA407: 'GainControl',
+    0xA408: 'Contrast',
+    0xA409: 'Saturation',
+    0xA40A: 'Sharpness',
+    0xA40B: 'DeviceSettingDescription',
+    0xA40C: 'SubjectDistanceRange',
+    0xA420: 'ImageUniqueID',
+    0xA430: 'CameraOwnerName',
+    0xA431: 'BodySerialNumber',
+    0xA432: 'LensSpecification',
+    0xA433: 'LensMake',
+    0xA434: 'LensModel',
+    0xA435: 'LensSerialNumber',
+    0xA500: 'Gamma'
+};
+
+var tagsByName = {};
+for (var i in tagsById) {
+    tagsByName[tagsById[i]] = i;
 }
 
-module.exports = TIFF;
+module.exports = {
+    tagsById: tagsById,
+    tagsByName: tagsByName
+};
 
-},{}],107:[function(require,module,exports){
+},{}],117:[function(require,module,exports){
+'use strict';
+
+var tagsById = {
+    0x0000: 'GPSVersionID',
+    0x0001: 'GPSLatitudeRef',
+    0x0002: 'GPSLatitude',
+    0x0003: 'GPSLongitudeRef',
+    0x0004: 'GPSLongitude',
+    0x0005: 'GPSAltitudeRef',
+    0x0006: 'GPSAltitude',
+    0x0007: 'GPSTimeStamp',
+    0x0008: 'GPSSatellites',
+    0x0009: 'GPSStatus',
+    0x000A: 'GPSMeasureMode',
+    0x000B: 'GPSDOP',
+    0x000C: 'GPSSpeedRef',
+    0x000D: 'GPSSpeed',
+    0x000E: 'GPSTrackRef',
+    0x000F: 'GPSTrack',
+    0x0010: 'GPSImgDirectionRef',
+    0x0011: 'GPSImgDirection',
+    0x0012: 'GPSMapDatum',
+    0x0013: 'GPSDestLatitudeRef',
+    0x0014: 'GPSDestLatitude',
+    0x0015: 'GPSDestLongitudeRef',
+    0x0016: 'GPSDestLongitude',
+    0x0017: 'GPSDestBearingRef',
+    0x0018: 'GPSDestBearing',
+    0x0019: 'GPSDestDistanceRef',
+    0x001A: 'GPSDestDistance',
+    0x001B: 'GPSProcessingMethod',
+    0x001C: 'GPSAreaInformation',
+    0x001D: 'GPSDateStamp',
+    0x001E: 'GPSDifferential',
+    0x001F: 'GPSHPositioningError'
+};
+
+var tagsByName = {};
+for (var i in tagsById) {
+    tagsByName[tagsById[i]] = i;
+}
+
+module.exports = {
+    tagsById: tagsById,
+    tagsByName: tagsByName
+};
+
+},{}],118:[function(require,module,exports){
+'use strict';
+
+var tagsById = {
+    // Baseline tags
+    0x00FE: 'NewSubfileType',
+    0x00FF: 'SubfileType',
+    0x0100: 'ImageWidth',
+    0x0101: 'ImageLength',
+    0x0102: 'BitsPerSample',
+    0x0103: 'Compression',
+    0x0106: 'PhotometricInterpretation',
+    0x0107: 'Threshholding',
+    0x0108: 'CellWidth',
+    0x0109: 'CellLength',
+    0x010A: 'FillOrder',
+    0x010E: 'ImageDescription',
+    0x010F: 'Make',
+    0x0110: 'Model',
+    0x0111: 'StripOffsets',
+    0x0112: 'Orientation',
+    0x0115: 'SamplesPerPixel',
+    0x0116: 'RowsPerStrip',
+    0x0117: 'StripByteCounts',
+    0x0118: 'MinSampleValue',
+    0x0119: 'MaxSampleValue',
+    0x011A: 'XResolution',
+    0x011B: 'YResolution',
+    0x011C: 'PlanarConfiguration',
+    0x0120: 'FreeOffsets',
+    0x0121: 'FreeByteCounts',
+    0x0122: 'GrayResponseUnit',
+    0x0123: 'GrayResponseCurve',
+    0x0128: 'ResolutionUnit',
+    0x0131: 'Software',
+    0x0132: 'DateTime',
+    0x013B: 'Artist',
+    0x013C: 'HostComputer',
+    0x0140: 'ColorMap',
+    0x0152: 'ExtraSamples',
+    0x8298: 'Copyright',
+
+    // Extension tags
+    0x010D: 'DocumentName',
+    0x011D: 'PageName',
+    0x011E: 'XPosition',
+    0x011F: 'YPosition',
+    0x0124: 'T4Options',
+    0x0125: 'T6Options',
+    0x0129: 'PageNumber',
+    0x012D: 'TransferFunction',
+    0x013D: 'Predictor',
+    0x013E: 'WhitePoint',
+    0x013F: 'PrimaryChromaticities',
+    0x0141: 'HalftoneHints',
+    0x0142: 'TileWidth',
+    0x0143: 'TileLength',
+    0x0144: 'TileOffsets',
+    0x0145: 'TileByteCounts',
+    0x0146: 'BadFaxLines',
+    0x0147: 'CleanFaxData',
+    0x0148: 'ConsecutiveBadFaxLines',
+    0x014A: 'SubIFDs',
+    0x014C: 'InkSet',
+    0x014D: 'InkNames',
+    0x014E: 'NumberOfInks',
+    0x0150: 'DotRange',
+    0x0151: 'TargetPrinter',
+    0x0153: 'SampleFormat',
+    0x0154: 'SMinSampleValue',
+    0x0155: 'SMaxSampleValue',
+    0x0156: 'TransferRange',
+    0x0157: 'ClipPath',
+    0x0158: 'XClipPathUnits',
+    0x0159: 'YClipPathUnits',
+    0x015A: 'Indexed',
+    0x015B: 'JPEGTables',
+    0x015F: 'OPIProxy',
+    0x0190: 'GlobalParametersIFD',
+    0x0191: 'ProfileType',
+    0x0192: 'FaxProfile',
+    0x0193: 'CodingMethods',
+    0x0194: 'VersionYear',
+    0x0195: 'ModeNumber',
+    0x01B1: 'Decode',
+    0x01B2: 'DefaultImageColor',
+    0x0200: 'JPEGProc',
+    0x0201: 'JPEGInterchangeFormat',
+    0x0202: 'JPEGInterchangeFormatLength',
+    0x0203: 'JPEGRestartInterval',
+    0x0205: 'JPEGLosslessPredictors',
+    0x0206: 'JPEGPointTransforms',
+    0x0207: 'JPEGQTables',
+    0x0208: 'JPEGDCTables',
+    0x0209: 'JPEGACTables',
+    0x0211: 'YCbCrCoefficients',
+    0x0212: 'YCbCrSubSampling',
+    0x0213: 'YCbCrPositioning',
+    0x0214: 'ReferenceBlackWhite',
+    0x022F: 'StripRowCounts',
+    0x02BC: 'XMP',
+    0x800D: 'ImageID',
+    0x87AC: 'ImageLayer',
+
+    // Private tags
+    0x80A4: 'WangAnnotatio',
+    0x82A5: 'MDFileTag',
+    0x82A6: 'MDScalePixel',
+    0x82A7: 'MDColorTable',
+    0x82A8: 'MDLabName',
+    0x82A9: 'MDSampleInfo',
+    0x82AA: 'MDPrepDate',
+    0x82AB: 'MDPrepTime',
+    0x82AC: 'MDFileUnits',
+    0x830E: 'ModelPixelScaleTag',
+    0x83BB: 'IPTC',
+    0x847E: 'INGRPacketDataTag',
+    0x847F: 'INGRFlagRegisters',
+    0x8480: 'IrasBTransformationMatrix',
+    0x8482: 'ModelTiepointTag',
+    0x85D8: 'ModelTransformationTag',
+    0x8649: 'Photoshop',
+    0x8769: 'ExifIFD',
+    0x8773: 'ICCProfile',
+    0x87AF: 'GeoKeyDirectoryTag',
+    0x87B0: 'GeoDoubleParamsTag',
+    0x87B1: 'GeoAsciiParamsTag',
+    0x8825: 'GPSIFD',
+    0x885C: 'HylaFAXFaxRecvParams',
+    0x885D: 'HylaFAXFaxSubAddress',
+    0x885E: 'HylaFAXFaxRecvTime',
+    0x935C: 'ImageSourceData',
+    0xA005: 'InteroperabilityIFD',
+    0xA480: 'GDAL_METADATA',
+    0xA481: 'GDAL_NODATA',
+    0xC427: 'OceScanjobDescription',
+    0xC428: 'OceApplicationSelector',
+    0xC429: 'OceIdentificationNumber',
+    0xC42A: 'OceImageLogicCharacteristics',
+    0xC612: 'DNGVersion',
+    0xC613: 'DNGBackwardVersion',
+    0xC614: 'UniqueCameraModel',
+    0xC615: 'LocalizedCameraModel',
+    0xC616: 'CFAPlaneColor',
+    0xC617: 'CFALayout',
+    0xC618: 'LinearizationTable',
+    0xC619: 'BlackLevelRepeatDim',
+    0xC61A: 'BlackLevel',
+    0xC61B: 'BlackLevelDeltaH',
+    0xC61C: 'BlackLevelDeltaV',
+    0xC61D: 'WhiteLevel',
+    0xC61E: 'DefaultScale',
+    0xC61F: 'DefaultCropOrigin',
+    0xC620: 'DefaultCropSize',
+    0xC621: 'ColorMatrix1',
+    0xC622: 'ColorMatrix2',
+    0xC623: 'CameraCalibration1',
+    0xC624: 'CameraCalibration2',
+    0xC625: 'ReductionMatrix1',
+    0xC626: 'ReductionMatrix2',
+    0xC627: 'AnalogBalance',
+    0xC628: 'AsShotNeutral',
+    0xC629: 'AsShotWhiteXY',
+    0xC62A: 'BaselineExposure',
+    0xC62B: 'BaselineNoise',
+    0xC62C: 'BaselineSharpness',
+    0xC62D: 'BayerGreenSplit',
+    0xC62E: 'LinearResponseLimit',
+    0xC62F: 'CameraSerialNumber',
+    0xC630: 'LensInfo',
+    0xC631: 'ChromaBlurRadius',
+    0xC632: 'AntiAliasStrength',
+    0xC634: 'DNGPrivateData',
+    0xC635: 'MakerNoteSafety',
+    0xC65A: 'CalibrationIlluminant1',
+    0xC65B: 'CalibrationIlluminant2',
+    0xC65C: 'BestQualityScale',
+    0xC660: 'AliasLayerMetadata'
+};
+
+var tagsByName = {};
+for (var i in tagsById) {
+    tagsByName[tagsById[i]] = i;
+}
+
+module.exports = {
+    tagsById: tagsById,
+    tagsByName: tagsByName
+};
+
+},{}],119:[function(require,module,exports){
 'use strict';
 
 var IOBuffer = require('iobuffer');
-var IFD = require('./IFD');
-var IFDValue = require('./IFDValue');
-var TIFF = require('./TIFF');
+var IFD = require('./ifd');
+var TiffIFD = require('./tiffIfd');
+var IFDValue = require('./ifdValue');
+
+var defaultOptions = {
+    ignoreImageData: false,
+    onlyFirst: false
+};
 
 class TIFFDecoder extends IOBuffer {
-    constructor(data) {
-        super(data);
-        this._decoded = false;
-        this._tiff = null;
+    constructor(data, options) {
+        super(data, options);
         this._nextIFD = 0;
     }
 
-    decode() {
-        if (this._decoded) return this._tiff;
-        this._tiff = new TIFF();
+    decode(options) {
+        options = Object.assign({}, defaultOptions, options);
+        var result = [];
         this.decodeHeader();
         while (this._nextIFD) {
-            this.decodeIFD();
+            result.push(this.decodeIFD(options));
+            if (options.onlyFirst) {
+                return result[0];
+            }
         }
-        return this._tiff;
+        return result;
     }
 
     decodeHeader() {
@@ -16646,20 +18243,29 @@ class TIFFDecoder extends IOBuffer {
         this._nextIFD = this.readUint32();
     }
 
-    decodeIFD() {
+    decodeIFD(options) {
         this.seek(this._nextIFD);
-        var ifd = new IFD();
-        this._tiff.ifd.push(ifd);
+
+        var ifd;
+        if (!options.kind) {
+            ifd = new TiffIFD();
+        } else {
+            ifd = new IFD(options.kind);
+        }
+
         var numEntries = this.readUint16();
         for (var i = 0; i < numEntries; i++) {
             this.decodeIFDEntry(ifd);
         }
-        this.decodeImageData(ifd);
+        if (!options.ignoreImageData) {
+            this.decodeImageData(ifd);
+        }
         this._nextIFD = this.readUint32();
+        return ifd;
     }
 
     decodeIFDEntry(ifd) {
-        this.mark();
+        var offset = this.offset;
         var tag = this.readUint16();
         var type = this.readUint16();
         var numValues = this.readUint32();
@@ -16677,8 +18283,25 @@ class TIFFDecoder extends IOBuffer {
         var value = IFDValue.readData(this, type, numValues);
         ifd.fields.set(tag, value);
 
+        // Read sub-IFDs
+        if (tag === 0x8769 || tag === 0x8825) {
+            var currentOffset = this.offset;
+            var kind = void 0;
+            if (tag === 0x8769) {
+                kind = 'exif';
+            } else if (tag === 0x8825) {
+                kind = 'gps';
+            }
+            this._nextIFD = value;
+            ifd[kind] = this.decodeIFD({
+                kind: kind,
+                ignoreImageData: true
+            });
+            this.offset = currentOffset;
+        }
+
         // go to the next entry
-        this.reset();
+        this.seek(offset);
         this.skip(12);
     }
 
@@ -16789,12 +18412,125 @@ function unsupported(type, value) {
     throw new Error('Unsupported ' + type + ': ' + value);
 }
 
-},{"./IFD":104,"./IFDValue":105,"./TIFF":106,"iobuffer":39}],108:[function(require,module,exports){
+},{"./ifd":113,"./ifdValue":114,"./tiffIfd":120,"iobuffer":111}],120:[function(require,module,exports){
 'use strict';
 
-exports.TIFFDecoder = require('./TIFFDecoder');
+var Ifd = require('./ifd');
 
-},{"./TIFFDecoder":107}],109:[function(require,module,exports){
+var dateTimeRegex = /^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+
+class TiffIfd extends Ifd {
+    constructor() {
+        super('standard');
+    }
+
+    // Custom fields
+    get size() {
+        return this.width * this.height;
+    }
+    get width() {
+        return this.imageWidth;
+    }
+    get height() {
+        return this.imageLength;
+    }
+    get components() {
+        return this.samplesPerPixel;
+    }
+    get date() {
+        var date = new Date();
+        var result = dateTimeRegex.exec(this.dateTime);
+        date.setFullYear(result[1], result[2] - 1, result[3]);
+        date.setHours(result[4], result[5], result[6]);
+        return date;
+    }
+
+    // IFD fields
+    get newSubfileType() {
+        return this.fields.get(254);
+    }
+    get imageWidth() {
+        return this.fields.get(256);
+    }
+    get imageLength() {
+        return this.fields.get(257);
+    }
+    get bitsPerSample() {
+        return this.fields.get(258);
+    }
+    get compression() {
+        return this.fields.get(259) || 1;
+    }
+    get type() {
+        return this.fields.get(262);
+    }
+    get fillOrder() {
+        return this.fields.get(266) || 1;
+    }
+    get documentName() {
+        return this.fields.get(269);
+    }
+    get imageDescription() {
+        return this.fields.get(270);
+    }
+    get stripOffsets() {
+        return alwaysArray(this.fields.get(273));
+    }
+    get orientation() {
+        return this.fields.get(274);
+    }
+    get samplesPerPixel() {
+        return this.fields.get(277);
+    }
+    get rowsPerStrip() {
+        return this.fields.get(278);
+    }
+    get stripByteCounts() {
+        return alwaysArray(this.fields.get(279));
+    }
+    get minSampleValue() {
+        return this.fields.get(280) || 0;
+    }
+    get maxSampleValue() {
+        return this.fields.get(281) || Math.pow(2, this.bitsPerSample) - 1;
+    }
+    get xResolution() {
+        return this.fields.get(282);
+    }
+    get yResolution() {
+        return this.fields.get(283);
+    }
+    get planarConfiguration() {
+        return this.fields.get(284) || 1;
+    }
+    get resolutionUnit() {
+        return this.fields.get(296) || 2;
+    }
+    get dateTime() {
+        return this.fields.get(306);
+    }
+    get predictor() {
+        return this.fields.get(317) || 1;
+    }
+    get sampleFormat() {
+        return this.fields.get(339) || 1;
+    }
+    get sMinSampleValue() {
+        return this.fields.get(340) || this.minSampleValue;
+    }
+    get sMaxSampleValue() {
+        return this.fields.get(341) || this.maxSampleValue;
+    }
+}
+
+function alwaysArray(value) {
+    if (typeof value === 'number') return [value];
+    return value;
+}
+
+module.exports = TiffIfd;
+
+},{"./ifd":113}],121:[function(require,module,exports){
 'use strict';
 
 var workerTemplate = require('./workerTemplate');
@@ -16950,7 +18686,7 @@ WorkerManager.prototype.post = function (event, args, transferable, id) {
 
 module.exports = WorkerManager;
 
-},{"./workerTemplate":110}],110:[function(require,module,exports){
+},{"./workerTemplate":122}],122:[function(require,module,exports){
 'use strict';
 
 var worker = function worker() {
@@ -17004,7 +18740,7 @@ exports.newWorkerURL = function newWorkerURL(code, deps) {
     return URL.createObjectURL(blob);
 };
 
-},{}],111:[function(require,module,exports){
+},{}],123:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17019,45 +18755,115 @@ exports.default = function (Image) {
 
 // those methods can only apply on binary images... but we will not lose time to check!
 var bitMethods = {
+
+    /**
+     * Set a specific pixel using XY coordinates from a binary image (mask)
+     * @memberof Image
+     * @instance
+     * @param {number} x - x coordinate (0 = left)
+     * @param {number} y - y coordinate (0 = top)
+     */
     setBitXY: function setBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         this.data[slot] |= 1 << shift;
     },
+
+
+    /**
+     * Clear (unset) a specific pixel using XY coordinates from a binary image (mask)
+     * @memberof Image
+     * @instance
+     * @param {number} x - x coordinate (0 = left)
+     * @param {number} y - y coordinate (0 = top)
+     */
     clearBitXY: function clearBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         this.data[slot] &= ~(1 << shift);
     },
+
+
+    /**
+     * Toggle (invert) a specific pixel using XY coordinates from a binary image (mask)
+     * @memberof Image
+     * @instance
+     * @param {number} x - x coordinate (0 = left)
+     * @param {number} y - y coordinate (0 = top)
+     */
     toggleBitXY: function toggleBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         this.data[slot] ^= 1 << shift;
     },
+
+
+    /**
+     * Get the state of a specific pixel using XY coordinates from a binary image (mask)
+     * @memberof Image
+     * @instance
+     * @param {number} x - x coordinate (0 = left)
+     * @param {number} y - y coordinate (0 = top)
+     * @returns {number} 0: bit is unset, 1: bit is set
+     */
     getBitXY: function getBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         return this.data[slot] & 1 << shift ? 1 : 0;
     },
+
+
+    /**
+     * Set a specific pixel from a binary image (mask)
+     *
+     * @memberof Image
+     * @instance
+     * @param {number} pixel - the pixel number which correspond to x * image.width + y
+     */
     setBit: function setBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         this.data[slot] |= 1 << shift;
     },
+
+
+    /**
+     * Clear (unset) a specific pixel from a binary image (mask)
+     * @memberof Image
+     * @instance
+     * @param {number} pixel - the pixel number which correspond to x * image.width + y
+     */
     clearBit: function clearBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         this.data[slot] &= ~(1 << shift);
     },
+
+
+    /**
+     * Toggle (invert) a specific pixel from a binary image (mask)
+     * @memberof Image
+     * @instance
+     * @param {number} pixel - the pixel number which correspond to x * image.width + y
+     */
     toggleBit: function toggleBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         this.data[slot] ^= 1 << shift;
     },
+
+
+    /**
+     * Get the state of a specific pixel using XY coordinates from a binary image (mask)
+     * @memberof Image
+     * @instance
+     * @param {number} pixel - the pixel number which correspond to x * image.width + y
+     * @returns {number} 0: bit is unset, 1: bit is set
+     */
     getBit: function getBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
@@ -17065,7 +18871,7 @@ var bitMethods = {
     }
 };
 
-},{}],112:[function(require,module,exports){
+},{}],124:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17121,7 +18927,7 @@ function getColorHistogram() {
     return result;
 }
 
-},{"new-array":101}],113:[function(require,module,exports){
+},{"new-array":108}],125:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17163,7 +18969,7 @@ function countAlphaPixels() {
     }
 }
 
-},{}],114:[function(require,module,exports){
+},{}],126:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17213,13 +19019,31 @@ function getHistogram() {
  * @instance
  */
 
-function getHistograms() {
-    var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+/**
+ * Returns an array (number of channels) of array (number of slots) containing
+ * the number of data of a specific intensity.
+ * Intensity may be grouped by the maxSlots parameter.
+ * @param {object} [options]
+ * @param {number} [options.maxSlots] - Number of slots in the resulting
+ *      array. The intensity will be evently distributed between 0 and
+ *      the maxValue allowed for this image (255 for usual images).
+ *      If maxSlots = 8, all the intensities between 0 and 31 will be
+ *      placed in the slot 0, 32 to 63 in slot 1, ...
+ * @param {number} [options.maxSlots] -
+ * @return {Promise} - Resolves with the Image
+ * @example
+ *      image.getHistograms({
+ *          maxSlots: 8,
+ *          useAlpha: false
+ *      });
+ */
 
-    var _ref2$maxSlots = _ref2.maxSlots;
-    var maxSlots = _ref2$maxSlots === undefined ? 256 : _ref2$maxSlots;
-    var _ref2$useAlpha = _ref2.useAlpha;
-    var useAlpha = _ref2$useAlpha === undefined ? true : _ref2$useAlpha;
+function getHistograms() {
+    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var _options$maxSlots = options.maxSlots;
+    var maxSlots = _options$maxSlots === undefined ? 256 : _options$maxSlots;
+    var _options$useAlpha = options.useAlpha;
+    var useAlpha = _options$useAlpha === undefined ? true : _options$useAlpha;
 
     this.checkProcessable('getHistograms', {
         bitDepth: [8, 16]
@@ -17260,7 +19084,7 @@ function getChannelHistogram(channel, useAlpha, maxSlots) {
     return result;
 }
 
-},{"is-integer":42,"new-array":101}],115:[function(require,module,exports){
+},{"is-integer":47,"new-array":108}],127:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17356,7 +19180,7 @@ function localExtrema() {
     return points;
 }
 
-},{}],116:[function(require,module,exports){
+},{}],128:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17392,7 +19216,7 @@ function max() {
     return result;
 }
 
-},{"new-array":101}],117:[function(require,module,exports){
+},{"new-array":108}],129:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17419,7 +19243,7 @@ function mean() {
     return result;
 }
 
-},{"../../util/histogram":223}],118:[function(require,module,exports){
+},{"../../util/histogram":234}],130:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17446,7 +19270,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":223}],119:[function(require,module,exports){
+},{"../../util/histogram":234}],131:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17482,7 +19306,7 @@ function min() {
     return result;
 }
 
-},{"new-array":101}],120:[function(require,module,exports){
+},{"new-array":108}],132:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17518,7 +19342,7 @@ function getPixelsArray() {
     }
 }
 
-},{}],121:[function(require,module,exports){
+},{}],133:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17559,7 +19383,7 @@ function getRelativePosition(targetImage) {
     // throw Error('Parent image was not found, can not get relative position.')
 }
 
-},{}],122:[function(require,module,exports){
+},{}],134:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17595,7 +19419,7 @@ function sum() {
     return result;
 }
 
-},{"new-array":101}],123:[function(require,module,exports){
+},{"new-array":108}],135:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17619,7 +19443,7 @@ function getSVD() {
     return _mlMatrix.DC.SVD(this.pixelsArray);
 }
 
-},{"ml-matrix":75}],124:[function(require,module,exports){
+},{"ml-matrix":80}],136:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17708,7 +19532,7 @@ exports.ImageData = ImageData;
 exports.isDifferentOrigin = isDifferentOrigin;
 exports.env = env;
 
-},{"canvas":undefined,"fs":4}],125:[function(require,module,exports){
+},{"canvas":undefined,"fs":4}],137:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17796,7 +19620,7 @@ var _scale = require('./transform/scale/scale');
 
 var _scale2 = _interopRequireDefault(_scale);
 
-var _hsv = require('./transform/hsl');
+var _hsv = require('./transform/hsv');
 
 var _hsv2 = _interopRequireDefault(_hsv);
 
@@ -17804,11 +19628,15 @@ var _hsl = require('./transform/hsl');
 
 var _hsl2 = _interopRequireDefault(_hsl);
 
+var _cmyk = require('./transform/cmyk');
+
+var _cmyk2 = _interopRequireDefault(_cmyk);
+
 var _rgba = require('./transform/rgba8');
 
 var _rgba2 = _interopRequireDefault(_rgba);
 
-var _grey = require('./transform/grey/grey');
+var _grey = require('./transform/grey');
 
 var _grey2 = _interopRequireDefault(_grey);
 
@@ -17839,6 +19667,10 @@ var _split2 = _interopRequireDefault(_split);
 var _getChannel = require('./utility/getChannel');
 
 var _getChannel2 = _interopRequireDefault(_getChannel);
+
+var _combineChannels = require('./utility/combineChannels');
+
+var _combineChannels2 = _interopRequireDefault(_combineChannels);
 
 var _setChannel = require('./utility/setChannel');
 
@@ -17974,6 +19806,7 @@ function extend(Image) {
     Image.extendMethod('scale', _scale2.default, stack);
     Image.extendMethod('hsv', _hsv2.default);
     Image.extendMethod('hsl', _hsl2.default);
+    Image.extendMethod('cmyk', _cmyk2.default);
     Image.extendMethod('rgba8', _rgba2.default);
     Image.extendMethod('grey', _grey2.default).extendMethod('gray', _grey2.default);
     Image.extendMethod('mask', _mask2.default);
@@ -17989,6 +19822,7 @@ function extend(Image) {
 
     Image.extendMethod('split', _split2.default);
     Image.extendMethod('getChannel', _getChannel2.default);
+    Image.extendMethod('combineChannels', _combineChannels2.default);
     Image.extendMethod('setChannel', _setChannel2.default);
     Image.extendMethod('getSimilarity', _getSimilarity2.default);
     Image.extendMethod('getPixelsGrid', _getPixelsGrid2.default);
@@ -18015,7 +19849,7 @@ function extend(Image) {
     Image.extendMethod('getSVD', _svd2.default).extendProperty('svd', _svd2.default);
 }
 
-},{"./compute/colorHistogram":112,"./compute/countAlphaPixels":113,"./compute/histogram":114,"./compute/localExtrema":115,"./compute/max":116,"./compute/mean":117,"./compute/median":118,"./compute/min":119,"./compute/pixelsArray":120,"./compute/relativePosition":121,"./compute/sum":122,"./compute/svd":123,"./filter/add":126,"./filter/blur":127,"./filter/divide":128,"./filter/gaussian":129,"./filter/getBackground":130,"./filter/hypotenuse":131,"./filter/invert":132,"./filter/invertApply":133,"./filter/invertBinaryLoop":134,"./filter/invertGetSet":135,"./filter/invertIterator":136,"./filter/invertOneLoop":137,"./filter/invertPixel":138,"./filter/level":139,"./filter/median":140,"./filter/multiply":141,"./filter/sobel":142,"./filter/subtract":143,"./operator/convolution":150,"./operator/convolutionFFT":151,"./operator/extract":152,"./operator/paintMasks":153,"./operator/paintPoints":154,"./transform/colorDepth":164,"./transform/crop":165,"./transform/grey/grey":167,"./transform/hsl":172,"./transform/hsv":173,"./transform/mask/mask":178,"./transform/pad":190,"./transform/resizeBinary":191,"./transform/rgba8":192,"./transform/scale/scale":194,"./utility/getBestMatch":196,"./utility/getChannel":197,"./utility/getColumn":198,"./utility/getMatrix":199,"./utility/getPixelsGrid":200,"./utility/getRow":201,"./utility/getSimilarity":202,"./utility/setBorder":203,"./utility/setChannel":204,"./utility/setMatrix":205,"./utility/split":206}],126:[function(require,module,exports){
+},{"./compute/colorHistogram":124,"./compute/countAlphaPixels":125,"./compute/histogram":126,"./compute/localExtrema":127,"./compute/max":128,"./compute/mean":129,"./compute/median":130,"./compute/min":131,"./compute/pixelsArray":132,"./compute/relativePosition":133,"./compute/sum":134,"./compute/svd":135,"./filter/add":138,"./filter/blur":139,"./filter/divide":140,"./filter/gaussian":141,"./filter/getBackground":142,"./filter/hypotenuse":143,"./filter/invert":144,"./filter/invertApply":145,"./filter/invertBinaryLoop":146,"./filter/invertGetSet":147,"./filter/invertIterator":148,"./filter/invertOneLoop":149,"./filter/invertPixel":150,"./filter/level":151,"./filter/median":152,"./filter/multiply":153,"./filter/sobel":154,"./filter/subtract":155,"./operator/convolution":162,"./operator/convolutionFFT":163,"./operator/extract":164,"./operator/paintMasks":165,"./operator/paintPoints":166,"./transform/cmyk":176,"./transform/colorDepth":177,"./transform/crop":178,"./transform/grey":179,"./transform/hsl":181,"./transform/hsv":182,"./transform/mask/mask":187,"./transform/pad":200,"./transform/resizeBinary":201,"./transform/rgba8":202,"./transform/scale/scale":204,"./utility/combineChannels":205,"./utility/getBestMatch":207,"./utility/getChannel":208,"./utility/getColumn":209,"./utility/getMatrix":210,"./utility/getPixelsGrid":211,"./utility/getRow":212,"./utility/getSimilarity":213,"./utility/setBorder":214,"./utility/setChannel":215,"./utility/setMatrix":216,"./utility/split":217}],138:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18035,9 +19869,8 @@ var _value = require('../../util/value');
  */
 
 function add(value) {
-    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-    var channels = _ref.channels;
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var channels = options.channels;
 
     this.checkProcessable('add', {
         bitDepth: [8, 16]
@@ -18067,7 +19900,7 @@ function add(value) {
     }
 }
 
-},{"../../util/channel":219,"../../util/value":228}],127:[function(require,module,exports){
+},{"../../util/channel":230,"../../util/value":239}],139:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18110,7 +19943,7 @@ function meanFilter(k) {
     return _convolutionFFT2.default.call(this, kernel);
 }
 
-},{"../operator/convolutionFFT":151}],128:[function(require,module,exports){
+},{"../operator/convolutionFFT":163}],140:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18135,9 +19968,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 
 function divide(value) {
-    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-    var channels = _ref.channels;
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var channels = options.channels;
 
     this.checkProcessable('divide', {
         bitDepth: [8, 16]
@@ -18166,7 +19998,7 @@ function divide(value) {
     }
 }
 
-},{"../../util/channel":219,"../../util/value":228,"../image":144}],129:[function(require,module,exports){
+},{"../../util/channel":230,"../../util/value":239,"../image":156}],141:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18191,15 +20023,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 
 function gaussianFilter() {
-	var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-	var _ref$radius = _ref.radius;
-	var radius = _ref$radius === undefined ? 1 : _ref$radius;
-	var sigma = _ref.sigma;
-	var channels = _ref.channels;
-	var _ref$border = _ref.border;
-	var border = _ref$border === undefined ? 'copy' : _ref$border;
-
+	var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	var _options$radius = options.radius;
+	var radius = _options$radius === undefined ? 1 : _options$radius;
+	var sigma = options.sigma;
+	var channels = options.channels;
+	var _options$border = options.border;
+	var border = _options$border === undefined ? 'copy' : _options$border;
 
 	this.checkProcessable('gaussianFilter', {
 		bitDepth: [8, 16]
@@ -18278,7 +20108,7 @@ function getSigmaKernel(sigma) {
 	return getKernel(neighbors, sigma);
 }
 
-},{"../image":144,"../operator/convolutionFFT":151}],130:[function(require,module,exports){
+},{"../image":156,"../operator/convolutionFFT":163}],142:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18316,7 +20146,7 @@ function getBackground(coordinates, values, options) {
     return background;
 }
 
-},{"../image":144,"ml-regression":87}],131:[function(require,module,exports){
+},{"../image":156,"ml-regression":93}],143:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18339,10 +20169,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 
 function hypotenuse(otherImage) {
-    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-    var bitDepth = _ref.bitDepth;
-    var channels = _ref.channels;
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var bitDepth = options.bitDepth;
+    var channels = options.channels;
 
     this.checkProcessable('hypotenuse', {
         bitDepth: [8, 16, 32]
@@ -18379,7 +20208,7 @@ function hypotenuse(otherImage) {
     return newImage;
 }
 
-},{"../../util/channel":219,"../image":144}],132:[function(require,module,exports){
+},{"../../util/channel":230,"../image":156}],144:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18390,15 +20219,23 @@ exports.default = invert;
 var _channel = require('../../util/channel');
 
 /**
+ * Invert an image. The image
  * @memberof Image
  * @instance
- * @returns {Image}
+ * @param {object} options
+ * @param {(undefined|number|string|[number]|[string])} [options.channels=undefined] Specify which channels should be processed
+ *      * undefined : we take all the channels but alpha
+ *      * number : this specific channel
+ *      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
+ *      * [number] : array of channels as numbers
+ *      * [string] : array of channels as one letter string
+ * @returns {this}
  */
 
 function invert() {
-    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var channels = options.channels;
 
-    var channels = _ref.channels;
 
     this.checkProcessable('invertOneLoop', {
         bitDepth: [1, 8, 16]
@@ -18413,22 +20250,18 @@ function invert() {
             data[i] = ~data[i];
         }
     } else {
-        channels = (0, _channel.validateArrayOfChannels)(this, channels, true);
-
-        var _data = this.data;
-
-        // for (let j of channels) { WOULD SLOW DO OF A FACTOR 10 !
+        channels = (0, _channel.validateArrayOfChannels)(this, { channels: channels });
 
         for (var c = 0; c < channels.length; c++) {
             var j = channels[c];
-            for (var _i = j; _i < _data.length; _i += this.channels) {
-                _data[_i] = this.maxValue - _data[_i];
+            for (var _i = j; _i < this.data.length; _i += this.channels) {
+                this.data[_i] = this.maxValue - this.data[_i];
             }
         }
     }
 } // we try the faster methods
 
-},{"../../util/channel":219}],133:[function(require,module,exports){
+},{"../../util/channel":230}],145:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18464,7 +20297,7 @@ function invertApply() {
     }
 }
 
-},{}],134:[function(require,module,exports){
+},{}],146:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18481,7 +20314,7 @@ function invertBinaryLoop() {
     }
 }
 
-},{}],135:[function(require,module,exports){
+},{}],147:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18513,7 +20346,7 @@ function invert() {
     }
 }
 
-},{}],136:[function(require,module,exports){
+},{}],148:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18545,7 +20378,7 @@ function invertIterator() {
     }
 }
 
-},{}],137:[function(require,module,exports){
+},{}],149:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18565,7 +20398,7 @@ function invertOneLoop() {
     }
 }
 
-},{}],138:[function(require,module,exports){
+},{}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18593,7 +20426,7 @@ function invertPixel() {
     }
 }
 
-},{}],139:[function(require,module,exports){
+},{}],151:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18610,21 +20443,31 @@ var _channel = require('../../util/channel');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
+ * Level the image for by default have the minimal and maximal values.
  * @memberof Image
  * @instance
+ * @param {object} options
+ * @param {(undefined|number|string|[number]|[string])} [options.channels=undefined] Specify which channels should be processed
+ *      * undefined : we take all the channels but alpha
+ *      * number : this specific channel
+ *      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
+ *      * [number] : array of channels as numbers
+ *      * [string] : array of channels as one letter string
+ * @param {number} [options.min=this.min] minimal value after levelling
+ * @param {number} [options.max=this.max] maximal value after levelling
  * @returns {Image}
  */
 
 function level() {
-    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var _options$algorithm = options.algorithm;
+    var algorithm = _options$algorithm === undefined ? 'range' : _options$algorithm;
+    var channels = options.channels;
+    var _options$min = options.min;
+    var min = _options$min === undefined ? this.min : _options$min;
+    var _options$max = options.max;
+    var max = _options$max === undefined ? this.max : _options$max;
 
-    var _ref$algorithm = _ref.algorithm;
-    var algorithm = _ref$algorithm === undefined ? 'range' : _ref$algorithm;
-    var channels = _ref.channels;
-    var _ref$min = _ref.min;
-    var min = _ref$min === undefined ? this.min : _ref$min;
-    var _ref$max = _ref.max;
-    var max = _ref$max === undefined ? this.max : _ref$max;
 
     this.checkProcessable('level', {
         bitDepth: [8, 16]
@@ -18681,7 +20524,7 @@ function processImage(image, min, max, channels) {
     }
 }
 
-},{"../../util/channel":219,"new-array":101}],140:[function(require,module,exports){
+},{"../../util/channel":230,"new-array":108}],152:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18698,13 +20541,29 @@ var _image2 = _interopRequireDefault(_image);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
+* Each pixel of the image becomes the median of the neightbour
+ * pixels.
  * @memberof Image
- * @instance
- * @returns {Image}
- */
+* @instance
+* @param {object} options
+* @param {(undefined|number|string|[number]|[string])} [options.channels=undefined] Specify which channels should be processed
+*      * undefined : we take all the channels but alpha
+*      * number : this specific channel
+*      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
+*      * [number] : array of channels as numbers
+*      * [string] : array of channels as one letter string
+* @param {number} [radius=1] distance of the square to take the mean of.
+* @param {string} [border='copy'] algorithm that will be applied after to deal with borders
+* @returns {Image}
+*/
+function medianFilter() {
+    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var _options$radius = options.radius;
+    var radius = _options$radius === undefined ? 1 : _options$radius;
+    var channels = options.channels;
+    var _options$border = options.border;
+    var border = _options$border === undefined ? 'copy' : _options$border;
 
-function medianFilter(radius, channels) {
-    var border = arguments.length <= 2 || arguments[2] === undefined ? 'copy' : arguments[2];
 
     this.checkProcessable('medianFilter', {
         bitDepth: [8, 16]
@@ -18736,12 +20595,12 @@ function medianFilter(radius, channels) {
                     }
                 }
                 var index = (y * this.width + x) * this.channels + c;
-                var newValue = kernel.sort()[middle];
+                var newValue = kernel.sort((a, b) => a - b)[middle];
+
                 newImage.data[index] = newValue;
             }
         }
     }
-
     if (this.alpha && channels.indexOf(this.channels) === -1) {
         for (var _i = this.components; _i < this.data.length; _i = _i + this.channels) {
             newImage.data[_i] = this.data[_i];
@@ -18753,7 +20612,7 @@ function medianFilter(radius, channels) {
     return newImage;
 } //End medianFilter function
 
-},{"../../util/channel":219,"../image":144}],141:[function(require,module,exports){
+},{"../../util/channel":230,"../image":156}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18778,9 +20637,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 
 function multiply(value) {
-    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-    var channels = _ref.channels;
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var channels = options.channels;
 
     this.checkProcessable('multiply', {
         bitDepth: [8, 16]
@@ -18810,7 +20668,7 @@ function multiply(value) {
     }
 }
 
-},{"../../util/channel":219,"../../util/value":228,"../image":144}],142:[function(require,module,exports){
+},{"../../util/channel":230,"../../util/value":239,"../image":156}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18837,15 +20695,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 
 function sobelFilter() {
-	var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-	var _ref$kernelX = _ref.kernelX;
-	var kernelX = _ref$kernelX === undefined ? _kernels.GRADIENT_X : _ref$kernelX;
-	var _ref$kernelY = _ref.kernelY;
-	var kernelY = _ref$kernelY === undefined ? _kernels.GRADIENT_Y : _ref$kernelY;
-	var _ref$border = _ref.border;
-	var border = _ref$border === undefined ? 'copy' : _ref$border;
-	var channels = _ref.channels;
+	var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	var _options$kernelX = options.kernelX;
+	var kernelX = _options$kernelX === undefined ? _kernels.GRADIENT_X : _options$kernelX;
+	var _options$kernelY = options.kernelY;
+	var kernelY = _options$kernelY === undefined ? _kernels.GRADIENT_Y : _options$kernelY;
+	var _options$border = options.border;
+	var border = _options$border === undefined ? 'copy' : _options$border;
+	var channels = options.channels;
 
 
 	this.checkProcessable('sobelFilter', {
@@ -18867,7 +20724,7 @@ function sobelFilter() {
 	return gX.hypotenuse(gY, { bitDepth: this.bitDepth, channels: channels });
 }
 
-},{"../../util/kernels":225,"../image":144,"../operator/convolution":150}],143:[function(require,module,exports){
+},{"../../util/kernels":236,"../image":156,"../operator/convolution":162}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18886,9 +20743,8 @@ var _value = require('../../util/value');
  */
 
 function subtract(value) {
-    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-    var channels = _ref.channels;
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var channels = options.channels;
 
     this.checkProcessable('subtract', {
         bitDepth: [8, 16]
@@ -18917,7 +20773,7 @@ function subtract(value) {
     }
 }
 
-},{"../../util/channel":219,"../../util/value":228}],144:[function(require,module,exports){
+},{"../../util/channel":230,"../../util/value":239}],156:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18971,7 +20827,39 @@ var computedPropertyDescriptor = {
 };
 
 /**
- * Class representing an image
+ * Class representing an image.
+ * This class allows to manipulate easily images directly in the browser.
+ *
+ * This library is designed to deal with scientific images (8 or 16 bit depth) and will be able to open
+ * and process jpeg, png and uncompressed tiff images.
+ *
+ * An image is characterized by:
+ * * width and height
+ * * colorModel (RGB, HSL, CMYK, GREY, ...)
+ * * components: number of components, Grey scale images will have 1 component while RGB will have 3 and CMYK 4.
+ * * alpha: 0 or 1 depending if there is an alpha channel. The
+ *      alpha channel define the opacity of each pixel
+ * * channels: number of channels (components + alpha)
+ * * bitDepth : number of bits to define the intensity of a point.
+ *      The values may be 1 for a binary image (mask), 8 for a normal image (each
+ *      channel contains values between 0 and 255) and 16 for scientific images
+ *      (each channel contains values between 0 and 65535).
+ *      The png library and tiff library included in image-js allow to deal correctly with
+ *      8 and 16 bit depth images.
+ * * position : an array of 2 elements that allows to define a relative position
+ *      to a parent image. This will be used in a crop or in the management
+ *      of Region Of Interests (ROI) for exmaple
+ * * data : an array that contains all the points of the image.
+ *      Depending the bitDepth Uint8Array (1 bit), Uint8ClampedArray (8 bits),
+ *      Uint16Array (16 bits), Float32Array (32 bits)
+ *
+ * In an image we have pixels and points:
+ * * A pixel is an array that has as size the number of channels
+ * and that contains all the values that define a particular pixel of the image.
+ * * A point is an array of 2 elements that contains the x / y coordinate
+ * of a specific pixel of the image
+ *
+ *
  * @class Image
  * @param {number} [width=1]
  * @param {number} [height=1]
@@ -18996,7 +20884,8 @@ class Image {
                 alpha: otherImage.alpha,
                 bitDepth: otherImage.bitDepth,
                 colorModel: otherImage.colorModel,
-                parent: otherImage
+                parent: otherImage,
+                meta: otherImage.meta
             };
         }
 
@@ -19038,6 +20927,7 @@ class Image {
         this.alpha = kindDefinition.alpha + 0;
         this.bitDepth = kindDefinition.bitDepth;
         this.colorModel = kindDefinition.colorModel;
+        this.meta = options.meta || {};
 
         this.computed = null;
 
@@ -19073,6 +20963,14 @@ class Image {
      * @param {string} url - URL of the image (browser, can be a dataURL) or path (Node.js)
      * @param {object} [options]
      * @return {Promise} - Resolves with the Image
+     * @example
+     *  Image.load('http://xxxx').then(
+     *      function(image) {
+     *          console.log(image);
+     *          // we can display the histogram of the first channel
+     *          console.log(image.histograms[0]);
+     *      }
+     *  )
      */
     static load(url, options) {
         return (0, _load.loadURL)(url, options);
@@ -19216,12 +21114,27 @@ class Image {
         return shift;
     }
 
+    /**
+     * Set the value of specific pixel channel
+     * @param {number} x - x coordinate (0 = left)
+     * @param {number} y - y coordinate (0 = top)
+     * @param {number} channel
+     * @param value - the new value of this pixel channel
+     * @returns {this}
+     */
     setValueXY(x, y, channel, value) {
         this.data[(y * this.width + x) * this.channels + channel] = value;
         this.computed = null;
         return this;
     }
 
+    /**
+     * Get the value of specific pixel channel
+     * @param {number} x - x coordinate (0 = left)
+     * @param {number} y - y coordinate (0 = top)
+     * @param {number} channel
+     * @returns {number} - the value of this pixel channel
+     */
     getValueXY(x, y, channel) {
         return this.data[(y * this.width + x) * this.channels + channel];
     }
@@ -19313,6 +21226,18 @@ class Image {
         return canvas;
     }
 
+    /**
+     * Retrieve the data of the current image as RGBA 8 bits
+     * The source image may be:
+     * * a mask (binary image)
+     * * a grey image (8 or 16 bits) with or without alpha channel
+     * * a color image (8 or 16 bits) with or without alpha channel in with RGB model
+     * @instance
+     * @returns {Uint8ClampedArray} - Array with the data
+     * @example
+     * var imageData = image.getRGBAData();
+     */
+
     getRGBAData() {
         this.checkProcessable('getRGBAData', {
             components: [1, 3],
@@ -19362,11 +21287,22 @@ class Image {
         return new _manager2.default(this, options);
     }
 
-    clone() {
-        var _ref4 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    /**
+     * Create a new image based on the current image.
+     * By default the method will copy the data
+     * @instance
+     * @param {object} options
+     * @param {boolean} [options.copyData=true] - Specify if we want also to clone
+     *          the data or only the image parameters (size, colorModel, ...)
+     * @returns {Image} - The source image clone
+     * @example
+     * var emptyImage = image.clone({copyData:false});
+     */
 
-        var _ref4$copyData = _ref4.copyData;
-        var copyData = _ref4$copyData === undefined ? true : _ref4$copyData;
+    clone() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+        var _options$copyData = options.copyData;
+        var copyData = _options$copyData === undefined ? true : _options$copyData;
 
         return new Image(this, copyData);
     }
@@ -19378,10 +21314,9 @@ class Image {
      * @return {Promise} - Resolves when the file is fully written
      */
     save(path) {
-        var _ref5 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-        var _ref5$format = _ref5.format;
-        var format = _ref5$format === undefined ? 'png' : _ref5$format;
+        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        var _options$format = options.format;
+        var format = _options$format === undefined ? 'png' : _options$format;
 
         return new Promise((resolve, reject) => {
             var out = (0, _fs.createWriteStream)(path);
@@ -19406,12 +21341,13 @@ class Image {
 
     // this method check if a process can be applied on the current image
     checkProcessable(processName) {
-        var _ref6 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        var _ref4 = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-        var bitDepth = _ref6.bitDepth;
-        var alpha = _ref6.alpha;
-        var colorModel = _ref6.colorModel;
-        var components = _ref6.components;
+        var bitDepth = _ref4.bitDepth;
+        var alpha = _ref4.alpha;
+        var colorModel = _ref4.colorModel;
+        var components = _ref4.components;
+        var channels = _ref4.channels;
 
         if (typeof processName !== 'string') {
             throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
@@ -19438,6 +21374,12 @@ class Image {
             if (!Array.isArray(components)) components = [components];
             if (components.indexOf(this.components) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if the number of channels is in: ' + components);
+            }
+        }
+        if (channels) {
+            if (!Array.isArray(channels)) channels = [channels];
+            if (channels.indexOf(this.channels) === -1) {
+                throw new TypeError('The process: ' + processName + ' can only be applied if the number of components is in: ' + channels);
             }
         }
     }
@@ -19474,7 +21416,7 @@ exports.default = Image;
 (0, _extend2.default)(Image);
 (0, _bitMethods2.default)(Image);
 
-},{"../stack/stack":216,"./bitMethods":111,"./environment":124,"./extend":125,"./kind":145,"./kindNames":146,"./load":147,"./mediaTypes":148,"./model/model":149,"./roi/manager":162,"blob-util":2,"extend":19,"fs":4}],145:[function(require,module,exports){
+},{"../stack/stack":227,"./bitMethods":123,"./environment":136,"./extend":137,"./kind":157,"./kindNames":158,"./load":159,"./mediaTypes":160,"./model/model":161,"./roi/manager":174,"blob-util":2,"extend":19,"fs":4}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19526,6 +21468,20 @@ kinds[Kind.RGB] = {
     colorModel: _model.RGB
 };
 
+kinds[Kind.CMYK] = {
+    components: 4,
+    alpha: 1,
+    bitDepth: 8,
+    colorModel: _model.CMYK
+};
+
+kinds[Kind.CMYKA] = {
+    components: 4,
+    alpha: 0,
+    bitDepth: 8,
+    colorModel: _model.CMYK
+};
+
 function getKind(kind) {
     return kinds[kind];
 }
@@ -19567,7 +21523,7 @@ function createPixelArray(image) {
     image.data = arr;
 }
 
-},{"./kindNames":146,"./model/model":149}],146:[function(require,module,exports){
+},{"./kindNames":158,"./model/model":161}],158:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19581,7 +21537,7 @@ var RGBA = exports.RGBA = 'RGBA';
 var RGB = exports.RGB = 'RGB';
 var GREY = exports.GREY = 'GREY';
 
-},{}],147:[function(require,module,exports){
+},{}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19601,17 +21557,21 @@ var _environment = require('./environment');
 
 var _fastPng = require('fast-png');
 
+var _fastJpeg = require('fast-jpeg');
+
 var _tiff = require('tiff');
 
 var _atobLite = require('atob-lite');
 
 var _atobLite2 = _interopRequireDefault(_atobLite);
 
+var _imageType = require('image-type');
+
+var _imageType2 = _interopRequireDefault(_imageType);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
-var isPNG = /\.png$/i;
-var isTIFF = /\.tiff?$/i;
 
 function str2ab(str) {
     var arr = new Uint8Array(str.length);
@@ -19627,25 +21587,32 @@ function swap16(val) {
 
 function loadURL(url, options) {
     var dataURL = url.slice(0, 64).match(isDataURL);
+    var binaryDataP = void 0;
     if (dataURL) {
-        var mimetype = dataURL[1];
-        var offset = dataURL[0].length;
-        if (mimetype === 'png') {
-            var slice = url.slice(offset);
-            return Promise.resolve(str2ab((0, _atobLite2.default)(slice))).then(loadPNG);
-        } else if (mimetype === 'tiff') {
-            var _slice = url.slice(offset);
-            return Promise.resolve(str2ab((0, _atobLite2.default)(_slice))).then(loadTIFF);
+        binaryDataP = Promise.resolve(str2ab((0, _atobLite2.default)(url.slice(dataURL[0].length))));
+    } else {
+        binaryDataP = (0, _environment.loadBinary)(url, options);
+    }
+    return binaryDataP.then(function (binaryData) {
+        var uint8 = new Uint8Array(binaryData);
+        var type = (0, _imageType2.default)(uint8);
+        if (type) {
+            switch (type.ext) {
+                case 'png':
+                    return loadPNG(binaryData);
+                case 'jpg':
+                    var decoded = (0, _fastJpeg.decode)(binaryData);
+                    var meta = void 0;
+                    if (decoded.exif) {
+                        meta = getMetadata(decoded.exif);
+                    }
+                    return loadGeneric(url, { meta: meta });
+                case 'tif':
+                    return loadTIFF(binaryData);
+            }
         }
-    }
-
-    if (isPNG.test(url)) {
-        return (0, _environment.loadBinary)(url, options).then(loadPNG);
-    } else if (isTIFF.test(url)) {
-        return (0, _environment.loadBinary)(url, options).then(loadTIFF);
-    }
-
-    return loadGeneric(url);
+        return loadGeneric(url);
+    });
 }
 
 function loadPNG(data) {
@@ -19681,13 +21648,25 @@ function loadPNG(data) {
 }
 
 function loadTIFF(data) {
-    var decoder = new _tiff.TIFFDecoder(data);
-    var result = decoder.decode();
-    if (result.ifd.length === 1) {
-        return getImageFromIFD(result.ifd[0]);
+    var result = (0, _tiff.decode)(data);
+    if (result.length === 1) {
+        return getImageFromIFD(result[0]);
     } else {
-        return new _stack2.default(result.ifd.map(getImageFromIFD));
+        return new _stack2.default(result.map(getImageFromIFD));
     }
+}
+
+function getMetadata(image) {
+    var metadata = {
+        tiff: image
+    };
+    if (image.exif) {
+        metadata.exif = image.exif;
+    }
+    if (image.gps) {
+        metadata.gps = image.gps;
+    }
+    return metadata;
 }
 
 function getImageFromIFD(image) {
@@ -19695,11 +21674,13 @@ function getImageFromIFD(image) {
         components: 1,
         alpha: 0,
         colorModel: null,
-        bitDepth: image.bitsPerSample
+        bitDepth: image.bitsPerSample,
+        meta: getMetadata(image)
     });
 }
 
-function loadGeneric(url) {
+function loadGeneric(url, options) {
+    options = options || {};
     return new Promise(function (resolve, reject) {
         var image = new _environment.DOMImage();
 
@@ -19715,7 +21696,7 @@ function loadGeneric(url) {
             var ctx = canvas.getContext('2d');
             ctx.drawImage(image, 0, 0, w, h);
             var data = ctx.getImageData(0, 0, w, h).data;
-            resolve(new _image2.default(w, h, data));
+            resolve(new _image2.default(w, h, data, options));
         };
         image.onerror = function () {
             reject(new Error('Could not load ' + url));
@@ -19724,7 +21705,7 @@ function loadGeneric(url) {
     });
 }
 
-},{"../stack/stack":216,"./environment":124,"./image":144,"atob-lite":1,"fast-png":37,"tiff":108}],148:[function(require,module,exports){
+},{"../stack/stack":227,"./environment":136,"./image":156,"atob-lite":1,"fast-jpeg":22,"fast-png":40,"image-type":42,"tiff":115}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19789,7 +21770,7 @@ function getType(type) {
     return type;
 }
 
-},{"./environment":124,"./image":144,"string-includes":103}],149:[function(require,module,exports){
+},{"./environment":136,"./image":156,"string-includes":110}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19798,8 +21779,9 @@ Object.defineProperty(exports, "__esModule", {
 var RGB = exports.RGB = 'RGB';
 var HSL = exports.HSL = 'HSL';
 var HSV = exports.HSV = 'HSV';
+var CMYK = exports.CMYK = 'CMYK';
 
-},{}],150:[function(require,module,exports){
+},{}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19927,7 +21909,7 @@ function convolution(kernel) {
     return newImage;
 }
 
-},{"../../util/channel":219,"../../util/kernel":224,"../image":144,"ml-matrix-convolution":66}],151:[function(require,module,exports){
+},{"../../util/channel":230,"../../util/kernel":235,"../image":156,"ml-matrix-convolution":71}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19954,7 +21936,7 @@ function convolutionFFT(kernel) {
   return this.convolution(kernel, options);
 }
 
-},{}],152:[function(require,module,exports){
+},{}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20020,7 +22002,7 @@ function extract(mask) {
     return extract;
 }
 
-},{"../image":144}],153:[function(require,module,exports){
+},{"../image":156}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20110,7 +22092,7 @@ function paintMasks(masks) {
     }
 }
 
-},{"../../util/color":220,"../model/model":149}],154:[function(require,module,exports){
+},{"../../util/color":231,"../model/model":161}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20170,7 +22152,7 @@ function paintPoints(points) {
     }
 }
 
-},{"../../util/shape":227,"../model/model":149}],155:[function(require,module,exports){
+},{"../../util/shape":238,"../model/model":161}],167:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20198,7 +22180,7 @@ class ROIMap {
 }
 exports.default = ROIMap;
 
-},{}],156:[function(require,module,exports){
+},{}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20274,7 +22256,7 @@ function createROI(roiMap) {
     return roiArray;
 }
 
-},{"./roi":163}],157:[function(require,module,exports){
+},{"./roi":175}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20495,7 +22477,7 @@ function fromExtrema() {
     }
 }
 
-},{"./../ROIMap":155}],158:[function(require,module,exports){
+},{"./../ROIMap":167}],170:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20623,7 +22605,7 @@ function fromMask(mask) {
    * @instance
    */
 
-},{"./../ROIMap":155}],159:[function(require,module,exports){
+},{"./../ROIMap":167}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20730,7 +22712,7 @@ function fromMask2(mask) {
     return new _ROIMap2.default(mask, pixels);
 }
 
-},{"./../ROIMap":155,"ml-disjoint-set":50}],160:[function(require,module,exports){
+},{"./../ROIMap":167,"ml-disjoint-set":55}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20778,7 +22760,7 @@ function fromPoints(pointsToPaint) {
     return new _ROIMap2.default(this, mapPixels);
 }
 
-},{"./../../../util/shape":227,"./../ROIMap":155}],161:[function(require,module,exports){
+},{"./../../../util/shape":238,"./../ROIMap":167}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20874,7 +22856,7 @@ function fromWaterShed() {
    * @instance
    */
 
-},{"./../../../util/dxdy.js":222,"./../ROIMap":155,"js-priority-queue":43}],162:[function(require,module,exports){
+},{"./../../../util/dxdy.js":233,"./../ROIMap":167,"js-priority-queue":48}],174:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21034,8 +23016,7 @@ class ROIManager {
 
 
         if (!this._layers[label]) {
-            console.log('getROI: This ROI layer (' + label + ') does not exists.');
-            return [];
+            throw new Error('getROI: This ROI layer (' + label + ') does not exists.');
         }
 
         var allROIs = this._layers[label].roi;
@@ -21060,22 +23041,20 @@ class ROIManager {
 
         var masks = new Array(rois.length);
         for (var i = 0; i < rois.length; i++) {
-            masks[i] = rois[i].mask;
+            masks[i] = rois[i].getMask(options);
         }
         return masks;
     }
 
-    getContours() {
-        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-        var rois = this.getROI(options);
-
-        var contours = new Array(rois.length);
-        for (var i = 0; i < rois.length; i++) {
-            contours[i] = rois[i].contourMask;
-        }
-        return contours;
-    }
+    // getContours(options = {}) {
+    //     let rois = this.getROI(options);
+    //
+    //     let contours = new Array(rois.length);
+    //     for (let i = 0; i < rois.length; i++) {
+    //         contours[i] = rois[i].contourMask;
+    //     }
+    //     return contours;
+    // }
 
     getPixels() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -21112,12 +23091,7 @@ class ROIManager {
         var labelFont = options.labelFont || '12px Helvetica';
 
         if (!this._painted) this._painted = this._image.rgba8();
-        var masks = void 0;
-        if (options.contourMask) {
-            masks = this.getContours(options);
-        } else {
-            masks = this.getMasks(options);
-        }
+        var masks = this.getMasks(options);
 
         this._painted.paintMasks(masks, options);
 
@@ -21216,7 +23190,7 @@ class ROILayer {
     }
 }
 
-},{"../image":144,"./ROIMap":155,"./createROI":156,"./creator/fromExtrema":157,"./creator/fromMask":158,"./creator/fromMask2":159,"./creator/fromPoints":160,"./creator/fromWaterShed":161,"extend":19}],163:[function(require,module,exports){
+},{"../image":156,"./ROIMap":167,"./createROI":168,"./creator/fromExtrema":169,"./creator/fromMask":170,"./creator/fromMask2":171,"./creator/fromPoints":172,"./creator/fromWaterShed":173,"extend":19}],175:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21230,6 +23204,10 @@ var _image2 = _interopRequireDefault(_image);
 var _kindNames = require('../kindNames');
 
 var KindNames = _interopRequireWildcard(_kindNames);
+
+var _shape = require('../../util/shape');
+
+var _shape2 = _interopRequireDefault(_shape);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -21255,30 +23233,58 @@ class ROI {
         this.computed = {};
     }
 
+    /**
+     * Returns a binary image (mask) for the corresponding ROI
+     * @param [object] options
+     * @param [number] {options.scale=1} Scaling factor to apply to the mask
+     * @param [string] {kind='normal'} 'contour', 'box', 'filled', 'center' or 'normal' (default 'normal')
+     * @returns {*}
+     */
     getMask() {
-        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-        var _ref$fill = _ref.fill;
-        var fill = _ref$fill === undefined ? false : _ref$fill;
-        var _ref$scale = _ref.scale;
-        var scale = _ref$scale === undefined ? 1 : _ref$scale;
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+        var _options$scale = options.scale;
+        var scale = _options$scale === undefined ? 1 : _options$scale;
+        var _options$kind = options.kind;
+        var kind = _options$kind === undefined ? '' : _options$kind;
 
         var mask = void 0;
-        if (fill) {
-            mask = this.filledMask;
-        } else {
-            mask = this.mask;
+        switch (kind) {
+            case 'contour':
+                mask = this.contourMask;
+                break;
+            case 'box':
+                mask = this.boxMask;
+                break;
+            case 'filled':
+                mask = this.filledMask;
+                break;
+            case 'center':
+                mask = this.centerMask;
+                break;
+            default:
+                mask = this.mask;
         }
 
         if (scale < 1) {
+            // by reassigning the mask we loose the parent and therefore the position
+            // we will have to force it back
             mask = mask.resizeBinary(scale);
+            mask.parent = this.mask.parent;
+            mask.position[0] += this.minX;
+            mask.position[1] += this.minY;
         }
 
         return mask;
     }
 
     get mean() {
-        return [this.meanX, this.meanY];
+        throw new Error('ROI mean not implemented yet');
+        // return [this.meanX,this.meanY];
+    }
+
+    get center() {
+        if (this.computed.center) return this.computed.center;
+        return this.computed.center = [this.width / 2 >> 0, this.height / 2 >> 0];
     }
 
     get width() {
@@ -21405,9 +23411,9 @@ class ROI {
     }
 
     /**
-        Returns a binary image containing only the border of the mask
+        Returns a binary image (mask) containing only the border of the mask
      */
-    get contour() {
+    get contourMask() {
         if (this.computed.contourMask) return this.computed.contourMask;
 
         var img = new _image2.default(this.width, this.height, {
@@ -21431,6 +23437,29 @@ class ROI {
             }
         }
         return this.computed.contour = img;
+    }
+
+    get boxMask() {
+        /**
+         Returns a binary image containing the mask
+         */
+        if (this.computed.boxMask) return this.computed.boxMask;
+
+        var img = new _image2.default(this.width, this.height, {
+            kind: KindNames.BINARY,
+            position: [this.minX, this.minY],
+            parent: this.map.parent
+        });
+
+        for (var x = 0; x < this.width; x++) {
+            img.setBitXY(x, 0);
+            img.setBitXY(x, this.height - 1);
+        }
+        for (var y = 0; y < this.height; y++) {
+            img.setBitXY(0, y);
+            img.setBitXY(this.width - 1, y);
+        }
+        return this.computed.boxMask = img;
     }
 
     /**
@@ -21472,8 +23501,18 @@ class ROI {
                 } // by default a pixel is to 0 so no problems, it will be transparent
             }
         }
-
         return this.computed.filledMask = img;
+    }
+
+    get centerMask() {
+        if (this.computed.centerMask) return this.computed.centerMask;
+
+        var img = new _shape2.default({ kind: 'smallCross' }).getMask();
+
+        img.parent = this.map.parent;
+        img.position = [this.minX + this.center[0] - 1, this.minY + this.center[1] - 1];
+
+        return this.computed.centerMask = img;
     }
 
     get points() {
@@ -21724,7 +23763,74 @@ function getInternalIDs(roi) {
     return internal;
 }
 
-},{"../image":144,"../kindNames":146}],164:[function(require,module,exports){
+},{"../../util/shape":238,"../image":156,"../kindNames":158}],176:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = cmyk;
+
+var _model = require('../model/model');
+
+var _image = require('../image');
+
+var _image2 = _interopRequireDefault(_image);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Make a copy of the current image and convert the color model to CMYK
+ * The source image has to be RGB !
+ * @memberof Image
+ * @instance
+ * @returns {Image} - New image in CMYK color model
+ * @example
+ * var cmykImage = image.cmyk();
+ * // we can create one image per channel
+ * var channels = cmykImage.split();
+ */
+
+// http://www.easyrgb.com/index.php?X=MATH&H=18#text18
+// check rgbToHsl : https://bgrins.github.io/TinyColor/docs/tinycolor.html
+
+function cmyk() {
+    this.checkProcessable('cmyk', {
+        bitDepth: [8, 16],
+        alpha: [0, 1],
+        colorModel: [_model.RGB]
+    });
+
+    var newImage = _image2.default.createFrom(this, {
+        components: 4,
+        colorModel: _model.CMYK
+    });
+
+    var ptr = 0;
+    var data = this.data;
+    for (var i = 0; i < data.length; i += this.channels) {
+        var red = data[i];
+        var green = data[i + 1];
+        var blue = data[i + 2];
+
+        var black = Math.min(this.maxValue - red, this.maxValue - green, this.maxValue - blue);
+        var cyan = (this.maxValue - red - black) / (1 - black / this.maxValue);
+        var magenta = (this.maxValue - green - black) / (1 - black / this.maxValue);
+        var yellow = (this.maxValue - blue - black) / (1 - black / this.maxValue);
+
+        newImage.data[ptr++] = cyan;
+        newImage.data[ptr++] = magenta;
+        newImage.data[ptr++] = yellow;
+        newImage.data[ptr++] = black;
+        if (this.alpha) {
+            newImage.data[ptr++] = data[i + 3];
+        }
+    }
+
+    return newImage;
+}
+
+},{"../image":156,"../model/model":161}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21739,8 +23845,18 @@ var _image2 = _interopRequireDefault(_image);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
+ * Change the image color depth.
+ * The color depth is the number of bits that is assigned to each point of a channel.
+ * For normal images it is 8 bits meaning the value is between 0 and 255.
+ * Currently only conversion from 8 to 16 bits and 16 to 8 bits is allowed.
  * @memberof Image
  * @instance
+ * @param {number} [newColorDepth=8]
+ * @return {Image} The new image
+ * @example
+ * var newImage = image.colorDepth({
+ *   newColorDepth:8
+ * });
  */
 
 function colorDepth() {
@@ -21770,7 +23886,7 @@ function colorDepth() {
     return newImage;
 }
 
-},{"../image":144}],165:[function(require,module,exports){
+},{"../image":156}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21785,26 +23901,31 @@ var _image2 = _interopRequireDefault(_image);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
+ * Crops the image
  * @memberof Image
  * @instance
- * @param {object} $0 - options
- * @param {number} [$0.x=0] - x coordinate to place the zero of the new image
- * @param {number} [$0.y=0] - y coordinate to place the zero of the new image
- * @param {number} [$0.width=this.width-x] - width of the new image
- * @param {number} [$0.height=this.height-x] - height of the new image
+ * @param {object} options
+ * @param {number} [options.x=0] - x coordinate to place the zero of the new image
+ * @param {number} [options.y=0] - y coordinate to place the zero of the new image
+ * @param {number} [options.width=this.width-x] - width of the new image
+ * @param {number} [options.height=this.height-x] - height of the new image
  * @return {Image} The new cropped image
+ * @example
+ * var cropped = image.crop({
+ *   x:0,
+ *   y:0
+ * });
  */
 function crop() {
-    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-    var _ref$x = _ref.x;
-    var x = _ref$x === undefined ? 0 : _ref$x;
-    var _ref$y = _ref.y;
-    var y = _ref$y === undefined ? 0 : _ref$y;
-    var _ref$width = _ref.width;
-    var width = _ref$width === undefined ? this.width - x : _ref$width;
-    var _ref$height = _ref.height;
-    var height = _ref$height === undefined ? this.height - y : _ref$height;
+    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var _options$x = options.x;
+    var x = _options$x === undefined ? 0 : _options$x;
+    var _options$y = options.y;
+    var y = _options$y === undefined ? 0 : _options$y;
+    var _options$width = options.width;
+    var width = _options$width === undefined ? this.width - x : _options$width;
+    var _options$height = options.height;
+    var height = _options$height === undefined ? this.height - y : _options$height;
 
 
     if (x > this.width - 1 || y > this.height - 1) throw new RangeError(`crop: origin (x:${ x }, y:${ y }) out of range (${ this.width - 1 }; ${ this.height - 1 })`);
@@ -21832,24 +23953,7 @@ function crop() {
     return newImage;
 }
 
-},{"../image":144}],166:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = average;
-function average(newImage) {
-    var ptr = 0;
-    for (var i = 0; i < this.data.length; i += this.channels) {
-        newImage.data[ptr++] = (this.data[i] + this.data[i + 1] + this.data[i + 2]) / 3;
-        if (this.alpha) {
-            newImage.data[ptr++] = this.data[i + 3];
-        }
-    }
-}
-
-},{}],167:[function(require,module,exports){
+},{"../image":156}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21857,161 +23961,202 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = grey;
 
-var _image = require('../../image');
+var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _model = require('../../model/model');
+var _model = require('../model/model');
 
-var _luma = require('./luma709');
-
-var _luma2 = _interopRequireDefault(_luma);
-
-var _luma3 = require('./luma601');
-
-var _luma4 = _interopRequireDefault(_luma3);
-
-var _minmax = require('./minmax');
-
-var _minmax2 = _interopRequireDefault(_minmax);
-
-var _maximum = require('./maximum');
-
-var _maximum2 = _interopRequireDefault(_maximum);
-
-var _average = require('./average');
-
-var _average2 = _interopRequireDefault(_average);
+var _greyAlgorithms = require('./greyAlgorithms');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Converts the current image to grey scale
+ * The source image has to be RGB !
+ * If there is an alpha channel we need to decide what to do:
+ * * keepAlpha : we will keep the alpha channel and you will get a GREY / A image
+ * * mergeAlpha : we will multiply each pixel of the image by the alpha
  * @memberof Image
  * @instance
- * @returns {Image} - Grey scale image
+ * @param {object} options
+ * @param {string} [options.algorithm='luma709'] - Algorithm to get the grey image
+ * @param {boolean} [options.keepAlpha=false] - If true the RGB values are treated
+ *          separately from the alpha channel and the method returns a GREYA image.
+ * @param {boolean} [options.mergeAlpha=true] - If true the alpha channel will be applied on each pixel.
+ *          This means that if for an 8bits RGBA image we have an alpha channel value of 0,
+ *          this grey scale value will always be 0 (black pixel)
+ * @param {boolean} [options.allowGrey=false] - By default only RGB images are allowed.
+ *          If true grey images are also allowed and will either return a copy or
+ *          apply the alpha channel depending the options
+ * @returns {Image} - Grey scale image (with or without alpha depending the options)
+ * @example
+ * var grey = image.grey();
  */
 
 function grey() {
-    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var _options$algorithm = options.algorithm;
+    var algorithm = _options$algorithm === undefined ? 'luma709' : _options$algorithm;
+    var _options$keepAlpha = options.keepAlpha;
+    var keepAlpha = _options$keepAlpha === undefined ? false : _options$keepAlpha;
+    var _options$mergeAlpha = options.mergeAlpha;
+    var mergeAlpha = _options$mergeAlpha === undefined ? true : _options$mergeAlpha;
+    var _options$allowGrey = options.allowGrey;
+    var allowGrey = _options$allowGrey === undefined ? false : _options$allowGrey;
 
-    var _ref$algorithm = _ref.algorithm;
-    var algorithm = _ref$algorithm === undefined ? 'luma709' : _ref$algorithm;
 
+    var valid = {
+        bitDepth: [8, 16],
+        alpha: [0, 1]
+    };
 
-    if (this.components === 1) {
-        return this.clone();
+    if (!allowGrey) {
+        valid.colorModel = [_model.RGB];
+        valid.components = [3];
     }
 
-    this.checkProcessable('grey', { colorModel: _model.RGB });
+    this.checkProcessable('grey', valid);
+
+    if (this.components === 1) {
+        algorithm = 'red'; // actually we just take the first channel if it is a grey image
+    }
+
+    keepAlpha &= this.alpha;
+    mergeAlpha &= this.alpha;
+    if (keepAlpha) mergeAlpha = false;
 
     var newImage = _image2.default.createFrom(this, {
         components: 1,
+        alpha: keepAlpha,
         colorModel: null
     });
 
-    switch (algorithm.toLowerCase()) {
-        case 'luma709':
-            // sRGB
-            _luma2.default.call(this, newImage);
-            break;
-        case 'luma601':
-            // NTSC
-            _luma4.default.call(this, newImage);
-            break;
-        case 'minmax':
-            // used in HSL color model
-            _minmax2.default.call(this, newImage);
-            break;
-        case 'maximum':
-            _maximum2.default.call(this, newImage);
-            break;
-        case 'average':
-            // used in HSI color model
-            _average2.default.call(this, newImage);
-            break;
-        default:
-            throw new Error('Unsupported grey algorithm: ' + algorithm);
+    var method = _greyAlgorithms.methods[algorithm.toLowerCase()];
+    if (!method) throw new Error('Unsupported grey algorithm: ' + algorithm);
+
+    var ptr = 0;
+    for (var i = 0; i < this.data.length; i += this.channels) {
+        if (mergeAlpha) {
+            newImage.data[ptr++] = method(this.data, i, this) * this.data[i + this.components] / this.maxValue;
+        } else {
+            newImage.data[ptr++] = method(this.data, i, this);
+            if (newImage.alpha) {
+                newImage.data[ptr++] = this.data[i + this.components];
+            }
+        }
     }
 
     return newImage;
 }
 
-},{"../../image":144,"../../model/model":149,"./average":166,"./luma601":168,"./luma709":169,"./maximum":170,"./minmax":171}],168:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = luma601;
-function luma601(newImage) {
-    var ptr = 0;
-    for (var i = 0; i < this.data.length; i += this.channels) {
-        newImage.data[ptr++] = this.data[i] * 0.299 + this.data[i + 1] * 0.587 + this.data[i + 2] * 0.114;
-        if (this.alpha) {
-            newImage.data[ptr++] = this.data[i + 3];
-        }
-    }
-}
-
-},{}],169:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = luma709;
-function luma709(newImage) {
-    var ptr = 0;
-    for (var i = 0; i < this.data.length; i += this.channels) {
-        newImage.data[ptr++] = this.data[i] * 0.2126 + this.data[i + 1] * 0.7152 + this.data[i + 2] * 0.0722;
-        if (this.alpha) {
-            newImage.data[ptr++] = this.data[i + 3];
-        }
-    }
-}
-
-},{}],170:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = maximum;
-function maximum(newImage) {
-    var ptr = 0;
-    for (var i = 0; i < this.data.length; i += this.channels) {
-        newImage.data[ptr++] = Math.max(this.data[i], this.data[i + 1], this.data[i + 2]);
-        if (this.alpha) {
-            newImage.data[ptr++] = this.data[i + 3];
-        }
-    }
-}
-
-},{}],171:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = minmax;
-function minmax(newImage) {
-    var ptr = 0;
-    for (var i = 0; i < this.data.length; i += this.channels) {
-        newImage.data[ptr++] = (Math.max(this.data[i], this.data[i + 1], this.data[i + 2]) + Math.min(this.data[i], this.data[i + 1], this.data[i + 2])) / 2;
-        if (this.alpha) {
-            newImage.data[ptr++] = this.data[i + 3];
-        }
-    }
-}
-
-},{}],172:[function(require,module,exports){
+},{"../image":156,"../model/model":161,"./greyAlgorithms":180}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = hsv;
+var methods = exports.methods = {
+    luma709: function luma709(data, i) {
+        // sRGB
+        // return data[i] * 0.2126 + data[i + 1] * 0.7152 + data[i + 2] * 0.0722;
+        // Let's do a little trick ... in order not convert the integer to a double we do
+        // the multiplication with integer to reach a total of 32768 and then shift the bits
+        // of 15 to the right
+        // This does a Math.floor and may lead to small (max 1) difference
+        // Same result, > 10% faster on the full grey conversion
+        return data[i] * 6966 + data[i + 1] * 23436 + data[i + 2] * 2366 >> 15;
+    },
+    luma601: function luma601(data, i) {
+        // NTSC
+        // return this.data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+        return data[i] * 9798 + data[i + 1] * 19235 + data[i + 2] * 3735 >> 15;
+    },
+    maximum: function maximum(data, i) {
+        return Math.max(data[i], data[i + 1], data[i + 2]);
+    },
+    minimum: function minimum(data, i) {
+        return Math.min(data[i], data[i + 1], data[i + 2]);
+    },
+    average: function average(data, i) {
+        return (data[i] + data[i + 1] + data[i + 2]) / 3 >> 0;
+    },
+    minmax: function minmax(data, i) {
+        return (Math.max(data[i], data[i + 1], data[i + 2]) + Math.min(data[i], data[i + 1], data[i + 2])) / 2;
+    },
+    red: function red(data, i) {
+        return data[i];
+    },
+    green: function green(data, i) {
+        return data[i + 1];
+    },
+    blue: function blue(data, i) {
+        return data[i + 2];
+    },
+    cyan: function cyan(data, i, image) {
+        var black = methods.black(data, i, image);
+        return (image.maxValue - data[0] - black) / (1 - black / image.maxValue) >> 0;
+    },
+    magenta: function magenta(data, i, image) {
+        var black = methods.black(data, i, image);
+        return (image.maxValue - data[1] - black) / (1 - black / image.maxValue) >> 0;
+    },
+    yellow: function yellow(data, i, image) {
+        var black = methods.black(data, i, image);
+        return (image.maxValue - data[2] - black) / (1 - black / image.maxValue) >> 0;
+    },
+    black: function black(data, i, image) {
+        return Math.min(image.maxValue - data[i], image.maxValue - data[i + 1], image.maxValue - data[i + 2]);
+    },
+    hue: function hue(data, i, image) {
+        var min = methods.min(data, i);
+        var max = methods.max(data, i);
+        if (max === min) return 0;
+        var hue = 0;
+        var delta = max - min;
+
+        switch (max) {
+            case data[i]:
+                hue = (data[i + 1] - data[i + 2]) / delta + (data[i + 1] < data[i + 2] ? 6 : 0);
+                break;
+            case data[i + 1]:
+                hue = (data[i + 2] - data[i]) / delta + 2;
+                break;
+            case data[i + 2]:
+                hue = (data[i] - data[i + 1]) / delta + 4;
+                break;
+        }
+        return hue / 6 * image.maxValue >> 0;
+    },
+    saturation: function saturation(data, i, image) {
+        // from HSV model
+        var min = methods.min(data, i);
+        var max = methods.max(data, i);
+        var delta = max - min;
+        return max === 0 ? 0 : delta / max * image.maxValue;
+    },
+    lightness: function lightness(data, i) {
+        var min = methods.min(data, i);
+        var max = methods.max(data, i);
+        return (max + min) / 2;
+    }
+};
+
+Object.defineProperty(methods, 'luminosity', { enumerable: false, value: methods.lightness });
+Object.defineProperty(methods, 'luminance', { enumerable: false, value: methods.lightness });
+Object.defineProperty(methods, 'min', { enumerable: false, value: methods.minimum });
+Object.defineProperty(methods, 'max', { enumerable: false, value: methods.maximum });
+Object.defineProperty(methods, 'brightness', { enumerable: false, value: methods.maximum });
+
+var names = exports.names = Object.keys(methods);
+
+},{}],181:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = hsl;
 
 var _model = require('../model/model');
 
@@ -22022,15 +24167,22 @@ var _image2 = _interopRequireDefault(_image);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
+ * Make a copy of the current image and convert the color model to HSL
+ * The source image has to be RGB !
  * @memberof Image
  * @instance
+  * @returns {Image} - New image in HSL color model
+ * @example
+ * var hslImage = image.hsl();
+ * // we can create one image per channel
+ * var channels = hslImage.split();
  */
 
 // http://www.easyrgb.com/index.php?X=MATH&H=18#text18
 // check rgbToHsl : https://bgrins.github.io/TinyColor/docs/tinycolor.html
 
-function hsv() {
-    this.checkProcessable('hsv', {
+function hsl() {
+    this.checkProcessable('hsl', {
         bitDepth: [8, 16],
         alpha: [0, 1],
         colorModel: [_model.RGB]
@@ -22081,7 +24233,7 @@ function hsv() {
     return newImage;
 }
 
-},{"../image":144,"../model/model":149}],173:[function(require,module,exports){
+},{"../image":156,"../model/model":161}],182:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22098,8 +24250,15 @@ var _image2 = _interopRequireDefault(_image);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
+ * Make a copy of the current image and convert the color model to HSV
+ * The source image has to be RGB !
  * @memberof Image
  * @instance
+ * @returns {Image} - New image in HSV color model
+ * @example
+ * var hsvImage = image.hsv();
+ * // we can create one image per channel
+ * var channels = hsvImage.split();
  */
 
 // based on https://bgrins.github.io/TinyColor/docs/tinycolor.html
@@ -22155,7 +24314,7 @@ function hsv() {
     return newImage;
 }
 
-},{"../image":144,"../model/model":149}],174:[function(require,module,exports){
+},{"../image":156,"../model/model":161}],183:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22239,7 +24398,7 @@ function huang(histogram) {
     return threshold;
 }
 
-},{}],175:[function(require,module,exports){
+},{}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22303,7 +24462,7 @@ function bimodalTest(iHisto) {
     return b;
 }
 
-},{}],176:[function(require,module,exports){
+},{}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22357,7 +24516,7 @@ function isodata(histogram) {
     return g;
 }
 
-},{}],177:[function(require,module,exports){
+},{}],186:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22441,7 +24600,7 @@ function li(histogram, total) {
     return threshold;
 }
 
-},{}],178:[function(require,module,exports){
+},{}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22452,6 +24611,83 @@ exports.default = mask;
 var _image = require('../../image');
 
 var _image2 = _interopRequireDefault(_image);
+
+var _maskAlgorithms = require('./maskAlgorithms');
+
+var _converter = require('../../../util/converter');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Creation of binary mask is based on the determination of a threshold
+ * You may either choose among the provided algorithm or just specify a threshold value
+ * @memberof Image
+ * @instance
+ * @returns {Image} - Binary image containins the mask
+ */
+
+function mask() {
+    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+    var _ref$algorithm = _ref.algorithm;
+    var algorithm = _ref$algorithm === undefined ? 'threshold' : _ref$algorithm;
+    var _ref$threshold = _ref.threshold;
+    var threshold = _ref$threshold === undefined ? 0.5 : _ref$threshold;
+    var _ref$useAlpha = _ref.useAlpha;
+    var useAlpha = _ref$useAlpha === undefined ? true : _ref$useAlpha;
+    var _ref$invert = _ref.invert;
+    var invert = _ref$invert === undefined ? false : _ref$invert;
+
+
+    this.checkProcessable('mask', {
+        components: 1,
+        bitDepth: [8, 16]
+    });
+
+    if (algorithm === 'threshold') {
+        threshold = (0, _converter.getThreshold)(threshold, this.maxValue);
+    } else {
+        var method = _maskAlgorithms.methods[algorithm];
+        if (method) {
+            var histogram = this.getHistogram();
+            threshold = method(histogram, this.size);
+        } else {
+            throw new Error('mask transform unknown algorithm: ' + algorithm);
+        }
+    }
+
+    var newImage = new _image2.default(this.width, this.height, {
+        kind: 'BINARY',
+        parent: this
+    });
+
+    var ptr = 0;
+    if (this.alpha && useAlpha) {
+        for (var i = 0; i < this.data.length; i += this.channels) {
+            var value = this.data[i] + (this.maxValue - this.data[i]) * (this.maxValue - this.data[i + 1]) / this.maxValue;
+            if (invert && value <= threshold || !invert && value >= threshold) {
+                newImage.setBit(ptr);
+            }
+            ptr++;
+        }
+    } else {
+        for (var _i = 0; _i < this.data.length; _i += this.channels) {
+            if (invert && this.data[_i] <= threshold || !invert && this.data[_i] >= threshold) {
+                newImage.setBit(ptr);
+            }
+            ptr++;
+        }
+    }
+    return newImage;
+}
+
+},{"../../../util/converter":232,"../../image":156,"./maskAlgorithms":188}],188:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.names = exports.methods = undefined;
 
 var _huang = require('./huang');
 
@@ -22513,116 +24749,29 @@ var _yen = require('./yen');
 
 var _yen2 = _interopRequireDefault(_yen);
 
-var _converter = require('../../../util/converter');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * Creation of binary mask is based on the determination of a threshold
- * You may either choose among the provided algorithm or just specify a threshold value
- * @memberof Image
- * @instance
- * @returns {Image} - Binary image containins the mask
- */
+var methods = exports.methods = {
+    huang: _huang2.default,
+    intermodes: _intermodes2.default,
+    isodata: _isodata2.default,
+    li: _li2.default,
+    maxEntropy: _maxEntropy2.default,
+    mean: _mean2.default,
+    minError: _minError2.default,
+    minimum: _minimum2.default,
+    moments: _moments2.default,
+    otsu: _otsu2.default,
+    percentile: _percentile2.default,
+    renyiEntropy: _renyiEntropy2.default,
+    shanbhag: _shanbhag2.default,
+    triangle: _triangle2.default,
+    yen: _yen2.default
+};
 
-function mask() {
-    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+var names = exports.names = ['threshold'].concat(Object.keys(methods));
 
-    var _ref$algorithm = _ref.algorithm;
-    var algorithm = _ref$algorithm === undefined ? 'threshold' : _ref$algorithm;
-    var _ref$threshold = _ref.threshold;
-    var threshold = _ref$threshold === undefined ? 0.5 : _ref$threshold;
-    var _ref$useAlpha = _ref.useAlpha;
-    var useAlpha = _ref$useAlpha === undefined ? true : _ref$useAlpha;
-    var _ref$invert = _ref.invert;
-    var invert = _ref$invert === undefined ? false : _ref$invert;
-
-
-    this.checkProcessable('mask', {
-        components: 1,
-        bitDepth: [8, 16]
-    });
-
-    var histogram = this.getHistogram();
-    switch (algorithm.toLowerCase()) {
-        case 'threshold':
-            threshold = (0, _converter.getThreshold)(threshold, this.maxValue);
-            break;
-        case 'huang':
-            threshold = (0, _huang2.default)(histogram);
-            break;
-        case 'intermodes':
-            threshold = (0, _intermodes2.default)(histogram);
-            break;
-        case 'isodata':
-            threshold = (0, _isodata2.default)(histogram);
-            break;
-        case 'li':
-            threshold = (0, _li2.default)(histogram, this.size);
-            break;
-        case 'maxentropy':
-            threshold = (0, _maxEntropy2.default)(histogram, this.size);
-            break;
-        case 'mean':
-            threshold = (0, _mean2.default)(histogram, this.size);
-            break;
-        case 'minerror':
-            threshold = (0, _minError2.default)(histogram, this.size);
-            break;
-        case 'minimum':
-            threshold = (0, _minimum2.default)(histogram);
-            break;
-        case 'moments':
-            threshold = (0, _moments2.default)(histogram, this.size);
-            break;
-        case 'otsu':
-            threshold = (0, _otsu2.default)(histogram, this.size);
-            break;
-        case 'percentile':
-            threshold = (0, _percentile2.default)(histogram);
-            break;
-        case 'renyientropy':
-            threshold = (0, _renyiEntropy2.default)(histogram, this.size);
-            break;
-        case 'shanbhag':
-            threshold = (0, _shanbhag2.default)(histogram, this.size);
-            break;
-        case 'triangle':
-            threshold = (0, _triangle2.default)(histogram);
-            break;
-        case 'yen':
-            threshold = (0, _yen2.default)(histogram, this.size);
-            break;
-        default:
-            throw new Error('mask transform unknown algorithm: ' + algorithm);
-    }
-
-    var newImage = new _image2.default(this.width, this.height, {
-        kind: 'BINARY',
-        parent: this
-    });
-
-    var ptr = 0;
-    if (this.alpha && useAlpha) {
-        for (var i = 0; i < this.data.length; i += this.channels) {
-            var value = this.data[i] + (this.maxValue - this.data[i]) * (this.maxValue - this.data[i + 1]) / this.maxValue;
-            if (invert && value <= threshold || !invert && value >= threshold) {
-                newImage.setBit(ptr);
-            }
-            ptr++;
-        }
-    } else {
-        for (var _i = 0; _i < this.data.length; _i += this.channels) {
-            if (invert && this.data[_i] <= threshold || !invert && this.data[_i] >= threshold) {
-                newImage.setBit(ptr);
-            }
-            ptr++;
-        }
-    }
-    return newImage;
-}
-
-},{"../../../util/converter":221,"../../image":144,"./huang":174,"./intermodes":175,"./isodata":176,"./li":177,"./maxEntropy":179,"./mean":180,"./minError":181,"./minimum":182,"./moments":183,"./otsu":184,"./percentile":185,"./renyiEntropy.js":186,"./shanbhag":187,"./triangle":188,"./yen":189}],179:[function(require,module,exports){
+},{"./huang":183,"./intermodes":184,"./isodata":185,"./li":186,"./maxEntropy":189,"./mean":190,"./minError":191,"./minimum":192,"./moments":193,"./otsu":194,"./percentile":195,"./renyiEntropy.js":196,"./shanbhag":197,"./triangle":198,"./yen":199}],189:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22707,7 +24856,7 @@ function maxEntropy(histogram, total) {
     return threshold;
 }
 
-},{}],180:[function(require,module,exports){
+},{}],190:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22716,7 +24865,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = mean;
 /*
  * The method is present in: Uses the 	mean of grey levels as the threshold. It is described in:
- * Glasbey, CA (1993), "An analysis of histogram-based thresholding names",
+ * Glasbey, CA (1993), "An analysis of histogram-based thresholding algorithms",
  * CVGIP: Graphical Models and Image Processing 55: 532-537
  * @param histogram - the histogram of the image
  *        total - the number of pixels in the image
@@ -22731,7 +24880,7 @@ function mean(histogram, total) {
     return Math.floor(sum / total);
 }
 
-},{}],181:[function(require,module,exports){
+},{}],191:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22839,7 +24988,7 @@ function sumC(y, j) {
     return x;
 }
 
-},{}],182:[function(require,module,exports){
+},{}],192:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22914,7 +25063,7 @@ function bimodalTest(histogram) {
     return isBimodal;
 }
 
-},{}],183:[function(require,module,exports){
+},{}],193:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22985,7 +25134,7 @@ function partialSum(histogram, limite) {
     return sum;
 }
 
-},{}],184:[function(require,module,exports){
+},{}],194:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23035,7 +25184,7 @@ function otsu(histogram, total) {
     return threshold;
 }
 
-},{}],185:[function(require,module,exports){
+},{}],195:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23077,7 +25226,7 @@ function partialSum(histogram, endIndex) {
     return x;
 }
 
-},{}],186:[function(require,module,exports){
+},{}],196:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23193,7 +25342,7 @@ function renyiEntropy(histogram, total) {
     /* End Maximum Entropy Thresholding */
 
     var t_stars = [threshold1, threshold2, threshold3];
-    t_stars.sort();
+    t_stars.sort((a, b) => a - b);
 
     var betas = void 0;
 
@@ -23219,7 +25368,7 @@ function renyiEntropy(histogram, total) {
     return opt_threshold;
 }
 
-},{}],187:[function(require,module,exports){
+},{}],197:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23299,7 +25448,7 @@ function shanbhag(histogram, total) {
     return threshold;
 }
 
-},{}],188:[function(require,module,exports){
+},{}],198:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23409,7 +25558,7 @@ function triangle(histogram) {
     } else return split;
 }
 
-},{}],189:[function(require,module,exports){
+},{}],199:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23460,7 +25609,7 @@ function yen(histogram, total) {
     return threshold;
 }
 
-},{}],190:[function(require,module,exports){
+},{}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23553,7 +25702,7 @@ function pad() {
     return newImage;
 }
 
-},{"../image":144,"../utility/copy":195,"new-array":101}],191:[function(require,module,exports){
+},{"../image":156,"../utility/copy":206,"new-array":108}],201:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23574,7 +25723,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * This is a temporary code that should be placed in the more generate resize method
+ * This is a temporary code that should be placed in the more general resize method
  * it only works for scaled down !
  * @memberof Image
  * @instance
@@ -23612,7 +25761,7 @@ function resizeBinary() {
     return newImage;
 }
 
-},{"../image":144,"../kindNames":146}],192:[function(require,module,exports){
+},{"../image":156,"../kindNames":158}],202:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23624,18 +25773,25 @@ var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _model = require('../model/model');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * Make a copy of the current image and convert to a RGBA 8 bits
+ * Make a copy of the current image and convert to RGBA 8 bits
+ * Those images are the one that are displayed in a canvas.
+ * RGB model in 8 bits per channel and containing as well an alpha channel.
+ * The source image may be:
+ * * a mask (binary image)
+ * * a grey image (8 or 16 bits) with or without alpha channel
+ * * a color image (8 or 16 bits) with or without alpha channel in with RGB model
+ * The conversion is based on {@link Image#getRGBAData}.
  * @memberof Image
  * @instance
+ * @returns {Image} - New image in RGB color model with alpha channel
+ * @example
+ * var rgbaImage = image.rgba8();
  */
 
 function rgba8() {
-
     var newImage = new _image2.default(this.width, this.height, {
         kind: 'RGBA'
     });
@@ -23644,7 +25800,7 @@ function rgba8() {
     return newImage;
 }
 
-},{"../image":144,"../model/model":149}],193:[function(require,module,exports){
+},{"../image":156}],203:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23669,7 +25825,7 @@ function nearestNeighbor(newImage, newWidth, newHeight) {
     }
 }
 
-},{}],194:[function(require,module,exports){
+},{}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23726,7 +25882,74 @@ function scale() {
     return newImage;
 }
 
-},{"../../../util/converter":221,"../../image":144,"./nearestNeighbor":193}],195:[function(require,module,exports){
+},{"../../../util/converter":232,"../../image":156,"./nearestNeighbor":203}],205:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = combineChannels;
+
+var _image = require('../image');
+
+var _image2 = _interopRequireDefault(_image);
+
+var _channel = require('./../../util/channel');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @memberof Image
+ *
+ * alpha  String : possible values: 'skip', 'keep', 'join' (default: 'skip')
+ *
+ * @instance
+ */
+
+function combineChannels() {
+    var method = arguments.length <= 0 || arguments[0] === undefined ? function (pixel) {
+        return (pixel[0] + pixel[1] + pixel[2]) / 3;
+    } : arguments[0];
+
+    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+    var _ref$mergeAlpha = _ref.mergeAlpha;
+    var mergeAlpha = _ref$mergeAlpha === undefined ? false : _ref$mergeAlpha;
+    var _ref$keepAlpha = _ref.keepAlpha;
+    var keepAlpha = _ref$keepAlpha === undefined ? false : _ref$keepAlpha;
+
+
+    mergeAlpha &= this.alpha;
+    keepAlpha &= this.alpha;
+
+    this.checkProcessable('combineChannels', {
+        bitDepth: [8, 16]
+    });
+
+    var newImage = _image2.default.createFrom(this, {
+        components: 1,
+        alpha: keepAlpha,
+        colorModel: null
+    });
+
+    var ptr = 0;
+    for (var i = 0; i < this.size; i++) {
+        // TODO quite slow because we create a new pixel each time
+        var value = method(this.getPixel(i));
+        if (mergeAlpha) {
+            newImage.data[ptr++] = value * this.data[i * this.channels + this.components] / this.maxValue;
+        } else {
+            newImage.data[ptr++] = value;
+            if (keepAlpha) {
+                newImage.data[ptr++] = this.data[i * this.channels + this.components];
+            }
+        }
+    }
+
+    return newImage;
+}
+
+},{"../image":156,"./../../util/channel":230}],206:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23757,7 +25980,7 @@ function copyImage(fromImage, toImage, x, y) {
     }
 }
 
-},{}],196:[function(require,module,exports){
+},{}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23838,7 +26061,7 @@ function match(image) {
     return [currentX - middleX, currentY - middleY];
 }
 
-},{"../../util/matrix":226}],197:[function(require,module,exports){
+},{"../../util/matrix":237}],208:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23856,10 +26079,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * @memberof Image
+ *
+ * alpha  String : possible values: 'skip', 'keep', 'join' (default: 'skip')
+ *
  * @instance
  */
 
 function getChannel(channel) {
+    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+    var _ref$keepAlpha = _ref.keepAlpha;
+    var keepAlpha = _ref$keepAlpha === undefined ? false : _ref$keepAlpha;
+    var _ref$mergeAlpha = _ref.mergeAlpha;
+    var mergeAlpha = _ref$mergeAlpha === undefined ? false : _ref$mergeAlpha;
+
+
+    keepAlpha &= this.alpha;
+    mergeAlpha &= this.alpha;
 
     this.checkProcessable('getChannel', {
         bitDepth: [8, 16]
@@ -23869,18 +26105,25 @@ function getChannel(channel) {
 
     var newImage = _image2.default.createFrom(this, {
         components: 1,
-        alpha: false,
+        alpha: keepAlpha,
         colorModel: null
     });
     var ptr = 0;
-    for (var j = channel; j < this.data.length; j += this.channels) {
-        newImage.data[ptr++] = this.data[j];
+    for (var j = 0; j < this.data.length; j += this.channels) {
+        if (mergeAlpha) {
+            newImage.data[ptr++] = this.data[j + channel] * this.data[j + this.components] / this.maxValue;
+        } else {
+            newImage.data[ptr++] = this.data[j + channel];
+            if (keepAlpha) {
+                newImage.data[ptr++] = this.data[j + this.components];
+            }
+        }
     }
 
     return newImage;
 }
 
-},{"../image":144,"./../../util/channel":219}],198:[function(require,module,exports){
+},{"../image":156,"./../../util/channel":230}],209:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23921,7 +26164,7 @@ function getColumn(column) {
     return array;
 }
 
-},{"../image":144,"./../../util/channel":219}],199:[function(require,module,exports){
+},{"../image":156,"./../../util/channel":230}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23965,7 +26208,7 @@ function getMatrix() {
     return matrix;
 }
 
-},{"ml-matrix":75}],200:[function(require,module,exports){
+},{"ml-matrix":80}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24034,7 +26277,7 @@ function getPixelsGrid() {
     return toReturn;
 }
 
-},{}],201:[function(require,module,exports){
+},{}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24077,7 +26320,7 @@ function getRow(row) {
     return array;
 }
 
-},{"../image":144,"./../../util/channel":219}],202:[function(require,module,exports){
+},{"../image":156,"./../../util/channel":230}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24168,7 +26411,7 @@ function getSimilarity(image) {
     return results;
 }
 
-},{"../image":144,"./../../util/channel":219,"new-array":101}],203:[function(require,module,exports){
+},{"../image":156,"./../../util/channel":230,"new-array":108}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24254,7 +26497,7 @@ function setBorder() {
     }
 }
 
-},{"../image":144,"new-array":101}],204:[function(require,module,exports){
+},{"../image":156,"new-array":108}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24300,7 +26543,7 @@ function setChannel(channel, image) {
     }
 }
 
-},{"../image":144,"./../../util/channel":219}],205:[function(require,module,exports){
+},{"../image":156,"./../../util/channel":230}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24346,7 +26589,7 @@ function setMatrix(matrix) {
     }
 }
 
-},{"ml-matrix":75}],206:[function(require,module,exports){
+},{"ml-matrix":80}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24416,7 +26659,7 @@ function split() {
     return images;
 }
 
-},{"../image":144}],207:[function(require,module,exports){
+},{"../image":156}],218:[function(require,module,exports){
 'use strict';
 
 var _environment = require('./image/environment');
@@ -24425,11 +26668,16 @@ module.exports = exports = require('./image/image').default;
 exports.Stack = require('./stack/stack').default;
 exports.Kernel = require('./kernel/kernel');
 
+exports.Static = {
+    grey: require('./image/transform/greyAlgorithms').names,
+    mask: require('./image/transform/mask/maskAlgorithms').names
+};
+
 if (_environment.env === 'browser') {
     exports.Worker = require('./worker/worker').default;
 }
 
-},{"./image/environment":124,"./image/image":144,"./kernel/kernel":208,"./stack/stack":216,"./worker/worker":231}],208:[function(require,module,exports){
+},{"./image/environment":136,"./image/image":156,"./image/transform/greyAlgorithms":180,"./image/transform/mask/maskAlgorithms":188,"./kernel/kernel":219,"./stack/stack":227,"./worker/worker":242}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24457,7 +26705,7 @@ Object.defineProperty(exports, 'laplacianOfGaussian', {
   }
 });
 
-},{"../util/kernels":225,"./laplacianOfGaussian":209}],209:[function(require,module,exports){
+},{"../util/kernels":236,"./laplacianOfGaussian":220}],220:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24488,7 +26736,7 @@ function laplacianOfGaussian(sigma, nPoints, factor) {
     return kernel;
 }
 
-},{}],210:[function(require,module,exports){
+},{}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24516,7 +26764,7 @@ function histogram(options) {
     return histogram;
 }
 
-},{}],211:[function(require,module,exports){
+},{}],222:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24547,7 +26795,7 @@ function histograms(options) {
     return histograms;
 }
 
-},{}],212:[function(require,module,exports){
+},{}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24574,7 +26822,7 @@ function max() {
     return max;
 }
 
-},{}],213:[function(require,module,exports){
+},{}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24604,7 +26852,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":223}],214:[function(require,module,exports){
+},{"../../util/histogram":234}],225:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24630,7 +26878,7 @@ function min() {
     return min;
 }
 
-},{}],215:[function(require,module,exports){
+},{}],226:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24681,7 +26929,7 @@ function extend(Stack) {
     Stack.extendMethod('getAverage', _average2.default);
 }
 
-},{"./compute/histogram":210,"./compute/histograms":211,"./compute/max":212,"./compute/median":213,"./compute/min":214,"./transform/matchAndCrop":217,"./utility/average":218}],216:[function(require,module,exports){
+},{"./compute/histogram":221,"./compute/histograms":222,"./compute/max":223,"./compute/median":224,"./compute/min":225,"./transform/matchAndCrop":228,"./utility/average":229}],227:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24840,7 +27088,7 @@ if (!Array[Symbol.species]) {
 
 (0, _extend2.default)(Stack);
 
-},{"../image/image":144,"./extend":215}],217:[function(require,module,exports){
+},{"../image/image":156,"./extend":226}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24957,7 +27205,7 @@ function matchAndCrop() {
    The match is always done on the first image ?
   */
 
-},{"../stack":216}],218:[function(require,module,exports){
+},{"../stack":227}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25005,7 +27253,7 @@ function average() {
     return image;
 }
 
-},{"../../image/image":144}],219:[function(require,module,exports){
+},{"../../image/image":156}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25021,11 +27269,10 @@ var Model = _interopRequireWildcard(_model);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function validateArrayOfChannels(image) {
-    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-    var channels = _ref.channels;
-    var allowAlpha = _ref.allowAlpha;
-    var defaultAlpha = _ref.defaultAlpha;
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var channels = options.channels;
+    var allowAlpha = options.allowAlpha;
+    var defaultAlpha = options.defaultAlpha;
 
 
     if (typeof allowAlpha !== 'boolean') allowAlpha = true;
@@ -25074,6 +27321,28 @@ function validateChannel(image, channel) {
                 case 'b':
                     channel = 2;
                     break;
+                case 'h':
+                    channel = 0;
+                    break;
+                case 's':
+                    channel = 1;
+                    break;
+                case 'l':
+                case 'v':
+                    channel = 2;
+                    break;
+                case 'c':
+                    channel = 0;
+                    break;
+                case 'm':
+                    channel = 1;
+                    break;
+                case 'y':
+                    channel = 2;
+                    break;
+                case 'k':
+                    channel = 3;
+                    break;
             }
         }
 
@@ -25098,7 +27367,7 @@ function validateChannel(image, channel) {
     return channel;
 }
 
-},{"../image/model/model":149}],220:[function(require,module,exports){
+},{"../image/model/model":161}],231:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25229,7 +27498,7 @@ function getBrightness(color) {
     return (color[0] / 255 * 299 + color[1] / 255 * 587 + color[2] / 255 * 114) / (color[3] || 1);
 }
 
-},{"color-functions":5}],221:[function(require,module,exports){
+},{"color-functions":5}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25289,7 +27558,7 @@ function factorDimensions(factor, width, height) {
     };
 }
 
-},{}],222:[function(require,module,exports){
+},{}],233:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25298,7 +27567,7 @@ Object.defineProperty(exports, "__esModule", {
 var dx = exports.dx = [+1, 0, -1, 0, +1, +1, -1, -1];
 var dy = exports.dy = [0, +1, 0, -1, +1, -1, +1, -1];
 
-},{}],223:[function(require,module,exports){
+},{}],234:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25357,7 +27626,7 @@ function mean(histogram) {
     return sum / total;
 }
 
-},{}],224:[function(require,module,exports){
+},{}],235:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25404,7 +27673,7 @@ function validateKernel(kernel) {
     return { kernel: kernel, kWidth: kWidth, kHeight: kHeight };
 }
 
-},{"is-integer":42}],225:[function(require,module,exports){
+},{"is-integer":47}],236:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25422,7 +27691,7 @@ var SECOND_DERIVATIVE = exports.SECOND_DERIVATIVE = [[-1, -2, 0, 2, 1], [-2, -4,
 
 var SECOND_DERIVATIVE_INV = exports.SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
 
-},{}],226:[function(require,module,exports){
+},{}],237:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25493,7 +27762,7 @@ Matrix.prototype.localSearch = function (x, y, value) {
     return results;
 };
 
-},{}],227:[function(require,module,exports){
+},{}],238:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25503,6 +27772,16 @@ Object.defineProperty(exports, "__esModule", {
 var _mlMatrix = require('ml-matrix');
 
 var _mlMatrix2 = _interopRequireDefault(_mlMatrix);
+
+var _image = require('../image/image');
+
+var _image2 = _interopRequireDefault(_image);
+
+var _kindNames = require('../image/kindNames');
+
+var KindNames = _interopRequireWildcard(_kindNames);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25543,11 +27822,10 @@ class Shape {
                     this.matrix = smallCross;
                     break;
             }
-            this.height = this.matrix.length;
-            this.width = this.matrix[0].length;
-            if (this.height & 1 === 0 || this.width & 1 === 0) {
-                throw new Error('Shapes must have an odd height and width');
-            }
+            //
+            // if ((this.height & 1 === 0) || (this.width & 1 === 0)) {
+            //     throw new Error('Shapes must have an odd height and width');
+            // }
         } else {
             switch (shape) {
                 case 'square':
@@ -25562,10 +27840,10 @@ class Shape {
                     this.matrix = triangle(width, height);
                     break;
                 default:
-
             }
         }
-
+        this.height = this.matrix.length;
+        this.width = this.matrix[0].length;
         this.halfHeight = this.height / 2 >> 0;
         this.halfWidth = this.width / 2 >> 0;
     }
@@ -25581,6 +27859,20 @@ class Shape {
             }
         }
         return points;
+    }
+
+    getMask() {
+        var img = new _image2.default(this.width, this.height, {
+            kind: KindNames.BINARY
+        });
+        for (var y = 0; y < this.matrix.length; y++) {
+            for (var x = 0; x < this.matrix[0].length; x++) {
+                if (this.matrix[y][x]) {
+                    img.setBitXY(x, y);
+                }
+            }
+        }
+        return img;
     }
 }
 
@@ -25625,7 +27917,7 @@ function triangle(width, height) {
     return matrix;
 }
 
-},{"ml-matrix":75}],228:[function(require,module,exports){
+},{"../image/image":156,"../image/kindNames":158,"ml-matrix":80}],239:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25658,7 +27950,7 @@ function checkNumberArray(value) {
     }
 }
 
-},{"../image/image":144,"is-array-type":40}],229:[function(require,module,exports){
+},{"../image/image":156,"is-array-type":45}],240:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25676,7 +27968,7 @@ function extend(Worker) {
     Worker.extendMethod('background', _background2.default);
 }
 
-},{"./process/background":230}],230:[function(require,module,exports){
+},{"./process/background":241}],241:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25776,7 +28068,7 @@ function work() {
 
 exports.default = { run: run, work: work };
 
-},{"../../image/image":144,"extend":19}],231:[function(require,module,exports){
+},{"../../image/image":156,"extend":19}],242:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25852,5 +28144,5 @@ class Worker {
 
 exports.default = new Worker();
 
-},{"../image/image":144,"./extend":229,"web-worker-manager":109}]},{},[207])(207)
+},{"../image/image":156,"./extend":240,"web-worker-manager":121}]},{},[218])(218)
 });
