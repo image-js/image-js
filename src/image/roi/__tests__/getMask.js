@@ -31,7 +31,7 @@ describe('we check ROI.getMask', function () {
         Array.from(mask.data).should.eql([0b01000111,0b10011110,0b00100000,0]);
     });
 
-    it.only('should yield the right mask, position and resize', function () {
+    it('should yield the right mask, position and resize', function () {
         let image = new Image(5, 5, {kind: 'GREY'});
         image.data = [
             0, 0, 0, 0, 0,
@@ -60,13 +60,13 @@ describe('we check ROI.getMask', function () {
         (rois[0].getMask().parent.parent.parent === undefined).should.be.true();  // no parent to grey image
 
 
-        let roi0Mask=rois[0].getMask({scale: 0.34});
+        let roi0Mask = rois[0].getMask({scale: 0.34});
         roi0Mask.position.should.eql([2,2]);
         roi0Mask.parent.size.should.equal(25); // the mask image
         roi0Mask.parent.parent.size.should.equal(25); // the grey image
         (roi0Mask.parent.parent.parent === undefined).should.be.true();  // no parent to grey image
-        
-        let roi1Mask=rois[1].getMask({scale: 0.2});
+
+        let roi1Mask = rois[1].getMask({scale: 0.2});
         roi1Mask.position.should.eql([2,2]);
 
         let painted = roiManager.paint({scale: 0.34, positive: true, negative: false});
