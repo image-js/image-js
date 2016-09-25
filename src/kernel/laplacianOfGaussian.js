@@ -1,3 +1,5 @@
+// http://homepages.inf.ed.ac.uk/rbf/HIPR2/log.htm
+
 export function laplacianOfGaussian(sigma, nPoints, factor) {
     let kernel = new Array(nPoints);
     let i, j, x2, y2;
