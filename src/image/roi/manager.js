@@ -136,16 +136,6 @@ export default class ROIManager {
         return masks;
     }
 
-    // getContours(options = {}) {
-    //     let rois = this.getROI(options);
-    //
-    //     let contours = new Array(rois.length);
-    //     for (let i = 0; i < rois.length; i++) {
-    //         contours[i] = rois[i].contourMask;
-    //     }
-    //     return contours;
-    // }
-
     getPixels(options = {}) {
         let opt = extendObject({}, this._options, options);
         if (this._layers[opt.label]) {
@@ -159,22 +149,22 @@ export default class ROIManager {
      * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
      * @param alpha Value from 0 to 255 to specify the alpha. Will be used if it is unspecified
      * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask
-     * @param contourMask {boolean} true if display only the contourMask
+     * @param [number] {options.scale=1} Scaling factor to apply to the mask
+     * @param [string] {kind='normal'} 'contour', 'box', 'filled', 'center' or 'normal' (default 'normal')
      * @param randomColors If we we would like to paint each mask with a random color
      * @param distinctColors If we we would like to paint each mask with a different color (default: false);
      * @param showLabels Paint a mask property on the image (default: false). If true will display the 'id'.
      *                      May be any property of the ROI. . Requires a RGBA image !
      * @param labelColor Define the color to paint the labels (default : 'blue')
      * @param labelFont Define the size of the labels ID (default : '12px Helvetica')
+     *
      *  id: true / false
      *  color
      * @returns {*|null}
      */
 
     paint(options = {}) {
-        let showLabels = options.showLabels;
-        let labelColor = options.labelColor || 'blue';
-        let labelFont = options.labelFont || '12px Helvetica';
+        const {showLabels, labelColor = 'blue', labelFont = '12px Helvetica'} = options;
 
         if (!this._painted) this._painted = this._image.rgba8();
         let masks = this.getMasks(options);
@@ -217,7 +207,11 @@ export default class ROIManager {
     }
 
     resetPainted(image) {
-        this._painted = image;
+        if (image) {
+            this._painted = this.image.rgba8();
+        } else {
+            this._painted = this._image.rgba8();
+        }
     }
 
     /**

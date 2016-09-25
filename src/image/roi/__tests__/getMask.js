@@ -70,7 +70,6 @@ describe('we check ROI.getMask', function () {
         roi1Mask.position.should.eql([2,2]);
 
         let painted = roiManager.paint({scale: 0.34, positive: true, negative: false});
-
         Array.from(painted.getChannel(0).data).should.eql(
             [
                 0, 0, 0, 0, 0,
