@@ -24,12 +24,14 @@ export default class ROI {
     }
 
     /**
-     *
-     * @param scale Scaling factor to apply to the mask
-     * @param kind 'contour', 'box', 'filled' or '' (default '')
+     * Returns a binary image (mask) for the corresponding ROI
+     * @param [object] options
+     * @param [number] {options.scale=1} Scaling factor to apply to the mask
+     * @param [string] {kind='normal'} 'contour', 'box', 'filled', 'center' or 'normal' (default 'normal')
      * @returns {*}
      */
-    getMask({scale = 1, kind = ''} = {}) {
+    getMask(options = {}) {
+        const {scale = 1, kind = ''} = options;
         let mask;
         switch (kind) {
             case 'contour':
@@ -52,6 +54,7 @@ export default class ROI {
             // by reassigning the mask we loose the parent and therefore the position
             // we will have to force it back
             mask = mask.resizeBinary(scale);
+            mask.parent = this.mask.parent;
             mask.position[0] += this.minX;
             mask.position[1] += this.minY;
         }
