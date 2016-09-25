@@ -46,7 +46,5 @@ describe('check the medianFilter filter', function () {
             ]
         );
     });
-
-
 });
 

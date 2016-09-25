@@ -30,6 +30,46 @@ describe('we check ROI.getMask', function () {
 
         Array.from(mask.data).should.eql([0b01000111,0b10011110,0b00100000,0]);
     });
+
+    it('should yield the right mask, position and resize', function () {
+        let image = new Image(5, 5, {kind: 'GREY'});
+        image.data = [
+            0, 0, 0, 0, 0,
+            0, 1, 1, 1, 0,
+            0, 1, 1, 1, 0,
+            0, 1, 1, 1, 0,
+            0, 0, 0, 0, 0
+        ];
+
+        let mask = image.mask({threshold: 1, algorithm:'threshold'});
+
+        Array.from(mask.data).should.eql([3, 156, 224, 0]);
+
+
+        let roiManager = image.getROIManager();
+        roiManager.fromMask(mask, {positive: true, negative: false});
+
+        let rois = roiManager.getROI().sort(function (a,b) {return a.surface - b.surface;});
+        rois[0].surface.should.equal(9);
+        rois[1].surface.should.equal(16);
+        rois[0].getMask().position.should.eql([1,1]);
+        rois[1].getMask().position.should.eql([0,0]);
+
+        rois[0].getMask({scale: 0.34}).position.should.eql([2,2]);
+        rois[1].getMask({scale: 0.20}).position.should.eql([2,2]);
+
+        let painted = roiManager.paint({scale: 0.34, positive: true, negative: false});
+
+        Array.from(painted.getChannel(0).data).should.eql(
+            [
+                0, 0, 0, 0, 0,
+                0, 1, 1, 1, 0,
+                0, 1, 255, 1, 0,
+                0, 1, 1, 1, 0,
+                0, 0, 0, 0, 0
+            ]
+        );
+    });
 });
 
 
