@@ -26664,6 +26664,7 @@ var _environment = require('./image/environment');
 
 module.exports = exports = require('./image/image').default;
 exports.Stack = require('./stack/stack').default;
+exports.Shape = require('./util/shape').default;
 exports.Kernel = require('./kernel/kernel');
 
 exports.Static = {
@@ -26675,7 +26676,7 @@ if (_environment.env === 'browser') {
     exports.Worker = require('./worker/worker').default;
 }
 
-},{"./image/environment":136,"./image/image":156,"./image/transform/greyAlgorithms":180,"./image/transform/mask/maskAlgorithms":188,"./kernel/kernel":219,"./stack/stack":227,"./worker/worker":242}],219:[function(require,module,exports){
+},{"./image/environment":136,"./image/image":156,"./image/transform/greyAlgorithms":180,"./image/transform/mask/maskAlgorithms":188,"./kernel/kernel":219,"./stack/stack":227,"./util/shape":238,"./worker/worker":242}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
