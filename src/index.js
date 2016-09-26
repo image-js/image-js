@@ -2,6 +2,7 @@ import {env} from './image/environment';
 
 module.exports = exports = require('./image/image').default;
 exports.Stack = require('./stack/stack').default;
+exports.Shape = require('./util/shape').default;
 exports.Kernel = require('./kernel/kernel');
 
 exports.Static = {
