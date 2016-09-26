@@ -9818,7 +9818,7 @@ module.exports = {
     scale: scale
 };
 
-},{"ml-stat":106}],51:[function(require,module,exports){
+},{"ml-stat":105}],51:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10100,7 +10100,7 @@ function SNV(data) {
     return result;
 }
 
-},{"ml-stat":106}],54:[function(require,module,exports){
+},{"ml-stat":105}],54:[function(require,module,exports){
 "use strict";
 
 /**
@@ -16982,6 +16982,12 @@ exports.cumulativeSum = function cumulativeSum(array) {
 },{}],105:[function(require,module,exports){
 'use strict';
 
+exports.array = require('./array');
+exports.matrix = require('./matrix');
+
+},{"./array":104,"./matrix":106}],106:[function(require,module,exports){
+'use strict';
+
 var arrayStat = require('./array');
 
 function compareNumbers(a, b) {
@@ -17626,13 +17632,7 @@ exports.weightedScatter = function weightedScatter(matrix, weights, means, facto
     return cov;
 };
 
-},{"./array":104}],106:[function(require,module,exports){
-'use strict';
-
-exports.array = require('./array');
-exports.matrix = require('./matrix');
-
-},{"./array":104,"./matrix":105}],107:[function(require,module,exports){
+},{"./array":104}],107:[function(require,module,exports){
 'use strict';
 
 module.exports = typeof Promise === 'function' ? Promise : require('lie');
