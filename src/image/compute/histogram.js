@@ -6,7 +6,8 @@ import isInteger from 'is-integer';
  * @instance
  */
 
-export function getHistogram({maxSlots = 256, channel, useAlpha = true} = {}) {
+export function getHistogram( options = {}) {
+    let {maxSlots = 256, channel, useAlpha = true} = options;
     this.checkProcessable('getHistogram', {
         bitDepth: [8, 16]
     });
@@ -16,7 +17,7 @@ export function getHistogram({maxSlots = 256, channel, useAlpha = true} = {}) {
         }
         channel = 0;
     }
-    return getChannelHistogram.call(this, channel, useAlpha, maxSlots);
+    return getChannelHistogram.call(this, channel, {useAlpha, maxSlots});
 }
 
 /**
@@ -34,7 +35,6 @@ export function getHistogram({maxSlots = 256, channel, useAlpha = true} = {}) {
  *      the maxValue allowed for this image (255 for usual images).
  *      If maxSlots = 8, all the intensities between 0 and 31 will be
  *      placed in the slot 0, 32 to 63 in slot 1, ...
- * @param {number} [options.maxSlots] -
  * @return {Promise} - Resolves with the Image
  * @example
  *      image.getHistograms({
@@ -50,14 +50,16 @@ export function getHistograms(options = {}) {
     });
     let results = new Array((useAlpha) ? this.components : this.channels);
     for (let i = 0; i < results.length; i++) {
-        results[i] = getChannelHistogram.call(this, i, useAlpha, maxSlots);
+        results[i] = getChannelHistogram.call(this, i, {useAlpha, maxSlots});
     }
     return results;
 }
 
 
 
-function getChannelHistogram(channel, useAlpha, maxSlots) {
+function getChannelHistogram(channel, options) {
+    let {useAlpha, maxSlots} = options;
+    
     let bitSlots = Math.log2(maxSlots);
     if (!isInteger(bitSlots)) {
         throw new RangeError('maxSlots must be a power of 2, for example: 64, 256, 1024');

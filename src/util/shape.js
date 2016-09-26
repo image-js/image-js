@@ -147,6 +147,7 @@ function ellipse(width, height, options) {
                 matrix.set(b + y + yEven, width - x - 1, 1);
             }
         } else {
+            // TODO this code currently gives the wrong shope
             if (true) throw new Error('Buggy code');
             for (let x = 0; x <= a; x++) {
                 let shift = Math.floor(Math.sqrt(b2 - b2 * x * x / a2));
