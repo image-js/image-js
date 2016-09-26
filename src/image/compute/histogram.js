@@ -6,7 +6,7 @@ import isInteger from 'is-integer';
  * @instance
  */
 
-export function getHistogram( options = {}) {
+export function getHistogram(options = {}) {
     let {maxSlots = 256, channel, useAlpha = true} = options;
     this.checkProcessable('getHistogram', {
         bitDepth: [8, 16]
@@ -59,7 +59,7 @@ export function getHistograms(options = {}) {
 
 function getChannelHistogram(channel, options) {
     let {useAlpha, maxSlots} = options;
-    
+
     let bitSlots = Math.log2(maxSlots);
     if (!isInteger(bitSlots)) {
         throw new RangeError('maxSlots must be a power of 2, for example: 64, 256, 1024');
