@@ -73,6 +73,28 @@ describe('we check Shape class', function () {
         );
     });
 
+    it('should yield the right empty square', function () {
+        let shape = new Shape({shape:'square', size:5, filled: false});
+        Array.from(shape.matrix).should.eql(
+            [
+                [1,1,1,1,1],
+                [1,0,0,0,1],
+                [1,0,0,0,1],
+                [1,0,0,0,1],
+                [1,1,1,1,1]
+            ]
+        );
+
+        let shape2 = new Shape({shape:'square', width:5, height:3, filled: false});
+        Array.from(shape2.matrix).should.eql(
+            [
+                [1,1,1,1,1],
+                [1,0,0,0,1],
+                [1,1,1,1,1]
+            ]
+        );
+    });
+
     it('should yield the right triangle', function () {
         let shape = new Shape({shape:'triangle', size:5});
         Array.from(shape.matrix).should.eql(
@@ -132,6 +154,64 @@ describe('we check Shape class', function () {
                 [1,1,1,1,1,1,1,1,1],
                 [0,1,1,1,1,1,1,1,0],
                 [0,0,0,0,1,0,0,0,0]
+            ]
+        );
+    });
+
+    it('should yield the right empty circle', function () {
+        let shape = new Shape({shape:'circle', size:5, filled: false});
+        Array.from(shape.matrix).should.eql(
+            [
+                [0,0,1,0,0],
+                [0,1,0,1,0],
+                [1,0,0,0,1],
+                [0,1,0,1,0],
+                [0,0,1,0,0]
+            ]
+        );
+    });
+
+    it('should yield the right empty circle even size', function () {
+        let shape = new Shape({shape:'circle', size:6, filled: false});
+        Array.from(shape.matrix).should.eql(
+            [
+                [0,0,1,1,0,0],
+                [0,1,0,0,1,0],
+                [1,0,0,0,0,1],
+                [1,0,0,0,0,1],
+                [0,1,0,0,1,0],
+                [0,0,1,1,0,0]
+            ]
+        );
+    });
+
+
+    it('should yield the right empty ellipse', function () {
+        let shape = new Shape({shape:'ellipse', width: 9, height: 5, filled: false});
+        Array.from(shape.matrix).should.eql(
+            [
+                [0,0,0,0,1,0,0,0,0],
+                [0,1,1,1,0,1,1,1,0],
+                [1,0,0,0,0,0,0,0,1],
+                [0,1,1,1,0,1,1,1,0],
+                [0,0,0,0,1,0,0,0,0]
+            ]
+        );
+    });
+
+    it('should yield the right vertical empty ellipse', function () {
+        let shape = new Shape({shape:'ellipse', width: 5, height: 9, filled: false});
+        Array.from(shape.matrix).should.eql(
+            [
+                [0,0,1,0,0],
+                [0,1,0,1,0],
+                [0,1,0,1,0],
+                [0,1,0,1,0],
+                [1,0,0,0,1],
+                [0,1,0,1,0],
+                [0,1,0,1,0],
+                [0,1,0,1,0],
+                [0,0,1,0,0]
             ]
         );
     });

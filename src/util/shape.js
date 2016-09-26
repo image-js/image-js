@@ -22,7 +22,8 @@ const smallCross = [
  */
 
 export default class Shape {
-    constructor({kind = 'cross', shape, size, width, height} = {}) {
+    constructor(options = {}) {
+        let {kind = 'cross', shape, size, width, height, filled = true} = options;
         if (shape) kind = undefined;
         if (size) {
             width = size;
@@ -48,14 +49,14 @@ export default class Shape {
             switch (shape) {
                 case 'square':
                 case 'rectangle':
-                    this.matrix = rectangle(width, height);
+                    this.matrix = rectangle(width, height, {filled});
                     break;
                 case 'circle':
                 case 'ellipse':
-                    this.matrix = ellipse(width, height);
+                    this.matrix = ellipse(width, height, {filled});
                     break;
                 case 'triangle':
-                    this.matrix = triangle(width, height);
+                    this.matrix = triangle(width, height, {filled});
                     break;
                 default:
             }
@@ -94,37 +95,74 @@ export default class Shape {
     }
 }
 
-function rectangle(width, height) {
+function rectangle(width, height, options) {
     const matrix = Matrix.zeros(height, width);
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-            matrix.set(y, x, 1);
+    if (options.filled) {
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                matrix.set(y, x, 1);
+            }
+        }
+    } else {
+        for (let y of [0, height - 1]) {
+            for (let x = 0; x < width; x++) {
+                matrix.set(y, x, 1);
+            }
+        }
+        for (let y = 0; y < height; y++) {
+            for (let x of [0, width - 1]) {
+                matrix.set(y, x, 1);
+            }
         }
     }
+
     return matrix;
 }
 
-function ellipse(width, height) {
-    const matrix = Matrix.zeros(height, width);
+function ellipse(width, height, options) {
+    const matrix = Matrix.zeros(height, width, options);
     let yEven = 1 - height % 2;
     let a = Math.floor((width - 1) / 2); // horizontal ellipse axe
     let b = Math.floor((height - 1) / 2); // vertical ellipse axe
     let a2 = a * a;
     let b2 = b * b;
-    for (let y = 0; y <= b; y++) {
-        let shift = Math.floor(Math.sqrt(a2 - a2 * y * y / b2));
-        for (let x = a - shift; x <= a; x++) {
-            matrix.set(b - y, x, 1);
-            matrix.set(b + y + yEven, x, 1);
-            matrix.set(b - y, width - x - 1, 1);
-            matrix.set(b + y + yEven, width - x - 1, 1);
+    if (options.filled) {
+        for (let y = 0; y <= b; y++) {
+            let shift = Math.floor(Math.sqrt(a2 - a2 * y * y / b2));
+            for (let x = a - shift; x <= a; x++) {
+                matrix.set(b - y, x, 1);
+                matrix.set(b + y + yEven, x, 1);
+                matrix.set(b - y, width - x - 1, 1);
+                matrix.set(b + y + yEven, width - x - 1, 1);
+            }
+        }
+    } else {
+        if (width < height) {
+            for (let y = 0; y <= b; y++) {
+                let shift = Math.floor(Math.sqrt(a2 - a2 * y * y / b2));
+                let x = a - shift;
+                matrix.set(b - y, x, 1);
+                matrix.set(b + y + yEven, x, 1);
+                matrix.set(b - y, width - x - 1, 1);
+                matrix.set(b + y + yEven, width - x - 1, 1);
+            }
+        } else {
+            for (let x = 0; x <= a; x++) {
+                let shift = Math.floor(Math.sqrt(b2 - b2 * x * x / a2));
+                let y = b - shift;
+                matrix.set(b - y, x, 1);
+                matrix.set(b + y + yEven, x, 1);
+                matrix.set(b - y, width - x - 1, 1);
+                matrix.set(b + y + yEven, width - x - 1, 1);
+            }
         }
     }
     return matrix;
 }
 
-function triangle(width, height) {
-    const matrix = Matrix.zeros(height, width);
+function triangle(width, height, options) {
+    if (!options.filled) throw new Error('Non filled triangle is not implemented');
+    const matrix = Matrix.zeros(height, width, options);
     for (let y = 0; y < height; y++) {
         let shift = Math.floor((1 - y / height) * width / 2);
         for (let x = shift; x < (width - shift); x++) {
