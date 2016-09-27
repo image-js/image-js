@@ -21958,14 +21958,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @memberof Image
  * @instance
  * @param {Image} mask - Image containing a binary mask
- * @param {array} [$1.position] - Array of 2 elements containing the x,y coordinates
+ * @param {array} [options.position] - Array of 2 elements containing the x,y coordinates
  * @returns {Image} A new image
  */
 function extract(mask) {
-    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-    var position = _ref.position;
-
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var position = options.position;
 
     this.checkProcessable('extract', {
         bitDepth: [8, 16]
@@ -22982,6 +22980,11 @@ class ROIManager {
         return this;
     }
 
+    /**
+     *
+     * @param options
+     * @returns {*}
+     */
     getMap() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
@@ -22990,6 +22993,11 @@ class ROIManager {
         return this._layers[opt.label].roiMap;
     }
 
+    /**
+     *
+     * @param options
+     * @returns {Array}
+     */
     getROIIDs() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
@@ -23002,19 +23010,41 @@ class ROIManager {
         return ids;
     }
 
-    getROI() {
-        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    /**
+     * Allows to select ROI based on size, label and sign.
+     * @param {object} [options={}]
+     * @param {string} [options.label='default'] Label of the layer containing the ROI
+     * @param {boolean} [options.positive=true] Select the positive region of interest
+     * @param {boolean} [options.negative=true] Select he negative region of interest
+     * @param {number} [options.minSurface=0]
+     * @param {number} [options.maxSurface=Number.POSITIVE_INFINITY]
+     * @param {number} [options.minWidth=0]
+     * @param {number} [options.minHeight=Number.POSITIVE_INFINITY]
+     * @param {number} [options.maxWidth=0]
+     * @param {number} [options.maxHeight=Number.POSITIVE_INFINITY]
+     * @returns {Array}
+     */
 
-        var _ref$label = _ref.label;
-        var label = _ref$label === undefined ? this._options.label : _ref$label;
-        var _ref$positive = _ref.positive;
-        var positive = _ref$positive === undefined ? true : _ref$positive;
-        var _ref$negative = _ref.negative;
-        var negative = _ref$negative === undefined ? true : _ref$negative;
-        var _ref$minSurface = _ref.minSurface;
-        var minSurface = _ref$minSurface === undefined ? 0 : _ref$minSurface;
-        var _ref$maxSurface = _ref.maxSurface;
-        var maxSurface = _ref$maxSurface === undefined ? Number.POSITIVE_INFINITY : _ref$maxSurface;
+    getROI() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+        var _options$label = options.label;
+        var label = _options$label === undefined ? this._options.label : _options$label;
+        var _options$positive = options.positive;
+        var positive = _options$positive === undefined ? true : _options$positive;
+        var _options$negative = options.negative;
+        var negative = _options$negative === undefined ? true : _options$negative;
+        var _options$minSurface = options.minSurface;
+        var minSurface = _options$minSurface === undefined ? 0 : _options$minSurface;
+        var _options$maxSurface = options.maxSurface;
+        var maxSurface = _options$maxSurface === undefined ? Number.POSITIVE_INFINITY : _options$maxSurface;
+        var _options$minWidth = options.minWidth;
+        var minWidth = _options$minWidth === undefined ? 0 : _options$minWidth;
+        var _options$maxWidth = options.maxWidth;
+        var maxWidth = _options$maxWidth === undefined ? Number.POSITIVE_INFINITY : _options$maxWidth;
+        var _options$minHeight = options.minHeight;
+        var minHeight = _options$minHeight === undefined ? 0 : _options$minHeight;
+        var _options$maxHeight = options.maxHeight;
+        var maxHeight = _options$maxHeight === undefined ? Number.POSITIVE_INFINITY : _options$maxHeight;
 
 
         if (!this._layers[label]) {
@@ -23028,7 +23058,7 @@ class ROIManager {
         var ptr = 0;
         for (var i = 0; i < allROIs.length; i++) {
             var roi = allROIs[i];
-            if ((roi.id < 0 && negative || roi.id > 0 && positive) && roi.surface >= minSurface && roi.surface <= maxSurface) {
+            if ((roi.id < 0 && negative || roi.id > 0 && positive) && roi.surface >= minSurface && roi.surface <= maxSurface && roi.width >= minWidth && roi.width <= maxWidth && roi.height >= minHeight && roi.height <= maxHeight) {
                 rois[ptr++] = roi;
             }
         }
@@ -23036,6 +23066,11 @@ class ROIManager {
         return rois;
     }
 
+    /**
+     * Returns an array of masks
+     * @param options
+     * @returns {Array}
+     */
     getMasks() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
