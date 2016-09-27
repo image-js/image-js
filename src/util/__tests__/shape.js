@@ -185,7 +185,7 @@ describe('we check Shape class', function () {
         );
     });
 
-    it.skip('should yield the right empty ellipse', function () {
+    it('should yield the right empty ellipse', function () {
         let shape = new Shape({shape:'ellipse', width: 9, height: 5, filled: false});
         Array.from(shape.matrix).should.eql(
             [

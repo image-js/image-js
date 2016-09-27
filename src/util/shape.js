@@ -137,27 +137,24 @@ function ellipse(width, height, options) {
             }
         }
     } else {
-        if (width <= height) {
-            for (let y = 0; y <= b; y++) {
-                let shift = Math.floor(Math.sqrt(a2 - a2 * y * y / b2));
-                let x = a - shift;
-                matrix.set(b - y, x, 1);
-                matrix.set(b + y + yEven, x, 1);
-                matrix.set(b - y, width - x - 1, 1);
-                matrix.set(b + y + yEven, width - x - 1, 1);
-            }
-        } else {
-            // TODO this code currently gives the wrong shope
-            if (true) throw new Error('Buggy code');
-            for (let x = 0; x <= a; x++) {
-                let shift = Math.floor(Math.sqrt(b2 - b2 * x * x / a2));
-                let y = b - shift;
-                matrix.set(b - y, x, 1);
-                matrix.set(b + y + yEven, x, 1);
-                matrix.set(b - y, width - x - 1, 1);
-                matrix.set(b + y + yEven, width - x - 1, 1);
-            }
+        for (let y = 0; y <= b; y++) {
+            let shift = Math.floor(Math.sqrt(a2 - a2 * y * y / b2));
+            let x = a - shift;
+            matrix.set(b - y, x, 1);
+            matrix.set(b + y + yEven, x, 1);
+            matrix.set(b - y, width - x - 1, 1);
+            matrix.set(b + y + yEven, width - x - 1, 1);
         }
+
+        for (let x = 0; x <= a; x++) {
+            let shift = Math.floor(Math.sqrt(b2 - b2 * x * x / a2));
+            let y = b - shift;
+            matrix.set(b - y, x, 1);
+            matrix.set(b + y + yEven, x, 1);
+            matrix.set(b - y, width - x - 1, 1);
+            matrix.set(b + y + yEven, width - x - 1, 1);
+        }
+
     }
     return matrix;
 }
