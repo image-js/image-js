@@ -27943,6 +27943,7 @@ function rectangle(width, height, options) {
 function ellipse(width, height, options) {
     var matrix = _mlMatrix2.default.zeros(height, width, options);
     var yEven = 1 - height % 2;
+    var xEven = 1 - width % 2;
     var a = Math.floor((width - 1) / 2); // horizontal ellipse axe
     var b = Math.floor((height - 1) / 2); // vertical ellipse axe
     var a2 = a * a;
@@ -27970,10 +27971,10 @@ function ellipse(width, height, options) {
         for (var _x5 = 0; _x5 <= a; _x5++) {
             var _shift2 = Math.floor(Math.sqrt(b2 - b2 * _x5 * _x5 / a2));
             var _y4 = b - _shift2;
-            matrix.set(b - _y4, _x5, 1);
-            matrix.set(b + _y4 + yEven, _x5, 1);
-            matrix.set(b - _y4, width - _x5 - 1, 1);
-            matrix.set(b + _y4 + yEven, width - _x5 - 1, 1);
+            matrix.set(_y4, a - _x5, 1);
+            matrix.set(_y4, a + _x5 + xEven, 1);
+            matrix.set(height - _y4 - 1, a - _x5, 1);
+            matrix.set(height - _y4 - 1, a + _x5 + xEven, 1);
         }
     }
     return matrix;
