@@ -18994,13 +18994,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 
 function getHistogram() {
-    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-    var _ref$maxSlots = _ref.maxSlots;
-    var maxSlots = _ref$maxSlots === undefined ? 256 : _ref$maxSlots;
-    var channel = _ref.channel;
-    var _ref$useAlpha = _ref.useAlpha;
-    var useAlpha = _ref$useAlpha === undefined ? true : _ref$useAlpha;
+    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var _options$maxSlots = options.maxSlots;
+    var maxSlots = _options$maxSlots === undefined ? 256 : _options$maxSlots;
+    var channel = options.channel;
+    var _options$useAlpha = options.useAlpha;
+    var useAlpha = _options$useAlpha === undefined ? true : _options$useAlpha;
 
     this.checkProcessable('getHistogram', {
         bitDepth: [8, 16]
@@ -19011,7 +19010,7 @@ function getHistogram() {
         }
         channel = 0;
     }
-    return getChannelHistogram.call(this, channel, useAlpha, maxSlots);
+    return getChannelHistogram.call(this, channel, { useAlpha: useAlpha, maxSlots: maxSlots });
 }
 
 /**
@@ -19029,7 +19028,6 @@ function getHistogram() {
  *      the maxValue allowed for this image (255 for usual images).
  *      If maxSlots = 8, all the intensities between 0 and 31 will be
  *      placed in the slot 0, 32 to 63 in slot 1, ...
- * @param {number} [options.maxSlots] -
  * @return {Promise} - Resolves with the Image
  * @example
  *      image.getHistograms({
@@ -19040,22 +19038,26 @@ function getHistogram() {
 
 function getHistograms() {
     var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-    var _options$maxSlots = options.maxSlots;
-    var maxSlots = _options$maxSlots === undefined ? 256 : _options$maxSlots;
-    var _options$useAlpha = options.useAlpha;
-    var useAlpha = _options$useAlpha === undefined ? true : _options$useAlpha;
+    var _options$maxSlots2 = options.maxSlots;
+    var maxSlots = _options$maxSlots2 === undefined ? 256 : _options$maxSlots2;
+    var _options$useAlpha2 = options.useAlpha;
+    var useAlpha = _options$useAlpha2 === undefined ? true : _options$useAlpha2;
 
     this.checkProcessable('getHistograms', {
         bitDepth: [8, 16]
     });
     var results = new Array(useAlpha ? this.components : this.channels);
     for (var i = 0; i < results.length; i++) {
-        results[i] = getChannelHistogram.call(this, i, useAlpha, maxSlots);
+        results[i] = getChannelHistogram.call(this, i, { useAlpha: useAlpha, maxSlots: maxSlots });
     }
     return results;
 }
 
-function getChannelHistogram(channel, useAlpha, maxSlots) {
+function getChannelHistogram(channel, options) {
+    var useAlpha = options.useAlpha;
+    var maxSlots = options.maxSlots;
+
+
     var bitSlots = Math.log2(maxSlots);
     if (!(0, _isInteger2.default)(bitSlots)) {
         throw new RangeError('maxSlots must be a power of 2, for example: 64, 256, 1024');
@@ -27921,24 +27923,22 @@ function ellipse(width, height, options) {
             }
         }
     } else {
-        if (width < height) {
-            for (var _y3 = 0; _y3 <= b; _y3++) {
-                var _shift = Math.floor(Math.sqrt(a2 - a2 * _y3 * _y3 / b2));
-                var _x4 = a - _shift;
-                matrix.set(b - _y3, _x4, 1);
-                matrix.set(b + _y3 + yEven, _x4, 1);
-                matrix.set(b - _y3, width - _x4 - 1, 1);
-                matrix.set(b + _y3 + yEven, width - _x4 - 1, 1);
-            }
-        } else {
-            for (var _x5 = 0; _x5 <= a; _x5++) {
-                var _shift2 = Math.floor(Math.sqrt(b2 - b2 * _x5 * _x5 / a2));
-                var _y4 = b - _shift2;
-                matrix.set(b - _y4, _x5, 1);
-                matrix.set(b + _y4 + yEven, _x5, 1);
-                matrix.set(b - _y4, width - _x5 - 1, 1);
-                matrix.set(b + _y4 + yEven, width - _x5 - 1, 1);
-            }
+        for (var _y3 = 0; _y3 <= b; _y3++) {
+            var _shift = Math.floor(Math.sqrt(a2 - a2 * _y3 * _y3 / b2));
+            var _x4 = a - _shift;
+            matrix.set(b - _y3, _x4, 1);
+            matrix.set(b + _y3 + yEven, _x4, 1);
+            matrix.set(b - _y3, width - _x4 - 1, 1);
+            matrix.set(b + _y3 + yEven, width - _x4 - 1, 1);
+        }
+
+        for (var _x5 = 0; _x5 <= a; _x5++) {
+            var _shift2 = Math.floor(Math.sqrt(b2 - b2 * _x5 * _x5 / a2));
+            var _y4 = b - _shift2;
+            matrix.set(b - _y4, _x5, 1);
+            matrix.set(b + _y4 + yEven, _x5, 1);
+            matrix.set(b - _y4, width - _x5 - 1, 1);
+            matrix.set(b + _y4 + yEven, width - _x5 - 1, 1);
         }
     }
     return matrix;
