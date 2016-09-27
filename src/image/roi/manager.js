@@ -164,7 +164,7 @@ export default class ROIManager {
      */
 
     paint(options = {}) {
-        const {showLabels, labelColor = 'blue', labelFont = '12px Helvetica'} = options;
+        let {showLabels, labelColor = 'blue', labelFont = '12px Helvetica'} = options;
 
         if (!this._painted) this._painted = this._image.rgba8();
         let masks = this.getMasks(options);
