@@ -122,6 +122,7 @@ function rectangle(width, height, options) {
 function ellipse(width, height, options) {
     const matrix = Matrix.zeros(height, width, options);
     let yEven = 1 - height % 2;
+    let xEven = 1 - width % 2;
     let a = Math.floor((width - 1) / 2); // horizontal ellipse axe
     let b = Math.floor((height - 1) / 2); // vertical ellipse axe
     let a2 = a * a;
@@ -149,10 +150,10 @@ function ellipse(width, height, options) {
         for (let x = 0; x <= a; x++) {
             let shift = Math.floor(Math.sqrt(b2 - b2 * x * x / a2));
             let y = b - shift;
-            matrix.set(b - y, x, 1);
-            matrix.set(b + y + yEven, x, 1);
-            matrix.set(b - y, width - x - 1, 1);
-            matrix.set(b + y + yEven, width - x - 1, 1);
+            matrix.set(y, a - x, 1);
+            matrix.set(y, a + x + xEven, 1);
+            matrix.set(height - y - 1, a - x, 1);
+            matrix.set(height - y - 1, a + x + xEven, 1);
         }
 
     }
