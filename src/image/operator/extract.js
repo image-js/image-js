@@ -6,11 +6,11 @@ import Image from '../image';
  * @memberof Image
  * @instance
  * @param {Image} mask - Image containing a binary mask
- * @param {array} [$1.position] - Array of 2 elements containing the x,y coordinates
+ * @param {array} [options.position] - Array of 2 elements containing the x,y coordinates
  * @returns {Image} A new image
  */
-export default function extract(mask, {position} = {}) {
-
+export default function extract(mask, options = {}) {
+    let {position} = options;
     this.checkProcessable('extract', {
         bitDepth: [8, 16]
     });

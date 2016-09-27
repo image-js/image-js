@@ -76,7 +76,11 @@ export default class ROIManager {
         return this;
     }
 
-
+    /**
+     *
+     * @param options
+     * @returns {*}
+     */
     getMap(options = {}) {
         let opt = extendObject({}, this._options, options);
         if (!this._layers[opt.label]) return;
@@ -84,7 +88,11 @@ export default class ROIManager {
     }
 
 
-
+    /**
+     *
+     * @param options
+     * @returns {Array}
+     */
     getROIIDs(options = {}) {
         let rois = this.getROI(options);
         if (!rois) return;
@@ -95,14 +103,33 @@ export default class ROIManager {
         return ids;
     }
 
+    /**
+     * Allows to select ROI based on size, label and sign.
+     * @param {object} [options={}]
+     * @param {string} [options.label='default'] Label of the layer containing the ROI
+     * @param {boolean} [options.positive=true] Select the positive region of interest
+     * @param {boolean} [options.negative=true] Select he negative region of interest
+     * @param {number} [options.minSurface=0]
+     * @param {number} [options.maxSurface=Number.POSITIVE_INFINITY]
+     * @param {number} [options.minWidth=0]
+     * @param {number} [options.minHeight=Number.POSITIVE_INFINITY]
+     * @param {number} [options.maxWidth=0]
+     * @param {number} [options.maxHeight=Number.POSITIVE_INFINITY]
+     * @returns {Array}
+     */
 
-    getROI({
-        label = this._options.label,
-        positive = true,
-        negative = true,
-        minSurface = 0,
-        maxSurface = Number.POSITIVE_INFINITY
-        } = {}) {
+    getROI(options = {}) {
+        let {
+            label = this._options.label,
+            positive = true,
+            negative = true,
+            minSurface = 0,
+            maxSurface = Number.POSITIVE_INFINITY,
+            minWidth = 0,
+            maxWidth = Number.POSITIVE_INFINITY,
+            minHeight = 0,
+            maxHeight = Number.POSITIVE_INFINITY
+        } = options;
 
         if (!this._layers[label]) {
             throw new Error('getROI: This ROI layer (' + label + ') does not exists.');
@@ -117,7 +144,12 @@ export default class ROIManager {
             let roi = allROIs[i];
             if (((roi.id < 0 && negative) || roi.id > 0 && positive)
                 && roi.surface >= minSurface
-                && roi.surface <= maxSurface) {
+                && roi.surface <= maxSurface
+                && roi.width >= minWidth
+                && roi.width <= maxWidth
+                && roi.height >= minHeight
+                && roi.height <= maxHeight
+            ) {
                 rois[ptr++] = roi;
             }
         }
@@ -125,7 +157,11 @@ export default class ROIManager {
         return rois;
     }
 
-
+    /**
+     * Returns an array of masks
+     * @param options
+     * @returns {Array}
+     */
     getMasks(options = {}) {
         let rois = this.getROI(options);
 
