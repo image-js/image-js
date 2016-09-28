@@ -181,18 +181,18 @@ export default class ROIManager {
 
     /**
      * Paint the ROI on a copy of the image adn return this image.
-     * @param options : all the options to select ROIs
-     * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
-     * @param alpha Value from 0 to 255 to specify the alpha. Will be used if it is unspecified
-     * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask
-     * @param [number] {options.scale=1} Scaling factor to apply to the mask
-     * @param [string] {kind='normal'} 'contour', 'box', 'filled', 'center' or 'normal' (default 'normal')
-     * @param randomColors If we we would like to paint each mask with a random color
-     * @param distinctColors If we we would like to paint each mask with a different color (default: false);
-     * @param showLabels Paint a mask property on the image (default: false). If true will display the 'id'.
-     *                      May be any property of the ROI. . Requires a RGBA image !
-     * @param labelColor Define the color to paint the labels (default : 'blue')
-     * @param labelFont Define the size of the labels ID (default : '12px Helvetica')
+     * @param {object} [options] - all the options to select ROIs
+     * @param {array<number>} [options.color=[255,0,0]] - Array of 3 elements (R, G, B), default is red.
+     * @param {number} [options.alpha=255] - Value from 0 to 255.
+     * @param {array<array<number>>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
+     * @param {number} [options.scale=1] - Scaling factor to apply to the mask
+     * @param {string} [options.kind='normal'] - 'contour', 'box', 'filled', 'center' or 'normal'
+     * @param {boolean} [options.randomColors=false]  To paint each mask with a random color
+     * @param {boolean} [options.distinctColors=false] To paint each mask with a different color
+     * @param {boolean|string} [options.showLabels=false] Paint a mask property on the image. If true will display the 'id'.
+     *                      May be any property of the ROI.
+     * @param {string} [options.labelColor='blue'] Define the color to paint the labels
+     * @param {string} [options.labelFont='12px Helvetica']
      *
      *  id: true / false
      *  color
