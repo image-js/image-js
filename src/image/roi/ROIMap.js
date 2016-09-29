@@ -1,6 +1,8 @@
 /**
- * Contains an array of the same size of the original image containings
- * the region to which belongs each of the pixels
+ * The roiMap is an array of the size of the original image data that contains
+ * positive and negative numbers. When the number is common, it corresponds
+ * to one region of interest (ROI)
+ *
  * @class ROIMap
  */
 

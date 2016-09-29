@@ -1,13 +1,14 @@
 import ROI from './roi';
 
+// TODO check the links for the reference in the docs (@see)
+
 /**
- * A layer that is caracterised by a roiMap. The roiMap is
- * an array of the size of the original image data that contains
- * positive and negative numbers. When the number is common, it corresponds
- * to one region of interest (ROI). A ROI should be a continuous
+ * A layer that is caracterised by a ROIMap (@see ROIMap) and that will
+ * generated automatically the corresponding ROI.
+ * ROI should be a continuous
  * surface (it is not tested when it is not continous ...)
  * From the roiMap, the ROILayer will create the corresponding
- * ROI.
+ * ROI (@see ROI).
  *
  * @class ROIManager
  * @param {Image} image
