@@ -98,5 +98,4 @@ export default function paintMasks(masks, options = {}) {
         }
         this.data = ctx.getImageData(0, 0, this.width, this.height).data;
     }
-
 }
