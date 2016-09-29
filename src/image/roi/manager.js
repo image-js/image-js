@@ -3,10 +3,10 @@ import fromMask2 from './creator/fromMask2';
 import fromExtrema from './creator/fromExtrema';
 import fromWaterShed from './creator/fromWaterShed';
 import fromPoints from './creator/fromPoints';
-import createROI from './createROI';
 import extendObject from 'extend';
 import Image from '../image';
 import ROIMap from './ROIMap';
+import ROILayer from './ROILayer';
 
 /**
  * A manager of Regions of Interest. A ROIManager is related to a specific Image
@@ -176,7 +176,7 @@ export default class ROIManager {
     /**
      * Returns an array of masks
      * @param {object} [options]
-     * @returns {[Image]}
+     * @returns {[Image]} Retuns an array of masks (1 bit Image)
      */
     getMasks(options = {}) {
         let rois = this.getROI(options);
@@ -191,7 +191,7 @@ export default class ROIManager {
     /**
      *
      * @param {object} [options]
-     * @returns {*}
+     * @returns {[number]}
      */
     getData(options = {}) {
         let opt = extendObject({}, this._options, options);
@@ -263,7 +263,15 @@ export default class ROIManager {
         return mask;
     }
 
-    resetPainted(image) {
+    /**
+     * Reset the changes to the current painted iamge to the image that was
+     * used during the creation of the ROIManager except if a new image is
+     * specified as parameter;
+     * #param {object} [options]
+     * @param {Image} [options.image] A new iamge that you would like to sue for painting over
+     */
+    resetPainted(options = {}) {
+        const {image} = options;
         if (image) {
             this._painted = this.image.rgba8();
         } else {
@@ -273,16 +281,18 @@ export default class ROIManager {
 
     /**
      *  Return a new roiMAP changed with the fusion of certain ROIs.
-     * @param rois is an array of ROIs which shares the same roiMAP.
-     * @param algorithm ; algorithm used to decide which ROIs are merged.
-     * @param value is an integer, determine the strength of the merging.
+     * @param {object} [options]
+     * @param {string} [algorithm='commonBorder'] ; algorithm used to decide which ROIs are merged.
+     * @param {number} [minCommonBorderLength=5] is an integer, determine the strength of the merging.
      * @returns {*}
      */
 
     mergeROI(options = {}) {
         let opt = extendObject({}, this._options, options);
-        let algorithm = opt.algorithm || 'commonBorder';
-        let minCommonBorderLength = opt.minCommonBorderLength || 5;
+        let {
+            algorithm = 'commonBorder',
+            minCommonBorderLength = 5
+        } = options;
         let rois = this.getROI(opt);
         let toMerge = new Set();
         switch (algorithm.toLowerCase()) {
@@ -315,10 +325,4 @@ export default class ROIManager {
     }
 }
 
-class ROILayer {
-    constructor(roiMap, options) {
-        this.roiMap = roiMap;
-        this.options = options;
-        this.roi = createROI(this.roiMap);
-    }
-}
+
