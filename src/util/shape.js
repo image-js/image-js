@@ -19,6 +19,16 @@ const smallCross = [
 /**
  * Class representing a shape
  * @class Shape
+ * @param {object} [options]
+ * @param {string} [options.kind='cross'] - Predefined matrix shape, 'cross' or 'smallCross'
+ * @param {string} [options.shape] - Value may be 'square', 'rectangle', 'circle', 'ellipse' or 'triangle'
+ *                                  The size of the shape will be determined by the size, width and height.
+ *                                  A Shape is by default filled.
+ *
+ * @param {number} [options.size]
+ * @param {number} [options.width=options.size] - width of the shape. Must be odd.
+ * @param {number} [options.height=options.size] - width of the shape. Must be odd.
+ * @param {boolean} [options.filled=true] - If false only the border ot the shape is taken into account.
  */
 
 export default class Shape {
@@ -33,11 +43,11 @@ export default class Shape {
             throw Error('Shape: The width and height has to be odd numbers.');
         }
         if (kind) {
-            switch (kind) {
+            switch (kind.toLowerCase()) {
                 case 'cross':
                     this.matrix = cross;
                     break;
-                case 'smallCross':
+                case 'smallcross':
                     this.matrix = smallCross;
                     break;
             }
@@ -67,6 +77,11 @@ export default class Shape {
         this.halfWidth = (this.width / 2) >> 0;
     }
 
+    /**
+     * Returns an array of [x,y] points
+     * @returns {array<array<number>>} - Array of [x,y] points
+     */
+
     getPoints() {
         let matrix = this.matrix;
         let points = [];
@@ -80,6 +95,10 @@ export default class Shape {
         return points;
     }
 
+    /**
+     *
+     * @returns {Image}
+     */
     getMask() {
         let img = new Image(this.width, this.height, {
             kind: KindNames.BINARY
