@@ -9,7 +9,7 @@ describe('we check ROI.getMask', function () {
         let roiManager = image.getROIManager();
         roiManager.fromPoints(points, {kind: 'smallCross'});
 
-        Array.from(roiManager.getPixels()).should.eql([
+        Array.from(roiManager.getData()).should.eql([
             0, 1, 0, 0, 4,
             1, 1, 1, 2, 0,
             0, 1, 2, 2, 2,

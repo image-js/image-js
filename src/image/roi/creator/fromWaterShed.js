@@ -35,7 +35,7 @@ export default function fromWaterShed(
         points = image.getLocalExtrema({algorithm:'min', mask:mask});
     }
 
-    let map = new Int16Array(image.size);
+    let data = new Int16Array(image.size);
     let width = image.width;
     let height = image.height;
     let toProcess = new PriorityQueue(
@@ -46,7 +46,7 @@ export default function fromWaterShed(
     );
     for (let i = 0; i < points.length; i++) {
         let index = points[i][0] + points[i][1] * width;
-        map[index] = i + 1;
+        data[index] = i + 1;
         let intensity = image.data[index];
         if (intensity <= fillMaxValue) {
             toProcess.queue([points[i][0], points[i][1], intensity]);
@@ -67,8 +67,8 @@ export default function fromWaterShed(
                 if (!mask || mask.getBit(currentNeighbourIndex)) {
                     let intensity = image.data[currentNeighbourIndex];
                     if (intensity <= fillMaxValue) {
-                        if (map[currentNeighbourIndex] === 0) {
-                            map[currentNeighbourIndex] = map[currentValueIndex];
+                        if (data[currentNeighbourIndex] === 0) {
+                            data[currentNeighbourIndex] = data[currentValueIndex];
                             toProcess.queue([currentPoint[0] + dx[dir], currentPoint[1] + dy[dir], intensity]);
                         }
                     }
@@ -77,5 +77,5 @@ export default function fromWaterShed(
         }
     }
 
-    return new ROIMap(image, map);
+    return new ROIMap(image, data);
 }

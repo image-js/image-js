@@ -14,7 +14,7 @@ describe('Test WaterShed ROI generation', function () {
             {kind: 'GREY'}
         );
         let map = ROIMapper.call(image);
-        Array.from(map.pixels).should.eql(
+        Array.from(map.data).should.eql(
             [
                 1,1,1,1,1,
                 1,1,1,1,1,
@@ -49,7 +49,7 @@ describe('Test WaterShed ROI generation', function () {
             }
         }
         let map = ROIMapper.call(image, {fillMaxValue:2, mask:mask});
-        Array.from(map.pixels).should.eql(
+        Array.from(map.data).should.eql(
             [
                 0,0,0,0,0,0,0,0,0,0,
                 0,0,1,1,1,0,0,0,0,0,
@@ -98,7 +98,7 @@ describe('Test WaterShed ROI generation', function () {
 
         let map = ROIMapper.call(image, {mask:mask});
 
-        Array.from(map.pixels).should.eql(
+        Array.from(map.data).should.eql(
             [
                 1,1,1,1,1,1,2,2,2,2,
                 1,1,1,1,1,1,2,2,2,0,

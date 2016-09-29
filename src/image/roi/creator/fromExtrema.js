@@ -25,7 +25,7 @@ export default function fromExtrema(
 
     let MIN_VALUE = -32768;
 
-    let pixels = new Int16Array(image.size); // maxValue: 32767, minValue: -32768
+    let data = new Int16Array(image.size); // maxValue: 32767, minValue: -32768
     let processed = new Int8Array(image.size);
     let variations = new Float32Array(image.size);
 
@@ -55,7 +55,7 @@ export default function fromExtrema(
     }
 
 
-    return new ROIMap(image, pixels);
+    return new ROIMap(image, data);
 
     // we will look for the maxima (or minima) that is present in the picture
     // a maxima is a point that is surrounded by lower values
@@ -93,9 +93,7 @@ export default function fromExtrema(
                         }
                     }
 
-                    pixels[index] = (maxima) ? ++positiveID : --negativeID;
-
-                    // console.log('---',pixels[index]);
+                    data[index] = (maxima) ? ++positiveID : --negativeID;
 
                     let valid = processTop(x, y, PROCESS_TOP);
                     if (!valid) (maxima) ? --positiveID : ++negativeID;
@@ -124,12 +122,12 @@ export default function fromExtrema(
         }
         if (!valid) {
             // console.log('REVERT');
-            // need to clear all the calculated pixels because the top is not surrounded by negative values
+            // need to clear all the calculated data because the top is not surrounded by negative values
             for (let i = 0; i < toTop; i++) {
                 let currentX = xToProcessTop[i & MAX_ARRAY];
                 let currentY = yToProcessTop[i & MAX_ARRAY];
                 let index = currentY * image.width + currentX;
-                pixels[index] = 0;
+                data[index] = 0;
             }
             to = currentTo;
         }
@@ -144,7 +142,7 @@ export default function fromExtrema(
      */
     function process(xCenter, yCenter, type) {
         // console.log('PROCESS', xCenter, yCenter);
-        let currentID = pixels[yCenter * image.width + xCenter];
+        let currentID = data[yCenter * image.width + xCenter];
         let currentValue = image.data[yCenter * image.width + xCenter];
         let currentVariation = variations[yCenter * image.width + xCenter];
         for (let y = yCenter - 1; y <= yCenter + 1; y++) {
@@ -161,7 +159,7 @@ export default function fromExtrema(
                                 // console.log('ZERO', currentID, x, y);
                                 // if we are next to a border ... it is not surrounded !
                                 if (x === 0 || y === 0 || x === (image.width - 1) || y === (image.height - 1)) return false;
-                                pixels[index] = currentID;
+                                data[index] = currentID;
                                 xToProcessTop[toTop & MAX_ARRAY] = x;
                                 yToProcessTop[toTop & MAX_ARRAY] = y;
                                 toTop++;
@@ -170,7 +168,7 @@ export default function fromExtrema(
                                 return false;
                             } else { // a point we will have to process
                                 if (!onlyTop) {
-                                    pixels[index] = currentID;
+                                    data[index] = currentID;
                                     xToProcess[to & MAX_ARRAY] = x;
                                     yToProcess[to & MAX_ARRAY] = y;
                                     to++;
@@ -179,7 +177,7 @@ export default function fromExtrema(
                             break;
                         case PROCESS_NORMAL:
                             if (variations[index] <= 0) { // we look for maxima
-                                pixels[index] = currentID;
+                                data[index] = currentID;
                                 xToProcess[to & MAX_ARRAY] = x;
                                 yToProcess[to & MAX_ARRAY] = y;
                                 to++;

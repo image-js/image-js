@@ -16,11 +16,11 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
             {kind: 'GREY'}
         );
 
-        let pixels = ROIMapper.call(image,
+        let data = ROIMapper.call(image,
             {onlyTop:true}
-        ).pixels;
+        ).data;
 
-        Array.from(pixels).should.eql([
+        Array.from(data).should.eql([
             0, 0, 0, 0, 0,
             0, 0, 0, 0, 0,
             0, 0, 1, 1, 0,
@@ -41,11 +41,11 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
             {kind: 'GREY'}
         );
 
-        let pixels = ROIMapper.call(image,
+        let data = ROIMapper.call(image,
             {onlyTop:true}
-        ).pixels;
+        ).data;
 
-        Array.from(pixels).should.eql([
+        Array.from(data).should.eql([
             0, 0, 0, 0, 0,
             0, 0, 0, 0, 0,
             0, 0, 0, 0, 0,
@@ -66,11 +66,11 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
             {kind: 'GREY'}
         );
 
-        let pixels = ROIMapper.call(image,
+        let data = ROIMapper.call(image,
             {onlyTop:true}
-        ).pixels;
+        ).data;
 
-        Array.from(pixels).should.eql([
+        Array.from(data).should.eql([
             0, 0, 0, 0, 0,
             0, 1, 0, 0, 0,
             0, 0, 0, 2, 0,
@@ -92,11 +92,11 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
             {kind: 'GREY'}
         );
 
-        let pixels = ROIMapper.call(image,
+        let data = ROIMapper.call(image,
             {onlyTop:true}
-        ).pixels;
+        ).data;
 
-        Array.from(pixels).should.eql([
+        Array.from(data).should.eql([
             0, 0, 0, 0, 0,
             0, 1, 1, 1, 0,
             0, 1, 0, 0, 0,
@@ -120,11 +120,11 @@ describe('we check createROIMapFromMaxima only looking for maxima', function () 
             {kind: 'GREY'}
         );
 
-        let pixels = ROIMapper.call(image,
+        let data = ROIMapper.call(image,
             {}
-        ).pixels;
+        ).data;
 
-        Array.from(pixels).should.eql([
+        Array.from(data).should.eql([
             1, 1, 1, 1, 1,
             1, 1, 1, 1, 1,
             1, 1, 1, 1, 1,
@@ -145,9 +145,9 @@ describe('we check createROIMapFromMaxima only looking for maxima', function () 
             {kind: 'GREY'}
         );
 
-        let pixels = ROIMapper.call(image).pixels;
+        let data = ROIMapper.call(image).data;
 
-        Array.from(pixels).should.eql([
+        Array.from(data).should.eql([
             1, 1, 1, 0, 1,
             1, 1, 1, 1, 1,
             1, 1, 1, 1, 1,
@@ -168,9 +168,9 @@ describe('we check createROIMapFromMaxima only looking for maxima', function () 
             {kind: 'GREY'}
         );
 
-        let pixels = ROIMapper.call(image).pixels;
+        let data = ROIMapper.call(image).data;
 
-        Array.from(pixels).should.eql([
+        Array.from(data).should.eql([
             1, 1, 1, 1, 1,
             1, 1, 1, 2, 2,
             1, 1, 1, 2, 2,

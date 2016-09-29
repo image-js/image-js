@@ -36,7 +36,7 @@ export default function fromMask2(mask, {
     const width = mask.width;
     const height = mask.height;
     const labels = new Array(size);
-    const pixels = new Int16Array(size);
+    const data = new Int16Array(size);
     const linked = new DisjointSet();
 
     let currentLabel = 1;
@@ -80,11 +80,11 @@ export default function fromMask2(mask, {
         for (let i = 0; i < width; i++) {
             const index = i + j * width;
             if (mask.getBit(index)) {
-                pixels[index] = linked.find(labels[index]).value;
+                data[index] = linked.find(labels[index]).value;
             }
         }
     }
 
-    return new ROIMap(mask, pixels);
+    return new ROIMap(mask, data);
 
 }

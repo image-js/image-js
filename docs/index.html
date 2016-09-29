@@ -507,6 +507,26 @@
               
                 
                 <li><a
+                  href='#median'
+                  class="">
+                  median
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#mean'
+                  class="">
+                  mean
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#roimanager'
                   class=" toggle-sibling">
                   ROIManager
@@ -520,6 +540,18 @@
                       <li class='h5'><span>Instance members</span></li>
                       
                       <li><a
+                        href='#ROIManager#fromExtrema'
+                        class='regular pre-open'>
+                        #fromExtrema
+                      </a></li>
+                      
+                      <li><a
+                        href='#ROIManager#fromExtrema'
+                        class='regular pre-open'>
+                        #fromExtrema
+                      </a></li>
+                      
+                      <li><a
                         href='#ROIManager#fromPoints'
                         class='regular pre-open'>
                         #fromPoints
@@ -529,6 +561,42 @@
                         href='#ROIManager#putMap'
                         class='regular pre-open'>
                         #putMap
+                      </a></li>
+                      
+                      <li><a
+                        href='#ROIManager#fromWaterShed'
+                        class='regular pre-open'>
+                        #fromWaterShed
+                      </a></li>
+                      
+                      <li><a
+                        href='#ROIManager#fromMask'
+                        class='regular pre-open'>
+                        #fromMask
+                      </a></li>
+                      
+                      <li><a
+                        href='#ROIManager#getMap'
+                        class='regular pre-open'>
+                        #getMap
+                      </a></li>
+                      
+                      <li><a
+                        href='#ROIManager#getROIIDs'
+                        class='regular pre-open'>
+                        #getROIIDs
+                      </a></li>
+                      
+                      <li><a
+                        href='#ROIManager#getROI'
+                        class='regular pre-open'>
+                        #getROI
+                      </a></li>
+                      
+                      <li><a
+                        href='#ROIManager#getMasks'
+                        class='regular pre-open'>
+                        #getMasks
                       </a></li>
                       
                       <li><a
@@ -559,12 +627,6 @@
                         href='#ROIManager#ROIMap'
                         class='regular pre-open'>
                         #ROIMap
-                      </a></li>
-                      
-                      <li><a
-                        href='#ROIManager#fromExtrema'
-                        class='regular pre-open'>
-                        #fromExtrema
                       </a></li>
                       
                       <li><a
@@ -756,26 +818,6 @@
               
                 
                 <li><a
-                  href='#median'
-                  class="">
-                  median
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#mean'
-                  class="">
-                  mean
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
                   href='#shape'
                   class="">
                   Shape
@@ -802,7 +844,7 @@
       Image
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/0d305c356f5939efc0c6653d4d26a00c95123f23/src/image/image.js#L61-L558'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/087ae441c05cd5caf112fe94f59de3d9e17e5883/src/image/image.js#L62-L559'>
       <span>src/image/image.js</span>
       </a>
     
@@ -810,9 +852,10 @@
   
 
   <p>Class representing an image.
-This class allows to manipulate easily images directly in the browser.</p>
+This class allows to manipulate easily images directly in the browser or in node.</p>
 <p>This library is designed to deal with scientific images (8 or 16 bit depth) and will be able to open
-and process jpeg, png and uncompressed tiff images.</p>
+and process jpeg, png and uncompressed tiff images. It is designed to work in the browser
+as on the server side in node.</p>
 <p>An image is characterized by:</p>
 <ul>
 <li>width and height</li>
@@ -1768,7 +1811,7 @@ the data or only the image parameters (size, colorModel, ...)
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> emptyImage = image.clone({copyData:<span class="hljs-literal">false</span>});</pre>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> emptyImage = image.clone({<span class="hljs-attr">copyData</span>:<span class="hljs-literal">false</span>});</pre>
     
   
 
@@ -2984,8 +3027,8 @@ pixels.</p>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> cropped = image.crop({
-  x:<span class="hljs-number">0</span>,
-  y:<span class="hljs-number">0</span>
+  <span class="hljs-attr">x</span>:<span class="hljs-number">0</span>,
+  <span class="hljs-attr">y</span>:<span class="hljs-number">0</span>
 });</pre>
     
   
@@ -3986,7 +4029,7 @@ Currently only conversion from 8 to 16 bits and 16 to 8 bits is allowed.</p>
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> newImage = image.colorDepth({
-  newColorDepth:<span class="hljs-number">8</span>
+  <span class="hljs-attr">newColorDepth</span>:<span class="hljs-number">8</span>
 });</pre>
     
   
@@ -5164,33 +5207,18 @@ a relative position and this part of the original image will be extracted.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$1</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            <span class='code bold'>options.position</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>])</code> Array of 2 elements containing the x,y coordinates
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(Any
             (default <code>{}</code>)
             )</code> 
           </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$1.position</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>]</code>
-                  </td>
-                  <td class='break-word'><span>Array of 2 elements containing the x,y coordinates
-</span></td>
-                </tr>
-              
-            </tbody>
-          </table>
           
         </div>
       
@@ -6700,7 +6728,7 @@ a relative position and this part of the original image will be extracted.</p>
       getChannel
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/0d305c356f5939efc0c6653d4d26a00c95123f23/src/image/utility/getChannel.js#L12-L44'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/087ae441c05cd5caf112fe94f59de3d9e17e5883/src/image/utility/getChannel.js#L12-L44'>
       <span>src/image/utility/getChannel.js</span>
       </a>
     
@@ -6800,7 +6828,7 @@ a relative position and this part of the original image will be extracted.</p>
       combineChannels
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/0d305c356f5939efc0c6653d4d26a00c95123f23/src/image/utility/combineChannels.js#L12-L49'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/087ae441c05cd5caf112fe94f59de3d9e17e5883/src/image/utility/combineChannels.js#L12-L49'>
       <span>src/image/utility/combineChannels.js</span>
       </a>
     
@@ -6904,7 +6932,7 @@ a relative position and this part of the original image will be extracted.</p>
       getHistograms
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/0d305c356f5939efc0c6653d4d26a00c95123f23/src/image/compute/histogram.js#L46-L56'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/087ae441c05cd5caf112fe94f59de3d9e17e5883/src/image/compute/histogram.js#L46-L56'>
       <span>src/image/compute/histogram.js</span>
       </a>
     
@@ -6986,10 +7014,144 @@ placed in the slot 0, 32 to 63 in slot 1, ...
     
       
       <pre class='p1 overflow-auto round fill-light'>image.getHistograms({
-         maxSlots: <span class="hljs-number">8</span>,
-         useAlpha: <span class="hljs-literal">false</span>
+         <span class="hljs-attr">maxSlots</span>: <span class="hljs-number">8</span>,
+         <span class="hljs-attr">useAlpha</span>: <span class="hljs-literal">false</span>
      });</pre>
     
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='median'>
+      median
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/087ae441c05cd5caf112fe94f59de3d9e17e5883/src/util/histogram.js#L7-L31'>
+      <span>src/util/histogram.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Returns the median of an histogram</p>
+
+
+  <div class='pre p1 fill-light mt0'>median</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>histogram</span> <code class='quiet'>(Any)</code> 
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>Any</code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    <h3 class='fl m0' id='mean'>
+      mean
+    </h3>
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/087ae441c05cd5caf112fe94f59de3d9e17e5883/src/util/histogram.js#L38-L50'>
+      <span>src/util/histogram.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Retuns the mean of an histogram</p>
+
+
+  <div class='pre p1 fill-light mt0'>mean</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>histogram</span> <code class='quiet'>(Any)</code> 
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>Any</code>:
+        
+      
+    
+  
+
+  
+
   
 
   
@@ -7010,7 +7172,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
       ROIManager
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/0d305c356f5939efc0c6653d4d26a00c95123f23/src/image/roi/manager.js#L19-L259'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/087ae441c05cd5caf112fe94f59de3d9e17e5883/src/image/roi/manager.js#L19-L311'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -7067,6 +7229,165 @@ name by default &#x27;default&#x27;</p>
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
+    <div class='border-bottom' id='ROIManager#fromExtrema'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromExtrema([options])</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>fromExtrema(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">ROIManager</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</code> 
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#roimanager">ROIManager</a></code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='ROIManager#fromExtrema'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromExtrema</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>fromExtrema</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            (default <code>{}</code>)
+            )</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.allowCorner</span> <code class='quiet'>Any</code>
+                  
+                    (default <code>true</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.onlyTop</span> <code class='quiet'>Any</code>
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>$0.invert</span> <code class='quiet'>Any</code>
+                  
+                    (default <code>false</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='ROIManager#fromPoints'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -7081,7 +7402,7 @@ name by default &#x27;default&#x27;</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromPoints(pixels: [[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]], options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {}))</div>
+  <div class='pre p1 fill-light mt0'>fromPoints(pixels: [[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]], options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">ROIManager</a></div>
 
   
 
@@ -7105,7 +7426,7 @@ name by default &#x27;default&#x27;</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {}))</code> 
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</code> 
           </div>
           
         </div>
@@ -7115,6 +7436,13 @@ name by default &#x27;default&#x27;</p>
 
   
 
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#roimanager">ROIManager</a></code>:
+        
+      
+    
   
 
   
@@ -7135,7 +7463,7 @@ name by default &#x27;default&#x27;</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>putMap(roiMap, options)</span>
+            <span class='code strong strong truncate'>putMap(roiMap, [options])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -7145,7 +7473,7 @@ name by default &#x27;default&#x27;</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>putMap(roiMap: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;, options: Any)</div>
+  <div class='pre p1 fill-light mt0'>putMap(roiMap: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;, options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</div>
 
   
 
@@ -7168,7 +7496,7 @@ name by default &#x27;default&#x27;</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(Any)</code> 
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</code> 
           </div>
           
         </div>
@@ -7194,11 +7522,11 @@ name by default &#x27;default&#x27;</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='ROIManager#paint'>
+    <div class='border-bottom' id='ROIManager#fromWaterShed'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>paint(options, labelFont, alpha, colors, number, color, randomColors, distinctColors, showLabels, labelColor, string)</span>
+            <span class='code strong strong truncate'>fromWaterShed([options])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -7206,10 +7534,9 @@ name by default &#x27;default&#x27;</p>
 
   
 
-  <p>Paint the ROI on a copy of the image adn return this image.</p>
+  
 
-
-  <div class='pre p1 fill-light mt0'>paint(options: Any, labelFont: Any, alpha: Any, colors: Any, number: Any, color: Any, randomColors: Any, distinctColors: Any, showLabels: Any, labelColor: Any, string: Any): (Any | null)</div>
+  <div class='pre p1 fill-light mt0'>fromWaterShed(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">ROIManager</a></div>
 
   
 
@@ -7225,94 +7552,597 @@ name by default &#x27;default&#x27;</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(Any)</code> : all the options to select ROIs
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</code> 
+          </div>
+          
+        </div>
+      
+    </div>
+  
 
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#roimanager">ROIManager</a></code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='ROIManager#fromMask'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromMask(mask, [options])</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>fromMask(mask: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>, options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">ROIManager</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>mask</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>)</code> 
           </div>
           
         </div>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>labelFont</span> <code class='quiet'>(Any)</code> Define the size of the labels ID (default : &#x27;12px Helvetica&#x27;)
-<p>id: true / false
-color</p>
-
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</code> 
           </div>
           
         </div>
       
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#roimanager">ROIManager</a></code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='ROIManager#getMap'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getMap([options])</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>getMap(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimap">ROIMap</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>alpha</span> <code class='quiet'>(Any)</code> Value from 0 to 255 to specify the alpha. Will be used if it is unspecified
-
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</code> 
           </div>
           
         </div>
       
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#roimap">ROIMap</a></code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='ROIManager#getROIIDs'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getROIIDs([options])</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return the IDs of the Regions Of Interest (ROI) as an array of number</p>
+
+
+  <div class='pre p1 fill-light mt0'>getROIIDs(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>colors</span> <code class='quiet'>(Any)</code> {array} Array of Array of 3 elements (R, G, B) for each color of each mask
-
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</code> 
           </div>
           
         </div>
       
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='ROIManager#getROI'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getROI([options])</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Allows to select ROI based on size, label and sign.</p>
+
+
+  <div class='pre p1 fill-light mt0'>getROI(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): [<a href="#roi">ROI</a>]</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>number</span> <code class='quiet'>(Any)</code> {options.scale=1} Scaling factor to apply to the mask
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]
+            (default <code>{}</code>)
+            )</code> 
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.label</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]</code>
+                  
+                    (default <code>&#39;default&#39;</code>)
+                  </td>
+                  <td class='break-word'><span>Label of the layer containing the ROI
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.positive</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>]</code>
+                  
+                    (default <code>true</code>)
+                  </td>
+                  <td class='break-word'><span>Select the positive region of interest
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.negative</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>]</code>
+                  
+                    (default <code>true</code>)
+                  </td>
+                  <td class='break-word'><span>Select he negative region of interest
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.minSurface</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  
+                    (default <code>0</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.maxSurface</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  
+                    (default <code>Number.POSITIVE_INFINITY</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.minWidth</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  
+                    (default <code>0</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.minHeight</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  
+                    (default <code>Number.POSITIVE_INFINITY</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.maxWidth</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  
+                    (default <code>0</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.maxHeight</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  
+                    (default <code>Number.POSITIVE_INFINITY</code>)
+                  </td>
+                  <td class='break-word'><span></span></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
 
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>[<a href="#roi">ROI</a>]</code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='ROIManager#getMasks'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getMasks(options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Returns an array of masks</p>
+
+
+  <div class='pre p1 fill-light mt0'>getMasks(options: Any): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(Any)</code> 
           </div>
           
         </div>
       
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>color</span> <code class='quiet'>(Any)</code> {array} [$1.color=
-[max,0,0]
-] - Array of 3 elements (R, G, B), default is red.
+    </div>
+  
 
-          </div>
-          
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>:
+        
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='ROIManager#paint'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>paint([options])</span>
         </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Paint the ROI on a copy of the image adn return this image.</p>
+
+
+  <div class='pre p1 fill-light mt0'>paint(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): (Any | null)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>randomColors</span> <code class='quiet'>(Any)</code> If we we would like to paint each mask with a random color
+            <span class='code bold'>options</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</code> all the options to select ROIs
 
           </div>
           
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>distinctColors</span> <code class='quiet'>(Any)</code> If we we would like to paint each mask with a different color (default: false);
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>showLabels</span> <code class='quiet'>(Any)</code> Paint a mask property on the image (default: false). If true will display the &#x27;id&#x27;.
-May be any property of the ROI. . Requires a RGBA image !
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>labelColor</span> <code class='quiet'>(Any)</code> Define the color to paint the labels (default : &#x27;blue&#x27;)
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>string</span> <code class='quiet'>(Any)</code> {kind=&#x27;normal&#x27;} &#x27;contour&#x27;, &#x27;box&#x27;, &#x27;filled&#x27;, &#x27;center&#x27; or &#x27;normal&#x27; (default &#x27;normal&#x27;)
-
-          </div>
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.labelFont</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]</code>
+                  
+                    (default <code>&#39;12px Helvetica&#39;</code>)
+                  </td>
+                  <td class='break-word'><span>id: true / false
+color
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.alpha</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  
+                    (default <code>255</code>)
+                  </td>
+                  <td class='break-word'><span>Value from 0 to 255.
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.colors</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;&gt;]</code>
+                  </td>
+                  <td class='break-word'><span>Array of Array of 3 elements (R, G, B) for each color of each mask
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.scale</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</code>
+                  
+                    (default <code>1</code>)
+                  </td>
+                  <td class='break-word'><span>Scaling factor to apply to the mask
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.color</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;]</code>
+                  
+                    (default <code>[255,0,0]</code>)
+                  </td>
+                  <td class='break-word'><span>Array of 3 elements (R, G, B), default is red.
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.randomColors</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>]</code>
+                  
+                    (default <code>false</code>)
+                  </td>
+                  <td class='break-word'><span>To paint each mask with a random color
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.distinctColors</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>]</code>
+                  
+                    (default <code>false</code>)
+                  </td>
+                  <td class='break-word'><span>To paint each mask with a different color
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.showLabels</span> <code class='quiet'>[(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)]</code>
+                  
+                    (default <code>false</code>)
+                  </td>
+                  <td class='break-word'><span>Paint a mask property on the image. If true will display the &#x27;id&#x27;.
+May be any property of the ROI.
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.labelColor</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]</code>
+                  
+                    (default <code>&#39;blue&#39;</code>)
+                  </td>
+                  <td class='break-word'><span>Define the color to paint the labels
+</span></td>
+                </tr>
+              
+                <tr>
+                  <td class='break-word'><span class='code bold'>options.kind</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]</code>
+                  
+                    (default <code>&#39;normal&#39;</code>)
+                  </td>
+                  <td class='break-word'><span>&#x27;contour&#x27;, &#x27;box&#x27;, &#x27;filled&#x27;, &#x27;center&#x27; or &#x27;normal&#x27;
+</span></td>
+                </tr>
+              
+            </tbody>
+          </table>
           
         </div>
       
@@ -7567,102 +8397,6 @@ May be any property of the ROI. . Requires a RGBA image !
       </div>
     </div>
   
-    <div class='border-bottom' id='ROIManager#fromExtrema'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>fromExtrema</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>fromExtrema</div>
-
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
-            (default <code>{}</code>)
-            )</code> 
-          </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.allowCorner</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>true</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.onlyTop</span> <code class='quiet'>Any</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.invert</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>false</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
     <div class='border-bottom' id='ROIManager#createROI'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -7740,7 +8474,7 @@ for each pixels to which ROI it belongs</p>
       fromWaterShed
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/0d305c356f5939efc0c6653d4d26a00c95123f23/src/image/roi/creator/fromWaterShed.js#L18-L81'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/087ae441c05cd5caf112fe94f59de3d9e17e5883/src/image/roi/creator/fromWaterShed.js#L18-L81'>
       <span>src/image/roi/creator/fromWaterShed.js</span>
       </a>
     
@@ -7878,7 +8612,7 @@ for each pixels to which ROI it belongs</p>
       ROI
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/0d305c356f5939efc0c6653d4d26a00c95123f23/src/image/roi/roi.js#L11-L370'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/087ae441c05cd5caf112fe94f59de3d9e17e5883/src/image/roi/roi.js#L11-L370'>
       <span>src/image/roi/roi.js</span>
       </a>
     
@@ -8456,7 +9190,7 @@ are calculated in the getBoxPixels procedure</p>
       boxMask
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/0d305c356f5939efc0c6653d4d26a00c95123f23/src/image/roi/roi.js#L244-L244'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/087ae441c05cd5caf112fe94f59de3d9e17e5883/src/image/roi/roi.js#L244-L244'>
       <span>src/image/roi/roi.js</span>
       </a>
     
@@ -8504,7 +9238,7 @@ are calculated in the getBoxPixels procedure</p>
       ROIMap
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/0d305c356f5939efc0c6653d4d26a00c95123f23/src/image/roi/ROIMap.js#L7-L20'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/087ae441c05cd5caf112fe94f59de3d9e17e5883/src/image/roi/ROIMap.js#L7-L20'>
       <span>src/image/roi/ROIMap.js</span>
       </a>
     
@@ -8553,7 +9287,7 @@ the region to which belongs each of the pixels</p>
       Stack
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/0d305c356f5939efc0c6653d4d26a00c95123f23/src/stack/stack.js#L14-L101'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/087ae441c05cd5caf112fe94f59de3d9e17e5883/src/stack/stack.js#L14-L101'>
       <span>src/stack/stack.js</span>
       </a>
     
@@ -9002,145 +9736,11 @@ the region to which belongs each of the pixels</p>
 
   
   <div class='clearfix'>
-    <h3 class='fl m0' id='median'>
-      median
-    </h3>
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/0d305c356f5939efc0c6653d4d26a00c95123f23/src/util/histogram.js#L7-L31'>
-      <span>src/util/histogram.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Returns the median of an histogram</p>
-
-
-  <div class='pre p1 fill-light mt0'>median</div>
-
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>histogram</span> <code class='quiet'>(Any)</code> 
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>Any</code>:
-        
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    <h3 class='fl m0' id='mean'>
-      mean
-    </h3>
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/0d305c356f5939efc0c6653d4d26a00c95123f23/src/util/histogram.js#L38-L50'>
-      <span>src/util/histogram.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Retuns the mean of an histogram</p>
-
-
-  <div class='pre p1 fill-light mt0'>mean</div>
-
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>histogram</span> <code class='quiet'>(Any)</code> 
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>Any</code>:
-        
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
     <h3 class='fl m0' id='shape'>
       Shape
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/ij/blob/0d305c356f5939efc0c6653d4d26a00c95123f23/src/util/shape.js#L24-L96'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/087ae441c05cd5caf112fe94f59de3d9e17e5883/src/util/shape.js#L24-L96'>
       <span>src/util/shape.js</span>
       </a>
     

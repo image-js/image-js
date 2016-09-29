@@ -20,10 +20,11 @@ let computedPropertyDescriptor = {
 
 /**
  * Class representing an image.
- * This class allows to manipulate easily images directly in the browser.
+ * This class allows to manipulate easily images directly in the browser or in node.
  *
  * This library is designed to deal with scientific images (8 or 16 bit depth) and will be able to open
- * and process jpeg, png and uncompressed tiff images.
+ * and process jpeg, png and uncompressed tiff images. It is designed to work in the browser
+ * as on the server side in node.
  *
  * An image is characterized by:
  * * width and height

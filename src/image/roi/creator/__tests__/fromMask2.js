@@ -30,7 +30,7 @@ describe('we check fromMask2', function () {
     mask.setBitXY(3, 4);
 
     it('should yield the right map with 4 neighbours', function () {
-        let mapPixels = ROIMapper(mask, {neighbours: 4}).pixels;
+        let mapData = ROIMapper(mask, {neighbours: 4}).data;
 
         const expected = [
             0, 1, 0, 2, 0, 3,
@@ -41,11 +41,11 @@ describe('we check fromMask2', function () {
             0, 0, 0, 0, 0, 0
         ];
 
-        Array.from(mapPixels).should.eql(expected);
+        Array.from(mapData).should.eql(expected);
     });
 
     it('should yield the right map with 8 neighbours', function () {
-        let mapPixels = ROIMapper(mask, {neighbours: 8}).pixels;
+        let mapData = ROIMapper(mask, {neighbours: 8}).data;
 
         const expected = [
             0, 1, 0, 1, 0, 1,
@@ -56,6 +56,6 @@ describe('we check fromMask2', function () {
             0, 0, 0, 0, 0, 0
         ];
 
-        Array.from(mapPixels).should.eql(expected);
+        Array.from(mapData).should.eql(expected);
     });
 });

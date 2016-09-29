@@ -5,11 +5,11 @@
  */
 
 export default class ROIMap {
-    constructor(parent, pixels) {
+    constructor(parent, data) {
         this.parent = parent;
         this.width = parent.width;
         this.height = parent.height;
-        this.pixels = pixels; // pixels containing the annotations
+        this.data = data;
         this.negative = 0;
         this.positive = 0;
     }

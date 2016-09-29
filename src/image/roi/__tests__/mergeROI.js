@@ -30,11 +30,11 @@ describe('Merge ROI', function () {
 
         let map = ROIMapper.call(image, {fillMaxValue:5, mask:mask, interval: 1});
         let roiManager = image.getROIManager();
-        roiManager.putMap(map.pixels);
+        roiManager.putMap(map.data);
 
         roiManager.mergeROI({minCommonBorderLength:3});
 
-        Array.from(map.pixels).should.eql(
+        Array.from(map.data).should.eql(
             [
                 1,1,1,1,1,1,1,1,1,1,
                 1,1,1,1,1,1,1,1,1,0,

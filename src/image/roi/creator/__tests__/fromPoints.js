@@ -7,9 +7,9 @@ describe('we check createROIMapFromPixels', function () {
 
         let pixels = [[1,1],[3,2],[4,4],[5,0]];
 
-        let mapPixels = ROIMapper.call(image, pixels, {kind: 'smallCross'}).pixels;
+        let mapData = ROIMapper.call(image, pixels, {kind: 'smallCross'}).data;
 
-        Array.from(mapPixels).should.eql([
+        Array.from(mapData).should.eql([
             0, 1, 0, 0, 4,
             1, 1, 1, 2, 0,
             0, 1, 2, 2, 2,

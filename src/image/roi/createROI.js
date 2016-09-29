@@ -3,23 +3,23 @@ import ROI from './roi';
 /**
  * ROI are created from a roiMap
  * The roiMap contains mainty an array of identifiers that define
- * for each pixels to which ROI it belongs
+ * for each data to which ROI it belongs
  * @memberof ROIManager
  * @instance
  */
 
 export default function createROI(roiMap) {
 
-    // we need to find all all the different IDs there is in the pixels
-    let pixels = roiMap.pixels;
+    // we need to find all all the different IDs there is in the data
+    let data = roiMap.data;
     let mapIDs = {};
     roiMap.positive = 0;
     roiMap.negative = 0;
 
-    for (let i = 0; i < pixels.length; i++) {
-        if (pixels[i] && !mapIDs[pixels[i]]) {
-            mapIDs[pixels[i]] = true;
-            if (pixels[i] > 0) {
+    for (let i = 0; i < data.length; i++) {
+        if (data[i] && !mapIDs[data[i]]) {
+            mapIDs[data[i]] = true;
+            if (data[i] > 0) {
                 roiMap.positive++;
             } else {
                 roiMap.negative++;
@@ -42,8 +42,8 @@ export default function createROI(roiMap) {
     for (let x = 0; x < width; x++) {
         for (let y = 0; y < height; y++) {
             let target = y * width + x;
-            if (pixels[target] !== 0) {
-                let mapID = pixels[target];
+            if (data[target] !== 0) {
+                let mapID = data[target];
                 if (x < rois[mapID].minX) rois[mapID].minX = x;
                 if (x > rois[mapID].maxX) rois[mapID].maxX = x;
                 if (y < rois[mapID].minY) rois[mapID].minY = y;

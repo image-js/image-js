@@ -25,6 +25,11 @@ export default class ROIManager {
         this._painted = null;
     }
 
+    /**
+     *
+     * @param {object} [options]
+     * @returns {ROIManager}
+     */
     fromExtrema(options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromExtrema.call(this._image, options);
@@ -32,12 +37,13 @@ export default class ROIManager {
     }
 
     /**
-     * @param {[[number]]} pixels - an array of pixels
-     * @param {object} options
+     * @param {[[number]]} points - an array of points
+     * @param {object} [options]
+     * @returns {ROIManager}
      */
-    fromPoints(pixels, options = {}) {
+    fromPoints(points, options = {}) {
         let opt = extendObject({}, this._options, options);
-        let roiMap = fromPoints.call(this._image, pixels, options);
+        let roiMap = fromPoints.call(this._image, points, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
         return this;
     }
@@ -45,7 +51,7 @@ export default class ROIManager {
 
     /**
      * @param {number[]} roiMap
-     * @param options
+     * @param {object} [options]
      */
     putMap(roiMap, options = {}) {
         let map = new ROIMap(this._image, roiMap);
@@ -54,13 +60,23 @@ export default class ROIManager {
         return this;
     }
 
-
+    /**
+     *
+     * @param {object} [options]
+     * @returns {ROIManager}
+     */
     fromWaterShed(options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromWaterShed.call(this._image, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
     }
 
+    /**
+     *
+     * @param {Image} mask
+     * @param {object} [options]
+     * @returns {ROIManager}
+     */
     fromMask(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromMask.call(this._image, mask, options);
@@ -78,8 +94,8 @@ export default class ROIManager {
 
     /**
      *
-     * @param options
-     * @returns {*}
+     * @param {object} [options]
+     * @returns {ROIMap}
      */
     getMap(options = {}) {
         let opt = extendObject({}, this._options, options);
@@ -89,9 +105,9 @@ export default class ROIManager {
 
 
     /**
-     *
-     * @param options
-     * @returns {Array}
+     * Return the IDs of the Regions Of Interest (ROI) as an array of number
+     * @param {object} [options]
+     * @returns {[number]}
      */
     getROIIDs(options = {}) {
         let rois = this.getROI(options);
@@ -115,7 +131,7 @@ export default class ROIManager {
      * @param {number} [options.minHeight=Number.POSITIVE_INFINITY]
      * @param {number} [options.maxWidth=0]
      * @param {number} [options.maxHeight=Number.POSITIVE_INFINITY]
-     * @returns {Array}
+     * @returns {[ROI]}
      */
 
     getROI(options = {}) {
@@ -159,8 +175,8 @@ export default class ROIManager {
 
     /**
      * Returns an array of masks
-     * @param options
-     * @returns {Array}
+     * @param {object} [options]
+     * @returns {[Image]}
      */
     getMasks(options = {}) {
         let rois = this.getROI(options);
@@ -172,10 +188,15 @@ export default class ROIManager {
         return masks;
     }
 
-    getPixels(options = {}) {
+    /**
+     *
+     * @param {object} [options]
+     * @returns {*}
+     */
+    getData(options = {}) {
         let opt = extendObject({}, this._options, options);
         if (this._layers[opt.label]) {
-            return this._layers[opt.label].roiMap.pixels;
+            return this._layers[opt.label].roiMap.data;
         }
     }
 
@@ -280,17 +301,17 @@ export default class ROIManager {
 
 
         //Now we can modify the roiMap by merging each region determined before
-        let pixels = this.getMap(opt).pixels;
-        for (let index = 0; index < pixels.length; index++) {
-            if (pixels[index] !== 0) {
+        let data = this.getMap(opt).data;
+        for (let index = 0; index < data.length; index++) {
+            if (data[index] !== 0) {
                 for (let array of toMerge) {
-                    if (pixels[index] === array[0]) {
-                        pixels[index] = array[1];
+                    if (data[index] === array[0]) {
+                        data[index] = array[1];
                     }
                 }
             }
         }
-        this.putMap(pixels, opt);
+        this.putMap(data, opt);
     }
 }
 

@@ -10,7 +10,7 @@ export default function fromPoints(pointsToPaint, options = {}) {
     let shape = new Shape(options);
 
     // based on a binary image we will create plenty of small images
-    let mapPixels = new Int16Array(this.size); // maxValue: 32767, minValue: -32768
+    let data = new Int16Array(this.size); // maxValue: 32767, minValue: -32768
     let positiveID = 0;
     let shapePoints = shape.getPoints();
     for (let i = 0; i < pointsToPaint.length; i++) {
@@ -26,10 +26,10 @@ export default function fromPoints(pointsToPaint, options = {}) {
                 ((xP + xS) < this.width) &&
                 ((yP + yS) < this.height)
             ) {
-                mapPixels[xP + xS + (yP + yS) * this.width] = positiveID;
+                data[xP + xS + (yP + yS) * this.width] = positiveID;
             }
         }
     }
 
-    return new ROIMap(this, mapPixels);
+    return new ROIMap(this, data);
 }
