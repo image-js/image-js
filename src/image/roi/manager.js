@@ -176,6 +176,7 @@ export default class ROIManager {
 
     /**
      * Returns an array of masks
+     * See @links ROI.getMask for the options
      * @param {object} [options]
      * @returns {[Image]} Retuns an array of masks (1 bit Image)
      */
@@ -203,44 +204,29 @@ export default class ROIManager {
 
     /**
      * Paint the ROI on a copy of the image adn return this image.
+     * For painting options @links Image.paintMasks
+     * For ROI selection options @links ROIManager.getMasks
      * @param {object} [options] - all the options to select ROIs
-     * @param {array<number>} [options.color=[255,0,0]] - Array of 3 elements (R, G, B), default is red.
-     * @param {number} [options.alpha=255] - Value from 0 to 255.
-     * @param {array<array<number>>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
-     * @param {number} [options.scale=1] - Scaling factor to apply to the mask
-     * @param {string} [options.kind='normal'] - 'contour', 'box', 'filled', 'center' or 'normal'
-     * @param {boolean} [options.randomColors=false]  To paint each mask with a random color
-     * @param {boolean} [options.distinctColors=false] To paint each mask with a different color
-     * @param {boolean|string} [options.showLabels=false] Paint a mask property on the image. If true will display the 'id'.
-     *                      May be any property of the ROI.
-     * @param {string} [options.labelColor='blue'] Define the color to paint the labels
-     * @param {string} [options.labelFont='12px Helvetica']
-     *
-     *  id: true / false
-     *  color
-     * @returns {*|null}
+     * @param {string} [options.labelProperty] - Paint a mask property on the image.
+     *                                  May be any property of the ROI like
+     *                                  for example id, surface, width, height, meanX, meanY.
+     * @returns {Image} - The painted RGBA 8 bits image
      */
 
     paint(options = {}) {
-        let {showLabels, labelColor = 'blue', labelFont = '12px Helvetica'} = options;
-
+        let {
+            labelProperty
+        } = options;
         if (!this._painted) this._painted = this._image.rgba8();
         let masks = this.getMasks(options);
 
-        this._painted.paintMasks(masks, options);
-
-        if (showLabels) {
-            if (showLabels === true) showLabels = 'id';
-            let canvas = this._painted.getCanvas({originalData: true});
-            let ctx = canvas.getContext('2d');
-            ctx.fillStyle = labelColor;
-            ctx.font = labelFont;
+        if (labelProperty) {
+            options.labels = rois.map((roi) => rois[labelProperty]);
+            options.labelPositions = rois.map((roi) => [roi.meanX - 3, roi.meanY + 3]);
             let rois = this.getROI(options);
-            for (let i = 0; i < rois.length; i++) {
-                ctx.fillText(rois[i][showLabels], rois[i].meanX - 3, rois[i].meanY + 3);
-            }
-            this._painted.data = ctx.getImageData(0, 0, this._painted.width, this._painted.height).data;
         }
+
+        this._painted.paintMasks(masks, options);
         return this._painted;
     }
 
