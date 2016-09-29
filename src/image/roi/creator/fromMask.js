@@ -4,12 +4,10 @@
  * @instance
  */
 
-
-
 import ROIMap from './../ROIMap';
 
-export default function fromMask(mask, {allowCorner = false} = {}) {
-
+export default function fromMask(mask, options = {}) {
+    const {allowCorners = false} = options;
     // based on a binary image we will create plenty of small images
     let data = new Int16Array(mask.size); // maxValue: 32767, minValue: -32768
 
@@ -75,7 +73,7 @@ export default function fromMask(mask, {allowCorner = false} = {}) {
                 yToProcess[to & MAX_ARRAY] = currentY + 1;
                 data[(currentY + 1) * mask.width + currentX] = -32768;
             }
-            if (allowCorner) {
+            if (allowCorners) {
                 if (currentX > 0 && currentY > 0 && data[(currentY - 1) * mask.width + currentX - 1] === 0 &&
                     mask.getBitXY(currentX - 1, currentY - 1) === targetState) {
                     // TOP LEFT

@@ -1,3 +1,10 @@
+/*
+This algorithm is nice and is therefore kept here
+However it seems to be slower than the get mask and
+also provides only the positive ROI
+We therefore don't expose it in the roiManager
+ */
+
 import DisjointSet from 'ml-disjoint-set';
 
 import ROIMap from './../ROIMap';
@@ -13,9 +20,12 @@ const neighbours8 = [null, null, null, null];
 /*
 Implementation of the connected-component labeling algorithm
  */
-export default function fromMask2(mask, {
-    neighbours = 8
-} = {}) {
+export default function fromMask2(mask, options = {}) {
+    const {
+        allowCorners = false
+    } = options;
+    let neighbours = 4;
+    if (allowCorners) neighbours = 8;
 
     let directionX;
     let directionY;

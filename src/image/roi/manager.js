@@ -1,5 +1,4 @@
 import fromMask from './creator/fromMask';
-import fromMask2 from './creator/fromMask2';
 import fromExtrema from './creator/fromExtrema';
 import fromWaterShed from './creator/fromWaterShed';
 import fromPoints from './creator/fromPoints';
@@ -85,12 +84,14 @@ export default class ROIManager {
     }
 
 
-    fromMask2(mask, options = {}) {
+    /* Seems slower and less general (only provides positive ROI)
+    fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromMask2.call(this._image, mask, options);
         this._layers[opt.label] = new ROILayer(roiMap, opt);
         return this;
     }
+     */
 
     /**
      *

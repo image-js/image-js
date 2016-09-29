@@ -5,7 +5,7 @@
 
 import ROIMap from './../ROIMap';
 import PriorityQueue from 'js-priority-queue';
-import {dx, dy} from './../../../util/dxdy.js';
+import {dxs, dys} from './../../../util/dxdy.js';
 /**
  *
  * @param fillMaxValue Limit of filling. By example, we can fill to a maximum value 32000 of a 16 bitDepth image.
@@ -60,8 +60,8 @@ export default function fromWaterShed(
         let currentValueIndex = currentPoint[0] + currentPoint[1] * width;
 
         for (let dir = 0; dir < 4; dir++) {
-            let newX = currentPoint[0] + dx[dir];
-            let newY = currentPoint[1] + dy[dir];
+            let newX = currentPoint[0] + dxs[dir];
+            let newY = currentPoint[1] + dys[dir];
             if (newX >= 0 && newY >= 0 && newX < width && newY < height) {
                 let currentNeighbourIndex = newX + newY * width;
                 if (!mask || mask.getBit(currentNeighbourIndex)) {
@@ -69,7 +69,7 @@ export default function fromWaterShed(
                     if (intensity <= fillMaxValue) {
                         if (data[currentNeighbourIndex] === 0) {
                             data[currentNeighbourIndex] = data[currentValueIndex];
-                            toProcess.queue([currentPoint[0] + dx[dir], currentPoint[1] + dy[dir], intensity]);
+                            toProcess.queue([currentPoint[0] + dxs[dir], currentPoint[1] + dys[dir], intensity]);
                         }
                     }
                 }
