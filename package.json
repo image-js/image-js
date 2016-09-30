@@ -54,7 +54,6 @@
   "devDependencies": {
     "babel-cli": "^6.2.0",
     "babel-core": "^6.2.1",
-    "babel-eslint": "^6.0.3",
     "babel-plugin-transform-es2015-block-scoping": "^6.1.18",
     "babel-preset-es2015-node4": "^2.0.1",
     "babel-register": "^6.2.0",
@@ -63,7 +62,7 @@
     "benchmark": "^2.1.0",
     "better-console": "^0.2.4",
     "browserify": "^13.1.0",
-    "documentation": "^4.0.0-beta10",
+    "documentation": "4.0.0-beta10",
     "eslint": "^3.0.0",
     "eslint-plugin-no-only-tests": "^1.1.0",
     "istanbul": "^1.0.0-alpha",

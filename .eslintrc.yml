@@ -4,10 +4,9 @@ env:
   es6: true
   mocha: true
 
-parser: babel-eslint
-
-ecmaFeatures:
-  modules: true
+parserOptions:
+  ecmaVersion: 8
+  sourceType: module
 
 plugins:
   - no-only-tests
