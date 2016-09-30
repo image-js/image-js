@@ -96,7 +96,7 @@ export default class Shape {
     }
 
     /**
-     *
+     * Returns a Mask (1 bit Image) corresponding to this shape.
      * @returns {Image}
      */
     getMask() {

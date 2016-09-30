@@ -6,13 +6,17 @@ import copy from '../utility/copy';
 /**
  * @memberof Image
  * @instance
+ * @param {number} [options.size=0]
+ * @param {string} [options.algorithm='copy']
+ * @param {array<number>} [options.color]
  */
 
-export default function pad({
-    size = 0,
-    algorithm = 'copy',
-    color
-    } = {}) {
+export default function pad(options = {}) {
+    let {
+        size = 0,
+        algorithm = 'copy',
+        color
+    } = options;
 
     this.checkProcessable('pad', {
         bitDepth: [8, 16]

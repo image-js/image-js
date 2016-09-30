@@ -4,17 +4,24 @@ import nearestNeighbor from './nearestNeighbor';
 import {factorDimensions} from '../../../util/converter';
 
 /**
+ * Rescale an image
  * @memberof Image
  * @instance
+ * @param {number} [width=this.width]
+ * @param {number} [height=this.height]
+ * @param {number} [factor=1]
+ * @param {string} [algorithm='nearestNeighbor']
  */
 
 
-export default function scale({
-    width = this.width,
-    height = this.height,
-    factor = 1,
-    algorithm = 'nearestNeighbor'
-    } = {}) {
+export default function scale(options = {}) {
+    const {
+        width = this.width,
+        height = this.height,
+        factor = 1,
+        algorithm = 'nearestNeighbor'
+    } = options;
+
 
     const {width: newWidth, height: newHeight} = factorDimensions(factor, width, height);
 
