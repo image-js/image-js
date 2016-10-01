@@ -12,5 +12,5 @@ export default function getSVD() {
         bitDepth: [1]
     });
 
-    return DC.SVD(this.pixelsArray);
+    return DC.SVD(this.points);
 }

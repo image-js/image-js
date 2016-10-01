@@ -59,7 +59,7 @@ import getSum from './compute/sum';
 import getLocalExtrema from './compute/localExtrema';
 import getMean from './compute/mean';
 import getMedian from './compute/median';
-import getPixelsArray from './compute/pixelsArray';
+import getPoints from './compute/points';
 import getRelativePosition from './compute/relativePosition';
 import getSVD from './compute/svd';
 import countAlphaPixels from './compute/countAlphaPixels';
@@ -131,7 +131,7 @@ export default function extend(Image) {
     Image.extendMethod('getLocalExtrema', getLocalExtrema);
     Image.extendMethod('getMedian', getSum).extendProperty('median', getMedian);
     Image.extendMethod('getMean', getMean).extendProperty('mean', getMean);
-    Image.extendMethod('getPixelsArray', getPixelsArray).extendProperty('pixelsArray', getPixelsArray);
+    Image.extendMethod('getPoints', getPoints).extendProperty('points', getPoints);
     Image.extendMethod('getRelativePosition', getRelativePosition);
     Image.extendMethod('getSVD', getSVD).extendProperty('svd', getSVD);
 }
