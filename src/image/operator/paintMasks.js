@@ -33,7 +33,7 @@ export default function paintMasks(masks, options = {}) {
         randomColors = false,
         distinctColors = false,
         labels = [],
-        labelPositions = [],
+        labelsPosition = [],
         labelColor = 'blue',
         labelFont = '12px Helvetica'
     } = options;
@@ -93,7 +93,7 @@ export default function paintMasks(masks, options = {}) {
         ctx.fillStyle = labelColor;
         ctx.font = labelFont;
         for (let i = 0; i < Math.min(masks.length, labels.length); i++) {
-            let position = (labelPositions[i]) ? labelPositions[i] : masks[i].position;
+            let position = (labelsPosition[i]) ? labelsPosition[i] : masks[i].position;
             ctx.fillText(labels[i], position[0], position[1]);
         }
         this.data = ctx.getImageData(0, 0, this.width, this.height).data;

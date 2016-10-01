@@ -223,7 +223,7 @@ export default class ROIManager {
         if (labelProperty) {
             let rois = this.getROI(options);
             options.labels = rois.map((roi) => roi[labelProperty]);
-            options.labelPositions = rois.map((roi) => [roi.meanX, roi.meanY]);
+            options.labelsPosition = rois.map((roi) => [roi.meanX, roi.meanY]);
         }
 
         this._painted.paintMasks(masks, options);
