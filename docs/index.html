@@ -397,9 +397,9 @@
                       </a></li>
                       
                       <li><a
-                        href='#Image#pixelsArray'
+                        href='#Image#points'
                         class='regular pre-open'>
-                        #pixelsArray
+                        #points
                       </a></li>
                       
                       <li><a
@@ -1018,7 +1018,7 @@
       Image
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/image/image.js#L62-L559'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/image/image.js#L62-L559'>
       <span>src/image/image.js</span>
       </a>
     
@@ -3229,7 +3229,8 @@ pixels.</p>
 
   
 
-  
+  <p>Rescale an image</p>
+
 
   <div class='pre p1 fill-light mt0'>scale</div>
 
@@ -3247,58 +3248,46 @@ pixels.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
-            (default <code>{}</code>)
+            <span class='code bold'>width</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]
+            (default <code>this.width</code>)
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.width</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>this.width</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.height</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>this.height</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.factor</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>1</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>&#39;nearestNeighbor&#39;</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>height</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]
+            (default <code>this.height</code>)
+            )</code> 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>factor</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]
+            (default <code>1</code>)
+            )</code> 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>algorithm</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]
+            (default <code>&#39;nearestNeighbor&#39;</code>)
+            )</code> 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(Any
+            (default <code>{}</code>)
+            )</code> 
+          </div>
           
         </div>
       
@@ -3813,6 +3802,45 @@ You may either choose among the provided algorithm or just specify a threshold v
       
         <div class='space-bottom0'>
           <div>
+            <span class='code bold'>algorithm</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]
+            (default <code>&#39;threshold&#39;</code>)
+            )</code> 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>threshold</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]
+            (default <code>0.5</code>)
+            )</code> If the algorithm is &#x27;threshold&#x27; specify here the value (0 to 1).
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>useAlpha</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>]
+            (default <code>true</code>)
+            )</code> Apply the alpha channel to determine the intensity of the pixel.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>invert</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>]
+            (default <code>false</code>)
+            )</code> Invert the resulting image
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
             <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
             (default <code>{}</code>)
             )</code> 
@@ -3877,7 +3905,7 @@ You may either choose among the provided algorithm or just specify a threshold v
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></code>:
-        Binary image containins the mask
+        Binary image containing the mask
 
       
     
@@ -3927,48 +3955,35 @@ You may either choose among the provided algorithm or just specify a threshold v
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>$0</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
-            (default <code>{}</code>)
+            <span class='code bold'>options.size</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]
+            (default <code>0</code>)
             )</code> 
           </div>
           
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.size</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>0</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.algorithm</span> <code class='quiet'>Any</code>
-                  
-                    (default <code>&#39;copy&#39;</code>)
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-                <tr>
-                  <td class='break-word'><span class='code bold'>$0.color</span> <code class='quiet'>Any</code>
-                  </td>
-                  <td class='break-word'><span></span></td>
-                </tr>
-              
-            </tbody>
-          </table>
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options.algorithm</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]
+            (default <code>&#39;copy&#39;</code>)
+            )</code> 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options.color</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>&gt;])</code> 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(Any
+            (default <code>{}</code>)
+            )</code> 
+          </div>
           
         </div>
       
@@ -6099,11 +6114,11 @@ a relative position and this part of the original image will be extracted.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='Image#pixelsArray'>
+    <div class='border-bottom' id='Image#points'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>pixelsArray</span>
+            <span class='code strong strong truncate'>points</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -6111,10 +6126,10 @@ a relative position and this part of the original image will be extracted.</p>
 
   
 
-  <p>Allows to generate an array of pixels for an image binary image (bit depth = 1)</p>
+  <p>Allows to generate an array of points for a binary image (bit depth = 1)</p>
 
 
-  <div class='pre p1 fill-light mt0'>pixelsArray</div>
+  <div class='pre p1 fill-light mt0'>points</div>
 
   
 
@@ -6131,7 +6146,7 @@ a relative position and this part of the original image will be extracted.</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>[[pixels]]</code>:
+      <code>[[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]]</code>:
         an array of 
 [x,y]
  corresponding to the set pixels in the binary image
@@ -6886,7 +6901,7 @@ a relative position and this part of the original image will be extracted.</p>
       getChannel
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/image/utility/getChannel.js#L12-L44'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/image/utility/getChannel.js#L12-L44'>
       <span>src/image/utility/getChannel.js</span>
       </a>
     
@@ -6986,7 +7001,7 @@ a relative position and this part of the original image will be extracted.</p>
       combineChannels
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/image/utility/combineChannels.js#L12-L49'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/image/utility/combineChannels.js#L12-L49'>
       <span>src/image/utility/combineChannels.js</span>
       </a>
     
@@ -7090,7 +7105,7 @@ a relative position and this part of the original image will be extracted.</p>
       getHistograms
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/image/compute/histogram.js#L46-L56'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/image/compute/histogram.js#L46-L56'>
       <span>src/image/compute/histogram.js</span>
       </a>
     
@@ -7196,7 +7211,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
       median
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/util/histogram.js#L7-L31'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/util/histogram.js#L7-L31'>
       <span>src/util/histogram.js</span>
       </a>
     
@@ -7263,7 +7278,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
       mean
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/util/histogram.js#L38-L50'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/util/histogram.js#L38-L50'>
       <span>src/util/histogram.js</span>
       </a>
     
@@ -7330,7 +7345,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
       ROIManager
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/image/roi/manager.js#L18-L313'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/image/roi/manager.js#L18-L313'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -8671,7 +8686,7 @@ for each data to which ROI it belongs</p>
       ROIManager
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/image/roi/ROILayer.js#L20-L88'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/image/roi/ROILayer.js#L20-L88'>
       <span>src/image/roi/ROILayer.js</span>
       </a>
     
@@ -10015,7 +10030,7 @@ for each data to which ROI it belongs</p>
       fromWaterShed
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/image/roi/creator/fromWaterShed.js#L18-L81'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/image/roi/creator/fromWaterShed.js#L18-L81'>
       <span>src/image/roi/creator/fromWaterShed.js</span>
       </a>
     
@@ -10153,7 +10168,7 @@ for each data to which ROI it belongs</p>
       ROIMap
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/image/roi/ROIMap.js#L9-L22'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/image/roi/ROIMap.js#L9-L22'>
       <span>src/image/roi/ROIMap.js</span>
       </a>
     
@@ -10203,7 +10218,7 @@ to one region of interest (ROI)</p>
       ROILayer
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/image/roi/ROILayer.js#L20-L88'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/image/roi/ROILayer.js#L20-L88'>
       <span>src/image/roi/ROILayer.js</span>
       </a>
     
@@ -10250,7 +10265,7 @@ to one region of interest (ROI)</p>
       ROI
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/image/roi/roi.js#L11-L370'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/image/roi/roi.js#L11-L370'>
       <span>src/image/roi/roi.js</span>
       </a>
     
@@ -10833,7 +10848,7 @@ are calculated in the getBoxPixels procedure</p>
       boxMask
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/image/roi/roi.js#L244-L244'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/image/roi/roi.js#L244-L244'>
       <span>src/image/roi/roi.js</span>
       </a>
     
@@ -10881,7 +10896,7 @@ are calculated in the getBoxPixels procedure</p>
       Stack
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/stack/stack.js#L14-L101'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/stack/stack.js#L14-L101'>
       <span>src/stack/stack.js</span>
       </a>
     
@@ -11334,7 +11349,7 @@ are calculated in the getBoxPixels procedure</p>
       Shape
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/1cc90931ca9ba68b46fe48d8cf34a9daf49ff955/src/util/shape.js#L34-L115'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/321c465cf5100c76c54e247030cbd1286f6c2376/src/util/shape.js#L34-L115'>
       <span>src/util/shape.js</span>
       </a>
     
@@ -11516,7 +11531,8 @@ A Shape is by default filled.
 
   
 
-  
+  <p>Returns a Mask (1 bit Image) corresponding to this shape.</p>
+
 
   <div class='pre p1 fill-light mt0'>getMask(): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
 
