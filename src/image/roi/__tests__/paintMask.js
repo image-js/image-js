@@ -86,6 +86,8 @@ describe('we check paint mask', function () {
 });
 
 describe('we check paint mask and draw label', function () {
+    // Disable the tests that require fonts on Travis
+    const _it = process.env.TRAVIS ? it.skip : it;
 
     let image = new Image(100, 100, {kind: 'GREY'});
     image.setPixelXY(10,50,[1]);
@@ -96,7 +98,7 @@ describe('we check paint mask and draw label', function () {
     let roiManager = image.getROIManager();
     roiManager.fromMask(mask, {positive: true, negative: false});
 
-    it('should yield the right painted images with label', function () {
+    _it('should yield the right painted images with label', function () {
         roiManager.resetPainted();
         let painted = roiManager.paint({
             positive: true,
@@ -110,7 +112,7 @@ describe('we check paint mask and draw label', function () {
        );
     });
 
-    it('should yield the right painted images with surface', function () {
+    _it('should yield the right painted images with surface', function () {
         roiManager.resetPainted();
         let painted = roiManager.paint({
             positive: true,
