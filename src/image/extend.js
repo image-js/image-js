@@ -44,6 +44,7 @@ import getRow from './utility/getRow';
 import getColumn from './utility/getColumn';
 import getMatrix from './utility/getMatrix';
 import setMatrix from './utility/setMatrix';
+import getPixelsArray from './utility/getPixelsArray';
 import paintMasks from './operator/paintMasks';
 import paintPoints from './operator/paintPoints';
 import extract from './operator/extract';
@@ -106,6 +107,7 @@ export default function extend(Image) {
     Image.extendMethod('getColumn', getColumn);
     Image.extendMethod('getMatrix', getMatrix);
     Image.extendMethod('setMatrix', setMatrix);
+    Image.extendMethod('getPixelsArray', getPixelsArray);
 
     Image.extendMethod('split', split);
     Image.extendMethod('getChannel', getChannel);
