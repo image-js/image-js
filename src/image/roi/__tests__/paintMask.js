@@ -86,8 +86,8 @@ describe('we check paint mask', function () {
 });
 
 describe('we check paint mask and draw label', function () {
-    // Disable the tests that require fonts on Travis
-    const _it = process.env.TRAVIS ? it.skip : it;
+    // Only run on macOS. Other platforms don't have the Georgia font.
+    const _it = process.platform === 'darwin' ? it : it.skip;
 
     let image = new Image(100, 100, {kind: 'GREY'});
     image.setPixelXY(10,50,[1]);
