@@ -126,12 +126,11 @@ IJS.load('cat.jpg').then(function(image) {
 
  @example
  // for this example you will need the picture of an ecstasy pill that is available on
- // wget https://raw.githubusercontent.com/image-js/core/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/test/img/xtc.jpg
- // the goal is to isolate the picture and to get a RGB histogram of the pill.
+ // wget https://raw.githubusercontent.com/image-js/core/854e70f50d63cc73d2dde1d2020fe61ba1b5ec05/test/img/xtc.png // the goal is to isolate the picture and to get a RGB histogram of the pill.
  // Practically this allows to classify pills based on the histogram similarity
  // This work was published at: http://dx.doi.org/10.1016/j.forsciint.2012.10.004
 
- IJS.load('xtc.jpg').then(function(image) {
+ IJS.load('xtc.png').then(function(image) {
     var grey=image.grey({
         algorithm:'lightness'
     });
@@ -146,10 +145,40 @@ IJS.load('cat.jpg').then(function(image) {
     // the ROIManager. A ROIManager will be applied on the original image
     // in order to be able to extract from the original image the regions
 
-    var manager = image.getROIManager();
+    // the result of this console.log result can diretly be pasted
+    // in the browser
+    // console.log(mask.toDataURL());
+
+
+    var manager = image.getROIManager({
+        positive: true,
+        negative: false
+    });
     manager.fromMask(mask);
-    var rois=manager.getROI();
-    console.log(rois);
+    var rois=manager.getROI({
+        minSurface: 100
+    });
+
+    // console.log(rois);
+
+    // we can sort teh rois by surface
+    // for demonstration we use an arrow function
+    rois.sort( (a,b) => b.surface-a.surface);
+
+    // the first ROI (the biggest is expected to be the pill)
+    var pill=image.extract(rois[0].getMask({
+        scale: 0.7
+    }));
+    pill.save('pill.jpg');
+
+    // we may again console log the pill so that we can
+    // copy / paste the result and display it in the browser
+    // by pasting as URL
+
+
+
+    console.log(pill.toDataURL());
+
 });
 
 */
