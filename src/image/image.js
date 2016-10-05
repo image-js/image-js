@@ -58,7 +58,102 @@ let computedPropertyDescriptor = {
  * @param {number} [height=1]
  * @param {array} [data] - Image data to load
  * @param {object} options
- */
+ *
+ * @example
+ *
+ * In order to run those examples you will have to install node and
+ * create a new project
+ *
+ * To install node you could use nvm that can be installed from
+ * https://github.com/creationix/nvm
+ *
+ * Once nvm is install:
+ * nvm install stable
+ * nvm alias default stable
+ *
+ * You may then create a folder, go in this folder and install image-js
+ * mkdir test-image-js
+ * cd test-image-js
+ * npm install image-js
+ *
+ * In the test-image-js folder please also store please a test.jpg image like
+ * wget https://raw.githubusercontent.com/image-js/core/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/test/img/cat.jpg
+
+
+ * @example
+
+ // javascript code using node to get some info about the image
+
+ // we load the library that was install using 'npm install image-js'
+ var IJS=require('image-js');
+
+ // now IJS contains all the methods available to create an image
+
+ // loading an image is asynchronous and will return a promise.
+ // once the promise has been resolved the function in the 'then' method will
+ // be executed
+
+ IJS.load('cat.jpg').then(function(image) {
+        console.log('Width',image.width);
+        console.log('Height',image.height);
+        console.log('colorModel', image.colorModel);
+        console.log('components', image.components);
+        console.log('alpha', image.alpha);
+        console.log('channels', image.channels);
+        console.log('bitDepth', image.bitDepth);
+});
+
+ @example
+// Convert an image to grey scale
+var IJS=require('image-js');
+
+IJS.load('cat.jpg').then(function(image) {
+    var grey=image.grey();
+    grey.save('cat-grey.jpg');
+});
+
+ @example
+ // Split a RGB image in it's components
+ var IJS=require('image-js');
+
+ IJS.load('cat.jpg').then(function(image) {
+    var components=image.split();
+    components[0].save('cat-red.jpg');
+    components[1].save('cat-green.jpg');
+    components[2].save('cat-blue.jpg');
+});
+
+
+ @example
+ // for this example you will need the picture of an ecstasy pill that is available on
+ // wget https://raw.githubusercontent.com/image-js/core/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/test/img/xtc.jpg
+ // the goal is to isolate the picture and to get a RGB histogram of the pill.
+ // Practically this allows to classify pills based on the histogram similarity
+ // This work was published at: http://dx.doi.org/10.1016/j.forsciint.2012.10.004
+
+ IJS.load('xtc.jpg').then(function(image) {
+    var grey=image.grey({
+        algorithm:'lightness'
+    });
+    // we create a mask, which is basically a binary image
+    // a mask has as source a grey image and we will decide how to determine
+    // the threshold to define what is white and what is black
+    var mask=grey.mask({
+        algorithm: 'li'
+    });
+
+    // it is possible to create an array of Region Of Interest (ROI) using
+    // the ROIManager. A ROIManager will be applied on the original image
+    // in order to be able to extract from the original image the regions
+
+    var manager = image.getROIManager();
+    manager.fromMask(mask);
+    var rois=manager.getROI();
+    console.log(rois);
+});
+
+*/
+
 export default class Image {
     constructor(width, height, data, options) {
         if (width === undefined) width = 1;
