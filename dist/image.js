@@ -312,7 +312,7 @@ module.exports = {
   blobToArrayBuffer: blobToArrayBuffer
 };
 
-},{"blob":3,"native-or-lie":107}],3:[function(require,module,exports){
+},{"blob":3,"native-or-lie":106}],3:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -1266,7 +1266,7 @@ function decode(data) {
 
 module.exports = decode;
 
-},{"iobuffer":20,"tiff":115}],22:[function(require,module,exports){
+},{"iobuffer":20,"tiff":114}],22:[function(require,module,exports){
 'use strict';
 
 exports.decode = require('./decode');
@@ -8914,7 +8914,7 @@ module.exports = Number.isFinite || function (val) {
 	return !(typeof val !== 'number' || numberIsNan(val) || val === Infinity || val === -Infinity);
 };
 
-},{"number-is-nan":109}],47:[function(require,module,exports){
+},{"number-is-nan":108}],47:[function(require,module,exports){
 "use strict";
 
 // https://github.com/paulmillr/es6-shim
@@ -9818,7 +9818,7 @@ module.exports = {
     scale: scale
 };
 
-},{"ml-stat":105}],51:[function(require,module,exports){
+},{"ml-stat":104}],51:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10100,7 +10100,7 @@ function SNV(data) {
     return result;
 }
 
-},{"ml-stat":105}],54:[function(require,module,exports){
+},{"ml-stat":104}],54:[function(require,module,exports){
 "use strict";
 
 /**
@@ -10133,90 +10133,6 @@ module.exports = binarySearch;
 },{}],55:[function(require,module,exports){
 'use strict';
 
-/**
- * @class DisjointSet
- */
-
-class DisjointSet {
-    constructor() {
-        this.nodes = new Map();
-    }
-
-    /**
-     * Adds an element as a new set
-     * @param {*} value
-     * @return {DisjointSetNode} Object holding the element
-     */
-    add(value) {
-        var node = this.nodes.get(value);
-        if (!node) {
-            node = new DisjointSetNode(value);
-            this.nodes.set(value, node);
-        }
-        return node;
-    }
-
-    /**
-     * Merges the sets that contain x and y
-     * @param {DisjointSetNode} x
-     * @param {DisjointSetNode} y
-     */
-    union(x, y) {
-        var rootX = this.find(x);
-        var rootY = this.find(y);
-        if (rootX === rootY) {
-            return;
-        }
-        if (rootX.rank < rootY.rank) {
-            rootX.parent = rootY;
-        } else if (rootX.rank > rootY.rank) {
-            rootY.parent = rootX;
-        } else {
-            rootY.parent = rootX;
-            rootX.rank++;
-        }
-    }
-
-    /**
-     * Finds and returns the root node of the set that contains node
-     * @param {DisjointSetNode} node
-     * @return {DisjointSetNode}
-     */
-    find(node) {
-        var rootX = node;
-        while (rootX.parent !== null) {
-            rootX = rootX.parent;
-        }
-        var toUpdateX = node;
-        while (toUpdateX.parent !== null) {
-            var toUpdateParent = toUpdateX;
-            toUpdateX = toUpdateX.parent;
-            toUpdateParent.parent = rootX;
-        }
-        return rootX;
-    }
-
-    /**
-     * Returns true if x and y belong to the same set
-     * @param {DisjointSetNode} x
-     * @param {DisjointSetNode} y
-     */
-    connected(x, y) {
-        return this.find(x) === this.find(y);
-    }
-}
-
-module.exports = DisjointSet;
-
-function DisjointSetNode(value) {
-    this.value = value;
-    this.parent = null;
-    this.rank = 0;
-}
-
-},{}],56:[function(require,module,exports){
-'use strict';
-
 function squaredEuclidean(p, q) {
     var d = 0;
     for (var i = 0; i < p.length; i++) {
@@ -10232,7 +10148,7 @@ function euclidean(p, q) {
 module.exports = euclidean;
 euclidean.squared = squaredEuclidean;
 
-},{}],57:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 'use strict';
 
 var FFT = require('./fftlib');
@@ -10540,7 +10456,7 @@ var FFTUtils = {
 
 module.exports = FFTUtils;
 
-},{"./fftlib":58}],58:[function(require,module,exports){
+},{"./fftlib":57}],57:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10785,13 +10701,13 @@ var FFT = function () {
   return FFT;
 }.call(undefined);
 
-},{}],59:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 'use strict';
 
 exports.FFTUtils = require("./FFTUtils");
 exports.FFT = require('./fftlib');
 
-},{"./FFTUtils":57,"./fftlib":58}],60:[function(require,module,exports){
+},{"./FFTUtils":56,"./fftlib":57}],59:[function(require,module,exports){
 'use strict';
 
 var squaredEuclidean = require('ml-distance-euclidean').squared;
@@ -10815,7 +10731,7 @@ class GaussianKernel {
 
 module.exports = GaussianKernel;
 
-},{"ml-distance-euclidean":56}],61:[function(require,module,exports){
+},{"ml-distance-euclidean":55}],60:[function(require,module,exports){
 'use strict';
 
 var defaultOptions = {
@@ -10844,7 +10760,7 @@ class PolynomialKernel {
 
 module.exports = PolynomialKernel;
 
-},{}],62:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 'use strict';
 
 var defaultOptions = {
@@ -10870,7 +10786,7 @@ class SigmoidKernel {
 
 module.exports = SigmoidKernel;
 
-},{}],63:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('ml-matrix');
@@ -10956,7 +10872,7 @@ class Kernel {
 
 module.exports = Kernel;
 
-},{"./kernels/anova-kernel":64,"./kernels/cauchy-kernel":65,"./kernels/exponential-kernel":66,"./kernels/histogram-intersection-kernel":67,"./kernels/laplacian-kernel":68,"./kernels/multiquadratic-kernel":69,"./kernels/rational-quadratic-kernel":70,"ml-kernel-gaussian":60,"ml-kernel-polynomial":61,"ml-kernel-sigmoid":62,"ml-matrix":80}],64:[function(require,module,exports){
+},{"./kernels/anova-kernel":63,"./kernels/cauchy-kernel":64,"./kernels/exponential-kernel":65,"./kernels/histogram-intersection-kernel":66,"./kernels/laplacian-kernel":67,"./kernels/multiquadratic-kernel":68,"./kernels/rational-quadratic-kernel":69,"ml-kernel-gaussian":59,"ml-kernel-polynomial":60,"ml-kernel-sigmoid":61,"ml-matrix":79}],63:[function(require,module,exports){
 'use strict';
 
 var defaultOptions = {
@@ -10983,7 +10899,7 @@ class ANOVAKernel {
 
 module.exports = ANOVAKernel;
 
-},{}],65:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 'use strict';
 
 var squaredEuclidean = require('ml-distance-euclidean').squared;
@@ -11005,7 +10921,7 @@ class CauchyKernel {
 
 module.exports = CauchyKernel;
 
-},{"ml-distance-euclidean":56}],66:[function(require,module,exports){
+},{"ml-distance-euclidean":55}],65:[function(require,module,exports){
 'use strict';
 
 var euclidean = require('ml-distance-euclidean');
@@ -11029,7 +10945,7 @@ class ExponentialKernel {
 
 module.exports = ExponentialKernel;
 
-},{"ml-distance-euclidean":56}],67:[function(require,module,exports){
+},{"ml-distance-euclidean":55}],66:[function(require,module,exports){
 'use strict';
 
 class HistogramIntersectionKernel {
@@ -11044,7 +10960,7 @@ class HistogramIntersectionKernel {
 
 module.exports = HistogramIntersectionKernel;
 
-},{}],68:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 'use strict';
 
 var euclidean = require('ml-distance-euclidean');
@@ -11067,7 +10983,7 @@ class LaplacianKernel {
 
 module.exports = LaplacianKernel;
 
-},{"ml-distance-euclidean":56}],69:[function(require,module,exports){
+},{"ml-distance-euclidean":55}],68:[function(require,module,exports){
 'use strict';
 
 var squaredEuclidean = require('ml-distance-euclidean').squared;
@@ -11089,7 +11005,7 @@ class MultiquadraticKernel {
 
 module.exports = MultiquadraticKernel;
 
-},{"ml-distance-euclidean":56}],70:[function(require,module,exports){
+},{"ml-distance-euclidean":55}],69:[function(require,module,exports){
 'use strict';
 
 var squaredEuclidean = require('ml-distance-euclidean').squared;
@@ -11112,7 +11028,7 @@ class RationalQuadraticKernel {
 
 module.exports = RationalQuadraticKernel;
 
-},{"ml-distance-euclidean":56}],71:[function(require,module,exports){
+},{"ml-distance-euclidean":55}],70:[function(require,module,exports){
 "use strict";
 'use strict;';
 /**
@@ -11270,7 +11186,7 @@ module.exports = {
     matrix2Array: matrix2Array
 };
 
-},{"ml-fft":59}],72:[function(require,module,exports){
+},{"ml-fft":58}],71:[function(require,module,exports){
 'use strict';
 
 module.exports = abstractMatrix;
@@ -12722,7 +12638,7 @@ function abstractMatrix(superCtor) {
     return Matrix;
 }
 
-},{"./util":83,"./views/column":85,"./views/flipColumn":86,"./views/flipRow":87,"./views/row":88,"./views/selection":89,"./views/sub":90,"./views/transpose":91,"ml-array-utils":52}],73:[function(require,module,exports){
+},{"./util":82,"./views/column":84,"./views/flipColumn":85,"./views/flipRow":86,"./views/row":87,"./views/selection":88,"./views/sub":89,"./views/transpose":90,"ml-array-utils":52}],72:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -12816,7 +12732,7 @@ CholeskyDecomposition.prototype = {
 
 module.exports = CholeskyDecomposition;
 
-},{"../matrix":81}],74:[function(require,module,exports){
+},{"../matrix":80}],73:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -13612,7 +13528,7 @@ function cdiv(xr, xi, yr, yi) {
 
 module.exports = EigenvalueDecomposition;
 
-},{"../matrix":81,"./util":78}],75:[function(require,module,exports){
+},{"../matrix":80,"./util":77}],74:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -13791,7 +13707,7 @@ LuDecomposition.prototype = {
 
 module.exports = LuDecomposition;
 
-},{"../matrix":81}],76:[function(require,module,exports){
+},{"../matrix":80}],75:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -13951,7 +13867,7 @@ QrDecomposition.prototype = {
 
 module.exports = QrDecomposition;
 
-},{"../matrix":81,"./util":78}],77:[function(require,module,exports){
+},{"../matrix":80,"./util":77}],76:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -14471,7 +14387,7 @@ SingularValueDecomposition.prototype = {
 
 module.exports = SingularValueDecomposition;
 
-},{"../matrix":81,"./util":78}],78:[function(require,module,exports){
+},{"../matrix":80,"./util":77}],77:[function(require,module,exports){
 'use strict';
 
 exports.hypotenuse = function hypotenuse(a, b) {
@@ -14509,7 +14425,7 @@ exports.getFilled2DArray = function (rows, columns, value) {
     return array;
 };
 
-},{}],79:[function(require,module,exports){
+},{}],78:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('./matrix');
@@ -14556,13 +14472,13 @@ module.exports = {
     solve: solve
 };
 
-},{"./dc/cholesky":73,"./dc/evd":74,"./dc/lu":75,"./dc/qr":76,"./dc/svd":77,"./matrix":81}],80:[function(require,module,exports){
+},{"./dc/cholesky":72,"./dc/evd":73,"./dc/lu":74,"./dc/qr":75,"./dc/svd":76,"./matrix":80}],79:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./matrix');
 module.exports.Decompositions = module.exports.DC = require('./decompositions');
 
-},{"./decompositions":79,"./matrix":81}],81:[function(require,module,exports){
+},{"./decompositions":78,"./matrix":80}],80:[function(require,module,exports){
 'use strict';
 
 require('./symbol-species');
@@ -14701,14 +14617,14 @@ class Matrix extends abstractMatrix(Array) {
 module.exports = Matrix;
 Matrix.abstractMatrix = abstractMatrix;
 
-},{"./abstractMatrix":72,"./symbol-species":82,"./util":83}],82:[function(require,module,exports){
+},{"./abstractMatrix":71,"./symbol-species":81,"./util":82}],81:[function(require,module,exports){
 'use strict';
 
 if (!Symbol.species) {
     Symbol.species = Symbol.for('@@species');
 }
 
-},{}],83:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 'use strict';
 
 /**
@@ -14820,7 +14736,7 @@ exports.getRange = function getRange(from, to) {
     return arr;
 };
 
-},{}],84:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 'use strict';
 
 var abstractMatrix = require('../abstractMatrix');
@@ -14844,7 +14760,7 @@ class BaseView extends abstractMatrix() {
 
 module.exports = BaseView;
 
-},{"../abstractMatrix":72,"../matrix":81}],85:[function(require,module,exports){
+},{"../abstractMatrix":71,"../matrix":80}],84:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -14867,7 +14783,7 @@ class MatrixColumnView extends BaseView {
 
 module.exports = MatrixColumnView;
 
-},{"./base":84}],86:[function(require,module,exports){
+},{"./base":83}],85:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -14889,7 +14805,7 @@ class MatrixFlipColumnView extends BaseView {
 
 module.exports = MatrixFlipColumnView;
 
-},{"./base":84}],87:[function(require,module,exports){
+},{"./base":83}],86:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -14911,7 +14827,7 @@ class MatrixFlipRowView extends BaseView {
 
 module.exports = MatrixFlipRowView;
 
-},{"./base":84}],88:[function(require,module,exports){
+},{"./base":83}],87:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -14934,7 +14850,7 @@ class MatrixRowView extends BaseView {
 
 module.exports = MatrixRowView;
 
-},{"./base":84}],89:[function(require,module,exports){
+},{"./base":83}],88:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -14960,7 +14876,7 @@ class MatrixSelectionView extends BaseView {
 
 module.exports = MatrixSelectionView;
 
-},{"../util":83,"./base":84}],90:[function(require,module,exports){
+},{"../util":82,"./base":83}],89:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -14986,7 +14902,7 @@ class MatrixSubView extends BaseView {
 
 module.exports = MatrixSubView;
 
-},{"../util":83,"./base":84}],91:[function(require,module,exports){
+},{"../util":82,"./base":83}],90:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -15008,7 +14924,7 @@ class MatrixTransposeView extends BaseView {
 
 module.exports = MatrixTransposeView;
 
-},{"./base":84}],92:[function(require,module,exports){
+},{"./base":83}],91:[function(require,module,exports){
 'use strict';
 
 function compareNumbers(a, b) {
@@ -15494,7 +15410,7 @@ exports.cumulativeSum = function cumulativeSum(array) {
     }return result;
 };
 
-},{}],93:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 'use strict';
 
 exports.SimpleLinearRegression = exports.SLR = require('./regression/simple-linear-regression');
@@ -15510,7 +15426,7 @@ exports.KernelRidgeRegression = exports.KRR = require('./regression/kernel-ridge
 exports.PolinomialFitting2D = require('./regression/poly-fit-regression2d');
 exports.TheilSenRegression = require('./regression/theil-sen-regression');
 
-},{"./regression/exp-regression":95,"./regression/kernel-ridge-regression":96,"./regression/poly-fit-regression2d":97,"./regression/polynomial-regression":98,"./regression/potential-regression":99,"./regression/power-regression":100,"./regression/simple-linear-regression":101,"./regression/theil-sen-regression":102}],94:[function(require,module,exports){
+},{"./regression/exp-regression":94,"./regression/kernel-ridge-regression":95,"./regression/poly-fit-regression2d":96,"./regression/polynomial-regression":97,"./regression/potential-regression":98,"./regression/power-regression":99,"./regression/simple-linear-regression":100,"./regression/theil-sen-regression":101}],93:[function(require,module,exports){
 'use strict';
 
 class BaseRegression {
@@ -15589,7 +15505,7 @@ class BaseRegression {
 
 module.exports = BaseRegression;
 
-},{}],95:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 'use strict';
 
 /*
@@ -15673,7 +15589,7 @@ class ExpRegression extends BaseRegression {
 
 module.exports = ExpRegression;
 
-},{"./base-regression":94,"./simple-linear-regression":101,"./util":103}],96:[function(require,module,exports){
+},{"./base-regression":93,"./simple-linear-regression":100,"./util":102}],95:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('ml-matrix');
@@ -15752,7 +15668,7 @@ class KernelRidgeRegression extends BaseRegression {
 
 module.exports = KernelRidgeRegression;
 
-},{"./base-regression":94,"ml-kernel":63,"ml-matrix":80}],97:[function(require,module,exports){
+},{"./base-regression":93,"ml-kernel":62,"ml-matrix":79}],96:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('ml-matrix');
@@ -15947,7 +15863,7 @@ function abs(i, j) {
     this[i][j] = Math.abs(this[i][j]);
 }
 
-},{"./base-regression":94,"ml-matrix":80}],98:[function(require,module,exports){
+},{"./base-regression":93,"ml-matrix":79}],97:[function(require,module,exports){
 'use strict';
 
 /**
@@ -16096,7 +16012,7 @@ class PolynomialRegression extends BaseRegression {
 
 module.exports = PolynomialRegression;
 
-},{"./base-regression":94,"./util":103,"ml-matrix":80}],99:[function(require,module,exports){
+},{"./base-regression":93,"./util":102,"ml-matrix":79}],98:[function(require,module,exports){
 'use strict';
 
 /*
@@ -16178,7 +16094,7 @@ class PotentialRegression extends BaseRegression {
 
 module.exports = PotentialRegression;
 
-},{"./base-regression":94,"./polynomial-regression":98,"./power-regression":100,"./util":103}],100:[function(require,module,exports){
+},{"./base-regression":93,"./polynomial-regression":97,"./power-regression":99,"./util":102}],99:[function(require,module,exports){
 'use strict';
 
 /**
@@ -16263,7 +16179,7 @@ class PowerRegression extends BaseRegression {
 
 module.exports = PowerRegression;
 
-},{"./base-regression":94,"./simple-linear-regression":101,"./util":103}],101:[function(require,module,exports){
+},{"./base-regression":93,"./simple-linear-regression":100,"./util":102}],100:[function(require,module,exports){
 'use strict';
 
 var maybeToPrecision = require('./util').maybeToPrecision;
@@ -16368,7 +16284,7 @@ class SimpleLinearRegression extends BaseRegression {
 
 module.exports = SimpleLinearRegression;
 
-},{"./base-regression":94,"./util":103}],102:[function(require,module,exports){
+},{"./base-regression":93,"./util":102}],101:[function(require,module,exports){
 'use strict';
 
 var BaseRegression = require('./base-regression');
@@ -16489,14 +16405,14 @@ class TheilSenRegression extends BaseRegression {
 
 module.exports = TheilSenRegression;
 
-},{"./base-regression":94,"./util":103,"ml-stat/array":92}],103:[function(require,module,exports){
+},{"./base-regression":93,"./util":102,"ml-stat/array":91}],102:[function(require,module,exports){
 'use strict';
 
 exports.maybeToPrecision = function maybeToPrecision(value, digits) {
     if (digits) return value.toPrecision(digits);else return value.toString();
 };
 
-},{}],104:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
 'use strict';
 
 function compareNumbers(a, b) {
@@ -16979,13 +16895,13 @@ exports.cumulativeSum = function cumulativeSum(array) {
     }return result;
 };
 
-},{}],105:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 'use strict';
 
 exports.array = require('./array');
 exports.matrix = require('./matrix');
 
-},{"./array":104,"./matrix":106}],106:[function(require,module,exports){
+},{"./array":103,"./matrix":105}],105:[function(require,module,exports){
 'use strict';
 
 var arrayStat = require('./array');
@@ -17632,12 +17548,12 @@ exports.weightedScatter = function weightedScatter(matrix, weights, means, facto
     return cov;
 };
 
-},{"./array":104}],107:[function(require,module,exports){
+},{"./array":103}],106:[function(require,module,exports){
 'use strict';
 
 module.exports = typeof Promise === 'function' ? Promise : require('lie');
 
-},{"lie":49}],108:[function(require,module,exports){
+},{"lie":49}],107:[function(require,module,exports){
 "use strict";
 
 module.exports = newArray;
@@ -17651,14 +17567,14 @@ function newArray(n, value) {
   return array;
 }
 
-},{}],109:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 'use strict';
 
 module.exports = Number.isNaN || function (x) {
 	return x !== x;
 };
 
-},{}],110:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 'use strict';
 
 module.exports = function (str, search, pos) {
@@ -17671,9 +17587,9 @@ module.exports = function (str, search, pos) {
 	return str.indexOf(search, pos) !== -1;
 };
 
-},{}],111:[function(require,module,exports){
+},{}],110:[function(require,module,exports){
 arguments[4][20][0].apply(exports,arguments)
-},{"dup":20}],112:[function(require,module,exports){
+},{"dup":20}],111:[function(require,module,exports){
 'use strict';
 
 var TIFFDecoder = require('./tiffDecoder');
@@ -17683,7 +17599,7 @@ module.exports = function decodeTIFF(data, options) {
     return decoder.decode(options);
 };
 
-},{"./tiffDecoder":119}],113:[function(require,module,exports){
+},{"./tiffDecoder":118}],112:[function(require,module,exports){
 'use strict';
 
 var tags = {
@@ -17727,7 +17643,7 @@ class IFD {
 
 module.exports = IFD;
 
-},{"./tags/exif":116,"./tags/gps":117,"./tags/standard":118}],114:[function(require,module,exports){
+},{"./tags/exif":115,"./tags/gps":116,"./tags/standard":117}],113:[function(require,module,exports){
 'use strict';
 
 var types = new Map([[1, [1, readByte]], // BYTE
@@ -17865,9 +17781,9 @@ function readDouble(decoder, count) {
     return array;
 }
 
-},{}],115:[function(require,module,exports){
+},{}],114:[function(require,module,exports){
 arguments[4][22][0].apply(exports,arguments)
-},{"./decode":112,"dup":22}],116:[function(require,module,exports){
+},{"./decode":111,"dup":22}],115:[function(require,module,exports){
 'use strict';
 
 var tagsById = {
@@ -17952,7 +17868,7 @@ module.exports = {
     tagsByName: tagsByName
 };
 
-},{}],117:[function(require,module,exports){
+},{}],116:[function(require,module,exports){
 'use strict';
 
 var tagsById = {
@@ -18000,7 +17916,7 @@ module.exports = {
     tagsByName: tagsByName
 };
 
-},{}],118:[function(require,module,exports){
+},{}],117:[function(require,module,exports){
 'use strict';
 
 var tagsById = {
@@ -18190,7 +18106,7 @@ module.exports = {
     tagsByName: tagsByName
 };
 
-},{}],119:[function(require,module,exports){
+},{}],118:[function(require,module,exports){
 'use strict';
 
 var IOBuffer = require('iobuffer');
@@ -18412,7 +18328,7 @@ function unsupported(type, value) {
     throw new Error('Unsupported ' + type + ': ' + value);
 }
 
-},{"./ifd":113,"./ifdValue":114,"./tiffIfd":120,"iobuffer":111}],120:[function(require,module,exports){
+},{"./ifd":112,"./ifdValue":113,"./tiffIfd":119,"iobuffer":110}],119:[function(require,module,exports){
 'use strict';
 
 var Ifd = require('./ifd');
@@ -18530,7 +18446,7 @@ function alwaysArray(value) {
 
 module.exports = TiffIfd;
 
-},{"./ifd":113}],121:[function(require,module,exports){
+},{"./ifd":112}],120:[function(require,module,exports){
 'use strict';
 
 var workerTemplate = require('./workerTemplate');
@@ -18686,7 +18602,7 @@ WorkerManager.prototype.post = function (event, args, transferable, id) {
 
 module.exports = WorkerManager;
 
-},{"./workerTemplate":122}],122:[function(require,module,exports){
+},{"./workerTemplate":121}],121:[function(require,module,exports){
 'use strict';
 
 var worker = function worker() {
@@ -18740,7 +18656,7 @@ exports.newWorkerURL = function newWorkerURL(code, deps) {
     return URL.createObjectURL(blob);
 };
 
-},{}],123:[function(require,module,exports){
+},{}],122:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18871,7 +18787,7 @@ var bitMethods = {
     }
 };
 
-},{}],124:[function(require,module,exports){
+},{}],123:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18927,7 +18843,7 @@ function getColorHistogram() {
     return result;
 }
 
-},{"new-array":108}],125:[function(require,module,exports){
+},{"new-array":107}],124:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18969,7 +18885,7 @@ function countAlphaPixels() {
     }
 }
 
-},{}],126:[function(require,module,exports){
+},{}],125:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19086,7 +19002,7 @@ function getChannelHistogram(channel, options) {
     return result;
 }
 
-},{"is-integer":47,"new-array":108}],127:[function(require,module,exports){
+},{"is-integer":47,"new-array":107}],126:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19182,7 +19098,7 @@ function localExtrema() {
     return points;
 }
 
-},{}],128:[function(require,module,exports){
+},{}],127:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19218,7 +19134,7 @@ function max() {
     return result;
 }
 
-},{"new-array":108}],129:[function(require,module,exports){
+},{"new-array":107}],128:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19245,7 +19161,7 @@ function mean() {
     return result;
 }
 
-},{"../../util/histogram":234}],130:[function(require,module,exports){
+},{"../../util/histogram":233}],129:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19272,7 +19188,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":234}],131:[function(require,module,exports){
+},{"../../util/histogram":233}],130:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19308,24 +19224,24 @@ function min() {
     return result;
 }
 
-},{"new-array":108}],132:[function(require,module,exports){
+},{"new-array":107}],131:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = getPixelsArray;
+exports.default = points;
 // this function will return an array containing an array of XY
 
 /**
- * Allows to generate an array of pixels for an image binary image (bit depth = 1)
+ * Allows to generate an array of points for a binary image (bit depth = 1)
  * @memberof Image
  * @instance
- * @returns {[[pixels]]} - an array of [x,y] corresponding to the set pixels in the binary image
+ * @returns {[[number]]} - an array of [x,y] corresponding to the set pixels in the binary image
  */
 
-function getPixelsArray() {
-    this.checkProcessable('getPixelsArray', {
+function points() {
+    this.checkProcessable('points', {
         bitDepth: [1]
     });
 
@@ -19344,7 +19260,7 @@ function getPixelsArray() {
     }
 }
 
-},{}],133:[function(require,module,exports){
+},{}],132:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19385,7 +19301,7 @@ function getRelativePosition(targetImage) {
     // throw Error('Parent image was not found, can not get relative position.')
 }
 
-},{}],134:[function(require,module,exports){
+},{}],133:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19421,7 +19337,7 @@ function sum() {
     return result;
 }
 
-},{"new-array":108}],135:[function(require,module,exports){
+},{"new-array":107}],134:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19442,10 +19358,10 @@ function getSVD() {
         bitDepth: [1]
     });
 
-    return _mlMatrix.DC.SVD(this.pixelsArray);
+    return _mlMatrix.DC.SVD(this.points);
 }
 
-},{"ml-matrix":80}],136:[function(require,module,exports){
+},{"ml-matrix":79}],135:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19534,7 +19450,7 @@ exports.ImageData = ImageData;
 exports.isDifferentOrigin = isDifferentOrigin;
 exports.env = env;
 
-},{"canvas":undefined,"fs":4}],137:[function(require,module,exports){
+},{"canvas":undefined,"fs":4}],136:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19706,6 +19622,10 @@ var _setMatrix = require('./utility/setMatrix');
 
 var _setMatrix2 = _interopRequireDefault(_setMatrix);
 
+var _getPixelsArray = require('./utility/getPixelsArray');
+
+var _getPixelsArray2 = _interopRequireDefault(_getPixelsArray);
+
 var _paintMasks = require('./operator/paintMasks');
 
 var _paintMasks2 = _interopRequireDefault(_paintMasks);
@@ -19756,9 +19676,9 @@ var _median3 = require('./compute/median');
 
 var _median4 = _interopRequireDefault(_median3);
 
-var _pixelsArray = require('./compute/pixelsArray');
+var _points = require('./compute/points');
 
-var _pixelsArray2 = _interopRequireDefault(_pixelsArray);
+var _points2 = _interopRequireDefault(_points);
 
 var _relativePosition = require('./compute/relativePosition');
 
@@ -19775,10 +19695,6 @@ var _countAlphaPixels2 = _interopRequireDefault(_countAlphaPixels);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // computers
-
-
-// methods
-// filters
 function extend(Image) {
     var inPlace = { inPlace: true };
     var inPlaceStack = { inPlace: true, stack: true };
@@ -19821,6 +19737,7 @@ function extend(Image) {
     Image.extendMethod('getColumn', _getColumn2.default);
     Image.extendMethod('getMatrix', _getMatrix2.default);
     Image.extendMethod('setMatrix', _setMatrix2.default);
+    Image.extendMethod('getPixelsArray', _getPixelsArray2.default);
 
     Image.extendMethod('split', _split2.default);
     Image.extendMethod('getChannel', _getChannel2.default);
@@ -19846,12 +19763,15 @@ function extend(Image) {
     Image.extendMethod('getLocalExtrema', _localExtrema2.default);
     Image.extendMethod('getMedian', _sum2.default).extendProperty('median', _median4.default);
     Image.extendMethod('getMean', _mean2.default).extendProperty('mean', _mean2.default);
-    Image.extendMethod('getPixelsArray', _pixelsArray2.default).extendProperty('pixelsArray', _pixelsArray2.default);
+    Image.extendMethod('getPoints', _points2.default).extendProperty('points', _points2.default);
     Image.extendMethod('getRelativePosition', _relativePosition2.default);
     Image.extendMethod('getSVD', _svd2.default).extendProperty('svd', _svd2.default);
 }
 
-},{"./compute/colorHistogram":124,"./compute/countAlphaPixels":125,"./compute/histogram":126,"./compute/localExtrema":127,"./compute/max":128,"./compute/mean":129,"./compute/median":130,"./compute/min":131,"./compute/pixelsArray":132,"./compute/relativePosition":133,"./compute/sum":134,"./compute/svd":135,"./filter/add":138,"./filter/blur":139,"./filter/divide":140,"./filter/gaussian":141,"./filter/getBackground":142,"./filter/hypotenuse":143,"./filter/invert":144,"./filter/invertApply":145,"./filter/invertBinaryLoop":146,"./filter/invertGetSet":147,"./filter/invertIterator":148,"./filter/invertOneLoop":149,"./filter/invertPixel":150,"./filter/level":151,"./filter/median":152,"./filter/multiply":153,"./filter/sobel":154,"./filter/subtract":155,"./operator/convolution":162,"./operator/convolutionFFT":163,"./operator/extract":164,"./operator/paintMasks":165,"./operator/paintPoints":166,"./transform/cmyk":176,"./transform/colorDepth":177,"./transform/crop":178,"./transform/grey":179,"./transform/hsl":181,"./transform/hsv":182,"./transform/mask/mask":187,"./transform/pad":200,"./transform/resizeBinary":201,"./transform/rgba8":202,"./transform/scale/scale":204,"./utility/combineChannels":205,"./utility/getBestMatch":207,"./utility/getChannel":208,"./utility/getColumn":209,"./utility/getMatrix":210,"./utility/getPixelsGrid":211,"./utility/getRow":212,"./utility/getSimilarity":213,"./utility/setBorder":214,"./utility/setChannel":215,"./utility/setMatrix":216,"./utility/split":217}],138:[function(require,module,exports){
+// methods
+// filters
+
+},{"./compute/colorHistogram":123,"./compute/countAlphaPixels":124,"./compute/histogram":125,"./compute/localExtrema":126,"./compute/max":127,"./compute/mean":128,"./compute/median":129,"./compute/min":130,"./compute/points":131,"./compute/relativePosition":132,"./compute/sum":133,"./compute/svd":134,"./filter/add":137,"./filter/blur":138,"./filter/divide":139,"./filter/gaussian":140,"./filter/getBackground":141,"./filter/hypotenuse":142,"./filter/invert":143,"./filter/invertApply":144,"./filter/invertBinaryLoop":145,"./filter/invertGetSet":146,"./filter/invertIterator":147,"./filter/invertOneLoop":148,"./filter/invertPixel":149,"./filter/level":150,"./filter/median":151,"./filter/multiply":152,"./filter/sobel":153,"./filter/subtract":154,"./operator/convolution":161,"./operator/convolutionFFT":162,"./operator/extract":163,"./operator/paintMasks":164,"./operator/paintPoints":165,"./transform/cmyk":174,"./transform/colorDepth":175,"./transform/crop":176,"./transform/grey":177,"./transform/hsl":179,"./transform/hsv":180,"./transform/mask/mask":185,"./transform/pad":198,"./transform/resizeBinary":199,"./transform/rgba8":200,"./transform/scale/scale":202,"./utility/combineChannels":203,"./utility/getBestMatch":205,"./utility/getChannel":206,"./utility/getColumn":207,"./utility/getMatrix":208,"./utility/getPixelsArray":209,"./utility/getPixelsGrid":210,"./utility/getRow":211,"./utility/getSimilarity":212,"./utility/setBorder":213,"./utility/setChannel":214,"./utility/setMatrix":215,"./utility/split":216}],137:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19902,7 +19822,7 @@ function add(value) {
     }
 }
 
-},{"../../util/channel":230,"../../util/value":239}],139:[function(require,module,exports){
+},{"../../util/channel":229,"../../util/value":238}],138:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19945,7 +19865,7 @@ function meanFilter(k) {
     return _convolutionFFT2.default.call(this, kernel);
 }
 
-},{"../operator/convolutionFFT":163}],140:[function(require,module,exports){
+},{"../operator/convolutionFFT":162}],139:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20000,7 +19920,7 @@ function divide(value) {
     }
 }
 
-},{"../../util/channel":230,"../../util/value":239,"../image":156}],141:[function(require,module,exports){
+},{"../../util/channel":229,"../../util/value":238,"../image":155}],140:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20110,7 +20030,7 @@ function getSigmaKernel(sigma) {
 	return getKernel(neighbors, sigma);
 }
 
-},{"../image":156,"../operator/convolutionFFT":163}],142:[function(require,module,exports){
+},{"../image":155,"../operator/convolutionFFT":162}],141:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20148,7 +20068,7 @@ function getBackground(coordinates, values, options) {
     return background;
 }
 
-},{"../image":156,"ml-regression":93}],143:[function(require,module,exports){
+},{"../image":155,"ml-regression":92}],142:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20210,7 +20130,7 @@ function hypotenuse(otherImage) {
     return newImage;
 }
 
-},{"../../util/channel":230,"../image":156}],144:[function(require,module,exports){
+},{"../../util/channel":229,"../image":155}],143:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20263,7 +20183,7 @@ function invert() {
     }
 } // we try the faster methods
 
-},{"../../util/channel":230}],145:[function(require,module,exports){
+},{"../../util/channel":229}],144:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20299,7 +20219,7 @@ function invertApply() {
     }
 }
 
-},{}],146:[function(require,module,exports){
+},{}],145:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20316,7 +20236,7 @@ function invertBinaryLoop() {
     }
 }
 
-},{}],147:[function(require,module,exports){
+},{}],146:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20348,7 +20268,7 @@ function invert() {
     }
 }
 
-},{}],148:[function(require,module,exports){
+},{}],147:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20380,7 +20300,7 @@ function invertIterator() {
     }
 }
 
-},{}],149:[function(require,module,exports){
+},{}],148:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20400,7 +20320,7 @@ function invertOneLoop() {
     }
 }
 
-},{}],150:[function(require,module,exports){
+},{}],149:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20428,7 +20348,7 @@ function invertPixel() {
     }
 }
 
-},{}],151:[function(require,module,exports){
+},{}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20526,7 +20446,7 @@ function processImage(image, min, max, channels) {
     }
 }
 
-},{"../../util/channel":230,"new-array":108}],152:[function(require,module,exports){
+},{"../../util/channel":229,"new-array":107}],151:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20614,7 +20534,7 @@ function medianFilter() {
     return newImage;
 } //End medianFilter function
 
-},{"../../util/channel":230,"../image":156}],153:[function(require,module,exports){
+},{"../../util/channel":229,"../image":155}],152:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20670,7 +20590,7 @@ function multiply(value) {
     }
 }
 
-},{"../../util/channel":230,"../../util/value":239,"../image":156}],154:[function(require,module,exports){
+},{"../../util/channel":229,"../../util/value":238,"../image":155}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20726,7 +20646,7 @@ function sobelFilter() {
 	return gX.hypotenuse(gY, { bitDepth: this.bitDepth, channels: channels });
 }
 
-},{"../../util/kernels":236,"../image":156,"../operator/convolution":162}],155:[function(require,module,exports){
+},{"../../util/kernels":235,"../image":155,"../operator/convolution":161}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20775,7 +20695,7 @@ function subtract(value) {
     }
 }
 
-},{"../../util/channel":230,"../../util/value":239}],156:[function(require,module,exports){
+},{"../../util/channel":229,"../../util/value":238}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20830,10 +20750,11 @@ var computedPropertyDescriptor = {
 
 /**
  * Class representing an image.
- * This class allows to manipulate easily images directly in the browser.
+ * This class allows to manipulate easily images directly in the browser or in node.
  *
  * This library is designed to deal with scientific images (8 or 16 bit depth) and will be able to open
- * and process jpeg, png and uncompressed tiff images.
+ * and process jpeg, png and uncompressed tiff images. It is designed to work in the browser
+ * as on the server side in node.
  *
  * An image is characterized by:
  * * width and height
@@ -21418,7 +21339,7 @@ exports.default = Image;
 (0, _extend2.default)(Image);
 (0, _bitMethods2.default)(Image);
 
-},{"../stack/stack":227,"./bitMethods":123,"./environment":136,"./extend":137,"./kind":157,"./kindNames":158,"./load":159,"./mediaTypes":160,"./model/model":161,"./roi/manager":174,"blob-util":2,"extend":19,"fs":4}],157:[function(require,module,exports){
+},{"../stack/stack":226,"./bitMethods":122,"./environment":135,"./extend":136,"./kind":156,"./kindNames":157,"./load":158,"./mediaTypes":159,"./model/model":160,"./roi/manager":172,"blob-util":2,"extend":19,"fs":4}],156:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21525,7 +21446,7 @@ function createPixelArray(image) {
     image.data = arr;
 }
 
-},{"./kindNames":158,"./model/model":161}],158:[function(require,module,exports){
+},{"./kindNames":157,"./model/model":160}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21539,7 +21460,7 @@ var RGBA = exports.RGBA = 'RGBA';
 var RGB = exports.RGB = 'RGB';
 var GREY = exports.GREY = 'GREY';
 
-},{}],159:[function(require,module,exports){
+},{}],158:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21707,7 +21628,7 @@ function loadGeneric(url, options) {
     });
 }
 
-},{"../stack/stack":227,"./environment":136,"./image":156,"atob-lite":1,"fast-jpeg":22,"fast-png":40,"image-type":42,"tiff":115}],160:[function(require,module,exports){
+},{"../stack/stack":226,"./environment":135,"./image":155,"atob-lite":1,"fast-jpeg":22,"fast-png":40,"image-type":42,"tiff":114}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21772,7 +21693,7 @@ function getType(type) {
     return type;
 }
 
-},{"./environment":136,"./image":156,"string-includes":110}],161:[function(require,module,exports){
+},{"./environment":135,"./image":155,"string-includes":109}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21783,7 +21704,7 @@ var HSL = exports.HSL = 'HSL';
 var HSV = exports.HSV = 'HSV';
 var CMYK = exports.CMYK = 'CMYK';
 
-},{}],162:[function(require,module,exports){
+},{}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21911,7 +21832,7 @@ function convolution(kernel) {
     return newImage;
 }
 
-},{"../../util/channel":230,"../../util/kernel":235,"../image":156,"ml-matrix-convolution":71}],163:[function(require,module,exports){
+},{"../../util/channel":229,"../../util/kernel":234,"../image":155,"ml-matrix-convolution":70}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21938,7 +21859,7 @@ function convolutionFFT(kernel) {
   return this.convolution(kernel, options);
 }
 
-},{}],164:[function(require,module,exports){
+},{}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21958,7 +21879,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @memberof Image
  * @instance
  * @param {Image} mask - Image containing a binary mask
- * @param {array} [options.position] - Array of 2 elements containing the x,y coordinates
+ * @param {array} [options.position] - Array of 2 elements to force the x,y coordinates
  * @returns {Image} A new image
  */
 function extract(mask) {
@@ -22002,7 +21923,7 @@ function extract(mask) {
     return extract;
 }
 
-},{"../image":156}],165:[function(require,module,exports){
+},{"../image":155}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22012,33 +21933,48 @@ exports.default = paintMasks;
 
 var _model = require('../model/model');
 
-var _color2 = require('../../util/color');
+var _color = require('../../util/color');
 
 /**
  * Paint a mask or masks on the current image.
  * @memberof Image
  * @instance
- * @param masks {(Image|Image[])} mask - Image containing a binary mask
- * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red. You may also give a valid css color.
- * @param alpha Value from 0 to 255 to specify the alpha. Will be used if it is unspecified
- * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask.
- * @param randomColors If we we would like to paint each mask with a random color
- * @param distinctColors If we we would like to paint each mask with a different color (default: false);
+ * @param {(Image|array<Image>)}     masks - Image containing a binary mask
+ * @param {object}              [options]
+ * @param {[number]|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
+ * @param {array<array<number>>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
+ * @param {number}              [options.alpha=255\ - Value from 0 to 255 to specify the alpha.
+ * @param {boolean}             [options.randomColors=false] - To paint each mask with a random color
+ * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color
+ * @param {array<string>}       [options.labels] - Array of labels to display. Should the the same size as masks.
+ * @param {array<array<number>>}} [options.labelsPosition] - Array of points [x,y] where the labels should be displayed.
+ *                                      By default it is the 0,0 position of the correesponding mask.
+ * @param {string}              [options.labelColor='blue'] - Define the color to paint the labels
+ * @param {string}              [options.labelFont='12px Helvetica'] - Paint the labels in a different CSS style
+
+ *
  * @returns {Image} The original painted image
  */
 
 function paintMasks(masks) {
-    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-    var _ref$color = _ref.color;
-    var color = _ref$color === undefined ? [this.maxValue, 0, 0] : _ref$color;
-    var colors = _ref.colors;
-    var _ref$alpha = _ref.alpha;
-    var alpha = _ref$alpha === undefined ? 255 : _ref$alpha;
-    var _ref$randomColors = _ref.randomColors;
-    var randomColors = _ref$randomColors === undefined ? false : _ref$randomColors;
-    var _ref$distinctColors = _ref.distinctColors;
-    var distinctColors = _ref$distinctColors === undefined ? false : _ref$distinctColors;
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var _options$color = options.color;
+    var color = _options$color === undefined ? 'red' : _options$color;
+    var colors = options.colors;
+    var _options$alpha = options.alpha;
+    var alpha = _options$alpha === undefined ? 255 : _options$alpha;
+    var _options$randomColors = options.randomColors;
+    var randomColors = _options$randomColors === undefined ? false : _options$randomColors;
+    var _options$distinctColo = options.distinctColors;
+    var distinctColors = _options$distinctColo === undefined ? false : _options$distinctColo;
+    var _options$labels = options.labels;
+    var labels = _options$labels === undefined ? [] : _options$labels;
+    var _options$labelsPositi = options.labelsPosition;
+    var labelsPosition = _options$labelsPositi === undefined ? [] : _options$labelsPositi;
+    var _options$labelColor = options.labelColor;
+    var labelColor = _options$labelColor === undefined ? 'blue' : _options$labelColor;
+    var _options$labelFont = options.labelFont;
+    var labelFont = _options$labelFont === undefined ? '12px Helvetica' : _options$labelFont;
 
 
     this.checkProcessable('paintMasks', {
@@ -22048,51 +21984,62 @@ function paintMasks(masks) {
     });
 
     if (!Array.isArray(color)) {
-        color = (0, _color2.css2array)(color);
+        color = (0, _color.css2array)(color);
     }
 
     if (colors) {
         colors = colors.map(function (color) {
             if (!Array.isArray(color)) {
-                var _color = (0, _color2.css2array)(_color);
-                return _color;
+                return (0, _color.css2array)(color);
             }
         });
     }
 
     if (!Array.isArray(masks)) masks = [masks];
 
-    if (distinctColors) colors = (0, _color2.getDistinctColors)(masks.length);
+    if (distinctColors) colors = (0, _color.getDistinctColors)(masks.length);
 
     for (var i = 0; i < masks.length; i++) {
-        var roi = masks[i];
+        var mask = masks[i];
         // we need to find the parent image to calculate the relative position
 
         if (colors) {
             color = colors[i % colors.length];
         } else if (randomColors) {
-            color = (0, _color2.getRandomColor)();
+            color = (0, _color.getRandomColor)();
         }
 
-        for (var x = 0; x < roi.width; x++) {
-            for (var y = 0; y < roi.height; y++) {
-                if (roi.getBitXY(x, y)) {
+        for (var x = 0; x < mask.width; x++) {
+            for (var y = 0; y < mask.height; y++) {
+                if (mask.getBitXY(x, y)) {
                     for (var component = 0; component < Math.min(this.components, color.length); component++) {
                         if (alpha === 255) {
-                            this.setValueXY(x + roi.position[0], y + roi.position[1], component, color[component]);
+                            this.setValueXY(x + mask.position[0], y + mask.position[1], component, color[component]);
                         } else {
-                            var value = this.getValueXY(x + roi.position[0], y + roi.position[1], component);
+                            var value = this.getValueXY(x + mask.position[0], y + mask.position[1], component);
                             value = Math.round((value * (255 - alpha) + color[component] * alpha) / 255);
-                            this.setValueXY(x + roi.position[0], y + roi.position[1], component, value);
+                            this.setValueXY(x + mask.position[0], y + mask.position[1], component, value);
                         }
                     }
                 }
             }
         }
     }
+
+    if (Array.isArray(labels) && labels.length > 0) {
+        var canvas = this.getCanvas({ originalData: true });
+        var ctx = canvas.getContext('2d');
+        ctx.fillStyle = labelColor;
+        ctx.font = labelFont;
+        for (var _i = 0; _i < Math.min(masks.length, labels.length); _i++) {
+            var position = labelsPosition[_i] ? labelsPosition[_i] : masks[_i].position;
+            ctx.fillText(labels[_i], position[0], position[1]);
+        }
+        this.data = ctx.getImageData(0, 0, this.width, this.height).data;
+    }
 }
 
-},{"../../util/color":231,"../model/model":161}],166:[function(require,module,exports){
+},{"../../util/color":230,"../model/model":160}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22152,24 +22099,127 @@ function paintPoints(points) {
     }
 }
 
-},{"../../util/shape":238,"../model/model":161}],167:[function(require,module,exports){
+},{"../../util/shape":237,"../model/model":160}],166:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _roi = require('./roi');
+
+var _roi2 = _interopRequireDefault(_roi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// TODO check the links for the reference in the docs (@see)
+
+/**
+ * A layer that is caracterised by a ROIMap (@see ROIMap) and that will
+ * generated automatically the corresponding ROI.
+ * ROI should be a continuous
+ * surface (it is not tested when it is not continous ...)
+ * From the roiMap, the ROILayer will create the corresponding
+ * ROI (@see ROI).
+ *
+ * @class ROIManager
+ * @param {Image} image
+ * @param {object} [options]
+ */
+/**
+ * @class ROILayer
+ */
+class ROILayer {
+    constructor(roiMap, options) {
+        this.roiMap = roiMap;
+        this.options = options;
+        this.roi = this.createROI();
+    }
+
+    /**
+     * ROI are created from a roiMap
+     * The roiMap contains mainty an array of identifiers that define
+     * for each data to which ROI it belongs
+     * @memberof ROIManager
+     * @instance
+     */
+
+    createROI() {
+        // we need to find all all the different IDs there is in the data
+        var data = this.roiMap.data;
+        var mapIDs = {};
+        this.roiMap.positive = 0;
+        this.roiMap.negative = 0;
+
+        for (var i = 0; i < data.length; i++) {
+            if (data[i] && !mapIDs[data[i]]) {
+                mapIDs[data[i]] = true;
+                if (data[i] > 0) {
+                    this.roiMap.positive++;
+                } else {
+                    this.roiMap.negative++;
+                }
+            }
+        }
+
+        var rois = {};
+
+        for (var mapID in mapIDs) {
+            rois[mapID] = new _roi2.default(this.roiMap, mapID * 1);
+        }
+
+        var width = this.roiMap.width;
+        var height = this.roiMap.height;
+
+        for (var x = 0; x < width; x++) {
+            for (var y = 0; y < height; y++) {
+                var target = y * width + x;
+                if (data[target] !== 0) {
+                    var _mapID = data[target];
+                    if (x < rois[_mapID].minX) rois[_mapID].minX = x;
+                    if (x > rois[_mapID].maxX) rois[_mapID].maxX = x;
+                    if (y < rois[_mapID].minY) rois[_mapID].minY = y;
+                    if (y > rois[_mapID].maxY) rois[_mapID].maxY = y;
+                    rois[_mapID].meanX += x;
+                    rois[_mapID].meanY += y;
+                    rois[_mapID].surface++;
+                }
+            }
+        }
+
+        var roiArray = [];
+        for (var _mapID2 in mapIDs) {
+            rois[_mapID2].meanX /= rois[_mapID2].surface;
+            rois[_mapID2].meanY /= rois[_mapID2].surface;
+            roiArray.push(rois[_mapID2]);
+        }
+
+        return roiArray;
+    }
+
+}
+exports.default = ROILayer;
+
+},{"./roi":173}],167:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 /**
- * Contains an array of the same size of the original image containings
- * the region to which belongs each of the pixels
+ * The roiMap is an array of the size of the original image data that contains
+ * positive and negative numbers. When the number is common, it corresponds
+ * to one region of interest (ROI)
+ *
  * @class ROIMap
  */
 
 class ROIMap {
-    constructor(parent, pixels) {
+    constructor(parent, data) {
         this.parent = parent;
         this.width = parent.width;
         this.height = parent.height;
-        this.pixels = pixels; // pixels containing the annotations
+        this.data = data;
         this.negative = 0;
         this.positive = 0;
     }
@@ -22181,82 +22231,6 @@ class ROIMap {
 exports.default = ROIMap;
 
 },{}],168:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = createROI;
-
-var _roi = require('./roi');
-
-var _roi2 = _interopRequireDefault(_roi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * ROI are created from a roiMap
- * The roiMap contains mainty an array of identifiers that define
- * for each pixels to which ROI it belongs
- * @memberof ROIManager
- * @instance
- */
-
-function createROI(roiMap) {
-
-    // we need to find all all the different IDs there is in the pixels
-    var pixels = roiMap.pixels;
-    var mapIDs = {};
-    roiMap.positive = 0;
-    roiMap.negative = 0;
-
-    for (var i = 0; i < pixels.length; i++) {
-        if (pixels[i] && !mapIDs[pixels[i]]) {
-            mapIDs[pixels[i]] = true;
-            if (pixels[i] > 0) {
-                roiMap.positive++;
-            } else {
-                roiMap.negative++;
-            }
-        }
-    }
-
-    var rois = {};
-
-    for (var mapID in mapIDs) {
-        rois[mapID] = new _roi2.default(roiMap, mapID * 1);
-    }
-
-    var width = roiMap.width;
-    var height = roiMap.height;
-
-    for (var x = 0; x < width; x++) {
-        for (var y = 0; y < height; y++) {
-            var target = y * width + x;
-            if (pixels[target] !== 0) {
-                var _mapID = pixels[target];
-                if (x < rois[_mapID].minX) rois[_mapID].minX = x;
-                if (x > rois[_mapID].maxX) rois[_mapID].maxX = x;
-                if (y < rois[_mapID].minY) rois[_mapID].minY = y;
-                if (y > rois[_mapID].maxY) rois[_mapID].maxY = y;
-                rois[_mapID].meanX += x;
-                rois[_mapID].meanY += y;
-                rois[_mapID].surface++;
-            }
-        }
-    }
-
-    var roiArray = [];
-    for (var _mapID2 in mapIDs) {
-        rois[_mapID2].meanX /= rois[_mapID2].surface;
-        rois[_mapID2].meanY /= rois[_mapID2].surface;
-        roiArray.push(rois[_mapID2]);
-    }
-
-    return roiArray;
-}
-
-},{"./roi":175}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22297,7 +22271,7 @@ function fromExtrema() {
 
     var MIN_VALUE = -32768;
 
-    var pixels = new Int16Array(image.size); // maxValue: 32767, minValue: -32768
+    var data = new Int16Array(image.size); // maxValue: 32767, minValue: -32768
     var processed = new Int8Array(image.size);
     var variations = new Float32Array(image.size);
 
@@ -22324,7 +22298,7 @@ function fromExtrema() {
         from++;
     }
 
-    return new _ROIMap2.default(image, pixels);
+    return new _ROIMap2.default(image, data);
 
     // we will look for the maxima (or minima) that is present in the picture
     // a maxima is a point that is surrounded by lower values
@@ -22373,9 +22347,7 @@ function fromExtrema() {
                         }
                     }
 
-                    pixels[index] = maxima ? ++positiveID : --negativeID;
-
-                    // console.log('---',pixels[index]);
+                    data[index] = maxima ? ++positiveID : --negativeID;
 
                     var valid = processTop(x, y, PROCESS_TOP);
                     if (!valid) maxima ? --positiveID : ++negativeID;
@@ -22404,12 +22376,12 @@ function fromExtrema() {
         }
         if (!valid) {
             // console.log('REVERT');
-            // need to clear all the calculated pixels because the top is not surrounded by negative values
+            // need to clear all the calculated data because the top is not surrounded by negative values
             for (var i = 0; i < toTop; i++) {
                 var _currentX2 = xToProcessTop[i & MAX_ARRAY];
                 var _currentY2 = yToProcessTop[i & MAX_ARRAY];
                 var index = _currentY2 * image.width + _currentX2;
-                pixels[index] = 0;
+                data[index] = 0;
             }
             to = currentTo;
         }
@@ -22424,7 +22396,7 @@ function fromExtrema() {
      */
     function process(xCenter, yCenter, type) {
         // console.log('PROCESS', xCenter, yCenter);
-        var currentID = pixels[yCenter * image.width + xCenter];
+        var currentID = data[yCenter * image.width + xCenter];
         var currentValue = image.data[yCenter * image.width + xCenter];
         var currentVariation = variations[yCenter * image.width + xCenter];
         for (var y = yCenter - 1; y <= yCenter + 1; y++) {
@@ -22442,7 +22414,7 @@ function fromExtrema() {
                                 // console.log('ZERO', currentID, x, y);
                                 // if we are next to a border ... it is not surrounded !
                                 if (x === 0 || y === 0 || x === image.width - 1 || y === image.height - 1) return false;
-                                pixels[index] = currentID;
+                                data[index] = currentID;
                                 xToProcessTop[toTop & MAX_ARRAY] = x;
                                 yToProcessTop[toTop & MAX_ARRAY] = y;
                                 toTop++;
@@ -22453,7 +22425,7 @@ function fromExtrema() {
                             } else {
                                 // a point we will have to process
                                 if (!onlyTop) {
-                                    pixels[index] = currentID;
+                                    data[index] = currentID;
                                     xToProcess[to & MAX_ARRAY] = x;
                                     yToProcess[to & MAX_ARRAY] = y;
                                     to++;
@@ -22463,7 +22435,7 @@ function fromExtrema() {
                         case PROCESS_NORMAL:
                             if (variations[index] <= 0) {
                                 // we look for maxima
-                                pixels[index] = currentID;
+                                data[index] = currentID;
                                 xToProcess[to & MAX_ARRAY] = x;
                                 yToProcess[to & MAX_ARRAY] = y;
                                 to++;
@@ -22477,7 +22449,7 @@ function fromExtrema() {
     }
 }
 
-},{"./../ROIMap":167}],170:[function(require,module,exports){
+},{"./../ROIMap":167}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22492,14 +22464,12 @@ var _ROIMap2 = _interopRequireDefault(_ROIMap);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function fromMask(mask) {
-    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-    var _ref$allowCorner = _ref.allowCorner;
-    var allowCorner = _ref$allowCorner === undefined ? false : _ref$allowCorner;
-
-
+    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var _options$allowCorners = options.allowCorners;
+    var allowCorners = _options$allowCorners === undefined ? false : _options$allowCorners;
     // based on a binary image we will create plenty of small images
-    var pixels = new Int16Array(mask.size); // maxValue: 32767, minValue: -32768
+
+    var data = new Int16Array(mask.size); // maxValue: 32767, minValue: -32768
 
     // split will always return an array of images
     var positiveID = 0;
@@ -22512,7 +22482,7 @@ function fromMask(mask) {
 
     for (var x = 0; x < mask.width; x++) {
         for (var y = 0; y < mask.height; y++) {
-            if (pixels[y * mask.width + x] === 0) {
+            if (data[y * mask.width + x] === 0) {
                 // need to process the whole surface
                 analyseSurface(x, y);
             }
@@ -22529,64 +22499,64 @@ function fromMask(mask) {
         while (from <= to) {
             var currentX = xToProcess[from & MAX_ARRAY];
             var currentY = yToProcess[from & MAX_ARRAY];
-            pixels[currentY * mask.width + currentX] = id;
+            data[currentY * mask.width + currentX] = id;
             // need to check all around mask pixel
-            if (currentX > 0 && pixels[currentY * mask.width + currentX - 1] === 0 && mask.getBitXY(currentX - 1, currentY) === targetState) {
+            if (currentX > 0 && data[currentY * mask.width + currentX - 1] === 0 && mask.getBitXY(currentX - 1, currentY) === targetState) {
                 // LEFT
                 to++;
                 xToProcess[to & MAX_ARRAY] = currentX - 1;
                 yToProcess[to & MAX_ARRAY] = currentY;
-                pixels[currentY * mask.width + currentX - 1] = -32768;
+                data[currentY * mask.width + currentX - 1] = -32768;
             }
-            if (currentY > 0 && pixels[(currentY - 1) * mask.width + currentX] === 0 && mask.getBitXY(currentX, currentY - 1) === targetState) {
+            if (currentY > 0 && data[(currentY - 1) * mask.width + currentX] === 0 && mask.getBitXY(currentX, currentY - 1) === targetState) {
                 // TOP
                 to++;
                 xToProcess[to & MAX_ARRAY] = currentX;
                 yToProcess[to & MAX_ARRAY] = currentY - 1;
-                pixels[(currentY - 1) * mask.width + currentX] = -32768;
+                data[(currentY - 1) * mask.width + currentX] = -32768;
             }
-            if (currentX < mask.width - 1 && pixels[currentY * mask.width + currentX + 1] === 0 && mask.getBitXY(currentX + 1, currentY) === targetState) {
+            if (currentX < mask.width - 1 && data[currentY * mask.width + currentX + 1] === 0 && mask.getBitXY(currentX + 1, currentY) === targetState) {
                 // RIGHT
                 to++;
                 xToProcess[to & MAX_ARRAY] = currentX + 1;
                 yToProcess[to & MAX_ARRAY] = currentY;
-                pixels[currentY * mask.width + currentX + 1] = -32768;
+                data[currentY * mask.width + currentX + 1] = -32768;
             }
-            if (currentY < mask.height - 1 && pixels[(currentY + 1) * mask.width + currentX] === 0 && mask.getBitXY(currentX, currentY + 1) === targetState) {
+            if (currentY < mask.height - 1 && data[(currentY + 1) * mask.width + currentX] === 0 && mask.getBitXY(currentX, currentY + 1) === targetState) {
                 // BOTTOM
                 to++;
                 xToProcess[to & MAX_ARRAY] = currentX;
                 yToProcess[to & MAX_ARRAY] = currentY + 1;
-                pixels[(currentY + 1) * mask.width + currentX] = -32768;
+                data[(currentY + 1) * mask.width + currentX] = -32768;
             }
-            if (allowCorner) {
-                if (currentX > 0 && currentY > 0 && pixels[(currentY - 1) * mask.width + currentX - 1] === 0 && mask.getBitXY(currentX - 1, currentY - 1) === targetState) {
+            if (allowCorners) {
+                if (currentX > 0 && currentY > 0 && data[(currentY - 1) * mask.width + currentX - 1] === 0 && mask.getBitXY(currentX - 1, currentY - 1) === targetState) {
                     // TOP LEFT
                     to++;
                     xToProcess[to & MAX_ARRAY] = currentX - 1;
                     yToProcess[to & MAX_ARRAY] = currentY - 1;
-                    pixels[(currentY - 1) * mask.width + currentX - 1] = -32768;
+                    data[(currentY - 1) * mask.width + currentX - 1] = -32768;
                 }
-                if (currentX < mask.width - 1 && currentY > 0 && pixels[(currentY - 1) * mask.width + currentX + 1] === 0 && mask.getBitXY(currentX + 1, currentY - 1) === targetState) {
+                if (currentX < mask.width - 1 && currentY > 0 && data[(currentY - 1) * mask.width + currentX + 1] === 0 && mask.getBitXY(currentX + 1, currentY - 1) === targetState) {
                     // TOP RIGHT
                     to++;
                     xToProcess[to & MAX_ARRAY] = currentX + 1;
                     yToProcess[to & MAX_ARRAY] = currentY - 1;
-                    pixels[(currentY - 1) * mask.width + currentX + 1] = -32768;
+                    data[(currentY - 1) * mask.width + currentX + 1] = -32768;
                 }
-                if (currentX > 0 && currentY < mask.height - 1 && pixels[(currentY + 1) * mask.width + currentX - 1] === 0 && mask.getBitXY(currentX - 1, currentY + 1) === targetState) {
+                if (currentX > 0 && currentY < mask.height - 1 && data[(currentY + 1) * mask.width + currentX - 1] === 0 && mask.getBitXY(currentX - 1, currentY + 1) === targetState) {
                     // BOTTOM LEFT
                     to++;
                     xToProcess[to & MAX_ARRAY] = currentX - 1;
                     yToProcess[to & MAX_ARRAY] = currentY + 1;
-                    pixels[(currentY + 1) * mask.width + currentX - 1] = -32768;
+                    data[(currentY + 1) * mask.width + currentX - 1] = -32768;
                 }
-                if (currentX < mask.width - 1 && currentY < mask.height - 1 && pixels[(currentY + 1) * mask.width + currentX + 1] === 0 && mask.getBitXY(currentX + 1, currentY + 1) === targetState) {
+                if (currentX < mask.width - 1 && currentY < mask.height - 1 && data[(currentY + 1) * mask.width + currentX + 1] === 0 && mask.getBitXY(currentX + 1, currentY + 1) === targetState) {
                     // BOTTOM RIGHT
                     to++;
                     xToProcess[to & MAX_ARRAY] = currentX + 1;
                     yToProcess[to & MAX_ARRAY] = currentY + 1;
-                    pixels[(currentY + 1) * mask.width + currentX + 1] = -32768;
+                    data[(currentY + 1) * mask.width + currentX + 1] = -32768;
                 }
             }
 
@@ -22597,122 +22567,14 @@ function fromMask(mask) {
             }
         }
     }
-
-    return new _ROIMap2.default(mask, pixels);
+    return new _ROIMap2.default(mask, data);
 } /**
    * Annotates each point to define to which area it belongs
    * @memberof ROIManager
    * @instance
    */
 
-},{"./../ROIMap":167}],171:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = fromMask2;
-
-var _mlDisjointSet = require('ml-disjoint-set');
-
-var _mlDisjointSet2 = _interopRequireDefault(_mlDisjointSet);
-
-var _ROIMap = require('./../ROIMap');
-
-var _ROIMap2 = _interopRequireDefault(_ROIMap);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var direction4X = [-1, 0];
-var direction4Y = [0, -1];
-var neighbours4 = [null, null];
-
-var direction8X = [-1, -1, 0, 1];
-var direction8Y = [0, -1, -1, -1];
-var neighbours8 = [null, null, null, null];
-
-/*
-Implementation of the connected-component labeling algorithm
- */
-function fromMask2(mask) {
-    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-    var _ref$neighbours = _ref.neighbours;
-    var neighbours = _ref$neighbours === undefined ? 8 : _ref$neighbours;
-
-
-    var directionX = void 0;
-    var directionY = void 0;
-    var neighboursList = void 0;
-    if (neighbours === 8) {
-        directionX = direction8X;
-        directionY = direction8Y;
-        neighboursList = neighbours8;
-    } else if (neighbours === 4) {
-        directionX = direction4X;
-        directionY = direction4Y;
-        neighboursList = neighbours4;
-    } else {
-        throw new RangeError('unsupported neighbours count: ' + neighbours);
-    }
-
-    var size = mask.size;
-    var width = mask.width;
-    var height = mask.height;
-    var labels = new Array(size);
-    var pixels = new Int16Array(size);
-    var linked = new _mlDisjointSet2.default();
-
-    var currentLabel = 1;
-    for (var j = 0; j < height; j++) {
-        for (var i = 0; i < width; i++) {
-            // true means out of background
-            var index = i + j * width;
-            if (mask.getBit(index)) {
-                var smallestNeighbour = null;
-                for (var k = 0; k < neighboursList.length; k++) {
-                    var ii = i + directionX[k];
-                    var jj = j + directionY[k];
-                    if (ii >= 0 && jj >= 0 && ii < width && jj < height) {
-                        var _index = ii + jj * width;
-                        var neighbour = labels[_index];
-                        if (!neighbour) {
-                            neighboursList[k] = null;
-                        } else {
-                            neighboursList[k] = neighbour;
-                            if (!smallestNeighbour || neighboursList[k].value < smallestNeighbour.value) {
-                                smallestNeighbour = neighboursList[k];
-                            }
-                        }
-                    }
-                }
-                if (!smallestNeighbour) {
-                    labels[index] = linked.add(currentLabel++);
-                } else {
-                    labels[index] = smallestNeighbour;
-                    for (var _k = 0; _k < neighboursList.length; _k++) {
-                        if (neighboursList[_k] && neighboursList[_k] !== smallestNeighbour) {
-                            linked.union(smallestNeighbour, neighboursList[_k]);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    for (var _j = 0; _j < height; _j++) {
-        for (var _i = 0; _i < width; _i++) {
-            var _index2 = _i + _j * width;
-            if (mask.getBit(_index2)) {
-                pixels[_index2] = linked.find(labels[_index2]).value;
-            }
-        }
-    }
-
-    return new _ROIMap2.default(mask, pixels);
-}
-
-},{"./../ROIMap":167,"ml-disjoint-set":55}],172:[function(require,module,exports){
+},{"./../ROIMap":167}],170:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22741,7 +22603,7 @@ function fromPoints(pointsToPaint) {
     var shape = new _shape2.default(options);
 
     // based on a binary image we will create plenty of small images
-    var mapPixels = new Int16Array(this.size); // maxValue: 32767, minValue: -32768
+    var data = new Int16Array(this.size); // maxValue: 32767, minValue: -32768
     var positiveID = 0;
     var shapePoints = shape.getPoints();
     for (var i = 0; i < pointsToPaint.length; i++) {
@@ -22752,15 +22614,15 @@ function fromPoints(pointsToPaint) {
             var xS = shapePoints[j][0];
             var yS = shapePoints[j][1];
             if (xP + xS >= 0 && yP + yS >= 0 && xP + xS < this.width && yP + yS < this.height) {
-                mapPixels[xP + xS + (yP + yS) * this.width] = positiveID;
+                data[xP + xS + (yP + yS) * this.width] = positiveID;
             }
         }
     }
 
-    return new _ROIMap2.default(this, mapPixels);
+    return new _ROIMap2.default(this, data);
 }
 
-},{"./../../../util/shape":238,"./../ROIMap":167}],173:[function(require,module,exports){
+},{"./../../../util/shape":237,"./../ROIMap":167}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22809,7 +22671,7 @@ function fromWaterShed() {
         points = image.getLocalExtrema({ algorithm: 'min', mask: mask });
     }
 
-    var map = new Int16Array(image.size);
+    var data = new Int16Array(image.size);
     var width = image.width;
     var height = image.height;
     var toProcess = new _jsPriorityQueue2.default({
@@ -22820,7 +22682,7 @@ function fromWaterShed() {
     });
     for (var i = 0; i < points.length; i++) {
         var index = points[i][0] + points[i][1] * width;
-        map[index] = i + 1;
+        data[index] = i + 1;
         var intensity = image.data[index];
         if (intensity <= fillMaxValue) {
             toProcess.queue([points[i][0], points[i][1], intensity]);
@@ -22833,16 +22695,16 @@ function fromWaterShed() {
         var currentValueIndex = currentPoint[0] + currentPoint[1] * width;
 
         for (var dir = 0; dir < 4; dir++) {
-            var newX = currentPoint[0] + _dxdy.dx[dir];
-            var newY = currentPoint[1] + _dxdy.dy[dir];
+            var newX = currentPoint[0] + _dxdy.dxs[dir];
+            var newY = currentPoint[1] + _dxdy.dys[dir];
             if (newX >= 0 && newY >= 0 && newX < width && newY < height) {
                 var currentNeighbourIndex = newX + newY * width;
                 if (!mask || mask.getBit(currentNeighbourIndex)) {
                     var _intensity = image.data[currentNeighbourIndex];
                     if (_intensity <= fillMaxValue) {
-                        if (map[currentNeighbourIndex] === 0) {
-                            map[currentNeighbourIndex] = map[currentValueIndex];
-                            toProcess.queue([currentPoint[0] + _dxdy.dx[dir], currentPoint[1] + _dxdy.dy[dir], _intensity]);
+                        if (data[currentNeighbourIndex] === 0) {
+                            data[currentNeighbourIndex] = data[currentValueIndex];
+                            toProcess.queue([currentPoint[0] + _dxdy.dxs[dir], currentPoint[1] + _dxdy.dys[dir], _intensity]);
                         }
                     }
                 }
@@ -22850,13 +22712,13 @@ function fromWaterShed() {
         }
     }
 
-    return new _ROIMap2.default(image, map);
+    return new _ROIMap2.default(image, data);
 } /**
    * @memberof ROIManager
    * @instance
    */
 
-},{"./../../../util/dxdy.js":233,"./../ROIMap":167,"js-priority-queue":48}],174:[function(require,module,exports){
+},{"./../../../util/dxdy.js":232,"./../ROIMap":167,"js-priority-queue":48}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22866,10 +22728,6 @@ Object.defineProperty(exports, "__esModule", {
 var _fromMask = require('./creator/fromMask');
 
 var _fromMask2 = _interopRequireDefault(_fromMask);
-
-var _fromMask3 = require('./creator/fromMask2');
-
-var _fromMask4 = _interopRequireDefault(_fromMask3);
 
 var _fromExtrema = require('./creator/fromExtrema');
 
@@ -22883,10 +22741,6 @@ var _fromPoints = require('./creator/fromPoints');
 
 var _fromPoints2 = _interopRequireDefault(_fromPoints);
 
-var _createROI = require('./createROI');
-
-var _createROI2 = _interopRequireDefault(_createROI);
-
 var _extend = require('extend');
 
 var _extend2 = _interopRequireDefault(_extend);
@@ -22898,6 +22752,10 @@ var _image2 = _interopRequireDefault(_image);
 var _ROIMap = require('./ROIMap');
 
 var _ROIMap2 = _interopRequireDefault(_ROIMap);
+
+var _ROILayer = require('./ROILayer');
+
+var _ROILayer2 = _interopRequireDefault(_ROILayer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22920,70 +22778,87 @@ class ROIManager {
         this._painted = null;
     }
 
+    /**
+     *
+     * @param {object} [options]
+     * @returns {ROIManager}
+     */
     fromExtrema() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
         var opt = (0, _extend2.default)({}, this._options, options);
         var roiMap = _fromExtrema2.default.call(this._image, options);
-        this._layers[opt.label] = new ROILayer(roiMap, opt);
+        this._layers[opt.label] = new _ROILayer2.default(roiMap, opt);
     }
 
     /**
-     * @param {[[number]]} pixels - an array of pixels
-     * @param {object} options
+     * @param {[[number]]} points - an array of points
+     * @param {object} [options]
+     * @returns {ROIManager}
      */
-    fromPoints(pixels) {
+    fromPoints(points) {
         var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
         var opt = (0, _extend2.default)({}, this._options, options);
-        var roiMap = _fromPoints2.default.call(this._image, pixels, options);
-        this._layers[opt.label] = new ROILayer(roiMap, opt);
+        var roiMap = _fromPoints2.default.call(this._image, points, options);
+        this._layers[opt.label] = new _ROILayer2.default(roiMap, opt);
         return this;
     }
 
     /**
      * @param {number[]} roiMap
-     * @param options
+     * @param {object} [options]
      */
     putMap(roiMap) {
         var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
         var map = new _ROIMap2.default(this._image, roiMap);
         var opt = (0, _extend2.default)({}, this._options, options);
-        this._layers[opt.label] = new ROILayer(map, opt);
-        return this;
-    }
-
-    fromWaterShed() {
-        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-        var opt = (0, _extend2.default)({}, this._options, options);
-        var roiMap = _fromWaterShed2.default.call(this._image, options);
-        this._layers[opt.label] = new ROILayer(roiMap, opt);
-    }
-
-    fromMask(mask) {
-        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-        var opt = (0, _extend2.default)({}, this._options, options);
-        var roiMap = _fromMask2.default.call(this._image, mask, options);
-        this._layers[opt.label] = new ROILayer(roiMap, opt);
-        return this;
-    }
-
-    fromMask2(mask) {
-        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-        var opt = (0, _extend2.default)({}, this._options, options);
-        var roiMap = _fromMask4.default.call(this._image, mask, options);
-        this._layers[opt.label] = new ROILayer(roiMap, opt);
+        this._layers[opt.label] = new _ROILayer2.default(map, opt);
         return this;
     }
 
     /**
      *
-     * @param options
-     * @returns {*}
+     * @param {object} [options]
+     * @returns {ROIManager}
+     */
+    fromWaterShed() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+        var opt = (0, _extend2.default)({}, this._options, options);
+        var roiMap = _fromWaterShed2.default.call(this._image, options);
+        this._layers[opt.label] = new _ROILayer2.default(roiMap, opt);
+    }
+
+    /**
+     *
+     * @param {Image} mask
+     * @param {object} [options]
+     * @returns {ROIManager}
+     */
+    fromMask(mask) {
+        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+        var opt = (0, _extend2.default)({}, this._options, options);
+        var roiMap = _fromMask2.default.call(this._image, mask, options);
+        this._layers[opt.label] = new _ROILayer2.default(roiMap, opt);
+        return this;
+    }
+
+    /* Seems slower and less general (only provides positive ROI)
+    fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
+        let opt = extendObject({}, this._options, options);
+        let roiMap = fromMask2.call(this._image, mask, options);
+        this._layers[opt.label] = new ROILayer(roiMap, opt);
+        return this;
+    }
+     */
+
+    /**
+     *
+     * @param {object} [options]
+     * @returns {ROIMap}
      */
     getMap() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -22994,9 +22869,9 @@ class ROIManager {
     }
 
     /**
-     *
-     * @param options
-     * @returns {Array}
+     * Return the IDs of the Regions Of Interest (ROI) as an array of number
+     * @param {object} [options]
+     * @returns {[number]}
      */
     getROIIDs() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -23022,7 +22897,7 @@ class ROIManager {
      * @param {number} [options.minHeight=Number.POSITIVE_INFINITY]
      * @param {number} [options.maxWidth=0]
      * @param {number} [options.maxHeight=Number.POSITIVE_INFINITY]
-     * @returns {Array}
+     * @returns {[ROI]}
      */
 
     getROI() {
@@ -23068,8 +22943,9 @@ class ROIManager {
 
     /**
      * Returns an array of masks
-     * @param options
-     * @returns {Array}
+     * See @links ROI.getMask for the options
+     * @param {object} [options]
+     * @returns {[Image]} Retuns an array of masks (1 bit Image)
      */
     getMasks() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -23083,61 +22959,45 @@ class ROIManager {
         return masks;
     }
 
-    getPixels() {
+    /**
+     *
+     * @param {object} [options]
+     * @returns {[number]}
+     */
+    getData() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
         var opt = (0, _extend2.default)({}, this._options, options);
         if (this._layers[opt.label]) {
-            return this._layers[opt.label].roiMap.pixels;
+            return this._layers[opt.label].roiMap.data;
         }
     }
 
     /**
      * Paint the ROI on a copy of the image adn return this image.
-     * @param options : all the options to select ROIs
-     * @param color {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
-     * @param alpha Value from 0 to 255 to specify the alpha. Will be used if it is unspecified
-     * @param colors {array} Array of Array of 3 elements (R, G, B) for each color of each mask
-     * @param [number] {options.scale=1} Scaling factor to apply to the mask
-     * @param [string] {kind='normal'} 'contour', 'box', 'filled', 'center' or 'normal' (default 'normal')
-     * @param randomColors If we we would like to paint each mask with a random color
-     * @param distinctColors If we we would like to paint each mask with a different color (default: false);
-     * @param showLabels Paint a mask property on the image (default: false). If true will display the 'id'.
-     *                      May be any property of the ROI. . Requires a RGBA image !
-     * @param labelColor Define the color to paint the labels (default : 'blue')
-     * @param labelFont Define the size of the labels ID (default : '12px Helvetica')
-     *
-     *  id: true / false
-     *  color
-     * @returns {*|null}
+     * For painting options @links Image.paintMasks
+     * For ROI selection options @links ROIManager.getMasks
+     * @param {object} [options] - all the options to select ROIs
+     * @param {string} [options.labelProperty] - Paint a mask property on the image.
+     *                                  May be any property of the ROI like
+     *                                  for example id, surface, width, height, meanX, meanY.
+     * @returns {Image} - The painted RGBA 8 bits image
      */
 
     paint() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-        var showLabels = options.showLabels;
-        var _options$labelColor = options.labelColor;
-        var labelColor = _options$labelColor === undefined ? 'blue' : _options$labelColor;
-        var _options$labelFont = options.labelFont;
-        var labelFont = _options$labelFont === undefined ? '12px Helvetica' : _options$labelFont;
-
+        var labelProperty = options.labelProperty;
 
         if (!this._painted) this._painted = this._image.rgba8();
         var masks = this.getMasks(options);
 
-        this._painted.paintMasks(masks, options);
-
-        if (showLabels) {
-            if (showLabels === true) showLabels = 'id';
-            var canvas = this._painted.getCanvas({ originalData: true });
-            var ctx = canvas.getContext('2d');
-            ctx.fillStyle = labelColor;
-            ctx.font = labelFont;
+        if (labelProperty) {
             var rois = this.getROI(options);
-            for (var i = 0; i < rois.length; i++) {
-                ctx.fillText(rois[i][showLabels], rois[i].meanX - 3, rois[i].meanY + 3);
-            }
-            this._painted.data = ctx.getImageData(0, 0, this._painted.width, this._painted.height).data;
+            options.labels = rois.map(roi => roi[labelProperty]);
+            options.labelsPosition = rois.map(roi => [roi.meanX, roi.meanY]);
         }
+
+        this._painted.paintMasks(masks, options);
         return this._painted;
     }
 
@@ -23163,7 +23023,17 @@ class ROIManager {
         return mask;
     }
 
-    resetPainted(image) {
+    /**
+     * Reset the changes to the current painted iamge to the image that was
+     * used during the creation of the ROIManager except if a new image is
+     * specified as parameter;
+     * #param {object} [options]
+     * @param {Image} [options.image] A new iamge that you would like to sue for painting over
+     */
+    resetPainted() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+        var image = options.image;
+
         if (image) {
             this._painted = this.image.rgba8();
         } else {
@@ -23173,9 +23043,9 @@ class ROIManager {
 
     /**
      *  Return a new roiMAP changed with the fusion of certain ROIs.
-     * @param rois is an array of ROIs which shares the same roiMAP.
-     * @param algorithm ; algorithm used to decide which ROIs are merged.
-     * @param value is an integer, determine the strength of the merging.
+     * @param {object} [options]
+     * @param {string} [algorithm='commonBorder'] ; algorithm used to decide which ROIs are merged.
+     * @param {number} [minCommonBorderLength=5] is an integer, determine the strength of the merging.
      * @returns {*}
      */
 
@@ -23183,8 +23053,11 @@ class ROIManager {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
         var opt = (0, _extend2.default)({}, this._options, options);
-        var algorithm = opt.algorithm || 'commonBorder';
-        var minCommonBorderLength = opt.minCommonBorderLength || 5;
+        var _options$algorithm = options.algorithm;
+        var algorithm = _options$algorithm === undefined ? 'commonBorder' : _options$algorithm;
+        var _options$minCommonBor = options.minCommonBorderLength;
+        var minCommonBorderLength = _options$minCommonBor === undefined ? 5 : _options$minCommonBor;
+
         var rois = this.getROI(opt);
         var toMerge = new Set();
         switch (algorithm.toLowerCase()) {
@@ -23202,30 +23075,22 @@ class ROIManager {
         }
 
         //Now we can modify the roiMap by merging each region determined before
-        var pixels = this.getMap(opt).pixels;
-        for (var index = 0; index < pixels.length; index++) {
-            if (pixels[index] !== 0) {
+        var data = this.getMap(opt).data;
+        for (var index = 0; index < data.length; index++) {
+            if (data[index] !== 0) {
                 for (var array of toMerge) {
-                    if (pixels[index] === array[0]) {
-                        pixels[index] = array[1];
+                    if (data[index] === array[0]) {
+                        data[index] = array[1];
                     }
                 }
             }
         }
-        this.putMap(pixels, opt);
+        this.putMap(data, opt);
     }
 }
-
 exports.default = ROIManager;
-class ROILayer {
-    constructor(roiMap, options) {
-        this.roiMap = roiMap;
-        this.options = options;
-        this.roi = (0, _createROI2.default)(this.roiMap);
-    }
-}
 
-},{"../image":156,"./ROIMap":167,"./createROI":168,"./creator/fromExtrema":169,"./creator/fromMask":170,"./creator/fromMask2":171,"./creator/fromPoints":172,"./creator/fromWaterShed":173,"extend":19}],175:[function(require,module,exports){
+},{"../image":155,"./ROILayer":166,"./ROIMap":167,"./creator/fromExtrema":168,"./creator/fromMask":169,"./creator/fromPoints":170,"./creator/fromWaterShed":171,"extend":19}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23271,9 +23136,9 @@ class ROI {
     /**
      * Returns a binary image (mask) for the corresponding ROI
      * @param [object] options
-     * @param [number] {options.scale=1} Scaling factor to apply to the mask
-     * @param [string] {kind='normal'} 'contour', 'box', 'filled', 'center' or 'normal' (default 'normal')
-     * @returns {*}
+     * @param {number} [options.scale=1] - Scaling factor to apply to the mask
+     * @param {string} [options.kind='normal'] - 'contour', 'box', 'filled', 'center' or 'normal'
+     * @returns {Image} - Returns a mask (1 bit Image)
      */
     getMask() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -23459,10 +23324,10 @@ class ROI {
 
         for (var x = 0; x < this.width; x++) {
             for (var y = 0; y < this.height; y++) {
-                if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
+                if (this.map.data[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
                     // it also has to be on a border ...
                     if (x > 0 && x < this.width - 1 && y > 0 && y < this.height - 1) {
-                        if (this.map.pixels[x - 1 + this.minX + (y + this.minY) * this.map.width] !== this.id || this.map.pixels[x + 1 + this.minX + (y + this.minY) * this.map.width] !== this.id || this.map.pixels[x + this.minX + (y - 1 + this.minY) * this.map.width] !== this.id || this.map.pixels[x + this.minX + (y + 1 + this.minY) * this.map.width] !== this.id) {
+                        if (this.map.data[x - 1 + this.minX + (y + this.minY) * this.map.width] !== this.id || this.map.data[x + 1 + this.minX + (y + this.minY) * this.map.width] !== this.id || this.map.data[x + this.minX + (y - 1 + this.minY) * this.map.width] !== this.id || this.map.data[x + this.minX + (y + 1 + this.minY) * this.map.width] !== this.id) {
                             img.setBitXY(x, y);
                         }
                     } else {
@@ -23511,7 +23376,7 @@ class ROI {
 
         for (var x = 0; x < this.width; x++) {
             for (var y = 0; y < this.height; y++) {
-                if (this.map.pixels[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
+                if (this.map.data[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
                     img.setBitXY(x, y);
                 }
             }
@@ -23531,7 +23396,7 @@ class ROI {
         for (var x = 0; x < this.width; x++) {
             for (var y = 0; y < this.height; y++) {
                 var target = x + this.minX + (y + this.minY) * this.map.width;
-                if (this.internalIDs.indexOf(this.map.pixels[target]) >= 0) {
+                if (this.internalIDs.indexOf(this.map.data[target]) >= 0) {
                     img.setBitXY(x, y);
                 } // by default a pixel is to 0 so no problems, it will be transparent
             }
@@ -23556,7 +23421,7 @@ class ROI {
         for (var y = 0; y < this.height; y++) {
             for (var x = 0; x < this.width; x++) {
                 var target = (y + this.minY) * this.map.width + x + this.minX;
-                if (this.map.pixels[target] === this.id) {
+                if (this.map.data[target] === this.id) {
                     points.push([x, y]);
                 }
             }
@@ -23604,31 +23469,31 @@ exports.default = ROI; // TODO we should follow the region in order to increase 
 
 function getBorders(roi) {
     var roiMap = roi.map;
-    var pixels = roiMap.pixels;
+    var data = roiMap.data;
     var surroudingIDs = new Set(); // allows to get a unique list without indexOf
     var surroundingBorders = new Map();
-    var visitedPixels = new Set();
+    var visitedData = new Set();
     var dx = [+1, 0, -1, 0];
     var dy = [0, +1, 0, -1];
 
     for (var x = roi.minX; x <= roi.maxX; x++) {
         for (var y = roi.minY; y <= roi.maxY; y++) {
             var target = x + y * roiMap.width;
-            if (pixels[target] === roi.id) {
+            if (data[target] === roi.id) {
                 for (var dir = 0; dir < 4; dir++) {
                     var newX = x + dx[dir];
                     var newY = y + dy[dir];
                     if (newX >= 0 && newY >= 0 && newX < roiMap.width && newY < roiMap.height) {
                         var neighbour = newX + newY * roiMap.width;
 
-                        if (pixels[neighbour] !== roi.id && !visitedPixels.has(neighbour)) {
-                            visitedPixels.add(neighbour);
-                            surroudingIDs.add(pixels[neighbour]);
-                            var surroundingBorder = surroundingBorders.get(pixels[neighbour]);
+                        if (data[neighbour] !== roi.id && !visitedData.has(neighbour)) {
+                            visitedData.add(neighbour);
+                            surroudingIDs.add(data[neighbour]);
+                            var surroundingBorder = surroundingBorders.get(data[neighbour]);
                             if (!surroundingBorder) {
-                                surroundingBorders.set(pixels[neighbour], 1);
+                                surroundingBorders.set(data[neighbour], 1);
                             } else {
-                                surroundingBorders.set(pixels[neighbour], ++surroundingBorder);
+                                surroundingBorders.set(data[neighbour], ++surroundingBorder);
                             }
                         }
                     }
@@ -23650,18 +23515,18 @@ function getBoxIDs(roi) {
     var surroundingIDs = new Set(); // allows to get a unique list without indexOf
 
     var roiMap = roi.map;
-    var pixels = roiMap.pixels;
+    var data = roiMap.data;
 
     // we check the first line and the last line
     for (var y of [0, roi.height - 1]) {
         for (var x = 0; x < roi.width; x++) {
             var target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            if (x - roi.minX > 0 && pixels[target] === roi.id && pixels[target - 1] !== roi.id) {
-                var value = pixels[target - 1];
+            if (x - roi.minX > 0 && data[target] === roi.id && data[target - 1] !== roi.id) {
+                var value = data[target - 1];
                 surroundingIDs.add(value);
             }
-            if (roiMap.width - x - roi.minX > 1 && pixels[target] === roi.id && pixels[target + 1] !== roi.id) {
-                var _value = pixels[target + 1];
+            if (roiMap.width - x - roi.minX > 1 && data[target] === roi.id && data[target + 1] !== roi.id) {
+                var _value = data[target + 1];
                 surroundingIDs.add(_value);
             }
         }
@@ -23671,12 +23536,12 @@ function getBoxIDs(roi) {
     for (var _x2 of [0, roi.width - 1]) {
         for (var _y = 0; _y < roi.height; _y++) {
             var _target = (_y + roi.minY) * roiMap.width + _x2 + roi.minX;
-            if (_y - roi.minY > 0 && pixels[_target] === roi.id && pixels[_target - roiMap.width] !== roi.id) {
-                var _value2 = pixels[_target - roiMap.width];
+            if (_y - roi.minY > 0 && data[_target] === roi.id && data[_target - roiMap.width] !== roi.id) {
+                var _value2 = data[_target - roiMap.width];
                 surroundingIDs.add(_value2);
             }
-            if (roiMap.height - _y - roi.minY > 1 && pixels[_target] === roi.id && pixels[_target + roiMap.width] !== roi.id) {
-                var _value3 = pixels[_target + roiMap.width];
+            if (roiMap.height - _y - roi.minY > 1 && data[_target] === roi.id && data[_target + roiMap.width] !== roi.id) {
+                var _value3 = data[_target + roiMap.width];
                 surroundingIDs.add(_value3);
             }
         }
@@ -23688,14 +23553,14 @@ function getBoxIDs(roi) {
 function getBox(roi) {
     var total = 0;
     var roiMap = roi.map;
-    var pixels = roiMap.pixels;
+    var data = roiMap.data;
 
     var topBottom = [0];
     if (roi.height > 1) topBottom[1] = roi.height - 1;
     for (var y of topBottom) {
         for (var x = 1; x < roi.width - 1; x++) {
             var target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            if (pixels[target] === roi.id) {
+            if (data[target] === roi.id) {
                 total++;
             }
         }
@@ -23706,7 +23571,7 @@ function getBox(roi) {
     for (var _x3 of leftRight) {
         for (var _y2 = 0; _y2 < roi.height; _y2++) {
             var _target2 = (_y2 + roi.minY) * roiMap.width + _x3 + roi.minX;
-            if (pixels[_target2] === roi.id) {
+            if (data[_target2] === roi.id) {
                 total++;
             }
         }
@@ -23717,14 +23582,14 @@ function getBox(roi) {
 function getBorder(roi) {
     var total = 0;
     var roiMap = roi.map;
-    var pixels = roiMap.pixels;
+    var data = roiMap.data;
 
     for (var x = 1; x < roi.width - 1; x++) {
         for (var y = 1; y < roi.height - 1; y++) {
             var target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            if (pixels[target] === roi.id) {
-                // if a pixel around is not roi.id it is a border
-                if (pixels[target - 1] !== roi.id || pixels[target + 1] !== roi.id || pixels[target - roiMap.width] !== roi.id || pixels[target + roiMap.width] !== roi.id) {
+            if (data[target] === roi.id) {
+                // if a point around is not roi.id it is a border
+                if (data[target - 1] !== roi.id || data[target + 1] !== roi.id || data[target - roiMap.width] !== roi.id || data[target + roiMap.width] !== roi.id) {
                     total++;
                 }
             }
@@ -23736,14 +23601,14 @@ function getBorder(roi) {
 function getExternal(roi) {
     var total = 0;
     var roiMap = roi.map;
-    var pixels = roiMap.pixels;
+    var data = roiMap.data;
 
     for (var x = 1; x < roi.width - 1; x++) {
         for (var y = 1; y < roi.height - 1; y++) {
             var target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            if (pixels[target] === roi.id) {
-                // if a pixel around is not roi.id it is a border
-                if (roi.externalIDs.indexOf(pixels[target - 1]) !== -1 || roi.externalIDs.indexOf(pixels[target + 1]) !== -1 || roi.externalIDs.indexOf(pixels[target - roiMap.width]) !== -1 || roi.externalIDs.indexOf(pixels[target + roiMap.width]) !== -1) {
+            if (data[target] === roi.id) {
+                // if a point around is not roi.id it is a border
+                if (roi.externalIDs.indexOf(data[target - 1]) !== -1 || roi.externalIDs.indexOf(data[target + 1]) !== -1 || roi.externalIDs.indexOf(data[target - roiMap.width]) !== -1 || roi.externalIDs.indexOf(data[target + roiMap.width]) !== -1) {
                     total++;
                 }
             }
@@ -23759,13 +23624,13 @@ This will allow to extract the 'plain' image
 function getInternalIDs(roi) {
     var internal = [roi.id];
     var roiMap = roi.map;
-    var pixels = roiMap.pixels;
+    var data = roiMap.data;
 
     if (roi.height > 2) {
         for (var x = 0; x < roi.width; x++) {
             var target = roi.minY * roiMap.width + x + roi.minX;
-            if (internal.indexOf(pixels[target]) >= 0) {
-                var id = pixels[target + roiMap.width];
+            if (internal.indexOf(data[target]) >= 0) {
+                var id = data[target + roiMap.width];
                 if (internal.indexOf(id) === -1 && roi.boxIDs.indexOf(id) === -1) {
                     internal.push(id);
                 }
@@ -23777,13 +23642,13 @@ function getInternalIDs(roi) {
     for (var _x4 = 1; _x4 < roi.width - 1; _x4++) {
         for (var y = 1; y < roi.height - 1; y++) {
             var _target3 = (y + roi.minY) * roiMap.width + _x4 + roi.minX;
-            if (internal.indexOf(pixels[_target3]) >= 0) {
+            if (internal.indexOf(data[_target3]) >= 0) {
                 // we check if one of the neighbour is not yet in
 
-                array[0] = pixels[_target3 - 1];
-                array[1] = pixels[_target3 + 1];
-                array[2] = pixels[_target3 - roiMap.width];
-                array[3] = pixels[_target3 + roiMap.width];
+                array[0] = data[_target3 - 1];
+                array[1] = data[_target3 + 1];
+                array[2] = data[_target3 - roiMap.width];
+                array[3] = data[_target3 + roiMap.width];
 
                 for (var i = 0; i < 4; i++) {
                     var _id = array[i];
@@ -23798,7 +23663,7 @@ function getInternalIDs(roi) {
     return internal;
 }
 
-},{"../../util/shape":238,"../image":156,"../kindNames":158}],176:[function(require,module,exports){
+},{"../../util/shape":237,"../image":155,"../kindNames":157}],174:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23865,7 +23730,7 @@ function cmyk() {
     return newImage;
 }
 
-},{"../image":156,"../model/model":161}],177:[function(require,module,exports){
+},{"../image":155,"../model/model":160}],175:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23921,7 +23786,7 @@ function colorDepth() {
     return newImage;
 }
 
-},{"../image":156}],178:[function(require,module,exports){
+},{"../image":155}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23988,7 +23853,7 @@ function crop() {
     return newImage;
 }
 
-},{"../image":156}],179:[function(require,module,exports){
+},{"../image":155}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24085,7 +23950,7 @@ function grey() {
     return newImage;
 }
 
-},{"../image":156,"../model/model":161,"./greyAlgorithms":180}],180:[function(require,module,exports){
+},{"../image":155,"../model/model":160,"./greyAlgorithms":178}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24185,7 +24050,7 @@ Object.defineProperty(methods, 'brightness', { enumerable: false, value: methods
 
 var names = exports.names = Object.keys(methods);
 
-},{}],181:[function(require,module,exports){
+},{}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24268,7 +24133,7 @@ function hsl() {
     return newImage;
 }
 
-},{"../image":156,"../model/model":161}],182:[function(require,module,exports){
+},{"../image":155,"../model/model":160}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24349,7 +24214,7 @@ function hsv() {
     return newImage;
 }
 
-},{"../image":156,"../model/model":161}],183:[function(require,module,exports){
+},{"../image":155,"../model/model":160}],181:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24433,7 +24298,7 @@ function huang(histogram) {
     return threshold;
 }
 
-},{}],184:[function(require,module,exports){
+},{}],182:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24497,7 +24362,7 @@ function bimodalTest(iHisto) {
     return b;
 }
 
-},{}],185:[function(require,module,exports){
+},{}],183:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24551,7 +24416,7 @@ function isodata(histogram) {
     return g;
 }
 
-},{}],186:[function(require,module,exports){
+},{}],184:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24635,7 +24500,7 @@ function li(histogram, total) {
     return threshold;
 }
 
-},{}],187:[function(require,module,exports){
+},{}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24658,7 +24523,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * You may either choose among the provided algorithm or just specify a threshold value
  * @memberof Image
  * @instance
- * @returns {Image} - Binary image containins the mask
+ * @param {string} [algorithm='threshold']
+ * @param {number} [threshold=0.5] - If the algorithm is 'threshold' specify here the value (0 to 1).
+ * @param {boolean} [useAlpha=true] - Apply the alpha channel to determine the intensity of the pixel.
+ * @param {boolean} [invert=false] - Invert the resulting image
+ * @returns {Image} - Binary image containing the mask
  */
 
 function mask() {
@@ -24716,7 +24585,7 @@ function mask() {
     return newImage;
 }
 
-},{"../../../util/converter":232,"../../image":156,"./maskAlgorithms":188}],188:[function(require,module,exports){
+},{"../../../util/converter":231,"../../image":155,"./maskAlgorithms":186}],186:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24806,7 +24675,7 @@ var methods = exports.methods = {
 
 var names = exports.names = ['threshold'].concat(Object.keys(methods));
 
-},{"./huang":183,"./intermodes":184,"./isodata":185,"./li":186,"./maxEntropy":189,"./mean":190,"./minError":191,"./minimum":192,"./moments":193,"./otsu":194,"./percentile":195,"./renyiEntropy.js":196,"./shanbhag":197,"./triangle":198,"./yen":199}],189:[function(require,module,exports){
+},{"./huang":181,"./intermodes":182,"./isodata":183,"./li":184,"./maxEntropy":187,"./mean":188,"./minError":189,"./minimum":190,"./moments":191,"./otsu":192,"./percentile":193,"./renyiEntropy.js":194,"./shanbhag":195,"./triangle":196,"./yen":197}],187:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24891,7 +24760,7 @@ function maxEntropy(histogram, total) {
     return threshold;
 }
 
-},{}],190:[function(require,module,exports){
+},{}],188:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24915,7 +24784,7 @@ function mean(histogram, total) {
     return Math.floor(sum / total);
 }
 
-},{}],191:[function(require,module,exports){
+},{}],189:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25023,7 +24892,7 @@ function sumC(y, j) {
     return x;
 }
 
-},{}],192:[function(require,module,exports){
+},{}],190:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25098,7 +24967,7 @@ function bimodalTest(histogram) {
     return isBimodal;
 }
 
-},{}],193:[function(require,module,exports){
+},{}],191:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25169,7 +25038,7 @@ function partialSum(histogram, limite) {
     return sum;
 }
 
-},{}],194:[function(require,module,exports){
+},{}],192:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25219,7 +25088,7 @@ function otsu(histogram, total) {
     return threshold;
 }
 
-},{}],195:[function(require,module,exports){
+},{}],193:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25261,7 +25130,7 @@ function partialSum(histogram, endIndex) {
     return x;
 }
 
-},{}],196:[function(require,module,exports){
+},{}],194:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25403,7 +25272,7 @@ function renyiEntropy(histogram, total) {
     return opt_threshold;
 }
 
-},{}],197:[function(require,module,exports){
+},{}],195:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25483,7 +25352,7 @@ function shanbhag(histogram, total) {
     return threshold;
 }
 
-},{}],198:[function(require,module,exports){
+},{}],196:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25593,7 +25462,7 @@ function triangle(histogram) {
     } else return split;
 }
 
-},{}],199:[function(require,module,exports){
+},{}],197:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25644,7 +25513,7 @@ function yen(histogram, total) {
     return threshold;
 }
 
-},{}],200:[function(require,module,exports){
+},{}],198:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25669,16 +25538,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * @memberof Image
  * @instance
+ * @param {number} [options.size=0]
+ * @param {string} [options.algorithm='copy']
+ * @param {array<number>} [options.color]
  */
 
 function pad() {
-    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-    var _ref$size = _ref.size;
-    var size = _ref$size === undefined ? 0 : _ref$size;
-    var _ref$algorithm = _ref.algorithm;
-    var algorithm = _ref$algorithm === undefined ? 'copy' : _ref$algorithm;
-    var color = _ref.color;
+    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var _options$size = options.size;
+    var size = _options$size === undefined ? 0 : _options$size;
+    var _options$algorithm = options.algorithm;
+    var algorithm = _options$algorithm === undefined ? 'copy' : _options$algorithm;
+    var color = options.color;
 
 
     this.checkProcessable('pad', {
@@ -25737,7 +25608,7 @@ function pad() {
     return newImage;
 }
 
-},{"../image":156,"../utility/copy":206,"new-array":108}],201:[function(require,module,exports){
+},{"../image":155,"../utility/copy":204,"new-array":107}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25796,7 +25667,7 @@ function resizeBinary() {
     return newImage;
 }
 
-},{"../image":156,"../kindNames":158}],202:[function(require,module,exports){
+},{"../image":155,"../kindNames":157}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25835,7 +25706,7 @@ function rgba8() {
     return newImage;
 }
 
-},{"../image":156}],203:[function(require,module,exports){
+},{"../image":155}],201:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25860,7 +25731,7 @@ function nearestNeighbor(newImage, newWidth, newHeight) {
     }
 }
 
-},{}],204:[function(require,module,exports){
+},{}],202:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25881,21 +25752,25 @@ var _converter = require('../../../util/converter');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
+ * Rescale an image
  * @memberof Image
  * @instance
+ * @param {number} [width=this.width]
+ * @param {number} [height=this.height]
+ * @param {number} [factor=1]
+ * @param {string} [algorithm='nearestNeighbor']
  */
 
 function scale() {
-    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-    var _ref$width = _ref.width;
-    var width = _ref$width === undefined ? this.width : _ref$width;
-    var _ref$height = _ref.height;
-    var height = _ref$height === undefined ? this.height : _ref$height;
-    var _ref$factor = _ref.factor;
-    var factor = _ref$factor === undefined ? 1 : _ref$factor;
-    var _ref$algorithm = _ref.algorithm;
-    var algorithm = _ref$algorithm === undefined ? 'nearestNeighbor' : _ref$algorithm;
+    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var _options$width = options.width;
+    var width = _options$width === undefined ? this.width : _options$width;
+    var _options$height = options.height;
+    var height = _options$height === undefined ? this.height : _options$height;
+    var _options$factor = options.factor;
+    var factor = _options$factor === undefined ? 1 : _options$factor;
+    var _options$algorithm = options.algorithm;
+    var algorithm = _options$algorithm === undefined ? 'nearestNeighbor' : _options$algorithm;
 
     var _factorDimensions = (0, _converter.factorDimensions)(factor, width, height);
 
@@ -25917,7 +25792,7 @@ function scale() {
     return newImage;
 }
 
-},{"../../../util/converter":232,"../../image":156,"./nearestNeighbor":203}],205:[function(require,module,exports){
+},{"../../../util/converter":231,"../../image":155,"./nearestNeighbor":201}],203:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25984,7 +25859,7 @@ function combineChannels() {
     return newImage;
 }
 
-},{"../image":156,"./../../util/channel":230}],206:[function(require,module,exports){
+},{"../image":155,"./../../util/channel":229}],204:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26015,7 +25890,7 @@ function copyImage(fromImage, toImage, x, y) {
     }
 }
 
-},{}],207:[function(require,module,exports){
+},{}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26096,7 +25971,7 @@ function match(image) {
     return [currentX - middleX, currentY - middleY];
 }
 
-},{"../../util/matrix":237}],208:[function(require,module,exports){
+},{"../../util/matrix":236}],206:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26158,7 +26033,7 @@ function getChannel(channel) {
     return newImage;
 }
 
-},{"../image":156,"./../../util/channel":230}],209:[function(require,module,exports){
+},{"../image":155,"./../../util/channel":229}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26199,7 +26074,7 @@ function getColumn(column) {
     return array;
 }
 
-},{"../image":156,"./../../util/channel":230}],210:[function(require,module,exports){
+},{"../image":155,"./../../util/channel":229}],208:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26243,7 +26118,40 @@ function getMatrix() {
     return matrix;
 }
 
-},{"ml-matrix":80}],211:[function(require,module,exports){
+},{"ml-matrix":79}],209:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = getPixelsArray;
+/**
+ * Returns an array of arrays containing the pixel values in the form
+ * [[R1, G1, B1], [R2, G2, B2], ...]
+ * @memberof Image
+ * @instance
+ * @returns {Array<Array<number>>}
+ */
+
+function getPixelsArray() {
+    this.checkProcessable('getPixelsArray', {
+        bitDepth: [8, 16, 32]
+    });
+
+    var array = new Array(this.size);
+    var ptr = 0;
+    for (var i = 0; i < this.data.length; i += this.channels) {
+        var pixel = new Array(this.components);
+        for (var j = 0; j < this.components; j++) {
+            pixel[j] = this.data[i + j];
+        }
+        array[ptr++] = pixel;
+    }
+
+    return array;
+}
+
+},{}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26312,7 +26220,7 @@ function getPixelsGrid() {
     return toReturn;
 }
 
-},{}],212:[function(require,module,exports){
+},{}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26355,7 +26263,7 @@ function getRow(row) {
     return array;
 }
 
-},{"../image":156,"./../../util/channel":230}],213:[function(require,module,exports){
+},{"../image":155,"./../../util/channel":229}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26446,7 +26354,7 @@ function getSimilarity(image) {
     return results;
 }
 
-},{"../image":156,"./../../util/channel":230,"new-array":108}],214:[function(require,module,exports){
+},{"../image":155,"./../../util/channel":229,"new-array":107}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26532,7 +26440,7 @@ function setBorder() {
     }
 }
 
-},{"../image":156,"new-array":108}],215:[function(require,module,exports){
+},{"../image":155,"new-array":107}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26578,7 +26486,7 @@ function setChannel(channel, image) {
     }
 }
 
-},{"../image":156,"./../../util/channel":230}],216:[function(require,module,exports){
+},{"../image":155,"./../../util/channel":229}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26624,7 +26532,7 @@ function setMatrix(matrix) {
     }
 }
 
-},{"ml-matrix":80}],217:[function(require,module,exports){
+},{"ml-matrix":79}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26694,7 +26602,7 @@ function split() {
     return images;
 }
 
-},{"../image":156}],218:[function(require,module,exports){
+},{"../image":155}],217:[function(require,module,exports){
 'use strict';
 
 var _environment = require('./image/environment');
@@ -26713,7 +26621,7 @@ if (_environment.env === 'browser') {
     exports.Worker = require('./worker/worker').default;
 }
 
-},{"./image/environment":136,"./image/image":156,"./image/transform/greyAlgorithms":180,"./image/transform/mask/maskAlgorithms":188,"./kernel/kernel":219,"./stack/stack":227,"./util/shape":238,"./worker/worker":242}],219:[function(require,module,exports){
+},{"./image/environment":135,"./image/image":155,"./image/transform/greyAlgorithms":178,"./image/transform/mask/maskAlgorithms":186,"./kernel/kernel":218,"./stack/stack":226,"./util/shape":237,"./worker/worker":241}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26741,7 +26649,7 @@ Object.defineProperty(exports, 'laplacianOfGaussian', {
   }
 });
 
-},{"../util/kernels":236,"./laplacianOfGaussian":220}],220:[function(require,module,exports){
+},{"../util/kernels":235,"./laplacianOfGaussian":219}],219:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26774,7 +26682,7 @@ function laplacianOfGaussian(sigma, nPoints, factor) {
     return kernel;
 }
 
-},{}],221:[function(require,module,exports){
+},{}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26802,7 +26710,7 @@ function histogram(options) {
     return histogram;
 }
 
-},{}],222:[function(require,module,exports){
+},{}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26833,7 +26741,7 @@ function histograms(options) {
     return histograms;
 }
 
-},{}],223:[function(require,module,exports){
+},{}],222:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26860,7 +26768,7 @@ function max() {
     return max;
 }
 
-},{}],224:[function(require,module,exports){
+},{}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26890,7 +26798,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":234}],225:[function(require,module,exports){
+},{"../../util/histogram":233}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26916,7 +26824,7 @@ function min() {
     return min;
 }
 
-},{}],226:[function(require,module,exports){
+},{}],225:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26967,7 +26875,7 @@ function extend(Stack) {
     Stack.extendMethod('getAverage', _average2.default);
 }
 
-},{"./compute/histogram":221,"./compute/histograms":222,"./compute/max":223,"./compute/median":224,"./compute/min":225,"./transform/matchAndCrop":228,"./utility/average":229}],227:[function(require,module,exports){
+},{"./compute/histogram":220,"./compute/histograms":221,"./compute/max":222,"./compute/median":223,"./compute/min":224,"./transform/matchAndCrop":227,"./utility/average":228}],226:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27126,7 +27034,7 @@ if (!Array[Symbol.species]) {
 
 (0, _extend2.default)(Stack);
 
-},{"../image/image":156,"./extend":226}],228:[function(require,module,exports){
+},{"../image/image":155,"./extend":225}],227:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27243,7 +27151,7 @@ function matchAndCrop() {
    The match is always done on the first image ?
   */
 
-},{"../stack":227}],229:[function(require,module,exports){
+},{"../stack":226}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27291,7 +27199,7 @@ function average() {
     return image;
 }
 
-},{"../../image/image":156}],230:[function(require,module,exports){
+},{"../../image/image":155}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27405,7 +27313,7 @@ function validateChannel(image, channel) {
     return channel;
 }
 
-},{"../image/model/model":161}],231:[function(require,module,exports){
+},{"../image/model/model":160}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27536,7 +27444,7 @@ function getBrightness(color) {
     return (color[0] / 255 * 299 + color[1] / 255 * 587 + color[2] / 255 * 114) / (color[3] || 1);
 }
 
-},{"color-functions":5}],232:[function(require,module,exports){
+},{"color-functions":5}],231:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27596,16 +27504,16 @@ function factorDimensions(factor, width, height) {
     };
 }
 
-},{}],233:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var dx = exports.dx = [+1, 0, -1, 0, +1, +1, -1, -1];
-var dy = exports.dy = [0, +1, 0, -1, +1, -1, +1, -1];
+var dxs = exports.dxs = [+1, 0, -1, 0, +1, +1, -1, -1];
+var dys = exports.dys = [0, +1, 0, -1, +1, -1, +1, -1];
 
-},{}],234:[function(require,module,exports){
+},{}],233:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27664,7 +27572,7 @@ function mean(histogram) {
     return sum / total;
 }
 
-},{}],235:[function(require,module,exports){
+},{}],234:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27711,7 +27619,7 @@ function validateKernel(kernel) {
     return { kernel: kernel, kWidth: kWidth, kHeight: kHeight };
 }
 
-},{"is-integer":47}],236:[function(require,module,exports){
+},{"is-integer":47}],235:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27729,7 +27637,7 @@ var SECOND_DERIVATIVE = exports.SECOND_DERIVATIVE = [[-1, -2, 0, 2, 1], [-2, -4,
 
 var SECOND_DERIVATIVE_INV = exports.SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
 
-},{}],237:[function(require,module,exports){
+},{}],236:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27800,7 +27708,7 @@ Matrix.prototype.localSearch = function (x, y, value) {
     return results;
 };
 
-},{}],238:[function(require,module,exports){
+},{}],237:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27830,6 +27738,16 @@ var smallCross = [[0, 1, 0], [1, 1, 1], [0, 1, 0]];
 /**
  * Class representing a shape
  * @class Shape
+ * @param {object} [options]
+ * @param {string} [options.kind='cross'] - Predefined matrix shape, 'cross' or 'smallCross'
+ * @param {string} [options.shape] - Value may be 'square', 'rectangle', 'circle', 'ellipse' or 'triangle'
+ *                                  The size of the shape will be determined by the size, width and height.
+ *                                  A Shape is by default filled.
+ *
+ * @param {number} [options.size]
+ * @param {number} [options.width=options.size] - width of the shape. Must be odd.
+ * @param {number} [options.height=options.size] - width of the shape. Must be odd.
+ * @param {boolean} [options.filled=true] - If false only the border ot the shape is taken into account.
  */
 
 class Shape {
@@ -27853,11 +27771,11 @@ class Shape {
             throw Error('Shape: The width and height has to be odd numbers.');
         }
         if (kind) {
-            switch (kind) {
+            switch (kind.toLowerCase()) {
                 case 'cross':
                     this.matrix = cross;
                     break;
-                case 'smallCross':
+                case 'smallcross':
                     this.matrix = smallCross;
                     break;
             }
@@ -27887,6 +27805,11 @@ class Shape {
         this.halfWidth = this.width / 2 >> 0;
     }
 
+    /**
+     * Returns an array of [x,y] points
+     * @returns {array<array<number>>} - Array of [x,y] points
+     */
+
     getPoints() {
         var matrix = this.matrix;
         var points = [];
@@ -27900,6 +27823,10 @@ class Shape {
         return points;
     }
 
+    /**
+     * Returns a Mask (1 bit Image) corresponding to this shape.
+     * @returns {Image}
+     */
     getMask() {
         var img = new _image2.default(this.width, this.height, {
             kind: KindNames.BINARY
@@ -27992,7 +27919,7 @@ function triangle(width, height, options) {
     return matrix;
 }
 
-},{"../image/image":156,"../image/kindNames":158,"ml-matrix":80}],239:[function(require,module,exports){
+},{"../image/image":155,"../image/kindNames":157,"ml-matrix":79}],238:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28025,7 +27952,7 @@ function checkNumberArray(value) {
     }
 }
 
-},{"../image/image":156,"is-array-type":45}],240:[function(require,module,exports){
+},{"../image/image":155,"is-array-type":45}],239:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28043,7 +27970,7 @@ function extend(Worker) {
     Worker.extendMethod('background', _background2.default);
 }
 
-},{"./process/background":241}],241:[function(require,module,exports){
+},{"./process/background":240}],240:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28143,7 +28070,7 @@ function work() {
 
 exports.default = { run: run, work: work };
 
-},{"../../image/image":156,"extend":19}],242:[function(require,module,exports){
+},{"../../image/image":155,"extend":19}],241:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28219,5 +28146,5 @@ class Worker {
 
 exports.default = new Worker();
 
-},{"../image/image":156,"./extend":240,"web-worker-manager":121}]},{},[218])(218)
+},{"../image/image":155,"./extend":239,"web-worker-manager":120}]},{},[217])(217)
 });
