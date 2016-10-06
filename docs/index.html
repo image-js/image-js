@@ -1024,7 +1024,7 @@
       Image
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/image/image.js#L157-L654'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/image/image.js#L204-L701'>
       <span>src/image/image.js</span>
       </a>
     
@@ -1126,7 +1126,7 @@ of a specific pixel of the image</li>
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'>In order to run those examples you will have to install node and
+      <pre class='p1 overflow-auto round fill-light'>In order to run the next examples you will have to install node and
 create a <span class="hljs-keyword">new</span> project
 
 To install node you could use nvm that can be installed <span class="hljs-keyword">from</span>
@@ -1188,12 +1188,15 @@ components[<span class="hljs-number">2</span>].save(<span class="hljs-string">'c
     
       
       <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// for this example you will need the picture of an ecstasy pill that is available on</span>
-<span class="hljs-comment">// wget https://raw.githubusercontent.com/image-js/core/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/test/img/xtc.jpg</span>
-<span class="hljs-comment">// the goal is to isolate the picture and to get a RGB histogram of the pill.</span>
+<span class="hljs-comment">// wget https://raw.githubusercontent.com/image-js/core/854e70f50d63cc73d2dde1d2020fe61ba1b5ec05/test/img/xtc.png // the goal is to isolate the picture and to get a RGB histogram of the pill.</span>
 <span class="hljs-comment">// Practically this allows to classify pills based on the histogram similarity</span>
 <span class="hljs-comment">// This work was published at: http://dx.doi.org/10.1016/j.forsciint.2012.10.004</span>
 
-IJS.load(<span class="hljs-string">'xtc.jpg'</span>).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">image</span>) </span>{
+<span class="hljs-keyword">var</span> IJS=<span class="hljs-built_in">require</span>(<span class="hljs-string">'image-js'</span>);
+
+IJS.load(<span class="hljs-string">'xtc.png'</span>).then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">image</span>) </span>{
+
+
 <span class="hljs-keyword">var</span> grey=image.grey({
 <span class="hljs-attr">algorithm</span>:<span class="hljs-string">'lightness'</span>
 });
@@ -1208,11 +1211,54 @@ IJS.load(<span class="hljs-string">'xtc.jpg'</span>).then(<span class="hljs-func
 <span class="hljs-comment">// the ROIManager. A ROIManager will be applied on the original image</span>
 <span class="hljs-comment">// in order to be able to extract from the original image the regions</span>
 
+<span class="hljs-comment">// the result of this console.log result can diretly be pasted</span>
+<span class="hljs-comment">// in the browser</span>
+<span class="hljs-comment">// console.log(mask.toDataURL());</span>
+
+
 <span class="hljs-keyword">var</span> manager = image.getROIManager();
 manager.fromMask(mask);
-<span class="hljs-keyword">var</span> rois=manager.getROI();
-<span class="hljs-built_in">console</span>.log(rois);
+<span class="hljs-keyword">var</span> rois=manager.getROI({
+<span class="hljs-attr">positive</span>: <span class="hljs-literal">true</span>,
+<span class="hljs-attr">negative</span>: <span class="hljs-literal">false</span>,
+<span class="hljs-attr">minSurface</span>: <span class="hljs-number">100</span>
+});
+
+<span class="hljs-comment">// console.log(rois);</span>
+
+<span class="hljs-comment">// we can sort teh rois by surface</span>
+<span class="hljs-comment">// for demonstration we use an arrow function</span>
+rois.sort( <span class="hljs-function">(<span class="hljs-params">a,b</span>) =&gt;</span> b.surface-a.surface);
+
+<span class="hljs-comment">// the first ROI (the biggest is expected to be the pill)</span>
+
+<span class="hljs-keyword">var</span> pillMask=rois[<span class="hljs-number">0</span>].getMask({
+<span class="hljs-attr">scale</span>: <span class="hljs-number">0.7</span>   <span class="hljs-comment">// we will scale down the mask to take just the center of the pill and avoid border effects</span>
+});
+
+<span class="hljs-comment">// image-js remembers the parent of the image and the relative</span>
+<span class="hljs-comment">// position of a derived image. This is the case for a crop as</span>
+<span class="hljs-comment">// well as for ROI</span>
+
+<span class="hljs-keyword">var</span> pill=image.extract(pillMask);
+pill.save(<span class="hljs-string">'pill.jpg'</span>);
+
+<span class="hljs-keyword">var</span> histogram=pill.getHistograms({<span class="hljs-attr">maxSlots</span>: <span class="hljs-number">16</span>});
+
+<span class="hljs-built_in">console</span>.log(histogram);
 });</pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Example of use of IJS in the browser</span>
+
+&lt;
+
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">sript</span>&gt;</span>
+var canvas = document.getElementById('myCanvasID');
+var ctx = canvas.getContext(‘2d’);
+var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+var image = new IJS(imageData.width, imageData.height, imageData.data);
+<span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span></pre>
     
   
 
@@ -7052,7 +7098,7 @@ a relative position and this part of the original image will be extracted.</p>
       getChannel
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/image/utility/getChannel.js#L12-L44'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/image/utility/getChannel.js#L12-L44'>
       <span>src/image/utility/getChannel.js</span>
       </a>
     
@@ -7152,7 +7198,7 @@ a relative position and this part of the original image will be extracted.</p>
       combineChannels
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/image/utility/combineChannels.js#L12-L49'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/image/utility/combineChannels.js#L12-L49'>
       <span>src/image/utility/combineChannels.js</span>
       </a>
     
@@ -7256,7 +7302,7 @@ a relative position and this part of the original image will be extracted.</p>
       getHistograms
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/image/compute/histogram.js#L46-L56'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/image/compute/histogram.js#L46-L56'>
       <span>src/image/compute/histogram.js</span>
       </a>
     
@@ -7362,7 +7408,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
       median
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/util/histogram.js#L7-L31'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/util/histogram.js#L7-L31'>
       <span>src/util/histogram.js</span>
       </a>
     
@@ -7429,7 +7475,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
       mean
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/util/histogram.js#L38-L50'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/util/histogram.js#L38-L50'>
       <span>src/util/histogram.js</span>
       </a>
     
@@ -7496,7 +7542,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
       ROIManager
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/image/roi/manager.js#L18-L313'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/image/roi/manager.js#L18-L313'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -8837,7 +8883,7 @@ for each data to which ROI it belongs</p>
       ROIManager
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/image/roi/ROILayer.js#L20-L88'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/image/roi/ROILayer.js#L20-L88'>
       <span>src/image/roi/ROILayer.js</span>
       </a>
     
@@ -10181,7 +10227,7 @@ for each data to which ROI it belongs</p>
       fromWaterShed
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/image/roi/creator/fromWaterShed.js#L18-L81'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/image/roi/creator/fromWaterShed.js#L18-L81'>
       <span>src/image/roi/creator/fromWaterShed.js</span>
       </a>
     
@@ -10319,7 +10365,7 @@ for each data to which ROI it belongs</p>
       ROIMap
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/image/roi/ROIMap.js#L9-L22'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/image/roi/ROIMap.js#L9-L22'>
       <span>src/image/roi/ROIMap.js</span>
       </a>
     
@@ -10369,7 +10415,7 @@ to one region of interest (ROI)</p>
       ROILayer
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/image/roi/ROILayer.js#L20-L88'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/image/roi/ROILayer.js#L20-L88'>
       <span>src/image/roi/ROILayer.js</span>
       </a>
     
@@ -10416,7 +10462,7 @@ to one region of interest (ROI)</p>
       ROI
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/image/roi/roi.js#L11-L370'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/image/roi/roi.js#L11-L370'>
       <span>src/image/roi/roi.js</span>
       </a>
     
@@ -10999,7 +11045,7 @@ are calculated in the getBoxPixels procedure</p>
       boxMask
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/image/roi/roi.js#L244-L244'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/image/roi/roi.js#L244-L244'>
       <span>src/image/roi/roi.js</span>
       </a>
     
@@ -11047,7 +11093,7 @@ are calculated in the getBoxPixels procedure</p>
       Stack
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/stack/stack.js#L14-L101'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/stack/stack.js#L14-L101'>
       <span>src/stack/stack.js</span>
       </a>
     
@@ -11500,7 +11546,7 @@ are calculated in the getBoxPixels procedure</p>
       Shape
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/src/util/shape.js#L34-L115'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/cd138106081331b10b2a98c606db21376a6685fc/src/util/shape.js#L34-L115'>
       <span>src/util/shape.js</span>
       </a>
     
