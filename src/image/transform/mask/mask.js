@@ -30,7 +30,7 @@ export default function mask({
     if (algorithm === 'threshold') {
         threshold = getThreshold(threshold, this.maxValue);
     } else {
-        let method = methods[algorithm];
+        let method = methods[algorithm.toLowerCase()];
         if (method) {
             let histogram = this.getHistogram();
             threshold = method(histogram, this.size);
