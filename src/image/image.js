@@ -61,7 +61,7 @@ let computedPropertyDescriptor = {
  *
  * @example
  *
- * In order to run those examples you will have to install node and
+ * In order to run the next examples you will have to install node and
  * create a new project
  *
  * To install node you could use nvm that can be installed from
@@ -130,7 +130,11 @@ IJS.load('cat.jpg').then(function(image) {
  // Practically this allows to classify pills based on the histogram similarity
  // This work was published at: http://dx.doi.org/10.1016/j.forsciint.2012.10.004
 
+ var IJS=require('image-js');
+
  IJS.load('xtc.png').then(function(image) {
+
+
     var grey=image.grey({
         algorithm:'lightness'
     });
@@ -150,12 +154,11 @@ IJS.load('cat.jpg').then(function(image) {
     // console.log(mask.toDataURL());
 
 
-    var manager = image.getROIManager({
-        positive: true,
-        negative: false
-    });
+    var manager = image.getROIManager();
     manager.fromMask(mask);
     var rois=manager.getROI({
+        positive: true,
+        negative: false,
         minSurface: 100
     });
 
@@ -166,20 +169,35 @@ IJS.load('cat.jpg').then(function(image) {
     rois.sort( (a,b) => b.surface-a.surface);
 
     // the first ROI (the biggest is expected to be the pill)
-    var pill=image.extract(rois[0].getMask({
-        scale: 0.7
-    }));
+
+    var pillMask=rois[0].getMask({
+        scale: 0.7   // we will scale down the mask to take just the center of the pill and avoid border effects
+    });
+
+    // image-js remembers the parent of the image and the relative
+    // position of a derived image. This is the case for a crop as
+    // well as for ROI
+
+    var pill=image.extract(pillMask);
     pill.save('pill.jpg');
 
-    // we may again console log the pill so that we can
-    // copy / paste the result and display it in the browser
-    // by pasting as URL
+    var histogram=pill.getHistograms({maxSlots: 16});
 
-
-
-    console.log(pill.toDataURL());
-
+    console.log(histogram);
 });
+
+ @example
+ // Example of use of IJS in the browser
+
+ <
+
+ <sript>
+    var canvas = document.getElementById('myCanvasID');
+    var ctx = canvas.getContext(‘2d’);
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var image = new IJS(imageData.width, imageData.height, imageData.data);
+ </script>
+
 
 */
 
