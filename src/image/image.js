@@ -189,16 +189,10 @@ IJS.load('cat.jpg').then(function(image) {
  @example
  // Example of use of IJS in the browser
 
- <
-
  <sript>
     var canvas = document.getElementById('myCanvasID');
-    var ctx = canvas.getContext(‘2d’);
-    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    var image = new IJS(imageData.width, imageData.height, imageData.data);
+    var image = IJS.fromCanvas(canvas);
  </script>
-
-
 */
 
 export default class Image {
