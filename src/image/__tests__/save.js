@@ -1,4 +1,5 @@
 import {Image, load, getHash, refreshTmpDir, tmpDir, getSquare} from 'test/common';
+import canvas from 'canvas';
 
 describe('save to disk', function () {
 
@@ -17,7 +18,9 @@ describe('save to disk', function () {
         });
     });
 
-    it('load then save (jpg)', function () {
+    // JPEG support is not always present
+    const _it = canvas.jpegVersion ? it : it.skip;
+    _it('load then save (jpg)', function () {
         return load('format/rgba32.png').then(function (img) {
             return img.save(tmpDir + '/img1.jpg', {format: 'jpeg'});
         });
