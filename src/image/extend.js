@@ -6,6 +6,8 @@ import invertPixel from './filter/invertPixel';
 import invertApply from './filter/invertApply';
 import invertBinaryLoop from './filter/invertBinaryLoop';
 import invert from './filter/invert';
+import flipX from './filter/flipX';
+import flipY from './filter/flipY';
 import meanFilter from './filter/blur';
 import medianFilter from './filter/median';
 import gaussianFilter from './filter/gaussian';
@@ -84,6 +86,8 @@ export default function extend(Image) {
     Image.extendMethod('divide', divide, inPlace);
     Image.extendMethod('hypotenuse', hypotenuse);
     Image.extendMethod('getBackground', getBackground);
+    Image.extendMethod('flipX', flipX);
+    Image.extendMethod('flipY', flipY);
 
     Image.extendMethod('meanFilter', meanFilter);
     Image.extendMethod('medianFilter', medianFilter);
