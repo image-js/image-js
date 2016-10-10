@@ -1,9 +1,9 @@
 /**
- * @memberof ROIManager
+ * @memberof RoiManager
  * @instance
  */
 
-import ROIMap from '../RoiMap';
+import RoiMap from '../RoiMap';
 import PriorityQueue from 'js-priority-queue';
 import {dxs, dys} from './../../../util/dxdy.js';
 /**
@@ -77,5 +77,5 @@ export default function fromWaterShed(
         }
     }
 
-    return new ROIMap(image, data);
+    return new RoiMap(image, data);
 }

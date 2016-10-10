@@ -29,7 +29,7 @@ describe('we check that each Roi is surrounded by the expected zones', function 
     roiManager.fromMask(mask);
 
     it('should yield the right boxIDs', function () {
-        let result = roiManager.getROI();
+        let result = roiManager.getRoi();
         result.should.have.lengthOf(3);
 
         result.sort(function (a,b) {
@@ -42,7 +42,7 @@ describe('we check that each Roi is surrounded by the expected zones', function 
     });
 
     it('should yield the right borderIDs', function () {
-        let result = roiManager.getROI();
+        let result = roiManager.getRoi();
 
         result.sort(function (a,b) {
             return b.borderIDs[0] - a.borderIDs[0];
@@ -58,7 +58,7 @@ describe('we check that each Roi is surrounded by the expected zones', function 
     });
 
     it('should yield the right borderIDs', function () {
-        let result = roiManager.getROI();
+        let result = roiManager.getRoi();
 
         result.sort(function (a,b) {
             return b.borderIDs[0] - a.borderIDs[0];

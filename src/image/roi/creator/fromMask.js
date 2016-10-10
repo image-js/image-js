@@ -1,10 +1,10 @@
 /**
  * Annotates each point to define to which area it belongs
- * @memberof ROIManager
+ * @memberof RoiManager
  * @instance
  */
 
-import ROIMap from '../RoiMap';
+import RoiMap from '../RoiMap';
 
 export default function fromMask(mask, options = {}) {
     const {allowCorners = false} = options;
@@ -117,6 +117,6 @@ export default function fromMask(mask, options = {}) {
             }
         }
     }
-    return new ROIMap(mask, data);
+    return new RoiMap(mask, data);
 
 }

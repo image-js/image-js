@@ -17,7 +17,7 @@ describe('we check that each Roi is surrounded by the expected border', function
             let mask = img.grey().mask({invert:true});
             roiManager.fromMask(mask);
 
-            let rois = roiManager.getROI();
+            let rois = roiManager.getRoi();
 
             rois.sort((a,b) => a.border - b.border);
 

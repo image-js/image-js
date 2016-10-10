@@ -1,4 +1,4 @@
-import ROIMapper from '../fromMaskConnectedComponentLabelingAlgorithm';
+import fromMaskConnectedComponentLabelingAlgorithm from '../fromMaskConnectedComponentLabelingAlgorithm';
 import {Image} from 'test/common';
 
 describe('we check fromMask2', function () {
@@ -30,7 +30,7 @@ describe('we check fromMask2', function () {
     mask.setBitXY(3, 4);
 
     it('should yield the right map with 4 neighbours', function () {
-        let mapData = ROIMapper(mask).data;
+        let mapData = fromMaskConnectedComponentLabelingAlgorithm(mask).data;
 
         const expected = [
             0, 1, 0, 2, 0, 3,
@@ -45,7 +45,7 @@ describe('we check fromMask2', function () {
     });
 
     it('should yield the right map with 8 neighbours', function () {
-        let mapData = ROIMapper(mask, {allowCorners: true}).data;
+        let mapData = fromMaskConnectedComponentLabelingAlgorithm(mask, {allowCorners: true}).data;
 
         const expected = [
             0, 1, 0, 1, 0, 1,

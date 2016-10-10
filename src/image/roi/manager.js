@@ -110,8 +110,8 @@ export default class RoiManager {
      * @param {object} [options]
      * @returns {[number]}
      */
-    getROIIDs(options = {}) {
-        let rois = this.getROI(options);
+    getRoiIDs(options = {}) {
+        let rois = this.getRoi(options);
         if (!rois) return;
         let ids = new Array(rois.length);
         for (let i = 0; i < rois.length; i++) {
@@ -132,10 +132,10 @@ export default class RoiManager {
      * @param {number} [options.minHeight=Number.POSITIVE_INFINITY]
      * @param {number} [options.maxWidth=0]
      * @param {number} [options.maxHeight=Number.POSITIVE_INFINITY]
-     * @returns {[ROI]}
+     * @returns {[Roi]}
      */
 
-    getROI(options = {}) {
+    getRoi(options = {}) {
         let {
             label = this._options.label,
             positive = true,
@@ -149,16 +149,16 @@ export default class RoiManager {
         } = options;
 
         if (!this._layers[label]) {
-            throw new Error('getROI: This Roi layer (' + label + ') does not exists.');
+            throw new Error('getRoi: This Roi layer (' + label + ') does not exists.');
         }
 
-        let allROIs = this._layers[label].roi;
+        let allRois = this._layers[label].roi;
 
         // todo Is this old way to change the array size still faster ?
-        let rois = new Array(allROIs.length);
+        let rois = new Array(allRois.length);
         let ptr = 0;
-        for (let i = 0; i < allROIs.length; i++) {
-            let roi = allROIs[i];
+        for (let i = 0; i < allRois.length; i++) {
+            let roi = allRois[i];
             if (((roi.id < 0 && negative) || roi.id > 0 && positive)
                 && roi.surface >= minSurface
                 && roi.surface <= maxSurface
@@ -181,7 +181,7 @@ export default class RoiManager {
      * @returns {[Image]} Retuns an array of masks (1 bit Image)
      */
     getMasks(options = {}) {
-        let rois = this.getROI(options);
+        let rois = this.getRoi(options);
 
         let masks = new Array(rois.length);
         for (let i = 0; i < rois.length; i++) {
@@ -205,7 +205,7 @@ export default class RoiManager {
     /**
      * Paint the ROI on a copy of the image adn return this image.
      * For painting options @links Image.paintMasks
-     * For ROI selection options @links ROIManager.getMasks
+     * For ROI selection options @links RoiManager.getMasks
      * @param {object} [options] - all the options to select ROIs
      * @param {string} [options.labelProperty] - Paint a mask property on the image.
      *                                  May be any property of the ROI like
@@ -221,7 +221,7 @@ export default class RoiManager {
         let masks = this.getMasks(options);
 
         if (labelProperty) {
-            let rois = this.getROI(options);
+            let rois = this.getRoi(options);
             options.labels = rois.map((roi) => roi[labelProperty]);
             options.labelsPosition = rois.map((roi) => [roi.meanX, roi.meanY]);
         }
@@ -252,7 +252,7 @@ export default class RoiManager {
 
     /**
      * Reset the changes to the current painted iamge to the image that was
-     * used during the creation of the ROIManager except if a new image is
+     * used during the creation of the RoiManager except if a new image is
      * specified as parameter;
      * #param {object} [options]
      * @param {Image} [options.image] A new iamge that you would like to sue for painting over
@@ -274,13 +274,13 @@ export default class RoiManager {
      * @returns {*}
      */
 
-    mergeROI(options = {}) {
+    mergeRoi(options = {}) {
         let opt = extendObject({}, this._options, options);
         let {
             algorithm = 'commonBorder',
             minCommonBorderLength = 5
         } = options;
-        let rois = this.getROI(opt);
+        let rois = this.getRoi(opt);
         let toMerge = new Set();
         switch (algorithm.toLowerCase()) {
             //Algorithms. We can add more algorithm to create other types of merging.

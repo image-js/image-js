@@ -8,7 +8,7 @@ Image.load('./node_modules/ij-test/img/BW11x11.png').then(function (img) {
     var roiManager=img.getRoiManager();
     var mask=img.grey().mask();
     roiManager.fromMask(mask);
-    var rois=roiManager.getROI();
+    var rois=roiManager.getRoi();
 
     rois.length.should.equal(4);
 

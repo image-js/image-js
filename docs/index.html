@@ -590,13 +590,13 @@
                       <li><a
                         href='#ROIManager#getROIIDs'
                         class='regular pre-open'>
-                        #getROIIDs
+                        #getRoiIDs
                       </a></li>
                       
                       <li><a
                         href='#ROIManager#getROI'
                         class='regular pre-open'>
-                        #getROI
+                        #getRoi
                       </a></li>
                       
                       <li><a
@@ -626,7 +626,7 @@
                       <li><a
                         href='#ROIManager#mergeROI'
                         class='regular pre-open'>
-                        #mergeROI
+                        #mergeRoi
                       </a></li>
                       
                       <li><a
@@ -719,13 +719,13 @@
                       <li><a
                         href='#ROIManager#getROIIDs'
                         class='regular pre-open'>
-                        #getROIIDs
+                        #getRoiIDs
                       </a></li>
                       
                       <li><a
                         href='#ROIManager#getROI'
                         class='regular pre-open'>
-                        #getROI
+                        #getRoi
                       </a></li>
                       
                       <li><a
@@ -755,7 +755,7 @@
                       <li><a
                         href='#ROIManager#mergeROI'
                         class='regular pre-open'>
-                        #mergeROI
+                        #mergeRoi
                       </a></li>
                       
                       <li><a
@@ -823,7 +823,7 @@
                 <li><a
                   href='#roi'
                   class=" toggle-sibling">
-                  ROI
+                  Roi
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -1052,7 +1052,7 @@ The png library and tiff library included in image-js allow to deal correctly wi
 8 and 16 bit depth images.</li>
 <li>position : an array of 2 elements that allows to define a relative position
 to a parent image. This will be used in a crop or in the management
-of Region Of Interests (ROI) for exmaple</li>
+of Region Of Interests (Roi) for exmaple</li>
 <li>data : an array that contains all the points of the image.
 Depending the bitDepth Uint8Array (1 bit), Uint8ClampedArray (8 bits),
 Uint16Array (16 bits), Float32Array (32 bits)</li>
@@ -1207,7 +1207,7 @@ IJS.load(<span class="hljs-string">'xtc.png'</span>).then(<span class="hljs-func
 <span class="hljs-attr">algorithm</span>: <span class="hljs-string">'li'</span>
 });
 
-<span class="hljs-comment">// it is possible to create an array of Region Of Interest (ROI) using</span>
+<span class="hljs-comment">// it is possible to create an array of Region Of Interest (Roi) using</span>
 <span class="hljs-comment">// the RoiManager. A RoiManager will be applied on the original image</span>
 <span class="hljs-comment">// in order to be able to extract from the original image the regions</span>
 
@@ -1218,7 +1218,7 @@ IJS.load(<span class="hljs-string">'xtc.png'</span>).then(<span class="hljs-func
 
 <span class="hljs-keyword">var</span> manager = image.getRoiManager();
 manager.fromMask(mask);
-<span class="hljs-keyword">var</span> rois=manager.getROI({
+<span class="hljs-keyword">var</span> rois=manager.getRoi({
 <span class="hljs-attr">positive</span>: <span class="hljs-literal">true</span>,
 <span class="hljs-attr">negative</span>: <span class="hljs-literal">false</span>,
 <span class="hljs-attr">minSurface</span>: <span class="hljs-number">100</span>
@@ -1230,7 +1230,7 @@ manager.fromMask(mask);
 <span class="hljs-comment">// for demonstration we use an arrow function</span>
 rois.sort( <span class="hljs-function">(<span class="hljs-params">a,b</span>) =&gt;</span> b.surface-a.surface);
 
-<span class="hljs-comment">// the first ROI (the biggest is expected to be the pill)</span>
+<span class="hljs-comment">// the first Roi (the biggest is expected to be the pill)</span>
 
 <span class="hljs-keyword">var</span> pillMask=rois[<span class="hljs-number">0</span>].getMask({
 <span class="hljs-attr">scale</span>: <span class="hljs-number">0.7</span>   <span class="hljs-comment">// we will scale down the mask to take just the center of the pill and avoid border effects</span>
@@ -1238,7 +1238,7 @@ rois.sort( <span class="hljs-function">(<span class="hljs-params">a,b</span>) =&
 
 <span class="hljs-comment">// image-js remembers the parent of the image and the relative</span>
 <span class="hljs-comment">// position of a derived image. This is the case for a crop as</span>
-<span class="hljs-comment">// well as for ROI</span>
+<span class="hljs-comment">// well as for Roi</span>
 
 <span class="hljs-keyword">var</span> pill=image.extract(pillMask);
 pill.save(<span class="hljs-string">'pill.jpg'</span>);
@@ -8088,7 +8088,7 @@ name by default &#x27;default&#x27;</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getROIIDs([options])</span>
+            <span class='code strong strong truncate'>getRoiIDs([options])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -8096,10 +8096,10 @@ name by default &#x27;default&#x27;</p>
 
   
 
-  <p>Return the IDs of the Regions Of Interest (ROI) as an array of number</p>
+  <p>Return the IDs of the Regions Of Interest (Roi) as an array of number</p>
 
 
-  <div class='pre p1 fill-light mt0'>getROIIDs(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</div>
+  <div class='pre p1 fill-light mt0'>getRoiIDs(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</div>
 
   
 
@@ -8152,7 +8152,7 @@ name by default &#x27;default&#x27;</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getROI([options])</span>
+            <span class='code strong strong truncate'>getRoi([options])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -8160,10 +8160,10 @@ name by default &#x27;default&#x27;</p>
 
   
 
-  <p>Allows to select ROI based on size, label and sign.</p>
+  <p>Allows to select Roi based on size, label and sign.</p>
 
 
-  <div class='pre p1 fill-light mt0'>getROI(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): [<a href="#roi">ROI</a>]</div>
+  <div class='pre p1 fill-light mt0'>getRoi(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): [<a href="#roi">Roi</a>]</div>
 
   
 
@@ -8202,7 +8202,7 @@ name by default &#x27;default&#x27;</p>
                   
                     (default <code>&#39;default&#39;</code>)
                   </td>
-                  <td class='break-word'><span>Label of the layer containing the ROI
+                  <td class='break-word'><span>Label of the layer containing the Roi
 </span></td>
                 </tr>
               
@@ -8285,7 +8285,7 @@ name by default &#x27;default&#x27;</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>[<a href="#roi">ROI</a>]</code>:
+      <code>[<a href="#roi">Roi</a>]</code>:
         
       
     
@@ -8318,7 +8318,7 @@ name by default &#x27;default&#x27;</p>
   
 
   <p>Returns an array of masks
-See @links ROI.getMask for the options</p>
+See @links Roi.getMask for the options</p>
 
 
   <div class='pre p1 fill-light mt0'>getMasks(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): [<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>]</div>
@@ -8446,9 +8446,9 @@ See @links ROI.getMask for the options</p>
 
   
 
-  <p>Paint the ROI on a copy of the image adn return this image.
+  <p>Paint the Roi on a copy of the image adn return this image.
 For painting options @links Image.paintMasks
-For ROI selection options @links RoiManager.getMasks</p>
+For Roi selection options @links RoiManager.getMasks</p>
 
 
   <div class='pre p1 fill-light mt0'>paint(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
@@ -8488,7 +8488,7 @@ For ROI selection options @links RoiManager.getMasks</p>
                   <td class='break-word'><span class='code bold'>options.labelProperty</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]</code>
                   </td>
                   <td class='break-word'><span>Paint a mask property on the image.
-May be any property of the ROI like
+May be any property of the Roi like
 for example id, surface, width, height, meanX, meanY.
 </span></td>
                 </tr>
@@ -8601,7 +8601,7 @@ specified as parameter;
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>mergeROI([options], [algorithm], [minCommonBorderLength])</span>
+            <span class='code strong strong truncate'>mergeRoi([options], [algorithm], [minCommonBorderLength])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -8612,7 +8612,7 @@ specified as parameter;
   <p>Return a new roiMAP changed with the fusion of certain ROIs.</p>
 
 
-  <div class='pre p1 fill-light mt0'>mergeROI(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>], algorithm: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>], minCommonBorderLength: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]): any</div>
+  <div class='pre p1 fill-light mt0'>mergeRoi(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>], algorithm: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>], minCommonBorderLength: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]): any</div>
 
   
 
@@ -8826,9 +8826,9 @@ specified as parameter;
 
   
 
-  <p>ROI are created from a roiMap
+  <p>Roi are created from a roiMap
 The roiMap contains mainty an array of identifiers that define
-for each data to which ROI it belongs</p>
+for each data to which Roi it belongs</p>
 
 
   <div class='pre p1 fill-light mt0'>createRoi()</div>
@@ -8887,11 +8887,11 @@ for each data to which ROI it belongs</p>
   
 
   <p>A layer that is caracterised by a RoiMap (@see RoiMap) and that will
-generated automatically the corresponding ROI.
-ROI should be a continuous
+generated automatically the corresponding Roi.
+Roi should be a continuous
 surface (it is not tested when it is not continous ...)
 From the roiMap, the RoiLayer will create the corresponding
-ROI (@see ROI).</p>
+Roi (@see Roi).</p>
 
 
   <div class='pre p1 fill-light mt0'>new RoiManager(image: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>, options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</div>
@@ -9432,7 +9432,7 @@ ROI (@see ROI).</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getROIIDs([options])</span>
+            <span class='code strong strong truncate'>getRoiIDs([options])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -9440,10 +9440,10 @@ ROI (@see ROI).</p>
 
   
 
-  <p>Return the IDs of the Regions Of Interest (ROI) as an array of number</p>
+  <p>Return the IDs of the Regions Of Interest (Roi) as an array of number</p>
 
 
-  <div class='pre p1 fill-light mt0'>getROIIDs(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</div>
+  <div class='pre p1 fill-light mt0'>getRoiIDs(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]</div>
 
   
 
@@ -9496,7 +9496,7 @@ ROI (@see ROI).</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getROI([options])</span>
+            <span class='code strong strong truncate'>getRoi([options])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -9504,10 +9504,10 @@ ROI (@see ROI).</p>
 
   
 
-  <p>Allows to select ROI based on size, label and sign.</p>
+  <p>Allows to select Roi based on size, label and sign.</p>
 
 
-  <div class='pre p1 fill-light mt0'>getROI(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): [<a href="#roi">ROI</a>]</div>
+  <div class='pre p1 fill-light mt0'>getRoi(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): [<a href="#roi">Roi</a>]</div>
 
   
 
@@ -9546,7 +9546,7 @@ ROI (@see ROI).</p>
                   
                     (default <code>&#39;default&#39;</code>)
                   </td>
-                  <td class='break-word'><span>Label of the layer containing the ROI
+                  <td class='break-word'><span>Label of the layer containing the Roi
 </span></td>
                 </tr>
               
@@ -9629,7 +9629,7 @@ ROI (@see ROI).</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>[<a href="#roi">ROI</a>]</code>:
+      <code>[<a href="#roi">Roi</a>]</code>:
         
       
     
@@ -9662,7 +9662,7 @@ ROI (@see ROI).</p>
   
 
   <p>Returns an array of masks
-See @links ROI.getMask for the options</p>
+See @links Roi.getMask for the options</p>
 
 
   <div class='pre p1 fill-light mt0'>getMasks(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): [<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>]</div>
@@ -9790,9 +9790,9 @@ See @links ROI.getMask for the options</p>
 
   
 
-  <p>Paint the ROI on a copy of the image adn return this image.
+  <p>Paint the Roi on a copy of the image adn return this image.
 For painting options @links Image.paintMasks
-For ROI selection options @links RoiManager.getMasks</p>
+For Roi selection options @links RoiManager.getMasks</p>
 
 
   <div class='pre p1 fill-light mt0'>paint(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
@@ -9832,7 +9832,7 @@ For ROI selection options @links RoiManager.getMasks</p>
                   <td class='break-word'><span class='code bold'>options.labelProperty</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]</code>
                   </td>
                   <td class='break-word'><span>Paint a mask property on the image.
-May be any property of the ROI like
+May be any property of the Roi like
 for example id, surface, width, height, meanX, meanY.
 </span></td>
                 </tr>
@@ -9945,7 +9945,7 @@ specified as parameter;
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>mergeROI([options], [algorithm], [minCommonBorderLength])</span>
+            <span class='code strong strong truncate'>mergeRoi([options], [algorithm], [minCommonBorderLength])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -9956,7 +9956,7 @@ specified as parameter;
   <p>Return a new roiMAP changed with the fusion of certain ROIs.</p>
 
 
-  <div class='pre p1 fill-light mt0'>mergeROI(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>], algorithm: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>], minCommonBorderLength: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]): any</div>
+  <div class='pre p1 fill-light mt0'>mergeRoi(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>], algorithm: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>], minCommonBorderLength: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]): any</div>
 
   
 
@@ -10170,9 +10170,9 @@ specified as parameter;
 
   
 
-  <p>ROI are created from a roiMap
+  <p>Roi are created from a roiMap
 The roiMap contains mainty an array of identifiers that define
-for each data to which ROI it belongs</p>
+for each data to which Roi it belongs</p>
 
 
   <div class='pre p1 fill-light mt0'>createRoi()</div>
@@ -10370,7 +10370,7 @@ for each data to which ROI it belongs</p>
 
   <p>The roiMap is an array of the size of the original image data that contains
 positive and negative numbers. When the number is common, it corresponds
-to one region of interest (ROI)</p>
+to one region of interest (Roi)</p>
 
 
   <div class='pre p1 fill-light mt0'>new RoiMap()</div>
@@ -10455,7 +10455,7 @@ to one region of interest (ROI)</p>
   
   <div class='clearfix'>
     <h3 class='fl m0' id='roi'>
-      ROI
+      Roi
     </h3>
     
       <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/b8e8c69553d00335631707a3296b920c149f81bc/src/image/roi/roi.js#L11-L370'>
@@ -10468,7 +10468,7 @@ to one region of interest (ROI)</p>
   <p>Class to manage Region Of Interests</p>
 
 
-  <div class='pre p1 fill-light mt0'>new ROI()</div>
+  <div class='pre p1 fill-light mt0'>new Roi()</div>
 
   
 
@@ -10506,7 +10506,7 @@ to one region of interest (ROI)</p>
 
   
 
-  <p>Returns a binary image (mask) for the corresponding ROI</p>
+  <p>Returns a binary image (mask) for the corresponding Roi</p>
 
 
   <div class='pre p1 fill-light mt0'>getMask(object: any, options.scale: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>], options.kind: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>], options: any): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
@@ -10693,7 +10693,7 @@ specific region. It may be external or internal</p>
 
   
 
-  <p>Retrieve all the IDs or the ROI touching the box surrouding the region</p>
+  <p>Retrieve all the IDs or the Roi touching the box surrouding the region</p>
 <p>It should really be an array to solve complex cases related to border effect</p>
 <p>Like the image</p>
 <pre>
@@ -10755,7 +10755,7 @@ The cross will be surrouned by 4 differents zones
 
   
 
-  <p>Number of pixels of the ROI that touch the rectangle
+  <p>Number of pixels of the Roi that touch the rectangle
 This is useful for the calculation of the border
 because we will ignore those special pixels of the rectangle
 border that don&#x27;t have neighbours all around them.</p>
@@ -10803,7 +10803,7 @@ border that don&#x27;t have neighbours all around them.</p>
 
   
 
-  <p>Calculates the number of pixels that are in the external border of the ROI
+  <p>Calculates the number of pixels that are in the external border of the Roi
 Contour are all the pixels that touch an external &quot;zone&quot;.
 All the pixels that touch the box are part of the border and
 are calculated in the getBoxPixels procedure</p>
@@ -10990,7 +10990,7 @@ are calculated in the getBoxPixels procedure</p>
 
   
 
-  <p>Calculates the maximum length between two pixels of the ROI.</p>
+  <p>Calculates the maximum length between two pixels of the Roi.</p>
 
 
   <div class='pre p1 fill-light mt0'>maxLength</div>

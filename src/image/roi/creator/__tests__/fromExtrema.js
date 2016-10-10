@@ -1,4 +1,4 @@
-import ROIMapper from '../fromExtrema';
+import fromExtrema from '../fromExtrema';
 import {Image} from 'test/common';
 
 
@@ -16,7 +16,7 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
             {kind: 'GREY'}
         );
 
-        let data = ROIMapper.call(image,
+        let data = fromExtrema.call(image,
             {onlyTop:true}
         ).data;
 
@@ -41,7 +41,7 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
             {kind: 'GREY'}
         );
 
-        let data = ROIMapper.call(image,
+        let data = fromExtrema.call(image,
             {onlyTop:true}
         ).data;
 
@@ -66,7 +66,7 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
             {kind: 'GREY'}
         );
 
-        let data = ROIMapper.call(image,
+        let data = fromExtrema.call(image,
             {onlyTop:true}
         ).data;
 
@@ -92,7 +92,7 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
             {kind: 'GREY'}
         );
 
-        let data = ROIMapper.call(image,
+        let data = fromExtrema.call(image,
             {onlyTop:true}
         ).data;
 
@@ -120,7 +120,7 @@ describe('we check createROIMapFromMaxima only looking for maxima', function () 
             {kind: 'GREY'}
         );
 
-        let data = ROIMapper.call(image,
+        let data = fromExtrema.call(image,
             {}
         ).data;
 
@@ -145,7 +145,7 @@ describe('we check createROIMapFromMaxima only looking for maxima', function () 
             {kind: 'GREY'}
         );
 
-        let data = ROIMapper.call(image).data;
+        let data = fromExtrema.call(image).data;
 
         Array.from(data).should.eql([
             1, 1, 1, 0, 1,
@@ -168,7 +168,7 @@ describe('we check createROIMapFromMaxima only looking for maxima', function () 
             {kind: 'GREY'}
         );
 
-        let data = ROIMapper.call(image).data;
+        let data = fromExtrema.call(image).data;
 
         Array.from(data).should.eql([
             1, 1, 1, 1, 1,

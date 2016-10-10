@@ -1,4 +1,4 @@
-import ROIMap from '../RoiMap';
+import RoiMap from '../RoiMap';
 
 /**
  * @memberof RoiManager
@@ -55,7 +55,7 @@ export default function fromExtrema(
     }
 
 
-    return new ROIMap(image, data);
+    return new RoiMap(image, data);
 
     // we will look for the maxima (or minima) that is present in the picture
     // a maxima is a point that is surrounded by lower values

@@ -22,7 +22,7 @@ describe('we check contourMask', function () {
         let mask = img.mask({invert:true});
         roiManager.fromMask(mask);
 
-        let rois = roiManager.getROI();
+        let rois = roiManager.getRoi();
         rois.should.be.an.instanceof(Array).and.lengthOf(2);
 
         rois.sort(function (a,b) {

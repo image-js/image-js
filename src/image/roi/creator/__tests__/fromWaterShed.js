@@ -1,4 +1,4 @@
-import ROIMapper from '../fromWaterShed';
+import fromWaterShed from '../fromWaterShed';
 import {Image} from 'test/common';
 
 describe('Test WaterShed Roi generation', function () {
@@ -13,7 +13,7 @@ describe('Test WaterShed Roi generation', function () {
             ],
             {kind: 'GREY'}
         );
-        let map = ROIMapper.call(image);
+        let map = fromWaterShed.call(image);
         Array.from(map.data).should.eql(
             [
                 1,1,1,1,1,
@@ -48,7 +48,7 @@ describe('Test WaterShed Roi generation', function () {
                 mask.setBitXY(i, j);
             }
         }
-        let map = ROIMapper.call(image, {fillMaxValue:2, mask:mask});
+        let map = fromWaterShed.call(image, {fillMaxValue:2, mask:mask});
         Array.from(map.data).should.eql(
             [
                 0,0,0,0,0,0,0,0,0,0,
@@ -96,7 +96,7 @@ describe('Test WaterShed Roi generation', function () {
 
 
 
-        let map = ROIMapper.call(image, {mask:mask});
+        let map = fromWaterShed.call(image, {mask:mask});
 
         Array.from(map.data).should.eql(
             [

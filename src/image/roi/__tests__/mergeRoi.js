@@ -32,7 +32,7 @@ describe('Merge Roi', function () {
         let roiManager = image.getRoiManager();
         roiManager.putMap(map.data);
 
-        roiManager.mergeROI({minCommonBorderLength:3});
+        roiManager.mergeRoi({minCommonBorderLength:3});
 
         Array.from(map.data).should.eql(
             [

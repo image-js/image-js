@@ -23,7 +23,7 @@ describe('mark a binary image 4 x 4 in 3 zones and create ROIs', function () {
         roiManager.fromMask(mask);
 
 
-        let result = roiManager.getROI();
+        let result = roiManager.getRoi();
 
         result.sort(function (a,b) {
             return a.id - b.id;

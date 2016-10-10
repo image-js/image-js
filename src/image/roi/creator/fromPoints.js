@@ -1,9 +1,9 @@
 /**
- * @memberof ROIManager
+ * @memberof RoiManager
  * @instance
  */
 
-import ROIMap from '../RoiMap';
+import RoiMap from '../RoiMap';
 import Shape from './../../../util/shape';
 
 export default function fromPoints(pointsToPaint, options = {}) {
@@ -31,5 +31,5 @@ export default function fromPoints(pointsToPaint, options = {}) {
         }
     }
 
-    return new ROIMap(this, data);
+    return new RoiMap(this, data);
 }

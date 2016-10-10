@@ -1,4 +1,4 @@
-import ROIMapper from '../fromPoints';
+import fromPoints from '../fromPoints';
 import {Image} from 'test/common';
 
 describe('we check createROIMapFromPixels', function () {
@@ -7,7 +7,7 @@ describe('we check createROIMapFromPixels', function () {
 
         let pixels = [[1,1],[3,2],[4,4],[5,0]];
 
-        let mapData = ROIMapper.call(image, pixels, {kind: 'smallCross'}).data;
+        let mapData = fromPoints.call(image, pixels, {kind: 'smallCross'}).data;
 
         Array.from(mapData).should.eql([
             0, 1, 0, 0, 4,

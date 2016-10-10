@@ -22897,7 +22897,7 @@ class ROIManager {
      * @param {number} [options.minHeight=Number.POSITIVE_INFINITY]
      * @param {number} [options.maxWidth=0]
      * @param {number} [options.maxHeight=Number.POSITIVE_INFINITY]
-     * @returns {[ROI]}
+     * @returns {[Roi]}
      */
 
     getROI() {
@@ -22923,7 +22923,7 @@ class ROIManager {
 
 
         if (!this._layers[label]) {
-            throw new Error('getROI: This Roi layer (' + label + ') does not exists.');
+            throw new Error('getRoi: This Roi layer (' + label + ') does not exists.');
         }
 
         var allROIs = this._layers[label].roi;

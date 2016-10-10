@@ -18,7 +18,7 @@ describe('we check the internalMapID', function () {
             let mask = img.mask(0.5, {invert:true});
             roiManager.fromMask(mask);
 
-            let rois = roiManager.getROI();
+            let rois = roiManager.getRoi();
 
             rois.sort(function (a,b) {
                 return a.mask.sizes[0] - b.mask.sizes[0];
@@ -48,7 +48,7 @@ describe('we check the internalMapID with complex image', function () {
             let roiManager = img.getRoiManager();
             roiManager.fromMask(mask);
 
-            let rois = roiManager.getROI();
+            let rois = roiManager.getRoi();
 
             rois.sort(function (a,b) {
                 return a.internalIDs[0] - b.internalIDs[0];

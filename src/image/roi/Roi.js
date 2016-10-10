@@ -4,11 +4,11 @@ import Shape from '../../util/shape';
 
 /**
  * Class to manage Region Of Interests
- * @class ROI
+ * @class Roi
  */
 
 
-export default class ROI {
+export default class Roi {
 
     constructor(map, id) {
         this.map = map;

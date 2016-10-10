@@ -7,7 +7,7 @@ We therefore don't expose it in the roiManager
 
 import DisjointSet from 'ml-disjoint-set';
 
-import ROIMap from '../RoiMap';
+import RoiMap from '../RoiMap';
 
 const direction4X = [-1,  0];
 const direction4Y = [ 0, -1];
@@ -95,6 +95,6 @@ export default function fromMask2(mask, options = {}) {
         }
     }
 
-    return new ROIMap(mask, data);
+    return new RoiMap(mask, data);
 
 }
