@@ -1,7 +1,7 @@
-import ROIMapper from '../creator/fromWaterShed';
+import RoiMapper from '../creator/fromWaterShed';
 import {Image} from 'test/common';
 
-describe('Merge ROI', function () {
+describe('Merge Roi', function () {
     it('should fusion 2 ROIs', function () {
 
         let image = new Image(10,10,
@@ -28,8 +28,8 @@ describe('Merge ROI', function () {
             }
         }
 
-        let map = ROIMapper.call(image, {fillMaxValue:5, mask:mask, interval: 1});
-        let roiManager = image.getROIManager();
+        let map = RoiMapper.call(image, {fillMaxValue:5, mask:mask, interval: 1});
+        let roiManager = image.getRoiManager();
         roiManager.putMap(map.data);
 
         roiManager.mergeROI({minCommonBorderLength:3});

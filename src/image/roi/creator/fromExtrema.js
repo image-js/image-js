@@ -1,7 +1,7 @@
-import ROIMap from './../ROIMap';
+import ROIMap from '../RoiMap';
 
 /**
- * @memberof ROIManager
+ * @memberof RoiManager
  * @instance
  */
 

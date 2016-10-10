@@ -3,10 +3,10 @@
  * positive and negative numbers. When the number is common, it corresponds
  * to one region of interest (ROI)
  *
- * @class ROIMap
+ * @class RoiMap
  */
 
-export default class ROIMap {
+export default class RoiMap {
     constructor(parent, data) {
         this.parent = parent;
         this.width = parent.width;

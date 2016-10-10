@@ -1,4 +1,4 @@
-import ROI from './roi';
+import Roi from './Roi';
 
 // TODO check the links for the reference in the docs (@see)
 
@@ -10,29 +10,29 @@ import ROI from './roi';
  * From the roiMap, the ROILayer will create the corresponding
  * ROI (@see ROI).
  *
- * @class ROIManager
+ * @class RoiManager
  * @param {Image} image
  * @param {object} [options]
  */
 /**
- * @class ROILayer
+ * @class RoiLayer
  */
-export default class ROILayer {
+export default class RoiLayer {
     constructor(roiMap, options) {
         this.roiMap = roiMap;
         this.options = options;
-        this.roi = this.createROI();
+        this.roi = this.createRoi();
     }
 
     /**
-     * ROI are created from a roiMap
+     * Roi are created from a roiMap
      * The roiMap contains mainty an array of identifiers that define
-     * for each data to which ROI it belongs
-     * @memberof ROIManager
+     * for each data to which Roi it belongs
+     * @memberof RoiManager
      * @instance
      */
 
-    createROI() {
+    createRoi() {
         // we need to find all all the different IDs there is in the data
         let data = this.roiMap.data;
         let mapIDs = {};
@@ -53,7 +53,7 @@ export default class ROILayer {
         let rois = {};
 
         for (let mapID in mapIDs) {
-            rois[mapID] = new ROI(this.roiMap, mapID * 1);
+            rois[mapID] = new Roi(this.roiMap, mapID * 1);
         }
 
         let width = this.roiMap.width;

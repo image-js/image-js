@@ -5,7 +5,7 @@ var Image = require('../../..');
 Image.load('./node_modules/ij-test/img/BW15x15.png').then(function (img) {
     console.log('Width: ',img.width);
     console.log('Height: ',img.height);
-    var roiManager=img.getROIManager();
+    var roiManager=img.getRoiManager();
     var mask=img.grey().mask();
     roiManager.fromMask(mask);
     var rois=roiManager.getROI();

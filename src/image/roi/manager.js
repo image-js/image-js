@@ -4,18 +4,18 @@ import fromWaterShed from './creator/fromWaterShed';
 import fromPoints from './creator/fromPoints';
 import extendObject from 'extend';
 import Image from '../image';
-import ROIMap from './ROIMap';
-import ROILayer from './ROILayer';
+import RoiMap from './RoiMap';
+import RoiLayer from './RoiLayer';
 
 /**
- * A manager of Regions of Interest. A ROIManager is related to a specific Image
+ * A manager of Regions of Interest. A RoiManager is related to a specific Image
  * and may contain multiple layers. Each layer is characterized by a label whose is
  * name by default 'default'
- * @class ROIManager
+ * @class RoiManager
  * @param {Image} image
  * @param {object} [options]
  */
-export default class ROIManager {
+export default class RoiManager {
     constructor(image, options = {}) {
         this._image = image;
         this._options = options;
@@ -27,23 +27,23 @@ export default class ROIManager {
     /**
      *
      * @param {object} [options]
-     * @returns {ROIManager}
+     * @returns {RoiManager}
      */
     fromExtrema(options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromExtrema.call(this._image, options);
-        this._layers[opt.label] = new ROILayer(roiMap, opt);
+        this._layers[opt.label] = new RoiLayer(roiMap, opt);
     }
 
     /**
      * @param {[[number]]} points - an array of points
      * @param {object} [options]
-     * @returns {ROIManager}
+     * @returns {RoiManager}
      */
     fromPoints(points, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromPoints.call(this._image, points, options);
-        this._layers[opt.label] = new ROILayer(roiMap, opt);
+        this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
     }
 
@@ -53,42 +53,42 @@ export default class ROIManager {
      * @param {object} [options]
      */
     putMap(roiMap, options = {}) {
-        let map = new ROIMap(this._image, roiMap);
+        let map = new RoiMap(this._image, roiMap);
         let opt = extendObject({}, this._options, options);
-        this._layers[opt.label] = new ROILayer(map, opt);
+        this._layers[opt.label] = new RoiLayer(map, opt);
         return this;
     }
 
     /**
      *
      * @param {object} [options]
-     * @returns {ROIManager}
+     * @returns {RoiManager}
      */
     fromWaterShed(options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromWaterShed.call(this._image, options);
-        this._layers[opt.label] = new ROILayer(roiMap, opt);
+        this._layers[opt.label] = new RoiLayer(roiMap, opt);
     }
 
     /**
      *
      * @param {Image} mask
      * @param {object} [options]
-     * @returns {ROIManager}
+     * @returns {RoiManager}
      */
     fromMask(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromMask.call(this._image, mask, options);
-        this._layers[opt.label] = new ROILayer(roiMap, opt);
+        this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
     }
 
 
-    /* Seems slower and less general (only provides positive ROI)
+    /* Seems slower and less general (only provides positive Roi)
     fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromMask2.call(this._image, mask, options);
-        this._layers[opt.label] = new ROILayer(roiMap, opt);
+        this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
     }
      */
@@ -96,7 +96,7 @@ export default class ROIManager {
     /**
      *
      * @param {object} [options]
-     * @returns {ROIMap}
+     * @returns {RoiMap}
      */
     getMap(options = {}) {
         let opt = extendObject({}, this._options, options);
@@ -106,7 +106,7 @@ export default class ROIManager {
 
 
     /**
-     * Return the IDs of the Regions Of Interest (ROI) as an array of number
+     * Return the IDs of the Regions Of Interest (Roi) as an array of number
      * @param {object} [options]
      * @returns {[number]}
      */
@@ -149,7 +149,7 @@ export default class ROIManager {
         } = options;
 
         if (!this._layers[label]) {
-            throw new Error('getROI: This ROI layer (' + label + ') does not exists.');
+            throw new Error('getROI: This Roi layer (' + label + ') does not exists.');
         }
 
         let allROIs = this._layers[label].roi;
@@ -176,7 +176,7 @@ export default class ROIManager {
 
     /**
      * Returns an array of masks
-     * See @links ROI.getMask for the options
+     * See @links Roi.getMask for the options
      * @param {object} [options]
      * @returns {[Image]} Retuns an array of masks (1 bit Image)
      */

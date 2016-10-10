@@ -17,7 +17,7 @@ describe('Get the angle of the region, relative to the maxlength', function () {
         kind: 'BINARY'
     });
 
-    let roiManager = mask.getROIManager();
+    let roiManager = mask.getRoiManager();
     roiManager.fromMask(mask);
     it('angle', function () {
         let result = roiManager.getROI();

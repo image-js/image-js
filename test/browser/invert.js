@@ -25,7 +25,7 @@ load('cells/cells.jpg').then(function (img) {
     //setLeft(a);
 
     var mask = img.grey().mask();
-    var manager = img.getROIManager();
+    var manager = img.getRoiManager();
     console.time('1');
     manager.fromMask(mask, {label: 'mask1'});
     console.timeEnd('1');

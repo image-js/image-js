@@ -1,12 +1,12 @@
 import {Image} from 'test/common';
 
-describe('we check ROI.getMask', function () {
+describe('we check Roi.getMask', function () {
     it('should yield the right mask', function () {
         let image = new Image(5, 5, {kind: 'GREY'});
 
         let points = [[1,1],[3,2],[4,4],[5,0]];
 
-        let roiManager = image.getROIManager();
+        let roiManager = image.getRoiManager();
         roiManager.fromPoints(points, {kind: 'smallCross'});
 
         Array.from(roiManager.getData()).should.eql([
@@ -19,7 +19,7 @@ describe('we check ROI.getMask', function () {
 
         let mask = roiManager.getMask({minSurface:5, maxSurface:5});
 
-        // only 2 ROI will be selected !
+        // only 2 Roi will be selected !
 
         // should be
         // 01000
@@ -46,7 +46,7 @@ describe('we check ROI.getMask', function () {
         Array.from(mask.data).should.eql([3, 156, 224, 0]);
 
 
-        let roiManager = image.getROIManager();
+        let roiManager = image.getRoiManager();
         roiManager.fromMask(mask, {positive: true, negative: false});
 
         let rois = roiManager.getROI().sort(function (a,b) {return a.surface - b.surface;});

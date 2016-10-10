@@ -1,6 +1,6 @@
 import {Image} from 'test/common';
 
-describe('Get the ids of neighbour touching the ROI', function () {
+describe('Get the ids of neighbour touching the Roi', function () {
 
     let map = [
         0,0,1,1,1,2,
@@ -13,7 +13,7 @@ describe('Get the ids of neighbour touching the ROI', function () {
 
     let img = new Image(6, 6);
 
-    let roiManager = img.getROIManager();
+    let roiManager = img.getRoiManager();
     roiManager.putMap(map);
     it('IDs of neighbour', function () {
         let result = roiManager.getROI();

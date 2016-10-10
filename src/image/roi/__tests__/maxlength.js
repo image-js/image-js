@@ -9,7 +9,7 @@ import {Image} from 'test/common';
 
 
 
-describe('Get the maxLength of the ROI and the points', function () {
+describe('Get the maxLength of the Roi and the points', function () {
     let data = new Uint8Array(2);
     data[0] = 63;
     data[1] = 196;
@@ -18,7 +18,7 @@ describe('Get the maxLength of the ROI and the points', function () {
         kind: 'BINARY'
     });
 
-    let roiManager = mask.getROIManager();
+    let roiManager = mask.getRoiManager();
     roiManager.fromMask(mask);
     it('vectors X and Y', function () {
         let results = roiManager.getROI();

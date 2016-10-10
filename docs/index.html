@@ -535,7 +535,7 @@
                 <li><a
                   href='#roimanager'
                   class=" toggle-sibling">
-                  ROIManager
+                  RoiManager
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -632,25 +632,25 @@
                       <li><a
                         href='#ROIManager#ROIMap'
                         class='regular pre-open'>
-                        #ROIMap
+                        #RoiMap
                       </a></li>
                       
                       <li><a
                         href='#ROIManager#ROIMap'
                         class='regular pre-open'>
-                        #ROIMap
+                        #RoiMap
                       </a></li>
                       
                       <li><a
                         href='#ROIManager#ROIMap'
                         class='regular pre-open'>
-                        #ROIMap
+                        #RoiMap
                       </a></li>
                       
                       <li><a
                         href='#ROIManager#createROI'
                         class='regular pre-open'>
-                        #createROI
+                        #createRoi
                       </a></li>
                       
                     </ul>
@@ -664,7 +664,7 @@
                 <li><a
                   href='#roimanager'
                   class=" toggle-sibling">
-                  ROIManager
+                  RoiManager
                   <span class='icon'>▸</span>
                 </a>
                 
@@ -761,25 +761,25 @@
                       <li><a
                         href='#ROIManager#ROIMap'
                         class='regular pre-open'>
-                        #ROIMap
+                        #RoiMap
                       </a></li>
                       
                       <li><a
                         href='#ROIManager#ROIMap'
                         class='regular pre-open'>
-                        #ROIMap
+                        #RoiMap
                       </a></li>
                       
                       <li><a
                         href='#ROIManager#ROIMap'
                         class='regular pre-open'>
-                        #ROIMap
+                        #RoiMap
                       </a></li>
                       
                       <li><a
                         href='#ROIManager#createROI'
                         class='regular pre-open'>
-                        #createROI
+                        #createRoi
                       </a></li>
                       
                     </ul>
@@ -803,7 +803,7 @@
                 <li><a
                   href='#roimap'
                   class="">
-                  ROIMap
+                  RoiMap
                   
                 </a>
                 
@@ -813,7 +813,7 @@
                 <li><a
                   href='#roilayer'
                   class="">
-                  ROILayer
+                  RoiLayer
                   
                 </a>
                 
@@ -1208,7 +1208,7 @@ IJS.load(<span class="hljs-string">'xtc.png'</span>).then(<span class="hljs-func
 });
 
 <span class="hljs-comment">// it is possible to create an array of Region Of Interest (ROI) using</span>
-<span class="hljs-comment">// the ROIManager. A ROIManager will be applied on the original image</span>
+<span class="hljs-comment">// the RoiManager. A RoiManager will be applied on the original image</span>
 <span class="hljs-comment">// in order to be able to extract from the original image the regions</span>
 
 <span class="hljs-comment">// the result of this console.log result can diretly be pasted</span>
@@ -1216,7 +1216,7 @@ IJS.load(<span class="hljs-string">'xtc.png'</span>).then(<span class="hljs-func
 <span class="hljs-comment">// console.log(mask.toDataURL());</span>
 
 
-<span class="hljs-keyword">var</span> manager = image.getROIManager();
+<span class="hljs-keyword">var</span> manager = image.getRoiManager();
 manager.fromMask(mask);
 <span class="hljs-keyword">var</span> rois=manager.getROI({
 <span class="hljs-attr">positive</span>: <span class="hljs-literal">true</span>,
@@ -7535,7 +7535,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
   
   <div class='clearfix'>
     <h3 class='fl m0' id='roimanager'>
-      ROIManager
+      RoiManager
     </h3>
     
       <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/b8e8c69553d00335631707a3296b920c149f81bc/src/image/roi/manager.js#L18-L313'>
@@ -7545,12 +7545,12 @@ placed in the slot 0, 32 to 63 in slot 1, ...
   </div>
   
 
-  <p>A manager of Regions of Interest. A ROIManager is related to a specific Image
+  <p>A manager of Regions of Interest. A RoiManager is related to a specific Image
 and may contain multiple layers. Each layer is characterized by a label whose is
 name by default &#x27;default&#x27;</p>
 
 
-  <div class='pre p1 fill-light mt0'>new ROIManager(image: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>, options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</div>
+  <div class='pre p1 fill-light mt0'>new RoiManager(image: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>, options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</div>
 
   
 
@@ -7609,7 +7609,7 @@ name by default &#x27;default&#x27;</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromExtrema(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">ROIManager</a></div>
+  <div class='pre p1 fill-light mt0'>fromExtrema(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">RoiManager</a></div>
 
   
 
@@ -7638,7 +7638,7 @@ name by default &#x27;default&#x27;</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#roimanager">ROIManager</a></code>:
+      <code><a href="#roimanager">RoiManager</a></code>:
         
       
     
@@ -7768,7 +7768,7 @@ name by default &#x27;default&#x27;</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromPoints(points: [[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]], options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">ROIManager</a></div>
+  <div class='pre p1 fill-light mt0'>fromPoints(points: [[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]], options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">RoiManager</a></div>
 
   
 
@@ -7805,7 +7805,7 @@ name by default &#x27;default&#x27;</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#roimanager">ROIManager</a></code>:
+      <code><a href="#roimanager">RoiManager</a></code>:
         
       
     
@@ -7902,7 +7902,7 @@ name by default &#x27;default&#x27;</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromWaterShed(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">ROIManager</a></div>
+  <div class='pre p1 fill-light mt0'>fromWaterShed(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">RoiManager</a></div>
 
   
 
@@ -7931,7 +7931,7 @@ name by default &#x27;default&#x27;</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#roimanager">ROIManager</a></code>:
+      <code><a href="#roimanager">RoiManager</a></code>:
         
       
     
@@ -7965,7 +7965,7 @@ name by default &#x27;default&#x27;</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromMask(mask: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>, options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">ROIManager</a></div>
+  <div class='pre p1 fill-light mt0'>fromMask(mask: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>, options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">RoiManager</a></div>
 
   
 
@@ -8001,7 +8001,7 @@ name by default &#x27;default&#x27;</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#roimanager">ROIManager</a></code>:
+      <code><a href="#roimanager">RoiManager</a></code>:
         
       
     
@@ -8035,7 +8035,7 @@ name by default &#x27;default&#x27;</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>getMap(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimap">ROIMap</a></div>
+  <div class='pre p1 fill-light mt0'>getMap(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimap">RoiMap</a></div>
 
   
 
@@ -8064,7 +8064,7 @@ name by default &#x27;default&#x27;</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#roimap">ROIMap</a></code>:
+      <code><a href="#roimap">RoiMap</a></code>:
         
       
     
@@ -8448,7 +8448,7 @@ See @links ROI.getMask for the options</p>
 
   <p>Paint the ROI on a copy of the image adn return this image.
 For painting options @links Image.paintMasks
-For ROI selection options @links ROIManager.getMasks</p>
+For ROI selection options @links RoiManager.getMasks</p>
 
 
   <div class='pre p1 fill-light mt0'>paint(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
@@ -8540,7 +8540,7 @@ for example id, surface, width, height, meanX, meanY.
   
 
   <p>Reset the changes to the current painted iamge to the image that was
-used during the creation of the ROIManager except if a new image is
+used during the creation of the RoiManager except if a new image is
 specified as parameter;
 #param {object} [options]</p>
 
@@ -8685,7 +8685,7 @@ specified as parameter;
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>ROIMap</span>
+            <span class='code strong strong truncate'>RoiMap</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -8696,7 +8696,7 @@ specified as parameter;
   <p>Annotates each point to define to which area it belongs</p>
 
 
-  <div class='pre p1 fill-light mt0'>ROIMap</div>
+  <div class='pre p1 fill-light mt0'>RoiMap</div>
 
   
 
@@ -8730,7 +8730,7 @@ specified as parameter;
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>ROIMap</span>
+            <span class='code strong strong truncate'>RoiMap</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -8740,7 +8740,7 @@ specified as parameter;
 
   
 
-  <div class='pre p1 fill-light mt0'>ROIMap</div>
+  <div class='pre p1 fill-light mt0'>RoiMap</div>
 
   
 
@@ -8774,7 +8774,7 @@ specified as parameter;
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>ROIMap</span>
+            <span class='code strong strong truncate'>RoiMap</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -8784,7 +8784,7 @@ specified as parameter;
 
   
 
-  <div class='pre p1 fill-light mt0'>ROIMap</div>
+  <div class='pre p1 fill-light mt0'>RoiMap</div>
 
   
 
@@ -8818,7 +8818,7 @@ specified as parameter;
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>createROI()</span>
+            <span class='code strong strong truncate'>createRoi()</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -8831,7 +8831,7 @@ The roiMap contains mainty an array of identifiers that define
 for each data to which ROI it belongs</p>
 
 
-  <div class='pre p1 fill-light mt0'>createROI()</div>
+  <div class='pre p1 fill-light mt0'>createRoi()</div>
 
   
 
@@ -8876,25 +8876,25 @@ for each data to which ROI it belongs</p>
   
   <div class='clearfix'>
     <h3 class='fl m0' id='roimanager'>
-      ROIManager
+      RoiManager
     </h3>
     
       <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/b8e8c69553d00335631707a3296b920c149f81bc/src/image/roi/ROILayer.js#L20-L88'>
-      <span>src/image/roi/ROILayer.js</span>
+      <span>src/image/roi/RoiLayer.js</span>
       </a>
     
   </div>
   
 
-  <p>A layer that is caracterised by a ROIMap (@see ROIMap) and that will
+  <p>A layer that is caracterised by a RoiMap (@see RoiMap) and that will
 generated automatically the corresponding ROI.
 ROI should be a continuous
 surface (it is not tested when it is not continous ...)
-From the roiMap, the ROILayer will create the corresponding
+From the roiMap, the RoiLayer will create the corresponding
 ROI (@see ROI).</p>
 
 
-  <div class='pre p1 fill-light mt0'>new ROIManager(image: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>, options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</div>
+  <div class='pre p1 fill-light mt0'>new RoiManager(image: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>, options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>])</div>
 
   
 
@@ -8953,7 +8953,7 @@ ROI (@see ROI).</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromExtrema(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">ROIManager</a></div>
+  <div class='pre p1 fill-light mt0'>fromExtrema(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">RoiManager</a></div>
 
   
 
@@ -8982,7 +8982,7 @@ ROI (@see ROI).</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#roimanager">ROIManager</a></code>:
+      <code><a href="#roimanager">RoiManager</a></code>:
         
       
     
@@ -9112,7 +9112,7 @@ ROI (@see ROI).</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromPoints(points: [[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]], options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">ROIManager</a></div>
+  <div class='pre p1 fill-light mt0'>fromPoints(points: [[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>]], options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">RoiManager</a></div>
 
   
 
@@ -9149,7 +9149,7 @@ ROI (@see ROI).</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#roimanager">ROIManager</a></code>:
+      <code><a href="#roimanager">RoiManager</a></code>:
         
       
     
@@ -9246,7 +9246,7 @@ ROI (@see ROI).</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromWaterShed(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">ROIManager</a></div>
+  <div class='pre p1 fill-light mt0'>fromWaterShed(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">RoiManager</a></div>
 
   
 
@@ -9275,7 +9275,7 @@ ROI (@see ROI).</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#roimanager">ROIManager</a></code>:
+      <code><a href="#roimanager">RoiManager</a></code>:
         
       
     
@@ -9309,7 +9309,7 @@ ROI (@see ROI).</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromMask(mask: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>, options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">ROIManager</a></div>
+  <div class='pre p1 fill-light mt0'>fromMask(mask: <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a>, options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimanager">RoiManager</a></div>
 
   
 
@@ -9345,7 +9345,7 @@ ROI (@see ROI).</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#roimanager">ROIManager</a></code>:
+      <code><a href="#roimanager">RoiManager</a></code>:
         
       
     
@@ -9379,7 +9379,7 @@ ROI (@see ROI).</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>getMap(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimap">ROIMap</a></div>
+  <div class='pre p1 fill-light mt0'>getMap(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="#roimap">RoiMap</a></div>
 
   
 
@@ -9408,7 +9408,7 @@ ROI (@see ROI).</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#roimap">ROIMap</a></code>:
+      <code><a href="#roimap">RoiMap</a></code>:
         
       
     
@@ -9792,7 +9792,7 @@ See @links ROI.getMask for the options</p>
 
   <p>Paint the ROI on a copy of the image adn return this image.
 For painting options @links Image.paintMasks
-For ROI selection options @links ROIManager.getMasks</p>
+For ROI selection options @links RoiManager.getMasks</p>
 
 
   <div class='pre p1 fill-light mt0'>paint(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
@@ -9884,7 +9884,7 @@ for example id, surface, width, height, meanX, meanY.
   
 
   <p>Reset the changes to the current painted iamge to the image that was
-used during the creation of the ROIManager except if a new image is
+used during the creation of the RoiManager except if a new image is
 specified as parameter;
 #param {object} [options]</p>
 
@@ -10029,7 +10029,7 @@ specified as parameter;
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>ROIMap</span>
+            <span class='code strong strong truncate'>RoiMap</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -10040,7 +10040,7 @@ specified as parameter;
   <p>Annotates each point to define to which area it belongs</p>
 
 
-  <div class='pre p1 fill-light mt0'>ROIMap</div>
+  <div class='pre p1 fill-light mt0'>RoiMap</div>
 
   
 
@@ -10074,7 +10074,7 @@ specified as parameter;
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>ROIMap</span>
+            <span class='code strong strong truncate'>RoiMap</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -10084,7 +10084,7 @@ specified as parameter;
 
   
 
-  <div class='pre p1 fill-light mt0'>ROIMap</div>
+  <div class='pre p1 fill-light mt0'>RoiMap</div>
 
   
 
@@ -10118,7 +10118,7 @@ specified as parameter;
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>ROIMap</span>
+            <span class='code strong strong truncate'>RoiMap</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -10128,7 +10128,7 @@ specified as parameter;
 
   
 
-  <div class='pre p1 fill-light mt0'>ROIMap</div>
+  <div class='pre p1 fill-light mt0'>RoiMap</div>
 
   
 
@@ -10162,7 +10162,7 @@ specified as parameter;
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>createROI()</span>
+            <span class='code strong strong truncate'>createRoi()</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -10175,7 +10175,7 @@ The roiMap contains mainty an array of identifiers that define
 for each data to which ROI it belongs</p>
 
 
-  <div class='pre p1 fill-light mt0'>createROI()</div>
+  <div class='pre p1 fill-light mt0'>createRoi()</div>
 
   
 
@@ -10232,7 +10232,7 @@ for each data to which ROI it belongs</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>fromWaterShed(fillMaxValue: any, points: any, interval: any, mask: any, $0: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="#roimap">ROIMap</a></div>
+  <div class='pre p1 fill-light mt0'>fromWaterShed(fillMaxValue: any, points: any, interval: any, mask: any, $0: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="#roimap">RoiMap</a></div>
 
   
 
@@ -10333,7 +10333,7 @@ for each data to which ROI it belongs</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#roimap">ROIMap</a></code>:
+      <code><a href="#roimap">RoiMap</a></code>:
         
       
     
@@ -10358,11 +10358,11 @@ for each data to which ROI it belongs</p>
   
   <div class='clearfix'>
     <h3 class='fl m0' id='roimap'>
-      ROIMap
+      RoiMap
     </h3>
     
       <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/b8e8c69553d00335631707a3296b920c149f81bc/src/image/roi/ROIMap.js#L9-L22'>
-      <span>src/image/roi/ROIMap.js</span>
+      <span>src/image/roi/RoiMap.js</span>
       </a>
     
   </div>
@@ -10373,7 +10373,7 @@ positive and negative numbers. When the number is common, it corresponds
 to one region of interest (ROI)</p>
 
 
-  <div class='pre p1 fill-light mt0'>new ROIMap()</div>
+  <div class='pre p1 fill-light mt0'>new RoiMap()</div>
 
   
 
@@ -10408,11 +10408,11 @@ to one region of interest (ROI)</p>
   
   <div class='clearfix'>
     <h3 class='fl m0' id='roilayer'>
-      ROILayer
+      RoiLayer
     </h3>
     
       <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/b8e8c69553d00335631707a3296b920c149f81bc/src/image/roi/ROILayer.js#L20-L88'>
-      <span>src/image/roi/ROILayer.js</span>
+      <span>src/image/roi/RoiLayer.js</span>
       </a>
     
   </div>
@@ -10420,7 +10420,7 @@ to one region of interest (ROI)</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>new ROILayer()</div>
+  <div class='pre p1 fill-light mt0'>new RoiLayer()</div>
 
   
 
@@ -10459,7 +10459,7 @@ to one region of interest (ROI)</p>
     </h3>
     
       <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/b8e8c69553d00335631707a3296b920c149f81bc/src/image/roi/roi.js#L11-L370'>
-      <span>src/image/roi/roi.js</span>
+      <span>src/image/roi/Roi.js</span>
       </a>
     
   </div>
@@ -11042,7 +11042,7 @@ are calculated in the getBoxPixels procedure</p>
     </h3>
     
       <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/core/blob/b8e8c69553d00335631707a3296b920c149f81bc/src/image/roi/roi.js#L244-L244'>
-      <span>src/image/roi/roi.js</span>
+      <span>src/image/roi/Roi.js</span>
       </a>
     
   </div>

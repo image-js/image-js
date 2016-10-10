@@ -5,7 +5,7 @@ import extend from './extend';
 import bitMethods from './bitMethods';
 import {createWriteStream} from 'fs';
 import {RGB} from './model/model';
-import ROIManager from './roi/manager';
+import RoiManager from './roi/manager';
 import {getType, canWrite} from './mediaTypes';
 import extendObject from 'extend';
 import {loadURL} from './load';
@@ -41,7 +41,7 @@ let computedPropertyDescriptor = {
  *      8 and 16 bit depth images.
  * * position : an array of 2 elements that allows to define a relative position
  *      to a parent image. This will be used in a crop or in the management
- *      of Region Of Interests (ROI) for exmaple
+ *      of Region Of Interests (Roi) for exmaple
  * * data : an array that contains all the points of the image.
  *      Depending the bitDepth Uint8Array (1 bit), Uint8ClampedArray (8 bits),
  *      Uint16Array (16 bits), Float32Array (32 bits)
@@ -145,8 +145,8 @@ IJS.load('cat.jpg').then(function(image) {
         algorithm: 'li'
     });
 
-    // it is possible to create an array of Region Of Interest (ROI) using
-    // the ROIManager. A ROIManager will be applied on the original image
+    // it is possible to create an array of Region Of Interest (Roi) using
+    // the RoiManager. A RoiManager will be applied on the original image
     // in order to be able to extract from the original image the regions
 
     // the result of this console.log result can diretly be pasted
@@ -154,9 +154,9 @@ IJS.load('cat.jpg').then(function(image) {
     // console.log(mask.toDataURL());
 
 
-    var manager = image.getROIManager();
+    var manager = image.getRoiManager();
     manager.fromMask(mask);
-    var rois=manager.getROI({
+    var rois=manager.getRoi({
         positive: true,
         negative: false,
         minSurface: 100
@@ -168,7 +168,7 @@ IJS.load('cat.jpg').then(function(image) {
     // for demonstration we use an arrow function
     rois.sort( (a,b) => b.surface-a.surface);
 
-    // the first ROI (the biggest is expected to be the pill)
+    // the first Roi (the biggest is expected to be the pill)
 
     var pillMask=rois[0].getMask({
         scale: 0.7   // we will scale down the mask to take just the center of the pill and avoid border effects
@@ -176,7 +176,7 @@ IJS.load('cat.jpg').then(function(image) {
 
     // image-js remembers the parent of the image and the relative
     // position of a derived image. This is the case for a crop as
-    // well as for ROI
+    // well as for Roi
 
     var pill=image.extract(pillMask);
     pill.save('pill.jpg');
@@ -286,7 +286,7 @@ export default class Image {
         this.multiplierX = this.channels;
         this.multiplierY = this.channels * this.width;
         this.isClamped = this.bitDepth < 32;
-        this.borderSizes = [0,0]; // when a filter create a border it may have impact on future processing like ROI
+        this.borderSizes = [0,0]; // when a filter create a border it may have impact on future processing like Roi
     }
 
     /**
@@ -577,8 +577,8 @@ export default class Image {
 
 
 
-    getROIManager(mask, options) {
-        return new ROIManager(this, options);
+    getRoiManager(mask, options) {
+        return new RoiManager(this, options);
     }
 
     /**

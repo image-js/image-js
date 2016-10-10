@@ -19269,7 +19269,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = getRelativePosition;
 /*
  An image may be derived from another image either by a crop
- or because it is a ROI (region of interest)
+ or because it is a Roi (region of interest)
  Also a region of interest can be reprocessed to generated another
  set of region of interests.
  It is therefore important to keep the hierarchy of images to know
@@ -20878,7 +20878,7 @@ class Image {
         this.multiplierX = this.channels;
         this.multiplierY = this.channels * this.width;
         this.isClamped = this.bitDepth < 32;
-        this.borderSizes = [0, 0]; // when a filter create a border it may have impact on future processing like ROI
+        this.borderSizes = [0, 0]; // when a filter create a border it may have impact on future processing like Roi
     }
 
     /**
@@ -22122,7 +22122,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * From the roiMap, the ROILayer will create the corresponding
  * ROI (@see ROI).
  *
- * @class ROIManager
+ * @class RoiManager
  * @param {Image} image
  * @param {object} [options]
  */
@@ -22137,10 +22137,10 @@ class ROILayer {
     }
 
     /**
-     * ROI are created from a roiMap
+     * Roi are created from a roiMap
      * The roiMap contains mainty an array of identifiers that define
-     * for each data to which ROI it belongs
-     * @memberof ROIManager
+     * for each data to which Roi it belongs
+     * @memberof RoiManager
      * @instance
      */
 
@@ -22238,14 +22238,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = fromExtrema;
 
-var _ROIMap = require('./../ROIMap');
+var _ROIMap = require('./../RoiMap');
 
 var _ROIMap2 = _interopRequireDefault(_ROIMap);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @memberof ROIManager
+ * @memberof RoiManager
  * @instance
  */
 
@@ -22457,7 +22457,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = fromMask;
 
-var _ROIMap = require('./../ROIMap');
+var _ROIMap = require('./../RoiMap');
 
 var _ROIMap2 = _interopRequireDefault(_ROIMap);
 
@@ -22570,7 +22570,7 @@ function fromMask(mask) {
     return new _ROIMap2.default(mask, data);
 } /**
    * Annotates each point to define to which area it belongs
-   * @memberof ROIManager
+   * @memberof RoiManager
    * @instance
    */
 
@@ -22582,7 +22582,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = fromPoints;
 
-var _ROIMap = require('./../ROIMap');
+var _ROIMap = require('./../RoiMap');
 
 var _ROIMap2 = _interopRequireDefault(_ROIMap);
 
@@ -22593,7 +22593,7 @@ var _shape2 = _interopRequireDefault(_shape);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @memberof ROIManager
+ * @memberof RoiManager
  * @instance
  */
 
@@ -22630,7 +22630,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = fromWaterShed;
 
-var _ROIMap = require('./../ROIMap');
+var _ROIMap = require('./../RoiMap');
 
 var _ROIMap2 = _interopRequireDefault(_ROIMap);
 
@@ -22648,7 +22648,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param points Array of object [{x:2, y:3, id:1}, ...]. The id for each points is obligatory
  * @param interval is a parameter which specify the level of filling each iteration. Every pixels in the current interval will be filled.
  * @param mask is a binary image, the same size as the image. The algorithm will fill only if the current pixel in the binary mask is true.
- * @returns {ROIMap}
+ * @returns {RoiMap}
  */
 
 function fromWaterShed() {
@@ -22714,7 +22714,7 @@ function fromWaterShed() {
 
     return new _ROIMap2.default(image, data);
 } /**
-   * @memberof ROIManager
+   * @memberof RoiManager
    * @instance
    */
 
@@ -22749,11 +22749,11 @@ var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _ROIMap = require('./ROIMap');
+var _ROIMap = require('./RoiMap');
 
 var _ROIMap2 = _interopRequireDefault(_ROIMap);
 
-var _ROILayer = require('./ROILayer');
+var _ROILayer = require('./RoiLayer');
 
 var _ROILayer2 = _interopRequireDefault(_ROILayer);
 
@@ -22846,11 +22846,11 @@ class ROIManager {
         return this;
     }
 
-    /* Seems slower and less general (only provides positive ROI)
+    /* Seems slower and less general (only provides positive Roi)
     fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromMask2.call(this._image, mask, options);
-        this._layers[opt.label] = new ROILayer(roiMap, opt);
+        this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
     }
      */
@@ -22858,7 +22858,7 @@ class ROIManager {
     /**
      *
      * @param {object} [options]
-     * @returns {ROIMap}
+     * @returns {RoiMap}
      */
     getMap() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -22869,7 +22869,7 @@ class ROIManager {
     }
 
     /**
-     * Return the IDs of the Regions Of Interest (ROI) as an array of number
+     * Return the IDs of the Regions Of Interest (Roi) as an array of number
      * @param {object} [options]
      * @returns {[number]}
      */
@@ -22923,7 +22923,7 @@ class ROIManager {
 
 
         if (!this._layers[label]) {
-            throw new Error('getROI: This ROI layer (' + label + ') does not exists.');
+            throw new Error('getROI: This Roi layer (' + label + ') does not exists.');
         }
 
         var allROIs = this._layers[label].roi;
@@ -22943,7 +22943,7 @@ class ROIManager {
 
     /**
      * Returns an array of masks
-     * See @links ROI.getMask for the options
+     * See @links Roi.getMask for the options
      * @param {object} [options]
      * @returns {[Image]} Retuns an array of masks (1 bit Image)
      */
@@ -23178,7 +23178,7 @@ class ROI {
     }
 
     get mean() {
-        throw new Error('ROI mean not implemented yet');
+        throw new Error('Roi mean not implemented yet');
         // return [this.meanX,this.meanY];
     }
 
@@ -23245,7 +23245,7 @@ class ROI {
     }
 
     /**
-     Retrieve all the IDs or the ROI touching the box surrouding the region
+     Retrieve all the IDs or the Roi touching the box surrouding the region
       It should really be an array to solve complex cases related to border effect
       Like the image
      <pre>
@@ -23276,19 +23276,19 @@ class ROI {
     }
 
     /**
-     Number of pixels of the ROI that touch the rectangle
+     Number of pixels of the Roi that touch the rectangle
      This is useful for the calculation of the border
      because we will ignore those special pixels of the rectangle
      border that don't have neighbours all around them.
      */
     get box() {
-        // points of the ROI that touch the rectangular shape
+        // points of the Roi that touch the rectangular shape
         if (this.computed.box) return this.computed.box;
         return this.computed.box = getBox(this);
     }
 
     /**
-     Calculates the number of pixels that are in the external border of the ROI
+     Calculates the number of pixels that are in the external border of the Roi
      Contour are all the pixels that touch an external "zone".
      All the pixels that touch the box are part of the border and
      are calculated in the getBoxPixels procedure
@@ -23448,7 +23448,7 @@ class ROI {
     }
 
     /**
-        Calculates the maximum length between two pixels of the ROI.
+        Calculates the maximum length between two pixels of the Roi.
      */
     get maxLength() {
         if (this.computed.maxLength) return this.computed.maxLength;
@@ -28040,7 +28040,7 @@ function work() {
         var mask = sobel.level().mask({ threshold: options.threshold });
         maybeInclude('mask', mask);
 
-        var roiManager = sobel.getROIManager();
+        var roiManager = sobel.getRoiManager();
         roiManager.fromMask(mask);
         var realMask = roiManager.getMask(options.roi);
         maybeInclude('realMask', realMask);

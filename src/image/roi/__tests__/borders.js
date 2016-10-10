@@ -9,7 +9,7 @@ import {Image} from 'test/common';
 
 
 
-describe('we check that each ROI is surrounded by the expected zones', function () {
+describe('we check that each Roi is surrounded by the expected zones', function () {
     let data = new Uint8Array(2);
     data[0] = 0b00111111;
     data[1] = 0b11000000;
@@ -25,7 +25,7 @@ describe('we check that each ROI is surrounded by the expected zones', function 
         kind: 'BINARY'
     });
 
-    let roiManager = mask.getROIManager();
+    let roiManager = mask.getRoiManager();
     roiManager.fromMask(mask);
 
     it('should yield the right boxIDs', function () {

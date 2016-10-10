@@ -15,7 +15,7 @@ var filename='cells/cells.jpg';
 Image.load(Test.getImage(filename)).then(function (img) {
     var grey = img.grey();
     let mask = grey.mask({threshold: 50});
-    let manager = img.getROIManager();
+    let manager = img.getRoiManager();
 
 
     suite

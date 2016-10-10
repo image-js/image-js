@@ -7,7 +7,7 @@ We therefore don't expose it in the roiManager
 
 import DisjointSet from 'ml-disjoint-set';
 
-import ROIMap from './../ROIMap';
+import ROIMap from '../RoiMap';
 
 const direction4X = [-1,  0];
 const direction4Y = [ 0, -1];

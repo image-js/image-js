@@ -4,7 +4,7 @@
  * @instance
  */
 
-import ROIMap from './../ROIMap';
+import ROIMap from '../RoiMap';
 
 export default function fromMask(mask, options = {}) {
     const {allowCorners = false} = options;

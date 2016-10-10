@@ -9,7 +9,7 @@ describe('map a binary image (mask) 2 x 2', function () {
         kind: 'BINARY'
     });
 
-    let roiManager = img.getROIManager();
+    let roiManager = img.getRoiManager();
     roiManager.fromMask(img);
     let data = roiManager.getData();
     let result = roiManager.getMap();
@@ -43,7 +43,7 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
         kind: 'BINARY'
     });
 
-    let roiManager = img.getROIManager();
+    let roiManager = img.getRoiManager();
     roiManager.fromMask(img);
     let data = roiManager.getData();
     let result = roiManager.getMap();
@@ -73,7 +73,7 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
         kind: 'BINARY'
     });
 
-    let roiManager = img.getROIManager();
+    let roiManager = img.getRoiManager();
     roiManager.fromMask(img);
     let data = roiManager.getData();
     let result = roiManager.getMap();

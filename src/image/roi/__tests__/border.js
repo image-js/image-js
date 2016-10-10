@@ -6,14 +6,14 @@ import {load} from 'test/common';
 1100
 0000
  */
-describe('we check that each ROI is surrounded by the expected border', function () {
+describe('we check that each Roi is surrounded by the expected border', function () {
     it('should yield the right contours size', function () {
         return load('BW11x11.png').then(function (img) {
 
             img.width.should.equal(11);
             img.height.should.equal(11);
 
-            let roiManager = img.getROIManager();
+            let roiManager = img.getRoiManager();
             let mask = img.grey().mask({invert:true});
             roiManager.fromMask(mask);
 

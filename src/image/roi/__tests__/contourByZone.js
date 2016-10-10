@@ -14,7 +14,7 @@ describe('Get the number of pixels touching the adjacent zones', function () {
 
     let img = new Image(6, 6);
 
-    let roiManager = img.getROIManager();
+    let roiManager = img.getRoiManager();
     roiManager.putMap(map);
     it('Number of pixels adjacent to another zone', function () {
         let result = roiManager.getROI();

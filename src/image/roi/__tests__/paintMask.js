@@ -11,7 +11,7 @@ describe('we check paint mask', function () {
         0, 0, 0, 0, 0
     ];
     let mask = image.mask({threshold: 1, algorithm: 'threshold'});
-    let roiManager = image.getROIManager();
+    let roiManager = image.getRoiManager();
     roiManager.fromMask(mask, {positive: true, negative: false});
 
     it('should yield the right painted images for box', function () {
@@ -95,7 +95,7 @@ describe('we check paint mask and draw label', function () {
     image.setPixelXY(80,50,[1]);
 
     let mask = image.mask({threshold: 1, algorithm:'threshold'});
-    let roiManager = image.getROIManager();
+    let roiManager = image.getRoiManager();
     roiManager.fromMask(mask, {positive: true, negative: false});
 
     _it('should yield the right painted images with label', function () {

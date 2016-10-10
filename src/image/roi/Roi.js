@@ -63,7 +63,7 @@ export default class ROI {
     }
 
     get mean() {
-        throw new Error('ROI mean not implemented yet');
+        throw new Error('Roi mean not implemented yet');
         // return [this.meanX,this.meanY];
     }
 
@@ -134,7 +134,7 @@ export default class ROI {
 
 
     /**
-     Retrieve all the IDs or the ROI touching the box surrouding the region
+     Retrieve all the IDs or the Roi touching the box surrouding the region
 
      It should really be an array to solve complex cases related to border effect
 
@@ -170,18 +170,18 @@ export default class ROI {
     }
 
     /**
-     Number of pixels of the ROI that touch the rectangle
+     Number of pixels of the Roi that touch the rectangle
      This is useful for the calculation of the border
      because we will ignore those special pixels of the rectangle
      border that don't have neighbours all around them.
      */
-    get box() { // points of the ROI that touch the rectangular shape
+    get box() { // points of the Roi that touch the rectangular shape
         if (this.computed.box) return this.computed.box;
         return this.computed.box = getBox(this);
     }
 
     /**
-     Calculates the number of pixels that are in the external border of the ROI
+     Calculates the number of pixels that are in the external border of the Roi
      Contour are all the pixels that touch an external "zone".
      All the pixels that touch the box are part of the border and
      are calculated in the getBoxPixels procedure
@@ -349,7 +349,7 @@ export default class ROI {
 
 
     /**
-        Calculates the maximum length between two pixels of the ROI.
+        Calculates the maximum length between two pixels of the Roi.
      */
     get maxLength() {
         if (this.computed.maxLength) return this.computed.maxLength;

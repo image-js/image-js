@@ -19,7 +19,7 @@ describe('mark a binary image 4 x 4 in 3 zones and create ROIs', function () {
             kind: 'BINARY'
         });
 
-        let roiManager = mask.getROIManager();
+        let roiManager = mask.getRoiManager();
         roiManager.fromMask(mask);
 
 

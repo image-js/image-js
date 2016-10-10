@@ -54,7 +54,7 @@ function work() {
         const mask = sobel.level().mask({threshold: options.threshold});
         maybeInclude('mask', mask);
 
-        const roiManager = sobel.getROIManager();
+        const roiManager = sobel.getRoiManager();
         roiManager.fromMask(mask);
         const realMask = roiManager.getMask(options.roi);
         maybeInclude('realMask', realMask);

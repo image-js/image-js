@@ -3,7 +3,7 @@
  * @instance
  */
 
-import ROIMap from './../ROIMap';
+import ROIMap from '../RoiMap';
 import PriorityQueue from 'js-priority-queue';
 import {dxs, dys} from './../../../util/dxdy.js';
 /**
@@ -12,7 +12,7 @@ import {dxs, dys} from './../../../util/dxdy.js';
  * @param points Array of object [{x:2, y:3, id:1}, ...]. The id for each points is obligatory
  * @param interval is a parameter which specify the level of filling each iteration. Every pixels in the current interval will be filled.
  * @param mask is a binary image, the same size as the image. The algorithm will fill only if the current pixel in the binary mask is true.
- * @returns {ROIMap}
+ * @returns {RoiMap}
  */
 
 export default function fromWaterShed(

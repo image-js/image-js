@@ -1,7 +1,7 @@
 import ROIMapper from '../fromWaterShed';
 import {Image} from 'test/common';
 
-describe('Test WaterShed ROI generation', function () {
+describe('Test WaterShed Roi generation', function () {
     it('basic', function () {
         let image = new Image(5,5,
             [

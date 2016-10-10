@@ -3,7 +3,7 @@
  * @instance
  */
 
-import ROIMap from './../ROIMap';
+import ROIMap from '../RoiMap';
 import Shape from './../../../util/shape';
 
 export default function fromPoints(pointsToPaint, options = {}) {

@@ -1,14 +1,14 @@
 import {Image, load} from 'test/common';
 
 
-describe('we check that we can extract correctly a ROI', function () {
+describe('we check that we can extract correctly a Roi', function () {
     it('should yield the right extract number of pixels', function () {
         return load('BW15x15.png').then(function (img) {
 
             img.width.should.equal(15);
             img.height.should.equal(15);
 
-            let roiManager = img.getROIManager();
+            let roiManager = img.getRoiManager();
             let grey = img.grey();
             let mask = grey.mask({invert: true});
             roiManager.fromMask(mask);
