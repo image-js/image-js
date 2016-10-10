@@ -19642,7 +19642,7 @@ var _convolution = require('./operator/convolution');
 
 var _convolution2 = _interopRequireDefault(_convolution);
 
-var _convolutionFFT = require('./operator/convolutionFFT');
+var _convolutionFFT = require('./operator/convolutionFft');
 
 var _convolutionFFT2 = _interopRequireDefault(_convolutionFFT);
 
@@ -19830,7 +19830,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = meanFilter;
 
-var _convolutionFFT = require('../operator/convolutionFFT');
+var _convolutionFFT = require('../operator/convolutionFft');
 
 var _convolutionFFT2 = _interopRequireDefault(_convolutionFFT);
 
@@ -19932,7 +19932,7 @@ var _image = require('../image');
 
 var _image2 = _interopRequireDefault(_image);
 
-var _convolutionFFT = require('../operator/convolutionFFT');
+var _convolutionFFT = require('../operator/convolutionFft');
 
 var _convolutionFFT2 = _interopRequireDefault(_convolutionFFT);
 

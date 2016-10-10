@@ -1,5 +1,5 @@
 import Image from '../image';
-import convolutionFFT from '../operator/convolutionFFT';
+import convolutionFft from '../operator/convolutionFft';
 
 /**
  * @memberof Image
@@ -27,7 +27,7 @@ export default function gaussianFilter(options = {}) {
 		kernel = getKernel(radius, sigma);
 	}
 
-	return convolutionFFT.call(this, kernel, {
+	return convolutionFft.call(this, kernel, {
 		border: border,
 		channels: channels
 	});

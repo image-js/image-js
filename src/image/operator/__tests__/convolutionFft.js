@@ -1,6 +1,6 @@
 import {Image, getHash} from 'test/common';
 
-describe('check the convolutionFFT operator', function () {
+describe('check the convolutionFft operator', function () {
     it('check the convolution for GREY image', function () {
         let image = new Image(4, 4,
             [
@@ -12,7 +12,7 @@ describe('check the convolutionFFT operator', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.convolutionFFT([1, 1, 1, 1, 1, 1, 1, 1, 1]).data).should.eql(
+        Array.from(image.convolutionFft([1, 1, 1, 1, 1, 1, 1, 1, 1]).data).should.eql(
             [
                 13, 13, 13, 13,
                 13, 13, 13, 13,

@@ -1,4 +1,4 @@
-import convolutionFFT from '../operator/convolutionFFT';
+import convolutionFft from '../operator/convolutionFft';
 
 /**
  * @memberof Image
@@ -24,5 +24,5 @@ export default function meanFilter(k) {
         kernel[i] = 1;
     }
 
-    return convolutionFFT.call(this, kernel);
+    return convolutionFft.call(this, kernel);
 }
