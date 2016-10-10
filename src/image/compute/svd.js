@@ -7,8 +7,8 @@ import {DC} from 'ml-matrix';
  */
 
 
-export default function getSVD() {
-    this.checkProcessable('getSVD', {
+export default function getSvd() {
+    this.checkProcessable('getSvd', {
         bitDepth: [1]
     });
 

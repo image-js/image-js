@@ -62,7 +62,7 @@ import getMean from './compute/mean';
 import getMedian from './compute/median';
 import getPoints from './compute/points';
 import getRelativePosition from './compute/relativePosition';
-import getSVD from './compute/svd';
+import getSvd from './compute/svd';
 import countAlphaPixels from './compute/countAlphaPixels';
 
 export default function extend(Image) {
@@ -135,5 +135,5 @@ export default function extend(Image) {
     Image.extendMethod('getMean', getMean).extendProperty('mean', getMean);
     Image.extendMethod('getPoints', getPoints).extendProperty('points', getPoints);
     Image.extendMethod('getRelativePosition', getRelativePosition);
-    Image.extendMethod('getSVD', getSVD).extendProperty('svd', getSVD);
+    Image.extendMethod('getSvd', getSvd).extendProperty('svd', getSvd);
 }

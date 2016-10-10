@@ -7,7 +7,7 @@ describe('calculate svd', function () {
             kind: 'BINARY'
         });
 
-        let svd = img.getSVD();
+        let svd = img.getSvd();
 
         svd.V[0].should.eql([-1, -0]);
         svd.V[1].should.eql([-0, -1]);
