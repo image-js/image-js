@@ -1,6 +1,6 @@
 import {Image} from 'test/common';
 
-describe('flipX', function () {
+describe.only('flipX', function () {
 	it('should flip pixels horizontally of all RGBA components for a [2,1] image', function () {
 
 		let image = new Image(2,1,[1, 2, 3, 4, 5, 6, 7, 8]);
@@ -40,4 +40,16 @@ describe('flipX', function () {
 		image.flipX();
         image.data.should.eql(flipped);
     });
+
+	it('should flip pixels horizontally of all CMYK components for a [2,2] image', function () {
+
+		let image = new Image(2,2,[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+			{kind: 'CMYK'});
+
+		let flipped = [5, 6, 7, 8, 1, 2, 3, 4, 13, 14, 15, 16, 9, 10, 11, 12];
+
+		image.flipX();
+		image.data.should.eql(flipped);
+	});
+
 });
