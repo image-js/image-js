@@ -41,41 +41,70 @@ export function validateChannel(image, channel, allowAlpha = true) {
     }
 
     if (typeof channel === 'string') {
-        if ('rgb'.indexOf(channel) > -1) {
-            if (image.colorModel !== Model.RGB) throw new Error('getChannel : not a RGB image');
-            switch (channel) {
-                case 'r':
-                    channel = 0;
-                    break;
-                case 'g':
-                    channel = 1;
-                    break;
-                case 'b':
-                    channel = 2;
-                    break;
-                case 'h':
-                    channel = 0;
-                    break;
-                case 's':
-                    channel = 1;
-                    break;
-                case 'l':
-                case 'v':
-                    channel = 2;
-                    break;
-                case 'c':
-                    channel = 0;
-                    break;
-                case 'm':
-                    channel = 1;
-                    break;
-                case 'y':
-                    channel = 2;
-                    break;
-                case 'k':
-                    channel = 3;
-                    break;
-            }
+        switch (image.colorModel) {
+            case Model.RGB:
+                if ('rgb'.indexOf(channel) > -1) {
+                    switch (channel) {
+                        case 'r':
+                            channel = 0;
+                            break;
+                        case 'g':
+                            channel = 1;
+                            break;
+                        case 'b':
+                            channel = 2;
+                            break;
+                    }
+                }
+                break;
+            case Model.HSL:
+                if ('hsl'.indexOf(channel) > -1) {
+                    switch (channel) {
+                        case 'h':
+                            channel = 0;
+                            break;
+                        case 's':
+                            channel = 1;
+                            break;
+                        case 'l':
+                            channel = 2;
+                            break;
+                    }
+                }
+                break;
+            case Model.HSV:
+                if ('hsv'.indexOf(channel) > -1) {
+                    switch (channel) {
+                        case 'h':
+                            channel = 0;
+                            break;
+                        case 's':
+                            channel = 1;
+                            break;
+                        case 'v':
+                            channel = 2;
+                            break;
+                    }
+                }
+                break;
+            case Model.CMYK:
+                if ('hsl'.indexOf(channel) > -1) {
+                    switch (channel) {
+                        case 'c':
+                            channel = 0;
+                            break;
+                        case 'm':
+                            channel = 1;
+                            break;
+                        case 'y':
+                            channel = 2;
+                            break;
+                        case 'k':
+                            channel = 3;
+                            break;
+                    }
+                }
+                break;
         }
 
         if (channel === 'a') {

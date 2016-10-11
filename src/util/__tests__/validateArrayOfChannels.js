@@ -59,7 +59,7 @@ describe('we check the validateArrayOfChannels method', function () {
         validateArrayOfChannels(image, {defaultAlpha:  false}).should.eql([0]);
         (function () {
             validateArrayOfChannels(image, {channels: ['r']});
-        }).should.throw(/not a RGB/);
+        }).should.throw(/undefined channel/);
         (function () {
             validateArrayOfChannels(image, {allowAlpha: false, channels: ['a']});
         }).should.throw(/alpha channel may not be selected/);

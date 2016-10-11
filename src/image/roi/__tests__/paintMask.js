@@ -85,7 +85,7 @@ describe('we check paint mask', function () {
     });
 });
 
-describe('we check paint mask and draw label', function () {
+describe.skip('we check paint mask and draw label', function () {
     // Only run on macOS. Other platforms don't have the Georgia font.
     const _it = process.platform === 'darwin' ? it : it.skip;
 

@@ -49,7 +49,7 @@ describe('we check the validateChannel method', function () {
         validateChannel(image, 'a',true).should.equal(1);
         (function () {
             validateChannel(image, 'r');
-        }).should.throw(/not a RGB image/);
+        }).should.throw(/undefined channel/);
         (function () {
             validateChannel(image, 1,false);
         }).should.throw(/alpha channel may not/);
