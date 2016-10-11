@@ -43,7 +43,6 @@ describe('Grey transform', function () {
         );
 
 
-
         Array.from(image.grey({algorithm: 'average', keepAlpha: true}).data).should.eql(
             [
                 150, 255,

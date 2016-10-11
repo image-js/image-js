@@ -3,7 +3,7 @@ import {Image} from 'test/common';
 describe('calculate svd', function () {
     it('check the result', function () {
 
-        let img = new Image(8,2,[255,0],{
+        let img = new Image(8, 2, [255, 0], {
             kind: 'BINARY'
         });
 

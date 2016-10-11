@@ -1,6 +1,3 @@
-import Matrix from 'ml-matrix';
-
-
 /**
  * We set the data of the image from a matrix. The size of the matrix and the data have to be the same.
  * @memberof Image

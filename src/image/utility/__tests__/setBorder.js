@@ -1,4 +1,4 @@
-import {Image, getHash} from 'test/common';
+import {Image} from 'test/common';
 
 describe('check the setBorder transform', function () {
     it('check the pad for GREY image', function () {
@@ -22,7 +22,7 @@ describe('check the setBorder transform', function () {
             ]
         );
 
-        Array.from(image.setBorder({size:1}).data).should.eql(
+        Array.from(image.setBorder({size: 1}).data).should.eql(
             [
                 6, 6, 7, 7,
                 6, 6, 7, 7,
@@ -31,7 +31,7 @@ describe('check the setBorder transform', function () {
             ]
         );
 
-        Array.from(image.setBorder({size:1, algorithm: 'set', color: [20]}).data).should.eql(
+        Array.from(image.setBorder({size: 1, algorithm: 'set', color: [20]}).data).should.eql(
             [
                 20, 20, 20, 20,
                 20, 6, 7, 20,
@@ -56,8 +56,7 @@ describe('check the setBorder transform', function () {
         );
 
 
-
-        Array.from(image.setBorder({size:2, algorithm:'set', color:[10]}).data).should.eql(
+        Array.from(image.setBorder({size: 2, algorithm: 'set', color: [10]}).data).should.eql(
             [
                 10, 10, 10, 10, 10, 10,
                 10, 10, 10, 10, 10, 10,

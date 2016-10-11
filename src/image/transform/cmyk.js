@@ -19,13 +19,13 @@ import Image from '../image';
 export default function cmyk() {
     this.checkProcessable('cmyk', {
         bitDepth: [8, 16],
-        alpha: [0,1],
+        alpha: [0, 1],
         colorModel: [RGB]
     });
 
     let newImage = Image.createFrom(this, {
         components: 4,
-        colorModel:CMYK
+        colorModel: CMYK
     });
 
     let ptr = 0;

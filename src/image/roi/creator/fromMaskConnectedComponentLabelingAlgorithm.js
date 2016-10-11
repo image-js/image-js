@@ -10,11 +10,11 @@ import DisjointSet from 'ml-disjoint-set';
 import RoiMap from '../RoiMap';
 
 const direction4X = [-1,  0];
-const direction4Y = [ 0, -1];
+const direction4Y = [0, -1];
 const neighbours4 = [null, null];
 
 const direction8X = [-1, -1,  0,  1];
-const direction8Y = [ 0, -1, -1, -1];
+const direction8Y = [0, -1, -1, -1];
 const neighbours8 = [null, null, null, null];
 
 /*
@@ -25,7 +25,9 @@ export default function fromMask2(mask, options = {}) {
         allowCorners = false
     } = options;
     let neighbours = 4;
-    if (allowCorners) neighbours = 8;
+    if (allowCorners) {
+        neighbours = 8;
+    }
 
     let directionX;
     let directionY;

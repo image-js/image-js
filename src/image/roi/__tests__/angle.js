@@ -13,7 +13,7 @@ describe('Get the angle of the region, relative to the maxlength', function () {
     data[0] = 63;
     data[1] = 196;
 
-    let mask = new Image(4,4, data, {
+    let mask = new Image(4, 4, data, {
         kind: 'BINARY'
     });
 

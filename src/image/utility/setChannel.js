@@ -1,4 +1,3 @@
-import Image from '../image';
 import {validateChannel} from './../../util/channel';
 
 /**
@@ -22,7 +21,7 @@ export default function setChannel(channel, image) {
         throw new Error('Images must have exactly the same width and height');
     }
 
-    channel = validateChannel(this,channel);
+    channel = validateChannel(this, channel);
 
     let ptr = channel;
     for (let i = 0; i < image.data.length; i++) {

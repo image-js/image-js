@@ -5,7 +5,7 @@ describe('we check createROIMapFromPixels', function () {
     it('should yield the right map', function () {
         let image = new Image(5, 5, {kind: 'GREY'});
 
-        let pixels = [[1,1],[3,2],[4,4],[5,0]];
+        let pixels = [[1, 1], [3, 2], [4, 4], [5, 0]];
 
         let mapData = fromPoints.call(image, pixels, {kind: 'smallCross'}).data;
 
@@ -18,5 +18,4 @@ describe('we check createROIMapFromPixels', function () {
         ]);
     });
 });
-
 

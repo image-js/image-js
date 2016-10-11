@@ -1,4 +1,4 @@
-import {Image, Stack, getHash} from 'test/common';
+import {Image, Stack} from 'test/common';
 
 describe('check stack histogram method', function () {
     it ('should return global histogram for GREY image', function () {
@@ -35,7 +35,7 @@ describe('check stack histogram method', function () {
             )
         );
 
-        images.getHistogram({maxSlots:4}).should.eql([10,0,1,1]);
+        images.getHistogram({maxSlots: 4}).should.eql([10, 0, 1, 1]);
     });
 
 
@@ -70,7 +70,7 @@ describe('check stack histogram method', function () {
             )
         );
 
-        images.getHistogram({maxSlots:4, channel:0}).should.eql([6, 0, 0, 0]);
+        images.getHistogram({maxSlots: 4, channel: 0}).should.eql([6, 0, 0, 0]);
     });
 
 });

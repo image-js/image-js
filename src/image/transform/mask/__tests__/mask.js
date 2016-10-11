@@ -24,7 +24,7 @@ describe('Create mask from a GREY image', function () {
 
 describe('Create a mask from a greyA image', function () {
 
-    let image = new Image(4,1,[255, 255, 0, 255, 255, 0, 0, 0], {
+    let image = new Image(4, 1, [255, 255, 0, 255, 255, 0, 0, 0], {
         kind: 'GREYA'
     });
 
@@ -79,7 +79,7 @@ describe('Create a mask from a greyA image', function () {
 describe('Create a mask from a greyA image using percentile algorithm', function () {
 
     it('should give the right result', function () {
-        let image = new Image(4,1,[0, 255, 63, 255, 127, 255, 255, 255], {
+        let image = new Image(4, 1, [0, 255, 63, 255, 127, 255, 255, 255], {
             kind: 'GREYA'
         });
 

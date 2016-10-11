@@ -36,8 +36,9 @@ export default class Stack extends Array {
                 // remove computed properties
                 this.computed = null;
                 let result = method.apply(this, [...partialArgs, ...args]);
-                if (returnThis)
+                if (returnThis) {
                     return this;
+                }
                 return result;
             };
         } else {

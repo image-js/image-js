@@ -16,14 +16,14 @@
 export default function li(histogram, total) {
 
     let threshold;
-    let sum_back; /* sum of the background pixels at a given threshold */
-    let sum_obj;  /* sum of the object pixels at a given threshold */
-    let num_back; /* number of background pixels at a given threshold */
-    let num_obj;  /* number of object pixels at a given threshold */
-    let old_thresh;
-    let new_thresh;
-    let mean_back; /* mean of the background pixels at a given threshold */
-    let mean_obj;  /* mean of the object pixels at a given threshold */
+    let sumBack; /* sum of the background pixels at a given threshold */
+    let sumObj;  /* sum of the object pixels at a given threshold */
+    let numBack; /* number of background pixels at a given threshold */
+    let numObj;  /* number of object pixels at a given threshold */
+    let oldThresh;
+    let newThresh;
+    let meanBack; /* mean of the background pixels at a given threshold */
+    let meanObj;  /* mean of the object pixels at a given threshold */
     let mean;  /* mean gray-level in the image */
     let tolerance; /* threshold tolerance */
     let temp;
@@ -37,45 +37,43 @@ export default function li(histogram, total) {
 
     mean /= total;
     /* Initial estimate */
-    new_thresh = mean;
+    newThresh = mean;
 
     do {
-        old_thresh = new_thresh;
-        threshold = (old_thresh + 0.5)|0;	/* range */
+        oldThresh = newThresh;
+        threshold = (oldThresh + 0.5)|0;	/* range */
 
         /* Calculate the means of background and object pixels */
         /* Background */
-        sum_back = 0;
-        num_back = 0;
+        sumBack = 0;
+        numBack = 0;
 
         for (let ih = 0; ih <= threshold; ih++) {
-            sum_back += ih * histogram[ih];
-            num_back += histogram[ih];
+            sumBack += ih * histogram[ih];
+            numBack += histogram[ih];
         }
-        mean_back = (num_back === 0 ? 0.0 : (sum_back / num_back));
+        meanBack = (numBack === 0 ? 0.0 : (sumBack / numBack));
 
         /* Object */
-        sum_obj = 0;
-        num_obj = 0;
+        sumObj = 0;
+        numObj = 0;
         for (let ih = threshold + 1; ih < histogram.length; ih++) {
-            sum_obj += ih * histogram[ih];
-            num_obj += histogram[ih];
+            sumObj += ih * histogram[ih];
+            numObj += histogram[ih];
         }
-        mean_obj = (num_obj === 0 ? 0.0 : (sum_obj / num_obj));
-        temp = (mean_back - mean_obj) / (Math.log(mean_back) - Math.log(mean_obj));
+        meanObj = (numObj === 0 ? 0.0 : (sumObj / numObj));
+        temp = (meanBack - meanObj) / (Math.log(meanBack) - Math.log(meanObj));
 
         if (temp < -Number.EPSILON) {
-            new_thresh = (temp - 0.5)|0;
-        }
-        else {
-            new_thresh = (temp + 0.5)|0;
+            newThresh = (temp - 0.5)|0;
+        } else {
+            newThresh = (temp + 0.5)|0;
         }
         /*  Stop the iterations when the difference between the
          new and old threshold values is less than the tolerance */
     }
-    while (Math.abs(new_thresh - old_thresh) > tolerance);
+    while (Math.abs(newThresh - oldThresh) > tolerance);
 
     return threshold;
 }
-
 

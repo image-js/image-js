@@ -1,35 +1,33 @@
-import {load, Image, Stack} from 'test/common';
-import matchAndCrop from '../matchAndCrop';
+import {load} from 'test/common';
 
 describe.skip('check matchAndCrop on real images', function () {
     it('should return an array of 2 images cropped and moved using matchToPrevious', function () {
-            this.timeout(30000); // we can increase the timeout for the test that is by default 2s
+        this.timeout(30000); // we can increase the timeout for the test that is by default 2s
 
-            let toLoad = [];
-            toLoad.push(load('cells/fluorescent2/C11-3-0000.png'));
-            toLoad.push(load('cells/fluorescent2/C11-3-1800.png'));
-            toLoad.push(load('cells/fluorescent2/C11-3-3600.png'));
-            toLoad.push(load('cells/fluorescent2/C11-3-5400.png'));
-            toLoad.push(load('cells/fluorescent2/C11-3-7200.png'));
-            toLoad.push(load('cells/fluorescent2/C11-3-9000.png'));
+        let toLoad = [];
+        toLoad.push(load('cells/fluorescent2/C11-3-0000.png'));
+        toLoad.push(load('cells/fluorescent2/C11-3-1800.png'));
+        toLoad.push(load('cells/fluorescent2/C11-3-3600.png'));
+        toLoad.push(load('cells/fluorescent2/C11-3-5400.png'));
+        toLoad.push(load('cells/fluorescent2/C11-3-7200.png'));
+        toLoad.push(load('cells/fluorescent2/C11-3-9000.png'));
 
-            return Promise.all(toLoad).then(function (images) {
+        return Promise.all(toLoad).then(function (images) {
 
-                for (let i = 0; i < images.length; i++) {
-                    images[i] = images[i].gaussianFilter({radius:5});
+            for (let i = 0; i < images.length; i++) {
+                images[i] = images[i].gaussianFilter({radius: 5});
 
-                    let median = images[i].median;
+                let median = images[i].median;
                     // console.log(median);
-                    images[i] = images[i].subtract(median);
+                images[i] = images[i].subtract(median);
 
-                }
+            }
 
 
-
-                images = new Stack(images);
+       //     images = new Stack(images);
          //       console.log("Number of loaded images: " + images.length);
 
-                let results = images.matchAndCrop({ignoreBorder:[0,0]});
+       //     let results = images.matchAndCrop({ignoreBorder: [0, 0]});
     //            results.should.be.instanceOf(Stack).and.have.lengthOf(2);
                 //getHash(results[1]).should.equal(getHash(results[2]));
                 //
@@ -45,9 +43,9 @@ describe.skip('check matchAndCrop on real images', function () {
                 //);
 
 
-                let result = images[0].getBestMatch(images[1]);
+        //    let result = images[0].getBestMatch(images[1]);
              //   console.log(result);
-            });
+        });
 
     });
 });

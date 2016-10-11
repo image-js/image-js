@@ -35,8 +35,9 @@ export default function isodata(histogram) {
         if (totl > 0 && toth > 0) {
             l /= totl;
             h /= toth;
-            if (g ===  Math.round((l + h) / 2.0))
+            if (g ===  Math.round((l + h) / 2.0)) {
                 break;
+            }
         }
         g++;
         if (g > histogram.length - 2) {

@@ -21,7 +21,7 @@ export default function medianFilter(options = {}) {
     let {radius = 1, channels, border = 'copy'} = options;
 
     this.checkProcessable('medianFilter', {
-        bitDepth:[8,16]
+        bitDepth: [8, 16]
     });
 
     if (radius < 1) {
@@ -50,7 +50,7 @@ export default function medianFilter(options = {}) {
                     }
                 }
                 let index = (y * this.width + x) * this.channels + c;
-                let newValue = kernel.sort((a,b) => a - b)[middle];
+                let newValue = kernel.sort((a, b) => a - b)[middle];
 
                 newImage.data[index] = newValue;
             }
@@ -62,7 +62,7 @@ export default function medianFilter(options = {}) {
         }
     }
 
-    newImage.setBorder({size:[kWidth, kHeight], algorithm: border});
+    newImage.setBorder({size: [kWidth, kHeight], algorithm: border});
 
     return newImage;
 

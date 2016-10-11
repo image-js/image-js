@@ -3,17 +3,17 @@ import Image from '../image/image';
 import * as KindNames from '../image/kindNames';
 
 const cross = [
-    [0,0,1,0,0],
-    [0,0,1,0,0],
-    [1,1,1,1,1],
-    [0,0,1,0,0],
-    [0,0,1,0,0]
+    [0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0],
+    [1, 1, 1, 1, 1],
+    [0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0]
 ];
 
 const smallCross = [
-    [0,1,0],
-    [1,1,1],
-    [0,1,0]
+    [0, 1, 0],
+    [1, 1, 1],
+    [0, 1, 0]
 ];
 
 /**
@@ -34,7 +34,9 @@ const smallCross = [
 export default class Shape {
     constructor(options = {}) {
         let {kind = 'cross', shape, size, width, height, filled = true} = options;
-        if (shape) kind = undefined;
+        if (shape) {
+            kind = undefined;
+        }
         if (size) {
             width = size;
             height = size;
@@ -180,7 +182,9 @@ function ellipse(width, height, options) {
 }
 
 function triangle(width, height, options) {
-    if (!options.filled) throw new Error('Non filled triangle is not implemented');
+    if (!options.filled) {
+        throw new Error('Non filled triangle is not implemented');
+    }
     const matrix = Matrix.zeros(height, width, options);
     for (let y = 0; y < height; y++) {
         let shift = Math.floor((1 - y / height) * width / 2);

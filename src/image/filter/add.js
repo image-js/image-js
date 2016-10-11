@@ -14,7 +14,7 @@ export default function add(value, options = {}) {
         bitDepth: [8, 16]
     });
 
-    channels = validateArrayOfChannels(this, {channels:channels});
+    channels = validateArrayOfChannels(this, {channels: channels});
     value = checkNumberArray(value);
 
 // we allow 3 cases, the value may be an array (1D), an image or a single value
@@ -32,7 +32,7 @@ export default function add(value, options = {}) {
         for (let j = 0; j < channels.length; j++) {
             let c = channels[j];
             for (let i = 0; i < this.data.length; i += this.channels) {
-                this.data[i + c] = Math.max(0,Math.min(this.maxValue, (this.data[i + c] + value[i + c]) >> 0));
+                this.data[i + c] = Math.max(0, Math.min(this.maxValue, (this.data[i + c] + value[i + c]) >> 0));
             }
         }
     }

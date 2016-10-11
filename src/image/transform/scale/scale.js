@@ -25,7 +25,7 @@ export default function scale(options = {}) {
 
     const {width: newWidth, height: newHeight} = factorDimensions(factor, width, height);
 
-    let newImage = Image.createFrom(this, { width: newWidth, height: newHeight });
+    let newImage = Image.createFrom(this, {width: newWidth, height: newHeight});
 
     switch (algorithm.toLowerCase()) {
         case 'nearestneighbor':

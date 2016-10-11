@@ -1,4 +1,4 @@
-import {Image, load, getHash, refreshTmpDir, tmpDir, getSquare} from 'test/common';
+import {Image, load, refreshTmpDir, tmpDir, getSquare} from 'test/common';
 import canvas from 'canvas';
 
 describe('save to disk', function () {

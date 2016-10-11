@@ -1,4 +1,4 @@
-import {Image, getHash} from 'test/common';
+import {Image} from 'test/common';
 
 describe('check the pad transform', function () {
     it('check the right pad extract for GREY image', function () {
@@ -18,7 +18,7 @@ describe('check the pad transform', function () {
             ]
         );
 
-        Array.from(image.pad({size:1}).data).should.eql(
+        Array.from(image.pad({size: 1}).data).should.eql(
             [
                 1, 1, 2, 2,
                 1, 1, 2, 2,
@@ -27,7 +27,7 @@ describe('check the pad transform', function () {
             ]
         );
 
-        Array.from(image.pad({size:2}).data).should.eql(
+        Array.from(image.pad({size: 2}).data).should.eql(
             [
                 1, 1, 1, 2, 2, 2,
                 1, 1, 1, 2, 2, 2,
@@ -38,7 +38,7 @@ describe('check the pad transform', function () {
             ]
         );
 
-        Array.from(image.pad({algorithm: 'set', size:1, color:[9]}).data).should.eql(
+        Array.from(image.pad({algorithm: 'set', size: 1, color: [9]}).data).should.eql(
             [
                 9, 9, 9, 9,
                 9, 1, 2, 9,

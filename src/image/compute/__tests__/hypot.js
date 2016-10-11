@@ -3,7 +3,7 @@ import {Image} from 'test/common';
 describe('check hypotenuse', function () {
     it('should yield the correct array', function () {
 
-        let image1 = new Image(5,1,
+        let image1 = new Image(5, 1,
             [
                 3, 5, 8, 7, 9
             ],
@@ -16,7 +16,6 @@ describe('check hypotenuse', function () {
             ],
             {kind: 'GREY'}
         );
-
 
 
         let theoretical =

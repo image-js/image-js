@@ -197,8 +197,12 @@ IJS.load('cat.jpg').then(function(image) {
 
 export default class Image {
     constructor(width, height, data, options) {
-        if (width === undefined) width = 1;
-        if (height === undefined) height = 1;
+        if (width === undefined) {
+            width = 1;
+        }
+        if (height === undefined) {
+            height = 1;
+        }
 
         // copy another image
         if (typeof width === 'object') {
@@ -222,7 +226,9 @@ export default class Image {
             options = data;
             data = null;
         }
-        if (options === undefined) options = {};
+        if (options === undefined) {
+            options = {};
+        }
 
         this.width = width;
         this.height = height;
@@ -246,7 +252,9 @@ export default class Image {
         let theKind;
         if (typeof options.kind === 'string') {
             theKind = getKind(options.kind);
-            if (!theKind) throw new RangeError('invalid image kind: ' + options.kind);
+            if (!theKind) {
+                throw new RangeError('invalid image kind: ' + options.kind);
+            }
         } else {
             theKind = getKind(RGBA);
         }
@@ -262,9 +270,9 @@ export default class Image {
 
         this.initialize();
 
-        if (!data)
+        if (!data) {
             createPixelArray(this);
-        else {
+        } else {
             let length = getTheoreticalPixelArraySize(this);
             if (length !== data.length) {
                 throw new RangeError(`incorrect data size. Should be ${length} and found ${data.length}`);
@@ -286,7 +294,7 @@ export default class Image {
         this.multiplierX = this.channels;
         this.multiplierY = this.channels * this.width;
         this.isClamped = this.bitDepth < 32;
-        this.borderSizes = [0,0]; // when a filter create a border it may have impact on future processing like Roi
+        this.borderSizes = [0, 0]; // when a filter create a border it may have impact on future processing like Roi
     }
 
     /**
@@ -324,8 +332,9 @@ export default class Image {
                 // remove computed properties
                 this.computed = null;
                 let result = method.apply(this, [...partialArgs, ...args]);
-                if (returnThis)
+                if (returnThis) {
                     return this;
+                }
                 return result;
             };
             if (stack) {
@@ -576,7 +585,6 @@ export default class Image {
     }
 
 
-
     getRoiManager(mask, options) {
         return new RoiManager(this, options);
     }
@@ -633,31 +641,41 @@ export default class Image {
             throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
         }
         if (bitDepth) {
-            if (!Array.isArray(bitDepth)) bitDepth = [bitDepth];
+            if (!Array.isArray(bitDepth)) {
+                bitDepth = [bitDepth];
+            }
             if (bitDepth.indexOf(this.bitDepth) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if bit depth is in: ' + bitDepth);
             }
         }
         if (alpha) {
-            if (!Array.isArray(alpha)) alpha = [alpha];
+            if (!Array.isArray(alpha)) {
+                alpha = [alpha];
+            }
             if (alpha.indexOf(this.alpha) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if alpha is in: ' + alpha);
             }
         }
         if (colorModel) {
-            if (!Array.isArray(colorModel)) colorModel = [colorModel];
+            if (!Array.isArray(colorModel)) {
+                colorModel = [colorModel];
+            }
             if (colorModel.indexOf(this.colorModel) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if color model is in: ' + colorModel);
             }
         }
         if (components) {
-            if (!Array.isArray(components)) components = [components];
+            if (!Array.isArray(components)) {
+                components = [components];
+            }
             if (components.indexOf(this.components) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if the number of channels is in: ' + components);
             }
         }
         if (channels) {
-            if (!Array.isArray(channels)) channels = [channels];
+            if (!Array.isArray(channels)) {
+                channels = [channels];
+            }
             if (channels.indexOf(this.channels) === -1) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if the number of components is in: ' + channels);
             }

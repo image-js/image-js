@@ -9,7 +9,7 @@ import histograms from './compute/histograms';
 import average from './utility/average';
 
 export default function extend(Stack) {
-    let inPlace = {inPlace: true};
+    // let inPlace = {inPlace: true};
     Stack.extendMethod('matchAndCrop', matchAndCrop);
 
     Stack.extendMethod('getMin', min);

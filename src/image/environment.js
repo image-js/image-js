@@ -39,9 +39,7 @@ if (typeof self !== 'undefined') { // Browser
     };
 } else if (typeof module !== 'undefined' && module.exports) { // Node.js
     env = 'node';
-    isDifferentOrigin = function (url) {
-        return false;
-    };
+    isDifferentOrigin = () => false;
 
     const canvas = require('canvas');
     DOMImage = canvas.Image;

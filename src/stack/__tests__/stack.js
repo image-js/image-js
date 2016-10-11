@@ -34,9 +34,7 @@ describe('Core methods of Stack objects', function () {
         stack.forEach(function (image) {
             image.should.be.instanceOf(Image);
         });
-        stack.filter(function (image) {
-            return false;
-        }).should.have.lengthOf(0);
+        stack.filter(() => false).should.have.lengthOf(0);
     });
 
     it('map should return a Stack', function () {

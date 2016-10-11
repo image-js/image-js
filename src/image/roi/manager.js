@@ -19,7 +19,9 @@ export default class RoiManager {
     constructor(image, options = {}) {
         this._image = image;
         this._options = options;
-        if (!this._options.label) this._options.label = 'default';
+        if (!this._options.label) {
+            this._options.label = 'default';
+        }
         this._layers = {};
         this._painted = null;
     }
@@ -100,8 +102,9 @@ export default class RoiManager {
      */
     getMap(options = {}) {
         let opt = extendObject({}, this._options, options);
-        if (!this._layers[opt.label]) return;
-        return this._layers[opt.label].roiMap;
+        if (this._layers[opt.label]) {
+            return this._layers[opt.label].roiMap;
+        }
     }
 
 
@@ -112,12 +115,13 @@ export default class RoiManager {
      */
     getRoiIDs(options = {}) {
         let rois = this.getRoi(options);
-        if (!rois) return;
-        let ids = new Array(rois.length);
-        for (let i = 0; i < rois.length; i++) {
-            ids[i] = rois[i].id;
+        if (rois) {
+            let ids = new Array(rois.length);
+            for (let i = 0; i < rois.length; i++) {
+                ids[i] = rois[i].id;
+            }
+            return ids;
         }
-        return ids;
     }
 
     /**
@@ -217,7 +221,9 @@ export default class RoiManager {
         let {
             labelProperty
         } = options;
-        if (!this._painted) this._painted = this._image.rgba8();
+        if (!this._painted) {
+            this._painted = this._image.rgba8();
+        }
         let masks = this.getMasks(options);
 
         if (labelProperty) {
@@ -232,7 +238,7 @@ export default class RoiManager {
 
     // return a mask corresponding to all the selected masks
     getMask(options = {}) {
-        let mask = new Image(this._image.width, this._image.height, {kind:'BINARY'});
+        let mask = new Image(this._image.width, this._image.height, {kind: 'BINARY'});
         let masks = this.getMasks(options);
 
         for (let i = 0; i < masks.length; i++) {
@@ -311,5 +317,4 @@ export default class RoiManager {
         this.putMap(data, opt);
     }
 }
-
 

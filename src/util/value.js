@@ -3,7 +3,9 @@ import isArray from 'is-array-type';
 
 export function checkNumberArray(value) {
     if (!isNaN(value)) {
-        if (value <= 0) throw new Error('checkNumberArray: the value must be greater than 0');
+        if (value <= 0) {
+            throw new Error('checkNumberArray: the value must be greater than 0');
+        }
         return value;
     } else {
         if (value instanceof Image) {

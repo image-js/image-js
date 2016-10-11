@@ -22,7 +22,7 @@ import Stack from '../stack';
 
 export default function matchAndCrop({
     algorithm = 'matchToPrevious',
-    ignoreBorder = [0,0]
+    ignoreBorder = [0, 0]
     } = {}
 ) {
     this.checkProcessable('matchAndCrop', {
@@ -34,16 +34,16 @@ export default function matchAndCrop({
     let parent = this[0];
     let results = [];
     results[0] = {
-        position:[0,0],
+        position: [0, 0],
         image: this[0]
     };
 
-    let relativePosition = [0,0];
+    let relativePosition = [0, 0];
 
     // we calculate the best relative position to the parent image
     for (let i = 1; i < this.length; i++) {
 
-        let position = parent.getBestMatch(this[i],{border:ignoreBorder});
+        let position = parent.getBestMatch(this[i], {border: ignoreBorder});
 
         results[i] = {
             position: [position[0] + relativePosition[0], position[1] + relativePosition[1]],
@@ -66,10 +66,18 @@ export default function matchAndCrop({
 
     for (let i = 0; i < results.length; i++) {
         let result = results[i];
-        if (result.position[0] > leftShift) leftShift = result.position[0];
-        if (result.position[0] < rightShift) rightShift = result.position[0];
-        if (result.position[1] > topShift) topShift = result.position[1];
-        if (result.position[1] < bottomShift) bottomShift = result.position[1];
+        if (result.position[0] > leftShift) {
+            leftShift = result.position[0];
+        }
+        if (result.position[0] < rightShift) {
+            rightShift = result.position[0];
+        }
+        if (result.position[1] > topShift) {
+            topShift = result.position[1];
+        }
+        if (result.position[1] < bottomShift) {
+            bottomShift = result.position[1];
+        }
     }
     rightShift *= -1;
     bottomShift *= -1;
@@ -90,8 +98,8 @@ export default function matchAndCrop({
         result.crop = result.image.crop({
             x: leftShift - result.position[0],
             y: topShift - result.position[1],
-            width:parent.width - rightShift - leftShift,
-            height:parent.height - bottomShift - topShift
+            width: parent.width - rightShift - leftShift,
+            height: parent.height - bottomShift - topShift
         });
     }
 

@@ -22,7 +22,7 @@ export default function getColorHistogram({
     let bitShift = this.bitDepth - nbSlotsCheck;
 
     let data = this.data;
-    let result = newArray(Math.pow(8, nbSlotsCheck),0);
+    let result = newArray(Math.pow(8, nbSlotsCheck), 0);
     let factor2 = Math.pow(2, nbSlotsCheck * 2);
     let factor1 = Math.pow(2, nbSlotsCheck);
 

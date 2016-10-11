@@ -9,34 +9,35 @@
  */
 
 export default function maxEntropy(histogram, total) {
-    let norm_histo = new Array(histogram.length); // normalized histogram
-    for (let ih = 0; ih < histogram.length; ih++)
-        norm_histo[ih] = histogram[ih] / total;
+    let normHisto = new Array(histogram.length); // normalized histogram
+    for (let ih = 0; ih < histogram.length; ih++) {
+        normHisto[ih] = histogram[ih] / total;
+    }
 
     let P1 = new Array(histogram.length); // cumulative normalized histogram
     let P2 = new Array(histogram.length);
-    P1[0] = norm_histo[0];
+    P1[0] = normHisto[0];
     P2[0] = 1.0 - P1[0];
 
     for (let ih = 1; ih < histogram.length; ih++) {
-        P1[ih] = P1[ih - 1] + norm_histo[ih];
+        P1[ih] = P1[ih - 1] + normHisto[ih];
         P2[ih] = 1.0 - P1[ih];
     }
 
     /* Determine the first non-zero bin */
-    let first_bin = 0;
+    let firstBin = 0;
     for (let ih = 0; ih < histogram.length; ih++) {
         if (Math.abs(P1[ih]) >= Number.EPSILON) {
-            first_bin = ih;
+            firstBin = ih;
             break;
         }
     }
 
     /* Determine the last non-zero bin */
-    let last_bin = histogram.length - 1;
-    for (let ih = histogram.length - 1; ih >= first_bin; ih--) {
+    let lastBin = histogram.length - 1;
+    for (let ih = histogram.length - 1; ih >= firstBin; ih--) {
         if (Math.abs(P2[ih]) >= Number.EPSILON) {
-            last_bin = ih;
+            lastBin = ih;
             break;
         }
     }
@@ -44,33 +45,33 @@ export default function maxEntropy(histogram, total) {
     // Calculate the total entropy each gray-level
     // and find the threshold that maximizes it
     let threshold = -1;
-    let tot_ent;  // total entropy
-    let max_ent = Number.MIN_VALUE; // max entropy
-    let ent_back; // entropy of the background pixels at a given threshold
-    let ent_obj;  // entropy of the object pixels at a given threshold
+    let totEnt;  // total entropy
+    let maxEnt = Number.MIN_VALUE; // max entropy
+    let entBack; // entropy of the background pixels at a given threshold
+    let entObj;  // entropy of the object pixels at a given threshold
 
-    for (let it = first_bin; it <= last_bin; it++) {
+    for (let it = firstBin; it <= lastBin; it++) {
         /* Entropy of the background pixels */
-        ent_back = 0.0;
+        entBack = 0.0;
         for (let ih = 0; ih <= it; ih++) {
             if (histogram[ih] !== 0) {
-                ent_back -= (norm_histo[ih] / P1[it]) * Math.log(norm_histo[ih] / P1[it]);
+                entBack -= (normHisto[ih] / P1[it]) * Math.log(normHisto[ih] / P1[it]);
             }
         }
 
         /* Entropy of the object pixels */
-        ent_obj = 0.0;
+        entObj = 0.0;
         for (let ih = it + 1; ih < histogram.length; ih++) {
             if (histogram[ih] !== 0) {
-                ent_obj -= (norm_histo[ih] / P2[it]) * Math.log(norm_histo[ih] / P2[it]);
+                entObj -= (normHisto[ih] / P2[it]) * Math.log(normHisto[ih] / P2[it]);
             }
         }
 
         /* Total entropy */
-        tot_ent = ent_back + ent_obj;
+        totEnt = entBack + entObj;
 
-        if (max_ent < tot_ent) {
-            max_ent = tot_ent;
+        if (maxEnt < totEnt) {
+            maxEnt = totEnt;
             threshold = it;
         }
     }

@@ -13,33 +13,37 @@
 // Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
 
 export default function yen(histogram, total) {
-    let norm_histo = new Array(histogram.length); // normalized histogram
-    for (let ih = 0; ih < histogram.length; ih++)
-        norm_histo[ih] = histogram[ih] / total;
+    let normHisto = new Array(histogram.length); // normalized histogram
+    for (let ih = 0; ih < histogram.length; ih++) {
+        normHisto[ih] = histogram[ih] / total;
+    }
 
     let P1 = new Array(histogram.length); // cumulative normalized histogram
-    P1[0] = norm_histo[0];
-    for (let ih = 1; ih < histogram.length; ih++)
-        P1[ih] = P1[ih - 1] + norm_histo[ih];
+    P1[0] = normHisto[0];
+    for (let ih = 1; ih < histogram.length; ih++) {
+        P1[ih] = P1[ih - 1] + normHisto[ih];
+    }
 
-    let P1_sq = new Array(histogram.length);
-    P1_sq[0] = norm_histo[0] * norm_histo[0];
-    for (let ih = 1; ih < histogram.length; ih++)
-        P1_sq[ih] = P1_sq[ih - 1] + norm_histo[ih] * norm_histo[ih];
+    let P1Sq = new Array(histogram.length);
+    P1Sq[0] = normHisto[0] * normHisto[0];
+    for (let ih = 1; ih < histogram.length; ih++) {
+        P1Sq[ih] = P1Sq[ih - 1] + normHisto[ih] * normHisto[ih];
+    }
 
-    let P2_sq = new Array(histogram.length);
-    P2_sq[histogram.length - 1] = 0.0;
-    for (let ih = histogram.length - 2; ih >= 0; ih--)
-        P2_sq[ih] = P2_sq[ih + 1] + norm_histo[ih + 1] * norm_histo[ih + 1];
+    let P2Sq = new Array(histogram.length);
+    P2Sq[histogram.length - 1] = 0.0;
+    for (let ih = histogram.length - 2; ih >= 0; ih--) {
+        P2Sq[ih] = P2Sq[ih + 1] + normHisto[ih + 1] * normHisto[ih + 1];
+    }
 
     /* Find the threshold that maximizes the criterion */
     let threshold = -1;
-    let max_crit = Number.MIN_VALUE;
+    let maxCrit = Number.MIN_VALUE;
     let crit;
     for (let it = 0; it < histogram.length; it++) {
-        crit = -1.0 * ((P1_sq[it] * P2_sq[it]) > 0.0 ? Math.log(P1_sq[it] * P2_sq[it]) : 0.0) + 2 * ((P1[it] * (1.0 - P1[it])) > 0.0 ? Math.log(P1[it] * (1.0 - P1[it])) : 0.0);
-        if (crit > max_crit) {
-            max_crit = crit;
+        crit = -1.0 * ((P1Sq[it] * P2Sq[it]) > 0.0 ? Math.log(P1Sq[it] * P2Sq[it]) : 0.0) + 2 * ((P1[it] * (1.0 - P1[it])) > 0.0 ? Math.log(P1[it] * (1.0 - P1[it])) : 0.0);
+        if (crit > maxCrit) {
+            maxCrit = crit;
             threshold = it;
         }
     }

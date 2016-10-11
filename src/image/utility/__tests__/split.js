@@ -1,7 +1,7 @@
 import {Image} from 'test/common';
 
 describe('split an image of 3 components and keep alpha', function () {
-    let image = new Image(1,2,[230, 83, 120, 255, 100, 140, 13, 240]);
+    let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 240]);
     let images = image.split();
 
     it('should yield 3 grey images with alpha', function () {
@@ -27,7 +27,7 @@ describe('split an image of 3 components and keep alpha', function () {
 });
 
 describe('split an image of 3 components and have alpha separately', function () {
-    let image = new Image(1,2,[230, 83, 120, 255, 100, 140, 13, 240]);
+    let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 240]);
     let images = image.split({preserveAlpha: false});
 
     it('should yield 4 grey images with alpha', function () {

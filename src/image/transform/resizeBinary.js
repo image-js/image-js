@@ -9,7 +9,7 @@ import * as KindNames from '../kindNames';
  * @instance
  */
 
-export default function resizeBinary(scale = 0.5, options = {}) {
+export default function resizeBinary(scale = 0.5) {
     this.checkProcessable('resizeBinary', {
         bitDepth: [1]
     });
@@ -29,7 +29,7 @@ export default function resizeBinary(scale = 0.5, options = {}) {
 
     for (let x = 0; x < this.width; x++) {
         for (let y = 0; y < this.height; y++) {
-            if (this.getBitXY(x,y)) {
+            if (this.getBitXY(x, y)) {
                 newImage.setBitXY(Math.floor(x * scale), Math.floor(y * scale));
             }
         }

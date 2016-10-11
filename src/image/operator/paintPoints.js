@@ -47,6 +47,3 @@ export default function paintPoints(points, {
     }
 }
 
-
-
-

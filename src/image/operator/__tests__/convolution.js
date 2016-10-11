@@ -1,4 +1,4 @@
-import {Image, getHash} from 'test/common';
+import {Image} from 'test/common';
 
 describe('check the convolution operator', function () {
     it('check the convolution for GREY image', function () {
@@ -21,7 +21,7 @@ describe('check the convolution operator', function () {
             ]
         );
 
-        Array.from(image.convolution([1],{algorithm:'fft'}).data).should.eql(
+        Array.from(image.convolution([1], {algorithm: 'fft'}).data).should.eql(
             [
                 1, 2, 3, 4,
                 5, 6, 7, 8,
@@ -39,7 +39,7 @@ describe('check the convolution operator', function () {
             ]
         );
 
-        Array.from(image.convolution([[1]],{algorithm:'fft'}).data).should.eql(
+        Array.from(image.convolution([[1]], {algorithm: 'fft'}).data).should.eql(
             [
                 1, 2, 3, 4,
                 5, 6, 7, 8,
@@ -49,13 +49,12 @@ describe('check the convolution operator', function () {
         );
 
 
-
         (function () {
-            image.convolution([1,2,3]);
+            image.convolution([1, 2, 3]);
         }).should.throw(/array should be a square/);
 
         (function () {
-            image.convolution([[1],[1,2,3]]);
+            image.convolution([[1], [1, 2, 3]]);
         }).should.throw(/rows and columns should be odd number/);
     });
 
@@ -80,7 +79,7 @@ describe('check the convolution operator', function () {
             ]
         );
 
-        Array.from(image.convolution([1, 1, 1, 1, 1, 1, 1, 1, 1],{algorithm:'fft'}).data).should.eql(
+        Array.from(image.convolution([1, 1, 1, 1, 1, 1, 1, 1, 1], {algorithm: 'fft'}).data).should.eql(
             [
                 13, 13, 13, 13,
                 13, 13, 13, 13,
@@ -111,7 +110,7 @@ describe('check the convolution operator', function () {
             ]
         );
 
-        Array.from(image.convolution([[1, 2, 1]],{algorithm:'fft'}).data).should.eql(
+        Array.from(image.convolution([[1, 2, 1]], {algorithm: 'fft'}).data).should.eql(
             [
                 4, 4, 4, 4,
                 7, 7, 7, 7,
@@ -120,7 +119,7 @@ describe('check the convolution operator', function () {
             ]
         );
 
-        Array.from(image.convolution([[1, 2, 1]],{divisor: 4}).data).should.eql(
+        Array.from(image.convolution([[1, 2, 1]], {divisor: 4}).data).should.eql(
             [
                 1, 1, 1, 1,
                 2, 2, 2, 2,
@@ -129,7 +128,7 @@ describe('check the convolution operator', function () {
             ]
         );
 
-        Array.from(image.convolution([[1, 2, 1]],{divisor: 4, algorithm:'fft'}).data).should.eql(
+        Array.from(image.convolution([[1, 2, 1]], {divisor: 4, algorithm: 'fft'}).data).should.eql(
             [
                 1, 1, 1, 1,
                 2, 2, 2, 2,
@@ -138,7 +137,7 @@ describe('check the convolution operator', function () {
             ]
         );
 
-        Array.from(image.convolution([[1, 2, 1]],{normalize: true}).data).should.eql(
+        Array.from(image.convolution([[1, 2, 1]], {normalize: true}).data).should.eql(
             [
                 1, 1, 1, 1,
                 2, 2, 2, 2,
@@ -147,7 +146,7 @@ describe('check the convolution operator', function () {
             ]
         );
 
-        Array.from(image.convolution([[1, 2, 1]],{normalize: true, algorithm:'fft'}).data).should.eql(
+        Array.from(image.convolution([[1, 2, 1]], {normalize: true, algorithm: 'fft'}).data).should.eql(
             [
                 1, 1, 1, 1,
                 2, 2, 2, 2,
@@ -176,7 +175,7 @@ describe('check the convolution operator', function () {
             ]
         );
 
-        Array.from(image.convolution([1], {algorithm:'fft'}).data).should.eql(
+        Array.from(image.convolution([1], {algorithm: 'fft'}).data).should.eql(
             [
                 1, 255, 2, 255, 3, 255,
                 4, 255, 5, 255, 6, 255,
@@ -192,7 +191,7 @@ describe('check the convolution operator', function () {
             ]
         );
 
-        Array.from(image.convolution([[1]], {algorithm:'fft'}).data).should.eql(
+        Array.from(image.convolution([[1]], {algorithm: 'fft'}).data).should.eql(
             [
                 1, 255, 2, 255, 3, 255,
                 4, 255, 5, 255, 6, 255,
@@ -202,11 +201,11 @@ describe('check the convolution operator', function () {
 
 
         (function () {
-            image.convolution([1,2,3]);
+            image.convolution([1, 2, 3]);
         }).should.throw(/array should be a square/);
 
         (function () {
-            image.convolution([[1],[1,2,3]]);
+            image.convolution([[1], [1, 2, 3]]);
         }).should.throw(/rows and columns should be odd number/);
     });
 });

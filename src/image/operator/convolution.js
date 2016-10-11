@@ -22,11 +22,12 @@ export default function convolution(kernel, {channels, bitDepth, normalize = fal
     let newImage = Image.createFrom(this, {bitDepth: bitDepth});
 
     channels = validateArrayOfChannels(this, channels, true);
-    let kWidth, kHeight;
+    //let kWidth, kHeight;
     //Very misterious function. If the kernel is an array only one quadrant is copied to the output matrix,
     //but if the kernel is already a matrix, nothing is done.
     //On the other hand, it only consider odd, squared and symmetric kernels. A too restrictive
-    ({kWidth, kHeight, kernel} = validateKernel(kernel));
+    //({kWidth, kHeight, kernel} = validateKernel(kernel));
+    ({kernel} = validateKernel(kernel));
 
 
     let halfHeight = Math.floor(kernel.length / 2);
@@ -51,8 +52,7 @@ export default function convolution(kernel, {channels, bitDepth, normalize = fal
                 normalize: normalize,
                 divisor: divisor
             });
-        }
-        else {
+        } else {
             tmpResult = conv.fft(tmpData, kernel, {
                 rows: this.height,
                 cols: this.width,
@@ -65,10 +65,11 @@ export default function convolution(kernel, {channels, bitDepth, normalize = fal
         for (y = 0; y < this.height; y++) {
             for (x = 0; x < this.width; x++) {
                 index = y * this.width + x;
-                if (clamped)
+                if (clamped) {
                     newImage.data[index * this.channels + c] = Math.min(Math.max(tmpResult[index], 0), newImage.maxValue);
-                else
+                } else {
                     newImage.data[index * this.channels + c] = tmpResult[index];
+                }
             }
         }
     }

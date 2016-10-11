@@ -19,12 +19,12 @@ import Image from '../image';
 export default function hsl() {
     this.checkProcessable('hsl', {
         bitDepth: [8, 16],
-        alpha: [0,1],
+        alpha: [0, 1],
         colorModel: [RGB]
     });
 
     let newImage = Image.createFrom(this, {
-        colorModel:HSL
+        colorModel: HSL
     });
 
     let threshold = Math.floor(this.maxValue / 2);

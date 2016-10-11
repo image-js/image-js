@@ -2,7 +2,6 @@ import fromExtrema from '../fromExtrema';
 import {Image} from 'test/common';
 
 
-
 describe('we check createROIMapFromMaxima only looking for top', function () {
     it('should yield the right map large top', function () {
         let image = new Image(5, 5,
@@ -17,7 +16,7 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
         );
 
         let data = fromExtrema.call(image,
-            {onlyTop:true}
+            {onlyTop: true}
         ).data;
 
         Array.from(data).should.eql([
@@ -42,7 +41,7 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
         );
 
         let data = fromExtrema.call(image,
-            {onlyTop:true}
+            {onlyTop: true}
         ).data;
 
         Array.from(data).should.eql([
@@ -67,7 +66,7 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
         );
 
         let data = fromExtrema.call(image,
-            {onlyTop:true}
+            {onlyTop: true}
         ).data;
 
         Array.from(data).should.eql([
@@ -93,7 +92,7 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
         );
 
         let data = fromExtrema.call(image,
-            {onlyTop:true}
+            {onlyTop: true}
         ).data;
 
         Array.from(data).should.eql([

@@ -8,7 +8,9 @@ export function validateArrayOfChannels(image, options = {}) {
         defaultAlpha // if no channels are selected should we take the alpha channel ?
     } = options;
 
-    if (typeof allowAlpha !== 'boolean') allowAlpha = true;
+    if (typeof allowAlpha !== 'boolean') {
+        allowAlpha = true;
+    }
 
     if (typeof channels === 'undefined') {
         return allChannels(image, defaultAlpha);
@@ -27,9 +29,11 @@ function allChannels(image, defaultAlpha) {
 }
 
 function validateChannels(image, channels, allowAlpha) {
-    if (!Array.isArray(channels)) channels = [channels];
+    if (!Array.isArray(channels)) {
+        channels = [channels];
+    }
     for (let c = 0; c < channels.length; c++) {
-        channels[c] = validateChannel(image,channels[c], allowAlpha);
+        channels[c] = validateChannel(image, channels[c], allowAlpha);
     }
     return channels;
 }
@@ -108,7 +112,9 @@ export function validateChannel(image, channel, allowAlpha = true) {
         }
 
         if (channel === 'a') {
-            if (!image.alpha) throw new Error('validateChannel : the image does not contain alpha channel');
+            if (!image.alpha) {
+                throw new Error('validateChannel : the image does not contain alpha channel');
+            }
             channel = image.components;
         }
 

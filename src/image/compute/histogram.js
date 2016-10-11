@@ -56,7 +56,6 @@ export function getHistograms(options = {}) {
 }
 
 
-
 function getChannelHistogram(channel, options) {
     let {useAlpha, maxSlots} = options;
 
@@ -69,10 +68,12 @@ function getChannelHistogram(channel, options) {
     // of 16 grey even if the images has 256 shade of grey
 
     let bitShift = 0;
-    if (this.bitDepth > bitSlots) bitShift = this.bitDepth - bitSlots;
+    if (this.bitDepth > bitSlots) {
+        bitShift = this.bitDepth - bitSlots;
+    }
 
     let data = this.data;
-    let result = newArray(Math.pow(2, Math.min(this.bitDepth, bitSlots)),0);
+    let result = newArray(Math.pow(2, Math.min(this.bitDepth, bitSlots)), 0);
     if (useAlpha && this.alpha) {
         let alphaChannelDiff = this.channels - channel - 1;
 

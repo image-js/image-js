@@ -10,8 +10,8 @@ describe('we check getPixelsGrid', function () {
         }
         let image = new Image(size, size, data, {kind: 'GREY'});
 
-        let pixels = image.getPixelsGrid({
-            sampling:[2,2],
+        image.getPixelsGrid({
+            sampling: [2, 2],
             painted: true
         });
 
@@ -35,17 +35,16 @@ describe('we check getPixelsGrid', function () {
 
         let mask = new Image(size, size, maskData, {kind: 'BINARY'});
         let pixels = image.getPixelsGrid({
-            sampling:[2,2],
+            sampling: [2, 2],
             painted: false,
             mask: mask
         });
 
-        pixels.xyS.should.eql([[1,1],[4,1]]);
-        pixels.zS.should.eql([[7],[10]]);
+        pixels.xyS.should.eql([[1, 1], [4, 1]]);
+        pixels.zS.should.eql([[7], [10]]);
         (typeof pixels.painted).should.equal('undefined');
 
 
     });
 });
-
 

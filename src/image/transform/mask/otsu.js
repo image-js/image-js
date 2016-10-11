@@ -25,11 +25,13 @@ export default function otsu(histogram, total) {
     for (let i = 1; i <  histogram.length; ++i) {
         wB += histogram[i];
 
-        if (wB === 0)
+        if (wB === 0) {
             continue;
+        }
         wF = total - wB;
-        if (wF === 0)
+        if (wF === 0) {
             break;
+        }
 
         sumB += i * histogram[i];
         mB = sumB / wB;

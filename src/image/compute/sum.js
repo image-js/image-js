@@ -13,7 +13,7 @@ export default function sum() {
         bitDepth: [8, 16]
     });
 
-    let result = newArray(this.channels,0);
+    let result = newArray(this.channels, 0);
 
     for (let i = 0; i < this.data.length; i += this.channels) {
         for (let c = 0; c < this.channels; c++) {

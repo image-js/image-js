@@ -52,14 +52,16 @@ function bimodalTest(histogram) {//It is responsible for determining if a histog
     let len = histogram.length;
     let isBimodal = false;
     let peaks = 0;
-    for (let k = 1;k < len - 1;k++) {
+    for (let k = 1; k < len - 1; k++) {
         if (histogram[k - 1] < histogram[k] && histogram[k + 1] < histogram[k]) {
             peaks++;
-            if (peaks > 2)
+            if (peaks > 2) {
                 return false;
+            }
         }
     }
-    if (peaks === 2)
+    if (peaks === 2) {
         isBimodal = true;
+    }
     return isBimodal;
 }

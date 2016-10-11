@@ -19,7 +19,7 @@ export default function getMatrix({channel} = {}) {
     let matrix = new Matrix(this.height, this.width);
     for (let x = 0; x < this.height; x++) {
         for (let y = 0; y < this.width; y++) {
-            matrix.set(x, y, this.getValueXY(y,x,channel));
+            matrix.set(x, y, this.getValueXY(y, x, channel));
         }
     }
 

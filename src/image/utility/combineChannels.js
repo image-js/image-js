@@ -1,5 +1,4 @@
 import Image from '../image';
-import {validateChannel} from './../../util/channel';
 
 /**
  * @memberof Image

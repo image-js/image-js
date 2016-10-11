@@ -1,3 +1,5 @@
+extends: eslint-config-cheminfo
+
 env:
   browser: true
   node: true
@@ -5,77 +7,8 @@ env:
   mocha: true
 
 parserOptions:
-  ecmaVersion: 8
+  ecmaVersion: 2017
   sourceType: module
 
-plugins:
-  - no-only-tests
-
 rules:
-  # Possible errors
-  comma-dangle:
-    - 2
-    - never
-  no-cond-assign:
-    - 2
-    - always
-  no-console: 2
-  no-constant-condition: 0
-  no-control-regex: 2
-  no-debugger: 2
-  no-dupe-args: 2
-  no-dupe-keys: 2
-  no-duplicate-case: 2
-  no-empty-character-class: 2
-  no-empty: 2
-  no-ex-assign: 2
-  no-extra-boolean-cast: 2
-  no-extra-semi: 2
-  no-func-assign: 2
-  no-inner-declarations: 2
-  no-invalid-regexp: 2
-  no-irregular-whitespace: 2
-  no-negated-in-lhs: 2
-  no-obj-calls: 2
-  no-regex-spaces: 2
-  no-sparse-arrays: 2
-  no-unreachable: 2
-  use-isnan: 2
-  valid-typeof: 2
-  no-unexpected-multiline: 2
-
-  # Best practices
-  eqeqeq: 2
-
-  # Strict mode
-  strict:
-    - 2
-    - global
-
-  # Variables
-  no-delete-var: 2
-  no-label-var: 2
-  no-shadow-restricted-names: 2
-  no-undef-init: 2
-  no-undef: 2
-
-  # ES6
   no-var: 2
-
-  # Stylistic issues
-  eol-last: 2
-  keyword-spacing: 2
-  no-trailing-spaces: 2
-  quotes:
-    - 2
-    - single
-    - avoid-escape
-  semi: 2
-  space-before-blocks: 2
-  space-before-function-paren: [2, {anonymous: always, named: never}]
-  space-in-parens: 2
-  space-infix-ops: [2, {int32Hint: true}]
-  space-unary-ops: 2
-
-  # Plugins
-  no-only-tests/no-only-tests: 2

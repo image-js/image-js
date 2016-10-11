@@ -13,7 +13,7 @@ export default function subtract(value, options = {}) {
         bitDepth: [8, 16]
     });
 
-    channels = validateArrayOfChannels(this, {channels:channels});
+    channels = validateArrayOfChannels(this, {channels: channels});
     value = checkNumberArray(value);
 
     if (!isNaN(value)) {

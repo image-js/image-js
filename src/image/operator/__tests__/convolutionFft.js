@@ -1,4 +1,4 @@
-import {Image, getHash} from 'test/common';
+import {Image} from 'test/common';
 
 describe('check the convolutionFft operator', function () {
     it('check the convolution for GREY image', function () {

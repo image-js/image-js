@@ -7,7 +7,9 @@
 export function median(histogram) {
     let total = histogram.reduce((sum, x) => sum + x);
 
-    if (total <= 0) return undefined;
+    if (total <= 0) {
+        return;
+    }
 
     let position = 0;
     let currentTotal = 0;
@@ -44,7 +46,9 @@ export function mean(histogram) {
         sum += histogram[i] * i;
     }
 
-    if (total <= 0) return undefined;
+    if (total <= 0) {
+        return;
+    }
 
     return sum / total;
 }

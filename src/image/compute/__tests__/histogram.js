@@ -3,7 +3,7 @@ import {Image} from 'test/common';
 describe('calculate the histogram', function () {
     it('check getHistogram method', function () {
 
-        let image = new Image(1,2,[230, 83, 120, 255, 100, 140, 13, 1]);
+        let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 1]);
 
         let histogram = image.getHistogram({useAlpha: false, channel: 0});
         histogram[0].should.equal(0);
@@ -21,8 +21,8 @@ describe('calculate the histogram', function () {
 
     it('check histogram property', function () {
 
-        let image = new Image(1,4,[230, 255, 230, 255, 230, 255, 13, 1], {
-            kind:'GREYA'
+        let image = new Image(1, 4, [230, 255, 230, 255, 230, 255, 13, 1], {
+            kind: 'GREYA'
         });
 
         let histogram = image.histogram;
@@ -37,8 +37,8 @@ describe('calculate the histogram', function () {
 
     it('check 16 slots histogram', function () {
 
-        let image = new Image(1,4,[230, 255, 230, 255, 230, 255, 13, 1], {
-            kind:'GREYA'
+        let image = new Image(1, 4, [230, 255, 230, 255, 230, 255, 13, 1], {
+            kind: 'GREYA'
         });
 
         let histogram = image.getHistogram({maxSlots: 16});

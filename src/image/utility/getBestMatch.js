@@ -62,7 +62,6 @@ export default function match(image, {border} = {}) {
     */
 
 
-
     return [currentX - middleX, currentY - middleY];
 }
 

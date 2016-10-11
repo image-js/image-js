@@ -1,5 +1,4 @@
 import {validateArrayOfChannels} from '../../util/channel';
-import Image from '../image';
 import {checkNumberArray} from '../../util/value';
 
 /**
@@ -14,7 +13,7 @@ export default function divide(value, options = {}) {
         bitDepth: [8, 16]
     });
 
-    channels = validateArrayOfChannels(this, {channels:channels});
+    channels = validateArrayOfChannels(this, {channels: channels});
     value = checkNumberArray(value);
 
     if (!isNaN(value)) {

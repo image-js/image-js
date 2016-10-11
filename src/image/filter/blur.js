@@ -10,11 +10,13 @@ import convolutionFft from '../operator/convolutionFft';
 export default function meanFilter(k) {
 
     this.checkProcessable('meanFilter', {
-        components:[1],
-        bitDepth:[8,16]
+        components: [1],
+        bitDepth: [8, 16]
     });
 
-    if (k < 1) {throw new Error('Number of neighbors should be grater than 0');}
+    if (k < 1) {
+        throw new Error('Number of neighbors should be grater than 0');
+    }
 
     let n = 2 * k + 1;
     let size = n * n;

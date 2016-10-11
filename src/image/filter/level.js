@@ -30,16 +30,24 @@ export default function level(options = {}) {
         bitDepth: [8, 16]
     });
 
-    channels = validateArrayOfChannels(this, {channels:channels});
+    channels = validateArrayOfChannels(this, {channels: channels});
 
     switch (algorithm) {
 
         case 'range':
-            if (min < 0) min = 0;
-            if (max > this.maxValue) max = this.maxValue;
+            if (min < 0) {
+                min = 0;
+            }
+            if (max > this.maxValue) {
+                max = this.maxValue;
+            }
 
-            if (!Array.isArray(min)) min = newArray(channels.length, min);
-            if (!Array.isArray(max)) max = newArray(channels.length, max);
+            if (!Array.isArray(min)) {
+                min = newArray(channels.length, min);
+            }
+            if (!Array.isArray(max)) {
+                max = newArray(channels.length, max);
+            }
 
             processImage(this, min, max, channels);
             break;
@@ -81,5 +89,4 @@ function processImage(image, min, max, channels) {
         }
     }
 }
-
 

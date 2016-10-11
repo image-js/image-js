@@ -11,8 +11,8 @@ describe('we check paintPoints', function () {
         let image = new Image(size, size, data, {kind: 'RGB'});
 
 
-        let points = [[1,1],[3,2]];
-        image.paintPoints(points, {shape:{kind:'smallCross'}});
+        let points = [[1, 1], [3, 2]];
+        image.paintPoints(points, {shape: {kind: 'smallCross'}});
 
 
         let marked = [
@@ -38,5 +38,4 @@ describe('we check paintPoints', function () {
         Array.from(image.data).should.eql(result);
     });
 });
-
 

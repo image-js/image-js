@@ -13,7 +13,7 @@ export default function fromExtrema(
 ) {
 
     let image = this;
-    image.checkProcessable('fromExtrema',{components:[1]});
+    image.checkProcessable('fromExtrema', {components: [1]});
 
 
     const PROCESS_TOP = 1;
@@ -22,8 +22,6 @@ export default function fromExtrema(
     // split will always return an array of images
     let positiveID = 0;
     let negativeID = 0;
-
-    let MIN_VALUE = -32768;
 
     let data = new Int16Array(image.size); // maxValue: 32767, minValue: -32768
     let processed = new Int8Array(image.size);
@@ -45,7 +43,7 @@ export default function fromExtrema(
     let fromTop = 0;
     let toTop = 0;
 
-    appendExtrema(image, {maxima:!invert});
+    appendExtrema(image, {maxima: !invert});
 
     while (from < to) {
         let currentX = xToProcess[from & MAX_ARRAY];
@@ -96,7 +94,13 @@ export default function fromExtrema(
                     data[index] = (maxima) ? ++positiveID : --negativeID;
 
                     let valid = processTop(x, y, PROCESS_TOP);
-                    if (!valid) (maxima) ? --positiveID : ++negativeID;
+                    if (!valid) {
+                        if (maxima) {
+                            --positiveID;
+                        } else {
+                            ++negativeID;
+                        }
+                    }
                 }
             }
         }
@@ -144,7 +148,7 @@ export default function fromExtrema(
         // console.log('PROCESS', xCenter, yCenter);
         let currentID = data[yCenter * image.width + xCenter];
         let currentValue = image.data[yCenter * image.width + xCenter];
-        let currentVariation = variations[yCenter * image.width + xCenter];
+        //let currentVariation = variations[yCenter * image.width + xCenter];
         for (let y = yCenter - 1; y <= yCenter + 1; y++) {
             for (let x = xCenter - 1; x <= xCenter + 1; x++) {
                 let index = y * image.width + x;
@@ -158,7 +162,9 @@ export default function fromExtrema(
                             if (variations[index] === 0) { // we look for maxima
                                 // console.log('ZERO', currentID, x, y);
                                 // if we are next to a border ... it is not surrounded !
-                                if (x === 0 || y === 0 || x === (image.width - 1) || y === (image.height - 1)) return false;
+                                if (x === 0 || y === 0 || x === (image.width - 1) || y === (image.height - 1)) {
+                                    return false;
+                                }
                                 data[index] = currentID;
                                 xToProcessTop[toTop & MAX_ARRAY] = x;
                                 yToProcessTop[toTop & MAX_ARRAY] = y;

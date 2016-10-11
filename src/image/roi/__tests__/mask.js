@@ -10,7 +10,7 @@ describe('we check mask', function () {
 
             let roiManager = img.getRoiManager();
 
-            let mask = img.mask({invert:true});
+            let mask = img.mask({invert: true});
             roiManager.fromMask(mask);
 
             let roiIDs = roiManager.getRoiIDs().sort();
@@ -20,13 +20,13 @@ describe('we check mask', function () {
 
             rois.should.be.an.instanceof(Array).and.lengthOf(3);
 
-            rois.sort(function (a,b) {
+            rois.sort(function (a, b) {
                 return a.mask.sizes[0] - b.mask.sizes[0];
             });
 
-            rois[0].mask.sizes.should.eql([1,1]);
-            rois[1].mask.sizes.should.eql([3,3]);
-            rois[2].mask.sizes.should.eql([5,5]);
+            rois[0].mask.sizes.should.eql([1, 1]);
+            rois[1].mask.sizes.should.eql([3, 3]);
+            rois[2].mask.sizes.should.eql([5, 5]);
 
 
             let roiMask = rois[0].mask;
@@ -50,19 +50,19 @@ describe('we check mask', function () {
             Array.from(roiFilledMask.data).should.eql([255, 255, 255, 128]);
 
             let centerMask = rois[0].centerMask;
-            centerMask.position.should.eql([1,1]);
-            Array.from(centerMask.data).should.eql([93,0]);
+            centerMask.position.should.eql([1, 1]);
+            Array.from(centerMask.data).should.eql([93, 0]);
 
             let contourMask = rois[1].contourMask;
-            contourMask.position.should.eql([1,1]);
-            Array.from(contourMask.data).should.eql([247,128]);
+            contourMask.position.should.eql([1, 1]);
+            Array.from(contourMask.data).should.eql([247, 128]);
 
             let masks = roiManager.getMasks();
 
-            let painted = new Image(5,5);
+            let painted = new Image(5, 5);
             painted.paintMasks(masks);
 
-            Array.from(painted.data).slice(0,8).should.eql([255,0,0,255,255,0,0,255]);
+            Array.from(painted.data).slice(0, 8).should.eql([255, 0, 0, 255, 255, 0, 0, 255]);
         });
     });
 });

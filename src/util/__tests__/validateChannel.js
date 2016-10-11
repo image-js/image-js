@@ -3,7 +3,7 @@ import {validateChannel} from '../channel';
 
 describe('we check the validateChannel method', function () {
     it('check for a RGB image', function () {
-        let image = new Image(2,2,{
+        let image = new Image(2, 2, {
             kind: 'RGB'
         });
 
@@ -22,7 +22,7 @@ describe('we check the validateChannel method', function () {
     });
 
     it('check for a RGBA image', function () {
-        let image = new Image(2,2,{
+        let image = new Image(2, 2, {
             kind: 'RGBA'
         });
 
@@ -39,26 +39,24 @@ describe('we check the validateChannel method', function () {
     });
 
     it('check for a GreyA image', function () {
-        let image = new Image(2,2,{
+        let image = new Image(2, 2, {
             kind: 'GREYA'
         });
 
         validateChannel(image, 0).should.equal(0);
         validateChannel(image, 1).should.equal(1);
         validateChannel(image, 'a').should.equal(1);
-        validateChannel(image, 'a',true).should.equal(1);
+        validateChannel(image, 'a', true).should.equal(1);
         (function () {
             validateChannel(image, 'r');
         }).should.throw(/undefined channel/);
         (function () {
-            validateChannel(image, 1,false);
+            validateChannel(image, 1, false);
         }).should.throw(/alpha channel may not/);
         (function () {
-            validateChannel(image, 'a',false);
+            validateChannel(image, 'a', false);
         }).should.throw(/alpha channel may not/);
     });
 
 });
-
-
 

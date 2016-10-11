@@ -1,6 +1,6 @@
 import Image from './image';
 import Stack from '../stack/stack';
-import {env, loadBinary, DOMImage, ImageData, Canvas, isDifferentOrigin} from './environment';
+import {loadBinary, DOMImage, Canvas, isDifferentOrigin} from './environment';
 import {PNGDecoder} from 'fast-png';
 import {decode as decodeJpeg} from 'fast-jpeg';
 import {decode as decodeTiff} from 'tiff';
@@ -36,13 +36,14 @@ export function loadURL(url, options) {
             switch (type.ext) {
                 case 'png':
                     return loadPNG(binaryData);
-                case 'jpg':
+                case 'jpg': {
                     const decoded = decodeJpeg(binaryData);
                     let meta;
                     if (decoded.exif) {
                         meta = getMetadata(decoded.exif);
                     }
                     return loadGeneric(url, {meta});
+                }
                 case 'tif':
                     return loadTIFF(binaryData);
             }

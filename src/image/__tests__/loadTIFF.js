@@ -1,4 +1,4 @@
-import {Image, load} from 'test/common';
+import {load} from 'test/common';
 
 describe('Load TIFF', function () {
     const tests = [

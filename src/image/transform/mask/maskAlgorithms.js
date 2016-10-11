@@ -34,5 +34,4 @@ export const methods = {
 };
 
 
-
 export const names = ['threshold'].concat(Object.keys(methods));

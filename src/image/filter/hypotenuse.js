@@ -22,9 +22,9 @@ export default function hypotenuse(otherImage, options = {}) {
         throw new Error('hypotenuse: both images must have the same number of channels');
     }
 
-    let newImage = Image.createFrom(this, {bitDepth:bitDepth});
+    let newImage = Image.createFrom(this, {bitDepth: bitDepth});
 
-    channels = validateArrayOfChannels(this, {channels:channels});
+    channels = validateArrayOfChannels(this, {channels: channels});
 
     let clamped = newImage.isClamped;
 
@@ -33,7 +33,7 @@ export default function hypotenuse(otherImage, options = {}) {
         for (let i = c; i < this.data.length; i += this.channels) {
             let value = Math.sqrt(this.data[i] * this.data[i] + otherImage.data[i] * otherImage.data[i]);
             if (clamped) { // we calculate the clamped result
-                newImage.data[i] = Math.min(Math.max(Math.round(value),0),newImage.maxValue);
+                newImage.data[i] = Math.min(Math.max(Math.round(value), 0), newImage.maxValue);
             } else {
                 newImage.data[i] = value;
             }

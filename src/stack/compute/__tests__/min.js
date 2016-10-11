@@ -1,4 +1,4 @@
-import {Image, Stack, getHash} from 'test/common';
+import {Image, Stack} from 'test/common';
 
 describe('check stack min method', function () {
     it ('should return global minimal for GREY image', function () {
@@ -70,7 +70,7 @@ describe('check stack min method', function () {
             )
         );
 
-        images.getMin().should.eql([1,1,1,4]);
+        images.getMin().should.eql([1, 1, 1, 4]);
     });
 
 });

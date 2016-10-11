@@ -6,7 +6,7 @@
 // Shreveport, LA 71115, USA
 // http://sourceforge.net/projects/fourier-ipal
 // http://www.lsus.edu/faculty/~ecelebi/fourier.htm
-export default function moments(histogram,total) {
+export default function moments(histogram, total) {
 //moments
     let m0 = 1.0;
     let m1 = 0.0;
@@ -48,11 +48,4 @@ export default function moments(histogram,total) {
         }
     }
     return threshold;
-}
-function partialSum(histogram, limite) {//a partial sum is calculated according to the value limit
-    let sum = 0;
-    for (let i = 0; i <= limite; i++) {
-        sum += histogram[i];
-    }
-    return sum;
 }

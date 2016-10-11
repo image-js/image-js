@@ -1,8 +1,8 @@
-import {Image, load} from 'test/common';
+import {Image} from 'test/common';
 
 describe('Image core - Binary images of 16 points', function () {
 
-    let img = new Image(8,2,{
+    let img = new Image(8, 2, {
         kind: 'BINARY'
     });
 
@@ -19,8 +19,8 @@ describe('Image core - Binary images of 16 points', function () {
     });
 
     it('check bit access XY', function () {
-        img.getBitXY(0,0).should.equal(0);
-        img.getBitXY(7,1).should.equal(0);
+        img.getBitXY(0, 0).should.equal(0);
+        img.getBitXY(7, 1).should.equal(0);
     });
 
     it('set / clear bit', function () {
@@ -35,14 +35,14 @@ describe('Image core - Binary images of 16 points', function () {
     });
 
     it('set XY / clear XY bit', function () {
-        img.setBitXY(0,0);
-        img.setBitXY(7,1);
-        img.getBitXY(0,0).should.equal(1);
-        img.getBitXY(7,1).should.equal(1);
-        img.clearBitXY(0,0);
-        img.clearBitXY(7,1);
-        img.getBitXY(0,0).should.equal(0);
-        img.getBitXY(7,1).should.equal(0);
+        img.setBitXY(0, 0);
+        img.setBitXY(7, 1);
+        img.getBitXY(0, 0).should.equal(1);
+        img.getBitXY(7, 1).should.equal(1);
+        img.clearBitXY(0, 0);
+        img.clearBitXY(7, 1);
+        img.getBitXY(0, 0).should.equal(0);
+        img.getBitXY(7, 1).should.equal(0);
     });
 
     it('toggle bit', function () {
@@ -59,16 +59,16 @@ describe('Image core - Binary images of 16 points', function () {
     });
 
     it('toggle XY bit', function () {
-        img.toggleBit(0,0);
-        img.toggleBit(4,1);
-        img.getBit(0,0).should.equal(1);
-        img.getBit(4,1).should.equal(1);
-        img.getBit(7,1).should.equal(0);
-        img.toggleBit(0,0);
-        img.toggleBit(4,1);
-        img.getBit(0,0).should.equal(0);
-        img.getBit(4,1).should.equal(0);
-        img.getBit(7,1).should.equal(0);
+        img.toggleBit(0, 0);
+        img.toggleBit(4, 1);
+        img.getBit(0, 0).should.equal(1);
+        img.getBit(4, 1).should.equal(1);
+        img.getBit(7, 1).should.equal(0);
+        img.toggleBit(0, 0);
+        img.toggleBit(4, 1);
+        img.getBit(0, 0).should.equal(0);
+        img.getBit(4, 1).should.equal(0);
+        img.getBit(7, 1).should.equal(0);
     });
 
 });

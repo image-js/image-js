@@ -42,7 +42,6 @@ export function getThreshold(value, maxValue) {
 }
 
 
-
 export function factorDimensions(factor, width, height) {
     factor = getFactor(factor);
     return {

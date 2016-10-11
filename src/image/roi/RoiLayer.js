@@ -64,10 +64,18 @@ export default class RoiLayer {
                 let target = y * width + x;
                 if (data[target] !== 0) {
                     let mapID = data[target];
-                    if (x < rois[mapID].minX) rois[mapID].minX = x;
-                    if (x > rois[mapID].maxX) rois[mapID].maxX = x;
-                    if (y < rois[mapID].minY) rois[mapID].minY = y;
-                    if (y > rois[mapID].maxY) rois[mapID].maxY = y;
+                    if (x < rois[mapID].minX) {
+                        rois[mapID].minX = x;
+                    }
+                    if (x > rois[mapID].maxX) {
+                        rois[mapID].maxX = x;
+                    }
+                    if (y < rois[mapID].minY) {
+                        rois[mapID].minY = y;
+                    }
+                    if (y > rois[mapID].maxY) {
+                        rois[mapID].maxY = y;
+                    }
                     rois[mapID].meanX += x;
                     rois[mapID].meanY += y;
                     rois[mapID].surface++;

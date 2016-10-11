@@ -9,7 +9,7 @@ describe.skip('Image core toBlob', function () {
         ctx.fillStyle = 'red';
         ctx.fillRect(0, 0, 2, 1);
         let img = Image.fromCanvas(canvas);
-        return img.toBlob().then(function (blob) {
+        return img.toBlob().then(function () {
 
         });
     });

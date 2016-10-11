@@ -5,7 +5,7 @@ describe('map a binary image (mask) 2 x 2', function () {
     let imageData = new Uint8Array(1);
     imageData[0] = 192;
 
-    let img = new Image(2,2, imageData, {
+    let img = new Image(2, 2, imageData, {
         kind: 'BINARY'
     });
 
@@ -14,7 +14,7 @@ describe('map a binary image (mask) 2 x 2', function () {
     let data = roiManager.getData();
     let result = roiManager.getMap();
 
-    data.sort(function (a,b) {
+    data.sort(function (a, b) {
         return b - a;
     });
 
@@ -39,7 +39,7 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
     imageData[0] = 255;
     imageData[1] = 0;
 
-    let img = new Image(4,4, imageData, {
+    let img = new Image(4, 4, imageData, {
         kind: 'BINARY'
     });
 
@@ -69,7 +69,7 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
     imageData[0] = 63;
     imageData[1] = 192;
 
-    let img = new Image(4,4, imageData, {
+    let img = new Image(4, 4, imageData, {
         kind: 'BINARY'
     });
 

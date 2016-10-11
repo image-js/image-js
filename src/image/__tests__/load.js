@@ -26,7 +26,7 @@ describe('Image core', function () {
         let img = Image.fromCanvas(canvas);
         Array.from(img.data).should.eql([
             255,   0,   0, 255, 255,   0,   0, 255,
-              0,   0,   0,   0,   0,   0,   0,   0
+            0,   0,   0,   0,   0,   0,   0,   0
         ]);
     });
 

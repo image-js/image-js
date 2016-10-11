@@ -16,7 +16,7 @@ import {RGB} from '../model/model';
 export default function rgba() {
     this.checkProcessable('rgba', {
         bitDepth: [8, 16],
-        alpha: [0,1],
+        alpha: [0, 1],
         colorModel: [RGB]
     });
 

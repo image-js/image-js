@@ -1,4 +1,4 @@
-import {Image, Stack, getHash} from 'test/common';
+import {Image, Stack} from 'test/common';
 
 describe('check stack max method', function () {
     it ('should return global maximal for GREY image', function () {

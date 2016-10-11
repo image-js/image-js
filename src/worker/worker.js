@@ -1,5 +1,4 @@
 import WorkerManager from 'web-worker-manager';
-import Image from '../image/image';
 import extend from './extend';
 
 class Worker {

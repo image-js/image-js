@@ -1,4 +1,4 @@
-import {Image, load} from 'test/common';
+import {load} from 'test/common';
 
 
 describe('we check that we can extract correctly a Roi', function () {
@@ -17,11 +17,11 @@ describe('we check that we can extract correctly a Roi', function () {
 
             rois.should.be.an.instanceof(Array).and.lengthOf(5);
 
-            rois.sort(function (a,b) {
+            rois.sort(function (a, b) {
                 return a.meanX - b.meanX;
             });
 
-            rois[0].internalIDs.should.eql([-2,3,2]);
+            rois[0].internalIDs.should.eql([-2, 3, 2]);
 
             let roiMask = rois[0].getMask();
             let extract = img.extract(roiMask);

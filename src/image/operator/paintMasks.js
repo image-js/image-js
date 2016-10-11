@@ -24,7 +24,6 @@ import {css2array} from '../../util/color';
  */
 
 
-
 export default function paintMasks(masks, options = {}) {
     let {
         color = 'red',
@@ -53,12 +52,17 @@ export default function paintMasks(masks, options = {}) {
             if (!Array.isArray(color)) {
                 return css2array(color);
             }
+            return color;
         });
     }
 
-    if (!Array.isArray(masks)) masks = [masks];
+    if (!Array.isArray(masks)) {
+        masks = [masks];
+    }
 
-    if (distinctColors) colors = getDistinctColors(masks.length);
+    if (distinctColors) {
+        colors = getDistinctColors(masks.length);
+    }
 
     for (let i = 0; i < masks.length; i++) {
         let mask = masks[i];

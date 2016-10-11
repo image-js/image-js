@@ -6,8 +6,8 @@ exports.Shape = require('./util/shape').default;
 exports.Kernel = require('./kernel/kernel');
 
 exports.Static = {
-    grey : require('./image/transform/greyAlgorithms').names,
-    mask : require('./image/transform/mask/maskAlgorithms').names
+    grey: require('./image/transform/greyAlgorithms').names,
+    mask: require('./image/transform/mask/maskAlgorithms').names
 };
 
 if (env === 'browser') {

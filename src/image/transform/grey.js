@@ -35,7 +35,7 @@ export default function grey(options = {}) {
 
     let valid = {
         bitDepth: [8, 16],
-        alpha: [0,1]
+        alpha: [0, 1]
     };
 
     if (!allowGrey) {
@@ -51,7 +51,9 @@ export default function grey(options = {}) {
 
     keepAlpha &= this.alpha;
     mergeAlpha &= this.alpha;
-    if (keepAlpha) mergeAlpha = false;
+    if (keepAlpha) {
+        mergeAlpha = false;
+    }
 
 
     let newImage = Image.createFrom(this, {
@@ -61,7 +63,9 @@ export default function grey(options = {}) {
     });
 
     let method = methods[algorithm.toLowerCase()];
-    if (!method) throw new Error('Unsupported grey algorithm: ' + algorithm);
+    if (!method) {
+        throw new Error('Unsupported grey algorithm: ' + algorithm);
+    }
 
 
     let ptr = 0;

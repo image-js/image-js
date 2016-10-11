@@ -1,5 +1,4 @@
-import {Image, load} from 'test/common';
-import console from 'better-console';
+import {load} from 'test/common';
 
 /* Image to test:
 11111
@@ -15,12 +14,12 @@ describe('we check the internalMapID', function () {
         return load('BW5x5.png').then(function (img) {
 
             let roiManager = img.getRoiManager();
-            let mask = img.mask(0.5, {invert:true});
+            let mask = img.mask(0.5, {invert: true});
             roiManager.fromMask(mask);
 
             let rois = roiManager.getRoi();
 
-            rois.sort(function (a,b) {
+            rois.sort(function (a, b) {
                 return a.mask.sizes[0] - b.mask.sizes[0];
             });
 
@@ -50,7 +49,7 @@ describe('we check the internalMapID with complex image', function () {
 
             let rois = roiManager.getRoi();
 
-            rois.sort(function (a,b) {
+            rois.sort(function (a, b) {
                 return a.internalIDs[0] - b.internalIDs[0];
             });
 
@@ -64,6 +63,4 @@ describe('we check the internalMapID with complex image', function () {
         });
     });
 });
-
-
 

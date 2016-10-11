@@ -1,5 +1,4 @@
 import {Image, Stack, getHash} from 'test/common';
-import matchAndCrop from '../matchAndCrop';
 
 describe('check matchAndCrop method', function () {
     it('should return an array of 3 images cropped and moved using matchToPrevious', function () {
@@ -177,7 +176,7 @@ describe('check matchAndCrop method', function () {
             )
         );
 
-        let results = images.matchAndCrop({algorithm:'matchToFirst'});
+        let results = images.matchAndCrop({algorithm: 'matchToFirst'});
         results.should.be.instanceOf(Stack).and.have.lengthOf(3);
 
         let result = results[0];
@@ -260,7 +259,7 @@ describe('check matchAndCrop method', function () {
             )
         );
 
-        let results = images.matchAndCrop({algorithm:'matchToFirst'});
+        let results = images.matchAndCrop({algorithm: 'matchToFirst'});
         results.should.be.instanceOf(Stack).and.have.lengthOf(3);
 
         getHash(results[1]).should.equal(getHash(results[2]));

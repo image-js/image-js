@@ -68,7 +68,9 @@ export default class Roi {
     }
 
     get center() {
-        if (this.computed.center) return this.computed.center;
+        if (this.computed.center) {
+            return this.computed.center;
+        }
         return this.computed.center = [(this.width / 2) >> 0, (this.height / 2) >> 0];
     }
 
@@ -82,7 +84,9 @@ export default class Roi {
     }
 
     get externalIDs() {
-        if (this.computed.externalIDs) return this.computed.externalIDs;
+        if (this.computed.externalIDs) {
+            return this.computed.externalIDs;
+        }
         // take all the borders and remove the internal one ...
 
         let borders = this.borderIDs;
@@ -104,7 +108,9 @@ export default class Roi {
     }
 
     get externalLengths() {
-        if (this.computed.externalLengths) return this.computed.externalLengths;
+        if (this.computed.externalLengths) {
+            return this.computed.externalLengths;
+        }
         this.externalIDs; // force the recalculation
         return this.computed.externalLengths;
     }
@@ -115,7 +121,9 @@ export default class Roi {
      specific region. It may be external or internal
      */
     get borderIDs() {
-        if (this.computed.borderIDs) return this.computed.borderIDs;
+        if (this.computed.borderIDs) {
+            return this.computed.borderIDs;
+        }
         let borders = getBorders(this);
         this.computed.borderIDs = borders.ids;
         this.computed.borderLengths = borders.lengths;
@@ -127,7 +135,9 @@ export default class Roi {
      specific region. It may be external or internal
      */
     get borderLengths() {
-        if (this.computed.borderLengths) return this.computed.borderLengths;
+        if (this.computed.borderLengths) {
+            return this.computed.borderLengths;
+        }
         this.borderIDs;
         return this.computed.borderLengths;
     }
@@ -160,12 +170,16 @@ export default class Roi {
      */
 
     get boxIDs() {
-        if (this.computed.boxIDs) return this.computed.boxIDs;
+        if (this.computed.boxIDs) {
+            return this.computed.boxIDs;
+        }
         return this.computed.boxIDs = getBoxIDs(this);
     }
 
     get internalIDs() {
-        if (this.computed.internalIDs) return this.computed.internalIDs;
+        if (this.computed.internalIDs) {
+            return this.computed.internalIDs;
+        }
         return this.computed.internalIDs = getInternalIDs(this);
     }
 
@@ -176,7 +190,9 @@ export default class Roi {
      border that don't have neighbours all around them.
      */
     get box() { // points of the Roi that touch the rectangular shape
-        if (this.computed.box) return this.computed.box;
+        if (this.computed.box) {
+            return this.computed.box;
+        }
         return this.computed.box = getBox(this);
     }
 
@@ -187,7 +203,9 @@ export default class Roi {
      are calculated in the getBoxPixels procedure
      */
     get external() {
-        if (this.computed.external) return this.computed.external;
+        if (this.computed.external) {
+            return this.computed.external;
+        }
         return this.computed.external = getExternal(this);
     }
 
@@ -199,7 +217,9 @@ export default class Roi {
      are calculated in the getBoxPixels procedure
      */
     get border() {
-        if (this.computed.border) return this.computed.border;
+        if (this.computed.border) {
+            return this.computed.border;
+        }
         return this.computed.border = getBorder(this);
     }
 
@@ -207,7 +227,9 @@ export default class Roi {
         Returns a binary image (mask) containing only the border of the mask
      */
     get contourMask() {
-        if (this.computed.contourMask) return this.computed.contourMask;
+        if (this.computed.contourMask) {
+            return this.computed.contourMask;
+        }
 
         let img = new Image(this.width, this.height, {
             kind: KindNames.BINARY,
@@ -241,30 +263,34 @@ export default class Roi {
         /**
          Returns a binary image containing the mask
          */
-            if (this.computed.boxMask) return this.computed.boxMask;
+        if (this.computed.boxMask) {
+            return this.computed.boxMask;
+        }
 
-            let img = new Image(this.width, this.height, {
-                kind: KindNames.BINARY,
-                position: [this.minX, this.minY],
-                parent: this.map.parent
-            });
+        let img = new Image(this.width, this.height, {
+            kind: KindNames.BINARY,
+            position: [this.minX, this.minY],
+            parent: this.map.parent
+        });
 
-            for (let x = 0; x < this.width; x++) {
-                img.setBitXY(x, 0);
-                img.setBitXY(x, this.height - 1);
-            }
-            for (let y = 0; y < this.height; y++) {
-                img.setBitXY(0, y);
-                img.setBitXY(this.width - 1, y);
-            }
-            return this.computed.boxMask = img;
+        for (let x = 0; x < this.width; x++) {
+            img.setBitXY(x, 0);
+            img.setBitXY(x, this.height - 1);
+        }
+        for (let y = 0; y < this.height; y++) {
+            img.setBitXY(0, y);
+            img.setBitXY(this.width - 1, y);
+        }
+        return this.computed.boxMask = img;
     }
 
     /**
      Returns a binary image containing the mask
      */
     get mask() {
-        if (this.computed.mask) return this.computed.mask;
+        if (this.computed.mask) {
+            return this.computed.mask;
+        }
 
         let img = new Image(this.width, this.height, {
             kind: KindNames.BINARY,
@@ -283,7 +309,9 @@ export default class Roi {
     }
 
     get filledMask() {
-        if (this.computed.filledMask) return this.computed.filledMask;
+        if (this.computed.filledMask) {
+            return this.computed.filledMask;
+        }
 
         let img = new Image(this.width, this.height, {
             kind: KindNames.BINARY,
@@ -303,9 +331,11 @@ export default class Roi {
     }
 
     get centerMask() {
-        if (this.computed.centerMask) return this.computed.centerMask;
+        if (this.computed.centerMask) {
+            return this.computed.centerMask;
+        }
 
-        let img = new Shape({kind:'smallCross'}).getMask();
+        let img = new Shape({kind: 'smallCross'}).getMask();
 
         img.parent = this.map.parent;
         img.position = [this.minX + this.center[0] - 1, this.minY + this.center[1] - 1];
@@ -314,13 +344,15 @@ export default class Roi {
     }
 
     get points() {
-        if (this.computed.points) return this.computed.points;
+        if (this.computed.points) {
+            return this.computed.points;
+        }
         let points = [];
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
                 let target = (y + this.minY) * this.map.width + x + this.minX;
                 if (this.map.data[target] === this.id) {
-                    points.push([x,y]);
+                    points.push([x, y]);
                 }
             }
         }
@@ -328,9 +360,10 @@ export default class Roi {
     }
 
 
-
     get maxLengthPoints() {
-        if (this.computed.maxLengthPoints) return this.computed.maxLengthPoints;
+        if (this.computed.maxLengthPoints) {
+            return this.computed.maxLengthPoints;
+        }
         let maxLength = 0;
         let maxLengthPoints;
         const points = this.points;
@@ -352,7 +385,9 @@ export default class Roi {
         Calculates the maximum length between two pixels of the Roi.
      */
     get maxLength() {
-        if (this.computed.maxLength) return this.computed.maxLength;
+        if (this.computed.maxLength) {
+            return this.computed.maxLength;
+        }
         let maxLength = Math.sqrt(
             Math.pow(this.maxLengthPoints[0][0] - this.maxLengthPoints[1][0], 2) +
             Math.pow(this.maxLengthPoints[0][1] - this.maxLengthPoints[1][1], 2)
@@ -361,7 +396,9 @@ export default class Roi {
     }
 
     get angle() {
-        if (this.computed.angle) return this.computed.angle;
+        if (this.computed.angle) {
+            return this.computed.angle;
+        }
         let points = this.maxLengthPoints;
         let angle = -Math.atan2(points[0][1] - points[1][1], points[0][0] - points[1][0]) * 180 / Math.PI;
 
@@ -417,7 +454,6 @@ function getBorders(roi) {
 }
 
 
-
 function getBoxIDs(roi) {
     let surroundingIDs = new Set(); // allows to get a unique list without indexOf
 
@@ -458,15 +494,15 @@ function getBoxIDs(roi) {
 }
 
 
-
-
 function getBox(roi) {
     let total = 0;
     let roiMap = roi.map;
     let data = roiMap.data;
 
     let topBottom = [0];
-    if (roi.height > 1) topBottom[1] = roi.height - 1;
+    if (roi.height > 1) {
+        topBottom[1] = roi.height - 1;
+    }
     for (let y of topBottom) {
         for (let x = 1; x < roi.width - 1; x++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
@@ -477,7 +513,9 @@ function getBox(roi) {
     }
 
     let leftRight = [0];
-    if (roi.width > 1) leftRight[1] = roi.width - 1;
+    if (roi.width > 1) {
+        leftRight[1] = roi.width - 1;
+    }
     for (let x of leftRight) {
         for (let y = 0; y < roi.height; y++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
