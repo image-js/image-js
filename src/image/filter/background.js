@@ -1,5 +1,5 @@
 import {KernelRidgeRegression} from 'ml-regression';
-import Image from '../image';
+import Image from '../Image';
 
 /**
  * @memberof Image

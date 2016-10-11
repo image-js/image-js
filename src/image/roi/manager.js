@@ -3,7 +3,7 @@ import fromExtrema from './creator/fromExtrema';
 import fromWaterShed from './creator/fromWaterShed';
 import fromPoints from './creator/fromPoints';
 import extendObject from 'extend';
-import Image from '../image';
+import Image from '../Image';
 import RoiMap from './RoiMap';
 import RoiLayer from './RoiLayer';
 

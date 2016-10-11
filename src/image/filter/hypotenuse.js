@@ -1,5 +1,5 @@
 import {validateArrayOfChannels} from '../../util/channel';
-import Image from '../image';
+import Image from '../Image';
 
 /**
  * Calculate a new image that is the hypotenuse between the current image and the otherImage.

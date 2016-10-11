@@ -1,4 +1,4 @@
-import Image from '../image';
+import Image from '../Image';
 
 /**
  * Make a copy of the current image and convert to RGBA 8 bits

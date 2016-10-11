@@ -1,4 +1,4 @@
-import Image from '../image';
+import Image from '../Image';
 import array from 'new-array';
 
 import copy from '../utility/copy';

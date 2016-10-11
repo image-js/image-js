@@ -3,7 +3,7 @@ lib
 .idea
 *.log
 test/TMP
-test/browser/image.js
+test/browser/Image.js
 .DS_Store
 coverage
 .eslintcache

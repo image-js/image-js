@@ -1,4 +1,4 @@
-import Image from './image';
+import Image from './Image';
 import {env} from './environment';
 import includes from 'string-includes';
 

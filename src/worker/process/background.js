@@ -1,5 +1,5 @@
 import extend from 'extend';
-import Image from '../../image/image';
+import Image from '../../image/Image';
 
 const defaultOptions = {
     regression: {

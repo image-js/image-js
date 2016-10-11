@@ -49,7 +49,7 @@ To run any script, use the command `npm run script-name`.
 Script name | Description
 ----------- | -----------
 build | build the browser files (for release, do not use it for tests)
-build-test | build the browser test file (test/browser/image.js)
+build-test | build the browser test file (test/browser/Image.js)
 clean-dist | delete browser build files
 compile | build the Node.js lib files
 test | Run the test suite and other checks. Always run this before pushing to GitHub

@@ -1,4 +1,4 @@
-import Image from '../image';
+import Image from '../Image';
 import {validateArrayOfChannels} from '../../util/channel';
 import {validateKernel} from '../../util/kernel';
 let conv = require('ml-matrix-convolution');

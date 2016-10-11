@@ -1,5 +1,5 @@
 import Matrix from 'ml-matrix';
-import Image from '../image/image';
+import Image from '../image/Image';
 import * as KindNames from '../image/kindNames';
 
 const cross = [
