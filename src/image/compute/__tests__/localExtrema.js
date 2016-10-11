@@ -22,6 +22,7 @@ describe('Find local extrema', function () {
         );
         image.getLocalExtrema().should.eql([[3, 2], [6, 7]]);
     });
+    
     it('minimum for a GREY image', function () {
 
         let image = new Image(10, 10,
@@ -42,7 +43,14 @@ describe('Find local extrema', function () {
         );
 
         image.getLocalExtrema({algorithm: 'min'}).should.eql([[3, 2], [6, 7]]);
+        image.getLocalExtrema({
+            algorithm: 'min',
+            region: 3,
+            maxEquals: 0
+        }).should.eql([[3, 2], [6, 7]]);
+        
     });
+
     it('maximum for a GREY image with merge', function () {
         let image = new Image(10, 10,
             [
@@ -63,4 +71,32 @@ describe('Find local extrema', function () {
             {removeClosePoints: 3, region: 1}
         ).should.eql([[3, 2], [6, 7]]);
     });
+
+    it('maximum for a GREY image with all smaller', function () {
+        let image = new Image(10, 10,
+            [
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 4, 4, 4, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 2, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+            ],
+            {kind: 'GREY'}
+        );
+        image.getLocalExtrema(
+            {removeClosePoints: 3, region: 1, maxEquals: 0}
+        ).should.eql([[6, 7]]);
+        image.getLocalExtrema(
+            {removeClosePoints: 3, region: 2, maxEquals: 0}
+        ).should.eql([[6, 7]]);
+        image.getLocalExtrema(
+            {removeClosePoints: 3, region: 3, maxEquals: 0}
+        ).should.eql([[6, 7]]);
+    });
+    
 });

@@ -1,4 +1,5 @@
 import convolutionFft from '../operator/convolutionFft';
+import convolution from '../operator/convolution';
 
 /**
  * @memberof Image
@@ -11,7 +12,8 @@ export default function gaussianFilter(options = {}) {
 		radius = 1,
 		sigma,
 		channels,
-		border = 'copy'
+		border = 'copy',
+        fft = true
 	} = options;
     this.checkProcessable('gaussianFilter', {
         bitDepth: [8, 16]
@@ -26,10 +28,18 @@ export default function gaussianFilter(options = {}) {
         kernel = getKernel(radius, sigma);
     }
 
-    return convolutionFft.call(this, kernel, {
-        border: border,
-        channels: channels
-    });
+    if (fft) {
+        return convolutionFft.call(this, kernel, {
+            border: border,
+            channels: channels
+        });
+    } else {
+        return convolution.call(this, kernel, {
+            border: border,
+            channels: channels
+        });
+    }
+    
 }
 
 function getKernel(radius, sigma) {
