@@ -1,5 +1,5 @@
 import {Image, load} from 'test/common';
-
+import {asc as sortAsc} from 'num-sort';
 
 describe('we check mask', function () {
     it('should yield the right mask size and value', function () {
@@ -13,7 +13,7 @@ describe('we check mask', function () {
             let mask = img.mask({invert: true});
             roiManager.fromMask(mask);
 
-            let roiIDs = roiManager.getRoiIDs().sort();
+            let roiIDs = roiManager.getRoiIDs().sort(sortAsc);
             roiIDs.should.eql([-1, 1, 2]);
 
             let rois = roiManager.getRoi();

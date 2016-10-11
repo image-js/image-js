@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import {asc as sortAsc} from 'num-sort';
 
 describe('Get the ids of neighbour touching the Roi', function () {
 
@@ -17,7 +18,7 @@ describe('Get the ids of neighbour touching the Roi', function () {
     roiManager.putMap(map);
     it('IDs of neighbour', function () {
         let result = roiManager.getRoi();
-        result[0].borderIDs.sort().should.eql([0, 2, 3]);
+        result[0].borderIDs.sort(sortAsc).should.eql([0, 2, 3]);
         result[1].borderIDs.should.eql([1, 3]);
         result[2].borderIDs.should.eql([1, 2]);
     });

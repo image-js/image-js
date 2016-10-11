@@ -1,4 +1,5 @@
 import {validateArrayOfChannels} from '../../util/channel';
+import {asc as sortAsc} from 'num-sort';
 import Image from '../image';
 
 /**
@@ -50,7 +51,7 @@ export default function medianFilter(options = {}) {
                     }
                 }
                 let index = (y * this.width + x) * this.channels + c;
-                let newValue = kernel.sort((a, b) => a - b)[middle];
+                let newValue = kernel.sort(sortAsc)[middle];
 
                 newImage.data[index] = newValue;
             }

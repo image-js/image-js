@@ -1,5 +1,5 @@
 import {Image} from 'test/common';
-
+import {asc as sortAsc} from 'num-sort';
 
 describe('Get the number of pixels touching the adjacent zones', function () {
 
@@ -18,8 +18,8 @@ describe('Get the number of pixels touching the adjacent zones', function () {
     roiManager.putMap(map);
     it('Number of pixels adjacent to another zone', function () {
         let result = roiManager.getRoi();
-        result[0].externalLengths.sort().should.eql([2, 3, 4]);
-        result[1].externalLengths.sort().should.eql([2, 4]);
-        result[2].externalLengths.sort().should.eql([3, 3]);
+        result[0].externalLengths.sort(sortAsc).should.eql([2, 3, 4]);
+        result[1].externalLengths.sort(sortAsc).should.eql([2, 4]);
+        result[2].externalLengths.sort(sortAsc).should.eql([3, 3]);
     });
 });

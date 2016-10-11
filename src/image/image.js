@@ -166,7 +166,7 @@ IJS.load('cat.jpg').then(function(image) {
 
     // we can sort teh rois by surface
     // for demonstration we use an arrow function
-    rois.sort( (a,b) => b.surface-a.surface);
+    rois.sort((a, b) => b.surface-a.surface);
 
     // the first Roi (the biggest is expected to be the pill)
 
