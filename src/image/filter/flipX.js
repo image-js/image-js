@@ -15,6 +15,7 @@ export default function flipX() {
         let offsetY = i * this.width * this.channels;
 
         for (let j = 0; j < Math.floor(this.width / 2); j++) {
+
             let posCurrent = j * this.channels + offsetY;
             let posOpposite = (this.width - j - 1) * this.channels + offsetY;
 
@@ -29,4 +30,5 @@ export default function flipX() {
     }
 
     return this;
+
 }
