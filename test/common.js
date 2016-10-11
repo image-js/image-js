@@ -18,7 +18,7 @@ export function getSquare() {
     return new Image(3,3,[
         0,  0,  255,255, // red
         0,  255,0,  255, // green
-        255,0,  0,  255, // blue
+        255,0,  0,  255, // blur
         255,255,0,  255, // yellow
         255,0,  255,255, // magenta
         0,  255,255,255, // cyan
