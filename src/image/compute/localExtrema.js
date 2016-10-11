@@ -7,7 +7,7 @@
  *        the 8 points around and 3 to the 12 points around the central pixel
  * @param removeClosePoints Remove pts which have a distance between them smaller than this param.
  * @param algorithm chose between min or max local.
- * @returns {[number]} Array having has size the number of channels
+ * @returns {number[]} Array having has size the number of channels
  */
 
 

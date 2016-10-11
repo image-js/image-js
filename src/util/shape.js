@@ -81,7 +81,7 @@ export default class Shape {
 
     /**
      * Returns an array of [x,y] points
-     * @returns {array<array<number>>} - Array of [x,y] points
+     * @returns {number[][]} - Array of [x,y] points
      */
 
     getPoints() {

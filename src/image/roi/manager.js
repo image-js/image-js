@@ -111,7 +111,7 @@ export default class RoiManager {
     /**
      * Return the IDs of the Regions Of Interest (Roi) as an array of number
      * @param {object} [options]
-     * @returns {[number]}
+     * @returns {number[]}
      */
     getRoiIDs(options = {}) {
         let rois = this.getRoi(options);
@@ -136,7 +136,7 @@ export default class RoiManager {
      * @param {number} [options.minHeight=Number.POSITIVE_INFINITY]
      * @param {number} [options.maxWidth=0]
      * @param {number} [options.maxHeight=Number.POSITIVE_INFINITY]
-     * @returns {[Roi]}
+     * @returns {Roi[]}
      */
 
     getRoi(options = {}) {
@@ -182,7 +182,7 @@ export default class RoiManager {
      * Returns an array of masks
      * See @links Roi.getMask for the options
      * @param {object} [options]
-     * @returns {[Image]} Retuns an array of masks (1 bit Image)
+     * @returns {Image[]} Retuns an array of masks (1 bit Image)
      */
     getMasks(options = {}) {
         let rois = this.getRoi(options);
@@ -197,7 +197,7 @@ export default class RoiManager {
     /**
      *
      * @param {object} [options]
-     * @returns {[number]}
+     * @returns {number[]}
      */
     getData(options = {}) {
         let opt = extendObject({}, this._options, options);
@@ -277,7 +277,7 @@ export default class RoiManager {
      * @param {object} [options]
      * @param {string} [algorithm='commonBorder'] ; algorithm used to decide which ROIs are merged.
      * @param {number} [minCommonBorderLength=5] is an integer, determine the strength of the merging.
-     * @returns {*}
+     * @returns {this}
      */
 
     mergeRoi(options = {}) {

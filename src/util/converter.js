@@ -19,7 +19,7 @@ export function getFactor(value) {
  * We can specify a threshold as "0.4", "40%" or 123
  * @param value
  * @param maxValue
- * @returns {*}
+ * @returns {number}
  */
 export function getThreshold(value, maxValue) {
     if (!maxValue) {

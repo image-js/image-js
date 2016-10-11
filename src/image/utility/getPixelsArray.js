@@ -3,7 +3,7 @@
  * [[R1, G1, B1], [R2, G2, B2], ...]
  * @memberof Image
  * @instance
- * @returns {Array<Array<number>>}
+ * @returns {number[][]}
  */
 
 export default function getPixelsArray() {

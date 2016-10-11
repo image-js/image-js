@@ -1,7 +1,7 @@
 /**
  * Returns the median of an histogram
  * @param histogram
- * @returns {*}
+ * @returns {number}
  */
 
 export function median(histogram) {
@@ -35,7 +35,7 @@ export function median(histogram) {
 /**
  * Retuns the mean of an histogram
  * @param histogram
- * @returns {*}
+ * @returns {number}
  */
 export function mean(histogram) {
     let total = 0;
