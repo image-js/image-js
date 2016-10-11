@@ -37,14 +37,14 @@ kinds[Kind.RGB] = {
 
 kinds[Kind.CMYK] = {
     components: 4,
-    alpha: 1,
+    alpha: 0,
     bitDepth: 8,
     colorModel: CMYK
 };
 
 kinds[Kind.CMYKA] = {
     components: 4,
-    alpha: 0,
+    alpha: 1,
     bitDepth: 8,
     colorModel: CMYK
 };
