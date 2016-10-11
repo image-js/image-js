@@ -35,7 +35,7 @@ export function getHistogram(options = {}) {
  *      the maxValue allowed for this image (255 for usual images).
  *      If maxSlots = 8, all the intensities between 0 and 31 will be
  *      placed in the slot 0, 32 to 63 in slot 1, ...
- * @return {Promise} - Resolves with the Image
+ * @return {number[]} - Resolves with the Image
  * @example
  *      image.getHistograms({
  *          maxSlots: 8,

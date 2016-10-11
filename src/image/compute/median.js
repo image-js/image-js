@@ -4,7 +4,7 @@ import {median as histogramMedian} from '../../util/histogram';
  * Returns an array with the median value of each channel
  * @memberof Image
  * @instance
- * @returns {[number]} Array having has size the number of channels
+ * @returns {number[]} Array having has size the number of channels
  */
 
 
