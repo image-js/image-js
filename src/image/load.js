@@ -1,5 +1,5 @@
 import Image from './Image';
-import Stack from '../stack/stack';
+import Stack from '../stack/Stack';
 import {loadBinary, DOMImage, Canvas, isDifferentOrigin} from './environment';
 import {PNGDecoder} from 'fast-png';
 import {decode as decodeJpeg} from 'fast-jpeg';

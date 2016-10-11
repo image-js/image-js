@@ -9,7 +9,7 @@ import RoiManager from './roi/manager';
 import {getType, canWrite} from './mediaTypes';
 import extendObject from 'extend';
 import {loadURL} from './load';
-import Stack from '../stack/stack';
+import Stack from '../stack/Stack';
 import {canvasToBlob} from 'blob-util';
 
 let computedPropertyDescriptor = {

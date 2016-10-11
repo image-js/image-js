@@ -1,7 +1,7 @@
 import {env} from './image/environment';
 
 module.exports = exports = require('./image/Image').default;
-exports.Stack = require('./stack/stack').default;
+exports.Stack = require('./stack/Stack').default;
 exports.Shape = require('./util/shape').default;
 exports.Kernel = require('./kernel/kernel');
 

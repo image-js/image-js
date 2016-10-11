@@ -5,7 +5,7 @@ import {getImage} from './test';
 export {getImage, getHash} from './test';
 
 import Image from '../src/image/Image';
-import Stack from '../src/stack/stack';
+import Stack from '../src/stack/Stack';
 import IJS from '../src/index';
 
 export {Image, Stack, IJS};
