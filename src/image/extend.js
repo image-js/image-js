@@ -5,22 +5,23 @@ import invertOneLoop from './filter/invertOneLoop';
 import invertPixel from './filter/invertPixel';
 import invertApply from './filter/invertApply';
 import invertBinaryLoop from './filter/invertBinaryLoop';
-import invert from './filter/invert';
-import flipX from './filter/flipX';
-import flipY from './filter/flipY';
-import meanFilter from './filter/blur';
+
+import invertFilter from './filter/invert';
+import flipXFilter from './filter/flipX';
+import flipYFilter from './filter/flipY';
+import blurFilter from './filter/blur';
 import medianFilter from './filter/median';
 import gaussianFilter from './filter/gaussian';
 import sobelFilter from './filter/sobel';
-import level from './filter/level';
-import add from './filter/add';
-import subtract from './filter/subtract';
-import hypotenuse from './filter/hypotenuse';
-import multiply from './filter/multiply';
-import divide from './filter/divide';
-import getBackground from './filter/getBackground';
+import levelFilter from './filter/level';
+import addFilter from './filter/add';
+import subtractFilter from './filter/subtract';
+import hypotenuseFilter from './filter/hypotenuse';
+import multiplyFilter from './filter/multiply';
+import divideFilter from './filter/divide';
+import backgroundFilter from './filter/background';
 
-// methods
+// transforms
 import crop from './transform/crop';
 import scale from './transform/scale/scale';
 import hsv from './transform/hsv';
@@ -33,7 +34,7 @@ import pad from './transform/pad';
 import resizeBinary from './transform/resizeBinary';
 import colorDepth from './transform/colorDepth';
 
-
+// utility
 import setBorder from './utility/setBorder';
 import split from './utility/split';
 import getChannel from './utility/getChannel';
@@ -47,6 +48,8 @@ import getColumn from './utility/getColumn';
 import getMatrix from './utility/getMatrix';
 import setMatrix from './utility/setMatrix';
 import getPixelsArray from './utility/getPixelsArray';
+
+// operators
 import paintMasks from './operator/paintMasks';
 import paintPoints from './operator/paintPoints';
 import extract from './operator/extract';
@@ -77,22 +80,22 @@ export default function extend(Image) {
     Image.extendMethod('invertPixel', invertPixel, inPlace);
     Image.extendMethod('invertOneLoop', invertOneLoop, inPlace);
     Image.extendMethod('invertApply', invertApply, inPlace);
-    Image.extendMethod('invert', invert, inPlaceStack);
+    Image.extendMethod('invert', invertFilter, inPlaceStack);
     Image.extendMethod('invertBinaryLoop', invertBinaryLoop, inPlace);
-    Image.extendMethod('level', level, inPlace);
-    Image.extendMethod('add', add, inPlace);
-    Image.extendMethod('subtract', subtract, inPlace);
-    Image.extendMethod('multiply', multiply, inPlace);
-    Image.extendMethod('divide', divide, inPlace);
-    Image.extendMethod('hypotenuse', hypotenuse);
-    Image.extendMethod('getBackground', getBackground);
-    Image.extendMethod('flipX', flipX);
-    Image.extendMethod('flipY', flipY);
+    Image.extendMethod('level', levelFilter, inPlace);
+    Image.extendMethod('add', addFilter, inPlace);
+    Image.extendMethod('subtract', subtractFilter, inPlace);
+    Image.extendMethod('multiply', multiplyFilter, inPlace);
+    Image.extendMethod('divide', divideFilter, inPlace);
+    Image.extendMethod('hypotenuse', hypotenuseFilter);
+    Image.extendMethod('background', backgroundFilter);
+    Image.extendMethod('flipX', flipXFilter);
+    Image.extendMethod('flipY', flipYFilter);
 
-    Image.extendMethod('meanFilter', meanFilter);
+    Image.extendMethod('blur', blurFilter);
     Image.extendMethod('medianFilter', medianFilter);
-    Image.extendMethod('gaussianFilter', gaussianFilter);
-    Image.extendMethod('sobelFilter', sobelFilter);
+    Image.extendMethod('gaussian', gaussianFilter);
+    Image.extendMethod('sobel', sobelFilter);
 
     Image.extendMethod('crop', crop, stack);
     Image.extendMethod('scale', scale, stack);
@@ -135,7 +138,7 @@ export default function extend(Image) {
     Image.extendMethod('getMax', getMax).extendProperty('max', getMax);
     Image.extendMethod('getSum', getSum).extendProperty('sum', getSum);
     Image.extendMethod('getLocalExtrema', getLocalExtrema);
-    Image.extendMethod('getMedian', getSum).extendProperty('median', getMedian);
+    Image.extendMethod('getMedian', getMedian).extendProperty('median', getMedian);
     Image.extendMethod('getMean', getMean).extendProperty('mean', getMean);
     Image.extendMethod('getPoints', getPoints).extendProperty('points', getPoints);
     Image.extendMethod('getRelativePosition', getRelativePosition);

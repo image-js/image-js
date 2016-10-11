@@ -120,7 +120,7 @@ IJS.load('cat.jpg').then(function(image) {
     var components=image.split();
     components[0].save('cat-red.jpg');
     components[1].save('cat-green.jpg');
-    components[2].save('cat-blue.jpg');
+    components[2].save('cat-blur.jpg');
 });
 
 

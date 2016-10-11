@@ -1,6 +1,6 @@
 import {Image} from 'test/common';
 
-describe('check the gaussianFilter filter', function () {
+describe('check the gaussian filter', function () {
     it('check for GREY image', function () {
         let image = new Image(5, 5,
             [
@@ -13,7 +13,7 @@ describe('check the gaussianFilter filter', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.gaussianFilter().data).should.eql(
+        Array.from(image.gaussian().data).should.eql(
             [
                 15, 15, 17, 15, 15,
                 15, 15, 17, 15, 15,
@@ -22,7 +22,6 @@ describe('check the gaussianFilter filter', function () {
                 15, 15, 17, 15, 15
             ]
         );
-
     });
 
     it('check for GREY image wider than taller', function () {
@@ -37,7 +36,7 @@ describe('check the gaussianFilter filter', function () {
             {kind: 'GREY'}
         );
         
-        Array.from(image.gaussianFilter({fft: false}).data).should.eql(
+        Array.from(image.gaussian({fft: false}).data).should.eql(
             [
                 11, 11, 15, 17, 15, 11, 11,
                 11, 11, 15, 17, 15, 11, 11,
@@ -47,7 +46,7 @@ describe('check the gaussianFilter filter', function () {
             ]
         );
 
-        Array.from(image.gaussianFilter().data).should.eql(
+        Array.from(image.gaussian().data).should.eql(
             [
                 11, 11, 15, 17, 15, 11, 11,
                 11, 11, 15, 17, 15, 11, 11,
@@ -58,7 +57,7 @@ describe('check the gaussianFilter filter', function () {
         );
     });
 
-    it.only('check for GREY image taller than wider', function () {
+    it('check for GREY image taller than wider', function () {
         let image = new Image(5, 7,
             [
                 10, 10, 10, 10, 10,
@@ -72,7 +71,7 @@ describe('check the gaussianFilter filter', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.gaussianFilter({fft: false}).data).should.eql(
+        Array.from(image.gaussian({fft: false}).data).should.eql(
             [
                 11, 11, 11, 11, 11,
                 11, 11, 11, 11, 11,
@@ -85,7 +84,7 @@ describe('check the gaussianFilter filter', function () {
         );
 
 
-        Array.from(image.gaussianFilter().data).should.eql(
+        Array.from(image.gaussian().data).should.eql(
             [
                 11, 11, 11, 11, 11,
                 11, 11, 11, 11, 11,
@@ -96,8 +95,6 @@ describe('check the gaussianFilter filter', function () {
                 11, 11, 11, 11, 11
             ]
         );
-
     });
-
 });
 

@@ -1,6 +1,6 @@
 import {Image} from 'test/common';
 
-describe('check the gaussianFilter filter', function () {
+describe('check the gaussian filter', function () {
     it('check for GREY image', function () {
         let image = new Image(7, 7,
             [
@@ -15,7 +15,7 @@ describe('check the gaussianFilter filter', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.sobelFilter().data).should.eql(
+        Array.from(image.sobel().data).should.eql(
             [
                 13, 13, 28, 36, 28, 13, 13,
                 13, 13, 28, 36, 28, 13, 13,

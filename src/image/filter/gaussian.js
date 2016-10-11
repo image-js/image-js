@@ -2,12 +2,19 @@ import convolutionFft from '../operator/convolutionFft';
 import convolution from '../operator/convolution';
 
 /**
+ * Apply a gaussian filter to the image
  * @memberof Image
  * @instance
+ * @param {object} options
+ * @param {number} [options.radius=1] : number of pixels around the current pixel
+ * @param {number} [options.sigma]
+ * @param {number[]|string[]} [options.channels] : to which channel to apply the filter. By default all but alpha.
+ * @param {string} [options.border='copy']
+ * @param {boolean} [options.fft=true] : use the fastest convolution FFT algorithm
  * @returns {Image}
  */
 
-export default function gaussianFilter(options = {}) {
+export default function gaussian(options = {}) {
     let {
 		radius = 1,
 		sigma,
@@ -15,7 +22,7 @@ export default function gaussianFilter(options = {}) {
 		border = 'copy',
         fft = true
 	} = options;
-    this.checkProcessable('gaussianFilter', {
+    this.checkProcessable('gaussian', {
         bitDepth: [8, 16]
     });
 

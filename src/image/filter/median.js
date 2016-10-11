@@ -14,14 +14,14 @@ import Image from '../image';
 *      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
 *      * [number] : array of channels as numbers
 *      * [string] : array of channels as one letter string
-* @param {number} [radius=1] distance of the square to take the mean of.
-* @param {string} [border='copy'] algorithm that will be applied after to deal with borders
+* @param {number} [options.radius=1] distance of the square to take the mean of.
+* @param {string} [options.border='copy'] algorithm that will be applied after to deal with borders
 * @returns {Image}
 */
-export default function medianFilter(options = {}) {
+export default function median(options = {}) {
     let {radius = 1, channels, border = 'copy'} = options;
 
-    this.checkProcessable('medianFilter', {
+    this.checkProcessable('median', {
         bitDepth: [8, 16]
     });
 
@@ -67,5 +67,5 @@ export default function medianFilter(options = {}) {
 
     return newImage;
 
-}//End medianFilter function
+}//End median function
 

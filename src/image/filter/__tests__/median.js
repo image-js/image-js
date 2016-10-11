@@ -1,6 +1,6 @@
 import {Image} from 'test/common';
 
-describe('check the medianFilter filter', function () {
+describe('check the median filter', function () {
     it('check for GREY image', function () {
         let image = new Image(5, 5,
             [

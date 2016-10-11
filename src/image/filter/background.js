@@ -7,7 +7,7 @@ import Image from '../image';
  * @returns {Image}
  */
 
-export default function getBackground(coordinates, values, options) {
+export default function background(coordinates, values, options) {
     const model = new KernelRidgeRegression(coordinates, values, options);
     const allCoordinates = new Array(this.size);
     for (let i = 0; i < this.width; i++) {

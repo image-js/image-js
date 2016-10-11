@@ -129,25 +129,25 @@
                       <li><a
                         href='#Image#meanFilter'
                         class='regular pre-open'>
-                        #meanFilter
+                        #blur
                       </a></li>
                       
                       <li><a
                         href='#Image#medianFilter'
                         class='regular pre-open'>
-                        #medianFilter
+                        #median
                       </a></li>
                       
                       <li><a
                         href='#Image#gaussianFilter'
                         class='regular pre-open'>
-                        #gaussianFilter
+                        #gaussian
                       </a></li>
                       
                       <li><a
                         href='#Image#sobelFilter'
                         class='regular pre-open'>
-                        #sobelFilter
+                        #sobel
                       </a></li>
                       
                       <li><a
@@ -189,7 +189,7 @@
                       <li><a
                         href='#Image#getBackground'
                         class='regular pre-open'>
-                        #getBackground
+                        #background
                       </a></li>
                       
                       <li><a
@@ -1195,7 +1195,7 @@ IJS.load(<span class="hljs-string">'cat.jpg'</span>).then(<span class="hljs-func
 <span class="hljs-keyword">var</span> components=image.split();
 components[<span class="hljs-number">0</span>].save(<span class="hljs-string">'cat-red.jpg'</span>);
 components[<span class="hljs-number">1</span>].save(<span class="hljs-string">'cat-green.jpg'</span>);
-components[<span class="hljs-number">2</span>].save(<span class="hljs-string">'cat-blue.jpg'</span>);
+components[<span class="hljs-number">2</span>].save(<span class="hljs-string">'cat-blur.jpg'</span>);
 });</pre>
     
       
@@ -2437,7 +2437,7 @@ the data or only the image parameters (size, colorModel, ...)
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>meanFilter(k)</span>
+            <span class='code strong strong truncate'>blur(k)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -2447,7 +2447,7 @@ the data or only the image parameters (size, colorModel, ...)
 
   
 
-  <div class='pre p1 fill-light mt0'>meanFilter(k: any): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
+  <div class='pre p1 fill-light mt0'>blur(k: any): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
 
   
 
@@ -2500,7 +2500,7 @@ the data or only the image parameters (size, colorModel, ...)
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>medianFilter([options], [radius], [border])</span>
+            <span class='code strong strong truncate'>median([options], [radius], [border])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -2512,7 +2512,7 @@ the data or only the image parameters (size, colorModel, ...)
 pixels.</p>
 
 
-  <div class='pre p1 fill-light mt0'>medianFilter(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {}), radius: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>], border: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
+  <div class='pre p1 fill-light mt0'>median(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>](default {}), radius: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>], border: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
 
   
 
@@ -2616,7 +2616,7 @@ pixels.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>gaussianFilter(options)</span>
+            <span class='code strong strong truncate'>gaussian(options)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -2626,7 +2626,7 @@ pixels.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>gaussianFilter(options: any): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
+  <div class='pre p1 fill-light mt0'>gaussian(options: any): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
 
   
 
@@ -2681,7 +2681,7 @@ pixels.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>sobelFilter(options)</span>
+            <span class='code strong strong truncate'>sobel(options)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -2691,7 +2691,7 @@ pixels.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>sobelFilter(options: any): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
+  <div class='pre p1 fill-light mt0'>sobel(options: any): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
 
   
 
@@ -3221,7 +3221,7 @@ pixels.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getBackground(coordinates, values, options)</span>
+            <span class='code strong strong truncate'>background(coordinates, values, options)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3231,7 +3231,7 @@ pixels.</p>
 
   
 
-  <div class='pre p1 fill-light mt0'>getBackground(coordinates: any, values: any, options: any): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
+  <div class='pre p1 fill-light mt0'>background(coordinates: any, values: any, options: any): <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image">Image</a></div>
 
   
 
@@ -5422,7 +5422,7 @@ Currently only conversion from 8 to 16 bits and 16 to 8 bits is allowed.</p>
                 <tr>
                   <td class='break-word'><span class='code bold'>options.labelColor</span> <code class='quiet'>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>]</code>
                   
-                    (default <code>&#39;blue&#39;</code>)
+                    (default <code>&#39;blur&#39;</code>)
                   </td>
                   <td class='break-word'><span>Define the color to paint the labels
 </span></td>

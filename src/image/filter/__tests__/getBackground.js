@@ -10,7 +10,7 @@ describe('getBackground filter', function () {
             ],
             {kind: 'GREY'}
         );
-        let bg = image.getBackground([[0, 0], [1, 1]], [[0], [0]]);
+        let bg = image.background([[0, 0], [1, 1]], [[0], [0]]);
         Array.from(bg.data).should.eql([
             0, 0, 0,
             0, 0, 0,

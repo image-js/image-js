@@ -19526,7 +19526,7 @@ var _divide = require('./filter/divide');
 
 var _divide2 = _interopRequireDefault(_divide);
 
-var _getBackground = require('./filter/getBackground');
+var _getBackground = require('./filter/background');
 
 var _getBackground2 = _interopRequireDefault(_getBackground);
 
@@ -20532,7 +20532,7 @@ function medianFilter() {
     newImage.setBorder({ size: [kWidth, kHeight], algorithm: border });
 
     return newImage;
-} //End medianFilter function
+} //End median function
 
 },{"../../util/channel":229,"../image":155}],152:[function(require,module,exports){
 'use strict';
