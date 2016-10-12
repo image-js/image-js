@@ -3,6 +3,8 @@ import RoiMap from '../RoiMap';
 /**
  * @memberof RoiManager
  * @instance
+ * @param {object} [options]
+ * @returns {RoiMap}
  */
 
 export default function fromExtrema(

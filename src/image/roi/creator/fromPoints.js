@@ -1,10 +1,13 @@
+import RoiMap from '../RoiMap';
+import Shape from './../../../util/shape';
+
 /**
  * @memberof RoiManager
  * @instance
+ * @param {[[number]]} points - an array of points
+ * @param {object} [options]
+ * @returns {RoiMap}
  */
-
-import RoiMap from '../RoiMap';
-import Shape from './../../../util/shape';
 
 export default function fromPoints(pointsToPaint, options = {}) {
     let shape = new Shape(options);

@@ -26,22 +26,14 @@ export default class RoiManager {
         this._painted = null;
     }
 
-    /**
-     *
-     * @param {object} [options]
-     * @returns {RoiManager}
-     */
+    // docs is in the corresponding file
     fromExtrema(options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromExtrema.call(this._image, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
     }
 
-    /**
-     * @param {[[number]]} points - an array of points
-     * @param {object} [options]
-     * @returns {RoiManager}
-     */
+    // docs is in the corresponding file
     fromPoints(points, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromPoints.call(this._image, points, options);
@@ -61,23 +53,14 @@ export default class RoiManager {
         return this;
     }
 
-    /**
-     *
-     * @param {object} [options]
-     * @returns {RoiManager}
-     */
+    // docs is in the corresponding file
     fromWaterShed(options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromWaterShed.call(this._image, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
     }
 
-    /**
-     *
-     * @param {Image} mask
-     * @param {object} [options]
-     * @returns {RoiManager}
-     */
+    // docs is in the corresponding file
     fromMask(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
         let roiMap = fromMask.call(this._image, mask, options);

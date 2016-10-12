@@ -20,7 +20,7 @@ const neighbours8 = [null, null, null, null];
 /*
 Implementation of the connected-component labeling algorithm
  */
-export default function fromMask2(mask, options = {}) {
+export default function fromKaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
     const {
         allowCorners = false
     } = options;

@@ -1,6 +1,7 @@
 import RoiMap from '../RoiMap';
 import PriorityQueue from 'js-priority-queue';
 import {dxs, dys} from './../../../util/dxdy.js';
+
 /**
  * @memberof RoiManager
  * @instance

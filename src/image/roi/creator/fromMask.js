@@ -1,10 +1,12 @@
+import RoiMap from '../RoiMap';
+
 /**
- * Annotates each point to define to which area it belongs
  * @memberof RoiManager
  * @instance
+ * @param {Image} mask
+ * @param {object} [options]
+ * @returns {RoiMap}
  */
-
-import RoiMap from '../RoiMap';
 
 export default function fromMask(mask, options = {}) {
     const {allowCorners = false} = options;
