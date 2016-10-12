@@ -57,7 +57,7 @@ export default function median(options = {}) {
             }
         }
     }
-    if (this.alpha && channels.indexOf(this.channels) === -1) {
+    if (this.alpha && ! channels.includes(this.channels)) {
         for (let i = this.components; i < this.data.length; i = i + this.channels) {
             newImage.data[i] = this.data[i];
         }

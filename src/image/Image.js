@@ -644,7 +644,7 @@ export default class Image {
             if (!Array.isArray(bitDepth)) {
                 bitDepth = [bitDepth];
             }
-            if (bitDepth.indexOf(this.bitDepth) === -1) {
+            if (! bitDepth.includes(this.bitDepth)) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if bit depth is in: ' + bitDepth);
             }
         }
@@ -652,7 +652,7 @@ export default class Image {
             if (!Array.isArray(alpha)) {
                 alpha = [alpha];
             }
-            if (alpha.indexOf(this.alpha) === -1) {
+            if (! alpha.includes(this.alpha)) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if alpha is in: ' + alpha);
             }
         }
@@ -660,7 +660,7 @@ export default class Image {
             if (!Array.isArray(colorModel)) {
                 colorModel = [colorModel];
             }
-            if (colorModel.indexOf(this.colorModel) === -1) {
+            if (! colorModel.includes(this.colorModel)) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if color model is in: ' + colorModel);
             }
         }
@@ -668,7 +668,7 @@ export default class Image {
             if (!Array.isArray(components)) {
                 components = [components];
             }
-            if (components.indexOf(this.components) === -1) {
+            if (! components.includes(this.components)) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if the number of channels is in: ' + components);
             }
         }
@@ -676,7 +676,7 @@ export default class Image {
             if (!Array.isArray(channels)) {
                 channels = [channels];
             }
-            if (channels.indexOf(this.channels) === -1) {
+            if (! channels.includes(this.channels)) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if the number of components is in: ' + channels);
             }
         }

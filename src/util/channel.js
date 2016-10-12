@@ -47,7 +47,7 @@ export function validateChannel(image, channel, allowAlpha = true) {
     if (typeof channel === 'string') {
         switch (image.colorModel) {
             case Model.RGB:
-                if ('rgb'.indexOf(channel) > -1) {
+                if ('rgb'.includes(channel)) {
                     switch (channel) {
                         case 'r':
                             channel = 0;
@@ -62,7 +62,7 @@ export function validateChannel(image, channel, allowAlpha = true) {
                 }
                 break;
             case Model.HSL:
-                if ('hsl'.indexOf(channel) > -1) {
+                if ('hsl'.includes(channel)) {
                     switch (channel) {
                         case 'h':
                             channel = 0;
@@ -77,7 +77,7 @@ export function validateChannel(image, channel, allowAlpha = true) {
                 }
                 break;
             case Model.HSV:
-                if ('hsv'.indexOf(channel) > -1) {
+                if ('hsv'.includes(channel)) {
                     switch (channel) {
                         case 'h':
                             channel = 0;
@@ -92,7 +92,7 @@ export function validateChannel(image, channel, allowAlpha = true) {
                 }
                 break;
             case Model.CMYK:
-                if ('hsl'.indexOf(channel) > -1) {
+                if ('hsl'.includes(channel)) {
                     switch (channel) {
                         case 'c':
                             channel = 0;

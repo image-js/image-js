@@ -99,7 +99,7 @@ export default class Roi {
         let internals = this.internalIDs;
 
         for (let i = 0; i < borders.length; i++) {
-            if (internals.indexOf(borders[i]) === -1) {
+            if (! internals.includes(borders[i])) {
                 this.computed.externalIDs.push(borders[i]);
                 this.computed.externalLengths.push(lengths[i]);
             }
@@ -322,7 +322,7 @@ export default class Roi {
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
                 let target = x + this.minX + (y + this.minY) * this.map.width;
-                if (this.internalIDs.indexOf(this.map.data[target]) >= 0) {
+                if (this.internalIDs.includes(this.map.data[target])) {
                     img.setBitXY(x, y);
                 } // by default a pixel is to 0 so no problems, it will be transparent
             }
@@ -561,10 +561,10 @@ function getExternal(roi) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
             if (data[target] === roi.id) {
                 // if a point around is not roi.id it is a border
-                if ((roi.externalIDs.indexOf(data[target - 1]) !== -1) ||
-                    (roi.externalIDs.indexOf(data[target + 1]) !== -1) ||
-                    (roi.externalIDs.indexOf(data[target - roiMap.width]) !== -1) ||
-                    (roi.externalIDs.indexOf(data[target + roiMap.width]) !== -1)) {
+                if ((roi.externalIDs.includes(data[target - 1])) ||
+                    (roi.externalIDs.includes(data[target + 1])) ||
+                    (roi.externalIDs.includes(data[target - roiMap.width])) ||
+                    (roi.externalIDs.includes(data[target + roiMap.width]))) {
                     total++;
                 }
             }
@@ -585,9 +585,9 @@ function getInternalIDs(roi) {
     if (roi.height > 2) {
         for (let x = 0; x < roi.width; x++) {
             let target = (roi.minY) * roiMap.width + x + roi.minX;
-            if (internal.indexOf(data[target]) >= 0) {
+            if (internal.includes(data[target])) {
                 let id = data[target + roiMap.width];
-                if ((internal.indexOf(id) === -1) && (roi.boxIDs.indexOf(id) === -1)) {
+                if ((! internal.includes(id) ) && (! roi.boxIDs.includes(id))) {
                     internal.push(id);
                 }
             }
@@ -598,7 +598,7 @@ function getInternalIDs(roi) {
     for (let x = 1; x < roi.width - 1; x++) {
         for (let y = 1; y < roi.height - 1; y++) {
             let target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            if (internal.indexOf(data[target]) >= 0) {
+            if (internal.includes(data[target])) {
                 // we check if one of the neighbour is not yet in
 
                 array[0] = data[target - 1];
@@ -608,7 +608,7 @@ function getInternalIDs(roi) {
 
                 for (let i = 0; i < 4; i++) {
                     let id = array[i];
-                    if ((internal.indexOf(id) === -1) && (roi.boxIDs.indexOf(id) === -1)) {
+                    if ((! internal.includes(id)) && (! roi.boxIDs.includes(id))) {
                         internal.push(id);
                     }
                 }

@@ -74,7 +74,7 @@ function work() {
         send(result, toTransfer);
 
         function maybeInclude(name, image) {
-            if (options.include.indexOf(name) !== -1) {
+            if (options.include.includes(name)) {
                 result[name] = image;
                 toTransfer.push(image.data.buffer);
             }

@@ -76,7 +76,7 @@ export default function convolution(kernel, {channels, bitDepth, normalize = fal
     // if the kernel was not applied on the alpha channel we just copy it
     // TODO: in general we should copy the channels that where not changed
     // TODO: probably we should just copy the image at the beginning ?
-    if (this.alpha && channels.indexOf(this.channels) === -1) {
+    if (this.alpha && ! channels.includes(this.channels)) {
         for (x = this.components; x < this.data.length; x = x + this.channels) {
             newImage.data[x] = this.data[x];
         }
