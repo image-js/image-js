@@ -1,12 +1,9 @@
-/**
- * @memberof RoiManager
- * @instance
- */
-
 import RoiMap from '../RoiMap';
 import PriorityQueue from 'js-priority-queue';
 import {dxs, dys} from './../../../util/dxdy.js';
 /**
+ * @memberof RoiManager
+ * @instance
  * @param {Object} options
  * @param options.fillMaxValue - Limit of filling. By example, we can fill to a maximum value 32000 of a 16 bitDepth image.
  * @param options.points - Array of object [{x:2, y:3, id:1}, ...]. The id for each points is obligatory

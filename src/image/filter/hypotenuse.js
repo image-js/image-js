@@ -3,13 +3,14 @@ import Image from '../Image';
 
 /**
  * Calculate a new image that is the hypotenuse between the current image and the otherImage.
+ * @memberof Image
+ * @instance
  * @param {Image} otherImage
  * @param {object} [options={}]
  * @param {array} [options.bitDepth=this.bitDepth]
  * @param {number[]|string[]} [options.channels] : to which channel to apply the filter. By default all but alpha.
  * @returns {Image}
  */
-
 export default function hypotenuse(otherImage, options = {}) {
     let {bitDepth = this.bitDepth, channels} = options;
     this.checkProcessable('hypotenuse', {

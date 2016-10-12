@@ -6,8 +6,6 @@ import Shape from '../../util/shape';
  * Class to manage Region Of Interests
  * @class Roi
  */
-
-
 export default class Roi {
 
     constructor(map, id) {
@@ -260,9 +258,6 @@ export default class Roi {
     }
 
     get boxMask() {
-        /**
-         Returns a binary image containing the mask
-         */
         if (this.computed.boxMask) {
             return this.computed.boxMask;
         }

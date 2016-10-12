@@ -10,12 +10,9 @@ import Roi from './Roi';
  * From the roiMap, the RoiLayer will create the corresponding
  * ROI (@see Roi).
  *
- * @class RoiManager
+ * @class RoiLayer
  * @param {Image} image
  * @param {object} [options]
- */
-/**
- * @class RoiLayer
  */
 export default class RoiLayer {
     constructor(roiMap, options) {

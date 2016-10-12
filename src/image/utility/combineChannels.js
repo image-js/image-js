@@ -1,13 +1,13 @@
 import Image from '../Image';
 
 /**
+ * Create a new grey Image by combining the channels of the current image.
  * @memberof Image
- *
- * alpha  String : possible values: 'skip', 'keep', 'join' (default: 'skip')
- *
  * @instance
+ * @param {function} method
+ * @param {object} options
+ * @param {string} [options.alpha='skip'] - possible values: 'skip', 'keep', 'join'
  */
-
 export default function combineChannels(
     method = function (pixel) {
         return (pixel[0] + pixel[1] + pixel[2]) / 3;

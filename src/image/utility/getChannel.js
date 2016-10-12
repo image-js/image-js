@@ -2,13 +2,12 @@ import Image from '../Image';
 import {validateChannel} from './../../util/channel';
 
 /**
+ * Create a grey image based on the selected channel
  * @memberof Image
- *
- * alpha  String : possible values: 'skip', 'keep', 'join' (default: 'skip')
- *
  * @instance
+ * @param channel
+ * @param options
  */
-
 export default function getChannel(channel, {
     keepAlpha = false,
     mergeAlpha = false

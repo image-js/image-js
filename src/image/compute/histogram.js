@@ -5,7 +5,6 @@ import isInteger from 'is-integer';
  * @memberof Image
  * @instance
  */
-
 export function getHistogram(options = {}) {
     let {maxSlots = 256, channel, useAlpha = true} = options;
     this.checkProcessable('getHistogram', {
@@ -21,14 +20,11 @@ export function getHistogram(options = {}) {
 }
 
 /**
- * @memberof Image
- * @instance
- */
-
-/**
  * Returns an array (number of channels) of array (number of slots) containing
  * the number of data of a specific intensity.
  * Intensity may be grouped by the maxSlots parameter.
+ * @memberof Image
+ * @instance
  * @param {object} [options]
  * @param {number} [options.maxSlots] - Number of slots in the resulting
  *      array. The intensity will be evently distributed between 0 and
@@ -42,7 +38,6 @@ export function getHistogram(options = {}) {
  *          useAlpha: false
  *      });
  */
-
 export function getHistograms(options = {}) {
     const {maxSlots = 256, useAlpha = true} = options;
     this.checkProcessable('getHistograms', {
