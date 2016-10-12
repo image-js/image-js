@@ -96,7 +96,6 @@
     "ml-regression": "^4.0.0",
     "new-array": "^1.0.0",
     "num-sort": "^1.0.0",
-    "string-includes": "^1.0.0",
     "tiff": "^2.0.1",
     "web-worker-manager": "^0.2.0"
   },

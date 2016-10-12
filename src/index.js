@@ -1,5 +1,9 @@
 import {env} from './image/environment';
 
+// Shim support for Array.prototype.includes
+import arrayIncludes from 'array-includes';
+arrayIncludes.shim();
+
 module.exports = exports = require('./image/Image').default;
 exports.Stack = require('./stack/Stack').default;
 exports.Shape = require('./util/shape').default;

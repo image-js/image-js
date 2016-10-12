@@ -644,7 +644,7 @@ export default class Image {
             if (!Array.isArray(bitDepth)) {
                 bitDepth = [bitDepth];
             }
-            if (! bitDepth.includes(this.bitDepth)) {
+            if (!bitDepth.includes(this.bitDepth)) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if bit depth is in: ' + bitDepth);
             }
         }
@@ -652,7 +652,7 @@ export default class Image {
             if (!Array.isArray(alpha)) {
                 alpha = [alpha];
             }
-            if (! alpha.includes(this.alpha)) {
+            if (!alpha.includes(this.alpha)) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if alpha is in: ' + alpha);
             }
         }
@@ -660,7 +660,7 @@ export default class Image {
             if (!Array.isArray(colorModel)) {
                 colorModel = [colorModel];
             }
-            if (! colorModel.includes(this.colorModel)) {
+            if (!colorModel.includes(this.colorModel)) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if color model is in: ' + colorModel);
             }
         }
@@ -668,7 +668,7 @@ export default class Image {
             if (!Array.isArray(components)) {
                 components = [components];
             }
-            if (! components.includes(this.components)) {
+            if (!components.includes(this.components)) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if the number of channels is in: ' + components);
             }
         }
@@ -676,7 +676,7 @@ export default class Image {
             if (!Array.isArray(channels)) {
                 channels = [channels];
             }
-            if (! channels.includes(this.channels)) {
+            if (!channels.includes(this.channels)) {
                 throw new TypeError('The process: ' + processName + ' can only be applied if the number of components is in: ' + channels);
             }
         }
