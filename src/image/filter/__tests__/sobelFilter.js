@@ -15,7 +15,7 @@ describe('check the gaussian filter', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.sobel().data).should.eql(
+        Array.from(image.sobelFilter().data).should.eql(
             [
                 13, 13, 28, 36, 28, 13, 13,
                 13, 13, 28, 36, 28, 13, 13,

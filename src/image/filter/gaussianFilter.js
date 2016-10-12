@@ -14,7 +14,7 @@ import convolution from '../operator/convolution';
  * @returns {Image}
  */
 
-export default function gaussian(options = {}) {
+export default function gaussianFilter(options = {}) {
     let {
 		radius = 1,
 		sigma,

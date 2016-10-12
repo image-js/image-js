@@ -7,7 +7,7 @@ import {GRADIENT_X, GRADIENT_Y} from '../../util/kernels';
  * @returns {Image}
  */
 
-export default function sobel(options = {}) {
+export default function sobelFilter(options = {}) {
     let {
 		kernelX = GRADIENT_X,
 		kernelY = GRADIENT_Y,

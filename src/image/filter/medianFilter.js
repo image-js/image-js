@@ -18,7 +18,7 @@ import Image from '../Image';
 * @param {string} [options.border='copy'] algorithm that will be applied after to deal with borders
 * @returns {Image}
 */
-export default function median(options = {}) {
+export default function medianFilter(options = {}) {
     let {radius = 1, channels, border = 'copy'} = options;
 
     this.checkProcessable('median', {

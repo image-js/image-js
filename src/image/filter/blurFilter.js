@@ -10,7 +10,7 @@ import convolutionFft from '../operator/convolutionFft';
  */
 
 // first release of mean filter
-export default function meanFilter(options = {}) {
+export default function blurFilter(options = {}) {
     let {radius = 1} = options;
     this.checkProcessable('meanFilter', {
         components: [1],

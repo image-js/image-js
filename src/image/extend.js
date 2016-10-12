@@ -9,10 +9,10 @@ import invertBinaryLoop from './filter/invertBinaryLoop';
 import invertFilter from './filter/invert';
 import flipXFilter from './filter/flipX';
 import flipYFilter from './filter/flipY';
-import blurFilter from './filter/blur';
-import medianFilter from './filter/median';
-import gaussianFilter from './filter/gaussian';
-import sobelFilter from './filter/sobel';
+import blurFilter from './filter/blurFilter';
+import medianFilter from './filter/medianFilter';
+import gaussianFilter from './filter/gaussianFilter';
+import sobelFilter from './filter/sobelFilter';
 import levelFilter from './filter/level';
 import addFilter from './filter/add';
 import subtractFilter from './filter/subtract';
@@ -92,10 +92,10 @@ export default function extend(Image) {
     Image.extendMethod('flipX', flipXFilter);
     Image.extendMethod('flipY', flipYFilter);
 
-    Image.extendMethod('blur', blurFilter);
+    Image.extendMethod('blurFilter', blurFilter);
     Image.extendMethod('medianFilter', medianFilter);
-    Image.extendMethod('gaussian', gaussianFilter);
-    Image.extendMethod('sobel', sobelFilter);
+    Image.extendMethod('gaussianFilter', gaussianFilter);
+    Image.extendMethod('sobelFilter', sobelFilter);
 
     Image.extendMethod('crop', crop, stack);
     Image.extendMethod('scale', scale, stack);
