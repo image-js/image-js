@@ -13,10 +13,10 @@ describe('we check mask', function () {
             let mask = img.mask({invert: true});
             roiManager.fromMask(mask);
 
-            let roiIDs = roiManager.getRoiIDs().sort(sortAsc);
+            let roiIDs = roiManager.getRoiIds().sort(sortAsc);
             roiIDs.should.eql([-1, 1, 2]);
 
-            let rois = roiManager.getRoi();
+            let rois = roiManager.getRois();
 
             rois.should.be.an.instanceof(Array).and.lengthOf(3);
 

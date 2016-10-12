@@ -49,7 +49,7 @@ describe('we check Roi.getMask', function () {
         let roiManager = image.getRoiManager();
         roiManager.fromMask(mask, {positive: true, negative: false});
 
-        let rois = roiManager.getRoi().sort((a, b) => a.surface - b.surface);
+        let rois = roiManager.getRois().sort((a, b) => a.surface - b.surface);
         rois[0].surface.should.equal(9);
         rois[1].surface.should.equal(16);
         rois[0].getMask().position.should.eql([1, 1]);

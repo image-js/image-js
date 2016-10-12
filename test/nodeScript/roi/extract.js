@@ -8,7 +8,7 @@ Image.load('./node_modules/ij-test/img/BW15x15.png').then(function (img) {
     var roiManager=img.getRoiManager();
     var mask=img.grey().mask();
     roiManager.fromMask(mask);
-    var rois=roiManager.getRoi();
+    var rois=roiManager.getRois();
 
     for (var i=0; i<rois.length; i++) {
         console.log(rois[i].surface);

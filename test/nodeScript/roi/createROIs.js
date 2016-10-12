@@ -13,7 +13,7 @@ var mask=new Image(4,4, histogram, {
 
 var roiManager=mask.getRoiManager();
 roiManager.fromMask(mask);
-var rois=roiManager.getRoi();
+var rois=roiManager.getRois();
 
 for (var i=0; i<rois.length; i++) {
     console.log("ROIs width and height: ",rois[i].width, rois[i].height)

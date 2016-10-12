@@ -38,7 +38,7 @@ function processImage(image, i) {
     images[i].mask={type:'png', value:mask.toDataURL()};
     // we take the biggest Roi and we crop based on the center of it the
     // original image
-    var rois=roiManager.getRoi('default',{
+    var rois=roiManager.getRois('default',{
         negative: false, minSurface: 10
     });
 

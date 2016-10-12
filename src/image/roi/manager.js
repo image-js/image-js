@@ -96,8 +96,8 @@ export default class RoiManager {
      * @param {object} [options]
      * @returns {number[]}
      */
-    getRoiIDs(options = {}) {
-        let rois = this.getRoi(options);
+    getRoiIds(options = {}) {
+        let rois = this.getRois(options);
         if (rois) {
             let ids = new Array(rois.length);
             for (let i = 0; i < rois.length; i++) {
@@ -122,7 +122,7 @@ export default class RoiManager {
      * @returns {Roi[]}
      */
 
-    getRoi(options = {}) {
+    getRois(options = {}) {
         let {
             label = this._options.label,
             positive = true,
@@ -168,7 +168,7 @@ export default class RoiManager {
      * @returns {Image[]} Retuns an array of masks (1 bit Image)
      */
     getMasks(options = {}) {
-        let rois = this.getRoi(options);
+        let rois = this.getRois(options);
 
         let masks = new Array(rois.length);
         for (let i = 0; i < rois.length; i++) {
@@ -210,7 +210,7 @@ export default class RoiManager {
         let masks = this.getMasks(options);
 
         if (labelProperty) {
-            let rois = this.getRoi(options);
+            let rois = this.getRois(options);
             options.labels = rois.map((roi) => roi[labelProperty]);
             options.labelsPosition = rois.map((roi) => [roi.meanX, roi.meanY]);
         }
@@ -269,7 +269,7 @@ export default class RoiManager {
             algorithm = 'commonBorder',
             minCommonBorderLength = 5
         } = options;
-        let rois = this.getRoi(opt);
+        let rois = this.getRois(opt);
         let toMerge = new Set();
         switch (algorithm.toLowerCase()) {
             //Algorithms. We can add more algorithm to create other types of merging.

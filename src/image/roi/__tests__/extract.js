@@ -13,7 +13,7 @@ describe('we check that we can extract correctly a Roi', function () {
             let mask = grey.mask({invert: true});
             roiManager.fromMask(mask);
 
-            let rois = roiManager.getRoi();
+            let rois = roiManager.getRois();
 
             rois.should.be.an.instanceof(Array).and.lengthOf(5);
 

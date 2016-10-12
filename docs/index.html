@@ -661,13 +661,13 @@
                       <li><a
                         href='#RoiManager#getRoi'
                         class='regular pre-open'>
-                        #getRoi
+                        #getRois
                       </a></li>
                       
                       <li><a
                         href='#RoiManager#getRoiIDs'
                         class='regular pre-open'>
-                        #getRoiIDs
+                        #getRoiIds
                       </a></li>
                       
                       <li><a
@@ -1019,7 +1019,7 @@ IJS.load(<span class="hljs-string">'xtc.png'</span>).then(<span class="hljs-func
 
 <span class="hljs-keyword">var</span> manager = image.getRoiManager();
 manager.fromMask(mask);
-<span class="hljs-keyword">var</span> rois=manager.getRoi({
+<span class="hljs-keyword">var</span> rois=manager.getRois({
 <span class="hljs-attr">positive</span>: <span class="hljs-literal">true</span>,
 <span class="hljs-attr">negative</span>: <span class="hljs-literal">false</span>,
 <span class="hljs-attr">minSurface</span>: <span class="hljs-number">100</span>
@@ -8757,7 +8757,7 @@ See @links Roi.getMask for the options</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getRoi([options])</span>
+            <span class='code strong strong truncate'>getRois([options])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -8768,7 +8768,7 @@ See @links Roi.getMask for the options</p>
   <p>Allows to select ROI based on size, label and sign.</p>
 
 
-  <div class='pre p1 fill-light mt0'>getRoi(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#roi">Roi</a>></div>
+  <div class='pre p1 fill-light mt0'>getRois(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#roi">Roi</a>></div>
 
   
 
@@ -8915,7 +8915,7 @@ See @links Roi.getMask for the options</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getRoiIDs([options])</span>
+            <span class='code strong strong truncate'>getRoiIds([options])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -8926,7 +8926,7 @@ See @links Roi.getMask for the options</p>
   <p>Return the IDs of the Regions Of Interest (Roi) as an array of number</p>
 
 
-  <div class='pre p1 fill-light mt0'>getRoiIDs(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>></div>
+  <div class='pre p1 fill-light mt0'>getRoiIds(options: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>></div>
 
   
 
