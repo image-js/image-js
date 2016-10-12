@@ -11,7 +11,7 @@ import Image from '../Image';
  */
 
 export default function hypotenuse(otherImage, options = {}) {
-    let {bitDepth=this.bitDepth, channels} = options;
+    let {bitDepth = this.bitDepth, channels} = options;
     this.checkProcessable('hypotenuse', {
         bitDepth: [8, 16, 32]
     });

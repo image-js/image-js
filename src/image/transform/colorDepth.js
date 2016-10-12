@@ -22,7 +22,7 @@ export default function colorDepth(newColorDepth = 8) {
         bitDepth: [8, 16]
     });
 
-    if (! [8, 16].includes(newColorDepth)) {
+    if (![8, 16].includes(newColorDepth)) {
         throw Error('You need to specify the new colorDepth as 8 or 16');
     }
 

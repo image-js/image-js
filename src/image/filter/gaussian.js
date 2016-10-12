@@ -46,7 +46,7 @@ export default function gaussian(options = {}) {
             channels: channels
         });
     }
-    
+
 }
 
 function getKernel(radius, sigma) {

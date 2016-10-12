@@ -22,7 +22,7 @@ describe('Find local extrema', function () {
         );
         image.getLocalExtrema().should.eql([[3, 2], [6, 7]]);
     });
-    
+
     it('minimum for a GREY image', function () {
 
         let image = new Image(10, 10,
@@ -48,7 +48,7 @@ describe('Find local extrema', function () {
             region: 3,
             maxEquals: 0
         }).should.eql([[3, 2], [6, 7]]);
-        
+
     });
 
     it('maximum for a GREY image with merge', function () {
@@ -98,5 +98,5 @@ describe('Find local extrema', function () {
             {removeClosePoints: 3, region: 3, maxEquals: 0}
         ).should.eql([[6, 7]]);
     });
-    
+
 });

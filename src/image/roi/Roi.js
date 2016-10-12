@@ -99,7 +99,7 @@ export default class Roi {
         let internals = this.internalIDs;
 
         for (let i = 0; i < borders.length; i++) {
-            if (! internals.includes(borders[i])) {
+            if (!internals.includes(borders[i])) {
                 this.computed.externalIDs.push(borders[i]);
                 this.computed.externalLengths.push(lengths[i]);
             }
@@ -587,7 +587,7 @@ function getInternalIDs(roi) {
             let target = (roi.minY) * roiMap.width + x + roi.minX;
             if (internal.includes(data[target])) {
                 let id = data[target + roiMap.width];
-                if ((! internal.includes(id) ) && (! roi.boxIDs.includes(id))) {
+                if ((!internal.includes(id)) && (!roi.boxIDs.includes(id))) {
                     internal.push(id);
                 }
             }
@@ -608,7 +608,7 @@ function getInternalIDs(roi) {
 
                 for (let i = 0; i < 4; i++) {
                     let id = array[i];
-                    if ((! internal.includes(id)) && (! roi.boxIDs.includes(id))) {
+                    if ((!internal.includes(id)) && (!roi.boxIDs.includes(id))) {
                         internal.push(id);
                     }
                 }
