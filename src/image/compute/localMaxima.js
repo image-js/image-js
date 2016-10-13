@@ -29,8 +29,8 @@ export default function localMaxima(
         components: 1
     });
     region *= 4;
-    
-    var maskExpectedValue = (invert) ? 0 : 1;
+
+    let maskExpectedValue = (invert) ? 0 : 1;
 
     let dx = [+1, 0, -1, 0, +1, +1, -1, -1, +2, 0, -2, 0, +2, +2, -2, -2];
     let dy = [0, +1, 0, -1, +1, -1, +1, -1, 0, +2, 0, -2, +2, -2, +2, -2];
@@ -38,7 +38,7 @@ export default function localMaxima(
     let points = [];
     for (let currentY = shift; currentY < image.height - shift; currentY++) {
         for (let currentX = shift; currentX < image.width - shift; currentX++) {
-            if (mask && ( mask.getBitXY(currentX, currentY) !== maskExpectedValue) ) {
+            if (mask && (mask.getBitXY(currentX, currentY) !== maskExpectedValue)) {
                 continue;
             }
             let counter = 0;

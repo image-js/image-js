@@ -28,11 +28,11 @@ describe('Test WaterShed Roi generation', function () {
     it('for a GREY image, and with a useless mask, looking for maxima', function () {
         let image = new Image(5, 5,
             [
-                1,1,1,1,1,
-                1,2,2,2,1,
-                1,2,3,2,1,
-                1,2,2,2,1,
-                1,1,1,1,1
+                1, 1, 1, 1, 1,
+                1, 2, 2, 2, 1,
+                1, 2, 3, 2, 1,
+                1, 2, 2, 2, 1,
+                1, 1, 1, 1, 1
 
             ],
             {kind: 'GREY'}
@@ -50,11 +50,11 @@ describe('Test WaterShed Roi generation', function () {
         });
         Array.from(map.data).should.eql(
             [
-                0,0,0,0,0,
-                0,1,1,1,0,
-                0,1,1,1,0,
-                0,1,1,1,0,
-                0,0,0,0,0
+                0, 0, 0, 0, 0,
+                0, 1, 1, 1, 0,
+                0, 1, 1, 1, 0,
+                0, 1, 1, 1, 0,
+                0, 0, 0, 0, 0
             ]
         );
     });

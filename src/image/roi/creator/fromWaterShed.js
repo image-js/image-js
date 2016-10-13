@@ -40,10 +40,10 @@ export default function fromWaterShed(options = {}) {
      We need to invert the logic because we are always using method to look for maxima and not minima and
      here water is expected to fill the minima first ...
     */
-    
-    invert = ! invert; 
-    
-    
+
+    invert = !invert;
+
+
     //WaterShed is done from points in the image. We can either specify those points in options,
     // or it is gonna take the minimum locals of the image by default.
     if (!points) {
@@ -51,7 +51,6 @@ export default function fromWaterShed(options = {}) {
             invert,
             mask
         });
-        console.log(points);
     }
 
     let maskExpectedValue = (invert) ? 0 : 1;
@@ -68,8 +67,8 @@ export default function fromWaterShed(options = {}) {
         data[index] = i + 1;
         let intensity = image.data[index];
         if (
-            ( invert && intensity <= fillMaxValue) ||
-            ( ! invert && intensity >= fillMaxValue)
+            (invert && intensity <= fillMaxValue) ||
+            (!invert && intensity >= fillMaxValue)
         ) {
             toProcess.queue([points[i][0], points[i][1], intensity]);
         }
@@ -89,8 +88,8 @@ export default function fromWaterShed(options = {}) {
                 if (!mask || (mask.getBit(currentNeighbourIndex) === maskExpectedValue)) {
                     let intensity = image.data[currentNeighbourIndex];
                     if (
-                        ( invert && intensity <= fillMaxValue) ||
-                        ( ! invert && intensity >= fillMaxValue)
+                        (invert && intensity <= fillMaxValue) ||
+                        (!invert && intensity >= fillMaxValue)
                     ) {
                         if (data[currentNeighbourIndex] === 0) {
                             data[currentNeighbourIndex] = data[currentValueIndex];

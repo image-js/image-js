@@ -12,7 +12,7 @@ export default function fromMask(mask, options = {}) {
     const {
         allowCorners = false
     } = options;
-    
+
     // based on a binary image we will create plenty of small images
     let data = new Int16Array(mask.size); // maxValue: 32767, minValue: -32768
 
