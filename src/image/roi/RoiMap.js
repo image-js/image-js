@@ -4,6 +4,7 @@
  * to one region of interest (ROI)
  *
  * @class RoiMap
+ * @private
  */
 
 export default class RoiMap {
