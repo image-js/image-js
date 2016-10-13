@@ -18,6 +18,8 @@ import {dxs, dys} from './../../../util/dxdy.js';
  * @param {number[][]} [options.points[ - Array of points [[x1,y1], [x2,y2], ...].
  * @param {number} [options.fillMaxValue] - Limit of filling. By example, we can fill to a maximum value 32000 of a 16 bitDepth image.
  *          If invert this will corresponds to the minimal value
+ * @param {Image} [options.image=this] - By default the waterShed will be applied on the current image. However waterShed can only be applied
+ *                              on 1 component image. This allows to specify a grey scale image on which to apply waterShed..
  * @param {Image} [options.mask] - A binary image, the same size as the image. The algorithm will fill only if the current pixel in the binary mask is true.
  * @param {boolean} [options.invert = false] - By default we fill the minima
  * @returns {RoiMap}
@@ -30,8 +32,8 @@ export default function fromWaterShed(options = {}) {
         fillMaxValue = this.maxValue,
         invert = false
     } = options;
-    let image = this;
-    image.checkProcessable('fromWaterShed', {
+    let currentImage = image || this;
+    currentImage.checkProcessable('fromWaterShed', {
         bitDepth: [8, 16],
         components: 1
     });
@@ -47,7 +49,7 @@ export default function fromWaterShed(options = {}) {
     //WaterShed is done from points in the image. We can either specify those points in options,
     // or it is gonna take the minimum locals of the image by default.
     if (!points) {
-        points = image.getLocalMaxima({
+        points = currentImage.getLocalMaxima({
             invert,
             mask
         });
@@ -55,9 +57,9 @@ export default function fromWaterShed(options = {}) {
 
     let maskExpectedValue = (invert) ? 0 : 1;
 
-    let data = new Int16Array(image.size);
-    let width = image.width;
-    let height = image.height;
+    let data = new Int16Array(currentImage.size);
+    let width = currentImage.width;
+    let height = currentImage.height;
     let toProcess = new PriorityQueue({
         comparator: (a, b) => a[2] - b[2],
         strategy: PriorityQueue.BinaryHeapStrategy
@@ -65,7 +67,7 @@ export default function fromWaterShed(options = {}) {
     for (let i = 0; i < points.length; i++) {
         let index = points[i][0] + points[i][1] * width;
         data[index] = i + 1;
-        let intensity = image.data[index];
+        let intensity = currentImage.data[index];
         if (
             (invert && intensity <= fillMaxValue) ||
             (!invert && intensity >= fillMaxValue)
@@ -86,7 +88,7 @@ export default function fromWaterShed(options = {}) {
             if (newX >= 0 && newY >= 0 && newX < width && newY < height) {
                 let currentNeighbourIndex = newX + newY * width;
                 if (!mask || (mask.getBit(currentNeighbourIndex) === maskExpectedValue)) {
-                    let intensity = image.data[currentNeighbourIndex];
+                    let intensity = currentImage.data[currentNeighbourIndex];
                     if (
                         (invert && intensity <= fillMaxValue) ||
                         (!invert && intensity >= fillMaxValue)
@@ -101,5 +103,5 @@ export default function fromWaterShed(options = {}) {
         }
     }
 
-    return new RoiMap(image, data);
+    return new RoiMap(currentImage, data);
 }
