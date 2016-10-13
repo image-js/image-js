@@ -21078,7 +21078,7 @@ var _sum = require('./compute/sum');
 
 var _sum2 = _interopRequireDefault(_sum);
 
-var _localExtrema = require('./compute/localExtrema');
+var _localExtrema = require('./compute/localMaxima');
 
 var _localExtrema2 = _interopRequireDefault(_localExtrema);
 
@@ -21179,7 +21179,7 @@ function extend(Image) {
     Image.extendMethod('getMin', _min2.default).extendProperty('min', _min2.default);
     Image.extendMethod('getMax', _max2.default).extendProperty('max', _max2.default);
     Image.extendMethod('getSum', _sum2.default).extendProperty('sum', _sum2.default);
-    Image.extendMethod('getLocalExtrema', _localExtrema2.default);
+    Image.extendMethod('getLocalMaxima', _localExtrema2.default);
     Image.extendMethod('getMedian', _median2.default).extendProperty('median', _median2.default);
     Image.extendMethod('getMean', _mean2.default).extendProperty('mean', _mean2.default);
     Image.extendMethod('getPoints', _points2.default).extendProperty('points', _points2.default);
@@ -24234,7 +24234,7 @@ var _fromMask = require('./creator/fromMask');
 
 var _fromMask2 = _interopRequireDefault(_fromMask);
 
-var _fromExtrema = require('./creator/fromExtrema');
+var _fromExtrema = require('./creator/fromMaxima');
 
 var _fromExtrema2 = _interopRequireDefault(_fromExtrema);
 

@@ -4,7 +4,7 @@ import Shape from './../../../util/shape';
 /**
  * @memberof RoiManager
  * @instance
- * @param {[[number]]} points - an array of points
+ * @param {number[][]} points - an array of points
  * @param {object} [options]
  * @returns {RoiMap}
  */

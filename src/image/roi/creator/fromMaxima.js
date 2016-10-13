@@ -7,7 +7,7 @@ import RoiMap from '../RoiMap';
  * @returns {RoiMap}
  */
 
-export default function fromExtrema(
+export default function fromMaxima(
     {
         allowCorner = true,
         onlyTop,
@@ -15,7 +15,7 @@ export default function fromExtrema(
 ) {
 
     let image = this;
-    image.checkProcessable('fromExtrema', {components: [1]});
+    image.checkProcessable('fromMaxima', {components: [1]});
 
 
     const PROCESS_TOP = 1;
@@ -45,7 +45,7 @@ export default function fromExtrema(
     let fromTop = 0;
     let toTop = 0;
 
-    appendExtrema(image, {maxima: !invert});
+    appendMaxima(image, {maxima: !invert});
 
     while (from < to) {
         let currentX = xToProcess[from & MAX_ARRAY];
@@ -60,7 +60,7 @@ export default function fromExtrema(
     // we will look for the maxima (or minima) that is present in the picture
     // a maxima is a point that is surrounded by lower values
     // should deal with allowCorner and invert
-    function appendExtrema({maxima = true}) {
+    function appendMaxima({maxima = true}) {
         for (let y = 1; y < image.height - 1; y++) {
             for (let x = 1; x < image.width - 1; x++) {
                 let index = x + y * image.width;

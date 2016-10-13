@@ -20,7 +20,7 @@ describe('Find local extrema', function () {
             ],
             {kind: 'GREY'}
         );
-        image.getLocalExtrema().should.eql([[3, 2], [6, 7]]);
+        image.getLocalMaxima().should.eql([[3, 2], [6, 7]]);
     });
 
     it('minimum for a GREY image', function () {
@@ -42,9 +42,9 @@ describe('Find local extrema', function () {
             {kind: 'GREY'}
         );
 
-        image.getLocalExtrema({algorithm: 'min'}).should.eql([[3, 2], [6, 7]]);
-        image.getLocalExtrema({
-            algorithm: 'min',
+        image.getLocalMaxima({invert: true}).should.eql([[3, 2], [6, 7]]);
+        image.getLocalMaxima({
+            invert: true,
             region: 3,
             maxEquals: 0
         }).should.eql([[3, 2], [6, 7]]);
@@ -67,7 +67,7 @@ describe('Find local extrema', function () {
             ],
             {kind: 'GREY'}
         );
-        image.getLocalExtrema(
+        image.getLocalMaxima(
             {removeClosePoints: 3, region: 1}
         ).should.eql([[3, 2], [6, 7]]);
     });
@@ -88,13 +88,13 @@ describe('Find local extrema', function () {
             ],
             {kind: 'GREY'}
         );
-        image.getLocalExtrema(
+        image.getLocalMaxima(
             {removeClosePoints: 3, region: 1, maxEquals: 0}
         ).should.eql([[6, 7]]);
-        image.getLocalExtrema(
+        image.getLocalMaxima(
             {removeClosePoints: 3, region: 2, maxEquals: 0}
         ).should.eql([[6, 7]]);
-        image.getLocalExtrema(
+        image.getLocalMaxima(
             {removeClosePoints: 3, region: 3, maxEquals: 0}
         ).should.eql([[6, 7]]);
     });

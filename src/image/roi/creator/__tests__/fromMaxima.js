@@ -1,8 +1,8 @@
-import fromExtrema from '../fromExtrema';
+import fromMaxima from '../fromMaxima';
 import {Image} from 'test/common';
 
 
-describe('we check createROIMapFromMaxima only looking for top', function () {
+describe('we check fromMaxima only looking for top', function () {
     it('should yield the right map large top', function () {
         let image = new Image(5, 5,
             [
@@ -15,7 +15,7 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
             {kind: 'GREY'}
         );
 
-        let data = fromExtrema.call(image,
+        let data = fromMaxima.call(image,
             {onlyTop: true}
         ).data;
 
@@ -40,7 +40,7 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
             {kind: 'GREY'}
         );
 
-        let data = fromExtrema.call(image,
+        let data = fromMaxima.call(image,
             {onlyTop: true}
         ).data;
 
@@ -65,7 +65,7 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
             {kind: 'GREY'}
         );
 
-        let data = fromExtrema.call(image,
+        let data = fromMaxima.call(image,
             {onlyTop: true}
         ).data;
 
@@ -91,7 +91,7 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
             {kind: 'GREY'}
         );
 
-        let data = fromExtrema.call(image,
+        let data = fromMaxima.call(image,
             {onlyTop: true}
         ).data;
 
@@ -106,7 +106,7 @@ describe('we check createROIMapFromMaxima only looking for top', function () {
 });
 
 
-describe('we check createROIMapFromMaxima only looking for maxima', function () {
+describe('we check fromMaxima only looking for maxima', function () {
     it('should yield the right map large top', function () {
         let image = new Image(5, 5,
             [
@@ -119,7 +119,7 @@ describe('we check createROIMapFromMaxima only looking for maxima', function () 
             {kind: 'GREY'}
         );
 
-        let data = fromExtrema.call(image,
+        let data = fromMaxima.call(image,
             {}
         ).data;
 
@@ -144,7 +144,7 @@ describe('we check createROIMapFromMaxima only looking for maxima', function () 
             {kind: 'GREY'}
         );
 
-        let data = fromExtrema.call(image).data;
+        let data = fromMaxima.call(image).data;
 
         Array.from(data).should.eql([
             1, 1, 1, 0, 1,
@@ -167,7 +167,7 @@ describe('we check createROIMapFromMaxima only looking for maxima', function () 
             {kind: 'GREY'}
         );
 
-        let data = fromExtrema.call(image).data;
+        let data = fromMaxima.call(image).data;
 
         Array.from(data).should.eql([
             1, 1, 1, 1, 1,

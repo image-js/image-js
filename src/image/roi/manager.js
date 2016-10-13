@@ -1,5 +1,5 @@
 import fromMask from './creator/fromMask';
-import fromExtrema from './creator/fromExtrema';
+import fromMaxima from './creator/fromMaxima';
 import fromWaterShed from './creator/fromWaterShed';
 import fromPoints from './creator/fromPoints';
 import extendObject from 'extend';
@@ -27,9 +27,9 @@ export default class RoiManager {
     }
 
     // docs is in the corresponding file
-    fromExtrema(options = {}) {
+    fromMaxima(options = {}) {
         let opt = extendObject({}, this._options, options);
-        let roiMap = fromExtrema.call(this._image, options);
+        let roiMap = fromMaxima.call(this._image, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
     }
 

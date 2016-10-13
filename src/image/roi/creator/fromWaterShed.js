@@ -3,21 +3,32 @@ import PriorityQueue from 'js-priority-queue';
 import {dxs, dys} from './../../../util/dxdy.js';
 
 /**
+ * This method allows to create a ROIMap using the water shed algorithm. By default this algorithm
+ * will fill the holes and therefore the lowest value of the image (black zones).
+ * If no points are given, the function will look for all the minimal points.
+ * If no mask is given the algorithm will completely fill the image.
+ * Please take care about the value that has be in the mask ! In order to be coherent with the expected mask,
+ * meaning that if it is a dark zone, the mask will be dark the normal behaviour to fill a zone
+ * is that the mask pixel is clear (value of 0) !
+ * However if you work in the 'invert' mode, the mask value has to be 'set' and the method will look for
+ * maxima.
  * @memberof RoiManager
  * @instance
- * @param {Object} options
- * @param options.fillMaxValue - Limit of filling. By example, we can fill to a maximum value 32000 of a 16 bitDepth image.
- * @param options.points - Array of object [{x:2, y:3, id:1}, ...]. The id for each points is obligatory
- * @param options.interval - A parameter which specify the level of filling each iteration. Every pixels in the current interval will be filled.
- * @param options.mask - A binary image, the same size as the image. The algorithm will fill only if the current pixel in the binary mask is true.
+ * @param {Object} [options={}]
+ * @param {number[][]} [options.points[ - Array of points [[x1,y1], [x2,y2], ...].
+ * @param {number} [options.fillMaxValue] - Limit of filling. By example, we can fill to a maximum value 32000 of a 16 bitDepth image.
+ *          If invert this will corresponds to the minimal value
+ * @param {Image} [options.mask] - A binary image, the same size as the image. The algorithm will fill only if the current pixel in the binary mask is true.
+ * @param {boolean} [options.invert = false] - By default we fill the minima
  * @returns {RoiMap}
  */
 
 export default function fromWaterShed(options = {}) {
     let {
-        fillMaxValue = this.maxValue,
         points,
-        mask
+        mask,
+        fillMaxValue = this.maxValue,
+        invert = false
     } = options;
     let image = this;
     image.checkProcessable('fromWaterShed', {
@@ -25,11 +36,25 @@ export default function fromWaterShed(options = {}) {
         components: 1
     });
 
+    /*
+     We need to invert the logic because we are always using method to look for maxima and not minima and
+     here water is expected to fill the minima first ...
+    */
+    
+    invert = ! invert; 
+    
+    
     //WaterShed is done from points in the image. We can either specify those points in options,
     // or it is gonna take the minimum locals of the image by default.
     if (!points) {
-        points = image.getLocalExtrema({algorithm: 'min', mask: mask});
+        points = image.getLocalMaxima({
+            invert,
+            mask
+        });
+        console.log(points);
     }
+
+    let maskExpectedValue = (invert) ? 0 : 1;
 
     let data = new Int16Array(image.size);
     let width = image.width;
@@ -42,7 +67,10 @@ export default function fromWaterShed(options = {}) {
         let index = points[i][0] + points[i][1] * width;
         data[index] = i + 1;
         let intensity = image.data[index];
-        if (intensity <= fillMaxValue) {
+        if (
+            ( invert && intensity <= fillMaxValue) ||
+            ( ! invert && intensity >= fillMaxValue)
+        ) {
             toProcess.queue([points[i][0], points[i][1], intensity]);
         }
     }
@@ -58,9 +86,12 @@ export default function fromWaterShed(options = {}) {
             let newY = currentPoint[1] + dys[dir];
             if (newX >= 0 && newY >= 0 && newX < width && newY < height) {
                 let currentNeighbourIndex = newX + newY * width;
-                if (!mask || mask.getBit(currentNeighbourIndex)) {
+                if (!mask || (mask.getBit(currentNeighbourIndex) === maskExpectedValue)) {
                     let intensity = image.data[currentNeighbourIndex];
-                    if (intensity <= fillMaxValue) {
+                    if (
+                        ( invert && intensity <= fillMaxValue) ||
+                        ( ! invert && intensity >= fillMaxValue)
+                    ) {
                         if (data[currentNeighbourIndex] === 0) {
                             data[currentNeighbourIndex] = data[currentValueIndex];
                             toProcess.queue([currentPoint[0] + dxs[dir], currentPoint[1] + dys[dir], intensity]);
