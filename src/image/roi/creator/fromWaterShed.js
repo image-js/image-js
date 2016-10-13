@@ -29,6 +29,7 @@ export default function fromWaterShed(options = {}) {
     let {
         points,
         mask,
+        image,
         fillMaxValue = this.maxValue,
         invert = false
     } = options;
