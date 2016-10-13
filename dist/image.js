@@ -20408,43 +20408,43 @@ function getChannelHistogram(channel, options) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = localExtrema;
+exports.default = localMaxima;
 
 /**
  * Returns an array of object with position.
  * @memberof Image
- * @param mask region of the image that is analyzed. The rest is omitted.
- * @param region 1, 2 or 3. Define the region around each points that is analyzed. 1 corresponds to 4 cross points, 2 to
+ * @instance
+ * @param {object} [options]
+ * @param {Image} [mask] - region of the image that is analyzed. The rest is omitted.
+ * @param {number} [region=3] -  1, 2 or 3. Define the region around each points that is analyzed. 1 corresponds to 4 cross points, 2 to
  *        the 8 points around and 3 to the 12 points around the central pixel
- * @param removeClosePoints Remove pts which have a distance between them smaller than this param.
- * @param algorithm chose between min or max local.
+ * @param {number} [removeClosePoints=0] Remove pts which have a distance between them smaller than this param.
+ * @param {boolean} [invert=false] Search for minima instead of maxima
+ * @param {number} [maxEquals=2] Maximal number of values that may be equal to the maximum
  * @returns {number[]} Array having has size the number of channels
  */
 
-function localExtrema() {
+function localMaxima() {
     var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
     var _ref$removeClosePoint = _ref.removeClosePoints;
     var removeClosePoints = _ref$removeClosePoint === undefined ? 0 : _ref$removeClosePoint;
     var _ref$region = _ref.region;
     var region = _ref$region === undefined ? 3 : _ref$region;
-    var _ref$algorithm = _ref.algorithm;
-    var algorithm = _ref$algorithm === undefined ? 'max' : _ref$algorithm;
+    var _ref$invert = _ref.invert;
+    var invert = _ref$invert === undefined ? false : _ref$invert;
     var mask = _ref.mask;
     var _ref$maxEquals = _ref.maxEquals;
     var maxEquals = _ref$maxEquals === undefined ? 2 : _ref$maxEquals;
 
-    var searchMaxima = true;
-    if (algorithm.toLowerCase() === 'min') {
-        searchMaxima = false;
-    }
-
     var image = this;
-    this.checkProcessable('localExtrema', {
+    this.checkProcessable('localMaxima', {
         bitDepth: [8, 16],
         components: 1
     });
     region *= 4;
+
+    var maskExpectedValue = invert ? 0 : 1;
 
     var dx = [+1, 0, -1, 0, +1, +1, -1, -1, +2, 0, -2, 0, +2, +2, -2, -2];
     var dy = [0, +1, 0, -1, +1, -1, +1, -1, 0, +2, 0, -2, +2, -2, +2, -2];
@@ -20452,19 +20452,20 @@ function localExtrema() {
     var points = [];
     for (var currentY = shift; currentY < image.height - shift; currentY++) {
         for (var currentX = shift; currentX < image.width - shift; currentX++) {
-            if (mask && !mask.getBitXY(currentX, currentY)) {
+            if (mask && mask.getBitXY(currentX, currentY) !== maskExpectedValue) {
                 continue;
             }
             var counter = 0;
             var nbEquals = 0;
             var currentValue = image.data[currentX + currentY * image.width];
             for (var dir = 0; dir < region; dir++) {
-                if (searchMaxima) {
-                    if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] < currentValue) {
+                if (invert) {
+                    // we search for minima
+                    if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] > currentValue) {
                         counter++;
                     }
                 } else {
-                    if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] > currentValue) {
+                    if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] < currentValue) {
                         counter++;
                     }
                 }
@@ -21078,9 +21079,9 @@ var _sum = require('./compute/sum');
 
 var _sum2 = _interopRequireDefault(_sum);
 
-var _localExtrema = require('./compute/localMaxima');
+var _localMaxima = require('./compute/localMaxima');
 
-var _localExtrema2 = _interopRequireDefault(_localExtrema);
+var _localMaxima2 = _interopRequireDefault(_localMaxima);
 
 var _mean = require('./compute/mean');
 
@@ -21179,7 +21180,7 @@ function extend(Image) {
     Image.extendMethod('getMin', _min2.default).extendProperty('min', _min2.default);
     Image.extendMethod('getMax', _max2.default).extendProperty('max', _max2.default);
     Image.extendMethod('getSum', _sum2.default).extendProperty('sum', _sum2.default);
-    Image.extendMethod('getLocalMaxima', _localExtrema2.default);
+    Image.extendMethod('getLocalMaxima', _localMaxima2.default);
     Image.extendMethod('getMedian', _median2.default).extendProperty('median', _median2.default);
     Image.extendMethod('getMean', _mean2.default).extendProperty('mean', _mean2.default);
     Image.extendMethod('getPoints', _points2.default).extendProperty('points', _points2.default);
@@ -21193,7 +21194,7 @@ function extend(Image) {
 // transforms
 // filters
 
-},{"./compute/colorHistogram":145,"./compute/countAlphaPixels":146,"./compute/histogram":147,"./compute/localExtrema":148,"./compute/max":149,"./compute/mean":150,"./compute/median":151,"./compute/min":152,"./compute/points":153,"./compute/relativePosition":154,"./compute/sum":155,"./compute/svd":156,"./filter/add":159,"./filter/background":160,"./filter/blurFilter":161,"./filter/divide":162,"./filter/flipX":163,"./filter/flipY":164,"./filter/gaussianFilter":165,"./filter/hypotenuse":166,"./filter/invert":167,"./filter/invertApply":168,"./filter/invertBinaryLoop":169,"./filter/invertGetSet":170,"./filter/invertIterator":171,"./filter/invertOneLoop":172,"./filter/invertPixel":173,"./filter/level":174,"./filter/medianFilter":175,"./filter/multiply":176,"./filter/sobelFilter":177,"./filter/subtract":178,"./operator/convolution":184,"./operator/convolutionFft":185,"./operator/extract":186,"./operator/paintMasks":187,"./operator/paintPoints":188,"./transform/cmyk":197,"./transform/colorDepth":198,"./transform/crop":199,"./transform/grey":200,"./transform/hsl":202,"./transform/hsv":203,"./transform/mask/mask":208,"./transform/pad":221,"./transform/resizeBinary":222,"./transform/rgba8":223,"./transform/scale/scale":225,"./utility/combineChannels":226,"./utility/getBestMatch":228,"./utility/getChannel":229,"./utility/getColumn":230,"./utility/getMatrix":231,"./utility/getPixelsArray":232,"./utility/getPixelsGrid":233,"./utility/getRow":234,"./utility/getSimilarity":235,"./utility/setBorder":236,"./utility/setChannel":237,"./utility/setMatrix":238,"./utility/split":239}],159:[function(require,module,exports){
+},{"./compute/colorHistogram":145,"./compute/countAlphaPixels":146,"./compute/histogram":147,"./compute/localMaxima":148,"./compute/max":149,"./compute/mean":150,"./compute/median":151,"./compute/min":152,"./compute/points":153,"./compute/relativePosition":154,"./compute/sum":155,"./compute/svd":156,"./filter/add":159,"./filter/background":160,"./filter/blurFilter":161,"./filter/divide":162,"./filter/flipX":163,"./filter/flipY":164,"./filter/gaussianFilter":165,"./filter/hypotenuse":166,"./filter/invert":167,"./filter/invertApply":168,"./filter/invertBinaryLoop":169,"./filter/invertGetSet":170,"./filter/invertIterator":171,"./filter/invertOneLoop":172,"./filter/invertPixel":173,"./filter/level":174,"./filter/medianFilter":175,"./filter/multiply":176,"./filter/sobelFilter":177,"./filter/subtract":178,"./operator/convolution":184,"./operator/convolutionFft":185,"./operator/extract":186,"./operator/paintMasks":187,"./operator/paintPoints":188,"./transform/cmyk":197,"./transform/colorDepth":198,"./transform/crop":199,"./transform/grey":200,"./transform/hsl":202,"./transform/hsv":203,"./transform/mask/mask":208,"./transform/pad":221,"./transform/resizeBinary":222,"./transform/rgba8":223,"./transform/scale/scale":225,"./utility/combineChannels":226,"./utility/getBestMatch":228,"./utility/getChannel":229,"./utility/getColumn":230,"./utility/getMatrix":231,"./utility/getPixelsArray":232,"./utility/getPixelsGrid":233,"./utility/getRow":234,"./utility/getSimilarity":235,"./utility/setBorder":236,"./utility/setChannel":237,"./utility/setMatrix":238,"./utility/split":239}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23612,6 +23613,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * ROI (@see Roi).
  *
  * @class RoiLayer
+ * @private
  * @param {Image} image
  * @param {object} [options]
  */
@@ -23706,6 +23708,7 @@ Object.defineProperty(exports, "__esModule", {
  * to one region of interest (ROI)
  *
  * @class RoiMap
+ * @private
  */
 
 class RoiMap {
@@ -23730,7 +23733,137 @@ exports.default = RoiMap;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = fromExtrema;
+exports.default = fromMask;
+
+var _RoiMap = require('../RoiMap');
+
+var _RoiMap2 = _interopRequireDefault(_RoiMap);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @memberof RoiManager
+ * @instance
+ * @param {Image} mask
+ * @param {object} [options]
+ * @returns {RoiMap}
+ */
+
+function fromMask(mask) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var _options$allowCorners = options.allowCorners;
+    var allowCorners = _options$allowCorners === undefined ? false : _options$allowCorners;
+
+    // based on a binary image we will create plenty of small images
+
+    var data = new Int16Array(mask.size); // maxValue: 32767, minValue: -32768
+
+    // split will always return an array of images
+    var positiveID = 0;
+    var negativeID = 0;
+
+    var MAX_ARRAY = 0x00ffff; // should be enough for most of the cases
+    var xToProcess = new Uint16Array(MAX_ARRAY + 1); // assign dynamically ????
+    var yToProcess = new Uint16Array(MAX_ARRAY + 1); // mask +1 is of course mandatory !!!
+
+
+    for (var x = 0; x < mask.width; x++) {
+        for (var y = 0; y < mask.height; y++) {
+            if (data[y * mask.width + x] === 0) {
+                // need to process the whole surface
+                analyseSurface(x, y);
+            }
+        }
+    }
+
+    function analyseSurface(x, y) {
+        var from = 0;
+        var to = 0;
+        var targetState = mask.getBitXY(x, y);
+        var id = targetState ? ++positiveID : --negativeID;
+        xToProcess[0] = x;
+        yToProcess[0] = y;
+        while (from <= to) {
+            var currentX = xToProcess[from & MAX_ARRAY];
+            var currentY = yToProcess[from & MAX_ARRAY];
+            data[currentY * mask.width + currentX] = id;
+            // need to check all around mask pixel
+            if (currentX > 0 && data[currentY * mask.width + currentX - 1] === 0 && mask.getBitXY(currentX - 1, currentY) === targetState) {
+                // LEFT
+                to++;
+                xToProcess[to & MAX_ARRAY] = currentX - 1;
+                yToProcess[to & MAX_ARRAY] = currentY;
+                data[currentY * mask.width + currentX - 1] = -32768;
+            }
+            if (currentY > 0 && data[(currentY - 1) * mask.width + currentX] === 0 && mask.getBitXY(currentX, currentY - 1) === targetState) {
+                // TOP
+                to++;
+                xToProcess[to & MAX_ARRAY] = currentX;
+                yToProcess[to & MAX_ARRAY] = currentY - 1;
+                data[(currentY - 1) * mask.width + currentX] = -32768;
+            }
+            if (currentX < mask.width - 1 && data[currentY * mask.width + currentX + 1] === 0 && mask.getBitXY(currentX + 1, currentY) === targetState) {
+                // RIGHT
+                to++;
+                xToProcess[to & MAX_ARRAY] = currentX + 1;
+                yToProcess[to & MAX_ARRAY] = currentY;
+                data[currentY * mask.width + currentX + 1] = -32768;
+            }
+            if (currentY < mask.height - 1 && data[(currentY + 1) * mask.width + currentX] === 0 && mask.getBitXY(currentX, currentY + 1) === targetState) {
+                // BOTTOM
+                to++;
+                xToProcess[to & MAX_ARRAY] = currentX;
+                yToProcess[to & MAX_ARRAY] = currentY + 1;
+                data[(currentY + 1) * mask.width + currentX] = -32768;
+            }
+            if (allowCorners) {
+                if (currentX > 0 && currentY > 0 && data[(currentY - 1) * mask.width + currentX - 1] === 0 && mask.getBitXY(currentX - 1, currentY - 1) === targetState) {
+                    // TOP LEFT
+                    to++;
+                    xToProcess[to & MAX_ARRAY] = currentX - 1;
+                    yToProcess[to & MAX_ARRAY] = currentY - 1;
+                    data[(currentY - 1) * mask.width + currentX - 1] = -32768;
+                }
+                if (currentX < mask.width - 1 && currentY > 0 && data[(currentY - 1) * mask.width + currentX + 1] === 0 && mask.getBitXY(currentX + 1, currentY - 1) === targetState) {
+                    // TOP RIGHT
+                    to++;
+                    xToProcess[to & MAX_ARRAY] = currentX + 1;
+                    yToProcess[to & MAX_ARRAY] = currentY - 1;
+                    data[(currentY - 1) * mask.width + currentX + 1] = -32768;
+                }
+                if (currentX > 0 && currentY < mask.height - 1 && data[(currentY + 1) * mask.width + currentX - 1] === 0 && mask.getBitXY(currentX - 1, currentY + 1) === targetState) {
+                    // BOTTOM LEFT
+                    to++;
+                    xToProcess[to & MAX_ARRAY] = currentX - 1;
+                    yToProcess[to & MAX_ARRAY] = currentY + 1;
+                    data[(currentY + 1) * mask.width + currentX - 1] = -32768;
+                }
+                if (currentX < mask.width - 1 && currentY < mask.height - 1 && data[(currentY + 1) * mask.width + currentX + 1] === 0 && mask.getBitXY(currentX + 1, currentY + 1) === targetState) {
+                    // BOTTOM RIGHT
+                    to++;
+                    xToProcess[to & MAX_ARRAY] = currentX + 1;
+                    yToProcess[to & MAX_ARRAY] = currentY + 1;
+                    data[(currentY + 1) * mask.width + currentX + 1] = -32768;
+                }
+            }
+
+            from++;
+
+            if (to - from > MAX_ARRAY) {
+                throw new Error('analyseMask can not finish, the array to manage internal data is not big enough.' + 'You could improve mask by changing MAX_ARRAY');
+            }
+        }
+    }
+    return new _RoiMap2.default(mask, data);
+}
+
+},{"../RoiMap":191}],193:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = fromMaxima;
 
 var _RoiMap = require('../RoiMap');
 
@@ -23745,7 +23878,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @returns {RoiMap}
  */
 
-function fromExtrema() {
+function fromMaxima() {
     var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
     var _ref$allowCorner = _ref.allowCorner;
@@ -23756,7 +23889,7 @@ function fromExtrema() {
 
 
     var image = this;
-    image.checkProcessable('fromExtrema', { components: [1] });
+    image.checkProcessable('fromMaxima', { components: [1] });
 
     var PROCESS_TOP = 1;
     var PROCESS_NORMAL = 2;
@@ -23783,7 +23916,7 @@ function fromExtrema() {
     var fromTop = 0;
     var toTop = 0;
 
-    appendExtrema(image, { maxima: !invert });
+    appendMaxima(image, { maxima: !invert });
 
     while (from < to) {
         var currentX = xToProcess[from & MAX_ARRAY];
@@ -23797,7 +23930,7 @@ function fromExtrema() {
     // we will look for the maxima (or minima) that is present in the picture
     // a maxima is a point that is surrounded by lower values
     // should deal with allowCorner and invert
-    function appendExtrema(_ref2) {
+    function appendMaxima(_ref2) {
         var _ref2$maxima = _ref2.maxima;
         var maxima = _ref2$maxima === undefined ? true : _ref2$maxima;
 
@@ -23951,135 +24084,6 @@ function fromExtrema() {
     }
 }
 
-},{"../RoiMap":191}],193:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = fromMask;
-
-var _RoiMap = require('../RoiMap');
-
-var _RoiMap2 = _interopRequireDefault(_RoiMap);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * @memberof RoiManager
- * @instance
- * @param {Image} mask
- * @param {object} [options]
- * @returns {RoiMap}
- */
-
-function fromMask(mask) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var _options$allowCorners = options.allowCorners;
-    var allowCorners = _options$allowCorners === undefined ? false : _options$allowCorners;
-    // based on a binary image we will create plenty of small images
-
-    var data = new Int16Array(mask.size); // maxValue: 32767, minValue: -32768
-
-    // split will always return an array of images
-    var positiveID = 0;
-    var negativeID = 0;
-
-    var MAX_ARRAY = 0x00ffff; // should be enough for most of the cases
-    var xToProcess = new Uint16Array(MAX_ARRAY + 1); // assign dynamically ????
-    var yToProcess = new Uint16Array(MAX_ARRAY + 1); // mask +1 is of course mandatory !!!
-
-
-    for (var x = 0; x < mask.width; x++) {
-        for (var y = 0; y < mask.height; y++) {
-            if (data[y * mask.width + x] === 0) {
-                // need to process the whole surface
-                analyseSurface(x, y);
-            }
-        }
-    }
-
-    function analyseSurface(x, y) {
-        var from = 0;
-        var to = 0;
-        var targetState = mask.getBitXY(x, y);
-        var id = targetState ? ++positiveID : --negativeID;
-        xToProcess[0] = x;
-        yToProcess[0] = y;
-        while (from <= to) {
-            var currentX = xToProcess[from & MAX_ARRAY];
-            var currentY = yToProcess[from & MAX_ARRAY];
-            data[currentY * mask.width + currentX] = id;
-            // need to check all around mask pixel
-            if (currentX > 0 && data[currentY * mask.width + currentX - 1] === 0 && mask.getBitXY(currentX - 1, currentY) === targetState) {
-                // LEFT
-                to++;
-                xToProcess[to & MAX_ARRAY] = currentX - 1;
-                yToProcess[to & MAX_ARRAY] = currentY;
-                data[currentY * mask.width + currentX - 1] = -32768;
-            }
-            if (currentY > 0 && data[(currentY - 1) * mask.width + currentX] === 0 && mask.getBitXY(currentX, currentY - 1) === targetState) {
-                // TOP
-                to++;
-                xToProcess[to & MAX_ARRAY] = currentX;
-                yToProcess[to & MAX_ARRAY] = currentY - 1;
-                data[(currentY - 1) * mask.width + currentX] = -32768;
-            }
-            if (currentX < mask.width - 1 && data[currentY * mask.width + currentX + 1] === 0 && mask.getBitXY(currentX + 1, currentY) === targetState) {
-                // RIGHT
-                to++;
-                xToProcess[to & MAX_ARRAY] = currentX + 1;
-                yToProcess[to & MAX_ARRAY] = currentY;
-                data[currentY * mask.width + currentX + 1] = -32768;
-            }
-            if (currentY < mask.height - 1 && data[(currentY + 1) * mask.width + currentX] === 0 && mask.getBitXY(currentX, currentY + 1) === targetState) {
-                // BOTTOM
-                to++;
-                xToProcess[to & MAX_ARRAY] = currentX;
-                yToProcess[to & MAX_ARRAY] = currentY + 1;
-                data[(currentY + 1) * mask.width + currentX] = -32768;
-            }
-            if (allowCorners) {
-                if (currentX > 0 && currentY > 0 && data[(currentY - 1) * mask.width + currentX - 1] === 0 && mask.getBitXY(currentX - 1, currentY - 1) === targetState) {
-                    // TOP LEFT
-                    to++;
-                    xToProcess[to & MAX_ARRAY] = currentX - 1;
-                    yToProcess[to & MAX_ARRAY] = currentY - 1;
-                    data[(currentY - 1) * mask.width + currentX - 1] = -32768;
-                }
-                if (currentX < mask.width - 1 && currentY > 0 && data[(currentY - 1) * mask.width + currentX + 1] === 0 && mask.getBitXY(currentX + 1, currentY - 1) === targetState) {
-                    // TOP RIGHT
-                    to++;
-                    xToProcess[to & MAX_ARRAY] = currentX + 1;
-                    yToProcess[to & MAX_ARRAY] = currentY - 1;
-                    data[(currentY - 1) * mask.width + currentX + 1] = -32768;
-                }
-                if (currentX > 0 && currentY < mask.height - 1 && data[(currentY + 1) * mask.width + currentX - 1] === 0 && mask.getBitXY(currentX - 1, currentY + 1) === targetState) {
-                    // BOTTOM LEFT
-                    to++;
-                    xToProcess[to & MAX_ARRAY] = currentX - 1;
-                    yToProcess[to & MAX_ARRAY] = currentY + 1;
-                    data[(currentY + 1) * mask.width + currentX - 1] = -32768;
-                }
-                if (currentX < mask.width - 1 && currentY < mask.height - 1 && data[(currentY + 1) * mask.width + currentX + 1] === 0 && mask.getBitXY(currentX + 1, currentY + 1) === targetState) {
-                    // BOTTOM RIGHT
-                    to++;
-                    xToProcess[to & MAX_ARRAY] = currentX + 1;
-                    yToProcess[to & MAX_ARRAY] = currentY + 1;
-                    data[(currentY + 1) * mask.width + currentX + 1] = -32768;
-                }
-            }
-
-            from++;
-
-            if (to - from > MAX_ARRAY) {
-                throw new Error('analyseMask can not finish, the array to manage internal data is not big enough.' + 'You could improve mask by changing MAX_ARRAY');
-            }
-        }
-    }
-    return new _RoiMap2.default(mask, data);
-}
-
 },{"../RoiMap":191}],194:[function(require,module,exports){
 'use strict';
 
@@ -24101,7 +24105,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * @memberof RoiManager
  * @instance
- * @param {[[number]]} points - an array of points
+ * @param {number[][]} points - an array of points
  * @param {object} [options]
  * @returns {RoiMap}
  */
@@ -24152,22 +24156,34 @@ var _dxdy = require('./../../../util/dxdy.js');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
+ * This method allows to create a ROIMap using the water shed algorithm. By default this algorithm
+ * will fill the holes and therefore the lowest value of the image (black zones).
+ * If no points are given, the function will look for all the minimal points.
+ * If no mask is given the algorithm will completely fill the image.
+ * Please take care about the value that has be in the mask ! In order to be coherent with the expected mask,
+ * meaning that if it is a dark zone, the mask will be dark the normal behaviour to fill a zone
+ * is that the mask pixel is clear (value of 0) !
+ * However if you work in the 'invert' mode, the mask value has to be 'set' and the method will look for
+ * maxima.
  * @memberof RoiManager
  * @instance
- * @param {Object} options
- * @param options.fillMaxValue - Limit of filling. By example, we can fill to a maximum value 32000 of a 16 bitDepth image.
- * @param options.points - Array of object [{x:2, y:3, id:1}, ...]. The id for each points is obligatory
- * @param options.interval - A parameter which specify the level of filling each iteration. Every pixels in the current interval will be filled.
- * @param options.mask - A binary image, the same size as the image. The algorithm will fill only if the current pixel in the binary mask is true.
+ * @param {Object} [options={}]
+ * @param {number[][]} [options.points[ - Array of points [[x1,y1], [x2,y2], ...].
+ * @param {number} [options.fillMaxValue] - Limit of filling. By example, we can fill to a maximum value 32000 of a 16 bitDepth image.
+ *          If invert this will corresponds to the minimal value
+ * @param {Image} [options.mask] - A binary image, the same size as the image. The algorithm will fill only if the current pixel in the binary mask is true.
+ * @param {boolean} [options.invert = false] - By default we fill the minima
  * @returns {RoiMap}
  */
 
 function fromWaterShed() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$fillMaxValue = options.fillMaxValue;
-    var fillMaxValue = _options$fillMaxValue === undefined ? this.maxValue : _options$fillMaxValue;
     var points = options.points;
     var mask = options.mask;
+    var _options$fillMaxValue = options.fillMaxValue;
+    var fillMaxValue = _options$fillMaxValue === undefined ? this.maxValue : _options$fillMaxValue;
+    var _options$invert = options.invert;
+    var invert = _options$invert === undefined ? false : _options$invert;
 
     var image = this;
     image.checkProcessable('fromWaterShed', {
@@ -24175,11 +24191,23 @@ function fromWaterShed() {
         components: 1
     });
 
+    /*
+     We need to invert the logic because we are always using method to look for maxima and not minima and
+     here water is expected to fill the minima first ...
+    */
+
+    invert = !invert;
+
     //WaterShed is done from points in the image. We can either specify those points in options,
     // or it is gonna take the minimum locals of the image by default.
     if (!points) {
-        points = image.getLocalExtrema({ algorithm: 'min', mask: mask });
+        points = image.getLocalMaxima({
+            invert: invert,
+            mask: mask
+        });
     }
+
+    var maskExpectedValue = invert ? 0 : 1;
 
     var data = new Int16Array(image.size);
     var width = image.width;
@@ -24192,7 +24220,7 @@ function fromWaterShed() {
         var index = points[i][0] + points[i][1] * width;
         data[index] = i + 1;
         var intensity = image.data[index];
-        if (intensity <= fillMaxValue) {
+        if (invert && intensity <= fillMaxValue || !invert && intensity >= fillMaxValue) {
             toProcess.queue([points[i][0], points[i][1], intensity]);
         }
     }
@@ -24207,9 +24235,9 @@ function fromWaterShed() {
             var newY = currentPoint[1] + _dxdy.dys[dir];
             if (newX >= 0 && newY >= 0 && newX < width && newY < height) {
                 var currentNeighbourIndex = newX + newY * width;
-                if (!mask || mask.getBit(currentNeighbourIndex)) {
+                if (!mask || mask.getBit(currentNeighbourIndex) === maskExpectedValue) {
                     var _intensity = image.data[currentNeighbourIndex];
-                    if (_intensity <= fillMaxValue) {
+                    if (invert && _intensity <= fillMaxValue || !invert && _intensity >= fillMaxValue) {
                         if (data[currentNeighbourIndex] === 0) {
                             data[currentNeighbourIndex] = data[currentValueIndex];
                             toProcess.queue([currentPoint[0] + _dxdy.dxs[dir], currentPoint[1] + _dxdy.dys[dir], _intensity]);
@@ -24234,9 +24262,9 @@ var _fromMask = require('./creator/fromMask');
 
 var _fromMask2 = _interopRequireDefault(_fromMask);
 
-var _fromExtrema = require('./creator/fromMaxima');
+var _fromMaxima = require('./creator/fromMaxima');
 
-var _fromExtrema2 = _interopRequireDefault(_fromExtrema);
+var _fromMaxima2 = _interopRequireDefault(_fromMaxima);
 
 var _fromWaterShed = require('./creator/fromWaterShed');
 
@@ -24286,11 +24314,11 @@ class RoiManager {
     }
 
     // docs is in the corresponding file
-    fromExtrema() {
+    fromMaxima() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
         var opt = (0, _extend2.default)({}, this._options, options);
-        var roiMap = _fromExtrema2.default.call(this._image, options);
+        var roiMap = _fromMaxima2.default.call(this._image, options);
         this._layers[opt.label] = new _RoiLayer2.default(roiMap, opt);
     }
 
@@ -24364,10 +24392,10 @@ class RoiManager {
      * @param {object} [options]
      * @returns {number[]}
      */
-    getRoiIDs() {
+    getRoiIds() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-        var rois = this.getRoi(options);
+        var rois = this.getRois(options);
         if (rois) {
             var ids = new Array(rois.length);
             for (var i = 0; i < rois.length; i++) {
@@ -24392,7 +24420,7 @@ class RoiManager {
      * @returns {Roi[]}
      */
 
-    getRoi() {
+    getRois() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var _options$label = options.label;
         var label = _options$label === undefined ? this._options.label : _options$label;
@@ -24442,7 +24470,7 @@ class RoiManager {
     getMasks() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-        var rois = this.getRoi(options);
+        var rois = this.getRois(options);
 
         var masks = new Array(rois.length);
         for (var i = 0; i < rois.length; i++) {
@@ -24486,7 +24514,7 @@ class RoiManager {
         var masks = this.getMasks(options);
 
         if (labelProperty) {
-            var rois = this.getRoi(options);
+            var rois = this.getRois(options);
             options.labels = rois.map(roi => roi[labelProperty]);
             options.labelsPosition = rois.map(roi => [roi.meanX, roi.meanY]);
         }
@@ -24552,7 +24580,7 @@ class RoiManager {
         var _options$minCommonBor = options.minCommonBorderLength;
         var minCommonBorderLength = _options$minCommonBor === undefined ? 5 : _options$minCommonBor;
 
-        var rois = this.getRoi(opt);
+        var rois = this.getRois(opt);
         var toMerge = new Set();
         switch (algorithm.toLowerCase()) {
             //Algorithms. We can add more algorithm to create other types of merging.
@@ -24584,7 +24612,7 @@ class RoiManager {
 }
 exports.default = RoiManager;
 
-},{"../Image":143,"./RoiLayer":190,"./RoiMap":191,"./creator/fromExtrema":192,"./creator/fromMask":193,"./creator/fromPoints":194,"./creator/fromWaterShed":195,"extend":35}],197:[function(require,module,exports){
+},{"../Image":143,"./RoiLayer":190,"./RoiMap":191,"./creator/fromMask":192,"./creator/fromMaxima":193,"./creator/fromPoints":194,"./creator/fromWaterShed":195,"extend":35}],197:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
