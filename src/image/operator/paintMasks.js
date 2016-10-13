@@ -8,8 +8,7 @@ import {css2array} from '../../util/color';
  * @instance
  * @param {(Image|array<Image>)}     masks - Image containing a binary mask
  * @param {object}              [options]
- * @param {[number]|string}     [options.color] - Array of 3 elements (R, G, B) or a valid css color. If no color is defined,
- *                                  distinctColor will be applied.
+ * @param {[number]|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
  * @param {array<array<number>>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
  * @param {number}              [options.alpha=255\ - Value from 0 to 255 to specify the alpha.
  * @param {boolean}             [options.randomColors=false] - To paint each mask with a random color
@@ -27,7 +26,7 @@ import {css2array} from '../../util/color';
 
 export default function paintMasks(masks, options = {}) {
     let {
-        color,
+        color = 'red',
         colors,
         alpha = 255,
         randomColors = false,
