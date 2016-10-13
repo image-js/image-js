@@ -11,6 +11,7 @@ import Roi from './Roi';
  * ROI (@see Roi).
  *
  * @class RoiLayer
+ * @private
  * @param {Image} image
  * @param {object} [options]
  */
