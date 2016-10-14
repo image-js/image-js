@@ -37,14 +37,14 @@ export default function convolution(kernel, options = {}) {
     //({kWidth, kHeight, kernel} = validateKernel(kernel));
     ({kernel} = validateKernel(kernel));
 
-    if (algorithm = 'auto') {
-        if (kernel.length>9 || kernel[0].length>9) {
+    if (algorithm === 'auto') {
+        if (kernel.length > 9 || kernel[0].length > 9) {
             algorithm = 'fft';
         } else {
             algorithm = 'direct';
         }
     }
-    if (this.width>4096 || this.height>4096) {
+    if (this.width > 4096 || this.height > 4096) {
         algorithm = 'direct';
     }
 
