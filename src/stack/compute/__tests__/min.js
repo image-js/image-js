@@ -1,7 +1,7 @@
 import {Image, Stack} from 'test/common';
 
 describe('check stack min method', function () {
-    it ('should return global minimal for GREY image', function () {
+    it('should return global minimal for GREY image', function () {
 
         let images = new Stack();
 
@@ -39,7 +39,7 @@ describe('check stack min method', function () {
     });
 
 
-    it ('should return global minimal for RGBA image', function () {
+    it('should return global minimal for RGBA image', function () {
 
         let images = new Stack();
 

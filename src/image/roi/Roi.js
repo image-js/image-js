@@ -81,15 +81,10 @@ export default class Roi {
         return this.maxY - this.minY + 1;
     }
 
-    get externalIDs() {
-        if (this.computed.externalIDs) {
-            return this.computed.externalIDs;
-        }
+    _computExternalIDs() {
         // take all the borders and remove the internal one ...
-
         let borders = this.borderIDs;
         let lengths = this.borderLengths;
-
 
         this.computed.externalIDs = [];
         this.computed.externalLengths = [];
@@ -102,6 +97,13 @@ export default class Roi {
                 this.computed.externalLengths.push(lengths[i]);
             }
         }
+    }
+
+    get externalIDs() {
+        if (this.computed.externalIDs) {
+            return this.computed.externalIDs;
+        }
+        this._computExternalIDs();
         return this.computed.externalIDs;
     }
 
@@ -109,10 +111,15 @@ export default class Roi {
         if (this.computed.externalLengths) {
             return this.computed.externalLengths;
         }
-        this.externalIDs; // force the recalculation
+        this._computExternalIDs();
         return this.computed.externalLengths;
     }
 
+    _computeBorderIDs() {
+        let borders = getBorders(this);
+        this.computed.borderIDs = borders.ids;
+        this.computed.borderLengths = borders.lengths;
+    }
 
     /**
      Retrieve all the IDs (array of number) of the regions that are in contact with this
@@ -122,9 +129,7 @@ export default class Roi {
         if (this.computed.borderIDs) {
             return this.computed.borderIDs;
         }
-        let borders = getBorders(this);
-        this.computed.borderIDs = borders.ids;
-        this.computed.borderLengths = borders.lengths;
+        this._computeBorderIDs();
         return this.computed.borderIDs;
     }
 
@@ -136,7 +141,7 @@ export default class Roi {
         if (this.computed.borderLengths) {
             return this.computed.borderLengths;
         }
-        this.borderIDs;
+        this._computeBorderIDs();
         return this.computed.borderLengths;
     }
 

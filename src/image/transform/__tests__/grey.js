@@ -79,8 +79,8 @@ describe('Grey transform', function () {
         );
 
         (function () {
-            image.grey({algorithm: 'XXX'}).should.throw(/Unsupported grey algorithm/);
-        });
+            image.grey({algorithm: 'XXX'});
+        }).should.throw(/Unsupported grey algorithm/);
 
     });
 
@@ -93,9 +93,10 @@ describe('Grey transform', function () {
             ],
             {kind: 'GREYA'}
         );
+
         (function () {
-            image.grey().should.throw(/only be applied/);
-        });
+            image.grey();
+        }).should.throw(/only be applied/);
 
         Array.from(image.grey({allowGrey: true}).data).should.eql([100, 0]);
         Array.from(image.grey({allowGrey: true, mergeAlpha: false}).data).should.eql([100, 150]);

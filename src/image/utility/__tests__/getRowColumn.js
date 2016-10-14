@@ -2,7 +2,7 @@ import {Image} from 'test/common';
 
 
 describe('check getRow and getColumn class', function () {
-    it ('should yield the third row and third column for GREY image', function () {
+    it('should yield the third row and third column for GREY image', function () {
         let image = new Image(5, 4,
             [
                 0, 0, 0, 0, 0,
@@ -17,7 +17,7 @@ describe('check getRow and getColumn class', function () {
         image.getColumn(2).should.eql([0, 1, 2, 3]);
     });
 
-    it ('should yield the first second and second column for GREY A image', function () {
+    it('should yield the first second and second column for GREY A image', function () {
         let image = new Image(3, 3,
             [
                 0,  1,  2,  3,  4,  5,
