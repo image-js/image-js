@@ -1,4 +1,3 @@
-import convolutionFft from '../operator/convolutionFft';
 import convolution from '../operator/convolution';
 
 /**
@@ -10,7 +9,7 @@ import convolution from '../operator/convolution';
  * @param {number} [options.sigma]
  * @param {number[]|string[]} [options.channels] : to which channel to apply the filter. By default all but alpha.
  * @param {string} [options.border='copy']
- * @param {boolean} [options.fft=true] : use the fastest convolution FFT algorithm
+ * @param {boolean} [options.algorithm='auto'] : Algorithm for convolution {@link Image#convolution}
  * @returns {Image}
  */
 
@@ -20,7 +19,7 @@ export default function gaussianFilter(options = {}) {
 		sigma,
 		channels,
 		border = 'copy',
-        fft = true
+        algorithm = 'auto'
 	} = options;
     this.checkProcessable('gaussian', {
         bitDepth: [8, 16]
@@ -35,18 +34,11 @@ export default function gaussianFilter(options = {}) {
         kernel = getKernel(radius, sigma);
     }
 
-    if (fft) {
-        return convolutionFft.call(this, kernel, {
-            border: border,
-            channels: channels
-        });
-    } else {
-        return convolution.call(this, kernel, {
-            border: border,
-            channels: channels
-        });
-    }
-
+    return convolution.call(this, kernel, {
+        border: border,
+        channels: channels,
+        algorithm: algorithm
+    });
 }
 
 function getKernel(radius, sigma) {

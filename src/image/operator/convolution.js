@@ -8,27 +8,45 @@ let conv = require('ml-matrix-convolution');
  * @memberof Image
  * @instance
  * @param {[[number]]} kernel
- * @param {object} [$1] - options
- * @param {array} [$1.channels] - Array of channels to treat. Defaults to all channels
- * @param {number} [$1.bitDepth=this.bitDepth] - A new bit depth can be specified. This allows to use 32 bits to avoid clamping of floating-point numbers.
- * @param {boolean} [$1.normalize=false]
- * @param {number} [$1.divisor=1]
- * @param {string} [$1.border='copy']
- * @param {string} [$1.algorithm='direct'] - Either direct or 'fft'. fft is much faster for large kernel.
+ * @param {object} [options] - options
+ * @param {array} [options.channels] - Array of channels to treat. Defaults to all channels
+ * @param {number} [options.bitDepth=this.bitDepth] - A new bit depth can be specified. This allows to use 32 bits to avoid clamping of floating-point numbers.
+ * @param {boolean} [options.normalize=false]
+ * @param {number} [options.divisor=1]
+ * @param {string} [options.border='copy']
+ * @param {string} [options.algorithm='auto'] - Either 'auto', 'direct' or 'fft'. fft is much faster for large kernel.
  * @returns {Image}
  */
-export default function convolution(kernel, {channels, bitDepth, normalize = false, divisor = 1, border = 'copy', algorithm = 'direct'} = {}) {
+export default function convolution(kernel, options = {}) {
+    let {
+        channels,
+        bitDepth,
+        normalize = false,
+        divisor = 1,
+        border = 'copy',
+        algorithm = 'auto'
+    } = options;
 
-    let newImage = Image.createFrom(this, {bitDepth: bitDepth});
+    let newImage = Image.createFrom(this, {bitDepth});
 
     channels = validateArrayOfChannels(this, channels, true);
     //let kWidth, kHeight;
-    //Very misterious function. If the kernel is an array only one quadrant is copied to the output matrix,
+    //Very mysterious function. If the kernel is an array only one quadrant is copied to the output matrix,
     //but if the kernel is already a matrix, nothing is done.
     //On the other hand, it only consider odd, squared and symmetric kernels. A too restrictive
     //({kWidth, kHeight, kernel} = validateKernel(kernel));
     ({kernel} = validateKernel(kernel));
 
+    if (algorithm = 'auto') {
+        if (kernel.length>9 || kernel[0].length>9) {
+            algorithm = 'fft';
+        } else {
+            algorithm = 'direct';
+        }
+    }
+    if (this.width>4096 || this.height>4096) {
+        algorithm = 'direct';
+    }
 
     let halfHeight = Math.floor(kernel.length / 2);
     let halfWidth = Math.floor(kernel[0].length / 2);
