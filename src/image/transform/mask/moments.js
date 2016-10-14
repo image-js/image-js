@@ -36,8 +36,8 @@ export default function moments(histogram, total) {
     c0 = (-m2 * m2 + m1 * m3) / cd;
     c1 = (m0 * -m3 + m2 * m1) / cd;
 //new two gray values where z0<z1
-    z0 = 0.5 * (-c1 - Math.sqrt (c1 * c1 - 4.0 * c0));
-    z1 = 0.5 * (-c1 + Math.sqrt (c1 * c1 - 4.0 * c0));
+    z0 = 0.5 * (-c1 - Math.sqrt(c1 * c1 - 4.0 * c0));
+    z1 = 0.5 * (-c1 + Math.sqrt(c1 * c1 - 4.0 * c0));
     p0 = (z1 - m1) / (z1 - z0); /* Fraction of the object pixels in the target binary image (p0z0+p1z1=m1) */
 // The threshold is the gray-level closest to the p0-tile of the normalized histogram
     for (let i = 0; i < histogramLength; i++) {

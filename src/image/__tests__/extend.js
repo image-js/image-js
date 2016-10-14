@@ -53,13 +53,13 @@ describe('Image extensions', function () {
             count.should.equal(1);
         });
         it('should reset after an inplace filter', function () {
-            img.testProp1;
+            img.testProp1.should.equal(3);
             count.should.equal(1);
-            img.testProp1;
+            img.testProp1.should.equal(3);
             count.should.equal(1);
             img.testMethod3();
             count.should.equal(1);
-            img.testProp1;
+            img.testProp1.should.equal(3);
             count.should.equal(2);
         });
         it('should pass parameters', function () {

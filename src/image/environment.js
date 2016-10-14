@@ -31,7 +31,8 @@ if (typeof self !== 'undefined') { // Browser
             xhr.withCredentials = withCredentials;
 
             xhr.onload = function (e) {
-                this.status === 200 ? resolve(this.response) : reject(e);
+                if (this.status !== 200) return reject(e);
+                resolve(this.response);
             };
             xhr.onerror = reject;
             xhr.send();
@@ -50,7 +51,8 @@ if (typeof self !== 'undefined') { // Browser
     loadBinary = function (path) {
         return new Promise(function (resolve, reject) {
             fs.readFile(path, function (err, data) {
-                err ? reject(err) : resolve(data.buffer);
+                if (err) return reject(err);
+                resolve(data.buffer);
             });
         });
     };

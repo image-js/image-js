@@ -2,7 +2,7 @@ import {Image} from 'test/common';
 
 
 describe('check getMatrix class', function () {
-    it ('should yield a Matrix object', function () {
+    it('should yield a Matrix object', function () {
         let image = new Image(5, 4,
             [
                 0, 0, 0, 0, 0,

@@ -54,16 +54,16 @@ export default function huang(histogram) {
             muX = 1 / (1 + term * Math.abs(ih - mu0[it]));
             if (!((muX  < 1e-06) || (muX > 0.999999))) {
                 /* Equation (6) & (8) in Ref. 1 */
-                ent += histogram[ih] * (-muX * Math.log (muX) - (1 - muX) * Math.log (1 - muX));
+                ent += histogram[ih] * (-muX * Math.log(muX) - (1 - muX) * Math.log(1 - muX));
             }
         }
 
         for (let ih = it + 1; ih < histogram.length; ih++) {
             /* Equation (4) in Ref. 1 */
-            muX = 1 / (1 + term * Math.abs (ih - mu1[it]));
+            muX = 1 / (1 + term * Math.abs(ih - mu1[it]));
             if (!((muX  < 1e-06) || (muX > 0.999999))) {
                 /* Equation (6) & (8) in Ref. 1 */
-                ent += histogram[ih] * (-muX * Math.log (muX) - (1 - muX) * Math.log(1 - muX));
+                ent += histogram[ih] * (-muX * Math.log(muX) - (1 - muX) * Math.log(1 - muX));
             }
         }
 

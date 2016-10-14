@@ -1,7 +1,7 @@
 import {Image, Stack} from 'test/common';
 
 describe('check stack histograms method', function () {
-    it ('should return global histograms for GREY image', function () {
+    it('should return global histograms for GREY image', function () {
 
         let images = new Stack();
 

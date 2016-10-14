@@ -39,7 +39,7 @@ export default function mask({
         }
     }
 
-    let newImage = new Image (this.width, this.height, {
+    let newImage = new Image(this.width, this.height, {
         kind: 'BINARY',
         parent: this
     });

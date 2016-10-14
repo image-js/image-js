@@ -1,7 +1,7 @@
 import {Image, Stack} from 'test/common';
 
 describe('check stack max method', function () {
-    it ('should return global maximal for GREY image', function () {
+    it('should return global maximal for GREY image', function () {
 
         let images = new Stack();
 
@@ -39,7 +39,7 @@ describe('check stack max method', function () {
     });
 
 
-    it ('should return global maximal for RGBA image', function () {
+    it('should return global maximal for RGBA image', function () {
 
         let images = new Stack();
 
