@@ -1,12 +1,11 @@
+// See http://imagej.nih.gov/ij/download/tools/source/ij/process/AutoThresholder.java
+// W. Doyle, "Operation useful for similarity-invariant pattern recognition,"
+// Journal of the Association for Computing Machinery, vol. 9,pp. 259-267, 1962.
+// ported to ImageJ plugin by G.Landini from Antti Niemisto's Matlab code (GPL)
+// Original Matlab code Copyright (C) 2004 Antti Niemisto
+// See http://www.cs.tut.fi/~ant/histthresh/ for an excellent slide presentation
+// and the original Matlab code.
 export default function percentile(histogram) {
-    // See http://imagej.nih.gov/ij/download/tools/source/ij/process/AutoThresholder.java
-    // W. Doyle, "Operation useful for similarity-invariant pattern recognition,"
-    // Journal of the Association for Computing Machinery, vol. 9,pp. 259-267, 1962.
-    // ported to ImageJ plugin by G.Landini from Antti Niemisto's Matlab code (GPL)
-    // Original Matlab code Copyright (C) 2004 Antti Niemisto
-    // See http://www.cs.tut.fi/~ant/histthresh/ for an excellent slide presentation
-    // and the original Matlab code.
-
     let threshold = -1;
     let percentile = 0.5; // default fraction of foreground pixels
     let avec = new Array(histogram.length);

@@ -1,4 +1,4 @@
-/***
+/*
  *
  * see http://rsb.info.nih.gov/ij/developer/source/ij/process/AutoThresholder.java.html.
  * Huang: Implements Huang's fuzzy thresholding method: Huang, L-K & Wang, M-J J (1995),

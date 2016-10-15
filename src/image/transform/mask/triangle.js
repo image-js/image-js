@@ -4,7 +4,6 @@
 // Journal of Histochemistry and Cytochemistry 25 (7), pp. 741-753
 //
 //  modified from Johannes Schindelin plugin
-//
 export default function triangle(histogram) {
 
     // find min and max

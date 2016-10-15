@@ -14,7 +14,6 @@ import shanbhag from  './shanbhag';
 import triangle from './triangle';
 import yen from './yen';
 
-
 export const methods = {
     huang,
     intermodes,
@@ -32,6 +31,5 @@ export const methods = {
     triangle,
     yen
 };
-
 
 export const names = ['threshold'].concat(Object.keys(methods));
