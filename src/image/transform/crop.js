@@ -8,7 +8,7 @@ import Image from '../Image';
  * @param {number} [options.x=0] - x coordinate to place the zero of the new image
  * @param {number} [options.y=0] - y coordinate to place the zero of the new image
  * @param {number} [options.width=this.width-x] - width of the new image
- * @param {number} [options.height=this.height-x] - height of the new image
+ * @param {number} [options.height=this.height-y] - height of the new image
  * @return {Image} The new cropped image
  * @example
  * var cropped = image.crop({
