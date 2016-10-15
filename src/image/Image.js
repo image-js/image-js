@@ -194,7 +194,6 @@ IJS.load('cat.jpg').then(function(image) {
     var image = IJS.fromCanvas(canvas);
  </script>
 */
-
 export default class Image {
     constructor(width, height, data, options) {
         if (width === undefined) {
@@ -429,7 +428,7 @@ export default class Image {
      * @param {number} x - x coordinate (0 = left)
      * @param {number} y - y coordinate (0 = top)
      * @param {number} channel
-     * @param value - the new value of this pixel channel
+     * @param {number} value - the new value of this pixel channel
      * @returns {this}
      */
     setValueXY(x, y, channel, value) {
@@ -449,26 +448,58 @@ export default class Image {
         return this.data[(y * this.width + x) * this.channels + channel];
     }
 
-    setValue(pixel, channel, value) {
-        this.data[pixel * this.channels + channel] = value;
+    /**
+     * Set the value of specific pixel channel
+     * @param {number} index - 1D index of the pixel
+     * @param {number} channel
+     * @param {number} value - the new value of this pixel channel
+     * @returns {this}
+     */
+    setValue(index, channel, value) {
+        this.data[index * this.channels + channel] = value;
         this.computed = null;
         return this;
     }
 
-    getValue(pixel, channel) {
-        return this.data[pixel * this.channels + channel];
+    /**
+     * Get the value of specific pixel channel
+     * @param {number} index - 1D index of the pixel
+     * @param {number} channel
+     * @returns {number} - the value of this pixel channel
+     */
+    getValue(index, channel) {
+        return this.data[index * this.channels + channel];
     }
 
+    /**
+     * Set the value of an entire pixel
+     * @param {number} x - x coordinate (0 = left)
+     * @param {number} y - y coordinate (0 = top)
+     * @param {number[]} value - the new value of this pixel
+     * @returns {this}
+     */
     setPixelXY(x, y, value) {
         return this.setPixel(y * this.width + x, value);
     }
 
+    /**
+     * Get the value of an entire pixel
+     * @param {number} x - x coordinate (0 = left)
+     * @param {number} y - y coordinate (0 = top)
+     * @returns {number[]} the value of this pixel
+     */
     getPixelXY(x, y) {
         return this.getPixel(y * this.width + x);
     }
 
-    setPixel(pixel, value) {
-        let target = pixel * this.channels;
+    /**
+     * Set the value of an entire pixel
+     * @param {number} index - 1D index of the pixel
+     * @param {number[]} value - the new value of this pixel
+     * @returns {this}
+     */
+    setPixel(index, value) {
+        let target = index * this.channels;
         for (let i = 0; i < value.length; i++) {
             this.data[target + i] = value[i];
         }
@@ -476,9 +507,14 @@ export default class Image {
         return this;
     }
 
-    getPixel(pixel) {
+    /**
+     * Get the value of an entire pixel
+     * @param {number} index - 1D index of the pixel
+     * @returns {number[]} the value of this pixel
+     */
+    getPixel(index) {
         let value = new Array(this.channels);
-        let target = pixel * this.channels;
+        let target = index * this.channels;
         for (let i = 0; i < this.channels; i++) {
             value[i] = this.data[target + i];
         }
@@ -504,13 +540,14 @@ export default class Image {
         return canvasToBlob(this.getCanvas({originalData: true}), type, quality);
     }
 
-
     /**
      * Creates a new canvas element and draw the image inside it
-     * #originalData
+     * @param {Object} [options]
+     * @param {boolean} [options.originalData=false]
      * @return {Canvas}
      */
-    getCanvas({originalData = false} = {}) {
+    getCanvas(options = {}) {
+        let {originalData = false} = options;
         let data;
         if (!originalData) {
             data = new ImageData(this.getRGBAData(), this.width, this.height);
@@ -538,7 +575,6 @@ export default class Image {
      * @example
      * var imageData = image.getRGBAData();
      */
-
     getRGBAData() {
         this.checkProcessable('getRGBAData', {
             components: [1, 3],
@@ -584,8 +620,12 @@ export default class Image {
         return newData;
     }
 
-
-    getRoiManager(mask, options) {
+    /**
+     * Create a new manager for regions of interest based on the current image.
+     * @param options
+     * @returns {RoiManager}
+     */
+    getRoiManager(options) {
         return new RoiManager(this, options);
     }
 
@@ -600,16 +640,16 @@ export default class Image {
      * @example
      * var emptyImage = image.clone({copyData:false});
      */
-
     clone(options = {}) {
         const {copyData = true} = options;
         return new Image(this, copyData);
     }
 
     /**
-     * Save the image (Node.js only)
+     * Save the image to disk (Node.js only)
      * @param {string} path
-     * @param {string} [format='png']
+     * @param {Object} [options]
+     * @param {string} [options.format='png']
      * @return {Promise} - Resolves when the file is fully written
      */
     save(path, options = {}) {
@@ -700,13 +740,11 @@ export default class Image {
         }
     }
 
-
     apply(filter) {
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
                 let index = (y * this.width + x) * this.channels;
                 filter.call(this, index);
-
             }
         }
     }
