@@ -16,6 +16,9 @@ describe('Image core', function () {
         (function () {
             new Image(5, 0);
         }).should.throw(/height must be greater than 0/);
+        (function () {
+            new Image(10, 10, {kind: 'BLABLA'});
+        }).should.throw(/invalid image kind: BLABLA/);
     });
 
     it('create from Canvas', function () {
