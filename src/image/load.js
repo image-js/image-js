@@ -46,6 +46,7 @@ export function loadURL(url, options) {
                 }
                 case 'tif':
                     return loadTIFF(binaryData);
+                // no default
             }
         }
         return loadGeneric(url);
@@ -74,6 +75,7 @@ function loadPNG(data) {
         case 2: components = 3; break;
         case 4: components = 1; alpha = 1; break;
         case 6: components = 3; alpha = 1; break;
+        default: throw new Error(`Unexpected colourType: ${type}`);
     }
 
     return new Image(png.width, png.height, bitmap, {components, alpha, bitDepth});

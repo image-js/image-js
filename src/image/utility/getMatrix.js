@@ -3,8 +3,12 @@ import Matrix from 'ml-matrix';
 /**
  * @memberof Image
  * @instance
+ * @param {object} [options]
+ * @param {number} [options.channel]
+ * @return {Matrix}
  */
-export default function getMatrix({channel} = {}) {
+export default function getMatrix(options = {}) {
+    let {channel} = options;
     this.checkProcessable('getMatrix', {
         bitDepth: [8, 16]
     });

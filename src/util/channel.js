@@ -58,6 +58,7 @@ export function validateChannel(image, channel, allowAlpha = true) {
                         case 'b':
                             channel = 2;
                             break;
+                        // no default
                     }
                 }
                 break;
@@ -73,6 +74,7 @@ export function validateChannel(image, channel, allowAlpha = true) {
                         case 'l':
                             channel = 2;
                             break;
+                        // no default
                     }
                 }
                 break;
@@ -88,11 +90,12 @@ export function validateChannel(image, channel, allowAlpha = true) {
                         case 'v':
                             channel = 2;
                             break;
+                        // no default
                     }
                 }
                 break;
             case Model.CMYK:
-                if ('hsl'.includes(channel)) {
+                if ('cmyk'.includes(channel)) {
                     switch (channel) {
                         case 'c':
                             channel = 0;
@@ -106,9 +109,12 @@ export function validateChannel(image, channel, allowAlpha = true) {
                         case 'k':
                             channel = 3;
                             break;
+                        // no default
                     }
                 }
                 break;
+            default:
+                throw new Error(`Unexpected color model: ${image.colorModel}`);
         }
 
         if (channel === 'a') {

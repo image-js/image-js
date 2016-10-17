@@ -11,6 +11,7 @@ import extendObject from 'extend';
 import {loadURL} from './load';
 import Stack from '../stack/Stack';
 import {canvasToBlob} from 'blob-util';
+import hasOwn from 'has-own';
 
 let computedPropertyDescriptor = {
     configurable: true,
@@ -56,7 +57,7 @@ let computedPropertyDescriptor = {
  * @class Image
  * @param {number} [width=1]
  * @param {number} [height=1]
- * @param {array} [data] - Image data to load
+ * @param {Array} [data] - Image data to load
  * @param {object} options
  *
  * @example
@@ -300,7 +301,7 @@ export default class Image {
      * Load an image
      * @param {string} url - URL of the image (browser, can be a dataURL) or path (Node.js)
      * @param {object} [options]
-     * @return {Promise} - Resolves with the Image
+     * @return {Promise<Image>} - Resolves with the Image
      * @example
      *  Image.load('http://xxxx').then(
      *      function(image) {
@@ -316,7 +317,7 @@ export default class Image {
 
     /**
      * Creates an image from an HTML Canvas object
-     * @param canvas
+     * @param {Canvas} canvas
      * @return {Image}
      */
     static fromCanvas(canvas) {
@@ -377,7 +378,7 @@ export default class Image {
         computedPropertyDescriptor.get = function () {
             if (this.computed === null) {
                 this.computed = {};
-            } else if (this.computed.hasOwnProperty(name)) {
+            } else if (hasOwn(name, this.computed)) {
                 return this.computed[name];
             }
             let result = method.apply(this, partialArgs);
@@ -429,7 +430,7 @@ export default class Image {
      * @param {number} y - y coordinate (0 = top)
      * @param {number} channel
      * @param {number} value - the new value of this pixel channel
-     * @returns {this}
+     * @return {this}
      */
     setValueXY(x, y, channel, value) {
         this.data[(y * this.width + x) * this.channels + channel] = value;
@@ -442,7 +443,7 @@ export default class Image {
      * @param {number} x - x coordinate (0 = left)
      * @param {number} y - y coordinate (0 = top)
      * @param {number} channel
-     * @returns {number} - the value of this pixel channel
+     * @return {number} - the value of this pixel channel
      */
     getValueXY(x, y, channel) {
         return this.data[(y * this.width + x) * this.channels + channel];
@@ -453,7 +454,7 @@ export default class Image {
      * @param {number} index - 1D index of the pixel
      * @param {number} channel
      * @param {number} value - the new value of this pixel channel
-     * @returns {this}
+     * @return {this}
      */
     setValue(index, channel, value) {
         this.data[index * this.channels + channel] = value;
@@ -465,7 +466,7 @@ export default class Image {
      * Get the value of specific pixel channel
      * @param {number} index - 1D index of the pixel
      * @param {number} channel
-     * @returns {number} - the value of this pixel channel
+     * @return {number} - the value of this pixel channel
      */
     getValue(index, channel) {
         return this.data[index * this.channels + channel];
@@ -476,7 +477,7 @@ export default class Image {
      * @param {number} x - x coordinate (0 = left)
      * @param {number} y - y coordinate (0 = top)
      * @param {number[]} value - the new value of this pixel
-     * @returns {this}
+     * @return {this}
      */
     setPixelXY(x, y, value) {
         return this.setPixel(y * this.width + x, value);
@@ -486,7 +487,7 @@ export default class Image {
      * Get the value of an entire pixel
      * @param {number} x - x coordinate (0 = left)
      * @param {number} y - y coordinate (0 = top)
-     * @returns {number[]} the value of this pixel
+     * @return {number[]} the value of this pixel
      */
     getPixelXY(x, y) {
         return this.getPixel(y * this.width + x);
@@ -496,7 +497,7 @@ export default class Image {
      * Set the value of an entire pixel
      * @param {number} index - 1D index of the pixel
      * @param {number[]} value - the new value of this pixel
-     * @returns {this}
+     * @return {this}
      */
     setPixel(index, value) {
         let target = index * this.channels;
@@ -510,7 +511,7 @@ export default class Image {
     /**
      * Get the value of an entire pixel
      * @param {number} index - 1D index of the pixel
-     * @returns {number[]} the value of this pixel
+     * @return {number[]} the value of this pixel
      */
     getPixel(index) {
         let value = new Array(this.channels);
@@ -542,7 +543,7 @@ export default class Image {
 
     /**
      * Creates a new canvas element and draw the image inside it
-     * @param {Object} [options]
+     * @param {object} [options]
      * @param {boolean} [options.originalData=false]
      * @return {Canvas}
      */
@@ -571,7 +572,7 @@ export default class Image {
      * * a grey image (8 or 16 bits) with or without alpha channel
      * * a color image (8 or 16 bits) with or without alpha channel in with RGB model
      * @instance
-     * @returns {Uint8ClampedArray} - Array with the data
+     * @return {Uint8ClampedArray} - Array with the data
      * @example
      * var imageData = image.getRGBAData();
      */
@@ -622,8 +623,8 @@ export default class Image {
 
     /**
      * Create a new manager for regions of interest based on the current image.
-     * @param options
-     * @returns {RoiManager}
+     * @param {object} [options]
+     * @return {RoiManager}
      */
     getRoiManager(options) {
         return new RoiManager(this, options);
@@ -636,7 +637,7 @@ export default class Image {
      * @param {object} options
      * @param {boolean} [options.copyData=true] - Specify if we want also to clone
      *          the data or only the image parameters (size, colorModel, ...)
-     * @returns {Image} - The source image clone
+     * @return {Image} - The source image clone
      * @example
      * var emptyImage = image.clone({copyData:false});
      */
@@ -648,7 +649,7 @@ export default class Image {
     /**
      * Save the image to disk (Node.js only)
      * @param {string} path
-     * @param {Object} [options]
+     * @param {object} [options]
      * @param {string} [options.format='png']
      * @return {Promise} - Resolves when the file is fully written
      */
@@ -667,7 +668,7 @@ export default class Image {
                     stream = canvas.jpegStream();
                     break;
                 default:
-                    return reject(new RangeError('invalid output format: ' + format));
+                    throw new RangeError('invalid output format: ' + format);
             }
             out.on('finish', resolve);
             out.on('error', reject);

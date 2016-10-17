@@ -31,8 +31,8 @@ ajv-keywords@^1.0.0:
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-1.1.1.tgz#02550bc605a3e576041565628af972e06c549d50"
 
 ajv@^4.7.0:
-  version "4.7.7"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-4.7.7.tgz#4980d5f65ce90a2579532eec66429f320dea0321"
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-4.8.0.tgz#011df5c4a08edb29574a477269afb15a6f97abe5"
   dependencies:
     co "^4.6.0"
     json-stable-stringify "^1.0.1"
@@ -1068,8 +1068,8 @@ babili@0.0.7:
     babel-preset-babili "^0.0.5"
 
 babylon@^6.11.0, babylon@^6.11.4, babylon@^6.8.1:
-  version "6.11.6"
-  resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.11.6.tgz#56dc52e624882841c7fe095257fbcb4a5bb61ae1"
+  version "6.12.0"
+  resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.12.0.tgz#953e6202e58062f7f5041fc8037e4bd4e17140a9"
 
 bail@^1.0.0:
   version "1.0.1"
@@ -1372,9 +1372,9 @@ camelcase@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-3.0.0.tgz#32fc4b9fcdaf845fcdf7e73bb97cac2261f0ab0a"
 
-canvas:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/canvas/-/canvas-1.5.0.tgz#fa1935b7e9d4fc1509a9402e1de436c7f8cc14c9"
+canvas@^1.5.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/canvas/-/canvas-1.6.0.tgz#7cb6cdd73ebdca7dc6053249626d7e798dfde176"
   dependencies:
     nan "^2.3.2"
 
@@ -1430,8 +1430,8 @@ character-reference-invalid@^1.0.0:
   resolved "https://registry.yarnpkg.com/character-reference-invalid/-/character-reference-invalid-1.0.1.tgz#cc413afbedb03554c2321fbff9356ec937505eaf"
 
 chokidar@^1.0.0, chokidar@^1.2.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-1.6.0.tgz#90c32ad4802901d7713de532dc284e96a63ad058"
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-1.6.1.tgz#2f4447ab5e96e50fb3d789fd90d4c72e0e4c70c2"
   dependencies:
     anymatch "^1.3.0"
     async-each "^1.0.0"
@@ -1811,7 +1811,7 @@ doctrine@^1.2.2, doctrine@^1.3.0:
 
 "documentation@https://github.com/documentationjs/documentation.git":
   version "4.0.0-beta11"
-  resolved "https://github.com/documentationjs/documentation.git#9c0adba916e0f95cdf6c2f0bd926a54aa994eb8c"
+  resolved "https://github.com/documentationjs/documentation.git#9e6bcefacc0d05915a8497a383d3ef2e27deeb27"
   dependencies:
     ansi-html "0.0.5"
     babel-core "^6.17.0"
@@ -1997,16 +1997,16 @@ escope@^3.6.0:
     estraverse "^4.1.1"
 
 eslint-config-cheminfo@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-cheminfo/-/eslint-config-cheminfo-1.4.0.tgz#0dcabf0c5e79b26e535b47758d63a93617225cb1"
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/eslint-config-cheminfo/-/eslint-config-cheminfo-1.5.1.tgz#c1ecda74cf2f9165a0fff13c1a2b4b63f660e47b"
 
 eslint-plugin-no-only-tests@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-no-only-tests/-/eslint-plugin-no-only-tests-1.1.0.tgz#24068cafdbccc08d2f9c2d962005793c5940fcd5"
 
 eslint@^3.0.0:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-3.7.1.tgz#7faa84599e0fea422f04bc32db49054051a3f11a"
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-3.8.0.tgz#4fbbf6833d66654860c23a099c47a0f086de34b7"
   dependencies:
     chalk "^1.1.3"
     concat-stream "^1.4.6"
@@ -2030,7 +2030,7 @@ eslint@^3.0.0:
     lodash "^4.0.0"
     mkdirp "^0.5.0"
     natural-compare "^1.4.0"
-    optionator "^0.8.1"
+    optionator "^0.8.2"
     path-is-inside "^1.0.1"
     pluralize "^1.2.1"
     progress "^1.1.8"
@@ -2486,6 +2486,10 @@ has-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-1.0.0.tgz#9d9e793165ce017a00f00418c43f942a7b1d11fa"
 
+has-own@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/has-own/-/has-own-1.0.0.tgz#3062246e31cfd887a9a61ee6d38ca57289378cd1"
+
 has-unicode@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/has-unicode/-/has-unicode-2.0.1.tgz#e0e6fe6a28cf51138855e086d1691e771de2a8b9"
@@ -2701,11 +2705,11 @@ irregular-plurals@^1.0.0:
   resolved "https://registry.yarnpkg.com/irregular-plurals/-/irregular-plurals-1.2.0.tgz#38f299834ba8c00c30be9c554e137269752ff3ac"
 
 is-absolute@^0.2.2:
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/is-absolute/-/is-absolute-0.2.5.tgz#994142b9f468d27c14fbf0cd30fe77db934ca76d"
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/is-absolute/-/is-absolute-0.2.6.tgz#20de69f3db942ef2d87b9c2da36f172235b1b5eb"
   dependencies:
     is-relative "^0.2.1"
-    is-windows "^0.1.1"
+    is-windows "^0.2.0"
 
 is-alphabetical@^1.0.0:
   version "1.0.0"
@@ -2909,9 +2913,9 @@ is-whitespace-character@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-whitespace-character/-/is-whitespace-character-1.0.0.tgz#bbf4a83764ead0d451bec2a55218e91961adc275"
 
-is-windows@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/is-windows/-/is-windows-0.1.1.tgz#be310715431cfabccc54ab3951210fa0b6d01abe"
+is-windows@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/is-windows/-/is-windows-0.2.0.tgz#de1aa6d63ea29dd248737b69f1ff8b8002d2108c"
 
 is-word-character@^1.0.0:
   version "1.0.0"
@@ -2967,8 +2971,8 @@ istanbul-lib-hook@^1.0.0-alpha:
     append-transform "^0.3.0"
 
 istanbul-lib-instrument@^1.0.0-alpha:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/istanbul-lib-instrument/-/istanbul-lib-instrument-1.1.3.tgz#66d5353d1f592b9e34d1cf9acda9c3f1ab509696"
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/istanbul-lib-instrument/-/istanbul-lib-instrument-1.1.4.tgz#95be56e5c321456ffdfddc925ad4dcfc28edab9c"
   dependencies:
     babel-generator "^6.11.3"
     babel-template "^6.9.0"
@@ -2998,8 +3002,8 @@ istanbul-lib-source-maps@^1.0.0-alpha:
     source-map "^0.5.3"
 
 istanbul-reports@^1.0.0-alpha:
-  version "1.0.0-alpha.8"
-  resolved "https://registry.yarnpkg.com/istanbul-reports/-/istanbul-reports-1.0.0-alpha.8.tgz#094830f4c7f3d482e466aac8abda2495f9ae4689"
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/istanbul-reports/-/istanbul-reports-1.0.0.tgz#24b4eb2b1d29d50f103b369bd422f6e640aa0777"
   dependencies:
     handlebars "^4.0.3"
 
@@ -3716,7 +3720,7 @@ optimist@^0.6.1:
     minimist "~0.0.1"
     wordwrap "~0.0.2"
 
-optionator@^0.8.1:
+optionator@^0.8.2:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/optionator/-/optionator-0.8.2.tgz#364c5e409d3f4d6301d6c0b4c05bba50180aeb64"
   dependencies:
@@ -4131,8 +4135,8 @@ remark-html@5.0.1:
     xtend "^4.0.1"
 
 remark-parse@^2.0.0:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/remark-parse/-/remark-parse-2.0.1.tgz#6d436c47e53ce689038f1291fc2fbac9524acc9d"
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/remark-parse/-/remark-parse-2.0.2.tgz#6abe266a166b14065901647ccc77f9b1826148e2"
   dependencies:
     collapse-white-space "^1.0.2"
     has "^1.0.1"
@@ -4160,8 +4164,8 @@ remark-slug@^4.0.0:
     unist-util-visit "^1.0.0"
 
 remark-stringify@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/remark-stringify/-/remark-stringify-2.0.0.tgz#ef20c38b5b99800eab98eddf62490a2cc8b85b51"
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/remark-stringify/-/remark-stringify-2.1.0.tgz#286515da3917c38da8296ebd3a9e85f513417bad"
   dependencies:
     ccount "^1.0.0"
     is-alphanumeric "^1.0.0"
@@ -4445,8 +4449,8 @@ sntp@1.x.x:
     hoek "2.x.x"
 
 source-map-support@^0.4.2:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.4.3.tgz#693c8383d4389a4569486987c219744dfc601685"
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.4.4.tgz#0df5765a05a560c91bc8f8641cf79f2affc0322e"
   dependencies:
     source-map "^0.5.3"
 
@@ -5115,9 +5119,10 @@ yargs-parser@^4.0.2:
     camelcase "^3.0.0"
 
 yargs@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-6.0.0.tgz#900479df4e8bf6ab0e87216f5ed2b2760b968345"
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-6.2.0.tgz#9001048953def85495a2ce1dcfa690b7ab060fd1"
   dependencies:
+    camelcase "^3.0.0"
     cliui "^3.2.0"
     decamelize "^1.1.1"
     get-caller-file "^1.0.1"

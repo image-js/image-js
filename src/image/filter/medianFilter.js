@@ -16,7 +16,7 @@ import Image from '../Image';
 *      * [string] : array of channels as one letter string
 * @param {number} [options.radius=1] distance of the square to take the mean of.
 * @param {string} [options.border='copy'] algorithm that will be applied after to deal with borders
-* @returns {Image}
+* @return {Image}
 */
 export default function medianFilter(options = {}) {
     let {radius = 1, channels, border = 'copy'} = options;

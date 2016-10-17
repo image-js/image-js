@@ -7,15 +7,15 @@ let conv = require('ml-matrix-convolution');
 /**
  * @memberof Image
  * @instance
- * @param {[[number]]} kernel
+ * @param {Array<Array<number>>} kernel
  * @param {object} [options] - options
- * @param {array} [options.channels] - Array of channels to treat. Defaults to all channels
+ * @param {Array} [options.channels] - Array of channels to treat. Defaults to all channels
  * @param {number} [options.bitDepth=this.bitDepth] - A new bit depth can be specified. This allows to use 32 bits to avoid clamping of floating-point numbers.
  * @param {boolean} [options.normalize=false]
  * @param {number} [options.divisor=1]
  * @param {string} [options.border='copy']
  * @param {string} [options.algorithm='auto'] - Either 'auto', 'direct' or 'fft'. fft is much faster for large kernel.
- * @returns {Image}
+ * @return {Image}
  */
 export default function convolution(kernel, options = {}) {
     let {

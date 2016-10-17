@@ -53,6 +53,8 @@ export default function hsl() {
                 case blue:
                     hue = (red - green) / delta + 4;
                     break;
+                default:
+                    throw new Error('unreachable');
             }
             hue /= 6;
         }

@@ -32,6 +32,6 @@ export default function getRelativePosition(targetImage) {
         currentImage = currentImage.parent;
     }
     // we should never reach this place, this means we could not find the parent
-    return;
     // throw Error('Parent image was not found, can not get relative position.')
+    return false;
 }

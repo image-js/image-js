@@ -49,7 +49,7 @@ let bitMethods = {
      * @instance
      * @param {number} x - x coordinate (0 = left)
      * @param {number} y - y coordinate (0 = top)
-     * @returns {number} 0: bit is unset, 1: bit is set
+     * @return {number} 0: bit is unset, 1: bit is set
      */
     getBitXY(x, y) {
         let target = y * this.width + x;
@@ -100,7 +100,7 @@ let bitMethods = {
      * @memberof Image
      * @instance
      * @param {number} pixel - the pixel number which correspond to x * image.width + y
-     * @returns {number} 0: bit is unset, 1: bit is set
+     * @return {number} 0: bit is unset, 1: bit is set
      */
     getBit(pixel) {
         let shift = 7 - (pixel & 0b00000111);

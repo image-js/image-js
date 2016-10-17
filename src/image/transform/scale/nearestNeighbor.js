@@ -1,6 +1,9 @@
 /**
  * Nearest neighbor scaling algorithm
  * @private
+ * @param {Image} newImage
+ * @param {number} newWidth
+ * @param {number} newHeight
  */
 export default function nearestNeighbor(newImage, newWidth, newHeight) {
     const wRatio = this.width / newWidth;
