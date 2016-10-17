@@ -1,24 +1,27 @@
 import * as Kind from './kindNames';
-import {RGB, CMYK} from './model/model';
+import {RGB, CMYK, GREY} from './model/model';
 
 const kinds = {};
 
 kinds[Kind.BINARY] = {
     components: 1,
     alpha: 0,
-    bitDepth: 1
+    bitDepth: 1,
+    colorModel: GREY
 };
 
 kinds[Kind.GREYA] = {
     components: 1,
     alpha: 1,
-    bitDepth: 8
+    bitDepth: 8,
+    colorModel: GREY
 };
 
 kinds[Kind.GREY] = {
     components: 1,
     alpha: 0,
-    bitDepth: 8
+    bitDepth: 8,
+    colorModel: GREY
 };
 
 kinds[Kind.RGBA] = {

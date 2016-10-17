@@ -1372,7 +1372,7 @@ camelcase@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-3.0.0.tgz#32fc4b9fcdaf845fcdf7e73bb97cac2261f0ab0a"
 
-canvas@^1.5.0:
+canvas@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/canvas/-/canvas-1.6.0.tgz#7cb6cdd73ebdca7dc6053249626d7e798dfde176"
   dependencies:
