@@ -46,6 +46,8 @@ export function validateChannel(image, channel, allowAlpha = true) {
 
     if (typeof channel === 'string') {
         switch (image.colorModel) {
+            case Model.GREY:
+                break;
             case Model.RGB:
                 if ('rgb'.includes(channel)) {
                     switch (channel) {

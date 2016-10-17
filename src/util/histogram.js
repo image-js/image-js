@@ -8,7 +8,7 @@ export function median(histogram) {
     let total = histogram.reduce((sum, x) => sum + x);
 
     if (total === 0) {
-        return 0;
+        throw new Error('unreachable');
     }
 
     let position = 0;

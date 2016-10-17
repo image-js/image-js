@@ -22,8 +22,6 @@ describe('we check histogram utilities', function () {
         medianFromHistogram([1, 1, 1, 0]).should.equal(1);
         medianFromHistogram([1, 0, 0, 0]).should.equal(0);
         medianFromHistogram([0, 0, 0, 1]).should.equal(3);
-        medianFromHistogram([0, 0, 0, 0.1]).should.equal(3);
-        medianFromHistogram([0.1, 0.1, 0.1, 0, 0]).should.equal(1);
     });
 
     it('should get the right value for medianFromHistogram with even total', function () {
@@ -33,11 +31,7 @@ describe('we check histogram utilities', function () {
         medianFromHistogram([0, 0, 0, 0, 4]).should.equal(4);
         medianFromHistogram([0, 0, 1, 1, 0]).should.equal(2.5);
         medianFromHistogram([4, 0, 0, 0, 0]).should.equal(0);
-        (typeof medianFromHistogram([0, 0, 0, 0, 0])).should.equal('undefined');
+        (() => medianFromHistogram([0, 0, 0, 0, 0])).should.throw(/unreachable/);
         medianFromHistogram([1, 0, 0, 0, 1]).should.equal(2);
-
     });
-
-
 });
-

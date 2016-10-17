@@ -10,7 +10,7 @@ describe('we check the relative position', function () {
 
         return load('BW4x4.png').then(function (image) {
             let position = image.getRelativePosition(mask);
-            (typeof position).should.equal('undefined');
+            position.should.equal(false);
         });
     });
 
