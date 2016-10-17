@@ -5,17 +5,16 @@ import Image from '../Image';
  * @memberof Image
  * @instance
  * @param {function} method
- * @param {object} options
- * @param {string} [options.alpha='skip'] - possible values: 'skip', 'keep', 'join'
+ * @param {object} [options]
+ * @param {boolean} [options.mergeAlpha=false]
+ * @param {boolean} [options.keepAlpha=false]
+ * @return {Image}
  */
-export default function combineChannels(
-    method = function (pixel) {
-        return (pixel[0] + pixel[1] + pixel[2]) / 3;
-    }, {
+export default function combineChannels(method = defaultCombineMethod, options = {}) {
+    let {
         mergeAlpha = false,
         keepAlpha = false
-    } = {}
-) {
+    } = options;
 
     mergeAlpha &= this.alpha;
     keepAlpha &= this.alpha;
@@ -45,4 +44,8 @@ export default function combineChannels(
     }
 
     return newImage;
+}
+
+function defaultCombineMethod(pixel) {
+    return (pixel[0] + pixel[1] + pixel[2]) / 3;
 }

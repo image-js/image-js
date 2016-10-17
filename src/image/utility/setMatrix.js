@@ -2,8 +2,12 @@
  * We set the data of the image from a matrix. The size of the matrix and the data have to be the same.
  * @memberof Image
  * @instance
+ * @param {Matrix} matrix
+ * @param {object} [options]
+ * @param {number} [options.channel]
  */
-export default function setMatrix(matrix, {channel} = {}) {
+export default function setMatrix(matrix, options = {}) {
+    let {channel} = options;
     this.checkProcessable('getMatrix', {
         bitDepth: [8, 16]
     });

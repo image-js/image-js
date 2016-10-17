@@ -4,15 +4,18 @@ import RoiMap from '../RoiMap';
  * @memberof RoiManager
  * @instance
  * @param {object} [options]
- * @returns {RoiMap}
+ * @param {boolean} [options.allowCorner=true]
+ * @param {boolean} [options.onlyTop=false]
+ * @param {boolean} [options.invert=false]
+ * @return {RoiMap}
  */
 
-export default function fromMaxima(
-    {
+export default function fromMaxima(options = {}) {
+    let {
         allowCorner = true,
-        onlyTop,
-        invert = false} = {}
-) {
+        onlyTop = false,
+        invert = false
+    } = options;
 
     let image = this;
     image.checkProcessable('fromMaxima', {components: [1]});
@@ -191,6 +194,8 @@ export default function fromMaxima(
                                 to++;
                             }
                             break;
+                        default:
+                            throw new Error('unreachable');
                     }
 
                 }

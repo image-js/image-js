@@ -1,14 +1,14 @@
 /**
  * Returns the median of an histogram
- * @param histogram
- * @returns {number}
+ * @param {number[]} histogram
+ * @return {number}
  * @private
  */
 export function median(histogram) {
     let total = histogram.reduce((sum, x) => sum + x);
 
-    if (total <= 0) {
-        return;
+    if (total === 0) {
+        return 0;
     }
 
     let position = 0;
@@ -34,8 +34,8 @@ export function median(histogram) {
 
 /**
  * Retuns the mean of an histogram
- * @param histogram
- * @returns {number}
+ * @param {number[]} histogram
+ * @return {number}
  * @private
  */
 export function mean(histogram) {
@@ -47,8 +47,8 @@ export function mean(histogram) {
         sum += histogram[i] * i;
     }
 
-    if (total <= 0) {
-        return;
+    if (total === 0) {
+        return 0;
     }
 
     return sum / total;

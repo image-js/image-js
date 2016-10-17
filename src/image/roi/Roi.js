@@ -26,7 +26,7 @@ export default class Roi {
      * @param {object} [options]
      * @param {number} [options.scale=1] - Scaling factor to apply to the mask
      * @param {string} [options.kind='normal'] - 'contour', 'box', 'filled', 'center' or 'normal'
-     * @returns {Image} - Returns a mask (1 bit Image)
+     * @return {Image} - Returns a mask (1 bit Image)
      */
     getMask(options = {}) {
         const {scale = 1, kind = ''} = options;

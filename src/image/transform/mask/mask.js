@@ -7,12 +7,12 @@ import {getThreshold} from '../../../util/converter';
  * You may either choose among the provided algorithm or just specify a threshold value
  * @memberof Image
  * @instance
- * @param {Object} [options]
+ * @param {object} [options]
  * @param {string} [options.algorithm='threshold']
  * @param {number} [options.threshold=0.5] - If the algorithm is 'threshold' specify here the value (0 to 1).
  * @param {boolean} [options.useAlpha=true] - Apply the alpha channel to determine the intensity of the pixel.
  * @param {boolean} [options.invert=false] - Invert the resulting image
- * @returns {Image} - Binary image containing the mask
+ * @return {Image} - Binary image containing the mask
  */
 export default function mask(options = {}) {
     let {

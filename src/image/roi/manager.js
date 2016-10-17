@@ -45,6 +45,7 @@ export default class RoiManager {
     /**
      * @param {number[]} roiMap
      * @param {object} [options]
+     * @return {this}
      */
     putMap(roiMap, options = {}) {
         let map = new RoiMap(this._image, roiMap);
@@ -81,20 +82,19 @@ export default class RoiManager {
     /**
      *
      * @param {object} [options]
-     * @returns {RoiMap}
+     * @return {RoiMap}
      */
     getMap(options = {}) {
         let opt = extendObject({}, this._options, options);
-        if (this._layers[opt.label]) {
-            return this._layers[opt.label].roiMap;
-        }
+        this._assertLayerWithLabel(opt.label);
+        return this._layers[opt.label].roiMap;
     }
 
 
     /**
      * Return the IDs of the Regions Of Interest (Roi) as an array of number
      * @param {object} [options]
-     * @returns {number[]}
+     * @return {number[]}
      */
     getRoiIds(options = {}) {
         let rois = this.getRois(options);
@@ -105,6 +105,7 @@ export default class RoiManager {
             }
             return ids;
         }
+        throw new Error('ROIs not found');
     }
 
     /**
@@ -165,7 +166,7 @@ export default class RoiManager {
      * Returns an array of masks
      * See @links Roi.getMask for the options
      * @param {object} [options]
-     * @returns {Image[]} Retuns an array of masks (1 bit Image)
+     * @return {Image[]} Retuns an array of masks (1 bit Image)
      */
     getMasks(options = {}) {
         let rois = this.getRois(options);
@@ -180,13 +181,12 @@ export default class RoiManager {
     /**
      *
      * @param {object} [options]
-     * @returns {number[]}
+     * @return {number[]}
      */
     getData(options = {}) {
         let opt = extendObject({}, this._options, options);
-        if (this._layers[opt.label]) {
-            return this._layers[opt.label].roiMap.data;
-        }
+        this._assertLayerWithLabel(opt.label);
+        return this._layers[opt.label].roiMap.data;
     }
 
     /**
@@ -243,7 +243,7 @@ export default class RoiManager {
      * Reset the changes to the current painted iamge to the image that was
      * used during the creation of the RoiManager except if a new image is
      * specified as parameter;
-     * #param {object} [options]
+     * @param {object} [options]
      * @param {Image} [options.image] A new iamge that you would like to sue for painting over
      */
     resetPainted(options = {}) {
@@ -258,9 +258,9 @@ export default class RoiManager {
     /**
      *  Return a new roiMAP changed with the fusion of certain ROIs.
      * @param {object} [options]
-     * @param {string} [algorithm='commonBorder'] ; algorithm used to decide which ROIs are merged.
-     * @param {number} [minCommonBorderLength=5] is an integer, determine the strength of the merging.
-     * @returns {this}
+     * @param {string} [options.algorithm='commonBorder'] ; algorithm used to decide which ROIs are merged.
+     * @param {number} [options.minCommonBorderLength=5] is an integer, determine the strength of the merging.
+     * @return {this}
      */
 
     mergeRoi(options = {}) {
@@ -283,6 +283,8 @@ export default class RoiManager {
                     }
                 }
                 break;
+            default:
+                throw new Error(`Unexpected algorithm: ${algorithm}`);
         }
 
 
@@ -298,6 +300,12 @@ export default class RoiManager {
             }
         }
         this.putMap(data, opt);
+    }
+
+    _assertLayerWithLabel(label) {
+        if (!this._layers[label]) {
+            throw new Error(`no layer with label ${label}`);
+        }
     }
 }
 

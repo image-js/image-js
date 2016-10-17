@@ -68,6 +68,8 @@ export const methods = {
             case data[i + 2]:
                 hue = (data[i] - data[i + 1]) / delta + 4;
                 break;
+            default:
+                throw new Error('unreachable');
         }
         return (hue / 6 * image.maxValue) >> 0;
     },

@@ -6,8 +6,9 @@ import Image from '../Image';
  * @memberof Image
  * @instance
  * @param {Image} mask - Image containing a binary mask
- * @param {array} [options.position] - Array of 2 elements to force the x,y coordinates
- * @returns {Image} A new image
+ * @param {object} [options]
+ * @param {number[]} [options.position] - Array of 2 elements to force the x,y coordinates
+ * @return {Image} A new image
  */
 export default function extract(mask, options = {}) {
     let {position} = options;

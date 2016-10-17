@@ -1,5 +1,6 @@
 import extend from './extend';
 import Image from '../image/Image';
+import hasOwn from 'has-own';
 
 let computedPropertyDescriptor = {
     configurable: true,
@@ -53,7 +54,7 @@ export default class Stack extends Array {
         computedPropertyDescriptor.get = function () {
             if (this.computed === null) {
                 this.computed = {};
-            } else if (this.computed.hasOwnProperty(name)) {
+            } else if (hasOwn(name, this.computed)) {
                 return this.computed[name];
             }
             let result = method.apply(this, partialArgs);
@@ -66,8 +67,8 @@ export default class Stack extends Array {
 
     /**
      * Check if a process can be applied on the stack
-     * @param processName
-     * @param options
+     * @param {string} processName
+     * @param {object} [options]
      * @private
      */
     checkProcessable(processName, options = {}) {

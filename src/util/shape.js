@@ -1,6 +1,6 @@
 import Matrix from 'ml-matrix';
 import Image from '../image/Image';
-import * as KindNames from '../image/kindNames';
+import {BINARY} from '../image/kindNames';
 
 const cross = [
     [0, 0, 1, 0, 0],
@@ -34,9 +34,6 @@ const smallCross = [
 export default class Shape {
     constructor(options = {}) {
         let {kind = 'cross', shape, size, width, height, filled = true} = options;
-        if (shape) {
-            kind = undefined;
-        }
         if (size) {
             width = size;
             height = size;
@@ -44,21 +41,8 @@ export default class Shape {
         if ((width && 1 !== 1) || (height && 1 !== 1)) {
             throw Error('Shape: The width and height has to be odd numbers.');
         }
-        if (kind) {
-            switch (kind.toLowerCase()) {
-                case 'cross':
-                    this.matrix = cross;
-                    break;
-                case 'smallcross':
-                    this.matrix = smallCross;
-                    break;
-            }
-            //
-            // if ((this.height & 1 === 0) || (this.width & 1 === 0)) {
-            //     throw new Error('Shapes must have an odd height and width');
-            // }
-        } else {
-            switch (shape) {
+        if (shape) {
+            switch (shape.toLowerCase()) {
                 case 'square':
                 case 'rectangle':
                     this.matrix = rectangle(width, height, {filled});
@@ -71,7 +55,21 @@ export default class Shape {
                     this.matrix = triangle(width, height, {filled});
                     break;
                 default:
+                    throw new Error(`Shape: unexpected shape: ${shape}`);
             }
+        } else if (kind) {
+            switch (kind.toLowerCase()) {
+                case 'cross':
+                    this.matrix = cross;
+                    break;
+                case 'smallcross':
+                    this.matrix = smallCross;
+                    break;
+                default:
+                    throw new Error(`Shape: unexpected kind: ${kind}`);
+            }
+        } else {
+            throw new Error('Shape: expected a kind or a shape option');
         }
         this.height = this.matrix.length;
         this.width = this.matrix[0].length;
@@ -99,11 +97,11 @@ export default class Shape {
 
     /**
      * Returns a Mask (1 bit Image) corresponding to this shape.
-     * @returns {Image}
+     * @return {Image}
      */
     getMask() {
         let img = new Image(this.width, this.height, {
-            kind: KindNames.BINARY
+            kind: BINARY
         });
         for (let y = 0; y < this.matrix.length; y++) {
             for (let x = 0; x < this.matrix[0].length; x++) {

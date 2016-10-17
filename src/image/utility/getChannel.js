@@ -5,13 +5,17 @@ import {validateChannel} from './../../util/channel';
  * Create a grey image based on the selected channel
  * @memberof Image
  * @instance
- * @param channel
- * @param options
+ * @param {number|string} channel
+ * @param {object} [options]
+ * @param {boolean} [options.keepAlpha]
+ * @param {boolean} [options.mergeAlpha]
+ * @return {Image} A grey image with the extracted channel
  */
-export default function getChannel(channel, {
-    keepAlpha = false,
-    mergeAlpha = false
-} = {}) {
+export default function getChannel(channel, options = {}) {
+    let {
+        keepAlpha = false,
+        mergeAlpha = false
+    } = options;
 
     keepAlpha &= this.alpha;
     mergeAlpha &= this.alpha;

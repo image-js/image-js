@@ -7,11 +7,12 @@ import {factorDimensions} from '../../../util/converter';
  * Rescale an image
  * @memberof Image
  * @instance
- * @param {Object} [options]
+ * @param {object} [options]
  * @param {number} [options.width=this.width] - new width
  * @param {number} [options.height=this.height] - new height
  * @param {number} [options.factor=1] - scaling factor (applied to the new width and height values)
  * @param {string} [options.algorithm='nearestNeighbor']
+ * @return {Image}
  */
 export default function scale(options = {}) {
     const {
@@ -22,6 +23,10 @@ export default function scale(options = {}) {
     } = options;
 
     const {width: newWidth, height: newHeight} = factorDimensions(factor, width, height);
+
+    if (width === this.width && height === this.height) {
+        return this.clone();
+    }
 
     const newImage = Image.createFrom(this, {width: newWidth, height: newHeight});
 

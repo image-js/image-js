@@ -2,8 +2,14 @@ import newArray from 'new-array';
 import isInteger from 'is-integer';
 
 /**
+ * Returns a histogram for the specified channel
  * @memberof Image
  * @instance
+ * @param {object} [options]
+ * @param {number} [options.maxSlots=256]
+ * @param {number} [options.channel]
+ * @param {boolean} [options.useAlpha=true]
+ * @return {number[]}
  */
 export function getHistogram(options = {}) {
     let {maxSlots = 256, channel, useAlpha = true} = options;
@@ -31,7 +37,7 @@ export function getHistogram(options = {}) {
  *      the maxValue allowed for this image (255 for usual images).
  *      If maxSlots = 8, all the intensities between 0 and 31 will be
  *      placed in the slot 0, 32 to 63 in slot 1, ...
- * @return {number[]} - Resolves with the Image
+ * @return {Array<Array<number>>}
  * @example
  *      image.getHistograms({
  *          maxSlots: 8,
