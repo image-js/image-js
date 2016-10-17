@@ -1,5 +1,5 @@
 /**
- * Flip an image horizontally. The image
+ * Flip an image horizontally.
  * @memberof Image
  * @instance
  * @returns {this}
