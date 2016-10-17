@@ -300,7 +300,7 @@ export default class Image {
      * Load an image
      * @param {string} url - URL of the image (browser, can be a dataURL) or path (Node.js)
      * @param {object} [options]
-     * @return {Promise} - Resolves with the Image
+     * @return {Promise<Image>} - Resolves with the Image
      * @example
      *  Image.load('http://xxxx').then(
      *      function(image) {

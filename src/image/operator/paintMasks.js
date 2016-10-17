@@ -6,15 +6,15 @@ import {css2array} from '../../util/color';
  * Paint a mask or masks on the current image.
  * @memberof Image
  * @instance
- * @param {(Image|array<Image>)}     masks - Image containing a binary mask
+ * @param {(Image|Image[])}     masks - Image containing a binary mask
  * @param {object}              [options]
  * @param {[number]|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
- * @param {array<array<number>>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
+ * @param {number[][]} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
  * @param {number}              [options.alpha=255\ - Value from 0 to 255 to specify the alpha.
  * @param {boolean}             [options.randomColors=false] - To paint each mask with a random color
  * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color
- * @param {array<string>}       [options.labels] - Array of labels to display. Should the the same size as masks.
- * @param {array<array<number>>}} [options.labelsPosition] - Array of points [x,y] where the labels should be displayed.
+ * @param {string[]}       [options.labels] - Array of labels to display. Should the the same size as masks.
+ * @param {number[][]} [options.labelsPosition] - Array of points [x,y] where the labels should be displayed.
  *                                      By default it is the 0,0 position of the correesponding mask.
  * @param {string}              [options.labelColor='blue'] - Define the color to paint the labels
  * @param {string}              [options.labelFont='12px Helvetica'] - Paint the labels in a different CSS style
