@@ -35,7 +35,7 @@
     "build-dist-main": "browserify src/index.js -o dist/image.js --standalone IJS --exclude canvas --ignore buffer --ignore zlib --ignore fs --global-transform [ babelify ]",
     "build-dist-min": "babili dist/image.js --out-file dist/image.min.js --source-maps --no-comments",
     "build-doc": "documentation build src/index.js --github --output docs --format html --sort-order alpha",
-    "publish-doc": "npm run build-doc && git add docs && git commit -m 'doc: rebuild docs' && git push origin master",
+    "publish-doc": "npm run build-doc && git add docs && git commit -m \"doc: rebuild docs\" && git push origin master",
     "build": "npm run compile && npm run clean-dist && npm run build-dist",
     "build-test": "browserify test/browser/bootstrap.js -o test/browser/image.js --standalone IJS --exclude canvas --ignore buffer --ignore zlib --ignore fs --debug --global-transform [ babelify --sourceMap ]",
     "compile": "npm run clean-lib && babel src --out-dir lib --ignore __tests__",
