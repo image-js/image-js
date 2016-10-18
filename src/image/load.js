@@ -25,9 +25,9 @@ export function loadImage(image, options) {
     if (typeof image === 'string') {
         return loadURL(image, options);
     } else if (image instanceof ArrayBuffer) {
-        return loadBinary(new Uint8Array(image), options);
+        return Promise.resolve(loadBinary(new Uint8Array(image), options));
     } else if (image.buffer) {
-        return loadBinary(image, options);
+        return Promise.resolve(loadBinary(image, options));
     } else {
         throw new Error('argument to "load" must be a string or buffer.');
     }
