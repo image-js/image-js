@@ -1,6 +1,6 @@
 import Image from './Image';
 import Stack from '../stack/Stack';
-import {loadBinary, DOMImage, Canvas, isDifferentOrigin} from './environment';
+import {fetchBinary, DOMImage, Canvas, isDifferentOrigin} from './environment';
 import {PNGDecoder} from 'fast-png';
 import {decode as decodeJpeg} from 'fast-jpeg';
 import {decode as decodeTiff} from 'tiff';
@@ -21,35 +21,58 @@ function swap16(val) {
     return ((val & 0xFF) << 8) | ((val >> 8) & 0xFF);
 }
 
-export function loadURL(url, options) {
+export function loadImage(image, options) {
+    if (typeof image === 'string') {
+        return loadURL(image, options);
+    } else if (image instanceof ArrayBuffer) {
+        return loadBinary(new Uint8Array(image), options);
+    } else if (image.buffer) {
+        return loadBinary(image, options);
+    } else {
+        throw new Error('argument to "load" must be a string or buffer.');
+    }
+}
+
+function loadBinary(image, options, url) {
+    const type = imageType(image);
+    if (type) {
+        switch (type.ext) {
+            case 'png':
+                return loadPNG(image);
+            case 'jpg': {
+                const decoded = decodeJpeg(image);
+                let meta;
+                if (decoded.exif) {
+                    meta = getMetadata(decoded.exif);
+                }
+                return loadFromURL(url, {meta});
+            }
+            case 'tif':
+                return loadTIFF(image);
+            // no default
+        }
+    }
+    return loadFromURL(url);
+
+    function loadFromURL(url, options) {
+        if (!url) {
+            throw new Error(`This kind of image (${type}) can only be loaded from URL.`);
+        }
+        return loadGeneric(url, options);
+    }
+}
+
+function loadURL(url, options) {
     const dataURL = url.slice(0, 64).match(isDataURL);
     let binaryDataP;
     if (dataURL) {
         binaryDataP = Promise.resolve(str2ab(atob(url.slice(dataURL[0].length))));
     } else {
-        binaryDataP = loadBinary(url, options);
+        binaryDataP = fetchBinary(url, options);
     }
-    return binaryDataP.then(function (binaryData) {
+    return binaryDataP.then((binaryData) => {
         const uint8 = new Uint8Array(binaryData);
-        const type = imageType(uint8);
-        if (type) {
-            switch (type.ext) {
-                case 'png':
-                    return loadPNG(binaryData);
-                case 'jpg': {
-                    const decoded = decodeJpeg(binaryData);
-                    let meta;
-                    if (decoded.exif) {
-                        meta = getMetadata(decoded.exif);
-                    }
-                    return loadGeneric(url, {meta});
-                }
-                case 'tif':
-                    return loadTIFF(binaryData);
-                // no default
-            }
-        }
-        return loadGeneric(url);
+        return loadBinary(uint8, options, url);
     });
 }
 

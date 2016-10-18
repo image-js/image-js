@@ -8,7 +8,7 @@ import {RGB} from './model/model';
 import RoiManager from './roi/manager';
 import {getType, canWrite} from './mediaTypes';
 import extendObject from 'extend';
-import {loadURL} from './load';
+import {loadImage} from './load';
 import Stack from '../stack/Stack';
 import {canvasToBlob} from 'blob-util';
 import hasOwn from 'has-own';
@@ -299,9 +299,10 @@ export default class Image {
 
     /**
      * Load an image
-     * @param {string} url - URL of the image (browser, can be a dataURL) or path (Node.js)
+     * @param {string|ArrayBuffer|Buffer|Uint8Array} url - URL of the image (browser, can be a dataURL) or path (Node.js)
+     * or buffer containing the binary data
      * @param {object} [options]
-     * @return {Promise<Image>} - Resolves with the Image
+     * @return {Promise<Image>}
      * @example
      *  Image.load('http://xxxx').then(
      *      function(image) {
@@ -312,7 +313,7 @@ export default class Image {
      *  )
      */
     static load(url, options) {
-        return loadURL(url, options);
+        return loadImage(url, options);
     }
 
     /**

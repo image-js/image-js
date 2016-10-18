@@ -1,4 +1,4 @@
-let loadBinary, DOMImage, Canvas, ImageData, isDifferentOrigin, env;
+let fetchBinary, DOMImage, Canvas, ImageData, isDifferentOrigin, env;
 
 if (typeof self !== 'undefined') { // Browser
     env = 'browser';
@@ -23,7 +23,7 @@ if (typeof self !== 'undefined') { // Browser
         return canvas;
     };
 
-    loadBinary = function (url, {withCredentials = false} = {}) {
+    fetchBinary = function (url, {withCredentials = false} = {}) {
         return new Promise(function (resolve, reject) {
             let xhr = new self.XMLHttpRequest();
             xhr.open('GET', url, true);
@@ -48,7 +48,7 @@ if (typeof self !== 'undefined') { // Browser
     ImageData = canvas.ImageData;
 
     const fs = require('fs');
-    loadBinary = function (path) {
+    fetchBinary = function (path) {
         return new Promise(function (resolve, reject) {
             fs.readFile(path, function (err, data) {
                 if (err) reject(err);
@@ -58,4 +58,4 @@ if (typeof self !== 'undefined') { // Browser
     };
 }
 
-export {loadBinary, DOMImage, Canvas, ImageData, isDifferentOrigin, env};
+export {fetchBinary, DOMImage, Canvas, ImageData, isDifferentOrigin, env};
