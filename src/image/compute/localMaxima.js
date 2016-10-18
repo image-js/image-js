@@ -1,28 +1,24 @@
-
 /**
  * Returns an array of object with position.
  * @memberof Image
  * @instance
  * @param {object} [options]
- * @param {Image} [mask] - region of the image that is analyzed. The rest is omitted.
- * @param {number} [region=3] -  1, 2 or 3. Define the region around each points that is analyzed. 1 corresponds to 4 cross points, 2 to
- *        the 8 points around and 3 to the 12 points around the central pixel
- * @param {number} [removeClosePoints=0] Remove pts which have a distance between them smaller than this param.
- * @param {boolean} [invert=false] Search for minima instead of maxima
- * @param {number} [maxEquals=2] Maximal number of values that may be equal to the maximum
- * @returns {number[]} Array having has size the number of channels
+ * @param {Image} [options.mask] - Region of the image that is analyzed. The rest is omitted.
+ * @param {number} [options.region=3] -  1, 2 or 3. Define the region around each points that is analyzed. 1 corresponds to 4 cross points, 2 to
+ *        the 8 points around and 3 to the 12 points around the central pixel.
+ * @param {number} [options.removeClosePoints=0] - Remove pts which have a distance between them smaller than this param.
+ * @param {boolean} [options.invert=false] - Search for minima instead of maxima
+ * @param {number} [options.maxEquals=2] - Maximal number of values that may be equal to the maximum
+ * @return {number[]} Array whose size is the number of channels
  */
-
-
-export default function localMaxima(
-    {
-        removeClosePoints = 0,
-        region = 3,
-        invert = false,
+export default function localMaxima(options = {}) {
+    let {
         mask,
+        region = 3,
+        removeClosePoints = 0,
+        invert = false,
         maxEquals = 2
-    } = {}
-) {
+    } = options;
     let image = this;
     this.checkProcessable('localMaxima', {
         bitDepth: [8, 16],
@@ -83,4 +79,3 @@ export default function localMaxima(
     }
     return points;
 }
-

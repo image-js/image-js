@@ -326,7 +326,14 @@ export default class Image {
         return new Image(imageData.width, imageData.height, imageData.data);
     }
 
-    static extendMethod(name, method, {inPlace = false, returnThis = true, partialArgs = [], stack = false} = {}) {
+    static extendMethod(name, method, options = {}) {
+        let {
+            inPlace = false,
+            returnThis = true,
+            partialArgs = [],
+            stack = false
+        } = options;
+
         if (inPlace) {
             Image.prototype[name] = function (...args) {
                 // remove computed properties
@@ -374,7 +381,11 @@ export default class Image {
         return Image;
     }
 
-    static extendProperty(name, method, {partialArgs = []} = {}) {
+    static extendProperty(name, method, options = {}) {
+        let {
+            partialArgs = []
+        } = options;
+
         computedPropertyDescriptor.get = function () {
             if (this.computed === null) {
                 this.computed = {};
@@ -677,7 +688,8 @@ export default class Image {
     }
 
     // this method check if a process can be applied on the current image
-    checkProcessable(processName, {bitDepth, alpha, colorModel, components, channels} = {}) {
+    checkProcessable(processName, options = {}) {
+        let {bitDepth, alpha, colorModel, components, channels} = options;
         if (typeof processName !== 'string') {
             throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
         }

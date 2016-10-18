@@ -3,8 +3,8 @@ import Image from '../../image/Image';
 /**
  * @memberof Stack
  * @instance
+ * @return {Image}
  */
-
 export default function average() {
     this.checkProcessable('average', {
         bitDepth: [8, 16]

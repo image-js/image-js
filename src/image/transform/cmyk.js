@@ -9,13 +9,12 @@ import Image from '../Image';
  * The source image has to be RGB !
  * @memberof Image
  * @instance
- * @returns {Image} - New image in CMYK color model
+ * @return {Image} - New image in CMYK color model
  * @example
  * var cmykImage = image.cmyk();
  * // we can create one image per channel
  * var channels = cmykImage.split();
  */
-
 export default function cmyk() {
     this.checkProcessable('cmyk', {
         bitDepth: [8, 16],

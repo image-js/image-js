@@ -1,22 +1,28 @@
 import Image from '../Image';
+import Stack from '../../stack/Stack';
 
 /**
  * @memberof Image
  * @instance
+ * @param {object} [options]
+ * @param {boolean} [options.preserveAlpha=true]
+ * @return {Stack}
  */
-
-export default function split({preserveAlpha = true} = {}) {
+export default function split(options = {}) {
+    let {
+        preserveAlpha = true
+    } = options;
 
     this.checkProcessable('split', {
         bitDepth: [8, 16]
     });
 
-    // split will always return an array of images
+    // split will always return a stack of images
     if (this.components === 1) {
-        return [this.clone()];
+        return new Stack([this.clone()]);
     }
 
-    let images = [];
+    let images = new Stack();
 
     let data = this.data;
     if (this.alpha && preserveAlpha) {

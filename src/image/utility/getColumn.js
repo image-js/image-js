@@ -1,8 +1,10 @@
 /**
  * @memberof Image
  * @instance
+ * @param {number} column
+ * @param {number} [channel=0]
+ * @return {number[]}
  */
-
 export default function getColumn(column, channel = 0) {
 
     this.checkProcessable('getColumn', {

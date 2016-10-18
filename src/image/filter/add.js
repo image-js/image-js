@@ -5,9 +5,10 @@ import {checkNumberArray} from '../../util/value';
  * Add a specific integer on the specified points of the specified channels
  * @memberof Image
  * @instance
- * @returns {Image} Modified current image
+ * @param {*} value
+ * @param {object} [options]
+ * @return {this} Modified current image
  */
-
 export default function add(value, options = {}) {
     let {channels} = options;
     this.checkProcessable('add', {
@@ -17,7 +18,7 @@ export default function add(value, options = {}) {
     channels = validateArrayOfChannels(this, {channels: channels});
     value = checkNumberArray(value);
 
-// we allow 3 cases, the value may be an array (1D), an image or a single value
+    // we allow 3 cases, the value may be an array (1D), an image or a single value
     if (!isNaN(value)) {
         for (let j = 0; j < channels.length; j++) {
             let c = channels[j];
@@ -36,4 +37,6 @@ export default function add(value, options = {}) {
             }
         }
     }
+
+    return this;
 }

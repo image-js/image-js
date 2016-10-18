@@ -3,8 +3,8 @@ import {median as medianFromHistogram} from '../../util/histogram';
 /**
  * @memberof Stack
  * @instance
+ * @return {number[]}
  */
-
 export default function median() {
 
     this.checkProcessable('median', {

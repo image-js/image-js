@@ -1,10 +1,11 @@
 /**
  * @memberof Image
  * @instance
+ * @param {number} row
+ * @param {number} [channel=0]
+ * @return {number[]}
  */
-
 export default function getRow(row, channel = 0) {
-
     this.checkProcessable('getRow', {
         bitDepth: [8, 16]
     });

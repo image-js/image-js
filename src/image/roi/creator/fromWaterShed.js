@@ -14,17 +14,16 @@ import {dxs, dys} from './../../../util/dxdy.js';
  * maxima.
  * @memberof RoiManager
  * @instance
- * @param {Object} [options={}]
- * @param {number[][]} [options.points[ - Array of points [[x1,y1], [x2,y2], ...].
+ * @param {object} [options={}]
+ * @param {Array<Array<number>>} [options.points] - Array of points [[x1,y1], [x2,y2], ...].
  * @param {number} [options.fillMaxValue] - Limit of filling. By example, we can fill to a maximum value 32000 of a 16 bitDepth image.
  *          If invert this will corresponds to the minimal value
  * @param {Image} [options.image=this] - By default the waterShed will be applied on the current image. However waterShed can only be applied
  *                              on 1 component image. This allows to specify a grey scale image on which to apply waterShed..
  * @param {Image} [options.mask] - A binary image, the same size as the image. The algorithm will fill only if the current pixel in the binary mask is true.
- * @param {boolean} [options.invert = false] - By default we fill the minima
- * @returns {RoiMap}
+ * @param {boolean} [options.invert=false] - By default we fill the minima
+ * @return {RoiMap}
  */
-
 export default function fromWaterShed(options = {}) {
     let {
         points,

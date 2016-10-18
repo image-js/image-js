@@ -5,9 +5,8 @@ import RoiMap from '../RoiMap';
  * @instance
  * @param {Image} mask
  * @param {object} [options]
- * @returns {RoiMap}
+ * @return {RoiMap}
  */
-
 export default function fromMask(mask, options = {}) {
     const {
         allowCorners = false

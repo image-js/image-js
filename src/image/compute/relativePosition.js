@@ -1,19 +1,17 @@
-/*
- An image may be derived from another image either by a crop
- or because it is a ROI (region of interest)
- Also a region of interest can be reprocessed to generated another
- set of region of interests.
- It is therefore important to keep the hierarchy of images to know
- which image is derived from which one and be able to get the
- relative position of one image in another
- This methods takes care of this.
- */
-
 /**
+ * An image may be derived from another image either by a crop
+ * or because it is a ROI (region of interest)
+ * Also a region of interest can be reprocessed to generated another
+ * set of region of interests.
+ * It is therefore important to keep the hierarchy of images to know
+ * which image is derived from which one and be able to get the
+ * relative position of one image in another
+ * This methods takes care of this.
  * @memberof Image
  * @instance
+ * @param {Image} targetImage
+ * @return {number[]|boolean}
  */
-
 export default function getRelativePosition(targetImage) {
     if (this === targetImage) {
         return [0, 0];

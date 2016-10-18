@@ -9,7 +9,6 @@ import RoiMap from '../RoiMap';
  * @param {boolean} [options.invert=false]
  * @return {RoiMap}
  */
-
 export default function fromMaxima(options = {}) {
     let {
         allowCorner = true,

@@ -2,9 +2,8 @@
  * Flip an image vertically. The image
  * @memberof Image
  * @instance
- * @returns {this}
+ * @return {this}
  */
-
 export default function flipY() {
     this.checkProcessable('flipY', {
         bitDepth: [8, 16]

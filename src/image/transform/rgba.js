@@ -8,11 +8,10 @@ import {RGB} from '../model/model';
  * the value for the alpha channel will be 100% opacity.
  * @memberof Image
  * @instance
- * @returns {Image} - New image in RGB color model with alpha channel
+ * @return {Image} - New image in RGB color model with alpha channel
  * @example
  * var rgbaImage = image.rgba();
  */
-
 export default function rgba() {
     this.checkProcessable('rgba', {
         bitDepth: [8, 16],

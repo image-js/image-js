@@ -4,9 +4,13 @@ import {GRADIENT_X, GRADIENT_Y} from '../../util/kernels';
 /**
  * @memberof Image
  * @instance
- * @returns {Image}
+ * @param {object} [options]
+ * @param {Array<Array<number>>} [options.kernelX]
+ * @param {Array<Array<number>>} [options.kernelY]
+ * @param {string} [options.border='copy']
+ * @param {*} [options.channels]
+ * @return {Image}
  */
-
 export default function sobelFilter(options = {}) {
     let {
 		kernelX = GRADIENT_X,

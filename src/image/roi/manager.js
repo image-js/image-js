@@ -120,9 +120,8 @@ export default class RoiManager {
      * @param {number} [options.minHeight=Number.POSITIVE_INFINITY]
      * @param {number} [options.maxWidth=0]
      * @param {number} [options.maxHeight=Number.POSITIVE_INFINITY]
-     * @returns {Roi[]}
+     * @return {Roi[]}
      */
-
     getRois(options = {}) {
         let {
             label = this._options.label,
@@ -197,9 +196,8 @@ export default class RoiManager {
      * @param {string} [options.labelProperty] - Paint a mask property on the image.
      *                                  May be any property of the ROI like
      *                                  for example id, surface, width, height, meanX, meanY.
-     * @returns {Image} - The painted RGBA 8 bits image
+     * @return {Image} - The painted RGBA 8 bits image
      */
-
     paint(options = {}) {
         let {
             labelProperty
@@ -256,13 +254,12 @@ export default class RoiManager {
     }
 
     /**
-     *  Return a new roiMAP changed with the fusion of certain ROIs.
+     * Return a new roiMAP changed with the fusion of certain ROIs.
      * @param {object} [options]
      * @param {string} [options.algorithm='commonBorder'] ; algorithm used to decide which ROIs are merged.
      * @param {number} [options.minCommonBorderLength=5] is an integer, determine the strength of the merging.
      * @return {this}
      */
-
     mergeRoi(options = {}) {
         let opt = extendObject({}, this._options, options);
         let {
@@ -300,6 +297,8 @@ export default class RoiManager {
             }
         }
         this.putMap(data, opt);
+
+        return this;
     }
 
     _assertLayerWithLabel(label) {

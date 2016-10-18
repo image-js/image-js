@@ -28,8 +28,8 @@ export default class RoiLayer {
      * for each data to which Roi it belongs
      * @memberof RoiManager
      * @instance
+     * @return {Roi[]}
      */
-
     createRoi() {
         // we need to find all all the different IDs there is in the data
         let data = this.roiMap.data;

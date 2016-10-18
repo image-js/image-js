@@ -1,14 +1,15 @@
 import Matrix from '../../util/matrix';
 
-// Try to match the current pictures with another one
-
 /**
+ * Try to match the current pictures with another one
  * @memberof Image
  * @instance
+ * @param {Image} image - Other image to match
+ * @param {object} [options]
+ * @return {number[]}
  */
-
-export default function match(image, {border} = {}) {
-
+export default function match(image, options = {}) {
+    let {border} = options;
 
     this.checkProcessable('getChannel', {
         bitDepth: [8, 16]
@@ -50,18 +51,5 @@ export default function match(image, {border} = {}) {
         }
     }
 
-    /*
-    for (let i=0; i<similarityMatrix.length; i++) {
-        let line=[];
-        for (let j=0; j<similarityMatrix[i].length; j++) {
-            line.push(similarityMatrix[i][j]);
-        }
-        console.log(line.join(" "));
-    }
-    console.log(currentX, middleX, currentY, middleY);
-    */
-
-
     return [currentX - middleX, currentY - middleY];
 }
-

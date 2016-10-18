@@ -1,13 +1,18 @@
 /**
  * @memberof Image
  * @instance
+ * @param {object} [options]
+ * @param {number[]} [options.sampling=[10, 10]]
+ * @param {boolean} [options.painted=false]
+ * @param {Image} [options.mask]
+ * @return {object}
  */
-
-export default function getPixelsGrid({
-    sampling = [10, 10],
-    painted = false,
-    mask
-    } = {}) {
+export default function getPixelsGrid(options = {}) {
+    let {
+        sampling = [10, 10],
+        painted = false,
+        mask
+    } = options;
 
     this.checkProcessable('getPixelsGrid', {
         bitDepth: [8, 16],

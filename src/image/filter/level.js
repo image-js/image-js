@@ -15,9 +15,8 @@ import {validateArrayOfChannels} from '../../util/channel';
  *      * [string] : array of channels as one letter string
  * @param {number} [options.min=this.min] minimal value after levelling
  * @param {number} [options.max=this.max] maximal value after levelling
- * @returns {Image}
+ * @return {this}
  */
-
 export default function level(options = {}) {
     let {
         algorithm = 'range',
@@ -33,7 +32,6 @@ export default function level(options = {}) {
     channels = validateArrayOfChannels(this, {channels: channels});
 
     switch (algorithm) {
-
         case 'range':
             if (min < 0) {
                 min = 0;
@@ -55,6 +53,8 @@ export default function level(options = {}) {
         default:
             throw new Error('level: algorithm not implement: ' + algorithm);
     }
+
+    return this;
 }
 
 function processImage(image, min, max, channels) {

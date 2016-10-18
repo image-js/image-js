@@ -3,10 +3,10 @@ import {validateChannel} from './../../util/channel';
 /**
  * @memberof Image
  * @instance
+ * @param {*} channel
+ * @param {Image} image
  */
-
 export default function setChannel(channel, image) {
-
     this.checkProcessable('setChannel', {
         bitDepth: [8, 16]
     });

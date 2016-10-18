@@ -4,9 +4,11 @@ import Image from '../Image';
 /**
  * @memberof Image
  * @instance
- * @returns {Image}
+ * @param {Array<Array<number>>} coordinates
+ * @param {Array<Array<number>>} values;
+ * @param {object} [options]
+ * @return {Image}
  */
-
 export default function background(coordinates, values, options) {
     const model = new KernelRidgeRegression(coordinates, values, options);
     const allCoordinates = new Array(this.size);

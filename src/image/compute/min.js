@@ -4,9 +4,8 @@ import newArray from 'new-array';
  * Returns an array with the minimal value of each channel
  * @memberof Image
  * @instance
- * @returns {number[]} Array having has size the number of channels
+ * @return {number[]} Array having has size the number of channels
  */
-
 export default function min() {
     this.checkProcessable('min', {
         bitDepth: [8, 16]

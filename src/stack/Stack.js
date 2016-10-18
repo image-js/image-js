@@ -31,7 +31,13 @@ export default class Stack extends Array {
         return Promise.all(urls.map(Image.load)).then(images => new Stack(images));
     }
 
-    static extendMethod(name, method, {inPlace = false, returnThis = true, partialArgs = []} = {}) {
+    static extendMethod(name, method, options = {}) {
+        let {
+            inPlace = false,
+            returnThis = true,
+            partialArgs = []
+        } = options;
+
         if (inPlace) {
             Stack.prototype[name] = function (...args) {
                 // remove computed properties
@@ -50,7 +56,11 @@ export default class Stack extends Array {
         return Stack;
     }
 
-    static extendProperty(name, method, {partialArgs = []} = {}) {
+    static extendProperty(name, method, options = {}) {
+        let {
+            partialArgs = []
+        } = options;
+
         computedPropertyDescriptor.get = function () {
             if (this.computed === null) {
                 this.computed = {};

@@ -171,7 +171,6 @@ export default class Roi {
 
      However in most of the cases it will be an array of one element
      */
-
     get boxIDs() {
         if (this.computed.boxIDs) {
             return this.computed.boxIDs;

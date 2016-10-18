@@ -14,8 +14,6 @@ import Image from '../Image';
  *   newColorDepth:8
  * });
  */
-
-
 export default function colorDepth(newColorDepth = 8) {
 
     this.checkProcessable('colorDepth', {

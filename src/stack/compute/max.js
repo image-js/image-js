@@ -1,8 +1,8 @@
 /**
  * @memberof Stack
  * @instance
+ * @return {number[]}
  */
-
 export default function max() {
 
     this.checkProcessable('min', {

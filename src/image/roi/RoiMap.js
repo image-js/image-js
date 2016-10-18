@@ -6,7 +6,6 @@
  * @class RoiMap
  * @private
  */
-
 export default class RoiMap {
     constructor(parent, data) {
         this.parent = parent;

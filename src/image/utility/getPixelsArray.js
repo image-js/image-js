@@ -3,9 +3,8 @@
  * [[R1, G1, B1], [R2, G2, B2], ...]
  * @memberof Image
  * @instance
- * @returns {number[][]}
+ * @return {Array<Array<number>>}
  */
-
 export default function getPixelsArray() {
     this.checkProcessable('getPixelsArray', {
         bitDepth: [8, 16, 32]

@@ -20,11 +20,10 @@ import {methods} from './greyAlgorithms';
  * @param {boolean} [options.allowGrey=false] - By default only RGB images are allowed.
  *          If true grey images are also allowed and will either return a copy or
  *          apply the alpha channel depending the options
- * @returns {Image} - Grey scale image (with or without alpha depending the options)
+ * @return {Image} - Grey scale image (with or without alpha depending the options)
  * @example
  * var grey = image.grey();
  */
-
 export default function grey(options = {}) {
     let {
         algorithm = 'luma709',

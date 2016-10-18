@@ -1,14 +1,14 @@
 import Image from '../Image';
-import * as KindNames from '../kindNames';
-
+import {BINARY} from '../kindNames';
 
 /**
  * This is a temporary code that should be placed in the more general resize method
  * it only works for scaled down !
  * @memberof Image
  * @instance
+ * @param {number} [scale=0.5]
+ * @return {Image}
  */
-
 export default function resizeBinary(scale = 0.5) {
     this.checkProcessable('resizeBinary', {
         bitDepth: [1]
@@ -20,7 +20,7 @@ export default function resizeBinary(scale = 0.5) {
     let shiftY = Math.round((this.height - height) / 2);
 
     let newImage = Image.createFrom(this, {
-        kind: KindNames.BINARY,
+        kind: BINARY,
         width: width,
         height: height,
         position: [shiftX, shiftY],

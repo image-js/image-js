@@ -13,9 +13,8 @@ import {validateArrayOfChannels} from '../../util/channel';
  *      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
  *      * [number] : array of channels as numbers
  *      * [string] : array of channels as one letter string
- * @returns {this}
+ * @return {this}
  */
-
 export default function invert(options = {}) {
     let {channels} = options;
 
@@ -41,4 +40,6 @@ export default function invert(options = {}) {
             }
         }
     }
+
+    return this;
 }

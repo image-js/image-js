@@ -1,20 +1,21 @@
 import {RGB} from '../model/model';
 import Shape from '../../util/shape';
 
-
 /**
  * Paint pixels on the current image.
  * @memberof Image
  * @instance
- * @param {[[pixels]]} points - Array of [x,y] points
- * @param {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
- * @param {array} [$1.shape] - Array of 3 elements (R, G, B), default is red.
- * @returns {Image} The original painted image
+ * @param {Array<Array<number>>} points - Array of [x,y] points
+ * @param {object} [options]
+ * @param {Array<number>} [options.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
+ * @param {Array<number>} [options.shape] - Array of 3 elements (R, G, B), default is red.
+ * @return {this} The original painted image
  */
-
-export default function paintPoints(points, {
-    color = [this.maxValue, 0, 0],
-    shape} = {}) {
+export default function paintPoints(points, options = {}) {
+    let {
+        color = [this.maxValue, 0, 0],
+        shape
+    } = options;
 
     this.checkProcessable('paintPoints', {
         components: 3,
@@ -45,5 +46,6 @@ export default function paintPoints(points, {
             }
         }
     }
-}
 
+    return this;
+}

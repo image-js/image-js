@@ -6,9 +6,8 @@ import convolutionFft from '../operator/convolutionFft';
  * @instance
  * @param {object} options
  * @param {number} [options.radius=1] : number of pixels around the current pixel to average
- * @returns {Image}
+ * @return {Image}
  */
-
 // first release of mean filter
 export default function blurFilter(options = {}) {
     let {radius = 1} = options;

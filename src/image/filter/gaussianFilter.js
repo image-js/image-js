@@ -10,9 +10,8 @@ import convolution from '../operator/convolution';
  * @param {number[]|string[]} [options.channels] : to which channel to apply the filter. By default all but alpha.
  * @param {string} [options.border='copy']
  * @param {boolean} [options.algorithm='auto'] : Algorithm for convolution {@link Image#convolution}
- * @returns {Image}
+ * @return {Image}
  */
-
 export default function gaussianFilter(options = {}) {
     let {
 		radius = 1,

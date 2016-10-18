@@ -4,9 +4,10 @@ import {checkNumberArray} from '../../util/value';
 /**
  * @memberof Image
  * @instance
- * @returns {Image}
+ * @param {*} value
+ * @param {object} [options]
+ * @return {this}
  */
-
 export default function subtract(value, options = {}) {
     let {channels} = options;
     this.checkProcessable('subtract', {
@@ -34,4 +35,6 @@ export default function subtract(value, options = {}) {
             }
         }
     }
+
+    return this;
 }

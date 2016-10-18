@@ -24,13 +24,11 @@ const smallCross = [
  * @param {string} [options.shape] - Value may be 'square', 'rectangle', 'circle', 'ellipse' or 'triangle'
  *                                  The size of the shape will be determined by the size, width and height.
  *                                  A Shape is by default filled.
- *
  * @param {number} [options.size]
  * @param {number} [options.width=options.size] - width of the shape. Must be odd.
  * @param {number} [options.height=options.size] - width of the shape. Must be odd.
  * @param {boolean} [options.filled=true] - If false only the border ot the shape is taken into account.
  */
-
 export default class Shape {
     constructor(options = {}) {
         let {kind = 'cross', shape, size, width, height, filled = true} = options;
@@ -79,9 +77,8 @@ export default class Shape {
 
     /**
      * Returns an array of [x,y] points
-     * @returns {number[][]} - Array of [x,y] points
+     * @return {Array<Array<number>>} - Array of [x,y] points
      */
-
     getPoints() {
         let matrix = this.matrix;
         let points = [];

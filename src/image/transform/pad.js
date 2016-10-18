@@ -6,11 +6,12 @@ import copy from '../utility/copy';
 /**
  * @memberof Image
  * @instance
+ * @param {object} [options]
  * @param {number} [options.size=0]
  * @param {string} [options.algorithm='copy']
  * @param {array<number>} [options.color]
+ * @return {Image}
  */
-
 export default function pad(options = {}) {
     let {
         size = 0,

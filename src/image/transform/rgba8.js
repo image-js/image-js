@@ -11,11 +11,10 @@ import Image from '../Image';
  * The conversion is based on {@link Image#getRGBAData}.
  * @memberof Image
  * @instance
- * @returns {Image} - New image in RGB color model with alpha channel
+ * @return {Image} - New image in RGB color model with alpha channel
  * @example
  * var rgbaImage = image.rgba8();
  */
-
 export default function rgba8() {
     let newImage = new Image(this.width, this.height, {
         kind: 'RGBA'

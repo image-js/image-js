@@ -1,8 +1,8 @@
 /**
  * @memberof Stack
  * @instance
+ * @return {number[]}
  */
-
 export default function min() {
     this.checkProcessable('min', {
         bitDepth: [8, 16]

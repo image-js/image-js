@@ -2,9 +2,8 @@
  * Allows to generate an array of points for a binary image (bit depth = 1)
  * @memberof Image
  * @instance
- * @returns {number[][]} - an array of [x,y] corresponding to the set pixels in the binary image
+ * @return {Array<Array<number>>} - an array of [x,y] corresponding to the set pixels in the binary image
  */
-
 export default function points() {
     this.checkProcessable('points', {
         bitDepth: [1]

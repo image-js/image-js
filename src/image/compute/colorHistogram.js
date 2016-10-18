@@ -3,12 +3,17 @@ import newArray from 'new-array';
 /**
  * @memberof Image
  * @instance
+ * @param {object} [options]
+ * @param {boolean} [options.useAlpha=true]
+ * @param {number} [options.nbSlots=512]
+ * @return {number[]}
  */
+export default function getColorHistogram(options = {}) {
+    let {
+        useAlpha = true,
+        nbSlots = 512
+    } = options;
 
-export default function getColorHistogram({
-    useAlpha = true,
-    nbSlots = 512
-    } = {}) {
     this.checkProcessable('getColorHistogram', {
         bitDepth: [8, 16],
         components: [3]

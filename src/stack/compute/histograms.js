@@ -1,10 +1,10 @@
 /**
  * @memberof Stack
  * @instance
+ * @param {object} [options]
+ * @return {Array<Array<number>>}
  */
-
 export default function histograms(options) {
-
     this.checkProcessable('min', {
         bitDepth: [8, 16]
     });

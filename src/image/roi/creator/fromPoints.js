@@ -4,11 +4,10 @@ import Shape from './../../../util/shape';
 /**
  * @memberof RoiManager
  * @instance
- * @param {number[][]} points - an array of points
+ * @param {Array<Array<number>>} pointsToPaint - an array of points
  * @param {object} [options]
- * @returns {RoiMap}
+ * @return {RoiMap}
  */
-
 export default function fromPoints(pointsToPaint, options = {}) {
     let shape = new Shape(options);
 

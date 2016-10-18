@@ -9,13 +9,12 @@ import Image from '../Image';
  * The source image has to be RGB !
  * @memberof Image
  * @instance
-  * @returns {Image} - New image in HSL color model
+ * @return {Image} - New image in HSL color model
  * @example
  * var hslImage = image.hsl();
  * // we can create one image per channel
  * var channels = hslImage.split();
  */
-
 export default function hsl() {
     this.checkProcessable('hsl', {
         bitDepth: [8, 16],

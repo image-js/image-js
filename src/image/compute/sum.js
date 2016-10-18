@@ -4,10 +4,8 @@ import newArray from 'new-array';
  * Returns an array with the sum of the values of each channel
  * @memberof Image
  * @instance
- * @returns {number[]} Array having has size the number of channels
+ * @return {number[]} Array having has size the number of channels
  */
-
-
 export default function sum() {
     this.checkProcessable('sum', {
         bitDepth: [8, 16]

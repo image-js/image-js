@@ -2,9 +2,8 @@
  * Flip an image horizontally.
  * @memberof Image
  * @instance
- * @returns {this}
+ * @return {this}
  */
-
 export default function flipX() {
     this.checkProcessable('flipX', {
         bitDepth: [8, 16]

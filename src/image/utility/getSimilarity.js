@@ -1,16 +1,23 @@
 import {validateArrayOfChannels} from './../../util/channel';
 import newArray from 'new-array';
 
-// Try to match the current pictures with another one
-
-// if normalize we normalize separately the 2 images
-
 /**
+ * Try to match the current pictures with another one. If normalize we normalize separately the 2 images.
  * @memberof Image
  * @instance
+ * @param {Image} image - Other image
+ * @param {object} [options]
+ * @return {number[]|number}
  */
-
-export default function getSimilarity(image, {shift = [0, 0], average, channels, defaultAlpha, normalize, border = [0, 0]} = {}) {
+export default function getSimilarity(image, options = {}) {
+    let {
+        shift = [0, 0],
+        average,
+        channels,
+        defaultAlpha,
+        normalize,
+        border = [0, 0]
+    } = options;
 
     this.checkProcessable('getSimilarity', {
         bitDepth: [8, 16]
