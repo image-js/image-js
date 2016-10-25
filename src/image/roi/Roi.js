@@ -403,6 +403,21 @@ export default class Roi {
 
         return this.computed.angle = angle;
     }
+
+    toJSON() {
+        return {
+            id: this.id,
+            minX: this.minX,
+            maxX: this.maxX,
+            minY: this.minY,
+            maxY: this.maxY,
+            meanX: this.meanX,
+            meanY: this.meanY,
+            height: this.height,
+            width: this.width,
+            surface: this.surface
+        }
+    }
 }
 
 
