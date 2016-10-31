@@ -58,7 +58,7 @@
     "babel-preset-es2015-node4": "^2.0.1",
     "babel-register": "^6.2.0",
     "babelify": "^7.2.0",
-    "babili": "0.0.7",
+    "babili": "0.0.8",
     "benchmark": "^2.1.0",
     "better-console": "^0.2.4",
     "browserify": "^13.1.0",
