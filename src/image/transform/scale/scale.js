@@ -24,7 +24,7 @@ export default function scale(options = {}) {
 
     const {width: newWidth, height: newHeight} = factorDimensions(factor, width, height);
 
-    if (width === this.width && height === this.height) {
+    if (newWidth === this.width && newHeight === this.height) {
         return this.clone();
     }
 
