@@ -9320,27 +9320,27 @@ class BaseRegression {
         return y2;
     }
 
-    _predict(x) {
+    _predict() {
         throw new Error('_compute not implemented');
     }
 
-    train(options) {
+    train() {
         //Do nothing for this package
     }
 
-    toString(precision) {
+    toString() {
         return '';
     }
 
-    toLaTeX(precision) {
+    toLaTeX() {
         return '';
     }
 
     /**
      * Return the correlation coefficient of determination (r) and chi-square.
-     * @param x
-     * @param y
-     * @returns {object}
+     * @param {Array<number>} x
+     * @param {Array<number>} y
+     * @return {object}
      */
     modelQuality(x, y) {
         var n = x.length;
@@ -9362,7 +9362,9 @@ class BaseRegression {
             xSquared += y2[_i] * y2[_i];
             ySquared += y[_i] * y[_i];
             xY += y2[_i] * y[_i];
-            if (y[_i] !== 0) chi2 += (y[_i] - y2[_i]) * (y[_i] - y2[_i]) / y[_i];
+            if (y[_i] !== 0) {
+                chi2 += (y[_i] - y2[_i]) * (y[_i] - y2[_i]) / y[_i];
+            }
             rmsd = (y[_i] - y2[_i]) * (y[_i] - y2[_i]);
         }
 
@@ -9401,9 +9403,9 @@ var BaseRegression = require('./base-regression');
 class ExpRegression extends BaseRegression {
     /**
      * @constructor
-     * @param x: Independent variable
-     * @param y: Dependent variable
-     * @param options
+     * @param {Array<number>} x - Independent variable
+     * @param {Array<number>} y - Dependent variable
+     * @param {object} options
      */
     constructor(x, y, options) {
         super();
@@ -9447,11 +9449,15 @@ class ExpRegression extends BaseRegression {
     }
 
     toString(precision) {
-        return 'y = ' + maybeToPrecision(this.C, precision) + '*exp(' + maybeToPrecision(this.A, precision) + '*x)';
+        return 'f(x) = ' + maybeToPrecision(this.C, precision) + ' * exp(' + maybeToPrecision(this.A, precision) + ' * x)';
     }
 
     toLaTeX(precision) {
-        if (this.A >= 0) return 'y = ' + maybeToPrecision(this.C, precision) + 'e^{' + maybeToPrecision(this.A, precision) + 'x}';else return 'y = \\frac{' + maybeToPrecision(this.C, precision) + '}{e^{' + maybeToPrecision(-this.A, precision) + 'x}}';
+        if (this.A >= 0) {
+            return 'f(x) = ' + maybeToPrecision(this.C, precision) + 'e^{' + maybeToPrecision(this.A, precision) + 'x}';
+        } else {
+            return 'f(x) = \\frac{' + maybeToPrecision(this.C, precision) + '}{e^{' + maybeToPrecision(-this.A, precision) + 'x}}';
+        }
     }
 
     static load(json) {
@@ -9597,19 +9603,24 @@ class PolynomialFitRegression2D extends BaseRegression {
      * The third argument is an object with the following options:
      * * order: order of the polynomial to fit.
      *
-     * @param X - A matrix with n rows and 2 columns.
-     * @param y - A vector of the prediction values.
-     * @param options
+     * @param {Matrix} X - A matrix with n rows and 2 columns.
+     * @param {Matrix} y - A vector of the prediction values.
      */
-    train(X, y, options) {
+    train(X, y) {
         if (!Matrix.isMatrix(X)) X = new Matrix(X);
         if (!Matrix.isMatrix(y)) y = Matrix.columnVector(y);
 
-        if (y.rows !== X.rows) //Perhaps y is transpose
+        //Perhaps y is transpose
+        if (y.rows !== X.rows) {
             y = y.transpose();
+        }
 
-        if (X.columns !== 2) throw new RangeError('You give X with ' + X.columns + ' columns and it must be 2');
-        if (X.rows !== y.rows) throw new RangeError('X and y must have the same rows');
+        if (X.columns !== 2) {
+            throw new RangeError('You give X with ' + X.columns + ' columns and it must be 2');
+        }
+        if (X.rows !== y.rows) {
+            throw new RangeError('X and y must have the same rows');
+        }
 
         var examples = X.rows;
         var coefficients = (this.order + 2) * (this.order + 1) / 2;
@@ -9717,7 +9728,7 @@ module.exports = PolynomialFitRegression2D;
  *
  * @param x - Column vector.
  * @param power - Pow number.
- * @returns {Suite|Matrix}
+ * @return {Suite|Matrix}
  */
 function powColVector(x, power) {
     var result = x.clone();
@@ -9798,7 +9809,9 @@ class PolynomialRegression extends BaseRegression {
             var k, i;
             for (k = 0; k < M; k++) {
                 for (i = 0; i < n; i++) {
-                    if (powers[k] === 0) F[i][k] = 1;else {
+                    if (powers[k] === 0) {
+                        F[i][k] = 1;
+                    } else {
                         F[i][k] = Math.pow(x[i], powers[k]);
                     }
                 }
@@ -9849,7 +9862,7 @@ class PolynomialRegression extends BaseRegression {
     _toFormula(precision, isLaTeX) {
         var sup = '^';
         var closeSup = '';
-        var times = '*';
+        var times = ' * ';
         if (isLaTeX) {
             sup = '^{';
             closeSup = '}';
@@ -9861,20 +9874,29 @@ class PolynomialRegression extends BaseRegression {
         for (var k = 0; k < this.coefficients.length; k++) {
             str = '';
             if (this.coefficients[k] !== 0) {
-                if (this.powers[k] === 0) str = maybeToPrecision(this.coefficients[k], precision);else {
-                    if (this.powers[k] === 1) str = maybeToPrecision(this.coefficients[k], precision) + times + 'x';else {
+                if (this.powers[k] === 0) {
+                    str = maybeToPrecision(this.coefficients[k], precision);
+                } else {
+                    if (this.powers[k] === 1) {
+                        str = maybeToPrecision(this.coefficients[k], precision) + times + 'x';
+                    } else {
                         str = maybeToPrecision(this.coefficients[k], precision) + times + 'x' + sup + this.powers[k] + closeSup;
                     }
                 }
-                if (this.coefficients[k] > 0) str = '+' + str;
+
+                if (this.coefficients[k] > 0 && k !== this.coefficients.length - 1) {
+                    str = ' + ' + str;
+                } else if (k !== this.coefficients.length - 1) {
+                    str = ' ' + str;
+                }
             }
             fn = str + fn;
         }
-        if (fn.charAt(0) === '+') {
+        if (fn.charAt(0) === ' + ') {
             fn = fn.slice(1);
         }
 
-        return 'y = ' + fn;
+        return 'f(x) = ' + fn;
     }
 
     static load(json) {
@@ -9903,7 +9925,7 @@ module.exports = PolynomialRegression;
 
 var maybeToPrecision = require('./util').maybeToPrecision;
 var PolynomialRegression = require('./polynomial-regression');
-var PowerRegression = require('./power-regression');
+// const PowerRegression = require('./power-regression');
 var BaseRegression = require('./base-regression');
 
 class PotentialRegression extends BaseRegression {
@@ -9911,6 +9933,7 @@ class PotentialRegression extends BaseRegression {
      * @constructor
      * @param x: Independent variable
      * @param y: Dependent variable
+     * @param M
      * @param options
      */
     constructor(x, y, M, options) {
@@ -9951,25 +9974,29 @@ class PotentialRegression extends BaseRegression {
     }
 
     toString(precision) {
-        return 'y = ' + maybeToPrecision(this.A, precision) + '*x^' + this.M;
+        return 'f(x) = ' + maybeToPrecision(this.A, precision) + ' * x^' + this.M;
     }
 
     toLaTeX(precision) {
 
-        if (this.M >= 0) return 'y = ' + maybeToPrecision(this.A, precision) + 'x^{' + this.M + '}';else return 'y = \\frac{' + maybeToPrecision(this.A, precision) + '}{x^{' + -this.M + '}}';
+        if (this.M >= 0) {
+            return 'f(x) = ' + maybeToPrecision(this.A, precision) + 'x^{' + this.M + '}';
+        } else {
+            return 'f(x) = \\frac{' + maybeToPrecision(this.A, precision) + '}{x^{' + -this.M + '}}';
+        }
     }
 
     static load(json) {
         if (json.name !== 'potentialRegression') {
             throw new TypeError('not a potential regression model');
         }
-        return new PowerRegression(true, json);
+        return new PotentialRegression(true, json);
     }
 }
 
 module.exports = PotentialRegression;
 
-},{"./base-regression":99,"./polynomial-regression":103,"./power-regression":105,"./util":108}],105:[function(require,module,exports){
+},{"./base-regression":99,"./polynomial-regression":103,"./util":108}],105:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10037,11 +10064,15 @@ class PowerRegression extends BaseRegression {
     }
 
     toString(precision) {
-        return 'y = ' + maybeToPrecision(this.A, precision) + '*x^' + maybeToPrecision(this.B, precision);
+        return 'f(x) = ' + maybeToPrecision(this.A, precision) + ' * x^' + maybeToPrecision(this.B, precision);
     }
 
     toLaTeX(precision) {
-        if (this.B >= 0) return 'y = ' + maybeToPrecision(this.A, precision) + 'x^{' + maybeToPrecision(this.B, precision) + '}';else return 'y = \\frac{' + maybeToPrecision(this.A, precision) + '}{x^{' + maybeToPrecision(-this.B, precision) + '}}';
+        if (this.B >= 0) {
+            return 'f(x) = ' + maybeToPrecision(this.A, precision) + 'x^{' + maybeToPrecision(this.B, precision) + '}';
+        } else {
+            return 'f(x) = \\frac{' + maybeToPrecision(this.A, precision) + '}{x^{' + maybeToPrecision(-this.B, precision) + '}}';
+        }
     }
 
     static load(json) {
@@ -10086,14 +10117,12 @@ class SimpleLinearRegression extends BaseRegression {
             var ySum = 0;
 
             var xSquared = 0;
-            var ySquared = 0;
             var xY = 0;
 
             for (var i = 0; i < n; i++) {
                 xSum += x[i];
                 ySum += y[i];
                 xSquared += x[i] * x[i];
-                ySquared += y[i] * y[i];
                 xY += x[i] * y[i];
             }
 
@@ -10130,10 +10159,10 @@ class SimpleLinearRegression extends BaseRegression {
     }
 
     toString(precision) {
-        var result = 'y = ';
+        var result = 'f(x) = ';
         if (this.slope) {
             var xFactor = maybeToPrecision(this.slope, precision);
-            result += (xFactor == 1 ? '' : xFactor) + 'x';
+            result += (Math.abs(xFactor - 1) < 1e-5 ? '' : xFactor + ' * ') + 'x';
             if (this.intercept) {
                 var absIntercept = Math.abs(this.intercept);
                 var operator = absIntercept === this.intercept ? '+' : '-';
@@ -10166,19 +10195,14 @@ var BaseRegression = require('./base-regression');
 var maybeToPrecision = require('./util').maybeToPrecision;
 var median = require('ml-stat/array').median;
 
-/**
- * Theil–Sen estimator
- *
- * https://en.wikipedia.org/wiki/Theil%E2%80%93Sen_estimator
- * @class
- */
 class TheilSenRegression extends BaseRegression {
 
     /**
-     *
-     * @param x
-     * @param y
-     * @param options
+     * Theil–Sen estimator
+     * https://en.wikipedia.org/wiki/Theil%E2%80%93Sen_estimator
+     * @param {Array<number>} x
+     * @param {Array<number>} y
+     * @param {object} options
      * @constructor
      */
     constructor(x, y, options) {
@@ -10188,14 +10212,7 @@ class TheilSenRegression extends BaseRegression {
             // loads the model
             this.slope = y.slope;
             this.intercept = y.intercept;
-            this.quality = y.quality || {};
-            if (y.quality.r) {
-                this.quality.r = y.quality.r;
-                this.quality.r2 = y.quality.r2;
-            }
-            if (y.quality.chi2) {
-                this.quality.chi2 = y.quality.chi2;
-            }
+            this.quality = Object.assign({}, y.quality, this.quality);
         } else {
             // creates the model
             var len = x.length;
@@ -10251,10 +10268,10 @@ class TheilSenRegression extends BaseRegression {
     }
 
     toString(precision) {
-        var result = 'y = ';
+        var result = 'f(x) = ';
         if (this.slope) {
             var xFactor = maybeToPrecision(this.slope, precision);
-            result += (Math.abs(xFactor - 1) < 1e-5 ? '' : xFactor) + 'x';
+            result += (Math.abs(xFactor - 1) < 1e-5 ? '' : xFactor + ' * ') + 'x';
             if (this.intercept) {
                 var absIntercept = Math.abs(this.intercept);
                 var operator = absIntercept === this.intercept ? '+' : '-';
@@ -10284,7 +10301,20 @@ module.exports = TheilSenRegression;
 'use strict';
 
 exports.maybeToPrecision = function maybeToPrecision(value, digits) {
-    if (digits) return value.toPrecision(digits);else return value.toString();
+    if (value < 0) {
+        value = -1 * value;
+        if (digits) {
+            return '- ' + value.toPrecision(digits);
+        } else {
+            return '- ' + value.toString();
+        }
+    } else {
+        if (digits) {
+            return value.toPrecision(digits);
+        } else {
+            return value.toString();
+        }
+    }
 };
 
 },{}],109:[function(require,module,exports){
@@ -19631,9 +19661,10 @@ class Image {
 
     /**
      * Load an image
-     * @param {string} url - URL of the image (browser, can be a dataURL) or path (Node.js)
+     * @param {string|ArrayBuffer|Buffer|Uint8Array} url - URL of the image (browser, can be a dataURL) or path (Node.js)
+     * or buffer containing the binary data
      * @param {object} [options]
-     * @return {Promise<Image>} - Resolves with the Image
+     * @return {Promise<Image>}
      * @example
      *  Image.load('http://xxxx').then(
      *      function(image) {
@@ -19644,7 +19675,7 @@ class Image {
      *  )
      */
     static load(url, options) {
-        return (0, _load.loadURL)(url, options);
+        return (0, _load.loadImage)(url, options);
     }
 
     /**
@@ -19659,16 +19690,16 @@ class Image {
     }
 
     static extendMethod(name, method) {
-        var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+        var _options$inPlace = options.inPlace,
+            inPlace = _options$inPlace === undefined ? false : _options$inPlace,
+            _options$returnThis = options.returnThis,
+            returnThis = _options$returnThis === undefined ? true : _options$returnThis,
+            _options$partialArgs = options.partialArgs,
+            partialArgs = _options$partialArgs === undefined ? [] : _options$partialArgs,
+            _options$stack = options.stack,
+            stack = _options$stack === undefined ? false : _options$stack;
 
-        var _ref$inPlace = _ref.inPlace;
-        var inPlace = _ref$inPlace === undefined ? false : _ref$inPlace;
-        var _ref$returnThis = _ref.returnThis;
-        var returnThis = _ref$returnThis === undefined ? true : _ref$returnThis;
-        var _ref$partialArgs = _ref.partialArgs;
-        var partialArgs = _ref$partialArgs === undefined ? [] : _ref$partialArgs;
-        var _ref$stack = _ref.stack;
-        var stack = _ref$stack === undefined ? false : _ref$stack;
 
         if (inPlace) {
             Image.prototype[name] = function () {
@@ -19731,10 +19762,10 @@ class Image {
     }
 
     static extendProperty(name, method) {
-        var _ref2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+        var _options$partialArgs2 = options.partialArgs,
+            partialArgs = _options$partialArgs2 === undefined ? [] : _options$partialArgs2;
 
-        var _ref2$partialArgs = _ref2.partialArgs;
-        var partialArgs = _ref2$partialArgs === undefined ? [] : _ref2$partialArgs;
 
         computedPropertyDescriptor.get = function () {
             if (this.computed === null) {
@@ -19917,8 +19948,8 @@ class Image {
      */
     getCanvas() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-        var _options$originalData = options.originalData;
-        var originalData = _options$originalData === undefined ? false : _options$originalData;
+        var _options$originalData = options.originalData,
+            originalData = _options$originalData === undefined ? false : _options$originalData;
 
         var data = void 0;
         if (!originalData) {
@@ -20014,8 +20045,8 @@ class Image {
      */
     clone() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-        var _options$copyData = options.copyData;
-        var copyData = _options$copyData === undefined ? true : _options$copyData;
+        var _options$copyData = options.copyData,
+            copyData = _options$copyData === undefined ? true : _options$copyData;
 
         return new Image(this, copyData);
     }
@@ -20029,8 +20060,8 @@ class Image {
      */
     save(path) {
         var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-        var _options$format = options.format;
-        var format = _options$format === undefined ? 'png' : _options$format;
+        var _options$format = options.format,
+            format = _options$format === undefined ? 'png' : _options$format;
 
         return new Promise((resolve, reject) => {
             var out = (0, _fs.createWriteStream)(path);
@@ -20055,13 +20086,12 @@ class Image {
 
     // this method check if a process can be applied on the current image
     checkProcessable(processName) {
-        var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-        var bitDepth = _ref3.bitDepth;
-        var alpha = _ref3.alpha;
-        var colorModel = _ref3.colorModel;
-        var components = _ref3.components;
-        var channels = _ref3.channels;
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+        var bitDepth = options.bitDepth,
+            alpha = options.alpha,
+            colorModel = options.colorModel,
+            components = options.components,
+            channels = options.channels;
 
         if (typeof processName !== 'string') {
             throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
@@ -20288,15 +20318,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * @memberof Image
  * @instance
+ * @param {object} [options]
+ * @param {boolean} [options.useAlpha=true]
+ * @param {number} [options.nbSlots=512]
+ * @return {number[]}
  */
-
 function getColorHistogram() {
-    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _options$useAlpha = options.useAlpha,
+        useAlpha = _options$useAlpha === undefined ? true : _options$useAlpha,
+        _options$nbSlots = options.nbSlots,
+        nbSlots = _options$nbSlots === undefined ? 512 : _options$nbSlots;
 
-    var _ref$useAlpha = _ref.useAlpha;
-    var useAlpha = _ref$useAlpha === undefined ? true : _ref$useAlpha;
-    var _ref$nbSlots = _ref.nbSlots;
-    var nbSlots = _ref$nbSlots === undefined ? 512 : _ref$nbSlots;
 
     this.checkProcessable('getColorHistogram', {
         bitDepth: [8, 16],
@@ -20334,22 +20367,18 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = countAlphaPixels;
-
-// returns the number of transparent
-
 /**
  * Returns the number of transparent pixels
  * @memberof Image
  * @instance
- * @param {number} [$1.alpha=1] - Value of the alpha value to count. By default 1.
- * @returns {number} Number of transparent pixel
+ * @param {object} [options]
+ * @param {number} [options.alpha=1] - Value of the alpha value to count.
+ * @return {number} Number of transparent pixels
  */
-
 function countAlphaPixels() {
-    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    var _ref$alpha = _ref.alpha;
-    var alpha = _ref$alpha === undefined ? 1 : _ref$alpha;
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _options$alpha = options.alpha,
+        alpha = _options$alpha === undefined ? 1 : _options$alpha;
 
     this.checkProcessable('countAlphaPixels', {
         bitDepth: [8, 16],
@@ -20402,11 +20431,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 function getHistogram() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$maxSlots = options.maxSlots;
-    var maxSlots = _options$maxSlots === undefined ? 256 : _options$maxSlots;
-    var channel = options.channel;
-    var _options$useAlpha = options.useAlpha;
-    var useAlpha = _options$useAlpha === undefined ? true : _options$useAlpha;
+    var _options$maxSlots = options.maxSlots,
+        maxSlots = _options$maxSlots === undefined ? 256 : _options$maxSlots,
+        channel = options.channel,
+        _options$useAlpha = options.useAlpha,
+        useAlpha = _options$useAlpha === undefined ? true : _options$useAlpha;
 
     this.checkProcessable('getHistogram', {
         bitDepth: [8, 16]
@@ -20441,10 +20470,10 @@ function getHistogram() {
  */
 function getHistograms() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$maxSlots2 = options.maxSlots;
-    var maxSlots = _options$maxSlots2 === undefined ? 256 : _options$maxSlots2;
-    var _options$useAlpha2 = options.useAlpha;
-    var useAlpha = _options$useAlpha2 === undefined ? true : _options$useAlpha2;
+    var _options$maxSlots2 = options.maxSlots,
+        maxSlots = _options$maxSlots2 === undefined ? 256 : _options$maxSlots2,
+        _options$useAlpha2 = options.useAlpha,
+        useAlpha = _options$useAlpha2 === undefined ? true : _options$useAlpha2;
 
     this.checkProcessable('getHistograms', {
         bitDepth: [8, 16]
@@ -20457,8 +20486,8 @@ function getHistograms() {
 }
 
 function getChannelHistogram(channel, options) {
-    var useAlpha = options.useAlpha;
-    var maxSlots = options.maxSlots;
+    var useAlpha = options.useAlpha,
+        maxSlots = options.maxSlots;
 
 
     var bitSlots = Math.log2(maxSlots);
@@ -20498,33 +20527,30 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = localMaxima;
-
 /**
  * Returns an array of object with position.
  * @memberof Image
  * @instance
  * @param {object} [options]
- * @param {Image} [mask] - region of the image that is analyzed. The rest is omitted.
- * @param {number} [region=3] -  1, 2 or 3. Define the region around each points that is analyzed. 1 corresponds to 4 cross points, 2 to
- *        the 8 points around and 3 to the 12 points around the central pixel
- * @param {number} [removeClosePoints=0] Remove pts which have a distance between them smaller than this param.
- * @param {boolean} [invert=false] Search for minima instead of maxima
- * @param {number} [maxEquals=2] Maximal number of values that may be equal to the maximum
- * @returns {number[]} Array having has size the number of channels
+ * @param {Image} [options.mask] - Region of the image that is analyzed. The rest is omitted.
+ * @param {number} [options.region=3] -  1, 2 or 3. Define the region around each points that is analyzed. 1 corresponds to 4 cross points, 2 to
+ *        the 8 points around and 3 to the 12 points around the central pixel.
+ * @param {number} [options.removeClosePoints=0] - Remove pts which have a distance between them smaller than this param.
+ * @param {boolean} [options.invert=false] - Search for minima instead of maxima
+ * @param {number} [options.maxEquals=2] - Maximal number of values that may be equal to the maximum
+ * @return {number[]} Array whose size is the number of channels
  */
-
 function localMaxima() {
-    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    var _ref$removeClosePoint = _ref.removeClosePoints;
-    var removeClosePoints = _ref$removeClosePoint === undefined ? 0 : _ref$removeClosePoint;
-    var _ref$region = _ref.region;
-    var region = _ref$region === undefined ? 3 : _ref$region;
-    var _ref$invert = _ref.invert;
-    var invert = _ref$invert === undefined ? false : _ref$invert;
-    var mask = _ref.mask;
-    var _ref$maxEquals = _ref.maxEquals;
-    var maxEquals = _ref$maxEquals === undefined ? 2 : _ref$maxEquals;
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var mask = options.mask,
+        _options$region = options.region,
+        region = _options$region === undefined ? 3 : _options$region,
+        _options$removeCloseP = options.removeClosePoints,
+        removeClosePoints = _options$removeCloseP === undefined ? 0 : _options$removeCloseP,
+        _options$invert = options.invert,
+        invert = _options$invert === undefined ? false : _options$invert,
+        _options$maxEquals = options.maxEquals,
+        maxEquals = _options$maxEquals === undefined ? 2 : _options$maxEquals;
 
     var image = this;
     this.checkProcessable('localMaxima', {
@@ -20606,9 +20632,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Returns an array with the maximal value of each channel
  * @memberof Image
  * @instance
- * @returns {number[]} Array having has size the number of channels
+ * @return {number[]} Array having has size the number of channels
  */
-
 function max() {
     this.checkProcessable('max', {
         bitDepth: [8, 16]
@@ -20640,9 +20665,8 @@ var _histogram = require('../../util/histogram');
  * Returns an array with the average value of each channel
  * @memberof Image
  * @instance
- * @returns {number[]} Array having has size the number of channels
+ * @return {number[]} Array having has size the number of channels
  */
-
 function mean() {
     var histograms = this.getHistograms({ maxSlots: this.maxValue + 1 });
     var result = new Array(histograms.length);
@@ -20667,9 +20691,8 @@ var _histogram = require('../../util/histogram');
  * Returns an array with the median value of each channel
  * @memberof Image
  * @instance
- * @returns {number[]} Array having has size the number of channels
+ * @return {number[]} Array having has size the number of channels
  */
-
 function median() {
     var histograms = this.getHistograms({ maxSlots: this.maxValue + 1 });
     var result = new Array(histograms.length);
@@ -20698,9 +20721,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Returns an array with the minimal value of each channel
  * @memberof Image
  * @instance
- * @returns {number[]} Array having has size the number of channels
+ * @return {number[]} Array having has size the number of channels
  */
-
 function min() {
     this.checkProcessable('min', {
         bitDepth: [8, 16]
@@ -20729,9 +20751,8 @@ exports.default = points;
  * Allows to generate an array of points for a binary image (bit depth = 1)
  * @memberof Image
  * @instance
- * @returns {number[][]} - an array of [x,y] corresponding to the set pixels in the binary image
+ * @return {Array<Array<number>>} - an array of [x,y] corresponding to the set pixels in the binary image
  */
-
 function points() {
     this.checkProcessable('points', {
         bitDepth: [1]
@@ -20757,22 +20778,20 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = getRelativePosition;
-/*
- An image may be derived from another image either by a crop
- or because it is a ROI (region of interest)
- Also a region of interest can be reprocessed to generated another
- set of region of interests.
- It is therefore important to keep the hierarchy of images to know
- which image is derived from which one and be able to get the
- relative position of one image in another
- This methods takes care of this.
- */
-
 /**
+ * An image may be derived from another image either by a crop
+ * or because it is a ROI (region of interest)
+ * Also a region of interest can be reprocessed to generated another
+ * set of region of interests.
+ * It is therefore important to keep the hierarchy of images to know
+ * which image is derived from which one and be able to get the
+ * relative position of one image in another
+ * This methods takes care of this.
  * @memberof Image
  * @instance
+ * @param {Image} targetImage
+ * @return {number[]|boolean}
  */
-
 function getRelativePosition(targetImage) {
     if (this === targetImage) {
         return [0, 0];
@@ -20813,9 +20832,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Returns an array with the sum of the values of each channel
  * @memberof Image
  * @instance
- * @returns {number[]} Array having has size the number of channels
+ * @return {number[]} Array having has size the number of channels
  */
-
 function sum() {
     this.checkProcessable('sum', {
         bitDepth: [8, 16]
@@ -20845,8 +20863,8 @@ var _mlMatrix = require('ml-matrix');
  * TODO would be suprised if this stuff works
  * @memberof Image
  * @instance
+ * @return {object} SVD result
  */
-
 function getSvd() {
     this.checkProcessable('getSvd', {
         bitDepth: [1]
@@ -20861,7 +20879,7 @@ function getSvd() {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var loadBinary = void 0,
+var fetchBinary = void 0,
     DOMImage = void 0,
     Canvas = void 0,
     ImageData = void 0,
@@ -20893,11 +20911,10 @@ if (typeof self !== 'undefined') {
             return canvas;
         };
 
-        exports.loadBinary = loadBinary = function loadBinary(url) {
-            var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-            var _ref$withCredentials = _ref.withCredentials;
-            var withCredentials = _ref$withCredentials === undefined ? false : _ref$withCredentials;
+        exports.fetchBinary = fetchBinary = function fetchBinary(url) {
+            var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+                _ref$withCredentials = _ref.withCredentials,
+                withCredentials = _ref$withCredentials === undefined ? false : _ref$withCredentials;
 
             return new Promise(function (resolve, reject) {
                 var xhr = new self.XMLHttpRequest();
@@ -20925,7 +20942,7 @@ if (typeof self !== 'undefined') {
         exports.ImageData = ImageData = canvas.ImageData;
 
         var fs = require('fs');
-        exports.loadBinary = loadBinary = function loadBinary(path) {
+        exports.fetchBinary = fetchBinary = function fetchBinary(path) {
             return new Promise(function (resolve, reject) {
                 fs.readFile(path, function (err, data) {
                     if (err) reject(err);else resolve(data.buffer);
@@ -20935,7 +20952,7 @@ if (typeof self !== 'undefined') {
     })();
 }
 
-exports.loadBinary = loadBinary;
+exports.fetchBinary = fetchBinary;
 exports.DOMImage = DOMImage;
 exports.Canvas = Canvas;
 exports.ImageData = ImageData;
@@ -21295,9 +21312,10 @@ var _value = require('../../util/value');
  * Add a specific integer on the specified points of the specified channels
  * @memberof Image
  * @instance
- * @returns {Image} Modified current image
+ * @param {*} value
+ * @param {object} [options]
+ * @return {this} Modified current image
  */
-
 function add(value) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var channels = options.channels;
@@ -21328,6 +21346,8 @@ function add(value) {
             }
         }
     }
+
+    return this;
 }
 
 },{"../../util/channel":254,"../../util/value":263}],162:[function(require,module,exports){
@@ -21349,9 +21369,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * @memberof Image
  * @instance
- * @returns {Image}
+ * @param {Array<Array<number>>} coordinates
+ * @param {Array<Array<number>>} values;
+ * @param {object} [options]
+ * @return {Image}
  */
-
 function background(coordinates, values, options) {
     var model = new _mlRegression.KernelRidgeRegression(coordinates, values, options);
     var allCoordinates = new Array(this.size);
@@ -21388,14 +21410,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @instance
  * @param {object} options
  * @param {number} [options.radius=1] : number of pixels around the current pixel to average
- * @returns {Image}
+ * @return {Image}
  */
-
 // first release of mean filter
 function blurFilter() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$radius = options.radius;
-    var radius = _options$radius === undefined ? 1 : _options$radius;
+    var _options$radius = options.radius,
+        radius = _options$radius === undefined ? 1 : _options$radius;
 
     this.checkProcessable('meanFilter', {
         components: [1],
@@ -21432,9 +21453,10 @@ var _value = require('../../util/value');
 /**
  * @memberof Image
  * @instance
- * @returns {Image}
+ * @param {*} value
+ * @param {object} [options]
+ * @return {this}
  */
-
 function divide(value) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var channels = options.channels;
@@ -21464,6 +21486,8 @@ function divide(value) {
             }
         }
     }
+
+    return this;
 }
 
 },{"../../util/channel":254,"../../util/value":263}],165:[function(require,module,exports){
@@ -21477,9 +21501,8 @@ exports.default = flipX;
  * Flip an image horizontally.
  * @memberof Image
  * @instance
- * @returns {this}
+ * @return {this}
  */
-
 function flipX() {
     this.checkProcessable('flipX', {
         bitDepth: [8, 16]
@@ -21516,9 +21539,8 @@ exports.default = flipY;
  * Flip an image vertically. The image
  * @memberof Image
  * @instance
- * @returns {this}
+ * @return {this}
  */
-
 function flipY() {
     this.checkProcessable('flipY', {
         bitDepth: [8, 16]
@@ -21565,19 +21587,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {number[]|string[]} [options.channels] : to which channel to apply the filter. By default all but alpha.
  * @param {string} [options.border='copy']
  * @param {boolean} [options.algorithm='auto'] : Algorithm for convolution {@link Image#convolution}
- * @returns {Image}
+ * @return {Image}
  */
-
 function gaussianFilter() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$radius = options.radius;
-    var radius = _options$radius === undefined ? 1 : _options$radius;
-    var sigma = options.sigma;
-    var channels = options.channels;
-    var _options$border = options.border;
-    var border = _options$border === undefined ? 'copy' : _options$border;
-    var _options$algorithm = options.algorithm;
-    var algorithm = _options$algorithm === undefined ? 'auto' : _options$algorithm;
+    var _options$radius = options.radius,
+        radius = _options$radius === undefined ? 1 : _options$radius,
+        sigma = options.sigma,
+        channels = options.channels,
+        _options$border = options.border,
+        border = _options$border === undefined ? 'copy' : _options$border,
+        _options$algorithm = options.algorithm,
+        algorithm = _options$algorithm === undefined ? 'auto' : _options$algorithm;
 
     this.checkProcessable('gaussian', {
         bitDepth: [8, 16]
@@ -21685,9 +21706,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 function hypotenuse(otherImage) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var _options$bitDepth = options.bitDepth;
-    var bitDepth = _options$bitDepth === undefined ? this.bitDepth : _options$bitDepth;
-    var channels = options.channels;
+    var _options$bitDepth = options.bitDepth,
+        bitDepth = _options$bitDepth === undefined ? this.bitDepth : _options$bitDepth,
+        channels = options.channels;
 
     this.checkProcessable('hypotenuse', {
         bitDepth: [8, 16, 32]
@@ -21745,9 +21766,8 @@ var _channel = require('../../util/channel');
  *      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
  *      * [number] : array of channels as numbers
  *      * [string] : array of channels as one letter string
- * @returns {this}
+ * @return {this}
  */
-
 function invert() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var channels = options.channels;
@@ -21775,6 +21795,8 @@ function invert() {
             }
         }
     }
+
+    return this;
 } // we try the faster methods
 
 },{"../../util/channel":254}],170:[function(require,module,exports){
@@ -21971,18 +21993,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *      * [string] : array of channels as one letter string
  * @param {number} [options.min=this.min] minimal value after levelling
  * @param {number} [options.max=this.max] maximal value after levelling
- * @returns {Image}
+ * @return {this}
  */
-
 function level() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$algorithm = options.algorithm;
-    var algorithm = _options$algorithm === undefined ? 'range' : _options$algorithm;
-    var channels = options.channels;
-    var _options$min = options.min;
-    var min = _options$min === undefined ? this.min : _options$min;
-    var _options$max = options.max;
-    var max = _options$max === undefined ? this.max : _options$max;
+    var _options$algorithm = options.algorithm,
+        algorithm = _options$algorithm === undefined ? 'range' : _options$algorithm,
+        channels = options.channels,
+        _options$min = options.min,
+        min = _options$min === undefined ? this.min : _options$min,
+        _options$max = options.max,
+        max = _options$max === undefined ? this.max : _options$max;
 
 
     this.checkProcessable('level', {
@@ -21992,7 +22013,6 @@ function level() {
     channels = (0, _channel.validateArrayOfChannels)(this, { channels: channels });
 
     switch (algorithm) {
-
         case 'range':
             if (min < 0) {
                 min = 0;
@@ -22014,6 +22034,8 @@ function level() {
         default:
             throw new Error('level: algorithm not implement: ' + algorithm);
     }
+
+    return this;
 }
 
 function processImage(image, min, max, channels) {
@@ -22084,11 +22106,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 */
 function medianFilter() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$radius = options.radius;
-    var radius = _options$radius === undefined ? 1 : _options$radius;
-    var channels = options.channels;
-    var _options$border = options.border;
-    var border = _options$border === undefined ? 'copy' : _options$border;
+    var _options$radius = options.radius,
+        radius = _options$radius === undefined ? 1 : _options$radius,
+        channels = options.channels,
+        _options$border = options.border,
+        border = _options$border === undefined ? 'copy' : _options$border;
 
 
     this.checkProcessable('median', {
@@ -22153,9 +22175,10 @@ var _value = require('../../util/value');
 /**
  * @memberof Image
  * @instance
- * @returns {Image}
+ * @param {*} value
+ * @param {object} [options]
+ * @return {this}
  */
-
 function multiply(value) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var channels = options.channels;
@@ -22188,6 +22211,8 @@ function multiply(value) {
             }
         }
     }
+
+    return this;
 }
 
 },{"../../util/channel":254,"../../util/value":263}],179:[function(require,module,exports){
@@ -22209,18 +22234,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * @memberof Image
  * @instance
- * @returns {Image}
+ * @param {object} [options]
+ * @param {Array<Array<number>>} [options.kernelX]
+ * @param {Array<Array<number>>} [options.kernelY]
+ * @param {string} [options.border='copy']
+ * @param {*} [options.channels]
+ * @return {Image}
  */
-
 function sobelFilter() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$kernelX = options.kernelX;
-    var kernelX = _options$kernelX === undefined ? _kernels.GRADIENT_X : _options$kernelX;
-    var _options$kernelY = options.kernelY;
-    var kernelY = _options$kernelY === undefined ? _kernels.GRADIENT_Y : _options$kernelY;
-    var _options$border = options.border;
-    var border = _options$border === undefined ? 'copy' : _options$border;
-    var channels = options.channels;
+    var _options$kernelX = options.kernelX,
+        kernelX = _options$kernelX === undefined ? _kernels.GRADIENT_X : _options$kernelX,
+        _options$kernelY = options.kernelY,
+        kernelY = _options$kernelY === undefined ? _kernels.GRADIENT_Y : _options$kernelY,
+        _options$border = options.border,
+        border = _options$border === undefined ? 'copy' : _options$border,
+        channels = options.channels;
 
 
     this.checkProcessable('sobel', {
@@ -22257,9 +22286,10 @@ var _value = require('../../util/value');
 /**
  * @memberof Image
  * @instance
- * @returns {Image}
+ * @param {*} value
+ * @param {object} [options]
+ * @return {this}
  */
-
 function subtract(value) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var channels = options.channels;
@@ -22289,6 +22319,8 @@ function subtract(value) {
             }
         }
     }
+
+    return this;
 }
 
 },{"../../util/channel":254,"../../util/value":263}],181:[function(require,module,exports){
@@ -22423,7 +22455,7 @@ var CMYKA = exports.CMYKA = 'CMYKA';
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.loadURL = loadURL;
+exports.loadImage = loadImage;
 
 var _Image = require('./Image');
 
@@ -22465,36 +22497,59 @@ function swap16(val) {
     return (val & 0xFF) << 8 | val >> 8 & 0xFF;
 }
 
+function loadImage(image, options) {
+    if (typeof image === 'string') {
+        return loadURL(image, options);
+    } else if (image instanceof ArrayBuffer) {
+        return Promise.resolve(loadBinary(new Uint8Array(image), options));
+    } else if (image.buffer) {
+        return Promise.resolve(loadBinary(image, options));
+    } else {
+        throw new Error('argument to "load" must be a string or buffer.');
+    }
+}
+
+function loadBinary(image, options, url) {
+    var type = (0, _imageType2.default)(image);
+    if (type) {
+        switch (type.ext) {
+            case 'png':
+                return loadPNG(image);
+            case 'jpg':
+                {
+                    var decoded = (0, _fastJpeg.decode)(image);
+                    var meta = void 0;
+                    if (decoded.exif) {
+                        meta = getMetadata(decoded.exif);
+                    }
+                    return loadFromURL(url, { meta: meta });
+                }
+            case 'tif':
+                return loadTIFF(image);
+            // no default
+        }
+    }
+    return loadFromURL(url);
+
+    function loadFromURL(url, options) {
+        if (!url) {
+            throw new Error(`This kind of image (${ type }) can only be loaded from URL.`);
+        }
+        return loadGeneric(url, options);
+    }
+}
+
 function loadURL(url, options) {
     var dataURL = url.slice(0, 64).match(isDataURL);
     var binaryDataP = void 0;
     if (dataURL) {
         binaryDataP = Promise.resolve(str2ab((0, _atobLite2.default)(url.slice(dataURL[0].length))));
     } else {
-        binaryDataP = (0, _environment.loadBinary)(url, options);
+        binaryDataP = (0, _environment.fetchBinary)(url, options);
     }
-    return binaryDataP.then(function (binaryData) {
+    return binaryDataP.then(binaryData => {
         var uint8 = new Uint8Array(binaryData);
-        var type = (0, _imageType2.default)(uint8);
-        if (type) {
-            switch (type.ext) {
-                case 'png':
-                    return loadPNG(binaryData);
-                case 'jpg':
-                    {
-                        var decoded = (0, _fastJpeg.decode)(binaryData);
-                        var meta = void 0;
-                        if (decoded.exif) {
-                            meta = getMetadata(decoded.exif);
-                        }
-                        return loadGeneric(url, { meta: meta });
-                    }
-                case 'tif':
-                    return loadTIFF(binaryData);
-                // no default
-            }
-        }
-        return loadGeneric(url);
+        return loadBinary(uint8, options, url);
     });
 }
 
@@ -22698,16 +22753,16 @@ var conv = require('ml-matrix-convolution');
  */
 function convolution(kernel) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var channels = options.channels;
-    var bitDepth = options.bitDepth;
-    var _options$normalize = options.normalize;
-    var normalize = _options$normalize === undefined ? false : _options$normalize;
-    var _options$divisor = options.divisor;
-    var divisor = _options$divisor === undefined ? 1 : _options$divisor;
-    var _options$border = options.border;
-    var border = _options$border === undefined ? 'copy' : _options$border;
-    var _options$algorithm = options.algorithm;
-    var algorithm = _options$algorithm === undefined ? 'auto' : _options$algorithm;
+    var channels = options.channels,
+        bitDepth = options.bitDepth,
+        _options$normalize = options.normalize,
+        normalize = _options$normalize === undefined ? false : _options$normalize,
+        _options$divisor = options.divisor,
+        divisor = _options$divisor === undefined ? 1 : _options$divisor,
+        _options$border = options.border,
+        border = _options$border === undefined ? 'copy' : _options$border,
+        _options$algorithm = options.algorithm,
+        algorithm = _options$algorithm === undefined ? 'auto' : _options$algorithm;
 
 
     var newImage = _Image2.default.createFrom(this, { bitDepth: bitDepth });
@@ -22813,19 +22868,19 @@ exports.default = convolutionFft;
 /**
  * @memberof Image
  * @instance
- * @param {[[number]]} kernel
- * @param {object} [$1] - options
- * @param {array} [$1.channels] - Array of channels to treat. Defaults to all channels
- * @param {number} [$1.bitDepth=this.bitDepth] - A new bit depth can be specified. This allows to use 32 bits to avoid clamping of floating-point numbers.
- * @param {boolean} [$1.normalize=false]
- * @param {number} [$1.divisor=1]
- * @param {string} [$1.border='copy']
- * @returns {Image}
+ * @param {Array<Array<number>>} kernel
+ * @param {object} [options]
+ * @param {Array} [options.channels] - Array of channels to treat. Defaults to all channels
+ * @param {number} [options.bitDepth=this.bitDepth] - A new bit depth can be specified. This allows to use 32 bits to avoid clamping of floating-point numbers.
+ * @param {boolean} [options.normalize=false]
+ * @param {number} [options.divisor=1]
+ * @param {string} [options.border='copy']
+ * @return {Image}
  */
-
 function convolutionFft(kernel) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
+  options = Object.assign({}, options);
   options.algorithm = 'fft';
   return this.convolution(kernel, options);
 }
@@ -22913,40 +22968,37 @@ var _color = require('../../util/color');
  * @instance
  * @param {(Image|Image[])}     masks - Image containing a binary mask
  * @param {object}              [options]
- * @param {[number]|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
- * @param {number[][]} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
- * @param {number}              [options.alpha=255\ - Value from 0 to 255 to specify the alpha.
+ * @param {number[]|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
+ * @param {Array<Array<number>>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
+ * @param {number}              [options.alpha=255] - Value from 0 to 255 to specify the alpha.
  * @param {boolean}             [options.randomColors=false] - To paint each mask with a random color
  * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color
  * @param {string[]}       [options.labels] - Array of labels to display. Should the the same size as masks.
- * @param {number[][]} [options.labelsPosition] - Array of points [x,y] where the labels should be displayed.
+ * @param {Array<Array<number>>} [options.labelsPosition] - Array of points [x,y] where the labels should be displayed.
  *                                      By default it is the 0,0 position of the correesponding mask.
  * @param {string}              [options.labelColor='blue'] - Define the color to paint the labels
  * @param {string}              [options.labelFont='12px Helvetica'] - Paint the labels in a different CSS style
-
- *
- * @returns {Image} The original painted image
+ * @return {this} The original painted image
  */
-
 function paintMasks(masks) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var _options$color = options.color;
-    var color = _options$color === undefined ? 'red' : _options$color;
-    var colors = options.colors;
-    var _options$alpha = options.alpha;
-    var alpha = _options$alpha === undefined ? 255 : _options$alpha;
-    var _options$randomColors = options.randomColors;
-    var randomColors = _options$randomColors === undefined ? false : _options$randomColors;
-    var _options$distinctColo = options.distinctColors;
-    var distinctColors = _options$distinctColo === undefined ? false : _options$distinctColo;
-    var _options$labels = options.labels;
-    var labels = _options$labels === undefined ? [] : _options$labels;
-    var _options$labelsPositi = options.labelsPosition;
-    var labelsPosition = _options$labelsPositi === undefined ? [] : _options$labelsPositi;
-    var _options$labelColor = options.labelColor;
-    var labelColor = _options$labelColor === undefined ? 'blue' : _options$labelColor;
-    var _options$labelFont = options.labelFont;
-    var labelFont = _options$labelFont === undefined ? '12px Helvetica' : _options$labelFont;
+    var _options$color = options.color,
+        color = _options$color === undefined ? 'red' : _options$color,
+        colors = options.colors,
+        _options$alpha = options.alpha,
+        alpha = _options$alpha === undefined ? 255 : _options$alpha,
+        _options$randomColors = options.randomColors,
+        randomColors = _options$randomColors === undefined ? false : _options$randomColors,
+        _options$distinctColo = options.distinctColors,
+        distinctColors = _options$distinctColo === undefined ? false : _options$distinctColo,
+        _options$labels = options.labels,
+        labels = _options$labels === undefined ? [] : _options$labels,
+        _options$labelsPositi = options.labelsPosition,
+        labelsPosition = _options$labelsPositi === undefined ? [] : _options$labelsPositi,
+        _options$labelColor = options.labelColor,
+        labelColor = _options$labelColor === undefined ? 'blue' : _options$labelColor,
+        _options$labelFont = options.labelFont,
+        labelFont = _options$labelFont === undefined ? '12px Helvetica' : _options$labelFont;
 
 
     this.checkProcessable('paintMasks', {
@@ -23014,6 +23066,8 @@ function paintMasks(masks) {
         }
         this.data = ctx.getImageData(0, 0, this.width, this.height).data;
     }
+
+    return this;
 }
 
 },{"../../util/color":255,"../model/model":185}],190:[function(require,module,exports){
@@ -23036,18 +23090,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Paint pixels on the current image.
  * @memberof Image
  * @instance
- * @param {[[pixels]]} points - Array of [x,y] points
- * @param {array} [$1.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
- * @param {array} [$1.shape] - Array of 3 elements (R, G, B), default is red.
- * @returns {Image} The original painted image
+ * @param {Array<Array<number>>} points - Array of [x,y] points
+ * @param {object} [options]
+ * @param {Array<number>} [options.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
+ * @param {Array<number>} [options.shape] - Array of 3 elements (R, G, B), default is red.
+ * @return {this} The original painted image
  */
-
 function paintPoints(points) {
-    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    var _ref$color = _ref.color;
-    var color = _ref$color === undefined ? [this.maxValue, 0, 0] : _ref$color;
-    var shape = _ref.shape;
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var _options$color = options.color,
+        color = _options$color === undefined ? [this.maxValue, 0, 0] : _options$color,
+        shape = options.shape;
 
 
     this.checkProcessable('paintPoints', {
@@ -23074,6 +23127,8 @@ function paintPoints(points) {
             }
         }
     }
+
+    return this;
 }
 
 },{"../../util/shape":262,"../model/model":185}],191:[function(require,module,exports){
@@ -23127,10 +23182,10 @@ class Roi {
      */
     getMask() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-        var _options$scale = options.scale;
-        var scale = _options$scale === undefined ? 1 : _options$scale;
-        var _options$kind = options.kind;
-        var kind = _options$kind === undefined ? '' : _options$kind;
+        var _options$scale = options.scale,
+            scale = _options$scale === undefined ? 1 : _options$scale,
+            _options$kind = options.kind,
+            kind = _options$kind === undefined ? '' : _options$kind;
 
         var mask = void 0;
         switch (kind) {
@@ -23266,7 +23321,6 @@ class Roi {
      The cross will be surrouned by 4 differents zones
       However in most of the cases it will be an array of one element
      */
-
     get boxIDs() {
         if (this.computed.boxIDs) {
             return this.computed.boxIDs;
@@ -23489,6 +23543,21 @@ class Roi {
         var angle = -Math.atan2(points[0][1] - points[1][1], points[0][0] - points[1][0]) * 180 / Math.PI;
 
         return this.computed.angle = angle;
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            minX: this.minX,
+            maxX: this.maxX,
+            minY: this.minY,
+            maxY: this.maxY,
+            meanX: this.meanX,
+            meanY: this.meanY,
+            height: this.height,
+            width: this.width,
+            surface: this.surface
+        };
     }
 }
 
@@ -23735,8 +23804,8 @@ class RoiLayer {
      * for each data to which Roi it belongs
      * @memberof RoiManager
      * @instance
+     * @return {Roi[]}
      */
-
     createRoi() {
         // we need to find all all the different IDs there is in the data
         var data = this.roiMap.data;
@@ -23815,7 +23884,6 @@ Object.defineProperty(exports, "__esModule", {
  * @class RoiMap
  * @private
  */
-
 class RoiMap {
     constructor(parent, data) {
         this.parent = parent;
@@ -23851,13 +23919,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @instance
  * @param {Image} mask
  * @param {object} [options]
- * @returns {RoiMap}
+ * @return {RoiMap}
  */
-
 function fromMask(mask) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var _options$allowCorners = options.allowCorners;
-    var allowCorners = _options$allowCorners === undefined ? false : _options$allowCorners;
+    var _options$allowCorners = options.allowCorners,
+        allowCorners = _options$allowCorners === undefined ? false : _options$allowCorners;
 
     // based on a binary image we will create plenty of small images
 
@@ -23985,15 +24052,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {boolean} [options.invert=false]
  * @return {RoiMap}
  */
-
 function fromMaxima() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$allowCorner = options.allowCorner;
-    var allowCorner = _options$allowCorner === undefined ? true : _options$allowCorner;
-    var _options$onlyTop = options.onlyTop;
-    var onlyTop = _options$onlyTop === undefined ? false : _options$onlyTop;
-    var _options$invert = options.invert;
-    var invert = _options$invert === undefined ? false : _options$invert;
+    var _options$allowCorner = options.allowCorner,
+        allowCorner = _options$allowCorner === undefined ? true : _options$allowCorner,
+        _options$onlyTop = options.onlyTop,
+        onlyTop = _options$onlyTop === undefined ? false : _options$onlyTop,
+        _options$invert = options.invert,
+        invert = _options$invert === undefined ? false : _options$invert;
 
 
     var image = this;
@@ -24039,8 +24105,8 @@ function fromMaxima() {
     // a maxima is a point that is surrounded by lower values
     // should deal with allowCorner and invert
     function appendMaxima(_ref) {
-        var _ref$maxima = _ref.maxima;
-        var maxima = _ref$maxima === undefined ? true : _ref$maxima;
+        var _ref$maxima = _ref.maxima,
+            maxima = _ref$maxima === undefined ? true : _ref$maxima;
 
         for (var y = 1; y < image.height - 1; y++) {
             for (var x = 1; x < image.width - 1; x++) {
@@ -24215,11 +24281,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * @memberof RoiManager
  * @instance
- * @param {number[][]} points - an array of points
+ * @param {Array<Array<number>>} pointsToPaint - an array of points
  * @param {object} [options]
- * @returns {RoiMap}
+ * @return {RoiMap}
  */
-
 function fromPoints(pointsToPaint) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -24277,26 +24342,25 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * maxima.
  * @memberof RoiManager
  * @instance
- * @param {Object} [options={}]
- * @param {number[][]} [options.points[ - Array of points [[x1,y1], [x2,y2], ...].
+ * @param {object} [options={}]
+ * @param {Array<Array<number>>} [options.points] - Array of points [[x1,y1], [x2,y2], ...].
  * @param {number} [options.fillMaxValue] - Limit of filling. By example, we can fill to a maximum value 32000 of a 16 bitDepth image.
  *          If invert this will corresponds to the minimal value
  * @param {Image} [options.image=this] - By default the waterShed will be applied on the current image. However waterShed can only be applied
  *                              on 1 component image. This allows to specify a grey scale image on which to apply waterShed..
  * @param {Image} [options.mask] - A binary image, the same size as the image. The algorithm will fill only if the current pixel in the binary mask is true.
- * @param {boolean} [options.invert = false] - By default we fill the minima
- * @returns {RoiMap}
+ * @param {boolean} [options.invert=false] - By default we fill the minima
+ * @return {RoiMap}
  */
-
 function fromWaterShed() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var points = options.points;
-    var mask = options.mask;
-    var image = options.image;
-    var _options$fillMaxValue = options.fillMaxValue;
-    var fillMaxValue = _options$fillMaxValue === undefined ? this.maxValue : _options$fillMaxValue;
-    var _options$invert = options.invert;
-    var invert = _options$invert === undefined ? false : _options$invert;
+    var points = options.points,
+        mask = options.mask,
+        image = options.image,
+        _options$fillMaxValue = options.fillMaxValue,
+        fillMaxValue = _options$fillMaxValue === undefined ? this.maxValue : _options$fillMaxValue,
+        _options$invert = options.invert,
+        invert = _options$invert === undefined ? false : _options$invert;
 
     var currentImage = image || this;
     currentImage.checkProcessable('fromWaterShed', {
@@ -24531,29 +24595,28 @@ class RoiManager {
      * @param {number} [options.minHeight=Number.POSITIVE_INFINITY]
      * @param {number} [options.maxWidth=0]
      * @param {number} [options.maxHeight=Number.POSITIVE_INFINITY]
-     * @returns {Roi[]}
+     * @return {Roi[]}
      */
-
     getRois() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-        var _options$label = options.label;
-        var label = _options$label === undefined ? this._options.label : _options$label;
-        var _options$positive = options.positive;
-        var positive = _options$positive === undefined ? true : _options$positive;
-        var _options$negative = options.negative;
-        var negative = _options$negative === undefined ? true : _options$negative;
-        var _options$minSurface = options.minSurface;
-        var minSurface = _options$minSurface === undefined ? 0 : _options$minSurface;
-        var _options$maxSurface = options.maxSurface;
-        var maxSurface = _options$maxSurface === undefined ? Number.POSITIVE_INFINITY : _options$maxSurface;
-        var _options$minWidth = options.minWidth;
-        var minWidth = _options$minWidth === undefined ? 0 : _options$minWidth;
-        var _options$maxWidth = options.maxWidth;
-        var maxWidth = _options$maxWidth === undefined ? Number.POSITIVE_INFINITY : _options$maxWidth;
-        var _options$minHeight = options.minHeight;
-        var minHeight = _options$minHeight === undefined ? 0 : _options$minHeight;
-        var _options$maxHeight = options.maxHeight;
-        var maxHeight = _options$maxHeight === undefined ? Number.POSITIVE_INFINITY : _options$maxHeight;
+        var _options$label = options.label,
+            label = _options$label === undefined ? this._options.label : _options$label,
+            _options$positive = options.positive,
+            positive = _options$positive === undefined ? true : _options$positive,
+            _options$negative = options.negative,
+            negative = _options$negative === undefined ? true : _options$negative,
+            _options$minSurface = options.minSurface,
+            minSurface = _options$minSurface === undefined ? 0 : _options$minSurface,
+            _options$maxSurface = options.maxSurface,
+            maxSurface = _options$maxSurface === undefined ? Number.POSITIVE_INFINITY : _options$maxSurface,
+            _options$minWidth = options.minWidth,
+            minWidth = _options$minWidth === undefined ? 0 : _options$minWidth,
+            _options$maxWidth = options.maxWidth,
+            maxWidth = _options$maxWidth === undefined ? Number.POSITIVE_INFINITY : _options$maxWidth,
+            _options$minHeight = options.minHeight,
+            minHeight = _options$minHeight === undefined ? 0 : _options$minHeight,
+            _options$maxHeight = options.maxHeight,
+            maxHeight = _options$maxHeight === undefined ? Number.POSITIVE_INFINITY : _options$maxHeight;
 
 
         if (!this._layers[label]) {
@@ -24614,9 +24677,8 @@ class RoiManager {
      * @param {string} [options.labelProperty] - Paint a mask property on the image.
      *                                  May be any property of the ROI like
      *                                  for example id, surface, width, height, meanX, meanY.
-     * @returns {Image} - The painted RGBA 8 bits image
+     * @return {Image} - The painted RGBA 8 bits image
      */
-
     paint() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var labelProperty = options.labelProperty;
@@ -24677,21 +24739,20 @@ class RoiManager {
     }
 
     /**
-     *  Return a new roiMAP changed with the fusion of certain ROIs.
+     * Return a new roiMAP changed with the fusion of certain ROIs.
      * @param {object} [options]
      * @param {string} [options.algorithm='commonBorder'] ; algorithm used to decide which ROIs are merged.
      * @param {number} [options.minCommonBorderLength=5] is an integer, determine the strength of the merging.
      * @return {this}
      */
-
     mergeRoi() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
         var opt = (0, _extend2.default)({}, this._options, options);
-        var _options$algorithm = options.algorithm;
-        var algorithm = _options$algorithm === undefined ? 'commonBorder' : _options$algorithm;
-        var _options$minCommonBor = options.minCommonBorderLength;
-        var minCommonBorderLength = _options$minCommonBor === undefined ? 5 : _options$minCommonBor;
+        var _options$algorithm = options.algorithm,
+            algorithm = _options$algorithm === undefined ? 'commonBorder' : _options$algorithm,
+            _options$minCommonBor = options.minCommonBorderLength,
+            minCommonBorderLength = _options$minCommonBor === undefined ? 5 : _options$minCommonBor;
 
         var rois = this.getRois(opt);
         var toMerge = new Set();
@@ -24723,6 +24784,8 @@ class RoiManager {
             }
         }
         this.putMap(data, opt);
+
+        return this;
     }
 
     _assertLayerWithLabel(label) {
@@ -24754,13 +24817,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * The source image has to be RGB !
  * @memberof Image
  * @instance
- * @returns {Image} - New image in CMYK color model
+ * @return {Image} - New image in CMYK color model
  * @example
  * var cmykImage = image.cmyk();
  * // we can create one image per channel
  * var channels = cmykImage.split();
  */
-
 // http://www.easyrgb.com/index.php?X=MATH&H=18#text18
 // check rgbToHsl : https://bgrins.github.io/TinyColor/docs/tinycolor.html
 
@@ -24828,7 +24890,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *   newColorDepth:8
  * });
  */
-
 function colorDepth() {
     var newColorDepth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 8;
 
@@ -24892,14 +24953,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 function crop() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$x = options.x;
-    var x = _options$x === undefined ? 0 : _options$x;
-    var _options$y = options.y;
-    var y = _options$y === undefined ? 0 : _options$y;
-    var _options$width = options.width;
-    var width = _options$width === undefined ? this.width - x : _options$width;
-    var _options$height = options.height;
-    var height = _options$height === undefined ? this.height - y : _options$height;
+    var _options$x = options.x,
+        x = _options$x === undefined ? 0 : _options$x,
+        _options$y = options.y,
+        y = _options$y === undefined ? 0 : _options$y,
+        _options$width = options.width,
+        width = _options$width === undefined ? this.width - x : _options$width,
+        _options$height = options.height,
+        height = _options$height === undefined ? this.height - y : _options$height;
 
 
     if (x > this.width - 1 || y > this.height - 1) {
@@ -24971,21 +25032,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {boolean} [options.allowGrey=false] - By default only RGB images are allowed.
  *          If true grey images are also allowed and will either return a copy or
  *          apply the alpha channel depending the options
- * @returns {Image} - Grey scale image (with or without alpha depending the options)
+ * @return {Image} - Grey scale image (with or without alpha depending the options)
  * @example
  * var grey = image.grey();
  */
-
 function grey() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$algorithm = options.algorithm;
-    var algorithm = _options$algorithm === undefined ? 'luma709' : _options$algorithm;
-    var _options$keepAlpha = options.keepAlpha;
-    var keepAlpha = _options$keepAlpha === undefined ? false : _options$keepAlpha;
-    var _options$mergeAlpha = options.mergeAlpha;
-    var mergeAlpha = _options$mergeAlpha === undefined ? true : _options$mergeAlpha;
-    var _options$allowGrey = options.allowGrey;
-    var allowGrey = _options$allowGrey === undefined ? false : _options$allowGrey;
+    var _options$algorithm = options.algorithm,
+        algorithm = _options$algorithm === undefined ? 'luma709' : _options$algorithm,
+        _options$keepAlpha = options.keepAlpha,
+        keepAlpha = _options$keepAlpha === undefined ? false : _options$keepAlpha,
+        _options$mergeAlpha = options.mergeAlpha,
+        mergeAlpha = _options$mergeAlpha === undefined ? true : _options$mergeAlpha,
+        _options$allowGrey = options.allowGrey,
+        allowGrey = _options$allowGrey === undefined ? false : _options$allowGrey;
 
 
     var valid = {
@@ -25161,13 +25221,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * The source image has to be RGB !
  * @memberof Image
  * @instance
-  * @returns {Image} - New image in HSL color model
+ * @return {Image} - New image in HSL color model
  * @example
  * var hslImage = image.hsl();
  * // we can create one image per channel
  * var channels = hslImage.split();
  */
-
 // http://www.easyrgb.com/index.php?X=MATH&H=18#text18
 // check rgbToHsl : https://bgrins.github.io/TinyColor/docs/tinycolor.html
 
@@ -25246,13 +25305,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * The source image has to be RGB !
  * @memberof Image
  * @instance
- * @returns {Image} - New image in HSV color model
+ * @return {Image} - New image in HSV color model
  * @example
  * var hsvImage = image.hsv();
  * // we can create one image per channel
  * var channels = hsvImage.split();
  */
-
 // based on https://bgrins.github.io/TinyColor/docs/tinycolor.html
 
 function hsv() {
@@ -25628,14 +25686,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 function mask() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$algorithm = options.algorithm;
-    var algorithm = _options$algorithm === undefined ? 'threshold' : _options$algorithm;
-    var _options$threshold = options.threshold;
-    var threshold = _options$threshold === undefined ? 0.5 : _options$threshold;
-    var _options$useAlpha = options.useAlpha;
-    var useAlpha = _options$useAlpha === undefined ? true : _options$useAlpha;
-    var _options$invert = options.invert;
-    var invert = _options$invert === undefined ? false : _options$invert;
+    var _options$algorithm = options.algorithm,
+        algorithm = _options$algorithm === undefined ? 'threshold' : _options$algorithm,
+        _options$threshold = options.threshold,
+        threshold = _options$threshold === undefined ? 0.5 : _options$threshold,
+        _options$useAlpha = options.useAlpha,
+        useAlpha = _options$useAlpha === undefined ? true : _options$useAlpha,
+        _options$invert = options.invert,
+        invert = _options$invert === undefined ? false : _options$invert;
 
 
     this.checkProcessable('mask', {
@@ -26657,18 +26715,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * @memberof Image
  * @instance
+ * @param {object} [options]
  * @param {number} [options.size=0]
  * @param {string} [options.algorithm='copy']
  * @param {array<number>} [options.color]
+ * @return {Image}
  */
-
 function pad() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$size = options.size;
-    var size = _options$size === undefined ? 0 : _options$size;
-    var _options$algorithm = options.algorithm;
-    var algorithm = _options$algorithm === undefined ? 'copy' : _options$algorithm;
-    var color = options.color;
+    var _options$size = options.size,
+        size = _options$size === undefined ? 0 : _options$size,
+        _options$algorithm = options.algorithm,
+        algorithm = _options$algorithm === undefined ? 'copy' : _options$algorithm,
+        color = options.color;
 
 
     this.checkProcessable('pad', {
@@ -26743,10 +26802,6 @@ var _Image2 = _interopRequireDefault(_Image);
 
 var _kindNames = require('../kindNames');
 
-var KindNames = _interopRequireWildcard(_kindNames);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -26754,8 +26809,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * it only works for scaled down !
  * @memberof Image
  * @instance
+ * @param {number} [scale=0.5]
+ * @return {Image}
  */
-
 function resizeBinary() {
     var scale = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.5;
 
@@ -26769,7 +26825,7 @@ function resizeBinary() {
     var shiftY = Math.round((this.height - height) / 2);
 
     var newImage = _Image2.default.createFrom(this, {
-        kind: KindNames.BINARY,
+        kind: _kindNames.BINARY,
         width: width,
         height: height,
         position: [shiftX, shiftY],
@@ -26812,11 +26868,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * The conversion is based on {@link Image#getRGBAData}.
  * @memberof Image
  * @instance
- * @returns {Image} - New image in RGB color model with alpha channel
+ * @return {Image} - New image in RGB color model with alpha channel
  * @example
  * var rgbaImage = image.rgba8();
  */
-
 function rgba8() {
     var newImage = new _Image2.default(this.width, this.height, {
         kind: 'RGBA'
@@ -26887,22 +26942,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 function scale() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$width = options.width;
-    var width = _options$width === undefined ? this.width : _options$width;
-    var _options$height = options.height;
-    var height = _options$height === undefined ? this.height : _options$height;
-    var _options$factor = options.factor;
-    var factor = _options$factor === undefined ? 1 : _options$factor;
-    var _options$algorithm = options.algorithm;
-    var algorithm = _options$algorithm === undefined ? 'nearestNeighbor' : _options$algorithm;
+    var _options$width = options.width,
+        width = _options$width === undefined ? this.width : _options$width,
+        _options$height = options.height,
+        height = _options$height === undefined ? this.height : _options$height,
+        _options$factor = options.factor,
+        factor = _options$factor === undefined ? 1 : _options$factor,
+        _options$algorithm = options.algorithm,
+        algorithm = _options$algorithm === undefined ? 'nearestNeighbor' : _options$algorithm;
 
-    var _factorDimensions = (0, _converter.factorDimensions)(factor, width, height);
+    var _factorDimensions = (0, _converter.factorDimensions)(factor, width, height),
+        newWidth = _factorDimensions.width,
+        newHeight = _factorDimensions.height;
 
-    var newWidth = _factorDimensions.width;
-    var newHeight = _factorDimensions.height;
-
-
-    if (width === this.width && height === this.height) {
+    if (newWidth === this.width && newHeight === this.height) {
         return this.clone();
     }
 
@@ -26947,10 +27000,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function combineChannels() {
     var method = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultCombineMethod;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var _options$mergeAlpha = options.mergeAlpha;
-    var mergeAlpha = _options$mergeAlpha === undefined ? false : _options$mergeAlpha;
-    var _options$keepAlpha = options.keepAlpha;
-    var keepAlpha = _options$keepAlpha === undefined ? false : _options$keepAlpha;
+    var _options$mergeAlpha = options.mergeAlpha,
+        mergeAlpha = _options$mergeAlpha === undefined ? false : _options$mergeAlpha,
+        _options$keepAlpha = options.keepAlpha,
+        keepAlpha = _options$keepAlpha === undefined ? false : _options$keepAlpha;
 
 
     mergeAlpha &= this.alpha;
@@ -26998,8 +27051,11 @@ exports.default = copyImage;
  * Make a copy of the current image
  * @memberof Image
  * @instance
+ * @param {Image} fromImage
+ * @param {Image} toImage
+ * @param {number} x
+ * @param {number} y
  */
-
 function copyImage(fromImage, toImage, x, y) {
     var fromWidth = fromImage.width;
     var fromHeight = fromImage.height;
@@ -27030,17 +27086,17 @@ var _matrix2 = _interopRequireDefault(_matrix);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Try to match the current pictures with another one
-
 /**
+ * Try to match the current pictures with another one
  * @memberof Image
  * @instance
+ * @param {Image} image - Other image to match
+ * @param {object} [options]
+ * @return {number[]}
  */
-
 function match(image) {
-    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    var border = _ref.border;
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var border = options.border;
 
 
     this.checkProcessable('getChannel', {
@@ -27083,17 +27139,6 @@ function match(image) {
         }
     }
 
-    /*
-    for (let i=0; i<similarityMatrix.length; i++) {
-        let line=[];
-        for (let j=0; j<similarityMatrix[i].length; j++) {
-            line.push(similarityMatrix[i][j]);
-        }
-        console.log(line.join(" "));
-    }
-    console.log(currentX, middleX, currentY, middleY);
-    */
-
     return [currentX - middleX, currentY - middleY];
 }
 
@@ -27125,10 +27170,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 function getChannel(channel) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var _options$keepAlpha = options.keepAlpha;
-    var keepAlpha = _options$keepAlpha === undefined ? false : _options$keepAlpha;
-    var _options$mergeAlpha = options.mergeAlpha;
-    var mergeAlpha = _options$mergeAlpha === undefined ? false : _options$mergeAlpha;
+    var _options$keepAlpha = options.keepAlpha,
+        keepAlpha = _options$keepAlpha === undefined ? false : _options$keepAlpha,
+        _options$mergeAlpha = options.mergeAlpha,
+        mergeAlpha = _options$mergeAlpha === undefined ? false : _options$mergeAlpha;
 
 
     keepAlpha &= this.alpha;
@@ -27170,8 +27215,10 @@ exports.default = getColumn;
 /**
  * @memberof Image
  * @instance
+ * @param {number} column
+ * @param {number} [channel=0]
+ * @return {number[]}
  */
-
 function getColumn(column) {
     var channel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
@@ -27250,9 +27297,8 @@ exports.default = getPixelsArray;
  * [[R1, G1, B1], [R2, G2, B2], ...]
  * @memberof Image
  * @instance
- * @returns {number[][]}
+ * @return {Array<Array<number>>}
  */
-
 function getPixelsArray() {
     this.checkProcessable('getPixelsArray', {
         bitDepth: [8, 16, 32]
@@ -27281,16 +27327,19 @@ exports.default = getPixelsGrid;
 /**
  * @memberof Image
  * @instance
+ * @param {object} [options]
+ * @param {number[]} [options.sampling=[10, 10]]
+ * @param {boolean} [options.painted=false]
+ * @param {Image} [options.mask]
+ * @return {object}
  */
-
 function getPixelsGrid() {
-    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    var _ref$sampling = _ref.sampling;
-    var sampling = _ref$sampling === undefined ? [10, 10] : _ref$sampling;
-    var _ref$painted = _ref.painted;
-    var painted = _ref$painted === undefined ? false : _ref$painted;
-    var mask = _ref.mask;
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _options$sampling = options.sampling,
+        sampling = _options$sampling === undefined ? [10, 10] : _options$sampling,
+        _options$painted = options.painted,
+        painted = _options$painted === undefined ? false : _options$painted,
+        mask = options.mask;
 
 
     this.checkProcessable('getPixelsGrid', {
@@ -27352,11 +27401,12 @@ exports.default = getRow;
 /**
  * @memberof Image
  * @instance
+ * @param {number} row
+ * @param {number} [channel=0]
+ * @return {number[]}
  */
-
 function getRow(row) {
     var channel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-
 
     this.checkProcessable('getRow', {
         bitDepth: [8, 16]
@@ -27392,26 +27442,24 @@ var _newArray2 = _interopRequireDefault(_newArray);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Try to match the current pictures with another one
-
-// if normalize we normalize separately the 2 images
-
 /**
+ * Try to match the current pictures with another one. If normalize we normalize separately the 2 images.
  * @memberof Image
  * @instance
+ * @param {Image} image - Other image
+ * @param {object} [options]
+ * @return {number[]|number}
  */
-
 function getSimilarity(image) {
-    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    var _ref$shift = _ref.shift;
-    var shift = _ref$shift === undefined ? [0, 0] : _ref$shift;
-    var average = _ref.average;
-    var channels = _ref.channels;
-    var defaultAlpha = _ref.defaultAlpha;
-    var normalize = _ref.normalize;
-    var _ref$border = _ref.border;
-    var border = _ref$border === undefined ? [0, 0] : _ref$border;
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var _options$shift = options.shift,
+        shift = _options$shift === undefined ? [0, 0] : _options$shift,
+        average = options.average,
+        channels = options.channels,
+        defaultAlpha = options.defaultAlpha,
+        normalize = options.normalize,
+        _options$border = options.border,
+        border = _options$border === undefined ? [0, 0] : _options$border;
 
 
     this.checkProcessable('getSimilarity', {
@@ -27481,22 +27529,23 @@ var _newArray2 = _interopRequireDefault(_newArray);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// this method will change the border
-// that may not be calculated
-
 /**
+ * This method will change the border
  * @memberof Image
  * @instance
+ * @param {object} [options]
+ * @param {number} [options.size=0]
+ * @param {string} [options.algorithm='copy']
+ * @param {number[]} [options.color]
+ * @return {this}
  */
-
 function setBorder() {
-    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    var _ref$size = _ref.size;
-    var size = _ref$size === undefined ? 0 : _ref$size;
-    var _ref$algorithm = _ref.algorithm;
-    var algorithm = _ref$algorithm === undefined ? 'copy' : _ref$algorithm;
-    var color = _ref.color;
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _options$size = options.size,
+        size = _options$size === undefined ? 0 : _options$size,
+        _options$algorithm = options.algorithm,
+        algorithm = _options$algorithm === undefined ? 'copy' : _options$algorithm,
+        color = options.color;
 
 
     this.checkProcessable('setBorder', {
@@ -27549,6 +27598,8 @@ function setBorder() {
             }
         }
     }
+
+    return this;
 }
 
 },{"new-array":113}],239:[function(require,module,exports){
@@ -27564,10 +27615,10 @@ var _channel = require('./../../util/channel');
 /**
  * @memberof Image
  * @instance
+ * @param {*} channel
+ * @param {Image} image
  */
-
 function setChannel(channel, image) {
-
     this.checkProcessable('setChannel', {
         bitDepth: [8, 16]
     });
@@ -27644,30 +27695,35 @@ var _Image = require('../Image');
 
 var _Image2 = _interopRequireDefault(_Image);
 
+var _Stack = require('../../stack/Stack');
+
+var _Stack2 = _interopRequireDefault(_Stack);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * @memberof Image
  * @instance
+ * @param {object} [options]
+ * @param {boolean} [options.preserveAlpha=true]
+ * @return {Stack}
  */
-
 function split() {
-    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    var _ref$preserveAlpha = _ref.preserveAlpha;
-    var preserveAlpha = _ref$preserveAlpha === undefined ? true : _ref$preserveAlpha;
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _options$preserveAlph = options.preserveAlpha,
+        preserveAlpha = _options$preserveAlph === undefined ? true : _options$preserveAlph;
 
 
     this.checkProcessable('split', {
         bitDepth: [8, 16]
     });
 
-    // split will always return an array of images
+    // split will always return a stack of images
     if (this.components === 1) {
-        return [this.clone()];
+        return new _Stack2.default([this.clone()]);
     }
 
-    var images = [];
+    var images = new _Stack2.default();
 
     var data = this.data;
     if (this.alpha && preserveAlpha) {
@@ -27702,7 +27758,7 @@ function split() {
     return images;
 }
 
-},{"../Image":145}],242:[function(require,module,exports){
+},{"../../stack/Stack":245,"../Image":145}],242:[function(require,module,exports){
 'use strict';
 
 var _environment = require('./image/environment');
@@ -27846,14 +27902,14 @@ class Stack extends Array {
     }
 
     static extendMethod(name, method) {
-        var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+        var _options$inPlace = options.inPlace,
+            inPlace = _options$inPlace === undefined ? false : _options$inPlace,
+            _options$returnThis = options.returnThis,
+            returnThis = _options$returnThis === undefined ? true : _options$returnThis,
+            _options$partialArgs = options.partialArgs,
+            partialArgs = _options$partialArgs === undefined ? [] : _options$partialArgs;
 
-        var _ref$inPlace = _ref.inPlace;
-        var inPlace = _ref$inPlace === undefined ? false : _ref$inPlace;
-        var _ref$returnThis = _ref.returnThis;
-        var returnThis = _ref$returnThis === undefined ? true : _ref$returnThis;
-        var _ref$partialArgs = _ref.partialArgs;
-        var partialArgs = _ref$partialArgs === undefined ? [] : _ref$partialArgs;
 
         if (inPlace) {
             Stack.prototype[name] = function () {
@@ -27883,10 +27939,10 @@ class Stack extends Array {
     }
 
     static extendProperty(name, method) {
-        var _ref2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+        var _options$partialArgs2 = options.partialArgs,
+            partialArgs = _options$partialArgs2 === undefined ? [] : _options$partialArgs2;
 
-        var _ref2$partialArgs = _ref2.partialArgs;
-        var partialArgs = _ref2$partialArgs === undefined ? [] : _ref2$partialArgs;
 
         computedPropertyDescriptor.get = function () {
             if (this.computed === null) {
@@ -27968,10 +28024,10 @@ exports.default = histogram;
 /**
  * @memberof Stack
  * @instance
+ * @param {object} [options]
+ * @return {number[]}
  */
-
 function histogram(options) {
-
     this.checkProcessable('min', {
         bitDepth: [8, 16]
     });
@@ -27996,10 +28052,10 @@ exports.default = histograms;
 /**
  * @memberof Stack
  * @instance
+ * @param {object} [options]
+ * @return {Array<Array<number>>}
  */
-
 function histograms(options) {
-
     this.checkProcessable('min', {
         bitDepth: [8, 16]
     });
@@ -28027,8 +28083,8 @@ exports.default = max;
 /**
  * @memberof Stack
  * @instance
+ * @return {number[]}
  */
-
 function max() {
 
     this.checkProcessable('min', {
@@ -28057,8 +28113,8 @@ var _histogram = require('../../util/histogram');
 /**
  * @memberof Stack
  * @instance
+ * @return {number[]}
  */
-
 function median() {
 
     this.checkProcessable('median', {
@@ -28084,8 +28140,8 @@ exports.default = min;
 /**
  * @memberof Stack
  * @instance
+ * @return {number[]}
  */
-
 function min() {
     this.checkProcessable('min', {
         bitDepth: [8, 16]
@@ -28165,35 +28221,34 @@ var _Stack2 = _interopRequireDefault(_Stack);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// in a stack we compare 2 consecutive images
-// or directly to a parent
-
-// algorithm: matchToPrevious || matchToFirst
-
-// Ignoring border may be dangerous ! Is there is a shape on the side of the image there will be a
-// continuous shift if you ignore border. By default it is better to leave it to 0,0
-// Now if the background is not black there will also be no way to shift ...
-// It may therefore be much better to make a background correction before trying to match and crop
-// TODO this code seems also buggy if it is not 0,0
-
+// TODO this code seems buggy if it is not 0,0
 /**
+ * We will try to move a set of images in order to get only the best common part of them.
+ * In a stack, we compare 2 consecutive images or directly to a parent.
+ * Ignoring border may be dangerous ! If there is a shape on the side of the image there will be a
+ * continuous shift if you ignore border. By default it is better to leave it to 0,0
+ * Now if the background is not black there will also be no way to shift ...
+ * It may therefore be much better to make a background correction before trying to match and crop.
  * @memberof Stack
  * @instance
+ * @param {object} [options]
+ * @param {string} [options.algorithm='matchToPrevious'] - matchToPrevious or matchToFirst
+ * @param {number[]} [options.ignoreBorder=[0, 0]]
+ * @return {Stack}
  */
-
 function matchAndCrop() {
-    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _options$algorithm = options.algorithm,
+        algorithm = _options$algorithm === undefined ? 'matchToPrevious' : _options$algorithm,
+        _options$ignoreBorder = options.ignoreBorder,
+        ignoreBorder = _options$ignoreBorder === undefined ? [0, 0] : _options$ignoreBorder;
 
-    var _ref$algorithm = _ref.algorithm;
-    var algorithm = _ref$algorithm === undefined ? 'matchToPrevious' : _ref$algorithm;
-    var _ref$ignoreBorder = _ref.ignoreBorder;
-    var ignoreBorder = _ref$ignoreBorder === undefined ? [0, 0] : _ref$ignoreBorder;
 
     this.checkProcessable('matchAndCrop', {
         bitDepth: [8, 16]
     });
 
-    var matchToPrevious = algorithm === 'matchToPrevious' ? true : false;
+    var matchToPrevious = algorithm === 'matchToPrevious';
 
     var parent = this[0];
     var results = [];
@@ -28241,20 +28296,11 @@ function matchAndCrop() {
             bottomShift = result.position[1];
         }
     }
-    rightShift *= -1;
-    bottomShift *= -1;
+    rightShift = 0 - rightShift;
+    bottomShift = 0 - bottomShift;
 
     for (var _i2 = 0; _i2 < results.length; _i2++) {
         var _result = results[_i2];
-
-        /*
-        console.log("CROP",
-            leftShift - result.position[0],
-            topShift - result.position[1],
-            parent.width - rightShift - leftShift,
-            parent.height - bottomShift - topShift
-        )
-        */
 
         _result.crop = _result.image.crop({
             x: leftShift - _result.position[0],
@@ -28271,10 +28317,7 @@ function matchAndCrop() {
     }
 
     return new _Stack2.default(newImages);
-} /*
-   We will try to move a set of images in order to get only the best common part of them
-   The match is always done on the first image ?
-  */
+}
 
 },{"../Stack":245}],253:[function(require,module,exports){
 'use strict';
@@ -28293,8 +28336,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * @memberof Stack
  * @instance
+ * @return {Image}
  */
-
 function average() {
     this.checkProcessable('average', {
         bitDepth: [8, 16]
@@ -28335,9 +28378,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function validateArrayOfChannels(image) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var channels = options.channels;
-    var allowAlpha = options.allowAlpha;
-    var defaultAlpha = options.defaultAlpha;
+    var channels = options.channels,
+        allowAlpha = options.allowAlpha,
+        defaultAlpha = options.defaultAlpha;
 
 
     if (typeof allowAlpha !== 'boolean') {
@@ -28857,24 +28900,22 @@ var smallCross = [[0, 1, 0], [1, 1, 1], [0, 1, 0]];
  * @param {string} [options.shape] - Value may be 'square', 'rectangle', 'circle', 'ellipse' or 'triangle'
  *                                  The size of the shape will be determined by the size, width and height.
  *                                  A Shape is by default filled.
- *
  * @param {number} [options.size]
  * @param {number} [options.width=options.size] - width of the shape. Must be odd.
  * @param {number} [options.height=options.size] - width of the shape. Must be odd.
  * @param {boolean} [options.filled=true] - If false only the border ot the shape is taken into account.
  */
-
 class Shape {
     constructor() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-        var _options$kind = options.kind;
-        var kind = _options$kind === undefined ? 'cross' : _options$kind;
-        var shape = options.shape;
-        var size = options.size;
-        var width = options.width;
-        var height = options.height;
-        var _options$filled = options.filled;
-        var filled = _options$filled === undefined ? true : _options$filled;
+        var _options$kind = options.kind,
+            kind = _options$kind === undefined ? 'cross' : _options$kind,
+            shape = options.shape,
+            size = options.size,
+            width = options.width,
+            height = options.height,
+            _options$filled = options.filled,
+            filled = _options$filled === undefined ? true : _options$filled;
 
         if (size) {
             width = size;
@@ -28921,9 +28962,8 @@ class Shape {
 
     /**
      * Returns an array of [x,y] points
-     * @returns {number[][]} - Array of [x,y] points
+     * @return {Array<Array<number>>} - Array of [x,y] points
      */
-
     getPoints() {
         var matrix = this.matrix;
         var points = [];
