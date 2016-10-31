@@ -416,7 +416,7 @@ export default class Roi {
             height: this.height,
             width: this.width,
             surface: this.surface
-        }
+        };
     }
 }
 
