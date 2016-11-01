@@ -5,6 +5,8 @@ import {validateChannel} from './../../util/channel';
  * @instance
  * @param {*} channel
  * @param {Image} image
+ *
+ * @return {this}
  */
 export default function setChannel(channel, image) {
     this.checkProcessable('setChannel', {
@@ -28,4 +30,6 @@ export default function setChannel(channel, image) {
         this.data[ptr] = image.data[i];
         ptr += this.channels;
     }
+
+    return this;
 }
