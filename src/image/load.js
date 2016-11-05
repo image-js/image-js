@@ -131,7 +131,7 @@ function getImageFromIFD(image) {
         components: 1,
         alpha: 0,
         colorModel: null,
-        bitDepth: image.bitsPerSample,
+        bitDepth: image.bitsPerSample.length ? image.bitsPerSample[0] : image.bitsPerSample,
         meta: getMetadata(image)
     });
 }
