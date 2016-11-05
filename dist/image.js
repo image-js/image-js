@@ -18292,6 +18292,8 @@ class IFD {
             return this.fields.get(tag);
         } else if (typeof tag === 'string') {
             return this.fields.get(tags[this.kind].tagsByName[tag]);
+        } else {
+            throw new Error('expected a number or string');
         }
     }
 
@@ -18895,9 +18897,10 @@ class TIFFDecoder extends IOBuffer {
             unsupported('orientation', orientation);
         }
         switch (ifd.type) {
-            case 1:
-                // BlackIsZero
-                this.decodeBilevelOrGrey(ifd);
+            case 1: // BlackIsZero
+            case 2:
+                // RGB
+                this.readStripData(ifd);
                 break;
             default:
                 unsupported('image type', ifd.type);
@@ -18905,11 +18908,11 @@ class TIFFDecoder extends IOBuffer {
         }
     }
 
-    decodeBilevelOrGrey(ifd) {
+    readStripData(ifd) {
         var width = ifd.width;
         var height = ifd.height;
 
-        var bitDepth = ifd.bitsPerSample;
+        var bitDepth = validateBitDepth(ifd.bitsPerSample);
         var sampleFormat = ifd.sampleFormat;
         var size = width * height;
         var data = getDataArray(size, 1, bitDepth, sampleFormat);
@@ -18945,12 +18948,10 @@ class TIFFDecoder extends IOBuffer {
             case 1:
                 // No compression
                 return new DataView(this.buffer, offset, byteCounts);
-                break;
             case 2: // CCITT Group 3 1-Dimensional Modified Huffman run length encoding
             case 32773:
                 // PackBits compression
-                unsupported('Compression', compression);
-                break;
+                return unsupported('Compression', compression);
             default:
                 throw new Error('invalid compression: ' + compression);
         }
@@ -18967,7 +18968,7 @@ function getDataArray(size, channels, bitDepth, sampleFormat) {
     } else if (bitDepth === 32 && sampleFormat === 3) {
         return new Float32Array(size * channels);
     } else {
-        unsupported('bit depth / sample format', bitDepth + ' / ' + sampleFormat);
+        return unsupported('bit depth / sample format', bitDepth + ' / ' + sampleFormat);
     }
 }
 
@@ -18994,6 +18995,19 @@ function fillFloat32(dataTo, dataFrom, index, length, littleEndian) {
 
 function unsupported(type, value) {
     throw new Error('Unsupported ' + type + ': ' + value);
+}
+
+function validateBitDepth(bitDepth) {
+    if (bitDepth.length) {
+        var bitDepthArray = bitDepth;
+        bitDepth = bitDepthArray[0];
+        for (var i = 0; i < bitDepthArray.length; i++) {
+            if (bitDepthArray[i] !== bitDepth) {
+                unsupported('bit depth', bitDepthArray);
+            }
+        }
+    }
+    return bitDepth;
 }
 
 },{"./ifd":135,"./ifdValue":136,"./tiffIfd":142,"iobuffer":48}],142:[function(require,module,exports){
@@ -19031,79 +19045,79 @@ class TiffIfd extends Ifd {
 
     // IFD fields
     get newSubfileType() {
-        return this.fields.get(254);
+        return this.get(254);
     }
     get imageWidth() {
-        return this.fields.get(256);
+        return this.get(256);
     }
     get imageLength() {
-        return this.fields.get(257);
+        return this.get(257);
     }
     get bitsPerSample() {
-        return this.fields.get(258);
+        return this.get(258);
     }
     get compression() {
-        return this.fields.get(259) || 1;
+        return this.get(259) || 1;
     }
     get type() {
-        return this.fields.get(262);
+        return this.get(262);
     }
     get fillOrder() {
-        return this.fields.get(266) || 1;
+        return this.get(266) || 1;
     }
     get documentName() {
-        return this.fields.get(269);
+        return this.get(269);
     }
     get imageDescription() {
-        return this.fields.get(270);
+        return this.get(270);
     }
     get stripOffsets() {
-        return alwaysArray(this.fields.get(273));
+        return alwaysArray(this.get(273));
     }
     get orientation() {
-        return this.fields.get(274);
+        return this.get(274);
     }
     get samplesPerPixel() {
-        return this.fields.get(277);
+        return this.get(277);
     }
     get rowsPerStrip() {
-        return this.fields.get(278);
+        return this.get(278);
     }
     get stripByteCounts() {
-        return alwaysArray(this.fields.get(279));
+        return alwaysArray(this.get(279));
     }
     get minSampleValue() {
-        return this.fields.get(280) || 0;
+        return this.get(280) || 0;
     }
     get maxSampleValue() {
-        return this.fields.get(281) || Math.pow(2, this.bitsPerSample) - 1;
+        return this.get(281) || Math.pow(2, this.bitsPerSample) - 1;
     }
     get xResolution() {
-        return this.fields.get(282);
+        return this.get(282);
     }
     get yResolution() {
-        return this.fields.get(283);
+        return this.get(283);
     }
     get planarConfiguration() {
-        return this.fields.get(284) || 1;
+        return this.get(284) || 1;
     }
     get resolutionUnit() {
-        return this.fields.get(296) || 2;
+        return this.get(296) || 2;
     }
     get dateTime() {
-        return this.fields.get(306);
+        return this.get(306);
     }
     get predictor() {
-        return this.fields.get(317) || 1;
+        return this.get(317) || 1;
     }
     get sampleFormat() {
-        return this.fields.get(339) || 1;
+        return this.get(339) || 1;
     }
     get sMinSampleValue() {
-        return this.fields.get(340) || this.minSampleValue;
+        return this.get(340) || this.minSampleValue;
     }
     get sMaxSampleValue() {
-        return this.fields.get(341) || this.maxSampleValue;
+        return this.get(341) || this.maxSampleValue;
     }
 }
 
@@ -22614,7 +22628,7 @@ function getImageFromIFD(image) {
         components: 1,
         alpha: 0,
         colorModel: null,
-        bitDepth: image.bitsPerSample,
+        bitDepth: image.bitsPerSample.length ? image.bitsPerSample[0] : image.bitsPerSample,
         meta: getMetadata(image)
     });
 }
@@ -27617,6 +27631,8 @@ var _channel = require('./../../util/channel');
  * @instance
  * @param {*} channel
  * @param {Image} image
+ *
+ * @return {this}
  */
 function setChannel(channel, image) {
     this.checkProcessable('setChannel', {
@@ -27640,6 +27656,8 @@ function setChannel(channel, image) {
         this.data[ptr] = image.data[i];
         ptr += this.channels;
     }
+
+    return this;
 }
 
 },{"./../../util/channel":254}],240:[function(require,module,exports){
