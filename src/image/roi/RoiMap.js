@@ -19,6 +19,4 @@ export default class RoiMap {
     get total() {
         return this.negative + this.positive;
     }
-
-
 }
