@@ -301,10 +301,47 @@ export default class RoiManager {
         return this;
     }
 
+
+    appendRelated(roiMap) {
+        let allRois = this.getRois();
+        let allRelated = {related: []};
+        for (let i = 0; i < allRois.length; i++) {
+            let x = allRois[i].minX;
+            let y = allRois[i].minY;
+            let allPoints = allRois[i].points;
+            let currentRelated = correspondingRoisAndPixels(x, y, allPoints, roiMap);
+            allRelated.related.push(currentRelated);
+        }
+        return allRelated;
+    }
+
+
     _assertLayerWithLabel(label) {
         if (!this._layers[label]) {
             throw new Error(`no layer with label ${label}`);
         }
     }
+
+
 }
 
+function correspondingRoisAndPixels(x, y, points, roiMap) {
+    let relatedRois = {id: [], pixels: []};
+    for (let i = 0; i < points.length; i++) {
+        let currentPoint = points[i];
+        let currentX = currentPoint[0];
+        let currentY = currentPoint[1];
+        let correspondingRoiMapIndex = (currentX + x) + (currentY + y) * roiMap.width;
+        let value = roiMap.data[correspondingRoiMapIndex];
+
+        if (value > 0 || value < 0) {
+            if (relatedRois.id.includes(value)) {
+                relatedRois.pixels[relatedRois.id.indexOf(value)] += 1;
+            } else {
+                relatedRois.id.push(value);
+                relatedRois.pixels.push(1);
+            }
+        }
+    }
+    return relatedRois;
+}
