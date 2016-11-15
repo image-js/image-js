@@ -3,7 +3,7 @@
  */
 import {Image} from 'test/common';
 
-describe('appendRelated', function () {
+describe('findCorrespondingRoi', function () {
     it('should yield the correct object containing corresponding roi ids and pixels', function () {
         let img1 = new Image(5, 5,
             [
@@ -44,11 +44,11 @@ describe('appendRelated', function () {
 
         let roiMap2 = roiManager2.getMap();
 
-        let related = roiManager1.appendRelated(roiMap2);
-        Array.from(related.related[0].id).should.eql([1, -1, 2]);
-        Array.from(related.related[0].pixels).should.eql([2, 4, 3]);
-        Array.from(related.related[1].id).should.eql([-1]);
-        Array.from(related.related[1].pixels).should.eql([16]);
+        let related = roiManager1.findCorrespondingRoi(roiMap2);
+        Array.from(related[0].id).should.eql([1, -1, 2]);
+        Array.from(related[0].surface).should.eql([2, 4, 3]);
+        Array.from(related[1].id).should.eql([-1]);
+        Array.from(related[1].surface).should.eql([16]);
 
     });
 
@@ -92,11 +92,11 @@ describe('appendRelated', function () {
 
         let roiMap2 = roiManager2.getMap();
 
-        let related = roiManager1.appendRelated(roiMap2);
-        Array.from(related.related[0].id).should.eql([-1]);
-        Array.from(related.related[0].pixels).should.eql([9]);
-        Array.from(related.related[1].id).should.eql([-1]);
-        Array.from(related.related[1].pixels).should.eql([16]);
+        let related = roiManager1.findCorrespondingRoi(roiMap2);
+        Array.from(related[0].id).should.eql([-1]);
+        Array.from(related[0].surface).should.eql([9]);
+        Array.from(related[1].id).should.eql([-1]);
+        Array.from(related[1].surface).should.eql([16]);
 
     });
 
@@ -140,8 +140,8 @@ describe('appendRelated', function () {
 
         let roiMap2 = roiManager2.getMap();
 
-        let related = roiManager1.appendRelated(roiMap2);
-        Array.from(related.related[0].id).should.eql([-1]);
-        Array.from(related.related[0].pixels).should.eql([25]);
+        let related = roiManager1.findCorrespondingRoi(roiMap2);
+        Array.from(related[0].id).should.eql([-1]);
+        Array.from(related[0].surface).should.eql([25]);
     });
 });

@@ -302,15 +302,15 @@ export default class RoiManager {
     }
 
 
-    appendRelated(roiMap) {
+    findCorrespondingRoi(roiMap) {
         let allRois = this.getRois();
-        let allRelated = {related: []};
+        let allRelated = [];
         for (let i = 0; i < allRois.length; i++) {
             let x = allRois[i].minX;
             let y = allRois[i].minY;
             let allPoints = allRois[i].points;
             let currentRelated = correspondingRoisAndPixels(x, y, allPoints, roiMap);
-            allRelated.related.push(currentRelated);
+            allRelated.push(currentRelated);
         }
         return allRelated;
     }
@@ -326,7 +326,7 @@ export default class RoiManager {
 }
 
 function correspondingRoisAndPixels(x, y, points, roiMap) {
-    let relatedRois = {id: [], pixels: []};
+    let correspondingRois = {id: [], surface: []};
     for (let i = 0; i < points.length; i++) {
         let currentPoint = points[i];
         let currentX = currentPoint[0];
@@ -335,13 +335,13 @@ function correspondingRoisAndPixels(x, y, points, roiMap) {
         let value = roiMap.data[correspondingRoiMapIndex];
 
         if (value > 0 || value < 0) {
-            if (relatedRois.id.includes(value)) {
-                relatedRois.pixels[relatedRois.id.indexOf(value)] += 1;
+            if (correspondingRois.id.includes(value)) {
+                correspondingRois.surface[correspondingRois.id.indexOf(value)] += 1;
             } else {
-                relatedRois.id.push(value);
-                relatedRois.pixels.push(1);
+                correspondingRois.id.push(value);
+                correspondingRois.surface.push(1);
             }
         }
     }
-    return relatedRois;
+    return correspondingRois;
 }
