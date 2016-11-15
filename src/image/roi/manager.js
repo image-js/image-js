@@ -306,10 +306,12 @@ export default class RoiManager {
         let allRois = this.getRois();
         let allRelated = [];
         for (let i = 0; i < allRois.length; i++) {
-            let x = allRois[i].minX;
-            let y = allRois[i].minY;
-            let allPoints = allRois[i].points;
-            let currentRelated = correspondingRoisAndPixels(x, y, allPoints, roiMap);
+            let currentRoi = allRois[i];
+            let x = currentRoi.minX;
+            let y = currentRoi.minY;
+            let allPoints = currentRoi.points;
+            let roiSign = Math.sign(currentRoi.id);
+            let currentRelated = correspondingRoisInformation(x, y, allPoints, roiMap, roiSign);
             allRelated.push(currentRelated);
         }
         return allRelated;
@@ -325,8 +327,8 @@ export default class RoiManager {
 
 }
 
-function correspondingRoisAndPixels(x, y, points, roiMap) {
-    let correspondingRois = {id: [], surface: []};
+function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
+    let correspondingRois = {id: [], surface: [], same: 0, opposite: 0, total: 0};
     for (let i = 0; i < points.length; i++) {
         let currentPoint = points[i];
         let currentX = currentPoint[0];
@@ -343,5 +345,17 @@ function correspondingRoisAndPixels(x, y, points, roiMap) {
             }
         }
     }
+    for (let i = 0; i < correspondingRois.id.length; i++) {
+        let currentSign = Math.sign(correspondingRois.id[i]);
+        if (currentSign === roiSign) {
+            correspondingRois.same += correspondingRois.surface[i];
+        } else {
+            correspondingRois.opposite += correspondingRois.surface[i];
+        }
+    }
+
+    correspondingRois.total = correspondingRois.opposite + correspondingRois.same;
+
     return correspondingRois;
 }
+
