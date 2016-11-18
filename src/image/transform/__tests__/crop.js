@@ -1,9 +1,9 @@
 import {Image, getHash} from 'test/common';
 
-describe('check the crop transform', function () {
-    it('check the right extract for GREY image', function () {
-
-        let image = new Image(5, 5,
+describe.only('check the crop transform', function () {
+    let image;
+    beforeEach(function () {
+        image = new Image(5, 5,
             [
                 0, 0, 0, 0, 0,
                 0, 1, 1, 1, 1,
@@ -13,7 +13,9 @@ describe('check the crop transform', function () {
             ],
             {kind: 'GREY'}
         );
+    });
 
+    it('check the right extract for GREY image', function () {
         let result = image.crop({
             x: 0,
             y: 0
@@ -51,7 +53,19 @@ describe('check the crop transform', function () {
             width: 4
         });
         Array.from(result.data).should.eql([1, 2, 4, 3]);
+    });
 
+    it('non-integer arguments', function () {
+        let result = image.crop({
+            x: 1.2,
+            y: 2.8,
+            height: 1.1,
+            width: 3.7
+        });
+        Array.from(result.data).should.eql([1, 2, 4, 3]);
+    });
+
+    it('invalid argument ranges', function () {
         (function () {
             result = image.crop({
                 x: -2,
@@ -87,9 +101,6 @@ describe('check the crop transform', function () {
                 width: 100
             });
         }).should.throw(/size is out of range/);
-
     });
-
-
 });
 

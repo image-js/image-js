@@ -17,12 +17,17 @@ import Image from '../Image';
  * });
  */
 export default function crop(options = {}) {
-    const {
+    let {
         x = 0,
         y = 0,
         width = this.width - x,
         height = this.height - y
     } = options;
+
+    x = Math.round(x);
+    y = Math.round(y);
+    width = Math.round(width);
+    height = Math.round(height);
 
     if (x > (this.width - 1) || y > (this.height - 1)) {
         throw new RangeError(`crop: origin (x:${x}, y:${y}) out of range (${this.width - 1}; ${this.height - 1})`);
