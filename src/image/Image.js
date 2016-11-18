@@ -668,8 +668,8 @@ export default class Image {
     save(path, options = {}) {
         const {format = 'png'} = options;
         return new Promise((resolve, reject) => {
-            let out = createWriteStream(path);
             let canvas = this.getCanvas();
+            let out = createWriteStream(path);
             let stream;
             switch (format.toLowerCase()) {
                 case 'png':
