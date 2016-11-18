@@ -25,7 +25,7 @@ describe('scale', function () {
 
         it('down - odd dimensions', function () {
             const image = new Image(9, 13);
-            const result = image.scale({factor: 1/3});
+            const result = image.scale({factor: 1 / 3});
             result.width.should.equal(3);
             result.height.should.equal(4);
         });
