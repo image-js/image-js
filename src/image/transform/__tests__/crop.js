@@ -1,6 +1,6 @@
 import {Image, getHash} from 'test/common';
 
-describe.only('check the crop transform', function () {
+describe('check the crop transform', function () {
     let image;
     beforeEach(function () {
         image = new Image(5, 5,
