@@ -668,8 +668,8 @@ export default class Image {
     save(path, options = {}) {
         const {format = 'png'} = options;
         return new Promise((resolve, reject) => {
-            let out = createWriteStream(path);
             let canvas = this.getCanvas();
+            let out = createWriteStream(path);
             let stream;
             switch (format.toLowerCase()) {
                 case 'png':
@@ -723,7 +723,7 @@ export default class Image {
                 components = [components];
             }
             if (!components.includes(this.components)) {
-                throw new TypeError('The process: ' + processName + ' can only be applied if the number of channels is in: ' + components);
+                throw new TypeError('The process: ' + processName + ' can only be applied if the number of components is in: ' + components);
             }
         }
         if (channels) {
@@ -731,7 +731,7 @@ export default class Image {
                 channels = [channels];
             }
             if (!channels.includes(this.channels)) {
-                throw new TypeError('The process: ' + processName + ' can only be applied if the number of components is in: ' + channels);
+                throw new TypeError('The process: ' + processName + ' can only be applied if the number of channels is in: ' + channels);
             }
         }
     }

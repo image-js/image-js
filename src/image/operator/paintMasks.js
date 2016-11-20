@@ -34,7 +34,7 @@ export default function paintMasks(masks, options = {}) {
     } = options;
 
     this.checkProcessable('paintMasks', {
-        channels: 4,
+        channels: [3, 4],
         bitDepth: [8, 16],
         colorModel: RGB
     });

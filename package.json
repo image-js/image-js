@@ -38,7 +38,7 @@
     "publish-doc": "npm run build-doc && git add docs && git commit -m \"doc: rebuild docs\" && git push origin master",
     "build": "npm run compile && npm run clean-dist && npm run build-dist",
     "build-test": "browserify test/browser/bootstrap.js -o test/browser/image.js --standalone IJS --exclude canvas --ignore buffer --ignore zlib --ignore fs --debug --global-transform [ babelify --sourceMap ]",
-    "compile": "npm run clean-lib && babel src --out-dir lib --ignore __tests__",
+    "compile": "npm run clean-lib && babel src --out-dir lib --ignore __tests__ --quiet",
     "clean-dist": "rm -rf dist && mkdir dist",
     "clean-lib": "rm -rf lib",
     "eslint": "eslint src --cache",
@@ -49,7 +49,7 @@
     "test-mocha": "mocha --compilers js:babel-register --require should --reporter mocha-better-spec-reporter --recursive src/**/__tests__/**/*.js",
     "test-travis": "istanbul cover _mocha --report lcovonly -- --compilers js:babel-register --require should --reporter mocha-better-spec-reporter --recursive src/**/__tests__/**/*.js && npm run eslint",
     "watch-browser": "watchify test/browser/bootstrap.js -o test/browser/image.js --standalone IJS --exclude canvas --ignore buffer --ignore zlib --ignore fs --debug --global-transform [ babelify --sourceMap ]",
-    "watch-node": "babel --watch src --out-dir lib"
+    "watch-node": "npm run compile -- --watch"
   },
   "devDependencies": {
     "babel-cli": "^6.2.0",
