@@ -47,8 +47,15 @@ describe('findCorrespondingRoi', function () {
         let related = roiManager1.findCorrespondingRoi(roiMap2);
         Array.from(related[0].id).should.eql([1, -1, 2]);
         Array.from(related[0].surface).should.eql([2, 4, 3]);
+        related[0].same.should.eql(5);
+        related[0].opposite.should.eql(4);
+        related[0].total.should.eql(9);
         Array.from(related[1].id).should.eql([-1]);
         Array.from(related[1].surface).should.eql([16]);
+        related[1].same.should.eql(16);
+        related[1].opposite.should.eql(0);
+        related[1].total.should.eql(16);
+
 
     });
 
@@ -95,8 +102,14 @@ describe('findCorrespondingRoi', function () {
         let related = roiManager1.findCorrespondingRoi(roiMap2);
         Array.from(related[0].id).should.eql([-1]);
         Array.from(related[0].surface).should.eql([9]);
+        related[0].same.should.eql(0);
+        related[0].opposite.should.eql(9);
+        related[0].total.should.eql(9);
         Array.from(related[1].id).should.eql([-1]);
         Array.from(related[1].surface).should.eql([16]);
+        related[1].same.should.eql(16);
+        related[1].opposite.should.eql(0);
+        related[1].total.should.eql(16);
 
     });
 

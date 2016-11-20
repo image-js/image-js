@@ -345,6 +345,7 @@ function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
             }
         }
     }
+
     for (let i = 0; i < correspondingRois.id.length; i++) {
         let currentSign = Math.sign(correspondingRois.id[i]);
         if (currentSign === roiSign) {
@@ -353,7 +354,6 @@ function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
             correspondingRois.opposite += correspondingRois.surface[i];
         }
     }
-
     correspondingRois.total = correspondingRois.opposite + correspondingRois.same;
 
     return correspondingRois;
