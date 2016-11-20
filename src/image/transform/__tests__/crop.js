@@ -1,6 +1,6 @@
 import {Image, getHash} from 'test/common';
 
-describe.only('check the crop transform', function () {
+describe('check the crop transform', function () {
     let image;
     beforeEach(function () {
         image = new Image(5, 5,
@@ -67,7 +67,7 @@ describe.only('check the crop transform', function () {
 
     it('invalid argument ranges', function () {
         (function () {
-            result = image.crop({
+            image.crop({
                 x: -2,
                 y: 2,
                 height: 2,
@@ -76,7 +76,7 @@ describe.only('check the crop transform', function () {
         }).should.throw(/x and y .* must be positive numbers/);
 
         (function () {
-            result = image.crop({
+            image.crop({
                 x: 2,
                 y: 2,
                 height: -2,
@@ -85,7 +85,7 @@ describe.only('check the crop transform', function () {
         }).should.throw(/width and height .* must be positive numbers/);
 
         (function () {
-            result = image.crop({
+            image.crop({
                 x: 100,
                 y: 2,
                 height: 2,
@@ -94,7 +94,7 @@ describe.only('check the crop transform', function () {
         }).should.throw(/origin .* out of range/);
 
         (function () {
-            result = image.crop({
+            image.crop({
                 x: 2,
                 y: 2,
                 height: 2,
