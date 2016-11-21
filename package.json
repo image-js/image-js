@@ -69,7 +69,7 @@
     "istanbul": "^1.0.0-alpha",
     "mocha": "^3.0.0",
     "mocha-better-spec-reporter": "^3.0.1",
-    "rimraf": "^2.4.0",
+    "rimraf": "^2.5.0",
     "sha.js": "^2.4.3",
     "should": "^11.1.0",
     "watchify": "^3.6.0",
