@@ -33,6 +33,7 @@ import mask from './transform/mask/mask';
 import pad from './transform/pad';
 import resizeBinary from './transform/resizeBinary';
 import colorDepth from './transform/colorDepth';
+import {rotate, rotateLeft, rotateRight} from './transform/rotate';
 
 // utility
 import setBorder from './utility/setBorder';
@@ -109,6 +110,9 @@ export default function extend(Image) {
     Image.extendMethod('resizeBinary', resizeBinary);
     Image.extendMethod('colorDepth', colorDepth);
     Image.extendMethod('setBorder', setBorder, inPlace);
+    Image.extendMethod('rotate', rotate);
+    Image.extendMethod('rotateLeft', rotateLeft);
+    Image.extendMethod('rotateRight', rotateRight);
 
     Image.extendMethod('getRow', getRow);
     Image.extendMethod('getColumn', getColumn);
