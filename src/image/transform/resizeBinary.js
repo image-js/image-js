@@ -14,8 +14,8 @@ export default function resizeBinary(scale = 0.5) {
         bitDepth: [1]
     });
 
-    let width = Math.max(Math.floor(this.width * scale),1);
-    let height = Math.max(Math.floor(this.height * scale),1);
+    let width = Math.max(Math.floor(this.width * scale), 1);
+    let height = Math.max(Math.floor(this.height * scale), 1);
     let shiftX = Math.round((this.width - width) / 2);
     let shiftY = Math.round((this.height - height) / 2);
 

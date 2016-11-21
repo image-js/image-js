@@ -26,7 +26,7 @@ describe('Can we resize a binary image', function () {
         newImage.position.should.eql([1, 1]);
     });
 
-    it.only('check the result fi size should be 0', function () {
+    it('check the result fi size should be 0', function () {
         let binary = new Image(4, 4, [204, 51], {
             kind: 'BINARY'
         });
@@ -36,5 +36,5 @@ describe('Can we resize a binary image', function () {
         Array.from(newImage.data).should.eql([128]);
         newImage.position.should.eql([2, 2]);
     });
-    
+
 });
