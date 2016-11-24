@@ -45,8 +45,17 @@ export function getThreshold(value, maxValue) {
 
 export function factorDimensions(factor, width, height) {
     factor = getFactor(factor);
+    let newWidth =  Math.round(factor * width);
+    let newHeight = Math.round(factor * height);
+
+    if (newWidth <= 0) {
+        newWidth = 1;
+    }
+    if (newHeight <= 0) {
+        newHeight = 1;
+    }
     return {
-        width: Math.round(factor * width),
-        height: Math.round(factor * height)
+        width: newWidth,
+        height: newHeight
     };
 }

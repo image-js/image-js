@@ -301,10 +301,62 @@ export default class RoiManager {
         return this;
     }
 
+
+    findCorrespondingRoi(roiMap) {
+        let allRois = this.getRois();
+        let allRelated = [];
+        for (let i = 0; i < allRois.length; i++) {
+            let currentRoi = allRois[i];
+            let x = currentRoi.minX;
+            let y = currentRoi.minY;
+            let allPoints = currentRoi.points;
+            let roiSign = Math.sign(currentRoi.id);
+            let currentRelated = correspondingRoisInformation(x, y, allPoints, roiMap, roiSign);
+            allRelated.push(currentRelated);
+        }
+        return allRelated;
+    }
+
+
     _assertLayerWithLabel(label) {
         if (!this._layers[label]) {
             throw new Error(`no layer with label ${label}`);
         }
     }
+
+
+}
+
+function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
+    let correspondingRois = {id: [], surface: [], roiSurfaceCovered: [], same: 0, opposite: 0, total: 0};
+    for (let i = 0; i < points.length; i++) {
+        let currentPoint = points[i];
+        let currentX = currentPoint[0];
+        let currentY = currentPoint[1];
+        let correspondingRoiMapIndex = (currentX + x) + (currentY + y) * roiMap.width;
+        let value = roiMap.data[correspondingRoiMapIndex];
+
+        if (value > 0 || value < 0) {
+            if (correspondingRois.id.includes(value)) {
+                correspondingRois.surface[correspondingRois.id.indexOf(value)] += 1;
+            } else {
+                correspondingRois.id.push(value);
+                correspondingRois.surface.push(1);
+            }
+        }
+    }
+
+    for (let i = 0; i < correspondingRois.id.length; i++) {
+        let currentSign = Math.sign(correspondingRois.id[i]);
+        if (currentSign === roiSign) {
+            correspondingRois.same += correspondingRois.surface[i];
+        } else {
+            correspondingRois.opposite += correspondingRois.surface[i];
+        }
+        correspondingRois.roiSurfaceCovered[i] = correspondingRois.surface[i] / points.length;
+    }
+    correspondingRois.total = correspondingRois.opposite + correspondingRois.same;
+
+    return correspondingRois;
 }
 
