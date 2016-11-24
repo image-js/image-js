@@ -31,7 +31,25 @@ describe('scale', function () {
         });
     });
     describe('binary images using a factor', function () {
-        it('check the result', function () {
+        it('up - 2 factor', function () {
+            let binary = new Image(2, 2, [144], {
+                kind: 'BINARY'
+            });
+            let newImage = binary.scale({factor: 2});
+            newImage.width.should.equal(4);
+            newImage.height.should.equal(4);
+            Array.from(newImage.data).should.eql([204, 51]);
+        });
+        it('up - 1.5 factor', function () {
+            let binary = new Image(2, 2, [144], {
+                kind: 'BINARY'
+            });
+            let newImage = binary.scale({factor: 1.5});
+            newImage.width.should.equal(3);
+            newImage.height.should.equal(3);
+            Array.from(newImage.data).should.eql([141, 128]);
+        });
+        it('down - 0.5 factor', function () {
             let binary = new Image(4, 4, [204, 51], {
                 kind: 'BINARY'
             });
@@ -41,7 +59,7 @@ describe('scale', function () {
             Array.from(newImage.data).should.eql([144]);
         });
 
-        it('check the result fi size should be 0', function () {
+        it('down - 0.01 factor', function () {
             let binary = new Image(4, 4, [204, 51], {
                 kind: 'BINARY'
             });
