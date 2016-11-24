@@ -302,8 +302,8 @@ export default class RoiManager {
     }
 
 
-    findCorrespondingRoi(roiMap) {
-        let allRois = this.getRois();
+    findCorrespondingRoi(roiMap, options = {}) {
+        let allRois = this.getRois(options);
         let allRelated = [];
         for (let i = 0; i < allRois.length; i++) {
             let currentRoi = allRois[i];
