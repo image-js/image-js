@@ -328,7 +328,7 @@ export default class RoiManager {
 }
 
 function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
-    let correspondingRois = {id: [], surface: [], same: 0, opposite: 0, total: 0};
+    let correspondingRois = {id: [], surface: [], roiSurfaceCovered: [], same: 0, opposite: 0, total: 0};
     for (let i = 0; i < points.length; i++) {
         let currentPoint = points[i];
         let currentX = currentPoint[0];
@@ -353,6 +353,7 @@ function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
         } else {
             correspondingRois.opposite += correspondingRois.surface[i];
         }
+        correspondingRois.roiSurfaceCovered[i] = correspondingRois.surface[i] / points.length;
     }
     correspondingRois.total = correspondingRois.opposite + correspondingRois.same;
 
