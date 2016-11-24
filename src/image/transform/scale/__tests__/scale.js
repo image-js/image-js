@@ -30,6 +30,27 @@ describe('scale', function () {
             result.height.should.equal(4);
         });
     });
+    describe('binary images using a factor', function () {
+        it('check the result', function () {
+            let binary = new Image(4, 4, [204, 51], {
+                kind: 'BINARY'
+            });
+            let newImage = binary.scale({factor: 0.5});
+            newImage.width.should.equal(2);
+            newImage.height.should.equal(2);
+            Array.from(newImage.data).should.eql([144]);
+        });
+
+        it('check the result fi size should be 0', function () {
+            let binary = new Image(4, 4, [204, 51], {
+                kind: 'BINARY'
+            });
+            let newImage = binary.scale({factor: 0.01});
+            newImage.width.should.equal(1);
+            newImage.height.should.equal(1);
+            Array.from(newImage.data).should.eql([128]);
+        });
+    });
 
     describe('with preserveAspectRatio', function () {
         it('up - auto height', function () {
@@ -60,6 +81,7 @@ describe('scale', function () {
             result.height.should.equal(5);
         });
     });
+
 
     describe('without preserveAspectRatio', function () {
         it('up - auto height', function () {
@@ -104,4 +126,6 @@ describe('scale', function () {
             result.height.should.equal(3);
         });
     });
+
+
 });
