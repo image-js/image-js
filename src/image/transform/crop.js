@@ -4,7 +4,7 @@ import Image from '../Image';
  * Crops the image
  * @memberof Image
  * @instance
- * @param {object} options
+ * @param {object} [options]
  * @param {number} [options.x=0] - x coordinate to place the zero of the new image
  * @param {number} [options.y=0] - y coordinate to place the zero of the new image
  * @param {number} [options.width=this.width-x] - width of the new image
