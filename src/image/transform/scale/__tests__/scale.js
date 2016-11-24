@@ -99,7 +99,45 @@ describe('scale', function () {
             result.height.should.equal(5);
         });
     });
+    describe('binary images with preserveAspectRatio', function () {
+        it('up - auto width', function () {
+            let binary = new Image(2, 2, [144], {
+                kind: 'BINARY'
+            });
+            let newImage = binary.scale({height: 4});
+            newImage.width.should.equal(4);
+            newImage.height.should.equal(4);
+            Array.from(newImage.data).should.eql([204, 51]);
+        });
+        it('up - auto height', function () {
+            let binary = new Image(2, 2, [144], {
+                kind: 'BINARY'
+            });
+            let newImage = binary.scale({width: 3});
+            newImage.width.should.equal(3);
+            newImage.height.should.equal(3);
+            Array.from(newImage.data).should.eql([141, 128]);
+        });
+        it('down - auto width', function () {
+            let binary = new Image(4, 4, [204, 51], {
+                kind: 'BINARY'
+            });
+            let newImage = binary.scale({height: 2});
+            newImage.width.should.equal(2);
+            newImage.height.should.equal(2);
+            Array.from(newImage.data).should.eql([144]);
+        });
 
+        it('down - auto height', function () {
+            let binary = new Image(4, 4, [204, 51], {
+                kind: 'BINARY'
+            });
+            let newImage = binary.scale({width: 1});
+            newImage.width.should.equal(1);
+            newImage.height.should.equal(1);
+            Array.from(newImage.data).should.eql([128]);
+        });
+    });
 
     describe('without preserveAspectRatio', function () {
         it('up - auto height', function () {
