@@ -27,14 +27,14 @@ export default function scale(options = {}) {
 
     if (!width) {
         if (height && preserveAspectRatio) {
-            width = Math.round(height * this.width / this.height);
+            width = Math.round(height * (this.width / this.height));
         } else {
             width = this.width;
         }
     }
     if (!height) {
         if (preserveAspectRatio) {
-            height = Math.round(width * this.height / this.width);
+            height = Math.round(width * (this.height / this.width));
         } else {
             height = this.height;
         }
