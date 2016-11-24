@@ -140,28 +140,28 @@ describe('scale', function () {
     });
 
     describe('without preserveAspectRatio', function () {
-        it('up - auto height', function () {
+        it('up - with width', function () {
             const image = new Image(10, 12);
             const result = image.scale({width: 20, preserveAspectRatio: false});
             result.width.should.equal(20);
             result.height.should.equal(12);
         });
 
-        it('up - auto width', function () {
+        it('up - with height', function () {
             const image = new Image(10, 12);
             const result = image.scale({height: 20, preserveAspectRatio: false});
             result.width.should.equal(10);
             result.height.should.equal(20);
         });
 
-        it('down - auto height', function () {
+        it('down - with width', function () {
             const image = new Image(10, 12);
             const result = image.scale({width: 5, preserveAspectRatio: false});
             result.width.should.equal(5);
             result.height.should.equal(12);
         });
 
-        it('down - auto width', function () {
+        it('down - with height', function () {
             const image = new Image(10, 12);
             const result = image.scale({height: 5, preserveAspectRatio: false});
             result.width.should.equal(10);
@@ -183,5 +183,40 @@ describe('scale', function () {
         });
     });
 
+    describe('binary images without preserveAspectRatio', function () {
+        it('up - with height', function () {
+            let binary = new Image(2, 2, [144], {
+                kind: 'BINARY'
+            });
+            let newImage = binary.scale({height: 4, preserveAspectRatio: false});
+            newImage.width.should.equal(2);
+            newImage.height.should.equal(4);
+        });
+        it('up - with width', function () {
+            let binary = new Image(2, 2, [144], {
+                kind: 'BINARY'
+            });
+            let newImage = binary.scale({width: 3, preserveAspectRatio: false});
+            newImage.width.should.equal(3);
+            newImage.height.should.equal(2);
+        });
+        it('down - with height', function () {
+            let binary = new Image(4, 4, [204, 51], {
+                kind: 'BINARY'
+            });
+            let newImage = binary.scale({height: 2, preserveAspectRatio: false});
+            newImage.width.should.equal(4);
+            newImage.height.should.equal(2);
+        });
+        it('down - with width', function () {
+            let binary = new Image(4, 4, [204, 51], {
+                kind: 'BINARY'
+            });
+            let newImage = binary.scale({width: 1, preserveAspectRatio: false});
+            newImage.width.should.equal(1);
+            newImage.height.should.equal(4);
+        });
+
+    });
 
 });
