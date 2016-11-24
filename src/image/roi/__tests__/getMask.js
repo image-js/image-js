@@ -32,14 +32,14 @@ describe('we check Roi.getMask', function () {
     });
 
     it('should yield the right mask, position and resize', function () {
-        let image = new Image(5, 5, {kind: 'GREY'});
-        image.data = [
+        const data = [
             0, 0, 0, 0, 0,
             0, 1, 1, 1, 0,
             0, 1, 1, 1, 0,
             0, 1, 1, 1, 0,
             0, 0, 0, 0, 0
         ];
+        let image = new Image(5, 5, data, {kind: 'GREY'});
 
         let mask = image.mask({threshold: 1, algorithm: 'threshold'});
 

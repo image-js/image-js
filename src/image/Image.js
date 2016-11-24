@@ -270,15 +270,8 @@ export default class Image {
 
         this.initialize();
 
-        if (!data) {
-            createPixelArray(this);
-        } else {
-            let length = getTheoreticalPixelArraySize(this);
-            if (length !== data.length) {
-                throw new RangeError(`incorrect data size. Should be ${length} and found ${data.length}`);
-            }
-            this.data = data;
-        }
+        if (!data) data = createPixelArray(this);
+        this.setData(data);
     }
 
     initialize() {
@@ -295,6 +288,14 @@ export default class Image {
         this.multiplierY = this.channels * this.width;
         this.isClamped = this.bitDepth < 32;
         this.borderSizes = [0, 0]; // when a filter create a border it may have impact on future processing like Roi
+    }
+
+    setData(data) {
+        let length = getTheoreticalPixelArraySize(this);
+        if (length !== data.length) {
+            throw new RangeError(`incorrect data size. Should be ${length} and found ${data.length}`);
+        }
+        this.data = data;
     }
 
     /**

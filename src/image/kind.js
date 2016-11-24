@@ -90,5 +90,6 @@ export function createPixelArray(image) {
             arr[i] = image.maxValue;
         }
     }
-    image.data = arr;
+
+    return arr;
 }

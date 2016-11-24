@@ -1,15 +1,15 @@
 import {Image} from 'test/common';
 
 describe('we check paint mask', function () {
-
-    let image = new Image(5, 5, {kind: 'GREY'});
-    image.data = [
+    const data = [
         0, 0, 0, 0, 0,
         0, 1, 1, 1, 0,
         0, 1, 1, 1, 0,
         0, 1, 1, 1, 0,
         0, 0, 0, 0, 0
     ];
+    let image = new Image(5, 5, data, {kind: 'GREY'});
+
     let mask = image.mask({threshold: 1, algorithm: 'threshold'});
     let roiManager = image.getRoiManager();
     roiManager.fromMask(mask, {positive: true, negative: false});
