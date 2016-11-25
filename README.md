@@ -30,3 +30,4 @@ Follow the instructions for your OS [here](https://github.com/Automattic/node-ca
 [coveralls-url]: https://coveralls.io/github/image-js/core
 [download-image]: https://img.shields.io/npm/dm/image-js.svg?style=flat-square
 [download-url]: https://www.npmjs.com/package/image-js
+ 
