@@ -13,7 +13,7 @@ import Image from '../Image';
 export default function extract(mask, options = {}) {
     let {position} = options;
     this.checkProcessable('extract', {
-        bitDepth: [8, 16]
+        bitDepth: [1, 8, 16]
     });
 
     // we need to find the relative position to the parent
@@ -25,27 +25,48 @@ export default function extract(mask, options = {}) {
         }
     }
 
-    let extract = Image.createFrom(this, {
-        width: mask.width,
-        height: mask.height,
-        alpha: 1,   // we force the alpha, otherwise difficult to extract a mask ...
-        position: position,
-        parent: this
-    });
+    if (this.bitDepth > 1) {
+        let extract = Image.createFrom(this, {
+            width: mask.width,
+            height: mask.height,
+            alpha: 1,   // we force the alpha, otherwise difficult to extract a mask ...
+            position: position,
+            parent: this
+        });
 
-    for (let x = 0; x < mask.width; x++) {
-        for (let y = 0; y < mask.height; y++) {
-            // we copy the point
-            for (let channel = 0; channel < this.channels; channel++) {
-                let value = this.getValueXY(x + position[0], y + position[1], channel);
-                extract.setValueXY(x, y, channel, value);
-            }
-            // we make it transparent in case it is not in the mask
-            if (!mask.getBitXY(x, y)) {
-                extract.setValueXY(x, y, this.components, 0);
+        for (let x = 0; x < mask.width; x++) {
+            for (let y = 0; y < mask.height; y++) {
+                // we copy the point
+                for (let channel = 0; channel < this.channels; channel++) {
+                    let value = this.getValueXY(x + position[0], y + position[1], channel);
+                    extract.setValueXY(x, y, channel, value);
+                }
+                // we make it transparent in case it is not in the mask
+                if (!mask.getBitXY(x, y)) {
+                    extract.setValueXY(x, y, this.components, 0);
+                }
             }
         }
+
+        return extract;
+    } else {
+        let extract = Image.createFrom(this, {
+            width: mask.width,
+            height: mask.height,
+            position: position,
+            parent: this
+        });
+        for (let y = 0; y < mask.height; y++) {
+            for (let x = 0; x < mask.width; x++) {
+                if (mask.getBitXY(x, y)) {
+                    if (this.getBitXY(x + position[0], y + position[1])) {
+                        extract.setBitXY(x, y);
+                    }
+                }
+            }
+        }
+
+        return extract;
     }
 
-    return extract;
 }
