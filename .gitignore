@@ -4,6 +4,7 @@ lib
 *.log
 test/TMP
 test/browser/Image.js
+test/browser/image.js
 .DS_Store
 coverage
 .eslintcache
