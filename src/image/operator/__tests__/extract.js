@@ -55,6 +55,38 @@ describe('we check we can extract a part of B/W image', function () {
     });
 
 
+    it('check a rectangular binary image extract', function () {
+
+        let image = new Image(8, 4,
+            [
+                0b00011000,
+                0b00011000,
+                0b00011000,
+                0b11111111
+            ],
+            {kind: 'BINARY'}
+        );
+
+        let mask = new Image(4, 2,
+            [
+                0b11110000
+            ], {
+                kind: 'BINARY',
+                parent: image,
+                position: [3, 2]
+            });
+
+        let extract = image.extract(mask);
+        extract.bitDepth.should.equal(1);
+        extract.height.should.equal(2);
+        extract.width.should.equal(4);
+        Array.from(extract.data).should.eql(
+            [
+                0b11000000
+            ]
+        );
+    });
+
     it('check by specify 1,1 position with parent', function () {
 
         return load('BW4x4.png').then(function (image) {
