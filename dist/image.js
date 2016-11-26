@@ -19646,15 +19646,8 @@ class Image {
 
         this.initialize();
 
-        if (!data) {
-            (0, _kind.createPixelArray)(this);
-        } else {
-            var length = (0, _kind.getTheoreticalPixelArraySize)(this);
-            if (length !== data.length) {
-                throw new RangeError(`incorrect data size. Should be ${ length } and found ${ data.length }`);
-            }
-            this.data = data;
-        }
+        if (!data) data = (0, _kind.createPixelArray)(this);
+        this.setData(data);
     }
 
     initialize() {
@@ -19671,6 +19664,14 @@ class Image {
         this.multiplierY = this.channels * this.width;
         this.isClamped = this.bitDepth < 32;
         this.borderSizes = [0, 0]; // when a filter create a border it may have impact on future processing like Roi
+    }
+
+    setData(data) {
+        var length = (0, _kind.getTheoreticalPixelArraySize)(this);
+        if (length !== data.length) {
+            throw new RangeError(`incorrect data size. Should be ${ length } and found ${ data.length }`);
+        }
+        this.data = data;
     }
 
     /**
@@ -22449,7 +22450,8 @@ function createPixelArray(image) {
             arr[i] = image.maxValue;
         }
     }
-    image.data = arr;
+
+    return arr;
 }
 
 },{"./kindNames":182,"./model/model":185}],182:[function(require,module,exports){
@@ -22933,7 +22935,7 @@ function extract(mask) {
     var position = options.position;
 
     this.checkProcessable('extract', {
-        bitDepth: [8, 16]
+        bitDepth: [1, 8, 16]
     });
 
     // we need to find the relative position to the parent
@@ -22944,29 +22946,49 @@ function extract(mask) {
         }
     }
 
-    var extract = _Image2.default.createFrom(this, {
-        width: mask.width,
-        height: mask.height,
-        alpha: 1, // we force the alpha, otherwise difficult to extract a mask ...
-        position: position,
-        parent: this
-    });
+    if (this.bitDepth > 1) {
+        var _extract = _Image2.default.createFrom(this, {
+            width: mask.width,
+            height: mask.height,
+            alpha: 1, // we force the alpha, otherwise difficult to extract a mask ...
+            position: position,
+            parent: this
+        });
 
-    for (var x = 0; x < mask.width; x++) {
-        for (var y = 0; y < mask.height; y++) {
-            // we copy the point
-            for (var channel = 0; channel < this.channels; channel++) {
-                var value = this.getValueXY(x + position[0], y + position[1], channel);
-                extract.setValueXY(x, y, channel, value);
-            }
-            // we make it transparent in case it is not in the mask
-            if (!mask.getBitXY(x, y)) {
-                extract.setValueXY(x, y, this.components, 0);
+        for (var x = 0; x < mask.width; x++) {
+            for (var y = 0; y < mask.height; y++) {
+                // we copy the point
+                for (var channel = 0; channel < this.channels; channel++) {
+                    var value = this.getValueXY(x + position[0], y + position[1], channel);
+                    _extract.setValueXY(x, y, channel, value);
+                }
+                // we make it transparent in case it is not in the mask
+                if (!mask.getBitXY(x, y)) {
+                    _extract.setValueXY(x, y, this.components, 0);
+                }
             }
         }
-    }
 
-    return extract;
+        return _extract;
+    } else {
+        var _extract2 = _Image2.default.createFrom(this, {
+            width: mask.width,
+            height: mask.height,
+            position: position,
+            parent: this
+        });
+        for (var _y = 0; _y < mask.height; _y++) {
+            for (var _x2 = 0; _x2 < mask.width; _x2++) {
+                if (mask.getBitXY(_x2, _y)) {
+                    if (this.getBitXY(_x2 + position[0], _y + position[1])) {
+                        _extract2.setBitXY(_x2, _y);
+                    }
+                }
+            }
+        }
+
+        return _extract2;
+    }
 }
 
 },{"../Image":145}],189:[function(require,module,exports){
@@ -23083,7 +23105,7 @@ function paintMasks(masks) {
             var position = labelsPosition[_i] ? labelsPosition[_i] : masks[_i].position;
             ctx.fillText(labels[_i], position[0], position[1]);
         }
-        this.data = ctx.getImageData(0, 0, this.width, this.height).data;
+        this.setData(ctx.getImageData(0, 0, this.width, this.height).data);
     }
 
     return this;
@@ -24807,13 +24829,64 @@ class RoiManager {
         return this;
     }
 
+    findCorrespondingRoi(roiMap) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+        var allRois = this.getRois(options);
+        var allRelated = [];
+        for (var i = 0; i < allRois.length; i++) {
+            var currentRoi = allRois[i];
+            var x = currentRoi.minX;
+            var y = currentRoi.minY;
+            var allPoints = currentRoi.points;
+            var roiSign = Math.sign(currentRoi.id);
+            var currentRelated = correspondingRoisInformation(x, y, allPoints, roiMap, roiSign);
+            allRelated.push(currentRelated);
+        }
+        return allRelated;
+    }
+
     _assertLayerWithLabel(label) {
         if (!this._layers[label]) {
             throw new Error(`no layer with label ${ label }`);
         }
     }
+
 }
+
 exports.default = RoiManager;
+function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
+    var correspondingRois = { id: [], surface: [], roiSurfaceCovered: [], same: 0, opposite: 0, total: 0 };
+    for (var i = 0; i < points.length; i++) {
+        var currentPoint = points[i];
+        var currentX = currentPoint[0];
+        var currentY = currentPoint[1];
+        var correspondingRoiMapIndex = currentX + x + (currentY + y) * roiMap.width;
+        var value = roiMap.data[correspondingRoiMapIndex];
+
+        if (value > 0 || value < 0) {
+            if (correspondingRois.id.includes(value)) {
+                correspondingRois.surface[correspondingRois.id.indexOf(value)] += 1;
+            } else {
+                correspondingRois.id.push(value);
+                correspondingRois.surface.push(1);
+            }
+        }
+    }
+
+    for (var _i = 0; _i < correspondingRois.id.length; _i++) {
+        var currentSign = Math.sign(correspondingRois.id[_i]);
+        if (currentSign === roiSign) {
+            correspondingRois.same += correspondingRois.surface[_i];
+        } else {
+            correspondingRois.opposite += correspondingRois.surface[_i];
+        }
+        correspondingRois.roiSurfaceCovered[_i] = correspondingRois.surface[_i] / points.length;
+    }
+    correspondingRois.total = correspondingRois.opposite + correspondingRois.same;
+
+    return correspondingRois;
+}
 
 },{"../Image":145,"./RoiLayer":192,"./RoiMap":193,"./creator/fromMask":194,"./creator/fromMaxima":195,"./creator/fromPoints":196,"./creator/fromWaterShed":197,"extend":35}],199:[function(require,module,exports){
 'use strict';
@@ -26897,12 +26970,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * var rgbaImage = image.rgba8();
  */
 function rgba8() {
-    var newImage = new _Image2.default(this.width, this.height, {
+    return new _Image2.default(this.width, this.height, this.getRGBAData(), {
         kind: 'RGBA'
     });
-
-    newImage.data = this.getRGBAData();
-    return newImage;
 }
 
 },{"../Image":145}],226:[function(require,module,exports){
@@ -27022,12 +27092,25 @@ exports.default = nearestNeighbor;
 function nearestNeighbor(newImage, newWidth, newHeight) {
     var wRatio = this.width / newWidth;
     var hRatio = this.height / newHeight;
-    for (var i = 0; i < newWidth; i++) {
-        var w = Math.floor((i + 0.5) * wRatio);
-        for (var j = 0; j < newHeight; j++) {
-            var h = Math.floor((j + 0.5) * hRatio);
-            for (var c = 0; c < this.channels; c++) {
-                newImage.setValueXY(i, j, c, this.getValueXY(w, h, c));
+
+    if (this.bitDepth > 1) {
+        for (var i = 0; i < newWidth; i++) {
+            var w = Math.floor((i + 0.5) * wRatio);
+            for (var j = 0; j < newHeight; j++) {
+                var h = Math.floor((j + 0.5) * hRatio);
+                for (var c = 0; c < this.channels; c++) {
+                    newImage.setValueXY(i, j, c, this.getValueXY(w, h, c));
+                }
+            }
+        }
+    } else {
+        for (var _i = 0; _i < newWidth; _i++) {
+            var _w = Math.floor((_i + 0.5) * wRatio);
+            for (var _j = 0; _j < newHeight; _j++) {
+                var _h = Math.floor((_j + 0.5) * hRatio);
+                if (this.getBitXY(_w, _h)) {
+                    newImage.setBitXY(_i, _j);
+                }
             }
         }
     }
@@ -27080,14 +27163,14 @@ function scale() {
 
     if (!width) {
         if (height && preserveAspectRatio) {
-            width = Math.round(height * this.width / this.height);
+            width = Math.round(height * (this.width / this.height));
         } else {
             width = this.width;
         }
     }
     if (!height) {
         if (preserveAspectRatio) {
-            height = Math.round(width * this.height / this.width);
+            height = Math.round(width * (this.height / this.width));
         } else {
             height = this.height;
         }
@@ -28800,9 +28883,18 @@ function getThreshold(value, maxValue) {
 
 function factorDimensions(factor, width, height) {
     factor = getFactor(factor);
+    var newWidth = Math.round(factor * width);
+    var newHeight = Math.round(factor * height);
+
+    if (newWidth <= 0) {
+        newWidth = 1;
+    }
+    if (newHeight <= 0) {
+        newHeight = 1;
+    }
     return {
-        width: Math.round(factor * width),
-        height: Math.round(factor * height)
+        width: newWidth,
+        height: newHeight
     };
 }
 
