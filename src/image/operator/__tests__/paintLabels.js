@@ -1,6 +1,6 @@
 import {Image} from 'test/common';
 
-describe.skip('we check paintLabels', function () {
+describe('we check paintLabels', function () {
     it('should yield the painted image', function () {
 
         let image = new Image(150, 150, {kind: 'RGBA'});
@@ -25,6 +25,11 @@ describe.skip('we check paintLabels', function () {
         };
         image.paintLabels(labels, positions, options);
 
+        // how to have any test that can work on travis ?
+        let means = image.mean;
+        means[0].should.be.above(0);
+        means[1].should.be.above(0);
+        means[2].should.be.above(0);
         // image.save('test.png');
     });
 });
