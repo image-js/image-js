@@ -52,6 +52,7 @@ import getPixelsArray from './utility/getPixelsArray';
 
 // operators
 import paintMasks from './operator/paintMasks';
+import paintLabels from './operator/paintLabels';
 import paintPoints from './operator/paintPoints';
 import extract from './operator/extract';
 import convolution from './operator/convolution';
@@ -129,6 +130,7 @@ export default function extend(Image) {
     Image.extendMethod('getBestMatch', getBestMatch);
 
     Image.extendMethod('paintMasks', paintMasks, inPlace);
+    Image.extendMethod('paintLabels', paintLabels, inPlace);
     Image.extendMethod('paintPoints', paintPoints, inPlace);
     Image.extendMethod('extract', extract);
     Image.extendMethod('convolution', convolution);
