@@ -20185,7 +20185,7 @@ exports.default = Image;
 (0, _extend2.default)(Image);
 (0, _bitMethods2.default)(Image);
 
-},{"../stack/Stack":246,"./bitMethods":146,"./environment":159,"./extend":160,"./kind":181,"./kindNames":182,"./load":183,"./mediaTypes":184,"./model/model":185,"./roi/manager":198,"blob-util":6,"extend":35,"fs":8,"has-own":44}],146:[function(require,module,exports){
+},{"../stack/Stack":247,"./bitMethods":146,"./environment":159,"./extend":160,"./kind":181,"./kindNames":182,"./load":183,"./mediaTypes":184,"./model/model":185,"./roi/manager":199,"blob-util":6,"extend":35,"fs":8,"has-own":44}],146:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20692,7 +20692,7 @@ function mean() {
     return result;
 }
 
-},{"../../util/histogram":259}],153:[function(require,module,exports){
+},{"../../util/histogram":260}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20718,7 +20718,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":259}],154:[function(require,module,exports){
+},{"../../util/histogram":260}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21164,6 +21164,10 @@ var _paintMasks = require('./operator/paintMasks');
 
 var _paintMasks2 = _interopRequireDefault(_paintMasks);
 
+var _paintLabels = require('./operator/paintLabels');
+
+var _paintLabels2 = _interopRequireDefault(_paintLabels);
+
 var _paintPoints = require('./operator/paintPoints');
 
 var _paintPoints2 = _interopRequireDefault(_paintPoints);
@@ -21231,11 +21235,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // computers
 
 
-// utility
-
-
-// transforms
-// filters
+// operators
 function extend(Image) {
     var inPlace = { inPlace: true };
     var inPlaceStack = { inPlace: true, stack: true };
@@ -21294,6 +21294,7 @@ function extend(Image) {
     Image.extendMethod('getBestMatch', _getBestMatch2.default);
 
     Image.extendMethod('paintMasks', _paintMasks2.default, inPlace);
+    Image.extendMethod('paintLabels', _paintLabels2.default, inPlace);
     Image.extendMethod('paintPoints', _paintPoints2.default, inPlace);
     Image.extendMethod('extract', _extract2.default);
     Image.extendMethod('convolution', _convolution2.default);
@@ -21314,9 +21315,13 @@ function extend(Image) {
     Image.extendMethod('getSvd', _svd2.default).extendProperty('svd', _svd2.default);
 }
 
-// operators
+// utility
 
-},{"./compute/colorHistogram":147,"./compute/countAlphaPixels":148,"./compute/histogram":149,"./compute/localMaxima":150,"./compute/max":151,"./compute/mean":152,"./compute/median":153,"./compute/min":154,"./compute/points":155,"./compute/relativePosition":156,"./compute/sum":157,"./compute/svd":158,"./filter/add":161,"./filter/background":162,"./filter/blurFilter":163,"./filter/divide":164,"./filter/flipX":165,"./filter/flipY":166,"./filter/gaussianFilter":167,"./filter/hypotenuse":168,"./filter/invert":169,"./filter/invertApply":170,"./filter/invertBinaryLoop":171,"./filter/invertGetSet":172,"./filter/invertIterator":173,"./filter/invertOneLoop":174,"./filter/invertPixel":175,"./filter/level":176,"./filter/medianFilter":177,"./filter/multiply":178,"./filter/sobelFilter":179,"./filter/subtract":180,"./operator/convolution":186,"./operator/convolutionFft":187,"./operator/extract":188,"./operator/paintMasks":189,"./operator/paintPoints":190,"./transform/cmyk":199,"./transform/colorDepth":200,"./transform/crop":201,"./transform/grey":202,"./transform/hsl":204,"./transform/hsv":205,"./transform/mask/mask":210,"./transform/pad":223,"./transform/resizeBinary":224,"./transform/rgba8":225,"./transform/rotate":226,"./transform/scale/scale":228,"./utility/combineChannels":229,"./utility/getBestMatch":231,"./utility/getChannel":232,"./utility/getColumn":233,"./utility/getMatrix":234,"./utility/getPixelsArray":235,"./utility/getPixelsGrid":236,"./utility/getRow":237,"./utility/getSimilarity":238,"./utility/setBorder":239,"./utility/setChannel":240,"./utility/setMatrix":241,"./utility/split":242}],161:[function(require,module,exports){
+
+// transforms
+// filters
+
+},{"./compute/colorHistogram":147,"./compute/countAlphaPixels":148,"./compute/histogram":149,"./compute/localMaxima":150,"./compute/max":151,"./compute/mean":152,"./compute/median":153,"./compute/min":154,"./compute/points":155,"./compute/relativePosition":156,"./compute/sum":157,"./compute/svd":158,"./filter/add":161,"./filter/background":162,"./filter/blurFilter":163,"./filter/divide":164,"./filter/flipX":165,"./filter/flipY":166,"./filter/gaussianFilter":167,"./filter/hypotenuse":168,"./filter/invert":169,"./filter/invertApply":170,"./filter/invertBinaryLoop":171,"./filter/invertGetSet":172,"./filter/invertIterator":173,"./filter/invertOneLoop":174,"./filter/invertPixel":175,"./filter/level":176,"./filter/medianFilter":177,"./filter/multiply":178,"./filter/sobelFilter":179,"./filter/subtract":180,"./operator/convolution":186,"./operator/convolutionFft":187,"./operator/extract":188,"./operator/paintLabels":189,"./operator/paintMasks":190,"./operator/paintPoints":191,"./transform/cmyk":200,"./transform/colorDepth":201,"./transform/crop":202,"./transform/grey":203,"./transform/hsl":205,"./transform/hsv":206,"./transform/mask/mask":211,"./transform/pad":224,"./transform/resizeBinary":225,"./transform/rgba8":226,"./transform/rotate":227,"./transform/scale/scale":229,"./utility/combineChannels":230,"./utility/getBestMatch":232,"./utility/getChannel":233,"./utility/getColumn":234,"./utility/getMatrix":235,"./utility/getPixelsArray":236,"./utility/getPixelsGrid":237,"./utility/getRow":238,"./utility/getSimilarity":239,"./utility/setBorder":240,"./utility/setChannel":241,"./utility/setMatrix":242,"./utility/split":243}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21370,7 +21375,7 @@ function add(value) {
     return this;
 }
 
-},{"../../util/channel":255,"../../util/value":264}],162:[function(require,module,exports){
+},{"../../util/channel":256,"../../util/value":265}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21510,7 +21515,7 @@ function divide(value) {
     return this;
 }
 
-},{"../../util/channel":255,"../../util/value":264}],165:[function(require,module,exports){
+},{"../../util/channel":256,"../../util/value":265}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21765,7 +21770,7 @@ function hypotenuse(otherImage) {
     return newImage;
 }
 
-},{"../../util/channel":255,"../Image":145}],169:[function(require,module,exports){
+},{"../../util/channel":256,"../Image":145}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21819,7 +21824,7 @@ function invert() {
     return this;
 } // we try the faster methods
 
-},{"../../util/channel":255}],170:[function(require,module,exports){
+},{"../../util/channel":256}],170:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22090,7 +22095,7 @@ function processImage(image, min, max, channels) {
     }
 }
 
-},{"../../util/channel":255,"new-array":113}],177:[function(require,module,exports){
+},{"../../util/channel":256,"new-array":113}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22180,7 +22185,7 @@ function medianFilter() {
     return newImage;
 } //End median function
 
-},{"../../util/channel":255,"../Image":145,"num-sort":114}],178:[function(require,module,exports){
+},{"../../util/channel":256,"../Image":145,"num-sort":114}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22235,7 +22240,7 @@ function multiply(value) {
     return this;
 }
 
-},{"../../util/channel":255,"../../util/value":264}],179:[function(require,module,exports){
+},{"../../util/channel":256,"../../util/value":265}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22291,7 +22296,7 @@ function sobelFilter() {
     return gX.hypotenuse(gY, { bitDepth: this.bitDepth, channels: channels });
 }
 
-},{"../../util/kernels":261,"../operator/convolution":186}],180:[function(require,module,exports){
+},{"../../util/kernels":262,"../operator/convolution":186}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22343,7 +22348,7 @@ function subtract(value) {
     return this;
 }
 
-},{"../../util/channel":255,"../../util/value":264}],181:[function(require,module,exports){
+},{"../../util/channel":256,"../../util/value":265}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22666,7 +22671,7 @@ function loadGeneric(url, options) {
     });
 }
 
-},{"../stack/Stack":246,"./Image":145,"./environment":159,"atob-lite":5,"fast-jpeg":37,"fast-png":39,"image-type":46,"tiff":137}],184:[function(require,module,exports){
+},{"../stack/Stack":247,"./Image":145,"./environment":159,"atob-lite":5,"fast-jpeg":37,"fast-png":39,"image-type":46,"tiff":137}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22879,7 +22884,7 @@ function convolution(kernel) {
     return newImage;
 }
 
-},{"../../util/channel":255,"../../util/kernel":260,"../Image":145,"ml-matrix-convolution":77}],187:[function(require,module,exports){
+},{"../../util/channel":256,"../../util/kernel":261,"../Image":145,"ml-matrix-convolution":77}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22997,6 +23002,98 @@ function extract(mask) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.default = paintLabels;
+
+var _model = require('../model/model');
+
+var _color2 = require('../../util/color');
+
+/**
+ * Paint a mask or masks on the current image.
+ * @memberof Image
+ * @instance
+ *
+ * @param {Array<string>}       [labels] - Array of labels to display. Should the the same size as masks.
+ * @param {Array<Array>}        [positions] - Array of labels to display. Should the the same size as masks.
+ * @param {object}              [options]
+ * @param {number[]|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
+ * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
+ * @param {string|Array<string>} [options.font='12px Helvetica'] - Paint the labels in a different CSS style
+ * @param {number|Array<number>} [options.rotate=0] - Rotate each label of a define angle
+ * @return {this} The original painted image
+ */
+function paintLabels(labels, positions) {
+    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    var _options$color = options.color,
+        color = _options$color === undefined ? 'blue' : _options$color,
+        colors = options.colors,
+        _options$font = options.font,
+        font = _options$font === undefined ? '12px Helvetica' : _options$font,
+        _options$rotate = options.rotate,
+        rotate = _options$rotate === undefined ? 0 : _options$rotate;
+
+
+    this.checkProcessable('paintMasks', {
+        channels: [3, 4],
+        bitDepth: [8, 16],
+        colorModel: _model.RGB
+    });
+
+    if (!Array.isArray(labels)) {
+        throw Error('paintLabels: labels must be an array');
+    }
+
+    if (!Array.isArray(positions)) {
+        throw Error('paintLabels: positions must be an array');
+    }
+
+    if (color && !Array.isArray(color)) {
+        color = (0, _color2.css2array)(color);
+    }
+
+    if (colors) {
+        colors = colors.map(function (color) {
+            if (!Array.isArray(color)) {
+                return (0, _color2.css2array)(color);
+            }
+            return color;
+        });
+    } else {
+        colors = [color];
+    }
+
+    if (labels.length !== positions.length) {
+        throw Error('paintLabels: positions and labels must be arrays from the same size');
+    }
+
+    // We convert everything to array so that we can simply loop thourgh all the labels
+    if (!Array.isArray(font)) font = [font];
+    if (!Array.isArray(rotate)) rotate = [rotate];
+
+    var canvas = this.getCanvas({ originalData: true });
+    var ctx = canvas.getContext('2d');
+    for (var i = 0; i < labels.length; i++) {
+        ctx.save();
+        var _color = colors[i % colors.length];
+        ctx.fillStyle = `rgba(${ _color[0] },${ _color[1] },${ _color[2] },${ _color[3] / this.maxValue })`;
+        ctx.font = font[i % font.length];
+        var position = positions[i];
+        ctx.translate(position[0], position[1]);
+        ctx.rotate(rotate[i % rotate.length] / 180 * Math.PI);
+        ctx.fillText(labels[i], 0, 0);
+        ctx.restore();
+    }
+    this.setData(ctx.getImageData(0, 0, this.width, this.height).data);
+
+    return this;
+}
+
+},{"../../util/color":257,"../model/model":185}],190:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.default = paintMasks;
 
 var _model = require('../model/model');
@@ -23007,14 +23104,14 @@ var _color = require('../../util/color');
  * Paint a mask or masks on the current image.
  * @memberof Image
  * @instance
- * @param {(Image|Image[])}     masks - Image containing a binary mask
+ * @param {(Image|Array<Image>)}     masks - Image containing a binary mask
  * @param {object}              [options]
- * @param {number[]|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
- * @param {Array<Array<number>>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
+ * @param {Array<number>|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
+ * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
  * @param {number}              [options.alpha=255] - Value from 0 to 255 to specify the alpha.
  * @param {boolean}             [options.randomColors=false] - To paint each mask with a random color
  * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color
- * @param {string[]}       [options.labels] - Array of labels to display. Should the the same size as masks.
+ * @param {Array<string>}       [options.labels] - Array of labels to display. Should the the same size as masks.
  * @param {Array<Array<number>>} [options.labelsPosition] - Array of points [x,y] where the labels should be displayed.
  *                                      By default it is the 0,0 position of the correesponding mask.
  * @param {string}              [options.labelColor='blue'] - Define the color to paint the labels
@@ -23111,7 +23208,7 @@ function paintMasks(masks) {
     return this;
 }
 
-},{"../../util/color":256,"../model/model":185}],190:[function(require,module,exports){
+},{"../../util/color":257,"../model/model":185}],191:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23134,7 +23231,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {Array<Array<number>>} points - Array of [x,y] points
  * @param {object} [options]
  * @param {Array<number>} [options.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
- * @param {Array<number>} [options.shape] - Array of 3 elements (R, G, B), default is red.
+ * @param {object} [options.shape] - Definition of the shape, see Shape contructor.
  * @return {this} The original painted image
  */
 function paintPoints(points) {
@@ -23172,7 +23269,7 @@ function paintPoints(points) {
     return this;
 }
 
-},{"../../util/shape":263,"../model/model":185}],191:[function(require,module,exports){
+},{"../../util/shape":264,"../model/model":185}],192:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23804,7 +23901,7 @@ function getInternalIDs(roi) {
     return internal;
 }
 
-},{"../../util/shape":263,"../Image":145,"../kindNames":182}],192:[function(require,module,exports){
+},{"../../util/shape":264,"../Image":145,"../kindNames":182}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23911,7 +24008,7 @@ class RoiLayer {
 }
 exports.default = RoiLayer;
 
-},{"./Roi":191}],193:[function(require,module,exports){
+},{"./Roi":192}],194:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -23941,7 +24038,7 @@ class RoiMap {
 }
 exports.default = RoiMap;
 
-},{}],194:[function(require,module,exports){
+},{}],195:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24070,7 +24167,7 @@ function fromMask(mask) {
     return new _RoiMap2.default(mask, data);
 }
 
-},{"../RoiMap":193}],195:[function(require,module,exports){
+},{"../RoiMap":194}],196:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24301,7 +24398,7 @@ function fromMaxima() {
     }
 }
 
-},{"../RoiMap":193}],196:[function(require,module,exports){
+},{"../RoiMap":194}],197:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24351,7 +24448,7 @@ function fromPoints(pointsToPaint) {
     return new _RoiMap2.default(this, data);
 }
 
-},{"../RoiMap":193,"./../../../util/shape":263}],197:[function(require,module,exports){
+},{"../RoiMap":194,"./../../../util/shape":264}],198:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24469,7 +24566,7 @@ function fromWaterShed() {
     return new _RoiMap2.default(currentImage, data);
 }
 
-},{"../RoiMap":193,"./../../../util/dxdy.js":258,"js-priority-queue":56}],198:[function(require,module,exports){
+},{"../RoiMap":194,"./../../../util/dxdy.js":259,"js-priority-queue":56}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24888,7 +24985,7 @@ function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
     return correspondingRois;
 }
 
-},{"../Image":145,"./RoiLayer":192,"./RoiMap":193,"./creator/fromMask":194,"./creator/fromMaxima":195,"./creator/fromPoints":196,"./creator/fromWaterShed":197,"extend":35}],199:[function(require,module,exports){
+},{"../Image":145,"./RoiLayer":193,"./RoiMap":194,"./creator/fromMask":195,"./creator/fromMaxima":196,"./creator/fromPoints":197,"./creator/fromWaterShed":198,"extend":35}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24954,7 +25051,7 @@ function cmyk() {
     return newImage;
 }
 
-},{"../Image":145,"../model/model":185}],200:[function(require,module,exports){
+},{"../Image":145,"../model/model":185}],201:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25013,7 +25110,7 @@ function colorDepth() {
     return newImage;
 }
 
-},{"../Image":145}],201:[function(require,module,exports){
+},{"../Image":145}],202:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25093,7 +25190,7 @@ function crop() {
     return newImage;
 }
 
-},{"../Image":145}],202:[function(require,module,exports){
+},{"../Image":145}],203:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25193,7 +25290,7 @@ function grey() {
     return newImage;
 }
 
-},{"../Image":145,"../model/model":185,"./greyAlgorithms":203}],203:[function(require,module,exports){
+},{"../Image":145,"../model/model":185,"./greyAlgorithms":204}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25297,7 +25394,7 @@ Object.defineProperty(methods, 'brightness', { enumerable: false, value: methods
 
 var names = exports.names = Object.keys(methods);
 
-},{}],204:[function(require,module,exports){
+},{}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25381,7 +25478,7 @@ function hsl() {
     return newImage;
 }
 
-},{"../Image":145,"../model/model":185}],205:[function(require,module,exports){
+},{"../Image":145,"../model/model":185}],206:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25463,7 +25560,7 @@ function hsv() {
     return newImage;
 }
 
-},{"../Image":145,"../model/model":185}],206:[function(require,module,exports){
+},{"../Image":145,"../model/model":185}],207:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25547,7 +25644,7 @@ function huang(histogram) {
     return threshold;
 }
 
-},{}],207:[function(require,module,exports){
+},{}],208:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25611,7 +25708,7 @@ function bimodalTest(iHisto) {
     return b;
 }
 
-},{}],208:[function(require,module,exports){
+},{}],209:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25667,7 +25764,7 @@ function isodata(histogram) {
     return g;
 }
 
-},{}],209:[function(require,module,exports){
+},{}],210:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25751,7 +25848,7 @@ function li(histogram, total) {
     return threshold;
 }
 
-},{}],210:[function(require,module,exports){
+},{}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25836,7 +25933,7 @@ function mask() {
     return newImage;
 }
 
-},{"../../../util/converter":257,"../../Image":145,"./maskAlgorithms":211}],211:[function(require,module,exports){
+},{"../../../util/converter":258,"../../Image":145,"./maskAlgorithms":212}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25926,7 +26023,7 @@ var methods = exports.methods = {
 
 var names = exports.names = ['threshold'].concat(Object.keys(methods));
 
-},{"./huang":206,"./intermodes":207,"./isodata":208,"./li":209,"./maxEntropy":212,"./mean":213,"./minError":214,"./minimum":215,"./moments":216,"./otsu":217,"./percentile":218,"./renyiEntropy.js":219,"./shanbhag":220,"./triangle":221,"./yen":222}],212:[function(require,module,exports){
+},{"./huang":207,"./intermodes":208,"./isodata":209,"./li":210,"./maxEntropy":213,"./mean":214,"./minError":215,"./minimum":216,"./moments":217,"./otsu":218,"./percentile":219,"./renyiEntropy.js":220,"./shanbhag":221,"./triangle":222,"./yen":223}],213:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26013,7 +26110,7 @@ function maxEntropy(histogram, total) {
     return threshold;
 }
 
-},{}],213:[function(require,module,exports){
+},{}],214:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26037,7 +26134,7 @@ function mean(histogram, total) {
     return Math.floor(sum / total);
 }
 
-},{}],214:[function(require,module,exports){
+},{}],215:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26145,7 +26242,7 @@ function sumC(y, j) {
     return x;
 }
 
-},{}],215:[function(require,module,exports){
+},{}],216:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26224,7 +26321,7 @@ function bimodalTest(histogram) {
     return isBimodal;
 }
 
-},{}],216:[function(require,module,exports){
+},{}],217:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26287,7 +26384,7 @@ function moments(histogram, total) {
     return threshold;
 }
 
-},{}],217:[function(require,module,exports){
+},{}],218:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26341,7 +26438,7 @@ function otsu(histogram, total) {
     return threshold;
 }
 
-},{}],218:[function(require,module,exports){
+},{}],219:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26382,7 +26479,7 @@ function partialSum(histogram, endIndex) {
     return x;
 }
 
-},{}],219:[function(require,module,exports){
+},{}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26527,7 +26624,7 @@ function renyiEntropy(histogram, total) {
 // 06.15.2007
 // Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
 
-},{"num-sort":114}],220:[function(require,module,exports){
+},{"num-sort":114}],221:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26609,7 +26706,7 @@ function shanbhag(histogram, total) {
     return threshold;
 }
 
-},{}],221:[function(require,module,exports){
+},{}],222:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26728,7 +26825,7 @@ function triangle(histogram) {
     }
 }
 
-},{}],222:[function(require,module,exports){
+},{}],223:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26787,7 +26884,7 @@ function yen(histogram, total) {
     return threshold;
 }
 
-},{}],223:[function(require,module,exports){
+},{}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26885,7 +26982,7 @@ function pad() {
     return newImage;
 }
 
-},{"../Image":145,"../utility/copy":230,"new-array":113}],224:[function(require,module,exports){
+},{"../Image":145,"../utility/copy":231,"new-array":113}],225:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26940,7 +27037,7 @@ function resizeBinary() {
     return newImage;
 }
 
-},{"../Image":145,"../kindNames":182}],225:[function(require,module,exports){
+},{"../Image":145,"../kindNames":182}],226:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26975,7 +27072,7 @@ function rgba8() {
     });
 }
 
-},{"../Image":145}],226:[function(require,module,exports){
+},{"../Image":145}],227:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27075,7 +27172,7 @@ function rotate180() {
     return newImage;
 }
 
-},{"../Image":145}],227:[function(require,module,exports){
+},{"../Image":145}],228:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27116,7 +27213,7 @@ function nearestNeighbor(newImage, newWidth, newHeight) {
     }
 }
 
-},{}],228:[function(require,module,exports){
+},{}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27200,7 +27297,7 @@ function scale() {
     return newImage;
 }
 
-},{"../../../util/converter":257,"../../Image":145,"./nearestNeighbor":227}],229:[function(require,module,exports){
+},{"../../../util/converter":258,"../../Image":145,"./nearestNeighbor":228}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27267,7 +27364,7 @@ function defaultCombineMethod(pixel) {
     return (pixel[0] + pixel[1] + pixel[2]) / 3;
 }
 
-},{"../Image":145}],230:[function(require,module,exports){
+},{"../Image":145}],231:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27299,7 +27396,7 @@ function copyImage(fromImage, toImage, x, y) {
     }
 }
 
-},{}],231:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27369,7 +27466,7 @@ function match(image) {
     return [currentX - middleX, currentY - middleY];
 }
 
-},{"../../util/matrix":262}],232:[function(require,module,exports){
+},{"../../util/matrix":263}],233:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27432,7 +27529,7 @@ function getChannel(channel) {
     return newImage;
 }
 
-},{"../Image":145,"./../../util/channel":255}],233:[function(require,module,exports){
+},{"../Image":145,"./../../util/channel":256}],234:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27466,7 +27563,7 @@ function getColumn(column) {
     return array;
 }
 
-},{}],234:[function(require,module,exports){
+},{}],235:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27512,7 +27609,7 @@ function getMatrix() {
     return matrix;
 }
 
-},{"ml-matrix":86}],235:[function(require,module,exports){
+},{"ml-matrix":86}],236:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27544,7 +27641,7 @@ function getPixelsArray() {
     return array;
 }
 
-},{}],236:[function(require,module,exports){
+},{}],237:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27618,7 +27715,7 @@ function getPixelsGrid() {
     return toReturn;
 }
 
-},{}],237:[function(require,module,exports){
+},{}],238:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27653,7 +27750,7 @@ function getRow(row) {
     return array;
 }
 
-},{}],238:[function(require,module,exports){
+},{}],239:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27742,7 +27839,7 @@ function getSimilarity(image) {
     return results;
 }
 
-},{"./../../util/channel":255,"new-array":113}],239:[function(require,module,exports){
+},{"./../../util/channel":256,"new-array":113}],240:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27829,7 +27926,7 @@ function setBorder() {
     return this;
 }
 
-},{"new-array":113}],240:[function(require,module,exports){
+},{"new-array":113}],241:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27873,7 +27970,7 @@ function setChannel(channel, image) {
     return this;
 }
 
-},{"./../../util/channel":255}],241:[function(require,module,exports){
+},{"./../../util/channel":256}],242:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27914,7 +28011,7 @@ function setMatrix(matrix) {
     }
 }
 
-},{}],242:[function(require,module,exports){
+},{}],243:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27989,7 +28086,7 @@ function split() {
     return images;
 }
 
-},{"../../stack/Stack":246,"../Image":145}],243:[function(require,module,exports){
+},{"../../stack/Stack":247,"../Image":145}],244:[function(require,module,exports){
 'use strict';
 
 var _environment = require('./image/environment');
@@ -28019,7 +28116,7 @@ if (_environment.env === 'browser') {
     exports.Worker = require('./worker/worker').default;
 }
 
-},{"./image/Image":145,"./image/environment":159,"./image/transform/greyAlgorithms":203,"./image/transform/mask/maskAlgorithms":211,"./kernel/kernel":244,"./stack/Stack":246,"./util/shape":263,"./worker/worker":267,"array-includes":2}],244:[function(require,module,exports){
+},{"./image/Image":145,"./image/environment":159,"./image/transform/greyAlgorithms":204,"./image/transform/mask/maskAlgorithms":212,"./kernel/kernel":245,"./stack/Stack":247,"./util/shape":264,"./worker/worker":268,"array-includes":2}],245:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28047,7 +28144,7 @@ Object.defineProperty(exports, 'laplacianOfGaussian', {
   }
 });
 
-},{"../util/kernels":261,"./laplacianOfGaussian":245}],245:[function(require,module,exports){
+},{"../util/kernels":262,"./laplacianOfGaussian":246}],246:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28080,7 +28177,7 @@ function laplacianOfGaussian(sigma, nPoints, factor) {
     return kernel;
 }
 
-},{}],246:[function(require,module,exports){
+},{}],247:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28245,7 +28342,7 @@ if (!Array[Symbol.species]) {
 
 (0, _extend2.default)(Stack);
 
-},{"../image/Image":145,"./extend":252,"has-own":44}],247:[function(require,module,exports){
+},{"../image/Image":145,"./extend":253,"has-own":44}],248:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28273,7 +28370,7 @@ function histogram(options) {
     return histogram;
 }
 
-},{}],248:[function(require,module,exports){
+},{}],249:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28304,7 +28401,7 @@ function histograms(options) {
     return histograms;
 }
 
-},{}],249:[function(require,module,exports){
+},{}],250:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28331,7 +28428,7 @@ function max() {
     return max;
 }
 
-},{}],250:[function(require,module,exports){
+},{}],251:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28361,7 +28458,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":259}],251:[function(require,module,exports){
+},{"../../util/histogram":260}],252:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28387,7 +28484,7 @@ function min() {
     return min;
 }
 
-},{}],252:[function(require,module,exports){
+},{}],253:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28438,7 +28535,7 @@ function extend(Stack) {
     Stack.extendMethod('getAverage', _average2.default);
 }
 
-},{"./compute/histogram":247,"./compute/histograms":248,"./compute/max":249,"./compute/median":250,"./compute/min":251,"./transform/matchAndCrop":253,"./utility/average":254}],253:[function(require,module,exports){
+},{"./compute/histogram":248,"./compute/histograms":249,"./compute/max":250,"./compute/median":251,"./compute/min":252,"./transform/matchAndCrop":254,"./utility/average":255}],254:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28550,7 +28647,7 @@ function matchAndCrop() {
     return new _Stack2.default(newImages);
 }
 
-},{"../Stack":246}],254:[function(require,module,exports){
+},{"../Stack":247}],255:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28592,7 +28689,7 @@ function average() {
     return image;
 }
 
-},{"../../image/Image":145}],255:[function(require,module,exports){
+},{"../../image/Image":145}],256:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28749,7 +28846,7 @@ function validateChannel(image, channel) {
     return channel;
 }
 
-},{"../image/model/model":185}],256:[function(require,module,exports){
+},{"../image/model/model":185}],257:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28828,7 +28925,7 @@ function getRandomColor() {
     return [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)];
 }
 
-},{"color-functions":9}],257:[function(require,module,exports){
+},{"color-functions":9}],258:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28898,7 +28995,7 @@ function factorDimensions(factor, width, height) {
     };
 }
 
-},{}],258:[function(require,module,exports){
+},{}],259:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28907,7 +29004,7 @@ Object.defineProperty(exports, "__esModule", {
 var dxs = exports.dxs = [+1, 0, -1, 0, +1, +1, -1, -1];
 var dys = exports.dys = [0, +1, 0, -1, +1, -1, +1, -1];
 
-},{}],259:[function(require,module,exports){
+},{}],260:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28971,7 +29068,7 @@ function mean(histogram) {
     return sum / total;
 }
 
-},{}],260:[function(require,module,exports){
+},{}],261:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29020,7 +29117,7 @@ function validateKernel(kernel) {
     return { kernel: kernel, kWidth: kWidth, kHeight: kHeight };
 }
 
-},{"is-integer":53}],261:[function(require,module,exports){
+},{"is-integer":53}],262:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29038,7 +29135,7 @@ var SECOND_DERIVATIVE = exports.SECOND_DERIVATIVE = [[-1, -2, 0, 2, 1], [-2, -4,
 
 var SECOND_DERIVATIVE_INV = exports.SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
 
-},{}],262:[function(require,module,exports){
+},{}],263:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29109,7 +29206,7 @@ Matrix.prototype.localSearch = function (x, y, value) {
     return results;
 };
 
-},{}],263:[function(require,module,exports){
+},{}],264:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29315,7 +29412,7 @@ function triangle(width, height, options) {
     return matrix;
 }
 
-},{"../image/Image":145,"../image/kindNames":182,"ml-matrix":86}],264:[function(require,module,exports){
+},{"../image/Image":145,"../image/kindNames":182,"ml-matrix":86}],265:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29350,7 +29447,7 @@ function checkNumberArray(value) {
     }
 }
 
-},{"../image/Image":145,"is-array-type":49}],265:[function(require,module,exports){
+},{"../image/Image":145,"is-array-type":49}],266:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29368,7 +29465,7 @@ function extend(Worker) {
     Worker.extendMethod('background', _background2.default);
 }
 
-},{"./process/background":266}],266:[function(require,module,exports){
+},{"./process/background":267}],267:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29468,7 +29565,7 @@ function work() {
 
 exports.default = { run: run, work: work };
 
-},{"../../image/Image":145,"extend":35}],267:[function(require,module,exports){
+},{"../../image/Image":145,"extend":35}],268:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29540,5 +29637,5 @@ class Worker {
 
 exports.default = new Worker();
 
-},{"./extend":265,"web-worker-manager":143}]},{},[243])(243)
+},{"./extend":266,"web-worker-manager":143}]},{},[244])(244)
 });
