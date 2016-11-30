@@ -558,11 +558,18 @@ export default class Image {
     /**
      * Creates a base64 string from the image.
      * @param {string} [type='image/png']
-     * @return {string}
+     * @param {boolean} [async=false]
+     * @return {string|Promise<string>}
      */
-    toBase64(type = 'image/png') {
-        const dataURL = this.toDataURL(type);
-        return dataURL.replace(`data:${type};base64,`, '');
+    toBase64(type = 'image/png', async = false) {
+        if (async) {
+            return this.toDataURL(type, true).then(function (dataURL) {
+                return dataURL.substring(dataURL.indexOf(',') + 1);
+            });
+        } else {
+            const dataURL = this.toDataURL(type);
+            return dataURL.substring(dataURL.indexOf(',') + 1);
+        }
     }
 
     /**

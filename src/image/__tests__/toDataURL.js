@@ -24,4 +24,17 @@ describe('toDataURL and toBase64', function () {
         base64.should.be.a.String();
         base64.should.equal(dataURL.substring(dataURL.indexOf(',') + 1));
     });
+
+    it('toBase64 (async jpeg)', function () {
+        const image = getSquare();
+        return Promise.all([
+            image.toBase64('jpeg', true),
+            image.toDataURL('jpeg', true)
+        ]).then(function (result) {
+            const base64 = result[0];
+            const dataURL = result[1];
+            base64.should.be.a.String();
+            base64.should.equal(dataURL.substring(dataURL.indexOf(',') + 1));
+        });
+    });
 });
