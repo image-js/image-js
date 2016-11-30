@@ -20018,12 +20018,23 @@ class Image {
     /**
      * Creates a dataURL string from the image.
      * @param {string} [type='image/png']
-     * @return {string}
+     * @param {boolean} [async=false] - set to true to asynchronously generate the dataURL
+     * This is required on Node.js for jpeg compression.
+     * @return {string|Promise<string>}
      */
     toDataURL() {
         var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'image/png';
+        var async = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-        return this.getCanvas().toDataURL((0, _mediaTypes.getType)(type));
+        if (async) {
+            return new Promise((resolve, reject) => {
+                this.getCanvas().toDataURL((0, _mediaTypes.getType)(type), function (err, text) {
+                    if (err) reject(err);else resolve(text);
+                });
+            });
+        } else {
+            return this.getCanvas().toDataURL((0, _mediaTypes.getType)(type));
+        }
     }
 
     /**
