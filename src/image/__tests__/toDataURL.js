@@ -8,6 +8,15 @@ describe('toDataURL and toBase64', function () {
         dataURL.should.startWith('data:image/png;base64,');
     });
 
+    it('toDataURL (async jpeg)', function () {
+        const image = getSquare();
+        const dataURL = image.toDataURL('jpeg', true);
+        return Promise.all([
+            dataURL.should.eventually.be.a.String(),
+            dataURL.should.eventually.startWith('data:image/jpeg;base64,')
+        ]);
+    });
+
     it('toBase64', function () {
         const image = getSquare();
         const dataURL = image.toDataURL();
