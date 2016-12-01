@@ -48,15 +48,12 @@ export default function rotateFree(degrees, options = {}) {
                 let xDiff = x - x1;
                 let yDiff = y - y1;
                 for (let c = 0; c < this.channels; c++) {
-
-
                     if (x < 0 || x >= width || y < 0 || y >= height) {
                         if (this.alpha) {
                             newImageRotated.setValueXY(i, j, c, this.alpha);
                         } else {
                             newImageRotated.setValueXY(i, j, c, this.maxValue);
                         }
-
                     } else {
                         let index = (y1 * this.width + x1) * this.channels + c;
 
@@ -65,8 +62,7 @@ export default function rotateFree(degrees, options = {}) {
                         let C = this.data[index + stride];
                         let D = this.data[index + stride + this.channels];
 
-                        let result = (A * (1 - xDiff) * (1 - yDiff) + B * (xDiff) * (1 - yDiff) + C * (yDiff) * (1 - xDiff)
-                            + D * (xDiff * yDiff)) | 0;
+                        let result = (A + xDiff * (B - A) + yDiff * (C - A) + xDiff * yDiff * (A - B - C + D)) | 0;
 
                         newImageRotated.setValueXY(i, j, c, result);
                     }
