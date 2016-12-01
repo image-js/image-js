@@ -1,4 +1,4 @@
-import {Image, getSquare} from 'test/common';
+import {Image} from 'test/common';
 
 describe('check the rotate transform', function () {
     it('90 degrees clockwise grey', function () {
