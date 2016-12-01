@@ -64,11 +64,4 @@ describe('check the rotate transform', function () {
         const rotateMin270 = image.rotate(-270);
         Array.from(rotate90.data).should.eql(Array.from(rotateMin270.data));
     });
-
-    it('unsupported angle', function () {
-        (function () {
-            const image = getSquare();
-            image.rotate(10);
-        }).should.throw(/free angle rotation is currently not supported/);
-    });
 });
