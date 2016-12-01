@@ -38,6 +38,7 @@ export default function rotateFree(degrees, options = {}) {
 
 
     if (interpolation === 'bilinear') {
+        let stride = this.width * this.channels;
         for (let i = 0; i < newWidth; i += 1) {
             for (let j = 0; j < newHeight; j += 1) {
                 let x = ((i - x0) * cos - (j - y0) * sin + x0) + incrementX;
@@ -49,7 +50,7 @@ export default function rotateFree(degrees, options = {}) {
                 for (let c = 0; c < this.channels; c++) {
 
 
-                    if (x < 0 || x > width || y < 0 || y > height) {
+                    if (x < 0 || x >= width || y < 0 || y >= height) {
                         if (this.alpha) {
                             newImageRotated.setValueXY(i, j, c, this.alpha);
                         } else {
@@ -61,8 +62,8 @@ export default function rotateFree(degrees, options = {}) {
 
                         let A = this.data[index];
                         let B = this.data[index + this.channels];
-                        let C = this.data[index + this.width * this.channels];
-                        let D = this.data[index + this.width * this.channels + this.channels];
+                        let C = this.data[index + stride];
+                        let D = this.data[index + stride + this.channels];
 
                         let result = (A * (1 - xDiff) * (1 - yDiff) + B * (xDiff) * (1 - yDiff) + C * (yDiff) * (1 - xDiff)
                             + D * (xDiff * yDiff)) | 0;
