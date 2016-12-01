@@ -20300,7 +20300,7 @@ exports.default = Image;
 (0, _extend2.default)(Image);
 (0, _bitMethods2.default)(Image);
 
-},{"../stack/Stack":249,"./bitMethods":147,"./environment":160,"./extend":161,"./kind":182,"./kindNames":183,"./load":184,"./mediaTypes":185,"./model/model":186,"./roi/manager":201,"blob-util":6,"extend":35,"fs":8,"has-own":44}],147:[function(require,module,exports){
+},{"../stack/Stack":250,"./bitMethods":147,"./environment":160,"./extend":161,"./kind":182,"./kindNames":183,"./load":184,"./mediaTypes":185,"./model/model":186,"./roi/manager":201,"blob-util":6,"extend":35,"fs":8,"has-own":44}],147:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20807,7 +20807,7 @@ function mean() {
     return result;
 }
 
-},{"../../util/histogram":262}],154:[function(require,module,exports){
+},{"../../util/histogram":263}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20833,7 +20833,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":262}],155:[function(require,module,exports){
+},{"../../util/histogram":263}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21436,7 +21436,7 @@ function extend(Image) {
 // transforms
 // filters
 
-},{"./compute/colorHistogram":148,"./compute/countAlphaPixels":149,"./compute/histogram":150,"./compute/localMaxima":151,"./compute/max":152,"./compute/mean":153,"./compute/median":154,"./compute/min":155,"./compute/points":156,"./compute/relativePosition":157,"./compute/sum":158,"./compute/svd":159,"./filter/add":162,"./filter/background":163,"./filter/blurFilter":164,"./filter/divide":165,"./filter/flipX":166,"./filter/flipY":167,"./filter/gaussianFilter":168,"./filter/hypotenuse":169,"./filter/invert":170,"./filter/invertApply":171,"./filter/invertBinaryLoop":172,"./filter/invertGetSet":173,"./filter/invertIterator":174,"./filter/invertOneLoop":175,"./filter/invertPixel":176,"./filter/level":177,"./filter/medianFilter":178,"./filter/multiply":179,"./filter/sobelFilter":180,"./filter/subtract":181,"./operator/convolution":187,"./operator/convolutionFft":188,"./operator/extract":189,"./operator/paintLabels":190,"./operator/paintMasks":191,"./operator/paintPoints":192,"./transform/cmyk":202,"./transform/colorDepth":203,"./transform/crop":204,"./transform/grey":205,"./transform/hsl":207,"./transform/hsv":208,"./transform/mask/mask":213,"./transform/pad":226,"./transform/resizeBinary":227,"./transform/rgba8":228,"./transform/rotate":229,"./transform/scale/scale":231,"./utility/combineChannels":232,"./utility/getBestMatch":234,"./utility/getChannel":235,"./utility/getColumn":236,"./utility/getMatrix":237,"./utility/getPixelsArray":238,"./utility/getPixelsGrid":239,"./utility/getRow":240,"./utility/getSimilarity":241,"./utility/setBorder":242,"./utility/setChannel":243,"./utility/setMatrix":244,"./utility/split":245}],162:[function(require,module,exports){
+},{"./compute/colorHistogram":148,"./compute/countAlphaPixels":149,"./compute/histogram":150,"./compute/localMaxima":151,"./compute/max":152,"./compute/mean":153,"./compute/median":154,"./compute/min":155,"./compute/points":156,"./compute/relativePosition":157,"./compute/sum":158,"./compute/svd":159,"./filter/add":162,"./filter/background":163,"./filter/blurFilter":164,"./filter/divide":165,"./filter/flipX":166,"./filter/flipY":167,"./filter/gaussianFilter":168,"./filter/hypotenuse":169,"./filter/invert":170,"./filter/invertApply":171,"./filter/invertBinaryLoop":172,"./filter/invertGetSet":173,"./filter/invertIterator":174,"./filter/invertOneLoop":175,"./filter/invertPixel":176,"./filter/level":177,"./filter/medianFilter":178,"./filter/multiply":179,"./filter/sobelFilter":180,"./filter/subtract":181,"./operator/convolution":187,"./operator/convolutionFft":188,"./operator/extract":189,"./operator/paintLabels":190,"./operator/paintMasks":191,"./operator/paintPoints":192,"./transform/cmyk":202,"./transform/colorDepth":203,"./transform/crop":204,"./transform/grey":205,"./transform/hsl":207,"./transform/hsv":208,"./transform/mask/mask":213,"./transform/pad":226,"./transform/resizeBinary":227,"./transform/rgba8":228,"./transform/rotate":229,"./transform/scale/scale":232,"./utility/combineChannels":233,"./utility/getBestMatch":235,"./utility/getChannel":236,"./utility/getColumn":237,"./utility/getMatrix":238,"./utility/getPixelsArray":239,"./utility/getPixelsGrid":240,"./utility/getRow":241,"./utility/getSimilarity":242,"./utility/setBorder":243,"./utility/setChannel":244,"./utility/setMatrix":245,"./utility/split":246}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21490,7 +21490,7 @@ function add(value) {
     return this;
 }
 
-},{"../../util/channel":258,"../../util/value":267}],163:[function(require,module,exports){
+},{"../../util/channel":259,"../../util/value":268}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21630,7 +21630,7 @@ function divide(value) {
     return this;
 }
 
-},{"../../util/channel":258,"../../util/value":267}],166:[function(require,module,exports){
+},{"../../util/channel":259,"../../util/value":268}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21885,7 +21885,7 @@ function hypotenuse(otherImage) {
     return newImage;
 }
 
-},{"../../util/channel":258,"../Image":146}],170:[function(require,module,exports){
+},{"../../util/channel":259,"../Image":146}],170:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21939,7 +21939,7 @@ function invert() {
     return this;
 } // we try the faster methods
 
-},{"../../util/channel":258}],171:[function(require,module,exports){
+},{"../../util/channel":259}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22210,7 +22210,7 @@ function processImage(image, min, max, channels) {
     }
 }
 
-},{"../../util/channel":258,"new-array":114}],178:[function(require,module,exports){
+},{"../../util/channel":259,"new-array":114}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22300,7 +22300,7 @@ function medianFilter() {
     return newImage;
 } //End median function
 
-},{"../../util/channel":258,"../Image":146,"num-sort":115}],179:[function(require,module,exports){
+},{"../../util/channel":259,"../Image":146,"num-sort":115}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22355,7 +22355,7 @@ function multiply(value) {
     return this;
 }
 
-},{"../../util/channel":258,"../../util/value":267}],180:[function(require,module,exports){
+},{"../../util/channel":259,"../../util/value":268}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22411,7 +22411,7 @@ function sobelFilter() {
     return gX.hypotenuse(gY, { bitDepth: this.bitDepth, channels: channels });
 }
 
-},{"../../util/kernels":264,"../operator/convolution":187}],181:[function(require,module,exports){
+},{"../../util/kernels":265,"../operator/convolution":187}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22463,7 +22463,7 @@ function subtract(value) {
     return this;
 }
 
-},{"../../util/channel":258,"../../util/value":267}],182:[function(require,module,exports){
+},{"../../util/channel":259,"../../util/value":268}],182:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22786,7 +22786,7 @@ function loadGeneric(url, options) {
     });
 }
 
-},{"../stack/Stack":249,"./Image":146,"./environment":160,"atob-lite":5,"fast-jpeg":37,"fast-png":39,"image-type":46,"tiff":138}],185:[function(require,module,exports){
+},{"../stack/Stack":250,"./Image":146,"./environment":160,"atob-lite":5,"fast-jpeg":37,"fast-png":39,"image-type":46,"tiff":138}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22999,7 +22999,7 @@ function convolution(kernel) {
     return newImage;
 }
 
-},{"../../util/channel":258,"../../util/kernel":263,"../Image":146,"ml-matrix-convolution":78}],188:[function(require,module,exports){
+},{"../../util/channel":259,"../../util/kernel":264,"../Image":146,"ml-matrix-convolution":78}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23203,7 +23203,7 @@ function paintLabels(labels, positions) {
     return this;
 }
 
-},{"../../util/color":259,"../model/model":186}],191:[function(require,module,exports){
+},{"../../util/color":260,"../model/model":186}],191:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23323,7 +23323,7 @@ function paintMasks(masks) {
     return this;
 }
 
-},{"../../util/color":259,"../model/model":186}],192:[function(require,module,exports){
+},{"../../util/color":260,"../model/model":186}],192:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23384,7 +23384,7 @@ function paintPoints(points) {
     return this;
 }
 
-},{"../../util/shape":266,"../model/model":186}],193:[function(require,module,exports){
+},{"../../util/shape":267,"../model/model":186}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24016,7 +24016,7 @@ function getInternalIDs(roi) {
     return internal;
 }
 
-},{"../../util/shape":266,"../Image":146,"../kindNames":183}],194:[function(require,module,exports){
+},{"../../util/shape":267,"../Image":146,"../kindNames":183}],194:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24681,7 +24681,7 @@ function fromPoints(pointsToPaint) {
     return new _RoiMap2.default(this, data);
 }
 
-},{"../RoiMap":195,"./../../../util/shape":266}],200:[function(require,module,exports){
+},{"../RoiMap":195,"./../../../util/shape":267}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24799,7 +24799,7 @@ function fromWaterShed() {
     return new _RoiMap2.default(currentImage, data);
 }
 
-},{"../RoiMap":195,"./../../../util/dxdy.js":261,"js-priority-queue":56}],201:[function(require,module,exports){
+},{"../RoiMap":195,"./../../../util/dxdy.js":262,"js-priority-queue":56}],201:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26170,7 +26170,7 @@ function mask() {
     return newImage;
 }
 
-},{"../../../util/converter":260,"../../Image":146,"./maskAlgorithms":214}],214:[function(require,module,exports){
+},{"../../../util/converter":261,"../../Image":146,"./maskAlgorithms":214}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27219,7 +27219,7 @@ function pad() {
     return newImage;
 }
 
-},{"../Image":146,"../utility/copy":233,"new-array":114}],227:[function(require,module,exports){
+},{"../Image":146,"../utility/copy":234,"new-array":114}],227:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27323,6 +27323,10 @@ var _Image = require('../Image');
 
 var _Image2 = _interopRequireDefault(_Image);
 
+var _rotateFree = require('./rotateFree');
+
+var _rotateFree2 = _interopRequireDefault(_rotateFree);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -27330,9 +27334,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @memberof Image
  * @instance
  * @param {number} angle - angle of the rotation in degrees
+ * @param {object} [options]
  * @return {Image} The new rotated image
  */
-function rotate(angle) {
+function rotate(angle, options) {
     if (typeof angle !== 'number') {
         throw new TypeError('angle must be a number');
     }
@@ -27351,8 +27356,7 @@ function rotate(angle) {
         case 270:
             return rotateLeft.call(this);
         default:
-            // todo add support for free angle rotation
-            throw new Error('free angle rotation is currently not supported');
+            return _rotateFree2.default.call(this, angle, options);
     }
 }
 
@@ -27409,7 +27413,116 @@ function rotate180() {
     return newImage;
 }
 
-},{"../Image":146}],230:[function(require,module,exports){
+},{"../Image":146,"./rotateFree":230}],230:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = rotateFree;
+
+var _Image = require('../Image');
+
+var _Image2 = _interopRequireDefault(_Image);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function rotateFree(degrees) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var _options$interpolatio = options.interpolation,
+        interpolation = _options$interpolatio === undefined ? 'none' : _options$interpolatio,
+        _options$width = options.width,
+        width = _options$width === undefined ? this.width : _options$width,
+        _options$height = options.height,
+        height = _options$height === undefined ? this.height : _options$height;
+
+
+    var radians = degrees * Math.PI / 180;
+    var newWidth = Math.floor(Math.abs(width * Math.cos(radians)) + Math.abs(height * Math.sin(radians)));
+    var newHeight = Math.floor(Math.abs(height * Math.cos(radians)) + Math.abs(width * Math.sin(radians)));
+    var newImageRotated = _Image2.default.createFrom(this, { width: newWidth, height: newHeight });
+    var cos = Math.cos(-radians);
+    var sin = Math.sin(-radians);
+
+    var x0 = newWidth / 2;
+    var y0 = newHeight / 2;
+    if (newWidth % 2 === 0) {
+        x0 = x0 - 0.5;
+        if (newHeight % 2 === 0) {
+            y0 = y0 - 0.5;
+        } else {
+            y0 = Math.floor(y0);
+        }
+    } else {
+        x0 = Math.floor(x0);
+        if (newHeight % 2 === 0) {
+            y0 = y0 - 0.5;
+        } else {
+            y0 = Math.floor(y0);
+        }
+    }
+
+    var incrementX = Math.floor(width / 2 - x0);
+    var incrementY = Math.floor(height / 2 - y0);
+
+    if (interpolation === 'bilinear') {
+        for (var i = 0; i < newWidth; i += 1) {
+            for (var j = 0; j < newHeight; j += 1) {
+                var x = (i - x0) * cos - (j - y0) * sin + x0 + incrementX;
+                var y = (j - y0) * cos + (i - x0) * sin + y0 + incrementY;
+                var x1 = x | 0;
+                var y1 = y | 0;
+                var xDiff = x - x1;
+                var yDiff = y - y1;
+                for (var c = 0; c < this.channels; c++) {
+
+                    if (x < 0 || x > width || y < 0 || y > height) {
+                        if (this.alpha) {
+                            newImageRotated.setValueXY(i, j, c, this.alpha);
+                        } else {
+                            newImageRotated.setValueXY(i, j, c, this.maxValue);
+                        }
+                    } else {
+                        var index = (y1 * this.width + x1) * this.channels + c;
+
+                        var A = this.data[index];
+                        var B = this.data[index + this.channels];
+                        var C = this.data[index + this.width * this.channels];
+                        var D = this.data[index + this.width * this.channels + this.channels];
+
+                        var result = A * (1 - xDiff) * (1 - yDiff) + B * xDiff * (1 - yDiff) + C * yDiff * (1 - xDiff) + D * (xDiff * yDiff) | 0;
+
+                        newImageRotated.setValueXY(i, j, c, result);
+                    }
+                }
+            }
+        }
+    } else {
+        for (var _i = 0; _i < newWidth; _i += 1) {
+            for (var _j = 0; _j < newHeight; _j += 1) {
+                for (var _c = 0; _c < this.channels; _c++) {
+                    var _x2 = Math.round((_i - x0) * cos - (_j - y0) * sin + x0) + incrementX;
+                    var _y = Math.round((_j - y0) * cos + (_i - x0) * sin + y0) + incrementY;
+
+                    if (_x2 < 0 || _x2 >= width || _y < 0 || _y >= height) {
+                        if (this.alpha) {
+                            newImageRotated.setValueXY(_i, _j, _c, this.alpha);
+                        } else {
+                            newImageRotated.setValueXY(_i, _j, _c, this.maxValue);
+                        }
+                    } else {
+                        newImageRotated.setValueXY(_i, _j, _c, this.getValueXY(_x2, _y, _c));
+                    }
+                }
+            }
+        }
+    }
+
+    return newImageRotated;
+} //http://homepages.inf.ed.ac.uk/rbf/HIPR2/rotate.htm
+//http://www.cyut.edu.tw/~yltang/program/Rotate1.java
+
+},{"../Image":146}],231:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27450,7 +27563,7 @@ function nearestNeighbor(newImage, newWidth, newHeight) {
     }
 }
 
-},{}],231:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27534,7 +27647,7 @@ function scale() {
     return newImage;
 }
 
-},{"../../../util/converter":260,"../../Image":146,"./nearestNeighbor":230}],232:[function(require,module,exports){
+},{"../../../util/converter":261,"../../Image":146,"./nearestNeighbor":231}],233:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27601,7 +27714,7 @@ function defaultCombineMethod(pixel) {
     return (pixel[0] + pixel[1] + pixel[2]) / 3;
 }
 
-},{"../Image":146}],233:[function(require,module,exports){
+},{"../Image":146}],234:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27633,7 +27746,7 @@ function copyImage(fromImage, toImage, x, y) {
     }
 }
 
-},{}],234:[function(require,module,exports){
+},{}],235:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27703,7 +27816,7 @@ function match(image) {
     return [currentX - middleX, currentY - middleY];
 }
 
-},{"../../util/matrix":265}],235:[function(require,module,exports){
+},{"../../util/matrix":266}],236:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27766,7 +27879,7 @@ function getChannel(channel) {
     return newImage;
 }
 
-},{"../Image":146,"./../../util/channel":258}],236:[function(require,module,exports){
+},{"../Image":146,"./../../util/channel":259}],237:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27800,7 +27913,7 @@ function getColumn(column) {
     return array;
 }
 
-},{}],237:[function(require,module,exports){
+},{}],238:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27846,7 +27959,7 @@ function getMatrix() {
     return matrix;
 }
 
-},{"ml-matrix":87}],238:[function(require,module,exports){
+},{"ml-matrix":87}],239:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27878,7 +27991,7 @@ function getPixelsArray() {
     return array;
 }
 
-},{}],239:[function(require,module,exports){
+},{}],240:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27952,7 +28065,7 @@ function getPixelsGrid() {
     return toReturn;
 }
 
-},{}],240:[function(require,module,exports){
+},{}],241:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27987,7 +28100,7 @@ function getRow(row) {
     return array;
 }
 
-},{}],241:[function(require,module,exports){
+},{}],242:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28076,7 +28189,7 @@ function getSimilarity(image) {
     return results;
 }
 
-},{"./../../util/channel":258,"new-array":114}],242:[function(require,module,exports){
+},{"./../../util/channel":259,"new-array":114}],243:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28163,7 +28276,7 @@ function setBorder() {
     return this;
 }
 
-},{"new-array":114}],243:[function(require,module,exports){
+},{"new-array":114}],244:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28207,7 +28320,7 @@ function setChannel(channel, image) {
     return this;
 }
 
-},{"./../../util/channel":258}],244:[function(require,module,exports){
+},{"./../../util/channel":259}],245:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28248,7 +28361,7 @@ function setMatrix(matrix) {
     }
 }
 
-},{}],245:[function(require,module,exports){
+},{}],246:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28323,7 +28436,7 @@ function split() {
     return images;
 }
 
-},{"../../stack/Stack":249,"../Image":146}],246:[function(require,module,exports){
+},{"../../stack/Stack":250,"../Image":146}],247:[function(require,module,exports){
 'use strict';
 
 var _environment = require('./image/environment');
@@ -28353,7 +28466,7 @@ if (_environment.env === 'browser') {
     exports.Worker = require('./worker/worker').default;
 }
 
-},{"./image/Image":146,"./image/environment":160,"./image/transform/greyAlgorithms":206,"./image/transform/mask/maskAlgorithms":214,"./kernel/kernel":247,"./stack/Stack":249,"./util/shape":266,"./worker/worker":270,"array-includes":2}],247:[function(require,module,exports){
+},{"./image/Image":146,"./image/environment":160,"./image/transform/greyAlgorithms":206,"./image/transform/mask/maskAlgorithms":214,"./kernel/kernel":248,"./stack/Stack":250,"./util/shape":267,"./worker/worker":271,"array-includes":2}],248:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28381,7 +28494,7 @@ Object.defineProperty(exports, 'laplacianOfGaussian', {
   }
 });
 
-},{"../util/kernels":264,"./laplacianOfGaussian":248}],248:[function(require,module,exports){
+},{"../util/kernels":265,"./laplacianOfGaussian":249}],249:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28414,7 +28527,7 @@ function laplacianOfGaussian(sigma, nPoints, factor) {
     return kernel;
 }
 
-},{}],249:[function(require,module,exports){
+},{}],250:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28579,7 +28692,7 @@ if (!Array[Symbol.species]) {
 
 (0, _extend2.default)(Stack);
 
-},{"../image/Image":146,"./extend":255,"has-own":44}],250:[function(require,module,exports){
+},{"../image/Image":146,"./extend":256,"has-own":44}],251:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28607,7 +28720,7 @@ function histogram(options) {
     return histogram;
 }
 
-},{}],251:[function(require,module,exports){
+},{}],252:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28638,7 +28751,7 @@ function histograms(options) {
     return histograms;
 }
 
-},{}],252:[function(require,module,exports){
+},{}],253:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28665,7 +28778,7 @@ function max() {
     return max;
 }
 
-},{}],253:[function(require,module,exports){
+},{}],254:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28695,7 +28808,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":262}],254:[function(require,module,exports){
+},{"../../util/histogram":263}],255:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28721,7 +28834,7 @@ function min() {
     return min;
 }
 
-},{}],255:[function(require,module,exports){
+},{}],256:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28772,7 +28885,7 @@ function extend(Stack) {
     Stack.extendMethod('getAverage', _average2.default);
 }
 
-},{"./compute/histogram":250,"./compute/histograms":251,"./compute/max":252,"./compute/median":253,"./compute/min":254,"./transform/matchAndCrop":256,"./utility/average":257}],256:[function(require,module,exports){
+},{"./compute/histogram":251,"./compute/histograms":252,"./compute/max":253,"./compute/median":254,"./compute/min":255,"./transform/matchAndCrop":257,"./utility/average":258}],257:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28884,7 +28997,7 @@ function matchAndCrop() {
     return new _Stack2.default(newImages);
 }
 
-},{"../Stack":249}],257:[function(require,module,exports){
+},{"../Stack":250}],258:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28926,7 +29039,7 @@ function average() {
     return image;
 }
 
-},{"../../image/Image":146}],258:[function(require,module,exports){
+},{"../../image/Image":146}],259:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29083,7 +29196,7 @@ function validateChannel(image, channel) {
     return channel;
 }
 
-},{"../image/model/model":186}],259:[function(require,module,exports){
+},{"../image/model/model":186}],260:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29162,7 +29275,7 @@ function getRandomColor() {
     return [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)];
 }
 
-},{"color-functions":9}],260:[function(require,module,exports){
+},{"color-functions":9}],261:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29232,7 +29345,7 @@ function factorDimensions(factor, width, height) {
     };
 }
 
-},{}],261:[function(require,module,exports){
+},{}],262:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29241,7 +29354,7 @@ Object.defineProperty(exports, "__esModule", {
 var dxs = exports.dxs = [+1, 0, -1, 0, +1, +1, -1, -1];
 var dys = exports.dys = [0, +1, 0, -1, +1, -1, +1, -1];
 
-},{}],262:[function(require,module,exports){
+},{}],263:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29305,7 +29418,7 @@ function mean(histogram) {
     return sum / total;
 }
 
-},{}],263:[function(require,module,exports){
+},{}],264:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29354,7 +29467,7 @@ function validateKernel(kernel) {
     return { kernel: kernel, kWidth: kWidth, kHeight: kHeight };
 }
 
-},{"is-integer":53}],264:[function(require,module,exports){
+},{"is-integer":53}],265:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29372,7 +29485,7 @@ var SECOND_DERIVATIVE = exports.SECOND_DERIVATIVE = [[-1, -2, 0, 2, 1], [-2, -4,
 
 var SECOND_DERIVATIVE_INV = exports.SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
 
-},{}],265:[function(require,module,exports){
+},{}],266:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29443,7 +29556,7 @@ Matrix.prototype.localSearch = function (x, y, value) {
     return results;
 };
 
-},{}],266:[function(require,module,exports){
+},{}],267:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29649,7 +29762,7 @@ function triangle(width, height, options) {
     return matrix;
 }
 
-},{"../image/Image":146,"../image/kindNames":183,"ml-matrix":87}],267:[function(require,module,exports){
+},{"../image/Image":146,"../image/kindNames":183,"ml-matrix":87}],268:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29684,7 +29797,7 @@ function checkNumberArray(value) {
     }
 }
 
-},{"../image/Image":146,"is-array-type":49}],268:[function(require,module,exports){
+},{"../image/Image":146,"is-array-type":49}],269:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29702,7 +29815,7 @@ function extend(Worker) {
     Worker.extendMethod('background', _background2.default);
 }
 
-},{"./process/background":269}],269:[function(require,module,exports){
+},{"./process/background":270}],270:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29802,7 +29915,7 @@ function work() {
 
 exports.default = { run: run, work: work };
 
-},{"../../image/Image":146,"extend":35}],270:[function(require,module,exports){
+},{"../../image/Image":146,"extend":35}],271:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29874,5 +29987,5 @@ class Worker {
 
 exports.default = new Worker();
 
-},{"./extend":268,"web-worker-manager":144}]},{},[246])(246)
+},{"./extend":269,"web-worker-manager":144}]},{},[247])(247)
 });
