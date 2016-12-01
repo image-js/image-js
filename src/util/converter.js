@@ -1,6 +1,8 @@
 /**
+ * @private
  * Converts a factor value to a number between 0 and 1
- * @param value
+ * @param {string|number} value
+ * @return {number}
  */
 export function getFactor(value) {
     if (typeof value === 'string') {
@@ -14,10 +16,11 @@ export function getFactor(value) {
 }
 
 /**
+ * @private
  * We can specify a threshold as "0.4", "40%" or 123
- * @param value
- * @param maxValue
- * @returns {*}
+ * @param {string|number} value
+ * @param {number} maxValue
+ * @return {number}
  */
 export function getThreshold(value, maxValue) {
     if (!maxValue) {
@@ -37,15 +40,22 @@ export function getThreshold(value, maxValue) {
     } else {
         throw Error('getThreshold : the value is not valid');
     }
-    return value;
 }
-
 
 
 export function factorDimensions(factor, width, height) {
     factor = getFactor(factor);
+    let newWidth =  Math.round(factor * width);
+    let newHeight = Math.round(factor * height);
+
+    if (newWidth <= 0) {
+        newWidth = 1;
+    }
+    if (newHeight <= 0) {
+        newHeight = 1;
+    }
     return {
-        width: Math.round(factor * width),
-        height: Math.round(factor * height)
+        width: newWidth,
+        height: newHeight
     };
 }

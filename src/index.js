@@ -1,5 +1,19 @@
-/* eslint-disable strict */
-'use strict';
+import {env} from './image/environment';
 
-module.exports = exports = require('./image/image');
-exports.Stack = require('./stack/stack');
+// Shim support for Array.prototype.includes
+import arrayIncludes from 'array-includes';
+arrayIncludes.shim();
+
+module.exports = exports = require('./image/Image').default;
+exports.Stack = require('./stack/Stack').default;
+exports.Shape = require('./util/shape').default;
+exports.Kernel = require('./kernel/kernel');
+
+exports.Static = {
+    grey: require('./image/transform/greyAlgorithms').names,
+    mask: require('./image/transform/mask/maskAlgorithms').names
+};
+
+if (env === 'browser') {
+    exports.Worker = require('./worker/worker').default;
+}

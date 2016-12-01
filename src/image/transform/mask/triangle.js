@@ -4,7 +4,6 @@
 // Journal of Histochemistry and Cytochemistry 25 (7), pp. 741-753
 //
 //  modified from Johannes Schindelin plugin
-//
 export default function triangle(histogram) {
 
     // find min and max
@@ -15,7 +14,9 @@ export default function triangle(histogram) {
             break;
         }
     }
-    if (min > 0) min--; // line to the (p==0) point, not to histogram[min]
+    if (min > 0) { // line to the (p==0) point, not to histogram[min]
+        min--;
+    }
 
     // The Triangle algorithm cannot tell whether the data is skewed to one side or another.
     // This causes a problem as there are 2 possible thresholds between the max and the 2 extremes
@@ -28,7 +29,9 @@ export default function triangle(histogram) {
             break;
         }
     }
-    if (min2 < histogram.length - 1) min2++; // line to the (p==0) point, not to data[min]
+    if (min2 < histogram.length - 1) { // line to the (p==0) point, not to data[min]
+        min2++;
+    }
 
     for (let i = 0; i < histogram.length; i++) {
         if (histogram[i] > dmax) {
@@ -57,8 +60,9 @@ export default function triangle(histogram) {
         max = histogram.length - 1 - max;
     }
 
-    if (min === max)
+    if (min === max) {
         return min;
+    }
 
     // describe line by nx * x + ny * y - d = 0
     let nx, ny, d;
@@ -94,7 +98,7 @@ export default function triangle(histogram) {
             right--;
         }
         return (histogram.length - 1 - split);
-    }
-    else
+    } else {
         return split;
+    }
 }

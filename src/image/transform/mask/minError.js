@@ -56,8 +56,7 @@ export default function minError(histogram, total) {
 
         if (isNaN(temp)) {
             threshold = Tprev;
-        }
-        else {
+        } else {
             threshold = Math.floor(temp);
         }
 
@@ -69,7 +68,7 @@ export default function minError(histogram, total) {
 
 function sumA(y, j) {
     let x = 0;
-    for (let i = 0;i <= j; i++) {
+    for (let i = 0; i <= j; i++) {
         x += y[i];
     }
     return x;

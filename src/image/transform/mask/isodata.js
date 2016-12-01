@@ -1,4 +1,4 @@
-/**
+/*
  * see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
  * Isodata: Ridler, TW & Calvard, S (1978), "Picture thresholding using an iterative selection method"
  * IEEE Transactions on Systems, Man and Cybernetics 8: 630-632.
@@ -35,8 +35,9 @@ export default function isodata(histogram) {
         if (totl > 0 && toth > 0) {
             l /= totl;
             h /= toth;
-            if (g ===  Math.round((l + h) / 2.0))
+            if (g ===  Math.round((l + h) / 2.0)) {
                 break;
+            }
         }
         g++;
         if (g > histogram.length - 2) {

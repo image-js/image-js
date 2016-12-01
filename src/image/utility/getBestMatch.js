@@ -1,10 +1,15 @@
-import Image from '../image';
-import newArray from 'new-array';
 import Matrix from '../../util/matrix';
 
-// Try to match the current pictures with another one
-
-export default function match(image, {} = {}) {
+/**
+ * Try to match the current pictures with another one
+ * @memberof Image
+ * @instance
+ * @param {Image} image - Other image to match
+ * @param {object} [options]
+ * @return {number[]}
+ */
+export default function match(image, options = {}) {
+    let {border} = options;
 
     this.checkProcessable('getChannel', {
         bitDepth: [8, 16]
@@ -20,7 +25,7 @@ export default function match(image, {} = {}) {
         throw new Error('Both images must have the same colorModel');
     }
 
-    // there could be many algorithms
+    // there could be many names
     let similarityMatrix = new Matrix(image.width, image.height, -Infinity);
 
     let currentX = Math.floor(image.width / 2);
@@ -33,7 +38,7 @@ export default function match(image, {} = {}) {
         let toCalculatePositions = similarityMatrix.localSearch(currentX, currentY, -Infinity);
         for (let i = 0; i < toCalculatePositions.length; i++) {
             let position = toCalculatePositions[i];
-            let similarity = this.getSimilarity(image, {shift: [middleX - position[0], middleY - position[1]]});
+            let similarity = this.getSimilarity(image, {border: border, shift: [middleX - position[0], middleY - position[1]]});
             similarityMatrix[position[0]][position[1]] = similarity;
         }
 
@@ -48,4 +53,3 @@ export default function match(image, {} = {}) {
 
     return [currentX - middleX, currentY - middleY];
 }
-

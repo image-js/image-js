@@ -5,7 +5,7 @@ Try to create a coherent API that will distinguish:
 * static functions
 
 ### Properties
-* min, max, average, sum, median
+* min, max, average, sum, medianFilter
 * histogram, colorHistogram
 
 ### Properties with options
@@ -25,7 +25,7 @@ There would always be a small prefix in the name of the function
 * applyGaussian()
 * toGrey()
 * getInvert()
-* add(), substract(), multiply(), median ... what to put in front ???
+* add(), substract(), multiply(), medianFilter ... what to put in front ???
 
 ### Static functions
 When the function combines many pictures should we use systematically a static approach ?

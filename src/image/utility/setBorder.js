@@ -1,14 +1,21 @@
-import Image from '../image';
 import array from 'new-array';
 
-// this method will change the border
-// that may not be calculated
-
-export default function setBorder({
-    size = 0,
-    algorithm = 'copy',
-    color
-    } = {}) {
+/**
+ * This method will change the border
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {number} [options.size=0]
+ * @param {string} [options.algorithm='copy']
+ * @param {number[]} [options.color]
+ * @return {this}
+ */
+export default function setBorder(options = {}) {
+    let {
+        size = 0,
+        algorithm = 'copy',
+        color
+    } = options;
 
     this.checkProcessable('setBorder', {
         bitDepth: [8, 16, 32, 64]
@@ -19,21 +26,22 @@ export default function setBorder({
             throw new Error('setBorder: the color array must have the same length as the number of channels. Here: ' + this.channels);
         }
         for (let i = 0; i < color.length; i++) {
-            if (color[i] === 0) color[i] = 0.001;
+            if (color[i] === 0) {
+                color[i] = 0.001;
+            }
         }
     } else {
         color = array(this.channels, null);
     }
 
     if (!Array.isArray(size)) {
-        size = [size,size];
+        size = [size, size];
     }
 
 
     let leftRightSize = size[0];
     let topBottomSize = size[1];
     let channels = this.channels;
-
 
 
     for (let i = leftRightSize; i < this.width - leftRightSize; i++) {
@@ -61,4 +69,6 @@ export default function setBorder({
             }
         }
     }
+
+    return this;
 }

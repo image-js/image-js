@@ -1,7 +1,18 @@
 import newArray from 'new-array';
 import isInteger from 'is-integer';
 
-export function getHistogram({maxSlots = 256, channel, useAlpha = true} = {}) {
+/**
+ * Returns a histogram for the specified channel
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {number} [options.maxSlots=256]
+ * @param {number} [options.channel]
+ * @param {boolean} [options.useAlpha=true]
+ * @return {number[]}
+ */
+export function getHistogram(options = {}) {
+    let {maxSlots = 256, channel, useAlpha = true} = options;
     this.checkProcessable('getHistogram', {
         bitDepth: [8, 16]
     });
@@ -11,23 +22,44 @@ export function getHistogram({maxSlots = 256, channel, useAlpha = true} = {}) {
         }
         channel = 0;
     }
-    return getChannelHistogram.call(this, channel, useAlpha, maxSlots);
+    return getChannelHistogram.call(this, channel, {useAlpha, maxSlots});
 }
 
-export function getHistograms({maxSlots = 256, useAlpha = true} = {}) {
+/**
+ * Returns an array (number of channels) of array (number of slots) containing
+ * the number of data of a specific intensity.
+ * Intensity may be grouped by the maxSlots parameter.
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {number} [options.maxSlots] - Number of slots in the resulting
+ *      array. The intensity will be evently distributed between 0 and
+ *      the maxValue allowed for this image (255 for usual images).
+ *      If maxSlots = 8, all the intensities between 0 and 31 will be
+ *      placed in the slot 0, 32 to 63 in slot 1, ...
+ * @return {Array<Array<number>>}
+ * @example
+ *      image.getHistograms({
+ *          maxSlots: 8,
+ *          useAlpha: false
+ *      });
+ */
+export function getHistograms(options = {}) {
+    const {maxSlots = 256, useAlpha = true} = options;
     this.checkProcessable('getHistograms', {
         bitDepth: [8, 16]
     });
-
-    let results = new Array(this.channels);
-    for (let i = 0; i < this.channels; i++) {
-        results[i] = getChannelHistogram.call(this, i, useAlpha, maxSlots);
+    let results = new Array((useAlpha) ? this.components : this.channels);
+    for (let i = 0; i < results.length; i++) {
+        results[i] = getChannelHistogram.call(this, i, {useAlpha, maxSlots});
     }
     return results;
 }
 
 
-function getChannelHistogram(channel, useAlpha, maxSlots) {
+function getChannelHistogram(channel, options) {
+    let {useAlpha, maxSlots} = options;
+
     let bitSlots = Math.log2(maxSlots);
     if (!isInteger(bitSlots)) {
         throw new RangeError('maxSlots must be a power of 2, for example: 64, 256, 1024');
@@ -37,10 +69,12 @@ function getChannelHistogram(channel, useAlpha, maxSlots) {
     // of 16 grey even if the images has 256 shade of grey
 
     let bitShift = 0;
-    if (this.bitDepth > bitSlots) bitShift = this.bitDepth - bitSlots;
+    if (this.bitDepth > bitSlots) {
+        bitShift = this.bitDepth - bitSlots;
+    }
 
     let data = this.data;
-    let result = newArray(Math.pow(2, Math.min(this.bitDepth, bitSlots)),0);
+    let result = newArray(Math.pow(2, Math.min(this.bitDepth, bitSlots)), 0);
     if (useAlpha && this.alpha) {
         let alphaChannelDiff = this.channels - channel - 1;
 

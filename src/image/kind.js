@@ -1,24 +1,27 @@
 import * as Kind from './kindNames';
-import {RGB} from './model/model';
+import {RGB, CMYK, GREY} from './model/model';
 
 const kinds = {};
 
 kinds[Kind.BINARY] = {
     components: 1,
     alpha: 0,
-    bitDepth: 1
+    bitDepth: 1,
+    colorModel: GREY
 };
 
 kinds[Kind.GREYA] = {
     components: 1,
     alpha: 1,
-    bitDepth: 8
+    bitDepth: 8,
+    colorModel: GREY
 };
 
 kinds[Kind.GREY] = {
     components: 1,
     alpha: 0,
-    bitDepth: 8
+    bitDepth: 8,
+    colorModel: GREY
 };
 
 kinds[Kind.RGBA] = {
@@ -35,6 +38,19 @@ kinds[Kind.RGB] = {
     colorModel: RGB
 };
 
+kinds[Kind.CMYK] = {
+    components: 4,
+    alpha: 0,
+    bitDepth: 8,
+    colorModel: CMYK
+};
+
+kinds[Kind.CMYKA] = {
+    components: 4,
+    alpha: 1,
+    bitDepth: 8,
+    colorModel: CMYK
+};
 
 export function getKind(kind) {
     return kinds[kind];
@@ -74,5 +90,6 @@ export function createPixelArray(image) {
             arr[i] = image.maxValue;
         }
     }
-    image.data = arr;
+
+    return arr;
 }

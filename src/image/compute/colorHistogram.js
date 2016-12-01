@@ -1,9 +1,19 @@
 import newArray from 'new-array';
 
-export default function getColorHistogram({
-    useAlpha = true,
-    nbSlots = 512
-    } = {}) {
+/**
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {boolean} [options.useAlpha=true]
+ * @param {number} [options.nbSlots=512]
+ * @return {number[]}
+ */
+export default function getColorHistogram(options = {}) {
+    let {
+        useAlpha = true,
+        nbSlots = 512
+    } = options;
+
     this.checkProcessable('getColorHistogram', {
         bitDepth: [8, 16],
         components: [3]
@@ -17,7 +27,7 @@ export default function getColorHistogram({
     let bitShift = this.bitDepth - nbSlotsCheck;
 
     let data = this.data;
-    let result = newArray(Math.pow(8, nbSlotsCheck),0);
+    let result = newArray(Math.pow(8, nbSlotsCheck), 0);
     let factor2 = Math.pow(2, nbSlotsCheck * 2);
     let factor1 = Math.pow(2, nbSlotsCheck);
 

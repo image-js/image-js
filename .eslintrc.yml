@@ -1,0 +1,14 @@
+extends: eslint-config-cheminfo
+
+env:
+  browser: true
+  node: true
+  es6: true
+  mocha: true
+
+parserOptions:
+  ecmaVersion: 2017
+  sourceType: module
+
+rules:
+  no-var: 2

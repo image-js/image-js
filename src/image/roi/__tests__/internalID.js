@@ -1,0 +1,66 @@
+import {load} from 'test/common';
+
+/* Image to test:
+11111
+10001
+10101
+10001
+11111
+ */
+
+
+describe('we check the internalMapID', function () {
+    it('should yield the right internalMapIDe', function () {
+        return load('BW5x5.png').then(function (img) {
+
+            let roiManager = img.getRoiManager();
+            let mask = img.mask(0.5, {invert: true});
+            roiManager.fromMask(mask);
+
+            let rois = roiManager.getRois();
+
+            rois.sort(function (a, b) {
+                return a.mask.sizes[0] - b.mask.sizes[0];
+            });
+
+            rois.should.be.an.instanceof(Array).and.lengthOf(3);
+            rois[0].mask.sizes.should.eql([1, 1]);
+            rois[1].mask.sizes.should.eql([3, 3]);
+            rois[2].mask.sizes.should.eql([5, 5]);
+
+            rois[0].internalIDs.should.eql([-2]);
+            rois[1].internalIDs.should.eql([1, -2]);
+            rois[2].internalIDs.should.eql([-1, 1, -2]);
+
+        });
+    });
+});
+
+
+describe('we check the internalMapID with complex image', function () {
+    it('should yield the right internapMapIDs', function () {
+        return load('BW15x15transparent.png').then(function (img) {
+            let grey = img.grey({allowGrey: true});
+            // console.log(grey.getMatrix());
+            let mask = grey.mask(0.5);
+
+            let roiManager = img.getRoiManager();
+            roiManager.fromMask(mask);
+
+            let rois = roiManager.getRois();
+
+            rois.sort(function (a, b) {
+                return a.internalIDs[0] - b.internalIDs[0];
+            });
+
+            rois.should.be.an.instanceof(Array).and.lengthOf(2);
+
+            rois[0].mask.sizes.should.eql([15, 15]);
+            rois[1].mask.sizes.should.eql([9, 2]);
+
+            rois[0].internalIDs.should.eql([-1, 1]);
+            rois[1].internalIDs.should.eql([1]);
+        });
+    });
+});
+

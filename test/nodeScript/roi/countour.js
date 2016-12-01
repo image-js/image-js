@@ -5,21 +5,21 @@ var Image = require('../../..');
 Image.load('./node_modules/ij-test/img/BW11x11.png').then(function (img) {
     console.log('Width: ',img.width);
     console.log('Height: ',img.height);
-    var roiManager=img.getROIManager();
+    var roiManager=img.getRoiManager();
     var mask=img.grey().mask();
-    roiManager.putMask(mask);
-    var rois=roiManager.getROI();
+    roiManager.fromMask(mask);
+    var rois=roiManager.getRois();
 
     rois.length.should.equal(4);
 
     /*
     for (var i=0; i<rois.length; i++) {
         var roi=rois[i];
-        console.log("ROI ID:",roi.id,
+        console.log("Roi ID:",roi.id,
             ' surround:', roi.surround,
             ' surface:', roi.surface,
             ' boxPixels:', roi.boxPixels,
-            ' contour:', roi.contour,
+            ' contourMask:', roi.contourMask,
             ' border:', roi.border)
     }
     */

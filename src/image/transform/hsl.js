@@ -2,17 +2,28 @@
 // check rgbToHsl : https://bgrins.github.io/TinyColor/docs/tinycolor.html
 
 import {RGB, HSL} from '../model/model';
-import Image from '../image';
+import Image from '../Image';
 
-export default function hsv() {
-    this.checkProcessable('hsv', {
+/**
+ * Make a copy of the current image and convert the color model to HSL
+ * The source image has to be RGB !
+ * @memberof Image
+ * @instance
+ * @return {Image} - New image in HSL color model
+ * @example
+ * var hslImage = image.hsl();
+ * // we can create one image per channel
+ * var channels = hslImage.split();
+ */
+export default function hsl() {
+    this.checkProcessable('hsl', {
         bitDepth: [8, 16],
-        alpha: [0,1],
+        alpha: [0, 1],
         colorModel: [RGB]
     });
 
     let newImage = Image.createFrom(this, {
-        colorModel:HSL
+        colorModel: HSL
     });
 
     let threshold = Math.floor(this.maxValue / 2);
@@ -41,10 +52,11 @@ export default function hsv() {
                 case blue:
                     hue = (red - green) / delta + 4;
                     break;
+                default:
+                    throw new Error('unreachable');
             }
             hue /= 6;
         }
-
 
         newImage.data[ptr++] = hue * this.maxValue;
         newImage.data[ptr++] = saturation * this.maxValue;

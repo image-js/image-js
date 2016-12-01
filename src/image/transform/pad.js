@@ -1,13 +1,23 @@
-import Image from '../image';
+import Image from '../Image';
 import array from 'new-array';
 
 import copy from '../utility/copy';
 
-export default function pad({
-    size = 0,
-    algorithm = 'copy',
-    color
-    } = {}) {
+/**
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {number} [options.size=0]
+ * @param {string} [options.algorithm='copy']
+ * @param {array<number>} [options.color]
+ * @return {Image}
+ */
+export default function pad(options = {}) {
+    let {
+        size = 0,
+        algorithm = 'copy',
+        color
+    } = options;
 
     this.checkProcessable('pad', {
         bitDepth: [8, 16]
@@ -18,14 +28,16 @@ export default function pad({
             throw new Error('pad: the color array must have the same length as the number of channels. Here: ' + this.channels);
         }
         for (let i = 0; i < color.length; i++) {
-            if (color[i] === 0) color[i] = 0.001;
+            if (color[i] === 0) {
+                color[i] = 0.001;
+            }
         }
     } else {
         color = array(this.channels, null);
     }
 
     if (!Array.isArray(size)) {
-        size = [size,size];
+        size = [size, size];
     }
 
     let newWidth = this.width + size[0] * 2;
@@ -35,7 +47,6 @@ export default function pad({
     let newImage = Image.createFrom(this, {width: newWidth, height: newHeight});
 
     copy(this, newImage, size[0], size[1]);
-
 
 
     for (let i = size[0]; i < newWidth - size[0]; i++) {

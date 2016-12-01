@@ -1,13 +1,17 @@
 import newArray from 'new-array';
 
-// returns an array with the sum values of each channel
-
+/**
+ * Returns an array with the sum of the values of each channel
+ * @memberof Image
+ * @instance
+ * @return {number[]} Array having has size the number of channels
+ */
 export default function sum() {
     this.checkProcessable('sum', {
         bitDepth: [8, 16]
     });
 
-    let result = newArray(this.channels,0);
+    let result = newArray(this.channels, 0);
 
     for (let i = 0; i < this.data.length; i += this.channels) {
         for (let c = 0; c < this.channels; c++) {

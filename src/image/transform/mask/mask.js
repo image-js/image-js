@@ -1,95 +1,45 @@
-import Image from '../../image';
-
-import huang from './huang';
-import intermodes from './intermodes';
-import isodata from './isodata';
-import li from './li';
-import maxEntropy from './maxEntropy';
-import mean from './mean';
-import minError from './minError';
-import minimum from './minimum';
-import moments from './moments';
-import otsu from './otsu';
-import percentile from './percentile';
-import renyiEntropy from './renyiEntropy.js';
-import shanbhag from  './shanbhag';
-import triangle from './triangle';
-import yen from './yen';
+import Image from '../../Image';
+import {methods} from './maskAlgorithms';
 import {getThreshold} from '../../../util/converter';
 
-/*
- Creation of binary mask is based on the determination of a threshold
- You may either choose among the provided algorithm or just specify a threshold value
+/**
+ * Creation of binary mask is based on the determination of a threshold
+ * You may either choose among the provided algorithm or just specify a threshold value
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {string} [options.algorithm='threshold']
+ * @param {number} [options.threshold=0.5] - If the algorithm is 'threshold' specify here the value (0 to 1).
+ * @param {boolean} [options.useAlpha=true] - Apply the alpha channel to determine the intensity of the pixel.
+ * @param {boolean} [options.invert=false] - Invert the resulting image
+ * @return {Image} - Binary image containing the mask
  */
-
-
-export default function mask({
-    algorithm = 'threshold',
-    threshold = 0.5,
-    useAlpha = true,
-    invert = false
-    } = {}) {
+export default function mask(options = {}) {
+    let {
+        algorithm = 'threshold',
+        threshold = 0.5,
+        useAlpha = true,
+        invert = false
+    } = options;
 
     this.checkProcessable('mask', {
         components: 1,
-        bitDepth: [8,16]
+        bitDepth: [8, 16]
     });
 
-    let histogram = this.getHistogram();
-    switch (algorithm.toLowerCase()) {
-        case 'threshold':
-            threshold = getThreshold(threshold, this.maxValue);
-            break;
-        case 'huang':
-            threshold = huang(histogram);
-            break;
-        case 'intermodes':
-            threshold = intermodes(histogram);
-            break;
-        case 'isodata':
-            threshold = isodata(histogram);
-            break;
-        case 'li':
-            threshold = li(histogram, this.size);
-            break;
-        case 'maxentropy':
-            threshold = maxEntropy(histogram, this.size);
-            break;
-        case 'mean':
-            threshold = mean(histogram, this.size);
-            break;
-        case 'minerror':
-            threshold = minError(histogram, this.size);
-            break;
-        case 'minimum':
-            threshold = minimum(histogram);
-            break;
-        case 'moments':
-            threshold = moments(histogram, this.size);
-            break;
-        case 'otsu':
-            threshold = otsu(histogram, this.size);
-            break;
-        case 'percentile':
-            threshold = percentile(histogram);
-            break;
-        case 'renyientropy':
-            threshold = renyiEntropy(histogram, this.size);
-            break;
-        case 'shanbhag':
-            threshold = shanbhag(histogram, this.size);
-            break;
-        case 'triangle':
-            threshold = triangle(histogram);
-            break;
-        case 'yen':
-            threshold = yen(histogram, this.size);
-            break;
-        default:
+    if (algorithm === 'threshold') {
+        threshold = getThreshold(threshold, this.maxValue);
+    } else {
+        let method = methods[algorithm.toLowerCase()];
+        if (method) {
+            let histogram = this.getHistogram();
+            threshold = method(histogram, this.size);
+        } else {
             throw new Error('mask transform unknown algorithm: ' + algorithm);
+        }
     }
 
-    let newImage = new Image (this.width, this.height, {
+    let newImage = new Image(this.width, this.height, {
         kind: 'BINARY',
         parent: this
     });
@@ -111,5 +61,6 @@ export default function mask({
             ptr++;
         }
     }
+
     return newImage;
 }

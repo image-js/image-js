@@ -6,7 +6,7 @@
 // Shreveport, LA 71115, USA
 // http://sourceforge.net/projects/fourier-ipal
 // http://www.lsus.edu/faculty/~ecelebi/fourier.htm
-export default function moments(histogram,total) {
+export default function moments(histogram, total) {
 //moments
     let m0 = 1.0;
     let m1 = 0.0;
@@ -36,8 +36,8 @@ export default function moments(histogram,total) {
     c0 = (-m2 * m2 + m1 * m3) / cd;
     c1 = (m0 * -m3 + m2 * m1) / cd;
 //new two gray values where z0<z1
-    z0 = 0.5 * (-c1 - Math.sqrt (c1 * c1 - 4.0 * c0));
-    z1 = 0.5 * (-c1 + Math.sqrt (c1 * c1 - 4.0 * c0));
+    z0 = 0.5 * (-c1 - Math.sqrt(c1 * c1 - 4.0 * c0));
+    z1 = 0.5 * (-c1 + Math.sqrt(c1 * c1 - 4.0 * c0));
     p0 = (z1 - m1) / (z1 - z0); /* Fraction of the object pixels in the target binary image (p0z0+p1z1=m1) */
 // The threshold is the gray-level closest to the p0-tile of the normalized histogram
     for (let i = 0; i < histogramLength; i++) {
@@ -48,11 +48,4 @@ export default function moments(histogram,total) {
         }
     }
     return threshold;
-}
-function partialSum(histogram, limite) {//a partial sum is calculated according to the value limit
-    let sum = 0;
-    for (let i = 0; i <= limite; i++) {
-        sum += histogram[i];
-    }
-    return sum;
 }

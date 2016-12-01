@@ -6,7 +6,7 @@ var Test = require('../test/test');
 
 var suite = new Benchmark.Suite;
 
-var filename='cells.jpg';
+var filename='cells/cells.jpg';
 //filename='ecoli.png';
 // filename='cat.jpg';
 
@@ -35,8 +35,8 @@ Image.load(Test.getImage(filename)).then(function (img) {
             console.log(String(event.target));
         })
         .on('complete', function () {
-            console.log('Fastest is ' + this.filter('fastest').pluck('name'));
+            console.log('Fastest is ' + this.filter('fastest').map('name'));
         })
         .run();
 
-});
+}).catch(console.error);

@@ -1,8 +1,8 @@
-let loadBinary, DOMImage, Canvas, ImageData, isDifferentOrigin, env;
+let fetchBinary, DOMImage, Canvas, ImageData, isDifferentOrigin, env;
 
 if (typeof self !== 'undefined') { // Browser
     env = 'browser';
-    let origin = self.location.origin;
+    const origin = self.location.origin;
     isDifferentOrigin = function (url) {
         try {
             let parsedURL = new self.URL(url);
@@ -23,14 +23,16 @@ if (typeof self !== 'undefined') { // Browser
         return canvas;
     };
 
-    loadBinary = function (url) {
+    fetchBinary = function (url, {withCredentials = false} = {}) {
         return new Promise(function (resolve, reject) {
             let xhr = new self.XMLHttpRequest();
             xhr.open('GET', url, true);
             xhr.responseType = 'arraybuffer';
+            xhr.withCredentials = withCredentials;
 
             xhr.onload = function (e) {
-                this.status === 200 ? resolve(this.response) : reject('wrong status', e);
+                if (this.status !== 200) reject(e);
+                else resolve(this.response);
             };
             xhr.onerror = reject;
             xhr.send();
@@ -38,24 +40,22 @@ if (typeof self !== 'undefined') { // Browser
     };
 } else if (typeof module !== 'undefined' && module.exports) { // Node.js
     env = 'node';
-    isDifferentOrigin = function (url) {
-        return false;
-    };
+    isDifferentOrigin = () => false;
 
-    ImageData = require('canvas/lib/bindings').ImageData;
-
-    let canvas = require('canvas');
+    const canvas = require('canvas');
     DOMImage = canvas.Image;
     Canvas = canvas;
+    ImageData = canvas.ImageData;
 
-    let fs = require('fs');
-    loadBinary = function (path) {
+    const fs = require('fs');
+    fetchBinary = function (path) {
         return new Promise(function (resolve, reject) {
             fs.readFile(path, function (err, data) {
-                err ? reject(err) : resolve(data.buffer);
+                if (err) reject(err);
+                else resolve(data.buffer);
             });
         });
     };
 }
 
-export {loadBinary, DOMImage, Canvas, ImageData, isDifferentOrigin, env};
+export {fetchBinary, DOMImage, Canvas, ImageData, isDifferentOrigin, env};

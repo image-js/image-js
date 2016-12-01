@@ -1,7 +1,8 @@
 language: node_js
 node_js:
-  - "4"
-  - "stable"
+  - 4
+  - 6
+  - stable
 sudo: false
 script: "npm run test-travis"
 after_script: "npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"

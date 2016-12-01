@@ -1,4 +1,4 @@
-/**
+/*
  * The method is present in: Otsu, N (1979), "A threshold selection method from gray-level histograms", IEEE Trans. Sys., Man., Cyber. 9: 62-66
  * The Otsu implementation is based on: https://en.wikipedia.org/wiki/Otsu's_method
  * @param histogram - the histogram of the image
@@ -25,11 +25,13 @@ export default function otsu(histogram, total) {
     for (let i = 1; i <  histogram.length; ++i) {
         wB += histogram[i];
 
-        if (wB === 0)
+        if (wB === 0) {
             continue;
+        }
         wF = total - wB;
-        if (wF === 0)
+        if (wF === 0) {
             break;
+        }
 
         sumB += i * histogram[i];
         mB = sumB / wB;

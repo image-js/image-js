@@ -8,7 +8,6 @@
 export default function invertApply() {
 
 
-
     if (this.bitDepth === 1) {
         // we simply invert all the integers value
         // there could be a small mistake if the number of points

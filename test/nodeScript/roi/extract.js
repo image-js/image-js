@@ -5,16 +5,16 @@ var Image = require('../../..');
 Image.load('./node_modules/ij-test/img/BW15x15.png').then(function (img) {
     console.log('Width: ',img.width);
     console.log('Height: ',img.height);
-    var roiManager=img.getROIManager();
+    var roiManager=img.getRoiManager();
     var mask=img.grey().mask();
-    roiManager.putMask(mask);
-    var rois=roiManager.getROI();
+    roiManager.fromMask(mask);
+    var rois=roiManager.getRois();
 
     for (var i=0; i<rois.length; i++) {
         console.log(rois[i].surface);
     }
 
-    console.log(rois[4].internalMapIDs);
+    console.log(rois[4].internalIDs);
 
 
     console.log("Not filled")

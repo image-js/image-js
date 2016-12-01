@@ -1,8 +1,16 @@
+/**
+ * Make a copy of the current image
+ * @memberof Image
+ * @instance
+ * @param {Image} fromImage
+ * @param {Image} toImage
+ * @param {number} x
+ * @param {number} y
+ */
 export default function copyImage(fromImage, toImage, x, y) {
     let fromWidth = fromImage.width;
     let fromHeight = fromImage.height;
     let toWidth = toImage.width;
-    let toHeight = toImage.height;
     let channels = fromImage.channels;
     for (let i = 0; i < fromWidth; i++) {
         for (let j = 0; j < fromHeight; j++) {

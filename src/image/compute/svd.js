@@ -1,9 +1,15 @@
-let Matrix = require('ml-matrix');
+import {DC} from 'ml-matrix';
 
-export default function getSVD() {
-    this.checkProcessable('getSVD', {
+/**
+ * TODO would be suprised if this stuff works
+ * @memberof Image
+ * @instance
+ * @return {object} SVD result
+ */
+export default function getSvd() {
+    this.checkProcessable('getSvd', {
         bitDepth: [1]
     });
 
-    return Matrix.DC.SVD(this.pixelsArray);
+    return DC.SVD(this.points);
 }

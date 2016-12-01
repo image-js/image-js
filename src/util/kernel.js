@@ -4,9 +4,9 @@ export function validateKernel(kernel) {
     let kHeight, kWidth;
     if (Array.isArray(kernel)) {
         if (Array.isArray(kernel[0])) { // 2D array
-            if (((kernel.length & 1) === 0) || ((kernel[0].length & 1) === 0))
+            if (((kernel.length & 1) === 0) || ((kernel[0].length & 1) === 0)) {
                 throw new RangeError('validateKernel: Kernel rows and columns should be odd numbers');
-            else {
+            } else {
                 kHeight = Math.floor(kernel.length / 2);
                 kWidth = Math.floor(kernel[0].length / 2);
             }
@@ -18,7 +18,7 @@ export function validateKernel(kernel) {
                 throw new RangeError('validateKernel: Kernel array should be a square');
             }
             // we convert the array to a matrix
-            let newKernel = new Array(kWidth);
+            let newKernel = new Array(kernelWidth);
             for (let i = 0; i < kernelWidth; i++) {
                 newKernel[i] = new Array(kernelWidth);
                 for (let j = 0; j < kernelWidth; j++) {

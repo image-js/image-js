@@ -21,35 +21,17 @@ load('rgb8.png').then(function (a) {
 
 
 
-load('cells.jpg').then(function (img) {
+load('cells/cells.jpg').then(function (img) {
     //setLeft(a);
 
-    console.time("invertGetSet");
-    for (var i=0; i<20; i++) {
-        img.invertGetSet();
-    }
-    console.timeEnd("invertGetSet");
-
-
-    console.time("invertApply");
-    for (var i=0; i<20; i++) {
-        img.invertApply();
-    }
-    console.timeEnd("invertApply");
-
-    console.time("invertApplyAll");
-    for (var i=0; i<20; i++) {
-        img.invertApplyAll();
-    }
-    console.timeEnd("invertApplyAll");
-
-    console.time("invertOneLoop");
-    for (var i=0; i<20; i++) {
-        img.invertOneLoop();
-    }
-    console.timeEnd("invertOneLoop");
-
-
-   // setRight(a);
+    var mask = img.grey().mask();
+    var manager = img.getRoiManager();
+    console.time('1');
+    manager.fromMask(mask, {label: 'mask1'});
+    console.timeEnd('1');
+    console.time('2');
+    manager.fromMask2(mask, {label: 'mask2'});
+    console.timeEnd('2');
+    console.log(manager);
 
 });

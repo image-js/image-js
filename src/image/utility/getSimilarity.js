@@ -1,18 +1,32 @@
-import Image from '../image';
 import {validateArrayOfChannels} from './../../util/channel';
 import newArray from 'new-array';
 
-// Try to match the current pictures with another one
+/**
+ * Try to match the current pictures with another one. If normalize we normalize separately the 2 images.
+ * @memberof Image
+ * @instance
+ * @param {Image} image - Other image
+ * @param {object} [options]
+ * @return {number[]|number}
+ */
+export default function getSimilarity(image, options = {}) {
+    let {
+        shift = [0, 0],
+        average,
+        channels,
+        defaultAlpha,
+        normalize,
+        border = [0, 0]
+    } = options;
 
-// if normalize we normalize separately the 2 images
-
-export default function overlap(image, {shift = [0,0], average, channels, defaultAlpha, normalize} = {}) {
-
-    this.checkProcessable('overlap', {
+    this.checkProcessable('getSimilarity', {
         bitDepth: [8, 16]
     });
 
-    channels = validateArrayOfChannels(this, {channels:channels, defaultAlpha:defaultAlpha});
+    if (!Array.isArray(border)) {
+        border = [border, border];
+    }
+    channels = validateArrayOfChannels(this, {channels: channels, defaultAlpha: defaultAlpha});
 
     if (this.bitDepth !== image.bitDepth) {
         throw new Error('Both images must have the same bitDepth');
@@ -24,16 +38,18 @@ export default function overlap(image, {shift = [0,0], average, channels, defaul
         throw new Error('Both images must have the same colorModel');
     }
 
-    if (typeof average === 'undefined') average = true;
+    if (typeof average === 'undefined') {
+        average = true;
+    }
 
     // we allow a shift
     // we need to find the minX, maxX, minY, maxY
-    let minX = Math.max(0, -shift[0]);
-    let maxX = Math.min(this.width, this.width - shift[0]);
-    let minY = Math.max(0, -shift[1]);
-    let maxY = Math.min(this.height, this.height - shift[1]);
+    let minX = Math.max(border[0], -shift[0]);
+    let maxX = Math.min(this.width - border[0], this.width - shift[0]);
+    let minY = Math.max(border[1], -shift[1]);
+    let maxY = Math.min(this.height - border[1], this.height - shift[1]);
 
-    let results = newArray(channels.length,0);
+    let results = newArray(channels.length, 0);
     for (let i = 0; i < channels.length; i++) {
         let c = channels[i];
         let sumThis = normalize ? this.sum[c] : Math.max(this.sum[c], image.sum[c]);
@@ -53,6 +69,5 @@ export default function overlap(image, {shift = [0,0], average, channels, defaul
     if (average) {
         return results.reduce((sum, x) => sum + x) / results.length;
     }
-
     return results;
 }

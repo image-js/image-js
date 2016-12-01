@@ -2,26 +2,50 @@ import newArray from 'new-array';
 
 import {validateArrayOfChannels} from '../../util/channel';
 
-export default function level({
-    algorithm = 'range',
-    channels,
-    min = this.min,
-    max = this.max
-    } = {}) {
+/**
+ * Level the image for by default have the minimal and maximal values.
+ * @memberof Image
+ * @instance
+ * @param {object} options
+ * @param {(undefined|number|string|[number]|[string])} [options.channels=undefined] Specify which channels should be processed
+ *      * undefined : we take all the channels but alpha
+ *      * number : this specific channel
+ *      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
+ *      * [number] : array of channels as numbers
+ *      * [string] : array of channels as one letter string
+ * @param {number} [options.min=this.min] minimal value after levelling
+ * @param {number} [options.max=this.max] maximal value after levelling
+ * @return {this}
+ */
+export default function level(options = {}) {
+    let {
+        algorithm = 'range',
+        channels,
+        min = this.min,
+        max = this.max
+        } = options;
+
     this.checkProcessable('level', {
         bitDepth: [8, 16]
     });
 
-    channels = validateArrayOfChannels(this, {channels:channels});
+    channels = validateArrayOfChannels(this, {channels: channels});
 
     switch (algorithm) {
-
         case 'range':
-            if (min < 0) min = 0;
-            if (max > this.maxValue) max = this.maxValue;
+            if (min < 0) {
+                min = 0;
+            }
+            if (max > this.maxValue) {
+                max = this.maxValue;
+            }
 
-            if (!Array.isArray(min)) min = newArray(channels.length, min);
-            if (!Array.isArray(max)) max = newArray(channels.length, max);
+            if (!Array.isArray(min)) {
+                min = newArray(channels.length, min);
+            }
+            if (!Array.isArray(max)) {
+                max = newArray(channels.length, max);
+            }
 
             processImage(this, min, max, channels);
             break;
@@ -29,6 +53,8 @@ export default function level({
         default:
             throw new Error('level: algorithm not implement: ' + algorithm);
     }
+
+    return this;
 }
 
 function processImage(image, min, max, channels) {
@@ -63,5 +89,4 @@ function processImage(image, min, max, channels) {
         }
     }
 }
-
 

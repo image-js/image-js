@@ -1,8 +1,10 @@
 lib
-node_modules
+/node_modules/
 .idea
 *.log
-test/node/TMP
+test/TMP
+test/browser/Image.js
 test/browser/image.js
 .DS_Store
 coverage
+.eslintcache
