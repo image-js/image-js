@@ -57,6 +57,7 @@ import paintPoints from './operator/paintPoints';
 import extract from './operator/extract';
 import convolution from './operator/convolution';
 import convolutionFft from './operator/convolutionFft';
+import floodFill from './operator/floodFill';
 
 // computers
 import {getHistogram, getHistograms} from './compute/histogram';
@@ -135,6 +136,7 @@ export default function extend(Image) {
     Image.extendMethod('extract', extract);
     Image.extendMethod('convolution', convolution);
     Image.extendMethod('convolutionFft', convolutionFft);
+    Image.extendMethod('floodFill', floodFill);
 
     Image.extendMethod('countAlphaPixels', countAlphaPixels);
     Image.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);

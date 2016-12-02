@@ -2227,6 +2227,10 @@ fast-levenshtein@~2.0.4:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.5.tgz#bd33145744519ab1c36c3ee9f31f08e9079b67f2"
 
+fast-list@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/fast-list/-/fast-list-1.0.3.tgz#f5d5754a7c1cbf682a15961ef9a063897571eaa1"
+
 fast-png@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/fast-png/-/fast-png-1.1.0.tgz#f1c34d4e93a31201ca2eb6d83b6a8d9605bffbc3"
