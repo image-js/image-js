@@ -23,6 +23,7 @@ import backgroundFilter from './filter/background';
 
 // transforms
 import crop from './transform/crop';
+import cropAlpha from './transform/cropAlpha';
 import scale from './transform/scale/scale';
 import hsv from './transform/hsv';
 import hsl from './transform/hsl';
@@ -101,6 +102,7 @@ export default function extend(Image) {
     Image.extendMethod('sobelFilter', sobelFilter);
 
     Image.extendMethod('crop', crop, stack);
+    Image.extendMethod('cropAlpha', cropAlpha, stack);
     Image.extendMethod('scale', scale, stack);
     Image.extendMethod('hsv', hsv);
     Image.extendMethod('hsl', hsl);
