@@ -1,8 +1,8 @@
 import {Image} from 'test/common';
 
-describe('we check paintLabels', function () {
+describe('paintLabels', function () {
     it('should yield the painted image', function () {
-
+        this.timeout(5000);
         let image = new Image(150, 150, {kind: 'RGBA'});
         let labels = ['1', '2'];
         let positions = [[20, 20], [40, 20]];
