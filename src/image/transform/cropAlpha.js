@@ -5,6 +5,7 @@
  * @instance
  * @param {object} [options]
  * @param {number} [options.threshold=this.maxValue]
+ * @return {Image}
  */
 export default function cropAlpha(options = {}) {
     this.checkProcessable('cropAlpha', {
@@ -16,6 +17,11 @@ export default function cropAlpha(options = {}) {
     } = options;
 
     let left = findLeft(this, threshold, this.components);
+
+    if (left === -1) {
+        throw new Error('Could not find new dimensions. Threshold may be too high.');
+    }
+
     let top = findTop(this, threshold, this.components, left);
     let bottom = findBottom(this, threshold, this.components, left);
     let right = findRight(this, threshold, this.components, left, top, bottom);
@@ -26,7 +32,7 @@ export default function cropAlpha(options = {}) {
         width: right - left + 1,
         height: bottom - top + 1
     });
-};
+}
 
 function findLeft(image, threshold, channel) {
     for (let x = 0; x < image.width; x++) {
@@ -36,6 +42,7 @@ function findLeft(image, threshold, channel) {
             }
         }
     }
+    return -1;
 }
 
 function findTop(image, threshold, channel, left) {
@@ -46,6 +53,7 @@ function findTop(image, threshold, channel, left) {
             }
         }
     }
+    return -1;
 }
 
 function findBottom(image, threshold, channel, left) {
@@ -56,6 +64,7 @@ function findBottom(image, threshold, channel, left) {
             }
         }
     }
+    return -1;
 }
 
 function findRight(image, threshold, channel, left, top, bottom) {
@@ -66,5 +75,5 @@ function findRight(image, threshold, channel, left, top, bottom) {
             }
         }
     }
-
+    return -1;
 }

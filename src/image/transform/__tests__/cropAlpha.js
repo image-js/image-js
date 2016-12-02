@@ -1,6 +1,6 @@
 import {Image} from 'test/common';
 
-describe.only('cropAlpha transform', function () {
+describe('cropAlpha transform', function () {
     it('grey + alpha - no crop', function () {
         const image = new Image(3, 4, [
             1, 255, 2, 255, 3, 255,
@@ -63,5 +63,20 @@ describe.only('cropAlpha transform', function () {
             5, 255, 6, 250,
             8, 239, 9, 250,
         ]);
+    });
+
+    it('grey + alpha - error high threshold', function () {
+        const image = new Image(3, 4, [
+            1, 40, 2, 240, 3, 50,
+            4, 110, 5, 0, 6, 250,
+            7, 110, 8, 239, 9, 250,
+            10, 10, 11, 0, 12, 90
+        ], {kind: 'GREYA'});
+
+
+        (function () {
+            image.cropAlpha();
+        }).should.throw(/Could not find new dimensions. Threshold may be too high./);
+
     });
 });
