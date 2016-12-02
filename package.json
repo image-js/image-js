@@ -82,6 +82,7 @@
     "array-includes": "^3.0.1",
     "atob-lite": "^1.0.0",
     "blob-util": "^1.2.1",
+    "bmp-js": "^0.0.3",
     "color-functions": "^1.1.0",
     "extend": "^3.0.0",
     "fast-jpeg": "^1.0.1",

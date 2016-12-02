@@ -4,6 +4,7 @@ import {fetchBinary, DOMImage, Canvas, isDifferentOrigin} from './environment';
 import {PNGDecoder} from 'fast-png';
 import {decode as decodeJpeg} from 'fast-jpeg';
 import {decode as decodeTiff} from 'tiff';
+import {decode as decodeBMP} from 'bmp-js';
 import atob from 'atob-lite';
 import imageType from 'image-type';
 
@@ -49,6 +50,8 @@ function loadBinary(image, options, url) {
             }
             case 'tif':
                 return loadTIFF(image);
+            case 'bmp':
+                return loadBMP(image);
             // no default
         }
     }
@@ -111,6 +114,17 @@ function loadTIFF(data) {
     } else {
         return new Stack(result.map(getImageFromIFD));
     }
+}
+
+function loadBMP(data) {
+    const result = decodeBMP(new Buffer(data.buffer, data.byteOffset, data.byteLength));
+    const size = result.width * result.height;
+    const length = result.data.length;
+    console.log(size, length, result.width, result.height);
+    if (length === size) {
+        console.log('bin');
+    }
+    return new Image(1,1);
 }
 
 function getMetadata(image) {
