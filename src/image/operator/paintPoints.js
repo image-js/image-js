@@ -1,5 +1,5 @@
 import {RGB} from '../model/model';
-import Shape from '../../util/shape';
+import Shape from '../../util/Shape';
 
 /**
  * Paint pixels on the current image.
