@@ -4,7 +4,7 @@
  * @param {Image} - a mask (1 bit image)
  * @returns {Image} - the lowest common parent of both masks or throws error if no common parent
  */
-export default function getLowestCommonParent(mask1, mask2) {
+export default function getClosestCommonParent(mask1, mask2) {
     let depthMask1 = getDepth(mask1);
     let depthMask2 = getDepth(mask2);
 
