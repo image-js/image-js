@@ -57,6 +57,7 @@ describe('scale', function () {
             newImage.width.should.equal(2);
             newImage.height.should.equal(2);
             Array.from(newImage.data).should.eql([144]);
+            newImage.position.should.eql([1, 1]);
         });
 
         it('down - 0.01 factor', function () {
@@ -67,6 +68,7 @@ describe('scale', function () {
             newImage.width.should.equal(1);
             newImage.height.should.equal(1);
             Array.from(newImage.data).should.eql([128]);
+            newImage.position.should.eql([2, 2]);
         });
     });
 
@@ -216,7 +218,6 @@ describe('scale', function () {
             newImage.width.should.equal(1);
             newImage.height.should.equal(4);
         });
-
     });
 
 });

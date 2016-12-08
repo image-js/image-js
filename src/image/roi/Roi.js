@@ -51,7 +51,7 @@ export default class Roi {
         if (scale < 1) {
             // by reassigning the mask we loose the parent and therefore the position
             // we will have to force it back
-            mask = mask.resizeBinary(scale);
+            mask = mask.scale({factor: scale});
             mask.parent = this.mask.parent;
             mask.position[0] += this.minX;
             mask.position[1] += this.minY;

@@ -32,7 +32,6 @@ import rgba8 from './transform/rgba8';
 import grey from './transform/grey';
 import mask from './transform/mask/mask';
 import pad from './transform/pad';
-import resizeBinary from './transform/resizeBinary';
 import colorDepth from './transform/colorDepth';
 import {rotate, rotateLeft, rotateRight} from './transform/rotate';
 
@@ -111,7 +110,6 @@ export default function extend(Image) {
     Image.extendMethod('grey', grey).extendMethod('gray', grey);
     Image.extendMethod('mask', mask);
     Image.extendMethod('pad', pad);
-    Image.extendMethod('resizeBinary', resizeBinary);
     Image.extendMethod('colorDepth', colorDepth);
     Image.extendMethod('setBorder', setBorder, inPlace);
     Image.extendMethod('rotate', rotate);
