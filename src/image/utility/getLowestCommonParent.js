@@ -2,7 +2,7 @@
  * Finds common parent between two different masks
  * @param {Image} - a mask (1 bit image)
  * @param {Image} - a mask (1 bit image)
- * @returns {Image} - the lowest common parent of both masks or null if no common parent
+ * @returns {Image} - the lowest common parent of both masks or throws error if no common parent
  */
 export default function getLowestCommonParent(mask1, mask2) {
     let depthMask1 = getDepth(mask1);
