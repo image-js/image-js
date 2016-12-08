@@ -1,5 +1,5 @@
 /**
- * Created by zoebaraschi on 10.11.16.
+ *
  */
 import {Image} from 'test/common';
 
