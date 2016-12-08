@@ -1,4 +1,4 @@
-import {Image, getSquare} from 'test/common';
+import {Image} from 'test/common';
 
 describe('check the rotate transform', function () {
     it('90 degrees clockwise grey', function () {
@@ -63,12 +63,5 @@ describe('check the rotate transform', function () {
         const rotate90 = image.rotate(90);
         const rotateMin270 = image.rotate(-270);
         Array.from(rotate90.data).should.eql(Array.from(rotateMin270.data));
-    });
-
-    it('unsupported angle', function () {
-        (function () {
-            const image = getSquare();
-            image.rotate(10);
-        }).should.throw(/free angle rotation is currently not supported/);
     });
 });

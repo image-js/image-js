@@ -1,4 +1,5 @@
 import fromMask from './creator/fromMask';
+import fromMaskConnectedComponentLabelingAlgorithm from './creator/fromMaskConnectedComponentLabelingAlgorithm';
 import fromMaxima from './creator/fromMaxima';
 import fromWaterShed from './creator/fromWaterShed';
 import fromPoints from './creator/fromPoints';
@@ -70,14 +71,12 @@ export default class RoiManager {
     }
 
 
-    /* Seems slower and less general (only provides positive Roi)
     fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
         let opt = extendObject({}, this._options, options);
-        let roiMap = fromMask2.call(this._image, mask, options);
+        let roiMap = fromMaskConnectedComponentLabelingAlgorithm.call(this._image, mask, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
     }
-     */
 
     /**
      *

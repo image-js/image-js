@@ -1,13 +1,15 @@
 import Image from '../Image';
+import rotateFree from './rotateFree';
 
 /**
  * Rotates an image
  * @memberof Image
  * @instance
  * @param {number} angle - angle of the rotation in degrees
+ * @param {object} [options]
  * @return {Image} The new rotated image
  */
-export function rotate(angle) {
+export function rotate(angle, options) {
     if (typeof angle !== 'number') {
         throw new TypeError('angle must be a number');
     }
@@ -26,8 +28,7 @@ export function rotate(angle) {
         case 270:
             return rotateLeft.call(this);
         default:
-            // todo add support for free angle rotation
-            throw new Error('free angle rotation is currently not supported');
+            return rotateFree.call(this, angle, options);
     }
 }
 

@@ -23,6 +23,7 @@ import backgroundFilter from './filter/background';
 
 // transforms
 import crop from './transform/crop';
+import cropAlpha from './transform/cropAlpha';
 import scale from './transform/scale/scale';
 import hsv from './transform/hsv';
 import hsl from './transform/hsl';
@@ -57,6 +58,7 @@ import paintPoints from './operator/paintPoints';
 import extract from './operator/extract';
 import convolution from './operator/convolution';
 import convolutionFft from './operator/convolutionFft';
+import floodFill from './operator/floodFill';
 
 // computers
 import {getHistogram, getHistograms} from './compute/histogram';
@@ -100,6 +102,7 @@ export default function extend(Image) {
     Image.extendMethod('sobelFilter', sobelFilter);
 
     Image.extendMethod('crop', crop, stack);
+    Image.extendMethod('cropAlpha', cropAlpha, stack);
     Image.extendMethod('scale', scale, stack);
     Image.extendMethod('hsv', hsv);
     Image.extendMethod('hsl', hsl);
@@ -135,6 +138,7 @@ export default function extend(Image) {
     Image.extendMethod('extract', extract);
     Image.extendMethod('convolution', convolution);
     Image.extendMethod('convolutionFft', convolutionFft);
+    Image.extendMethod('floodFill', floodFill);
 
     Image.extendMethod('countAlphaPixels', countAlphaPixels);
     Image.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);

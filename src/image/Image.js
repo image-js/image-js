@@ -538,10 +538,38 @@ export default class Image {
     /**
      * Creates a dataURL string from the image.
      * @param {string} [type='image/png']
-     * @return {string}
+     * @param {boolean} [async=false] - set to true to asynchronously generate the dataURL
+     * This is required on Node.js for jpeg compression.
+     * @return {string|Promise<string>}
      */
-    toDataURL(type = 'image/png') {
-        return this.getCanvas().toDataURL(getType(type));
+    toDataURL(type = 'image/png', async = false) {
+        if (async) {
+            return new Promise((resolve, reject) => {
+                this.getCanvas().toDataURL(getType(type), function (err, text) {
+                    if (err) reject(err);
+                    else resolve(text);
+                });
+            });
+        } else {
+            return this.getCanvas().toDataURL(getType(type));
+        }
+    }
+
+    /**
+     * Creates a base64 string from the image.
+     * @param {string} [type='image/png']
+     * @param {boolean} [async=false]
+     * @return {string|Promise<string>}
+     */
+    toBase64(type = 'image/png', async = false) {
+        if (async) {
+            return this.toDataURL(type, true).then(function (dataURL) {
+                return dataURL.substring(dataURL.indexOf(',') + 1);
+            });
+        } else {
+            const dataURL = this.toDataURL(type);
+            return dataURL.substring(dataURL.indexOf(',') + 1);
+        }
     }
 
     /**
