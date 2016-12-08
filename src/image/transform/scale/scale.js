@@ -43,10 +43,14 @@ export default function scale(options = {}) {
     ({width, height} = factorDimensions(factor, width, height));
 
     if (width === this.width && height === this.height) {
-        return this.clone();
+        const newImage = this.clone();
+        newImage.position = [0, 0];
+        return newImage;
     }
 
-    const newImage = Image.createFrom(this, {width, height});
+    let shiftX = Math.round((this.width - width) / 2);
+    let shiftY = Math.round((this.height - height) / 2);
+    const newImage = Image.createFrom(this, {width, height, position: [shiftX, shiftY]});
 
     switch (algorithm.toLowerCase()) {
         case 'nearestneighbor':
