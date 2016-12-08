@@ -1,6 +1,17 @@
-import Shape from '../shape';
+import Shape from '../Shape';
 
 describe('we check Shape class', function () {
+    it('should be able to create a Shape', function () {
+        let shape = new Shape({shape: 'circle', filled: false, size: 5});
+        let mask = shape.getMask();
+        Array.from(mask.data).should.eql([
+            0b00100010,
+            0b10100010,
+            0b10100010,
+            0b00000000
+        ]);
+    });
+
     it('should yield a cross', function () {
         let shape = new Shape();
 

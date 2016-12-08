@@ -1,6 +1,6 @@
 import Image from '../Image';
 import * as KindNames from '../kindNames';
-import Shape from '../../util/shape';
+import Shape from '../../util/Shape';
 
 /**
  * Class to manage Region Of Interests
