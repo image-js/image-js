@@ -8,34 +8,38 @@ export default function getLowestCommonParent(mask1, mask2) {
     let depthMask1 = getDepth(mask1);
     let depthMask2 = getDepth(mask2);
 
-    if(depthMask1===0 || depthMask2 ===0){
+    if (depthMask1 === 0 || depthMask2 === 0) {
         //comparing with at least one original image -> no common parent
-        throw new Error("No common parent");
+        throw new Error('No common parent');
     }
     let m1 = mask1;
     let m2 = mask2;
     while (depthMask1 !== depthMask2) {
         if (depthMask1 > depthMask2) {
             m1 = m1.parent;
-            if(m1 === "undefined"){
-                throw new Error("No common parent");
+            if (m1 === undefined) {
+                throw new Error('No common parent');
             }
             depthMask1 = depthMask1 - 1;
         } else {
             m2 = m2.parent;
-            if(m2 === "undefined"){
-                throw new Error("No common parent");
+            if (m2 === undefined) {
+                throw new Error('No common parent');
             }
             depthMask2 = depthMask2 - 1;
         }
     }
 
-    while (m1 !== m2 && typeof m1 !== "undefined" && typeof  m2 !== "undefined") {
+    while (m1 !== m2 && typeof m1 !== undefined && typeof  m2 !== undefined) {
         m1 = m1.parent;
         m2 = m2.parent;
-        if(m1 === "undefined" || m2 === "undefined"){
-            throw new Error("No common parent");
+        if (m1 === undefined || m2 === undefined) {
+            throw new Error('No common parent');
         }
+    }
+
+    if (m1 !== m2) {
+        throw new Error('No common parent');
     }
 
     return m1;

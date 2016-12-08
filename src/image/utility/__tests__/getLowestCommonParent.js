@@ -4,7 +4,7 @@
 import {Image} from 'test/common';
 import getLowestCommonParent from '../getLowestCommonParent';
 
-describe.only('getLowestCommonParent', function () {
+describe('getLowestCommonParent', function () {
     it('correct common parent for masks with one ancestor each', function () {
         let img1 = new Image(5, 5,
             [
@@ -84,8 +84,37 @@ describe.only('getLowestCommonParent', function () {
         );
 
         let mask1 = img1.mask();
+        (function () {
+            getLowestCommonParent(img1, mask1);
+        }).should.throw(/No common parent/);
+    });
+    it('no common parent for masks with different original images', function () {
+        let img1 = new Image(5, 5,
+            [
+                0, 0, 0, 0, 0,
+                0, 255, 255, 255, 0,
+                0, 255, 255, 255, 0,
+                0, 255, 255, 255, 0,
+                0, 0, 0, 0, 0
+            ],
+            {kind: 'GREY'}
+        );
+        let img2 = new Image(5, 5,
+            [
+                0, 0,   0,   0,   0,
+                0, 255, 0,   255, 0,
+                0, 255, 0,   255, 0,
+                0,  0,  0,   255, 0,
+                0,  0,  0,   0,   0
+            ],
+            {kind: 'GREY'}
+        );
 
-        getLowestCommonParent(img1, mask1);
+        let mask1 = img1.mask();
+        let mask2 = img2.mask();
 
+        (function () {
+            getLowestCommonParent(mask1, mask2);
+        }).should.throw(/No common parent/);
     });
 });
