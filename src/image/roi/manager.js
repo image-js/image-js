@@ -341,7 +341,7 @@ export default class RoiManager {
  * @param {number[][]} points: points of ROI
  * @param {number[]} roiMap: roiMap from which we get the corresponding ROI
  * @param {number} roiSign: sign of ROI
- * @returns {object} {{id: Array, surface: Array, roiSurfaceCovered: Array, same: number, opposite: number, total: number}}
+ * @return {object} {{id: Array, surface: Array, roiSurfaceCovered: Array, same: number, opposite: number, total: number}}
  */
 function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
     let correspondingRois = {id: [], surface: [], roiSurfaceCovered: [], same: 0, opposite: 0, total: 0};
