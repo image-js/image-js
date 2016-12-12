@@ -65,7 +65,7 @@
     "better-console": "^0.2.4",
     "browserify": "^13.1.0",
     "documentation": "4.0.0-beta16",
-    "eslint": "^3.0.0",
+    "eslint": "^3.12.1",
     "eslint-config-cheminfo": "^1.4.0",
     "eslint-plugin-no-only-tests": "^1.1.0",
     "istanbul": "^1.0.0-alpha",
