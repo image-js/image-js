@@ -49,5 +49,22 @@ describe('calculate the histogram', function () {
         histogram[15].should.equal(0);
     });
 
+    it('check histogram for 1 bit image', function () {
+        let image = new Image(5, 5,
+            [
+                0, 0, 0, 0, 0,
+                0, 255, 255, 255, 0,
+                0, 255, 255, 255, 0,
+                0, 255, 255, 255, 0,
+                0, 0, 0, 0, 0
+            ],
+            {kind: 'GREY'}
+        );
+        let image2 = image.mask();
+        let histogram = image2.getHistogram();
+        histogram[0].should.eql(16);
+        histogram[1].should.eql(9);
+
+    });
 });
 
