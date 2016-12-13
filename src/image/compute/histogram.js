@@ -14,7 +14,7 @@ import isInteger from 'is-integer';
 export function getHistogram(options = {}) {
     let {maxSlots = 256, channel, useAlpha = true} = options;
     this.checkProcessable('getHistogram', {
-        bitDepth: [8, 16]
+        bitDepth: [1, 8, 16]
     });
     if (channel === undefined) {
         if (this.components > 1) {
@@ -60,6 +60,23 @@ export function getHistograms(options = {}) {
 function getChannelHistogram(channel, options) {
     let {useAlpha, maxSlots} = options;
 
+    //for a mask, return a number array containing count of black and white points (black = array[0], white = array[1])
+
+    if (this.bitDepth === 1) {
+        let blackWhiteCount = [0, 0];
+        for (let i = 0; i < this.height; i++) {
+            for (let j = 0; j < this.width; j++) {
+                let value = this.getBitXY(i, j);
+                if (value === 0) {
+                    blackWhiteCount[0] += 1;
+                } else if (value === 1) {
+                    blackWhiteCount[1] += 1;
+                }
+            }
+        }
+        return blackWhiteCount;
+    }
+
     let bitSlots = Math.log2(maxSlots);
     if (!isInteger(bitSlots)) {
         throw new RangeError('maxSlots must be a power of 2, for example: 64, 256, 1024');
@@ -89,3 +106,4 @@ function getChannelHistogram(channel, options) {
 
     return result;
 }
+
