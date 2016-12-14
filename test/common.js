@@ -28,6 +28,14 @@ export function getSquare() {
     ]);
 }
 
+export function get1BitSquare() {
+    return new Image(3,3, new Uint8Array([
+       0b00001000, 0b00000000
+    ]), {
+        kind: 'BINARY'
+    });
+}
+
 export let tmpDir = __dirname + '/TMP';
 export function refreshTmpDir() {
     rmSync(tmpDir);

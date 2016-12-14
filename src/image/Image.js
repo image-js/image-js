@@ -3,7 +3,7 @@ import {RGBA} from './kindNames';
 import {ImageData, Canvas} from './environment';
 import extend from './extend';
 import bitMethods from './bitMethods';
-import {createWriteStream} from 'fs';
+import {createWriteStream, writeFile} from 'fs';
 import {RGB} from './model/model';
 import RoiManager from './roi/manager';
 import {getType, canWrite} from './mediaTypes';
@@ -12,6 +12,7 @@ import {loadImage} from './load';
 import Stack from '../stack/Stack';
 import {canvasToBlob} from 'blob-util';
 import hasOwn from 'has-own';
+import {encode as encodeBmp} from 'fast-bmp';
 
 let computedPropertyDescriptor = {
     configurable: true,
@@ -697,23 +698,36 @@ export default class Image {
     save(path, options = {}) {
         const {format = 'png'} = options;
         return new Promise((resolve, reject) => {
-            let canvas = this.getCanvas();
             let out = createWriteStream(path);
-            let stream;
+            let stream, buffer;
             switch (format.toLowerCase()) {
                 case 'png':
-                    stream = canvas.pngStream();
+                    stream = this.getCanvas().pngStream();
                     break;
                 case 'jpg':
                 case 'jpeg':
-                    stream = canvas.jpegStream();
+                    stream = this.getCanvas().jpegStream();
+                    break;
+                case 'bmp':
+                    buffer = encodeBmp(this);
                     break;
                 default:
                     throw new RangeError('invalid output format: ' + format);
             }
-            out.on('finish', resolve);
-            out.on('error', reject);
-            stream.pipe(out);
+            if (stream) {
+                out.on('finish', resolve);
+                out.on('error', reject);
+                stream.pipe(out);
+            } else if (buffer) {
+                writeFile(path, Buffer.from(buffer), err => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+                    resolve();
+                });
+            }
+
         });
     }
 
