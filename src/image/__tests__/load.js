@@ -41,6 +41,15 @@ describe('Image core', function () {
         });
     });
 
+    it('should load from dataURL', function () {
+        // a red dot
+        const dataURL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==';
+        return Image.load(dataURL).then(img => {
+            img.width.should.equal(5);
+            img.height.should.equal(5);
+        });
+    });
+
     it('should clone', function () {
         return load('format/rgba32.png').then(function (img) {
             let clone = img.clone();
