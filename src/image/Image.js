@@ -13,6 +13,7 @@ import Stack from '../stack/Stack';
 import {canvasToBlob} from 'blob-util';
 import hasOwn from 'has-own';
 import {encode as encodeBmp} from 'fast-bmp';
+import {encode as base64Encode} from '../util/base64';
 
 let computedPropertyDescriptor = {
     configurable: true,
@@ -544,15 +545,30 @@ export default class Image {
      * @return {string|Promise<string>}
      */
     toDataURL(type = 'image/png', async = false) {
+        type = getType(type);
+        function bmpUrl(ctx) {
+            const u8 = encodeBmp(ctx);
+            const base64 = base64Encode(u8);
+            return `data:${type};base64,${base64}`;
+        }
         if (async) {
             return new Promise((resolve, reject) => {
-                this.getCanvas().toDataURL(getType(type), function (err, text) {
-                    if (err) reject(err);
-                    else resolve(text);
-                });
+                if (type === 'image/bmp') {
+                    resolve(bmpUrl(this));
+                } else {
+                    this.getCanvas().toDataURL(type, function (err, text) {
+                        if (err) reject(err);
+                        else resolve(text);
+                    });
+                }
+
             });
         } else {
-            return this.getCanvas().toDataURL(getType(type));
+            if (type === 'image/bmp') {
+                return bmpUrl(this);
+            } else {
+                return this.getCanvas().toDataURL(type);
+            }
         }
     }
 
