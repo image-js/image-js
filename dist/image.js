@@ -1670,6 +1670,7 @@ module.exports = function extend() {
 };
 
 },{}],35:[function(require,module,exports){
+(function (Buffer){
 'use strict';
 
 var defaultByteLength = 1024 * 8;
@@ -2164,6 +2165,18 @@ class IOBuffer {
     }
 
     /**
+     * Same as {@link IOBuffer#toArray} but returns a Buffer if possible. Otherwise returns a Uint8Array.
+     * @return {Buffer|Uint8Array}
+     */
+    getBuffer() {
+        if (typeof Buffer !== 'undefined') {
+            return Buffer.from(this.toArray());
+        } else {
+            return this.toArray();
+        }
+    }
+
+    /**
      * Update the last written byte offset
      * @private
      */
@@ -2176,7 +2189,8 @@ class IOBuffer {
 
 module.exports = IOBuffer;
 
-},{}],36:[function(require,module,exports){
+}).call(this,require("buffer").Buffer)
+},{"buffer":7}],36:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -2242,7 +2256,7 @@ module.exports = function (imageData) {
     // write header at the end
     io.rewind();
     writeBitmapFileHeader(io, imageOffset);
-    return io.toArray();
+    return io.getBuffer();
 };
 
 function writePixelArray(io, imgData) {
@@ -2269,7 +2283,7 @@ function writePixelArray(io, imgData) {
             if (relOffset <= bitSkip && lastCol) {
                 // no need to read new data
                 io.writeByte(byteB << relOffset);
-                if (bitSkip === 0 && !lastRow) {
+                if ((bitSkip === 0 || bitSkip === relOffset) && !lastRow) {
                     byteA = byteB;
                     byteB = ioData.readByte();
                 }
