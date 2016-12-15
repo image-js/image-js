@@ -90,7 +90,7 @@
     "blob-util": "^1.2.1",
     "color-functions": "^1.1.0",
     "extend": "^3.0.0",
-    "fast-bmp": "^0.0.1",
+    "fast-bmp": "^1.0.0",
     "fast-jpeg": "^1.0.1",
     "fast-list": "^1.0.3",
     "fast-png": "^1.1.0",
