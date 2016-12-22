@@ -1,4 +1,4 @@
-import {Image, load, refreshTmpDir, tmpDir, getSquare} from 'test/common';
+import {Image, load, refreshTmpDir, tmpDir, getSquare, get1BitSquare} from 'test/common';
 import canvas from 'canvas';
 
 describe('save to disk', function () {
@@ -29,6 +29,11 @@ describe('save to disk', function () {
     it('new then save', function () {
         let img = getSquare();
         return img.save(tmpDir + '/img2.png');
+    });
+
+    it('new then save bmp', function () {
+        let img = get1BitSquare();
+        return img.save(tmpDir + '/square.bmp', {format: 'bmp'});
     });
 
 });

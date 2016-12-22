@@ -4,18 +4,10 @@ import {fetchBinary, DOMImage, Canvas, isDifferentOrigin} from './environment';
 import {PNGDecoder} from 'fast-png';
 import {decode as decodeJpeg} from 'fast-jpeg';
 import {decode as decodeTiff} from 'tiff';
-import atob from 'atob-lite';
 import imageType from 'image-type';
+import {decode as base64Decode} from '../util/base64';
 
 const isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
-
-function str2ab(str) {
-    const arr = new Uint8Array(str.length);
-    for (let i = 0; i < str.length; i++) {
-        arr[i] = str.charCodeAt(i);
-    }
-    return arr;
-}
 
 function swap16(val) {
     return ((val & 0xFF) << 8) | ((val >> 8) & 0xFF);
@@ -66,7 +58,7 @@ function loadURL(url, options) {
     const dataURL = url.slice(0, 64).match(isDataURL);
     let binaryDataP;
     if (dataURL) {
-        binaryDataP = Promise.resolve(str2ab(atob(url.slice(dataURL[0].length))));
+        binaryDataP = Promise.resolve(base64Decode(url.slice(dataURL[0].length)));
     } else {
         binaryDataP = fetchBinary(url, options);
     }

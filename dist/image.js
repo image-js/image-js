@@ -33,7 +33,7 @@ module.exports = function includes(searchElement) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"es-abstract/es6":25}],2:[function(require,module,exports){
+},{"es-abstract/es6":24}],2:[function(require,module,exports){
 'use strict';
 
 var define = require('define-properties');
@@ -60,7 +60,7 @@ define(boundIncludesShim, {
 
 module.exports = boundIncludesShim;
 
-},{"./implementation":1,"./polyfill":3,"./shim":4,"define-properties":23,"es-abstract/es6":25}],3:[function(require,module,exports){
+},{"./implementation":1,"./polyfill":3,"./shim":4,"define-properties":22,"es-abstract/es6":24}],3:[function(require,module,exports){
 'use strict';
 
 var implementation = require('./implementation');
@@ -83,14 +83,7 @@ module.exports = function shimArrayPrototypeIncludes() {
 	return polyfill;
 };
 
-},{"./polyfill":3,"define-properties":23}],5:[function(require,module,exports){
-"use strict";
-
-module.exports = function _atob(str) {
-  return atob(str);
-};
-
-},{}],6:[function(require,module,exports){
+},{"./polyfill":3,"define-properties":22}],5:[function(require,module,exports){
 'use strict';
 
 /* jshint -W079 */
@@ -397,7 +390,7 @@ module.exports = {
   blobToArrayBuffer: blobToArrayBuffer
 };
 
-},{"blob":7,"native-or-lie":114}],7:[function(require,module,exports){
+},{"blob":6,"native-or-lie":117}],6:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -494,10 +487,10 @@ module.exports = function () {
 }();
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -515,7 +508,7 @@ module.exports = {
   cssColor: require('./lib/css-color')
 };
 
-},{"./lib/css-color":11,"./lib/hex2rgb":12,"./lib/hsl2hsv":13,"./lib/hsl2rgb":14,"./lib/hsv2hex":15,"./lib/hsv2hsl":16,"./lib/hsv2rgb":17,"./lib/rgb2hex":18,"./lib/rgb2hsv":19,"./lib/rgba":20,"./lib/rgba2hex":21,"./lib/rgba2rgb":22}],10:[function(require,module,exports){
+},{"./lib/css-color":10,"./lib/hex2rgb":11,"./lib/hsl2hsv":12,"./lib/hsl2rgb":13,"./lib/hsv2hex":14,"./lib/hsv2hsl":15,"./lib/hsv2rgb":16,"./lib/rgb2hex":17,"./lib/rgb2hsv":18,"./lib/rgba":19,"./lib/rgba2hex":20,"./lib/rgba2rgb":21}],9:[function(require,module,exports){
 "use strict";
 
 module.exports = {
@@ -669,7 +662,7 @@ module.exports = {
   yellowgreen: [154, 205, 5]
 };
 
-},{}],11:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 // based on component/color-parser
@@ -776,7 +769,7 @@ function hsla(str) {
 
 module.exports = parse;
 
-},{"./_colors":10,"./hsl2rgb":14}],12:[function(require,module,exports){
+},{"./_colors":9,"./hsl2rgb":13}],11:[function(require,module,exports){
 'use strict';
 
 module.exports = function (hex) {
@@ -797,7 +790,7 @@ module.exports = function (hex) {
   }
 };
 
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 module.exports = function (h, s, l) {
@@ -812,7 +805,7 @@ module.exports = function (h, s, l) {
   };
 };
 
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 var hsl2hsv = require('./hsl2hsv');
@@ -823,7 +816,7 @@ module.exports = function (h, s, l) {
   return hsv2rgb(hsv.h, hsv.s, hsv.v);
 };
 
-},{"./hsl2hsv":13,"./hsv2rgb":17}],15:[function(require,module,exports){
+},{"./hsl2hsv":12,"./hsv2rgb":16}],14:[function(require,module,exports){
 'use strict';
 
 var hsv2rgb = require('./hsv2rgb');
@@ -834,7 +827,7 @@ module.exports = function (h, s, v) {
   return rgb2hex(rgb.r, rgb.g, rgb.b);
 };
 
-},{"./hsv2rgb":17,"./rgb2hex":18}],16:[function(require,module,exports){
+},{"./hsv2rgb":16,"./rgb2hex":17}],15:[function(require,module,exports){
 "use strict";
 
 module.exports = function (h, s, v) {
@@ -847,7 +840,7 @@ module.exports = function (h, s, v) {
   };
 };
 
-},{}],17:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 // http://www.rapidtables.com/convert/color/hsv-to-rgb.htm
@@ -894,7 +887,7 @@ module.exports = function (h, s, v) {
   };
 };
 
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 module.exports = function (r, g, b) {
@@ -906,7 +899,7 @@ module.exports = function (r, g, b) {
   }
 };
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict";
 
 // http://www.rapidtables.com/convert/color/rgb-to-hsv.htm
@@ -943,14 +936,14 @@ module.exports = function (r, g, b) {
   };
 };
 
-},{}],20:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
 module.exports = function (r, g, b, a) {
   return 'rgba(' + [r, g, b, a / 100].join(',') + ')';
 };
 
-},{}],21:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 var rgba2rgb = require('./rgba2rgb');
@@ -961,7 +954,7 @@ module.exports = function (r, g, b, a) {
   return rgb2hex(rgb.r, rgb.g, rgb.b);
 };
 
-},{"./rgb2hex":18,"./rgba2rgb":22}],22:[function(require,module,exports){
+},{"./rgb2hex":17,"./rgba2rgb":21}],21:[function(require,module,exports){
 "use strict";
 
 // https://en.wikipedia.org/wiki/Alpha_compositing#Alpha_blending
@@ -975,7 +968,7 @@ module.exports = function (r, g, b, a) {
   };
 };
 
-},{}],23:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 var keys = require('object-keys');
@@ -1036,7 +1029,7 @@ defineProperties.supportsDescriptors = !!supportsDescriptors;
 
 module.exports = defineProperties;
 
-},{"foreach":42,"object-keys":118}],24:[function(require,module,exports){
+},{"foreach":45,"object-keys":121}],23:[function(require,module,exports){
 'use strict';
 
 var $isNaN = require('./helpers/isNaN');
@@ -1133,7 +1126,7 @@ var ES5 = {
 
 module.exports = ES5;
 
-},{"./helpers/isFinite":27,"./helpers/isNaN":28,"./helpers/mod":30,"./helpers/sign":31,"es-to-primitive/es5":32,"is-callable":51}],25:[function(require,module,exports){
+},{"./helpers/isFinite":26,"./helpers/isNaN":27,"./helpers/mod":29,"./helpers/sign":30,"es-to-primitive/es5":31,"is-callable":54}],24:[function(require,module,exports){
 'use strict';
 
 var toStr = Object.prototype.toString;
@@ -1414,7 +1407,7 @@ delete ES6.CheckObjectCoercible; // renamed in ES6 to RequireObjectCoercible
 
 module.exports = ES6;
 
-},{"./es5":24,"./helpers/assign":26,"./helpers/isFinite":27,"./helpers/isNaN":28,"./helpers/isPrimitive":29,"./helpers/mod":30,"./helpers/sign":31,"es-to-primitive/es6":33,"function-bind":44,"is-regex":55}],26:[function(require,module,exports){
+},{"./es5":23,"./helpers/assign":25,"./helpers/isFinite":26,"./helpers/isNaN":27,"./helpers/isPrimitive":28,"./helpers/mod":29,"./helpers/sign":30,"es-to-primitive/es6":32,"function-bind":47,"is-regex":58}],25:[function(require,module,exports){
 "use strict";
 
 var has = Object.prototype.hasOwnProperty;
@@ -1427,7 +1420,7 @@ module.exports = Object.assign || function assign(target, source) {
 	return target;
 };
 
-},{}],27:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
 var $isNaN = Number.isNaN || function (a) {
@@ -1438,21 +1431,21 @@ module.exports = Number.isFinite || function (x) {
   return typeof x === 'number' && !$isNaN(x) && x !== Infinity && x !== -Infinity;
 };
 
-},{}],28:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 "use strict";
 
 module.exports = Number.isNaN || function isNaN(a) {
 	return a !== a;
 };
 
-},{}],29:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 'use strict';
 
 module.exports = function isPrimitive(value) {
 	return value === null || typeof value !== 'function' && typeof value !== 'object';
 };
 
-},{}],30:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 
 module.exports = function mod(number, modulo) {
@@ -1460,14 +1453,14 @@ module.exports = function mod(number, modulo) {
 	return Math.floor(remain >= 0 ? remain : remain + modulo);
 };
 
-},{}],31:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 "use strict";
 
 module.exports = function sign(number) {
 	return number >= 0 ? 1 : -1;
 };
 
-},{}],32:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
 
 var toStr = Object.prototype.toString;
@@ -1506,7 +1499,7 @@ module.exports = function ToPrimitive(input, PreferredType) {
 	return ES5internalSlots['[[DefaultValue]]'](input, PreferredType);
 };
 
-},{"./helpers/isPrimitive":34,"is-callable":51}],33:[function(require,module,exports){
+},{"./helpers/isPrimitive":33,"is-callable":54}],32:[function(require,module,exports){
 'use strict';
 
 var hasSymbols = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol';
@@ -1582,9 +1575,9 @@ module.exports = function ToPrimitive(input, PreferredType) {
 	return ordinaryToPrimitive(input, hint === 'default' ? 'number' : hint);
 };
 
-},{"./helpers/isPrimitive":34,"is-callable":51,"is-date-object":52,"is-symbol":56}],34:[function(require,module,exports){
-arguments[4][29][0].apply(exports,arguments)
-},{"dup":29}],35:[function(require,module,exports){
+},{"./helpers/isPrimitive":33,"is-callable":54,"is-date-object":55,"is-symbol":59}],33:[function(require,module,exports){
+arguments[4][28][0].apply(exports,arguments)
+},{"dup":28}],34:[function(require,module,exports){
 'use strict';
 
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -1676,7 +1669,695 @@ module.exports = function extend() {
 	return target;
 };
 
-},{}],36:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
+(function (Buffer){
+'use strict';
+
+var defaultByteLength = 1024 * 8;
+var charArray = [];
+
+/**
+ * IOBuffer
+ * @constructor
+ * @param {undefined|number|ArrayBuffer|TypedArray|IOBuffer|Buffer} data - The data to construct the IOBuffer with.
+ *
+ * If it's a number, it will initialize the buffer with the number as the buffer's length<br>
+ * If it's undefined, it will initialize the buffer with a default length of 8 Kb<br>
+ * If its an ArrayBuffer, a TypedArray, an IOBuffer instance,
+ * or a Node.js Buffer, it will create a view over the underlying ArrayBuffer.
+ * @param {object} [options]
+ * @param {number} [options.offset=0] - Ignore the first n bytes of the ArrayBuffer
+ * @property {ArrayBuffer} buffer - Reference to the internal ArrayBuffer object
+ * @property {number} length - Byte length of the internal ArrayBuffer
+ * @property {number} offset - The current offset of the buffer's pointer
+ * @property {number} byteLength - Byte length of the internal ArrayBuffer
+ * @property {number} byteOffset - Byte offset of the internal ArrayBuffer
+ */
+class IOBuffer {
+    constructor(data, options) {
+        options = options || {};
+        var dataIsGiven = false;
+        if (data === undefined) {
+            data = defaultByteLength;
+        }
+        if (typeof data === 'number') {
+            data = new ArrayBuffer(data);
+        } else {
+            dataIsGiven = true;
+            this._lastWrittenByte = data.byteLength;
+        }
+
+        var offset = options.offset ? options.offset >>> 0 : 0;
+        var byteLength = data.byteLength - offset;
+        var dvOffset = offset;
+        if (data.buffer) {
+            if (data.byteLength !== data.buffer.byteLength) {
+                dvOffset = data.byteOffset + offset;
+            }
+            data = data.buffer;
+        }
+        if (dataIsGiven) {
+            this._lastWrittenByte = byteLength;
+        } else {
+            this._lastWrittenByte = 0;
+        }
+        this.buffer = data;
+        this.length = byteLength;
+        this.byteLength = byteLength;
+        this.byteOffset = dvOffset;
+        this.offset = 0;
+        this.littleEndian = true;
+        this._data = new DataView(this.buffer, dvOffset, byteLength);
+        this._mark = 0;
+        this._marks = [];
+    }
+
+    /**
+     * Checks if the memory allocated to the buffer is sufficient to store more bytes after the offset
+     * @param {number} [byteLength=1] The needed memory in bytes
+     * @return {boolean} Returns true if there is sufficient space and false otherwise
+     */
+    available(byteLength) {
+        if (byteLength === undefined) byteLength = 1;
+        return this.offset + byteLength <= this.length;
+    }
+
+    /**
+     * Check if little-endian mode is used for reading and writing multi-byte values
+     * @return {boolean} Returns true if little-endian mode is used, false otherwise
+     */
+    isLittleEndian() {
+        return this.littleEndian;
+    }
+
+    /**
+     * Set little-endian mode for reading and writing multi-byte values
+     * @return {IOBuffer}
+     */
+    setLittleEndian() {
+        this.littleEndian = true;
+        return this;
+    }
+
+    /**
+     * Check if big-endian mode is used for reading and writing multi-byte values
+     * @return {boolean} Returns true if big-endian mode is used, false otherwise
+     */
+    isBigEndian() {
+        return !this.littleEndian;
+    }
+
+    /**
+     * Switches to big-endian mode for reading and writing multi-byte values
+     * @return {IOBuffer}
+     */
+    setBigEndian() {
+        this.littleEndian = false;
+        return this;
+    }
+
+    /**
+     * Move the pointer n bytes forward
+     * @param {number} n
+     * @return {IOBuffer}
+     */
+    skip(n) {
+        if (n === undefined) n = 1;
+        this.offset += n;
+        return this;
+    }
+
+    /**
+     * Move the pointer to the given offset
+     * @param {number} offset
+     * @return {IOBuffer}
+     */
+    seek(offset) {
+        this.offset = offset;
+        return this;
+    }
+
+    /**
+     * Store the current pointer offset.
+     * @see {@link IOBuffer#reset}
+     * @return {IOBuffer}
+     */
+    mark() {
+        this._mark = this.offset;
+        return this;
+    }
+
+    /**
+     * Move the pointer back to the last pointer offset set by mark
+     * @see {@link IOBuffer#mark}
+     * @return {IOBuffer}
+     */
+    reset() {
+        this.offset = this._mark;
+        return this;
+    }
+
+    /**
+     * Push the current pointer offset to the mark stack
+     * @see {@link IOBuffer#popMark}
+     * @return {IOBuffer}
+     */
+    pushMark() {
+        this._marks.push(this.offset);
+        return this;
+    }
+
+    /**
+     * Pop the last pointer offset from the mark stack, and set the current pointer offset to the popped value
+     * @see {@link IOBuffer#pushMark}
+     * @return {IOBuffer}
+     */
+    popMark() {
+        var offset = this._marks.pop();
+        if (offset === undefined) throw new Error('Mark stack empty');
+        this.seek(offset);
+        return this;
+    }
+
+    /**
+     * Move the pointer offset back to 0
+     * @return {IOBuffer}
+     */
+    rewind() {
+        this.offset = 0;
+        return this;
+    }
+
+    /**
+     * Make sure the buffer has sufficient memory to write a given byteLength at the current pointer offset
+     * If the buffer's memory is insufficient, this method will create a new buffer (a copy) with a length
+     * that is twice (byteLength + current offset)
+     * @param {number} [byteLength = 1]
+     * @return {IOBuffer}
+     */
+    ensureAvailable(byteLength) {
+        if (byteLength === undefined) byteLength = 1;
+        if (!this.available(byteLength)) {
+            var lengthNeeded = this.offset + byteLength;
+            var newLength = lengthNeeded * 2;
+            var newArray = new Uint8Array(newLength);
+            newArray.set(new Uint8Array(this.buffer));
+            this.buffer = newArray.buffer;
+            this.length = this.byteLength = newLength;
+            this._data = new DataView(this.buffer);
+        }
+        return this;
+    }
+
+    /**
+     * Read a byte and return false if the byte's value is 0, or true otherwise
+     * Moves pointer forward
+     * @return {boolean}
+     */
+    readBoolean() {
+        return this.readUint8() !== 0;
+    }
+
+    /**
+     * Read a signed 8-bit integer and move pointer forward
+     * @return {number}
+     */
+    readInt8() {
+        return this._data.getInt8(this.offset++);
+    }
+
+    /**
+     * Read an unsigned 8-bit integer and move pointer forward
+     * @return {number}
+     */
+    readUint8() {
+        return this._data.getUint8(this.offset++);
+    }
+
+    /**
+     * Alias for {@link IOBuffer#readUint8}
+     * @return {number}
+     */
+    readByte() {
+        return this.readUint8();
+    }
+
+    /**
+     * Read n bytes and move pointer forward.
+     * @param {number} n
+     * @return {Uint8Array}
+     */
+    readBytes(n) {
+        if (n === undefined) n = 1;
+        var bytes = new Uint8Array(n);
+        for (var i = 0; i < n; i++) {
+            bytes[i] = this.readByte();
+        }
+        return bytes;
+    }
+
+    /**
+     * Read a 16-bit signed integer and move pointer forward
+     * @return {number}
+     */
+    readInt16() {
+        var value = this._data.getInt16(this.offset, this.littleEndian);
+        this.offset += 2;
+        return value;
+    }
+
+    /**
+     * Read a 16-bit unsigned integer and move pointer forward
+     * @return {number}
+     */
+    readUint16() {
+        var value = this._data.getUint16(this.offset, this.littleEndian);
+        this.offset += 2;
+        return value;
+    }
+
+    /**
+     * Read a 32-bit signed integer and move pointer forward
+     * @return {number}
+     */
+    readInt32() {
+        var value = this._data.getInt32(this.offset, this.littleEndian);
+        this.offset += 4;
+        return value;
+    }
+
+    /**
+     * Read a 32-bit unsigned integer and move pointer forward
+     * @return {number}
+     */
+    readUint32() {
+        var value = this._data.getUint32(this.offset, this.littleEndian);
+        this.offset += 4;
+        return value;
+    }
+
+    /**
+     * Read a 32-bit floating number and move pointer forward
+     * @return {number}
+     */
+    readFloat32() {
+        var value = this._data.getFloat32(this.offset, this.littleEndian);
+        this.offset += 4;
+        return value;
+    }
+
+    /**
+     * Read a 64-bit floating number and move pointer forward
+     * @return {number}
+     */
+    readFloat64() {
+        var value = this._data.getFloat64(this.offset, this.littleEndian);
+        this.offset += 8;
+        return value;
+    }
+
+    /**
+     * Read 1-byte ascii character and move pointer forward
+     * @return {string}
+     */
+    readChar() {
+        return String.fromCharCode(this.readInt8());
+    }
+
+    /**
+     * Read n 1-byte ascii characters and move pointer forward
+     * @param {number} n
+     * @return {string}
+     */
+    readChars(n) {
+        if (n === undefined) n = 1;
+        charArray.length = n;
+        for (var i = 0; i < n; i++) {
+            charArray[i] = this.readChar();
+        }
+        return charArray.join('');
+    }
+
+    /**
+     * Write 0xff if the passed value is truthy, 0x00 otherwise
+     * @param {any} value
+     * @return {IOBuffer}
+     */
+    writeBoolean(value) {
+        this.writeUint8(value ? 0xff : 0x00);
+        return this;
+    }
+
+    /**
+     * Write value as an 8-bit signed integer
+     * @param {number} value
+     * @return {IOBuffer}
+     */
+    writeInt8(value) {
+        this.ensureAvailable(1);
+        this._data.setInt8(this.offset++, value);
+        this._updateLastWrittenByte();
+        return this;
+    }
+
+    /**
+     * Write value as a 8-bit unsigned integer
+     * @param {number} value
+     * @return {IOBuffer}
+     */
+    writeUint8(value) {
+        this.ensureAvailable(1);
+        this._data.setUint8(this.offset++, value);
+        this._updateLastWrittenByte();
+        return this;
+    }
+
+    /**
+     * An alias for {@link IOBuffer#writeUint8}
+     * @param {number} value
+     * @return {IOBuffer}
+     */
+    writeByte(value) {
+        return this.writeUint8(value);
+    }
+
+    /**
+     * Write bytes
+     * @param {Array|Uint8Array} bytes
+     * @return {IOBuffer}
+     */
+    writeBytes(bytes) {
+        this.ensureAvailable(bytes.length);
+        for (var i = 0; i < bytes.length; i++) {
+            this._data.setUint8(this.offset++, bytes[i]);
+        }
+        this._updateLastWrittenByte();
+        return this;
+    }
+
+    /**
+     * Write value as an 16-bit signed integer
+     * @param {number} value
+     * @return {IOBuffer}
+     */
+    writeInt16(value) {
+        this.ensureAvailable(2);
+        this._data.setInt16(this.offset, value, this.littleEndian);
+        this.offset += 2;
+        this._updateLastWrittenByte();
+        return this;
+    }
+
+    /**
+     * Write value as a 16-bit unsigned integer
+     * @param {number} value
+     * @return {IOBuffer}
+     */
+    writeUint16(value) {
+        this.ensureAvailable(2);
+        this._data.setUint16(this.offset, value, this.littleEndian);
+        this.offset += 2;
+        this._updateLastWrittenByte();
+        return this;
+    }
+
+    /**
+     * Write a 32-bit signed integer at the current pointer offset
+     * @param {number} value
+     * @return {IOBuffer}
+     */
+    writeInt32(value) {
+        this.ensureAvailable(4);
+        this._data.setInt32(this.offset, value, this.littleEndian);
+        this.offset += 4;
+        this._updateLastWrittenByte();
+        return this;
+    }
+
+    /**
+     * Write a 32-bit unsigned integer at the current pointer offset
+     * @param {number} value - The value to set
+     * @return {IOBuffer}
+     */
+    writeUint32(value) {
+        this.ensureAvailable(4);
+        this._data.setUint32(this.offset, value, this.littleEndian);
+        this.offset += 4;
+        this._updateLastWrittenByte();
+        return this;
+    }
+
+    /**
+     * Write a 32-bit floating number at the current pointer offset
+     * @param {number} value - The value to set
+     * @return {IOBuffer}
+     */
+    writeFloat32(value) {
+        this.ensureAvailable(4);
+        this._data.setFloat32(this.offset, value, this.littleEndian);
+        this.offset += 4;
+        this._updateLastWrittenByte();
+        return this;
+    }
+
+    /**
+     * Write a 64-bit floating number at the current pointer offset
+     * @param {number} value
+     * @return {IOBuffer}
+     */
+    writeFloat64(value) {
+        this.ensureAvailable(8);
+        this._data.setFloat64(this.offset, value, this.littleEndian);
+        this.offset += 8;
+        this._updateLastWrittenByte();
+        return this;
+    }
+
+    /**
+     * Write the charCode of the passed string's first character to the current pointer offset
+     * @param {string} str - The character to set
+     * @return {IOBuffer}
+     */
+    writeChar(str) {
+        return this.writeUint8(str.charCodeAt(0));
+    }
+
+    /**
+     * Write the charCodes of the passed string's characters to the current pointer offset
+     * @param {string} str
+     * @return {IOBuffer}
+     */
+    writeChars(str) {
+        for (var i = 0; i < str.length; i++) {
+            this.writeUint8(str.charCodeAt(i));
+        }
+        return this;
+    }
+
+    /**
+     * Export a Uint8Array view of the internal buffer.
+     * The view starts at the byte offset and its length
+     * is calculated to stop at the last written byte or the original length.
+     * @return {Uint8Array}
+     */
+    toArray() {
+        return new Uint8Array(this.buffer, this.byteOffset, this._lastWrittenByte);
+    }
+
+    /**
+     * Same as {@link IOBuffer#toArray} but returns a Buffer if possible. Otherwise returns a Uint8Array.
+     * @return {Buffer|Uint8Array}
+     */
+    getBuffer() {
+        if (typeof Buffer !== 'undefined') {
+            return Buffer.from(this.toArray());
+        } else {
+            return this.toArray();
+        }
+    }
+
+    /**
+     * Update the last written byte offset
+     * @private
+     */
+    _updateLastWrittenByte() {
+        if (this.offset > this._lastWrittenByte) {
+            this._lastWrittenByte = this.offset;
+        }
+    }
+}
+
+module.exports = IOBuffer;
+
+}).call(this,require("buffer").Buffer)
+},{"buffer":7}],36:[function(require,module,exports){
+'use strict';
+
+module.exports = {
+    BITMAPV5HEADER: {
+        LogicalColorSpace: { // https://msdn.microsoft.com/en-us/library/cc250396.aspx
+            LCS_CALIBRATED_RGB: 0x00000000,
+            LCS_sRGB: 0x73524742, // eslint-disable-line camelcase
+            LCS_WINDOWS_COLOR_SPACE: 0x57696E20
+        },
+        Compression: { // https://msdn.microsoft.com/en-us/library/cc250415.aspx
+            BI_RGB: 0x0000, // No compression
+            BI_RLE8: 0x0001,
+            BI_RLE4: 0x0002,
+            BI_BITFIELDS: 0x0003,
+            BI_JPEG: 0x0004,
+            BI_PNG: 0x0005,
+            BI_CMYK: 0x000B,
+            BI_CMYKRLE8: 0x000C,
+            BI_CMYKRLE4: 0x000D
+        },
+        GamutMappingIntent: { // https://msdn.microsoft.com/en-us/library/cc250392.aspx
+            LCS_GM_ABS_COLORIMETRIC: 0x00000008,
+            LCS_GM_BUSINESS: 0x00000001,
+            LCS_GM_GRAPHICS: 0x00000002,
+            LCS_GM_IMAGES: 0x00000004
+        }
+    }
+};
+
+},{}],37:[function(require,module,exports){
+'use strict';
+
+var IOBuffer = require('iobuffer');
+var constants = require('./constants');
+var tableLeft = [];
+for (var i = 0; i <= 8; i++) {
+    tableLeft.push(0b11111111 << i);
+}
+module.exports = function (imageData) {
+    if (imageData.bitDepth !== 1) {
+        throw new Error('Only bitDepth of 1 is supported');
+    }
+    if (!imageData.height || !imageData.width) {
+        throw new Error('ImageData width and height are required');
+    }
+
+    if (imageData.components !== 1) {
+        throw new Error('Only 1 component is supported');
+    }
+
+    if (imageData.channels !== 1) {
+        throw new Error('Only 1 channel is supported');
+    }
+
+    var io = new IOBuffer();
+    // skip header
+    io.skip(14);
+    writeBitmapV5Header(io, imageData);
+    writeColorTable(io, imageData);
+    var imageOffset = io.offset;
+    writePixelArray(io, imageData);
+
+    // write header at the end
+    io.rewind();
+    writeBitmapFileHeader(io, imageOffset);
+    return io.getBuffer();
+};
+
+function writePixelArray(io, imgData) {
+    var rowSize = Math.floor((imgData.bitDepth * imgData.width + 31) / 32) * 4;
+    var dataRowSize = Math.ceil(imgData.bitDepth * imgData.width / 8);
+    var skipSize = rowSize - dataRowSize;
+    var bitOverflow = imgData.bitDepth * imgData.width % 8;
+    var bitSkip = bitOverflow === 0 ? 0 : 8 - bitOverflow;
+    var totalBytes = rowSize * imgData.height;
+
+    var byteA, byteB;
+    var ioData = new IOBuffer(imgData.data);
+    var offset = 0; // Current off set in the ioData
+    var relOffset = 0,
+        iOffset = 8;
+    io.mark();
+    byteB = ioData.readUint8();
+    for (var i = imgData.height - 1; i >= 0; i--) {
+        var lastRow = i === 0;
+        io.reset();
+        io.skip(i * rowSize);
+        for (var j = 0; j < dataRowSize; j++) {
+            var lastCol = j === dataRowSize - 1;
+            if (relOffset <= bitSkip && lastCol) {
+                // no need to read new data
+                io.writeByte(byteB << relOffset);
+                if ((bitSkip === 0 || bitSkip === relOffset) && !lastRow) {
+                    byteA = byteB;
+                    byteB = ioData.readByte();
+                }
+            } else if (relOffset === 0) {
+                byteA = byteB;
+                byteB = ioData.readUint8();
+                io.writeByte(byteA);
+            } else {
+                byteA = byteB;
+                byteB = ioData.readUint8();
+                io.writeByte(byteA << relOffset & tableLeft[relOffset] | byteB >> iOffset);
+            }
+            if (lastCol) {
+                offset += bitOverflow || 8;
+                io.skip(skipSize);
+                relOffset = offset % 8;
+                iOffset = 8 - relOffset;
+            } else {
+                offset += 8;
+            }
+        }
+    }
+    if (rowSize > dataRowSize) {
+        // make sure last written byte is correct
+        io.reset();
+        io.skip(totalBytes - 1);
+        io.writeUint8(0);
+    }
+}
+
+function writeColorTable(io, imgData) {
+    // Color table is optional for bitDepth >= 8
+    if (imgData.bitDepth > 8) return;
+    // We only handle 1-bit images
+    io.writeUint32(0x00000000) // black
+    .writeUint32(0x00ffffff); //white
+}
+
+function writeBitmapFileHeader(io, imageOffset) {
+    // 14 bytes bitmap file header
+    io.writeChars('BM');
+    // Size of BMP file in bytes
+    io.writeInt32(io._lastWrittenByte);
+    io.writeUint16(0);
+    io.writeUint16(0);
+    io.writeUint32(imageOffset);
+}
+
+function writeBitmapV5Header(io, imgData) {
+    // Size of the header
+    io.writeUint32(124) // Header size
+    .writeInt32(imgData.width) // bV5Width
+    .writeInt32(imgData.height) // bV5Height
+    .writeUint16(1) // bv5Planes - must be set to 1
+    .writeUint16(imgData.bitDepth) // bV5BitCount
+    .writeUint32(constants.BITMAPV5HEADER.Compression.BI_RGB) // bV5Compression - No compression
+    .writeUint32(imgData.width * imgData.height * imgData.bitDepth) // bv5SizeImage - buffer size (optional if uncompressed)
+    .writeInt32(0) // bV5XPelsPerMeter - resolution
+    .writeInt32(0) // bV5YPelsPerMeter - resolution
+    .writeUint32(Math.pow(2, imgData.bitDepth)).writeUint32(Math.pow(2, imgData.bitDepth)).writeUint32(0xff000000) // bV5RedMask
+    .writeUint32(0x00ff0000) // bV5GreenMask
+    .writeUint32(0x0000ff00) // bV5BlueMask
+    .writeUint32(0x000000ff) // bV5AlphaMask
+    .writeUint32(constants.BITMAPV5HEADER.LogicalColorSpace.LCS_sRGB).skip(36) // bV5Endpoints
+    .skip(12) // bV5GammaRed, Green, Blue
+    .writeUint32(constants.BITMAPV5HEADER.GamutMappingIntent.LCS_GM_IMAGES).skip(12); // ProfileData, ProfileSize, Reserved
+}
+
+},{"./constants":36,"iobuffer":35}],38:[function(require,module,exports){
+'use strict';
+
+exports.encode = require('./encode');
+
+},{"./encode":37}],39:[function(require,module,exports){
 'use strict';
 
 var IOBuffer = require('iobuffer');
@@ -1713,12 +2394,12 @@ function decode(data) {
 
 module.exports = decode;
 
-},{"iobuffer":49,"tiff":139}],37:[function(require,module,exports){
+},{"iobuffer":52,"tiff":142}],40:[function(require,module,exports){
 'use strict';
 
 exports.decode = require('./decode');
 
-},{"./decode":36}],38:[function(require,module,exports){
+},{"./decode":39}],41:[function(require,module,exports){
 "use strict";
 
 ;(function () {
@@ -1868,7 +2549,7 @@ exports.decode = require('./decode');
   })().FastList = FastList;
 })();
 
-},{}],39:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 'use strict';
 
 var IOBuffer = require('iobuffer');
@@ -2150,12 +2831,12 @@ function paethPredictor(a, b, c) {
     if (pa <= pb && pa <= pc) return a;else if (pb <= pc) return b;else return c;
 }
 
-},{"iobuffer":49,"pako":120}],40:[function(require,module,exports){
+},{"iobuffer":52,"pako":123}],43:[function(require,module,exports){
 'use strict';
 
 exports.PNGDecoder = require('./PNGDecoder');
 
-},{"./PNGDecoder":39}],41:[function(require,module,exports){
+},{"./PNGDecoder":42}],44:[function(require,module,exports){
 'use strict';
 
 module.exports = function (buf) {
@@ -2579,7 +3260,7 @@ module.exports = function (buf) {
 	return null;
 };
 
-},{}],42:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 'use strict';
 
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -2603,7 +3284,7 @@ module.exports = function forEach(obj, fn, ctx) {
     }
 };
 
-},{}],43:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 'use strict';
 
 var ERROR_MESSAGE = 'Function.prototype.bind called on incompatible ';
@@ -2649,14 +3330,14 @@ module.exports = function bind(that) {
     return bound;
 };
 
-},{}],44:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 'use strict';
 
 var implementation = require('./implementation');
 
 module.exports = Function.prototype.bind || implementation;
 
-},{"./implementation":43}],45:[function(require,module,exports){
+},{"./implementation":46}],48:[function(require,module,exports){
 'use strict';
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -2667,7 +3348,7 @@ module.exports = exports = function hasOwn(prop, obj) {
 
 exports.version = require('./package').version;
 
-},{"./package":46}],46:[function(require,module,exports){
+},{"./package":49}],49:[function(require,module,exports){
 module.exports={
   "name": "has-own",
   "version": "1.0.0",
@@ -2688,7 +3369,7 @@ module.exports={
   }
 }
 
-},{}],47:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 var fileType = require('file-type');
@@ -2701,7 +3382,7 @@ module.exports = function (buf) {
 	return imageExts.indexOf(ret && ret.ext) !== -1 ? ret : null;
 };
 
-},{"file-type":41}],48:[function(require,module,exports){
+},{"file-type":44}],51:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -2775,7 +3456,7 @@ function immediate(task) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],49:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 'use strict';
 
 var defaultByteLength = 1024 * 8;
@@ -3022,7 +3703,7 @@ class IOBuffer {
 
 module.exports = IOBuffer;
 
-},{}],50:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 'use strict';
 
 var toString = Object.prototype.toString;
@@ -3031,7 +3712,7 @@ module.exports = function isArrayType(value) {
     return toString.call(value).substr(-6, 5) === 'Array';
 };
 
-},{}],51:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 'use strict';
 
 var fnToStr = Function.prototype.toString;
@@ -3082,7 +3763,7 @@ module.exports = function isCallable(value) {
 	return strClass === fnClass || strClass === genClass;
 };
 
-},{}],52:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 'use strict';
 
 var getDay = Date.prototype.getDay;
@@ -3106,7 +3787,7 @@ module.exports = function isDateObject(value) {
 	return hasToStringTag ? tryDateObject(value) : toStr.call(value) === dateClass;
 };
 
-},{}],53:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 'use strict';
 
 var numberIsNan = require('number-is-nan');
@@ -3115,7 +3796,7 @@ module.exports = Number.isFinite || function (val) {
 	return !(typeof val !== 'number' || numberIsNan(val) || val === Infinity || val === -Infinity);
 };
 
-},{"number-is-nan":117}],54:[function(require,module,exports){
+},{"number-is-nan":120}],57:[function(require,module,exports){
 "use strict";
 
 // https://github.com/paulmillr/es6-shim
@@ -3125,7 +3806,7 @@ module.exports = Number.isInteger || function (val) {
   return typeof val === "number" && isFinite(val) && Math.floor(val) === val;
 };
 
-},{"is-finite":53}],55:[function(require,module,exports){
+},{"is-finite":56}],58:[function(require,module,exports){
 'use strict';
 
 var regexExec = RegExp.prototype.exec;
@@ -3148,7 +3829,7 @@ module.exports = function isRegex(value) {
 	return hasToStringTag ? tryRegexExec(value) : toStr.call(value) === regexClass;
 };
 
-},{}],56:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 'use strict';
 
 var toStr = Object.prototype.toString;
@@ -3183,7 +3864,7 @@ if (hasSymbols) {
 	};
 }
 
-},{}],57:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -3600,7 +4281,7 @@ if (hasSymbols) {
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],58:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 'use strict';
 
 var immediate = require('immediate');
@@ -3855,7 +4536,7 @@ function race(iterable) {
   }
 }
 
-},{"immediate":48}],59:[function(require,module,exports){
+},{"immediate":51}],62:[function(require,module,exports){
 'use strict';
 
 var Stat = require('ml-stat').array;
@@ -4077,7 +4758,7 @@ module.exports = {
     scale: scale
 };
 
-},{"ml-stat":112}],60:[function(require,module,exports){
+},{"ml-stat":115}],63:[function(require,module,exports){
 'use strict';
 
 /**
@@ -4329,7 +5010,7 @@ function integral(x0, x1, slope, intercept) {
 exports.getEquallySpacedData = getEquallySpacedData;
 exports.integral = integral;
 
-},{}],61:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 'use strict';
 
 module.exports = exports = require('./ArrayUtils');
@@ -4337,7 +5018,7 @@ module.exports = exports = require('./ArrayUtils');
 exports.getEquallySpacedData = require('./getEquallySpaced').getEquallySpacedData;
 exports.SNV = require('./snv').SNV;
 
-},{"./ArrayUtils":59,"./getEquallySpaced":60,"./snv":62}],62:[function(require,module,exports){
+},{"./ArrayUtils":62,"./getEquallySpaced":63,"./snv":65}],65:[function(require,module,exports){
 'use strict';
 
 exports.SNV = SNV;
@@ -4359,7 +5040,7 @@ function SNV(data) {
     return result;
 }
 
-},{"ml-stat":112}],63:[function(require,module,exports){
+},{"ml-stat":115}],66:[function(require,module,exports){
 'use strict';
 
 /**
@@ -4443,7 +5124,7 @@ function DisjointSetNode(value) {
     this.rank = 0;
 }
 
-},{}],64:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 'use strict';
 
 function squaredEuclidean(p, q) {
@@ -4461,7 +5142,7 @@ function euclidean(p, q) {
 module.exports = euclidean;
 euclidean.squared = squaredEuclidean;
 
-},{}],65:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 'use strict';
 
 var FFT = require('./fftlib');
@@ -4768,7 +5449,7 @@ var FFTUtils = {
 
 module.exports = FFTUtils;
 
-},{"./fftlib":66}],66:[function(require,module,exports){
+},{"./fftlib":69}],69:[function(require,module,exports){
 'use strict';
 
 /**
@@ -5013,13 +5694,13 @@ var FFT = function () {
   return FFT;
 }.call(undefined);
 
-},{}],67:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 'use strict';
 
 exports.FFTUtils = require("./FFTUtils");
 exports.FFT = require('./fftlib');
 
-},{"./FFTUtils":65,"./fftlib":66}],68:[function(require,module,exports){
+},{"./FFTUtils":68,"./fftlib":69}],71:[function(require,module,exports){
 'use strict';
 
 var squaredEuclidean = require('ml-distance-euclidean').squared;
@@ -5043,7 +5724,7 @@ class GaussianKernel {
 
 module.exports = GaussianKernel;
 
-},{"ml-distance-euclidean":64}],69:[function(require,module,exports){
+},{"ml-distance-euclidean":67}],72:[function(require,module,exports){
 'use strict';
 
 var defaultOptions = {
@@ -5072,7 +5753,7 @@ class PolynomialKernel {
 
 module.exports = PolynomialKernel;
 
-},{}],70:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 'use strict';
 
 var defaultOptions = {
@@ -5098,7 +5779,7 @@ class SigmoidKernel {
 
 module.exports = SigmoidKernel;
 
-},{}],71:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('ml-matrix');
@@ -5184,7 +5865,7 @@ class Kernel {
 
 module.exports = Kernel;
 
-},{"./kernels/anova-kernel":72,"./kernels/cauchy-kernel":73,"./kernels/exponential-kernel":74,"./kernels/histogram-intersection-kernel":75,"./kernels/laplacian-kernel":76,"./kernels/multiquadratic-kernel":77,"./kernels/rational-quadratic-kernel":78,"ml-kernel-gaussian":68,"ml-kernel-polynomial":69,"ml-kernel-sigmoid":70,"ml-matrix":88}],72:[function(require,module,exports){
+},{"./kernels/anova-kernel":75,"./kernels/cauchy-kernel":76,"./kernels/exponential-kernel":77,"./kernels/histogram-intersection-kernel":78,"./kernels/laplacian-kernel":79,"./kernels/multiquadratic-kernel":80,"./kernels/rational-quadratic-kernel":81,"ml-kernel-gaussian":71,"ml-kernel-polynomial":72,"ml-kernel-sigmoid":73,"ml-matrix":91}],75:[function(require,module,exports){
 'use strict';
 
 var defaultOptions = {
@@ -5211,7 +5892,7 @@ class ANOVAKernel {
 
 module.exports = ANOVAKernel;
 
-},{}],73:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 'use strict';
 
 var squaredEuclidean = require('ml-distance-euclidean').squared;
@@ -5233,7 +5914,7 @@ class CauchyKernel {
 
 module.exports = CauchyKernel;
 
-},{"ml-distance-euclidean":64}],74:[function(require,module,exports){
+},{"ml-distance-euclidean":67}],77:[function(require,module,exports){
 'use strict';
 
 var euclidean = require('ml-distance-euclidean');
@@ -5257,7 +5938,7 @@ class ExponentialKernel {
 
 module.exports = ExponentialKernel;
 
-},{"ml-distance-euclidean":64}],75:[function(require,module,exports){
+},{"ml-distance-euclidean":67}],78:[function(require,module,exports){
 'use strict';
 
 class HistogramIntersectionKernel {
@@ -5272,7 +5953,7 @@ class HistogramIntersectionKernel {
 
 module.exports = HistogramIntersectionKernel;
 
-},{}],76:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 'use strict';
 
 var euclidean = require('ml-distance-euclidean');
@@ -5295,7 +5976,7 @@ class LaplacianKernel {
 
 module.exports = LaplacianKernel;
 
-},{"ml-distance-euclidean":64}],77:[function(require,module,exports){
+},{"ml-distance-euclidean":67}],80:[function(require,module,exports){
 'use strict';
 
 var squaredEuclidean = require('ml-distance-euclidean').squared;
@@ -5317,7 +5998,7 @@ class MultiquadraticKernel {
 
 module.exports = MultiquadraticKernel;
 
-},{"ml-distance-euclidean":64}],78:[function(require,module,exports){
+},{"ml-distance-euclidean":67}],81:[function(require,module,exports){
 'use strict';
 
 var squaredEuclidean = require('ml-distance-euclidean').squared;
@@ -5340,7 +6021,7 @@ class RationalQuadraticKernel {
 
 module.exports = RationalQuadraticKernel;
 
-},{"ml-distance-euclidean":64}],79:[function(require,module,exports){
+},{"ml-distance-euclidean":67}],82:[function(require,module,exports){
 "use strict";
 'use strict;';
 /**
@@ -5498,11 +6179,12 @@ module.exports = {
     matrix2Array: matrix2Array
 };
 
-},{"ml-fft":67}],80:[function(require,module,exports){
+},{"ml-fft":70}],83:[function(require,module,exports){
 'use strict';
 
 module.exports = abstractMatrix;
 
+var LuDecomposition = require('./dc/lu');
 var arrayUtils = require('ml-array-utils');
 var util = require('./util');
 var MatrixTransposeView = require('./views/transpose');
@@ -5533,7 +6215,7 @@ function abstractMatrix(superCtor) {
          * @param {number} newRows - Number of rows
          * @param {number} newColumns - Number of columns
          * @param {Array} newData - A 1D array containing data for the matrix
-         * @returns {Matrix} - The new matrix
+         * @return {Matrix} - The new matrix
          */
         static from1DArray(newRows, newColumns, newData) {
             var length = newRows * newColumns;
@@ -5552,7 +6234,7 @@ function abstractMatrix(superCtor) {
         /**
          * Creates a row vector, a matrix with only one row.
          * @param {Array} newData - A 1D array containing data for the vector
-         * @returns {Matrix} - The new matrix
+         * @return {Matrix} - The new matrix
          */
         static rowVector(newData) {
             var vector = new this(1, newData.length);
@@ -5565,7 +6247,7 @@ function abstractMatrix(superCtor) {
         /**
          * Creates a column vector, a matrix with only one column.
          * @param {Array} newData - A 1D array containing data for the vector
-         * @returns {Matrix} - The new matrix
+         * @return {Matrix} - The new matrix
          */
         static columnVector(newData) {
             var vector = new this(newData.length, 1);
@@ -5579,7 +6261,7 @@ function abstractMatrix(superCtor) {
          * Creates an empty matrix with the given dimensions. Values will be undefined. Same as using new Matrix(rows, columns).
          * @param {number} rows - Number of rows
          * @param {number} columns - Number of columns
-         * @returns {Matrix} - The new matrix
+         * @return {Matrix} - The new matrix
          */
         static empty(rows, columns) {
             return new this(rows, columns);
@@ -5589,7 +6271,7 @@ function abstractMatrix(superCtor) {
          * Creates a matrix with the given dimensions. Values will be set to zero.
          * @param {number} rows - Number of rows
          * @param {number} columns - Number of columns
-         * @returns {Matrix} - The new matrix
+         * @return {Matrix} - The new matrix
          */
         static zeros(rows, columns) {
             return this.empty(rows, columns).fill(0);
@@ -5599,7 +6281,7 @@ function abstractMatrix(superCtor) {
          * Creates a matrix with the given dimensions. Values will be set to one.
          * @param {number} rows - Number of rows
          * @param {number} columns - Number of columns
-         * @returns {Matrix} - The new matrix
+         * @return {Matrix} - The new matrix
          */
         static ones(rows, columns) {
             return this.empty(rows, columns).fill(1);
@@ -5610,7 +6292,7 @@ function abstractMatrix(superCtor) {
          * @param {number} rows - Number of rows
          * @param {number} columns - Number of columns
          * @param {function} [rng=Math.random] - Random number generator
-         * @returns {Matrix} The new matrix
+         * @return {Matrix} The new matrix
          */
         static rand(rows, columns, rng) {
             if (rng === undefined) rng = Math.random;
@@ -5629,7 +6311,7 @@ function abstractMatrix(superCtor) {
          * @param {number} columns - Number of columns
          * @param {number} [maxValue=1000] - Maximum value
          * @param {function} [rng=Math.random] - Random number generator
-         * @returns {Matrix} The new matrix
+         * @return {Matrix} The new matrix
          */
         static randInt(rows, columns, maxValue, rng) {
             if (maxValue === undefined) maxValue = 1000;
@@ -5647,12 +6329,13 @@ function abstractMatrix(superCtor) {
         /**
          * Creates an identity matrix with the given dimension. Values of the diagonal will be 1 and others will be 0.
          * @param {number} rows - Number of rows
-         * @param {number} [columns] - Number of columns (Default: rows)
-         * @returns {Matrix} - The new identity matrix
+         * @param {number} [columns=rows] - Number of columns
+         * @param {number} [value=1] - Value to fill the diagonal with
+         * @return {Matrix} - The new identity matrix
          */
         static eye(rows, columns, value) {
-            if (value === undefined) value = 1;
             if (columns === undefined) columns = rows;
+            if (value === undefined) value = 1;
             var min = Math.min(rows, columns);
             var matrix = this.zeros(rows, columns);
             for (var i = 0; i < min; i++) {
@@ -5666,7 +6349,7 @@ function abstractMatrix(superCtor) {
          * @param {Array} data - Array containing the data for the diagonal
          * @param {number} [rows] - Number of rows (Default: data.length)
          * @param {number} [columns] - Number of columns (Default: rows)
-         * @returns {Matrix} - The new diagonal matrix
+         * @return {Matrix} - The new diagonal matrix
          */
         static diag(data, rows, columns) {
             var l = data.length;
@@ -5682,9 +6365,9 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns a matrix whose elements are the minimum between matrix1 and matrix2
-         * @param matrix1
-         * @param matrix2
-         * @returns {Matrix}
+         * @param {Matrix} matrix1
+         * @param {Matrix} matrix2
+         * @return {Matrix}
          */
         static min(matrix1, matrix2) {
             matrix1 = this.checkMatrix(matrix1);
@@ -5702,9 +6385,9 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns a matrix whose elements are the maximum between matrix1 and matrix2
-         * @param matrix1
-         * @param matrix2
-         * @returns {Matrix}
+         * @param {Matrix} matrix1
+         * @param {Matrix} matrix2
+         * @return {Matrix}
          */
         static max(matrix1, matrix2) {
             matrix1 = this.checkMatrix(matrix1);
@@ -5722,8 +6405,8 @@ function abstractMatrix(superCtor) {
 
         /**
          * Check that the provided value is a Matrix and tries to instantiate one if not
-         * @param value - The value to check
-         * @returns {Matrix}
+         * @param {*} value - The value to check
+         * @return {Matrix}
          */
         static checkMatrix(value) {
             return Matrix.isMatrix(value) ? value : new this(value);
@@ -5731,7 +6414,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns true if the argument is a Matrix, false otherwise
-         * @param value - The value to check
+         * @param {*} value - The value to check
          * @return {boolean}
          */
         static isMatrix(value) {
@@ -5739,7 +6422,7 @@ function abstractMatrix(superCtor) {
         }
 
         /**
-         * @property {number} - The number of elements in the matrix.
+         * @prop {number} size - The number of elements in the matrix.
          */
         get size() {
             return this.rows * this.columns;
@@ -5748,7 +6431,7 @@ function abstractMatrix(superCtor) {
         /**
          * Applies a callback for each element of the matrix. The function is called in the matrix (this) context.
          * @param {function} callback - Function that will be called with two parameters : i (row) and j (column)
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         apply(callback) {
             if (typeof callback !== 'function') {
@@ -5766,7 +6449,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns a new 1D array filled row by row with the matrix values
-         * @returns {Array}
+         * @return {Array}
          */
         to1DArray() {
             var array = new Array(this.size);
@@ -5780,7 +6463,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns a 2D array containing a copy of the data
-         * @returns {Array}
+         * @return {Array}
          */
         to2DArray() {
             var copy = new Array(this.rows);
@@ -5794,35 +6477,35 @@ function abstractMatrix(superCtor) {
         }
 
         /**
-         * @returns {boolean} true if the matrix has one row
+         * @return {boolean} true if the matrix has one row
          */
         isRowVector() {
             return this.rows === 1;
         }
 
         /**
-         * @returns {boolean} true if the matrix has one column
+         * @return {boolean} true if the matrix has one column
          */
         isColumnVector() {
             return this.columns === 1;
         }
 
         /**
-         * @returns {boolean} true if the matrix has one row or one column
+         * @return {boolean} true if the matrix has one row or one column
          */
         isVector() {
             return this.rows === 1 || this.columns === 1;
         }
 
         /**
-         * @returns {boolean} true if the matrix has the same number of rows and columns
+         * @return {boolean} true if the matrix has the same number of rows and columns
          */
         isSquare() {
             return this.rows === this.columns;
         }
 
         /**
-         * @returns {boolean} true if the matrix is square and has the same values on both sides of the diagonal
+         * @return {boolean} true if the matrix is square and has the same values on both sides of the diagonal
          */
         isSymmetric() {
             if (this.isSquare()) {
@@ -5840,22 +6523,26 @@ function abstractMatrix(superCtor) {
 
         /**
          * Sets a given element of the matrix. mat.set(3,4,1) is equivalent to mat[3][4]=1
+         * @abstract
          * @param {number} rowIndex - Index of the row
          * @param {number} columnIndex - Index of the column
          * @param {number} value - The new value for the element
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         set(rowIndex, columnIndex, value) {
+            // eslint-disable-line no-unused-vars
             throw new Error('set method is unimplemented');
         }
 
         /**
          * Returns the given element of the matrix. mat.get(3,4) is equivalent to matrix[3][4]
+         * @abstract
          * @param {number} rowIndex - Index of the row
          * @param {number} columnIndex - Index of the column
-         * @returns {number}
+         * @return {number}
          */
         get(rowIndex, columnIndex) {
+            // eslint-disable-line no-unused-vars
             throw new Error('get method is unimplemented');
         }
 
@@ -5864,6 +6551,7 @@ function abstractMatrix(superCtor) {
          * rows of the matrix, and colRep times the number of columns of the matrix
          * @param {number} rowRep - Number of times the rows should be repeated
          * @param {number} colRep - Number of times the columns should be re
+         * @return {Matrix}
          * @example
          * var matrix = new Matrix([[1,2]]);
          * matrix.repeat(2); // [[1,2],[1,2]]
@@ -5883,7 +6571,7 @@ function abstractMatrix(superCtor) {
         /**
          * Fills the matrix with a given value. All elements will be set to this value.
          * @param {number} value - New value
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         fill(value) {
             for (var i = 0; i < this.rows; i++) {
@@ -5896,7 +6584,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Negates the matrix. All elements will be multiplied by (-1)
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         neg() {
             return this.mulS(-1);
@@ -5905,7 +6593,7 @@ function abstractMatrix(superCtor) {
         /**
          * Returns a new array from the given row index
          * @param {number} index - Row index
-         * @returns {Array}
+         * @return {Array}
          */
         getRow(index) {
             util.checkRowIndex(this, index);
@@ -5919,7 +6607,7 @@ function abstractMatrix(superCtor) {
         /**
          * Returns a new row vector from the given row index
          * @param {number} index - Row index
-         * @returns {Matrix}
+         * @return {Matrix}
          */
         getRowVector(index) {
             return this.constructor.rowVector(this.getRow(index));
@@ -5929,7 +6617,7 @@ function abstractMatrix(superCtor) {
          * Sets a row at the given index
          * @param {number} index - Row index
          * @param {Array|Matrix} array - Array or vector
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         setRow(index, array) {
             util.checkRowIndex(this, index);
@@ -5944,7 +6632,7 @@ function abstractMatrix(superCtor) {
          * Swaps two rows
          * @param {number} row1 - First row index
          * @param {number} row2 - Second row index
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         swapRows(row1, row2) {
             util.checkRowIndex(this, row1);
@@ -5960,7 +6648,7 @@ function abstractMatrix(superCtor) {
         /**
          * Returns a new array from the given column index
          * @param {number} index - Column index
-         * @returns {Array}
+         * @return {Array}
          */
         getColumn(index) {
             util.checkColumnIndex(this, index);
@@ -5974,7 +6662,7 @@ function abstractMatrix(superCtor) {
         /**
          * Returns a new column vector from the given column index
          * @param {number} index - Column index
-         * @returns {Matrix}
+         * @return {Matrix}
          */
         getColumnVector(index) {
             return this.constructor.columnVector(this.getColumn(index));
@@ -5984,7 +6672,7 @@ function abstractMatrix(superCtor) {
          * Sets a column at the given index
          * @param {number} index - Column index
          * @param {Array|Matrix} array - Array or vector
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         setColumn(index, array) {
             util.checkColumnIndex(this, index);
@@ -5999,7 +6687,7 @@ function abstractMatrix(superCtor) {
          * Swaps two columns
          * @param {number} column1 - First column index
          * @param {number} column2 - Second column index
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         swapColumns(column1, column2) {
             util.checkColumnIndex(this, column1);
@@ -6015,7 +6703,7 @@ function abstractMatrix(superCtor) {
         /**
          * Adds the values of a vector to each row
          * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         addRowVector(vector) {
             vector = util.checkRowVector(this, vector);
@@ -6030,7 +6718,7 @@ function abstractMatrix(superCtor) {
         /**
          * Subtracts the values of a vector from each row
          * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         subRowVector(vector) {
             vector = util.checkRowVector(this, vector);
@@ -6045,7 +6733,7 @@ function abstractMatrix(superCtor) {
         /**
          * Multiplies the values of a vector with each row
          * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         mulRowVector(vector) {
             vector = util.checkRowVector(this, vector);
@@ -6060,7 +6748,7 @@ function abstractMatrix(superCtor) {
         /**
          * Divides the values of each row by those of a vector
          * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         divRowVector(vector) {
             vector = util.checkRowVector(this, vector);
@@ -6075,7 +6763,7 @@ function abstractMatrix(superCtor) {
         /**
          * Adds the values of a vector to each column
          * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         addColumnVector(vector) {
             vector = util.checkColumnVector(this, vector);
@@ -6090,7 +6778,7 @@ function abstractMatrix(superCtor) {
         /**
          * Subtracts the values of a vector from each column
          * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         subColumnVector(vector) {
             vector = util.checkColumnVector(this, vector);
@@ -6105,7 +6793,7 @@ function abstractMatrix(superCtor) {
         /**
          * Multiplies the values of a vector with each column
          * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         mulColumnVector(vector) {
             vector = util.checkColumnVector(this, vector);
@@ -6120,7 +6808,7 @@ function abstractMatrix(superCtor) {
         /**
          * Divides the values of each column by those of a vector
          * @param {Array|Matrix} vector - Array or vector
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         divColumnVector(vector) {
             vector = util.checkColumnVector(this, vector);
@@ -6136,7 +6824,7 @@ function abstractMatrix(superCtor) {
          * Multiplies the values of a row with a scalar
          * @param {number} index - Row index
          * @param {number} value
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         mulRow(index, value) {
             util.checkRowIndex(this, index);
@@ -6150,18 +6838,19 @@ function abstractMatrix(superCtor) {
          * Multiplies the values of a column with a scalar
          * @param {number} index - Column index
          * @param {number} value
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         mulColumn(index, value) {
             util.checkColumnIndex(this, index);
             for (var i = 0; i < this.rows; i++) {
                 this.set(i, index, this.get(i, index) * value);
             }
+            return this;
         }
 
         /**
          * Returns the maximum value of the matrix
-         * @returns {number}
+         * @return {number}
          */
         max() {
             var v = this.get(0, 0);
@@ -6177,7 +6866,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns the index of the maximum value
-         * @returns {Array}
+         * @return {Array}
          */
         maxIndex() {
             var v = this.get(0, 0);
@@ -6196,7 +6885,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns the minimum value of the matrix
-         * @returns {number}
+         * @return {number}
          */
         min() {
             var v = this.get(0, 0);
@@ -6212,7 +6901,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns the index of the minimum value
-         * @returns {Array}
+         * @return {Array}
          */
         minIndex() {
             var v = this.get(0, 0);
@@ -6232,7 +6921,7 @@ function abstractMatrix(superCtor) {
         /**
          * Returns the maximum value of one row
          * @param {number} row - Row index
-         * @returns {number}
+         * @return {number}
          */
         maxRow(row) {
             util.checkRowIndex(this, row);
@@ -6248,7 +6937,7 @@ function abstractMatrix(superCtor) {
         /**
          * Returns the index of the maximum value of one row
          * @param {number} row - Row index
-         * @returns {Array}
+         * @return {Array}
          */
         maxRowIndex(row) {
             util.checkRowIndex(this, row);
@@ -6266,7 +6955,7 @@ function abstractMatrix(superCtor) {
         /**
          * Returns the minimum value of one row
          * @param {number} row - Row index
-         * @returns {number}
+         * @return {number}
          */
         minRow(row) {
             util.checkRowIndex(this, row);
@@ -6282,7 +6971,7 @@ function abstractMatrix(superCtor) {
         /**
          * Returns the index of the maximum value of one row
          * @param {number} row - Row index
-         * @returns {Array}
+         * @return {Array}
          */
         minRowIndex(row) {
             util.checkRowIndex(this, row);
@@ -6300,7 +6989,7 @@ function abstractMatrix(superCtor) {
         /**
          * Returns the maximum value of one column
          * @param {number} column - Column index
-         * @returns {number}
+         * @return {number}
          */
         maxColumn(column) {
             util.checkColumnIndex(this, column);
@@ -6316,7 +7005,7 @@ function abstractMatrix(superCtor) {
         /**
          * Returns the index of the maximum value of one column
          * @param {number} column - Column index
-         * @returns {Array}
+         * @return {Array}
          */
         maxColumnIndex(column) {
             util.checkColumnIndex(this, column);
@@ -6334,7 +7023,7 @@ function abstractMatrix(superCtor) {
         /**
          * Returns the minimum value of one column
          * @param {number} column - Column index
-         * @returns {number}
+         * @return {number}
          */
         minColumn(column) {
             util.checkColumnIndex(this, column);
@@ -6350,7 +7039,7 @@ function abstractMatrix(superCtor) {
         /**
          * Returns the index of the minimum value of one column
          * @param {number} column - Column index
-         * @returns {Array}
+         * @return {Array}
          */
         minColumnIndex(column) {
             util.checkColumnIndex(this, column);
@@ -6367,7 +7056,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns an array containing the diagonal values of the matrix
-         * @returns {Array}
+         * @return {Array}
          */
         diag() {
             var min = Math.min(this.rows, this.columns);
@@ -6379,22 +7068,25 @@ function abstractMatrix(superCtor) {
         }
 
         /**
-         * Returns the sum of all elements of the matrix
-         * @returns {number}
+         * Returns the sum by the argument given, if no argument given,
+         * it returns the sum of all elements of the matrix.
+         * @param {string} by - sum by 'row' or 'column'.
+         * @return {Matrix|number}
          */
-        sum() {
-            var v = 0;
-            for (var i = 0; i < this.rows; i++) {
-                for (var j = 0; j < this.columns; j++) {
-                    v += this.get(i, j);
-                }
+        sum(by) {
+            switch (by) {
+                case 'row':
+                    return util.sumByRow(this);
+                case 'column':
+                    return util.sumByColumn(this);
+                default:
+                    return util.sumAll(this);
             }
-            return v;
         }
 
         /**
          * Returns the mean of all elements of the matrix
-         * @returns {number}
+         * @return {number}
          */
         mean() {
             return this.sum() / this.size;
@@ -6402,7 +7094,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns the product of all elements of the matrix
-         * @returns {number}
+         * @return {number}
          */
         prod() {
             var prod = 1;
@@ -6416,7 +7108,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Computes the cumulative sum of the matrix elements (in place, row by row)
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         cumulativeSum() {
             var sum = 0;
@@ -6432,7 +7124,7 @@ function abstractMatrix(superCtor) {
         /**
          * Computes the dot (scalar) product between the matrix and another
          * @param {Matrix} vector2 vector
-         * @returns {number}
+         * @return {number}
          */
         dot(vector2) {
             if (Matrix.isMatrix(vector2)) vector2 = vector2.to1DArray();
@@ -6450,11 +7142,14 @@ function abstractMatrix(superCtor) {
         /**
          * Returns the matrix product between this and other
          * @param {Matrix} other
-         * @returns {Matrix}
+         * @return {Matrix}
          */
         mmul(other) {
             other = this.constructor.checkMatrix(other);
-            if (this.columns !== other.rows) console.warn('Number of columns of left matrix are not equal to number of rows of right matrix.');
+            if (this.columns !== other.rows) {
+                // eslint-disable-next-line no-console
+                console.warn('Number of columns of left matrix are not equal to number of rows of right matrix.');
+            }
 
             var m = this.rows;
             var n = this.columns;
@@ -6480,7 +7175,7 @@ function abstractMatrix(superCtor) {
             return result;
         }
 
-        strassen_2x2(other) {
+        strassen2x2(other) {
             var result = new this.constructor[Symbol.species](2, 2);
             var a11 = this.get(0, 0);
             var b11 = other.get(0, 0);
@@ -6513,7 +7208,7 @@ function abstractMatrix(superCtor) {
             return result;
         }
 
-        strassen_3x3(other) {
+        strassen3x3(other) {
             var result = new this.constructor[Symbol.species](3, 3);
 
             var a00 = this.get(0, 0);
@@ -6584,18 +7279,18 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns the matrix product between x and y. More efficient than mmul(other) only when we multiply squared matrix and when the size of the matrix is > 1000.
-         * @param {Matrix} x
          * @param {Matrix} y
-         * @returns {Matrix}
+         * @return {Matrix}
          */
-        mmul_strassen(y) {
+        mmulStrassen(y) {
             var x = this.clone();
             var r1 = x.rows;
             var c1 = x.columns;
             var r2 = y.rows;
             var c2 = y.columns;
-            if (c1 != r2) {
-                console.log(`Multiplying ${ r1 } x ${ c1 } and ${ r2 } x ${ c2 } matrix: dimensions do not match.`);
+            if (c1 !== r2) {
+                // eslint-disable-next-line no-console
+                console.warn(`Multiplying ${ r1 } x ${ c1 } and ${ r2 } x ${ c2 } matrix: dimensions do not match.`);
             }
 
             // Put a matrix into the top left of a matrix of zeros.
@@ -6603,7 +7298,7 @@ function abstractMatrix(superCtor) {
             function embed(mat, rows, cols) {
                 var r = mat.rows;
                 var c = mat.columns;
-                if (r == rows && c == cols) {
+                if (r === rows && c === cols) {
                     return mat;
                 } else {
                     var resultat = Matrix.zeros(rows, cols);
@@ -6618,51 +7313,51 @@ function abstractMatrix(superCtor) {
 
             var r = Math.max(r1, r2);
             var c = Math.max(c1, c2);
-            var x = embed(x, r, c);
-            var y = embed(y, r, c);
+            x = embed(x, r, c);
+            y = embed(y, r, c);
 
             // Our recursive multiplication function.
-            function block_mult(a, b, rows, cols) {
+            function blockMult(a, b, rows, cols) {
                 // For small matrices, resort to naive multiplication.
                 if (rows <= 512 || cols <= 512) {
                     return a.mmul(b); // a is equivalent to this
                 }
 
                 // Apply dynamic padding.
-                if (rows % 2 == 1 && cols % 2 == 1) {
+                if (rows % 2 === 1 && cols % 2 === 1) {
                     a = embed(a, rows + 1, cols + 1);
                     b = embed(b, rows + 1, cols + 1);
-                } else if (rows % 2 == 1) {
+                } else if (rows % 2 === 1) {
                     a = embed(a, rows + 1, cols);
                     b = embed(b, rows + 1, cols);
-                } else if (cols % 2 == 1) {
+                } else if (cols % 2 === 1) {
                     a = embed(a, rows, cols + 1);
                     b = embed(b, rows, cols + 1);
                 }
 
-                var half_rows = parseInt(a.rows / 2);
-                var half_cols = parseInt(a.columns / 2);
+                var halfRows = parseInt(a.rows / 2);
+                var halfCols = parseInt(a.columns / 2);
                 // Subdivide input matrices.
-                var a11 = a.subMatrix(0, half_rows - 1, 0, half_cols - 1);
-                var b11 = b.subMatrix(0, half_rows - 1, 0, half_cols - 1);
+                var a11 = a.subMatrix(0, halfRows - 1, 0, halfCols - 1);
+                var b11 = b.subMatrix(0, halfRows - 1, 0, halfCols - 1);
 
-                var a12 = a.subMatrix(0, half_rows - 1, half_cols, a.columns - 1);
-                var b12 = b.subMatrix(0, half_rows - 1, half_cols, b.columns - 1);
+                var a12 = a.subMatrix(0, halfRows - 1, halfCols, a.columns - 1);
+                var b12 = b.subMatrix(0, halfRows - 1, halfCols, b.columns - 1);
 
-                var a21 = a.subMatrix(half_rows, a.rows - 1, 0, half_cols - 1);
-                var b21 = b.subMatrix(half_rows, b.rows - 1, 0, half_cols - 1);
+                var a21 = a.subMatrix(halfRows, a.rows - 1, 0, halfCols - 1);
+                var b21 = b.subMatrix(halfRows, b.rows - 1, 0, halfCols - 1);
 
-                var a22 = a.subMatrix(half_rows, a.rows - 1, half_cols, a.columns - 1);
-                var b22 = b.subMatrix(half_rows, b.rows - 1, half_cols, b.columns - 1);
+                var a22 = a.subMatrix(halfRows, a.rows - 1, halfCols, a.columns - 1);
+                var b22 = b.subMatrix(halfRows, b.rows - 1, halfCols, b.columns - 1);
 
                 // Compute intermediate values.
-                var m1 = block_mult(Matrix.add(a11, a22), Matrix.add(b11, b22), half_rows, half_cols);
-                var m2 = block_mult(Matrix.add(a21, a22), b11, half_rows, half_cols);
-                var m3 = block_mult(a11, Matrix.sub(b12, b22), half_rows, half_cols);
-                var m4 = block_mult(a22, Matrix.sub(b21, b11), half_rows, half_cols);
-                var m5 = block_mult(Matrix.add(a11, a12), b22, half_rows, half_cols);
-                var m6 = block_mult(Matrix.sub(a21, a11), Matrix.add(b11, b12), half_rows, half_cols);
-                var m7 = block_mult(Matrix.sub(a12, a22), Matrix.add(b21, b22), half_rows, half_cols);
+                var m1 = blockMult(Matrix.add(a11, a22), Matrix.add(b11, b22), halfRows, halfCols);
+                var m2 = blockMult(Matrix.add(a21, a22), b11, halfRows, halfCols);
+                var m3 = blockMult(a11, Matrix.sub(b12, b22), halfRows, halfCols);
+                var m4 = blockMult(a22, Matrix.sub(b21, b11), halfRows, halfCols);
+                var m5 = blockMult(Matrix.add(a11, a12), b22, halfRows, halfCols);
+                var m6 = blockMult(Matrix.sub(a21, a11), Matrix.add(b11, b12), halfRows, halfCols);
+                var m7 = blockMult(Matrix.sub(a12, a22), Matrix.add(b21, b22), halfRows, halfCols);
 
                 // Combine intermediate values into the output.
                 var c11 = Matrix.add(m1, m4);
@@ -6682,15 +7377,14 @@ function abstractMatrix(superCtor) {
                 resultat = resultat.setSubMatrix(c22, c11.rows, c11.columns);
                 return resultat.subMatrix(0, rows - 1, 0, cols - 1);
             }
-            var resultat_final = block_mult(x, y, r, c);
-            return resultat_final;
+            return blockMult(x, y, r, c);
         }
 
         /**
          * Returns a row-by-row scaled matrix
-         * @param {Number} [min=0] - Minimum scaled value
-         * @param {Number} [max=1] - Maximum scaled value
-         * @returns {Matrix} - The scaled matrix
+         * @param {number} [min=0] - Minimum scaled value
+         * @param {number} [max=1] - Maximum scaled value
+         * @return {Matrix} - The scaled matrix
          */
         scaleRows(min, max) {
             min = min === undefined ? 0 : min;
@@ -6708,9 +7402,9 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns a new column-by-column scaled matrix
-         * @param {Number} [min=0] - Minimum scaled value
-         * @param {Number} [max=1] - Maximum scaled value
-         * @returns {Matrix} - The new scaled matrix
+         * @param {number} [min=0] - Minimum scaled value
+         * @param {number} [max=1] - Maximum scaled value
+         * @return {Matrix} - The new scaled matrix
          * @example
          * var matrix = new Matrix([[1,2],[-1,0]]);
          * var scaledMatrix = matrix.scaleColumns(); // [[1,1],[0,0]]
@@ -6761,7 +7455,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Transposes the matrix and returns a new one containing the result
-         * @returns {Matrix}
+         * @return {Matrix}
          */
         transpose() {
             var result = new this.constructor[Symbol.species](this.columns, this.rows);
@@ -6776,7 +7470,7 @@ function abstractMatrix(superCtor) {
         /**
          * Sorts the rows (in place)
          * @param {function} compareFunction - usual Array.prototype.sort comparison function
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         sortRows(compareFunction) {
             if (compareFunction === undefined) compareFunction = compareNumbers;
@@ -6789,7 +7483,7 @@ function abstractMatrix(superCtor) {
         /**
          * Sorts the columns (in place)
          * @param {function} compareFunction - usual Array.prototype.sort comparison function
-         * @returns {Matrix} this
+         * @return {Matrix} this
          */
         sortColumns(compareFunction) {
             if (compareFunction === undefined) compareFunction = compareNumbers;
@@ -6805,7 +7499,7 @@ function abstractMatrix(superCtor) {
          * @param {number} endRow - Last row index
          * @param {number} startColumn - First column index
          * @param {number} endColumn - Last column index
-         * @returns {Matrix}
+         * @return {Matrix}
          */
         subMatrix(startRow, endRow, startColumn, endColumn) {
             util.checkRange(this, startRow, endRow, startColumn, endColumn);
@@ -6823,7 +7517,7 @@ function abstractMatrix(superCtor) {
          * @param {Array} indices - Array containing the row indices
          * @param {number} [startColumn = 0] - First column index
          * @param {number} [endColumn = this.columns-1] - Last column index
-         * @returns {Matrix}
+         * @return {Matrix}
          */
         subMatrixRow(indices, startColumn, endColumn) {
             if (startColumn === undefined) startColumn = 0;
@@ -6849,7 +7543,7 @@ function abstractMatrix(superCtor) {
          * @param {Array} indices - Array containing the column indices
          * @param {number} [startRow = 0] - First row index
          * @param {number} [endRow = this.rows-1] - Last row index
-         * @returns {Matrix}
+         * @return {Matrix}
          */
         subMatrixColumn(indices, startRow, endRow) {
             if (startRow === undefined) startRow = 0;
@@ -6873,9 +7567,9 @@ function abstractMatrix(superCtor) {
         /**
          * Set a part of the matrix to the given sub-matrix
          * @param {Matrix|Array< Array >} matrix - The source matrix from which to extract values.
-         * @param startRow - The index of the first row to set
-         * @param startColumn - The index of the first column to set
-         * @returns {Matrix}
+         * @param {number} startRow - The index of the first row to set
+         * @param {number} startColumn - The index of the first column to set
+         * @return {Matrix}
          */
         setSubMatrix(matrix, startRow, startColumn) {
             matrix = this.constructor.checkMatrix(matrix);
@@ -6894,7 +7588,7 @@ function abstractMatrix(superCtor) {
          * Return a new matrix based on a selection of rows and columns
          * @param {Array<number>} rowIndices - The row indices to select. Order matters and an index can be more than once.
          * @param {Array<number>} columnIndices - The column indices to select. Order matters and an index can be use more than once.
-         * @returns {Matrix} The new matrix
+         * @return {Matrix} The new matrix
          */
         selection(rowIndices, columnIndices) {
             var indices = util.checkIndices(this, rowIndices, columnIndices);
@@ -6911,7 +7605,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns the trace of the matrix (sum of the diagonal elements)
-         * @returns {number}
+         * @return {number}
          */
         trace() {
             var min = Math.min(this.rows, this.columns);
@@ -6928,7 +7622,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns a view of the transposition of the matrix
-         * @returns {MatrixTransposeView}
+         * @return {MatrixTransposeView}
          */
         transposeView() {
             return new MatrixTransposeView(this);
@@ -6937,7 +7631,7 @@ function abstractMatrix(superCtor) {
         /**
          * Returns a view of the row vector with the given index
          * @param {number} row - row index of the vector
-         * @returns {MatrixRowView}
+         * @return {MatrixRowView}
          */
         rowView(row) {
             util.checkRowIndex(this, row);
@@ -6947,7 +7641,7 @@ function abstractMatrix(superCtor) {
         /**
          * Returns a view of the column vector with the given index
          * @param {number} column - column index of the vector
-         * @returns {MatrixColumnView}
+         * @return {MatrixColumnView}
          */
         columnView(column) {
             util.checkColumnIndex(this, column);
@@ -6956,7 +7650,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns a view of the matrix flipped in the row axis
-         * @returns {MatrixFlipRowView}
+         * @return {MatrixFlipRowView}
          */
         flipRowView() {
             return new MatrixFlipRowView(this);
@@ -6964,7 +7658,7 @@ function abstractMatrix(superCtor) {
 
         /**
          * Returns a view of the matrix flipped in the column axis
-         * @returns {MatrixFlipColumnView}
+         * @return {MatrixFlipColumnView}
          */
         flipColumnView() {
             return new MatrixFlipColumnView(this);
@@ -6976,7 +7670,7 @@ function abstractMatrix(superCtor) {
          * @param {number} endRow - last row index of the submatrix
          * @param {number} startColumn - first column index of the submatrix
          * @param {number} endColumn - last column index of the submatrix
-         * @returns {MatrixSubView}
+         * @return {MatrixSubView}
          */
         subMatrixView(startRow, endRow, startColumn, endColumn) {
             return new MatrixSubView(this, startRow, endRow, startColumn, endColumn);
@@ -6989,10 +7683,47 @@ function abstractMatrix(superCtor) {
          * var matrix = new Matrix([[1,2,3], [4,5,6]]).selectionView([0, 0], [1])
          * @param {Array<number>} rowIndices
          * @param {Array<number>} columnIndices
-         * @returns {MatrixSelectionView}
+         * @return {MatrixSelectionView}
          */
         selectionView(rowIndices, columnIndices) {
             return new MatrixSelectionView(this, rowIndices, columnIndices);
+        }
+
+        /**
+        * Calculates and returns the determinant of a matrix as a Number
+        * @example
+        *   new Matrix([[1,2,3], [4,5,6]]).det()
+        * @return {number}
+        */
+        det() {
+            if (this.isSquare()) {
+                var a, b, c, d;
+                if (this.columns === 2) {
+                    // 2 x 2 matrix
+                    a = this.get(0, 0);
+                    b = this.get(0, 1);
+                    c = this.get(1, 0);
+                    d = this.get(1, 1);
+
+                    return a * d - b * c;
+                } else if (this.columns === 3) {
+                    // 3 x 3 matrix
+                    var subMatrix0, subMatrix1, subMatrix2;
+                    subMatrix0 = this.selectionView([1, 2], [1, 2]);
+                    subMatrix1 = this.selectionView([1, 2], [0, 2]);
+                    subMatrix2 = this.selectionView([1, 2], [0, 1]);
+                    a = this.get(0, 0);
+                    b = this.get(0, 1);
+                    c = this.get(0, 2);
+
+                    return a * subMatrix0.det() - b * subMatrix1.det() + c * subMatrix2.det();
+                } else {
+                    // general purpose determinant using the LU decomposition
+                    return new LuDecomposition(this).determinant;
+                }
+            } else {
+                throw Error('Determinant can only be calculated for a square matrix.');
+            }
         }
     }
 
@@ -7005,6 +7736,7 @@ function abstractMatrix(superCtor) {
      * @param {Matrix} otherMatrix
      */
     function checkDimensions(matrix, otherMatrix) {
+        // eslint-disable-line no-unused-vars
         if (matrix.rows !== otherMatrix.rows || matrix.columns !== otherMatrix.columns) {
             throw new RangeError('Matrices dimensions must be equal');
         }
@@ -7024,6 +7756,7 @@ function abstractMatrix(superCtor) {
     Matrix.identity = Matrix.eye;
     Matrix.prototype.negate = Matrix.prototype.neg;
     Matrix.prototype.tensorProduct = Matrix.prototype.kroneckerProduct;
+    Matrix.prototype.determinant = Matrix.prototype.det;
 
     /*
      Add dynamically instance and static methods for mathematical operations
@@ -7141,12 +7874,14 @@ function abstractMatrix(superCtor) {
     // Bitwise operators
     ['&', 'and'], ['|', 'or'], ['^', 'xor'], ['<<', 'leftShift'], ['>>', 'signPropagatingRightShift'], ['>>>', 'rightShift', 'zeroFillRightShift']];
 
+    var i;
+
     for (var operator of operators) {
         var inplaceOp = eval(fillTemplateFunction(inplaceOperator, { name: operator[1], op: operator[0] }));
         var inplaceOpS = eval(fillTemplateFunction(inplaceOperatorScalar, { name: operator[1] + 'S', op: operator[0] }));
         var inplaceOpM = eval(fillTemplateFunction(inplaceOperatorMatrix, { name: operator[1] + 'M', op: operator[0] }));
         var staticOp = eval(fillTemplateFunction(staticOperator, { name: operator[1] }));
-        for (var i = 1; i < operator.length; i++) {
+        for (i = 1; i < operator.length; i++) {
             Matrix.prototype[operator[i]] = inplaceOp;
             Matrix.prototype[operator[i] + 'S'] = inplaceOpS;
             Matrix.prototype[operator[i] + 'M'] = inplaceOpM;
@@ -7163,7 +7898,7 @@ function abstractMatrix(superCtor) {
     for (var method of methods) {
         var inplaceMeth = eval(fillTemplateFunction(inplaceMethod, { name: method[1], method: method[0] }));
         var staticMeth = eval(fillTemplateFunction(staticMethod, { name: method[1] }));
-        for (var i = 1; i < method.length; i++) {
+        for (i = 1; i < method.length; i++) {
             Matrix.prototype[method[i]] = inplaceMeth;
             Matrix[method[i]] = staticMeth;
         }
@@ -7173,7 +7908,7 @@ function abstractMatrix(superCtor) {
 
     for (var methodWithArg of methodsWithArgs) {
         var args = 'arg0';
-        for (var i = 1; i < methodWithArg[1]; i++) {
+        for (i = 1; i < methodWithArg[1]; i++) {
             args += `, arg${ i }`;
         }
         if (methodWithArg[1] !== 1) {
@@ -7183,7 +7918,7 @@ function abstractMatrix(superCtor) {
                 args: args
             }));
             var staticMethWithArgs = eval(fillTemplateFunction(staticMethodWithArgs, { name: methodWithArg[2], args: args }));
-            for (var i = 2; i < methodWithArg.length; i++) {
+            for (i = 2; i < methodWithArg.length; i++) {
                 Matrix.prototype[methodWithArg[i]] = inplaceMethWithArgs;
                 Matrix[methodWithArg[i]] = staticMethWithArgs;
             }
@@ -7193,22 +7928,22 @@ function abstractMatrix(superCtor) {
                 args: args,
                 method: methodWithArg[0]
             };
-            var inplaceMethod = eval(fillTemplateFunction(inplaceMethodWithOneArg, tmplVar));
+            var inplaceMethod2 = eval(fillTemplateFunction(inplaceMethodWithOneArg, tmplVar));
             var inplaceMethodS = eval(fillTemplateFunction(inplaceMethodWithOneArgScalar, tmplVar));
             var inplaceMethodM = eval(fillTemplateFunction(inplaceMethodWithOneArgMatrix, tmplVar));
-            var staticMethod = eval(fillTemplateFunction(staticMethodWithOneArg, tmplVar));
-            for (var i = 2; i < methodWithArg.length; i++) {
-                Matrix.prototype[methodWithArg[i]] = inplaceMethod;
+            var staticMethod2 = eval(fillTemplateFunction(staticMethodWithOneArg, tmplVar));
+            for (i = 2; i < methodWithArg.length; i++) {
+                Matrix.prototype[methodWithArg[i]] = inplaceMethod2;
                 Matrix.prototype[methodWithArg[i] + 'M'] = inplaceMethodM;
                 Matrix.prototype[methodWithArg[i] + 'S'] = inplaceMethodS;
-                Matrix[methodWithArg[i]] = staticMethod;
+                Matrix[methodWithArg[i]] = staticMethod2;
             }
         }
     }
 
     function fillTemplateFunction(template, values) {
-        for (var i in values) {
-            template = template.replace(new RegExp('%' + i + '%', 'g'), values[i]);
+        for (var value in values) {
+            template = template.replace(new RegExp('%' + value + '%', 'g'), values[value]);
         }
         return template;
     }
@@ -7216,10 +7951,10 @@ function abstractMatrix(superCtor) {
     return Matrix;
 }
 
-},{"./util":91,"./views/column":93,"./views/flipColumn":94,"./views/flipRow":95,"./views/row":96,"./views/selection":97,"./views/sub":98,"./views/transpose":99,"ml-array-utils":61}],81:[function(require,module,exports){
+},{"./dc/lu":86,"./util":94,"./views/column":96,"./views/flipColumn":97,"./views/flipRow":98,"./views/row":99,"./views/selection":100,"./views/sub":101,"./views/transpose":102,"ml-array-utils":64}],84:[function(require,module,exports){
 'use strict';
 
-var Matrix = require('../matrix');
+var Matrix = require('../matrix').Matrix;
 
 // https://github.com/lutzroeder/Mapack/blob/master/Source/CholeskyDecomposition.cs
 function CholeskyDecomposition(value) {
@@ -7227,7 +7962,9 @@ function CholeskyDecomposition(value) {
         return new CholeskyDecomposition(value);
     }
     value = Matrix.checkMatrix(value);
-    if (!value.isSymmetric()) throw new Error('Matrix is not symmetric');
+    if (!value.isSymmetric()) {
+        throw new Error('Matrix is not symmetric');
+    }
 
     var a = value,
         dimension = a.rows,
@@ -7310,10 +8047,10 @@ CholeskyDecomposition.prototype = {
 
 module.exports = CholeskyDecomposition;
 
-},{"../matrix":89}],82:[function(require,module,exports){
+},{"../matrix":92}],85:[function(require,module,exports){
 'use strict';
 
-var Matrix = require('../matrix');
+var Matrix = require('../matrix').Matrix;
 var util = require('./util');
 var hypotenuse = util.hypotenuse;
 var getFilled2DArray = util.getFilled2DArray;
@@ -8106,7 +8843,7 @@ function cdiv(xr, xi, yr, yi) {
 
 module.exports = EigenvalueDecomposition;
 
-},{"../matrix":89,"./util":86}],83:[function(require,module,exports){
+},{"../matrix":92,"./util":89}],86:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('../matrix');
@@ -8116,7 +8853,8 @@ function LuDecomposition(matrix) {
     if (!(this instanceof LuDecomposition)) {
         return new LuDecomposition(matrix);
     }
-    matrix = Matrix.checkMatrix(matrix);
+
+    matrix = Matrix.Matrix.checkMatrix(matrix);
 
     var lu = matrix.clone(),
         rows = lu.rows,
@@ -8202,18 +8940,21 @@ LuDecomposition.prototype = {
     },
     get determinant() {
         var data = this.LU;
-        if (!data.isSquare()) throw new Error('Matrix must be square');
+        if (!data.isSquare()) {
+            throw new Error('Matrix must be square');
+        }
         var determinant = this.pivotSign,
             col = data.columns;
         for (var j = 0; j < col; j++) {
             determinant *= data[j][j];
-        }return determinant;
+        }
+        return determinant;
     },
     get lowerTriangularMatrix() {
         var data = this.LU,
             rows = data.rows,
             columns = data.columns,
-            X = new Matrix(rows, columns);
+            X = new Matrix.Matrix(rows, columns);
         for (var i = 0; i < rows; i++) {
             for (var j = 0; j < columns; j++) {
                 if (i > j) {
@@ -8231,7 +8972,7 @@ LuDecomposition.prototype = {
         var data = this.LU,
             rows = data.rows,
             columns = data.columns,
-            X = new Matrix(rows, columns);
+            X = new Matrix.Matrix(rows, columns);
         for (var i = 0; i < rows; i++) {
             for (var j = 0; j < columns; j++) {
                 if (i <= j) {
@@ -8247,20 +8988,22 @@ LuDecomposition.prototype = {
         return this.pivotVector.slice();
     },
     solve: function solve(value) {
-        value = Matrix.checkMatrix(value);
+        value = Matrix.Matrix.checkMatrix(value);
 
         var lu = this.LU,
             rows = lu.rows;
 
-        if (rows !== value.rows) throw new Error('Invalid matrix dimensions');
-        if (this.isSingular()) throw new Error('LU matrix is singular');
+        if (rows !== value.rows) {
+            throw new Error('Invalid matrix dimensions');
+        }
+        if (this.isSingular()) {
+            throw new Error('LU matrix is singular');
+        }
 
-        var count = value.columns,
-            X = value.subMatrixRow(this.pivotVector, 0, count - 1),
-            columns = lu.columns,
-            i,
-            j,
-            k;
+        var count = value.columns;
+        var X = value.subMatrixRow(this.pivotVector, 0, count - 1);
+        var columns = lu.columns;
+        var i, j, k;
 
         for (k = 0; k < columns; k++) {
             for (i = k + 1; i < columns; i++) {
@@ -8285,10 +9028,10 @@ LuDecomposition.prototype = {
 
 module.exports = LuDecomposition;
 
-},{"../matrix":89}],84:[function(require,module,exports){
+},{"../matrix":92}],87:[function(require,module,exports){
 'use strict';
 
-var Matrix = require('../matrix');
+var Matrix = require('../matrix').Matrix;
 var hypotenuse = require('./util').hypotenuse;
 
 //https://github.com/lutzroeder/Mapack/blob/master/Source/QrDecomposition.cs
@@ -8345,16 +9088,17 @@ QrDecomposition.prototype = {
         var qr = this.QR,
             m = qr.rows;
 
-        if (value.rows !== m) throw new Error('Matrix row dimensions must agree');
-        if (!this.isFullRank()) throw new Error('Matrix is rank deficient');
+        if (value.rows !== m) {
+            throw new Error('Matrix row dimensions must agree');
+        }
+        if (!this.isFullRank()) {
+            throw new Error('Matrix is rank deficient');
+        }
 
-        var count = value.columns,
-            X = value.clone(),
-            n = qr.columns,
-            i,
-            j,
-            k,
-            s;
+        var count = value.columns;
+        var X = value.clone();
+        var n = qr.columns;
+        var i, j, k, s;
 
         for (k = 0; k < n; k++) {
             for (j = 0; j < count; j++) {
@@ -8445,10 +9189,10 @@ QrDecomposition.prototype = {
 
 module.exports = QrDecomposition;
 
-},{"../matrix":89,"./util":86}],85:[function(require,module,exports){
+},{"../matrix":92,"./util":89}],88:[function(require,module,exports){
 'use strict';
 
-var Matrix = require('../matrix');
+var Matrix = require('../matrix').Matrix;
 var util = require('./util');
 var hypotenuse = util.hypotenuse;
 var getFilled2DArray = util.getFilled2DArray;
@@ -8477,6 +9221,7 @@ function SingularValueDecomposition(value, options) {
     if (m < n) {
         if (!autoTranspose) {
             a = value.clone();
+            // eslint-disable-next-line no-console
             console.warn('Computing SVD on a matrix with more columns than rows. Consider enabling autoTranspose');
         } else {
             a = value.transpose();
@@ -8546,7 +9291,9 @@ function SingularValueDecomposition(value, options) {
                 e[k] = hypotenuse(e[k], e[i]);
             }
             if (e[k] !== 0) {
-                if (e[k + 1] < 0) e[k] = -e[k];
+                if (e[k + 1] < 0) {
+                    e[k] = 0 - e[k];
+                }
                 for (i = k + 1; i < n; i++) {
                     e[i] /= e[k];
                 }
@@ -8823,6 +9570,7 @@ function SingularValueDecomposition(value, options) {
                     p--;
                     break;
                 }
+            // no default
         }
     }
 
@@ -8965,16 +9713,17 @@ SingularValueDecomposition.prototype = {
 
 module.exports = SingularValueDecomposition;
 
-},{"../matrix":89,"./util":86}],86:[function(require,module,exports){
+},{"../matrix":92,"./util":89}],89:[function(require,module,exports){
 'use strict';
 
 exports.hypotenuse = function hypotenuse(a, b) {
+    var r;
     if (Math.abs(a) > Math.abs(b)) {
-        var r = b / a;
+        r = b / a;
         return Math.abs(a) * Math.sqrt(1 + r * r);
     }
     if (b !== 0) {
-        var r = a / b;
+        r = a / b;
         return Math.abs(b) * Math.sqrt(1 + r * r);
     }
     return 0;
@@ -9003,10 +9752,10 @@ exports.getFilled2DArray = function (rows, columns, value) {
     return array;
 };
 
-},{}],87:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 'use strict';
 
-var Matrix = require('./matrix');
+var Matrix = require('./matrix').Matrix;
 
 var SingularValueDecomposition = require('./dc/svd');
 var EigenvalueDecomposition = require('./dc/evd');
@@ -9067,13 +9816,13 @@ module.exports = {
     solve: solve
 };
 
-},{"./dc/cholesky":81,"./dc/evd":82,"./dc/lu":83,"./dc/qr":84,"./dc/svd":85,"./matrix":89}],88:[function(require,module,exports){
+},{"./dc/cholesky":84,"./dc/evd":85,"./dc/lu":86,"./dc/qr":87,"./dc/svd":88,"./matrix":92}],91:[function(require,module,exports){
 'use strict';
 
-module.exports = require('./matrix');
+module.exports = require('./matrix').Matrix;
 module.exports.Decompositions = module.exports.DC = require('./decompositions');
 
-},{"./decompositions":87,"./matrix":89}],89:[function(require,module,exports){
+},{"./decompositions":90,"./matrix":92}],92:[function(require,module,exports){
 'use strict';
 
 require('./symbol-species');
@@ -9082,6 +9831,7 @@ var util = require('./util');
 
 class Matrix extends abstractMatrix(Array) {
     constructor(nRows, nColumns) {
+        var i;
         if (arguments.length === 1 && typeof nRows === 'number') {
             return new Array(nRows);
         }
@@ -9091,7 +9841,7 @@ class Matrix extends abstractMatrix(Array) {
             // Create an empty matrix
             super(nRows);
             if (Number.isInteger(nColumns) && nColumns > 0) {
-                for (var i = 0; i < nRows; i++) {
+                for (i = 0; i < nRows; i++) {
                     this[i] = new Array(nColumns);
                 }
             } else {
@@ -9106,7 +9856,7 @@ class Matrix extends abstractMatrix(Array) {
                 throw new TypeError('Data must be a 2D array with at least one element');
             }
             super(nRows);
-            for (var i = 0; i < nRows; i++) {
+            for (i = 0; i < nRows; i++) {
                 if (matrix[i].length !== nColumns) {
                     throw new RangeError('Inconsistent array dimensions');
                 }
@@ -9117,6 +9867,7 @@ class Matrix extends abstractMatrix(Array) {
         }
         this.rows = nRows;
         this.columns = nColumns;
+        return this;
     }
 
     set(rowIndex, columnIndex, value) {
@@ -9130,7 +9881,7 @@ class Matrix extends abstractMatrix(Array) {
 
     /**
      * Creates an exact and independent copy of the matrix
-     * @returns {Matrix}
+     * @return {Matrix}
      */
     clone() {
         var newMatrix = new this.constructor[Symbol.species](this.rows, this.columns);
@@ -9145,11 +9896,13 @@ class Matrix extends abstractMatrix(Array) {
     /**
      * Removes a row from the given index
      * @param {number} index - Row index
-     * @returns {Matrix} this
+     * @return {Matrix} this
      */
     removeRow(index) {
         util.checkRowIndex(this, index);
-        if (this.rows === 1) throw new RangeError('A matrix cannot have less than one row');
+        if (this.rows === 1) {
+            throw new RangeError('A matrix cannot have less than one row');
+        }
         this.splice(index, 1);
         this.rows -= 1;
         return this;
@@ -9159,7 +9912,7 @@ class Matrix extends abstractMatrix(Array) {
      * Adds a row at the given index
      * @param {number} [index = this.rows] - Row index
      * @param {Array|Matrix} array - Array or vector
-     * @returns {Matrix} this
+     * @return {Matrix} this
      */
     addRow(index, array) {
         if (array === undefined) {
@@ -9176,11 +9929,13 @@ class Matrix extends abstractMatrix(Array) {
     /**
      * Removes a column from the given index
      * @param {number} index - Column index
-     * @returns {Matrix} this
+     * @return {Matrix} this
      */
     removeColumn(index) {
         util.checkColumnIndex(this, index);
-        if (this.columns === 1) throw new RangeError('A matrix cannot have less than one column');
+        if (this.columns === 1) {
+            throw new RangeError('A matrix cannot have less than one column');
+        }
         for (var i = 0; i < this.rows; i++) {
             this[i].splice(index, 1);
         }
@@ -9192,7 +9947,7 @@ class Matrix extends abstractMatrix(Array) {
      * Adds a column at the given index
      * @param {number} [index = this.columns] - Column index
      * @param {Array|Matrix} array - Array or vector
-     * @returns {Matrix} this
+     * @return {Matrix} this
      */
     addColumn(index, array) {
         if (typeof array === 'undefined') {
@@ -9209,18 +9964,20 @@ class Matrix extends abstractMatrix(Array) {
     }
 }
 
-module.exports = Matrix;
+exports.Matrix = Matrix;
 Matrix.abstractMatrix = abstractMatrix;
 
-},{"./abstractMatrix":80,"./symbol-species":90,"./util":91}],90:[function(require,module,exports){
+},{"./abstractMatrix":83,"./symbol-species":93,"./util":94}],93:[function(require,module,exports){
 'use strict';
 
 if (!Symbol.species) {
     Symbol.species = Symbol.for('@@species');
 }
 
-},{}],91:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 'use strict';
+
+var Matrix = require('./matrix');
 
 /**
  * @private
@@ -9229,7 +9986,6 @@ if (!Symbol.species) {
  * @param {number} index
  * @param {boolean} [outer]
  */
-
 exports.checkRowIndex = function checkRowIndex(matrix, index, outer) {
     var max = outer ? matrix.rows : matrix.rows - 1;
     if (index < 0 || index > max) {
@@ -9256,7 +10012,7 @@ exports.checkColumnIndex = function checkColumnIndex(matrix, index, outer) {
  * Check that the provided vector is an array with the right length
  * @param {Matrix} matrix
  * @param {Array|Matrix} vector
- * @returns {Array}
+ * @return {Array}
  * @throws {RangeError}
  */
 exports.checkRowVector = function checkRowVector(matrix, vector) {
@@ -9274,7 +10030,7 @@ exports.checkRowVector = function checkRowVector(matrix, vector) {
  * Check that the provided vector is an array with the right length
  * @param {Matrix} matrix
  * @param {Array|Matrix} vector
- * @returns {Array}
+ * @return {Array}
  * @throws {RangeError}
  */
 exports.checkColumnVector = function checkColumnVector(matrix, vector) {
@@ -9331,11 +10087,41 @@ exports.getRange = function getRange(from, to) {
     return arr;
 };
 
-},{}],92:[function(require,module,exports){
+exports.sumByRow = function sumByRow(matrix) {
+    var sum = Matrix.Matrix.zeros(matrix.rows, 1);
+    for (var i = 0; i < matrix.rows; ++i) {
+        for (var j = 0; j < matrix.columns; ++j) {
+            sum.set(i, 0, sum.get(i, 0) + matrix.get(i, j));
+        }
+    }
+    return sum;
+};
+
+exports.sumByColumn = function sumByColumn(matrix) {
+    var sum = Matrix.Matrix.zeros(1, matrix.columns);
+    for (var i = 0; i < matrix.rows; ++i) {
+        for (var j = 0; j < matrix.columns; ++j) {
+            sum.set(0, j, sum.get(0, j) + matrix.get(i, j));
+        }
+    }
+    return sum;
+};
+
+exports.sumAll = function sumAll(matrix) {
+    var v = 0;
+    for (var i = 0; i < matrix.rows; i++) {
+        for (var j = 0; j < matrix.columns; j++) {
+            v += matrix.get(i, j);
+        }
+    }
+    return v;
+};
+
+},{"./matrix":92}],95:[function(require,module,exports){
 'use strict';
 
 var abstractMatrix = require('../abstractMatrix');
-var Matrix;
+var Matrix = require('../matrix');
 
 class BaseView extends abstractMatrix() {
     constructor(matrix, rows, columns) {
@@ -9346,16 +10132,13 @@ class BaseView extends abstractMatrix() {
     }
 
     static get [Symbol.species]() {
-        if (!Matrix) {
-            Matrix = require('../matrix');
-        }
-        return Matrix;
+        return Matrix.Matrix;
     }
 }
 
 module.exports = BaseView;
 
-},{"../abstractMatrix":80,"../matrix":89}],93:[function(require,module,exports){
+},{"../abstractMatrix":83,"../matrix":92}],96:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -9371,14 +10154,14 @@ class MatrixColumnView extends BaseView {
         return this;
     }
 
-    get(rowIndex, columnIndex) {
+    get(rowIndex) {
         return this.matrix.get(rowIndex, this.column);
     }
 }
 
 module.exports = MatrixColumnView;
 
-},{"./base":92}],94:[function(require,module,exports){
+},{"./base":95}],97:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -9400,7 +10183,7 @@ class MatrixFlipColumnView extends BaseView {
 
 module.exports = MatrixFlipColumnView;
 
-},{"./base":92}],95:[function(require,module,exports){
+},{"./base":95}],98:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -9422,7 +10205,7 @@ class MatrixFlipRowView extends BaseView {
 
 module.exports = MatrixFlipRowView;
 
-},{"./base":92}],96:[function(require,module,exports){
+},{"./base":95}],99:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -9445,7 +10228,7 @@ class MatrixRowView extends BaseView {
 
 module.exports = MatrixRowView;
 
-},{"./base":92}],97:[function(require,module,exports){
+},{"./base":95}],100:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -9471,7 +10254,7 @@ class MatrixSelectionView extends BaseView {
 
 module.exports = MatrixSelectionView;
 
-},{"../util":91,"./base":92}],98:[function(require,module,exports){
+},{"../util":94,"./base":95}],101:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -9497,7 +10280,7 @@ class MatrixSubView extends BaseView {
 
 module.exports = MatrixSubView;
 
-},{"../util":91,"./base":92}],99:[function(require,module,exports){
+},{"../util":94,"./base":95}],102:[function(require,module,exports){
 'use strict';
 
 var BaseView = require('./base');
@@ -9519,7 +10302,7 @@ class MatrixTransposeView extends BaseView {
 
 module.exports = MatrixTransposeView;
 
-},{"./base":92}],100:[function(require,module,exports){
+},{"./base":95}],103:[function(require,module,exports){
 'use strict';
 
 exports.SimpleLinearRegression = exports.SLR = require('./regression/simple-linear-regression');
@@ -9535,7 +10318,7 @@ exports.KernelRidgeRegression = exports.KRR = require('./regression/kernel-ridge
 exports.PolinomialFitting2D = require('./regression/poly-fit-regression2d');
 exports.TheilSenRegression = require('./regression/theil-sen-regression');
 
-},{"./regression/exp-regression":102,"./regression/kernel-ridge-regression":103,"./regression/poly-fit-regression2d":104,"./regression/polynomial-regression":105,"./regression/potential-regression":106,"./regression/power-regression":107,"./regression/simple-linear-regression":108,"./regression/theil-sen-regression":109}],101:[function(require,module,exports){
+},{"./regression/exp-regression":105,"./regression/kernel-ridge-regression":106,"./regression/poly-fit-regression2d":107,"./regression/polynomial-regression":108,"./regression/potential-regression":109,"./regression/power-regression":110,"./regression/simple-linear-regression":111,"./regression/theil-sen-regression":112}],104:[function(require,module,exports){
 'use strict';
 
 class BaseRegression {
@@ -9616,7 +10399,7 @@ class BaseRegression {
 
 module.exports = BaseRegression;
 
-},{}],102:[function(require,module,exports){
+},{}],105:[function(require,module,exports){
 'use strict';
 
 /*
@@ -9704,7 +10487,7 @@ class ExpRegression extends BaseRegression {
 
 module.exports = ExpRegression;
 
-},{"./base-regression":101,"./simple-linear-regression":108,"./util":110}],103:[function(require,module,exports){
+},{"./base-regression":104,"./simple-linear-regression":111,"./util":113}],106:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('ml-matrix');
@@ -9783,7 +10566,7 @@ class KernelRidgeRegression extends BaseRegression {
 
 module.exports = KernelRidgeRegression;
 
-},{"./base-regression":101,"ml-kernel":71,"ml-matrix":88}],104:[function(require,module,exports){
+},{"./base-regression":104,"ml-kernel":74,"ml-matrix":91}],107:[function(require,module,exports){
 'use strict';
 
 var Matrix = require('ml-matrix');
@@ -9983,7 +10766,7 @@ function abs(i, j) {
     this[i][j] = Math.abs(this[i][j]);
 }
 
-},{"./base-regression":101,"ml-matrix":88}],105:[function(require,module,exports){
+},{"./base-regression":104,"ml-matrix":91}],108:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10143,7 +10926,7 @@ class PolynomialRegression extends BaseRegression {
 
 module.exports = PolynomialRegression;
 
-},{"./base-regression":101,"./util":110,"ml-matrix":88}],106:[function(require,module,exports){
+},{"./base-regression":104,"./util":113,"ml-matrix":91}],109:[function(require,module,exports){
 'use strict';
 
 /*
@@ -10230,7 +11013,7 @@ class PotentialRegression extends BaseRegression {
 
 module.exports = PotentialRegression;
 
-},{"./base-regression":101,"./polynomial-regression":105,"./util":110}],107:[function(require,module,exports){
+},{"./base-regression":104,"./polynomial-regression":108,"./util":113}],110:[function(require,module,exports){
 'use strict';
 
 /**
@@ -10319,7 +11102,7 @@ class PowerRegression extends BaseRegression {
 
 module.exports = PowerRegression;
 
-},{"./base-regression":101,"./simple-linear-regression":108,"./util":110}],108:[function(require,module,exports){
+},{"./base-regression":104,"./simple-linear-regression":111,"./util":113}],111:[function(require,module,exports){
 'use strict';
 
 var maybeToPrecision = require('./util').maybeToPrecision;
@@ -10422,7 +11205,7 @@ class SimpleLinearRegression extends BaseRegression {
 
 module.exports = SimpleLinearRegression;
 
-},{"./base-regression":101,"./util":110}],109:[function(require,module,exports){
+},{"./base-regression":104,"./util":113}],112:[function(require,module,exports){
 'use strict';
 
 var BaseRegression = require('./base-regression');
@@ -10531,7 +11314,7 @@ class TheilSenRegression extends BaseRegression {
 
 module.exports = TheilSenRegression;
 
-},{"./base-regression":101,"./util":110,"ml-stat/array":111}],110:[function(require,module,exports){
+},{"./base-regression":104,"./util":113,"ml-stat/array":114}],113:[function(require,module,exports){
 'use strict';
 
 exports.maybeToPrecision = function maybeToPrecision(value, digits) {
@@ -10551,7 +11334,7 @@ exports.maybeToPrecision = function maybeToPrecision(value, digits) {
     }
 };
 
-},{}],111:[function(require,module,exports){
+},{}],114:[function(require,module,exports){
 'use strict';
 
 function compareNumbers(a, b) {
@@ -11037,13 +11820,13 @@ exports.cumulativeSum = function cumulativeSum(array) {
     }return result;
 };
 
-},{}],112:[function(require,module,exports){
+},{}],115:[function(require,module,exports){
 'use strict';
 
 exports.array = require('./array');
 exports.matrix = require('./matrix');
 
-},{"./array":111,"./matrix":113}],113:[function(require,module,exports){
+},{"./array":114,"./matrix":116}],116:[function(require,module,exports){
 'use strict';
 
 var arrayStat = require('./array');
@@ -11693,12 +12476,12 @@ exports.weightedScatter = function weightedScatter(matrix, weights, means, facto
     return cov;
 };
 
-},{"./array":111}],114:[function(require,module,exports){
+},{"./array":114}],117:[function(require,module,exports){
 'use strict';
 
 module.exports = typeof Promise === 'function' ? Promise : require('lie');
 
-},{"lie":58}],115:[function(require,module,exports){
+},{"lie":61}],118:[function(require,module,exports){
 "use strict";
 
 module.exports = newArray;
@@ -11712,7 +12495,7 @@ function newArray(n, value) {
   return array;
 }
 
-},{}],116:[function(require,module,exports){
+},{}],119:[function(require,module,exports){
 'use strict';
 
 var numberIsNan = require('number-is-nan');
@@ -11735,14 +12518,14 @@ exports.desc = function (a, b) {
 	return b - a;
 };
 
-},{"number-is-nan":117}],117:[function(require,module,exports){
+},{"number-is-nan":120}],120:[function(require,module,exports){
 'use strict';
 
 module.exports = Number.isNaN || function (x) {
 	return x !== x;
 };
 
-},{}],118:[function(require,module,exports){
+},{}],121:[function(require,module,exports){
 'use strict';
 
 // modified from https://github.com/es-shims/es5-shim
@@ -11879,7 +12662,7 @@ keysShim.shim = function shimObjectKeys() {
 
 module.exports = keysShim;
 
-},{"./isArguments":119}],119:[function(require,module,exports){
+},{"./isArguments":122}],122:[function(require,module,exports){
 'use strict';
 
 var toStr = Object.prototype.toString;
@@ -11893,7 +12676,7 @@ module.exports = function isArguments(value) {
 	return isArgs;
 };
 
-},{}],120:[function(require,module,exports){
+},{}],123:[function(require,module,exports){
 // Top level file is just a mixin of submodules & constants
 'use strict';
 
@@ -11909,7 +12692,7 @@ assign(pako, deflate, inflate, constants);
 
 module.exports = pako;
 
-},{"./lib/deflate":121,"./lib/inflate":122,"./lib/utils/common":123,"./lib/zlib/constants":126}],121:[function(require,module,exports){
+},{"./lib/deflate":124,"./lib/inflate":125,"./lib/utils/common":126,"./lib/zlib/constants":129}],124:[function(require,module,exports){
 'use strict';
 
 var zlib_deflate = require('./zlib/deflate');
@@ -12258,7 +13041,7 @@ function deflate(input, options) {
 
   // That will never happens, if you don't cheat with options :)
   if (deflator.err) {
-    throw deflator.msg;
+    throw deflator.msg || msg[deflator.err];
   }
 
   return deflator.result;
@@ -12297,7 +13080,7 @@ exports.deflate = deflate;
 exports.deflateRaw = deflateRaw;
 exports.gzip = gzip;
 
-},{"./utils/common":123,"./utils/strings":124,"./zlib/deflate":128,"./zlib/messages":133,"./zlib/zstream":135}],122:[function(require,module,exports){
+},{"./utils/common":126,"./utils/strings":127,"./zlib/deflate":131,"./zlib/messages":136,"./zlib/zstream":138}],125:[function(require,module,exports){
 'use strict';
 
 var zlib_inflate = require('./zlib/inflate');
@@ -12676,7 +13459,7 @@ function inflate(input, options) {
 
   // That will never happens, if you don't cheat with options :)
   if (inflator.err) {
-    throw inflator.msg;
+    throw inflator.msg || msg[inflator.err];
   }
 
   return inflator.result;
@@ -12710,7 +13493,7 @@ exports.inflate = inflate;
 exports.inflateRaw = inflateRaw;
 exports.ungzip = inflate;
 
-},{"./utils/common":123,"./utils/strings":124,"./zlib/constants":126,"./zlib/gzheader":129,"./zlib/inflate":131,"./zlib/messages":133,"./zlib/zstream":135}],123:[function(require,module,exports){
+},{"./utils/common":126,"./utils/strings":127,"./zlib/constants":129,"./zlib/gzheader":132,"./zlib/inflate":134,"./zlib/messages":136,"./zlib/zstream":138}],126:[function(require,module,exports){
 'use strict';
 
 var TYPED_OK = typeof Uint8Array !== 'undefined' && typeof Uint16Array !== 'undefined' && typeof Int32Array !== 'undefined';
@@ -12813,7 +13596,7 @@ exports.setTyped = function (on) {
 
 exports.setTyped(TYPED_OK);
 
-},{}],124:[function(require,module,exports){
+},{}],127:[function(require,module,exports){
 // String encode/decode helpers
 'use strict';
 
@@ -13021,7 +13804,7 @@ exports.utf8border = function (buf, max) {
   return pos + _utf8len[buf[pos]] > max ? pos : max;
 };
 
-},{"./common":123}],125:[function(require,module,exports){
+},{"./common":126}],128:[function(require,module,exports){
 'use strict';
 
 // Note: adler32 takes 12% for level 0 and 2% for level 6.
@@ -13054,7 +13837,7 @@ function adler32(adler, buf, len, pos) {
 
 module.exports = adler32;
 
-},{}],126:[function(require,module,exports){
+},{}],129:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -13104,7 +13887,7 @@ module.exports = {
   //Z_NULL:                 null // Use -1 or null inline, depending on var type
 };
 
-},{}],127:[function(require,module,exports){
+},{}],130:[function(require,module,exports){
 'use strict';
 
 // Note: we can't get significant speed boost here.
@@ -13147,7 +13930,7 @@ function crc32(crc, buf, len, pos) {
 
 module.exports = crc32;
 
-},{}],128:[function(require,module,exports){
+},{}],131:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -14954,7 +15737,7 @@ exports.deflatePrime = deflatePrime;
 exports.deflateTune = deflateTune;
 */
 
-},{"../utils/common":123,"./adler32":125,"./crc32":127,"./messages":133,"./trees":134}],129:[function(require,module,exports){
+},{"../utils/common":126,"./adler32":128,"./crc32":130,"./messages":136,"./trees":137}],132:[function(require,module,exports){
 'use strict';
 
 function GZheader() {
@@ -14995,7 +15778,7 @@ function GZheader() {
 
 module.exports = GZheader;
 
-},{}],130:[function(require,module,exports){
+},{}],133:[function(require,module,exports){
 'use strict';
 
 // See state defs from inflate.js
@@ -15327,7 +16110,7 @@ module.exports = function inflate_fast(strm, start) {
   return;
 };
 
-},{}],131:[function(require,module,exports){
+},{}],134:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -16953,7 +17736,7 @@ exports.inflateSyncPoint = inflateSyncPoint;
 exports.inflateUndermine = inflateUndermine;
 */
 
-},{"../utils/common":123,"./adler32":125,"./crc32":127,"./inffast":130,"./inftrees":132}],132:[function(require,module,exports){
+},{"../utils/common":126,"./adler32":128,"./crc32":130,"./inffast":133,"./inftrees":135}],135:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -17167,10 +17950,8 @@ module.exports = function inflate_table(type, lens, lens_index, codes, table, ta
     return 1;
   }
 
-  var i = 0;
   /* process all codes and make table entries */
   for (;;) {
-    i++;
     /* create table entry */
     here_bits = len - drop;
     if (work[sym] < end) {
@@ -17267,7 +18048,7 @@ module.exports = function inflate_table(type, lens, lens_index, codes, table, ta
   return 0;
 };
 
-},{"../utils/common":123}],133:[function(require,module,exports){
+},{"../utils/common":126}],136:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -17282,7 +18063,7 @@ module.exports = {
   '-6': 'incompatible version' /* Z_VERSION_ERROR (-6) */
 };
 
-},{}],134:[function(require,module,exports){
+},{}],137:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils/common');
@@ -18461,7 +19242,7 @@ exports._tr_flush_block = _tr_flush_block;
 exports._tr_tally = _tr_tally;
 exports._tr_align = _tr_align;
 
-},{"../utils/common":123}],135:[function(require,module,exports){
+},{"../utils/common":126}],138:[function(require,module,exports){
 'use strict';
 
 function ZStream() {
@@ -18491,7 +19272,7 @@ function ZStream() {
 
 module.exports = ZStream;
 
-},{}],136:[function(require,module,exports){
+},{}],139:[function(require,module,exports){
 'use strict';
 
 var TIFFDecoder = require('./tiffDecoder');
@@ -18501,7 +19282,7 @@ module.exports = function decodeTIFF(data, options) {
     return decoder.decode(options);
 };
 
-},{"./tiffDecoder":143}],137:[function(require,module,exports){
+},{"./tiffDecoder":146}],140:[function(require,module,exports){
 'use strict';
 
 var tags = {
@@ -18547,7 +19328,7 @@ class IFD {
 
 module.exports = IFD;
 
-},{"./tags/exif":140,"./tags/gps":141,"./tags/standard":142}],138:[function(require,module,exports){
+},{"./tags/exif":143,"./tags/gps":144,"./tags/standard":145}],141:[function(require,module,exports){
 'use strict';
 
 var types = new Map([[1, [1, readByte]], // BYTE
@@ -18685,9 +19466,9 @@ function readDouble(decoder, count) {
     return array;
 }
 
-},{}],139:[function(require,module,exports){
-arguments[4][37][0].apply(exports,arguments)
-},{"./decode":136,"dup":37}],140:[function(require,module,exports){
+},{}],142:[function(require,module,exports){
+arguments[4][40][0].apply(exports,arguments)
+},{"./decode":139,"dup":40}],143:[function(require,module,exports){
 'use strict';
 
 var tagsById = {
@@ -18772,7 +19553,7 @@ module.exports = {
     tagsByName: tagsByName
 };
 
-},{}],141:[function(require,module,exports){
+},{}],144:[function(require,module,exports){
 'use strict';
 
 var tagsById = {
@@ -18820,7 +19601,7 @@ module.exports = {
     tagsByName: tagsByName
 };
 
-},{}],142:[function(require,module,exports){
+},{}],145:[function(require,module,exports){
 'use strict';
 
 var tagsById = {
@@ -19010,7 +19791,7 @@ module.exports = {
     tagsByName: tagsByName
 };
 
-},{}],143:[function(require,module,exports){
+},{}],146:[function(require,module,exports){
 'use strict';
 
 var IOBuffer = require('iobuffer');
@@ -19244,7 +20025,7 @@ function validateBitDepth(bitDepth) {
     return bitDepth;
 }
 
-},{"./ifd":137,"./ifdValue":138,"./tiffIfd":144,"iobuffer":49}],144:[function(require,module,exports){
+},{"./ifd":140,"./ifdValue":141,"./tiffIfd":147,"iobuffer":52}],147:[function(require,module,exports){
 'use strict';
 
 var Ifd = require('./ifd');
@@ -19362,7 +20143,7 @@ function alwaysArray(value) {
 
 module.exports = TiffIfd;
 
-},{"./ifd":137}],145:[function(require,module,exports){
+},{"./ifd":140}],148:[function(require,module,exports){
 'use strict';
 
 var workerTemplate = require('./workerTemplate');
@@ -19518,7 +20299,7 @@ WorkerManager.prototype.post = function (event, args, transferable, id) {
 
 module.exports = WorkerManager;
 
-},{"./workerTemplate":146}],146:[function(require,module,exports){
+},{"./workerTemplate":149}],149:[function(require,module,exports){
 'use strict';
 
 var worker = function worker() {
@@ -19572,7 +20353,8 @@ exports.newWorkerURL = function newWorkerURL(code, deps) {
     return URL.createObjectURL(blob);
 };
 
-},{}],147:[function(require,module,exports){
+},{}],150:[function(require,module,exports){
+(function (Buffer){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19618,6 +20400,10 @@ var _blobUtil = require('blob-util');
 var _hasOwn = require('has-own');
 
 var _hasOwn2 = _interopRequireDefault(_hasOwn);
+
+var _fastBmp = require('fast-bmp');
+
+var _base = require('../util/base64');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20176,14 +20962,28 @@ class Image {
         var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'image/png';
         var async = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
+        type = (0, _mediaTypes.getType)(type);
+        function bmpUrl(ctx) {
+            var u8 = (0, _fastBmp.encode)(ctx);
+            var base64 = (0, _base.encode)(u8);
+            return `data:${ type };base64,${ base64 }`;
+        }
         if (async) {
             return new Promise((resolve, reject) => {
-                this.getCanvas().toDataURL((0, _mediaTypes.getType)(type), function (err, text) {
-                    if (err) reject(err);else resolve(text);
-                });
+                if (type === 'image/bmp') {
+                    resolve(bmpUrl(this));
+                } else {
+                    this.getCanvas().toDataURL(type, function (err, text) {
+                        if (err) reject(err);else resolve(text);
+                    });
+                }
             });
         } else {
-            return this.getCanvas().toDataURL((0, _mediaTypes.getType)(type));
+            if (type === 'image/bmp') {
+                return bmpUrl(this);
+            } else {
+                return this.getCanvas().toDataURL(type);
+            }
         }
     }
 
@@ -20344,23 +21144,36 @@ class Image {
             format = _options$format === undefined ? 'png' : _options$format;
 
         return new Promise((resolve, reject) => {
-            var canvas = this.getCanvas();
             var out = (0, _fs.createWriteStream)(path);
-            var stream = void 0;
+            var stream = void 0,
+                buffer = void 0;
             switch (format.toLowerCase()) {
                 case 'png':
-                    stream = canvas.pngStream();
+                    stream = this.getCanvas().pngStream();
                     break;
                 case 'jpg':
                 case 'jpeg':
-                    stream = canvas.jpegStream();
+                    stream = this.getCanvas().jpegStream();
+                    break;
+                case 'bmp':
+                    buffer = (0, _fastBmp.encode)(this);
                     break;
                 default:
                     throw new RangeError('invalid output format: ' + format);
             }
-            out.on('finish', resolve);
-            out.on('error', reject);
-            stream.pipe(out);
+            if (stream) {
+                out.on('finish', resolve);
+                out.on('error', reject);
+                stream.pipe(out);
+            } else if (buffer) {
+                (0, _fs.writeFile)(path, Buffer.from(buffer), err => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+                    resolve();
+                });
+            }
         });
     }
 
@@ -20450,7 +21263,8 @@ exports.default = Image;
 (0, _extend2.default)(Image);
 (0, _bitMethods2.default)(Image);
 
-},{"../stack/Stack":253,"./bitMethods":148,"./environment":161,"./extend":162,"./kind":183,"./kindNames":184,"./load":185,"./mediaTypes":186,"./model/model":187,"./roi/manager":203,"blob-util":6,"extend":35,"fs":8,"has-own":45}],148:[function(require,module,exports){
+}).call(this,require("buffer").Buffer)
+},{"../stack/Stack":255,"../util/base64":265,"./bitMethods":151,"./environment":164,"./extend":165,"./kind":186,"./kindNames":187,"./load":188,"./mediaTypes":189,"./model/model":190,"./roi/manager":206,"blob-util":5,"buffer":7,"extend":34,"fast-bmp":38,"fs":7,"has-own":48}],151:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20581,7 +21395,7 @@ var bitMethods = {
     }
 };
 
-},{}],149:[function(require,module,exports){
+},{}],152:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20640,7 +21454,7 @@ function getColorHistogram() {
     return result;
 }
 
-},{"new-array":115}],150:[function(require,module,exports){
+},{"new-array":118}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20680,7 +21494,7 @@ function countAlphaPixels() {
     }
 }
 
-},{}],151:[function(require,module,exports){
+},{}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20718,7 +21532,7 @@ function getHistogram() {
         useAlpha = _options$useAlpha === undefined ? true : _options$useAlpha;
 
     this.checkProcessable('getHistogram', {
-        bitDepth: [8, 16]
+        bitDepth: [1, 8, 16]
     });
     if (channel === undefined) {
         if (this.components > 1) {
@@ -20769,6 +21583,22 @@ function getChannelHistogram(channel, options) {
     var useAlpha = options.useAlpha,
         maxSlots = options.maxSlots;
 
+    //for a mask, return a number array containing count of black and white points (black = array[0], white = array[1])
+
+    if (this.bitDepth === 1) {
+        var blackWhiteCount = [0, 0];
+        for (var i = 0; i < this.height; i++) {
+            for (var j = 0; j < this.width; j++) {
+                var value = this.getBitXY(i, j);
+                if (value === 0) {
+                    blackWhiteCount[0] += 1;
+                } else if (value === 1) {
+                    blackWhiteCount[1] += 1;
+                }
+            }
+        }
+        return blackWhiteCount;
+    }
 
     var bitSlots = Math.log2(maxSlots);
     if (!(0, _isInteger2.default)(bitSlots)) {
@@ -20788,19 +21618,19 @@ function getChannelHistogram(channel, options) {
     if (useAlpha && this.alpha) {
         var alphaChannelDiff = this.channels - channel - 1;
 
-        for (var i = channel; i < data.length; i += this.channels) {
-            result[data[i] >> bitShift] += data[i + alphaChannelDiff] / this.maxValue;
+        for (var _i = channel; _i < data.length; _i += this.channels) {
+            result[data[_i] >> bitShift] += data[_i + alphaChannelDiff] / this.maxValue;
         }
     } else {
-        for (var _i = channel; _i < data.length; _i += this.channels) {
-            result[data[_i] >> bitShift]++;
+        for (var _i2 = channel; _i2 < data.length; _i2 += this.channels) {
+            result[data[_i2] >> bitShift]++;
         }
     }
 
     return result;
 }
 
-},{"is-integer":54,"new-array":115}],152:[function(require,module,exports){
+},{"is-integer":57,"new-array":118}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20894,7 +21724,7 @@ function localMaxima() {
     return points;
 }
 
-},{}],153:[function(require,module,exports){
+},{}],156:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20931,7 +21761,7 @@ function max() {
     return result;
 }
 
-},{"new-array":115}],154:[function(require,module,exports){
+},{"new-array":118}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20957,7 +21787,7 @@ function mean() {
     return result;
 }
 
-},{"../../util/histogram":266}],155:[function(require,module,exports){
+},{"../../util/histogram":270}],158:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -20983,7 +21813,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":266}],156:[function(require,module,exports){
+},{"../../util/histogram":270}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21020,7 +21850,7 @@ function min() {
     return result;
 }
 
-},{"new-array":115}],157:[function(require,module,exports){
+},{"new-array":118}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21051,7 +21881,7 @@ function points() {
     return pixels;
 }
 
-},{}],158:[function(require,module,exports){
+},{}],161:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21094,7 +21924,7 @@ function getRelativePosition(targetImage) {
     return false;
 }
 
-},{}],159:[function(require,module,exports){
+},{}],162:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21129,7 +21959,7 @@ function sum() {
     return result;
 }
 
-},{"new-array":115}],160:[function(require,module,exports){
+},{"new-array":118}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21153,7 +21983,7 @@ function getSvd() {
     return _mlMatrix.DC.SVD(this.points);
 }
 
-},{"ml-matrix":88}],161:[function(require,module,exports){
+},{"ml-matrix":91}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21239,7 +22069,7 @@ exports.ImageData = ImageData;
 exports.isDifferentOrigin = isDifferentOrigin;
 exports.env = env;
 
-},{"canvas":undefined,"fs":8}],162:[function(require,module,exports){
+},{"canvas":undefined,"fs":7}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21366,10 +22196,6 @@ var _mask2 = _interopRequireDefault(_mask);
 var _pad = require('./transform/pad');
 
 var _pad2 = _interopRequireDefault(_pad);
-
-var _resizeBinary = require('./transform/resizeBinary');
-
-var _resizeBinary2 = _interopRequireDefault(_resizeBinary);
 
 var _colorDepth = require('./transform/colorDepth');
 
@@ -21509,6 +22335,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
 // utility
+
+
+// transforms
+// filters
 function extend(Image) {
     var inPlace = { inPlace: true };
     var inPlaceStack = { inPlace: true, stack: true };
@@ -21546,7 +22376,6 @@ function extend(Image) {
     Image.extendMethod('grey', _grey2.default).extendMethod('gray', _grey2.default);
     Image.extendMethod('mask', _mask2.default);
     Image.extendMethod('pad', _pad2.default);
-    Image.extendMethod('resizeBinary', _resizeBinary2.default);
     Image.extendMethod('colorDepth', _colorDepth2.default);
     Image.extendMethod('setBorder', _setBorder2.default, inPlace);
     Image.extendMethod('rotate', _rotate.rotate);
@@ -21592,11 +22421,7 @@ function extend(Image) {
 
 // operators
 
-
-// transforms
-// filters
-
-},{"./compute/colorHistogram":149,"./compute/countAlphaPixels":150,"./compute/histogram":151,"./compute/localMaxima":152,"./compute/max":153,"./compute/mean":154,"./compute/median":155,"./compute/min":156,"./compute/points":157,"./compute/relativePosition":158,"./compute/sum":159,"./compute/svd":160,"./filter/add":163,"./filter/background":164,"./filter/blurFilter":165,"./filter/divide":166,"./filter/flipX":167,"./filter/flipY":168,"./filter/gaussianFilter":169,"./filter/hypotenuse":170,"./filter/invert":171,"./filter/invertApply":172,"./filter/invertBinaryLoop":173,"./filter/invertGetSet":174,"./filter/invertIterator":175,"./filter/invertOneLoop":176,"./filter/invertPixel":177,"./filter/level":178,"./filter/medianFilter":179,"./filter/multiply":180,"./filter/sobelFilter":181,"./filter/subtract":182,"./operator/convolution":188,"./operator/convolutionFft":189,"./operator/extract":190,"./operator/floodFill":191,"./operator/paintLabels":192,"./operator/paintMasks":193,"./operator/paintPoints":194,"./transform/cmyk":204,"./transform/colorDepth":205,"./transform/crop":206,"./transform/cropAlpha":207,"./transform/grey":208,"./transform/hsl":210,"./transform/hsv":211,"./transform/mask/mask":216,"./transform/pad":229,"./transform/resizeBinary":230,"./transform/rgba8":231,"./transform/rotate":232,"./transform/scale/scale":235,"./utility/combineChannels":236,"./utility/getBestMatch":238,"./utility/getChannel":239,"./utility/getColumn":240,"./utility/getMatrix":241,"./utility/getPixelsArray":242,"./utility/getPixelsGrid":243,"./utility/getRow":244,"./utility/getSimilarity":245,"./utility/setBorder":246,"./utility/setChannel":247,"./utility/setMatrix":248,"./utility/split":249}],163:[function(require,module,exports){
+},{"./compute/colorHistogram":152,"./compute/countAlphaPixels":153,"./compute/histogram":154,"./compute/localMaxima":155,"./compute/max":156,"./compute/mean":157,"./compute/median":158,"./compute/min":159,"./compute/points":160,"./compute/relativePosition":161,"./compute/sum":162,"./compute/svd":163,"./filter/add":166,"./filter/background":167,"./filter/blurFilter":168,"./filter/divide":169,"./filter/flipX":170,"./filter/flipY":171,"./filter/gaussianFilter":172,"./filter/hypotenuse":173,"./filter/invert":174,"./filter/invertApply":175,"./filter/invertBinaryLoop":176,"./filter/invertGetSet":177,"./filter/invertIterator":178,"./filter/invertOneLoop":179,"./filter/invertPixel":180,"./filter/level":181,"./filter/medianFilter":182,"./filter/multiply":183,"./filter/sobelFilter":184,"./filter/subtract":185,"./operator/convolution":191,"./operator/convolutionFft":192,"./operator/extract":193,"./operator/floodFill":194,"./operator/paintLabels":195,"./operator/paintMasks":196,"./operator/paintPoints":197,"./transform/cmyk":207,"./transform/colorDepth":208,"./transform/crop":209,"./transform/cropAlpha":210,"./transform/grey":211,"./transform/hsl":213,"./transform/hsv":214,"./transform/mask/mask":219,"./transform/pad":232,"./transform/rgba8":233,"./transform/rotate":234,"./transform/scale/scale":237,"./utility/combineChannels":238,"./utility/getBestMatch":240,"./utility/getChannel":241,"./utility/getColumn":242,"./utility/getMatrix":243,"./utility/getPixelsArray":244,"./utility/getPixelsGrid":245,"./utility/getRow":246,"./utility/getSimilarity":247,"./utility/setBorder":248,"./utility/setChannel":249,"./utility/setMatrix":250,"./utility/split":251}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21650,7 +22475,7 @@ function add(value) {
     return this;
 }
 
-},{"../../util/channel":262,"../../util/value":271}],164:[function(require,module,exports){
+},{"../../util/channel":266,"../../util/value":274}],167:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21690,7 +22515,7 @@ function background(coordinates, values, options) {
     return background;
 }
 
-},{"../Image":147,"ml-regression":100}],165:[function(require,module,exports){
+},{"../Image":150,"ml-regression":103}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21738,7 +22563,7 @@ function blurFilter() {
     return _convolutionFft2.default.call(this, kernel);
 }
 
-},{"../operator/convolutionFft":189}],166:[function(require,module,exports){
+},{"../operator/convolutionFft":192}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21790,7 +22615,7 @@ function divide(value) {
     return this;
 }
 
-},{"../../util/channel":262,"../../util/value":271}],167:[function(require,module,exports){
+},{"../../util/channel":266,"../../util/value":274}],170:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21828,7 +22653,7 @@ function flipX() {
     return this;
 }
 
-},{}],168:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21863,7 +22688,7 @@ function flipY() {
     return this;
 }
 
-},{}],169:[function(require,module,exports){
+},{}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21978,7 +22803,7 @@ function getSigmaKernel(sigma) {
     return getKernel(neighbors, sigma);
 }
 
-},{"../operator/convolution":188}],170:[function(require,module,exports){
+},{"../operator/convolution":191}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22045,7 +22870,7 @@ function hypotenuse(otherImage) {
     return newImage;
 }
 
-},{"../../util/channel":262,"../Image":147}],171:[function(require,module,exports){
+},{"../../util/channel":266,"../Image":150}],174:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22099,7 +22924,7 @@ function invert() {
     return this;
 } // we try the faster methods
 
-},{"../../util/channel":262}],172:[function(require,module,exports){
+},{"../../util/channel":266}],175:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22135,7 +22960,7 @@ function invertApply() {
     }
 }
 
-},{}],173:[function(require,module,exports){
+},{}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22152,7 +22977,7 @@ function invertBinaryLoop() {
     }
 }
 
-},{}],174:[function(require,module,exports){
+},{}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22184,7 +23009,7 @@ function invert() {
     }
 }
 
-},{}],175:[function(require,module,exports){
+},{}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22216,7 +23041,7 @@ function invertIterator() {
     }
 }
 
-},{}],176:[function(require,module,exports){
+},{}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22236,7 +23061,7 @@ function invertOneLoop() {
     }
 }
 
-},{}],177:[function(require,module,exports){
+},{}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22264,7 +23089,7 @@ function invertPixel() {
     }
 }
 
-},{}],178:[function(require,module,exports){
+},{}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22370,7 +23195,7 @@ function processImage(image, min, max, channels) {
     }
 }
 
-},{"../../util/channel":262,"new-array":115}],179:[function(require,module,exports){
+},{"../../util/channel":266,"new-array":118}],182:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22460,7 +23285,7 @@ function medianFilter() {
     return newImage;
 } //End median function
 
-},{"../../util/channel":262,"../Image":147,"num-sort":116}],180:[function(require,module,exports){
+},{"../../util/channel":266,"../Image":150,"num-sort":119}],183:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22515,7 +23340,7 @@ function multiply(value) {
     return this;
 }
 
-},{"../../util/channel":262,"../../util/value":271}],181:[function(require,module,exports){
+},{"../../util/channel":266,"../../util/value":274}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22571,7 +23396,7 @@ function sobelFilter() {
     return gX.hypotenuse(gY, { bitDepth: this.bitDepth, channels: channels });
 }
 
-},{"../../util/kernels":268,"../operator/convolution":188}],182:[function(require,module,exports){
+},{"../../util/kernels":272,"../operator/convolution":191}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22623,7 +23448,7 @@ function subtract(value) {
     return this;
 }
 
-},{"../../util/channel":262,"../../util/value":271}],183:[function(require,module,exports){
+},{"../../util/channel":266,"../../util/value":274}],186:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22734,7 +23559,7 @@ function createPixelArray(image) {
     return arr;
 }
 
-},{"./kindNames":184,"./model/model":187}],184:[function(require,module,exports){
+},{"./kindNames":187,"./model/model":190}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22750,7 +23575,7 @@ var RGBA = exports.RGBA = 'RGBA';
 var CMYK = exports.CMYK = 'CMYK';
 var CMYKA = exports.CMYKA = 'CMYKA';
 
-},{}],185:[function(require,module,exports){
+},{}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22774,25 +23599,15 @@ var _fastJpeg = require('fast-jpeg');
 
 var _tiff = require('tiff');
 
-var _atobLite = require('atob-lite');
-
-var _atobLite2 = _interopRequireDefault(_atobLite);
-
 var _imageType = require('image-type');
 
 var _imageType2 = _interopRequireDefault(_imageType);
 
+var _base = require('../util/base64');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
-
-function str2ab(str) {
-    var arr = new Uint8Array(str.length);
-    for (var i = 0; i < str.length; i++) {
-        arr[i] = str.charCodeAt(i);
-    }
-    return arr;
-}
 
 function swap16(val) {
     return (val & 0xFF) << 8 | val >> 8 & 0xFF;
@@ -22844,7 +23659,7 @@ function loadURL(url, options) {
     var dataURL = url.slice(0, 64).match(isDataURL);
     var binaryDataP = void 0;
     if (dataURL) {
-        binaryDataP = Promise.resolve(str2ab((0, _atobLite2.default)(url.slice(dataURL[0].length))));
+        binaryDataP = Promise.resolve((0, _base.decode)(url.slice(dataURL[0].length)));
     } else {
         binaryDataP = (0, _environment.fetchBinary)(url, options);
     }
@@ -22946,7 +23761,7 @@ function loadGeneric(url, options) {
     });
 }
 
-},{"../stack/Stack":253,"./Image":147,"./environment":161,"atob-lite":5,"fast-jpeg":37,"fast-png":40,"image-type":47,"tiff":139}],186:[function(require,module,exports){
+},{"../stack/Stack":255,"../util/base64":265,"./Image":150,"./environment":164,"fast-jpeg":40,"fast-png":43,"image-type":50,"tiff":142}],189:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23007,7 +23822,7 @@ function getType(type) {
     return type;
 }
 
-},{"./Image":147,"./environment":161}],187:[function(require,module,exports){
+},{"./Image":150,"./environment":164}],190:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23019,7 +23834,7 @@ var HSV = exports.HSV = 'HSV';
 var CMYK = exports.CMYK = 'CMYK';
 var GREY = exports.GREY = 'GREY';
 
-},{}],188:[function(require,module,exports){
+},{}],191:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23159,7 +23974,7 @@ function convolution(kernel) {
     return newImage;
 }
 
-},{"../../util/channel":262,"../../util/kernel":267,"../Image":147,"ml-matrix-convolution":79}],189:[function(require,module,exports){
+},{"../../util/channel":266,"../../util/kernel":271,"../Image":150,"ml-matrix-convolution":82}],192:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23186,7 +24001,7 @@ function convolutionFft(kernel) {
   return this.convolution(kernel, options);
 }
 
-},{}],190:[function(require,module,exports){
+},{}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23271,7 +24086,7 @@ function extract(mask) {
     }
 }
 
-},{"../Image":147}],191:[function(require,module,exports){
+},{"../Image":150}],194:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23348,7 +24163,7 @@ function Node(x, y) {
     this.y = y;
 }
 
-},{"../Image":147,"fast-list":38}],192:[function(require,module,exports){
+},{"../Image":150,"fast-list":41}],195:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23440,7 +24255,7 @@ function paintLabels(labels, positions) {
     return this;
 }
 
-},{"../../util/color":263,"../model/model":187}],193:[function(require,module,exports){
+},{"../../util/color":267,"../model/model":190}],196:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23560,7 +24375,7 @@ function paintMasks(masks) {
     return this;
 }
 
-},{"../../util/color":263,"../model/model":187}],194:[function(require,module,exports){
+},{"../../util/color":267,"../model/model":190}],197:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23570,9 +24385,9 @@ exports.default = paintPoints;
 
 var _model = require('../model/model');
 
-var _shape = require('../../util/shape');
+var _Shape = require('../../util/Shape');
 
-var _shape2 = _interopRequireDefault(_shape);
+var _Shape2 = _interopRequireDefault(_Shape);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -23599,7 +24414,7 @@ function paintPoints(points) {
         colorModel: _model.RGB
     });
 
-    var shapePixels = new _shape2.default(shape).getPoints();
+    var shapePixels = new _Shape2.default(shape).getPoints();
 
     var numberChannels = Math.min(this.channels, color.length);
 
@@ -23621,7 +24436,7 @@ function paintPoints(points) {
     return this;
 }
 
-},{"../../util/shape":270,"../model/model":187}],195:[function(require,module,exports){
+},{"../../util/Shape":264,"../model/model":190}],198:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23636,9 +24451,9 @@ var _kindNames = require('../kindNames');
 
 var KindNames = _interopRequireWildcard(_kindNames);
 
-var _shape = require('../../util/shape');
+var _Shape = require('../../util/Shape');
 
-var _shape2 = _interopRequireDefault(_shape);
+var _Shape2 = _interopRequireDefault(_Shape);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -23698,7 +24513,7 @@ class Roi {
         if (scale < 1) {
             // by reassigning the mask we loose the parent and therefore the position
             // we will have to force it back
-            mask = mask.resizeBinary(scale);
+            mask = mask.scale({ factor: scale });
             mask.parent = this.mask.parent;
             mask.position[0] += this.minX;
             mask.position[1] += this.minY;
@@ -23970,7 +24785,7 @@ class Roi {
             return this.computed.centerMask;
         }
 
-        var img = new _shape2.default({ kind: 'smallCross' }).getMask();
+        var img = new _Shape2.default({ kind: 'smallCross' }).getMask();
 
         img.parent = this.map.parent;
         img.position = [this.minX + this.center[0] - 1, this.minY + this.center[1] - 1];
@@ -24253,7 +25068,7 @@ function getInternalIDs(roi) {
     return internal;
 }
 
-},{"../../util/shape":270,"../Image":147,"../kindNames":184}],196:[function(require,module,exports){
+},{"../../util/Shape":264,"../Image":150,"../kindNames":187}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24361,7 +25176,7 @@ class RoiLayer {
 }
 exports.default = RoiLayer;
 
-},{"./Roi":195}],197:[function(require,module,exports){
+},{"./Roi":198}],200:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24391,7 +25206,7 @@ class RoiMap {
 }
 exports.default = RoiMap;
 
-},{}],198:[function(require,module,exports){
+},{}],201:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24520,7 +25335,7 @@ function fromMask(mask) {
     return new _RoiMap2.default(mask, data);
 }
 
-},{"../RoiMap":197}],199:[function(require,module,exports){
+},{"../RoiMap":200}],202:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24637,7 +25452,7 @@ function fromKaskConnectedComponentLabelingAlgorithm(mask) {
     return new _RoiMap2.default(mask, data);
 }
 
-},{"../RoiMap":197,"ml-disjoint-set":63}],200:[function(require,module,exports){
+},{"../RoiMap":200,"ml-disjoint-set":66}],203:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24868,7 +25683,7 @@ function fromMaxima() {
     }
 }
 
-},{"../RoiMap":197}],201:[function(require,module,exports){
+},{"../RoiMap":200}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24880,9 +25695,9 @@ var _RoiMap = require('../RoiMap');
 
 var _RoiMap2 = _interopRequireDefault(_RoiMap);
 
-var _shape = require('./../../../util/shape');
+var _Shape = require('./../../../util/Shape');
 
-var _shape2 = _interopRequireDefault(_shape);
+var _Shape2 = _interopRequireDefault(_Shape);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24896,7 +25711,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function fromPoints(pointsToPaint) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    var shape = new _shape2.default(options);
+    var shape = new _Shape2.default(options);
 
     // based on a binary image we will create plenty of small images
     var data = new Int16Array(this.size); // maxValue: 32767, minValue: -32768
@@ -24918,7 +25733,7 @@ function fromPoints(pointsToPaint) {
     return new _RoiMap2.default(this, data);
 }
 
-},{"../RoiMap":197,"./../../../util/shape":270}],202:[function(require,module,exports){
+},{"../RoiMap":200,"./../../../util/Shape":264}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25036,7 +25851,7 @@ function fromWaterShed() {
     return new _RoiMap2.default(currentImage, data);
 }
 
-},{"../RoiMap":197,"./../../../util/dxdy.js":265,"js-priority-queue":57}],203:[function(require,module,exports){
+},{"../RoiMap":200,"./../../../util/dxdy.js":269,"js-priority-queue":60}],206:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25400,6 +26215,12 @@ class RoiManager {
         return this;
     }
 
+    /**
+     * Finds all corresponding ROIs for all ROIs in the manager
+     * @param {number[]} roiMap
+     * @param {object} [options]
+     * @returns {Array} array of objects returned in correspondingRoisInformation
+     */
     findCorrespondingRoi(roiMap) {
         var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -25425,7 +26246,19 @@ class RoiManager {
 
 }
 
-exports.default = RoiManager;
+exports.default = RoiManager; /**
+                               * For a given ROI, find corresponding ROIs and properties in given ROIMap.
+                               * Returns an object containing the ID of ROIs, the surface shared by given and corresponding ROIs,
+                               * the percentage of given ROI surface covered by the corresponding ROI, the number of points with same and opposite signs,
+                               * the total number of points (same and opposite).
+                               * @param {number} x: minX value of ROI
+                               * @param {number} y: minY value of ROI
+                               * @param {number[][]} points: points of ROI
+                               * @param {number[]} roiMap: roiMap from which we get the corresponding ROI
+                               * @param {number} roiSign: sign of ROI
+                               * @return {object} {{id: Array, surface: Array, roiSurfaceCovered: Array, same: number, opposite: number, total: number}}
+                               */
+
 function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
     var correspondingRois = { id: [], surface: [], roiSurfaceCovered: [], same: 0, opposite: 0, total: 0 };
     for (var i = 0; i < points.length; i++) {
@@ -25459,7 +26292,7 @@ function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
     return correspondingRois;
 }
 
-},{"../Image":147,"./RoiLayer":196,"./RoiMap":197,"./creator/fromMask":198,"./creator/fromMaskConnectedComponentLabelingAlgorithm":199,"./creator/fromMaxima":200,"./creator/fromPoints":201,"./creator/fromWaterShed":202,"extend":35}],204:[function(require,module,exports){
+},{"../Image":150,"./RoiLayer":199,"./RoiMap":200,"./creator/fromMask":201,"./creator/fromMaskConnectedComponentLabelingAlgorithm":202,"./creator/fromMaxima":203,"./creator/fromPoints":204,"./creator/fromWaterShed":205,"extend":34}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25525,7 +26358,7 @@ function cmyk() {
     return newImage;
 }
 
-},{"../Image":147,"../model/model":187}],205:[function(require,module,exports){
+},{"../Image":150,"../model/model":190}],208:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25584,7 +26417,7 @@ function colorDepth() {
     return newImage;
 }
 
-},{"../Image":147}],206:[function(require,module,exports){
+},{"../Image":150}],209:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25664,7 +26497,7 @@ function crop() {
     return newImage;
 }
 
-},{"../Image":147}],207:[function(require,module,exports){
+},{"../Image":150}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25753,7 +26586,7 @@ function findRight(image, threshold, channel, left, top, bottom) {
     return -1;
 }
 
-},{}],208:[function(require,module,exports){
+},{}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25853,7 +26686,7 @@ function grey() {
     return newImage;
 }
 
-},{"../Image":147,"../model/model":187,"./greyAlgorithms":209}],209:[function(require,module,exports){
+},{"../Image":150,"../model/model":190,"./greyAlgorithms":212}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25957,7 +26790,7 @@ Object.defineProperty(methods, 'brightness', { enumerable: false, value: methods
 
 var names = exports.names = Object.keys(methods);
 
-},{}],210:[function(require,module,exports){
+},{}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26041,7 +26874,7 @@ function hsl() {
     return newImage;
 }
 
-},{"../Image":147,"../model/model":187}],211:[function(require,module,exports){
+},{"../Image":150,"../model/model":190}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26123,7 +26956,7 @@ function hsv() {
     return newImage;
 }
 
-},{"../Image":147,"../model/model":187}],212:[function(require,module,exports){
+},{"../Image":150,"../model/model":190}],215:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26207,7 +27040,7 @@ function huang(histogram) {
     return threshold;
 }
 
-},{}],213:[function(require,module,exports){
+},{}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26271,7 +27104,7 @@ function bimodalTest(iHisto) {
     return b;
 }
 
-},{}],214:[function(require,module,exports){
+},{}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26327,7 +27160,7 @@ function isodata(histogram) {
     return g;
 }
 
-},{}],215:[function(require,module,exports){
+},{}],218:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26411,7 +27244,7 @@ function li(histogram, total) {
     return threshold;
 }
 
-},{}],216:[function(require,module,exports){
+},{}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26496,7 +27329,7 @@ function mask() {
     return newImage;
 }
 
-},{"../../../util/converter":264,"../../Image":147,"./maskAlgorithms":217}],217:[function(require,module,exports){
+},{"../../../util/converter":268,"../../Image":150,"./maskAlgorithms":220}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26586,7 +27419,7 @@ var methods = exports.methods = {
 
 var names = exports.names = ['threshold'].concat(Object.keys(methods));
 
-},{"./huang":212,"./intermodes":213,"./isodata":214,"./li":215,"./maxEntropy":218,"./mean":219,"./minError":220,"./minimum":221,"./moments":222,"./otsu":223,"./percentile":224,"./renyiEntropy.js":225,"./shanbhag":226,"./triangle":227,"./yen":228}],218:[function(require,module,exports){
+},{"./huang":215,"./intermodes":216,"./isodata":217,"./li":218,"./maxEntropy":221,"./mean":222,"./minError":223,"./minimum":224,"./moments":225,"./otsu":226,"./percentile":227,"./renyiEntropy.js":228,"./shanbhag":229,"./triangle":230,"./yen":231}],221:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26673,7 +27506,7 @@ function maxEntropy(histogram, total) {
     return threshold;
 }
 
-},{}],219:[function(require,module,exports){
+},{}],222:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26697,7 +27530,7 @@ function mean(histogram, total) {
     return Math.floor(sum / total);
 }
 
-},{}],220:[function(require,module,exports){
+},{}],223:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26805,7 +27638,7 @@ function sumC(y, j) {
     return x;
 }
 
-},{}],221:[function(require,module,exports){
+},{}],224:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26884,7 +27717,7 @@ function bimodalTest(histogram) {
     return isBimodal;
 }
 
-},{}],222:[function(require,module,exports){
+},{}],225:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -26947,7 +27780,7 @@ function moments(histogram, total) {
     return threshold;
 }
 
-},{}],223:[function(require,module,exports){
+},{}],226:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27001,7 +27834,7 @@ function otsu(histogram, total) {
     return threshold;
 }
 
-},{}],224:[function(require,module,exports){
+},{}],227:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27042,7 +27875,7 @@ function partialSum(histogram, endIndex) {
     return x;
 }
 
-},{}],225:[function(require,module,exports){
+},{}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27187,7 +28020,7 @@ function renyiEntropy(histogram, total) {
 // 06.15.2007
 // Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
 
-},{"num-sort":116}],226:[function(require,module,exports){
+},{"num-sort":119}],229:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27269,7 +28102,7 @@ function shanbhag(histogram, total) {
     return threshold;
 }
 
-},{}],227:[function(require,module,exports){
+},{}],230:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27388,7 +28221,7 @@ function triangle(histogram) {
     }
 }
 
-},{}],228:[function(require,module,exports){
+},{}],231:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27447,7 +28280,7 @@ function yen(histogram, total) {
     return threshold;
 }
 
-},{}],229:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27545,62 +28378,7 @@ function pad() {
     return newImage;
 }
 
-},{"../Image":147,"../utility/copy":237,"new-array":115}],230:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = resizeBinary;
-
-var _Image = require('../Image');
-
-var _Image2 = _interopRequireDefault(_Image);
-
-var _kindNames = require('../kindNames');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * This is a temporary code that should be placed in the more general resize method
- * it only works for scaled down !
- * @memberof Image
- * @instance
- * @param {number} [scale=0.5]
- * @return {Image}
- */
-function resizeBinary() {
-    var scale = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.5;
-
-    this.checkProcessable('resizeBinary', {
-        bitDepth: [1]
-    });
-
-    var width = Math.max(Math.floor(this.width * scale), 1);
-    var height = Math.max(Math.floor(this.height * scale), 1);
-    var shiftX = Math.round((this.width - width) / 2);
-    var shiftY = Math.round((this.height - height) / 2);
-
-    var newImage = _Image2.default.createFrom(this, {
-        kind: _kindNames.BINARY,
-        width: width,
-        height: height,
-        position: [shiftX, shiftY],
-        parent: this
-    });
-
-    for (var x = 0; x < this.width; x++) {
-        for (var y = 0; y < this.height; y++) {
-            if (this.getBitXY(x, y)) {
-                newImage.setBitXY(Math.floor(x * scale), Math.floor(y * scale));
-            }
-        }
-    }
-
-    return newImage;
-}
-
-},{"../Image":147,"../kindNames":184}],231:[function(require,module,exports){
+},{"../Image":150,"../utility/copy":239,"new-array":118}],233:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27635,7 +28413,7 @@ function rgba8() {
     });
 }
 
-},{"../Image":147}],232:[function(require,module,exports){
+},{"../Image":150}],234:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27739,7 +28517,7 @@ function rotate180() {
     return newImage;
 }
 
-},{"../Image":147,"./rotateFree":233}],233:[function(require,module,exports){
+},{"../Image":150,"./rotateFree":235}],235:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27848,7 +28626,7 @@ function rotateFree(degrees) {
 } //http://homepages.inf.ed.ac.uk/rbf/HIPR2/rotate.htm
 //http://www.cyut.edu.tw/~yltang/program/Rotate1.java
 
-},{"../Image":147}],234:[function(require,module,exports){
+},{"../Image":150}],236:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27889,7 +28667,7 @@ function nearestNeighbor(newImage, newWidth, newHeight) {
     }
 }
 
-},{}],235:[function(require,module,exports){
+},{}],237:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27956,10 +28734,14 @@ function scale() {
 
 
     if (width === this.width && height === this.height) {
-        return this.clone();
+        var _newImage = this.clone();
+        _newImage.position = [0, 0];
+        return _newImage;
     }
 
-    var newImage = _Image2.default.createFrom(this, { width: width, height: height });
+    var shiftX = Math.round((this.width - width) / 2);
+    var shiftY = Math.round((this.height - height) / 2);
+    var newImage = _Image2.default.createFrom(this, { width: width, height: height, position: [shiftX, shiftY] });
 
     switch (algorithm.toLowerCase()) {
         case 'nearestneighbor':
@@ -27973,7 +28755,7 @@ function scale() {
     return newImage;
 }
 
-},{"../../../util/converter":264,"../../Image":147,"./nearestNeighbor":234}],236:[function(require,module,exports){
+},{"../../../util/converter":268,"../../Image":150,"./nearestNeighbor":236}],238:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28040,7 +28822,7 @@ function defaultCombineMethod(pixel) {
     return (pixel[0] + pixel[1] + pixel[2]) / 3;
 }
 
-},{"../Image":147}],237:[function(require,module,exports){
+},{"../Image":150}],239:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28072,7 +28854,7 @@ function copyImage(fromImage, toImage, x, y) {
     }
 }
 
-},{}],238:[function(require,module,exports){
+},{}],240:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28142,7 +28924,7 @@ function match(image) {
     return [currentX - middleX, currentY - middleY];
 }
 
-},{"../../util/matrix":269}],239:[function(require,module,exports){
+},{"../../util/matrix":273}],241:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28205,7 +28987,7 @@ function getChannel(channel) {
     return newImage;
 }
 
-},{"../Image":147,"./../../util/channel":262}],240:[function(require,module,exports){
+},{"../Image":150,"./../../util/channel":266}],242:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28239,7 +29021,7 @@ function getColumn(column) {
     return array;
 }
 
-},{}],241:[function(require,module,exports){
+},{}],243:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28285,7 +29067,7 @@ function getMatrix() {
     return matrix;
 }
 
-},{"ml-matrix":88}],242:[function(require,module,exports){
+},{"ml-matrix":91}],244:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28317,7 +29099,7 @@ function getPixelsArray() {
     return array;
 }
 
-},{}],243:[function(require,module,exports){
+},{}],245:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28391,7 +29173,7 @@ function getPixelsGrid() {
     return toReturn;
 }
 
-},{}],244:[function(require,module,exports){
+},{}],246:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28426,7 +29208,7 @@ function getRow(row) {
     return array;
 }
 
-},{}],245:[function(require,module,exports){
+},{}],247:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28515,7 +29297,7 @@ function getSimilarity(image) {
     return results;
 }
 
-},{"./../../util/channel":262,"new-array":115}],246:[function(require,module,exports){
+},{"./../../util/channel":266,"new-array":118}],248:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28602,7 +29384,7 @@ function setBorder() {
     return this;
 }
 
-},{"new-array":115}],247:[function(require,module,exports){
+},{"new-array":118}],249:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28646,7 +29428,7 @@ function setChannel(channel, image) {
     return this;
 }
 
-},{"./../../util/channel":262}],248:[function(require,module,exports){
+},{"./../../util/channel":266}],250:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28687,7 +29469,7 @@ function setMatrix(matrix) {
     }
 }
 
-},{}],249:[function(require,module,exports){
+},{}],251:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28762,7 +29544,7 @@ function split() {
     return images;
 }
 
-},{"../../stack/Stack":253,"../Image":147}],250:[function(require,module,exports){
+},{"../../stack/Stack":255,"../Image":150}],252:[function(require,module,exports){
 'use strict';
 
 var _environment = require('./image/environment');
@@ -28780,7 +29562,7 @@ _arrayIncludes2.default.shim();
 
 module.exports = exports = require('./image/Image').default;
 exports.Stack = require('./stack/Stack').default;
-exports.Shape = require('./util/shape').default;
+exports.Shape = require('./util/Shape').default;
 exports.Kernel = require('./kernel/kernel');
 
 exports.Static = {
@@ -28792,7 +29574,7 @@ if (_environment.env === 'browser') {
     exports.Worker = require('./worker/worker').default;
 }
 
-},{"./image/Image":147,"./image/environment":161,"./image/transform/greyAlgorithms":209,"./image/transform/mask/maskAlgorithms":217,"./kernel/kernel":251,"./stack/Stack":253,"./util/shape":270,"./worker/worker":274,"array-includes":2}],251:[function(require,module,exports){
+},{"./image/Image":150,"./image/environment":164,"./image/transform/greyAlgorithms":212,"./image/transform/mask/maskAlgorithms":220,"./kernel/kernel":253,"./stack/Stack":255,"./util/Shape":264,"./worker/worker":277,"array-includes":2}],253:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28820,7 +29602,7 @@ Object.defineProperty(exports, 'laplacianOfGaussian', {
   }
 });
 
-},{"../util/kernels":268,"./laplacianOfGaussian":252}],252:[function(require,module,exports){
+},{"../util/kernels":272,"./laplacianOfGaussian":254}],254:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28853,7 +29635,7 @@ function laplacianOfGaussian(sigma, nPoints, factor) {
     return kernel;
 }
 
-},{}],253:[function(require,module,exports){
+},{}],255:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29018,7 +29800,7 @@ if (!Array[Symbol.species]) {
 
 (0, _extend2.default)(Stack);
 
-},{"../image/Image":147,"./extend":259,"has-own":45}],254:[function(require,module,exports){
+},{"../image/Image":150,"./extend":261,"has-own":48}],256:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29046,7 +29828,7 @@ function histogram(options) {
     return histogram;
 }
 
-},{}],255:[function(require,module,exports){
+},{}],257:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29077,7 +29859,7 @@ function histograms(options) {
     return histograms;
 }
 
-},{}],256:[function(require,module,exports){
+},{}],258:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29104,7 +29886,7 @@ function max() {
     return max;
 }
 
-},{}],257:[function(require,module,exports){
+},{}],259:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29134,7 +29916,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":266}],258:[function(require,module,exports){
+},{"../../util/histogram":270}],260:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29160,7 +29942,7 @@ function min() {
     return min;
 }
 
-},{}],259:[function(require,module,exports){
+},{}],261:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29211,7 +29993,7 @@ function extend(Stack) {
     Stack.extendMethod('getAverage', _average2.default);
 }
 
-},{"./compute/histogram":254,"./compute/histograms":255,"./compute/max":256,"./compute/median":257,"./compute/min":258,"./transform/matchAndCrop":260,"./utility/average":261}],260:[function(require,module,exports){
+},{"./compute/histogram":256,"./compute/histograms":257,"./compute/max":258,"./compute/median":259,"./compute/min":260,"./transform/matchAndCrop":262,"./utility/average":263}],262:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29323,7 +30105,7 @@ function matchAndCrop() {
     return new _Stack2.default(newImages);
 }
 
-},{"../Stack":253}],261:[function(require,module,exports){
+},{"../Stack":255}],263:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29365,524 +30147,7 @@ function average() {
     return image;
 }
 
-},{"../../image/Image":147}],262:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.validateArrayOfChannels = validateArrayOfChannels;
-exports.validateChannel = validateChannel;
-
-var _model = require('../image/model/model');
-
-var Model = _interopRequireWildcard(_model);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function validateArrayOfChannels(image) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var channels = options.channels,
-        allowAlpha = options.allowAlpha,
-        defaultAlpha = options.defaultAlpha;
-
-
-    if (typeof allowAlpha !== 'boolean') {
-        allowAlpha = true;
-    }
-
-    if (typeof channels === 'undefined') {
-        return allChannels(image, defaultAlpha);
-    } else {
-        return validateChannels(image, channels, allowAlpha);
-    }
-}
-
-function allChannels(image, defaultAlpha) {
-    var length = defaultAlpha ? image.channels : image.components;
-    var array = new Array(length);
-    for (var i = 0; i < length; i++) {
-        array[i] = i;
-    }
-    return array;
-}
-
-function validateChannels(image, channels, allowAlpha) {
-    if (!Array.isArray(channels)) {
-        channels = [channels];
-    }
-    for (var c = 0; c < channels.length; c++) {
-        channels[c] = validateChannel(image, channels[c], allowAlpha);
-    }
-    return channels;
-}
-
-function validateChannel(image, channel) {
-    var allowAlpha = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-
-    if (channel === undefined) {
-        throw new RangeError('validateChannel : the channel has to be >=0 and <' + image.channels);
-    }
-
-    if (typeof channel === 'string') {
-        switch (image.colorModel) {
-            case Model.GREY:
-                break;
-            case Model.RGB:
-                if ('rgb'.includes(channel)) {
-                    switch (channel) {
-                        case 'r':
-                            channel = 0;
-                            break;
-                        case 'g':
-                            channel = 1;
-                            break;
-                        case 'b':
-                            channel = 2;
-                            break;
-                        // no default
-                    }
-                }
-                break;
-            case Model.HSL:
-                if ('hsl'.includes(channel)) {
-                    switch (channel) {
-                        case 'h':
-                            channel = 0;
-                            break;
-                        case 's':
-                            channel = 1;
-                            break;
-                        case 'l':
-                            channel = 2;
-                            break;
-                        // no default
-                    }
-                }
-                break;
-            case Model.HSV:
-                if ('hsv'.includes(channel)) {
-                    switch (channel) {
-                        case 'h':
-                            channel = 0;
-                            break;
-                        case 's':
-                            channel = 1;
-                            break;
-                        case 'v':
-                            channel = 2;
-                            break;
-                        // no default
-                    }
-                }
-                break;
-            case Model.CMYK:
-                if ('cmyk'.includes(channel)) {
-                    switch (channel) {
-                        case 'c':
-                            channel = 0;
-                            break;
-                        case 'm':
-                            channel = 1;
-                            break;
-                        case 'y':
-                            channel = 2;
-                            break;
-                        case 'k':
-                            channel = 3;
-                            break;
-                        // no default
-                    }
-                }
-                break;
-            default:
-                throw new Error(`Unexpected color model: ${ image.colorModel }`);
-        }
-
-        if (channel === 'a') {
-            if (!image.alpha) {
-                throw new Error('validateChannel : the image does not contain alpha channel');
-            }
-            channel = image.components;
-        }
-
-        if (typeof channel === 'string') {
-            throw new Error('validateChannel : undefined channel: ' + channel);
-        }
-    }
-
-    if (channel >= image.channels) {
-        throw new RangeError('validateChannel : the channel has to be >=0 and <' + image.channels);
-    }
-
-    if (!allowAlpha && channel >= image.components) {
-        throw new RangeError('validateChannel : alpha channel may not be selected');
-    }
-
-    return channel;
-}
-
-},{"../image/model/model":187}],263:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.css2array = css2array;
-exports.getDistinctColors = getDistinctColors;
-exports.getRandomColor = getRandomColor;
-
-var _colorFunctions = require('color-functions');
-
-function css2array(string) {
-    var color = (0, _colorFunctions.cssColor)(string);
-    return [color.r, color.g, color.b, Math.round(color.a * 255 / 100)];
-}
-
-function hue2rgb(p, q, t) {
-    if (t < 0) {
-        t += 1;
-    }
-    if (t > 1) {
-        t -= 1;
-    }
-    if (t < 1 / 6) {
-        return p + (q - p) * 6 * t;
-    }
-    if (t < 1 / 2) {
-        return q;
-    }
-    if (t < 2 / 3) {
-        return p + (q - p) * (2 / 3 - t) * 6;
-    }
-    return p;
-}
-
-function hsl2rgb(h, s, l) {
-    var m1 = void 0,
-        m2 = void 0,
-        hue = void 0,
-        r = void 0,
-        g = void 0,
-        b = void 0;
-    s /= 100;
-    l /= 100;
-
-    if (s === 0) {
-        r = g = b = l * 255;
-    } else {
-        if (l <= 0.5) {
-            m2 = l * (s + 1);
-        } else {
-            m2 = l + s - l * s;
-        }
-
-        m1 = l * 2 - m2;
-        hue = h / 360;
-        r = hue2rgb(m1, m2, hue + 1 / 3);
-        g = hue2rgb(m1, m2, hue);
-        b = hue2rgb(m1, m2, hue - 1 / 3);
-    }
-    return { r: r, g: g, b: b };
-}
-
-function getDistinctColors(numColors) {
-    var colors = new Array(numColors);
-    var j = 0;
-    for (var i = 0; i < 360; i += 360 / numColors) {
-        j++;
-        var color = hsl2rgb(i, 100, 30 + j % 4 * 15);
-        colors[j - 1] = [Math.round(color.r * 255), Math.round(color.g * 255), Math.round(color.b * 255)];
-    }
-    return colors;
-}
-
-function getRandomColor() {
-    return [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)];
-}
-
-},{"color-functions":9}],264:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.getFactor = getFactor;
-exports.getThreshold = getThreshold;
-exports.factorDimensions = factorDimensions;
-/**
- * @private
- * Converts a factor value to a number between 0 and 1
- * @param {string|number} value
- * @return {number}
- */
-function getFactor(value) {
-    if (typeof value === 'string') {
-        var last = value[value.length - 1];
-        value = parseFloat(value);
-        if (last === '%') {
-            value /= 100;
-        }
-    }
-    return value;
-}
-
-/**
- * @private
- * We can specify a threshold as "0.4", "40%" or 123
- * @param {string|number} value
- * @param {number} maxValue
- * @return {number}
- */
-function getThreshold(value, maxValue) {
-    if (!maxValue) {
-        throw Error('getThreshold : the maxValue should be specified');
-    }
-    if (typeof value === 'string') {
-        var last = value[value.length - 1];
-        if (last !== '%') {
-            throw Error('getThreshold : if the value is a string it must finish by %');
-        }
-        return parseFloat(value) / 100 * maxValue;
-    } else if (typeof value === 'number') {
-        if (value < 1) {
-            return value * maxValue;
-        }
-        return value;
-    } else {
-        throw Error('getThreshold : the value is not valid');
-    }
-}
-
-function factorDimensions(factor, width, height) {
-    factor = getFactor(factor);
-    var newWidth = Math.round(factor * width);
-    var newHeight = Math.round(factor * height);
-
-    if (newWidth <= 0) {
-        newWidth = 1;
-    }
-    if (newHeight <= 0) {
-        newHeight = 1;
-    }
-    return {
-        width: newWidth,
-        height: newHeight
-    };
-}
-
-},{}],265:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var dxs = exports.dxs = [+1, 0, -1, 0, +1, +1, -1, -1];
-var dys = exports.dys = [0, +1, 0, -1, +1, -1, +1, -1];
-
-},{}],266:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.median = median;
-exports.mean = mean;
-/**
- * Returns the median of an histogram
- * @param {number[]} histogram
- * @return {number}
- * @private
- */
-function median(histogram) {
-    var total = histogram.reduce((sum, x) => sum + x);
-
-    if (total === 0) {
-        throw new Error('unreachable');
-    }
-
-    var position = 0;
-    var currentTotal = 0;
-    var middle = total / 2;
-    var previous = void 0;
-
-    while (true) {
-        if (histogram[position] > 0) {
-            if (previous !== undefined) {
-                return (previous + position) / 2;
-            }
-            currentTotal += histogram[position];
-            if (currentTotal > middle) {
-                return position;
-            } else if (currentTotal === middle) {
-                previous = position;
-            }
-        }
-        position++;
-    }
-}
-
-/**
- * Retuns the mean of an histogram
- * @param {number[]} histogram
- * @return {number}
- * @private
- */
-function mean(histogram) {
-    var total = 0;
-    var sum = 0;
-
-    for (var i = 0; i < histogram.length; i++) {
-        total += histogram[i];
-        sum += histogram[i] * i;
-    }
-
-    if (total === 0) {
-        return 0;
-    }
-
-    return sum / total;
-}
-
-},{}],267:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.validateKernel = validateKernel;
-
-var _isInteger = require('is-integer');
-
-var _isInteger2 = _interopRequireDefault(_isInteger);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function validateKernel(kernel) {
-    var kHeight = void 0,
-        kWidth = void 0;
-    if (Array.isArray(kernel)) {
-        if (Array.isArray(kernel[0])) {
-            // 2D array
-            if ((kernel.length & 1) === 0 || (kernel[0].length & 1) === 0) {
-                throw new RangeError('validateKernel: Kernel rows and columns should be odd numbers');
-            } else {
-                kHeight = Math.floor(kernel.length / 2);
-                kWidth = Math.floor(kernel[0].length / 2);
-            }
-        } else {
-            var kernelWidth = Math.sqrt(kernel.length);
-            if ((0, _isInteger2.default)(kernelWidth)) {
-                kWidth = kHeight = Math.floor(Math.sqrt(kernel.length) / 2);
-            } else {
-                throw new RangeError('validateKernel: Kernel array should be a square');
-            }
-            // we convert the array to a matrix
-            var newKernel = new Array(kernelWidth);
-            for (var i = 0; i < kernelWidth; i++) {
-                newKernel[i] = new Array(kernelWidth);
-                for (var j = 0; j < kernelWidth; j++) {
-                    newKernel[i][j] = kernel[i * kernelWidth + j];
-                }
-            }
-            kernel = newKernel;
-        }
-    } else {
-        throw new Error('validateKernel: Invalid Kernel: ' + kernel);
-    }
-    return { kernel: kernel, kWidth: kWidth, kHeight: kHeight };
-}
-
-},{"is-integer":54}],268:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var DISCRETE_LAPLACE_4 = exports.DISCRETE_LAPLACE_4 = [[0, 1, 0], [1, -4, 1], [0, 1, 0]];
-
-var DISCRETE_LAPLACE_8 = exports.DISCRETE_LAPLACE_8 = [[1, 1, 1], [1, -8, 1], [1, 1, 1]];
-
-var GRADIENT_X = exports.GRADIENT_X = [[-1, 0, +1], [-2, 0, +2], [-1, 0, +1]];
-
-var GRADIENT_Y = exports.GRADIENT_Y = [[-1, -2, -1], [0, 0, 0], [+1, +2, +1]];
-
-var SECOND_DERIVATIVE = exports.SECOND_DERIVATIVE = [[-1, -2, 0, 2, 1], [-2, -4, 0, 4, 2], [0, 0, 0, 0, 0], [1, 2, 0, -2, -1], [2, 4, 0, -4, -2]];
-
-var SECOND_DERIVATIVE_INV = exports.SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
-
-},{}],269:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = Matrix;
-function Matrix(width, height, defaultValue) {
-    var matrix = new Array(width);
-    for (var x = 0; x < width; x++) {
-        matrix[x] = new Array(height);
-    }
-    if (defaultValue) {
-        for (var _x = 0; _x < width; _x++) {
-            for (var y = 0; y < height; y++) {
-                matrix[_x][y] = defaultValue;
-            }
-        }
-    }
-    matrix.width = width;
-    matrix.height = height;
-    matrix.__proto__ = Matrix.prototype;
-    return matrix;
-}
-
-Matrix.prototype.localMin = function (x, y) {
-    var min = this[x][y];
-    var position = [x, y];
-    for (var i = Math.max(0, x - 1); i < Math.min(this.length, x + 2); i++) {
-        for (var j = Math.max(0, y - 1); j < Math.min(this[0].length, y + 2); j++) {
-            if (this[i][j] < min) {
-                min = this[i][j];
-                position = [i, j];
-            }
-        }
-    }
-    return {
-        position: position,
-        value: min
-    };
-};
-
-Matrix.prototype.localMax = function (x, y) {
-    var max = this[x][y];
-    var position = [x, y];
-    for (var i = Math.max(0, x - 1); i < Math.min(this.length, x + 2); i++) {
-        for (var j = Math.max(0, y - 1); j < Math.min(this[0].length, y + 2); j++) {
-            if (this[i][j] > max) {
-                max = this[i][j];
-                position = [i, j];
-            }
-        }
-    }
-    return {
-        position: position,
-        value: max
-    };
-};
-
-Matrix.prototype.localSearch = function (x, y, value) {
-    var results = [];
-    for (var i = Math.max(0, x - 1); i < Math.min(this.length, x + 2); i++) {
-        for (var j = Math.max(0, y - 1); j < Math.min(this[0].length, y + 2); j++) {
-            if (this[i][j] === value) {
-                results.push([i, j]);
-            }
-        }
-    }
-    return results;
-};
-
-},{}],270:[function(require,module,exports){
+},{"../../image/Image":150}],264:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30088,7 +30353,603 @@ function triangle(width, height, options) {
     return matrix;
 }
 
-},{"../image/Image":147,"../image/kindNames":184,"ml-matrix":88}],271:[function(require,module,exports){
+},{"../image/Image":150,"../image/kindNames":187,"ml-matrix":91}],265:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.encode = encode;
+exports.decode = decode;
+
+/*
+ * base64-arraybuffer
+ * https://github.com/niklasvh/base64-arraybuffer
+ *
+ * Copyright (c) 2012 Niklas von Hertzen
+ * Licensed under the MIT license.
+ */
+
+var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
+// Use a lookup table to find the index.
+var lookup = new Uint8Array(256);
+for (var i = 0; i < chars.length; i++) {
+    lookup[chars.charCodeAt(i)] = i;
+}
+
+function encode(bytes) {
+    var i = void 0,
+        len = bytes.length,
+        base64 = '';
+
+    for (i = 0; i < len; i += 3) {
+        base64 += chars[bytes[i] >> 2];
+        base64 += chars[(bytes[i] & 3) << 4 | bytes[i + 1] >> 4];
+        base64 += chars[(bytes[i + 1] & 15) << 2 | bytes[i + 2] >> 6];
+        base64 += chars[bytes[i + 2] & 63];
+    }
+
+    if (len % 3 === 2) {
+        base64 = base64.substring(0, base64.length - 1) + '=';
+    } else if (len % 3 === 1) {
+        base64 = base64.substring(0, base64.length - 2) + '==';
+    }
+
+    return base64;
+}
+
+function decode(base64) {
+    var bufferLength = base64.length * 0.75,
+        len = base64.length,
+        i = void 0,
+        p = 0,
+        encoded1 = void 0,
+        encoded2 = void 0,
+        encoded3 = void 0,
+        encoded4 = void 0;
+
+    if (base64[base64.length - 1] === '=') {
+        bufferLength--;
+        if (base64[base64.length - 2] === '=') {
+            bufferLength--;
+        }
+    }
+
+    var bytes = new Uint8Array(bufferLength);
+
+    for (i = 0; i < len; i += 4) {
+        encoded1 = lookup[base64.charCodeAt(i)];
+        encoded2 = lookup[base64.charCodeAt(i + 1)];
+        encoded3 = lookup[base64.charCodeAt(i + 2)];
+        encoded4 = lookup[base64.charCodeAt(i + 3)];
+
+        bytes[p++] = encoded1 << 2 | encoded2 >> 4;
+        bytes[p++] = (encoded2 & 15) << 4 | encoded3 >> 2;
+        bytes[p++] = (encoded3 & 3) << 6 | encoded4 & 63;
+    }
+
+    return bytes;
+}
+
+},{}],266:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.validateArrayOfChannels = validateArrayOfChannels;
+exports.validateChannel = validateChannel;
+
+var _model = require('../image/model/model');
+
+var Model = _interopRequireWildcard(_model);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function validateArrayOfChannels(image) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var channels = options.channels,
+        allowAlpha = options.allowAlpha,
+        defaultAlpha = options.defaultAlpha;
+
+
+    if (typeof allowAlpha !== 'boolean') {
+        allowAlpha = true;
+    }
+
+    if (typeof channels === 'undefined') {
+        return allChannels(image, defaultAlpha);
+    } else {
+        return validateChannels(image, channels, allowAlpha);
+    }
+}
+
+function allChannels(image, defaultAlpha) {
+    var length = defaultAlpha ? image.channels : image.components;
+    var array = new Array(length);
+    for (var i = 0; i < length; i++) {
+        array[i] = i;
+    }
+    return array;
+}
+
+function validateChannels(image, channels, allowAlpha) {
+    if (!Array.isArray(channels)) {
+        channels = [channels];
+    }
+    for (var c = 0; c < channels.length; c++) {
+        channels[c] = validateChannel(image, channels[c], allowAlpha);
+    }
+    return channels;
+}
+
+function validateChannel(image, channel) {
+    var allowAlpha = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
+    if (channel === undefined) {
+        throw new RangeError('validateChannel : the channel has to be >=0 and <' + image.channels);
+    }
+
+    if (typeof channel === 'string') {
+        switch (image.colorModel) {
+            case Model.GREY:
+                break;
+            case Model.RGB:
+                if ('rgb'.includes(channel)) {
+                    switch (channel) {
+                        case 'r':
+                            channel = 0;
+                            break;
+                        case 'g':
+                            channel = 1;
+                            break;
+                        case 'b':
+                            channel = 2;
+                            break;
+                        // no default
+                    }
+                }
+                break;
+            case Model.HSL:
+                if ('hsl'.includes(channel)) {
+                    switch (channel) {
+                        case 'h':
+                            channel = 0;
+                            break;
+                        case 's':
+                            channel = 1;
+                            break;
+                        case 'l':
+                            channel = 2;
+                            break;
+                        // no default
+                    }
+                }
+                break;
+            case Model.HSV:
+                if ('hsv'.includes(channel)) {
+                    switch (channel) {
+                        case 'h':
+                            channel = 0;
+                            break;
+                        case 's':
+                            channel = 1;
+                            break;
+                        case 'v':
+                            channel = 2;
+                            break;
+                        // no default
+                    }
+                }
+                break;
+            case Model.CMYK:
+                if ('cmyk'.includes(channel)) {
+                    switch (channel) {
+                        case 'c':
+                            channel = 0;
+                            break;
+                        case 'm':
+                            channel = 1;
+                            break;
+                        case 'y':
+                            channel = 2;
+                            break;
+                        case 'k':
+                            channel = 3;
+                            break;
+                        // no default
+                    }
+                }
+                break;
+            default:
+                throw new Error(`Unexpected color model: ${ image.colorModel }`);
+        }
+
+        if (channel === 'a') {
+            if (!image.alpha) {
+                throw new Error('validateChannel : the image does not contain alpha channel');
+            }
+            channel = image.components;
+        }
+
+        if (typeof channel === 'string') {
+            throw new Error('validateChannel : undefined channel: ' + channel);
+        }
+    }
+
+    if (channel >= image.channels) {
+        throw new RangeError('validateChannel : the channel has to be >=0 and <' + image.channels);
+    }
+
+    if (!allowAlpha && channel >= image.components) {
+        throw new RangeError('validateChannel : alpha channel may not be selected');
+    }
+
+    return channel;
+}
+
+},{"../image/model/model":190}],267:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.css2array = css2array;
+exports.getDistinctColors = getDistinctColors;
+exports.getRandomColor = getRandomColor;
+
+var _colorFunctions = require('color-functions');
+
+function css2array(string) {
+    var color = (0, _colorFunctions.cssColor)(string);
+    return [color.r, color.g, color.b, Math.round(color.a * 255 / 100)];
+}
+
+function hue2rgb(p, q, t) {
+    if (t < 0) {
+        t += 1;
+    }
+    if (t > 1) {
+        t -= 1;
+    }
+    if (t < 1 / 6) {
+        return p + (q - p) * 6 * t;
+    }
+    if (t < 1 / 2) {
+        return q;
+    }
+    if (t < 2 / 3) {
+        return p + (q - p) * (2 / 3 - t) * 6;
+    }
+    return p;
+}
+
+function hsl2rgb(h, s, l) {
+    var m1 = void 0,
+        m2 = void 0,
+        hue = void 0,
+        r = void 0,
+        g = void 0,
+        b = void 0;
+    s /= 100;
+    l /= 100;
+
+    if (s === 0) {
+        r = g = b = l * 255;
+    } else {
+        if (l <= 0.5) {
+            m2 = l * (s + 1);
+        } else {
+            m2 = l + s - l * s;
+        }
+
+        m1 = l * 2 - m2;
+        hue = h / 360;
+        r = hue2rgb(m1, m2, hue + 1 / 3);
+        g = hue2rgb(m1, m2, hue);
+        b = hue2rgb(m1, m2, hue - 1 / 3);
+    }
+    return { r: r, g: g, b: b };
+}
+
+function getDistinctColors(numColors) {
+    var colors = new Array(numColors);
+    var j = 0;
+    for (var i = 0; i < 360; i += 360 / numColors) {
+        j++;
+        var color = hsl2rgb(i, 100, 30 + j % 4 * 15);
+        colors[j - 1] = [Math.round(color.r * 255), Math.round(color.g * 255), Math.round(color.b * 255)];
+    }
+    return colors;
+}
+
+function getRandomColor() {
+    return [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)];
+}
+
+},{"color-functions":8}],268:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getFactor = getFactor;
+exports.getThreshold = getThreshold;
+exports.factorDimensions = factorDimensions;
+/**
+ * @private
+ * Converts a factor value to a number between 0 and 1
+ * @param {string|number} value
+ * @return {number}
+ */
+function getFactor(value) {
+    if (typeof value === 'string') {
+        var last = value[value.length - 1];
+        value = parseFloat(value);
+        if (last === '%') {
+            value /= 100;
+        }
+    }
+    return value;
+}
+
+/**
+ * @private
+ * We can specify a threshold as "0.4", "40%" or 123
+ * @param {string|number} value
+ * @param {number} maxValue
+ * @return {number}
+ */
+function getThreshold(value, maxValue) {
+    if (!maxValue) {
+        throw Error('getThreshold : the maxValue should be specified');
+    }
+    if (typeof value === 'string') {
+        var last = value[value.length - 1];
+        if (last !== '%') {
+            throw Error('getThreshold : if the value is a string it must finish by %');
+        }
+        return parseFloat(value) / 100 * maxValue;
+    } else if (typeof value === 'number') {
+        if (value < 1) {
+            return value * maxValue;
+        }
+        return value;
+    } else {
+        throw Error('getThreshold : the value is not valid');
+    }
+}
+
+function factorDimensions(factor, width, height) {
+    factor = getFactor(factor);
+    var newWidth = Math.round(factor * width);
+    var newHeight = Math.round(factor * height);
+
+    if (newWidth <= 0) {
+        newWidth = 1;
+    }
+    if (newHeight <= 0) {
+        newHeight = 1;
+    }
+    return {
+        width: newWidth,
+        height: newHeight
+    };
+}
+
+},{}],269:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var dxs = exports.dxs = [+1, 0, -1, 0, +1, +1, -1, -1];
+var dys = exports.dys = [0, +1, 0, -1, +1, -1, +1, -1];
+
+},{}],270:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.median = median;
+exports.mean = mean;
+/**
+ * Returns the median of an histogram
+ * @param {number[]} histogram
+ * @return {number}
+ * @private
+ */
+function median(histogram) {
+    var total = histogram.reduce((sum, x) => sum + x);
+
+    if (total === 0) {
+        throw new Error('unreachable');
+    }
+
+    var position = 0;
+    var currentTotal = 0;
+    var middle = total / 2;
+    var previous = void 0;
+
+    while (true) {
+        if (histogram[position] > 0) {
+            if (previous !== undefined) {
+                return (previous + position) / 2;
+            }
+            currentTotal += histogram[position];
+            if (currentTotal > middle) {
+                return position;
+            } else if (currentTotal === middle) {
+                previous = position;
+            }
+        }
+        position++;
+    }
+}
+
+/**
+ * Retuns the mean of an histogram
+ * @param {number[]} histogram
+ * @return {number}
+ * @private
+ */
+function mean(histogram) {
+    var total = 0;
+    var sum = 0;
+
+    for (var i = 0; i < histogram.length; i++) {
+        total += histogram[i];
+        sum += histogram[i] * i;
+    }
+
+    if (total === 0) {
+        return 0;
+    }
+
+    return sum / total;
+}
+
+},{}],271:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.validateKernel = validateKernel;
+
+var _isInteger = require('is-integer');
+
+var _isInteger2 = _interopRequireDefault(_isInteger);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function validateKernel(kernel) {
+    var kHeight = void 0,
+        kWidth = void 0;
+    if (Array.isArray(kernel)) {
+        if (Array.isArray(kernel[0])) {
+            // 2D array
+            if ((kernel.length & 1) === 0 || (kernel[0].length & 1) === 0) {
+                throw new RangeError('validateKernel: Kernel rows and columns should be odd numbers');
+            } else {
+                kHeight = Math.floor(kernel.length / 2);
+                kWidth = Math.floor(kernel[0].length / 2);
+            }
+        } else {
+            var kernelWidth = Math.sqrt(kernel.length);
+            if ((0, _isInteger2.default)(kernelWidth)) {
+                kWidth = kHeight = Math.floor(Math.sqrt(kernel.length) / 2);
+            } else {
+                throw new RangeError('validateKernel: Kernel array should be a square');
+            }
+            // we convert the array to a matrix
+            var newKernel = new Array(kernelWidth);
+            for (var i = 0; i < kernelWidth; i++) {
+                newKernel[i] = new Array(kernelWidth);
+                for (var j = 0; j < kernelWidth; j++) {
+                    newKernel[i][j] = kernel[i * kernelWidth + j];
+                }
+            }
+            kernel = newKernel;
+        }
+    } else {
+        throw new Error('validateKernel: Invalid Kernel: ' + kernel);
+    }
+    return { kernel: kernel, kWidth: kWidth, kHeight: kHeight };
+}
+
+},{"is-integer":57}],272:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var DISCRETE_LAPLACE_4 = exports.DISCRETE_LAPLACE_4 = [[0, 1, 0], [1, -4, 1], [0, 1, 0]];
+
+var DISCRETE_LAPLACE_8 = exports.DISCRETE_LAPLACE_8 = [[1, 1, 1], [1, -8, 1], [1, 1, 1]];
+
+var GRADIENT_X = exports.GRADIENT_X = [[-1, 0, +1], [-2, 0, +2], [-1, 0, +1]];
+
+var GRADIENT_Y = exports.GRADIENT_Y = [[-1, -2, -1], [0, 0, 0], [+1, +2, +1]];
+
+var SECOND_DERIVATIVE = exports.SECOND_DERIVATIVE = [[-1, -2, 0, 2, 1], [-2, -4, 0, 4, 2], [0, 0, 0, 0, 0], [1, 2, 0, -2, -1], [2, 4, 0, -4, -2]];
+
+var SECOND_DERIVATIVE_INV = exports.SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
+
+},{}],273:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = Matrix;
+function Matrix(width, height, defaultValue) {
+    var matrix = new Array(width);
+    for (var x = 0; x < width; x++) {
+        matrix[x] = new Array(height);
+    }
+    if (defaultValue) {
+        for (var _x = 0; _x < width; _x++) {
+            for (var y = 0; y < height; y++) {
+                matrix[_x][y] = defaultValue;
+            }
+        }
+    }
+    matrix.width = width;
+    matrix.height = height;
+    matrix.__proto__ = Matrix.prototype;
+    return matrix;
+}
+
+Matrix.prototype.localMin = function (x, y) {
+    var min = this[x][y];
+    var position = [x, y];
+    for (var i = Math.max(0, x - 1); i < Math.min(this.length, x + 2); i++) {
+        for (var j = Math.max(0, y - 1); j < Math.min(this[0].length, y + 2); j++) {
+            if (this[i][j] < min) {
+                min = this[i][j];
+                position = [i, j];
+            }
+        }
+    }
+    return {
+        position: position,
+        value: min
+    };
+};
+
+Matrix.prototype.localMax = function (x, y) {
+    var max = this[x][y];
+    var position = [x, y];
+    for (var i = Math.max(0, x - 1); i < Math.min(this.length, x + 2); i++) {
+        for (var j = Math.max(0, y - 1); j < Math.min(this[0].length, y + 2); j++) {
+            if (this[i][j] > max) {
+                max = this[i][j];
+                position = [i, j];
+            }
+        }
+    }
+    return {
+        position: position,
+        value: max
+    };
+};
+
+Matrix.prototype.localSearch = function (x, y, value) {
+    var results = [];
+    for (var i = Math.max(0, x - 1); i < Math.min(this.length, x + 2); i++) {
+        for (var j = Math.max(0, y - 1); j < Math.min(this[0].length, y + 2); j++) {
+            if (this[i][j] === value) {
+                results.push([i, j]);
+            }
+        }
+    }
+    return results;
+};
+
+},{}],274:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30123,7 +30984,7 @@ function checkNumberArray(value) {
     }
 }
 
-},{"../image/Image":147,"is-array-type":50}],272:[function(require,module,exports){
+},{"../image/Image":150,"is-array-type":53}],275:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30141,7 +31002,7 @@ function extend(Worker) {
     Worker.extendMethod('background', _background2.default);
 }
 
-},{"./process/background":273}],273:[function(require,module,exports){
+},{"./process/background":276}],276:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30241,7 +31102,7 @@ function work() {
 
 exports.default = { run: run, work: work };
 
-},{"../../image/Image":147,"extend":35}],274:[function(require,module,exports){
+},{"../../image/Image":150,"extend":34}],277:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30313,5 +31174,5 @@ class Worker {
 
 exports.default = new Worker();
 
-},{"./extend":272,"web-worker-manager":145}]},{},[250])(250)
+},{"./extend":275,"web-worker-manager":148}]},{},[252])(252)
 });
