@@ -12,9 +12,9 @@ export default function getIntersection(mask1, mask2) {
     let startPos2 = mask2.getRelativePosition(parent);
     let allRelPos2 = getRelativePositionForAllPixels(mask2, startPos2);
     let commonSurface = getCommonSurface(allRelPos1, allRelPos2);
-    let intersection = {whitePixelsMask1:[], whitePixelsMask2: [], commonWhitePixels:[]};
+    let intersection = {whitePixelsMask1: [], whitePixelsMask2: [], commonWhitePixels: []};
 
-    for(let i = 0; i < commonSurface.length; i++){
+    for (let i = 0; i < commonSurface.length; i++) {
         let currentRelativePos = commonSurface[i];
         let realPos1 = [currentRelativePos[0] - startPos1[0], currentRelativePos[1] - startPos1[1]];
         let realPos2 = [currentRelativePos[0] - startPos2[0], currentRelativePos[1] - startPos2[1]];
@@ -22,13 +22,13 @@ export default function getIntersection(mask1, mask2) {
         let valueBitMask1 = mask1.getBitXY(realPos1[0], realPos1[1]);
         let valueBitMask2 = mask2.getBitXY(realPos2[0], realPos2[1]);
 
-        if(valueBitMask1 === 1){
+        if (valueBitMask1 === 1) {
             intersection.whitePixelsMask1[i] = currentRelativePos;
         }
-        if(valueBitMask2 === 1){
+        if (valueBitMask2 === 1) {
             intersection.whitePixelsMask2[i] = currentRelativePos;
         }
-        if(valueBitMask1 === 1 && valueBitMask2 === 1){
+        if (valueBitMask1 === 1 && valueBitMask2 === 1) {
             intersection.commonWhitePixels[i] = currentRelativePos;
         }
     }
