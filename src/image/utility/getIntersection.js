@@ -12,28 +12,30 @@ export default function getIntersection(mask1, mask2) {
     let allRelPos1 = getRelativePositionForAllPixels(mask1, startPos1);
     let startPos2 = mask2.getRelativePosition(parent);
     let allRelPos2 = getRelativePositionForAllPixels(mask2, startPos2);
+
     let commonSurface = getCommonSurface(allRelPos1, allRelPos2);
+    console.log("commonSurface: " + commonSurface);
     let intersection = {whitePixelsMask1: [], whitePixelsMask2: [], commonWhitePixels: []};
 
     for (let i = 0; i < commonSurface.length; i++) {
         let currentRelativePos = commonSurface[i];
         let realPos1 = [currentRelativePos[0] - startPos1[0], currentRelativePos[1] - startPos1[1]];
         let realPos2 = [currentRelativePos[0] - startPos2[0], currentRelativePos[1] - startPos2[1]];
-
         let valueBitMask1 = mask1.getBitXY(realPos1[0], realPos1[1]);
         let valueBitMask2 = mask2.getBitXY(realPos2[0], realPos2[1]);
+        console.log("valueBitMask1: " + valueBitMask1 + ", valueBitMask2: " + valueBitMask2);
 
         if (valueBitMask1 === 1) {
-            intersection.whitePixelsMask1[i] = currentRelativePos;
+            intersection.whitePixelsMask1.push(currentRelativePos);
         }
         if (valueBitMask2 === 1) {
-            intersection.whitePixelsMask2[i] = currentRelativePos;
+            intersection.whitePixelsMask2.push(currentRelativePos);
         }
         if (valueBitMask1 === 1 && valueBitMask2 === 1) {
-            intersection.commonWhitePixels[i] = currentRelativePos;
+            intersection.commonWhitePixels.push(currentRelativePos);
         }
     }
-
+    return intersection;
 }
 
 /**
@@ -43,13 +45,17 @@ export default function getIntersection(mask1, mask2) {
  * @returns {Array} - relative position of all pixels
  */
 function getRelativePositionForAllPixels(mask, startPosition) {
+    console.log("startPosition: " + startPosition);
     let relativePositions = [];
     for (let i = 0; i < mask.height; i++) {
         for (let j = 0; j < mask.width; j++) {
             let originalPos = [i, j];
-            relativePositions[(i + j)] = [originalPos[0] + startPosition[0], originalPos[1] + startPosition[1]];
+            console.log([originalPos[0] + startPosition[0], originalPos[1] + startPosition[1]]);
+            relativePositions.push([originalPos[0] + startPosition[0], originalPos[1] + startPosition[1]]);
+
         }
     }
+    console.log("relativePositions: " + relativePositions);
     return relativePositions;
 }
 
@@ -65,7 +71,7 @@ function getCommonSurface(positionArray1, positionArray2) {
     let commonSurface = [];
     while (i < positionArray1.length && j < positionArray2.length) {
         if (positionArray1[i][0] === positionArray2[j][0] && positionArray1[i][1] === positionArray2[j][1]) {
-            commonSurface[i] = positionArray1[i];
+            commonSurface.push(positionArray1[i]);
             i++;
             j++;
         } else if (positionArray1[i][0] < positionArray2[j][0]
@@ -75,5 +81,6 @@ function getCommonSurface(positionArray1, positionArray2) {
             j++;
         }
     }
+    console.log("commonSurface: ", commonSurface);
     return commonSurface;
 }

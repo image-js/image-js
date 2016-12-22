@@ -1,6 +1,6 @@
 import {Image, load} from 'test/common';
 
-describe('we check the relative position', function () {
+describe.only('we check the relative position', function () {
     it('check the extract without specify position', function () {
         let mask = new Image(2, 2, {
             kind: 'BINARY'
@@ -10,6 +10,7 @@ describe('we check the relative position', function () {
 
         return load('BW4x4.png').then(function (image) {
             let position = image.getRelativePosition(mask);
+            console.log(position);
             position.should.equal(false);
         });
     });
@@ -28,6 +29,8 @@ describe('we check the relative position', function () {
             mask.setBitXY(1, 0);
 
             let position = mask.getRelativePosition(image);
+            console.log(position);
+
             position.should.eql([1, 1]);
         });
     });
