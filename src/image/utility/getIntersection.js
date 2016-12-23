@@ -8,6 +8,7 @@ import getClosestCommonParent from './getClosestCommonParent';
 export default function getIntersection(mask1, mask2) {
 
     let parent = getClosestCommonParent(mask1, mask2);
+
     let startPos1 = mask1.getRelativePosition(parent);
     let allRelPos1 = getRelativePositionForAllPixels(mask1, startPos1);
     let startPos2 = mask2.getRelativePosition(parent);
