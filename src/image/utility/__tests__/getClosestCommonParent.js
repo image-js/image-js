@@ -117,7 +117,7 @@ describe('getClosestCommonParent', function () {
         getClosestCommonParent(mask3, mask4).should.eql(mask3);
     });
 
-    it('no common parent for one mask and original image', function () {
+    it('common parent for one mask and original image is original image', function () {
         let img1 = new Image(5, 5,
             [
                 0, 0, 0, 0, 0,
@@ -130,12 +130,10 @@ describe('getClosestCommonParent', function () {
         );
 
         let mask1 = img1.mask();
-        (function () {
-            getClosestCommonParent(img1, mask1);
-        }).should.throw(/No common parent/);
+        getClosestCommonParent(img1, mask1).should.eql(img1);
     });
 
-    it('no common parent for masks with different original images', function () {
+    it('common parent for masks with different original images', function () {
         let img1 = new Image(5, 5,
             [
                 0, 0, 0, 0, 0,
@@ -160,8 +158,6 @@ describe('getClosestCommonParent', function () {
         let mask1 = img1.mask();
         let mask2 = img2.mask();
 
-        (function () {
-            getClosestCommonParent(mask1, mask2);
-        }).should.throw(/No common parent/);
+        getClosestCommonParent(mask1, mask2).should.eql(img1);
     });
 });
