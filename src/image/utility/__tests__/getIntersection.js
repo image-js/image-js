@@ -49,7 +49,7 @@ describe('getIntersection', function () {
 
     });
 
-    /*it('correct intersection for 2 Roi in 2 5x5 images', function () {
+    it('correct intersection for 2 Roi in 2 5x5 images', function () {
         let img1 = new Image(5, 5,
             [
                 255, 255, 255, 0, 0,
@@ -83,23 +83,22 @@ describe('getIntersection', function () {
         roiManager2.fromMask(mask2);
         let rois2 = roiManager2.getRois();
 
-        let roiMap2 = roiManager2.getMap();
-        let related = roiManager1.findCorrespondingRoi(roiMap2);
+        //let roiMap2 = roiManager2.getMap();
+        //let related = roiManager1.findCorrespondingRoi(roiMap2);
 
        // let mask2 = rois[0].getMask();
         //let mask3 = rois[0].contourMask();
-       /* let mask2 = rois[0].getMask();
-        let mask3 = rois[1].getMask();
+        let mask3 = rois1[0].getMask();
+        let mask4 = rois2[0].getMask();
 
-        console.log('mask2: ' + mask2);
-        console.log('mask3: ' + mask3);
 
         //no intersection
-        let intersectNull = getIntersection(mask2, mask3);
-        intersectNull.commonWhitePixels.length.should.eql(0);
-        intersectNull.whitePixelsMask1.length.should.eql(4);
+        //console.log(getIntersection(mask3, mask4));
+        let intersectNull = getIntersection(mask3, mask4);
+        intersectNull.commonWhitePixels.length.should.eql(4);
+        intersectNull.whitePixelsMask1.length.should.eql(9);
         intersectNull.whitePixelsMask2.length.should.eql(4);
 
 
-    });*/
+    });
 });
