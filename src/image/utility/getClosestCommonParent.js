@@ -10,9 +10,9 @@ export default function getClosestCommonParent(mask1, mask2) {
     let depthMask2 = getDepth(mask2);
 
     let furthestParent;
-    if(depthMask1 >= depthMask2){
+    if (depthMask1 >= depthMask2) {
         furthestParent = getFurthestParent(mask1, depthMask1);
-    }else{
+    } else {
         furthestParent = getFurthestParent(mask2, depthMask2);
     }
 
@@ -22,7 +22,6 @@ export default function getClosestCommonParent(mask1, mask2) {
     }
     let m1 = mask1;
     let m2 = mask2;
-
 
 
     while (depthMask1 !== depthMask2) {
@@ -53,7 +52,7 @@ export default function getClosestCommonParent(mask1, mask2) {
     //no common parent, use parent at top of hierarchy of m1
     //we assume it works for now
     if (m1 !== m2) {
-       return furthestParent;
+        return furthestParent;
     }
 
     return m1;
