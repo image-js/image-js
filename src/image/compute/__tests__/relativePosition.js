@@ -28,6 +28,7 @@ describe('we check the relative position', function () {
             mask.setBitXY(1, 0);
 
             let position = mask.getRelativePosition(image);
+
             position.should.eql([1, 1]);
         });
     });
