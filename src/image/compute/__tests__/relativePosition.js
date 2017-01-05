@@ -14,6 +14,19 @@ describe('we check the relative position', function () {
         });
     });
 
+    it.only('check the extract without specify position but force top parent', function () {
+        let mask = new Image(2, 2, {
+            kind: 'BINARY'
+        });
+        mask.setBitXY(0, 0);
+        mask.setBitXY(1, 1);
+
+        return load('BW4x4.png').then(function (image) {
+            let position = image.getRelativePosition(mask, {defaultFurther: true});
+            position.should.eql([0,0]);
+        });
+    });
+    
     it('check by specify 1,1 position with parent', function () {
 
         return load('BW4x4.png').then(function (image) {

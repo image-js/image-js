@@ -5,15 +5,14 @@ import getClosestCommonParent from './getClosestCommonParent';
  * @param {Image} - a mask (1 bit image)
  * @return {Object} - object containing number of white pixels for mask1, for mask 2 and for them both
  */
-export default function getIntersection(mask1, mask2) {
+export default function getIntersection(mask2) {
 
-    let parent = getClosestCommonParent(mask1, mask2);
+    let mask1 = this;
+    let closestParent = getClosestCommonParent(mask1, mask2);
 
-    let startPos1 = getRelativePosition(mask1, parent);
-    //console.log("startPos1: " + startPos1);
+    let startPos1 = mask1.getRelativePosition(closestParent, {defaultFurther: true});
     let allRelPos1 = getRelativePositionForAllPixels(mask1, startPos1);
-    let startPos2 = getRelativePosition(mask2, parent);
-    //console.log("startPos2: " + startPos2);
+    let startPos2 = mask2.getRelativePosition(closestParent, {defaultFurther: true});
     let allRelPos2 = getRelativePositionForAllPixels(mask2, startPos2);
 
     let commonSurface = getCommonSurface(allRelPos1, allRelPos2);
@@ -109,27 +108,3 @@ function getCommonSurface(positionArray1, positionArray2) {
     return commonSurface;
 }
 
-function getRelativePosition(mask, targetImage) {
-    if (mask === targetImage) {
-        return [0, 0];
-    }
-    let position = [0, 0];
-
-    let currentImage = mask;
-    while (currentImage) {
-        //console.log("currentImage: ", currentImage);
-
-        if (currentImage === targetImage) {
-            return position;
-        }
-        if (currentImage.position) {
-            position[0] += currentImage.position[0];
-            position[1] += currentImage.position[1];
-        }
-
-        currentImage = currentImage.parent;
-    }
-    // we should never reach this place, this means we could not find the parent
-    // throw Error('Parent image was not found, can not get relative position.')
-    return position;
-}

@@ -49,6 +49,9 @@ import getColumn from './utility/getColumn';
 import getMatrix from './utility/getMatrix';
 import setMatrix from './utility/setMatrix';
 import getPixelsArray from './utility/getPixelsArray';
+import getIntersection from './utility/getIntersection';
+import getClosestCommonParent from './utility/getClosestCommonParent';
+
 
 // operators
 import paintMasks from './operator/paintMasks';
@@ -121,6 +124,8 @@ export default function extend(Image) {
     Image.extendMethod('getMatrix', getMatrix);
     Image.extendMethod('setMatrix', setMatrix);
     Image.extendMethod('getPixelsArray', getPixelsArray);
+    Image.extendMethod('getIntersection', getIntersection);
+    Image.extendMethod('getClosestCommonParent', getClosestCommonParent);
 
     Image.extendMethod('split', split);
     Image.extendMethod('getChannel', getChannel);
