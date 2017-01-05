@@ -10,9 +10,12 @@
  * @memberof Image
  * @instance
  * @param {Image} targetImage
+ * @param {Object} [options={}]
+ * @param {boolean} [options.defaultFurther=false] If set to true and no parent found returns the relative position
+ *      to the further parent
  * @return {number[]|boolean}
  */
-export default function getRelativePosition(targetImage) {
+export default function getRelativePosition(targetImage, options = {}) {
     if (this === targetImage) {
         return [0, 0];
     }
@@ -31,5 +34,7 @@ export default function getRelativePosition(targetImage) {
     }
     // we should never reach this place, this means we could not find the parent
     // throw Error('Parent image was not found, can not get relative position.')
+    if (options.defaultFurther)  return position;
+
     return false;
 }

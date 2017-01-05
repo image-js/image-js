@@ -24,6 +24,10 @@ export default function crop(options = {}) {
         height = this.height - y
     } = options;
 
+    this.checkProcessable('max', {
+        bitDepth: [8, 16]
+    });
+
     x = Math.round(x);
     y = Math.round(y);
     width = Math.round(width);
