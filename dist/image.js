@@ -1673,6 +1673,8 @@ module.exports = function extend() {
 (function (Buffer){
 'use strict';
 
+var utf8 = require('utf8');
+
 var defaultByteLength = 1024 * 8;
 var charArray = [];
 
@@ -1999,6 +2001,17 @@ class IOBuffer {
     }
 
     /**
+     * Read the next n bytes, return a UTF-8 decoded string and move pointer forward
+     * @param {number} n
+     * @return {string}
+     */
+    readUtf8(n) {
+        if (n === undefined) n = 1;
+        var bString = this.readChars(n);
+        return utf8.decode(bString);
+    }
+
+    /**
      * Write 0xff if the passed value is truthy, 0x00 otherwise
      * @param {any} value
      * @return {IOBuffer}
@@ -2155,6 +2168,16 @@ class IOBuffer {
     }
 
     /**
+     * UTF-8 encode and write the passed string to the current pointer offset
+     * @param {string} str
+     * @return {IOBuffer}
+     */
+    writeUtf8(str) {
+        var bString = utf8.encode(str);
+        return this.writeChars(bString);
+    }
+
+    /**
      * Export a Uint8Array view of the internal buffer.
      * The view starts at the byte offset and its length
      * is calculated to stop at the last written byte or the original length.
@@ -2190,7 +2213,7 @@ class IOBuffer {
 module.exports = IOBuffer;
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":7}],36:[function(require,module,exports){
+},{"buffer":7,"utf8":148}],36:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -20144,6 +20167,252 @@ function alwaysArray(value) {
 module.exports = TiffIfd;
 
 },{"./ifd":140}],148:[function(require,module,exports){
+(function (global){
+'use strict';
+
+/*! https://mths.be/utf8js v2.1.2 by @mathias */
+;(function (root) {
+
+	// Detect free variables `exports`
+	var freeExports = typeof exports == 'object' && exports;
+
+	// Detect free variable `module`
+	var freeModule = typeof module == 'object' && module && module.exports == freeExports && module;
+
+	// Detect free variable `global`, from Node.js or Browserified code,
+	// and use it as `root`
+	var freeGlobal = typeof global == 'object' && global;
+	if (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal) {
+		root = freeGlobal;
+	}
+
+	/*--------------------------------------------------------------------------*/
+
+	var stringFromCharCode = String.fromCharCode;
+
+	// Taken from https://mths.be/punycode
+	function ucs2decode(string) {
+		var output = [];
+		var counter = 0;
+		var length = string.length;
+		var value;
+		var extra;
+		while (counter < length) {
+			value = string.charCodeAt(counter++);
+			if (value >= 0xD800 && value <= 0xDBFF && counter < length) {
+				// high surrogate, and there is a next character
+				extra = string.charCodeAt(counter++);
+				if ((extra & 0xFC00) == 0xDC00) {
+					// low surrogate
+					output.push(((value & 0x3FF) << 10) + (extra & 0x3FF) + 0x10000);
+				} else {
+					// unmatched surrogate; only append this code unit, in case the next
+					// code unit is the high surrogate of a surrogate pair
+					output.push(value);
+					counter--;
+				}
+			} else {
+				output.push(value);
+			}
+		}
+		return output;
+	}
+
+	// Taken from https://mths.be/punycode
+	function ucs2encode(array) {
+		var length = array.length;
+		var index = -1;
+		var value;
+		var output = '';
+		while (++index < length) {
+			value = array[index];
+			if (value > 0xFFFF) {
+				value -= 0x10000;
+				output += stringFromCharCode(value >>> 10 & 0x3FF | 0xD800);
+				value = 0xDC00 | value & 0x3FF;
+			}
+			output += stringFromCharCode(value);
+		}
+		return output;
+	}
+
+	function checkScalarValue(codePoint) {
+		if (codePoint >= 0xD800 && codePoint <= 0xDFFF) {
+			throw Error('Lone surrogate U+' + codePoint.toString(16).toUpperCase() + ' is not a scalar value');
+		}
+	}
+	/*--------------------------------------------------------------------------*/
+
+	function createByte(codePoint, shift) {
+		return stringFromCharCode(codePoint >> shift & 0x3F | 0x80);
+	}
+
+	function encodeCodePoint(codePoint) {
+		if ((codePoint & 0xFFFFFF80) == 0) {
+			// 1-byte sequence
+			return stringFromCharCode(codePoint);
+		}
+		var symbol = '';
+		if ((codePoint & 0xFFFFF800) == 0) {
+			// 2-byte sequence
+			symbol = stringFromCharCode(codePoint >> 6 & 0x1F | 0xC0);
+		} else if ((codePoint & 0xFFFF0000) == 0) {
+			// 3-byte sequence
+			checkScalarValue(codePoint);
+			symbol = stringFromCharCode(codePoint >> 12 & 0x0F | 0xE0);
+			symbol += createByte(codePoint, 6);
+		} else if ((codePoint & 0xFFE00000) == 0) {
+			// 4-byte sequence
+			symbol = stringFromCharCode(codePoint >> 18 & 0x07 | 0xF0);
+			symbol += createByte(codePoint, 12);
+			symbol += createByte(codePoint, 6);
+		}
+		symbol += stringFromCharCode(codePoint & 0x3F | 0x80);
+		return symbol;
+	}
+
+	function utf8encode(string) {
+		var codePoints = ucs2decode(string);
+		var length = codePoints.length;
+		var index = -1;
+		var codePoint;
+		var byteString = '';
+		while (++index < length) {
+			codePoint = codePoints[index];
+			byteString += encodeCodePoint(codePoint);
+		}
+		return byteString;
+	}
+
+	/*--------------------------------------------------------------------------*/
+
+	function readContinuationByte() {
+		if (byteIndex >= byteCount) {
+			throw Error('Invalid byte index');
+		}
+
+		var continuationByte = byteArray[byteIndex] & 0xFF;
+		byteIndex++;
+
+		if ((continuationByte & 0xC0) == 0x80) {
+			return continuationByte & 0x3F;
+		}
+
+		// If we end up here, it’s not a continuation byte
+		throw Error('Invalid continuation byte');
+	}
+
+	function decodeSymbol() {
+		var byte1;
+		var byte2;
+		var byte3;
+		var byte4;
+		var codePoint;
+
+		if (byteIndex > byteCount) {
+			throw Error('Invalid byte index');
+		}
+
+		if (byteIndex == byteCount) {
+			return false;
+		}
+
+		// Read first byte
+		byte1 = byteArray[byteIndex] & 0xFF;
+		byteIndex++;
+
+		// 1-byte sequence (no continuation bytes)
+		if ((byte1 & 0x80) == 0) {
+			return byte1;
+		}
+
+		// 2-byte sequence
+		if ((byte1 & 0xE0) == 0xC0) {
+			byte2 = readContinuationByte();
+			codePoint = (byte1 & 0x1F) << 6 | byte2;
+			if (codePoint >= 0x80) {
+				return codePoint;
+			} else {
+				throw Error('Invalid continuation byte');
+			}
+		}
+
+		// 3-byte sequence (may include unpaired surrogates)
+		if ((byte1 & 0xF0) == 0xE0) {
+			byte2 = readContinuationByte();
+			byte3 = readContinuationByte();
+			codePoint = (byte1 & 0x0F) << 12 | byte2 << 6 | byte3;
+			if (codePoint >= 0x0800) {
+				checkScalarValue(codePoint);
+				return codePoint;
+			} else {
+				throw Error('Invalid continuation byte');
+			}
+		}
+
+		// 4-byte sequence
+		if ((byte1 & 0xF8) == 0xF0) {
+			byte2 = readContinuationByte();
+			byte3 = readContinuationByte();
+			byte4 = readContinuationByte();
+			codePoint = (byte1 & 0x07) << 0x12 | byte2 << 0x0C | byte3 << 0x06 | byte4;
+			if (codePoint >= 0x010000 && codePoint <= 0x10FFFF) {
+				return codePoint;
+			}
+		}
+
+		throw Error('Invalid UTF-8 detected');
+	}
+
+	var byteArray;
+	var byteCount;
+	var byteIndex;
+	function utf8decode(byteString) {
+		byteArray = ucs2decode(byteString);
+		byteCount = byteArray.length;
+		byteIndex = 0;
+		var codePoints = [];
+		var tmp;
+		while ((tmp = decodeSymbol()) !== false) {
+			codePoints.push(tmp);
+		}
+		return ucs2encode(codePoints);
+	}
+
+	/*--------------------------------------------------------------------------*/
+
+	var utf8 = {
+		'version': '2.1.2',
+		'encode': utf8encode,
+		'decode': utf8decode
+	};
+
+	// Some AMD build optimizers, like r.js, check for specific condition patterns
+	// like the following:
+	if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
+		define(function () {
+			return utf8;
+		});
+	} else if (freeExports && !freeExports.nodeType) {
+		if (freeModule) {
+			// in Node.js or RingoJS v0.8.0+
+			freeModule.exports = utf8;
+		} else {
+			// in Narwhal or RingoJS v0.7.0-
+			var object = {};
+			var hasOwnProperty = object.hasOwnProperty;
+			for (var key in utf8) {
+				hasOwnProperty.call(utf8, key) && (freeExports[key] = utf8[key]);
+			}
+		}
+	} else {
+		// in Rhino or a web browser
+		root.utf8 = utf8;
+	}
+})(undefined);
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],149:[function(require,module,exports){
 'use strict';
 
 var workerTemplate = require('./workerTemplate');
@@ -20299,7 +20568,7 @@ WorkerManager.prototype.post = function (event, args, transferable, id) {
 
 module.exports = WorkerManager;
 
-},{"./workerTemplate":149}],149:[function(require,module,exports){
+},{"./workerTemplate":150}],150:[function(require,module,exports){
 'use strict';
 
 var worker = function worker() {
@@ -20353,7 +20622,7 @@ exports.newWorkerURL = function newWorkerURL(code, deps) {
     return URL.createObjectURL(blob);
 };
 
-},{}],150:[function(require,module,exports){
+},{}],151:[function(require,module,exports){
 (function (Buffer){
 'use strict';
 
@@ -21264,7 +21533,7 @@ exports.default = Image;
 (0, _bitMethods2.default)(Image);
 
 }).call(this,require("buffer").Buffer)
-},{"../stack/Stack":255,"../util/base64":265,"./bitMethods":151,"./environment":164,"./extend":165,"./kind":186,"./kindNames":187,"./load":188,"./mediaTypes":189,"./model/model":190,"./roi/manager":206,"blob-util":5,"buffer":7,"extend":34,"fast-bmp":38,"fs":7,"has-own":48}],151:[function(require,module,exports){
+},{"../stack/Stack":256,"../util/base64":266,"./bitMethods":152,"./environment":165,"./extend":166,"./kind":187,"./kindNames":188,"./load":189,"./mediaTypes":190,"./model/model":191,"./roi/manager":207,"blob-util":5,"buffer":7,"extend":34,"fast-bmp":38,"fs":7,"has-own":48}],152:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21395,7 +21664,7 @@ var bitMethods = {
     }
 };
 
-},{}],152:[function(require,module,exports){
+},{}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21454,7 +21723,7 @@ function getColorHistogram() {
     return result;
 }
 
-},{"new-array":118}],153:[function(require,module,exports){
+},{"new-array":118}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21494,7 +21763,7 @@ function countAlphaPixels() {
     }
 }
 
-},{}],154:[function(require,module,exports){
+},{}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21630,7 +21899,7 @@ function getChannelHistogram(channel, options) {
     return result;
 }
 
-},{"is-integer":57,"new-array":118}],155:[function(require,module,exports){
+},{"is-integer":57,"new-array":118}],156:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21724,7 +21993,7 @@ function localMaxima() {
     return points;
 }
 
-},{}],156:[function(require,module,exports){
+},{}],157:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21761,7 +22030,7 @@ function max() {
     return result;
 }
 
-},{"new-array":118}],157:[function(require,module,exports){
+},{"new-array":118}],158:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21787,7 +22056,7 @@ function mean() {
     return result;
 }
 
-},{"../../util/histogram":270}],158:[function(require,module,exports){
+},{"../../util/histogram":271}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21813,7 +22082,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":270}],159:[function(require,module,exports){
+},{"../../util/histogram":271}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21850,7 +22119,7 @@ function min() {
     return result;
 }
 
-},{"new-array":118}],160:[function(require,module,exports){
+},{"new-array":118}],161:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21881,7 +22150,7 @@ function points() {
     return pixels;
 }
 
-},{}],161:[function(require,module,exports){
+},{}],162:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21924,7 +22193,7 @@ function getRelativePosition(targetImage) {
     return false;
 }
 
-},{}],162:[function(require,module,exports){
+},{}],163:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21959,7 +22228,7 @@ function sum() {
     return result;
 }
 
-},{"new-array":118}],163:[function(require,module,exports){
+},{"new-array":118}],164:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21983,7 +22252,7 @@ function getSvd() {
     return _mlMatrix.DC.SVD(this.points);
 }
 
-},{"ml-matrix":91}],164:[function(require,module,exports){
+},{"ml-matrix":91}],165:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22069,7 +22338,7 @@ exports.ImageData = ImageData;
 exports.isDifferentOrigin = isDifferentOrigin;
 exports.env = env;
 
-},{"canvas":undefined,"fs":7}],165:[function(require,module,exports){
+},{"canvas":undefined,"fs":7}],166:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22421,7 +22690,7 @@ function extend(Image) {
 
 // operators
 
-},{"./compute/colorHistogram":152,"./compute/countAlphaPixels":153,"./compute/histogram":154,"./compute/localMaxima":155,"./compute/max":156,"./compute/mean":157,"./compute/median":158,"./compute/min":159,"./compute/points":160,"./compute/relativePosition":161,"./compute/sum":162,"./compute/svd":163,"./filter/add":166,"./filter/background":167,"./filter/blurFilter":168,"./filter/divide":169,"./filter/flipX":170,"./filter/flipY":171,"./filter/gaussianFilter":172,"./filter/hypotenuse":173,"./filter/invert":174,"./filter/invertApply":175,"./filter/invertBinaryLoop":176,"./filter/invertGetSet":177,"./filter/invertIterator":178,"./filter/invertOneLoop":179,"./filter/invertPixel":180,"./filter/level":181,"./filter/medianFilter":182,"./filter/multiply":183,"./filter/sobelFilter":184,"./filter/subtract":185,"./operator/convolution":191,"./operator/convolutionFft":192,"./operator/extract":193,"./operator/floodFill":194,"./operator/paintLabels":195,"./operator/paintMasks":196,"./operator/paintPoints":197,"./transform/cmyk":207,"./transform/colorDepth":208,"./transform/crop":209,"./transform/cropAlpha":210,"./transform/grey":211,"./transform/hsl":213,"./transform/hsv":214,"./transform/mask/mask":219,"./transform/pad":232,"./transform/rgba8":233,"./transform/rotate":234,"./transform/scale/scale":237,"./utility/combineChannels":238,"./utility/getBestMatch":240,"./utility/getChannel":241,"./utility/getColumn":242,"./utility/getMatrix":243,"./utility/getPixelsArray":244,"./utility/getPixelsGrid":245,"./utility/getRow":246,"./utility/getSimilarity":247,"./utility/setBorder":248,"./utility/setChannel":249,"./utility/setMatrix":250,"./utility/split":251}],166:[function(require,module,exports){
+},{"./compute/colorHistogram":153,"./compute/countAlphaPixels":154,"./compute/histogram":155,"./compute/localMaxima":156,"./compute/max":157,"./compute/mean":158,"./compute/median":159,"./compute/min":160,"./compute/points":161,"./compute/relativePosition":162,"./compute/sum":163,"./compute/svd":164,"./filter/add":167,"./filter/background":168,"./filter/blurFilter":169,"./filter/divide":170,"./filter/flipX":171,"./filter/flipY":172,"./filter/gaussianFilter":173,"./filter/hypotenuse":174,"./filter/invert":175,"./filter/invertApply":176,"./filter/invertBinaryLoop":177,"./filter/invertGetSet":178,"./filter/invertIterator":179,"./filter/invertOneLoop":180,"./filter/invertPixel":181,"./filter/level":182,"./filter/medianFilter":183,"./filter/multiply":184,"./filter/sobelFilter":185,"./filter/subtract":186,"./operator/convolution":192,"./operator/convolutionFft":193,"./operator/extract":194,"./operator/floodFill":195,"./operator/paintLabels":196,"./operator/paintMasks":197,"./operator/paintPoints":198,"./transform/cmyk":208,"./transform/colorDepth":209,"./transform/crop":210,"./transform/cropAlpha":211,"./transform/grey":212,"./transform/hsl":214,"./transform/hsv":215,"./transform/mask/mask":220,"./transform/pad":233,"./transform/rgba8":234,"./transform/rotate":235,"./transform/scale/scale":238,"./utility/combineChannels":239,"./utility/getBestMatch":241,"./utility/getChannel":242,"./utility/getColumn":243,"./utility/getMatrix":244,"./utility/getPixelsArray":245,"./utility/getPixelsGrid":246,"./utility/getRow":247,"./utility/getSimilarity":248,"./utility/setBorder":249,"./utility/setChannel":250,"./utility/setMatrix":251,"./utility/split":252}],167:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22475,7 +22744,7 @@ function add(value) {
     return this;
 }
 
-},{"../../util/channel":266,"../../util/value":274}],167:[function(require,module,exports){
+},{"../../util/channel":267,"../../util/value":275}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22515,7 +22784,7 @@ function background(coordinates, values, options) {
     return background;
 }
 
-},{"../Image":150,"ml-regression":103}],168:[function(require,module,exports){
+},{"../Image":151,"ml-regression":103}],169:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22563,7 +22832,7 @@ function blurFilter() {
     return _convolutionFft2.default.call(this, kernel);
 }
 
-},{"../operator/convolutionFft":192}],169:[function(require,module,exports){
+},{"../operator/convolutionFft":193}],170:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22615,7 +22884,7 @@ function divide(value) {
     return this;
 }
 
-},{"../../util/channel":266,"../../util/value":274}],170:[function(require,module,exports){
+},{"../../util/channel":267,"../../util/value":275}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22653,7 +22922,7 @@ function flipX() {
     return this;
 }
 
-},{}],171:[function(require,module,exports){
+},{}],172:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22688,7 +22957,7 @@ function flipY() {
     return this;
 }
 
-},{}],172:[function(require,module,exports){
+},{}],173:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22803,7 +23072,7 @@ function getSigmaKernel(sigma) {
     return getKernel(neighbors, sigma);
 }
 
-},{"../operator/convolution":191}],173:[function(require,module,exports){
+},{"../operator/convolution":192}],174:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22870,7 +23139,7 @@ function hypotenuse(otherImage) {
     return newImage;
 }
 
-},{"../../util/channel":266,"../Image":150}],174:[function(require,module,exports){
+},{"../../util/channel":267,"../Image":151}],175:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22924,7 +23193,7 @@ function invert() {
     return this;
 } // we try the faster methods
 
-},{"../../util/channel":266}],175:[function(require,module,exports){
+},{"../../util/channel":267}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22960,7 +23229,7 @@ function invertApply() {
     }
 }
 
-},{}],176:[function(require,module,exports){
+},{}],177:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22977,7 +23246,7 @@ function invertBinaryLoop() {
     }
 }
 
-},{}],177:[function(require,module,exports){
+},{}],178:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23009,7 +23278,7 @@ function invert() {
     }
 }
 
-},{}],178:[function(require,module,exports){
+},{}],179:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23041,7 +23310,7 @@ function invertIterator() {
     }
 }
 
-},{}],179:[function(require,module,exports){
+},{}],180:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23061,7 +23330,7 @@ function invertOneLoop() {
     }
 }
 
-},{}],180:[function(require,module,exports){
+},{}],181:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23089,7 +23358,7 @@ function invertPixel() {
     }
 }
 
-},{}],181:[function(require,module,exports){
+},{}],182:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23195,7 +23464,7 @@ function processImage(image, min, max, channels) {
     }
 }
 
-},{"../../util/channel":266,"new-array":118}],182:[function(require,module,exports){
+},{"../../util/channel":267,"new-array":118}],183:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23285,7 +23554,7 @@ function medianFilter() {
     return newImage;
 } //End median function
 
-},{"../../util/channel":266,"../Image":150,"num-sort":119}],183:[function(require,module,exports){
+},{"../../util/channel":267,"../Image":151,"num-sort":119}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23340,7 +23609,7 @@ function multiply(value) {
     return this;
 }
 
-},{"../../util/channel":266,"../../util/value":274}],184:[function(require,module,exports){
+},{"../../util/channel":267,"../../util/value":275}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23396,7 +23665,7 @@ function sobelFilter() {
     return gX.hypotenuse(gY, { bitDepth: this.bitDepth, channels: channels });
 }
 
-},{"../../util/kernels":272,"../operator/convolution":191}],185:[function(require,module,exports){
+},{"../../util/kernels":273,"../operator/convolution":192}],186:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23448,7 +23717,7 @@ function subtract(value) {
     return this;
 }
 
-},{"../../util/channel":266,"../../util/value":274}],186:[function(require,module,exports){
+},{"../../util/channel":267,"../../util/value":275}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23559,7 +23828,7 @@ function createPixelArray(image) {
     return arr;
 }
 
-},{"./kindNames":187,"./model/model":190}],187:[function(require,module,exports){
+},{"./kindNames":188,"./model/model":191}],188:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23575,7 +23844,7 @@ var RGBA = exports.RGBA = 'RGBA';
 var CMYK = exports.CMYK = 'CMYK';
 var CMYKA = exports.CMYKA = 'CMYKA';
 
-},{}],188:[function(require,module,exports){
+},{}],189:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23761,7 +24030,7 @@ function loadGeneric(url, options) {
     });
 }
 
-},{"../stack/Stack":255,"../util/base64":265,"./Image":150,"./environment":164,"fast-jpeg":40,"fast-png":43,"image-type":50,"tiff":142}],189:[function(require,module,exports){
+},{"../stack/Stack":256,"../util/base64":266,"./Image":151,"./environment":165,"fast-jpeg":40,"fast-png":43,"image-type":50,"tiff":142}],190:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23822,7 +24091,7 @@ function getType(type) {
     return type;
 }
 
-},{"./Image":150,"./environment":164}],190:[function(require,module,exports){
+},{"./Image":151,"./environment":165}],191:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23834,7 +24103,7 @@ var HSV = exports.HSV = 'HSV';
 var CMYK = exports.CMYK = 'CMYK';
 var GREY = exports.GREY = 'GREY';
 
-},{}],191:[function(require,module,exports){
+},{}],192:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23974,7 +24243,7 @@ function convolution(kernel) {
     return newImage;
 }
 
-},{"../../util/channel":266,"../../util/kernel":271,"../Image":150,"ml-matrix-convolution":82}],192:[function(require,module,exports){
+},{"../../util/channel":267,"../../util/kernel":272,"../Image":151,"ml-matrix-convolution":82}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24001,7 +24270,7 @@ function convolutionFft(kernel) {
   return this.convolution(kernel, options);
 }
 
-},{}],193:[function(require,module,exports){
+},{}],194:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24086,7 +24355,7 @@ function extract(mask) {
     }
 }
 
-},{"../Image":150}],194:[function(require,module,exports){
+},{"../Image":151}],195:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24163,7 +24432,7 @@ function Node(x, y) {
     this.y = y;
 }
 
-},{"../Image":150,"fast-list":41}],195:[function(require,module,exports){
+},{"../Image":151,"fast-list":41}],196:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24255,7 +24524,7 @@ function paintLabels(labels, positions) {
     return this;
 }
 
-},{"../../util/color":267,"../model/model":190}],196:[function(require,module,exports){
+},{"../../util/color":268,"../model/model":191}],197:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24375,7 +24644,7 @@ function paintMasks(masks) {
     return this;
 }
 
-},{"../../util/color":267,"../model/model":190}],197:[function(require,module,exports){
+},{"../../util/color":268,"../model/model":191}],198:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24436,7 +24705,7 @@ function paintPoints(points) {
     return this;
 }
 
-},{"../../util/Shape":264,"../model/model":190}],198:[function(require,module,exports){
+},{"../../util/Shape":265,"../model/model":191}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25068,7 +25337,7 @@ function getInternalIDs(roi) {
     return internal;
 }
 
-},{"../../util/Shape":264,"../Image":150,"../kindNames":187}],199:[function(require,module,exports){
+},{"../../util/Shape":265,"../Image":151,"../kindNames":188}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25176,7 +25445,7 @@ class RoiLayer {
 }
 exports.default = RoiLayer;
 
-},{"./Roi":198}],200:[function(require,module,exports){
+},{"./Roi":199}],201:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -25206,7 +25475,7 @@ class RoiMap {
 }
 exports.default = RoiMap;
 
-},{}],201:[function(require,module,exports){
+},{}],202:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25335,7 +25604,7 @@ function fromMask(mask) {
     return new _RoiMap2.default(mask, data);
 }
 
-},{"../RoiMap":200}],202:[function(require,module,exports){
+},{"../RoiMap":201}],203:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25452,7 +25721,7 @@ function fromKaskConnectedComponentLabelingAlgorithm(mask) {
     return new _RoiMap2.default(mask, data);
 }
 
-},{"../RoiMap":200,"ml-disjoint-set":66}],203:[function(require,module,exports){
+},{"../RoiMap":201,"ml-disjoint-set":66}],204:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25683,7 +25952,7 @@ function fromMaxima() {
     }
 }
 
-},{"../RoiMap":200}],204:[function(require,module,exports){
+},{"../RoiMap":201}],205:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25733,7 +26002,7 @@ function fromPoints(pointsToPaint) {
     return new _RoiMap2.default(this, data);
 }
 
-},{"../RoiMap":200,"./../../../util/Shape":264}],205:[function(require,module,exports){
+},{"../RoiMap":201,"./../../../util/Shape":265}],206:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25851,7 +26120,7 @@ function fromWaterShed() {
     return new _RoiMap2.default(currentImage, data);
 }
 
-},{"../RoiMap":200,"./../../../util/dxdy.js":269,"js-priority-queue":60}],206:[function(require,module,exports){
+},{"../RoiMap":201,"./../../../util/dxdy.js":270,"js-priority-queue":60}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26292,7 +26561,7 @@ function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
     return correspondingRois;
 }
 
-},{"../Image":150,"./RoiLayer":199,"./RoiMap":200,"./creator/fromMask":201,"./creator/fromMaskConnectedComponentLabelingAlgorithm":202,"./creator/fromMaxima":203,"./creator/fromPoints":204,"./creator/fromWaterShed":205,"extend":34}],207:[function(require,module,exports){
+},{"../Image":151,"./RoiLayer":200,"./RoiMap":201,"./creator/fromMask":202,"./creator/fromMaskConnectedComponentLabelingAlgorithm":203,"./creator/fromMaxima":204,"./creator/fromPoints":205,"./creator/fromWaterShed":206,"extend":34}],208:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26358,7 +26627,7 @@ function cmyk() {
     return newImage;
 }
 
-},{"../Image":150,"../model/model":190}],208:[function(require,module,exports){
+},{"../Image":151,"../model/model":191}],209:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26417,7 +26686,7 @@ function colorDepth() {
     return newImage;
 }
 
-},{"../Image":150}],209:[function(require,module,exports){
+},{"../Image":151}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26497,7 +26766,7 @@ function crop() {
     return newImage;
 }
 
-},{"../Image":150}],210:[function(require,module,exports){
+},{"../Image":151}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26586,7 +26855,7 @@ function findRight(image, threshold, channel, left, top, bottom) {
     return -1;
 }
 
-},{}],211:[function(require,module,exports){
+},{}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26686,7 +26955,7 @@ function grey() {
     return newImage;
 }
 
-},{"../Image":150,"../model/model":190,"./greyAlgorithms":212}],212:[function(require,module,exports){
+},{"../Image":151,"../model/model":191,"./greyAlgorithms":213}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26790,7 +27059,7 @@ Object.defineProperty(methods, 'brightness', { enumerable: false, value: methods
 
 var names = exports.names = Object.keys(methods);
 
-},{}],213:[function(require,module,exports){
+},{}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26874,7 +27143,7 @@ function hsl() {
     return newImage;
 }
 
-},{"../Image":150,"../model/model":190}],214:[function(require,module,exports){
+},{"../Image":151,"../model/model":191}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26956,7 +27225,7 @@ function hsv() {
     return newImage;
 }
 
-},{"../Image":150,"../model/model":190}],215:[function(require,module,exports){
+},{"../Image":151,"../model/model":191}],216:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27040,7 +27309,7 @@ function huang(histogram) {
     return threshold;
 }
 
-},{}],216:[function(require,module,exports){
+},{}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27104,7 +27373,7 @@ function bimodalTest(iHisto) {
     return b;
 }
 
-},{}],217:[function(require,module,exports){
+},{}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27160,7 +27429,7 @@ function isodata(histogram) {
     return g;
 }
 
-},{}],218:[function(require,module,exports){
+},{}],219:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27244,7 +27513,7 @@ function li(histogram, total) {
     return threshold;
 }
 
-},{}],219:[function(require,module,exports){
+},{}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27329,7 +27598,7 @@ function mask() {
     return newImage;
 }
 
-},{"../../../util/converter":268,"../../Image":150,"./maskAlgorithms":220}],220:[function(require,module,exports){
+},{"../../../util/converter":269,"../../Image":151,"./maskAlgorithms":221}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27419,7 +27688,7 @@ var methods = exports.methods = {
 
 var names = exports.names = ['threshold'].concat(Object.keys(methods));
 
-},{"./huang":215,"./intermodes":216,"./isodata":217,"./li":218,"./maxEntropy":221,"./mean":222,"./minError":223,"./minimum":224,"./moments":225,"./otsu":226,"./percentile":227,"./renyiEntropy.js":228,"./shanbhag":229,"./triangle":230,"./yen":231}],221:[function(require,module,exports){
+},{"./huang":216,"./intermodes":217,"./isodata":218,"./li":219,"./maxEntropy":222,"./mean":223,"./minError":224,"./minimum":225,"./moments":226,"./otsu":227,"./percentile":228,"./renyiEntropy.js":229,"./shanbhag":230,"./triangle":231,"./yen":232}],222:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27506,7 +27775,7 @@ function maxEntropy(histogram, total) {
     return threshold;
 }
 
-},{}],222:[function(require,module,exports){
+},{}],223:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27530,7 +27799,7 @@ function mean(histogram, total) {
     return Math.floor(sum / total);
 }
 
-},{}],223:[function(require,module,exports){
+},{}],224:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27638,7 +27907,7 @@ function sumC(y, j) {
     return x;
 }
 
-},{}],224:[function(require,module,exports){
+},{}],225:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27717,7 +27986,7 @@ function bimodalTest(histogram) {
     return isBimodal;
 }
 
-},{}],225:[function(require,module,exports){
+},{}],226:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27780,7 +28049,7 @@ function moments(histogram, total) {
     return threshold;
 }
 
-},{}],226:[function(require,module,exports){
+},{}],227:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27834,7 +28103,7 @@ function otsu(histogram, total) {
     return threshold;
 }
 
-},{}],227:[function(require,module,exports){
+},{}],228:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27875,7 +28144,7 @@ function partialSum(histogram, endIndex) {
     return x;
 }
 
-},{}],228:[function(require,module,exports){
+},{}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28020,7 +28289,7 @@ function renyiEntropy(histogram, total) {
 // 06.15.2007
 // Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
 
-},{"num-sort":119}],229:[function(require,module,exports){
+},{"num-sort":119}],230:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28102,7 +28371,7 @@ function shanbhag(histogram, total) {
     return threshold;
 }
 
-},{}],230:[function(require,module,exports){
+},{}],231:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28221,7 +28490,7 @@ function triangle(histogram) {
     }
 }
 
-},{}],231:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28280,7 +28549,7 @@ function yen(histogram, total) {
     return threshold;
 }
 
-},{}],232:[function(require,module,exports){
+},{}],233:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28378,7 +28647,7 @@ function pad() {
     return newImage;
 }
 
-},{"../Image":150,"../utility/copy":239,"new-array":118}],233:[function(require,module,exports){
+},{"../Image":151,"../utility/copy":240,"new-array":118}],234:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28413,7 +28682,7 @@ function rgba8() {
     });
 }
 
-},{"../Image":150}],234:[function(require,module,exports){
+},{"../Image":151}],235:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28517,7 +28786,7 @@ function rotate180() {
     return newImage;
 }
 
-},{"../Image":150,"./rotateFree":235}],235:[function(require,module,exports){
+},{"../Image":151,"./rotateFree":236}],236:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28626,7 +28895,7 @@ function rotateFree(degrees) {
 } //http://homepages.inf.ed.ac.uk/rbf/HIPR2/rotate.htm
 //http://www.cyut.edu.tw/~yltang/program/Rotate1.java
 
-},{"../Image":150}],236:[function(require,module,exports){
+},{"../Image":151}],237:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28667,7 +28936,7 @@ function nearestNeighbor(newImage, newWidth, newHeight) {
     }
 }
 
-},{}],237:[function(require,module,exports){
+},{}],238:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28755,7 +29024,7 @@ function scale() {
     return newImage;
 }
 
-},{"../../../util/converter":268,"../../Image":150,"./nearestNeighbor":236}],238:[function(require,module,exports){
+},{"../../../util/converter":269,"../../Image":151,"./nearestNeighbor":237}],239:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28822,7 +29091,7 @@ function defaultCombineMethod(pixel) {
     return (pixel[0] + pixel[1] + pixel[2]) / 3;
 }
 
-},{"../Image":150}],239:[function(require,module,exports){
+},{"../Image":151}],240:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28854,7 +29123,7 @@ function copyImage(fromImage, toImage, x, y) {
     }
 }
 
-},{}],240:[function(require,module,exports){
+},{}],241:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28924,7 +29193,7 @@ function match(image) {
     return [currentX - middleX, currentY - middleY];
 }
 
-},{"../../util/matrix":273}],241:[function(require,module,exports){
+},{"../../util/matrix":274}],242:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28987,7 +29256,7 @@ function getChannel(channel) {
     return newImage;
 }
 
-},{"../Image":150,"./../../util/channel":266}],242:[function(require,module,exports){
+},{"../Image":151,"./../../util/channel":267}],243:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29021,7 +29290,7 @@ function getColumn(column) {
     return array;
 }
 
-},{}],243:[function(require,module,exports){
+},{}],244:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29067,7 +29336,7 @@ function getMatrix() {
     return matrix;
 }
 
-},{"ml-matrix":91}],244:[function(require,module,exports){
+},{"ml-matrix":91}],245:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29099,7 +29368,7 @@ function getPixelsArray() {
     return array;
 }
 
-},{}],245:[function(require,module,exports){
+},{}],246:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29173,7 +29442,7 @@ function getPixelsGrid() {
     return toReturn;
 }
 
-},{}],246:[function(require,module,exports){
+},{}],247:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29208,7 +29477,7 @@ function getRow(row) {
     return array;
 }
 
-},{}],247:[function(require,module,exports){
+},{}],248:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29297,7 +29566,7 @@ function getSimilarity(image) {
     return results;
 }
 
-},{"./../../util/channel":266,"new-array":118}],248:[function(require,module,exports){
+},{"./../../util/channel":267,"new-array":118}],249:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29384,7 +29653,7 @@ function setBorder() {
     return this;
 }
 
-},{"new-array":118}],249:[function(require,module,exports){
+},{"new-array":118}],250:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29428,7 +29697,7 @@ function setChannel(channel, image) {
     return this;
 }
 
-},{"./../../util/channel":266}],250:[function(require,module,exports){
+},{"./../../util/channel":267}],251:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29469,7 +29738,7 @@ function setMatrix(matrix) {
     }
 }
 
-},{}],251:[function(require,module,exports){
+},{}],252:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29544,7 +29813,7 @@ function split() {
     return images;
 }
 
-},{"../../stack/Stack":255,"../Image":150}],252:[function(require,module,exports){
+},{"../../stack/Stack":256,"../Image":151}],253:[function(require,module,exports){
 'use strict';
 
 var _environment = require('./image/environment');
@@ -29574,7 +29843,7 @@ if (_environment.env === 'browser') {
     exports.Worker = require('./worker/worker').default;
 }
 
-},{"./image/Image":150,"./image/environment":164,"./image/transform/greyAlgorithms":212,"./image/transform/mask/maskAlgorithms":220,"./kernel/kernel":253,"./stack/Stack":255,"./util/Shape":264,"./worker/worker":277,"array-includes":2}],253:[function(require,module,exports){
+},{"./image/Image":151,"./image/environment":165,"./image/transform/greyAlgorithms":213,"./image/transform/mask/maskAlgorithms":221,"./kernel/kernel":254,"./stack/Stack":256,"./util/Shape":265,"./worker/worker":278,"array-includes":2}],254:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29602,7 +29871,7 @@ Object.defineProperty(exports, 'laplacianOfGaussian', {
   }
 });
 
-},{"../util/kernels":272,"./laplacianOfGaussian":254}],254:[function(require,module,exports){
+},{"../util/kernels":273,"./laplacianOfGaussian":255}],255:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29635,7 +29904,7 @@ function laplacianOfGaussian(sigma, nPoints, factor) {
     return kernel;
 }
 
-},{}],255:[function(require,module,exports){
+},{}],256:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29800,7 +30069,7 @@ if (!Array[Symbol.species]) {
 
 (0, _extend2.default)(Stack);
 
-},{"../image/Image":150,"./extend":261,"has-own":48}],256:[function(require,module,exports){
+},{"../image/Image":151,"./extend":262,"has-own":48}],257:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29828,7 +30097,7 @@ function histogram(options) {
     return histogram;
 }
 
-},{}],257:[function(require,module,exports){
+},{}],258:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29859,7 +30128,7 @@ function histograms(options) {
     return histograms;
 }
 
-},{}],258:[function(require,module,exports){
+},{}],259:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29886,7 +30155,7 @@ function max() {
     return max;
 }
 
-},{}],259:[function(require,module,exports){
+},{}],260:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29916,7 +30185,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":270}],260:[function(require,module,exports){
+},{"../../util/histogram":271}],261:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29942,7 +30211,7 @@ function min() {
     return min;
 }
 
-},{}],261:[function(require,module,exports){
+},{}],262:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29993,7 +30262,7 @@ function extend(Stack) {
     Stack.extendMethod('getAverage', _average2.default);
 }
 
-},{"./compute/histogram":256,"./compute/histograms":257,"./compute/max":258,"./compute/median":259,"./compute/min":260,"./transform/matchAndCrop":262,"./utility/average":263}],262:[function(require,module,exports){
+},{"./compute/histogram":257,"./compute/histograms":258,"./compute/max":259,"./compute/median":260,"./compute/min":261,"./transform/matchAndCrop":263,"./utility/average":264}],263:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30105,7 +30374,7 @@ function matchAndCrop() {
     return new _Stack2.default(newImages);
 }
 
-},{"../Stack":255}],263:[function(require,module,exports){
+},{"../Stack":256}],264:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30147,7 +30416,7 @@ function average() {
     return image;
 }
 
-},{"../../image/Image":150}],264:[function(require,module,exports){
+},{"../../image/Image":151}],265:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30353,7 +30622,7 @@ function triangle(width, height, options) {
     return matrix;
 }
 
-},{"../image/Image":150,"../image/kindNames":187,"ml-matrix":91}],265:[function(require,module,exports){
+},{"../image/Image":151,"../image/kindNames":188,"ml-matrix":91}],266:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30432,7 +30701,7 @@ function decode(base64) {
     return bytes;
 }
 
-},{}],266:[function(require,module,exports){
+},{}],267:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30589,7 +30858,7 @@ function validateChannel(image, channel) {
     return channel;
 }
 
-},{"../image/model/model":190}],267:[function(require,module,exports){
+},{"../image/model/model":191}],268:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30668,7 +30937,7 @@ function getRandomColor() {
     return [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)];
 }
 
-},{"color-functions":8}],268:[function(require,module,exports){
+},{"color-functions":8}],269:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30738,7 +31007,7 @@ function factorDimensions(factor, width, height) {
     };
 }
 
-},{}],269:[function(require,module,exports){
+},{}],270:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30747,7 +31016,7 @@ Object.defineProperty(exports, "__esModule", {
 var dxs = exports.dxs = [+1, 0, -1, 0, +1, +1, -1, -1];
 var dys = exports.dys = [0, +1, 0, -1, +1, -1, +1, -1];
 
-},{}],270:[function(require,module,exports){
+},{}],271:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30811,7 +31080,7 @@ function mean(histogram) {
     return sum / total;
 }
 
-},{}],271:[function(require,module,exports){
+},{}],272:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30860,7 +31129,7 @@ function validateKernel(kernel) {
     return { kernel: kernel, kWidth: kWidth, kHeight: kHeight };
 }
 
-},{"is-integer":57}],272:[function(require,module,exports){
+},{"is-integer":57}],273:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30878,7 +31147,7 @@ var SECOND_DERIVATIVE = exports.SECOND_DERIVATIVE = [[-1, -2, 0, 2, 1], [-2, -4,
 
 var SECOND_DERIVATIVE_INV = exports.SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
 
-},{}],273:[function(require,module,exports){
+},{}],274:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30949,7 +31218,7 @@ Matrix.prototype.localSearch = function (x, y, value) {
     return results;
 };
 
-},{}],274:[function(require,module,exports){
+},{}],275:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30984,7 +31253,7 @@ function checkNumberArray(value) {
     }
 }
 
-},{"../image/Image":150,"is-array-type":53}],275:[function(require,module,exports){
+},{"../image/Image":151,"is-array-type":53}],276:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31002,7 +31271,7 @@ function extend(Worker) {
     Worker.extendMethod('background', _background2.default);
 }
 
-},{"./process/background":276}],276:[function(require,module,exports){
+},{"./process/background":277}],277:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31102,7 +31371,7 @@ function work() {
 
 exports.default = { run: run, work: work };
 
-},{"../../image/Image":150,"extend":34}],277:[function(require,module,exports){
+},{"../../image/Image":151,"extend":34}],278:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31174,5 +31443,5 @@ class Worker {
 
 exports.default = new Worker();
 
-},{"./extend":275,"web-worker-manager":148}]},{},[252])(252)
+},{"./extend":276,"web-worker-manager":149}]},{},[253])(253)
 });
