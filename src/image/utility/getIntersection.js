@@ -1,4 +1,3 @@
-import getClosestCommonParent from './getClosestCommonParent';
 /**
  * Find intersection of points between two different masks
  * @param {Image} - a mask (1 bit image)
@@ -8,7 +7,7 @@ import getClosestCommonParent from './getClosestCommonParent';
 export default function getIntersection(mask2) {
 
     let mask1 = this;
-    let closestParent = getClosestCommonParent(mask1, mask2);
+    let closestParent = mask1.getClosestCommonParent(mask2);
 
     let startPos1 = mask1.getRelativePosition(closestParent, {defaultFurther: true});
     let allRelPos1 = getRelativePositionForAllPixels(mask1, startPos1);

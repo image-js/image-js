@@ -2,7 +2,6 @@
  *
  */
 import {Image} from 'test/common';
-import getClosestCommonParent from '../getClosestCommonParent';
 
 describe('getClosestCommonParent', function () {
     it('correct common parent for masks with one ancestor each', function () {
@@ -18,7 +17,7 @@ describe('getClosestCommonParent', function () {
         );
         let mask1 = img1.mask();
         let mask2 = img1.mask();
-        getClosestCommonParent(mask1, mask2).should.eql(img1);
+        mask1.getClosestCommonParent(mask2).should.eql(img1);
 
     });
 
@@ -36,12 +35,12 @@ describe('getClosestCommonParent', function () {
 
         let mask1 = img1.mask();
         let mask2 = mask1.scale({factor: 2});
-        let mask3 = mask2.crop();
+        let mask3 = mask2.scale({factor: 2});
         let mask4 = img1.mask();
         let mask5 = mask4.rotate(90);
         let mask6 = mask5.scale({factor: 2});
-        getClosestCommonParent(mask2, mask4).should.eql(img1);
-        getClosestCommonParent(mask3, mask6).should.eql(img1);
+        mask2.getClosestCommonParent(mask4).should.eql(img1);
+        mask3.getClosestCommonParent(mask6).should.eql(img1);
 
 
     });
@@ -59,15 +58,15 @@ describe('getClosestCommonParent', function () {
         );
 
         let mask1 = img1.mask();
-        let mask2 = mask1.crop();
+        let mask2 = mask1.scale({factor: 0.2});
         let mask3 = img1.mask();
-        let mask4 = mask3.crop();
+        let mask4 = mask3.scale({factor: 2});
         let mask5 = mask4.rotate(90);
-        let mask6 = mask5.scale({factor: 2});
-        let mask7 = mask6.crop();
-        getClosestCommonParent(mask2, mask5).should.eql(img1);
-        getClosestCommonParent(mask2, mask6).should.eql(img1);
-        getClosestCommonParent(mask2, mask7).should.eql(img1);
+        let mask6 = mask5.scale({factor: 0.5});
+        let mask7 = mask6.scale({factor: 2});
+        mask2.getClosestCommonParent(mask5).should.eql(img1);
+        mask2.getClosestCommonParent(mask6).should.eql(img1);
+        mask2.getClosestCommonParent(mask7).should.eql(img1);
 
     });
 
@@ -84,17 +83,17 @@ describe('getClosestCommonParent', function () {
         );
 
         let mask1 = img1.mask();
-        let mask2 = mask1.crop();
+        let mask2 = mask1.scale({factor: 2});
         let mask3 = mask2.scale({factor: 0.5});
-        let mask4 = mask3.crop();
+        let mask4 = mask3.scale({factor: 0.1});
         let mask5 = mask4.rotate(90);
         let mask6 = mask4.scale({factor: 2});
-        let mask7 = mask5.crop();
+        let mask7 = mask5.scale({factor: 1.5});
         let mask8 = mask6.rotate(180);
         //console.log(getClosestCommonParent(mask2, mask3));
         //getClosestCommonParent(mask2, mask3).should.eql(img1);
-        getClosestCommonParent(mask5, mask6).should.eql(mask4);
-        getClosestCommonParent(mask7, mask8).should.eql(mask4);
+        mask5.getClosestCommonParent(mask6).should.eql(mask4);
+        mask7.getClosestCommonParent(mask8).should.eql(mask4);
     });
 
     it('correct common parent for one mask having the other as an ancestor', function () {
@@ -110,11 +109,11 @@ describe('getClosestCommonParent', function () {
         );
 
         let mask1 = img1.mask();
-        let mask2 = mask1.crop();
+        let mask2 = mask1.scale({factor: 0.5});
         let mask3 = mask2.scale({factor: 0.5});
-        let mask4 = mask3.crop();
-        getClosestCommonParent(mask2, mask3).should.eql(mask2);
-        getClosestCommonParent(mask3, mask4).should.eql(mask3);
+        let mask4 = mask3.scale({factor: 0.5});
+        mask2.getClosestCommonParent(mask3).should.eql(mask2);
+        mask3.getClosestCommonParent(mask4).should.eql(mask3);
     });
 
     it('common parent for one mask and original image is original image', function () {
@@ -130,7 +129,7 @@ describe('getClosestCommonParent', function () {
         );
 
         let mask1 = img1.mask();
-        getClosestCommonParent(img1, mask1).should.eql(img1);
+        img1.getClosestCommonParent(mask1).should.eql(img1);
     });
 
     it('common parent for masks with different original images', function () {
@@ -158,6 +157,6 @@ describe('getClosestCommonParent', function () {
         let mask1 = img1.mask();
         let mask2 = img2.mask();
 
-        getClosestCommonParent(mask1, mask2).should.eql(img1);
+        mask1.getClosestCommonParent(mask2).should.eql(img1);
     });
 });

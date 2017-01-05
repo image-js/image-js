@@ -1,27 +1,25 @@
 /**
  * Finds common parent between two different masks
- * @param {Image} - a mask (1 bit image)
- * @param {Image} - a mask (1 bit image)
- * @returns {Image} - the lowest common parent of both masks or throws error if no common parent
+ * @param {Image} mask - a mask (1 bit image)
+ * @returns {Image} - the lowest common parent of both masks
  */
-export default function getClosestCommonParent(mask2) {
-    let mask1 = this;
-    let depthMask1 = getDepth(mask1);
-    let depthMask2 = getDepth(mask2);
+export default function getClosestCommonParent(mask) {
+    let depthMask1 = getDepth(this);
+    let depthMask2 = getDepth(mask);
 
     let furthestParent;
     if (depthMask1 >= depthMask2) {
-        furthestParent = getFurthestParent(mask1, depthMask1);
+        furthestParent = getFurthestParent(this, depthMask1);
     } else {
-        furthestParent = getFurthestParent(mask2, depthMask2);
+        furthestParent = getFurthestParent(mask, depthMask2);
     }
 
     if (depthMask1 === 0 || depthMask2 === 0) {
         //comparing with at least one original image -> no common parent
         return furthestParent;
     }
-    let m1 = mask1;
-    let m2 = mask2;
+    let m1 = this;
+    let m2 = mask;
 
 
     while (depthMask1 !== depthMask2) {
