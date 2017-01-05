@@ -2,7 +2,6 @@ language: node_js
 node_js:
   - node
   - lts/boron # v6
-  - lts/argon # v4
 script: "npm run test-travis"
 after_script: "bash <(curl -s https://codecov.io/bash)"
 addons:
