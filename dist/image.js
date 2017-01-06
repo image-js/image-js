@@ -21533,7 +21533,7 @@ exports.default = Image;
 (0, _bitMethods2.default)(Image);
 
 }).call(this,require("buffer").Buffer)
-},{"../stack/Stack":256,"../util/base64":266,"./bitMethods":152,"./environment":165,"./extend":166,"./kind":187,"./kindNames":188,"./load":189,"./mediaTypes":190,"./model/model":191,"./roi/manager":207,"blob-util":5,"buffer":7,"extend":34,"fast-bmp":38,"fs":7,"has-own":48}],152:[function(require,module,exports){
+},{"../stack/Stack":258,"../util/base64":268,"./bitMethods":152,"./environment":165,"./extend":166,"./kind":187,"./kindNames":188,"./load":189,"./mediaTypes":190,"./model/model":191,"./roi/manager":207,"blob-util":5,"buffer":7,"extend":34,"fast-bmp":38,"fs":7,"has-own":48}],152:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -22056,7 +22056,7 @@ function mean() {
     return result;
 }
 
-},{"../../util/histogram":271}],159:[function(require,module,exports){
+},{"../../util/histogram":273}],159:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22082,7 +22082,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":271}],160:[function(require,module,exports){
+},{"../../util/histogram":273}],160:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22169,9 +22169,14 @@ exports.default = getRelativePosition;
  * @memberof Image
  * @instance
  * @param {Image} targetImage
+ * @param {Object} [options={}]
+ * @param {boolean} [options.defaultFurther=false] If set to true and no parent found returns the relative position
+ *      to the further parent
  * @return {number[]|boolean}
  */
 function getRelativePosition(targetImage) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
     if (this === targetImage) {
         return [0, 0];
     }
@@ -22190,6 +22195,8 @@ function getRelativePosition(targetImage) {
     }
     // we should never reach this place, this means we could not find the parent
     // throw Error('Parent image was not found, can not get relative position.')
+    if (options.defaultFurther) return position;
+
     return false;
 }
 
@@ -22524,6 +22531,14 @@ var _getPixelsArray = require('./utility/getPixelsArray');
 
 var _getPixelsArray2 = _interopRequireDefault(_getPixelsArray);
 
+var _getIntersection = require('./utility/getIntersection');
+
+var _getIntersection2 = _interopRequireDefault(_getIntersection);
+
+var _getClosestCommonParent = require('./utility/getClosestCommonParent');
+
+var _getClosestCommonParent2 = _interopRequireDefault(_getClosestCommonParent);
+
 var _paintMasks = require('./operator/paintMasks');
 
 var _paintMasks2 = _interopRequireDefault(_paintMasks);
@@ -22656,6 +22671,8 @@ function extend(Image) {
     Image.extendMethod('getMatrix', _getMatrix2.default);
     Image.extendMethod('setMatrix', _setMatrix2.default);
     Image.extendMethod('getPixelsArray', _getPixelsArray2.default);
+    Image.extendMethod('getIntersection', _getIntersection2.default);
+    Image.extendMethod('getClosestCommonParent', _getClosestCommonParent2.default);
 
     Image.extendMethod('split', _split2.default);
     Image.extendMethod('getChannel', _getChannel2.default);
@@ -22690,7 +22707,7 @@ function extend(Image) {
 
 // operators
 
-},{"./compute/colorHistogram":153,"./compute/countAlphaPixels":154,"./compute/histogram":155,"./compute/localMaxima":156,"./compute/max":157,"./compute/mean":158,"./compute/median":159,"./compute/min":160,"./compute/points":161,"./compute/relativePosition":162,"./compute/sum":163,"./compute/svd":164,"./filter/add":167,"./filter/background":168,"./filter/blurFilter":169,"./filter/divide":170,"./filter/flipX":171,"./filter/flipY":172,"./filter/gaussianFilter":173,"./filter/hypotenuse":174,"./filter/invert":175,"./filter/invertApply":176,"./filter/invertBinaryLoop":177,"./filter/invertGetSet":178,"./filter/invertIterator":179,"./filter/invertOneLoop":180,"./filter/invertPixel":181,"./filter/level":182,"./filter/medianFilter":183,"./filter/multiply":184,"./filter/sobelFilter":185,"./filter/subtract":186,"./operator/convolution":192,"./operator/convolutionFft":193,"./operator/extract":194,"./operator/floodFill":195,"./operator/paintLabels":196,"./operator/paintMasks":197,"./operator/paintPoints":198,"./transform/cmyk":208,"./transform/colorDepth":209,"./transform/crop":210,"./transform/cropAlpha":211,"./transform/grey":212,"./transform/hsl":214,"./transform/hsv":215,"./transform/mask/mask":220,"./transform/pad":233,"./transform/rgba8":234,"./transform/rotate":235,"./transform/scale/scale":238,"./utility/combineChannels":239,"./utility/getBestMatch":241,"./utility/getChannel":242,"./utility/getColumn":243,"./utility/getMatrix":244,"./utility/getPixelsArray":245,"./utility/getPixelsGrid":246,"./utility/getRow":247,"./utility/getSimilarity":248,"./utility/setBorder":249,"./utility/setChannel":250,"./utility/setMatrix":251,"./utility/split":252}],167:[function(require,module,exports){
+},{"./compute/colorHistogram":153,"./compute/countAlphaPixels":154,"./compute/histogram":155,"./compute/localMaxima":156,"./compute/max":157,"./compute/mean":158,"./compute/median":159,"./compute/min":160,"./compute/points":161,"./compute/relativePosition":162,"./compute/sum":163,"./compute/svd":164,"./filter/add":167,"./filter/background":168,"./filter/blurFilter":169,"./filter/divide":170,"./filter/flipX":171,"./filter/flipY":172,"./filter/gaussianFilter":173,"./filter/hypotenuse":174,"./filter/invert":175,"./filter/invertApply":176,"./filter/invertBinaryLoop":177,"./filter/invertGetSet":178,"./filter/invertIterator":179,"./filter/invertOneLoop":180,"./filter/invertPixel":181,"./filter/level":182,"./filter/medianFilter":183,"./filter/multiply":184,"./filter/sobelFilter":185,"./filter/subtract":186,"./operator/convolution":192,"./operator/convolutionFft":193,"./operator/extract":194,"./operator/floodFill":195,"./operator/paintLabels":196,"./operator/paintMasks":197,"./operator/paintPoints":198,"./transform/cmyk":208,"./transform/colorDepth":209,"./transform/crop":210,"./transform/cropAlpha":211,"./transform/grey":212,"./transform/hsl":214,"./transform/hsv":215,"./transform/mask/mask":220,"./transform/pad":233,"./transform/rgba8":234,"./transform/rotate":235,"./transform/scale/scale":238,"./utility/combineChannels":239,"./utility/getBestMatch":241,"./utility/getChannel":242,"./utility/getClosestCommonParent":243,"./utility/getColumn":244,"./utility/getIntersection":245,"./utility/getMatrix":246,"./utility/getPixelsArray":247,"./utility/getPixelsGrid":248,"./utility/getRow":249,"./utility/getSimilarity":250,"./utility/setBorder":251,"./utility/setChannel":252,"./utility/setMatrix":253,"./utility/split":254}],167:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22744,7 +22761,7 @@ function add(value) {
     return this;
 }
 
-},{"../../util/channel":267,"../../util/value":275}],168:[function(require,module,exports){
+},{"../../util/channel":269,"../../util/value":277}],168:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22884,7 +22901,7 @@ function divide(value) {
     return this;
 }
 
-},{"../../util/channel":267,"../../util/value":275}],171:[function(require,module,exports){
+},{"../../util/channel":269,"../../util/value":277}],171:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23139,7 +23156,7 @@ function hypotenuse(otherImage) {
     return newImage;
 }
 
-},{"../../util/channel":267,"../Image":151}],175:[function(require,module,exports){
+},{"../../util/channel":269,"../Image":151}],175:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23193,7 +23210,7 @@ function invert() {
     return this;
 } // we try the faster methods
 
-},{"../../util/channel":267}],176:[function(require,module,exports){
+},{"../../util/channel":269}],176:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23464,7 +23481,7 @@ function processImage(image, min, max, channels) {
     }
 }
 
-},{"../../util/channel":267,"new-array":118}],183:[function(require,module,exports){
+},{"../../util/channel":269,"new-array":118}],183:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23554,7 +23571,7 @@ function medianFilter() {
     return newImage;
 } //End median function
 
-},{"../../util/channel":267,"../Image":151,"num-sort":119}],184:[function(require,module,exports){
+},{"../../util/channel":269,"../Image":151,"num-sort":119}],184:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23609,7 +23626,7 @@ function multiply(value) {
     return this;
 }
 
-},{"../../util/channel":267,"../../util/value":275}],185:[function(require,module,exports){
+},{"../../util/channel":269,"../../util/value":277}],185:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23665,7 +23682,7 @@ function sobelFilter() {
     return gX.hypotenuse(gY, { bitDepth: this.bitDepth, channels: channels });
 }
 
-},{"../../util/kernels":273,"../operator/convolution":192}],186:[function(require,module,exports){
+},{"../../util/kernels":275,"../operator/convolution":192}],186:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -23717,7 +23734,7 @@ function subtract(value) {
     return this;
 }
 
-},{"../../util/channel":267,"../../util/value":275}],187:[function(require,module,exports){
+},{"../../util/channel":269,"../../util/value":277}],187:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24030,7 +24047,7 @@ function loadGeneric(url, options) {
     });
 }
 
-},{"../stack/Stack":256,"../util/base64":266,"./Image":151,"./environment":165,"fast-jpeg":40,"fast-png":43,"image-type":50,"tiff":142}],190:[function(require,module,exports){
+},{"../stack/Stack":258,"../util/base64":268,"./Image":151,"./environment":165,"fast-jpeg":40,"fast-png":43,"image-type":50,"tiff":142}],190:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24243,7 +24260,7 @@ function convolution(kernel) {
     return newImage;
 }
 
-},{"../../util/channel":267,"../../util/kernel":272,"../Image":151,"ml-matrix-convolution":82}],193:[function(require,module,exports){
+},{"../../util/channel":269,"../../util/kernel":274,"../Image":151,"ml-matrix-convolution":82}],193:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24524,7 +24541,7 @@ function paintLabels(labels, positions) {
     return this;
 }
 
-},{"../../util/color":268,"../model/model":191}],197:[function(require,module,exports){
+},{"../../util/color":270,"../model/model":191}],197:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24644,7 +24661,7 @@ function paintMasks(masks) {
     return this;
 }
 
-},{"../../util/color":268,"../model/model":191}],198:[function(require,module,exports){
+},{"../../util/color":270,"../model/model":191}],198:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -24705,7 +24722,7 @@ function paintPoints(points) {
     return this;
 }
 
-},{"../../util/Shape":265,"../model/model":191}],199:[function(require,module,exports){
+},{"../../util/Shape":267,"../model/model":191}],199:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -25337,7 +25354,7 @@ function getInternalIDs(roi) {
     return internal;
 }
 
-},{"../../util/Shape":265,"../Image":151,"../kindNames":188}],200:[function(require,module,exports){
+},{"../../util/Shape":267,"../Image":151,"../kindNames":188}],200:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26002,7 +26019,7 @@ function fromPoints(pointsToPaint) {
     return new _RoiMap2.default(this, data);
 }
 
-},{"../RoiMap":201,"./../../../util/Shape":265}],206:[function(require,module,exports){
+},{"../RoiMap":201,"./../../../util/Shape":267}],206:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26120,7 +26137,7 @@ function fromWaterShed() {
     return new _RoiMap2.default(currentImage, data);
 }
 
-},{"../RoiMap":201,"./../../../util/dxdy.js":270,"js-priority-queue":60}],207:[function(require,module,exports){
+},{"../RoiMap":201,"./../../../util/dxdy.js":272,"js-priority-queue":60}],207:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -26727,6 +26744,10 @@ function crop() {
         _options$height = options.height,
         height = _options$height === undefined ? this.height - y : _options$height;
 
+
+    this.checkProcessable('max', {
+        bitDepth: [8, 16]
+    });
 
     x = Math.round(x);
     y = Math.round(y);
@@ -27598,7 +27619,7 @@ function mask() {
     return newImage;
 }
 
-},{"../../../util/converter":269,"../../Image":151,"./maskAlgorithms":221}],221:[function(require,module,exports){
+},{"../../../util/converter":271,"../../Image":151,"./maskAlgorithms":221}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29024,7 +29045,7 @@ function scale() {
     return newImage;
 }
 
-},{"../../../util/converter":269,"../../Image":151,"./nearestNeighbor":237}],239:[function(require,module,exports){
+},{"../../../util/converter":271,"../../Image":151,"./nearestNeighbor":237}],239:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29193,7 +29214,7 @@ function match(image) {
     return [currentX - middleX, currentY - middleY];
 }
 
-},{"../../util/matrix":274}],242:[function(require,module,exports){
+},{"../../util/matrix":276}],242:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29256,7 +29277,97 @@ function getChannel(channel) {
     return newImage;
 }
 
-},{"../Image":151,"./../../util/channel":267}],243:[function(require,module,exports){
+},{"../Image":151,"./../../util/channel":269}],243:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = getClosestCommonParent;
+/**
+ * Finds common parent between two different masks
+ * @param {Image} mask - a mask (1 bit image)
+ * @returns {Image} - the lowest common parent of both masks
+ */
+function getClosestCommonParent(mask) {
+    var depthMask1 = getDepth(this);
+    var depthMask2 = getDepth(mask);
+
+    var furthestParent = void 0;
+    if (depthMask1 >= depthMask2) {
+        furthestParent = getFurthestParent(this, depthMask1);
+    } else {
+        furthestParent = getFurthestParent(mask, depthMask2);
+    }
+
+    if (depthMask1 === 0 || depthMask2 === 0) {
+        //comparing with at least one original image -> no common parent
+        return furthestParent;
+    }
+    var m1 = this;
+    var m2 = mask;
+
+    while (depthMask1 !== depthMask2) {
+        if (depthMask1 > depthMask2) {
+            m1 = m1.parent;
+            if (m1 === undefined) {
+                return furthestParent;
+            }
+            depthMask1 = depthMask1 - 1;
+        } else {
+            m2 = m2.parent;
+            if (m2 === undefined) {
+                return furthestParent;
+            }
+            depthMask2 = depthMask2 - 1;
+        }
+    }
+
+    while (m1 !== m2 && typeof m1 !== undefined && typeof m2 !== undefined) {
+        m1 = m1.parent;
+        m2 = m2.parent;
+        if (m1 === undefined || m2 === undefined) {
+            return furthestParent;
+        }
+    }
+
+    //TODO
+    //no common parent, use parent at top of hierarchy of m1
+    //we assume it works for now
+    if (m1 !== m2) {
+        return furthestParent;
+    }
+
+    return m1;
+}
+
+/**
+ * Find the depth of the mask with respect to its arborescence.
+ * Helper function to find the common parent between two masks.
+ * @param {Image} - a mask (1 bit Image)
+ * @return {number} - depth of mask
+ */
+function getDepth(mask) {
+    var d = 0;
+    var m = mask;
+    //a null parent means it's the original image
+    while (m.parent != null) {
+        m = m.parent;
+        d++;
+    }
+    return d;
+}
+
+function getFurthestParent(mask, depth) {
+    var m = mask;
+    while (depth > 0) {
+        m = m.parent;
+        depth = depth - 1;
+    }
+    return m;
+}
+
+},{}],244:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29290,7 +29401,121 @@ function getColumn(column) {
     return array;
 }
 
-},{}],244:[function(require,module,exports){
+},{}],245:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = getIntersection;
+/**
+ * Find intersection of points between two different masks
+ * @param {Image} - a mask (1 bit image)
+ * @param {Image} - a mask (1 bit image)
+ * @return {Object} - object containing number of white pixels for mask1, for mask 2 and for them both
+ */
+function getIntersection(mask2) {
+
+    var mask1 = this;
+    var closestParent = mask1.getClosestCommonParent(mask2);
+
+    var startPos1 = mask1.getRelativePosition(closestParent, { defaultFurther: true });
+    var allRelPos1 = getRelativePositionForAllPixels(mask1, startPos1);
+    var startPos2 = mask2.getRelativePosition(closestParent, { defaultFurther: true });
+    var allRelPos2 = getRelativePositionForAllPixels(mask2, startPos2);
+
+    var commonSurface = getCommonSurface(allRelPos1, allRelPos2);
+    //console.log('commonSurface: ' + commonSurface);
+    var intersection = { whitePixelsMask1: [], whitePixelsMask2: [], commonWhitePixels: [] };
+
+    for (var i = 0; i < commonSurface.length; i++) {
+        var currentRelativePos = commonSurface[i];
+        var realPos1 = [currentRelativePos[0] - startPos1[0], currentRelativePos[1] - startPos1[1]];
+        var realPos2 = [currentRelativePos[0] - startPos2[0], currentRelativePos[1] - startPos2[1]];
+        var valueBitMask1 = mask1.getBitXY(realPos1[0], realPos1[1]);
+        var valueBitMask2 = mask2.getBitXY(realPos2[0], realPos2[1]);
+        //console.log('valueBitMask1: ' + valueBitMask1 + ', valueBitMask2: ' + valueBitMask2);
+
+        if (valueBitMask1 === 1 && valueBitMask2 === 1) {
+            intersection.commonWhitePixels.push(currentRelativePos);
+        }
+    }
+
+    for (var _i = 0; _i < allRelPos1.length; _i++) {
+        var posX = void 0;
+        var posY = void 0;
+        if (_i !== 0) {
+            posX = Math.floor(_i / (mask1.width - 1));
+            posY = _i % (mask1.width - 1);
+        }
+        if (mask1.getBitXY(posX, posY) === 1) {
+            //console.log("white px mask1 : " + allRelPos1[i]);
+            intersection.whitePixelsMask1.push(allRelPos1[_i]);
+        }
+    }
+
+    for (var _i2 = 0; _i2 < allRelPos2.length; _i2++) {
+        var _posX = 0;
+        var _posY = 0;
+        if (_i2 !== 0) {
+            _posX = Math.floor(_i2 / (mask2.width - 1));
+            _posY = _i2 % (mask2.width - 1);
+        }
+        if (mask2.getBitXY(_posX, _posY) === 1) {
+            //console.log("white px mask2 : " + allRelPos2[i]);
+            intersection.whitePixelsMask2.push(allRelPos2[_i2]);
+        }
+    }
+
+    return intersection;
+}
+
+/**
+ * Get relative position array for all pixels in masks
+ * @param {Image} - a mask (1 bit image)
+ * @param {Array} - number array, start position of mask relative to parent
+ * @returns {Array} - relative position of all pixels
+ */
+function getRelativePositionForAllPixels(mask, startPosition) {
+    //console.log('startPosition: ' + startPosition);
+    var relativePositions = [];
+    for (var i = 0; i < mask.height; i++) {
+        for (var j = 0; j < mask.width; j++) {
+            var originalPos = [i, j];
+            //console.log([originalPos[0] + startPosition[0], originalPos[1] + startPosition[1]]);
+            relativePositions.push([originalPos[0] + startPosition[0], originalPos[1] + startPosition[1]]);
+        }
+    }
+    //console.log('relativePositions: ' + relativePositions);
+    return relativePositions;
+}
+
+/**
+ * Finds common surface for two arrays containing the positions of the pixels relative to parent image
+ * @param {Array} - number array containing positions of pixels relative to parent
+ * @param {Array} - number array containing positions of pixels relative to parent
+ * @returns {Array} - number array containing positions of common pixels for both arrays
+ */
+function getCommonSurface(positionArray1, positionArray2) {
+    var i = 0;
+    var j = 0;
+    var commonSurface = [];
+    while (i < positionArray1.length && j < positionArray2.length) {
+        if (positionArray1[i][0] === positionArray2[j][0] && positionArray1[i][1] === positionArray2[j][1]) {
+            commonSurface.push(positionArray1[i]);
+            i++;
+            j++;
+        } else if (positionArray1[i][0] < positionArray2[j][0] || positionArray1[i][0] === positionArray2[j][0] && positionArray1[i][1] < positionArray2[j][1]) {
+            i++;
+        } else {
+            j++;
+        }
+    }
+    //console.log('commonSurface: ', commonSurface);
+    return commonSurface;
+}
+
+},{}],246:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29336,7 +29561,7 @@ function getMatrix() {
     return matrix;
 }
 
-},{"ml-matrix":91}],245:[function(require,module,exports){
+},{"ml-matrix":91}],247:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29368,7 +29593,7 @@ function getPixelsArray() {
     return array;
 }
 
-},{}],246:[function(require,module,exports){
+},{}],248:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29442,7 +29667,7 @@ function getPixelsGrid() {
     return toReturn;
 }
 
-},{}],247:[function(require,module,exports){
+},{}],249:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29477,7 +29702,7 @@ function getRow(row) {
     return array;
 }
 
-},{}],248:[function(require,module,exports){
+},{}],250:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29566,7 +29791,7 @@ function getSimilarity(image) {
     return results;
 }
 
-},{"./../../util/channel":267,"new-array":118}],249:[function(require,module,exports){
+},{"./../../util/channel":269,"new-array":118}],251:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29653,7 +29878,7 @@ function setBorder() {
     return this;
 }
 
-},{"new-array":118}],250:[function(require,module,exports){
+},{"new-array":118}],252:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29697,7 +29922,7 @@ function setChannel(channel, image) {
     return this;
 }
 
-},{"./../../util/channel":267}],251:[function(require,module,exports){
+},{"./../../util/channel":269}],253:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29738,7 +29963,7 @@ function setMatrix(matrix) {
     }
 }
 
-},{}],252:[function(require,module,exports){
+},{}],254:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29813,7 +30038,7 @@ function split() {
     return images;
 }
 
-},{"../../stack/Stack":256,"../Image":151}],253:[function(require,module,exports){
+},{"../../stack/Stack":258,"../Image":151}],255:[function(require,module,exports){
 'use strict';
 
 var _environment = require('./image/environment');
@@ -29843,7 +30068,7 @@ if (_environment.env === 'browser') {
     exports.Worker = require('./worker/worker').default;
 }
 
-},{"./image/Image":151,"./image/environment":165,"./image/transform/greyAlgorithms":213,"./image/transform/mask/maskAlgorithms":221,"./kernel/kernel":254,"./stack/Stack":256,"./util/Shape":265,"./worker/worker":278,"array-includes":2}],254:[function(require,module,exports){
+},{"./image/Image":151,"./image/environment":165,"./image/transform/greyAlgorithms":213,"./image/transform/mask/maskAlgorithms":221,"./kernel/kernel":256,"./stack/Stack":258,"./util/Shape":267,"./worker/worker":280,"array-includes":2}],256:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29871,7 +30096,7 @@ Object.defineProperty(exports, 'laplacianOfGaussian', {
   }
 });
 
-},{"../util/kernels":273,"./laplacianOfGaussian":255}],255:[function(require,module,exports){
+},{"../util/kernels":275,"./laplacianOfGaussian":257}],257:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29904,7 +30129,7 @@ function laplacianOfGaussian(sigma, nPoints, factor) {
     return kernel;
 }
 
-},{}],256:[function(require,module,exports){
+},{}],258:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30069,7 +30294,7 @@ if (!Array[Symbol.species]) {
 
 (0, _extend2.default)(Stack);
 
-},{"../image/Image":151,"./extend":262,"has-own":48}],257:[function(require,module,exports){
+},{"../image/Image":151,"./extend":264,"has-own":48}],259:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30097,7 +30322,7 @@ function histogram(options) {
     return histogram;
 }
 
-},{}],258:[function(require,module,exports){
+},{}],260:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30128,7 +30353,7 @@ function histograms(options) {
     return histograms;
 }
 
-},{}],259:[function(require,module,exports){
+},{}],261:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30155,7 +30380,7 @@ function max() {
     return max;
 }
 
-},{}],260:[function(require,module,exports){
+},{}],262:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30185,7 +30410,7 @@ function median() {
     return result;
 }
 
-},{"../../util/histogram":271}],261:[function(require,module,exports){
+},{"../../util/histogram":273}],263:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30211,7 +30436,7 @@ function min() {
     return min;
 }
 
-},{}],262:[function(require,module,exports){
+},{}],264:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30262,7 +30487,7 @@ function extend(Stack) {
     Stack.extendMethod('getAverage', _average2.default);
 }
 
-},{"./compute/histogram":257,"./compute/histograms":258,"./compute/max":259,"./compute/median":260,"./compute/min":261,"./transform/matchAndCrop":263,"./utility/average":264}],263:[function(require,module,exports){
+},{"./compute/histogram":259,"./compute/histograms":260,"./compute/max":261,"./compute/median":262,"./compute/min":263,"./transform/matchAndCrop":265,"./utility/average":266}],265:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30374,7 +30599,7 @@ function matchAndCrop() {
     return new _Stack2.default(newImages);
 }
 
-},{"../Stack":256}],264:[function(require,module,exports){
+},{"../Stack":258}],266:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30416,7 +30641,7 @@ function average() {
     return image;
 }
 
-},{"../../image/Image":151}],265:[function(require,module,exports){
+},{"../../image/Image":151}],267:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30622,7 +30847,7 @@ function triangle(width, height, options) {
     return matrix;
 }
 
-},{"../image/Image":151,"../image/kindNames":188,"ml-matrix":91}],266:[function(require,module,exports){
+},{"../image/Image":151,"../image/kindNames":188,"ml-matrix":91}],268:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30701,7 +30926,7 @@ function decode(base64) {
     return bytes;
 }
 
-},{}],267:[function(require,module,exports){
+},{}],269:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30858,7 +31083,7 @@ function validateChannel(image, channel) {
     return channel;
 }
 
-},{"../image/model/model":191}],268:[function(require,module,exports){
+},{"../image/model/model":191}],270:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -30937,7 +31162,7 @@ function getRandomColor() {
     return [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)];
 }
 
-},{"color-functions":8}],269:[function(require,module,exports){
+},{"color-functions":8}],271:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31007,7 +31232,7 @@ function factorDimensions(factor, width, height) {
     };
 }
 
-},{}],270:[function(require,module,exports){
+},{}],272:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31016,7 +31241,7 @@ Object.defineProperty(exports, "__esModule", {
 var dxs = exports.dxs = [+1, 0, -1, 0, +1, +1, -1, -1];
 var dys = exports.dys = [0, +1, 0, -1, +1, -1, +1, -1];
 
-},{}],271:[function(require,module,exports){
+},{}],273:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31080,7 +31305,7 @@ function mean(histogram) {
     return sum / total;
 }
 
-},{}],272:[function(require,module,exports){
+},{}],274:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31129,7 +31354,7 @@ function validateKernel(kernel) {
     return { kernel: kernel, kWidth: kWidth, kHeight: kHeight };
 }
 
-},{"is-integer":57}],273:[function(require,module,exports){
+},{"is-integer":57}],275:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31147,7 +31372,7 @@ var SECOND_DERIVATIVE = exports.SECOND_DERIVATIVE = [[-1, -2, 0, 2, 1], [-2, -4,
 
 var SECOND_DERIVATIVE_INV = exports.SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
 
-},{}],274:[function(require,module,exports){
+},{}],276:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31218,7 +31443,7 @@ Matrix.prototype.localSearch = function (x, y, value) {
     return results;
 };
 
-},{}],275:[function(require,module,exports){
+},{}],277:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31253,7 +31478,7 @@ function checkNumberArray(value) {
     }
 }
 
-},{"../image/Image":151,"is-array-type":53}],276:[function(require,module,exports){
+},{"../image/Image":151,"is-array-type":53}],278:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31271,7 +31496,7 @@ function extend(Worker) {
     Worker.extendMethod('background', _background2.default);
 }
 
-},{"./process/background":277}],277:[function(require,module,exports){
+},{"./process/background":279}],279:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31371,7 +31596,7 @@ function work() {
 
 exports.default = { run: run, work: work };
 
-},{"../../image/Image":151,"extend":34}],278:[function(require,module,exports){
+},{"../../image/Image":151,"extend":34}],280:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -31443,5 +31668,5 @@ class Worker {
 
 exports.default = new Worker();
 
-},{"./extend":276,"web-worker-manager":149}]},{},[253])(253)
+},{"./extend":278,"web-worker-manager":149}]},{},[255])(255)
 });
