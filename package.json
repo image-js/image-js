@@ -62,7 +62,7 @@
     "babelify": "^7.2.0",
     "babili": "0.0.9",
     "benchmark": "^2.1.0",
-    "better-console": "^0.2.4",
+    "better-console": "^1.0.0",
     "browserify": "^13.1.0",
     "documentation": "4.0.0-beta16",
     "eslint": "^3.12.1",
