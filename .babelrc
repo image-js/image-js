@@ -1,4 +1,10 @@
 {
-  "presets": ["es2015-node4"],
+  "presets": [
+    ["env", {
+      "targets": {
+        "node": 6
+      }
+    }]
+  ],
   "plugins": ["transform-es2015-block-scoping"]
 }
