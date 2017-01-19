@@ -96,7 +96,7 @@
     "fast-list": "^1.0.3",
     "fast-png": "^1.1.0",
     "has-own": "^1.0.0",
-    "image-type": "^2.1.0",
+    "image-type": "^3.0.0",
     "is-array-type": "^1.0.0",
     "is-integer": "^1.0.6",
     "js-priority-queue": "^0.1.5",
