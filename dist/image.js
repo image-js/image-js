@@ -7417,7 +7417,7 @@ function abstractMatrix(superCtor) {
             }
             var newMatrix = this.constructor.empty(this.rows, this.columns);
             for (var i = 0; i < this.rows; i++) {
-                var scaled = arrayUtils.scale(this.getRow(i), { min: min, max: max });
+                var scaled = arrayUtils.scale(this.getRow(i), { min, max });
                 newMatrix.setRow(i, scaled);
             }
             return newMatrix;
@@ -7899,16 +7899,37 @@ function abstractMatrix(superCtor) {
 
     var i;
 
-    for (var operator of operators) {
-        var inplaceOp = eval(fillTemplateFunction(inplaceOperator, { name: operator[1], op: operator[0] }));
-        var inplaceOpS = eval(fillTemplateFunction(inplaceOperatorScalar, { name: operator[1] + 'S', op: operator[0] }));
-        var inplaceOpM = eval(fillTemplateFunction(inplaceOperatorMatrix, { name: operator[1] + 'M', op: operator[0] }));
-        var staticOp = eval(fillTemplateFunction(staticOperator, { name: operator[1] }));
-        for (i = 1; i < operator.length; i++) {
-            Matrix.prototype[operator[i]] = inplaceOp;
-            Matrix.prototype[operator[i] + 'S'] = inplaceOpS;
-            Matrix.prototype[operator[i] + 'M'] = inplaceOpM;
-            Matrix[operator[i]] = staticOp;
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = operators[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var operator = _step.value;
+
+            var inplaceOp = eval(fillTemplateFunction(inplaceOperator, { name: operator[1], op: operator[0] }));
+            var inplaceOpS = eval(fillTemplateFunction(inplaceOperatorScalar, { name: operator[1] + 'S', op: operator[0] }));
+            var inplaceOpM = eval(fillTemplateFunction(inplaceOperatorMatrix, { name: operator[1] + 'M', op: operator[0] }));
+            var staticOp = eval(fillTemplateFunction(staticOperator, { name: operator[1] }));
+            for (i = 1; i < operator.length; i++) {
+                Matrix.prototype[operator[i]] = inplaceOp;
+                Matrix.prototype[operator[i] + 'S'] = inplaceOpS;
+                Matrix.prototype[operator[i] + 'M'] = inplaceOpM;
+                Matrix[operator[i]] = staticOp;
+            }
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
         }
     }
 
@@ -7918,48 +7939,90 @@ function abstractMatrix(superCtor) {
         methods.push(['Math.' + mathMethod, mathMethod]);
     });
 
-    for (var method of methods) {
-        var inplaceMeth = eval(fillTemplateFunction(inplaceMethod, { name: method[1], method: method[0] }));
-        var staticMeth = eval(fillTemplateFunction(staticMethod, { name: method[1] }));
-        for (i = 1; i < method.length; i++) {
-            Matrix.prototype[method[i]] = inplaceMeth;
-            Matrix[method[i]] = staticMeth;
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+        for (var _iterator2 = methods[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var method = _step2.value;
+
+            var inplaceMeth = eval(fillTemplateFunction(inplaceMethod, { name: method[1], method: method[0] }));
+            var staticMeth = eval(fillTemplateFunction(staticMethod, { name: method[1] }));
+            for (i = 1; i < method.length; i++) {
+                Matrix.prototype[method[i]] = inplaceMeth;
+                Matrix[method[i]] = staticMeth;
+            }
+        }
+    } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
+            }
+        } finally {
+            if (_didIteratorError2) {
+                throw _iteratorError2;
+            }
         }
     }
 
     var methodsWithArgs = [['Math.pow', 1, 'pow']];
 
-    for (var methodWithArg of methodsWithArgs) {
-        var args = 'arg0';
-        for (i = 1; i < methodWithArg[1]; i++) {
-            args += `, arg${ i }`;
-        }
-        if (methodWithArg[1] !== 1) {
-            var inplaceMethWithArgs = eval(fillTemplateFunction(inplaceMethodWithArgs, {
-                name: methodWithArg[2],
-                method: methodWithArg[0],
-                args: args
-            }));
-            var staticMethWithArgs = eval(fillTemplateFunction(staticMethodWithArgs, { name: methodWithArg[2], args: args }));
-            for (i = 2; i < methodWithArg.length; i++) {
-                Matrix.prototype[methodWithArg[i]] = inplaceMethWithArgs;
-                Matrix[methodWithArg[i]] = staticMethWithArgs;
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
+
+    try {
+        for (var _iterator3 = methodsWithArgs[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+            var methodWithArg = _step3.value;
+
+            var args = 'arg0';
+            for (i = 1; i < methodWithArg[1]; i++) {
+                args += `, arg${ i }`;
             }
-        } else {
-            var tmplVar = {
-                name: methodWithArg[2],
-                args: args,
-                method: methodWithArg[0]
-            };
-            var inplaceMethod2 = eval(fillTemplateFunction(inplaceMethodWithOneArg, tmplVar));
-            var inplaceMethodS = eval(fillTemplateFunction(inplaceMethodWithOneArgScalar, tmplVar));
-            var inplaceMethodM = eval(fillTemplateFunction(inplaceMethodWithOneArgMatrix, tmplVar));
-            var staticMethod2 = eval(fillTemplateFunction(staticMethodWithOneArg, tmplVar));
-            for (i = 2; i < methodWithArg.length; i++) {
-                Matrix.prototype[methodWithArg[i]] = inplaceMethod2;
-                Matrix.prototype[methodWithArg[i] + 'M'] = inplaceMethodM;
-                Matrix.prototype[methodWithArg[i] + 'S'] = inplaceMethodS;
-                Matrix[methodWithArg[i]] = staticMethod2;
+            if (methodWithArg[1] !== 1) {
+                var inplaceMethWithArgs = eval(fillTemplateFunction(inplaceMethodWithArgs, {
+                    name: methodWithArg[2],
+                    method: methodWithArg[0],
+                    args: args
+                }));
+                var staticMethWithArgs = eval(fillTemplateFunction(staticMethodWithArgs, { name: methodWithArg[2], args: args }));
+                for (i = 2; i < methodWithArg.length; i++) {
+                    Matrix.prototype[methodWithArg[i]] = inplaceMethWithArgs;
+                    Matrix[methodWithArg[i]] = staticMethWithArgs;
+                }
+            } else {
+                var tmplVar = {
+                    name: methodWithArg[2],
+                    args: args,
+                    method: methodWithArg[0]
+                };
+                var inplaceMethod2 = eval(fillTemplateFunction(inplaceMethodWithOneArg, tmplVar));
+                var inplaceMethodS = eval(fillTemplateFunction(inplaceMethodWithOneArgScalar, tmplVar));
+                var inplaceMethodM = eval(fillTemplateFunction(inplaceMethodWithOneArgMatrix, tmplVar));
+                var staticMethod2 = eval(fillTemplateFunction(staticMethodWithOneArg, tmplVar));
+                for (i = 2; i < methodWithArg.length; i++) {
+                    Matrix.prototype[methodWithArg[i]] = inplaceMethod2;
+                    Matrix.prototype[methodWithArg[i] + 'M'] = inplaceMethodM;
+                    Matrix.prototype[methodWithArg[i] + 'S'] = inplaceMethodS;
+                    Matrix[methodWithArg[i]] = staticMethod2;
+                }
+            }
+        }
+    } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                _iterator3.return();
+            }
+        } finally {
+            if (_didIteratorError3) {
+                throw _iteratorError3;
             }
         }
     }
@@ -19339,9 +19402,30 @@ class IFD {
         if (!this._map) {
             this._map = {};
             var taglist = tags[this.kind].tagsById;
-            for (var key of this.fields.keys()) {
-                if (taglist[key]) {
-                    this._map[taglist[key]] = this.fields.get(key);
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = this.fields.keys()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var key = _step.value;
+
+                    if (taglist[key]) {
+                        this._map[taglist[key]] = this.fields.get(key);
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
                 }
             }
         }
@@ -19572,8 +19656,8 @@ for (var i in tagsById) {
 }
 
 module.exports = {
-    tagsById: tagsById,
-    tagsByName: tagsByName
+    tagsById,
+    tagsByName
 };
 
 },{}],144:[function(require,module,exports){
@@ -19620,8 +19704,8 @@ for (var i in tagsById) {
 }
 
 module.exports = {
-    tagsById: tagsById,
-    tagsByName: tagsByName
+    tagsById,
+    tagsByName
 };
 
 },{}],145:[function(require,module,exports){
@@ -19810,8 +19894,8 @@ for (var i in tagsById) {
 }
 
 module.exports = {
-    tagsById: tagsById,
-    tagsByName: tagsByName
+    tagsById,
+    tagsByName
 };
 
 },{}],146:[function(require,module,exports){
@@ -19918,7 +20002,7 @@ class TIFFDecoder extends IOBuffer {
             }
             this._nextIFD = value;
             ifd[kind] = this.decodeIFD({
-                kind: kind,
+                kind,
                 ignoreImageData: true
             });
             this.offset = currentOffset;
@@ -20498,28 +20582,49 @@ WorkerManager.prototype._onmessage = function (worker, event) {
 };
 
 WorkerManager.prototype._exec = function () {
-    for (var worker of this._workers.keys()) {
-        if (this._working === this._numWorkers || this._waiting.length === 0) {
-            return;
-        }
-        if (!worker.running) {
-            for (var i = 0; i < this._waiting.length; i++) {
-                var execInfo = this._waiting[i];
-                if (typeof execInfo[4] === 'number' && execInfo[4] !== worker.id) {
-                    // this message is intended to another worker, let's ignore it
-                    continue;
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = this._workers.keys()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var worker = _step.value;
+
+            if (this._working === this._numWorkers || this._waiting.length === 0) {
+                return;
+            }
+            if (!worker.running) {
+                for (var i = 0; i < this._waiting.length; i++) {
+                    var execInfo = this._waiting[i];
+                    if (typeof execInfo[4] === 'number' && execInfo[4] !== worker.id) {
+                        // this message is intended to another worker, let's ignore it
+                        continue;
+                    }
+                    this._waiting.splice(i, 1);
+                    worker.postMessage({
+                        action: 'exec',
+                        event: execInfo[0],
+                        args: execInfo[1]
+                    }, execInfo[2]);
+                    worker.running = true;
+                    worker.time = Date.now();
+                    this._workers.set(worker, execInfo[3]);
+                    this._working++;
+                    break;
                 }
-                this._waiting.splice(i, 1);
-                worker.postMessage({
-                    action: 'exec',
-                    event: execInfo[0],
-                    args: execInfo[1]
-                }, execInfo[2]);
-                worker.running = true;
-                worker.time = Date.now();
-                this._workers.set(worker, execInfo[3]);
-                this._working++;
-                break;
+            }
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
             }
         }
     }
@@ -20527,12 +20632,34 @@ WorkerManager.prototype._exec = function () {
 
 WorkerManager.prototype.terminate = function () {
     if (this._terminated) return;
-    for (var entry of this._workers) {
-        entry[0].terminate();
-        if (entry[1]) {
-            entry[1][1](new Error('Terminated'));
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+        for (var _iterator2 = this._workers[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var entry = _step2.value;
+
+            entry[0].terminate();
+            if (entry[1]) {
+                entry[1][1](new Error('Terminated'));
+            }
+        }
+    } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
+            }
+        } finally {
+            if (_didIteratorError2) {
+                throw _iteratorError2;
+            }
         }
     }
+
     this._workers.clear();
     this._waiting = [];
     this._working = 0;
@@ -20542,9 +20669,31 @@ WorkerManager.prototype.terminate = function () {
 WorkerManager.prototype.postAll = function (event, args) {
     if (this._terminated) throw new Error('Cannot post (terminated)');
     var promises = [];
-    for (var worker of this._workers.keys()) {
-        promises.push(this.post(event, args, [], worker.id));
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
+
+    try {
+        for (var _iterator3 = this._workers.keys()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+            var worker = _step3.value;
+
+            promises.push(this.post(event, args, [], worker.id));
+        }
+    } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                _iterator3.return();
+            }
+        } finally {
+            if (_didIteratorError3) {
+                throw _iteratorError3;
+            }
+        }
     }
+
     return Promise.all(promises);
 };
 
@@ -20675,8 +20824,6 @@ var _fastBmp = require('fast-bmp');
 var _base = require('../util/base64');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var computedPropertyDescriptor = {
     configurable: true,
@@ -20993,8 +21140,7 @@ class Image {
         return new Image(imageData.width, imageData.height, imageData.data);
     }
 
-    static extendMethod(name, method) {
-        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    static extendMethod(name, method, options = {}) {
         var _options$inPlace = options.inPlace,
             inPlace = _options$inPlace === undefined ? false : _options$inPlace,
             _options$returnThis = options.returnThis,
@@ -21006,15 +21152,10 @@ class Image {
 
 
         if (inPlace) {
-            Image.prototype[name] = function () {
+            Image.prototype[name] = function (...args) {
                 // remove computed properties
                 this.computed = null;
-
-                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                    args[_key] = arguments[_key];
-                }
-
-                var result = method.apply(this, [].concat(_toConsumableArray(partialArgs), args));
+                var result = method.apply(this, [...partialArgs, ...args]);
                 if (returnThis) {
                     return this;
                 }
@@ -21023,40 +21164,54 @@ class Image {
             if (stack) {
                 var stackName = typeof stack === 'string' ? stack : name;
                 if (returnThis) {
-                    _Stack2.default.prototype[stackName] = function () {
-                        for (var image of this) {
-                            image[name].apply(image, arguments);
+                    _Stack2.default.prototype[stackName] = function (...args) {
+                        var _iteratorNormalCompletion = true;
+                        var _didIteratorError = false;
+                        var _iteratorError = undefined;
+
+                        try {
+                            for (var _iterator = this[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                                var image = _step.value;
+
+                                image[name](...args);
+                            }
+                        } catch (err) {
+                            _didIteratorError = true;
+                            _iteratorError = err;
+                        } finally {
+                            try {
+                                if (!_iteratorNormalCompletion && _iterator.return) {
+                                    _iterator.return();
+                                }
+                            } finally {
+                                if (_didIteratorError) {
+                                    throw _iteratorError;
+                                }
+                            }
                         }
+
                         return this;
                     };
                 } else {
-                    _Stack2.default.prototype[stackName] = function () {
+                    _Stack2.default.prototype[stackName] = function (...args) {
                         var result = new _Stack2.default(this.length);
                         for (var i = 0; i < this.length; i++) {
-                            var _i;
-
-                            result[i] = (_i = this[i])[name].apply(_i, arguments);
+                            result[i] = this[i][name](...args);
                         }
                         return result;
                     };
                 }
             }
         } else {
-            Image.prototype[name] = function () {
-                for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-                    args[_key2] = arguments[_key2];
-                }
-
-                return method.apply(this, [].concat(_toConsumableArray(partialArgs), args));
+            Image.prototype[name] = function (...args) {
+                return method.apply(this, [...partialArgs, ...args]);
             };
             if (stack) {
                 var _stackName = typeof stack === 'string' ? stack : name;
-                _Stack2.default.prototype[_stackName] = function () {
+                _Stack2.default.prototype[_stackName] = function (...args) {
                     var result = new _Stack2.default(this.length);
                     for (var i = 0; i < this.length; i++) {
-                        var _i2;
-
-                        result[i] = (_i2 = this[i])[name].apply(_i2, arguments);
+                        result[i] = this[i][name](...args);
                     }
                     return result;
                 };
@@ -21065,8 +21220,7 @@ class Image {
         return Image;
     }
 
-    static extendProperty(name, method) {
-        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    static extendProperty(name, method, options = {}) {
         var _options$partialArgs2 = options.partialArgs,
             partialArgs = _options$partialArgs2 === undefined ? [] : _options$partialArgs2;
 
@@ -21100,9 +21254,7 @@ class Image {
         return new Image(newOptions.width, newOptions.height, newOptions);
     }
 
-    static isTypeSupported(type) {
-        var operation = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'write';
-
+    static isTypeSupported(type, operation = 'write') {
         if (typeof type !== 'string') {
             throw new TypeError('type argument must be a string');
         }
@@ -21227,10 +21379,7 @@ class Image {
      * This is required on Node.js for jpeg compression.
      * @return {string|Promise<string>}
      */
-    toDataURL() {
-        var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'image/png';
-        var async = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
+    toDataURL(type = 'image/png', async = false) {
         type = (0, _mediaTypes.getType)(type);
         function bmpUrl(ctx) {
             var u8 = (0, _fastBmp.encode)(ctx);
@@ -21262,10 +21411,7 @@ class Image {
      * @param {boolean} [async=false]
      * @return {string|Promise<string>}
      */
-    toBase64() {
-        var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'image/png';
-        var async = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
+    toBase64(type = 'image/png', async = false) {
         if (async) {
             return this.toDataURL(type, true).then(function (dataURL) {
                 return dataURL.substring(dataURL.indexOf(',') + 1);
@@ -21282,10 +21428,7 @@ class Image {
      * @param {string} [quality=0.8] A Number between 0 and 1 indicating image quality if the requested type is image/jpeg or image/webp. If this argument is anything else, the default value for image quality is used. Other arguments are ignored.
      * @return {Promise}
      */
-    toBlob() {
-        var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'image/png';
-        var quality = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.8;
-
+    toBlob(type = 'image/png', quality = 0.8) {
         return (0, _blobUtil.canvasToBlob)(this.getCanvas({ originalData: true }), type, quality);
     }
 
@@ -21295,8 +21438,7 @@ class Image {
      * @param {boolean} [options.originalData=false]
      * @return {Canvas}
      */
-    getCanvas() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    getCanvas(options = {}) {
         var _options$originalData = options.originalData,
             originalData = _options$originalData === undefined ? false : _options$originalData;
 
@@ -21343,30 +21485,30 @@ class Image {
             }
         } else {
             if (this.components === 1) {
-                for (var _i3 = 0; _i3 < size; _i3++) {
-                    newData[_i3 * 4] = this.data[_i3 * this.channels] >>> this.bitDepth - 8;
-                    newData[_i3 * 4 + 1] = this.data[_i3 * this.channels] >>> this.bitDepth - 8;
-                    newData[_i3 * 4 + 2] = this.data[_i3 * this.channels] >>> this.bitDepth - 8;
+                for (var _i = 0; _i < size; _i++) {
+                    newData[_i * 4] = this.data[_i * this.channels] >>> this.bitDepth - 8;
+                    newData[_i * 4 + 1] = this.data[_i * this.channels] >>> this.bitDepth - 8;
+                    newData[_i * 4 + 2] = this.data[_i * this.channels] >>> this.bitDepth - 8;
                 }
             } else if (this.components === 3) {
                 this.checkProcessable('getRGBAData', { colorModel: [_model.RGB] });
                 if (this.colorModel === _model.RGB) {
-                    for (var _i4 = 0; _i4 < size; _i4++) {
-                        newData[_i4 * 4] = this.data[_i4 * this.channels] >>> this.bitDepth - 8;
-                        newData[_i4 * 4 + 1] = this.data[_i4 * this.channels + 1] >>> this.bitDepth - 8;
-                        newData[_i4 * 4 + 2] = this.data[_i4 * this.channels + 2] >>> this.bitDepth - 8;
+                    for (var _i2 = 0; _i2 < size; _i2++) {
+                        newData[_i2 * 4] = this.data[_i2 * this.channels] >>> this.bitDepth - 8;
+                        newData[_i2 * 4 + 1] = this.data[_i2 * this.channels + 1] >>> this.bitDepth - 8;
+                        newData[_i2 * 4 + 2] = this.data[_i2 * this.channels + 2] >>> this.bitDepth - 8;
                     }
                 }
             }
         }
         if (this.alpha) {
             this.checkProcessable('getRGBAData', { bitDepth: [8, 16] });
-            for (var _i5 = 0; _i5 < size; _i5++) {
-                newData[_i5 * 4 + 3] = this.data[_i5 * this.channels + this.components] >> this.bitDepth - 8;
+            for (var _i3 = 0; _i3 < size; _i3++) {
+                newData[_i3 * 4 + 3] = this.data[_i3 * this.channels + this.components] >> this.bitDepth - 8;
             }
         } else {
-            for (var _i6 = 0; _i6 < size; _i6++) {
-                newData[_i6 * 4 + 3] = 255;
+            for (var _i4 = 0; _i4 < size; _i4++) {
+                newData[_i4 * 4 + 3] = 255;
             }
         }
         return newData;
@@ -21392,8 +21534,7 @@ class Image {
      * @example
      * var emptyImage = image.clone({copyData:false});
      */
-    clone() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    clone(options = {}) {
         var _options$copyData = options.copyData,
             copyData = _options$copyData === undefined ? true : _options$copyData;
 
@@ -21407,8 +21548,7 @@ class Image {
      * @param {string} [options.format='png']
      * @return {Promise} - Resolves when the file is fully written
      */
-    save(path) {
-        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    save(path, options = {}) {
         var _options$format = options.format,
             format = _options$format === undefined ? 'png' : _options$format;
 
@@ -21447,8 +21587,7 @@ class Image {
     }
 
     // this method check if a process can be applied on the current image
-    checkProcessable(processName) {
-        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    checkProcessable(processName, options = {}) {
         var bitDepth = options.bitDepth,
             alpha = options.alpha,
             colorModel = options.colorModel,
@@ -21556,13 +21695,12 @@ var bitMethods = {
      * @param {number} x - x coordinate (0 = left)
      * @param {number} y - y coordinate (0 = top)
      */
-    setBitXY: function setBitXY(x, y) {
+    setBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         this.data[slot] |= 1 << shift;
     },
-
 
     /**
      * Clear (unset) a specific pixel using XY coordinates from a binary image (mask)
@@ -21571,13 +21709,12 @@ var bitMethods = {
      * @param {number} x - x coordinate (0 = left)
      * @param {number} y - y coordinate (0 = top)
      */
-    clearBitXY: function clearBitXY(x, y) {
+    clearBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         this.data[slot] &= ~(1 << shift);
     },
-
 
     /**
      * Toggle (invert) a specific pixel using XY coordinates from a binary image (mask)
@@ -21586,13 +21723,12 @@ var bitMethods = {
      * @param {number} x - x coordinate (0 = left)
      * @param {number} y - y coordinate (0 = top)
      */
-    toggleBitXY: function toggleBitXY(x, y) {
+    toggleBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         this.data[slot] ^= 1 << shift;
     },
-
 
     /**
      * Get the state of a specific pixel using XY coordinates from a binary image (mask)
@@ -21602,13 +21738,12 @@ var bitMethods = {
      * @param {number} y - y coordinate (0 = top)
      * @return {number} 0: bit is unset, 1: bit is set
      */
-    getBitXY: function getBitXY(x, y) {
+    getBitXY(x, y) {
         var target = y * this.width + x;
         var shift = 7 - (target & 0b00000111);
         var slot = target >> 3;
         return this.data[slot] & 1 << shift ? 1 : 0;
     },
-
 
     /**
      * Set a specific pixel from a binary image (mask)
@@ -21617,12 +21752,11 @@ var bitMethods = {
      * @instance
      * @param {number} pixel - the pixel number which correspond to x * image.width + y
      */
-    setBit: function setBit(pixel) {
+    setBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         this.data[slot] |= 1 << shift;
     },
-
 
     /**
      * Clear (unset) a specific pixel from a binary image (mask)
@@ -21630,12 +21764,11 @@ var bitMethods = {
      * @instance
      * @param {number} pixel - the pixel number which correspond to x * image.width + y
      */
-    clearBit: function clearBit(pixel) {
+    clearBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         this.data[slot] &= ~(1 << shift);
     },
-
 
     /**
      * Toggle (invert) a specific pixel from a binary image (mask)
@@ -21643,12 +21776,11 @@ var bitMethods = {
      * @instance
      * @param {number} pixel - the pixel number which correspond to x * image.width + y
      */
-    toggleBit: function toggleBit(pixel) {
+    toggleBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         this.data[slot] ^= 1 << shift;
     },
-
 
     /**
      * Get the state of a specific pixel using XY coordinates from a binary image (mask)
@@ -21657,7 +21789,7 @@ var bitMethods = {
      * @param {number} pixel - the pixel number which correspond to x * image.width + y
      * @return {number} 0: bit is unset, 1: bit is set
      */
-    getBit: function getBit(pixel) {
+    getBit(pixel) {
         var shift = 7 - (pixel & 0b00000111);
         var slot = pixel >> 3;
         return this.data[slot] & 1 << shift ? 1 : 0;
@@ -21686,8 +21818,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {number} [options.nbSlots=512]
  * @return {number[]}
  */
-function getColorHistogram() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function getColorHistogram(options = {}) {
     var _options$useAlpha = options.useAlpha,
         useAlpha = _options$useAlpha === undefined ? true : _options$useAlpha,
         _options$nbSlots = options.nbSlots,
@@ -21738,8 +21869,7 @@ exports.default = countAlphaPixels;
  * @param {number} [options.alpha=1] - Value of the alpha value to count.
  * @return {number} Number of transparent pixels
  */
-function countAlphaPixels() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function countAlphaPixels(options = {}) {
     var _options$alpha = options.alpha,
         alpha = _options$alpha === undefined ? 1 : _options$alpha;
 
@@ -21792,8 +21922,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {boolean} [options.useAlpha=true]
  * @return {number[]}
  */
-function getHistogram() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function getHistogram(options = {}) {
     var _options$maxSlots = options.maxSlots,
         maxSlots = _options$maxSlots === undefined ? 256 : _options$maxSlots,
         channel = options.channel,
@@ -21809,7 +21938,7 @@ function getHistogram() {
         }
         channel = 0;
     }
-    return getChannelHistogram.call(this, channel, { useAlpha: useAlpha, maxSlots: maxSlots });
+    return getChannelHistogram.call(this, channel, { useAlpha, maxSlots });
 }
 
 /**
@@ -21831,8 +21960,7 @@ function getHistogram() {
  *          useAlpha: false
  *      });
  */
-function getHistograms() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function getHistograms(options = {}) {
     var _options$maxSlots2 = options.maxSlots,
         maxSlots = _options$maxSlots2 === undefined ? 256 : _options$maxSlots2,
         _options$useAlpha2 = options.useAlpha,
@@ -21843,7 +21971,7 @@ function getHistograms() {
     });
     var results = new Array(useAlpha ? this.components : this.channels);
     for (var i = 0; i < results.length; i++) {
-        results[i] = getChannelHistogram.call(this, i, { useAlpha: useAlpha, maxSlots: maxSlots });
+        results[i] = getChannelHistogram.call(this, i, { useAlpha, maxSlots });
     }
     return results;
 }
@@ -21919,8 +22047,7 @@ exports.default = localMaxima;
  * @param {number} [options.maxEquals=2] - Maximal number of values that may be equal to the maximum
  * @return {number[]} Array whose size is the number of channels
  */
-function localMaxima() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function localMaxima(options = {}) {
     var mask = options.mask,
         _options$region = options.region,
         region = _options$region === undefined ? 3 : _options$region,
@@ -22174,9 +22301,7 @@ exports.default = getRelativePosition;
  *      to the further parent
  * @return {number[]|boolean}
  */
-function getRelativePosition(targetImage) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+function getRelativePosition(targetImage, options = {}) {
     if (this === targetImage) {
         return [0, 0];
     }
@@ -22297,11 +22422,7 @@ if (typeof self !== 'undefined') {
             return canvas;
         };
 
-        exports.fetchBinary = fetchBinary = function fetchBinary(url) {
-            var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-                _ref$withCredentials = _ref.withCredentials,
-                withCredentials = _ref$withCredentials === undefined ? false : _ref$withCredentials;
-
+        exports.fetchBinary = fetchBinary = function fetchBinary(url, { withCredentials = false } = {}) {
             return new Promise(function (resolve, reject) {
                 var xhr = new self.XMLHttpRequest();
                 xhr.open('GET', url, true);
@@ -22727,8 +22848,7 @@ var _value = require('../../util/value');
  * @param {object} [options]
  * @return {this} Modified current image
  */
-function add(value) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function add(value, options = {}) {
     var channels = options.channels;
 
     this.checkProcessable('add', {
@@ -22824,8 +22944,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @return {Image}
  */
 // first release of mean filter
-function blurFilter() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function blurFilter(options = {}) {
     var _options$radius = options.radius,
         radius = _options$radius === undefined ? 1 : _options$radius;
 
@@ -22868,8 +22987,7 @@ var _value = require('../../util/value');
  * @param {object} [options]
  * @return {this}
  */
-function divide(value) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function divide(value, options = {}) {
     var channels = options.channels;
 
     this.checkProcessable('divide', {
@@ -23000,8 +23118,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {boolean} [options.algorithm='auto'] : Algorithm for convolution {@link Image#convolution}
  * @return {Image}
  */
-function gaussianFilter() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function gaussianFilter(options = {}) {
     var _options$radius = options.radius,
         radius = _options$radius === undefined ? 1 : _options$radius,
         sigma = options.sigma,
@@ -23115,8 +23232,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {number[]|string[]} [options.channels] : to which channel to apply the filter. By default all but alpha.
  * @return {Image}
  */
-function hypotenuse(otherImage) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function hypotenuse(otherImage, options = {}) {
     var _options$bitDepth = options.bitDepth,
         bitDepth = _options$bitDepth === undefined ? this.bitDepth : _options$bitDepth,
         channels = options.channels;
@@ -23179,8 +23295,7 @@ var _channel = require('../../util/channel');
  *      * [string] : array of channels as one letter string
  * @return {this}
  */
-function invert() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function invert(options = {}) {
     var channels = options.channels;
 
 
@@ -23197,7 +23312,7 @@ function invert() {
             data[i] = ~data[i];
         }
     } else {
-        channels = (0, _channel.validateArrayOfChannels)(this, { channels: channels });
+        channels = (0, _channel.validateArrayOfChannels)(this, { channels });
 
         for (var c = 0; c < channels.length; c++) {
             var j = channels[c];
@@ -23316,12 +23431,32 @@ function invertIterator() {
             data[i] = ~data[i];
         }
     } else {
-        for (var _ref of this.pixels()) {
-            var index = _ref.index;
-            var pixel = _ref.pixel;
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
 
-            for (var k = 0; k < this.components; k++) {
-                this.setValue(index, k, this.maxValue - pixel[k]);
+        try {
+            for (var _iterator = this.pixels()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var _ref = _step.value;
+                var index = _ref.index;
+                var pixel = _ref.pixel;
+
+                for (var k = 0; k < this.components; k++) {
+                    this.setValue(index, k, this.maxValue - pixel[k]);
+                }
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                    _iterator.return();
+                }
+            } finally {
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
             }
         }
     }
@@ -23406,8 +23541,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {number} [options.max=this.max] maximal value after levelling
  * @return {this}
  */
-function level() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function level(options = {}) {
     var _options$algorithm = options.algorithm,
         algorithm = _options$algorithm === undefined ? 'range' : _options$algorithm,
         channels = options.channels,
@@ -23453,23 +23587,44 @@ function processImage(image, min, max, channels) {
     var delta = 1e-5; // sorry no better value that this "best guess"
     var factor = new Array(image.channels);
 
-    for (var c of channels) {
-        if (min[c] === 0 && max[c] === image.maxValue) {
-            factor[c] = 0;
-        } else if (max[c] === min[c]) {
-            factor[c] = 0;
-        } else {
-            factor[c] = (image.maxValue + 1 - delta) / (max[c] - min[c]);
-        }
-        min[c] += (0.5 - delta / 2) / factor[c];
-    }
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
 
-    /*
-     Note on border effect
-     For 8 bits images we should calculate for the space between -0.5 and 255.5
-     so that after ronding the first and last points still have the same population
-     But doing this we need to deal with Math.round that gives 256 if the value is 255.5
-     */
+    try {
+        for (var _iterator = channels[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var c = _step.value;
+
+            if (min[c] === 0 && max[c] === image.maxValue) {
+                factor[c] = 0;
+            } else if (max[c] === min[c]) {
+                factor[c] = 0;
+            } else {
+                factor[c] = (image.maxValue + 1 - delta) / (max[c] - min[c]);
+            }
+            min[c] += (0.5 - delta / 2) / factor[c];
+        }
+
+        /*
+         Note on border effect
+         For 8 bits images we should calculate for the space between -0.5 and 255.5
+         so that after ronding the first and last points still have the same population
+         But doing this we need to deal with Math.round that gives 256 if the value is 255.5
+         */
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
 
     for (var j = 0; j < channels.length; j++) {
         var _c = channels[j];
@@ -23515,8 +23670,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 * @param {string} [options.border='copy'] algorithm that will be applied after to deal with borders
 * @return {Image}
 */
-function medianFilter() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function medianFilter(options = {}) {
     var _options$radius = options.radius,
         radius = _options$radius === undefined ? 1 : _options$radius,
         channels = options.channels,
@@ -23590,8 +23744,7 @@ var _value = require('../../util/value');
  * @param {object} [options]
  * @return {this}
  */
-function multiply(value) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function multiply(value, options = {}) {
     var channels = options.channels;
 
     this.checkProcessable('multiply', {
@@ -23652,8 +23805,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {*} [options.channels]
  * @return {Image}
  */
-function sobelFilter() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function sobelFilter(options = {}) {
     var _options$kernelX = options.kernelX,
         kernelX = _options$kernelX === undefined ? _kernels.GRADIENT_X : _options$kernelX,
         _options$kernelY = options.kernelY,
@@ -23701,8 +23853,7 @@ var _value = require('../../util/value');
  * @param {object} [options]
  * @return {this}
  */
-function subtract(value) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function subtract(value, options = {}) {
     var channels = options.channels;
 
     this.checkProcessable('subtract', {
@@ -23924,7 +24075,7 @@ function loadBinary(image, options, url) {
                     if (decoded.exif) {
                         meta = getMetadata(decoded.exif);
                     }
-                    return loadFromURL(url, { meta: meta });
+                    return loadFromURL(url, { meta });
                 }
             case 'tif':
                 return loadTIFF(image);
@@ -23986,7 +24137,7 @@ function loadPNG(data) {
             throw new Error(`Unexpected colourType: ${ type }`);
     }
 
-    return new _Image2.default(png.width, png.height, bitmap, { components: components, alpha: alpha, bitDepth: bitDepth });
+    return new _Image2.default(png.width, png.height, bitmap, { components, alpha, bitDepth });
 }
 
 function loadTIFF(data) {
@@ -24153,8 +24304,7 @@ var conv = require('ml-matrix-convolution');
  * @param {string} [options.algorithm='auto'] - Either 'auto', 'direct' or 'fft'. fft is much faster for large kernel.
  * @return {Image}
  */
-function convolution(kernel) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function convolution(kernel, options = {}) {
     var channels = options.channels,
         bitDepth = options.bitDepth,
         _options$normalize = options.normalize,
@@ -24167,7 +24317,7 @@ function convolution(kernel) {
         algorithm = _options$algorithm === undefined ? 'auto' : _options$algorithm;
 
 
-    var newImage = _Image2.default.createFrom(this, { bitDepth: bitDepth });
+    var newImage = _Image2.default.createFrom(this, { bitDepth });
 
     channels = (0, _channel.validateArrayOfChannels)(this, channels, true);
     //let kWidth, kHeight;
@@ -24279,9 +24429,7 @@ exports.default = convolutionFft;
  * @param {string} [options.border='copy']
  * @return {Image}
  */
-function convolutionFft(kernel) {
-  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+function convolutionFft(kernel, options = {}) {
   options = Object.assign({}, options);
   options.algorithm = 'fft';
   return this.convolution(kernel, options);
@@ -24311,8 +24459,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {number[]} [options.position] - Array of 2 elements to force the x,y coordinates
  * @return {Image} A new image
  */
-function extract(mask) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function extract(mask, options = {}) {
     var position = options.position;
 
     this.checkProcessable('extract', {
@@ -24359,10 +24506,10 @@ function extract(mask) {
             parent: this
         });
         for (var _y = 0; _y < mask.height; _y++) {
-            for (var _x2 = 0; _x2 < mask.width; _x2++) {
-                if (mask.getBitXY(_x2, _y)) {
-                    if (this.getBitXY(_x2 + position[0], _y + position[1])) {
-                        _extract2.setBitXY(_x2, _y);
+            for (var _x = 0; _x < mask.width; _x++) {
+                if (mask.getBitXY(_x, _y)) {
+                    if (this.getBitXY(_x + position[0], _y + position[1])) {
+                        _extract2.setBitXY(_x, _y);
                     }
                 }
             }
@@ -24390,8 +24537,7 @@ var _Image2 = _interopRequireDefault(_Image);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function floodFill() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function floodFill(options = {}) {
     var _options$x = options.x,
         x = _options$x === undefined ? 0 : _options$x,
         _options$y = options.y,
@@ -24475,8 +24621,7 @@ var _color2 = require('../../util/color');
  * @param {number|Array<number>} [options.rotate=0] - Rotate each label of a define angle
  * @return {this} The original painted image
  */
-function paintLabels(labels, positions) {
-    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+function paintLabels(labels, positions, options = {}) {
     var _options$color = options.color,
         color = _options$color === undefined ? 'blue' : _options$color,
         colors = options.colors,
@@ -24571,8 +24716,7 @@ var _color = require('../../util/color');
  * @param {string}              [options.labelFont='12px Helvetica'] - Paint the labels in a different CSS style
  * @return {this} The original painted image
  */
-function paintMasks(masks) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function paintMasks(masks, options = {}) {
     var _options$color = options.color,
         color = _options$color === undefined ? 'red' : _options$color,
         colors = options.colors,
@@ -24687,8 +24831,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {object} [options.shape] - Definition of the shape, see Shape contructor.
  * @return {this} The original painted image
  */
-function paintPoints(points) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function paintPoints(points, options = {}) {
     var _options$color = options.color,
         color = _options$color === undefined ? [this.maxValue, 0, 0] : _options$color,
         shape = options.shape;
@@ -24771,8 +24914,7 @@ class Roi {
      * @param {string} [options.kind='normal'] - 'contour', 'box', 'filled', 'center' or 'normal'
      * @return {Image} - Returns a mask (1 bit Image)
      */
-    getMask() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    getMask(options = {}) {
         var _options$scale = options.scale,
             scale = _options$scale === undefined ? 1 : _options$scale,
             _options$kind = options.kind,
@@ -25205,14 +25347,16 @@ function getBoxIDs(roi) {
     var data = roiMap.data;
 
     // we check the first line and the last line
-    for (var y of [0, roi.height - 1]) {
-        for (var x = 0; x < roi.width; x++) {
-            var target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            if (x - roi.minX > 0 && data[target] === roi.id && data[target - 1] !== roi.id) {
+    var _arr = [0, roi.height - 1];
+    for (var _i = 0; _i < _arr.length; _i++) {
+        var y = _arr[_i];
+        for (var _x = 0; _x < roi.width; _x++) {
+            var target = (y + roi.minY) * roiMap.width + _x + roi.minX;
+            if (_x - roi.minX > 0 && data[target] === roi.id && data[target - 1] !== roi.id) {
                 var value = data[target - 1];
                 surroundingIDs.add(value);
             }
-            if (roiMap.width - x - roi.minX > 1 && data[target] === roi.id && data[target + 1] !== roi.id) {
+            if (roiMap.width - _x - roi.minX > 1 && data[target] === roi.id && data[target + 1] !== roi.id) {
                 var _value = data[target + 1];
                 surroundingIDs.add(_value);
             }
@@ -25220,9 +25364,11 @@ function getBoxIDs(roi) {
     }
 
     // we check the first column and the last column
-    for (var _x2 of [0, roi.width - 1]) {
+    var _arr2 = [0, roi.width - 1];
+    for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
+        var x = _arr2[_i2];
         for (var _y = 0; _y < roi.height; _y++) {
-            var _target = (_y + roi.minY) * roiMap.width + _x2 + roi.minX;
+            var _target = (_y + roi.minY) * roiMap.width + x + roi.minX;
             if (_y - roi.minY > 0 && data[_target] === roi.id && data[_target - roiMap.width] !== roi.id) {
                 var _value2 = data[_target - roiMap.width];
                 surroundingIDs.add(_value2);
@@ -25246,11 +25392,32 @@ function getBox(roi) {
     if (roi.height > 1) {
         topBottom[1] = roi.height - 1;
     }
-    for (var y of topBottom) {
-        for (var x = 1; x < roi.width - 1; x++) {
-            var target = (y + roi.minY) * roiMap.width + x + roi.minX;
-            if (data[target] === roi.id) {
-                total++;
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = topBottom[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var y = _step.value;
+
+            for (var _x2 = 1; _x2 < roi.width - 1; _x2++) {
+                var target = (y + roi.minY) * roiMap.width + _x2 + roi.minX;
+                if (data[target] === roi.id) {
+                    total++;
+                }
+            }
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
             }
         }
     }
@@ -25259,14 +25426,36 @@ function getBox(roi) {
     if (roi.width > 1) {
         leftRight[1] = roi.width - 1;
     }
-    for (var _x3 of leftRight) {
-        for (var _y2 = 0; _y2 < roi.height; _y2++) {
-            var _target2 = (_y2 + roi.minY) * roiMap.width + _x3 + roi.minX;
-            if (data[_target2] === roi.id) {
-                total++;
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+        for (var _iterator2 = leftRight[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var x = _step2.value;
+
+            for (var _y2 = 0; _y2 < roi.height; _y2++) {
+                var _target2 = (_y2 + roi.minY) * roiMap.width + x + roi.minX;
+                if (data[_target2] === roi.id) {
+                    total++;
+                }
+            }
+        }
+    } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
+            }
+        } finally {
+            if (_didIteratorError2) {
+                throw _iteratorError2;
             }
         }
     }
+
     return total;
 }
 
@@ -25330,9 +25519,9 @@ function getInternalIDs(roi) {
     }
 
     var array = new Array(4);
-    for (var _x4 = 1; _x4 < roi.width - 1; _x4++) {
+    for (var _x3 = 1; _x3 < roi.width - 1; _x3++) {
         for (var y = 1; y < roi.height - 1; y++) {
-            var _target3 = (y + roi.minY) * roiMap.width + _x4 + roi.minX;
+            var _target3 = (y + roi.minY) * roiMap.width + _x3 + roi.minX;
             if (internal.includes(data[_target3])) {
                 // we check if one of the neighbour is not yet in
 
@@ -25513,8 +25702,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {object} [options]
  * @return {RoiMap}
  */
-function fromMask(mask) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function fromMask(mask, options = {}) {
     var _options$allowCorners = options.allowCorners,
         allowCorners = _options$allowCorners === undefined ? false : _options$allowCorners;
 
@@ -25657,8 +25845,7 @@ var neighbours8 = [null, null, null, null];
 /*
 Implementation of the connected-component labeling algorithm
  */
-function fromKaskConnectedComponentLabelingAlgorithm(mask) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function fromKaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
     var _options$allowCorners = options.allowCorners,
         allowCorners = _options$allowCorners === undefined ? false : _options$allowCorners;
 
@@ -25761,8 +25948,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {boolean} [options.invert=false]
  * @return {RoiMap}
  */
-function fromMaxima() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function fromMaxima(options = {}) {
     var _options$allowCorner = options.allowCorner,
         allowCorner = _options$allowCorner === undefined ? true : _options$allowCorner,
         _options$onlyTop = options.onlyTop,
@@ -25813,10 +25999,7 @@ function fromMaxima() {
     // we will look for the maxima (or minima) that is present in the picture
     // a maxima is a point that is surrounded by lower values
     // should deal with allowCorner and invert
-    function appendMaxima(_ref) {
-        var _ref$maxima = _ref.maxima,
-            maxima = _ref$maxima === undefined ? true : _ref$maxima;
-
+    function appendMaxima({ maxima = true }) {
         for (var y = 1; y < image.height - 1; y++) {
             for (var x = 1; x < image.width - 1; x++) {
                 var index = x + y * image.width;
@@ -25994,9 +26177,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {object} [options]
  * @return {RoiMap}
  */
-function fromPoints(pointsToPaint) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+function fromPoints(pointsToPaint, options = {}) {
     var shape = new _Shape2.default(options);
 
     // based on a binary image we will create plenty of small images
@@ -26061,8 +26242,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {boolean} [options.invert=false] - By default we fill the minima
  * @return {RoiMap}
  */
-function fromWaterShed() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function fromWaterShed(options = {}) {
     var points = options.points,
         mask = options.mask,
         image = options.image,
@@ -26088,8 +26268,8 @@ function fromWaterShed() {
     // or it is gonna take the minimum locals of the image by default.
     if (!points) {
         points = currentImage.getLocalMaxima({
-            invert: invert,
-            mask: mask
+            invert,
+            mask
         });
     }
 
@@ -26191,9 +26371,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {object} [options]
  */
 class RoiManager {
-    constructor(image) {
-        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+    constructor(image, options = {}) {
         this._image = image;
         this._options = options;
         if (!this._options.label) {
@@ -26204,18 +26382,14 @@ class RoiManager {
     }
 
     // docs is in the corresponding file
-    fromMaxima() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+    fromMaxima(options = {}) {
         var opt = (0, _extend2.default)({}, this._options, options);
         var roiMap = _fromMaxima2.default.call(this._image, options);
         this._layers[opt.label] = new _RoiLayer2.default(roiMap, opt);
     }
 
     // docs is in the corresponding file
-    fromPoints(points) {
-        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+    fromPoints(points, options = {}) {
         var opt = (0, _extend2.default)({}, this._options, options);
         var roiMap = _fromPoints2.default.call(this._image, points, options);
         this._layers[opt.label] = new _RoiLayer2.default(roiMap, opt);
@@ -26227,9 +26401,7 @@ class RoiManager {
      * @param {object} [options]
      * @return {this}
      */
-    putMap(roiMap) {
-        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+    putMap(roiMap, options = {}) {
         var map = new _RoiMap2.default(this._image, roiMap);
         var opt = (0, _extend2.default)({}, this._options, options);
         this._layers[opt.label] = new _RoiLayer2.default(map, opt);
@@ -26237,27 +26409,21 @@ class RoiManager {
     }
 
     // docs is in the corresponding file
-    fromWaterShed() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+    fromWaterShed(options = {}) {
         var opt = (0, _extend2.default)({}, this._options, options);
         var roiMap = _fromWaterShed2.default.call(this._image, options);
         this._layers[opt.label] = new _RoiLayer2.default(roiMap, opt);
     }
 
     // docs is in the corresponding file
-    fromMask(mask) {
-        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+    fromMask(mask, options = {}) {
         var opt = (0, _extend2.default)({}, this._options, options);
         var roiMap = _fromMask2.default.call(this._image, mask, options);
         this._layers[opt.label] = new _RoiLayer2.default(roiMap, opt);
         return this;
     }
 
-    fromMaskConnectedComponentLabelingAlgorithm(mask) {
-        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+    fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
         var opt = (0, _extend2.default)({}, this._options, options);
         var roiMap = _fromMaskConnectedComponentLabelingAlgorithm2.default.call(this._image, mask, options);
         this._layers[opt.label] = new _RoiLayer2.default(roiMap, opt);
@@ -26269,9 +26435,7 @@ class RoiManager {
      * @param {object} [options]
      * @return {RoiMap}
      */
-    getMap() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+    getMap(options = {}) {
         var opt = (0, _extend2.default)({}, this._options, options);
         this._assertLayerWithLabel(opt.label);
         return this._layers[opt.label].roiMap;
@@ -26282,9 +26446,7 @@ class RoiManager {
      * @param {object} [options]
      * @return {number[]}
      */
-    getRoiIds() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+    getRoiIds(options = {}) {
         var rois = this.getRois(options);
         if (rois) {
             var ids = new Array(rois.length);
@@ -26310,8 +26472,7 @@ class RoiManager {
      * @param {number} [options.maxHeight=Number.POSITIVE_INFINITY]
      * @return {Roi[]}
      */
-    getRois() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    getRois(options = {}) {
         var _options$label = options.label,
             label = _options$label === undefined ? this._options.label : _options$label,
             _options$positive = options.positive,
@@ -26357,9 +26518,7 @@ class RoiManager {
      * @param {object} [options]
      * @return {Image[]} Retuns an array of masks (1 bit Image)
      */
-    getMasks() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+    getMasks(options = {}) {
         var rois = this.getRois(options);
 
         var masks = new Array(rois.length);
@@ -26374,9 +26533,7 @@ class RoiManager {
      * @param {object} [options]
      * @return {number[]}
      */
-    getData() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+    getData(options = {}) {
         var opt = (0, _extend2.default)({}, this._options, options);
         this._assertLayerWithLabel(opt.label);
         return this._layers[opt.label].roiMap.data;
@@ -26392,8 +26549,7 @@ class RoiManager {
      *                                  for example id, surface, width, height, meanX, meanY.
      * @return {Image} - The painted RGBA 8 bits image
      */
-    paint() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    paint(options = {}) {
         var labelProperty = options.labelProperty;
 
         if (!this._painted) {
@@ -26412,9 +26568,7 @@ class RoiManager {
     }
 
     // return a mask corresponding to all the selected masks
-    getMask() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+    getMask(options = {}) {
         var mask = new _Image2.default(this._image.width, this._image.height, { kind: 'BINARY' });
         var masks = this.getMasks(options);
 
@@ -26440,8 +26594,7 @@ class RoiManager {
      * @param {object} [options]
      * @param {Image} [options.image] A new iamge that you would like to sue for painting over
      */
-    resetPainted() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    resetPainted(options = {}) {
         var image = options.image;
 
         if (image) {
@@ -26458,9 +26611,7 @@ class RoiManager {
      * @param {number} [options.minCommonBorderLength=5] is an integer, determine the strength of the merging.
      * @return {this}
      */
-    mergeRoi() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+    mergeRoi(options = {}) {
         var opt = (0, _extend2.default)({}, this._options, options);
         var _options$algorithm = options.algorithm,
             algorithm = _options$algorithm === undefined ? 'commonBorder' : _options$algorithm,
@@ -26489,9 +26640,30 @@ class RoiManager {
         var data = this.getMap(opt).data;
         for (var index = 0; index < data.length; index++) {
             if (data[index] !== 0) {
-                for (var array of toMerge) {
-                    if (data[index] === array[0]) {
-                        data[index] = array[1];
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = toMerge[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var array = _step.value;
+
+                        if (data[index] === array[0]) {
+                            data[index] = array[1];
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
                     }
                 }
             }
@@ -26507,9 +26679,7 @@ class RoiManager {
      * @param {object} [options]
      * @returns {Array} array of objects returned in correspondingRoisInformation
      */
-    findCorrespondingRoi(roiMap) {
-        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+    findCorrespondingRoi(roiMap, options = {}) {
         var allRois = this.getRois(options);
         var allRelated = [];
         for (var i = 0; i < allRois.length; i++) {
@@ -26672,9 +26842,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *   newColorDepth:8
  * });
  */
-function colorDepth() {
-    var newColorDepth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 8;
-
+function colorDepth(newColorDepth = 8) {
 
     this.checkProcessable('colorDepth', {
         bitDepth: [8, 16]
@@ -26733,8 +26901,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *   y:0
  * });
  */
-function crop() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function crop(options = {}) {
     var _options$x = options.x,
         x = _options$x === undefined ? 0 : _options$x,
         _options$y = options.y,
@@ -26767,7 +26934,7 @@ function crop() {
         throw new RangeError(`crop: (x: ${ x }, y:${ y }, width:${ width }, height:${ height }) size is out of range`);
     }
 
-    var newImage = _Image2.default.createFrom(this, { width: width, height: height });
+    var newImage = _Image2.default.createFrom(this, { width, height });
 
     var xWidth = width * this.channels;
     var y1 = y + height;
@@ -26803,9 +26970,7 @@ exports.default = cropAlpha;
  * @param {number} [options.threshold=this.maxValue]
  * @return {Image}
  */
-function cropAlpha() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+function cropAlpha(options = {}) {
     this.checkProcessable('cropAlpha', {
         alpha: 1
     });
@@ -26916,8 +27081,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @example
  * var grey = image.grey();
  */
-function grey() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function grey(options = {}) {
     var _options$algorithm = options.algorithm,
         algorithm = _options$algorithm === undefined ? 'luma709' : _options$algorithm,
         _options$keepAlpha = options.keepAlpha,
@@ -26983,7 +27147,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 var methods = exports.methods = {
-    luma709: function luma709(data, i) {
+    luma709(data, i) {
         // sRGB
         // return data[i] * 0.2126 + data[i + 1] * 0.7152 + data[i + 2] * 0.0722;
         // Let's do a little trick ... in order not convert the integer to a double we do
@@ -26993,48 +27157,48 @@ var methods = exports.methods = {
         // Same result, > 10% faster on the full grey conversion
         return data[i] * 6966 + data[i + 1] * 23436 + data[i + 2] * 2366 >> 15;
     },
-    luma601: function luma601(data, i) {
+    luma601(data, i) {
         // NTSC
         // return this.data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
         return data[i] * 9798 + data[i + 1] * 19235 + data[i + 2] * 3735 >> 15;
     },
-    maximum: function maximum(data, i) {
+    maximum(data, i) {
         return Math.max(data[i], data[i + 1], data[i + 2]);
     },
-    minimum: function minimum(data, i) {
+    minimum(data, i) {
         return Math.min(data[i], data[i + 1], data[i + 2]);
     },
-    average: function average(data, i) {
+    average(data, i) {
         return (data[i] + data[i + 1] + data[i + 2]) / 3 >> 0;
     },
-    minmax: function minmax(data, i) {
+    minmax(data, i) {
         return (Math.max(data[i], data[i + 1], data[i + 2]) + Math.min(data[i], data[i + 1], data[i + 2])) / 2;
     },
-    red: function red(data, i) {
+    red(data, i) {
         return data[i];
     },
-    green: function green(data, i) {
+    green(data, i) {
         return data[i + 1];
     },
-    blue: function blue(data, i) {
+    blue(data, i) {
         return data[i + 2];
     },
-    cyan: function cyan(data, i, image) {
+    cyan(data, i, image) {
         var black = methods.black(data, i, image);
         return (image.maxValue - data[0] - black) / (1 - black / image.maxValue) >> 0;
     },
-    magenta: function magenta(data, i, image) {
+    magenta(data, i, image) {
         var black = methods.black(data, i, image);
         return (image.maxValue - data[1] - black) / (1 - black / image.maxValue) >> 0;
     },
-    yellow: function yellow(data, i, image) {
+    yellow(data, i, image) {
         var black = methods.black(data, i, image);
         return (image.maxValue - data[2] - black) / (1 - black / image.maxValue) >> 0;
     },
-    black: function black(data, i, image) {
+    black(data, i, image) {
         return Math.min(image.maxValue - data[i], image.maxValue - data[i + 1], image.maxValue - data[i + 2]);
     },
-    hue: function hue(data, i, image) {
+    hue(data, i, image) {
         var min = methods.min(data, i);
         var max = methods.max(data, i);
         if (max === min) {
@@ -27058,14 +27222,14 @@ var methods = exports.methods = {
         }
         return hue / 6 * image.maxValue >> 0;
     },
-    saturation: function saturation(data, i, image) {
+    saturation(data, i, image) {
         // from HSV model
         var min = methods.min(data, i);
         var max = methods.max(data, i);
         var delta = max - min;
         return max === 0 ? 0 : delta / max * image.maxValue;
     },
-    lightness: function lightness(data, i) {
+    lightness(data, i) {
         var min = methods.min(data, i);
         var max = methods.max(data, i);
         return (max + min) / 2;
@@ -27564,8 +27728,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {boolean} [options.invert=false] - Invert the resulting image
  * @return {Image} - Binary image containing the mask
  */
-function mask() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function mask(options = {}) {
     var _options$algorithm = options.algorithm,
         algorithm = _options$algorithm === undefined ? 'threshold' : _options$algorithm,
         _options$threshold = options.threshold,
@@ -28601,8 +28764,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {array<number>} [options.color]
  * @return {Image}
  */
-function pad() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function pad(options = {}) {
     var _options$size = options.size,
         size = _options$size === undefined ? 0 : _options$size,
         _options$algorithm = options.algorithm,
@@ -28821,8 +28983,7 @@ var _Image2 = _interopRequireDefault(_Image);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function rotateFree(degrees) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function rotateFree(degrees, options = {}) {
     var _options$interpolatio = options.interpolation,
         interpolation = _options$interpolatio === undefined ? 'none' : _options$interpolatio,
         _options$width = options.width,
@@ -28895,17 +29056,17 @@ function rotateFree(degrees) {
         for (var _i = 0; _i < newWidth; _i += 1) {
             for (var _j = 0; _j < newHeight; _j += 1) {
                 for (var _c = 0; _c < this.channels; _c++) {
-                    var _x2 = Math.round((_i - x0) * cos - (_j - y0) * sin + x0) + incrementX;
+                    var _x = Math.round((_i - x0) * cos - (_j - y0) * sin + x0) + incrementX;
                     var _y = Math.round((_j - y0) * cos + (_i - x0) * sin + y0) + incrementY;
 
-                    if (_x2 < 0 || _x2 >= width || _y < 0 || _y >= height) {
+                    if (_x < 0 || _x >= width || _y < 0 || _y >= height) {
                         if (this.alpha) {
                             newImageRotated.setValueXY(_i, _j, _c, this.alpha);
                         } else {
                             newImageRotated.setValueXY(_i, _j, _c, this.maxValue);
                         }
                     } else {
-                        newImageRotated.setValueXY(_i, _j, _c, this.getValueXY(_x2, _y, _c));
+                        newImageRotated.setValueXY(_i, _j, _c, this.getValueXY(_x, _y, _c));
                     }
                 }
             }
@@ -28989,8 +29150,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {boolean} [options.preserveAspectRatio=false] - preserve width/height ratio if only one of them is defined
  * @return {Image}
  */
-function scale() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function scale(options = {}) {
     var _options$factor = options.factor,
         factor = _options$factor === undefined ? 1 : _options$factor,
         _options$algorithm = options.algorithm,
@@ -29031,7 +29191,7 @@ function scale() {
 
     var shiftX = Math.round((this.width - width) / 2);
     var shiftY = Math.round((this.height - height) / 2);
-    var newImage = _Image2.default.createFrom(this, { width: width, height: height, position: [shiftX, shiftY] });
+    var newImage = _Image2.default.createFrom(this, { width, height, position: [shiftX, shiftY] });
 
     switch (algorithm.toLowerCase()) {
         case 'nearestneighbor':
@@ -29069,9 +29229,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {boolean} [options.keepAlpha=false]
  * @return {Image}
  */
-function combineChannels() {
-    var method = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultCombineMethod;
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function combineChannels(method = defaultCombineMethod, options = {}) {
     var _options$mergeAlpha = options.mergeAlpha,
         mergeAlpha = _options$mergeAlpha === undefined ? false : _options$mergeAlpha,
         _options$keepAlpha = options.keepAlpha,
@@ -29166,8 +29324,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {object} [options]
  * @return {number[]}
  */
-function match(image) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function match(image, options = {}) {
     var border = options.border;
 
 
@@ -29240,8 +29397,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {boolean} [options.mergeAlpha]
  * @return {Image} A grey image with the extracted channel
  */
-function getChannel(channel) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function getChannel(channel, options = {}) {
     var _options$keepAlpha = options.keepAlpha,
         keepAlpha = _options$keepAlpha === undefined ? false : _options$keepAlpha,
         _options$mergeAlpha = options.mergeAlpha,
@@ -29381,9 +29537,7 @@ exports.default = getColumn;
  * @param {number} [channel=0]
  * @return {number[]}
  */
-function getColumn(column) {
-    var channel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-
+function getColumn(column, channel = 0) {
 
     this.checkProcessable('getColumn', {
         bitDepth: [8, 16]
@@ -29536,8 +29690,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {number} [options.channel]
  * @return {Matrix}
  */
-function getMatrix() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function getMatrix(options = {}) {
     var channel = options.channel;
 
     this.checkProcessable('getMatrix', {
@@ -29609,8 +29762,7 @@ exports.default = getPixelsGrid;
  * @param {Image} [options.mask]
  * @return {object}
  */
-function getPixelsGrid() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function getPixelsGrid(options = {}) {
     var _options$sampling = options.sampling,
         sampling = _options$sampling === undefined ? [10, 10] : _options$sampling,
         _options$painted = options.painted,
@@ -29658,7 +29810,7 @@ function getPixelsGrid() {
     xyS.length = position;
     zS.length = position;
 
-    var toReturn = { xyS: xyS, zS: zS };
+    var toReturn = { xyS, zS };
 
     if (painted) {
         toReturn.painted = this.rgba8().paintPoints(xyS);
@@ -29681,9 +29833,7 @@ exports.default = getRow;
  * @param {number} [channel=0]
  * @return {number[]}
  */
-function getRow(row) {
-    var channel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-
+function getRow(row, channel = 0) {
     this.checkProcessable('getRow', {
         bitDepth: [8, 16]
     });
@@ -29726,8 +29876,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {object} [options]
  * @return {number[]|number}
  */
-function getSimilarity(image) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function getSimilarity(image, options = {}) {
     var _options$shift = options.shift,
         shift = _options$shift === undefined ? [0, 0] : _options$shift,
         average = options.average,
@@ -29815,8 +29964,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {number[]} [options.color]
  * @return {this}
  */
-function setBorder() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function setBorder(options = {}) {
     var _options$size = options.size,
         size = _options$size === undefined ? 0 : _options$size,
         _options$algorithm = options.algorithm,
@@ -29937,8 +30085,7 @@ exports.default = setMatrix;
  * @param {object} [options]
  * @param {number} [options.channel]
  */
-function setMatrix(matrix) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function setMatrix(matrix, options = {}) {
     var channel = options.channel;
 
     this.checkProcessable('getMatrix', {
@@ -29988,8 +30135,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {boolean} [options.preserveAlpha=true]
  * @return {Stack}
  */
-function split() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function split(options = {}) {
     var _options$preserveAlph = options.preserveAlpha,
         preserveAlpha = _options$preserveAlph === undefined ? true : _options$preserveAlph;
 
@@ -30150,8 +30296,6 @@ var _hasOwn2 = _interopRequireDefault(_hasOwn);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 var computedPropertyDescriptor = {
     configurable: true,
     enumerable: false,
@@ -30181,8 +30325,7 @@ class Stack extends Array {
         return Promise.all(urls.map(_Image2.default.load)).then(images => new Stack(images));
     }
 
-    static extendMethod(name, method) {
-        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    static extendMethod(name, method, options = {}) {
         var _options$inPlace = options.inPlace,
             inPlace = _options$inPlace === undefined ? false : _options$inPlace,
             _options$returnThis = options.returnThis,
@@ -30192,34 +30335,24 @@ class Stack extends Array {
 
 
         if (inPlace) {
-            Stack.prototype[name] = function () {
+            Stack.prototype[name] = function (...args) {
                 // remove computed properties
                 this.computed = null;
-
-                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                    args[_key] = arguments[_key];
-                }
-
-                var result = method.apply(this, [].concat(_toConsumableArray(partialArgs), args));
+                var result = method.apply(this, [...partialArgs, ...args]);
                 if (returnThis) {
                     return this;
                 }
                 return result;
             };
         } else {
-            Stack.prototype[name] = function () {
-                for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-                    args[_key2] = arguments[_key2];
-                }
-
-                return method.apply(this, [].concat(_toConsumableArray(partialArgs), args));
+            Stack.prototype[name] = function (...args) {
+                return method.apply(this, [...partialArgs, ...args]);
             };
         }
         return Stack;
     }
 
-    static extendProperty(name, method) {
-        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    static extendProperty(name, method, options = {}) {
         var _options$partialArgs2 = options.partialArgs,
             partialArgs = _options$partialArgs2 === undefined ? [] : _options$partialArgs2;
 
@@ -30244,9 +30377,7 @@ class Stack extends Array {
      * @param {object} [options]
      * @private
      */
-    checkProcessable(processName) {
-        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+    checkProcessable(processName, options = {}) {
         if (typeof processName !== 'string') {
             throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
         }
@@ -30516,8 +30647,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {number[]} [options.ignoreBorder=[0, 0]]
  * @return {Stack}
  */
-function matchAndCrop() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+function matchAndCrop(options = {}) {
     var _options$algorithm = options.algorithm,
         algorithm = _options$algorithm === undefined ? 'matchToPrevious' : _options$algorithm,
         _options$ignoreBorder = options.ignoreBorder,
@@ -30678,8 +30808,7 @@ var smallCross = [[0, 1, 0], [1, 1, 1], [0, 1, 0]];
  * @param {boolean} [options.filled=true] - If false only the border ot the shape is taken into account.
  */
 class Shape {
-    constructor() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    constructor(options = {}) {
         var _options$kind = options.kind,
             kind = _options$kind === undefined ? 'cross' : _options$kind,
             shape = options.shape,
@@ -30700,14 +30829,14 @@ class Shape {
             switch (shape.toLowerCase()) {
                 case 'square':
                 case 'rectangle':
-                    this.matrix = rectangle(width, height, { filled: filled });
+                    this.matrix = rectangle(width, height, { filled });
                     break;
                 case 'circle':
                 case 'ellipse':
-                    this.matrix = ellipse(width, height, { filled: filled });
+                    this.matrix = ellipse(width, height, { filled });
                     break;
                 case 'triangle':
-                    this.matrix = triangle(width, height, { filled: filled });
+                    this.matrix = triangle(width, height, { filled });
                     break;
                 default:
                     throw new Error(`Shape: unexpected shape: ${ shape }`);
@@ -30778,14 +30907,20 @@ function rectangle(width, height, options) {
             }
         }
     } else {
-        for (var _y of [0, height - 1]) {
+        var _arr = [0, height - 1];
+
+        for (var _i = 0; _i < _arr.length; _i++) {
+            var _y = _arr[_i];
             for (var _x2 = 0; _x2 < width; _x2++) {
                 matrix.set(_y, _x2, 1);
             }
         }
         for (var _y2 = 0; _y2 < height; _y2++) {
-            for (var _x3 of [0, width - 1]) {
-                matrix.set(_y2, _x3, 1);
+            var _arr2 = [0, width - 1];
+
+            for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
+                var _x = _arr2[_i2];
+                matrix.set(_y2, _x, 1);
             }
         }
     }
@@ -30814,20 +30949,20 @@ function ellipse(width, height, options) {
     } else {
         for (var _y3 = 0; _y3 <= b; _y3++) {
             var _shift = Math.floor(Math.sqrt(a2 - a2 * _y3 * _y3 / b2));
-            var _x4 = a - _shift;
-            matrix.set(b - _y3, _x4, 1);
-            matrix.set(b + _y3 + yEven, _x4, 1);
-            matrix.set(b - _y3, width - _x4 - 1, 1);
-            matrix.set(b + _y3 + yEven, width - _x4 - 1, 1);
+            var _x3 = a - _shift;
+            matrix.set(b - _y3, _x3, 1);
+            matrix.set(b + _y3 + yEven, _x3, 1);
+            matrix.set(b - _y3, width - _x3 - 1, 1);
+            matrix.set(b + _y3 + yEven, width - _x3 - 1, 1);
         }
 
-        for (var _x5 = 0; _x5 <= a; _x5++) {
-            var _shift2 = Math.floor(Math.sqrt(b2 - b2 * _x5 * _x5 / a2));
+        for (var _x4 = 0; _x4 <= a; _x4++) {
+            var _shift2 = Math.floor(Math.sqrt(b2 - b2 * _x4 * _x4 / a2));
             var _y4 = b - _shift2;
-            matrix.set(_y4, a - _x5, 1);
-            matrix.set(_y4, a + _x5 + xEven, 1);
-            matrix.set(height - _y4 - 1, a - _x5, 1);
-            matrix.set(height - _y4 - 1, a + _x5 + xEven, 1);
+            matrix.set(_y4, a - _x4, 1);
+            matrix.set(_y4, a + _x4 + xEven, 1);
+            matrix.set(height - _y4 - 1, a - _x4, 1);
+            matrix.set(height - _y4 - 1, a + _x4 + xEven, 1);
         }
     }
     return matrix;
@@ -30941,8 +31076,7 @@ var Model = _interopRequireWildcard(_model);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-function validateArrayOfChannels(image) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+function validateArrayOfChannels(image, options = {}) {
     var channels = options.channels,
         allowAlpha = options.allowAlpha,
         defaultAlpha = options.defaultAlpha;
@@ -30978,9 +31112,7 @@ function validateChannels(image, channels, allowAlpha) {
     return channels;
 }
 
-function validateChannel(image, channel) {
-    var allowAlpha = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-
+function validateChannel(image, channel, allowAlpha = true) {
     if (channel === undefined) {
         throw new RangeError('validateChannel : the channel has to be >=0 and <' + image.channels);
     }
@@ -31351,7 +31483,7 @@ function validateKernel(kernel) {
     } else {
         throw new Error('validateKernel: Invalid Kernel: ' + kernel);
     }
-    return { kernel: kernel, kWidth: kWidth, kHeight: kHeight };
+    return { kernel, kWidth, kHeight };
 }
 
 },{"is-integer":57}],275:[function(require,module,exports){
@@ -31594,7 +31726,7 @@ function work() {
     });
 }
 
-exports.default = { run: run, work: work };
+exports.default = { run, work };
 
 },{"../../image/Image":151,"extend":34}],280:[function(require,module,exports){
 'use strict';
@@ -31637,21 +31769,14 @@ class Worker {
         var manager = void 0;
         var url = void 0;
         var runner = {};
-        function run() {
-            var _method$run;
-
+        function run(...args) {
             if (!manager) {
                 this.checkUrl();
                 url = this.url;
                 manager = new _webWorkerManager2.default(method.work, { deps: url });
                 runner.manager = manager;
             }
-
-            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                args[_key] = arguments[_key];
-            }
-
-            return (_method$run = method.run).call.apply(_method$run, [runner].concat(args));
+            return method.run.call(runner, ...args);
         }
         run.reset = function () {
             if (manager) {
