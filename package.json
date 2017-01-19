@@ -26,6 +26,7 @@
   "homepage": "https://github.com/image-js/core",
   "license": "MIT",
   "main": "./lib/index.js",
+  "browser": "./dist/image.js",
   "files": [
     "dist",
     "lib"
