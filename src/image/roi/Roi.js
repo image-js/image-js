@@ -72,6 +72,9 @@ export default class Roi {
         return this.computed.center = [(this.width / 2) >> 0, (this.height / 2) >> 0];
     }
 
+    get ratio() {
+        return this.width / this.height;
+    }
 
     get width() {
         return this.maxX - this.minX + 1;

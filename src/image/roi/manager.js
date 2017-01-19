@@ -119,6 +119,8 @@ export default class RoiManager {
      * @param {number} [options.minHeight=Number.POSITIVE_INFINITY]
      * @param {number} [options.maxWidth=0]
      * @param {number} [options.maxHeight=Number.POSITIVE_INFINITY]
+     * @param {number} [options.minRatio=0] Ratio width / height
+     * @param {number} [options.maxRatio=Number.POSITIVE_INFINITY]
      * @return {Roi[]}
      */
     getRois(options = {}) {
@@ -131,7 +133,9 @@ export default class RoiManager {
             minWidth = 0,
             maxWidth = Number.POSITIVE_INFINITY,
             minHeight = 0,
-            maxHeight = Number.POSITIVE_INFINITY
+            maxHeight = Number.POSITIVE_INFINITY,
+            minRatio = 0,
+            maxRatio = Number.POSITIVE_INFINITY
         } = options;
 
         if (!this._layers[label]) {
@@ -152,6 +156,9 @@ export default class RoiManager {
                 && roi.width <= maxWidth
                 && roi.height >= minHeight
                 && roi.height <= maxHeight
+                && roi.ratio >= minRatio
+                && roi.ratio <= maxRatio
+
             ) {
                 rois[ptr++] = roi;
             }
