@@ -89,6 +89,23 @@ export default class RoiManager {
         return this._layers[opt.label].roiMap;
     }
 
+    /**
+     * Return statistics about rows
+     * @param {object} [options]
+     * @return {object[]}
+     */
+    rowsInfo(options = {}) {
+        return this.getMap(options).rowsInfo();
+    }
+
+    /**
+     * Return statistics about columns
+     * @param {object} [options]
+     * @return {object[]}
+     */
+    colsInfo(options = {}) {
+        return this.getMap(options).rowsInfo();
+    }
 
     /**
      * Return the IDs of the Regions Of Interest (Roi) as an array of number

@@ -19,4 +19,109 @@ export default class RoiMap {
     get total() {
         return this.negative + this.positive;
     }
+
+    rowsInfo() {
+        let rowsInfo = new Array(this.height);
+        let currentRow = 0;
+        for (let i = 0; i < this.data.length; i += this.width) {
+            let info = {
+                row: currentRow,
+                positivePixel: 0,
+                negativePixel: 0,
+                zeroPixel: 0,
+                positiveRoi: 0,
+                negativeRoi: 0,
+                medianChange: 0
+            };
+            rowsInfo[currentRow++] = info;
+            let positives = {};
+            let negatives = {};
+            let changes = [];
+            let previous = this.data[i];
+            let current = 0;
+            for (let j = i; j < i + this.width; j++) {
+                let value = this.data[j];
+                if (previous !== value) {
+                    previous = value;
+                    changes.push(current);
+                    current = 0;
+                }
+                current++;
+                if (value > 0) {
+                    info.positivePixel++;
+                    if (!positives[value]) {
+                        positives[value] = true;
+                    }
+                } else if (value < 0) {
+                    info.negativePixel++;
+                    if (!negatives[value]) {
+                        negatives[value] = true;
+                    }
+                } else {
+                    info.zeroPixel++;
+                }
+            }
+            changes.push(current);
+            // TODO use median package
+            info.medianChange = changes.sort((a, b) => a - b)[Math.floor(changes.length / 2)];
+            info.positiveRoiIDs = Object.keys(positives);
+            info.negativeRoiIDs = Object.keys(negatives);
+            info.positiveRoi = info.positiveRoiIDs.length;
+            info.negativeRoi = info.negativeRoiIDs.length;
+        }
+        return rowsInfo;
+    }
+
+    colsInfo() {
+        let colsInfo = new Array(this.width);
+        let currentCol = 0;
+        for (let i = 0; i < this.width; i++) {
+            let info = {
+                col: currentCol,
+                positivePixel: 0,
+                negativePixel: 0,
+                zeroPixel: 0,
+                positiveRoi: 0,
+                negativeRoi: 0,
+                medianChange: 0
+            };
+            colsInfo[currentCol++] = info;
+            let positives = {};
+            let negatives = {};
+            let changes = [];
+            let previous = this.data[i];
+            let current = 0;
+            for (let j = i; j < i + this.data.length; j += this.width) {
+                let value = this.data[j];
+                if (previous !== value) {
+                    previous = value;
+                    changes.push(current);
+                    current = 0;
+                }
+                current++;
+                if (value > 0) {
+                    info.positivePixel++;
+                    if (!positives[value]) {
+                        positives[value] = true;
+                    }
+                } else if (value < 0) {
+                    info.negativePixel++;
+                    if (!negatives[value]) {
+                        negatives[value] = true;
+                    }
+                } else {
+                    info.zeroPixel++;
+                }
+            }
+            changes.push(current);
+            // TODO use median package
+            info.medianChange = changes.sort((a, b) => a - b)[Math.floor(changes.length / 2)];
+            info.positiveRoiIDs = Object.keys(positives);
+            info.negativeRoiIDs = Object.keys(negatives);
+            info.positiveRoi = info.positiveRoiIDs.length;
+            info.negativeRoi = info.negativeRoiIDs.length;
+        }
+        return colsInfo;
+    }
+
 }
