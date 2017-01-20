@@ -4,7 +4,9 @@ module.exports = {
     entry: './src/index.js',
     output: {
         filename: 'image.js',
-        path: './dist'
+        path: './dist',
+        library: 'IJS',
+        libraryTarget: 'umd'
     },
     module: {
         loaders: [
