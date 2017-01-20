@@ -26,7 +26,10 @@
   "homepage": "https://github.com/image-js/core",
   "license": "MIT",
   "main": "./lib/index.js",
-  "browser": "./dist/image.js",
+  "browser": {
+    "./src/worker/worker.js": "./src/browser/worker/worker.js",
+    "./src/image/environment.js": "./src/browser/environment.js"
+  },
   "files": [
     "dist",
     "lib"
@@ -87,7 +90,6 @@
     "canvas": "^1.6.0"
   },
   "dependencies": {
-    "array-includes": "^3.0.1",
     "blob-util": "^1.2.1",
     "color-functions": "^1.1.0",
     "extend": "^3.0.0",
