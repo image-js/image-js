@@ -21,6 +21,9 @@ let computedPropertyDescriptor = {
     get: undefined
 };
 
+const toString = Object.prototype.toString;
+const imageStringTag = 'IJSImage';
+
 /**
  * Class representing an image.
  * This class allows to manipulate easily images directly in the browser or in node.
@@ -274,6 +277,14 @@ export default class Image {
 
         if (!data) data = createPixelArray(this);
         this.setData(data);
+    }
+
+    get [Symbol.toStringTag]() {
+        return imageStringTag;
+    }
+
+    static isImage(img) {
+        return toString.call(img) === `[object ${imageStringTag}]`;
     }
 
     initialize() {

@@ -58,4 +58,11 @@ describe('Image core', function () {
             clone.toDataURL().should.equal(img.toDataURL());
         });
     });
+
+    it('isImage', function () {
+        const image = new Image(5, 5);
+        Image.isImage(image).should.be.true();
+        Image.isImage().should.be.false();
+        Image.isImage({}).should.be.false();
+    });
 });
