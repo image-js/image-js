@@ -30,7 +30,7 @@ describe('check the gaussian filter', function () {
     });
 
 
-    it('check for GREY image', function () {
+    it('check for GREY image large value', function () {
         let image = new Image(7, 7,
             [
                 0, 0, 0, 0, 0, 0, 0,
