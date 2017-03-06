@@ -9,6 +9,7 @@ import {GRADIENT_X, GRADIENT_Y} from '../../util/kernels';
  * @param {Array<Array<number>>} [options.kernelY]
  * @param {string} [options.border='copy']
  * @param {*} [options.channels]
+ * #param {number} [options.bitDepth=this.bitDepth] Specify the bitDepth of the resulting image
  * @return {Image}
  */
 export default function sobelFilter(options = {}) {
@@ -16,7 +17,8 @@ export default function sobelFilter(options = {}) {
 		kernelX = GRADIENT_X,
 		kernelY = GRADIENT_Y,
 		border = 'copy',
-		channels
+		channels,
+        bitDepth = this.bitDepth
 	} = options;
 
     this.checkProcessable('sobel', {
@@ -35,5 +37,5 @@ export default function sobelFilter(options = {}) {
         bitDepth: 32
     });
 
-    return gX.hypotenuse(gY, {bitDepth: this.bitDepth, channels: channels});
+    return gX.hypotenuse(gY, {bitDepth, channels: channels});
 }
