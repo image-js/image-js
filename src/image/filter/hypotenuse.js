@@ -35,7 +35,7 @@ export default function hypotenuse(otherImage, options = {}) {
     for (let j = 0; j < channels.length; j++) {
         let c = channels[j];
         for (let i = c; i < this.data.length; i += this.channels) {
-            let value = Math.sqrt(this.data[i] * this.data[i] + otherImage.data[i] * otherImage.data[i]);
+            let value = Math.hypot(this.data[i], otherImage.data[i]);
             if (clamped) { // we calculate the clamped result
                 newImage.data[i] = Math.min(Math.max(Math.round(value), 0), newImage.maxValue);
             } else {
