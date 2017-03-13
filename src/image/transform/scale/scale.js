@@ -12,7 +12,7 @@ import {factorDimensions} from '../../../util/converter';
  * @param {number} [options.height=this.height] - new height
  * @param {number} [options.factor=1] - scaling factor (applied to the new width and height values)
  * @param {string} [options.algorithm='nearestNeighbor']
- * @param {boolean} [options.preserveAspectRatio=false] - preserve width/height ratio if only one of them is defined
+ * @param {boolean} [options.preserveAspectRatio=true] - preserve width/height ratio if only one of them is defined
  * @return {Image}
  */
 export default function scale(options = {}) {
