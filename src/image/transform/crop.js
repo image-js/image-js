@@ -46,7 +46,7 @@ export default function crop(options = {}) {
         throw new RangeError(`crop: (x: ${x}, y:${y}, width:${width}, height:${height}) size is out of range`);
     }
 
-    let newImage = Image.createFrom(this, {width, height});
+    let newImage = Image.createFrom(this, {width, height, position: [x, y]});
 
     let xWidth = width * this.channels;
     let y1 = y + height;

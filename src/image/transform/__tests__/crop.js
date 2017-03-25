@@ -55,6 +55,21 @@ describe('check the crop transform', function () {
         Array.from(result.data).should.eql([1, 2, 4, 3]);
     });
 
+    it('check crop + grey parenting', function () {
+        let original = image;
+        image = image.rgba8();
+        image.parent.should.equal(original);
+        let result = image.crop({
+            x: 2,
+            y: 3
+        });
+        let grey = result.grey();
+        grey.parent.should.equal(result);
+        grey.position.should.eql([0, 0]);
+        grey.parent.parent.should.equal(image);
+        grey.parent.position.should.eql([2, 3]);
+    });
+
     it('non-integer arguments', function () {
         let result = image.crop({
             x: 1.2,

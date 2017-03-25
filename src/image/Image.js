@@ -419,7 +419,7 @@ export default class Image {
         let newOptions = {
             width: other.width,
             height: other.height,
-            position: other.position,
+            position: [0, 0],
             components: other.components,
             alpha: other.alpha,
             colorModel: other.colorModel,

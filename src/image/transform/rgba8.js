@@ -17,6 +17,7 @@ import Image from '../Image';
  */
 export default function rgba8() {
     return new Image(this.width, this.height, this.getRGBAData(), {
-        kind: 'RGBA'
+        kind: 'RGBA',
+        parent: this
     });
 }
