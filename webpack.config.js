@@ -4,14 +4,15 @@ module.exports = {
     entry: './src/index.js',
     output: {
         filename: 'image.js',
-        path: './dist',
+        path: __dirname + '/dist',
         library: 'IJS',
         libraryTarget: 'umd'
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js$/,
+                exclude: /node_modules/,
                 loader: 'babel-loader'
             }
         ]

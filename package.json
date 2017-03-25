@@ -65,7 +65,7 @@
     "babel-plugin-transform-es2015-block-scoping": "^6.1.18",
     "babel-preset-env": "^1.1.7",
     "babel-register": "^6.2.0",
-    "babili": "0.0.10",
+    "babili": "^0.0.12",
     "benchmark": "^2.1.0",
     "documentation": "^4.0.0-beta.18",
     "eslint": "^3.12.1",
