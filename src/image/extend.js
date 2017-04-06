@@ -52,7 +52,6 @@ import getPixelsArray from './utility/getPixelsArray';
 import getIntersection from './utility/getIntersection';
 import getClosestCommonParent from './utility/getClosestCommonParent';
 
-
 // operators
 import paintMasks from './operator/paintMasks';
 import paintLabels from './operator/paintLabels';
@@ -75,6 +74,8 @@ import getPoints from './compute/points';
 import getRelativePosition from './compute/relativePosition';
 import getSvd from './compute/svd';
 import countAlphaPixels from './compute/countAlphaPixels';
+import monotoneChainConvexHull from './compute/monotoneChainConvexHull';
+import minimalBoundingRectangle from './compute/minimalBoundingRectangle';
 
 export default function extend(Image) {
     let inPlace = {inPlace: true};
@@ -144,6 +145,8 @@ export default function extend(Image) {
     Image.extendMethod('floodFill', floodFill);
 
     Image.extendMethod('countAlphaPixels', countAlphaPixels);
+    Image.extendMethod('monotoneChainConvexHull', monotoneChainConvexHull);
+    Image.extendMethod('minimalBoundingRectangle', minimalBoundingRectangle);
     Image.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);
     Image.extendMethod('getHistograms', getHistograms).extendProperty('histograms', getHistograms);
     Image.extendMethod('getColorHistogram', getColorHistogram).extendProperty('colorHistogram', getColorHistogram);
