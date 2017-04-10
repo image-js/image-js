@@ -68,6 +68,7 @@ import getColorHistogram from './compute/colorHistogram';
 import getMin from './compute/min';
 import getMax from './compute/max';
 import getSum from './compute/sum';
+import getMoment from './compute/moment';
 import getLocalMaxima from './compute/localMaxima';
 import getMean from './compute/mean';
 import getMedian from './compute/median';
@@ -150,6 +151,7 @@ export default function extend(Image) {
     Image.extendMethod('getMin', getMin).extendProperty('min', getMin);
     Image.extendMethod('getMax', getMax).extendProperty('max', getMax);
     Image.extendMethod('getSum', getSum).extendProperty('sum', getSum);
+    Image.extendMethod('getMoment', getMoment).extendProperty('moment', getMoment);
     Image.extendMethod('getLocalMaxima', getLocalMaxima);
     Image.extendMethod('getMedian', getMedian).extendProperty('median', getMedian);
     Image.extendMethod('getMean', getMean).extendProperty('mean', getMean);
