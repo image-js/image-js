@@ -11,17 +11,14 @@ export default function getMoment(xPower = 0, yPower = 0) {
         bitDepth: [1]
     });
 
-    let m=0;
+    let m = 0;
 
-    for (let x=0; x<this.width; x++) {
-        for (let y=0; y<this.height; y++) {
-            if (this.getBitXY(x,y)) {
-                // we add +1 otherwise the first row and column has no influence
-                m+=Math.pow(x+1,xPower)*Math.pow(y+1,yPower);
+    for (let x = 0; x < this.width; x++) {
+        for (let y = 0; y < this.height; y++) {
+            if (this.getBitXY(x, y) === 1) {
+                m += x ** xPower * y ** yPower;
             }
         }
     }
-
-    // how to deal with the +1 ?
     return m;
 }
