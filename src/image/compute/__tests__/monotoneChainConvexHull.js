@@ -1,7 +1,5 @@
 import {Image} from 'test/common';
 
-import monotoneChainConvexHull from '../monotoneChainConvexHull';
-
 describe('Monotone Chain Convex Hull', function () {
     it('should return the convex hull', function () {
         let image = new Image(8, 8,
@@ -18,7 +16,7 @@ describe('Monotone Chain Convex Hull', function () {
             {kind: 'BINARY'}
         );
 
-        monotoneChainConvexHull.call(image).should.eql([
+        image.monotoneChainConvexHull().should.eql([
             [2, 3],
             [3, 1],
             [4, 1],
