@@ -3,7 +3,7 @@ import {Image} from 'test/common';
 import minimalBoundingRectangle from '../minimalBoundingRectangle';
 
 describe('Minimal bounding rectangle', function () {
-    it('should return the minimal bounding box', function () {
+    it.skip('should return the minimal bounding box', function () {
         let image = new Image(8, 8,
             [
                 0b00000000,
@@ -20,10 +20,41 @@ describe('Minimal bounding rectangle', function () {
 
         const result = minimalBoundingRectangle.call(image);
         result.length.should.equal(4);
+
         for (let i = 0; i < 4; i++) {
-            angle(result[i], result[(i + 1) % 4], result[(i + 2) % 4]).should.approximately(Math.PI / 4, Number.EPSILON);
+            angle(result[i], result[(i + 1) % 4], result[(i + 2) % 4]).should.approximately(Math.PI / 4, 1e-6);
         }
     });
+
+    it('should work with array of points', function () {
+        const result = minimalBoundingRectangle({
+            convexHull: [[0, 1], [2, 0], [3, 0], [4, 1], [4, 3], [0, 3]]
+        });
+        result.length.should.equal(4);
+
+    });
+
+    it.skip('should work with array of points', function () {
+        const result = minimalBoundingRectangle({
+            convexHull: [[0, 0], [2, -1], [3, -1], [4, 0], [4, 2], [0, 2]]
+        });
+        result.length.should.equal(4);
+    });
+
+    it.skip('should work with array of points', function () {
+        const result = minimalBoundingRectangle({
+            convexHull: [[2, 0], [4, 2], [2, 4], [0, 2]]
+        });
+        result.length.should.equal(4);
+    });
+
+    it.skip('should work with array of points', function () {
+        const result = minimalBoundingRectangle({
+            convexHull: [[0, 0], [5, 0], [6, 4], [1, 4]]
+        });
+        result.length.should.equal(4);
+    });
+
 });
 
 function angle(p1, p2, p3) {

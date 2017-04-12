@@ -7,7 +7,7 @@ export default function monotoneChainConvexHull() {
     const image = this;
     image.checkProcessable('monotoneChainConvexHull', {bitDepth: 1});
 
-    const points = image.points();
+    const points = image.points;
 
     const n = points.length;
     const ans = new Array(n * 2);
