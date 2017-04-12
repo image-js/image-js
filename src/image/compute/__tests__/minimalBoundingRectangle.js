@@ -24,6 +24,23 @@ describe('Minimal bounding rectangle', function () {
             angle(result[i], result[(i + 1) % 4], result[(i + 2) % 4]).should.approximately(Math.PI / 4, Number.EPSILON);
         }
     });
+
+    it.only('should return the small bounding box', function () {
+        let image = new Image(8, 3,
+            [
+                0b10000001,
+                0b00011000,
+                0b10011010,
+            ],
+            {kind: 'BINARY'}
+        );
+
+        const result = minimalBoundingRectangle.call(image);
+
+        console.log(result);
+
+    });
+
 });
 
 function angle(p1, p2, p3) {
