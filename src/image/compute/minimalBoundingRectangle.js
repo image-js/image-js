@@ -7,99 +7,102 @@ Computes the minimum bounding box around a binary image
 export default function minimalBoundingRectangle(options = {}) {
 
     const {
-        convexHull = convexHullFunction.call(this)
+        originalPoints = convexHullFunction.call(this)
     } = options;
 
-    // 1
-    let aMin = Infinity;
-    let tMin = 1;
-    let tMax = 0;
-    let sMax = 0;
-    let j = 1;
-    let k = 0;
-    let l = -1;
-    let nV = convexHull.length;
+    const p = new Array(originalPoints.length);
 
-    let r0, r1, r2, r3;
-    let q;
-    let mbr = [null, null, null, null];
+    let minSurface = +Infinity;
+    let minSurfaceAngle = 0;
+    let mbr;
 
-    while (k < nV) {
-        // 2
-        let v = vectorDiff(convexHull[j], convexHull[k]);
-        let r = 1 / scalarProduct(v, v);
 
-        // 3
-        for (j = 0; j < nV; j++) {
-            let u = vectorDiff(convexHull[j], convexHull[k]);
-            let t = scalarProduct(u, v) * r;
-            let pt = vectorSum(vectorMul(v, t), convexHull[k]);
+    for (let i = 0; i < p.length; i++) {
+        let angle = getAngle(originalPoints[i], originalPoints[(i + 1) % p.length]);
 
-            u = vectorDiff(pt, convexHull[j]);
-            let s = scalarProduct(u, u);
+        rotate(-angle, originalPoints, p);
 
-            if (t < tMin) {
+        // console.log('Using the vector: ', originalPoints[i],  originalPoints[(i + 1) % p.length], 'angle', angle);
+        // console.log('newPoints', p);
+
+        // we rotate and translate so that this axe is in the bottom
+
+        let aX = p[i][0];
+        let aY = p[i][1];
+        let bX = p[(i + 1) % p.length][0];
+        let bY = p[(i + 1) % p.length][1];
+
+        let tUndefined = true;
+        let tMin = 0;
+        let tMax = 0;
+        let maxWidth = 0;
+        for (let j = 0; j < p.length; j++) {
+            let cX = p[j][0];
+            let cY = p[j][1];
+            let power = (bX - aX) ** 2 + (bY - aY) ** 2;
+            let t = ((cX - aX) * (bX - aX) + (cY - aY) * (bY - aY)) / (power);
+            if (tUndefined === true) {
+                tUndefined = false;
                 tMin = t;
-                r0 = pt;
-            }
-            if (t > tMax) {
                 tMax = t;
-                r1 = pt;
+            } else {
+                if (t < tMin) tMin = t;
+                if (t > tMax) tMax = t;
             }
-            if (s > sMax) {
-                sMax = s;
-                q = pt;
-                l = j;
-            }
+            let width = Math.abs((bY - aY) * cX - (bX - aX) * cY + bX * aY - bY * aX) / power ** 0.5;
+            if (width > maxWidth) maxWidth = width;
         }
 
-        // 4
-        r2 = vectorDiff(vectorSum(r1, convexHull[l]), q);
+        let pMin = [aX + tMin * (bX - aX), aY + tMin * (bY - aY)];
+        let pMax = [aX + tMax * (bX - aX), aY + tMax * (bY - aY)];
 
-        // 5
-        r3 = vectorDiff(vectorSum(r0, convexHull[l]), q);
-
-        // 6
-        let u = vectorDiff(r1, r0);
-        // 7
-        let a = scalarProduct(u, u) * sMax;
-
-        // 8
-        if (a < aMin) {
-            aMin = a;
-            mbr = [r0, r1, r2, r3];
-        }
-
-        k = k + 1;
-        j = k + 1;
-        if (j === nV) {
-            j = 0;
+        let currentSurface = maxWidth * getDistance(pMin, pMax);
+        if (currentSurface < minSurface) {
+            minSurfaceAngle = angle;
+            minSurface = currentSurface;
+            mbr = [
+                pMin,
+                pMax,
+                [pMax[0], pMax[1] + maxWidth],
+                [pMin[0], pMin[1] + maxWidth]
+            ];
+            // console.log('MIN SURFACE', angle, minSurface, mbr);
         }
     }
-
+    rotate(minSurfaceAngle, mbr, mbr);
     return mbr;
+}
+
+function getDistance(p1, p2) {
+    return Math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2);
 
 }
 
-function vectorDiff(a, b, r = [0, 0]) {
-    r[0] = a[0] - b[0];
-    r[1] = a[1] - b[1];
-    return r;
+function getDiff(p1, p2) {
+    return [p1[0] - p2[0], p1[1] - p2[1]];
 }
 
-function vectorSum(a, b, r = [0, 0]) {
-    r[0] = a[0] + b[0];
-    r[1] = a[1] + b[1];
-    return r;
-}
-
-function vectorMul(a, s, r = [0, 0]) {
-    r[0] = a[0] * s;
-    r[1] = a[1] * s;
-    return r;
+// the angle that allows to make the line going through p1 and p2 horizontal
+function getAngle(p1, p2) {
+    let diff = getDiff(p2, p1);
+    let vector = norm(diff);
+    return Math.acos((vector[0]));
 }
 
 
-function scalarProduct(a, b) {
-    return a[0] * b[0] + a[1] * b[1];
+function norm(p) {
+    let length = Math.sqrt(p[0] ** 2 + p[1] ** 2);
+    return [p[0] / length, p[1] / length];
+
+}
+
+function rotate(radians, srcPoints, destPoints) {
+    let cos = Math.cos(radians);
+    let sin = Math.sin(radians);
+    for (let i = 0; i < destPoints.length; ++i) {
+        destPoints[i] = [
+            cos * srcPoints[i][0] - sin * srcPoints[i][1],
+            sin * srcPoints[i][0] + cos * srcPoints[i][1]
+        ];
+    }
 }
