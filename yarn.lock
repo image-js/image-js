@@ -4421,6 +4421,10 @@ shellsubstitute@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/shellsubstitute/-/shellsubstitute-1.2.0.tgz#e4f702a50c518b0f6fe98451890d705af29b6b70"
 
+should-approximately-deep@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/should-approximately-deep/-/should-approximately-deep-1.1.0.tgz#53232b655a93a61526f42e9282a370e6dbfcedaf"
+
 should-equal@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/should-equal/-/should-equal-1.0.1.tgz#0b6e9516f2601a9fb0bb2dcc369afa1c7e200af7"

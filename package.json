@@ -51,9 +51,9 @@
     "eslint-fix": "npm run eslint -- --fix",
     "prepublish": "npm run compile",
     "test": "run-s test-mocha eslint",
-    "test-cov": "istanbul cover _mocha -- --compilers js:babel-register --require should --reporter dot --recursive src/**/__tests__/**/*.js",
-    "test-mocha": "mocha --compilers js:babel-register --require should --reporter mocha-better-spec-reporter --recursive src/**/__tests__/**/*.js",
-    "test-travis": "istanbul cover _mocha --report lcovonly -- --compilers js:babel-register --require should --reporter mocha-better-spec-reporter --recursive src/**/__tests__/**/*.js && npm run eslint",
+    "test-cov": "istanbul cover _mocha -- --compilers js:babel-register --require should --require should-approximately-deep --reporter dot --recursive src/**/__tests__/**/*.js",
+    "test-mocha": "mocha --compilers js:babel-register --require should --require should-approximately-deep --reporter mocha-better-spec-reporter --recursive src/**/__tests__/**/*.js",
+    "test-travis": "istanbul cover _mocha --report lcovonly -- --compilers js:babel-register --require should --require should-approximately-deep --reporter mocha-better-spec-reporter --recursive src/**/__tests__/**/*.js && npm run eslint",
     "watch-browser": "watchify test/browser/bootstrap.js -o test/browser/image.js --standalone IJS --exclude canvas --ignore buffer --ignore zlib --ignore fs --debug --global-transform [ babelify --sourceMap ]",
     "watch-node": "npm run compile -- --watch"
   },
@@ -78,6 +78,7 @@
     "rimraf": "^2.4.0",
     "sha.js": "^2.4.3",
     "should": "^11.1.0",
+    "should-approximately-deep": "^1.1.0",
     "webpack": "^2.2.0",
     "which": "^1.2.0"
   },

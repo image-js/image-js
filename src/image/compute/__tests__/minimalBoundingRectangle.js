@@ -3,7 +3,7 @@ import {Image} from 'test/common';
 import minimalBoundingRectangle from '../minimalBoundingRectangle';
 
 describe('Minimal bounding rectangle', function () {
-    it('should return the minimal bounding box', function () {
+    it.skip('should return the minimal bounding box', function () {
         let image = new Image(8, 8,
             [
                 0b00000000,
@@ -25,7 +25,7 @@ describe('Minimal bounding rectangle', function () {
         }
     });
 
-    it.only('should return the small bounding box', function () {
+    it('should return the small bounding box', function () {
         let image = new Image(8, 3,
             [
                 0b10000001,
@@ -36,10 +36,55 @@ describe('Minimal bounding rectangle', function () {
         );
 
         const result = minimalBoundingRectangle.call(image);
-
-        console.log(result);
-
+        result.should.eql([[0, 0], [7, 0], [7, 2], [0, 2]]);
     });
+
+    it('should return the small bounding box 2', function () {
+        let image = new Image(8, 3,
+            [
+                0b01000100,
+                0b00011000,
+                0b01011010
+            ],
+            {kind: 'BINARY'}
+        );
+
+        const result = minimalBoundingRectangle.call(image);
+        result.should.eql([[1, 0], [6, 0], [6, 2], [1, 2]]);
+    });
+
+    it('should return the small bounding box diamond', function () {
+        let image = new Image(8, 3,
+            [
+                0b00000100,
+                0b00001110,
+                0b00000100
+            ],
+            {kind: 'BINARY'}
+        );
+
+        const result = minimalBoundingRectangle.call(image);
+        result.should.approximatelyDeep([[5, 0], [6, 1], [5, 2], [4, 1]], 1e-6);
+    });
+
+    it('should return the small bounding box rectangle', function () {
+        let image = new Image(8, 7,
+            [
+                0b00000000,
+                0b00001000,
+                0b00011100,
+                0b00111110,
+                0b00011111,
+                0b00001110,
+                0b00000100
+            ],
+            {kind: 'BINARY'}
+        );
+
+        const result = minimalBoundingRectangle.call(image);
+        result.should.approximatelyDeep([[4, 1], [7, 4], [5, 6], [2, 3]], 1e-6);
+    });
+
 
 });
 
