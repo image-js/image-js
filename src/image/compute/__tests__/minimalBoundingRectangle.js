@@ -86,6 +86,23 @@ describe('Minimal bounding rectangle', function () {
         result.should.approximatelyDeep([[4, 1], [7, 4], [5, 6], [2, 3]], 1e-6);
     });
 
+    it.skip('should return the small bounding box rectangle', function () {
+
+        const result = minimalBoundingRectangle({
+            originalPoints: [[0, 1], [1, 0], [3, 2], [2, 4], [1, 4], [0, 3]]
+        });
+      //  console.log(result);
+
+        // [ [ 1.5, 4.5 ],
+        //     [ -1, 2 ],
+        //     [ -3, 0 ],
+        //     [ -0.5, 2.5 ] ]
+
+
+        // result.should.approximatelyDeep([[4, 1], [7, 4], [5, 6], [2, 3]], 1e-6);
+    });
+
+
 });
 
 function angle(p1, p2, p3) {
