@@ -65,7 +65,7 @@ describe('Minimal bounding rectangle', function () {
         );
 
         const result = minimalBoundingRectangle.call(image);
-        result.should.approximatelyDeep([[5, 2], [4, 1], [5, 0], [6, 1]], 1e-6);
+        result.should.approximatelyDeep([[5, 0], [6, 1], [5, 2], [4, 1]], 1e-6);
     });
 
 
@@ -84,7 +84,7 @@ describe('Minimal bounding rectangle', function () {
         );
 
         const result = minimalBoundingRectangle.call(image);
-        result.should.approximatelyDeep([[4, 1], [7, 4], [5, 6], [2, 3]], 1e-6);
+        result.should.approximatelyDeep([[2, 3], [4, 1], [7, 4], [5, 6]], 1e-6);
     });
 
     it('should return the small bounding box rectangle', function () {
@@ -92,7 +92,7 @@ describe('Minimal bounding rectangle', function () {
         const result = minimalBoundingRectangle({
             originalPoints: [[0, 1], [1, 0], [3, 2], [2, 4], [1, 4], [0, 3]]
         });
-        result.should.approximatelyDeep([[-1, 2], [1, 0], [3.5, 2.5], [1.5, 4.5]], 1e-6);
+        result.should.approximatelyDeep([[1, 0], [3.5, 2.5], [1.5, 4.5], [-1, 2]], 1e-6);
     });
 
 
