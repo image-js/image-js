@@ -86,7 +86,9 @@ function getDiff(p1, p2) {
 function getAngle(p1, p2) {
     let diff = getDiff(p2, p1);
     let vector = norm(diff);
-    return Math.acos((vector[0]));
+    let angle = Math.acos((vector[0]));
+    if (vector[1] < 0) return -angle;
+    return angle;
 }
 
 
