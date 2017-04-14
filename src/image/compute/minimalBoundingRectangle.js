@@ -39,8 +39,7 @@ export default function minimalBoundingRectangle(options = {}) {
         for (let j = 0; j < p.length; j++) {
             let cX = p[j][0];
             let cY = p[j][1];
-            let power = (bX - aX) ** 2;
-            let t = ((cX - aX) * (bX - aX)) / (power);
+            let t = (cX - aX) / (bX - aX);
             if (tUndefined === true) {
                 tUndefined = false;
                 tMin = t;
@@ -49,14 +48,14 @@ export default function minimalBoundingRectangle(options = {}) {
                 if (t < tMin) tMin = t;
                 if (t > tMax) tMax = t;
             }
-            let width = Math.abs(-(bX - aX) * cY + bX * aY - bY * aX) / power ** 0.5;
+            let width = Math.abs(-(bX - aX) * cY + bX * aY - bY * aX) / (bX - aX);
             if (width > maxWidth) maxWidth = width;
         }
 
         let pMin = [aX + tMin * (bX - aX), aY];
         let pMax = [aX + tMax * (bX - aX), aY];
 
-        let currentSurface = maxWidth * getDistance(pMin, pMax);
+        let currentSurface = maxWidth * Math.abs((tMin-tMax)*(bX-aX));
         if (currentSurface < minSurface) {
             minSurfaceAngle = angle;
             minSurface = currentSurface;
