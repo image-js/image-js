@@ -3,7 +3,7 @@ import {Image} from 'test/common';
 import minimalBoundingRectangle from '../minimalBoundingRectangle';
 
 describe('Minimal bounding rectangle', function () {
-    it.skip('should return the minimal bounding box', function () {
+    it('should return the minimal bounding box', function () {
         let image = new Image(8, 8,
             [
                 0b00000000,
@@ -22,7 +22,8 @@ describe('Minimal bounding rectangle', function () {
         result.length.should.equal(4);
 
         for (let i = 0; i < 4; i++) {
-            angle(result[i], result[(i + 1) % 4], result[(i + 2) % 4]).should.approximately(Math.PI / 4, 1e-6);
+            let currentAngle = angle(result[i], result[(i + 1) % 4], result[(i + 2) % 4]);
+            Math.abs(currentAngle).should.approximately(Math.PI / 2, 1e-6);
         }
     });
 
@@ -99,9 +100,22 @@ describe('Minimal bounding rectangle', function () {
 });
 
 function angle(p1, p2, p3) {
-    return Math.acos((l(p1, p2) ** 2 + l(p1, p3) ** 2 - l(p2, p3) ** 2) / (2 * l(p1, p2) * l(p1, p3)));
+    let v1 = norm(getDiff(p1, p2));
+    let v2 = norm(getDiff(p2, p3));
+    let dotProduct = dot(v1, v2);
+    return Math.acos(dotProduct);
 }
 
-function l(p1, p2) {
-    return Math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2);
+
+function dot(p1, p2) {
+    return p1[0] * p2[0] + p1[1] * p2[1];
+}
+
+function getDiff(p1, p2) {
+    return [p1[0] - p2[0], p1[1] - p2[1]];
+}
+
+function norm(p) {
+    let length = Math.sqrt(p[0] ** 2 + p[1] ** 2);
+    return [p[0] / length, p[1] / length];
 }

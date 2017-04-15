@@ -55,7 +55,7 @@ export default function minimalBoundingRectangle(options = {}) {
         let pMin = [aX + tMin * (bX - aX), aY];
         let pMax = [aX + tMax * (bX - aX), aY];
 
-        let currentSurface = maxWidth * Math.abs((tMin-tMax)*(bX-aX));
+        let currentSurface = maxWidth * Math.abs((tMin - tMax) * (bX - aX));
         if (currentSurface < minSurface) {
             minSurfaceAngle = angle;
             minSurface = currentSurface;
@@ -70,11 +70,6 @@ export default function minimalBoundingRectangle(options = {}) {
     }
     rotate(minSurfaceAngle, mbr, mbr);
     return mbr;
-}
-
-function getDistance(p1, p2) {
-    return Math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2);
-
 }
 
 function getDiff(p1, p2) {
@@ -94,7 +89,6 @@ function getAngle(p1, p2) {
 function norm(p) {
     let length = Math.sqrt(p[0] ** 2 + p[1] ** 2);
     return [p[0] / length, p[1] / length];
-
 }
 
 function rotate(radians, srcPoints, destPoints) {
