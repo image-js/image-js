@@ -1,5 +1,11 @@
 import {Image} from 'test/common';
 
+
+import {
+    angle
+} from './../../../util/points.js';
+
+
 import minimalBoundingRectangle from '../minimalBoundingRectangle';
 
 describe('Minimal bounding rectangle', function () {
@@ -22,7 +28,7 @@ describe('Minimal bounding rectangle', function () {
         result.length.should.equal(4);
 
         for (let i = 0; i < 4; i++) {
-            let currentAngle = angle(result[i], result[(i + 1) % 4], result[(i + 2) % 4]);
+            let currentAngle = angle(result[(i + 1) % 4], result[i], result[(i + 2) % 4]);
             Math.abs(currentAngle).should.approximately(Math.PI / 2, 1e-6);
         }
     });
@@ -95,27 +101,5 @@ describe('Minimal bounding rectangle', function () {
         });
         result.should.approximatelyDeep([[-1, 2], [1, 0], [3.5, 2.5], [1.5, 4.5]], 1e-6);
     });
-
-
 });
 
-function angle(p1, p2, p3) {
-    let v1 = norm(getDiff(p1, p2));
-    let v2 = norm(getDiff(p2, p3));
-    let dotProduct = dot(v1, v2);
-    return Math.acos(dotProduct);
-}
-
-
-function dot(p1, p2) {
-    return p1[0] * p2[0] + p1[1] * p2[1];
-}
-
-function getDiff(p1, p2) {
-    return [p1[0] - p2[0], p1[1] - p2[1]];
-}
-
-function norm(p) {
-    let length = Math.sqrt(p[0] ** 2 + p[1] ** 2);
-    return [p[0] / length, p[1] / length];
-}

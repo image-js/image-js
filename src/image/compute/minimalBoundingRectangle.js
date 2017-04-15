@@ -1,5 +1,11 @@
 import convexHullFunction from './monotoneChainConvexHull';
 
+import {
+    rotate,
+    difference,
+    normalize
+} from './../../util/points.js';
+
 /*
 Computes the minimum bounding box around a binary image
  https://www.researchgate.net/profile/Lennert_Den_Boer2/publication/303783472_A_Fast_Algorithm_for_Generating_a_Minimal_Bounding_Rectangle/links/5751a14108ae6807fafb2aa5.pdf
@@ -72,32 +78,14 @@ export default function minimalBoundingRectangle(options = {}) {
     return mbr;
 }
 
-function getDiff(p1, p2) {
-    return [p1[0] - p2[0], p1[1] - p2[1]];
-}
 
 // the angle that allows to make the line going through p1 and p2 horizontal
+// this is an otmized version because it assume one verctor is horizontal
 function getAngle(p1, p2) {
-    let diff = getDiff(p2, p1);
-    let vector = norm(diff);
+    let diff = difference(p2, p1);
+    let vector = normalize(diff);
     let angle = Math.acos((vector[0]));
     if (vector[1] < 0) return -angle;
     return angle;
 }
 
-
-function norm(p) {
-    let length = Math.sqrt(p[0] ** 2 + p[1] ** 2);
-    return [p[0] / length, p[1] / length];
-}
-
-function rotate(radians, srcPoints, destPoints) {
-    let cos = Math.cos(radians);
-    let sin = Math.sin(radians);
-    for (let i = 0; i < destPoints.length; ++i) {
-        destPoints[i] = [
-            cos * srcPoints[i][0] - sin * srcPoints[i][1],
-            sin * srcPoints[i][0] + cos * srcPoints[i][1]
-        ];
-    }
-}
