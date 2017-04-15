@@ -16,9 +16,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -8701,8 +8701,7 @@ function minimalBoundingRectangle(options = {}) {
         for (var j = 0; j < p.length; j++) {
             var cX = p[j][0];
             var cY = p[j][1];
-            var power = Math.pow(bX - aX, 2) + Math.pow(bY - aY, 2);
-            var t = ((cX - aX) * (bX - aX) + (cY - aY) * (bY - aY)) / power;
+            var t = (cX - aX) / (bX - aX);
             if (tUndefined === true) {
                 tUndefined = false;
                 tMin = t;
@@ -8711,14 +8710,14 @@ function minimalBoundingRectangle(options = {}) {
                 if (t < tMin) tMin = t;
                 if (t > tMax) tMax = t;
             }
-            var width = Math.abs((bY - aY) * cX - (bX - aX) * cY + bX * aY - bY * aX) / Math.pow(power, 0.5);
+            var width = Math.abs(-(bX - aX) * cY + bX * aY - bY * aX) / (bX - aX);
             if (width > maxWidth) maxWidth = width;
         }
 
-        var pMin = [aX + tMin * (bX - aX), aY + tMin * (bY - aY)];
-        var pMax = [aX + tMax * (bX - aX), aY + tMax * (bY - aY)];
+        var pMin = [aX + tMin * (bX - aX), aY];
+        var pMax = [aX + tMax * (bX - aX), aY];
 
-        var currentSurface = maxWidth * getDistance(pMin, pMax);
+        var currentSurface = maxWidth * Math.abs((tMin - tMax) * (bX - aX));
         if (currentSurface < minSurface) {
             minSurfaceAngle = angle;
             minSurface = currentSurface;
@@ -8730,10 +8729,6 @@ function minimalBoundingRectangle(options = {}) {
     return mbr;
 }
 
-function getDistance(p1, p2) {
-    return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2));
-}
-
 function getDiff(p1, p2) {
     return [p1[0] - p2[0], p1[1] - p2[1]];
 }
@@ -8742,7 +8737,9 @@ function getDiff(p1, p2) {
 function getAngle(p1, p2) {
     var diff = getDiff(p2, p1);
     var vector = norm(diff);
-    return Math.acos(vector[0]);
+    var angle = Math.acos(vector[0]);
+    if (vector[1] < 0) return -angle;
+    return angle;
 }
 
 function norm(p) {
@@ -19890,7 +19887,7 @@ module.exports = Number.isFinite || function (val) {
 /* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var require;var require;(function(f){if(true){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.PriorityQueue = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+var require;var require;(function(f){if(true){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.PriorityQueue = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return require(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 var AbstractPriorityQueue, ArrayStrategy, BHeapStrategy, BinaryHeapStrategy, PriorityQueue,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
