@@ -1,4 +1,3 @@
-import {RGB} from '../model/model';
 import Shape from '../../util/Shape';
 
 /**
@@ -18,9 +17,7 @@ export default function paintPoints(points, options = {}) {
     } = options;
 
     this.checkProcessable('paintPoints', {
-        components: 3,
-        bitDepth: [8, 16],
-        colorModel: RGB
+        bitDepth: [8, 16]
     });
 
     let shapePixels = (new Shape(shape)).getPoints();
