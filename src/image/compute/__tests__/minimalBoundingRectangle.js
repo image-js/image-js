@@ -3,7 +3,7 @@ import {Image} from 'test/common';
 
 import {
     angle
-} from './../../../util/points.js';
+} from '../../../util/points';
 
 
 import minimalBoundingRectangle from '../minimalBoundingRectangle';

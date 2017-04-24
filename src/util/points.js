@@ -1,7 +1,8 @@
 /**
  * Rounds all the x and y values of an array of points
- * @param points
- * @returns {*}
+ * @param {Array<Array<number>>} points
+ * @return {Array<Array<number>>} modified input value
+ * @private
  */
 export function round(points) {
     for (let i = 0; i < points.length; i++) {
@@ -13,9 +14,10 @@ export function round(points) {
 
 /**
  * Calculates a new point that is the difference p1 - p2
- * @param p1
- * @param p2
- * @returns {[*,*]}
+ * @param {Array<number>} p1
+ * @param {Array<number>} p2
+ * @return {Array<number>}
+ * @private
  */
 export function difference(p1, p2) {
     return [p1[0] - p2[0], p1[1] - p2[1]];
@@ -23,8 +25,9 @@ export function difference(p1, p2) {
 
 /**
  * Normalize a point
- * @param p
- * @returns {[*,*]}
+ * @param {Array<number>} p
+ * @return {Array<number>}
+ * @private
  */
 export function normalize(p) {
     let length = Math.sqrt(p[0] ** 2 + p[1] ** 2);
@@ -33,10 +36,11 @@ export function normalize(p) {
 
 /**
  * We rotate an array of points
- * @param radians
- * @param srcPoints
- * @param destPoints
- * @returns {*}
+ * @param {number} radians
+ * @param {Array<Array<number>>} srcPoints
+ * @param {Array<Array<number>>} destPoints
+ * @return {Array<Array<number>>}
+ * @private
  */
 export function rotate(radians, srcPoints, destPoints) {
     if (destPoints === undefined) destPoints = new Array(srcPoints.length);
@@ -53,9 +57,10 @@ export function rotate(radians, srcPoints, destPoints) {
 
 /**
  * Dot products of 2 points assuming vectors starting from (0,0)
- * @param p1
- * @param p2
- * @returns {number}
+ * @param {Array<number>} p1
+ * @param {Array<number>} p2
+ * @return {number}
+ * @private
  */
 export function dot(p1, p2) {
     return p1[0] * p2[0] + p1[1] * p2[1];
@@ -63,10 +68,11 @@ export function dot(p1, p2) {
 
 /**
  * Returns the angle between 3 points. The first one is a common point
- * @param origin
- * @param p1
- * @param p2
- * @returns {number}
+ * @param {Array<number>} origin
+ * @param {Array<number>} p1
+ * @param {Array<number>} p2
+ * @return {number}
+ * @private
  */
 export function angle(origin, p1, p2) {
     let v1 = normalize(difference(p1, origin));
@@ -77,8 +83,10 @@ export function angle(origin, p1, p2) {
 }
 
 /**
- * Returns the 4 points of an horizontal rectangle that includes all the oints
- * @param points
+ * Returns the 4 points of an horizontal rectangle that includes all the points
+ * @param {Array<Array<number>>} points
+ * @return {Array<Array<number>>}
+ * @private
  */
 export function boundary(points) {
     let minMaxValues = minMax(points);
@@ -91,7 +99,9 @@ export function boundary(points) {
 
 /**
  * Returns 2 points with minimal and maximal XY
- * @param points
+ * @param {Array<Array<number>>} points
+ * @return {Array<Array<number>>}
+ * @private
  */
 export function minMax(points) {
     let xMin = +Infinity;
@@ -110,8 +120,10 @@ export function minMax(points) {
 /**
  * Moves the minX, minY to 0,0
  * All the points will be positive after this move
- * @param srcPoints
- * @param destPoints
+ * @param {Array<Array<number>>} srcPoints
+ * @param {Array<Array<number>>} destPoints
+ * @return {Array<Array<number>>}
+ * @private
  */
 export function moveToZeroZero(srcPoints, destPoints) {
     if (destPoints === undefined) destPoints = new Array(srcPoints.length);
@@ -124,4 +136,3 @@ export function moveToZeroZero(srcPoints, destPoints) {
     }
     return destPoints;
 }
-

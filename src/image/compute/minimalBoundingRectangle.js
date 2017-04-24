@@ -4,7 +4,7 @@ import {
     rotate,
     difference,
     normalize
-} from './../../util/points.js';
+} from '../../util/points';
 
 /*
 Computes the minimum bounding box around a binary image

@@ -328,7 +328,7 @@ export default class RoiManager {
      * Finds all corresponding ROIs for all ROIs in the manager
      * @param {number[]} roiMap
      * @param {object} [options]
-     * @returns {Array} array of objects returned in correspondingRoisInformation
+     * @return {Array} array of objects returned in correspondingRoisInformation
      */
     findCorrespondingRoi(roiMap, options = {}) {
         let allRois = this.getRois(options);
@@ -360,11 +360,11 @@ export default class RoiManager {
  * Returns an object containing the ID of ROIs, the surface shared by given and corresponding ROIs,
  * the percentage of given ROI surface covered by the corresponding ROI, the number of points with same and opposite signs,
  * the total number of points (same and opposite).
- * @param {number} x: minX value of ROI
- * @param {number} y: minY value of ROI
- * @param {number[][]} points: points of ROI
- * @param {number[]} roiMap: roiMap from which we get the corresponding ROI
- * @param {number} roiSign: sign of ROI
+ * @param {number} x - minX value of ROI
+ * @param {number} y - minY value of ROI
+ * @param {Array<Array<number>>} points - points of ROI
+ * @param {Array<number>} roiMap - roiMap from which we get the corresponding ROI
+ * @param {number} roiSign - sign of ROI
  * @return {object} {{id: Array, surface: Array, roiSurfaceCovered: Array, same: number, opposite: number, total: number}}
  */
 function correspondingRoisInformation(x, y, points, roiMap, roiSign) {

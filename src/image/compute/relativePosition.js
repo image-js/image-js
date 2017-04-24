@@ -10,7 +10,7 @@
  * @memberof Image
  * @instance
  * @param {Image} targetImage
- * @param {Object} [options={}]
+ * @param {object} [options={}]
  * @param {boolean} [options.defaultFurther=false] If set to true and no parent found returns the relative position
  *      to the further parent
  * @return {number[]|boolean}

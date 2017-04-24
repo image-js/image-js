@@ -1,8 +1,7 @@
 /**
  * Find intersection of points between two different masks
- * @param {Image} - a mask (1 bit image)
- * @param {Image} - a mask (1 bit image)
- * @return {Object} - object containing number of white pixels for mask1, for mask 2 and for them both
+ * @param {Image} mask2 - a mask (1 bit image)
+ * @return {object} - object containing number of white pixels for mask1, for mask 2 and for them both
  */
 export default function getIntersection(mask2) {
 
@@ -62,9 +61,9 @@ export default function getIntersection(mask2) {
 
 /**
  * Get relative position array for all pixels in masks
- * @param {Image} - a mask (1 bit image)
- * @param {Array} - number array, start position of mask relative to parent
- * @returns {Array} - relative position of all pixels
+ * @param {Image} mask - a mask (1 bit image)
+ * @param {Array<number>} startPosition - start position of mask relative to parent
+ * @return {Array} - relative position of all pixels
  */
 function getRelativePositionForAllPixels(mask, startPosition) {
     //console.log('startPosition: ' + startPosition);
@@ -83,9 +82,9 @@ function getRelativePositionForAllPixels(mask, startPosition) {
 
 /**
  * Finds common surface for two arrays containing the positions of the pixels relative to parent image
- * @param {Array} - number array containing positions of pixels relative to parent
- * @param {Array} - number array containing positions of pixels relative to parent
- * @returns {Array} - number array containing positions of common pixels for both arrays
+ * @param {Array<number>} positionArray1 - positions of pixels relative to parent
+ * @param {Array<number>} positionArray2 - positions of pixels relative to parent
+ * @return {Array<number>} - positions of common pixels for both arrays
  */
 function getCommonSurface(positionArray1, positionArray2) {
     let i = 0;
@@ -103,7 +102,5 @@ function getCommonSurface(positionArray1, positionArray2) {
             j++;
         }
     }
-    //console.log('commonSurface: ', commonSurface);
     return commonSurface;
 }
-

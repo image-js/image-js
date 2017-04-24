@@ -1,7 +1,7 @@
 /**
  * Finds common parent between two different masks
  * @param {Image} mask - a mask (1 bit image)
- * @returns {Image} - the lowest common parent of both masks
+ * @return {Image} - the lowest common parent of both masks
  */
 export default function getClosestCommonParent(mask) {
     let depthMask1 = getDepth(this);
@@ -59,7 +59,7 @@ export default function getClosestCommonParent(mask) {
 /**
  * Find the depth of the mask with respect to its arborescence.
  * Helper function to find the common parent between two masks.
- * @param {Image} - a mask (1 bit Image)
+ * @param {Image} mask - a mask (1 bit Image)
  * @return {number} - depth of mask
  */
 function getDepth(mask) {

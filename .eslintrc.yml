@@ -13,3 +13,4 @@ parserOptions:
 rules:
   no-var: error
   no-multi-spaces: off
+  valid-jsdoc: error
