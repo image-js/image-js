@@ -1,5 +1,7 @@
 /**
  * Find intersection of points between two different masks
+ * @memberof Image
+ * @instance
  * @param {Image} mask2 - a mask (1 bit image)
  * @return {object} - object containing number of white pixels for mask1, for mask 2 and for them both
  */
@@ -64,6 +66,7 @@ export default function getIntersection(mask2) {
  * @param {Image} mask - a mask (1 bit image)
  * @param {Array<number>} startPosition - start position of mask relative to parent
  * @return {Array} - relative position of all pixels
+ * @private
  */
 function getRelativePositionForAllPixels(mask, startPosition) {
     //console.log('startPosition: ' + startPosition);
@@ -85,6 +88,7 @@ function getRelativePositionForAllPixels(mask, startPosition) {
  * @param {Array<number>} positionArray1 - positions of pixels relative to parent
  * @param {Array<number>} positionArray2 - positions of pixels relative to parent
  * @return {Array<number>} - positions of common pixels for both arrays
+ * @private
  */
 function getCommonSurface(positionArray1, positionArray2) {
     let i = 0;

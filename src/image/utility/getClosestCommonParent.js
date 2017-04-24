@@ -1,5 +1,7 @@
 /**
  * Finds common parent between two different masks
+ * @memberof Image
+ * @instance
  * @param {Image} mask - a mask (1 bit image)
  * @return {Image} - the lowest common parent of both masks
  */
@@ -61,6 +63,7 @@ export default function getClosestCommonParent(mask) {
  * Helper function to find the common parent between two masks.
  * @param {Image} mask - a mask (1 bit Image)
  * @return {number} - depth of mask
+ * @private
  */
 function getDepth(mask) {
     let d = 0;
