@@ -41,7 +41,6 @@ describe('we check the internalMapID with complex image', function () {
     it('should yield the right internapMapIDs', function () {
         return load('BW15x15transparent.png').then(function (img) {
             let grey = img.grey({allowGrey: true});
-            // console.log(grey.getMatrix());
             let mask = grey.mask(0.5);
 
             let roiManager = img.getRoiManager();

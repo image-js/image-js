@@ -46,7 +46,6 @@ describe('check the gaussian filter', function () {
             ]
         );
 
-        //console.log(image.gaussian().data);
         Array.from(image.gaussianFilter().data).should.eql(
             [
                 11, 11, 15, 17, 15, 11, 11,

@@ -23,9 +23,6 @@ describe('getIntersection', function () {
         let mask2 = rois[0].getMask();
         let mask3 = rois[1].getMask();
 
-        //console.log('mask2: ' + mask2);
-        //console.log('mask3: ' + mask3);
-
         //no intersection
         let intersectNull = mask2.getIntersection(mask3);
         intersectNull.commonWhitePixels.length.should.eql(0);

@@ -33,8 +33,6 @@ export default function paintPolyline(points, options = {}) {
         let x = from[0];
         let y = from[1];
 
-        // console.log(from, to, 'Steps',steps,'xIncrement',xIncrement, 'yIncrement',yIncrement, x, y)
-
         for (let j = 0; j <= steps; j++) {
             let xPoint = Math.round(x);
             let yPoint = Math.round(y);

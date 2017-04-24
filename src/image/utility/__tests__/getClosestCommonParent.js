@@ -90,8 +90,6 @@ describe('getClosestCommonParent', function () {
         let mask6 = mask4.scale({factor: 2});
         let mask7 = mask5.scale({factor: 1.5});
         let mask8 = mask6.rotate(180);
-        //console.log(getClosestCommonParent(mask2, mask3));
-        //getClosestCommonParent(mask2, mask3).should.eql(img1);
         mask5.getClosestCommonParent(mask6).should.eql(mask4);
         mask7.getClosestCommonParent(mask8).should.eql(mask4);
     });

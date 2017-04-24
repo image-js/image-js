@@ -28,11 +28,7 @@ export default function minimalBoundingRectangle(options = {}) {
 
         rotate(-angle, originalPoints, p);
 
-        // console.log('Using the vector: ', originalPoints[i],  originalPoints[(i + 1) % p.length], 'angle', angle);
-        // console.log('newPoints', p);
-
         // we rotate and translate so that this axe is in the bottom
-
         let aX = p[i][0];
         let aY = p[i][1];
         let bX = p[(i + 1) % p.length][0];
@@ -71,7 +67,6 @@ export default function minimalBoundingRectangle(options = {}) {
                 [pMax[0], pMax[1] + maxWidth],
                 [pMin[0], pMin[1] + maxWidth]
             ];
-            // console.log('MIN SURFACE', angle, minSurface, mbr);
         }
     }
     rotate(minSurfaceAngle, mbr, mbr);
@@ -80,7 +75,7 @@ export default function minimalBoundingRectangle(options = {}) {
 
 
 // the angle that allows to make the line going through p1 and p2 horizontal
-// this is an otmized version because it assume one verctor is horizontal
+// this is an optimized version because it assume one vector is horizontal
 function getAngle(p1, p2) {
     let diff = difference(p2, p1);
     let vector = normalize(diff);
@@ -88,4 +83,3 @@ function getAngle(p1, p2) {
     if (vector[1] < 0) return -angle;
     return angle;
 }
-

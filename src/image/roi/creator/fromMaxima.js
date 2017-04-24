@@ -115,7 +115,6 @@ export default function fromMaxima(options = {}) {
     // as soon as one of them if not part we need to reverse the process
     // and just for get those points
     function processTop(xToProcess, yToProcess) {
-        // console.log('process top');
         let currentTo = to; // in case if fails we come back
         fromTop = 0;
         toTop = 1;
@@ -129,7 +128,6 @@ export default function fromMaxima(options = {}) {
             fromTop++;
         }
         if (!valid) {
-            // console.log('REVERT');
             // need to clear all the calculated data because the top is not surrounded by negative values
             for (let i = 0; i < toTop; i++) {
                 let currentX = xToProcessTop[i & MAX_ARRAY];
@@ -149,10 +147,8 @@ export default function fromMaxima(options = {}) {
      type=1 : normal
      */
     function process(xCenter, yCenter, type) {
-        // console.log('PROCESS', xCenter, yCenter);
         let currentID = data[yCenter * image.width + xCenter];
         let currentValue = image.data[yCenter * image.width + xCenter];
-        //let currentVariation = variations[yCenter * image.width + xCenter];
         for (let y = yCenter - 1; y <= yCenter + 1; y++) {
             for (let x = xCenter - 1; x <= xCenter + 1; x++) {
                 let index = y * image.width + x;
@@ -162,9 +158,7 @@ export default function fromMaxima(options = {}) {
                     variations[index] = image.data[index] - currentValue;
                     switch (type) {
                         case PROCESS_TOP:
-                            // console.log(x, y, variations[index]);
                             if (variations[index] === 0) { // we look for maxima
-                                // console.log('ZERO', currentID, x, y);
                                 // if we are next to a border ... it is not surrounded !
                                 if (x === 0 || y === 0 || x === (image.width - 1) || y === (image.height - 1)) {
                                     return false;
@@ -174,7 +168,6 @@ export default function fromMaxima(options = {}) {
                                 yToProcessTop[toTop & MAX_ARRAY] = y;
                                 toTop++;
                             } else if (variations[index] > 0) { // not a global maximum
-                                // console.log('LARGER');
                                 return false;
                             } else { // a point we will have to process
                                 if (!onlyTop) {

@@ -18,7 +18,6 @@ describe.skip('check matchAndCrop on real images', function () {
                 images[i] = images[i].gaussianFilter({radius: 5});
 
                 let median = images[i].median;
-                    // console.log(median);
                 images[i] = images[i].subtract(median);
 
             }
