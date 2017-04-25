@@ -279,8 +279,10 @@ export default class RoiManager {
     /**
      * Return a new roiMAP changed with the fusion of certain ROIs.
      * @param {object} [options]
-     * @param {string} [options.algorithm='commonBorder'] ; algorithm used to decide which ROIs are merged.
+     * @param {string} [options.algorithm='commonBorderLength'] ; algorithm used to decide which ROIs are merged.
      * @param {number} [options.minCommonBorderLength=5] is an integer, determine the strength of the merging.
+     * @param {number} [options.maxCommonBorderLength=5] is an integer, determine the strength of the merging.
+     *
      * @return {this}
      */
     mergeRoi(options = {}) {

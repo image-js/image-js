@@ -6,6 +6,9 @@
  * @class RoiMap
  * @private
  */
+import commonBorderLength from './util/commonBorderLength';
+import mergeRoi from './util/mergeRoi';
+
 export default class RoiMap {
     constructor(parent, data) {
         this.parent = parent;
@@ -14,11 +17,33 @@ export default class RoiMap {
         this.data = data;
         this.negative = 0;
         this.positive = 0;
+        this.computed={};
     }
 
     get total() {
         return this.negative + this.positive;
     }
+
+    get minMax() {
+        if (this.computed.minMax) return this.computed.minMax;
+        let min = Number.MAX_SAFE_INTEGER;
+        let max = Number.MIN_SAFE_INTEGER;
+        for (let i = 0; i < this.data.length; i++) {
+            if (this.data[i]<min) min=this.data[i];
+            if (this.data[i]>max) max=this.data[i];
+        }
+        return this.computed.minMax = {min, max};
+    }
+
+    get commonBorderLength() {
+        return commonBorderLength(this);
+    }
+
+
+    mergeRoi(options = {}) {
+        mergeRoi(this, options);
+    }
+
 
     rowsInfo() {
         let rowsInfo = new Array(this.height);
