@@ -1,4 +1,4 @@
-import {DC} from 'ml-matrix';
+import {SVD} from 'ml-matrix';
 
 /**
  * TODO would be suprised if this stuff works
@@ -11,5 +11,5 @@ export default function getSvd() {
         bitDepth: [1]
     });
 
-    return DC.SVD(this.points);
+    return SVD(this.points);
 }

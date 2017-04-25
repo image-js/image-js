@@ -22,7 +22,8 @@ export default {
             namedExports: {
                 'node_modules/blob-util/lib/index.js': ['canvasToBlob'],
                 'node_modules/color-functions/index.js': ['cssColor'],
-                'node_modules/ml-matrix-convolution/src/index.js': ['direct', 'fft']
+                'node_modules/ml-matrix-convolution/src/index.js': ['direct', 'fft'],
+                'node_modules/ml-array-utils/src/index.js': ['scale']
             }
         }),
         json()
