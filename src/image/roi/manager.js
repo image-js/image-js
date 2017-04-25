@@ -294,6 +294,41 @@ export default class RoiManager {
         switch (algorithm.toLowerCase()) {
             //Algorithms. We can add more algorithm to create other types of merging.
             case 'commonborder' :
+
+                // We calculate all the information about the neightbours
+                let roiMap = this.getMap(opt);
+                let data = roiMap.data;
+                let dx = [+1, 0, -1, 0];
+                let dy = [0, +1, 0, -1];
+                let borderInfo = {};
+
+                for (let x = 0; x <= this.width; x++) {
+                    for (let y = 0; y <= this.height; y++) {
+                        let target = x + y * roiMap.width;
+                        let currentRoiID = data[target];
+                        for (let dir = 0; dir < 4; dir++) {
+                            let newX = x + dx[dir];
+                            let newY = y + dy[dir];
+                            if (newX >= 0 && newY >= 0 && newX < roiMap.width && newY < roiMap.height) {
+                                let neighbourRoiID = data[newX + newY * roiMap.width];
+                                if (currentRoiID !== neighbourRoiID) {
+                                    if (! borderInfo[neighbourRoiID]) {
+                                        borderInfo[neighbourRoiID] = {};
+                                    }
+                                    if (! borderInfo[neighbourRoiID][currentRoiID]) {
+                                        borderInfo[neighbourRoiID][currentRoiID]=1;
+                                    } else {
+                                        borderInfo[neighbourRoiID][currentRoiID]++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+
                 for (let i = 0; i < rois.length; i++) {
                     for (let k = 0; k < rois[i].borderIDs.length; k++) {
                         //If the length of wall of the current region and his neighbour is big enough, we join the rois.
