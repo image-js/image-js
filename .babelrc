@@ -1,9 +1,19 @@
 {
   "presets": [
     ["env", {
+      "modules": false,
       "targets": {
-        "node": 6
-      }
+        "node": 6,
+        "browsers": [
+          "last 2 chrome versions",
+          "last 2 edge versions",
+          "last 1 safari version"
+        ]
+      },
+      "debug": false,
+      "exclude": [
+        "transform-es2015-for-of"
+      ]
     }]
   ],
   "plugins": ["transform-es2015-block-scoping"]

@@ -1,9 +1,8 @@
 import {getKind, createPixelArray, getTheoreticalPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
-import {ImageData, Canvas} from './environment';
+import {ImageData, Canvas, createWriteStream, writeFile} from './environment';
 import extend from './extend';
 import bitMethods from './bitMethods';
-import {createWriteStream, writeFile} from 'fs';
 import {RGB} from './model/model';
 import RoiManager from './roi/manager';
 import {getType, canWrite} from './mediaTypes';

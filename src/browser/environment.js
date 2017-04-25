@@ -36,4 +36,12 @@ export function fetchBinary(url, {withCredentials = false} = {}) {
     });
 }
 
+export function createWriteStream() {
+    throw new Error('createWriteStream does not exist in the browser');
+}
+
+export function writeFile() {
+    throw new Error('writeFile does not exist in the browser');
+}
+
 export {env, ImageData, DOMImage};

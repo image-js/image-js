@@ -1,5 +1,5 @@
 import Canvas, {Image as DOMImage, ImageData} from 'canvas';
-import {readFile} from 'fs';
+import {readFile, createWriteStream, writeFile} from 'fs';
 
 const env = 'node';
 
@@ -16,4 +16,4 @@ export function fetchBinary(path) {
     });
 }
 
-export {env, Canvas, ImageData, DOMImage};
+export {env, Canvas, ImageData, DOMImage, createWriteStream, writeFile};
