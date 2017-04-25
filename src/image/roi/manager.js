@@ -290,7 +290,7 @@ export default class RoiManager {
             minCommonBorderLength = 5
         } = options;
         let rois = this.getRois(opt);
-        let toMerge = new Set();
+        let toMerge = [];
         switch (algorithm.toLowerCase()) {
             //Algorithms. We can add more algorithm to create other types of merging.
             case 'commonborder' :
@@ -298,7 +298,7 @@ export default class RoiManager {
                     for (let k = 0; k < rois[i].borderIDs.length; k++) {
                         //If the length of wall of the current region and his neighbour is big enough, we join the rois.
                         if (rois[i].borderIDs[k] !== 0 && rois[i].borderIDs[k] < rois[i].id && rois[i].borderLengths[k] * minCommonBorderLength >= rois[i].border) {
-                            toMerge.add([rois[i].id, rois[i].borderIDs[k]]);
+                            toMerge.push([rois[i].id, rois[i].borderIDs[k]]);
                         }
                     }
                 }
