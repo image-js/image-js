@@ -34,7 +34,8 @@
   },
   "files": [
     "dist",
-    "lib"
+    "lib",
+    "src"
   ],
   "scripts": {
     "build": "npm-run-all clean-dist --parallel compile build-dist",
