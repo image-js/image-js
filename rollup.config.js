@@ -21,7 +21,8 @@ export default {
         commonjs({
             namedExports: {
                 'node_modules/blob-util/lib/index.js': ['canvasToBlob'],
-                'node_modules/color-functions/index.js': ['cssColor']
+                'node_modules/color-functions/index.js': ['cssColor'],
+                'node_modules/ml-matrix-convolution/src/index.js': ['direct', 'fft']
             }
         }),
         json()

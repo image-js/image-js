@@ -1,8 +1,8 @@
+import {direct, fft} from 'ml-matrix-convolution';
+
 import Image from '../Image';
 import {validateArrayOfChannels} from '../../util/channel';
 import {validateKernel} from '../../util/kernel';
-let conv = require('ml-matrix-convolution');
-
 
 /**
  * @memberof Image
@@ -64,14 +64,14 @@ export default function convolution(kernel, options = {}) {
             }
         }
         if (algorithm === 'direct') {
-            tmpResult = conv.direct(tmpData, kernel, {
+            tmpResult = direct(tmpData, kernel, {
                 rows: this.height,
                 cols: this.width,
                 normalize: normalize,
                 divisor: divisor
             });
         } else {
-            tmpResult = conv.fft(tmpData, kernel, {
+            tmpResult = fft(tmpData, kernel, {
                 rows: this.height,
                 cols: this.width,
                 normalize: normalize,
