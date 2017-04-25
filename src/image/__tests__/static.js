@@ -1,4 +1,6 @@
-import {Static} from '../..';
+import Image from '../..';
+
+const Static = Image.Static;
 
 describe('Image core - Algorithms', function () {
 

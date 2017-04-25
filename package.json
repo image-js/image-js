@@ -37,25 +37,22 @@
     "lib"
   ],
   "scripts": {
+    "build": "npm-run-all clean-dist --parallel compile build-dist",
     "build-dist": "npm-run-all build-dist-main build-dist-min",
-    "build-dist-main": "rollup -c",
+    "build-dist-main": "NODE_ENV=browser rollup -c",
     "build-dist-min": "babili dist/image.js --out-file dist/image.min.js --source-maps --no-comments",
     "build-doc": "documentation build src/index.js --github --output docs --format html --sort-order alpha",
-    "publish-doc": "npm run build-doc && git add docs && git commit -m \"doc: rebuild docs\" && git push origin master",
-    "build": "npm-run-all clean-dist --parallel compile build-dist",
-    "build-test": "browserify test/browser/bootstrap.js -o test/browser/image.js --standalone IJS --exclude canvas --ignore buffer --ignore zlib --ignore fs --debug --global-transform [ babelify --sourceMap ]",
-    "compile": "npm run clean-lib && babel src --out-dir lib --ignore __tests__ --quiet",
     "clean-dist": "rm -rf dist && mkdir dist",
     "clean-lib": "rm -rf lib",
+    "compile": "npm run clean-lib && babel src --out-dir lib --ignore __tests__ --quiet",
     "eslint": "eslint src --cache",
     "eslint-fix": "npm run eslint -- --fix",
     "prepublish": "npm run compile",
+    "publish-doc": "npm run build-doc && git add docs && git commit -m \"doc: rebuild docs\" && git push origin master",
     "test": "run-s test-mocha eslint",
     "test-cov": "istanbul cover _mocha -- --compilers js:babel-register --require should --require should-approximately-deep --reporter dot --recursive src/**/__tests__/**/*.js",
     "test-mocha": "mocha --compilers js:babel-register --require should --require should-approximately-deep --reporter mocha-better-spec-reporter --recursive src/**/__tests__/**/*.js",
-    "test-travis": "istanbul cover _mocha --report lcovonly -- --compilers js:babel-register --require should --require should-approximately-deep --reporter mocha-better-spec-reporter --recursive src/**/__tests__/**/*.js && npm run eslint",
-    "watch-browser": "watchify test/browser/bootstrap.js -o test/browser/image.js --standalone IJS --exclude canvas --ignore buffer --ignore zlib --ignore fs --debug --global-transform [ babelify --sourceMap ]",
-    "watch-node": "npm run compile -- --watch"
+    "test-travis": "istanbul cover _mocha --report lcovonly -- --compilers js:babel-register --require should --require should-approximately-deep --reporter mocha-better-spec-reporter --recursive src/**/__tests__/**/*.js && npm run eslint"
   },
   "devDependencies": {
     "babel-cli": "^6.2.0",
@@ -110,6 +107,6 @@
     "web-worker-manager": "^0.2.0"
   },
   "engines": {
-    "node": ">= 4.0.0"
+    "node": ">= 6.0.0"
   }
 }
