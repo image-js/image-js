@@ -1,6 +1,7 @@
 
 import commonBorderLength from '../commonBorderLength';
 import RoiMap from '../../RoiMap';
+import should from 'should';
 
 describe('Calculate the commonBorderLength from a roiMap', function () {
 
@@ -14,9 +15,9 @@ describe('Calculate the commonBorderLength from a roiMap', function () {
     ];
 
     let roiMap = new RoiMap({width: 6, height: 6}, map);
-    let result = JSON.parse(JSON.stringify(commonBorderLength(roiMap)));
+    let result = commonBorderLength(roiMap);
 
-    result.should.eql(
+    should(result).eql(
         {
             '1': { '1': 10, '2': 4, '3': 3 },
             '2': { '1': 4, '2': 11, '3': 2 },

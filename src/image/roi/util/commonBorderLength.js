@@ -21,7 +21,7 @@ export default function commonBorderLength(roiMap) {
             let currentRoiID = data[target];
             if (currentRoiID !== 0) {
                 // each pixel may only contribute one time to a border
-                let used={};
+                let used=Object.create(null);
                 let isBorder=false;
                 for (let dir = 0; dir < 4; dir++) {
                     let newX = x + dx[dir];
@@ -30,7 +30,7 @@ export default function commonBorderLength(roiMap) {
                         let neighbourRoiID = data[newX + newY * roiMap.width];
                         if (currentRoiID !== neighbourRoiID) {
                             isBorder=true;
-                            if (neighbourRoiID!==0 && ! used[neighbourRoiID]) {
+                            if (neighbourRoiID!==0 && used[neighbourRoiID]===undefined) {
                                 used[neighbourRoiID]=true;
                                 if (! borderInfo[neighbourRoiID+shift][currentRoiID]) {
                                     borderInfo[neighbourRoiID+shift][currentRoiID]=1;

@@ -2,7 +2,7 @@
 import mergeRoi from '../mergeRoi';
 import RoiMap from '../../RoiMap';
 
-describe('Calculate the commonBorderLength from a roiMap', function () {
+describe.only('Calculate the commonBorderLength from a roiMap', function () {
 
     let map = [
         0, 0, 1, 1, 1, 2,
@@ -14,9 +14,10 @@ describe('Calculate the commonBorderLength from a roiMap', function () {
     ];
 
     let roiMap = new RoiMap({width: 6, height: 6}, map);
-    let result = JSON.parse(JSON.stringify(mergeRoi(roiMap, {
-
-    })));
+    let result = mergeRoi(roiMap, {
+        minCommonBorderLength: 3,
+        maxCommonBorderLength: 4,
+    });
 
     // console.log(result);
 
