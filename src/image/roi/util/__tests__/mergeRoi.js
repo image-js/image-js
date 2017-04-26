@@ -2,7 +2,7 @@
 import mergeRoi from '../mergeRoi';
 import RoiMap from '../../RoiMap';
 
-describe.only('Calculate the commonBorderLength from a roiMap', function () {
+describe.only('Calculate mergeRoi from a roiMap', function () {
 
     let map = [
         0, 0, 1, 1, 1, 2,
