@@ -21,25 +21,34 @@ export default function mergeRoi(roiMap, options = {}) {
         maxCommonBorderRatio = 1
     } = options;
 
-    let common = roiMap.commonBorderLength;
+    let borderLengths = roiMap.commonBorderLength;
 
     algorithm = algorithm.toLowerCase();
-    console.log(common);
 
-    let toAnalyse = Object.keys(common);
     let currentPosition = 0;
+    let oldToNew = {};
 
-    while (currentPosition < toAnalyse.length) {
-        let currentID = toAnalyse[currentPosition];
-        let currentInfo = common[currentID];
+    for (let currentID of Object.keys(borderLengths)) {
+        let currentInfo = borderLengths[currentID];
         switch (algorithm) {
             case 'commonborderlength':
                 let neighbourIDs = Object.keys(currentInfo);
-                console.log(neighbourIDs);
                 for (let neighbourID of neighbourIDs) {
                     console.log(neighbourID, currentID);
                     if (neighbourID !== currentID) { // it is not myself ...
                         if (currentInfo[neighbourID]>=minCommonBorderLength && currentInfo[neighbourID]<=maxCommonBorderLength) {
+                            let smallerID = Math.min(neighbourID, currentID);
+                            let largerID = Math.max(neighbourID, currentID);
+                            if (! oldToNew[smallerID]) {
+                                oldToNew[smallerID]={};
+                            }
+                            oldToNew[smallerID][largerID]=true;
+                            if (oldToNew[largerID]) { // need to put everything to smallerID and remove property
+                                for (let id of Object.keys(oldToNew[largerID])) {
+                                    oldToNew[smallerID][id]=true;
+                                }
+                                delete oldToNew[largerID];
+                            }
                             console.log('Should merge');
                         }
                     }
@@ -55,6 +64,7 @@ export default function mergeRoi(roiMap, options = {}) {
         currentPosition++;
     }
 
+    console.log(oldToNew);
 
     return roiMap;
 
