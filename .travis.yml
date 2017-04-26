@@ -1,8 +1,7 @@
 language: node_js
 node_js:
   - node
-  - lts/boron # v6
-script: "npm run test-travis"
+script: "yarn run test-travis"
 after_script: "bash <(curl -s https://codecov.io/bash)"
 addons:
   apt:

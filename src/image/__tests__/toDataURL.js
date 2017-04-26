@@ -9,13 +9,11 @@ describe('toDataURL and toBase64', function () {
         dataURL.should.startWith('data:image/png;base64,');
     });
 
-    it('toDataURL (async jpeg)', function () {
+    it('toDataURL (async jpeg)', async () => {
         const image = getSquare();
-        const dataURL = image.toDataURL('jpeg', true);
-        return Promise.all([
-            dataURL.should.eventually.be.a.String(),
-            dataURL.should.eventually.startWith('data:image/jpeg;base64,')
-        ]);
+        const dataURL = await image.toDataURL('jpeg', true);
+        dataURL.should.be.a.String();
+        dataURL.should.startWith('data:image/jpeg;base64,');
     });
 
     it('toBase64', function () {

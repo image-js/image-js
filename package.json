@@ -45,7 +45,7 @@
     "build-doc": "documentation build src/index.js --github --output docs --format html --sort-order alpha",
     "clean-dist": "rm -rf dist && mkdir dist",
     "clean-lib": "rm -rf lib",
-    "compile": "npm run clean-lib && NODE_ENV=test babel src --out-dir lib --ignore __tests__ --quiet",
+    "compile": "npm run clean-lib && NODE_ENV=npm babel src --out-dir lib --ignore __tests__ --quiet",
     "eslint": "eslint src --cache",
     "eslint-fix": "npm run eslint -- --fix",
     "prepublish": "npm run compile",
@@ -54,6 +54,9 @@
     "test-cov": "jest --coverage",
     "testonly": "jest",
     "test-travis": "run-s test-cov eslint"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "devDependencies": {
     "babel-cli": "^6.2.0",
