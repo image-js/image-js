@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('calculate the colorHistogram', function () {
     it('check getColorHistogram method', function () {

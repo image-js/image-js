@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('check median', function () {
     it('for a GREY even image', function () {

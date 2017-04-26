@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('get and set ', function () {
     it('should test getPixel, getPixelXY and setPixel, setPixelXY', function () {

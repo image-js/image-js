@@ -1,4 +1,5 @@
 import {getSquare, get1BitSquare} from 'test/common';
+import 'should';
 
 describe('toDataURL and toBase64', function () {
     it('toDataURL', function () {

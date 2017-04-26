@@ -1,4 +1,5 @@
 import {Image, getSquare} from 'test/common';
+import 'should';
 
 describe('getPixelsArray', function () {
     it('should work with grey images', function () {

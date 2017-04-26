@@ -1,5 +1,5 @@
 import {Image} from 'test/common';
-
+import 'should';
 
 describe('check getMatrix class', function () {
     it('should yield a Matrix object', function () {
@@ -25,4 +25,3 @@ describe('check getMatrix class', function () {
         image.data.should.eql(Array.from(image2.data));
     });
 });
-

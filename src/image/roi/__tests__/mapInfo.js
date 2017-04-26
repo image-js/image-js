@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 /* Image to test:
 0011
@@ -6,8 +7,6 @@ import {Image} from 'test/common';
 1100
 0000
  */
-
-
 describe('mark a binary image 4 x 4 in 3 zones and create ROIs', function () {
     it('should yield the right result', function () {
         let data = new Uint8Array(2);

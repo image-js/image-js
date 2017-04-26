@@ -1,7 +1,5 @@
-/**
- *
- */
 import {Image} from 'test/common';
+import 'should';
 
 describe('findCorrespondingRoi', function () {
     it('should yield the correct object containing corresponding roi ids and pixels', function () {

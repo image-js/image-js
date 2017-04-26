@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('calculate the array of points', function () {
     it('check the array', function () {

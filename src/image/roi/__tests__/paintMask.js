@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('we check paint mask', function () {
     const data = [

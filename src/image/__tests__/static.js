@@ -1,4 +1,5 @@
 import Image from '../..';
+import 'should';
 
 const Static = Image.Static;
 

@@ -1,4 +1,5 @@
 import {laplacianOfGaussian} from '../laplacianOfGaussian';
+import 'should';
 
 describe('we check Shape class', function () {
     it('should yield a cross', function () {

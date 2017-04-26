@@ -1,5 +1,6 @@
 import {Image, load, refreshTmpDir, tmpDir, getSquare, get1BitSquare} from 'test/common';
 import canvas from 'canvas';
+import 'should';
 
 describe('save to disk', function () {
 

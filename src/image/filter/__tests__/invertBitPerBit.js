@@ -1,7 +1,8 @@
 import {Image} from 'test/common';
+import 'should';
 
-describe('invert binary image bit by bit', function () {
-    it('should invert a binary image', function () {
+describe('invert binary image bit by bit', () =>{
+    it('should invert a binary image', () =>{
         let image = new Image(8, 1, {
             kind: 'BINARY'
         });
@@ -10,6 +11,6 @@ describe('invert binary image bit by bit', function () {
         inverted[0] = 127;
 
         image.invertBinaryLoop();
-        image.data.should.eql(inverted);
+        expect(image.data).toEqual(inverted);
     });
 });

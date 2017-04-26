@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('check the rotate transform', function () {
     it('90 degrees clockwise grey', function () {

@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('Create mask from a GREY image', function () {
     it('From GREY image give a mask image', function () {
@@ -38,8 +39,8 @@ describe('Create a mask from a greyA image', function () {
         mask.height.should.equal(1);
 
         let data = mask.data;
-        data.should.instanceOf(Uint8Array);
-        data.length.should.equal(1);
+        expect(data).toBeInstanceOf(Uint8Array);
+        expect(data.length).toEqual(1);
 
         data[0].should.equal(176);
     });
@@ -53,8 +54,8 @@ describe('Create a mask from a greyA image', function () {
         mask.height.should.equal(1);
 
         let data = mask.data;
-        data.should.instanceOf(Uint8Array);
-        data.length.should.equal(1);
+        expect(data).toBeInstanceOf(Uint8Array);
+        expect(data.length).toEqual(1);
 
         data[0].should.equal(64);
     });
@@ -68,8 +69,8 @@ describe('Create a mask from a greyA image', function () {
         mask.height.should.equal(1);
 
         let data = mask.data;
-        data.should.instanceOf(Uint8Array);
-        data.length.should.equal(1);
+        expect(data).toBeInstanceOf(Uint8Array);
+        expect(data.length).toEqual(1);
 
         data[0].should.equal(0b10100000);
     });
@@ -91,8 +92,8 @@ describe('Create a mask from a greyA image using percentile algorithm', function
         mask.height.should.equal(1);
 
         let data = mask.data;
-        data.should.instanceOf(Uint8Array);
-        data.length.should.equal(1);
+        expect(data).toBeInstanceOf(Uint8Array);
+        expect(data.length).toEqual(1);
 
         data[0].should.equal(0b01110000);
     });

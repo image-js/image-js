@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('we check getPixelsGrid', function () {
     it('should yield the right array of pixels', function () {

@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('check the gaussian filter', function () {
     it('check for GREY image', function () {

@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('check the setBorder transform', function () {
     it('check the pad for GREY image', function () {

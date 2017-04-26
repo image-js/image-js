@@ -1,4 +1,5 @@
 import {Image, getHash} from 'test/common';
+import 'should';
 
 describe('check the crop transform', function () {
     let image;

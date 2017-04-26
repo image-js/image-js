@@ -1,7 +1,7 @@
 'use strict';
 
 import Image from '../../src';
-import {imageList, getHash} from '../test';
+import {imageList, getHash} from '../test-util';
 
 window.images = imageList;
 window.getHash = getHash;

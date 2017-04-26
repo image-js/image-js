@@ -1,6 +1,6 @@
 import fromMaxima from '../fromMaxima';
 import {Image} from 'test/common';
-
+import 'should';
 
 describe('we check fromMaxima only looking for top', function () {
     it('should yield the right map large top', function () {

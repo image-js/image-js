@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('multiply', function () {
     it('should multiply a fix value to all channels of RGBA image, we dont touch alpha', function () {

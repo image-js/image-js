@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('calculate svd', function () {
     it('check the result', function () {

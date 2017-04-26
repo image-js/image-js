@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('add', function () {
     it('should add a fix value to all channels of RGBA image, we dont touch alpha', function () {

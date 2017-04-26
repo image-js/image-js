@@ -1,7 +1,5 @@
-/**
- *
- */
 import {Image} from 'test/common';
+import 'should';
 
 describe('getClosestCommonParent', function () {
     it('correct common parent for masks with one ancestor each', function () {

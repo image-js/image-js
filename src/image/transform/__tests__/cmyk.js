@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('check the cmyk transform', function () {
     it('check the right result for RGB image 8 bit', function () {

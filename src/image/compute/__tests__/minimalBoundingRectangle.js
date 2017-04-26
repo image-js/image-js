@@ -1,5 +1,6 @@
 import {Image} from 'test/common';
-
+import 'should';
+import 'should-approximately-deep';
 
 import {
     angle

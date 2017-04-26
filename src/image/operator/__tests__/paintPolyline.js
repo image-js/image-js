@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('we check paintPolyline', function () {
     it('should yield the painted image with a line', function () {

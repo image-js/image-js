@@ -2,7 +2,6 @@ import {load} from 'test/common';
 
 describe.skip('check matchAndCrop on real images', function () {
     it('should return an array of 2 images cropped and moved using matchToPrevious', function () {
-        this.timeout(30000); // we can increase the timeout for the test that is by default 2s
 
         let toLoad = [];
         toLoad.push(load('cells/fluorescent2/C11-3-0000.png'));

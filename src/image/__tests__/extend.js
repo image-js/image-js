@@ -1,4 +1,5 @@
 import {Image, getSquare} from 'test/common';
+import 'should';
 
 function sub(a = 1, b = 2) {
     return a - b;

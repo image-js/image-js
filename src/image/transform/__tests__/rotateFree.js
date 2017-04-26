@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('check the rotate transform with free rotation', function () {
     it('GREY image', function () {

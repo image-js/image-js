@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('check min / max', function () {
     it('should yield the correct arrays', function () {

@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('cropAlpha transform', function () {
     it('grey + alpha - no crop', function () {

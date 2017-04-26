@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('calculate the overlap with another image', function () {
     it('check identical images without shift', function () {

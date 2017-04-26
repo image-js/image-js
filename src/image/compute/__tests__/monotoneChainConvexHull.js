@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('Monotone Chain Convex Hull', function () {
     it('should return the convex hull', function () {

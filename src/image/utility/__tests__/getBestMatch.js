@@ -1,5 +1,5 @@
 import {Image} from 'test/common';
-
+import 'should';
 
 describe('check getBestMatch class', function () {
     it('should move the image to the bottom right', function () {
@@ -81,4 +81,3 @@ describe('check getBestMatch class', function () {
     });
 
 });
-

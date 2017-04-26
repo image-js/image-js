@@ -1,5 +1,6 @@
 import {Image, load} from 'test/common';
 import {asc as sortAsc} from 'num-sort';
+import 'should';
 
 describe('we check mask', function () {
     it('should yield the right mask size and value', function () {

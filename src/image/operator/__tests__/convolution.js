@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('check the convolution operator', function () {
     it('check the convolution for GREY image', function () {

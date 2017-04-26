@@ -1,4 +1,5 @@
 import {getFactor, factorDimensions} from '../converter';
+import 'should';
 
 describe('Converter tests', function () {
     describe('getFactor', function () {

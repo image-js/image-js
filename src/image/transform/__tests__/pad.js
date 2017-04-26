@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('check the pad transform', function () {
     it('check the right pad extract for GREY image', function () {

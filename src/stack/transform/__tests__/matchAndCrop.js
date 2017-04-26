@@ -1,4 +1,5 @@
 import {Image, Stack, getHash} from 'test/common';
+import 'should';
 
 describe('check matchAndCrop method', function () {
     it('should return an array of 3 images cropped and moved using matchToPrevious', function () {

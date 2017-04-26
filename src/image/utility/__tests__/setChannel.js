@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('get a specific channel from an image', function () {
 

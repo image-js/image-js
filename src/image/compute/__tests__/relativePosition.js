@@ -1,4 +1,5 @@
 import {Image, load} from 'test/common';
+import 'should';
 
 describe('we check the relative position', function () {
     it('check the extract without specify position', function () {

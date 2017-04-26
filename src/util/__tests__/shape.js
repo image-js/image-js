@@ -1,4 +1,5 @@
 import Shape from '../Shape';
+import 'should';
 
 describe('we check Shape class', function () {
     it('should be able to create a Shape', function () {

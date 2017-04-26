@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('Grey transform', function () {
     it('From RGBA image give a grey image', function () {

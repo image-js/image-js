@@ -1,5 +1,6 @@
 import fromMask from '../fromMask';
 import {Image} from 'test/common';
+import 'should';
 
 describe('we check fromMask', function () {
 

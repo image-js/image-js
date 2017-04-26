@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('scale', function () {
     describe('using a factor', function () {

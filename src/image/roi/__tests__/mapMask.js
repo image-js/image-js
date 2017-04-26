@@ -1,5 +1,6 @@
 import {Image} from 'test/common';
 import {desc as sortDesc} from 'num-sort';
+import 'should';
 
 describe('map a binary image (mask) 2 x 2', function () {
     let imageData = new Uint8Array(1);
@@ -17,7 +18,8 @@ describe('map a binary image (mask) 2 x 2', function () {
     data.sort(sortDesc);
 
     it('should have 4 data in 2 zones', function () {
-        data.should.instanceOf(Int16Array).and.have.lengthOf(4);
+        expect(data).toBeInstanceOf(Int16Array);
+        expect(data.length).toEqual(4);
         data[0].should.equal(1);
         data[1].should.equal(1);
         data[2].should.equal(-1);
@@ -47,7 +49,8 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
     let result = roiManager.getMap();
 
     it('should have 16 data in 2 zones', function () {
-        data.should.instanceOf(Int16Array).and.have.lengthOf(16);
+        expect(data).toBeInstanceOf(Int16Array);
+        expect(data.length).toEqual(16);
         data[0].should.equal(1);
         data[7].should.equal(1);
         data[8].should.equal(-1);
@@ -77,7 +80,8 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
     let result = roiManager.getMap();
 
     it('should have 16 data in 3 zones', function () {
-        data.should.instanceOf(Int16Array).and.have.lengthOf(16);
+        expect(data).toBeInstanceOf(Int16Array);
+        expect(data.length).toEqual(16);
         data[0].should.equal(-1);
         data[1].should.equal(-1);
         data[2].should.equal(1);

@@ -1,4 +1,5 @@
 import {Image, load, getHash} from 'test/common';
+import 'should';
 
 describe('we check we can extract a part of B/W image', function () {
     it('check the extract without specify position', function () {

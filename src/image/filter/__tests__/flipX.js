@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('flipX', function () {
     it('should flip pixels horizontally of all RGBA components for a [2,1] image', function () {

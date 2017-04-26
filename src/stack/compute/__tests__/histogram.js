@@ -1,4 +1,5 @@
 import {Image, Stack} from 'test/common';
+import 'should';
 
 describe('check stack histogram method', function () {
     it('should return global histogram for GREY image', function () {

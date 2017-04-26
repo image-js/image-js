@@ -1,4 +1,5 @@
 import {load} from 'test/common';
+import 'should';
 
 /* Image to test:
 0011

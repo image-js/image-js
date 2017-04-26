@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('floodFill', function () {
     it('should fill the binary image', function () {

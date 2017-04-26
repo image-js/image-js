@@ -1,4 +1,5 @@
 import {Image, Stack} from 'test/common';
+import 'should';
 
 describe('check stack median method', function () {
     it('should return global median for GREY image', function () {

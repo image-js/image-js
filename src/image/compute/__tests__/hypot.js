@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('check hypotenuse', function () {
     it('should yield the correct array', function () {

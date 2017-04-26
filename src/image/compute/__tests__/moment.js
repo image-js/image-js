@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('check moment', function () {
     it('should yield the correct moment', function () {

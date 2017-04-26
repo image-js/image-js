@@ -1,5 +1,6 @@
 import {Image} from 'test/common';
 import {validateChannel} from '../channel';
+import 'should';
 
 describe('we check the validateChannel method', function () {
     it('check for a RGB image', function () {

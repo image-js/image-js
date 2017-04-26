@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('combine specific channels from an image', function () {
 
@@ -49,4 +50,3 @@ describe('combine specific channels from an image', function () {
     });
 
 });
-

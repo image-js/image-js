@@ -1,5 +1,6 @@
 import {Image, load} from 'test/common';
 import Canvas from 'canvas';
+import 'should';
 
 describe('Image core', function () {
     it('constructor defaults', function () {

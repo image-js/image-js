@@ -1,5 +1,5 @@
 import {css2array, getDistinctColors} from '../color';
-
+import 'should';
 
 describe('check color class', function () {
     it('check css2array', function () {
@@ -14,4 +14,3 @@ describe('check color class', function () {
         );
     });
 });
-

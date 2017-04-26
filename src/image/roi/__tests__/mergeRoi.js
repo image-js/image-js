@@ -1,5 +1,6 @@
 import RoiMapper from '../creator/fromWaterShed';
 import {Image} from 'test/common';
+import 'should';
 
 describe('Merge Roi', function () {
     it('should fusion 2 ROIs', function () {

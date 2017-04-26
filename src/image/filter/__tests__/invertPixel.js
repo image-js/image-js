@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('invertPixel', function () {
     describe('invert 3 components', function () {

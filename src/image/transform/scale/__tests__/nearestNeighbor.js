@@ -1,9 +1,10 @@
 import {load, getHash} from 'test/common';
+import 'should';
 
 describe('Scale - nearest neighbor', function () {
     it('check images resize', function () {
         let original;
-        before(function () {
+        beforeEach(function () {
             return load('resize/5x5a_5.png').then(function (img) {
                 original = img;
             });

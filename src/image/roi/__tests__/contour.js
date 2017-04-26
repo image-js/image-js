@@ -1,5 +1,5 @@
 import {Image} from 'test/common';
-
+import 'should';
 
 describe('we check contourMask', function () {
     it('should yield the right contourMask size and value', function () {

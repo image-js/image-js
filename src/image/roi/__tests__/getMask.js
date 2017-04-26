@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('we check Roi.getMask', function () {
     it('should yield the right mask', function () {

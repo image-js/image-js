@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('calculate the histogram', function () {
     it('check getHistogram method', function () {

@@ -1,5 +1,6 @@
 import {getType, canWrite} from '../mediaTypes';
 import {Image} from 'test/common';
+import 'should';
 
 describe('Media Type support checks', function () {
 

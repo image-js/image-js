@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('we check paintPoints', function () {
     it('should yield the painted image', function () {

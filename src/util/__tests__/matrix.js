@@ -1,5 +1,5 @@
 import Matrix from '../matrix';
-
+import 'should';
 
 describe('check matrix class', function () {
     let matrix = new Matrix(9, 5, 1);

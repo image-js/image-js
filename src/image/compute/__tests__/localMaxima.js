@@ -1,5 +1,5 @@
 import {Image} from 'test/common';
-
+import 'should';
 
 describe('Find local extrema', function () {
     it('maximum for a GREY image', function () {

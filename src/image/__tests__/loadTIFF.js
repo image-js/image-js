@@ -1,4 +1,5 @@
 import {load} from 'test/common';
+import 'should';
 
 describe('Load TIFF', function () {
     const tests = [

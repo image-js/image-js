@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('check the colorDepth transform', function () {
     it('check the right colorDepth for GREY image 8 bit', function () {

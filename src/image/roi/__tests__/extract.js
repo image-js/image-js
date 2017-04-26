@@ -1,5 +1,5 @@
 import {load} from 'test/common';
-
+import 'should';
 
 describe('we check that we can extract correctly a Roi', function () {
     it('should yield the right extract number of pixels', function () {

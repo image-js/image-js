@@ -1,7 +1,5 @@
-/**
- *
- */
 import {Image} from 'test/common';
+import 'should';
 
 describe('getIntersection', function () {
     it('correct intersection for two 2x2 Roi not intersecting (before transformation) in 5x5 image', function () {

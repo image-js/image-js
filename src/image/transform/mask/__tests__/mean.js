@@ -1,5 +1,6 @@
 import {load} from 'test/common';
 import mean from '../mean';
+import 'should';
 
 describe('Mean threshold', function () {
     it('Should work like ImageJ', function () {

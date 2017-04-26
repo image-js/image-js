@@ -1,4 +1,5 @@
 import {Image, Stack} from 'test/common';
+import 'should';
 
 describe('check stack min method', function () {
     it('should return global minimal for GREY image', function () {

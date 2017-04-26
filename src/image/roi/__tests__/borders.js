@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 /* Image to test:
 0011
@@ -6,8 +7,6 @@ import {Image} from 'test/common';
 1100
 0000
  */
-
-
 describe('we check that each Roi is surrounded by the expected zones', function () {
     let data = new Uint8Array(2);
     data[0] = 0b00111111;

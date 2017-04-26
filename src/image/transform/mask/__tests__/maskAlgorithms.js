@@ -1,5 +1,6 @@
 import {load} from 'test/common';
 import {methods} from '../maskAlgorithms';
+import 'should';
 
 // if the values are the same as in imageJ we consider it as currently correct
 // TODO not obivious that those algorithms can deal with 16 bits images !

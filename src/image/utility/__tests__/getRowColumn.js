@@ -1,5 +1,5 @@
 import {Image} from 'test/common';
-
+import 'should';
 
 describe('check getRow and getColumn class', function () {
     it('should yield the third row and third column for GREY image', function () {

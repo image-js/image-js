@@ -1,4 +1,5 @@
 import {load} from 'test/common';
+import 'should';
 
 /* Image to test:
 11111
@@ -7,8 +8,6 @@ import {load} from 'test/common';
 10001
 11111
  */
-
-
 describe('we check the internalMapID', function () {
     it('should yield the right internalMapIDe', function () {
         return load('BW5x5.png').then(function (img) {

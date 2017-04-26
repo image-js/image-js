@@ -1,4 +1,5 @@
 import {Image} from 'test/common';
+import 'should';
 
 describe('check the rgba8 transform', function () {
     it('check the right result for GREY image 8 bit', function () {
