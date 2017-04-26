@@ -51,7 +51,7 @@
     "prepublish": "npm run compile",
     "publish-doc": "npm run build-doc && git add docs && git commit -m \"doc: rebuild docs\" && git push origin master",
     "test": "run-s testonly eslint",
-    "test-cov": "jest --coverage",
+    "test-cov": "jest --coverage --runInBand",
     "testonly": "jest",
     "test-travis": "run-s test-cov eslint"
   },
