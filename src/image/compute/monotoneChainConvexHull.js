@@ -1,7 +1,10 @@
-/*
-Computes the convex hull of a binary image using Andrew's Monotone Chain Algorithm
- http://www.algorithmist.com/index.php/Monotone_Chain_Convex_Hull
- Returns an array of coordinates, in clockwise order
+import mcch from 'monotone-chain-convex-hull';
+
+/**
+ * Returns the convex hull of a binary image
+ * @memberof Image
+ * @instance
+ * @return {Array<Array<number>>}
  */
 export default function monotoneChainConvexHull() {
     const image = this;
@@ -9,35 +12,11 @@ export default function monotoneChainConvexHull() {
 
     const points = image.getPoints();
 
-    const n = points.length;
-    const ans = new Array(n * 2);
-    let k = 0;
-    let start = 0;
+    const result = mcch(points, {sorted: true});
 
-    for (let i = 0; i < n; i++) {
-        const point = points[i];
-        while (k - start >= 2 && ccw(ans[k - 2], ans[k - 1], point) <= 0) {
-            k--;
-        }
-        ans[k++] = point;
-    }
-
-    k--;
-    start = k;
-
-    for (let i = n - 1; i >= 0; i--) {
-        const point = points[i];
-        while (k - start >= 2 && ccw(ans[k - 2], ans[k - 1], point) <= 0) {
-            k--;
-        }
-        ans[k++] = point;
-    }
-
-    k--;
-
-    return ans.slice(0, k);
-}
-
-function ccw(p1, p2, p3) {
-    return (p2[0] - p1[0]) * (p3[1] - p1[1]) - (p2[1] - p1[1]) * (p3[0] - p1[0]);
+    // TODO: this is required for the MBR algorithm to work. Remove when it has been adapted
+    result.reverse();
+    const first = result.pop();
+    result.unshift(first);
+    return result;
 }

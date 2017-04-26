@@ -6,9 +6,14 @@ import {
     normalize
 } from '../../util/points';
 
-/*
-Computes the minimum bounding box around a binary image
- https://www.researchgate.net/profile/Lennert_Den_Boer2/publication/303783472_A_Fast_Algorithm_for_Generating_a_Minimal_Bounding_Rectangle/links/5751a14108ae6807fafb2aa5.pdf
+/**
+ * Computes the minimum bounding box around a binary image
+ * https://www.researchgate.net/profile/Lennert_Den_Boer2/publication/303783472_A_Fast_Algorithm_for_Generating_a_Minimal_Bounding_Rectangle/links/5751a14108ae6807fafb2aa5.pdf
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {Array<Array<number>>} [options.originalPoints]
+ * @return {Array<Array<number>>}
  */
 export default function minimalBoundingRectangle(options = {}) {
 
@@ -21,7 +26,6 @@ export default function minimalBoundingRectangle(options = {}) {
     let minSurface = +Infinity;
     let minSurfaceAngle = 0;
     let mbr;
-
 
     for (let i = 0; i < p.length; i++) {
         let angle = getAngle(originalPoints[i], originalPoints[(i + 1) % p.length]);

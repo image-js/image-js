@@ -102,6 +102,7 @@
     "ml-matrix": "3.0.0",
     "ml-matrix-convolution": "0.4.3",
     "ml-regression": "^4.0.0",
+    "monotone-chain-convex-hull": "^1.0.0",
     "new-array": "^1.0.0",
     "num-sort": "^1.0.0",
     "tiff": "^2.1.0",
