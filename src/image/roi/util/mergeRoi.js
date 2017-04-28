@@ -26,6 +26,7 @@ export default function mergeRoi(roiMap, options = {}) {
     algorithm = algorithm.toLowerCase();
 
     let currentPosition = 0;
+    let newMap = {};
     let oldToNew = {};
 
     for (let currentID of Object.keys(borderLengths)) {
@@ -34,22 +35,28 @@ export default function mergeRoi(roiMap, options = {}) {
             case 'commonborderlength':
                 let neighbourIDs = Object.keys(currentInfo);
                 for (let neighbourID of neighbourIDs) {
-                    console.log(neighbourID, currentID);
                     if (neighbourID !== currentID) { // it is not myself ...
                         if (currentInfo[neighbourID]>=minCommonBorderLength && currentInfo[neighbourID]<=maxCommonBorderLength) {
-                            let smallerID = Math.min(neighbourID, currentID);
-                            let largerID = Math.max(neighbourID, currentID);
-                            if (! oldToNew[smallerID]) {
-                                oldToNew[smallerID]={};
+                            let newNeighbourID = neighbourID;
+                            if (oldToNew[neighbourID]) newNeighbourID=oldToNew[neighbourID];
+                            let newCurrentID = currentID;
+                            if (oldToNew[currentID]) newCurrentID=oldToNew[currentID];
+
+                            let smallerID = Math.min(newNeighbourID, newCurrentID);
+                            let largerID = Math.max(newNeighbourID, newCurrentID);
+
+                            if (! newMap[smallerID]) {
+                                newMap[smallerID]={};
                             }
-                            oldToNew[smallerID][largerID]=true;
-                            if (oldToNew[largerID]) { // need to put everything to smallerID and remove property
-                                for (let id of Object.keys(oldToNew[largerID])) {
-                                    oldToNew[smallerID][id]=true;
+                            newMap[smallerID][largerID]=true;
+                            oldToNew[largerID]=smallerID;
+                            if (newMap[largerID]) { // need to put everything to smallerID and remove property
+                                for (let id of Object.keys(newMap[largerID])) {
+                                    newMap[smallerID][id]=true;
                                 }
-                                delete oldToNew[largerID];
+                                delete newMap[largerID];
                             }
-                            console.log('Should merge');
+                            console.log('Should merge', neighbourID, currentID, newMap);
                         }
                     }
                 }
@@ -64,7 +71,7 @@ export default function mergeRoi(roiMap, options = {}) {
         currentPosition++;
     }
 
-    console.log(oldToNew);
+    console.log(newMap);
 
     return roiMap;
 
