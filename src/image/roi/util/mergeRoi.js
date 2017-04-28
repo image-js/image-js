@@ -1,5 +1,3 @@
-"use strict";
-
 
 /**
  * Return a new roiMAP changed with the fusion of certain ROIs.
@@ -36,27 +34,30 @@ export default function mergeRoi(roiMap, options = {}) {
                 let neighbourIDs = Object.keys(currentInfo);
                 for (let neighbourID of neighbourIDs) {
                     if (neighbourID !== currentID) { // it is not myself ...
-                        if (currentInfo[neighbourID]>=minCommonBorderLength && currentInfo[neighbourID]<=maxCommonBorderLength) {
+                        if (currentInfo[neighbourID] >= minCommonBorderLength && currentInfo[neighbourID] <= maxCommonBorderLength) {
+                            // the common border are in the range. We should merge
                             let newNeighbourID = neighbourID;
-                            if (oldToNew[neighbourID]) newNeighbourID=oldToNew[neighbourID];
+                            if (oldToNew[neighbourID]) newNeighbourID = oldToNew[neighbourID];
                             let newCurrentID = currentID;
-                            if (oldToNew[currentID]) newCurrentID=oldToNew[currentID];
+                            if (oldToNew[currentID]) newCurrentID = oldToNew[currentID];
 
-                            let smallerID = Math.min(newNeighbourID, newCurrentID);
-                            let largerID = Math.max(newNeighbourID, newCurrentID);
+                            if (Number(newNeighbourID) !== newCurrentID) {
+                                let smallerID = Math.min(newNeighbourID, newCurrentID);
+                                let largerID = Math.max(newNeighbourID, newCurrentID);
 
-                            if (! newMap[smallerID]) {
-                                newMap[smallerID]={};
-                            }
-                            newMap[smallerID][largerID]=true;
-                            oldToNew[largerID]=smallerID;
-                            if (newMap[largerID]) { // need to put everything to smallerID and remove property
-                                for (let id of Object.keys(newMap[largerID])) {
-                                    newMap[smallerID][id]=true;
+                                if (!newMap[smallerID]) {
+                                    newMap[smallerID] = {};
                                 }
-                                delete newMap[largerID];
+                                newMap[smallerID][largerID] = true;
+                                oldToNew[largerID] = smallerID;
+                                if (newMap[largerID]) { // need to put everything to smallerID and remove property
+                                    for (let id of Object.keys(newMap[largerID])) {
+                                        newMap[smallerID][id] = true;
+                                        oldToNew[id] = smallerID;
+                                    }
+                                    delete newMap[largerID];
+                                }
                             }
-                            console.log('Should merge', neighbourID, currentID, newMap);
                         }
                     }
                 }
@@ -65,18 +66,34 @@ export default function mergeRoi(roiMap, options = {}) {
 
                 break;
             default:
-                throw Error('Unknown algorithm to merge roi: '+algorithm);
+                throw Error('Unknown algorithm to merge roi: ' + algorithm);
         }
 
         currentPosition++;
     }
 
-    console.log(newMap);
+    let minMax = roiMap.minMax;
+    let shift = -minMax.min;
+    let max = minMax.max + shift;
+    let oldToNewArray = new Array(max + 1).fill(0);
+    for (let key of Object.keys(oldToNew)) {
+        oldToNewArray[Number(key) + shift] = oldToNew[key];
+    }
+    // time to change the roiMap
+    let data = roiMap.data;
+    for (let i = 0; i < data.length; i++) {
+        let currentValue = data[i];
+        if (currentValue !== 0) {
+            let newValue = oldToNewArray[currentValue + shift];
+            if (newValue !== 0) {
+                data[i] = newValue;
+            }
+        }
+    }
+
+    roiMap.computed = {};
 
     return roiMap;
 
 }
 
-function merge(common, id1, id2) {
-
-}

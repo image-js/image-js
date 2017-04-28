@@ -314,11 +314,11 @@ export default class RoiManager {
                             if (newX >= 0 && newY >= 0 && newX < roiMap.width && newY < roiMap.height) {
                                 let neighbourRoiID = data[newX + newY * roiMap.width];
                                 if (currentRoiID !== neighbourRoiID) {
-                                    if (! borderInfo[neighbourRoiID]) {
+                                    if (!borderInfo[neighbourRoiID]) {
                                         borderInfo[neighbourRoiID] = {};
                                     }
-                                    if (! borderInfo[neighbourRoiID][currentRoiID]) {
-                                        borderInfo[neighbourRoiID][currentRoiID]=1;
+                                    if (!borderInfo[neighbourRoiID][currentRoiID]) {
+                                        borderInfo[neighbourRoiID][currentRoiID] = 1;
                                     } else {
                                         borderInfo[neighbourRoiID][currentRoiID]++;
                                     }
@@ -327,8 +327,6 @@ export default class RoiManager {
                         }
                     }
                 }
-
-
 
 
                 for (let i = 0; i < rois.length; i++) {

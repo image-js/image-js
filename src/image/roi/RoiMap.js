@@ -17,7 +17,7 @@ export default class RoiMap {
         this.data = data;
         this.negative = 0;
         this.positive = 0;
-        this.computed={};
+        this.computed = {};
     }
 
     get total() {
@@ -29,8 +29,8 @@ export default class RoiMap {
         let min = Number.MAX_SAFE_INTEGER;
         let max = Number.MIN_SAFE_INTEGER;
         for (let i = 0; i < this.data.length; i++) {
-            if (this.data[i]<min) min=this.data[i];
-            if (this.data[i]>max) max=this.data[i];
+            if (this.data[i] < min) min = this.data[i];
+            if (this.data[i] > max) max = this.data[i];
         }
         return this.computed.minMax = {min, max};
     }
