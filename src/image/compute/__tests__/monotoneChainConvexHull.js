@@ -19,13 +19,13 @@ describe('Monotone Chain Convex Hull', function () {
 
         image.monotoneChainConvexHull().should.eql([
             [2, 3],
-            [3, 1],
-            [4, 1],
-            [7, 3],
-            [7, 4],
-            [4, 6],
+            [2, 4],
             [3, 6],
-            [2, 4]
+            [4, 6],
+            [7, 4],
+            [7, 3],
+            [4, 1],
+            [3, 1]
         ]);
     });
 });

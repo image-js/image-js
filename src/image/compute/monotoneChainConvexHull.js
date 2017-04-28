@@ -12,11 +12,5 @@ export default function monotoneChainConvexHull() {
 
     const points = image.getPoints();
 
-    const result = mcch(points, {sorted: true});
-
-    // TODO: this is required for the MBR algorithm to work. Remove when it has been adapted
-    result.reverse();
-    const first = result.pop();
-    result.unshift(first);
-    return result;
+    return mcch(points, {sorted: true});
 }

@@ -45,7 +45,7 @@ describe('Minimal bounding rectangle', function () {
         );
 
         const result = minimalBoundingRectangle.call(image);
-        result.should.eql([[0, 0], [7, 0], [7, 2], [0, 2]]);
+        result.should.eql([[0, 2], [7, 2], [7, 0], [0, 0]]);
     });
 
     it('should return the small bounding box 2', function () {
@@ -59,7 +59,7 @@ describe('Minimal bounding rectangle', function () {
         );
 
         const result = minimalBoundingRectangle.call(image);
-        result.should.eql([[1, 0], [6, 0], [6, 2], [1, 2]]);
+        result.should.eql([[1, 2], [6, 2], [6, 0], [1, 0]]);
     });
 
     it('should return the small bounding box diamond', function () {
@@ -73,7 +73,7 @@ describe('Minimal bounding rectangle', function () {
         );
 
         const result = minimalBoundingRectangle.call(image);
-        result.should.approximatelyDeep([[5, 0], [6, 1], [5, 2], [4, 1]], 1e-6);
+        result.should.approximatelyDeep([[6, 1], [5, 0], [4, 1], [5, 2]], 1e-6);
     });
 
 
@@ -92,7 +92,7 @@ describe('Minimal bounding rectangle', function () {
         );
 
         const result = minimalBoundingRectangle.call(image);
-        result.should.approximatelyDeep([[7, 4], [5, 6], [2, 3], [4, 1]], 1e-6);
+        result.should.approximatelyDeep([[2, 3], [5, 6], [7, 4], [4, 1]], 1e-6);
     });
 
     it('should return the small bounding box rectangle', function () {
