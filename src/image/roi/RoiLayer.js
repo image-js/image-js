@@ -53,15 +53,15 @@ export default class RoiLayer {
         for (let mapID in mapIDs) {
             rois[mapID] = new Roi(this.roiMap, mapID * 1);
         }
-
         let width = this.roiMap.width;
         let height = this.roiMap.height;
 
-        for (let x = 0; x < width; x++) {
-            for (let y = 0; y < height; y++) {
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
                 let target = y * width + x;
                 if (data[target] !== 0) {
                     const mapID = data[target];
+                   // console.log('---',mapID)
                     const roi = rois[mapID];
                     if (x < roi.minX) {
                         roi.minX = x;
@@ -81,7 +81,6 @@ export default class RoiLayer {
                 }
             }
         }
-
         let roiArray = [];
         for (let mapID in mapIDs) {
             rois[mapID].meanX /= rois[mapID].surface;

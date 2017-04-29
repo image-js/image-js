@@ -1,4 +1,4 @@
-import RoiMapper from '../creator/fromWaterShed';
+import fromWaterShed from '../creator/fromWaterShed';
 import {Image} from 'test/common';
 import 'should';
 
@@ -31,13 +31,17 @@ describe('Merge Roi', function () {
             }
         }
 
-        let map = RoiMapper.call(image, {fillMaxValue: 5, mask: mask});
+        let roiMap = fromWaterShed.call(image, {fillMaxValue: 5, mask: mask});
+
         let roiManager = image.getRoiManager();
-        roiManager.putMap(map.data);
+        roiManager.putMap(roiMap.data);
 
-        roiManager.mergeRoi({minCommonBorderLength: 3});
+        roiManager.mergeRoi({
+            minCommonBorderLength: 3,
+            maxCommonBorderLength: 5,
+        });
 
-        Array.from(map.data).should.eql(
+        Array.from(roiMap.data).should.eql(
             [
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,

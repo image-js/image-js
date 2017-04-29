@@ -41,7 +41,7 @@ export default class RoiMap {
 
 
     mergeRoi(options = {}) {
-        mergeRoi(this, options);
+        return mergeRoi.call(this, options);
     }
 
 

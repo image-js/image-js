@@ -1,17 +1,21 @@
 
 /**
- * Return a new roiMAP changed with the fusion of certain ROIs.
+ * In place modification of the roiMap that joins regions of interest
  * @param {object} [options]
- * @param {string} [options.algorithm='commonBorderLength'] ; algorithm used to decide which ROIs are merged.
- * @param {number} [options.minCommonBorderLength=5] is an integer, determine the strength of the merging.
- * @param {number} [options.maxCommonBorderLength=5] is an integer, determine the strength of the merging.
- *
+ * @param {string|function(object,number,number)} [options.algorithm='commonBorderLength'] algorithm used to decide which ROIs are merged.
+ *      Current implemented algorithms are 'commonBorderLength' that use the parameters
+ *      'minCommonBorderLength' and 'maxCommonBorderLength' as well as 'commonBorderRatio' that uses
+ *      the parameters 'minCommonBorderRatio' and 'maxCommonBorderRatio'.
+ * @param {number} [options.minCommonBorderLength=5] minimal common number of pixels for merging
+ * @param {number} [options.maxCommonBorderLength=100] maximal common number of pixels for merging
+ * @param {number} [options.minCommonBorderRatio=0.3] minimal common border ratio for merging
+ * @param {number} [options.maxCommonBorderRatio=1] maximal common border ratio for merging
  * @return {this}
  */
 
 
-export default function mergeRoi(roiMap, options = {}) {
-    let {
+export default function mergeRoi(options = {}) {
+    const {
         algorithm = 'commonBorderLength',
         minCommonBorderLength = 5,
         maxCommonBorderLength = 100,
@@ -19,57 +23,56 @@ export default function mergeRoi(roiMap, options = {}) {
         maxCommonBorderRatio = 1
     } = options;
 
-    let borderLengths = roiMap.commonBorderLength;
-
-    algorithm = algorithm.toLowerCase();
-
-    let currentPosition = 0;
+    let checkFunction = function (currentInfo, currentID, neighbourID) {
+        return (currentInfo[neighbourID] >= minCommonBorderLength &&
+            currentInfo[neighbourID] <= maxCommonBorderLength);
+    };
+    if (typeof algorithm === 'function') {
+        checkFunction = algorithm;
+    }
+    if (algorithm.toLowerCase() === 'commonborderratio') {
+        checkFunction = function (currentInfo, currentID, neighbourID) {
+            let ratio = Math.min(currentInfo[neighbourID] / currentInfo[currentID], 1);
+            return (ratio >= minCommonBorderRatio && ratio <= maxCommonBorderRatio);
+        };
+    }
+    const roiMap = this;
+    const borderLengths = roiMap.commonBorderLength;
     let newMap = {};
     let oldToNew = {};
 
     for (let currentID of Object.keys(borderLengths)) {
         let currentInfo = borderLengths[currentID];
-        switch (algorithm) {
-            case 'commonborderlength':
-                let neighbourIDs = Object.keys(currentInfo);
-                for (let neighbourID of neighbourIDs) {
-                    if (neighbourID !== currentID) { // it is not myself ...
-                        if (currentInfo[neighbourID] >= minCommonBorderLength && currentInfo[neighbourID] <= maxCommonBorderLength) {
-                            // the common border are in the range. We should merge
-                            let newNeighbourID = neighbourID;
-                            if (oldToNew[neighbourID]) newNeighbourID = oldToNew[neighbourID];
-                            let newCurrentID = currentID;
-                            if (oldToNew[currentID]) newCurrentID = oldToNew[currentID];
+        let neighbourIDs = Object.keys(currentInfo);
+        for (let neighbourID of neighbourIDs) {
+            if (neighbourID !== currentID) { // it is not myself ...
+                if (checkFunction(currentInfo, currentID, neighbourID)) {
+                    // the common border are in the range. We should merge
+                    let newNeighbourID = neighbourID;
+                    if (oldToNew[neighbourID]) newNeighbourID = oldToNew[neighbourID];
+                    let newCurrentID = currentID;
+                    if (oldToNew[currentID]) newCurrentID = oldToNew[currentID];
 
-                            if (Number(newNeighbourID) !== newCurrentID) {
-                                let smallerID = Math.min(newNeighbourID, newCurrentID);
-                                let largerID = Math.max(newNeighbourID, newCurrentID);
+                    if (Number(newNeighbourID) !== newCurrentID) {
+                        let smallerID = Math.min(newNeighbourID, newCurrentID);
+                        let largerID = Math.max(newNeighbourID, newCurrentID);
 
-                                if (!newMap[smallerID]) {
-                                    newMap[smallerID] = {};
-                                }
-                                newMap[smallerID][largerID] = true;
-                                oldToNew[largerID] = smallerID;
-                                if (newMap[largerID]) { // need to put everything to smallerID and remove property
-                                    for (let id of Object.keys(newMap[largerID])) {
-                                        newMap[smallerID][id] = true;
-                                        oldToNew[id] = smallerID;
-                                    }
-                                    delete newMap[largerID];
-                                }
+                        if (!newMap[smallerID]) {
+                            newMap[smallerID] = {};
+                        }
+                        newMap[smallerID][largerID] = true;
+                        oldToNew[largerID] = smallerID;
+                        if (newMap[largerID]) { // need to put everything to smallerID and remove property
+                            for (let id of Object.keys(newMap[largerID])) {
+                                newMap[smallerID][id] = true;
+                                oldToNew[id] = smallerID;
                             }
+                            delete newMap[largerID];
                         }
                     }
                 }
-                break;
-            case 'commonborderratio':
-
-                break;
-            default:
-                throw Error('Unknown algorithm to merge roi: ' + algorithm);
+            }
         }
-
-        currentPosition++;
     }
 
     let minMax = roiMap.minMax;
@@ -92,8 +95,5 @@ export default function mergeRoi(roiMap, options = {}) {
     }
 
     roiMap.computed = {};
-
     return roiMap;
-
 }
-

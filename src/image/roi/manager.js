@@ -44,14 +44,14 @@ export default class RoiManager {
 
 
     /**
-     * @param {number[]} roiMap
+     * @param {number[]} map
      * @param {object} [options]
      * @return {this}
      */
-    putMap(roiMap, options = {}) {
-        let map = new RoiMap(this._image, roiMap);
+    putMap(map, options = {}) {
+        let roiMap = new RoiMap(this._image, map);
         let opt = extendObject({}, this._options, options);
-        this._layers[opt.label] = new RoiLayer(map, opt);
+        this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
     }
 
@@ -277,85 +277,22 @@ export default class RoiManager {
     }
 
     /**
-     * Return a new roiMAP changed with the fusion of certain ROIs.
+     * In place modification of the roiMap that joins regions of interest
      * @param {object} [options]
-     * @param {string} [options.algorithm='commonBorderLength'] ; algorithm used to decide which ROIs are merged.
-     * @param {number} [options.minCommonBorderLength=5] is an integer, determine the strength of the merging.
-     * @param {number} [options.maxCommonBorderLength=5] is an integer, determine the strength of the merging.
-     *
+     * @param {string|function(object,number,number)} [options.algorithm='commonBorderLength'] algorithm used to decide which ROIs are merged.
+     *      Current implemented algorithms are 'commonBorderLength' that use the parameters
+     *      'minCommonBorderLength' and 'maxCommonBorderLength' as well as 'commonBorderRatio' that uses
+     *      the parameters 'minCommonBorderRatio' and 'maxCommonBorderRatio'.
+     * @param {number} [options.minCommonBorderLength=5] minimal common number of pixels for merging
+     * @param {number} [options.maxCommonBorderLength=100] maximal common number of pixels for merging
+     * @param {number} [options.minCommonBorderRatio=0.3] minimal common border ratio for merging
+     * @param {number} [options.maxCommonBorderRatio=1] maximal common border ratio for merging
      * @return {this}
      */
     mergeRoi(options = {}) {
-        let opt = extendObject({}, this._options, options);
-        let {
-            algorithm = 'commonBorder',
-            minCommonBorderLength = 5
-        } = options;
-        let rois = this.getRois(opt);
-        let toMerge = [];
-        switch (algorithm.toLowerCase()) {
-            //Algorithms. We can add more algorithm to create other types of merging.
-            case 'commonborder' :
-
-                // We calculate all the information about the neightbours
-                let roiMap = this.getMap(opt);
-                let data = roiMap.data;
-                let dx = [+1, 0, -1, 0];
-                let dy = [0, +1, 0, -1];
-                let borderInfo = {};
-
-                for (let x = 0; x <= this.width; x++) {
-                    for (let y = 0; y <= this.height; y++) {
-                        let target = x + y * roiMap.width;
-                        let currentRoiID = data[target];
-                        for (let dir = 0; dir < 4; dir++) {
-                            let newX = x + dx[dir];
-                            let newY = y + dy[dir];
-                            if (newX >= 0 && newY >= 0 && newX < roiMap.width && newY < roiMap.height) {
-                                let neighbourRoiID = data[newX + newY * roiMap.width];
-                                if (currentRoiID !== neighbourRoiID) {
-                                    if (!borderInfo[neighbourRoiID]) {
-                                        borderInfo[neighbourRoiID] = {};
-                                    }
-                                    if (!borderInfo[neighbourRoiID][currentRoiID]) {
-                                        borderInfo[neighbourRoiID][currentRoiID] = 1;
-                                    } else {
-                                        borderInfo[neighbourRoiID][currentRoiID]++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-
-                for (let i = 0; i < rois.length; i++) {
-                    for (let k = 0; k < rois[i].borderIDs.length; k++) {
-                        //If the length of wall of the current region and his neighbour is big enough, we join the rois.
-                        if (rois[i].borderIDs[k] !== 0 && rois[i].borderIDs[k] < rois[i].id && rois[i].borderLengths[k] * minCommonBorderLength >= rois[i].border) {
-                            toMerge.push([rois[i].id, rois[i].borderIDs[k]]);
-                        }
-                    }
-                }
-                break;
-            default:
-                throw new Error(`Unexpected algorithm: ${algorithm}`);
-        }
-
-
-        //Now we can modify the roiMap by merging each region determined before
-        let data = this.getMap(opt).data;
-        for (let index = 0; index < data.length; index++) {
-            if (data[index] !== 0) {
-                for (let array of toMerge) {
-                    if (data[index] === array[0]) {
-                        data[index] = array[1];
-                    }
-                }
-            }
-        }
-        this.putMap(data, opt);
-
+        const roiMap = this.getMap(options);
+        roiMap.mergeRoi(options);
+        this.putMap(roiMap.data, options);
         return this;
     }
 
