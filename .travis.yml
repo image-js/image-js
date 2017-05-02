@@ -12,9 +12,9 @@ addons:
       - libjpeg8-dev
       - libpango1.0-dev
       - libgif-dev
-      - g++-4.8
+      - g++-4.9
 env:
-  - CXX=g++-4.8
+  - CXX=g++-4.9
 cache:
   yarn: true
   directories:
