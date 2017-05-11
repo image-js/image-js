@@ -7,7 +7,10 @@
 export default function triangle(histogram) {
 
     // find min and max
-    let min = 0, dmax = 0, max = 0, min2 = 0;
+    let min = 0;
+    let dmax = 0;
+    let max = 0;
+    let min2 = 0;
     for (let i = 0; i < histogram.length; i++) {
         if (histogram[i] > 0) {
             min = i;

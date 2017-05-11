@@ -1,9 +1,8 @@
-
 import commonBorderLength from '../commonBorderLength';
 import RoiMap from '../../RoiMap';
 import 'should';
 
-
+/* eslint-disable quote-props */
 describe('Calculate the commonBorderLength from a roiMap', function () {
 
     it('check simple roimap', function () {

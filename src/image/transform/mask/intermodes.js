@@ -11,7 +11,9 @@ export default function intermodes(histogram) {
     let iter = 0;
     while (!bimodalTest(iHisto)) {
         //smooth with a 3 point running mean filter
-        let previous = 0, current = 0, next = iHisto[0];
+        let previous = 0;
+        let current = 0;
+        let next = iHisto[0];
         for (let i = 0; i < histogram.length - 1; i++) {
             previous = current;
             current = next;

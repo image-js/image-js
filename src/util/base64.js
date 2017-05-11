@@ -16,7 +16,9 @@ for (let i = 0; i < chars.length; i++) {
 }
 
 export function encode(bytes) {
-    let i, len = bytes.length, base64 = '';
+    let i;
+    let len = bytes.length;
+    let base64 = '';
 
     for (i = 0; i < len; i += 3) {
         base64 += chars[bytes[i] >> 2];
@@ -35,9 +37,10 @@ export function encode(bytes) {
 }
 
 export function decode(base64) {
-    let bufferLength = base64.length * 0.75,
-        len = base64.length, i, p = 0,
-        encoded1, encoded2, encoded3, encoded4;
+    let bufferLength = base64.length * 0.75;
+    let len = base64.length;
+    let p = 0;
+    let encoded1, encoded2, encoded3, encoded4;
 
     if (base64[base64.length - 1] === '=') {
         bufferLength--;
@@ -48,7 +51,7 @@ export function decode(base64) {
 
     const bytes = new Uint8Array(bufferLength);
 
-    for (i = 0; i < len; i += 4) {
+    for (let i = 0; i < len; i += 4) {
         encoded1 = lookup[base64.charCodeAt(i)];
         encoded2 = lookup[base64.charCodeAt(i + 1)];
         encoded3 = lookup[base64.charCodeAt(i + 2)];

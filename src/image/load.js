@@ -84,7 +84,8 @@ function loadPNG(data) {
     }
 
     const type = png.colourType;
-    let components, alpha = 0;
+    let components;
+    let alpha = 0;
     switch (type) {
         case 0: components = 1; break;
         case 2: components = 3; break;
@@ -139,7 +140,8 @@ function loadGeneric(url, options) {
         }
 
         image.onload = function () {
-            let w = image.width, h = image.height;
+            let w = image.width;
+            let h = image.height;
             let canvas = new Canvas(w, h);
             let ctx = canvas.getContext('2d');
             ctx.drawImage(image, 0, 0, w, h);
