@@ -15079,7 +15079,7 @@ var neighbours8 = [null, null, null, null];
 /*
 Implementation of the connected-component labeling algorithm
  */
-function fromKaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
+function fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
     var _options$allowCorners = options.allowCorners,
         allowCorners = _options$allowCorners === undefined ? false : _options$allowCorners;
 
@@ -15107,7 +15107,7 @@ function fromKaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
     var width = mask.width;
     var height = mask.height;
     var labels = new Array(size);
-    var data = new Int16Array(size);
+    var data = new Uint32Array(size);
     var linked = new DisjointSet_1();
 
     var currentLabel = 1;
@@ -16738,7 +16738,7 @@ class RoiManager {
 
     fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
         var opt = index$22({}, this._options, options);
-        var roiMap = fromKaskConnectedComponentLabelingAlgorithm.call(this._image, mask, options);
+        var roiMap = fromMaskConnectedComponentLabelingAlgorithm.call(this._image, mask, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
     }
