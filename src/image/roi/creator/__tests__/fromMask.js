@@ -1,6 +1,7 @@
 import fromMask from '../fromMask';
 import {Image} from 'test/common';
 import 'should';
+import {BINARY} from "../../../kindNames";
 
 describe('we check fromMask', function () {
 
@@ -57,5 +58,20 @@ describe('we check fromMask', function () {
         ];
 
         Array.from(mapData).should.eql(expected);
+    });
+
+    it('should fail when there are too many separate ROIs', () => {
+        const size = 11;
+        let mask = new Image(size, size, {kind: 'BINARY'});
+        let pos = true;
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                if (pos) mask.setBitXY(i, j);
+                pos = !pos;
+            }
+        }
+        (function () {
+            fromMask(mask, {maxArray: 0b111}); // 7
+        }).should.throw(/analyseMask can not finish, the array to manage internal data is not big enough/);
     });
 });

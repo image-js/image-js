@@ -9,8 +9,11 @@ import RoiMap from '../RoiMap';
  */
 export default function fromMask(mask, options = {}) {
     const {
-        allowCorners = false
+        allowCorners = false,
+        maxArray = 0x00ffff // 65535 should be enough for most of the cases
     } = options;
+
+    const MAX_ARRAY = maxArray;
 
     // based on a binary image we will create plenty of small images
     let data = new Int16Array(mask.size); // maxValue: 32767, minValue: -32768
@@ -19,7 +22,6 @@ export default function fromMask(mask, options = {}) {
     let positiveID = 0;
     let negativeID = 0;
 
-    let MAX_ARRAY = 0x00ffff; // should be enough for most of the cases
     let xToProcess = new Uint16Array(MAX_ARRAY + 1); // assign dynamically ????
     let yToProcess = new Uint16Array(MAX_ARRAY + 1); // mask +1 is of course mandatory !!!
 
