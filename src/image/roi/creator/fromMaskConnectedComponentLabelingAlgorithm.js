@@ -20,7 +20,7 @@ const neighbours8 = [null, null, null, null];
 /*
 Implementation of the connected-component labeling algorithm
  */
-export default function fromKaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
+export default function fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
     const {
         allowCorners = false
     } = options;
@@ -48,7 +48,7 @@ export default function fromKaskConnectedComponentLabelingAlgorithm(mask, option
     const width = mask.width;
     const height = mask.height;
     const labels = new Array(size);
-    const data = new Int16Array(size);
+    const data = new Uint32Array(size);
     const linked = new DisjointSet();
 
     let currentLabel = 1;
