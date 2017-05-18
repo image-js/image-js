@@ -12,11 +12,12 @@ import * as Kernel from './kernel/kernel';
 Image.Kernel = Kernel;
 
 import {names as greyNames} from './image/transform/greyAlgorithms';
-import {names as maskNames} from './image/transform/mask/maskAlgorithms';
+import {names as maskNames, methods as maskMethods} from './image/transform/mask/maskAlgorithms';
 
 const Static = {
     grey: greyNames,
-    mask: maskNames
+    mask: maskNames,
+    maskMethods: maskMethods
 };
 Image.Static = Static;
 
