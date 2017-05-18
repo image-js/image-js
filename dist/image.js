@@ -9709,9 +9709,9 @@ function intermodes(histogram) {
     var iter = 0;
     while (!bimodalTest(iHisto)) {
         //smooth with a 3 point running mean filter
-        var previous = 0,
-            current = 0,
-            next = iHisto[0];
+        var previous = 0;
+        var current = 0;
+        var next = iHisto[0];
         for (var i = 0; i < histogram.length - 1; i++) {
             previous = current;
             current = next;
@@ -10506,10 +10506,10 @@ function shanbhag(histogram, total) {
 function triangle(histogram) {
 
     // find min and max
-    var min = 0,
-        dmax = 0,
-        max = 0,
-        min2 = 0;
+    var min = 0;
+    var dmax = 0;
+    var max = 0;
+    var min2 = 0;
     for (var i = 0; i < histogram.length; i++) {
         if (histogram[i] > 0) {
             min = i;
@@ -25280,35 +25280,49 @@ var index$32 = input => {
 		return null;
 	}
 
-	if (buf[0] === 0xFF && buf[1] === 0xD8 && buf[2] === 0xFF) {
+	const check = (header, opts) => {
+		opts = Object.assign({
+			offset: 0
+		}, opts);
+
+		for (let i = 0; i < header.length; i++) {
+			if (header[i] !== buf[i + opts.offset]) {
+				return false;
+			}
+		}
+
+		return true;
+	};
+
+	if (check([0xFF, 0xD8, 0xFF])) {
 		return {
 			ext: 'jpg',
 			mime: 'image/jpeg'
 		};
 	}
 
-	if (buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4E && buf[3] === 0x47) {
+	if (check([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])) {
 		return {
 			ext: 'png',
 			mime: 'image/png'
 		};
 	}
 
-	if (buf[0] === 0x47 && buf[1] === 0x49 && buf[2] === 0x46) {
+	if (check([0x47, 0x49, 0x46])) {
 		return {
 			ext: 'gif',
 			mime: 'image/gif'
 		};
 	}
 
-	if (buf[8] === 0x57 && buf[9] === 0x45 && buf[10] === 0x42 && buf[11] === 0x50) {
+	if (check([0x57, 0x45, 0x42, 0x50], {offset: 8})) {
 		return {
 			ext: 'webp',
 			mime: 'image/webp'
 		};
 	}
 
-	if (buf[0] === 0x46 && buf[1] === 0x4C && buf[2] === 0x49 && buf[3] === 0x46) {
+	if (check([0x46, 0x4C, 0x49, 0x46])) {
 		return {
 			ext: 'flif',
 			mime: 'image/flif'
@@ -25316,43 +25330,52 @@ var index$32 = input => {
 	}
 
 	// Needs to be before `tif` check
-	if (((buf[0] === 0x49 && buf[1] === 0x49 && buf[2] === 0x2A && buf[3] === 0x0) || (buf[0] === 0x4D && buf[1] === 0x4D && buf[2] === 0x0 && buf[3] === 0x2A)) && buf[8] === 0x43 && buf[9] === 0x52) {
+	if (
+		(check([0x49, 0x49, 0x2A, 0x0]) || check([0x4D, 0x4D, 0x0, 0x2A])) &&
+		check([0x43, 0x52], {offset: 8})
+	) {
 		return {
 			ext: 'cr2',
 			mime: 'image/x-canon-cr2'
 		};
 	}
 
-	if ((buf[0] === 0x49 && buf[1] === 0x49 && buf[2] === 0x2A && buf[3] === 0x0) || (buf[0] === 0x4D && buf[1] === 0x4D && buf[2] === 0x0 && buf[3] === 0x2A)) {
+	if (
+		check([0x49, 0x49, 0x2A, 0x0]) ||
+		check([0x4D, 0x4D, 0x0, 0x2A])
+	) {
 		return {
 			ext: 'tif',
 			mime: 'image/tiff'
 		};
 	}
 
-	if (buf[0] === 0x42 && buf[1] === 0x4D) {
+	if (check([0x42, 0x4D])) {
 		return {
 			ext: 'bmp',
 			mime: 'image/bmp'
 		};
 	}
 
-	if (buf[0] === 0x49 && buf[1] === 0x49 && buf[2] === 0xBC) {
+	if (check([0x49, 0x49, 0xBC])) {
 		return {
 			ext: 'jxr',
 			mime: 'image/vnd.ms-photo'
 		};
 	}
 
-	if (buf[0] === 0x38 && buf[1] === 0x42 && buf[2] === 0x50 && buf[3] === 0x53) {
+	if (check([0x38, 0x42, 0x50, 0x53])) {
 		return {
 			ext: 'psd',
 			mime: 'image/vnd.adobe.photoshop'
 		};
 	}
 
-	// Needs to be before `zip` check
-	if (buf[0] === 0x50 && buf[1] === 0x4B && buf[2] === 0x3 && buf[3] === 0x4 && buf[30] === 0x6D && buf[31] === 0x69 && buf[32] === 0x6D && buf[33] === 0x65 && buf[34] === 0x74 && buf[35] === 0x79 && buf[36] === 0x70 && buf[37] === 0x65 && buf[38] === 0x61 && buf[39] === 0x70 && buf[40] === 0x70 && buf[41] === 0x6C && buf[42] === 0x69 && buf[43] === 0x63 && buf[44] === 0x61 && buf[45] === 0x74 && buf[46] === 0x69 && buf[47] === 0x6F && buf[48] === 0x6E && buf[49] === 0x2F && buf[50] === 0x65 && buf[51] === 0x70 && buf[52] === 0x75 && buf[53] === 0x62 && buf[54] === 0x2B && buf[55] === 0x7A && buf[56] === 0x69 && buf[57] === 0x70) {
+	// Needs to be before the `zip` check
+	if (
+		check([0x50, 0x4B, 0x3, 0x4]) &&
+		check([0x6D, 0x69, 0x6D, 0x65, 0x74, 0x79, 0x70, 0x65, 0x61, 0x70, 0x70, 0x6C, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6F, 0x6E, 0x2F, 0x65, 0x70, 0x75, 0x62, 0x2B, 0x7A, 0x69, 0x70], {offset: 30})
+	) {
 		return {
 			ext: 'epub',
 			mime: 'application/epub+zip'
@@ -25360,57 +25383,67 @@ var index$32 = input => {
 	}
 
 	// Needs to be before `zip` check
-	// assumes signed .xpi from addons.mozilla.org
-	if (buf[0] === 0x50 && buf[1] === 0x4B && buf[2] === 0x3 && buf[3] === 0x4 && buf[30] === 0x4D && buf[31] === 0x45 && buf[32] === 0x54 && buf[33] === 0x41 && buf[34] === 0x2D && buf[35] === 0x49 && buf[36] === 0x4E && buf[37] === 0x46 && buf[38] === 0x2F && buf[39] === 0x6D && buf[40] === 0x6F && buf[41] === 0x7A && buf[42] === 0x69 && buf[43] === 0x6C && buf[44] === 0x6C && buf[45] === 0x61 && buf[46] === 0x2E && buf[47] === 0x72 && buf[48] === 0x73 && buf[49] === 0x61) {
+	// Assumes signed `.xpi` from addons.mozilla.org
+	if (
+		check([0x50, 0x4B, 0x3, 0x4]) &&
+		check([0x4D, 0x45, 0x54, 0x41, 0x2D, 0x49, 0x4E, 0x46, 0x2F, 0x6D, 0x6F, 0x7A, 0x69, 0x6C, 0x6C, 0x61, 0x2E, 0x72, 0x73, 0x61], {offset: 30})
+	) {
 		return {
 			ext: 'xpi',
 			mime: 'application/x-xpinstall'
 		};
 	}
 
-	if (buf[0] === 0x50 && buf[1] === 0x4B && (buf[2] === 0x3 || buf[2] === 0x5 || buf[2] === 0x7) && (buf[3] === 0x4 || buf[3] === 0x6 || buf[3] === 0x8)) {
+	if (
+		check([0x50, 0x4B]) &&
+		(buf[2] === 0x3 || buf[2] === 0x5 || buf[2] === 0x7) &&
+		(buf[3] === 0x4 || buf[3] === 0x6 || buf[3] === 0x8)
+	) {
 		return {
 			ext: 'zip',
 			mime: 'application/zip'
 		};
 	}
 
-	if (buf[257] === 0x75 && buf[258] === 0x73 && buf[259] === 0x74 && buf[260] === 0x61 && buf[261] === 0x72) {
+	if (check([0x75, 0x73, 0x74, 0x61, 0x72], {offset: 257})) {
 		return {
 			ext: 'tar',
 			mime: 'application/x-tar'
 		};
 	}
 
-	if (buf[0] === 0x52 && buf[1] === 0x61 && buf[2] === 0x72 && buf[3] === 0x21 && buf[4] === 0x1A && buf[5] === 0x7 && (buf[6] === 0x0 || buf[6] === 0x1)) {
+	if (
+		check([0x52, 0x61, 0x72, 0x21, 0x1A, 0x7]) &&
+		(buf[6] === 0x0 || buf[6] === 0x1)
+	) {
 		return {
 			ext: 'rar',
 			mime: 'application/x-rar-compressed'
 		};
 	}
 
-	if (buf[0] === 0x1F && buf[1] === 0x8B && buf[2] === 0x8) {
+	if (check([0x1F, 0x8B, 0x8])) {
 		return {
 			ext: 'gz',
 			mime: 'application/gzip'
 		};
 	}
 
-	if (buf[0] === 0x42 && buf[1] === 0x5A && buf[2] === 0x68) {
+	if (check([0x42, 0x5A, 0x68])) {
 		return {
 			ext: 'bz2',
 			mime: 'application/x-bzip2'
 		};
 	}
 
-	if (buf[0] === 0x37 && buf[1] === 0x7A && buf[2] === 0xBC && buf[3] === 0xAF && buf[4] === 0x27 && buf[5] === 0x1C) {
+	if (check([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C])) {
 		return {
 			ext: '7z',
 			mime: 'application/x-7z-compressed'
 		};
 	}
 
-	if (buf[0] === 0x78 && buf[1] === 0x01) {
+	if (check([0x78, 0x01])) {
 		return {
 			ext: 'dmg',
 			mime: 'application/x-apple-diskimage'
@@ -25418,11 +25451,18 @@ var index$32 = input => {
 	}
 
 	if (
-		(buf[0] === 0x0 && buf[1] === 0x0 && buf[2] === 0x0 && (buf[3] === 0x18 || buf[3] === 0x20) && buf[4] === 0x66 && buf[5] === 0x74 && buf[6] === 0x79 && buf[7] === 0x70) ||
-		(buf[0] === 0x33 && buf[1] === 0x67 && buf[2] === 0x70 && buf[3] === 0x35) ||
-		(buf[0] === 0x0 && buf[1] === 0x0 && buf[2] === 0x0 && buf[3] === 0x1C && buf[4] === 0x66 && buf[5] === 0x74 && buf[6] === 0x79 && buf[7] === 0x70 && buf[8] === 0x6D && buf[9] === 0x70 && buf[10] === 0x34 && buf[11] === 0x32 && buf[16] === 0x6D && buf[17] === 0x70 && buf[18] === 0x34 && buf[19] === 0x31 && buf[20] === 0x6D && buf[21] === 0x70 && buf[22] === 0x34 && buf[23] === 0x32 && buf[24] === 0x69 && buf[25] === 0x73 && buf[26] === 0x6F && buf[27] === 0x6D) ||
-		(buf[0] === 0x0 && buf[1] === 0x0 && buf[2] === 0x0 && buf[3] === 0x1C && buf[4] === 0x66 && buf[5] === 0x74 && buf[6] === 0x79 && buf[7] === 0x70 && buf[8] === 0x69 && buf[9] === 0x73 && buf[10] === 0x6F && buf[11] === 0x6D) ||
-		(buf[0] === 0x0 && buf[1] === 0x0 && buf[2] === 0x0 && buf[3] === 0x1C && buf[4] === 0x66 && buf[5] === 0x74 && buf[6] === 0x79 && buf[7] === 0x70 && buf[8] === 0x6D && buf[9] === 0x70 && buf[10] === 0x34 && buf[11] === 0x32 && buf[12] === 0x0 && buf[13] === 0x0 && buf[14] === 0x0 && buf[15] === 0x0)
+		(
+			check([0x0, 0x0, 0x0]) &&
+			(buf[3] === 0x18 || buf[3] === 0x20) &&
+			check([0x66, 0x74, 0x79, 0x70], {offset: 4})
+		) ||
+		check([0x33, 0x67, 0x70, 0x35]) ||
+		(
+			check([0x0, 0x0, 0x0, 0x1C, 0x66, 0x74, 0x79, 0x70, 0x6D, 0x70, 0x34, 0x32]) &&
+			check([0x6D, 0x70, 0x34, 0x31, 0x6D, 0x70, 0x34, 0x32, 0x69, 0x73, 0x6F, 0x6D], {offset: 16})
+		) ||
+		check([0x0, 0x0, 0x0, 0x1C, 0x66, 0x74, 0x79, 0x70, 0x69, 0x73, 0x6F, 0x6D]) ||
+		check([0x0, 0x0, 0x0, 0x1C, 0x66, 0x74, 0x79, 0x70, 0x6D, 0x70, 0x34, 0x32, 0x0, 0x0, 0x0, 0x0])
 	) {
 		return {
 			ext: 'mp4',
@@ -25430,14 +25470,14 @@ var index$32 = input => {
 		};
 	}
 
-	if ((buf[0] === 0x0 && buf[1] === 0x0 && buf[2] === 0x0 && buf[3] === 0x1C && buf[4] === 0x66 && buf[5] === 0x74 && buf[6] === 0x79 && buf[7] === 0x70 && buf[8] === 0x4D && buf[9] === 0x34 && buf[10] === 0x56)) {
+	if (check([0x0, 0x0, 0x0, 0x1C, 0x66, 0x74, 0x79, 0x70, 0x4D, 0x34, 0x56])) {
 		return {
 			ext: 'm4v',
 			mime: 'video/x-m4v'
 		};
 	}
 
-	if (buf[0] === 0x4D && buf[1] === 0x54 && buf[2] === 0x68 && buf[3] === 0x64) {
+	if (check([0x4D, 0x54, 0x68, 0x64])) {
 		return {
 			ext: 'mid',
 			mime: 'audio/midi'
@@ -25445,7 +25485,7 @@ var index$32 = input => {
 	}
 
 	// https://github.com/threatstack/libmagic/blob/master/magic/Magdir/matroska
-	if (buf[0] === 0x1A && buf[1] === 0x45 && buf[2] === 0xDF && buf[3] === 0xA3) {
+	if (check([0x1A, 0x45, 0xDF, 0xA3])) {
 		const sliced = buf.subarray(4, 4 + 4096);
 		const idPos = sliced.findIndex((el, i, arr) => arr[i] === 0x42 && arr[i + 1] === 0x82);
 
@@ -25459,6 +25499,7 @@ var index$32 = input => {
 					mime: 'video/x-matroska'
 				};
 			}
+
 			if (findDocType('webm')) {
 				return {
 					ext: 'webm',
@@ -25468,42 +25509,55 @@ var index$32 = input => {
 		}
 	}
 
-	if (buf[0] === 0x0 && buf[1] === 0x0 && buf[2] === 0x0 && buf[3] === 0x14 && buf[4] === 0x66 && buf[5] === 0x74 && buf[6] === 0x79 && buf[7] === 0x70) {
+	if (check([0x0, 0x0, 0x0, 0x14, 0x66, 0x74, 0x79, 0x70, 0x71, 0x74, 0x20, 0x20]) ||
+		check([0x66, 0x72, 0x65, 0x65], {offset: 4}) ||
+		check([0x66, 0x74, 0x79, 0x70, 0x71, 0x74, 0x20, 0x20], {offset: 4}) ||
+		check([0x6D, 0x64, 0x61, 0x74], {offset: 4}) || // MJPEG
+		check([0x77, 0x69, 0x64, 0x65], {offset: 4})) {
 		return {
 			ext: 'mov',
 			mime: 'video/quicktime'
 		};
 	}
 
-	if (buf[0] === 0x52 && buf[1] === 0x49 && buf[2] === 0x46 && buf[3] === 0x46 && buf[8] === 0x41 && buf[9] === 0x56 && buf[10] === 0x49) {
+	if (
+		check([0x52, 0x49, 0x46, 0x46]) &&
+		check([0x41, 0x56, 0x49], {offset: 8})
+	) {
 		return {
 			ext: 'avi',
 			mime: 'video/x-msvideo'
 		};
 	}
 
-	if (buf[0] === 0x30 && buf[1] === 0x26 && buf[2] === 0xB2 && buf[3] === 0x75 && buf[4] === 0x8E && buf[5] === 0x66 && buf[6] === 0xCF && buf[7] === 0x11 && buf[8] === 0xA6 && buf[9] === 0xD9) {
+	if (check([0x30, 0x26, 0xB2, 0x75, 0x8E, 0x66, 0xCF, 0x11, 0xA6, 0xD9])) {
 		return {
 			ext: 'wmv',
 			mime: 'video/x-ms-wmv'
 		};
 	}
 
-	if (buf[0] === 0x0 && buf[1] === 0x0 && buf[2] === 0x1 && buf[3].toString(16)[0] === 'b') {
+	if (check([0x0, 0x0, 0x1, 0xBA])) {
 		return {
 			ext: 'mpg',
 			mime: 'video/mpeg'
 		};
 	}
 
-	if ((buf[0] === 0x49 && buf[1] === 0x44 && buf[2] === 0x33) || (buf[0] === 0xFF && buf[1] === 0xFB)) {
+	if (
+		check([0x49, 0x44, 0x33]) ||
+		check([0xFF, 0xFB])
+	) {
 		return {
 			ext: 'mp3',
 			mime: 'audio/mpeg'
 		};
 	}
 
-	if ((buf[4] === 0x66 && buf[5] === 0x74 && buf[6] === 0x79 && buf[7] === 0x70 && buf[8] === 0x4D && buf[9] === 0x34 && buf[10] === 0x41) || (buf[0] === 0x4D && buf[1] === 0x34 && buf[2] === 0x41 && buf[3] === 0x20)) {
+	if (
+		check([0x66, 0x74, 0x79, 0x70, 0x4D, 0x34, 0x41], {offset: 4}) ||
+		check([0x4D, 0x34, 0x41, 0x20])
+	) {
 		return {
 			ext: 'm4a',
 			mime: 'audio/m4a'
@@ -25511,70 +25565,76 @@ var index$32 = input => {
 	}
 
 	// Needs to be before `ogg` check
-	if (buf[28] === 0x4F && buf[29] === 0x70 && buf[30] === 0x75 && buf[31] === 0x73 && buf[32] === 0x48 && buf[33] === 0x65 && buf[34] === 0x61 && buf[35] === 0x64) {
+	if (check([0x4F, 0x70, 0x75, 0x73, 0x48, 0x65, 0x61, 0x64], {offset: 28})) {
 		return {
 			ext: 'opus',
 			mime: 'audio/opus'
 		};
 	}
 
-	if (buf[0] === 0x4F && buf[1] === 0x67 && buf[2] === 0x67 && buf[3] === 0x53) {
+	if (check([0x4F, 0x67, 0x67, 0x53])) {
 		return {
 			ext: 'ogg',
 			mime: 'audio/ogg'
 		};
 	}
 
-	if (buf[0] === 0x66 && buf[1] === 0x4C && buf[2] === 0x61 && buf[3] === 0x43) {
+	if (check([0x66, 0x4C, 0x61, 0x43])) {
 		return {
 			ext: 'flac',
 			mime: 'audio/x-flac'
 		};
 	}
 
-	if (buf[0] === 0x52 && buf[1] === 0x49 && buf[2] === 0x46 && buf[3] === 0x46 && buf[8] === 0x57 && buf[9] === 0x41 && buf[10] === 0x56 && buf[11] === 0x45) {
+	if (
+		check([0x52, 0x49, 0x46, 0x46]) &&
+		check([0x57, 0x41, 0x56, 0x45], {offset: 8})
+	) {
 		return {
 			ext: 'wav',
 			mime: 'audio/x-wav'
 		};
 	}
 
-	if (buf[0] === 0x23 && buf[1] === 0x21 && buf[2] === 0x41 && buf[3] === 0x4D && buf[4] === 0x52 && buf[5] === 0x0A) {
+	if (check([0x23, 0x21, 0x41, 0x4D, 0x52, 0x0A])) {
 		return {
 			ext: 'amr',
 			mime: 'audio/amr'
 		};
 	}
 
-	if (buf[0] === 0x25 && buf[1] === 0x50 && buf[2] === 0x44 && buf[3] === 0x46) {
+	if (check([0x25, 0x50, 0x44, 0x46])) {
 		return {
 			ext: 'pdf',
 			mime: 'application/pdf'
 		};
 	}
 
-	if (buf[0] === 0x4D && buf[1] === 0x5A) {
+	if (check([0x4D, 0x5A])) {
 		return {
 			ext: 'exe',
 			mime: 'application/x-msdownload'
 		};
 	}
 
-	if ((buf[0] === 0x43 || buf[0] === 0x46) && buf[1] === 0x57 && buf[2] === 0x53) {
+	if (
+		(buf[0] === 0x43 || buf[0] === 0x46) &&
+		check([0x57, 0x53], {offset: 1})
+	) {
 		return {
 			ext: 'swf',
 			mime: 'application/x-shockwave-flash'
 		};
 	}
 
-	if (buf[0] === 0x7B && buf[1] === 0x5C && buf[2] === 0x72 && buf[3] === 0x74 && buf[4] === 0x66) {
+	if (check([0x7B, 0x5C, 0x72, 0x74, 0x66])) {
 		return {
 			ext: 'rtf',
 			mime: 'application/rtf'
 		};
 	}
 
-	if (buf[0] === 0x00 && buf[1] === 0x61 && buf[2] === 0x73 && buf[3] === 0x6D) {
+	if (check([0x00, 0x61, 0x73, 0x6D])) {
 		return {
 			ext: 'wasm',
 			mime: 'application/wasm'
@@ -25582,10 +25642,10 @@ var index$32 = input => {
 	}
 
 	if (
-		(buf[0] === 0x77 && buf[1] === 0x4F && buf[2] === 0x46 && buf[3] === 0x46) &&
+		check([0x77, 0x4F, 0x46, 0x46]) &&
 		(
-			(buf[4] === 0x00 && buf[5] === 0x01 && buf[6] === 0x00 && buf[7] === 0x00) ||
-			(buf[4] === 0x4F && buf[5] === 0x54 && buf[6] === 0x54 && buf[7] === 0x4F)
+			check([0x00, 0x01, 0x00, 0x00], {offset: 4}) ||
+			check([0x4F, 0x54, 0x54, 0x4F], {offset: 4})
 		)
 	) {
 		return {
@@ -25595,10 +25655,10 @@ var index$32 = input => {
 	}
 
 	if (
-		(buf[0] === 0x77 && buf[1] === 0x4F && buf[2] === 0x46 && buf[3] === 0x32) &&
+		check([0x77, 0x4F, 0x46, 0x32]) &&
 		(
-			(buf[4] === 0x00 && buf[5] === 0x01 && buf[6] === 0x00 && buf[7] === 0x00) ||
-			(buf[4] === 0x4F && buf[5] === 0x54 && buf[6] === 0x54 && buf[7] === 0x4F)
+			check([0x00, 0x01, 0x00, 0x00], {offset: 4}) ||
+			check([0x4F, 0x54, 0x54, 0x4F], {offset: 4})
 		)
 	) {
 		return {
@@ -25608,11 +25668,11 @@ var index$32 = input => {
 	}
 
 	if (
-		(buf[34] === 0x4C && buf[35] === 0x50) &&
+		check([0x4C, 0x50], {offset: 34}) &&
 		(
-			(buf[8] === 0x00 && buf[9] === 0x00 && buf[10] === 0x01) ||
-			(buf[8] === 0x01 && buf[9] === 0x00 && buf[10] === 0x02) ||
-			(buf[8] === 0x02 && buf[9] === 0x00 && buf[10] === 0x02)
+			check([0x00, 0x00, 0x01], {offset: 8}) ||
+			check([0x01, 0x00, 0x02], {offset: 8}) ||
+			check([0x02, 0x00, 0x02], {offset: 8})
 		)
 	) {
 		return {
@@ -25621,63 +25681,63 @@ var index$32 = input => {
 		};
 	}
 
-	if (buf[0] === 0x00 && buf[1] === 0x01 && buf[2] === 0x00 && buf[3] === 0x00 && buf[4] === 0x00) {
+	if (check([0x00, 0x01, 0x00, 0x00, 0x00])) {
 		return {
 			ext: 'ttf',
 			mime: 'application/font-sfnt'
 		};
 	}
 
-	if (buf[0] === 0x4F && buf[1] === 0x54 && buf[2] === 0x54 && buf[3] === 0x4F && buf[4] === 0x00) {
+	if (check([0x4F, 0x54, 0x54, 0x4F, 0x00])) {
 		return {
 			ext: 'otf',
 			mime: 'application/font-sfnt'
 		};
 	}
 
-	if (buf[0] === 0x00 && buf[1] === 0x00 && buf[2] === 0x01 && buf[3] === 0x00) {
+	if (check([0x00, 0x00, 0x01, 0x00])) {
 		return {
 			ext: 'ico',
 			mime: 'image/x-icon'
 		};
 	}
 
-	if (buf[0] === 0x46 && buf[1] === 0x4C && buf[2] === 0x56 && buf[3] === 0x01) {
+	if (check([0x46, 0x4C, 0x56, 0x01])) {
 		return {
 			ext: 'flv',
 			mime: 'video/x-flv'
 		};
 	}
 
-	if (buf[0] === 0x25 && buf[1] === 0x21) {
+	if (check([0x25, 0x21])) {
 		return {
 			ext: 'ps',
 			mime: 'application/postscript'
 		};
 	}
 
-	if (buf[0] === 0xFD && buf[1] === 0x37 && buf[2] === 0x7A && buf[3] === 0x58 && buf[4] === 0x5A && buf[5] === 0x00) {
+	if (check([0xFD, 0x37, 0x7A, 0x58, 0x5A, 0x00])) {
 		return {
 			ext: 'xz',
 			mime: 'application/x-xz'
 		};
 	}
 
-	if (buf[0] === 0x53 && buf[1] === 0x51 && buf[2] === 0x4C && buf[3] === 0x69) {
+	if (check([0x53, 0x51, 0x4C, 0x69])) {
 		return {
 			ext: 'sqlite',
 			mime: 'application/x-sqlite3'
 		};
 	}
 
-	if (buf[0] === 0x4E && buf[1] === 0x45 && buf[2] === 0x53 && buf[3] === 0x1A) {
+	if (check([0x4E, 0x45, 0x53, 0x1A])) {
 		return {
 			ext: 'nes',
 			mime: 'application/x-nintendo-nes-rom'
 		};
 	}
 
-	if (buf[0] === 0x43 && buf[1] === 0x72 && buf[2] === 0x32 && buf[3] === 0x34) {
+	if (check([0x43, 0x72, 0x32, 0x34])) {
 		return {
 			ext: 'crx',
 			mime: 'application/x-google-chrome-extension'
@@ -25685,8 +25745,8 @@ var index$32 = input => {
 	}
 
 	if (
-		(buf[0] === 0x4D && buf[1] === 0x53 && buf[2] === 0x43 && buf[3] === 0x46) ||
-		(buf[0] === 0x49 && buf[1] === 0x53 && buf[2] === 0x63 && buf[3] === 0x28)
+		check([0x4D, 0x53, 0x43, 0x46]) ||
+		check([0x49, 0x53, 0x63, 0x28])
 	) {
 		return {
 			ext: 'cab',
@@ -25695,21 +25755,21 @@ var index$32 = input => {
 	}
 
 	// Needs to be before `ar` check
-	if (buf[0] === 0x21 && buf[1] === 0x3C && buf[2] === 0x61 && buf[3] === 0x72 && buf[4] === 0x63 && buf[5] === 0x68 && buf[6] === 0x3E && buf[7] === 0x0A && buf[8] === 0x64 && buf[9] === 0x65 && buf[10] === 0x62 && buf[11] === 0x69 && buf[12] === 0x61 && buf[13] === 0x6E && buf[14] === 0x2D && buf[15] === 0x62 && buf[16] === 0x69 && buf[17] === 0x6E && buf[18] === 0x61 && buf[19] === 0x72 && buf[20] === 0x79) {
+	if (check([0x21, 0x3C, 0x61, 0x72, 0x63, 0x68, 0x3E, 0x0A, 0x64, 0x65, 0x62, 0x69, 0x61, 0x6E, 0x2D, 0x62, 0x69, 0x6E, 0x61, 0x72, 0x79])) {
 		return {
 			ext: 'deb',
 			mime: 'application/x-deb'
 		};
 	}
 
-	if (buf[0] === 0x21 && buf[1] === 0x3C && buf[2] === 0x61 && buf[3] === 0x72 && buf[4] === 0x63 && buf[5] === 0x68 && buf[6] === 0x3E) {
+	if (check([0x21, 0x3C, 0x61, 0x72, 0x63, 0x68, 0x3E])) {
 		return {
 			ext: 'ar',
 			mime: 'application/x-unix-archive'
 		};
 	}
 
-	if (buf[0] === 0xED && buf[1] === 0xAB && buf[2] === 0xEE && buf[3] === 0xDB) {
+	if (check([0xED, 0xAB, 0xEE, 0xDB])) {
 		return {
 			ext: 'rpm',
 			mime: 'application/x-rpm'
@@ -25717,8 +25777,8 @@ var index$32 = input => {
 	}
 
 	if (
-		(buf[0] === 0x1F && buf[1] === 0xA0) ||
-		(buf[0] === 0x1F && buf[1] === 0x9D)
+		check([0x1F, 0xA0]) ||
+		check([0x1F, 0x9D])
 	) {
 		return {
 			ext: 'Z',
@@ -25726,21 +25786,21 @@ var index$32 = input => {
 		};
 	}
 
-	if (buf[0] === 0x4C && buf[1] === 0x5A && buf[2] === 0x49 && buf[3] === 0x50) {
+	if (check([0x4C, 0x5A, 0x49, 0x50])) {
 		return {
 			ext: 'lz',
 			mime: 'application/x-lzip'
 		};
 	}
 
-	if (buf[0] === 0xD0 && buf[1] === 0xCF && buf[2] === 0x11 && buf[3] === 0xE0 && buf[4] === 0xA1 && buf[5] === 0xB1 && buf[6] === 0x1A && buf[7] === 0xE1) {
+	if (check([0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1])) {
 		return {
 			ext: 'msi',
 			mime: 'application/x-msi'
 		};
 	}
 
-	if (buf[0] === 0x06 && buf[1] === 0x0E && buf[2] === 0x2B && buf[3] === 0x34 && buf[4] === 0x02 && buf[5] === 0x05 && buf[6] === 0x01 && buf[7] === 0x01 && buf[8] === 0x0D && buf[9] === 0x01 && buf[10] === 0x02 && buf[11] === 0x01 && buf[12] === 0x01 && buf[13] === 0x02) {
+	if (check([0x06, 0x0E, 0x2B, 0x34, 0x02, 0x05, 0x01, 0x01, 0x0D, 0x01, 0x02, 0x01, 0x01, 0x02])) {
 		return {
 			ext: 'mxf',
 			mime: 'application/mxf'
@@ -25783,9 +25843,9 @@ for (var i$3 = 0; i$3 < chars.length; i$3++) {
 }
 
 function encode(bytes) {
-    var i = void 0,
-        len = bytes.length,
-        base64 = '';
+    var i = void 0;
+    var len = bytes.length;
+    var base64 = '';
 
     for (i = 0; i < len; i += 3) {
         base64 += chars[bytes[i] >> 2];
@@ -25804,11 +25864,10 @@ function encode(bytes) {
 }
 
 function decode$5(base64) {
-    var bufferLength = base64.length * 0.75,
-        len = base64.length,
-        i = void 0,
-        p = 0,
-        encoded1 = void 0,
+    var bufferLength = base64.length * 0.75;
+    var len = base64.length;
+    var p = 0;
+    var encoded1 = void 0,
         encoded2 = void 0,
         encoded3 = void 0,
         encoded4 = void 0;
@@ -25822,11 +25881,11 @@ function decode$5(base64) {
 
     var bytes = new Uint8Array(bufferLength);
 
-    for (i = 0; i < len; i += 4) {
-        encoded1 = lookup[base64.charCodeAt(i)];
-        encoded2 = lookup[base64.charCodeAt(i + 1)];
-        encoded3 = lookup[base64.charCodeAt(i + 2)];
-        encoded4 = lookup[base64.charCodeAt(i + 3)];
+    for (var _i = 0; _i < len; _i += 4) {
+        encoded1 = lookup[base64.charCodeAt(_i)];
+        encoded2 = lookup[base64.charCodeAt(_i + 1)];
+        encoded3 = lookup[base64.charCodeAt(_i + 2)];
+        encoded4 = lookup[base64.charCodeAt(_i + 3)];
 
         bytes[p++] = encoded1 << 2 | encoded2 >> 4;
         bytes[p++] = (encoded2 & 15) << 4 | encoded3 >> 2;
@@ -25914,8 +25973,8 @@ function loadPNG(data) {
     }
 
     var type = png.colourType;
-    var components = void 0,
-        alpha = 0;
+    var components = void 0;
+    var alpha = 0;
     switch (type) {
         case 0:
             components = 1;break;
@@ -25975,8 +26034,8 @@ function loadGeneric(url, options) {
         }
 
         image.onload = function () {
-            var w = image.width,
-                h = image.height;
+            var w = image.width;
+            var h = image.height;
             var canvas = new Canvas(w, h);
             var ctx = canvas.getContext('2d');
             ctx.drawImage(image, 0, 0, w, h);
@@ -28896,7 +28955,8 @@ Image$2.Kernel = Kernel$2;
 
 var Static = {
     grey: names,
-    mask: names$1
+    mask: names$1,
+    maskMethods: methods$1
 };
 Image$2.Static = Static;
 
