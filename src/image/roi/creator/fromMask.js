@@ -9,11 +9,10 @@ import RoiMap from '../RoiMap';
  */
 export default function fromMask(mask, options = {}) {
     const {
-        allowCorners = false,
-        maxArray = 0x00ffff // 65535 should be enough for most of the cases
+        allowCorners = false
     } = options;
 
-    const MAX_ARRAY = maxArray;
+    const MAX_ARRAY = 0x00ffff; // 65535 should be enough for most of the cases
 
     // based on a binary image we will create plenty of small images
     let data = new Int16Array(mask.size); // maxValue: 32767, minValue: -32768
@@ -40,6 +39,7 @@ export default function fromMask(mask, options = {}) {
         let to = 0;
         let targetState = mask.getBitXY(x, y);
         let id = targetState ? ++positiveID : --negativeID;
+        if (positiveID > 32767 || negativeID < -32768) throw new Error('Too many regions of interest');
         xToProcess[0] = x;
         yToProcess[0] = y;
         while (from <= to) {
