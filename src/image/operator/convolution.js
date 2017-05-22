@@ -3,6 +3,7 @@ import {direct, fft} from 'ml-matrix-convolution';
 import Image from '../Image';
 import {validateArrayOfChannels} from '../../util/channel';
 import {validateKernel} from '../../util/kernel';
+import convolutionSeparable from '../operator/convolutionSeparable';
 
 /**
  * @memberof Image
@@ -70,6 +71,12 @@ export default function convolution(kernel, options = {}) {
                 normalize: normalize,
                 divisor: divisor
             });
+        } else if (algorithm === 'separable') {
+            const projection = new Array(kernel.length);
+            for (let i = 0; i < kernel.length; i++) {
+                projection[i] = Math.sqrt(kernel[i][i]);
+            }
+            tmpResult = convolutionSeparable(tmpData, projection, this.width, this.height);
         } else {
             tmpResult = fft(tmpData, kernel, {
                 rows: this.height,

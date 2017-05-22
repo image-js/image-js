@@ -2099,6 +2099,10 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "^2.0.0"
 
+fft.js@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/fft.js/-/fft.js-4.0.3.tgz#b0084efa94188febdd1cffe68691f4c85a0fb8cb"
+
 figures@^1.3.5:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-1.7.0.tgz#cbe1e3affcf1cd44b80cadfed28dc793a9701d2e"
@@ -3502,6 +3506,13 @@ ml-array-utils@^0.3.0:
   dependencies:
     ml-stat "^1.0.1"
 
+ml-convolution@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/ml-convolution/-/ml-convolution-0.1.0.tgz#64f1314566ac41a1db9e91d240bc5e2a64798ff4"
+  dependencies:
+    fft.js "^4.0.3"
+    next-power-of-two "^1.0.0"
+
 ml-disjoint-set@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/ml-disjoint-set/-/ml-disjoint-set-1.0.0.tgz#6cd8e583eef5a02585348b98d0df21fd83ef6082"
@@ -3616,6 +3627,10 @@ natural-compare@^1.4.0:
 new-array@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/new-array/-/new-array-1.0.0.tgz#5dbc639d961eac7f1a9fbc1a7146ec12f2924fbf"
+
+next-power-of-two@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/next-power-of-two/-/next-power-of-two-1.0.0.tgz#cbc1f2f62b586fc501bd3ab2fb9962ac4e4e9359"
 
 node-int64@^0.4.0:
   version "0.4.0"

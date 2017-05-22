@@ -97,5 +97,31 @@ describe('check the gaussian filter', function () {
             ]
         );
     });
-});
 
+    it('separable gaussian', function () {
+        let image = new Image(5, 7,
+            [
+                10, 10, 10, 10, 10,
+                10, 10, 10, 10, 10,
+                10, 20, 20, 20, 10,
+                10, 20, 30, 20, 10,
+                10, 20, 20, 20, 10,
+                10, 10, 10, 10, 10,
+                10, 10, 10, 10, 10
+            ],
+            {kind: 'GREY'}
+        );
+
+        Array.from(image.gaussianFilter({algorithm: 'separable'}).data).should.eql(
+            [
+                11, 11, 11, 11, 11,
+                11, 11, 11, 11, 11,
+                15, 15, 17, 15, 15,
+                17, 17, 21, 17, 17,
+                15, 15, 17, 15, 15,
+                11, 11, 11, 11, 11,
+                11, 11, 11, 11, 11
+            ]
+        );
+    });
+});
