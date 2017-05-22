@@ -103,7 +103,7 @@
     "is-array-type": "^1.0.0",
     "is-integer": "^1.0.6",
     "js-priority-queue": "^0.1.5",
-    "ml-convolution": "^0.1.0",
+    "ml-convolution": "^0.2.0",
     "ml-disjoint-set": "^1.0.0",
     "ml-matrix": "3.0.0",
     "ml-matrix-convolution": "0.4.3",

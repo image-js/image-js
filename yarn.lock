@@ -3506,9 +3506,9 @@ ml-array-utils@^0.3.0:
   dependencies:
     ml-stat "^1.0.1"
 
-ml-convolution@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/ml-convolution/-/ml-convolution-0.1.0.tgz#64f1314566ac41a1db9e91d240bc5e2a64798ff4"
+ml-convolution@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/ml-convolution/-/ml-convolution-0.2.0.tgz#374659a6f75c98324ef7d61766c1e6209caff594"
   dependencies:
     fft.js "^4.0.3"
     next-power-of-two "^1.0.0"
