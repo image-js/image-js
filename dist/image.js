@@ -1528,7 +1528,7 @@ function convolution(kernel, options = {}) {
             algorithm = 'direct';
         }
     }
-    if (this.width > 4096 || this.height > 4096) {
+    if ((this.width > 4096 || this.height > 4096) && algorithm !== 'separable') {
         algorithm = 'direct';
     }
 
