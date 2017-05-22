@@ -1429,6 +1429,58 @@ function validateKernel(kernel) {
     return { kernel, kWidth, kHeight };
 }
 
+function directConvolution(input, kernel, output) {
+    if (output === undefined) {
+        const length = input.length + kernel.length - 1;
+        output = new Array(length);
+    }
+    fill(output);
+    for (var i = 0; i < input.length; i++) {
+        for (var j = 0; j < kernel.length; j++) {
+            output[i + j] += input[i] * kernel[j];
+        }
+    }
+    return output;
+}
+
+function fill(array) {
+    for (var i = 0; i < array.length; i++) {
+        array[i] = 0;
+    }
+}
+
+function convolutionSeparable(data, kernel, width, height) {
+    var result = new Array(data.length);
+    var offset = (kernel.length - 1) / 2;
+    var tmp = void 0,
+        conv = void 0;
+
+    conv = new Array(width + kernel.length - 1);
+    tmp = new Array(width);
+    for (var y = 0; y < height; y++) {
+        for (var x = 0; x < width; x++) {
+            tmp[x] = data[y * width + x];
+        }
+        directConvolution(tmp, kernel, conv);
+        for (var _x = 0; _x < width; _x++) {
+            result[y * width + _x] = conv[offset + _x];
+        }
+    }
+
+    conv = new Array(height + kernel.length - 1);
+    tmp = new Array(height);
+    for (var _x2 = 0; _x2 < width; _x2++) {
+        for (var _y = 0; _y < height; _y++) {
+            tmp[_y] = result[_y * width + _x2];
+        }
+        directConvolution(tmp, kernel, conv);
+        for (var _y2 = 0; _y2 < height; _y2++) {
+            result[_y2 * width + _x2] = conv[offset + _y2];
+        }
+    }
+    return result;
+}
+
 /**
  * @memberof Image
  * @instance
@@ -1507,6 +1559,12 @@ function convolution(kernel, options = {}) {
                 normalize: normalize,
                 divisor: divisor
             });
+        } else if (algorithm === 'separable') {
+            var projection = new Array(kernel.length);
+            for (var i = 0; i < kernel.length; i++) {
+                projection[i] = Math.sqrt(kernel[i][i]);
+            }
+            tmpResult = convolutionSeparable(tmpData, projection, this.width, this.height);
         } else {
             tmpResult = index_2(tmpData, kernel, {
                 rows: this.height,
@@ -1702,7 +1760,7 @@ function sobelFilter(options = {}) {
     return gX.hypotenuse(gY, { bitDepth, channels: channels });
 }
 
-var index$11 = newArray;
+var index$12 = newArray;
 
 function newArray (n, value) {
   n = n || 0;
@@ -1754,10 +1812,10 @@ function level(options = {}) {
             }
 
             if (!Array.isArray(min)) {
-                min = index$11(channels.length, min);
+                min = index$12(channels.length, min);
             }
             if (!Array.isArray(max)) {
-                max = index$11(channels.length, max);
+                max = index$12(channels.length, max);
             }
 
             processImage(this, min, max, channels);
@@ -4046,12 +4104,12 @@ exports.weightedScatter = function weightedScatter(matrix, weights, means, facto
 var array = array$1;
 var matrix = matrix$1;
 
-var index$17 = {
+var index$18 = {
 	array: array,
 	matrix: matrix
 };
 
-const Stat = index$17.array;
+const Stat = index$18.array;
 /**
  * Function that returns an array of points given 1D array as follows:
  *
@@ -4533,7 +4591,7 @@ var getEquallySpaced = {
 };
 
 var SNV_1 = SNV;
-var Stat$1 = index$17.array;
+var Stat$1 = index$18.array;
 
 /**
  * Function that applies the standard normal variate (SNV) to an array of values.
@@ -4555,7 +4613,7 @@ var snv = {
 	SNV: SNV_1
 };
 
-var index$15 = createCommonjsModule(function (module, exports) {
+var index$16 = createCommonjsModule(function (module, exports) {
 module.exports = exports = ArrayUtils;
 
 
@@ -4563,7 +4621,7 @@ exports.getEquallySpacedData = getEquallySpaced.getEquallySpacedData;
 exports.SNV = snv.SNV;
 });
 
-var index_1$2 = index$15.scale;
+var index_1$2 = index$16.scale;
 
 /**
  * @private
@@ -7769,7 +7827,7 @@ CholeskyDecomposition.prototype = {
 
 
 
-var index$14 = Object.freeze({
+var index$15 = Object.freeze({
 	default: Matrix$1,
 	Matrix: Matrix$1,
 	abstractMatrix: AbstractMatrix,
@@ -7787,7 +7845,7 @@ var index$14 = Object.freeze({
 	QR: QrDecomposition
 });
 
-var matrixLib = ( index$14 && Matrix$1 ) || index$14;
+var matrixLib = ( index$15 && Matrix$1 ) || index$15;
 
 /**
  * Function that return a constants of the M degree polynomial that
@@ -8880,7 +8938,7 @@ class TheilSenRegression extends baseRegression {
 
 var theilSenRegression = TheilSenRegression;
 
-var index$12 = createCommonjsModule(function (module, exports) {
+var index$13 = createCommonjsModule(function (module, exports) {
 'use strict';
 
 exports.SimpleLinearRegression = exports.SLR = simpleLinearRegression;
@@ -8897,7 +8955,7 @@ exports.PolinomialFitting2D = polyFitRegression2d;
 exports.TheilSenRegression = theilSenRegression;
 });
 
-var index_5 = index$12.KernelRidgeRegression;
+var index_5 = index$13.KernelRidgeRegression;
 
 /**
  * @memberof Image
@@ -10803,7 +10861,7 @@ function pad(options = {}) {
             }
         }
     } else {
-        color = index$11(this.channels, null);
+        color = index$12(this.channels, null);
     }
 
     if (!Array.isArray(size)) {
@@ -11101,7 +11159,7 @@ function setBorder(options = {}) {
             }
         }
     } else {
-        color = index$11(this.channels, null);
+        color = index$12(this.channels, null);
     }
 
     if (!Array.isArray(size)) {
@@ -11478,7 +11536,7 @@ var _package$1 = Object.freeze({
 
 var require$$0$6 = ( _package$1 && _package ) || _package$1;
 
-var index$19 = createCommonjsModule(function (module, exports) {
+var index$20 = createCommonjsModule(function (module, exports) {
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 module.exports = exports = function hasOwn(prop, obj) {
@@ -11552,7 +11610,7 @@ class Stack extends Array {
         computedPropertyDescriptor$1.get = function () {
             if (this.computed === null) {
                 this.computed = {};
-            } else if (index$19(name, this.computed)) {
+            } else if (index$20(name, this.computed)) {
                 return this.computed[name];
             }
             var result = method.apply(this, partialArgs);
@@ -11852,7 +11910,7 @@ function getSimilarity(image, options = {}) {
     var minY = Math.max(border[1], -shift[1]);
     var maxY = Math.min(this.height - border[1], this.height - shift[1]);
 
-    var results = index$11(channels.length, 0);
+    var results = index$12(channels.length, 0);
     for (var i = 0; i < channels.length; i++) {
         var c = channels[i];
         var sumThis = normalize ? this.sum[c] : Math.max(this.sum[c], image.sum[c]);
@@ -12810,7 +12868,7 @@ function hsla(str) {
 
 var cssColor = parse;
 
-var index$20 = {
+var index$21 = {
   hex2rgb: hex2rgb,
   hsv2hex: hsv2hex,
   hsv2rgb: hsv2rgb,
@@ -12825,7 +12883,7 @@ var index$20 = {
   cssColor: cssColor
 };
 
-var index_1$4 = index$20.cssColor;
+var index_1$4 = index$21.cssColor;
 
 function css2array(string) {
     var color = index_1$4(string);
@@ -13731,7 +13789,7 @@ function getChannelHistogram(channel, options) {
     }
 
     var data = this.data;
-    var result = index$11(Math.pow(2, Math.min(this.bitDepth, bitSlots)), 0);
+    var result = index$12(Math.pow(2, Math.min(this.bitDepth, bitSlots)), 0);
     if (useAlpha && this.alpha) {
         var alphaChannelDiff = this.channels - channel - 1;
 
@@ -13775,7 +13833,7 @@ function getColorHistogram(options = {}) {
     var bitShift = this.bitDepth - nbSlotsCheck;
 
     var data = this.data;
-    var result = index$11(Math.pow(8, nbSlotsCheck), 0);
+    var result = index$12(Math.pow(8, nbSlotsCheck), 0);
     var factor2 = Math.pow(2, nbSlotsCheck * 2);
     var factor1 = Math.pow(2, nbSlotsCheck);
 
@@ -13802,7 +13860,7 @@ function min$1() {
         bitDepth: [8, 16]
     });
 
-    var result = index$11(this.channels, +Infinity);
+    var result = index$12(this.channels, +Infinity);
 
     for (var i = 0; i < this.data.length; i += this.channels) {
         for (var c = 0; c < this.channels; c++) {
@@ -13825,7 +13883,7 @@ function max$1() {
         bitDepth: [8, 16]
     });
 
-    var result = index$11(this.channels, -Infinity);
+    var result = index$12(this.channels, -Infinity);
 
     for (var i = 0; i < this.data.length; i += this.channels) {
         for (var c = 0; c < this.channels; c++) {
@@ -13848,7 +13906,7 @@ function sum() {
         bitDepth: [8, 16]
     });
 
-    var result = index$11(this.channels, 0);
+    var result = index$12(this.channels, 0);
 
     for (var i = 0; i < this.data.length; i += this.channels) {
         for (var c = 0; c < this.channels; c++) {
@@ -13876,7 +13934,7 @@ function getMoment(xPower = 0, yPower = 0) {
     for (var x = 0; x < this.width; x++) {
         for (var y = 0; y < this.height; y++) {
             if (this.getBitXY(x, y) === 1) {
-                m += Math.pow(x, xPower) * Math.pow(y, yPower);
+                m += x ** xPower * y ** yPower;
             }
         }
     }
@@ -14201,7 +14259,7 @@ function difference(p1, p2) {
  * @private
  */
 function normalize(p) {
-    var length = Math.sqrt(Math.pow(p[0], 2) + Math.pow(p[1], 2));
+    var length = Math.sqrt(p[0] ** 2 + p[1] ** 2);
     return [p[0] / length, p[1] / length];
 }
 
@@ -14878,15 +14936,16 @@ function fromMask(mask, options = {}) {
     var _options$allowCorners = options.allowCorners,
         allowCorners = _options$allowCorners === undefined ? false : _options$allowCorners;
 
-    // based on a binary image we will create plenty of small images
 
+    var MAX_ARRAY = 0x00ffff; // 65535 should be enough for most of the cases
+
+    // based on a binary image we will create plenty of small images
     var data = new Int16Array(mask.size); // maxValue: 32767, minValue: -32768
 
     // split will always return an array of images
     var positiveID = 0;
     var negativeID = 0;
 
-    var MAX_ARRAY = 0x00ffff; // should be enough for most of the cases
     var xToProcess = new Uint16Array(MAX_ARRAY + 1); // assign dynamically ????
     var yToProcess = new Uint16Array(MAX_ARRAY + 1); // mask +1 is of course mandatory !!!
 
@@ -14905,6 +14964,7 @@ function fromMask(mask, options = {}) {
         var to = 0;
         var targetState = mask.getBitXY(x, y);
         var id = targetState ? ++positiveID : --negativeID;
+        if (positiveID > 32767 || negativeID < -32768) throw new Error('Too many regions of interest');
         xToProcess[0] = x;
         yToProcess[0] = y;
         while (from <= to) {
@@ -15916,7 +15976,7 @@ var isPlainObject = function isPlainObject(obj) {
 	return typeof key === 'undefined' || hasOwn$1.call(obj, key);
 };
 
-var index$22 = function extend() {
+var index$23 = function extend() {
 	var options, name, src, copy, copyIsArray, clone;
 	var target = arguments[0];
 	var i = 1;
@@ -16696,14 +16756,14 @@ class RoiManager {
 
     // docs is in the corresponding file
     fromMaxima(options = {}) {
-        var opt = index$22({}, this._options, options);
+        var opt = index$23({}, this._options, options);
         var roiMap = fromMaxima.call(this._image, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
     }
 
     // docs is in the corresponding file
     fromPoints(points, options = {}) {
-        var opt = index$22({}, this._options, options);
+        var opt = index$23({}, this._options, options);
         var roiMap = fromPoints.call(this._image, points, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
@@ -16716,28 +16776,28 @@ class RoiManager {
      */
     putMap(map, options = {}) {
         var roiMap = new RoiMap(this._image, map);
-        var opt = index$22({}, this._options, options);
+        var opt = index$23({}, this._options, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
     }
 
     // docs is in the corresponding file
     fromWaterShed(options = {}) {
-        var opt = index$22({}, this._options, options);
+        var opt = index$23({}, this._options, options);
         var roiMap = fromWaterShed.call(this._image, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
     }
 
     // docs is in the corresponding file
     fromMask(mask, options = {}) {
-        var opt = index$22({}, this._options, options);
+        var opt = index$23({}, this._options, options);
         var roiMap = fromMask.call(this._image, mask, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
     }
 
     fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
-        var opt = index$22({}, this._options, options);
+        var opt = index$23({}, this._options, options);
         var roiMap = fromMaskConnectedComponentLabelingAlgorithm.call(this._image, mask, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
@@ -16749,7 +16809,7 @@ class RoiManager {
      * @return {RoiMap}
      */
     getMap(options = {}) {
-        var opt = index$22({}, this._options, options);
+        var opt = index$23({}, this._options, options);
         this._assertLayerWithLabel(opt.label);
         return this._layers[opt.label].roiMap;
     }
@@ -16871,7 +16931,7 @@ class RoiManager {
      * @return {number[]}
      */
     getData(options = {}) {
-        var opt = index$22({}, this._options, options);
+        var opt = index$23({}, this._options, options);
         this._assertLayerWithLabel(opt.label);
         return this._layers[opt.label].roiMap.data;
     }
@@ -24115,9 +24175,9 @@ var pako = {};
 
 assign(pako, deflate_1, inflate_1, constants);
 
-var index$25 = pako;
+var index$26 = pako;
 
-const Inflator = index$25.Inflate;
+const Inflator = index$26.Inflate;
 
 const empty = new Uint8Array(0);
 const NULL = '\0';
@@ -25235,7 +25295,7 @@ var decode$3 = function decodeTIFF(data, options) {
 
 var decode$2 = decode$3;
 
-var index$29 = {
+var index$30 = {
 	decode: decode$2
 };
 
@@ -25258,7 +25318,7 @@ function decode$1(data) {
             header[4] === 0 &&
             header[5] === 0) {
        //     buffer.skip(2);
-            const exif = index$29.decode(buffer, {
+            const exif = index$30.decode(buffer, {
                 onlyFirst: true,
                 ignoreImageData: true,
                 offset: buffer.offset
@@ -25273,7 +25333,7 @@ var decode_1 = decode$1;
 
 var decode = decode_1;
 
-var index$32 = input => {
+var index$33 = input => {
 	const buf = new Uint8Array(input);
 
 	if (!(buf && buf.length > 1)) {
@@ -25821,8 +25881,8 @@ const imageExts = new Set([
 	'psd'
 ]);
 
-var index$31 = input => {
-	const ret = index$32(input);
+var index$32 = input => {
+	const ret = index$33(input);
 	return imageExts.has(ret && ret.ext) ? ret : null;
 };
 
@@ -25914,7 +25974,7 @@ function loadImage(image, options) {
 }
 
 function loadBinary(image, options, url) {
-    var type = index$31(image);
+    var type = index$32(image);
     if (type) {
         switch (type.ext) {
             case 'png':
@@ -26136,7 +26196,7 @@ function BlobConstructor(ary, options) {
   return new Blob(ary, options || {});
 }
 
-var index$36 = (function() {
+var index$37 = (function() {
   if (blobSupported) {
     return blobSupportsArrayBufferView ? commonjsGlobal.Blob : BlobConstructor;
   } else if (blobBuilderSupported) {
@@ -26466,7 +26526,7 @@ function race(iterable) {
   }
 }
 
-var index$38 = typeof Promise === 'function' ? Promise : browser;
+var index$39 = typeof Promise === 'function' ? Promise : browser;
 
 /* jshint -W079 */
 
@@ -26506,7 +26566,7 @@ function arrayBufferToBinaryString(buffer) {
 // doesn't download the image more than once, because
 // browsers aren't dumb. uses the cache
 function loadImage$1(src, crossOrigin) {
-  return new index$38(function (resolve, reject) {
+  return new index$39(function (resolve, reject) {
     var img = new Image();
     if (crossOrigin) {
       img.crossOrigin = crossOrigin;
@@ -26556,7 +26616,7 @@ function createBlob(parts, options) {
   if (typeof options === 'string') {
     options = {type: options}; // do you a solid here
   }
-  return new index$36(parts, options);
+  return new index$37(parts, options);
 }
 
 /**
@@ -26589,7 +26649,7 @@ function revokeObjectURL(url) {
  * @returns {Promise} Promise that resolves with the binary string
  */
 function blobToBinaryString(blob) {
-  return new index$38(function (resolve, reject) {
+  return new index$39(function (resolve, reject) {
     var reader = new FileReader();
     var hasBinaryString = typeof reader.readAsBinaryString === 'function';
     reader.onloadend = function (e) {
@@ -26615,7 +26675,7 @@ function blobToBinaryString(blob) {
  * @returns {Promise} Promise that resolves with the <code>Blob</code>
  */
 function base64StringToBlob(base64, type) {
-  return index$38.resolve().then(function () {
+  return index$39.resolve().then(function () {
     var parts = [binaryStringToArrayBuffer(atob(base64))];
     return type ? createBlob(parts, {type: type}) : createBlob(parts);
   });
@@ -26628,7 +26688,7 @@ function base64StringToBlob(base64, type) {
  * @returns {Promise} Promise that resolves with the <code>Blob</code>
  */
 function binaryStringToBlob(binary, type) {
-  return index$38.resolve().then(function () {
+  return index$39.resolve().then(function () {
     return base64StringToBlob(btoa(binary), type);
   });
 }
@@ -26652,7 +26712,7 @@ function blobToBase64String(blob) {
  * @returns {Promise} Promise that resolves with the <code>Blob</code>
  */
 function dataURLToBlob(dataURL) {
-  return index$38.resolve().then(function () {
+  return index$39.resolve().then(function () {
     var type = dataURL.match(/data:([^;]+)/)[1];
     var base64 = dataURL.replace(/^[^,]+,/, '');
 
@@ -26695,9 +26755,9 @@ function imgSrcToDataURL(src, type, crossOrigin, quality) {
  * @returns {Promise} Promise that resolves with the <code>Blob</code>
  */
 function canvasToBlob(canvas, type, quality) {
-  return index$38.resolve().then(function () {
+  return index$39.resolve().then(function () {
     if (typeof canvas.toBlob === 'function') {
-      return new index$38(function (resolve) {
+      return new index$39(function (resolve) {
         canvas.toBlob(resolve, type, quality);
       });
     }
@@ -26738,7 +26798,7 @@ function imgSrcToBlob(src, type, crossOrigin, quality) {
  * @returns {Promise} Promise that resolves with the <code>Blob</code>
  */
 function arrayBufferToBlob(buffer, type) {
-  return index$38.resolve().then(function () {
+  return index$39.resolve().then(function () {
     return createBlob([buffer], type);
   });
 }
@@ -26749,7 +26809,7 @@ function arrayBufferToBlob(buffer, type) {
  * @returns {Promise} Promise that resolves with the <code>ArrayBuffer</code>
  */
 function blobToArrayBuffer(blob) {
-  return new index$38(function (resolve, reject) {
+  return new index$39(function (resolve, reject) {
     var reader = new FileReader();
     reader.onloadend = function (e) {
       var result = e.target.result || new ArrayBuffer(0);
@@ -26760,7 +26820,7 @@ function blobToArrayBuffer(blob) {
   });
 }
 
-var index$34 = {
+var index$35 = {
   createBlob         : createBlob,
   createObjectURL    : createObjectURL,
   revokeObjectURL    : revokeObjectURL,
@@ -26776,7 +26836,7 @@ var index$34 = {
   blobToArrayBuffer  : blobToArrayBuffer
 };
 
-var index_1$5 = index$34.canvasToBlob;
+var index_1$5 = index$35.canvasToBlob;
 
 var utf8 = createCommonjsModule(function (module, exports) {
 /*! https://mths.be/utf8js v2.1.2 by @mathias */
@@ -27973,7 +28033,7 @@ class Image$2 {
             theKind = getKind(RGBA);
         }
 
-        var kindDefinition = index$22({}, theKind, options);
+        var kindDefinition = index$23({}, theKind, options);
         this.components = kindDefinition.components;
         this.alpha = kindDefinition.alpha + 0;
         this.bitDepth = kindDefinition.bitDepth;
@@ -28116,7 +28176,7 @@ class Image$2 {
         computedPropertyDescriptor.get = function () {
             if (this.computed === null) {
                 this.computed = {};
-            } else if (index$19(name, this.computed)) {
+            } else if (index$20(name, this.computed)) {
                 return this.computed[name];
             }
             var result = method.apply(this, partialArgs);
@@ -28138,7 +28198,7 @@ class Image$2 {
             bitDepth: other.bitDepth,
             parent: other
         };
-        index$22(newOptions, options);
+        index$23(newOptions, options);
         return new Image$2(newOptions.width, newOptions.height, newOptions);
     }
 
@@ -28810,7 +28870,7 @@ WorkerManager.prototype.post = function (event, args, transferable, id) {
     });
 };
 
-var index$42 = WorkerManager;
+var index$43 = WorkerManager;
 
 var defaultOptions$13 = {
     regression: {
@@ -28827,7 +28887,7 @@ var defaultOptions$13 = {
 };
 
 function run(image, options, onStep) {
-    options = index$22({}, defaultOptions$13, options);
+    options = index$23({}, defaultOptions$13, options);
     var manager = this.manager;
     if (Array.isArray(image)) {
         return Promise.all(image.map(function (img) {
@@ -28927,7 +28987,7 @@ class Worker$1 {
             if (!manager) {
                 this.checkUrl();
                 url = this.url;
-                manager = new index$42(method.work, { deps: url });
+                manager = new index$43(method.work, { deps: url });
                 runner.manager = manager;
             }
             return method.run.call(runner, ...args);
@@ -28935,7 +28995,7 @@ class Worker$1 {
         run.reset = function () {
             if (manager) {
                 manager.terminate();
-                manager = new index$42(method.work, { deps: url });
+                manager = new index$43(method.work, { deps: url });
                 runner.manager = manager;
             }
         };
