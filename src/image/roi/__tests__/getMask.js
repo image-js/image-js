@@ -1,7 +1,7 @@
 import {Image} from 'test/common';
 import 'should';
 
-describe('we check Roi.getMask', function () {
+describe('Roi#getMask', function () {
     it('should yield the right mask', function () {
         let image = new Image(5, 5, {kind: 'GREY'});
 
@@ -80,6 +80,27 @@ describe('we check Roi.getMask', function () {
                 0, 0, 0, 0, 0
             ]
         );
+    });
+
+    it('should work with convex hull', () => {
+        const data = [
+            0, 0, 0, 0, 0,
+            0, 1, 1, 0, 0,
+            0, 1, 0, 0, 0,
+            0, 1, 1, 1, 0,
+            0, 0, 0, 0, 0
+        ];
+        let image = new Image(5, 5, data, {kind: 'GREY'});
+
+        let mask = image.mask({threshold: 1, algorithm: 'threshold'});
+        let roiManager = image.getRoiManager();
+        roiManager.fromMask(mask, {positive: true, negative: false});
+        const rois = roiManager.getRois();
+        rois.length.should.equal(2);
+
+        const roi = rois[0];
+        const hullMask = roi.hullMask;
+        Array.from(hullMask.data).should.eql([0b11011011, 0b10000000]);
     });
 });
 

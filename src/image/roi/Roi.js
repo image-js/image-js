@@ -1,3 +1,5 @@
+import robustPointInPolygon from 'robust-point-in-polygon';
+
 import Image from '../Image';
 import * as KindNames from '../kindNames';
 import Shape from '../../util/Shape';
@@ -25,7 +27,7 @@ export default class Roi {
      * Returns a binary image (mask) for the corresponding ROI
      * @param {object} [options]
      * @param {number} [options.scale=1] - Scaling factor to apply to the mask
-     * @param {string} [options.kind='normal'] - 'contour', 'box', 'filled', 'center' or 'normal'
+     * @param {string} [options.kind='normal'] - 'contour', 'box', 'filled', 'center', 'hull' or 'normal'
      * @return {Image} - Returns a mask (1 bit Image)
      */
     getMask(options = {}) {
@@ -43,6 +45,9 @@ export default class Roi {
                 break;
             case 'center':
                 mask = this.centerMask;
+                break;
+            case 'hull':
+                mask = this.hullMask;
                 break;
             default:
                 mask = this.mask;
@@ -343,6 +348,29 @@ export default class Roi {
         img.position = [this.minX + this.center[0] - 1, this.minY + this.center[1] - 1];
 
         return this.computed.centerMask = img;
+    }
+
+    get hullMask() {
+        if (this.computed.hullMask) {
+            return this.computed.hullMask;
+        }
+
+        const img = new Image(this.width, this.height, {
+            kind: KindNames.BINARY,
+            position: [this.minX, this.minY],
+            parent: this.map.parent
+        });
+
+        const hull = this.mask.monotoneChainConvexHull();
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
+                if (robustPointInPolygon(hull, [x, y]) !== 1) {
+                    img.setBitXY(x, y);
+                }
+            }
+        }
+
+        return this.computed.hullMask = img;
     }
 
     get points() {

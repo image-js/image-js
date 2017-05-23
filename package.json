@@ -111,6 +111,7 @@
     "monotone-chain-convex-hull": "^1.0.0",
     "new-array": "^1.0.0",
     "num-sort": "^1.0.0",
+    "robust-point-in-polygon": "^1.0.3",
     "tiff": "^2.1.0",
     "web-worker-manager": "^0.2.0"
   },
