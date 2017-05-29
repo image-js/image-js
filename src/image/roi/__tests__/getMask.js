@@ -84,13 +84,14 @@ describe('Roi#getMask', function () {
 
     it('should work with convex hull', () => {
         const data = [
-            0, 0, 0, 0, 0,
-            0, 1, 1, 0, 0,
-            0, 1, 0, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 0, 0, 0
+            0, 0, 0, 0, 0, 0,
+            0, 1, 1, 1, 0, 0,
+            0, 1, 0, 0, 0, 0,
+            0, 1, 0, 0, 0, 0,
+            0, 1, 1, 1, 1, 1,
+            0, 0, 0, 0, 0, 0
         ];
-        let image = new Image(5, 5, data, {kind: 'GREY'});
+        let image = new Image(6, 6, data, {kind: 'GREY'});
 
         let mask = image.mask({threshold: 1, algorithm: 'threshold'});
         let roiManager = image.getRoiManager();
@@ -100,7 +101,7 @@ describe('Roi#getMask', function () {
 
         const roi = rois[0];
         const hullMask = roi.hullMask;
-        Array.from(hullMask.data).should.eql([0b11011011, 0b10000000]);
+        Array.from(hullMask.data).should.eql([0b11100111, 0b00111101, 0b11110000]);
     });
 });
 
