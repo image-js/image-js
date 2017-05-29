@@ -1,10 +1,11 @@
 import {directConvolution} from 'ml-convolution';
 
-export default function convolutionSeparable(data, kernel, width, height) {
+export default function convolutionSeparable(data, separatedKernel, width, height) {
     const result = new Array(data.length);
-    const offset = (kernel.length - 1) / 2;
-    let tmp, conv;
+    let tmp, conv, offset, kernel;
 
+    kernel = separatedKernel[1];
+    offset = (kernel.length - 1) / 2;
     conv = new Array(width + kernel.length - 1);
     tmp = new Array(width);
     for (let y = 0; y < height; y++) {
@@ -17,6 +18,8 @@ export default function convolutionSeparable(data, kernel, width, height) {
         }
     }
 
+    kernel = separatedKernel[0];
+    offset = (kernel.length - 1) / 2;
     conv = new Array(height + kernel.length - 1);
     tmp = new Array(height);
     for (let x = 0; x < width; x++) {

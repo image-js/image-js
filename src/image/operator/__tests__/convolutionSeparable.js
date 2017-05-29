@@ -12,11 +12,7 @@ describe('convolution with separable kernel', () => {
             {kind: 'GREY'}
         );
 
-        const kernel = [
-            [1, 2, 1],
-            [2, 4, 2],
-            [1, 2, 1]
-        ];
+        const kernel = [[1, 2, 1], [1, 2, 1]];
 
         const result = Array.from(image.convolution(kernel, {
             algorithm: 'separable',

@@ -14,12 +14,12 @@ import convolution from '../operator/convolution';
  */
 export default function gaussianFilter(options = {}) {
     let {
-		radius = 1,
-		sigma,
-		channels,
-		border = 'copy',
-        algorithm = 'auto'
-	} = options;
+        radius = 1,
+        sigma,
+        channels,
+        border = 'copy'
+    } = options;
+
     this.checkProcessable('gaussian', {
         bitDepth: [8, 16]
     });
@@ -28,42 +28,30 @@ export default function gaussianFilter(options = {}) {
     if (sigma) {
         kernel = getSigmaKernel(sigma);
     } else {
-		// sigma approximation using radius
+        // sigma approximation using radius
         sigma = 0.3 * (radius - 1) + 0.8;
         kernel = getKernel(radius, sigma);
     }
 
-    return convolution.call(this, kernel, {
-        border: border,
-        channels: channels,
-        algorithm: algorithm
-    });
+    return convolution.call(this, [kernel, kernel], {border, channels, algorithm: 'separable'});
 }
+
+const sqrt2Pi = Math.sqrt(2 * Math.PI);
 
 function getKernel(radius, sigma) {
     if (radius < 1) {
         throw new RangeError('Radius should be grater than 0');
     }
-    let n = 2 * radius + 1;
 
-    let kernel = new Array(n * n);
-
-	//gaussian kernel is calculated
-    let sigma2 = 2 * (sigma * sigma); //2*sigma^2
-    let PI2sigma2 = Math.PI * sigma2; //2*PI*sigma^2
+    const n = 2 * radius + 1;
+    const kernel = new Array(n);
+    const twoSigmaSquared = 0 - 1 / (2 * sigma * sigma);
+    const sigmaSqrt2Pi = 1 / (sigma * sqrt2Pi);
 
     for (let i = 0; i <= radius; i++) {
-        for (let j = i; j <= radius; j++) {
-            let value = Math.exp(-((i * i) + (j * j)) / sigma2) / PI2sigma2;
-            kernel[(i + radius) * n + (j + radius)] = value;
-            kernel[(i + radius) * n + (-j + radius)] = value;
-            kernel[(-i + radius) * n + (j + radius)] = value;
-            kernel[(-i + radius) * n + (-j + radius)] = value;
-            kernel[(j + radius) * n + (i + radius)] = value;
-            kernel[(j + radius) * n + (-i + radius)] = value;
-            kernel[(-j + radius) * n + (i + radius)] = value;
-            kernel[(-j + radius) * n + (-i + radius)] = value;
-        }
+        const value = Math.exp(i * i * twoSigmaSquared) * sigmaSqrt2Pi;
+        kernel[radius + i] = value;
+        kernel[radius - i] = value;
     }
     return kernel;
 }
@@ -90,7 +78,7 @@ function getSigmaKernel(sigma) {
         sum +=  value;
     }
 
-	// What does this case mean ?
+    // What does this case mean ?
     if (sum > 1) {
         throw new Error('unexpected sum over 1');
     }

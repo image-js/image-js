@@ -4,6 +4,7 @@ import Image from '../Image';
 import {validateArrayOfChannels} from '../../util/channel';
 import {validateKernel} from '../../util/kernel';
 import convolutionSeparable from '../operator/convolutionSeparable';
+import getSeparatedKernel from './getSeparatedKernel';
 
 /**
  * @memberof Image
@@ -15,7 +16,9 @@ import convolutionSeparable from '../operator/convolutionSeparable';
  * @param {boolean} [options.normalize=false]
  * @param {number} [options.divisor=1]
  * @param {string} [options.border='copy']
- * @param {string} [options.algorithm='auto'] - Either 'auto', 'direct' or 'fft'. fft is much faster for large kernel.
+ * @param {string} [options.algorithm='auto'] - Either 'auto', 'direct', 'fft' or 'separable'. fft is much faster for large kernel.
+ * If the separable algorithm is used, one must provide as kernel an array of two 1D kernels.
+ * The 'auto' option will try to separate the kernel if that is possible.
  * @return {Image}
  */
 export default function convolution(kernel, options = {}) {
@@ -31,26 +34,33 @@ export default function convolution(kernel, options = {}) {
     let newImage = Image.createFrom(this, {bitDepth});
 
     channels = validateArrayOfChannels(this, channels, true);
-    //let kWidth, kHeight;
-    //Very mysterious function. If the kernel is an array only one quadrant is copied to the output matrix,
-    //but if the kernel is already a matrix, nothing is done.
-    //On the other hand, it only consider odd, squared and symmetric kernels. A too restrictive
-    //({kWidth, kHeight, kernel} = validateKernel(kernel));
-    ({kernel} = validateKernel(kernel));
+
+    if (algorithm !== 'separable') {
+        ({kernel} = validateKernel(kernel));
+    } else if (!Array.isArray(kernel) || kernel.length !== 2) {
+        throw new RangeError('separable convolution requires two arrays of numbers to represent the kernel');
+    }
 
     if (algorithm === 'auto') {
-        if (kernel.length > 9 || kernel[0].length > 9) {
+        let separatedKernel = getSeparatedKernel(kernel);
+        if (separatedKernel !== null) {
+            algorithm = 'separable';
+            kernel = separatedKernel;
+        } else if ((kernel.length > 9 || kernel[0].length > 9) && this.width <= 4096 && this.height <= 4096) {
             algorithm = 'fft';
         } else {
             algorithm = 'direct';
         }
     }
-    if ((this.width > 4096 || this.height > 4096) && algorithm !== 'separable') {
-        algorithm = 'direct';
-    }
 
-    let halfHeight = Math.floor(kernel.length / 2);
-    let halfWidth = Math.floor(kernel[0].length / 2);
+    let halfHeight, halfWidth;
+    if (algorithm === 'separable') {
+        halfHeight = Math.floor(kernel[0].length / 2);
+        halfWidth = Math.floor(kernel[1].length / 2);
+    } else {
+        halfHeight = Math.floor(kernel.length / 2);
+        halfWidth = Math.floor(kernel[0].length / 2);
+    }
     let clamped = newImage.isClamped;
 
     let tmpData = new Array(this.height * this.width);
@@ -72,11 +82,20 @@ export default function convolution(kernel, options = {}) {
                 divisor: divisor
             });
         } else if (algorithm === 'separable') {
-            const projection = new Array(kernel.length);
-            for (let i = 0; i < kernel.length; i++) {
-                projection[i] = Math.sqrt(kernel[i][i]);
+            tmpResult = convolutionSeparable(tmpData, kernel, this.width, this.height);
+            if (normalize) {
+                divisor = 0;
+                for (let i = 0; i < kernel[0].length; i++) {
+                    for (let j = 0; j < kernel[1].length; j++) {
+                        divisor += kernel[0][i] * kernel[1][j];
+                    }
+                }
             }
-            tmpResult = convolutionSeparable(tmpData, projection, this.width, this.height);
+            if (divisor !== 1) {
+                for (let i = 0; i < tmpResult.length; i++) {
+                    tmpResult[i] /= divisor;
+                }
+            }
         } else {
             tmpResult = fft(tmpData, kernel, {
                 rows: this.height,
@@ -97,6 +116,7 @@ export default function convolution(kernel, options = {}) {
                 }
             }
         }
+
     }
     // if the kernel was not applied on the alpha channel we just copy it
     // TODO: in general we should copy the channels that where not changed
