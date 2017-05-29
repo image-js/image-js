@@ -1449,12 +1449,15 @@ function fill(array) {
     }
 }
 
-function convolutionSeparable(data, kernel, width, height) {
+function convolutionSeparable(data, separatedKernel, width, height) {
     var result = new Array(data.length);
-    var offset = (kernel.length - 1) / 2;
     var tmp = void 0,
-        conv = void 0;
+        conv = void 0,
+        offset = void 0,
+        kernel = void 0;
 
+    kernel = separatedKernel[1];
+    offset = (kernel.length - 1) / 2;
     conv = new Array(width + kernel.length - 1);
     tmp = new Array(width);
     for (var y = 0; y < height; y++) {
@@ -1467,6 +1470,8 @@ function convolutionSeparable(data, kernel, width, height) {
         }
     }
 
+    kernel = separatedKernel[0];
+    offset = (kernel.length - 1) / 2;
     conv = new Array(height + kernel.length - 1);
     tmp = new Array(height);
     for (var _x2 = 0; _x2 < width; _x2++) {
@@ -1481,821 +1486,6 @@ function convolutionSeparable(data, kernel, width, height) {
     return result;
 }
 
-/**
- * @memberof Image
- * @instance
- * @param {Array<Array<number>>} kernel
- * @param {object} [options] - options
- * @param {Array} [options.channels] - Array of channels to treat. Defaults to all channels
- * @param {number} [options.bitDepth=this.bitDepth] - A new bit depth can be specified. This allows to use 32 bits to avoid clamping of floating-point numbers.
- * @param {boolean} [options.normalize=false]
- * @param {number} [options.divisor=1]
- * @param {string} [options.border='copy']
- * @param {string} [options.algorithm='auto'] - Either 'auto', 'direct' or 'fft'. fft is much faster for large kernel.
- * @return {Image}
- */
-function convolution(kernel, options = {}) {
-    var channels = options.channels,
-        bitDepth = options.bitDepth,
-        _options$normalize = options.normalize,
-        normalize = _options$normalize === undefined ? false : _options$normalize,
-        _options$divisor = options.divisor,
-        divisor = _options$divisor === undefined ? 1 : _options$divisor,
-        _options$border = options.border,
-        border = _options$border === undefined ? 'copy' : _options$border,
-        _options$algorithm = options.algorithm,
-        algorithm = _options$algorithm === undefined ? 'auto' : _options$algorithm;
-
-
-    var newImage = Image$2.createFrom(this, { bitDepth });
-
-    channels = validateArrayOfChannels(this, channels, true);
-    //let kWidth, kHeight;
-    //Very mysterious function. If the kernel is an array only one quadrant is copied to the output matrix,
-    //but if the kernel is already a matrix, nothing is done.
-    //On the other hand, it only consider odd, squared and symmetric kernels. A too restrictive
-    //({kWidth, kHeight, kernel} = validateKernel(kernel));
-
-    var _validateKernel = validateKernel(kernel);
-
-    kernel = _validateKernel.kernel;
-
-
-    if (algorithm === 'auto') {
-        if (kernel.length > 9 || kernel[0].length > 9) {
-            algorithm = 'fft';
-        } else {
-            algorithm = 'direct';
-        }
-    }
-    if ((this.width > 4096 || this.height > 4096) && algorithm !== 'separable') {
-        algorithm = 'direct';
-    }
-
-    var halfHeight = Math.floor(kernel.length / 2);
-    var halfWidth = Math.floor(kernel[0].length / 2);
-    var clamped = newImage.isClamped;
-
-    var tmpData = new Array(this.height * this.width);
-    var index = void 0,
-        x = void 0,
-        y = void 0,
-        channel = void 0,
-        c = void 0,
-        tmpResult = void 0;
-    for (channel = 0; channel < channels.length; channel++) {
-        c = channels[channel];
-        //Copy the channel in a single array
-        for (y = 0; y < this.height; y++) {
-            for (x = 0; x < this.width; x++) {
-                index = y * this.width + x;
-                tmpData[index] = this.data[index * this.channels + c];
-            }
-        }
-        if (algorithm === 'direct') {
-            tmpResult = index_1(tmpData, kernel, {
-                rows: this.height,
-                cols: this.width,
-                normalize: normalize,
-                divisor: divisor
-            });
-        } else if (algorithm === 'separable') {
-            var projection = new Array(kernel.length);
-            for (var i = 0; i < kernel.length; i++) {
-                projection[i] = Math.sqrt(kernel[i][i]);
-            }
-            tmpResult = convolutionSeparable(tmpData, projection, this.width, this.height);
-        } else {
-            tmpResult = index_2(tmpData, kernel, {
-                rows: this.height,
-                cols: this.width,
-                normalize: normalize,
-                divisor: divisor
-            });
-        }
-
-        //Copy the result to the output image
-        for (y = 0; y < this.height; y++) {
-            for (x = 0; x < this.width; x++) {
-                index = y * this.width + x;
-                if (clamped) {
-                    newImage.data[index * this.channels + c] = Math.min(Math.max(tmpResult[index], 0), newImage.maxValue);
-                } else {
-                    newImage.data[index * this.channels + c] = tmpResult[index];
-                }
-            }
-        }
-    }
-    // if the kernel was not applied on the alpha channel we just copy it
-    // TODO: in general we should copy the channels that where not changed
-    // TODO: probably we should just copy the image at the beginning ?
-    if (this.alpha && !channels.includes(this.channels)) {
-        for (x = this.components; x < this.data.length; x = x + this.channels) {
-            newImage.data[x] = this.data[x];
-        }
-    }
-
-    //I only can have 3 types of borders:
-    //  1. Considering the image as periodic: periodic
-    //  2. Extend the interior borders: copy
-    //  3. fill with a color: set
-    if (border !== 'periodic') {
-        newImage.setBorder({ size: [halfWidth, halfHeight], algorithm: border });
-    }
-
-    return newImage;
-}
-
-/**
- * Apply a gaussian filter to the image
- * @memberof Image
- * @instance
- * @param {object} options
- * @param {number} [options.radius=1] : number of pixels around the current pixel
- * @param {number} [options.sigma]
- * @param {number[]|string[]} [options.channels] : to which channel to apply the filter. By default all but alpha.
- * @param {string} [options.border='copy']
- * @param {boolean} [options.algorithm='auto'] : Algorithm for convolution {@link Image#convolution}
- * @return {Image}
- */
-function gaussianFilter(options = {}) {
-    var _options$radius = options.radius,
-        radius = _options$radius === undefined ? 1 : _options$radius,
-        sigma = options.sigma,
-        channels = options.channels,
-        _options$border = options.border,
-        border = _options$border === undefined ? 'copy' : _options$border,
-        _options$algorithm = options.algorithm,
-        algorithm = _options$algorithm === undefined ? 'auto' : _options$algorithm;
-
-    this.checkProcessable('gaussian', {
-        bitDepth: [8, 16]
-    });
-
-    var kernel = void 0;
-    if (sigma) {
-        kernel = getSigmaKernel(sigma);
-    } else {
-        // sigma approximation using radius
-        sigma = 0.3 * (radius - 1) + 0.8;
-        kernel = getKernel(radius, sigma);
-    }
-
-    return convolution.call(this, kernel, {
-        border: border,
-        channels: channels,
-        algorithm: algorithm
-    });
-}
-
-function getKernel(radius, sigma) {
-    if (radius < 1) {
-        throw new RangeError('Radius should be grater than 0');
-    }
-    var n = 2 * radius + 1;
-
-    var kernel = new Array(n * n);
-
-    //gaussian kernel is calculated
-    var sigma2 = 2 * (sigma * sigma); //2*sigma^2
-    var PI2sigma2 = Math.PI * sigma2; //2*PI*sigma^2
-
-    for (var i = 0; i <= radius; i++) {
-        for (var j = i; j <= radius; j++) {
-            var value = Math.exp(-(i * i + j * j) / sigma2) / PI2sigma2;
-            kernel[(i + radius) * n + (j + radius)] = value;
-            kernel[(i + radius) * n + (-j + radius)] = value;
-            kernel[(-i + radius) * n + (j + radius)] = value;
-            kernel[(-i + radius) * n + (-j + radius)] = value;
-            kernel[(j + radius) * n + (i + radius)] = value;
-            kernel[(j + radius) * n + (-i + radius)] = value;
-            kernel[(-j + radius) * n + (i + radius)] = value;
-            kernel[(-j + radius) * n + (-i + radius)] = value;
-        }
-    }
-    return kernel;
-}
-
-function getSigmaKernel(sigma) {
-    if (sigma <= 0) {
-        throw new RangeError('Sigma should be grater than 0');
-    }
-    var sigma2 = 2 * (sigma * sigma); //2*sigma^2
-    var PI2sigma2 = Math.PI * sigma2; //2*PI*sigma^2
-    var value = 1 / PI2sigma2;
-    var sum = value;
-    var neighbors = 0;
-
-    while (sum < 0.99) {
-        neighbors++;
-        value = Math.exp(-(neighbors * neighbors) / sigma2) / PI2sigma2;
-        sum += 4 * value;
-        for (var i = 1; i < neighbors; i++) {
-            value = Math.exp(-(i * i + neighbors * neighbors) / sigma2) / PI2sigma2;
-            sum += 8 * value;
-        }
-        value = 4 * Math.exp(-(2 * neighbors * neighbors) / sigma2) / PI2sigma2;
-        sum += value;
-    }
-
-    // What does this case mean ?
-    if (sum > 1) {
-        throw new Error('unexpected sum over 1');
-    }
-
-    return getKernel(neighbors, sigma);
-}
-
-var DISCRETE_LAPLACE_4 = [[0, 1, 0], [1, -4, 1], [0, 1, 0]];
-
-var DISCRETE_LAPLACE_8 = [[1, 1, 1], [1, -8, 1], [1, 1, 1]];
-
-var GRADIENT_X = [[-1, 0, +1], [-2, 0, +2], [-1, 0, +1]];
-
-var GRADIENT_Y = [[-1, -2, -1], [0, 0, 0], [+1, +2, +1]];
-
-var SECOND_DERIVATIVE = [[-1, -2, 0, 2, 1], [-2, -4, 0, 4, 2], [0, 0, 0, 0, 0], [1, 2, 0, -2, -1], [2, 4, 0, -4, -2]];
-
-var SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
-
-/**
- * @memberof Image
- * @instance
- * @param {object} [options]
- * @param {Array<Array<number>>} [options.kernelX]
- * @param {Array<Array<number>>} [options.kernelY]
- * @param {string} [options.border='copy']
- * @param {*} [options.channels]
- * #param {number} [options.bitDepth=this.bitDepth] Specify the bitDepth of the resulting image
- * @return {Image}
- */
-function sobelFilter(options = {}) {
-    var _options$kernelX = options.kernelX,
-        kernelX = _options$kernelX === undefined ? GRADIENT_X : _options$kernelX,
-        _options$kernelY = options.kernelY,
-        kernelY = _options$kernelY === undefined ? GRADIENT_Y : _options$kernelY,
-        _options$border = options.border,
-        border = _options$border === undefined ? 'copy' : _options$border,
-        channels = options.channels,
-        _options$bitDepth = options.bitDepth,
-        bitDepth = _options$bitDepth === undefined ? this.bitDepth : _options$bitDepth;
-
-
-    this.checkProcessable('sobel', {
-        bitDepth: [8, 16]
-    });
-
-    var gX = convolution.call(this, kernelX, {
-        channels: channels,
-        border: border,
-        bitDepth: 32
-    });
-
-    var gY = convolution.call(this, kernelY, {
-        channels: channels,
-        border: border,
-        bitDepth: 32
-    });
-
-    return gX.hypotenuse(gY, { bitDepth, channels: channels });
-}
-
-var index$12 = newArray;
-
-function newArray (n, value) {
-  n = n || 0;
-  var array = new Array(n);
-  for (var i = 0; i < n; i++) {
-    array[i] = value;
-  }
-  return array
-}
-
-/**
- * Level the image for by default have the minimal and maximal values.
- * @memberof Image
- * @instance
- * @param {object} options
- * @param {(undefined|number|string|[number]|[string])} [options.channels=undefined] Specify which channels should be processed
- *      * undefined : we take all the channels but alpha
- *      * number : this specific channel
- *      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
- *      * [number] : array of channels as numbers
- *      * [string] : array of channels as one letter string
- * @param {number} [options.min=this.min] minimal value after levelling
- * @param {number} [options.max=this.max] maximal value after levelling
- * @return {this}
- */
-function level(options = {}) {
-    var _options$algorithm = options.algorithm,
-        algorithm = _options$algorithm === undefined ? 'range' : _options$algorithm,
-        channels = options.channels,
-        _options$min = options.min,
-        min = _options$min === undefined ? this.min : _options$min,
-        _options$max = options.max,
-        max = _options$max === undefined ? this.max : _options$max;
-
-
-    this.checkProcessable('level', {
-        bitDepth: [8, 16]
-    });
-
-    channels = validateArrayOfChannels(this, { channels: channels });
-
-    switch (algorithm) {
-        case 'range':
-            if (min < 0) {
-                min = 0;
-            }
-            if (max > this.maxValue) {
-                max = this.maxValue;
-            }
-
-            if (!Array.isArray(min)) {
-                min = index$12(channels.length, min);
-            }
-            if (!Array.isArray(max)) {
-                max = index$12(channels.length, max);
-            }
-
-            processImage(this, min, max, channels);
-            break;
-
-        default:
-            throw new Error('level: algorithm not implement: ' + algorithm);
-    }
-
-    return this;
-}
-
-function processImage(image, min, max, channels) {
-    var delta = 1e-5; // sorry no better value that this "best guess"
-    var factor = new Array(image.channels);
-
-    for (var c of channels) {
-        if (min[c] === 0 && max[c] === image.maxValue) {
-            factor[c] = 0;
-        } else if (max[c] === min[c]) {
-            factor[c] = 0;
-        } else {
-            factor[c] = (image.maxValue + 1 - delta) / (max[c] - min[c]);
-        }
-        min[c] += (0.5 - delta / 2) / factor[c];
-    }
-
-    /*
-     Note on border effect
-     For 8 bits images we should calculate for the space between -0.5 and 255.5
-     so that after ronding the first and last points still have the same population
-     But doing this we need to deal with Math.round that gives 256 if the value is 255.5
-     */
-
-    for (var j = 0; j < channels.length; j++) {
-        var _c = channels[j];
-        if (factor[_c] !== 0) {
-            for (var i = 0; i < image.data.length; i += image.channels) {
-                image.data[i + _c] = Math.min(Math.max(0, (image.data[i + _c] - min[_c]) * factor[_c] + 0.5 | 0), image.maxValue);
-            }
-        }
-    }
-}
-
-var toString$1 = Object.prototype.toString;
-
-var isArrayType = function isArrayType(value) {
-    return toString$1.call(value).substr(-6, 5) === 'Array';
-};
-
-function checkNumberArray(value) {
-    if (!isNaN(value)) {
-        if (value <= 0) {
-            throw new Error('checkNumberArray: the value must be greater than 0');
-        }
-        return value;
-    } else {
-        if (value instanceof Image$2) {
-            return value.data;
-        }
-        if (!isArrayType(value)) {
-            throw new Error('checkNumberArray: the value should be either a number, array or Image');
-        }
-        return value;
-    }
-}
-
-/**
- * Add a specific integer on the specified points of the specified channels
- * @memberof Image
- * @instance
- * @param {*} value
- * @param {object} [options]
- * @return {this} Modified current image
- */
-function add(value, options = {}) {
-    var channels = options.channels;
-
-    this.checkProcessable('add', {
-        bitDepth: [8, 16]
-    });
-
-    channels = validateArrayOfChannels(this, { channels: channels });
-    value = checkNumberArray(value);
-
-    // we allow 3 cases, the value may be an array (1D), an image or a single value
-    if (!isNaN(value)) {
-        for (var j = 0; j < channels.length; j++) {
-            var c = channels[j];
-            for (var i = 0; i < this.data.length; i += this.channels) {
-                this.data[i + c] = Math.min(this.maxValue, this.data[i + c] + value >> 0);
-            }
-        }
-    } else {
-        if (this.data.length !== value.length) {
-            throw new Error('add: the data size is different');
-        }
-        for (var _j = 0; _j < channels.length; _j++) {
-            var _c = channels[_j];
-            for (var _i = 0; _i < this.data.length; _i += this.channels) {
-                this.data[_i + _c] = Math.max(0, Math.min(this.maxValue, this.data[_i + _c] + value[_i + _c] >> 0));
-            }
-        }
-    }
-
-    return this;
-}
-
-/**
- * @memberof Image
- * @instance
- * @param {*} value
- * @param {object} [options]
- * @return {this}
- */
-function subtract(value, options = {}) {
-    var channels = options.channels;
-
-    this.checkProcessable('subtract', {
-        bitDepth: [8, 16]
-    });
-
-    channels = validateArrayOfChannels(this, { channels: channels });
-    value = checkNumberArray(value);
-
-    if (!isNaN(value)) {
-        for (var j = 0; j < channels.length; j++) {
-            var c = channels[j];
-            for (var i = 0; i < this.data.length; i += this.channels) {
-                this.data[i + c] = Math.max(0, this.data[i + c] - value >> 0);
-            }
-        }
-    } else {
-        if (this.data.length !== value.length) {
-            throw new Error('substract: the data size is different');
-        }
-        for (var _j = 0; _j < channels.length; _j++) {
-            var _c = channels[_j];
-            for (var _i = 0; _i < this.data.length; _i += this.channels) {
-                this.data[_i + _c] = Math.max(0, Math.min(this.maxValue, this.data[_i + _c] - value[_i + _c] >> 0));
-            }
-        }
-    }
-
-    return this;
-}
-
-/**
- * Calculate a new image that is the hypotenuse between the current image and the otherImage.
- * @memberof Image
- * @instance
- * @param {Image} otherImage
- * @param {object} [options={}]
- * @param {number} [options.bitDepth=this.bitDepth]
- * @param {number[]|string[]} [options.channels] : to which channel to apply the filter. By default all but alpha.
- * @return {Image}
- */
-function hypotenuse(otherImage, options = {}) {
-    var _options$bitDepth = options.bitDepth,
-        bitDepth = _options$bitDepth === undefined ? this.bitDepth : _options$bitDepth,
-        channels = options.channels;
-
-    this.checkProcessable('hypotenuse', {
-        bitDepth: [8, 16, 32]
-    });
-    if (this.width !== otherImage.width || this.height !== otherImage.height) {
-        throw new Error('hypotenuse: both images must have the same size');
-    }
-    if (this.alpha !== otherImage.alpha || this.bitDepth !== otherImage.bitDepth) {
-        throw new Error('hypotenuse: both images must have the same alpha and bitDepth');
-    }
-    if (this.channels !== otherImage.channels) {
-        throw new Error('hypotenuse: both images must have the same number of channels');
-    }
-
-    var newImage = Image$2.createFrom(this, { bitDepth: bitDepth });
-
-    channels = validateArrayOfChannels(this, { channels: channels });
-
-    var clamped = newImage.isClamped;
-
-    for (var j = 0; j < channels.length; j++) {
-        var c = channels[j];
-        for (var i = c; i < this.data.length; i += this.channels) {
-            var value = Math.hypot(this.data[i], otherImage.data[i]);
-            if (clamped) {
-                // we calculate the clamped result
-                newImage.data[i] = Math.min(Math.max(Math.round(value), 0), newImage.maxValue);
-            } else {
-                newImage.data[i] = value;
-            }
-        }
-    }
-
-    return newImage;
-}
-
-/**
- * @memberof Image
- * @instance
- * @param {*} value
- * @param {object} [options]
- * @return {this}
- */
-function multiply(value, options = {}) {
-    var channels = options.channels;
-
-    this.checkProcessable('multiply', {
-        bitDepth: [8, 16]
-    });
-    if (value <= 0) {
-        throw new Error('multiply: the value must be greater than 0');
-    }
-
-    channels = validateArrayOfChannels(this, { channels: channels });
-    value = checkNumberArray(value);
-
-    if (!isNaN(value)) {
-        for (var j = 0; j < channels.length; j++) {
-            var c = channels[j];
-            for (var i = 0; i < this.data.length; i += this.channels) {
-                this.data[i + c] = Math.min(this.maxValue, this.data[i + c] * value >> 0);
-            }
-        }
-    } else {
-        if (this.data.length !== value.length) {
-            throw new Error('multiply: the data size is different');
-        }
-        for (var _j = 0; _j < channels.length; _j++) {
-            var _c = channels[_j];
-            for (var _i = 0; _i < this.data.length; _i += this.channels) {
-                this.data[_i + _c] = Math.max(0, Math.min(this.maxValue, this.data[_i + _c] * value[_i + _c] >> 0));
-            }
-        }
-    }
-
-    return this;
-}
-
-/**
- * @memberof Image
- * @instance
- * @param {*} value
- * @param {object} [options]
- * @return {this}
- */
-function divide(value, options = {}) {
-    var channels = options.channels;
-
-    this.checkProcessable('divide', {
-        bitDepth: [8, 16]
-    });
-
-    channels = validateArrayOfChannels(this, { channels: channels });
-    value = checkNumberArray(value);
-
-    if (!isNaN(value)) {
-        for (var j = 0; j < channels.length; j++) {
-            var c = channels[j];
-            for (var i = 0; i < this.data.length; i += this.channels) {
-                this.data[i + c] = Math.min(this.maxValue, this.data[i + c] / value >> 0);
-            }
-        }
-    } else {
-        if (this.data.length !== value.length) {
-            throw new Error('divide: the: the data size is different');
-        }
-        for (var _j = 0; _j < channels.length; _j++) {
-            var _c = channels[_j];
-            for (var _i = 0; _i < this.data.length; _i += this.channels) {
-                this.data[_i + _c] = Math.max(0, Math.min(this.maxValue, this.data[_i + _c] / value[_i + _c] >> 0));
-            }
-        }
-    }
-
-    return this;
-}
-
-var maybeToPrecision$1 = function maybeToPrecision(value, digits) {
-    if (value < 0) {
-        value = -1 * value;
-        if (digits) {
-            return '- ' + value.toPrecision(digits);
-        } else {
-            return '- ' + value.toString();
-        }
-    } else {
-        if (digits) {
-            return value.toPrecision(digits);
-        } else {
-            return value.toString();
-        }
-    }
-};
-
-var util = {
-	maybeToPrecision: maybeToPrecision$1
-};
-
-class BaseRegression {
-    predict(x) {
-        var y2;
-        if (Array.isArray(x)) {
-            y2 = new Array(x.length);
-            for (var i = 0; i < x.length; i++) {
-                y2[i] = this._predict(x[i]);
-            }
-        } else if (Number.isFinite(x)) {
-            y2 = this._predict(x);
-        } else {
-            throw new TypeError('x must be a number or array');
-        }
-        return y2;
-    }
-
-    _predict() {
-        throw new Error('_compute not implemented');
-    }
-
-    train() {
-        //Do nothing for this package
-    }
-
-    toString() {
-        return '';
-    }
-
-    toLaTeX() {
-        return '';
-    }
-
-    /**
-     * Return the correlation coefficient of determination (r) and chi-square.
-     * @param {Array<number>} x
-     * @param {Array<number>} y
-     * @return {object}
-     */
-    modelQuality(x, y) {
-        let n = x.length;
-        var y2 = new Array(n);
-        for (let i = 0; i < n; i++) {
-            y2[i] = this._predict(x[i]);
-        }
-        var xSum = 0;
-        var ySum = 0;
-        var chi2 = 0;
-        var rmsd = 0;
-        var xSquared = 0;
-        var ySquared = 0;
-        var xY = 0;
-
-        for (let i = 0; i < n; i++) {
-            xSum += y2[i];
-            ySum += y[i];
-            xSquared += y2[i] * y2[i];
-            ySquared += y[i] * y[i];
-            xY += y2[i] * y[i];
-            if (y[i] !== 0) {
-                chi2 += (y[i] - y2[i]) * (y[i] - y2[i]) / y[i];
-            }
-            rmsd = (y[i] - y2[i]) * (y[i] - y2[i]);
-        }
-
-        var r = (n * xY - xSum * ySum) / Math.sqrt((n * xSquared - xSum * xSum) * (n * ySquared - ySum * ySum));
-
-        return {
-            r: r,
-            r2: r * r,
-            chi2: chi2,
-            rmsd: rmsd * rmsd / n
-        };
-    }
-
-}
-
-var baseRegression = BaseRegression;
-
-var maybeToPrecision = util.maybeToPrecision;
-
-
-
-class SimpleLinearRegression extends baseRegression {
-
-    constructor(x, y, options) {
-        options = options || {};
-        super();
-        if (x === true) {
-            this.slope = y.slope;
-            this.intercept = y.intercept;
-            this.quality = y.quality || {};
-            if (y.quality.r) {
-                this.quality.r = y.quality.r;
-                this.quality.r2 = y.quality.r2;
-            }
-            if (y.quality.chi2) {
-                this.quality.chi2 = y.quality.chi2;
-            }
-        } else {
-            var n = x.length;
-            if (n !== y.length) {
-                throw new RangeError('input and output array have a different length');
-            }
-
-            var xSum = 0;
-            var ySum = 0;
-
-            var xSquared = 0;
-            var xY = 0;
-
-            for (var i = 0; i < n; i++) {
-                xSum += x[i];
-                ySum += y[i];
-                xSquared += x[i] * x[i];
-                xY += x[i] * y[i];
-            }
-
-            var numerator = (n * xY - xSum * ySum);
-
-
-            this.slope = numerator / (n * xSquared - xSum * xSum);
-            this.intercept = (1 / n) * ySum - this.slope * (1 / n) * xSum;
-            this.coefficients = [this.intercept, this.slope];
-            if (options.computeQuality) {
-                this.quality = this.modelQuality(x, y);
-            }
-        }
-
-    }
-
-    toJSON() {
-        var out = {
-            name: 'simpleLinearRegression',
-            slope: this.slope,
-            intercept: this.intercept
-        };
-        if (this.quality) {
-            out.quality = this.quality;
-        }
-
-        return out;
-    }
-
-    _predict(input) {
-        return this.slope * input + this.intercept;
-    }
-
-    computeX(input) {
-        return (input - this.intercept) / this.slope;
-    }
-
-    toString(precision) {
-        var result = 'f(x) = ';
-        if (this.slope) {
-            var xFactor = maybeToPrecision(this.slope, precision);
-            result += (Math.abs(xFactor - 1) < 1e-5 ? '' : xFactor + ' * ') + 'x';
-            if (this.intercept) {
-                var absIntercept = Math.abs(this.intercept);
-                var operator = absIntercept === this.intercept ? '+' : '-';
-                result += ' ' + operator + ' ' + maybeToPrecision(absIntercept, precision);
-            }
-        } else {
-            result += maybeToPrecision(this.intercept, precision);
-        }
-        return result;
-    }
-
-    toLaTeX(precision) {
-        return this.toString(precision);
-    }
-
-    static load(json) {
-        if (json.name !== 'simpleLinearRegression') {
-            throw new TypeError('not a SLR model');
-        }
-        return new SimpleLinearRegression(true, json);
-    }
-}
-
-var simpleLinearRegression = SimpleLinearRegression;
-
 if (!Symbol.species) {
     Symbol.species = Symbol.for('@@species');
 }
@@ -2306,7 +1496,7 @@ function LuDecomposition(matrix) {
         return new LuDecomposition(matrix);
     }
 
-    matrix = Matrix$1.checkMatrix(matrix);
+    matrix = Matrix.checkMatrix(matrix);
 
     var lu = matrix.clone(),
         rows = lu.rows,
@@ -2397,7 +1587,7 @@ LuDecomposition.prototype = {
         var data = this.LU,
             rows = data.rows,
             columns = data.columns,
-            X = new Matrix$1(rows, columns);
+            X = new Matrix(rows, columns);
         for (var i = 0; i < rows; i++) {
             for (var j = 0; j < columns; j++) {
                 if (i > j) {
@@ -2415,7 +1605,7 @@ LuDecomposition.prototype = {
         var data = this.LU,
             rows = data.rows,
             columns = data.columns,
-            X = new Matrix$1(rows, columns);
+            X = new Matrix(rows, columns);
         for (var i = 0; i < rows; i++) {
             for (var j = 0; j < columns; j++) {
                 if (i <= j) {
@@ -2431,7 +1621,7 @@ LuDecomposition.prototype = {
         return this.pivotVector.slice();
     },
     solve: function (value) {
-        value = Matrix$1.checkMatrix(value);
+        value = Matrix.checkMatrix(value);
 
         var lu = this.LU,
             rows = lu.rows;
@@ -2469,7 +1659,7 @@ LuDecomposition.prototype = {
     }
 };
 
-function hypotenuse$1(a, b) {
+function hypotenuse(a, b) {
     var r;
     if (Math.abs(a) > Math.abs(b)) {
         r = b / a;
@@ -2504,7 +1694,7 @@ function SingularValueDecomposition(value, options) {
     if (!(this instanceof SingularValueDecomposition)) {
         return new SingularValueDecomposition(value, options);
     }
-    value = Matrix$1.checkMatrix(value);
+    value = Matrix.checkMatrix(value);
 
     options = options || {};
 
@@ -2553,7 +1743,7 @@ function SingularValueDecomposition(value, options) {
         if (k < nct) {
             s[k] = 0;
             for (i = k; i < m; i++) {
-                s[k] = hypotenuse$1(s[k], a[i][k]);
+                s[k] = hypotenuse(s[k], a[i][k]);
             }
             if (s[k] !== 0) {
                 if (a[k][k] < 0) {
@@ -2590,7 +1780,7 @@ function SingularValueDecomposition(value, options) {
         if (k < nrt) {
             e[k] = 0;
             for (i = k + 1; i < n; i++) {
-                e[k] = hypotenuse$1(e[k], e[i]);
+                e[k] = hypotenuse(e[k], e[i]);
             }
             if (e[k] !== 0) {
                 if (e[k + 1] < 0) {
@@ -2737,7 +1927,7 @@ function SingularValueDecomposition(value, options) {
                 f = e[p - 2];
                 e[p - 2] = 0;
                 for (j = p - 2; j >= k; j--) {
-                    t = hypotenuse$1(s[j], f);
+                    t = hypotenuse(s[j], f);
                     cs = s[j] / t;
                     sn = f / t;
                     s[j] = t;
@@ -2759,7 +1949,7 @@ function SingularValueDecomposition(value, options) {
                 f = e[k - 1];
                 e[k - 1] = 0;
                 for (j = k; j < p; j++) {
-                    t = hypotenuse$1(s[j], f);
+                    t = hypotenuse(s[j], f);
                     cs = s[j] / t;
                     sn = f / t;
                     s[j] = t;
@@ -2795,7 +1985,7 @@ function SingularValueDecomposition(value, options) {
                 f = (sk + sp) * (sk - sp) + shift;
                 g = sk * ek;
                 for (j = k; j < p - 1; j++) {
-                    t = hypotenuse$1(f, g);
+                    t = hypotenuse(f, g);
                     cs = f / t;
                     sn = g / t;
                     if (j !== k) {
@@ -2812,7 +2002,7 @@ function SingularValueDecomposition(value, options) {
                             V[i][j] = t;
                         }
                     }
-                    t = hypotenuse$1(f, g);
+                    t = hypotenuse(f, g);
                     cs = f / t;
                     sn = g / t;
                     s[j] = t;
@@ -2912,26 +2102,26 @@ SingularValueDecomposition.prototype = {
         return (Math.pow(2, -52) / 2) * Math.max(this.m, this.n) * this.s[0];
     },
     get leftSingularVectors() {
-        if (!Matrix$1.isMatrix(this.U)) {
-            this.U = new Matrix$1(this.U);
+        if (!Matrix.isMatrix(this.U)) {
+            this.U = new Matrix(this.U);
         }
         return this.U;
     },
     get rightSingularVectors() {
-        if (!Matrix$1.isMatrix(this.V)) {
-            this.V = new Matrix$1(this.V);
+        if (!Matrix.isMatrix(this.V)) {
+            this.V = new Matrix(this.V);
         }
         return this.V;
     },
     get diagonalMatrix() {
-        return Matrix$1.diag(this.s);
+        return Matrix.diag(this.s);
     },
     solve: function (value) {
 
         var Y = value,
             e = this.threshold,
             scols = this.s.length,
-            Ls = Matrix$1.zeros(scols, scols),
+            Ls = Matrix.zeros(scols, scols),
             i;
 
         for (i = 0; i < scols; i++) {
@@ -2948,7 +2138,7 @@ SingularValueDecomposition.prototype = {
         var VL = V.mmul(Ls),
             vrows = V.rows,
             urows = U.length,
-            VLU = Matrix$1.zeros(vrows, urows),
+            VLU = Matrix.zeros(vrows, urows),
             j, k, sum;
 
         for (i = 0; i < vrows; i++) {
@@ -2964,14 +2154,14 @@ SingularValueDecomposition.prototype = {
         return VLU.mmul(Y);
     },
     solveForDiagonal: function (value) {
-        return this.solve(Matrix$1.diag(value));
+        return this.solve(Matrix.diag(value));
     },
     inverse: function () {
         var V = this.V;
         var e = this.threshold,
             vrows = V.length,
             vcols = V[0].length,
-            X = new Matrix$1(vrows, this.s.length),
+            X = new Matrix(vrows, this.s.length),
             i, j;
 
         for (i = 0; i < vrows; i++) {
@@ -2988,7 +2178,7 @@ SingularValueDecomposition.prototype = {
 
         var urows = U.length,
             ucols = U[0].length,
-            Y = new Matrix$1(vrows, urows),
+            Y = new Matrix(vrows, urows),
             k, sum;
 
         for (i = 0; i < vrows; i++) {
@@ -4104,12 +3294,12 @@ exports.weightedScatter = function weightedScatter(matrix, weights, means, facto
 var array = array$1;
 var matrix = matrix$1;
 
-var index$18 = {
+var index$15 = {
 	array: array,
 	matrix: matrix
 };
 
-const Stat = index$18.array;
+const Stat = index$15.array;
 /**
  * Function that returns an array of points given 1D array as follows:
  *
@@ -4591,7 +3781,7 @@ var getEquallySpaced = {
 };
 
 var SNV_1 = SNV;
-var Stat$1 = index$18.array;
+var Stat$1 = index$15.array;
 
 /**
  * Function that applies the standard normal variate (SNV) to an array of values.
@@ -4613,7 +3803,7 @@ var snv = {
 	SNV: SNV_1
 };
 
-var index$16 = createCommonjsModule(function (module, exports) {
+var index$13 = createCommonjsModule(function (module, exports) {
 module.exports = exports = ArrayUtils;
 
 
@@ -4621,7 +3811,7 @@ exports.getEquallySpacedData = getEquallySpaced.getEquallySpacedData;
 exports.SNV = snv.SNV;
 });
 
-var index_1$2 = index$16.scale;
+var index_1$1 = index$13.scale;
 
 /**
  * @private
@@ -4727,7 +3917,7 @@ function checkRange(matrix, startRow, endRow, startColumn, endColumn) {
 
 
 function sumByRow(matrix) {
-    var sum = Matrix$1.zeros(matrix.rows, 1);
+    var sum = Matrix.zeros(matrix.rows, 1);
     for (var i = 0; i < matrix.rows; ++i) {
         for (var j = 0; j < matrix.columns; ++j) {
             sum.set(i, 0, sum.get(i, 0) + matrix.get(i, j));
@@ -4737,7 +3927,7 @@ function sumByRow(matrix) {
 }
 
 function sumByColumn(matrix) {
-    var sum = Matrix$1.zeros(1, matrix.columns);
+    var sum = Matrix.zeros(1, matrix.columns);
     for (var i = 0; i < matrix.rows; ++i) {
         for (var j = 0; j < matrix.columns; ++j) {
             sum.set(0, j, sum.get(0, j) + matrix.get(i, j));
@@ -4765,7 +3955,7 @@ class BaseView extends AbstractMatrix() {
     }
 
     static get [Symbol.species]() {
-        return Matrix$1;
+        return Matrix;
     }
 }
 
@@ -6080,7 +5270,7 @@ function AbstractMatrix(superCtor) {
             }
             var newMatrix = this.constructor.empty(this.rows, this.columns);
             for (var i = 0; i < this.rows; i++) {
-                var scaled = index_1$2(this.getRow(i), {min, max});
+                var scaled = index_1$1(this.getRow(i), {min, max});
                 newMatrix.setRow(i, scaled);
             }
             return newMatrix;
@@ -6103,7 +5293,7 @@ function AbstractMatrix(superCtor) {
             }
             var newMatrix = this.constructor.empty(this.rows, this.columns);
             for (var i = 0; i < this.columns; i++) {
-                var scaled = index_1$2(this.getColumn(i), {
+                var scaled = index_1$1(this.getColumn(i), {
                     min: min,
                     max: max
                 });
@@ -6678,13 +5868,13 @@ function AbstractMatrix(superCtor) {
     return Matrix;
 }
 
-class Matrix$1 extends AbstractMatrix(Array) {
+class Matrix extends AbstractMatrix(Array) {
     constructor(nRows, nColumns) {
         var i;
         if (arguments.length === 1 && typeof nRows === 'number') {
             return new Array(nRows);
         }
-        if (Matrix$1.isMatrix(nRows)) {
+        if (Matrix.isMatrix(nRows)) {
             return nRows.clone();
         } else if (Number.isInteger(nRows) && nRows > 0) { // Create an empty matrix
             super(nRows);
@@ -6816,7 +6006,7 @@ function QrDecomposition(value) {
     if (!(this instanceof QrDecomposition)) {
         return new QrDecomposition(value);
     }
-    value = Matrix$1.checkMatrix(value);
+    value = Matrix.checkMatrix(value);
 
     var qr = value.clone(),
         m = value.rows,
@@ -6827,7 +6017,7 @@ function QrDecomposition(value) {
     for (k = 0; k < n; k++) {
         var nrm = 0;
         for (i = k; i < m; i++) {
-            nrm = hypotenuse$1(nrm, qr[i][k]);
+            nrm = hypotenuse(nrm, qr[i][k]);
         }
         if (nrm !== 0) {
             if (qr[k][k] < 0) {
@@ -6857,7 +6047,7 @@ function QrDecomposition(value) {
 
 QrDecomposition.prototype = {
     solve: function (value) {
-        value = Matrix$1.checkMatrix(value);
+        value = Matrix.checkMatrix(value);
 
         var qr = this.QR,
             m = qr.rows;
@@ -6911,7 +6101,7 @@ QrDecomposition.prototype = {
     get upperTriangularMatrix() {
         var qr = this.QR,
             n = qr.columns,
-            X = new Matrix$1(n, n),
+            X = new Matrix(n, n),
             i, j;
         for (i = 0; i < n; i++) {
             for (j = 0; j < n; j++) {
@@ -6930,7 +6120,7 @@ QrDecomposition.prototype = {
         var qr = this.QR,
             rows = qr.rows,
             columns = qr.columns,
-            X = new Matrix$1(rows, columns),
+            X = new Matrix(rows, columns),
             i, j, k, s;
 
         for (k = columns - 1; k >= 0; k--) {
@@ -6958,13 +6148,13 @@ QrDecomposition.prototype = {
 };
 
 function inverse(matrix) {
-    matrix = Matrix$1.checkMatrix(matrix);
-    return solve$1(matrix, Matrix$1.eye(matrix.rows));
+    matrix = Matrix.checkMatrix(matrix);
+    return solve(matrix, Matrix.eye(matrix.rows));
 }
 
-function solve$1(leftHandSide, rightHandSide) {
-    leftHandSide = Matrix$1.checkMatrix(leftHandSide);
-    rightHandSide = Matrix$1.checkMatrix(rightHandSide);
+function solve(leftHandSide, rightHandSide) {
+    leftHandSide = Matrix.checkMatrix(leftHandSide);
+    rightHandSide = Matrix.checkMatrix(rightHandSide);
     return leftHandSide.isSquare() ? new LuDecomposition(leftHandSide).solve(rightHandSide) : new QrDecomposition(leftHandSide).solve(rightHandSide);
 }
 
@@ -6978,7 +6168,7 @@ function EigenvalueDecomposition(matrix, options) {
     if (!(this instanceof EigenvalueDecomposition)) {
         return new EigenvalueDecomposition(matrix, options);
     }
-    matrix = Matrix$1.checkMatrix(matrix);
+    matrix = Matrix.checkMatrix(matrix);
     if (!matrix.isSquare()) {
         throw new Error('Matrix is not a square matrix');
     }
@@ -7031,8 +6221,8 @@ EigenvalueDecomposition.prototype = {
         return this.e;
     },
     get eigenvectorMatrix() {
-        if (!Matrix$1.isMatrix(this.V)) {
-            this.V = new Matrix$1(this.V);
+        if (!Matrix.isMatrix(this.V)) {
+            this.V = new Matrix(this.V);
         }
         return this.V;
     },
@@ -7040,7 +6230,7 @@ EigenvalueDecomposition.prototype = {
         var n = this.n,
             e = this.e,
             d = this.d,
-            X = new Matrix$1(n, n),
+            X = new Matrix(n, n),
             i, j;
         for (i = 0; i < n; i++) {
             for (j = 0; j < n; j++) {
@@ -7201,7 +6391,7 @@ function tql2(n, e, d, V) {
 
                 g = d[l];
                 p = (d[l + 1] - g) / (2 * e[l]);
-                r = hypotenuse$1(p, 1);
+                r = hypotenuse(p, 1);
                 if (p < 0) {
                     r = -r;
                 }
@@ -7229,7 +6419,7 @@ function tql2(n, e, d, V) {
                     s2 = s;
                     g = c * e[i];
                     h = c * p;
-                    r = hypotenuse$1(p, e[i]);
+                    r = hypotenuse(p, e[i]);
                     e[i + 1] = s * r;
                     s = e[i] / r;
                     c = p / r;
@@ -7745,14 +6935,14 @@ function CholeskyDecomposition(value) {
     if (!(this instanceof CholeskyDecomposition)) {
         return new CholeskyDecomposition(value);
     }
-    value = Matrix$1.checkMatrix(value);
+    value = Matrix.checkMatrix(value);
     if (!value.isSymmetric()) {
         throw new Error('Matrix is not symmetric');
     }
 
     var a = value,
         dimension = a.rows,
-        l = new Matrix$1(dimension, dimension),
+        l = new Matrix(dimension, dimension),
         positiveDefinite = true,
         i, j, k;
 
@@ -7790,7 +6980,7 @@ CholeskyDecomposition.prototype = {
         return this.L;
     },
     solve: function (value) {
-        value = Matrix$1.checkMatrix(value);
+        value = Matrix.checkMatrix(value);
 
         var l = this.L,
             dimension = l.rows;
@@ -7827,11 +7017,11 @@ CholeskyDecomposition.prototype = {
 
 
 
-var index$15 = Object.freeze({
-	default: Matrix$1,
-	Matrix: Matrix$1,
+var index$12 = Object.freeze({
+	default: Matrix,
+	Matrix: Matrix,
 	abstractMatrix: AbstractMatrix,
-	solve: solve$1,
+	solve: solve,
 	inverse: inverse,
 	SingularValueDecomposition: SingularValueDecomposition,
 	SVD: SingularValueDecomposition,
@@ -7845,7 +7035,835 @@ var index$15 = Object.freeze({
 	QR: QrDecomposition
 });
 
-var matrixLib = ( index$15 && Matrix$1 ) || index$15;
+function getSeparatedKernel(kernel) {
+    var svd = new SingularValueDecomposition(kernel, { autoTranspose: true });
+    if (svd.rank !== 1) return null;
+    var s = Math.sqrt(svd.s[0]);
+    var v = svd.U.map(v => v[0] * s);
+    var h = svd.V.map(h => h[0] * s);
+    return [v, h];
+}
+
+/**
+ * @memberof Image
+ * @instance
+ * @param {Array<Array<number>>} kernel
+ * @param {object} [options] - options
+ * @param {Array} [options.channels] - Array of channels to treat. Defaults to all channels
+ * @param {number} [options.bitDepth=this.bitDepth] - A new bit depth can be specified. This allows to use 32 bits to avoid clamping of floating-point numbers.
+ * @param {boolean} [options.normalize=false]
+ * @param {number} [options.divisor=1]
+ * @param {string} [options.border='copy']
+ * @param {string} [options.algorithm='auto'] - Either 'auto', 'direct', 'fft' or 'separable'. fft is much faster for large kernel.
+ * If the separable algorithm is used, one must provide as kernel an array of two 1D kernels.
+ * The 'auto' option will try to separate the kernel if that is possible.
+ * @return {Image}
+ */
+function convolution(kernel, options = {}) {
+    var channels = options.channels,
+        bitDepth = options.bitDepth,
+        _options$normalize = options.normalize,
+        normalize = _options$normalize === undefined ? false : _options$normalize,
+        _options$divisor = options.divisor,
+        divisor = _options$divisor === undefined ? 1 : _options$divisor,
+        _options$border = options.border,
+        border = _options$border === undefined ? 'copy' : _options$border,
+        _options$algorithm = options.algorithm,
+        algorithm = _options$algorithm === undefined ? 'auto' : _options$algorithm;
+
+
+    var newImage = Image$2.createFrom(this, { bitDepth });
+
+    channels = validateArrayOfChannels(this, channels, true);
+
+    if (algorithm !== 'separable') {
+        var _validateKernel = validateKernel(kernel);
+
+        kernel = _validateKernel.kernel;
+    } else if (!Array.isArray(kernel) || kernel.length !== 2) {
+        throw new RangeError('separable convolution requires two arrays of numbers to represent the kernel');
+    }
+
+    if (algorithm === 'auto') {
+        var separatedKernel = getSeparatedKernel(kernel);
+        if (separatedKernel !== null) {
+            algorithm = 'separable';
+            kernel = separatedKernel;
+        } else if ((kernel.length > 9 || kernel[0].length > 9) && this.width <= 4096 && this.height <= 4096) {
+            algorithm = 'fft';
+        } else {
+            algorithm = 'direct';
+        }
+    }
+
+    var halfHeight = void 0,
+        halfWidth = void 0;
+    if (algorithm === 'separable') {
+        halfHeight = Math.floor(kernel[0].length / 2);
+        halfWidth = Math.floor(kernel[1].length / 2);
+    } else {
+        halfHeight = Math.floor(kernel.length / 2);
+        halfWidth = Math.floor(kernel[0].length / 2);
+    }
+    var clamped = newImage.isClamped;
+
+    var tmpData = new Array(this.height * this.width);
+    var index = void 0,
+        x = void 0,
+        y = void 0,
+        channel = void 0,
+        c = void 0,
+        tmpResult = void 0;
+    for (channel = 0; channel < channels.length; channel++) {
+        c = channels[channel];
+        //Copy the channel in a single array
+        for (y = 0; y < this.height; y++) {
+            for (x = 0; x < this.width; x++) {
+                index = y * this.width + x;
+                tmpData[index] = this.data[index * this.channels + c];
+            }
+        }
+        if (algorithm === 'direct') {
+            tmpResult = index_1(tmpData, kernel, {
+                rows: this.height,
+                cols: this.width,
+                normalize: normalize,
+                divisor: divisor
+            });
+        } else if (algorithm === 'separable') {
+            tmpResult = convolutionSeparable(tmpData, kernel, this.width, this.height);
+            if (normalize) {
+                divisor = 0;
+                for (var i = 0; i < kernel[0].length; i++) {
+                    for (var j = 0; j < kernel[1].length; j++) {
+                        divisor += kernel[0][i] * kernel[1][j];
+                    }
+                }
+            }
+            if (divisor !== 1) {
+                for (var _i = 0; _i < tmpResult.length; _i++) {
+                    tmpResult[_i] /= divisor;
+                }
+            }
+        } else {
+            tmpResult = index_2(tmpData, kernel, {
+                rows: this.height,
+                cols: this.width,
+                normalize: normalize,
+                divisor: divisor
+            });
+        }
+
+        //Copy the result to the output image
+        for (y = 0; y < this.height; y++) {
+            for (x = 0; x < this.width; x++) {
+                index = y * this.width + x;
+                if (clamped) {
+                    newImage.data[index * this.channels + c] = Math.min(Math.max(tmpResult[index], 0), newImage.maxValue);
+                } else {
+                    newImage.data[index * this.channels + c] = tmpResult[index];
+                }
+            }
+        }
+    }
+    // if the kernel was not applied on the alpha channel we just copy it
+    // TODO: in general we should copy the channels that where not changed
+    // TODO: probably we should just copy the image at the beginning ?
+    if (this.alpha && !channels.includes(this.channels)) {
+        for (x = this.components; x < this.data.length; x = x + this.channels) {
+            newImage.data[x] = this.data[x];
+        }
+    }
+
+    //I only can have 3 types of borders:
+    //  1. Considering the image as periodic: periodic
+    //  2. Extend the interior borders: copy
+    //  3. fill with a color: set
+    if (border !== 'periodic') {
+        newImage.setBorder({ size: [halfWidth, halfHeight], algorithm: border });
+    }
+
+    return newImage;
+}
+
+/**
+ * Apply a gaussian filter to the image
+ * @memberof Image
+ * @instance
+ * @param {object} options
+ * @param {number} [options.radius=1] : number of pixels around the current pixel
+ * @param {number} [options.sigma]
+ * @param {number[]|string[]} [options.channels] : to which channel to apply the filter. By default all but alpha.
+ * @param {string} [options.border='copy']
+ * @param {boolean} [options.algorithm='auto'] : Algorithm for convolution {@link Image#convolution}
+ * @return {Image}
+ */
+function gaussianFilter(options = {}) {
+    var _options$radius = options.radius,
+        radius = _options$radius === undefined ? 1 : _options$radius,
+        sigma = options.sigma,
+        channels = options.channels,
+        _options$border = options.border,
+        border = _options$border === undefined ? 'copy' : _options$border;
+
+
+    this.checkProcessable('gaussian', {
+        bitDepth: [8, 16]
+    });
+
+    var kernel = void 0;
+    if (sigma) {
+        kernel = getSigmaKernel(sigma);
+    } else {
+        // sigma approximation using radius
+        sigma = 0.3 * (radius - 1) + 0.8;
+        kernel = getKernel(radius, sigma);
+    }
+
+    return convolution.call(this, [kernel, kernel], { border, channels, algorithm: 'separable' });
+}
+
+var sqrt2Pi = Math.sqrt(2 * Math.PI);
+
+function getKernel(radius, sigma) {
+    if (radius < 1) {
+        throw new RangeError('Radius should be grater than 0');
+    }
+
+    var n = 2 * radius + 1;
+    var kernel = new Array(n);
+    var twoSigmaSquared = 0 - 1 / (2 * sigma * sigma);
+    var sigmaSqrt2Pi = 1 / (sigma * sqrt2Pi);
+
+    for (var i = 0; i <= radius; i++) {
+        var value = Math.exp(i * i * twoSigmaSquared) * sigmaSqrt2Pi;
+        kernel[radius + i] = value;
+        kernel[radius - i] = value;
+    }
+    return kernel;
+}
+
+function getSigmaKernel(sigma) {
+    if (sigma <= 0) {
+        throw new RangeError('Sigma should be grater than 0');
+    }
+    var sigma2 = 2 * (sigma * sigma); //2*sigma^2
+    var PI2sigma2 = Math.PI * sigma2; //2*PI*sigma^2
+    var value = 1 / PI2sigma2;
+    var sum = value;
+    var neighbors = 0;
+
+    while (sum < 0.99) {
+        neighbors++;
+        value = Math.exp(-(neighbors * neighbors) / sigma2) / PI2sigma2;
+        sum += 4 * value;
+        for (var i = 1; i < neighbors; i++) {
+            value = Math.exp(-(i * i + neighbors * neighbors) / sigma2) / PI2sigma2;
+            sum += 8 * value;
+        }
+        value = 4 * Math.exp(-(2 * neighbors * neighbors) / sigma2) / PI2sigma2;
+        sum += value;
+    }
+
+    // What does this case mean ?
+    if (sum > 1) {
+        throw new Error('unexpected sum over 1');
+    }
+
+    return getKernel(neighbors, sigma);
+}
+
+var DISCRETE_LAPLACE_4 = [[0, 1, 0], [1, -4, 1], [0, 1, 0]];
+
+var DISCRETE_LAPLACE_8 = [[1, 1, 1], [1, -8, 1], [1, 1, 1]];
+
+var GRADIENT_X = [[-1, 0, +1], [-2, 0, +2], [-1, 0, +1]];
+
+var GRADIENT_Y = [[-1, -2, -1], [0, 0, 0], [+1, +2, +1]];
+
+var SECOND_DERIVATIVE = [[-1, -2, 0, 2, 1], [-2, -4, 0, 4, 2], [0, 0, 0, 0, 0], [1, 2, 0, -2, -1], [2, 4, 0, -4, -2]];
+
+var SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 0], [-2, -4, 0, 4, 2], [-1, -2, 0, 2, 1]];
+
+/**
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {Array<Array<number>>} [options.kernelX]
+ * @param {Array<Array<number>>} [options.kernelY]
+ * @param {string} [options.border='copy']
+ * @param {*} [options.channels]
+ * #param {number} [options.bitDepth=this.bitDepth] Specify the bitDepth of the resulting image
+ * @return {Image}
+ */
+function sobelFilter(options = {}) {
+    var _options$kernelX = options.kernelX,
+        kernelX = _options$kernelX === undefined ? GRADIENT_X : _options$kernelX,
+        _options$kernelY = options.kernelY,
+        kernelY = _options$kernelY === undefined ? GRADIENT_Y : _options$kernelY,
+        _options$border = options.border,
+        border = _options$border === undefined ? 'copy' : _options$border,
+        channels = options.channels,
+        _options$bitDepth = options.bitDepth,
+        bitDepth = _options$bitDepth === undefined ? this.bitDepth : _options$bitDepth;
+
+
+    this.checkProcessable('sobel', {
+        bitDepth: [8, 16]
+    });
+
+    var gX = convolution.call(this, kernelX, {
+        channels: channels,
+        border: border,
+        bitDepth: 32
+    });
+
+    var gY = convolution.call(this, kernelY, {
+        channels: channels,
+        border: border,
+        bitDepth: 32
+    });
+
+    return gX.hypotenuse(gY, { bitDepth, channels: channels });
+}
+
+var index$17 = newArray;
+
+function newArray (n, value) {
+  n = n || 0;
+  var array = new Array(n);
+  for (var i = 0; i < n; i++) {
+    array[i] = value;
+  }
+  return array
+}
+
+/**
+ * Level the image for by default have the minimal and maximal values.
+ * @memberof Image
+ * @instance
+ * @param {object} options
+ * @param {(undefined|number|string|[number]|[string])} [options.channels=undefined] Specify which channels should be processed
+ *      * undefined : we take all the channels but alpha
+ *      * number : this specific channel
+ *      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
+ *      * [number] : array of channels as numbers
+ *      * [string] : array of channels as one letter string
+ * @param {number} [options.min=this.min] minimal value after levelling
+ * @param {number} [options.max=this.max] maximal value after levelling
+ * @return {this}
+ */
+function level(options = {}) {
+    var _options$algorithm = options.algorithm,
+        algorithm = _options$algorithm === undefined ? 'range' : _options$algorithm,
+        channels = options.channels,
+        _options$min = options.min,
+        min = _options$min === undefined ? this.min : _options$min,
+        _options$max = options.max,
+        max = _options$max === undefined ? this.max : _options$max;
+
+
+    this.checkProcessable('level', {
+        bitDepth: [8, 16]
+    });
+
+    channels = validateArrayOfChannels(this, { channels: channels });
+
+    switch (algorithm) {
+        case 'range':
+            if (min < 0) {
+                min = 0;
+            }
+            if (max > this.maxValue) {
+                max = this.maxValue;
+            }
+
+            if (!Array.isArray(min)) {
+                min = index$17(channels.length, min);
+            }
+            if (!Array.isArray(max)) {
+                max = index$17(channels.length, max);
+            }
+
+            processImage(this, min, max, channels);
+            break;
+
+        default:
+            throw new Error('level: algorithm not implement: ' + algorithm);
+    }
+
+    return this;
+}
+
+function processImage(image, min, max, channels) {
+    var delta = 1e-5; // sorry no better value that this "best guess"
+    var factor = new Array(image.channels);
+
+    for (var c of channels) {
+        if (min[c] === 0 && max[c] === image.maxValue) {
+            factor[c] = 0;
+        } else if (max[c] === min[c]) {
+            factor[c] = 0;
+        } else {
+            factor[c] = (image.maxValue + 1 - delta) / (max[c] - min[c]);
+        }
+        min[c] += (0.5 - delta / 2) / factor[c];
+    }
+
+    /*
+     Note on border effect
+     For 8 bits images we should calculate for the space between -0.5 and 255.5
+     so that after ronding the first and last points still have the same population
+     But doing this we need to deal with Math.round that gives 256 if the value is 255.5
+     */
+
+    for (var j = 0; j < channels.length; j++) {
+        var _c = channels[j];
+        if (factor[_c] !== 0) {
+            for (var i = 0; i < image.data.length; i += image.channels) {
+                image.data[i + _c] = Math.min(Math.max(0, (image.data[i + _c] - min[_c]) * factor[_c] + 0.5 | 0), image.maxValue);
+            }
+        }
+    }
+}
+
+var toString$1 = Object.prototype.toString;
+
+var isArrayType = function isArrayType(value) {
+    return toString$1.call(value).substr(-6, 5) === 'Array';
+};
+
+function checkNumberArray(value) {
+    if (!isNaN(value)) {
+        if (value <= 0) {
+            throw new Error('checkNumberArray: the value must be greater than 0');
+        }
+        return value;
+    } else {
+        if (value instanceof Image$2) {
+            return value.data;
+        }
+        if (!isArrayType(value)) {
+            throw new Error('checkNumberArray: the value should be either a number, array or Image');
+        }
+        return value;
+    }
+}
+
+/**
+ * Add a specific integer on the specified points of the specified channels
+ * @memberof Image
+ * @instance
+ * @param {*} value
+ * @param {object} [options]
+ * @return {this} Modified current image
+ */
+function add(value, options = {}) {
+    var channels = options.channels;
+
+    this.checkProcessable('add', {
+        bitDepth: [8, 16]
+    });
+
+    channels = validateArrayOfChannels(this, { channels: channels });
+    value = checkNumberArray(value);
+
+    // we allow 3 cases, the value may be an array (1D), an image or a single value
+    if (!isNaN(value)) {
+        for (var j = 0; j < channels.length; j++) {
+            var c = channels[j];
+            for (var i = 0; i < this.data.length; i += this.channels) {
+                this.data[i + c] = Math.min(this.maxValue, this.data[i + c] + value >> 0);
+            }
+        }
+    } else {
+        if (this.data.length !== value.length) {
+            throw new Error('add: the data size is different');
+        }
+        for (var _j = 0; _j < channels.length; _j++) {
+            var _c = channels[_j];
+            for (var _i = 0; _i < this.data.length; _i += this.channels) {
+                this.data[_i + _c] = Math.max(0, Math.min(this.maxValue, this.data[_i + _c] + value[_i + _c] >> 0));
+            }
+        }
+    }
+
+    return this;
+}
+
+/**
+ * @memberof Image
+ * @instance
+ * @param {*} value
+ * @param {object} [options]
+ * @return {this}
+ */
+function subtract(value, options = {}) {
+    var channels = options.channels;
+
+    this.checkProcessable('subtract', {
+        bitDepth: [8, 16]
+    });
+
+    channels = validateArrayOfChannels(this, { channels: channels });
+    value = checkNumberArray(value);
+
+    if (!isNaN(value)) {
+        for (var j = 0; j < channels.length; j++) {
+            var c = channels[j];
+            for (var i = 0; i < this.data.length; i += this.channels) {
+                this.data[i + c] = Math.max(0, this.data[i + c] - value >> 0);
+            }
+        }
+    } else {
+        if (this.data.length !== value.length) {
+            throw new Error('substract: the data size is different');
+        }
+        for (var _j = 0; _j < channels.length; _j++) {
+            var _c = channels[_j];
+            for (var _i = 0; _i < this.data.length; _i += this.channels) {
+                this.data[_i + _c] = Math.max(0, Math.min(this.maxValue, this.data[_i + _c] - value[_i + _c] >> 0));
+            }
+        }
+    }
+
+    return this;
+}
+
+/**
+ * Calculate a new image that is the hypotenuse between the current image and the otherImage.
+ * @memberof Image
+ * @instance
+ * @param {Image} otherImage
+ * @param {object} [options={}]
+ * @param {number} [options.bitDepth=this.bitDepth]
+ * @param {number[]|string[]} [options.channels] : to which channel to apply the filter. By default all but alpha.
+ * @return {Image}
+ */
+function hypotenuse$1(otherImage, options = {}) {
+    var _options$bitDepth = options.bitDepth,
+        bitDepth = _options$bitDepth === undefined ? this.bitDepth : _options$bitDepth,
+        channels = options.channels;
+
+    this.checkProcessable('hypotenuse', {
+        bitDepth: [8, 16, 32]
+    });
+    if (this.width !== otherImage.width || this.height !== otherImage.height) {
+        throw new Error('hypotenuse: both images must have the same size');
+    }
+    if (this.alpha !== otherImage.alpha || this.bitDepth !== otherImage.bitDepth) {
+        throw new Error('hypotenuse: both images must have the same alpha and bitDepth');
+    }
+    if (this.channels !== otherImage.channels) {
+        throw new Error('hypotenuse: both images must have the same number of channels');
+    }
+
+    var newImage = Image$2.createFrom(this, { bitDepth: bitDepth });
+
+    channels = validateArrayOfChannels(this, { channels: channels });
+
+    var clamped = newImage.isClamped;
+
+    for (var j = 0; j < channels.length; j++) {
+        var c = channels[j];
+        for (var i = c; i < this.data.length; i += this.channels) {
+            var value = Math.hypot(this.data[i], otherImage.data[i]);
+            if (clamped) {
+                // we calculate the clamped result
+                newImage.data[i] = Math.min(Math.max(Math.round(value), 0), newImage.maxValue);
+            } else {
+                newImage.data[i] = value;
+            }
+        }
+    }
+
+    return newImage;
+}
+
+/**
+ * @memberof Image
+ * @instance
+ * @param {*} value
+ * @param {object} [options]
+ * @return {this}
+ */
+function multiply(value, options = {}) {
+    var channels = options.channels;
+
+    this.checkProcessable('multiply', {
+        bitDepth: [8, 16]
+    });
+    if (value <= 0) {
+        throw new Error('multiply: the value must be greater than 0');
+    }
+
+    channels = validateArrayOfChannels(this, { channels: channels });
+    value = checkNumberArray(value);
+
+    if (!isNaN(value)) {
+        for (var j = 0; j < channels.length; j++) {
+            var c = channels[j];
+            for (var i = 0; i < this.data.length; i += this.channels) {
+                this.data[i + c] = Math.min(this.maxValue, this.data[i + c] * value >> 0);
+            }
+        }
+    } else {
+        if (this.data.length !== value.length) {
+            throw new Error('multiply: the data size is different');
+        }
+        for (var _j = 0; _j < channels.length; _j++) {
+            var _c = channels[_j];
+            for (var _i = 0; _i < this.data.length; _i += this.channels) {
+                this.data[_i + _c] = Math.max(0, Math.min(this.maxValue, this.data[_i + _c] * value[_i + _c] >> 0));
+            }
+        }
+    }
+
+    return this;
+}
+
+/**
+ * @memberof Image
+ * @instance
+ * @param {*} value
+ * @param {object} [options]
+ * @return {this}
+ */
+function divide(value, options = {}) {
+    var channels = options.channels;
+
+    this.checkProcessable('divide', {
+        bitDepth: [8, 16]
+    });
+
+    channels = validateArrayOfChannels(this, { channels: channels });
+    value = checkNumberArray(value);
+
+    if (!isNaN(value)) {
+        for (var j = 0; j < channels.length; j++) {
+            var c = channels[j];
+            for (var i = 0; i < this.data.length; i += this.channels) {
+                this.data[i + c] = Math.min(this.maxValue, this.data[i + c] / value >> 0);
+            }
+        }
+    } else {
+        if (this.data.length !== value.length) {
+            throw new Error('divide: the: the data size is different');
+        }
+        for (var _j = 0; _j < channels.length; _j++) {
+            var _c = channels[_j];
+            for (var _i = 0; _i < this.data.length; _i += this.channels) {
+                this.data[_i + _c] = Math.max(0, Math.min(this.maxValue, this.data[_i + _c] / value[_i + _c] >> 0));
+            }
+        }
+    }
+
+    return this;
+}
+
+var maybeToPrecision$1 = function maybeToPrecision(value, digits) {
+    if (value < 0) {
+        value = -1 * value;
+        if (digits) {
+            return '- ' + value.toPrecision(digits);
+        } else {
+            return '- ' + value.toString();
+        }
+    } else {
+        if (digits) {
+            return value.toPrecision(digits);
+        } else {
+            return value.toString();
+        }
+    }
+};
+
+var util = {
+	maybeToPrecision: maybeToPrecision$1
+};
+
+class BaseRegression {
+    predict(x) {
+        var y2;
+        if (Array.isArray(x)) {
+            y2 = new Array(x.length);
+            for (var i = 0; i < x.length; i++) {
+                y2[i] = this._predict(x[i]);
+            }
+        } else if (Number.isFinite(x)) {
+            y2 = this._predict(x);
+        } else {
+            throw new TypeError('x must be a number or array');
+        }
+        return y2;
+    }
+
+    _predict() {
+        throw new Error('_compute not implemented');
+    }
+
+    train() {
+        //Do nothing for this package
+    }
+
+    toString() {
+        return '';
+    }
+
+    toLaTeX() {
+        return '';
+    }
+
+    /**
+     * Return the correlation coefficient of determination (r) and chi-square.
+     * @param {Array<number>} x
+     * @param {Array<number>} y
+     * @return {object}
+     */
+    modelQuality(x, y) {
+        let n = x.length;
+        var y2 = new Array(n);
+        for (let i = 0; i < n; i++) {
+            y2[i] = this._predict(x[i]);
+        }
+        var xSum = 0;
+        var ySum = 0;
+        var chi2 = 0;
+        var rmsd = 0;
+        var xSquared = 0;
+        var ySquared = 0;
+        var xY = 0;
+
+        for (let i = 0; i < n; i++) {
+            xSum += y2[i];
+            ySum += y[i];
+            xSquared += y2[i] * y2[i];
+            ySquared += y[i] * y[i];
+            xY += y2[i] * y[i];
+            if (y[i] !== 0) {
+                chi2 += (y[i] - y2[i]) * (y[i] - y2[i]) / y[i];
+            }
+            rmsd = (y[i] - y2[i]) * (y[i] - y2[i]);
+        }
+
+        var r = (n * xY - xSum * ySum) / Math.sqrt((n * xSquared - xSum * xSum) * (n * ySquared - ySum * ySum));
+
+        return {
+            r: r,
+            r2: r * r,
+            chi2: chi2,
+            rmsd: rmsd * rmsd / n
+        };
+    }
+
+}
+
+var baseRegression = BaseRegression;
+
+var maybeToPrecision = util.maybeToPrecision;
+
+
+
+class SimpleLinearRegression extends baseRegression {
+
+    constructor(x, y, options) {
+        options = options || {};
+        super();
+        if (x === true) {
+            this.slope = y.slope;
+            this.intercept = y.intercept;
+            this.quality = y.quality || {};
+            if (y.quality.r) {
+                this.quality.r = y.quality.r;
+                this.quality.r2 = y.quality.r2;
+            }
+            if (y.quality.chi2) {
+                this.quality.chi2 = y.quality.chi2;
+            }
+        } else {
+            var n = x.length;
+            if (n !== y.length) {
+                throw new RangeError('input and output array have a different length');
+            }
+
+            var xSum = 0;
+            var ySum = 0;
+
+            var xSquared = 0;
+            var xY = 0;
+
+            for (var i = 0; i < n; i++) {
+                xSum += x[i];
+                ySum += y[i];
+                xSquared += x[i] * x[i];
+                xY += x[i] * y[i];
+            }
+
+            var numerator = (n * xY - xSum * ySum);
+
+
+            this.slope = numerator / (n * xSquared - xSum * xSum);
+            this.intercept = (1 / n) * ySum - this.slope * (1 / n) * xSum;
+            this.coefficients = [this.intercept, this.slope];
+            if (options.computeQuality) {
+                this.quality = this.modelQuality(x, y);
+            }
+        }
+
+    }
+
+    toJSON() {
+        var out = {
+            name: 'simpleLinearRegression',
+            slope: this.slope,
+            intercept: this.intercept
+        };
+        if (this.quality) {
+            out.quality = this.quality;
+        }
+
+        return out;
+    }
+
+    _predict(input) {
+        return this.slope * input + this.intercept;
+    }
+
+    computeX(input) {
+        return (input - this.intercept) / this.slope;
+    }
+
+    toString(precision) {
+        var result = 'f(x) = ';
+        if (this.slope) {
+            var xFactor = maybeToPrecision(this.slope, precision);
+            result += (Math.abs(xFactor - 1) < 1e-5 ? '' : xFactor + ' * ') + 'x';
+            if (this.intercept) {
+                var absIntercept = Math.abs(this.intercept);
+                var operator = absIntercept === this.intercept ? '+' : '-';
+                result += ' ' + operator + ' ' + maybeToPrecision(absIntercept, precision);
+            }
+        } else {
+            result += maybeToPrecision(this.intercept, precision);
+        }
+        return result;
+    }
+
+    toLaTeX(precision) {
+        return this.toString(precision);
+    }
+
+    static load(json) {
+        if (json.name !== 'simpleLinearRegression') {
+            throw new TypeError('not a SLR model');
+        }
+        return new SimpleLinearRegression(true, json);
+    }
+}
+
+var simpleLinearRegression = SimpleLinearRegression;
+
+var matrixLib = ( index$12 && Matrix ) || index$12;
 
 /**
  * Function that return a constants of the M degree polynomial that
@@ -7862,8 +7880,8 @@ var matrixLib = ( index$15 && Matrix$1 ) || index$15;
 const maybeToPrecision$2 = util.maybeToPrecision;
 
 
-const Matrix = matrixLib.Matrix;
-const solve = matrixLib.solve;
+const Matrix$1 = matrixLib.Matrix;
+const solve$1 = matrixLib.solve;
 
 class PolynomialRegression extends baseRegression {
     /**
@@ -7900,8 +7918,8 @@ class PolynomialRegression extends baseRegression {
                     powers[k] = k;
                 }
             }
-            var F = new Matrix(n, M);
-            var Y = new Matrix([y]);
+            var F = new Matrix$1(n, M);
+            var Y = new Matrix$1([y]);
             var k, i;
             for (k = 0; k < M; k++) {
                 for (i = 0; i < n; i++) {
@@ -7917,7 +7935,7 @@ class PolynomialRegression extends baseRegression {
             var A = FT.mmul(F);
             var B = FT.mmul(Y.transposeView());
 
-            this.coefficients = solve(A, B).to1DArray();
+            this.coefficients = solve$1(A, B).to1DArray();
             this.powers = powers;
             this.M = M - 1;
             if (opt.computeQuality) {
@@ -8938,7 +8956,7 @@ class TheilSenRegression extends baseRegression {
 
 var theilSenRegression = TheilSenRegression;
 
-var index$13 = createCommonjsModule(function (module, exports) {
+var index$18 = createCommonjsModule(function (module, exports) {
 'use strict';
 
 exports.SimpleLinearRegression = exports.SLR = simpleLinearRegression;
@@ -8955,7 +8973,7 @@ exports.PolinomialFitting2D = polyFitRegression2d;
 exports.TheilSenRegression = theilSenRegression;
 });
 
-var index_5 = index$13.KernelRidgeRegression;
+var index_5 = index$18.KernelRidgeRegression;
 
 /**
  * @memberof Image
@@ -10861,7 +10879,7 @@ function pad(options = {}) {
             }
         }
     } else {
-        color = index$12(this.channels, null);
+        color = index$17(this.channels, null);
     }
 
     if (!Array.isArray(size)) {
@@ -11159,7 +11177,7 @@ function setBorder(options = {}) {
             }
         }
     } else {
-        color = index$12(this.channels, null);
+        color = index$17(this.channels, null);
     }
 
     if (!Array.isArray(size)) {
@@ -11910,7 +11928,7 @@ function getSimilarity(image, options = {}) {
     var minY = Math.max(border[1], -shift[1]);
     var maxY = Math.min(this.height - border[1], this.height - shift[1]);
 
-    var results = index$12(channels.length, 0);
+    var results = index$17(channels.length, 0);
     for (var i = 0; i < channels.length; i++) {
         var c = channels[i];
         var sumThis = normalize ? this.sum[c] : Math.max(this.sum[c], image.sum[c]);
@@ -12190,7 +12208,7 @@ function getMatrix(options = {}) {
         channel = 0;
     }
 
-    var matrix = new Matrix$1(this.height, this.width);
+    var matrix = new Matrix(this.height, this.width);
     for (var x = 0; x < this.height; x++) {
         for (var y = 0; y < this.width; y++) {
             matrix.set(x, y, this.getValueXY(y, x, channel));
@@ -13246,7 +13264,7 @@ class Shape {
 }
 
 function rectangle(width, height, options) {
-    var matrix = Matrix$1.zeros(height, width);
+    var matrix = Matrix.zeros(height, width);
     if (options.filled) {
         for (var y = 0; y < height; y++) {
             for (var x = 0; x < width; x++) {
@@ -13270,7 +13288,7 @@ function rectangle(width, height, options) {
 }
 
 function ellipse(width, height, options) {
-    var matrix = Matrix$1.zeros(height, width, options);
+    var matrix = Matrix.zeros(height, width, options);
     var yEven = 1 - height % 2;
     var xEven = 1 - width % 2;
     var a = Math.floor((width - 1) / 2); // horizontal ellipse axe
@@ -13313,7 +13331,7 @@ function triangle$1(width, height, options) {
     if (!options.filled) {
         throw new Error('Non filled triangle is not implemented');
     }
-    var matrix = Matrix$1.zeros(height, width, options);
+    var matrix = Matrix.zeros(height, width, options);
     for (var y = 0; y < height; y++) {
         var shift = Math.floor((1 - y / height) * width / 2);
         for (var x = shift; x < width - shift; x++) {
@@ -13789,7 +13807,7 @@ function getChannelHistogram(channel, options) {
     }
 
     var data = this.data;
-    var result = index$12(Math.pow(2, Math.min(this.bitDepth, bitSlots)), 0);
+    var result = index$17(Math.pow(2, Math.min(this.bitDepth, bitSlots)), 0);
     if (useAlpha && this.alpha) {
         var alphaChannelDiff = this.channels - channel - 1;
 
@@ -13833,7 +13851,7 @@ function getColorHistogram(options = {}) {
     var bitShift = this.bitDepth - nbSlotsCheck;
 
     var data = this.data;
-    var result = index$12(Math.pow(8, nbSlotsCheck), 0);
+    var result = index$17(Math.pow(8, nbSlotsCheck), 0);
     var factor2 = Math.pow(2, nbSlotsCheck * 2);
     var factor1 = Math.pow(2, nbSlotsCheck);
 
@@ -13860,7 +13878,7 @@ function min$1() {
         bitDepth: [8, 16]
     });
 
-    var result = index$12(this.channels, +Infinity);
+    var result = index$17(this.channels, +Infinity);
 
     for (var i = 0; i < this.data.length; i += this.channels) {
         for (var c = 0; c < this.channels; c++) {
@@ -13883,7 +13901,7 @@ function max$1() {
         bitDepth: [8, 16]
     });
 
-    var result = index$12(this.channels, -Infinity);
+    var result = index$17(this.channels, -Infinity);
 
     for (var i = 0; i < this.data.length; i += this.channels) {
         for (var c = 0; c < this.channels; c++) {
@@ -13906,7 +13924,7 @@ function sum() {
         bitDepth: [8, 16]
     });
 
-    var result = index$12(this.channels, 0);
+    var result = index$17(this.channels, 0);
 
     for (var i = 0; i < this.data.length; i += this.channels) {
         for (var c = 0; c < this.channels; c++) {
@@ -14423,7 +14441,7 @@ function extend(Image) {
     Image.extendMethod('subtract', subtract, inPlace);
     Image.extendMethod('multiply', multiply, inPlace);
     Image.extendMethod('divide', divide, inPlace);
-    Image.extendMethod('hypotenuse', hypotenuse);
+    Image.extendMethod('hypotenuse', hypotenuse$1);
     Image.extendMethod('background', background);
     Image.extendMethod('flipX', flipX);
     Image.extendMethod('flipY', flipY);
@@ -16030,6 +16048,704 @@ var index$23 = function extend() {
 	return target;
 };
 
+var twoProduct_1 = twoProduct;
+
+var SPLITTER = +(Math.pow(2, 27) + 1.0);
+
+function twoProduct(a, b, result) {
+  var x = a * b;
+
+  var c = SPLITTER * a;
+  var abig = c - a;
+  var ahi = c - abig;
+  var alo = a - ahi;
+
+  var d = SPLITTER * b;
+  var bbig = d - b;
+  var bhi = d - bbig;
+  var blo = b - bhi;
+
+  var err1 = x - (ahi * bhi);
+  var err2 = err1 - (alo * bhi);
+  var err3 = err2 - (ahi * blo);
+
+  var y = alo * blo - err3;
+
+  if(result) {
+    result[0] = y;
+    result[1] = x;
+    return result
+  }
+
+  return [ y, x ]
+}
+
+var robustSum = linearExpansionSum;
+
+//Easy case: Add two scalars
+function scalarScalar(a, b) {
+  var x = a + b;
+  var bv = x - a;
+  var av = x - bv;
+  var br = b - bv;
+  var ar = a - av;
+  var y = ar + br;
+  if(y) {
+    return [y, x]
+  }
+  return [x]
+}
+
+function linearExpansionSum(e, f) {
+  var ne = e.length|0;
+  var nf = f.length|0;
+  if(ne === 1 && nf === 1) {
+    return scalarScalar(e[0], f[0])
+  }
+  var n = ne + nf;
+  var g = new Array(n);
+  var count = 0;
+  var eptr = 0;
+  var fptr = 0;
+  var abs = Math.abs;
+  var ei = e[eptr];
+  var ea = abs(ei);
+  var fi = f[fptr];
+  var fa = abs(fi);
+  var a, b;
+  if(ea < fa) {
+    b = ei;
+    eptr += 1;
+    if(eptr < ne) {
+      ei = e[eptr];
+      ea = abs(ei);
+    }
+  } else {
+    b = fi;
+    fptr += 1;
+    if(fptr < nf) {
+      fi = f[fptr];
+      fa = abs(fi);
+    }
+  }
+  if((eptr < ne && ea < fa) || (fptr >= nf)) {
+    a = ei;
+    eptr += 1;
+    if(eptr < ne) {
+      ei = e[eptr];
+      ea = abs(ei);
+    }
+  } else {
+    a = fi;
+    fptr += 1;
+    if(fptr < nf) {
+      fi = f[fptr];
+      fa = abs(fi);
+    }
+  }
+  var x = a + b;
+  var bv = x - a;
+  var y = b - bv;
+  var q0 = y;
+  var q1 = x;
+  var _x, _bv, _av, _br, _ar;
+  while(eptr < ne && fptr < nf) {
+    if(ea < fa) {
+      a = ei;
+      eptr += 1;
+      if(eptr < ne) {
+        ei = e[eptr];
+        ea = abs(ei);
+      }
+    } else {
+      a = fi;
+      fptr += 1;
+      if(fptr < nf) {
+        fi = f[fptr];
+        fa = abs(fi);
+      }
+    }
+    b = q0;
+    x = a + b;
+    bv = x - a;
+    y = b - bv;
+    if(y) {
+      g[count++] = y;
+    }
+    _x = q1 + x;
+    _bv = _x - q1;
+    _av = _x - _bv;
+    _br = x - _bv;
+    _ar = q1 - _av;
+    q0 = _ar + _br;
+    q1 = _x;
+  }
+  while(eptr < ne) {
+    a = ei;
+    b = q0;
+    x = a + b;
+    bv = x - a;
+    y = b - bv;
+    if(y) {
+      g[count++] = y;
+    }
+    _x = q1 + x;
+    _bv = _x - q1;
+    _av = _x - _bv;
+    _br = x - _bv;
+    _ar = q1 - _av;
+    q0 = _ar + _br;
+    q1 = _x;
+    eptr += 1;
+    if(eptr < ne) {
+      ei = e[eptr];
+    }
+  }
+  while(fptr < nf) {
+    a = fi;
+    b = q0;
+    x = a + b;
+    bv = x - a;
+    y = b - bv;
+    if(y) {
+      g[count++] = y;
+    } 
+    _x = q1 + x;
+    _bv = _x - q1;
+    _av = _x - _bv;
+    _br = x - _bv;
+    _ar = q1 - _av;
+    q0 = _ar + _br;
+    q1 = _x;
+    fptr += 1;
+    if(fptr < nf) {
+      fi = f[fptr];
+    }
+  }
+  if(q0) {
+    g[count++] = q0;
+  }
+  if(q1) {
+    g[count++] = q1;
+  }
+  if(!count) {
+    g[count++] = 0.0;  
+  }
+  g.length = count;
+  return g
+}
+
+var twoSum = fastTwoSum;
+
+function fastTwoSum(a, b, result) {
+	var x = a + b;
+	var bv = x - a;
+	var av = x - bv;
+	var br = b - bv;
+	var ar = a - av;
+	if(result) {
+		result[0] = ar + br;
+		result[1] = x;
+		return result
+	}
+	return [ar+br, x]
+}
+
+var robustScale = scaleLinearExpansion;
+
+function scaleLinearExpansion(e, scale) {
+  var n = e.length;
+  if(n === 1) {
+    var ts = twoProduct_1(e[0], scale);
+    if(ts[0]) {
+      return ts
+    }
+    return [ ts[1] ]
+  }
+  var g = new Array(2 * n);
+  var q = [0.1, 0.1];
+  var t = [0.1, 0.1];
+  var count = 0;
+  twoProduct_1(e[0], scale, q);
+  if(q[0]) {
+    g[count++] = q[0];
+  }
+  for(var i=1; i<n; ++i) {
+    twoProduct_1(e[i], scale, t);
+    var pq = q[1];
+    twoSum(pq, t[0], q);
+    if(q[0]) {
+      g[count++] = q[0];
+    }
+    var a = t[1];
+    var b = q[1];
+    var x = a + b;
+    var bv = x - a;
+    var y = b - bv;
+    q[1] = x;
+    if(y) {
+      g[count++] = y;
+    }
+  }
+  if(q[1]) {
+    g[count++] = q[1];
+  }
+  if(count === 0) {
+    g[count++] = 0.0;
+  }
+  g.length = count;
+  return g
+}
+
+var robustDiff = robustSubtract;
+
+//Easy case: Add two scalars
+function scalarScalar$1(a, b) {
+  var x = a + b;
+  var bv = x - a;
+  var av = x - bv;
+  var br = b - bv;
+  var ar = a - av;
+  var y = ar + br;
+  if(y) {
+    return [y, x]
+  }
+  return [x]
+}
+
+function robustSubtract(e, f) {
+  var ne = e.length|0;
+  var nf = f.length|0;
+  if(ne === 1 && nf === 1) {
+    return scalarScalar$1(e[0], -f[0])
+  }
+  var n = ne + nf;
+  var g = new Array(n);
+  var count = 0;
+  var eptr = 0;
+  var fptr = 0;
+  var abs = Math.abs;
+  var ei = e[eptr];
+  var ea = abs(ei);
+  var fi = -f[fptr];
+  var fa = abs(fi);
+  var a, b;
+  if(ea < fa) {
+    b = ei;
+    eptr += 1;
+    if(eptr < ne) {
+      ei = e[eptr];
+      ea = abs(ei);
+    }
+  } else {
+    b = fi;
+    fptr += 1;
+    if(fptr < nf) {
+      fi = -f[fptr];
+      fa = abs(fi);
+    }
+  }
+  if((eptr < ne && ea < fa) || (fptr >= nf)) {
+    a = ei;
+    eptr += 1;
+    if(eptr < ne) {
+      ei = e[eptr];
+      ea = abs(ei);
+    }
+  } else {
+    a = fi;
+    fptr += 1;
+    if(fptr < nf) {
+      fi = -f[fptr];
+      fa = abs(fi);
+    }
+  }
+  var x = a + b;
+  var bv = x - a;
+  var y = b - bv;
+  var q0 = y;
+  var q1 = x;
+  var _x, _bv, _av, _br, _ar;
+  while(eptr < ne && fptr < nf) {
+    if(ea < fa) {
+      a = ei;
+      eptr += 1;
+      if(eptr < ne) {
+        ei = e[eptr];
+        ea = abs(ei);
+      }
+    } else {
+      a = fi;
+      fptr += 1;
+      if(fptr < nf) {
+        fi = -f[fptr];
+        fa = abs(fi);
+      }
+    }
+    b = q0;
+    x = a + b;
+    bv = x - a;
+    y = b - bv;
+    if(y) {
+      g[count++] = y;
+    }
+    _x = q1 + x;
+    _bv = _x - q1;
+    _av = _x - _bv;
+    _br = x - _bv;
+    _ar = q1 - _av;
+    q0 = _ar + _br;
+    q1 = _x;
+  }
+  while(eptr < ne) {
+    a = ei;
+    b = q0;
+    x = a + b;
+    bv = x - a;
+    y = b - bv;
+    if(y) {
+      g[count++] = y;
+    }
+    _x = q1 + x;
+    _bv = _x - q1;
+    _av = _x - _bv;
+    _br = x - _bv;
+    _ar = q1 - _av;
+    q0 = _ar + _br;
+    q1 = _x;
+    eptr += 1;
+    if(eptr < ne) {
+      ei = e[eptr];
+    }
+  }
+  while(fptr < nf) {
+    a = fi;
+    b = q0;
+    x = a + b;
+    bv = x - a;
+    y = b - bv;
+    if(y) {
+      g[count++] = y;
+    } 
+    _x = q1 + x;
+    _bv = _x - q1;
+    _av = _x - _bv;
+    _br = x - _bv;
+    _ar = q1 - _av;
+    q0 = _ar + _br;
+    q1 = _x;
+    fptr += 1;
+    if(fptr < nf) {
+      fi = -f[fptr];
+    }
+  }
+  if(q0) {
+    g[count++] = q0;
+  }
+  if(q1) {
+    g[count++] = q1;
+  }
+  if(!count) {
+    g[count++] = 0.0;  
+  }
+  g.length = count;
+  return g
+}
+
+var orientation_1 = createCommonjsModule(function (module) {
+"use strict";
+
+
+
+
+
+
+var NUM_EXPAND = 5;
+
+var EPSILON     = 1.1102230246251565e-16;
+var ERRBOUND3   = (3.0 + 16.0 * EPSILON) * EPSILON;
+var ERRBOUND4   = (7.0 + 56.0 * EPSILON) * EPSILON;
+
+function cofactor(m, c) {
+  var result = new Array(m.length-1);
+  for(var i=1; i<m.length; ++i) {
+    var r = result[i-1] = new Array(m.length-1);
+    for(var j=0,k=0; j<m.length; ++j) {
+      if(j === c) {
+        continue
+      }
+      r[k++] = m[i][j];
+    }
+  }
+  return result
+}
+
+function matrix(n) {
+  var result = new Array(n);
+  for(var i=0; i<n; ++i) {
+    result[i] = new Array(n);
+    for(var j=0; j<n; ++j) {
+      result[i][j] = ["m", j, "[", (n-i-1), "]"].join("");
+    }
+  }
+  return result
+}
+
+function sign(n) {
+  if(n & 1) {
+    return "-"
+  }
+  return ""
+}
+
+function generateSum(expr) {
+  if(expr.length === 1) {
+    return expr[0]
+  } else if(expr.length === 2) {
+    return ["sum(", expr[0], ",", expr[1], ")"].join("")
+  } else {
+    var m = expr.length>>1;
+    return ["sum(", generateSum(expr.slice(0, m)), ",", generateSum(expr.slice(m)), ")"].join("")
+  }
+}
+
+function determinant(m) {
+  if(m.length === 2) {
+    return [["sum(prod(", m[0][0], ",", m[1][1], "),prod(-", m[0][1], ",", m[1][0], "))"].join("")]
+  } else {
+    var expr = [];
+    for(var i=0; i<m.length; ++i) {
+      expr.push(["scale(", generateSum(determinant(cofactor(m, i))), ",", sign(i), m[0][i], ")"].join(""));
+    }
+    return expr
+  }
+}
+
+function orientation(n) {
+  var pos = [];
+  var neg = [];
+  var m = matrix(n);
+  var args = [];
+  for(var i=0; i<n; ++i) {
+    if((i&1)===0) {
+      pos.push.apply(pos, determinant(cofactor(m, i)));
+    } else {
+      neg.push.apply(neg, determinant(cofactor(m, i)));
+    }
+    args.push("m" + i);
+  }
+  var posExpr = generateSum(pos);
+  var negExpr = generateSum(neg);
+  var funcName = "orientation" + n + "Exact";
+  var code = ["function ", funcName, "(", args.join(), "){var p=", posExpr, ",n=", negExpr, ",d=sub(p,n);\
+return d[d.length-1];};return ", funcName].join("");
+  var proc = new Function("sum", "prod", "scale", "sub", code);
+  return proc(robustSum, twoProduct_1, robustScale, robustDiff)
+}
+
+var orientation3Exact = orientation(3);
+var orientation4Exact = orientation(4);
+
+var CACHED = [
+  function orientation0() { return 0 },
+  function orientation1() { return 0 },
+  function orientation2(a, b) { 
+    return b[0] - a[0]
+  },
+  function orientation3(a, b, c) {
+    var l = (a[1] - c[1]) * (b[0] - c[0]);
+    var r = (a[0] - c[0]) * (b[1] - c[1]);
+    var det = l - r;
+    var s;
+    if(l > 0) {
+      if(r <= 0) {
+        return det
+      } else {
+        s = l + r;
+      }
+    } else if(l < 0) {
+      if(r >= 0) {
+        return det
+      } else {
+        s = -(l + r);
+      }
+    } else {
+      return det
+    }
+    var tol = ERRBOUND3 * s;
+    if(det >= tol || det <= -tol) {
+      return det
+    }
+    return orientation3Exact(a, b, c)
+  },
+  function orientation4(a,b,c,d) {
+    var adx = a[0] - d[0];
+    var bdx = b[0] - d[0];
+    var cdx = c[0] - d[0];
+    var ady = a[1] - d[1];
+    var bdy = b[1] - d[1];
+    var cdy = c[1] - d[1];
+    var adz = a[2] - d[2];
+    var bdz = b[2] - d[2];
+    var cdz = c[2] - d[2];
+    var bdxcdy = bdx * cdy;
+    var cdxbdy = cdx * bdy;
+    var cdxady = cdx * ady;
+    var adxcdy = adx * cdy;
+    var adxbdy = adx * bdy;
+    var bdxady = bdx * ady;
+    var det = adz * (bdxcdy - cdxbdy) 
+            + bdz * (cdxady - adxcdy)
+            + cdz * (adxbdy - bdxady);
+    var permanent = (Math.abs(bdxcdy) + Math.abs(cdxbdy)) * Math.abs(adz)
+                  + (Math.abs(cdxady) + Math.abs(adxcdy)) * Math.abs(bdz)
+                  + (Math.abs(adxbdy) + Math.abs(bdxady)) * Math.abs(cdz);
+    var tol = ERRBOUND4 * permanent;
+    if ((det > tol) || (-det > tol)) {
+      return det
+    }
+    return orientation4Exact(a,b,c,d)
+  }
+];
+
+function slowOrient(args) {
+  var proc = CACHED[args.length];
+  if(!proc) {
+    proc = CACHED[args.length] = orientation(args.length);
+  }
+  return proc.apply(undefined, args)
+}
+
+function generateOrientationProc() {
+  while(CACHED.length <= NUM_EXPAND) {
+    CACHED.push(orientation(CACHED.length));
+  }
+  var args = [];
+  var procArgs = ["slow"];
+  for(var i=0; i<=NUM_EXPAND; ++i) {
+    args.push("a" + i);
+    procArgs.push("o" + i);
+  }
+  var code = [
+    "function getOrientation(", args.join(), "){switch(arguments.length){case 0:case 1:return 0;"
+  ];
+  for(var i=2; i<=NUM_EXPAND; ++i) {
+    code.push("case ", i, ":return o", i, "(", args.slice(0, i).join(), ");");
+  }
+  code.push("}var s=new Array(arguments.length);for(var i=0;i<arguments.length;++i){s[i]=arguments[i]};return slow(s);}return getOrientation");
+  procArgs.push(code.join(""));
+
+  var proc = Function.apply(undefined, procArgs);
+  module.exports = proc.apply(undefined, [slowOrient].concat(CACHED));
+  for(var i=0; i<=NUM_EXPAND; ++i) {
+    module.exports[i] = CACHED[i];
+  }
+}
+
+generateOrientationProc();
+});
+
+var robustPnp = robustPointInPolygon;
+
+
+
+function robustPointInPolygon(vs, point) {
+  var x = point[0];
+  var y = point[1];
+  var n = vs.length;
+  var inside = 1;
+  var lim = n;
+  for(var i = 0, j = n-1; i<lim; j=i++) {
+    var a = vs[i];
+    var b = vs[j];
+    var yi = a[1];
+    var yj = b[1];
+    if(yj < yi) {
+      if(yj < y && y < yi) {
+        var s = orientation_1(a, b, point);
+        if(s === 0) {
+          return 0
+        } else {
+          inside ^= (0 < s)|0;
+        }
+      } else if(y === yi) {
+        var c = vs[(i+1)%n];
+        var yk = c[1];
+        if(yi < yk) {
+          var s = orientation_1(a, b, point);
+          if(s === 0) {
+            return 0
+          } else {
+            inside ^= (0 < s)|0;
+          }
+        }
+      }
+    } else if(yi < yj) {
+      if(yi < y && y < yj) {
+        var s = orientation_1(a, b, point);
+        if(s === 0) {
+          return 0
+        } else {
+          inside ^= (s < 0)|0;
+        }
+      } else if(y === yi) {
+        var c = vs[(i+1)%n];
+        var yk = c[1];
+        if(yk < yi) {
+          var s = orientation_1(a, b, point);
+          if(s === 0) {
+            return 0
+          } else {
+            inside ^= (s < 0)|0;
+          }
+        }
+      }
+    } else if(y === yi) {
+      var x0 = Math.min(a[0], b[0]);
+      var x1 = Math.max(a[0], b[0]);
+      if(i === 0) {
+        while(j>0) {
+          var k = (j+n-1)%n;
+          var p = vs[k];
+          if(p[1] !== y) {
+            break
+          }
+          var px = p[0];
+          x0 = Math.min(x0, px);
+          x1 = Math.max(x1, px);
+          j = k;
+        }
+        if(j === 0) {
+          if(x0 <= x && x <= x1) {
+            return 0
+          }
+          return 1 
+        }
+        lim = j+1;
+      }
+      var y0 = vs[(j+n-1)%n][1];
+      while(i+1<lim) {
+        var p = vs[i+1];
+        if(p[1] !== y) {
+          break
+        }
+        var px = p[0];
+        x0 = Math.min(x0, px);
+        x1 = Math.max(x1, px);
+        i += 1;
+      }
+      if(x0 <= x && x <= x1) {
+        return 0
+      }
+      var y1 = vs[(i+1)%n][1];
+      if(x < x0 && (y0 < y !== y1 < y)) {
+        inside ^= 1;
+      }
+    }
+  }
+  return 2 * inside - 1
+}
+
 /**
  * Class to manage Region Of Interests
  * @class Roi
@@ -16053,7 +16769,7 @@ class Roi {
      * Returns a binary image (mask) for the corresponding ROI
      * @param {object} [options]
      * @param {number} [options.scale=1] - Scaling factor to apply to the mask
-     * @param {string} [options.kind='normal'] - 'contour', 'box', 'filled', 'center' or 'normal'
+     * @param {string} [options.kind='normal'] - 'contour', 'box', 'filled', 'center', 'hull' or 'normal'
      * @return {Image} - Returns a mask (1 bit Image)
      */
     getMask(options = {}) {
@@ -16075,6 +16791,9 @@ class Roi {
                 break;
             case 'center':
                 mask = this.centerMask;
+                break;
+            case 'hull':
+                mask = this.hullMask;
                 break;
             default:
                 mask = this.mask;
@@ -16365,6 +17084,29 @@ class Roi {
         img.position = [this.minX + this.center[0] - 1, this.minY + this.center[1] - 1];
 
         return this.computed.centerMask = img;
+    }
+
+    get hullMask() {
+        if (this.computed.hullMask) {
+            return this.computed.hullMask;
+        }
+
+        var img = new Image$2(this.width, this.height, {
+            kind: BINARY,
+            position: [this.minX, this.minY],
+            parent: this.map.parent
+        });
+
+        var hull = this.mask.monotoneChainConvexHull();
+        for (var x = 0; x < this.width; x++) {
+            for (var y = 0; y < this.height; y++) {
+                if (robustPnp(hull, [x, y]) !== 1) {
+                    img.setBitXY(x, y);
+                }
+            }
+        }
+
+        return this.computed.hullMask = img;
     }
 
     get points() {
