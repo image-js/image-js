@@ -28,4 +28,30 @@ describe('Monotone Chain Convex Hull', function () {
             [3, 1]
         ]);
     });
+
+    it('should return the convex hull for one point', function () {
+        let image = new Image(1, 1,
+            [
+                0b10000000
+            ],
+            {kind: 'BINARY'}
+        );
+
+        image.monotoneChainConvexHull().should.eql([]);
+    });
+
+    it('should return the convex hull for two points', function () {
+        let image = new Image(1, 2,
+            [
+                0b11000000
+            ],
+            {kind: 'BINARY'}
+        );
+
+        image.monotoneChainConvexHull().should.eql([
+            [0, 0],
+            [0, 1]
+        ]);
+    });
+
 });
