@@ -21,7 +21,12 @@ export default function minimalBoundingRectangle(options = {}) {
         originalPoints = convexHullFunction.call(this)
     } = options;
 
+    if (originalPoints.length===1) {
+        return [ originalPoints[0], originalPoints[0], originalPoints[0], originalPoints[0]]
+    }
+
     const p = new Array(originalPoints.length);
+
 
     let minSurface = +Infinity;
     let minSurfaceAngle = 0;

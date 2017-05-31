@@ -102,5 +102,20 @@ describe('Minimal bounding rectangle', function () {
         });
         result.should.approximatelyDeep([[-1, 2], [1, 0], [3.5, 2.5], [1.5, 4.5]], 1e-6);
     });
+
+    it('should return the small bouding rectangle for one point', function () {
+        const result = minimalBoundingRectangle({
+            originalPoints: [[2, 2]]
+        });
+        result.should.approximatelyDeep([[2, 2], [2, 2], [2, 2], [2, 2]], 1e-6);
+    });
+
+    it('should return the small bouding rectangle for 2 points', function () {
+        const result = minimalBoundingRectangle({
+            originalPoints: [[2, 2], [3, 3]]
+        });
+        result.should.approximatelyDeep([[2, 2], [3, 3], [3, 3], [2, 2]], 1e-6);
+    });
+
 });
 
