@@ -56,6 +56,7 @@ import getClosestCommonParent from './utility/getClosestCommonParent';
 import paintMasks from './operator/paintMasks';
 import paintLabels from './operator/paintLabels';
 import paintPoints from './operator/paintPoints';
+import paintPolygon from './operator/paintPolygon';
 import paintPolyline from './operator/paintPolyline';
 import extract from './operator/extract';
 import convolution from './operator/convolution';
@@ -142,6 +143,7 @@ export default function extend(Image) {
     Image.extendMethod('paintLabels', paintLabels, inPlace);
     Image.extendMethod('paintPoints', paintPoints, inPlace);
     Image.extendMethod('paintPolyline', paintPolyline, inPlace);
+    Image.extendMethod('paintPolygon', paintPolygon, inPlace);
     Image.extendMethod('extract', extract);
     Image.extendMethod('convolution', convolution);
     Image.extendMethod('convolutionFft', convolutionFft);
