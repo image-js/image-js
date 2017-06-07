@@ -14375,6 +14375,10 @@ function minimalBoundingRectangle(options = {}) {
         originalPoints = _options$originalPoin === undefined ? monotoneChainConvexHull.call(this) : _options$originalPoin;
 
 
+    if (originalPoints.length === 0) {
+        return [];
+    }
+
     if (originalPoints.length === 1) {
         return [originalPoints[0], originalPoints[0], originalPoints[0], originalPoints[0]];
     }
