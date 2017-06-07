@@ -1,7 +1,7 @@
 import {Image} from 'test/common';
 import 'should';
 
-describe('we check paintPolyline', function () {
+describe('we check paintPolygon', function () {
     it('should yield the painted image with a line', function () {
         let size = 5;
         let data = new Array(size * size * 3);
@@ -11,7 +11,7 @@ describe('we check paintPolyline', function () {
         let image = new Image(size, size, data, {kind: 'RGB'});
 
         let points = [[1, 1], [3, 3]];
-        image.paintPolyline(points);
+        image.paintPolygon(points);
 
         let painted = [
             0, 0, 0, 0, 0,
@@ -35,12 +35,12 @@ describe('we check paintPolyline', function () {
         let image = new Image(size, size, data, {kind: 'RGB'});
 
         let points = [[1, 1], [4, 1], [4, 3], [1, 3]];
-        image.paintPolyline(points);
+        image.paintPolygon(points);
 
         let painted = [
             0, 0, 0, 0, 0,
             0, 1, 1, 1, 1,
-            0, 0, 0, 0, 1,
+            0, 1, 0, 0, 1,
             0, 1, 1, 1, 1,
             0, 0, 0, 0, 0
         ];
@@ -59,11 +59,11 @@ describe('we check paintPolyline', function () {
         let image = new Image(size, size, data, {kind: 'GREY'});
 
         let points = [[2, 0], [4, 2], [0, 2]];
-        image.paintPolyline(points);
+        image.paintPolygon(points);
 
         let painted = [
             0, 0, 1, 0, 0,
-            0, 0, 0, 1, 0,
+            0, 1, 0, 1, 0,
             1, 1, 1, 1, 1,
             0, 0, 0, 0, 0,
             0, 0, 0, 0, 0

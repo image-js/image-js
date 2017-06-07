@@ -1,16 +1,18 @@
 
 /**
- * Paint pixels on the current image.
+ * Paint a polyline defined by an array of points.
  * @memberof Image
  * @instance
  * @param {Array<Array<number>>} points - Array of [x,y] points
  * @param {object} [options]
  * @param {Array<number>} [options.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
+ * @param {boolean} [options.closed=false] - Close the polyline.
  * @return {this} The original painted image
  */
 export default function paintPolyline(points, options = {}) {
     let {
-        color = [this.maxValue, 0, 0]
+        color = [this.maxValue, 0, 0],
+        closed = false
     } = options;
 
     this.checkProcessable('paintPoints', {
@@ -19,7 +21,7 @@ export default function paintPolyline(points, options = {}) {
 
     let numberChannels = Math.min(this.channels, color.length);
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < (points.length - 1 + closed); i++) {
         let from = points[i];
         let to = points[(i + 1) % points.length];
 

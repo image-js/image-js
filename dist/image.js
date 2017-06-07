@@ -644,10 +644,10 @@ function medianFilter(options = {}) {
                         kernel[n++] = this.data[_index];
                     }
                 }
-                var index = (y * this.width + x) * this.channels + c;
+                var index$$1 = (y * this.width + x) * this.channels + c;
                 var newValue = kernel.sort(asc)[middle];
 
-                newImage.data[index] = newValue;
+                newImage.data[index$$1] = newValue;
             }
         }
     }
@@ -13384,7 +13384,7 @@ function paintPoints(points, options = {}) {
 }
 
 /**
- * Paint pixels on the current image.
+ * Paint a polygon defined by an array of points.
  * @memberof Image
  * @instance
  * @param {Array<Array<number>>} points - Array of [x,y] points
@@ -13392,9 +13392,27 @@ function paintPoints(points, options = {}) {
  * @param {Array<number>} [options.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
  * @return {this} The original painted image
  */
+function paintPolygon(points, options = {}) {
+  options.closed = true;
+
+  return this.paintPolyline(points, options);
+}
+
+/**
+ * Paint a polyline defined by an array of points.
+ * @memberof Image
+ * @instance
+ * @param {Array<Array<number>>} points - Array of [x,y] points
+ * @param {object} [options]
+ * @param {Array<number>} [options.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
+ * @param {boolean} [options.closed=false] - Close the polyline.
+ * @return {this} The original painted image
+ */
 function paintPolyline(points, options = {}) {
     var _options$color = options.color,
-        color = _options$color === undefined ? [this.maxValue, 0, 0] : _options$color;
+        color = _options$color === undefined ? [this.maxValue, 0, 0] : _options$color,
+        _options$closed = options.closed,
+        closed = _options$closed === undefined ? false : _options$closed;
 
 
     this.checkProcessable('paintPoints', {
@@ -13403,7 +13421,7 @@ function paintPolyline(points, options = {}) {
 
     var numberChannels = Math.min(this.channels, color.length);
 
-    for (var i = 0; i < points.length; i++) {
+    for (var i = 0; i < points.length - 1 + closed; i++) {
         var from = points[i];
         var to = points[(i + 1) % points.length];
 
@@ -14357,6 +14375,10 @@ function minimalBoundingRectangle(options = {}) {
         originalPoints = _options$originalPoin === undefined ? monotoneChainConvexHull.call(this) : _options$originalPoin;
 
 
+    if (originalPoints.length === 1) {
+        return [originalPoints[0], originalPoints[0], originalPoints[0], originalPoints[0]];
+    }
+
     var p = new Array(originalPoints.length);
 
     var minSurface = +Infinity;
@@ -14487,6 +14509,7 @@ function extend(Image) {
     Image.extendMethod('paintLabels', paintLabels, inPlace);
     Image.extendMethod('paintPoints', paintPoints, inPlace);
     Image.extendMethod('paintPolyline', paintPolyline, inPlace);
+    Image.extendMethod('paintPolygon', paintPolygon, inPlace);
     Image.extendMethod('extract', extract);
     Image.extendMethod('convolution', convolution);
     Image.extendMethod('convolutionFft', convolutionFft);
@@ -26606,6 +26629,13 @@ var index$33 = input => {
 		return {
 			ext: 'mxf',
 			mime: 'application/mxf'
+		};
+	}
+
+	if (check([0x42, 0x4C, 0x45, 0x4E, 0x44, 0x45, 0x52])) {
+		return {
+			ext: 'blend',
+			mime: 'application/x-blender'
 		};
 	}
 
