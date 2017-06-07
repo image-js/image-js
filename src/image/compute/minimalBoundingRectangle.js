@@ -21,6 +21,11 @@ export default function minimalBoundingRectangle(options = {}) {
         originalPoints = convexHullFunction.call(this)
     } = options;
 
+
+    if (originalPoints.length === 0) {
+        return [];
+    }
+
     if (originalPoints.length === 1) {
         return [originalPoints[0], originalPoints[0], originalPoints[0], originalPoints[0]];
     }

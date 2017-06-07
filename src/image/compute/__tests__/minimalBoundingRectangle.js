@@ -110,6 +110,13 @@ describe('Minimal bounding rectangle', function () {
         result.should.approximatelyDeep([[2, 2], [2, 2], [2, 2], [2, 2]], 1e-6);
     });
 
+    it('should return the small bouding rectangle for nothing', function () {
+        const result = minimalBoundingRectangle({
+            originalPoints: []
+        });
+        result.should.approximatelyDeep([], 1e-6);
+    });
+
     it('should return the small bouding rectangle for 2 points', function () {
         const result = minimalBoundingRectangle({
             originalPoints: [[2, 2], [3, 3]]
