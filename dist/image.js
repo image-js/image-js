@@ -17472,7 +17472,6 @@ class RoiLayer {
                 var target = y * width + x;
                 if (data[target] !== 0) {
                     var _mapID = data[target];
-                    // console.log('---',mapID)
                     var roi = rois[_mapID];
                     if (x < roi.minX) {
                         roi.minX = x;
