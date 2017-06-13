@@ -7,10 +7,12 @@ describe('check color class', function () {
     });
     it('check getDistinctColors', function () {
         getDistinctColors(4).should.eql(
-            [[230, 0, 0],
-            [153, 255, 51],
-            [128, 255, 255],
-            [76, 0, 153]]
+            [
+                [230, 0, 0],
+                [153, 255, 51],
+                [128, 255, 255],
+                [76, 0, 153]
+            ]
         );
     });
 });

@@ -35,11 +35,11 @@ export default function moments(histogram, total) {
     cd = m0 * m2 - m1 * m1; //determinant of the matriz of hankel for moments 2x2
     c0 = (-m2 * m2 + m1 * m3) / cd;
     c1 = (m0 * -m3 + m2 * m1) / cd;
-//new two gray values where z0<z1
+    //new two gray values where z0<z1
     z0 = 0.5 * (-c1 - Math.sqrt(c1 * c1 - 4.0 * c0));
     z1 = 0.5 * (-c1 + Math.sqrt(c1 * c1 - 4.0 * c0));
     p0 = (z1 - m1) / (z1 - z0); /* Fraction of the object pixels in the target binary image (p0z0+p1z1=m1) */
-// The threshold is the gray-level closest to the p0-tile of the normalized histogram
+    // The threshold is the gray-level closest to the p0-tile of the normalized histogram
     for (let i = 0; i < histogramLength; i++) {
         sum += normalizedHistogram[i];
         if (sum > p0) {

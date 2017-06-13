@@ -61,7 +61,6 @@ export default class RoiLayer {
                 let target = y * width + x;
                 if (data[target] !== 0) {
                     const mapID = data[target];
-                   // console.log('---',mapID)
                     const roi = rois[mapID];
                     if (x < roi.minX) {
                         roi.minX = x;

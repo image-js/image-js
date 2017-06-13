@@ -23,7 +23,7 @@ export default function level(options = {}) {
         channels,
         min = this.min,
         max = this.max
-        } = options;
+    } = options;
 
     this.checkProcessable('level', {
         bitDepth: [8, 16]

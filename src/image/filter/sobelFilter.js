@@ -14,12 +14,12 @@ import {GRADIENT_X, GRADIENT_Y} from '../../util/kernels';
  */
 export default function sobelFilter(options = {}) {
     let {
-		kernelX = GRADIENT_X,
-		kernelY = GRADIENT_Y,
-		border = 'copy',
-		channels,
+        kernelX = GRADIENT_X,
+        kernelY = GRADIENT_Y,
+        border = 'copy',
+        channels,
         bitDepth = this.bitDepth
-	} = options;
+    } = options;
 
     this.checkProcessable('sobel', {
         bitDepth: [8, 16]

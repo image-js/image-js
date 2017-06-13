@@ -16,7 +16,7 @@ describe('check the cmyk transform', function () {
         newImage.bitDepth.should.equal(8);
 
         Array.from(newImage.data).should.eql(
-             [0, 0, 255, 155, 255, 0, 0, 155]
+            [0, 0, 255, 155, 255, 0, 0, 155]
         );
     });
 

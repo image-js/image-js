@@ -58,7 +58,7 @@ describe('check the gaussian filter', function () {
                 283, 283, 632, 800, 632, 283, 283
             ]
 
-         );
+        );
     });
 
 
