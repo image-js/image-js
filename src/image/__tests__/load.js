@@ -2,15 +2,15 @@ import {Image, load} from 'test/common';
 import Canvas from 'canvas';
 import 'should';
 
-describe('Image core', function () {
-    it('constructor defaults', function () {
+describe('Image core', () => {
+    it('constructor defaults', () => {
         let img = new Image();
         img.width.should.equal(1);
         img.height.should.equal(1);
         img.data.length.should.equal(4);
     });
 
-    it('invalid constructor use', function () {
+    it('invalid constructor use', () => {
         (function () {
             new Image(0, 0);
         }).should.throw(/width must be greater than 0/);
@@ -22,7 +22,26 @@ describe('Image core', function () {
         }).should.throw(/invalid image kind: BLABLA/);
     });
 
-    it('create from Canvas', function () {
+    it('construct with a kind', () => {
+        const img = new Image(1, 1, {kind: 'RGB'});
+        expect(img.data.length).toBe(3);
+    });
+
+    it('construct a 32bit image', () => {
+        const img = new Image(1, 1, {bitDepth: 32});
+        expect(img.bitDepth).toBe(32);
+        expect(img.data).toBeInstanceOf(Float32Array);
+        expect(img.maxValue).toBe(Number.MAX_VALUE);
+    });
+
+    it('wrong array passed to setData', () => {
+        const img = new Image(1, 1);
+        expect(() => {
+            img.setData([1])
+        }).toThrow('incorrect data size. Should be 4 and found 1');
+    });
+
+    it('create from Canvas', () => {
         let canvas = new Canvas(2, 2);
         let ctx = canvas.getContext('2d');
         ctx.fillStyle = 'red';
@@ -51,13 +70,22 @@ describe('Image core', function () {
         });
     });
 
-    it('should clone', function () {
-        return load('format/rgba32.png').then(function (img) {
-            let clone = img.clone();
-            clone.should.be.an.instanceOf(Image);
-            clone.should.not.be.equal(img);
-            clone.toDataURL().should.equal(img.toDataURL());
-        });
+    it('should clone', async () => {
+        const img = await load('format/rgba32.png');
+        const clone = img.clone();
+        clone.should.be.an.instanceOf(Image);
+        clone.should.not.be.equal(img);
+        clone.data.should.not.equal(img.data);
+        clone.toDataURL().should.equal(img.toDataURL());
+    });
+
+    it('should clone and keep same data', async () => {
+        const img = await load('format/rgba32.png');
+        const clone = img.clone({copyData: false});
+        clone.should.be.an.instanceOf(Image);
+        clone.should.not.be.equal(img);
+        clone.data.should.equal(img.data);
+        clone.toDataURL().should.equal(img.toDataURL());
     });
 
     it('isImage', function () {
