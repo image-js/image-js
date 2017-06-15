@@ -37,7 +37,7 @@ describe('Image core', () => {
     it('wrong array passed to setData', () => {
         const img = new Image(1, 1);
         expect(() => {
-            img.setData([1])
+            img.setData([1]);
         }).toThrow('incorrect data size. Should be 4 and found 1');
     });
 
