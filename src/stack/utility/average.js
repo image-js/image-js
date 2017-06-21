@@ -1,4 +1,4 @@
-import Image from '../../image/Image';
+import Image from '../../image/ImageClass';
 
 /**
  * @memberof Stack

@@ -1,7 +1,7 @@
 // based on https://bgrins.github.io/TinyColor/docs/tinycolor.html
 
 import {RGB, HSV} from '../model/model';
-import Image from '../Image';
+import Image from '../ImageClass';
 
 /**
  * Make a copy of the current image and convert the color model to HSV

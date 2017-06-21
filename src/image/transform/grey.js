@@ -1,4 +1,4 @@
-import Image from '../Image';
+import Image from '../ImageClass';
 import {RGB} from '../model/model';
 import {methods} from './greyAlgorithms';
 

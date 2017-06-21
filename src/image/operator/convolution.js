@@ -1,6 +1,6 @@
 import {direct, fft} from 'ml-matrix-convolution';
 
-import Image from '../Image';
+import Image from '../ImageClass';
 import {validateArrayOfChannels} from '../../util/channel';
 import {validateKernel} from '../../util/kernel';
 import convolutionSeparable from '../operator/convolutionSeparable';

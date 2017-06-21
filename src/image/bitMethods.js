@@ -1,5 +1,5 @@
 // those methods can only apply on binary images... but we will not lose time to check!
-let bitMethods = {
+const bitMethods = {
 
     /**
      * Set a specific pixel using XY coordinates from a binary image (mask)

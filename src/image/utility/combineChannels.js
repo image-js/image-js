@@ -1,4 +1,4 @@
-import Image from '../Image';
+import Image from '../ImageClass';
 
 /**
  * Create a new grey Image by combining the channels of the current image.

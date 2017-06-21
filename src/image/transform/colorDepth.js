@@ -1,4 +1,4 @@
-import Image from '../Image';
+import Image from '../ImageClass';
 
 /**
  * Change the image color depth.

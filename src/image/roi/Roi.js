@@ -1,6 +1,6 @@
 import robustPointInPolygon from 'robust-point-in-polygon';
 
-import Image from '../Image';
+import Image from '../ImageClass';
 import * as KindNames from '../kindNames';
 import Shape from '../../util/Shape';
 

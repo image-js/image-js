@@ -1,4 +1,4 @@
-import Image from '../../Image';
+import Image from '../../ImageClass';
 import {methods} from './maskAlgorithms';
 import {getThreshold} from '../../../util/converter';
 
