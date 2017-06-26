@@ -4,9 +4,11 @@ import {getImage} from './test-util';
 
 export {getImage, getHash} from './test-util';
 
-import {Image, Stack} from '../src/index-next';
+import Image from '../src/image/Image';
+import Stack from '../src/stack/Stack';
+import IJS from '../src/index';
 
-export {Image, Stack};
+export {Image, Stack, IJS};
 
 export function load(name) {
     return Image.load(getImage(name));

@@ -1,4 +1,4 @@
-import {Shape} from '../../index-next';
+import Shape from '../Shape';
 import 'should';
 
 describe('we check Shape class', function () {

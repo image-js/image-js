@@ -1,4 +1,4 @@
-import Image from '../ImageClass';
+import Image from '../Image';
 
 /**
  * Crops the image

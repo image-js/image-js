@@ -1,4 +1,4 @@
-import Image from '../image/ImageClass';
+import Image from '../image/Image';
 import isArray from 'is-array-type';
 
 export function checkNumberArray(value) {

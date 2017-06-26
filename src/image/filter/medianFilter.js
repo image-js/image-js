@@ -1,6 +1,6 @@
 import {validateArrayOfChannels} from '../../util/channel';
 import {asc as sortAsc} from 'num-sort';
-import Image from '../ImageClass';
+import Image from '../Image';
 
 /**
 * Each pixel of the image becomes the median of the neightbour

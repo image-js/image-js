@@ -1,4 +1,4 @@
-import Image from '../ImageClass';
+import Image from '../Image';
 
 /**
  * Extracts a part of an original image based on a mask. By default the mask may contain

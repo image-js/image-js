@@ -1,4 +1,4 @@
-import Image from './ImageClass';
+import Image from './Image';
 import {env} from './environment';
 
 let types = new Map();

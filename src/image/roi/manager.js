@@ -4,7 +4,7 @@ import fromMaxima from './creator/fromMaxima';
 import fromWaterShed from './creator/fromWaterShed';
 import fromPoints from './creator/fromPoints';
 import extendObject from 'extend';
-import Image from '../ImageClass';
+import Image from '../Image';
 import RoiMap from './RoiMap';
 import RoiLayer from './RoiLayer';
 

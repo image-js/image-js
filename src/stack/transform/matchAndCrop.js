@@ -1,4 +1,4 @@
-import Stack from '../StackClass';
+import Stack from '../Stack';
 
 // TODO this code seems buggy if it is not 0,0
 /**

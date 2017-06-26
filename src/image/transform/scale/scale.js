@@ -1,4 +1,4 @@
-import Image from '../../ImageClass';
+import Image from '../../Image';
 
 import nearestNeighbor from './nearestNeighbor';
 import {factorDimensions} from '../../../util/converter';
