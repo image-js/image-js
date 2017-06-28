@@ -7661,7 +7661,450 @@ function divide(value, options = {}) {
     return this;
 }
 
-var maybeToPrecision$1 = function maybeToPrecision(value, digits) {
+function maybeToPrecision(value, digits) {
+    if (value < 0) {
+        value = 0 - value;
+        if (typeof digits === 'number') {
+            return '- ' + value.toPrecision(digits);
+        } else {
+            return '- ' + value.toString();
+        }
+    } else {
+        if (typeof digits === 'number') {
+            return value.toPrecision(digits);
+        } else {
+            return value.toString();
+        }
+    }
+}
+
+function checkArraySize(x, y) {
+    if (!Array.isArray(x) || !Array.isArray(y)) {
+        throw new TypeError('x and y must be arrays');
+    }
+    if (x.length !== y.length) {
+        throw new RangeError('x and y arrays must have the same length');
+    }
+}
+
+class BaseRegression {
+    constructor() {
+        if (new.target === BaseRegression) {
+            throw new Error('BaseRegression must be subclassed');
+        }
+    }
+
+    predict(x) {
+        if (typeof x === 'number') {
+            return this._predict(x);
+        } else if (Array.isArray(x)) {
+            const y = new Array(x.length);
+            for (let i = 0; i < x.length; i++) {
+                y[i] = this._predict(x[i]);
+            }
+            return y;
+        } else {
+            throw new TypeError('x must be a number or array');
+        }
+    }
+
+    _predict() {
+        throw new Error('_predict must be implemented');
+    }
+
+    train() {
+        //Do nothing for this package
+    }
+
+    toString() {
+        return '';
+    }
+
+    toLaTeX() {
+        return '';
+    }
+
+    /**
+     * Return the correlation coefficient of determination (r) and chi-square.
+     * @param {Array<number>} x
+     * @param {Array<number>} y
+     * @return {object}
+     */
+    score(x, y) {
+        if (!Array.isArray(x) || !Array.isArray(y) || x.length !== y.length) {
+            throw new Error('x and y must be arrays of the same length');
+        }
+
+        const n = x.length;
+        const y2 = new Array(n);
+        for (let i = 0; i < n; i++) {
+            y2[i] = this._predict(x[i]);
+        }
+
+        let xSum = 0;
+        let ySum = 0;
+        let chi2 = 0;
+        let rmsd = 0;
+        let xSquared = 0;
+        let ySquared = 0;
+        let xY = 0;
+        for (let i = 0; i < n; i++) {
+            xSum += y2[i];
+            ySum += y[i];
+            xSquared += y2[i] * y2[i];
+            ySquared += y[i] * y[i];
+            xY += y2[i] * y[i];
+            if (y[i] !== 0) {
+                chi2 += (y[i] - y2[i]) * (y[i] - y2[i]) / y[i];
+            }
+            rmsd = (y[i] - y2[i]) * (y[i] - y2[i]);
+        }
+
+        const r = (n * xY - xSum * ySum) / Math.sqrt((n * xSquared - xSum * xSum) * (n * ySquared - ySum * ySum));
+
+        return {
+            r: r,
+            r2: r * r,
+            chi2: chi2,
+            rmsd: rmsd * rmsd / n
+        };
+    }
+}
+
+class SimpleLinearRegression extends BaseRegression {
+    constructor(x, y) {
+        super();
+        if (x === true) {
+            this.slope = y.slope;
+            this.intercept = y.intercept;
+            this.coefficients = [y.intercept, y.slope];
+        } else {
+            checkArraySize(x, y);
+            regress(this, x, y);
+        }
+    }
+
+    toJSON() {
+        return {
+            name: 'simpleLinearRegression',
+            slope: this.slope,
+            intercept: this.intercept
+        };
+    }
+
+    _predict(x) {
+        return this.slope * x + this.intercept;
+    }
+
+    computeX(y) {
+        return (y - this.intercept) / this.slope;
+    }
+
+    toString(precision) {
+        let result = 'f(x) = ';
+        if (this.slope !== 0) {
+            const xFactor = maybeToPrecision(this.slope, precision);
+            result += (xFactor === '1' ? '' : xFactor + ' * ') + 'x';
+            if (this.intercept) {
+                const absIntercept = Math.abs(this.intercept);
+                const operator = absIntercept === this.intercept ? '+' : '-';
+                result += ` ${operator} ${maybeToPrecision(absIntercept, precision)}`;
+            }
+        } else {
+            result += maybeToPrecision(this.intercept, precision);
+        }
+        return result;
+    }
+
+    toLaTeX(precision) {
+        return this.toString(precision);
+    }
+
+    static load(json) {
+        if (json.name !== 'simpleLinearRegression') {
+            throw new TypeError('not a SLR model');
+        }
+        return new SimpleLinearRegression(true, json);
+    }
+}
+
+function regress(slr, x, y) {
+    const n = x.length;
+    let xSum = 0;
+    let ySum = 0;
+
+    let xSquared = 0;
+    let xY = 0;
+
+    for (let i = 0; i < n; i++) {
+        xSum += x[i];
+        ySum += y[i];
+        xSquared += x[i] * x[i];
+        xY += x[i] * y[i];
+    }
+
+    const numerator = (n * xY - xSum * ySum);
+    slr.slope = numerator / (n * xSquared - xSum * xSum);
+    slr.intercept = (1 / n) * ySum - slr.slope * (1 / n) * xSum;
+    slr.coefficients = [slr.intercept, slr.slope];
+}
+
+
+var index$20 = Object.freeze({
+	default: SimpleLinearRegression
+});
+
+class PolynomialRegression extends BaseRegression {
+    constructor(x, y, degree) {
+        super();
+        if (x === true) {
+            this.degree = y.degree;
+            this.powers = y.powers;
+            this.coefficients = y.coefficients;
+        } else {
+            checkArraySize(x, y);
+            regress$1(this, x, y, degree);
+        }
+    }
+
+    _predict(x) {
+        let y = 0;
+        for (let k = 0; k < this.powers.length; k++) {
+            y += this.coefficients[k] * Math.pow(x, this.powers[k]);
+        }
+        return y;
+    }
+
+    toJSON() {
+        return {
+            name: 'polynomialRegression',
+            degree: this.degree,
+            powers: this.powers,
+            coefficients: this.coefficients
+        };
+    }
+
+    toString(precision) {
+        return this._toFormula(precision, false);
+    }
+
+    toLaTeX(precision) {
+        return this._toFormula(precision, true);
+    }
+
+    _toFormula(precision, isLaTeX) {
+        let sup = '^';
+        let closeSup = '';
+        let times = ' * ';
+        if (isLaTeX) {
+            sup = '^{';
+            closeSup = '}';
+            times = '';
+        }
+
+        let fn = '';
+        let str = '';
+        for (let k = 0; k < this.coefficients.length; k++) {
+            str = '';
+            if (this.coefficients[k] !== 0) {
+                if (this.powers[k] === 0) {
+                    str = maybeToPrecision(this.coefficients[k], precision);
+                } else {
+                    if (this.powers[k] === 1) {
+                        str = maybeToPrecision(this.coefficients[k], precision) + times + 'x';
+                    } else {
+                        str = maybeToPrecision(this.coefficients[k], precision) + times + 'x' + sup + this.powers[k] + closeSup;
+                    }
+                }
+
+                if (this.coefficients[k] > 0 && k !== (this.coefficients.length - 1)) {
+                    str = ' + ' + str;
+                } else if (k !== (this.coefficients.length - 1)) {
+                    str = ' ' + str;
+                }
+            }
+            fn = str + fn;
+        }
+        if (fn.charAt(0) === '+') {
+            fn = fn.slice(1);
+        }
+
+        return 'f(x) = ' + fn;
+    }
+
+    static load(json) {
+        if (json.name !== 'polynomialRegression') {
+            throw new TypeError('not a polynomial regression model');
+        }
+        return new PolynomialRegression(true, json);
+    }
+}
+
+function regress$1(pr, x, y, degree) {
+    const n = x.length;
+    let powers;
+    if (Array.isArray(degree)) {
+        powers = degree;
+        degree = powers.length;
+    } else {
+        degree++;
+        powers = new Array(degree);
+        for (let k = 0; k < degree; k++) {
+            powers[k] = k;
+        }
+    }
+    const F = new Matrix(n, degree);
+    const Y = new Matrix([y]);
+    for (let k = 0; k < degree; k++) {
+        for (let i = 0; i < n; i++) {
+            if (powers[k] === 0) {
+                F[i][k] = 1;
+            } else {
+                F[i][k] = Math.pow(x[i], powers[k]);
+            }
+        }
+    }
+
+    const FT = F.transposeView();
+    const A = FT.mmul(F);
+    const B = FT.mmul(Y.transposeView());
+
+    pr.degree = degree - 1;
+    pr.powers = powers;
+    pr.coefficients = solve(A, B).to1DArray();
+}
+
+
+var index$21 = Object.freeze({
+	default: PolynomialRegression
+});
+
+class ExponentialRegression extends BaseRegression {
+    constructor(x, y) {
+        super();
+        if (x === true) {
+            this.A = y.A;
+            this.B = y.B;
+        } else {
+            checkArraySize(x, y);
+            regress$2(this, x, y);
+        }
+    }
+
+    _predict(input) {
+        return this.B * Math.exp(input * this.A);
+    }
+
+    toJSON() {
+        return {
+            name: 'exponentialRegression',
+            A: this.A,
+            B: this.B
+        };
+    }
+
+    toString(precision) {
+        return 'f(x) = ' + maybeToPrecision(this.B, precision) + ' * e^(' + maybeToPrecision(this.A, precision) + ' * x)';
+    }
+
+    toLaTeX(precision) {
+        if (this.A >= 0) {
+            return 'f(x) = ' + maybeToPrecision(this.B, precision) + 'e^{' + maybeToPrecision(this.A, precision) + 'x}';
+        } else {
+            return 'f(x) = \\frac{' + maybeToPrecision(this.B, precision) + '}{e^{' + maybeToPrecision(-this.A, precision) + 'x}}';
+        }
+
+    }
+
+    static load(json) {
+        if (json.name !== 'exponentialRegression') {
+            throw new TypeError('not a exponential regression model');
+        }
+        return new ExponentialRegression(true, json);
+    }
+}
+
+function regress$2(er, x, y) {
+    const n = x.length;
+    const yl = new Array(n);
+    for (let i = 0; i < n; i++) {
+        yl[i] = Math.log(y[i]);
+    }
+
+    const linear = new SimpleLinearRegression(x, yl);
+    er.A = linear.slope;
+    er.B = Math.exp(linear.intercept);
+}
+
+
+var index$22 = Object.freeze({
+	default: ExponentialRegression
+});
+
+class PowerRegression extends BaseRegression {
+    constructor(x, y) {
+        super();
+        if (x === true) { // reloading model
+            this.A = y.A;
+            this.B = y.B;
+        } else {
+            checkArraySize(x, y);
+            regress$3(this, x, y);
+        }
+    }
+
+    _predict(newInputs) {
+        return this.A * Math.pow(newInputs, this.B);
+    }
+
+    toJSON() {
+        return {
+            name: 'powerRegression',
+            A: this.A,
+            B: this.B
+        };
+    }
+
+    toString(precision) {
+        return 'f(x) = ' + maybeToPrecision(this.A, precision) + ' * x^' + maybeToPrecision(this.B, precision);
+    }
+
+    toLaTeX(precision) {
+        if (this.B >= 0) {
+            return 'f(x) = ' + maybeToPrecision(this.A, precision) + 'x^{' + maybeToPrecision(this.B, precision) + '}';
+        } else {
+            return 'f(x) = \\frac{' + maybeToPrecision(this.A, precision) + '}{x^{' + maybeToPrecision(-this.B, precision) + '}}';
+        }
+    }
+
+    static load(json) {
+        if (json.name !== 'powerRegression') {
+            throw new TypeError('not a power regression model');
+        }
+        return new PowerRegression(true, json);
+    }
+}
+
+function regress$3(pr, x, y) {
+    const n = x.length;
+    const xl = new Array(n);
+    const yl = new Array(n);
+    for (let i = 0; i < n; i++) {
+        xl[i] = Math.log(x[i]);
+        yl[i] = Math.log(y[i]);
+    }
+
+    const linear = new SimpleLinearRegression(xl, yl);
+    pr.A = Math.exp(linear.intercept);
+    pr.B = linear.slope;
+}
+
+
+var index$23 = Object.freeze({
+	default: PowerRegression
+});
+
+var maybeToPrecision$2 = function maybeToPrecision(value, digits) {
     if (value < 0) {
         value = -1 * value;
         if (digits) {
@@ -7679,10 +8122,10 @@ var maybeToPrecision$1 = function maybeToPrecision(value, digits) {
 };
 
 var util = {
-	maybeToPrecision: maybeToPrecision$1
+	maybeToPrecision: maybeToPrecision$2
 };
 
-class BaseRegression {
+class BaseRegression$1 {
     predict(x) {
         var y2;
         if (Array.isArray(x)) {
@@ -7758,269 +8201,9 @@ class BaseRegression {
 
 }
 
-var baseRegression = BaseRegression;
+var baseRegression = BaseRegression$1;
 
-var maybeToPrecision = util.maybeToPrecision;
-
-
-
-class SimpleLinearRegression extends baseRegression {
-
-    constructor(x, y, options) {
-        options = options || {};
-        super();
-        if (x === true) {
-            this.slope = y.slope;
-            this.intercept = y.intercept;
-            this.quality = y.quality || {};
-            if (y.quality.r) {
-                this.quality.r = y.quality.r;
-                this.quality.r2 = y.quality.r2;
-            }
-            if (y.quality.chi2) {
-                this.quality.chi2 = y.quality.chi2;
-            }
-        } else {
-            var n = x.length;
-            if (n !== y.length) {
-                throw new RangeError('input and output array have a different length');
-            }
-
-            var xSum = 0;
-            var ySum = 0;
-
-            var xSquared = 0;
-            var xY = 0;
-
-            for (var i = 0; i < n; i++) {
-                xSum += x[i];
-                ySum += y[i];
-                xSquared += x[i] * x[i];
-                xY += x[i] * y[i];
-            }
-
-            var numerator = (n * xY - xSum * ySum);
-
-
-            this.slope = numerator / (n * xSquared - xSum * xSum);
-            this.intercept = (1 / n) * ySum - this.slope * (1 / n) * xSum;
-            this.coefficients = [this.intercept, this.slope];
-            if (options.computeQuality) {
-                this.quality = this.modelQuality(x, y);
-            }
-        }
-
-    }
-
-    toJSON() {
-        var out = {
-            name: 'simpleLinearRegression',
-            slope: this.slope,
-            intercept: this.intercept
-        };
-        if (this.quality) {
-            out.quality = this.quality;
-        }
-
-        return out;
-    }
-
-    _predict(input) {
-        return this.slope * input + this.intercept;
-    }
-
-    computeX(input) {
-        return (input - this.intercept) / this.slope;
-    }
-
-    toString(precision) {
-        var result = 'f(x) = ';
-        if (this.slope) {
-            var xFactor = maybeToPrecision(this.slope, precision);
-            result += (Math.abs(xFactor - 1) < 1e-5 ? '' : xFactor + ' * ') + 'x';
-            if (this.intercept) {
-                var absIntercept = Math.abs(this.intercept);
-                var operator = absIntercept === this.intercept ? '+' : '-';
-                result += ' ' + operator + ' ' + maybeToPrecision(absIntercept, precision);
-            }
-        } else {
-            result += maybeToPrecision(this.intercept, precision);
-        }
-        return result;
-    }
-
-    toLaTeX(precision) {
-        return this.toString(precision);
-    }
-
-    static load(json) {
-        if (json.name !== 'simpleLinearRegression') {
-            throw new TypeError('not a SLR model');
-        }
-        return new SimpleLinearRegression(true, json);
-    }
-}
-
-var simpleLinearRegression = SimpleLinearRegression;
-
-var matrixLib = ( index$12 && Matrix ) || index$12;
-
-/**
- * Function that return a constants of the M degree polynomial that
- * fit the given points, this constants is given from lower to higher
- * order of the polynomial.
- *
- * @param {Vector} X - Vector of the x positions of the points.
- * @param {Vector} Y - Vector of the y positions of the points.
- * @param {Number|BigNumber} M - Degree of the polynomial.
- * @param {Vector} constants - Vector of constants of the function.
- * Created by acastillo on 5/12/16.
- */
-
-const maybeToPrecision$2 = util.maybeToPrecision;
-
-
-const Matrix$1 = matrixLib.Matrix;
-const solve$1 = matrixLib.solve;
-
-class PolynomialRegression extends baseRegression {
-    /**
-     * @constructor
-     * @param x: Independent variable
-     * @param y: Dependent variable
-     * @param M: Maximum degree of the polynomial
-     * @param options
-     */
-    constructor(x, y, M, options) {
-        super();
-        let opt = options || {};
-        if (x === true) { // reloading model
-            this.coefficients = y.coefficients;
-            this.powers = y.powers;
-            this.M = y.M;
-            if (y.quality) {
-                this.quality = y.quality;
-            }
-        } else {
-            var n = x.length;
-            if (n !== y.length) {
-                throw new RangeError('input and output array have a different length');
-            }
-
-            let powers;
-            if (Array.isArray(M)) {
-                powers = M;
-                M = powers.length;
-            } else {
-                M++;
-                powers = new Array(M);
-                for (k = 0; k < M; k++) {
-                    powers[k] = k;
-                }
-            }
-            var F = new Matrix$1(n, M);
-            var Y = new Matrix$1([y]);
-            var k, i;
-            for (k = 0; k < M; k++) {
-                for (i = 0; i < n; i++) {
-                    if (powers[k] === 0) {
-                        F[i][k] = 1;
-                    } else {
-                        F[i][k] = Math.pow(x[i], powers[k]);
-                    }
-                }
-            }
-
-            var FT = F.transposeView();
-            var A = FT.mmul(F);
-            var B = FT.mmul(Y.transposeView());
-
-            this.coefficients = solve$1(A, B).to1DArray();
-            this.powers = powers;
-            this.M = M - 1;
-            if (opt.computeQuality) {
-                this.quality = this.modelQuality(x, y);
-            }
-        }
-    }
-
-    _predict(x) {
-        var y = 0;
-        for (var  k = 0; k < this.powers.length; k++) {
-            y += this.coefficients[k] * Math.pow(x, this.powers[k]);
-        }
-        return y;
-    }
-
-    toJSON() {
-        var out = {name: 'polynomialRegression',
-            coefficients: this.coefficients,
-            powers: this.powers,
-            M: this.M
-        };
-
-        if (this.quality) {
-            out.quality = this.quality;
-        }
-        return out;
-    }
-
-    toString(precision) {
-        return this._toFormula(precision, false);
-    }
-
-    toLaTeX(precision) {
-        return this._toFormula(precision, true);
-    }
-
-    _toFormula(precision, isLaTeX) {
-        var sup = '^';
-        var closeSup = '';
-        var times = ' * ';
-        if (isLaTeX) {
-            sup = '^{';
-            closeSup = '}';
-            times = '';
-        }
-
-        var fn =  '', str;
-        for (var k = 0; k < this.coefficients.length; k++) {
-            str = '';
-            if (this.coefficients[k] !== 0) {
-                if (this.powers[k] === 0) {
-                    str = maybeToPrecision$2(this.coefficients[k], precision);
-                } else {
-                    if (this.powers[k] === 1) {
-                        str = maybeToPrecision$2(this.coefficients[k], precision) + times + 'x';
-                    } else {
-                        str = maybeToPrecision$2(this.coefficients[k], precision) + times + 'x' + sup + this.powers[k] + closeSup;
-                    }
-                }
-
-                if (this.coefficients[k] > 0 && k !== (this.coefficients.length - 1)) {
-                    str = ' + ' + str;
-                } else if (k !== (this.coefficients.length - 1)) {
-                    str = ' ' + str;
-                }
-            }
-            fn = str + fn;
-        }
-        if (fn.charAt(0) === ' + ') {
-            fn = fn.slice(1);
-        }
-
-        return 'f(x) = ' + fn;
-    }
-
-    static load(json) {
-        if (json.name !== 'polynomialRegression') {
-            throw new TypeError('not a polynomial regression model');
-        }
-        return new PolynomialRegression(true, json);
-    }
-}
-
-var polynomialRegression = PolynomialRegression;
+var PolynomialRegression$1 = ( index$21 && PolynomialRegression ) || index$21;
 
 /*
  * Function that calculate the potential fit in the form f(x) = A*x^M
@@ -8033,7 +8216,7 @@ var polynomialRegression = PolynomialRegression;
  * Created by acastillo on 5/12/16.
  */
 
-const maybeToPrecision$3 = util.maybeToPrecision;
+const maybeToPrecision$1 = util.maybeToPrecision;
 
 // const PowerRegression = require('./power-regression');
 
@@ -8061,7 +8244,7 @@ class PotentialRegression extends baseRegression {
                 throw new RangeError('input and output array have a different length');
             }
 
-            var linear = new polynomialRegression(x, y, [M], {computeCoefficient: true});
+            var linear = new PolynomialRegression$1(x, y, [M]);
             this.A = linear.coefficients[0];
             this.M = M;
             if (opt.computeQuality) {
@@ -8083,15 +8266,15 @@ class PotentialRegression extends baseRegression {
     }
 
     toString(precision) {
-        return 'f(x) = ' + maybeToPrecision$3(this.A, precision) + ' * x^' + this.M;
+        return 'f(x) = ' + maybeToPrecision$1(this.A, precision) + ' * x^' + this.M;
     }
 
     toLaTeX(precision) {
 
         if (this.M >= 0) {
-            return 'f(x) = ' + maybeToPrecision$3(this.A, precision) + 'x^{' + this.M + '}';
+            return 'f(x) = ' + maybeToPrecision$1(this.A, precision) + 'x^{' + this.M + '}';
         } else {
-            return 'f(x) = \\frac{' + maybeToPrecision$3(this.A, precision) + '}{x^{' + (-this.M) + '}}';
+            return 'f(x) = \\frac{' + maybeToPrecision$1(this.A, precision) + '}{x^{' + (-this.M) + '}}';
         }
     }
 
@@ -8104,176 +8287,6 @@ class PotentialRegression extends baseRegression {
 }
 
 var potentialRegression = PotentialRegression;
-
-/*
- * Function that calculate the linear fit in the form f(x) = Ce^(A * x) and
- * return the A and C coefficient of the given formula.
- *
- * @param {Vector} X - Vector of the x positions of the points.
- * @param {Vector} Y - Vector of the y positions of the points.
- * @return {Object} coefficients - The A and C coefficients.
- *
- * Created by acastillo on 5/12/16.
- */
-
-const maybeToPrecision$4 = util.maybeToPrecision;
-
-
-
-class ExpRegression extends baseRegression {
-    /**
-     * @constructor
-     * @param {Array<number>} x - Independent variable
-     * @param {Array<number>} y - Dependent variable
-     * @param {object} options
-     */
-    constructor(x, y, options) {
-        super();
-        let opt = options || {};
-        if (x === true) { // reloading model
-            this.A = y.A;
-            this.C = y.C;
-            if (y.quality) {
-                this.quality = y.quality;
-            }
-        } else {
-            var n = x.length;
-            if (n !== y.length) {
-                throw new RangeError('input and output array have a different length');
-            }
-            var yl = new Array(n);
-            for (var i = 0; i < n; i++) {
-                yl[i] = Math.log(y[i]);
-            }
-
-            var linear = new simpleLinearRegression(x, yl, {computeCoefficient: false});
-            this.A = linear.slope;
-            this.C = Math.exp(linear.intercept);
-            if (opt.computeQuality) {
-                this.quality = this.modelQuality(x, y);
-            }
-        }
-    }
-
-    _predict(newInputs) {
-        return this.C * Math.exp(newInputs * this.A);
-    }
-
-    toJSON() {
-        var out = {name: 'expRegression', A: this.A, C: this.C};
-        if (this.quality) {
-            out.quality = this.quality;
-        }
-        return out;
-    }
-
-    toString(precision) {
-        return 'f(x) = ' + maybeToPrecision$4(this.C, precision) + ' * exp(' + maybeToPrecision$4(this.A, precision) + ' * x)';
-    }
-
-    toLaTeX(precision) {
-        if (this.A >= 0) {
-            return 'f(x) = ' + maybeToPrecision$4(this.C, precision) + 'e^{' + maybeToPrecision$4(this.A, precision) + 'x}';
-        } else {
-            return 'f(x) = \\frac{' + maybeToPrecision$4(this.C, precision) + '}{e^{' + maybeToPrecision$4(-this.A, precision) + 'x}}';
-        }
-
-    }
-
-    static load(json) {
-        if (json.name !== 'expRegression') {
-            throw new TypeError('not a exp regression model');
-        }
-        return new ExpRegression(true, json);
-    }
-}
-
-
-var expRegression = ExpRegression;
-
-/**
- * This class implements the power regression f(x)=A*x^B
- * Created by acastillo on 5/12/16.
- */
-
-const maybeToPrecision$5 = util.maybeToPrecision;
-
-
-
-class PowerRegression extends baseRegression {
-    /**
-     * @constructor
-     * @param x: Independent variable
-     * @param y: Dependent variable
-     * @param options
-     */
-    constructor(x, y, options) {
-        super();
-        let opt = options || {};
-        if (x === true) { // reloading model
-            this.A = y.A;
-            this.B = y.B;
-            this.quality = y.quality || {};
-            if (y.quality.r) {
-                this.quality.r = y.quality.r;
-                this.quality.r2 = y.quality.r2;
-            }
-            if (y.quality.chi2) {
-                this.quality.chi2 = y.quality.chi2;
-            }
-        } else {
-            var n = x.length;
-            if (n !== y.length) {
-                throw new RangeError('input and output array have a different length');
-            }
-            var xl = new Array(n), yl = new Array(n);
-            for (var i = 0; i < n; i++) {
-                xl[i] = Math.log(x[i]);
-                yl[i] = Math.log(y[i]);
-            }
-
-            var linear = new simpleLinearRegression(xl, yl, {computeCoefficient: false});
-            this.A = Math.exp(linear.intercept);
-            this.B = linear.slope;
-            if (opt.computeQuality) {
-                this.quality = this.modelQuality(x, y);
-            }
-        }
-    }
-
-    _predict(newInputs) {
-        return this.A * Math.pow(newInputs, this.B);
-    }
-
-    toJSON() {
-        var out = {name: 'powerRegression', A: this.A, B: this.B};
-        if (this.quality) {
-            out.quality = this.quality;
-        }
-        return out;
-    }
-
-    toString(precision) {
-        return 'f(x) = ' + maybeToPrecision$5(this.A, precision) + ' * x^' + maybeToPrecision$5(this.B, precision);
-    }
-
-    toLaTeX(precision) {
-        if (this.B >= 0) {
-            return 'f(x) = ' + maybeToPrecision$5(this.A, precision) + 'x^{' + maybeToPrecision$5(this.B, precision) + '}';
-        } else {
-            return 'f(x) = \\frac{' + maybeToPrecision$5(this.A, precision) + '}{x^{' + maybeToPrecision$5(-this.B, precision) + '}}';
-        }
-    }
-
-    static load(json) {
-        if (json.name !== 'powerRegression') {
-            throw new TypeError('not a power regression model');
-        }
-        return new PowerRegression(true, json);
-    }
-}
-
-var powerRegression = PowerRegression;
 
 function squaredEuclidean$1(p, q) {
     var d = 0;
@@ -8494,7 +8507,9 @@ class SigmoidKernel {
 
 var sigmoidKernel = SigmoidKernel;
 
-const Matrix$3 = matrixLib.Matrix;
+var matrixLib = ( index$12 && Matrix ) || index$12;
+
+const Matrix$2 = matrixLib.Matrix;
 
 
 
@@ -8551,11 +8566,11 @@ class Kernel {
         }
 
         if (this.kernelType === 'linear') {
-            var matrix = new Matrix$3(inputs);
-            return matrix.mmul(new Matrix$3(landmarks).transposeView());
+            var matrix = new Matrix$2(inputs);
+            return matrix.mmul(new Matrix$2(landmarks).transposeView());
         }
 
-        const kernelMatrix = new Matrix$3(inputs.length, landmarks.length);
+        const kernelMatrix = new Matrix$2(inputs.length, landmarks.length);
         var i, j;
         if (inputs === landmarks) { // fast path, matrix is symmetric
             for (i = 0; i < inputs.length; i++) {
@@ -8576,8 +8591,8 @@ class Kernel {
 
 var kernel = Kernel;
 
-const Matrix$2 = matrixLib.Matrix;
-const solve$2 = matrixLib.solve;
+const Matrix$1 = matrixLib.Matrix;
+const solve$1 = matrixLib.solve;
 
 
 
@@ -8610,9 +8625,9 @@ class KernelRidgeRegression extends baseRegression {
             const kernelFunction = new kernel(options.kernelType, options.kernelOptions);
             const K = kernelFunction.compute(inputs);
             const n = inputs.length;
-            K.add(Matrix$2.eye(n, n).mul(options.lambda));
+            K.add(Matrix$1.eye(n, n).mul(options.lambda));
 
-            this.alpha = solve$2(K, outputs);
+            this.alpha = solve$1(K, outputs);
             this.inputs = inputs;
             this.kernelType = options.kernelType;
             this.kernelOptions = options.kernelOptions;
@@ -8652,7 +8667,7 @@ class KernelRidgeRegression extends baseRegression {
 
 var kernelRidgeRegression = KernelRidgeRegression;
 
-const Matrix$4 = matrixLib.Matrix;
+const Matrix$3 = matrixLib.Matrix;
 const SVD$1 = matrixLib.SVD;
 
 
@@ -8673,7 +8688,7 @@ class PolynomialFitRegression2D extends baseRegression {
     constructor(inputs, outputs, options) {
         super();
         if (inputs === true) { // reloading model
-            this.coefficients = Matrix$4.columnVector(outputs.coefficients);
+            this.coefficients = Matrix$3.columnVector(outputs.coefficients);
             this.order = outputs.order;
             if (outputs.r) {
                 this.r = outputs.r;
@@ -8706,8 +8721,8 @@ class PolynomialFitRegression2D extends baseRegression {
      * @param {Matrix} y - A vector of the prediction values.
      */
     train(X, y) {
-        if (!Matrix$4.isMatrix(X)) X = new Matrix$4(X);
-        if (!Matrix$4.isMatrix(y)) y = Matrix$4.columnVector(y);
+        if (!Matrix$3.isMatrix(X)) X = new Matrix$3(X);
+        if (!Matrix$3.isMatrix(y)) y = Matrix$3.columnVector(y);
 
         //Perhaps y is transpose
         if (y.rows !== X.rows) {
@@ -8736,7 +8751,7 @@ class PolynomialFitRegression2D extends baseRegression {
         x2.mulColumn(0, scaleX2);
         y.mulColumn(0, scaleY);
 
-        var A = new Matrix$4(examples, coefficients);
+        var A = new Matrix$3(examples, coefficients);
         var col = 0;
 
         for (var i = 0; i <= this.order; ++i) {
@@ -8754,13 +8769,13 @@ class PolynomialFitRegression2D extends baseRegression {
             autoTranspose: false
         });
 
-        var qqs = Matrix$4.rowVector(svd.diagonal);
+        var qqs = Matrix$3.rowVector(svd.diagonal);
         qqs = qqs.apply(function (i, j) {
             if (this[i][j] >= 1e-15) this[i][j] = 1 / this[i][j];
             else this[i][j] = 0;
         });
 
-        var qqs1 = Matrix$4.zeros(examples, coefficients);
+        var qqs1 = Matrix$3.zeros(examples, coefficients);
         for (i = 0; i < coefficients; ++i) {
             qqs1[i][i] = qqs[0][i];
         }
@@ -8850,72 +8865,38 @@ function abs(i, j) {
     this[i][j] = Math.abs(this[i][j]);
 }
 
-const maybeToPrecision$6 = util.maybeToPrecision;
-const median = array$1.median;
+const median = array.median;
 
-class TheilSenRegression extends baseRegression {
+class TheilSenRegression extends BaseRegression {
 
     /**
      * Theil–Sen estimator
      * https://en.wikipedia.org/wiki/Theil%E2%80%93Sen_estimator
-     * @param {Array<number>} x
-     * @param {Array<number>} y
-     * @param {object} options
+     * @param {Array<number>|boolean} x
+     * @param {Array<number>|object} y
      * @constructor
      */
-    constructor(x, y, options) {
-        options = options || {};
+    constructor(x, y) {
         super();
         if (x === true) {
             // loads the model
             this.slope = y.slope;
             this.intercept = y.intercept;
-            this.quality = Object.assign({}, y.quality, this.quality);
+            this.coefficients = y.coefficients;
         } else {
             // creates the model
-            let len = x.length;
-            if (len !== y.length) {
-                throw new RangeError('Input and output array have a different length');
-            }
-
-            let slopes = new Array(len * len);
-            let count = 0;
-            for (let i = 0; i < len; ++i) {
-                for (let j =  i + 1; j < len; ++j) {
-                    if (x[i] !== x[j]) {
-                        slopes[count++] = (y[j] - y[i]) / (x[j] - x[i]);
-                    }
-                }
-            }
-            slopes.length = count;
-            let medianSlope = median(slopes);
-
-            let cuts = new Array(len);
-            for (let i = 0; i < len; ++i) {
-                cuts[i] = y[i] - medianSlope * x[i];
-            }
-
-            this.slope = medianSlope;
-            this.intercept = median(cuts);
-            this.coefficients = [this.intercept, this.slope];
-            if (options.computeQuality) {
-                this.quality = this.modelQuality(x, y);
-            }
+            checkArraySize(x, y);
+            theilSen(this, x, y);
         }
 
     }
 
     toJSON() {
-        var out = {
+        return {
             name: 'TheilSenRegression',
             slope: this.slope,
             intercept: this.intercept
         };
-        if (this.quality) {
-            out.quality = this.quality;
-        }
-
-        return out;
     }
 
     _predict(input) {
@@ -8929,15 +8910,15 @@ class TheilSenRegression extends baseRegression {
     toString(precision) {
         var result = 'f(x) = ';
         if (this.slope) {
-            var xFactor = maybeToPrecision$6(this.slope, precision);
+            var xFactor = maybeToPrecision(this.slope, precision);
             result += (Math.abs(xFactor - 1) < 1e-5 ? '' : xFactor + ' * ') + 'x';
             if (this.intercept) {
                 var absIntercept = Math.abs(this.intercept);
                 var operator = absIntercept === this.intercept ? '+' : '-';
-                result += ' ' + operator + ' ' + maybeToPrecision$6(absIntercept, precision);
+                result += ' ' + operator + ' ' + maybeToPrecision(absIntercept, precision);
             }
         } else {
-            result += maybeToPrecision$6(this.intercept, precision);
+            result += maybeToPrecision(this.intercept, precision);
         }
         return result;
     }
@@ -8954,26 +8935,268 @@ class TheilSenRegression extends baseRegression {
     }
 }
 
-var theilSenRegression = TheilSenRegression;
+function theilSen(regression, x, y) {
+    let len = x.length;
+    let slopes = new Array(len * len);
+    let count = 0;
+    for (let i = 0; i < len; ++i) {
+        for (let j = i + 1; j < len; ++j) {
+            if (x[i] !== x[j]) {
+                slopes[count++] = (y[j] - y[i]) / (x[j] - x[i]);
+            }
+        }
+    }
+    slopes.length = count;
+    let medianSlope = median(slopes);
+
+    let cuts = new Array(len);
+    for (let i = 0; i < len; ++i) {
+        cuts[i] = y[i] - medianSlope * x[i];
+    }
+
+    regression.slope = medianSlope;
+    regression.intercept = median(cuts);
+    regression.coefficients = [regression.intercept, regression.slope];
+}
+
+
+var index$24 = Object.freeze({
+	default: TheilSenRegression
+});
+
+class RobustPolynomialRegression extends BaseRegression {
+    constructor(x, y, degree) {
+        super();
+        if (x === true) {
+            this.degree = y.degree;
+            this.powers = y.powers;
+            this.coefficients = y.coefficients;
+        } else {
+            checkArraySize(x, y);
+            robustPolynomial(this, x, y, degree);
+        }
+    }
+
+    toJSON() {
+        return {
+            name: 'robustPolynomialRegression',
+            degree: this.degree,
+            powers: this.powers,
+            coefficients: this.coefficients
+        };
+    }
+
+    _predict(x) {
+        return predict(x, this.powers, this.coefficients);
+    }
+
+    toString(precision) {
+        return this._toFormula(precision, false);
+    }
+
+    toLaTeX(precision) {
+        return this._toFormula(precision, true);
+    }
+
+    _toFormula(precision, isLaTeX) {
+        let sup = '^';
+        let closeSup = '';
+        let times = ' * ';
+        if (isLaTeX) {
+            sup = '^{';
+            closeSup = '}';
+            times = '';
+        }
+
+        let fn = '';
+        let str = '';
+        for (let k = 0; k < this.coefficients.length; k++) {
+            str = '';
+            if (this.coefficients[k] !== 0) {
+                if (this.powers[k] === 0) {
+                    str = maybeToPrecision(this.coefficients[k], precision);
+                } else {
+                    if (this.powers[k] === 1) {
+                        str = maybeToPrecision(this.coefficients[k], precision) + times + 'x';
+                    } else {
+                        str = maybeToPrecision(this.coefficients[k], precision) + times + 'x' + sup + this.powers[k] + closeSup;
+                    }
+                }
+
+                if (this.coefficients[k] > 0 && k !== (this.coefficients.length - 1)) {
+                    str = ' + ' + str;
+                } else if (k !== (this.coefficients.length - 1)) {
+                    str = ' ' + str;
+                }
+            }
+            fn = str + fn;
+        }
+        if (fn.charAt(0) === '+') {
+            fn = fn.slice(1);
+        }
+
+        return 'f(x) = ' + fn;
+    }
+
+    static load(json) {
+        if (json.name !== 'robustPolynomialRegression') {
+            throw new TypeError('not a RobustPolynomialRegression model');
+        }
+        return new RobustPolynomialRegression(true, json);
+    }
+}
+
+function robustPolynomial(regression, x, y, degree) {
+    let powers = new Array(degree);
+    for (let k = 0; k < degree; k++) {
+        powers[k] = k;
+    }
+
+    const tuples = getRandomTuples(x, y, degree);
+    var min;
+
+    for (var i = 0; i < tuples.length; i++) {
+        var tuple = tuples[i];
+        var coefficients = calcCoefficients(tuple, powers);
+
+        var residuals = x.slice();
+        for (var j = 0; j < x.length; j++) {
+            residuals[j] = y[j] - predict(x[j], powers, coefficients);
+            residuals[j] = {
+                residual: residuals[j] * residuals[j],
+                coefficients
+            };
+        }
+
+        var median = residualsMedian(residuals);
+        if (!min || median.residual < min.residual) {
+            min = median;
+        }
+    }
+
+    regression.degree = degree;
+    regression.powers = powers;
+    regression.coefficients = min.coefficients;
+}
+
+/**
+ * @ignore
+ * @param {Array<number>} x
+ * @param {Array<number>} y
+ * @param {number} degree
+ * @return {Array<{x:number,y:number}>}
+ */
+function getRandomTuples(x, y, degree) {
+    var len = Math.floor(x.length / degree);
+    var tuples = new Array(len);
+
+    for (var i = 0; i < x.length; i++) {
+        var pos = Math.floor(Math.random() * len);
+
+        var counter = 0;
+        while (counter < x.length) {
+            if (!tuples[pos]) {
+                tuples[pos] = [{
+                    x: x[i],
+                    y: y[i]
+                }];
+                break;
+            } else if (tuples[pos].length < degree) {
+                tuples[pos].push({
+                    x: x[i],
+                    y: y[i]
+                });
+                break;
+            } else {
+                counter++;
+                pos = (pos + 1) % len;
+            }
+        }
+
+        if (counter === x.length) {
+            return tuples;
+        }
+    }
+    return tuples;
+}
+
+/**
+ * @ignore
+ * @param {{x:number,y:number}} tuple
+ * @param {Array<number>} powers
+ * @return {Array<number>}
+ */
+function calcCoefficients(tuple, powers) {
+    var X = tuple.slice();
+    var Y = tuple.slice();
+    for (var i = 0; i < X.length; i++) {
+        Y[i] = [tuple[i].y];
+        X[i] = new Array(powers.length);
+        for (var j = 0; j < powers.length; j++) {
+            X[i][j] = Math.pow(tuple[i].x, powers[j]);
+        }
+    }
+
+    return solve(X, Y).to1DArray();
+}
+
+function predict(x, powers, coefficients) {
+    let y = 0;
+    for (let k = 0; k < powers.length; k++) {
+        y += coefficients[k] * Math.pow(x, powers[k]);
+    }
+    return y;
+}
+
+function residualsMedian(residuals) {
+    residuals.sort((a, b) => a.residual - b.residual);
+
+    var l = residuals.length;
+    var half = Math.floor(l / 2);
+    if (l % 2 === 0) {
+        return residuals[half - 1];
+    } else {
+        return residuals[half];
+    }
+}
+
+
+var index$25 = Object.freeze({
+	default: RobustPolynomialRegression
+});
+
+var require$$0$6 = ( index$20 && SimpleLinearRegression ) || index$20;
+
+var require$$2$1 = ( index$22 && ExponentialRegression ) || index$22;
+
+var require$$3 = ( index$23 && PowerRegression ) || index$23;
+
+var require$$7 = ( index$24 && TheilSenRegression ) || index$24;
+
+var require$$8 = ( index$25 && RobustPolynomialRegression ) || index$25;
 
 var index$18 = createCommonjsModule(function (module, exports) {
 'use strict';
 
-exports.SimpleLinearRegression = exports.SLR = simpleLinearRegression;
+exports.SimpleLinearRegression = exports.SLR = require$$0$6;
+exports.PolynomialRegression = PolynomialRegression$1;
+exports.ExponentialRegression = require$$2$1;
+exports.PowerRegression = require$$3;
+
 exports.NonLinearRegression = exports.NLR = {
-    PolynomialRegression: polynomialRegression,
-    PotentialRegression: potentialRegression,
-    ExpRegression: expRegression,
-    PowerRegression: powerRegression
+    PotentialRegression: potentialRegression
 };
 exports.KernelRidgeRegression = exports.KRR = kernelRidgeRegression;
 //exports.MultipleLinearRegression = exports.MLR = require('./regression/multiple-linear-regression');
 //exports.MultivariateLinearRegression = exports.MVLR = require('./regression/multivariate-linear-regression');
 exports.PolinomialFitting2D = polyFitRegression2d;
-exports.TheilSenRegression = theilSenRegression;
+
+// robust regressions
+exports.TheilSenRegression = require$$7;
+exports.RobustPolynomialRegression = require$$8;
 });
 
-var index_5 = index$18.KernelRidgeRegression;
+var index_8 = index$18.KernelRidgeRegression;
 
 /**
  * @memberof Image
@@ -8984,7 +9207,7 @@ var index_5 = index$18.KernelRidgeRegression;
  * @return {Image}
  */
 function background(coordinates, values, options) {
-    var model = new index_5(coordinates, values, options);
+    var model = new index_8(coordinates, values, options);
     var allCoordinates = new Array(this.size);
     for (var i = 0; i < this.width; i++) {
         for (var j = 0; j < this.height; j++) {
@@ -11552,16 +11775,16 @@ var _package$1 = Object.freeze({
 	default: _package
 });
 
-var require$$0$6 = ( _package$1 && _package ) || _package$1;
+var require$$0$7 = ( _package$1 && _package ) || _package$1;
 
-var index$20 = createCommonjsModule(function (module, exports) {
+var index$26 = createCommonjsModule(function (module, exports) {
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 module.exports = exports = function hasOwn(prop, obj) {
   return hasOwnProperty.call(obj, prop);
 };
 
-exports.version = require$$0$6.version;
+exports.version = require$$0$7.version;
 });
 
 var computedPropertyDescriptor$1 = {
@@ -11628,7 +11851,7 @@ class Stack extends Array {
         computedPropertyDescriptor$1.get = function () {
             if (this.computed === null) {
                 this.computed = {};
-            } else if (index$20(name, this.computed)) {
+            } else if (index$26(name, this.computed)) {
                 return this.computed[name];
             }
             var result = method.apply(this, partialArgs);
@@ -12017,7 +12240,7 @@ function getPixelsGrid(options = {}) {
     return toReturn;
 }
 
-function Matrix$5(width, height, defaultValue) {
+function Matrix$4(width, height, defaultValue) {
     var matrix = new Array(width);
     for (var x = 0; x < width; x++) {
         matrix[x] = new Array(height);
@@ -12031,11 +12254,11 @@ function Matrix$5(width, height, defaultValue) {
     }
     matrix.width = width;
     matrix.height = height;
-    matrix.__proto__ = Matrix$5.prototype;
+    matrix.__proto__ = Matrix$4.prototype;
     return matrix;
 }
 
-Matrix$5.prototype.localMin = function (x, y) {
+Matrix$4.prototype.localMin = function (x, y) {
     var min = this[x][y];
     var position = [x, y];
     for (var i = Math.max(0, x - 1); i < Math.min(this.length, x + 2); i++) {
@@ -12052,7 +12275,7 @@ Matrix$5.prototype.localMin = function (x, y) {
     };
 };
 
-Matrix$5.prototype.localMax = function (x, y) {
+Matrix$4.prototype.localMax = function (x, y) {
     var max = this[x][y];
     var position = [x, y];
     for (var i = Math.max(0, x - 1); i < Math.min(this.length, x + 2); i++) {
@@ -12069,7 +12292,7 @@ Matrix$5.prototype.localMax = function (x, y) {
     };
 };
 
-Matrix$5.prototype.localSearch = function (x, y, value) {
+Matrix$4.prototype.localSearch = function (x, y, value) {
     var results = [];
     for (var i = Math.max(0, x - 1); i < Math.min(this.length, x + 2); i++) {
         for (var j = Math.max(0, y - 1); j < Math.min(this[0].length, y + 2); j++) {
@@ -12108,7 +12331,7 @@ function match(image, options = {}) {
     }
 
     // there could be many names
-    var similarityMatrix = new Matrix$5(image.width, image.height, -Infinity);
+    var similarityMatrix = new Matrix$4(image.width, image.height, -Infinity);
 
     var currentX = Math.floor(image.width / 2);
     var currentY = Math.floor(image.height / 2);
@@ -12886,7 +13109,7 @@ function hsla(str) {
 
 var cssColor = parse;
 
-var index$21 = {
+var index$27 = {
   hex2rgb: hex2rgb,
   hsv2hex: hsv2hex,
   hsv2rgb: hsv2rgb,
@@ -12901,7 +13124,7 @@ var index$21 = {
   cssColor: cssColor
 };
 
-var index_1$4 = index$21.cssColor;
+var index_1$4 = index$27.cssColor;
 
 function css2array(string) {
     var color = index_1$4(string);
@@ -16021,7 +16244,7 @@ var isPlainObject = function isPlainObject(obj) {
 	return typeof key === 'undefined' || hasOwn$1.call(obj, key);
 };
 
-var index$23 = function extend() {
+var index$29 = function extend() {
 	var options, name, src, copy, copyIsArray, clone;
 	var target = arguments[0];
 	var i = 1;
@@ -17524,14 +17747,14 @@ class RoiManager {
 
     // docs is in the corresponding file
     fromMaxima(options = {}) {
-        var opt = index$23({}, this._options, options);
+        var opt = index$29({}, this._options, options);
         var roiMap = fromMaxima.call(this._image, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
     }
 
     // docs is in the corresponding file
     fromPoints(points, options = {}) {
-        var opt = index$23({}, this._options, options);
+        var opt = index$29({}, this._options, options);
         var roiMap = fromPoints.call(this._image, points, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
@@ -17544,28 +17767,28 @@ class RoiManager {
      */
     putMap(map, options = {}) {
         var roiMap = new RoiMap(this._image, map);
-        var opt = index$23({}, this._options, options);
+        var opt = index$29({}, this._options, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
     }
 
     // docs is in the corresponding file
     fromWaterShed(options = {}) {
-        var opt = index$23({}, this._options, options);
+        var opt = index$29({}, this._options, options);
         var roiMap = fromWaterShed.call(this._image, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
     }
 
     // docs is in the corresponding file
     fromMask(mask, options = {}) {
-        var opt = index$23({}, this._options, options);
+        var opt = index$29({}, this._options, options);
         var roiMap = fromMask.call(this._image, mask, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
     }
 
     fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
-        var opt = index$23({}, this._options, options);
+        var opt = index$29({}, this._options, options);
         var roiMap = fromMaskConnectedComponentLabelingAlgorithm.call(this._image, mask, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
@@ -17577,7 +17800,7 @@ class RoiManager {
      * @return {RoiMap}
      */
     getMap(options = {}) {
-        var opt = index$23({}, this._options, options);
+        var opt = index$29({}, this._options, options);
         this._assertLayerWithLabel(opt.label);
         return this._layers[opt.label].roiMap;
     }
@@ -17699,7 +17922,7 @@ class RoiManager {
      * @return {number[]}
      */
     getData(options = {}) {
-        var opt = index$23({}, this._options, options);
+        var opt = index$29({}, this._options, options);
         this._assertLayerWithLabel(opt.label);
         return this._layers[opt.label].roiMap.data;
     }
@@ -24943,9 +25166,9 @@ var pako = {};
 
 assign(pako, deflate_1, inflate_1, constants);
 
-var index$26 = pako;
+var index$32 = pako;
 
-const Inflator = index$26.Inflate;
+const Inflator = index$32.Inflate;
 
 const empty = new Uint8Array(0);
 const NULL = '\0';
@@ -26063,7 +26286,7 @@ var decode$3 = function decodeTIFF(data, options) {
 
 var decode$2 = decode$3;
 
-var index$30 = {
+var index$36 = {
 	decode: decode$2
 };
 
@@ -26086,7 +26309,7 @@ function decode$1(data) {
             header[4] === 0 &&
             header[5] === 0) {
        //     buffer.skip(2);
-            const exif = index$30.decode(buffer, {
+            const exif = index$36.decode(buffer, {
                 onlyFirst: true,
                 ignoreImageData: true,
                 offset: buffer.offset
@@ -26101,7 +26324,7 @@ var decode_1 = decode$1;
 
 var decode = decode_1;
 
-var index$33 = input => {
+var index$39 = input => {
 	const buf = new Uint8Array(input);
 
 	if (!(buf && buf.length > 1)) {
@@ -26656,8 +26879,8 @@ const imageExts = new Set([
 	'psd'
 ]);
 
-var index$32 = input => {
-	const ret = index$33(input);
+var index$38 = input => {
+	const ret = index$39(input);
 	return imageExts.has(ret && ret.ext) ? ret : null;
 };
 
@@ -26749,7 +26972,7 @@ function loadImage(image, options) {
 }
 
 function loadBinary(image, options, url) {
-    var type = index$32(image);
+    var type = index$38(image);
     if (type) {
         switch (type.ext) {
             case 'png':
@@ -26971,7 +27194,7 @@ function BlobConstructor(ary, options) {
   return new Blob(ary, options || {});
 }
 
-var index$37 = (function() {
+var index$43 = (function() {
   if (blobSupported) {
     return blobSupportsArrayBufferView ? commonjsGlobal.Blob : BlobConstructor;
   } else if (blobBuilderSupported) {
@@ -27301,7 +27524,7 @@ function race(iterable) {
   }
 }
 
-var index$39 = typeof Promise === 'function' ? Promise : browser;
+var index$45 = typeof Promise === 'function' ? Promise : browser;
 
 /* jshint -W079 */
 
@@ -27341,7 +27564,7 @@ function arrayBufferToBinaryString(buffer) {
 // doesn't download the image more than once, because
 // browsers aren't dumb. uses the cache
 function loadImage$1(src, crossOrigin) {
-  return new index$39(function (resolve, reject) {
+  return new index$45(function (resolve, reject) {
     var img = new Image();
     if (crossOrigin) {
       img.crossOrigin = crossOrigin;
@@ -27391,7 +27614,7 @@ function createBlob(parts, options) {
   if (typeof options === 'string') {
     options = {type: options}; // do you a solid here
   }
-  return new index$37(parts, options);
+  return new index$43(parts, options);
 }
 
 /**
@@ -27424,7 +27647,7 @@ function revokeObjectURL(url) {
  * @returns {Promise} Promise that resolves with the binary string
  */
 function blobToBinaryString(blob) {
-  return new index$39(function (resolve, reject) {
+  return new index$45(function (resolve, reject) {
     var reader = new FileReader();
     var hasBinaryString = typeof reader.readAsBinaryString === 'function';
     reader.onloadend = function (e) {
@@ -27450,7 +27673,7 @@ function blobToBinaryString(blob) {
  * @returns {Promise} Promise that resolves with the <code>Blob</code>
  */
 function base64StringToBlob(base64, type) {
-  return index$39.resolve().then(function () {
+  return index$45.resolve().then(function () {
     var parts = [binaryStringToArrayBuffer(atob(base64))];
     return type ? createBlob(parts, {type: type}) : createBlob(parts);
   });
@@ -27463,7 +27686,7 @@ function base64StringToBlob(base64, type) {
  * @returns {Promise} Promise that resolves with the <code>Blob</code>
  */
 function binaryStringToBlob(binary, type) {
-  return index$39.resolve().then(function () {
+  return index$45.resolve().then(function () {
     return base64StringToBlob(btoa(binary), type);
   });
 }
@@ -27487,7 +27710,7 @@ function blobToBase64String(blob) {
  * @returns {Promise} Promise that resolves with the <code>Blob</code>
  */
 function dataURLToBlob(dataURL) {
-  return index$39.resolve().then(function () {
+  return index$45.resolve().then(function () {
     var type = dataURL.match(/data:([^;]+)/)[1];
     var base64 = dataURL.replace(/^[^,]+,/, '');
 
@@ -27530,9 +27753,9 @@ function imgSrcToDataURL(src, type, crossOrigin, quality) {
  * @returns {Promise} Promise that resolves with the <code>Blob</code>
  */
 function canvasToBlob(canvas, type, quality) {
-  return index$39.resolve().then(function () {
+  return index$45.resolve().then(function () {
     if (typeof canvas.toBlob === 'function') {
-      return new index$39(function (resolve) {
+      return new index$45(function (resolve) {
         canvas.toBlob(resolve, type, quality);
       });
     }
@@ -27573,7 +27796,7 @@ function imgSrcToBlob(src, type, crossOrigin, quality) {
  * @returns {Promise} Promise that resolves with the <code>Blob</code>
  */
 function arrayBufferToBlob(buffer, type) {
-  return index$39.resolve().then(function () {
+  return index$45.resolve().then(function () {
     return createBlob([buffer], type);
   });
 }
@@ -27584,7 +27807,7 @@ function arrayBufferToBlob(buffer, type) {
  * @returns {Promise} Promise that resolves with the <code>ArrayBuffer</code>
  */
 function blobToArrayBuffer(blob) {
-  return new index$39(function (resolve, reject) {
+  return new index$45(function (resolve, reject) {
     var reader = new FileReader();
     reader.onloadend = function (e) {
       var result = e.target.result || new ArrayBuffer(0);
@@ -27595,7 +27818,7 @@ function blobToArrayBuffer(blob) {
   });
 }
 
-var index$35 = {
+var index$41 = {
   createBlob         : createBlob,
   createObjectURL    : createObjectURL,
   revokeObjectURL    : revokeObjectURL,
@@ -27611,7 +27834,7 @@ var index$35 = {
   blobToArrayBuffer  : blobToArrayBuffer
 };
 
-var index_1$5 = index$35.canvasToBlob;
+var index_1$5 = index$41.canvasToBlob;
 
 var utf8 = createCommonjsModule(function (module, exports) {
 /*! https://mths.be/utf8js v2.1.2 by @mathias */
@@ -28808,7 +29031,7 @@ class Image$2 {
             theKind = getKind(RGBA);
         }
 
-        var kindDefinition = index$23({}, theKind, options);
+        var kindDefinition = index$29({}, theKind, options);
         this.components = kindDefinition.components;
         this.alpha = kindDefinition.alpha + 0;
         this.bitDepth = kindDefinition.bitDepth;
@@ -28951,7 +29174,7 @@ class Image$2 {
         computedPropertyDescriptor.get = function () {
             if (this.computed === null) {
                 this.computed = {};
-            } else if (index$20(name, this.computed)) {
+            } else if (index$26(name, this.computed)) {
                 return this.computed[name];
             }
             var result = method.apply(this, partialArgs);
@@ -28973,7 +29196,7 @@ class Image$2 {
             bitDepth: other.bitDepth,
             parent: other
         };
-        index$23(newOptions, options);
+        index$29(newOptions, options);
         return new Image$2(newOptions.width, newOptions.height, newOptions);
     }
 
@@ -29645,7 +29868,7 @@ WorkerManager.prototype.post = function (event, args, transferable, id) {
     });
 };
 
-var index$43 = WorkerManager;
+var index$49 = WorkerManager;
 
 var defaultOptions$13 = {
     regression: {
@@ -29662,7 +29885,7 @@ var defaultOptions$13 = {
 };
 
 function run(image, options, onStep) {
-    options = index$23({}, defaultOptions$13, options);
+    options = index$29({}, defaultOptions$13, options);
     var manager = this.manager;
     if (Array.isArray(image)) {
         return Promise.all(image.map(function (img) {
@@ -29762,7 +29985,7 @@ class Worker$1 {
             if (!manager) {
                 this.checkUrl();
                 url = this.url;
-                manager = new index$43(method.work, { deps: url });
+                manager = new index$49(method.work, { deps: url });
                 runner.manager = manager;
             }
             return method.run.call(runner, ...args);
@@ -29770,7 +29993,7 @@ class Worker$1 {
         run.reset = function () {
             if (manager) {
                 manager.terminate();
-                manager = new index$43(method.work, { deps: url });
+                manager = new index$49(method.work, { deps: url });
                 runner.manager = manager;
             }
         };
