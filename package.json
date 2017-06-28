@@ -92,6 +92,7 @@
   },
   "dependencies": {
     "blob-util": "^1.2.1",
+    "canny-edge-detector": "^1.0.0",
     "color-functions": "^1.1.0",
     "extend": "^3.0.0",
     "fast-bmp": "^1.0.0",

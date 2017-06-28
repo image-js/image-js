@@ -1319,6 +1319,10 @@ caniuse-lite@^1.0.30000670:
   version "1.0.30000684"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000684.tgz#0c1032d0b36e14d1ac199f93ef2d1c42d3f03fd7"
 
+canny-edge-detector@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/canny-edge-detector/-/canny-edge-detector-1.0.0.tgz#41f4cc3e09c0802a5269a05e7bff3dbf09169c97"
+
 canvas@^1.6.0:
   version "1.6.5"
   resolved "https://registry.yarnpkg.com/canvas/-/canvas-1.6.5.tgz#557f9988f5d2c95fdc247c61a5ee43de52f6717c"

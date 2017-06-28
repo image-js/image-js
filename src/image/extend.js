@@ -53,15 +53,16 @@ import getIntersection from './utility/getIntersection';
 import getClosestCommonParent from './utility/getClosestCommonParent';
 
 // operators
-import paintMasks from './operator/paintMasks';
-import paintLabels from './operator/paintLabels';
-import paintPoints from './operator/paintPoints';
-import paintPolygon from './operator/paintPolygon';
-import paintPolyline from './operator/paintPolyline';
-import extract from './operator/extract';
+import cannyEdge from './operator/cannyEdge';
 import convolution from './operator/convolution';
 import convolutionFft from './operator/convolutionFft';
+import extract from './operator/extract';
 import floodFill from './operator/floodFill';
+import paintLabels from './operator/paintLabels';
+import paintMasks from './operator/paintMasks';
+import paintPoints from './operator/paintPoints';
+import paintPolyline from './operator/paintPolyline';
+import paintPolygon from './operator/paintPolygon';
 
 // computers
 import {getHistogram, getHistograms} from './compute/histogram';
@@ -139,15 +140,16 @@ export default function extend(Image) {
     Image.extendMethod('getPixelsGrid', getPixelsGrid);
     Image.extendMethod('getBestMatch', getBestMatch);
 
-    Image.extendMethod('paintMasks', paintMasks, inPlace);
+    Image.extendMethod('cannyEdge', cannyEdge);
+    Image.extendMethod('convolution', convolution);
+    Image.extendMethod('convolutionFft', convolutionFft);
+    Image.extendMethod('extract', extract);
+    Image.extendMethod('floodFill', floodFill);
     Image.extendMethod('paintLabels', paintLabels, inPlace);
+    Image.extendMethod('paintMasks', paintMasks, inPlace);
     Image.extendMethod('paintPoints', paintPoints, inPlace);
     Image.extendMethod('paintPolyline', paintPolyline, inPlace);
     Image.extendMethod('paintPolygon', paintPolygon, inPlace);
-    Image.extendMethod('extract', extract);
-    Image.extendMethod('convolution', convolution);
-    Image.extendMethod('convolutionFft', convolutionFft);
-    Image.extendMethod('floodFill', floodFill);
 
     Image.extendMethod('countAlphaPixels', countAlphaPixels);
     Image.extendMethod('monotoneChainConvexHull', monotoneChainConvexHull);
