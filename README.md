@@ -15,9 +15,8 @@ Image processing and manipulation in JavaScript
 
 ### A note about Canvas
 
-Currently, to run `image-js` on Node.js, it is necessary to install the Canvas native addon.  
-Follow the instructions for your OS [here](https://github.com/Automattic/node-canvas#installation)
-
+Currently, to run some methods of `image-js` on Node.js (including: `.save()`, `.toDataURL()`, `load()` on a JPEG image), it is necessary to install the `canvas` native addon. The addon is specified as an optional dependency. If its compilation fails and you need it, follow the instructions to install it on your OS [here](https://github.com/Automattic/node-canvas#installation).  
+Browser builds of the library are not affected as they use the standard Canvas API.
 
 ## License
 
