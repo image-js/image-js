@@ -12687,6 +12687,427 @@ function getFurthestParent(mask, depth) {
     return m;
 }
 
+const defaultOptions$12 = {
+    lowThreshold: 10,
+    highThreshold: 30,
+    gaussianBlur: 1.1
+};
+
+const Gx = [
+    [-1, 0, +1],
+    [-2, 0, +2],
+    [-1, 0, +1]
+];
+
+const Gy = [
+    [-1, -2, -1],
+    [0, 0, 0],
+    [+1, +2, +1]
+];
+
+const convOptions = {
+    bitDepth: 32,
+    mode: 'periodic'
+};
+
+function cannyEdgeDetector(image, options) {
+    image.checkProcessable('Canny edge detector', {
+        bitDepth: 8,
+        channels: 1,
+        components: 1
+    });
+
+    options = Object.assign({}, defaultOptions$12, options);
+
+    const width = image.width;
+    const height = image.height;
+    const brightness = image.maxValue;
+
+    const gfOptions = {
+        sigma: options.gaussianBlur,
+        radius: 3
+    };
+
+    const gf = image.gaussianFilter(gfOptions);
+
+    const gradientX = gf.convolution(Gy, convOptions);
+    const gradientY = gf.convolution(Gx, convOptions);
+
+    const G = gradientY.hypotenuse(gradientX);
+
+    const Image = image.constructor;
+
+    const nms = new Image(width, height, {
+        kind: 'GREY',
+        bitDepth: 32
+    });
+
+    const edges = new Image(width, height, {
+        kind: 'GREY',
+        bitDepth: 32
+    });
+
+    const finalImage = new Image(width, height, {
+        kind: 'GREY'
+    });
+
+    // Non-Maximum supression
+    for (var i = 1; i < width - 1; i++) {
+        for (var j = 1; j < height - 1; j++) {
+
+            var dir = (Math.round(Math.atan2(gradientY.getValueXY(i, j, 0), gradientX.getValueXY(i, j, 0)) * (5.0 / Math.PI)) + 5) % 5;
+
+            if (
+                !((dir === 0 && (G.getValueXY(i, j, 0) <= G.getValueXY(i, j - 1, 0) || G.getValueXY(i, j, 0) <= G.getValueXY(i, j + 1, 0)))
+                    || (dir === 1 && (G.getValueXY(i, j, 0) <= G.getValueXY(i - 1, j + 1, 0) || G.getValueXY(i, j, 0) <= G.getValueXY(i + 1, j - 1, 0)))
+                    || (dir === 2 && (G.getValueXY(i, j, 0) <= G.getValueXY(i - 1, j, 0) || G.getValueXY(i, j, 0) <= G.getValueXY(i + 1, j, 0)))
+                    || (dir === 3 && (G.getValueXY(i, j, 0) <= G.getValueXY(i - 1, j - 1, 0) || G.getValueXY(i, j, 0) <= G.getValueXY(i + 1, j + 1, 0))))
+            ) {
+                nms.setValueXY(i, j, 0, G.getValueXY(i, j, 0));
+            }
+        }
+    }
+
+    for (i = 0; i < width * height; ++i) {
+        var currentNms = nms.data[i];
+        var currentEdge = 0;
+        if (currentNms > options.highThreshold) {
+            currentEdge++;
+            finalImage.data[i] = brightness;
+        }
+        if (currentNms > options.lowThreshold) {
+            currentEdge++;
+        }
+
+        edges.data[i] = currentEdge;
+    }
+
+    // Hysteresis: first pass
+    var currentPixels = [];
+    for (i = 1; i < width - 1; ++i) {
+        for (j = 1; j < height - 1; ++j) {
+            if (edges.getValueXY(i, j, 0) !== 1) {
+                continue;
+            }
+
+            outer: for (var k = i - 1; k < i + 2; ++k) {
+                for (var l = j - 1; l < j + 2; ++l) {
+                    if (edges.getValueXY(k, l, 0) === 2) {
+                        currentPixels.push([i, j]);
+                        finalImage.setValueXY(i, j, 0, brightness);
+                        break outer;
+                    }
+                }
+            }
+        }
+    }
+
+    // Hysteresis: second pass
+    while (currentPixels.length > 0) {
+        var newPixels = [];
+        for (i = 0; i < currentPixels.length; ++i) {
+            for (j = -1; j < 2; ++j) {
+                for (k = -1; k < 2; ++k) {
+                    if (j === 0 && k === 0) {
+                        continue;
+                    }
+                    var row = currentPixels[i][0] + j;
+                    var col = currentPixels[i][1] + k;
+                    if (edges.getValueXY(row, col, 0) === 1 && finalImage.getValueXY(row, col, 0) === 0) {
+                        newPixels.push([row, col]);
+                        finalImage.setValueXY(row, col, 0, brightness);
+                    }
+                }
+            }
+        }
+        currentPixels = newPixels;
+    }
+
+    return finalImage;
+}
+
+/**
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @return {Image}
+ */
+function cannyEdge(options) {
+  return cannyEdgeDetector(this, options);
+}
+
+/**
+ * Extracts a part of an original image based on a mask. By default the mask may contain
+ * a relative position and this part of the original image will be extracted.
+ * @memberof Image
+ * @instance
+ * @param {Image} mask - Image containing a binary mask
+ * @param {object} [options]
+ * @param {number[]} [options.position] - Array of 2 elements to force the x,y coordinates
+ * @return {Image} A new image
+ */
+function extract(mask, options = {}) {
+    var position = options.position;
+
+    this.checkProcessable('extract', {
+        bitDepth: [1, 8, 16]
+    });
+
+    // we need to find the relative position to the parent
+    if (!position) {
+        position = mask.getRelativePosition(this);
+        if (!position) {
+            throw new Error('extract : can not extract an image because the relative position can not be ' + 'determined, try to specify manually the position as an array of 2 elements [x,y].');
+        }
+    }
+
+    if (this.bitDepth > 1) {
+        var _extract = Image$2.createFrom(this, {
+            width: mask.width,
+            height: mask.height,
+            alpha: 1, // we force the alpha, otherwise difficult to extract a mask ...
+            position: position,
+            parent: this
+        });
+
+        for (var x = 0; x < mask.width; x++) {
+            for (var y = 0; y < mask.height; y++) {
+                // we copy the point
+                for (var channel = 0; channel < this.channels; channel++) {
+                    var value = this.getValueXY(x + position[0], y + position[1], channel);
+                    _extract.setValueXY(x, y, channel, value);
+                }
+                // we make it transparent in case it is not in the mask
+                if (!mask.getBitXY(x, y)) {
+                    _extract.setValueXY(x, y, this.components, 0);
+                }
+            }
+        }
+
+        return _extract;
+    } else {
+        var _extract2 = Image$2.createFrom(this, {
+            width: mask.width,
+            height: mask.height,
+            position: position,
+            parent: this
+        });
+        for (var _y = 0; _y < mask.height; _y++) {
+            for (var _x = 0; _x < mask.width; _x++) {
+                if (mask.getBitXY(_x, _y)) {
+                    if (this.getBitXY(_x + position[0], _y + position[1])) {
+                        _extract2.setBitXY(_x, _y);
+                    }
+                }
+            }
+        }
+
+        return _extract2;
+    }
+}
+
+var fastList = createCommonjsModule(function (module, exports) {
+(function() { // closure for web browsers
+
+function Item (data, prev, next) {
+  this.next = next;
+  if (next) next.prev = this;
+  this.prev = prev;
+  if (prev) prev.next = this;
+  this.data = data;
+}
+
+function FastList () {
+  if (!(this instanceof FastList)) return new FastList
+  this._head = null;
+  this._tail = null;
+  this.length = 0;
+}
+
+FastList.prototype =
+{ push: function (data) {
+    this._tail = new Item(data, this._tail, null);
+    if (!this._head) this._head = this._tail;
+    this.length ++;
+  }
+
+, pop: function () {
+    if (this.length === 0) return undefined
+    var t = this._tail;
+    this._tail = t.prev;
+    if (t.prev) {
+      t.prev = this._tail.next = null;
+    }
+    this.length --;
+    if (this.length === 1) this._head = this._tail;
+    else if (this.length === 0) this._head = this._tail = null;
+    return t.data
+  }
+
+, unshift: function (data) {
+    this._head = new Item(data, null, this._head);
+    if (!this._tail) this._tail = this._head;
+    this.length ++;
+  }
+
+, shift: function () {
+    if (this.length === 0) return undefined
+    var h = this._head;
+    this._head = h.next;
+    if (h.next) {
+      h.next = this._head.prev = null;
+    }
+    this.length --;
+    if (this.length === 1) this._tail = this._head;
+    else if (this.length === 0) this._head = this._tail = null;
+    return h.data
+  }
+
+, item: function (n) {
+    if (n < 0) n = this.length + n;
+    var h = this._head;
+    while (n-- > 0 && h) h = h.next;
+    return h ? h.data : undefined
+  }
+
+, slice: function (n, m) {
+    if (!n) n = 0;
+    if (!m) m = this.length;
+    if (m < 0) m = this.length + m;
+    if (n < 0) n = this.length + n;
+
+    if (m === n) {
+      return []
+    }
+
+    if (m < n) {
+      throw new Error("invalid offset: "+n+","+m+" (length="+this.length+")")
+    }
+
+    var len = m - n
+      , ret = new Array(len)
+      , i = 0
+      , h = this._head;
+    while (n-- > 0 && h) h = h.next;
+    while (i < len && h) {
+      ret[i++] = h.data;
+      h = h.next;
+    }
+    return ret
+  }
+
+, drop: function () {
+    FastList.call(this);
+  }
+
+, forEach: function (fn, thisp) {
+    var p = this._head
+      , i = 0
+      , len = this.length;
+    while (i < len && p) {
+      fn.call(thisp || this, p.data, i, this);
+      p = p.next;
+      i ++;
+    }
+  }
+
+, map: function (fn, thisp) {
+    var n = new FastList();
+    this.forEach(function (v, i, me) {
+      n.push(fn.call(thisp || me, v, i, me));
+    });
+    return n
+  }
+
+, filter: function (fn, thisp) {
+    var n = new FastList();
+    this.forEach(function (v, i, me) {
+      if (fn.call(thisp || me, v, i, me)) n.push(v);
+    });
+    return n
+  }
+
+, reduce: function (fn, val, thisp) {
+    var i = 0
+      , p = this._head
+      , len = this.length;
+    if (!val) {
+      i = 1;
+      val = p && p.data;
+      p = p && p.next;
+    }
+    while (i < len && p) {
+      val = fn.call(thisp || this, val, p.data, this);
+      i ++;
+      p = p.next;
+    }
+    return val
+  }
+};
+
+module.exports = FastList;
+
+})();
+});
+
+function floodFill(options = {}) {
+    var _options$x = options.x,
+        x = _options$x === undefined ? 0 : _options$x,
+        _options$y = options.y,
+        y = _options$y === undefined ? 0 : _options$y,
+        _options$inPlace = options.inPlace,
+        inPlace = _options$inPlace === undefined ? true : _options$inPlace;
+
+
+    var destination = inPlace ? this : Image$2.createFrom(this);
+
+    this.checkProcessable('floodFill', { bitDepth: 1 });
+
+    if (this.bitDepth === 1) {
+        var bit = this.getBitXY(x, y);
+        if (bit) return destination;
+        var queue = new fastList();
+        queue.push(new Node(x, y));
+        while (queue.length > 0) {
+            var node = queue.shift();
+            destination.setBitXY(node.x, node.y);
+            for (var i = node.x + 1; i < this.width; i++) {
+                if (!destination.getBitXY(i, node.y) && !this.getBitXY(i, node.y)) {
+                    destination.setBitXY(i, node.y);
+                    if (node.y + 1 < this.height && !this.getBitXY(i, node.y + 1)) {
+                        queue.push(new Node(i, node.y + 1));
+                    }
+                    if (node.y - 1 >= 0 && !this.getBitXY(i, node.y - 1)) {
+                        queue.push(new Node(i, node.y - 1));
+                    }
+                } else {
+                    break;
+                }
+            }
+            for (var _i = node.x - 1; _i >= 0; _i++) {
+                if (!destination.getBitXY(_i, node.y) && !this.getBitXY(_i, node.y)) {
+                    destination.setBitXY(_i, node.y);
+                    if (node.y + 1 < this.height && !this.getBitXY(_i, node.y + 1)) {
+                        queue.push(new Node(_i, node.y + 1));
+                    }
+                    if (node.y - 1 >= 0 && !this.getBitXY(_i, node.y - 1)) {
+                        queue.push(new Node(_i, node.y - 1));
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+
+    return destination;
+}
+
+function Node(x, y) {
+    this.x = x;
+    this.y = y;
+}
+
 var hex2rgb = function(hex) {
   if(hex[0] === '#') hex = hex.substr(1);
 
@@ -13197,6 +13618,85 @@ function getRandomColor() {
  * Paint a mask or masks on the current image.
  * @memberof Image
  * @instance
+ *
+ * @param {Array<string>}       [labels] - Array of labels to display. Should the the same size as masks.
+ * @param {Array<Array>}        [positions] - Array of labels to display. Should the the same size as masks.
+ * @param {object}              [options]
+ * @param {number[]|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
+ * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
+ * @param {string|Array<string>} [options.font='12px Helvetica'] - Paint the labels in a different CSS style
+ * @param {number|Array<number>} [options.rotate=0] - Rotate each label of a define angle
+ * @return {this} The original painted image
+ */
+function paintLabels(labels, positions, options = {}) {
+    var _options$color = options.color,
+        color = _options$color === undefined ? 'blue' : _options$color,
+        colors = options.colors,
+        _options$font = options.font,
+        font = _options$font === undefined ? '12px Helvetica' : _options$font,
+        _options$rotate = options.rotate,
+        rotate = _options$rotate === undefined ? 0 : _options$rotate;
+
+
+    this.checkProcessable('paintMasks', {
+        channels: [3, 4],
+        bitDepth: [8, 16],
+        colorModel: RGB$1
+    });
+
+    if (!Array.isArray(labels)) {
+        throw Error('paintLabels: labels must be an array');
+    }
+
+    if (!Array.isArray(positions)) {
+        throw Error('paintLabels: positions must be an array');
+    }
+
+    if (color && !Array.isArray(color)) {
+        color = css2array(color);
+    }
+
+    if (colors) {
+        colors = colors.map(function (color) {
+            if (!Array.isArray(color)) {
+                return css2array(color);
+            }
+            return color;
+        });
+    } else {
+        colors = [color];
+    }
+
+    if (labels.length !== positions.length) {
+        throw Error('paintLabels: positions and labels must be arrays from the same size');
+    }
+
+    // We convert everything to array so that we can simply loop thourgh all the labels
+    if (!Array.isArray(font)) font = [font];
+    if (!Array.isArray(rotate)) rotate = [rotate];
+
+    var canvas = this.getCanvas({ originalData: true });
+    var ctx = canvas.getContext('2d');
+    for (var i = 0; i < labels.length; i++) {
+        ctx.save();
+        var _color = colors[i % colors.length];
+        ctx.fillStyle = `rgba(${_color[0]},${_color[1]},${_color[2]},${_color[3] / this.maxValue})`;
+        ctx.font = font[i % font.length];
+        var position = positions[i];
+        ctx.translate(position[0], position[1]);
+        ctx.rotate(rotate[i % rotate.length] / 180 * Math.PI);
+        ctx.fillText(labels[i], 0, 0);
+        ctx.restore();
+    }
+    this.setData(ctx.getImageData(0, 0, this.width, this.height).data);
+
+    return this;
+}
+
+/**
+ * Paint a mask or masks on the current image.
+ * @memberof Image
+ * @instance
  * @param {(Image|Array<Image>)}     masks - Image containing a binary mask
  * @param {object}              [options]
  * @param {Array<number>|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
@@ -13296,85 +13796,6 @@ function paintMasks(masks, options = {}) {
         }
         this.setData(ctx.getImageData(0, 0, this.width, this.height).data);
     }
-
-    return this;
-}
-
-/**
- * Paint a mask or masks on the current image.
- * @memberof Image
- * @instance
- *
- * @param {Array<string>}       [labels] - Array of labels to display. Should the the same size as masks.
- * @param {Array<Array>}        [positions] - Array of labels to display. Should the the same size as masks.
- * @param {object}              [options]
- * @param {number[]|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
- * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
- * @param {string|Array<string>} [options.font='12px Helvetica'] - Paint the labels in a different CSS style
- * @param {number|Array<number>} [options.rotate=0] - Rotate each label of a define angle
- * @return {this} The original painted image
- */
-function paintLabels(labels, positions, options = {}) {
-    var _options$color = options.color,
-        color = _options$color === undefined ? 'blue' : _options$color,
-        colors = options.colors,
-        _options$font = options.font,
-        font = _options$font === undefined ? '12px Helvetica' : _options$font,
-        _options$rotate = options.rotate,
-        rotate = _options$rotate === undefined ? 0 : _options$rotate;
-
-
-    this.checkProcessable('paintMasks', {
-        channels: [3, 4],
-        bitDepth: [8, 16],
-        colorModel: RGB$1
-    });
-
-    if (!Array.isArray(labels)) {
-        throw Error('paintLabels: labels must be an array');
-    }
-
-    if (!Array.isArray(positions)) {
-        throw Error('paintLabels: positions must be an array');
-    }
-
-    if (color && !Array.isArray(color)) {
-        color = css2array(color);
-    }
-
-    if (colors) {
-        colors = colors.map(function (color) {
-            if (!Array.isArray(color)) {
-                return css2array(color);
-            }
-            return color;
-        });
-    } else {
-        colors = [color];
-    }
-
-    if (labels.length !== positions.length) {
-        throw Error('paintLabels: positions and labels must be arrays from the same size');
-    }
-
-    // We convert everything to array so that we can simply loop thourgh all the labels
-    if (!Array.isArray(font)) font = [font];
-    if (!Array.isArray(rotate)) rotate = [rotate];
-
-    var canvas = this.getCanvas({ originalData: true });
-    var ctx = canvas.getContext('2d');
-    for (var i = 0; i < labels.length; i++) {
-        ctx.save();
-        var _color = colors[i % colors.length];
-        ctx.fillStyle = `rgba(${_color[0]},${_color[1]},${_color[2]},${_color[3] / this.maxValue})`;
-        ctx.font = font[i % font.length];
-        var position = positions[i];
-        ctx.translate(position[0], position[1]);
-        ctx.rotate(rotate[i % rotate.length] / 180 * Math.PI);
-        ctx.fillText(labels[i], 0, 0);
-        ctx.restore();
-    }
-    this.setData(ctx.getImageData(0, 0, this.width, this.height).data);
 
     return this;
 }
@@ -13607,21 +14028,6 @@ function paintPoints(points, options = {}) {
 }
 
 /**
- * Paint a polygon defined by an array of points.
- * @memberof Image
- * @instance
- * @param {Array<Array<number>>} points - Array of [x,y] points
- * @param {object} [options]
- * @param {Array<number>} [options.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
- * @return {this} The original painted image
- */
-function paintPolygon(points, options = {}) {
-  options.closed = true;
-
-  return this.paintPolyline(points, options);
-}
-
-/**
  * Paint a polyline defined by an array of points.
  * @memberof Image
  * @instance
@@ -13678,275 +14084,18 @@ function paintPolyline(points, options = {}) {
 }
 
 /**
- * Extracts a part of an original image based on a mask. By default the mask may contain
- * a relative position and this part of the original image will be extracted.
+ * Paint a polygon defined by an array of points.
  * @memberof Image
  * @instance
- * @param {Image} mask - Image containing a binary mask
+ * @param {Array<Array<number>>} points - Array of [x,y] points
  * @param {object} [options]
- * @param {number[]} [options.position] - Array of 2 elements to force the x,y coordinates
- * @return {Image} A new image
+ * @param {Array<number>} [options.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
+ * @return {this} The original painted image
  */
-function extract(mask, options = {}) {
-    var position = options.position;
+function paintPolygon(points, options = {}) {
+  options.closed = true;
 
-    this.checkProcessable('extract', {
-        bitDepth: [1, 8, 16]
-    });
-
-    // we need to find the relative position to the parent
-    if (!position) {
-        position = mask.getRelativePosition(this);
-        if (!position) {
-            throw new Error('extract : can not extract an image because the relative position can not be ' + 'determined, try to specify manually the position as an array of 2 elements [x,y].');
-        }
-    }
-
-    if (this.bitDepth > 1) {
-        var _extract = Image$2.createFrom(this, {
-            width: mask.width,
-            height: mask.height,
-            alpha: 1, // we force the alpha, otherwise difficult to extract a mask ...
-            position: position,
-            parent: this
-        });
-
-        for (var x = 0; x < mask.width; x++) {
-            for (var y = 0; y < mask.height; y++) {
-                // we copy the point
-                for (var channel = 0; channel < this.channels; channel++) {
-                    var value = this.getValueXY(x + position[0], y + position[1], channel);
-                    _extract.setValueXY(x, y, channel, value);
-                }
-                // we make it transparent in case it is not in the mask
-                if (!mask.getBitXY(x, y)) {
-                    _extract.setValueXY(x, y, this.components, 0);
-                }
-            }
-        }
-
-        return _extract;
-    } else {
-        var _extract2 = Image$2.createFrom(this, {
-            width: mask.width,
-            height: mask.height,
-            position: position,
-            parent: this
-        });
-        for (var _y = 0; _y < mask.height; _y++) {
-            for (var _x = 0; _x < mask.width; _x++) {
-                if (mask.getBitXY(_x, _y)) {
-                    if (this.getBitXY(_x + position[0], _y + position[1])) {
-                        _extract2.setBitXY(_x, _y);
-                    }
-                }
-            }
-        }
-
-        return _extract2;
-    }
-}
-
-var fastList = createCommonjsModule(function (module, exports) {
-(function() { // closure for web browsers
-
-function Item (data, prev, next) {
-  this.next = next;
-  if (next) next.prev = this;
-  this.prev = prev;
-  if (prev) prev.next = this;
-  this.data = data;
-}
-
-function FastList () {
-  if (!(this instanceof FastList)) return new FastList
-  this._head = null;
-  this._tail = null;
-  this.length = 0;
-}
-
-FastList.prototype =
-{ push: function (data) {
-    this._tail = new Item(data, this._tail, null);
-    if (!this._head) this._head = this._tail;
-    this.length ++;
-  }
-
-, pop: function () {
-    if (this.length === 0) return undefined
-    var t = this._tail;
-    this._tail = t.prev;
-    if (t.prev) {
-      t.prev = this._tail.next = null;
-    }
-    this.length --;
-    if (this.length === 1) this._head = this._tail;
-    else if (this.length === 0) this._head = this._tail = null;
-    return t.data
-  }
-
-, unshift: function (data) {
-    this._head = new Item(data, null, this._head);
-    if (!this._tail) this._tail = this._head;
-    this.length ++;
-  }
-
-, shift: function () {
-    if (this.length === 0) return undefined
-    var h = this._head;
-    this._head = h.next;
-    if (h.next) {
-      h.next = this._head.prev = null;
-    }
-    this.length --;
-    if (this.length === 1) this._tail = this._head;
-    else if (this.length === 0) this._head = this._tail = null;
-    return h.data
-  }
-
-, item: function (n) {
-    if (n < 0) n = this.length + n;
-    var h = this._head;
-    while (n-- > 0 && h) h = h.next;
-    return h ? h.data : undefined
-  }
-
-, slice: function (n, m) {
-    if (!n) n = 0;
-    if (!m) m = this.length;
-    if (m < 0) m = this.length + m;
-    if (n < 0) n = this.length + n;
-
-    if (m === n) {
-      return []
-    }
-
-    if (m < n) {
-      throw new Error("invalid offset: "+n+","+m+" (length="+this.length+")")
-    }
-
-    var len = m - n
-      , ret = new Array(len)
-      , i = 0
-      , h = this._head;
-    while (n-- > 0 && h) h = h.next;
-    while (i < len && h) {
-      ret[i++] = h.data;
-      h = h.next;
-    }
-    return ret
-  }
-
-, drop: function () {
-    FastList.call(this);
-  }
-
-, forEach: function (fn, thisp) {
-    var p = this._head
-      , i = 0
-      , len = this.length;
-    while (i < len && p) {
-      fn.call(thisp || this, p.data, i, this);
-      p = p.next;
-      i ++;
-    }
-  }
-
-, map: function (fn, thisp) {
-    var n = new FastList();
-    this.forEach(function (v, i, me) {
-      n.push(fn.call(thisp || me, v, i, me));
-    });
-    return n
-  }
-
-, filter: function (fn, thisp) {
-    var n = new FastList();
-    this.forEach(function (v, i, me) {
-      if (fn.call(thisp || me, v, i, me)) n.push(v);
-    });
-    return n
-  }
-
-, reduce: function (fn, val, thisp) {
-    var i = 0
-      , p = this._head
-      , len = this.length;
-    if (!val) {
-      i = 1;
-      val = p && p.data;
-      p = p && p.next;
-    }
-    while (i < len && p) {
-      val = fn.call(thisp || this, val, p.data, this);
-      i ++;
-      p = p.next;
-    }
-    return val
-  }
-};
-
-module.exports = FastList;
-
-})();
-});
-
-function floodFill(options = {}) {
-    var _options$x = options.x,
-        x = _options$x === undefined ? 0 : _options$x,
-        _options$y = options.y,
-        y = _options$y === undefined ? 0 : _options$y,
-        _options$inPlace = options.inPlace,
-        inPlace = _options$inPlace === undefined ? true : _options$inPlace;
-
-
-    var destination = inPlace ? this : Image$2.createFrom(this);
-
-    this.checkProcessable('floodFill', { bitDepth: 1 });
-
-    if (this.bitDepth === 1) {
-        var bit = this.getBitXY(x, y);
-        if (bit) return destination;
-        var queue = new fastList();
-        queue.push(new Node(x, y));
-        while (queue.length > 0) {
-            var node = queue.shift();
-            destination.setBitXY(node.x, node.y);
-            for (var i = node.x + 1; i < this.width; i++) {
-                if (!destination.getBitXY(i, node.y) && !this.getBitXY(i, node.y)) {
-                    destination.setBitXY(i, node.y);
-                    if (node.y + 1 < this.height && !this.getBitXY(i, node.y + 1)) {
-                        queue.push(new Node(i, node.y + 1));
-                    }
-                    if (node.y - 1 >= 0 && !this.getBitXY(i, node.y - 1)) {
-                        queue.push(new Node(i, node.y - 1));
-                    }
-                } else {
-                    break;
-                }
-            }
-            for (var _i = node.x - 1; _i >= 0; _i++) {
-                if (!destination.getBitXY(_i, node.y) && !this.getBitXY(_i, node.y)) {
-                    destination.setBitXY(_i, node.y);
-                    if (node.y + 1 < this.height && !this.getBitXY(_i, node.y + 1)) {
-                        queue.push(new Node(_i, node.y + 1));
-                    }
-                    if (node.y - 1 >= 0 && !this.getBitXY(_i, node.y - 1)) {
-                        queue.push(new Node(_i, node.y - 1));
-                    }
-                } else {
-                    break;
-                }
-            }
-        }
-    }
-
-    return destination;
-}
-
-function Node(x, y) {
-    this.x = x;
-    this.y = y;
+  return this.paintPolyline(points, options);
 }
 
 /**
@@ -14732,15 +14881,16 @@ function extend(Image) {
     Image.extendMethod('getPixelsGrid', getPixelsGrid);
     Image.extendMethod('getBestMatch', match);
 
-    Image.extendMethod('paintMasks', paintMasks, inPlace);
+    Image.extendMethod('cannyEdge', cannyEdge);
+    Image.extendMethod('convolution', convolution);
+    Image.extendMethod('convolutionFft', convolutionFft);
+    Image.extendMethod('extract', extract);
+    Image.extendMethod('floodFill', floodFill);
     Image.extendMethod('paintLabels', paintLabels, inPlace);
+    Image.extendMethod('paintMasks', paintMasks, inPlace);
     Image.extendMethod('paintPoints', paintPoints, inPlace);
     Image.extendMethod('paintPolyline', paintPolyline, inPlace);
     Image.extendMethod('paintPolygon', paintPolygon, inPlace);
-    Image.extendMethod('extract', extract);
-    Image.extendMethod('convolution', convolution);
-    Image.extendMethod('convolutionFft', convolutionFft);
-    Image.extendMethod('floodFill', floodFill);
 
     Image.extendMethod('countAlphaPixels', countAlphaPixels);
     Image.extendMethod('monotoneChainConvexHull', monotoneChainConvexHull);
@@ -26056,7 +26206,7 @@ var ifdValue = {
 	readData: readData
 };
 
-const defaultOptions$12 = {
+const defaultOptions$13 = {
     ignoreImageData: false,
     onlyFirst: false
 };
@@ -26068,7 +26218,7 @@ class TIFFDecoder extends IOBuffer_1 {
     }
 
     decode(options) {
-        options = Object.assign({}, defaultOptions$12, options);
+        options = Object.assign({}, defaultOptions$13, options);
         const result = [];
         this.decodeHeader();
         while (this._nextIFD) {
@@ -29870,7 +30020,7 @@ WorkerManager.prototype.post = function (event, args, transferable, id) {
 
 var index$49 = WorkerManager;
 
-var defaultOptions$13 = {
+var defaultOptions$14 = {
     regression: {
         kernelType: 'polynomial',
         kernelOptions: { degree: 2, constant: 1 }
@@ -29885,7 +30035,7 @@ var defaultOptions$13 = {
 };
 
 function run(image, options, onStep) {
-    options = index$29({}, defaultOptions$13, options);
+    options = index$29({}, defaultOptions$14, options);
     var manager = this.manager;
     if (Array.isArray(image)) {
         return Promise.all(image.map(function (img) {
