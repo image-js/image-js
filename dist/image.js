@@ -9725,6 +9725,7 @@ function computeKind(image) {
     outer: for (var kind in kinds) {
         var kindData = kinds[kind];
         for (var prop in kindData) {
+            if (prop === 'bitDepth') continue;
             if (image[prop] !== kindData[prop]) {
                 continue outer;
             }
