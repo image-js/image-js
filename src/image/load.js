@@ -1,17 +1,13 @@
 import Image from './Image';
 import Stack from '../stack/Stack';
 import {fetchBinary, DOMImage, Canvas, isDifferentOrigin} from './environment';
-import {PNGDecoder} from 'fast-png';
+import {decode as decodePng} from 'fast-png';
 import {decode as decodeJpeg} from 'fast-jpeg';
 import {decode as decodeTiff} from 'tiff';
 import imageType from 'image-type';
 import {decode as base64Decode} from '../util/base64';
 
 const isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
-
-function swap16(val) {
-    return ((val & 0xFF) << 8) | ((val >> 8) & 0xFF);
-}
 
 export function loadImage(image, options) {
     if (typeof image === 'string') {
@@ -69,18 +65,11 @@ function loadURL(url, options) {
 }
 
 function loadPNG(data) {
-    const decoder = new PNGDecoder(data);
-    const png = decoder.decode();
+    const png = decodePng(data);
     const bitDepth = png.bitDepth;
-    const buffer = png.data.buffer;
-    let bitmap;
+    let bitmap = png.data;
     if (bitDepth === 8) {
-        bitmap = new Uint8ClampedArray(buffer);
-    } else if (bitDepth === 16) {
-        bitmap = new Uint16Array(buffer);
-        for (let i = 0; i < bitmap.length; i++) {
-            bitmap[i] = swap16(bitmap[i]);
-        }
+        bitmap = new Uint8ClampedArray(png.data.buffer, png.data.byteOffset, png.data.byteLength);
     }
 
     const type = png.colourType;
