@@ -1,4 +1,10 @@
-import {getKind, createPixelArray, getTheoreticalPixelArraySize} from './kind';
+import {canvasToBlob} from 'blob-util';
+import extendObject from 'extend';
+import {encode as encodeBmp} from 'fast-bmp';
+import {encode as encodePng} from 'fast-png';
+import hasOwn from 'has-own';
+
+import {getKind, computeKind, createPixelArray, getTheoreticalPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
 import {ImageData, Canvas, createWriteStream, writeFile} from './environment';
 import extend from './extend';
@@ -6,13 +12,9 @@ import bitMethods from './bitMethods';
 import {RGB} from './model/model';
 import RoiManager from './roi/manager';
 import {getType, canWrite} from './mediaTypes';
-import extendObject from 'extend';
 import {loadImage} from './load';
 import Stack from '../stack/Stack';
-import {canvasToBlob} from 'blob-util';
-import hasOwn from 'has-own';
-import {encode as encodeBmp} from 'fast-bmp';
-import {encode as base64Encode} from '../util/base64';
+import {toBase64URL} from '../util/base64';
 
 let computedPropertyDescriptor = {
     configurable: true,
@@ -268,6 +270,8 @@ export default class Image {
         this.alpha = kindDefinition.alpha + 0;
         this.bitDepth = kindDefinition.bitDepth;
         this.colorModel = kindDefinition.colorModel;
+        this.kind = computeKind(this);
+
         this.meta = options.meta || {};
 
         this.computed = null;
@@ -556,15 +560,16 @@ export default class Image {
      */
     toDataURL(type = 'image/png', async = false) {
         type = getType(type);
-        function bmpUrl(ctx) {
-            const u8 = encodeBmp(ctx);
-            const base64 = base64Encode(u8);
-            return `data:${type};base64,${base64}`;
+        function dataUrl(encoder, ctx) {
+            const u8 = encoder(ctx);
+            return toBase64URL(u8, type);
         }
         if (async) {
             return new Promise((resolve, reject) => {
                 if (type === 'image/bmp') {
-                    resolve(bmpUrl(this));
+                    resolve(dataUrl(encodeBmp, this));
+                } else if (type === 'image/png' && canJSEncodePng(this)) {
+                    resolve(dataUrl(encodePng, this));
                 } else {
                     this.getCanvas().toDataURL(type, function (err, text) {
                         if (err) reject(err);
@@ -575,7 +580,9 @@ export default class Image {
             });
         } else {
             if (type === 'image/bmp') {
-                return bmpUrl(this);
+                return dataUrl(encodeBmp, this);
+            } else if (type === 'image/png' && canJSEncodePng(this)) {
+                return dataUrl(encodePng, this);
             } else {
                 return this.getCanvas().toDataURL(type);
             }
@@ -718,18 +725,23 @@ export default class Image {
      * Save the image to disk (Node.js only)
      * @param {string} path
      * @param {object} [options]
-     * @param {string} [options.format='png']
+     * @param {string} [options.format='png'] - One of: png, jpg, bmp (limited support for bmp)
+     * @param {boolean} [options.useCanvas=false] - Force use of the canvas API to save the image instead of JavaScript implementation
      * @return {Promise} - Resolves when the file is fully written
      */
     save(path, options = {}) {
-        const {format = 'png'} = options;
+        const {format = 'png', useCanvas = false} = options;
         return new Promise((resolve, reject) => {
-            let out = createWriteStream(path);
             let stream, buffer;
             switch (format.toLowerCase()) {
-                case 'png':
-                    stream = this.getCanvas().pngStream();
+                case 'png': {
+                    if (!canJSEncodePng(this) || useCanvas) {
+                        stream = this.getCanvas().pngStream();
+                    } else {
+                        buffer = encodePng(this);
+                    }
                     break;
+                }
                 case 'jpg':
                 case 'jpeg':
                     stream = this.getCanvas().jpegStream();
@@ -741,6 +753,7 @@ export default class Image {
                     throw new RangeError('invalid output format: ' + format);
             }
             if (stream) {
+                let out = createWriteStream(path);
                 out.on('finish', resolve);
                 out.on('error', reject);
                 stream.pipe(out);
@@ -831,6 +844,10 @@ export default class Image {
             }
         }
     }
+}
+
+function canJSEncodePng(img) {
+    return (img.bitDepth === 8 || img.bitDepth === 16);
 }
 
 extend(Image);

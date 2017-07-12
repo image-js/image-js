@@ -64,3 +64,8 @@ export function decode(base64) {
 
     return bytes;
 }
+
+export function toBase64URL(u8, type) {
+    const base64 = encode(u8);
+    return `data:${type};base64,${base64}`;
+}
