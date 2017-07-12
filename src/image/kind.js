@@ -60,6 +60,7 @@ export function computeKind(image) {
     outer: for (const kind in kinds) {
         const kindData = kinds[kind];
         for (const prop in kindData) {
+            if (prop === 'bitDepth') continue;
             if (image[prop] !== kindData[prop]) {
                 continue outer;
             }
