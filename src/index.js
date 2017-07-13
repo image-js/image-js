@@ -1,25 +1,18 @@
 import Image from './image/Image';
-
-export default Image;
-
-import {default as Stack} from './stack/Stack';
-Image.Stack = Stack;
-
-import {default as Shape} from './util/Shape';
-Image.Shape = Shape;
+export {Image as default, Image};
+export {default as Stack} from './stack/Stack';
+export {default as Shape} from './util/Shape';
 
 import * as Kernel from './kernel/kernel';
-Image.Kernel = Kernel;
+export {Kernel};
 
 import {names as greyNames} from './image/transform/greyAlgorithms';
-import {names as maskNames, methods as maskMethods} from './image/transform/mask/maskAlgorithms';
+import {names as maskNames} from './image/transform/mask/maskAlgorithms';
 
 const Static = {
     grey: greyNames,
-    mask: maskNames,
-    maskMethods: maskMethods
+    mask: maskNames
 };
-Image.Static = Static;
+export {Static};
 
-import {default as Worker} from './worker/worker';
-Image.Worker = Worker;
+export {default as Worker} from './worker/worker';

@@ -26,7 +26,7 @@
   "homepage": "https://github.com/image-js/core",
   "license": "MIT",
   "main": "./lib/index.js",
-  "module": "./src/index-next.js",
+  "module": "./src/index.js",
   "browser": {
     "./src/worker/worker.js": "./src/browser/worker/worker.js",
     "./src/image/environment.js": "./src/browser/environment.js",

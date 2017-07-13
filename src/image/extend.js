@@ -83,15 +83,13 @@ import minimalBoundingRectangle from './compute/minimalBoundingRectangle';
 
 export default function extend(Image) {
     let inPlace = {inPlace: true};
-    let inPlaceStack = {inPlace: true, stack: true};
-    let stack = {stack: true};
 
     Image.extendMethod('invertGetSet', invertGetSet, inPlace);
     Image.extendMethod('invertIterator', invertIterator, inPlace);
     Image.extendMethod('invertPixel', invertPixel, inPlace);
     Image.extendMethod('invertOneLoop', invertOneLoop, inPlace);
     Image.extendMethod('invertApply', invertApply, inPlace);
-    Image.extendMethod('invert', invertFilter, inPlaceStack);
+    Image.extendMethod('invert', invertFilter, inPlace);
     Image.extendMethod('invertBinaryLoop', invertBinaryLoop, inPlace);
     Image.extendMethod('level', levelFilter, inPlace);
     Image.extendMethod('add', addFilter, inPlace);
@@ -108,9 +106,9 @@ export default function extend(Image) {
     Image.extendMethod('gaussianFilter', gaussianFilter);
     Image.extendMethod('sobelFilter', sobelFilter);
 
-    Image.extendMethod('crop', crop, stack);
-    Image.extendMethod('cropAlpha', cropAlpha, stack);
-    Image.extendMethod('scale', scale, stack);
+    Image.extendMethod('crop', crop);
+    Image.extendMethod('cropAlpha', cropAlpha);
+    Image.extendMethod('scale', scale);
     Image.extendMethod('hsv', hsv);
     Image.extendMethod('hsl', hsl);
     Image.extendMethod('cmyk', cmyk);

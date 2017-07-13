@@ -1,7 +1,5 @@
-import Image from '../..';
+import {Static} from '../..';
 import 'should';
-
-const Static = Image.Static;
 
 describe('Image core - Algorithms', function () {
 
