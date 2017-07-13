@@ -31,7 +31,8 @@
             "modules": false,
             "targets": {
               "browsers": [
-                "last 2 chrome versions",
+                "chrome >= 54",
+                "firefox >= 45",
                 "last 2 edge versions",
                 "last 1 safari version"
               ]
