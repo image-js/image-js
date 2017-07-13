@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.IJS = factory());
-}(this, (function () { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.IJS = {})));
+}(this, (function (exports) { 'use strict';
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -9152,7 +9152,6 @@ class PNGDecoder extends IOBuffer_1$2 {
             checkCrc = false
         } = options;
         this._checkCrc = checkCrc;
-        this._decoded = false;
         this._inflator = new index_2();
         this._png = null;
         this._end = false;
@@ -9162,9 +9161,8 @@ class PNGDecoder extends IOBuffer_1$2 {
     }
 
     decode() {
-        if (this._decoded) return this._png;
         this._png = {
-            tEXt: {}
+            text: {}
         };
         this.decodeSignature();
         while (!this._end) {
@@ -9178,7 +9176,7 @@ class PNGDecoder extends IOBuffer_1$2 {
     decodeSignature() {
         for (var i = 0; i < pngSignature.length; i++) {
             if (this.readUint8() !== pngSignature[i]) {
-                throw new Error(`Wrong PNG signature. Byte at ${i} should be ${pngSignature[i]}.`);
+                throw new Error(`wrong PNG signature. Byte at ${i} should be ${pngSignature[i]}.`);
             }
         }
     }
@@ -9269,7 +9267,7 @@ class PNGDecoder extends IOBuffer_1$2 {
         while ((char = this.readChar()) !== NULL) {
             keyword += char;
         }
-        this._png.tEXt[keyword] = this.readChars(length - keyword.length - 1);
+        this._png.text[keyword] = this.readChars(length - keyword.length - 1);
     }
 
     // https://www.w3.org/TR/PNG/#11pHYs
@@ -9523,10 +9521,13 @@ class PNGDecoder$1 extends IOBuffer_1$2 {
         var offset = 0;
         for (var i = 0; i < height; i++) {
             newData.writeByte(0); // no filter
+            /* istanbul ignore else */
             if (bitDepth === 8) {
                 offset = writeDataBytes(data, newData, slotsPerLine, offset);
             } else if (bitDepth === 16) {
                 offset = writeDataUint16(data, newData, slotsPerLine, offset);
+            } else {
+                throw new Error('unreachable');
             }
         }
         const buffer = newData.getBuffer();
@@ -9540,10 +9541,10 @@ class PNGDecoder$1 extends IOBuffer_1$2 {
             height: checkInteger(data.height, 'height'),
             data: data.data
         };
-        const {colourType, channels} = getColourType(data.kind);
+        const {colourType, channels, bitDepth} = getColourType(data);
         this._png.colourType = colourType;
         this._png.channels = channels;
-        this._png.bitDepth = data.bitDepth || 8;
+        this._png.bitDepth = bitDepth;
         const expectedSize = this._png.width * this._png.height * channels;
         if (this._png.data.length !== expectedSize) {
             throw new RangeError(`wrong data size. Found ${this._png.data.length}, expected ${expectedSize}`);
@@ -9562,19 +9563,37 @@ function checkInteger(value, name) {
     throw new TypeError(`${name} must be a positive integer`);
 }
 
-function getColourType(kind = 'RGBA') {
-    switch (kind) {
-        case 'RGBA':
-            return {colourType: 6, channels: 4};
-        case 'RGB':
-            return {colourType: 2, channels: 3};
-        case 'GREY':
-            return {colourType: 0, channels: 1};
-        case 'GREYA':
-            return {colourType: 4, channels: 2};
-        default:
-            throw new Error(`unknown kind: ${kind}`);
+function getColourType(data) {
+    const {
+        components = 3,
+        alpha = true,
+        bitDepth = 8
+    } = data;
+    if (components !== 3 && components !== 1) {
+        throw new RangeError(`unsupported number of components: ${components}`);
     }
+    if (bitDepth !== 8 && bitDepth !== 16) {
+        throw new RangeError(`unsupported bit depth: ${bitDepth}`);
+    }
+    const channels = components + Number(alpha);
+    const returnValue = {channels, bitDepth};
+    switch (channels) {
+        case 4:
+            returnValue.colourType = 6;
+            break;
+        case 3:
+            returnValue.colourType = 2;
+            break;
+        case 1:
+            returnValue.colourType = 0;
+            break;
+        case 2:
+            returnValue.colourType = 4;
+            break;
+        default:
+            throw new Error(`unsupported number of channels: ${channels}`);
+    }
+    return returnValue;
 }
 
 function writeDataBytes(data, newData, slotsPerLine, offset) {
@@ -9719,20 +9738,6 @@ kinds[CMYKA] = {
 
 function getKind(kind) {
     return kinds[kind];
-}
-
-function computeKind(image) {
-    outer: for (var kind in kinds) {
-        var kindData = kinds[kind];
-        for (var prop in kindData) {
-            if (prop === 'bitDepth') continue;
-            if (image[prop] !== kindData[prop]) {
-                continue outer;
-            }
-        }
-        return kind;
-    }
-    return 'UNKNOWN';
 }
 
 function getTheoreticalPixelArraySize(image) {
@@ -10287,7 +10292,7 @@ function medianFilter(options = {}) {
 
     var kWidth = radius;
     var kHeight = radius;
-    var newImage = Image$2.createFrom(this);
+    var newImage = Image$1.createFrom(this);
 
     var size = (kWidth * 2 + 1) * (kHeight * 2 + 1);
     var middle = Math.floor(size / 2);
@@ -16720,7 +16725,7 @@ function convolution(kernel, options = {}) {
         algorithm = _options$algorithm === undefined ? 'auto' : _options$algorithm;
 
 
-    var newImage = Image$2.createFrom(this, { bitDepth });
+    var newImage = Image$1.createFrom(this, { bitDepth });
 
     channels = validateArrayOfChannels(this, channels, true);
 
@@ -17088,7 +17093,7 @@ function checkNumberArray(value) {
         }
         return value;
     } else {
-        if (value instanceof Image$2) {
+        if (value instanceof Image$1) {
             return value.data;
         }
         if (!isArrayType(value)) {
@@ -17206,7 +17211,7 @@ function hypotenuse$1(otherImage, options = {}) {
         throw new Error('hypotenuse: both images must have the same number of channels');
     }
 
-    var newImage = Image$2.createFrom(this, { bitDepth: bitDepth });
+    var newImage = Image$1.createFrom(this, { bitDepth: bitDepth });
 
     channels = validateArrayOfChannels(this, { channels: channels });
 
@@ -17771,7 +17776,7 @@ function background(coordinates, values, options) {
         }
     }
     var result = model.predict(allCoordinates);
-    var background = Image$2.createFrom(this);
+    var background = Image$1.createFrom(this);
     for (var _i = 0; _i < this.size; _i++) {
         background.data[_i] = Math.min(this.maxValue, Math.max(0, result[_i][0]));
     }
@@ -17827,7 +17832,7 @@ function crop(options = {}) {
         throw new RangeError(`crop: (x: ${x}, y:${y}, width:${width}, height:${height}) size is out of range`);
     }
 
-    var newImage = Image$2.createFrom(this, { width, height, position: [x, y] });
+    var newImage = Image$1.createFrom(this, { width, height, position: [x, y] });
 
     var xWidth = width * this.channels;
     var y1 = y + height;
@@ -18075,7 +18080,7 @@ function scale$1(options = {}) {
 
     var shiftX = Math.round((this.width - width) / 2);
     var shiftY = Math.round((this.height - height) / 2);
-    var newImage = Image$2.createFrom(this, { width, height, position: [shiftX, shiftY] });
+    var newImage = Image$1.createFrom(this, { width, height, position: [shiftX, shiftY] });
 
     switch (algorithm.toLowerCase()) {
         case 'nearestneighbor':
@@ -18109,7 +18114,7 @@ function hsv() {
         colorModel: [RGB$1]
     });
 
-    var newImage = Image$2.createFrom(this, {
+    var newImage = Image$1.createFrom(this, {
         colorModel: HSV
     });
 
@@ -18176,7 +18181,7 @@ function hsl() {
         colorModel: [RGB$1]
     });
 
-    var newImage = Image$2.createFrom(this, {
+    var newImage = Image$1.createFrom(this, {
         colorModel: HSL
     });
 
@@ -18244,7 +18249,7 @@ function cmyk() {
         colorModel: [RGB$1]
     });
 
-    var newImage = Image$2.createFrom(this, {
+    var newImage = Image$1.createFrom(this, {
         components: 4,
         colorModel: CMYK$1
     });
@@ -18289,7 +18294,7 @@ function cmyk() {
  * var rgbaImage = image.rgba8();
  */
 function rgba8() {
-    return new Image$2(this.width, this.height, this.getRGBAData(), {
+    return new Image$1(this.width, this.height, this.getRGBAData(), {
         kind: 'RGBA',
         parent: this
     });
@@ -18448,7 +18453,7 @@ function grey(options = {}) {
         mergeAlpha = false;
     }
 
-    var newImage = Image$2.createFrom(this, {
+    var newImage = Image$1.createFrom(this, {
         components: 1,
         alpha: keepAlpha,
         colorModel: null
@@ -19576,7 +19581,7 @@ function mask(options = {}) {
         }
     }
 
-    var newImage = new Image$2(this.width, this.height, {
+    var newImage = new Image$1(this.width, this.height, {
         kind: 'BINARY',
         parent: this
     });
@@ -19669,7 +19674,7 @@ function pad(options = {}) {
     var newHeight = this.height + size[1] * 2;
     var channels = this.channels;
 
-    var newImage = Image$2.createFrom(this, { width: newWidth, height: newHeight });
+    var newImage = Image$1.createFrom(this, { width: newWidth, height: newHeight });
 
     copyImage(this, newImage, size[0], size[1]);
 
@@ -19730,7 +19735,7 @@ function colorDepth(newColorDepth = 8) {
         return this.clone();
     }
 
-    var newImage = Image$2.createFrom(this, { bitDepth: newColorDepth });
+    var newImage = Image$1.createFrom(this, { bitDepth: newColorDepth });
 
     if (newColorDepth === 8) {
         for (var i = 0; i < this.data.length; i++) {
@@ -19759,7 +19764,7 @@ function rotateFree(degrees, options = {}) {
     var radians = degrees * Math.PI / 180;
     var newWidth = Math.floor(Math.abs(width * Math.cos(radians)) + Math.abs(height * Math.sin(radians)));
     var newHeight = Math.floor(Math.abs(height * Math.cos(radians)) + Math.abs(width * Math.sin(radians)));
-    var newImageRotated = Image$2.createFrom(this, { width: newWidth, height: newHeight });
+    var newImageRotated = Image$1.createFrom(this, { width: newWidth, height: newHeight });
     var cos = Math.cos(-radians);
     var sin = Math.sin(-radians);
 
@@ -19878,7 +19883,7 @@ function rotate(angle, options) {
  * @return {Image} The new rotated image
  */
 function rotateLeft() {
-    var newImage = Image$2.createFrom(this, { width: this.height, height: this.width });
+    var newImage = Image$1.createFrom(this, { width: this.height, height: this.width });
     var newMaxHeight = newImage.height - 1;
     for (var i = 0; i < this.height; i++) {
         for (var j = 0; j < this.width; j++) {
@@ -19898,7 +19903,7 @@ function rotateLeft() {
  */
 
 function rotateRight() {
-    var newImage = Image$2.createFrom(this, { width: this.height, height: this.width });
+    var newImage = Image$1.createFrom(this, { width: this.height, height: this.width });
     var newMaxWidth = newImage.width - 1;
     for (var i = 0; i < this.height; i++) {
         for (var j = 0; j < this.width; j++) {
@@ -19911,7 +19916,7 @@ function rotateRight() {
 }
 
 function rotate180() {
-    var newImage = Image$2.createFrom(this);
+    var newImage = Image$1.createFrom(this);
     var newMaxWidth = newImage.width - 1;
     var newMaxHeight = newImage.height - 1;
     for (var i = 0; i < this.height; i++) {
@@ -20271,7 +20276,7 @@ function average() {
         }
     }
 
-    var image = Image$2.createFrom(this[0]);
+    var image = Image$1.createFrom(this[0]);
     var newData = image.data;
 
     for (var _i = 0; _i < this[0].data.length; _i++) {
@@ -20320,7 +20325,7 @@ class Stack extends Array {
     }
 
     static load(urls) {
-        return Promise.all(urls.map(Image$2.load)).then(images => new Stack(images));
+        return Promise.all(urls.map(Image$1.load)).then(images => new Stack(images));
     }
 
     static extendMethod(name, method, options = {}) {
@@ -20448,7 +20453,7 @@ function split(options = {}) {
     var data = this.data;
     if (this.alpha && preserveAlpha) {
         for (var i = 0; i < this.components; i++) {
-            var newImage = Image$2.createFrom(this, {
+            var newImage = Image$1.createFrom(this, {
                 components: 1,
                 alpha: true,
                 colorModel: null
@@ -20462,7 +20467,7 @@ function split(options = {}) {
         }
     } else {
         for (var _i = 0; _i < this.channels; _i++) {
-            var _newImage = Image$2.createFrom(this, {
+            var _newImage = Image$1.createFrom(this, {
                 components: 1,
                 alpha: false,
                 colorModel: null
@@ -20504,7 +20509,7 @@ function getChannel(channel, options = {}) {
 
     channel = validateChannel(this, channel);
 
-    var newImage = Image$2.createFrom(this, {
+    var newImage = Image$1.createFrom(this, {
         components: 1,
         alpha: keepAlpha,
         colorModel: null
@@ -20548,7 +20553,7 @@ function combineChannels(method = defaultCombineMethod, options = {}) {
         bitDepth: [8, 16]
     });
 
-    var newImage = Image$2.createFrom(this, {
+    var newImage = Image$1.createFrom(this, {
         components: 1,
         alpha: keepAlpha,
         colorModel: null
@@ -21369,7 +21374,7 @@ function extract(mask, options = {}) {
     }
 
     if (this.bitDepth > 1) {
-        var _extract = Image$2.createFrom(this, {
+        var _extract = Image$1.createFrom(this, {
             width: mask.width,
             height: mask.height,
             alpha: 1, // we force the alpha, otherwise difficult to extract a mask ...
@@ -21393,7 +21398,7 @@ function extract(mask, options = {}) {
 
         return _extract;
     } else {
-        var _extract2 = Image$2.createFrom(this, {
+        var _extract2 = Image$1.createFrom(this, {
             width: mask.width,
             height: mask.height,
             position: position,
@@ -21566,7 +21571,7 @@ function floodFill(options = {}) {
         inPlace = _options$inPlace === undefined ? true : _options$inPlace;
 
 
-    var destination = inPlace ? this : Image$2.createFrom(this);
+    var destination = inPlace ? this : Image$1.createFrom(this);
 
     this.checkProcessable('floodFill', { bitDepth: 1 });
 
@@ -22400,7 +22405,7 @@ class Shape {
      * @return {Image}
      */
     getMask() {
-        var img = new Image$2(this.width, this.height, {
+        var img = new Image$1(this.width, this.height, {
             kind: BINARY
         });
         for (var y = 0; y < this.matrix.length; y++) {
@@ -23331,15 +23336,13 @@ function getAngle(p1, p2) {
 // computers
 function extend$1(Image) {
     var inPlace = { inPlace: true };
-    var inPlaceStack = { inPlace: true, stack: true };
-    var stack = { stack: true };
 
     Image.extendMethod('invertGetSet', invert, inPlace);
     Image.extendMethod('invertIterator', invertIterator, inPlace);
     Image.extendMethod('invertPixel', invertPixel, inPlace);
     Image.extendMethod('invertOneLoop', invertOneLoop, inPlace);
     Image.extendMethod('invertApply', invertApply, inPlace);
-    Image.extendMethod('invert', invert$1, inPlaceStack);
+    Image.extendMethod('invert', invert$1, inPlace);
     Image.extendMethod('invertBinaryLoop', invertBinaryLoop, inPlace);
     Image.extendMethod('level', level, inPlace);
     Image.extendMethod('add', add, inPlace);
@@ -23356,9 +23359,9 @@ function extend$1(Image) {
     Image.extendMethod('gaussianFilter', gaussianFilter);
     Image.extendMethod('sobelFilter', sobelFilter);
 
-    Image.extendMethod('crop', crop, stack);
-    Image.extendMethod('cropAlpha', cropAlpha, stack);
-    Image.extendMethod('scale', scale$1, stack);
+    Image.extendMethod('crop', crop);
+    Image.extendMethod('cropAlpha', cropAlpha);
+    Image.extendMethod('scale', scale$1);
     Image.extendMethod('hsv', hsv);
     Image.extendMethod('hsl', hsl);
     Image.extendMethod('cmyk', cmyk);
@@ -25804,7 +25807,7 @@ class Roi {
             return this.computed.contourMask;
         }
 
-        var img = new Image$2(this.width, this.height, {
+        var img = new Image$1(this.width, this.height, {
             kind: BINARY,
             position: [this.minX, this.minY],
             parent: this.map.parent
@@ -25832,7 +25835,7 @@ class Roi {
             return this.computed.boxMask;
         }
 
-        var img = new Image$2(this.width, this.height, {
+        var img = new Image$1(this.width, this.height, {
             kind: BINARY,
             position: [this.minX, this.minY],
             parent: this.map.parent
@@ -25857,7 +25860,7 @@ class Roi {
             return this.computed.mask;
         }
 
-        var img = new Image$2(this.width, this.height, {
+        var img = new Image$1(this.width, this.height, {
             kind: BINARY,
             position: [this.minX, this.minY],
             parent: this.map.parent
@@ -25878,7 +25881,7 @@ class Roi {
             return this.computed.filledMask;
         }
 
-        var img = new Image$2(this.width, this.height, {
+        var img = new Image$1(this.width, this.height, {
             kind: BINARY,
             position: [this.minX, this.minY],
             parent: this.map.parent
@@ -25913,7 +25916,7 @@ class Roi {
             return this.computed.hullMask;
         }
 
-        var img = new Image$2(this.width, this.height, {
+        var img = new Image$1(this.width, this.height, {
             kind: BINARY,
             position: [this.minX, this.minY],
             parent: this.map.parent
@@ -26529,7 +26532,7 @@ class RoiManager {
 
     // return a mask corresponding to all the selected masks
     getMask(options = {}) {
-        var mask = new Image$2(this._image.width, this._image.height, { kind: 'BINARY' });
+        var mask = new Image$1(this._image.width, this._image.height, { kind: 'BINARY' });
         var masks = this.getMasks(options);
 
         for (var i = 0; i < masks.length; i++) {
@@ -26664,7 +26667,7 @@ var image = void 0;
 
 function getMediaType(type) {
     if (!image) {
-        image = new Image$2(1, 1);
+        image = new Image$1(1, 1);
     }
     var theType = types.get(type);
     if (!theType) {
@@ -28541,7 +28544,7 @@ function loadPNG(data) {
             throw new Error(`Unexpected colourType: ${type}`);
     }
 
-    return new Image$2(png.width, png.height, bitmap, { components, alpha, bitDepth });
+    return new Image$1(png.width, png.height, bitmap, { components, alpha, bitDepth });
 }
 
 function loadTIFF(data) {
@@ -28567,7 +28570,7 @@ function getMetadata(image) {
 }
 
 function getImageFromIFD(image) {
-    return new Image$2(image.width, image.height, image.data, {
+    return new Image$1(image.width, image.height, image.data, {
         components: 1,
         alpha: 0,
         colorModel: null,
@@ -28593,7 +28596,7 @@ function loadGeneric(url, options) {
             var ctx = canvas.getContext('2d');
             ctx.drawImage(image, 0, 0, w, h);
             var data = ctx.getImageData(0, 0, w, h).data;
-            resolve(new Image$2(w, h, data, options));
+            resolve(new Image$1(w, h, data, options));
         };
         image.onerror = function () {
             reject(new Error('Could not load ' + url));
@@ -28678,15 +28681,12 @@ var imageStringTag = 'IJSImage';
  // javascript code using node to get some info about the image
 
  // we load the library that was install using 'npm install image-js'
- var IJS=require('image-js');
-
- // now IJS contains all the methods available to create an image
+ const {Image} = require('image-js');
 
  // loading an image is asynchronous and will return a promise.
  // once the promise has been resolved the function in the 'then' method will
  // be executed
-
- IJS.load('cat.jpg').then(function(image) {
+ Image.load('cat.jpg').then(function(image) {
         console.log('Width',image.width);
         console.log('Height',image.height);
         console.log('colorModel', image.colorModel);
@@ -28698,18 +28698,18 @@ var imageStringTag = 'IJSImage';
 
  @example
 // Convert an image to grey scale
-var IJS=require('image-js');
+const {Image} =require('image-js');
 
-IJS.load('cat.jpg').then(function(image) {
+Image.load('cat.jpg').then(function(image) {
     var grey=image.grey();
     grey.save('cat-grey.jpg');
 });
 
  @example
  // Split a RGB image in it's components
- var IJS=require('image-js');
+ const {Image} = require('image-js');
 
- IJS.load('cat.jpg').then(function(image) {
+ Image.load('cat.jpg').then(function(image) {
     var components=image.split();
     components[0].save('cat-red.jpg');
     components[1].save('cat-green.jpg');
@@ -28723,9 +28723,9 @@ IJS.load('cat.jpg').then(function(image) {
  // Practically this allows to classify pills based on the histogram similarity
  // This work was published at: http://dx.doi.org/10.1016/j.forsciint.2012.10.004
 
- var IJS=require('image-js');
+ const {Image} = require('image-js');
 
- IJS.load('xtc.png').then(function(image) {
+ Image.load('xtc.png').then(function(image) {
 
 
     var grey=image.grey({
@@ -28787,7 +28787,7 @@ IJS.load('cat.jpg').then(function(image) {
     var image = IJS.fromCanvas(canvas);
  </script>
 */
-class Image$2 {
+class Image$1 {
     constructor(width, height, data, options) {
         if (width === undefined) {
             width = 1;
@@ -28856,8 +28856,6 @@ class Image$2 {
         this.alpha = kindDefinition.alpha + 0;
         this.bitDepth = kindDefinition.bitDepth;
         this.colorModel = kindDefinition.colorModel;
-        this.kind = computeKind(this);
-
         this.meta = options.meta || {};
 
         this.computed = null;
@@ -28927,7 +28925,7 @@ class Image$2 {
     static fromCanvas(canvas) {
         var ctx = canvas.getContext('2d');
         var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        return new Image$2(imageData.width, imageData.height, imageData.data);
+        return new Image$1(imageData.width, imageData.height, imageData.data);
     }
 
     static extendMethod(name, method, options = {}) {
@@ -28942,7 +28940,7 @@ class Image$2 {
 
 
         if (inPlace) {
-            Image$2.prototype[name] = function (...args) {
+            Image$1.prototype[name] = function (...args) {
                 // remove computed properties
                 this.computed = null;
                 var result = method.apply(this, [...partialArgs, ...args]);
@@ -28971,7 +28969,7 @@ class Image$2 {
                 }
             }
         } else {
-            Image$2.prototype[name] = function (...args) {
+            Image$1.prototype[name] = function (...args) {
                 return method.apply(this, [...partialArgs, ...args]);
             };
             if (stack) {
@@ -28985,7 +28983,7 @@ class Image$2 {
                 };
             }
         }
-        return Image$2;
+        return Image$1;
     }
 
     static extendProperty(name, method, options = {}) {
@@ -29003,8 +29001,8 @@ class Image$2 {
             this.computed[name] = result;
             return result;
         };
-        Object.defineProperty(Image$2.prototype, name, computedPropertyDescriptor);
-        return Image$2;
+        Object.defineProperty(Image$1.prototype, name, computedPropertyDescriptor);
+        return Image$1;
     }
 
     static createFrom(other, options) {
@@ -29019,7 +29017,7 @@ class Image$2 {
             parent: other
         };
         index$6(newOptions, options);
-        return new Image$2(newOptions.width, newOptions.height, newOptions);
+        return new Image$1(newOptions.width, newOptions.height, newOptions);
     }
 
     static isTypeSupported(type, operation = 'write') {
@@ -29143,11 +29141,17 @@ class Image$2 {
     /**
      * Creates a dataURL string from the image.
      * @param {string} [type='image/png']
-     * @param {boolean} [async=false] - set to true to asynchronously generate the dataURL
-     * This is required on Node.js for jpeg compression.
+     * @param {object} [options]
+     * @param {boolean} [options.async=false] - Set to true to asynchronously generate the dataURL. This is required on Node.js for jpeg compression.
+     * @param {boolean} [options.useCanvas=false] - Force use of the canvas API to save the image instead of JavaScript implementation
      * @return {string|Promise<string>}
      */
-    toDataURL(type = 'image/png', async = false) {
+    toDataURL(type = 'image/png', options = {}) {
+        var _options$async = options.async,
+            async = _options$async === undefined ? false : _options$async,
+            _options$useCanvas = options.useCanvas,
+            useCanvas = _options$useCanvas === undefined ? false : _options$useCanvas;
+
         type = getType(type);
         function dataUrl(encoder, ctx) {
             var u8 = encoder(ctx);
@@ -29157,7 +29161,7 @@ class Image$2 {
             return new Promise((resolve, reject) => {
                 if (type === 'image/bmp') {
                     resolve(dataUrl(encode, this));
-                } else if (type === 'image/png' && canJSEncodePng(this)) {
+                } else if (type === 'image/png' && canJSEncodePng(this) && !useCanvas) {
                     resolve(dataUrl(encodePNG, this));
                 } else {
                     this.getCanvas().toDataURL(type, function (err, text) {
@@ -29168,7 +29172,7 @@ class Image$2 {
         } else {
             if (type === 'image/bmp') {
                 return dataUrl(encode, this);
-            } else if (type === 'image/png' && canJSEncodePng(this)) {
+            } else if (type === 'image/png' && canJSEncodePng(this) && !useCanvas) {
                 return dataUrl(encodePNG, this);
             } else {
                 return this.getCanvas().toDataURL(type);
@@ -29179,16 +29183,16 @@ class Image$2 {
     /**
      * Creates a base64 string from the image.
      * @param {string} [type='image/png']
-     * @param {boolean} [async=false]
+     * @param {object} [options] - Same options as toDataURL
      * @return {string|Promise<string>}
      */
-    toBase64(type = 'image/png', async = false) {
-        if (async) {
-            return this.toDataURL(type, true).then(function (dataURL) {
+    toBase64(type = 'image/png', options = {}) {
+        if (options.async) {
+            return this.toDataURL(type, options).then(function (dataURL) {
                 return dataURL.substring(dataURL.indexOf(',') + 1);
             });
         } else {
-            var dataURL = this.toDataURL(type);
+            var dataURL = this.toDataURL(type, options);
             return dataURL.substring(dataURL.indexOf(',') + 1);
         }
     }
@@ -29309,7 +29313,7 @@ class Image$2 {
         var _options$copyData = options.copyData,
             copyData = _options$copyData === undefined ? true : _options$copyData;
 
-        return new Image$2(this, copyData);
+        return new Image$1(this, copyData);
     }
 
     /**
@@ -29323,8 +29327,8 @@ class Image$2 {
     save(path, options = {}) {
         var _options$format = options.format,
             format = _options$format === undefined ? 'png' : _options$format,
-            _options$useCanvas = options.useCanvas,
-            useCanvas = _options$useCanvas === undefined ? false : _options$useCanvas;
+            _options$useCanvas2 = options.useCanvas,
+            useCanvas = _options$useCanvas2 === undefined ? false : _options$useCanvas2;
 
         return new Promise((resolve, reject) => {
             var stream = void 0,
@@ -29451,8 +29455,8 @@ function canJSEncodePng(img) {
     return img.bitDepth === 8 || img.bitDepth === 16;
 }
 
-extend$1(Image$2);
-bitMethods$1(Image$2);
+extend$1(Image$1);
+bitMethods$1(Image$1);
 
 // http://homepages.inf.ed.ac.uk/rbf/HIPR2/log.htm
 
@@ -29482,7 +29486,7 @@ function laplacianOfGaussian(sigma, nPoints, factor) {
 
 
 
-var Kernel$2 = Object.freeze({
+var kernel$1 = Object.freeze({
 	laplacianOfGaussian: laplacianOfGaussian,
 	DISCRETE_LAPLACE_4: DISCRETE_LAPLACE_4,
 	DISCRETE_LAPLACE_8: DISCRETE_LAPLACE_8,
@@ -29492,7 +29496,7 @@ var Kernel$2 = Object.freeze({
 	SECOND_DERIVATIVE_INV: SECOND_DERIVATIVE_INV
 });
 
-var worker$1 = function () {
+var worker$2 = function () {
     var window = self.window = self;
     function ManagedWorker() {
         this._listeners = {};
@@ -29539,7 +29543,7 @@ var worker$1 = function () {
     "CODE";
 };
 
-var workerStr = worker$1.toString().split('"CODE";');
+var workerStr = worker$2.toString().split('"CODE";');
 
 var newWorkerURL = function newWorkerURL(code, deps) {
     var blob = new Blob(['(', workerStr[0], 'importScripts.apply(self, ' + JSON.stringify(deps) + ');\n', '(', code, ')();', workerStr[1], ')();'], {type: 'application/javascript'});
@@ -29741,7 +29745,7 @@ function run(image, options, onStep) {
 function runOnce(manager, image, options) {
     return manager.post('data', [image, options]).then(function (response) {
         for (var i in response) {
-            response[i] = new Image$2(response[i]);
+            response[i] = new Image$1(response[i]);
         }
         return response;
     });
@@ -29841,23 +29845,21 @@ class Worker$1 {
 
 extend$3(Worker$1);
 
-var Worker$2 = new Worker$1();
-
-Image$2.Stack = Stack;
-
-Image$2.Shape = Shape;
-
-Image$2.Kernel = Kernel$2;
+var worker$1 = new Worker$1();
 
 var Static = {
     grey: names,
-    mask: names$1,
-    maskMethods: methods$1
+    mask: names$1
 };
-Image$2.Static = Static;
 
-Image$2.Worker = Worker$2;
+exports['default'] = Image$1;
+exports.Image = Image$1;
+exports.Kernel = kernel$1;
+exports.Static = Static;
+exports.Stack = Stack;
+exports.Shape = Shape;
+exports.Worker = worker$1;
 
-return Image$2;
+Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
