@@ -9800,7 +9800,11 @@ function Canvas(width, height) {
     return canvas;
 }
 
-function fetchBinary(url, { withCredentials = false } = {}) {
+function fetchBinary(url) {
+    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        _ref$withCredentials = _ref.withCredentials,
+        withCredentials = _ref$withCredentials === undefined ? false : _ref$withCredentials;
+
     return new Promise(function (resolve, reject) {
         var xhr = new self.XMLHttpRequest();
         xhr.open('GET', url, true);
@@ -9946,7 +9950,8 @@ function invertBinaryLoop() {
     }
 }
 
-function validateArrayOfChannels(image, options = {}) {
+function validateArrayOfChannels(image) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var channels = options.channels,
         allowAlpha = options.allowAlpha,
         defaultAlpha = options.defaultAlpha;
@@ -9982,7 +9987,9 @@ function validateChannels(image, channels, allowAlpha) {
     return channels;
 }
 
-function validateChannel(image, channel, allowAlpha = true) {
+function validateChannel(image, channel) {
+    var allowAlpha = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
     if (channel === undefined) {
         throw new RangeError('validateChannel : the channel has to be >=0 and <' + image.channels);
     }
@@ -10100,7 +10107,8 @@ function validateChannel(image, channel, allowAlpha = true) {
  *      * [string] : array of channels as one letter string
  * @return {this}
  */
-function invert$1(options = {}) {
+function invert$1() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var channels = options.channels;
 
 
@@ -10201,7 +10209,9 @@ function flipY() {
  * @param {string} [options.border='copy']
  * @return {Image}
  */
-function convolutionFft(kernel, options = {}) {
+function convolutionFft(kernel) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
   options = Object.assign({}, options);
   options.algorithm = 'fft';
   return this.convolution(kernel, options);
@@ -10216,7 +10226,8 @@ function convolutionFft(kernel, options = {}) {
  * @return {Image}
  */
 // first release of mean filter
-function blurFilter(options = {}) {
+function blurFilter() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$radius = options.radius,
         radius = _options$radius === undefined ? 1 : _options$radius;
 
@@ -10272,7 +10283,8 @@ var asc = function (a, b) {
 * @param {string} [options.border='copy'] algorithm that will be applied after to deal with borders
 * @return {Image}
 */
-function medianFilter(options = {}) {
+function medianFilter() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$radius = options.radius,
         radius = _options$radius === undefined ? 1 : _options$radius,
         channels = options.channels,
@@ -16712,7 +16724,8 @@ function getSeparatedKernel(kernel) {
  * The 'auto' option will try to separate the kernel if that is possible.
  * @return {Image}
  */
-function convolution(kernel, options = {}) {
+function convolution(kernel) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var channels = options.channels,
         bitDepth = options.bitDepth,
         _options$normalize = options.normalize,
@@ -16851,7 +16864,8 @@ function convolution(kernel, options = {}) {
  * @param {boolean} [options.algorithm='auto'] : Algorithm for convolution {@link Image#convolution}
  * @return {Image}
  */
-function gaussianFilter(options = {}) {
+function gaussianFilter() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$radius = options.radius,
         radius = _options$radius === undefined ? 1 : _options$radius,
         sigma = options.sigma,
@@ -16949,7 +16963,8 @@ var SECOND_DERIVATIVE_INV = [[1, 2, 0, -2, -1], [2, 4, 0, -4, -2], [0, 0, 0, 0, 
  * #param {number} [options.bitDepth=this.bitDepth] Specify the bitDepth of the resulting image
  * @return {Image}
  */
-function sobelFilter(options = {}) {
+function sobelFilter() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$kernelX = options.kernelX,
         kernelX = _options$kernelX === undefined ? GRADIENT_X : _options$kernelX,
         _options$kernelY = options.kernelY,
@@ -17006,7 +17021,8 @@ function newArray (n, value) {
  * @param {number} [options.max=this.max] maximal value after levelling
  * @return {this}
  */
-function level(options = {}) {
+function level() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$algorithm = options.algorithm,
         algorithm = _options$algorithm === undefined ? 'range' : _options$algorithm,
         channels = options.channels,
@@ -17111,7 +17127,8 @@ function checkNumberArray(value) {
  * @param {object} [options]
  * @return {this} Modified current image
  */
-function add(value, options = {}) {
+function add(value) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var channels = options.channels;
 
     this.checkProcessable('add', {
@@ -17151,7 +17168,8 @@ function add(value, options = {}) {
  * @param {object} [options]
  * @return {this}
  */
-function subtract(value, options = {}) {
+function subtract(value) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var channels = options.channels;
 
     this.checkProcessable('subtract', {
@@ -17193,7 +17211,8 @@ function subtract(value, options = {}) {
  * @param {number[]|string[]} [options.channels] : to which channel to apply the filter. By default all but alpha.
  * @return {Image}
  */
-function hypotenuse$1(otherImage, options = {}) {
+function hypotenuse$1(otherImage) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var _options$bitDepth = options.bitDepth,
         bitDepth = _options$bitDepth === undefined ? this.bitDepth : _options$bitDepth,
         channels = options.channels;
@@ -17240,7 +17259,8 @@ function hypotenuse$1(otherImage, options = {}) {
  * @param {object} [options]
  * @return {this}
  */
-function multiply(value, options = {}) {
+function multiply(value) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var channels = options.channels;
 
     this.checkProcessable('multiply', {
@@ -17282,7 +17302,8 @@ function multiply(value, options = {}) {
  * @param {object} [options]
  * @return {this}
  */
-function divide(value, options = {}) {
+function divide(value) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var channels = options.channels;
 
     this.checkProcessable('divide', {
@@ -17799,7 +17820,8 @@ function background(coordinates, values, options) {
  *   y:0
  * });
  */
-function crop(options = {}) {
+function crop() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$x = options.x,
         x = _options$x === undefined ? 0 : _options$x,
         _options$y = options.y,
@@ -17861,7 +17883,9 @@ function crop(options = {}) {
  * @param {number} [options.threshold=this.maxValue]
  * @return {Image}
  */
-function cropAlpha(options = {}) {
+function cropAlpha() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
     this.checkProcessable('cropAlpha', {
         alpha: 1
     });
@@ -18039,7 +18063,8 @@ function factorDimensions(factor, width, height) {
  * @param {boolean} [options.preserveAspectRatio=true] - preserve width/height ratio if only one of them is defined
  * @return {Image}
  */
-function scale$1(options = {}) {
+function scale$1() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$factor = options.factor,
         factor = _options$factor === undefined ? 1 : _options$factor,
         _options$algorithm = options.algorithm,
@@ -18420,7 +18445,8 @@ var names = Object.keys(methods);
  * @example
  * var grey = image.grey();
  */
-function grey(options = {}) {
+function grey() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$algorithm = options.algorithm,
         algorithm = _options$algorithm === undefined ? 'luma709' : _options$algorithm,
         _options$keepAlpha = options.keepAlpha,
@@ -19553,7 +19579,8 @@ var names$1 = ['threshold'].concat(Object.keys(methods$1));
  * @param {boolean} [options.invert=false] - Invert the resulting image
  * @return {Image} - Binary image containing the mask
  */
-function mask(options = {}) {
+function mask() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$algorithm = options.algorithm,
         algorithm = _options$algorithm === undefined ? 'threshold' : _options$algorithm,
         _options$threshold = options.threshold,
@@ -19641,7 +19668,8 @@ function copyImage(fromImage, toImage, x, y) {
  * @param {array<number>} [options.color]
  * @return {Image}
  */
-function pad(options = {}) {
+function pad() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$size = options.size,
         size = _options$size === undefined ? 0 : _options$size,
         _options$algorithm = options.algorithm,
@@ -19721,7 +19749,9 @@ function pad(options = {}) {
  *   newColorDepth:8
  * });
  */
-function colorDepth(newColorDepth = 8) {
+function colorDepth() {
+    var newColorDepth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 8;
+
 
     this.checkProcessable('colorDepth', {
         bitDepth: [8, 16]
@@ -19752,7 +19782,8 @@ function colorDepth(newColorDepth = 8) {
 
 //http://homepages.inf.ed.ac.uk/rbf/HIPR2/rotate.htm
 //http://www.cyut.edu.tw/~yltang/program/Rotate1.java
-function rotateFree(degrees, options = {}) {
+function rotateFree(degrees) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var _options$interpolatio = options.interpolation,
         interpolation = _options$interpolatio === undefined ? 'none' : _options$interpolatio,
         _options$width = options.width,
@@ -19825,17 +19856,17 @@ function rotateFree(degrees, options = {}) {
         for (var _i = 0; _i < newWidth; _i += 1) {
             for (var _j = 0; _j < newHeight; _j += 1) {
                 for (var _c = 0; _c < this.channels; _c++) {
-                    var _x = Math.round((_i - x0) * cos - (_j - y0) * sin + x0) + incrementX;
+                    var _x2 = Math.round((_i - x0) * cos - (_j - y0) * sin + x0) + incrementX;
                     var _y = Math.round((_j - y0) * cos + (_i - x0) * sin + y0) + incrementY;
 
-                    if (_x < 0 || _x >= width || _y < 0 || _y >= height) {
+                    if (_x2 < 0 || _x2 >= width || _y < 0 || _y >= height) {
                         if (this.alpha) {
                             newImageRotated.setValueXY(_i, _j, _c, this.alpha);
                         } else {
                             newImageRotated.setValueXY(_i, _j, _c, this.maxValue);
                         }
                     } else {
-                        newImageRotated.setValueXY(_i, _j, _c, this.getValueXY(_x, _y, _c));
+                        newImageRotated.setValueXY(_i, _j, _c, this.getValueXY(_x2, _y, _c));
                     }
                 }
             }
@@ -19939,7 +19970,8 @@ function rotate180() {
  * @param {number[]} [options.color]
  * @return {this}
  */
-function setBorder(options = {}) {
+function setBorder() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$size = options.size,
         size = _options$size === undefined ? 0 : _options$size,
         _options$algorithm = options.algorithm,
@@ -20016,7 +20048,8 @@ function setBorder(options = {}) {
  * @param {number[]} [options.ignoreBorder=[0, 0]]
  * @return {Stack}
  */
-function matchAndCrop(options = {}) {
+function matchAndCrop() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$algorithm = options.algorithm,
         algorithm = _options$algorithm === undefined ? 'matchToPrevious' : _options$algorithm,
         _options$ignoreBorder = options.ignoreBorder,
@@ -20328,7 +20361,8 @@ class Stack extends Array {
         return Promise.all(urls.map(Image$1.load)).then(images => new Stack(images));
     }
 
-    static extendMethod(name, method, options = {}) {
+    static extendMethod(name, method) {
+        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
         var _options$inPlace = options.inPlace,
             inPlace = _options$inPlace === undefined ? false : _options$inPlace,
             _options$returnThis = options.returnThis,
@@ -20338,9 +20372,14 @@ class Stack extends Array {
 
 
         if (inPlace) {
-            Stack.prototype[name] = function (...args) {
+            Stack.prototype[name] = function () {
                 // remove computed properties
                 this.computed = null;
+
+                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                    args[_key] = arguments[_key];
+                }
+
                 var result = method.apply(this, [...partialArgs, ...args]);
                 if (returnThis) {
                     return this;
@@ -20348,14 +20387,19 @@ class Stack extends Array {
                 return result;
             };
         } else {
-            Stack.prototype[name] = function (...args) {
+            Stack.prototype[name] = function () {
+                for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                    args[_key2] = arguments[_key2];
+                }
+
                 return method.apply(this, [...partialArgs, ...args]);
             };
         }
         return Stack;
     }
 
-    static extendProperty(name, method, options = {}) {
+    static extendProperty(name, method) {
+        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
         var _options$partialArgs2 = options.partialArgs,
             partialArgs = _options$partialArgs2 === undefined ? [] : _options$partialArgs2;
 
@@ -20380,7 +20424,9 @@ class Stack extends Array {
      * @param {object} [options]
      * @private
      */
-    checkProcessable(processName, options = {}) {
+    checkProcessable(processName) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
         if (typeof processName !== 'string') {
             throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
         }
@@ -20434,7 +20480,8 @@ extend$2(Stack);
  * @param {boolean} [options.preserveAlpha=true]
  * @return {Stack}
  */
-function split(options = {}) {
+function split() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$preserveAlph = options.preserveAlpha,
         preserveAlpha = _options$preserveAlph === undefined ? true : _options$preserveAlph;
 
@@ -20493,7 +20540,8 @@ function split(options = {}) {
  * @param {boolean} [options.mergeAlpha]
  * @return {Image} A grey image with the extracted channel
  */
-function getChannel(channel, options = {}) {
+function getChannel(channel) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var _options$keepAlpha = options.keepAlpha,
         keepAlpha = _options$keepAlpha === undefined ? false : _options$keepAlpha,
         _options$mergeAlpha = options.mergeAlpha,
@@ -20539,7 +20587,9 @@ function getChannel(channel, options = {}) {
  * @param {boolean} [options.keepAlpha=false]
  * @return {Image}
  */
-function combineChannels(method = defaultCombineMethod, options = {}) {
+function combineChannels() {
+    var method = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultCombineMethod;
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var _options$mergeAlpha = options.mergeAlpha,
         mergeAlpha = _options$mergeAlpha === undefined ? false : _options$mergeAlpha,
         _options$keepAlpha = options.keepAlpha,
@@ -20622,7 +20672,8 @@ function setChannel(channel, image) {
  * @param {object} [options]
  * @return {number[]|number}
  */
-function getSimilarity(image, options = {}) {
+function getSimilarity(image) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var _options$shift = options.shift,
         shift = _options$shift === undefined ? [0, 0] : _options$shift,
         average = options.average,
@@ -20695,7 +20746,8 @@ function getSimilarity(image, options = {}) {
  * @param {Image} [options.mask]
  * @return {object}
  */
-function getPixelsGrid(options = {}) {
+function getPixelsGrid() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$sampling = options.sampling,
         sampling = _options$sampling === undefined ? [10, 10] : _options$sampling,
         _options$painted = options.painted,
@@ -20824,7 +20876,8 @@ Matrix$2.prototype.localSearch = function (x, y, value) {
  * @param {object} [options]
  * @return {number[]}
  */
-function match(image, options = {}) {
+function match(image) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var border = options.border;
 
 
@@ -20878,7 +20931,9 @@ function match(image, options = {}) {
  * @param {number} [channel=0]
  * @return {number[]}
  */
-function getRow(row, channel = 0) {
+function getRow(row) {
+    var channel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
     this.checkProcessable('getRow', {
         bitDepth: [8, 16]
     });
@@ -20904,7 +20959,9 @@ function getRow(row, channel = 0) {
  * @param {number} [channel=0]
  * @return {number[]}
  */
-function getColumn(column, channel = 0) {
+function getColumn(column) {
+    var channel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
 
     this.checkProcessable('getColumn', {
         bitDepth: [8, 16]
@@ -20929,7 +20986,8 @@ function getColumn(column, channel = 0) {
  * @param {number} [options.channel]
  * @return {Matrix}
  */
-function getMatrix(options = {}) {
+function getMatrix() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var channel = options.channel;
 
     this.checkProcessable('getMatrix', {
@@ -20961,7 +21019,8 @@ function getMatrix(options = {}) {
  * @param {object} [options]
  * @param {number} [options.channel]
  */
-function setMatrix(matrix, options = {}) {
+function setMatrix(matrix) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var channel = options.channel;
 
     this.checkProcessable('getMatrix', {
@@ -21358,7 +21417,8 @@ function cannyEdge(options) {
  * @param {number[]} [options.position] - Array of 2 elements to force the x,y coordinates
  * @return {Image} A new image
  */
-function extract(mask, options = {}) {
+function extract(mask) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var position = options.position;
 
     this.checkProcessable('extract', {
@@ -21405,10 +21465,10 @@ function extract(mask, options = {}) {
             parent: this
         });
         for (var _y = 0; _y < mask.height; _y++) {
-            for (var _x = 0; _x < mask.width; _x++) {
-                if (mask.getBitXY(_x, _y)) {
-                    if (this.getBitXY(_x + position[0], _y + position[1])) {
-                        _extract2.setBitXY(_x, _y);
+            for (var _x2 = 0; _x2 < mask.width; _x2++) {
+                if (mask.getBitXY(_x2, _y)) {
+                    if (this.getBitXY(_x2 + position[0], _y + position[1])) {
+                        _extract2.setBitXY(_x2, _y);
                     }
                 }
             }
@@ -21562,7 +21622,8 @@ module.exports = FastList;
 })();
 });
 
-function floodFill(options = {}) {
+function floodFill() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$x = options.x,
         x = _options$x === undefined ? 0 : _options$x,
         _options$y = options.y,
@@ -22140,7 +22201,8 @@ function getRandomColor() {
  * @param {number|Array<number>} [options.rotate=0] - Rotate each label of a define angle
  * @return {this} The original painted image
  */
-function paintLabels(labels, positions, options = {}) {
+function paintLabels(labels, positions) {
+    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
     var _options$color = options.color,
         color = _options$color === undefined ? 'blue' : _options$color,
         colors = options.colors,
@@ -22223,7 +22285,8 @@ function paintLabels(labels, positions, options = {}) {
  * @param {string}              [options.labelFont='12px Helvetica'] - Paint the labels in a different CSS style
  * @return {this} The original painted image
  */
-function paintMasks(masks, options = {}) {
+function paintMasks(masks) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var _options$color = options.color,
         color = _options$color === undefined ? 'red' : _options$color,
         colors = options.colors,
@@ -22330,7 +22393,8 @@ var smallCross = [[0, 1, 0], [1, 1, 1], [0, 1, 0]];
  * @param {boolean} [options.filled=true] - If false only the border ot the shape is taken into account.
  */
 class Shape {
-    constructor(options = {}) {
+    constructor() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var _options$kind = options.kind,
             kind = _options$kind === undefined ? 'cross' : _options$kind,
             shape = options.shape,
@@ -22429,13 +22493,13 @@ function rectangle(width, height, options) {
         }
     } else {
         for (var _y of [0, height - 1]) {
-            for (var _x = 0; _x < width; _x++) {
-                matrix.set(_y, _x, 1);
+            for (var _x2 = 0; _x2 < width; _x2++) {
+                matrix.set(_y, _x2, 1);
             }
         }
         for (var _y2 = 0; _y2 < height; _y2++) {
-            for (var _x2 of [0, width - 1]) {
-                matrix.set(_y2, _x2, 1);
+            for (var _x3 of [0, width - 1]) {
+                matrix.set(_y2, _x3, 1);
             }
         }
     }
@@ -22464,20 +22528,20 @@ function ellipse(width, height, options) {
     } else {
         for (var _y3 = 0; _y3 <= b; _y3++) {
             var _shift = Math.floor(Math.sqrt(a2 - a2 * _y3 * _y3 / b2));
-            var _x3 = a - _shift;
-            matrix.set(b - _y3, _x3, 1);
-            matrix.set(b + _y3 + yEven, _x3, 1);
-            matrix.set(b - _y3, width - _x3 - 1, 1);
-            matrix.set(b + _y3 + yEven, width - _x3 - 1, 1);
+            var _x4 = a - _shift;
+            matrix.set(b - _y3, _x4, 1);
+            matrix.set(b + _y3 + yEven, _x4, 1);
+            matrix.set(b - _y3, width - _x4 - 1, 1);
+            matrix.set(b + _y3 + yEven, width - _x4 - 1, 1);
         }
 
-        for (var _x4 = 0; _x4 <= a; _x4++) {
-            var _shift2 = Math.floor(Math.sqrt(b2 - b2 * _x4 * _x4 / a2));
+        for (var _x5 = 0; _x5 <= a; _x5++) {
+            var _shift2 = Math.floor(Math.sqrt(b2 - b2 * _x5 * _x5 / a2));
             var _y4 = b - _shift2;
-            matrix.set(_y4, a - _x4, 1);
-            matrix.set(_y4, a + _x4 + xEven, 1);
-            matrix.set(height - _y4 - 1, a - _x4, 1);
-            matrix.set(height - _y4 - 1, a + _x4 + xEven, 1);
+            matrix.set(_y4, a - _x5, 1);
+            matrix.set(_y4, a + _x5 + xEven, 1);
+            matrix.set(height - _y4 - 1, a - _x5, 1);
+            matrix.set(height - _y4 - 1, a + _x5 + xEven, 1);
         }
     }
     return matrix;
@@ -22507,7 +22571,8 @@ function triangle$1(width, height, options) {
  * @param {object} [options.shape] - Definition of the shape, see Shape contructor.
  * @return {this} The original painted image
  */
-function paintPoints(points, options = {}) {
+function paintPoints(points) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var _options$color = options.color,
         color = _options$color === undefined ? [this.maxValue, 0, 0] : _options$color,
         shape = options.shape;
@@ -22549,7 +22614,8 @@ function paintPoints(points, options = {}) {
  * @param {boolean} [options.closed=false] - Close the polyline.
  * @return {this} The original painted image
  */
-function paintPolyline(points, options = {}) {
+function paintPolyline(points) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var _options$color = options.color,
         color = _options$color === undefined ? [this.maxValue, 0, 0] : _options$color,
         _options$closed = options.closed,
@@ -22604,7 +22670,9 @@ function paintPolyline(points, options = {}) {
  * @param {Array<number>} [options.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
  * @return {this} The original painted image
  */
-function paintPolygon(points, options = {}) {
+function paintPolygon(points) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
   options.closed = true;
 
   return this.paintPolyline(points, options);
@@ -22620,7 +22688,8 @@ function paintPolygon(points, options = {}) {
  * @param {boolean} [options.useAlpha=true]
  * @return {number[]}
  */
-function getHistogram(options = {}) {
+function getHistogram() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$maxSlots = options.maxSlots,
         maxSlots = _options$maxSlots === undefined ? 256 : _options$maxSlots,
         channel = options.channel,
@@ -22658,7 +22727,8 @@ function getHistogram(options = {}) {
  *          useAlpha: false
  *      });
  */
-function getHistograms(options = {}) {
+function getHistograms() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$maxSlots2 = options.maxSlots,
         maxSlots = _options$maxSlots2 === undefined ? 256 : _options$maxSlots2,
         _options$useAlpha2 = options.useAlpha,
@@ -22733,7 +22803,8 @@ function getChannelHistogram(channel, options) {
  * @param {number} [options.nbSlots=512]
  * @return {number[]}
  */
-function getColorHistogram(options = {}) {
+function getColorHistogram() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$useAlpha = options.useAlpha,
         useAlpha = _options$useAlpha === undefined ? true : _options$useAlpha,
         _options$nbSlots = options.nbSlots,
@@ -22844,7 +22915,10 @@ function sum() {
  * @param {number} [yPower=0]
  * @return {number}
  */
-function getMoment(xPower = 0, yPower = 0) {
+function getMoment() {
+    var xPower = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    var yPower = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
     this.checkProcessable('getMoment', {
         bitDepth: [1]
     });
@@ -22854,7 +22928,7 @@ function getMoment(xPower = 0, yPower = 0) {
     for (var x = 0; x < this.width; x++) {
         for (var y = 0; y < this.height; y++) {
             if (this.getBitXY(x, y) === 1) {
-                m += x ** xPower * y ** yPower;
+                m += Math.pow(x, xPower) * Math.pow(y, yPower);
             }
         }
     }
@@ -22874,7 +22948,8 @@ function getMoment(xPower = 0, yPower = 0) {
  * @param {number} [options.maxEquals=2] - Maximal number of values that may be equal to the maximum
  * @return {number[]} Array whose size is the number of channels
  */
-function localMaxima(options = {}) {
+function localMaxima() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var mask = options.mask,
         _options$region = options.region,
         region = _options$region === undefined ? 3 : _options$region,
@@ -23020,7 +23095,9 @@ function points() {
  *      to the further parent
  * @return {number[]|boolean}
  */
-function getRelativePosition(targetImage, options = {}) {
+function getRelativePosition(targetImage) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
     if (this === targetImage) {
         return [0, 0];
     }
@@ -23066,7 +23143,8 @@ function getSvd() {
  * @param {number} [options.alpha=1] - Value of the alpha value to count.
  * @return {number} Number of transparent pixels
  */
-function countAlphaPixels(options = {}) {
+function countAlphaPixels() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$alpha = options.alpha,
         alpha = _options$alpha === undefined ? 1 : _options$alpha;
 
@@ -23179,7 +23257,7 @@ function difference(p1, p2) {
  * @private
  */
 function normalize(p) {
-    var length = Math.sqrt(p[0] ** 2 + p[1] ** 2);
+    var length = Math.sqrt(Math.pow(p[0], 2) + Math.pow(p[1], 2));
     return [p[0] / length, p[1] / length];
 }
 
@@ -23254,7 +23332,8 @@ function rotate$1(radians, srcPoints, destPoints) {
  * @param {Array<Array<number>>} [options.originalPoints]
  * @return {Array<Array<number>>}
  */
-function minimalBoundingRectangle(options = {}) {
+function minimalBoundingRectangle() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$originalPoin = options.originalPoints,
         originalPoints = _options$originalPoin === undefined ? monotoneChainConvexHull.call(this) : _options$originalPoin;
 
@@ -23432,7 +23511,7 @@ var bitMethods = {
      */
     setBitXY(x, y) {
         var target = y * this.width + x;
-        var shift = 7 - (target & 0b00000111);
+        var shift = 7 - (target & 7);
         var slot = target >> 3;
         this.data[slot] |= 1 << shift;
     },
@@ -23446,7 +23525,7 @@ var bitMethods = {
      */
     clearBitXY(x, y) {
         var target = y * this.width + x;
-        var shift = 7 - (target & 0b00000111);
+        var shift = 7 - (target & 7);
         var slot = target >> 3;
         this.data[slot] &= ~(1 << shift);
     },
@@ -23460,7 +23539,7 @@ var bitMethods = {
      */
     toggleBitXY(x, y) {
         var target = y * this.width + x;
-        var shift = 7 - (target & 0b00000111);
+        var shift = 7 - (target & 7);
         var slot = target >> 3;
         this.data[slot] ^= 1 << shift;
     },
@@ -23475,7 +23554,7 @@ var bitMethods = {
      */
     getBitXY(x, y) {
         var target = y * this.width + x;
-        var shift = 7 - (target & 0b00000111);
+        var shift = 7 - (target & 7);
         var slot = target >> 3;
         return this.data[slot] & 1 << shift ? 1 : 0;
     },
@@ -23488,7 +23567,7 @@ var bitMethods = {
      * @param {number} pixel - the pixel number which correspond to x * image.width + y
      */
     setBit(pixel) {
-        var shift = 7 - (pixel & 0b00000111);
+        var shift = 7 - (pixel & 7);
         var slot = pixel >> 3;
         this.data[slot] |= 1 << shift;
     },
@@ -23500,7 +23579,7 @@ var bitMethods = {
      * @param {number} pixel - the pixel number which correspond to x * image.width + y
      */
     clearBit(pixel) {
-        var shift = 7 - (pixel & 0b00000111);
+        var shift = 7 - (pixel & 7);
         var slot = pixel >> 3;
         this.data[slot] &= ~(1 << shift);
     },
@@ -23512,7 +23591,7 @@ var bitMethods = {
      * @param {number} pixel - the pixel number which correspond to x * image.width + y
      */
     toggleBit(pixel) {
-        var shift = 7 - (pixel & 0b00000111);
+        var shift = 7 - (pixel & 7);
         var slot = pixel >> 3;
         this.data[slot] ^= 1 << shift;
     },
@@ -23525,7 +23604,7 @@ var bitMethods = {
      * @return {number} 0: bit is unset, 1: bit is set
      */
     getBit(pixel) {
-        var shift = 7 - (pixel & 0b00000111);
+        var shift = 7 - (pixel & 7);
         var slot = pixel >> 3;
         return this.data[slot] & 1 << shift ? 1 : 0;
     }
@@ -23616,7 +23695,8 @@ function commonBorderLength(roiMap) {
  * @return {this}
  */
 
-function mergeRoi(options = {}) {
+function mergeRoi() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$algorithm = options.algorithm,
         algorithm = _options$algorithm === undefined ? 'commonBorderLength' : _options$algorithm,
         _options$minCommonBor = options.minCommonBorderLength,
@@ -23743,7 +23823,9 @@ class RoiMap {
         return commonBorderLength(this);
     }
 
-    mergeRoi(options = {}) {
+    mergeRoi() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
         return mergeRoi.call(this, options);
     }
 
@@ -23860,7 +23942,8 @@ class RoiMap {
  * @param {object} [options]
  * @return {RoiMap}
  */
-function fromMask(mask, options = {}) {
+function fromMask(mask) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var _options$allowCorners = options.allowCorners,
         allowCorners = _options$allowCorners === undefined ? false : _options$allowCorners;
 
@@ -24067,7 +24150,8 @@ var neighbours8 = [null, null, null, null];
 /*
 Implementation of the connected-component labeling algorithm
  */
-function fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
+function fromMaskConnectedComponentLabelingAlgorithm(mask) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var _options$allowCorners = options.allowCorners,
         allowCorners = _options$allowCorners === undefined ? false : _options$allowCorners;
 
@@ -24156,7 +24240,8 @@ function fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
  * @param {boolean} [options.invert=false]
  * @return {RoiMap}
  */
-function fromMaxima(options = {}) {
+function fromMaxima() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var _options$allowCorner = options.allowCorner,
         allowCorner = _options$allowCorner === undefined ? true : _options$allowCorner,
         _options$onlyTop = options.onlyTop,
@@ -24207,7 +24292,10 @@ function fromMaxima(options = {}) {
     // we will look for the maxima (or minima) that is present in the picture
     // a maxima is a point that is surrounded by lower values
     // should deal with allowCorner and invert
-    function appendMaxima({ maxima = true }) {
+    function appendMaxima(_ref) {
+        var _ref$maxima = _ref.maxima,
+            maxima = _ref$maxima === undefined ? true : _ref$maxima;
+
         for (var y = 1; y < image.height - 1; y++) {
             for (var x = 1; x < image.width - 1; x++) {
                 var index = x + y * image.width;
@@ -24768,7 +24856,8 @@ var dys = [0, +1, 0, -1, +1, -1, +1, -1];
  * @param {boolean} [options.invert=false] - By default we fill the minima
  * @return {RoiMap}
  */
-function fromWaterShed(options = {}) {
+function fromWaterShed() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var points = options.points,
         mask = options.mask,
         image = options.image,
@@ -24850,7 +24939,9 @@ function fromWaterShed(options = {}) {
  * @param {object} [options]
  * @return {RoiMap}
  */
-function fromPoints(pointsToPaint, options = {}) {
+function fromPoints(pointsToPaint) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
     var shape = new Shape(options);
 
     // based on a binary image we will create plenty of small images
@@ -25597,7 +25688,8 @@ class Roi {
      * @param {string} [options.kind='normal'] - 'contour', 'box', 'filled', 'center', 'hull' or 'normal'
      * @return {Image} - Returns a mask (1 bit Image)
      */
-    getMask(options = {}) {
+    getMask() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var _options$scale = options.scale,
             scale = _options$scale === undefined ? 1 : _options$scale,
             _options$kind = options.kind,
@@ -26075,9 +26167,9 @@ function getBoxIDs(roi) {
     }
 
     // we check the first column and the last column
-    for (var _x of [0, roi.width - 1]) {
+    for (var _x2 of [0, roi.width - 1]) {
         for (var _y = 0; _y < roi.height; _y++) {
-            var _target = (_y + roi.minY) * roiMap.width + _x + roi.minX;
+            var _target = (_y + roi.minY) * roiMap.width + _x2 + roi.minX;
             if (_y - roi.minY > 0 && data[_target] === roi.id && data[_target - roiMap.width] !== roi.id) {
                 var _value2 = data[_target - roiMap.width];
                 surroundingIDs.add(_value2);
@@ -26114,9 +26206,9 @@ function getBox(roi) {
     if (roi.width > 1) {
         leftRight[1] = roi.width - 1;
     }
-    for (var _x2 of leftRight) {
+    for (var _x3 of leftRight) {
         for (var _y2 = 0; _y2 < roi.height; _y2++) {
-            var _target2 = (_y2 + roi.minY) * roiMap.width + _x2 + roi.minX;
+            var _target2 = (_y2 + roi.minY) * roiMap.width + _x3 + roi.minX;
             if (data[_target2] === roi.id) {
                 total++;
             }
@@ -26185,9 +26277,9 @@ function getInternalIDs(roi) {
     }
 
     var array = new Array(4);
-    for (var _x3 = 1; _x3 < roi.width - 1; _x3++) {
+    for (var _x4 = 1; _x4 < roi.width - 1; _x4++) {
         for (var y = 1; y < roi.height - 1; y++) {
-            var _target3 = (y + roi.minY) * roiMap.width + _x3 + roi.minX;
+            var _target3 = (y + roi.minY) * roiMap.width + _x4 + roi.minX;
             if (internal.includes(data[_target3])) {
                 // we check if one of the neighbour is not yet in
 
@@ -26310,7 +26402,9 @@ class RoiLayer {
  * @param {object} [options]
  */
 class RoiManager {
-    constructor(image, options = {}) {
+    constructor(image) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
         this._image = image;
         this._options = options;
         if (!this._options.label) {
@@ -26321,14 +26415,18 @@ class RoiManager {
     }
 
     // docs is in the corresponding file
-    fromMaxima(options = {}) {
+    fromMaxima() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
         var opt = index$6({}, this._options, options);
         var roiMap = fromMaxima.call(this._image, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
     }
 
     // docs is in the corresponding file
-    fromPoints(points, options = {}) {
+    fromPoints(points) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
         var opt = index$6({}, this._options, options);
         var roiMap = fromPoints.call(this._image, points, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
@@ -26340,7 +26438,9 @@ class RoiManager {
      * @param {object} [options]
      * @return {this}
      */
-    putMap(map, options = {}) {
+    putMap(map) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
         var roiMap = new RoiMap(this._image, map);
         var opt = index$6({}, this._options, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
@@ -26348,21 +26448,27 @@ class RoiManager {
     }
 
     // docs is in the corresponding file
-    fromWaterShed(options = {}) {
+    fromWaterShed() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
         var opt = index$6({}, this._options, options);
         var roiMap = fromWaterShed.call(this._image, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
     }
 
     // docs is in the corresponding file
-    fromMask(mask, options = {}) {
+    fromMask(mask) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
         var opt = index$6({}, this._options, options);
         var roiMap = fromMask.call(this._image, mask, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
         return this;
     }
 
-    fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
+    fromMaskConnectedComponentLabelingAlgorithm(mask) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
         var opt = index$6({}, this._options, options);
         var roiMap = fromMaskConnectedComponentLabelingAlgorithm.call(this._image, mask, options);
         this._layers[opt.label] = new RoiLayer(roiMap, opt);
@@ -26374,7 +26480,9 @@ class RoiManager {
      * @param {object} [options]
      * @return {RoiMap}
      */
-    getMap(options = {}) {
+    getMap() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
         var opt = index$6({}, this._options, options);
         this._assertLayerWithLabel(opt.label);
         return this._layers[opt.label].roiMap;
@@ -26385,7 +26493,9 @@ class RoiManager {
      * @param {object} [options]
      * @return {object[]}
      */
-    rowsInfo(options = {}) {
+    rowsInfo() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
         return this.getMap(options).rowsInfo();
     }
 
@@ -26394,7 +26504,9 @@ class RoiManager {
      * @param {object} [options]
      * @return {object[]}
      */
-    colsInfo(options = {}) {
+    colsInfo() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
         return this.getMap(options).rowsInfo();
     }
 
@@ -26403,7 +26515,9 @@ class RoiManager {
      * @param {object} [options]
      * @return {number[]}
      */
-    getRoiIds(options = {}) {
+    getRoiIds() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
         var rois = this.getRois(options);
         if (rois) {
             var ids = new Array(rois.length);
@@ -26431,7 +26545,8 @@ class RoiManager {
      * @param {number} [options.maxRatio=Number.POSITIVE_INFINITY]
      * @return {Roi[]}
      */
-    getRois(options = {}) {
+    getRois() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var _options$label = options.label,
             label = _options$label === undefined ? this._options.label : _options$label,
             _options$positive = options.positive,
@@ -26481,7 +26596,9 @@ class RoiManager {
      * @param {object} [options]
      * @return {Image[]} Retuns an array of masks (1 bit Image)
      */
-    getMasks(options = {}) {
+    getMasks() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
         var rois = this.getRois(options);
 
         var masks = new Array(rois.length);
@@ -26496,7 +26613,9 @@ class RoiManager {
      * @param {object} [options]
      * @return {number[]}
      */
-    getData(options = {}) {
+    getData() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
         var opt = index$6({}, this._options, options);
         this._assertLayerWithLabel(opt.label);
         return this._layers[opt.label].roiMap.data;
@@ -26512,7 +26631,8 @@ class RoiManager {
      *                                  for example id, surface, width, height, meanX, meanY.
      * @return {Image} - The painted RGBA 8 bits image
      */
-    paint(options = {}) {
+    paint() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var labelProperty = options.labelProperty;
 
         if (!this._painted) {
@@ -26531,7 +26651,9 @@ class RoiManager {
     }
 
     // return a mask corresponding to all the selected masks
-    getMask(options = {}) {
+    getMask() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
         var mask = new Image$1(this._image.width, this._image.height, { kind: 'BINARY' });
         var masks = this.getMasks(options);
 
@@ -26557,7 +26679,8 @@ class RoiManager {
      * @param {object} [options]
      * @param {Image} [options.image] A new iamge that you would like to sue for painting over
      */
-    resetPainted(options = {}) {
+    resetPainted() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var image = options.image;
 
         if (image) {
@@ -26580,7 +26703,9 @@ class RoiManager {
      * @param {number} [options.maxCommonBorderRatio=1] maximal common border ratio for merging
      * @return {this}
      */
-    mergeRoi(options = {}) {
+    mergeRoi() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
         var roiMap = this.getMap(options);
         roiMap.mergeRoi(options);
         this.putMap(roiMap.data, options);
@@ -26593,7 +26718,9 @@ class RoiManager {
      * @param {object} [options]
      * @return {Array} array of objects returned in correspondingRoisInformation
      */
-    findCorrespondingRoi(roiMap, options = {}) {
+    findCorrespondingRoi(roiMap) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
         var allRois = this.getRois(options);
         var allRelated = [];
         for (var i = 0; i < allRois.length; i++) {
@@ -28928,7 +29055,8 @@ class Image$1 {
         return new Image$1(imageData.width, imageData.height, imageData.data);
     }
 
-    static extendMethod(name, method, options = {}) {
+    static extendMethod(name, method) {
+        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
         var _options$inPlace = options.inPlace,
             inPlace = _options$inPlace === undefined ? false : _options$inPlace,
             _options$returnThis = options.returnThis,
@@ -28940,9 +29068,14 @@ class Image$1 {
 
 
         if (inPlace) {
-            Image$1.prototype[name] = function (...args) {
+            Image$1.prototype[name] = function () {
                 // remove computed properties
                 this.computed = null;
+
+                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                    args[_key] = arguments[_key];
+                }
+
                 var result = method.apply(this, [...partialArgs, ...args]);
                 if (returnThis) {
                     return this;
@@ -28952,32 +29085,36 @@ class Image$1 {
             if (stack) {
                 var stackName = typeof stack === 'string' ? stack : name;
                 if (returnThis) {
-                    Stack.prototype[stackName] = function (...args) {
+                    Stack.prototype[stackName] = function () {
                         for (var image of this) {
-                            image[name](...args);
+                            image[name](...arguments);
                         }
                         return this;
                     };
                 } else {
-                    Stack.prototype[stackName] = function (...args) {
+                    Stack.prototype[stackName] = function () {
                         var result = new Stack(this.length);
                         for (var i = 0; i < this.length; i++) {
-                            result[i] = this[i][name](...args);
+                            result[i] = this[i][name](...arguments);
                         }
                         return result;
                     };
                 }
             }
         } else {
-            Image$1.prototype[name] = function (...args) {
+            Image$1.prototype[name] = function () {
+                for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                    args[_key2] = arguments[_key2];
+                }
+
                 return method.apply(this, [...partialArgs, ...args]);
             };
             if (stack) {
                 var _stackName = typeof stack === 'string' ? stack : name;
-                Stack.prototype[_stackName] = function (...args) {
+                Stack.prototype[_stackName] = function () {
                     var result = new Stack(this.length);
                     for (var i = 0; i < this.length; i++) {
-                        result[i] = this[i][name](...args);
+                        result[i] = this[i][name](...arguments);
                     }
                     return result;
                 };
@@ -28986,7 +29123,8 @@ class Image$1 {
         return Image$1;
     }
 
-    static extendProperty(name, method, options = {}) {
+    static extendProperty(name, method) {
+        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
         var _options$partialArgs2 = options.partialArgs,
             partialArgs = _options$partialArgs2 === undefined ? [] : _options$partialArgs2;
 
@@ -29020,7 +29158,9 @@ class Image$1 {
         return new Image$1(newOptions.width, newOptions.height, newOptions);
     }
 
-    static isTypeSupported(type, operation = 'write') {
+    static isTypeSupported(type) {
+        var operation = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'write';
+
         if (typeof type !== 'string') {
             throw new TypeError('type argument must be a string');
         }
@@ -29146,7 +29286,9 @@ class Image$1 {
      * @param {boolean} [options.useCanvas=false] - Force use of the canvas API to save the image instead of JavaScript implementation
      * @return {string|Promise<string>}
      */
-    toDataURL(type = 'image/png', options = {}) {
+    toDataURL() {
+        var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'image/png';
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         var _options$async = options.async,
             async = _options$async === undefined ? false : _options$async,
             _options$useCanvas = options.useCanvas,
@@ -29186,7 +29328,10 @@ class Image$1 {
      * @param {object} [options] - Same options as toDataURL
      * @return {string|Promise<string>}
      */
-    toBase64(type = 'image/png', options = {}) {
+    toBase64() {
+        var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'image/png';
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
         if (options.async) {
             return this.toDataURL(type, options).then(function (dataURL) {
                 return dataURL.substring(dataURL.indexOf(',') + 1);
@@ -29203,7 +29348,10 @@ class Image$1 {
      * @param {string} [quality=0.8] A Number between 0 and 1 indicating image quality if the requested type is image/jpeg or image/webp. If this argument is anything else, the default value for image quality is used. Other arguments are ignored.
      * @return {Promise}
      */
-    toBlob(type = 'image/png', quality = 0.8) {
+    toBlob() {
+        var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'image/png';
+        var quality = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.8;
+
         return index_1(this.getCanvas({ originalData: true }), type, quality);
     }
 
@@ -29213,7 +29361,8 @@ class Image$1 {
      * @param {boolean} [options.originalData=false]
      * @return {Canvas}
      */
-    getCanvas(options = {}) {
+    getCanvas() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var _options$originalData = options.originalData,
             originalData = _options$originalData === undefined ? false : _options$originalData;
 
@@ -29309,7 +29458,8 @@ class Image$1 {
      * @example
      * var emptyImage = image.clone({copyData:false});
      */
-    clone(options = {}) {
+    clone() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var _options$copyData = options.copyData,
             copyData = _options$copyData === undefined ? true : _options$copyData;
 
@@ -29324,7 +29474,8 @@ class Image$1 {
      * @param {boolean} [options.useCanvas=false] - Force use of the canvas API to save the image instead of JavaScript implementation
      * @return {Promise} - Resolves when the file is fully written
      */
-    save(path, options = {}) {
+    save(path) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         var _options$format = options.format,
             format = _options$format === undefined ? 'png' : _options$format,
             _options$useCanvas2 = options.useCanvas,
@@ -29371,7 +29522,8 @@ class Image$1 {
     }
 
     // this method check if a process can be applied on the current image
-    checkProcessable(processName, options = {}) {
+    checkProcessable(processName) {
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         var bitDepth = options.bitDepth,
             alpha = options.alpha,
             colorModel = options.colorModel,
@@ -29823,13 +29975,18 @@ class Worker$1 {
         var manager = void 0;
         var url = void 0;
         var runner = {};
-        function run(...args) {
+        function run() {
             if (!manager) {
                 this.checkUrl();
                 url = this.url;
                 manager = new index$39(method.work, { deps: url });
                 runner.manager = manager;
             }
+
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
+            }
+
             return method.run.call(runner, ...args);
         }
         run.reset = function () {
