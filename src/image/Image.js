@@ -92,15 +92,12 @@ const imageStringTag = 'IJSImage';
  // javascript code using node to get some info about the image
 
  // we load the library that was install using 'npm install image-js'
- var IJS=require('image-js');
-
- // now IJS contains all the methods available to create an image
+ const {Image} = require('image-js');
 
  // loading an image is asynchronous and will return a promise.
  // once the promise has been resolved the function in the 'then' method will
  // be executed
-
- IJS.load('cat.jpg').then(function(image) {
+ Image.load('cat.jpg').then(function(image) {
         console.log('Width',image.width);
         console.log('Height',image.height);
         console.log('colorModel', image.colorModel);
@@ -112,18 +109,18 @@ const imageStringTag = 'IJSImage';
 
  @example
 // Convert an image to grey scale
-var IJS=require('image-js');
+const {Image} =require('image-js');
 
-IJS.load('cat.jpg').then(function(image) {
+Image.load('cat.jpg').then(function(image) {
     var grey=image.grey();
     grey.save('cat-grey.jpg');
 });
 
  @example
  // Split a RGB image in it's components
- var IJS=require('image-js');
+ const {Image} = require('image-js');
 
- IJS.load('cat.jpg').then(function(image) {
+ Image.load('cat.jpg').then(function(image) {
     var components=image.split();
     components[0].save('cat-red.jpg');
     components[1].save('cat-green.jpg');
@@ -137,9 +134,9 @@ IJS.load('cat.jpg').then(function(image) {
  // Practically this allows to classify pills based on the histogram similarity
  // This work was published at: http://dx.doi.org/10.1016/j.forsciint.2012.10.004
 
- var IJS=require('image-js');
+ const {Image} = require('image-js');
 
- IJS.load('xtc.png').then(function(image) {
+ Image.load('xtc.png').then(function(image) {
 
 
     var grey=image.grey({
@@ -552,11 +549,16 @@ export default class Image {
     /**
      * Creates a dataURL string from the image.
      * @param {string} [type='image/png']
-     * @param {boolean} [async=false] - set to true to asynchronously generate the dataURL
-     * This is required on Node.js for jpeg compression.
+     * @param {object} [options]
+     * @param {boolean} [options.async=false] - Set to true to asynchronously generate the dataURL. This is required on Node.js for jpeg compression.
+     * @param {boolean} [options.useCanvas=false] - Force use of the canvas API to save the image instead of JavaScript implementation
      * @return {string|Promise<string>}
      */
-    toDataURL(type = 'image/png', async = false) {
+    toDataURL(type = 'image/png', options = {}) {
+        const {
+            async = false,
+            useCanvas = false
+        } = options;
         type = getType(type);
         function dataUrl(encoder, ctx) {
             const u8 = encoder(ctx);
@@ -566,7 +568,7 @@ export default class Image {
             return new Promise((resolve, reject) => {
                 if (type === 'image/bmp') {
                     resolve(dataUrl(encodeBmp, this));
-                } else if (type === 'image/png' && canJSEncodePng(this)) {
+                } else if (type === 'image/png' && canJSEncodePng(this) && !useCanvas) {
                     resolve(dataUrl(encodePng, this));
                 } else {
                     this.getCanvas().toDataURL(type, function (err, text) {
@@ -579,7 +581,7 @@ export default class Image {
         } else {
             if (type === 'image/bmp') {
                 return dataUrl(encodeBmp, this);
-            } else if (type === 'image/png' && canJSEncodePng(this)) {
+            } else if (type === 'image/png' && canJSEncodePng(this) && !useCanvas) {
                 return dataUrl(encodePng, this);
             } else {
                 return this.getCanvas().toDataURL(type);
@@ -590,16 +592,16 @@ export default class Image {
     /**
      * Creates a base64 string from the image.
      * @param {string} [type='image/png']
-     * @param {boolean} [async=false]
+     * @param {object} [options] - Same options as toDataURL
      * @return {string|Promise<string>}
      */
-    toBase64(type = 'image/png', async = false) {
-        if (async) {
-            return this.toDataURL(type, true).then(function (dataURL) {
+    toBase64(type = 'image/png', options = {}) {
+        if (options.async) {
+            return this.toDataURL(type, options).then(function (dataURL) {
                 return dataURL.substring(dataURL.indexOf(',') + 1);
             });
         } else {
-            const dataURL = this.toDataURL(type);
+            const dataURL = this.toDataURL(type, options);
             return dataURL.substring(dataURL.indexOf(',') + 1);
         }
     }
