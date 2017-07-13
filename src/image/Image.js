@@ -4,7 +4,7 @@ import {encode as encodeBmp} from 'fast-bmp';
 import {encode as encodePng} from 'fast-png';
 import hasOwn from 'has-own';
 
-import {getKind, computeKind, createPixelArray, getTheoreticalPixelArraySize} from './kind';
+import {getKind, createPixelArray, getTheoreticalPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
 import {ImageData, Canvas, createWriteStream, writeFile} from './environment';
 import extend from './extend';
@@ -270,8 +270,6 @@ export default class Image {
         this.alpha = kindDefinition.alpha + 0;
         this.bitDepth = kindDefinition.bitDepth;
         this.colorModel = kindDefinition.colorModel;
-        this.kind = computeKind(this);
-
         this.meta = options.meta || {};
 
         this.computed = null;
