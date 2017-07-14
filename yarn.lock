@@ -2071,11 +2071,11 @@ fast-list@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/fast-list/-/fast-list-1.0.3.tgz#f5d5754a7c1cbf682a15961ef9a063897571eaa1"
 
-fast-png@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/fast-png/-/fast-png-1.1.0.tgz#f1c34d4e93a31201ca2eb6d83b6a8d9605bffbc3"
+fast-png@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/fast-png/-/fast-png-3.0.0.tgz#8e0c1265ef91787228e334244d50e667072136a1"
   dependencies:
-    iobuffer "^2.0.0"
+    iobuffer "^3.2.0"
     pako "^1.0.0"
 
 faye-websocket@~0.10.0:
@@ -2578,11 +2578,11 @@ invert-kv@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
 
-iobuffer@^2.0.0, iobuffer@^2.1.0:
+iobuffer@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/iobuffer/-/iobuffer-2.1.0.tgz#074882d24020a85db6a5042a0418ef9b6b2e616a"
 
-iobuffer@^3.1.0:
+iobuffer@^3.1.0, iobuffer@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/iobuffer/-/iobuffer-3.2.0.tgz#9234f4d2cb1042818704f07d1f5c833f41327e26"
   dependencies:
@@ -4502,9 +4502,9 @@ rollup-pluginutils@^2.0.1:
     estree-walker "^0.3.0"
     micromatch "^2.3.11"
 
-rollup@^0.43.0:
-  version "0.43.0"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.43.0.tgz#b36bdb75fa5e0823b6de8aee18ff7b5655520543"
+rollup@^0.45.1:
+  version "0.45.2"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.45.2.tgz#63a284c2b31234656f24e9e9717fabb6a7f0fa43"
   dependencies:
     source-map-support "^0.4.0"
 
