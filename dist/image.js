@@ -9782,17 +9782,6 @@ var env = 'browser';
 var ImageData = self.ImageData;
 var DOMImage = self.Image;
 
-var origin = self.location.origin;
-function isDifferentOrigin(url) {
-    try {
-        var parsedURL = new URL(url);
-        return parsedURL.origin !== origin;
-    } catch (e) {
-        // may be a relative URL. In this case, it cannot be parsed but is effectively from same origin
-        return false;
-    }
-}
-
 function Canvas(width, height) {
     var canvas = self.document.createElement('canvas');
     canvas.width = width;
@@ -28595,41 +28584,42 @@ function loadImage$1(image, options) {
     if (typeof image === 'string') {
         return loadURL(image, options);
     } else if (image instanceof ArrayBuffer) {
-        return Promise.resolve(loadBinary(new Uint8Array(image), options));
+        return Promise.resolve(loadBinary(new Uint8Array(image)));
     } else if (image.buffer) {
-        return Promise.resolve(loadBinary(image, options));
+        return Promise.resolve(loadBinary(image));
     } else {
         throw new Error('argument to "load" must be a string or buffer.');
     }
 }
 
-function loadBinary(image, options, url) {
+function loadBinary(image, base64Url) {
     var type = index$36(image);
     if (type) {
-        switch (type.ext) {
-            case 'png':
+        switch (type.mime) {
+            case 'image/png':
                 return loadPNG(image);
-            case 'jpg':
+            case 'image/jpeg':
                 {
                     var decoded = decode(image);
                     var meta = void 0;
                     if (decoded.exif) {
                         meta = getMetadata(decoded.exif);
                     }
-                    return loadFromURL(url, { meta });
+                    return loadGeneric(getBase64('image/jpeg'), { meta });
                 }
-            case 'tif':
+            case 'image/tiff':
                 return loadTIFF(image);
-            // no default
+            default:
+                return loadGeneric(getBase64(type.mime));
         }
     }
-    return loadFromURL(url);
-
-    function loadFromURL(url, options) {
-        if (!url) {
-            throw new Error(`This kind of image (${type}) can only be loaded from URL.`);
+    return loadGeneric(getBase64('application/octet-stream'));
+    function getBase64(type) {
+        if (base64Url) {
+            return base64Url;
+        } else {
+            return toBase64URL(image, type);
         }
-        return loadGeneric(url, options);
     }
 }
 
@@ -28643,7 +28633,7 @@ function loadURL(url, options) {
     }
     return binaryDataP.then(binaryData => {
         var uint8 = new Uint8Array(binaryData);
-        return loadBinary(uint8, options, url);
+        return loadBinary(uint8, dataURL ? url : undefined);
     });
 }
 
@@ -28710,12 +28700,6 @@ function loadGeneric(url, options) {
     options = options || {};
     return new Promise(function (resolve, reject) {
         var image = new DOMImage();
-
-        if (isDifferentOrigin(url)) {
-            // see https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
-            image.crossOrigin = 'Anonymous';
-        }
-
         image.onload = function () {
             var w = image.width;
             var h = image.height;
