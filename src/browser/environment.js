@@ -2,17 +2,6 @@ const env = 'browser';
 const ImageData = self.ImageData;
 const DOMImage = self.Image;
 
-const origin = self.location.origin;
-export function isDifferentOrigin(url) {
-    try {
-        let parsedURL = new URL(url);
-        return parsedURL.origin !== origin;
-    } catch (e) {
-        // may be a relative URL. In this case, it cannot be parsed but is effectively from same origin
-        return false;
-    }
-}
-
 export function Canvas(width, height) {
     let canvas = self.document.createElement('canvas');
     canvas.width = width;
