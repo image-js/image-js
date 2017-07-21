@@ -11,5 +11,5 @@ export default function getSvd() {
         bitDepth: [1]
     });
 
-    return SVD(this.points);
+    return new SVD(this.points);
 }
