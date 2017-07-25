@@ -22096,6 +22096,53 @@ function getRandomColor() {
 }
 
 /**
+ * returns an array of colors based on various options
+ * by default this methods return 50 distinct colors
+ * @param {object} [options]
+ * @param {Array<number>|string}     [options.color] - Array of 3 elements (R, G, B) or a valid css color.
+ * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
+ * @param {boolean}             [options.randomColors=true] - To paint each mask with a random color if color and colors are undefined
+ * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color if color and colors are undefined
+ * @param {boolean}             [options.numberColors=50] - number of colors to generate by default
+ * @return {Array} Array of colors
+ */
+function getColors(options) {
+    var color = options.color,
+        colors = options.colors,
+        randomColors = options.randomColors,
+        _options$numberColors = options.numberColors,
+        numberColors = _options$numberColors === undefined ? 50 : _options$numberColors;
+
+
+    if (color && !Array.isArray(color)) {
+        color = css2array(color);
+    }
+
+    if (color) {
+        return [color];
+    }
+
+    if (colors) {
+        colors = colors.map(function (color) {
+            if (!Array.isArray(color)) {
+                return css2array(color);
+            }
+            return color;
+        });
+        return colors;
+    }
+
+    if (randomColors) {
+        colors = new Array(numberColors);
+        for (var i = 0; i < numberColors; i++) {
+            colors[i] = getRandomColor();
+        }
+    }
+
+    return getDistinctColors(numberColors);
+}
+
+/**
  * Paint a mask or masks on the current image.
  * @memberof Image
  * @instance
@@ -22181,11 +22228,11 @@ function paintLabels(labels, positions) {
  * @instance
  * @param {(Image|Array<Image>)}     masks - Image containing a binary mask
  * @param {object}              [options]
- * @param {Array<number>|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
+ * @param {Array<number>|string}     [options.color] - Array of 3 elements (R, G, B) or a valid css color.
  * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
+ * @param {boolean}             [options.randomColors=true] - To paint each mask with a random color if color and colors are undefined
+ * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color if color and colors are undefined
  * @param {number}              [options.alpha=255] - Value from 0 to 255 to specify the alpha.
- * @param {boolean}             [options.randomColors=false] - To paint each mask with a random color
- * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color
  * @param {Array<string>}       [options.labels] - Array of labels to display. Should the the same size as masks.
  * @param {Array<Array<number>>} [options.labelsPosition] - Array of points [x,y] where the labels should be displayed.
  *                                      By default it is the 0,0 position of the correesponding mask.
@@ -22195,15 +22242,8 @@ function paintLabels(labels, positions) {
  */
 function paintMasks(masks) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var _options$color = options.color,
-        color = _options$color === undefined ? 'red' : _options$color,
-        colors = options.colors,
-        _options$alpha = options.alpha,
+    var _options$alpha = options.alpha,
         alpha = _options$alpha === undefined ? 255 : _options$alpha,
-        _options$randomColors = options.randomColors,
-        randomColors = _options$randomColors === undefined ? false : _options$randomColors,
-        _options$distinctColo = options.distinctColors,
-        distinctColors = _options$distinctColo === undefined ? false : _options$distinctColo,
         _options$labels = options.labels,
         labels = _options$labels === undefined ? [] : _options$labels,
         _options$labelsPositi = options.labelsPosition,
@@ -22220,37 +22260,16 @@ function paintMasks(masks) {
         colorModel: RGB$1
     });
 
-    if (color && !Array.isArray(color)) {
-        color = css2array(color);
-    }
-
-    if (colors) {
-        colors = colors.map(function (color) {
-            if (!Array.isArray(color)) {
-                return css2array(color);
-            }
-            return color;
-        });
-    }
+    var colors = getColors(Object.assign({}, options, { numberColors: masks.length }));
 
     if (!Array.isArray(masks)) {
         masks = [masks];
     }
 
-    if (distinctColors) {
-        colors = getDistinctColors(masks.length);
-    }
-
     for (var i = 0; i < masks.length; i++) {
         var mask = masks[i];
         // we need to find the parent image to calculate the relative position
-
-        if (colors) {
-            color = colors[i % colors.length];
-        } else if (randomColors) {
-            color = getRandomColor();
-        }
-
+        var color = colors[i % colors.length];
         for (var x = 0; x < mask.width; x++) {
             for (var y = 0; y < mask.height; y++) {
                 if (mask.getBitXY(x, y)) {
@@ -22475,26 +22494,30 @@ function triangle$1(width, height, options) {
  * @instance
  * @param {Array<Array<number>>} points - Array of [x,y] points
  * @param {object} [options]
- * @param {Array<number>} [options.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
+ * @param {Array<number>|string}     [options.color] - Array of 3 elements (R, G, B) or a valid css color.
+ * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
+ * @param {boolean}             [options.randomColors=true] - To paint each mask with a random color if color and colors are undefined
+ * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color if color and colors are undefined
  * @param {object} [options.shape] - Definition of the shape, see Shape contructor.
  * @return {this} The original painted image
  */
 function paintPoints(points) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var _options$color = options.color,
-        color = _options$color === undefined ? [this.maxValue, 0, 0] : _options$color,
-        shape = options.shape;
+    var shape = options.shape;
 
 
     this.checkProcessable('paintPoints', {
         bitDepth: [8, 16]
     });
 
+    var colors = getColors(Object.assign({}, options, { numberColors: points.length }));
+
     var shapePixels = new Shape(shape).getPoints();
 
-    var numberChannels = Math.min(this.channels, color.length);
+    var numberChannels = Math.min(this.channels, colors[0].length);
 
     for (var i = 0; i < points.length; i++) {
+        var color = colors[i % colors.length];
         var xP = points[i][0];
         var yP = points[i][1];
         for (var j = 0; j < shapePixels.length; j++) {
@@ -22570,6 +22593,38 @@ function paintPolyline(points) {
 }
 
 /**
+ * Paint polylines on the current image.
+ * @memberof Image
+ * @instance
+ * @param {Array<Array<number>>} polylines - Array of array of [x,y] points
+ * @param {object} [options]
+ * @param {Array<number>|string}     [options.color] - Array of 3 elements (R, G, B) or a valid css color.
+ * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
+ * @param {boolean}             [options.randomColors=true] - To paint each mask with a random color if color and colors are undefined
+ * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color if color and colors are undefined
+ * @param {object} [options.shape] - Definition of the shape, see Shape contructor.
+ * @return {this} The original painted image
+ */
+function paintPolylines(polylines) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    var optionsCopy = Object.assign({}, options);
+
+    this.checkProcessable('paintPolylines', {
+        bitDepth: [8, 16]
+    });
+
+    var colors = getColors(Object.assign({}, options, { numberColors: polylines.length }));
+
+    for (var i = 0; i < polylines.length; i++) {
+        optionsCopy.color = colors[i % colors.length];
+        this.paintPolyline(polylines[i], optionsCopy);
+    }
+
+    return this;
+}
+
+/**
  * Paint a polygon defined by an array of points.
  * @memberof Image
  * @instance
@@ -22584,6 +22639,38 @@ function paintPolygon(points) {
   options.closed = true;
 
   return this.paintPolyline(points, options);
+}
+
+/**
+ * Paint an array of polygone on the current image.
+ * @memberof Image
+ * @instance
+ * @param {Array<Array<number>>} polygones - Array of array of [x,y] points
+ * @param {object} [options]
+ * @param {Array<number>|string}     [options.color] - Array of 3 elements (R, G, B) or a valid css color.
+ * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
+ * @param {boolean}             [options.randomColors=true] - To paint each mask with a random color if color and colors are undefined
+ * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color if color and colors are undefined
+ * @param {object} [options.shape] - Definition of the shape, see Shape contructor.
+ * @return {this} The original painted image
+ */
+function paintPolylines$1(polygones) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    var optionsCopy = Object.assign({}, options);
+
+    this.checkProcessable('paintPolylines', {
+        bitDepth: [8, 16]
+    });
+
+    var colors = getColors(Object.assign({}, options, { numberColors: polygones.length }));
+
+    for (var i = 0; i < polygones.length; i++) {
+        optionsCopy.color = colors[i % colors.length];
+        this.paintPolygone(polygones[i], optionsCopy);
+    }
+
+    return this;
 }
 
 /**
@@ -23387,7 +23474,9 @@ function extend$1(Image) {
     Image.extendMethod('paintMasks', paintMasks, inPlace);
     Image.extendMethod('paintPoints', paintPoints, inPlace);
     Image.extendMethod('paintPolyline', paintPolyline, inPlace);
+    Image.extendMethod('paintPolylines', paintPolylines, inPlace);
     Image.extendMethod('paintPolygon', paintPolygon, inPlace);
+    Image.extendMethod('paintPolygons', paintPolylines$1, inPlace);
 
     Image.extendMethod('countAlphaPixels', countAlphaPixels);
     Image.extendMethod('monotoneChainConvexHull', monotoneChainConvexHull);
