@@ -1,6 +1,5 @@
 import {RGB} from '../model/model';
-import {getDistinctColors, getRandomColor} from '../../util/color';
-import {css2array} from '../../util/color';
+import {getColors} from '../../util/color';
 
 /**
  * Paint a mask or masks on the current image.
@@ -10,9 +9,9 @@ import {css2array} from '../../util/color';
  * @param {object}              [options]
  * @param {Array<number>|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
  * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
- * @param {number}              [options.alpha=255] - Value from 0 to 255 to specify the alpha.
  * @param {boolean}             [options.randomColors=false] - To paint each mask with a random color
  * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color
+ * @param {number}              [options.alpha=255] - Value from 0 to 255 to specify the alpha.
  * @param {Array<string>}       [options.labels] - Array of labels to display. Should the the same size as masks.
  * @param {Array<Array<number>>} [options.labelsPosition] - Array of points [x,y] where the labels should be displayed.
  *                                      By default it is the 0,0 position of the correesponding mask.
@@ -22,11 +21,7 @@ import {css2array} from '../../util/color';
  */
 export default function paintMasks(masks, options = {}) {
     let {
-        color = 'red',
-        colors,
         alpha = 255,
-        randomColors = false,
-        distinctColors = false,
         labels = [],
         labelsPosition = [],
         labelColor = 'blue',
@@ -39,37 +34,16 @@ export default function paintMasks(masks, options = {}) {
         colorModel: RGB
     });
 
-    if (color && !Array.isArray(color)) {
-        color = css2array(color);
-    }
-
-    if (colors) {
-        colors = colors.map(function (color) {
-            if (!Array.isArray(color)) {
-                return css2array(color);
-            }
-            return color;
-        });
-    }
+    let colors=getColors(Object.assign({}, options, {numberColors: masks.length}));
 
     if (!Array.isArray(masks)) {
         masks = [masks];
     }
 
-    if (distinctColors) {
-        colors = getDistinctColors(masks.length);
-    }
-
     for (let i = 0; i < masks.length; i++) {
         let mask = masks[i];
         // we need to find the parent image to calculate the relative position
-
-        if (colors) {
-            color = colors[i % colors.length];
-        } else if (randomColors) {
-            color = getRandomColor();
-        }
-
+        let color= colors[i % colors.length];
         for (let x = 0; x < mask.width; x++) {
             for (let y = 0; y < mask.height; y++) {
                 if (mask.getBitXY(x, y)) {

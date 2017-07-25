@@ -61,3 +61,44 @@ export function getDistinctColors(numColors) {
 export function getRandomColor() {
     return [(Math.floor(Math.random() * 256)), (Math.floor(Math.random() * 256)), (Math.floor(Math.random() * 256))];
 }
+
+
+/**
+ * returns an array of colors based on various options
+ * by default this methods return 50 distinct colors
+ */
+export function getColors(options) {
+    let {
+        color,
+        colors,
+        randomColors, // true / false
+        numberColors = 50
+    } = options;
+
+    if (color && !Array.isArray(color)) {
+        color = css2array(color);
+    }
+
+    if (color) {
+        return [color];
+    }
+
+    if (colors) {
+        colors = colors.map(function (color) {
+            if (!Array.isArray(color)) {
+                return css2array(color);
+            }
+            return color;
+        });
+        return colors;
+    }
+
+    if (randomColors) {
+        colors = new Array(numberColors);
+        for (let i = 0; i < numberColors; i++) {
+            colors[i] = getRandomColor();
+        }
+    }
+
+    return getDistinctColors(numberColors);
+}
