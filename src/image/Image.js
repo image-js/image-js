@@ -551,17 +551,23 @@ export default class Image {
      * @param {string} [type='image/png']
      * @param {object} [options]
      * @param {boolean} [options.async=false] - Set to true to asynchronously generate the dataURL. This is required on Node.js for jpeg compression.
-     * @param {boolean} [options.useCanvas=false] - Force use of the canvas API to save the image instead of JavaScript implementation
+     * @param {boolean} [options.useCanvas=false] - Force use of the canvas API to save the image instead of JavaScript implementation.
+     * @param {object} [options.encoder] - Specify options for the encoder if applicable.
      * @return {string|Promise<string>}
      */
     toDataURL(type = 'image/png', options = {}) {
+        if (typeof type === 'object') {
+            options = type;
+            type = 'image/png';
+        }
         const {
             async = false,
-            useCanvas = false
+            useCanvas = false,
+            encoder: encoderOptions = undefined
         } = options;
         type = getType(type);
         function dataUrl(encoder, ctx) {
-            const u8 = encoder(ctx);
+            const u8 = encoder(ctx, encoderOptions);
             return toBase64URL(u8, type);
         }
         if (async) {
@@ -727,10 +733,15 @@ export default class Image {
      * @param {object} [options]
      * @param {string} [options.format='png'] - One of: png, jpg, bmp (limited support for bmp)
      * @param {boolean} [options.useCanvas=false] - Force use of the canvas API to save the image instead of JavaScript implementation
+     * @param {object} [options.encoder] - Specify options for the encoder if applicable.
      * @return {Promise} - Resolves when the file is fully written
      */
     save(path, options = {}) {
-        const {format = 'png', useCanvas = false} = options;
+        const {
+            format = 'png',
+            useCanvas = false,
+            encoder: encoderOptions = undefined
+        } = options;
         return new Promise((resolve, reject) => {
             let stream, buffer;
             switch (format.toLowerCase()) {
@@ -738,7 +749,7 @@ export default class Image {
                     if (!canJSEncodePng(this) || useCanvas) {
                         stream = this.getCanvas().pngStream();
                     } else {
-                        buffer = encodePng(this);
+                        buffer = encodePng(this, encoderOptions);
                     }
                     break;
                 }
@@ -747,7 +758,7 @@ export default class Image {
                     stream = this.getCanvas().jpegStream();
                     break;
                 case 'bmp':
-                    buffer = encodeBmp(this);
+                    buffer = encodeBmp(this, encoderOptions);
                     break;
                 default:
                     throw new RangeError('invalid output format: ' + format);

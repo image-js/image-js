@@ -1,6 +1,6 @@
 {
   "name": "image-js",
-  "version": "0.11.10",
+  "version": "0.11.11",
   "description": "Image processing and manipulation in JavaScript",
   "keywords": [
     "image",
@@ -70,7 +70,7 @@
     "benchmark": "^2.1.0",
     "cross-env": "^5.0.0",
     "documentation": "^4.0.0-beta.18",
-    "eslint": "^4.0.0",
+    "eslint": "^4.3.0",
     "eslint-config-cheminfo": "^1.4.0",
     "eslint-plugin-no-only-tests": "^2.0.0",
     "istanbul": "^1.0.0-alpha",
@@ -98,7 +98,7 @@
     "fast-bmp": "^1.0.0",
     "fast-jpeg": "^1.0.1",
     "fast-list": "^1.0.3",
-    "fast-png": "^3.0.0",
+    "fast-png": "^3.1.0",
     "has-own": "^1.0.0",
     "image-type": "^3.0.0",
     "is-array-type": "^1.0.0",

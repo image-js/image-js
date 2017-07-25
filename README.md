@@ -18,6 +18,9 @@ Image processing and manipulation in JavaScript
 Currently, to run some methods of `image-js` on Node.js (including: `.save()`, `.toDataURL()`, `load()` on a JPEG image), it is necessary to install the `canvas` native addon. The addon is specified as an optional dependency. If its compilation fails and you need it, follow the instructions to install it on your OS [here](https://github.com/Automattic/node-canvas#installation).  
 Browser builds of the library are not affected as they use the standard Canvas API.
 
+#### If compilation fails on OsX, try:
+`export PKG_CONFIG_PATH=/usr/X11/lib/pkgconfig/`
+
 ## License
 
   [MIT](./LICENSE)
