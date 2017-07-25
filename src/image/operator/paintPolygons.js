@@ -1,10 +1,10 @@
 import {getColors} from '../../util/color';
 
 /**
- * Paint an array of polygone on the current image.
+ * Paint an array of polygon on the current image.
  * @memberof Image
  * @instance
- * @param {Array<Array<number>>} polygones - Array of array of [x,y] points
+ * @param {Array<Array<number>>} polygons - Array of array of [x,y] points
  * @param {object} [options]
  * @param {Array<number>|string}     [options.color] - Array of 3 elements (R, G, B) or a valid css color.
  * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
@@ -13,19 +13,19 @@ import {getColors} from '../../util/color';
  * @param {object} [options.shape] - Definition of the shape, see Shape contructor.
  * @return {this} The original painted image
  */
-export default function paintPolylines(polygones, options = {}) {
+export default function paintPolygons(polygons, options = {}) {
     let optionsCopy = Object.assign({}, options);
 
-    this.checkProcessable('paintPolylines', {
+    this.checkProcessable('paintPolygons', {
         bitDepth: [8, 16]
     });
 
-    let colors = getColors(Object.assign({}, options, {numberColors: polygones.length}));
+    let colors = getColors(Object.assign({}, options, {numberColors: polygons.length}));
 
 
-    for (let i = 0; i < polygones.length; i++) {
+    for (let i = 0; i < polygons.length; i++) {
         optionsCopy.color = colors[i % colors.length];
-        this.paintPolygone(polygones[i], optionsCopy);
+        this.paintPolygon(polygons[i], optionsCopy);
     }
 
     return this;

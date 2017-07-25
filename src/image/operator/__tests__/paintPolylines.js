@@ -7,7 +7,7 @@ describe('we check paintPolylines', function () {
         let data = new Array(size * size * 3).fill(0);
         let image = new Image(size, size, data, {kind: 'RGB'});
 
-        let polylines = [[[1, 1], [3, 1], [3, 2], [1, 2]], [[1, 3], [3, 3], [3, 4], [1, 4]]];
+        let polylines = [[[1, 1], [3, 1]], [[1, 3], [3, 3]]];
         image.paintPolylines(polylines, {colors: ['red', 'blue']});
 
         let grey = image.grey();
@@ -15,9 +15,9 @@ describe('we check paintPolylines', function () {
         let expected = [
             0, 0, 0, 0, 0,
             0, 54, 54, 54, 0,
-            0, 54, 54, 54, 0,
+            0, 0, 0, 0, 0,
             0, 18, 18, 18, 0,
-            0, 18, 18, 18, 0
+            0, 0, 0, 0, 0
         ];
 
         Array.from(grey.data).should.eql(expected);
