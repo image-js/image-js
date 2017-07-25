@@ -66,6 +66,13 @@ export function getRandomColor() {
 /**
  * returns an array of colors based on various options
  * by default this methods return 50 distinct colors
+ * @param {object} [options]
+ * @param {Array<number>|string}     [options.color] - Array of 3 elements (R, G, B) or a valid css color.
+ * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
+ * @param {boolean}             [options.randomColors=true] - To paint each mask with a random color if color and colors are undefined
+ * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color if color and colors are undefined
+ * @param {boolean}             [options.numberColors=50] - number of colors to generate by default
+ * @return {Array} Array of colors
  */
 export function getColors(options) {
     let {

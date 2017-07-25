@@ -7,10 +7,10 @@ import {getColors} from '../../util/color';
  * @instance
  * @param {(Image|Array<Image>)}     masks - Image containing a binary mask
  * @param {object}              [options]
- * @param {Array<number>|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
+ * @param {Array<number>|string}     [options.color] - Array of 3 elements (R, G, B) or a valid css color.
  * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
- * @param {boolean}             [options.randomColors=false] - To paint each mask with a random color
- * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color
+ * @param {boolean}             [options.randomColors=true] - To paint each mask with a random color if color and colors are undefined
+ * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color if color and colors are undefined
  * @param {number}              [options.alpha=255] - Value from 0 to 255 to specify the alpha.
  * @param {Array<string>}       [options.labels] - Array of labels to display. Should the the same size as masks.
  * @param {Array<Array<number>>} [options.labelsPosition] - Array of points [x,y] where the labels should be displayed.
@@ -34,7 +34,7 @@ export default function paintMasks(masks, options = {}) {
         colorModel: RGB
     });
 
-    let colors=getColors(Object.assign({}, options, {numberColors: masks.length}));
+    let colors = getColors(Object.assign({}, options, {numberColors: masks.length}));
 
     if (!Array.isArray(masks)) {
         masks = [masks];
@@ -43,7 +43,7 @@ export default function paintMasks(masks, options = {}) {
     for (let i = 0; i < masks.length; i++) {
         let mask = masks[i];
         // we need to find the parent image to calculate the relative position
-        let color= colors[i % colors.length];
+        let color = colors[i % colors.length];
         for (let x = 0; x < mask.width; x++) {
             for (let y = 0; y < mask.height; y++) {
                 if (mask.getBitXY(x, y)) {

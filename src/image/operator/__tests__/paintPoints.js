@@ -13,7 +13,7 @@ describe('we check paintPoints', function () {
 
 
         let points = [[1, 1], [3, 2]];
-        image.paintPoints(points, {shape: {kind: 'smallCross'}});
+        image.paintPoints(points, {color: 'red', shape: {kind: 'smallCross'}});
 
 
         let marked = [

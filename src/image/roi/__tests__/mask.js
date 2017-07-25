@@ -61,7 +61,7 @@ describe('we check mask', function () {
             let masks = roiManager.getMasks();
 
             let painted = new Image(5, 5);
-            painted.paintMasks(masks);
+            painted.paintMasks(masks, {color: 'red'});
 
             Array.from(painted.data).slice(0, 8).should.eql([255, 0, 0, 255, 255, 0, 0, 255]);
         });

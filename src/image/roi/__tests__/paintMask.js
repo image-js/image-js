@@ -17,7 +17,7 @@ describe('we check paint mask', function () {
 
     it('should yield the right painted images for box', function () {
         roiManager.resetPainted();
-        let painted = roiManager.paint({kind: 'box', positive: true, negative: false});
+        let painted = roiManager.paint({color: 'red', kind: 'box', positive: true, negative: false});
         Array.from(painted.getChannel(0).data).should.eql(
             [
                 0, 0, 0, 0, 0,
@@ -31,7 +31,7 @@ describe('we check paint mask', function () {
 
     it('should yield the right painted images for filled', function () {
         roiManager.resetPainted();
-        let painted = roiManager.paint({kind: 'filled', positive: true, negative: false});
+        let painted = roiManager.paint({color: 'red', kind: 'filled', positive: true, negative: false});
         Array.from(painted.getChannel(0).data).should.eql(
             [
                 0, 0, 0, 0, 0,
@@ -45,7 +45,7 @@ describe('we check paint mask', function () {
 
     it('should yield the right painted images for contour', function () {
         roiManager.resetPainted();
-        let painted = roiManager.paint({kind: 'contour', positive: true, negative: false});
+        let painted = roiManager.paint({color: 'red', kind: 'contour', positive: true, negative: false});
         Array.from(painted.getChannel(0).data).should.eql(
             [
                 0, 0, 0, 0, 0,
@@ -59,7 +59,7 @@ describe('we check paint mask', function () {
 
     it('should yield the right painted images for center', function () {
         roiManager.resetPainted();
-        let painted = roiManager.paint({kind: 'center', positive: true, negative: false});
+        let painted = roiManager.paint({color: 'red', kind: 'center', positive: true, negative: false});
         Array.from(painted.getChannel(0).data).should.eql(
             [
                 0, 0, 0, 0, 0,
@@ -73,7 +73,7 @@ describe('we check paint mask', function () {
 
     it('should yield the right painted images for normal', function () {
         roiManager.resetPainted();
-        let painted = roiManager.paint({positive: true, negative: false});
+        let painted = roiManager.paint({color: 'red', positive: true, negative: false});
         Array.from(painted.getChannel(0).data).should.eql(
             [
                 0, 0, 0, 0, 0,

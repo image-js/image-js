@@ -62,7 +62,9 @@ import paintLabels from './operator/paintLabels';
 import paintMasks from './operator/paintMasks';
 import paintPoints from './operator/paintPoints';
 import paintPolyline from './operator/paintPolyline';
+import paintPolylines from './operator/paintPolylines';
 import paintPolygon from './operator/paintPolygon';
+import paintPolygons from './operator/paintPolygons';
 
 // computers
 import {getHistogram, getHistograms} from './compute/histogram';
@@ -147,7 +149,9 @@ export default function extend(Image) {
     Image.extendMethod('paintMasks', paintMasks, inPlace);
     Image.extendMethod('paintPoints', paintPoints, inPlace);
     Image.extendMethod('paintPolyline', paintPolyline, inPlace);
+    Image.extendMethod('paintPolylines', paintPolylines, inPlace);
     Image.extendMethod('paintPolygon', paintPolygon, inPlace);
+    Image.extendMethod('paintPolygons', paintPolygons, inPlace);
 
     Image.extendMethod('countAlphaPixels', countAlphaPixels);
     Image.extendMethod('monotoneChainConvexHull', monotoneChainConvexHull);
