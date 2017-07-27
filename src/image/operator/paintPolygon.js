@@ -62,7 +62,7 @@ export default function paintPolygon(points, options = {}) {
 
     let filtredPoints = deleteDouble(points);
     if (filled === false) {
-        return this.paintPolyline(filtredPoints, options);
+        return this.paintPolyline(points, options);
     } else {
         let matrixBinary = Array(this.height);
         for (let i = 0; i < this.height; i++) {
