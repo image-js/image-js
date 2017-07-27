@@ -816,7 +816,12 @@ export default class Image {
                 components = [components];
             }
             if (!components.includes(this.components)) {
-                throw new TypeError('The process: ' + processName + ' can only be applied if the number of components is in: ' + components);
+                let errorMessage = `The process: ${processName} can only be applied if the number of components is in: ${components}`;
+                if (components.length === 1 && components[0] === 1) {
+                    throw new TypeError(errorMessage + '.\rYou should transform your image using "image.grey()" before applying the algorithm.');
+                } else {
+                    throw new TypeError(errorMessage);
+                }
             }
         }
         if (channels) {
