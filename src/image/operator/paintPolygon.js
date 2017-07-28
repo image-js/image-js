@@ -60,7 +60,7 @@ export default function paintPolygon(points, options = {}) {
 
     options.closed = true;
 
-    let filtredPoints = deleteDouble(points);
+    let filteredPoints = deleteDouble(points);
     if (filled === false) {
         return this.paintPolyline(points, options);
     } else {
@@ -71,8 +71,8 @@ export default function paintPolygon(points, options = {}) {
                 matrixBinary[i].push(0);
             }
         }
-        for (let p = 0; p < filtredPoints.length; p++) {
-            const line = lineBetweenTwoPoints(filtredPoints[p], filtredPoints[(p + 1) % filtredPoints.length]);
+        for (let p = 0; p < filteredPoints.length; p++) {
+            const line = lineBetweenTwoPoints(filteredPoints[p], filteredPoints[(p + 1) % filteredPoints.length]);
             for (let y = 0; y < this.height; y++) {
                 for (let x = 0; x < this.width; x++) {
                     if (isAtTheRightOfTheLine(x, y, line, this.height)) {
