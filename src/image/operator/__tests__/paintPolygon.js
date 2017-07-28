@@ -35,7 +35,7 @@ describe('we check paintPolygon', function () {
         let image = new Image(size, size, data, {kind: 'RGB'});
 
         let points = [[1, 1], [4, 1], [4, 3], [1, 3]];
-        image.paintPolygon(points, {filled: false});
+        image.paintPolygon(points);
 
         let painted = [
             0, 0, 0, 0, 0,

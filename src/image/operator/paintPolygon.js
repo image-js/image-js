@@ -51,7 +51,7 @@ function isAtTheRightOfTheLine(x, y, line, height) {
 export default function paintPolygon(points, options = {}) {
     let {
         color = [this.maxValue, 0, 0],
-        filled = true
+        filled = false
     } = options;
 
     this.checkProcessable('paintPoints', {
