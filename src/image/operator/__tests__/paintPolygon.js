@@ -59,14 +59,37 @@ describe('we check paintPolygon', function () {
         let image = new Image(size, size, data, {kind: 'GREY'});
 
         let points = [[2, 0], [4, 2], [0, 2]];
-        image.paintPolygon(points);
+        image.paintPolygon(points, {filled: true});
 
         let painted = [
             0, 0, 1, 0, 0,
-            0, 1, 0, 1, 0,
+            0, 1, 1, 1, 0,
             1, 1, 1, 1, 1,
             0, 0, 0, 0, 0,
             0, 0, 0, 0, 0
+        ];
+
+        let exptected = getExpectedGrey(painted, [255, 0, 0]);
+        Array.from(image.data).should.eql(exptected);
+    });
+
+    it('when there is two segments out of the polygon', function () {
+        let size = 5;
+        let data = new Array(size * size);
+        for (let i = 0; i < data.length; i++) {
+            data[i] = i;
+        }
+        let image = new Image(size, size, data, {kind: 'GREY'});
+
+        let points = [[0, 0], [2, 0], [4, 2], [2, 2], [2, 4], [2, 2], [0, 2], [2, 0], [0, 0]];
+        image.paintPolygon(points, {filled: true});
+
+        let painted = [
+            1, 1, 1, 0, 0,
+            0, 1, 1, 1, 0,
+            1, 1, 1, 1, 1,
+            0, 0, 1, 0, 0,
+            0, 0, 1, 0, 0
         ];
 
         let exptected = getExpectedGrey(painted, [255, 0, 0]);
