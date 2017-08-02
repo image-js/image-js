@@ -45,7 +45,7 @@ function isAtTheRightOfTheLine(x, y, line, height) {
  * @param {Array<Array<number>>} points - Array of [x,y] points
  * @param {object} [options]
  * @param {Array<number>} [options.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
- * @param {Array<number>} [options.filled=true] - If you want the polygon to be filled or not.
+ * @param {Array<number>} [options.filled=false] - If you want the polygon to be filled or not.
  * @return {this} The original painted image
  */
 export default function paintPolygon(points, options = {}) {
