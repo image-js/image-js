@@ -135,9 +135,9 @@ function computeWidthAndHeigth(tl, tr, br, bl, widthImage, heightImage) {
 }
 
 
-function projectionPoint(x, y, a, b, c, d, e, f, g, h, imageInput)  {
+function projectionPoint(x, y, a, b, c, d, e, f, g, h, image, channel)  {
     let [newX, newY] = [(a * x + b * y + c) / (g * x + h * y + 1), (d * x + e * y + f) / (g * x + h * y + 1)];
-    return imageInput.getPixelXY(Math.floor(newX), Math.floor(newY));
+    return image.getValueXY(Math.floor(newX), Math.floor(newY), channel);
 }
 
 /**
@@ -164,37 +164,36 @@ export default function warpingFourPoints(pts) {
     let [widthRect, heightRect] = computeWidthAndHeigth(tl, tr, br, bl, this.width, this.height);
     let newImage = Image.createFrom(this, {width: widthRect, height: heightRect});
 
+    let [X1, Y1] = tl;
+    let [X2, Y2] = tr;
+    let [X3, Y3] = br;
+    let [X4, Y4] = bl;
+    let [x1, y1] = [0, 0];
+    let [x2, y2] = [0, widthRect - 1];
+    let [x3, y3] = [heightRect - 1, widthRect - 1];
+    let [x4, y4] = [heightRect - 1, 0];
+
+    let S = new Matrix([[x1, y1, 1, 0, 0, 0, -x1 * X1, -y1 * X1],
+        [x2, y2, 1, 0, 0, 0, -x2 * X2, -y2 * X2],
+        [x3, y3, 1, 0, 0, 0, -x3 * X3, -y1 * X3],
+        [x4, y4, 1, 0, 0, 0, -x4 * X4, -y4 * X4],
+        [0, 0, 0, x1, y1, 1, -x1 * Y1, -y1 * Y1],
+        [0, 0, 0, x2, y2, 1, -x2 * Y2, -y2 * Y2],
+        [0, 0, 0, x3, y3, 1, -x3 * Y3, -y3 * Y3],
+        [0, 0, 0, x4, y4, 1, -x4 * Y4, -y4 * Y4]]);
+
+    let D = Matrix.columnVector([X1, X2, X3, X4, Y1, Y2, Y3, Y4]);
+
+    let svd = new SingularValueDecomposition(S);
+    let T = svd.solve(D); // solve S*T = D
+    let [a, b, c, d, e, f, g, h] = T.to1DArray();
+
+    let Xt = new Matrix(heightRect, widthRect);
+
     for (let channel = 0; channel < this.channels; channel++) {
-        let imageChannel = this.getChannel(channel);
-
-        let [X1, Y1] = tl;
-        let [X2, Y2] = tr;
-        let [X3, Y3] = br;
-        let [X4, Y4] = bl;
-        let [x1, y1] = [0, 0];
-        let [x2, y2] = [0, widthRect - 1];
-        let [x3, y3] = [heightRect - 1, widthRect - 1];
-        let [x4, y4] = [heightRect - 1, 0];
-
-        let S = new Matrix([[x1, y1, 1, 0, 0, 0, -x1 * X1, -y1 * X1],
-            [x2, y2, 1, 0, 0, 0, -x2 * X2, -y2 * X2],
-            [x3, y3, 1, 0, 0, 0, -x3 * X3, -y1 * X3],
-            [x4, y4, 1, 0, 0, 0, -x4 * X4, -y4 * X4],
-            [0, 0, 0, x1, y1, 1, -x1 * Y1, -y1 * Y1],
-            [0, 0, 0, x2, y2, 1, -x2 * Y2, -y2 * Y2],
-            [0, 0, 0, x3, y3, 1, -x3 * Y3, -y3 * Y3],
-            [0, 0, 0, x4, y4, 1, -x4 * Y4, -y4 * Y4]]);
-
-        let D = Matrix.columnVector([X1, X2, X3, X4, Y1, Y2, Y3, Y4]);
-
-        let svd = new SingularValueDecomposition(S);
-        let T = svd.solve(D); // solve S*T = D
-        let [a, b, c, d, e, f, g, h] = T.to1DArray();
-
-        let Xt = new Matrix(heightRect, widthRect);
         for (let i = 0; i < heightRect; i++) {
             for (let j = 0; j < widthRect; j++) {
-                Xt.set(i, j, projectionPoint(i, j, a, b, c, d, e, f, g, h, imageChannel));
+                Xt.set(i, j, projectionPoint(i, j, a, b, c, d, e, f, g, h, this, channel));
             }
         }
         newImage.setMatrix(Xt, {channel: channel});
