@@ -144,7 +144,9 @@ function projectionPoint(x, y, a, b, c, d, e, f, g, h, image, channel)  {
  * Transform a quadrilateral into a rectangle
  * @memberof Image
  * @instance
- * @param {Array<Array<number>>} [pts] Array of the four corners.
+ * @param {Array<Array<number>>} [pts] - Array of the four corners.
+ * @param {object} [options] 
+ * @param {boolean} [options.calculateRatio=true] - true if you want to calculate the aspect ratio "width x height" by taking the perspectiv into consideration.
  * @return {Image} The new image, which is a rectangle
  * @example
  * var cropped = image.warpingFourPoints({
@@ -152,7 +154,11 @@ function projectionPoint(x, y, a, b, c, d, e, f, g, h, image, channel)  {
  * });
  */
 
-export default function warpingFourPoints(pts) {
+export default function warpingFourPoints(pts, options = {}) {
+    let {
+        calculateRatio = true
+    } = options;
+
     if (pts.length !== 4) {
         throw new Error('The array pts must have four elements, which are the four corners. Currently, pts have ' + pts.length + ' elements');
     }
@@ -161,7 +167,14 @@ export default function warpingFourPoints(pts) {
 
     let quadrilaterial = [pt1, pt2, pt3, pt4];
     let [tl, tr, br, bl] = order4Points(quadrilaterial);
-    let [widthRect, heightRect] = computeWidthAndHeigth(tl, tr, br, bl, this.width, this.height);
+    let widthRect;
+    let heightRect;
+    if (calculateRatio) {
+        [widthRect, heightRect] = computeWidthAndHeigth(tl, tr, br, bl, this.width, this.height);
+    } else {
+        widthRect = Math.ceil(Math.max(distance2Points(tl, tr), distance2Points(bl, br)));
+        heightRect = Math.ceil(Math.max(distance2Points(tl, bl), distance2Points(tr, br)));
+    }
     let newImage = Image.createFrom(this, {width: widthRect, height: heightRect});
 
     let [X1, Y1] = tl;
