@@ -629,6 +629,19 @@ function dataURLToBlob(dataURL) {
 }
 
 /**
+ * Convert a <code>Blob</code> to a data URL string
+ * (e.g. <code>'data:image/png;base64,iVBORw0KG...'</code>).
+ * Returns a Promise.
+ * @param {Blob} blob
+ * @returns {Promise} Promise that resolves with the data URL string
+ */
+function blobToDataURL(blob) {
+  return blobToBase64String(blob).then(function (base64String) {
+    return 'data:' + blob.type + ';base64,' + base64String;
+  });
+}
+
+/**
  * Convert an image's <code>src</code> URL to a data URL by loading the image and painting
  * it to a <code>canvas</code>. Returns a Promise.
  *
@@ -735,6 +748,7 @@ var index = {
   imgSrcToDataURL    : imgSrcToDataURL,
   canvasToBlob       : canvasToBlob,
   dataURLToBlob      : dataURLToBlob,
+  blobToDataURL      : blobToDataURL,
   blobToBase64String : blobToBase64String,
   base64StringToBlob : base64StringToBlob,
   binaryStringToBlob : binaryStringToBlob,
@@ -9088,7 +9102,7 @@ function encodePNG(png, options = {}) {
     return encoder.encode();
 }
 
-var _args = [["has-own@1.0.0","/home/jajoe/Desktop/image-js"]];
+var _args = [["has-own@1.0.0","/usr/local/www/sites/www.lactame.com/node/grm-data/git/image-js/image-js"]];
 var _from = "has-own@1.0.0";
 var _id = "has-own@1.0.0";
 var _inBundle = false;
@@ -9099,7 +9113,7 @@ var _requested = {"type":"version","registry":true,"raw":"has-own@1.0.0","name":
 var _requiredBy = ["/"];
 var _resolved = "https://registry.npmjs.org/has-own/-/has-own-1.0.0.tgz";
 var _spec = "1.0.0";
-var _where = "/home/jajoe/Desktop/image-js";
+var _where = "/usr/local/www/sites/www.lactame.com/node/grm-data/git/image-js/image-js";
 var author = {"name":"Aaron Heckmann","email":"aaron.heckmann+github@gmail.com"};
 var bugs = {"url":"https://github.com/pebble/has-own/issues"};
 var description = "A safer .hasOwnProperty() - hasOwn(name, obj)";
@@ -10656,9 +10670,9 @@ if (!Symbol.species) {
  * @link https://github.com/lutzroeder/Mapack/blob/master/Source/LuDecomposition.cs
  * @param {Matrix} matrix
  */
-class LuDecomposition {
+class LuDecomposition$$1 {
     constructor(matrix) {
-        matrix = Matrix.checkMatrix(matrix);
+        matrix = WrapperMatrix2D.checkMatrix(matrix);
 
         var lu = matrix.clone();
         var rows = lu.rows;
@@ -10666,7 +10680,7 @@ class LuDecomposition {
         var pivotVector = new Array(rows);
         var pivotSign = 1;
         var i, j, k, p, s, t, v;
-        var LUrowi, LUcolj, kmax;
+        var LUcolj, kmax;
 
         for (i = 0; i < rows; i++) {
             pivotVector[i] = i;
@@ -10677,17 +10691,17 @@ class LuDecomposition {
         for (j = 0; j < columns; j++) {
 
             for (i = 0; i < rows; i++) {
-                LUcolj[i] = lu[i][j];
+                LUcolj[i] = lu.get(i, j);
             }
 
             for (i = 0; i < rows; i++) {
-                LUrowi = lu[i];
                 kmax = Math.min(i, j);
                 s = 0;
                 for (k = 0; k < kmax; k++) {
-                    s += LUrowi[k] * LUcolj[k];
+                    s += lu.get(i, k) * LUcolj[k];
                 }
-                LUrowi[j] = LUcolj[i] -= s;
+                LUcolj[i] -= s;
+                lu.set(i, j, LUcolj[i]);
             }
 
             p = j;
@@ -10699,9 +10713,9 @@ class LuDecomposition {
 
             if (p !== j) {
                 for (k = 0; k < columns; k++) {
-                    t = lu[p][k];
-                    lu[p][k] = lu[j][k];
-                    lu[j][k] = t;
+                    t = lu.get(p, k);
+                    lu.set(p, k, lu.get(j, k));
+                    lu.set(j, k, t);
                 }
 
                 v = pivotVector[p];
@@ -10711,9 +10725,9 @@ class LuDecomposition {
                 pivotSign = -pivotSign;
             }
 
-            if (j < rows && lu[j][j] !== 0) {
+            if (j < rows && lu.get(j, j) !== 0) {
                 for (i = j + 1; i < rows; i++) {
-                    lu[i][j] /= lu[j][j];
+                    lu.set(i, j, lu.get(i, j) / lu.get(j, j));
                 }
             }
         }
@@ -10886,7 +10900,7 @@ function getFilled2DArray(rows, columns, value) {
  */
 class SingularValueDecomposition {
     constructor(value, options = {}) {
-        value = Matrix.checkMatrix(value);
+        value = WrapperMatrix2D.checkMatrix(value);
 
         var m = value.rows;
         var n = value.columns;
@@ -13410,7 +13424,7 @@ function AbstractMatrix(superCtor) {
                     return a * subMatrix0.det() - b * subMatrix1.det() + c * subMatrix2.det();
                 } else {
                     // general purpose determinant using the LU decomposition
-                    return new LuDecomposition(this).determinant;
+                    return new LuDecomposition$$1(this).determinant;
                 }
 
             } else {
@@ -13442,6 +13456,20 @@ function AbstractMatrix(superCtor) {
             // convert list to diagonal
             s = this.constructor[Symbol.species].diag(s);
             return V.mmul(s.mmul(U.transposeView()));
+        }
+
+        /**
+         * Creates an exact and independent copy of the matrix
+         * @return {Matrix}
+         */
+        clone() {
+            var newMatrix = new this.constructor[Symbol.species](this.rows, this.columns);
+            for (var row = 0; row < this.rows; row++) {
+                for (var column = 0; column < this.columns; column++) {
+                    newMatrix.set(row, column, this.get(row, column));
+                }
+            }
+            return newMatrix;
         }
     }
 
@@ -13730,20 +13758,6 @@ class Matrix extends AbstractMatrix(Array) {
     }
 
     /**
-     * Creates an exact and independent copy of the matrix
-     * @return {Matrix}
-     */
-    clone() {
-        var newMatrix = new this.constructor[Symbol.species](this.rows, this.columns);
-        for (var row = 0; row < this.rows; row++) {
-            for (var column = 0; column < this.columns; column++) {
-                newMatrix.set(row, column, this.get(row, column));
-            }
-        }
-        return newMatrix;
-    }
-
-    /**
      * Removes a row from the given index
      * @param {number} index - Row index
      * @return {Matrix} this
@@ -13904,9 +13918,9 @@ function wrap(array, options) {
  * @link https://github.com/lutzroeder/Mapack/blob/master/Source/QrDecomposition.cs
  * @param {Matrix} value
  */
-class QrDecomposition {
+class QrDecomposition$$1 {
     constructor(value) {
-        value = Matrix.checkMatrix(value);
+        value = WrapperMatrix2D.checkMatrix(value);
 
         var qr = value.clone();
         var m = value.rows;
@@ -13917,24 +13931,24 @@ class QrDecomposition {
         for (k = 0; k < n; k++) {
             var nrm = 0;
             for (i = k; i < m; i++) {
-                nrm = hypotenuse(nrm, qr[i][k]);
+                nrm = hypotenuse(nrm, qr.get(i, k));
             }
             if (nrm !== 0) {
-                if (qr[k][k] < 0) {
+                if (qr.get(k, k) < 0) {
                     nrm = -nrm;
                 }
                 for (i = k; i < m; i++) {
-                    qr[i][k] /= nrm;
+                    qr.set(i, k, qr.get(i, k) / nrm);
                 }
-                qr[k][k] += 1;
+                qr.set(k, k, qr.get(k, k) + 1);
                 for (j = k + 1; j < n; j++) {
                     s = 0;
                     for (i = k; i < m; i++) {
-                        s += qr[i][k] * qr[i][j];
+                        s += qr.get(i, k) * qr.get(i, j);
                     }
-                    s = -s / qr[k][k];
+                    s = -s / qr.get(k, k);
                     for (i = k; i < m; i++) {
-                        qr[i][j] += s * qr[i][k];
+                        qr.set(i, j, qr.get(i, j) + s * qr.get(i, k));
                     }
                 }
             }
@@ -14075,12 +14089,12 @@ class QrDecomposition {
  * @param {boolean} [useSVD=false]
  * @return {Matrix}
  */
-function inverse(matrix, useSVD = false) {
-    matrix = Matrix.checkMatrix(matrix);
+function inverse$$1(matrix, useSVD = false) {
+    matrix = WrapperMatrix2D.checkMatrix(matrix);
     if (useSVD) {
-        return SingularValueDecomposition(matrix).inverse();
+        return new SingularValueDecomposition(matrix).inverse();
     } else {
-        return solve(matrix, Matrix.eye(matrix.rows));
+        return solve$$1(matrix, Matrix.eye(matrix.rows));
     }
 }
 
@@ -14091,13 +14105,13 @@ function inverse(matrix, useSVD = false) {
  * @param {boolean} [useSVD = false]
  * @return {Matrix}
  */
-function solve(leftHandSide, rightHandSide, useSVD = false) {
-    leftHandSide = Matrix.checkMatrix(leftHandSide);
-    rightHandSide = Matrix.checkMatrix(rightHandSide);
+function solve$$1(leftHandSide, rightHandSide, useSVD = false) {
+    leftHandSide = WrapperMatrix2D.checkMatrix(leftHandSide);
+    rightHandSide = WrapperMatrix2D.checkMatrix(rightHandSide);
     if (useSVD) {
-        return SingularValueDecomposition(leftHandSide).solve(rightHandSide);
+        return new SingularValueDecomposition(leftHandSide).solve(rightHandSide);
     } else {
-        return leftHandSide.isSquare() ? new LuDecomposition(leftHandSide).solve(rightHandSide) : new QrDecomposition(leftHandSide).solve(rightHandSide);
+        return leftHandSide.isSquare() ? new LuDecomposition$$1(leftHandSide).solve(rightHandSide) : new QrDecomposition$$1(leftHandSide).solve(rightHandSide);
     }
 }
 
@@ -14108,13 +14122,13 @@ function solve(leftHandSide, rightHandSide, useSVD = false) {
  * @param {object} [options]
  * @param {boolean} [options.assumeSymmetric=false]
  */
-class EigenvalueDecomposition {
+class EigenvalueDecomposition$$1 {
     constructor(matrix, options = {}) {
         const {
             assumeSymmetric = false
         } = options;
 
-        matrix = Matrix.checkMatrix(matrix);
+        matrix = WrapperMatrix2D.checkMatrix(matrix);
         if (!matrix.isSquare()) {
             throw new Error('Matrix is not a square matrix');
         }
@@ -14898,9 +14912,9 @@ function cdiv(xr, xi, yr, yi) {
  * @link https://github.com/lutzroeder/Mapack/blob/master/Source/CholeskyDecomposition.cs
  * @param {Matrix} value
  */
-class CholeskyDecomposition {
+class CholeskyDecomposition$$1 {
     constructor(value) {
-        value = Matrix.checkMatrix(value);
+        value = WrapperMatrix2D.checkMatrix(value);
         if (!value.isSymmetric()) {
             throw new Error('Matrix is not symmetric');
         }
@@ -14920,11 +14934,11 @@ class CholeskyDecomposition {
                 for (i = 0; i < k; i++) {
                     s += Lrowk[i] * Lrowj[i];
                 }
-                Lrowj[k] = s = (a[j][k] - s) / l[k][k];
+                Lrowj[k] = s = (a.get(j, k) - s) / l[k][k];
                 d = d + s * s;
             }
 
-            d = a[j][j] - d;
+            d = a.get(j, j) - d;
 
             positiveDefinite &= (d > 0);
             l[j][j] = Math.sqrt(Math.max(d, 0));
@@ -14946,7 +14960,7 @@ class CholeskyDecomposition {
      * @return {Matrix}
      */
     solve(value) {
-        value = Matrix.checkMatrix(value);
+        value = WrapperMatrix2D.checkMatrix(value);
 
         var l = this.L;
         var dimension = l.rows;
@@ -14998,18 +15012,18 @@ var index$24 = Object.freeze({
 	wrap: wrap,
 	WrapperMatrix2D: WrapperMatrix2D,
 	WrapperMatrix1D: WrapperMatrix1D,
-	solve: solve,
-	inverse: inverse,
+	solve: solve$$1,
+	inverse: inverse$$1,
 	SingularValueDecomposition: SingularValueDecomposition,
 	SVD: SingularValueDecomposition,
-	EigenvalueDecomposition: EigenvalueDecomposition,
-	EVD: EigenvalueDecomposition,
-	CholeskyDecomposition: CholeskyDecomposition,
-	CHO: CholeskyDecomposition,
-	LuDecomposition: LuDecomposition,
-	LU: LuDecomposition,
-	QrDecomposition: QrDecomposition,
-	QR: QrDecomposition
+	EigenvalueDecomposition: EigenvalueDecomposition$$1,
+	EVD: EigenvalueDecomposition$$1,
+	CholeskyDecomposition: CholeskyDecomposition$$1,
+	CHO: CholeskyDecomposition$$1,
+	LuDecomposition: LuDecomposition$$1,
+	LU: LuDecomposition$$1,
+	QrDecomposition: QrDecomposition$$1,
+	QR: QrDecomposition$$1
 });
 
 function getSeparatedKernel(kernel) {
@@ -16060,7 +16074,7 @@ class KernelRidgeRegression extends BaseRegression {
             const n = inputs.length;
             K.add(Matrix.eye(n, n).mul(options.lambda));
 
-            this.alpha = solve(K, outputs);
+            this.alpha = solve$$1(K, outputs);
             this.inputs = inputs;
             this.kernelType = options.kernelType;
             this.kernelOptions = options.kernelOptions;
@@ -17212,6 +17226,256 @@ function background(coordinates, values, options) {
         background.data[_i] = Math.min(this.maxValue, Math.max(0, result[_i][0]));
     }
     return background;
+}
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+// REFERENCES :
+// https://stackoverflow.com/questions/38285229/calculating-aspect-ratio-of-perspective-transform-destination-image/38402378#38402378
+// http://www.corrmap.com/features/homography_transformation.php
+// https://ags.cs.uni-kl.de/fileadmin/inf_ags/3dcv-ws11-12/3DCV_WS11-12_lec04.pdf
+// http://graphics.cs.cmu.edu/courses/15-463/2011_fall/Lectures/morphing.pdf
+
+function order4Points(pts) {
+    var tl = 0;
+    var tr = 0;
+    var br = 0;
+    var bl = 0;
+
+    var minX = pts[0][0];
+    var indexMinX = 0;
+
+    for (var i = 1; i < pts.length; i++) {
+        if (pts[i][0] < minX) {
+            minX = pts[i][0];
+            indexMinX = i;
+        }
+    }
+
+    var minX2 = pts[(indexMinX + 1) % pts.length][0];
+    var indexMinX2 = (indexMinX + 1) % pts.length;
+
+    for (var _i = 1; _i < pts.length; _i++) {
+        if (pts[_i][0] < minX2 && _i !== indexMinX) {
+            minX2 = pts[_i][0];
+            indexMinX2 = _i;
+        }
+    }
+
+    if (pts[indexMinX2][1] < pts[indexMinX][1]) {
+        tl = pts[indexMinX2];
+        bl = pts[indexMinX];
+        if (indexMinX !== (indexMinX2 + 1) % 4) {
+            tr = pts[(indexMinX2 + 1) % 4];
+            br = pts[(indexMinX2 + 2) % 4];
+        } else {
+            tr = pts[(indexMinX2 + 2) % 4];
+            br = pts[(indexMinX2 + 3) % 4];
+        }
+    } else {
+        bl = pts[indexMinX2];
+        tl = pts[indexMinX];
+        if (indexMinX2 !== (indexMinX + 1) % 4) {
+            tr = pts[(indexMinX + 1) % 4];
+            br = pts[(indexMinX + 2) % 4];
+        } else {
+            tr = pts[(indexMinX + 2) % 4];
+            br = pts[(indexMinX + 3) % 4];
+        }
+    }
+
+    return [tl, tr, br, bl];
+}
+
+function distance2Points(p1, p2) {
+    return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2));
+}
+
+function crossVect(u, v) {
+    var result = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
+    return result;
+}
+
+function dotVect(u, v) {
+    var result = u[0] * v[0] + u[1] * v[1] + u[2] * v[2];
+    return result;
+}
+
+function computeWidthAndHeigth(tl, tr, br, bl, widthImage, heightImage) {
+    var w = Math.max(distance2Points(tl, tr), distance2Points(bl, br));
+    var h = Math.max(distance2Points(tl, bl), distance2Points(tr, br));
+    var finalW = 0;
+    var finalH = 0;
+    var u0 = Math.ceil(widthImage / 2);
+    var v0 = Math.ceil(heightImage / 2);
+    var arVis = w / h;
+
+    var m1 = [tl[0], tl[1], 1];
+    var m2 = [tr[0], tr[1], 1];
+    var m3 = [bl[0], bl[1], 1];
+    var m4 = [br[0], br[1], 1];
+
+    var k2 = dotVect(crossVect(m1, m4), m3) / dotVect(crossVect(m2, m4), m3);
+    var k3 = dotVect(crossVect(m1, m4), m2) / dotVect(crossVect(m3, m4), m2);
+
+    var n2 = [k2 * m2[0] - m1[0], k2 * m2[1] - m1[1], k2 * m2[2] - m1[2]];
+    var n3 = [k3 * m3[0] - m1[0], k3 * m3[1] - m1[1], k3 * m3[2] - m1[2]];
+
+    var n21 = n2[0];
+    var n22 = n2[1];
+    var n23 = n2[2];
+
+    var n31 = n3[0];
+    var n32 = n3[1];
+    var n33 = n3[2];
+
+    var f = 1.0 / (n23 * n33) * (n21 * n31 - (n21 * n33 + n23 * n31) * u0 + n23 * n33 * u0 * u0 + (n22 * n32 - (n22 * n33 + n23 * n32) * v0 + n23 * n33 * v0 * v0));
+    if (f >= 0) {
+        f = Math.sqrt(f);
+    } else {
+        f = Math.sqrt(-f);
+    }
+
+    var A = new Matrix([[f, 0, u0], [0, f, v0], [0, 0, 1]]);
+    var At = A.transpose();
+    var Ati = inverse$$1(At);
+    var Ai = inverse$$1(A);
+
+    var n2R = Matrix.rowVector(n2);
+    var n3R = Matrix.rowVector(n3);
+
+    var arReal = Math.sqrt(dotVect(n2R.mmul(Ati).mmul(Ai).to1DArray(), n2) / dotVect(n3R.mmul(Ati).mmul(Ai).to1DArray(), n3));
+
+    if (arReal === 0 || arVis === 0) {
+        finalW = Math.ceil(w);
+        finalH = Math.ceil(h);
+    } else if (arReal < arVis) {
+        finalW = Math.ceil(w);
+        finalH = Math.ceil(finalW / arReal);
+    } else {
+        finalH = Math.ceil(h);
+        finalW = Math.ceil(arReal * finalH);
+    }
+    return [finalW, finalH];
+}
+
+function projectionPoint(x, y, a, b, c, d, e, f, g, h, image, channel) {
+    var newX = (a * x + b * y + c) / (g * x + h * y + 1),
+        newY = (d * x + e * y + f) / (g * x + h * y + 1);
+
+    return image.getValueXY(Math.floor(newX), Math.floor(newY), channel);
+}
+
+/**
+ * Transform a quadrilateral into a rectangle
+ * @memberof Image
+ * @instance
+ * @param {Array<Array<number>>} [pts] - Array of the four corners.
+ * @param {object} [options] 
+ * @param {boolean} [options.calculateRatio=true] - true if you want to calculate the aspect ratio "width x height" by taking the perspectiv into consideration.
+ * @return {Image} The new image, which is a rectangle
+ * @example
+ * var cropped = image.warpingFourPoints({
+ *   pts: [[0,0], [100, 0], [80, 50], [10, 50]]
+ * });
+ */
+
+function warpingFourPoints(pts) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var _options$calculateRat = options.calculateRatio,
+        calculateRatio = _options$calculateRat === undefined ? true : _options$calculateRat;
+
+
+    if (pts.length !== 4) {
+        throw new Error('The array pts must have four elements, which are the four corners. Currently, pts have ' + pts.length + ' elements');
+    }
+
+    var _pts = _slicedToArray(pts, 4),
+        pt1 = _pts[0],
+        pt2 = _pts[1],
+        pt3 = _pts[2],
+        pt4 = _pts[3];
+
+    var quadrilaterial = [pt1, pt2, pt3, pt4];
+
+    var _order4Points = order4Points(quadrilaterial),
+        _order4Points2 = _slicedToArray(_order4Points, 4),
+        tl = _order4Points2[0],
+        tr = _order4Points2[1],
+        br = _order4Points2[2],
+        bl = _order4Points2[3];
+
+    var widthRect = void 0;
+    var heightRect = void 0;
+    if (calculateRatio) {
+        var _computeWidthAndHeigt = computeWidthAndHeigth(tl, tr, br, bl, this.width, this.height);
+
+        var _computeWidthAndHeigt2 = _slicedToArray(_computeWidthAndHeigt, 2);
+
+        widthRect = _computeWidthAndHeigt2[0];
+        heightRect = _computeWidthAndHeigt2[1];
+    } else {
+        widthRect = Math.ceil(Math.max(distance2Points(tl, tr), distance2Points(bl, br)));
+        heightRect = Math.ceil(Math.max(distance2Points(tl, bl), distance2Points(tr, br)));
+    }
+    var newImage = Image$1.createFrom(this, { width: widthRect, height: heightRect });
+
+    var _tl = _slicedToArray(tl, 2),
+        X1 = _tl[0],
+        Y1 = _tl[1];
+
+    var _tr = _slicedToArray(tr, 2),
+        X2 = _tr[0],
+        Y2 = _tr[1];
+
+    var _br = _slicedToArray(br, 2),
+        X3 = _br[0],
+        Y3 = _br[1];
+
+    var _bl = _slicedToArray(bl, 2),
+        X4 = _bl[0],
+        Y4 = _bl[1];
+
+    var x1 = 0,
+        y1 = 0;
+    var x2 = 0,
+        y2 = widthRect - 1;
+    var x3 = heightRect - 1,
+        y3 = widthRect - 1;
+    var x4 = heightRect - 1,
+        y4 = 0;
+
+
+    var S = new Matrix([[x1, y1, 1, 0, 0, 0, -x1 * X1, -y1 * X1], [x2, y2, 1, 0, 0, 0, -x2 * X2, -y2 * X2], [x3, y3, 1, 0, 0, 0, -x3 * X3, -y1 * X3], [x4, y4, 1, 0, 0, 0, -x4 * X4, -y4 * X4], [0, 0, 0, x1, y1, 1, -x1 * Y1, -y1 * Y1], [0, 0, 0, x2, y2, 1, -x2 * Y2, -y2 * Y2], [0, 0, 0, x3, y3, 1, -x3 * Y3, -y3 * Y3], [0, 0, 0, x4, y4, 1, -x4 * Y4, -y4 * Y4]]);
+
+    var D = Matrix.columnVector([X1, X2, X3, X4, Y1, Y2, Y3, Y4]);
+
+    var svd = new SingularValueDecomposition(S);
+    var T = svd.solve(D); // solve S*T = D
+
+    var _T$to1DArray = T.to1DArray(),
+        _T$to1DArray2 = _slicedToArray(_T$to1DArray, 8),
+        a = _T$to1DArray2[0],
+        b = _T$to1DArray2[1],
+        c = _T$to1DArray2[2],
+        d = _T$to1DArray2[3],
+        e = _T$to1DArray2[4],
+        f = _T$to1DArray2[5],
+        g = _T$to1DArray2[6],
+        h = _T$to1DArray2[7];
+
+    var Xt = new Matrix(heightRect, widthRect);
+
+    for (var channel = 0; channel < this.channels; channel++) {
+        for (var i = 0; i < heightRect; i++) {
+            for (var j = 0; j < widthRect; j++) {
+                Xt.set(i, j, projectionPoint(i, j, a, b, c, d, e, f, g, h, this, channel));
+            }
+        }
+        newImage.setMatrix(Xt, { channel: channel });
+    }
+
+    return newImage;
 }
 
 /**
@@ -22126,61 +22390,43 @@ function paintPolylines(polylines) {
     return this;
 }
 
-/**
- * Take four points into parameters (which corresponds to 2 segments) and return the intersection of the segments (or null if no intersection)
- * 
- * @param {Array<number>} p1
- * @param {Array<number>} p2
- * @param {Array<number>} p3
- * @param {Array<number>} p4 
- * @return {Array<number>} The point of intersection. return null if no intersection point.
- */
-
-/**
- * Take a point and an array of points into parameters and return the index of the point into the array (or -1 if not in the array)
- * 
- * @param {Array<number>} point
- * @param {Array<Array<number>>} arrayPoints
- * @return {number} The index of the point in the array.
- */
-
-function indexOfPoint(point, arrayPoints) {
-    for (var i = 0; i < arrayPoints.length; i++) {
-        if (point[0] === arrayPoints[i][0] && point[1] === arrayPoints[i][1]) {
-            return i;
+function deleteDouble(points) {
+    var finalPoints = [];
+    for (var i = 0; i < points.length; i++) {
+        if (points[i][0] === points[(i + 1) % points.length][0] && points[i][1] === points[(i + 1) % points.length][1]) {
+            continue;
+        } else if (points[i][0] === points[(i - 1 + points.length) % points.length][0] && points[i][1] === points[(i - 1 + points.length) % points.length][1]) {
+            continue;
+        } else if (points[(i + 1) % points.length][0] === points[(i - 1 + points.length) % points.length][0] && points[(i - 1 + points.length) % points.length][1] === points[(i + 1) % points.length][1]) {
+            continue; // we don't consider this point only
+        } else {
+            finalPoints.push(points[i]);
         }
     }
-    console.log("Point not in the array");
-    return -1;
+    return finalPoints;
 }
 
-/**
- * Transform an Array of points into a shape which go through every points
- * 
- * @param {Array<Array<number>>} points - Array of [x,y] points
- * @return {Array<Array<number>>} The points which defines the shape
- */
+function lineBetweenTwoPoints(p1, p2) {
+    if (p1[0] === p2[0]) {
+        return { a: 0, b: p1[0], vertical: true }; // we store the x of the vertical line into b
+    } else {
+        var coeffA = (p2[1] - p1[1]) / (p2[0] - p1[0]);
+        var coeffB = p1[1] - coeffA * p1[0];
+        return { a: coeffA, b: coeffB, vertical: false };
+    }
+}
 
-function pointsToShape(points) {
-    var shape = [];
-    var currentPoint = points[0];
-    var nextPoint = points[1];
-    shape.push(currentPoint);
-
-    do {
-        var intersections = intersectionSegmentPolygone(currentPoint, nextPoint, points);
-        if (intersections.length === 0) {
-            shape.push(nextPoint);
-            currentPoint = nextPoint;
-            nextPoint = points[(indexOfPoint(currentPoint) + 1) % points.length];
+function isAtTheRightOfTheLine(x, y, line, height) {
+    if (line.vertical === true) {
+        return line.b <= x;
+    } else {
+        if (line.a === 0) {
+            return false;
         } else {
-            closestIntersection = intersections[0];
-            shape.push(closestIntersection.intersectionPoint);
-            currentPoint = closestIntersection.intersectionPoint;
-            nextPoint = closestIntersection.endPoint;
+            var xline = (y - line.b) / line.a;
+            return xline < x && xline >= 0 && xline <= height;
         }
-    } while (currentPoint[0] !== points[0][0] || currentPoint[1] !== points[0][1]);
-    return shape;
+    }
 }
 
 /**
@@ -22190,21 +22436,56 @@ function pointsToShape(points) {
  * @param {Array<Array<number>>} points - Array of [x,y] points
  * @param {object} [options]
  * @param {Array<number>} [options.color=[max,0,0]] - Array of 3 elements (R, G, B), default is red.
+ * @param {Array<number>} [options.filled=false] - If you want the polygon to be filled or not.
  * @return {this} The original painted image
  */
 function paintPolygon(points) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var _options$filled = options.filled,
-        filled = _options$filled === undefined ? true : _options$filled;
+    var _options$color = options.color,
+        color = _options$color === undefined ? [this.maxValue, 0, 0] : _options$color,
+        _options$filled = options.filled,
+        filled = _options$filled === undefined ? false : _options$filled;
 
+
+    this.checkProcessable('paintPoints', {
+        bitDepth: [8, 16]
+    });
 
     options.closed = true;
 
+    var filteredPoints = deleteDouble(points);
     if (filled === false) {
         return this.paintPolyline(points, options);
     } else {
-        var shape = pointsToShape(points);
-        return this.paintPolyline(shape, options);
+        var matrixBinary = Array(this.height);
+        for (var i = 0; i < this.height; i++) {
+            matrixBinary[i] = [];
+            for (var j = 0; j < this.width; j++) {
+                matrixBinary[i].push(0);
+            }
+        }
+        for (var p = 0; p < filteredPoints.length; p++) {
+            var line = lineBetweenTwoPoints(filteredPoints[p], filteredPoints[(p + 1) % filteredPoints.length]);
+            for (var y = 0; y < this.height; y++) {
+                for (var x = 0; x < this.width; x++) {
+                    if (isAtTheRightOfTheLine(x, y, line, this.height)) {
+                        matrixBinary[y][x] = matrixBinary[y][x] === 0 ? 1 : 0;
+                    }
+                }
+            }
+        }
+        for (var _y = 0; _y < this.height; _y++) {
+            for (var _x2 = 0; _x2 < this.width; _x2++) {
+                if (matrixBinary[_y][_x2] === 1) {
+                    var numberChannels = Math.min(this.channels, color.length);
+                    var position = (_x2 + _y * this.width) * this.channels;
+                    for (var channel = 0; channel < numberChannels; channel++) {
+                        this.data[position + channel] = color[channel];
+                    }
+                }
+            }
+        }
+        return this.paintPolyline(points, options);
     }
 }
 
@@ -23000,6 +23281,7 @@ function extend$1(Image) {
     Image.extendMethod('gaussianFilter', gaussianFilter);
     Image.extendMethod('sobelFilter', sobelFilter);
 
+    Image.extendMethod('warpingFourPoints', warpingFourPoints);
     Image.extendMethod('crop', crop);
     Image.extendMethod('cropAlpha', cropAlpha);
     Image.extendMethod('scale', scale);
@@ -27762,7 +28044,10 @@ var decode_1 = decode$1;
 
 var decode = decode_1;
 
-var index$35 = input => {
+var index$35 = createCommonjsModule(function (module) {
+'use strict';
+
+module.exports = input => {
 	const buf = new Uint8Array(input);
 
 	if (!(buf && buf.length > 1)) {
@@ -28305,6 +28590,11 @@ var index$35 = input => {
 
 	return null;
 };
+});
+
+var index$34 = createCommonjsModule(function (module) {
+'use strict';
+
 
 const imageExts = new Set([
 	'jpg',
@@ -28317,10 +28607,11 @@ const imageExts = new Set([
 	'psd'
 ]);
 
-var index$34 = input => {
+module.exports = input => {
 	const ret = index$35(input);
 	return imageExts.has(ret && ret.ext) ? ret : null;
 };
+});
 
 /*
  * base64-arraybuffer
@@ -29376,7 +29667,12 @@ class Image$1 {
                 components = [components];
             }
             if (!components.includes(this.components)) {
-                throw new TypeError('The process: ' + processName + ' can only be applied if the number of components is in: ' + components);
+                var errorMessage = `The process: ${processName} can only be applied if the number of components is in: ${components}`;
+                if (components.length === 1 && components[0] === 1) {
+                    throw new TypeError(errorMessage + '.\rYou should transform your image using "image.grey()" before applying the algorithm.');
+                } else {
+                    throw new TypeError(errorMessage);
+                }
             }
         }
         if (channels) {
