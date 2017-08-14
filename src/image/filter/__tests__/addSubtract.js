@@ -44,3 +44,74 @@ describe('subtract', function () {
         }).should.throw(/the value must be greater/);
     });
 });
+
+describe('subtract image', function () {
+    it('should subtract an image to another', function () {
+
+        let image = new Image(5, 5,
+            [
+                0, 0, 255, 0, 255,
+                0, 0, 255, 0, 255,
+                0, 0, 255, 0, 255,
+                0, 0, 255, 0, 255,
+                0, 0, 255, 0, 255
+            ],
+            {kind: 'GREY'}
+        );
+
+        let image2 = new Image(5, 5,
+            [
+                255, 0, 0, 0, 255,
+                255, 0, 0, 0, 255,
+                255, 0, 0, 0, 255,
+                255, 0, 0, 0, 255,
+                255, 0, 0, 0, 255
+            ],
+            {kind: 'GREY'}
+        );
+
+        Array.from(image.subtractImage(image2).data).should.eql(
+            [
+                0, 0, 255, 0, 0,
+                0, 0, 255, 0, 0,
+                0, 0, 255, 0, 0,
+                0, 0, 255, 0, 0,
+                0, 0, 255, 0, 0
+            ]
+        );
+    });
+    it('should subtract an image to another with absolute = true', function () {
+
+        let image = new Image(5, 5,
+            [
+                0, 0, 255, 0, 255,
+                0, 0, 255, 0, 255,
+                0, 0, 255, 0, 255,
+                0, 0, 255, 0, 255,
+                0, 0, 255, 0, 255
+            ],
+            {kind: 'GREY'}
+        );
+
+        let image2 = new Image(5, 5,
+            [
+                255, 0, 0, 0, 255,
+                255, 0, 0, 0, 255,
+                255, 0, 0, 0, 255,
+                255, 0, 0, 0, 255,
+                255, 0, 0, 0, 255
+            ],
+            {kind: 'GREY'}
+        );
+
+        Array.from(image.subtractImage(image2, {absolute: true}).data).should.eql(
+            [
+                255, 0, 255, 0, 0,
+                255, 0, 255, 0, 0,
+                255, 0, 255, 0, 0,
+                255, 0, 255, 0, 0,
+                255, 0, 255, 0, 0
+            ]
+        );
+    });
+});
