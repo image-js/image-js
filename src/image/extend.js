@@ -21,6 +21,11 @@ import multiplyFilter from './filter/multiply';
 import divideFilter from './filter/divide';
 import backgroundFilter from './filter/background';
 
+// morphology transforms
+
+import dilate from './morphology/dilate';
+import erode from './morphology/erode';
+
 // transforms
 import warpingFourPoints from './transform/warping';
 import crop from './transform/crop';
@@ -108,6 +113,9 @@ export default function extend(Image) {
     Image.extendMethod('medianFilter', medianFilter);
     Image.extendMethod('gaussianFilter', gaussianFilter);
     Image.extendMethod('sobelFilter', sobelFilter);
+
+    Image.extendMethod('dilate', dilate);
+    Image.extendMethod('erode', erode);
 
     Image.extendMethod('warpingFourPoints', warpingFourPoints);
     Image.extendMethod('crop', crop);
