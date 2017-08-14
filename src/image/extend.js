@@ -26,6 +26,10 @@ import backgroundFilter from './filter/background';
 
 import dilate from './morphology/dilate';
 import erode from './morphology/erode';
+import opening from './morphology/opening';
+import closing from './morphology/closing';
+import topHat from './morphology/topHat';
+import blackHat from './morphology/blackHat';
 import morphologicalGradient from './morphology/morphologicalGradient';
 
 // transforms
@@ -119,6 +123,10 @@ export default function extend(Image) {
 
     Image.extendMethod('dilate', dilate);
     Image.extendMethod('erode', erode);
+    Image.extendMethod('opening', opening);
+    Image.extendMethod('closing', closing);
+    Image.extendMethod('topHat', topHat);
+    Image.extendMethod('blackHat', blackHat);
     Image.extendMethod('morphologicalGradient', morphologicalGradient);
 
     Image.extendMethod('warpingFourPoints', warpingFourPoints);
