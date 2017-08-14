@@ -8,9 +8,15 @@ import Matrix from 'ml-matrix';
  * @return {Image}
  */
 export default function erode(kernel) {
+
+    this.checkProcessable('max', {
+        bitDepth: [8, 16],
+        channel: [1]
+    });
     if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
-        // problem
+        throw new TypeError('The number of rows and columns of the kernel must be odd');
     }
+
     const newImage = Image.createFrom(this);
     let currentMatrix = this.getMatrix();
     let newMatrix = new Matrix(currentMatrix);
