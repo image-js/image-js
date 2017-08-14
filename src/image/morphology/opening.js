@@ -4,7 +4,7 @@
  * @param {Matrix} kernel
  * @return {Image}
  */
-export default function morphologicalGradient(kernel) {
+export default function opening(kernel) {
     this.checkProcessable('max', {
         bitDepth: [8, 16],
         channel: [1]
@@ -13,7 +13,7 @@ export default function morphologicalGradient(kernel) {
         throw new TypeError('The number of rows and columns of the kernel must be odd');
     }
 
-    const openImage = this.opening(kernel);
-    const newImage = this.subtractImage(openImage, {absolute: true});
+    let newImage = this.erode(kernel);
+    newImage = newImage.dilate(kernel);
     return newImage;
 }
