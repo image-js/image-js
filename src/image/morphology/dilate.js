@@ -8,12 +8,12 @@ import Matrix from 'ml-matrix';
  * @return {Image}
  */
 export default function dilate(kernel) {
-    this.checkProcessable('max', {
+    this.checkProcessable('dilate', {
         bitDepth: [8, 16],
         channel: [1]
     });
     if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
-        throw new TypeError('The number of rows and columns of the kernel must be odd');
+        throw new TypeError('dilate: The number of rows and columns of the kernel must be odd');
     }
 
     const newImage = Image.createFrom(this);
