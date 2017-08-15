@@ -16,7 +16,7 @@ describe('check the erode function', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.erode(kernel).data).should.eql(
+        Array.from(image.erode({kernel: kernel}).data).should.eql(
             [
                 255, 255, 0, 255, 255,
                 255, 255, 0, 255, 255,

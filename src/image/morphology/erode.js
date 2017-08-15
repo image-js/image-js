@@ -7,10 +7,14 @@ import Matrix from 'ml-matrix';
  * https://en.wikipedia.org/wiki/Erosion_(morphology)
  * @memberof Image
  * @instance
- * @param {Matrix} kernel
+ * @param {object} [options]
+ * @param {Matrix} [options.kernel]
  * @return {Image}
  */
-export default function erode(kernel) {
+export default function erode(options = {}) {
+    let {
+        kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
+    } = options;
 
     this.checkProcessable('erode', {
         bitDepth: [8, 16],

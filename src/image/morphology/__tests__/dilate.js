@@ -16,7 +16,7 @@ describe('check the dilate function', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.dilate(kernel).data).should.eql(
+        Array.from(image.dilate({kernel: kernel}).data).should.eql(
             [
                 0, 0, 0, 255, 255,
                 0, 0, 0, 255, 255,

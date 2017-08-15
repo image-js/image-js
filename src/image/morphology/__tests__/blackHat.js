@@ -16,7 +16,7 @@ describe('check the black hat function', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.blackHat(kernel).data).should.eql(
+        Array.from(image.blackHat({kernel: kernel}).data).should.eql(
             [
                 0, 0, 255, 0, 0,
                 0, 0, 0, 0, 0,
@@ -40,7 +40,7 @@ describe('check the black hat function', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.blackHat(kernel, 2).data).should.eql(
+        Array.from(image.blackHat({kernel: kernel, iterations: 2}).data).should.eql(
             [
                 0, 0, 255, 0, 0,
                 0, 0, 0, 0, 0,

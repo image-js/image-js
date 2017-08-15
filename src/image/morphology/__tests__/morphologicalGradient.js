@@ -16,7 +16,7 @@ describe('check the morphological gradient function', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.morphologicalGradient(kernel).data).should.eql(
+        Array.from(image.morphologicalGradient({kernel: kernel}).data).should.eql(
             [
                 255, 255, 0, 255, 255,
                 255, 255, 0, 255, 255,
@@ -39,7 +39,7 @@ describe('check the morphological gradient function', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.morphologicalGradient(kernel, 2).data).should.eql(
+        Array.from(image.morphologicalGradient({kernel: kernel, iterations: 2}).data).should.eql(
             [
                 0, 255, 255, 255, 0,
                 0, 255, 255, 255, 0,

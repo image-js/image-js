@@ -16,7 +16,7 @@ describe('check the top hat function', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.topHat(kernel).data).should.eql(
+        Array.from(image.topHat({kernel: kernel}).data).should.eql(
             [
                 255, 255, 0, 255, 255,
                 255, 0, 0, 0, 255,
@@ -39,7 +39,7 @@ describe('check the top hat function', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.topHat(kernel, 2).data).should.eql(
+        Array.from(image.topHat({kernel: kernel, iterations: 2}).data).should.eql(
             [
                 0, 0, 255, 0, 0,
                 0, 0, 0, 0, 0,

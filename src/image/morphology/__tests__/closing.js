@@ -16,7 +16,7 @@ describe('check the closing function', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.closing(kernel).data).should.eql(
+        Array.from(image.closing({kernel: kernel}).data).should.eql(
             [
                 0, 0, 0, 0, 0,
                 0, 255, 255, 255, 0,
@@ -40,7 +40,7 @@ describe('check the closing function', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.closing(kernel, 2).data).should.eql(
+        Array.from(image.closing({kernel: kernel, iterations: 2}).data).should.eql(
             [
                 0, 0, 0, 0, 0,
                 0, 255, 255, 255, 0,

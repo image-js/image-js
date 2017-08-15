@@ -16,7 +16,7 @@ describe('check the opening function', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.opening(kernel).data).should.eql(
+        Array.from(image.opening({kernel: kernel}).data).should.eql(
             [
                 255, 255, 255, 255, 255,
                 255, 255, 255, 255, 255,
@@ -40,7 +40,7 @@ describe('check the opening function', function () {
             {kind: 'GREY'}
         );
 
-        Array.from(image.opening(kernel, 2).data).should.eql(
+        Array.from(image.opening({kernel: kernel, iterations: 2}).data).should.eql(
             [
                 0, 0, 255, 0, 0,
                 0, 0, 255, 0, 0,

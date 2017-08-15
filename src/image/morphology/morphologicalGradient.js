@@ -1,13 +1,21 @@
+import Matrix from 'ml-matrix';
+
 /**
  * In mathematical morphology and digital image processing, a morphological gradient is the difference between the dilation and the erosion of a given image. It is an image where each pixel value (typically non-negative) indicates the contrast intensity in the close neighborhood of that pixel. It is useful for edge detection and segmentation applications.
  * http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html
  * @memberof Image
  * @instance
- * @param {Matrix} kernel
- * @param {number} iterations - number of iterations of the morphological transform
+ * @param {object} [options]
+ * @param {Matrix} [options.kernel]
+ * @param {number} [options.iterations] - number of iterations of the morphological transform
  * @return {Image}
  */
-export default function morphologicalGradient(kernel, iterations = 1) {
+export default function morphologicalGradient(options = {}) {
+    let {
+        kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]),
+        iterations = 1
+    } = options;
+
     this.checkProcessable('morphologicalGradient', {
         bitDepth: [8, 16],
         channel: [1]

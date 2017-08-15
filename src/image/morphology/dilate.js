@@ -7,10 +7,15 @@ import Matrix from 'ml-matrix';
  * https://en.wikipedia.org/wiki/Dilation_(morphology)
  * @memberof Image
  * @instance
- * @param {Matrix} kernel
+ * @param {object} [options]
+ * @param {Matrix} [options.kernel]
  * @return {Image}
  */
-export default function dilate(kernel) {
+export default function dilate(options = {}) {
+    let {
+        kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
+    } = options;
+
     this.checkProcessable('dilate', {
         bitDepth: [8, 16],
         channel: [1]
