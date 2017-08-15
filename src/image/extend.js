@@ -16,6 +16,7 @@ import sobelFilter from './filter/sobelFilter';
 import levelFilter from './filter/level';
 import addFilter from './filter/add';
 import subtractFilter from './filter/subtract';
+import subtractImage from './filter/subtractImage';
 import hypotenuseFilter from './filter/hypotenuse';
 import multiplyFilter from './filter/multiply';
 import divideFilter from './filter/divide';
@@ -25,6 +26,11 @@ import backgroundFilter from './filter/background';
 
 import dilate from './morphology/dilate';
 import erode from './morphology/erode';
+import opening from './morphology/opening';
+import closing from './morphology/closing';
+import topHat from './morphology/topHat';
+import blackHat from './morphology/blackHat';
+import morphologicalGradient from './morphology/morphologicalGradient';
 
 // transforms
 import warpingFourPoints from './transform/warping';
@@ -102,6 +108,7 @@ export default function extend(Image) {
     Image.extendMethod('level', levelFilter, inPlace);
     Image.extendMethod('add', addFilter, inPlace);
     Image.extendMethod('subtract', subtractFilter, inPlace);
+    Image.extendMethod('subtractImage', subtractImage);
     Image.extendMethod('multiply', multiplyFilter, inPlace);
     Image.extendMethod('divide', divideFilter, inPlace);
     Image.extendMethod('hypotenuse', hypotenuseFilter);
@@ -116,6 +123,11 @@ export default function extend(Image) {
 
     Image.extendMethod('dilate', dilate);
     Image.extendMethod('erode', erode);
+    Image.extendMethod('opening', opening);
+    Image.extendMethod('closing', closing);
+    Image.extendMethod('topHat', topHat);
+    Image.extendMethod('blackHat', blackHat);
+    Image.extendMethod('morphologicalGradient', morphologicalGradient);
 
     Image.extendMethod('warpingFourPoints', warpingFourPoints);
     Image.extendMethod('crop', crop);

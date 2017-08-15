@@ -12,7 +12,7 @@ import Image from '../Image';
  * @return {Image}
  */
 export default function substractImage(otherImage, options = {}) {
-    let {bitDepth = this.bitDepth, channels} = options;
+    let {bitDepth = this.bitDepth, channels, absolute = false} = options;
     this.checkProcessable('substractImage', {
         bitDepth: [8, 16]
     });
@@ -34,7 +34,11 @@ export default function substractImage(otherImage, options = {}) {
         let c = channels[j];
         for (let i = c; i < this.data.length; i += this.channels) {
             let value = this.data[i] - otherImage.data[i];
-            newImage.data[i] = Math.max(value, 0);
+            if (absolute) {
+                newImage.data[i] = Math.abs(value);
+            } else {
+                newImage.data[i] = Math.max(value, 0);
+            }
         }
     }
 

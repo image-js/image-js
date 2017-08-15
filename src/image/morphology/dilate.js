@@ -2,18 +2,26 @@ import Image from '../Image';
 import Matrix from 'ml-matrix';
 
 /**
+ * Dilation is one of two fundamental operations (the other being eroding) in morphological image processing from which all other morphological operations are based (from Wikipedia).
+ * http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html
+ * https://en.wikipedia.org/wiki/Dilation_(morphology)
  * @memberof Image
  * @instance
- * @param {Matrix} kernel
+ * @param {object} [options]
+ * @param {Matrix} [options.kernel]
  * @return {Image}
  */
-export default function dilate(kernel) {
-    this.checkProcessable('max', {
+export default function dilate(options = {}) {
+    let {
+        kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
+    } = options;
+
+    this.checkProcessable('dilate', {
         bitDepth: [8, 16],
         channel: [1]
     });
     if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
-        throw new TypeError('The number of rows and columns of the kernel must be odd');
+        throw new TypeError('dilate: The number of rows and columns of the kernel must be odd');
     }
 
     const newImage = Image.createFrom(this);
