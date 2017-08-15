@@ -33,7 +33,14 @@ export default function dilate(options = {}) {
 
     for (let i = 0; i < currentMatrix.columns; i++) {
         for (let j = 0; j < currentMatrix.rows; j++) {
-            let tmpMatrix = currentMatrix.subMatrix(Math.max(0, i - shiftX), Math.min(currentMatrix.columns - 1, i + shiftX), Math.max(0, j - shiftY), Math.min(currentMatrix.rows - 1, j + shiftY));
+            let startRow = Math.max(0, i - shiftX);
+            let endRow = Math.min(currentMatrix.rows - 1, i + shiftX);
+            let startColumn = Math.max(0, j - shiftY);
+            let endColumn = Math.min(currentMatrix.columns - 1, j + shiftY);
+            if (startRow >= endRow || startColumn >= endColumn) {
+                continue;
+            }
+            let tmpMatrix = currentMatrix.subMatrix(startRow, endRow, startColumn, endColumn);
 
             newMatrix.set(i, j, minOfConvolution(tmpMatrix, kernel));
         }
