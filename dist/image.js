@@ -17310,7 +17310,14 @@ function dilate() {
 
     for (var i = 0; i < currentMatrix.columns; i++) {
         for (var j = 0; j < currentMatrix.rows; j++) {
-            var tmpMatrix = currentMatrix.subMatrix(Math.max(0, i - shiftX), Math.min(currentMatrix.columns - 1, i + shiftX), Math.max(0, j - shiftY), Math.min(currentMatrix.rows - 1, j + shiftY));
+            var startRow = Math.max(0, i - shiftX);
+            var endRow = Math.min(currentMatrix.rows - 1, i + shiftX);
+            var startColumn = Math.max(0, j - shiftY);
+            var endColumn = Math.min(currentMatrix.columns - 1, j + shiftY);
+            if (startRow >= endRow || startColumn >= endColumn) {
+                continue;
+            }
+            var tmpMatrix = currentMatrix.subMatrix(startRow, endRow, startColumn, endColumn);
 
             newMatrix.set(i, j, minOfConvolution(tmpMatrix, kernel));
         }
@@ -17365,7 +17372,15 @@ function erode() {
 
     for (var i = 0; i < currentMatrix.columns; i++) {
         for (var j = 0; j < currentMatrix.rows; j++) {
-            var tmpMatrix = currentMatrix.subMatrix(Math.max(0, i - shiftX), Math.min(currentMatrix.columns - 1, i + shiftX), Math.max(0, j - shiftY), Math.min(currentMatrix.rows - 1, j + shiftY));
+            var startRow = Math.max(0, i - shiftX);
+            var endRow = Math.min(currentMatrix.rows - 1, i + shiftX);
+            var startColumn = Math.max(0, j - shiftY);
+            var endColumn = Math.min(currentMatrix.columns - 1, j + shiftY);
+            if (startRow >= endRow || startColumn >= endColumn) {
+                continue;
+            }
+            var tmpMatrix = currentMatrix.subMatrix(startRow, endRow, startColumn, endColumn);
+
             newMatrix.set(i, j, maxOfConvolution(tmpMatrix, kernel));
         }
     }
