@@ -18,6 +18,21 @@ describe('check the colorDepth transform', function () {
         Array.from(newImage.data).should.eql([0x0000, 0x7f7f, 0xffff, 0x1212]);
     });
 
+    it('check the right colorDepth for MASK to 8 bit', function () {
+
+        let image = new Image(4, 2,
+            [
+                0b01010101
+            ],
+            {kind: 'BINARY'}
+        );
+        let newImage = image.colorDepth(8);
+        Array.from(newImage.data).should.eql([0, 255, 0, 255, 0, 255, 0, 255]);
+
+        newImage = image.colorDepth(16);
+        Array.from(newImage.data).should.eql([0, 65535, 0, 65535, 0, 65535, 0, 65535]);
+    });
+
     it('check the right colorDepth for GREY image 8 bit', function () {
 
         let image = new Image(4, 1,
