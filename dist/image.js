@@ -19774,7 +19774,7 @@ function pad() {
  * Change the image color depth.
  * The color depth is the number of bits that is assigned to each point of a channel.
  * For normal images it is 8 bits meaning the value is between 0 and 255.
- * Currently only conversion from 8 to 16 bits and 16 to 8 bits is allowed.
+ * Currently only conversion from 1, 8 or 16 bits towards 8 or 16 bits are allowed.
  * @memberof Image
  * @instance
  * @param {number} [newColorDepth=8]
@@ -19789,7 +19789,7 @@ function colorDepth() {
 
 
     this.checkProcessable('colorDepth', {
-        bitDepth: [8, 16]
+        bitDepth: [1, 8, 16]
     });
 
     if (![8, 16].includes(newColorDepth)) {
@@ -19802,16 +19802,36 @@ function colorDepth() {
 
     var newImage = Image$1.createFrom(this, { bitDepth: newColorDepth });
 
-    if (newColorDepth === 8) {
-        for (var i = 0; i < this.data.length; i++) {
-            newImage.data[i] = this.data[i] >> 8;
-        }
-    } else {
-        for (var _i = 0; _i < this.data.length; _i++) {
-            newImage.data[_i] = this.data[_i] << 8 | this.data[_i];
-        }
+    switch (newColorDepth) {
+        case 8:
+            if (this.bitDepth === 1) {
+                for (var i = 0; i < this.size; i++) {
+                    if (this.getBit(i)) {
+                        newImage.data[i] = 255;
+                    }
+                }
+            } else {
+                for (var _i = 0; _i < this.data.length; _i++) {
+                    newImage.data[_i] = this.data[_i] >> 8;
+                }
+            }
+            break;
+        case 16:
+            if (this.bitDepth === 1) {
+                for (var _i2 = 0; _i2 < this.size; _i2++) {
+                    if (this.getBit(_i2)) {
+                        newImage.data[_i2] = 65535;
+                    }
+                }
+            } else {
+                for (var _i3 = 0; _i3 < this.data.length; _i3++) {
+                    newImage.data[_i3] = this.data[_i3] << 8 | this.data[_i3];
+                }
+            }
+            break;
+        default:
+            throw new Error('colorDepth conversion unexpected case');
     }
-
     return newImage;
 }
 
