@@ -2,6 +2,9 @@ import Image from '../Image';
 import Matrix from 'ml-matrix';
 
 /**
+ * Erosion is one of two fundamental operations (the other being dilation) in morphological image processing from which all other morphological operations are based (from Wikipedia).
+ * http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html
+ * https://en.wikipedia.org/wiki/Erosion_(morphology)
  * @memberof Image
  * @instance
  * @param {Matrix} kernel
