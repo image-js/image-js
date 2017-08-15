@@ -2,7 +2,7 @@ import {Image} from 'test/common';
 import 'should';
 import Matrix from 'ml-matrix';
 
-describe('check the morphological gradient function', function () {
+describe('check the black hat function', function () {
     it('check for GREY image 5x5', function () {
         let kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]);
         let image = new Image(5, 5,
