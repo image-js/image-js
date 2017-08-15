@@ -10670,7 +10670,7 @@ if (!Symbol.species) {
  * @link https://github.com/lutzroeder/Mapack/blob/master/Source/LuDecomposition.cs
  * @param {Matrix} matrix
  */
-class LuDecomposition$$1 {
+class LuDecomposition {
     constructor(matrix) {
         matrix = WrapperMatrix2D.checkMatrix(matrix);
 
@@ -13424,7 +13424,7 @@ function AbstractMatrix(superCtor) {
                     return a * subMatrix0.det() - b * subMatrix1.det() + c * subMatrix2.det();
                 } else {
                     // general purpose determinant using the LU decomposition
-                    return new LuDecomposition$$1(this).determinant;
+                    return new LuDecomposition(this).determinant;
                 }
 
             } else {
@@ -13918,7 +13918,7 @@ function wrap(array, options) {
  * @link https://github.com/lutzroeder/Mapack/blob/master/Source/QrDecomposition.cs
  * @param {Matrix} value
  */
-class QrDecomposition$$1 {
+class QrDecomposition {
     constructor(value) {
         value = WrapperMatrix2D.checkMatrix(value);
 
@@ -14089,12 +14089,12 @@ class QrDecomposition$$1 {
  * @param {boolean} [useSVD=false]
  * @return {Matrix}
  */
-function inverse$$1(matrix, useSVD = false) {
+function inverse(matrix, useSVD = false) {
     matrix = WrapperMatrix2D.checkMatrix(matrix);
     if (useSVD) {
         return new SingularValueDecomposition(matrix).inverse();
     } else {
-        return solve$$1(matrix, Matrix.eye(matrix.rows));
+        return solve(matrix, Matrix.eye(matrix.rows));
     }
 }
 
@@ -14105,13 +14105,13 @@ function inverse$$1(matrix, useSVD = false) {
  * @param {boolean} [useSVD = false]
  * @return {Matrix}
  */
-function solve$$1(leftHandSide, rightHandSide, useSVD = false) {
+function solve(leftHandSide, rightHandSide, useSVD = false) {
     leftHandSide = WrapperMatrix2D.checkMatrix(leftHandSide);
     rightHandSide = WrapperMatrix2D.checkMatrix(rightHandSide);
     if (useSVD) {
         return new SingularValueDecomposition(leftHandSide).solve(rightHandSide);
     } else {
-        return leftHandSide.isSquare() ? new LuDecomposition$$1(leftHandSide).solve(rightHandSide) : new QrDecomposition$$1(leftHandSide).solve(rightHandSide);
+        return leftHandSide.isSquare() ? new LuDecomposition(leftHandSide).solve(rightHandSide) : new QrDecomposition(leftHandSide).solve(rightHandSide);
     }
 }
 
@@ -14122,7 +14122,7 @@ function solve$$1(leftHandSide, rightHandSide, useSVD = false) {
  * @param {object} [options]
  * @param {boolean} [options.assumeSymmetric=false]
  */
-class EigenvalueDecomposition$$1 {
+class EigenvalueDecomposition {
     constructor(matrix, options = {}) {
         const {
             assumeSymmetric = false
@@ -14912,7 +14912,7 @@ function cdiv(xr, xi, yr, yi) {
  * @link https://github.com/lutzroeder/Mapack/blob/master/Source/CholeskyDecomposition.cs
  * @param {Matrix} value
  */
-class CholeskyDecomposition$$1 {
+class CholeskyDecomposition {
     constructor(value) {
         value = WrapperMatrix2D.checkMatrix(value);
         if (!value.isSymmetric()) {
@@ -15012,18 +15012,18 @@ var index$24 = Object.freeze({
 	wrap: wrap,
 	WrapperMatrix2D: WrapperMatrix2D,
 	WrapperMatrix1D: WrapperMatrix1D,
-	solve: solve$$1,
-	inverse: inverse$$1,
+	solve: solve,
+	inverse: inverse,
 	SingularValueDecomposition: SingularValueDecomposition,
 	SVD: SingularValueDecomposition,
-	EigenvalueDecomposition: EigenvalueDecomposition$$1,
-	EVD: EigenvalueDecomposition$$1,
-	CholeskyDecomposition: CholeskyDecomposition$$1,
-	CHO: CholeskyDecomposition$$1,
-	LuDecomposition: LuDecomposition$$1,
-	LU: LuDecomposition$$1,
-	QrDecomposition: QrDecomposition$$1,
-	QR: QrDecomposition$$1
+	EigenvalueDecomposition: EigenvalueDecomposition,
+	EVD: EigenvalueDecomposition,
+	CholeskyDecomposition: CholeskyDecomposition,
+	CHO: CholeskyDecomposition,
+	LuDecomposition: LuDecomposition,
+	LU: LuDecomposition,
+	QrDecomposition: QrDecomposition,
+	QR: QrDecomposition
 });
 
 function getSeparatedKernel(kernel) {
@@ -15525,6 +15525,56 @@ function subtract(value) {
     }
 
     return this;
+}
+
+/**
+ * Calculate a new image that is the substraction between the current image and the otherImage.
+ * @memberof Image
+ * @instance
+ * @param {Image} otherImage
+ * @param {object} [options={}]
+ * @param {number} [options.bitDepth=this.bitDepth]
+ * @param {number[]|string[]} [options.channels] : to which channel to apply the filter. By default all but alpha.
+ * @return {Image}
+ */
+function substractImage(otherImage) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var _options$bitDepth = options.bitDepth,
+        bitDepth = _options$bitDepth === undefined ? this.bitDepth : _options$bitDepth,
+        channels = options.channels,
+        _options$absolute = options.absolute,
+        absolute = _options$absolute === undefined ? false : _options$absolute;
+
+    this.checkProcessable('substractImage', {
+        bitDepth: [8, 16]
+    });
+    if (this.width !== otherImage.width || this.height !== otherImage.height) {
+        throw new Error('substractImage: both images must have the same size');
+    }
+    if (this.alpha !== otherImage.alpha || this.bitDepth !== otherImage.bitDepth) {
+        throw new Error('substractImage: both images must have the same alpha and bitDepth');
+    }
+    if (this.channels !== otherImage.channels) {
+        throw new Error('substractImage: both images must have the same number of channels');
+    }
+
+    var newImage = Image$1.createFrom(this, { bitDepth: bitDepth });
+
+    channels = validateArrayOfChannels(this, { channels: channels });
+
+    for (var j = 0; j < channels.length; j++) {
+        var c = channels[j];
+        for (var i = c; i < this.data.length; i += this.channels) {
+            var value = this.data[i] - otherImage.data[i];
+            if (absolute) {
+                newImage.data[i] = Math.abs(value);
+            } else {
+                newImage.data[i] = Math.max(value, 0);
+            }
+        }
+    }
+
+    return newImage;
 }
 
 /**
@@ -16074,7 +16124,7 @@ class KernelRidgeRegression extends BaseRegression {
             const n = inputs.length;
             K.add(Matrix.eye(n, n).mul(options.lambda));
 
-            this.alpha = solve$$1(K, outputs);
+            this.alpha = solve(K, outputs);
             this.inputs = inputs;
             this.kernelType = options.kernelType;
             this.kernelOptions = options.kernelOptions;
@@ -17228,6 +17278,302 @@ function background(coordinates, values, options) {
     return background;
 }
 
+/**
+ * Dilation is one of two fundamental operations (the other being eroding) in morphological image processing from which all other morphological operations are based (from Wikipedia).
+ * http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html
+ * https://en.wikipedia.org/wiki/Dilation_(morphology)
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {Matrix} [options.kernel]
+ * @return {Image}
+ */
+function dilate() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _options$kernel = options.kernel,
+        kernel = _options$kernel === undefined ? new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]) : _options$kernel;
+
+
+    this.checkProcessable('dilate', {
+        bitDepth: [8, 16],
+        channel: [1]
+    });
+    if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
+        throw new TypeError('dilate: The number of rows and columns of the kernel must be odd');
+    }
+
+    var newImage = Image$1.createFrom(this);
+    var currentMatrix = this.getMatrix();
+    var newMatrix = new Matrix(currentMatrix);
+    var shiftX = (kernel.columns - 1) / 2;
+    var shiftY = (kernel.rows - 1) / 2;
+
+    for (var i = 0; i < currentMatrix.columns; i++) {
+        for (var j = 0; j < currentMatrix.rows; j++) {
+            var tmpMatrix = currentMatrix.subMatrix(Math.max(0, i - shiftX), Math.min(currentMatrix.columns - 1, i + shiftX), Math.max(0, j - shiftY), Math.min(currentMatrix.rows - 1, j + shiftY));
+
+            newMatrix.set(i, j, minOfConvolution(tmpMatrix, kernel));
+        }
+    }
+    newImage.setMatrix(newMatrix);
+    return newImage;
+}
+
+function minOfConvolution(a, b) {
+    var minimum = Number.POSITIVE_INFINITY;
+    for (var i = 0; i < a.rows; i++) {
+        for (var j = 0; j < a.columns; j++) {
+            if (b.get(i, j) === 1) {
+                if (a.get(i, j) < minimum) {
+                    minimum = a.get(i, j);
+                }
+            }
+        }
+    }
+    return minimum;
+}
+
+/**
+ * Erosion is one of two fundamental operations (the other being dilation) in morphological image processing from which all other morphological operations are based (from Wikipedia).
+ * http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html
+ * https://en.wikipedia.org/wiki/Erosion_(morphology)
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {Matrix} [options.kernel]
+ * @return {Image}
+ */
+function erode() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _options$kernel = options.kernel,
+        kernel = _options$kernel === undefined ? new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]) : _options$kernel;
+
+
+    this.checkProcessable('erode', {
+        bitDepth: [8, 16],
+        channel: [1]
+    });
+    if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
+        throw new TypeError('erode: The number of rows and columns of the kernel must be odd');
+    }
+
+    var newImage = Image$1.createFrom(this);
+    var currentMatrix = this.getMatrix();
+    var newMatrix = new Matrix(currentMatrix);
+    var shiftX = (kernel.columns - 1) / 2;
+    var shiftY = (kernel.rows - 1) / 2;
+
+    for (var i = 0; i < currentMatrix.columns; i++) {
+        for (var j = 0; j < currentMatrix.rows; j++) {
+            var tmpMatrix = currentMatrix.subMatrix(Math.max(0, i - shiftX), Math.min(currentMatrix.columns - 1, i + shiftX), Math.max(0, j - shiftY), Math.min(currentMatrix.rows - 1, j + shiftY));
+            newMatrix.set(i, j, maxOfConvolution(tmpMatrix, kernel));
+        }
+    }
+    newImage.setMatrix(newMatrix);
+    return newImage;
+}
+
+function maxOfConvolution(a, b) {
+    var maximum = 0;
+    for (var i = 0; i < a.rows; i++) {
+        for (var j = 0; j < a.columns; j++) {
+            if (b.get(i, j) === 1) {
+                if (a.get(i, j) > maximum) {
+                    maximum = a.get(i, j);
+                }
+            }
+        }
+    }
+    return maximum;
+}
+
+/**
+ * In mathematical morphology, opening is the dilation of the erosion of a set A by a structuring element B. Together with closing, the opening serves in computer vision and image processing as a basic workhorse of morphological noise removal. Opening removes small objects from the foreground (usually taken as the bright pixels) of an image, placing them in the background, while closing removes small holes in the foreground, changing small islands of background into foreground. (Wikipedia)
+ * http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {Matrix} [options.kernel]
+ * @param {number} [options.iterations] - number of iterations of the morphological transform
+ * @return {Image}
+ */
+function opening() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _options$kernel = options.kernel,
+        kernel = _options$kernel === undefined ? new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]) : _options$kernel,
+        _options$iterations = options.iterations,
+        iterations = _options$iterations === undefined ? 1 : _options$iterations;
+
+
+    this.checkProcessable('opening', {
+        bitDepth: [8, 16],
+        channel: [1]
+    });
+    if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
+        throw new TypeError('opening: The number of rows and columns of the kernel must be odd');
+    }
+
+    var newImage = this.erode(kernel);
+    newImage = newImage.dilate(kernel);
+    if (iterations > 1) {
+        for (var i = 1; i < iterations; i++) {
+            newImage = newImage.erode(kernel);
+            newImage = newImage.dilate(kernel);
+        }
+    }
+    return newImage;
+}
+
+/**
+ * In mathematical morphology, the closing of a set A by a structuring element B is the erosion of the dilation of that set (Wikipedia). In image processing, closing is, together with opening, the basic workhorse of morphological noise removal. Opening removes small objects, while closing removes small holes.
+ * http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {Matrix} [options.kernel]
+ * @param {number} [options.iterations] - number of iterations of the morphological transform
+ * @return {Image}
+ */
+function closing() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _options$kernel = options.kernel,
+        kernel = _options$kernel === undefined ? new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]) : _options$kernel,
+        _options$iterations = options.iterations,
+        iterations = _options$iterations === undefined ? 1 : _options$iterations;
+
+
+    this.checkProcessable('closing', {
+        bitDepth: [8, 16],
+        channel: [1]
+    });
+    if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
+        throw new TypeError('closing: The number of rows and columns of the kernel must be odd');
+    }
+
+    var newImage = this.dilate(kernel);
+    newImage = newImage.erode(kernel);
+    if (iterations > 1) {
+        for (var i = 1; i < iterations; i++) {
+            newImage = newImage.dilate(kernel);
+            newImage = newImage.erode(kernel);
+        }
+    }
+    return newImage;
+}
+
+/**
+ * This function is the white top hat (also called top hat). In mathematical morphology and digital image processing, top-hat transform is an operation that extracts small elements and details from given images. The white top-hat transform is defined as the difference between the input image and its opening by some structuring element. Top-hat transforms are used for various image processing tasks, such as feature extraction, background equalization, image enhancement, and others. (Wikipedia)
+ * http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {Matrix} [options.kernel]
+ * @param {number} [options.iterations] - number of iterations of the morphological transform
+ * @return {Image}
+ */
+function topHat() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _options$kernel = options.kernel,
+        kernel = _options$kernel === undefined ? new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]) : _options$kernel,
+        _options$iterations = options.iterations,
+        iterations = _options$iterations === undefined ? 1 : _options$iterations;
+
+
+    this.checkProcessable('topHat', {
+        bitDepth: [8, 16],
+        channel: [1]
+    });
+    if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
+        throw new TypeError('topHat: The number of rows and columns of the kernel must be odd');
+    }
+
+    var openImage = this.opening(kernel);
+    var newImage = this.subtractImage(openImage, { absolute: true });
+    if (iterations > 1) {
+        for (var i = 1; i < iterations; i++) {
+            openImage = newImage.opening(kernel);
+            newImage = openImage.subtractImage(newImage, { absolute: true });
+        }
+    }
+    return newImage;
+}
+
+/**
+ * This function is the black top hat (also called black hat). In mathematical morphology and digital image processing, top-hat transform is an operation that extracts small elements and details from given images. The black top-hat transform is defined dually as the difference between the closing and the input image. Top-hat transforms are used for various image processing tasks, such as feature extraction, background equalization, image enhancement, and others. (Wikipedia) 
+ * http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {Matrix} [options.kernel]
+ * @param {number} [options.iterations] - number of iterations of the morphological transform
+ * @return {Image}
+ */
+function blackHat() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _options$kernel = options.kernel,
+        kernel = _options$kernel === undefined ? new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]) : _options$kernel,
+        _options$iterations = options.iterations,
+        iterations = _options$iterations === undefined ? 1 : _options$iterations;
+
+
+    this.checkProcessable('blackHat', {
+        bitDepth: [8, 16],
+        channel: [1]
+    });
+    if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
+        throw new TypeError('black hat: The number of rows and columns of the kernel must be odd');
+    }
+
+    var closeImage = this.closing(kernel);
+    var newImage = closeImage.subtractImage(this, { absolute: true });
+    if (iterations > 1) {
+        for (var i = 1; i < iterations; i++) {
+            closeImage = newImage.closing(kernel);
+            newImage = closeImage.subtractImage(newImage, { absolute: true });
+        }
+    }
+    return newImage;
+}
+
+/**
+ * In mathematical morphology and digital image processing, a morphological gradient is the difference between the dilation and the erosion of a given image. It is an image where each pixel value (typically non-negative) indicates the contrast intensity in the close neighborhood of that pixel. It is useful for edge detection and segmentation applications.
+ * http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {Matrix} [options.kernel]
+ * @param {number} [options.iterations] - number of iterations of the morphological transform
+ * @return {Image}
+ */
+function morphologicalGradient() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _options$kernel = options.kernel,
+        kernel = _options$kernel === undefined ? new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]) : _options$kernel,
+        _options$iterations = options.iterations,
+        iterations = _options$iterations === undefined ? 1 : _options$iterations;
+
+
+    this.checkProcessable('morphologicalGradient', {
+        bitDepth: [8, 16],
+        channel: [1]
+    });
+    if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
+        throw new TypeError('morphologicalGradient: The number of rows and columns of the kernel must be odd');
+    }
+
+    var dilatedImage = this.dilate(kernel);
+    var erodedImage = this.erode(kernel);
+    var newImage = dilatedImage.subtractImage(erodedImage, { absolute: true });
+    if (iterations > 1) {
+        for (var i = 1; i < iterations; i++) {
+            dilatedImage = newImage.dilate(kernel);
+            erodedImage = newImage.erode(kernel);
+            newImage = dilatedImage.subtractImage(erodedImage, { absolute: true });
+        }
+    }
+    return newImage;
+}
+
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 // REFERENCES :
@@ -17338,8 +17684,8 @@ function computeWidthAndHeigth(tl, tr, br, bl, widthImage, heightImage) {
 
     var A = new Matrix([[f, 0, u0], [0, f, v0], [0, 0, 1]]);
     var At = A.transpose();
-    var Ati = inverse$$1(At);
-    var Ai = inverse$$1(A);
+    var Ati = inverse(At);
+    var Ai = inverse(A);
 
     var n2R = Matrix.rowVector(n2);
     var n3R = Matrix.rowVector(n3);
@@ -23252,6 +23598,8 @@ function getAngle(p1, p2) {
 }
 
 // filters
+// morphology transforms
+
 // transforms
 // utility
 // operators
@@ -23269,6 +23617,7 @@ function extend$1(Image) {
     Image.extendMethod('level', level, inPlace);
     Image.extendMethod('add', add, inPlace);
     Image.extendMethod('subtract', subtract, inPlace);
+    Image.extendMethod('subtractImage', substractImage);
     Image.extendMethod('multiply', multiply, inPlace);
     Image.extendMethod('divide', divide, inPlace);
     Image.extendMethod('hypotenuse', hypotenuse$1);
@@ -23280,6 +23629,14 @@ function extend$1(Image) {
     Image.extendMethod('medianFilter', medianFilter);
     Image.extendMethod('gaussianFilter', gaussianFilter);
     Image.extendMethod('sobelFilter', sobelFilter);
+
+    Image.extendMethod('dilate', dilate);
+    Image.extendMethod('erode', erode);
+    Image.extendMethod('opening', opening);
+    Image.extendMethod('closing', closing);
+    Image.extendMethod('topHat', topHat);
+    Image.extendMethod('blackHat', blackHat);
+    Image.extendMethod('morphologicalGradient', morphologicalGradient);
 
     Image.extendMethod('warpingFourPoints', warpingFourPoints);
     Image.extendMethod('crop', crop);
