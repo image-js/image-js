@@ -10,9 +10,7 @@ import Image from '../Image';
  * @param {number} [newColorDepth=8]
  * @return {Image} The new image
  * @example
- * var newImage = image.colorDepth({
- *   newColorDepth:8
- * });
+ * var newImage = image.colorDepth(8);
  */
 export default function colorDepth(newColorDepth = 8) {
 
