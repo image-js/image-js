@@ -4,9 +4,10 @@
  * @memberof Image
  * @instance
  * @param {Matrix} kernel
+ * @param {number} iterations - number of iterations of the morphological transform
  * @return {Image}
  */
-export default function blackHat(kernel) {
+export default function blackHat(kernel, iterations = 1) {
     this.checkProcessable('blackHat', {
         bitDepth: [8, 16],
         channel: [1]
@@ -15,7 +16,14 @@ export default function blackHat(kernel) {
         throw new TypeError('black hat: The number of rows and columns of the kernel must be odd');
     }
 
-    const closeImage = this.closing(kernel);
-    const newImage = closeImage.subtractImage(this, {absolute: true});
+
+    let closeImage = this.closing(kernel);
+    let newImage = closeImage.subtractImage(this, {absolute: true});
+    if (iterations > 1) {
+        for (let i = 1; i < iterations; i++) {
+            closeImage = newImage.closing(kernel);
+            newImage = closeImage.subtractImage(newImage, {absolute: true});
+        }
+    }
     return newImage;
 }

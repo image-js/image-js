@@ -4,9 +4,10 @@
  * @memberof Image
  * @instance
  * @param {Matrix} kernel
+ * @param {number} iterations - number of iterations of the morphological transform
  * @return {Image}
  */
-export default function opening(kernel) {
+export default function opening(kernel, iterations = 1) {
     this.checkProcessable('opening', {
         bitDepth: [8, 16],
         channel: [1]
@@ -17,5 +18,11 @@ export default function opening(kernel) {
 
     let newImage = this.erode(kernel);
     newImage = newImage.dilate(kernel);
+    if (iterations > 1) {
+        for (let i = 1; i < iterations; i++) {
+            newImage = newImage.erode(kernel);
+            newImage = newImage.dilate(kernel);
+        }
+    }
     return newImage;
 }

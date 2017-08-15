@@ -4,9 +4,10 @@
  * @memberof Image
  * @instance
  * @param {Matrix} kernel
+ * @param {number} iterations - number of iterations of the morphological transform
  * @return {Image}
  */
-export default function topHat(kernel) {
+export default function topHat(kernel, iterations = 1) {
     this.checkProcessable('topHat', {
         bitDepth: [8, 16],
         channel: [1]
@@ -15,7 +16,13 @@ export default function topHat(kernel) {
         throw new TypeError('topHat: The number of rows and columns of the kernel must be odd');
     }
 
-    const openImage = this.opening(kernel);
-    const newImage = this.subtractImage(openImage, {absolute: true});
+    let openImage = this.opening(kernel);
+    let newImage = this.subtractImage(openImage, {absolute: true});
+    if (iterations > 1) {
+        for (let i = 1; i < iterations; i++) {
+            openImage = newImage.opening(kernel);
+            newImage = openImage.subtractImage(newImage, {absolute: true});
+        }
+    }
     return newImage;
 }
