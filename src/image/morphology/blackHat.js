@@ -25,11 +25,11 @@ export default function blackHat(options = {}) {
     }
 
 
-    let closeImage = this.closing(kernel);
+    let closeImage = this.closing({kernel: kernel});
     let newImage = closeImage.subtractImage(this, {absolute: true});
     if (iterations > 1) {
         for (let i = 1; i < iterations; i++) {
-            closeImage = newImage.closing(kernel);
+            closeImage = newImage.closing({kernel: kernel});
             newImage = closeImage.subtractImage(newImage, {absolute: true});
         }
     }

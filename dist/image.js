@@ -17305,73 +17305,11 @@ function dilate() {
     var newImage = Image$1.createFrom(this);
     var currentMatrix = this.getMatrix();
     var newMatrix = new Matrix(currentMatrix);
-    var shiftX = (kernel.columns - 1) / 2;
-    var shiftY = (kernel.rows - 1) / 2;
+    var shiftX = (kernel.rows - 1) / 2;
+    var shiftY = (kernel.columns - 1) / 2;
 
-    for (var i = 0; i < currentMatrix.columns; i++) {
-        for (var j = 0; j < currentMatrix.rows; j++) {
-            var startRow = Math.max(0, i - shiftX);
-            var endRow = Math.min(currentMatrix.rows - 1, i + shiftX);
-            var startColumn = Math.max(0, j - shiftY);
-            var endColumn = Math.min(currentMatrix.columns - 1, j + shiftY);
-            if (startRow >= endRow || startColumn >= endColumn) {
-                continue;
-            }
-            var tmpMatrix = currentMatrix.subMatrix(startRow, endRow, startColumn, endColumn);
-
-            newMatrix.set(i, j, minOfConvolution(tmpMatrix, kernel));
-        }
-    }
-    newImage.setMatrix(newMatrix);
-    return newImage;
-}
-
-function minOfConvolution(a, b) {
-    var minimum = Number.POSITIVE_INFINITY;
-    for (var i = 0; i < a.rows; i++) {
-        for (var j = 0; j < a.columns; j++) {
-            if (b.get(i, j) === 1) {
-                if (a.get(i, j) < minimum) {
-                    minimum = a.get(i, j);
-                }
-            }
-        }
-    }
-    return minimum;
-}
-
-/**
- * Erosion is one of two fundamental operations (the other being dilation) in morphological image processing from which all other morphological operations are based (from Wikipedia).
- * http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html
- * https://en.wikipedia.org/wiki/Erosion_(morphology)
- * @memberof Image
- * @instance
- * @param {object} [options]
- * @param {Matrix} [options.kernel]
- * @return {Image}
- */
-function erode() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var _options$kernel = options.kernel,
-        kernel = _options$kernel === undefined ? new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]) : _options$kernel;
-
-
-    this.checkProcessable('erode', {
-        bitDepth: [8, 16],
-        channel: [1]
-    });
-    if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
-        throw new TypeError('erode: The number of rows and columns of the kernel must be odd');
-    }
-
-    var newImage = Image$1.createFrom(this);
-    var currentMatrix = this.getMatrix();
-    var newMatrix = new Matrix(currentMatrix);
-    var shiftX = (kernel.columns - 1) / 2;
-    var shiftY = (kernel.rows - 1) / 2;
-
-    for (var i = 0; i < currentMatrix.columns; i++) {
-        for (var j = 0; j < currentMatrix.rows; j++) {
+    for (var i = 0; i < currentMatrix.rows; i++) {
+        for (var j = 0; j < currentMatrix.columns; j++) {
             var startRow = Math.max(0, i - shiftX);
             var endRow = Math.min(currentMatrix.rows - 1, i + shiftX);
             var startColumn = Math.max(0, j - shiftY);
@@ -17403,6 +17341,68 @@ function maxOfConvolution(a, b) {
 }
 
 /**
+ * Erosion is one of two fundamental operations (the other being dilation) in morphological image processing from which all other morphological operations are based (from Wikipedia).
+ * http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html
+ * https://en.wikipedia.org/wiki/Erosion_(morphology)
+ * @memberof Image
+ * @instance
+ * @param {object} [options]
+ * @param {Matrix} [options.kernel]
+ * @return {Image}
+ */
+function erode() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _options$kernel = options.kernel,
+        kernel = _options$kernel === undefined ? new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]) : _options$kernel;
+
+
+    this.checkProcessable('erode', {
+        bitDepth: [8, 16],
+        channel: [1]
+    });
+    if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
+        throw new TypeError('erode: The number of rows and columns of the kernel must be odd');
+    }
+
+    var newImage = Image$1.createFrom(this);
+    var currentMatrix = this.getMatrix();
+    var newMatrix = new Matrix(currentMatrix);
+    var shiftX = (kernel.rows - 1) / 2;
+    var shiftY = (kernel.columns - 1) / 2;
+
+    for (var i = 0; i < currentMatrix.rows; i++) {
+        for (var j = 0; j < currentMatrix.columns; j++) {
+            var startRow = Math.max(0, i - shiftX);
+            var endRow = Math.min(currentMatrix.rows - 1, i + shiftX);
+            var startColumn = Math.max(0, j - shiftY);
+            var endColumn = Math.min(currentMatrix.columns - 1, j + shiftY);
+            if (startRow >= endRow || startColumn >= endColumn) {
+                continue;
+            }
+            var tmpMatrix = currentMatrix.subMatrix(startRow, endRow, startColumn, endColumn);
+
+            newMatrix.set(i, j, minOfConvolution(tmpMatrix, kernel));
+        }
+    }
+    newImage.setMatrix(newMatrix);
+    return newImage;
+}
+
+function minOfConvolution(a, b) {
+    var minimum = Number.POSITIVE_INFINITY;
+    for (var i = 0; i < a.rows; i++) {
+        for (var j = 0; j < a.columns; j++) {
+            if (b.get(i, j) === 1) {
+                if (a.get(i, j) < minimum) {
+                    minimum = a.get(i, j);
+                }
+            }
+        }
+    }
+    return minimum;
+}
+
+/**
  * In mathematical morphology, opening is the dilation of the erosion of a set A by a structuring element B. Together with closing, the opening serves in computer vision and image processing as a basic workhorse of morphological noise removal. Opening removes small objects from the foreground (usually taken as the bright pixels) of an image, placing them in the background, while closing removes small holes in the foreground, changing small islands of background into foreground. (Wikipedia)
  * http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html
  * @memberof Image
@@ -17428,12 +17428,12 @@ function opening() {
         throw new TypeError('opening: The number of rows and columns of the kernel must be odd');
     }
 
-    var newImage = this.erode(kernel);
-    newImage = newImage.dilate(kernel);
+    var newImage = this.erode({ kernel: kernel });
+    newImage = newImage.dilate({ kernel: kernel });
     if (iterations > 1) {
         for (var i = 1; i < iterations; i++) {
-            newImage = newImage.erode(kernel);
-            newImage = newImage.dilate(kernel);
+            newImage = newImage.erode({ kernel: kernel });
+            newImage = newImage.dilate({ kernel: kernel });
         }
     }
     return newImage;
@@ -17465,12 +17465,12 @@ function closing() {
         throw new TypeError('closing: The number of rows and columns of the kernel must be odd');
     }
 
-    var newImage = this.dilate(kernel);
-    newImage = newImage.erode(kernel);
+    var newImage = this.dilate({ kernel: kernel });
+    newImage = newImage.erode({ kernel: kernel });
     if (iterations > 1) {
         for (var i = 1; i < iterations; i++) {
-            newImage = newImage.dilate(kernel);
-            newImage = newImage.erode(kernel);
+            newImage = newImage.dilate({ kernel: kernel });
+            newImage = newImage.erode({ kernel: kernel });
         }
     }
     return newImage;
@@ -17502,11 +17502,11 @@ function topHat() {
         throw new TypeError('topHat: The number of rows and columns of the kernel must be odd');
     }
 
-    var openImage = this.opening(kernel);
+    var openImage = this.opening({ kernel: kernel });
     var newImage = this.subtractImage(openImage, { absolute: true });
     if (iterations > 1) {
         for (var i = 1; i < iterations; i++) {
-            openImage = newImage.opening(kernel);
+            openImage = newImage.opening({ kernel: kernel });
             newImage = openImage.subtractImage(newImage, { absolute: true });
         }
     }
@@ -17539,11 +17539,11 @@ function blackHat() {
         throw new TypeError('black hat: The number of rows and columns of the kernel must be odd');
     }
 
-    var closeImage = this.closing(kernel);
+    var closeImage = this.closing({ kernel: kernel });
     var newImage = closeImage.subtractImage(this, { absolute: true });
     if (iterations > 1) {
         for (var i = 1; i < iterations; i++) {
-            closeImage = newImage.closing(kernel);
+            closeImage = newImage.closing({ kernel: kernel });
             newImage = closeImage.subtractImage(newImage, { absolute: true });
         }
     }
@@ -17576,13 +17576,13 @@ function morphologicalGradient() {
         throw new TypeError('morphologicalGradient: The number of rows and columns of the kernel must be odd');
     }
 
-    var dilatedImage = this.dilate(kernel);
-    var erodedImage = this.erode(kernel);
+    var dilatedImage = this.dilate({ kernel: kernel });
+    var erodedImage = this.erode({ kernel: kernel });
     var newImage = dilatedImage.subtractImage(erodedImage, { absolute: true });
     if (iterations > 1) {
         for (var i = 1; i < iterations; i++) {
-            dilatedImage = newImage.dilate(kernel);
-            erodedImage = newImage.erode(kernel);
+            dilatedImage = newImage.dilate({ kernel: kernel });
+            erodedImage = newImage.erode({ kernel: kernel });
             newImage = dilatedImage.subtractImage(erodedImage, { absolute: true });
         }
     }
@@ -19780,9 +19780,7 @@ function pad() {
  * @param {number} [newColorDepth=8]
  * @return {Image} The new image
  * @example
- * var newImage = image.colorDepth({
- *   newColorDepth:8
- * });
+ * var newImage = image.colorDepth(8);
  */
 function colorDepth() {
     var newColorDepth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 8;

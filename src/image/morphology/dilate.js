@@ -27,12 +27,12 @@ export default function dilate(options = {}) {
     const newImage = Image.createFrom(this);
     let currentMatrix = this.getMatrix();
     let newMatrix = new Matrix(currentMatrix);
-    let shiftX = (kernel.columns - 1) / 2;
-    let shiftY = (kernel.rows - 1) / 2;
+    let shiftX = (kernel.rows - 1) / 2;
+    let shiftY = (kernel.columns - 1) / 2;
 
 
-    for (let i = 0; i < currentMatrix.columns; i++) {
-        for (let j = 0; j < currentMatrix.rows; j++) {
+    for (let i = 0; i < currentMatrix.rows; i++) {
+        for (let j = 0; j < currentMatrix.columns; j++) {
             let startRow = Math.max(0, i - shiftX);
             let endRow = Math.min(currentMatrix.rows - 1, i + shiftX);
             let startColumn = Math.max(0, j - shiftY);
@@ -42,23 +42,23 @@ export default function dilate(options = {}) {
             }
             let tmpMatrix = currentMatrix.subMatrix(startRow, endRow, startColumn, endColumn);
 
-            newMatrix.set(i, j, minOfConvolution(tmpMatrix, kernel));
+            newMatrix.set(i, j, maxOfConvolution(tmpMatrix, kernel));
         }
     }
     newImage.setMatrix(newMatrix);
     return newImage;
 }
 
-function minOfConvolution(a, b) {
-    let minimum = Number.POSITIVE_INFINITY;
+function maxOfConvolution(a, b) {
+    let maximum = 0;
     for (let i = 0; i < a.rows; i++) {
         for (let j = 0; j < a.columns; j++) {
             if (b.get(i, j) === 1) {
-                if (a.get(i, j) < minimum) {
-                    minimum = a.get(i, j);
+                if (a.get(i, j) > maximum) {
+                    maximum = a.get(i, j);
                 }
             }
         }
     }
-    return minimum;
+    return maximum;
 }
