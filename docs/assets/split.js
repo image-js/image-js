@@ -1,14 +1,12 @@
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /*! Split.js - v1.3.5 */
 // https://github.com/nathancahill/Split.js
 // Copyright (c) 2017 Nathan Cahill; Licensed MIT
 
 (function (global, factory) {
-  (typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory() : typeof define === 'function' && define.amd ? define(factory) : global.Split = factory();
-})(undefined, function () {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() : typeof define === 'function' && define.amd ? define(factory) : global.Split = factory();
+})(this, function () {
   'use strict';
   // The programming goals of Split.js are to deliver readable, understandable and
   // maintainable code, while at the same time manually optimizing for tiny minified file size,
@@ -23,7 +21,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   var addEventListener = 'addEventListener';
   var removeEventListener = 'removeEventListener';
   var getBoundingClientRect = 'getBoundingClientRect';
-  var NOOP = function NOOP() {
+  var NOOP = function () {
     return false;
   };
 
@@ -48,7 +46,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   // The second helper function allows elements and string selectors to be used
   // interchangeably. In either case an element is returned. This allows us to
   // do `Split([elem1, elem2])` as well as `Split(['#id1', '#id2'])`.
-  var elementOrSelector = function elementOrSelector(el) {
+  var elementOrSelector = function (el) {
     if (typeof el === 'string' || el instanceof String) {
       return document.querySelector(el);
     }
@@ -85,7 +83,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   // 4. Loop through the elements while pairing them off. Every pair gets an
   //    `pair` object, a gutter, and special isFirst/isLast properties.
   // 5. Actually size the pair elements, insert gutters and attach event listeners.
-  var Split = function Split(ids, options) {
+  var Split = function (ids, options) {
     if (options === void 0) options = {};
 
     var dimension;

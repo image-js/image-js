@@ -1,7 +1,5 @@
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /*!
  * AnchorJS - v4.0.0 - 2017-06-02
  * https://github.com/bryanbraun/anchorjs
@@ -16,7 +14,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define([], factory);
-  } else if ((typeof module === 'undefined' ? 'undefined' : _typeof(module)) === 'object' && module.exports) {
+  } else if (typeof module === 'object' && module.exports) {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
@@ -26,7 +24,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     root.AnchorJS = factory();
     root.anchors = new root.AnchorJS();
   }
-})(undefined, function () {
+})(this, function () {
   'use strict';
 
   function AnchorJS(options) {
@@ -38,7 +36,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
      * @param {Object} opts - Options object
      */
     function _applyRemainingDefaultOptions(opts) {
-      opts.icon = opts.hasOwnProperty('icon') ? opts.icon : '\uE9CB'; // Accepts characters (and also URLs?), like  '#', '¶', '❡', or '§'.
+      opts.icon = opts.hasOwnProperty('icon') ? opts.icon : '\ue9cb'; // Accepts characters (and also URLs?), like  '#', '¶', '❡', or '§'.
       opts.visible = opts.hasOwnProperty('visible') ? opts.visible : 'hover'; // Also accepts 'always' & 'touch'
       opts.placement = opts.hasOwnProperty('placement') ? opts.placement : 'right'; // Also accepts 'left'
       opts.class = opts.hasOwnProperty('class') ? opts.class : ''; // Accepts any class name.
@@ -154,7 +152,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           anchor.style.opacity = '1';
         }
 
-        if (this.options.icon === '\uE9CB') {
+        if (this.options.icon === '\ue9cb') {
           anchor.style.font = '1em/1 anchorjs-icons';
 
           // We set lineHeight = 1 here because the `anchorjs-icons` font family could otherwise affect the

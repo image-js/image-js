@@ -24,14 +24,14 @@ document.getElementById('filter-input').addEventListener('keyup', function (e) {
     }
   }
 
-  var match = function match() {
+  var match = function () {
     return true;
   };
 
   var value = this.value.toLowerCase();
 
   if (!value.match(/^\s*$/)) {
-    match = function match(element) {
+    match = function (element) {
       var html = element.firstChild.innerHTML;
       return html && html.toLowerCase().indexOf(value) !== -1;
     };
@@ -118,12 +118,12 @@ split_left.style.overflow = '';
 var percent_left = (split_left.getBoundingClientRect().width + 10 + cw_without_sb - cw_with_sb) / split_parent.getBoundingClientRect().width * 100;
 
 Split(['#split-left', '#split-right'], {
-  elementStyle: function elementStyle(dimension, size, gutterSize) {
+  elementStyle: function (dimension, size, gutterSize) {
     return {
       'flex-basis': 'calc(' + size + '% - ' + gutterSize + 'px)'
     };
   },
-  gutterStyle: function gutterStyle(dimension, gutterSize) {
+  gutterStyle: function (dimension, gutterSize) {
     return {
       'flex-basis': gutterSize + 'px'
     };
