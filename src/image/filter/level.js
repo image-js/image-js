@@ -26,10 +26,22 @@ export default function level(options = {}) {
     } = options;
 
     this.checkProcessable('level', {
-        bitDepth: [8, 16]
+        bitDepth: [8, 16, 32]
     });
 
     channels = validateArrayOfChannels(this, {channels: channels});
+
+    if (channels.length !== this.channel) {
+        // if we process only part of the channels and the min or max length corresponds to the number of channels
+        // we need to take the corresponding values
+        if (Array.isArray(min) && min.length === this.channels) {
+            min = min.filter((a, index) => channels.includes(index));
+        }
+        if (Array.isArray(max) && max.length === this.channels) {
+            max = max.filter((a, index) => channels.includes(index));
+        }
+    }
+
 
     switch (algorithm) {
         case 'range':
@@ -59,17 +71,17 @@ export default function level(options = {}) {
 
 function processImage(image, min, max, channels) {
     let delta = 1e-5; // sorry no better value that this "best guess"
-    let factor = new Array(image.channels);
+    let factor = new Array(channels.length);
 
-    for (let c of channels) {
-        if (min[c] === 0 && max[c] === image.maxValue) {
-            factor[c] = 0;
-        } else if (max[c] === min[c]) {
-            factor[c] = 0;
+    for (let i = 0; i < channels.length; i++) {
+        if (min[i] === 0 && max[i] === image.maxValue) {
+            factor[i] = 0;
+        } else if (max[i] === min[i]) {
+            factor[i] = 0;
         } else {
-            factor[c] = (image.maxValue + 1 - delta) / (max[c] - min[c]);
+            factor[i] = (image.maxValue + 1 - delta) / (max[i] - min[i]);
         }
-        min[c] += ((0.5 - delta / 2) / factor[c]);
+        min[i] += ((0.5 - delta / 2) / factor[i]);
     }
 
     /*
@@ -82,9 +94,9 @@ function processImage(image, min, max, channels) {
 
     for (let j = 0; j < channels.length; j++) {
         let c = channels[j];
-        if (factor[c] !== 0) {
+        if (factor[j] !== 0) {
             for (let i = 0; i < image.data.length; i += image.channels) {
-                image.data[i + c] = Math.min(Math.max(0, ((image.data[i + c] - min[c]) * factor[c] + 0.5) | 0), image.maxValue);
+                image.data[i + c] = Math.min(Math.max(0, ((image.data[i + c] - min[j]) * factor[j] + 0.5) | 0), image.maxValue);
             }
         }
     }
