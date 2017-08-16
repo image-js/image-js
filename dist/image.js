@@ -17305,11 +17305,11 @@ function dilate() {
     var newImage = Image$1.createFrom(this);
     var currentMatrix = this.getMatrix();
     var newMatrix = new Matrix(currentMatrix);
-    var shiftX = (kernel.columns - 1) / 2;
-    var shiftY = (kernel.rows - 1) / 2;
+    var shiftX = (kernel.rows - 1) / 2;
+    var shiftY = (kernel.columns - 1) / 2;
 
-    for (var i = 0; i < currentMatrix.columns; i++) {
-        for (var j = 0; j < currentMatrix.rows; j++) {
+    for (var i = 0; i < currentMatrix.rows; i++) {
+        for (var j = 0; j < currentMatrix.columns; j++) {
             var startRow = Math.max(0, i - shiftX);
             var endRow = Math.min(currentMatrix.rows - 1, i + shiftX);
             var startColumn = Math.max(0, j - shiftY);
@@ -17319,25 +17319,25 @@ function dilate() {
             }
             var tmpMatrix = currentMatrix.subMatrix(startRow, endRow, startColumn, endColumn);
 
-            newMatrix.set(i, j, minOfConvolution(tmpMatrix, kernel));
+            newMatrix.set(i, j, maxOfConvolution(tmpMatrix, kernel));
         }
     }
     newImage.setMatrix(newMatrix);
     return newImage;
 }
 
-function minOfConvolution(a, b) {
-    var minimum = Number.POSITIVE_INFINITY;
+function maxOfConvolution(a, b) {
+    var maximum = 0;
     for (var i = 0; i < a.rows; i++) {
         for (var j = 0; j < a.columns; j++) {
             if (b.get(i, j) === 1) {
-                if (a.get(i, j) < minimum) {
-                    minimum = a.get(i, j);
+                if (a.get(i, j) > maximum) {
+                    maximum = a.get(i, j);
                 }
             }
         }
     }
-    return minimum;
+    return maximum;
 }
 
 /**
@@ -17367,11 +17367,11 @@ function erode() {
     var newImage = Image$1.createFrom(this);
     var currentMatrix = this.getMatrix();
     var newMatrix = new Matrix(currentMatrix);
-    var shiftX = (kernel.columns - 1) / 2;
-    var shiftY = (kernel.rows - 1) / 2;
+    var shiftX = (kernel.rows - 1) / 2;
+    var shiftY = (kernel.columns - 1) / 2;
 
-    for (var i = 0; i < currentMatrix.columns; i++) {
-        for (var j = 0; j < currentMatrix.rows; j++) {
+    for (var i = 0; i < currentMatrix.rows; i++) {
+        for (var j = 0; j < currentMatrix.columns; j++) {
             var startRow = Math.max(0, i - shiftX);
             var endRow = Math.min(currentMatrix.rows - 1, i + shiftX);
             var startColumn = Math.max(0, j - shiftY);
@@ -17381,25 +17381,25 @@ function erode() {
             }
             var tmpMatrix = currentMatrix.subMatrix(startRow, endRow, startColumn, endColumn);
 
-            newMatrix.set(i, j, maxOfConvolution(tmpMatrix, kernel));
+            newMatrix.set(i, j, minOfConvolution(tmpMatrix, kernel));
         }
     }
     newImage.setMatrix(newMatrix);
     return newImage;
 }
 
-function maxOfConvolution(a, b) {
-    var maximum = 0;
+function minOfConvolution(a, b) {
+    var minimum = Number.POSITIVE_INFINITY;
     for (var i = 0; i < a.rows; i++) {
         for (var j = 0; j < a.columns; j++) {
             if (b.get(i, j) === 1) {
-                if (a.get(i, j) > maximum) {
-                    maximum = a.get(i, j);
+                if (a.get(i, j) < minimum) {
+                    minimum = a.get(i, j);
                 }
             }
         }
     }
-    return maximum;
+    return minimum;
 }
 
 /**
