@@ -18,11 +18,11 @@ describe('check the top hat function', function () {
 
         Array.from(image.topHat({kernel: kernel}).data).should.eql(
             [
-                255, 255, 0, 255, 255,
-                255, 0, 0, 0, 255,
-                255, 0, 0, 0, 255,
-                255, 0, 0, 0, 255,
-                255, 255, 0, 255, 255
+                0, 0, 255, 0, 0,
+                0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0,
+                0, 0, 255, 0, 0
             ]
         );
     });

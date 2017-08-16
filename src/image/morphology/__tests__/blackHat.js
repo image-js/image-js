@@ -18,11 +18,11 @@ describe('check the black hat function', function () {
 
         Array.from(image.blackHat({kernel: kernel}).data).should.eql(
             [
-                0, 0, 255, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 255, 0, 0
+                255, 255, 0, 255, 255,
+                255, 0, 0, 0, 255,
+                255, 0, 0, 0, 255,
+                255, 0, 0, 0, 255,
+                255, 255, 0, 255, 255
             ]
         );
     });
