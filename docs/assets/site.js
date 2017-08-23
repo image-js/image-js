@@ -1,5 +1,3 @@
-'use strict';
-
 /* global anchors */
 
 // add anchor links to headers
@@ -9,7 +7,7 @@ anchors.add('h3');
 // Filter UI
 var tocElements = document.getElementById('toc').getElementsByTagName('li');
 
-document.getElementById('filter-input').addEventListener('keyup', function (e) {
+document.getElementById('filter-input').addEventListener('keyup', function(e) {
   var i, element, children;
 
   // enter key
@@ -24,14 +22,14 @@ document.getElementById('filter-input').addEventListener('keyup', function (e) {
     }
   }
 
-  var match = function () {
+  var match = function() {
     return true;
   };
 
   var value = this.value.toLowerCase();
 
   if (!value.match(/^\s*$/)) {
-    match = function (element) {
+    match = function(element) {
       var html = element.firstChild.innerHTML;
       return html && html.toLowerCase().indexOf(value) !== -1;
     };
@@ -70,7 +68,11 @@ function showHashTarget(targetId) {
   if (targetId) {
     var hashTarget = document.getElementById(targetId);
     // new target is hidden
-    if (hashTarget && hashTarget.offsetHeight === 0 && hashTarget.parentNode.parentNode.classList.contains('display-none')) {
+    if (
+      hashTarget &&
+      hashTarget.offsetHeight === 0 &&
+      hashTarget.parentNode.parentNode.classList.contains('display-none')
+    ) {
       hashTarget.parentNode.parentNode.classList.remove('display-none');
     }
   }
@@ -115,15 +117,18 @@ split_left.style.overflow = '';
 // - Half of gutterSize (i.e. 10) because gutter will take that much from each.
 // - Scrollbar width (cw_with_sb - cw_without_sb), if it takes up existing
 //   space (Firefox) rather than adding the scrollbar to the side (Chrome)
-var percent_left = (split_left.getBoundingClientRect().width + 10 + cw_without_sb - cw_with_sb) / split_parent.getBoundingClientRect().width * 100;
+var percent_left =
+  (split_left.getBoundingClientRect().width + 10 + cw_without_sb - cw_with_sb) /
+  split_parent.getBoundingClientRect().width *
+  100;
 
 Split(['#split-left', '#split-right'], {
-  elementStyle: function (dimension, size, gutterSize) {
+  elementStyle: function(dimension, size, gutterSize) {
     return {
       'flex-basis': 'calc(' + size + '% - ' + gutterSize + 'px)'
     };
   },
-  gutterStyle: function (dimension, gutterSize) {
+  gutterStyle: function(dimension, gutterSize) {
     return {
       'flex-basis': gutterSize + 'px'
     };
@@ -136,10 +141,13 @@ Split(['#split-left', '#split-right'], {
 // Also works on Firefox and Edge.
 
 function updateState() {
-  history.replaceState({
-    left_top: split_left.scrollTop,
-    right_top: split_right.scrollTop
-  }, document.title);
+  history.replaceState(
+    {
+      left_top: split_left.scrollTop,
+      right_top: split_right.scrollTop
+    },
+    document.title
+  );
 }
 
 function loadState(ev) {
@@ -153,9 +161,9 @@ function loadState(ev) {
   }
 }
 
-window.addEventListener('load', function () {
+window.addEventListener('load', function() {
   // Restore after Firefox scrolls to hash.
-  setTimeout(function () {
+  setTimeout(function() {
     loadState();
     // Update with initial scroll position.
     updateState();
