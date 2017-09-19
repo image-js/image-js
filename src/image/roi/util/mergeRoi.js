@@ -11,9 +11,8 @@
  * @param {number} [options.minCommonBorderRatio=0.3] minimal common border ratio for merging
  * @param {number} [options.maxCommonBorderRatio=1] maximal common border ratio for merging
  * @return {this}
+ * @private
  */
-
-
 export default function mergeRoi(options = {}) {
     const {
         algorithm = 'commonBorderLength',
