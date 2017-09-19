@@ -73,6 +73,7 @@ export function getRandomColor() {
  * @param {boolean}             [options.distinctColors=false] - To paint each mask with a different color if color and colors are undefined
  * @param {boolean}             [options.numberColors=50] - number of colors to generate by default
  * @return {Array} Array of colors
+ * @private
  */
 export function getColors(options) {
     let {
