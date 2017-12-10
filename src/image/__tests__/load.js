@@ -1,5 +1,5 @@
 import {Image, load} from 'test/common';
-import Canvas from 'canvas';
+import {createCanvas} from 'canvas';
 import 'should';
 
 describe('Image core', () => {
@@ -42,7 +42,7 @@ describe('Image core', () => {
     });
 
     it('create from Canvas', () => {
-        let canvas = new Canvas(2, 2);
+        let canvas = createCanvas(2, 2);
         let ctx = canvas.getContext('2d');
         ctx.fillStyle = 'red';
         ctx.fillRect(0, 0, 2, 1);

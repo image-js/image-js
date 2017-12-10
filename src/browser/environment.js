@@ -2,7 +2,7 @@ const env = 'browser';
 const ImageData = self.ImageData;
 const DOMImage = self.Image;
 
-export function Canvas(width, height) {
+export function createCanvas(width, height) {
     let canvas = self.document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;

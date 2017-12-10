@@ -6,7 +6,7 @@ import hasOwn from 'has-own';
 
 import {getKind, createPixelArray, getTheoreticalPixelArraySize} from './kind';
 import {RGBA} from './kindNames';
-import {ImageData, Canvas, createWriteStream, writeFile} from './environment';
+import {ImageData, createCanvas, createWriteStream, writeFile} from './environment';
 import extend from './extend';
 import bitMethods from './bitMethods';
 import {RGB} from './model/model';
@@ -640,7 +640,7 @@ export default class Image {
             });
             data = new ImageData(this.data, this.width, this.height);
         }
-        let canvas = new Canvas(this.width, this.height);
+        let canvas = createCanvas(this.width, this.height);
         let ctx = canvas.getContext('2d');
         ctx.putImageData(data, 0, 0);
         return canvas;

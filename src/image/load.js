@@ -1,6 +1,6 @@
 import Image from './Image';
 import Stack from '../stack/Stack';
-import {fetchBinary, DOMImage, Canvas} from './environment';
+import {fetchBinary, DOMImage, createCanvas} from './environment';
 import {decode as decodePng} from 'fast-png';
 import {decode as decodeJpeg} from 'fast-jpeg';
 import {decode as decodeTiff} from 'tiff';
@@ -126,7 +126,7 @@ function loadGeneric(url, options) {
         image.onload = function () {
             let w = image.width;
             let h = image.height;
-            let canvas = new Canvas(w, h);
+            let canvas = createCanvas(w, h);
             let ctx = canvas.getContext('2d');
             ctx.drawImage(image, 0, 0, w, h);
             let data = ctx.getImageData(0, 0, w, h).data;

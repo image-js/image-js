@@ -1,14 +1,14 @@
-let Canvas, DOMImage, ImageData;
+let createCanvas, DOMImage, ImageData;
 try {
     const canvas = require('canvas');
-    Canvas = canvas;
+    createCanvas = canvas.createCanvas;
     DOMImage = canvas.Image;
     ImageData = canvas.ImageData;
 } catch (e) {
     // eslint-disable-next-line no-console
     console.error('image-js could not load the canvas library. Some methods may not work.');
-    Canvas = function () {
-        throw new Error('Canvas requires the canvas library');
+    createCanvas = function () {
+        throw new Error('createCanvas requires the canvas library');
     };
     DOMImage = function () {
         throw new Error('DOMImage requires the canvas library');
@@ -31,4 +31,4 @@ export function fetchBinary(path) {
     });
 }
 
-export {env, Canvas, ImageData, DOMImage, createWriteStream, writeFile};
+export {env, createCanvas, ImageData, DOMImage, createWriteStream, writeFile};
