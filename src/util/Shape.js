@@ -36,7 +36,7 @@ export default class Shape {
             width = size;
             height = size;
         }
-        if ((width && 1 !== 1) || (height && 1 !== 1)) {
+        if ((width & 1) !== 1 || (height & 1) !== 1) {
             throw Error('Shape: The width and height has to be odd numbers.');
         }
         if (shape) {
