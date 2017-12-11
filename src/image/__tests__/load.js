@@ -12,13 +12,13 @@ describe('Image core', () => {
 
     it('invalid constructor use', () => {
         (function () {
-            new Image(0, 0);
+            new Image(0, 0); // eslint-disable-line no-new
         }).should.throw(/width must be greater than 0/);
         (function () {
-            new Image(5, 0);
+            new Image(5, 0); // eslint-disable-line no-new
         }).should.throw(/height must be greater than 0/);
         (function () {
-            new Image(10, 10, {kind: 'BLABLA'});
+            new Image(10, 10, {kind: 'BLABLA'}); // eslint-disable-line no-new
         }).should.throw(/invalid image kind: BLABLA/);
     });
 

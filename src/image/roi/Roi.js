@@ -71,10 +71,10 @@ export default class Roi {
     }
 
     get center() {
-        if (this.computed.center) {
-            return this.computed.center;
+        if (!this.computed.center) {
+            this.computed.center = [(this.width / 2) >> 0, (this.height / 2) >> 0];
         }
-        return this.computed.center = [(this.width / 2) >> 0, (this.height / 2) >> 0];
+        return this.computed.center;
     }
 
     get ratio() {
@@ -180,17 +180,17 @@ export default class Roi {
      However in most of the cases it will be an array of one element
      */
     get boxIDs() {
-        if (this.computed.boxIDs) {
-            return this.computed.boxIDs;
+        if (!this.computed.boxIDs) {
+            this.computed.boxIDs = getBoxIDs(this);
         }
-        return this.computed.boxIDs = getBoxIDs(this);
+        return this.computed.boxIDs;
     }
 
     get internalIDs() {
-        if (this.computed.internalIDs) {
-            return this.computed.internalIDs;
+        if (!this.computed.internalIDs) {
+            this.computed.internalIDs = getInternalIDs(this);
         }
-        return this.computed.internalIDs = getInternalIDs(this);
+        return this.computed.internalIDs;
     }
 
     /**
@@ -200,10 +200,10 @@ export default class Roi {
      border that don't have neighbours all around them.
      */
     get box() { // points of the Roi that touch the rectangular shape
-        if (this.computed.box) {
-            return this.computed.box;
+        if (!this.computed.box) {
+            this.computed.box = getBox(this);
         }
-        return this.computed.box = getBox(this);
+        return this.computed.box;
     }
 
     /**
@@ -213,10 +213,10 @@ export default class Roi {
      are calculated in the getBoxPixels procedure
      */
     get external() {
-        if (this.computed.external) {
-            return this.computed.external;
+        if (!this.computed.external) {
+            this.computed.external = getExternal(this);
         }
-        return this.computed.external = getExternal(this);
+        return this.computed.external;
     }
 
     /**
@@ -227,187 +227,181 @@ export default class Roi {
      are calculated in the getBoxPixels procedure
      */
     get border() {
-        if (this.computed.border) {
-            return this.computed.border;
+        if (!this.computed.border) {
+            this.computed.border = getBorder(this);
         }
-        return this.computed.border = getBorder(this);
+        return this.computed.border;
     }
 
     /**
         Returns a binary image (mask) containing only the border of the mask
      */
     get contourMask() {
-        if (this.computed.contourMask) {
-            return this.computed.contourMask;
-        }
+        if (!this.computed.contourMask) {
+            let img = new Image(this.width, this.height, {
+                kind: KindNames.BINARY,
+                position: [this.minX, this.minY],
+                parent: this.map.parent
+            });
 
-        let img = new Image(this.width, this.height, {
-            kind: KindNames.BINARY,
-            position: [this.minX, this.minY],
-            parent: this.map.parent
-        });
-
-        for (let x = 0; x < this.width; x++) {
-            for (let y = 0; y < this.height; y++) {
-                if (this.map.data[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
-                    // it also has to be on a border ...
-                    if (x > 0 && x < (this.width - 1) && y > 0 && y < (this.height - 1)) {
-                        if (
-                            (this.map.data[x - 1 + this.minX + (y + this.minY) * this.map.width] !== this.id) ||
-                            (this.map.data[x + 1 + this.minX + (y + this.minY) * this.map.width] !== this.id) ||
-                            (this.map.data[x + this.minX + (y - 1 + this.minY) * this.map.width] !== this.id) ||
-                            (this.map.data[x + this.minX + (y + 1 + this.minY) * this.map.width] !== this.id)
-                        ) {
+            for (let x = 0; x < this.width; x++) {
+                for (let y = 0; y < this.height; y++) {
+                    if (this.map.data[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
+                        // it also has to be on a border ...
+                        if (x > 0 && x < (this.width - 1) && y > 0 && y < (this.height - 1)) {
+                            if (
+                                (this.map.data[x - 1 + this.minX + (y + this.minY) * this.map.width] !== this.id) ||
+                                (this.map.data[x + 1 + this.minX + (y + this.minY) * this.map.width] !== this.id) ||
+                                (this.map.data[x + this.minX + (y - 1 + this.minY) * this.map.width] !== this.id) ||
+                                (this.map.data[x + this.minX + (y + 1 + this.minY) * this.map.width] !== this.id)
+                            ) {
+                                img.setBitXY(x, y);
+                            }
+                        } else {
                             img.setBitXY(x, y);
                         }
-                    } else {
-                        img.setBitXY(x, y);
                     }
                 }
             }
+            this.computed.contourMask = img;
         }
-        return this.computed.contour = img;
+        return this.computed.contourMask;
     }
 
     get boxMask() {
-        if (this.computed.boxMask) {
-            return this.computed.boxMask;
-        }
+        if (!this.computed.boxMask) {
+            let img = new Image(this.width, this.height, {
+                kind: KindNames.BINARY,
+                position: [this.minX, this.minY],
+                parent: this.map.parent
+            });
 
-        let img = new Image(this.width, this.height, {
-            kind: KindNames.BINARY,
-            position: [this.minX, this.minY],
-            parent: this.map.parent
-        });
-
-        for (let x = 0; x < this.width; x++) {
-            img.setBitXY(x, 0);
-            img.setBitXY(x, this.height - 1);
+            for (let x = 0; x < this.width; x++) {
+                img.setBitXY(x, 0);
+                img.setBitXY(x, this.height - 1);
+            }
+            for (let y = 0; y < this.height; y++) {
+                img.setBitXY(0, y);
+                img.setBitXY(this.width - 1, y);
+            }
+            this.computed.boxMask = img;
         }
-        for (let y = 0; y < this.height; y++) {
-            img.setBitXY(0, y);
-            img.setBitXY(this.width - 1, y);
-        }
-        return this.computed.boxMask = img;
+        return this.computed.boxMask;
     }
 
     /**
      Returns a binary image containing the mask
      */
     get mask() {
-        if (this.computed.mask) {
-            return this.computed.mask;
-        }
+        if (!this.computed.mask) {
+            let img = new Image(this.width, this.height, {
+                kind: KindNames.BINARY,
+                position: [this.minX, this.minY],
+                parent: this.map.parent
+            });
 
-        let img = new Image(this.width, this.height, {
-            kind: KindNames.BINARY,
-            position: [this.minX, this.minY],
-            parent: this.map.parent
-        });
-
-        for (let x = 0; x < this.width; x++) {
-            for (let y = 0; y < this.height; y++) {
-                if (this.map.data[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
-                    img.setBitXY(x, y);
+            for (let x = 0; x < this.width; x++) {
+                for (let y = 0; y < this.height; y++) {
+                    if (this.map.data[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
+                        img.setBitXY(x, y);
+                    }
                 }
             }
+            this.computed.mask = img;
         }
-        return this.computed.mask = img;
+        return this.computed.mask;
     }
 
     get filledMask() {
-        if (this.computed.filledMask) {
-            return this.computed.filledMask;
-        }
+        if (!this.computed.filledMask) {
+            let img = new Image(this.width, this.height, {
+                kind: KindNames.BINARY,
+                position: [this.minX, this.minY],
+                parent: this.map.parent
+            });
 
-        let img = new Image(this.width, this.height, {
-            kind: KindNames.BINARY,
-            position: [this.minX, this.minY],
-            parent: this.map.parent
-        });
-
-        for (let x = 0; x < this.width; x++) {
-            for (let y = 0; y < this.height; y++) {
-                let target = x + this.minX + (y + this.minY) * this.map.width;
-                if (this.internalIDs.includes(this.map.data[target])) {
-                    img.setBitXY(x, y);
-                } // by default a pixel is to 0 so no problems, it will be transparent
+            for (let x = 0; x < this.width; x++) {
+                for (let y = 0; y < this.height; y++) {
+                    let target = x + this.minX + (y + this.minY) * this.map.width;
+                    if (this.internalIDs.includes(this.map.data[target])) {
+                        img.setBitXY(x, y);
+                    } // by default a pixel is to 0 so no problems, it will be transparent
+                }
             }
+            this.computed.filledMask = img;
         }
-        return this.computed.filledMask = img;
+        return this.computed.filledMask;
     }
 
     get centerMask() {
-        if (this.computed.centerMask) {
-            return this.computed.centerMask;
+        if (!this.computed.centerMask) {
+            let img = new Shape({kind: 'smallCross'}).getMask();
+
+            img.parent = this.map.parent;
+            img.position = [this.minX + this.center[0] - 1, this.minY + this.center[1] - 1];
+
+            this.computed.centerMask = img;
         }
-
-        let img = new Shape({kind: 'smallCross'}).getMask();
-
-        img.parent = this.map.parent;
-        img.position = [this.minX + this.center[0] - 1, this.minY + this.center[1] - 1];
-
-        return this.computed.centerMask = img;
+        return this.computed.centerMask;
     }
 
     get hullMask() {
-        if (this.computed.hullMask) {
-            return this.computed.hullMask;
-        }
+        if (!this.computed.hullMask) {
+            const img = new Image(this.width, this.height, {
+                kind: KindNames.BINARY,
+                position: [this.minX, this.minY],
+                parent: this.map.parent
+            });
 
-        const img = new Image(this.width, this.height, {
-            kind: KindNames.BINARY,
-            position: [this.minX, this.minY],
-            parent: this.map.parent
-        });
-
-        const hull = this.mask.monotoneChainConvexHull();
-        for (let x = 0; x < this.width; x++) {
-            for (let y = 0; y < this.height; y++) {
-                if (robustPointInPolygon(hull, [x, y]) !== 1) {
-                    img.setBitXY(x, y);
+            const hull = this.mask.monotoneChainConvexHull();
+            for (let x = 0; x < this.width; x++) {
+                for (let y = 0; y < this.height; y++) {
+                    if (robustPointInPolygon(hull, [x, y]) !== 1) {
+                        img.setBitXY(x, y);
+                    }
                 }
             }
-        }
 
-        return this.computed.hullMask = img;
+            this.computed.hullMask = img;
+        }
+        return this.computed.hullMask;
     }
 
     get points() {
-        if (this.computed.points) {
-            return this.computed.points;
-        }
-        let points = [];
-        for (let y = 0; y < this.height; y++) {
-            for (let x = 0; x < this.width; x++) {
-                let target = (y + this.minY) * this.map.width + x + this.minX;
-                if (this.map.data[target] === this.id) {
-                    points.push([x, y]);
+        if (!this.computed.points) {
+            let points = [];
+            for (let y = 0; y < this.height; y++) {
+                for (let x = 0; x < this.width; x++) {
+                    let target = (y + this.minY) * this.map.width + x + this.minX;
+                    if (this.map.data[target] === this.id) {
+                        points.push([x, y]);
+                    }
                 }
             }
+            this.computed.points = points;
         }
-        return this.computed.points = points;
+        return this.computed.points;
     }
 
 
     get maxLengthPoints() {
-        if (this.computed.maxLengthPoints) {
-            return this.computed.maxLengthPoints;
-        }
-        let maxLength = 0;
-        let maxLengthPoints;
-        const points = this.points;
+        if (!this.computed.maxLengthPoints) {
+            let maxLength = 0;
+            let maxLengthPoints;
+            const points = this.points;
 
-        for (let i = 0; i < points.length; i++) {
-            for (let j = i + 1; j < points.length; j++) {
-                let currentML = Math.pow(points[i][0] - points[j][0], 2) + Math.pow(points[i][1] - points[j][1], 2);
-                if (currentML >= maxLength) {
-                    maxLength = currentML;
-                    maxLengthPoints = [points[i], points[j]];
+            for (let i = 0; i < points.length; i++) {
+                for (let j = i + 1; j < points.length; j++) {
+                    let currentML = Math.pow(points[i][0] - points[j][0], 2) + Math.pow(points[i][1] - points[j][1], 2);
+                    if (currentML >= maxLength) {
+                        maxLength = currentML;
+                        maxLengthPoints = [points[i], points[j]];
+                    }
                 }
             }
+            this.computed.maxLengthPoints = maxLengthPoints;
         }
-        return this.computed.maxLengthPoints = maxLengthPoints;
+        return this.computed.maxLengthPoints;
     }
 
 
@@ -415,24 +409,24 @@ export default class Roi {
         Calculates the maximum length between two pixels of the Roi.
      */
     get maxLength() {
-        if (this.computed.maxLength) {
-            return this.computed.maxLength;
+        if (!this.computed.maxLength) {
+            let maxLength = Math.sqrt(
+                Math.pow(this.maxLengthPoints[0][0] - this.maxLengthPoints[1][0], 2) +
+                Math.pow(this.maxLengthPoints[0][1] - this.maxLengthPoints[1][1], 2)
+            );
+            this.computed.maxLength = maxLength;
         }
-        let maxLength = Math.sqrt(
-            Math.pow(this.maxLengthPoints[0][0] - this.maxLengthPoints[1][0], 2) +
-            Math.pow(this.maxLengthPoints[0][1] - this.maxLengthPoints[1][1], 2)
-        );
-        return this.computed.maxLength = maxLength;
+        return this.computed.maxLength;
     }
 
     get angle() {
-        if (this.computed.angle) {
-            return this.computed.angle;
-        }
-        let points = this.maxLengthPoints;
-        let angle = -Math.atan2(points[0][1] - points[1][1], points[0][0] - points[1][0]) * 180 / Math.PI;
+        if (!this.computed.angle) {
+            let points = this.maxLengthPoints;
+            let angle = -Math.atan2(points[0][1] - points[1][1], points[0][0] - points[1][0]) * 180 / Math.PI;
 
-        return this.computed.angle = angle;
+            this.computed.angle = angle;
+        }
+        return this.computed.angle;
     }
 
     toJSON() {

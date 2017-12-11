@@ -145,7 +145,7 @@ function projectionPoint(x, y, a, b, c, d, e, f, g, h, image, channel)  {
  * @memberof Image
  * @instance
  * @param {Array<Array<number>>} [pts] - Array of the four corners.
- * @param {object} [options] 
+ * @param {object} [options]
  * @param {boolean} [options.calculateRatio=true] - true if you want to calculate the aspect ratio "width x height" by taking the perspectiv into consideration.
  * @return {Image} The new image, which is a rectangle
  * @example

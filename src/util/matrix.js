@@ -12,7 +12,7 @@ export default function Matrix(width, height, defaultValue) {
     }
     matrix.width = width;
     matrix.height = height;
-    matrix.__proto__ = Matrix.prototype;
+    Object.setPrototypeOf(matrix, Matrix.prototype);
     return matrix;
 }
 
