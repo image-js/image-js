@@ -4,10 +4,12 @@ import json from 'rollup-plugin-json';
 import resolve from 'rollup-plugin-node-resolve';
 
 export default {
-    entry: 'src/index.js',
-    format: 'umd',
-    dest: 'dist/image.js',
-    moduleName: 'IJS',
+    input: 'src/index.js',
+    output: {
+        file: 'dist/image.js',
+        format: 'umd',
+        name: 'IJS'
+    },
     plugins: [
         babel({
             exclude: 'node_modules/**'

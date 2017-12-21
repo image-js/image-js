@@ -1,11 +1,9 @@
 {
-  "plugins": [
-    "transform-es2015-block-scoping"
-  ],
   "env": {
     "test": {
       "plugins": [
-        "transform-es2015-modules-commonjs"
+        "transform-es2015-modules-commonjs",
+        "transform-es2015-block-scoping"
       ]
     },
     "npm": {
@@ -21,6 +19,9 @@
             ]
           }
         ]
+      ],
+      "plugins": [
+        "transform-es2015-block-scoping"
       ]
     },
     "browser": {
@@ -42,6 +43,14 @@
             ]
           }
         ]
+      ],
+      "plugins": [
+        "transform-es2015-block-scoping"
+      ]
+    },
+    "minify": {
+      "presets": [
+        "minify"
       ]
     }
   }
