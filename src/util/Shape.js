@@ -36,10 +36,11 @@ export default class Shape {
             width = size;
             height = size;
         }
-        if ((width & 1) !== 1 || (height & 1) !== 1) {
-            throw Error('Shape: The width and height has to be odd numbers.');
-        }
+
         if (shape) {
+            if ((width & 1) !== 1 || (height & 1) !== 1) {
+                throw Error('Shape: The width and height has to be odd numbers.');
+            }
             switch (shape.toLowerCase()) {
                 case 'square':
                 case 'rectangle':
