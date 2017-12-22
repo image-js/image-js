@@ -76,7 +76,7 @@
     "jest": "^22.0.3",
     "npm-run-all": "^4.0.0",
     "rimraf": "^2.4.0",
-    "rollup": "^0.52.0",
+    "rollup": "^0.53.0",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-json": "^2.1.1",
