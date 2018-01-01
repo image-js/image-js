@@ -199,14 +199,7 @@ Image.load('cat.jpg').then(function(image) {
  </script>
 */
 export default class Image {
-    constructor(width, height, data, options) {
-        if (width === undefined) {
-            width = 1;
-        }
-        if (height === undefined) {
-            height = 1;
-        }
-
+    constructor(width = 1, height = 1, data, options) {
         // copy another image
         if (typeof width === 'object') {
             const otherImage = width;
@@ -233,23 +226,21 @@ export default class Image {
             options = {};
         }
 
-        this.width = width;
-        this.height = height;
-
-        if (this.width <= 0) {
+        if (width <= 0) {
             throw new RangeError('width must be greater than 0');
         }
-        if (this.height <= 0) {
+        if (height <= 0) {
             throw new RangeError('height must be greater than 0');
         }
 
-        // We will set the parent image for relative position
+        this.width = width;
+        this.height = height;
 
         Object.defineProperty(this, 'parent', {
             enumerable: false,
-            writable: true
+            writable: true,
+            value: options.parent || null
         });
-        this.parent = options.parent;
         this.position = options.position || [0, 0];
 
         let theKind;
@@ -292,13 +283,13 @@ export default class Image {
         if (this.bitDepth === 32) {
             this.maxValue = Number.MAX_VALUE;
         } else {
-            this.maxValue = Math.pow(2, this.bitDepth) - 1;  // we may not use 1 << this.bitDepth for 32 bits images
+            this.maxValue = 2 ** this.bitDepth - 1;
         }
 
         this.multiplierX = this.channels;
         this.multiplierY = this.channels * this.width;
         this.isClamped = this.bitDepth < 32;
-        this.borderSizes = [0, 0]; // when a filter create a border it may have impact on future processing like Roi
+        this.borderSizes = [0, 0]; // when a filter creates a border, it may have impact on future processing like Roi
     }
 
     setData(data) {
