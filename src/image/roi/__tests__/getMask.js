@@ -58,14 +58,14 @@ describe('Roi#getMask', function () {
 
         rois[0].getMask().parent.size.should.equal(25); // the mask image
         rois[0].getMask().parent.parent.size.should.equal(25); // the grey image
-        (rois[0].getMask().parent.parent.parent === undefined).should.be.true();  // no parent to grey image
+        (rois[0].getMask().parent.parent.parent === null).should.be.true();  // no parent to grey image
 
 
         let roi0Mask = rois[0].getMask({scale: 0.34});
         roi0Mask.position.should.eql([2, 2]);
         roi0Mask.parent.size.should.equal(25); // the mask image
         roi0Mask.parent.parent.size.should.equal(25); // the grey image
-        (roi0Mask.parent.parent.parent === undefined).should.be.true();  // no parent to grey image
+        (roi0Mask.parent.parent.parent === null).should.be.true();  // no parent to grey image
 
         let roi1Mask = rois[1].getMask({scale: 0.2});
         roi1Mask.position.should.eql([2, 2]);

@@ -27,23 +27,23 @@ export default function getClosestCommonParent(mask) {
     while (depthMask1 !== depthMask2) {
         if (depthMask1 > depthMask2) {
             m1 = m1.parent;
-            if (m1 === undefined) {
+            if (m1 === null) {
                 return furthestParent;
             }
             depthMask1 = depthMask1 - 1;
         } else {
             m2 = m2.parent;
-            if (m2 === undefined) {
+            if (m2 === null) {
                 return furthestParent;
             }
             depthMask2 = depthMask2 - 1;
         }
     }
 
-    while (m1 !== m2 && typeof m1 !== undefined && typeof  m2 !== undefined) {
+    while (m1 !== m2 && m1 !== null && m2 !== null) {
         m1 = m1.parent;
         m2 = m2.parent;
-        if (m1 === undefined || m2 === undefined) {
+        if (m1 === null || m2 === null) {
             return furthestParent;
         }
     }
