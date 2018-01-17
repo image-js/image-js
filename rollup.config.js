@@ -24,9 +24,18 @@ export default {
             namedExports: {
                 'node_modules/blob-util/lib/index.js': ['canvasToBlob'],
                 'node_modules/color-functions/index.js': ['cssColor'],
-                'node_modules/ml-matrix-convolution/src/index.js': ['direct', 'fft'],
+                'node_modules/jpeg-js/index.js': ['decode', 'encode'],
+                'node_modules/ml-matrix-convolution/src/index.js': [
+                    'direct',
+                    'fft'
+                ],
                 'node_modules/ml-array-utils/src/index.js': ['scale'],
-                'node_modules/pako/index.js': ['inflate', 'Inflate', 'deflate', 'Deflate']
+                'node_modules/pako/index.js': [
+                    'inflate',
+                    'Inflate',
+                    'deflate',
+                    'Deflate'
+                ]
             }
         }),
         json()

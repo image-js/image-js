@@ -1,122 +1,122 @@
 {
-  "name": "image-js",
-  "version": "0.15.0",
-  "description": "Image processing and manipulation in JavaScript",
-  "keywords": [
-    "image",
-    "processing",
-    "manipulation",
-    "analysis",
-    "histogram",
-    "hsb",
-    "hsl",
-    "rgb",
-    "roi",
-    "rois",
-    "mask"
-  ],
-  "author": "Michaël Zasso",
-  "contributors": [
-    "Luc Patiny"
-  ],
-  "repository": "image-js/core",
-  "bugs": {
-    "url": "https://github.com/image-js/core/issues"
-  },
-  "homepage": "https://github.com/image-js/core",
-  "license": "MIT",
-  "main": "./lib/index.js",
-  "module": "./src/index.js",
-  "browser": {
-    "./src/worker/worker.js": "./src/browser/worker/worker.js",
-    "./src/image/environment.js": "./src/browser/environment.js",
-    "fs": false
-  },
-  "files": [
-    "dist",
-    "lib",
-    "src"
-  ],
-  "scripts": {
-    "build": "npm-run-all clean-dist --parallel compile build-dist",
-    "build-dist": "npm-run-all build-dist-main build-dist-min",
-    "build-dist-main": "NODE_ENV=browser rollup -c",
-    "build-dist-min": "NODE_ENV=minify babel dist/image.js --out-file dist/image.min.js --source-maps --no-comments",
-    "build-doc": "documentation build src/index.js --github --output docs --format html --sort-order alpha",
-    "clean-dist": "rimraf dist && mkdir dist",
-    "clean-lib": "rimraf lib",
-    "compile": "npm run clean-lib && cross-env NODE_ENV=npm babel src --out-dir lib --ignore __tests__ --quiet",
-    "eslint": "eslint src --cache",
-    "eslint-fix": "npm run eslint -- --fix",
-    "prepublish": "npm run compile",
-    "publish-doc": "npm run build-doc && git add docs && git commit -m \"doc: rebuild docs\" && git push origin master",
-    "test": "run-s testonly eslint",
-    "test-cov": "jest --coverage --runInBand",
-    "testonly": "jest",
-    "test-travis": "run-s test-cov eslint"
-  },
-  "jest": {
-    "testEnvironment": "node"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.2.0",
-    "babel-core": "^6.2.1",
-    "babel-jest": "^22.0.4",
-    "babel-plugin-transform-es2015-block-scoping": "^6.1.18",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "babel-preset-env": "^1.3.1",
-    "babel-preset-minify": "^0.2.0",
-    "babel-register": "^6.2.0",
-    "benchmark": "^2.1.0",
-    "cross-env": "^5.1.3",
-    "documentation": "^5.2.2",
-    "eslint": "^4.14.0",
-    "eslint-config-cheminfo": "^1.4.0",
-    "eslint-plugin-jest": "^21.7.0",
-    "jest": "^22.0.4",
-    "npm-run-all": "^4.0.0",
-    "rimraf": "^2.4.0",
-    "rollup": "^0.54.0",
-    "rollup-plugin-babel": "^3.0.2",
-    "rollup-plugin-commonjs": "^8.0.2",
-    "rollup-plugin-json": "^2.1.1",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "sha.js": "^2.4.3",
-    "should": "^13.2.0",
-    "should-approximately-deep": "^1.1.0",
-    "which": "^1.2.0"
-  },
-  "optionalDependencies": {
-    "canvas": "^2.0.0-alpha.2"
-  },
-  "dependencies": {
-    "blob-util": "^1.2.1",
-    "canny-edge-detector": "^1.0.0",
-    "color-functions": "^1.1.0",
-    "extend": "^3.0.0",
-    "fast-bmp": "^1.0.0",
-    "fast-jpeg": "^1.0.1",
-    "fast-list": "^1.0.3",
-    "fast-png": "^3.1.0",
-    "has-own": "^1.0.0",
-    "image-type": "^3.0.0",
-    "is-array-type": "^1.0.0",
-    "is-integer": "^1.0.6",
-    "jpeg-js": "^0.3.3",
-    "js-priority-queue": "^0.1.5",
-    "ml-convolution": "^0.2.0",
-    "ml-disjoint-set": "^1.0.0",
-    "ml-matrix": "^5.0.0",
-    "ml-matrix-convolution": "0.4.3",
-    "ml-regression": "^4.4.2",
-    "monotone-chain-convex-hull": "^1.0.0",
-    "new-array": "^1.0.0",
-    "num-sort": "^1.0.0",
-    "robust-point-in-polygon": "^1.0.3",
-    "tiff": "^3.0.0",
-    "web-worker-manager": "^0.2.0"
-  },
-  "engines": {
-    "node": ">= 6.0.0"
-  }
+    "name": "image-js",
+    "version": "0.15.0",
+    "description": "Image processing and manipulation in JavaScript",
+    "keywords": [
+        "image",
+        "processing",
+        "manipulation",
+        "analysis",
+        "histogram",
+        "hsb",
+        "hsl",
+        "rgb",
+        "roi",
+        "rois",
+        "mask"
+    ],
+    "author": "Michaël Zasso",
+    "contributors": [
+        "Luc Patiny"
+    ],
+    "repository": "image-js/core",
+    "bugs": {
+        "url": "https://github.com/image-js/core/issues"
+    },
+    "homepage": "https://github.com/image-js/core",
+    "license": "MIT",
+    "main": "./lib/index.js",
+    "module": "./src/index.js",
+    "browser": {
+        "./src/worker/worker.js": "./src/browser/worker/worker.js",
+        "./src/image/environment.js": "./src/browser/environment.js",
+        "fs": false
+    },
+    "files": [
+        "dist",
+        "lib",
+        "src"
+    ],
+    "scripts": {
+        "build": "npm-run-all clean-dist --parallel compile build-dist",
+        "build-dist": "npm-run-all build-dist-main build-dist-min",
+        "build-dist-main": "NODE_ENV=browser rollup -c",
+        "build-dist-min": "NODE_ENV=minify babel dist/image.js --out-file dist/image.min.js --source-maps --no-comments",
+        "build-doc": "documentation build src/index.js --github --output docs --format html --sort-order alpha",
+        "clean-dist": "rimraf dist && mkdir dist",
+        "clean-lib": "rimraf lib",
+        "compile": "npm run clean-lib && cross-env NODE_ENV=npm babel src --out-dir lib --ignore __tests__ --quiet",
+        "eslint": "eslint src --cache",
+        "eslint-fix": "npm run eslint -- --fix",
+        "prepublish": "npm run compile",
+        "publish-doc": "npm run build-doc && git add docs && git commit -m \"doc: rebuild docs\" && git push origin master",
+        "test": "run-s testonly eslint",
+        "test-cov": "jest --coverage --runInBand",
+        "testonly": "jest",
+        "test-travis": "run-s test-cov eslint"
+    },
+    "jest": {
+        "testEnvironment": "node"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.2.0",
+        "babel-core": "^6.2.1",
+        "babel-jest": "^22.0.4",
+        "babel-plugin-transform-es2015-block-scoping": "^6.1.18",
+        "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+        "babel-preset-env": "^1.3.1",
+        "babel-preset-minify": "^0.2.0",
+        "babel-register": "^6.2.0",
+        "benchmark": "^2.1.0",
+        "cross-env": "^5.1.3",
+        "documentation": "^5.2.2",
+        "eslint": "^4.14.0",
+        "eslint-config-cheminfo": "^1.4.0",
+        "eslint-plugin-jest": "^21.7.0",
+        "jest": "^22.0.4",
+        "npm-run-all": "^4.0.0",
+        "rimraf": "^2.4.0",
+        "rollup": "^0.54.0",
+        "rollup-plugin-babel": "^3.0.2",
+        "rollup-plugin-commonjs": "^8.0.2",
+        "rollup-plugin-json": "^2.1.1",
+        "rollup-plugin-node-resolve": "3.0.0",
+        "sha.js": "^2.4.3",
+        "should": "^13.2.0",
+        "should-approximately-deep": "^1.1.0",
+        "which": "^1.2.0"
+    },
+    "optionalDependencies": {
+        "canvas": "^2.0.0-alpha.2"
+    },
+    "dependencies": {
+        "blob-util": "^1.2.1",
+        "canny-edge-detector": "^1.0.0",
+        "color-functions": "^1.1.0",
+        "extend": "^3.0.0",
+        "fast-bmp": "^1.0.0",
+        "fast-jpeg": "^1.0.1",
+        "fast-list": "^1.0.3",
+        "fast-png": "^3.1.0",
+        "has-own": "^1.0.0",
+        "image-type": "^3.0.0",
+        "is-array-type": "^1.0.0",
+        "is-integer": "^1.0.6",
+        "jpeg-js": "^0.3.3",
+        "js-priority-queue": "^0.1.5",
+        "ml-convolution": "^0.2.0",
+        "ml-disjoint-set": "^1.0.0",
+        "ml-matrix": "^5.0.0",
+        "ml-matrix-convolution": "0.4.3",
+        "ml-regression": "^4.4.2",
+        "monotone-chain-convex-hull": "^1.0.0",
+        "new-array": "^1.0.0",
+        "num-sort": "^1.0.0",
+        "robust-point-in-polygon": "^1.0.3",
+        "tiff": "^3.0.0",
+        "web-worker-manager": "^0.2.0"
+    },
+    "engines": {
+        "node": ">= 6.0.0"
+    }
 }
