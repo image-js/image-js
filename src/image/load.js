@@ -2,7 +2,8 @@ import Image from './Image';
 import Stack from '../stack/Stack';
 import { fetchBinary, DOMImage, createCanvas } from './environment';
 import { decode as decodePng } from 'fast-png';
-import { decode as decodeJpeg } from 'fast-jpeg';
+import { decode as decodeJpegExif } from 'fast-jpeg';
+import { decode as decodeJpeg } from 'jpeg-js';
 import { decode as decodeTiff } from 'tiff';
 import imageType from 'image-type';
 import { decode as base64Decode, toBase64URL } from '../util/base64';
@@ -27,14 +28,8 @@ function loadBinary(image, base64Url) {
         switch (type.mime) {
             case 'image/png':
                 return loadPNG(image);
-            case 'image/jpeg': {
-                const decoded = decodeJpeg(image);
-                let meta;
-                if (decoded.exif) {
-                    meta = getMetadata(decoded.exif);
-                }
-                return loadGeneric(getBase64('image/jpeg'), { meta });
-            }
+            case 'image/jpeg':
+                return loadJPEG(image);
             case 'image/tiff':
                 return loadTIFF(image);
             default:
@@ -55,7 +50,9 @@ function loadURL(url, options) {
     const dataURL = url.slice(0, 64).match(isDataURL);
     let binaryDataP;
     if (dataURL) {
-        binaryDataP = Promise.resolve(base64Decode(url.slice(dataURL[0].length)));
+        binaryDataP = Promise.resolve(
+            base64Decode(url.slice(dataURL[0].length))
+        );
     } else {
         binaryDataP = fetchBinary(url, options);
     }
@@ -70,21 +67,50 @@ function loadPNG(data) {
     const bitDepth = png.bitDepth;
     let bitmap = png.data;
     if (bitDepth === 8) {
-        bitmap = new Uint8ClampedArray(png.data.buffer, png.data.byteOffset, png.data.byteLength);
+        bitmap = new Uint8ClampedArray(
+            png.data.buffer,
+            png.data.byteOffset,
+            png.data.byteLength
+        );
     }
 
     const type = png.colourType;
     let components;
     let alpha = 0;
     switch (type) {
-        case 0: components = 1; break;
-        case 2: components = 3; break;
-        case 4: components = 1; alpha = 1; break;
-        case 6: components = 3; alpha = 1; break;
-        default: throw new Error(`Unexpected colourType: ${type}`);
+        case 0:
+            components = 1;
+            break;
+        case 2:
+            components = 3;
+            break;
+        case 4:
+            components = 1;
+            alpha = 1;
+            break;
+        case 6:
+            components = 3;
+            alpha = 1;
+            break;
+        default:
+            throw new Error(`Unexpected colourType: ${type}`);
     }
 
-    return new Image(png.width, png.height, bitmap, { components, alpha, bitDepth });
+    return new Image(png.width, png.height, bitmap, {
+        components,
+        alpha,
+        bitDepth
+    });
+}
+
+function loadJPEG(data) {
+    const decodedExif = decodeJpegExif(data);
+    let meta;
+    if (decodedExif.exif) {
+        meta = getMetadata(decodedExif.exif);
+    }
+    const jpeg = decodeJpeg(data, true);
+    return new Image(jpeg.width, jpeg.height, jpeg.data, { meta });
 }
 
 function loadTIFF(data) {
@@ -114,7 +140,9 @@ function getImageFromIFD(image) {
         components: 1,
         alpha: 0,
         colorModel: null,
-        bitDepth: image.bitsPerSample.length ? image.bitsPerSample[0] : image.bitsPerSample,
+        bitDepth: image.bitsPerSample.length
+            ? image.bitsPerSample[0]
+            : image.bitsPerSample,
         meta: getMetadata(image)
     });
 }

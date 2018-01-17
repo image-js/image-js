@@ -102,6 +102,7 @@
     "image-type": "^3.0.0",
     "is-array-type": "^1.0.0",
     "is-integer": "^1.0.6",
+    "jpeg-js": "^0.3.3",
     "js-priority-queue": "^0.1.5",
     "ml-convolution": "^0.2.0",
     "ml-disjoint-set": "^1.0.0",
