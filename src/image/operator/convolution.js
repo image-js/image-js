@@ -1,8 +1,8 @@
-import {direct, fft} from 'ml-matrix-convolution';
+import { direct, fft } from 'ml-matrix-convolution';
 
 import Image from '../Image';
-import {validateArrayOfChannels} from '../../util/channel';
-import {validateKernel} from '../../util/kernel';
+import { validateArrayOfChannels } from '../../util/channel';
+import { validateKernel } from '../../util/kernel';
 import convolutionSeparable from '../operator/convolutionSeparable';
 import getSeparatedKernel from './getSeparatedKernel';
 
@@ -31,12 +31,12 @@ export default function convolution(kernel, options = {}) {
         algorithm = 'auto'
     } = options;
 
-    let newImage = Image.createFrom(this, {bitDepth});
+    let newImage = Image.createFrom(this, { bitDepth });
 
     channels = validateArrayOfChannels(this, channels, true);
 
     if (algorithm !== 'separable') {
-        ({kernel} = validateKernel(kernel));
+        ({ kernel } = validateKernel(kernel));
     } else if (!Array.isArray(kernel) || kernel.length !== 2) {
         throw new RangeError('separable convolution requires two arrays of numbers to represent the kernel');
     }
@@ -132,7 +132,7 @@ export default function convolution(kernel, options = {}) {
     //  2. Extend the interior borders: copy
     //  3. fill with a color: set
     if (border !== 'periodic') {
-        newImage.setBorder({size: [halfWidth, halfHeight], algorithm: border});
+        newImage.setBorder({ size: [halfWidth, halfHeight], algorithm: border });
     }
 
     return newImage;

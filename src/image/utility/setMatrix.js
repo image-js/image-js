@@ -7,7 +7,7 @@
  * @param {number} [options.channel]
  */
 export default function setMatrix(matrix, options = {}) {
-    let {channel} = options;
+    let { channel } = options;
     this.checkProcessable('getMatrix', {
         bitDepth: [8, 16]
     });

@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 import Matrix from 'ml-matrix';
 
@@ -13,10 +13,10 @@ describe('check the closing function', function () {
                 255, 0, 0, 0, 255,
                 255, 255, 0, 255, 255
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
-        Array.from(image.closing({kernel: kernel}).data).should.eql(
+        Array.from(image.closing({ kernel: kernel }).data).should.eql(
             [
                 255, 255, 255, 255, 255,
                 255, 0, 0, 0, 255,
@@ -37,10 +37,10 @@ describe('check the closing function', function () {
                 255, 0, 0, 0, 255,
                 255, 255, 0, 255, 255
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
-        Array.from(image.closing({kernel: kernel, iterations: 2}).data).should.eql(
+        Array.from(image.closing({ kernel: kernel, iterations: 2 }).data).should.eql(
             [
                 255, 255, 255, 255, 255,
                 255, 0, 0, 0, 255,

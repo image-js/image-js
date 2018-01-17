@@ -8,7 +8,7 @@ import Matrix from 'ml-matrix';
  * @return {Matrix}
  */
 export default function getMatrix(options = {}) {
-    let {channel} = options;
+    let { channel } = options;
     this.checkProcessable('getMatrix', {
         bitDepth: [8, 16]
     });

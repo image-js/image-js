@@ -86,11 +86,11 @@ export const methods = {
     }
 };
 
-Object.defineProperty(methods, 'luminosity', {enumerable: false, value: methods.lightness});
-Object.defineProperty(methods, 'luminance', {enumerable: false, value: methods.lightness});
-Object.defineProperty(methods, 'min', {enumerable: false, value: methods.minimum});
-Object.defineProperty(methods, 'max', {enumerable: false, value: methods.maximum});
-Object.defineProperty(methods, 'brightness', {enumerable: false, value: methods.maximum});
+Object.defineProperty(methods, 'luminosity', { enumerable: false, value: methods.lightness });
+Object.defineProperty(methods, 'luminance', { enumerable: false, value: methods.lightness });
+Object.defineProperty(methods, 'min', { enumerable: false, value: methods.minimum });
+Object.defineProperty(methods, 'max', { enumerable: false, value: methods.maximum });
+Object.defineProperty(methods, 'brightness', { enumerable: false, value: methods.maximum });
 
 
 export const names = Object.keys(methods);

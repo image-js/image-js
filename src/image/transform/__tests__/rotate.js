@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('check the rotate transform', function () {
@@ -8,7 +8,7 @@ describe('check the rotate transform', function () {
                 1, 2, 3,
                 4, 5, 6
             ],
-            {kind: 'GREY'});
+            { kind: 'GREY' });
 
         const result = image.rotateRight();
         result.width.should.equal(2);
@@ -26,7 +26,7 @@ describe('check the rotate transform', function () {
                 1, 2, 3,
                 4, 5, 6
             ],
-            {kind: 'GREY'});
+            { kind: 'GREY' });
 
         const result = image.rotateLeft();
         result.width.should.equal(2);
@@ -45,7 +45,7 @@ describe('check the rotate transform', function () {
                 1, 2, 3,
                 4, 5, 6
             ],
-            {kind: 'GREY'});
+            { kind: 'GREY' });
 
         const result = image.rotate(180);
         Array.from(result.data).should.eql([
@@ -60,7 +60,7 @@ describe('check the rotate transform', function () {
                 1, 2, 3,
                 4, 5, 6
             ],
-            {kind: 'GREY'});
+            { kind: 'GREY' });
         const rotate90 = image.rotate(90);
         const rotateMin270 = image.rotate(-270);
         Array.from(rotate90.data).should.eql(Array.from(rotateMin270.data));

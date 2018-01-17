@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('check getBestMatch class', function () {
@@ -11,7 +11,7 @@ describe('check getBestMatch class', function () {
                 0, 1, 2, 3, 3,
                 0, 1, 2, 3, 4
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let image2 = new Image(5, 5,
@@ -22,7 +22,7 @@ describe('check getBestMatch class', function () {
                 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         image1.getBestMatch(image2).should.eql([2, 2]);
@@ -37,7 +37,7 @@ describe('check getBestMatch class', function () {
                 0, 1, 3, 1, 0,
                 0, 1, 4, 1, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let image2 = new Image(5, 5,
@@ -48,7 +48,7 @@ describe('check getBestMatch class', function () {
                 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         image1.getBestMatch(image2).should.eql([0, 2]);
@@ -63,7 +63,7 @@ describe('check getBestMatch class', function () {
                 0, 1, 3, 1, 0,
                 0, 1, 4, 1, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let image2 = new Image(5, 5,
@@ -74,7 +74,7 @@ describe('check getBestMatch class', function () {
                 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         image1.getBestMatch(image2).should.eql([-2, -2]);

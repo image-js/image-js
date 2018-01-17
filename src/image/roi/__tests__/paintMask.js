@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('we check paint mask', function () {
@@ -9,15 +9,15 @@ describe('we check paint mask', function () {
         0, 1, 1, 1, 0,
         0, 0, 0, 0, 0
     ];
-    let image = new Image(5, 5, data, {kind: 'GREY'});
+    let image = new Image(5, 5, data, { kind: 'GREY' });
 
-    let mask = image.mask({threshold: 1, algorithm: 'threshold'});
+    let mask = image.mask({ threshold: 1, algorithm: 'threshold' });
     let roiManager = image.getRoiManager();
-    roiManager.fromMask(mask, {positive: true, negative: false});
+    roiManager.fromMask(mask, { positive: true, negative: false });
 
     it('should yield the right painted images for box', function () {
         roiManager.resetPainted();
-        let painted = roiManager.paint({color: 'red', kind: 'box', positive: true, negative: false});
+        let painted = roiManager.paint({ color: 'red', kind: 'box', positive: true, negative: false });
         Array.from(painted.getChannel(0).data).should.eql(
             [
                 0, 0, 0, 0, 0,
@@ -31,7 +31,7 @@ describe('we check paint mask', function () {
 
     it('should yield the right painted images for filled', function () {
         roiManager.resetPainted();
-        let painted = roiManager.paint({color: 'red', kind: 'filled', positive: true, negative: false});
+        let painted = roiManager.paint({ color: 'red', kind: 'filled', positive: true, negative: false });
         Array.from(painted.getChannel(0).data).should.eql(
             [
                 0, 0, 0, 0, 0,
@@ -45,7 +45,7 @@ describe('we check paint mask', function () {
 
     it('should yield the right painted images for contour', function () {
         roiManager.resetPainted();
-        let painted = roiManager.paint({color: 'red', kind: 'contour', positive: true, negative: false});
+        let painted = roiManager.paint({ color: 'red', kind: 'contour', positive: true, negative: false });
         Array.from(painted.getChannel(0).data).should.eql(
             [
                 0, 0, 0, 0, 0,
@@ -59,7 +59,7 @@ describe('we check paint mask', function () {
 
     it('should yield the right painted images for center', function () {
         roiManager.resetPainted();
-        let painted = roiManager.paint({color: 'red', kind: 'center', positive: true, negative: false});
+        let painted = roiManager.paint({ color: 'red', kind: 'center', positive: true, negative: false });
         Array.from(painted.getChannel(0).data).should.eql(
             [
                 0, 0, 0, 0, 0,
@@ -73,7 +73,7 @@ describe('we check paint mask', function () {
 
     it('should yield the right painted images for normal', function () {
         roiManager.resetPainted();
-        let painted = roiManager.paint({color: 'red', positive: true, negative: false});
+        let painted = roiManager.paint({ color: 'red', positive: true, negative: false });
         Array.from(painted.getChannel(0).data).should.eql(
             [
                 0, 0, 0, 0, 0,
@@ -90,14 +90,14 @@ describe.skip('we check paint mask and draw label', function () {
     // Only run on macOS. Other platforms don't have the Georgia font.
     const _it = process.platform === 'darwin' ? it : it.skip;
 
-    let image = new Image(100, 100, {kind: 'GREY'});
+    let image = new Image(100, 100, { kind: 'GREY' });
     image.setPixelXY(10, 50, [1]);
     image.setPixelXY(50, 50, [1]);
     image.setPixelXY(80, 50, [1]);
 
-    let mask = image.mask({threshold: 1, algorithm: 'threshold'});
+    let mask = image.mask({ threshold: 1, algorithm: 'threshold' });
     let roiManager = image.getRoiManager();
-    roiManager.fromMask(mask, {positive: true, negative: false});
+    roiManager.fromMask(mask, { positive: true, negative: false });
 
     _it('should yield the right painted images with label', function () {
         roiManager.resetPainted();

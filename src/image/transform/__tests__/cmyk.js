@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('check the cmyk transform', function () {
@@ -7,7 +7,7 @@ describe('check the cmyk transform', function () {
             [
                 100, 100, 0, 0, 100, 100
             ],
-            {kind: 'RGB'}
+            { kind: 'RGB' }
         );
 
         let newImage = image.cmyk();
@@ -25,7 +25,7 @@ describe('check the cmyk transform', function () {
             [
                 16383, 16383, 0, 127, 0, 16383, 16383, 127
             ],
-            {kind: 'RGBA', bitDepth: 16}
+            { kind: 'RGBA', bitDepth: 16 }
         );
 
         let newImage = image.cmyk();

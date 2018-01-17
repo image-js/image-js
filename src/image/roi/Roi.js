@@ -31,7 +31,7 @@ export default class Roi {
      * @return {Image} - Returns a mask (1 bit Image)
      */
     getMask(options = {}) {
-        const {scale = 1, kind = ''} = options;
+        const { scale = 1, kind = '' } = options;
         let mask;
         switch (kind) {
             case 'contour':
@@ -56,7 +56,7 @@ export default class Roi {
         if (scale < 1) {
             // by reassigning the mask we loose the parent and therefore the position
             // we will have to force it back
-            mask = mask.scale({factor: scale});
+            mask = mask.scale({ factor: scale });
             mask.parent = this.mask.parent;
             mask.position[0] += this.minX;
             mask.position[1] += this.minY;
@@ -335,7 +335,7 @@ export default class Roi {
 
     get centerMask() {
         if (!this.computed.centerMask) {
-            let img = new Shape({kind: 'smallCross'}).getMask();
+            let img = new Shape({ kind: 'smallCross' }).getMask();
 
             img.parent = this.map.parent;
             img.position = [this.minX + this.center[0] - 1, this.minY + this.center[1] - 1];

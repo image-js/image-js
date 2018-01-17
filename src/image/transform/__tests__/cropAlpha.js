@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('cropAlpha transform', function () {
@@ -8,7 +8,7 @@ describe('cropAlpha transform', function () {
             4, 255, 5, 255, 6, 255,
             7, 255, 8, 255, 9, 255,
             10, 255, 11, 255, 12, 255
-        ], {kind: 'GREYA'});
+        ], { kind: 'GREYA' });
 
         const cropped = image.cropAlpha();
         cropped.width.should.equal(image.width);
@@ -22,7 +22,7 @@ describe('cropAlpha transform', function () {
             4, 0, 5, 255, 6, 255,
             7, 0, 8, 255, 9, 255,
             10, 0, 11, 0, 12, 0
-        ], {kind: 'GREYA'});
+        ], { kind: 'GREYA' });
 
         const cropped = image.cropAlpha();
         cropped.width.should.equal(2);
@@ -40,7 +40,7 @@ describe('cropAlpha transform', function () {
             4, 0, 5, 255, 6, 0,
             7, 0, 8, 0, 9, 0,
             10, 0, 11, 0, 12, 0
-        ], {kind: 'GREYA'});
+        ], { kind: 'GREYA' });
 
         const cropped = image.cropAlpha();
         cropped.width.should.equal(1);
@@ -54,9 +54,9 @@ describe('cropAlpha transform', function () {
             4, 110, 5, 255, 6, 250,
             7, 110, 8, 239, 9, 250,
             10, 10, 11, 0, 12, 90
-        ], {kind: 'GREYA'});
+        ], { kind: 'GREYA' });
 
-        const cropped = image.cropAlpha({threshold: 240});
+        const cropped = image.cropAlpha({ threshold: 240 });
         cropped.width.should.equal(2);
         cropped.height.should.equal(3);
         Array.from(cropped.data).should.eql([
@@ -72,7 +72,7 @@ describe('cropAlpha transform', function () {
             4, 110, 5, 0, 6, 250,
             7, 110, 8, 239, 9, 250,
             10, 10, 11, 0, 12, 90
-        ], {kind: 'GREYA'});
+        ], { kind: 'GREYA' });
 
 
         (function () {

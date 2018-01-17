@@ -23,7 +23,7 @@ export default function setBorder(options = {}) {
 
     if (algorithm === 'set') {
         if (color.length !== this.channels) {
-            throw new Error('setBorder: the color array must have the same length as the number of channels. Here: ' + this.channels);
+            throw new Error(`setBorder: the color array must have the same length as the number of channels. Here: ${this.channels}`);
         }
         for (let i = 0; i < color.length; i++) {
             if (color[i] === 0) {

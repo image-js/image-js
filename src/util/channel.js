@@ -41,7 +41,7 @@ function validateChannels(image, channels, allowAlpha) {
 
 export function validateChannel(image, channel, allowAlpha = true) {
     if (channel === undefined) {
-        throw new RangeError('validateChannel : the channel has to be >=0 and <' + image.channels);
+        throw new RangeError(`validateChannel : the channel has to be >=0 and <${image.channels}`);
     }
 
     if (typeof channel === 'string') {
@@ -127,12 +127,12 @@ export function validateChannel(image, channel, allowAlpha = true) {
         }
 
         if (typeof channel === 'string') {
-            throw new Error('validateChannel : undefined channel: ' + channel);
+            throw new Error(`validateChannel : undefined channel: ${channel}`);
         }
     }
 
     if (channel >= image.channels) {
-        throw new RangeError('validateChannel : the channel has to be >=0 and <' + image.channels);
+        throw new RangeError(`validateChannel : the channel has to be >=0 and <${image.channels}`);
     }
 
     if (!allowAlpha && channel >= image.components) {

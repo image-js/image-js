@@ -1,4 +1,4 @@
-import {Image, getSquare} from 'test/common';
+import { Image, getSquare } from 'test/common';
 import 'should';
 
 describe('getPixelsArray', function () {
@@ -10,11 +10,11 @@ describe('getPixelsArray', function () {
             0, 1, 3, 3, 3
         ];
         let image = new Image(5, 4, data,
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let array = image.getPixelsArray();
-        array.should.eql(data.map(x => [x]));
+        array.should.eql(data.map((x) => [x]));
     });
 
     it('should work with RGB images', function () {

@@ -1,5 +1,5 @@
-import {validateArrayOfChannels} from '../../util/channel';
-import {checkNumberArray} from '../../util/value';
+import { validateArrayOfChannels } from '../../util/channel';
+import { checkNumberArray } from '../../util/value';
 
 /**
  * @memberof Image
@@ -9,7 +9,7 @@ import {checkNumberArray} from '../../util/value';
  * @return {this}
  */
 export default function multiply(value, options = {}) {
-    let {channels} = options;
+    let { channels } = options;
     this.checkProcessable('multiply', {
         bitDepth: [8, 16]
     });
@@ -17,7 +17,7 @@ export default function multiply(value, options = {}) {
         throw new Error('multiply: the value must be greater than 0');
     }
 
-    channels = validateArrayOfChannels(this, {channels: channels});
+    channels = validateArrayOfChannels(this, { channels: channels });
     value = checkNumberArray(value);
 
     if (!isNaN(value)) {

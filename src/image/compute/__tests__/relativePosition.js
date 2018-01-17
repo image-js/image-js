@@ -1,4 +1,4 @@
-import {Image, load} from 'test/common';
+import { Image, load } from 'test/common';
 import 'should';
 
 describe('we check the relative position', function () {
@@ -23,7 +23,7 @@ describe('we check the relative position', function () {
         mask.setBitXY(1, 1);
 
         return load('BW4x4.png').then(function (image) {
-            let position = image.getRelativePosition(mask, {defaultFurther: true});
+            let position = image.getRelativePosition(mask, { defaultFurther: true });
             position.should.eql([0, 0]);
         });
     });

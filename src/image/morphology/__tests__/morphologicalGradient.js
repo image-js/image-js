@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 import Matrix from 'ml-matrix';
 
@@ -13,10 +13,10 @@ describe('check the morphological gradient function', function () {
                 0, 255, 255, 255, 0,
                 0, 255, 255, 255, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
-        Array.from(image.morphologicalGradient({kernel: kernel}).data).should.eql(
+        Array.from(image.morphologicalGradient({ kernel: kernel }).data).should.eql(
             [
                 255, 255, 0, 255, 255,
                 255, 255, 0, 255, 255,
@@ -36,10 +36,10 @@ describe('check the morphological gradient function', function () {
                 0, 255, 255, 255, 0,
                 0, 255, 255, 255, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
-        Array.from(image.morphologicalGradient({kernel: kernel, iterations: 2}).data).should.eql(
+        Array.from(image.morphologicalGradient({ kernel: kernel, iterations: 2 }).data).should.eql(
             [
                 0, 255, 255, 255, 0,
                 0, 255, 255, 255, 0,

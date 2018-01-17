@@ -1,7 +1,7 @@
 // http://www.easyrgb.com/index.php?X=MATH&H=18#text18
 // check rgbToHsl : https://bgrins.github.io/TinyColor/docs/tinycolor.html
 
-import {RGB, CMYK} from '../model/model';
+import { RGB, CMYK } from '../model/model';
 import Image from '../Image';
 
 /**

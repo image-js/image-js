@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('we check getPixelsGrid', function () {
@@ -9,7 +9,7 @@ describe('we check getPixelsGrid', function () {
         for (let i = 0; i < data.length; i++) {
             data[i] = i;
         }
-        let image = new Image(size, size, data, {kind: 'GREY'});
+        let image = new Image(size, size, data, { kind: 'GREY' });
 
         image.getPixelsGrid({
             sampling: [2, 2],
@@ -25,7 +25,7 @@ describe('we check getPixelsGrid', function () {
         for (let i = 0; i < data.length; i++) {
             data[i] = i;
         }
-        let image = new Image(size, size, data, {kind: 'GREY'});
+        let image = new Image(size, size, data, { kind: 'GREY' });
         let maskData = [
             0b00000001,
             0b00100000,
@@ -34,7 +34,7 @@ describe('we check getPixelsGrid', function () {
             0b00000000
         ];
 
-        let mask = new Image(size, size, maskData, {kind: 'BINARY'});
+        let mask = new Image(size, size, maskData, { kind: 'BINARY' });
         let pixels = image.getPixelsGrid({
             sampling: [2, 2],
             painted: false,

@@ -1,5 +1,5 @@
 import Image from '../Image';
-import {validateChannel} from './../../util/channel';
+import { validateChannel } from './../../util/channel';
 
 /**
  * Create a grey image based on the selected channel

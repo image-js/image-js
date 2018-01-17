@@ -1,4 +1,4 @@
-import {SVD} from 'ml-matrix';
+import { SVD } from 'ml-matrix';
 
 /**
  * TODO would be suprised if this stuff works

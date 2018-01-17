@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 /* Image to test:
@@ -55,7 +55,7 @@ describe('we check that each Roi is surrounded by the expected zones', function 
         result[2].borderLengths.should.eql([2, 4]);
     });
 
-    it('should yield the right borderIDs', function () {
+    it('should yield the right externalIDs', function () {
         let result = roiManager.getRois();
 
         result.sort(function (a, b) {
@@ -70,6 +70,4 @@ describe('we check that each Roi is surrounded by the expected zones', function 
         result[1].externalLengths.should.eql([4]);
         result[2].externalLengths.should.eql([2, 4]);
     });
-
-
 });

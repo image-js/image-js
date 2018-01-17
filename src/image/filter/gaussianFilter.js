@@ -33,7 +33,7 @@ export default function gaussianFilter(options = {}) {
         kernel = getKernel(radius, sigma);
     }
 
-    return convolution.call(this, [kernel, kernel], {border, channels, algorithm: 'separable'});
+    return convolution.call(this, [kernel, kernel], { border, channels, algorithm: 'separable' });
 }
 
 const sqrt2Pi = Math.sqrt(2 * Math.PI);

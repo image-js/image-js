@@ -1,5 +1,5 @@
-import {validateArrayOfChannels} from '../../util/channel';
-import {asc as sortAsc} from 'num-sort';
+import { validateArrayOfChannels } from '../../util/channel';
+import { asc as sortAsc } from 'num-sort';
 import Image from '../Image';
 
 /**
@@ -19,7 +19,7 @@ import Image from '../Image';
 * @return {Image}
 */
 export default function medianFilter(options = {}) {
-    let {radius = 1, channels, border = 'copy'} = options;
+    let { radius = 1, channels, border = 'copy' } = options;
 
     this.checkProcessable('median', {
         bitDepth: [8, 16]
@@ -63,7 +63,7 @@ export default function medianFilter(options = {}) {
         }
     }
 
-    newImage.setBorder({size: [kWidth, kHeight], algorithm: border});
+    newImage.setBorder({ size: [kWidth, kHeight], algorithm: border });
 
     return newImage;
 

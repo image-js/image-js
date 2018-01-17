@@ -24,12 +24,12 @@ export default function topHat(options = {}) {
         throw new TypeError('topHat: The number of rows and columns of the kernel must be odd');
     }
 
-    let openImage = this.opening({kernel: kernel});
-    let newImage = this.subtractImage(openImage, {absolute: true});
+    let openImage = this.opening({ kernel: kernel });
+    let newImage = this.subtractImage(openImage, { absolute: true });
     if (iterations > 1) {
         for (let i = 1; i < iterations; i++) {
-            openImage = newImage.opening({kernel: kernel});
-            newImage = openImage.subtractImage(newImage, {absolute: true});
+            openImage = newImage.opening({ kernel: kernel });
+            newImage = openImage.subtractImage(newImage, { absolute: true });
         }
     }
     return newImage;

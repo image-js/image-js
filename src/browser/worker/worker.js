@@ -29,7 +29,7 @@ class Worker {
             if (!manager) {
                 this.checkUrl();
                 url = this.url;
-                manager = new WorkerManager(method.work, {deps: url});
+                manager = new WorkerManager(method.work, { deps: url });
                 runner.manager = manager;
             }
             return method.run.call(runner, ...args);
@@ -37,7 +37,7 @@ class Worker {
         run.reset = function () {
             if (manager) {
                 manager.terminate();
-                manager = new WorkerManager(method.work, {deps: url});
+                manager = new WorkerManager(method.work, { deps: url });
                 runner.manager = manager;
             }
         };

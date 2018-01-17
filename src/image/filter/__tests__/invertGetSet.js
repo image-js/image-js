@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import should from 'should';
 
 describe('invertGetSet', function () {

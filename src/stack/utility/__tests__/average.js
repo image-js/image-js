@@ -1,4 +1,4 @@
-import {Image, Stack} from 'test/common';
+import { Image, Stack } from 'test/common';
 import 'should';
 
 describe('check stack average method', function () {

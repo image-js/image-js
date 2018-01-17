@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('floodFill', function () {
@@ -9,7 +9,7 @@ describe('floodFill', function () {
             0b00010000,
             0b00111000,
             0b11110000
-        ], {kind: 'BINARY'});
+        ], { kind: 'BINARY' });
 
         image.floodFill();
 
@@ -19,7 +19,7 @@ describe('floodFill', function () {
             0b11110000,
             0b11111000,
             0b11110000
-        ], {kind: 'BINARY'});
+        ], { kind: 'BINARY' });
 
         image.data.should.eql(filled.data);
     });
@@ -31,9 +31,9 @@ describe('floodFill', function () {
             0b00010000,
             0b00111000,
             0b11110000
-        ], {kind: 'BINARY'});
+        ], { kind: 'BINARY' });
 
-        const result = image.floodFill({inPlace: false});
+        const result = image.floodFill({ inPlace: false });
 
         const filled = new Image(8, 5, [
             0b11000000,
@@ -41,7 +41,7 @@ describe('floodFill', function () {
             0b11100000,
             0b11000000,
             0b00000000
-        ], {kind: 'BINARY'});
+        ], { kind: 'BINARY' });
 
         Array.from(result.data).should.eql(Array.from(filled.data));
         Array.from(image.data).should.eql([

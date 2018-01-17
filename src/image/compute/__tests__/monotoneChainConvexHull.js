@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('Monotone Chain Convex Hull', function () {
@@ -14,7 +14,7 @@ describe('Monotone Chain Convex Hull', function () {
                 0b00011000,
                 0b00000000
             ],
-            {kind: 'BINARY'}
+            { kind: 'BINARY' }
         );
 
         image.monotoneChainConvexHull().should.eql([
@@ -34,7 +34,7 @@ describe('Monotone Chain Convex Hull', function () {
             [
                 0b10000000
             ],
-            {kind: 'BINARY'}
+            { kind: 'BINARY' }
         );
 
         image.monotoneChainConvexHull().should.eql([]);
@@ -45,7 +45,7 @@ describe('Monotone Chain Convex Hull', function () {
             [
                 0b11000000
             ],
-            {kind: 'BINARY'}
+            { kind: 'BINARY' }
         );
 
         image.monotoneChainConvexHull().should.eql([

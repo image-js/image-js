@@ -1,4 +1,4 @@
-import {Image, Stack, getHash} from 'test/common';
+import { Image, Stack, getHash } from 'test/common';
 import 'should';
 
 describe('check matchAndCrop method', function () {
@@ -15,7 +15,7 @@ describe('check matchAndCrop method', function () {
                     0, 1, 2, 4, 3,
                     0, 1, 2, 3, 3
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -28,7 +28,7 @@ describe('check matchAndCrop method', function () {
                     0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -41,7 +41,7 @@ describe('check matchAndCrop method', function () {
                     0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -54,7 +54,7 @@ describe('check matchAndCrop method', function () {
                     0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -67,7 +67,7 @@ describe('check matchAndCrop method', function () {
                     0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -147,7 +147,7 @@ describe('check matchAndCrop method', function () {
                     0, 1, 2, 4, 3,
                     0, 1, 2, 3, 3
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -160,7 +160,7 @@ describe('check matchAndCrop method', function () {
                     0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -173,11 +173,11 @@ describe('check matchAndCrop method', function () {
                     0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
-        let results = images.matchAndCrop({algorithm: 'matchToFirst'});
+        let results = images.matchAndCrop({ algorithm: 'matchToFirst' });
         results.should.be.instanceOf(Stack).and.have.lengthOf(3);
 
         let result = results[0];
@@ -230,7 +230,7 @@ describe('check matchAndCrop method', function () {
                     0, 1, 2, 4, 3,
                     0, 1, 2, 3, 3
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -243,7 +243,7 @@ describe('check matchAndCrop method', function () {
                     0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -256,11 +256,11 @@ describe('check matchAndCrop method', function () {
                     0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
-        let results = images.matchAndCrop({algorithm: 'matchToFirst'});
+        let results = images.matchAndCrop({ algorithm: 'matchToFirst' });
         results.should.be.instanceOf(Stack).and.have.lengthOf(3);
 
         getHash(results[1]).should.equal(getHash(results[2]));

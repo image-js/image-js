@@ -10,7 +10,7 @@ export default function floodFill(options = {}) {
 
     const destination = inPlace ? this : Image.createFrom(this);
 
-    this.checkProcessable('floodFill', {bitDepth: 1});
+    this.checkProcessable('floodFill', { bitDepth: 1 });
 
     if (this.bitDepth === 1) {
         const bit = this.getBitXY(x, y);

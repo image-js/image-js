@@ -1,14 +1,14 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('we check paintPolylines', function () {
     it('should yield the painted image with 2 lines', function () {
         let size = 5;
         let data = new Array(size * size * 3).fill(0);
-        let image = new Image(size, size, data, {kind: 'RGB'});
+        let image = new Image(size, size, data, { kind: 'RGB' });
 
         let polylines = [[[1, 1], [3, 1]], [[1, 3], [3, 3]]];
-        image.paintPolylines(polylines, {colors: ['red', 'blue']});
+        image.paintPolylines(polylines, { colors: ['red', 'blue'] });
 
         let grey = image.grey();
 

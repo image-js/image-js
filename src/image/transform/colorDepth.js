@@ -26,7 +26,7 @@ export default function colorDepth(newColorDepth = 8) {
         return this.clone();
     }
 
-    let newImage = Image.createFrom(this, {bitDepth: newColorDepth});
+    let newImage = Image.createFrom(this, { bitDepth: newColorDepth });
 
     switch (newColorDepth) {
         case 8:

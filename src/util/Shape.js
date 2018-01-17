@@ -1,6 +1,6 @@
 import Matrix from 'ml-matrix';
 import Image from '../image/Image';
-import {BINARY} from '../image/kindNames';
+import { BINARY } from '../image/kindNames';
 
 const cross = [
     [0, 0, 1, 0, 0],
@@ -31,7 +31,7 @@ const smallCross = [
  */
 export default class Shape {
     constructor(options = {}) {
-        let {kind = 'cross', shape, size, width, height, filled = true} = options;
+        let { kind = 'cross', shape, size, width, height, filled = true } = options;
         if (size) {
             width = size;
             height = size;
@@ -41,14 +41,14 @@ export default class Shape {
             switch (shape.toLowerCase()) {
                 case 'square':
                 case 'rectangle':
-                    this.matrix = rectangle(width, height, {filled});
+                    this.matrix = rectangle(width, height, { filled });
                     break;
                 case 'circle':
                 case 'ellipse':
-                    this.matrix = ellipse(width, height, {filled});
+                    this.matrix = ellipse(width, height, { filled });
                     break;
                 case 'triangle':
-                    this.matrix = triangle(width, height, {filled});
+                    this.matrix = triangle(width, height, { filled });
                     break;
                 default:
                     throw new Error(`Shape: unexpected shape: ${shape}`);

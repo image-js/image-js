@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('getIntersection', function () {
@@ -11,7 +11,7 @@ describe('getIntersection', function () {
                 0,   0,   255, 255, 0,
                 0,   0,   0,   0,   0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let roiManager1 = img1.getRoiManager();
@@ -28,14 +28,14 @@ describe('getIntersection', function () {
         intersectNull.whitePixelsMask2.length.should.eql(4);
 
         //scale second roi s.t. one pixel intersects
-        let mask4 = mask3.scale({factor: 2});
+        let mask4 = mask3.scale({ factor: 2 });
         let intersectOnePx = mask2.getIntersection(mask4);
         intersectOnePx.commonWhitePixels.length.should.eql(1);
         intersectOnePx.whitePixelsMask1.length.should.eql(4);
         intersectOnePx.whitePixelsMask2.length.should.eql(16);
 
         //scale first roi s.t. one pixel intersects
-        let mask5 = mask2.scale({factor: 2});
+        let mask5 = mask2.scale({ factor: 2 });
         let intersectOnePxInverse = mask3.getIntersection(mask5);
         intersectOnePxInverse.commonWhitePixels.length.should.eql(1);
         intersectOnePxInverse.whitePixelsMask1.length.should.eql(4);
@@ -52,7 +52,7 @@ describe('getIntersection', function () {
                 0,   0,   0,   0, 0,
                 0,   0,   0,   0, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
         let img2 = new Image(5, 5,
             [
@@ -62,7 +62,7 @@ describe('getIntersection', function () {
                 0, 0,   0,   0, 0,
                 0, 0,   0,   0, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         //TODO find how to force parent

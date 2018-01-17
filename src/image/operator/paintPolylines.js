@@ -1,4 +1,4 @@
-import {getColors} from '../../util/color';
+import { getColors } from '../../util/color';
 
 /**
  * Paint polylines on the current image.
@@ -20,7 +20,7 @@ export default function paintPolylines(polylines, options = {}) {
         bitDepth: [8, 16]
     });
 
-    let colors = getColors(Object.assign({}, options, {numberColors: polylines.length}));
+    let colors = getColors(Object.assign({}, options, { numberColors: polylines.length }));
 
 
     for (let i = 0; i < polylines.length; i++) {

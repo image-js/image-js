@@ -1,5 +1,5 @@
-import {Image} from 'test/common';
-import {createCanvas} from 'canvas';
+import { Image } from 'test/common';
+import { createCanvas } from 'canvas';
 
 
 describe.skip('Image core toBlob', function () {

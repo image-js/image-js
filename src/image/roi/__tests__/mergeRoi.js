@@ -1,5 +1,5 @@
 import fromWaterShed from '../creator/fromWaterShed';
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('Merge Roi', function () {
@@ -18,9 +18,9 @@ describe('Merge Roi', function () {
                 4, 4, 4, 4, 3, 2, 2, 2, 2, 3,
                 4, 4, 4, 4, 3, 3, 3, 3, 2, 3
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
-        let mask = new Image(10, 10, {kind: 'BINARY'});
+        let mask = new Image(10, 10, { kind: 'BINARY' });
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
                 if (image.data[i + j * 10] !== 4) {
@@ -31,7 +31,7 @@ describe('Merge Roi', function () {
             }
         }
 
-        let roiMap = fromWaterShed.call(image, {fillMaxValue: 5, mask: mask});
+        let roiMap = fromWaterShed.call(image, { fillMaxValue: 5, mask: mask });
 
         let roiManager = image.getRoiManager();
         roiManager.putMap(roiMap.data);

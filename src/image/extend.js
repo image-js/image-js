@@ -45,7 +45,7 @@ import grey from './transform/grey';
 import mask from './transform/mask/mask';
 import pad from './transform/pad';
 import colorDepth from './transform/colorDepth';
-import {rotate, rotateLeft, rotateRight} from './transform/rotate';
+import { rotate, rotateLeft, rotateRight } from './transform/rotate';
 
 // utility
 import setBorder from './utility/setBorder';
@@ -79,7 +79,7 @@ import paintPolygon from './operator/paintPolygon';
 import paintPolygons from './operator/paintPolygons';
 
 // computers
-import {getHistogram, getHistograms} from './compute/histogram';
+import { getHistogram, getHistograms } from './compute/histogram';
 import getColorHistogram from './compute/colorHistogram';
 import getMin from './compute/min';
 import getMax from './compute/max';
@@ -96,7 +96,7 @@ import monotoneChainConvexHull from './compute/monotoneChainConvexHull';
 import minimalBoundingRectangle from './compute/minimalBoundingRectangle';
 
 export default function extend(Image) {
-    let inPlace = {inPlace: true};
+    let inPlace = { inPlace: true };
 
     Image.extendMethod('invertGetSet', invertGetSet, inPlace);
     Image.extendMethod('invertIterator', invertIterator, inPlace);

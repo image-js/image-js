@@ -1,5 +1,5 @@
 import convolution from '../operator/convolution';
-import {GRADIENT_X, GRADIENT_Y} from '../../util/kernels';
+import { GRADIENT_X, GRADIENT_Y } from '../../util/kernels';
 
 /**
  * @memberof Image
@@ -37,5 +37,5 @@ export default function sobelFilter(options = {}) {
         bitDepth: 32
     });
 
-    return gX.hypotenuse(gY, {bitDepth, channels: channels});
+    return gX.hypotenuse(gY, { bitDepth, channels: channels });
 }

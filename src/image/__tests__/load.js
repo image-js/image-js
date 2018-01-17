@@ -1,5 +1,5 @@
-import {Image, load} from 'test/common';
-import {createCanvas} from 'canvas';
+import { Image, load } from 'test/common';
+import { createCanvas } from 'canvas';
 import 'should';
 
 describe('Image core', () => {
@@ -18,17 +18,17 @@ describe('Image core', () => {
             new Image(5, 0); // eslint-disable-line no-new
         }).should.throw(/height must be greater than 0/);
         (function () {
-            new Image(10, 10, {kind: 'BLABLA'}); // eslint-disable-line no-new
+            new Image(10, 10, { kind: 'BLABLA' }); // eslint-disable-line no-new
         }).should.throw(/invalid image kind: BLABLA/);
     });
 
     it('construct with a kind', () => {
-        const img = new Image(1, 1, {kind: 'RGB'});
-        expect(img.data.length).toBe(3);
+        const img = new Image(1, 1, { kind: 'RGB' });
+        expect(img.data).toHaveLength(3);
     });
 
     it('construct a 32bit image', () => {
-        const img = new Image(1, 1, {bitDepth: 32});
+        const img = new Image(1, 1, { bitDepth: 32 });
         expect(img.bitDepth).toBe(32);
         expect(img.data).toBeInstanceOf(Float32Array);
         expect(img.maxValue).toBe(Number.MAX_VALUE);
@@ -64,7 +64,7 @@ describe('Image core', () => {
     it('should load from dataURL', function () {
         // a red dot
         const dataURL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==';
-        return Image.load(dataURL).then(img => {
+        return Image.load(dataURL).then((img) => {
             img.width.should.equal(5);
             img.height.should.equal(5);
         });
@@ -81,7 +81,7 @@ describe('Image core', () => {
 
     it('should clone and keep same data', async () => {
         const img = await load('format/rgba32.png');
-        const clone = img.clone({copyData: false});
+        const clone = img.clone({ copyData: false });
         clone.should.be.an.instanceOf(Image);
         clone.should.not.be.equal(img);
         clone.data.should.equal(img.data);

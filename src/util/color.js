@@ -1,4 +1,4 @@
-import {cssColor} from 'color-functions';
+import { cssColor } from 'color-functions';
 
 export function css2array(string) {
     let color = cssColor(string);
@@ -44,7 +44,7 @@ function hsl2rgb(h, s, l) {
         g = hue2rgb(m1, m2, hue);
         b = hue2rgb(m1, m2, hue - 1 / 3);
     }
-    return {r: r, g: g, b: b};
+    return { r: r, g: g, b: b };
 }
 
 export function getDistinctColors(numColors) {

@@ -1,4 +1,4 @@
-import {validateArrayOfChannels} from './../../util/channel';
+import { validateArrayOfChannels } from './../../util/channel';
 import newArray from 'new-array';
 
 /**
@@ -26,7 +26,7 @@ export default function getSimilarity(image, options = {}) {
     if (!Array.isArray(border)) {
         border = [border, border];
     }
-    channels = validateArrayOfChannels(this, {channels: channels, defaultAlpha: defaultAlpha});
+    channels = validateArrayOfChannels(this, { channels: channels, defaultAlpha: defaultAlpha });
 
     if (this.bitDepth !== image.bitDepth) {
         throw new Error('Both images must have the same bitDepth');

@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('getBackground filter', function () {
@@ -9,7 +9,7 @@ describe('getBackground filter', function () {
                 0, 0, 0,
                 0, 0, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
         let bg = image.background([[0, 0], [1, 1]], [[0], [0]]);
         Array.from(bg.data).should.eql([

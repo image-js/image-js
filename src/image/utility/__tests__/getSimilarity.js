@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('calculate the overlap with another image', function () {
@@ -6,20 +6,20 @@ describe('calculate the overlap with another image', function () {
 
         let image = new Image(1, 2, [0, 0, 0, 0, 255, 255, 255, 255]);
         let image2 = new Image(1, 2, [0, 0, 0, 0, 255, 255, 255, 255]);
-        let similarity = image.getSimilarity(image2, {average: false});
+        let similarity = image.getSimilarity(image2, { average: false });
         similarity.should.eql([1, 1, 1]);
 
-        similarity = image.getSimilarity(image2, {average: true});
+        similarity = image.getSimilarity(image2, { average: true });
         similarity.should.equal(1);
 
         similarity = image.getSimilarity(image2);
         similarity.should.eql(1);
 
 
-        similarity = image.getSimilarity(image2, {average: false, channels: ['r', 'g']});
+        similarity = image.getSimilarity(image2, { average: false, channels: ['r', 'g'] });
         similarity.should.eql([1, 1]);
 
-        similarity = image.getSimilarity(image2, {average: false, defaultAlpha: true});
+        similarity = image.getSimilarity(image2, { average: false, defaultAlpha: true });
         similarity.should.eql([1, 1, 1, 1]);
 
     });
@@ -28,13 +28,13 @@ describe('calculate the overlap with another image', function () {
         let image = new Image(1, 2, [0, 255, 0, 0, 0, 0, 0, 0]);
         let image2 = new Image(1, 2, [0, 0, 200, 255, 255, 0, 255, 255]);
 
-        let similarity = image.getSimilarity(image2, {average: false});
+        let similarity = image.getSimilarity(image2, { average: false });
         similarity.should.eql([0, 0, 0]);
 
-        similarity = image.getSimilarity(image2, {average: false, channels: ['r', 'g']});
+        similarity = image.getSimilarity(image2, { average: false, channels: ['r', 'g'] });
         similarity.should.eql([0, 0]);
 
-        similarity = image.getSimilarity(image2, {average: false, defaultAlpha: true});
+        similarity = image.getSimilarity(image2, { average: false, defaultAlpha: true });
         similarity.should.eql([0, 0, 0, 0]);
 
     });
@@ -43,73 +43,73 @@ describe('calculate the overlap with another image', function () {
 
         let image = new Image(1, 3, [0, 0, 0, 0, 20, 20, 20, 20, 30, 30, 30, 30]);
         let image2 = new Image(1, 3, [1, 10, 20, 2, 2, 20, 30, 1, 2, 20, 0, 2]);
-        let similarity = image.getSimilarity(image2, {average: false});
+        let similarity = image.getSimilarity(image2, { average: false });
         similarity.should.eql([0.08, 0.8, 0.4]);
 
-        similarity = image.getSimilarity(image2, {average: false, normalize: true});
+        similarity = image.getSimilarity(image2, { average: false, normalize: true });
         similarity.should.eql([0.8, 0.8, 0.4]);
 
-        similarity = image.getSimilarity(image2, {average: false, channels: ['r', 'b']});
+        similarity = image.getSimilarity(image2, { average: false, channels: ['r', 'b'] });
         similarity.should.eql([0.08, 0.4]);
 
-        similarity = image.getSimilarity(image2, {channels: ['r', 'b']});
+        similarity = image.getSimilarity(image2, { channels: ['r', 'b'] });
         similarity.should.approximately(0.24, 0.0002);
 
-        similarity = image.getSimilarity(image2, {average: false, defaultAlpha: true});
+        similarity = image.getSimilarity(image2, { average: false, defaultAlpha: true });
         similarity.should.eql([0.08, 0.8, 0.4, 0.06]);
     });
 
     it('check different images with shift', function () {
         let image = new Image(3, 1, [0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30]);
         let image2 = new Image(3, 1, [0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30]);
-        let similarity = image.getSimilarity(image2, {average: false});
+        let similarity = image.getSimilarity(image2, { average: false });
         similarity.should.eql([1, 1, 1]);
 
-        similarity = image.getSimilarity(image2, {average: false, normalize: true});
+        similarity = image.getSimilarity(image2, { average: false, normalize: true });
         similarity.should.eql([1, 1, 1]);
 
-        similarity = image.getSimilarity(image2, {average: false, shift: [1, 0]});
+        similarity = image.getSimilarity(image2, { average: false, shift: [1, 0] });
         similarity.should.eql([0.25, 0.25, 0.25]);
 
-        similarity = image.getSimilarity(image2, {average: false, shift: [-1, 0]});
+        similarity = image.getSimilarity(image2, { average: false, shift: [-1, 0] });
         similarity.should.eql([0.25, 0.25, 0.25]);
 
-        similarity = image.getSimilarity(image2, {average: false, shift: [0, 1]});
+        similarity = image.getSimilarity(image2, { average: false, shift: [0, 1] });
         similarity.should.eql([0, 0, 0]);
 
-        similarity = image.getSimilarity(image2, {average: false, shift: [0, -1]});
+        similarity = image.getSimilarity(image2, { average: false, shift: [0, -1] });
         similarity.should.eql([0, 0, 0]);
     });
 
     it('check different images with size error', function () {
         let image = new Image(3, 1, [0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30]);
         (function () {
-            let image2 = new Image(3, 1, [0, 0], {kind: 'GREY'});
-            image.getSimilarity(image2, {average: false});
+            let image2 = new Image(3, 1, [0, 0], { kind: 'GREY' });
+            image.getSimilarity(image2, { average: false });
         }).should.throw(/incorrect data size/);
     });
 
     it('check different images with other kind', function () {
         let image = new Image(3, 1, [0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30]);
-        let image2 = new Image(3, 1, [0, 0, 0], {kind: 'GREY'});
+        let image2 = new Image(3, 1, [0, 0, 0], { kind: 'GREY' });
         (function () {
-            image.getSimilarity(image2, {average: false});
+            image.getSimilarity(image2, { average: false });
         }).should.throw(/number of channel/);
     });
 
     it('check different images with other bitDepth', function () {
         let image = new Image(3, 1, [0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30]);
-        let image2 = new Image(3, 1, [0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30], {bitDepth: 16});
+        let image2 = new Image(3, 1, [0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30], { bitDepth: 16 });
         (function () {
-            image.getSimilarity(image2, {average: false});
+            image.getSimilarity(image2, { average: false });
         }).should.throw(/the same bitDepth/);
     });
 
-    it('check different images with other bitDepth', function () {
+    it('check different images with other color model', function () {
         let image = new Image(3, 1, [0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30]);
-        let image2 = new Image(3, 1, [0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30], {colorModel: 'HSL'});
+        let image2 = new Image(3, 1, [0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30], { colorModel: 'HSL' });
         (function () {
-            image.getSimilarity(image2, {average: false});
+            image.getSimilarity(image2, { average: false });
         }).should.throw(/the same colorModel/);
     });
 

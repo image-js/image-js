@@ -1,5 +1,5 @@
-import {validateArrayOfChannels} from '../../util/channel';
-import {checkNumberArray} from '../../util/value';
+import { validateArrayOfChannels } from '../../util/channel';
+import { checkNumberArray } from '../../util/value';
 
 /**
  * Add a specific integer on the specified points of the specified channels
@@ -10,12 +10,12 @@ import {checkNumberArray} from '../../util/value';
  * @return {this} Modified current image
  */
 export default function add(value, options = {}) {
-    let {channels} = options;
+    let { channels } = options;
     this.checkProcessable('add', {
         bitDepth: [8, 16]
     });
 
-    channels = validateArrayOfChannels(this, {channels: channels});
+    channels = validateArrayOfChannels(this, { channels: channels });
     value = checkNumberArray(value);
 
     // we allow 3 cases, the value may be an array (1D), an image or a single value

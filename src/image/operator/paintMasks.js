@@ -1,5 +1,5 @@
-import {RGB} from '../model/model';
-import {getColors} from '../../util/color';
+import { RGB } from '../model/model';
+import { getColors } from '../../util/color';
 
 /**
  * Paint a mask or masks on the current image.
@@ -34,7 +34,7 @@ export default function paintMasks(masks, options = {}) {
         colorModel: RGB
     });
 
-    let colors = getColors(Object.assign({}, options, {numberColors: masks.length}));
+    let colors = getColors(Object.assign({}, options, { numberColors: masks.length }));
 
     if (!Array.isArray(masks)) {
         masks = [masks];
@@ -62,7 +62,7 @@ export default function paintMasks(masks, options = {}) {
     }
 
     if (Array.isArray(labels) && labels.length > 0) {
-        let canvas = this.getCanvas({originalData: true});
+        let canvas = this.getCanvas({ originalData: true });
         let ctx = canvas.getContext('2d');
         ctx.fillStyle = labelColor;
         ctx.font = labelFont;

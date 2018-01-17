@@ -156,7 +156,7 @@ export default class RoiManager {
         } = options;
 
         if (!this._layers[label]) {
-            throw new Error('getRoi: This Roi layer (' + label + ') does not exists.');
+            throw new Error(`getRoi: This Roi layer (${label}) does not exists.`);
         }
 
         let allRois = this._layers[label].roi;
@@ -242,7 +242,7 @@ export default class RoiManager {
 
     // return a mask corresponding to all the selected masks
     getMask(options = {}) {
-        let mask = new Image(this._image.width, this._image.height, {kind: 'BINARY'});
+        let mask = new Image(this._image.width, this._image.height, { kind: 'BINARY' });
         let masks = this.getMasks(options);
 
         for (let i = 0; i < masks.length; i++) {
@@ -268,7 +268,7 @@ export default class RoiManager {
      * @param {Image} [options.image] A new iamge that you would like to sue for painting over
      */
     resetPainted(options = {}) {
-        const {image} = options;
+        const { image } = options;
         if (image) {
             this._painted = this.image.rgba8();
         } else {
@@ -341,7 +341,7 @@ export default class RoiManager {
  * @private
  */
 function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
-    let correspondingRois = {id: [], surface: [], roiSurfaceCovered: [], same: 0, opposite: 0, total: 0};
+    let correspondingRois = { id: [], surface: [], roiSurfaceCovered: [], same: 0, opposite: 0, total: 0 };
     for (let i = 0; i < points.length; i++) {
         let currentPoint = points[i];
         let currentX = currentPoint[0];

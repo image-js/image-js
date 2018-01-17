@@ -29,7 +29,7 @@ export function validateKernel(kernel) {
 
         }
     } else {
-        throw new Error('validateKernel: Invalid Kernel: ' + kernel);
+        throw new Error(`validateKernel: Invalid Kernel: ${kernel}`);
     }
-    return {kernel, kWidth, kHeight};
+    return { kernel, kWidth, kHeight };
 }

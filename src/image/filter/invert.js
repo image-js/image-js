@@ -1,6 +1,6 @@
 // we try the faster methods
 
-import {validateArrayOfChannels} from '../../util/channel';
+import { validateArrayOfChannels } from '../../util/channel';
 
 /**
  * Invert an image. The image
@@ -16,7 +16,7 @@ import {validateArrayOfChannels} from '../../util/channel';
  * @return {this}
  */
 export default function invert(options = {}) {
-    let {channels} = options;
+    let { channels } = options;
 
     this.checkProcessable('invertOneLoop', {
         bitDepth: [1, 8, 16]
@@ -31,7 +31,7 @@ export default function invert(options = {}) {
             data[i] = ~data[i];
         }
     } else {
-        channels = validateArrayOfChannels(this, {channels});
+        channels = validateArrayOfChannels(this, { channels });
 
         for (let c = 0; c < channels.length; c++) {
             let j = channels[c];

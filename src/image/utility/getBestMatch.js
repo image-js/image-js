@@ -9,7 +9,7 @@ import Matrix from '../../util/matrix';
  * @return {number[]}
  */
 export default function match(image, options = {}) {
-    let {border} = options;
+    let { border } = options;
 
     this.checkProcessable('getChannel', {
         bitDepth: [8, 16]
@@ -38,7 +38,7 @@ export default function match(image, options = {}) {
         let toCalculatePositions = similarityMatrix.localSearch(currentX, currentY, -Infinity);
         for (let i = 0; i < toCalculatePositions.length; i++) {
             let position = toCalculatePositions[i];
-            let similarity = this.getSimilarity(image, {border: border, shift: [middleX - position[0], middleY - position[1]]});
+            let similarity = this.getSimilarity(image, { border: border, shift: [middleX - position[0], middleY - position[1]] });
             similarityMatrix[position[0]][position[1]] = similarity;
         }
 

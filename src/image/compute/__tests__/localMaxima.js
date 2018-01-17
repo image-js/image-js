@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('Find local extrema', function () {
@@ -18,7 +18,7 @@ describe('Find local extrema', function () {
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
         image.getLocalMaxima().should.eql([[3, 2], [6, 7]]);
     });
@@ -39,10 +39,10 @@ describe('Find local extrema', function () {
                 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
 
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
-        image.getLocalMaxima({invert: true}).should.eql([[3, 2], [6, 7]]);
+        image.getLocalMaxima({ invert: true }).should.eql([[3, 2], [6, 7]]);
         image.getLocalMaxima({
             invert: true,
             region: 3,
@@ -65,10 +65,10 @@ describe('Find local extrema', function () {
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
         image.getLocalMaxima(
-            {removeClosePoints: 3, region: 1}
+            { removeClosePoints: 3, region: 1 }
         ).should.eql([[3, 2], [6, 7]]);
     });
 
@@ -86,16 +86,16 @@ describe('Find local extrema', function () {
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
         image.getLocalMaxima(
-            {removeClosePoints: 3, region: 1, maxEquals: 0}
+            { removeClosePoints: 3, region: 1, maxEquals: 0 }
         ).should.eql([[6, 7]]);
         image.getLocalMaxima(
-            {removeClosePoints: 3, region: 2, maxEquals: 0}
+            { removeClosePoints: 3, region: 2, maxEquals: 0 }
         ).should.eql([[6, 7]]);
         image.getLocalMaxima(
-            {removeClosePoints: 3, region: 3, maxEquals: 0}
+            { removeClosePoints: 3, region: 3, maxEquals: 0 }
         ).should.eql([[6, 7]]);
     });
 

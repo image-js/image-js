@@ -1,6 +1,6 @@
 import RoiMap from '../RoiMap';
 import PriorityQueue from 'js-priority-queue';
-import {dxs, dys} from './../../../util/dxdy.js';
+import { dxs, dys } from './../../../util/dxdy.js';
 
 /**
  * This method allows to create a ROIMap using the water shed algorithm. By default this algorithm

@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('check getRow and getColumn class', function () {
@@ -10,7 +10,7 @@ describe('check getRow and getColumn class', function () {
                 0, 1, 2, 2, 2,
                 0, 1, 3, 3, 3
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         image.getRow(2).should.eql([0, 1, 2, 2, 2]);
@@ -24,7 +24,7 @@ describe('check getRow and getColumn class', function () {
                 6,  7,  8,  9, 10, 11,
                 12, 13, 14, 15, 16, 17
             ],
-            {kind: 'GREYA'}
+            { kind: 'GREYA' }
         );
 
         image.getRow(1, 0).should.eql([6, 8, 10]);

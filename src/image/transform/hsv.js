@@ -1,6 +1,6 @@
 // based on https://bgrins.github.io/TinyColor/docs/tinycolor.html
 
-import {RGB, HSV} from '../model/model';
+import { RGB, HSV } from '../model/model';
 import Image from '../Image';
 
 /**

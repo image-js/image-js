@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('calculate the histogram', function () {
@@ -6,13 +6,13 @@ describe('calculate the histogram', function () {
 
         let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 1]);
 
-        let histogram = image.getHistogram({useAlpha: false, channel: 0});
+        let histogram = image.getHistogram({ useAlpha: false, channel: 0 });
         histogram[0].should.equal(0);
         histogram[100].should.equal(1);
         histogram[230].should.equal(1);
         histogram[255].should.equal(0);
 
-        histogram = image.getHistogram({useAlpha: false, channel: 2});
+        histogram = image.getHistogram({ useAlpha: false, channel: 2 });
         histogram[0].should.equal(0);
         histogram[13].should.equal(1);
         histogram[120].should.equal(1);
@@ -42,7 +42,7 @@ describe('calculate the histogram', function () {
             kind: 'GREYA'
         });
 
-        let histogram = image.getHistogram({maxSlots: 16});
+        let histogram = image.getHistogram({ maxSlots: 16 });
 
         histogram[0].should.approximately(0.0039, 0.0001);
         histogram[1].should.equal(0);
@@ -59,7 +59,7 @@ describe('calculate the histogram', function () {
                 0, 255, 255, 255, 0,
                 0, 0, 0, 0, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
         let image2 = image.mask();
         let histogram = image2.getHistogram();

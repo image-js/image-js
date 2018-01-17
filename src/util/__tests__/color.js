@@ -1,4 +1,4 @@
-import {css2array, getDistinctColors} from '../color';
+import { css2array, getDistinctColors } from '../color';
 import 'should';
 
 describe('check color class', function () {

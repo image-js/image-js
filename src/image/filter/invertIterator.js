@@ -12,7 +12,7 @@ export default function invertIterator() {
             data[i] = ~data[i];
         }
     } else {
-        for (let {index, pixel} of this.pixels()) {
+        for (let { index, pixel } of this.pixels()) {
             for (let k = 0; k < this.components; k++) {
                 this.setValue(index, k, this.maxValue - pixel[k]);
             }

@@ -1,4 +1,4 @@
-import {getFactor, factorDimensions} from '../converter';
+import { getFactor, factorDimensions } from '../converter';
 import 'should';
 
 describe('Converter tests', function () {
@@ -24,14 +24,14 @@ describe('Converter tests', function () {
 
     describe('factorDimensions', function () {
         it('integer result', function () {
-            factorDimensions(1, 100, 100).should.eql({width: 100, height: 100});
-            factorDimensions(2, 100, 30).should.eql({width: 200, height: 60});
-            factorDimensions(0.5, 12, 100).should.eql({width: 6, height: 50});
+            factorDimensions(1, 100, 100).should.eql({ width: 100, height: 100 });
+            factorDimensions(2, 100, 30).should.eql({ width: 200, height: 60 });
+            factorDimensions(0.5, 12, 100).should.eql({ width: 6, height: 50 });
         });
         it('non integer result', function () {
-            factorDimensions(0.5, 11, 13).should.eql({width: 6, height: 7});
-            factorDimensions('25%', 15, 25).should.eql({width: 4, height: 6});
-            factorDimensions(1 / 3, 100, 122).should.eql({width: 33, height: 41});
+            factorDimensions(0.5, 11, 13).should.eql({ width: 6, height: 7 });
+            factorDimensions('25%', 15, 25).should.eql({ width: 4, height: 6 });
+            factorDimensions(1 / 3, 100, 122).should.eql({ width: 33, height: 41 });
         });
     });
 });

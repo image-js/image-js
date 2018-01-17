@@ -1,4 +1,4 @@
-import {Image, getSquare} from 'test/common';
+import { Image, getSquare } from 'test/common';
 import 'should';
 
 function sub(a = 1, b = 2) {
@@ -9,11 +9,11 @@ describe('Image extensions', function () {
     Image.extendMethod('testMethod1', sub);
     Image.extendMethod('testMethod2', function () {
         return this.width;
-    }, {inPlace: true, returnThis: false});
+    }, { inPlace: true, returnThis: false });
     Image.extendMethod('testMethod3', function () {
         this.clone();
-    }, {inPlace: true});
-    Image.extendMethod('testMethod4', sub, {partialArgs: [6]});
+    }, { inPlace: true });
+    Image.extendMethod('testMethod4', sub, { partialArgs: [6] });
     describe('extendMethod', function () {
         let img = getSquare();
         it('should add methods to the prototype', function () {
@@ -38,8 +38,8 @@ describe('Image extensions', function () {
         count++;
         return this.width;
     });
-    Image.extendProperty('testProp2', sub, {partialArgs: [5]});
-    Image.extendProperty('testProp3', sub, {partialArgs: [18, 3]});
+    Image.extendProperty('testProp2', sub, { partialArgs: [5] });
+    Image.extendProperty('testProp3', sub, { partialArgs: [18, 3] });
     describe('extendProperty', function () {
         let img;
         beforeEach(function () {

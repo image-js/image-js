@@ -1,4 +1,4 @@
-import {Image, getHash} from 'test/common';
+import { Image, getHash } from 'test/common';
 import 'should';
 
 describe('check the crop transform', function () {
@@ -12,7 +12,7 @@ describe('check the crop transform', function () {
                 0, 1, 2, 4, 3,
                 0, 1, 2, 3, 3
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
     });
 

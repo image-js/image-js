@@ -1,4 +1,4 @@
-import {load} from 'test/common';
+import { load } from 'test/common';
 import 'should';
 
 /* Image to test:
@@ -13,7 +13,7 @@ describe('we check the internalMapID', function () {
         return load('BW5x5.png').then(function (img) {
 
             let roiManager = img.getRoiManager();
-            let mask = img.mask(0.5, {invert: true});
+            let mask = img.mask(0.5, { invert: true });
             roiManager.fromMask(mask);
 
             let rois = roiManager.getRois();
@@ -39,7 +39,7 @@ describe('we check the internalMapID', function () {
 describe('we check the internalMapID with complex image', function () {
     it('should yield the right internapMapIDs', function () {
         return load('BW15x15transparent.png').then(function (img) {
-            let grey = img.grey({allowGrey: true});
+            let grey = img.grey({ allowGrey: true });
             let mask = grey.mask(0.5);
 
             let roiManager = img.getRoiManager();

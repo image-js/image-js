@@ -1,5 +1,5 @@
-import {Image} from 'test/common';
-import {desc as sortDesc} from 'num-sort';
+import { Image } from 'test/common';
+import { desc as sortDesc } from 'num-sort';
 import 'should';
 
 describe('map a binary image (mask) 2 x 2', function () {
@@ -19,7 +19,7 @@ describe('map a binary image (mask) 2 x 2', function () {
 
     it('should have 4 data in 2 zones', function () {
         expect(data).toBeInstanceOf(Int16Array);
-        expect(data.length).toEqual(4);
+        expect(data).toHaveLength(4);
         data[0].should.equal(1);
         data[1].should.equal(1);
         data[2].should.equal(-1);
@@ -31,7 +31,6 @@ describe('map a binary image (mask) 2 x 2', function () {
         result.negative.should.equal(1);
         result.positive.should.equal(1);
     });
-
 });
 
 describe('map a binary image 4 x 4 in 2 zones', function () {
@@ -50,7 +49,7 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
 
     it('should have 16 data in 2 zones', function () {
         expect(data).toBeInstanceOf(Int16Array);
-        expect(data.length).toEqual(16);
+        expect(data).toHaveLength(16);
         data[0].should.equal(1);
         data[7].should.equal(1);
         data[8].should.equal(-1);
@@ -62,10 +61,9 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
         result.negative.should.equal(1);
         result.positive.should.equal(1);
     });
-
 });
 
-describe('map a binary image 4 x 4 in 2 zones', function () {
+describe('map a binary image 4 x 4 in 3 zones', function () {
     let imageData = new Uint8Array(2);
     imageData[0] = 63;
     imageData[1] = 192;
@@ -81,7 +79,7 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
 
     it('should have 16 data in 3 zones', function () {
         expect(data).toBeInstanceOf(Int16Array);
-        expect(data.length).toEqual(16);
+        expect(data).toHaveLength(16);
         data[0].should.equal(-1);
         data[1].should.equal(-1);
         data[2].should.equal(1);
@@ -95,5 +93,4 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
         result.negative.should.equal(2);
         result.positive.should.equal(1);
     });
-
 });

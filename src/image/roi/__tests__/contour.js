@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('we check contourMask', function () {
@@ -12,14 +12,14 @@ describe('we check contourMask', function () {
                 0, 255, 255, 255, 0,
                 0, 0,   0,   0,   0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         img.width.should.equal(5);
         img.height.should.equal(5);
 
         let roiManager = img.getRoiManager();
-        let mask = img.mask({invert: true});
+        let mask = img.mask({ invert: true });
         roiManager.fromMask(mask);
 
         let rois = roiManager.getRois();

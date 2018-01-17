@@ -10,13 +10,13 @@ export default function getIntersection(mask2) {
     let mask1 = this;
     let closestParent = mask1.getClosestCommonParent(mask2);
 
-    let startPos1 = mask1.getRelativePosition(closestParent, {defaultFurther: true});
+    let startPos1 = mask1.getRelativePosition(closestParent, { defaultFurther: true });
     let allRelPos1 = getRelativePositionForAllPixels(mask1, startPos1);
-    let startPos2 = mask2.getRelativePosition(closestParent, {defaultFurther: true});
+    let startPos2 = mask2.getRelativePosition(closestParent, { defaultFurther: true });
     let allRelPos2 = getRelativePositionForAllPixels(mask2, startPos2);
 
     let commonSurface = getCommonSurface(allRelPos1, allRelPos2);
-    let intersection = {whitePixelsMask1: [], whitePixelsMask2: [], commonWhitePixels: []};
+    let intersection = { whitePixelsMask1: [], whitePixelsMask2: [], commonWhitePixels: [] };
 
     for (let i = 0; i < commonSurface.length; i++) {
         let currentRelativePos = commonSurface[i];

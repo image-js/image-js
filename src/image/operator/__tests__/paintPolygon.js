@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('we check paintPolygon', function () {
@@ -8,7 +8,7 @@ describe('we check paintPolygon', function () {
         for (let i = 0; i < data.length; i++) {
             data[i] = i;
         }
-        let image = new Image(size, size, data, {kind: 'RGB'});
+        let image = new Image(size, size, data, { kind: 'RGB' });
 
         let points = [[1, 1], [3, 3]];
         image.paintPolygon(points);
@@ -32,7 +32,7 @@ describe('we check paintPolygon', function () {
         for (let i = 0; i < data.length; i++) {
             data[i] = i;
         }
-        let image = new Image(size, size, data, {kind: 'RGB'});
+        let image = new Image(size, size, data, { kind: 'RGB' });
 
         let points = [[1, 1], [4, 1], [4, 3], [1, 3]];
         image.paintPolygon(points);
@@ -56,10 +56,10 @@ describe('we check paintPolygon', function () {
         for (let i = 0; i < data.length; i++) {
             data[i] = i;
         }
-        let image = new Image(size, size, data, {kind: 'GREY'});
+        let image = new Image(size, size, data, { kind: 'GREY' });
 
         let points = [[2, 0], [4, 2], [0, 2]];
-        image.paintPolygon(points, {filled: true});
+        image.paintPolygon(points, { filled: true });
 
         let painted = [
             0, 0, 1, 0, 0,
@@ -79,10 +79,10 @@ describe('we check paintPolygon', function () {
         for (let i = 0; i < data.length; i++) {
             data[i] = i;
         }
-        let image = new Image(size, size, data, {kind: 'GREY'});
+        let image = new Image(size, size, data, { kind: 'GREY' });
 
         let points = [[0, 0], [2, 0], [4, 2], [2, 2], [2, 4], [2, 2], [0, 2], [2, 0], [0, 0]];
-        image.paintPolygon(points, {filled: true});
+        image.paintPolygon(points, { filled: true });
 
         let painted = [
             1, 1, 1, 0, 0,

@@ -1,4 +1,4 @@
-import {load} from 'test/common';
+import { load } from 'test/common';
 import 'should';
 
 describe('we check that we can extract correctly a Roi', function () {
@@ -10,7 +10,7 @@ describe('we check that we can extract correctly a Roi', function () {
 
             let roiManager = img.getRoiManager();
             let grey = img.grey();
-            let mask = grey.mask({invert: true});
+            let mask = grey.mask({ invert: true });
             roiManager.fromMask(mask);
 
             let rois = roiManager.getRois();
@@ -25,13 +25,13 @@ describe('we check that we can extract correctly a Roi', function () {
 
             let roiMask = rois[0].getMask();
             let extract = img.extract(roiMask);
-            extract.countAlphaPixels({alpha: 0}).should.equal(27);
-            extract.countAlphaPixels({alpha: 255}).should.equal(54);
+            extract.countAlphaPixels({ alpha: 0 }).should.equal(27);
+            extract.countAlphaPixels({ alpha: 255 }).should.equal(54);
 
-            roiMask = rois[0].getMask({kind: 'filled'});
+            roiMask = rois[0].getMask({ kind: 'filled' });
             extract = img.extract(roiMask);
-            extract.countAlphaPixels({alpha: 0}).should.equal(1);
-            extract.countAlphaPixels({alpha: 255}).should.equal(80);
+            extract.countAlphaPixels({ alpha: 0 }).should.equal(1);
+            extract.countAlphaPixels({ alpha: 255 }).should.equal(80);
         });
     });
 });

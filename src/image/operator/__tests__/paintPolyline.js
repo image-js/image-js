@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('we check paintPolyline', function () {
@@ -8,7 +8,7 @@ describe('we check paintPolyline', function () {
         for (let i = 0; i < data.length; i++) {
             data[i] = i;
         }
-        let image = new Image(size, size, data, {kind: 'RGB'});
+        let image = new Image(size, size, data, { kind: 'RGB' });
 
         let points = [[1, 1], [3, 3]];
         image.paintPolyline(points);
@@ -32,7 +32,7 @@ describe('we check paintPolyline', function () {
         for (let i = 0; i < data.length; i++) {
             data[i] = i;
         }
-        let image = new Image(size, size, data, {kind: 'RGB'});
+        let image = new Image(size, size, data, { kind: 'RGB' });
 
         let points = [[1, 1], [4, 1], [4, 3], [1, 3]];
         image.paintPolyline(points);
@@ -56,7 +56,7 @@ describe('we check paintPolyline', function () {
         for (let i = 0; i < data.length; i++) {
             data[i] = i;
         }
-        let image = new Image(size, size, data, {kind: 'GREY'});
+        let image = new Image(size, size, data, { kind: 'GREY' });
 
         let points = [[2, 0], [4, 2], [0, 2]];
         image.paintPolyline(points);

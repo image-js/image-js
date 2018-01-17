@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('check the median filter', function () {
@@ -11,7 +11,7 @@ describe('check the median filter', function () {
                 1, 2, 3, 4, 5,
                 1, 2, 3, 4, 5
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         Array.from(image.medianFilter().data).should.eql(
@@ -34,10 +34,10 @@ describe('check the median filter', function () {
                 10, 2, 20, 4, 5,
                 10, 2, 20, 4, 5
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
-        Array.from(image.medianFilter({radius: 1}).data).should.eql(
+        Array.from(image.medianFilter({ radius: 1 }).data).should.eql(
             [
                 10, 10, 4, 5, 5,
                 10, 10, 4, 5, 5,

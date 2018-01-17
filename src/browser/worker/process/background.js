@@ -4,7 +4,7 @@ import Image from '../../../image/Image';
 const defaultOptions = {
     regression: {
         kernelType: 'polynomial',
-        kernelOptions: {degree: 2, constant: 1}
+        kernelOptions: { degree: 2, constant: 1 }
     },
     threshold: 0.02,
     roi: {
@@ -51,7 +51,7 @@ function work() {
         const sobel = grey.sobelFilter();
         maybeInclude('sobel', sobel);
 
-        const mask = sobel.level().mask({threshold: options.threshold});
+        const mask = sobel.level().mask({ threshold: options.threshold });
         maybeInclude('mask', mask);
 
         const roiManager = sobel.getRoiManager();
@@ -82,4 +82,4 @@ function work() {
     });
 }
 
-export default {run, work};
+export default { run, work };

@@ -1,10 +1,10 @@
-import {SVD} from 'ml-matrix';
+import { SVD } from 'ml-matrix';
 
 export default function getSeparatedKernel(kernel) {
-    const svd = new SVD(kernel, {autoTranspose: true});
+    const svd = new SVD(kernel, { autoTranspose: true });
     if (svd.rank !== 1) return null;
     const s = Math.sqrt(svd.s[0]);
-    const v = svd.U.map(v => v[0] * s);
-    const h = svd.V.map(h => h[0] * s);
+    const v = svd.U.map((v) => v[0] * s);
+    const h = svd.V.map((h) => h[0] * s);
     return [v, h];
 }

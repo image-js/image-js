@@ -9,7 +9,7 @@ export function createCanvas(width, height) {
     return canvas;
 }
 
-export function fetchBinary(url, {withCredentials = false} = {}) {
+export function fetchBinary(url, { withCredentials = false } = {}) {
     return new Promise(function (resolve, reject) {
         let xhr = new self.XMLHttpRequest();
         xhr.open('GET', url, true);
@@ -33,4 +33,4 @@ export function writeFile() {
     throw new Error('writeFile does not exist in the browser');
 }
 
-export {env, ImageData, DOMImage};
+export { env, ImageData, DOMImage };

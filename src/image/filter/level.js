@@ -1,6 +1,6 @@
 import newArray from 'new-array';
 
-import {validateArrayOfChannels} from '../../util/channel';
+import { validateArrayOfChannels } from '../../util/channel';
 
 /**
  * Level the image for by default have the minimal and maximal values.
@@ -29,7 +29,7 @@ export default function level(options = {}) {
         bitDepth: [8, 16, 32]
     });
 
-    channels = validateArrayOfChannels(this, {channels: channels});
+    channels = validateArrayOfChannels(this, { channels: channels });
 
     if (channels.length !== this.channel) {
         // if we process only part of the channels and the min or max length corresponds to the number of channels
@@ -63,7 +63,7 @@ export default function level(options = {}) {
             break;
 
         default:
-            throw new Error('level: algorithm not implement: ' + algorithm);
+            throw new Error(`level: algorithm not implement: ${algorithm}`);
     }
 
     return this;

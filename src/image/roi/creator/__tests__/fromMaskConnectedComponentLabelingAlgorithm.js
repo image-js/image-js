@@ -1,5 +1,5 @@
 import fromMaskConnectedComponentLabelingAlgorithm from '../fromMaskConnectedComponentLabelingAlgorithm';
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('we check fromMask2', function () {
@@ -16,7 +16,7 @@ describe('we check fromMask2', function () {
       ‾‾‾‾‾‾
 
      */
-    let mask = new Image(6, 6, {kind: 'BINARY'});
+    let mask = new Image(6, 6, { kind: 'BINARY' });
     mask.setBitXY(1, 0);
     mask.setBitXY(3, 0);
     mask.setBitXY(3, 1);
@@ -46,7 +46,7 @@ describe('we check fromMask2', function () {
     });
 
     it('should yield the right map with 8 neighbours', function () {
-        let mapData = fromMaskConnectedComponentLabelingAlgorithm(mask, {allowCorners: true}).data;
+        let mapData = fromMaskConnectedComponentLabelingAlgorithm(mask, { allowCorners: true }).data;
 
         const expected = [
             0, 1, 0, 1, 0, 1,

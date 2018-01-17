@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('check the rgba8 transform', function () {
@@ -7,7 +7,7 @@ describe('check the rgba8 transform', function () {
             [
                 10, 20
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let newImage = image.rgba8();
@@ -22,7 +22,7 @@ describe('check the rgba8 transform', function () {
             [
                 10, 127, 20, 255
             ],
-            {kind: 'GREYA'}
+            { kind: 'GREYA' }
         );
 
         let newImage = image.rgba8();
@@ -37,7 +37,7 @@ describe('check the rgba8 transform', function () {
             [
                 10, 20, 30, 40, 50, 60
             ],
-            {kind: 'RGB'}
+            { kind: 'RGB' }
         );
 
         let newImage = image.rgba8();
@@ -52,7 +52,7 @@ describe('check the rgba8 transform', function () {
             [
                 10 << 8, 20 << 8, 30 << 8, 40 << 8, 50 << 8, 60 << 8
             ],
-            {kind: 'RGB', bitDepth: 16}
+            { kind: 'RGB', bitDepth: 16 }
         );
 
         let newImage = image.rgba8();

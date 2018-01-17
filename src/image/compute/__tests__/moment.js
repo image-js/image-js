@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('check moment', function () {
@@ -7,7 +7,7 @@ describe('check moment', function () {
         const image = new Image(8, 2, [
             0b10000011,
             0b10000000,
-        ], {kind: 'BINARY'});
+        ], { kind: 'BINARY' });
 
         image.getMoment().should.equal(4);
         image.getMoment(0, 0).should.equal(4);

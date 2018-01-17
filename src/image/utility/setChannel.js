@@ -1,4 +1,4 @@
-import {validateChannel} from './../../util/channel';
+import { validateChannel } from './../../util/channel';
 
 /**
  * @memberof Image

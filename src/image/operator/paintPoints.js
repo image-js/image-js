@@ -1,5 +1,5 @@
 import Shape from '../../util/Shape';
-import {getColors} from '../../util/color';
+import { getColors } from '../../util/color';
 
 /**
  * Paint pixels on the current image.
@@ -23,7 +23,7 @@ export default function paintPoints(points, options = {}) {
         bitDepth: [8, 16]
     });
 
-    let colors = getColors(Object.assign({}, options, {numberColors: points.length}));
+    let colors = getColors(Object.assign({}, options, { numberColors: points.length }));
 
     let shapePixels = (new Shape(shape)).getPoints();
 

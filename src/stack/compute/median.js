@@ -1,4 +1,4 @@
-import {median as medianFromHistogram} from '../../util/histogram';
+import { median as medianFromHistogram } from '../../util/histogram';
 
 /**
  * @memberof Stack
@@ -12,7 +12,7 @@ export default function median() {
     });
 
 
-    let histograms = this.getHistograms({maxSlots: this[0].maxValue + 1});
+    let histograms = this.getHistograms({ maxSlots: this[0].maxValue + 1 });
     let result = new Array(histograms.length);
     for (let c = 0; c < histograms.length; c++) {
         let histogram = histograms[c];

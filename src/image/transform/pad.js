@@ -25,7 +25,7 @@ export default function pad(options = {}) {
 
     if (algorithm === 'set') {
         if (color.length !== this.channels) {
-            throw new Error('pad: the color array must have the same length as the number of channels. Here: ' + this.channels);
+            throw new Error(`pad: the color array must have the same length as the number of channels. Here: ${this.channels}`);
         }
         for (let i = 0; i < color.length; i++) {
             if (color[i] === 0) {
@@ -44,7 +44,7 @@ export default function pad(options = {}) {
     let newHeight = this.height + size[1] * 2;
     let channels = this.channels;
 
-    let newImage = Image.createFrom(this, {width: newWidth, height: newHeight});
+    let newImage = Image.createFrom(this, { width: newWidth, height: newHeight });
 
     copy(this, newImage, size[0], size[1]);
 

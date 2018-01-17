@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('invert', function () {
@@ -13,7 +13,7 @@ describe('invert', function () {
 
     it('should invert grey of GREY image', function () {
         let image = new Image(2, 2, [1, 2, 3, 4],
-            {kind: 'GREY'});
+            { kind: 'GREY' });
 
         let inverted = [254, 253, 252, 251];
 
@@ -23,7 +23,7 @@ describe('invert', function () {
 
     it('should invert grey 16 bits of GREY image', function () {
         let image = new Image(2, 2, [1, 2, 3, 4],
-            {kind: 'GREY', bitDepth: 16});
+            { kind: 'GREY', bitDepth: 16 });
 
         let inverted = [65534, 65533, 65532, 65531];
 
@@ -36,7 +36,7 @@ describe('invert', function () {
         data[0] = 85;
 
         let image = new Image(2, 4, data,
-            {kind: 'BINARY'});
+            { kind: 'BINARY' });
 
         let inverted = new Uint8Array(1);
         inverted[0] = [170];

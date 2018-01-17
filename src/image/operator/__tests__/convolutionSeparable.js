@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('convolution with separable kernel', () => {
@@ -9,7 +9,7 @@ describe('convolution with separable kernel', () => {
                 1, 1, 1, 1,
                 1, 1, 1, 1
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         const kernel = [[1, 2, 1], [1, 2, 1]];

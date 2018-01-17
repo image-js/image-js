@@ -1,4 +1,4 @@
-import {load} from 'test/common';
+import { load } from 'test/common';
 import mean from '../mean';
 import 'should';
 

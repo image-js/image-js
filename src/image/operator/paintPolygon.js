@@ -17,11 +17,11 @@ function deleteDouble(points) {
 
 function lineBetweenTwoPoints(p1, p2) {
     if (p1[0] === p2[0]) {
-        return {a: 0, b: p1[0], vertical: true}; // we store the x of the vertical line into b
+        return { a: 0, b: p1[0], vertical: true }; // we store the x of the vertical line into b
     } else {
         const coeffA = (p2[1] - p1[1]) / (p2[0] - p1[0]);
         const coeffB = p1[1] - coeffA * p1[0];
-        return {a: coeffA, b: coeffB, vertical: false};
+        return { a: coeffA, b: coeffB, vertical: false };
     }
 }
 

@@ -21,7 +21,7 @@ describe('Calculate mergeRoi from a roiMap', function () {
          '3': { '1': 3, '2': 3, '3': 9 }
          */
 
-        let roiMap = new RoiMap({width: 6, height: 6}, map);
+        let roiMap = new RoiMap({ width: 6, height: 6 }, map);
         let result = roiMap.mergeRoi({
             minCommonBorderLength: 4,
             maxCommonBorderLength: 4
@@ -56,7 +56,7 @@ describe('Calculate mergeRoi from a roiMap', function () {
          '-1': { '1': 3, '-1': 2 }
          */
 
-        let roiMap = new RoiMap({width: 6, height: 6}, map);
+        let roiMap = new RoiMap({ width: 6, height: 6 }, map);
         let result = roiMap.mergeRoi({
             minCommonBorderLength: 3,
             maxCommonBorderLength: 4
@@ -83,7 +83,7 @@ describe('Calculate mergeRoi from a roiMap', function () {
             3, 3, 3, 3, 2, 2
         ];
 
-        let roiMap = new RoiMap({width: 6, height: 6}, map);
+        let roiMap = new RoiMap({ width: 6, height: 6 }, map);
         let result = roiMap.mergeRoi({
             minCommonBorderLength: 2,
             maxCommonBorderLength: 2
@@ -115,7 +115,7 @@ describe('Calculate mergeRoi from a roiMap', function () {
          '3': { '2': 2, '3': 2 } }
          */
 
-        let roiMap = new RoiMap({width: 3, height: 3}, map);
+        let roiMap = new RoiMap({ width: 3, height: 3 }, map);
         let result = roiMap.mergeRoi({
             minCommonBorderRatio: 0.8,
             maxCommonBorderRatio: 1,
@@ -144,7 +144,7 @@ describe('Calculate mergeRoi from a roiMap', function () {
          '3': { '1': 6, '2': 2, '3': 4 }
          */
 
-        let roiMap = new RoiMap({width: 6, height: 4}, map);
+        let roiMap = new RoiMap({ width: 6, height: 4 }, map);
         let result = roiMap.mergeRoi({
             minCommonBorderRatio: 0.7,
             maxCommonBorderRatio: 0.9,

@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 /* Image to test:
@@ -27,9 +27,9 @@ describe('mark a binary image 4 x 4 in 3 zones and create ROIs', function () {
             return a.id - b.id;
         });
 
-        let expected = [{id: -2, meanX: 1.8333333333333333, meanY: 2.6666666666666665, minX: 0, maxX: 3, minY: 2, maxY: 3, surface: 6},
-            {id: -1, meanX: 0.5, meanY: 0, minX: 0, maxX: 1, minY: 0, maxY: 0, surface: 2},
-            {id: 1, meanX: 1.5, meanY: 1, minX: 0, maxX: 3, minY: 0, maxY: 2, surface: 8}];
+        let expected = [{ id: -2, meanX: 1.8333333333333333, meanY: 2.6666666666666665, minX: 0, maxX: 3, minY: 2, maxY: 3, surface: 6 },
+            { id: -1, meanX: 0.5, meanY: 0, minX: 0, maxX: 1, minY: 0, maxY: 0, surface: 2 },
+            { id: 1, meanX: 1.5, meanY: 1, minX: 0, maxX: 3, minY: 0, maxY: 2, surface: 8 }];
 
 
         result.should.have.lengthOf(3);

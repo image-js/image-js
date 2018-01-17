@@ -32,7 +32,7 @@ export default class RoiMap {
                 if (this.data[i] < min) min = this.data[i];
                 if (this.data[i] > max) max = this.data[i];
             }
-            this.computed.minMax = {min, max};
+            this.computed.minMax = { min, max };
         }
         return this.computed.minMax;
     }

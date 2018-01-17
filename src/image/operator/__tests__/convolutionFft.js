@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('check the convolutionFft operator', function () {
@@ -10,7 +10,7 @@ describe('check the convolutionFft operator', function () {
                 1, 2, 2, 1,
                 1, 1, 1, 1
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         Array.from(image.convolutionFft([1, 1, 1, 1, 1, 1, 1, 1, 1]).data).should.eql(

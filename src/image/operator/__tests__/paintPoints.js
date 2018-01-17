@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('we check paintPoints', function () {
@@ -9,11 +9,11 @@ describe('we check paintPoints', function () {
         for (let i = 0; i < data.length; i++) {
             data[i] = i;
         }
-        let image = new Image(size, size, data, {kind: 'RGB'});
+        let image = new Image(size, size, data, { kind: 'RGB' });
 
 
         let points = [[1, 1], [3, 2]];
-        image.paintPoints(points, {color: 'red', shape: {kind: 'smallCross'}});
+        image.paintPoints(points, { color: 'red', shape: { kind: 'smallCross' } });
 
 
         let marked = [

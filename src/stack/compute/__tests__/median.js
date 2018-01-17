@@ -1,4 +1,4 @@
-import {Image, Stack} from 'test/common';
+import { Image, Stack } from 'test/common';
 import 'should';
 
 describe('check stack median method', function () {
@@ -12,7 +12,7 @@ describe('check stack median method', function () {
                     1, 2,
                     100, 101
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -22,7 +22,7 @@ describe('check stack median method', function () {
                     2, 3,
                     200, 201
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -32,7 +32,7 @@ describe('check stack median method', function () {
                     4, 5,
                     200, 240
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 

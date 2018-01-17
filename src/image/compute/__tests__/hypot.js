@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('check hypotenuse', function () {
@@ -8,14 +8,14 @@ describe('check hypotenuse', function () {
             [
                 3, 5, 8, 7, 9
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let image2 = new Image(5, 1,
             [
                 4, 12, 15, 24, 40
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
 

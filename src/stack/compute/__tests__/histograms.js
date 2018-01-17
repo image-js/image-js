@@ -1,4 +1,4 @@
-import {Image, Stack} from 'test/common';
+import { Image, Stack } from 'test/common';
 import 'should';
 
 describe('check stack histograms method', function () {
@@ -12,7 +12,7 @@ describe('check stack histograms method', function () {
                     4, 170,
                     6, 7
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -22,7 +22,7 @@ describe('check stack histograms method', function () {
                     2, 3,
                     4, 5
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -32,11 +32,11 @@ describe('check stack histograms method', function () {
                     1, 255,
                     6, 7
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
-        images.getHistograms({maxSlots: 4}).should.eql([[10, 0, 1, 1]]);
+        images.getHistograms({ maxSlots: 4 }).should.eql([[10, 0, 1, 1]]);
     });
 
 
@@ -71,7 +71,7 @@ describe('check stack histograms method', function () {
             )
         );
 
-        images.getHistograms({maxSlots: 4}).should.eql([
+        images.getHistograms({ maxSlots: 4 }).should.eql([
             [6, 0, 0, 0],
             [6, 0, 0, 0],
             [6, 0, 0, 0]

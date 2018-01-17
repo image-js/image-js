@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('findCorrespondingRoi', function () {
@@ -11,7 +11,7 @@ describe('findCorrespondingRoi', function () {
                 0, 255, 255, 255, 0,
                 0, 0,   0,   0,   0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
 
@@ -23,7 +23,7 @@ describe('findCorrespondingRoi', function () {
                 0,  0,  0,   255, 0,
                 0,  0,  0,   0,   0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
 
@@ -67,7 +67,7 @@ describe('findCorrespondingRoi', function () {
                 0,  0,  0,   255, 0,
                 0,  0,  0,   0,   0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let img2 = new Image(5, 5,
@@ -78,7 +78,7 @@ describe('findCorrespondingRoi', function () {
                 0, 255, 255, 255, 0,
                 0, 0,   0,   0,   0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         img1.width.should.equal(5);
@@ -126,7 +126,7 @@ describe('findCorrespondingRoi', function () {
                 0, 255, 255, 255, 0,
                 0, 0,   0,   0,   0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
 
@@ -138,7 +138,7 @@ describe('findCorrespondingRoi', function () {
                 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
 
@@ -182,7 +182,7 @@ describe('findCorrespondingRoi', function () {
                 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
 
@@ -194,7 +194,7 @@ describe('findCorrespondingRoi', function () {
                 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
 

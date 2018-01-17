@@ -1,5 +1,5 @@
 import * as Kind from './kindNames';
-import {RGB, CMYK, GREY} from './model/model';
+import { RGB, CMYK, GREY } from './model/model';
 
 const kinds = {};
 
@@ -81,7 +81,7 @@ export function createPixelArray(image) {
             arr = new Float32Array(length);
             break;
         default:
-            throw new Error('Cannot create pixel array for bit depth ' + image.bitDepth);
+            throw new Error(`Cannot create pixel array for bit depth ${image.bitDepth}`);
     }
 
     // alpha channel is 100% by default

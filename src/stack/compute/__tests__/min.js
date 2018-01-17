@@ -1,4 +1,4 @@
-import {Image, Stack} from 'test/common';
+import { Image, Stack } from 'test/common';
 import 'should';
 
 describe('check stack min method', function () {
@@ -12,7 +12,7 @@ describe('check stack min method', function () {
                     4, 5,
                     6, 7
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -22,7 +22,7 @@ describe('check stack min method', function () {
                     2, 3,
                     4, 5
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 
@@ -32,7 +32,7 @@ describe('check stack min method', function () {
                     1, 5,
                     6, 7
                 ],
-                {kind: 'GREY'}
+                { kind: 'GREY' }
             )
         );
 

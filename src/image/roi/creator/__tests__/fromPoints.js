@@ -1,14 +1,14 @@
 import fromPoints from '../fromPoints';
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('we check createROIMapFromPixels', function () {
     it('should yield the right map', function () {
-        let image = new Image(5, 5, {kind: 'GREY'});
+        let image = new Image(5, 5, { kind: 'GREY' });
 
         let pixels = [[1, 1], [3, 2], [4, 4], [5, 0]];
 
-        let mapData = fromPoints.call(image, pixels, {kind: 'smallCross'}).data;
+        let mapData = fromPoints.call(image, pixels, { kind: 'smallCross' }).data;
 
         Array.from(mapData).should.eql([
             0, 1, 0, 0, 4,

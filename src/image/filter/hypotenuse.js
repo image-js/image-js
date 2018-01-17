@@ -1,4 +1,4 @@
-import {validateArrayOfChannels} from '../../util/channel';
+import { validateArrayOfChannels } from '../../util/channel';
 import Image from '../Image';
 
 /**
@@ -12,7 +12,7 @@ import Image from '../Image';
  * @return {Image}
  */
 export default function hypotenuse(otherImage, options = {}) {
-    let {bitDepth = this.bitDepth, channels} = options;
+    let { bitDepth = this.bitDepth, channels } = options;
     this.checkProcessable('hypotenuse', {
         bitDepth: [8, 16, 32]
     });
@@ -26,9 +26,9 @@ export default function hypotenuse(otherImage, options = {}) {
         throw new Error('hypotenuse: both images must have the same number of channels');
     }
 
-    let newImage = Image.createFrom(this, {bitDepth: bitDepth});
+    let newImage = Image.createFrom(this, { bitDepth: bitDepth });
 
-    channels = validateArrayOfChannels(this, {channels: channels});
+    channels = validateArrayOfChannels(this, { channels: channels });
 
     let clamped = newImage.isClamped;
 

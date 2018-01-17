@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('add', function () {
@@ -56,7 +56,7 @@ describe('subtract image', function () {
                 0, 0, 255, 0, 255,
                 0, 0, 255, 0, 255
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let image2 = new Image(5, 5,
@@ -67,7 +67,7 @@ describe('subtract image', function () {
                 255, 0, 0, 0, 255,
                 255, 0, 0, 0, 255
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         Array.from(image.subtractImage(image2).data).should.eql(
@@ -90,7 +90,7 @@ describe('subtract image', function () {
                 0, 0, 255, 0, 255,
                 0, 0, 255, 0, 255
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let image2 = new Image(5, 5,
@@ -101,10 +101,10 @@ describe('subtract image', function () {
                 255, 0, 0, 0, 255,
                 255, 0, 0, 0, 255
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
-        Array.from(image.subtractImage(image2, {absolute: true}).data).should.eql(
+        Array.from(image.subtractImage(image2, { absolute: true }).data).should.eql(
             [
                 255, 0, 255, 0, 0,
                 255, 0, 255, 0, 0,

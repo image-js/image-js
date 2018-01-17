@@ -1,5 +1,5 @@
 import fromWaterShed from '../fromWaterShed';
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('Test WaterShed Roi generation', function () {
@@ -12,7 +12,7 @@ describe('Test WaterShed Roi generation', function () {
                 3, 2, 2, 2, 3,
                 3, 3, 3, 3, 3
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
         let map = fromWaterShed.call(image);
         Array.from(map.data).should.eql(
@@ -36,9 +36,9 @@ describe('Test WaterShed Roi generation', function () {
                 1, 1, 1, 1, 1
 
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
-        let mask = new Image(5, 5, {kind: 'BINARY'});
+        let mask = new Image(5, 5, { kind: 'BINARY' });
         for (let i = 0; i < 5; i++) {
             for (let j = 0; j < 5; j++) {
                 mask.setBitXY(i, j);
@@ -75,15 +75,15 @@ describe('Test WaterShed Roi generation', function () {
                 4, 4, 4, 4, 3, 3, 3, 3, 2, 3
 
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
-        let mask = new Image(10, 10, {kind: 'BINARY'});
+        let mask = new Image(10, 10, { kind: 'BINARY' });
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
                 mask.clearBitXY(i, j);
             }
         }
-        let map = fromWaterShed.call(image, {fillMaxValue: 2, mask: mask});
+        let map = fromWaterShed.call(image, { fillMaxValue: 2, mask: mask });
         Array.from(map.data).should.eql(
             [
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -116,10 +116,10 @@ describe('Test WaterShed Roi generation', function () {
                 4, 4, 4, 4, 3, 3, 3, 3, 2, 3
 
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
-        let mask = new Image(10, 10, {kind: 'BINARY'});
+        let mask = new Image(10, 10, { kind: 'BINARY' });
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
                 if (image.data[i + j * 10] !== 4) {
@@ -130,7 +130,7 @@ describe('Test WaterShed Roi generation', function () {
             }
         }
 
-        let map = fromWaterShed.call(image, {mask: mask});
+        let map = fromWaterShed.call(image, { mask: mask });
         Array.from(map.data).should.eql(
             [
                 1, 1, 1, 1, 1, 1, 2, 2, 2, 2,

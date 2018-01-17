@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('check the rotate transform with free rotation', function () {
@@ -11,7 +11,7 @@ describe('check the rotate transform with free rotation', function () {
                 0, 1, 2, 4, 3,
                 0, 1, 2, 3, 3
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let result = image.rotate(45);

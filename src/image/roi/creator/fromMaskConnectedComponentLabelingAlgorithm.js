@@ -41,7 +41,7 @@ export default function fromMaskConnectedComponentLabelingAlgorithm(mask, option
         directionY = direction4Y;
         neighboursList = neighbours4;
     } else {
-        throw new RangeError('unsupported neighbours count: ' + neighbours);
+        throw new RangeError(`unsupported neighbours count: ${neighbours}`);
     }
 
     const size = mask.size;

@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('check the gaussian filter', function () {
@@ -13,7 +13,7 @@ describe('check the gaussian filter', function () {
                 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let sobel = image.sobelFilter();
@@ -42,10 +42,10 @@ describe('check the gaussian filter', function () {
                 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
-        let sobel = image.sobelFilter({bitDepth: 16});
+        let sobel = image.sobelFilter({ bitDepth: 16 });
 
         Array.from(sobel.data).should.eql(
             [

@@ -1,4 +1,4 @@
-import {directConvolution} from 'ml-convolution';
+import { directConvolution } from 'ml-convolution';
 
 export default function convolutionSeparable(data, separatedKernel, width, height) {
     const result = new Array(data.length);

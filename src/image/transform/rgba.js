@@ -1,5 +1,5 @@
 import Image from '../Image';
-import {RGB} from '../model/model';
+import { RGB } from '../model/model';
 
 /**
  * Make a copy of the current image and convert to RGBA

@@ -1,6 +1,6 @@
 import Image from '../../Image';
-import {methods} from './maskAlgorithms';
-import {getThreshold} from '../../../util/converter';
+import { methods } from './maskAlgorithms';
+import { getThreshold } from '../../../util/converter';
 
 /**
  * Creation of binary mask is based on the determination of a threshold
@@ -35,7 +35,7 @@ export default function mask(options = {}) {
             let histogram = this.getHistogram();
             threshold = method(histogram, this.size);
         } else {
-            throw new Error('mask transform unknown algorithm: ' + algorithm);
+            throw new Error(`mask transform unknown algorithm: ${algorithm}`);
         }
     }
 

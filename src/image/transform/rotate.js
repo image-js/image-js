@@ -39,7 +39,7 @@ export function rotate(angle, options) {
  * @return {Image} The new rotated image
  */
 export function rotateLeft() {
-    const newImage = Image.createFrom(this, {width: this.height, height: this.width});
+    const newImage = Image.createFrom(this, { width: this.height, height: this.width });
     const newMaxHeight = newImage.height - 1;
     for (let i = 0; i < this.height; i++) {
         for (let j = 0; j < this.width; j++) {
@@ -59,7 +59,7 @@ export function rotateLeft() {
  */
 
 export function rotateRight() {
-    const newImage = Image.createFrom(this, {width: this.height, height: this.width});
+    const newImage = Image.createFrom(this, { width: this.height, height: this.width });
     const newMaxWidth = newImage.width - 1;
     for (let i = 0; i < this.height; i++) {
         for (let j = 0; j < this.width; j++) {

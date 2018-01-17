@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('flipX', function () {
@@ -33,7 +33,7 @@ describe('flipX', function () {
 
     it('should flip pixels horizontally of GREY image', function () {
 
-        let image = new Image(2, 2, [1, 2, 3, 4], {kind: 'GREY'});
+        let image = new Image(2, 2, [1, 2, 3, 4], { kind: 'GREY' });
 
         let flipped = [2, 1, 4, 3];
         image.flipX();
@@ -42,7 +42,7 @@ describe('flipX', function () {
 
     it('should flip pixels horizontally of all CMYK components for a [2,2] image', function () {
 
-        let image = new Image(2, 2, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], {kind: 'CMYK'});
+        let image = new Image(2, 2, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], { kind: 'CMYK' });
 
         let flipped = [5, 6, 7, 8, 1, 2, 3, 4, 13, 14, 15, 16, 9, 10, 11, 12];
 

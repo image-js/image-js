@@ -1,4 +1,4 @@
-import {Image, load, getHash} from 'test/common';
+import { Image, load, getHash } from 'test/common';
 import 'should';
 
 describe('we check we can extract a part of B/W image', function () {
@@ -30,7 +30,7 @@ describe('we check we can extract a part of B/W image', function () {
                 0b00011000,
                 0b00011000
             ],
-            {kind: 'BINARY'}
+            { kind: 'BINARY' }
         );
 
         let mask = new Image(4, 4,
@@ -65,7 +65,7 @@ describe('we check we can extract a part of B/W image', function () {
                 0b00011000,
                 0b11111111
             ],
-            {kind: 'BINARY'}
+            { kind: 'BINARY' }
         );
 
         let mask = new Image(4, 2,

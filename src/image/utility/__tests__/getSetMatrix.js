@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('check getMatrix class', function () {
@@ -10,7 +10,7 @@ describe('check getMatrix class', function () {
                 0, 1, 2, 2, 2,
                 0, 1, 3, 3, 3
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let matrix = image.getMatrix();
@@ -19,7 +19,7 @@ describe('check getMatrix class', function () {
         matrix.rows.should.equal(4);
         matrix[2].should.eql([0, 1, 2, 2, 2]);
 
-        let image2 = new Image(5, 4, {kind: 'GREY'});
+        let image2 = new Image(5, 4, { kind: 'GREY' });
         image2.setMatrix(matrix);
 
         image.data.should.eql(Array.from(image2.data));

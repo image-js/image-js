@@ -17,7 +17,7 @@ export default function fromMaxima(options = {}) {
     } = options;
 
     let image = this;
-    image.checkProcessable('fromMaxima', {components: [1]});
+    image.checkProcessable('fromMaxima', { components: [1] });
 
 
     const PROCESS_TOP = 1;
@@ -47,7 +47,7 @@ export default function fromMaxima(options = {}) {
     let fromTop = 0;
     let toTop = 0;
 
-    appendMaxima(image, {maxima: !invert});
+    appendMaxima(image, { maxima: !invert });
 
     while (from < to) {
         let currentX = xToProcess[from & MAX_ARRAY];
@@ -62,7 +62,7 @@ export default function fromMaxima(options = {}) {
     // we will look for the maxima (or minima) that is present in the picture
     // a maxima is a point that is surrounded by lower values
     // should deal with allowCorner and invert
-    function appendMaxima({maxima = true}) {
+    function appendMaxima({ maxima = true }) {
         for (let y = 1; y < image.height - 1; y++) {
             for (let x = 1; x < image.width - 1; x++) {
                 let index = x + y * image.width;

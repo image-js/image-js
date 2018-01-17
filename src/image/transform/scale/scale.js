@@ -1,7 +1,7 @@
 import Image from '../../Image';
 
 import nearestNeighbor from './nearestNeighbor';
-import {factorDimensions} from '../../../util/converter';
+import { factorDimensions } from '../../../util/converter';
 
 /**
  * Rescale an image
@@ -40,7 +40,7 @@ export default function scale(options = {}) {
         }
     }
 
-    ({width, height} = factorDimensions(factor, width, height));
+    ({ width, height } = factorDimensions(factor, width, height));
 
     if (width === this.width && height === this.height) {
         const newImage = this.clone();
@@ -50,7 +50,7 @@ export default function scale(options = {}) {
 
     let shiftX = Math.round((this.width - width) / 2);
     let shiftY = Math.round((this.height - height) / 2);
-    const newImage = Image.createFrom(this, {width, height, position: [shiftX, shiftY]});
+    const newImage = Image.createFrom(this, { width, height, position: [shiftX, shiftY] });
 
     switch (algorithm.toLowerCase()) {
         case 'nearestneighbor':
@@ -58,7 +58,7 @@ export default function scale(options = {}) {
             nearestNeighbor.call(this, newImage, width, height);
             break;
         default:
-            throw new Error('Unsupported scale algorithm: ' + algorithm);
+            throw new Error(`Unsupported scale algorithm: ${algorithm}`);
     }
 
     return newImage;

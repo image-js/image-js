@@ -1,4 +1,4 @@
-import {Image, Stack, getSquare, getImage} from 'test/common';
+import { Image, Stack, getSquare, getImage } from 'test/common';
 import 'should';
 
 describe('Core methods of Stack objects', function () {

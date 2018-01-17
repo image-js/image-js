@@ -1,4 +1,4 @@
-import {laplacianOfGaussian} from '../laplacianOfGaussian';
+import { laplacianOfGaussian } from '../laplacianOfGaussian';
 import 'should';
 
 describe('we check Shape class', function () {

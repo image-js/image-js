@@ -1,5 +1,5 @@
-import {RGB} from '../model/model';
-import {css2array} from '../../util/color';
+import { RGB } from '../model/model';
+import { css2array } from '../../util/color';
 
 /**
  * Paint a mask or masks on the current image.
@@ -61,7 +61,7 @@ export default function paintLabels(labels, positions, options = {}) {
     if (!Array.isArray(font)) font = [font];
     if (!Array.isArray(rotate)) rotate = [rotate];
 
-    let canvas = this.getCanvas({originalData: true});
+    let canvas = this.getCanvas({ originalData: true });
     let ctx = canvas.getContext('2d');
     for (let i = 0; i < labels.length; i++) {
         ctx.save();

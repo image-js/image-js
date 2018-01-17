@@ -5,7 +5,7 @@
 // http://graphics.cs.cmu.edu/courses/15-463/2011_fall/Lectures/morphing.pdf
 
 import Image from '../Image';
-import {Matrix, inverse, SingularValueDecomposition} from 'ml-matrix';
+import { Matrix, inverse, SingularValueDecomposition } from 'ml-matrix';
 
 function order4Points(pts) {
     let tl = 0;
@@ -160,7 +160,7 @@ export default function warpingFourPoints(pts, options = {}) {
     } = options;
 
     if (pts.length !== 4) {
-        throw new Error('The array pts must have four elements, which are the four corners. Currently, pts have ' + pts.length + ' elements');
+        throw new Error(`The array pts must have four elements, which are the four corners. Currently, pts have ${pts.length} elements`);
     }
 
     let [pt1, pt2, pt3, pt4] = pts;
@@ -175,7 +175,7 @@ export default function warpingFourPoints(pts, options = {}) {
         widthRect = Math.ceil(Math.max(distance2Points(tl, tr), distance2Points(bl, br)));
         heightRect = Math.ceil(Math.max(distance2Points(tl, bl), distance2Points(tr, br)));
     }
-    let newImage = Image.createFrom(this, {width: widthRect, height: heightRect});
+    let newImage = Image.createFrom(this, { width: widthRect, height: heightRect });
 
     let [X1, Y1] = tl;
     let [X2, Y2] = tr;
@@ -209,7 +209,7 @@ export default function warpingFourPoints(pts, options = {}) {
                 Xt.set(i, j, projectionPoint(i, j, a, b, c, d, e, f, g, h, this, channel));
             }
         }
-        newImage.setMatrix(Xt, {channel: channel});
+        newImage.setMatrix(Xt, { channel: channel });
     }
 
     return newImage;

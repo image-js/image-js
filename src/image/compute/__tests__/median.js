@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('check median', function () {
@@ -10,7 +10,7 @@ describe('check median', function () {
                 2, 2, 2, 2,
                 3, 3, 3, 3
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         image.median.should.eql([2]);
@@ -24,7 +24,7 @@ describe('check median', function () {
                 2, 2, 2,
                 3, 3, 3
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         image.median.should.eql([2]);

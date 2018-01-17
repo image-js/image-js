@@ -1,4 +1,4 @@
-import {Image, load, getImage} from 'test/common';
+import { Image, load, getImage } from 'test/common';
 import * as fs from 'fs';
 import 'should';
 
@@ -17,7 +17,7 @@ describe('Load PNG', function () {
 
     tests.forEach(function (test) {
         it(`should load from path ${test[0]}`, function () {
-            return load('format/' + test[0] + '.png').then(function (img) {
+            return load(`format/${test[0]}.png`).then(function (img) {
                 img.components.should.equal(test[1]);
                 img.alpha.should.equal(test[2]);
                 img.bitDepth.should.equal(test[3]);

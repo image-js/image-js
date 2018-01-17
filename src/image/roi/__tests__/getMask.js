@@ -1,14 +1,14 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('Roi#getMask', function () {
     it('should yield the right mask', function () {
-        let image = new Image(5, 5, {kind: 'GREY'});
+        let image = new Image(5, 5, { kind: 'GREY' });
 
         let points = [[1, 1], [3, 2], [4, 4], [5, 0]];
 
         let roiManager = image.getRoiManager();
-        roiManager.fromPoints(points, {kind: 'smallCross'});
+        roiManager.fromPoints(points, { kind: 'smallCross' });
 
         Array.from(roiManager.getData()).should.eql([
             0, 1, 0, 0, 4,
@@ -18,7 +18,7 @@ describe('Roi#getMask', function () {
             0, 0, 0, 3, 3
         ]);
 
-        let mask = roiManager.getMask({minSurface: 5, maxSurface: 5});
+        let mask = roiManager.getMask({ minSurface: 5, maxSurface: 5 });
 
         // only 2 Roi will be selected !
 
@@ -40,15 +40,15 @@ describe('Roi#getMask', function () {
             0, 1, 1, 1, 0,
             0, 0, 0, 0, 0
         ];
-        let image = new Image(5, 5, data, {kind: 'GREY'});
+        let image = new Image(5, 5, data, { kind: 'GREY' });
 
-        let mask = image.mask({threshold: 1, algorithm: 'threshold'});
+        let mask = image.mask({ threshold: 1, algorithm: 'threshold' });
 
         Array.from(mask.data).should.eql([3, 156, 224, 0]);
 
 
         let roiManager = image.getRoiManager();
-        roiManager.fromMask(mask, {positive: true, negative: false});
+        roiManager.fromMask(mask, { positive: true, negative: false });
 
         let rois = roiManager.getRois().sort((a, b) => a.surface - b.surface);
         rois[0].surface.should.equal(9);
@@ -61,16 +61,16 @@ describe('Roi#getMask', function () {
         (rois[0].getMask().parent.parent.parent === null).should.be.true();  // no parent to grey image
 
 
-        let roi0Mask = rois[0].getMask({scale: 0.34});
+        let roi0Mask = rois[0].getMask({ scale: 0.34 });
         roi0Mask.position.should.eql([2, 2]);
         roi0Mask.parent.size.should.equal(25); // the mask image
         roi0Mask.parent.parent.size.should.equal(25); // the grey image
         (roi0Mask.parent.parent.parent === null).should.be.true();  // no parent to grey image
 
-        let roi1Mask = rois[1].getMask({scale: 0.2});
+        let roi1Mask = rois[1].getMask({ scale: 0.2 });
         roi1Mask.position.should.eql([2, 2]);
 
-        let painted = roiManager.paint({color: 'red', scale: 0.34, positive: true, negative: false});
+        let painted = roiManager.paint({ color: 'red', scale: 0.34, positive: true, negative: false });
         Array.from(painted.getChannel(0).data).should.eql(
             [
                 0, 0, 0, 0, 0,
@@ -91,11 +91,11 @@ describe('Roi#getMask', function () {
             0, 1, 1, 1, 1, 1,
             0, 0, 0, 0, 0, 0
         ];
-        let image = new Image(6, 6, data, {kind: 'GREY'});
+        let image = new Image(6, 6, data, { kind: 'GREY' });
 
-        let mask = image.mask({threshold: 1, algorithm: 'threshold'});
+        let mask = image.mask({ threshold: 1, algorithm: 'threshold' });
         let roiManager = image.getRoiManager();
-        roiManager.fromMask(mask, {positive: true, negative: false});
+        roiManager.fromMask(mask, { positive: true, negative: false });
         const rois = roiManager.getRois();
         rois.length.should.equal(2);
 

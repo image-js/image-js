@@ -1,20 +1,20 @@
-import {canvasToBlob} from 'blob-util';
+import { canvasToBlob } from 'blob-util';
 import extendObject from 'extend';
-import {encode as encodeBmp} from 'fast-bmp';
-import {encode as encodePng} from 'fast-png';
+import { encode as encodeBmp } from 'fast-bmp';
+import { encode as encodePng } from 'fast-png';
 import hasOwn from 'has-own';
 
-import {getKind, createPixelArray, getTheoreticalPixelArraySize} from './kind';
-import {RGBA} from './kindNames';
-import {ImageData, createCanvas, createWriteStream, writeFile} from './environment';
+import { getKind, createPixelArray, getTheoreticalPixelArraySize } from './kind';
+import { RGBA } from './kindNames';
+import { ImageData, createCanvas, createWriteStream, writeFile } from './environment';
 import extend from './extend';
 import bitMethods from './bitMethods';
-import {RGB} from './model/model';
+import { RGB } from './model/model';
 import RoiManager from './roi/manager';
-import {getType, canWrite} from './mediaTypes';
-import {loadImage} from './load';
+import { getType, canWrite } from './mediaTypes';
+import { loadImage } from './load';
 import Stack from '../stack/Stack';
-import {toBase64URL} from '../util/base64';
+import { toBase64URL } from '../util/base64';
 
 let computedPropertyDescriptor = {
     configurable: true,
@@ -247,7 +247,7 @@ export default class Image {
         if (typeof options.kind === 'string') {
             theKind = getKind(options.kind);
             if (!theKind) {
-                throw new RangeError('invalid image kind: ' + options.kind);
+                throw new RangeError(`invalid image kind: ${options.kind}`);
             }
         } else {
             theKind = getKind(RGBA);
@@ -427,7 +427,7 @@ export default class Image {
         if (operation === 'write') {
             return canWrite(type);
         } else {
-            throw new TypeError('unknown operation: ' + operation);
+            throw new TypeError(`unknown operation: ${operation}`);
         }
     }
 
@@ -610,7 +610,7 @@ export default class Image {
      * @return {Promise}
      */
     toBlob(type = 'image/png', quality = 0.8) {
-        return canvasToBlob(this.getCanvas({originalData: true}), type, quality);
+        return canvasToBlob(this.getCanvas({ originalData: true }), type, quality);
     }
 
     /**
@@ -620,7 +620,7 @@ export default class Image {
      * @return {Canvas}
      */
     getCanvas(options = {}) {
-        let {originalData = false} = options;
+        let { originalData = false } = options;
         let data;
         if (!originalData) {
             data = new ImageData(this.getRGBAData(), this.width, this.height);
@@ -670,7 +670,7 @@ export default class Image {
                     newData[i * 4 + 2] = this.data[i * this.channels] >>> (this.bitDepth - 8);
                 }
             } else if (this.components === 3) {
-                this.checkProcessable('getRGBAData', {colorModel: [RGB]});
+                this.checkProcessable('getRGBAData', { colorModel: [RGB] });
                 if (this.colorModel === RGB) {
                     for (let i = 0; i < size; i++) {
                         newData[i * 4] = this.data[i * this.channels] >>> (this.bitDepth - 8);
@@ -681,7 +681,7 @@ export default class Image {
             }
         }
         if (this.alpha) {
-            this.checkProcessable('getRGBAData', {bitDepth: [8, 16]});
+            this.checkProcessable('getRGBAData', { bitDepth: [8, 16] });
             for (let i = 0; i < size; i++) {
                 newData[i * 4 + 3] = this.data[i * this.channels + this.components] >> (this.bitDepth - 8);
             }
@@ -714,7 +714,7 @@ export default class Image {
      * var emptyImage = image.clone({copyData:false});
      */
     clone(options = {}) {
-        const {copyData = true} = options;
+        const { copyData = true } = options;
         return new Image(this, copyData);
     }
 
@@ -752,7 +752,7 @@ export default class Image {
                     buffer = encodeBmp(this, encoderOptions);
                     break;
                 default:
-                    throw new RangeError('invalid output format: ' + format);
+                    throw new RangeError(`invalid output format: ${format}`);
             }
             if (stream) {
                 let out = createWriteStream(path);
@@ -760,7 +760,7 @@ export default class Image {
                 out.on('error', reject);
                 stream.pipe(out);
             } else if (buffer) {
-                writeFile(path, Buffer.from(buffer), err => {
+                writeFile(path, Buffer.from(buffer), (err) => {
                     if (err) {
                         reject(err);
                         return;
@@ -774,7 +774,7 @@ export default class Image {
 
     // this method check if a process can be applied on the current image
     checkProcessable(processName, options = {}) {
-        let {bitDepth, alpha, colorModel, components, channels} = options;
+        let { bitDepth, alpha, colorModel, components, channels } = options;
         if (typeof processName !== 'string') {
             throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
         }
@@ -783,7 +783,7 @@ export default class Image {
                 bitDepth = [bitDepth];
             }
             if (!bitDepth.includes(this.bitDepth)) {
-                throw new TypeError('The process: ' + processName + ' can only be applied if bit depth is in: ' + bitDepth);
+                throw new TypeError(`The process: ${processName} can only be applied if bit depth is in: ${bitDepth}`);
             }
         }
         if (alpha) {
@@ -791,7 +791,7 @@ export default class Image {
                 alpha = [alpha];
             }
             if (!alpha.includes(this.alpha)) {
-                throw new TypeError('The process: ' + processName + ' can only be applied if alpha is in: ' + alpha);
+                throw new TypeError(`The process: ${processName} can only be applied if alpha is in: ${alpha}`);
             }
         }
         if (colorModel) {
@@ -799,7 +799,7 @@ export default class Image {
                 colorModel = [colorModel];
             }
             if (!colorModel.includes(this.colorModel)) {
-                throw new TypeError('The process: ' + processName + ' can only be applied if color model is in: ' + colorModel);
+                throw new TypeError(`The process: ${processName} can only be applied if color model is in: ${colorModel}`);
             }
         }
         if (components) {
@@ -809,7 +809,7 @@ export default class Image {
             if (!components.includes(this.components)) {
                 let errorMessage = `The process: ${processName} can only be applied if the number of components is in: ${components}`;
                 if (components.length === 1 && components[0] === 1) {
-                    throw new TypeError(errorMessage + '.\rYou should transform your image using "image.grey()" before applying the algorithm.');
+                    throw new TypeError(`${errorMessage}.\rYou should transform your image using "image.grey()" before applying the algorithm.`);
                 } else {
                     throw new TypeError(errorMessage);
                 }
@@ -820,7 +820,7 @@ export default class Image {
                 channels = [channels];
             }
             if (!channels.includes(this.channels)) {
-                throw new TypeError('The process: ' + processName + ' can only be applied if the number of channels is in: ' + channels);
+                throw new TypeError(`The process: ${processName} can only be applied if the number of channels is in: ${channels}`);
             }
         }
     }

@@ -11,7 +11,7 @@ export default function rotateFree(degrees, options = {}) {
     const radians = (degrees * Math.PI) / 180;
     const newWidth = Math.floor(Math.abs(width * Math.cos(radians)) + Math.abs(height * Math.sin(radians)));
     const newHeight = Math.floor(Math.abs(height * Math.cos(radians)) + Math.abs(width * Math.sin(radians)));
-    const newImageRotated = Image.createFrom(this, {width: newWidth, height: newHeight});
+    const newImageRotated = Image.createFrom(this, { width: newWidth, height: newHeight });
     const cos = Math.cos(-radians);
     const sin = Math.sin(-radians);
 

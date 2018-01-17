@@ -1,4 +1,4 @@
-import {load, getHash} from 'test/common';
+import { load, getHash } from 'test/common';
 import 'should';
 
 describe('Scale - nearest neighbor', function () {

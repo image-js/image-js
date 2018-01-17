@@ -11,7 +11,7 @@ import Image from '../Image';
  * @return {Image} A new image
  */
 export default function extract(mask, options = {}) {
-    let {position} = options;
+    let { position } = options;
     this.checkProcessable('extract', {
         bitDepth: [1, 8, 16]
     });

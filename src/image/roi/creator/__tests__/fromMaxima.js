@@ -1,5 +1,5 @@
 import fromMaxima from '../fromMaxima';
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('we check fromMaxima only looking for top', function () {
@@ -12,11 +12,11 @@ describe('we check fromMaxima only looking for top', function () {
                 0, 1, 4, 4, 3,
                 0, 1, 2, 3, 3
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let data = fromMaxima.call(image,
-            {onlyTop: true}
+            { onlyTop: true }
         ).data;
 
         Array.from(data).should.eql([
@@ -37,11 +37,11 @@ describe('we check fromMaxima only looking for top', function () {
                 0, 1, 4, 4, 3,
                 0, 1, 2, 3, 5
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let data = fromMaxima.call(image,
-            {onlyTop: true}
+            { onlyTop: true }
         ).data;
 
         Array.from(data).should.eql([
@@ -62,11 +62,11 @@ describe('we check fromMaxima only looking for top', function () {
                 0, 1, 4, 4, 3,
                 0, 1, 2, 3, 3
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let data = fromMaxima.call(image,
-            {onlyTop: true}
+            { onlyTop: true }
         ).data;
 
         Array.from(data).should.eql([
@@ -88,11 +88,11 @@ describe('we check fromMaxima only looking for top', function () {
                 0, 1, 0, 2, 2,
                 0, 0, 0, 2, 2
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let data = fromMaxima.call(image,
-            {onlyTop: true}
+            { onlyTop: true }
         ).data;
 
         Array.from(data).should.eql([
@@ -116,7 +116,7 @@ describe('we check fromMaxima only looking for maxima', function () {
                 0, 1, 4, 4, 3,
                 0, 1, 2, 3, 3
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let data = fromMaxima.call(image,
@@ -141,7 +141,7 @@ describe('we check fromMaxima only looking for maxima', function () {
                 0, 0, 4, 4, 3,
                 0, 0, 2, 3, 3
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let data = fromMaxima.call(image).data;
@@ -164,7 +164,7 @@ describe('we check fromMaxima only looking for maxima', function () {
                 0, 0, 4, 4, 0,
                 0, 0, 0, 0, 0
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         let data = fromMaxima.call(image).data;

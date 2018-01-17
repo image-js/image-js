@@ -1,5 +1,5 @@
 import Image from './Image';
-import {env} from './environment';
+import { env } from './environment';
 
 let types = new Map();
 let image;
@@ -32,7 +32,7 @@ class MediaType {
 
     canWrite() {
         if (this._canWrite === null) {
-            this._canWrite = image.toDataURL(this.type).startsWith('data:' + this.type);
+            this._canWrite = image.toDataURL(this.type).startsWith(`data:${this.type}`);
         }
         return this._canWrite;
     }
@@ -40,7 +40,7 @@ class MediaType {
 
 export function getType(type) {
     if (!type.includes('/')) {
-        type = 'image/' + type;
+        type = `image/${type}`;
     }
     return type;
 }

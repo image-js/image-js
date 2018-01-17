@@ -1,5 +1,5 @@
 import fromMask from '../fromMask';
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('we check fromMask', function () {
@@ -15,7 +15,7 @@ describe('we check fromMask', function () {
      |      |
      */
 
-    let mask = new Image(6, 6, {kind: 'BINARY'});
+    let mask = new Image(6, 6, { kind: 'BINARY' });
     mask.setBitXY(1, 0);
     mask.setBitXY(3, 0);
     mask.setBitXY(3, 1);
@@ -45,7 +45,7 @@ describe('we check fromMask', function () {
     });
 
     it('should yield the right map with 8 neighbours', function () {
-        let mapData = fromMask(mask, {allowCorners: true}).data;
+        let mapData = fromMask(mask, { allowCorners: true }).data;
 
         const expected = [
             -1,  1, -1,  1, -1,  1,
@@ -61,7 +61,7 @@ describe('we check fromMask', function () {
 
     it('should fail when there are too many separate ROIs', () => {
         const size = 513;
-        let mask = new Image(size, size, {kind: 'BINARY'});
+        let mask = new Image(size, size, { kind: 'BINARY' });
         let pos = true;
         for (let i = 0; i < size; i++) {
             for (let j = 0; j < size; j++) {

@@ -12,7 +12,7 @@ import isInteger from 'is-integer';
  * @return {number[]}
  */
 export function getHistogram(options = {}) {
-    let {maxSlots = 256, channel, useAlpha = true} = options;
+    let { maxSlots = 256, channel, useAlpha = true } = options;
     this.checkProcessable('getHistogram', {
         bitDepth: [1, 8, 16]
     });
@@ -22,7 +22,7 @@ export function getHistogram(options = {}) {
         }
         channel = 0;
     }
-    return getChannelHistogram.call(this, channel, {useAlpha, maxSlots});
+    return getChannelHistogram.call(this, channel, { useAlpha, maxSlots });
 }
 
 /**
@@ -45,20 +45,20 @@ export function getHistogram(options = {}) {
  *      });
  */
 export function getHistograms(options = {}) {
-    const {maxSlots = 256, useAlpha = true} = options;
+    const { maxSlots = 256, useAlpha = true } = options;
     this.checkProcessable('getHistograms', {
         bitDepth: [8, 16]
     });
     let results = new Array((useAlpha) ? this.components : this.channels);
     for (let i = 0; i < results.length; i++) {
-        results[i] = getChannelHistogram.call(this, i, {useAlpha, maxSlots});
+        results[i] = getChannelHistogram.call(this, i, { useAlpha, maxSlots });
     }
     return results;
 }
 
 
 function getChannelHistogram(channel, options) {
-    let {useAlpha, maxSlots} = options;
+    let { useAlpha, maxSlots } = options;
 
     //for a mask, return a number array containing count of black and white points (black = array[0], white = array[1])
 

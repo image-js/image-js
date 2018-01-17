@@ -1,11 +1,11 @@
 import Image from './Image';
 import Stack from '../stack/Stack';
-import {fetchBinary, DOMImage, createCanvas} from './environment';
-import {decode as decodePng} from 'fast-png';
-import {decode as decodeJpeg} from 'fast-jpeg';
-import {decode as decodeTiff} from 'tiff';
+import { fetchBinary, DOMImage, createCanvas } from './environment';
+import { decode as decodePng } from 'fast-png';
+import { decode as decodeJpeg } from 'fast-jpeg';
+import { decode as decodeTiff } from 'tiff';
 import imageType from 'image-type';
-import {decode as base64Decode, toBase64URL} from '../util/base64';
+import { decode as base64Decode, toBase64URL } from '../util/base64';
 
 const isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
 
@@ -33,7 +33,7 @@ function loadBinary(image, base64Url) {
                 if (decoded.exif) {
                     meta = getMetadata(decoded.exif);
                 }
-                return loadGeneric(getBase64('image/jpeg'), {meta});
+                return loadGeneric(getBase64('image/jpeg'), { meta });
             }
             case 'image/tiff':
                 return loadTIFF(image);
@@ -84,7 +84,7 @@ function loadPNG(data) {
         default: throw new Error(`Unexpected colourType: ${type}`);
     }
 
-    return new Image(png.width, png.height, bitmap, {components, alpha, bitDepth});
+    return new Image(png.width, png.height, bitmap, { components, alpha, bitDepth });
 }
 
 function loadTIFF(data) {
@@ -133,7 +133,7 @@ function loadGeneric(url, options) {
             resolve(new Image(w, h, data, options));
         };
         image.onerror = function () {
-            reject(new Error('Could not load ' + url));
+            reject(new Error(`Could not load ${url}`));
         };
         image.src = url;
     });

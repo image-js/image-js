@@ -1,5 +1,5 @@
-import {load} from 'test/common';
-import {methods} from '../maskAlgorithms';
+import { load } from 'test/common';
+import { methods } from '../maskAlgorithms';
 import 'should';
 
 // if the values are the same as in imageJ we consider it as currently correct
@@ -25,7 +25,6 @@ Here are the results from imageJ
  Triangle: 87
  Yen: 108
 */
-
 
 describe('Threshold calculation', function () {
     it.skip('Huang should work like ImageJ', function () {
@@ -94,12 +93,6 @@ describe('Threshold calculation', function () {
         });
     });
 
-    it('Percentile should work like ImageJ', function () {
-        return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.percentile(img.histogram).should.equal(90);
-        });
-    });
-
     it.skip('RenyiEntropy should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
             methods.renyiEntropy(img.histogram).should.equal(115);
@@ -124,4 +117,3 @@ describe('Threshold calculation', function () {
         });
     });
 });
-

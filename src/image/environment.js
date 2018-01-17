@@ -18,7 +18,7 @@ try {
     };
 }
 
-import {readFile, createWriteStream, writeFile} from 'fs';
+import { readFile, createWriteStream, writeFile } from 'fs';
 
 const env = 'node';
 
@@ -31,4 +31,4 @@ export function fetchBinary(path) {
     });
 }
 
-export {env, createCanvas, ImageData, DOMImage, createWriteStream, writeFile};
+export { env, createCanvas, ImageData, DOMImage, createWriteStream, writeFile };

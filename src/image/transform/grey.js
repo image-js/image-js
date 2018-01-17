@@ -1,6 +1,6 @@
 import Image from '../Image';
-import {RGB} from '../model/model';
-import {methods} from './greyAlgorithms';
+import { RGB } from '../model/model';
+import { methods } from './greyAlgorithms';
 
 /**
  * Converts the current image to grey scale
@@ -63,7 +63,7 @@ export default function grey(options = {}) {
 
     let method = methods[algorithm.toLowerCase()];
     if (!method) {
-        throw new Error('Unsupported grey algorithm: ' + algorithm);
+        throw new Error(`Unsupported grey algorithm: ${algorithm}`);
     }
 
 

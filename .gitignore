@@ -8,3 +8,4 @@ test/browser/image.js
 .DS_Store
 coverage
 .eslintcache
+.vscode

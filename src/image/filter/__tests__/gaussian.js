@@ -1,4 +1,4 @@
-import {Image} from 'test/common';
+import { Image } from 'test/common';
 import 'should';
 
 describe('check the gaussian filter', function () {
@@ -11,7 +11,7 @@ describe('check the gaussian filter', function () {
                 10, 20, 20, 20, 10,
                 10, 10, 10, 10, 10
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
         Array.from(image.gaussianFilter().data).should.eql(
@@ -34,10 +34,10 @@ describe('check the gaussian filter', function () {
                 10, 10, 20, 20, 20, 10, 10,
                 10, 10, 10, 10, 10, 10, 10
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
-        Array.from(image.gaussianFilter({fft: false}).data).should.eql(
+        Array.from(image.gaussianFilter({ fft: false }).data).should.eql(
             [
                 11, 11, 15, 17, 15, 11, 11,
                 11, 11, 15, 17, 15, 11, 11,
@@ -69,10 +69,10 @@ describe('check the gaussian filter', function () {
                 10, 10, 10, 10, 10,
                 10, 10, 10, 10, 10
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
-        Array.from(image.gaussianFilter({fft: false}).data).should.eql(
+        Array.from(image.gaussianFilter({ fft: false }).data).should.eql(
             [
                 11, 11, 11, 11, 11,
                 11, 11, 11, 11, 11,
@@ -109,10 +109,10 @@ describe('check the gaussian filter', function () {
                 10, 10, 10, 10, 10,
                 10, 10, 10, 10, 10
             ],
-            {kind: 'GREY'}
+            { kind: 'GREY' }
         );
 
-        Array.from(image.gaussianFilter({algorithm: 'separable'}).data).should.eql(
+        Array.from(image.gaussianFilter({ algorithm: 'separable' }).data).should.eql(
             [
                 11, 11, 11, 11, 11,
                 11, 11, 11, 11, 11,

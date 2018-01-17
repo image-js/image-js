@@ -1,4 +1,4 @@
-import {getColors} from '../../util/color';
+import { getColors } from '../../util/color';
 
 /**
  * Paint an array of polygon on the current image.
@@ -20,7 +20,7 @@ export default function paintPolygons(polygons, options = {}) {
         bitDepth: [8, 16]
     });
 
-    let colors = getColors(Object.assign({}, options, {numberColors: polygons.length}));
+    let colors = getColors(Object.assign({}, options, { numberColors: polygons.length }));
 
 
     for (let i = 0; i < polygons.length; i++) {

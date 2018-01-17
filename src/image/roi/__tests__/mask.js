@@ -1,5 +1,5 @@
-import {Image, load} from 'test/common';
-import {asc as sortAsc} from 'num-sort';
+import { Image, load } from 'test/common';
+import { asc as sortAsc } from 'num-sort';
 import 'should';
 
 describe('we check mask', function () {
@@ -11,7 +11,7 @@ describe('we check mask', function () {
 
             let roiManager = img.getRoiManager();
 
-            let mask = img.mask({invert: true});
+            let mask = img.mask({ invert: true });
             roiManager.fromMask(mask);
 
             let roiIDs = roiManager.getRoiIds().sort(sortAsc);
@@ -61,7 +61,7 @@ describe('we check mask', function () {
             let masks = roiManager.getMasks();
 
             let painted = new Image(5, 5);
-            painted.paintMasks(masks, {color: 'red'});
+            painted.paintMasks(masks, { color: 'red' });
 
             Array.from(painted.data).slice(0, 8).should.eql([255, 0, 0, 255, 255, 0, 0, 255]);
         });

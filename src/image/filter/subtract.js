@@ -1,5 +1,5 @@
-import {validateArrayOfChannels} from '../../util/channel';
-import {checkNumberArray} from '../../util/value';
+import { validateArrayOfChannels } from '../../util/channel';
+import { checkNumberArray } from '../../util/value';
 
 /**
  * @memberof Image
@@ -9,12 +9,12 @@ import {checkNumberArray} from '../../util/value';
  * @return {this}
  */
 export default function subtract(value, options = {}) {
-    let {channels} = options;
+    let { channels } = options;
     this.checkProcessable('subtract', {
         bitDepth: [8, 16]
     });
 
-    channels = validateArrayOfChannels(this, {channels: channels});
+    channels = validateArrayOfChannels(this, { channels: channels });
     value = checkNumberArray(value);
 
     if (!isNaN(value)) {
