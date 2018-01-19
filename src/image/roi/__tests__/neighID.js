@@ -1,6 +1,5 @@
 import { Image } from 'test/common';
 import { asc as sortAsc } from 'num-sort';
-import 'should';
 
 describe('Get the ids of neighbour touching the Roi', function () {
 
@@ -19,8 +18,8 @@ describe('Get the ids of neighbour touching the Roi', function () {
     roiManager.putMap(map);
     it('IDs of neighbour', function () {
         let result = roiManager.getRois();
-        result[0].borderIDs.sort(sortAsc).should.eql([0, 2, 3]);
-        result[1].borderIDs.should.eql([1, 3]);
-        result[2].borderIDs.should.eql([1, 2]);
+        expect(result[0].borderIDs.sort(sortAsc)).toEqual([0, 2, 3]);
+        expect(result[1].borderIDs).toEqual([1, 3]);
+        expect(result[2].borderIDs).toEqual([1, 2]);
     });
 });

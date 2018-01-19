@@ -1,5 +1,4 @@
 import { Image, Stack } from 'test/common';
-import 'should';
 
 describe('check stack max method', function () {
     it('should return global maximal for GREY image', function () {
@@ -36,7 +35,7 @@ describe('check stack max method', function () {
             )
         );
 
-        images.getMax().should.eql([7]);
+        expect(images.getMax()).toEqual([7]);
     });
 
 
@@ -71,7 +70,7 @@ describe('check stack max method', function () {
             )
         );
 
-        images.getMax().should.eql([10, 8, 12, 10]);
+        expect(images.getMax()).toEqual([10, 8, 12, 10]);
     });
 
 });

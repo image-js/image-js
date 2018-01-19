@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import should from 'should';
 
 describe('invertGetSet', function () {
     describe('invert 3 components', function () {
@@ -9,7 +8,7 @@ describe('invertGetSet', function () {
             let inverted = [25, 172, 135, 255, 155, 115, 242, 240];
 
             image.invertGetSet();
-            should(image.data).eql(inverted);
+            expect(image.data).toEqual(inverted);
         });
     });
 
@@ -23,7 +22,7 @@ describe('invertGetSet', function () {
             inverted[0] = 127;
 
             image.invertGetSet();
-            should(image.data).eql(inverted);
+            expect(image.data).toEqual(inverted);
         });
     });
 });

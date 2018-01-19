@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('invert binary image bit by bit', () => {
     it('should invert a binary image', () => {

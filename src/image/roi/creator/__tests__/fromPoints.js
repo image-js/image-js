@@ -1,6 +1,5 @@
 import fromPoints from '../fromPoints';
 import { Image } from 'test/common';
-import 'should';
 
 describe('we check createROIMapFromPixels', function () {
     it('should yield the right map', function () {
@@ -10,7 +9,7 @@ describe('we check createROIMapFromPixels', function () {
 
         let mapData = fromPoints.call(image, pixels, { kind: 'smallCross' }).data;
 
-        Array.from(mapData).should.eql([
+        expect(Array.from(mapData)).toEqual([
             0, 1, 0, 0, 4,
             1, 1, 1, 2, 0,
             0, 1, 2, 2, 2,

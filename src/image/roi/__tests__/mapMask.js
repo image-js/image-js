@@ -1,6 +1,5 @@
 import { Image } from 'test/common';
 import { desc as sortDesc } from 'num-sort';
-import 'should';
 
 describe('map a binary image (mask) 2 x 2', function () {
     let imageData = new Uint8Array(1);
@@ -20,16 +19,16 @@ describe('map a binary image (mask) 2 x 2', function () {
     it('should have 4 data in 2 zones', function () {
         expect(data).toBeInstanceOf(Int16Array);
         expect(data).toHaveLength(4);
-        data[0].should.equal(1);
-        data[1].should.equal(1);
-        data[2].should.equal(-1);
-        data[3].should.equal(-1);
+        expect(data[0]).toBe(1);
+        expect(data[1]).toBe(1);
+        expect(data[2]).toBe(-1);
+        expect(data[3]).toBe(-1);
     });
 
     it('should have 2 zones, one positive, one negative', function () {
-        result.total.should.equal(2);
-        result.negative.should.equal(1);
-        result.positive.should.equal(1);
+        expect(result.total).toBe(2);
+        expect(result.negative).toBe(1);
+        expect(result.positive).toBe(1);
     });
 });
 
@@ -50,16 +49,16 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
     it('should have 16 data in 2 zones', function () {
         expect(data).toBeInstanceOf(Int16Array);
         expect(data).toHaveLength(16);
-        data[0].should.equal(1);
-        data[7].should.equal(1);
-        data[8].should.equal(-1);
-        data[15].should.equal(-1);
+        expect(data[0]).toBe(1);
+        expect(data[7]).toBe(1);
+        expect(data[8]).toBe(-1);
+        expect(data[15]).toBe(-1);
     });
 
     it('should have 2 zones, one positive, one negative', function () {
-        result.total.should.equal(2);
-        result.negative.should.equal(1);
-        result.positive.should.equal(1);
+        expect(result.total).toBe(2);
+        expect(result.negative).toBe(1);
+        expect(result.positive).toBe(1);
     });
 });
 
@@ -80,17 +79,17 @@ describe('map a binary image 4 x 4 in 3 zones', function () {
     it('should have 16 data in 3 zones', function () {
         expect(data).toBeInstanceOf(Int16Array);
         expect(data).toHaveLength(16);
-        data[0].should.equal(-1);
-        data[1].should.equal(-1);
-        data[2].should.equal(1);
-        data[9].should.equal(1);
-        data[10].should.equal(-2);
-        data[15].should.equal(-2);
+        expect(data[0]).toBe(-1);
+        expect(data[1]).toBe(-1);
+        expect(data[2]).toBe(1);
+        expect(data[9]).toBe(1);
+        expect(data[10]).toBe(-2);
+        expect(data[15]).toBe(-2);
     });
 
     it('should have 3 zones, one positive, two negative', function () {
-        result.total.should.equal(3);
-        result.negative.should.equal(2);
-        result.positive.should.equal(1);
+        expect(result.total).toBe(3);
+        expect(result.negative).toBe(2);
+        expect(result.positive).toBe(1);
     });
 });

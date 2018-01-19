@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('calculate svd', function () {
     it('check the result', function () {
@@ -10,8 +9,8 @@ describe('calculate svd', function () {
 
         let svd = img.getSvd();
 
-        svd.V[0].should.eql([-1, -0]);
-        svd.V[1].should.eql([-0, -1]);
+        expect(svd.V[0]).toEqual([-1, -0]);
+        expect(svd.V[1]).toEqual([-0, -1]);
 
     });
 });

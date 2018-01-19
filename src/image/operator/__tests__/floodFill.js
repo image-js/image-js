@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('floodFill', function () {
     it('should fill the binary image', function () {
@@ -21,7 +20,7 @@ describe('floodFill', function () {
             0b11110000
         ], { kind: 'BINARY' });
 
-        image.data.should.eql(filled.data);
+        expect(image.data).toEqual(filled.data);
     });
 
     it('should fill the binary image (not in place)', function () {
@@ -43,8 +42,8 @@ describe('floodFill', function () {
             0b00000000
         ], { kind: 'BINARY' });
 
-        Array.from(result.data).should.eql(Array.from(filled.data));
-        Array.from(image.data).should.eql([
+        expect(Array.from(result.data)).toEqual(Array.from(filled.data));
+        expect(Array.from(image.data)).toEqual([
             0b00100000,
             0b00110000,
             0b00010000,

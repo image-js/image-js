@@ -1,6 +1,5 @@
 import { Image, load, getImage } from 'test/common';
 import * as fs from 'fs';
-import 'should';
 
 describe('Load PNG', function () {
     const tests = [
@@ -18,18 +17,18 @@ describe('Load PNG', function () {
     tests.forEach(function (test) {
         it(`should load from path ${test[0]}`, function () {
             return load(`format/${test[0]}.png`).then(function (img) {
-                img.components.should.equal(test[1]);
-                img.alpha.should.equal(test[2]);
-                img.bitDepth.should.equal(test[3]);
+                expect(img.components).toBe(test[1]);
+                expect(img.alpha).toBe(test[2]);
+                expect(img.bitDepth).toBe(test[3]);
             });
         });
 
         it(`should load from buffer ${test[0]}`, function () {
             const data = fs.readFileSync(getImage(`format/${test[0]}.png`));
             return Image.load(data).then(function (img) {
-                img.components.should.equal(test[1]);
-                img.alpha.should.equal(test[2]);
-                img.bitDepth.should.equal(test[3]);
+                expect(img.components).toBe(test[1]);
+                expect(img.alpha).toBe(test[2]);
+                expect(img.bitDepth).toBe(test[3]);
             });
         });
     });

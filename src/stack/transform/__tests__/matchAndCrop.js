@@ -1,5 +1,4 @@
 import { Image, Stack, getHash } from 'test/common';
-import 'should';
 
 describe('check matchAndCrop method', function () {
     it('should return an array of 3 images cropped and moved using matchToPrevious', function () {
@@ -72,64 +71,55 @@ describe('check matchAndCrop method', function () {
         );
 
         let results = images.matchAndCrop();
-        results.should.be.instanceOf(Stack).and.have.lengthOf(5);
-        getHash(results[1]).should.equal(getHash(results[2]));
+        expect(results).toBeInstanceOf(Stack);
+        expect(results).toHaveLength(5);
+        expect(getHash(results[1])).toBe(getHash(results[2]));
 
         let result = results[0];
-        result.width.should.equal(4);
-        result.height.should.equal(3);
-        Array.from(result.data).should.eql(
-            [
-                1, 2, 2, 2,
-                1, 2, 4, 3,
-                1, 2, 3, 3
-            ]
-        );
+        expect(result.width).toBe(4);
+        expect(result.height).toBe(3);
+        expect(Array.from(result.data)).toEqual([
+            1, 2, 2, 2,
+            1, 2, 4, 3,
+            1, 2, 3, 3
+        ]);
 
 
         result = results[1];
-        result.width.should.equal(4);
-        result.height.should.equal(3);
-        Array.from(result.data).should.eql(
-            [
-                0, 0, 0, 0,
-                0, 0, 4, 0,
-                0, 0, 0, 0
-            ]
-        );
+        expect(result.width).toBe(4);
+        expect(result.height).toBe(3);
+        expect(Array.from(result.data)).toEqual([
+            0, 0, 0, 0,
+            0, 0, 4, 0,
+            0, 0, 0, 0
+        ]);
 
         result = results[2];
-        result.width.should.equal(4);
-        result.height.should.equal(3);
-        Array.from(result.data).should.eql(
-            [
-                0, 0, 0, 0,
-                0, 0, 4, 0,
-                0, 0, 0, 0
-            ]
-        );
+        expect(result.width).toBe(4);
+        expect(result.height).toBe(3);
+        expect(Array.from(result.data)).toEqual([
+            0, 0, 0, 0,
+            0, 0, 4, 0,
+            0, 0, 0, 0
+        ]);
 
         result = results[3];
-        result.width.should.equal(4);
-        result.height.should.equal(3);
-        Array.from(result.data).should.eql(
-            [
-                0, 0, 0, 0,
-                0, 0, 4, 0,
-                0, 0, 0, 0
-            ]
-        );
+        expect(result.width).toBe(4);
+        expect(result.height).toBe(3);
+        expect(Array.from(result.data)).toEqual([
+            0, 0, 0, 0,
+            0, 0, 4, 0,
+            0, 0, 0, 0
+        ]);
 
         result = results[4];
-        result.width.should.equal(4);
-        result.height.should.equal(3);
-        Array.from(result.data).should.eql(
-            [
-                0, 0, 0, 0,
-                0, 0, 4, 0,
-                0, 0, 0, 0
-            ]
-        );
+        expect(result.width).toBe(4);
+        expect(result.height).toBe(3);
+        expect(Array.from(result.data)).toEqual([
+            0, 0, 0, 0,
+            0, 0, 4, 0,
+            0, 0, 0, 0
+        ]);
 
     });
 
@@ -178,43 +168,38 @@ describe('check matchAndCrop method', function () {
         );
 
         let results = images.matchAndCrop({ algorithm: 'matchToFirst' });
-        results.should.be.instanceOf(Stack).and.have.lengthOf(3);
+        expect(results).toBeInstanceOf(Stack);
+        expect(results).toHaveLength(3);
 
         let result = results[0];
-        result.width.should.equal(3);
-        result.height.should.equal(4);
-        Array.from(result.data).should.eql(
-            [
-                3, 1, 1,
-                1, 2, 2,
-                1, 2, 4,
-                1, 2, 3
-            ]
-        );
+        expect(result.width).toBe(3);
+        expect(result.height).toBe(4);
+        expect(Array.from(result.data)).toEqual([
+            3, 1, 1,
+            1, 2, 2,
+            1, 2, 4,
+            1, 2, 3
+        ]);
 
         result = results[1];
-        result.width.should.equal(3);
-        result.height.should.equal(4);
-        Array.from(result.data).should.eql(
-            [
-                0, 0, 0,
-                0, 0, 0,
-                0, 0, 4,
-                0, 0, 0
-            ]
-        );
+        expect(result.width).toBe(3);
+        expect(result.height).toBe(4);
+        expect(Array.from(result.data)).toEqual([
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 4,
+            0, 0, 0
+        ]);
 
         result = results[2];
-        result.width.should.equal(3);
-        result.height.should.equal(4);
-        Array.from(result.data).should.eql(
-            [
-                4, 0, 0,
-                0, 0, 0,
-                0, 0, 0,
-                0, 0, 0
-            ]
-        );
+        expect(result.width).toBe(3);
+        expect(result.height).toBe(4);
+        expect(Array.from(result.data)).toEqual([
+            4, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0
+        ]);
     });
 
     it('should return an array of 3 images cropped and moved unsng matchToFirst simple', function () {
@@ -261,42 +246,37 @@ describe('check matchAndCrop method', function () {
         );
 
         let results = images.matchAndCrop({ algorithm: 'matchToFirst' });
-        results.should.be.instanceOf(Stack).and.have.lengthOf(3);
+        expect(results).toBeInstanceOf(Stack);
+        expect(results).toHaveLength(3);
 
-        getHash(results[1]).should.equal(getHash(results[2]));
+        expect(getHash(results[1])).toBe(getHash(results[2]));
 
         let result = results[0];
-        result.width.should.equal(4);
-        result.height.should.equal(3);
-        Array.from(result.data).should.eql(
-            [
-                1, 2, 2, 2,
-                1, 2, 4, 3,
-                1, 2, 3, 3
-            ]
-        );
+        expect(result.width).toBe(4);
+        expect(result.height).toBe(3);
+        expect(Array.from(result.data)).toEqual([
+            1, 2, 2, 2,
+            1, 2, 4, 3,
+            1, 2, 3, 3
+        ]);
 
         result = results[1];
-        result.width.should.equal(4);
-        result.height.should.equal(3);
-        Array.from(result.data).should.eql(
-            [
-                0, 0, 0, 0,
-                0, 0, 4, 0,
-                0, 0, 0, 0
-            ]
-        );
+        expect(result.width).toBe(4);
+        expect(result.height).toBe(3);
+        expect(Array.from(result.data)).toEqual([
+            0, 0, 0, 0,
+            0, 0, 4, 0,
+            0, 0, 0, 0
+        ]);
 
         result = results[2];
-        result.width.should.equal(4);
-        result.height.should.equal(3);
-        Array.from(result.data).should.eql(
-            [
-                0, 0, 0, 0,
-                0, 0, 4, 0,
-                0, 0, 0, 0
-            ]
-        );
+        expect(result.width).toBe(4);
+        expect(result.height).toBe(3);
+        expect(Array.from(result.data)).toEqual([
+            0, 0, 0, 0,
+            0, 0, 4, 0,
+            0, 0, 0, 0
+        ]);
 
     });
 

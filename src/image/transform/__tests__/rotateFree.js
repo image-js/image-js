@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('check the rotate transform with free rotation', function () {
     it('GREY image', function () {
@@ -16,7 +15,7 @@ describe('check the rotate transform with free rotation', function () {
 
         let result = image.rotate(45);
 
-        Array.from(result.data).should.eql([
+        expect(Array.from(result.data)).toEqual([
             255, 255, 255, 0, 255, 255, 255,
             255, 255,  0,  1,  0,  255, 255,
             255,  0,   1,  1,  1,   0,  255,

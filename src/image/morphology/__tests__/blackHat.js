@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 import Matrix from 'ml-matrix';
 
 describe('check the black hat function', function () {
@@ -16,15 +15,13 @@ describe('check the black hat function', function () {
             { kind: 'GREY' }
         );
 
-        Array.from(image.blackHat({ kernel: kernel }).data).should.eql(
-            [
-                255, 255, 0, 255, 255,
-                255, 0, 0, 0, 255,
-                255, 0, 0, 0, 255,
-                255, 0, 0, 0, 255,
-                255, 255, 0, 255, 255
-            ]
-        );
+        expect(Array.from(image.blackHat({ kernel: kernel }).data)).toEqual([
+            255, 255, 0, 255, 255,
+            255, 0, 0, 0, 255,
+            255, 0, 0, 0, 255,
+            255, 0, 0, 0, 255,
+            255, 255, 0, 255, 255
+        ]);
     });
 
     it('check for GREY image 5x5 2 iterations', function () {
@@ -40,15 +37,13 @@ describe('check the black hat function', function () {
             { kind: 'GREY' }
         );
 
-        Array.from(image.blackHat({ kernel: kernel, iterations: 2 }).data).should.eql(
-            [
-                0, 0, 255, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 255, 0, 0
-            ]
-        );
+        expect(Array.from(image.blackHat({ kernel: kernel, iterations: 2 }).data)).toEqual([
+            0, 0, 255, 0, 0,
+            0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0,
+            0, 0, 255, 0, 0
+        ]);
     });
 });
 

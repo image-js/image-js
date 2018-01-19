@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('check the cmyk transform', function () {
     it('check the right result for RGB image 8 bit', function () {
@@ -12,12 +11,10 @@ describe('check the cmyk transform', function () {
 
         let newImage = image.cmyk();
 
-        newImage.colorModel.should.equal('CMYK');
-        newImage.bitDepth.should.equal(8);
+        expect(newImage.colorModel).toBe('CMYK');
+        expect(newImage.bitDepth).toBe(8);
 
-        Array.from(newImage.data).should.eql(
-            [0, 0, 255, 155, 255, 0, 0, 155]
-        );
+        expect(Array.from(newImage.data)).toEqual([0, 0, 255, 155, 255, 0, 0, 155]);
     });
 
     it('check the right result for RGB A image 8 bit', function () {
@@ -30,11 +27,9 @@ describe('check the cmyk transform', function () {
 
         let newImage = image.cmyk();
 
-        newImage.colorModel.should.equal('CMYK');
-        newImage.bitDepth.should.equal(16);
+        expect(newImage.colorModel).toBe('CMYK');
+        expect(newImage.bitDepth).toBe(16);
 
-        Array.from(newImage.data).should.eql(
-            [0, 0, 65535, 49152, 127, 65535, 0, 0, 49152, 127]
-        );
+        expect(Array.from(newImage.data)).toEqual([0, 0, 65535, 49152, 127, 65535, 0, 0, 49152, 127]);
     });
 });

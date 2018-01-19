@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('Monotone Chain Convex Hull', function () {
     it('should return the convex hull', function () {
@@ -17,7 +16,7 @@ describe('Monotone Chain Convex Hull', function () {
             { kind: 'BINARY' }
         );
 
-        image.monotoneChainConvexHull().should.eql([
+        expect(image.monotoneChainConvexHull()).toEqual([
             [2, 3],
             [2, 4],
             [3, 6],
@@ -37,7 +36,7 @@ describe('Monotone Chain Convex Hull', function () {
             { kind: 'BINARY' }
         );
 
-        image.monotoneChainConvexHull().should.eql([]);
+        expect(image.monotoneChainConvexHull()).toEqual([]);
     });
 
     it('should return the convex hull for two points', function () {
@@ -48,7 +47,7 @@ describe('Monotone Chain Convex Hull', function () {
             { kind: 'BINARY' }
         );
 
-        image.monotoneChainConvexHull().should.eql([
+        expect(image.monotoneChainConvexHull()).toEqual([
             [0, 0],
             [0, 1]
         ]);

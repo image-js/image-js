@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('Find local extrema', function () {
     it('maximum for a GREY image', function () {
@@ -20,7 +19,7 @@ describe('Find local extrema', function () {
             ],
             { kind: 'GREY' }
         );
-        image.getLocalMaxima().should.eql([[3, 2], [6, 7]]);
+        expect(image.getLocalMaxima()).toEqual([[3, 2], [6, 7]]);
     });
 
     it('minimum for a GREY image', function () {
@@ -42,12 +41,12 @@ describe('Find local extrema', function () {
             { kind: 'GREY' }
         );
 
-        image.getLocalMaxima({ invert: true }).should.eql([[3, 2], [6, 7]]);
-        image.getLocalMaxima({
+        expect(image.getLocalMaxima({ invert: true })).toEqual([[3, 2], [6, 7]]);
+        expect(image.getLocalMaxima({
             invert: true,
             region: 3,
             maxEquals: 0
-        }).should.eql([[3, 2], [6, 7]]);
+        })).toEqual([[3, 2], [6, 7]]);
 
     });
 
@@ -67,9 +66,9 @@ describe('Find local extrema', function () {
             ],
             { kind: 'GREY' }
         );
-        image.getLocalMaxima(
+        expect(image.getLocalMaxima(
             { removeClosePoints: 3, region: 1 }
-        ).should.eql([[3, 2], [6, 7]]);
+        )).toEqual([[3, 2], [6, 7]]);
     });
 
     it('maximum for a GREY image with all smaller', function () {
@@ -88,15 +87,15 @@ describe('Find local extrema', function () {
             ],
             { kind: 'GREY' }
         );
-        image.getLocalMaxima(
+        expect(image.getLocalMaxima(
             { removeClosePoints: 3, region: 1, maxEquals: 0 }
-        ).should.eql([[6, 7]]);
-        image.getLocalMaxima(
+        )).toEqual([[6, 7]]);
+        expect(image.getLocalMaxima(
             { removeClosePoints: 3, region: 2, maxEquals: 0 }
-        ).should.eql([[6, 7]]);
-        image.getLocalMaxima(
+        )).toEqual([[6, 7]]);
+        expect(image.getLocalMaxima(
             { removeClosePoints: 3, region: 3, maxEquals: 0 }
-        ).should.eql([[6, 7]]);
+        )).toEqual([[6, 7]]);
     });
 
 });

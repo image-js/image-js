@@ -1,5 +1,4 @@
 import { Image, Stack, getSquare, getImage } from 'test/common';
-import 'should';
 
 describe('Core methods of Stack objects', function () {
 
@@ -7,35 +6,35 @@ describe('Core methods of Stack objects', function () {
 
     it('Stack.load', function () {
         return Stack.load([getImage('BW2x2.png'), getImage('BW3x3.png')]).then(function (images) {
-            images.should.have.lengthOf(2);
-            images.should.be.instanceOf(Stack);
-            images[0].should.be.instanceOf(Image);
-            images[1].should.be.instanceOf(Image);
-            images[0].width.should.equal(2);
-            images[1].width.should.equal(3);
+            expect(images).toHaveLength(2);
+            expect(images).toBeInstanceOf(Stack);
+            expect(images[0]).toBeInstanceOf(Image);
+            expect(images[1]).toBeInstanceOf(Image);
+            expect(images[0].width).toBe(2);
+            expect(images[1].width).toBe(3);
         });
     });
 
     it('Stack.load with error', function () {
         return Stack.load([getImage('BW2x2.png'), getImage('inexistant')]).catch(function (e) {
-            e.code.should.equal('ENOENT');
+            expect(e.code).toBe('ENOENT');
             return 42;
         }).then(function (value) {
-            value.should.equal(42);
+            expect(value).toBe(42);
         });
     });
 
     it('should be an Array', function () {
-        stack.should.be.instanceOf(Stack);
-        stack.should.be.instanceOf(Array);
-        Array.isArray(stack).should.be.true();
+        expect(stack).toBeInstanceOf(Stack);
+        expect(stack).toBeInstanceOf(Array);
+        expect(Array.isArray(stack)).toBe(true);
     });
 
     it('should have Array methods on prototype', function () {
         stack.forEach(function (image) {
-            image.should.be.instanceOf(Image);
+            expect(image).toBeInstanceOf(Image);
         });
-        stack.filter(() => false).should.have.lengthOf(0);
+        expect(stack.filter(() => false)).toHaveLength(0);
     });
 
     it('map should return a Stack', function () {
@@ -43,13 +42,13 @@ describe('Core methods of Stack objects', function () {
             return image.grey();
         });
 
-        result.should.be.instanceOf(Stack);
-        result.length.should.equal(2);
-        result[0].components.should.equal(1);
+        expect(result).toBeInstanceOf(Stack);
+        expect(result).toHaveLength(2);
+        expect(result[0].components).toBe(1);
 
-        (function () {
+        expect(function () {
             stack.map();
-        }).should.throw(TypeError);
+        }).toThrowError(TypeError);
     });
 
 });

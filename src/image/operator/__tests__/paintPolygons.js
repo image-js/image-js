@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('we check paintPolygons', function () {
     it('should yield the painted image with 2 boxes', function () {
@@ -20,7 +19,7 @@ describe('we check paintPolygons', function () {
             0, 18, 18, 18, 0
         ];
 
-        Array.from(grey.data).should.eql(expected);
+        expect(Array.from(grey.data)).toEqual(expected);
     });
 
     it('should yield the painted image with 2 boxes filled', function () {
@@ -41,7 +40,7 @@ describe('we check paintPolygons', function () {
             0, 54, 54, 54, 0
         ];
 
-        Array.from(grey.data).should.eql(expected);
+        expect(Array.from(grey.data)).toEqual(expected);
     });
 });
 

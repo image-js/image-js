@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('check the convolutionFft operator', function () {
     it('check the convolution for GREY image', function () {
@@ -13,14 +12,12 @@ describe('check the convolutionFft operator', function () {
             { kind: 'GREY' }
         );
 
-        Array.from(image.convolutionFft([1, 1, 1, 1, 1, 1, 1, 1, 1]).data).should.eql(
-            [
-                13, 13, 13, 13,
-                13, 13, 13, 13,
-                13, 13, 13, 13,
-                13, 13, 13, 13
-            ]
-        );
+        expect(Array.from(image.convolutionFft([1, 1, 1, 1, 1, 1, 1, 1, 1]).data)).toEqual([
+            13, 13, 13, 13,
+            13, 13, 13, 13,
+            13, 13, 13, 13,
+            13, 13, 13, 13
+        ]);
     });
 });
 

@@ -1,5 +1,4 @@
 import { Image, getHash } from 'test/common';
-import 'should';
 
 describe('check the crop transform', function () {
     let image;
@@ -22,13 +21,13 @@ describe('check the crop transform', function () {
             y: 0
         });
 
-        getHash(result).should.equal(getHash(image));
+        expect(getHash(result)).toBe(getHash(image));
 
         result = image.crop({
             x: 2,
             y: 2
         });
-        Array.from(result.data).should.eql([2, 2, 2, 2, 4, 3, 2, 3, 3]);
+        expect(Array.from(result.data)).toEqual([2, 2, 2, 2, 4, 3, 2, 3, 3]);
 
         result = image.crop({
             x: 0,
@@ -36,7 +35,7 @@ describe('check the crop transform', function () {
             height: 2,
             width: 2
         });
-        Array.from(result.data).should.eql([0, 0, 0, 1]);
+        expect(Array.from(result.data)).toEqual([0, 0, 0, 1]);
 
 
         result = image.crop({
@@ -45,7 +44,7 @@ describe('check the crop transform', function () {
             height: 2,
             width: 2
         });
-        Array.from(result.data).should.eql([2, 2, 2, 4]);
+        expect(Array.from(result.data)).toEqual([2, 2, 2, 4]);
 
         result = image.crop({
             x: 1,
@@ -53,22 +52,22 @@ describe('check the crop transform', function () {
             height: 1,
             width: 4
         });
-        Array.from(result.data).should.eql([1, 2, 4, 3]);
+        expect(Array.from(result.data)).toEqual([1, 2, 4, 3]);
     });
 
     it('check crop + grey parenting', function () {
         let original = image;
         image = image.rgba8();
-        image.parent.should.equal(original);
+        expect(image.parent).toBe(original);
         let result = image.crop({
             x: 2,
             y: 3
         });
         let grey = result.grey();
-        grey.parent.should.equal(result);
-        grey.position.should.eql([0, 0]);
-        grey.parent.parent.should.equal(image);
-        grey.parent.position.should.eql([2, 3]);
+        expect(grey.parent).toBe(result);
+        expect(grey.position).toEqual([0, 0]);
+        expect(grey.parent.parent).toBe(image);
+        expect(grey.parent.position).toEqual([2, 3]);
     });
 
     it('non-integer arguments', function () {
@@ -78,45 +77,45 @@ describe('check the crop transform', function () {
             height: 1.1,
             width: 3.7
         });
-        Array.from(result.data).should.eql([1, 2, 4, 3]);
+        expect(Array.from(result.data)).toEqual([1, 2, 4, 3]);
     });
 
     it('invalid argument ranges', function () {
-        (function () {
+        expect(function () {
             image.crop({
                 x: -2,
                 y: 2,
                 height: 2,
                 width: 2
             });
-        }).should.throw(/x and y .* must be positive numbers/);
+        }).toThrowError(/x and y .* must be positive numbers/);
 
-        (function () {
+        expect(function () {
             image.crop({
                 x: 2,
                 y: 2,
                 height: -2,
                 width: 2
             });
-        }).should.throw(/width and height .* must be positive numbers/);
+        }).toThrowError(/width and height .* must be positive numbers/);
 
-        (function () {
+        expect(function () {
             image.crop({
                 x: 100,
                 y: 2,
                 height: 2,
                 width: 2
             });
-        }).should.throw(/origin .* out of range/);
+        }).toThrowError(/origin .* out of range/);
 
-        (function () {
+        expect(function () {
             image.crop({
                 x: 2,
                 y: 2,
                 height: 2,
                 width: 100
             });
-        }).should.throw(/size is out of range/);
+        }).toThrowError(/size is out of range/);
     });
 });
 

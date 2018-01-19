@@ -1,6 +1,5 @@
 import { load } from 'test/common';
 import { methods } from '../maskAlgorithms';
-import 'should';
 
 // if the values are the same as in imageJ we consider it as currently correct
 // TODO not obivious that those algorithms can deal with 16 bits images !
@@ -29,91 +28,91 @@ Here are the results from imageJ
 describe('Threshold calculation', function () {
     it.skip('Huang should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.huang(img.histogram).should.equal(134);
+            expect(methods.huang(img.histogram)).toBe(134);
         });
     });
 
     it('Intermodes should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.intermodes(img.histogram).should.equal(166);
+            expect(methods.intermodes(img.histogram)).toBe(166);
         });
     });
 
     it('Isodata should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.isodata(img.histogram).should.equal(135);
+            expect(methods.isodata(img.histogram)).toBe(135);
         });
     });
 
     it('Percentile should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.percentile(img.histogram).should.equal(90);
+            expect(methods.percentile(img.histogram)).toBe(90);
         });
     });
 
     it.skip('Li should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.li(img.histogram).should.equal(115);
+            expect(methods.li(img.histogram)).toBe(115);
         });
     });
 
     it.skip('MaxEntropy should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.maxEntropy(img.histogram).should.equal(126);
+            expect(methods.maxEntropy(img.histogram)).toBe(126);
         });
     });
 
     it.skip('Mean should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.mean(img.histogram).should.equal(106);
+            expect(methods.mean(img.histogram)).toBe(106);
         });
     });
 
     it.skip('MinError should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.minError(img.histogram).should.equal(101);
+            expect(methods.minError(img.histogram)).toBe(101);
         });
     });
 
     it('Minimum should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.minimum(img.histogram).should.equal(234);
+            expect(methods.minimum(img.histogram)).toBe(234);
         });
     });
 
     it.skip('Moments should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.moments(img.histogram).should.equal(127);
+            expect(methods.moments(img.histogram)).toBe(127);
         });
     });
 
     it.skip('Otsu should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.otsu(img.histogram).should.equal(135);
+            expect(methods.otsu(img.histogram)).toBe(135);
         });
     });
 
     it.skip('RenyiEntropy should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.renyiEntropy(img.histogram).should.equal(115);
+            expect(methods.renyiEntropy(img.histogram)).toBe(115);
         });
     });
 
     it.skip('Shanbhag should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.shanbhag(img.histogram).should.equal(116);
+            expect(methods.shanbhag(img.histogram)).toBe(116);
         });
     });
 
     it('Triangle should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.triangle(img.histogram).should.equal(87);
+            expect(methods.triangle(img.histogram)).toBe(87);
         });
     });
 
     it.skip('Yem should work like ImageJ', function () {
         return load('grayscale_by_zimmyrose.png').then(function (img) {
-            methods.yen(img.histogram).should.equal(108);
+            expect(methods.yen(img.histogram)).toBe(108);
         });
     });
 });

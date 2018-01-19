@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('cropAlpha transform', function () {
     it('grey + alpha - no crop', function () {
@@ -11,9 +10,9 @@ describe('cropAlpha transform', function () {
         ], { kind: 'GREYA' });
 
         const cropped = image.cropAlpha();
-        cropped.width.should.equal(image.width);
-        cropped.height.should.equal(image.height);
-        Array.from(cropped.data).should.eql(Array.from(image.data));
+        expect(cropped.width).toBe(image.width);
+        expect(cropped.height).toBe(image.height);
+        expect(Array.from(cropped.data)).toEqual(Array.from(image.data));
     });
 
     it('grey + alpha - some crop', function () {
@@ -25,9 +24,9 @@ describe('cropAlpha transform', function () {
         ], { kind: 'GREYA' });
 
         const cropped = image.cropAlpha();
-        cropped.width.should.equal(2);
-        cropped.height.should.equal(3);
-        Array.from(cropped.data).should.eql([
+        expect(cropped.width).toBe(2);
+        expect(cropped.height).toBe(3);
+        expect(Array.from(cropped.data)).toEqual([
             2, 255, 3, 255,
             5, 255, 6, 255,
             8, 255, 9, 255,
@@ -43,9 +42,9 @@ describe('cropAlpha transform', function () {
         ], { kind: 'GREYA' });
 
         const cropped = image.cropAlpha();
-        cropped.width.should.equal(1);
-        cropped.height.should.equal(1);
-        Array.from(cropped.data).should.eql([5, 255]);
+        expect(cropped.width).toBe(1);
+        expect(cropped.height).toBe(1);
+        expect(Array.from(cropped.data)).toEqual([5, 255]);
     });
 
     it('grey + alpha - with threshold', function () {
@@ -57,9 +56,9 @@ describe('cropAlpha transform', function () {
         ], { kind: 'GREYA' });
 
         const cropped = image.cropAlpha({ threshold: 240 });
-        cropped.width.should.equal(2);
-        cropped.height.should.equal(3);
-        Array.from(cropped.data).should.eql([
+        expect(cropped.width).toBe(2);
+        expect(cropped.height).toBe(3);
+        expect(Array.from(cropped.data)).toEqual([
             2, 240, 3, 0,
             5, 255, 6, 250,
             8, 239, 9, 250,
@@ -75,9 +74,9 @@ describe('cropAlpha transform', function () {
         ], { kind: 'GREYA' });
 
 
-        (function () {
+        expect(function () {
             image.cropAlpha();
-        }).should.throw(/Could not find new dimensions. Threshold may be too high./);
+        }).toThrowError(/Could not find new dimensions. Threshold may be too high./);
 
     });
 });

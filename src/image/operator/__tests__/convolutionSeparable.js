@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('convolution with separable kernel', () => {
     it('check the convolution for GREY image', () => {
@@ -19,12 +18,10 @@ describe('convolution with separable kernel', () => {
             border: 'periodic'
         }).data);
 
-        result.should.eql(
-            [
-                9, 12, 12, 9,
-                12, 16, 16, 12,
-                9, 12, 12, 9
-            ]
-        );
+        expect(result).toEqual([
+            9, 12, 12, 9,
+            12, 16, 16, 12,
+            9, 12, 12, 9
+        ]);
     });
 });

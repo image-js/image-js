@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('calculate the histogram', function () {
     it('check getHistogram method', function () {
@@ -7,16 +6,16 @@ describe('calculate the histogram', function () {
         let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 1]);
 
         let histogram = image.getHistogram({ useAlpha: false, channel: 0 });
-        histogram[0].should.equal(0);
-        histogram[100].should.equal(1);
-        histogram[230].should.equal(1);
-        histogram[255].should.equal(0);
+        expect(histogram[0]).toBe(0);
+        expect(histogram[100]).toBe(1);
+        expect(histogram[230]).toBe(1);
+        expect(histogram[255]).toBe(0);
 
         histogram = image.getHistogram({ useAlpha: false, channel: 2 });
-        histogram[0].should.equal(0);
-        histogram[13].should.equal(1);
-        histogram[120].should.equal(1);
-        histogram[255].should.equal(0);
+        expect(histogram[0]).toBe(0);
+        expect(histogram[13]).toBe(1);
+        expect(histogram[120]).toBe(1);
+        expect(histogram[255]).toBe(0);
     });
 
 
@@ -28,12 +27,12 @@ describe('calculate the histogram', function () {
 
         let histogram = image.histogram;
 
-        histogram[0].should.equal(0);
-        histogram[1].should.equal(0);
-        histogram[13].should.approximately(0.0039, 0.0001);
-        histogram[100].should.equal(0);
-        histogram[230].should.equal(3);
-        histogram[255].should.equal(0);
+        expect(histogram[0]).toBe(0);
+        expect(histogram[1]).toBe(0);
+        expect(histogram[13]).toBeCloseTo(0.0039, 0.0001);
+        expect(histogram[100]).toBe(0);
+        expect(histogram[230]).toBe(3);
+        expect(histogram[255]).toBe(0);
     });
 
     it('check 16 slots histogram', function () {
@@ -44,10 +43,10 @@ describe('calculate the histogram', function () {
 
         let histogram = image.getHistogram({ maxSlots: 16 });
 
-        histogram[0].should.approximately(0.0039, 0.0001);
-        histogram[1].should.equal(0);
-        histogram[14].should.equal(3);
-        histogram[15].should.equal(0);
+        expect(histogram[0]).toBeCloseTo(0.0039, 0.0001);
+        expect(histogram[1]).toBe(0);
+        expect(histogram[14]).toBe(3);
+        expect(histogram[15]).toBe(0);
     });
 
     it('check histogram for 1 bit image', function () {
@@ -63,8 +62,8 @@ describe('calculate the histogram', function () {
         );
         let image2 = image.mask();
         let histogram = image2.getHistogram();
-        histogram[0].should.eql(16);
-        histogram[1].should.eql(9);
+        expect(histogram[0]).toEqual(16);
+        expect(histogram[1]).toEqual(9);
 
     });
 });

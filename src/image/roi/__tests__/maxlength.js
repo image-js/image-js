@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 /* Image to test:
 0011
@@ -20,17 +19,17 @@ describe('Get the maxLength of the Roi and the points', function () {
     roiManager.fromMask(mask);
     it('vectors X and Y', function () {
         let results = roiManager.getRois();
-        results[0].points.slice(0, 3).should.eql([[2, 0], [3, 0], [0, 1]]);
+        expect(results[0].points.slice(0, 3)).toEqual([[2, 0], [3, 0], [0, 1]]);
     });
 
 
     it('maxLengthPoints', function () {
         let result = roiManager.getRois();
-        result[0].maxLengthPoints.should.eql([[3, 0], [1, 3]]);
+        expect(result[0].maxLengthPoints).toEqual([[3, 0], [1, 3]]);
     });
 
     it('maxLength', function () {
         let result = roiManager.getRois();
-        result[0].maxLength.should.equal(Math.sqrt(13));
+        expect(result[0].maxLength).toBe(Math.sqrt(13));
     });
 });

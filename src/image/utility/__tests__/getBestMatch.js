@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('check getBestMatch class', function () {
     it('should move the image to the bottom right', function () {
@@ -25,7 +24,7 @@ describe('check getBestMatch class', function () {
             { kind: 'GREY' }
         );
 
-        image1.getBestMatch(image2).should.eql([2, 2]);
+        expect(image1.getBestMatch(image2)).toEqual([2, 2]);
     });
 
     it('should move the image to the bottom', function () {
@@ -51,7 +50,7 @@ describe('check getBestMatch class', function () {
             { kind: 'GREY' }
         );
 
-        image1.getBestMatch(image2).should.eql([0, 2]);
+        expect(image1.getBestMatch(image2)).toEqual([0, 2]);
     });
 
     it('should move the image to the top left', function () {
@@ -77,7 +76,7 @@ describe('check getBestMatch class', function () {
             { kind: 'GREY' }
         );
 
-        image1.getBestMatch(image2).should.eql([-2, -2]);
+        expect(image1.getBestMatch(image2)).toEqual([-2, -2]);
     });
 
 });

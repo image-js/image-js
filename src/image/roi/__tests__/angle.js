@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 /* Image to test:
 0011
@@ -20,6 +19,6 @@ describe('Get the angle of the region, relative to the maxlength', function () {
     roiManager.fromMask(mask);
     it('angle', function () {
         let result = roiManager.getRois();
-        result[0].angle.should.eql(-Math.atan2(0 - 3, 3 - 1) * 180 / Math.PI);
+        expect(result[0].angle).toEqual(-Math.atan2(0 - 3, 3 - 1) * 180 / Math.PI);
     });
 });

@@ -1,5 +1,4 @@
 import { Image, load, getHash } from 'test/common';
-import 'should';
 
 describe('level', function () {
     describe('extend the image to cover all levels', function () {
@@ -7,28 +6,28 @@ describe('level', function () {
             let image = new Image(1, 3, [0, 10, 255, 100, 0, 20, 255, 255, 0, 30, 255, 255]);
             let leveled = [0, 0, 255, 100, 0, 128, 255, 255, 0, 255, 255, 255];
             image.level();
-            image.data.should.eql(leveled);
+            expect(image.data).toEqual(leveled);
         });
 
         it('should just change red channel', function () {
             let image = new Image(1, 3, [0, 10, 255, 100, 0, 20, 255, 255, 0, 30, 255, 255]);
             let leveled = [0, 10, 255, 100, 0, 20, 255, 255, 0, 30, 255, 255];
             image.level({ channels: [0] });
-            image.data.should.eql(leveled);
+            expect(image.data).toEqual(leveled);
         });
 
         it('should change only red and green channe', function () {
             let image = new Image(1, 3, [0, 10, 255, 100, 0, 20, 255, 255, 0, 30, 255, 255]);
             let leveled = [0, 0, 255, 100, 0, 128, 255, 255, 0, 255, 255, 255];
             image.level({ channels: ['r', 'g'] });
-            image.data.should.eql(leveled);
+            expect(image.data).toEqual(leveled);
         });
 
         it('should not change if it used the full range', function () {
             let image = new Image(1, 3, [0, 0, 0, 255, 100, 110, 120, 255, 255, 255, 255, 255]);
             let leveled = [0, 0, 0, 255, 100, 110, 120, 255, 255, 255, 255, 255];
             image.level();
-            image.data.should.eql(leveled);
+            expect(image.data).toEqual(leveled);
         });
 
         it('should not change at all an image that has the extreme colors', function () {
@@ -37,7 +36,7 @@ describe('level', function () {
                     let hash = getHash(image);
                     image.level();
                     let hash2 = getHash(image);
-                    hash.should.equal(hash2);
+                    expect(hash).toBe(hash2);
                 }
             );
         });
@@ -48,7 +47,7 @@ describe('level', function () {
                     let hash = getHash(image);
                     image.level();
                     let hash2 = getHash(image);
-                    hash.should.not.equal(hash2);
+                    expect(hash).not.toBe(hash2);
                 }
             );
         });
@@ -64,7 +63,7 @@ describe('level', function () {
                     let hash = getHash(image);
                     image.level();
                     let hash2 = getHash(image);
-                    hash.should.equal(hash2);
+                    expect(hash).toBe(hash2);
                 });
             });
         });
@@ -87,7 +86,7 @@ describe('level', function () {
                 max: 110
             });
 
-            image.data.should.eql(leveled);
+            expect(image.data).toEqual(leveled);
         });
     });
 });

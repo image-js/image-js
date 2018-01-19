@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('invertPixel', function () {
     describe('invert 3 components', function () {
@@ -10,7 +9,7 @@ describe('invertPixel', function () {
             let inverted = [25, 172, 135, 255, 155, 115, 242, 240];
 
             image.invertPixel();
-            image.data.should.eql(inverted);
+            expect(image.data).toEqual(inverted);
 
         });
     });

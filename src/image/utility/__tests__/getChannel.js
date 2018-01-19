@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('get a specific channel from an image', function () {
 
@@ -12,25 +11,25 @@ describe('get a specific channel from an image', function () {
         let alpha = image.getChannel('a');
 
 
-        red.components.should.equal(1);
-        red.channels.should.equal(1);
-        red.bitDepth.should.equal(8);
-        Array.from(red.data).should.eql([230, 100]);
+        expect(red.components).toBe(1);
+        expect(red.channels).toBe(1);
+        expect(red.bitDepth).toBe(8);
+        expect(Array.from(red.data)).toEqual([230, 100]);
 
-        green.components.should.equal(1);
-        green.channels.should.equal(1);
-        green.bitDepth.should.equal(8);
-        Array.from(green.data).should.eql([83, 140]);
+        expect(green.components).toBe(1);
+        expect(green.channels).toBe(1);
+        expect(green.bitDepth).toBe(8);
+        expect(Array.from(green.data)).toEqual([83, 140]);
 
-        blue.components.should.equal(1);
-        blue.channels.should.equal(1);
-        blue.bitDepth.should.equal(8);
-        Array.from(blue.data).should.eql([120, 13]);
+        expect(blue.components).toBe(1);
+        expect(blue.channels).toBe(1);
+        expect(blue.bitDepth).toBe(8);
+        expect(Array.from(blue.data)).toEqual([120, 13]);
 
-        alpha.components.should.equal(1);
-        alpha.channels.should.equal(1);
-        alpha.bitDepth.should.equal(8);
-        Array.from(alpha.data).should.eql([255, 240]);
+        expect(alpha.components).toBe(1);
+        expect(alpha.channels).toBe(1);
+        expect(alpha.bitDepth).toBe(8);
+        expect(Array.from(alpha.data)).toEqual([255, 240]);
 
     });
 
@@ -41,11 +40,11 @@ describe('get a specific channel from an image', function () {
             mergeAlpha: true
         });
 
-        red.components.should.equal(1);
-        red.alpha.should.be.equal(0);
-        red.channels.should.equal(1);
-        red.bitDepth.should.equal(8);
-        Array.from(red.data).should.eql([230, 0]);
+        expect(red.components).toBe(1);
+        expect(red.alpha).toBe(0);
+        expect(red.channels).toBe(1);
+        expect(red.bitDepth).toBe(8);
+        expect(Array.from(red.data)).toEqual([230, 0]);
     });
 
     it('should check channels from a RGBA image with keep alpha', function () {
@@ -55,11 +54,11 @@ describe('get a specific channel from an image', function () {
             keepAlpha: true
         });
 
-        red.channels.should.equal(2);
-        red.alpha.should.be.equal(1);
-        red.components.should.equal(1);
-        red.bitDepth.should.equal(8);
-        Array.from(red.data).should.eql([230, 255, 100, 0]);
+        expect(red.channels).toBe(2);
+        expect(red.alpha).toBe(1);
+        expect(red.components).toBe(1);
+        expect(red.bitDepth).toBe(8);
+        expect(Array.from(red.data)).toEqual([230, 255, 100, 0]);
     });
 
 });

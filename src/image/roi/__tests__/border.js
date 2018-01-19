@@ -1,5 +1,4 @@
 import { load } from 'test/common';
-import 'should';
 
 /* Image to test:
 0011
@@ -11,8 +10,8 @@ describe('we check that each Roi is surrounded by the expected border', function
     it('should yield the right contours size', function () {
         return load('BW11x11.png').then(function (img) {
 
-            img.width.should.equal(11);
-            img.height.should.equal(11);
+            expect(img.width).toBe(11);
+            expect(img.height).toBe(11);
 
             let roiManager = img.getRoiManager();
             let mask = img.grey().mask({ invert: true });
@@ -22,13 +21,19 @@ describe('we check that each Roi is surrounded by the expected border', function
 
             rois.sort((a, b) => a.border - b.border);
 
-            rois.should.be.an.instanceof(Array).and.lengthOf(4);
+            expect(rois).toBeInstanceOf(Array);
+            expect(rois).toHaveLength(4);
 
-
-            rois[0].should.containDeep({ externalIDs: [-1], surface: 1, external: 1, box: 1, border: 1 });
-            rois[1].should.containDeep({ externalIDs: [1], surface: 9, external: 8, box: 8, border: 8 });
-            rois[2].should.containDeep({ externalIDs: [2], surface: 39, external: 39, box: 39, border: 39 });
-            rois[3].should.containDeep({ externalIDs: [-1], surface: 72, external: 32, box: 32, border: 44 });
+            check(rois[0], { externalIDs: [-1], surface: 1, external: 1, box: 1, border: 1 });
+            check(rois[1], { externalIDs: [1], surface: 9, external: 8, box: 8, border: 8 });
+            check(rois[2], { externalIDs: [2], surface: 39, external: 39, box: 39, border: 39 });
+            check(rois[3], { externalIDs: [-1], surface: 72, external: 32, box: 32, border: 44 });
         });
     });
 });
+
+function check(roi, values) {
+    for (let prop in values) {
+        expect(roi[prop]).toEqual(values[prop]);
+    }
+}

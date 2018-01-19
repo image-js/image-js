@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('we check paintPolylines', function () {
     it('should yield the painted image with 2 lines', function () {
@@ -20,7 +19,7 @@ describe('we check paintPolylines', function () {
             0, 0, 0, 0, 0
         ];
 
-        Array.from(grey.data).should.eql(expected);
+        expect(Array.from(grey.data)).toEqual(expected);
     });
 });
 

@@ -1,6 +1,5 @@
 import fromMaskConnectedComponentLabelingAlgorithm from '../fromMaskConnectedComponentLabelingAlgorithm';
 import { Image } from 'test/common';
-import 'should';
 
 describe('we check fromMask2', function () {
 
@@ -42,7 +41,7 @@ describe('we check fromMask2', function () {
             0, 0, 0, 0, 0, 0
         ];
 
-        Array.from(mapData).should.eql(expected);
+        expect(Array.from(mapData)).toEqual(expected);
     });
 
     it('should yield the right map with 8 neighbours', function () {
@@ -57,6 +56,6 @@ describe('we check fromMask2', function () {
             0, 0, 0, 0, 0, 0
         ];
 
-        Array.from(mapData).should.eql(expected);
+        expect(Array.from(mapData)).toEqual(expected);
     });
 });

@@ -1,5 +1,4 @@
 import { Image, load, getHash } from 'test/common';
-import 'should';
 
 describe('we check we can extract a part of B/W image', function () {
     it('check the extract without specify position', function () {
@@ -10,9 +9,9 @@ describe('we check we can extract a part of B/W image', function () {
         mask.setBitXY(1, 1);
 
         return load('BW4x4.png').then(function (image) {
-            (function () {
+            expect(function () {
                 image.extract(mask);
-            }).should.throw(/can not extract an image/);
+            }).toThrowError(/can not extract an image/);
 
         });
     });
@@ -44,15 +43,13 @@ describe('we check we can extract a part of B/W image', function () {
             });
 
         let extract = image.extract(mask);
-        extract.bitDepth.should.equal(1);
-        extract.height.should.equal(4);
-        extract.width.should.equal(4);
-        Array.from(extract.data).should.eql(
-            [
-                0b01100000,
-                0b11110000
-            ]
-        );
+        expect(extract.bitDepth).toBe(1);
+        expect(extract.height).toBe(4);
+        expect(extract.width).toBe(4);
+        expect(Array.from(extract.data)).toEqual([
+            0b01100000,
+            0b11110000
+        ]);
     });
 
 
@@ -78,14 +75,12 @@ describe('we check we can extract a part of B/W image', function () {
             });
 
         let extract = image.extract(mask);
-        extract.bitDepth.should.equal(1);
-        extract.height.should.equal(2);
-        extract.width.should.equal(4);
-        Array.from(extract.data).should.eql(
-            [
-                0b11000000
-            ]
-        );
+        expect(extract.bitDepth).toBe(1);
+        expect(extract.height).toBe(2);
+        expect(extract.width).toBe(4);
+        expect(Array.from(extract.data)).toEqual([
+            0b11000000
+        ]);
     });
 
     it('check by specify 1,1 position with parent', function () {
@@ -102,11 +97,11 @@ describe('we check we can extract a part of B/W image', function () {
             mask.setBitXY(1, 0);
 
             let extract = image.extract(mask);
-            getHash(image).should.equal(getHash(extract.parent));
-            extract.width.should.equal(2);
-            extract.height.should.equal(2);
+            expect(getHash(image)).toBe(getHash(extract.parent));
+            expect(extract.width).toBe(2);
+            expect(extract.height).toBe(2);
 
-            Array.from(extract.data).should.eql([
+            expect(Array.from(extract.data)).toEqual([
                 0, 255,
                 255, 255,
                 255, 0,

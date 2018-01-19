@@ -1,37 +1,36 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('calculate the colorHistogram', function () {
     it('check getColorHistogram method', function () {
         let image = new Image(1, 2, [0, 0, 0, 255, 255, 255, 255, 255]);
 
         let histogram = image.getColorHistogram({ useAlpha: false, nbSlots: 8 });
-        Array.from(histogram).should.eql([1, 0, 0, 0, 0, 0, 0, 1]);
+        expect(Array.from(histogram)).toEqual([1, 0, 0, 0, 0, 0, 0, 1]);
 
         histogram = image.getColorHistogram({ useAlpha: true, nbSlots: 8 });
-        Array.from(histogram).should.eql([1, 0, 0, 0, 0, 0, 0, 1]);
+        expect(Array.from(histogram)).toEqual([1, 0, 0, 0, 0, 0, 0, 1]);
 
-        (function () {
+        expect(function () {
             image.getColorHistogram({ nbSlots: 3 });
-        }).should.throw(/nbSlots must be a power of 8/);
+        }).toThrowError(/nbSlots must be a power of 8/);
     });
 
     it('check getColorHistogram method with transparency', function () {
         let image = new Image(1, 2, [0, 0, 0, 255, 255, 255, 255, 0]);
 
         let histogram = image.getColorHistogram({ useAlpha: false, nbSlots: 8 });
-        Array.from(histogram).should.eql([1, 0, 0, 0, 0, 0, 0, 1]);
+        expect(Array.from(histogram)).toEqual([1, 0, 0, 0, 0, 0, 0, 1]);
 
         histogram = image.getColorHistogram({ useAlpha: true, nbSlots: 8 });
-        Array.from(histogram).should.eql([1, 0, 0, 0, 0, 0, 0, 0]);
+        expect(Array.from(histogram)).toEqual([1, 0, 0, 0, 0, 0, 0, 0]);
     });
 
     it('check getColorHistogram property with transparency', function () {
         let image = new Image(1, 4, [0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 255, 255]);
 
         let histogram = image.colorHistogram;
-        Array.from(histogram).length.should.equal(512);
-        Array.from(histogram)[0].should.equal(2);
-        Array.from(histogram)[511].should.equal(1);
+        expect(Array.from(histogram)).toHaveLength(512);
+        expect(Array.from(histogram)[0]).toBe(2);
+        expect(Array.from(histogram)[511]).toBe(1);
     });
 });

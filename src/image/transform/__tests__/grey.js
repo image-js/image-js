@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('Grey transform', function () {
     it('From RGBA image give a grey image', function () {
@@ -10,78 +9,64 @@ describe('Grey transform', function () {
             ]
         );
 
-        Array.from(image.grey().data).should.eql([142, 0]);
-        Array.from(image.grey({ algorithm: 'min' }).data).should.eql([100, 0]);
-        Array.from(image.grey({ algorithm: 'minimum' }).data).should.eql([100, 0]);
-        Array.from(image.grey({ algorithm: 'max' }).data).should.eql([200, 0]);
-        Array.from(image.grey({ algorithm: 'maximum' }).data).should.eql([200, 0]);
-        Array.from(image.grey({ algorithm: 'brightness' }).data).should.eql([200, 0]);
-        Array.from(image.grey({ algorithm: 'red' }).data).should.eql([100, 0]);
-        Array.from(image.grey({ algorithm: 'green' }).data).should.eql([150, 0]);
-        Array.from(image.grey({ algorithm: 'blue' }).data).should.eql([200, 0]);
-        Array.from(image.grey({ algorithm: 'magenta' }).data).should.eql([63, 0]);
-        Array.from(image.grey({ algorithm: 'cyan' }).data).should.eql([127, 0]);
-        Array.from(image.grey({ algorithm: 'yellow' }).data).should.eql([0, 0]);
-        Array.from(image.grey({ algorithm: 'black' }).data).should.eql([55, 0]);
-        Array.from(image.grey({ algorithm: 'hue' }).data).should.eql([148, 0]);
-        Array.from(image.grey({ algorithm: 'saturation' }).data).should.eql([128, 0]);
-        Array.from(image.grey({ algorithm: 'lightness' }).data).should.eql([150, 0]);
-        Array.from(image.grey({ algorithm: 'luminosity' }).data).should.eql([150, 0]);
-        Array.from(image.grey({ algorithm: 'luminance' }).data).should.eql([150, 0]);
+        expect(Array.from(image.grey().data)).toEqual([142, 0]);
+        expect(Array.from(image.grey({ algorithm: 'min' }).data)).toEqual([100, 0]);
+        expect(Array.from(image.grey({ algorithm: 'minimum' }).data)).toEqual([100, 0]);
+        expect(Array.from(image.grey({ algorithm: 'max' }).data)).toEqual([200, 0]);
+        expect(Array.from(image.grey({ algorithm: 'maximum' }).data)).toEqual([200, 0]);
+        expect(Array.from(image.grey({ algorithm: 'brightness' }).data)).toEqual([200, 0]);
+        expect(Array.from(image.grey({ algorithm: 'red' }).data)).toEqual([100, 0]);
+        expect(Array.from(image.grey({ algorithm: 'green' }).data)).toEqual([150, 0]);
+        expect(Array.from(image.grey({ algorithm: 'blue' }).data)).toEqual([200, 0]);
+        expect(Array.from(image.grey({ algorithm: 'magenta' }).data)).toEqual([63, 0]);
+        expect(Array.from(image.grey({ algorithm: 'cyan' }).data)).toEqual([127, 0]);
+        expect(Array.from(image.grey({ algorithm: 'yellow' }).data)).toEqual([0, 0]);
+        expect(Array.from(image.grey({ algorithm: 'black' }).data)).toEqual([55, 0]);
+        expect(Array.from(image.grey({ algorithm: 'hue' }).data)).toEqual([148, 0]);
+        expect(Array.from(image.grey({ algorithm: 'saturation' }).data)).toEqual([128, 0]);
+        expect(Array.from(image.grey({ algorithm: 'lightness' }).data)).toEqual([150, 0]);
+        expect(Array.from(image.grey({ algorithm: 'luminosity' }).data)).toEqual([150, 0]);
+        expect(Array.from(image.grey({ algorithm: 'luminance' }).data)).toEqual([150, 0]);
 
-        Array.from(image.grey({ keepAlpha: true }).data).should.eql(
-            [
-                142, 255,
-                142, 0
-            ]
-        );
+        expect(Array.from(image.grey({ keepAlpha: true }).data)).toEqual([
+            142, 255,
+            142, 0
+        ]);
 
-        Array.from(image.grey({ mergeAlpha: true }).data).should.eql(
-            [
-                142,
-                0
-            ]
-        );
+        expect(Array.from(image.grey({ mergeAlpha: true }).data)).toEqual([
+            142,
+            0
+        ]);
 
 
-        Array.from(image.grey({ algorithm: 'average', keepAlpha: true }).data).should.eql(
-            [
-                150, 255,
-                150, 0
-            ]
-        );
+        expect(Array.from(image.grey({ algorithm: 'average', keepAlpha: true }).data)).toEqual([
+            150, 255,
+            150, 0
+        ]);
 
-        Array.from(image.grey({ algorithm: 'maximum', keepAlpha: true }).data).should.eql(
-            [
-                200, 255,
-                200, 0
-            ]
-        );
+        expect(Array.from(image.grey({ algorithm: 'maximum', keepAlpha: true }).data)).toEqual([
+            200, 255,
+            200, 0
+        ]);
 
-        Array.from(image.grey({ algorithm: 'minmax', keepAlpha: true }).data).should.eql(
-            [
-                150, 255,
-                150, 0
-            ]
-        );
+        expect(Array.from(image.grey({ algorithm: 'minmax', keepAlpha: true }).data)).toEqual([
+            150, 255,
+            150, 0
+        ]);
 
-        Array.from(image.grey({ algorithm: 'luma601', keepAlpha: true }).data).should.eql(
-            [
-                140, 255,
-                140, 0
-            ]
-        );
+        expect(Array.from(image.grey({ algorithm: 'luma601', keepAlpha: true }).data)).toEqual([
+            140, 255,
+            140, 0
+        ]);
 
-        Array.from(image.grey({ algorithm: 'luma709', keepAlpha: true }).data).should.eql(
-            [
-                142, 255,
-                142, 0
-            ]
-        );
+        expect(Array.from(image.grey({ algorithm: 'luma709', keepAlpha: true }).data)).toEqual([
+            142, 255,
+            142, 0
+        ]);
 
-        (function () {
+        expect(function () {
             image.grey({ algorithm: 'XXX' });
-        }).should.throw(/Unsupported grey algorithm/);
+        }).toThrowError(/Unsupported grey algorithm/);
 
     });
 
@@ -95,19 +80,17 @@ describe('Grey transform', function () {
             { kind: 'GREYA' }
         );
 
-        (function () {
+        expect(function () {
             image.grey();
-        }).should.throw(/only be applied/);
+        }).toThrowError(/only be applied/);
 
-        Array.from(image.grey({ allowGrey: true }).data).should.eql([100, 0]);
-        Array.from(image.grey({ allowGrey: true, mergeAlpha: false }).data).should.eql([100, 150]);
+        expect(Array.from(image.grey({ allowGrey: true }).data)).toEqual([100, 0]);
+        expect(Array.from(image.grey({ allowGrey: true, mergeAlpha: false }).data)).toEqual([100, 150]);
 
-        Array.from(image.grey({ allowGrey: true, keepAlpha: true }).data).should.eql(
-            [
-                100, 255,
-                150, 0
-            ]
-        );
+        expect(Array.from(image.grey({ allowGrey: true, keepAlpha: true }).data)).toEqual([
+            100, 255,
+            150, 0
+        ]);
 
 
     });

@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('check median', function () {
     it('for a GREY even image', function () {
@@ -13,7 +12,7 @@ describe('check median', function () {
             { kind: 'GREY' }
         );
 
-        image.median.should.eql([2]);
+        expect(image.median).toEqual([2]);
     });
 
     it('for a GREY odd image', function () {
@@ -27,7 +26,7 @@ describe('check median', function () {
             { kind: 'GREY' }
         );
 
-        image.median.should.eql([2]);
+        expect(image.median).toEqual([2]);
     });
 
     it('for a RGBA image', function () {
@@ -39,7 +38,7 @@ describe('check median', function () {
                 3, 4, 5, 255
             ]
         );
-        image.median.should.eql([2, 3, 4]);
+        expect(image.median).toEqual([2, 3, 4]);
     });
 
     it('for a RGBA image with alpha', function () {
@@ -52,7 +51,7 @@ describe('check median', function () {
             ]
         );
 
-        image.median.should.eql([2.5, 3.5, 4.5]);
+        expect(image.median).toEqual([2.5, 3.5, 4.5]);
     });
 
 });

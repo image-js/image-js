@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('get a specific channel from an image', function () {
 
@@ -26,10 +25,10 @@ describe('get a specific channel from an image', function () {
         });
         image.setChannel('a', alpha);
 
-        image.components.should.equal(3);
-        image.channels.should.equal(4);
-        image.bitDepth.should.equal(8);
-        Array.from(image.data).should.eql([230, 83, 120, 55, 100, 140, 13, 77]);
+        expect(image.components).toBe(3);
+        expect(image.channels).toBe(4);
+        expect(image.bitDepth).toBe(8);
+        expect(Array.from(image.data)).toEqual([230, 83, 120, 55, 100, 140, 13, 77]);
     });
 });
 

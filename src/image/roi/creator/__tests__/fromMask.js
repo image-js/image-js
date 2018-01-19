@@ -1,6 +1,5 @@
 import fromMask from '../fromMask';
 import { Image } from 'test/common';
-import 'should';
 
 describe('we check fromMask', function () {
 
@@ -41,7 +40,7 @@ describe('we check fromMask', function () {
             -1, -1, -1, -1, -1, -1
         ];
 
-        Array.from(mapData).should.eql(expected);
+        expect(Array.from(mapData)).toEqual(expected);
     });
 
     it('should yield the right map with 8 neighbours', function () {
@@ -56,7 +55,7 @@ describe('we check fromMask', function () {
             -1, -1, -1, -1, -1, -1
         ];
 
-        Array.from(mapData).should.eql(expected);
+        expect(Array.from(mapData)).toEqual(expected);
     });
 
     it('should fail when there are too many separate ROIs', () => {
@@ -69,8 +68,8 @@ describe('we check fromMask', function () {
                 pos = !pos;
             }
         }
-        (function () {
+        expect(function () {
             fromMask(mask);
-        }).should.throw(/Too many regions of interest/);
+        }).toThrowError(/Too many regions of interest/);
     });
 });

@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 import Matrix from 'ml-matrix';
 
 describe('check the top hat function', function () {
@@ -16,15 +15,13 @@ describe('check the top hat function', function () {
             { kind: 'GREY' }
         );
 
-        Array.from(image.topHat({ kernel: kernel }).data).should.eql(
-            [
-                0, 0, 255, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 255, 0, 0
-            ]
-        );
+        expect(Array.from(image.topHat({ kernel: kernel }).data)).toEqual([
+            0, 0, 255, 0, 0,
+            0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0,
+            0, 0, 255, 0, 0
+        ]);
     });
     it('check for GREY image 5x5 2 iterations', function () {
         let kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]);
@@ -39,15 +36,13 @@ describe('check the top hat function', function () {
             { kind: 'GREY' }
         );
 
-        Array.from(image.topHat({ kernel: kernel, iterations: 2 }).data).should.eql(
-            [
-                0, 0, 255, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0,
-                0, 0, 255, 0, 0
-            ]
-        );
+        expect(Array.from(image.topHat({ kernel: kernel, iterations: 2 }).data)).toEqual([
+            0, 0, 255, 0, 0,
+            0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0,
+            0, 0, 255, 0, 0
+        ]);
     });
 });
 

@@ -1,5 +1,4 @@
 import { Image, load } from 'test/common';
-import 'should';
 
 describe('we check the relative position', function () {
     it('check the extract without specify position', function () {
@@ -11,7 +10,7 @@ describe('we check the relative position', function () {
 
         return load('BW4x4.png').then(function (image) {
             let position = image.getRelativePosition(mask);
-            position.should.equal(false);
+            expect(position).toBe(false);
         });
     });
 
@@ -24,7 +23,7 @@ describe('we check the relative position', function () {
 
         return load('BW4x4.png').then(function (image) {
             let position = image.getRelativePosition(mask, { defaultFurther: true });
-            position.should.eql([0, 0]);
+            expect(position).toEqual([0, 0]);
         });
     });
 
@@ -43,7 +42,7 @@ describe('we check the relative position', function () {
 
             let position = mask.getRelativePosition(image);
 
-            position.should.eql([1, 1]);
+            expect(position).toEqual([1, 1]);
         });
     });
 });

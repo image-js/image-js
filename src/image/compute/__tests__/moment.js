@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('check moment', function () {
     it('should yield the correct moment', function () {
@@ -9,11 +8,11 @@ describe('check moment', function () {
             0b10000000,
         ], { kind: 'BINARY' });
 
-        image.getMoment().should.equal(4);
-        image.getMoment(0, 0).should.equal(4);
-        image.getMoment(1, 0).should.equal(13);
-        image.getMoment(0, 1).should.equal(1);
-        image.getMoment(1, 1).should.equal(0);
+        expect(image.getMoment()).toBe(4);
+        expect(image.getMoment(0, 0)).toBe(4);
+        expect(image.getMoment(1, 0)).toBe(13);
+        expect(image.getMoment(0, 1)).toBe(1);
+        expect(image.getMoment(1, 1)).toBe(0);
     });
 });
 

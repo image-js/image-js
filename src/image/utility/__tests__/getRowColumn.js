@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('check getRow and getColumn class', function () {
     it('should yield the third row and third column for GREY image', function () {
@@ -13,8 +12,8 @@ describe('check getRow and getColumn class', function () {
             { kind: 'GREY' }
         );
 
-        image.getRow(2).should.eql([0, 1, 2, 2, 2]);
-        image.getColumn(2).should.eql([0, 1, 2, 3]);
+        expect(image.getRow(2)).toEqual([0, 1, 2, 2, 2]);
+        expect(image.getColumn(2)).toEqual([0, 1, 2, 3]);
     });
 
     it('should yield the first second and second column for GREY A image', function () {
@@ -27,26 +26,26 @@ describe('check getRow and getColumn class', function () {
             { kind: 'GREYA' }
         );
 
-        image.getRow(1, 0).should.eql([6, 8, 10]);
-        image.getRow(1, 1).should.eql([7, 9, 11]);
-        image.getColumn(1, 0).should.eql([2, 8, 14]);
-        image.getColumn(1, 1).should.eql([3, 9, 15]);
+        expect(image.getRow(1, 0)).toEqual([6, 8, 10]);
+        expect(image.getRow(1, 1)).toEqual([7, 9, 11]);
+        expect(image.getColumn(1, 0)).toEqual([2, 8, 14]);
+        expect(image.getColumn(1, 1)).toEqual([3, 9, 15]);
 
-        (function () {
+        expect(function () {
             image.getRow(5);
-        }).should.throw(/row should be included between 0 and 2/);
+        }).toThrowError(/row should be included between 0 and 2/);
 
-        (function () {
+        expect(function () {
             image.getRow(1, 2);
-        }).should.throw(/channel should be included between 0 and 1/);
+        }).toThrowError(/channel should be included between 0 and 1/);
 
-        (function () {
+        expect(function () {
             image.getColumn(5);
-        }).should.throw(/column should be included between 0 and 2/);
+        }).toThrowError(/column should be included between 0 and 2/);
 
-        (function () {
+        expect(function () {
             image.getColumn(1, 2);
-        }).should.throw(/channel should be included between 0 and 1/);
+        }).toThrowError(/channel should be included between 0 and 1/);
 
     });
 

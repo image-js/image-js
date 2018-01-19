@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 import Matrix from 'ml-matrix';
 
 describe('check the erode function', function () {
@@ -16,15 +15,13 @@ describe('check the erode function', function () {
             { kind: 'GREY' }
         );
 
-        Array.from(image.erode({ kernel: kernel }).data).should.eql(
-            [
-                0, 0, 0, 255, 255,
-                0, 0, 0, 255, 255,
-                0, 0, 0, 255, 255,
-                0, 0, 0, 255, 255,
-                0, 0, 0, 255, 255
-            ]
-        );
+        expect(Array.from(image.erode({ kernel: kernel }).data)).toEqual([
+            0, 0, 0, 255, 255,
+            0, 0, 0, 255, 255,
+            0, 0, 0, 255, 255,
+            0, 0, 0, 255, 255,
+            0, 0, 0, 255, 255
+        ]);
     });
 });
 

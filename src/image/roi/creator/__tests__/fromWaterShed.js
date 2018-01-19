@@ -1,6 +1,5 @@
 import fromWaterShed from '../fromWaterShed';
 import { Image } from 'test/common';
-import 'should';
 
 describe('Test WaterShed Roi generation', function () {
     it('basic', function () {
@@ -15,15 +14,13 @@ describe('Test WaterShed Roi generation', function () {
             { kind: 'GREY' }
         );
         let map = fromWaterShed.call(image);
-        Array.from(map.data).should.eql(
-            [
-                1, 1, 1, 1, 1,
-                1, 1, 1, 1, 1,
-                1, 1, 1, 1, 1,
-                1, 1, 1, 1, 1,
-                1, 1, 1, 1, 1
-            ]
-        );
+        expect(Array.from(map.data)).toEqual([
+            1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1
+        ]);
     });
 
     it('for a GREY image, and with a useless mask, looking for maxima', function () {
@@ -49,15 +46,13 @@ describe('Test WaterShed Roi generation', function () {
             mask: mask,
             invert: true
         });
-        Array.from(map.data).should.eql(
-            [
-                0, 0, 0, 0, 0,
-                0, 1, 1, 1, 0,
-                0, 1, 1, 1, 0,
-                0, 1, 1, 1, 0,
-                0, 0, 0, 0, 0
-            ]
-        );
+        expect(Array.from(map.data)).toEqual([
+            0, 0, 0, 0, 0,
+            0, 1, 1, 1, 0,
+            0, 1, 1, 1, 0,
+            0, 1, 1, 1, 0,
+            0, 0, 0, 0, 0
+        ]);
     });
 
     it('for a GREY image, and with a useless mask', function () {
@@ -84,20 +79,18 @@ describe('Test WaterShed Roi generation', function () {
             }
         }
         let map = fromWaterShed.call(image, { fillMaxValue: 2, mask: mask });
-        Array.from(map.data).should.eql(
-            [
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 1, 1, 1, 0, 0, 0, 0, 0,
-                0, 0, 1, 1, 1, 1, 0, 0, 0, 0,
-                0, 0, 1, 1, 1, 1, 0, 0, 0, 0,
-                0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 2, 2, 2, 0,
-                0, 0, 0, 0, 0, 0, 2, 2, 2, 2,
-                0, 0, 0, 0, 0, 2, 2, 2, 2, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 2, 0
-            ]
-        );
+        expect(Array.from(map.data)).toEqual([
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 1, 1, 1, 0, 0, 0, 0, 0,
+            0, 0, 1, 1, 1, 1, 0, 0, 0, 0,
+            0, 0, 1, 1, 1, 1, 0, 0, 0, 0,
+            0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 2, 2, 2, 0,
+            0, 0, 0, 0, 0, 0, 2, 2, 2, 2,
+            0, 0, 0, 0, 0, 2, 2, 2, 2, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 2, 0
+        ]);
     });
 
 
@@ -131,19 +124,17 @@ describe('Test WaterShed Roi generation', function () {
         }
 
         let map = fromWaterShed.call(image, { mask: mask });
-        Array.from(map.data).should.eql(
-            [
-                1, 1, 1, 1, 1, 1, 2, 2, 2, 2,
-                1, 1, 1, 1, 1, 1, 2, 2, 2, 0,
-                0, 1, 1, 1, 1, 1, 2, 2, 2, 0,
-                0, 1, 1, 1, 1, 1, 1, 2, 2, 0,
-                0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
-                0, 0, 0, 3, 1, 3, 3, 3, 3, 3,
-                0, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-                0, 0, 3, 3, 3, 3, 3, 3, 3, 3,
-                0, 0, 0, 0, 3, 3, 3, 3, 3, 3,
-                0, 0, 0, 0, 3, 3, 3, 3, 3, 3
-            ]
-        );
+        expect(Array.from(map.data)).toEqual([
+            1, 1, 1, 1, 1, 1, 2, 2, 2, 2,
+            1, 1, 1, 1, 1, 1, 2, 2, 2, 0,
+            0, 1, 1, 1, 1, 1, 2, 2, 2, 0,
+            0, 1, 1, 1, 1, 1, 1, 2, 2, 0,
+            0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
+            0, 0, 0, 3, 1, 3, 3, 3, 3, 3,
+            0, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+            0, 0, 3, 3, 3, 3, 3, 3, 3, 3,
+            0, 0, 0, 0, 3, 3, 3, 3, 3, 3,
+            0, 0, 0, 0, 3, 3, 3, 3, 3, 3
+        ]);
     });
 });

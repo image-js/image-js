@@ -1,5 +1,4 @@
 import { Image, getSquare } from 'test/common';
-import 'should';
 
 function sub(a = 1, b = 2) {
     return a - b;
@@ -17,19 +16,19 @@ describe('Image extensions', function () {
     describe('extendMethod', function () {
         let img = getSquare();
         it('should add methods to the prototype', function () {
-            img.testMethod1.should.be.a.Function();
-            img.testMethod2.should.be.a.Function();
-            Image.prototype.testMethod1.should.equal(img.testMethod1);
+            expect(typeof img.testMethod1).toBe('function');
+            expect(typeof img.testMethod2).toBe('function');
+            expect(Image.prototype.testMethod1).toBe(img.testMethod1);
         });
         it('inplace and returnThis options', function () {
-            img.testMethod1().should.equal(-1);
-            img.testMethod1(5).should.equal(3);
-            img.testMethod2().should.equal(3);
-            img.testMethod3().should.equal(img);
+            expect(img.testMethod1()).toBe(-1);
+            expect(img.testMethod1(5)).toBe(3);
+            expect(img.testMethod2()).toBe(3);
+            expect(img.testMethod3()).toBe(img);
         });
         it('partial arguments', function () {
-            img.testMethod4().should.equal(4);
-            img.testMethod4(3).should.equal(3);
+            expect(img.testMethod4()).toBe(4);
+            expect(img.testMethod4(3)).toBe(3);
         });
     });
 
@@ -47,25 +46,25 @@ describe('Image extensions', function () {
             img = getSquare();
         });
         it('should compute the property on first access', function () {
-            img.testProp1.should.equal(3);
-            count.should.equal(1);
-            img.testProp1.should.equal(3);
-            img.testProp1.should.equal(3);
-            count.should.equal(1);
+            expect(img.testProp1).toBe(3);
+            expect(count).toBe(1);
+            expect(img.testProp1).toBe(3);
+            expect(img.testProp1).toBe(3);
+            expect(count).toBe(1);
         });
         it('should reset after an inplace filter', function () {
-            img.testProp1.should.equal(3);
-            count.should.equal(1);
-            img.testProp1.should.equal(3);
-            count.should.equal(1);
+            expect(img.testProp1).toBe(3);
+            expect(count).toBe(1);
+            expect(img.testProp1).toBe(3);
+            expect(count).toBe(1);
             img.testMethod3();
-            count.should.equal(1);
-            img.testProp1.should.equal(3);
-            count.should.equal(2);
+            expect(count).toBe(1);
+            expect(img.testProp1).toBe(3);
+            expect(count).toBe(2);
         });
         it('should pass parameters', function () {
-            img.testProp2.should.equal(3);
-            img.testProp3.should.equal(15);
+            expect(img.testProp2).toBe(3);
+            expect(img.testProp3).toBe(15);
         });
     });
 });

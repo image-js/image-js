@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('combine specific channels from an image', function () {
 
@@ -10,10 +9,10 @@ describe('combine specific channels from an image', function () {
             return (pixel[0] + pixel[1] + pixel[2]) / 3;
         });
 
-        combined.components.should.equal(1);
-        combined.channels.should.equal(1);
-        combined.bitDepth.should.equal(8);
-        Array.from(combined.data).should.eql([20, 110]);
+        expect(combined.components).toBe(1);
+        expect(combined.channels).toBe(1);
+        expect(combined.bitDepth).toBe(8);
+        expect(Array.from(combined.data)).toEqual([20, 110]);
 
     });
 
@@ -26,11 +25,11 @@ describe('combine specific channels from an image', function () {
             mergeAlpha: true
         });
 
-        combined.components.should.equal(1);
-        combined.alpha.should.be.equal(0);
-        combined.channels.should.equal(1);
-        combined.bitDepth.should.equal(8);
-        Array.from(combined.data).should.eql([20, 0]);
+        expect(combined.components).toBe(1);
+        expect(combined.alpha).toBe(0);
+        expect(combined.channels).toBe(1);
+        expect(combined.bitDepth).toBe(8);
+        expect(Array.from(combined.data)).toEqual([20, 0]);
     });
 
     it('should check channels from a RGBA image with keep alpha', function () {
@@ -42,11 +41,11 @@ describe('combine specific channels from an image', function () {
             keepAlpha: true
         });
 
-        combined.channels.should.equal(2);
-        combined.alpha.should.be.equal(1);
-        combined.components.should.equal(1);
-        combined.bitDepth.should.equal(8);
-        Array.from(combined.data).should.eql([20, 255, 110, 0]);
+        expect(combined.channels).toBe(2);
+        expect(combined.alpha).toBe(1);
+        expect(combined.components).toBe(1);
+        expect(combined.bitDepth).toBe(8);
+        expect(Array.from(combined.data)).toEqual([20, 255, 110, 0]);
     });
 
 });

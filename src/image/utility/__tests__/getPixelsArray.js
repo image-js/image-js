@@ -1,5 +1,4 @@
 import { Image, getSquare } from 'test/common';
-import 'should';
 
 describe('getPixelsArray', function () {
     it('should work with grey images', function () {
@@ -14,13 +13,13 @@ describe('getPixelsArray', function () {
         );
 
         let array = image.getPixelsArray();
-        array.should.eql(data.map((x) => [x]));
+        expect(array).toEqual(data.map((x) => [x]));
     });
 
     it('should work with RGB images', function () {
         const square = getSquare();
         let array = square.getPixelsArray();
-        array.should.eql([
+        expect(array).toEqual([
             [0,  0,  255],
             [0,  255, 0],
             [255, 0,  0],

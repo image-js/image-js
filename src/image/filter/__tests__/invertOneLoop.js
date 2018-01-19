@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('invertOneLoop', function () {
 
@@ -12,7 +11,7 @@ describe('invertOneLoop', function () {
             let inverted = [25, 172, 135, 255, 155, 115, 242, 240];
 
             image.invertOneLoop();
-            image.data.should.eql(inverted);
+            expect(image.data).toEqual(inverted);
         });
     });
 });

@@ -1,5 +1,4 @@
 import { Image, Stack } from 'test/common';
-import 'should';
 
 describe('check stack histograms method', function () {
     it('should return global histograms for GREY image', function () {
@@ -36,7 +35,7 @@ describe('check stack histograms method', function () {
             )
         );
 
-        images.getHistograms({ maxSlots: 4 }).should.eql([[10, 0, 1, 1]]);
+        expect(images.getHistograms({ maxSlots: 4 })).toEqual([[10, 0, 1, 1]]);
     });
 
 
@@ -71,7 +70,7 @@ describe('check stack histograms method', function () {
             )
         );
 
-        images.getHistograms({ maxSlots: 4 }).should.eql([
+        expect(images.getHistograms({ maxSlots: 4 })).toEqual([
             [6, 0, 0, 0],
             [6, 0, 0, 0],
             [6, 0, 0, 0]

@@ -1,5 +1,4 @@
 import { load } from 'test/common';
-import 'should';
 
 /* Image to test:
 11111
@@ -22,14 +21,15 @@ describe('we check the internalMapID', function () {
                 return a.mask.sizes[0] - b.mask.sizes[0];
             });
 
-            rois.should.be.an.instanceof(Array).and.lengthOf(3);
-            rois[0].mask.sizes.should.eql([1, 1]);
-            rois[1].mask.sizes.should.eql([3, 3]);
-            rois[2].mask.sizes.should.eql([5, 5]);
+            expect(rois).toBeInstanceOf(Array);
+            expect(rois).toHaveLength(3);
+            expect(rois[0].mask.sizes).toEqual([1, 1]);
+            expect(rois[1].mask.sizes).toEqual([3, 3]);
+            expect(rois[2].mask.sizes).toEqual([5, 5]);
 
-            rois[0].internalIDs.should.eql([-2]);
-            rois[1].internalIDs.should.eql([1, -2]);
-            rois[2].internalIDs.should.eql([-1, 1, -2]);
+            expect(rois[0].internalIDs).toEqual([-2]);
+            expect(rois[1].internalIDs).toEqual([1, -2]);
+            expect(rois[2].internalIDs).toEqual([-1, 1, -2]);
 
         });
     });
@@ -51,13 +51,14 @@ describe('we check the internalMapID with complex image', function () {
                 return a.internalIDs[0] - b.internalIDs[0];
             });
 
-            rois.should.be.an.instanceof(Array).and.lengthOf(2);
+            expect(rois).toBeInstanceOf(Array);
+            expect(rois).toHaveLength(2);
 
-            rois[0].mask.sizes.should.eql([15, 15]);
-            rois[1].mask.sizes.should.eql([9, 2]);
+            expect(rois[0].mask.sizes).toEqual([15, 15]);
+            expect(rois[1].mask.sizes).toEqual([9, 2]);
 
-            rois[0].internalIDs.should.eql([-1, 1]);
-            rois[1].internalIDs.should.eql([1]);
+            expect(rois[0].internalIDs).toEqual([-1, 1]);
+            expect(rois[1].internalIDs).toEqual([1]);
         });
     });
 });

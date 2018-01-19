@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 import Matrix from 'ml-matrix';
 
 describe('check the dilate function', function () {
@@ -16,15 +15,13 @@ describe('check the dilate function', function () {
             { kind: 'GREY' }
         );
 
-        Array.from(image.dilate({ kernel: kernel }).data).should.eql(
-            [
-                255, 255, 0, 255, 255,
-                255, 255, 0, 255, 255,
-                255, 255, 0, 255, 255,
-                255, 255, 0, 255, 255,
-                255, 255, 0, 255, 255
-            ]
-        );
+        expect(Array.from(image.dilate({ kernel: kernel }).data)).toEqual([
+            255, 255, 0, 255, 255,
+            255, 255, 0, 255, 255,
+            255, 255, 0, 255, 255,
+            255, 255, 0, 255, 255,
+            255, 255, 0, 255, 255
+        ]);
     });
 });
 

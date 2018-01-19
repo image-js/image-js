@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('check the rotate transform', function () {
     it('90 degrees clockwise grey', function () {
@@ -11,9 +10,9 @@ describe('check the rotate transform', function () {
             { kind: 'GREY' });
 
         const result = image.rotateRight();
-        result.width.should.equal(2);
-        result.height.should.equal(3);
-        Array.from(result.data).should.eql([
+        expect(result.width).toBe(2);
+        expect(result.height).toBe(3);
+        expect(Array.from(result.data)).toEqual([
             4, 1,
             5, 2,
             6, 3
@@ -29,9 +28,9 @@ describe('check the rotate transform', function () {
             { kind: 'GREY' });
 
         const result = image.rotateLeft();
-        result.width.should.equal(2);
-        result.height.should.equal(3);
-        Array.from(result.data).should.eql([
+        expect(result.width).toBe(2);
+        expect(result.height).toBe(3);
+        expect(Array.from(result.data)).toEqual([
             3, 6,
             2, 5,
             1, 4
@@ -48,7 +47,7 @@ describe('check the rotate transform', function () {
             { kind: 'GREY' });
 
         const result = image.rotate(180);
-        Array.from(result.data).should.eql([
+        expect(Array.from(result.data)).toEqual([
             6, 5, 4,
             3, 2, 1
         ]);
@@ -63,6 +62,6 @@ describe('check the rotate transform', function () {
             { kind: 'GREY' });
         const rotate90 = image.rotate(90);
         const rotateMin270 = image.rotate(-270);
-        Array.from(rotate90.data).should.eql(Array.from(rotateMin270.data));
+        expect(Array.from(rotate90.data)).toEqual(Array.from(rotateMin270.data));
     });
 });

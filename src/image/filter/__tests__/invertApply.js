@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('invertApply', function () {
     describe('invert 3 components', function () {

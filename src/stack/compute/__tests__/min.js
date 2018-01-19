@@ -1,5 +1,4 @@
 import { Image, Stack } from 'test/common';
-import 'should';
 
 describe('check stack min method', function () {
     it('should return global minimal for GREY image', function () {
@@ -36,7 +35,7 @@ describe('check stack min method', function () {
             )
         );
 
-        images.getMin().should.eql([1]);
+        expect(images.getMin()).toEqual([1]);
     });
 
 
@@ -71,7 +70,7 @@ describe('check stack min method', function () {
             )
         );
 
-        images.getMin().should.eql([1, 1, 1, 4]);
+        expect(images.getMin()).toEqual([1, 1, 1, 4]);
     });
 
 });

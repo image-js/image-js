@@ -1,5 +1,4 @@
 import { Image, Stack } from 'test/common';
-import 'should';
 
 describe('check stack median method', function () {
     it('should return global median for GREY image', function () {
@@ -36,7 +35,7 @@ describe('check stack median method', function () {
             )
         );
 
-        images.getMedian().should.eql([52.5]);
+        expect(images.getMedian()).toEqual([52.5]);
     });
 
 
@@ -71,7 +70,7 @@ describe('check stack median method', function () {
             )
         );
 
-        images.getMedian().should.eql([4, 4.5, 6.5]);
+        expect(images.getMedian()).toEqual([4, 4.5, 6.5]);
     });
 
 });

@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('we check paintPolyline', function () {
     it('should yield the painted image with a line', function () {
@@ -23,7 +22,7 @@ describe('we check paintPolyline', function () {
 
         let exptected = getExpected(painted, [255, 0, 0]);
 
-        Array.from(image.data).should.eql(exptected);
+        expect(Array.from(image.data)).toEqual(exptected);
     });
 
     it('should yield the painted image with a rectangle', function () {
@@ -47,7 +46,7 @@ describe('we check paintPolyline', function () {
 
         let exptected = getExpected(painted, [255, 0, 0]);
 
-        Array.from(image.data).should.eql(exptected);
+        expect(Array.from(image.data)).toEqual(exptected);
     });
 
     it('should yield the painted image B/W image with a triangle', function () {
@@ -70,7 +69,7 @@ describe('we check paintPolyline', function () {
         ];
 
         let exptected = getExpectedGrey(painted, [255, 0, 0]);
-        Array.from(image.data).should.eql(exptected);
+        expect(Array.from(image.data)).toEqual(exptected);
     });
 });
 

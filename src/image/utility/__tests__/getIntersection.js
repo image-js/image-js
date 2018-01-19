@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('getIntersection', function () {
     it('correct intersection for two 2x2 Roi not intersecting (before transformation) in 5x5 image', function () {
@@ -23,23 +22,23 @@ describe('getIntersection', function () {
 
         //no intersection
         let intersectNull = mask2.getIntersection(mask3);
-        intersectNull.commonWhitePixels.length.should.eql(0);
-        intersectNull.whitePixelsMask1.length.should.eql(4);
-        intersectNull.whitePixelsMask2.length.should.eql(4);
+        expect(intersectNull.commonWhitePixels).toHaveLength(0);
+        expect(intersectNull.whitePixelsMask1).toHaveLength(4);
+        expect(intersectNull.whitePixelsMask2).toHaveLength(4);
 
         //scale second roi s.t. one pixel intersects
         let mask4 = mask3.scale({ factor: 2 });
         let intersectOnePx = mask2.getIntersection(mask4);
-        intersectOnePx.commonWhitePixels.length.should.eql(1);
-        intersectOnePx.whitePixelsMask1.length.should.eql(4);
-        intersectOnePx.whitePixelsMask2.length.should.eql(16);
+        expect(intersectOnePx.commonWhitePixels).toHaveLength(1);
+        expect(intersectOnePx.whitePixelsMask1).toHaveLength(4);
+        expect(intersectOnePx.whitePixelsMask2).toHaveLength(16);
 
         //scale first roi s.t. one pixel intersects
         let mask5 = mask2.scale({ factor: 2 });
         let intersectOnePxInverse = mask3.getIntersection(mask5);
-        intersectOnePxInverse.commonWhitePixels.length.should.eql(1);
-        intersectOnePxInverse.whitePixelsMask1.length.should.eql(4);
-        intersectOnePxInverse.whitePixelsMask2.length.should.eql(16);
+        expect(intersectOnePxInverse.commonWhitePixels).toHaveLength(1);
+        expect(intersectOnePxInverse.whitePixelsMask1).toHaveLength(4);
+        expect(intersectOnePxInverse.whitePixelsMask2).toHaveLength(16);
 
     });
 
@@ -82,9 +81,9 @@ describe('getIntersection', function () {
 
 
         let intersectNull = mask3.getIntersection(mask4);
-        intersectNull.commonWhitePixels.length.should.eql(4);
-        intersectNull.whitePixelsMask1.length.should.eql(9);
-        intersectNull.whitePixelsMask2.length.should.eql(4);
+        expect(intersectNull.commonWhitePixels).toHaveLength(4);
+        expect(intersectNull.whitePixelsMask1).toHaveLength(9);
+        expect(intersectNull.whitePixelsMask2).toHaveLength(4);
 
 
     });

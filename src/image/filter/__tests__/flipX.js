@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('flipX', function () {
     it('should flip pixels horizontally of all RGBA components for a [2,1] image', function () {
@@ -9,7 +8,7 @@ describe('flipX', function () {
         let flipped = [5, 6, 7, 8, 1, 2, 3, 4];
 
         image.flipX();
-        image.data.should.eql(flipped);
+        expect(image.data).toEqual(flipped);
     });
 
     it('should flip pixels horizontally of all RGBA components for a [2,2] image', function () {
@@ -18,7 +17,7 @@ describe('flipX', function () {
 
         let flipped = [5, 6, 7, 8, 1, 2, 3, 4, 13, 14, 15, 16, 9, 10, 11, 12];
         image.flipX();
-        image.data.should.eql(flipped);
+        expect(image.data).toEqual(flipped);
     });
 
     it('should flip pixels horizontally of all RGBA components for a [3,2] image', function () {
@@ -28,7 +27,7 @@ describe('flipX', function () {
         let flipped = [9, 10, 11, 12, 5, 6, 7, 8, 1, 2, 3, 4, 21, 22, 23, 24, 17, 18, 19, 20, 13, 14, 15, 16];
 
         image.flipX();
-        image.data.should.eql(flipped);
+        expect(image.data).toEqual(flipped);
     });
 
     it('should flip pixels horizontally of GREY image', function () {
@@ -37,7 +36,7 @@ describe('flipX', function () {
 
         let flipped = [2, 1, 4, 3];
         image.flipX();
-        image.data.should.eql(flipped);
+        expect(image.data).toEqual(flipped);
     });
 
     it('should flip pixels horizontally of all CMYK components for a [2,2] image', function () {
@@ -47,7 +46,7 @@ describe('flipX', function () {
         let flipped = [5, 6, 7, 8, 1, 2, 3, 4, 13, 14, 15, 16, 9, 10, 11, 12];
 
         image.flipX();
-        image.data.should.eql(flipped);
+        expect(image.data).toEqual(flipped);
     });
 
 });

@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('we check getPixelsGrid', function () {
     it('should yield the right array of pixels', function () {
@@ -41,9 +40,9 @@ describe('we check getPixelsGrid', function () {
             mask: mask
         });
 
-        pixels.xyS.should.eql([[1, 1], [4, 1]]);
-        pixels.zS.should.eql([[7], [10]]);
-        (typeof pixels.painted).should.equal('undefined');
+        expect(pixels.xyS).toEqual([[1, 1], [4, 1]]);
+        expect(pixels.zS).toEqual([[7], [10]]);
+        expect(typeof pixels.painted).toBe('undefined');
 
 
     });

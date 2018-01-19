@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('findCorrespondingRoi', function () {
     it('should yield the correct object containing corresponding roi ids and pixels', function () {
@@ -27,10 +26,10 @@ describe('findCorrespondingRoi', function () {
         );
 
 
-        img1.width.should.equal(5);
-        img1.height.should.equal(5);
-        img2.width.should.equal(5);
-        img2.height.should.equal(5);
+        expect(img1.width).toBe(5);
+        expect(img1.height).toBe(5);
+        expect(img2.width).toBe(5);
+        expect(img2.height).toBe(5);
 
         let roiManager1 = img1.getRoiManager();
         let mask1 = img1.mask();
@@ -43,18 +42,18 @@ describe('findCorrespondingRoi', function () {
         let roiMap2 = roiManager2.getMap();
 
         let related = roiManager1.findCorrespondingRoi(roiMap2);
-        Array.from(related[0].id).should.eql([1, -1, 2]);
-        Array.from(related[0].surface).should.eql([2, 4, 3]);
-        Array.from(related[0].roiSurfaceCovered).should.eql([(2 / 9), (4 / 9), (3 / 9)]);
-        related[0].same.should.eql(5);
-        related[0].opposite.should.eql(4);
-        related[0].total.should.eql(9);
-        Array.from(related[1].id).should.eql([-1]);
-        Array.from(related[1].surface).should.eql([16]);
-        Array.from(related[1].roiSurfaceCovered).should.eql([1]);
-        related[1].same.should.eql(16);
-        related[1].opposite.should.eql(0);
-        related[1].total.should.eql(16);
+        expect(Array.from(related[0].id)).toEqual([1, -1, 2]);
+        expect(Array.from(related[0].surface)).toEqual([2, 4, 3]);
+        expect(Array.from(related[0].roiSurfaceCovered)).toEqual([(2 / 9), (4 / 9), (3 / 9)]);
+        expect(related[0].same).toEqual(5);
+        expect(related[0].opposite).toEqual(4);
+        expect(related[0].total).toEqual(9);
+        expect(Array.from(related[1].id)).toEqual([-1]);
+        expect(Array.from(related[1].surface)).toEqual([16]);
+        expect(Array.from(related[1].roiSurfaceCovered)).toEqual([1]);
+        expect(related[1].same).toEqual(16);
+        expect(related[1].opposite).toEqual(0);
+        expect(related[1].total).toEqual(16);
 
 
     });
@@ -81,10 +80,10 @@ describe('findCorrespondingRoi', function () {
             { kind: 'GREY' }
         );
 
-        img1.width.should.equal(5);
-        img1.height.should.equal(5);
-        img2.width.should.equal(5);
-        img2.height.should.equal(5);
+        expect(img1.width).toBe(5);
+        expect(img1.height).toBe(5);
+        expect(img2.width).toBe(5);
+        expect(img2.height).toBe(5);
 
         let roiManager1 = img1.getRoiManager();
         let mask1 = img1.mask();
@@ -96,24 +95,24 @@ describe('findCorrespondingRoi', function () {
         let roiMap2 = roiManager2.getMap();
 
         let related = roiManager1.findCorrespondingRoi(roiMap2);
-        Array.from(related[0].id).should.eql([1]);
-        Array.from(related[0].surface).should.eql([2]);
-        Array.from(related[0].roiSurfaceCovered).should.eql([1]);
-        related[0].same.should.eql(2);
-        related[0].opposite.should.eql(0);
-        related[0].total.should.eql(2);
-        Array.from(related[1].id).should.eql([1]);
-        Array.from(related[1].surface).should.eql([3]);
-        Array.from(related[1].roiSurfaceCovered).should.eql([1]);
-        related[1].same.should.eql(3);
-        related[1].opposite.should.eql(0);
-        related[1].total.should.eql(3);
-        Array.from(related[2].id).should.eql([-1, 1]);
-        Array.from(related[2].surface).should.eql([16, 4]);
-        Array.from(related[2].roiSurfaceCovered).should.eql([(16 / 20), (4 / 20)]);
-        related[2].same.should.eql(16);
-        related[2].opposite.should.eql(4);
-        related[2].total.should.eql(20);
+        expect(Array.from(related[0].id)).toEqual([1]);
+        expect(Array.from(related[0].surface)).toEqual([2]);
+        expect(Array.from(related[0].roiSurfaceCovered)).toEqual([1]);
+        expect(related[0].same).toEqual(2);
+        expect(related[0].opposite).toEqual(0);
+        expect(related[0].total).toEqual(2);
+        expect(Array.from(related[1].id)).toEqual([1]);
+        expect(Array.from(related[1].surface)).toEqual([3]);
+        expect(Array.from(related[1].roiSurfaceCovered)).toEqual([1]);
+        expect(related[1].same).toEqual(3);
+        expect(related[1].opposite).toEqual(0);
+        expect(related[1].total).toEqual(3);
+        expect(Array.from(related[2].id)).toEqual([-1, 1]);
+        expect(Array.from(related[2].surface)).toEqual([16, 4]);
+        expect(Array.from(related[2].roiSurfaceCovered)).toEqual([(16 / 20), (4 / 20)]);
+        expect(related[2].same).toEqual(16);
+        expect(related[2].opposite).toEqual(4);
+        expect(related[2].total).toEqual(20);
 
     });
 
@@ -142,10 +141,10 @@ describe('findCorrespondingRoi', function () {
         );
 
 
-        img1.width.should.equal(5);
-        img1.height.should.equal(5);
-        img2.width.should.equal(5);
-        img2.height.should.equal(5);
+        expect(img1.width).toBe(5);
+        expect(img1.height).toBe(5);
+        expect(img2.width).toBe(5);
+        expect(img2.height).toBe(5);
 
         let roiManager1 = img1.getRoiManager();
         let mask1 = img1.mask();
@@ -158,18 +157,18 @@ describe('findCorrespondingRoi', function () {
         let roiMap2 = roiManager2.getMap();
 
         let related = roiManager1.findCorrespondingRoi(roiMap2);
-        Array.from(related[0].id).should.eql([-1]);
-        Array.from(related[0].surface).should.eql([9]);
-        Array.from(related[0].roiSurfaceCovered).should.eql([1]);
-        related[0].same.should.eql(0);
-        related[0].opposite.should.eql(9);
-        related[0].total.should.eql(9);
-        Array.from(related[1].id).should.eql([-1]);
-        Array.from(related[1].surface).should.eql([16]);
-        Array.from(related[1].roiSurfaceCovered).should.eql([1]);
-        related[1].same.should.eql(16);
-        related[1].opposite.should.eql(0);
-        related[1].total.should.eql(16);
+        expect(Array.from(related[0].id)).toEqual([-1]);
+        expect(Array.from(related[0].surface)).toEqual([9]);
+        expect(Array.from(related[0].roiSurfaceCovered)).toEqual([1]);
+        expect(related[0].same).toEqual(0);
+        expect(related[0].opposite).toEqual(9);
+        expect(related[0].total).toEqual(9);
+        expect(Array.from(related[1].id)).toEqual([-1]);
+        expect(Array.from(related[1].surface)).toEqual([16]);
+        expect(Array.from(related[1].roiSurfaceCovered)).toEqual([1]);
+        expect(related[1].same).toEqual(16);
+        expect(related[1].opposite).toEqual(0);
+        expect(related[1].total).toEqual(16);
 
     });
 
@@ -198,10 +197,10 @@ describe('findCorrespondingRoi', function () {
         );
 
 
-        img1.width.should.equal(5);
-        img1.height.should.equal(5);
-        img2.width.should.equal(5);
-        img2.height.should.equal(5);
+        expect(img1.width).toBe(5);
+        expect(img1.height).toBe(5);
+        expect(img2.width).toBe(5);
+        expect(img2.height).toBe(5);
 
         let roiManager1 = img1.getRoiManager();
         let mask1 = img1.mask();
@@ -214,9 +213,9 @@ describe('findCorrespondingRoi', function () {
         let roiMap2 = roiManager2.getMap();
 
         let related = roiManager1.findCorrespondingRoi(roiMap2);
-        Array.from(related[0].id).should.eql([-1]);
-        Array.from(related[0].surface).should.eql([25]);
-        Array.from(related[0].roiSurfaceCovered).should.eql([1]);
+        expect(Array.from(related[0].id)).toEqual([-1]);
+        expect(Array.from(related[0].surface)).toEqual([25]);
+        expect(Array.from(related[0].roiSurfaceCovered)).toEqual([1]);
 
     });
 });

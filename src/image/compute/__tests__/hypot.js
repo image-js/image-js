@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('check hypotenuse', function () {
     it('should yield the correct array', function () {
@@ -24,7 +23,7 @@ describe('check hypotenuse', function () {
                 5, 13, 17, 25, 41
             ];
 
-        Array.from(image1.hypotenuse(image2).data).should.eql(theoretical);
+        expect(Array.from(image1.hypotenuse(image2).data)).toEqual(theoretical);
     });
 });
 

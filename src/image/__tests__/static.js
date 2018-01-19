@@ -1,11 +1,10 @@
 import { Static } from '../..';
-import 'should';
 
 describe('Image core - Algorithms', function () {
 
     it('check grey names', function () {
-        Static.grey.indexOf('hue').should.equal(13);
-        Static.mask.indexOf('li').should.equal(4);
-        Static.mask.indexOf('threshold').should.equal(0);
+        expect(Static.grey.indexOf('hue')).toBe(13);
+        expect(Static.mask.indexOf('li')).toBe(4);
+        expect(Static.mask.indexOf('threshold')).toBe(0);
     });
 });

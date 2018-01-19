@@ -1,6 +1,5 @@
 import fromMaxima from '../fromMaxima';
 import { Image } from 'test/common';
-import 'should';
 
 describe('we check fromMaxima only looking for top', function () {
     it('should yield the right map large top', function () {
@@ -19,7 +18,7 @@ describe('we check fromMaxima only looking for top', function () {
             { onlyTop: true }
         ).data;
 
-        Array.from(data).should.eql([
+        expect(Array.from(data)).toEqual([
             0, 0, 0, 0, 0,
             0, 0, 0, 0, 0,
             0, 0, 1, 1, 0,
@@ -44,7 +43,7 @@ describe('we check fromMaxima only looking for top', function () {
             { onlyTop: true }
         ).data;
 
-        Array.from(data).should.eql([
+        expect(Array.from(data)).toEqual([
             0, 0, 0, 0, 0,
             0, 0, 0, 0, 0,
             0, 0, 0, 0, 0,
@@ -69,7 +68,7 @@ describe('we check fromMaxima only looking for top', function () {
             { onlyTop: true }
         ).data;
 
-        Array.from(data).should.eql([
+        expect(Array.from(data)).toEqual([
             0, 0, 0, 0, 0,
             0, 1, 0, 0, 0,
             0, 0, 0, 2, 0,
@@ -95,7 +94,7 @@ describe('we check fromMaxima only looking for top', function () {
             { onlyTop: true }
         ).data;
 
-        Array.from(data).should.eql([
+        expect(Array.from(data)).toEqual([
             0, 0, 0, 0, 0,
             0, 1, 1, 1, 0,
             0, 1, 0, 0, 0,
@@ -123,7 +122,7 @@ describe('we check fromMaxima only looking for maxima', function () {
             {}
         ).data;
 
-        Array.from(data).should.eql([
+        expect(Array.from(data)).toEqual([
             1, 1, 1, 1, 1,
             1, 1, 1, 1, 1,
             1, 1, 1, 1, 1,
@@ -146,7 +145,7 @@ describe('we check fromMaxima only looking for maxima', function () {
 
         let data = fromMaxima.call(image).data;
 
-        Array.from(data).should.eql([
+        expect(Array.from(data)).toEqual([
             1, 1, 1, 0, 1,
             1, 1, 1, 1, 1,
             1, 1, 1, 1, 1,
@@ -169,7 +168,7 @@ describe('we check fromMaxima only looking for maxima', function () {
 
         let data = fromMaxima.call(image).data;
 
-        Array.from(data).should.eql([
+        expect(Array.from(data)).toEqual([
             1, 1, 1, 1, 1,
             1, 1, 1, 2, 2,
             1, 1, 1, 2, 2,

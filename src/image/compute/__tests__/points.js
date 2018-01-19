@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('calculate the array of points', function () {
     it('check the array', function () {
@@ -8,8 +7,8 @@ describe('calculate the array of points', function () {
             kind: 'BINARY'
         });
 
-        img.getPoints().should.eql([[0, 0],  [1, 0],  [2, 0],  [3, 0],  [4, 0],  [5, 0],  [6, 0],  [7, 0]]);
-        img.points.should.eql([[0, 0],  [1, 0],  [2, 0],  [3, 0],  [4, 0],  [5, 0],  [6, 0],  [7, 0]]);
+        expect(img.getPoints()).toEqual([[0, 0],  [1, 0],  [2, 0],  [3, 0],  [4, 0],  [5, 0],  [6, 0],  [7, 0]]);
+        expect(img.points).toEqual([[0, 0],  [1, 0],  [2, 0],  [3, 0],  [4, 0],  [5, 0],  [6, 0],  [7, 0]]);
 
     });
 });

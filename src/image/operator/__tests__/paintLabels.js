@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('paintLabels', function () {
     it('should yield the painted image', function () {
@@ -27,9 +26,9 @@ describe('paintLabels', function () {
 
         // how to have any test that can work on travis ?
         let means = image.mean;
-        means[0].should.be.above(0);
-        means[1].should.be.above(0);
-        means[2].should.be.above(0);
+        expect(means[0]).toBeGreaterThan(0);
+        expect(means[1]).toBeGreaterThan(0);
+        expect(means[2]).toBeGreaterThan(0);
         // image.save('test.png');
     });
 });

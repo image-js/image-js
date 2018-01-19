@@ -1,5 +1,4 @@
 import { load, getHash } from 'test/common';
-import 'should';
 
 describe('Scale - nearest neighbor', function () {
     let original;
@@ -11,10 +10,10 @@ describe('Scale - nearest neighbor', function () {
     tests.forEach(function (test) {
         it(`5x5 -> ${test}x${test}`, async () => {
             const expected = await load(`resize/5x5a_${test}.png`);
-            getHash(original.scale({
+            expect(getHash(original.scale({
                 height: test,
                 width: test
-            })).should.equal(getHash(expected));
+            }))).toBe(getHash(expected));
         });
     });
 });

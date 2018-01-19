@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('invert', function () {
     it('should invert colors of 3 components of RGBA, not alpha', function () {

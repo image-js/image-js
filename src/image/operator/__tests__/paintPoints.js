@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('we check paintPoints', function () {
     it('should yield the painted image', function () {
@@ -36,7 +35,7 @@ describe('we check paintPoints', function () {
             }
         }
 
-        Array.from(image.data).should.eql(result);
+        expect(Array.from(image.data)).toEqual(result);
     });
 });
 

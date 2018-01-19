@@ -1,6 +1,5 @@
 import fromWaterShed from '../creator/fromWaterShed';
 import { Image } from 'test/common';
-import 'should';
 
 describe('Merge Roi', function () {
     it('should fusion 2 ROIs', function () {
@@ -41,19 +40,17 @@ describe('Merge Roi', function () {
             maxCommonBorderLength: 5,
         });
 
-        Array.from(roiMap.data).should.eql(
-            [
-                1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-                0, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-                0, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-                0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
-                0, 0, 0, 3, 1, 3, 3, 3, 3, 3,
-                0, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-                0, 0, 3, 3, 3, 3, 3, 3, 3, 3,
-                0, 0, 0, 0, 3, 3, 3, 3, 3, 3,
-                0, 0, 0, 0, 3, 3, 3, 3, 3, 3
-            ]
-        );
+        expect(Array.from(roiMap.data)).toEqual([
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+            0, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+            0, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+            0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
+            0, 0, 0, 3, 1, 3, 3, 3, 3, 3,
+            0, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+            0, 0, 3, 3, 3, 3, 3, 3, 3, 3,
+            0, 0, 0, 0, 3, 3, 3, 3, 3, 3,
+            0, 0, 0, 0, 3, 3, 3, 3, 3, 3
+        ]);
     });
 });

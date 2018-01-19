@@ -1,6 +1,5 @@
 import { Image } from 'test/common';
 import { validateChannel } from '../channel';
-import 'should';
 
 describe('we check the validateChannel method', function () {
     it('check for a RGB image', function () {
@@ -8,18 +7,18 @@ describe('we check the validateChannel method', function () {
             kind: 'RGB'
         });
 
-        validateChannel(image, 'r').should.equal(0);
-        validateChannel(image, 'g').should.equal(1);
-        validateChannel(image, 'b').should.equal(2);
-        (function () {
+        expect(validateChannel(image, 'r')).toBe(0);
+        expect(validateChannel(image, 'g')).toBe(1);
+        expect(validateChannel(image, 'b')).toBe(2);
+        expect(function () {
             validateChannel(image, 'a');
-        }).should.throw(/does not contain alpha/);
-        (function () {
+        }).toThrowError(/does not contain alpha/);
+        expect(function () {
             validateChannel(image);
-        }).should.throw(/the channel has to be/);
-        (function () {
+        }).toThrowError(/the channel has to be/);
+        expect(function () {
             validateChannel(image, 3, false);
-        }).should.throw(/the channel has to be/);
+        }).toThrowError(/the channel has to be/);
     });
 
     it('check for a RGBA image', function () {
@@ -27,16 +26,16 @@ describe('we check the validateChannel method', function () {
             kind: 'RGBA'
         });
 
-        validateChannel(image, 'r').should.equal(0);
-        validateChannel(image, 'g').should.equal(1);
-        validateChannel(image, 'b').should.equal(2);
-        validateChannel(image, 'a').should.equal(3);
-        (function () {
+        expect(validateChannel(image, 'r')).toBe(0);
+        expect(validateChannel(image, 'g')).toBe(1);
+        expect(validateChannel(image, 'b')).toBe(2);
+        expect(validateChannel(image, 'a')).toBe(3);
+        expect(function () {
             validateChannel(image);
-        }).should.throw(/the channel has to be/);
-        (function () {
+        }).toThrowError(/the channel has to be/);
+        expect(function () {
             validateChannel(image, 3, false);
-        }).should.throw(/alpha channel may not be/);
+        }).toThrowError(/alpha channel may not be/);
     });
 
     it('check for a GreyA image', function () {
@@ -44,19 +43,19 @@ describe('we check the validateChannel method', function () {
             kind: 'GREYA'
         });
 
-        validateChannel(image, 0).should.equal(0);
-        validateChannel(image, 1).should.equal(1);
-        validateChannel(image, 'a').should.equal(1);
-        validateChannel(image, 'a', true).should.equal(1);
-        (function () {
+        expect(validateChannel(image, 0)).toBe(0);
+        expect(validateChannel(image, 1)).toBe(1);
+        expect(validateChannel(image, 'a')).toBe(1);
+        expect(validateChannel(image, 'a', true)).toBe(1);
+        expect(function () {
             validateChannel(image, 'r');
-        }).should.throw(/undefined channel/);
-        (function () {
+        }).toThrowError(/undefined channel/);
+        expect(function () {
             validateChannel(image, 1, false);
-        }).should.throw(/alpha channel may not/);
-        (function () {
+        }).toThrowError(/alpha channel may not/);
+        expect(function () {
             validateChannel(image, 'a', false);
-        }).should.throw(/alpha channel may not/);
+        }).toThrowError(/alpha channel may not/);
     });
 
 });

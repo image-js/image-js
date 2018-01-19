@@ -1,6 +1,7 @@
+import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
+expect.extend({ toBeDeepCloseTo });
+
 import { Image } from 'test/common';
-import 'should';
-import 'should-approximately-deep';
 
 import { angle } from '../../../util/points';
 
@@ -25,7 +26,7 @@ describe('Minimal bounding rectangle', function () {
         );
 
         const result = minimalBoundingRectangle.call(image);
-        result.length.should.equal(4);
+        expect(result).toHaveLength(4);
 
         for (let i = 0; i < 4; i++) {
             let currentAngle = angle(
@@ -33,7 +34,7 @@ describe('Minimal bounding rectangle', function () {
                 result[i],
                 result[(i + 2) % 4]
             );
-            Math.abs(currentAngle).should.approximately(Math.PI / 2, 1e-6);
+            expect(Math.abs(currentAngle)).toBeCloseTo(Math.PI / 2, 1e-6);
         }
     });
 
@@ -43,7 +44,7 @@ describe('Minimal bounding rectangle', function () {
         });
 
         const result = minimalBoundingRectangle.call(image);
-        result.should.eql([[0, 2], [7, 2], [7, 0], [0, 0]]);
+        expect(result).toEqual([[0, 2], [7, 2], [7, 0], [0, 0]]);
     });
 
     it('should return the small bounding box 2', function () {
@@ -52,7 +53,7 @@ describe('Minimal bounding rectangle', function () {
         });
 
         const result = minimalBoundingRectangle.call(image);
-        result.should.eql([[1, 2], [6, 2], [6, 0], [1, 0]]);
+        expect(result).toEqual([[1, 2], [6, 2], [6, 0], [1, 0]]);
     });
 
     it('should return the small bounding box diamond', function () {
@@ -61,7 +62,7 @@ describe('Minimal bounding rectangle', function () {
         });
 
         const result = minimalBoundingRectangle.call(image);
-        result.should.approximatelyDeep([[6, 1], [5, 0], [4, 1], [5, 2]], 1e-6);
+        expect(result).toBeDeepCloseTo([[6, 1], [5, 0], [4, 1], [5, 2]], 6);
     });
 
     it('should return the small bounding box rectangle', function () {
@@ -81,37 +82,34 @@ describe('Minimal bounding rectangle', function () {
         );
 
         const result = minimalBoundingRectangle.call(image);
-        result.should.approximatelyDeep([[2, 3], [5, 6], [7, 4], [4, 1]], 1e-6);
+        expect(result).toBeDeepCloseTo([[2, 3], [5, 6], [7, 4], [4, 1]], 6);
     });
 
     it('should return the small bounding box rectangle from points', function () {
         const result = minimalBoundingRectangle({
             originalPoints: [[0, 1], [1, 0], [3, 2], [2, 4], [1, 4], [0, 3]]
         });
-        result.should.approximatelyDeep(
-            [[-1, 2], [1, 0], [3.5, 2.5], [1.5, 4.5]],
-            1e-6
-        );
+        expect(result).toBeDeepCloseTo([[-1, 2], [1, 0], [3.5, 2.5], [1.5, 4.5]], 6);
     });
 
     it('should return the small bouding rectangle for one point', function () {
         const result = minimalBoundingRectangle({
             originalPoints: [[2, 2]]
         });
-        result.should.approximatelyDeep([[2, 2], [2, 2], [2, 2], [2, 2]], 1e-6);
+        expect(result).toEqual([[2, 2], [2, 2], [2, 2], [2, 2]]);
     });
 
     it('should return the small bouding rectangle for nothing', function () {
         const result = minimalBoundingRectangle({
             originalPoints: []
         });
-        result.should.approximatelyDeep([], 1e-6);
+        expect(result).toEqual([]);
     });
 
     it('should return the small bouding rectangle for 2 points', function () {
         const result = minimalBoundingRectangle({
             originalPoints: [[2, 2], [3, 3]]
         });
-        result.should.approximatelyDeep([[2, 2], [3, 3], [3, 3], [2, 2]], 1e-6);
+        expect(result).toBeDeepCloseTo([[2, 2], [3, 3], [3, 3], [2, 2]], 6);
     });
 });

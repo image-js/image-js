@@ -1,5 +1,4 @@
 import { Image, Stack } from 'test/common';
-import 'should';
 
 describe('check stack average method', function () {
     it('should return a correct new RGBA image', function () {
@@ -32,11 +31,10 @@ describe('check stack average method', function () {
             )
         );
 
-        Array.from(images.getAverage().data).should.eql(
-            [
-                2, 3, 4, 5,
-                6, 7, 8, 9
-            ]);
+        expect(Array.from(images.getAverage().data)).toEqual([
+            2, 3, 4, 5,
+            6, 7, 8, 9
+        ]);
     });
 
 });

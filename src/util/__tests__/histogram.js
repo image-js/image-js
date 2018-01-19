@@ -1,38 +1,37 @@
 import { mean as meanFromHistogram, median as medianFromHistogram } from '../histogram';
-import 'should';
 
 describe('we check histogram utilities', function () {
     it('should check meanFromHistogram', function () {
-        meanFromHistogram([10, 10, 10, 10]).should.equal(1.5);
-        meanFromHistogram([0, 2, 2, 0, 4, 0]).should.equal(2.75);
+        expect(meanFromHistogram([10, 10, 10, 10])).toBe(1.5);
+        expect(meanFromHistogram([0, 2, 2, 0, 4, 0])).toBe(2.75);
     });
 
     it('should check medianFromHistogram', function () {
-        medianFromHistogram([10, 10, 10, 10]).should.equal(1.5);
-        medianFromHistogram([0, 2, 2, 0, 4, 0]).should.equal(3);
+        expect(medianFromHistogram([10, 10, 10, 10])).toBe(1.5);
+        expect(medianFromHistogram([0, 2, 2, 0, 4, 0])).toBe(3);
     });
 
     it('should get the right value for medianFromHistogram with odd total', function () {
-        medianFromHistogram([0, 0, 3, 0, 0]).should.equal(2);
-        medianFromHistogram([0, 1, 1, 1, 0]).should.equal(2);
-        medianFromHistogram([1, 1, 1, 0, 0]).should.equal(1);
-        medianFromHistogram([1, 0, 0, 0, 0]).should.equal(0);
-        medianFromHistogram([0, 0, 0, 0, 1]).should.equal(4);
-        medianFromHistogram([0, 0, 3, 0]).should.equal(2);
-        medianFromHistogram([0, 1, 1, 1]).should.equal(2);
-        medianFromHistogram([1, 1, 1, 0]).should.equal(1);
-        medianFromHistogram([1, 0, 0, 0]).should.equal(0);
-        medianFromHistogram([0, 0, 0, 1]).should.equal(3);
+        expect(medianFromHistogram([0, 0, 3, 0, 0])).toBe(2);
+        expect(medianFromHistogram([0, 1, 1, 1, 0])).toBe(2);
+        expect(medianFromHistogram([1, 1, 1, 0, 0])).toBe(1);
+        expect(medianFromHistogram([1, 0, 0, 0, 0])).toBe(0);
+        expect(medianFromHistogram([0, 0, 0, 0, 1])).toBe(4);
+        expect(medianFromHistogram([0, 0, 3, 0])).toBe(2);
+        expect(medianFromHistogram([0, 1, 1, 1])).toBe(2);
+        expect(medianFromHistogram([1, 1, 1, 0])).toBe(1);
+        expect(medianFromHistogram([1, 0, 0, 0])).toBe(0);
+        expect(medianFromHistogram([0, 0, 0, 1])).toBe(3);
     });
 
     it('should get the right value for medianFromHistogram with even total', function () {
-        medianFromHistogram([0, 0, 4, 0, 0]).should.equal(2);
-        medianFromHistogram([0, 1, 2, 1, 0]).should.equal(2);
-        medianFromHistogram([1, 2, 1, 0, 0]).should.equal(1);
-        medianFromHistogram([0, 0, 0, 0, 4]).should.equal(4);
-        medianFromHistogram([0, 0, 1, 1, 0]).should.equal(2.5);
-        medianFromHistogram([4, 0, 0, 0, 0]).should.equal(0);
-        (() => medianFromHistogram([0, 0, 0, 0, 0])).should.throw(/unreachable/);
-        medianFromHistogram([1, 0, 0, 0, 1]).should.equal(2);
+        expect(medianFromHistogram([0, 0, 4, 0, 0])).toBe(2);
+        expect(medianFromHistogram([0, 1, 2, 1, 0])).toBe(2);
+        expect(medianFromHistogram([1, 2, 1, 0, 0])).toBe(1);
+        expect(medianFromHistogram([0, 0, 0, 0, 4])).toBe(4);
+        expect(medianFromHistogram([0, 0, 1, 1, 0])).toBe(2.5);
+        expect(medianFromHistogram([4, 0, 0, 0, 0])).toBe(0);
+        expect(() => medianFromHistogram([0, 0, 0, 0, 0])).toThrowError(/unreachable/);
+        expect(medianFromHistogram([1, 0, 0, 0, 1])).toBe(2);
     });
 });

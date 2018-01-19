@@ -1,25 +1,24 @@
 import { Image, load } from 'test/common';
 import { createCanvas } from 'canvas';
-import 'should';
 
 describe('Image core', () => {
     it('constructor defaults', () => {
         let img = new Image();
-        img.width.should.equal(1);
-        img.height.should.equal(1);
-        img.data.length.should.equal(4);
+        expect(img.width).toBe(1);
+        expect(img.height).toBe(1);
+        expect(img.data).toHaveLength(4);
     });
 
     it('invalid constructor use', () => {
-        (function () {
+        expect(function () {
             new Image(0, 0); // eslint-disable-line no-new
-        }).should.throw(/width must be greater than 0/);
-        (function () {
+        }).toThrowError(/width must be greater than 0/);
+        expect(function () {
             new Image(5, 0); // eslint-disable-line no-new
-        }).should.throw(/height must be greater than 0/);
-        (function () {
+        }).toThrowError(/height must be greater than 0/);
+        expect(function () {
             new Image(10, 10, { kind: 'BLABLA' }); // eslint-disable-line no-new
-        }).should.throw(/invalid image kind: BLABLA/);
+        }).toThrowError(/invalid image kind: BLABLA/);
     });
 
     it('construct with a kind', () => {
@@ -38,7 +37,7 @@ describe('Image core', () => {
         const img = new Image(1, 1);
         expect(() => {
             img.setData([1]);
-        }).toThrow('incorrect data size. Should be 4 and found 1');
+        }).toThrow(/incorrect data size. Should be 4 and found 1/);
     });
 
     it('create from Canvas', () => {
@@ -47,7 +46,7 @@ describe('Image core', () => {
         ctx.fillStyle = 'red';
         ctx.fillRect(0, 0, 2, 1);
         let img = Image.fromCanvas(canvas);
-        Array.from(img.data).should.eql([
+        expect(Array.from(img.data)).toEqual([
             255,   0,   0, 255, 255,   0,   0, 255,
             0,   0,   0,   0,   0,   0,   0,   0
         ]);
@@ -55,9 +54,9 @@ describe('Image core', () => {
 
     it('should load from URL', function () {
         return load('format/rgba32.png').then(function (img) {
-            img.width.should.be.greaterThan(0);
-            img.height.should.be.greaterThan(0);
-            img.maxValue.should.equal(255);
+            expect(img.width).toBeGreaterThan(0);
+            expect(img.height).toBeGreaterThan(0);
+            expect(img.maxValue).toBe(255);
         });
     });
 
@@ -65,33 +64,33 @@ describe('Image core', () => {
         // a red dot
         const dataURL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==';
         return Image.load(dataURL).then((img) => {
-            img.width.should.equal(5);
-            img.height.should.equal(5);
+            expect(img.width).toBe(5);
+            expect(img.height).toBe(5);
         });
     });
 
     it('should clone', async () => {
         const img = await load('format/rgba32.png');
         const clone = img.clone();
-        clone.should.be.an.instanceOf(Image);
-        clone.should.not.be.equal(img);
-        clone.data.should.not.equal(img.data);
-        clone.toDataURL().should.equal(img.toDataURL());
+        expect(clone).toBeInstanceOf(Image);
+        expect(clone).not.toBe(img);
+        expect(clone.data).not.toBe(img.data);
+        expect(clone.toDataURL()).toBe(img.toDataURL());
     });
 
     it('should clone and keep same data', async () => {
         const img = await load('format/rgba32.png');
         const clone = img.clone({ copyData: false });
-        clone.should.be.an.instanceOf(Image);
-        clone.should.not.be.equal(img);
-        clone.data.should.equal(img.data);
-        clone.toDataURL().should.equal(img.toDataURL());
+        expect(clone).toBeInstanceOf(Image);
+        expect(clone).not.toBe(img);
+        expect(clone.data).toBe(img.data);
+        expect(clone.toDataURL()).toBe(img.toDataURL());
     });
 
     it('isImage', function () {
         const image = new Image(5, 5);
-        Image.isImage(image).should.be.true();
-        Image.isImage().should.be.false();
-        Image.isImage({}).should.be.false();
+        expect(Image.isImage(image)).toBe(true);
+        expect(Image.isImage()).toBe(false);
+        expect(Image.isImage({})).toBe(false);
     });
 });

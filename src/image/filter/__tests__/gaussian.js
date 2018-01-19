@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-import 'should';
 
 describe('check the gaussian filter', function () {
     it('check for GREY image', function () {
@@ -14,15 +13,13 @@ describe('check the gaussian filter', function () {
             { kind: 'GREY' }
         );
 
-        Array.from(image.gaussianFilter().data).should.eql(
-            [
-                15, 15, 17, 15, 15,
-                15, 15, 17, 15, 15,
-                17, 17, 21, 17, 17,
-                15, 15, 17, 15, 15,
-                15, 15, 17, 15, 15
-            ]
-        );
+        expect(Array.from(image.gaussianFilter().data)).toEqual([
+            15, 15, 17, 15, 15,
+            15, 15, 17, 15, 15,
+            17, 17, 21, 17, 17,
+            15, 15, 17, 15, 15,
+            15, 15, 17, 15, 15
+        ]);
     });
 
     it('check for GREY image wider than taller', function () {
@@ -37,25 +34,21 @@ describe('check the gaussian filter', function () {
             { kind: 'GREY' }
         );
 
-        Array.from(image.gaussianFilter({ fft: false }).data).should.eql(
-            [
-                11, 11, 15, 17, 15, 11, 11,
-                11, 11, 15, 17, 15, 11, 11,
-                11, 11, 17, 21, 17, 11, 11,
-                11, 11, 15, 17, 15, 11, 11,
-                11, 11, 15, 17, 15, 11, 11
-            ]
-        );
+        expect(Array.from(image.gaussianFilter({ fft: false }).data)).toEqual([
+            11, 11, 15, 17, 15, 11, 11,
+            11, 11, 15, 17, 15, 11, 11,
+            11, 11, 17, 21, 17, 11, 11,
+            11, 11, 15, 17, 15, 11, 11,
+            11, 11, 15, 17, 15, 11, 11
+        ]);
 
-        Array.from(image.gaussianFilter().data).should.eql(
-            [
-                11, 11, 15, 17, 15, 11, 11,
-                11, 11, 15, 17, 15, 11, 11,
-                11, 11, 17, 21, 17, 11, 11,
-                11, 11, 15, 17, 15, 11, 11,
-                11, 11, 15, 17, 15, 11, 11
-            ]
-        );
+        expect(Array.from(image.gaussianFilter().data)).toEqual([
+            11, 11, 15, 17, 15, 11, 11,
+            11, 11, 15, 17, 15, 11, 11,
+            11, 11, 17, 21, 17, 11, 11,
+            11, 11, 15, 17, 15, 11, 11,
+            11, 11, 15, 17, 15, 11, 11
+        ]);
     });
 
     it('check for GREY image taller than wider', function () {
@@ -72,30 +65,26 @@ describe('check the gaussian filter', function () {
             { kind: 'GREY' }
         );
 
-        Array.from(image.gaussianFilter({ fft: false }).data).should.eql(
-            [
-                11, 11, 11, 11, 11,
-                11, 11, 11, 11, 11,
-                15, 15, 17, 15, 15,
-                17, 17, 21, 17, 17,
-                15, 15, 17, 15, 15,
-                11, 11, 11, 11, 11,
-                11, 11, 11, 11, 11
-            ]
-        );
+        expect(Array.from(image.gaussianFilter({ fft: false }).data)).toEqual([
+            11, 11, 11, 11, 11,
+            11, 11, 11, 11, 11,
+            15, 15, 17, 15, 15,
+            17, 17, 21, 17, 17,
+            15, 15, 17, 15, 15,
+            11, 11, 11, 11, 11,
+            11, 11, 11, 11, 11
+        ]);
 
 
-        Array.from(image.gaussianFilter().data).should.eql(
-            [
-                11, 11, 11, 11, 11,
-                11, 11, 11, 11, 11,
-                15, 15, 17, 15, 15,
-                17, 17, 21, 17, 17,
-                15, 15, 17, 15, 15,
-                11, 11, 11, 11, 11,
-                11, 11, 11, 11, 11
-            ]
-        );
+        expect(Array.from(image.gaussianFilter().data)).toEqual([
+            11, 11, 11, 11, 11,
+            11, 11, 11, 11, 11,
+            15, 15, 17, 15, 15,
+            17, 17, 21, 17, 17,
+            15, 15, 17, 15, 15,
+            11, 11, 11, 11, 11,
+            11, 11, 11, 11, 11
+        ]);
     });
 
     it('separable gaussian', function () {
@@ -112,16 +101,14 @@ describe('check the gaussian filter', function () {
             { kind: 'GREY' }
         );
 
-        Array.from(image.gaussianFilter({ algorithm: 'separable' }).data).should.eql(
-            [
-                11, 11, 11, 11, 11,
-                11, 11, 11, 11, 11,
-                15, 15, 17, 15, 15,
-                17, 17, 21, 17, 17,
-                15, 15, 17, 15, 15,
-                11, 11, 11, 11, 11,
-                11, 11, 11, 11, 11
-            ]
-        );
+        expect(Array.from(image.gaussianFilter({ algorithm: 'separable' }).data)).toEqual([
+            11, 11, 11, 11, 11,
+            11, 11, 11, 11, 11,
+            15, 15, 17, 15, 15,
+            17, 17, 21, 17, 17,
+            15, 15, 17, 15, 15,
+            11, 11, 11, 11, 11,
+            11, 11, 11, 11, 11
+        ]);
     });
 });
