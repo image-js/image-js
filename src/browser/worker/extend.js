@@ -1,5 +1,5 @@
 import background from './process/background';
 
 export default function extend(Worker) {
-    Worker.extendMethod('background', background);
+  Worker.extendMethod('background', background);
 }

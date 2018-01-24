@@ -14,19 +14,19 @@ import { getColors } from '../../util/color';
  * @return {this} The original painted image
  */
 export default function paintPolygons(polygons, options = {}) {
-    let optionsCopy = Object.assign({}, options);
+  let optionsCopy = Object.assign({}, options);
 
-    this.checkProcessable('paintPolygons', {
-        bitDepth: [8, 16]
-    });
+  this.checkProcessable('paintPolygons', {
+    bitDepth: [8, 16]
+  });
 
-    let colors = getColors(Object.assign({}, options, { numberColors: polygons.length }));
+  let colors = getColors(Object.assign({}, options, { numberColors: polygons.length }));
 
 
-    for (let i = 0; i < polygons.length; i++) {
-        optionsCopy.color = colors[i % colors.length];
-        this.paintPolygon(polygons[i], optionsCopy);
-    }
+  for (let i = 0; i < polygons.length; i++) {
+    optionsCopy.color = colors[i % colors.length];
+    this.paintPolygon(polygons[i], optionsCopy);
+  }
 
-    return this;
+  return this;
 }

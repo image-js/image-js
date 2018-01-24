@@ -8,9 +8,9 @@
  */
 
 export default function mean(histogram, total) {
-    let sum = 0;
-    for (let i = 0; i < histogram.length; i++) {
-        sum += i * histogram[i];
-    }
-    return Math.floor(sum / total);
+  let sum = 0;
+  for (let i = 0; i < histogram.length; i++) {
+    sum += i * histogram[i];
+  }
+  return Math.floor(sum / total);
 }

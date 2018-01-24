@@ -7,11 +7,11 @@ import { median as histogramMedian } from '../../util/histogram';
  * @return {number[]} Array having has size the number of channels
  */
 export default function median() {
-    let histograms = this.getHistograms({ maxSlots: this.maxValue + 1 });
-    let result = new Array(histograms.length);
-    for (let c = 0; c < histograms.length; c++) {
-        let histogram = histograms[c];
-        result[c] = histogramMedian(histogram);
-    }
-    return result;
+  let histograms = this.getHistograms({ maxSlots: this.maxValue + 1 });
+  let result = new Array(histograms.length);
+  for (let c = 0; c < histograms.length; c++) {
+    let histogram = histograms[c];
+    result[c] = histogramMedian(histogram);
+  }
+  return result;
 }

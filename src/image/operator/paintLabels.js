@@ -16,65 +16,65 @@ import { css2array } from '../../util/color';
  * @return {this} The original painted image
  */
 export default function paintLabels(labels, positions, options = {}) {
-    let {
-        color = 'blue',
-        colors,
-        font = '12px Helvetica',
-        rotate = 0
-    } = options;
+  let {
+    color = 'blue',
+    colors,
+    font = '12px Helvetica',
+    rotate = 0
+  } = options;
 
-    this.checkProcessable('paintMasks', {
-        channels: [3, 4],
-        bitDepth: [8, 16],
-        colorModel: RGB
+  this.checkProcessable('paintMasks', {
+    channels: [3, 4],
+    bitDepth: [8, 16],
+    colorModel: RGB
+  });
+
+  if (!Array.isArray(labels)) {
+    throw Error('paintLabels: labels must be an array');
+  }
+
+  if (!Array.isArray(positions)) {
+    throw Error('paintLabels: positions must be an array');
+  }
+
+
+  if (color && !Array.isArray(color)) {
+    color = css2array(color);
+  }
+
+  if (colors) {
+    colors = colors.map(function (color) {
+      if (!Array.isArray(color)) {
+        return css2array(color);
+      }
+      return color;
     });
+  } else {
+    colors = [color];
+  }
 
-    if (!Array.isArray(labels)) {
-        throw Error('paintLabels: labels must be an array');
-    }
+  if (labels.length !== positions.length) {
+    throw Error('paintLabels: positions and labels must be arrays from the same size');
+  }
 
-    if (!Array.isArray(positions)) {
-        throw Error('paintLabels: positions must be an array');
-    }
+  // We convert everything to array so that we can simply loop thourgh all the labels
+  if (!Array.isArray(font)) font = [font];
+  if (!Array.isArray(rotate)) rotate = [rotate];
 
+  let canvas = this.getCanvas({ originalData: true });
+  let ctx = canvas.getContext('2d');
+  for (let i = 0; i < labels.length; i++) {
+    ctx.save();
+    let color = colors[i % colors.length];
+    ctx.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},${color[3] / this.maxValue})`;
+    ctx.font = font[i % font.length];
+    let position = positions[i];
+    ctx.translate(position[0], position[1]);
+    ctx.rotate(rotate[i % rotate.length] / 180 * Math.PI);
+    ctx.fillText(labels[i], 0, 0);
+    ctx.restore();
+  }
+  this.setData(ctx.getImageData(0, 0, this.width, this.height).data);
 
-    if (color && !Array.isArray(color)) {
-        color = css2array(color);
-    }
-
-    if (colors) {
-        colors = colors.map(function (color) {
-            if (!Array.isArray(color)) {
-                return css2array(color);
-            }
-            return color;
-        });
-    } else {
-        colors = [color];
-    }
-
-    if (labels.length !== positions.length) {
-        throw Error('paintLabels: positions and labels must be arrays from the same size');
-    }
-
-    // We convert everything to array so that we can simply loop thourgh all the labels
-    if (!Array.isArray(font)) font = [font];
-    if (!Array.isArray(rotate)) rotate = [rotate];
-
-    let canvas = this.getCanvas({ originalData: true });
-    let ctx = canvas.getContext('2d');
-    for (let i = 0; i < labels.length; i++) {
-        ctx.save();
-        let color = colors[i % colors.length];
-        ctx.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},${color[3] / this.maxValue})`;
-        ctx.font = font[i % font.length];
-        let position = positions[i];
-        ctx.translate(position[0], position[1]);
-        ctx.rotate(rotate[i % rotate.length] / 180 * Math.PI);
-        ctx.fillText(labels[i], 0, 0);
-        ctx.restore();
-    }
-    this.setData(ctx.getImageData(0, 0, this.width, this.height).data);
-
-    return this;
+  return this;
 }

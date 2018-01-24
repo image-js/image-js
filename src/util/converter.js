@@ -5,14 +5,14 @@
  * @return {number}
  */
 export function getFactor(value) {
-    if (typeof value === 'string') {
-        const last = value[value.length - 1];
-        value = parseFloat(value);
-        if (last === '%') {
-            value /= 100;
-        }
+  if (typeof value === 'string') {
+    const last = value[value.length - 1];
+    value = parseFloat(value);
+    if (last === '%') {
+      value /= 100;
     }
-    return value;
+  }
+  return value;
 }
 
 /**
@@ -23,39 +23,39 @@ export function getFactor(value) {
  * @return {number}
  */
 export function getThreshold(value, maxValue) {
-    if (!maxValue) {
-        throw Error('getThreshold : the maxValue should be specified');
+  if (!maxValue) {
+    throw Error('getThreshold : the maxValue should be specified');
+  }
+  if (typeof value === 'string') {
+    let last = value[value.length - 1];
+    if (last !== '%') {
+      throw Error('getThreshold : if the value is a string it must finish by %');
     }
-    if (typeof value === 'string') {
-        let last = value[value.length - 1];
-        if (last !== '%') {
-            throw Error('getThreshold : if the value is a string it must finish by %');
-        }
-        return parseFloat(value) / 100 * maxValue;
-    } else if (typeof value === 'number') {
-        if (value < 1) {
-            return value * maxValue;
-        }
-        return value;
-    } else {
-        throw Error('getThreshold : the value is not valid');
+    return parseFloat(value) / 100 * maxValue;
+  } else if (typeof value === 'number') {
+    if (value < 1) {
+      return value * maxValue;
     }
+    return value;
+  } else {
+    throw Error('getThreshold : the value is not valid');
+  }
 }
 
 
 export function factorDimensions(factor, width, height) {
-    factor = getFactor(factor);
-    let newWidth =  Math.round(factor * width);
-    let newHeight = Math.round(factor * height);
+  factor = getFactor(factor);
+  let newWidth =  Math.round(factor * width);
+  let newHeight = Math.round(factor * height);
 
-    if (newWidth <= 0) {
-        newWidth = 1;
-    }
-    if (newHeight <= 0) {
-        newHeight = 1;
-    }
-    return {
-        width: newWidth,
-        height: newHeight
-    };
+  if (newWidth <= 0) {
+    newWidth = 1;
+  }
+  if (newHeight <= 0) {
+    newHeight = 1;
+  }
+  return {
+    width: newWidth,
+    height: newHeight
+  };
 }

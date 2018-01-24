@@ -13,29 +13,29 @@ import { RGB } from '../model/model';
  * var rgbaImage = image.rgba();
  */
 export default function rgba() {
-    this.checkProcessable('rgba', {
-        bitDepth: [8, 16],
-        alpha: [0, 1],
-        colorModel: [RGB]
-    });
+  this.checkProcessable('rgba', {
+    bitDepth: [8, 16],
+    alpha: [0, 1],
+    colorModel: [RGB]
+  });
 
-    if (this.colorModel === RGB && this.alpha) {
-        return this.clone();
-    }
+  if (this.colorModel === RGB && this.alpha) {
+    return this.clone();
+  }
 
-    let newImage = Image.createFrom(this, {
-        alpha: 1
-    });
+  let newImage = Image.createFrom(this, {
+    alpha: 1
+  });
 
-    let ptr = 0;
-    let data = this.data;
-    for (let i = 0; i < data.length; i += this.channels) {
-        newImage.data[ptr++] = data[i];
-        newImage.data[ptr++] = data[i + 1];
-        newImage.data[ptr++] = data[i + 2];
-        newImage.data[ptr++] = this.maxValue;
-        ptr++;
-    }
+  let ptr = 0;
+  let data = this.data;
+  for (let i = 0; i < data.length; i += this.channels) {
+    newImage.data[ptr++] = data[i];
+    newImage.data[ptr++] = data[i + 1];
+    newImage.data[ptr++] = data[i + 2];
+    newImage.data[ptr++] = this.maxValue;
+    ptr++;
+  }
 
-    return newImage;
+  return newImage;
 }

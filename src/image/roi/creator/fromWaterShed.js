@@ -25,83 +25,83 @@ import { dxs, dys } from './../../../util/dxdy.js';
  * @return {RoiMap}
  */
 export default function fromWaterShed(options = {}) {
-    let {
-        points,
-        mask,
-        image,
-        fillMaxValue = this.maxValue,
-        invert = false
-    } = options;
-    let currentImage = image || this;
-    currentImage.checkProcessable('fromWaterShed', {
-        bitDepth: [8, 16],
-        components: 1
-    });
+  let {
+    points,
+    mask,
+    image,
+    fillMaxValue = this.maxValue,
+    invert = false
+  } = options;
+  let currentImage = image || this;
+  currentImage.checkProcessable('fromWaterShed', {
+    bitDepth: [8, 16],
+    components: 1
+  });
 
-    /*
+  /*
      We need to invert the logic because we are always using method to look for maxima and not minima and
      here water is expected to fill the minima first ...
     */
 
-    invert = !invert;
+  invert = !invert;
 
 
-    //WaterShed is done from points in the image. We can either specify those points in options,
-    // or it is gonna take the minimum locals of the image by default.
-    if (!points) {
-        points = currentImage.getLocalMaxima({
-            invert,
-            mask
-        });
-    }
-
-    let maskExpectedValue = (invert) ? 0 : 1;
-
-    let data = new Int16Array(currentImage.size);
-    let width = currentImage.width;
-    let height = currentImage.height;
-    let toProcess = new PriorityQueue({
-        comparator: (a, b) => a[2] - b[2],
-        strategy: PriorityQueue.BinaryHeapStrategy
+  //WaterShed is done from points in the image. We can either specify those points in options,
+  // or it is gonna take the minimum locals of the image by default.
+  if (!points) {
+    points = currentImage.getLocalMaxima({
+      invert,
+      mask
     });
-    for (let i = 0; i < points.length; i++) {
-        let index = points[i][0] + points[i][1] * width;
-        data[index] = i + 1;
-        let intensity = currentImage.data[index];
-        if (
-            (invert && intensity <= fillMaxValue) ||
+  }
+
+  let maskExpectedValue = (invert) ? 0 : 1;
+
+  let data = new Int16Array(currentImage.size);
+  let width = currentImage.width;
+  let height = currentImage.height;
+  let toProcess = new PriorityQueue({
+    comparator: (a, b) => a[2] - b[2],
+    strategy: PriorityQueue.BinaryHeapStrategy
+  });
+  for (let i = 0; i < points.length; i++) {
+    let index = points[i][0] + points[i][1] * width;
+    data[index] = i + 1;
+    let intensity = currentImage.data[index];
+    if (
+      (invert && intensity <= fillMaxValue) ||
             (!invert && intensity >= fillMaxValue)
-        ) {
-            toProcess.queue([points[i][0], points[i][1], intensity]);
-        }
+    ) {
+      toProcess.queue([points[i][0], points[i][1], intensity]);
     }
+  }
 
 
-    //Then we iterate through each points
-    while (toProcess.length > 0) {
-        let currentPoint = toProcess.dequeue();
-        let currentValueIndex = currentPoint[0] + currentPoint[1] * width;
+  //Then we iterate through each points
+  while (toProcess.length > 0) {
+    let currentPoint = toProcess.dequeue();
+    let currentValueIndex = currentPoint[0] + currentPoint[1] * width;
 
-        for (let dir = 0; dir < 4; dir++) {
-            let newX = currentPoint[0] + dxs[dir];
-            let newY = currentPoint[1] + dys[dir];
-            if (newX >= 0 && newY >= 0 && newX < width && newY < height) {
-                let currentNeighbourIndex = newX + newY * width;
-                if (!mask || (mask.getBit(currentNeighbourIndex) === maskExpectedValue)) {
-                    let intensity = currentImage.data[currentNeighbourIndex];
-                    if (
-                        (invert && intensity <= fillMaxValue) ||
+    for (let dir = 0; dir < 4; dir++) {
+      let newX = currentPoint[0] + dxs[dir];
+      let newY = currentPoint[1] + dys[dir];
+      if (newX >= 0 && newY >= 0 && newX < width && newY < height) {
+        let currentNeighbourIndex = newX + newY * width;
+        if (!mask || (mask.getBit(currentNeighbourIndex) === maskExpectedValue)) {
+          let intensity = currentImage.data[currentNeighbourIndex];
+          if (
+            (invert && intensity <= fillMaxValue) ||
                         (!invert && intensity >= fillMaxValue)
-                    ) {
-                        if (data[currentNeighbourIndex] === 0) {
-                            data[currentNeighbourIndex] = data[currentValueIndex];
-                            toProcess.queue([currentPoint[0] + dxs[dir], currentPoint[1] + dys[dir], intensity]);
-                        }
-                    }
-                }
+          ) {
+            if (data[currentNeighbourIndex] === 0) {
+              data[currentNeighbourIndex] = data[currentValueIndex];
+              toProcess.queue([currentPoint[0] + dxs[dir], currentPoint[1] + dys[dir], intensity]);
             }
+          }
         }
+      }
     }
+  }
 
-    return new RoiMap(currentImage, data);
+  return new RoiMap(currentImage, data);
 }

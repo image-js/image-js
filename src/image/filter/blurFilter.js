@@ -10,23 +10,23 @@ import convolutionFft from '../operator/convolutionFft';
  */
 // first release of mean filter
 export default function blurFilter(options = {}) {
-    let { radius = 1 } = options;
-    this.checkProcessable('meanFilter', {
-        components: [1],
-        bitDepth: [8, 16]
-    });
+  let { radius = 1 } = options;
+  this.checkProcessable('meanFilter', {
+    components: [1],
+    bitDepth: [8, 16]
+  });
 
-    if (radius < 1) {
-        throw new Error('Number of neighbors should be grater than 0');
-    }
+  if (radius < 1) {
+    throw new Error('Number of neighbors should be grater than 0');
+  }
 
-    let n = 2 * radius + 1;
-    let size = n * n;
-    let kernel = new Array(size);
+  let n = 2 * radius + 1;
+  let size = n * n;
+  let kernel = new Array(size);
 
-    for (let i = 0; i < kernel.length; i++) {
-        kernel[i] = 1;
-    }
+  for (let i = 0; i < kernel.length; i++) {
+    kernel[i] = 1;
+  }
 
-    return convolutionFft.call(this, kernel);
+  return convolutionFft.call(this, kernel);
 }

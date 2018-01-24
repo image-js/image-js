@@ -25,60 +25,60 @@ import { methods } from './greyAlgorithms';
  * var grey = image.grey();
  */
 export default function grey(options = {}) {
-    let {
-        algorithm = 'luma709',
-        keepAlpha = false,
-        mergeAlpha = true,
-        allowGrey = false
-    } = options;
+  let {
+    algorithm = 'luma709',
+    keepAlpha = false,
+    mergeAlpha = true,
+    allowGrey = false
+  } = options;
 
-    let valid = {
-        bitDepth: [8, 16],
-        alpha: [0, 1]
-    };
+  let valid = {
+    bitDepth: [8, 16],
+    alpha: [0, 1]
+  };
 
-    if (!allowGrey) {
-        valid.colorModel = [RGB];
-        valid.components = [3];
+  if (!allowGrey) {
+    valid.colorModel = [RGB];
+    valid.components = [3];
+  }
+
+  this.checkProcessable('grey', valid);
+
+  if (this.components === 1) {
+    algorithm = 'red'; // actually we just take the first channel if it is a grey image
+  }
+
+  keepAlpha &= this.alpha;
+  mergeAlpha &= this.alpha;
+  if (keepAlpha) {
+    mergeAlpha = false;
+  }
+
+
+  let newImage = Image.createFrom(this, {
+    components: 1,
+    alpha: keepAlpha,
+    colorModel: null
+  });
+
+  let method = methods[algorithm.toLowerCase()];
+  if (!method) {
+    throw new Error(`Unsupported grey algorithm: ${algorithm}`);
+  }
+
+
+  let ptr = 0;
+  for (let i = 0; i < this.data.length; i += this.channels) {
+    if (mergeAlpha) {
+      newImage.data[ptr++] = method(this.data, i, this) * this.data[i + this.components] / this.maxValue;
+    } else {
+      newImage.data[ptr++] = method(this.data, i, this);
+      if (newImage.alpha) {
+        newImage.data[ptr++] = this.data[i + this.components];
+      }
     }
+  }
 
-    this.checkProcessable('grey', valid);
-
-    if (this.components === 1) {
-        algorithm = 'red'; // actually we just take the first channel if it is a grey image
-    }
-
-    keepAlpha &= this.alpha;
-    mergeAlpha &= this.alpha;
-    if (keepAlpha) {
-        mergeAlpha = false;
-    }
-
-
-    let newImage = Image.createFrom(this, {
-        components: 1,
-        alpha: keepAlpha,
-        colorModel: null
-    });
-
-    let method = methods[algorithm.toLowerCase()];
-    if (!method) {
-        throw new Error(`Unsupported grey algorithm: ${algorithm}`);
-    }
-
-
-    let ptr = 0;
-    for (let i = 0; i < this.data.length; i += this.channels) {
-        if (mergeAlpha) {
-            newImage.data[ptr++] = method(this.data, i, this) * this.data[i + this.components] / this.maxValue;
-        } else {
-            newImage.data[ptr++] = method(this.data, i, this);
-            if (newImage.alpha) {
-                newImage.data[ptr++] = this.data[i + this.components];
-            }
-        }
-    }
-
-    return newImage;
+  return newImage;
 }
 

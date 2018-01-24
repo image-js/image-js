@@ -11,7 +11,7 @@
  * @return {Image}
  */
 export default function convolutionFft(kernel, options = {}) {
-    options = Object.assign({}, options);
-    options.algorithm = 'fft';
-    return this.convolution(kernel, options);
+  options = Object.assign({}, options);
+  options.algorithm = 'fft';
+  return this.convolution(kernel, options);
 }

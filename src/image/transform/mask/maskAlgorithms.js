@@ -15,21 +15,21 @@ import triangle from './triangle';
 import yen from './yen';
 
 export const methods = {
-    huang,
-    intermodes,
-    isodata,
-    li,
-    maxentropy: maxEntropy,
-    mean,
-    minerror: minError,
-    minimum,
-    moments,
-    otsu,
-    percentile,
-    renyientropy: renyiEntropy,
-    shanbhag,
-    triangle,
-    yen
+  huang,
+  intermodes,
+  isodata,
+  li,
+  maxentropy: maxEntropy,
+  mean,
+  minerror: minError,
+  minimum,
+  moments,
+  otsu,
+  percentile,
+  renyientropy: renyiEntropy,
+  shanbhag,
+  triangle,
+  yen
 };
 
 export const names = ['threshold'].concat(Object.keys(methods));

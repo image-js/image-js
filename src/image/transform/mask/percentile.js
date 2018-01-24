@@ -6,28 +6,28 @@
 // See http://www.cs.tut.fi/~ant/histthresh/ for an excellent slide presentation
 // and the original Matlab code.
 export default function percentile(histogram) {
-    let threshold = -1;
-    let percentile = 0.5; // default fraction of foreground pixels
-    let avec = new Array(histogram.length);
+  let threshold = -1;
+  let percentile = 0.5; // default fraction of foreground pixels
+  let avec = new Array(histogram.length);
 
-    let total = partialSum(histogram, histogram.length - 1);
-    let temp = 1.0;
+  let total = partialSum(histogram, histogram.length - 1);
+  let temp = 1.0;
 
-    for (let i = 0; i < histogram.length; i++) {
-        avec[i] = Math.abs((partialSum(histogram, i) / total) - percentile);
-        if (avec[i] < temp) {
-            temp = avec[i];
-            threshold = i;
-        }
+  for (let i = 0; i < histogram.length; i++) {
+    avec[i] = Math.abs((partialSum(histogram, i) / total) - percentile);
+    if (avec[i] < temp) {
+      temp = avec[i];
+      threshold = i;
     }
+  }
 
-    return threshold;
+  return threshold;
 }
 
 function partialSum(histogram, endIndex) {
-    let x = 0;
-    for (let i = 0; i <= endIndex; i++) {
-        x += histogram[i];
-    }
-    return x;
+  let x = 0;
+  for (let i = 0; i <= endIndex; i++) {
+    x += histogram[i];
+  }
+  return x;
 }

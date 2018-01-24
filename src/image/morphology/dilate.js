@@ -12,53 +12,53 @@ import Matrix from 'ml-matrix';
  * @return {Image}
  */
 export default function dilate(options = {}) {
-    let {
-        kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
-    } = options;
+  let {
+    kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
+  } = options;
 
-    this.checkProcessable('dilate', {
-        bitDepth: [8, 16],
-        channel: [1]
-    });
-    if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
-        throw new TypeError('dilate: The number of rows and columns of the kernel must be odd');
+  this.checkProcessable('dilate', {
+    bitDepth: [8, 16],
+    channel: [1]
+  });
+  if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
+    throw new TypeError('dilate: The number of rows and columns of the kernel must be odd');
+  }
+
+  const newImage = Image.createFrom(this);
+  let currentMatrix = this.getMatrix();
+  let newMatrix = new Matrix(currentMatrix);
+  let shiftX = (kernel.rows - 1) / 2;
+  let shiftY = (kernel.columns - 1) / 2;
+
+
+  for (let i = 0; i < currentMatrix.rows; i++) {
+    for (let j = 0; j < currentMatrix.columns; j++) {
+      let startRow = Math.max(0, i - shiftX);
+      let endRow = Math.min(currentMatrix.rows - 1, i + shiftX);
+      let startColumn = Math.max(0, j - shiftY);
+      let endColumn = Math.min(currentMatrix.columns - 1, j + shiftY);
+      if (startRow >= endRow || startColumn >= endColumn) {
+        continue;
+      }
+      let tmpMatrix = currentMatrix.subMatrix(startRow, endRow, startColumn, endColumn);
+
+      newMatrix.set(i, j, maxOfConvolution(tmpMatrix, kernel));
     }
-
-    const newImage = Image.createFrom(this);
-    let currentMatrix = this.getMatrix();
-    let newMatrix = new Matrix(currentMatrix);
-    let shiftX = (kernel.rows - 1) / 2;
-    let shiftY = (kernel.columns - 1) / 2;
-
-
-    for (let i = 0; i < currentMatrix.rows; i++) {
-        for (let j = 0; j < currentMatrix.columns; j++) {
-            let startRow = Math.max(0, i - shiftX);
-            let endRow = Math.min(currentMatrix.rows - 1, i + shiftX);
-            let startColumn = Math.max(0, j - shiftY);
-            let endColumn = Math.min(currentMatrix.columns - 1, j + shiftY);
-            if (startRow >= endRow || startColumn >= endColumn) {
-                continue;
-            }
-            let tmpMatrix = currentMatrix.subMatrix(startRow, endRow, startColumn, endColumn);
-
-            newMatrix.set(i, j, maxOfConvolution(tmpMatrix, kernel));
-        }
-    }
-    newImage.setMatrix(newMatrix);
-    return newImage;
+  }
+  newImage.setMatrix(newMatrix);
+  return newImage;
 }
 
 function maxOfConvolution(a, b) {
-    let maximum = 0;
-    for (let i = 0; i < a.rows; i++) {
-        for (let j = 0; j < a.columns; j++) {
-            if (b.get(i, j) === 1) {
-                if (a.get(i, j) > maximum) {
-                    maximum = a.get(i, j);
-                }
-            }
+  let maximum = 0;
+  for (let i = 0; i < a.rows; i++) {
+    for (let j = 0; j < a.columns; j++) {
+      if (b.get(i, j) === 1) {
+        if (a.get(i, j) > maximum) {
+          maximum = a.get(i, j);
         }
+      }
     }
-    return maximum;
+  }
+  return maximum;
 }

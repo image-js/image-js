@@ -16,30 +16,30 @@ import { validateArrayOfChannels } from '../../util/channel';
  * @return {this}
  */
 export default function invert(options = {}) {
-    let { channels } = options;
+  let { channels } = options;
 
-    this.checkProcessable('invertOneLoop', {
-        bitDepth: [1, 8, 16]
-    });
+  this.checkProcessable('invertOneLoop', {
+    bitDepth: [1, 8, 16]
+  });
 
-    if (this.bitDepth === 1) {
-        // we simply invert all the integers value
-        // there could be a small mistake if the number of points
-        // is not a multiple of 8 but it is not important
-        let data = this.data;
-        for (let i = 0; i < data.length; i++) {
-            data[i] = ~data[i];
-        }
-    } else {
-        channels = validateArrayOfChannels(this, { channels });
-
-        for (let c = 0; c < channels.length; c++) {
-            let j = channels[c];
-            for (let i = j; i < this.data.length; i += this.channels) {
-                this.data[i] = this.maxValue - this.data[i];
-            }
-        }
+  if (this.bitDepth === 1) {
+    // we simply invert all the integers value
+    // there could be a small mistake if the number of points
+    // is not a multiple of 8 but it is not important
+    let data = this.data;
+    for (let i = 0; i < data.length; i++) {
+      data[i] = ~data[i];
     }
+  } else {
+    channels = validateArrayOfChannels(this, { channels });
 
-    return this;
+    for (let c = 0; c < channels.length; c++) {
+      let j = channels[c];
+      for (let i = j; i < this.data.length; i += this.channels) {
+        this.data[i] = this.maxValue - this.data[i];
+      }
+    }
+  }
+
+  return this;
 }

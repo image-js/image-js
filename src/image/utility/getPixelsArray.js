@@ -6,19 +6,19 @@
  * @return {Array<Array<number>>}
  */
 export default function getPixelsArray() {
-    this.checkProcessable('getPixelsArray', {
-        bitDepth: [8, 16, 32]
-    });
+  this.checkProcessable('getPixelsArray', {
+    bitDepth: [8, 16, 32]
+  });
 
-    let array = new Array(this.size);
-    let ptr = 0;
-    for (let i = 0; i < this.data.length; i += this.channels) {
-        let pixel = new Array(this.components);
-        for (let j = 0; j < this.components; j++) {
-            pixel[j] = this.data[i + j];
-        }
-        array[ptr++] = pixel;
+  let array = new Array(this.size);
+  let ptr = 0;
+  for (let i = 0; i < this.data.length; i += this.channels) {
+    let pixel = new Array(this.components);
+    for (let j = 0; j < this.components; j++) {
+      pixel[j] = this.data[i + j];
     }
+    array[ptr++] = pixel;
+  }
 
-    return array;
+  return array;
 }

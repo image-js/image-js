@@ -7,5 +7,5 @@ import cannyEdgeDetector from 'canny-edge-detector';
  * @return {Image}
  */
 export default function cannyEdge(options) {
-    return cannyEdgeDetector(this, options);
+  return cannyEdgeDetector(this, options);
 }

@@ -7,66 +7,66 @@ import { Image } from 'test/common';
 0000
  */
 describe('we check that each Roi is surrounded by the expected zones', function () {
-    let data = new Uint8Array(2);
-    data[0] = 0b00111111;
-    data[1] = 0b11000000;
+  let data = new Uint8Array(2);
+  data[0] = 0b00111111;
+  data[1] = 0b11000000;
 
-    /*
+  /*
          . . x x  -1 -1 +1 +1
          x x x x  +1 +1 +1 +1
          x x . .  +1 +1 -2 -2
          . . . .  -2 -2 -2 -2
      */
 
-    let mask = new Image(4, 4, data, {
-        kind: 'BINARY'
+  let mask = new Image(4, 4, data, {
+    kind: 'BINARY'
+  });
+
+  let roiManager = mask.getRoiManager();
+  roiManager.fromMask(mask);
+
+  it('should yield the right boxIDs', function () {
+    let result = roiManager.getRois();
+    expect(result).toHaveLength(3);
+
+    result.sort(function (a, b) {
+      return b.boxIDs[0] - a.boxIDs[0];
     });
 
-    let roiManager = mask.getRoiManager();
-    roiManager.fromMask(mask);
+    expect(result[0].boxIDs).toEqual([1]);
+    expect(result[1].boxIDs).toEqual([1]);
+    expect(result[2].boxIDs).toEqual([-1, -2]);
+  });
 
-    it('should yield the right boxIDs', function () {
-        let result = roiManager.getRois();
-        expect(result).toHaveLength(3);
+  it('should yield the right borderIDs', function () {
+    let result = roiManager.getRois();
 
-        result.sort(function (a, b) {
-            return b.boxIDs[0] - a.boxIDs[0];
-        });
-
-        expect(result[0].boxIDs).toEqual([1]);
-        expect(result[1].boxIDs).toEqual([1]);
-        expect(result[2].boxIDs).toEqual([-1, -2]);
+    result.sort(function (a, b) {
+      return b.borderIDs[0] - a.borderIDs[0];
     });
 
-    it('should yield the right borderIDs', function () {
-        let result = roiManager.getRois();
+    expect(result[0].borderIDs).toEqual([1]); // -1
+    expect(result[1].borderIDs).toEqual([1]); // -2
+    expect(result[2].borderIDs).toEqual([-1, -2]); // +1
 
-        result.sort(function (a, b) {
-            return b.borderIDs[0] - a.borderIDs[0];
-        });
+    expect(result[0].borderLengths).toEqual([3]);
+    expect(result[1].borderLengths).toEqual([4]);
+    expect(result[2].borderLengths).toEqual([2, 4]);
+  });
 
-        expect(result[0].borderIDs).toEqual([1]); // -1
-        expect(result[1].borderIDs).toEqual([1]); // -2
-        expect(result[2].borderIDs).toEqual([-1, -2]); // +1
+  it('should yield the right externalIDs', function () {
+    let result = roiManager.getRois();
 
-        expect(result[0].borderLengths).toEqual([3]);
-        expect(result[1].borderLengths).toEqual([4]);
-        expect(result[2].borderLengths).toEqual([2, 4]);
+    result.sort(function (a, b) {
+      return b.borderIDs[0] - a.borderIDs[0];
     });
 
-    it('should yield the right externalIDs', function () {
-        let result = roiManager.getRois();
+    expect(result[0].externalIDs).toEqual([1]); // -1
+    expect(result[1].externalIDs).toEqual([1]); // -2
+    expect(result[2].externalIDs).toEqual([-1, -2]); // +1
 
-        result.sort(function (a, b) {
-            return b.borderIDs[0] - a.borderIDs[0];
-        });
-
-        expect(result[0].externalIDs).toEqual([1]); // -1
-        expect(result[1].externalIDs).toEqual([1]); // -2
-        expect(result[2].externalIDs).toEqual([-1, -2]); // +1
-
-        expect(result[0].externalLengths).toEqual([3]);
-        expect(result[1].externalLengths).toEqual([4]);
-        expect(result[2].externalLengths).toEqual([2, 4]);
-    });
+    expect(result[0].externalLengths).toEqual([3]);
+    expect(result[1].externalLengths).toEqual([4]);
+    expect(result[2].externalLengths).toEqual([2, 4]);
+  });
 });

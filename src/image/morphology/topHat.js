@@ -11,26 +11,26 @@ import Matrix from 'ml-matrix';
  * @return {Image}
  */
 export default function topHat(options = {}) {
-    let {
-        kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]),
-        iterations = 1
-    } = options;
+  let {
+    kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]),
+    iterations = 1
+  } = options;
 
-    this.checkProcessable('topHat', {
-        bitDepth: [8, 16],
-        channel: [1]
-    });
-    if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
-        throw new TypeError('topHat: The number of rows and columns of the kernel must be odd');
-    }
+  this.checkProcessable('topHat', {
+    bitDepth: [8, 16],
+    channel: [1]
+  });
+  if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
+    throw new TypeError('topHat: The number of rows and columns of the kernel must be odd');
+  }
 
-    let openImage = this.opening({ kernel: kernel });
-    let newImage = this.subtractImage(openImage, { absolute: true });
-    if (iterations > 1) {
-        for (let i = 1; i < iterations; i++) {
-            openImage = newImage.opening({ kernel: kernel });
-            newImage = openImage.subtractImage(newImage, { absolute: true });
-        }
+  let openImage = this.opening({ kernel: kernel });
+  let newImage = this.subtractImage(openImage, { absolute: true });
+  if (iterations > 1) {
+    for (let i = 1; i < iterations; i++) {
+      openImage = newImage.opening({ kernel: kernel });
+      newImage = openImage.subtractImage(newImage, { absolute: true });
     }
-    return newImage;
+  }
+  return newImage;
 }

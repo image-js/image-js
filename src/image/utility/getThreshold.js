@@ -9,20 +9,20 @@ import { methods } from '../transform/mask/maskAlgorithms';
  * @return {number}
  */
 export default function getThreshold(options = {}) {
-    let {
-        algorithm = 'otsu'
-    } = options;
+  let {
+    algorithm = 'otsu'
+  } = options;
 
-    this.checkProcessable('getThreshold', {
-        components: 1,
-        bitDepth: [8, 16]
-    });
+  this.checkProcessable('getThreshold', {
+    components: 1,
+    bitDepth: [8, 16]
+  });
 
-    let method = methods[algorithm.toLowerCase()];
-    if (method) {
-        let histogram = this.getHistogram();
-        return method(histogram, this.size);
-    } else {
-        throw new Error(`unknown thresholding algorithm: ${algorithm}`);
-    }
+  let method = methods[algorithm.toLowerCase()];
+  if (method) {
+    let histogram = this.getHistogram();
+    return method(histogram, this.size);
+  } else {
+    throw new Error(`unknown thresholding algorithm: ${algorithm}`);
+  }
 }

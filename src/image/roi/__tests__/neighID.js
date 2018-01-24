@@ -3,23 +3,23 @@ import { asc as sortAsc } from 'num-sort';
 
 describe('Get the ids of neighbour touching the Roi', function () {
 
-    let map = [
-        0, 0, 1, 1, 1, 2,
-        1, 1, 1, 1, 2, 2,
-        1, 1, 1, 2, 2, 2,
-        3, 3, 1, 2, 2, 2,
-        3, 3, 3, 3, 2, 2,
-        3, 3, 3, 3, 2, 2
-    ];
+  let map = [
+    0, 0, 1, 1, 1, 2,
+    1, 1, 1, 1, 2, 2,
+    1, 1, 1, 2, 2, 2,
+    3, 3, 1, 2, 2, 2,
+    3, 3, 3, 3, 2, 2,
+    3, 3, 3, 3, 2, 2
+  ];
 
-    let img = new Image(6, 6);
+  let img = new Image(6, 6);
 
-    let roiManager = img.getRoiManager();
-    roiManager.putMap(map);
-    it('IDs of neighbour', function () {
-        let result = roiManager.getRois();
-        expect(result[0].borderIDs.sort(sortAsc)).toEqual([0, 2, 3]);
-        expect(result[1].borderIDs).toEqual([1, 3]);
-        expect(result[2].borderIDs).toEqual([1, 2]);
-    });
+  let roiManager = img.getRoiManager();
+  roiManager.putMap(map);
+  it('IDs of neighbour', function () {
+    let result = roiManager.getRois();
+    expect(result[0].borderIDs.sort(sortAsc)).toEqual([0, 2, 3]);
+    expect(result[1].borderIDs).toEqual([1, 3]);
+    expect(result[2].borderIDs).toEqual([1, 2]);
+  });
 });

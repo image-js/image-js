@@ -15,40 +15,40 @@ import { getColors } from '../../util/color';
  * @return {this} The original painted image
  */
 export default function paintPoints(points, options = {}) {
-    let {
-        shape
-    } = options;
+  let {
+    shape
+  } = options;
 
-    this.checkProcessable('paintPoints', {
-        bitDepth: [8, 16]
-    });
+  this.checkProcessable('paintPoints', {
+    bitDepth: [8, 16]
+  });
 
-    let colors = getColors(Object.assign({}, options, { numberColors: points.length }));
+  let colors = getColors(Object.assign({}, options, { numberColors: points.length }));
 
-    let shapePixels = (new Shape(shape)).getPoints();
+  let shapePixels = (new Shape(shape)).getPoints();
 
-    let numberChannels = Math.min(this.channels, colors[0].length);
+  let numberChannels = Math.min(this.channels, colors[0].length);
 
-    for (let i = 0; i < points.length; i++) {
-        let color = colors[i % colors.length];
-        let xP = points[i][0];
-        let yP = points[i][1];
-        for (let j = 0; j < shapePixels.length; j++) {
-            let xS = shapePixels[j][0];
-            let yS = shapePixels[j][1];
-            if (
-                ((xP + xS) >= 0) &&
+  for (let i = 0; i < points.length; i++) {
+    let color = colors[i % colors.length];
+    let xP = points[i][0];
+    let yP = points[i][1];
+    for (let j = 0; j < shapePixels.length; j++) {
+      let xS = shapePixels[j][0];
+      let yS = shapePixels[j][1];
+      if (
+        ((xP + xS) >= 0) &&
                 ((yP + yS) >= 0) &&
                 ((xP + xS) < this.width) &&
                 ((yP + yS) < this.height)
-            ) {
-                let position = (xP + xS + (yP + yS) * this.width) * this.channels;
-                for (let channel = 0; channel < numberChannels; channel++) {
-                    this.data[position + channel] = color[channel];
-                }
-            }
+      ) {
+        let position = (xP + xS + (yP + yS) * this.width) * this.channels;
+        for (let channel = 0; channel < numberChannels; channel++) {
+          this.data[position + channel] = color[channel];
         }
+      }
     }
+  }
 
-    return this;
+  return this;
 }

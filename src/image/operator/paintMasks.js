@@ -20,58 +20,58 @@ import { getColors } from '../../util/color';
  * @return {this} The original painted image
  */
 export default function paintMasks(masks, options = {}) {
-    let {
-        alpha = 255,
-        labels = [],
-        labelsPosition = [],
-        labelColor = 'blue',
-        labelFont = '12px Helvetica'
-    } = options;
+  let {
+    alpha = 255,
+    labels = [],
+    labelsPosition = [],
+    labelColor = 'blue',
+    labelFont = '12px Helvetica'
+  } = options;
 
-    this.checkProcessable('paintMasks', {
-        channels: [3, 4],
-        bitDepth: [8, 16],
-        colorModel: RGB
-    });
+  this.checkProcessable('paintMasks', {
+    channels: [3, 4],
+    bitDepth: [8, 16],
+    colorModel: RGB
+  });
 
-    let colors = getColors(Object.assign({}, options, { numberColors: masks.length }));
+  let colors = getColors(Object.assign({}, options, { numberColors: masks.length }));
 
-    if (!Array.isArray(masks)) {
-        masks = [masks];
-    }
+  if (!Array.isArray(masks)) {
+    masks = [masks];
+  }
 
-    for (let i = 0; i < masks.length; i++) {
-        let mask = masks[i];
-        // we need to find the parent image to calculate the relative position
-        let color = colors[i % colors.length];
-        for (let x = 0; x < mask.width; x++) {
-            for (let y = 0; y < mask.height; y++) {
-                if (mask.getBitXY(x, y)) {
-                    for (let component = 0; component < Math.min(this.components, color.length); component++) {
-                        if (alpha === 255) {
-                            this.setValueXY(x + mask.position[0], y + mask.position[1], component, color[component]);
-                        } else {
-                            let value = this.getValueXY(x + mask.position[0], y + mask.position[1], component);
-                            value = Math.round((value * (255 - alpha) + color[component] * alpha) / 255);
-                            this.setValueXY(x + mask.position[0], y + mask.position[1], component, value);
-                        }
-                    }
-                }
+  for (let i = 0; i < masks.length; i++) {
+    let mask = masks[i];
+    // we need to find the parent image to calculate the relative position
+    let color = colors[i % colors.length];
+    for (let x = 0; x < mask.width; x++) {
+      for (let y = 0; y < mask.height; y++) {
+        if (mask.getBitXY(x, y)) {
+          for (let component = 0; component < Math.min(this.components, color.length); component++) {
+            if (alpha === 255) {
+              this.setValueXY(x + mask.position[0], y + mask.position[1], component, color[component]);
+            } else {
+              let value = this.getValueXY(x + mask.position[0], y + mask.position[1], component);
+              value = Math.round((value * (255 - alpha) + color[component] * alpha) / 255);
+              this.setValueXY(x + mask.position[0], y + mask.position[1], component, value);
             }
+          }
         }
+      }
     }
+  }
 
-    if (Array.isArray(labels) && labels.length > 0) {
-        let canvas = this.getCanvas({ originalData: true });
-        let ctx = canvas.getContext('2d');
-        ctx.fillStyle = labelColor;
-        ctx.font = labelFont;
-        for (let i = 0; i < Math.min(masks.length, labels.length); i++) {
-            let position = (labelsPosition[i]) ? labelsPosition[i] : masks[i].position;
-            ctx.fillText(labels[i], position[0], position[1]);
-        }
-        this.setData(ctx.getImageData(0, 0, this.width, this.height).data);
+  if (Array.isArray(labels) && labels.length > 0) {
+    let canvas = this.getCanvas({ originalData: true });
+    let ctx = canvas.getContext('2d');
+    ctx.fillStyle = labelColor;
+    ctx.font = labelFont;
+    for (let i = 0; i < Math.min(masks.length, labels.length); i++) {
+      let position = (labelsPosition[i]) ? labelsPosition[i] : masks[i].position;
+      ctx.fillText(labels[i], position[0], position[1]);
     }
+    this.setData(ctx.getImageData(0, 0, this.width, this.height).data);
+  }
 
-    return this;
+  return this;
 }

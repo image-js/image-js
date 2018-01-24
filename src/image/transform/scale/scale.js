@@ -16,50 +16,50 @@ import { factorDimensions } from '../../../util/converter';
  * @return {Image}
  */
 export default function scale(options = {}) {
-    const {
-        factor = 1,
-        algorithm = 'nearestNeighbor',
-        preserveAspectRatio = true
-    } = options;
+  const {
+    factor = 1,
+    algorithm = 'nearestNeighbor',
+    preserveAspectRatio = true
+  } = options;
 
-    let width = options.width;
-    let height = options.height;
+  let width = options.width;
+  let height = options.height;
 
-    if (!width) {
-        if (height && preserveAspectRatio) {
-            width = Math.round(height * (this.width / this.height));
-        } else {
-            width = this.width;
-        }
+  if (!width) {
+    if (height && preserveAspectRatio) {
+      width = Math.round(height * (this.width / this.height));
+    } else {
+      width = this.width;
     }
-    if (!height) {
-        if (preserveAspectRatio) {
-            height = Math.round(width * (this.height / this.width));
-        } else {
-            height = this.height;
-        }
+  }
+  if (!height) {
+    if (preserveAspectRatio) {
+      height = Math.round(width * (this.height / this.width));
+    } else {
+      height = this.height;
     }
+  }
 
-    ({ width, height } = factorDimensions(factor, width, height));
+  ({ width, height } = factorDimensions(factor, width, height));
 
-    if (width === this.width && height === this.height) {
-        const newImage = this.clone();
-        newImage.position = [0, 0];
-        return newImage;
-    }
-
-    let shiftX = Math.round((this.width - width) / 2);
-    let shiftY = Math.round((this.height - height) / 2);
-    const newImage = Image.createFrom(this, { width, height, position: [shiftX, shiftY] });
-
-    switch (algorithm.toLowerCase()) {
-        case 'nearestneighbor':
-        case 'nearestneighbour':
-            nearestNeighbor.call(this, newImage, width, height);
-            break;
-        default:
-            throw new Error(`Unsupported scale algorithm: ${algorithm}`);
-    }
-
+  if (width === this.width && height === this.height) {
+    const newImage = this.clone();
+    newImage.position = [0, 0];
     return newImage;
+  }
+
+  let shiftX = Math.round((this.width - width) / 2);
+  let shiftY = Math.round((this.height - height) / 2);
+  const newImage = Image.createFrom(this, { width, height, position: [shiftX, shiftY] });
+
+  switch (algorithm.toLowerCase()) {
+    case 'nearestneighbor':
+    case 'nearestneighbour':
+      nearestNeighbor.call(this, newImage, width, height);
+      break;
+    default:
+      throw new Error(`Unsupported scale algorithm: ${algorithm}`);
+  }
+
+  return newImage;
 }

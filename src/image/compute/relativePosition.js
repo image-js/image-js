@@ -16,25 +16,25 @@
  * @return {number[]|boolean}
  */
 export default function getRelativePosition(targetImage, options = {}) {
-    if (this === targetImage) {
-        return [0, 0];
-    }
-    let position = [0, 0];
+  if (this === targetImage) {
+    return [0, 0];
+  }
+  let position = [0, 0];
 
-    let currentImage = this;
-    while (currentImage) {
-        if (currentImage === targetImage) {
-            return position;
-        }
-        if (currentImage.position) {
-            position[0] += currentImage.position[0];
-            position[1] += currentImage.position[1];
-        }
-        currentImage = currentImage.parent;
+  let currentImage = this;
+  while (currentImage) {
+    if (currentImage === targetImage) {
+      return position;
     }
-    // we should never reach this place, this means we could not find the parent
-    // throw Error('Parent image was not found, can not get relative position.')
-    if (options.defaultFurther)  return position;
+    if (currentImage.position) {
+      position[0] += currentImage.position[0];
+      position[1] += currentImage.position[1];
+    }
+    currentImage = currentImage.parent;
+  }
+  // we should never reach this place, this means we could not find the parent
+  // throw Error('Parent image was not found, can not get relative position.')
+  if (options.defaultFurther)  return position;
 
-    return false;
+  return false;
 }

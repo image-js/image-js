@@ -9,14 +9,14 @@ import histograms from './compute/histograms';
 import average from './utility/average';
 
 export default function extend(Stack) {
-    // let inPlace = {inPlace: true};
-    Stack.extendMethod('matchAndCrop', matchAndCrop);
+  // let inPlace = {inPlace: true};
+  Stack.extendMethod('matchAndCrop', matchAndCrop);
 
-    Stack.extendMethod('getMin', min);
-    Stack.extendMethod('getMax', max);
-    Stack.extendMethod('getMedian', median);
-    Stack.extendMethod('getHistogram', histogram);
-    Stack.extendMethod('getHistograms', histograms);
+  Stack.extendMethod('getMin', min);
+  Stack.extendMethod('getMax', max);
+  Stack.extendMethod('getMedian', median);
+  Stack.extendMethod('getHistogram', histogram);
+  Stack.extendMethod('getHistograms', histograms);
 
-    Stack.extendMethod('getAverage', average);
+  Stack.extendMethod('getAverage', average);
 }

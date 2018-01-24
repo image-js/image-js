@@ -11,26 +11,26 @@ import Matrix from 'ml-matrix';
  * @return {Image}
  */
 export default function closing(options = {}) {
-    let {
-        kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]),
-        iterations = 1
-    } = options;
+  let {
+    kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]),
+    iterations = 1
+  } = options;
 
-    this.checkProcessable('closing', {
-        bitDepth: [8, 16],
-        channel: [1]
-    });
-    if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
-        throw new TypeError('closing: The number of rows and columns of the kernel must be odd');
-    }
+  this.checkProcessable('closing', {
+    bitDepth: [8, 16],
+    channel: [1]
+  });
+  if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
+    throw new TypeError('closing: The number of rows and columns of the kernel must be odd');
+  }
 
-    let newImage = this.dilate({ kernel: kernel });
-    newImage = newImage.erode({ kernel: kernel });
-    if (iterations > 1) {
-        for (let i = 1; i < iterations; i++) {
-            newImage = newImage.dilate({ kernel: kernel });
-            newImage = newImage.erode({ kernel: kernel });
-        }
+  let newImage = this.dilate({ kernel: kernel });
+  newImage = newImage.erode({ kernel: kernel });
+  if (iterations > 1) {
+    for (let i = 1; i < iterations; i++) {
+      newImage = newImage.dilate({ kernel: kernel });
+      newImage = newImage.erode({ kernel: kernel });
     }
-    return newImage;
+  }
+  return newImage;
 }

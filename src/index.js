@@ -10,8 +10,8 @@ import { names as greyNames } from './image/transform/greyAlgorithms';
 import { names as maskNames } from './image/transform/mask/maskAlgorithms';
 
 const Static = {
-    grey: greyNames,
-    mask: maskNames
+  grey: greyNames,
+  mask: maskNames
 };
 export { Static };
 

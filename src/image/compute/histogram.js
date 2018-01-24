@@ -12,17 +12,17 @@ import isInteger from 'is-integer';
  * @return {number[]}
  */
 export function getHistogram(options = {}) {
-    let { maxSlots = 256, channel, useAlpha = true } = options;
-    this.checkProcessable('getHistogram', {
-        bitDepth: [1, 8, 16]
-    });
-    if (channel === undefined) {
-        if (this.components > 1) {
-            throw new RangeError('You need to define the channel for an image that contains more than one channel');
-        }
-        channel = 0;
+  let { maxSlots = 256, channel, useAlpha = true } = options;
+  this.checkProcessable('getHistogram', {
+    bitDepth: [1, 8, 16]
+  });
+  if (channel === undefined) {
+    if (this.components > 1) {
+      throw new RangeError('You need to define the channel for an image that contains more than one channel');
     }
-    return getChannelHistogram.call(this, channel, { useAlpha, maxSlots });
+    channel = 0;
+  }
+  return getChannelHistogram.call(this, channel, { useAlpha, maxSlots });
 }
 
 /**
@@ -45,65 +45,65 @@ export function getHistogram(options = {}) {
  *      });
  */
 export function getHistograms(options = {}) {
-    const { maxSlots = 256, useAlpha = true } = options;
-    this.checkProcessable('getHistograms', {
-        bitDepth: [8, 16]
-    });
-    let results = new Array((useAlpha) ? this.components : this.channels);
-    for (let i = 0; i < results.length; i++) {
-        results[i] = getChannelHistogram.call(this, i, { useAlpha, maxSlots });
-    }
-    return results;
+  const { maxSlots = 256, useAlpha = true } = options;
+  this.checkProcessable('getHistograms', {
+    bitDepth: [8, 16]
+  });
+  let results = new Array((useAlpha) ? this.components : this.channels);
+  for (let i = 0; i < results.length; i++) {
+    results[i] = getChannelHistogram.call(this, i, { useAlpha, maxSlots });
+  }
+  return results;
 }
 
 
 function getChannelHistogram(channel, options) {
-    let { useAlpha, maxSlots } = options;
+  let { useAlpha, maxSlots } = options;
 
-    //for a mask, return a number array containing count of black and white points (black = array[0], white = array[1])
+  //for a mask, return a number array containing count of black and white points (black = array[0], white = array[1])
 
-    if (this.bitDepth === 1) {
-        let blackWhiteCount = [0, 0];
-        for (let i = 0; i < this.height; i++) {
-            for (let j = 0; j < this.width; j++) {
-                let value = this.getBitXY(i, j);
-                if (value === 0) {
-                    blackWhiteCount[0] += 1;
-                } else if (value === 1) {
-                    blackWhiteCount[1] += 1;
-                }
-            }
+  if (this.bitDepth === 1) {
+    let blackWhiteCount = [0, 0];
+    for (let i = 0; i < this.height; i++) {
+      for (let j = 0; j < this.width; j++) {
+        let value = this.getBitXY(i, j);
+        if (value === 0) {
+          blackWhiteCount[0] += 1;
+        } else if (value === 1) {
+          blackWhiteCount[1] += 1;
         }
-        return blackWhiteCount;
+      }
     }
+    return blackWhiteCount;
+  }
 
-    let bitSlots = Math.log2(maxSlots);
-    if (!isInteger(bitSlots)) {
-        throw new RangeError('maxSlots must be a power of 2, for example: 64, 256, 1024');
+  let bitSlots = Math.log2(maxSlots);
+  if (!isInteger(bitSlots)) {
+    throw new RangeError('maxSlots must be a power of 2, for example: 64, 256, 1024');
+  }
+  // we will compare the bitSlots to the bitDepth of the image
+  // based on this we will shift the values. This allows to generate a histogram
+  // of 16 grey even if the images has 256 shade of grey
+
+  let bitShift = 0;
+  if (this.bitDepth > bitSlots) {
+    bitShift = this.bitDepth - bitSlots;
+  }
+
+  let data = this.data;
+  let result = newArray(Math.pow(2, Math.min(this.bitDepth, bitSlots)), 0);
+  if (useAlpha && this.alpha) {
+    let alphaChannelDiff = this.channels - channel - 1;
+
+    for (let i = channel; i < data.length; i += this.channels) {
+      result[data[i] >> bitShift] += data[i + alphaChannelDiff] / this.maxValue;
     }
-    // we will compare the bitSlots to the bitDepth of the image
-    // based on this we will shift the values. This allows to generate a histogram
-    // of 16 grey even if the images has 256 shade of grey
-
-    let bitShift = 0;
-    if (this.bitDepth > bitSlots) {
-        bitShift = this.bitDepth - bitSlots;
+  } else {
+    for (let i = channel; i < data.length; i += this.channels) {
+      result[data[i] >> bitShift]++;
     }
+  }
 
-    let data = this.data;
-    let result = newArray(Math.pow(2, Math.min(this.bitDepth, bitSlots)), 0);
-    if (useAlpha && this.alpha) {
-        let alphaChannelDiff = this.channels - channel - 1;
-
-        for (let i = channel; i < data.length; i += this.channels) {
-            result[data[i] >> bitShift] += data[i + alphaChannelDiff] / this.maxValue;
-        }
-    } else {
-        for (let i = channel; i < data.length; i += this.channels) {
-            result[data[i] >> bitShift]++;
-        }
-    }
-
-    return result;
+  return result;
 }
 

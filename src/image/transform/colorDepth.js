@@ -14,49 +14,49 @@ import Image from '../Image';
  */
 export default function colorDepth(newColorDepth = 8) {
 
-    this.checkProcessable('colorDepth', {
-        bitDepth: [1, 8, 16]
-    });
+  this.checkProcessable('colorDepth', {
+    bitDepth: [1, 8, 16]
+  });
 
-    if (![8, 16].includes(newColorDepth)) {
-        throw Error('You need to specify the new colorDepth as 8 or 16');
-    }
+  if (![8, 16].includes(newColorDepth)) {
+    throw Error('You need to specify the new colorDepth as 8 or 16');
+  }
 
-    if (this.bitDepth === newColorDepth) {
-        return this.clone();
-    }
+  if (this.bitDepth === newColorDepth) {
+    return this.clone();
+  }
 
-    let newImage = Image.createFrom(this, { bitDepth: newColorDepth });
+  let newImage = Image.createFrom(this, { bitDepth: newColorDepth });
 
-    switch (newColorDepth) {
-        case 8:
-            if (this.bitDepth === 1) {
-                for (let i = 0; i < this.size; i++) {
-                    if (this.getBit(i)) {
-                        newImage.data[i] = 255;
-                    }
-                }
-            } else {
-                for (let i = 0; i < this.data.length; i++) {
-                    newImage.data[i] = this.data[i] >> 8;
-                }
-            }
-            break;
-        case 16:
-            if (this.bitDepth === 1) {
-                for (let i = 0; i < this.size; i++) {
-                    if (this.getBit(i)) {
-                        newImage.data[i] = 65535;
-                    }
-                }
-            } else {
-                for (let i = 0; i < this.data.length; i++) {
-                    newImage.data[i] = this.data[i] << 8 | this.data[i];
-                }
-            }
-            break;
-        default:
-            throw new Error('colorDepth conversion unexpected case');
-    }
-    return newImage;
+  switch (newColorDepth) {
+    case 8:
+      if (this.bitDepth === 1) {
+        for (let i = 0; i < this.size; i++) {
+          if (this.getBit(i)) {
+            newImage.data[i] = 255;
+          }
+        }
+      } else {
+        for (let i = 0; i < this.data.length; i++) {
+          newImage.data[i] = this.data[i] >> 8;
+        }
+      }
+      break;
+    case 16:
+      if (this.bitDepth === 1) {
+        for (let i = 0; i < this.size; i++) {
+          if (this.getBit(i)) {
+            newImage.data[i] = 65535;
+          }
+        }
+      } else {
+        for (let i = 0; i < this.data.length; i++) {
+          newImage.data[i] = this.data[i] << 8 | this.data[i];
+        }
+      }
+      break;
+    default:
+      throw new Error('colorDepth conversion unexpected case');
+  }
+  return newImage;
 }

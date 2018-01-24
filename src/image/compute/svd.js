@@ -7,9 +7,9 @@ import { SVD } from 'ml-matrix';
  * @return {object} SVD result
  */
 export default function getSvd() {
-    this.checkProcessable('getSvd', {
-        bitDepth: [1]
-    });
+  this.checkProcessable('getSvd', {
+    bitDepth: [1]
+  });
 
-    return new SVD(this.points);
+  return new SVD(this.points);
 }
