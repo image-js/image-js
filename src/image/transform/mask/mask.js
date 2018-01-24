@@ -1,6 +1,6 @@
 import Image from '../../Image';
-import { methods } from './maskAlgorithms';
-import { getThreshold } from '../../../util/converter';
+import { getThreshold as convertThreshold } from '../../../util/converter';
+import getThreshold from '../../utility/getThreshold';
 
 /**
  * Creation of binary mask is based on the determination of a threshold
@@ -28,15 +28,9 @@ export default function mask(options = {}) {
     });
 
     if (algorithm === 'threshold') {
-        threshold = getThreshold(threshold, this.maxValue);
+        threshold = convertThreshold(threshold, this.maxValue);
     } else {
-        let method = methods[algorithm.toLowerCase()];
-        if (method) {
-            let histogram = this.getHistogram();
-            threshold = method(histogram, this.size);
-        } else {
-            throw new Error(`mask transform unknown algorithm: ${algorithm}`);
-        }
+        threshold = getThreshold.call(this, options);
     }
 
     let newImage = new Image(this.width, this.height, {

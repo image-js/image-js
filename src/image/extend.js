@@ -63,6 +63,7 @@ import setMatrix from './utility/setMatrix';
 import getPixelsArray from './utility/getPixelsArray';
 import getIntersection from './utility/getIntersection';
 import getClosestCommonParent from './utility/getClosestCommonParent';
+import getThreshold from './utility/getThreshold';
 
 // operators
 import cannyEdge from './operator/cannyEdge';
@@ -153,6 +154,7 @@ export default function extend(Image) {
     Image.extendMethod('getPixelsArray', getPixelsArray);
     Image.extendMethod('getIntersection', getIntersection);
     Image.extendMethod('getClosestCommonParent', getClosestCommonParent);
+    Image.extendMethod('getThreshold', getThreshold);
 
     Image.extendMethod('split', split);
     Image.extendMethod('getChannel', getChannel);

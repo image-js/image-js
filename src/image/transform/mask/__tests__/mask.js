@@ -16,7 +16,7 @@ describe('Create mask from a GREY image', function () {
             .data[0]).toBe(0b01111000);
         (expect(function () {
             image.mask({ algorithm: 'XXX' });
-        }).toThrowError(/mask transform unknown algorithm/));
+        }).toThrowError(/^unknown thresholding algorithm: XXX$/));
     });
 });
 
