@@ -6,6 +6,7 @@ import { SCHARR_X, SCHARR_Y } from '../../util/kernels';
  * @memberof Image
  * @instance
  * @param {object} [options]
+ * @param {GradientDirection} [options.direction]
  * @param {string} [options.border='copy']
  * @param {*} [options.channels]
  * @param {number} [options.bitDepth=this.bitDepth] Specify the bitDepth of the resulting image
