@@ -1,6 +1,10 @@
 import convolution from '../operator/convolution';
 
 /**
+ * @typedef {('x'|'y'|'xy')} GradientDirection - Direction of a gradient filter
+ */
+
+/**
  * @memberof Image
  * @instance
  * @param {object} [options]
