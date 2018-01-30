@@ -6,6 +6,7 @@ import invertPixel from './filter/invertPixel';
 import invertApply from './filter/invertApply';
 import invertBinaryLoop from './filter/invertBinaryLoop';
 
+import abs from './filter/abs';
 import invertFilter from './filter/invert';
 import flipXFilter from './filter/flipX';
 import flipYFilter from './filter/flipY';
@@ -107,6 +108,7 @@ export default function extend(Image) {
   Image.extendMethod('invertOneLoop', invertOneLoop, inPlace);
   Image.extendMethod('invertApply', invertApply, inPlace);
   Image.extendMethod('invert', invertFilter, inPlace);
+  Image.extendMethod('abs', abs, inPlace);
   Image.extendMethod('invertBinaryLoop', invertBinaryLoop, inPlace);
   Image.extendMethod('level', levelFilter, inPlace);
   Image.extendMethod('add', addFilter, inPlace);
