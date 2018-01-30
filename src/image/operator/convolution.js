@@ -38,7 +38,9 @@ export default function convolution(kernel, options = {}) {
   if (algorithm !== 'separable') {
     ({ kernel } = validateKernel(kernel));
   } else if (!Array.isArray(kernel) || kernel.length !== 2) {
-    throw new RangeError('separable convolution requires two arrays of numbers to represent the kernel');
+    throw new RangeError(
+      'separable convolution requires two arrays of numbers to represent the kernel'
+    );
   }
 
   if (algorithm === 'auto') {
@@ -46,7 +48,11 @@ export default function convolution(kernel, options = {}) {
     if (separatedKernel !== null) {
       algorithm = 'separable';
       kernel = separatedKernel;
-    } else if ((kernel.length > 9 || kernel[0].length > 9) && this.width <= 4096 && this.height <= 4096) {
+    } else if (
+      (kernel.length > 9 || kernel[0].length > 9) &&
+      this.width <= 4096 &&
+      this.height <= 4096
+    ) {
       algorithm = 'fft';
     } else {
       algorithm = 'direct';
@@ -82,7 +88,12 @@ export default function convolution(kernel, options = {}) {
         divisor: divisor
       });
     } else if (algorithm === 'separable') {
-      tmpResult = convolutionSeparable(tmpData, kernel, this.width, this.height);
+      tmpResult = convolutionSeparable(
+        tmpData,
+        kernel,
+        this.width,
+        this.height
+      );
       if (normalize) {
         divisor = 0;
         for (let i = 0; i < kernel[0].length; i++) {
@@ -110,13 +121,15 @@ export default function convolution(kernel, options = {}) {
       for (x = 0; x < this.width; x++) {
         index = y * this.width + x;
         if (clamped) {
-          newImage.data[index * this.channels + c] = Math.min(Math.max(tmpResult[index], 0), newImage.maxValue);
+          newImage.data[index * this.channels + c] = Math.min(
+            Math.max(tmpResult[index], 0),
+            newImage.maxValue
+          );
         } else {
           newImage.data[index * this.channels + c] = tmpResult[index];
         }
       }
     }
-
   }
   // if the kernel was not applied on the alpha channel we just copy it
   // TODO: in general we should copy the channels that where not changed
