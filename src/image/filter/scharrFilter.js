@@ -1,5 +1,6 @@
 import gradientFilter from './gradientFilter';
-import { GRADIENT_X, GRADIENT_Y } from '../../util/kernels';
+import { SCHARR_X, SCHARR_Y } from '../../util/kernels';
+
 
 /**
  * @memberof Image
@@ -10,9 +11,9 @@ import { GRADIENT_X, GRADIENT_Y } from '../../util/kernels';
  * @param {number} [options.bitDepth=this.bitDepth] Specify the bitDepth of the resulting image
  * @return {Image}
  */
-export default function sobelFilter(options) {
+export default function scharrFilter(options) {
   return gradientFilter.call(this, Object.assign({}, options, {
-    kernelX: GRADIENT_X,
-    kernelY: GRADIENT_Y
+    kernelX: SCHARR_X,
+    kernelY: SCHARR_Y
   }));
 }

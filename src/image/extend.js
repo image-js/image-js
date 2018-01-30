@@ -13,6 +13,7 @@ import blurFilter from './filter/blurFilter';
 import medianFilter from './filter/medianFilter';
 import gaussianFilter from './filter/gaussianFilter';
 import sobelFilter from './filter/sobelFilter';
+import scharrFilter from './filter/scharrFilter';
 import gradientFilter from './filter/gradientFilter';
 import levelFilter from './filter/level';
 import addFilter from './filter/add';
@@ -123,6 +124,7 @@ export default function extend(Image) {
   Image.extendMethod('gaussianFilter', gaussianFilter);
   Image.extendMethod('sobelFilter', sobelFilter);
   Image.extendMethod('gradientFilter', gradientFilter);
+  Image.extendMethod('scharrFilter', scharrFilter);
 
   Image.extendMethod('dilate', dilate);
   Image.extendMethod('erode', erode);

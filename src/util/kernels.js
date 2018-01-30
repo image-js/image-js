@@ -24,6 +24,18 @@ export const SOBEL_Y = [
   [+1, +2, +1]
 ];
 
+export const SCHARR_Y = [
+  [3, 0, -3],
+  [10, 0, -10],
+  [3, 0, -3]
+];
+
+export const SCHARR_X = [
+  [3, 10, 3],
+  [0, 0, 0],
+  [-3, -10, -3]
+];
+
 export const SECOND_DERIVATIVE = [
   [-1, -2,  0,  2,  1],
   [-2, -4,  0,  4,  2],
