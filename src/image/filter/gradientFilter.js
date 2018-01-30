@@ -37,12 +37,14 @@ export default function gradientFilter(options = {}) {
       return convolution.call(this, kernelX, {
         channels: channels,
         border: border,
+        bitDepth
       });
     case 'y':
       if (!kernelY) throw new Error('kernelY option is missing');
       return convolution.call(this, kernelY, {
         channels: channels,
         border: border,
+        bitDepth
       });
     case 'xy': {
       if (!kernelX) throw new Error('kernelX option is missing');
