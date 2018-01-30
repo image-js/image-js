@@ -1,5 +1,5 @@
 import gradientFilter from './gradientFilter';
-import { GRADIENT_X, GRADIENT_Y } from '../../util/kernels';
+import { SOBEL_X, SOBEL_Y } from '../../util/kernels';
 
 /**
  * @memberof Image
@@ -12,7 +12,7 @@ import { GRADIENT_X, GRADIENT_Y } from '../../util/kernels';
  */
 export default function sobelFilter(options) {
   return gradientFilter.call(this, Object.assign({}, options, {
-    kernelX: GRADIENT_X,
-    kernelY: GRADIENT_Y
+    kernelX: SOBEL_X,
+    kernelY: SOBEL_Y
   }));
 }
