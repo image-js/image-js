@@ -24,13 +24,13 @@ export const SOBEL_Y = [
   [+1, +2, +1]
 ];
 
-export const SCHARR_Y = [
+export const SCHARR_X = [
   [3, 0, -3],
   [10, 0, -10],
   [3, 0, -3]
 ];
 
-export const SCHARR_X = [
+export const SCHARR_Y = [
   [3, 10, 3],
   [0, 0, 0],
   [-3, -10, -3]
