@@ -1,4 +1,4 @@
-import convolution from '../operator/convolution';
+import gradientFilter from './gradientFilter';
 import { GRADIENT_X, GRADIENT_Y } from '../../util/kernels';
 
 /**
@@ -12,30 +12,9 @@ import { GRADIENT_X, GRADIENT_Y } from '../../util/kernels';
  * #param {number} [options.bitDepth=this.bitDepth] Specify the bitDepth of the resulting image
  * @return {Image}
  */
-export default function sobelFilter(options = {}) {
-  let {
-    kernelX = GRADIENT_X,
-    kernelY = GRADIENT_Y,
-    border = 'copy',
-    channels,
-    bitDepth = this.bitDepth
-  } = options;
-
-  this.checkProcessable('sobel', {
-    bitDepth: [8, 16]
-  });
-
-  let gX = convolution.call(this, kernelX, {
-    channels: channels,
-    border: border,
-    bitDepth: 32
-  });
-
-  let gY = convolution.call(this, kernelY, {
-    channels: channels,
-    border: border,
-    bitDepth: 32
-  });
-
-  return gX.hypotenuse(gY, { bitDepth, channels: channels });
+export default function sobelFilter(options) {
+  return gradientFilter.call(this, Object.assign({
+    kernelX: GRADIENT_X,
+    kernelY: GRADIENT_Y
+  }, options));
 }

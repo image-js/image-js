@@ -11,13 +11,14 @@ export const DISCRETE_LAPLACE_8 = [
   [1,  1, 1]
 ];
 
-export const GRADIENT_X = [
+
+export const SOBEL_X = [
   [-1, 0, +1],
   [-2, 0, +2],
   [-1, 0, +1]
 ];
 
-export const GRADIENT_Y = [
+export const SOBEL_Y = [
   [-1, -2, -1],
   [0,  0,  0],
   [+1, +2, +1]
