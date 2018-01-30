@@ -1,3 +1,5 @@
+import { readFile, createWriteStream, writeFile } from 'fs';
+
 let createCanvas, DOMImage, ImageData;
 try {
   const canvas = require('canvas');
@@ -18,7 +20,6 @@ try {
   };
 }
 
-import { readFile, createWriteStream, writeFile } from 'fs';
 
 const env = 'node';
 

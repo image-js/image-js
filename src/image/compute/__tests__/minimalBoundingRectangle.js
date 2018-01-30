@@ -1,11 +1,11 @@
-import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
-expect.extend({ toBeDeepCloseTo });
-
 import { Image } from 'test/common';
 
-import { angle } from '../../../util/points';
+import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
+import { angle } from '../../../util/points';
 import minimalBoundingRectangle from '../minimalBoundingRectangle';
+
+expect.extend({ toBeDeepCloseTo });
 
 describe('Minimal bounding rectangle', function () {
   it('should return the minimal bounding box', function () {

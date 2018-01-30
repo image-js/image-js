@@ -13,3 +13,6 @@ rules:
   no-var: error
   no-multi-spaces: off
   valid-jsdoc: error
+
+settings:
+  import/core-modules: [ test ]

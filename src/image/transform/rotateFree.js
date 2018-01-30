@@ -1,6 +1,7 @@
 //http://homepages.inf.ed.ac.uk/rbf/HIPR2/rotate.htm
 //http://www.cyut.edu.tw/~yltang/program/Rotate1.java
 import Image from '../Image';
+
 export default function rotateFree(degrees, options = {}) {
   const {
     interpolation = 'none',
