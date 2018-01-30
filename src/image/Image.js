@@ -722,17 +722,28 @@ export default class Image {
      * Save the image to disk (Node.js only)
      * @param {string} path
      * @param {object} [options]
-     * @param {string} [options.format='png'] - One of: png, jpg, bmp (limited support for bmp)
+     * @param {string} [options.format] - One of: png, jpg, bmp (limited support for bmp). If not specified will try to infer from filename
      * @param {boolean} [options.useCanvas=false] - Force use of the canvas API to save the image instead of JavaScript implementation
      * @param {object} [options.encoder] - Specify options for the encoder if applicable.
      * @return {Promise} - Resolves when the file is fully written
      */
   save(path, options = {}) {
     const {
-      format = 'png',
       useCanvas = false,
       encoder: encoderOptions = undefined
     } = options;
+
+    let { format } = options;
+    if (!format) {
+      // try to infer format from filename
+      const m = /\.([a-zA-Z]+)$/.exec(path);
+      if (m) {
+        format = m[1].toLowerCase();
+      }
+    }
+    if (!format) {
+      throw new Error('file format not provided');
+    }
     return new Promise((resolve, reject) => {
       let stream, buffer;
       switch (format.toLowerCase()) {
