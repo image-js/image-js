@@ -33,9 +33,9 @@ export default function erode(options = {}) {
   let result = this;
   for (let i = 0; i < iterations; i++) {
     if (this.bitDepth === 1) {
-      result = erodeOnceBinary(this, kernel, channels);
+      result = erodeOnceBinary(result, kernel, channels);
     } else {
-      result = erodeOnce(this, kernel, channels);
+      result = erodeOnce(result, kernel, channels);
     }
   }
   return result;
@@ -72,7 +72,6 @@ function erodeOnceBinary(img, kernel) {
   let newImage = Image.createFrom(img);
   for (let y = 0; y < img.height; y++) {
     for (let x = 0; x < img.width; x++) {
-      // console.log('x, y', x, y);
       let min = 1;
       intLoop: for (let j = -kHeight; j <= kHeight; j++) {
         for (let i = -kWidth; i <= kWidth; i++) {

@@ -24,14 +24,6 @@ describe('check the erode function', function () {
   });
 
   it('check for binary image 5x5', function () {
-    /*        ______
-       |x xxx|
-       |x xxx|
-       |x xxx|
-       |x xxx|
-       |x xxx|
-       */
-
     let mask = new Image(5, 5, binary`
       10111
       10111
@@ -48,6 +40,26 @@ describe('check the erode function', function () {
         00011
         00011
       `
+    );
+  });
+
+  it('checks erode with 2 iterations', function () {
+    let mask = new Image(5, 5, binary`
+    10111
+    10111
+    10111
+    10111
+    10111
+  `, { kind: 'BINARY' });
+
+    expect(mask.erode({ iterations: 2 }).data).toEqual(
+      binary`
+      00001
+      00001
+      00001
+      00001
+      00001
+    `
     );
   });
 
