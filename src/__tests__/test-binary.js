@@ -8,13 +8,13 @@ test('test-binary', () => {
       0101
       0101
   `;
-    expect(result).toEqual([0b10101010, 0b01010101]);
+    expect(result).toEqual(new Uint8Array([0b10101010, 0b01010101]));
   }
   {
     const result = binary`
       1010101001010101
     `;
-    expect(result).toEqual([0b10101010, 0b01010101]);
+    expect(result).toEqual(new Uint8Array([0b10101010, 0b01010101]));
   }
 
   {
@@ -23,6 +23,6 @@ test('test-binary', () => {
       00000000
       00001111
     `;
-    expect(result).toEqual([0b11111111, 0b00000000, 0b00001111]);
+    expect(result).toEqual(new Uint8Array([0b11111111, 0b00000000, 0b00001111]));
   }
 });
