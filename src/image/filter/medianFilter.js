@@ -1,5 +1,6 @@
-import { validateArrayOfChannels } from '../../util/channel';
 import { asc as sortAsc } from 'num-sort';
+
+import { validateArrayOfChannels } from '../../util/channel';
 import Image from '../Image';
 
 /**
