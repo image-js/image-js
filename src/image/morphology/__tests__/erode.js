@@ -63,6 +63,24 @@ describe('check the erode function', function () {
     );
   });
 
+  it('checks a 5x5 binary', function () {
+    const mask = new Image(5, 5, binary`
+      11111
+      11011
+      10001
+      11011
+      11111
+    `, {kind: 'BINARY'});
+
+    expect(mask.erode().data).toEqual(binary`
+      10001
+      00000
+      00000
+      00000
+      10001
+    `);
+  });
+
   it('checks fro binary image 5x3 with vertical kernel', function () {
     const kernel = [[1, 1, 1]];
     const mask = new Image(3, 5, binary`
