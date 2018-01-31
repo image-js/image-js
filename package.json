@@ -46,7 +46,7 @@
     "clean-dist": "rimraf dist && mkdir dist",
     "clean-lib": "rimraf lib",
     "compile": "npm run clean-lib && cross-env NODE_ENV=npm babel src --out-dir lib --ignore __tests__ --quiet",
-    "eslint": "eslint src --cache",
+    "eslint": "eslint src test/common.js --cache",
     "eslint-fix": "npm run eslint -- --fix",
     "prepublish": "npm run compile",
     "publish-doc": "npm run build-doc && git add docs && git commit -m \"doc: rebuild docs\" && git push origin master",
