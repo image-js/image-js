@@ -9,11 +9,13 @@ import Matrix from 'ml-matrix';
  * @instance
  * @param {object} [options]
  * @param {Matrix} [options.kernel]
+ * @param {number} [options.iterations] - The number of successive erosions
  * @return {Image}
  */
 export default function erode(options = {}) {
   let {
-    kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
+    kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]),
+    iterations = 1
   } = options;
 
   this.checkProcessable('erode', {
@@ -24,6 +26,28 @@ export default function erode(options = {}) {
     throw new TypeError('erode: The number of rows and columns of the kernel must be odd');
   }
 
+  let result = this;
+  for (let i = 0; i < iterations; i++) {
+    result = erodeOnce(this, kernel);
+  }
+  return result;
+}
+
+function minOfConvolution(a, b) {
+  let minimum = Number.POSITIVE_INFINITY;
+  for (let i = 0; i < a.rows; i++) {
+    for (let j = 0; j < a.columns; j++) {
+      if (b.get(i, j) === 1) {
+        if (a.get(i, j) < minimum) {
+          minimum = a.get(i, j);
+        }
+      }
+    }
+  }
+  return minimum;
+}
+
+function erodeOnce(img, kernel) {
   const newImage = Image.createFrom(this);
   let currentMatrix = this.getMatrix();
   let newMatrix = new Matrix(currentMatrix);
@@ -47,18 +71,4 @@ export default function erode(options = {}) {
   }
   newImage.setMatrix(newMatrix);
   return newImage;
-}
-
-function minOfConvolution(a, b) {
-  let minimum = Number.POSITIVE_INFINITY;
-  for (let i = 0; i < a.rows; i++) {
-    for (let j = 0; j < a.columns; j++) {
-      if (b.get(i, j) === 1) {
-        if (a.get(i, j) < minimum) {
-          minimum = a.get(i, j);
-        }
-      }
-    }
-  }
-  return minimum;
 }
