@@ -1,4 +1,5 @@
 import { Image } from 'test/common';
+import binary from 'test/binary';
 
 describe('we check getPixelsGrid', function () {
   it('should yield the right array of pixels', function () {
@@ -25,13 +26,14 @@ describe('we check getPixelsGrid', function () {
       data[i] = i;
     }
     let image = new Image(size, size, data, { kind: 'GREY' });
-    let maskData = [
-      0b00000001,
-      0b00100000,
-      0b00000000,
-      0b00000000,
-      0b00000000
-    ];
+    const maskData = binary`
+        000000
+        010010
+        000000
+        000000
+        000000
+        000000
+    `;
 
     let mask = new Image(size, size, maskData, { kind: 'BINARY' });
     let pixels = image.getPixelsGrid({

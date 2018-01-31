@@ -1,4 +1,5 @@
 import { Image } from 'test/common';
+import binary from 'test/binary';
 
 describe('Roi#getMask', function () {
   it('should yield the right mask', function () {
@@ -20,15 +21,13 @@ describe('Roi#getMask', function () {
     let mask = roiManager.getMask({ minSurface: 5, maxSurface: 5 });
 
     // only 2 Roi will be selected !
-
-    // should be
-    // 01000
-    // 11110
-    // 01111
-    // 00010
-    // 00000
-
-    expect(Array.from(mask.data)).toEqual([0b01000111, 0b10011110, 0b00100000, 0]);
+    expect(mask.data).toEqual(binary`
+        01000
+        11110
+        01111
+        00010
+        00000
+    `);
   });
 
   it('should yield the right mask, position and resize', function () {
@@ -43,8 +42,13 @@ describe('Roi#getMask', function () {
 
     let mask = image.mask({ threshold: 1, algorithm: 'threshold' });
 
-    expect(Array.from(mask.data)).toEqual([3, 156, 224, 0]);
-
+    expect(mask.data).toEqual(binary`
+        00000
+        01110
+        01110
+        01110
+        00000
+    `);
 
     let roiManager = image.getRoiManager();
     roiManager.fromMask(mask, { positive: true, negative: false });
@@ -98,7 +102,12 @@ describe('Roi#getMask', function () {
 
     const roi = rois[0];
     const hullMask = roi.hullMask;
-    expect(Array.from(hullMask.data)).toEqual([0b11100111, 0b00111101, 0b11110000]);
+    expect(hullMask.data).toEqual(binary`
+        111001
+        110011
+        110111
+        110000
+    `);
   });
 });
 

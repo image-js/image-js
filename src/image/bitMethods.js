@@ -9,8 +9,7 @@ let bitMethods = {
      * @param {number} y - y coordinate (0 = top)
      */
   setBitXY(x, y) {
-    let target = y * this.width + x;
-    this.setBit(target);
+    this.setBit(y * this.width + x);
   },
 
   /**
@@ -21,10 +20,7 @@ let bitMethods = {
      * @param {number} y - y coordinate (0 = top)
      */
   clearBitXY(x, y) {
-    let target = y * this.width + x;
-    let shift = 7 - (target & 0b00000111);
-    let slot = target >> 3;
-    this.data[slot] &= ~(1 << shift);
+    this.clearBit(y * this.width + x);
   },
 
   /**
@@ -35,10 +31,7 @@ let bitMethods = {
      * @param {number} y - y coordinate (0 = top)
      */
   toggleBitXY(x, y) {
-    let target = y * this.width + x;
-    let shift = 7 - (target & 0b00000111);
-    let slot = target >> 3;
-    this.data[slot] ^= 1 << shift;
+    this.toggleBit(y * this.width + x);
   },
 
   /**
@@ -50,8 +43,7 @@ let bitMethods = {
      * @return {number} 0: bit is unset, 1: bit is set
      */
   getBitXY(x, y) {
-    let target = y * this.width + x;
-    return this.getBit(target);
+    return this.getBit(y * this.width + x);
   },
 
   /**
@@ -105,7 +97,7 @@ let bitMethods = {
   }
 };
 
-export default function (Image) {
+export default function setBitMethods(Image) {
   for (let i in bitMethods) {
     Image.prototype[i] = bitMethods[i];
   }

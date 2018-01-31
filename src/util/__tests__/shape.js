@@ -1,15 +1,20 @@
+import binary from 'test/binary';
+
 import Shape from '../Shape';
 
 describe('we check Shape class', function () {
   it('should be able to create a Shape', function () {
     let shape = new Shape({ shape: 'circle', filled: false, size: 5 });
     let mask = shape.getMask();
-    expect(Array.from(mask.data)).toEqual([
-      0b00100010,
-      0b10100010,
-      0b10100010,
-      0b00000000
-    ]);
+    expect(mask.data).toEqual(
+      binary`
+          00100
+          01010
+          10001
+          01010
+          00100
+      `
+    );
   });
 
   it('should yield a cross', function () {

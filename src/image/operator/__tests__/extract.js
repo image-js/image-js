@@ -1,4 +1,5 @@
 import { Image, load, getHash } from 'test/common';
+import binary from 'test/binary';
 
 describe('we check we can extract a part of B/W image', function () {
   it('check the extract without specify position', function () {
@@ -19,24 +20,26 @@ describe('we check we can extract a part of B/W image', function () {
   it('check a binary image extract', function () {
 
     let image = new Image(8, 8,
-      [
-        0b00011000,
-        0b00011000,
-        0b00011000,
-        0b11111111,
-        0b11111111,
-        0b00011000,
-        0b00011000,
-        0b00011000
-      ],
+      binary`
+        00011000
+        00011000
+        00011000
+        11111111
+        11111111
+        00011000
+        00011000
+        00011000
+      `,
       { kind: 'BINARY' }
     );
 
     let mask = new Image(4, 4,
-      [
-        0b11110000,
-        0b11110000
-      ], {
+      binary`
+        1111
+        0000
+        1111
+        0000
+      `, {
         kind: 'BINARY',
         parent: image,
         position: [2, 2]
@@ -46,29 +49,32 @@ describe('we check we can extract a part of B/W image', function () {
     expect(extract.bitDepth).toBe(1);
     expect(extract.height).toBe(4);
     expect(extract.width).toBe(4);
-    expect(Array.from(extract.data)).toEqual([
-      0b01100000,
-      0b11110000
-    ]);
+    expect(extract.data).toEqual(binary`
+      0110
+      0000
+      1111
+      0000
+    `);
   });
 
 
   it('check a rectangular binary image extract', function () {
 
     let image = new Image(8, 4,
-      [
-        0b00011000,
-        0b00011000,
-        0b00011000,
-        0b11111111
-      ],
+      binary`
+        00011000
+        00011000
+        00011000
+        11111111
+      `,
       { kind: 'BINARY' }
     );
 
     let mask = new Image(4, 2,
-      [
-        0b11110000
-      ], {
+      binary`
+        1111
+        0000
+      `, {
         kind: 'BINARY',
         parent: image,
         position: [3, 2]
@@ -78,9 +84,10 @@ describe('we check we can extract a part of B/W image', function () {
     expect(extract.bitDepth).toBe(1);
     expect(extract.height).toBe(2);
     expect(extract.width).toBe(4);
-    expect(Array.from(extract.data)).toEqual([
-      0b11000000
-    ]);
+    expect(extract.data).toEqual(binary`
+      1100
+      0000
+    `);
   });
 
   it('check by specify 1,1 position with parent', function () {

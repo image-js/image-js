@@ -1,4 +1,5 @@
 import { Image } from 'test/common';
+import binary from 'test/binary';
 
 describe('check the colorDepth transform', function () {
   it('check the right colorDepth for GREY image 8 bit', function () {
@@ -12,20 +13,20 @@ describe('check the colorDepth transform', function () {
   });
 
   it('check the right colorDepth for MASK to 8 bit', function () {
-    let image = new Image(4, 2, [0b01010101], { kind: 'BINARY' });
+    let image = new Image(4, 2, binary`
+        0101
+        0101
+    `, { kind: 'BINARY' });
     let newImage = image.colorDepth(8);
-    expect(Array.from(newImage.data)).toEqual([0, 255, 0, 255, 0, 255, 0, 255]);
+    expect(Array.from(newImage.data)).toEqual([
+      0, 255, 0, 255,
+      0, 255, 0, 255
+    ]);
 
     newImage = image.colorDepth(16);
     expect(Array.from(newImage.data)).toEqual([
-      0,
-      65535,
-      0,
-      65535,
-      0,
-      65535,
-      0,
-      65535
+      0, 65535, 0, 65535,
+      0, 65535, 0, 65535
     ]);
   });
 

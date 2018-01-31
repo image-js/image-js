@@ -1,4 +1,5 @@
 import { Image } from 'test/common';
+import binary from 'test/binary';
 
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
@@ -12,16 +13,16 @@ describe('Minimal bounding rectangle', function () {
     let image = new Image(
       8,
       8,
-      [
-        0b00000000,
-        0b00011000,
-        0b00011000,
-        0b00111111,
-        0b00111111,
-        0b00011000,
-        0b00011000,
-        0b00000000
-      ],
+      binary`
+        00000000
+        00011000
+        00011000
+        00111111
+        00111111
+        00011000
+        00011000
+        00000000
+      `,
       { kind: 'BINARY' }
     );
 
@@ -39,7 +40,11 @@ describe('Minimal bounding rectangle', function () {
   });
 
   it('should return the small bounding box', function () {
-    let image = new Image(8, 3, [0b10000001, 0b00011000, 0b10011010], {
+    let image = new Image(8, 3, binary`
+      10000001
+      00011000
+      10011010
+    `, {
       kind: 'BINARY'
     });
 
@@ -48,7 +53,11 @@ describe('Minimal bounding rectangle', function () {
   });
 
   it('should return the small bounding box 2', function () {
-    let image = new Image(8, 3, [0b01000100, 0b00011000, 0b01011010], {
+    let image = new Image(8, 3, binary`
+      01000100
+      00011000
+      01011010
+    `, {
       kind: 'BINARY'
     });
 
@@ -57,7 +66,11 @@ describe('Minimal bounding rectangle', function () {
   });
 
   it('should return the small bounding box diamond', function () {
-    let image = new Image(8, 3, [0b00000100, 0b00001110, 0b00000100], {
+    let image = new Image(8, 3, binary`
+      00000100
+      00001110
+      00000100
+    `, {
       kind: 'BINARY'
     });
 
@@ -69,15 +82,15 @@ describe('Minimal bounding rectangle', function () {
     let image = new Image(
       8,
       7,
-      [
-        0b00000000,
-        0b00001000,
-        0b00011100,
-        0b00111110,
-        0b00011111,
-        0b00001110,
-        0b00000100
-      ],
+      binary`
+        00000000
+        00001000
+        00011100
+        00111110
+        00011111
+        00001110
+        00000100
+      `,
       { kind: 'BINARY' }
     );
 
