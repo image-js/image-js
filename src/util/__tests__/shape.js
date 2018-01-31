@@ -13,8 +13,7 @@ describe('we check Shape class', function () {
           10001
           01010
           00100
-      `
-    );
+      `);
   });
 
   it('should yield a cross', function () {
