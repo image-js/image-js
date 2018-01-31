@@ -1,9 +1,8 @@
 import { Image } from 'test/common';
-import Matrix from 'ml-matrix';
+import binary from 'test/binary';
 
 describe('check the erode function', function () {
   it('check for GREY image 5x5', function () {
-    let kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]);
     let image = new Image(5, 5,
       [
         255,   0,   255, 255, 255,
@@ -15,13 +14,62 @@ describe('check the erode function', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.erode({ kernel: kernel }).data)).toEqual([
+    expect(Array.from(image.erode().data)).toEqual([
       0, 0, 0, 255, 255,
       0, 0, 0, 255, 255,
       0, 0, 0, 255, 255,
       0, 0, 0, 255, 255,
       0, 0, 0, 255, 255
     ]);
+  });
+
+  it('check for binary image 5x5', function () {
+    /*        ______
+       |x xxx|
+       |x xxx|
+       |x xxx|
+       |x xxx|
+       |x xxx|
+       */
+
+    let mask = new Image(5, 5, binary`
+      10111
+      10111
+      10111
+      10111
+      10111
+    `, { kind: 'BINARY' });
+
+    expect(mask.erode().data).toEqual(
+      binary`
+        00011
+        00011
+        00011
+        00011
+        00011
+      `
+    );
+  });
+
+  it('checks fro binary image 5x3 with vertical kernel', function () {
+    const kernel = [[1, 1, 1]];
+    const mask = new Image(3, 5, binary`
+      110
+      100
+      111
+      001
+      011
+    `, { kind: 'BINARY' });
+
+    const expected = binary`
+      100
+      100
+      000
+      001
+      001
+    `;
+
+    expect(mask.erode({ kernel }).data).toEqual(expected);
   });
 });
 
