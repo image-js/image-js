@@ -48,8 +48,8 @@ function minOfConvolution(a, b) {
 }
 
 function erodeOnce(img, kernel) {
-  const newImage = Image.createFrom(this);
-  let currentMatrix = this.getMatrix();
+  const newImage = Image.createFrom(img);
+  let currentMatrix = img.getMatrix();
   let newMatrix = new Matrix(currentMatrix);
   let shiftX = (kernel.rows - 1) / 2;
   let shiftY = (kernel.columns - 1) / 2;
