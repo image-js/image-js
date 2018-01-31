@@ -1,4 +1,6 @@
+import binary from 'test/binary';
 import { Image } from 'test/common';
+
 import Matrix from 'ml-matrix';
 
 describe('check the dilate function', function () {
@@ -22,6 +24,26 @@ describe('check the dilate function', function () {
       255, 255, 0, 255, 255,
       255, 255, 0, 255, 255
     ]);
+  });
+
+  it('check for BINARY image 5x5', function () {
+    const mask = new Image(5, 5, binary`
+      10001
+      00000
+      00000
+      00000
+      10001
+    `, { kind: 'BINARY' });
+
+    const expected = binary`
+      11011
+      11011
+      00000
+      11011
+      11011
+    `;
+
+    expect(mask.dilate().data).toEqual(expected);
   });
 });
 

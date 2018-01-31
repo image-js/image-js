@@ -1,64 +1,103 @@
 import Image from '../Image';
-import Matrix from 'ml-matrix';
+import { validateArrayOfChannels } from '../../util/channel';
 
 /**
- * Dilation is one of two fundamental operations (the other being eroding) in morphological image processing from which all other morphological operations are based (from Wikipedia).
+ * Erosion is one of two fundamental operations (the other being dilation) in morphological image processing from which all other morphological operations are based (from Wikipedia).
  * http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html
- * https://en.wikipedia.org/wiki/Dilation_(morphology)
+ * https://en.wikipedia.org/wiki/Erosion_(morphology)
  * @memberof Image
  * @instance
  * @param {object} [options]
+ * @param {SelectedChannels} [options.channels] - Selected channels
  * @param {Matrix} [options.kernel]
+ * @param {number} [options.iterations] - The number of successive erosions
  * @return {Image}
  */
 export default function dilate(options = {}) {
   let {
-    kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
+    kernel = [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
+    iterations = 1,
+    channels
   } = options;
 
   this.checkProcessable('dilate', {
-    bitDepth: [8, 16],
+    bitDepth: [1, 8, 16],
     channel: [1]
   });
   if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {
     throw new TypeError('dilate: The number of rows and columns of the kernel must be odd');
   }
 
-  const newImage = Image.createFrom(this);
-  let currentMatrix = this.getMatrix();
-  let newMatrix = new Matrix(currentMatrix);
-  let shiftX = (kernel.rows - 1) / 2;
-  let shiftY = (kernel.columns - 1) / 2;
+  channels = validateArrayOfChannels(this, channels, true);
 
-
-  for (let i = 0; i < currentMatrix.rows; i++) {
-    for (let j = 0; j < currentMatrix.columns; j++) {
-      let startRow = Math.max(0, i - shiftX);
-      let endRow = Math.min(currentMatrix.rows - 1, i + shiftX);
-      let startColumn = Math.max(0, j - shiftY);
-      let endColumn = Math.min(currentMatrix.columns - 1, j + shiftY);
-      if (startRow >= endRow || startColumn >= endColumn) {
-        continue;
-      }
-      let tmpMatrix = currentMatrix.subMatrix(startRow, endRow, startColumn, endColumn);
-
-      newMatrix.set(i, j, maxOfConvolution(tmpMatrix, kernel));
+  let result = this;
+  for (let i = 0; i < iterations; i++) {
+    if (this.bitDepth === 1) {
+      result = dilateOnceBinary(result, kernel, channels);
+    } else {
+      result = dilateOnce(result, kernel, channels);
     }
   }
-  newImage.setMatrix(newMatrix);
+  return result;
+}
+
+function dilateOnce(img, kernel, channels) {
+  const kernelWidth = kernel.length;
+  const kernelHeight = kernel[0].length;
+  let radiusX = (kernelWidth - 1) / 2;
+  let radiusY = (kernelHeight - 1) / 2;
+  let newImage = Image.createFrom(img);
+  for (let channel = 0; channel < channels.length; channel++) {
+    let c = channels[channel];
+    for (let y = 0; y < img.height; y++) {
+      for (let x = 0; x < img.width; x++) {
+        let max = 0;
+        for (let jj = 0; jj < kernelHeight; jj++) {
+          for (let ii = 0; ii < kernelWidth; ii++) {
+            if (kernel[ii][jj] !== 1) continue;
+            let i = ii - radiusX + x;
+            let j = jj - radiusY + y;
+            let index = (j * img.width + i) * img.channels + c;
+            if (index < 0) continue;
+            const value = img.data[index];
+            if (value > max) max = value;
+          }
+        }
+        let index = (y * img.width + x) * img.channels + c;
+        newImage.data[index] = max;
+      }
+    }
+  }
   return newImage;
 }
 
-function maxOfConvolution(a, b) {
-  let maximum = 0;
-  for (let i = 0; i < a.rows; i++) {
-    for (let j = 0; j < a.columns; j++) {
-      if (b.get(i, j) === 1) {
-        if (a.get(i, j) > maximum) {
-          maximum = a.get(i, j);
+function dilateOnceBinary(img, kernel) {
+  const kernelWidth = kernel.length;
+  const kernelHeight = kernel[0].length;
+  let radiusX = (kernelWidth - 1) / 2;
+  let radiusY = (kernelHeight - 1) / 2;
+  let newImage = Image.createFrom(img);
+  for (let y = 0; y < img.height; y++) {
+    for (let x = 0; x < img.width; x++) {
+      let min = 0;
+      intLoop: for (let jj = 0; jj < kernelHeight; jj++) {
+        for (let ii = 0; ii < kernelWidth; ii++) {
+          if (kernel[ii][jj] !== 1) continue;
+          let i = ii - radiusX + x;
+          let j = jj - radiusY + y;
+          if (j < 0 || i < 0 || i >= img.width || j >= img.height) continue;
+          const value = img.getBitXY(i, j);
+          if (value === 1) {
+            min = 1;
+            break intLoop;
+          }
         }
+      }
+      if (min === 1) {
+        newImage.setBitXY(x, y);
       }
     }
   }
-  return maximum;
+  return newImage;
 }
+
