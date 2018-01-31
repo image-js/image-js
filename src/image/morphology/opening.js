@@ -1,4 +1,3 @@
-import Matrix from 'ml-matrix';
 
 /**
  * In mathematical morphology, opening is the dilation of the erosion of a set A by a structuring element B. Together with closing, the opening serves in computer vision and image processing as a basic workhorse of morphological noise removal. Opening removes small objects from the foreground (usually taken as the bright pixels) of an image, placing them in the background, while closing removes small holes in the foreground, changing small islands of background into foreground. (Wikipedia)
@@ -12,7 +11,7 @@ import Matrix from 'ml-matrix';
  */
 export default function opening(options = {}) {
   let {
-    kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]),
+    kernel = [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
     iterations = 1
   } = options;
 
@@ -24,13 +23,10 @@ export default function opening(options = {}) {
     throw new TypeError('opening: The number of rows and columns of the kernel must be odd');
   }
 
-  let newImage = this.erode({ kernel: kernel });
-  newImage = newImage.dilate({ kernel: kernel });
-  if (iterations > 1) {
-    for (let i = 1; i < iterations; i++) {
-      newImage = newImage.erode({ kernel: kernel });
-      newImage = newImage.dilate({ kernel: kernel });
-    }
+  let newImage = this;
+  for (let i = 0; i < iterations; i++) {
+    newImage = newImage.erode({ kernel });
+    newImage = newImage.dilate({ kernel });
   }
   return newImage;
 }

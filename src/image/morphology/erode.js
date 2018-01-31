@@ -57,8 +57,8 @@ function erodeOnce(img, kernel, channels) {
             if (kernel[ii][jj] !== 1) continue;
             let i = ii - radiusX + x;
             let j = jj - radiusY + y;
+            if (i < 0 || j < 0 || i >= img.width || j >= img.height) continue;
             let index = (j * img.width + i) * img.channels + c;
-            if (index < 0) continue;
             const value = img.data[index];
             if (value < min) min = value;
           }

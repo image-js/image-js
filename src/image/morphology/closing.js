@@ -17,7 +17,7 @@ export default function closing(options = {}) {
   } = options;
 
   this.checkProcessable('closing', {
-    bitDepth: [8, 16],
+    bitDepth: [1, 8, 16],
     channel: [1]
   });
   if (kernel.columns - 1 % 2 === 0 || kernel.rows - 1 % 2 === 0) {

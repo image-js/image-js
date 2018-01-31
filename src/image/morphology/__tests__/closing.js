@@ -1,5 +1,8 @@
+import binary from 'test/binary';
+
 import { Image } from 'test/common';
 import Matrix from 'ml-matrix';
+
 
 describe('check the closing function', function () {
   it('check for GREY image 5x5', function () {
@@ -44,6 +47,35 @@ describe('check the closing function', function () {
       255, 0, 0, 0, 255,
       255, 255, 255, 255, 255
     ]);
+  });
+
+  it('check on 5x5 mask', function () {
+    /*
+     We will create the following mask
+      ______
+     |xx xx|
+     |x   x|
+     |x   x|
+     |x   x|
+     |xx xx|
+     */
+
+    let mask = new Image(5, 5, binary`
+      11011
+      10001
+      10001
+      10001
+      11011
+    `, { kind: 'BINARY' });
+
+    expect(mask.closing().data).toEqual(
+      binary`
+        11111
+        10001
+        10001
+        10001
+        11111
+    `);
   });
 });
 

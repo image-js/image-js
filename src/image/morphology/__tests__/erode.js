@@ -23,6 +23,26 @@ describe('check the erode function', function () {
     ]);
   });
 
+  it('check for another GREY image 5x5', function () {
+    let image = new Image(5, 5, [
+      255, 255, 255, 255, 255,
+      255, 255, 0, 255, 255,
+      255, 0, 0, 0, 255,
+      255, 255, 0, 255, 255,
+      255, 255, 255, 255, 255
+    ], { kind: 'GREY' });
+
+    const expected = [
+      255, 0, 0, 0, 255,
+      0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0,
+      255, 0, 0, 0, 255
+    ];
+
+    expect(Array.from(image.erode().data)).toEqual(expected);
+  });
+
   it('check for binary image 5x5', function () {
     let mask = new Image(5, 5, binary`
       10111
@@ -70,7 +90,25 @@ describe('check the erode function', function () {
       10001
       11011
       11111
-    `, {kind: 'BINARY'});
+    `, { kind: 'BINARY' });
+
+    expect(mask.erode().data).toEqual(binary`
+      10001
+      00000
+      00000
+      00000
+      10001
+    `);
+  });
+
+  it('checks another 5x5 binary', function () {
+    const mask = new Image(5, 5, binary`
+      11011
+      11011
+      00000
+      11011
+      11011
+    `, { kind: 'BINARY' });
 
     expect(mask.erode().data).toEqual(binary`
       10001

@@ -51,14 +51,14 @@ function dilateOnce(img, kernel, channels) {
     let c = channels[channel];
     for (let y = 0; y < img.height; y++) {
       for (let x = 0; x < img.width; x++) {
-        let max = 0;
+        let max = Number.MIN_SAFE_INTEGER;
         for (let jj = 0; jj < kernelHeight; jj++) {
           for (let ii = 0; ii < kernelWidth; ii++) {
             if (kernel[ii][jj] !== 1) continue;
             let i = ii - radiusX + x;
             let j = jj - radiusY + y;
+            if (i < 0 || j < 0 || i >= img.width || j >= img.height) continue;
             let index = (j * img.width + i) * img.channels + c;
-            if (index < 0) continue;
             const value = img.data[index];
             if (value > max) max = value;
           }
