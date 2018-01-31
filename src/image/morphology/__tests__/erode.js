@@ -83,5 +83,26 @@ describe('check the erode function', function () {
 
     expect(mask.erode({ kernel }).data).toEqual(expected);
   });
+
+  it('checks from binary image 5x5, kernel with holes', function () {
+    const kernel = [[1, 1, 1], [1, 0, 1], [1, 1, 1]];
+    const mask = new Image(5, 5, binary`
+      11111
+      11111
+      11011
+      11111
+      11111
+    `, { kind: 'BINARY' });
+
+    const expected = binary`
+      11111
+      10001
+      10101
+      10001
+      11111
+    `;
+
+    expect(mask.erode({ kernel }).data).toEqual(expected);
+  });
 });
 
