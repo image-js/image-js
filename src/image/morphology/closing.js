@@ -24,13 +24,10 @@ export default function closing(options = {}) {
     throw new TypeError('closing: The number of rows and columns of the kernel must be odd');
   }
 
-  let newImage = this.dilate({ kernel: kernel });
-  newImage = newImage.erode({ kernel: kernel });
-  if (iterations > 1) {
-    for (let i = 1; i < iterations; i++) {
-      newImage = newImage.dilate({ kernel: kernel });
-      newImage = newImage.erode({ kernel: kernel });
-    }
+  let newImage = this;
+  for (let i = 0; i < iterations; i++) {
+    newImage = newImage.dilate({ kernel: kernel });
+    newImage = newImage.erode({ kernel: kernel });
   }
   return newImage;
 }
