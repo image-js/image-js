@@ -89,16 +89,16 @@ describe('check the erode function', function () {
     const mask = new Image(5, 5, binary`
       11111
       11111
-      11011
+      11101
       11111
       11111
     `, { kind: 'BINARY' });
 
     const expected = binary`
       11111
-      10001
-      10101
-      10001
+      11000
+      11010
+      11000
       11111
     `;
 
