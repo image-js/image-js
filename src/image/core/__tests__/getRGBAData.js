@@ -1,4 +1,4 @@
-import Image from '../Image';
+import Image from '../../Image';
 
 describe('getRGBAData', function () {
   it('32 bit grey image', function () {

@@ -1,3 +1,5 @@
+import { checkColumn, checkChannel } from './checks';
+
 /**
  * @memberof Image
  * @instance
@@ -11,8 +13,8 @@ export default function getColumn(column, channel = 0) {
     bitDepth: [8, 16]
   });
 
-  this.checkColumn(column);
-  this.checkChannel(channel);
+  checkColumn(this, column);
+  checkChannel(this, channel);
 
   let array = new Array(this.height);
   let ptr = 0;

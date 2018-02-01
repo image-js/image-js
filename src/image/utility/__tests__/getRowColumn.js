@@ -33,19 +33,19 @@ describe('check getRow and getColumn class', function () {
 
     expect(function () {
       image.getRow(5);
-    }).toThrowError(/row should be included between 0 and 2/);
+    }).toThrowError(/row must be included between 0 and 2/);
 
     expect(function () {
       image.getRow(1, 2);
-    }).toThrowError(/channel should be included between 0 and 1/);
+    }).toThrowError(/channel must be included between 0 and 1/);
 
     expect(function () {
       image.getColumn(5);
-    }).toThrowError(/column should be included between 0 and 2/);
+    }).toThrowError(/column must be included between 0 and 2/);
 
     expect(function () {
       image.getColumn(1, 2);
-    }).toThrowError(/channel should be included between 0 and 1/);
+    }).toThrowError(/channel must be included between 0 and 1/);
 
   });
 

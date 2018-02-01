@@ -1,3 +1,5 @@
+import { checkRow, checkChannel } from './checks';
+
 /**
  * @memberof Image
  * @instance
@@ -10,8 +12,8 @@ export default function getRow(row, channel = 0) {
     bitDepth: [8, 16]
   });
 
-  this.checkRow(row);
-  this.checkChannel(channel);
+  checkRow(this, row);
+  checkChannel(this, channel);
 
 
   let array = new Array(this.width);
