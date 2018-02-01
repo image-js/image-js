@@ -5,44 +5,31 @@
  * @returns {number} - the threshold
  */
 
-export default function otsu(histogram, total) {
+export default function otsu(histogramCounts, total) {
+  let sumB = 0;
+  let wB = 0;
+  let maximum = 0;
+  let level = 0;
 
-  let sum = 0;            //Total Intensities of the histogram
-  let sumB = 0;           //Total intensities in the 1-class histogram
-  let wB = 0;             //Total pixels in the 1-class histogram
-  let wF = 0;             //Total pixels in the 2-class histogram
-  let mB;                 //Mean of 1-class intensities
-  let mF;                 //Mean of 2-class intensities
-  let max = 0.0;          //Auxiliary variable to save temporarily the max variance
-  let between = 0.0;      //To save the current variance
-  let threshold = 0.0;
-
-
-  for (let i = 1; i < histogram.length; ++i) {
-    sum += i * histogram[i];
+  let sum1 = 0;
+  for (let i = 0; i < histogramCounts.length; i++) {
+    sum1 += i * histogramCounts[i];
   }
 
-  for (let i = 1; i <  histogram.length; ++i) {
-    wB += histogram[i];
-
-    if (wB === 0) {
+  for (let ii = 0; ii < histogramCounts.length; ii++) {
+    wB = wB + histogramCounts[ii];
+    const wF = total - wB;
+    if (wB === 0 || wF === 0) {
       continue;
     }
-    wF = total - wB;
-    if (wF === 0) {
-      break;
-    }
-
-    sumB += i * histogram[i];
-    mB = sumB / wB;
-    mF = (sum - sumB) / wF;
-    between = wB * wF * (mB - mF) * (mB - mF);
-
-    if (between >= max) {
-      threshold = i;
-      max = between;
+    sumB = sumB + ii * histogramCounts[ii];
+    const mF = (sum1 - sumB) / wF;
+    const between = wB * wF * ((sumB / wB) - mF) * ((sumB / wB) - mF);
+    if (between >= maximum) {
+      level = ii;
+      maximum = between;
     }
   }
-  return threshold;
-}
 
+  return level;
+}
