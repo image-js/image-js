@@ -75,7 +75,7 @@ const valueMethods = {
      * @return {this}
      */
   setPixel(index, value) {
-    let target = index * this.channels;
+    const target = index * this.channels;
     for (let i = 0; i < value.length; i++) {
       this.data[target + i] = value[i];
     }
@@ -89,8 +89,8 @@ const valueMethods = {
      * @return {number[]} the value of this pixel
      */
   getPixel(index) {
-    let value = new Array(this.channels);
-    let target = index * this.channels;
+    const value = new Array(this.channels);
+    const target = index * this.channels;
     for (let i = 0; i < this.channels; i++) {
       value[i] = this.data[target + i];
     }
