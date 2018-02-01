@@ -4,17 +4,18 @@ import { encode as encodeBmp } from 'fast-bmp';
 import { encode as encodePng } from 'fast-png';
 import hasOwn from 'has-own';
 
-import { getKind, createPixelArray, getTheoreticalPixelArraySize } from './kind';
-import { RGBA } from './kindNames';
-import { ImageData, createCanvas, createWriteStream, writeFile } from './environment';
-import extend from './extend';
-import bitMethods from './bitMethods';
-import { RGB } from './model/model';
-import RoiManager from './roi/manager';
-import { getType, canWrite } from './mediaTypes';
-import { loadImage } from './load';
 import Stack from '../stack/Stack';
 import { toBase64URL } from '../util/base64';
+
+import bitMethods from './core/bitMethods';
+import { loadImage } from './core/load';
+import { getKind, createPixelArray, getTheoreticalPixelArraySize } from './core/kind';
+import { RGBA } from './core/kindNames';
+import { getType, canWrite } from './core/mediaTypes';
+import { ImageData, createCanvas, createWriteStream, writeFile } from './environment';
+import extend from './extend';
+import { RGB } from './model/model';
+import RoiManager from './roi/manager';
 
 let computedPropertyDescriptor = {
   configurable: true,

@@ -1,6 +1,7 @@
 import Matrix from 'ml-matrix';
+
 import Image from '../image/Image';
-import { BINARY } from '../image/kindNames';
+import { BINARY } from '../image/core/kindNames';
 
 const cross = [
   [0, 0, 1, 0, 0],

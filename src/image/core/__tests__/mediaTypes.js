@@ -1,5 +1,6 @@
-import { getType, canWrite } from '../mediaTypes';
 import { Image } from 'test/common';
+
+import { getType, canWrite } from '../mediaTypes';
 
 describe('Media Type support checks', function () {
 

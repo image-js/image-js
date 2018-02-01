@@ -1,12 +1,13 @@
-import Image from './Image';
-import Stack from '../stack/Stack';
-import { fetchBinary, DOMImage, createCanvas } from './environment';
 import { decode as decodePng } from 'fast-png';
 import { decode as decodeJpegExif } from 'fast-jpeg';
 import { decode as decodeJpeg } from 'jpeg-js';
 import { decode as decodeTiff } from 'tiff';
 import imageType from 'image-type';
-import { decode as base64Decode, toBase64URL } from '../util/base64';
+
+import Image from '../Image';
+import Stack from '../../stack/Stack';
+import { fetchBinary, DOMImage, createCanvas } from '../environment';
+import { decode as base64Decode, toBase64URL } from '../../util/base64';
 
 const isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
 

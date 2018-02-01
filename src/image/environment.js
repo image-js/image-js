@@ -1,5 +1,6 @@
 import { readFile, createWriteStream, writeFile } from 'fs';
 
+// eslint-disable-next-line import/no-mutable-exports
 let createCanvas, DOMImage, ImageData;
 try {
   const canvas = require('canvas');
@@ -7,8 +8,6 @@ try {
   DOMImage = canvas.Image;
   ImageData = canvas.ImageData;
 } catch (e) {
-  // eslint-disable-next-line no-console
-  console.error('image-js could not load the canvas library. Some methods may not work.');
   createCanvas = function () {
     throw new Error('createCanvas requires the canvas library');
   };

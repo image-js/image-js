@@ -1,5 +1,5 @@
-import Image from './Image';
-import { env } from './environment';
+import Image from '../Image';
+import { env } from '../environment';
 
 let types = new Map();
 let image;
