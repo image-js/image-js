@@ -87,11 +87,4 @@ describe('Image core', () => {
     expect(clone.data).toBe(img.data);
     expect(clone.toDataURL()).toBe(img.toDataURL());
   });
-
-  it('isImage', function () {
-    const image = new Image(5, 5);
-    expect(Image.isImage(image)).toBe(true);
-    expect(Image.isImage()).toBe(false);
-    expect(Image.isImage({})).toBe(false);
-  });
 });

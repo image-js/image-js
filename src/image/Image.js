@@ -253,10 +253,6 @@ export default class Image {
     return imageStringTag;
   }
 
-  static isImage(img) {
-    return toString.call(img) === `[object ${imageStringTag}]`;
-  }
-
   setData(data) {
     let length = getTheoreticalPixelArraySize(this);
     if (length !== data.length) {
