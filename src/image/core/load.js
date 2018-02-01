@@ -12,7 +12,16 @@ import { fetchBinary, DOMImage, createCanvas } from './environment';
 
 const isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
 
-export function loadImage(image, options) {
+/**
+ * Load an image
+ * @param {string|ArrayBuffer|Buffer|Uint8Array} image - URL of the image (browser, can be a dataURL) or path (Node.js)
+ * or buffer containing the binary data
+ * @param {object} [options] - In the browser, the options object is passed to the underlying `fetch` call.
+ * @return {Promise<Image>}
+ * @example
+ * const image = await Image.load('https://example.com/image.png');
+ */
+export default function load(image, options) {
   if (typeof image === 'string') {
     return loadURL(image, options);
   } else if (image instanceof ArrayBuffer) {

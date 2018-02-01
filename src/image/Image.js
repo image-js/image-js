@@ -11,7 +11,7 @@ import {
   getTheoreticalPixelArraySize
 } from './core/kind';
 import { RGBA } from './core/kindNames';
-import { loadImage } from './core/load';
+import load from './core/load';
 import { getType, canWrite } from './core/mediaTypes';
 import valueMethods from './core/valueMethods';
 import extend from './extend';
@@ -296,25 +296,6 @@ export default class Image {
   }
 
   /**
-     * Load an image
-     * @param {string|ArrayBuffer|Buffer|Uint8Array} url - URL of the image (browser, can be a dataURL) or path (Node.js)
-     * or buffer containing the binary data
-     * @param {object} [options]
-     * @return {Promise<Image>}
-     * @example
-     *  Image.load('http://xxxx').then(
-     *      function(image) {
-     *          console.log(image);
-     *          // we can display the histogram of the first channel
-     *          console.log(image.histograms[0]);
-     *      }
-     *  )
-     */
-  static load(url, options) {
-    return loadImage(url, options);
-  }
-
-  /**
      * Creates an image from an HTML Canvas object
      * @param {Canvas} canvas
      * @return {Image}
@@ -402,6 +383,7 @@ exportMethods(Image);
 Image.prototype.checkProcessable = checkProcessable;
 Image.prototype.getRGBAData = getRGBAData;
 
+Image.load = load;
 Image.extendMethod = extendMethod;
 Image.extendProperty = extendProperty;
 extend(Image);
