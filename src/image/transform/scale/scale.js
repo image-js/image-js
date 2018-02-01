@@ -1,7 +1,7 @@
 import Image from '../../Image';
+import { factorDimensions } from '../../../util/converter';
 
 import nearestNeighbor from './nearestNeighbor';
-import { factorDimensions } from '../../../util/converter';
 
 /**
  * Rescale an image

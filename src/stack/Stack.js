@@ -1,6 +1,8 @@
-import extend from './extend';
-import Image from '../image/Image';
 import hasOwn from 'has-own';
+
+import Image from '../image/Image';
+
+import extend from './extend';
 
 let computedPropertyDescriptor = {
   configurable: true,

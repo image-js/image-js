@@ -1,5 +1,6 @@
-import fromWaterShed from '../creator/fromWaterShed';
 import { Image } from 'test/common';
+
+import fromWaterShed from '../creator/fromWaterShed';
 
 describe('Merge Roi', function () {
   it('should fusion 2 ROIs', function () {

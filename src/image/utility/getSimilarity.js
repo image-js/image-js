@@ -1,5 +1,6 @@
-import { validateArrayOfChannels } from './../../util/channel';
 import newArray from 'new-array';
+
+import { validateArrayOfChannels } from '../../util/channel';
 
 /**
  * Try to match the current pictures with another one. If normalize we normalize separately the 2 images.

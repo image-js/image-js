@@ -1,5 +1,6 @@
-import gradientFilter from './gradientFilter';
 import { SOBEL_X, SOBEL_Y } from '../../util/kernels';
+
+import gradientFilter from './gradientFilter';
 
 /**
  * @memberof Image

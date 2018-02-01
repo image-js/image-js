@@ -1,4 +1,5 @@
 import { KernelRidgeRegression } from 'ml-regression';
+
 import Image from '../Image';
 
 /**

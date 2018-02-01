@@ -1,6 +1,6 @@
-import gradientFilter from './gradientFilter';
 import { SCHARR_X, SCHARR_Y } from '../../util/kernels';
 
+import gradientFilter from './gradientFilter';
 
 /**
  * @memberof Image

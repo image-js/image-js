@@ -1,5 +1,6 @@
-import Image from '../image/Image';
 import isArray from 'is-array-type';
+
+import Image from '../image/Image';
 
 export function checkNumberArray(value) {
   if (!isNaN(value)) {

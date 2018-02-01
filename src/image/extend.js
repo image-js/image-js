@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 // filters
 import invertGetSet from './filter/invertGetSet';
 import invertIterator from './filter/invertIterator';

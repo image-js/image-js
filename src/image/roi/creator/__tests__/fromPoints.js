@@ -1,5 +1,6 @@
-import fromPoints from '../fromPoints';
 import { Image } from 'test/common';
+
+import fromPoints from '../fromPoints';
 
 describe('we check createROIMapFromPixels', function () {
   it('should yield the right map', function () {

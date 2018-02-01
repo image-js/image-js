@@ -1,4 +1,5 @@
 import WorkerManager from 'web-worker-manager';
+
 import extend from './extend';
 
 class Worker {

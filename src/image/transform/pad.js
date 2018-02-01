@@ -1,6 +1,6 @@
-import Image from '../Image';
 import array from 'new-array';
 
+import Image from '../Image';
 import copy from '../utility/copy';
 
 /**

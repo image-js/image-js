@@ -1,6 +1,6 @@
 import { Image } from 'test/common';
-import { createCanvas } from 'canvas';
 
+import { createCanvas } from 'canvas';
 
 describe.skip('Image core toBlob', function () {
   it('constructor defaults', function () {

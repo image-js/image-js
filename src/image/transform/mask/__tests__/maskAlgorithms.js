@@ -1,4 +1,5 @@
 import { load } from 'test/common';
+
 import { methods } from '../maskAlgorithms';
 
 // if the values are the same as in imageJ we consider it as currently correct

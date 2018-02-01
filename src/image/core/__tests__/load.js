@@ -1,4 +1,5 @@
 import { Image, load } from 'test/common';
+
 import { createCanvas } from 'canvas';
 
 describe('Image core', () => {

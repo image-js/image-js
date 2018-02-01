@@ -1,5 +1,6 @@
 import Image from '../Image';
 import { RGB } from '../model/model';
+
 import { methods } from './greyAlgorithms';
 
 /**

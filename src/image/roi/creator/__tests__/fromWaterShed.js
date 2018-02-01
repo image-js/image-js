@@ -1,5 +1,6 @@
-import fromWaterShed from '../fromWaterShed';
 import { Image } from 'test/common';
+
+import fromWaterShed from '../fromWaterShed';
 
 describe('Test WaterShed Roi generation', function () {
   it('basic', function () {

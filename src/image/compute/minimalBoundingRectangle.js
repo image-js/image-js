@@ -1,10 +1,10 @@
-import convexHullFunction from './monotoneChainConvexHull';
-
 import {
   rotate,
   difference,
   normalize
 } from '../../util/points';
+
+import convexHullFunction from './monotoneChainConvexHull';
 
 /**
  * Computes the minimum bounding box around a binary image

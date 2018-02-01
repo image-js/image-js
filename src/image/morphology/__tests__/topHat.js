@@ -1,4 +1,5 @@
 import { Image } from 'test/common';
+
 import Matrix from 'ml-matrix';
 
 describe('check the top hat function', function () {

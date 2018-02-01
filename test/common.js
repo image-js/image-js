@@ -38,7 +38,7 @@ export function get1BitSquare() {
   });
 }
 
-export let tmpDir = `${__dirname}/TMP`;
+export const tmpDir = `${__dirname}/TMP`;
 export function refreshTmpDir() {
   rmSync(tmpDir);
   mkdirSync(tmpDir);

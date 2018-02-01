@@ -1,4 +1,5 @@
 import LinkedList from 'fast-list';
+
 import Image from '../Image';
 
 export default function floodFill(options = {}) {

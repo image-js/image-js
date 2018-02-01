@@ -1,5 +1,5 @@
 import RoiMap from '../RoiMap';
-import Shape from './../../../util/Shape';
+import Shape from '../../../util/Shape';
 
 /**
  * @memberof RoiManager

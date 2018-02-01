@@ -4,8 +4,9 @@
 // https://ags.cs.uni-kl.de/fileadmin/inf_ags/3dcv-ws11-12/3DCV_WS11-12_lec04.pdf
 // http://graphics.cs.cmu.edu/courses/15-463/2011_fall/Lectures/morphing.pdf
 
-import Image from '../Image';
 import { Matrix, inverse, SingularValueDecomposition } from 'ml-matrix';
+
+import Image from '../Image';
 
 function order4Points(pts) {
   let tl = 0;

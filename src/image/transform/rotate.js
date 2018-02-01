@@ -1,4 +1,5 @@
 import Image from '../Image';
+
 import rotateFree from './rotateFree';
 
 /**

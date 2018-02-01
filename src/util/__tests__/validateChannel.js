@@ -1,4 +1,5 @@
 import { Image } from 'test/common';
+
 import { validateChannel } from '../channel';
 
 describe('we check the validateChannel method', function () {

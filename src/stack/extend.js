@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import matchAndCrop from './transform/matchAndCrop';
 
 import min from './compute/min';

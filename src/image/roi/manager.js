@@ -1,10 +1,12 @@
+import extendObject from 'extend';
+
+import Image from '../Image';
+
 import fromMask from './creator/fromMask';
 import fromMaskConnectedComponentLabelingAlgorithm from './creator/fromMaskConnectedComponentLabelingAlgorithm';
 import fromMaxima from './creator/fromMaxima';
 import fromWaterShed from './creator/fromWaterShed';
 import fromPoints from './creator/fromPoints';
-import extendObject from 'extend';
-import Image from '../Image';
 import RoiMap from './RoiMap';
 import RoiLayer from './RoiLayer';
 

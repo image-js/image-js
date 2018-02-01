@@ -1,4 +1,5 @@
 import extend from 'extend';
+
 import Image from '../../../image/Image';
 
 const defaultOptions = {
@@ -82,4 +83,5 @@ function work() {
   });
 }
 
-export default { run, work };
+const background = { run, work };
+export default background;
