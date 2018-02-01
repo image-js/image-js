@@ -1,6 +1,5 @@
 // those methods can only apply on binary images... but we will not lose time to check!
-let bitMethods = {
-
+const bitMethods = {
   /**
      * Set a specific pixel using XY coordinates from a binary image (mask)
      * @memberof Image
@@ -54,9 +53,7 @@ let bitMethods = {
      * @param {number} pixel - the pixel number which correspond to x * image.width + y
      */
   setBit(pixel) {
-    let shift = 7 - (pixel & 0b00000111);
-    let slot = pixel >> 3;
-    this.data[slot] |= 1 << shift;
+    this.data[getSlot(pixel)] |= 1 << getShift(pixel);
   },
 
   /**
@@ -66,9 +63,7 @@ let bitMethods = {
      * @param {number} pixel - the pixel number which correspond to x * image.width + y
      */
   clearBit(pixel) {
-    let shift = 7 - (pixel & 0b00000111);
-    let slot = pixel >> 3;
-    this.data[slot] &= ~(1 << shift);
+    this.data[getSlot(pixel)] &= ~(1 << getShift(pixel));
   },
 
   /**
@@ -78,9 +73,7 @@ let bitMethods = {
      * @param {number} pixel - the pixel number which correspond to x * image.width + y
      */
   toggleBit(pixel) {
-    let shift = 7 - (pixel & 0b00000111);
-    let slot = pixel >> 3;
-    this.data[slot] ^= 1 << shift;
+    this.data[getSlot(pixel)] ^= 1 << getShift(pixel);
   },
 
   /**
@@ -91,14 +84,20 @@ let bitMethods = {
      * @return {number} 0: bit is unset, 1: bit is set
      */
   getBit(pixel) {
-    let shift = 7 - (pixel & 0b00000111);
-    let slot = pixel >> 3;
-    return (this.data[slot] & (1 << shift)) ? 1 : 0;
+    return (this.data[getSlot(pixel)] & (1 << getShift(pixel))) ? 1 : 0;
   }
 };
 
+function getSlot(pixel) {
+  return pixel >> 3;
+}
+
+function getShift(pixel) {
+  return 7 - (pixel & 0b00000111);
+}
+
 export default function setBitMethods(Image) {
-  for (let i in bitMethods) {
+  for (const i in bitMethods) {
     Image.prototype[i] = bitMethods[i];
   }
 }

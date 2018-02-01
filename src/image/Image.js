@@ -7,7 +7,9 @@ import hasOwn from 'has-own';
 import Stack from '../stack/Stack';
 import { toBase64URL } from '../util/base64';
 
+import valueMethods from './core/valueMethods';
 import bitMethods from './core/bitMethods';
+import checkProcessable from './core/checkProcessable';
 import getRGBAData from './core/getRGBAData';
 import { loadImage } from './core/load';
 import { getKind, createPixelArray, getTheoreticalPixelArraySize } from './core/kind';
@@ -441,104 +443,6 @@ export default class Image {
   }
 
   /**
-     * Set the value of specific pixel channel
-     * @param {number} x - x coordinate (0 = left)
-     * @param {number} y - y coordinate (0 = top)
-     * @param {number} channel
-     * @param {number} value - the new value of this pixel channel
-     * @return {this}
-     */
-  setValueXY(x, y, channel, value) {
-    this.data[(y * this.width + x) * this.channels + channel] = value;
-    this.computed = null;
-    return this;
-  }
-
-  /**
-     * Get the value of specific pixel channel
-     * @param {number} x - x coordinate (0 = left)
-     * @param {number} y - y coordinate (0 = top)
-     * @param {number} channel
-     * @return {number} - the value of this pixel channel
-     */
-  getValueXY(x, y, channel) {
-    return this.data[(y * this.width + x) * this.channels + channel];
-  }
-
-  /**
-     * Set the value of specific pixel channel
-     * @param {number} index - 1D index of the pixel
-     * @param {number} channel
-     * @param {number} value - the new value of this pixel channel
-     * @return {this}
-     */
-  setValue(index, channel, value) {
-    this.data[index * this.channels + channel] = value;
-    this.computed = null;
-    return this;
-  }
-
-  /**
-     * Get the value of specific pixel channel
-     * @param {number} index - 1D index of the pixel
-     * @param {number} channel
-     * @return {number} - the value of this pixel channel
-     */
-  getValue(index, channel) {
-    return this.data[index * this.channels + channel];
-  }
-
-  /**
-     * Set the value of an entire pixel
-     * @param {number} x - x coordinate (0 = left)
-     * @param {number} y - y coordinate (0 = top)
-     * @param {number[]} value - the new value of this pixel
-     * @return {this}
-     */
-  setPixelXY(x, y, value) {
-    return this.setPixel(y * this.width + x, value);
-  }
-
-  /**
-     * Get the value of an entire pixel
-     * @param {number} x - x coordinate (0 = left)
-     * @param {number} y - y coordinate (0 = top)
-     * @return {number[]} the value of this pixel
-     */
-  getPixelXY(x, y) {
-    return this.getPixel(y * this.width + x);
-  }
-
-  /**
-     * Set the value of an entire pixel
-     * @param {number} index - 1D index of the pixel
-     * @param {number[]} value - the new value of this pixel
-     * @return {this}
-     */
-  setPixel(index, value) {
-    let target = index * this.channels;
-    for (let i = 0; i < value.length; i++) {
-      this.data[target + i] = value[i];
-    }
-    this.computed = null;
-    return this;
-  }
-
-  /**
-     * Get the value of an entire pixel
-     * @param {number} index - 1D index of the pixel
-     * @return {number[]} the value of this pixel
-     */
-  getPixel(index) {
-    let value = new Array(this.channels);
-    let target = index * this.channels;
-    for (let i = 0; i < this.channels; i++) {
-      value[i] = this.data[target + i];
-    }
-    return value;
-  }
-
-  /**
      * Creates a dataURL string from the image.
      * @param {string} [type='image/png']
      * @param {object} [options]
@@ -728,59 +632,6 @@ export default class Image {
     });
   }
 
-  // this method check if a process can be applied on the current image
-  checkProcessable(processName, options = {}) {
-    let { bitDepth, alpha, colorModel, components, channels } = options;
-    if (typeof processName !== 'string') {
-      throw new TypeError('checkProcessable requires as first parameter the processName (a string)');
-    }
-    if (bitDepth) {
-      if (!Array.isArray(bitDepth)) {
-        bitDepth = [bitDepth];
-      }
-      if (!bitDepth.includes(this.bitDepth)) {
-        throw new TypeError(`The process: ${processName} can only be applied if bit depth is in: ${bitDepth}`);
-      }
-    }
-    if (alpha) {
-      if (!Array.isArray(alpha)) {
-        alpha = [alpha];
-      }
-      if (!alpha.includes(this.alpha)) {
-        throw new TypeError(`The process: ${processName} can only be applied if alpha is in: ${alpha}`);
-      }
-    }
-    if (colorModel) {
-      if (!Array.isArray(colorModel)) {
-        colorModel = [colorModel];
-      }
-      if (!colorModel.includes(this.colorModel)) {
-        throw new TypeError(`The process: ${processName} can only be applied if color model is in: ${colorModel}`);
-      }
-    }
-    if (components) {
-      if (!Array.isArray(components)) {
-        components = [components];
-      }
-      if (!components.includes(this.components)) {
-        let errorMessage = `The process: ${processName} can only be applied if the number of components is in: ${components}`;
-        if (components.length === 1 && components[0] === 1) {
-          throw new TypeError(`${errorMessage}.\rYou should transform your image using "image.grey()" before applying the algorithm.`);
-        } else {
-          throw new TypeError(errorMessage);
-        }
-      }
-    }
-    if (channels) {
-      if (!Array.isArray(channels)) {
-        channels = [channels];
-      }
-      if (!channels.includes(this.channels)) {
-        throw new TypeError(`The process: ${processName} can only be applied if the number of channels is in: ${channels}`);
-      }
-    }
-  }
-
   apply(filter) {
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
@@ -795,7 +646,10 @@ function canJSEncodePng(img) {
   return (img.bitDepth === 8 || img.bitDepth === 16);
 }
 
+valueMethods(Image);
+bitMethods(Image);
+
+Image.prototype.checkProcessable = checkProcessable;
 Image.prototype.getRGBAData = getRGBAData;
 
 extend(Image);
-bitMethods(Image);
