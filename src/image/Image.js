@@ -152,10 +152,10 @@ const imageStringTag = 'IJSImage';
  * // position of a derived image. This is the case for a crop as
  * // well as for Roi
  *
- * var pill=image.extract(pillMask);
+ * var pill = image.extract(pillMask);
  * pill.save('pill.jpg');
  *
- * var histogram=pill.getHistograms({maxSlots: 16});
+ * var histogram = pill.getHistograms({ maxSlots: 16 });
  *
  * console.log(histogram);
  *
@@ -253,6 +253,10 @@ export default class Image {
     return imageStringTag;
   }
 
+  /**
+   * Replace the internal array that holds the image's data.
+   * @param {Array|TypedArray} data
+   */
   setData(data) {
     let length = getTheoreticalPixelArraySize(this);
     if (length !== data.length) {
@@ -273,6 +277,14 @@ export default class Image {
     return new Image(imageData.width, imageData.height, imageData.data);
   }
 
+  /**
+   * Create a new Image based on the characteristics of another one.
+   * @param {Image} other
+   * @param {object} [options] - Override options to change some parameters
+   * @return {Image}
+   * @example
+   * const newImage = Image.createFrom(image, { width: 100 });
+   */
   static createFrom(other, options) {
     const newOptions = {
       width: other.width,
@@ -326,7 +338,7 @@ export default class Image {
    *          the data or only the image parameters (size, colorModel, ...)
    * @return {Image} - The source image clone
    * @example
-   * var emptyImage = image.clone({copyData:false});
+   * var emptyImage = image.clone({ copyData: false });
    */
   clone(options = {}) {
     const { copyData = true } = options;

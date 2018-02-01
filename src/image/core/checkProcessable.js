@@ -1,5 +1,7 @@
 /**
  * This method checks if a process can be applied on the current image
+ * @memberof Image
+ * @instance
  * @param {string} processName
  * @param {object} [options]
  */
