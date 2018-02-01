@@ -48,7 +48,7 @@ const imageStringTag = 'IJSImage';
  *      Depending the bitDepth Uint8Array (1 bit), Uint8ClampedArray (8 bits),
  *      Uint16Array (16 bits), Float32Array (32 bits)
  *
- * In an image we have pixels and points:
+ * In an image there are pixels and points:
  * * A pixel is an array that has as size the number of channels
  * and that contains all the values that define a particular pixel of the image.
  * * A point is an array of 2 elements that contains the x / y coordinate
@@ -59,140 +59,114 @@ const imageStringTag = 'IJSImage';
  * @param {number} [width=1]
  * @param {number} [height=1]
  * @param {Array} [data] - Image data to load
- * @param {object} options
+ * @param {object} [options]
+ *
  *
  * @example
+ * // JavaScript code using Node.js to get some info about the image.
+ * // We load the library that was installed using 'npm install image-js'
+ * const { Image } = require('image-js');
  *
- * In order to run the next examples you will have to install node and
- * create a new project
+ * // Loading an image is asynchronous and will return a Promise.
+ * Image.load('cat.jpg').then(function (image) {
+ *   console.log('Width', image.width);
+ *   console.log('Height', image.height);
+ *   console.log('colorModel', image.colorModel);
+ *   console.log('components', image.components);
+ *   console.log('alpha', image.alpha);
+ *   console.log('channels', image.channels);
+ *   console.log('bitDepth', image.bitDepth);
+ * });
  *
- * To install node you could use nvm that can be installed from
- * https://github.com/creationix/nvm
- *
- * Once nvm is install:
- * nvm install stable
- * nvm alias default stable
- *
- * You may then create a folder, go in this folder and install image-js
- * mkdir test-image-js
- * cd test-image-js
- * npm install image-js
- *
- * In the test-image-js folder please also store please a test.jpg image like
- * wget https://raw.githubusercontent.com/image-js/core/c44bb2a0a45d95f43f3c1f8ecb58ee7afa752bb9/test/img/cat.jpg
-
-
  * @example
-
- // javascript code using node to get some info about the image
-
- // we load the library that was install using 'npm install image-js'
- const {Image} = require('image-js');
-
- // loading an image is asynchronous and will return a promise.
- // once the promise has been resolved the function in the 'then' method will
- // be executed
- Image.load('cat.jpg').then(function(image) {
-        console.log('Width',image.width);
-        console.log('Height',image.height);
-        console.log('colorModel', image.colorModel);
-        console.log('components', image.components);
-        console.log('alpha', image.alpha);
-        console.log('channels', image.channels);
-        console.log('bitDepth', image.bitDepth);
-});
-
- @example
-// Convert an image to grey scale
-const {Image} =require('image-js');
-
-Image.load('cat.jpg').then(function(image) {
-    var grey=image.grey();
-    grey.save('cat-grey.jpg');
-});
-
- @example
- // Split a RGB image in it's components
- const {Image} = require('image-js');
-
- Image.load('cat.jpg').then(function(image) {
-    var components=image.split();
-    components[0].save('cat-red.jpg');
-    components[1].save('cat-green.jpg');
-    components[2].save('cat-blur.jpg');
-});
-
-
- @example
- // for this example you will need the picture of an ecstasy pill that is available on
- // wget https://raw.githubusercontent.com/image-js/core/854e70f50d63cc73d2dde1d2020fe61ba1b5ec05/test/img/xtc.png // the goal is to isolate the picture and to get a RGB histogram of the pill.
- // Practically this allows to classify pills based on the histogram similarity
- // This work was published at: http://dx.doi.org/10.1016/j.forsciint.2012.10.004
-
- const {Image} = require('image-js');
-
- Image.load('xtc.png').then(function(image) {
-
-
-    var grey=image.grey({
-        algorithm:'lightness'
-    });
-    // we create a mask, which is basically a binary image
-    // a mask has as source a grey image and we will decide how to determine
-    // the threshold to define what is white and what is black
-    var mask=grey.mask({
-        algorithm: 'li'
-    });
-
-    // it is possible to create an array of Region Of Interest (Roi) using
-    // the RoiManager. A RoiManager will be applied on the original image
-    // in order to be able to extract from the original image the regions
-
-    // the result of this console.log result can diretly be pasted
-    // in the browser
-    // console.log(mask.toDataURL());
-
-
-    var manager = image.getRoiManager();
-    manager.fromMask(mask);
-    var rois=manager.getRoi({
-        positive: true,
-        negative: false,
-        minSurface: 100
-    });
-
-    // console.log(rois);
-
-    // we can sort teh rois by surface
-    // for demonstration we use an arrow function
-    rois.sort((a, b) => b.surface-a.surface);
-
-    // the first Roi (the biggest is expected to be the pill)
-
-    var pillMask=rois[0].getMask({
-        scale: 0.7   // we will scale down the mask to take just the center of the pill and avoid border effects
-    });
-
-    // image-js remembers the parent of the image and the relative
-    // position of a derived image. This is the case for a crop as
-    // well as for Roi
-
-    var pill=image.extract(pillMask);
-    pill.save('pill.jpg');
-
-    var histogram=pill.getHistograms({maxSlots: 16});
-
-    console.log(histogram);
-});
-
- @example
- // Example of use of IJS in the browser
-
- <sript>
-    var canvas = document.getElementById('myCanvasID');
-    var image = IJS.fromCanvas(canvas);
- </script>
-*/
+ * // Convert an image to greyscale
+ * const { Image } = require('image-js');
+ *
+ * Image.load('cat.jpg').then(function (image) {
+ *   var grey = image.grey();
+ *   grey.save('cat-grey.jpg');
+ * });
+ *
+ * @example
+ * // Split an RGB image in its components
+ * const { Image } = require('image-js');
+ *
+ * Image.load('cat.jpg').then(function (image) {
+ *   var components = image.split();
+ *   components[0].save('cat-red.jpg');
+ *   components[1].save('cat-green.jpg');
+ *   components[2].save('cat-blur.jpg');
+ * });
+ *
+ *
+ * @example
+ * // For this example you will need the picture of an ecstasy pill that is available on
+ * // wget https://raw.githubusercontent.com/image-js/core/854e70f50d63cc73d2dde1d2020fe61ba1b5ec05/test/img/xtc.png // the goal is to isolate the picture and to get a RGB histogram of the pill.
+ * // Practically this allows to classify pills based on the histogram similarity
+ * // This work was published at: http://dx.doi.org/10.1016/j.forsciint.2012.10.004
+ *
+ * const { Image } = require('image-js');
+ *
+ * const image = await Image.load('xtc.png');
+ *
+ * const grey = image.grey({
+ *   algorithm:'lightness'
+ * });
+ * // we create a mask, which is basically a binary image
+ * // a mask has as source a grey image and we will decide how to determine
+ * // the threshold to define what is white and what is black
+ * var mask = grey.mask({
+ *   algorithm: 'li'
+ * });
+ *
+ * // it is possible to create an array of Region Of Interest (Roi) using
+ * // the RoiManager. A RoiManager will be applied on the original image
+ * // in order to be able to extract from the original image the regions
+ *
+ * // the result of this console.log result can diretly be pasted
+ * // in the browser
+ * // console.log(mask.toDataURL());
+ *
+ *
+ * var manager = image.getRoiManager();
+ * manager.fromMask(mask);
+ * var rois = manager.getRoi({
+ *   positive: true,
+ *   negative: false,
+ *   minSurface: 100
+ * });
+ *
+ * // console.log(rois);
+ *
+ * // we can sort teh rois by surface
+ * // for demonstration we use an arrow function
+ * rois.sort((a, b) => b.surface - a.surface);
+ *
+ * // the first Roi (the biggest is expected to be the pill)
+ *
+ * var pillMask = rois[0].getMask({
+ *   scale: 0.7   // we will scale down the mask to take just the center of the pill and avoid border effects
+ * });
+ *
+ * // image-js remembers the parent of the image and the relative
+ * // position of a derived image. This is the case for a crop as
+ * // well as for Roi
+ *
+ * var pill=image.extract(pillMask);
+ * pill.save('pill.jpg');
+ *
+ * var histogram=pill.getHistograms({maxSlots: 16});
+ *
+ * console.log(histogram);
+ *
+ * @example
+ * // Example of use of IJS in the browser
+ *
+ * <script>
+ *  var canvas = document.getElementById('myCanvasID');
+ *  var image = IJS.fromCanvas(canvas);
+ * </script>
+ */
 export default class Image {
   constructor(width = 1, height = 1, data, options) {
     // copy another image
@@ -257,21 +231,6 @@ export default class Image {
 
     this.computed = null;
 
-    this.initialize();
-
-    if (!data) data = createPixelArray(this);
-    this.setData(data);
-  }
-
-  get [Symbol.toStringTag]() {
-    return imageStringTag;
-  }
-
-  static isImage(img) {
-    return toString.call(img) === `[object ${imageStringTag}]`;
-  }
-
-  initialize() {
     this.size = this.width * this.height;
     this.sizes = [this.width, this.height];
     this.channels = this.components + this.alpha;
@@ -285,6 +244,17 @@ export default class Image {
     this.multiplierY = this.channels * this.width;
     this.isClamped = this.bitDepth < 32;
     this.borderSizes = [0, 0]; // when a filter creates a border, it may have impact on future processing like Roi
+
+    if (!data) data = createPixelArray(this);
+    this.setData(data);
+  }
+
+  get [Symbol.toStringTag]() {
+    return imageStringTag;
+  }
+
+  static isImage(img) {
+    return toString.call(img) === `[object ${imageStringTag}]`;
   }
 
   setData(data) {
@@ -293,13 +263,14 @@ export default class Image {
       throw new RangeError(`incorrect data size. Should be ${length} and found ${data.length}`);
     }
     this.data = data;
+    this.computed = null;
   }
 
   /**
-     * Creates an image from an HTML Canvas object
-     * @param {Canvas} canvas
-     * @return {Image}
-     */
+   * Creates an image from an HTML Canvas object
+   * @param {Canvas} canvas
+   * @return {Image}
+   */
   static fromCanvas(canvas) {
     const ctx = canvas.getContext('2d');
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -307,7 +278,7 @@ export default class Image {
   }
 
   static createFrom(other, options) {
-    let newOptions = {
+    const newOptions = {
       width: other.width,
       height: other.height,
       position: [0, 0],
@@ -342,25 +313,25 @@ export default class Image {
   }
 
   /**
-     * Create a new manager for regions of interest based on the current image.
-     * @param {object} [options]
-     * @return {RoiManager}
-     */
+   * Create a new manager for regions of interest based on the current image.
+   * @param {object} [options]
+   * @return {RoiManager}
+   */
   getRoiManager(options) {
     return new RoiManager(this, options);
   }
 
   /**
-     * Create a new image based on the current image.
-     * By default the method will copy the data
-     * @instance
-     * @param {object} options
-     * @param {boolean} [options.copyData=true] - Specify if we want also to clone
-     *          the data or only the image parameters (size, colorModel, ...)
-     * @return {Image} - The source image clone
-     * @example
-     * var emptyImage = image.clone({copyData:false});
-     */
+   * Create a new image based on the current image.
+   * By default the method will copy the data.
+   * @instance
+   * @param {object} options
+   * @param {boolean} [options.copyData=true] - Specify if we want also to clone
+   *          the data or only the image parameters (size, colorModel, ...)
+   * @return {Image} - The source image clone
+   * @example
+   * var emptyImage = image.clone({copyData:false});
+   */
   clone(options = {}) {
     const { copyData = true } = options;
     return new Image(this, copyData);
