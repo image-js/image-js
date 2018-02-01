@@ -29,7 +29,7 @@
   "module": "./src/index.js",
   "browser": {
     "./src/worker/worker.js": "./src/browser/worker/worker.js",
-    "./src/image/environment.js": "./src/browser/environment.js",
+    "./src/image/core/environment.js": "./src/browser/environment.js",
     "fs": false
   },
   "files": [

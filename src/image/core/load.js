@@ -6,8 +6,9 @@ import imageType from 'image-type';
 
 import Image from '../Image';
 import Stack from '../../stack/Stack';
-import { fetchBinary, DOMImage, createCanvas } from '../environment';
 import { decode as base64Decode, toBase64URL } from '../../util/base64';
+
+import { fetchBinary, DOMImage, createCanvas } from './environment';
 
 const isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
 

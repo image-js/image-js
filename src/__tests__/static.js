@@ -1,4 +1,4 @@
-import { Static } from '../..';
+import { Static } from '..';
 
 describe('Image core - Algorithms', function () {
 

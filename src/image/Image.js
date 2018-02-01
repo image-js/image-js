@@ -1,29 +1,21 @@
-import { canvasToBlob } from 'blob-util';
 import extendObject from 'extend';
-import { encode as encodeBmp } from 'fast-bmp';
-import { encode as encodePng } from 'fast-png';
-import hasOwn from 'has-own';
 
-import Stack from '../stack/Stack';
-import { toBase64URL } from '../util/base64';
-
-import valueMethods from './core/valueMethods';
 import bitMethods from './core/bitMethods';
 import checkProcessable from './core/checkProcessable';
+import exportMethods from './core/export';
+import { extendMethod, extendProperty } from './core/extend';
 import getRGBAData from './core/getRGBAData';
-import { loadImage } from './core/load';
-import { getKind, createPixelArray, getTheoreticalPixelArraySize } from './core/kind';
+import {
+  getKind,
+  createPixelArray,
+  getTheoreticalPixelArraySize
+} from './core/kind';
 import { RGBA } from './core/kindNames';
+import { loadImage } from './core/load';
 import { getType, canWrite } from './core/mediaTypes';
-import { ImageData, createCanvas, createWriteStream, writeFile } from './environment';
+import valueMethods from './core/valueMethods';
 import extend from './extend';
 import RoiManager from './roi/manager';
-
-let computedPropertyDescriptor = {
-  configurable: true,
-  enumerable: false,
-  get: undefined
-};
 
 const toString = Object.prototype.toString;
 const imageStringTag = 'IJSImage';
@@ -333,80 +325,6 @@ export default class Image {
     return new Image(imageData.width, imageData.height, imageData.data);
   }
 
-  static extendMethod(name, method, options = {}) {
-    let {
-      inPlace = false,
-      returnThis = true,
-      partialArgs = [],
-      stack = false
-    } = options;
-
-    if (inPlace) {
-      Image.prototype[name] = function (...args) {
-        // remove computed properties
-        this.computed = null;
-        let result = method.apply(this, [...partialArgs, ...args]);
-        if (returnThis) {
-          return this;
-        }
-        return result;
-      };
-      if (stack) {
-        const stackName = typeof stack === 'string' ? stack : name;
-        if (returnThis) {
-          Stack.prototype[stackName] = function (...args) {
-            for (let image of this) {
-              image[name](...args);
-            }
-            return this;
-          };
-        } else {
-          Stack.prototype[stackName] = function (...args) {
-            let result = new Stack(this.length);
-            for (let i = 0; i < this.length; i++) {
-              result[i] = this[i][name](...args);
-            }
-            return result;
-          };
-        }
-      }
-    } else {
-      Image.prototype[name] = function (...args) {
-        return method.apply(this, [...partialArgs, ...args]);
-      };
-      if (stack) {
-        const stackName = typeof stack === 'string' ? stack : name;
-        Stack.prototype[stackName] = function (...args) {
-          let result = new Stack(this.length);
-          for (let i = 0; i < this.length; i++) {
-            result[i] = this[i][name](...args);
-          }
-          return result;
-        };
-      }
-    }
-    return Image;
-  }
-
-  static extendProperty(name, method, options = {}) {
-    let {
-      partialArgs = []
-    } = options;
-
-    computedPropertyDescriptor.get = function () {
-      if (this.computed === null) {
-        this.computed = {};
-      } else if (hasOwn(name, this.computed)) {
-        return this.computed[name];
-      }
-      let result = method.apply(this, partialArgs);
-      this.computed[name] = result;
-      return result;
-    };
-    Object.defineProperty(Image.prototype, name, computedPropertyDescriptor);
-    return Image;
-  }
-
   static createFrom(other, options) {
     let newOptions = {
       width: other.width,
@@ -443,106 +361,6 @@ export default class Image {
   }
 
   /**
-     * Creates a dataURL string from the image.
-     * @param {string} [type='image/png']
-     * @param {object} [options]
-     * @param {boolean} [options.async=false] - Set to true to asynchronously generate the dataURL. This is required on Node.js for jpeg compression.
-     * @param {boolean} [options.useCanvas=false] - Force use of the canvas API to save the image instead of JavaScript implementation.
-     * @param {object} [options.encoder] - Specify options for the encoder if applicable.
-     * @return {string|Promise<string>}
-     */
-  toDataURL(type = 'image/png', options = {}) {
-    if (typeof type === 'object') {
-      options = type;
-      type = 'image/png';
-    }
-    const {
-      async = false,
-      useCanvas = false,
-      encoder: encoderOptions = undefined
-    } = options;
-    type = getType(type);
-    function dataUrl(encoder, ctx) {
-      const u8 = encoder(ctx, encoderOptions);
-      return toBase64URL(u8, type);
-    }
-    if (async) {
-      return new Promise((resolve, reject) => {
-        if (type === 'image/bmp') {
-          resolve(dataUrl(encodeBmp, this));
-        } else if (type === 'image/png' && canJSEncodePng(this) && !useCanvas) {
-          resolve(dataUrl(encodePng, this));
-        } else {
-          this.getCanvas().toDataURL(type, function (err, text) {
-            if (err) reject(err);
-            else resolve(text);
-          });
-        }
-
-      });
-    } else {
-      if (type === 'image/bmp') {
-        return dataUrl(encodeBmp, this);
-      } else if (type === 'image/png' && canJSEncodePng(this) && !useCanvas) {
-        return dataUrl(encodePng, this);
-      } else {
-        return this.getCanvas().toDataURL(type);
-      }
-    }
-  }
-
-  /**
-     * Creates a base64 string from the image.
-     * @param {string} [type='image/png']
-     * @param {object} [options] - Same options as toDataURL
-     * @return {string|Promise<string>}
-     */
-  toBase64(type = 'image/png', options = {}) {
-    if (options.async) {
-      return this.toDataURL(type, options).then(function (dataURL) {
-        return dataURL.substring(dataURL.indexOf(',') + 1);
-      });
-    } else {
-      const dataURL = this.toDataURL(type, options);
-      return dataURL.substring(dataURL.indexOf(',') + 1);
-    }
-  }
-
-  /**
-     * Creates a blob from the image and return a Promise.
-     * @param {string} [type='image/png'] A String indicating the image format. The default type is image/png.
-     * @param {string} [quality=0.8] A Number between 0 and 1 indicating image quality if the requested type is image/jpeg or image/webp. If this argument is anything else, the default value for image quality is used. Other arguments are ignored.
-     * @return {Promise}
-     */
-  toBlob(type = 'image/png', quality = 0.8) {
-    return canvasToBlob(this.getCanvas({ originalData: true }), type, quality);
-  }
-
-  /**
-     * Creates a new canvas element and draw the image inside it
-     * @param {object} [options]
-     * @param {boolean} [options.originalData=false]
-     * @return {Canvas}
-     */
-  getCanvas(options = {}) {
-    let { originalData = false } = options;
-    let data;
-    if (!originalData) {
-      data = new ImageData(this.getRGBAData(), this.width, this.height);
-    } else {
-      this.checkProcessable('getInPlaceCanvas', {
-        channels: [4],
-        bitDepth: [8]
-      });
-      data = new ImageData(this.data, this.width, this.height);
-    }
-    let canvas = createCanvas(this.width, this.height);
-    let ctx = canvas.getContext('2d');
-    ctx.putImageData(data, 0, 0);
-    return canvas;
-  }
-
-  /**
      * Create a new manager for regions of interest based on the current image.
      * @param {object} [options]
      * @return {RoiManager}
@@ -567,71 +385,6 @@ export default class Image {
     return new Image(this, copyData);
   }
 
-  /**
-     * Save the image to disk (Node.js only)
-     * @param {string} path
-     * @param {object} [options]
-     * @param {string} [options.format] - One of: png, jpg, bmp (limited support for bmp). If not specified will try to infer from filename
-     * @param {boolean} [options.useCanvas=false] - Force use of the canvas API to save the image instead of JavaScript implementation
-     * @param {object} [options.encoder] - Specify options for the encoder if applicable.
-     * @return {Promise} - Resolves when the file is fully written
-     */
-  save(path, options = {}) {
-    const {
-      useCanvas = false,
-      encoder: encoderOptions = undefined
-    } = options;
-
-    let { format } = options;
-    if (!format) {
-      // try to infer format from filename
-      const m = /\.([a-zA-Z]+)$/.exec(path);
-      if (m) {
-        format = m[1].toLowerCase();
-      }
-    }
-    if (!format) {
-      throw new Error('file format not provided');
-    }
-    return new Promise((resolve, reject) => {
-      let stream, buffer;
-      switch (format.toLowerCase()) {
-        case 'png': {
-          if (!canJSEncodePng(this) || useCanvas) {
-            stream = this.getCanvas().pngStream();
-          } else {
-            buffer = encodePng(this, encoderOptions);
-          }
-          break;
-        }
-        case 'jpg':
-        case 'jpeg':
-          stream = this.getCanvas().jpegStream();
-          break;
-        case 'bmp':
-          buffer = encodeBmp(this, encoderOptions);
-          break;
-        default:
-          throw new RangeError(`invalid output format: ${format}`);
-      }
-      if (stream) {
-        let out = createWriteStream(path);
-        out.on('finish', resolve);
-        out.on('error', reject);
-        stream.pipe(out);
-      } else if (buffer) {
-        writeFile(path, Buffer.from(buffer), (err) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-          resolve();
-        });
-      }
-
-    });
-  }
-
   apply(filter) {
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
@@ -642,14 +395,13 @@ export default class Image {
   }
 }
 
-function canJSEncodePng(img) {
-  return (img.bitDepth === 8 || img.bitDepth === 16);
-}
-
 valueMethods(Image);
 bitMethods(Image);
+exportMethods(Image);
 
 Image.prototype.checkProcessable = checkProcessable;
 Image.prototype.getRGBAData = getRGBAData;
 
+Image.extendMethod = extendMethod;
+Image.extendProperty = extendProperty;
 extend(Image);
