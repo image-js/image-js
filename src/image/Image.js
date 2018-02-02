@@ -17,9 +17,6 @@ import valueMethods from './core/valueMethods';
 import extend from './extend';
 import RoiManager from './roi/manager';
 
-const toString = Object.prototype.toString;
-const imageStringTag = 'IJSImage';
-
 /**
  * Class representing an image.
  * This class allows to manipulate easily images directly in the browser or in node.
@@ -250,7 +247,7 @@ export default class Image {
   }
 
   get [Symbol.toStringTag]() {
-    return imageStringTag;
+    return 'IJSImage';
   }
 
   /**
