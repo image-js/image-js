@@ -1,5 +1,3 @@
-import extend from 'extend';
-
 import Image from '../../../image/Image';
 
 const defaultOptions = {
@@ -17,7 +15,7 @@ const defaultOptions = {
 };
 
 function run(image, options, onStep) {
-  options = extend({}, defaultOptions, options);
+  options = Object.assign({}, defaultOptions, options);
   const manager = this.manager;
   if (Array.isArray(image)) {
     return Promise.all(image.map(function (img) {
