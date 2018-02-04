@@ -14,6 +14,10 @@ import shanbhag from  './shanbhag';
 import triangle from './triangle';
 import yen from './yen';
 
+/**
+ * @typedef {('huang'|'intermodes'|'isodata'|'li'|'maxentropy'|'mean'|'minerror'|'minimum'|'moments'|'otsu'|'percentile'|'renyientropy'|'shanbhag'|'triangle'|'yen')} ThresholdAlgorithm
+ */
+
 export const methods = {
   huang,
   intermodes,

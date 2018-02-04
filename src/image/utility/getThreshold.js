@@ -1,16 +1,16 @@
-import { methods } from '../transform/mask/maskAlgorithms';
+import { methods, names } from '../transform/mask/maskAlgorithms';
 
 /**
  * Returns a threshold for the creation of a binary mask with the `mask()` method.
  * @memberof Image
  * @instance
  * @param {object} [options]
- * @param {string} [options.algorithm='otsu']
+ * @param {ThresholdAlgorithm} [options.algorithm='otsu']
  * @return {number}
  */
 export default function getThreshold(options = {}) {
   let {
-    algorithm = 'otsu'
+    algorithm = names.otsu
   } = options;
 
   this.checkProcessable('getThreshold', {

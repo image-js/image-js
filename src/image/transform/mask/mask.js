@@ -1,6 +1,7 @@
 import Image from '../../Image';
 import { getThreshold as convertThreshold } from '../../../util/converter';
 import getThreshold from '../../utility/getThreshold';
+import { names } from './maskAlgorithms';
 
 /**
  * Creation of binary mask is based on the determination of a threshold
@@ -8,7 +9,7 @@ import getThreshold from '../../utility/getThreshold';
  * @memberof Image
  * @instance
  * @param {object} [options]
- * @param {string} [options.algorithm='threshold']
+ * @param {ThresholdAlgorithm|'threshold'} [options.algorithm='threshold']
  * @param {number} [options.threshold=0.5] - If the algorithm is 'threshold' specify here the value (0 to 1).
  * @param {boolean} [options.useAlpha=true] - Apply the alpha channel to determine the intensity of the pixel.
  * @param {boolean} [options.invert=false] - Invert the resulting image
@@ -16,7 +17,7 @@ import getThreshold from '../../utility/getThreshold';
  */
 export default function mask(options = {}) {
   let {
-    algorithm = 'threshold',
+    algorithm = names.threshold,
     threshold = 0.5,
     useAlpha = true,
     invert = false
@@ -27,7 +28,7 @@ export default function mask(options = {}) {
     bitDepth: [8, 16]
   });
 
-  if (algorithm === 'threshold') {
+  if (algorithm === names.threshold) {
     threshold = convertThreshold(threshold, this.maxValue);
   } else {
     threshold = getThreshold.call(this, options);
