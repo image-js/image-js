@@ -1,11 +1,21 @@
 import { canvasToBlob } from 'blob-util';
 import { encode as encodeBmp } from 'fast-bmp';
 import { encode as encodePng } from 'fast-png';
+import { encode as realEncodeJpeg } from 'jpeg-js';
 
 import { toBase64URL } from '../../util/base64';
 
 import { ImageData, createCanvas, createWriteStream, writeFile } from './environment';
 import { getType } from './mediaTypes';
+
+function encodeJpeg(image, options = {}) {
+  const data = {
+    width: image.width,
+    height: image.height,
+    data: image.getRGBAData()
+  };
+  return realEncodeJpeg(data, options.quality);
+}
 
 const exportMethods = {
   /**
@@ -15,7 +25,7 @@ const exportMethods = {
    * @param {string} path
    * @param {object} [options]
    * @param {string} [options.format] - One of: png, jpg, bmp (limited support for bmp). If not specified will try to infer from filename
-   * @param {boolean} [options.useCanvas=false] - Force use of the canvas API to save the image instead of JavaScript implementation
+   * @param {boolean} [options.useCanvas=false] - Force use of the canvas API to save the image instead of a JavaScript implementation
    * @param {object} [options.encoder] - Specify options for the encoder if applicable.
    * @return {Promise} - Resolves when the file is fully written
    */
@@ -40,7 +50,8 @@ const exportMethods = {
       let stream, buffer;
       switch (format.toLowerCase()) {
         case 'png': {
-          if (!canJSEncodePng(this) || useCanvas) {
+          this.checkProcessable('save (PNG)', { bitDepth: [8, 16] });
+          if (useCanvas) {
             stream = this.getCanvas().pngStream();
           } else {
             buffer = encodePng(this, encoderOptions);
@@ -49,7 +60,11 @@ const exportMethods = {
         }
         case 'jpg':
         case 'jpeg':
-          stream = this.getCanvas().jpegStream();
+          if (useCanvas) {
+            stream = this.getCanvas().jpegStream();
+          } else {
+            buffer = encodeJpeg(this, encoderOptions);
+          }
           break;
         case 'bmp':
           buffer = encodeBmp(this, encoderOptions);
@@ -63,7 +78,7 @@ const exportMethods = {
         out.on('error', reject);
         stream.pipe(out);
       } else if (buffer) {
-        writeFile(path, Buffer.from(buffer), (err) => {
+        writeFile(path, buffer, (err) => {
           if (err) {
             reject(err);
             return;
@@ -97,6 +112,9 @@ const exportMethods = {
       encoder: encoderOptions = undefined
     } = options;
     type = getType(type);
+    if (type === 'image/png') {
+      this.checkProcessable('toDataURL (PNG)', { bitDepth: [8, 16] });
+    }
     function dataUrl(encoder, ctx) {
       const u8 = encoder(ctx, encoderOptions);
       return toBase64URL(u8, type);
@@ -105,9 +123,11 @@ const exportMethods = {
       return new Promise((resolve, reject) => {
         if (type === 'image/bmp') {
           resolve(dataUrl(encodeBmp, this));
-        } else if (type === 'image/png' && canJSEncodePng(this) && !useCanvas) {
+        } else if (type === 'image/png' && !useCanvas) {
           resolve(dataUrl(encodePng, this));
-        } else {
+        } else if (type === 'image/jpeg' && !useCanvas) {
+          resolve(dataUrl(encodeJpeg, this));
+        } else  {
           this.getCanvas().toDataURL(type, function (err, text) {
             if (err) reject(err);
             else resolve(text);
@@ -118,8 +138,10 @@ const exportMethods = {
     } else {
       if (type === 'image/bmp') {
         return dataUrl(encodeBmp, this);
-      } else if (type === 'image/png' && canJSEncodePng(this) && !useCanvas) {
+      } else if (type === 'image/png' && !useCanvas) {
         return dataUrl(encodePng, this);
+      } else if (type === 'image/jpeg' && !useCanvas) {
+        return dataUrl(encodeJpeg, this);
       } else {
         return this.getCanvas().toDataURL(type);
       }
@@ -147,6 +169,7 @@ const exportMethods = {
 
   /**
    * Creates a blob from the image and return a Promise.
+   * This function is only available in the browser.
    * @memberof Image
    * @instance
    * @param {string} [type='image/png'] A String indicating the image format. The default type is image/png.
@@ -183,10 +206,6 @@ const exportMethods = {
     return canvas;
   }
 };
-
-function canJSEncodePng(img) {
-  return (img.bitDepth === 8 || img.bitDepth === 16);
-}
 
 export default function setExportMethods(Image) {
   for (const i in exportMethods) {

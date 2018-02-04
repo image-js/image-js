@@ -1,9 +1,6 @@
 import { Image, load, refreshTmpDir, tmpDir, getSquare, get1BitSquare } from 'test/common';
 
-import canvas from 'canvas';
-
 describe('save to disk', () => {
-
   beforeEach(refreshTmpDir);
   afterEach(refreshTmpDir);
 
@@ -16,9 +13,7 @@ describe('save to disk', () => {
     expect(otherImg.toDataURL()).toBe(dataURL);
   });
 
-  // JPEG support is not always present
-  const _it = canvas.jpegVersion ? it : it.skip;
-  _it('load then save (jpg)', async () => {
+  it('load then save (jpg)', async () => {
     const img = await load('format/rgba32.png');
     await img.save(`${tmpDir}/img1.jpg`, { format: 'jpeg' });
   });
@@ -28,9 +23,9 @@ describe('save to disk', () => {
     await img.save(`${tmpDir}/img2.png`);
   });
 
-  it('new then save with canvas (unsupported bit depth)', async () => {
+  it('new then save with unsupported bit depth', async () => {
     const img = new Image(2, 2, { kind: 'BINARY' });
-    await img.save(`${tmpDir}/imgBinary.png`);
+    await expect(img.save(`${tmpDir}/imgBinary.png`)).rejects.toThrow(/The process: save \(PNG\) can only be applied if bit depth is in: 8,16/);
   });
 
   it('new then save bmp', async () => {
