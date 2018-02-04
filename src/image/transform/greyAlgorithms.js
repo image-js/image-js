@@ -93,4 +93,7 @@ Object.defineProperty(methods, 'max', { enumerable: false, value: methods.maximu
 Object.defineProperty(methods, 'brightness', { enumerable: false, value: methods.maximum });
 
 
-export const names = Object.keys(methods);
+export const names = {};
+Object.keys(methods).forEach((name) => {
+  names[name] = name;
+});

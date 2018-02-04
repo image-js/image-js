@@ -1,7 +1,7 @@
 import Image from './image/Image';
 import * as Kernel from './kernel/kernel';
 import { names as greyNames } from './image/transform/greyAlgorithms';
-import { names as maskNames } from './image/transform/mask/maskAlgorithms';
+import { names as thresholdNames } from './image/transform/mask/thresholdAlgorithms';
 
 export { Kernel };
 
@@ -11,7 +11,7 @@ export { default as Shape } from './util/Shape';
 
 export const Static = {
   grey: greyNames,
-  mask: maskNames
+  threshold: thresholdNames
 };
 
 export { default as Worker } from './worker/worker';

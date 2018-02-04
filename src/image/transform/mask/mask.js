@@ -1,7 +1,8 @@
 import Image from '../../Image';
 import { getThreshold as convertThreshold } from '../../../util/converter';
 import getThreshold from '../../utility/getThreshold';
-import { names } from './maskAlgorithms';
+
+const THRESHOLD = 'threshold';
 
 /**
  * Creation of binary mask is based on the determination of a threshold
@@ -17,7 +18,7 @@ import { names } from './maskAlgorithms';
  */
 export default function mask(options = {}) {
   let {
-    algorithm = names.threshold,
+    algorithm = THRESHOLD,
     threshold = 0.5,
     useAlpha = true,
     invert = false
@@ -28,7 +29,7 @@ export default function mask(options = {}) {
     bitDepth: [8, 16]
   });
 
-  if (algorithm === names.threshold) {
+  if (algorithm === THRESHOLD) {
     threshold = convertThreshold(threshold, this.maxValue);
   } else {
     threshold = getThreshold.call(this, options);

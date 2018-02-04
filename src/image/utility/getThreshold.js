@@ -1,4 +1,4 @@
-import { methods, names } from '../transform/mask/maskAlgorithms';
+import { methods, names } from '../transform/mask/thresholdAlgorithms';
 
 /**
  * Returns a threshold for the creation of a binary mask with the `mask()` method.

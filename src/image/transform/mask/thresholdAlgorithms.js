@@ -36,4 +36,7 @@ export const methods = {
   yen
 };
 
-export const names = ['threshold'].concat(Object.keys(methods));
+export const names = {};
+Object.keys(methods).forEach((name) => {
+  names[name] = name;
+});
