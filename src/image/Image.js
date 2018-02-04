@@ -168,7 +168,7 @@ export default class Image {
     if (arguments.length === 1) {
       options = width;
       ({ width, height, data } = options);
-    } else if (typeof data === 'object' && !data.length) {
+    } else if (data && !data.length) {
       options = data;
       ({ data } = options);
     }
@@ -347,14 +347,6 @@ export default class Image {
     } else {
       throw new TypeError(`unknown operation: ${operation}`);
     }
-  }
-
-  getPixelIndex(indices) {
-    let shift = 0;
-    for (let i = 0; i < indices.length; i++) {
-      shift += this.multipliers[i] * indices[i];
-    }
-    return shift;
   }
 
   /**
