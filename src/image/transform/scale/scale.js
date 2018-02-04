@@ -1,5 +1,6 @@
 import Image from '../../Image';
 import { factorDimensions } from '../../../util/converter';
+import { validInterpolations, checkInterpolation } from '../../utility/checks';
 
 import nearestNeighbor from './nearestNeighbor';
 
@@ -11,16 +12,18 @@ import nearestNeighbor from './nearestNeighbor';
  * @param {number} [options.width=this.width] - new width
  * @param {number} [options.height=this.height] - new height
  * @param {number} [options.factor=1] - scaling factor (applied to the new width and height values)
- * @param {string} [options.algorithm='nearestNeighbor']
+ * @param {InterpolationAlgorithm} [options.interpolation='nearestNeighbor']
  * @param {boolean} [options.preserveAspectRatio=true] - preserve width/height ratio if only one of them is defined
  * @return {Image}
  */
 export default function scale(options = {}) {
   const {
     factor = 1,
-    algorithm = 'nearestNeighbor',
+    interpolation = validInterpolations.nearestneighbor,
     preserveAspectRatio = true
   } = options;
+
+  const interpolationToUse = checkInterpolation(interpolation);
 
   let width = options.width;
   let height = options.height;
@@ -52,13 +55,12 @@ export default function scale(options = {}) {
   let shiftY = Math.round((this.height - height) / 2);
   const newImage = Image.createFrom(this, { width, height, position: [shiftX, shiftY] });
 
-  switch (algorithm.toLowerCase()) {
-    case 'nearestneighbor':
-    case 'nearestneighbour':
+  switch (interpolationToUse) {
+    case validInterpolations.nearestneighbor:
       nearestNeighbor.call(this, newImage, width, height);
       break;
     default:
-      throw new Error(`Unsupported scale algorithm: ${algorithm}`);
+      throw new Error(`unsupported scale interpolation: ${interpolationToUse}`);
   }
 
   return newImage;

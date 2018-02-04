@@ -3,11 +3,12 @@ import Image from '../Image';
 import rotateFree from './rotateFree';
 
 /**
- * Rotates an image
+ * Rotates an image.
  * @memberof Image
  * @instance
- * @param {number} angle - angle of the rotation in degrees
+ * @param {number} angle - Angle of the rotation in degrees
  * @param {object} [options]
+ * @param {InterpolationAlgorithm} [options.interpolation='nearestNeighbor'] - Interpolation algorithm to use if `angle` is not a multiple of 90
  * @return {Image} The new rotated image
  */
 export function rotate(angle, options) {

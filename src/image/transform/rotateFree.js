@@ -1,18 +1,22 @@
-//http://homepages.inf.ed.ac.uk/rbf/HIPR2/rotate.htm
-//http://www.cyut.edu.tw/~yltang/program/Rotate1.java
 import Image from '../Image';
+import { validInterpolations, checkInterpolation } from '../utility/checks';
 
 export default function rotateFree(degrees, options = {}) {
   const {
-    interpolation = 'none',
+    interpolation = validInterpolations.nearestneighbor,
     width = this.width,
     height = this.height
   } = options;
 
+  if (typeof degrees !== 'number') {
+    throw new TypeError('degrees must be a number');
+  }
+  const interpolationToUse = checkInterpolation(interpolation);
+
   const radians = (degrees * Math.PI) / 180;
   const newWidth = Math.floor(Math.abs(width * Math.cos(radians)) + Math.abs(height * Math.sin(radians)));
   const newHeight = Math.floor(Math.abs(height * Math.cos(radians)) + Math.abs(width * Math.sin(radians)));
-  const newImageRotated = Image.createFrom(this, { width: newWidth, height: newHeight });
+  const newImage = Image.createFrom(this, { width: newWidth, height: newHeight });
   const cos = Math.cos(-radians);
   const sin = Math.sin(-radians);
 
@@ -37,61 +41,69 @@ export default function rotateFree(degrees, options = {}) {
   const incrementX = Math.floor(width / 2 - x0);
   const incrementY = Math.floor(height / 2 - y0);
 
-
-  if (interpolation === 'bilinear') {
-    let stride = this.width * this.channels;
-    for (let i = 0; i < newWidth; i += 1) {
-      for (let j = 0; j < newHeight; j += 1) {
-        let x = ((i - x0) * cos - (j - y0) * sin + x0) + incrementX;
-        let y = ((j - y0) * cos + (i - x0) * sin + y0) + incrementY;
-        let x1 = x | 0;
-        let y1 = y | 0;
-        let xDiff = x - x1;
-        let yDiff = y - y1;
-        for (let c = 0; c < this.channels; c++) {
-          if (x < 0 || x >= width || y < 0 || y >= height) {
-            if (this.alpha) {
-              newImageRotated.setValueXY(i, j, c, this.alpha);
-            } else {
-              newImageRotated.setValueXY(i, j, c, this.maxValue);
-            }
-          } else {
-            let index = (y1 * this.width + x1) * this.channels + c;
-
-            let A = this.data[index];
-            let B = this.data[index + this.channels];
-            let C = this.data[index + stride];
-            let D = this.data[index + stride + this.channels];
-
-            let result = (A + xDiff * (B - A) + yDiff * (C - A) + xDiff * yDiff * (A - B - C + D)) | 0;
-
-            newImageRotated.setValueXY(i, j, c, result);
-          }
-        }
-      }
-    }
-  }   else {
-    for (let i = 0; i < newWidth; i += 1) {
-      for (let j = 0; j < newHeight; j += 1) {
-        for (let c = 0; c < this.channels; c++) {
-          let x = Math.round((i - x0) * cos - ((j - y0) * sin) + x0) + incrementX;
-          let y = Math.round((j - y0) * cos + ((i - x0) * sin) + y0) + incrementY;
-
-          if (x < 0 || x >= width || y < 0 || y >= height) {
-            if (this.alpha) {
-              newImageRotated.setValueXY(i, j, c, this.alpha);
-            } else {
-              newImageRotated.setValueXY(i, j, c, this.maxValue);
-            }
-          } else {
-            newImageRotated.setValueXY(i, j, c, this.getValueXY(x, y, c));
-          }
-        }
-      }
-    }
-
+  switch (interpolationToUse) {
+    case validInterpolations.nearestneighbor:
+      return rotateNearestNeighbor(this, newImage, incrementX, incrementY, x0, y0, cos, sin);
+    case validInterpolations.bilinear:
+      return rotateBilinear(this, newImage, incrementX, incrementY, x0, y0, cos, sin);
+    default:
+      throw new Error(`unsupported rotate interpolation: ${interpolationToUse}`);
   }
-
-  return newImageRotated;
 }
 
+function rotateNearestNeighbor(thisImage, newImage, incrementX, incrementY, x0, y0, cos, sin) {
+  for (let i = 0; i < newImage.width; i += 1) {
+    for (let j = 0; j < newImage.height; j += 1) {
+      for (let c = 0; c < thisImage.channels; c++) {
+        let x = Math.round((i - x0) * cos - ((j - y0) * sin) + x0) + incrementX;
+        let y = Math.round((j - y0) * cos + ((i - x0) * sin) + y0) + incrementY;
+
+        if (x < 0 || x >= thisImage.width || y < 0 || y >= thisImage.height) {
+          if (thisImage.alpha) {
+            newImage.setValueXY(i, j, c, thisImage.alpha);
+          } else {
+            newImage.setValueXY(i, j, c, thisImage.maxValue);
+          }
+        } else {
+          newImage.setValueXY(i, j, c, thisImage.getValueXY(x, y, c));
+        }
+      }
+    }
+  }
+  return newImage;
+}
+
+function rotateBilinear(thisImage, newImage, incrementX, incrementY, x0, y0, cos, sin) {
+  let stride = thisImage.width * thisImage.channels;
+  for (let i = 0; i < newImage.width; i += 1) {
+    for (let j = 0; j < newImage.height; j += 1) {
+      let x = ((i - x0) * cos - (j - y0) * sin + x0) + incrementX;
+      let y = ((j - y0) * cos + (i - x0) * sin + y0) + incrementY;
+      let x1 = x | 0;
+      let y1 = y | 0;
+      let xDiff = x - x1;
+      let yDiff = y - y1;
+      for (let c = 0; c < thisImage.channels; c++) {
+        if (x < 0 || x >= thisImage.width || y < 0 || y >= thisImage.height) {
+          if (thisImage.alpha) {
+            newImage.setValueXY(i, j, c, thisImage.alpha);
+          } else {
+            newImage.setValueXY(i, j, c, thisImage.maxValue);
+          }
+        } else {
+          let index = (y1 * thisImage.width + x1) * thisImage.channels + c;
+
+          let A = thisImage.data[index];
+          let B = thisImage.data[index + thisImage.channels];
+          let C = thisImage.data[index + stride];
+          let D = thisImage.data[index + stride + thisImage.channels];
+
+          let result = (A + xDiff * (B - A) + yDiff * (C - A) + xDiff * yDiff * (A - B - C + D)) | 0;
+
+          newImage.setValueXY(i, j, c, result);
+        }
+      }
+    }
+  }
+  return newImage;
+}
