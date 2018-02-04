@@ -1,5 +1,8 @@
 import { readFile, createWriteStream, writeFile } from 'fs';
 
+const message =
+  'requires the canvas library. Install it with `npm install canvas@next`.';
+
 // eslint-disable-next-line import/no-mutable-exports
 let createCanvas, DOMImage, ImageData;
 try {
@@ -9,18 +12,17 @@ try {
   ImageData = canvas.ImageData;
 } catch (e) {
   createCanvas = function () {
-    throw new Error('createCanvas requires the canvas library');
+    throw new Error(`createCanvas ${message}`);
   };
   DOMImage = function () {
-    throw new Error('DOMImage requires the canvas library');
+    throw new Error(`DOMImage ${message}`);
   };
   ImageData = function () {
-    throw new Error('ImageData requires the canvas library');
+    throw new Error(`ImageData ${message}`);
   };
 }
 
-
-const env = 'node';
+export const env = 'node';
 
 export function fetchBinary(path) {
   return new Promise(function (resolve, reject) {
@@ -31,4 +33,4 @@ export function fetchBinary(path) {
   });
 }
 
-export { env, createCanvas, ImageData, DOMImage, createWriteStream, writeFile };
+export { createCanvas, ImageData, DOMImage, createWriteStream, writeFile };
