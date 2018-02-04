@@ -74,7 +74,7 @@ export default function paintLabels(labels, positions, options = {}) {
     ctx.fillText(labels[i], 0, 0);
     ctx.restore();
   }
-  this.setData(ctx.getImageData(0, 0, this.width, this.height).data);
+  this.data = ctx.getImageData(0, 0, this.width, this.height).data;
 
   return this;
 }

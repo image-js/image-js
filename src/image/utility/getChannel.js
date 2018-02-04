@@ -1,5 +1,6 @@
 import Image from '../Image';
 import { validateChannel } from '../../util/channel';
+import { GREY } from '../model/model';
 
 /**
  * Create a grey image based on the selected channel
@@ -29,7 +30,7 @@ export default function getChannel(channel, options = {}) {
   let newImage = Image.createFrom(this, {
     components: 1,
     alpha: keepAlpha,
-    colorModel: null
+    colorModel: GREY
   });
   let ptr = 0;
   for (let j = 0; j < this.data.length; j += this.channels) {

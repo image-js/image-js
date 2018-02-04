@@ -2,8 +2,11 @@ import { Image } from 'test/common';
 
 describe('Image core - Binary images of 16 points', function () {
 
-  let img = new Image(8, 2, {
-    kind: 'BINARY'
+  let img;
+  beforeEach(() => {
+    img = new Image(8, 2, {
+      kind: 'BINARY'
+    });
   });
 
   it('check the size', function () {

@@ -1,5 +1,3 @@
-import extendObject from 'extend';
-
 import bitMethods from './core/bitMethods';
 import checkProcessable from './core/checkProcessable';
 import exportMethods from './core/export';
@@ -7,6 +5,7 @@ import { extendMethod, extendProperty } from './core/extend';
 import getRGBAData from './core/getRGBAData';
 import {
   getKind,
+  verifyKindDefinition,
   createPixelArray,
   getTheoreticalPixelArraySize
 } from './core/kind';
@@ -165,102 +164,143 @@ import RoiManager from './roi/manager';
  * </script>
  */
 export default class Image {
-  constructor(width = 1, height = 1, data, options) {
-    // copy another image
-    if (typeof width === 'object') {
-      const otherImage = width;
-      const cloneData = height === true;
-      width = otherImage.width;
-      height = otherImage.height;
-      data = cloneData ? otherImage.data.slice() : otherImage.data;
-      options = {
-        position: otherImage.position,
-        components: otherImage.components,
-        alpha: otherImage.alpha,
-        bitDepth: otherImage.bitDepth,
-        colorModel: otherImage.colorModel,
-        parent: otherImage,
-        meta: otherImage.meta
-      };
-    }
-
-    if (data && !data.length) {
+  constructor(width, height, data, options) {
+    if (arguments.length === 1) {
+      options = width;
+      ({ width, height, data } = options);
+    } else if (typeof data === 'object' && !data.length) {
       options = data;
-      data = null;
+      ({ data } = options);
     }
-    if (options === undefined) {
-      options = {};
+    if (width === undefined) width = 1;
+    if (height === undefined) height = 1;
+    if (options === undefined) options = {};
+
+    if (typeof options !== 'object' || options === null) {
+      throw new TypeError('options must be an object');
     }
 
-    if (width <= 0) {
-      throw new RangeError('width must be greater than 0');
+    if (!Number.isInteger(width) || width <= 0) {
+      throw new RangeError('width must be a positive integer');
     }
-    if (height <= 0) {
-      throw new RangeError('height must be greater than 0');
+    if (!Number.isInteger(height) || height <= 0) {
+      throw new RangeError('height must be a positive integer');
     }
 
+    const { kind = RGBA } = options;
+    if (typeof kind !== 'string') {
+      throw new TypeError('kind must be a string');
+    }
+    const theKind = getKind(kind);
+    const kindDefinition = Object.assign({}, options);
+    for (const prop in theKind) {
+      if (kindDefinition[prop] === undefined) {
+        kindDefinition[prop] = theKind[prop];
+      }
+    }
+    verifyKindDefinition(kindDefinition);
+
+    const { components, bitDepth, colorModel } = kindDefinition;
+    const alpha = kindDefinition.alpha + 0;
+    const size = width * height;
+    const channels = components + alpha;
+    const maxValue = bitDepth === 32 ? Number.MAX_VALUE : 2 ** bitDepth - 1;
+
+    if (data === undefined) {
+      data = createPixelArray(size, components, alpha, channels, bitDepth, maxValue);
+    } else {
+      const expectedLength = getTheoreticalPixelArraySize(size, channels, bitDepth);
+      if (data.length !== expectedLength) {
+        throw new RangeError(`incorrect data size: ${data.length}. Should be ${expectedLength}`);
+      }
+    }
+
+    /**
+     * Width of the image.
+     * @member {number}
+     */
     this.width = width;
+
+    /**
+     * Height of the image.
+     * @member {number}
+     */
     this.height = height;
 
+    /**
+     * Typed array holding the image data.
+     * @member {TypedArray}
+     */
+    this.data = data;
+
+    /**
+     * Total number of pixels (width * height).
+     * @member {number}
+     */
+    this.size = size;
+
+    /**
+     * Number of color channels in the image.
+     * A grey image has 1 component. An RGB image has 3 components.
+     * @member {number}
+     */
+    this.components = components;
+
+    /**
+     * Alpha is 1 if there is an alpha channel, 0 otherwise.
+     * @member {number}
+     */
+    this.alpha = alpha;
+
+    /**
+     * Number of bits per value in each channel.
+     * @member {number}
+     */
+    this.bitDepth = bitDepth;
+
+    /**
+     * Maximum value that a pixel can have.
+     * @member {number}
+     */
+    this.maxValue = maxValue;
+
+    /**
+     * Color model of the image.
+     * @member {ColorModel}
+     */
+    this.colorModel = colorModel;
+
+    /**
+     * Total number of channels. Is equal to `image.components + image.alpha`.
+     * @member {number}
+     */
+    this.channels = channels;
+
+    /**
+     * Metadata associated with the image.
+     * @member {object}
+     */
+    this.meta = options.meta || {};
+
+    // TODO review those props
     Object.defineProperty(this, 'parent', {
       enumerable: false,
       writable: true,
+      configurable: true,
       value: options.parent || null
     });
     this.position = options.position || [0, 0];
 
-    let theKind;
-    if (typeof options.kind === 'string') {
-      theKind = getKind(options.kind);
-      if (!theKind) {
-        throw new RangeError(`invalid image kind: ${options.kind}`);
-      }
-    } else {
-      theKind = getKind(RGBA);
-    }
-
-    let kindDefinition = extendObject({}, theKind, options);
-    this.components = kindDefinition.components;
-    this.alpha = kindDefinition.alpha + 0;
-    this.bitDepth = kindDefinition.bitDepth;
-    this.colorModel = kindDefinition.colorModel;
-    this.meta = options.meta || {};
-
     this.computed = null;
-
-    this.size = this.width * this.height;
     this.sizes = [this.width, this.height];
-    this.channels = this.components + this.alpha;
-    if (this.bitDepth === 32) {
-      this.maxValue = Number.MAX_VALUE;
-    } else {
-      this.maxValue = 2 ** this.bitDepth - 1;
-    }
-
     this.multiplierX = this.channels;
     this.multiplierY = this.channels * this.width;
     this.isClamped = this.bitDepth < 32;
     this.borderSizes = [0, 0]; // when a filter creates a border, it may have impact on future processing like Roi
-
-    if (!data) data = createPixelArray(this);
-    this.setData(data);
   }
 
   get [Symbol.toStringTag]() {
     return 'IJSImage';
-  }
-
-  /**
-   * Replace the internal array that holds the image's data.
-   * @param {Array|TypedArray} data
-   */
-  setData(data) {
-    let length = getTheoreticalPixelArraySize(this);
-    if (length !== data.length) {
-      throw new RangeError(`incorrect data size. Should be ${length} and found ${data.length}`);
-    }
-    this.data = data;
-    this.computed = null;
   }
 
   /**
@@ -293,8 +333,8 @@ export default class Image {
       bitDepth: other.bitDepth,
       parent: other
     };
-    extendObject(newOptions, options);
-    return new Image(newOptions.width, newOptions.height, newOptions);
+    Object.assign(newOptions, options);
+    return new Image(newOptions);
   }
 
   static isTypeSupported(type, operation = 'write') {
@@ -327,19 +367,13 @@ export default class Image {
   }
 
   /**
-   * Create a new image based on the current image.
-   * By default the method will copy the data.
+   * Create a copy a the current image, including its data.
    * @instance
-   * @param {object} options
-   * @param {boolean} [options.copyData=true] - Specify if we want also to clone
-   *          the data or only the image parameters (size, colorModel, ...)
-   * @return {Image} - The source image clone
-   * @example
-   * var emptyImage = image.clone({ copyData: false });
+   * @return {Image}
    */
-  clone(options = {}) {
-    const { copyData = true } = options;
-    return new Image(this, copyData);
+  clone() {
+    const newData = this.data.slice();
+    return new Image(this.width, this.height, newData, this);
   }
 
   apply(filter) {

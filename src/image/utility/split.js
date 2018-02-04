@@ -1,5 +1,6 @@
 import Image from '../Image';
 import Stack from '../../stack/Stack';
+import { GREY } from '../model/model';
 
 /**
  * @memberof Image
@@ -30,7 +31,7 @@ export default function split(options = {}) {
       let newImage = Image.createFrom(this, {
         components: 1,
         alpha: true,
-        colorModel: null
+        colorModel: GREY
       });
       let ptr = 0;
       for (let j = 0; j < data.length; j += this.channels) {
@@ -44,7 +45,7 @@ export default function split(options = {}) {
       let newImage = Image.createFrom(this, {
         components: 1,
         alpha: false,
-        colorModel: null
+        colorModel: GREY
       });
       let ptr = 0;
       for (let j = 0; j < data.length; j += this.channels) {

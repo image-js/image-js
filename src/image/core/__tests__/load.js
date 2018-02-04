@@ -13,10 +13,10 @@ describe('Image core', () => {
   it('invalid constructor use', () => {
     expect(function () {
       new Image(0, 0); // eslint-disable-line no-new
-    }).toThrowError(/width must be greater than 0/);
+    }).toThrowError(/width must be a positive integer/);
     expect(function () {
       new Image(5, 0); // eslint-disable-line no-new
-    }).toThrowError(/height must be greater than 0/);
+    }).toThrowError(/height must be a positive integer/);
     expect(function () {
       new Image(10, 10, { kind: 'BLABLA' }); // eslint-disable-line no-new
     }).toThrowError(/invalid image kind: BLABLA/);
@@ -32,13 +32,6 @@ describe('Image core', () => {
     expect(img.bitDepth).toBe(32);
     expect(img.data).toBeInstanceOf(Float32Array);
     expect(img.maxValue).toBe(Number.MAX_VALUE);
-  });
-
-  it('wrong array passed to setData', () => {
-    const img = new Image(1, 1);
-    expect(() => {
-      img.setData([1]);
-    }).toThrow(/incorrect data size. Should be 4 and found 1/);
   });
 
   it('create from Canvas', () => {
@@ -76,15 +69,6 @@ describe('Image core', () => {
     expect(clone).toBeInstanceOf(Image);
     expect(clone).not.toBe(img);
     expect(clone.data).not.toBe(img.data);
-    expect(clone.toDataURL()).toBe(img.toDataURL());
-  });
-
-  it('should clone and keep same data', async () => {
-    const img = await load('format/rgba32.png');
-    const clone = img.clone({ copyData: false });
-    expect(clone).toBeInstanceOf(Image);
-    expect(clone).not.toBe(img);
-    expect(clone.data).toBe(img.data);
     expect(clone.toDataURL()).toBe(img.toDataURL());
   });
 });

@@ -1,5 +1,3 @@
-import extendObject from 'extend';
-
 import Image from '../Image';
 
 import fromMask from './creator/fromMask';
@@ -31,14 +29,14 @@ export default class RoiManager {
 
   // docs is in the corresponding file
   fromMaxima(options = {}) {
-    let opt = extendObject({}, this._options, options);
+    let opt = Object.assign({}, this._options, options);
     let roiMap = fromMaxima.call(this._image, options);
     this._layers[opt.label] = new RoiLayer(roiMap, opt);
   }
 
   // docs is in the corresponding file
   fromPoints(points, options = {}) {
-    let opt = extendObject({}, this._options, options);
+    let opt = Object.assign({}, this._options, options);
     let roiMap = fromPoints.call(this._image, points, options);
     this._layers[opt.label] = new RoiLayer(roiMap, opt);
     return this;
@@ -52,21 +50,21 @@ export default class RoiManager {
      */
   putMap(map, options = {}) {
     let roiMap = new RoiMap(this._image, map);
-    let opt = extendObject({}, this._options, options);
+    let opt = Object.assign({}, this._options, options);
     this._layers[opt.label] = new RoiLayer(roiMap, opt);
     return this;
   }
 
   // docs is in the corresponding file
   fromWaterShed(options = {}) {
-    let opt = extendObject({}, this._options, options);
+    let opt = Object.assign({}, this._options, options);
     let roiMap = fromWaterShed.call(this._image, options);
     this._layers[opt.label] = new RoiLayer(roiMap, opt);
   }
 
   // docs is in the corresponding file
   fromMask(mask, options = {}) {
-    let opt = extendObject({}, this._options, options);
+    let opt = Object.assign({}, this._options, options);
     let roiMap = fromMask.call(this._image, mask, options);
     this._layers[opt.label] = new RoiLayer(roiMap, opt);
     return this;
@@ -74,7 +72,7 @@ export default class RoiManager {
 
 
   fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
-    let opt = extendObject({}, this._options, options);
+    let opt = Object.assign({}, this._options, options);
     let roiMap = fromMaskConnectedComponentLabelingAlgorithm.call(this._image, mask, options);
     this._layers[opt.label] = new RoiLayer(roiMap, opt);
     return this;
@@ -86,7 +84,7 @@ export default class RoiManager {
      * @return {RoiMap}
      */
   getMap(options = {}) {
-    let opt = extendObject({}, this._options, options);
+    let opt = Object.assign({}, this._options, options);
     this._assertLayerWithLabel(opt.label);
     return this._layers[opt.label].roiMap;
   }
@@ -208,7 +206,7 @@ export default class RoiManager {
      * @return {number[]}
      */
   getData(options = {}) {
-    let opt = extendObject({}, this._options, options);
+    let opt = Object.assign({}, this._options, options);
     this._assertLayerWithLabel(opt.label);
     return this._layers[opt.label].roiMap.data;
   }

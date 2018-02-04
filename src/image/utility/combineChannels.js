@@ -1,4 +1,5 @@
 import Image from '../Image';
+import { GREY } from '../model/model';
 
 /**
  * Create a new grey Image by combining the channels of the current image.
@@ -26,7 +27,7 @@ export default function combineChannels(method = defaultCombineMethod, options =
   let newImage = Image.createFrom(this, {
     components: 1,
     alpha: keepAlpha,
-    colorModel: null
+    colorModel: GREY
   });
 
   let ptr = 0;

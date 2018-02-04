@@ -1,5 +1,5 @@
 import Image from '../Image';
-import { RGB } from '../model/model';
+import { RGB, GREY } from '../model/model';
 
 import { methods } from './greyAlgorithms';
 
@@ -59,7 +59,7 @@ export default function grey(options = {}) {
   let newImage = Image.createFrom(this, {
     components: 1,
     alpha: keepAlpha,
-    colorModel: null
+    colorModel: GREY
   });
 
   let method = methods[algorithm.toLowerCase()];

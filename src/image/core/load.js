@@ -9,6 +9,7 @@ import Stack from '../../stack/Stack';
 import { decode as base64Decode, toBase64URL } from '../../util/base64';
 
 import { fetchBinary, DOMImage, createCanvas } from './environment';
+import { GREY } from '../model/model';
 
 const isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
 
@@ -152,7 +153,7 @@ function getImageFromIFD(image) {
   return new Image(image.width, image.height, image.data, {
     components: 1,
     alpha: 0,
-    colorModel: null,
+    colorModel: GREY,
     bitDepth: image.bitsPerSample.length
       ? image.bitsPerSample[0]
       : image.bitsPerSample,

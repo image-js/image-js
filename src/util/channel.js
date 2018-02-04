@@ -1,12 +1,13 @@
 import * as Model from '../image/model/model';
 
 /**
- * @typedef {undefined|number|string|[number]|[string]} SelectedChannels - Specify which channels should be processed
-*      * undefined : we take all the channels but alpha
-*      * number : this specific channel
-*      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
-*      * [number] : array of channels as numbers
-*      * [string] : array of channels as one letter string
+ * Specify which channels should be processed
+ * * undefined : we take all the channels but alpha
+ * * number : this specific channel
+ * * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
+ * * [number] : array of channels as numbers
+ * * [string] : array of channels as one letter string
+ * @typedef {undefined|number|string|[number]|[string]} SelectedChannels
  */
 
 export function validateArrayOfChannels(image, options = {}) {

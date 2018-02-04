@@ -1,7 +1,8 @@
 import convolution from '../operator/convolution';
 
 /**
- * @typedef {('x'|'y'|'xy')} GradientDirection - Direction of a gradient filter
+ * Direction of a gradient filter
+ * @typedef {('x'|'y'|'xy')} GradientDirection
  */
 
 /**
