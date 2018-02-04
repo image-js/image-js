@@ -27,12 +27,12 @@ export default function getRGBAData() {
       newData[i * 4 + 2] = value * 255;
     }
   } else if (this.bitDepth === 32) {
-    this.checkProcessable('getRGBAData', { alpha: 0 });
     // map minimum to 0 and maximum to 255
-    const min = this.min;
-    const max = this.max;
-    const range = max - min;
+    this.checkProcessable('getRGBAData', { alpha: 0 });
     if (this.components === 1) {
+      const min = this.min;
+      const max = this.max;
+      const range = max - min;
       for (let i = 0; i < size; i++) {
         const val = (255 * (this.data[i * this.channels] - min) / range) >> 0;
         newData[i * 4] = val;
@@ -41,6 +41,9 @@ export default function getRGBAData() {
       }
     } else if (this.components === 3) {
       this.checkProcessable('getRGBAData', { colorModel: [RGB] });
+      const min = Math.min(...this.min);
+      const max = Math.max(...this.max);
+      const range = max - min;
       for (let i = 0; i < size; i++) {
         const val1 = (255 * (this.data[i * this.channels] - min) / range) >> 0;
         const val2 = (255 * (this.data[i * this.channels + 1] - min) / range) >> 0;
