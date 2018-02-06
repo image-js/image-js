@@ -85,4 +85,21 @@ describe('Grey transform', function () {
       150, 0
     ]);
   });
+
+  it('user-provided output', () => {
+    const image = new Image(2, 1,
+      [
+        100, 150, 200, 255,
+        100, 150, 200, 0
+      ]
+    );
+
+    const out = new Image(2, 1, { kind: 'GREY' });
+    const result = image.grey({ out });
+    expect(result).toBe(out);
+    expect(Array.from(out.data)).toEqual([142, 0]);
+
+    const wrongOut = new Image(2, 1, { kind: 'GREYA' });
+    expect(() => image.grey({ out: wrongOut })).toThrow(/cannot use out\. Its alpha must be "0" \(found "1"\)/);
+  });
 });

@@ -1,5 +1,5 @@
-import Image from '../Image';
 import { GREY } from '../model/model';
+import { getOutputImage } from '../internal/getOutputImage';
 
 import { methods } from './greyAlgorithms';
 
@@ -19,6 +19,7 @@ import { methods } from './greyAlgorithms';
  * @param {boolean} [options.allowGrey=false] - By default only RGB images are allowed.
  *          If true grey images are also allowed and will either return a copy or
  *          apply the alpha channel depending the options
+ * @param {Image} [options.out]
  * @return {Image}
  */
 export default function grey(options = {}) {
@@ -43,7 +44,7 @@ export default function grey(options = {}) {
     mergeAlpha = false;
   }
 
-  let newImage = Image.createFrom(this, {
+  let newImage = getOutputImage(this, options, {
     components: 1,
     alpha: keepAlpha,
     colorModel: GREY

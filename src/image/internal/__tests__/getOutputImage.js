@@ -75,7 +75,7 @@ test('getOutputImage with requirements NOK - pass this', () => {
 });
 
 test('getOutputImage with requirements NOK - pass other', () => {
-  const other = Image.createFrom(thisImage);  
+  const other = Image.createFrom(thisImage);
   expect(
     () => getOutputImage(thisImage, { out: other }, { width: 4 })
   ).toThrow(/cannot use out\. Its width must be "4" \(found "2"\)/);

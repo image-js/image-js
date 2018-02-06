@@ -7,7 +7,7 @@ describe('invert', function () {
     let expected = [25, 172, 135, 255, 155, 115, 242, 240];
 
     const inverted = image.invert();
-    expect(inverted).toBe(image);
+    expect(inverted).not.toBe(image);
     expect(Array.from(inverted.data)).toEqual(expected);
   });
 
@@ -17,7 +17,7 @@ describe('invert', function () {
     let expected = [254, 253, 252, 251];
 
     const inverted = image.invert();
-    expect(inverted).toBe(image);
+    expect(inverted).not.toBe(image);
     expect(Array.from(inverted.data)).toEqual(expected);
   });
 
@@ -27,7 +27,7 @@ describe('invert', function () {
     let expected = [65534, 65533, 65532, 65531];
 
     const inverted = image.invert();
-    expect(inverted).toBe(image);
+    expect(inverted).not.toBe(image);
     expect(Array.from(inverted.data)).toEqual(expected);
   });
 
@@ -38,7 +38,42 @@ describe('invert', function () {
     let expected = Uint8Array.of(170);
 
     const inverted = image.invert();
-    expect(inverted).toBe(image);
+    expect(inverted).not.toBe(image);
     expect(inverted.data).toEqual(expected);
+  });
+
+  it('should allow in-place modification', function () {
+    let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 240]);
+
+    let expected = [25, 172, 135, 255, 155, 115, 242, 240];
+    const inverted = image.invert({ inPlace: true });
+    expect(Array.from(inverted.data)).toEqual(expected);
+    expect(inverted).toBe(image);
+  });
+
+  it('should allow self out', function () {
+    let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 240]);
+
+    let expected = [25, 172, 135, 255, 155, 115, 242, 240];
+    const inverted = image.invert({ out: image });
+    expect(Array.from(inverted.data)).toEqual(expected);
+    expect(inverted).toBe(image);
+  });
+
+  it('should allow new out', function () {
+    let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 240]);
+
+    let expected = [25, 172, 135, 255, 155, 115, 242, 240];
+    const out = new Image(1, 2);
+    const inverted = image.invert({ out });
+    expect(Array.from(inverted.data)).toEqual(expected);
+    expect(inverted).toBe(out);
+  });
+
+  it('should throw for wrong out', function () {
+    let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 240]);
+
+    const out = new Image(1, 2, { kind: 'GREY' });
+    expect(() => image.invert({ out })).toThrow(/cannot use out\. Its components must be "3" \(found "1"\)/);
   });
 });
