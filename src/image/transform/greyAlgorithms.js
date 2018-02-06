@@ -1,3 +1,6 @@
+/**
+ * @typedef {('luma709'|'luma601'|'maximum'|'minimum'|'average'|'minmax'|'red'|'green'|'blue'|'cyan'|'magenta'|'yellow'|'black'|'hue'|'saturation'|'lightness')} GreyAlgorithm
+ */
 
 export const methods = {
   luma709(data, i) { // sRGB

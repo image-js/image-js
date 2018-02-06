@@ -1,7 +1,7 @@
 import { Image } from 'test/common';
 
 describe('Grey transform', function () {
-  it('From RGBA image give a grey image', function () {
+  it('RGBA image', function () {
     let image = new Image(2, 1,
       [
         100, 150, 200, 255,
@@ -38,7 +38,6 @@ describe('Grey transform', function () {
       0
     ]);
 
-
     expect(Array.from(image.grey({ algorithm: 'average', keepAlpha: true }).data)).toEqual([
       150, 255,
       150, 0
@@ -66,12 +65,10 @@ describe('Grey transform', function () {
 
     expect(function () {
       image.grey({ algorithm: 'XXX' });
-    }).toThrowError(/Unsupported grey algorithm/);
-
+    }).toThrowError(/unsupported grey algorithm: XXX/);
   });
 
-
-  it('From GreyA image throw an error except if allowed', function () {
+  it('GREYA image', function () {
     let image = new Image(2, 1,
       [
         100, 255,
@@ -80,20 +77,12 @@ describe('Grey transform', function () {
       { kind: 'GREYA' }
     );
 
-    expect(function () {
-      image.grey();
-    }).toThrowError(/only be applied/);
+    expect(Array.from(image.grey().data)).toEqual([100, 0]);
+    expect(Array.from(image.grey({ mergeAlpha: false }).data)).toEqual([100, 150]);
 
-    expect(Array.from(image.grey({ allowGrey: true }).data)).toEqual([100, 0]);
-    expect(Array.from(image.grey({ allowGrey: true, mergeAlpha: false }).data)).toEqual([100, 150]);
-
-    expect(Array.from(image.grey({ allowGrey: true, keepAlpha: true }).data)).toEqual([
+    expect(Array.from(image.grey({ keepAlpha: true }).data)).toEqual([
       100, 255,
       150, 0
     ]);
-
-
   });
-
-
 });
