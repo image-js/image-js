@@ -1,13 +1,7 @@
 /* eslint-disable import/order */
-// filters
-import invertGetSet from './filter/invertGetSet';
-import invertIterator from './filter/invertIterator';
-import invertOneLoop from './filter/invertOneLoop';
-import invertPixel from './filter/invertPixel';
-import invertApply from './filter/invertApply';
-import invertBinaryLoop from './filter/invertBinaryLoop';
 
-import abs from './filter/abs';
+// filters
+import absFilter from './filter/abs';
 import invertFilter from './filter/invert';
 import flipXFilter from './filter/flipX';
 import flipYFilter from './filter/flipY';
@@ -27,7 +21,6 @@ import divideFilter from './filter/divide';
 import backgroundFilter from './filter/background';
 
 // morphology transforms
-
 import dilate from './morphology/dilate';
 import erode from './morphology/erode';
 import opening from './morphology/opening';
@@ -103,14 +96,8 @@ import minimalBoundingRectangle from './compute/minimalBoundingRectangle';
 export default function extend(Image) {
   let inPlace = { inPlace: true };
 
-  Image.extendMethod('invertGetSet', invertGetSet, inPlace);
-  Image.extendMethod('invertIterator', invertIterator, inPlace);
-  Image.extendMethod('invertPixel', invertPixel, inPlace);
-  Image.extendMethod('invertOneLoop', invertOneLoop, inPlace);
-  Image.extendMethod('invertApply', invertApply, inPlace);
   Image.extendMethod('invert', invertFilter, inPlace);
-  Image.extendMethod('abs', abs, inPlace);
-  Image.extendMethod('invertBinaryLoop', invertBinaryLoop, inPlace);
+  Image.extendMethod('abs', absFilter, inPlace);
   Image.extendMethod('level', levelFilter, inPlace);
   Image.extendMethod('add', addFilter, inPlace);
   Image.extendMethod('subtract', subtractFilter, inPlace);
