@@ -25,7 +25,15 @@ describe('save to disk', () => {
 
   it('new then save with unsupported bit depth', async () => {
     const img = new Image(2, 2, { kind: 'BINARY' });
-    await expect(img.save(`${tmpDir}/imgBinary.png`)).rejects.toThrow(/The process: save \(PNG\) can only be applied if bit depth is in: 8,16/);
+    img.setBitXY(0, 0);
+    img.setBitXY(1, 1);
+    const imgBinary = `${tmpDir}/imgBinary.png`;
+    await img.save(imgBinary);
+    const reloaded = await load(imgBinary);
+    expect(Array.from(reloaded.data)).toEqual([
+      255, 255, 255, 255, 0, 0, 0, 255,
+      0, 0, 0, 255, 255, 255, 255, 255
+    ]);
   });
 
   it('new then save bmp', async () => {

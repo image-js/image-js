@@ -1,6 +1,6 @@
 import { canvasToBlob } from 'blob-util';
 import { encode as encodeBmp } from 'fast-bmp';
-import { encode as encodePng } from 'fast-png';
+import { encode as realEncodePng } from 'fast-png';
 import { encode as realEncodeJpeg } from 'jpeg-js';
 
 import { toBase64URL } from '../../util/base64';
@@ -15,6 +15,26 @@ function encodeJpeg(image, options = {}) {
     data: image.getRGBAData()
   };
   return realEncodeJpeg(data, options.quality);
+}
+
+function encodePng(image, options) {
+  const data = {
+    width: image.width,
+    height: image.height,
+    components: image.components,
+    alpha: image.alpha,
+    bitDepth: image.bitDepth,
+    data: image.data
+  };
+
+  if (data.bitDepth === 1 || data.bitDepth === 32) {
+    data.bitDepth = 8;
+    data.components = 3;
+    data.alpha = 1;
+    data.data = image.getRGBAData();
+  }
+
+  return realEncodePng(data, options);
 }
 
 const exportMethods = {
@@ -50,7 +70,6 @@ const exportMethods = {
       let stream, buffer;
       switch (format.toLowerCase()) {
         case 'png': {
-          this.checkProcessable('save (PNG)', { bitDepth: [8, 16] });
           if (useCanvas) {
             stream = this.getCanvas().pngStream();
           } else {
@@ -112,9 +131,6 @@ const exportMethods = {
       encoder: encoderOptions = undefined
     } = options;
     type = getType(type);
-    if (type === 'image/png') {
-      this.checkProcessable('toDataURL (PNG)', { bitDepth: [8, 16] });
-    }
     function dataUrl(encoder, ctx) {
       const u8 = encoder(ctx, encoderOptions);
       return toBase64URL(u8, type);
