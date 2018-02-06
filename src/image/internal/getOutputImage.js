@@ -34,7 +34,8 @@ export function getOutputImage(thisImage, options, newParameters) {
  * Same as getOutputImage but allows for an `inPlace` option.
  * @param {Image} thisImage
  * @param {object} options
- * @param {boolean} [options.inPlace=false] If true, thisImage is returned
+ * @param {boolean} [options.inPlace=false] - If true, thisImage is returned
+ * @param {Image} [options.out]
  * @param {object} newParameters
  * @return {Image}
  */
