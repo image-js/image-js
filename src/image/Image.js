@@ -15,6 +15,9 @@ import { getType, canWrite } from './core/mediaTypes';
 import valueMethods from './core/valueMethods';
 import extend from './extend';
 import RoiManager from './roi/manager';
+import getImageParameters from './internal/getImageParameters';
+
+const objectToString = Object.prototype.toString;
 
 /**
  * Class representing an image.
@@ -303,6 +306,10 @@ export default class Image {
     return 'IJSImage';
   }
 
+  static isImage(object) {
+    return objectToString.call(object) === '[object IJSImage]';
+  }
+
   /**
    * Creates an image from an HTML Canvas object
    * @param {Canvas} canvas
@@ -323,17 +330,11 @@ export default class Image {
    * const newImage = Image.createFrom(image, { width: 100 });
    */
   static createFrom(other, options) {
-    const newOptions = {
-      width: other.width,
-      height: other.height,
-      position: [0, 0],
-      components: other.components,
-      alpha: other.alpha,
-      colorModel: other.colorModel,
-      bitDepth: other.bitDepth,
-      parent: other
-    };
-    Object.assign(newOptions, options);
+    const newOptions = getImageParameters(other);
+    Object.assign(newOptions, {
+      parent: other,
+      position: [0, 0]
+    }, options);
     return new Image(newOptions);
   }
 
