@@ -1,6 +1,6 @@
 import Image from '../../Image';
 import { factorDimensions } from '../../../util/converter';
-import { validInterpolations, checkInterpolation } from '../../utility/checks';
+import { validInterpolations, checkInterpolation } from '../../internal/checks';
 
 import nearestNeighbor from './nearestNeighbor';
 

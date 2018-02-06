@@ -1,4 +1,4 @@
-import { checkColumn, checkChannel } from './checks';
+import { checkColumn, checkChannel } from '../internal/checks';
 
 /**
  * @memberof Image

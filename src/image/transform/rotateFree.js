@@ -1,5 +1,5 @@
 import Image from '../Image';
-import { validInterpolations, checkInterpolation } from '../utility/checks';
+import { validInterpolations, checkInterpolation } from '../internal/checks';
 
 export default function rotateFree(degrees, options = {}) {
   const {
