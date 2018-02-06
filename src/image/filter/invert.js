@@ -1,45 +1,41 @@
-// we try the faster methods
-
 import { validateArrayOfChannels } from '../../util/channel';
 
 /**
- * Invert an image. The image
+ * Invert the colors of an image
  * @memberof Image
  * @instance
- * @param {object} options
- * @param {(undefined|number|string|[number]|[string])} [options.channels=undefined] Specify which channels should be processed
- *      * undefined : we take all the channels but alpha
- *      * number : this specific channel
- *      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
- *      * [number] : array of channels as numbers
- *      * [string] : array of channels as one letter string
- * @return {this}
+ * @param {object} [options]
+ * @param {SelectedChannels} [options.channels=undefined]
+ * @return {Image}
  */
 export default function invert(options = {}) {
   let { channels } = options;
 
-  this.checkProcessable('invertOneLoop', {
+  this.checkProcessable('invert', {
     bitDepth: [1, 8, 16]
   });
 
   if (this.bitDepth === 1) {
-    // we simply invert all the integers value
-    // there could be a small mistake if the number of points
-    // is not a multiple of 8 but it is not important
-    let data = this.data;
-    for (let i = 0; i < data.length; i++) {
-      data[i] = ~data[i];
-    }
+    invertBinary(this);
   } else {
-    channels = validateArrayOfChannels(this, { channels });
+    invertColor(this, channels);
+  }
+  return this;
+}
 
-    for (let c = 0; c < channels.length; c++) {
-      let j = channels[c];
-      for (let i = j; i < this.data.length; i += this.channels) {
-        this.data[i] = this.maxValue - this.data[i];
-      }
+function invertBinary(image) {
+  const data = image.data;
+  for (let i = 0; i < data.length; i++) {
+    data[i] = ~data[i];
+  }
+}
+
+function invertColor(image, channels) {
+  channels = validateArrayOfChannels(image, { channels });
+  for (let c = 0; c < channels.length; c++) {
+    let j = channels[c];
+    for (let i = j; i < image.data.length; i += image.channels) {
+      image.data[i] = image.maxValue - image.data[i];
     }
   }
-
-  return this;
 }
