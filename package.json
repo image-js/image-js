@@ -1,6 +1,6 @@
 {
   "name": "image-js",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "Image processing and manipulation in JavaScript",
   "keywords": [
     "image",
@@ -71,7 +71,7 @@
     "canvas": "^2.0.0-alpha.9",
     "cross-env": "^5.1.3",
     "documentation": "^5.2.2",
-    "eslint": "^4.16.0",
+    "eslint": "^4.17.0",
     "eslint-config-cheminfo": "^1.15.1",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jest": "^21.7.0",
