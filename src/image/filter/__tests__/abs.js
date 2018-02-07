@@ -1,13 +1,11 @@
-import Image from '../../Image';
+import { Image } from 'test/common';
 
-describe('abs fiter', function () {
-  it('basic test', function () {
-    const img = new Image(1, 2, [
-      -2000, 3000
-    ], { kind: 'GREY', bitDepth: 32 });
-    img.abs();
-    expect(img.data).toEqual([
-      2000, 3000
-    ]);
-  });
+test('abs fiter', function () {
+  const img = new Image(1, 2, [
+    -2000, 3000
+  ], { kind: 'GREY', bitDepth: 32 });
+  const out = img.abs();
+  expect(Array.from(out.data)).toEqual([
+    2000, 3000
+  ]);
 });

@@ -6,8 +6,8 @@ import copyAlphaChannel from '../internal/copyAlphaChannel';
  * @memberof Image
  * @instance
  * @param {object} [options]
+ * @param {boolean} [options.inPlace=false]
  * @param {Image} [options.out]
- * @param {boolean} [options.inPlace]
  * @return {Image}
  */
 export default function invert(options = {}) {

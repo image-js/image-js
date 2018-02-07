@@ -36,10 +36,9 @@ export function getOutputImage(thisImage, options, newParameters) {
  * @param {object} options
  * @param {boolean} [options.inPlace=false] - If true, thisImage is returned
  * @param {Image} [options.out]
- * @param {object} newParameters
  * @return {Image}
  */
-export function getOutputImageOrInPlace(thisImage, options, newParameters) {
+export function getOutputImageOrInPlace(thisImage, options) {
   if (options.inPlace !== undefined && typeof options.inPlace !== 'boolean') {
     throw new TypeError('inPlace option must be a boolean');
   }
@@ -49,5 +48,5 @@ export function getOutputImageOrInPlace(thisImage, options, newParameters) {
     }
     return thisImage;
   }
-  return getOutputImage(thisImage, options, newParameters);
+  return getOutputImage(thisImage, options);
 }

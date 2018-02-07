@@ -97,7 +97,7 @@ export default function extend(Image) {
   let inPlace = { inPlace: true };
 
   Image.extendMethod('invert', invertFilter);
-  Image.extendMethod('abs', absFilter, inPlace);
+  Image.extendMethod('abs', absFilter);
   Image.extendMethod('level', levelFilter, inPlace);
   Image.extendMethod('add', addFilter, inPlace);
   Image.extendMethod('subtract', subtractFilter, inPlace);
