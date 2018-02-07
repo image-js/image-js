@@ -11,7 +11,6 @@ import {
 } from './core/kind';
 import { RGBA } from './core/kindNames';
 import load from './core/load';
-import { getType, canWrite } from './core/mediaTypes';
 import valueMethods from './core/valueMethods';
 import extend from './extend';
 import RoiManager from './roi/manager';
@@ -336,18 +335,6 @@ export default class Image {
       position: [0, 0]
     }, options);
     return new Image(newOptions);
-  }
-
-  static isTypeSupported(type, operation = 'write') {
-    if (typeof type !== 'string') {
-      throw new TypeError('type argument must be a string');
-    }
-    type = getType(type);
-    if (operation === 'write') {
-      return canWrite(type);
-    } else {
-      throw new TypeError(`unknown operation: ${operation}`);
-    }
   }
 
   /**

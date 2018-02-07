@@ -115,7 +115,6 @@ const exportMethods = {
    * @instance
    * @param {string} [type='image/png']
    * @param {object} [options]
-   * @param {boolean} [options.async=false] - Set to true to asynchronously generate the dataURL. This is required on Node.js for jpeg compression.
    * @param {boolean} [options.useCanvas=false] - Force use of the canvas API to save the image instead of JavaScript implementation.
    * @param {object} [options.encoder] - Specify options for the encoder if applicable.
    * @return {string|Promise<string>}
@@ -126,7 +125,6 @@ const exportMethods = {
       type = 'image/png';
     }
     const {
-      async = false,
       useCanvas = false,
       encoder: encoderOptions = undefined
     } = options;
@@ -135,32 +133,14 @@ const exportMethods = {
       const u8 = encoder(ctx, encoderOptions);
       return toBase64URL(u8, type);
     }
-    if (async) {
-      return new Promise((resolve, reject) => {
-        if (type === 'image/bmp') {
-          resolve(dataUrl(encodeBmp, this));
-        } else if (type === 'image/png' && !useCanvas) {
-          resolve(dataUrl(encodePng, this));
-        } else if (type === 'image/jpeg' && !useCanvas) {
-          resolve(dataUrl(encodeJpeg, this));
-        } else  {
-          this.getCanvas().toDataURL(type, function (err, text) {
-            if (err) reject(err);
-            else resolve(text);
-          });
-        }
-
-      });
+    if (type === 'image/bmp') {
+      return dataUrl(encodeBmp, this);
+    } else if (type === 'image/png' && !useCanvas) {
+      return dataUrl(encodePng, this);
+    } else if (type === 'image/jpeg' && !useCanvas) {
+      return dataUrl(encodeJpeg, this);
     } else {
-      if (type === 'image/bmp') {
-        return dataUrl(encodeBmp, this);
-      } else if (type === 'image/png' && !useCanvas) {
-        return dataUrl(encodePng, this);
-      } else if (type === 'image/jpeg' && !useCanvas) {
-        return dataUrl(encodeJpeg, this);
-      } else {
-        return this.getCanvas().toDataURL(type);
-      }
+      return this.getCanvas().toDataURL(type);
     }
   },
 

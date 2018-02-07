@@ -6,13 +6,9 @@ import { validateArrayOfChannels } from '../../util/channel';
  * Level the image for by default have the minimal and maximal values.
  * @memberof Image
  * @instance
- * @param {object} options
- * @param {(undefined|number|string|[number]|[string])} [options.channels=undefined] Specify which channels should be processed
- *      * undefined : we take all the channels but alpha
- *      * number : this specific channel
- *      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
- *      * [number] : array of channels as numbers
- *      * [string] : array of channels as one letter string
+ * @param {object} [options]
+ * @param {string} [options.algorithm='range']
+ * @param {SelectedChannels} [options.channels] Specify which channels should be processed
  * @param {number} [options.min=this.min] minimal value after levelling
  * @param {number} [options.max=this.max] maximal value after levelling
  * @return {this}

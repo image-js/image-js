@@ -9,12 +9,7 @@ import Image from '../Image';
  * @memberof Image
 * @instance
 * @param {object} options
-* @param {(undefined|number|string|[number]|[string])} [options.channels=undefined] Specify which channels should be processed
-*      * undefined : we take all the channels but alpha
-*      * number : this specific channel
-*      * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
-*      * [number] : array of channels as numbers
-*      * [string] : array of channels as one letter string
+* @param {SelectedChannels} [options.channels] Specify which channels should be processed
 * @param {number} [options.radius=1] distance of the square to take the mean of.
 * @param {string} [options.border='copy'] algorithm that will be applied after to deal with borders
 * @return {Image}

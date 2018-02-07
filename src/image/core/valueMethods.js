@@ -1,5 +1,18 @@
 const valueMethods = {
   /**
+   * Get the value of specific pixel channel
+   * @memberof Image
+   * @instance
+   * @param {number} x - x coordinate (0 = left)
+   * @param {number} y - y coordinate (0 = top)
+   * @param {number} channel
+   * @return {number} - the value of this pixel channel
+   */
+  getValueXY(x, y, channel) {
+    return this.data[(y * this.width + x) * this.channels + channel];
+  },
+
+  /**
    * Set the value of specific pixel channel
    * @memberof Image
    * @instance
@@ -19,13 +32,12 @@ const valueMethods = {
    * Get the value of specific pixel channel
    * @memberof Image
    * @instance
-   * @param {number} x - x coordinate (0 = left)
-   * @param {number} y - y coordinate (0 = top)
+   * @param {number} index - 1D index of the pixel
    * @param {number} channel
    * @return {number} - the value of this pixel channel
    */
-  getValueXY(x, y, channel) {
-    return this.data[(y * this.width + x) * this.channels + channel];
+  getValue(index, channel) {
+    return this.data[index * this.channels + channel];
   },
 
   /**
@@ -44,15 +56,15 @@ const valueMethods = {
   },
 
   /**
-   * Get the value of specific pixel channel
+   * Get the value of an entire pixel
    * @memberof Image
    * @instance
-   * @param {number} index - 1D index of the pixel
-   * @param {number} channel
-   * @return {number} - the value of this pixel channel
+   * @param {number} x - x coordinate (0 = left)
+   * @param {number} y - y coordinate (0 = top)
+   * @return {number[]} the value of this pixel
    */
-  getValue(index, channel) {
-    return this.data[index * this.channels + channel];
+  getPixelXY(x, y) {
+    return this.getPixel(y * this.width + x);
   },
 
   /**
@@ -72,12 +84,16 @@ const valueMethods = {
    * Get the value of an entire pixel
    * @memberof Image
    * @instance
-   * @param {number} x - x coordinate (0 = left)
-   * @param {number} y - y coordinate (0 = top)
+   * @param {number} index - 1D index of the pixel
    * @return {number[]} the value of this pixel
    */
-  getPixelXY(x, y) {
-    return this.getPixel(y * this.width + x);
+  getPixel(index) {
+    const value = new Array(this.channels);
+    const target = index * this.channels;
+    for (let i = 0; i < this.channels; i++) {
+      value[i] = this.data[target + i];
+    }
+    return value;
   },
 
   /**
@@ -95,22 +111,6 @@ const valueMethods = {
     }
     this.computed = null;
     return this;
-  },
-
-  /**
-   * Get the value of an entire pixel
-   * @memberof Image
-   * @instance
-   * @param {number} index - 1D index of the pixel
-   * @return {number[]} the value of this pixel
-   */
-  getPixel(index) {
-    const value = new Array(this.channels);
-    const target = index * this.channels;
-    for (let i = 0; i < this.channels; i++) {
-      value[i] = this.data[target + i];
-    }
-    return value;
   }
 };
 
