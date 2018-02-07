@@ -25,7 +25,7 @@ declare class Image {
     static isImage(object: any): boolean;
     static fromCanvas(canvas: HTMLCanvasElement): Image;
     static createFrom(other: Image, options: ImageConstructorOptions);
-    static load(image: (string|ArrayBuffer|Buffer|Uint8Array), options?: RequestInit)
+    static load(image: (string|ArrayBuffer|Uint8Array), options?: RequestInit)
 
     getRoiManager(): RoiManager;
     clone(): Image;
@@ -180,11 +180,11 @@ interface OutOrInplace {
 
 interface LevelOptions {
     channels?: SelectedChannels,
-    min: number,
-    max: number
+    min?: number,
+    max?: number
 }
 
-enum ImageKind {
+declare enum ImageKind {
     BINARY = 'BINARY',
     GREY = 'GREY',
     GREYA = 'GREYA',
@@ -194,14 +194,14 @@ enum ImageKind {
     CMYKA = 'CMYKA',
 }
 
-enum BitDepth {
+declare enum BitDepth {
     BINARY = 1,
     UINT8 = 8,
     UINT16 = 16,
     FLOAT32 = 32
 }
 
-enum ColorModel {
+declare enum ColorModel {
     GREY = 'GREY',
     RGB = 'RGB',
     HSL = 'HSL',
