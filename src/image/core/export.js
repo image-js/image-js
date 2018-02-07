@@ -193,29 +193,17 @@ const exportMethods = {
    * @return {Promise}
    */
   toBlob(type = 'image/png', quality = 0.8) {
-    return canvasToBlob(this.getCanvas({ originalData: true }), type, quality);
+    return canvasToBlob(this.getCanvas(), type, quality);
   },
 
   /**
    * Creates a new canvas element and draw the image inside it
    * @memberof Image
    * @instance
-   * @param {object} [options]
-   * @param {boolean} [options.originalData=false]
    * @return {Canvas}
    */
-  getCanvas(options = {}) {
-    let { originalData = false } = options;
-    let data;
-    if (!originalData) {
-      data = new ImageData(this.getRGBAData(), this.width, this.height);
-    } else {
-      this.checkProcessable('getInPlaceCanvas', {
-        channels: [4],
-        bitDepth: [8]
-      });
-      data = new ImageData(this.data, this.width, this.height);
-    }
+  getCanvas() {
+    const data = new ImageData(this.getRGBAData({ clamped: true }), this.width, this.height);
     let canvas = createCanvas(this.width, this.height);
     let ctx = canvas.getContext('2d');
     ctx.putImageData(data, 0, 0);

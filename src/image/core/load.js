@@ -79,14 +79,7 @@ function loadURL(url, options) {
 function loadPNG(data) {
   const png = decodePng(data);
   const bitDepth = png.bitDepth;
-  let bitmap = png.data;
-  if (bitDepth === 8) {
-    bitmap = new Uint8ClampedArray(
-      png.data.buffer,
-      png.data.byteOffset,
-      png.data.byteLength
-    );
-  }
+  const bitmap = png.data;
 
   const type = png.colourType;
   let components;

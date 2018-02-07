@@ -94,7 +94,7 @@ export function createPixelArray(size, components, alpha, channels, bitDepth, ma
       arr = new Uint8Array(Math.ceil(length / 8));
       break;
     case 8:
-      arr = new Uint8ClampedArray(length);
+      arr = new Uint8Array(length);
       break;
     case 16:
       arr = new Uint16Array(length);

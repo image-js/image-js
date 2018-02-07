@@ -39,10 +39,10 @@ export default function cmyk() {
     let magenta = (this.maxValue - green - black) / (1 - black / this.maxValue);
     let yellow = (this.maxValue - blue - black) / (1 - black / this.maxValue);
 
-    newImage.data[ptr++] = cyan;
-    newImage.data[ptr++] = magenta;
-    newImage.data[ptr++] = yellow;
-    newImage.data[ptr++] = black;
+    newImage.data[ptr++] = Math.round(cyan);
+    newImage.data[ptr++] = Math.round(magenta);
+    newImage.data[ptr++] = Math.round(yellow);
+    newImage.data[ptr++] = Math.round(black);
     if (this.alpha) {
       newImage.data[ptr++] = data[i + 3];
     }

@@ -44,7 +44,7 @@ const objectToString = Object.prototype.toString;
  *      to a parent image. This will be used in a crop or in the management
  *      of Region Of Interests (Roi) for exmaple
  * * data : an array that contains all the points of the image.
- *      Depending the bitDepth Uint8Array (1 bit), Uint8ClampedArray (8 bits),
+ *      Depending the bitDepth Uint8Array (1 bit), Uint8Array (8 bits),
  *      Uint16Array (16 bits), Float32Array (32 bits)
  *
  * In an image there are pixels and points:

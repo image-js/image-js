@@ -4,6 +4,7 @@ import Image from '../Image';
 import { validateArrayOfChannels } from '../../util/channel';
 import { validateKernel } from '../../util/kernel';
 import convolutionSeparable from '../operator/convolutionSeparable';
+import { clamp } from '../internal/clamp';
 
 import getSeparatedKernel from './getSeparatedKernel';
 
@@ -122,10 +123,7 @@ export default function convolution(kernel, options = {}) {
       for (x = 0; x < this.width; x++) {
         index = y * this.width + x;
         if (clamped) {
-          newImage.data[index * this.channels + c] = Math.min(
-            Math.max(tmpResult[index], 0),
-            newImage.maxValue
-          );
+          newImage.data[index * this.channels + c] = clamp(tmpResult[index], newImage);
         } else {
           newImage.data[index * this.channels + c] = tmpResult[index];
         }

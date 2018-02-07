@@ -2,6 +2,7 @@ import { GREY } from '../model/model';
 import { getOutputImage } from '../internal/getOutputImage';
 
 import { methods } from './greyAlgorithms';
+import { clamp } from '../internal/clamp';
 
 /**
  * Converts the current image to greyscale.
@@ -58,9 +59,9 @@ export default function grey(options = {}) {
   let ptr = 0;
   for (let i = 0; i < this.data.length; i += this.channels) {
     if (mergeAlpha) {
-      newImage.data[ptr++] = method(this.data, i, this) * this.data[i + this.components] / this.maxValue;
+      newImage.data[ptr++] = clamp(method(this.data, i, this) * this.data[i + this.components] / this.maxValue, this);
     } else {
-      newImage.data[ptr++] = method(this.data, i, this);
+      newImage.data[ptr++] = clamp(method(this.data, i, this), this);
       if (newImage.alpha) {
         newImage.data[ptr++] = this.data[i + this.components];
       }

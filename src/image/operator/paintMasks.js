@@ -62,7 +62,7 @@ export default function paintMasks(masks, options = {}) {
   }
 
   if (Array.isArray(labels) && labels.length > 0) {
-    let canvas = this.getCanvas({ originalData: true });
+    let canvas = this.getCanvas();
     let ctx = canvas.getContext('2d');
     ctx.fillStyle = labelColor;
     ctx.font = labelFont;
@@ -70,7 +70,7 @@ export default function paintMasks(masks, options = {}) {
       let position = (labelsPosition[i]) ? labelsPosition[i] : masks[i].position;
       ctx.fillText(labels[i], position[0], position[1]);
     }
-    this.data = ctx.getImageData(0, 0, this.width, this.height).data;
+    this.data = Uint8Array.from(ctx.getImageData(0, 0, this.width, this.height).data);
   }
 
   return this;

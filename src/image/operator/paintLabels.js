@@ -61,7 +61,7 @@ export default function paintLabels(labels, positions, options = {}) {
   if (!Array.isArray(font)) font = [font];
   if (!Array.isArray(rotate)) rotate = [rotate];
 
-  let canvas = this.getCanvas({ originalData: true });
+  let canvas = this.getCanvas();
   let ctx = canvas.getContext('2d');
   for (let i = 0; i < labels.length; i++) {
     ctx.save();
@@ -74,7 +74,7 @@ export default function paintLabels(labels, positions, options = {}) {
     ctx.fillText(labels[i], 0, 0);
     ctx.restore();
   }
-  this.data = ctx.getImageData(0, 0, this.width, this.height).data;
+  this.data = Uint8Array.from(ctx.getImageData(0, 0, this.width, this.height).data);
 
   return this;
 }

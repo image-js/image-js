@@ -8,78 +8,104 @@ import { RGB } from '../model/model';
  * * a color image (8 or 16 bits) with or without alpha channel in with RGB model
  * @instance
  * @memberof Image
- * @return {Uint8ClampedArray} - Array with the data
- * @example
- * var imageData = image.getRGBAData();
+ * @param {object} [options]
+ * @param {boolean} [options.clamped] - If true, the function will return a Uint8ClampedArray
+ * @return {Uint8Array|Uint8ClampedArray} - Array with the data
  */
-export default function getRGBAData() {
+export default function getRGBAData(options = {}) {
+  const { clamped } = options;
   this.checkProcessable('getRGBAData', {
     components: [1, 3],
     bitDepth: [1, 8, 16, 32]
   });
-  let size = this.size;
-  let newData = new Uint8ClampedArray(this.width * this.height * 4);
+  const arrayLength = this.width * this.height * 4;
+  let newData = clamped ? new Uint8ClampedArray(arrayLength) : new Uint8Array(arrayLength);
   if (this.bitDepth === 1) {
-    for (let i = 0; i < size; i++) {
-      let value = this.getBit(i);
-      newData[i * 4] = value * 255;
-      newData[i * 4 + 1] = value * 255;
-      newData[i * 4 + 2] = value * 255;
-    }
+    fillDataFromBinary(this, newData);
   } else if (this.bitDepth === 32) {
-    // map minimum to 0 and maximum to 255
     this.checkProcessable('getRGBAData', { alpha: 0 });
     if (this.components === 1) {
-      const min = this.min;
-      const max = this.max;
-      const range = max - min;
-      for (let i = 0; i < size; i++) {
-        const val = (255 * (this.data[i * this.channels] - min) / range) >> 0;
-        newData[i * 4] = val;
-        newData[i * 4 + 1] = val;
-        newData[i * 4 + 2] = val;
-      }
+      fillDataFromGrey32(this, newData);
     } else if (this.components === 3) {
       this.checkProcessable('getRGBAData', { colorModel: [RGB] });
-      const min = Math.min(...this.min);
-      const max = Math.max(...this.max);
-      const range = max - min;
-      for (let i = 0; i < size; i++) {
-        const val1 = (255 * (this.data[i * this.channels] - min) / range) >> 0;
-        const val2 = (255 * (this.data[i * this.channels + 1] - min) / range) >> 0;
-        const val3 = (255 * (this.data[i * this.channels + 2] - min) / range) >> 0;
-        newData[i * 4] = val1;
-        newData[i * 4 + 1] = val2;
-        newData[i * 4 + 2] = val3;
-      }
+      fillDataFromRGB32(this, newData);
     }
   } else {
     if (this.components === 1) {
-      for (let i = 0; i < size; i++) {
-        newData[i * 4] = this.data[i * this.channels] >>> (this.bitDepth - 8);
-        newData[i * 4 + 1] = this.data[i * this.channels] >>> (this.bitDepth - 8);
-        newData[i * 4 + 2] = this.data[i * this.channels] >>> (this.bitDepth - 8);
-      }
+      fillDataFromGrey(this, newData);
     } else if (this.components === 3) {
       this.checkProcessable('getRGBAData', { colorModel: [RGB] });
-      if (this.colorModel === RGB) {
-        for (let i = 0; i < size; i++) {
-          newData[i * 4] = this.data[i * this.channels] >>> (this.bitDepth - 8);
-          newData[i * 4 + 1] = this.data[i * this.channels + 1] >>> (this.bitDepth - 8);
-          newData[i * 4 + 2] = this.data[i * this.channels + 2] >>> (this.bitDepth - 8);
-        }
-      }
+      fillDataFromRGB(this, newData);
     }
   }
-  if (this.alpha) {
+  if (this.alpha === 1) {
     this.checkProcessable('getRGBAData', { bitDepth: [8, 16] });
-    for (let i = 0; i < size; i++) {
-      newData[i * 4 + 3] = this.data[i * this.channels + this.components] >> (this.bitDepth - 8);
-    }
+    copyAlpha(this, newData);
   } else {
-    for (let i = 0; i < size; i++) {
-      newData[i * 4 + 3] = 255;
-    }
+    fillAlpha(this, newData);
   }
   return newData;
+}
+
+function fillDataFromBinary(image, newData) {
+  for (let i = 0; i < image.size; i++) {
+    const value = image.getBit(i);
+    newData[i * 4] = value * 255;
+    newData[i * 4 + 1] = value * 255;
+    newData[i * 4 + 2] = value * 255;
+  }
+}
+
+function fillDataFromGrey32(image, newData) {
+  const min = image.min[0];
+  const max = image.max[0];
+  const range = max - min;
+  for (let i = 0; i < image.size; i++) {
+    const val = Math.floor(255 * (image.data[i] - min) / range);
+    newData[i * 4] = val;
+    newData[i * 4 + 1] = val;
+    newData[i * 4 + 2] = val;
+  }
+}
+
+function fillDataFromRGB32(image, newData) {
+  const min = Math.min(...image.min);
+  const max = Math.max(...image.max);
+  const range = max - min;
+  for (let i = 0; i < image.size; i++) {
+    const val1 = Math.floor(255 * (image.data[i * 3] - min) / range);
+    const val2 = Math.floor(255 * (image.data[i * 3 + 1] - min) / range);
+    const val3 = Math.floor(255 * (image.data[i * 3 + 2] - min) / range);
+    newData[i * 4] = val1;
+    newData[i * 4 + 1] = val2;
+    newData[i * 4 + 2] = val3;
+  }
+}
+
+function fillDataFromGrey(image, newData) {
+  for (let i = 0; i < image.size; i++) {
+    newData[i * 4] = image.data[i * image.channels] >>> (image.bitDepth - 8);
+    newData[i * 4 + 1] = image.data[i * image.channels] >>> (image.bitDepth - 8);
+    newData[i * 4 + 2] = image.data[i * image.channels] >>> (image.bitDepth - 8);
+  }
+}
+
+function fillDataFromRGB(image, newData) {
+  for (let i = 0; i < image.size; i++) {
+    newData[i * 4] = image.data[i * image.channels] >>> (image.bitDepth - 8);
+    newData[i * 4 + 1] = image.data[i * image.channels + 1] >>> (image.bitDepth - 8);
+    newData[i * 4 + 2] = image.data[i * image.channels + 2] >>> (image.bitDepth - 8);
+  }
+}
+
+function copyAlpha(image, newData) {
+  for (let i = 0; i < image.size; i++) {
+    newData[i * 4 + 3] = image.data[i * image.channels + image.components] >> (image.bitDepth - 8);
+  }
+}
+
+function fillAlpha(image, newData) {
+  for (let i = 0; i < image.size; i++) {
+    newData[i * 4 + 3] = 255;
+  }
 }
