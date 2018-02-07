@@ -1,5 +1,5 @@
-// Type definitions for image-js 0.18.1
-// Project: image-js
+// Type definitions for image-js 0.18
+// Project: https://github.com/image-js/image-js
 // Definitions by: Michaël Zasso <https://github.com/targos>
 
 // Global variable exposed by UMD bundle
