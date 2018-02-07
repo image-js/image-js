@@ -96,7 +96,7 @@ import minimalBoundingRectangle from './compute/minimalBoundingRectangle';
 export default function extend(Image) {
   let inPlace = { inPlace: true };
 
-  Image.extendMethod('invert', invertFilter, inPlace);
+  Image.extendMethod('invert', invertFilter);
   Image.extendMethod('abs', absFilter, inPlace);
   Image.extendMethod('level', levelFilter, inPlace);
   Image.extendMethod('add', addFilter, inPlace);
