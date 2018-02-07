@@ -27,6 +27,7 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "module": "./src/index.js",
+  "types": "./index.d.ts",
   "browser": {
     "./src/worker/worker.js": "./src/browser/worker/worker.js",
     "./src/image/core/environment.js": "./src/browser/environment.js",
