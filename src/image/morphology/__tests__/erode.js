@@ -119,7 +119,7 @@ describe('check the erode function', function () {
     `);
   });
 
-  it('checks fro binary image 5x3 with vertical kernel', function () {
+  it('checks from binary image 5x3 with vertical kernel', function () {
     const kernel = [[1, 1, 1]];
     const mask = new Image(3, 5, binary`
       110
