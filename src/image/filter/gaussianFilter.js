@@ -1,15 +1,12 @@
-import convolution from '../operator/convolution';
-
 /**
- * Apply a gaussian filter to the image
+ * Apply a gaussian filter to the image.
  * @memberof Image
  * @instance
  * @param {object} options
- * @param {number} [options.radius=1] : number of pixels around the current pixel
- * @param {number} [options.sigma]
- * @param {number[]|string[]} [options.channels] : to which channel to apply the filter. By default all but alpha.
+ * @param {number} [options.radius=1] - Number of pixels around the current pixel.
+ * @param {number} [options.sigma] - Sigma parameter for the gaussian.
+ * @param {number[]|string[]} [options.channels] - To which channel to apply the filter.
  * @param {string} [options.border='copy']
- * @param {boolean} [options.algorithm='auto'] : Algorithm for convolution {@link Image#convolution}
  * @return {Image}
  */
 export default function gaussianFilter(options = {}) {
@@ -25,7 +22,7 @@ export default function gaussianFilter(options = {}) {
   });
 
   const kernel = getKernel(radius, sigma);
-  return convolution.call(this, [kernel, kernel], { border, channels, algorithm: 'separable' });
+  return this.convolution([kernel, kernel], { border, channels, algorithm: 'separable' });
 }
 
 function getKernel(radius, sigma) {

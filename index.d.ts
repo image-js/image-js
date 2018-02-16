@@ -63,7 +63,7 @@ declare class Image {
     // extend
     invert(options?: OutOrInplace): Image;
     abs(options?: OutOrInplace): Image;
-    level(options?: LevelOptions): this;
+    level(options?: {channels?: SelectedChannels, min?: number, max?: number}): this;
     // add
     // subtract
     // subtractImage
@@ -74,9 +74,9 @@ declare class Image {
     // flipX
     // flipY
 
-    blurFilter(options?: {radius: number}): Image;
-    // medianFilter
-    // gaussianFilter
+    blurFilter(options?: {radius?: number}): Image;
+    medianFilter(options?: {radius?: number, border?: BorderHandling, channels?: SelectedChannels}): Image;
+    gaussianFilter(options?: GaussianFilterOptions): Image;
     // sobelFilter
     // gradientFilter
     // scharrFilter
@@ -124,7 +124,7 @@ declare class Image {
     // getBestMatch
 
     // cannyEdge
-    // convolution
+    convolution(kernel: Kernel, options?: ConvolutionOptions): Image;
     // extract
     // floodFill
     // paintLabels
@@ -177,15 +177,26 @@ interface OutOrInplace {
     out?: Image
 }
 
-interface LevelOptions {
-    channels?: SelectedChannels,
-    min?: number,
-    max?: number
-}
-
 interface MorphologicalOptions {
     kernel?: BinaryKernel,
     iterations?: number
+}
+
+interface GaussianFilterOptions {
+    radius?: number,
+    sigma?: number,
+    channels?: SelectedChannels,
+    border?: BorderHandling,
+    algorithm?: ConvolutionAlgorithm
+}
+
+interface ConvolutionOptions {
+    channels?: SelectedChannels,
+    bitDepth?: BitDepth,
+    normalize?: boolean,
+    divisor?: number,
+    border?: BorderHandling,
+    algorithm?: ConvolutionAlgorithm
 }
 
 declare enum ImageKind {
@@ -211,6 +222,17 @@ declare enum ColorModel {
     HSL = 'HSL',
     HSV = 'HSV',
     CMYK = 'CMYK'
+}
+
+declare enum BorderHandling {
+    COPY = 'copy'
+}
+
+declare enum ConvolutionAlgorithm {
+    AUTO = 'auto',
+    DIRECT = 'direct',
+    FFT = 'fft',
+    SEPARABLE = 'separable'
 }
 
 type DataArray = Uint8Array | Uint16Array | Float32Array;

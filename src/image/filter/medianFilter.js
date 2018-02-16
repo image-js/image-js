@@ -4,25 +4,28 @@ import { validateArrayOfChannels } from '../../util/channel';
 import Image from '../Image';
 
 /**
-* Each pixel of the image becomes the median of the neightbour
- * pixels.
+ * Each pixel of the image becomes the median of the neighbor pixels.
  * @memberof Image
-* @instance
-* @param {object} options
-* @param {SelectedChannels} [options.channels] Specify which channels should be processed
-* @param {number} [options.radius=1] distance of the square to take the mean of.
-* @param {string} [options.border='copy'] algorithm that will be applied after to deal with borders
-* @return {Image}
-*/
+ * @instance
+ * @param {object} options
+ * @param {SelectedChannels} [options.channels] - Specify which channels should be processed.
+ * @param {number} [options.radius=1] - Distance of the square to take the mean of.
+ * @param {string} [options.border='copy'] - Algorithm that will be applied after to deal with borders.
+ * @return {Image}
+ */
 export default function medianFilter(options = {}) {
-  let { radius = 1, channels, border = 'copy' } = options;
+  let {
+    radius = 1,
+    border = 'copy',
+    channels
+  } = options;
 
-  this.checkProcessable('median', {
+  this.checkProcessable('medianFilter', {
     bitDepth: [8, 16]
   });
 
   if (radius < 1) {
-    throw new Error('Kernel radius should be greater than 0');
+    throw new Error('radius must be greater than 0');
   }
 
   channels = validateArrayOfChannels(this, channels, true);
@@ -62,6 +65,4 @@ export default function medianFilter(options = {}) {
   newImage.setBorder({ size: [kWidth, kHeight], algorithm: border });
 
   return newImage;
-
-}//End median function
-
+}
