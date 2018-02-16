@@ -36,7 +36,8 @@
   "files": [
     "dist",
     "lib",
-    "src"
+    "src",
+    "index.d.ts"
   ],
   "scripts": {
     "build": "npm-run-all clean-dist --parallel compile build-dist",
