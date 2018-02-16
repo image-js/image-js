@@ -42,14 +42,16 @@ export default function erode(options = {}) {
 
   let result = this;
   for (let i = 0; i < iterations; i++) {
-    const newImage = Image.createFrom(result);
     if (this.bitDepth === 1) {
       if (onlyOnes) {
+        const newImage = result.clone();
         result = erodeOnceBinaryOnlyOnes(result, newImage, kernel.length, kernel[0].length);
       } else {
+        const newImage = Image.createFrom(result);
         result = erodeOnceBinary(result, newImage, kernel);
       }
     } else {
+      const newImage = Image.createFrom(result);
       result = erodeOnce(result, newImage, kernel, channels);
     }
   }
@@ -124,33 +126,23 @@ function erodeOnceBinaryOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
   }
 
   for (let y = 0; y < img.height; y++) {
-    let start = y - radiusY;
     for (let x = 0; x < img.width; x++) {
-      let min = 1;
-      for (let h = 0; h < kernelHeight; h++) {
-        const hh = start + h;
-        if (hh < 0 || hh >= img.height) continue;
-        if (img.getBitXY(x, hh) === 0) {
-          min = 0;
+      minList[x] = 1;
+      for (let h = Math.max(0, y - radiusY); h < Math.min(img.height, y + radiusY + 1); h++) {
+        if (img.getBitXY(x, h) === 0) {
+          minList[x] = 0;
           break;
         }
       }
-      minList[x] = min;
     }
 
     for (let x = 0; x < img.width; x++) {
-      let min = 1;
-      for (let ii = 0; ii < kernelWidth; ii++) {
-        let i = ii - radiusX + x;
-        if (i < 0 || i >= img.width) continue;
+      if (newImage.getBitXY(x, y) === 0) continue;
+      for (let i = Math.max(0, x - radiusX); i < Math.min(img.width, x + radiusX + 1); i++) {
         if (minList[i] === 0) {
-          min = 0;
+          newImage.clearBitXY(x, y);
           break;
         }
-      }
-
-      if (min === 1) {
-        newImage.setBitXY(x, y);
       }
     }
   }

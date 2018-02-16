@@ -42,14 +42,16 @@ export default function dilate(options = {}) {
 
   let result = this;
   for (let i = 0; i < iterations; i++) {
-    const newImage = Image.createFrom(result);
     if (this.bitDepth === 1) {
       if (onlyOnes) {
+        const newImage = result.clone();
         result = dilateOnceBinaryOnlyOnes(result, newImage, kernel.length, kernel[0].length);
       } else {
+        const newImage = Image.createFrom(result);
         result = dilateOnceBinary(result, newImage, kernel);
       }
     } else {
+      const newImage = Image.createFrom(result);
       result = dilateOnce(result, newImage, kernel, channels);
     }
   }
@@ -124,33 +126,23 @@ function dilateOnceBinaryOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
   }
 
   for (let y = 0; y < img.height; y++) {
-    let start = y - radiusY;
     for (let x = 0; x < img.width; x++) {
-      let max = 0;
-      for (let h = 0; h < kernelHeight; h++) {
-        const hh = start + h;
-        if (hh < 0 || hh >= img.height) continue;
-        if (img.getBitXY(x, hh) === 1) {
-          max = 1;
+      maxList[x] = 0;
+      for (let h = Math.max(0, y - radiusY); h < Math.min(img.height, y + radiusY + 1); h++) {
+        if (img.getBitXY(x, h) === 1) {
+          maxList[x] = 1;
           break;
         }
       }
-      maxList[x] = max;
     }
 
     for (let x = 0; x < img.width; x++) {
-      let max = 0;
-      for (let ii = 0; ii < kernelWidth; ii++) {
-        let i = ii - radiusX + x;
-        if (i < 0 || i >= img.width) continue;
+      if (newImage.getBitXY(x, y) === 1) continue;
+      for (let i = Math.max(0, x - radiusX); i < Math.min(img.width, x + radiusX + 1); i++) {
         if (maxList[i] === 1) {
-          max = 1;
+          newImage.setBitXY(x, y);
           break;
         }
-      }
-
-      if (max === 1) {
-        newImage.setBitXY(x, y);
       }
     }
   }
