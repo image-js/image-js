@@ -2,9 +2,10 @@ import Image from '../Image';
 import { validateArrayOfChannels } from '../../util/channel';
 
 /**
- * Erosion is one of two fundamental operations (the other being dilation) in morphological image processing from which all other morphological operations are based (from Wikipedia).
+ * Dilation is one of two fundamental operations (with erosion) in morphological image processing from which all other morphological operations are based (from Wikipedia).
+ * Replaces each value with it's local maximum among the pixels with a kernel value of 1
  * http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html
- * https://en.wikipedia.org/wiki/Erosion_(morphology)
+ * https://en.wikipedia.org/wiki/Dilation_(morphology)
  * @memberof Image
  * @instance
  * @param {object} [options]
