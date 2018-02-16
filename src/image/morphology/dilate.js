@@ -1,5 +1,4 @@
 import Image from '../Image';
-import { validateArrayOfChannels } from '../../util/channel';
 
 /**
  * Dilation is one of two fundamental operations (with erosion) in morphological image processing from which all other morphological operations are based (from Wikipedia).
@@ -9,7 +8,6 @@ import { validateArrayOfChannels } from '../../util/channel';
  * @memberof Image
  * @instance
  * @param {object} [options]
- * @param {SelectedChannels} [options.channels] - Selected channels
  * @param {Matrix} [options.kernel]
  * @param {number} [options.iterations] - The number of successive erosions
  * @return {Image}
@@ -17,13 +15,13 @@ import { validateArrayOfChannels } from '../../util/channel';
 export default function dilate(options = {}) {
   let {
     kernel = [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
-    iterations = 1,
-    channels
+    iterations = 1
   } = options;
 
   this.checkProcessable('dilate', {
     bitDepth: [1, 8, 16],
-    channel: [1]
+    components: 1,
+    alpha: 0
   });
   if (kernel.columns % 2 === 0 || kernel.rows % 2 === 0) {
     throw new TypeError('dilate: The number of rows and columns of the kernel must be odd');
@@ -39,8 +37,6 @@ export default function dilate(options = {}) {
     }
   }
 
-  channels = validateArrayOfChannels(this, channels, true);
-
   let result = this;
   for (let i = 0; i < iterations; i++) {
     if (this.bitDepth === 1) {
@@ -51,38 +47,70 @@ export default function dilate(options = {}) {
         const newImage = Image.createFrom(result);
         result = dilateOnceBinary(result, newImage, kernel);
       }
+    } else if (onlyOnes) {
+      const newImage = Image.createFrom(result);
+      result = dilateOnceGreyOnlyOnes(result, newImage, kernel.length, kernel[0].length);
     } else {
       const newImage = Image.createFrom(result);
-      result = dilateOnce(result, newImage, kernel, channels);
+      result = dilateOnceGrey(result, newImage, kernel);
     }
   }
   return result;
 }
 
-function dilateOnce(img, newImage, kernel, channels) {
+function dilateOnceGrey(img, newImage, kernel) {
   const kernelWidth = kernel.length;
   const kernelHeight = kernel[0].length;
   let radiusX = (kernelWidth - 1) / 2;
   let radiusY = (kernelHeight - 1) / 2;
-  for (let channel = 0; channel < channels.length; channel++) {
-    let c = channels[channel];
-    for (let y = 0; y < img.height; y++) {
-      for (let x = 0; x < img.width; x++) {
-        let max = Number.MIN_SAFE_INTEGER;
-        for (let jj = 0; jj < kernelHeight; jj++) {
-          for (let ii = 0; ii < kernelWidth; ii++) {
-            if (kernel[ii][jj] !== 1) continue;
-            let i = ii - radiusX + x;
-            let j = jj - radiusY + y;
-            if (i < 0 || j < 0 || i >= img.width || j >= img.height) continue;
-            let index = (j * img.width + i) * img.channels + c;
-            const value = img.data[index];
-            if (value > max) max = value;
-          }
+  for (let y = 0; y < img.height; y++) {
+    for (let x = 0; x < img.width; x++) {
+      let max = 0;
+      for (let jj = 0; jj < kernelHeight; jj++) {
+        for (let ii = 0; ii < kernelWidth; ii++) {
+          if (kernel[ii][jj] !== 1) continue;
+          let i = ii - radiusX + x;
+          let j = jj - radiusY + y;
+          if (i < 0 || j < 0 || i >= img.width || j >= img.height) continue;
+          const value = img.getValueXY(i, j, 0);
+          if (value > max) max = value;
         }
-        let index = (y * img.width + x) * img.channels + c;
-        newImage.data[index] = max;
       }
+      newImage.setValueXY(x, y, 0, max);
+    }
+  }
+  return newImage;
+}
+
+function dilateOnceGreyOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
+  const radiusX = (kernelWidth - 1) / 2;
+  const radiusY = (kernelHeight - 1) / 2;
+
+  const maxList = [];
+  for (let x = 0; x < img.width; x++) {
+    maxList.push(0);
+  }
+
+  for (let y = 0; y < img.height; y++) {
+    for (let x = 0; x < img.width; x++) {
+      let max = 0;
+      for (let h = Math.max(0, y - radiusY); h < Math.min(img.height, y + radiusY + 1); h++) {
+        const value = img.getValueXY(x, h, 0);
+        if (value > max) {
+          max = value;
+        }
+      }
+      maxList[x] = max;
+    }
+
+    for (let x = 0; x < img.width; x++) {
+      let max = 0;
+      for (let i = Math.max(0, x - radiusX); i < Math.min(img.width, x + radiusX + 1); i++) {
+        if (maxList[i] > max) {
+          max = maxList[i];
+        }
+      }
+      newImage.setValueXY(x, y, 0, max);
     }
   }
   return newImage;

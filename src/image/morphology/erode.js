@@ -1,5 +1,4 @@
 import Image from '../Image';
-import { validateArrayOfChannels } from '../../util/channel';
 
 /**
  * Erosion is one of two fundamental operations (with dilation) in morphological image processing from which all other morphological operations are based (from Wikipedia).
@@ -9,7 +8,6 @@ import { validateArrayOfChannels } from '../../util/channel';
  * @memberof Image
  * @instance
  * @param {object} [options]
- * @param {SelectedChannels} [options.channels] - Selected channels
  * @param {Matrix} [options.kernel]
  * @param {number} [options.iterations] - The number of successive erosions
  * @return {Image}
@@ -17,13 +15,13 @@ import { validateArrayOfChannels } from '../../util/channel';
 export default function erode(options = {}) {
   let {
     kernel = [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
-    iterations = 1,
-    channels
+    iterations = 1
   } = options;
 
   this.checkProcessable('erode', {
     bitDepth: [1, 8, 16],
-    channel: [1]
+    components: 1,
+    alpha: 0
   });
   if (kernel.columns % 2 === 0 || kernel.rows % 2 === 0) {
     throw new TypeError('erode: The number of rows and columns of the kernel must be odd');
@@ -39,8 +37,6 @@ export default function erode(options = {}) {
     }
   }
 
-  channels = validateArrayOfChannels(this, channels, true);
-
   let result = this;
   for (let i = 0; i < iterations; i++) {
     if (this.bitDepth === 1) {
@@ -51,38 +47,70 @@ export default function erode(options = {}) {
         const newImage = Image.createFrom(result);
         result = erodeOnceBinary(result, newImage, kernel);
       }
+    } else if (onlyOnes) {
+      const newImage = Image.createFrom(result);
+      result = erodeOnceGreyOnlyOnes(result, newImage, kernel.length, kernel[0].length);
     } else {
       const newImage = Image.createFrom(result);
-      result = erodeOnce(result, newImage, kernel, channels);
+      result = erodeOnceGrey(result, newImage, kernel);
     }
   }
   return result;
 }
 
-function erodeOnce(img, newImage, kernel, channels) {
+function erodeOnceGrey(img, newImage, kernel) {
   const kernelWidth = kernel.length;
   const kernelHeight = kernel[0].length;
   let radiusX = (kernelWidth - 1) / 2;
   let radiusY = (kernelHeight - 1) / 2;
-  for (let channel = 0; channel < channels.length; channel++) {
-    let c = channels[channel];
-    for (let y = 0; y < img.height; y++) {
-      for (let x = 0; x < img.width; x++) {
-        let min = Number.MAX_SAFE_INTEGER;
-        for (let jj = 0; jj < kernelHeight; jj++) {
-          for (let ii = 0; ii < kernelWidth; ii++) {
-            if (kernel[ii][jj] !== 1) continue;
-            let i = ii - radiusX + x;
-            let j = jj - radiusY + y;
-            if (i < 0 || j < 0 || i >= img.width || j >= img.height) continue;
-            let index = (j * img.width + i) * img.channels + c;
-            const value = img.data[index];
-            if (value < min) min = value;
-          }
+  for (let y = 0; y < img.height; y++) {
+    for (let x = 0; x < img.width; x++) {
+      let min = img.maxValue;
+      for (let jj = 0; jj < kernelHeight; jj++) {
+        for (let ii = 0; ii < kernelWidth; ii++) {
+          if (kernel[ii][jj] !== 1) continue;
+          let i = ii - radiusX + x;
+          let j = jj - radiusY + y;
+          if (i < 0 || j < 0 || i >= img.width || j >= img.height) continue;
+          const value = img.getValueXY(i, j, 0);
+          if (value < min) min = value;
         }
-        let index = (y * img.width + x) * img.channels + c;
-        newImage.data[index] = min;
       }
+      newImage.setValueXY(x, y, 0, min);
+    }
+  }
+  return newImage;
+}
+
+function erodeOnceGreyOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
+  const radiusX = (kernelWidth - 1) / 2;
+  const radiusY = (kernelHeight - 1) / 2;
+
+  const minList = [];
+  for (let x = 0; x < img.width; x++) {
+    minList.push(0);
+  }
+
+  for (let y = 0; y < img.height; y++) {
+    for (let x = 0; x < img.width; x++) {
+      let min = img.maxValue;
+      for (let h = Math.max(0, y - radiusY); h < Math.min(img.height, y + radiusY + 1); h++) {
+        const value = img.getValueXY(x, h, 0);
+        if (value < min) {
+          min = value;
+        }
+      }
+      minList[x] = min;
+    }
+
+    for (let x = 0; x < img.width; x++) {
+      let min = img.maxValue;
+      for (let i = Math.max(0, x - radiusX); i < Math.min(img.width, x + radiusX + 1); i++) {
+        if (minList[i] < min) {
+          min = minList[i];
+        }
+      }
+      newImage.setValueXY(x, y, 0, min);
     }
   }
   return newImage;
