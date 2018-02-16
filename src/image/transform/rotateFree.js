@@ -59,8 +59,8 @@ function rotateNearestNeighbor(thisImage, newImage, incrementX, incrementY, x0, 
         let y = Math.round((j - y0) * cos + ((i - x0) * sin) + y0) + incrementY;
 
         if (x < 0 || x >= thisImage.width || y < 0 || y >= thisImage.height) {
-          if (thisImage.alpha) {
-            newImage.setValueXY(i, j, c, thisImage.alpha);
+          if (thisImage.alpha === 1 && c === thisImage.channels - 1) {
+            newImage.setValueXY(i, j, c, 0);
           } else {
             newImage.setValueXY(i, j, c, thisImage.maxValue);
           }
@@ -75,8 +75,8 @@ function rotateNearestNeighbor(thisImage, newImage, incrementX, incrementY, x0, 
 
 function rotateBilinear(thisImage, newImage, incrementX, incrementY, x0, y0, cos, sin) {
   let stride = thisImage.width * thisImage.channels;
-  for (let i = 0; i < newImage.width; i += 1) {
-    for (let j = 0; j < newImage.height; j += 1) {
+  for (let j = 0; j < newImage.height; j++) {
+    for (let i = 0; i < newImage.width; i++) {
       let x = ((i - x0) * cos - (j - y0) * sin + x0) + incrementX;
       let y = ((j - y0) * cos + (i - x0) * sin + y0) + incrementY;
       let x1 = x | 0;
@@ -85,8 +85,8 @@ function rotateBilinear(thisImage, newImage, incrementX, incrementY, x0, y0, cos
       let yDiff = y - y1;
       for (let c = 0; c < thisImage.channels; c++) {
         if (x < 0 || x >= thisImage.width || y < 0 || y >= thisImage.height) {
-          if (thisImage.alpha) {
-            newImage.setValueXY(i, j, c, thisImage.alpha);
+          if (thisImage.alpha === 1 && c === thisImage.channels - 1) {
+            newImage.setValueXY(i, j, c, 0);
           } else {
             newImage.setValueXY(i, j, c, thisImage.maxValue);
           }
