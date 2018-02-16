@@ -24,7 +24,7 @@ export default function dilate(options = {}) {
     bitDepth: [1, 8, 16],
     channel: [1]
   });
-  if ((kernel.columns - 1) % 2 === 1 || (kernel.rows - 1) % 2 === 1) {
+  if (kernel.columns % 2 === 0 || kernel.rows % 2 === 0) {
     throw new TypeError('dilate: The number of rows and columns of the kernel must be odd');
   }
 
