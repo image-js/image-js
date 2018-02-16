@@ -23,8 +23,8 @@ import backgroundFilter from './filter/background';
 // morphology transforms
 import dilate from './morphology/dilate';
 import erode from './morphology/erode';
-import opening from './morphology/opening';
-import closing from './morphology/closing';
+import open from './morphology/open';
+import close from './morphology/close';
 import topHat from './morphology/topHat';
 import blackHat from './morphology/blackHat';
 import morphologicalGradient from './morphology/morphologicalGradient';
@@ -118,8 +118,8 @@ export default function extend(Image) {
 
   Image.extendMethod('dilate', dilate);
   Image.extendMethod('erode', erode);
-  Image.extendMethod('opening', opening);
-  Image.extendMethod('closing', closing);
+  Image.extendMethod('open', open);
+  Image.extendMethod('close', close);
   Image.extendMethod('topHat', topHat);
   Image.extendMethod('blackHat', blackHat);
   Image.extendMethod('morphologicalGradient', morphologicalGradient);

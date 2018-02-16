@@ -1,15 +1,16 @@
 import Image from '../Image';
 
 /**
- * Erosion is one of two fundamental operations (with dilation) in morphological image processing from which all other morphological operations are based (from Wikipedia).
- * Replaces each value with it's local minimum among the pixels with a kernel value of 1
+ * Erosion is one of two fundamental operations (with dilatation) in morphological
+ * image processing from which all other morphological operations are based (from Wikipedia).
+ * Replaces each value with it's local minimum among the pixels with a kernel value of 1.
  * http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html
  * https://en.wikipedia.org/wiki/Erosion_(morphology)
  * @memberof Image
  * @instance
  * @param {object} [options]
- * @param {Matrix} [options.kernel]
- * @param {number} [options.iterations] - The number of successive erosions
+ * @param {Array<Array<number>>} [options.kernel] - The kernel can only have ones and zeros. Default: [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
+ * @param {number} [options.iterations=1] - The number of successive erosions
  * @return {Image}
  */
 export default function erode(options = {}) {

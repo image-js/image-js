@@ -4,7 +4,7 @@ import binary from 'test/binary';
 import Matrix from 'ml-matrix';
 
 
-describe('check the closing function', function () {
+describe('check the close function', function () {
   it('check for GREY image 5x5', function () {
     let kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]);
     let image = new Image(5, 5,
@@ -18,7 +18,7 @@ describe('check the closing function', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.closing({ kernel: kernel }).data)).toEqual([
+    expect(Array.from(image.close({ kernel }).data)).toEqual([
       255, 255, 255, 255, 255,
       255, 0, 0, 0, 255,
       255, 0, 0, 0, 255,
@@ -40,7 +40,7 @@ describe('check the closing function', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.closing({ kernel: kernel, iterations: 2 }).data)).toEqual([
+    expect(Array.from(image.close({ kernel, iterations: 2 }).data)).toEqual([
       255, 255, 255, 255, 255,
       255, 0, 0, 0, 255,
       255, 0, 0, 0, 255,
@@ -68,7 +68,7 @@ describe('check the closing function', function () {
       11011
     `, { kind: 'BINARY' });
 
-    expect(mask.closing().data).toEqual(
+    expect(mask.close().data).toEqual(
       binary`
         11111
         10001

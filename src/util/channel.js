@@ -7,7 +7,7 @@ import * as Model from '../image/model/model';
  * * string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
  * * [number] : array of channels as numbers
  * * [string] : array of channels as one letter string
- * @typedef {undefined|number|string|[number]|[string]} SelectedChannels
+ * @typedef {undefined|number|string|Array<number>|Array<string>} SelectedChannels
  */
 
 export function validateArrayOfChannels(image, options = {}) {

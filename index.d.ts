@@ -11,7 +11,7 @@ declare class Image {
     data: DataArray;
     size: number;
     components: number;
-    alpha: (0|1);
+    alpha: BinaryValue;
     bitDepth: BitDepth;
     maxValue: number;
     colorModel: ColorModel;
@@ -41,11 +41,11 @@ declare class Image {
     setPixel(index: number, value: Array<number>): this;
 
     // bitMethods
-    getBit(index: number): BitValue;
+    getBit(index: number): BinaryValue;
     setBit(index: number): void;
     clearBit(index: number): void;
     toggleBit(index: number): void;
-    getBitXY(x: number, y: number): BitValue;
+    getBitXY(x: number, y: number): BinaryValue;
     setBitXY(x: number, y: number): void;
     clearBitXY(x: number, y: number): void;
     toggleBitXY(x: number, y: number): void;
@@ -81,13 +81,13 @@ declare class Image {
     // gradientFilter
     // scharrFilter
 
-    // dilate
-    // erode
-    // opening
-    // closing
-    // topHat
-    // blackHat
-    // morphologicalGradient
+    dilate(options?: MorphologicalOptions): Image;
+    erode(options?: MorphologicalOptions): Image;
+    open(options?: MorphologicalOptions): Image;
+    close(options?: MorphologicalOptions): Image;
+    topHat(options?: MorphologicalOptions): Image;
+    blackHat(options?: MorphologicalOptions): Image;
+    morphologicalGradient(options?: MorphologicalOptions): Image;
 
     // warpingFourPoints
     // crop
@@ -184,6 +184,11 @@ interface LevelOptions {
     max?: number
 }
 
+interface MorphologicalOptions {
+    kernel?: BinaryKernel,
+    iterations?: number
+}
+
 declare enum ImageKind {
     BINARY = 'BINARY',
     GREY = 'GREY',
@@ -210,8 +215,10 @@ declare enum ColorModel {
 }
 
 type DataArray = Uint8Array | Uint16Array | Float32Array;
-type BitValue = 0 | 1;
+type BinaryValue = 0 | 1;
 type SelectedChannels = number | string | Array<number> | Array<string>;
+type BinaryKernel = Array<Array<BinaryValue>>;
+type Kernel = Array<Array<number>>;
 
 export { Image }
 export default Image;

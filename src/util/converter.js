@@ -1,6 +1,6 @@
 /**
- * @private
  * Converts a factor value to a number between 0 and 1
+ * @private
  * @param {string|number} value
  * @return {number}
  */
@@ -16,8 +16,8 @@ export function getFactor(value) {
 }
 
 /**
- * @private
  * We can specify a threshold as "0.4", "40%" or 123
+ * @private
  * @param {string|number} value
  * @param {number} maxValue
  * @return {number}
