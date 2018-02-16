@@ -1,14 +1,12 @@
 import Roi from './Roi';
 
-// TODO check the links for the reference in the docs (@see)
-
 /**
- * A layer that is caracterised by a RoiMap (@see RoiMap) and that will
+ * A layer that is caracterised by a {@link RoiMap} and that will
  * generated automatically the corresponding ROI.
  * ROI should be a continuous
  * surface (it is not tested when it is not continous ...)
  * From the roiMap, the RoiLayer will create the corresponding
- * ROI (@see Roi).
+ * {@link ROI}.
  *
  * @class RoiLayer
  * @private

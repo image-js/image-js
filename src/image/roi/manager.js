@@ -186,7 +186,7 @@ export default class RoiManager {
 
   /**
      * Returns an array of masks
-     * See @links Roi.getMask for the options
+     * See {@link Roi.getMask} for the options
      * @param {object} [options]
      * @return {Image[]} Retuns an array of masks (1 bit Image)
      */
@@ -201,10 +201,10 @@ export default class RoiManager {
   }
 
   /**
-     *
-     * @param {object} [options]
-     * @return {number[]}
-     */
+   *
+   * @param {object} [options]
+   * @return {number[]}
+   */
   getData(options = {}) {
     let opt = Object.assign({}, this._options, options);
     this._assertLayerWithLabel(opt.label);
@@ -212,15 +212,15 @@ export default class RoiManager {
   }
 
   /**
-     * Paint the ROI on a copy of the image adn return this image.
-     * For painting options @links Image.paintMasks
-     * For ROI selection options @links RoiManager.getMasks
-     * @param {object} [options] - all the options to select ROIs
-     * @param {string} [options.labelProperty] - Paint a mask property on the image.
-     *                                  May be any property of the ROI like
-     *                                  for example id, surface, width, height, meanX, meanY.
-     * @return {Image} - The painted RGBA 8 bits image
-     */
+   * Paint the ROI on a copy of the image and return this image.
+   * For painting options {@link Image.paintMasks}
+   * For ROI selection options, see {@link RoiManager.getMasks}
+   * @param {object} [options] - all the options to select ROIs
+   * @param {string} [options.labelProperty] - Paint a mask property on the image.
+   *                                  May be any property of the ROI like
+   *                                  for example id, surface, width, height, meanX, meanY.
+   * @return {Image} - The painted RGBA 8 bits image
+   */
   paint(options = {}) {
     let {
       labelProperty

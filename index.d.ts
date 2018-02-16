@@ -77,9 +77,9 @@ declare class Image {
     blurFilter(options?: {radius?: number}): Image;
     medianFilter(options?: {radius?: number, border?: BorderHandling, channels?: SelectedChannels}): Image;
     gaussianFilter(options?: GaussianFilterOptions): Image;
-    // sobelFilter
-    // gradientFilter
-    // scharrFilter
+    gradientFilter(options?: GradientFilterOptions): Image;
+    sobelFilter(options?: GradientOptions): Image;
+    scharrFilter(options?: GradientOptions): Image;
 
     dilate(options?: MorphologicalOptions): Image;
     erode(options?: MorphologicalOptions): Image;
@@ -199,6 +199,18 @@ interface ConvolutionOptions {
     algorithm?: ConvolutionAlgorithm
 }
 
+interface GradientOptions {
+    direction?: GradientDirection,
+    border?: BorderHandling,
+    channels?: SelectedChannels,
+    bitDepth?: BitDepth
+}
+
+interface GradientFilterOptions extends GradientOptions {
+    kernelX?: Kernel,
+    kernelY?: Kernel
+}
+
 declare enum ImageKind {
     BINARY = 'BINARY',
     GREY = 'GREY',
@@ -233,6 +245,12 @@ declare enum ConvolutionAlgorithm {
     DIRECT = 'direct',
     FFT = 'fft',
     SEPARABLE = 'separable'
+}
+
+declare enum GradientDirection {
+    WIDTH = 'x',
+    HEIGHT = 'y',
+    BOTH = 'xy'
 }
 
 type DataArray = Uint8Array | Uint16Array | Float32Array;
