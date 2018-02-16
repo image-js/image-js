@@ -10,7 +10,7 @@ describe('Scale - nearest neighbor', function () {
   tests.forEach(function (test) {
     it(`5x5 -> ${test}x${test}`, async () => {
       const expected = await load(`resize/5x5a_${test}.png`);
-      expect(getHash(original.scale({
+      expect(getHash(original.resize({
         height: test,
         width: test
       }))).toBe(getHash(expected));

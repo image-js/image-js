@@ -90,21 +90,21 @@ declare class Image {
     morphologicalGradient(options?: MorphologicalOptions): Image;
 
     // warpingFourPoints
-    // crop
+    crop(options?: {x?: number, y?: number, width?: number, height?: number}): Image;
     // cropAlpha
-    // scale
+    resize(options?: {width?: number, height?: number, factor?: number, interpolation?: InterpolationAlgorithm, preserveAspectRatio?: boolean}): Image;
     // hsv
     // hsl
     // cmyk
     // rgba8
-    // grey
-    // mask
+    grey(options?: {algorithm?: GreyAlgorithm, keepAlpha?: boolean, mergeAlpha?: boolean, out?: Image}): Image;
+    mask(options?: {algorithm?: ThresholdAlgorithm|'threshold', threshold?: number, useAlpha?: boolean, invert?: boolean}): Image;
     // pad
     // colorDepth
     // setBorder
-    // rotate
-    // rotateLeft
-    // rotateRight
+    rotate(angle: number, options?: {interpolation?: InterpolationAlgorithm}): Image;
+    rotateLeft(): Image;
+    rotateRight(): Image;
 
     // getRow
     // getColumn
@@ -247,10 +247,51 @@ declare enum ConvolutionAlgorithm {
     SEPARABLE = 'separable'
 }
 
+declare enum GreyAlgorithm {
+    LUMA709 = 'luma709',
+    LUMA601 = 'luma601',
+    MAXIMUM = 'maximum',
+    MINIMUM = 'minimum',
+    AVERAGE = 'average',
+    MINMAX = 'minmax',
+    RED = 'red',
+    GREEN = 'green',
+    BLUE = 'blue',
+    CYAN = 'cyan',
+    MAGENTA = 'magenta',
+    YELLOW = 'yellow',
+    BLACK = 'black',
+    HUE ='hue',
+    SATURATION = 'saturation',
+    LIGHTNESS = 'lightness'
+}
+
+declare enum ThresholdAlgorithm {
+    HUANG = 'huang',
+    INTERMODES = 'intermodes',
+    ISODATA = 'isodata',
+    LI = 'li',
+    MAX_ENTROPY = 'maxentropy',
+    MEAN = 'mean',
+    MIN_ERROR = 'minerror',
+    MOMENTS = 'moments',
+    OTSU = 'otsu',
+    PERCENTILE = 'percentile',
+    RENYI_ENTROPY = 'renyientropy',
+    SHANBHAG = 'shanbhag',
+    TRIANGLE = 'triangle',
+    YEN = 'yen'
+}
+
 declare enum GradientDirection {
     WIDTH = 'x',
     HEIGHT = 'y',
     BOTH = 'xy'
+}
+
+declare enum InterpolationAlgorithm {
+    NEAREST_NEIGHBOR = 'nearestNeighbor',
+    BILINEAR = 'bilinear'
 }
 
 type DataArray = Uint8Array | Uint16Array | Float32Array;

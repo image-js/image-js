@@ -1,8 +1,8 @@
 import { GREY } from '../model/model';
 import { getOutputImage } from '../internal/getOutputImage';
+import { clamp } from '../internal/clamp';
 
 import { methods } from './greyAlgorithms';
-import { clamp } from '../internal/clamp';
 
 /**
  * Converts the current image to greyscale.
@@ -17,9 +17,6 @@ import { clamp } from '../internal/clamp';
  * @param {boolean} [options.keepAlpha=false] - If true, the RGB values are treated
  *          separately from the alpha channel and the method returns a GREYA image.
  * @param {boolean} [options.mergeAlpha=true] - If true, the alpha channel will be used to scale the grey pixel.
- * @param {boolean} [options.allowGrey=false] - By default only RGB images are allowed.
- *          If true grey images are also allowed and will either return a copy or
- *          apply the alpha channel depending the options
  * @param {Image} [options.out]
  * @return {Image}
  */

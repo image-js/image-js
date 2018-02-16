@@ -11,7 +11,7 @@ const suite = new Benchmark.Suite;
 const filename = 'cells/cells.jpg';
 
 Image.load(path.join(__dirname, '../test/img', filename)).then(function (img) {
-    img = img.scale({factor: 0.25});
+    img = img.resize({factor: 0.25});
     suite
         .add('direct', function () {
             img.gaussianFilter({algorithm: 'direct', radius: 17});

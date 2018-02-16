@@ -33,7 +33,7 @@ import morphologicalGradient from './morphology/morphologicalGradient';
 import warpingFourPoints from './transform/warping';
 import crop from './transform/crop';
 import cropAlpha from './transform/cropAlpha';
-import scale from './transform/scale/scale';
+import resize from './transform/resize/resize';
 import hsv from './transform/hsv';
 import hsl from './transform/hsl';
 import cmyk from './transform/cmyk';
@@ -126,7 +126,7 @@ export default function extend(Image) {
   Image.extendMethod('warpingFourPoints', warpingFourPoints);
   Image.extendMethod('crop', crop);
   Image.extendMethod('cropAlpha', cropAlpha);
-  Image.extendMethod('scale', scale);
+  Image.extendMethod('resize', resize).extendMethod('scale', resize);
   Image.extendMethod('hsv', hsv);
   Image.extendMethod('hsl', hsl);
   Image.extendMethod('cmyk', cmyk);

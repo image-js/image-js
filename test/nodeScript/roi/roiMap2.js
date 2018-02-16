@@ -3,7 +3,7 @@
 var Image = require('../../..');
 
 Image.load('./test/img/moon/nocrop/BloodMoonTest-6.png').then(function (img) {
-    img = img.scale({factor:4});
+    img = img.resize({factor:4});
     var roiManager = img.getRoiManager();
     var mask = img.grey().mask();
 

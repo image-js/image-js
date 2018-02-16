@@ -1,5 +1,5 @@
 /**
- * Nearest neighbor scaling algorithm
+ * Nearest neighbor resizing algorithm
  * @private
  * @param {Image} newImage
  * @param {number} newWidth

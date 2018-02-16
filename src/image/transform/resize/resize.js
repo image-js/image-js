@@ -5,7 +5,7 @@ import { validInterpolations, checkInterpolation } from '../../internal/checks';
 import nearestNeighbor from './nearestNeighbor';
 
 /**
- * Rescale an image
+ * Resize an image
  * @memberof Image
  * @instance
  * @param {object} [options]
@@ -16,7 +16,7 @@ import nearestNeighbor from './nearestNeighbor';
  * @param {boolean} [options.preserveAspectRatio=true] - preserve width/height ratio if only one of them is defined
  * @return {Image}
  */
-export default function scale(options = {}) {
+export default function resize(options = {}) {
   const {
     factor = 1,
     interpolation = validInterpolations.nearestneighbor,
@@ -60,7 +60,7 @@ export default function scale(options = {}) {
       nearestNeighbor.call(this, newImage, width, height);
       break;
     default:
-      throw new Error(`unsupported scale interpolation: ${interpolationToUse}`);
+      throw new Error(`unsupported resize interpolation: ${interpolationToUse}`);
   }
 
   return newImage;

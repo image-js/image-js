@@ -27,14 +27,14 @@ describe('getIntersection', function () {
     expect(intersectNull.whitePixelsMask2).toHaveLength(4);
 
     //scale second roi s.t. one pixel intersects
-    let mask4 = mask3.scale({ factor: 2 });
+    let mask4 = mask3.resize({ factor: 2 });
     let intersectOnePx = mask2.getIntersection(mask4);
     expect(intersectOnePx.commonWhitePixels).toHaveLength(1);
     expect(intersectOnePx.whitePixelsMask1).toHaveLength(4);
     expect(intersectOnePx.whitePixelsMask2).toHaveLength(16);
 
     //scale first roi s.t. one pixel intersects
-    let mask5 = mask2.scale({ factor: 2 });
+    let mask5 = mask2.resize({ factor: 2 });
     let intersectOnePxInverse = mask3.getIntersection(mask5);
     expect(intersectOnePxInverse.commonWhitePixels).toHaveLength(1);
     expect(intersectOnePxInverse.whitePixelsMask1).toHaveLength(4);
