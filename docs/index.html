@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>image-js 0.18.0 | Documentation</title>
+  <title>image-js 0.19.0 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -14,7 +14,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>image-js</h3>
-          <div class='mb1'><code>0.18.0</code></div>
+          <div class='mb1'><code>0.19.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -139,9 +139,9 @@
                       </a></li>
                       
                       <li><a
-                        href='#imageclosing'
+                        href='#imageclose'
                         class='regular pre-open'>
-                        #closing
+                        #close
                       </a></li>
                       
                       <li><a
@@ -178,12 +178,6 @@
                         href='#imageconvolution'
                         class='regular pre-open'>
                         #convolution
-                      </a></li>
-                      
-                      <li><a
-                        href='#imageconvolutionfft'
-                        class='regular pre-open'>
-                        #convolutionFft
                       </a></li>
                       
                       <li><a
@@ -541,9 +535,9 @@
                       </a></li>
                       
                       <li><a
-                        href='#imageopening'
+                        href='#imageopen'
                         class='regular pre-open'>
-                        #opening
+                        #open
                       </a></li>
                       
                       <li><a
@@ -601,6 +595,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#imageresize'
+                        class='regular pre-open'>
+                        #resize
+                      </a></li>
+                      
+                      <li><a
                         href='#imagergba8'
                         class='regular pre-open'>
                         #rgba8
@@ -628,12 +628,6 @@
                         href='#imagesave'
                         class='regular pre-open'>
                         #save
-                      </a></li>
-                      
-                      <li><a
-                        href='#imagescale'
-                        class='regular pre-open'>
-                        #scale
                       </a></li>
                       
                       <li><a
@@ -1114,6 +1108,16 @@
               
                 
                 <li><a
+                  href='#greyalgorithm'
+                  class="">
+                  GreyAlgorithm
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
                   href='#interpolationalgorithm'
                   class="">
                   InterpolationAlgorithm
@@ -1162,7 +1166,7 @@
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L166-L379'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L168-L367'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -1192,7 +1196,7 @@ The png library and tiff library included in image-js allow to deal correctly wi
 to a parent image. This will be used in a crop or in the management
 of Region Of Interests (Roi) for exmaple</li>
 <li>data : an array that contains all the points of the image.
-Depending the bitDepth Uint8Array (1 bit), Uint8ClampedArray (8 bits),
+Depending the bitDepth Uint8Array (1 bit), Uint8Array (8 bits),
 Uint16Array (16 bits), Float32Array (32 bits)</li>
 </ul>
 <p>In an image there are pixels and points:</p>
@@ -1390,7 +1394,7 @@ pill.save(<span class="hljs-string">'pill.jpg'</span>);
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L325-L338'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L331-L338'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -1481,7 +1485,7 @@ pill.save(<span class="hljs-string">'pill.jpg'</span>);
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L311-L315'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L317-L321'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -1557,7 +1561,7 @@ pill.save(<span class="hljs-string">'pill.jpg'</span>);
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/load.js#L27-L37'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/load.js#L27-L37'>
       <span>src/image/core/load.js</span>
       </a>
     
@@ -1650,7 +1654,7 @@ or buffer containing the binary data
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>abs()</span>
+            <span class='code strong strong truncate'>abs(options = {})</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -1660,27 +1664,76 @@ or buffer containing the binary data
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/abs.js#L7-L19'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/abs.js#L13-L20'>
       <span>src/image/filter/abs.js</span>
       </a>
     
   </div>
   
 
-  <p>Calculate the absolute values of an image. Only works on 32-bit images.</p>
+  <p>Calculate the absolute values of an image.
+Only works on 32-bit images.</p>
 
 
-  <div class='pre p1 fill-light mt0'>abs(): this</div>
-  
-  
-
-  
-  
-  
-  
+  <div class='pre p1 fill-light mt0'>abs(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
   
   
 
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.inPlace</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
+  
+    (default <code>false</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.out</span> <code class='quiet'><a href="#image">Image</a>?</code>
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -1688,7 +1741,7 @@ or buffer containing the binary data
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>this</code>:
+      <code><a href="#image">Image</a></code>:
         
 
       
@@ -1723,7 +1776,7 @@ or buffer containing the binary data
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/add.js#L12-L42'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/add.js#L12-L42'>
       <span>src/image/filter/add.js</span>
       </a>
     
@@ -1808,7 +1861,7 @@ or buffer containing the binary data
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L253-L253'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L255-L255'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -1868,7 +1921,7 @@ or buffer containing the binary data
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/background.js#L13-L27'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/background.js#L13-L27'>
       <span>src/image/filter/background.js</span>
       </a>
     
@@ -1960,7 +2013,7 @@ or buffer containing the binary data
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L259-L259'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L261-L261'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -2020,7 +2073,7 @@ or buffer containing the binary data
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/morphology/blackHat.js#L18-L42'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/morphology/blackHat.js#L16-L37'>
       <span>src/image/morphology/blackHat.js</span>
       </a>
     
@@ -2030,7 +2083,7 @@ or buffer containing the binary data
   <p>This function is the black top hat (also called black hat).
 In mathematical morphology and digital image processing,
 top-hat transform is an operation that extracts small elements and details from given images.
-The black top-hat transform is defined dually as the difference between the closing and the input image.
+The black top-hat transform is defined dually as the difference between the closed and the input image.
 Top-hat transforms are used for various image processing tasks, such as feature extraction, background equalization,
 image enhancement, and others. (Wikipedia)
 <a href="http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html">http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html</a></p>
@@ -2072,17 +2125,32 @@ image enhancement, and others. (Wikipedia)
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.kernel</span> <code class='quiet'>Matrix?</code>
+  <td class='break-word'><span class='code bold'>options.kernel</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>>?</code>
   </td>
-  <td class='break-word'><span></span></td>
+  <td class='break-word'><span>The kernel can only have ones and zeros. Default: [
+[
+1, 1, 1
+]
+, 
+[
+1, 1, 1
+]
+, 
+[
+1, 1, 1
+]
+]
+</span></td>
 </tr>
 
 
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.iterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?</code>
+  <td class='break-word'><span class='code bold'>options.iterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
+  
+    (default <code>1</code>)
   </td>
-  <td class='break-word'><span>number of iterations of the morphological transform
+  <td class='break-word'><span>Number of iterations of the morphological transform
 </span></td>
 </tr>
 
@@ -2126,7 +2194,7 @@ image enhancement, and others. (Wikipedia)
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>blurFilter(options)</span>
+            <span class='code strong strong truncate'>blurFilter(options = {})</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -2136,17 +2204,17 @@ image enhancement, and others. (Wikipedia)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/blurFilter.js#L12-L32'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/blurFilter.js#L9-L30'>
       <span>src/image/filter/blurFilter.js</span>
       </a>
     
   </div>
   
 
-  <p>Apply a filter to blur the image</p>
+  <p>Blurs the image by averaging the neighboring pixels.</p>
 
 
-  <div class='pre p1 fill-light mt0'>blurFilter(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="#image">Image</a></div>
+  <div class='pre p1 fill-light mt0'>blurFilter(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
   
   
 
@@ -2163,7 +2231,7 @@ image enhancement, and others. (Wikipedia)
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?
             = <code>{}</code>)</code>
 	    
           </div>
@@ -2186,7 +2254,7 @@ image enhancement, and others. (Wikipedia)
   
     (default <code>1</code>)
   </td>
-  <td class='break-word'><span>: number of pixels around the current pixel to average
+  <td class='break-word'><span>Number of pixels around the current pixel to average
 </span></td>
 </tr>
 
@@ -2240,7 +2308,7 @@ image enhancement, and others. (Wikipedia)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/operator/cannyEdge.js#L9-L11'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/operator/cannyEdge.js#L9-L11'>
       <span>src/image/operator/cannyEdge.js</span>
       </a>
     
@@ -2315,7 +2383,7 @@ image enhancement, and others. (Wikipedia)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L277-L277'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L279-L279'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -2375,7 +2443,7 @@ image enhancement, and others. (Wikipedia)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/checkProcessable.js#L8-L58'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/checkProcessable.js#L8-L58'>
       <span>src/image/core/checkProcessable.js</span>
       </a>
     
@@ -2452,7 +2520,7 @@ image enhancement, and others. (Wikipedia)
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/bitMethods.js#L33-L35'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/bitMethods.js#L33-L35'>
       <span>src/image/core/bitMethods.js</span>
       </a>
     
@@ -2523,7 +2591,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/bitMethods.js#L80-L82'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/bitMethods.js#L80-L82'>
       <span>src/image/core/bitMethods.js</span>
       </a>
     
@@ -2601,7 +2669,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L366-L369'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L354-L357'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -2650,11 +2718,11 @@ This method can only be called on binary images.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='imageclosing'>
+    <div class='border-bottom' id='imageclose'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>closing(options = {})</span>
+            <span class='code strong strong truncate'>close(options = {})</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -2664,18 +2732,20 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/morphology/closing.js#L13-L33'>
-      <span>src/image/morphology/closing.js</span>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/morphology/close.js#L13-L33'>
+      <span>src/image/morphology/close.js</span>
       </a>
     
   </div>
   
 
-  <p>In mathematical morphology, the closing of a set A by a structuring element B is the erosion of the dilation of that set (Wikipedia). In image processing, closing is, together with opening, the basic workhorse of morphological noise removal. Opening removes small objects, while closing removes small holes.
+  <p>In mathematical morphology, the closing of a set A by a structuring element B is the erosion of the dilation of that set (Wikipedia).
+In image processing, closing is, together with opening, the basic workhorse of morphological noise removal.
+Opening removes small objects, while closing removes small holes.
 <a href="http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html">http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html</a></p>
 
 
-  <div class='pre p1 fill-light mt0'>closing(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
+  <div class='pre p1 fill-light mt0'>close(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
   
   
 
@@ -2711,17 +2781,32 @@ This method can only be called on binary images.</p>
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.kernel</span> <code class='quiet'>Matrix?</code>
+  <td class='break-word'><span class='code bold'>options.kernel</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>>?</code>
   </td>
-  <td class='break-word'><span></span></td>
+  <td class='break-word'><span>The kernel can only have ones and zeros. Default: [
+[
+1, 1, 1
+]
+, 
+[
+1, 1, 1
+]
+, 
+[
+1, 1, 1
+]
+]
+</span></td>
 </tr>
 
 
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.iterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?</code>
+  <td class='break-word'><span class='code bold'>options.iterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
+  
+    (default <code>1</code>)
   </td>
-  <td class='break-word'><span>number of iterations of the morphological transform
+  <td class='break-word'><span>Number of iterations of the morphological transform
 </span></td>
 </tr>
 
@@ -2775,7 +2860,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/cmyk.js#L18-L52'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/cmyk.js#L18-L52'>
       <span>src/image/transform/cmyk.js</span>
       </a>
     
@@ -2847,7 +2932,7 @@ The source image has to be RGB !</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/colorDepth.js#L15-L62'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/colorDepth.js#L15-L62'>
       <span>src/image/transform/colorDepth.js</span>
       </a>
     
@@ -2933,7 +3018,7 @@ Currently only conversion from 1, 8 or 16 bits towards 8 or 16 bits are allowed.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L271-L271'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L273-L273'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -2993,7 +3078,7 @@ Currently only conversion from 1, 8 or 16 bits towards 8 or 16 bits are allowed.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/combineChannels.js#L14-L48'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/combineChannels.js#L14-L48'>
       <span>src/image/utility/combineChannels.js</span>
       </a>
     
@@ -3115,7 +3200,7 @@ Currently only conversion from 1, 8 or 16 bits towards 8 or 16 bits are allowed.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L247-L247'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L249-L249'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -3176,7 +3261,7 @@ A grey image has 1 component. An RGB image has 3 components.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/operator/convolution.js#L25-L153'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/operator/convolution.js#L26-L151'>
       <span>src/image/operator/convolution.js</span>
       </a>
     
@@ -3326,156 +3411,6 @@ The 'auto' option will try to separate the kernel if that is possible.
       </div>
     </div>
   
-    <div class='border-bottom' id='imageconvolutionfft'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>convolutionFft(kernel, options = {})</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/operator/convolutionFft.js#L13-L17'>
-      <span>src/image/operator/convolutionFft.js</span>
-      </a>
-    
-  </div>
-  
-
-  
-
-  <div class='pre p1 fill-light mt0'>convolutionFft(kernel: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>kernel</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?
-            = <code>{}</code>)</code>
-	    
-          </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.channels</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>?</code>
-  </td>
-  <td class='break-word'><span>Array of channels to treat. Defaults to all channels
-</span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.bitDepth</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
-  
-    (default <code>this.bitDepth</code>)
-  </td>
-  <td class='break-word'><span>A new bit depth can be specified. This allows to use 32 bits to avoid clamping of floating-point numbers.
-</span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.normalize</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
-  
-    (default <code>false</code>)
-  </td>
-  <td class='break-word'><span></span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.divisor</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
-  
-    (default <code>1</code>)
-  </td>
-  <td class='break-word'><span></span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.border</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
-  
-    (default <code>&#39;copy&#39;</code>)
-  </td>
-  <td class='break-word'><span></span></td>
-</tr>
-
-
-              
-            </tbody>
-          </table>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#image">Image</a></code>:
-        
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
     <div class='border-bottom' id='imagecopyimage'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -3490,8 +3425,8 @@ The 'auto' option will try to separate the kernel if that is possible.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/copy.js#L10-L24'>
-      <span>src/image/utility/copy.js</span>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/internal/copy.js#L10-L24'>
+      <span>src/image/internal/copy.js</span>
       </a>
     
   </div>
@@ -3582,7 +3517,7 @@ The 'auto' option will try to separate the kernel if that is possible.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/countAlphaPixels.js#L9-L31'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/countAlphaPixels.js#L9-L31'>
       <span>src/image/compute/countAlphaPixels.js</span>
       </a>
     
@@ -3686,7 +3621,7 @@ The 'auto' option will try to separate the kernel if that is possible.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/crop.js#L19-L67'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/crop.js#L19-L67'>
       <span>src/image/transform/crop.js</span>
       </a>
     
@@ -3832,7 +3767,7 @@ The 'auto' option will try to separate the kernel if that is possible.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/cropAlpha.js#L10-L35'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/cropAlpha.js#L10-L35'>
       <span>src/image/transform/cropAlpha.js</span>
       </a>
     
@@ -3936,7 +3871,7 @@ This removes lines and columns where the alpha channel is lower than a threshold
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L234-L234'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L236-L236'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -3996,16 +3931,18 @@ This removes lines and columns where the alpha channel is lower than a threshold
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/morphology/dilate.js#L16-L42'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/morphology/dilate.js#L16-L60'>
       <span>src/image/morphology/dilate.js</span>
       </a>
     
   </div>
   
 
-  <p>Erosion is one of two fundamental operations (the other being dilation) in morphological image processing from which all other morphological operations are based (from Wikipedia).
+  <p>Dilatation is one of two fundamental operations (with erosion) in morphological
+image processing from which all other morphological operations are based (from Wikipedia).
+Replaces each value with it's local maximum among the pixels with a kernel value of 1.
 <a href="http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html">http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html</a>
-<a href="https://en.wikipedia.org/wiki/Erosion_(morphology">https://en.wikipedia.org/wiki/Erosion_(morphology</a>)</p>
+<a href="https://en.wikipedia.org/wiki/Dilation_(morphology">https://en.wikipedia.org/wiki/Dilation_(morphology</a>)</p>
 
 
   <div class='pre p1 fill-light mt0'>dilate(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
@@ -4044,24 +3981,30 @@ This removes lines and columns where the alpha channel is lower than a threshold
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.channels</span> <code class='quiet'><a href="#selectedchannels">SelectedChannels</a>?</code>
+  <td class='break-word'><span class='code bold'>options.kernel</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>>?</code>
   </td>
-  <td class='break-word'><span>Selected channels
+  <td class='break-word'><span>The kernel can only have ones and zeros. Default: [
+[
+1, 1, 1
+]
+, 
+[
+1, 1, 1
+]
+, 
+[
+1, 1, 1
+]
+]
 </span></td>
 </tr>
 
 
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.kernel</span> <code class='quiet'>Matrix?</code>
-  </td>
-  <td class='break-word'><span></span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.iterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?</code>
+  <td class='break-word'><span class='code bold'>options.iterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
+  
+    (default <code>1</code>)
   </td>
   <td class='break-word'><span>The number of successive erosions
 </span></td>
@@ -4117,7 +4060,7 @@ This removes lines and columns where the alpha channel is lower than a threshold
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/divide.js#L11-L40'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/divide.js#L11-L40'>
       <span>src/image/filter/divide.js</span>
       </a>
     
@@ -4201,14 +4144,16 @@ This removes lines and columns where the alpha channel is lower than a threshold
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/morphology/erode.js#L16-L42'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/morphology/erode.js#L16-L60'>
       <span>src/image/morphology/erode.js</span>
       </a>
     
   </div>
   
 
-  <p>Erosion is one of two fundamental operations (the other being dilation) in morphological image processing from which all other morphological operations are based (from Wikipedia).
+  <p>Erosion is one of two fundamental operations (with dilatation) in morphological
+image processing from which all other morphological operations are based (from Wikipedia).
+Replaces each value with it's local minimum among the pixels with a kernel value of 1.
 <a href="http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html">http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html</a>
 <a href="https://en.wikipedia.org/wiki/Erosion_(morphology">https://en.wikipedia.org/wiki/Erosion_(morphology</a>)</p>
 
@@ -4249,24 +4194,30 @@ This removes lines and columns where the alpha channel is lower than a threshold
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.channels</span> <code class='quiet'><a href="#selectedchannels">SelectedChannels</a>?</code>
+  <td class='break-word'><span class='code bold'>options.kernel</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>>?</code>
   </td>
-  <td class='break-word'><span>Selected channels
+  <td class='break-word'><span>The kernel can only have ones and zeros. Default: [
+[
+1, 1, 1
+]
+, 
+[
+1, 1, 1
+]
+, 
+[
+1, 1, 1
+]
+]
 </span></td>
 </tr>
 
 
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.kernel</span> <code class='quiet'>Matrix?</code>
-  </td>
-  <td class='break-word'><span></span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.iterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?</code>
+  <td class='break-word'><span class='code bold'>options.iterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
+  
+    (default <code>1</code>)
   </td>
   <td class='break-word'><span>The number of successive erosions
 </span></td>
@@ -4322,7 +4273,7 @@ This removes lines and columns where the alpha channel is lower than a threshold
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/operator/extract.js#L13-L72'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/operator/extract.js#L13-L72'>
       <span>src/image/operator/extract.js</span>
       </a>
     
@@ -4434,7 +4385,7 @@ a relative position and this part of the original image will be extracted.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/flipX.js#L7-L33'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/flipX.js#L7-L33'>
       <span>src/image/filter/flipX.js</span>
       </a>
     
@@ -4497,7 +4448,7 @@ a relative position and this part of the original image will be extracted.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/flipY.js#L7-L28'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/flipY.js#L7-L28'>
       <span>src/image/filter/flipY.js</span>
       </a>
     
@@ -4560,14 +4511,14 @@ a relative position and this part of the original image will be extracted.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/gaussianFilter.js#L15-L29'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/gaussianFilter.js#L12-L26'>
       <span>src/image/filter/gaussianFilter.js</span>
       </a>
     
   </div>
   
 
-  <p>Apply a gaussian filter to the image</p>
+  <p>Apply a gaussian filter to the image.</p>
 
 
   <div class='pre p1 fill-light mt0'>gaussianFilter(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="#image">Image</a></div>
@@ -4610,7 +4561,7 @@ a relative position and this part of the original image will be extracted.</p>
   
     (default <code>1</code>)
   </td>
-  <td class='break-word'><span>: number of pixels around the current pixel
+  <td class='break-word'><span>Number of pixels around the current pixel.
 </span></td>
 </tr>
 
@@ -4619,7 +4570,8 @@ a relative position and this part of the original image will be extracted.</p>
                 <tr>
   <td class='break-word'><span class='code bold'>options.sigma</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?</code>
   </td>
-  <td class='break-word'><span></span></td>
+  <td class='break-word'><span>Sigma parameter for the gaussian.
+</span></td>
 </tr>
 
 
@@ -4627,7 +4579,7 @@ a relative position and this part of the original image will be extracted.</p>
                 <tr>
   <td class='break-word'><span class='code bold'>options.channels</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)?</code>
   </td>
-  <td class='break-word'><span>: to which channel to apply the filter. By default all but alpha.
+  <td class='break-word'><span>To which channel to apply the filter.
 </span></td>
 </tr>
 
@@ -4639,18 +4591,6 @@ a relative position and this part of the original image will be extracted.</p>
     (default <code>&#39;copy&#39;</code>)
   </td>
   <td class='break-word'><span></span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.algorithm</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
-  
-    (default <code>&#39;auto&#39;</code>)
-  </td>
-  <td class='break-word'><span>: Algorithm for convolution 
-<a href="#imageconvolution">Image#convolution</a>
-</span></td>
 </tr>
 
 
@@ -4703,7 +4643,7 @@ a relative position and this part of the original image will be extracted.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/bitMethods.js#L11-L13'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/bitMethods.js#L11-L13'>
       <span>src/image/core/bitMethods.js</span>
       </a>
     
@@ -4782,7 +4722,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/bitMethods.js#L57-L59'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/bitMethods.js#L57-L59'>
       <span>src/image/core/bitMethods.js</span>
       </a>
     
@@ -4859,7 +4799,7 @@ This method can only be called on binary images.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getCanvas(options = {})</span>
+            <span class='code strong strong truncate'>getCanvas()</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -4869,7 +4809,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/export.js#L191-L207'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/export.js#L185-L191'>
       <span>src/image/core/export.js</span>
       </a>
     
@@ -4879,7 +4819,7 @@ This method can only be called on binary images.</p>
   <p>Creates a new canvas element and draw the image inside it</p>
 
 
-  <div class='pre p1 fill-light mt0'>getCanvas(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): Canvas</div>
+  <div class='pre p1 fill-light mt0'>getCanvas(): Canvas</div>
   
   
 
@@ -4890,46 +4830,6 @@ This method can only be called on binary images.</p>
   
   
 
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?
-            = <code>{}</code>)</code>
-	    
-          </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.originalData</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
-  
-    (default <code>false</code>)
-  </td>
-  <td class='break-word'><span></span></td>
-</tr>
-
-
-              
-            </tbody>
-          </table>
-          
-        </div>
-      
-    </div>
   
 
   
@@ -4972,7 +4872,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/getChannel.js#L15-L48'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/getChannel.js#L15-L48'>
       <span>src/image/utility/getChannel.js</span>
       </a>
     
@@ -5089,7 +4989,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/getClosestCommonParent.js#L8-L59'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/getClosestCommonParent.js#L8-L59'>
       <span>src/image/utility/getClosestCommonParent.js</span>
       </a>
     
@@ -5166,7 +5066,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/colorHistogram.js#L11-L47'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/colorHistogram.js#L11-L47'>
       <span>src/image/compute/colorHistogram.js</span>
       </a>
     
@@ -5278,7 +5178,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/getColumn.js#L10-L26'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/getColumn.js#L10-L26'>
       <span>src/image/utility/getColumn.js</span>
       </a>
     
@@ -5362,7 +5262,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/histogram.js#L14-L26'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/histogram.js#L14-L26'>
       <span>src/image/compute/histogram.js</span>
       </a>
     
@@ -5483,7 +5383,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/histogram.js#L47-L57'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/histogram.js#L47-L57'>
       <span>src/image/compute/histogram.js</span>
       </a>
     
@@ -5600,7 +5500,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/getIntersection.js#L8-L58'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/getIntersection.js#L8-L58'>
       <span>src/image/utility/getIntersection.js</span>
       </a>
     
@@ -5677,7 +5577,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/getMatrix.js#L10-L31'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/getMatrix.js#L10-L31'>
       <span>src/image/utility/getMatrix.js</span>
       </a>
     
@@ -5777,7 +5677,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/moment.js#L9-L24'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/moment.js#L9-L24'>
       <span>src/image/compute/moment.js</span>
       </a>
     
@@ -5863,7 +5763,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/valueMethods.js#L107-L114'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/valueMethods.js#L90-L97'>
       <span>src/image/core/valueMethods.js</span>
       </a>
     
@@ -5940,7 +5840,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/getPixelsArray.js#L8-L24'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/getPixelsArray.js#L8-L24'>
       <span>src/image/utility/getPixelsArray.js</span>
       </a>
     
@@ -6004,7 +5904,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/getPixelsGrid.js#L10-L64'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/getPixelsGrid.js#L10-L64'>
       <span>src/image/utility/getPixelsGrid.js</span>
       </a>
     
@@ -6124,7 +6024,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/valueMethods.js#L79-L81'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/valueMethods.js#L66-L68'>
       <span>src/image/core/valueMethods.js</span>
       </a>
     
@@ -6210,7 +6110,7 @@ placed in the slot 0, 32 to 63 in slot 1, ...
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/relativePosition.js#L18-L40'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/relativePosition.js#L18-L40'>
       <span>src/image/compute/relativePosition.js</span>
       </a>
     
@@ -6320,7 +6220,7 @@ to the further parent
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getRGBAData()</span>
+            <span class='code strong strong truncate'>getRGBAData(options = {})</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -6330,7 +6230,7 @@ to the further parent
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/getRGBAData.js#L15-L85'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/getRGBAData.js#L15-L48'>
       <span>src/image/core/getRGBAData.js</span>
       </a>
     
@@ -6346,7 +6246,7 @@ The source image may be:</p>
 </ul>
 
 
-  <div class='pre p1 fill-light mt0'>getRGBAData(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray">Uint8ClampedArray</a></div>
+  <div class='pre p1 fill-light mt0'>getRGBAData(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray">Uint8ClampedArray</a>)</div>
   
   
 
@@ -6357,6 +6257,45 @@ The source image may be:</p>
   
   
 
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.clamped</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>?</code>
+  </td>
+  <td class='break-word'><span>If true, the function will return a Uint8ClampedArray
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
   
 
   
@@ -6364,7 +6303,7 @@ The source image may be:</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray">Uint8ClampedArray</a></code>:
+      <code>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array">Uint8Array</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray">Uint8ClampedArray</a>)</code>:
         Array with the data
 
       
@@ -6373,12 +6312,6 @@ The source image may be:</p>
 
   
 
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> imageData = image.getRGBAData();</pre>
-    
   
 
   
@@ -6405,7 +6338,7 @@ The source image may be:</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L357-L359'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L345-L347'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -6481,7 +6414,7 @@ The source image may be:</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/getRow.js#L10-L28'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/getRow.js#L10-L28'>
       <span>src/image/utility/getRow.js</span>
       </a>
     
@@ -6565,7 +6498,7 @@ The source image may be:</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/getSimilarity.js#L13-L74'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/getSimilarity.js#L13-L74'>
       <span>src/image/utility/getSimilarity.js</span>
       </a>
     
@@ -6651,7 +6584,7 @@ The source image may be:</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/svd.js#L9-L15'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/svd.js#L9-L15'>
       <span>src/image/compute/svd.js</span>
       </a>
     
@@ -6714,7 +6647,7 @@ The source image may be:</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/getThreshold.js#L11-L28'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/getThreshold.js#L11-L28'>
       <span>src/image/utility/getThreshold.js</span>
       </a>
     
@@ -6817,7 +6750,7 @@ The source image may be:</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/valueMethods.js#L54-L56'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/valueMethods.js#L39-L41'>
       <span>src/image/core/valueMethods.js</span>
       </a>
     
@@ -6902,7 +6835,7 @@ The source image may be:</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/valueMethods.js#L27-L29'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/valueMethods.js#L11-L13'>
       <span>src/image/core/valueMethods.js</span>
       </a>
     
@@ -6996,7 +6929,7 @@ The source image may be:</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/gradientFilter.js#L20-L68'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/gradientFilter.js#L20-L68'>
       <span>src/image/filter/gradientFilter.js</span>
       </a>
     
@@ -7131,7 +7064,7 @@ The source image may be:</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>grey(options)</span>
+            <span class='code strong strong truncate'>grey(options = {})</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -7141,15 +7074,15 @@ The source image may be:</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/grey.js#L28-L84'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/grey.js#L23-L69'>
       <span>src/image/transform/grey.js</span>
       </a>
     
   </div>
   
 
-  <p>Converts the current image to grey scale
-The source image has to be RGB !
+  <p>Converts the current image to greyscale.
+The source image has to be RGB.
 If there is an alpha channel we need to decide what to do:</p>
 <ul>
 <li>keepAlpha : we will keep the alpha channel and you will get a GREY / A image</li>
@@ -7157,7 +7090,7 @@ If there is an alpha channel we need to decide what to do:</p>
 </ul>
 
 
-  <div class='pre p1 fill-light mt0'>grey(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="#image">Image</a></div>
+  <div class='pre p1 fill-light mt0'>grey(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
   
   
 
@@ -7174,7 +7107,7 @@ If there is an alpha channel we need to decide what to do:</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?
             = <code>{}</code>)</code>
 	    
           </div>
@@ -7193,11 +7126,11 @@ If there is an alpha channel we need to decide what to do:</p>
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.algorithm</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
+  <td class='break-word'><span class='code bold'>options.algorithm</span> <code class='quiet'><a href="#greyalgorithm">GreyAlgorithm</a></code>
   
     (default <code>&#39;luma709&#39;</code>)
   </td>
-  <td class='break-word'><span>Algorithm to get the grey image
+  <td class='break-word'><span>Algorithm to get the grey value from RGB values
 </span></td>
 </tr>
 
@@ -7208,7 +7141,7 @@ If there is an alpha channel we need to decide what to do:</p>
   
     (default <code>false</code>)
   </td>
-  <td class='break-word'><span>If true the RGB values are treated
+  <td class='break-word'><span>If true, the RGB values are treated
 separately from the alpha channel and the method returns a GREYA image.
 </span></td>
 </tr>
@@ -7220,23 +7153,16 @@ separately from the alpha channel and the method returns a GREYA image.
   
     (default <code>true</code>)
   </td>
-  <td class='break-word'><span>If true the alpha channel will be applied on each pixel.
-This means that if for an 8bits RGBA image we have an alpha channel value of 0,
-this grey scale value will always be 0 (black pixel)
+  <td class='break-word'><span>If true, the alpha channel will be used to scale the grey pixel.
 </span></td>
 </tr>
 
 
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.allowGrey</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
-  
-    (default <code>false</code>)
+  <td class='break-word'><span class='code bold'>options.out</span> <code class='quiet'><a href="#image">Image</a>?</code>
   </td>
-  <td class='break-word'><span>By default only RGB images are allowed.
-If true grey images are also allowed and will either return a copy or
-apply the alpha channel depending the options
-</span></td>
+  <td class='break-word'><span></span></td>
 </tr>
 
 
@@ -7255,7 +7181,7 @@ apply the alpha channel depending the options
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#image">Image</a></code>:
-        Grey scale image (with or without alpha depending the options)
+        
 
       
     
@@ -7263,12 +7189,6 @@ apply the alpha channel depending the options
 
   
 
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> grey = image.grey();</pre>
-    
   
 
   
@@ -7295,7 +7215,7 @@ apply the alpha channel depending the options
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L228-L228'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L230-L230'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -7355,7 +7275,7 @@ apply the alpha channel depending the options
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/hsl.js#L18-L70'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/hsl.js#L18-L70'>
       <span>src/image/transform/hsl.js</span>
       </a>
     
@@ -7427,7 +7347,7 @@ The source image has to be RGB !</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/hsv.js#L17-L68'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/hsv.js#L17-L68'>
       <span>src/image/transform/hsv.js</span>
       </a>
     
@@ -7499,7 +7419,7 @@ The source image has to be RGB !</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/hypotenuse.js#L14-L48'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/hypotenuse.js#L14-L48'>
       <span>src/image/filter/hypotenuse.js</span>
       </a>
     
@@ -7609,7 +7529,7 @@ The source image has to be RGB !</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>invert(options)</span>
+            <span class='code strong strong truncate'>invert(options = {})</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -7619,17 +7539,17 @@ The source image has to be RGB !</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/invert.js#L18-L45'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/invert.js#L13-L29'>
       <span>src/image/filter/invert.js</span>
       </a>
     
   </div>
   
 
-  <p>Invert an image. The image</p>
+  <p>Invert the colors of an image</p>
 
 
-  <div class='pre p1 fill-light mt0'>invert(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): this</div>
+  <div class='pre p1 fill-light mt0'>invert(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
   
   
 
@@ -7646,7 +7566,7 @@ The source image has to be RGB !</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?
             = <code>{}</code>)</code>
 	    
           </div>
@@ -7665,29 +7585,19 @@ The source image has to be RGB !</p>
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.channels</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>])</code>
+  <td class='break-word'><span class='code bold'>options.inPlace</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
   
-    (default <code>undefined</code>)
+    (default <code>false</code>)
   </td>
-  <td class='break-word'><span>Specify which channels should be processed
+  <td class='break-word'><span></span></td>
+</tr>
 
-<em> undefined : we take all the channels but alpha
-</em>
- number : this specific channel
 
-<em> string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
-</em>
- 
-[
-number
-]
- : array of channels as numbers
-* 
-[
-string
-]
- : array of channels as one letter string
-</span></td>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.out</span> <code class='quiet'><a href="#image">Image</a>?</code>
+  </td>
+  <td class='break-word'><span></span></td>
 </tr>
 
 
@@ -7705,7 +7615,7 @@ string
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>this</code>:
+      <code><a href="#image">Image</a></code>:
         
 
       
@@ -7730,7 +7640,7 @@ string
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>level(options)</span>
+            <span class='code strong strong truncate'>level(options = {})</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -7740,7 +7650,7 @@ string
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/level.js#L20-L70'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/level.js#L16-L66'>
       <span>src/image/filter/level.js</span>
       </a>
     
@@ -7750,7 +7660,7 @@ string
   <p>Level the image for by default have the minimal and maximal values.</p>
 
 
-  <div class='pre p1 fill-light mt0'>level(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): this</div>
+  <div class='pre p1 fill-light mt0'>level(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): this</div>
   
   
 
@@ -7767,7 +7677,7 @@ string
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?
             = <code>{}</code>)</code>
 	    
           </div>
@@ -7786,28 +7696,19 @@ string
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.channels</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>])</code>
+  <td class='break-word'><span class='code bold'>options.algorithm</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>
   
-    (default <code>undefined</code>)
+    (default <code>&#39;range&#39;</code>)
+  </td>
+  <td class='break-word'><span></span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.channels</span> <code class='quiet'><a href="#selectedchannels">SelectedChannels</a>?</code>
   </td>
   <td class='break-word'><span>Specify which channels should be processed
-
-<em> undefined : we take all the channels but alpha
-</em>
- number : this specific channel
-
-<em> string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
-</em>
- 
-[
-number
-]
- : array of channels as numbers
-* 
-[
-string
-]
- : array of channels as one letter string
 </span></td>
 </tr>
 
@@ -7883,7 +7784,7 @@ string
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/localMaxima.js#L14-L81'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/localMaxima.js#L14-L81'>
       <span>src/image/compute/localMaxima.js</span>
       </a>
     
@@ -8030,7 +7931,7 @@ the 8 points around and 3 to the 12 points around the central pixel.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/mask/mask.js#L19-L62'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/mask/mask.js#L19-L62'>
       <span>src/image/transform/mask/mask.js</span>
       </a>
     
@@ -8167,7 +8068,7 @@ You may either choose among the provided algorithm or just specify a threshold v
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/getBestMatch.js#L11-L55'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/getBestMatch.js#L11-L55'>
       <span>src/image/utility/getBestMatch.js</span>
       </a>
     
@@ -8253,7 +8154,7 @@ You may either choose among the provided algorithm or just specify a threshold v
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/max.js#L9-L25'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/max.js#L9-L25'>
       <span>src/image/compute/max.js</span>
       </a>
     
@@ -8316,7 +8217,7 @@ You may either choose among the provided algorithm or just specify a threshold v
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L265-L265'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L267-L267'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -8376,7 +8277,7 @@ You may either choose among the provided algorithm or just specify a threshold v
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/mean.js#L10-L18'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/mean.js#L10-L18'>
       <span>src/image/compute/mean.js</span>
       </a>
     
@@ -8439,7 +8340,7 @@ You may either choose among the provided algorithm or just specify a threshold v
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/median.js#L9-L17'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/median.js#L9-L17'>
       <span>src/image/compute/median.js</span>
       </a>
     
@@ -8502,15 +8403,14 @@ You may either choose among the provided algorithm or just specify a threshold v
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/medianFilter.js#L22-L71'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/medianFilter.js#L16-L68'>
       <span>src/image/filter/medianFilter.js</span>
       </a>
     
   </div>
   
 
-  <p>Each pixel of the image becomes the median of the neightbour
-pixels.</p>
+  <p>Each pixel of the image becomes the median of the neighbor pixels.</p>
 
 
   <div class='pre p1 fill-light mt0'>medianFilter(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="#image">Image</a></div>
@@ -8549,28 +8449,9 @@ pixels.</p>
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.channels</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>])</code>
-  
-    (default <code>undefined</code>)
+  <td class='break-word'><span class='code bold'>options.channels</span> <code class='quiet'><a href="#selectedchannels">SelectedChannels</a>?</code>
   </td>
-  <td class='break-word'><span>Specify which channels should be processed
-
-<em> undefined : we take all the channels but alpha
-</em>
- number : this specific channel
-
-<em> string : converted to a channel based on rgb, cmyk, hsl or hsv (one letter code)
-</em>
- 
-[
-number
-]
- : array of channels as numbers
-* 
-[
-string
-]
- : array of channels as one letter string
+  <td class='break-word'><span>Specify which channels should be processed.
 </span></td>
 </tr>
 
@@ -8581,7 +8462,7 @@ string
   
     (default <code>1</code>)
   </td>
-  <td class='break-word'><span>distance of the square to take the mean of.
+  <td class='break-word'><span>Distance of the square to take the mean of.
 </span></td>
 </tr>
 
@@ -8592,7 +8473,7 @@ string
   
     (default <code>&#39;copy&#39;</code>)
   </td>
-  <td class='break-word'><span>algorithm that will be applied after to deal with borders
+  <td class='break-word'><span>Algorithm that will be applied after to deal with borders.
 </span></td>
 </tr>
 
@@ -8646,7 +8527,7 @@ string
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L283-L283'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L285-L285'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -8706,7 +8587,7 @@ string
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/min.js#L9-L25'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/min.js#L9-L25'>
       <span>src/image/compute/min.js</span>
       </a>
     
@@ -8769,7 +8650,7 @@ string
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/minimalBoundingRectangle.js#L18-L89'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/minimalBoundingRectangle.js#L18-L89'>
       <span>src/image/compute/minimalBoundingRectangle.js</span>
       </a>
     
@@ -8871,7 +8752,7 @@ string
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/monotoneChainConvexHull.js#L9-L16'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/monotoneChainConvexHull.js#L9-L16'>
       <span>src/image/compute/monotoneChainConvexHull.js</span>
       </a>
     
@@ -8934,7 +8815,7 @@ string
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/morphology/morphologicalGradient.js#L13-L38'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/morphology/morphologicalGradient.js#L11-L34'>
       <span>src/image/morphology/morphologicalGradient.js</span>
       </a>
     
@@ -8981,17 +8862,32 @@ string
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.kernel</span> <code class='quiet'>Matrix?</code>
+  <td class='break-word'><span class='code bold'>options.kernel</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>>?</code>
   </td>
-  <td class='break-word'><span></span></td>
+  <td class='break-word'><span>The kernel can only have ones and zeros. Default: [
+[
+1, 1, 1
+]
+, 
+[
+1, 1, 1
+]
+, 
+[
+1, 1, 1
+]
+]
+</span></td>
 </tr>
 
 
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.iterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?</code>
+  <td class='break-word'><span class='code bold'>options.iterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
+  
+    (default <code>1</code>)
   </td>
-  <td class='break-word'><span>number of iterations of the morphological transform
+  <td class='break-word'><span>Number of iterations of the morphological transform
 </span></td>
 </tr>
 
@@ -9045,7 +8941,7 @@ string
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/multiply.js#L11-L43'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/multiply.js#L11-L43'>
       <span>src/image/filter/multiply.js</span>
       </a>
     
@@ -9115,11 +9011,11 @@ string
       </div>
     </div>
   
-    <div class='border-bottom' id='imageopening'>
+    <div class='border-bottom' id='imageopen'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>opening(options = {})</span>
+            <span class='code strong strong truncate'>open(options = {})</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -9129,18 +9025,21 @@ string
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/morphology/opening.js#L12-L32'>
-      <span>src/image/morphology/opening.js</span>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/morphology/open.js#L14-L35'>
+      <span>src/image/morphology/open.js</span>
       </a>
     
   </div>
   
 
-  <p>In mathematical morphology, opening is the dilation of the erosion of a set A by a structuring element B. Together with closing, the opening serves in computer vision and image processing as a basic workhorse of morphological noise removal. Opening removes small objects from the foreground (usually taken as the bright pixels) of an image, placing them in the background, while closing removes small holes in the foreground, changing small islands of background into foreground. (Wikipedia)
+  <p>In mathematical morphology, opening is the dilation of the erosion of a set A by a structuring element B.
+Together with closing, the opening serves in computer vision and image processing as a basic workhorse of morphological noise removal.
+Opening removes small objects from the foreground (usually taken as the bright pixels) of an image,
+placing them in the background, while closing removes small holes in the foreground, changing small islands of background into foreground. (Wikipedia)
 <a href="http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html">http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html</a></p>
 
 
-  <div class='pre p1 fill-light mt0'>opening(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
+  <div class='pre p1 fill-light mt0'>open(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
   
   
 
@@ -9176,17 +9075,32 @@ string
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.kernel</span> <code class='quiet'>Matrix?</code>
+  <td class='break-word'><span class='code bold'>options.kernel</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>>?</code>
   </td>
-  <td class='break-word'><span></span></td>
+  <td class='break-word'><span>The kernel can only have ones and zeros. Default: [
+[
+1, 1, 1
+]
+, 
+[
+1, 1, 1
+]
+, 
+[
+1, 1, 1
+]
+]
+</span></td>
 </tr>
 
 
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.iterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?</code>
+  <td class='break-word'><span class='code bold'>options.iterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
+  
+    (default <code>1</code>)
   </td>
-  <td class='break-word'><span>number of iterations of the morphological transform
+  <td class='break-word'><span>Number of iterations of the morphological transform
 </span></td>
 </tr>
 
@@ -9240,7 +9154,7 @@ string
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/pad.js#L15-L79'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/pad.js#L15-L79'>
       <span>src/image/transform/pad.js</span>
       </a>
     
@@ -9360,7 +9274,7 @@ string
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/operator/paintLabels.js#L18-L80'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/operator/paintLabels.js#L18-L80'>
       <span>src/image/operator/paintLabels.js</span>
       </a>
     
@@ -9513,7 +9427,7 @@ string
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/operator/paintMasks.js#L22-L77'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/operator/paintMasks.js#L22-L77'>
       <span>src/image/operator/paintMasks.js</span>
       </a>
     
@@ -9711,7 +9625,7 @@ By default it is the 0,0 position of the correesponding mask.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/operator/paintPoints.js#L17-L54'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/operator/paintPoints.js#L17-L54'>
       <span>src/image/operator/paintPoints.js</span>
       </a>
     
@@ -9866,7 +9780,7 @@ x,y
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/operator/paintPolygon.js#L51-L98'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/operator/paintPolygon.js#L51-L98'>
       <span>src/image/operator/paintPolygon.js</span>
       </a>
     
@@ -9994,7 +9908,7 @@ x,y
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/operator/paintPolygons.js#L16-L32'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/operator/paintPolygons.js#L16-L32'>
       <span>src/image/operator/paintPolygons.js</span>
       </a>
     
@@ -10149,7 +10063,7 @@ x,y
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/operator/paintPolyline.js#L12-L60'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/operator/paintPolyline.js#L12-L60'>
       <span>src/image/operator/paintPolyline.js</span>
       </a>
     
@@ -10277,7 +10191,7 @@ x,y
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/operator/paintPolylines.js#L16-L32'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/operator/paintPolylines.js#L16-L32'>
       <span>src/image/operator/paintPolylines.js</span>
       </a>
     
@@ -10432,7 +10346,7 @@ x,y
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/points.js#L7-L23'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/points.js#L7-L23'>
       <span>src/image/compute/points.js</span>
       </a>
     
@@ -10485,11 +10399,11 @@ x,y
       </div>
     </div>
   
-    <div class='border-bottom' id='imagergba8'>
+    <div class='border-bottom' id='imageresize'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>rgba8()</span>
+            <span class='code strong strong truncate'>resize(options = {})</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -10499,467 +10413,17 @@ x,y
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/rgba8.js#L20-L25'>
-      <span>src/image/transform/rgba8.js</span>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/resize/resize.js#L19-L67'>
+      <span>src/image/transform/resize/resize.js</span>
       </a>
     
   </div>
   
 
-  <p>Make a copy of the current image and convert to RGBA 8 bits
-Those images are the one that are displayed in a canvas.
-RGB model in 8 bits per channel and containing as well an alpha channel.
-The source image may be:</p>
-<ul>
-<li>a mask (binary image)</li>
-<li>a grey image (8, 16 or 32 bits) with or without alpha channel</li>
-<li>a color image (8, 16 or 32 bits) with or without alpha channel in with RGB model</li>
-<li>when the image is 32 bits, a rescaling is performed from the min and max values</li>
-<li>to map values from 0 to 255
-The conversion is based on <a href="#imagegetrgbadata">Image#getRGBAData</a>.</li>
-</ul>
+  <p>Resize an image</p>
 
 
-  <div class='pre p1 fill-light mt0'>rgba8(): <a href="#image">Image</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#image">Image</a></code>:
-        New image in RGB color model with alpha channel
-
-      
-    
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> rgbaImage = image.rgba8();</pre>
-    
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='imagerotate'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>rotate(angle, options?)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/rotate.js#L14-L35'>
-      <span>src/image/transform/rotate.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Rotates an image.</p>
-
-
-  <div class='pre p1 fill-light mt0'>rotate(angle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-	    Angle of the rotation in degrees
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?)</code>
-	    
-          </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.interpolation</span> <code class='quiet'><a href="#interpolationalgorithm">InterpolationAlgorithm</a></code>
-  
-    (default <code>&#39;nearestNeighbor&#39;</code>)
-  </td>
-  <td class='break-word'><span>Interpolation algorithm to use if 
-<code>angle</code>
- is not a multiple of 90
-</span></td>
-</tr>
-
-
-              
-            </tbody>
-          </table>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#image">Image</a></code>:
-        The new rotated image
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='imagerotateleft'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>rotateLeft()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/rotate.js#L43-L54'>
-      <span>src/image/transform/rotate.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Rotates an image counter-clockwise</p>
-
-
-  <div class='pre p1 fill-light mt0'>rotateLeft(): <a href="#image">Image</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#image">Image</a></code>:
-        The new rotated image
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='imagerotateright'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>rotateRight()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/rotate.js#L63-L74'>
-      <span>src/image/transform/rotate.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Rotates an image clockwise</p>
-
-
-  <div class='pre p1 fill-light mt0'>rotateRight(): <a href="#image">Image</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#image">Image</a></code>:
-        The new rotated image
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='imagesave'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>save(path, options = {})</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/export.js#L32-L91'>
-      <span>src/image/core/export.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Save the image to disk (Node.js only)</p>
-
-
-  <div class='pre p1 fill-light mt0'>save(path: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?
-            = <code>{}</code>)</code>
-	    
-          </div>
-          
-          <table class='mt1 mb2 fixed-table h5 col-12'>
-            <colgroup>
-              <col width='30%' />
-              <col width='70%' />
-            </colgroup>
-            <thead>
-              <tr class='bold fill-light'>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody class='mt1'>
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.format</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
-  </td>
-  <td class='break-word'><span>One of: png, jpg, bmp (limited support for bmp). If not specified will try to infer from filename
-</span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.useCanvas</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
-  
-    (default <code>false</code>)
-  </td>
-  <td class='break-word'><span>Force use of the canvas API to save the image instead of a JavaScript implementation
-</span></td>
-</tr>
-
-
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.encoder</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?</code>
-  </td>
-  <td class='break-word'><span>Specify options for the encoder if applicable.
-</span></td>
-</tr>
-
-
-              
-            </tbody>
-          </table>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
-        Resolves when the file is fully written
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='imagescale'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>scale(options = {})</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/scale/scale.js#L19-L67'>
-      <span>src/image/transform/scale/scale.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Rescale an image</p>
-
-
-  <div class='pre p1 fill-light mt0'>scale(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
+  <div class='pre p1 fill-light mt0'>resize(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
   
   
 
@@ -11082,6 +10546,456 @@ The conversion is based on <a href="#imagegetrgbadata">Image#getRGBAData</a>.</l
       </div>
     </div>
   
+    <div class='border-bottom' id='imagergba8'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>rgba8()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/rgba8.js#L20-L25'>
+      <span>src/image/transform/rgba8.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Make a copy of the current image and convert to RGBA 8 bits
+Those images are the one that are displayed in a canvas.
+RGB model in 8 bits per channel and containing as well an alpha channel.
+The source image may be:</p>
+<ul>
+<li>a mask (binary image)</li>
+<li>a grey image (8, 16 or 32 bits) with or without alpha channel</li>
+<li>a color image (8, 16 or 32 bits) with or without alpha channel in with RGB model</li>
+<li>when the image is 32 bits, a rescaling is performed from the min and max values</li>
+<li>to map values from 0 to 255
+The conversion is based on <a href="#imagegetrgbadata">Image#getRGBAData</a>.</li>
+</ul>
+
+
+  <div class='pre p1 fill-light mt0'>rgba8(): <a href="#image">Image</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#image">Image</a></code>:
+        New image in RGB color model with alpha channel
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">var</span> rgbaImage = image.rgba8();</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='imagerotate'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>rotate(angle, options?)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/rotate.js#L14-L35'>
+      <span>src/image/transform/rotate.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Rotates an image.</p>
+
+
+  <div class='pre p1 fill-light mt0'>rotate(angle: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>angle</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    Angle of the rotation in degrees
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?)</code>
+	    
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.interpolation</span> <code class='quiet'><a href="#interpolationalgorithm">InterpolationAlgorithm</a></code>
+  
+    (default <code>&#39;nearestNeighbor&#39;</code>)
+  </td>
+  <td class='break-word'><span>Interpolation algorithm to use if 
+<code>angle</code>
+ is not a multiple of 90
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#image">Image</a></code>:
+        The new rotated image
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='imagerotateleft'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>rotateLeft()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/rotate.js#L43-L54'>
+      <span>src/image/transform/rotate.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Rotates an image counter-clockwise</p>
+
+
+  <div class='pre p1 fill-light mt0'>rotateLeft(): <a href="#image">Image</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#image">Image</a></code>:
+        The new rotated image
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='imagerotateright'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>rotateRight()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/rotate.js#L63-L74'>
+      <span>src/image/transform/rotate.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Rotates an image clockwise</p>
+
+
+  <div class='pre p1 fill-light mt0'>rotateRight(): <a href="#image">Image</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#image">Image</a></code>:
+        The new rotated image
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='imagesave'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>save(path, options = {})</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/export.js#L52-L110'>
+      <span>src/image/core/export.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Save the image to disk (Node.js only)</p>
+
+
+  <div class='pre p1 fill-light mt0'>save(path: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+          <table class='mt1 mb2 fixed-table h5 col-12'>
+            <colgroup>
+              <col width='30%' />
+              <col width='70%' />
+            </colgroup>
+            <thead>
+              <tr class='bold fill-light'>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody class='mt1'>
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.format</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</code>
+  </td>
+  <td class='break-word'><span>One of: png, jpg, bmp (limited support for bmp). If not specified will try to infer from filename
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.useCanvas</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
+  
+    (default <code>false</code>)
+  </td>
+  <td class='break-word'><span>Force use of the canvas API to save the image instead of a JavaScript implementation
+</span></td>
+</tr>
+
+
+              
+                <tr>
+  <td class='break-word'><span class='code bold'>options.encoder</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?</code>
+  </td>
+  <td class='break-word'><span>Specify options for the encoder if applicable.
+</span></td>
+</tr>
+
+
+              
+            </tbody>
+          </table>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        Resolves when the file is fully written
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='imagescharrfilter'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -11096,14 +11010,15 @@ The conversion is based on <a href="#imagegetrgbadata">Image#getRGBAData</a>.</l
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/scharrFilter.js#L15-L20'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/scharrFilter.js#L17-L22'>
       <span>src/image/filter/scharrFilter.js</span>
       </a>
     
   </div>
   
 
-  
+  <p>Applies the Scharr operator.</p>
+
 
   <div class='pre p1 fill-light mt0'>scharrFilter(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
   
@@ -11224,7 +11139,7 @@ The conversion is based on <a href="#imagegetrgbadata">Image#getRGBAData</a>.</l
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/bitMethods.js#L22-L24'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/bitMethods.js#L22-L24'>
       <span>src/image/core/bitMethods.js</span>
       </a>
     
@@ -11295,7 +11210,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/bitMethods.js#L69-L71'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/bitMethods.js#L69-L71'>
       <span>src/image/core/bitMethods.js</span>
       </a>
     
@@ -11374,7 +11289,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/setBorder.js#L13-L74'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/setBorder.js#L13-L74'>
       <span>src/image/utility/setBorder.js</span>
       </a>
     
@@ -11495,7 +11410,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/setChannel.js#L11-L35'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/setChannel.js#L11-L35'>
       <span>src/image/utility/setChannel.js</span>
       </a>
     
@@ -11578,7 +11493,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/setMatrix.js#L9-L31'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/setMatrix.js#L9-L31'>
       <span>src/image/utility/setMatrix.js</span>
       </a>
     
@@ -11679,7 +11594,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/valueMethods.js#L91-L98'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/valueMethods.js#L107-L114'>
       <span>src/image/core/valueMethods.js</span>
       </a>
     
@@ -11765,7 +11680,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/valueMethods.js#L67-L69'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/valueMethods.js#L79-L81'>
       <span>src/image/core/valueMethods.js</span>
       </a>
     
@@ -11860,7 +11775,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/valueMethods.js#L40-L44'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/valueMethods.js#L52-L56'>
       <span>src/image/core/valueMethods.js</span>
       </a>
     
@@ -11954,7 +11869,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/valueMethods.js#L12-L16'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/valueMethods.js#L25-L29'>
       <span>src/image/core/valueMethods.js</span>
       </a>
     
@@ -12057,7 +11972,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L240-L240'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L242-L242'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -12117,14 +12032,15 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/sobelFilter.js#L15-L20'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/sobelFilter.js#L17-L22'>
       <span>src/image/filter/sobelFilter.js</span>
       </a>
     
   </div>
   
 
-  
+  <p>Applies the Sobel operator.</p>
+
 
   <div class='pre p1 fill-light mt0'>sobelFilter(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
   
@@ -12245,7 +12161,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/split.js#L12-L59'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/utility/split.js#L12-L59'>
       <span>src/image/utility/split.js</span>
       </a>
     
@@ -12347,7 +12263,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/subtractImage.js#L14-L46'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/subtractImage.js#L14-L46'>
       <span>src/image/filter/subtractImage.js</span>
       </a>
     
@@ -12467,7 +12383,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/subtract.js#L11-L40'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/subtract.js#L11-L40'>
       <span>src/image/filter/subtract.js</span>
       </a>
     
@@ -12551,7 +12467,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/compute/sum.js#L9-L23'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/compute/sum.js#L9-L23'>
       <span>src/image/compute/sum.js</span>
       </a>
     
@@ -12614,7 +12530,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/export.js#L159-L168'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/export.js#L155-L164'>
       <span>src/image/core/export.js</span>
       </a>
     
@@ -12701,7 +12617,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/export.js#L179-L181'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/export.js#L175-L177'>
       <span>src/image/core/export.js</span>
       </a>
     
@@ -12790,7 +12706,7 @@ This function is only available in the browser.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/export.js#L104-L149'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/export.js#L122-L145'>
       <span>src/image/core/export.js</span>
       </a>
     
@@ -12843,17 +12759,6 @@ This function is only available in the browser.</p>
               </tr>
             </thead>
             <tbody class='mt1'>
-              
-                <tr>
-  <td class='break-word'><span class='code bold'>options.async</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
-  
-    (default <code>false</code>)
-  </td>
-  <td class='break-word'><span>Set to true to asynchronously generate the dataURL. This is required on Node.js for jpeg compression.
-</span></td>
-</tr>
-
-
               
                 <tr>
   <td class='break-word'><span class='code bold'>options.useCanvas</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
@@ -12923,7 +12828,7 @@ This function is only available in the browser.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/bitMethods.js#L44-L46'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/bitMethods.js#L44-L46'>
       <span>src/image/core/bitMethods.js</span>
       </a>
     
@@ -12994,7 +12899,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/core/bitMethods.js#L91-L93'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/core/bitMethods.js#L91-L93'>
       <span>src/image/core/bitMethods.js</span>
       </a>
     
@@ -13072,14 +12977,17 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/morphology/topHat.js#L13-L36'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/morphology/topHat.js#L14-L35'>
       <span>src/image/morphology/topHat.js</span>
       </a>
     
   </div>
   
 
-  <p>This function is the white top hat (also called top hat). In mathematical morphology and digital image processing, top-hat transform is an operation that extracts small elements and details from given images. The white top-hat transform is defined as the difference between the input image and its opening by some structuring element. Top-hat transforms are used for various image processing tasks, such as feature extraction, background equalization, image enhancement, and others. (Wikipedia)
+  <p>This function is the white top hat (also called top hat). In mathematical morphology and digital image processing,
+top-hat transform is an operation that extracts small elements and details from given images.
+The white top-hat transform is defined as the difference between the input image and its opening by some structuring element.
+Top-hat transforms are used for various image processing tasks, such as feature extraction, background equalization, image enhancement, and others. (Wikipedia)
 <a href="http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html">http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html</a></p>
 
 
@@ -13119,17 +13027,32 @@ This method can only be called on binary images.</p>
             <tbody class='mt1'>
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.kernel</span> <code class='quiet'>Matrix?</code>
+  <td class='break-word'><span class='code bold'>options.kernel</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>>>?</code>
   </td>
-  <td class='break-word'><span></span></td>
+  <td class='break-word'><span>The kernel can only have ones and zeros. Default: [
+[
+1, 1, 1
+]
+, 
+[
+1, 1, 1
+]
+, 
+[
+1, 1, 1
+]
+]
+</span></td>
 </tr>
 
 
               
                 <tr>
-  <td class='break-word'><span class='code bold'>options.iterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?</code>
+  <td class='break-word'><span class='code bold'>options.iterations</span> <code class='quiet'><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>
+  
+    (default <code>1</code>)
   </td>
-  <td class='break-word'><span>number of iterations of the morphological transform
+  <td class='break-word'><span>Number of iterations of the morphological transform
 </span></td>
 </tr>
 
@@ -13183,7 +13106,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/warping.js#L158-L217'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/warping.js#L158-L217'>
       <span>src/image/transform/warping.js</span>
       </a>
     
@@ -13304,7 +13227,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/Image.js#L222-L222'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/Image.js#L224-L224'>
       <span>src/image/Image.js</span>
       </a>
     
@@ -13370,7 +13293,7 @@ This method can only be called on binary images.</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/stack/Stack.js#L17-L115'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/stack/Stack.js#L17-L115'>
       <span>src/stack/Stack.js</span>
       </a>
     
@@ -13421,7 +13344,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/stack/utility/average.js#L8-L29'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/stack/utility/average.js#L8-L29'>
       <span>src/stack/utility/average.js</span>
       </a>
     
@@ -13483,7 +13406,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/stack/compute/histogram.js#L7-L20'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/stack/compute/histogram.js#L7-L20'>
       <span>src/stack/compute/histogram.js</span>
       </a>
     
@@ -13558,7 +13481,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/stack/compute/histograms.js#L7-L23'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/stack/compute/histograms.js#L7-L23'>
       <span>src/stack/compute/histograms.js</span>
       </a>
     
@@ -13633,7 +13556,7 @@ This method can only be called on binary images.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/stack/transform/matchAndCrop.js#L18-L97'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/stack/transform/matchAndCrop.js#L18-L97'>
       <span>src/stack/transform/matchAndCrop.js</span>
       </a>
     
@@ -13752,7 +13675,7 @@ It may therefore be much better to make a background correction before trying to
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/stack/compute/max.js#L6-L19'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/stack/compute/max.js#L6-L19'>
       <span>src/stack/compute/max.js</span>
       </a>
     
@@ -13814,7 +13737,7 @@ It may therefore be much better to make a background correction before trying to
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/stack/compute/median.js#L8-L22'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/stack/compute/median.js#L8-L22'>
       <span>src/stack/compute/median.js</span>
       </a>
     
@@ -13876,7 +13799,7 @@ It may therefore be much better to make a background correction before trying to
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/stack/compute/min.js#L6-L18'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/stack/compute/min.js#L6-L18'>
       <span>src/stack/compute/min.js</span>
       </a>
     
@@ -13944,7 +13867,7 @@ It may therefore be much better to make a background correction before trying to
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/Roi.js#L11-L446'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/Roi.js#L11-L446'>
       <span>src/image/roi/Roi.js</span>
       </a>
     
@@ -13995,7 +13918,7 @@ It may therefore be much better to make a background correction before trying to
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/Roi.js#L229-L234'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/Roi.js#L229-L234'>
       <span>src/image/roi/Roi.js</span>
       </a>
     
@@ -14054,7 +13977,7 @@ are calculated in the getBoxPixels procedure</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/Roi.js#L136-L142'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/Roi.js#L136-L142'>
       <span>src/image/roi/Roi.js</span>
       </a>
     
@@ -14110,7 +14033,7 @@ specific region. It may be external or internal</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/Roi.js#L148-L154'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/Roi.js#L148-L154'>
       <span>src/image/roi/Roi.js</span>
       </a>
     
@@ -14166,7 +14089,7 @@ specific region. It may be external or internal</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/Roi.js#L202-L207'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/Roi.js#L202-L207'>
       <span>src/image/roi/Roi.js</span>
       </a>
     
@@ -14224,7 +14147,7 @@ border that don't have neighbours all around them.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/Roi.js#L182-L187'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/Roi.js#L182-L187'>
       <span>src/image/roi/Roi.js</span>
       </a>
     
@@ -14296,7 +14219,7 @@ border that don't have neighbours all around them.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/Roi.js#L239-L269'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/Roi.js#L239-L269'>
       <span>src/image/roi/Roi.js</span>
       </a>
     
@@ -14351,7 +14274,7 @@ border that don't have neighbours all around them.</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/Roi.js#L215-L220'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/Roi.js#L215-L220'>
       <span>src/image/roi/Roi.js</span>
       </a>
     
@@ -14409,7 +14332,7 @@ are calculated in the getBoxPixels procedure</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/Roi.js#L33-L66'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/Roi.js#L33-L66'>
       <span>src/image/roi/Roi.js</span>
       </a>
     
@@ -14524,7 +14447,7 @@ are calculated in the getBoxPixels procedure</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/Roi.js#L295-L313'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/Roi.js#L295-L313'>
       <span>src/image/roi/Roi.js</span>
       </a>
     
@@ -14579,7 +14502,7 @@ are calculated in the getBoxPixels procedure</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/Roi.js#L411-L420'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/Roi.js#L411-L420'>
       <span>src/image/roi/Roi.js</span>
       </a>
     
@@ -14640,7 +14563,7 @@ are calculated in the getBoxPixels procedure</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/model/model.js#L6-L6'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/model/model.js#L6-L6'>
       <span>src/image/model/model.js</span>
       </a>
     
@@ -14696,7 +14619,7 @@ are calculated in the getBoxPixels procedure</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/manager.js#L19-L328'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/manager.js#L19-L328'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -14770,7 +14693,7 @@ name by default 'default'</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/manager.js#L106-L108'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/manager.js#L106-L108'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -14847,7 +14770,7 @@ name by default 'default'</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/RoiLayer.js#L33-L91'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/RoiLayer.js#L31-L89'>
       <span>src/image/roi/RoiLayer.js</span>
       </a>
     
@@ -14912,7 +14835,7 @@ for each data to which Roi it belongs</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/manager.js#L305-L318'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/manager.js#L305-L318'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -14997,7 +14920,7 @@ for each data to which Roi it belongs</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/creator/fromMask.js#L10-L128'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/creator/fromMask.js#L10-L128'>
       <span>src/image/roi/creator/fromMask.js</span>
       </a>
     
@@ -15081,7 +15004,7 @@ for each data to which Roi it belongs</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/creator/fromMaxima.js#L12-L198'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/creator/fromMaxima.js#L12-L198'>
       <span>src/image/roi/creator/fromMaxima.js</span>
       </a>
     
@@ -15203,7 +15126,7 @@ for each data to which Roi it belongs</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/creator/fromPoints.js#L11-L37'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/creator/fromPoints.js#L11-L37'>
       <span>src/image/roi/creator/fromPoints.js</span>
       </a>
     
@@ -15288,7 +15211,7 @@ for each data to which Roi it belongs</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/creator/fromWaterShed.js#L28-L108'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/creator/fromWaterShed.js#L28-L108'>
       <span>src/image/roi/creator/fromWaterShed.js</span>
       </a>
     
@@ -15448,7 +15371,7 @@ on 1 component image. This allows to specify a grey scale image on which to appl
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/manager.js#L208-L212'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/manager.js#L208-L212'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -15524,7 +15447,7 @@ on 1 component image. This allows to specify a grey scale image on which to appl
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/manager.js#L86-L90'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/manager.js#L86-L90'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -15600,7 +15523,7 @@ on 1 component image. This allows to specify a grey scale image on which to appl
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/manager.js#L193-L201'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/manager.js#L193-L201'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -15608,7 +15531,7 @@ on 1 component image. This allows to specify a grey scale image on which to appl
   
 
   <p>Returns an array of masks
-See @links Roi.getMask for the options</p>
+See <a href="Roi.getMask">Roi.getMask</a> for the options</p>
 
 
   <div class='pre p1 fill-light mt0'>getMasks(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#image">Image</a>></div>
@@ -15678,7 +15601,7 @@ See @links Roi.getMask for the options</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/manager.js#L115-L125'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/manager.js#L115-L125'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -15755,7 +15678,7 @@ See @links Roi.getMask for the options</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/manager.js#L143-L185'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/manager.js#L143-L185'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -15962,7 +15885,7 @@ See @links Roi.getMask for the options</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/manager.js#L292-L297'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/manager.js#L292-L297'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -16113,16 +16036,16 @@ the parameters 'minCommonBorderRatio' and 'maxCommonBorderRatio'.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/manager.js#L224-L241'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/manager.js#L224-L241'>
       <span>src/image/roi/manager.js</span>
       </a>
     
   </div>
   
 
-  <p>Paint the ROI on a copy of the image adn return this image.
-For painting options @links Image.paintMasks
-For ROI selection options @links RoiManager.getMasks</p>
+  <p>Paint the ROI on a copy of the image and return this image.
+For painting options <a href="Image.paintMasks">Image.paintMasks</a>
+For ROI selection options, see <a href="RoiManager.getMasks">RoiManager.getMasks</a></p>
 
 
   <div class='pre p1 fill-light mt0'>paint(options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>?): <a href="#image">Image</a></div>
@@ -16220,7 +16143,7 @@ for example id, surface, width, height, meanX, meanY.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/manager.js#L51-L56'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/manager.js#L51-L56'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -16304,7 +16227,7 @@ for example id, surface, width, height, meanX, meanY.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/manager.js#L270-L277'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/manager.js#L270-L277'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -16400,7 +16323,7 @@ specified as parameter;</p>
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/roi/manager.js#L97-L99'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/roi/manager.js#L97-L99'>
       <span>src/image/roi/manager.js</span>
       </a>
     
@@ -16483,7 +16406,7 @@ specified as parameter;</p>
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/util/Shape.js#L33-L111'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/util/Shape.js#L33-L111'>
       <span>src/util/Shape.js</span>
       </a>
     
@@ -16626,7 +16549,7 @@ A Shape is by default filled.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/util/Shape.js#L98-L110'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/util/Shape.js#L98-L110'>
       <span>src/util/Shape.js</span>
       </a>
     
@@ -16689,7 +16612,7 @@ A Shape is by default filled.
   <div class='clearfix'>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/util/Shape.js#L81-L92'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/util/Shape.js#L81-L92'>
       <span>src/util/Shape.js</span>
       </a>
     
@@ -16762,7 +16685,7 @@ x,y
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/filter/gradientFilter.js#L20-L68'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/filter/gradientFilter.js#L20-L68'>
       <span>src/image/filter/gradientFilter.js</span>
       </a>
     
@@ -16813,13 +16736,68 @@ x,y
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='greyalgorithm'>
+      GreyAlgorithm
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/greyAlgorithms.js#L5-L90'>
+      <span>src/image/transform/greyAlgorithms.js</span>
+      </a>
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>GreyAlgorithm</div>
+  
+    <p>
+      Type:
+      (<code>"luma709"</code> | <code>"luma601"</code> | <code>"maximum"</code> | <code>"minimum"</code> | <code>"average"</code> | <code>"minmax"</code> | <code>"red"</code> | <code>"green"</code> | <code>"blue"</code> | <code>"cyan"</code> | <code>"magenta"</code> | <code>"yellow"</code> | <code>"black"</code> | <code>"hue"</code> | <code>"saturation"</code> | <code>"lightness"</code>)
+    </p>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='interpolationalgorithm'>
       InterpolationAlgorithm
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/utility/checks.js#L22-L26'>
-      <span>src/image/utility/checks.js</span>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/internal/checks.js#L22-L26'>
+      <span>src/image/internal/checks.js</span>
       </a>
     
   </div>
@@ -16873,7 +16851,7 @@ x,y
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/util/channel.js#L13-L29'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/util/channel.js#L13-L29'>
       <span>src/util/channel.js</span>
       </a>
     
@@ -16894,7 +16872,7 @@ x,y
   
     <p>
       Type:
-      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>] | [<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>])
+      (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>)
     </p>
   
   
@@ -16936,7 +16914,7 @@ x,y
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/0fd301d283093e43162dc23a80b7ae77999c4992/src/image/transform/mask/thresholdAlgorithms.js#L21-L37'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/image-js/image-js/blob/7963ccd346585432eaa0107709f3af7e1d444a10/src/image/transform/mask/thresholdAlgorithms.js#L21-L37'>
       <span>src/image/transform/mask/thresholdAlgorithms.js</span>
       </a>
     
