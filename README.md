@@ -66,7 +66,7 @@ image-js implements a number of functions to get statistics about an image:
 ## Development
 
 Contributions to code or documentation are welcome! Here are a few tips on how to
-setup a development environ ment for image-js.
+setup a development environment for image-js.
 
 ### Canvas
 
