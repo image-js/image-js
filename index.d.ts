@@ -74,7 +74,7 @@ declare class Image {
     // flipX
     // flipY
 
-    // blurFilter
+    blurFilter(options?: {radius: number}): Image;
     // medianFilter
     // gaussianFilter
     // sobelFilter
@@ -125,7 +125,6 @@ declare class Image {
 
     // cannyEdge
     // convolution
-    // convolutionFft
     // extract
     // floodFill
     // paintLabels

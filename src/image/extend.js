@@ -65,7 +65,6 @@ import getThreshold from './utility/getThreshold';
 // operators
 import cannyEdge from './operator/cannyEdge';
 import convolution from './operator/convolution';
-import convolutionFft from './operator/convolutionFft';
 import extract from './operator/extract';
 import floodFill from './operator/floodFill';
 import paintLabels from './operator/paintLabels';
@@ -160,7 +159,6 @@ export default function extend(Image) {
 
   Image.extendMethod('cannyEdge', cannyEdge);
   Image.extendMethod('convolution', convolution);
-  Image.extendMethod('convolutionFft', convolutionFft);
   Image.extendMethod('extract', extract);
   Image.extendMethod('floodFill', floodFill);
   Image.extendMethod('paintLabels', paintLabels, inPlace);
