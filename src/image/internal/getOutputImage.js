@@ -10,12 +10,17 @@ import getImageParameters from './getImageParameters';
  * @param {object} options - Options object received by the algorithm
  * @param {Image} [options.out] - If set, must be an image compatible with the algorithm
  * @param {object} newParameters - Parameters that will be combined with the ones from `thisImage`.
+ * @param {object} internalOptions - Some additional options on the way to create the output image
  * @return {Image}
  */
-export function getOutputImage(thisImage, options, newParameters) {
+export function getOutputImage(thisImage, options, newParameters, internalOptions = {}) {
   const { out } = options;
   if (out === undefined) {
-    return Image.createFrom(thisImage, newParameters);
+    if (internalOptions.copy) {
+      return thisImage.clone();
+    } else {
+      return Image.createFrom(thisImage, newParameters);
+    }
   } else {
     if (!Image.isImage(out)) {
       throw new TypeError('out must be an Image object');
@@ -37,9 +42,11 @@ export function getOutputImage(thisImage, options, newParameters) {
  * @param {object} options
  * @param {boolean} [options.inPlace=false] - If true, thisImage is returned
  * @param {Image} [options.out]
+ * @param {object} internalOptions - Additional internal options on how to create the output image
+ * @param {boolean} [interalOptions.copy] - If true will copy the original image instead of creating a new empty image
  * @return {Image}
  */
-export function getOutputImageOrInPlace(thisImage, options) {
+export function getOutputImageOrInPlace(thisImage, options, internalOptions) {
   if (options.inPlace !== undefined && typeof options.inPlace !== 'boolean') {
     throw new TypeError('inPlace option must be a boolean');
   }
@@ -49,5 +56,5 @@ export function getOutputImageOrInPlace(thisImage, options) {
     }
     return thisImage;
   }
-  return getOutputImage(thisImage, options);
+  return getOutputImage(thisImage, options, null, internalOptions);
 }
