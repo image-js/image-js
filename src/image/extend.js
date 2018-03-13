@@ -43,6 +43,7 @@ import mask from './transform/mask/mask';
 import pad from './transform/pad';
 import colorDepth from './transform/colorDepth';
 import { rotate, rotateLeft, rotateRight } from './transform/rotate';
+import insert from './transform/insert';
 
 // utility
 import setBorder from './utility/setBorder';
@@ -139,6 +140,7 @@ export default function extend(Image) {
   Image.extendMethod('rotate', rotate);
   Image.extendMethod('rotateLeft', rotateLeft);
   Image.extendMethod('rotateRight', rotateRight);
+  Image.extendMethod('insert', insert);
 
   Image.extendMethod('getRow', getRow);
   Image.extendMethod('getColumn', getColumn);
