@@ -12,26 +12,26 @@ export default function insert(toInsert, options = {}) {
   const parameters = getImageParameters(toInsert);
   this.checkProcessable('insert', parameters);
   let {
-    offsetX = 0,
-    offsetY = 0
+    x = 0,
+    y = 0
   } = options;
 
 
   const out = getOutputImageOrInPlace(this, options, { copy: true });
-  const maxY = Math.min(out.height, offsetY + toInsert.height);
-  const maxX = Math.min(out.width, offsetX + toInsert.width);
+  const maxY = Math.min(out.height, y + toInsert.height);
+  const maxX = Math.min(out.width, x + toInsert.width);
   if (out.bitDepth === 1) {
-    for (let j = offsetY; j < maxY; j++) {
-      for (let i = offsetX; i < maxX; i++) {
-        const val = toInsert.getBitXY(i - offsetX, j - offsetY);
+    for (let j = y; j < maxY; j++) {
+      for (let i = x; i < maxX; i++) {
+        const val = toInsert.getBitXY(i - x, j - y);
         if (val) out.setBitXY(i, j);
         else out.clearBitXY(i, j);
       }
     }
   } else {
-    for (let j = offsetY; j < maxY; j++) {
-      for (let i = offsetX; i < maxX; i++) {
-        out.setPixelXY(i, j, toInsert.getPixelXY(i - offsetX, j - offsetY));
+    for (let j = y; j < maxY; j++) {
+      for (let i = x; i < maxX; i++) {
+        out.setPixelXY(i, j, toInsert.getPixelXY(i - x, j - y));
       }
     }
   }

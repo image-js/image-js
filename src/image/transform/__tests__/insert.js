@@ -56,8 +56,8 @@ it('insert on binary image', function () {
     `);
 
   expect(mask.insert(toInsert, {
-    offsetX: 1,
-    offsetY: 1
+    x: 1,
+    y: 1
   }).data).toEqual(
     binary`
         11111
@@ -69,8 +69,8 @@ it('insert on binary image', function () {
   );
 
   expect(mask.insert(toInsert, {
-    offsetX: 4,
-    offsetY: 4
+    x: 4,
+    y: 4
   }).data).toEqual(
     binary`
         11111
