@@ -2,11 +2,15 @@ import { getOutputImageOrInPlace } from '../internal/getOutputImage';
 import getImageParameters from '../internal/getImageParameters';
 
 /**
+ * Inserts an image within another image.
  * @memberof Image
  * @instance
- * @param {Image} toInsert
+ * @param {Image} toInsert The image to insert. Out of boundary pixel will be ignored.
  * @param {object} [options]
- * @return {Image}
+ * @param {number} [options.x=0] x offset
+ * @param {number} [options.y=0] y offset
+ * @param {boolean} [options.inPlace=false] - If true modifies the image. If false the insertion is performed on a copy of the image.
+ * @return {Image} The modified image or the new image.
  */
 export default function insert(toInsert, options = {}) {
   const parameters = getImageParameters(toInsert);
