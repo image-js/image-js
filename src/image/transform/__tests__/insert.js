@@ -23,16 +23,6 @@ it('insert on grey image', function () {
 });
 
 it('insert on binary image', function () {
-  /*
-     We will create the following mask
-      ______
-     |xx xx|
-     |x   x|
-     |x   x|
-     |x   x|
-     |xx xx|
-     */
-
   let mask = new Image(5, 5, binary`
       11111
       11111
