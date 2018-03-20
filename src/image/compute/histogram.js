@@ -60,7 +60,7 @@ export function getHistograms(options = {}) {
 function getChannelHistogram(channel, options) {
   let { useAlpha, maxSlots } = options;
 
-  //for a mask, return a number array containing count of black and white points (black = array[0], white = array[1])
+  // for a mask, return a number array containing count of black and white points (black = array[0], white = array[1])
 
   if (this.bitDepth === 1) {
     let blackWhiteCount = [0, 0];

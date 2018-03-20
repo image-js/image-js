@@ -15,7 +15,6 @@ describe('getClosestCommonParent', function () {
     let mask1 = img1.mask();
     let mask2 = img1.mask();
     expect(mask1.getClosestCommonParent(mask2)).toEqual(img1);
-
   });
 
   it('correct common parent for masks with same number of ancestors', function () {
@@ -38,8 +37,6 @@ describe('getClosestCommonParent', function () {
     let mask6 = mask5.resize({ factor: 2 });
     expect(mask2.getClosestCommonParent(mask4)).toEqual(img1);
     expect(mask3.getClosestCommonParent(mask6)).toEqual(img1);
-
-
   });
 
   it('correct common parent for masks with a different number of ancestors', function () {
@@ -64,7 +61,6 @@ describe('getClosestCommonParent', function () {
     expect(mask2.getClosestCommonParent(mask5)).toEqual(img1);
     expect(mask2.getClosestCommonParent(mask6)).toEqual(img1);
     expect(mask2.getClosestCommonParent(mask7)).toEqual(img1);
-
   });
 
   it('correct common parent for masks with a multiple number of common ancestors', function () {

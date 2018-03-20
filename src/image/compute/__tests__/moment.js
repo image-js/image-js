@@ -3,7 +3,6 @@ import binary from 'test/binary';
 
 describe('check moment', function () {
   it('should yield the correct moment', function () {
-
     const image = new Image(8, 2, binary`
       10000011
       10000000

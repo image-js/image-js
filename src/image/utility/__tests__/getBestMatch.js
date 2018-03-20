@@ -78,5 +78,4 @@ describe('check getBestMatch class', function () {
 
     expect(image1.getBestMatch(image2)).toEqual([-2, -2]);
   });
-
 });

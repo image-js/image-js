@@ -28,9 +28,7 @@ describe('we check the relative position', function () {
   });
 
   it('check by specify 1,1 position with parent', function () {
-
     return load('BW4x4.png').then(function (image) {
-
       let mask = new Image(2, 2, {
         kind: 'BINARY',
         position: [1, 1],

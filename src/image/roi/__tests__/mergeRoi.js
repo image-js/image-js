@@ -4,7 +4,6 @@ import fromWaterShed from '../creator/fromWaterShed';
 
 describe('Merge Roi', function () {
   it('should fusion 2 ROIs', function () {
-
     let image = new Image(10, 10,
       [
         3, 3, 3, 3, 3, 3, 3, 2, 2, 2,

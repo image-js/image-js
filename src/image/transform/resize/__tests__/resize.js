@@ -219,5 +219,4 @@ describe('resize', function () {
       expect(newImage.height).toBe(4);
     });
   });
-
 });

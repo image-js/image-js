@@ -2,7 +2,6 @@ import { Image, Stack } from 'test/common';
 
 describe('check stack median method', function () {
   it('should return global median for GREY image', function () {
-
     let images = new Stack();
 
     images.push(
@@ -40,7 +39,6 @@ describe('check stack median method', function () {
 
 
   it('should return global median for RGBA image', function () {
-
     let images = new Stack();
 
     images.push(
@@ -72,6 +70,5 @@ describe('check stack median method', function () {
 
     expect(images.getMedian()).toEqual([4, 4.5, 6.5]);
   });
-
 });
 

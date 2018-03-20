@@ -16,7 +16,6 @@ import convexHullFunction from './monotoneChainConvexHull';
  * @return {Array<Array<number>>}
  */
 export default function minimalBoundingRectangle(options = {}) {
-
   const {
     originalPoints = convexHullFunction.call(this)
   } = options;

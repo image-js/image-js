@@ -1,7 +1,6 @@
 import { Image } from 'test/common';
 
 describe('get a specific channel from an image', function () {
-
   it('should check channels from a RGBA image', function () {
     let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 240]);
 
@@ -30,7 +29,6 @@ describe('get a specific channel from an image', function () {
     expect(alpha.channels).toBe(1);
     expect(alpha.bitDepth).toBe(8);
     expect(Array.from(alpha.data)).toEqual([255, 240]);
-
   });
 
   it('should check channels from a RGBA image with join alpha', function () {
@@ -60,6 +58,5 @@ describe('get a specific channel from an image', function () {
     expect(red.bitDepth).toBe(8);
     expect(Array.from(red.data)).toEqual([230, 255, 100, 0]);
   });
-
 });
 

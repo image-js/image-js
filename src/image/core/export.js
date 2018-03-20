@@ -105,7 +105,6 @@ const exportMethods = {
           resolve();
         });
       }
-
     });
   },
 

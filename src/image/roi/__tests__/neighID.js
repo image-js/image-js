@@ -3,7 +3,6 @@ import { Image } from 'test/common';
 import { asc as sortAsc } from 'num-sort';
 
 describe('Get the ids of neighbour touching the Roi', function () {
-
   let map = [
     0, 0, 1, 1, 1, 2,
     1, 1, 1, 1, 2, 2,

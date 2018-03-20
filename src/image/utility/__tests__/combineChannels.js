@@ -1,7 +1,6 @@
 import { Image } from 'test/common';
 
 describe('combine specific channels from an image', function () {
-
   it('should check channels from a RGBA image', function () {
     let image = new Image(1, 2, [10, 20, 30, 255, 100, 110, 120, 0]);
 
@@ -13,7 +12,6 @@ describe('combine specific channels from an image', function () {
     expect(combined.channels).toBe(1);
     expect(combined.bitDepth).toBe(8);
     expect(Array.from(combined.data)).toEqual([20, 110]);
-
   });
 
   it('should check channels from a RGBA image with join alpha', function () {
@@ -47,5 +45,4 @@ describe('combine specific channels from an image', function () {
     expect(combined.bitDepth).toBe(8);
     expect(Array.from(combined.data)).toEqual([20, 255, 110, 0]);
   });
-
 });

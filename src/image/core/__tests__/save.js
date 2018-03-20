@@ -40,5 +40,4 @@ describe('save to disk', () => {
     const img = get1BitSquare();
     await img.save(`${tmpDir}/square.bmp`, { format: 'bmp' });
   });
-
 });

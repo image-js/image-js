@@ -94,5 +94,4 @@ export default function paintPolygon(points, options = {}) {
     }
     return this.paintPolyline(points, options);
   }
-
 }

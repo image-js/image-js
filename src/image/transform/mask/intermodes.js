@@ -10,7 +10,7 @@ export default function intermodes(histogram) {
   let iHisto = histogram.slice();
   let iter = 0;
   while (!bimodalTest(iHisto)) {
-    //smooth with a 3 point running mean filter
+    // smooth with a 3 point running mean filter
     let previous = 0;
     let current = 0;
     let next = iHisto[0];

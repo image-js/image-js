@@ -3,7 +3,6 @@ import RoiMap from '../../RoiMap';
 
 /* eslint-disable quote-props */
 describe('Calculate the commonBorderLength from a roiMap', function () {
-
   it('check simple roimap', function () {
     let map = [
       0, 0, 1, 1, 1, 2,
@@ -44,5 +43,4 @@ describe('Calculate the commonBorderLength from a roiMap', function () {
       '-1': { '1': 3, '-1': 2 }
     });
   });
-
 });

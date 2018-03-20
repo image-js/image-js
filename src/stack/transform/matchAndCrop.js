@@ -38,7 +38,6 @@ export default function matchAndCrop(options = {}) {
 
   // we calculate the best relative position to the parent image
   for (let i = 1; i < this.length; i++) {
-
     let position = parent.getBestMatch(this[i], { border: ignoreBorder });
 
     results[i] = {

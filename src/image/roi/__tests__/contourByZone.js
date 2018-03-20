@@ -3,7 +3,6 @@ import { Image } from 'test/common';
 import { asc as sortAsc } from 'num-sort';
 
 describe('Get the number of pixels touching the adjacent zones', function () {
-
   let map = [
     0, 0, 1, 1, 1, 2,
     1, 1, 1, 1, 2, 2,

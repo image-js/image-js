@@ -4,7 +4,6 @@
  * @return {number[]}
  */
 export default function max() {
-
   this.checkProcessable('min', {
     bitDepth: [8, 16]
   });

@@ -2,7 +2,6 @@ import { Image, Stack } from 'test/common';
 
 describe('check stack max method', function () {
   it('should return global maximal for GREY image', function () {
-
     let images = new Stack();
 
     images.push(
@@ -40,7 +39,6 @@ describe('check stack max method', function () {
 
 
   it('should return global maximal for RGBA image', function () {
-
     let images = new Stack();
 
     images.push(
@@ -72,6 +70,5 @@ describe('check stack max method', function () {
 
     expect(images.getMax()).toEqual([10, 8, 12, 10]);
   });
-
 });
 

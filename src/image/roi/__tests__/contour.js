@@ -2,7 +2,6 @@ import { Image } from 'test/common';
 
 describe('we check contourMask', function () {
   it('should yield the right contourMask size and value', function () {
-
     let img = new Image(5, 5,
       [
         0, 0,   0,   0,   0,

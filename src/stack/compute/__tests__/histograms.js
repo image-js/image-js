@@ -2,7 +2,6 @@ import { Image, Stack } from 'test/common';
 
 describe('check stack histograms method', function () {
   it('should return global histograms for GREY image', function () {
-
     let images = new Stack();
 
     images.push(
@@ -40,7 +39,6 @@ describe('check stack histograms method', function () {
 
 
   it('should return global histograms for RGBA image', function () {
-
     let images = new Stack();
 
     images.push(

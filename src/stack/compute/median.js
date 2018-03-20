@@ -6,7 +6,6 @@ import { median as medianFromHistogram } from '../../util/histogram';
  * @return {number[]}
  */
 export default function median() {
-
   this.checkProcessable('median', {
     bitDepth: [8, 16]
   });

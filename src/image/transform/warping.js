@@ -187,14 +187,16 @@ export default function warpingFourPoints(pts, options = {}) {
   let [x3, y3] = [heightRect - 1, widthRect - 1];
   let [x4, y4] = [heightRect - 1, 0];
 
-  let S = new Matrix([[x1, y1, 1, 0, 0, 0, -x1 * X1, -y1 * X1],
+  let S = new Matrix([
+    [x1, y1, 1, 0, 0, 0, -x1 * X1, -y1 * X1],
     [x2, y2, 1, 0, 0, 0, -x2 * X2, -y2 * X2],
     [x3, y3, 1, 0, 0, 0, -x3 * X3, -y1 * X3],
     [x4, y4, 1, 0, 0, 0, -x4 * X4, -y4 * X4],
     [0, 0, 0, x1, y1, 1, -x1 * Y1, -y1 * Y1],
     [0, 0, 0, x2, y2, 1, -x2 * Y2, -y2 * Y2],
     [0, 0, 0, x3, y3, 1, -x3 * Y3, -y3 * Y3],
-    [0, 0, 0, x4, y4, 1, -x4 * Y4, -y4 * Y4]]);
+    [0, 0, 0, x4, y4, 1, -x4 * Y4, -y4 * Y4]
+  ]);
 
   let D = Matrix.columnVector([X1, X2, X3, X4, Y1, Y2, Y3, Y4]);
 

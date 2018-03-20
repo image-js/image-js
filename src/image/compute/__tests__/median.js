@@ -2,7 +2,6 @@ import { Image } from 'test/common';
 
 describe('check median', function () {
   it('for a GREY even image', function () {
-
     let image = new Image(4, 3,
       [
         1, 1, 1, 1,
@@ -16,7 +15,6 @@ describe('check median', function () {
   });
 
   it('for a GREY odd image', function () {
-
     let image = new Image(3, 3,
       [
         1, 1, 1,
@@ -30,7 +28,6 @@ describe('check median', function () {
   });
 
   it('for a RGBA image', function () {
-
     let image = new Image(1, 3,
       [
         1, 2, 3, 255,
@@ -42,7 +39,6 @@ describe('check median', function () {
   });
 
   it('for a RGBA image with alpha', function () {
-
     let image = new Image(1, 3,
       [
         1, 2, 3, 100,
@@ -53,6 +49,5 @@ describe('check median', function () {
 
     expect(image.median).toEqual([2.5, 3.5, 4.5]);
   });
-
 });
 

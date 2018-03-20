@@ -10,7 +10,6 @@ import { load } from 'test/common';
 describe('we check the internalMapID', function () {
   it('should yield the right internalMapIDe', function () {
     return load('BW5x5.png').then(function (img) {
-
       let roiManager = img.getRoiManager();
       let mask = img.mask(0.5, { invert: true });
       roiManager.fromMask(mask);
@@ -30,7 +29,6 @@ describe('we check the internalMapID', function () {
       expect(rois[0].internalIDs).toEqual([-2]);
       expect(rois[1].internalIDs).toEqual([1, -2]);
       expect(rois[2].internalIDs).toEqual([-1, 1, -2]);
-
     });
   });
 });

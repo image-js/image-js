@@ -9,7 +9,6 @@ import Shape from '../../util/Shape';
  * @class Roi
  */
 export default class Roi {
-
   constructor(map, id) {
     this.map = map;
     this.id = id;

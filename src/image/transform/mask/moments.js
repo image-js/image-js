@@ -1,4 +1,4 @@
-//see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
+// see https://github.com/fiji/Auto_Threshold/blob/master/src/main/java/fiji/threshold/Auto_Threshold.java
 // W. Tsai, "Moment-preserving thresholding: a new approach," Computer Vision,
 // Graphics, and Image Processing, vol. 29, pp. 377-393, 1985.
 // Ported to ImageJ plugin by G.Landini from the the open source project FOURIER 0.8
@@ -7,7 +7,7 @@
 // http://sourceforge.net/projects/fourier-ipal
 // http://www.lsus.edu/faculty/~ecelebi/fourier.htm
 export default function moments(histogram, total) {
-//moments
+// moments
   let m0 = 1.0;
   let m1 = 0.0;
   let m2 = 0.0;
@@ -32,10 +32,10 @@ export default function moments(histogram, total) {
      of the target binary image. This leads to 4 equalities whose solutions
      are given in the Appendix of Ref. 1
      */
-  cd = m0 * m2 - m1 * m1; //determinant of the matriz of hankel for moments 2x2
+  cd = m0 * m2 - m1 * m1; // determinant of the matriz of hankel for moments 2x2
   c0 = (-m2 * m2 + m1 * m3) / cd;
   c1 = (m0 * -m3 + m2 * m1) / cd;
-  //new two gray values where z0<z1
+  // new two gray values where z0<z1
   z0 = 0.5 * (-c1 - Math.sqrt(c1 * c1 - 4.0 * c0));
   z1 = 0.5 * (-c1 + Math.sqrt(c1 * c1 - 4.0 * c0));
   p0 = (z1 - m1) / (z1 - z0); /* Fraction of the object pixels in the target binary image (p0z0+p1z1=m1) */

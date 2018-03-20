@@ -46,8 +46,6 @@ describe('check getRow and getColumn class', function () {
     expect(function () {
       image.getColumn(1, 2);
     }).toThrowError(/channel must be included between 0 and 1/);
-
   });
-
 });
 

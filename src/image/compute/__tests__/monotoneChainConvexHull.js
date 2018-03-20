@@ -53,5 +53,4 @@ describe('Monotone Chain Convex Hull', function () {
       [0, 1]
     ]);
   });
-
 });

@@ -54,8 +54,6 @@ describe('findCorrespondingRoi', function () {
     expect(related[1].same).toEqual(16);
     expect(related[1].opposite).toEqual(0);
     expect(related[1].total).toEqual(16);
-
-
   });
   it('should yield the correct object containing corresponding roi ids and pixels (switch imgs from prev test)', function () {
     let img1 = new Image(5, 5,
@@ -113,7 +111,6 @@ describe('findCorrespondingRoi', function () {
     expect(related[2].same).toEqual(16);
     expect(related[2].opposite).toEqual(4);
     expect(related[2].total).toEqual(20);
-
   });
 
   it('should yield the correct object containing 2 elements with same roi ids and different number of pixels (covering entire image)', function () {
@@ -169,7 +166,6 @@ describe('findCorrespondingRoi', function () {
     expect(related[1].same).toEqual(16);
     expect(related[1].opposite).toEqual(0);
     expect(related[1].total).toEqual(16);
-
   });
 
   it('should yield the correct object containing 1 element with one roi id and al of pixels (covering entire image)', function () {
@@ -216,6 +212,5 @@ describe('findCorrespondingRoi', function () {
     expect(Array.from(related[0].id)).toEqual([-1]);
     expect(Array.from(related[0].surface)).toEqual([25]);
     expect(Array.from(related[0].roiSurfaceCovered)).toEqual([1]);
-
   });
 });

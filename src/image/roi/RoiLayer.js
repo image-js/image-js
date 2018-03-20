@@ -87,5 +87,4 @@ export default class RoiLayer {
 
     return roiArray;
   }
-
 }

@@ -2,7 +2,6 @@ import { Image } from 'test/common';
 
 describe('check the setBorder transform', function () {
   it('check the pad for GREY image', function () {
-
     let image = new Image(4, 4,
       [
         1, 2, 3, 4,
@@ -35,7 +34,6 @@ describe('check the setBorder transform', function () {
       20, 10, 11, 20,
       20, 20, 20, 20
     ]);
-
   });
 
   it('check the pad for larger GREY image', function () {
@@ -68,7 +66,5 @@ describe('check the setBorder transform', function () {
       image.setBorder({ algorithm: 'set', size: 1, color: [0, 1] });
     }).toThrowError(/the color array must have the same/);
   });
-
-
 });
 

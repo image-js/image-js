@@ -2,7 +2,6 @@ import { Image, Stack } from 'test/common';
 
 describe('check stack min method', function () {
   it('should return global minimal for GREY image', function () {
-
     let images = new Stack();
 
     images.push(
@@ -40,7 +39,6 @@ describe('check stack min method', function () {
 
 
   it('should return global minimal for RGBA image', function () {
-
     let images = new Stack();
 
     images.push(
@@ -72,6 +70,5 @@ describe('check stack min method', function () {
 
     expect(images.getMin()).toEqual([1, 1, 1, 4]);
   });
-
 });
 

@@ -170,7 +170,6 @@ function ellipse(width, height, options) {
       matrix.set(height - y - 1, a - x, 1);
       matrix.set(height - y - 1, a + x + xEven, 1);
     }
-
   }
   return matrix;
 }

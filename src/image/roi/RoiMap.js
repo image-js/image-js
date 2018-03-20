@@ -150,5 +150,4 @@ export default class RoiMap {
     }
     return colsInfo;
   }
-
 }

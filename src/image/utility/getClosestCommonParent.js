@@ -17,7 +17,7 @@ export default function getClosestCommonParent(mask) {
   }
 
   if (depthMask1 === 0 || depthMask2 === 0) {
-    //comparing with at least one original image -> no common parent
+    // comparing with at least one original image -> no common parent
     return furthestParent;
   }
   let m1 = this;
@@ -48,9 +48,9 @@ export default function getClosestCommonParent(mask) {
     }
   }
 
-  //TODO
-  //no common parent, use parent at top of hierarchy of m1
-  //we assume it works for now
+  // TODO
+  // no common parent, use parent at top of hierarchy of m1
+  // we assume it works for now
   if (m1 !== m2) {
     return furthestParent;
   }
@@ -68,7 +68,7 @@ export default function getClosestCommonParent(mask) {
 function getDepth(mask) {
   let d = 0;
   let m = mask;
-  //a null parent means it's the original image
+  // a null parent means it's the original image
   while (m.parent != null) {
     m = m.parent;
     d++;

@@ -3,9 +3,7 @@ import { Image } from 'test/common';
 describe('check the cmyk transform', function () {
   it('check the right result for RGB image 8 bit', function () {
     let image = new Image(2, 1,
-      [
-        100, 100, 0, 0, 100, 100
-      ],
+      [100, 100, 0, 0, 100, 100],
       { kind: 'RGB' }
     );
 
@@ -19,9 +17,7 @@ describe('check the cmyk transform', function () {
 
   it('check the right result for RGB A image 8 bit', function () {
     let image = new Image(2, 1,
-      [
-        16383, 16383, 0, 127, 0, 16383, 16383, 127
-      ],
+      [16383, 16383, 0, 127, 0, 16383, 16383, 127],
       { kind: 'RGBA', bitDepth: 16 }
     );
 

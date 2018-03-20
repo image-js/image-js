@@ -2,7 +2,6 @@ import { Image, Stack } from 'test/common';
 
 describe('check stack histogram method', function () {
   it('should return global histogram for GREY image', function () {
-
     let images = new Stack();
 
     images.push(
@@ -40,7 +39,6 @@ describe('check stack histogram method', function () {
 
 
   it('should return global histogram for RGBA image', function () {
-
     let images = new Stack();
 
     images.push(
@@ -72,6 +70,5 @@ describe('check stack histogram method', function () {
 
     expect(images.getHistogram({ maxSlots: 4, channel: 0 })).toEqual([6, 0, 0, 0]);
   });
-
 });
 

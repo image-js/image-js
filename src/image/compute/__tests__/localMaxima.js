@@ -2,7 +2,6 @@ import { Image } from 'test/common';
 
 describe('Find local extrema', function () {
   it('maximum for a GREY image', function () {
-
     let image = new Image(10, 10,
       [
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -23,7 +22,6 @@ describe('Find local extrema', function () {
   });
 
   it('minimum for a GREY image', function () {
-
     let image = new Image(10, 10,
       [
         5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
@@ -47,7 +45,6 @@ describe('Find local extrema', function () {
       region: 3,
       maxEquals: 0
     })).toEqual([[3, 2], [6, 7]]);
-
   });
 
   it('maximum for a GREY image with merge', function () {
@@ -97,5 +94,4 @@ describe('Find local extrema', function () {
       { removeClosePoints: 3, region: 3, maxEquals: 0 }
     )).toEqual([[6, 7]]);
   });
-
 });

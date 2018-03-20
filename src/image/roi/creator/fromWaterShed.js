@@ -47,7 +47,7 @@ export default function fromWaterShed(options = {}) {
   invert = !invert;
 
 
-  //WaterShed is done from points in the image. We can either specify those points in options,
+  // WaterShed is done from points in the image. We can either specify those points in options,
   // or it is gonna take the minimum locals of the image by default.
   if (!points) {
     points = currentImage.getLocalMaxima({
@@ -78,7 +78,7 @@ export default function fromWaterShed(options = {}) {
   }
 
 
-  //Then we iterate through each points
+  // Then we iterate through each points
   while (toProcess.length > 0) {
     let currentPoint = toProcess.dequeue();
     let currentValueIndex = currentPoint[0] + currentPoint[1] * width;

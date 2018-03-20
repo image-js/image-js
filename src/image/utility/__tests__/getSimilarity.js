@@ -47,7 +47,6 @@ describe('calculate the overlap with another image', function () {
   });
 
   it('check different images without shift', function () {
-
     let image = new Image(1, 3, [0, 0, 0, 0, 20, 20, 20, 20, 30, 30, 30, 30]);
     let image2 = new Image(1, 3, [1, 10, 20, 2, 2, 20, 30, 1, 2, 20, 0, 2]);
     let similarity = image.getSimilarity(image2, { average: false });

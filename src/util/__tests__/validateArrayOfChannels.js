@@ -65,6 +65,5 @@ describe('we check the validateArrayOfChannels method', function () {
       validateArrayOfChannels(image, { allowAlpha: false, channels: ['a'] });
     }).toThrowError(/alpha channel may not be selected/);
   });
-
 });
 

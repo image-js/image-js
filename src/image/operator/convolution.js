@@ -75,7 +75,7 @@ export default function convolution(kernel, options = {}) {
   let index, x, y, channel, c, tmpResult;
   for (channel = 0; channel < channels.length; channel++) {
     c = channels[channel];
-    //Copy the channel in a single array
+    // Copy the channel in a single array
     for (y = 0; y < this.height; y++) {
       for (x = 0; x < this.width; x++) {
         index = y * this.width + x;
@@ -118,7 +118,7 @@ export default function convolution(kernel, options = {}) {
       });
     }
 
-    //Copy the result to the output image
+    // Copy the result to the output image
     for (y = 0; y < this.height; y++) {
       for (x = 0; x < this.width; x++) {
         index = y * this.width + x;
@@ -139,7 +139,7 @@ export default function convolution(kernel, options = {}) {
     }
   }
 
-  //I only can have 3 types of borders:
+  // I only can have 3 types of borders:
   //  1. Considering the image as periodic: periodic
   //  2. Extend the interior borders: copy
   //  3. fill with a color: set

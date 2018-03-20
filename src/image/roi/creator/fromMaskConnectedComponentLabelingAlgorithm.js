@@ -98,5 +98,4 @@ export default function fromMaskConnectedComponentLabelingAlgorithm(mask, option
   }
 
   return new RoiMap(mask, data);
-
 }

@@ -1,7 +1,6 @@
 import { Image, Stack, getSquare, getImage } from 'test/common';
 
 describe('Core methods of Stack objects', function () {
-
   let stack = new Stack([getSquare(), getSquare()]);
 
   it('Stack.load', function () {
@@ -50,5 +49,4 @@ describe('Core methods of Stack objects', function () {
       stack.map();
     }).toThrowError(TypeError);
   });
-
 });

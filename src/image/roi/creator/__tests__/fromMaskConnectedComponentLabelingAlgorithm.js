@@ -3,7 +3,6 @@ import { Image } from 'test/common';
 import fromMaskConnectedComponentLabelingAlgorithm from '../fromMaskConnectedComponentLabelingAlgorithm';
 
 describe('we check fromMask2', function () {
-
   /*
      We will create the following mask
       ______

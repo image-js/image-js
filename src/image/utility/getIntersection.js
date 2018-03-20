@@ -6,7 +6,6 @@
  * @return {object} - object containing number of white pixels for mask1, for mask 2 and for them both
  */
 export default function getIntersection(mask2) {
-
   let mask1 = this;
   let closestParent = mask1.getClosestCommonParent(mask2);
 
@@ -70,7 +69,6 @@ function getRelativePositionForAllPixels(mask, startPosition) {
     for (let j = 0; j < mask.width; j++) {
       let originalPos = [i, j];
       relativePositions.push([originalPos[0] + startPosition[0], originalPos[1] + startPosition[1]]);
-
     }
   }
   return relativePositions;

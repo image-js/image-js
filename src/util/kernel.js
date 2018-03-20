@@ -26,7 +26,6 @@ export function validateKernel(kernel) {
         }
       }
       kernel = newKernel;
-
     }
   } else {
     throw new Error(`validateKernel: Invalid Kernel: ${kernel}`);

@@ -77,7 +77,6 @@ describe('check the convolution operator', function () {
       13, 13, 13, 13,
       13, 13, 13, 13
     ]);
-
   });
 
   it('check the convolution non square for GREY image - matrix kernel', function () {
@@ -136,7 +135,6 @@ describe('check the convolution operator', function () {
       2, 2, 2, 2,
       1, 1, 1, 1
     ]);
-
   });
 
   it('check the convolution for GREYA image', function () {

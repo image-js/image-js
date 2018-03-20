@@ -21,5 +21,4 @@ export default function max() {
     }
   }
   return result;
-
 }

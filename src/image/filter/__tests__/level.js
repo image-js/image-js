@@ -51,8 +51,6 @@ describe('level', function () {
         }
       );
     });
-
-
   });
 
   describe('testing various file format', function () {
@@ -74,7 +72,8 @@ describe('level', function () {
       let image = new Image(1, 3, [
         0, 100, 50, 100,
         100, 105, 105, 255,
-        110, 110, 150, 255]);
+        110, 110, 150, 255
+      ]);
       let leveled = [
         0, 0, 0, 100,
         0, 128, 128, 255,

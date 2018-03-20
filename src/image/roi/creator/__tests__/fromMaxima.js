@@ -79,7 +79,6 @@ describe('we check fromMaxima only looking for top', function () {
   });
 
   it('should yield the right map symmetric', function () {
-
     let image = new Image(5, 5,
       [
         0, 0, 0, 0, 0,
@@ -177,5 +176,4 @@ describe('we check fromMaxima only looking for maxima', function () {
       1, 2, 2, 2, 2
     ]);
   });
-
 });

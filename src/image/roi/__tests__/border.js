@@ -9,7 +9,6 @@ import { load } from 'test/common';
 describe('we check that each Roi is surrounded by the expected border', function () {
   it('should yield the right contours size', function () {
     return load('BW11x11.png').then(function (img) {
-
       expect(img.width).toBe(11);
       expect(img.height).toBe(11);
 

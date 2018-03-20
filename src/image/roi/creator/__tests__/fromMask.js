@@ -3,7 +3,6 @@ import { Image } from 'test/common';
 import fromMask from '../fromMask';
 
 describe('we check fromMask', function () {
-
   /*
      We will create the following mask
       ______

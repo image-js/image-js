@@ -2,7 +2,6 @@
 import RoiMap from '../../RoiMap';
 
 describe('Calculate mergeRoi from a roiMap', function () {
-
   it('work with simple case', function () {
     let map = [
       0, 0, 1, 1, 1, 2,

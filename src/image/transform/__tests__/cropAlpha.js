@@ -77,6 +77,5 @@ describe('cropAlpha transform', function () {
     expect(function () {
       image.cropAlpha();
     }).toThrowError(/Could not find new dimensions. Threshold may be too high./);
-
   });
 });

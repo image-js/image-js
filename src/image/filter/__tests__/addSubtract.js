@@ -2,7 +2,6 @@ import { Image } from 'test/common';
 
 describe('add', function () {
   it('should add a fix value to all channels of RGBA image, we dont touch alpha', function () {
-
     let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 240]);
 
     let newImage = [255, 183, 220, 255, 200, 240, 113, 240];
@@ -30,7 +29,6 @@ describe('add', function () {
 
 describe('subtract', function () {
   it('should subtract a fix value to all channels of RGBA image, we dont touch alpha', function () {
-
     let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 240]);
 
     let newImage = [130, 0, 20, 255, 0, 40, 0, 240];
@@ -46,7 +44,6 @@ describe('subtract', function () {
 
 describe('subtract image', function () {
   it('should subtract an image to another', function () {
-
     let image = new Image(5, 5,
       [
         0, 0, 255, 0, 255,
@@ -78,7 +75,6 @@ describe('subtract image', function () {
     ]);
   });
   it('should subtract an image to another with absolute = true', function () {
-
     let image = new Image(5, 5,
       [
         0, 0, 255, 0, 255,

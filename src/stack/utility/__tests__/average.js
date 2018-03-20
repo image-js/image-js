@@ -36,6 +36,5 @@ describe('check stack average method', function () {
       6, 7, 8, 9
     ]);
   });
-
 });
 

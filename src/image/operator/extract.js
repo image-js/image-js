@@ -68,5 +68,4 @@ export default function extract(mask, options = {}) {
 
     return extract;
   }
-
 }

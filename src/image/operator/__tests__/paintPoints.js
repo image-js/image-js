@@ -2,7 +2,6 @@ import { Image } from 'test/common';
 
 describe('we check paintPoints', function () {
   it('should yield the painted image', function () {
-
     let size = 5;
     let data = new Array(size * size * 3);
     for (let i = 0; i < data.length; i++) {

@@ -6,7 +6,7 @@ export function laplacianOfGaussian(sigma, nPoints, factor) {
   if (!factor) {
     factor = 100;
   }
-  factor *= -1;//-480/(Math.PI*Math.pow(sigma,4));
+  factor *= -1;// -480/(Math.PI*Math.pow(sigma,4));
   let center = (nPoints - 1) / 2;
   let sigma2 = 2 * sigma * sigma;
   for (i = 0; i < nPoints; i++) {

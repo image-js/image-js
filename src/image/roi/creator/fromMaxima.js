@@ -189,7 +189,6 @@ export default function fromMaxima(options = {}) {
             default:
               throw new Error('unreachable');
           }
-
         }
       }
     }

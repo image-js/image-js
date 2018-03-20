@@ -5,7 +5,6 @@
 //
 //  modified from Johannes Schindelin plugin
 export default function triangle(histogram) {
-
   // find min and max
   let min = 0;
   let dmax = 0;
@@ -70,7 +69,7 @@ export default function triangle(histogram) {
   // describe line by nx * x + ny * y - d = 0
   let nx, ny, d;
   // nx is just the max frequency as the other point has freq=0
-  nx = histogram[max];   //-min; // data[min]; //  lowest value bmin = (p=0)% in the image
+  nx = histogram[max];   // -min; // data[min]; //  lowest value bmin = (p=0)% in the image
   ny = min - max;
   d = Math.sqrt(nx * nx + ny * ny);
   nx /= d;

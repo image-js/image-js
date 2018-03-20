@@ -8,7 +8,6 @@ import { checkColumn, checkChannel } from '../internal/checks';
  * @return {number[]}
  */
 export default function getColumn(column, channel = 0) {
-
   this.checkProcessable('getColumn', {
     bitDepth: [8, 16]
   });

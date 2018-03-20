@@ -13,7 +13,6 @@ import Image from '../Image';
  * var newImage = image.colorDepth(8);
  */
 export default function colorDepth(newColorDepth = 8) {
-
   this.checkProcessable('colorDepth', {
     bitDepth: [1, 8, 16]
   });

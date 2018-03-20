@@ -58,6 +58,5 @@ describe('we check the validateChannel method', function () {
       validateChannel(image, 'a', false);
     }).toThrowError(/alpha channel may not/);
   });
-
 });
 

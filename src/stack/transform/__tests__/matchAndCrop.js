@@ -2,7 +2,6 @@ import { Image, Stack, getHash } from 'test/common';
 
 describe('check matchAndCrop method', function () {
   it('should return an array of 3 images cropped and moved using matchToPrevious', function () {
-
     let images = new Stack();
 
     images.push(
@@ -120,12 +119,10 @@ describe('check matchAndCrop method', function () {
       0, 0, 4, 0,
       0, 0, 0, 0
     ]);
-
   });
 
 
   it('should return an array of 3 images cropped and moved unsng matchToFirst', function () {
-
     let images = new Stack();
 
     images.push(
@@ -203,7 +200,6 @@ describe('check matchAndCrop method', function () {
   });
 
   it('should return an array of 3 images cropped and moved unsng matchToFirst simple', function () {
-
     let images = new Stack();
 
     images.push(
@@ -277,8 +273,6 @@ describe('check matchAndCrop method', function () {
       0, 0, 4, 0,
       0, 0, 0, 0
     ]);
-
   });
-
 });
 

@@ -8,15 +8,15 @@
 import { asc as sortAsc } from 'num-sort';
 
 export default function renyiEntropy(histogram, total) {
-  let optThreshold; //Optimal threshold
-  let firstBin; //First non-zero bin
-  let lastBin; //last non-zero bin
+  let optThreshold; // Optimal threshold
+  let firstBin; // First non-zero bin
+  let lastBin; // last non-zero bin
 
-  let normHisto = new Array(histogram.length); //normalized histogram
-  let P1 = new Array(histogram.length); //acumulative normalized histogram
-  let P2 = new Array(histogram.length); //acumulative normalized histogram
+  let normHisto = new Array(histogram.length); // normalized histogram
+  let P1 = new Array(histogram.length); // acumulative normalized histogram
+  let P2 = new Array(histogram.length); // acumulative normalized histogram
 
-  //Entropy Variables
+  // Entropy Variables
   let threshold1 = 0;
   let threshold2 = 0;
   let threshold3 = 0;

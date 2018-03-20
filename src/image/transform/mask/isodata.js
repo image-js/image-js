@@ -5,12 +5,11 @@
  *
  */
 export default function isodata(histogram) {
-
-  let l;      //the average grey value of pixels with intensities < g
-  let toth;   //the the average grey value of pixels with intensities > g
-  let totl;   //the total the average grey value of pixels with intensities < g
-  let h;      //the average grey value of pixels with intensities > g
-  let g = 0;  //threshold value
+  let l;      // the average grey value of pixels with intensities < g
+  let toth;   // the the average grey value of pixels with intensities > g
+  let totl;   // the total the average grey value of pixels with intensities < g
+  let h;      // the average grey value of pixels with intensities > g
+  let g = 0;  // threshold value
 
   for (let i = 1; i < histogram.length; i++) {
     if (histogram[i] > 0) {

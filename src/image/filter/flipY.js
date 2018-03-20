@@ -11,7 +11,6 @@ export default function flipY() {
 
 
   for (let i = 0; i < Math.floor(this.height / 2); i++) {
-
     for (let j = 0; j < this.width; j++) {
       let posCurrent = j * this.channels + (i * this.width * this.channels);
       let posOpposite =  j * this.channels + (this.height - 1 - i) * this.channels * this.width;

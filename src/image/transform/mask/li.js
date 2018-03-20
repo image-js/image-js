@@ -2,19 +2,18 @@
  * see http://rsb.info.nih.gov/ij/developer/source/ij/process/AutoThresholder.java.html
  * The method is present in: Implements Li's Minimum Cross Entropy thresholding method
  * This implementation is based on the iterative version (Ref. 2nd reference below) of the algorithm.
- *  1) Li, CH & Lee, CK (1993), "Minimum Cross 	Entropy Thresholding", Pattern Recognition 26(4): 61 625
- *  2) Li, CH & Tam, PKS (1998), "An Iterative 	Algorithm for Minimum Cross Entropy Thresholding",
- *     Pattern 	Recognition Letters 18(8): 771-776
- *  3) Sezgin, M & Sankur, B (2004), "Survey 	over Image Thresholding Techniques and Quantitative Performance
+ *  1) Li, CH & Lee, CK (1993), "Minimum Cross Entropy Thresholding", Pattern Recognition 26(4): 61 625
+ *  2) Li, CH & Tam, PKS (1998), "An Iterative Algorithm for Minimum Cross Entropy Thresholding",
+ *     Pattern Recognition Letters 18(8): 771-776
+ *  3) Sezgin, M & Sankur, B (2004), "Survey over Image Thresholding Techniques and Quantitative Performance
  *     Evaluation",Journal of Electronic Imaging 13(1): 146-165
  * @param histogram - the histogram of the image
- *        total - the number of pixels in the image
+ * @param total - the number of pixels in the image
  * @returns {number} - the threshold
  */
 
 
 export default function li(histogram, total) {
-
   let threshold;
   let sumBack; /* sum of the background pixels at a given threshold */
   let sumObj;  /* sum of the object pixels at a given threshold */
@@ -41,7 +40,7 @@ export default function li(histogram, total) {
 
   do {
     oldThresh = newThresh;
-    threshold = (oldThresh + 0.5)|0;	/* range */
+    threshold = (oldThresh + 0.5)|0; /* range */
 
     /* Calculate the means of background and object pixels */
     /* Background */

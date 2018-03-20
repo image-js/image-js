@@ -13,12 +13,10 @@ describe('we check we can extract a part of B/W image', function () {
       expect(function () {
         image.extract(mask);
       }).toThrowError(/can not extract an image/);
-
     });
   });
 
   it('check a binary image extract', function () {
-
     let image = new Image(8, 8,
       binary`
         00011000
@@ -59,7 +57,6 @@ describe('we check we can extract a part of B/W image', function () {
 
 
   it('check a rectangular binary image extract', function () {
-
     let image = new Image(8, 4,
       binary`
         00011000
@@ -91,9 +88,7 @@ describe('we check we can extract a part of B/W image', function () {
   });
 
   it('check by specify 1,1 position with parent', function () {
-
     return load('BW4x4.png').then(function (image) {
-
       let mask = new Image(2, 2, {
         kind: 'BINARY',
         position: [1, 1],

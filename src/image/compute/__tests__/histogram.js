@@ -2,7 +2,6 @@ import { Image } from 'test/common';
 
 describe('calculate the histogram', function () {
   it('check getHistogram method', function () {
-
     let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 1]);
 
     let histogram = image.getHistogram({ useAlpha: false, channel: 0 });
@@ -20,7 +19,6 @@ describe('calculate the histogram', function () {
 
 
   it('check histogram property', function () {
-
     let image = new Image(1, 4, [230, 255, 230, 255, 230, 255, 13, 1], {
       kind: 'GREYA'
     });
@@ -36,7 +34,6 @@ describe('calculate the histogram', function () {
   });
 
   it('check 16 slots histogram', function () {
-
     let image = new Image(1, 4, [230, 255, 230, 255, 230, 255, 13, 1], {
       kind: 'GREYA'
     });
@@ -64,7 +61,6 @@ describe('calculate the histogram', function () {
     let histogram = image2.getHistogram();
     expect(histogram[0]).toEqual(16);
     expect(histogram[1]).toEqual(9);
-
   });
 });
 

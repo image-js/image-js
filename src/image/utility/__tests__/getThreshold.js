@@ -5,5 +5,4 @@ it('should return a number', function () {
 
   const threshold = image.getThreshold();
   expect(typeof threshold).toBe('number');
-
 });

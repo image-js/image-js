@@ -3,7 +3,6 @@ import { load } from 'test/common';
 describe('we check that we can extract correctly a Roi', function () {
   it('should yield the right extract number of pixels', function () {
     return load('BW15x15.png').then(function (img) {
-
       expect(img.width).toBe(15);
       expect(img.height).toBe(15);
 

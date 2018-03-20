@@ -323,8 +323,6 @@ export default class RoiManager {
       throw new Error(`no layer with label ${label}`);
     }
   }
-
-
 }
 
 /**
