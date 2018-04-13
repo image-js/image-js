@@ -14,7 +14,7 @@ function encodeJpeg(image, options = {}) {
     height: image.height,
     data: image.getRGBAData()
   };
-  return realEncodeJpeg(data, options.quality);
+  return realEncodeJpeg(data, options.quality).data;
 }
 
 function encodePng(image, options) {

@@ -13,9 +13,12 @@ describe('save to disk', () => {
     expect(otherImg.toDataURL()).toBe(dataURL);
   });
 
-  it('load then save (jpg)', async () => {
+  it('save then load (jpg)', async () => {
     const img = await load('format/rgba32.png');
-    await img.save(`${tmpDir}/img1.jpg`, { format: 'jpeg' });
+    const tmpJpg = `${tmpDir}/img1.jpg`;
+    await img.save(tmpJpg, { format: 'jpeg' });
+    const reloaded = await Image.load(tmpJpg);
+    expect(reloaded.width).toBe(30);
   });
 
   it('new then save', async () => {

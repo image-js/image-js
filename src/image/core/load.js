@@ -63,7 +63,7 @@ function loadBinary(image, base64Url) {
 function loadURL(url, options) {
   const dataURL = url.slice(0, 64).match(isDataURL);
   let binaryDataP;
-  if (dataURL) {
+  if (dataURL !== null) {
     binaryDataP = Promise.resolve(
       base64Decode(url.slice(dataURL[0].length))
     );
