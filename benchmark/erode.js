@@ -4,7 +4,7 @@ const { Image } = require('..');
 
 
 function getImage() {
-  const image = new Image(3000, 2000, { kind: 'BINARY' });
+  const image = new Image(1000, 500, { kind: 'BINARY' });
   for (let x = 0; x < image.width; x++) {
     for (let y = 0; y < image.height; y++) {
       if (Math.random() > 0.5) {
