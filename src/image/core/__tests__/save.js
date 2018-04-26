@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { Image, load, refreshTmpDir, tmpDir, getSquare, get1BitSquare } from 'test/common';
 
 describe('save to disk', () => {
@@ -11,6 +12,14 @@ describe('save to disk', () => {
     // reload the new file to check that the image is identical
     const otherImg = await Image.load(`${tmpDir}/img1.png`);
     expect(otherImg.toDataURL()).toBe(dataURL);
+  });
+
+  it('save vs toBuffer', async () => {
+    const img = await load('format/rgb24.png');
+    await img.save(`${tmpDir}/img.png`);
+    const data = Uint8Array.from(fs.readFileSync(`${tmpDir}/img.png`));
+    const buffer = img.toBuffer();
+    expect(buffer).toEqual(data);
   });
 
   it('save then load (jpg)', async () => {

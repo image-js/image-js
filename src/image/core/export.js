@@ -144,6 +144,33 @@ const exportMethods = {
   },
 
   /**
+   * Encodes the image and returns a buffer
+   * @memberof Image
+   * @instance
+   * @param {object} [options]
+   * @param {string} [options.format='png']
+   * @param {object} [options.encoder] - Specify options for the encoder if applicable.
+   * @return {Uint8Array}
+   */
+  toBuffer(options = {}) {
+    const {
+      format = 'png',
+      encoder: encoderOptions = undefined
+    } = options;
+    switch (format.toLowerCase()) {
+      case 'png':
+        return encodePng(this, encoderOptions);
+      case 'jpeg':
+      case 'jpg':
+        return encodeJpeg(this, encoderOptions);
+      case 'bmp':
+        return encodeBmp(this, encoderOptions);
+      default:
+        throw new RangeError(`invalid output format: ${format}`);
+    }
+  },
+
+  /**
    * Creates a base64 string from the image.
    * @memberof Image
    * @instance
