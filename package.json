@@ -90,7 +90,7 @@
     "which": "^1.2.0"
   },
   "dependencies": {
-    "blob-util": "^1.2.1",
+    "blob-util": "^2.0.0",
     "canny-edge-detector": "^1.0.0",
     "color-functions": "^1.1.0",
     "fast-bmp": "^1.0.0",
