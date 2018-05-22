@@ -72,7 +72,7 @@
     "benchmark": "^2.1.0",
     "canvas": "^2.0.0-alpha.11",
     "cross-env": "^5.1.4",
-    "documentation": "^6.0.0",
+    "documentation": "^7.0.0",
     "eslint": "^4.18.2",
     "eslint-config-cheminfo": "^1.17.2",
     "eslint-plugin-import": "^2.9.0",
