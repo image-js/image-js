@@ -71,7 +71,7 @@
     "babel-preset-minify": "^0.4.3",
     "babel-jest": "^23.4.2",
     "benchmark": "^2.1.4",
-    "canvas": "^2.0.0-alpha.11",
+    "canvas": "2.0.0-alpha.12",
     "cross-env": "^5.2.0",
     "documentation": "^8.1.2",
     "eslint": "^5.5.0",
