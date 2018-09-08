@@ -2,7 +2,7 @@ import { Image, load } from 'test/common';
 
 describe('Image loading', () => {
   it('should load from URL', function () {
-    return load('format/rgba32.png').then(function (img) {
+    return load('format/png/rgba32.png').then(function (img) {
       expect(img.width).toBeGreaterThan(0);
       expect(img.height).toBeGreaterThan(0);
       expect(img.maxValue).toBe(255);

@@ -11,12 +11,14 @@ describe('Load PNG', function () {
     ['rgb24', 3, 0, 8],
     ['rgb48', 3, 0, 16],
     ['rgba32', 3, 1, 8],
-    ['rgba64', 3, 1, 16]
+    ['rgba64', 3, 1, 16],
+    ['plt-4bpp', 3, 0, 8],
+    ['plt-8bpp-color', 3, 0, 8]
   ];
 
   tests.forEach(function (test) {
     it(`should load from path ${test[0]}`, function () {
-      return load(`format/${test[0]}.png`).then(function (img) {
+      return load(`format/png/${test[0]}.png`).then(function (img) {
         expect(img.components).toBe(test[1]);
         expect(img.alpha).toBe(test[2]);
         expect(img.bitDepth).toBe(test[3]);
@@ -24,7 +26,7 @@ describe('Load PNG', function () {
     });
 
     it(`should load from buffer ${test[0]}`, function () {
-      const data = fs.readFileSync(getImage(`format/${test[0]}.png`));
+      const data = fs.readFileSync(getImage(`format/png/${test[0]}.png`));
       return Image.load(data).then(function (img) {
         expect(img.components).toBe(test[1]);
         expect(img.alpha).toBe(test[2]);

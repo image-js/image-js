@@ -56,8 +56,8 @@ describe('level', function () {
   describe('testing various file format', function () {
     const tests = ['grey8', 'greya16', 'greya32', 'rgb24', 'rgb48', 'rgba32', 'rgba64'];
     tests.forEach(function (test) {
-      it(`should not change: format/${test}`, function () {
-        return load(`format/${test}.png`).then(function (image) {
+      it(`should not change: format/png/${test}`, function () {
+        return load(`format/png/${test}.png`).then(function (image) {
           let hash = getHash(image);
           image.level();
           let hash2 = getHash(image);

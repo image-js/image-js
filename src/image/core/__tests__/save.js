@@ -6,7 +6,7 @@ describe('save to disk', () => {
   afterEach(refreshTmpDir);
 
   it('load then save', async () => {
-    const img = await load('format/rgb24.png');
+    const img = await load('format/png/rgb24.png');
     let dataURL = img.toDataURL();
     await img.save(`${tmpDir}/img1.png`);
     // reload the new file to check that the image is identical
@@ -15,7 +15,7 @@ describe('save to disk', () => {
   });
 
   it('save vs toBuffer', async () => {
-    const img = await load('format/rgb24.png');
+    const img = await load('format/png/rgb24.png');
     await img.save(`${tmpDir}/img.png`);
     const data = Uint8Array.from(fs.readFileSync(`${tmpDir}/img.png`));
     const buffer = img.toBuffer();
@@ -23,7 +23,7 @@ describe('save to disk', () => {
   });
 
   it('save then load (jpg)', async () => {
-    const img = await load('format/rgba32.png');
+    const img = await load('format/png/rgba32.png');
     const tmpJpg = `${tmpDir}/img1.jpg`;
     await img.save(tmpJpg, { format: 'jpeg' });
     const reloaded = await Image.load(tmpJpg);

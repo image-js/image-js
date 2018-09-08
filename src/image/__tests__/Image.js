@@ -42,7 +42,7 @@ test('create from Canvas', () => {
 });
 
 test('clone', async () => {
-  const img = await load('format/rgba32.png');
+  const img = await load('format/png/rgba32.png');
   const clone = img.clone();
   expect(clone).toBeInstanceOf(Image);
   expect(clone).not.toBe(img);

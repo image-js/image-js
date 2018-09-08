@@ -9,7 +9,7 @@ describe('Load TIFF', function () {
 
   tests.forEach(function (test) {
     it(test[0], function () {
-      return load(`format/${test[0]}.tif`).then(function (img) {
+      return load(`format/tif/${test[0]}.tif`).then(function (img) {
         expect(img.components).toBe(test[1]);
         expect(img.alpha).toBe(test[2]);
         expect(img.bitDepth).toBe(test[3]);

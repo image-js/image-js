@@ -64,9 +64,7 @@ function loadURL(url, options) {
   const dataURL = url.slice(0, 64).match(isDataURL);
   let binaryDataP;
   if (dataURL !== null) {
-    binaryDataP = Promise.resolve(
-      base64Decode(url.slice(dataURL[0].length))
-    );
+    binaryDataP = Promise.resolve(base64Decode(url.slice(dataURL[0].length)));
   } else {
     binaryDataP = fetchBinary(url, options);
   }
@@ -78,19 +76,18 @@ function loadURL(url, options) {
 
 function loadPNG(data) {
   const png = decodePng(data);
-  const bitDepth = png.bitDepth;
-  const bitmap = png.data;
 
-  const type = png.colourType;
   let components;
   let alpha = 0;
-  switch (type) {
+  switch (png.colourType) {
     case 0:
       components = 1;
       break;
     case 2:
       components = 3;
       break;
+    case 3:
+      return loadPNGFromPalette(png);
     case 4:
       components = 1;
       alpha = 1;
@@ -100,13 +97,40 @@ function loadPNG(data) {
       alpha = 1;
       break;
     default:
-      throw new Error(`Unexpected colourType: ${type}`);
+      throw new Error(`Unexpected colourType: ${png.colourType}`);
   }
 
-  return new Image(png.width, png.height, bitmap, {
+  return new Image(png.width, png.height, png.data, {
     components,
     alpha,
-    bitDepth
+    bitDepth: png.bitDepth
+  });
+}
+
+function loadPNGFromPalette(png) {
+  const pixels = png.width * png.height;
+  const data = new Uint8Array(pixels * 3);
+  const pixelsPerByte = 8 / png.bitDepth;
+  const factor = png.bitDepth < 8 ? pixelsPerByte : 1;
+  const mask = parseInt('1'.repeat(png.bitDepth), 2);
+  let dataIndex = 0;
+
+  for (let i = 0; i < pixels; i++) {
+    const index = Math.floor(i / factor);
+    let value = png.data[index];
+    if (png.bitDepth < 8) {
+      value = (value >>> (png.bitDepth * (pixelsPerByte - 1 - (i % pixelsPerByte)))) & mask;
+    }
+    const paletteValue = png.palette[value];
+    data[dataIndex++] = paletteValue[0];
+    data[dataIndex++] = paletteValue[1];
+    data[dataIndex++] = paletteValue[2];
+  }
+
+  return new Image(png.width, png.height, data, {
+    components: 3,
+    alpha: false,
+    bitDepth: 8
   });
 }
 

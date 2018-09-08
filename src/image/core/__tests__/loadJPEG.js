@@ -12,7 +12,7 @@ describe('Load JPEG', function () {
 
   tests.forEach(function (test) {
     it(`should load from path ${test[0]}`, function () {
-      return load(`format/${test[0]}.jpg`).then(function (img) {
+      return load(`format/jpg/${test[0]}.jpg`).then(function (img) {
         expect(img.components).toBe(test[1]);
         expect(img.alpha).toBe(test[2]);
         expect(img.bitDepth).toBe(test[3]);
@@ -20,7 +20,7 @@ describe('Load JPEG', function () {
     });
 
     it(`should load from buffer ${test[0]}`, function () {
-      const data = readFileSync(getImage(`format/${test[0]}.jpg`));
+      const data = readFileSync(getImage(`format/jpg/${test[0]}.jpg`));
       return Image.load(data).then(function (img) {
         expect(img.components).toBe(test[1]);
         expect(img.alpha).toBe(test[2]);
