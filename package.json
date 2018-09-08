@@ -42,8 +42,8 @@
   "scripts": {
     "build": "npm-run-all clean-dist --parallel compile build-dist",
     "build-dist": "npm-run-all build-dist-main build-dist-min",
-    "build-dist-main": "NODE_ENV=browser rollup -c",
-    "build-dist-min": "NODE_ENV=minify babel dist/image.js --out-file dist/image.min.js --source-maps --no-comments",
+    "build-dist-main": "cross-env NODE_ENV=browser rollup -c",
+    "build-dist-min": "cross-env NODE_ENV=minify babel dist/image.js --out-file dist/image.min.js --source-maps --no-comments",
     "build-doc": "documentation build src/index.js --github --output docs --format html --sort-order alpha",
     "clean-dist": "rimraf dist && mkdir dist",
     "clean-lib": "rimraf lib",

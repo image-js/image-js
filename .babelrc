@@ -2,13 +2,13 @@
   "env": {
     "test": {
       "plugins": [
-        "transform-es2015-modules-commonjs"
+        "@babel/transform-modules-commonjs"
       ]
     },
     "npm": {
       "presets": [
         [
-          "env",
+          "@babel/env",
           {
             "targets": {
               "node": 8
@@ -20,7 +20,7 @@
     "browser": {
       "presets": [
         [
-          "env",
+          "@babel/env",
           {
             "modules": false,
             "targets": {
@@ -32,7 +32,7 @@
               ]
             },
             "exclude": [
-              "transform-es2015-for-of"
+              "transform-for-of"
             ]
           }
         ]
