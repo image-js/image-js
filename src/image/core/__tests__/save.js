@@ -6,7 +6,7 @@ describe('save to disk', () => {
   afterEach(refreshTmpDir);
 
   it('load then save', async () => {
-    const img = await load('format/png/rgb24.png');
+    const img = await load('format/png/rgba32.png');
     let dataURL = img.toDataURL();
     await img.save(`${tmpDir}/img1.png`);
     // reload the new file to check that the image is identical
