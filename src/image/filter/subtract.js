@@ -26,7 +26,7 @@ export default function subtract(value, options = {}) {
     }
   } else {
     if (this.data.length !== value.length) {
-      throw new Error('substract: the data size is different');
+      throw new Error('subtract: the data size is different');
     }
     for (let j = 0; j < channels.length; j++) {
       let c = channels[j];
