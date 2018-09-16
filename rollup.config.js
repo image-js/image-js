@@ -23,10 +23,8 @@ const config = {
     }),
     commonjs({
       namedExports: {
-        'node_modules/pako/index.js': [
-          'Inflate',
-          'deflate',
-        ]
+        'node_modules/pako/index.js': ['Inflate', 'deflate'],
+        'node_modules/utf8/utf8.js': ['decode', 'encode']
       }
     }),
     json()
