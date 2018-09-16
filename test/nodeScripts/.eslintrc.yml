@@ -1,0 +1,4 @@
+parserOptions:
+  sourceType: script
+rules:
+  no-console: off

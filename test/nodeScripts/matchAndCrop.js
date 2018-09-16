@@ -1,12 +1,16 @@
 'use strict';
 
-let Image = require('../..');
+/*
+ Execute this script with:
+ node -r esm matchAndCrop.js
+*/
+
+let { Image } = require('../../src');
 
 // we will create a stack and load all the images
 
 let stack = new Image.Stack();
-let baseName =
-  '/Users/lpatiny/git/image-js/core/test/img/moon/crop/BloodMoonTest-';
+let baseName = '../../test/img/moon/crop/BloodMoonTest-';
 let images = [];
 let toLoad = [];
 for (let i = 1; i <= 8; i++) {

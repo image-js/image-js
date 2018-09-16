@@ -2,7 +2,12 @@
 
 let fs = require('fs');
 
-let Image = require('../..');
+/*
+ Execute this script with:
+ node -r esm matchAndCropCell.js
+*/
+
+let { Image } = require('../../src');
 
 // we will create a stack and load all the images
 
@@ -18,14 +23,15 @@ for (let i = 0; i < files.length; i++) {
   toLoad.push(Image.load(image.name));
 }
 
-
-Promise.all(toLoad).then(function (images) {
-  let stack = new Image.Stack(images);
-  let cropped = stack.matchAndCrop();
-  for (let i = 0; i < cropped.length; i++) {
-    console.log(i, cropped[i].width, cropped[i].height);
+Promise.all(toLoad).then(
+  function (images) {
+    let stack = new Image.Stack(images);
+    let cropped = stack.matchAndCrop();
+    for (let i = 0; i < cropped.length; i++) {
+      console.log(i, cropped[i].width, cropped[i].height);
+    }
+  },
+  function (error) {
+    console.log(error);
   }
-}, function (error) {
-  console.log(error);
-});
-
+);
