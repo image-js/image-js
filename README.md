@@ -131,10 +131,19 @@ In order to load the library you may use our content delivery network (CDN) http
 
 ### Filter a mask using Region Of Interests (ROIs)
 
+Image-js has a powerful Region of Interests Manager that allows to create ROIs from different sources. The ROIs can then be filtered, manipulated and finally painted to an RGBA image.
+
 <img src="./test/img/taxi/original.jpeg" width="300" />
 <img src="./test/img/taxi/filteredOrange.png" width="300" />
 
 [Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC5G8Q3RP78)
+
+When extracting a mask from a ROI you have many options (`contour`, `box`, `filled`, `center`, `hull` or `normal`). Here it looks better to use the `filled` ROI.
+
+<img src="./test/img/taxi/original.jpeg" width="300" />
+<img src="./test/img/taxi/filteredFilledOrange.png" width="300" />
+
+[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC5VOJXA6V9)
 
 ## License
 
