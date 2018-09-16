@@ -129,6 +129,13 @@ In order to load the library you may use our content delivery network (CDN) http
 
 [Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC3Z6F6T6ZQ)
 
+### Filter a mask using Region Of Interests (ROIs)
+
+<img src="./test/img/taxi/original.jpeg" width="300" />
+<img src="./test/img/taxi/filteredOrange.png" width="300" />
+
+[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC5G8Q3RP78)
+
 ## License
 
 [MIT](./LICENSE)
