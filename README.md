@@ -1,9 +1,9 @@
 # image-js
 
-  [![NPM version][npm-image]][npm-url]
-  [![build status][travis-image]][travis-url]
-  [![Test coverage][codecov-image]][codecov-url]
-  [![npm download][download-image]][download-url]
+[![NPM version][npm-image]][npm-url]
+[![build status][travis-image]][travis-url]
+[![Test coverage][codecov-image]][codecov-url]
+[![npm download][download-image]][download-url]
 
 Image processing and manipulation in JavaScript.
 
@@ -18,14 +18,16 @@ Image processing and manipulation in JavaScript.
 ### Supported image formats
 
 The following formats can be loaded by image-js:
-* PNG (8 or 16 bits, color or greyscale, with or without alpha, palette 1 - 8 bits)
-* JPEG
-* TIFF (8 or 16 bits, greyscale)
+
+- PNG (8 or 16 bits, color or greyscale, with or without alpha, palette 1 - 8 bits)
+- JPEG
+- TIFF (8 or 16 bits, greyscale)
 
 The following formats can be saved by image-js:
-* PNG (8 or 16 bits)
-* JPEG
-* BMP (black and white)
+
+- PNG (8 or 16 bits)
+- JPEG
+- BMP (black and white)
 
 ### Native support for various bit depths and image kinds
 
@@ -39,29 +41,31 @@ It can accept an arbitrary amount of color channels (usually 1 or 3) and can han
 ### Basic image manipulation
 
 image-js can be used to do simple image manipulations such as:
-* Resize
-* Crop
-* Rotate
-* Convert to greyscale
-* Invert colors
-* Gaussian blur
-* Extract individual channels (red, green or blue)
-* And more...
+
+- Resize
+- Crop
+- Rotate
+- Convert to greyscale
+- Invert colors
+- Gaussian blur
+- Extract individual channels (red, green or blue)
+- And more...
 
 ### Statistics
 
 image-js implements a number of functions to get statistics about an image:
-* Histogram
-* Max, min, median value
-* And more ...
+
+- Histogram
+- Max, min, median value
+- And more ...
 
 ### Advanced features for computer vision
 
-* Image thresholding (otsu, triangle, ...)
-* Regions of interest
-* Convolution with custom kernel
-* Sobel filter
-* Morphological transformations (open, close, erode, ...)
+- Image thresholding (otsu, triangle, ...)
+- Regions of interest
+- Convolution with custom kernel
+- Sobel filter
+- Morphological transformations (open, close, erode, ...)
 
 ## Development
 
@@ -71,11 +75,62 @@ setup a development environment for image-js.
 ### Canvas
 
 The `canvas` native addon library is required for all tests to pass. You can
-follow the instructions to install it on your OS [here](https://github.com/Automattic/node-canvas#installation).  
+follow the instructions to install it on your OS [here](https://github.com/Automattic/node-canvas#installation).
+
+## Examples in the browser
+
+In order to load the library you may use our content delivery network (CDN) https://www.lactame.com.
+
+### Load an image and convert it to grey
+
+```html
+<html>
+
+<head>
+    <script src="https://www.lactame.com/lib/image-js/0.21.2/image.min.js"></script>
+</head>
+
+<body>
+    <img id="color" src="https://picsum.photos/458/354" />
+    <img id='result' />
+
+    <script>
+        async function process() {
+            let image = await IJS.Image.load(document.getElementById('color').src);
+
+            let grey=image.grey();
+
+            document.getElementById('result').src = grey.toDataURL();
+        }
+        process();
+    </script>
+
+</body>
+
+</html>
+```
+
+<img src="./test/img/taxi/original.jpeg" />
+<img src="./test/img/taxi/grey.png" />
+
+[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC4CG6DZZHU)
+
+### Create a mask
+
+<img src="./test/img/taxi/original.jpeg" />
+<img src="./test/img/taxi/mask.png" />
+
+[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC47MLSCEP2)
+
+### Paint a mask
+
+<img src="./test/img/taxi/original.jpeg" />
+<img src="./test/img/taxi/orange.png" />
+[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC3Z6F6T6ZQ)
 
 ## License
 
-  [MIT](./LICENSE)
+[MIT](./LICENSE)
 
 [npm-image]: https://img.shields.io/npm/v/image-js.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/image-js
