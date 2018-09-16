@@ -1,6 +1,6 @@
 'use strict';
 
-let Image = require('../../..');
+let { Image } = require('../../../src');
 
 let histogram = new Uint8Array(2);
 histogram[0] = 63;

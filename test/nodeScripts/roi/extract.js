@@ -1,6 +1,6 @@
 'use strict';
 
-let Image = require('../../..');
+let { Image } = require('../../../src');
 
 Image.load('./node_modules/ij-test/img/BW15x15.png').then(function (img) {
   console.log('Width: ', img.width);
@@ -15,7 +15,6 @@ Image.load('./node_modules/ij-test/img/BW15x15.png').then(function (img) {
   }
 
   console.log(rois[4].internalIDs);
-
 
   console.log('Not filled');
   let extract = rois[4].extract(img);

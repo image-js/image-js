@@ -1,6 +1,6 @@
 'use strict';
 
-let Image = require('../../..');
+let { Image } = require('../../../src');
 
 Image.load('./node_modules/ij-test/img/BW11x11.png').then(function (img) {
   console.log('Width: ', img.width);
@@ -25,4 +25,3 @@ Image.load('./node_modules/ij-test/img/BW11x11.png').then(function (img) {
     */
   //  console.log(rois);
 });
-
