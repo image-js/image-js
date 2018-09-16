@@ -110,22 +110,23 @@ In order to load the library you may use our content delivery network (CDN) http
 </html>
 ```
 
-<img src="./test/img/taxi/original.jpeg" />
-<img src="./test/img/taxi/grey.png" />
+<img src="./test/img/taxi/original.jpeg" width="300" />
+<img src="./test/img/taxi/grey.png" width="300" />
 
 [Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC4CG6DZZHU)
 
 ### Create a mask
 
-<img src="./test/img/taxi/original.jpeg" />
-<img src="./test/img/taxi/mask.png" />
+<img src="./test/img/taxi/original.jpeg" width="300" />
+<img src="./test/img/taxi/mask.png" width="300" />
 
 [Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC47MLSCEP2)
 
 ### Paint a mask
 
-<img src="./test/img/taxi/original.jpeg" />
-<img src="./test/img/taxi/orange.png" />
+<img src="./test/img/taxi/original.jpeg" width="300" />
+<img src="./test/img/taxi/orange.png" width="300" />
+
 [Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC3Z6F6T6ZQ)
 
 ## License
