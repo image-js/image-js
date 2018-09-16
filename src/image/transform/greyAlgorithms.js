@@ -3,58 +3,58 @@
  */
 
 export const methods = {
-  luma709(data, i) { // sRGB
-    // return data[i] * 0.2126 + data[i + 1] * 0.7152 + data[i + 2] * 0.0722;
+  luma709(red, green, blue) { // sRGB
+    // return red * 0.2126 + green * 0.7152 + blue * 0.0722;
     // Let's do a little trick ... in order not convert the integer to a double we do
     // the multiplication with integer to reach a total of 32768 and then shift the bits
     // of 15 to the right
     // This does a Math.floor and may lead to small (max 1) difference
     // Same result, > 10% faster on the full grey conversion
-    return (data[i] * 6966 + data[i + 1] * 23436 + data[i + 2] * 2366) >> 15;
+    return (red * 6966 + green * 23436 + blue * 2366) >> 15;
   },
-  luma601(data, i) { // NTSC
-    // return this.data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
-    return (data[i] * 9798 + data[i + 1] * 19235 + data[i + 2] * 3735) >> 15;
+  luma601(red, green, blue) { // NTSC
+    // return this.red * 0.299 + green * 0.587 + blue * 0.114;
+    return (red * 9798 + green * 19235 + blue * 3735) >> 15;
   },
-  maximum(data, i) {
-    return Math.max(data[i], data[i + 1], data[i + 2]);
+  maximum(red, green, blue) {
+    return Math.max(red, green, blue);
   },
-  minimum(data, i) {
-    return Math.min(data[i], data[i + 1], data[i + 2]);
+  minimum(red, green, blue) {
+    return Math.min(red, green, blue);
   },
-  average(data, i) {
-    return ((data[i] + data[i + 1] + data[i + 2]) / 3) >> 0;
+  average(red, green, blue) {
+    return ((red + green + blue) / 3) >> 0;
   },
-  minmax(data, i) {
-    return (Math.max(data[i], data[i + 1], data[i + 2]) + Math.min(data[i], data[i + 1], data[i + 2])) / 2;
+  minmax(red, green, blue) {
+    return (Math.max(red, green, blue) + Math.min(red, green, blue)) / 2;
   },
-  red(data, i) {
-    return data[i];
+  red(red, green, blue) {
+    return red;
   },
-  green(data, i) {
-    return data[i + 1];
+  green(red, green, blue) {
+    return green;
   },
-  blue(data, i) {
-    return data[i + 2];
+  blue(red, green, blue) {
+    return blue;
   },
-  cyan(data, i, image) {
-    let black = methods.black(data, i, image);
-    return (image.maxValue - data[0] - black) / (1 - black / image.maxValue) >> 0;
+  cyan(red, green, blue, image) {
+    let black = methods.black(red, green, blue, image);
+    return (image.maxValue - red - black) / (1 - black / image.maxValue) >> 0;
   },
-  magenta(data, i, image) {
-    let black = methods.black(data, i, image);
-    return (image.maxValue - data[1] - black) / (1 - black / image.maxValue) >> 0;
+  magenta(red, green, blue, image) {
+    let black = methods.black(red, green, blue, image);
+    return (image.maxValue - green - black) / (1 - black / image.maxValue) >> 0;
   },
-  yellow(data, i, image) {
-    let black = methods.black(data, i, image);
-    return (image.maxValue - data[2] - black) / (1 - black / image.maxValue) >> 0;
+  yellow(red, green, blue, image) {
+    let black = methods.black(red, green, blue, image);
+    return (image.maxValue - blue - black) / (1 - black / image.maxValue) >> 0;
   },
-  black(data, i, image) {
-    return Math.min(image.maxValue - data[i], image.maxValue - data[i + 1], image.maxValue - data[i + 2]);
+  black(red, green, blue, image) {
+    return Math.min(image.maxValue - red, image.maxValue - green, image.maxValue - blue);
   },
-  hue(data, i, image) {
-    let min = methods.min(data, i);
-    let max = methods.max(data, i);
+  hue(red, green, blue, image) {
+    let min = methods.min(red, green, blue);
+    let max = methods.max(red, green, blue);
     if (max === min) {
       return 0;
     }
@@ -62,29 +62,29 @@ export const methods = {
     let delta = max - min;
 
     switch (max) {
-      case data[i]:
-        hue = (data[i + 1] - data[i + 2]) / delta + (data[i + 1] < data[i + 2] ? 6 : 0);
+      case red:
+        hue = (green - blue) / delta + (green < blue ? 6 : 0);
         break;
-      case data[i + 1]:
-        hue = (data[i + 2] - data[i]) / delta + 2;
+      case green:
+        hue = (blue - red) / delta + 2;
         break;
-      case data[i + 2]:
-        hue = (data[i] - data[i + 1]) / delta + 4;
+      case blue:
+        hue = (red - green) / delta + 4;
         break;
       default:
         throw new Error('unreachable');
     }
     return (hue / 6 * image.maxValue) >> 0;
   },
-  saturation(data, i, image) { // from HSV model
-    let min = methods.min(data, i);
-    let max = methods.max(data, i);
+  saturation(red, green, blue, image) { // from HSV model
+    let min = methods.min(red, green, blue);
+    let max = methods.max(red, green, blue);
     let delta = max - min;
     return (max === 0) ? 0 : delta / max * image.maxValue;
   },
-  lightness(data, i) {
-    let min = methods.min(data, i);
-    let max = methods.max(data, i);
+  lightness(red, green, blue) {
+    let min = methods.min(red, green, blue);
+    let max = methods.max(red, green, blue);
     return (max + min) / 2;
   }
 };

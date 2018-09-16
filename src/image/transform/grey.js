@@ -21,11 +21,7 @@ import { methods } from './greyAlgorithms';
  * @return {Image}
  */
 export default function grey(options = {}) {
-  let {
-    algorithm = 'luma709',
-    keepAlpha = false,
-    mergeAlpha = true
-  } = options;
+  let { algorithm = 'luma709', keepAlpha = false, mergeAlpha = true } = options;
 
   this.checkProcessable('grey', {
     bitDepth: [8, 16],
@@ -56,9 +52,17 @@ export default function grey(options = {}) {
   let ptr = 0;
   for (let i = 0; i < this.data.length; i += this.channels) {
     if (mergeAlpha) {
-      newImage.data[ptr++] = clamp(method(this.data, i, this) * this.data[i + this.components] / this.maxValue, this);
+      newImage.data[ptr++] = clamp(
+        (method(this.data[i], this.data[i + 1], this.data[i + 2], this) *
+          this.data[i + this.components]) /
+          this.maxValue,
+        this
+      );
     } else {
-      newImage.data[ptr++] = clamp(method(this.data, i, this), this);
+      newImage.data[ptr++] = clamp(
+        method(this.data[i], this.data[i + 1], this.data[i + 2], this),
+        this
+      );
       if (newImage.alpha) {
         newImage.data[ptr++] = this.data[i + this.components];
       }
