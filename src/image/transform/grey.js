@@ -5,6 +5,15 @@ import { clamp } from '../internal/clamp';
 import { methods } from './greyAlgorithms';
 
 /**
+ * Call back that converts the RGB channels to grey. It will be clamped after.
+ * @callback GreyAlgorithmCallback
+ * @param {number} red - value of the red channel
+ * @param {number} green - value of the green channel
+ * @param {number} blue - value of the blue channel
+ * @return {number} value of the grey channel
+ */
+
+/**
  * Converts the current image to greyscale.
  * The source image has to be RGB.
  * If there is an alpha channel we need to decide what to do:
@@ -13,7 +22,7 @@ import { methods } from './greyAlgorithms';
  * @memberof Image
  * @instance
  * @param {object} [options]
- * @param {GreyAlgorithm} [options.algorithm='luma709'] - Algorithm to get the grey value from RGB values
+ * @param {GreyAlgorithm|GreyAlgorithmCallback} [options.algorithm='luma709'] - Algorithm to get the grey value from RGB values
  * @param {boolean} [options.keepAlpha=false] - If true, the RGB values are treated
  *          separately from the alpha channel and the method returns a GREYA image.
  * @param {boolean} [options.mergeAlpha=true] - If true, the alpha channel will be used to scale the grey pixel.
@@ -22,6 +31,10 @@ import { methods } from './greyAlgorithms';
  */
 export default function grey(options = {}) {
   let { algorithm = 'luma709', keepAlpha = false, mergeAlpha = true } = options;
+
+  if (typeof algorithm !== 'string' && typeof algorithm !== 'function') {
+    throw new TypeError('algorithm must be a string or a function');
+  }
 
   this.checkProcessable('grey', {
     bitDepth: [8, 16],
@@ -44,9 +57,14 @@ export default function grey(options = {}) {
     colorModel: GREY
   });
 
-  let method = methods[algorithm.toLowerCase()];
-  if (!method) {
-    throw new Error(`unsupported grey algorithm: ${algorithm}`);
+  let method;
+  if (typeof algorithm === 'function') {
+    method = algorithm;
+  } else {
+    method = methods[algorithm.toLowerCase()];
+    if (!method) {
+      throw new Error(`unsupported grey algorithm: ${algorithm}`);
+    }
   }
 
   let ptr = 0;

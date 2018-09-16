@@ -28,10 +28,10 @@ export const methods = {
   minmax(red, green, blue) {
     return (Math.max(red, green, blue) + Math.min(red, green, blue)) / 2;
   },
-  red(red, green, blue) {
+  red(red) {
     return red;
   },
-  green(red, green, blue) {
+  green(red, green) {
     return green;
   },
   blue(red, green, blue) {
