@@ -5,7 +5,9 @@
 [![Test coverage][codecov-image]][codecov-url]
 [![npm download][download-image]][download-url]
 
-Image processing and manipulation in JavaScript.
+Advanced image processing and manipulation in JavaScript.
+
+Can deal as well with simple image processing (color leveling, grey image, mask, resize, rotation, etc.) than with advanced processing on scientific images (Region of interest (ROI), Hull curve, minimal boundary rectangle (MBR), particle size and orientation, cell imaging, etc.).
 
 ## [API Documentation](https://image-js.github.io/image-js/)
 
