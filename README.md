@@ -117,7 +117,7 @@ A greyscale image will be saved in the same folder.
 </head>
 
 <body>
-    <img id="color" src="https://picsum.photos/458/354" />
+    <img id="color" src="https://www.lactame.com/github/image-js/image-js/3073b80c7d626196cb669f9d617f491a8338ca66/test/img/taxi/original.jpeg" />
     <img id='result' />
 
     <script>
@@ -172,7 +172,7 @@ This library is able to deal with complex analysis involving images of cell or S
 
 In this example we will annotate an SEM / TEM image by coloring each particle and show the surface of them.
 
-<img src="./test/img/semtem/semtem.jpg" width=400/>
+<img src="./test/img/semtem/semtem.jpg" width="400" />
 <img src="./test/img/semtem/result.png" />
 
 We also display a table containing a summary of all the identified particles.
