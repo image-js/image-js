@@ -7,7 +7,10 @@
 
 Advanced image processing and manipulation in JavaScript.
 
-Can deal as well with simple image processing (color leveling, grey image, mask, resize, rotation, etc.) than with advanced processing on scientific images (Region of interest (ROI), Hull curve, minimal boundary rectangle (MBR), particle size and orientation, cell imaging, etc.).
+image-js is a full-featured library that can deal with simple image processing
+(color leveling, grey image, mask, resize, rotation, etc.) as well as advanced
+processing on scientific images (Region of interest (ROI), Hull curve, minimal
+boundary rectangle (MBR), particle size and orientation, cell imaging, etc.).
 
 ## [API Documentation](https://image-js.github.io/image-js/)
 
@@ -35,10 +38,12 @@ The following formats can be saved by image-js:
 
 image-js was developed to be used in scientific applications where we often
 have to work on images that have more that 8 bits per channel.  
-Unlike many other libraries, if a 16-bit greyscale PNG is decoded, the resulting image has only one 16-bit channel and no pixel information is lost.
+Unlike many other libraries, if a 16-bit greyscale PNG is decoded, the resulting
+image has only one 16-bit channel and no pixel information is lost.
 
 image-js can work with images that have 1 (binary), 8, 16 or 32 bits per channel.  
-It can accept an arbitrary amount of color channels (usually 1 or 3) and can handle an additional alpha component.
+It can accept an arbitrary amount of color channels (usually 1 or 3) and can
+handle an additional alpha component.
 
 ### Basic image manipulation
 
@@ -69,46 +74,38 @@ image-js implements a number of functions to get statistics about an image:
 - Sobel filter
 - Morphological transformations (open, close, erode, ...)
 
-## Development
-
-Contributions to code or documentation are welcome! Here are a few tips on how to
-setup a development environment for image-js.
-
-### Canvas
-
-The `canvas` native addon library is required for all tests to pass. You can
-follow the instructions to install it on your OS [here](https://github.com/Automattic/node-canvas#installation).
-
 ## An example using npm and node
 
 Install the library:
 
-`npm i image-js`
+```console
+npm i image-js
+```
 
 An example of code manipulating the image 'cat.jpg' (you need to create it).
 
 ```js
 const { Image } = require('image-js');
 
-execute();
+execute().catch(console.error);
 
 async function execute() {
   let image = await Image.load('cat.jpg');
   let grey = image
-    .grey() // converts the image to greyscale (over 10 algorithms available)
-    .resize({ width: 200 })
-    .rotate(30);
-  grey.save('cat.png');
+    .grey() // convert the image to greyscale.
+    .resize({ width: 200 }) // resize the image, forcing a width of 200 pixels. The height is computed automatically to preserve the aspect ratio.
+    .rotate(30); // rotate the image clockwise by 30 degrees.
+  return grey.save('cat.png');
 }
 ```
 
-`node index.js`
+```console
+node index.js
+```
 
-A grey scale image will be saved in the same folder.
+A greyscale image will be saved in the same folder.
 
 ## Examples in the browser
-
-In order to load the library you may use our content delivery network (CDN) https://www.lactame.com.
 
 ### Load an image and convert it to grey
 
@@ -181,6 +178,16 @@ In this example we will annotate an SEM / TEM image by coloring each particle an
 We also display a table containing a summary of all the identified particles.
 
 [Try it](https://www.w3schools.com/code/tryit.asp?filename=FVCJLR0VNK33)
+
+## Development
+
+Contributions to code or documentation are welcome! Here are a few tips on how to
+setup a development environment for image-js.
+
+### Canvas
+
+The `canvas` native addon library is required for all tests to pass. You can
+follow the instructions to install it on your OS [here](https://github.com/Automattic/node-canvas#installation).
 
 ## License
 
