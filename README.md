@@ -137,22 +137,19 @@ In order to load the library you may use our content delivery network (CDN) http
 </html>
 ```
 
-<img src="./test/img/taxi/original.jpeg" width="300" />
-<img src="./test/img/taxi/grey.png" width="300" />
+<img src="./test/img/taxi/original.jpeg" width="300" /><img src="./test/img/taxi/grey.png" width="300" />
 
 [Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC4CG6DZZHU)
 
 ### Create a mask
 
-<img src="./test/img/taxi/original.jpeg" width="300" />
-<img src="./test/img/taxi/mask.png" width="300" />
+<img src="./test/img/taxi/original.jpeg" width="300" /><img src="./test/img/taxi/mask.png" width="300" />
 
 [Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC47MLSCEP2)
 
 ### Paint a mask
 
-<img src="./test/img/taxi/original.jpeg" width="300" />
-<img src="./test/img/taxi/orange.png" width="300" />
+<img src="./test/img/taxi/original.jpeg" width="300" /><img src="./test/img/taxi/orange.png" width="300" />
 
 [Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC3Z6F6T6ZQ)
 
@@ -160,15 +157,13 @@ In order to load the library you may use our content delivery network (CDN) http
 
 Image-js has a powerful Region of Interests Manager that allows to create ROIs from different sources. The ROIs can then be filtered, manipulated and finally painted to an RGBA image.
 
-<img src="./test/img/taxi/original.jpeg" width="300" />
-<img src="./test/img/taxi/filteredOrange.png" width="300" />
+<img src="./test/img/taxi/original.jpeg" width="300" /><img src="./test/img/taxi/filteredOrange.png" width="300" />
 
 [Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC5G8Q3RP78)
 
 When extracting a mask from a ROI you have many options (`contour`, `box`, `filled`, `center`, `hull` or `normal`). Here it looks better to use the `filled` ROI.
 
-<img src="./test/img/taxi/original.jpeg" width="300" />
-<img src="./test/img/taxi/filteredFilledOrange.png" width="300" />
+<img src="./test/img/taxi/original.jpeg" width="300" /><img src="./test/img/taxi/filteredFilledOrange.png" width="300" />
 
 [Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC5VOJXA6V9)
 
@@ -178,7 +173,7 @@ This library is able to deal with complex analysis involving images of cell or S
 
 In this example we will annotate an SEM / TEM image by coloring each particle and show the surface of them.
 
-<img src="./test/img/semtem/semtem.jpg" />
+<img src="./test/img/semtem/semtem.jpg" width=400/>
 <img src="./test/img/semtem/result.png" />
 
 We also display a table containing a summary of all the identified particles.
