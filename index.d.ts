@@ -150,7 +150,6 @@ declare class Image {
     // getMean
     // getPoints
     // getRelativePosition
-    // getSvd
 }
 
 declare class RoiManager {}
