@@ -88,7 +88,6 @@ import getMean from './compute/mean';
 import getMedian from './compute/median';
 import getPoints from './compute/points';
 import getRelativePosition from './compute/relativePosition';
-import getSvd from './compute/svd';
 import countAlphaPixels from './compute/countAlphaPixels';
 import monotoneChainConvexHull from './compute/monotoneChainConvexHull';
 import minimalBoundingRectangle from './compute/minimalBoundingRectangle';
@@ -186,5 +185,4 @@ export default function extend(Image) {
   Image.extendMethod('getMean', getMean).extendProperty('mean', getMean);
   Image.extendMethod('getPoints', getPoints).extendProperty('points', getPoints);
   Image.extendMethod('getRelativePosition', getRelativePosition);
-  Image.extendMethod('getSvd', getSvd).extendProperty('svd', getSvd);
 }
