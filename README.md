@@ -79,18 +79,11 @@ follow the instructions to install it on your OS [here](https://github.com/Autom
 
 ## An example using npm and node
 
-<img src="./test/img/taxi/original.jpeg" width="300" />
-<img src="./test/img/taxi/grey.png" width="300" />
-
-[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC4CG6DZZHU)
-
-With `node`you would have to to:
+Install the library:
 
 `npm i image-js`
 
-and here is an code example loading an image that you need to have called `cat.jpg`
-
-`vi index.js`
+An example of code manipulating the image 'cat.jpg' (you need to create it).
 
 ```js
 const { Image } = require('image-js');
@@ -144,6 +137,11 @@ In order to load the library you may use our content delivery network (CDN) http
 </html>
 ```
 
+<img src="./test/img/taxi/original.jpeg" width="300" />
+<img src="./test/img/taxi/grey.png" width="300" />
+
+[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC4CG6DZZHU)
+
 ### Create a mask
 
 <img src="./test/img/taxi/original.jpeg" width="300" />
@@ -173,6 +171,19 @@ When extracting a mask from a ROI you have many options (`contour`, `box`, `fill
 <img src="./test/img/taxi/filteredFilledOrange.png" width="300" />
 
 [Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC5VOJXA6V9)
+
+### Advanced analysis of SEM / TEM images
+
+This library is able to deal with complex analysis involving images of cell or SEM / TEM. It will deal correctly with 16 bits grey scale images (TIFF or PNG) commonly found in scientific results.
+
+In this example we will annotate an SEM / TEM image by coloring each particle and show the surface of them.
+
+<img src="./test/img/semtem/semtem.jpg" />
+<img src="./test/img/semtem/result.png" />
+
+We also display a table containing a summary of all the identified particles.
+
+[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVCJLR0VNK33)
 
 ## License
 
