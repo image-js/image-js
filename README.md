@@ -77,6 +77,40 @@ setup a development environment for image-js.
 The `canvas` native addon library is required for all tests to pass. You can
 follow the instructions to install it on your OS [here](https://github.com/Automattic/node-canvas#installation).
 
+## An example using npm and node
+
+<img src="./test/img/taxi/original.jpeg" width="300" />
+<img src="./test/img/taxi/grey.png" width="300" />
+
+[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC4CG6DZZHU)
+
+With `node`you would have to to:
+
+`npm i image-js`
+
+and here is an code example loading an image that you need to have called `cat.jpg`
+
+`vi index.js`
+
+```js
+const { Image } = require('image-js');
+
+execute();
+
+async function execute() {
+  let image = await Image.load('cat.jpg');
+  let grey = image
+    .grey() // converts the image to greyscale (over 10 algorithms available)
+    .resize({ width: 200 })
+    .rotate(30);
+  grey.save('cat.png');
+}
+```
+
+`node index.js`
+
+A grey scale image will be saved in the same folder.
+
 ## Examples in the browser
 
 In order to load the library you may use our content delivery network (CDN) https://www.lactame.com.
@@ -109,11 +143,6 @@ In order to load the library you may use our content delivery network (CDN) http
 
 </html>
 ```
-
-<img src="./test/img/taxi/original.jpeg" width="300" />
-<img src="./test/img/taxi/grey.png" width="300" />
-
-[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC4CG6DZZHU)
 
 ### Create a mask
 
