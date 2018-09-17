@@ -90,19 +90,19 @@ declare class Image {
     morphologicalGradient(options?: MorphologicalOptions): Image;
 
     // warpingFourPoints
-    crop(options?: {x?: number, y?: number, width?: number, height?: number}): Image;
+    crop(options?: CropOptions): Image;
     // cropAlpha
-    resize(options?: {width?: number, height?: number, factor?: number, interpolation?: InterpolationAlgorithm, preserveAspectRatio?: boolean}): Image;
+    resize(options?: ResizeOptions): Image;
     // hsv
     // hsl
     // cmyk
     // rgba8
-    grey(options?: {algorithm?: GreyAlgorithm, keepAlpha?: boolean, mergeAlpha?: boolean, out?: Image}): Image;
-    mask(options?: {algorithm?: ThresholdAlgorithm|'threshold', threshold?: number, useAlpha?: boolean, invert?: boolean}): Image;
+    grey(options?: GreyOptions): Image;
+    mask(options?: MaskOptions): Image;
     // pad
     // colorDepth
     // setBorder
-    rotate(angle: number, options?: {interpolation?: InterpolationAlgorithm}): Image;
+    rotate(angle: number, options?: RotateOptions): Image;
     rotateLeft(): Image;
     rotateRight(): Image;
 
@@ -247,6 +247,28 @@ declare enum ConvolutionAlgorithm {
     SEPARABLE = 'separable'
 }
 
+interface CropOptions {
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+}
+
+interface ResizeOptions {
+    width?: number;
+    height?: number;
+    factor?: number;
+    interpolation?: InterpolationAlgorithm;
+    preserveAspectRatio?: boolean;
+}
+
+interface GreyOptions {
+    algorithm?: GreyAlgorithm|GreyAlgorithmCallback;
+    keepAlpha?: boolean;
+    mergeAlpha?: boolean;
+    out?: Image;
+}
+
 declare enum GreyAlgorithm {
     LUMA709 = 'luma709',
     LUMA601 = 'luma601',
@@ -266,6 +288,15 @@ declare enum GreyAlgorithm {
     LIGHTNESS = 'lightness'
 }
 
+type GreyAlgorithmCallback = (red: number, green: number, blue: number) => number;
+
+interface MaskOptions {
+    algorithm?: ThresholdAlgorithm|'threshold';
+    threshold?: number;
+    useAlpha?: boolean;
+    invert?: boolean;
+}
+
 declare enum ThresholdAlgorithm {
     HUANG = 'huang',
     INTERMODES = 'intermodes',
@@ -281,6 +312,10 @@ declare enum ThresholdAlgorithm {
     SHANBHAG = 'shanbhag',
     TRIANGLE = 'triangle',
     YEN = 'yen'
+}
+
+interface RotateOptions {
+    interpolation?: InterpolationAlgorithm
 }
 
 declare enum GradientDirection {
