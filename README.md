@@ -138,19 +138,19 @@ A greyscale image will be saved in the same folder.
 
 <img src="./test/img/taxi/original.jpeg" width="300" /><img src="./test/img/taxi/grey.png" width="300" />
 
-[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC4CG6DZZHU)
+[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVD6UC9S7RSV)
 
 ### Create a mask
 
 <img src="./test/img/taxi/original.jpeg" width="300" /><img src="./test/img/taxi/mask.png" width="300" />
 
-[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC47MLSCEP2)
+[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVD6TP7ICRZM)
 
 ### Paint a mask
 
 <img src="./test/img/taxi/original.jpeg" width="300" /><img src="./test/img/taxi/orange.png" width="300" />
 
-[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC3Z6F6T6ZQ)
+[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVD6T1Y63MUH)
 
 ### Filter a mask using Region Of Interests (ROIs)
 
@@ -158,13 +158,13 @@ Image-js has a powerful Region of Interests Manager that allows to create ROIs f
 
 <img src="./test/img/taxi/original.jpeg" width="300" /><img src="./test/img/taxi/filteredOrange.png" width="300" />
 
-[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC5G8Q3RP78)
+[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVD6SE2F4MWE)
 
 When extracting a mask from a ROI you have many options (`contour`, `box`, `filled`, `center`, `hull` or `normal`). Here it looks better to use the `filled` ROI.
 
 <img src="./test/img/taxi/original.jpeg" width="300" /><img src="./test/img/taxi/filteredFilledOrange.png" width="300" />
 
-[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVC5VOJXA6V9)
+[Try it](https://www.w3schools.com/code/tryit.asp?filename=FVD6QQISMLZ2)
 
 ### Advanced analysis of SEM / TEM images
 
