@@ -1,6 +1,6 @@
 import { Image } from 'test/common';
 
-describe('paintLabels', function () {
+describe.skip('paintLabels', function () {
   it('should yield the painted image', function () {
     let image = new Image(150, 150, { kind: 'RGBA' });
     let labels = ['1', '2'];
