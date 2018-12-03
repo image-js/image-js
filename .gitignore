@@ -10,3 +10,4 @@ coverage
 .eslintcache
 .vscode
 /dist/
+package-lock.json
