@@ -40,7 +40,7 @@ describe('Merge Roi', function () {
       maxCommonBorderLength: 5,
     });
 
-    expect(Array.from(roiMap.data)).toEqual([
+    expect(Array.from(roiMap.data)).toStrictEqual([
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
       1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
       0, 1, 1, 1, 1, 1, 1, 1, 1, 0,

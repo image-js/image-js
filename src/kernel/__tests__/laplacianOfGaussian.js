@@ -2,7 +2,7 @@ import { laplacianOfGaussian } from '../laplacianOfGaussian';
 
 describe('we check Shape class', function () {
   it('should yield a cross', function () {
-    expect(laplacianOfGaussian(1.5, 17, 40)).toEqual([
+    expect(laplacianOfGaussian(1.5, 17, 40)).toStrictEqual([
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

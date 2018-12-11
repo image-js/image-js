@@ -34,7 +34,7 @@ describe('check stack max method', function () {
       )
     );
 
-    expect(images.getMax()).toEqual([7]);
+    expect(images.getMax()).toStrictEqual([7]);
   });
 
 
@@ -68,7 +68,7 @@ describe('check stack max method', function () {
       )
     );
 
-    expect(images.getMax()).toEqual([10, 8, 12, 10]);
+    expect(images.getMax()).toStrictEqual([10, 8, 12, 10]);
   });
 });
 

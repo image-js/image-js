@@ -13,13 +13,13 @@ describe('getPixelsArray', function () {
     );
 
     let array = image.getPixelsArray();
-    expect(array).toEqual(data.map((x) => [x]));
+    expect(array).toStrictEqual(data.map((x) => [x]));
   });
 
   it('should work with RGB images', function () {
     const square = getSquare();
     let array = square.getPixelsArray();
-    expect(array).toEqual([
+    expect(array).toStrictEqual([
       [0,  0,  255],
       [0,  255, 0],
       [255, 0,  0],

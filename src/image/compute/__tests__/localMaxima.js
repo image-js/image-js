@@ -18,7 +18,7 @@ describe('Find local extrema', function () {
       ],
       { kind: 'GREY' }
     );
-    expect(image.getLocalMaxima()).toEqual([[3, 2], [6, 7]]);
+    expect(image.getLocalMaxima()).toStrictEqual([[3, 2], [6, 7]]);
   });
 
   it('minimum for a GREY image', function () {
@@ -39,12 +39,12 @@ describe('Find local extrema', function () {
       { kind: 'GREY' }
     );
 
-    expect(image.getLocalMaxima({ invert: true })).toEqual([[3, 2], [6, 7]]);
+    expect(image.getLocalMaxima({ invert: true })).toStrictEqual([[3, 2], [6, 7]]);
     expect(image.getLocalMaxima({
       invert: true,
       region: 3,
       maxEquals: 0
-    })).toEqual([[3, 2], [6, 7]]);
+    })).toStrictEqual([[3, 2], [6, 7]]);
   });
 
   it('maximum for a GREY image with merge', function () {
@@ -65,7 +65,7 @@ describe('Find local extrema', function () {
     );
     expect(image.getLocalMaxima(
       { removeClosePoints: 3, region: 1 }
-    )).toEqual([[3, 2], [6, 7]]);
+    )).toStrictEqual([[3, 2], [6, 7]]);
   });
 
   it('maximum for a GREY image with all smaller', function () {
@@ -86,12 +86,12 @@ describe('Find local extrema', function () {
     );
     expect(image.getLocalMaxima(
       { removeClosePoints: 3, region: 1, maxEquals: 0 }
-    )).toEqual([[6, 7]]);
+    )).toStrictEqual([[6, 7]]);
     expect(image.getLocalMaxima(
       { removeClosePoints: 3, region: 2, maxEquals: 0 }
-    )).toEqual([[6, 7]]);
+    )).toStrictEqual([[6, 7]]);
     expect(image.getLocalMaxima(
       { removeClosePoints: 3, region: 3, maxEquals: 0 }
-    )).toEqual([[6, 7]]);
+    )).toStrictEqual([[6, 7]]);
   });
 });

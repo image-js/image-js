@@ -31,7 +31,7 @@ describe('check stack average method', function () {
       )
     );
 
-    expect(Array.from(images.getAverage().data)).toEqual([
+    expect(Array.from(images.getAverage().data)).toStrictEqual([
       2, 3, 4, 5,
       6, 7, 8, 9
     ]);

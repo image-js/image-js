@@ -7,11 +7,11 @@ describe('multiply', function () {
     let newImage = [255, 166, 240, 255, 200, 255, 26, 240];
 
     image.multiply(2);
-    expect(image.data).toEqual(newImage);
+    expect(image.data).toStrictEqual(newImage);
 
     expect(function () {
       image.add(0);
-    }).toThrowError(/the value must be greater/);
+    }).toThrow(/the value must be greater/);
   });
 });
 
@@ -22,10 +22,10 @@ describe('divide', function () {
     let newImage = [115, 41, 60, 255, 50, 70, 6, 240];
 
     image.divide(2);
-    expect(image.data).toEqual(newImage);
+    expect(image.data).toStrictEqual(newImage);
 
     expect(function () {
       image.divide(0);
-    }).toThrowError(/the value must be greater/);
+    }).toThrow(/the value must be greater/);
   });
 });

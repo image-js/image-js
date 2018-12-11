@@ -27,93 +27,78 @@ Here are the results from imageJ
 */
 
 describe('Threshold calculation', function () {
-  it.skip('Huang should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.huang(img.histogram, img.size)).toBe(134);
-    });
+  it.skip('Huang should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.huang(img.histogram, img.size)).toBe(134);
   });
 
-  it('Intermodes should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.intermodes(img.histogram, img.size)).toBe(166);
-    });
+  it('Intermodes should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.intermodes(img.histogram, img.size)).toBe(166);
   });
 
-  it('Isodata should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.isodata(img.histogram, img.size)).toBe(135);
-    });
+  it('Isodata should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.isodata(img.histogram, img.size)).toBe(135);
   });
 
-  it('Percentile should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.percentile(img.histogram, img.size)).toBe(90);
-    });
+  it('Percentile should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.percentile(img.histogram, img.size)).toBe(90);
   });
 
-  it.skip('Li should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.li(img.histogram, img.size)).toBe(115);
-    });
+  it.skip('Li should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.li(img.histogram, img.size)).toBe(115);
   });
 
-  it('MaxEntropy should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.maxentropy(img.histogram, img.size)).toBe(126);
-    });
+  it('MaxEntropy should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.maxentropy(img.histogram, img.size)).toBe(126);
   });
 
-  it('Mean should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.mean(img.histogram, img.size)).toBe(106);
-    });
+  it('Mean should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.mean(img.histogram, img.size)).toBe(106);
   });
 
-  it('MinError should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.minerror(img.histogram, img.size)).toBe(101);
-    });
+  it('MinError should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.minerror(img.histogram, img.size)).toBe(101);
   });
 
-  it('Minimum should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.minimum(img.histogram, img.size)).toBe(234);
-    });
+  it('Minimum should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.minimum(img.histogram, img.size)).toBe(234);
   });
 
-  it('Moments should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.moments(img.histogram, img.size)).toBe(127);
-    });
+  it('Moments should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.moments(img.histogram, img.size)).toBe(127);
   });
 
-  it('Otsu should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.otsu(img.histogram, img.size)).toBe(135);
-    });
+  it('Otsu should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.otsu(img.histogram, img.size)).toBe(135);
   });
 
-  it.skip('RenyiEntropy should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.renyientropy(img.histogram, img.size)).toBe(115);
-    });
+  it.skip('RenyiEntropy should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.renyientropy(img.histogram, img.size)).toBe(115);
   });
 
-  it('Shanbhag should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.shanbhag(img.histogram, img.size)).toBe(116);
-    });
+  it('Shanbhag should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.shanbhag(img.histogram, img.size)).toBe(116);
   });
 
-  it('Triangle should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.triangle(img.histogram, img.size)).toBe(87);
-    });
+  it('Triangle should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.triangle(img.histogram, img.size)).toBe(87);
   });
 
-  it('Yem should work like ImageJ', function () {
-    return load('grayscale_by_zimmyrose.png').then(function (img) {
-      expect(methods.yen(img.histogram, img.size)).toBe(108);
-    });
+  it('Yem should work like ImageJ', async () => {
+    const img = await load('grayscale_by_zimmyrose.png');
+    expect(methods.yen(img.histogram, img.size)).toBe(108);
   });
 });

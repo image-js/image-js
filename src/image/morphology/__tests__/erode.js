@@ -14,7 +14,7 @@ describe('check the erode function', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.erode().data)).toEqual([
+    expect(Array.from(image.erode().data)).toStrictEqual([
       0, 0, 0, 255, 255,
       0, 0, 0, 255, 255,
       0, 0, 0, 255, 255,
@@ -40,7 +40,7 @@ describe('check the erode function', function () {
       255, 0, 0, 0, 255
     ];
 
-    expect(Array.from(image.erode().data)).toEqual(expected);
+    expect(Array.from(image.erode().data)).toStrictEqual(expected);
   });
 
   it('check for binary image 5x5', function () {
@@ -52,7 +52,7 @@ describe('check the erode function', function () {
       10111
     `, { kind: 'BINARY' });
 
-    expect(mask.erode().data).toEqual(
+    expect(mask.erode().data).toStrictEqual(
       binary`
         00011
         00011
@@ -72,7 +72,7 @@ describe('check the erode function', function () {
     10111
   `, { kind: 'BINARY' });
 
-    expect(mask.erode({ iterations: 2 }).data).toEqual(
+    expect(mask.erode({ iterations: 2 }).data).toStrictEqual(
       binary`
       00001
       00001
@@ -92,7 +92,7 @@ describe('check the erode function', function () {
       11111
     `, { kind: 'BINARY' });
 
-    expect(mask.erode().data).toEqual(binary`
+    expect(mask.erode().data).toStrictEqual(binary`
       10001
       00000
       00000
@@ -110,7 +110,7 @@ describe('check the erode function', function () {
       11011
     `, { kind: 'BINARY' });
 
-    expect(mask.erode().data).toEqual(binary`
+    expect(mask.erode().data).toStrictEqual(binary`
       10001
       00000
       00000
@@ -137,7 +137,7 @@ describe('check the erode function', function () {
       001
     `;
 
-    expect(mask.erode({ kernel }).data).toEqual(expected);
+    expect(mask.erode({ kernel }).data).toStrictEqual(expected);
   });
 
   it('checks from binary image 5x5, kernel with holes', function () {
@@ -158,7 +158,7 @@ describe('check the erode function', function () {
       11111
     `;
 
-    expect(mask.erode({ kernel }).data).toEqual(expected);
+    expect(mask.erode({ kernel }).data).toStrictEqual(expected);
   });
 });
 

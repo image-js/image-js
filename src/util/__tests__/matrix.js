@@ -10,18 +10,18 @@ describe('check matrix class', function () {
   it('check localMax', function () {
     let max = matrix.localMax(4, 3);
     expect(max.value).toBe(4);
-    expect(max.position).toEqual([4, 4]);
+    expect(max.position).toStrictEqual([4, 4]);
   });
 
   it('check localMin', function () {
     let min = matrix.localMin(4, 3);
     expect(min.value).toBe(1);
-    expect(min.position).toEqual([3, 2]);
+    expect(min.position).toStrictEqual([3, 2]);
   });
 
   it('check localSearch', function () {
     let results = matrix.localSearch(4, 3, 1);
-    expect(results).toEqual([[3, 2], [3, 3], [3, 4], [5, 2], [5, 3], [5, 4]]);
+    expect(results).toStrictEqual([[3, 2], [3, 3], [3, 4], [5, 2], [5, 3], [5, 4]]);
   });
 });
 

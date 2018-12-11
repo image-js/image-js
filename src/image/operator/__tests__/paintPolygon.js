@@ -22,7 +22,7 @@ describe('we check paintPolygon', function () {
 
     let exptected = getExpected(painted, [255, 0, 0]);
 
-    expect(Array.from(image.data)).toEqual(exptected);
+    expect(Array.from(image.data)).toStrictEqual(exptected);
   });
 
   it('should yield the painted image with a rectangle', function () {
@@ -46,7 +46,7 @@ describe('we check paintPolygon', function () {
 
     let exptected = getExpected(painted, [255, 0, 0]);
 
-    expect(Array.from(image.data)).toEqual(exptected);
+    expect(Array.from(image.data)).toStrictEqual(exptected);
   });
 
   it('should yield the painted image B/W image with a triangle', function () {
@@ -69,7 +69,7 @@ describe('we check paintPolygon', function () {
     ];
 
     let exptected = getExpectedGrey(painted, [255, 0, 0]);
-    expect(Array.from(image.data)).toEqual(exptected);
+    expect(Array.from(image.data)).toStrictEqual(exptected);
   });
 
   it('when there is two segments out of the polygon', function () {
@@ -92,7 +92,7 @@ describe('we check paintPolygon', function () {
     ];
 
     let exptected = getExpectedGrey(painted, [255, 0, 0]);
-    expect(Array.from(image.data)).toEqual(exptected);
+    expect(Array.from(image.data)).toStrictEqual(exptected);
   });
 });
 

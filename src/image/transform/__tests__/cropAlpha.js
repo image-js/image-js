@@ -12,7 +12,7 @@ describe('cropAlpha transform', function () {
     const cropped = image.cropAlpha();
     expect(cropped.width).toBe(image.width);
     expect(cropped.height).toBe(image.height);
-    expect(Array.from(cropped.data)).toEqual(Array.from(image.data));
+    expect(Array.from(cropped.data)).toStrictEqual(Array.from(image.data));
   });
 
   it('grey + alpha - some crop', function () {
@@ -26,7 +26,7 @@ describe('cropAlpha transform', function () {
     const cropped = image.cropAlpha();
     expect(cropped.width).toBe(2);
     expect(cropped.height).toBe(3);
-    expect(Array.from(cropped.data)).toEqual([
+    expect(Array.from(cropped.data)).toStrictEqual([
       2, 255, 3, 255,
       5, 255, 6, 255,
       8, 255, 9, 255,
@@ -44,7 +44,7 @@ describe('cropAlpha transform', function () {
     const cropped = image.cropAlpha();
     expect(cropped.width).toBe(1);
     expect(cropped.height).toBe(1);
-    expect(Array.from(cropped.data)).toEqual([5, 255]);
+    expect(Array.from(cropped.data)).toStrictEqual([5, 255]);
   });
 
   it('grey + alpha - with threshold', function () {
@@ -58,7 +58,7 @@ describe('cropAlpha transform', function () {
     const cropped = image.cropAlpha({ threshold: 240 });
     expect(cropped.width).toBe(2);
     expect(cropped.height).toBe(3);
-    expect(Array.from(cropped.data)).toEqual([
+    expect(Array.from(cropped.data)).toStrictEqual([
       2, 240, 3, 0,
       5, 255, 6, 250,
       8, 239, 9, 250,
@@ -76,6 +76,6 @@ describe('cropAlpha transform', function () {
 
     expect(function () {
       image.cropAlpha();
-    }).toThrowError(/Could not find new dimensions. Threshold may be too high./);
+    }).toThrow(/Could not find new dimensions. Threshold may be too high./);
   });
 });

@@ -5,25 +5,25 @@ describe('calculate the overlap with another image', function () {
     let image = new Image(1, 2, [0, 0, 0, 0, 255, 255, 255, 255]);
     let image2 = new Image(1, 2, [0, 0, 0, 0, 255, 255, 255, 255]);
     let similarity = image.getSimilarity(image2, { average: false });
-    expect(similarity).toEqual([1, 1, 1]);
+    expect(similarity).toStrictEqual([1, 1, 1]);
 
     similarity = image.getSimilarity(image2, { average: true });
     expect(similarity).toBe(1);
 
     similarity = image.getSimilarity(image2);
-    expect(similarity).toEqual(1);
+    expect(similarity).toStrictEqual(1);
 
     similarity = image.getSimilarity(image2, {
       average: false,
       channels: ['r', 'g']
     });
-    expect(similarity).toEqual([1, 1]);
+    expect(similarity).toStrictEqual([1, 1]);
 
     similarity = image.getSimilarity(image2, {
       average: false,
       defaultAlpha: true
     });
-    expect(similarity).toEqual([1, 1, 1, 1]);
+    expect(similarity).toStrictEqual([1, 1, 1, 1]);
   });
 
   it('check if sum = 0', function () {
@@ -31,38 +31,38 @@ describe('calculate the overlap with another image', function () {
     let image2 = new Image(1, 2, [0, 0, 200, 255, 255, 0, 255, 255]);
 
     let similarity = image.getSimilarity(image2, { average: false });
-    expect(similarity).toEqual([0, 0, 0]);
+    expect(similarity).toStrictEqual([0, 0, 0]);
 
     similarity = image.getSimilarity(image2, {
       average: false,
       channels: ['r', 'g']
     });
-    expect(similarity).toEqual([0, 0]);
+    expect(similarity).toStrictEqual([0, 0]);
 
     similarity = image.getSimilarity(image2, {
       average: false,
       defaultAlpha: true
     });
-    expect(similarity).toEqual([0, 0, 0, 0]);
+    expect(similarity).toStrictEqual([0, 0, 0, 0]);
   });
 
   it('check different images without shift', function () {
     let image = new Image(1, 3, [0, 0, 0, 0, 20, 20, 20, 20, 30, 30, 30, 30]);
     let image2 = new Image(1, 3, [1, 10, 20, 2, 2, 20, 30, 1, 2, 20, 0, 2]);
     let similarity = image.getSimilarity(image2, { average: false });
-    expect(similarity).toEqual([0.08, 0.8, 0.4]);
+    expect(similarity).toStrictEqual([0.08, 0.8, 0.4]);
 
     similarity = image.getSimilarity(image2, {
       average: false,
       normalize: true
     });
-    expect(similarity).toEqual([0.8, 0.8, 0.4]);
+    expect(similarity).toStrictEqual([0.8, 0.8, 0.4]);
 
     similarity = image.getSimilarity(image2, {
       average: false,
       channels: ['r', 'b']
     });
-    expect(similarity).toEqual([0.08, 0.4]);
+    expect(similarity).toStrictEqual([0.08, 0.4]);
 
     similarity = image.getSimilarity(image2, { channels: ['r', 'b'] });
     expect(similarity).toBeCloseTo(0.24, 0.0002);
@@ -71,44 +71,44 @@ describe('calculate the overlap with another image', function () {
       average: false,
       defaultAlpha: true
     });
-    expect(similarity).toEqual([0.08, 0.8, 0.4, 0.06]);
+    expect(similarity).toStrictEqual([0.08, 0.8, 0.4, 0.06]);
   });
 
   it('check different images with shift', function () {
     let image = new Image(3, 1, [0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30]);
     let image2 = new Image(3, 1, [0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30]);
     let similarity = image.getSimilarity(image2, { average: false });
-    expect(similarity).toEqual([1, 1, 1]);
+    expect(similarity).toStrictEqual([1, 1, 1]);
 
     similarity = image.getSimilarity(image2, {
       average: false,
       normalize: true
     });
-    expect(similarity).toEqual([1, 1, 1]);
+    expect(similarity).toStrictEqual([1, 1, 1]);
 
     similarity = image.getSimilarity(image2, {
       average: false,
       shift: [1, 0]
     });
-    expect(similarity).toEqual([0.25, 0.25, 0.25]);
+    expect(similarity).toStrictEqual([0.25, 0.25, 0.25]);
 
     similarity = image.getSimilarity(image2, {
       average: false,
       shift: [-1, 0]
     });
-    expect(similarity).toEqual([0.25, 0.25, 0.25]);
+    expect(similarity).toStrictEqual([0.25, 0.25, 0.25]);
 
     similarity = image.getSimilarity(image2, {
       average: false,
       shift: [0, 1]
     });
-    expect(similarity).toEqual([0, 0, 0]);
+    expect(similarity).toStrictEqual([0, 0, 0]);
 
     similarity = image.getSimilarity(image2, {
       average: false,
       shift: [0, -1]
     });
-    expect(similarity).toEqual([0, 0, 0]);
+    expect(similarity).toStrictEqual([0, 0, 0]);
   });
 
   it('check different images with size error', function () {
@@ -116,7 +116,7 @@ describe('calculate the overlap with another image', function () {
     expect(function () {
       let image2 = new Image(3, 1, [0, 0], { kind: 'GREY' });
       image.getSimilarity(image2, { average: false });
-    }).toThrowError(/incorrect data size/);
+    }).toThrow(/incorrect data size/);
   });
 
   it('check different images with other kind', function () {
@@ -124,7 +124,7 @@ describe('calculate the overlap with another image', function () {
     let image2 = new Image(3, 1, [0, 0, 0], { kind: 'GREY' });
     expect(function () {
       image.getSimilarity(image2, { average: false });
-    }).toThrowError(/number of channel/);
+    }).toThrow(/number of channel/);
   });
 
   it('check different images with other bitDepth', function () {
@@ -132,7 +132,7 @@ describe('calculate the overlap with another image', function () {
     let image2 = new Image(3, 1, [0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30], { bitDepth: 16 });
     expect(function () {
       image.getSimilarity(image2, { average: false });
-    }).toThrowError(/the same bitDepth/);
+    }).toThrow(/the same bitDepth/);
   });
 
   it('check different images with other color model', function () {
@@ -140,6 +140,6 @@ describe('calculate the overlap with another image', function () {
     let image2 = new Image(3, 1, [0, 0, 0, 0, 10, 10, 10, 10, 30, 30, 30, 30], { colorModel: 'HSL' });
     expect(function () {
       image.getSimilarity(image2, { average: false });
-    }).toThrowError(/the same colorModel/);
+    }).toThrow(/the same colorModel/);
   });
 });

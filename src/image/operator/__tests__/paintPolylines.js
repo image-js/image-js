@@ -19,7 +19,7 @@ describe('we check paintPolylines', function () {
       0, 0, 0, 0, 0
     ];
 
-    expect(Array.from(grey.data)).toEqual(expected);
+    expect(Array.from(grey.data)).toStrictEqual(expected);
   });
 });
 

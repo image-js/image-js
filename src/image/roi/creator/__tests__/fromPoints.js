@@ -10,7 +10,7 @@ describe('we check createROIMapFromPixels', function () {
 
     let mapData = fromPoints.call(image, pixels, { kind: 'smallCross' }).data;
 
-    expect(Array.from(mapData)).toEqual([
+    expect(Array.from(mapData)).toStrictEqual([
       0, 1, 0, 0, 4,
       1, 1, 1, 2, 0,
       0, 1, 2, 2, 2,

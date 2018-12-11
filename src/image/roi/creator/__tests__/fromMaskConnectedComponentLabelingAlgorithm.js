@@ -41,7 +41,7 @@ describe('we check fromMask2', function () {
       0, 0, 0, 0, 0, 0
     ];
 
-    expect(Array.from(mapData)).toEqual(expected);
+    expect(Array.from(mapData)).toStrictEqual(expected);
   });
 
   it('should yield the right map with 8 neighbours', function () {
@@ -56,6 +56,6 @@ describe('we check fromMask2', function () {
       0, 0, 0, 0, 0, 0
     ];
 
-    expect(Array.from(mapData)).toEqual(expected);
+    expect(Array.from(mapData)).toStrictEqual(expected);
   });
 });

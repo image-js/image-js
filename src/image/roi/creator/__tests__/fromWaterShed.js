@@ -15,7 +15,7 @@ describe('Test WaterShed Roi generation', function () {
       { kind: 'GREY' }
     );
     let map = fromWaterShed.call(image);
-    expect(Array.from(map.data)).toEqual([
+    expect(Array.from(map.data)).toStrictEqual([
       1, 1, 1, 1, 1,
       1, 1, 1, 1, 1,
       1, 1, 1, 1, 1,
@@ -47,7 +47,7 @@ describe('Test WaterShed Roi generation', function () {
       mask: mask,
       invert: true
     });
-    expect(Array.from(map.data)).toEqual([
+    expect(Array.from(map.data)).toStrictEqual([
       0, 0, 0, 0, 0,
       0, 1, 1, 1, 0,
       0, 1, 1, 1, 0,
@@ -80,7 +80,7 @@ describe('Test WaterShed Roi generation', function () {
       }
     }
     let map = fromWaterShed.call(image, { fillMaxValue: 2, mask: mask });
-    expect(Array.from(map.data)).toEqual([
+    expect(Array.from(map.data)).toStrictEqual([
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 1, 1, 1, 0, 0, 0, 0, 0,
       0, 0, 1, 1, 1, 1, 0, 0, 0, 0,
@@ -125,7 +125,7 @@ describe('Test WaterShed Roi generation', function () {
     }
 
     let map = fromWaterShed.call(image, { mask: mask });
-    expect(Array.from(map.data)).toEqual([
+    expect(Array.from(map.data)).toStrictEqual([
       1, 1, 1, 1, 1, 1, 2, 2, 2, 2,
       1, 1, 1, 1, 1, 1, 2, 2, 2, 0,
       0, 1, 1, 1, 1, 1, 2, 2, 2, 0,

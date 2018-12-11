@@ -13,13 +13,13 @@ describe('we check the validateChannel method', function () {
     expect(validateChannel(image, 'b')).toBe(2);
     expect(function () {
       validateChannel(image, 'a');
-    }).toThrowError(/does not contain alpha/);
+    }).toThrow(/does not contain alpha/);
     expect(function () {
       validateChannel(image);
-    }).toThrowError(/the channel has to be/);
+    }).toThrow(/the channel has to be/);
     expect(function () {
       validateChannel(image, 3, false);
-    }).toThrowError(/the channel has to be/);
+    }).toThrow(/the channel has to be/);
   });
 
   it('check for a RGBA image', function () {
@@ -33,10 +33,10 @@ describe('we check the validateChannel method', function () {
     expect(validateChannel(image, 'a')).toBe(3);
     expect(function () {
       validateChannel(image);
-    }).toThrowError(/the channel has to be/);
+    }).toThrow(/the channel has to be/);
     expect(function () {
       validateChannel(image, 3, false);
-    }).toThrowError(/alpha channel may not be/);
+    }).toThrow(/alpha channel may not be/);
   });
 
   it('check for a GreyA image', function () {
@@ -50,13 +50,13 @@ describe('we check the validateChannel method', function () {
     expect(validateChannel(image, 'a', true)).toBe(1);
     expect(function () {
       validateChannel(image, 'r');
-    }).toThrowError(/undefined channel/);
+    }).toThrow(/undefined channel/);
     expect(function () {
       validateChannel(image, 1, false);
-    }).toThrowError(/alpha channel may not/);
+    }).toThrow(/alpha channel may not/);
     expect(function () {
       validateChannel(image, 'a', false);
-    }).toThrowError(/alpha channel may not/);
+    }).toThrow(/alpha channel may not/);
   });
 });
 

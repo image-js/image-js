@@ -33,7 +33,7 @@ describe('Calculate mergeRoi from a roiMap', function () {
       3, 3, 3, 3, 1, 1,
       3, 3, 3, 3, 1, 1
     ];
-    expect(result.data).toEqual(expected);
+    expect(result.data).toStrictEqual(expected);
   });
 
   it('should work with complex case', function () {
@@ -68,7 +68,7 @@ describe('Calculate mergeRoi from a roiMap', function () {
       -1, -1, -1, -1, -1, -1
     ];
 
-    expect(result.data).toEqual(expected);
+    expect(result.data).toStrictEqual(expected);
   });
 
   it('should work with more complex case', function () {
@@ -96,7 +96,7 @@ describe('Calculate mergeRoi from a roiMap', function () {
       2, 2, 2, 2, 2, 2
     ];
 
-    expect(result.data).toEqual(expected);
+    expect(result.data).toStrictEqual(expected);
   });
 
   it('check with common border ratio', function () {
@@ -124,7 +124,7 @@ describe('Calculate mergeRoi from a roiMap', function () {
       1, 1, 1,
       1, 1, 0
     ];
-    expect(result.data).toEqual(expected);
+    expect(result.data).toStrictEqual(expected);
   });
 
   it('check with common border ratio more complex', function () {
@@ -154,6 +154,6 @@ describe('Calculate mergeRoi from a roiMap', function () {
       1, 2, 2, 3, 3, 1,
       1, 1, 1, 1, 1, 1
     ];
-    expect(result.data).toEqual(expected);
+    expect(result.data).toStrictEqual(expected);
   });
 });

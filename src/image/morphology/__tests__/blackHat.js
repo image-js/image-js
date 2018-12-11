@@ -16,7 +16,7 @@ describe('check the black hat function', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.blackHat({ kernel: kernel }).data)).toEqual([
+    expect(Array.from(image.blackHat({ kernel: kernel }).data)).toStrictEqual([
       255, 255, 0, 255, 255,
       255, 0, 0, 0, 255,
       255, 0, 0, 0, 255,
@@ -38,7 +38,7 @@ describe('check the black hat function', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.blackHat({ kernel: kernel, iterations: 2 }).data)).toEqual([
+    expect(Array.from(image.blackHat({ kernel: kernel, iterations: 2 }).data)).toStrictEqual([
       0, 0, 255, 0, 0,
       0, 0, 0, 0, 0,
       0, 0, 0, 0, 0,

@@ -3,24 +3,18 @@ import { Image, Stack, getSquare, getImage } from 'test/common';
 describe('Core methods of Stack objects', function () {
   let stack = new Stack([getSquare(), getSquare()]);
 
-  it('Stack.load', function () {
-    return Stack.load([getImage('BW2x2.png'), getImage('BW3x3.png')]).then(function (images) {
-      expect(images).toHaveLength(2);
-      expect(images).toBeInstanceOf(Stack);
-      expect(images[0]).toBeInstanceOf(Image);
-      expect(images[1]).toBeInstanceOf(Image);
-      expect(images[0].width).toBe(2);
-      expect(images[1].width).toBe(3);
-    });
+  it('Stack.load', async () => {
+    const images = await Stack.load([getImage('BW2x2.png'), getImage('BW3x3.png')]);
+    expect(images).toHaveLength(2);
+    expect(images).toBeInstanceOf(Stack);
+    expect(images[0]).toBeInstanceOf(Image);
+    expect(images[1]).toBeInstanceOf(Image);
+    expect(images[0].width).toBe(2);
+    expect(images[1].width).toBe(3);
   });
 
-  it('Stack.load with error', function () {
-    return Stack.load([getImage('BW2x2.png'), getImage('inexistant')]).catch(function (e) {
-      expect(e.code).toBe('ENOENT');
-      return 42;
-    }).then(function (value) {
-      expect(value).toBe(42);
-    });
+  it('Stack.load with error', async () => {
+    await expect(Stack.load([getImage('BW2x2.png'), getImage('inexistant')])).rejects.toThrow(/ENOENT/);
   });
 
   it('should be an Array', function () {
@@ -47,6 +41,6 @@ describe('Core methods of Stack objects', function () {
 
     expect(function () {
       stack.map();
-    }).toThrowError(TypeError);
+    }).toThrow(TypeError);
   });
 });

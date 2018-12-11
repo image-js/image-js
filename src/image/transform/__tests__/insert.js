@@ -1,7 +1,7 @@
 import { Image } from 'test/common';
 import binary from 'test/binary';
 
-it('insert on grey image', function () {
+test('insert on grey image', function () {
   let img = new Image(3, 4, [
     100, 200, 100,
     100, 100, 100,
@@ -14,7 +14,7 @@ it('insert on grey image', function () {
     0, 0
   ], { kind: 'GREY' });
 
-  expect(img.insert(toInsert).data).toEqual([
+  expect(img.insert(toInsert).data).toStrictEqual([
     0, 255, 100,
     0, 0, 100,
     100, 100, 100,
@@ -22,7 +22,7 @@ it('insert on grey image', function () {
   ]);
 });
 
-it('insert on binary image', function () {
+test('insert on binary image', function () {
   let mask = new Image(5, 5, binary`
       11111
       11111
@@ -36,7 +36,7 @@ it('insert on binary image', function () {
      0101
      0001
     `, { kind: 'BINARY' });
-  expect(mask.insert(toInsert).data).toEqual(
+  expect(mask.insert(toInsert).data).toStrictEqual(
     binary`
         00011
         01011
@@ -48,7 +48,7 @@ it('insert on binary image', function () {
   expect(mask.insert(toInsert, {
     x: 1,
     y: 1
-  }).data).toEqual(
+  }).data).toStrictEqual(
     binary`
         11111
         10001
@@ -61,7 +61,7 @@ it('insert on binary image', function () {
   expect(mask.insert(toInsert, {
     x: 4,
     y: 4
-  }).data).toEqual(
+  }).data).toStrictEqual(
     binary`
         11111
         11111

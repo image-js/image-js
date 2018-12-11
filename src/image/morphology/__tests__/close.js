@@ -18,7 +18,7 @@ describe('check the close function', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.close({ kernel }).data)).toEqual([
+    expect(Array.from(image.close({ kernel }).data)).toStrictEqual([
       255, 255, 255, 255, 255,
       255, 0, 0, 0, 255,
       255, 0, 0, 0, 255,
@@ -40,7 +40,7 @@ describe('check the close function', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.close({ kernel, iterations: 2 }).data)).toEqual([
+    expect(Array.from(image.close({ kernel, iterations: 2 }).data)).toStrictEqual([
       255, 255, 255, 255, 255,
       255, 0, 0, 0, 255,
       255, 0, 0, 0, 255,
@@ -68,7 +68,7 @@ describe('check the close function', function () {
       11011
     `, { kind: 'BINARY' });
 
-    expect(mask.close().data).toEqual(
+    expect(mask.close().data).toStrictEqual(
       binary`
         11111
         10001

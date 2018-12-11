@@ -31,9 +31,9 @@ describe('we check that each Roi is surrounded by the expected zones', function 
       return b.boxIDs[0] - a.boxIDs[0];
     });
 
-    expect(result[0].boxIDs).toEqual([1]);
-    expect(result[1].boxIDs).toEqual([1]);
-    expect(result[2].boxIDs).toEqual([-1, -2]);
+    expect(result[0].boxIDs).toStrictEqual([1]);
+    expect(result[1].boxIDs).toStrictEqual([1]);
+    expect(result[2].boxIDs).toStrictEqual([-1, -2]);
   });
 
   it('should yield the right borderIDs', function () {
@@ -43,13 +43,13 @@ describe('we check that each Roi is surrounded by the expected zones', function 
       return b.borderIDs[0] - a.borderIDs[0];
     });
 
-    expect(result[0].borderIDs).toEqual([1]); // -1
-    expect(result[1].borderIDs).toEqual([1]); // -2
-    expect(result[2].borderIDs).toEqual([-1, -2]); // +1
+    expect(result[0].borderIDs).toStrictEqual([1]); // -1
+    expect(result[1].borderIDs).toStrictEqual([1]); // -2
+    expect(result[2].borderIDs).toStrictEqual([-1, -2]); // +1
 
-    expect(result[0].borderLengths).toEqual([3]);
-    expect(result[1].borderLengths).toEqual([4]);
-    expect(result[2].borderLengths).toEqual([2, 4]);
+    expect(result[0].borderLengths).toStrictEqual([3]);
+    expect(result[1].borderLengths).toStrictEqual([4]);
+    expect(result[2].borderLengths).toStrictEqual([2, 4]);
   });
 
   it('should yield the right externalIDs', function () {
@@ -59,12 +59,12 @@ describe('we check that each Roi is surrounded by the expected zones', function 
       return b.borderIDs[0] - a.borderIDs[0];
     });
 
-    expect(result[0].externalIDs).toEqual([1]); // -1
-    expect(result[1].externalIDs).toEqual([1]); // -2
-    expect(result[2].externalIDs).toEqual([-1, -2]); // +1
+    expect(result[0].externalIDs).toStrictEqual([1]); // -1
+    expect(result[1].externalIDs).toStrictEqual([1]); // -2
+    expect(result[2].externalIDs).toStrictEqual([-1, -2]); // +1
 
-    expect(result[0].externalLengths).toEqual([3]);
-    expect(result[1].externalLengths).toEqual([4]);
-    expect(result[2].externalLengths).toEqual([2, 4]);
+    expect(result[0].externalLengths).toStrictEqual([3]);
+    expect(result[1].externalLengths).toStrictEqual([4]);
+    expect(result[2].externalLengths).toStrictEqual([2, 4]);
   });
 });

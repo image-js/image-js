@@ -21,7 +21,7 @@ describe('floodFill', function () {
         11110000
     `, { kind: 'BINARY' });
 
-    expect(image.data).toEqual(filled.data);
+    expect(image.data).toStrictEqual(filled.data);
   });
 
   it('should fill the binary image (not in place)', function () {
@@ -43,8 +43,8 @@ describe('floodFill', function () {
         00000000
     `, { kind: 'BINARY' });
 
-    expect(result.data).toEqual(filled.data);
-    expect(image.data).toEqual(binary`
+    expect(result.data).toStrictEqual(filled.data);
+    expect(image.data).toStrictEqual(binary`
         00100000
         00110000
         00010000

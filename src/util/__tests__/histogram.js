@@ -31,7 +31,7 @@ describe('we check histogram utilities', function () {
     expect(medianFromHistogram([0, 0, 0, 0, 4])).toBe(4);
     expect(medianFromHistogram([0, 0, 1, 1, 0])).toBe(2.5);
     expect(medianFromHistogram([4, 0, 0, 0, 0])).toBe(0);
-    expect(() => medianFromHistogram([0, 0, 0, 0, 0])).toThrowError(/unreachable/);
+    expect(() => medianFromHistogram([0, 0, 0, 0, 0])).toThrow(/unreachable/);
     expect(medianFromHistogram([1, 0, 0, 0, 1])).toBe(2);
   });
 });

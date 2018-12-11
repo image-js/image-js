@@ -12,28 +12,28 @@ describe('check the convolution operator', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.convolution([1]).data)).toEqual([
+    expect(Array.from(image.convolution([1]).data)).toStrictEqual([
       1, 2, 3, 4,
       5, 6, 7, 8,
       9, 10, 11, 12,
       13, 14, 15, 16
     ]);
 
-    expect(Array.from(image.convolution([1], { algorithm: 'fft' }).data)).toEqual([
+    expect(Array.from(image.convolution([1], { algorithm: 'fft' }).data)).toStrictEqual([
       1, 2, 3, 4,
       5, 6, 7, 8,
       9, 10, 11, 12,
       13, 14, 15, 16
     ]);
 
-    expect(Array.from(image.convolution([[1]]).data)).toEqual([
+    expect(Array.from(image.convolution([[1]]).data)).toStrictEqual([
       1, 2, 3, 4,
       5, 6, 7, 8,
       9, 10, 11, 12,
       13, 14, 15, 16
     ]);
 
-    expect(Array.from(image.convolution([[1]], { algorithm: 'fft' }).data)).toEqual([
+    expect(Array.from(image.convolution([[1]], { algorithm: 'fft' }).data)).toStrictEqual([
       1, 2, 3, 4,
       5, 6, 7, 8,
       9, 10, 11, 12,
@@ -43,11 +43,11 @@ describe('check the convolution operator', function () {
 
     expect(function () {
       image.convolution([1, 2, 3]);
-    }).toThrowError(/array should be a square/);
+    }).toThrow(/array should be a square/);
 
     expect(function () {
       image.convolution([[1], [1, 2, 3]]);
-    }).toThrowError(/rows and columns should be odd number/);
+    }).toThrow(/rows and columns should be odd number/);
   });
 
 
@@ -62,7 +62,7 @@ describe('check the convolution operator', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.convolution([1, 1, 1, 1, 1, 1, 1, 1, 1]).data)).toEqual([
+    expect(Array.from(image.convolution([1, 1, 1, 1, 1, 1, 1, 1, 1]).data)).toStrictEqual([
       13, 13, 13, 13,
       13, 13, 13, 13,
       13, 13, 13, 13,
@@ -71,7 +71,7 @@ describe('check the convolution operator', function () {
 
     expect(
       Array.from(image.convolution([1, 1, 1, 1, 1, 1, 1, 1, 1], { algorithm: 'fft' }).data)
-    ).toEqual([
+    ).toStrictEqual([
       13, 13, 13, 13,
       13, 13, 13, 13,
       13, 13, 13, 13,
@@ -90,21 +90,21 @@ describe('check the convolution operator', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.convolution([[1, 2, 1]]).data)).toEqual([
+    expect(Array.from(image.convolution([[1, 2, 1]]).data)).toStrictEqual([
       4, 4, 4, 4,
       7, 7, 7, 7,
       7, 7, 7, 7,
       4, 4, 4, 4
     ]);
 
-    expect(Array.from(image.convolution([[1, 2, 1]], { algorithm: 'fft' }).data)).toEqual([
+    expect(Array.from(image.convolution([[1, 2, 1]], { algorithm: 'fft' }).data)).toStrictEqual([
       4, 4, 4, 4,
       7, 7, 7, 7,
       7, 7, 7, 7,
       4, 4, 4, 4
     ]);
 
-    expect(Array.from(image.convolution([[1, 2, 1]], { divisor: 4 }).data)).toEqual([
+    expect(Array.from(image.convolution([[1, 2, 1]], { divisor: 4 }).data)).toStrictEqual([
       1, 1, 1, 1,
       2, 2, 2, 2,
       2, 2, 2, 2,
@@ -113,14 +113,14 @@ describe('check the convolution operator', function () {
 
     expect(
       Array.from(image.convolution([[1, 2, 1]], { divisor: 4, algorithm: 'fft' }).data)
-    ).toEqual([
+    ).toStrictEqual([
       1, 1, 1, 1,
       2, 2, 2, 2,
       2, 2, 2, 2,
       1, 1, 1, 1
     ]);
 
-    expect(Array.from(image.convolution([[1, 2, 1]], { normalize: true }).data)).toEqual([
+    expect(Array.from(image.convolution([[1, 2, 1]], { normalize: true }).data)).toStrictEqual([
       1, 1, 1, 1,
       2, 2, 2, 2,
       2, 2, 2, 2,
@@ -129,7 +129,7 @@ describe('check the convolution operator', function () {
 
     expect(
       Array.from(image.convolution([[1, 2, 1]], { normalize: true, algorithm: 'fft' }).data)
-    ).toEqual([
+    ).toStrictEqual([
       1, 1, 1, 1,
       2, 2, 2, 2,
       2, 2, 2, 2,
@@ -147,25 +147,25 @@ describe('check the convolution operator', function () {
       { kind: 'GREYA' }
     );
 
-    expect(Array.from(image.convolution([1]).data)).toEqual([
+    expect(Array.from(image.convolution([1]).data)).toStrictEqual([
       1, 255, 2, 255, 3, 255,
       4, 255, 5, 255, 6, 255,
       7, 255, 8, 255, 9, 255
     ]);
 
-    expect(Array.from(image.convolution([1], { algorithm: 'fft' }).data)).toEqual([
+    expect(Array.from(image.convolution([1], { algorithm: 'fft' }).data)).toStrictEqual([
       1, 255, 2, 255, 3, 255,
       4, 255, 5, 255, 6, 255,
       7, 255, 8, 255, 9, 255
     ]);
 
-    expect(Array.from(image.convolution([[1]]).data)).toEqual([
+    expect(Array.from(image.convolution([[1]]).data)).toStrictEqual([
       1, 255, 2, 255, 3, 255,
       4, 255, 5, 255, 6, 255,
       7, 255, 8, 255, 9, 255
     ]);
 
-    expect(Array.from(image.convolution([[1]], { algorithm: 'fft' }).data)).toEqual([
+    expect(Array.from(image.convolution([[1]], { algorithm: 'fft' }).data)).toStrictEqual([
       1, 255, 2, 255, 3, 255,
       4, 255, 5, 255, 6, 255,
       7, 255, 8, 255, 9, 255
@@ -174,11 +174,11 @@ describe('check the convolution operator', function () {
 
     expect(function () {
       image.convolution([1, 2, 3]);
-    }).toThrowError(/array should be a square/);
+    }).toThrow(/array should be a square/);
 
     expect(function () {
       image.convolution([[1], [1, 2, 3]]);
-    }).toThrowError(/rows and columns should be odd number/);
+    }).toThrow(/rows and columns should be odd number/);
   });
 });
 

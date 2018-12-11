@@ -19,7 +19,7 @@ describe('save to disk', () => {
     await img.save(`${tmpDir}/img.png`);
     const data = Uint8Array.from(fs.readFileSync(`${tmpDir}/img.png`));
     const buffer = img.toBuffer();
-    expect(buffer).toEqual(data);
+    expect(buffer).toStrictEqual(data);
   });
 
   it('save then load (jpg)', async () => {
@@ -33,6 +33,7 @@ describe('save to disk', () => {
   it('new then save', async () => {
     const img = getSquare();
     await img.save(`${tmpDir}/img2.png`);
+    expect(fs.existsSync(`${tmpDir}/img2.png`)).toBe(true);
   });
 
   it('new then save with unsupported bit depth', async () => {
@@ -42,7 +43,7 @@ describe('save to disk', () => {
     const imgBinary = `${tmpDir}/imgBinary.png`;
     await img.save(imgBinary);
     const reloaded = await load(imgBinary);
-    expect(Array.from(reloaded.data)).toEqual([
+    expect(Array.from(reloaded.data)).toStrictEqual([
       255, 255, 255, 255, 0, 0, 0, 255,
       0, 0, 0, 255, 255, 255, 255, 255
     ]);
@@ -51,5 +52,6 @@ describe('save to disk', () => {
   it('new then save bmp', async () => {
     const img = get1BitSquare();
     await img.save(`${tmpDir}/square.bmp`, { format: 'bmp' });
+    expect(fs.existsSync(`${tmpDir}/square.bmp`)).toBe(true);
   });
 });

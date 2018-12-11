@@ -12,7 +12,7 @@ describe('check the cmyk transform', function () {
     expect(newImage.colorModel).toBe('CMYK');
     expect(newImage.bitDepth).toBe(8);
 
-    expect(Array.from(newImage.data)).toEqual([0, 0, 255, 155, 255, 0, 0, 155]);
+    expect(Array.from(newImage.data)).toStrictEqual([0, 0, 255, 155, 255, 0, 0, 155]);
   });
 
   it('check the right result for RGB A image 8 bit', function () {
@@ -26,6 +26,6 @@ describe('check the cmyk transform', function () {
     expect(newImage.colorModel).toBe('CMYK');
     expect(newImage.bitDepth).toBe(16);
 
-    expect(Array.from(newImage.data)).toEqual([0, 0, 65535, 49152, 127, 65535, 0, 0, 49152, 127]);
+    expect(Array.from(newImage.data)).toStrictEqual([0, 0, 65535, 49152, 127, 65535, 0, 0, 49152, 127]);
   });
 });

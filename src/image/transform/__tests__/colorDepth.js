@@ -6,10 +6,10 @@ describe('check the colorDepth transform', function () {
     let image = new Image(4, 1, [0x00, 0x7f, 0xff, 0x12], { kind: 'GREY' });
 
     let newImage = image.colorDepth(8);
-    expect(Array.from(newImage.data)).toEqual([0x00, 0x7f, 0xff, 0x12]);
+    expect(Array.from(newImage.data)).toStrictEqual([0x00, 0x7f, 0xff, 0x12]);
 
     newImage = image.colorDepth(16);
-    expect(Array.from(newImage.data)).toEqual([0x0000, 0x7f7f, 0xffff, 0x1212]);
+    expect(Array.from(newImage.data)).toStrictEqual([0x0000, 0x7f7f, 0xffff, 0x1212]);
   });
 
   it('check the right colorDepth for MASK to 8 bit', function () {
@@ -18,13 +18,13 @@ describe('check the colorDepth transform', function () {
         0101
     `, { kind: 'BINARY' });
     let newImage = image.colorDepth(8);
-    expect(Array.from(newImage.data)).toEqual([
+    expect(Array.from(newImage.data)).toStrictEqual([
       0, 255, 0, 255,
       0, 255, 0, 255
     ]);
 
     newImage = image.colorDepth(16);
-    expect(Array.from(newImage.data)).toEqual([
+    expect(Array.from(newImage.data)).toStrictEqual([
       0, 65535, 0, 65535,
       0, 65535, 0, 65535
     ]);
@@ -37,13 +37,13 @@ describe('check the colorDepth transform', function () {
     });
 
     let newImage = image.colorDepth(8);
-    expect(Array.from(newImage.data)).toEqual([0x00, 0x7f, 0xff, 0x12]);
+    expect(Array.from(newImage.data)).toStrictEqual([0x00, 0x7f, 0xff, 0x12]);
 
     newImage = image.colorDepth(16);
-    expect(Array.from(newImage.data)).toEqual([0x0000, 0x7fff, 0xffff, 0x1234]);
+    expect(Array.from(newImage.data)).toStrictEqual([0x0000, 0x7fff, 0xffff, 0x1234]);
 
     (expect(function () {
       image.colorDepth(15);
-    }).toThrowError(/You need to specify the new colorDepth as 8 or 16/));
+    }).toThrow(/You need to specify the new colorDepth as 8 or 16/));
   });
 });

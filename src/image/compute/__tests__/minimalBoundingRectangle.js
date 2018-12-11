@@ -49,7 +49,7 @@ describe('Minimal bounding rectangle', function () {
     });
 
     const result = minimalBoundingRectangle.call(image);
-    expect(result).toEqual([[0, 2], [7, 2], [7, 0], [0, 0]]);
+    expect(result).toStrictEqual([[0, 2], [7, 2], [7, 0], [0, 0]]);
   });
 
   it('should return the small bounding box 2', function () {
@@ -62,7 +62,7 @@ describe('Minimal bounding rectangle', function () {
     });
 
     const result = minimalBoundingRectangle.call(image);
-    expect(result).toEqual([[1, 2], [6, 2], [6, 0], [1, 0]]);
+    expect(result).toStrictEqual([[1, 2], [6, 2], [6, 0], [1, 0]]);
   });
 
   it('should return the small bounding box diamond', function () {
@@ -109,14 +109,14 @@ describe('Minimal bounding rectangle', function () {
     const result = minimalBoundingRectangle({
       originalPoints: [[2, 2]]
     });
-    expect(result).toEqual([[2, 2], [2, 2], [2, 2], [2, 2]]);
+    expect(result).toStrictEqual([[2, 2], [2, 2], [2, 2], [2, 2]]);
   });
 
   it('should return the small bouding rectangle for nothing', function () {
     const result = minimalBoundingRectangle({
       originalPoints: []
     });
-    expect(result).toEqual([]);
+    expect(result).toStrictEqual([]);
   });
 
   it('should return the small bouding rectangle for 2 points', function () {

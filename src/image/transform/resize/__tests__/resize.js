@@ -38,7 +38,7 @@ describe('resize', function () {
       let newImage = binary.resize({ factor: 2 });
       expect(newImage.width).toBe(4);
       expect(newImage.height).toBe(4);
-      expect(Array.from(newImage.data)).toEqual([204, 51]);
+      expect(Array.from(newImage.data)).toStrictEqual([204, 51]);
     });
     it('up - 1.5 factor', function () {
       let binary = new Image(2, 2, [144], {
@@ -47,7 +47,7 @@ describe('resize', function () {
       let newImage = binary.resize({ factor: 1.5 });
       expect(newImage.width).toBe(3);
       expect(newImage.height).toBe(3);
-      expect(Array.from(newImage.data)).toEqual([141, 128]);
+      expect(Array.from(newImage.data)).toStrictEqual([141, 128]);
     });
     it('down - 0.5 factor', function () {
       let binary = new Image(4, 4, [204, 51], {
@@ -56,8 +56,8 @@ describe('resize', function () {
       let newImage = binary.resize({ factor: 0.5 });
       expect(newImage.width).toBe(2);
       expect(newImage.height).toBe(2);
-      expect(Array.from(newImage.data)).toEqual([144]);
-      expect(newImage.position).toEqual([1, 1]);
+      expect(Array.from(newImage.data)).toStrictEqual([144]);
+      expect(newImage.position).toStrictEqual([1, 1]);
     });
 
     it('down - 0.01 factor', function () {
@@ -67,8 +67,8 @@ describe('resize', function () {
       let newImage = binary.resize({ factor: 0.01 });
       expect(newImage.width).toBe(1);
       expect(newImage.height).toBe(1);
-      expect(Array.from(newImage.data)).toEqual([128]);
-      expect(newImage.position).toEqual([2, 2]);
+      expect(Array.from(newImage.data)).toStrictEqual([128]);
+      expect(newImage.position).toStrictEqual([2, 2]);
     });
   });
 
@@ -109,7 +109,7 @@ describe('resize', function () {
       let newImage = binary.resize({ height: 4 });
       expect(newImage.width).toBe(4);
       expect(newImage.height).toBe(4);
-      expect(Array.from(newImage.data)).toEqual([204, 51]);
+      expect(Array.from(newImage.data)).toStrictEqual([204, 51]);
     });
     it('up - auto height', function () {
       let binary = new Image(2, 2, [144], {
@@ -118,7 +118,7 @@ describe('resize', function () {
       let newImage = binary.resize({ width: 3 });
       expect(newImage.width).toBe(3);
       expect(newImage.height).toBe(3);
-      expect(Array.from(newImage.data)).toEqual([141, 128]);
+      expect(Array.from(newImage.data)).toStrictEqual([141, 128]);
     });
     it('down - auto width', function () {
       let binary = new Image(4, 4, [204, 51], {
@@ -127,7 +127,7 @@ describe('resize', function () {
       let newImage = binary.resize({ height: 2 });
       expect(newImage.width).toBe(2);
       expect(newImage.height).toBe(2);
-      expect(Array.from(newImage.data)).toEqual([144]);
+      expect(Array.from(newImage.data)).toStrictEqual([144]);
     });
 
     it('down - auto height', function () {
@@ -137,7 +137,7 @@ describe('resize', function () {
       let newImage = binary.resize({ width: 1 });
       expect(newImage.width).toBe(1);
       expect(newImage.height).toBe(1);
-      expect(Array.from(newImage.data)).toEqual([128]);
+      expect(Array.from(newImage.data)).toStrictEqual([128]);
     });
   });
 
