@@ -34,7 +34,7 @@ describe('check stack min method', function () {
       )
     );
 
-    expect(images.getMin()).toEqual([1]);
+    expect(images.getMin()).toStrictEqual([1]);
   });
 
 
@@ -68,7 +68,7 @@ describe('check stack min method', function () {
       )
     );
 
-    expect(images.getMin()).toEqual([1, 1, 1, 4]);
+    expect(images.getMin()).toStrictEqual([1, 1, 1, 4]);
   });
 });
 

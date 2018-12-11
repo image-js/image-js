@@ -12,7 +12,7 @@ parserOptions:
 rules:
   no-var: error
   no-multi-spaces: off
-  valid-jsdoc: error
+  import/no-cycle: off 
 
 settings:
   import/core-modules: [ test ]

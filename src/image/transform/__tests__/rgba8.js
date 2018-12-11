@@ -9,7 +9,7 @@ describe('check the rgba8 transform', function () {
 
     let newImage = image.rgba8();
 
-    expect(Array.from(newImage.data)).toEqual([10, 10, 10, 255, 20, 20, 20, 255]);
+    expect(Array.from(newImage.data)).toStrictEqual([10, 10, 10, 255, 20, 20, 20, 255]);
   });
 
   it('check the right result for GREY A image 8 bit', function () {
@@ -20,7 +20,7 @@ describe('check the rgba8 transform', function () {
 
     let newImage = image.rgba8();
 
-    expect(Array.from(newImage.data)).toEqual([10, 10, 10, 127, 20, 20, 20, 255]);
+    expect(Array.from(newImage.data)).toStrictEqual([10, 10, 10, 127, 20, 20, 20, 255]);
   });
 
   it('check the right result for RGB A image 8 bit', function () {
@@ -31,7 +31,7 @@ describe('check the rgba8 transform', function () {
 
     let newImage = image.rgba8();
 
-    expect(Array.from(newImage.data)).toEqual([10, 20, 30, 255, 40, 50, 60, 255]);
+    expect(Array.from(newImage.data)).toStrictEqual([10, 20, 30, 255, 40, 50, 60, 255]);
   });
 
   it('check the right result for RGB A image 16 bit', function () {
@@ -42,6 +42,6 @@ describe('check the rgba8 transform', function () {
 
     let newImage = image.rgba8();
 
-    expect(Array.from(newImage.data)).toEqual([10, 20, 30, 255, 40, 50, 60, 255]);
+    expect(Array.from(newImage.data)).toStrictEqual([10, 20, 30, 255, 40, 50, 60, 255]);
   });
 });

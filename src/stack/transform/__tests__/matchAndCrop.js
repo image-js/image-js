@@ -77,7 +77,7 @@ describe('check matchAndCrop method', function () {
     let result = results[0];
     expect(result.width).toBe(4);
     expect(result.height).toBe(3);
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       1, 2, 2, 2,
       1, 2, 4, 3,
       1, 2, 3, 3
@@ -87,7 +87,7 @@ describe('check matchAndCrop method', function () {
     result = results[1];
     expect(result.width).toBe(4);
     expect(result.height).toBe(3);
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       0, 0, 0, 0,
       0, 0, 4, 0,
       0, 0, 0, 0
@@ -96,7 +96,7 @@ describe('check matchAndCrop method', function () {
     result = results[2];
     expect(result.width).toBe(4);
     expect(result.height).toBe(3);
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       0, 0, 0, 0,
       0, 0, 4, 0,
       0, 0, 0, 0
@@ -105,7 +105,7 @@ describe('check matchAndCrop method', function () {
     result = results[3];
     expect(result.width).toBe(4);
     expect(result.height).toBe(3);
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       0, 0, 0, 0,
       0, 0, 4, 0,
       0, 0, 0, 0
@@ -114,7 +114,7 @@ describe('check matchAndCrop method', function () {
     result = results[4];
     expect(result.width).toBe(4);
     expect(result.height).toBe(3);
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       0, 0, 0, 0,
       0, 0, 4, 0,
       0, 0, 0, 0
@@ -171,7 +171,7 @@ describe('check matchAndCrop method', function () {
     let result = results[0];
     expect(result.width).toBe(3);
     expect(result.height).toBe(4);
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       3, 1, 1,
       1, 2, 2,
       1, 2, 4,
@@ -181,7 +181,7 @@ describe('check matchAndCrop method', function () {
     result = results[1];
     expect(result.width).toBe(3);
     expect(result.height).toBe(4);
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       0, 0, 0,
       0, 0, 0,
       0, 0, 4,
@@ -191,7 +191,7 @@ describe('check matchAndCrop method', function () {
     result = results[2];
     expect(result.width).toBe(3);
     expect(result.height).toBe(4);
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       4, 0, 0,
       0, 0, 0,
       0, 0, 0,
@@ -250,7 +250,7 @@ describe('check matchAndCrop method', function () {
     let result = results[0];
     expect(result.width).toBe(4);
     expect(result.height).toBe(3);
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       1, 2, 2, 2,
       1, 2, 4, 3,
       1, 2, 3, 3
@@ -259,7 +259,7 @@ describe('check matchAndCrop method', function () {
     result = results[1];
     expect(result.width).toBe(4);
     expect(result.height).toBe(3);
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       0, 0, 0, 0,
       0, 0, 4, 0,
       0, 0, 0, 0
@@ -268,7 +268,7 @@ describe('check matchAndCrop method', function () {
     result = results[2];
     expect(result.width).toBe(4);
     expect(result.height).toBe(3);
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       0, 0, 0, 0,
       0, 0, 4, 0,
       0, 0, 0, 0

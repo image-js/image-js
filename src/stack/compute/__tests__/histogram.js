@@ -34,7 +34,7 @@ describe('check stack histogram method', function () {
       )
     );
 
-    expect(images.getHistogram({ maxSlots: 4 })).toEqual([10, 0, 1, 1]);
+    expect(images.getHistogram({ maxSlots: 4 })).toStrictEqual([10, 0, 1, 1]);
   });
 
 
@@ -68,7 +68,7 @@ describe('check stack histogram method', function () {
       )
     );
 
-    expect(images.getHistogram({ maxSlots: 4, channel: 0 })).toEqual([6, 0, 0, 0]);
+    expect(images.getHistogram({ maxSlots: 4, channel: 0 })).toStrictEqual([6, 0, 0, 0]);
   });
 });
 

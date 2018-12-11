@@ -40,7 +40,7 @@ describe('we check fromMask', function () {
       -1, -1, -1, -1, -1, -1
     ];
 
-    expect(Array.from(mapData)).toEqual(expected);
+    expect(Array.from(mapData)).toStrictEqual(expected);
   });
 
   it('should yield the right map with 8 neighbours', function () {
@@ -55,7 +55,7 @@ describe('we check fromMask', function () {
       -1, -1, -1, -1, -1, -1
     ];
 
-    expect(Array.from(mapData)).toEqual(expected);
+    expect(Array.from(mapData)).toStrictEqual(expected);
   });
 
   it('should fail when there are too many separate ROIs', () => {
@@ -70,6 +70,6 @@ describe('we check fromMask', function () {
     }
     expect(function () {
       fromMask(mask);
-    }).toThrowError(/Too many regions of interest/);
+    }).toThrow(/Too many regions of interest/);
   });
 });

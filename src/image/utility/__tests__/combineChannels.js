@@ -11,7 +11,7 @@ describe('combine specific channels from an image', function () {
     expect(combined.components).toBe(1);
     expect(combined.channels).toBe(1);
     expect(combined.bitDepth).toBe(8);
-    expect(Array.from(combined.data)).toEqual([20, 110]);
+    expect(Array.from(combined.data)).toStrictEqual([20, 110]);
   });
 
   it('should check channels from a RGBA image with join alpha', function () {
@@ -27,7 +27,7 @@ describe('combine specific channels from an image', function () {
     expect(combined.alpha).toBe(0);
     expect(combined.channels).toBe(1);
     expect(combined.bitDepth).toBe(8);
-    expect(Array.from(combined.data)).toEqual([20, 0]);
+    expect(Array.from(combined.data)).toStrictEqual([20, 0]);
   });
 
   it('should check channels from a RGBA image with keep alpha', function () {
@@ -43,6 +43,6 @@ describe('combine specific channels from an image', function () {
     expect(combined.alpha).toBe(1);
     expect(combined.components).toBe(1);
     expect(combined.bitDepth).toBe(8);
-    expect(Array.from(combined.data)).toEqual([20, 255, 110, 0]);
+    expect(Array.from(combined.data)).toStrictEqual([20, 255, 110, 0]);
   });
 });

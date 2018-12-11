@@ -3,9 +3,9 @@ import { direct, fft } from 'ml-matrix-convolution';
 import Image from '../Image';
 import { validateArrayOfChannels } from '../../util/channel';
 import { validateKernel } from '../../util/kernel';
-import convolutionSeparable from '../operator/convolutionSeparable';
 import { clamp } from '../internal/clamp';
 
+import convolutionSeparable from './convolutionSeparable';
 import getSeparatedKernel from './getSeparatedKernel';
 
 /**

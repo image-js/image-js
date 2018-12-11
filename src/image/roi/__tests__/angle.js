@@ -19,6 +19,6 @@ describe('Get the angle of the region, relative to the maxlength', function () {
   roiManager.fromMask(mask);
   it('angle', function () {
     let result = roiManager.getRois();
-    expect(result[0].angle).toEqual(-Math.atan2(0 - 3, 3 - 1) * 180 / Math.PI);
+    expect(result[0].angle).toStrictEqual(-Math.atan2(0 - 3, 3 - 1) * 180 / Math.PI);
   });
 });

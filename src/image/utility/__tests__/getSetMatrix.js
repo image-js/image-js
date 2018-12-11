@@ -16,11 +16,11 @@ describe('check getMatrix class', function () {
 
     expect(matrix.columns).toBe(5);
     expect(matrix.rows).toBe(4);
-    expect(matrix[2]).toEqual([0, 1, 2, 2, 2]);
+    expect(matrix[2]).toStrictEqual([0, 1, 2, 2, 2]);
 
     let image2 = new Image(5, 4, { kind: 'GREY' });
     image2.setMatrix(matrix);
 
-    expect(image.data).toEqual(Array.from(image2.data));
+    expect(image.data).toStrictEqual(Array.from(image2.data));
   });
 });

@@ -8,7 +8,7 @@ describe('invert', function () {
 
     const inverted = image.invert();
     expect(inverted).not.toBe(image);
-    expect(Array.from(inverted.data)).toEqual(expected);
+    expect(Array.from(inverted.data)).toStrictEqual(expected);
   });
 
   it('should invert grey of GREY image', function () {
@@ -18,7 +18,7 @@ describe('invert', function () {
 
     const inverted = image.invert();
     expect(inverted).not.toBe(image);
-    expect(Array.from(inverted.data)).toEqual(expected);
+    expect(Array.from(inverted.data)).toStrictEqual(expected);
   });
 
   it('should invert grey 16 bits of GREY image', function () {
@@ -28,7 +28,7 @@ describe('invert', function () {
 
     const inverted = image.invert();
     expect(inverted).not.toBe(image);
-    expect(Array.from(inverted.data)).toEqual(expected);
+    expect(Array.from(inverted.data)).toStrictEqual(expected);
   });
 
   it('should invert data if BINARY image', function () {
@@ -39,7 +39,7 @@ describe('invert', function () {
 
     const inverted = image.invert();
     expect(inverted).not.toBe(image);
-    expect(inverted.data).toEqual(expected);
+    expect(inverted.data).toStrictEqual(expected);
   });
 
   it('should allow in-place modification', function () {
@@ -47,7 +47,7 @@ describe('invert', function () {
 
     let expected = [25, 172, 135, 255, 155, 115, 242, 240];
     const inverted = image.invert({ inPlace: true });
-    expect(Array.from(inverted.data)).toEqual(expected);
+    expect(Array.from(inverted.data)).toStrictEqual(expected);
     expect(inverted).toBe(image);
   });
 
@@ -56,7 +56,7 @@ describe('invert', function () {
 
     let expected = [25, 172, 135, 255, 155, 115, 242, 240];
     const inverted = image.invert({ out: image });
-    expect(Array.from(inverted.data)).toEqual(expected);
+    expect(Array.from(inverted.data)).toStrictEqual(expected);
     expect(inverted).toBe(image);
   });
 
@@ -66,7 +66,7 @@ describe('invert', function () {
     let expected = [25, 172, 135, 255, 155, 115, 242, 240];
     const out = new Image(1, 2);
     const inverted = image.invert({ out });
-    expect(Array.from(inverted.data)).toEqual(expected);
+    expect(Array.from(inverted.data)).toStrictEqual(expected);
     expect(inverted).toBe(out);
   });
 

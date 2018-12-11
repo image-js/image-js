@@ -16,7 +16,7 @@ describe('check the gaussian filter', function () {
     );
 
     let sobel = image.sobelFilter();
-    expect(Array.from(sobel.data)).toEqual([
+    expect(Array.from(sobel.data)).toStrictEqual([
       13, 13, 28, 36, 28, 13, 13,
       13, 13, 28, 36, 28, 13, 13,
       28, 28, 25, 18, 25, 28, 28,
@@ -44,7 +44,7 @@ describe('check the gaussian filter', function () {
 
     let sobel = image.sobelFilter({ bitDepth: 16 });
 
-    expect(Array.from(sobel.data)).toEqual([
+    expect(Array.from(sobel.data)).toStrictEqual([
       283, 283, 632, 800, 632, 283, 283,
       283, 283, 632, 800, 632, 283, 283,
       632, 632, 566, 400, 566, 632, 632,

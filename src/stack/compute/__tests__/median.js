@@ -34,7 +34,7 @@ describe('check stack median method', function () {
       )
     );
 
-    expect(images.getMedian()).toEqual([52.5]);
+    expect(images.getMedian()).toStrictEqual([52.5]);
   });
 
 
@@ -68,7 +68,7 @@ describe('check stack median method', function () {
       )
     );
 
-    expect(images.getMedian()).toEqual([4, 4.5, 6.5]);
+    expect(images.getMedian()).toStrictEqual([4, 4.5, 6.5]);
   });
 });
 

@@ -18,8 +18,8 @@ describe('Get the ids of neighbour touching the Roi', function () {
   roiManager.putMap(map);
   it('IDs of neighbour', function () {
     let result = roiManager.getRois();
-    expect(result[0].borderIDs.sort(sortAsc)).toEqual([0, 2, 3]);
-    expect(result[1].borderIDs).toEqual([1, 3]);
-    expect(result[2].borderIDs).toEqual([1, 2]);
+    expect(result[0].borderIDs.sort(sortAsc)).toStrictEqual([0, 2, 3]);
+    expect(result[1].borderIDs).toStrictEqual([1, 3]);
+    expect(result[2].borderIDs).toStrictEqual([1, 2]);
   });
 });

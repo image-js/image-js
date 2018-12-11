@@ -7,23 +7,23 @@ describe('add', function () {
     let newImage = [255, 183, 220, 255, 200, 240, 113, 240];
 
     image.add(100);
-    expect(image.data).toEqual(newImage);
+    expect(image.data).toStrictEqual(newImage);
 
     expect(function () {
       image.add(-10);
-    }).toThrowError(/the value must be greater/);
+    }).toThrow(/the value must be greater/);
 
     expect(function () {
       image.add('abc');
-    }).toThrowError(/should be either a/);
+    }).toThrow(/should be either a/);
 
     expect(function () {
       image.add([1, 2, 3]);
-    }).toThrowError(/the data size is different/);
+    }).toThrow(/the data size is different/);
 
     let image2 = new Image(1, 2, [1, 2, 3, 4, 5, 6, 7, 8]);
     // by default alpha is untouched
-    expect(image2.add([1, 2, 3, 4, 5, 6, 7, 8]).data).toEqual([2, 4, 6, 4, 10, 12, 14, 8]);
+    expect(image2.add([1, 2, 3, 4, 5, 6, 7, 8]).data).toStrictEqual([2, 4, 6, 4, 10, 12, 14, 8]);
   });
 });
 
@@ -34,11 +34,11 @@ describe('subtract', function () {
     let newImage = [130, 0, 20, 255, 0, 40, 0, 240];
 
     image.subtract(100);
-    expect(image.data).toEqual(newImage);
+    expect(image.data).toStrictEqual(newImage);
 
     expect(function () {
       image.subtract(-10);
-    }).toThrowError(/the value must be greater/);
+    }).toThrow(/the value must be greater/);
   });
 });
 
@@ -66,7 +66,7 @@ describe('subtract image', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.subtractImage(image2).data)).toEqual([
+    expect(Array.from(image.subtractImage(image2).data)).toStrictEqual([
       0, 0, 255, 0, 0,
       0, 0, 255, 0, 0,
       0, 0, 255, 0, 0,
@@ -97,7 +97,7 @@ describe('subtract image', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.subtractImage(image2, { absolute: true }).data)).toEqual([
+    expect(Array.from(image.subtractImage(image2, { absolute: true }).data)).toStrictEqual([
       255, 0, 255, 0, 0,
       255, 0, 255, 0, 0,
       255, 0, 255, 0, 0,

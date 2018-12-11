@@ -16,7 +16,7 @@ describe('check the morphological gradient function', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.morphologicalGradient({ kernel: kernel }).data)).toEqual([
+    expect(Array.from(image.morphologicalGradient({ kernel: kernel }).data)).toStrictEqual([
       255, 255, 0, 255, 255,
       255, 255, 0, 255, 255,
       255, 255, 0, 255, 255,
@@ -39,7 +39,7 @@ describe('check the morphological gradient function', function () {
 
     expect(
       Array.from(image.morphologicalGradient({ kernel: kernel, iterations: 2 }).data)
-    ).toEqual([
+    ).toStrictEqual([
       0, 255, 255, 255, 0,
       0, 255, 255, 255, 0,
       0, 255, 255, 255, 0,

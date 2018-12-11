@@ -13,7 +13,7 @@ describe('check the median filter', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.medianFilter().data)).toEqual([
+    expect(Array.from(image.medianFilter().data)).toStrictEqual([
       2, 2, 3, 4, 4,
       2, 2, 3, 4, 4,
       2, 2, 3, 4, 4,
@@ -34,7 +34,7 @@ describe('check the median filter', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.medianFilter({ radius: 1 }).data)).toEqual([
+    expect(Array.from(image.medianFilter({ radius: 1 }).data)).toStrictEqual([
       10, 10, 4, 5, 5,
       10, 10, 4, 5, 5,
       10, 10, 4, 5, 5,

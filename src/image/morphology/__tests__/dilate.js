@@ -17,7 +17,7 @@ describe('check the dilate function', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.dilate({ kernel: kernel }).data)).toEqual([
+    expect(Array.from(image.dilate({ kernel: kernel }).data)).toStrictEqual([
       255, 255, 0, 255, 255,
       255, 255, 0, 255, 255,
       255, 255, 0, 255, 255,
@@ -38,7 +38,7 @@ describe('check the dilate function', function () {
       { kind: 'GREY' }
     );
 
-    expect(Array.from(image.dilate().data)).toEqual([
+    expect(Array.from(image.dilate().data)).toStrictEqual([
       255, 255, 0, 255, 255,
       255, 255, 0, 255, 255,
       0, 0, 0, 0, 0,
@@ -64,7 +64,7 @@ describe('check the dilate function', function () {
       11011
     `;
 
-    expect(mask.dilate().data).toEqual(expected);
+    expect(mask.dilate().data).toStrictEqual(expected);
   });
 });
 

@@ -7,17 +7,14 @@ describe('Load TIFF', function () {
     ['grey16', 1, 0, 16]
   ];
 
-  tests.forEach(function (test) {
-    it(test[0], function () {
-      return load(`format/tif/${test[0]}.tif`).then(function (img) {
-        expect(img.components).toBe(test[1]);
-        expect(img.alpha).toBe(test[2]);
-        expect(img.bitDepth).toBe(test[3]);
-        expect(img.meta).toMatchObject({
-          tiff: expect.any(Object),
-          exif: expect.any(Object)
-        });
-      });
+  it.each(tests)('%s', async (name, components, alpha, bitDepth) => {
+    const img = await load(`format/tif/${name}.tif`);
+    expect(img.components).toBe(components);
+    expect(img.alpha).toBe(alpha);
+    expect(img.bitDepth).toBe(bitDepth);
+    expect(img.meta).toMatchObject({
+      tiff: expect.any(Object),
+      exif: expect.any(Object)
     });
   });
 });

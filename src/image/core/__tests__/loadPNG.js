@@ -16,22 +16,18 @@ describe('Load PNG', function () {
     ['plt-8bpp-color', 3, 0, 8]
   ];
 
-  tests.forEach(function (test) {
-    it(`should load from path ${test[0]}`, function () {
-      return load(`format/png/${test[0]}.png`).then(function (img) {
-        expect(img.components).toBe(test[1]);
-        expect(img.alpha).toBe(test[2]);
-        expect(img.bitDepth).toBe(test[3]);
-      });
-    });
+  it.each(tests)('should load from path %s', async (name, components, alpha, bitDepth) => {
+    const img = await load(`format/png/${name}.png`);
+    expect(img.components).toBe(components);
+    expect(img.alpha).toBe(alpha);
+    expect(img.bitDepth).toBe(bitDepth);
+  });
 
-    it(`should load from buffer ${test[0]}`, function () {
-      const data = fs.readFileSync(getImage(`format/png/${test[0]}.png`));
-      return Image.load(data).then(function (img) {
-        expect(img.components).toBe(test[1]);
-        expect(img.alpha).toBe(test[2]);
-        expect(img.bitDepth).toBe(test[3]);
-      });
-    });
+  it.each(tests)('should load from buffer %s', async (name, components, alpha, bitDepth) => {
+    const data = fs.readFileSync(getImage(`format/png/${name}.png`));
+    const img = await Image.load(data);
+    expect(img.components).toBe(components);
+    expect(img.alpha).toBe(alpha);
+    expect(img.bitDepth).toBe(bitDepth);
   });
 });

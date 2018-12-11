@@ -19,7 +19,7 @@ describe('we check fromMaxima only looking for top', function () {
       { onlyTop: true }
     ).data;
 
-    expect(Array.from(data)).toEqual([
+    expect(Array.from(data)).toStrictEqual([
       0, 0, 0, 0, 0,
       0, 0, 0, 0, 0,
       0, 0, 1, 1, 0,
@@ -44,7 +44,7 @@ describe('we check fromMaxima only looking for top', function () {
       { onlyTop: true }
     ).data;
 
-    expect(Array.from(data)).toEqual([
+    expect(Array.from(data)).toStrictEqual([
       0, 0, 0, 0, 0,
       0, 0, 0, 0, 0,
       0, 0, 0, 0, 0,
@@ -69,7 +69,7 @@ describe('we check fromMaxima only looking for top', function () {
       { onlyTop: true }
     ).data;
 
-    expect(Array.from(data)).toEqual([
+    expect(Array.from(data)).toStrictEqual([
       0, 0, 0, 0, 0,
       0, 1, 0, 0, 0,
       0, 0, 0, 2, 0,
@@ -94,7 +94,7 @@ describe('we check fromMaxima only looking for top', function () {
       { onlyTop: true }
     ).data;
 
-    expect(Array.from(data)).toEqual([
+    expect(Array.from(data)).toStrictEqual([
       0, 0, 0, 0, 0,
       0, 1, 1, 1, 0,
       0, 1, 0, 0, 0,
@@ -122,7 +122,7 @@ describe('we check fromMaxima only looking for maxima', function () {
       {}
     ).data;
 
-    expect(Array.from(data)).toEqual([
+    expect(Array.from(data)).toStrictEqual([
       1, 1, 1, 1, 1,
       1, 1, 1, 1, 1,
       1, 1, 1, 1, 1,
@@ -145,7 +145,7 @@ describe('we check fromMaxima only looking for maxima', function () {
 
     let data = fromMaxima.call(image).data;
 
-    expect(Array.from(data)).toEqual([
+    expect(Array.from(data)).toStrictEqual([
       1, 1, 1, 0, 1,
       1, 1, 1, 1, 1,
       1, 1, 1, 1, 1,
@@ -168,7 +168,7 @@ describe('we check fromMaxima only looking for maxima', function () {
 
     let data = fromMaxima.call(image).data;
 
-    expect(Array.from(data)).toEqual([
+    expect(Array.from(data)).toStrictEqual([
       1, 1, 1, 1, 1,
       1, 1, 1, 2, 2,
       1, 1, 1, 2, 2,

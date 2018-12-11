@@ -12,8 +12,8 @@ describe('check getRow and getColumn class', function () {
       { kind: 'GREY' }
     );
 
-    expect(image.getRow(2)).toEqual([0, 1, 2, 2, 2]);
-    expect(image.getColumn(2)).toEqual([0, 1, 2, 3]);
+    expect(image.getRow(2)).toStrictEqual([0, 1, 2, 2, 2]);
+    expect(image.getColumn(2)).toStrictEqual([0, 1, 2, 3]);
   });
 
   it('should yield the first second and second column for GREY A image', function () {
@@ -26,26 +26,26 @@ describe('check getRow and getColumn class', function () {
       { kind: 'GREYA' }
     );
 
-    expect(image.getRow(1, 0)).toEqual([6, 8, 10]);
-    expect(image.getRow(1, 1)).toEqual([7, 9, 11]);
-    expect(image.getColumn(1, 0)).toEqual([2, 8, 14]);
-    expect(image.getColumn(1, 1)).toEqual([3, 9, 15]);
+    expect(image.getRow(1, 0)).toStrictEqual([6, 8, 10]);
+    expect(image.getRow(1, 1)).toStrictEqual([7, 9, 11]);
+    expect(image.getColumn(1, 0)).toStrictEqual([2, 8, 14]);
+    expect(image.getColumn(1, 1)).toStrictEqual([3, 9, 15]);
 
     expect(function () {
       image.getRow(5);
-    }).toThrowError(/row must be included between 0 and 2/);
+    }).toThrow(/row must be included between 0 and 2/);
 
     expect(function () {
       image.getRow(1, 2);
-    }).toThrowError(/channel must be included between 0 and 1/);
+    }).toThrow(/channel must be included between 0 and 1/);
 
     expect(function () {
       image.getColumn(5);
-    }).toThrowError(/column must be included between 0 and 2/);
+    }).toThrow(/column must be included between 0 and 2/);
 
     expect(function () {
       image.getColumn(1, 2);
-    }).toThrowError(/channel must be included between 0 and 1/);
+    }).toThrow(/channel must be included between 0 and 1/);
   });
 });
 

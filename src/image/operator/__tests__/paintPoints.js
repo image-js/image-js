@@ -34,7 +34,7 @@ describe('we check paintPoints', function () {
       }
     }
 
-    expect(Array.from(image.data)).toEqual(result);
+    expect(Array.from(image.data)).toStrictEqual(result);
   });
 });
 

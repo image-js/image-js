@@ -11,7 +11,7 @@ describe('getBackground filter', function () {
       { kind: 'GREY' }
     );
     let bg = image.background([[0, 0], [1, 1]], [[0], [0]]);
-    expect(Array.from(bg.data)).toEqual([
+    expect(Array.from(bg.data)).toStrictEqual([
       0, 0, 0,
       0, 0, 0,
       0, 0, 0

@@ -27,7 +27,7 @@ describe('check the crop transform', function () {
       x: 2,
       y: 2
     });
-    expect(Array.from(result.data)).toEqual([2, 2, 2, 2, 4, 3, 2, 3, 3]);
+    expect(Array.from(result.data)).toStrictEqual([2, 2, 2, 2, 4, 3, 2, 3, 3]);
 
     result = image.crop({
       x: 0,
@@ -35,7 +35,7 @@ describe('check the crop transform', function () {
       height: 2,
       width: 2
     });
-    expect(Array.from(result.data)).toEqual([0, 0, 0, 1]);
+    expect(Array.from(result.data)).toStrictEqual([0, 0, 0, 1]);
 
 
     result = image.crop({
@@ -44,7 +44,7 @@ describe('check the crop transform', function () {
       height: 2,
       width: 2
     });
-    expect(Array.from(result.data)).toEqual([2, 2, 2, 4]);
+    expect(Array.from(result.data)).toStrictEqual([2, 2, 2, 4]);
 
     result = image.crop({
       x: 1,
@@ -52,7 +52,7 @@ describe('check the crop transform', function () {
       height: 1,
       width: 4
     });
-    expect(Array.from(result.data)).toEqual([1, 2, 4, 3]);
+    expect(Array.from(result.data)).toStrictEqual([1, 2, 4, 3]);
   });
 
   it('check crop + grey parenting', function () {
@@ -65,9 +65,9 @@ describe('check the crop transform', function () {
     });
     let grey = result.grey();
     expect(grey.parent).toBe(result);
-    expect(grey.position).toEqual([0, 0]);
+    expect(grey.position).toStrictEqual([0, 0]);
     expect(grey.parent.parent).toBe(image);
-    expect(grey.parent.position).toEqual([2, 3]);
+    expect(grey.parent.position).toStrictEqual([2, 3]);
   });
 
   it('non-integer arguments', function () {
@@ -77,7 +77,7 @@ describe('check the crop transform', function () {
       height: 1.1,
       width: 3.7
     });
-    expect(Array.from(result.data)).toEqual([1, 2, 4, 3]);
+    expect(Array.from(result.data)).toStrictEqual([1, 2, 4, 3]);
   });
 
   it('invalid argument ranges', function () {
@@ -88,7 +88,7 @@ describe('check the crop transform', function () {
         height: 2,
         width: 2
       });
-    }).toThrowError(/x and y .* must be positive numbers/);
+    }).toThrow(/x and y .* must be positive numbers/);
 
     expect(function () {
       image.crop({
@@ -97,7 +97,7 @@ describe('check the crop transform', function () {
         height: -2,
         width: 2
       });
-    }).toThrowError(/width and height .* must be positive numbers/);
+    }).toThrow(/width and height .* must be positive numbers/);
 
     expect(function () {
       image.crop({
@@ -106,7 +106,7 @@ describe('check the crop transform', function () {
         height: 2,
         width: 2
       });
-    }).toThrowError(/origin .* out of range/);
+    }).toThrow(/origin .* out of range/);
 
     expect(function () {
       image.crop({
@@ -115,7 +115,7 @@ describe('check the crop transform', function () {
         height: 2,
         width: 100
       });
-    }).toThrowError(/size is out of range/);
+    }).toThrow(/size is out of range/);
   });
 });
 

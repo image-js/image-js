@@ -9,21 +9,21 @@ describe('we check the validateArrayOfChannels method', function () {
     });
 
     expect(validateArrayOfChannels(image, {
-      channels: ['r', 'g', 'b'] })).toEqual([0, 1, 2]);
-    expect(validateArrayOfChannels(image, { channels: 'r' })).toEqual([0]);
-    expect(validateArrayOfChannels(image, { channels: 'b' })).toEqual([2]);
-    expect(validateArrayOfChannels(image, { channels: 1 })).toEqual([1]);
-    expect(validateArrayOfChannels(image, { channels: [0, 1, 2] })).toEqual([0, 1, 2]);
-    expect(validateArrayOfChannels(image)).toEqual([0, 1, 2]);
-    expect(validateArrayOfChannels(image, { allowAlpha: true })).toEqual([0, 1, 2]);
-    expect(validateArrayOfChannels(image, { allowAlpha: false })).toEqual([0, 1, 2]);
-    expect(validateArrayOfChannels(image, { defaultAlpha: true })).toEqual([0, 1, 2]);
+      channels: ['r', 'g', 'b'] })).toStrictEqual([0, 1, 2]);
+    expect(validateArrayOfChannels(image, { channels: 'r' })).toStrictEqual([0]);
+    expect(validateArrayOfChannels(image, { channels: 'b' })).toStrictEqual([2]);
+    expect(validateArrayOfChannels(image, { channels: 1 })).toStrictEqual([1]);
+    expect(validateArrayOfChannels(image, { channels: [0, 1, 2] })).toStrictEqual([0, 1, 2]);
+    expect(validateArrayOfChannels(image)).toStrictEqual([0, 1, 2]);
+    expect(validateArrayOfChannels(image, { allowAlpha: true })).toStrictEqual([0, 1, 2]);
+    expect(validateArrayOfChannels(image, { allowAlpha: false })).toStrictEqual([0, 1, 2]);
+    expect(validateArrayOfChannels(image, { defaultAlpha: true })).toStrictEqual([0, 1, 2]);
     expect(function () {
       validateArrayOfChannels(image, { channels: 'a' });
-    }).toThrowError(/does not contain alpha/);
+    }).toThrow(/does not contain alpha/);
     expect(function () {
       validateArrayOfChannels(image, { channels: ['r', 'a'] });
-    }).toThrowError(/does not contain alpha/);
+    }).toThrow(/does not contain alpha/);
   });
 
   it('check for a RGBA image', function () {
@@ -31,21 +31,21 @@ describe('we check the validateArrayOfChannels method', function () {
       kind: 'RGBA'
     });
 
-    expect(validateArrayOfChannels(image, { channels: ['r', 'g', 'b'] })).toEqual([0, 1, 2]);
-    expect(validateArrayOfChannels(image, { channels: 'r' })).toEqual([0]);
-    expect(validateArrayOfChannels(image, { channels: 'b' })).toEqual([2]);
-    expect(validateArrayOfChannels(image, { channels: 1 })).toEqual([1]);
-    expect(validateArrayOfChannels(image, { channels: [0, 1, 2] })).toEqual([0, 1, 2]);
-    expect(validateArrayOfChannels(image)).toEqual([0, 1, 2]);
-    expect(validateArrayOfChannels(image, { defaultAlpha: true })).toEqual([0, 1, 2, 3]);
-    expect(validateArrayOfChannels(image, { defaultAlpha: false })).toEqual([0, 1, 2]);
-    expect(validateArrayOfChannels(image, { allowAlpha: true, defaultAlpha: false })).toEqual([0, 1, 2]);
-    expect(validateArrayOfChannels(image, { allowAlpha: true, defaultAlpha: true })).toEqual([0, 1, 2, 3]);
-    expect(validateArrayOfChannels(image, { channels: 'a' })).toEqual([3]);
-    expect(validateArrayOfChannels(image, { channels: ['r', 'a'] })).toEqual([0, 3]);
+    expect(validateArrayOfChannels(image, { channels: ['r', 'g', 'b'] })).toStrictEqual([0, 1, 2]);
+    expect(validateArrayOfChannels(image, { channels: 'r' })).toStrictEqual([0]);
+    expect(validateArrayOfChannels(image, { channels: 'b' })).toStrictEqual([2]);
+    expect(validateArrayOfChannels(image, { channels: 1 })).toStrictEqual([1]);
+    expect(validateArrayOfChannels(image, { channels: [0, 1, 2] })).toStrictEqual([0, 1, 2]);
+    expect(validateArrayOfChannels(image)).toStrictEqual([0, 1, 2]);
+    expect(validateArrayOfChannels(image, { defaultAlpha: true })).toStrictEqual([0, 1, 2, 3]);
+    expect(validateArrayOfChannels(image, { defaultAlpha: false })).toStrictEqual([0, 1, 2]);
+    expect(validateArrayOfChannels(image, { allowAlpha: true, defaultAlpha: false })).toStrictEqual([0, 1, 2]);
+    expect(validateArrayOfChannels(image, { allowAlpha: true, defaultAlpha: true })).toStrictEqual([0, 1, 2, 3]);
+    expect(validateArrayOfChannels(image, { channels: 'a' })).toStrictEqual([3]);
+    expect(validateArrayOfChannels(image, { channels: ['r', 'a'] })).toStrictEqual([0, 3]);
     expect(function () {
       validateArrayOfChannels(image, { channels: 'a', allowAlpha: false });
-    }).toThrowError(/alpha channel may not be selected/);
+    }).toThrow(/alpha channel may not be selected/);
   });
 
   it('check for a GreyA image', function () {
@@ -53,17 +53,17 @@ describe('we check the validateArrayOfChannels method', function () {
       kind: 'GREYA'
     });
 
-    expect(validateArrayOfChannels(image, { channels: 'a' })).toEqual([1]);
-    expect(validateArrayOfChannels(image, { channels: 1 })).toEqual([1]);
-    expect(validateArrayOfChannels(image)).toEqual([0]);
-    expect(validateArrayOfChannels(image, { defaultAlpha: true })).toEqual([0, 1]);
-    expect(validateArrayOfChannels(image, { defaultAlpha: false })).toEqual([0]);
+    expect(validateArrayOfChannels(image, { channels: 'a' })).toStrictEqual([1]);
+    expect(validateArrayOfChannels(image, { channels: 1 })).toStrictEqual([1]);
+    expect(validateArrayOfChannels(image)).toStrictEqual([0]);
+    expect(validateArrayOfChannels(image, { defaultAlpha: true })).toStrictEqual([0, 1]);
+    expect(validateArrayOfChannels(image, { defaultAlpha: false })).toStrictEqual([0]);
     expect(function () {
       validateArrayOfChannels(image, { channels: ['r'] });
-    }).toThrowError(/undefined channel/);
+    }).toThrow(/undefined channel/);
     expect(function () {
       validateArrayOfChannels(image, { allowAlpha: false, channels: ['a'] });
-    }).toThrowError(/alpha channel may not be selected/);
+    }).toThrow(/alpha channel may not be selected/);
   });
 });
 

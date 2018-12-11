@@ -6,8 +6,8 @@ describe('calculate the array of points', function () {
       kind: 'BINARY'
     });
 
-    expect(img.getPoints()).toEqual([[0, 0],  [1, 0],  [2, 0],  [3, 0],  [4, 0],  [5, 0],  [6, 0],  [7, 0]]);
-    expect(img.points).toEqual([[0, 0],  [1, 0],  [2, 0],  [3, 0],  [4, 0],  [5, 0],  [6, 0],  [7, 0]]);
+    expect(img.getPoints()).toStrictEqual([[0, 0],  [1, 0],  [2, 0],  [3, 0],  [4, 0],  [5, 0],  [6, 0],  [7, 0]]);
+    expect(img.points).toStrictEqual([[0, 0],  [1, 0],  [2, 0],  [3, 0],  [4, 0],  [5, 0],  [6, 0],  [7, 0]]);
   });
 });
 

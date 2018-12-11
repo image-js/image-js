@@ -15,7 +15,7 @@ describe('check the rotate transform with free rotation', function () {
 
     let result = image.rotate(45);
 
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       255, 255, 255, 0, 255, 255, 255,
       255, 255,  0,  1,  0,  255, 255,
       255,  0,   1,  1,  1,   0,  255,

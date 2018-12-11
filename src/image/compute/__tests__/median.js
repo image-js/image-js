@@ -11,7 +11,7 @@ describe('check median', function () {
       { kind: 'GREY' }
     );
 
-    expect(image.median).toEqual([2]);
+    expect(image.median).toStrictEqual([2]);
   });
 
   it('for a GREY odd image', function () {
@@ -24,7 +24,7 @@ describe('check median', function () {
       { kind: 'GREY' }
     );
 
-    expect(image.median).toEqual([2]);
+    expect(image.median).toStrictEqual([2]);
   });
 
   it('for a RGBA image', function () {
@@ -35,7 +35,7 @@ describe('check median', function () {
         3, 4, 5, 255
       ]
     );
-    expect(image.median).toEqual([2, 3, 4]);
+    expect(image.median).toStrictEqual([2, 3, 4]);
   });
 
   it('for a RGBA image with alpha', function () {
@@ -47,7 +47,7 @@ describe('check median', function () {
       ]
     );
 
-    expect(image.median).toEqual([2.5, 3.5, 4.5]);
+    expect(image.median).toStrictEqual([2.5, 3.5, 4.5]);
   });
 });
 

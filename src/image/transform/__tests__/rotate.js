@@ -12,7 +12,7 @@ describe('check the rotate transform', function () {
     const result = image.rotateRight();
     expect(result.width).toBe(2);
     expect(result.height).toBe(3);
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       4, 1,
       5, 2,
       6, 3
@@ -30,7 +30,7 @@ describe('check the rotate transform', function () {
     const result = image.rotateLeft();
     expect(result.width).toBe(2);
     expect(result.height).toBe(3);
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       3, 6,
       2, 5,
       1, 4
@@ -47,7 +47,7 @@ describe('check the rotate transform', function () {
       { kind: 'GREY' });
 
     const result = image.rotate(180);
-    expect(Array.from(result.data)).toEqual([
+    expect(Array.from(result.data)).toStrictEqual([
       6, 5, 4,
       3, 2, 1
     ]);
@@ -62,6 +62,6 @@ describe('check the rotate transform', function () {
       { kind: 'GREY' });
     const rotate90 = image.rotate(90);
     const rotateMin270 = image.rotate(-270);
-    expect(Array.from(rotate90.data)).toEqual(Array.from(rotateMin270.data));
+    expect(Array.from(rotate90.data)).toStrictEqual(Array.from(rotateMin270.data));
   });
 });

@@ -16,7 +16,7 @@ describe('check hypotenuse', function () {
     let theoretical =
             [5, 13, 17, 25, 41];
 
-    expect(Array.from(image1.hypotenuse(image2).data)).toEqual(theoretical);
+    expect(Array.from(image1.hypotenuse(image2).data)).toStrictEqual(theoretical);
   });
 });
 

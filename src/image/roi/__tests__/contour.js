@@ -33,21 +33,21 @@ describe('we check contourMask', function () {
 
 
     let roiMask = rois[0].mask;
-    expect(Array.from(roiMask.data)).toEqual([255, 128]);
+    expect(Array.from(roiMask.data)).toStrictEqual([255, 128]);
 
     let roiFilledMask = rois[0].filledMask;
-    expect(Array.from(roiFilledMask.data)).toEqual([255, 128]);
+    expect(Array.from(roiFilledMask.data)).toStrictEqual([255, 128]);
 
     let roiContour = rois[0].contourMask;
-    expect(Array.from(roiContour.data)).toEqual([247, 128]);
+    expect(Array.from(roiContour.data)).toStrictEqual([247, 128]);
 
     roiMask = rois[1].mask;
-    expect(Array.from(roiMask.data)).toEqual([252, 99, 31, 128]);
+    expect(Array.from(roiMask.data)).toStrictEqual([252, 99, 31, 128]);
 
     roiFilledMask = rois[1].filledMask;
-    expect(Array.from(roiFilledMask.data)).toEqual([255, 255, 255, 128]);
+    expect(Array.from(roiFilledMask.data)).toStrictEqual([255, 255, 255, 128]);
 
     roiContour = rois[1].contourMask;
-    expect(Array.from(roiContour.data)).toEqual([252, 99, 31, 128]);
+    expect(Array.from(roiContour.data)).toStrictEqual([252, 99, 31, 128]);
   });
 });

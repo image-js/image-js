@@ -18,7 +18,7 @@ describe('convolution with separable kernel', () => {
       border: 'periodic'
     }).data);
 
-    expect(result).toEqual([
+    expect(result).toStrictEqual([
       9, 12, 12, 9,
       12, 16, 16, 12,
       9, 12, 12, 9

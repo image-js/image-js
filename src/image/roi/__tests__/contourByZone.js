@@ -18,8 +18,8 @@ describe('Get the number of pixels touching the adjacent zones', function () {
   roiManager.putMap(map);
   it('Number of pixels adjacent to another zone', function () {
     let result = roiManager.getRois();
-    expect(result[0].externalLengths.sort(sortAsc)).toEqual([2, 3, 4]);
-    expect(result[1].externalLengths.sort(sortAsc)).toEqual([2, 4]);
-    expect(result[2].externalLengths.sort(sortAsc)).toEqual([3, 3]);
+    expect(result[0].externalLengths.sort(sortAsc)).toStrictEqual([2, 3, 4]);
+    expect(result[1].externalLengths.sort(sortAsc)).toStrictEqual([2, 4]);
+    expect(result[2].externalLengths.sort(sortAsc)).toStrictEqual([3, 3]);
   });
 });

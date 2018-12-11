@@ -34,7 +34,7 @@ describe('check stack histograms method', function () {
       )
     );
 
-    expect(images.getHistograms({ maxSlots: 4 })).toEqual([[10, 0, 1, 1]]);
+    expect(images.getHistograms({ maxSlots: 4 })).toStrictEqual([[10, 0, 1, 1]]);
   });
 
 
@@ -68,7 +68,7 @@ describe('check stack histograms method', function () {
       )
     );
 
-    expect(images.getHistograms({ maxSlots: 4 })).toEqual([
+    expect(images.getHistograms({ maxSlots: 4 })).toStrictEqual([
       [6, 0, 0, 0],
       [6, 0, 0, 0],
       [6, 0, 0, 0]

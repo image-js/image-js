@@ -2,18 +2,17 @@ import { Image, load, getHash } from 'test/common';
 import binary from 'test/binary';
 
 describe('we check we can extract a part of B/W image', function () {
-  it('check the extract without specify position', function () {
+  it('check the extract without specify position', async () => {
     let mask = new Image(2, 2, {
       kind: 'BINARY'
     });
     mask.setBitXY(0, 0);
     mask.setBitXY(1, 1);
 
-    return load('BW4x4.png').then(function (image) {
-      expect(function () {
-        image.extract(mask);
-      }).toThrowError(/can not extract an image/);
-    });
+    const image = await load('BW4x4.png');
+    expect(function () {
+      image.extract(mask);
+    }).toThrow(/can not extract an image/);
   });
 
   it('check a binary image extract', function () {
@@ -47,7 +46,7 @@ describe('we check we can extract a part of B/W image', function () {
     expect(extract.bitDepth).toBe(1);
     expect(extract.height).toBe(4);
     expect(extract.width).toBe(4);
-    expect(extract.data).toEqual(binary`
+    expect(extract.data).toStrictEqual(binary`
       0110
       0000
       1111
@@ -81,44 +80,43 @@ describe('we check we can extract a part of B/W image', function () {
     expect(extract.bitDepth).toBe(1);
     expect(extract.height).toBe(2);
     expect(extract.width).toBe(4);
-    expect(extract.data).toEqual(binary`
+    expect(extract.data).toStrictEqual(binary`
       1100
       0000
     `);
   });
 
-  it('check by specify 1,1 position with parent', function () {
-    return load('BW4x4.png').then(function (image) {
-      let mask = new Image(2, 2, {
-        kind: 'BINARY',
-        position: [1, 1],
-        parent: image
-      });
-
-      mask.setBitXY(0, 0);
-      mask.setBitXY(1, 0);
-
-      let extract = image.extract(mask);
-      expect(getHash(image)).toBe(getHash(extract.parent));
-      expect(extract.width).toBe(2);
-      expect(extract.height).toBe(2);
-
-      expect(Array.from(extract.data)).toEqual([
-        0, 255,
-        255, 255,
-        255, 0,
-        0, 0
-      ]);
-
-      /* This corresponds to an extract if it was RGBA image */
-      /*
-            Array.from(extract.data).should.eql([
-                0, 0, 0, 255,
-                255, 255, 255, 255,
-                255, 255, 255, 0,
-                255, 255, 255, 0
-            ]);
-            */
+  it('check by specify 1,1 position with parent', async () => {
+    const image = await load('BW4x4.png');
+    let mask = new Image(2, 2, {
+      kind: 'BINARY',
+      position: [1, 1],
+      parent: image
     });
+
+    mask.setBitXY(0, 0);
+    mask.setBitXY(1, 0);
+
+    let extract = image.extract(mask);
+    expect(getHash(image)).toBe(getHash(extract.parent));
+    expect(extract.width).toBe(2);
+    expect(extract.height).toBe(2);
+
+    expect(Array.from(extract.data)).toStrictEqual([
+      0, 255,
+      255, 255,
+      255, 0,
+      0, 0
+    ]);
+
+    /* This corresponds to an extract if it was RGBA image */
+    /*
+          Array.from(extract.data).should.eql([
+              0, 0, 0, 255,
+              255, 255, 255, 255,
+              255, 255, 255, 0,
+              255, 255, 255, 0
+          ]);
+    */
   });
 });
