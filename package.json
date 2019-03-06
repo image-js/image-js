@@ -100,7 +100,7 @@
     "fast-list": "^1.0.3",
     "fast-png": "^3.1.0",
     "has-own": "^1.0.0",
-    "image-type": "^3.0.0",
+    "image-type": "^4.0.0",
     "is-array-type": "^1.0.0",
     "is-integer": "^1.0.7",
     "jpeg-js": "^0.3.4",
