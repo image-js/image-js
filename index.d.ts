@@ -1,11 +1,11 @@
-// Type definitions for image-js 0.18
+// Type definitions for image-js
 // Project: https://github.com/image-js/image-js
 // Definitions by: Michaël Zasso <https://github.com/targos>
 
 // Global variable exposed by UMD bundle
 export as namespace IJS;
 
-declare class Image {
+export declare class Image {
     width: number;
     height: number;
     data: DataArray;
@@ -152,9 +152,9 @@ declare class Image {
     // getRelativePosition
 }
 
-declare class RoiManager {}
+export declare class RoiManager {}
 
-interface ImageConstructorOptions {
+export interface ImageConstructorOptions {
     width?: number,
     height?: number,
     data?: ArrayLike<number>,
@@ -165,23 +165,23 @@ interface ImageConstructorOptions {
     colorModel?: ColorModel
 }
 
-interface SaveOptions {
+export interface SaveOptions {
     format?: string,
     useCanvas?: boolean,
     encoder?: object
 }
 
-interface OutOrInplace {
+export interface OutOrInplace {
     inPlace?: boolean,
     out?: Image
 }
 
-interface MorphologicalOptions {
+export interface MorphologicalOptions {
     kernel?: BinaryKernel,
     iterations?: number
 }
 
-interface GaussianFilterOptions {
+export interface GaussianFilterOptions {
     radius?: number,
     sigma?: number,
     channels?: SelectedChannels,
@@ -189,7 +189,7 @@ interface GaussianFilterOptions {
     algorithm?: ConvolutionAlgorithm
 }
 
-interface ConvolutionOptions {
+export interface ConvolutionOptions {
     channels?: SelectedChannels,
     bitDepth?: BitDepth,
     normalize?: boolean,
@@ -198,19 +198,19 @@ interface ConvolutionOptions {
     algorithm?: ConvolutionAlgorithm
 }
 
-interface GradientOptions {
+export interface GradientOptions {
     direction?: GradientDirection,
     border?: BorderHandling,
     channels?: SelectedChannels,
     bitDepth?: BitDepth
 }
 
-interface GradientFilterOptions extends GradientOptions {
+export interface GradientFilterOptions extends GradientOptions {
     kernelX?: Kernel,
     kernelY?: Kernel
 }
 
-declare enum ImageKind {
+export declare enum ImageKind {
     BINARY = 'BINARY',
     GREY = 'GREY',
     GREYA = 'GREYA',
@@ -220,14 +220,14 @@ declare enum ImageKind {
     CMYKA = 'CMYKA',
 }
 
-declare enum BitDepth {
+export declare enum BitDepth {
     BINARY = 1,
     UINT8 = 8,
     UINT16 = 16,
     FLOAT32 = 32
 }
 
-declare enum ColorModel {
+export declare enum ColorModel {
     GREY = 'GREY',
     RGB = 'RGB',
     HSL = 'HSL',
@@ -235,25 +235,25 @@ declare enum ColorModel {
     CMYK = 'CMYK'
 }
 
-declare enum BorderHandling {
+export declare enum BorderHandling {
     COPY = 'copy'
 }
 
-declare enum ConvolutionAlgorithm {
+export declare enum ConvolutionAlgorithm {
     AUTO = 'auto',
     DIRECT = 'direct',
     FFT = 'fft',
     SEPARABLE = 'separable'
 }
 
-interface CropOptions {
+export interface CropOptions {
     x?: number;
     y?: number;
     width?: number;
     height?: number;
 }
 
-interface ResizeOptions {
+export interface ResizeOptions {
     width?: number;
     height?: number;
     factor?: number;
@@ -261,14 +261,14 @@ interface ResizeOptions {
     preserveAspectRatio?: boolean;
 }
 
-interface GreyOptions {
+export interface GreyOptions {
     algorithm?: GreyAlgorithm|GreyAlgorithmCallback;
     keepAlpha?: boolean;
     mergeAlpha?: boolean;
     out?: Image;
 }
 
-declare enum GreyAlgorithm {
+export declare enum GreyAlgorithm {
     LUMA709 = 'luma709',
     LUMA601 = 'luma601',
     MAXIMUM = 'maximum',
@@ -287,16 +287,16 @@ declare enum GreyAlgorithm {
     LIGHTNESS = 'lightness'
 }
 
-type GreyAlgorithmCallback = (red: number, green: number, blue: number) => number;
+export type GreyAlgorithmCallback = (red: number, green: number, blue: number) => number;
 
-interface MaskOptions {
+export interface MaskOptions {
     algorithm?: ThresholdAlgorithm|'threshold';
     threshold?: number;
     useAlpha?: boolean;
     invert?: boolean;
 }
 
-declare enum ThresholdAlgorithm {
+export declare enum ThresholdAlgorithm {
     HUANG = 'huang',
     INTERMODES = 'intermodes',
     ISODATA = 'isodata',
@@ -313,26 +313,25 @@ declare enum ThresholdAlgorithm {
     YEN = 'yen'
 }
 
-interface RotateOptions {
+export interface RotateOptions {
     interpolation?: InterpolationAlgorithm
 }
 
-declare enum GradientDirection {
+export declare enum GradientDirection {
     WIDTH = 'x',
     HEIGHT = 'y',
     BOTH = 'xy'
 }
 
-declare enum InterpolationAlgorithm {
+export declare enum InterpolationAlgorithm {
     NEAREST_NEIGHBOR = 'nearestNeighbor',
     BILINEAR = 'bilinear'
 }
 
-type DataArray = Uint8Array | Uint16Array | Float32Array;
-type BinaryValue = 0 | 1;
-type SelectedChannels = number | string | Array<number> | Array<string>;
-type BinaryKernel = Array<Array<BinaryValue>>;
-type Kernel = Array<Array<number>>;
+export type DataArray = Uint8Array | Uint16Array | Float32Array;
+export type BinaryValue = 0 | 1;
+export type SelectedChannels = number | string | Array<number> | Array<string>;
+export type BinaryKernel = Array<Array<BinaryValue>>;
+export type Kernel = Array<Array<number>>;
 
-export { Image }
 export default Image;
