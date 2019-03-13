@@ -317,6 +317,31 @@ export default class RoiManager {
   }
 
   /**
+   * Merge multiple rois into one.
+   * All rois in the provided array will be merged into the first one.
+   * @param {Array<number>} roiIds - A list of Roi ids to merge
+   * @param {object} [options]
+   */
+  mergeRois(roiIds, options = {}) {
+    if (!Array.isArray(roiIds) || roiIds.some((id) => !Number.isInteger(id))) {
+      throw new Error('Roi ids must be an array of integers');
+    }
+    if (roiIds.length < 2) {
+      throw new Error('Roi ids must have at least two elements');
+    }
+    if (new Set(roiIds).size !== roiIds.length) {
+      throw new Error('Roi ids must be all different');
+    }
+    // Throws if one of the ids is wrong
+    roiIds.forEach((roiId) => this.getRoi(roiId));
+
+    const roiMap = this.getMap(options);
+    roiMap.mergeRois(roiIds);
+    this.putMap(roiMap.data, options);
+    return this;
+  }
+
+  /**
      * Finds all corresponding ROIs for all ROIs in the manager
      * @param {number[]} roiMap
      * @param {object} [options]
