@@ -17,7 +17,6 @@ export default class RoiMap {
     this.data = data;
     this.negative = 0;
     this.positive = 0;
-    this.computed = {};
   }
 
   get total() {
@@ -25,16 +24,13 @@ export default class RoiMap {
   }
 
   get minMax() {
-    if (!this.computed.minMax) {
-      let min = Number.MAX_SAFE_INTEGER;
-      let max = Number.MIN_SAFE_INTEGER;
-      for (let i = 0; i < this.data.length; i++) {
-        if (this.data[i] < min) min = this.data[i];
-        if (this.data[i] > max) max = this.data[i];
-      }
-      this.computed.minMax = { min, max };
+    let min = Number.MAX_SAFE_INTEGER;
+    let max = Number.MIN_SAFE_INTEGER;
+    for (let i = 0; i < this.data.length; i++) {
+      if (this.data[i] < min) min = this.data[i];
+      if (this.data[i] > max) max = this.data[i];
     }
-    return this.computed.minMax;
+    return { min, max };
   }
 
   get commonBorderLength() {
@@ -46,6 +42,15 @@ export default class RoiMap {
     return mergeRoi.call(this, options);
   }
 
+  mergeRois(rois) {
+    const first = rois[0];
+    const others = rois.slice(1);
+    for (let i = 0; i < this.data.length; i++) {
+      if (others.includes(this.data[i])) {
+        this.data[i] = first;
+      }
+    }
+  }
 
   rowsInfo() {
     let rowsInfo = new Array(this.height);
