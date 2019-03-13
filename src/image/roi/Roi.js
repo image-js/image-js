@@ -23,12 +23,12 @@ export default class Roi {
   }
 
   /**
-     * Returns a binary image (mask) for the corresponding ROI
-     * @param {object} [options]
-     * @param {number} [options.scale=1] - Scaling factor to apply to the mask
-     * @param {string} [options.kind='normal'] - 'contour', 'box', 'filled', 'center', 'hull' or 'normal'
-     * @return {Image} - Returns a mask (1 bit Image)
-     */
+   * Returns a binary image (mask) for the corresponding ROI
+   * @param {object} [options]
+   * @param {number} [options.scale=1] - Scaling factor to apply to the mask
+   * @param {string} [options.kind='normal'] - 'contour', 'box', 'filled', 'center', 'hull' or 'normal'
+   * @return {Image} - Returns a mask (1 bit Image)
+   */
   getMask(options = {}) {
     const { scale = 1, kind = '' } = options;
     let mask;
@@ -152,7 +152,6 @@ export default class Roi {
     return this.computed.borderLengths;
   }
 
-
   /**
      Retrieve all the IDs or the Roi touching the box surrouding the region
 
@@ -198,7 +197,8 @@ export default class Roi {
      because we will ignore those special pixels of the rectangle
      border that don't have neighbours all around them.
      */
-  get box() { // points of the Roi that touch the rectangular shape
+  get box() {
+    // points of the Roi that touch the rectangular shape
     if (!this.computed.box) {
       this.computed.box = getBox(this);
     }
@@ -245,14 +245,25 @@ export default class Roi {
 
       for (let x = 0; x < this.width; x++) {
         for (let y = 0; y < this.height; y++) {
-          if (this.map.data[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
+          if (
+            this.map.data[x + this.minX + (y + this.minY) * this.map.width] ===
+            this.id
+          ) {
             // it also has to be on a border ...
-            if (x > 0 && x < (this.width - 1) && y > 0 && y < (this.height - 1)) {
+            if (x > 0 && x < this.width - 1 && y > 0 && y < this.height - 1) {
               if (
-                (this.map.data[x - 1 + this.minX + (y + this.minY) * this.map.width] !== this.id) ||
-                                (this.map.data[x + 1 + this.minX + (y + this.minY) * this.map.width] !== this.id) ||
-                                (this.map.data[x + this.minX + (y - 1 + this.minY) * this.map.width] !== this.id) ||
-                                (this.map.data[x + this.minX + (y + 1 + this.minY) * this.map.width] !== this.id)
+                this.map.data[
+                  x - 1 + this.minX + (y + this.minY) * this.map.width
+                ] !== this.id ||
+                this.map.data[
+                  x + 1 + this.minX + (y + this.minY) * this.map.width
+                ] !== this.id ||
+                this.map.data[
+                  x + this.minX + (y - 1 + this.minY) * this.map.width
+                ] !== this.id ||
+                this.map.data[
+                  x + this.minX + (y + 1 + this.minY) * this.map.width
+                ] !== this.id
               ) {
                 img.setBitXY(x, y);
               }
@@ -301,7 +312,10 @@ export default class Roi {
 
       for (let x = 0; x < this.width; x++) {
         for (let y = 0; y < this.height; y++) {
-          if (this.map.data[x + this.minX + (y + this.minY) * this.map.width] === this.id) {
+          if (
+            this.map.data[x + this.minX + (y + this.minY) * this.map.width] ===
+            this.id
+          ) {
             img.setBitXY(x, y);
           }
         }
@@ -337,7 +351,10 @@ export default class Roi {
       let img = new Shape({ kind: 'smallCross' }).getMask();
 
       img.parent = this.map.parent;
-      img.position = [this.minX + this.center[0] - 1, this.minY + this.center[1] - 1];
+      img.position = [
+        this.minX + this.center[0] - 1,
+        this.minY + this.center[1] - 1
+      ];
 
       this.computed.centerMask = img;
     }
@@ -352,7 +369,7 @@ export default class Roi {
         parent: this.map.parent
       });
 
-      const hull = this.mask.monotoneChainConvexHull();
+      const hull = this.contourMask.monotoneChainConvexHull();
       for (let x = 0; x < this.width; x++) {
         for (let y = 0; y < this.height; y++) {
           if (robustPointInPolygon(hull, [x, y]) !== 1) {
@@ -382,7 +399,6 @@ export default class Roi {
     return this.computed.points;
   }
 
-
   get maxLengthPoints() {
     if (!this.computed.maxLengthPoints) {
       let maxLength = 0;
@@ -391,7 +407,9 @@ export default class Roi {
 
       for (let i = 0; i < points.length; i++) {
         for (let j = i + 1; j < points.length; j++) {
-          let currentML = Math.pow(points[i][0] - points[j][0], 2) + Math.pow(points[i][1] - points[j][1], 2);
+          let currentML =
+            Math.pow(points[i][0] - points[j][0], 2) +
+            Math.pow(points[i][1] - points[j][1], 2);
           if (currentML >= maxLength) {
             maxLength = currentML;
             maxLengthPoints = [points[i], points[j]];
@@ -403,7 +421,6 @@ export default class Roi {
     return this.computed.maxLengthPoints;
   }
 
-
   /**
         Calculates the maximum length between two pixels of the Roi.
      */
@@ -411,7 +428,7 @@ export default class Roi {
     if (!this.computed.maxLength) {
       let maxLength = Math.sqrt(
         Math.pow(this.maxLengthPoints[0][0] - this.maxLengthPoints[1][0], 2) +
-                Math.pow(this.maxLengthPoints[0][1] - this.maxLengthPoints[1][1], 2)
+          Math.pow(this.maxLengthPoints[0][1] - this.maxLengthPoints[1][1], 2)
       );
       this.computed.maxLength = maxLength;
     }
@@ -421,7 +438,10 @@ export default class Roi {
   get angle() {
     if (!this.computed.angle) {
       let points = this.maxLengthPoints;
-      let angle = -Math.atan2(points[0][1] - points[1][1], points[0][0] - points[1][0]) * 180 / Math.PI;
+      let angle =
+        (-Math.atan2(points[0][1] - points[1][1], points[0][0] - points[1][0]) *
+          180) /
+        Math.PI;
 
       this.computed.angle = angle;
     }
@@ -444,7 +464,6 @@ export default class Roi {
   }
 }
 
-
 // TODO we should follow the region in order to increase the speed
 
 function getBorders(roi) {
@@ -463,7 +482,12 @@ function getBorders(roi) {
         for (let dir = 0; dir < 4; dir++) {
           let newX = x + dx[dir];
           let newY = y + dy[dir];
-          if (newX >= 0 && newY >= 0 && newX < roiMap.width && newY < roiMap.height) {
+          if (
+            newX >= 0 &&
+            newY >= 0 &&
+            newX < roiMap.width &&
+            newY < roiMap.height
+          ) {
             let neighbour = newX + newY * roiMap.width;
 
             if (data[neighbour] !== roi.id && !visitedData.has(neighbour)) {
@@ -491,7 +515,6 @@ function getBorders(roi) {
   };
 }
 
-
 function getBoxIDs(roi) {
   let surroundingIDs = new Set(); // allows to get a unique list without indexOf
 
@@ -502,11 +525,19 @@ function getBoxIDs(roi) {
   for (let y of [0, roi.height - 1]) {
     for (let x = 0; x < roi.width; x++) {
       let target = (y + roi.minY) * roiMap.width + x + roi.minX;
-      if ((x - roi.minX) > 0 && data[target] === roi.id && data[target - 1] !== roi.id) {
+      if (
+        x - roi.minX > 0 &&
+        data[target] === roi.id &&
+        data[target - 1] !== roi.id
+      ) {
         let value = data[target - 1];
         surroundingIDs.add(value);
       }
-      if ((roiMap.width - x - roi.minX) > 1 && data[target] === roi.id && data[target + 1] !== roi.id) {
+      if (
+        roiMap.width - x - roi.minX > 1 &&
+        data[target] === roi.id &&
+        data[target + 1] !== roi.id
+      ) {
         let value = data[target + 1];
         surroundingIDs.add(value);
       }
@@ -517,11 +548,19 @@ function getBoxIDs(roi) {
   for (let x of [0, roi.width - 1]) {
     for (let y = 0; y < roi.height; y++) {
       let target = (y + roi.minY) * roiMap.width + x + roi.minX;
-      if ((y - roi.minY) > 0 && data[target] === roi.id && data[target - roiMap.width] !== roi.id) {
+      if (
+        y - roi.minY > 0 &&
+        data[target] === roi.id &&
+        data[target - roiMap.width] !== roi.id
+      ) {
         let value = data[target - roiMap.width];
         surroundingIDs.add(value);
       }
-      if ((roiMap.height - y - roi.minY) > 1 && data[target] === roi.id && data[target + roiMap.width] !== roi.id) {
+      if (
+        roiMap.height - y - roi.minY > 1 &&
+        data[target] === roi.id &&
+        data[target + roiMap.width] !== roi.id
+      ) {
         let value = data[target + roiMap.width];
         surroundingIDs.add(value);
       }
@@ -530,7 +569,6 @@ function getBoxIDs(roi) {
 
   return Array.from(surroundingIDs); // the selection takes the whole rectangle
 }
-
 
 function getBox(roi) {
   let total = 0;
@@ -565,7 +603,6 @@ function getBox(roi) {
   return total;
 }
 
-
 function getBorder(roi) {
   let total = 0;
   let roiMap = roi.map;
@@ -576,10 +613,12 @@ function getBorder(roi) {
       let target = (y + roi.minY) * roiMap.width + x + roi.minX;
       if (data[target] === roi.id) {
         // if a point around is not roi.id it is a border
-        if ((data[target - 1] !== roi.id) ||
-                    (data[target + 1] !== roi.id) ||
-                    (data[target - roiMap.width] !== roi.id) ||
-                    (data[target + roiMap.width] !== roi.id)) {
+        if (
+          data[target - 1] !== roi.id ||
+          data[target + 1] !== roi.id ||
+          data[target - roiMap.width] !== roi.id ||
+          data[target + roiMap.width] !== roi.id
+        ) {
           total++;
         }
       }
@@ -587,7 +626,6 @@ function getBorder(roi) {
   }
   return total + roi.box;
 }
-
 
 function getExternal(roi) {
   let total = 0;
@@ -599,10 +637,12 @@ function getExternal(roi) {
       let target = (y + roi.minY) * roiMap.width + x + roi.minX;
       if (data[target] === roi.id) {
         // if a point around is not roi.id it is a border
-        if ((roi.externalIDs.includes(data[target - 1])) ||
-                    (roi.externalIDs.includes(data[target + 1])) ||
-                    (roi.externalIDs.includes(data[target - roiMap.width])) ||
-                    (roi.externalIDs.includes(data[target + roiMap.width]))) {
+        if (
+          roi.externalIDs.includes(data[target - 1]) ||
+          roi.externalIDs.includes(data[target + 1]) ||
+          roi.externalIDs.includes(data[target - roiMap.width]) ||
+          roi.externalIDs.includes(data[target + roiMap.width])
+        ) {
           total++;
         }
       }
@@ -622,10 +662,10 @@ function getInternalIDs(roi) {
 
   if (roi.height > 2) {
     for (let x = 0; x < roi.width; x++) {
-      let target = (roi.minY) * roiMap.width + x + roi.minX;
+      let target = roi.minY * roiMap.width + x + roi.minX;
       if (internal.includes(data[target])) {
         let id = data[target + roiMap.width];
-        if ((!internal.includes(id)) && (!roi.boxIDs.includes(id))) {
+        if (!internal.includes(id) && !roi.boxIDs.includes(id)) {
           internal.push(id);
         }
       }
@@ -646,7 +686,7 @@ function getInternalIDs(roi) {
 
         for (let i = 0; i < 4; i++) {
           let id = array[i];
-          if ((!internal.includes(id)) && (!roi.boxIDs.includes(id))) {
+          if (!internal.includes(id) && !roi.boxIDs.includes(id)) {
             internal.push(id);
           }
         }
