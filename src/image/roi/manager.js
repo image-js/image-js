@@ -156,16 +156,13 @@ export default class RoiManager {
     } = options;
 
     if (!this._layers[label]) {
-      throw new Error(`getRoi: This Roi layer (${label}) does not exists.`);
+      throw new Error(`this Roi layer (${label}) does not exist`);
     }
 
-    let allRois = this._layers[label].roi;
+    const allRois = this._layers[label].roi;
 
-    // todo Is this old way to change the array size still faster ?
-    let rois = new Array(allRois.length);
-    let ptr = 0;
-    for (let i = 0; i < allRois.length; i++) {
-      let roi = allRois[i];
+    const rois = [];
+    for (const roi of allRois) {
       if (((roi.id < 0 && negative) || roi.id > 0 && positive)
                 && roi.surface >= minSurface
                 && roi.surface <= maxSurface
@@ -177,11 +174,34 @@ export default class RoiManager {
                 && roi.ratio <= maxRatio
 
       ) {
-        rois[ptr++] = roi;
+        rois.push(roi);
       }
     }
-    rois.length = ptr;
     return rois;
+  }
+
+  /**
+   * Get an ROI by its id.
+   * @param {number} roiId
+   * @param {object} [options={}]
+   * @param {string} [options.label='default'] Label of the layer containing the ROI
+   * @return {Roi}
+   */
+  getRoi(roiId, options = {}) {
+    const {
+      label = this._options.label
+    } = options;
+
+    if (!this._layers[label]) {
+      throw new Error(`this Roi layer (${label}) does not exist`);
+    }
+
+    const roi = this._layers[label].roi.find((roi) => roi.id === roiId);
+    if (!roi) {
+      throw new Error(`found no Roi with id ${roiId}`);
+    }
+
+    return roi;
   }
 
   /**
