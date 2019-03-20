@@ -109,5 +109,32 @@ describe('Roi#getMask', function () {
         110000
     `);
   });
+
+  it('should work with mbr', () => {
+    const data = [
+      0, 0, 0, 0, 0, 0,
+      0, 1, 1, 1, 0, 0,
+      0, 1, 0, 0, 0, 0,
+      0, 1, 0, 0, 0, 0,
+      0, 1, 1, 1, 1, 1,
+      0, 0, 0, 0, 0, 0
+    ];
+    let image = new Image(6, 6, data, { kind: 'GREY' });
+
+    let mask = image.mask({ threshold: 1, algorithm: 'threshold' });
+    let roiManager = image.getRoiManager();
+    roiManager.fromMask(mask, { positive: true, negative: false });
+    const rois = roiManager.getRois();
+    expect(rois).toHaveLength(2);
+
+    const roi = rois[0];
+    const mbrMask = roi.mbrMask;
+    expect(mbrMask.data).toStrictEqual(binary`
+      11111
+      11111
+      11111
+      11111
+    `);
+  });
 });
 

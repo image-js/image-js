@@ -48,6 +48,9 @@ export default class Roi {
       case 'hull':
         mask = this.hullMask;
         break;
+      case 'mbr':
+        mask = this.mbrMask;
+        break;
       default:
         mask = this.mask;
     }
@@ -381,6 +384,28 @@ export default class Roi {
       this.computed.hullMask = img;
     }
     return this.computed.hullMask;
+  }
+
+  get mbrMask() {
+    if (!this.computed.mbrMask) {
+      const img = new Image(this.width, this.height, {
+        kind: KindNames.BINARY,
+        position: [this.minX, this.minY],
+        parent: this.map.parent
+      });
+
+      const mbr = this.mask.minimalBoundingRectangle();
+      for (let x = 0; x < this.width; x++) {
+        for (let y = 0; y < this.height; y++) {
+          if (robustPointInPolygon(mbr, [x, y]) !== 1) {
+            img.setBitXY(x, y);
+          }
+        }
+      }
+
+      this.computed.mbrMask = img;
+    }
+    return this.computed.mbrMask;
   }
 
   get points() {
