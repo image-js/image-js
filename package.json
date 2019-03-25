@@ -7,5 +7,9 @@
     "lerna": "^3.13.1",
     "ts-jest": "^24.0.0",
     "typescript": "^3.3.4000"
+  },
+  "scripts": {
+    "jest": "jest",
+    "test": "npm run jest"
   }
 }
