@@ -9,5 +9,10 @@
     "sourceMap": true,
     "strict": true
   },
-  "exclude": ["**/__tests__", "*/lib"]
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/filter" },
+    { "path": "packages/image-js" }
+  ],
+  "exclude": ["**/__tests__", "packages/*/lib"]
 }

@@ -32,6 +32,8 @@ export interface INewImageOptions {
   kind?: ImageKind;
 }
 
+export type ImageValues = [number, number, number, number];
+
 const kinds: { [key in ImageKind]: { components: number; alpha: boolean } } = {
   [ImageKind.GREY]: {
     components: 1,
@@ -51,7 +53,7 @@ const kinds: { [key in ImageKind]: { components: number; alpha: boolean } } = {
   }
 };
 
-export class Image {
+export class BaseImage {
   /**
    * The number of columns of the image.
    */
@@ -204,6 +206,16 @@ export class Image {
    */
   setValue(y: number, x: number, channel: number, value: number) {
     this.data[(y * this.width + x) * this.channels + channel] = value;
+  }
+
+  *values (): IterableIterator<ImageValues> {
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
+        for (let c = 0; c < this.channels; c++) {
+          yield [y, x, c, this.data[(y * this.width + x) * this.channels + c]];
+        }
+      }
+    }
   }
 }
 
