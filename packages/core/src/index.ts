@@ -1,1 +1,1 @@
-export const x: number = 3;
+export * from './Image';
