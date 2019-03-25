@@ -10,8 +10,10 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "jest": "jest",
     "prepare": "npm run bootstrap",
-    "test": "npm run jest"
+    "test": "npm run test-only",
+    "test-coverage": "jest --coverage",
+    "test-only": "jest",
+    "test-travis": "npm run test-coverage"
   }
 }
