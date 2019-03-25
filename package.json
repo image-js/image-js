@@ -9,7 +9,9 @@
     "typescript": "^3.3.4000"
   },
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "jest": "jest",
+    "prepare": "npm run bootstrap",
     "test": "npm run jest"
   }
 }

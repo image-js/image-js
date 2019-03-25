@@ -1,0 +1,15 @@
+{
+  "name": "@image-js/filter",
+  "version": "0.0.0",
+  "description": "image-js filter components",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "prepare": "tsc -b ."
+  },
+  "files": ["lib", "src"],
+  "dependencies": {
+    "@image-js/core": "^0.0.0"
+  }
+}

@@ -6,7 +6,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "prepublishOnly": "tsc -b ."
+    "prepare": "tsc -b ."
   },
   "files": ["lib", "src"]
 }

@@ -1,6 +1,7 @@
 {
   "files": [],
   "references": [
-      { "path": "core" }
+      { "path": "core" },
+      { "path": "filter" }
   ]
 }

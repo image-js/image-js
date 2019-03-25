@@ -8,5 +8,6 @@
     "target": "es2018",
     "sourceMap": true,
     "strict": true
-  }
+  },
+  "exclude": ["**/__tests__", "*/lib"]
 }
