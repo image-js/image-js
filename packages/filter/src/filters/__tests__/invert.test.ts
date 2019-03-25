@@ -1,6 +1,6 @@
-import { BaseImage } from "@image-js/core";
+import { BaseImage } from '@image-js/core';
 
-import { invert } from "../invert";
+import { invert } from '../invert';
 
 test('invert', () => {
   const img = new BaseImage(1, 2);

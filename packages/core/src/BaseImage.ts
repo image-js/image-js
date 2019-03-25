@@ -208,7 +208,7 @@ export class BaseImage {
     this.data[(y * this.width + x) * this.channels + channel] = value;
   }
 
-  *values (): IterableIterator<ImageValues> {
+  *values(): IterableIterator<ImageValues> {
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
         for (let c = 0; c < this.channels; c++) {

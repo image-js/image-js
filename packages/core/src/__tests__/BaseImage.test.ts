@@ -62,7 +62,11 @@ describe('create new images', () => {
   });
 
   it('should create from existing data array', () => {
-    const data = Uint8Array.of(0, 1, 2, 3, 4, 5);
+    // prettier-ignore
+    const data = Uint8Array.from([
+      0, 1, 2,
+      3, 4, 5
+    ]);
     const img = new BaseImage(3, 2, { data, kind: ImageKind.GREY });
     expect(img.getValue(1, 0, 0)).toBe(3);
     expect(img.data).toBe(data);
@@ -118,6 +122,7 @@ describe('get and set pixels', () => {
 
 describe('iterators', () => {
   it('values()', () => {
+    // prettier-ignore
     const data = Uint8Array.from([
       0, 1, 2, 3, 4, 5,
       6, 7, 8, 9, 10, 11,

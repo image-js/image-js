@@ -1,4 +1,4 @@
-import { BaseImage } from "./BaseImage";
+import { BaseImage } from './BaseImage';
 
 /**
  * Create a new image base on the properties of an existing one.
