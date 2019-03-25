@@ -14,6 +14,7 @@ describe('create new images', () => {
       alpha: false,
       maxValue: 255
     });
+    expect(img.data).toHaveLength(600);
   });
 
   it('should create a 16-bit image', () => {
@@ -29,6 +30,7 @@ describe('create new images', () => {
       alpha: false,
       maxValue: 65535
     });
+    expect(img.data).toHaveLength(600);
   });
 
   it('should create a 32-bit image', () => {
@@ -44,6 +46,7 @@ describe('create new images', () => {
       alpha: false,
       maxValue: 1
     });
+    expect(img.data).toHaveLength(600);
   });
 
   it('should create a grey image with alpha', () => {
@@ -55,12 +58,14 @@ describe('create new images', () => {
       channels: 2,
       alpha: true
     });
+    expect(img.data).toHaveLength(400);
   });
 
   it('should create from existing data array', () => {
     const data = Uint8Array.of(0, 1, 2, 3, 4, 5);
     const img = new BaseImage(3, 2, { data, kind: ImageKind.GREY });
     expect(img.getValue(1, 0, 0)).toBe(3);
+    expect(img.data).toBe(data);
   });
 
   it('should throw on wrong width', () => {

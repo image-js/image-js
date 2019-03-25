@@ -103,7 +103,7 @@ export class BaseImage {
   /**
    * Typed array holding the image data.
    */
-  private readonly data: ImageDataArray;
+  public readonly data: ImageDataArray;
 
   /**
    * Construct a new image knowing its dimensions.
