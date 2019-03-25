@@ -2,5 +2,11 @@
   "name": "@image-js/core",
   "version": "0.0.0",
   "description": "image-js core components",
-  "license": "MIT"
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "prepublishOnly": "tsc -b ."
+  },
+  "files": ["lib", "src"]
 }
