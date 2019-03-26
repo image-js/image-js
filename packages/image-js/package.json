@@ -8,7 +8,7 @@
   "types": "lib/index.d.ts",
   "sideEffects": false,
   "scripts": {
-    "prepare": "tsc -b src test"
+    "prepare": "tsc -b src"
   },
   "files": [
     "lib",

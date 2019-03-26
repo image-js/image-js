@@ -15,6 +15,5 @@
       "test/*": ["test/*"]
     }
   },
-  "references": [{ "path": "packages/image-js/src" }, { "path": "test" }],
   "exclude": ["packages/**/lib", "packages/*/lib-esm", "test/lib"]
 }
