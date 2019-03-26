@@ -1,4 +1,7 @@
-export default function checkHeader(buf: ArrayBufferView, header: number[]) {
+export default function checkHeader(
+  buf: ArrayBufferView,
+  header: number[]
+): boolean {
   const arr = new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
   for (let i = 0; i < header.length; i++) {
     if (header[i] !== arr[i]) {

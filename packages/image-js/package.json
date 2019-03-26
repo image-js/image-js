@@ -1,5 +1,5 @@
 {
-  "name": "@image-js/core",
+  "name": "image-js",
   "version": "0.0.0",
   "description": "Advanced image processing in JavaScript.",
   "license": "MIT",
