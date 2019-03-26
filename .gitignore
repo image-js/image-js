@@ -84,5 +84,5 @@ typings/
 .dynamodb/
 
 # Packages output files
-packages/*/lib
-packages/*/lib-esm
+lib
+lib-esm

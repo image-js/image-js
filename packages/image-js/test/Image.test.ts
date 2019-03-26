@@ -1,4 +1,4 @@
-import { Image, ColorDepth, ImageKind } from '..';
+import { Image, ColorDepth, ImageKind } from 'ijs';
 
 describe('create new images', () => {
   it('should create a 8-bit image', () => {
@@ -76,9 +76,9 @@ describe('create new images', () => {
 
   it('should throw on wrong data size', () => {
     const data = new Uint16Array(2);
-    expect(
-      () => new Image(2, 2, { data, depth: ColorDepth.UINT16 })
-    ).toThrow(/incorrect data size: 2. Expected 12/);
+    expect(() => new Image(2, 2, { data, depth: ColorDepth.UINT16 })).toThrow(
+      /incorrect data size: 2. Expected 12/
+    );
   });
 
   it('should throw on wrong bit depth', () => {

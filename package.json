@@ -21,10 +21,10 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "clean": "lerna exec \"rimraf lib lib-esm\"",
+    "clean": "lerna exec \"rimraf lib lib-esm\" && rimraf test/lib",
     "eslint": "eslint packages/*/src --ext ts",
     "eslint-fix": "npm run eslint -- --fix",
-    "prepare": "npm run clean && npm run bootstrap",
+    "prepare": "npm run clean && npm run bootstrap && tsc -b test",
     "rollup": "rollup -c",
     "test": "npm run test-only",
     "test-coverage": "jest --coverage",

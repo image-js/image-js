@@ -1,8 +1,9 @@
-import { decodePng } from '..';
-import { ColorDepth, ImageKind } from '../../Image';
-import {readImage} from '../../../../../test/readFile';
+import { readImage } from 'test/readFile';
 
-describe('Load PNG', function() {
+import { decodePng } from '../../src/load';
+import { ColorDepth, ImageKind } from '../../src/Image';
+
+describe('Load PNG', function () {
   const tests: [string, ColorDepth, ImageKind][] = [
     // ['name', components, alpha, bitDepth]
     ['grey8', ColorDepth.UINT8, ImageKind.GREY],

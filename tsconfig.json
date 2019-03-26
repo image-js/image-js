@@ -7,8 +7,14 @@
     "module": "commonjs",
     "target": "es2018",
     "sourceMap": true,
-    "strict": true
+    "strict": true,
+    "rootDir": ".",
+    "baseUrl": "./",
+    "paths": {
+      "ijs": ["packages/image-js/src/index.ts"],
+      "test/*": ["test/*"]
+    }
   },
-  "references": [{ "path": "packages/image-js" }],
-  "exclude": ["**/__tests__", "packages/*/lib", "packages/*/lib-esm"]
+  "references": [{ "path": "packages/image-js/src" }, { "path": "test" }],
+  "exclude": ["packages/**/lib", "packages/*/lib-esm", "test/lib"]
 }

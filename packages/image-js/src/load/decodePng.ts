@@ -1,9 +1,9 @@
-// const {decode} = require('fast-png');
 // @ts-ignore
 import { decode } from 'fast-png';
+
 import { Image, ImageKind, ColorDepth } from '../Image';
 
-export function decodePng(buffer: ArrayBufferView) {
+export function decodePng(buffer: ArrayBufferView): Image {
   const png = decode(buffer);
 
   let kind: ImageKind = ImageKind.GREY;
@@ -36,7 +36,15 @@ export function decodePng(buffer: ArrayBufferView) {
   });
 }
 
-function loadPalettePNG(png: any) {
+interface IPalettePng {
+  width: number;
+  height: number;
+  bitDepth: number;
+  data: Uint8Array;
+  palette: { [key: number]: [number, number, number] };
+}
+
+function loadPalettePNG(png: IPalettePng): Image {
   const pixels = png.width * png.height;
   const data = new Uint8Array(pixels * 3);
   const pixelsPerByte = 8 / png.bitDepth;

@@ -2,3 +2,4 @@ extends: cheminfo-typescript
 rules:
   no-useless-constructor: off
   no-dupe-class-members: off
+  'import/no-unresolved': off
