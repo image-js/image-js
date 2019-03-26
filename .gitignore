@@ -85,3 +85,4 @@ typings/
 
 # Packages output files
 packages/*/lib
+packages/*/lib-esm

@@ -10,5 +10,5 @@
     "strict": true
   },
   "references": [{ "path": "packages/image-js" }],
-  "exclude": ["**/__tests__", "packages/*/lib"]
+  "exclude": ["**/__tests__", "packages/*/lib", "packages/*/lib-esm"]
 }

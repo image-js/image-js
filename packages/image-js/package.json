@@ -4,6 +4,7 @@
   "description": "Advanced image processing in JavaScript.",
   "license": "MIT",
   "main": "lib/index.js",
+  "module": "lib-esm/index.js",
   "types": "lib/index.d.ts",
   "sideEffects": false,
   "scripts": {
@@ -11,6 +12,7 @@
   },
   "files": [
     "lib",
+    "lib-esm",
     "src"
   ]
 }

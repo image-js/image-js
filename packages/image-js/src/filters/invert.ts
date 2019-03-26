@@ -1,5 +1,4 @@
-import { Image } from '..';
-
+import { Image } from '../Image';
 import { IOutOptions, getOutputImage } from '../utils/getOutputImage';
 
 export type IInvertOptions = IOutOptions;
