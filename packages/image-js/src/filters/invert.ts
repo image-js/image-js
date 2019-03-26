@@ -7,7 +7,7 @@ export interface IInvertOptions extends IOutOptions {}
  * Invert the colors of an image.
  * @param image - The image to invert.
  */
-export function invert(image: Image, options: IInvertOptions): Image {
+export function invert(image: Image, options?: IInvertOptions): Image {
   const newImage = getOutputImage(image, options, { copy: true });
   const { maxValue } = newImage;
   for (let i = 0; i < newImage.data.length; i++) {

@@ -262,7 +262,7 @@ export class Image {
   /**
    * Invert the colors of the image.
    */
-  invert(options: IInvertOptions): Image {
+  invert(options?: IInvertOptions): Image {
     return invert(this, options);
   }
 }
