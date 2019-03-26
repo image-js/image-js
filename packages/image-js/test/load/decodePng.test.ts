@@ -1,7 +1,5 @@
 import { readImage } from 'test/readFile';
-
-import { decodePng } from '../../src/load';
-import { ColorDepth, ImageKind } from '../../src/Image';
+import { decodePng, ColorDepth, ImageKind } from 'ijs';
 
 describe('Load PNG', function () {
   const tests: [string, ColorDepth, ImageKind][] = [

@@ -1,4 +1,4 @@
-import { Image } from '../..';
+import { Image } from 'ijs';
 
 test('invert', () => {
   const img = new Image(1, 2);
