@@ -33,22 +33,6 @@ describe('create new images', () => {
     expect(img.data).toHaveLength(600);
   });
 
-  it('should create a 32-bit image', () => {
-    const img = new Image(10, 20, { bitDepth: BitDepth.FLOAT32 });
-    expect(img).toMatchObject({
-      width: 10,
-      height: 20,
-      size: 200,
-      bitDepth: BitDepth.FLOAT32,
-      kind: ImageKind.RGB,
-      components: 3,
-      channels: 3,
-      alpha: false,
-      maxValue: 1
-    });
-    expect(img.data).toHaveLength(600);
-  });
-
   it('should create a grey image with alpha', () => {
     const img = new Image(10, 20, { kind: ImageKind.GREYA });
     expect(img).toMatchObject({

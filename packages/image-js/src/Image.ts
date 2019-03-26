@@ -1,12 +1,11 @@
 import { createFrom } from './misc';
 import { invert, IInvertOptions } from './filters/invert';
 
-type ImageDataArray = Uint8Array | Uint16Array | Float32Array;
+type ImageDataArray = Uint8Array | Uint16Array;
 
 export enum BitDepth {
   UINT8 = 8,
   UINT16 = 16,
-  FLOAT32 = 32
 }
 
 export enum ImageKind {
@@ -282,9 +281,6 @@ function createPixelArray(
       break;
     case BitDepth.UINT16:
       arr = new Uint16Array(length);
-      break;
-    case BitDepth.FLOAT32:
-      arr = new Float32Array(length);
       break;
     default:
       throw new Error(`unexpected bit depth: ${bitDepth}`);
