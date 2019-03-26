@@ -1,2 +1,2 @@
-export * from '@image-js/core';
 export * from './Image';
+export * from './misc';

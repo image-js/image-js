@@ -1,5 +1,5 @@
 {
-  "name": "image-js",
+  "name": "@image-js/core",
   "version": "0.0.0",
   "description": "Advanced image processing in JavaScript.",
   "license": "MIT",
@@ -8,9 +8,8 @@
   "scripts": {
     "prepare": "tsc -b ."
   },
-  "files": ["lib", "src"],
-  "dependencies": {
-    "@image-js/core": "^0.0.0",
-    "@image-js/filter": "^0.0.0"
-  }
+  "files": [
+    "lib",
+    "src"
+  ]
 }
