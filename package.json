@@ -3,6 +3,13 @@
   "private": true,
   "devDependencies": {
     "@types/jest": "^24.0.11",
+    "@typescript-eslint/eslint-plugin": "^1.5.0",
+    "@typescript-eslint/parser": "^1.5.0",
+    "eslint": "^5.15.3",
+    "eslint-config-cheminfo": "^1.20.1",
+    "eslint-config-cheminfo-typescript": "^3.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jest": "^22.4.1",
     "jest": "^24.5.0",
     "lerna": "^3.13.1",
     "rimraf": "^2.6.3",
@@ -12,6 +19,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "clean": "lerna exec \"rimraf lib\"",
+    "eslint": "eslint packages/*/src --ext ts",
+    "eslint-fix": "npm run eslint -- --fix",
     "prepare": "npm run clean && npm run bootstrap",
     "test": "npm run test-only",
     "test-coverage": "jest --coverage",

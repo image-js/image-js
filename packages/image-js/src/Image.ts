@@ -123,13 +123,13 @@ export class Image {
    * @param height
    * @param options
    */
-  constructor(width: number, height: number, options?: INewImageOptions);
+  public constructor(width: number, height: number, options?: INewImageOptions);
   /**
    * Construct a new image only with options.
    * @param options
    */
-  constructor(options?: INewImageOptions);
-  constructor(
+  public constructor(options?: INewImageOptions);
+  public constructor(
     width?: number | INewImageOptions,
     height?: number,
     options: INewImageOptions = {}
@@ -200,7 +200,7 @@ export class Image {
    * @param x - Column index.
    * @returns Values of the pixel.
    */
-  get(y: number, x: number): number[] {
+  public get(y: number, x: number): number[] {
     const result = [];
     const start = (y * this.width + x) * this.channels;
     for (let i = 0; i < this.channels; i++) {
@@ -215,7 +215,7 @@ export class Image {
    * @param x - Column index.
    * @param value - Values of the pixel to set.
    */
-  set(y: number, x: number, value: number[]): void {
+  public set(y: number, x: number, value: number[]): void {
     const start = (y * this.width + x) * this.channels;
     for (let i = 0; i < this.channels; i++) {
       this.data[start + i] = value[i];
@@ -228,7 +228,7 @@ export class Image {
    * @param x - Column index.
    * @param channel - Channel index.
    */
-  getValue(y: number, x: number, channel: number): number {
+  public getValue(y: number, x: number, channel: number): number {
     return this.data[(y * this.width + x) * this.channels + channel];
   }
 
@@ -239,18 +239,18 @@ export class Image {
    * @param channel - Channel index.
    * @param value - Value to set.
    */
-  setValue(y: number, x: number, channel: number, value: number) {
+  public setValue(y: number, x: number, channel: number, value: number): void {
     this.data[(y * this.width + x) * this.channels + channel] = value;
   }
 
   /**
    * Create a copy of this image.
    */
-  clone(): Image {
+  public clone(): Image {
     return createFrom(this, { data: this.data.slice() });
   }
 
-  changeEach(cb: (value: number) => number) {
+  public changeEach(cb: (value: number) => number): void {
     for (let i = 0; i < this.data.length; i++) {
       this.data[i] = cb(this.data[i]);
     }
@@ -261,7 +261,7 @@ export class Image {
   /**
    * Invert the colors of the image.
    */
-  invert(options?: IInvertOptions): Image {
+  public invert(options?: IInvertOptions): Image {
     return invert(this, options);
   }
 }

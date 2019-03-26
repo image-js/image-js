@@ -57,19 +57,19 @@ describe('create new images', () => {
   });
 
   it('should throw on wrong width', () => {
-    expect(() => new Image(0, 1)).toThrowError(
+    expect(() => new Image(0, 1)).toThrow(
       /width must be an integer and at least 1. Received 0/
     );
-    expect(() => new Image(0.5, 1)).toThrowError(
+    expect(() => new Image(0.5, 1)).toThrow(
       /width must be an integer and at least 1. Received 0.5/
     );
   });
 
   it('should throw on wrong height', () => {
-    expect(() => new Image(1, 0)).toThrowError(
+    expect(() => new Image(1, 0)).toThrow(
       /height must be an integer and at least 1. Received 0/
     );
-    expect(() => new Image(1, 0.5)).toThrowError(
+    expect(() => new Image(1, 0.5)).toThrow(
       /height must be an integer and at least 1. Received 0.5/
     );
   });
@@ -78,11 +78,11 @@ describe('create new images', () => {
     const data = new Uint16Array(2);
     expect(
       () => new Image(2, 2, { data, depth: ColorDepth.UINT16 })
-    ).toThrowError(/incorrect data size: 2. Expected 12/);
+    ).toThrow(/incorrect data size: 2. Expected 12/);
   });
 
   it('should throw on wrong bit depth', () => {
-    expect(() => new Image(1, 1, { depth: 20 })).toThrowError(
+    expect(() => new Image(1, 1, { depth: 20 })).toThrow(
       /unexpected color depth: 20/
     );
   });

@@ -1,7 +1,8 @@
 import { Image } from '..';
+
 import { IOutOptions, getOutputImage } from '../utils/getOutputImage';
 
-export interface IInvertOptions extends IOutOptions {}
+export type IInvertOptions = IOutOptions;
 
 /**
  * Invert the colors of an image.
