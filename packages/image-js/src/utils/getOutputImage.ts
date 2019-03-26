@@ -50,7 +50,7 @@ export function getOutputImage(
       {
         width: thisImage.width,
         height: thisImage.height,
-        bitDepth: thisImage.bitDepth,
+        depth: thisImage.depth,
         kind: thisImage.kind
       },
       newParameters

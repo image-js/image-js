@@ -1,4 +1,4 @@
-import { Image, BitDepth, ImageKind } from '..';
+import { Image, ColorDepth, ImageKind } from '..';
 
 describe('create new images', () => {
   it('should create a 8-bit image', () => {
@@ -7,7 +7,7 @@ describe('create new images', () => {
       width: 10,
       height: 20,
       size: 200,
-      bitDepth: BitDepth.UINT8,
+      depth: ColorDepth.UINT8,
       kind: ImageKind.RGB,
       components: 3,
       channels: 3,
@@ -18,12 +18,12 @@ describe('create new images', () => {
   });
 
   it('should create a 16-bit image', () => {
-    const img = new Image(10, 20, { bitDepth: BitDepth.UINT16 });
+    const img = new Image(10, 20, { depth: ColorDepth.UINT16 });
     expect(img).toMatchObject({
       width: 10,
       height: 20,
       size: 200,
-      bitDepth: BitDepth.UINT16,
+      depth: ColorDepth.UINT16,
       kind: ImageKind.RGB,
       components: 3,
       channels: 3,
@@ -36,7 +36,7 @@ describe('create new images', () => {
   it('should create a grey image with alpha', () => {
     const img = new Image(10, 20, { kind: ImageKind.GREYA });
     expect(img).toMatchObject({
-      bitDepth: BitDepth.UINT8,
+      depth: ColorDepth.UINT8,
       kind: ImageKind.GREYA,
       components: 1,
       channels: 2,
@@ -77,13 +77,13 @@ describe('create new images', () => {
   it('should throw on wrong data size', () => {
     const data = new Uint16Array(2);
     expect(
-      () => new Image(2, 2, { data, bitDepth: BitDepth.UINT16 })
+      () => new Image(2, 2, { data, depth: ColorDepth.UINT16 })
     ).toThrowError(/incorrect data size: 2. Expected 12/);
   });
 
   it('should throw on wrong bit depth', () => {
-    expect(() => new Image(1, 1, { bitDepth: 20 })).toThrowError(
-      /unexpected bit depth: 20/
+    expect(() => new Image(1, 1, { depth: 20 })).toThrowError(
+      /unexpected color depth: 20/
     );
   });
 });

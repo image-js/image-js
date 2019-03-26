@@ -8,7 +8,7 @@ export function createFrom(other: Image, options?: INewImageOptions): Image {
   return new Image({
     width: other.width,
     height: other.height,
-    bitDepth: other.bitDepth,
+    depth: other.depth,
     kind: other.kind,
     ...options
   });

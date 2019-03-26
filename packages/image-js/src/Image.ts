@@ -3,9 +3,9 @@ import { invert, IInvertOptions } from './filters/invert';
 
 type ImageDataArray = Uint8Array | Uint16Array;
 
-export enum BitDepth {
+export enum ColorDepth {
   UINT8 = 8,
-  UINT16 = 16,
+  UINT16 = 16
 }
 
 export enum ImageKind {
@@ -18,9 +18,9 @@ export enum ImageKind {
 export interface INewImageOptions {
   /**
    * Number of bits per value in each channel.
-   * Default: `BitDepth.UINT8`.
+   * Default: `ColorDepth.UINT8`.
    */
-  bitDepth?: BitDepth;
+  depth?: ColorDepth;
 
   /**
    * Typed array holding the image data.
@@ -84,7 +84,7 @@ export class Image {
   /**
    * The number of bits per value in each channel.
    */
-  public readonly bitDepth: BitDepth;
+  public readonly depth: ColorDepth;
 
   /**
    * The kind of the image.
@@ -147,7 +147,7 @@ export class Image {
       height = options.height || 1;
     }
 
-    const { bitDepth = BitDepth.UINT8, data, kind = ImageKind.RGB } = options;
+    const { depth = ColorDepth.UINT8, data, kind = ImageKind.RGB } = options;
 
     if (width < 1 || !Number.isInteger(width)) {
       throw new RangeError(
@@ -164,7 +164,7 @@ export class Image {
     this.width = width;
     this.height = height;
     this.size = width * height;
-    this.bitDepth = bitDepth;
+    this.depth = depth;
     this.kind = kind;
 
     const kindDef = kinds[kind];
@@ -172,7 +172,7 @@ export class Image {
     this.channels = kindDef.components + Number(kindDef.alpha);
     this.alpha = kindDef.alpha;
 
-    const maxValue = bitDepth === 32 ? 1 : 2 ** bitDepth - 1;
+    const maxValue = depth === 32 ? 1 : 2 ** depth - 1;
     this.maxValue = maxValue;
 
     if (data === undefined) {
@@ -180,7 +180,7 @@ export class Image {
         this.size,
         this.channels,
         this.alpha,
-        this.bitDepth,
+        this.depth,
         maxValue
       );
     } else {
@@ -270,20 +270,20 @@ function createPixelArray(
   size: number,
   channels: number,
   alpha: boolean,
-  bitDepth: BitDepth,
+  depth: ColorDepth,
   maxValue: number
 ): ImageDataArray {
   const length = channels * size;
   let arr;
-  switch (bitDepth) {
-    case BitDepth.UINT8:
+  switch (depth) {
+    case ColorDepth.UINT8:
       arr = new Uint8Array(length);
       break;
-    case BitDepth.UINT16:
+    case ColorDepth.UINT16:
       arr = new Uint16Array(length);
       break;
     default:
-      throw new Error(`unexpected bit depth: ${bitDepth}`);
+      throw new Error(`unexpected color depth: ${depth}`);
   }
 
   // Alpha channel is 100% by default.
