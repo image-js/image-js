@@ -11,3 +11,12 @@ describe('Load PNG', function () {
     expect(decoded.depth).toStrictEqual(ColorDepth.UINT8);
   });
 });
+
+describe('invalid data format', () => {
+  it('should throw for too small data', () => {
+    expect(() => decode(new Uint8Array(0))).toThrow(/invalid data format/);
+  });
+  it('should throw for unknown data', () => {
+    expect(() => decode(new Uint8Array(10))).toThrow(/invalid data format/);
+  });
+});

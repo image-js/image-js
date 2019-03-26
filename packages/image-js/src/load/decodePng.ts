@@ -6,12 +6,13 @@ import { Image, ImageKind, ColorDepth } from '../Image';
 export function decodePng(buffer: ArrayBufferView): Image {
   const png = decode(buffer);
 
-  let kind: ImageKind = ImageKind.GREY;
+  let kind: ImageKind;
   let depth: ColorDepth =
     png.bitDepth === 16 ? ColorDepth.UINT16 : ColorDepth.UINT8;
 
   switch (png.colourType) {
     case 0:
+      kind = ImageKind.GREY;
       break;
     case 2:
       kind = ImageKind.RGB;

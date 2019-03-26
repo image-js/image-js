@@ -45,6 +45,30 @@ describe('create new images', () => {
     expect(img.data).toHaveLength(400);
   });
 
+  it('should have a default width of 1', () => {
+    const img = new Image({ height: 2 });
+    expect(img).toMatchObject({
+      width: 1,
+      height: 2
+    });
+  });
+
+  it('should have a default height of 1', () => {
+    const img = new Image({ width: 2 });
+    expect(img).toMatchObject({
+      width: 2,
+      height: 1
+    });
+  });
+
+  it('should default to width and height of 1', () => {
+    const img = new Image();
+    expect(img).toMatchObject({
+      width: 1,
+      height: 1
+    });
+  });
+
   it('should create from existing data array', () => {
     // prettier-ignore
     const data = Uint8Array.from([
@@ -102,4 +126,19 @@ describe('get and set pixels', () => {
     img.setValue(15, 5, 0, 50);
     expect(img.getValue(15, 5, 0)).toBe(50);
   });
+});
+
+test('clone', () => {
+  const img = new Image(2, 2, { kind: ImageKind.GREY });
+  img.setValue(0, 1, 0, 50);
+  const copy = img.clone();
+  expect(copy).toStrictEqual(img);
+  expect(copy.data).not.toBe(img.data);
+});
+
+test('changeEach', () => {
+  const img = new Image(1, 2);
+  let i = 0;
+  img.changeEach(() => i++);
+  expect(Array.from(img.data)).toStrictEqual([0, 1, 2, 3, 4, 5]);
 });

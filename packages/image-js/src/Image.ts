@@ -172,7 +172,7 @@ export class Image {
     this.channels = kindDef.components + Number(kindDef.alpha);
     this.alpha = kindDef.alpha;
 
-    const maxValue = depth === 32 ? 1 : 2 ** depth - 1;
+    const maxValue = 2 ** depth - 1;
     this.maxValue = maxValue;
 
     if (data === undefined) {
