@@ -1,5 +1,5 @@
 import { createFrom } from './misc';
-import { invert } from './filters/invert';
+import { invert, IInvertOptions } from './filters/invert';
 
 type ImageDataArray = Uint8Array | Uint16Array | Float32Array;
 
@@ -29,10 +29,20 @@ export interface INewImageOptions {
   data?: ImageDataArray;
 
   /**
+   * Height of the image.
+   */
+  height?: number;
+
+  /**
    * Kind of the created image.
    * Default: `ImageKind.RGB`.
    */
   kind?: ImageKind;
+
+  /**
+   * Width of the image.
+   */
+  width?: number;
 }
 
 export type ImageValues = [number, number, number, number];
@@ -114,20 +124,43 @@ export class Image {
    * @param height
    * @param options
    */
-  constructor(width: number, height: number, options: INewImageOptions = {}) {
+  constructor(width: number, height: number, options?: INewImageOptions);
+  /**
+   * Construct a new image only with options.
+   * @param options
+   */
+  constructor(options?: INewImageOptions);
+  constructor(
+    width?: number | INewImageOptions,
+    height?: number,
+    options: INewImageOptions = {}
+  ) {
+    if (typeof width !== 'number') {
+      options = width || {};
+      width = undefined;
+    }
+
+    if (width === undefined) {
+      width = options.width || 1;
+    }
+
+    if (height === undefined) {
+      height = options.height || 1;
+    }
+
+    const { bitDepth = BitDepth.UINT8, data, kind = ImageKind.RGB } = options;
+
     if (width < 1 || !Number.isInteger(width)) {
       throw new RangeError(
-        `width must be an integer and at least 1. Received ${width}.`
+        `width must be an integer and at least 1. Received ${width}`
       );
     }
 
     if (height < 1 || !Number.isInteger(height)) {
       throw new RangeError(
-        `height must be an integer and at least 1. Received ${height}.`
+        `height must be an integer and at least 1. Received ${height}`
       );
     }
-
-    const { bitDepth = BitDepth.UINT8, data, kind = ImageKind.RGB } = options;
 
     this.width = width;
     this.height = height;
@@ -155,7 +188,7 @@ export class Image {
       const expectedLength = this.size * this.channels;
       if (data.length !== expectedLength) {
         throw new RangeError(
-          `incorrect data size: ${data.length}. Expected ${expectedLength}.`
+          `incorrect data size: ${data.length}. Expected ${expectedLength}`
         );
       }
       this.data = data;
@@ -229,8 +262,8 @@ export class Image {
   /**
    * Invert the colors of the image.
    */
-  invert(): Image {
-    return invert(this);
+  invert(options: IInvertOptions): Image {
+    return invert(this, options);
   }
 }
 
