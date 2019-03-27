@@ -1,5 +1,4 @@
-// @ts-ignore
-import { decode } from 'fast-png';
+import { decode, IDecodedPNG } from 'fast-png';
 
 import { Image, ImageKind, ColorDepth } from '../Image';
 
@@ -41,15 +40,12 @@ export function decodePng(buffer: ArrayBufferView): Image {
   });
 }
 
-interface IPalettePng {
-  width: number;
-  height: number;
-  bitDepth: number;
-  data: Uint8Array;
-  palette: { [key: number]: [number, number, number] };
-}
-
-function loadPalettePNG(png: IPalettePng): Image {
+function loadPalettePNG(png: IDecodedPNG): Image {
+  if (!png.palette) {
+    throw new Error(
+      'unexpected: there should be a palette when colourType is 3'
+    );
+  }
   const pixels = png.width * png.height;
   const data = new Uint8Array(pixels * 3);
   const pixelsPerByte = 8 / png.bitDepth;
