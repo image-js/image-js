@@ -1,4 +1,3 @@
-import { createFrom } from './misc';
 import { invert, IInvertOptions } from './filters/invert';
 
 type ImageDataArray = Uint8Array | Uint16Array;
@@ -195,6 +194,20 @@ export class Image {
   }
 
   /**
+   * Create a new image base on the properties of an existing one.
+   * @param other - Reference image.
+   */
+  public static createFrom(other: Image, options?: INewImageOptions): Image {
+    return new Image({
+      width: other.width,
+      height: other.height,
+      depth: other.depth,
+      kind: other.kind,
+      ...options
+    });
+  }
+
+  /**
    * Get all the values of a pixel.
    * @param y - Row index.
    * @param x - Column index.
@@ -247,7 +260,7 @@ export class Image {
    * Create a copy of this image.
    */
   public clone(): Image {
-    return createFrom(this, { data: this.data.slice() });
+    return Image.createFrom(this, { data: this.data.slice() });
   }
 
   public changeEach(cb: (value: number) => number): void {

@@ -1,5 +1,4 @@
 import { Image, INewImageOptions } from '../Image';
-import { createFrom } from '../misc';
 
 export interface IOutOptions {
   /**
@@ -40,7 +39,7 @@ export function getOutputImage(
     if (copy) {
       return thisImage.clone();
     } else {
-      return createFrom(thisImage, newParameters);
+      return Image.createFrom(thisImage, newParameters);
     }
   } else {
     if (!(out instanceof Image)) {
