@@ -25,27 +25,11 @@ export function convertColor(image: Image, kind: ImageKind): Image {
   });
 
   if (image.kind === ImageKind.GREY || image.kind === ImageKind.GREYA) {
-    for (
-      let i = 0, iNew = 0;
-      i < image.data.length;
-      i += image.channels, iNew += newImage.channels
-    ) {
-      for (let j = 0; j < newImage.components; j++) {
-        newImage.data[iNew + j] = image.data[i];
-      }
-    }
+    convertGreyToAny(image, newImage);
   }
 
   if (image.kind === ImageKind.RGB || image.kind === ImageKind.RGBA) {
-    for (
-      let i = 0, iNew = 0;
-      i < image.data.length;
-      i += image.channels, iNew += newImage.channels
-    ) {
-      for (let j = 0; j < newImage.components; j++) {
-        newImage.data[iNew + j] = image.data[i + j];
-      }
-    }
+    convertRgbToRgb(image, newImage);
   }
 
   if (!image.alpha && newImage.alpha) {
@@ -73,5 +57,29 @@ function copyAlpha(source: Image, dest: Image): void {
     i += dest.channels, j += source.channels
   ) {
     dest.data[i] = source.data[j];
+  }
+}
+
+function convertGreyToAny(image: Image, newImage: Image): void {
+  for (
+    let i = 0, iNew = 0;
+    i < image.data.length;
+    i += image.channels, iNew += newImage.channels
+  ) {
+    for (let j = 0; j < newImage.components; j++) {
+      newImage.data[iNew + j] = image.data[i];
+    }
+  }
+}
+
+function convertRgbToRgb(image: Image, newImage: Image): void {
+  for (
+    let i = 0, iNew = 0;
+    i < image.data.length;
+    i += image.channels, iNew += newImage.channels
+  ) {
+    for (let j = 0; j < newImage.components; j++) {
+      newImage.data[iNew + j] = image.data[i + j];
+    }
   }
 }
