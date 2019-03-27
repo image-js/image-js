@@ -1,3 +1,9 @@
+/**
+ * Check the presence of a header in a buffer
+ * @private
+ * @param buf The buffer to check
+ * @param header The header to check the presence of
+ */
 export default function checkHeader(
   buf: ArrayBufferView,
   header: number[]
