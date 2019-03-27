@@ -4,6 +4,7 @@
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
+    "moduleResolution": "node",
     "module": "commonjs",
     "target": "es2018",
     "sourceMap": true,
