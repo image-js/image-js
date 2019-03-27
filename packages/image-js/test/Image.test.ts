@@ -188,6 +188,13 @@ test('fill channel 2', () => {
   expect(img.data).toStrictEqual(Uint8Array.from([0, 0, 50, 0, 0, 50]));
 });
 
+test('fill channel invalid channel', () => {
+  const img = new Image(1, 2);
+  expect(() => img.fillChannel(4, 50)).toThrow(
+    /invalid channel: 4. It must be a positive integer smaller than 3/
+  );
+});
+
 test('fill alpha', () => {
   const img = new Image(1, 2, { kind: ImageKind.RGBA });
   img.fillAlpha(0);
