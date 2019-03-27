@@ -3,9 +3,9 @@ import { Image, ImageKind } from '../Image';
 export function convertColor(image: Image, kind: ImageKind): Image {
   const canConvert = new Map([
     [ImageKind.GREY, [ImageKind.GREYA, ImageKind.RGB, ImageKind.RGBA]],
-    [ImageKind.GREYA, [ImageKind.GREY, ImageKind.RGB, ImageKind.RGBA]]
-    //   [ImageKind.RGB, [ImageKind.RGBA]],
-    //   [ImageKind.RGBA, [ImageKind.RGB]]
+    [ImageKind.GREYA, [ImageKind.GREY, ImageKind.RGB, ImageKind.RGBA]],
+    [ImageKind.RGB, [ImageKind.RGBA]],
+    [ImageKind.RGBA, [ImageKind.RGB]]
   ]);
 
   if (image.kind === kind) {
@@ -34,17 +34,27 @@ export function convertColor(image: Image, kind: ImageKind): Image {
         newImage.data[iNew + j] = image.data[i];
       }
     }
-    if (!image.alpha && newImage.alpha) {
-      newImage.fillAlpha(newImage.maxValue);
-    }
+  }
 
-    if (image.alpha && newImage.alpha) {
-      copyAlpha(image, newImage);
+  if (image.kind === ImageKind.RGB || image.kind === ImageKind.RGBA) {
+    for (
+      let i = 0, iNew = 0;
+      i < image.data.length;
+      i += image.channels, iNew += newImage.channels
+    ) {
+      for (let j = 0; j < newImage.components; j++) {
+        newImage.data[iNew + j] = image.data[i + j];
+      }
     }
   }
 
-  //   if (image.kind === ImageKind.RGB) {
-  //   }
+  if (!image.alpha && newImage.alpha) {
+    newImage.fillAlpha(newImage.maxValue);
+  }
+
+  if (image.alpha && newImage.alpha) {
+    copyAlpha(image, newImage);
+  }
 
   return newImage;
 }

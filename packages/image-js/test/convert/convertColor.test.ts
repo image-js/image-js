@@ -84,4 +84,32 @@ describe('convert color', () => {
       new Uint8Array([10, 10, 10, 100, 30, 30, 30, 100, 50, 50, 50, 100, 70, 70, 70, 100])
     );
   });
+
+  it('RGB to RGBA', () => {
+    const image = new Image({
+      width: 2,
+      height: 1,
+      data: new Uint8Array([10, 20, 30, 40, 60, 70]),
+      kind: ImageKind.RGB
+    });
+
+    const converted = image.convertColor(ImageKind.RGBA);
+    expect(converted.data).toStrictEqual(
+      new Uint8Array([10, 20, 30, 255, 40, 60, 70, 255])
+    );
+  });
+
+  it('RGBA to RGB', () => {
+    const image = new Image({
+      width: 2,
+      height: 1,
+      data: new Uint8Array([10, 20, 30, 100, 40, 60, 70, 100]),
+      kind: ImageKind.RGBA
+    });
+
+    const converted = image.convertColor(ImageKind.RGB);
+    expect(converted.data).toStrictEqual(
+      new Uint8Array([10, 20, 30, 40, 60, 70])
+    );
+  });
 });
