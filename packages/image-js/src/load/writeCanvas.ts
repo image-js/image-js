@@ -1,4 +1,4 @@
-import { Image } from '../Image';
+import { Image, ImageKind } from '../Image';
 
 export interface IWriteCanvasOptions {
   /**
@@ -18,6 +18,9 @@ export function writeCanvas(
   image: Image,
   options: IWriteCanvasOptions = {}
 ): void {
+  if (image.kind !== ImageKind.RGBA) {
+    throw new Error('writeCanvas only supports RGBA images for now');
+  }
   const {
     resizeCanvas = true,
     dx = 0,

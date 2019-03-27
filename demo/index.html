@@ -19,7 +19,7 @@
 
       const image = IJS.readImg(img);
       const inverted = image.invert();
-      inverted.fillChannel(3, 255);
+      inverted.fillAlpha(255);
 
       const canvas = document.getElementById('canvas');
       IJS.writeCanvas(canvas, inverted);

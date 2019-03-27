@@ -297,6 +297,20 @@ export class Image {
   }
 
   /**
+   * Fill the alpha channel with the specified value.
+   */
+  public fillAlpha(value: number): this {
+    validateValue(value, this);
+    if (!this.alpha) {
+      throw new Error(
+        'fillAlpha can only be called if the image has an alpha channel'
+      );
+    }
+    const alphaIndex = this.channels - 1;
+    return this.fillChannel(alphaIndex, value);
+  }
+
+  /**
    * Create a copy of this image.
    */
   public clone(): Image {
