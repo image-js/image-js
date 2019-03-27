@@ -2,10 +2,8 @@ import { readImage } from 'test/readFile';
 import { decode, ColorDepth } from 'ijs';
 
 describe('Load PNG', function () {
-  const tests: [string][] = [['grey8']];
-
-  it.each(tests)('auto decode %s', async (name) => {
-    const buffer = readImage(`${name}.png`);
+  it('auto decode png', async () => {
+    const buffer = readImage('grey8.png');
     expect(() => decode(buffer)).not.toThrow();
     const decoded = decode(buffer);
     expect(decoded.depth).toStrictEqual(ColorDepth.UINT8);

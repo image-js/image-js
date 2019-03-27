@@ -16,6 +16,8 @@
     "src"
   ],
   "dependencies": {
-    "fast-png": "^3.1.0"
+    "@types/jpeg-js": "^0.3.0",
+    "fast-png": "^3.1.0",
+    "jpeg-js": "^0.3.4"
   }
 }
