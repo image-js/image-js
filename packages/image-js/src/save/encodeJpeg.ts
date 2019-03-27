@@ -1,6 +1,6 @@
 import { encode } from 'jpeg-js';
 
-import { Image, ImageKind, ColorDepth } from '../Image';
+import { Image, ImageKind } from '../Image';
 
 export function encodeJpeg(image: Image): ArrayBufferView {
   image = image.convertColor(ImageKind.RGBA);
