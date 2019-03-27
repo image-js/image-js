@@ -21,7 +21,7 @@
     "typescript": "^3.3.4000"
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --no-ci",
     "clean": "lerna exec \"rimraf lib lib-esm\" && rimraf test/lib",
     "eslint": "eslint packages/*/src --ext ts",
     "eslint-fix": "npm run eslint -- --fix",
