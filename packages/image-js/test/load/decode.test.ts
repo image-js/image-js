@@ -1,12 +1,21 @@
 import { readImage } from 'test/readFile';
-import { decode, ColorDepth } from 'ijs';
+import { decode, ColorDepth, ImageKind } from 'ijs';
 
-describe('Load PNG', function () {
+describe('decode various formats', function () {
   it('auto decode png', async () => {
     const buffer = readImage('grey8.png');
     expect(() => decode(buffer)).not.toThrow();
     const decoded = decode(buffer);
     expect(decoded.depth).toStrictEqual(ColorDepth.UINT8);
+    expect(decoded.kind).toStrictEqual(ImageKind.GREY);
+  });
+
+  it('auto decode jpeg', async () => {
+    const buffer = readImage('rgb12.jpg');
+    expect(() => decode(buffer)).not.toThrow();
+    const decoded = decode(buffer);
+    expect(decoded.depth).toStrictEqual(ColorDepth.UINT8);
+    expect(decoded.kind).toStrictEqual(ImageKind.RGBA);
   });
 });
 
