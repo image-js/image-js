@@ -1,4 +1,5 @@
 import { invert, IInvertOptions } from './filters/invert';
+import { validateChannel, validateValue } from './utils/validators';
 
 type ImageDataArray = Uint8Array | Uint16Array;
 
@@ -254,6 +255,45 @@ export class Image {
    */
   public setValue(y: number, x: number, channel: number, value: number): void {
     this.data[(y * this.width + x) * this.channels + channel] = value;
+  }
+
+  /**
+   * Fill the image with a value or a color
+   */
+  public fill(value: number | number[]): this {
+    let values: number[];
+    if (typeof value === 'number') {
+      values = new Array(this.channels).fill(value);
+    } else {
+      values = value;
+      if (values.length !== this.channels) {
+        throw new RangeError(
+          `the size of value must match the number of channels (${
+            this.channels
+          }). Got ${values.length} instead`
+        );
+      }
+    }
+    for (let i = 0; i < this.data.length; i += this.channels) {
+      for (let j = 0; j <= this.channels; j++) {
+        this.data[i + j] = values[j];
+      }
+    }
+    return this;
+  }
+
+  /**
+   * Fill one channel with a value
+   * @param channel - The channel to fill.
+   * @param value - The new value.
+   */
+  public fillChannel(channel: number, value: number): this {
+    validateChannel(channel, this);
+    validateValue(value, this);
+    for (let i = channel; i < this.data.length; i += this.channels) {
+      this.data[i] = value;
+    }
+    return this;
   }
 
   /**

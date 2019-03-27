@@ -16,20 +16,12 @@
   <script>
     function doIt() {
       const img = document.getElementById('img');
-      const tmpCanvas = document.createElement('canvas');
-      tmpCanvas.width = img.width;
-      tmpCanvas.height = img.height;
-      const ctx = tmpCanvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-      const image = IJS.readCanvas(tmpCanvas);
 
+      const image = IJS.readImg(img);
       const inverted = image.invert();
-      for (let i = 3; i < inverted.data.length; i += 4) {
-        inverted.data[i] = 255;
-      }
-      const canvas = document.getElementById('canvas')
-      canvas.width = inverted.width;
-      canvas.height = inverted.height;
+      inverted.fillChannel(3, 255);
+
+      const canvas = document.getElementById('canvas');
       IJS.writeCanvas(canvas, inverted);
     }
   </script>
