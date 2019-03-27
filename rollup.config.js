@@ -5,7 +5,7 @@ const config = {
   input: 'packages/image-js/lib-esm/index.js',
   output: {
     exports: 'named',
-    file: 'dist/image.js',
+    file: 'demo/dist/image.js',
     format: 'umd',
     name: 'IJS'
   },
