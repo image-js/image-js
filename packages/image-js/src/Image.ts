@@ -261,25 +261,26 @@ export class Image {
    * Fill the image with a value or a color
    */
   public fill(value: number | number[]): this {
-    let values: number[];
     if (typeof value === 'number') {
-      values = new Array(this.channels).fill(value);
+      validateValue(value, this);
+      this.data.fill(value);
+      return this;
     } else {
-      values = value;
-      if (values.length !== this.channels) {
+      if (value.length !== this.channels) {
         throw new RangeError(
           `the size of value must match the number of channels (${
             this.channels
-          }). Got ${values.length} instead`
+          }). Got ${value.length} instead`
         );
       }
-    }
-    for (let i = 0; i < this.data.length; i += this.channels) {
-      for (let j = 0; j <= this.channels; j++) {
-        this.data[i + j] = values[j];
+      value.forEach((val) => validateValue(val, this));
+      for (let i = 0; i < this.data.length; i += this.channels) {
+        for (let j = 0; j <= this.channels; j++) {
+          this.data[i + j] = value[j];
+        }
       }
+      return this;
     }
-    return this;
   }
 
   /**
