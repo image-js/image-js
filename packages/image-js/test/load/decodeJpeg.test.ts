@@ -1,4 +1,4 @@
-import { readImage } from 'test/readFile';
+import { readImage } from 'test';
 import { decodeJpeg, ColorDepth, ImageKind } from 'ijs';
 
 describe('Load JPEG', function () {

@@ -13,7 +13,7 @@
     "baseUrl": "./",
     "paths": {
       "ijs": ["packages/image-js/src/index.ts"],
-      "test/*": ["test/*"]
+      "test": ["test/index.ts"]
     }
   },
   "exclude": ["packages/*/lib", "packages/*/lib-esm", "test/lib"]

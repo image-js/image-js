@@ -1,5 +1,5 @@
 import { encodePng, decode } from 'ijs';
-import { readImage } from 'test/readFile';
+import { readImage } from 'test';
 
 describe('encode PNG', () => {
   it('should encode what it decoded', () => {
