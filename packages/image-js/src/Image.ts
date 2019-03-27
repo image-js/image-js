@@ -1,5 +1,6 @@
 import { invert, IInvertOptions } from './filters/invert';
 import { validateChannel, validateValue } from './utils/validators';
+import { convertColor } from './convert/convertColor';
 
 type ImageDataArray = Uint8Array | Uint16Array;
 
@@ -331,6 +332,10 @@ export class Image {
    */
   public invert(options?: IInvertOptions): Image {
     return invert(this, options);
+  }
+
+  public convertColor(kind: ImageKind): Image {
+    return convertColor(this, kind);
   }
 }
 
