@@ -26,7 +26,7 @@
     "eslint": "eslint packages/*/src --ext ts",
     "eslint-fix": "npm run eslint -- --fix",
     "prepare": "npm run clean && npm run bootstrap && tsc -b test",
-    "rollup": "rollup -c",
+    "rollup": "lerna run prepare image-js && rollup -c",
     "test-coverage": "jest --coverage",
     "test-only": "jest",
     "test": "npm run test-coverage && npm run eslint"
