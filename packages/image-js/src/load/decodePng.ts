@@ -3,6 +3,10 @@ import { decode } from 'fast-png';
 
 import { Image, ImageKind, ColorDepth } from '../Image';
 
+/**
+ * Decode a png. See the fast-png npm module.
+ * @param buffer The data to decode
+ */
 export function decodePng(buffer: ArrayBufferView): Image {
   const png = decode(buffer);
 
