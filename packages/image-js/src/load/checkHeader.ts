@@ -2,10 +2,12 @@ export default function checkHeader(
   buf: ArrayBufferView,
   header: number[]
 ): boolean {
-  const arr = new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
-  if (arr.length < header.length) {
+  if (buf.byteLength < header.length) {
     return false;
   }
+
+  const arr = new Uint8Array(buf.buffer, buf.byteOffset, header.length);
+
   for (let i = 0; i < header.length; i++) {
     if (header[i] !== arr[i]) {
       return false;
