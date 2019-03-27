@@ -8,7 +8,7 @@
   "types": "lib/index.d.ts",
   "sideEffects": false,
   "scripts": {
-    "prepare": "tsc -b src"
+    "prepare": "tsc -b src src/tsconfig.esm.json"
   },
   "files": [
     "lib",

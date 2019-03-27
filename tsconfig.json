@@ -16,5 +16,5 @@
       "test/*": ["test/*"]
     }
   },
-  "exclude": ["packages/**/lib", "packages/*/lib-esm", "test/lib"]
+  "exclude": ["packages/*/lib", "packages/*/lib-esm", "test/lib"]
 }
