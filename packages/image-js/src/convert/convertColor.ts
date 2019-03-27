@@ -12,6 +12,7 @@ export function convertColor(image: Image, kind: ImageKind): Image {
     throw new Error(`Cannot convert color, image is already ${kind}`);
   }
 
+  // TODO: handle conversion from RGB to GREY
   const canConvertTo = canConvert.get(image.kind);
   if (!canConvertTo || !canConvertTo.includes(kind)) {
     throw new Error(`conversion from ${image.kind} to ${kind} not implemented`);

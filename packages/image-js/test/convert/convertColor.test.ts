@@ -112,4 +112,17 @@ describe('convert color', () => {
       new Uint8Array([10, 20, 30, 40, 60, 70])
     );
   });
+
+  it('Cannot convert to same kind', () => {
+    const image = new Image({
+      width: 2,
+      height: 1,
+      data: new Uint8Array([10, 20, 30, 40, 60, 70]),
+      kind: ImageKind.RGB
+    });
+
+    expect(() => image.convertColor(ImageKind.RGB)).toThrow(
+      /Cannot convert color, image is already RGB/
+    );
+  });
 });
