@@ -4,8 +4,8 @@ export function convertColor(image: Image, kind: ImageKind): Image {
   const canConvert = new Map([
     [ImageKind.GREY, [ImageKind.GREYA, ImageKind.RGB, ImageKind.RGBA]],
     [ImageKind.GREYA, [ImageKind.GREY, ImageKind.RGB, ImageKind.RGBA]],
-    [ImageKind.RGB, [ImageKind.RGBA]],
-    [ImageKind.RGBA, [ImageKind.RGB]]
+    [ImageKind.RGB, [ImageKind.GREYA, ImageKind.GREY, ImageKind.RGBA]],
+    [ImageKind.RGBA, [ImageKind.GREYA, ImageKind.GREY, ImageKind.RGB]]
   ]);
 
   if (image.kind === kind) {
@@ -30,7 +30,12 @@ export function convertColor(image: Image, kind: ImageKind): Image {
   }
 
   if (image.kind === ImageKind.RGB || image.kind === ImageKind.RGBA) {
-    convertRgbToRgb(image, newImage);
+    if (kind === ImageKind.RGB || kind === ImageKind.RGBA) {
+      convertRgbToRgb(image, newImage);
+    } else {
+      // GREYA or GREY
+      convertRgbToGrey(image, newImage);
+    }
   }
 
   if (!image.alpha && newImage.alpha) {
@@ -79,8 +84,21 @@ function convertRgbToRgb(image: Image, newImage: Image): void {
     i < image.data.length;
     i += image.channels, iNew += newImage.channels
   ) {
-    for (let j = 0; j < newImage.components; j++) {
+    for (let j = 0; j < 3; j++) {
       newImage.data[iNew + j] = image.data[i + j];
     }
+  }
+}
+
+function convertRgbToGrey(image: Image, newImage: Image): void {
+  for (
+    let i = 0, iNew = 0;
+    i < image.data.length;
+    i += image.channels, iNew += newImage.channels
+  ) {
+    const r = image.data[i];
+    const g = image.data[i + 1];
+    const b = image.data[i + 2];
+    newImage.data[iNew] = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
   }
 }
