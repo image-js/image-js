@@ -19,7 +19,7 @@ export function writeCanvas(
   options: IWriteCanvasOptions = {}
 ): void {
   if (image.kind !== ImageKind.RGBA) {
-    throw new Error('writeCanvas only supports RGBA images for now');
+    image = image.convertColor(ImageKind.RGBA);
   }
   const {
     resizeCanvas = true,
