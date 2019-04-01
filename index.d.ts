@@ -127,7 +127,6 @@ export declare class Image {
   // getClosestCommonParent
   // getThreshold
 
-  // split
   // getChannel
   // combineChannels
   // setChannel

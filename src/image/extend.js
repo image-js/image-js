@@ -46,7 +46,6 @@ import insert from './transform/insert';
 
 // utility
 import setBorder from './utility/setBorder';
-import split from './utility/split';
 import getChannel from './utility/getChannel';
 import combineChannels from './utility/combineChannels';
 import setChannel from './utility/setChannel';
@@ -148,7 +147,6 @@ export default function extend(Image) {
   Image.extendMethod('getClosestCommonParent', getClosestCommonParent);
   Image.extendMethod('getThreshold', getThreshold);
 
-  Image.extendMethod('split', split);
   Image.extendMethod('getChannel', getChannel);
   Image.extendMethod('combineChannels', combineChannels);
   Image.extendMethod('setChannel', setChannel);
