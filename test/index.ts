@@ -27,7 +27,7 @@ export function getImage(
 
   // @ts-ignore
   const flatData: number[] = data.flat();
-  let imgData =
+  const imgData =
     depth === ColorDepth.UINT8
       ? new Uint8Array(flatData)
       : new Uint16Array(flatData);

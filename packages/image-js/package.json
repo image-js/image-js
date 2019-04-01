@@ -11,7 +11,7 @@
   },
   "sideEffects": false,
   "scripts": {
-    "prepare": "tsc -b src src/tsconfig.esm.json"
+    "prepare": "tsc -b tsconfig.json tsconfig.esm.json"
   },
   "files": [
     "lib",

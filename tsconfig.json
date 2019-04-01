@@ -16,5 +16,12 @@
       "test": ["test/index.ts"]
     }
   },
-  "exclude": ["packages/*/lib", "packages/*/lib-esm", "test/lib"]
+  "include": ["packages/**/*", "test/**/*"],
+  "exclude": ["packages/*/lib", "packages/*/lib-*", "test/lib"],
+  "references": [
+    { "path": "packages/image-js/tsconfig.json" },
+    { "path": "packages/image-js/tsconfig.esm.json" },
+    { "path": "packages/image-js/tsconfig.test.json" },
+    { "path": "test/tsconfig.json" }
+  ]
 }

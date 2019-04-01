@@ -1,8 +1,7 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "outDir": "lib",
-    "rootDir": "."
+    "outDir": "lib"
   },
-  "references": [{ "path": "../packages/image-js/src" }]
+  "references": [{ "path": "../packages/image-js/tsconfig.json" }]
 }
