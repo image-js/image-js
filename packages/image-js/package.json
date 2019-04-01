@@ -7,7 +7,8 @@
   "module": "lib-esm/index.js",
   "types": "lib/index.d.ts",
   "browser": {
-    "./lib-esm/load/read.js": "./lib-esm/load/read.browser.js"
+    "./lib-esm/load/read.js": false,
+    "./lib-esm/save/write.js": false
   },
   "sideEffects": false,
   "scripts": {
@@ -21,6 +22,7 @@
   "dependencies": {
     "@types/jpeg-js": "^0.3.0",
     "fast-png": "^4.0.1",
-    "jpeg-js": "^0.3.4"
+    "jpeg-js": "^0.3.4",
+    "type-fest": "^0.3.0"
   }
 }

@@ -5,6 +5,6 @@ import { Image } from '../Image';
 export function encodePng(
   image: Image,
   options?: IPNGEncoderOptions
-): ArrayBufferView {
+): Uint8Array {
   return encode(image, options);
 }

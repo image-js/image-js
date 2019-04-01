@@ -6,7 +6,7 @@ import { Image, ImageKind, ColorDepth } from '../Image';
  * Decode a png. See the fast-png npm module.
  * @param buffer The data to decode
  */
-export function decodePng(buffer: ArrayBufferView): Image {
+export function decodePng(buffer: Uint8Array): Image {
   const png = decode(buffer);
 
   let kind: ImageKind;

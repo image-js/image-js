@@ -31,5 +31,6 @@
     "test-coverage": "jest --coverage",
     "test-only": "jest",
     "test": "npm run test-coverage && npm run eslint"
-  }
+  },
+  "dependencies": {}
 }
