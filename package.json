@@ -16,9 +16,9 @@
     "rollup": "^1.7.3",
     "rollup-plugin-commonjs": "^9.2.2",
     "rollup-plugin-node-resolve": "^4.0.1",
-    "ts-jest": "^24.0.0",
+    "ts-jest": "^24.0.1",
     "typedoc": "^0.14.2",
-    "typescript": "^3.3.4000"
+    "typescript": "^3.4.1"
   },
   "scripts": {
     "bootstrap": "lerna bootstrap --no-ci",
