@@ -1,0 +1,7 @@
+export enum BorderType {
+  CONSTANT = 'CONSTANT',
+  REPLICATE = 'REPLICATE',
+  REFLECT = 'REFLECT',
+  WRAP = 'WRAP',
+  REFLECT_101 = 'REFLECT_101'
+}
