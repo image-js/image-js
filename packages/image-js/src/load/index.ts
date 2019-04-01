@@ -4,4 +4,3 @@ export * from './decodePng';
 export * from './read';
 export * from './readCanvas';
 export * from './readImg';
-export * from './writeCanvas';
