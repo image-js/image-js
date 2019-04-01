@@ -7,8 +7,12 @@ export function encodeJpeg(image: Image): ArrayBufferView {
     image = image.convertColor(ImageKind.RGBA);
   }
   if (image.depth !== ColorDepth.UINT8) {
-    //   image = image.convertDepth(ColorDepth.UINT8);
-    throw new Error(`color depth of ${image.depth} not supported`);
+    console.warn(
+      `jpeg encoding: image is converted from a depth of ${
+        image.depth
+      } to a depth of ${ColorDepth.UINT8}`
+    );
+    image = image.convertDepth(ColorDepth.UINT8);
   }
 
   // Image data after depth conversion will always be UInt8Array

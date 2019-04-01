@@ -1,8 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+// @ts-ignore
+import * as flat from 'array.prototype.flat';
 import { Image, decode, ImageKind, ColorDepth } from 'ijs';
 
+flat.default.shim();
 export function getPath(name: string): string {
   return path.join(__dirname, `./img/${name}`);
 }
@@ -29,8 +32,8 @@ export function getImage(
   const flatData: number[] = data.flat();
   const imgData =
     depth === ColorDepth.UINT8
-      ? new Uint8Array(flatData)
-      : new Uint16Array(flatData);
+      ? Uint8Array.from(flatData)
+      : Uint16Array.from(flatData);
 
   return new Image({
     width,
