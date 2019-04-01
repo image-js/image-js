@@ -1,7 +1,8 @@
 import { invert, IInvertOptions } from './filters/invert';
 import { validateChannel, validateValue } from './utils/validators';
-import { convertColor } from './convert/convertColor';
-import { convertDepth } from './convert/convertDepth';
+import { convertColor } from './operations/convertColor';
+import { convertDepth } from './operations/convertDepth';
+import { split } from './operations/split';
 
 type ImageDataArray = Uint8Array | Uint16Array;
 
@@ -335,12 +336,18 @@ export class Image {
     return invert(this, options);
   }
 
+  // OPERATIONS
+
   public convertColor(kind: ImageKind): Image {
     return convertColor(this, kind);
   }
 
   public convertDepth(newDepth: ColorDepth): Image {
     return convertDepth(this, newDepth);
+  }
+
+  public split(): Image[] {
+    return split(this);
   }
 }
 

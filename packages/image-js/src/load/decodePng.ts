@@ -10,7 +10,7 @@ export function decodePng(buffer: ArrayBufferView): Image {
   const png = decode(buffer);
 
   let kind: ImageKind;
-  let depth: ColorDepth =
+  const depth: ColorDepth =
     png.depth === 16 ? ColorDepth.UINT16 : ColorDepth.UINT8;
 
   if (png.palette) {
