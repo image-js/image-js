@@ -1,4 +1,4 @@
-import { encodeJpeg, decode } from 'ijs';
+import { encodeJpeg, decode, ColorDepth, Image, ImageKind } from 'ijs';
 import { readImage } from 'test';
 
 describe('encode JPEG', () => {
