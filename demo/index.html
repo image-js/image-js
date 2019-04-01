@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<head>
+  <script src="dist/image.js"></script>
+</head>
+<body>
+  <h1>image-js demos</h1>
+  <div>
+    <button type="button" onclick="doIt();">Do it!</button>
+  </div>
+  <div>
+    <img id="img" src="img/cyclopean_isles_sicily_italy.jpg" />
+  </div>
+  <div>
+    <canvas id="canvas"></canvas>
+  </div>
+  <script>
+    function doIt() {
+      const img = document.getElementById('img');
+
+      const image = IJS.readImg(img);
+      const inverted = image.invert();
+      inverted.fillAlpha(255);
+
+      const canvas = document.getElementById('canvas');
+      IJS.writeCanvas(canvas, inverted);
+    }
+  </script>
+</body>
+</html>

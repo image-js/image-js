@@ -1,0 +1,26 @@
+{
+  "name": "image-js",
+  "version": "0.0.0",
+  "description": "Advanced image processing in JavaScript.",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "module": "lib-esm/index.js",
+  "types": "lib/index.d.ts",
+  "browser": {
+    "./lib-esm/load/read.js": "./lib-esm/load/read.browser.js"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "prepare": "tsc -b src src/tsconfig.esm.json"
+  },
+  "files": [
+    "lib",
+    "lib-esm",
+    "src"
+  ],
+  "dependencies": {
+    "@types/jpeg-js": "^0.3.0",
+    "fast-png": "^4.0.1",
+    "jpeg-js": "^0.3.4"
+  }
+}

@@ -3,17 +3,4 @@ node_js:
   - 11
   - 10
   - 8
-script: "npm run test-travis"
-after_script: "bash <(curl -s https://codecov.io/bash)"
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - libcairo2-dev
-      - libjpeg8-dev
-      - libpango1.0-dev
-      - libgif-dev
-      - g++-4.9
-env:
-  - CXX=g++-4.9
+after_script: 'bash <(curl -s https://codecov.io/bash)'
