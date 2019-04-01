@@ -10,10 +10,6 @@ export interface IOutOptions {
 
 interface IOutInternalOptions {
   /**
-   * If true, the original image will be copied instead of creating a new image.
-   */
-  copy?: boolean;
-  /**
    * Parameters that will be combined with the ones from
    * thisImage`. This option is only used if `copy` is `false`.
    */
@@ -34,13 +30,9 @@ export function getOutputImage(
   internalOptions: IOutInternalOptions = {}
 ): Image {
   const { out } = options;
-  const { copy, newParameters } = internalOptions;
+  const { newParameters } = internalOptions;
   if (out === undefined) {
-    if (copy) {
-      return thisImage.clone();
-    } else {
-      return Image.createFrom(thisImage, newParameters);
-    }
+    return Image.createFrom(thisImage, newParameters);
   } else {
     if (!(out instanceof Image)) {
       throw new TypeError('out must be an Image object');

@@ -3,21 +3,6 @@ import { Image, ImageKind, ColorDepth } from 'ijs';
 import { getOutputImage } from '../src/utils/getOutputImage';
 
 describe('getOutputImage', () => {
-  it('should copy if we pass the option', () => {
-    const img = new Image(2, 2, {
-      kind: ImageKind.GREY,
-      data: Uint8Array.of(0, 1, 2, 3)
-    });
-    const output = getOutputImage(img, {}, { copy: true });
-    expect(output).toMatchObject({
-      width: 2,
-      height: 2,
-      kind: ImageKind.GREY,
-      depth: ColorDepth.UINT8
-    });
-    expect(output.data).toStrictEqual(img.data);
-  });
-
   it('should default to creating an empty image', () => {
     const img = new Image(2, 2, {
       kind: ImageKind.GREY,

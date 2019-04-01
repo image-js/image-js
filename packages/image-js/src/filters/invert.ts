@@ -8,10 +8,10 @@ export type IInvertOptions = IOutOptions;
  * @param image - The image to invert.
  */
 export function invert(image: Image, options?: IInvertOptions): Image {
-  const newImage = getOutputImage(image, options, { copy: true });
+  const newImage = getOutputImage(image, options);
   const { maxValue } = newImage;
   for (let i = 0; i < newImage.data.length; i++) {
-    newImage.data[i] = maxValue - newImage.data[i];
+    newImage.data[i] = maxValue - image.data[i];
   }
   return newImage;
 }
