@@ -7,7 +7,10 @@ import { Image, ImageKind } from '../Image';
  * @param buffer The data to decode
  */
 export function decodeJpeg(buffer: ArrayBufferView): Image {
-  const jpeg = decode(buffer.buffer, true);
+  const jpeg = decode(
+    new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength),
+    true
+  );
   return new Image(jpeg.width, jpeg.height, {
     data: jpeg.data,
     kind: ImageKind.RGBA
