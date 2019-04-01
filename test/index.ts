@@ -21,7 +21,7 @@ export function decodeImage(name: string): Image {
 }
 
 export function getImage(
-  data: number[][],
+  data: number[][] | number[][][],
   kind: ImageKind,
   depth: ColorDepth
 ): Image {
@@ -29,7 +29,7 @@ export function getImage(
   const height = data[0].length;
 
   // @ts-ignore
-  const flatData: number[] = data.flat();
+  const flatData: number[] = data.flat(2);
   const imgData =
     depth === ColorDepth.UINT8
       ? Uint8Array.from(flatData)

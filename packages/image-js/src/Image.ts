@@ -187,6 +187,11 @@ export class Image {
         maxValue
       );
     } else {
+      if (depth === ColorDepth.UINT8 && data instanceof Uint16Array) {
+        throw new Error(`depth is ${depth} but data is Uint16Array`);
+      } else if (depth === ColorDepth.UINT16 && data instanceof Uint8Array) {
+        throw new Error(`depth is ${depth} but data is Uint8Array`);
+      }
       const expectedLength = this.size * this.channels;
       if (data.length !== expectedLength) {
         throw new RangeError(

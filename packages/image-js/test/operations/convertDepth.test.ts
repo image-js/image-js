@@ -27,4 +27,24 @@ describe('convert depth', () => {
     expect(newImg.kind).toStrictEqual(ImageKind.GREY);
     expect(Array.from(newImg.data)).toStrictEqual([0, 1, 2, 7]);
   });
+
+  it('Uint16 to Uint8 for rgba', () => {
+    const img = getImage(
+      [
+        [[256, 256, 256, 256], [512, 512, 512, 512]],
+        [[768, 768, 768, 768], [1024, 1024, 1024, 1024]]
+      ],
+      ImageKind.RGBA,
+      ColorDepth.UINT16
+    );
+
+    const newImg = img.convertDepth(ColorDepth.UINT8);
+    expect(newImg.width).toStrictEqual(2);
+    expect(newImg.height).toStrictEqual(2);
+    expect(newImg.kind).toStrictEqual(ImageKind.RGBA);
+    expect(newImg.depth).toStrictEqual(ColorDepth.UINT8);
+    expect(newImg.data).toStrictEqual(
+      Uint8Array.from([1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4])
+    );
+  });
 });

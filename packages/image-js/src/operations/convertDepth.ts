@@ -35,7 +35,7 @@ function convertToUint8(image: Image): Image {
     kind: image.kind
   });
 
-  for (let i = 0; i < image.size; i++) {
+  for (let i = 0; i < image.data.length; i++) {
     newImage.data[i] = image.data[i] >> 8;
   }
 

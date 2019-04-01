@@ -1,4 +1,4 @@
-import { Image, ImageKind } from 'ijs';
+import { Image, ImageKind, ColorDepth } from 'ijs';
 
 describe('convert color', () => {
   it('GREY to GREYA', () => {
@@ -123,6 +123,22 @@ describe('convert color', () => {
 
     expect(() => image.convertColor(ImageKind.RGB)).toThrow(
       /Cannot convert color, image is already RGB/
+    );
+  });
+
+  it('GREY to RGBA 16-bit', () => {
+    const image = new Image({
+      width: 2,
+      height: 2,
+      data: new Uint16Array([256, 512, 768, 1024]),
+      kind: ImageKind.GREY,
+      depth: ColorDepth.UINT16
+    });
+
+    const converted = image.convertColor(ImageKind.RGBA);
+    expect(converted.data).toStrictEqual(
+      // prettier-ignore
+      new Uint16Array([256, 256, 256, 65535, 512, 512, 512, 65535, 768, 768, 768, 65535, 1024, 1024, 1024, 65535])
     );
   });
 });
