@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "@types/jpeg-js": "^0.3.0",
-    "fast-png": "^3.1.1",
+    "fast-png": "^4.0.1",
     "jpeg-js": "^0.3.4"
   }
 }
