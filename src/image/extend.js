@@ -2,7 +2,6 @@
 
 // filters
 import absFilter from './filter/abs';
-import invertFilter from './filter/invert';
 import flipXFilter from './filter/flipX';
 import flipYFilter from './filter/flipY';
 import blurFilter from './filter/blurFilter';
@@ -95,7 +94,6 @@ import minimalBoundingRectangle from './compute/minimalBoundingRectangle';
 export default function extend(Image) {
   let inPlace = { inPlace: true };
 
-  Image.extendMethod('invert', invertFilter);
   Image.extendMethod('abs', absFilter);
   Image.extendMethod('level', levelFilter, inPlace);
   Image.extendMethod('add', addFilter, inPlace);
@@ -173,16 +171,34 @@ export default function extend(Image) {
   Image.extendMethod('countAlphaPixels', countAlphaPixels);
   Image.extendMethod('monotoneChainConvexHull', monotoneChainConvexHull);
   Image.extendMethod('minimalBoundingRectangle', minimalBoundingRectangle);
-  Image.extendMethod('getHistogram', getHistogram).extendProperty('histogram', getHistogram);
-  Image.extendMethod('getHistograms', getHistograms).extendProperty('histograms', getHistograms);
-  Image.extendMethod('getColorHistogram', getColorHistogram).extendProperty('colorHistogram', getColorHistogram);
+  Image.extendMethod('getHistogram', getHistogram).extendProperty(
+    'histogram',
+    getHistogram
+  );
+  Image.extendMethod('getHistograms', getHistograms).extendProperty(
+    'histograms',
+    getHistograms
+  );
+  Image.extendMethod('getColorHistogram', getColorHistogram).extendProperty(
+    'colorHistogram',
+    getColorHistogram
+  );
   Image.extendMethod('getMin', getMin).extendProperty('min', getMin);
   Image.extendMethod('getMax', getMax).extendProperty('max', getMax);
   Image.extendMethod('getSum', getSum).extendProperty('sum', getSum);
-  Image.extendMethod('getMoment', getMoment).extendProperty('moment', getMoment);
+  Image.extendMethod('getMoment', getMoment).extendProperty(
+    'moment',
+    getMoment
+  );
   Image.extendMethod('getLocalMaxima', getLocalMaxima);
-  Image.extendMethod('getMedian', getMedian).extendProperty('median', getMedian);
+  Image.extendMethod('getMedian', getMedian).extendProperty(
+    'median',
+    getMedian
+  );
   Image.extendMethod('getMean', getMean).extendProperty('mean', getMean);
-  Image.extendMethod('getPoints', getPoints).extendProperty('points', getPoints);
+  Image.extendMethod('getPoints', getPoints).extendProperty(
+    'points',
+    getPoints
+  );
   Image.extendMethod('getRelativePosition', getRelativePosition);
 }
