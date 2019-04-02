@@ -1,18 +1,19 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import { join } from 'path';
+import { tmpdir } from 'os';
 
 // @ts-ignore
 import * as flat from 'array.prototype.flat';
+import { readFileSync, mkdtempSync, ensureDirSync, removeSync } from 'fs-extra';
 import { Image, decode, ImageKind, ColorDepth } from 'ijs';
 
 flat.default.shim();
 export function getPath(name: string): string {
-  return path.join(__dirname, `./img/${name}`);
+  return join(__dirname, `./img/${name}`);
 }
 
 export function readImage(name: string): Buffer {
   const filePath = getPath(name);
-  return fs.readFileSync(filePath);
+  return readFileSync(filePath);
 }
 
 export function decodeImage(name: string): Image {
@@ -74,4 +75,14 @@ export function getTestImage(kind: ImageKind = ImageKind.RGB): Image {
   } else {
     return img;
   }
+}
+
+export function makeTmpDir(): string {
+  const dir = mkdtempSync(join(tmpdir(), 'ijs-test-'));
+  ensureDirSync(dir);
+  return dir;
+}
+
+export function cleanTmpDir(dir: string): void {
+  removeSync(dir);
 }

@@ -2,7 +2,16 @@ import { encode } from 'jpeg-js';
 
 import { Image, ImageKind, ColorDepth } from '../Image';
 
-export function encodeJpeg(image: Image): Uint8Array {
+export interface IEncodeJpegOptions {
+  quality?: number;
+}
+
+export function encodeJpeg(
+  image: Image,
+  options: IEncodeJpegOptions = {}
+): Uint8Array {
+  const { quality = 50 } = options;
+
   if (image.kind !== ImageKind.RGBA) {
     image = image.convertColor(ImageKind.RGBA);
   }
@@ -11,8 +20,7 @@ export function encodeJpeg(image: Image): Uint8Array {
   }
 
   // Image data after depth conversion will always be UInt8Array
-
   // @ts-ignore
-  const buffer = encode(image).data;
+  const buffer = encode(image, quality).data;
   return new Uint8Array(buffer, buffer.byteOffset, buffer.byteLength);
 }

@@ -3,5 +3,7 @@ rules:
   no-useless-constructor: off
   no-dupe-class-members: off
   'import/no-unresolved': off
+  'import/export': off
   no-var: error
   prefer-const: error
+  'import/no-extraneous-dependencies': off
