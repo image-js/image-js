@@ -3,5 +3,5 @@
   "compilerOptions": {
     "outDir": "lib-test"
   },
-  "references": [{ "path": "." }, { "path": "../../test" }]
+  "references": [{ "path": "./tsconfig.json" }, { "path": "../../test" }]
 }
