@@ -67,7 +67,7 @@ test('automatic threshold with OTSU', () => {
 
 test('error too many channels', () => {
   const testImage = getTestImage();
-  expect(() => threshold(testImage)).toThrow(
-    /threshold can only be computed on images with one channel/
-  );
+  expect(() =>
+    threshold(testImage, { algorithm: ThresholdAlgorithm.OTSU })
+  ).toThrow(/threshold can only be computed on images with one channel/);
 });

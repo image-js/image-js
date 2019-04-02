@@ -24,10 +24,16 @@ export enum ThresholdAlgorithm {
   // YEN
 }
 
-export interface IThresholdOptions {
-  algorithm?: ThresholdAlgorithm;
-  threshold?: number;
+interface IThresholdOptionsBase {
   out?: Image;
+}
+
+export interface IThresholdOptions extends IThresholdOptionsBase {
+  threshold: number;
+}
+
+export interface IThresholdOptionsAlgorithm extends IThresholdOptionsBase {
+  algorithm: ThresholdAlgorithm;
 }
 
 export function computeThreshold(
@@ -53,17 +59,22 @@ export function computeThreshold(
 
 // TODO: add support for other threshold types.
 // See: https://docs.opencv.org/4.0.1/d7/d1b/group__imgproc__misc.html#gaa9e58d2860d4afa658ef70a9b1115576
+export function threshold(image: Image, options: IThresholdOptions): Image;
 export function threshold(
   image: Image,
-  options: IThresholdOptions = {}
+  options: IThresholdOptionsAlgorithm
+): Image;
+export function threshold(
+  image: Image,
+  options: IThresholdOptions | IThresholdOptionsAlgorithm
 ): Image {
-  const { algorithm = ThresholdAlgorithm.OTSU, threshold } = options;
   let thresholdValue: number;
-  if (typeof threshold === 'number') {
-    thresholdValue = threshold;
+  if ('threshold' in options) {
+    thresholdValue = options.threshold;
   } else {
-    thresholdValue = computeThreshold(image, algorithm);
+    thresholdValue = computeThreshold(image, options.algorithm);
   }
+
   validateValue(thresholdValue, image);
   const result = getOutputImage(image, options);
   for (let i = 0; i < image.data.length; i++) {
