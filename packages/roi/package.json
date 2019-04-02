@@ -1,0 +1,28 @@
+{
+  "name": "@image-js/roi",
+  "version": "0.0.0",
+  "description": "Work with regions of interest (ROI) of images",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "module": "lib-esm/index.js",
+  "types": "lib/index.d.ts",
+  "sideEffects": false,
+  "keywords": [
+    "roi",
+    "region",
+    "regions",
+    "interest"
+  ],
+  "scripts": {
+    "prepare": "tsc -b tsconfig.json tsconfig.esm.json"
+  },
+  "files": [
+    "lib",
+    "lib-esm",
+    "src"
+  ],
+  "peerDependencies": {
+    "image-js": "0.0.0"
+  },
+  "dependencies": {}
+}

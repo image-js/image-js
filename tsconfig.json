@@ -12,8 +12,8 @@
     "rootDir": ".",
     "baseUrl": "./",
     "paths": {
-      "ijs": ["packages/image-js/src/index.ts"],
-      "test": ["test/index.ts"]
+      "ijs": ["./packages/image-js/src/index.ts"],
+      "test": ["./test/index.ts"]
     }
   },
   "include": ["packages/**/*", "test/**/*"],

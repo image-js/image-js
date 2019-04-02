@@ -1,7 +1,7 @@
 {
   "name": "image-js",
   "version": "0.0.0",
-  "description": "Advanced image processing in JavaScript.",
+  "description": "Advanced image processing in JavaScript",
   "license": "MIT",
   "main": "lib/index.js",
   "module": "lib-esm/index.js",

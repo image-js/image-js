@@ -90,3 +90,6 @@ lib-esm
 # docs
 docs
 dist
+
+# TypeScript
+*.tsbuildinfo
