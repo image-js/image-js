@@ -149,9 +149,6 @@ export declare class Image {
   // countAlphaPixels
   // monotoneChainConvexHull
   // minimalBoundingRectangle
-  // getHistogram
-  // getHistograms
-  // getColorHistogram
   // getMin
   // getMax
   // getSum
