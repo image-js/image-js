@@ -3,6 +3,7 @@ import { validateChannel, validateValue } from './utils/validators';
 import { convertColor } from './operations/convertColor';
 import { convertDepth } from './operations/convertDepth';
 import { split } from './operations/split';
+import { IHistogramOptions, histogram } from './compute';
 
 type ImageDataArray = Uint8Array | Uint16Array;
 
@@ -330,6 +331,16 @@ export class Image {
     for (let i = 0; i < this.data.length; i++) {
       this.data[i] = cb(this.data[i]);
     }
+  }
+
+  // COMPUTE
+
+  /**
+   * Returns a histogram of pixel intensities.
+   * @param image
+   */
+  public histogram(options?: IHistogramOptions): number[] {
+    return histogram(this, options);
   }
 
   // FILTERS
