@@ -25,7 +25,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --no-ci",
     "clean": "lerna exec \"rimraf lib lib-esm lib-test *.tsbuildinfo\" && rimraf test/lib",
-    "eslint": "eslint packages/*/src --ext ts",
+    "eslint": "eslint . --ext ts --cache",
     "eslint-fix": "npm run eslint -- --fix",
     "prepare": "npm run clean && npm run bootstrap",
     "publish-canary": "lerna publish --canary --dist-tag canary",

@@ -1,5 +1,5 @@
 import { getImage, getTestImage } from 'test';
-import { ImageKind, write } from 'ijs';
+import { ImageKind } from 'ijs';
 
 test('RGBA image - channel 0', () => {
   const image = getImage(

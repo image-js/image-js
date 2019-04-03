@@ -1,1 +1,5 @@
 typedoc.js
+lib
+lib-esm
+lib-test
+node_modules
