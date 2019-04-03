@@ -2,13 +2,15 @@ import { separableConvolution, BorderType, read } from 'ijs';
 import { getTestImage } from 'test';
 
 describe('convolution functions', () => {
-  it('separable convolution', async () => {
+  it('separable convolution compared to opencv', async () => {
     const img = getTestImage();
     const convoluted = separableConvolution(
       img,
       [0.1, 0.2, 0.3],
       [0.4, 0.5, 0.6],
-      BorderType.REFLECT
+      {
+        borderType: BorderType.REFLECT
+      }
     );
 
     const expected = await read('test/img/testConv.png');

@@ -1,18 +1,30 @@
-import { directConvolution, BorderType } from 'ml-convolution';
+import {
+  directConvolution,
+  BorderType as ConvolutionBorderType
+} from 'ml-convolution';
 import { Matrix } from 'ml-matrix';
 
 import { Image } from '../Image';
 import { clamp } from '../utils/clamp';
-import { BorderType as ImageBorderType } from '../types';
+import { BorderType } from '../types';
 import { interpolateBorder } from '../utils/interpolateBorder';
 import { round } from '../utils/round';
+
+interface ISeparableConvolutionOptions {
+  borderType?: BorderType;
+  normalize?: boolean;
+}
 
 export function separableConvolution(
   image: Image,
   kernelX: number[],
   kernelY: number[],
-  borderType: ImageBorderType
+  options: ISeparableConvolutionOptions = {}
 ): Image {
+  const { normalize, borderType } = options;
+  if (normalize) {
+    [kernelX, kernelY] = normalizeSeparatedKernel(kernelX, kernelY);
+  }
   const kernelOffsetX = (kernelX.length - 1) / 2;
   const kernelOffsetY = (kernelY.length - 1) / 2;
   const hFactor = image.channels * image.width;
@@ -26,7 +38,7 @@ export function separableConvolution(
       for (let x = 0; x < image.width; x++) {
         row.push(image.data[rowIndex + x * image.channels + c]);
       }
-      imgArr.push(directConvolution(row, kernelX, BorderType.CUT));
+      imgArr.push(directConvolution(row, kernelX, ConvolutionBorderType.CUT));
     }
 
     for (let x = 0; x < image.width - 2 * kernelOffsetX; x++) {
@@ -35,7 +47,11 @@ export function separableConvolution(
       for (let y = 0; y < image.height; y++) {
         column.push(imgArr[y][x]);
       }
-      const result = directConvolution(column, kernelY, BorderType.CUT);
+      const result = directConvolution(
+        column,
+        kernelY,
+        ConvolutionBorderType.CUT
+      );
       for (let i = 0; i < result.length; i++) {
         const idx = (i + kernelOffsetY) * hFactor + wOffset + c;
         newImage.data[idx] = round(clamp(result[i], newImage));
@@ -113,7 +129,7 @@ function computeConvolutionBorder(
   c: number,
   image: Image,
   kernel: number[][],
-  borderType: ImageBorderType
+  borderType: BorderType = BorderType.REFLECT_101
 ): number {
   let val = 0;
   const kernelOffsetX = (kernel[0].length - 1) / 2;
@@ -137,4 +153,14 @@ function computeConvolutionBorder(
   }
 
   return round(clamp(val, image));
+}
+
+export function normalizeSeparatedKernel(
+  kernelX: number[],
+  kernelY: number[]
+): [number[], number[]] {
+  const sumKernelX = kernelX.reduce((prev, current) => prev + current, 0);
+  const sumKernelY = kernelY.reduce((prev, current) => prev + current, 0);
+  const factor = 1 / Math.sqrt(sumKernelX * sumKernelY);
+  return [kernelX.map((v) => v * factor), kernelY.map((v) => v * factor)];
 }

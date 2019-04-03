@@ -34,14 +34,18 @@ function gaussianBlurImpl(
     const { size, sigma } = options;
     const radius = getRadius(size);
     const kernel = getKernel(radius, sigma);
-    return separableConvolution(image, kernel, kernel, options.borderType);
+    return separableConvolution(image, kernel, kernel, {
+      borderType: options.borderType
+    });
   } else {
     getRadius(options.size);
     const { sigmaX, sigmaY } = options;
     const radius = getRadius(options.size);
     const kernelX = getKernel(radius, sigmaX);
     const kernelY = getKernel(radius, sigmaY);
-    return separableConvolution(image, kernelX, kernelY, options.borderType);
+    return separableConvolution(image, kernelX, kernelY, {
+      borderType: options.borderType
+    });
   }
 }
 
