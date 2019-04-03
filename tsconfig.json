@@ -1,23 +1,6 @@
 {
-  "compilerOptions": {
-    "composite": true,
-    "declaration": true,
-    "declarationMap": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "target": "es2018",
-    "sourceMap": true,
-    "strict": true,
-    "rootDir": ".",
-    "baseUrl": "./",
-    "paths": {
-      "ijs": ["./packages/image-js/src/index.ts"],
-      "test": ["./test/index.ts"]
-    }
-  },
-  "include": ["packages/**/*", "test/**/*"],
-  "exclude": ["packages/*/lib", "packages/*/lib-*", "test/lib"],
+  "extends": "./tsconfig.settings.json",
+  "files": [],
   "references": [
     { "path": "packages/image-js/tsconfig.json" },
     { "path": "packages/image-js/tsconfig.esm.json" },

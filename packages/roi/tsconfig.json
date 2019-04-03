@@ -1,9 +1,10 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.settings.json",
   "compilerOptions": {
-    "outDir": "lib",
-    "rootDir": "./src"
+    "rootDir": "src",
+    "outDir": "lib"
   },
-  "include": ["src/**/*"],
+  "include": ["src"],
+  "exclude": ["lib", "lib-esm", "test"],
   "references": [{ "path": "../image-js" }]
 }

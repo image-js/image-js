@@ -1,7 +1,10 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.settings.json",
   "compilerOptions": {
+    "rootDir": "test",
     "outDir": "lib-test"
   },
-  "references": [{ "path": "./tsconfig.json" }, { "path": "../../test" }]
+  "include": ["test"],
+  "exclude": ["lib", "lib-esm", "src"],
+  "references": [{ "path": "." }, { "path": "../../test" }]
 }
