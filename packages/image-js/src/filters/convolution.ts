@@ -8,7 +8,7 @@ import { interpolateBorder } from '../utils/interpolateBorder';
 
 // import { BorderType } from '../types';
 
-export function separatedConvolution(
+export function separableConvolution(
   image: Image,
   kernelX: number[],
   kernelY: number[],
@@ -43,7 +43,7 @@ export function separatedConvolution(
     }
   }
 
-  // calculate kernel from separated kernels
+  // Calculate kernel from separated kernels.
   const matrixX = Matrix.rowVector(kernelX);
   const matrixY = Matrix.columnVector(kernelY);
   const kernel = matrixY.mmul(matrixX).to2DArray();

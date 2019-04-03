@@ -1,10 +1,10 @@
-import { separatedConvolution, ImageKind, write, BorderType } from 'ijs';
+import { separableConvolution, write, BorderType } from 'ijs';
 import { getTestImage } from 'test';
 
 describe('convolution functions', () => {
-  it('separated convolution', () => {
+  it('separable convolution', () => {
     const img = getTestImage();
-    const convoluted = separatedConvolution(
+    const convoluted = separableConvolution(
       img,
       [0.3, 0.3, 0.3],
       [0.3, 0.3, 0.3],

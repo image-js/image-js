@@ -1,7 +1,7 @@
 import { BorderType } from '../types';
 import { Image } from '../Image';
 
-import { separatedConvolution } from './convolution';
+import { separableConvolution } from './convolution';
 
 interface IGaussianBlurOptions {
   size: number;
@@ -34,14 +34,14 @@ function gaussianBlurImpl(
     const { size, sigma } = options;
     const radius = getRadius(size);
     const kernel = getKernel(radius, sigma);
-    return separatedConvolution(image, [kernel, kernel], options.borderType);
+    return separableConvolution(image, kernel, kernel, options.borderType);
   } else {
     getRadius(options.size);
     const { sigmaX, sigmaY } = options;
     const radius = getRadius(options.size);
     const kernelX = getKernel(radius, sigmaX);
     const kernelY = getKernel(radius, sigmaY);
-    return separatedConvolution(image, [kernelX, kernelY], options.borderType);
+    return separableConvolution(image, kernelX, kernelY, options.borderType);
   }
 }
 
