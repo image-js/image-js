@@ -184,7 +184,6 @@ function computeConvolutionPixel(
   return round(clamp(val, image));
 }
 
-// TODO: how can we test this?
 function normalizeSeparatedKernel(
   kernelX: number[],
   kernelY: number[]
