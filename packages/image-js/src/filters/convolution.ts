@@ -1,5 +1,5 @@
 import {
-  directConvolution,
+  directConvolution as directConvolution1D,
   BorderType as ConvolutionBorderType
 } from 'ml-convolution';
 import { Matrix } from 'ml-matrix';
@@ -13,6 +13,34 @@ import { round } from '../utils/round';
 interface ISeparableConvolutionOptions {
   borderType?: BorderType;
   normalize?: boolean;
+}
+
+export function directConvolution(
+  image: Image,
+  kernel: number[][],
+  options: ISeparableConvolutionOptions = {}
+): Image {
+  const { borderType } = options;
+
+  const newImage = Image.createFrom(image);
+
+  for (let c = 0; c < image.channels; c++) {
+    for (let x = 0; x < image.width; x++) {
+      for (let y = 0; y < image.height; y++) {
+        const idx = (y * image.width + x) * image.channels + c;
+        newImage.data[idx] = computeConvolutionBorder(
+          x,
+          y,
+          c,
+          image,
+          kernel,
+          borderType
+        );
+      }
+    }
+  }
+
+  return newImage;
 }
 
 export function separableConvolution(
@@ -38,7 +66,7 @@ export function separableConvolution(
       for (let x = 0; x < image.width; x++) {
         row.push(image.data[rowIndex + x * image.channels + c]);
       }
-      imgArr.push(directConvolution(row, kernelX, ConvolutionBorderType.CUT));
+      imgArr.push(directConvolution1D(row, kernelX, ConvolutionBorderType.CUT));
     }
 
     for (let x = 0; x < image.width - 2 * kernelOffsetX; x++) {
@@ -47,7 +75,7 @@ export function separableConvolution(
       for (let y = 0; y < image.height; y++) {
         column.push(imgArr[y][x]);
       }
-      const result = directConvolution(
+      const result = directConvolution1D(
         column,
         kernelY,
         ConvolutionBorderType.CUT

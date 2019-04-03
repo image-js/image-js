@@ -1,4 +1,5 @@
-import { separableConvolution, BorderType, read } from 'ijs';
+import { separableConvolution, directConvolution, BorderType, read } from 'ijs';
+import { Matrix } from 'ml-matrix';
 import { getTestImage } from 'test';
 
 describe('convolution functions', () => {
@@ -16,6 +17,19 @@ describe('convolution functions', () => {
     const expected = await read('test/img/testConv.png');
     expect(convoluted.width).toStrictEqual(img.width);
     expect(convoluted.height).toStrictEqual(img.height);
+    expect(convoluted.data).toStrictEqual(expected.data);
+  });
+
+  it('direct convolution comapre to opencv', async () => {
+    const img = getTestImage();
+    const kernelY = Matrix.columnVector([0.4, 0.5, 0.6]);
+    const kernelX = Matrix.rowVector([0.1, 0.2, 0.3]);
+    const kernel = kernelY.mmul(kernelX).to2DArray();
+    const convoluted = directConvolution(img, kernel, {
+      borderType: BorderType.REFLECT
+    });
+
+    const expected = await read('test/img/testConv.png');
     expect(convoluted.data).toStrictEqual(expected.data);
   });
 });
