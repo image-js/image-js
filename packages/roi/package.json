@@ -16,6 +16,9 @@
   "scripts": {
     "prepare": "tsc -b tsconfig.json tsconfig.esm.json"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "lib",
     "lib-esm",
