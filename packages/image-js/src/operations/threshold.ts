@@ -16,11 +16,11 @@ export enum ThresholdAlgorithm {
   // MIN_ERROR,
   // MINIMUM,
   // MOMENTS,
-  OTSU,
+  OTSU = 'OTSU',
   // PERCENTILE,
   // RENYI_ENTROPY,
   // SHANBHAG,
-  TRIANGLE
+  TRIANGLE = 'TRIANGLE'
   // YEN
 }
 
