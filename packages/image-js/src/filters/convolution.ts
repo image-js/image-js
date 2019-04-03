@@ -53,6 +53,7 @@ export function separableConvolution(
   if (normalize) {
     [kernelX, kernelY] = normalizeSeparatedKernel(kernelX, kernelY);
   }
+  console.log(kernelX, kernelY);
   const kernelOffsetX = (kernelX.length - 1) / 2;
   const kernelOffsetY = (kernelY.length - 1) / 2;
   const hFactor = image.channels * image.width;
@@ -190,6 +191,10 @@ function normalizeSeparatedKernel(
 ): [number[], number[]] {
   const sumKernelX = kernelX.reduce((prev, current) => prev + current, 0);
   const sumKernelY = kernelY.reduce((prev, current) => prev + current, 0);
-  const factor = 1 / Math.sqrt(sumKernelX * sumKernelY);
+  const prod = sumKernelX * sumKernelY;
+  if (prod < 0) {
+    throw new Error('this separated kernel cannot be normalized');
+  }
+  const factor = 1 / Math.sqrt(Math.abs(prod));
   return [kernelX.map((v) => v * factor), kernelY.map((v) => v * factor)];
 }
