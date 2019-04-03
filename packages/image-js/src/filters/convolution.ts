@@ -2,9 +2,10 @@ import { directConvolution, BorderType } from 'ml-convolution';
 import { Matrix } from 'ml-matrix';
 
 import { Image } from '../Image';
-import clamp from '../utils/clamp';
+import { clamp } from '../utils/clamp';
 import { BorderType as ImageBorderType } from '../types';
 import { interpolateBorder } from '../utils/interpolateBorder';
+import { round } from '../utils/round';
 
 export function separableConvolution(
   image: Image,
@@ -37,7 +38,7 @@ export function separableConvolution(
       const result = directConvolution(column, kernelY, BorderType.CUT);
       for (let i = 0; i < result.length; i++) {
         const idx = (i + kernelOffsetY) * hFactor + wOffset + c;
-        newImage.data[idx] = clamp(result[i], newImage);
+        newImage.data[idx] = round(clamp(result[i], newImage));
       }
     }
   }
@@ -135,5 +136,5 @@ function computeConvolutionBorder(
     }
   }
 
-  return clamp(val, image);
+  return round(clamp(val, image));
 }
