@@ -23,7 +23,7 @@
     "@types/jpeg-js": "^0.3.0",
     "fast-png": "^4.0.1",
     "jpeg-js": "^0.3.4",
-    "ml-convolution": "^0.2.0",
+    "ml-convolution": "^1.0.2",
     "ml-matrix": "^5.3.0",
     "type-fest": "^0.3.0"
   }

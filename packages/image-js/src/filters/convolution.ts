@@ -1,20 +1,19 @@
-// @ts-ignore
-import { directConvolution } from 'ml-convolution';
+import { directConvolution, BorderType } from 'ml-convolution';
 import { Matrix } from 'ml-matrix';
 
 import { Image } from '../Image';
-import { BorderType } from '../types';
+import clamp from '../utils/clamp';
+import { BorderType as ImageBorderType } from '../types';
 import { interpolateBorder } from '../utils/interpolateBorder';
-
-// import { BorderType } from '../types';
 
 export function separableConvolution(
   image: Image,
   kernelX: number[],
   kernelY: number[],
-  borderType: BorderType
+  borderType: ImageBorderType
 ): Image {
-  const kernelOffset = (kernelY.length - 1) / 2;
+  const kernelOffsetX = (kernelX.length - 1) / 2;
+  const kernelOffsetY = (kernelY.length - 1) / 2;
   const hFactor = image.channels * image.width;
   const newImage = Image.createFrom(image);
 
@@ -26,18 +25,18 @@ export function separableConvolution(
       for (let x = 0; x < image.width; x++) {
         row.push(image.data[rowIndex + x * image.channels + c]);
       }
-      imgArr.push(directConvolution(row, kernelX, 'CUT'));
+      imgArr.push(directConvolution(row, kernelX, BorderType.CUT));
     }
 
-    for (let x = 0; x < image.width; x++) {
-      const wOffset = (x + kernelOffset) * image.channels;
+    for (let x = 0; x < image.width - 2 * kernelOffsetX; x++) {
+      const wOffset = (x + kernelOffsetY) * image.channels;
       const column = [];
       for (let y = 0; y < image.height; y++) {
         column.push(imgArr[y][x]);
       }
-      const result = directConvolution(column, kernelY, 'CUT');
+      const result = directConvolution(column, kernelY, BorderType.CUT);
       for (let i = 0; i < result.length; i++) {
-        const idx = (i + kernelOffset) * hFactor + wOffset + c;
+        const idx = (i + kernelOffsetY) * hFactor + wOffset + c;
         newImage.data[idx] = clamp(result[i], newImage);
       }
     }
@@ -49,7 +48,7 @@ export function separableConvolution(
   const kernel = matrixY.mmul(matrixX).to2DArray();
 
   for (let c = 0; c < image.channels; c++) {
-    for (let bX = 0; bX < kernelOffset; bX++) {
+    for (let bX = 0; bX < kernelOffsetY; bX++) {
       for (let bY = 0; bY < image.height; bY++) {
         const idx = (bY * image.width + bX) * image.channels + c;
         const bXopp = image.width - bX - 1;
@@ -78,7 +77,7 @@ export function separableConvolution(
 
   for (let c = 0; c < image.channels; c++) {
     for (let bX = 0; bX < image.width; bX++) {
-      for (let bY = 0; bY < kernelOffset; bY++) {
+      for (let bY = 0; bY < kernelOffsetY; bY++) {
         const idx = (bY * image.width + bX) * image.channels + c;
         const bXopp = image.width - bX - 1;
         const bYopp = image.height - bY - 1;
@@ -113,7 +112,7 @@ function computeConvolutionBorder(
   c: number,
   image: Image,
   kernel: number[][],
-  borderType: BorderType
+  borderType: ImageBorderType
 ): number {
   let val = 0;
   const kernelOffsetX = (kernel[0].length - 1) / 2;
@@ -136,9 +135,5 @@ function computeConvolutionBorder(
     }
   }
 
-  return val;
-}
-
-function clamp(value: number, image: Image) {
-  return Math.round(Math.min(Math.max(value, 0), image.maxValue));
+  return clamp(val, image);
 }
