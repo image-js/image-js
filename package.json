@@ -32,7 +32,8 @@
     "rollup": "lerna run prepare image-js && rollup -c",
     "test-coverage": "jest --coverage",
     "test-only": "jest",
-    "test": "npm run test-coverage && npm run eslint"
+    "test": "npm run tsc && npm run test-coverage && npm run eslint",
+    "tsc": "tsc -b ."
   },
   "dependencies": {}
 }
