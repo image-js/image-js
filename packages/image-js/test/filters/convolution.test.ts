@@ -20,7 +20,7 @@ describe('convolution functions', () => {
     expect(convoluted.data).toStrictEqual(expected.data);
   });
 
-  it('direct convolution comapre to opencv', async () => {
+  it('direct convolution compared to opencv', async () => {
     const img = getTestImage();
     const kernelY = Matrix.columnVector([0.4, 0.5, 0.6]);
     const kernelX = Matrix.rowVector([0.1, 0.2, 0.3]);
