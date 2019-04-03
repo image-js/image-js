@@ -28,7 +28,7 @@
     "eslint": "eslint . --ext ts --cache",
     "eslint-fix": "npm run eslint -- --fix",
     "prepare": "npm run clean && npm run bootstrap && tsc -b .",
-    "publish-canary": "lerna publish --canary --dist-tag canary",
+    "publish-next": "lerna publish --dist-tag next",
     "rollup": "lerna run prepare image-js && rollup -c",
     "test-coverage": "jest --coverage",
     "test-only": "jest",
