@@ -155,7 +155,8 @@ function computeConvolutionBorder(
   return round(clamp(val, image));
 }
 
-export function normalizeSeparatedKernel(
+// TODO: how can we test this?
+function normalizeSeparatedKernel(
   kernelX: number[],
   kernelY: number[]
 ): [number[], number[]] {
