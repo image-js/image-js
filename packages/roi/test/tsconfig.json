@@ -2,8 +2,15 @@
   "extends": "../../../tsconfig.settings.json",
   "compilerOptions": {
     "rootDir": ".",
-    "outDir": "../lib-test"
+    "outDir": "../lib-test",
+    "paths": {
+      "test": ["test/index.ts"]
+    }
   },
   "include": ["."],
-  "references": [{ "path": ".." }, { "path": "../../../test" }]
+  "references": [
+    { "path": ".." },
+    { "path": "../../image-js" },
+    { "path": "../../../test" }
+  ]
 }

@@ -9,10 +9,6 @@
     "target": "es2018",
     "sourceMap": true,
     "strict": true,
-    "baseUrl": ".",
-    "paths": {
-      "ijs": ["packages/image-js/src/index.ts"],
-      "test": ["test/index.ts"]
-    }
+    "baseUrl": "."
   }
 }

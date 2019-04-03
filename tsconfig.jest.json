@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "ijs": ["packages/image-js/src/index.ts"],
+      "test": ["test/index.ts"]
+    }
+  }
+}

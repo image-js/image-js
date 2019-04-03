@@ -2,7 +2,11 @@
   "extends": "../../../tsconfig.settings.json",
   "compilerOptions": {
     "rootDir": ".",
-    "outDir": "../lib-test"
+    "outDir": "../lib-test",
+    "paths": {
+      "ijs": ["packages/image-js/src/index.ts"],
+      "test": ["test/index.ts"]
+    }
   },
   "include": ["."],
   "references": [{ "path": ".." }, { "path": "../../../test" }]

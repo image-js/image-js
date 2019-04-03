@@ -16,5 +16,10 @@ module.exports = {
   moduleNameMapper: {
     '^ijs$': '<rootDir>/packages/image-js/src/index.ts',
     '^test$': '<rootDir>/test/index.ts'
+  },
+  globals: {
+    'ts-jest': {
+      tsConfig: 'tsconfig.jest.json'
+    }
   }
 };
