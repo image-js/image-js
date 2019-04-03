@@ -4,7 +4,10 @@
   "references": [
     { "path": "packages/image-js/tsconfig.json" },
     { "path": "packages/image-js/tsconfig.esm.json" },
-    { "path": "packages/image-js/tsconfig.test.json" },
+    { "path": "packages/image-js/test/tsconfig.json" },
+    { "path": "packages/roi/tsconfig.json" },
+    { "path": "packages/roi/tsconfig.esm.json" },
+    { "path": "packages/roi/test/tsconfig.json" },
     { "path": "test/tsconfig.json" }
   ]
 }

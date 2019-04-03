@@ -5,6 +5,6 @@
     "outDir": "lib"
   },
   "include": ["src"],
-  "exclude": ["lib", "lib-esm", "test"],
+  "exclude": ["lib", "lib-esm", "lib-test", "test"],
   "references": []
 }

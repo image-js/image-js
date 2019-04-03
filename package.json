@@ -24,7 +24,7 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap --no-ci",
-    "clean": "lerna exec \"rimraf lib lib-esm *.tsbuildinfo\" && rimraf test/lib",
+    "clean": "lerna exec \"rimraf lib lib-esm lib-test *.tsbuildinfo\" && rimraf test/lib",
     "eslint": "eslint packages/*/src --ext ts",
     "eslint-fix": "npm run eslint -- --fix",
     "prepare": "npm run clean && npm run bootstrap",

@@ -86,6 +86,7 @@ typings/
 # Packages output files
 lib
 lib-esm
+lib-test
 
 # docs
 docs
