@@ -182,7 +182,6 @@ function computeConvolutionPixel(
         image.height,
         borderType
       );
-      // console.log(x, y, imgX, imgY);
       val += kernelValue * image.getValue(imgY, imgX, channel);
     }
   }
