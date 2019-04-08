@@ -53,7 +53,6 @@ export function separableConvolution(
   if (normalize) {
     [kernelX, kernelY] = normalizeSeparatedKernel(kernelX, kernelY);
   }
-  console.log(kernelX, kernelY);
   const kernelOffsetX = (kernelX.length - 1) / 2;
   const kernelOffsetY = (kernelY.length - 1) / 2;
   const hFactor = image.channels * image.width;
