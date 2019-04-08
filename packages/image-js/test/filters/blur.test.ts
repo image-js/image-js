@@ -1,4 +1,4 @@
-import { blur, BorderType, read, write } from 'ijs';
+import { blur, BorderType, read } from 'ijs';
 import { getTestImage } from 'test';
 
 describe('blur', () => {
