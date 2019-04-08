@@ -17,7 +17,7 @@ kernelY[0, 3] = -0.3
 kernelY[0, 4] = -0.4
 
 
-dst = cv2.sepFilter2D(img, ddepth=-1, kernelX=kernelX, kernelY=kernelY,
+dst = cv2.sepFilter2D(img, kernelX=kernelX, kernelY=kernelY,
                       borderType=cv2.BORDER_REFLECT)
 
 cv2.imwrite('./test/img/testConv.png', dst)

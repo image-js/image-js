@@ -8,7 +8,7 @@ describe('convolution functions', () => {
     const convoluted = separableConvolution(
       img,
       [0.1, 0.2, 0.3],
-      [0.4, 0.5, 0.6],
+      [0.4, 0.5, 0.6, -0.3, -0.4],
       {
         borderType: BorderType.REFLECT
       }
@@ -22,7 +22,7 @@ describe('convolution functions', () => {
 
   it('direct convolution compared to opencv', async () => {
     const img = getTestImage();
-    const kernelY = Matrix.columnVector([0.4, 0.5, 0.6]);
+    const kernelY = Matrix.columnVector([0.4, 0.5, 0.6, -0.3, -0.4]);
     const kernelX = Matrix.rowVector([0.1, 0.2, 0.3]);
     const kernel = kernelY.mmul(kernelX).to2DArray();
 

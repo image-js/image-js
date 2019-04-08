@@ -70,7 +70,7 @@ export function separableConvolution(
     }
 
     for (let x = 0; x < image.width - 2 * kernelOffsetX; x++) {
-      const wOffset = (x + kernelOffsetY) * image.channels;
+      const wOffset = (x + kernelOffsetX) * image.channels;
       const column = [];
       for (let y = 0; y < image.height; y++) {
         column.push(imgArr[y][x]);
@@ -88,14 +88,17 @@ export function separableConvolution(
   }
 
   // Calculate kernel from separated kernels.
+
   const matrixX = Matrix.rowVector(kernelX);
   const matrixY = Matrix.columnVector(kernelY);
   const kernel = matrixY.mmul(matrixX).to2DArray();
 
+  // Apply convolution on the left and right borders
   for (let c = 0; c < image.channels; c++) {
-    for (let bX = 0; bX < kernelOffsetY; bX++) {
-      for (let bY = 0; bY < image.height; bY++) {
+    for (let bY = 0; bY < image.height; bY++) {
+      for (let bX = 0; bX < kernelOffsetX; bX++) {
         const idx = (bY * image.width + bX) * image.channels + c;
+
         const bXopp = image.width - bX - 1;
         const bYopp = image.height - bY - 1;
         const idxOpp = (bYopp * image.width + bXopp) * image.channels + c;
@@ -120,6 +123,7 @@ export function separableConvolution(
     }
   }
 
+  // apply the convolution on the top and bottom borders
   for (let c = 0; c < image.channels; c++) {
     for (let bX = 0; bX < image.width; bX++) {
       for (let bY = 0; bY < kernelOffsetY; bY++) {
@@ -160,11 +164,13 @@ function computeConvolutionPixel(
   borderType: BorderType = BorderType.REFLECT_101
 ): number {
   let val = 0;
-  const kernelOffsetX = (kernel[0].length - 1) / 2;
-  const kernelOffsetY = (kernel.length - 1) / 2;
+  const kernelWidth = kernel[0].length;
+  const kernelHeight = kernel.length;
+  const kernelOffsetX = (kernelWidth - 1) / 2;
+  const kernelOffsetY = (kernelHeight - 1) / 2;
 
-  for (let kY = 0; kY < kernel.length; kY++) {
-    for (let kX = 0; kX < kernel.length; kX++) {
+  for (let kY = 0; kY < kernelHeight; kY++) {
+    for (let kX = 0; kX < kernelWidth; kX++) {
       const kernelValue = kernel[kY][kX];
       const imgX = interpolateBorder(
         x + kX - kernelOffsetX,
@@ -176,6 +182,7 @@ function computeConvolutionPixel(
         image.height,
         borderType
       );
+      // console.log(x, y, imgX, imgY);
       val += kernelValue * image.getValue(imgY, imgX, channel);
     }
   }
