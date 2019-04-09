@@ -1,4 +1,4 @@
 export * from './invert';
-export * from './gaussian';
+export * from './gaussianBlur';
 export * from './convolution';
 export * from './blur';

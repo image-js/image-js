@@ -3,10 +3,10 @@ import { BorderType } from '../types';
 
 import { separableConvolution } from './convolution';
 
-interface IBlurOptions {
+export interface IBlurOptions {
   width: number;
   height: number;
-  borderType: BorderType;
+  borderType?: BorderType;
 }
 
 export function blur(image: Image, options: IBlurOptions): Image {
