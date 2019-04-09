@@ -1,6 +1,6 @@
 {
   "name": "image-js",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "description": "Advanced image processing in JavaScript",
   "license": "MIT",
   "main": "lib/index.js",
