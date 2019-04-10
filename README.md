@@ -1,5 +1,7 @@
 # image-js
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/image-js/image-js.svg)](https://greenkeeper.io/)
+
 Advanced image processing in JavaScript.
 
 ## Project rewrite
