@@ -3,17 +3,19 @@ import { Image } from '../Image';
 
 import { separableConvolution } from './convolution';
 
-interface IGaussianBlurOptions {
+interface IGaussianBlurBaseOptions {
   size: number;
-  sigma: number;
-  borderType: BorderType;
+  borderType?: BorderType;
+  out?: Image;
 }
 
-interface IGaussianBlurXYOptions {
-  size: number;
+export interface IGaussianBlurOptions extends IGaussianBlurBaseOptions {
+  sigma: number;
+}
+
+export interface IGaussianBlurXYOptions extends IGaussianBlurBaseOptions {
   sigmaX: number;
   sigmaY: number;
-  borderType: BorderType;
 }
 
 function getRadius(size: number): number {

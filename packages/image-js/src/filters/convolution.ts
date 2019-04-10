@@ -9,10 +9,12 @@ import { clamp } from '../utils/clamp';
 import { BorderType } from '../types';
 import { interpolateBorder } from '../utils/interpolateBorder';
 import { round } from '../utils/round';
+import { getOutputImage } from '../utils/getOutputImage';
 
 interface ISeparableConvolutionOptions {
   borderType?: BorderType;
   normalize?: boolean;
+  out?: Image;
 }
 
 export function directConvolution(
@@ -22,7 +24,7 @@ export function directConvolution(
 ): Image {
   const { borderType } = options;
 
-  const newImage = Image.createFrom(image);
+  const newImage = getOutputImage(image, options);
 
   for (let c = 0; c < image.channels; c++) {
     for (let x = 0; x < image.width; x++) {
