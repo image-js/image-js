@@ -1,10 +1,17 @@
 /* eslint-disable import/unambiguous */
 /* eslint-env browser */
 
+let greyCache;
+
 const possibleTreatments = {
-  grey: (img) => img.convertColor(IJS.ImageKind.GREY),
+  grey: (img) => {
+    if (!greyCache) {
+      greyCache = IJS.Image.createFrom(img, { kind: IJS.ImageKind.GREY });
+    }
+    return IJS.convertColor(img, IJS.ImageKind.GREY, { out: greyCache });
+  },
   invert: (img) => {
-    const inverted = img.invert();
+    const inverted = img.invert({ out: img });
     inverted.fillAlpha(255);
     return inverted;
   }
@@ -54,10 +61,20 @@ function initializeStream(mediaStream) {
     requestAnimationFrame(treatment);
   };
 }
+
+let outCache;
+
 function treatment() {
   canvas.getContext('2d').drawImage(video, 0, 0);
   const image = IJS.readCanvas(canvas);
-  IJS.writeCanvas(canvas, fn(image));
+  if (!outCache) {
+    outCache = IJS.Image.createFrom(image);
+  }
+  let result = fn(image);
+  if (result.kind !== IJS.ImageKind.RGBA) {
+    result = IJS.convertColor(result, IJS.ImageKind.RGBA, { out: outCache });
+  }
+  IJS.writeCanvas(canvas, result);
   const framesPerSecond = frames++ / ((Date.now() - start) / 1000);
   if (frames === 1000) {
     start = Date.now();
@@ -67,6 +84,7 @@ function treatment() {
   requestAnimationFrame(treatment);
 }
 function printError(e) {
+  // eslint-disable-next-line no-console
   console.log(e);
   app.innerHTML = 'Please connect a camera and accept the video feed';
 }

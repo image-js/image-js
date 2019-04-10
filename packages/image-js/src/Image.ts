@@ -1,6 +1,6 @@
 import { invert, IInvertOptions } from './filters/invert';
 import { validateChannel, validateValue } from './utils/validators';
-import { convertColor } from './operations/convertColor';
+import { convertColor, IConvertColorOptions } from './operations/convertColor';
 import { convertDepth } from './operations/convertDepth';
 import { split } from './operations/split';
 import { IHistogramOptions, histogram } from './compute';
@@ -354,8 +354,8 @@ export class Image {
 
   // OPERATIONS
 
-  public convertColor(kind: ImageKind): Image {
-    return convertColor(this, kind);
+  public convertColor(kind: ImageKind, options?: IConvertColorOptions): Image {
+    return convertColor(this, kind, options);
   }
 
   public convertDepth(newDepth: ColorDepth): Image {

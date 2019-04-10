@@ -11,7 +11,7 @@ export interface IOutOptions {
 interface IOutInternalOptions {
   /**
    * Parameters that will be combined with the ones from
-   * thisImage`. This option is only used if `copy` is `false`.
+   * thisImage`.
    */
   newParameters?: INewImageOptions;
 }

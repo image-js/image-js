@@ -1,6 +1,15 @@
 import { Image, ImageKind } from '../Image';
+import { getOutputImage } from '../utils/getOutputImage';
 
-export function convertColor(image: Image, kind: ImageKind): Image {
+export interface IConvertColorOptions {
+  out?: Image;
+}
+
+export function convertColor(
+  image: Image,
+  kind: ImageKind,
+  options: IConvertColorOptions = {}
+): Image {
   const canConvert = new Map([
     [ImageKind.GREY, [ImageKind.GREYA, ImageKind.RGB, ImageKind.RGBA]],
     [ImageKind.GREYA, [ImageKind.GREY, ImageKind.RGB, ImageKind.RGBA]],
@@ -17,35 +26,32 @@ export function convertColor(image: Image, kind: ImageKind): Image {
     throw new Error(`conversion from ${image.kind} to ${kind} not implemented`);
   }
 
-  const newImage = new Image({
-    width: image.width,
-    height: image.height,
-    depth: image.depth,
-    kind
+  const output = getOutputImage(image, options, {
+    newParameters: { kind }
   });
 
   if (image.kind === ImageKind.GREY || image.kind === ImageKind.GREYA) {
-    convertGreyToAny(image, newImage);
+    convertGreyToAny(image, output);
   }
 
   if (image.kind === ImageKind.RGB || image.kind === ImageKind.RGBA) {
     if (kind === ImageKind.RGB || kind === ImageKind.RGBA) {
-      convertRgbToRgb(image, newImage);
+      convertRgbToRgb(image, output);
     } else {
       // GREYA or GREY
-      convertRgbToGrey(image, newImage);
+      convertRgbToGrey(image, output);
     }
   }
 
-  if (!image.alpha && newImage.alpha) {
-    newImage.fillAlpha(newImage.maxValue);
+  if (!image.alpha && output.alpha) {
+    output.fillAlpha(output.maxValue);
   }
 
-  if (image.alpha && newImage.alpha) {
-    copyAlpha(image, newImage);
+  if (image.alpha && output.alpha) {
+    copyAlpha(image, output);
   }
 
-  return newImage;
+  return output;
 }
 
 function copyAlpha(source: Image, dest: Image): void {
