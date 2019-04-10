@@ -17,9 +17,12 @@ test('too far', () => {
   expect(() => interpolateBorder(200, 10, BorderType.REFLECT)).toThrow(exp);
 });
 
-test('bad type', () => {
-  const exp = /interpolateBorder cannot be used with border type CONSTANT/;
-  expect(() => interpolateBorder(-4, 10, BorderType.CONSTANT)).toThrow(exp);
+test('CONSTANT', () => {
+  expect(interpolateBorder(-4, 10, BorderType.CONSTANT)).toStrictEqual(-1);
+  expect(interpolateBorder(0, 10, BorderType.CONSTANT)).toStrictEqual(0);
+  expect(interpolateBorder(1, 10, BorderType.CONSTANT)).toStrictEqual(1);
+  expect(interpolateBorder(-200, 10, BorderType.CONSTANT)).toStrictEqual(-1);
+  expect(interpolateBorder(200, 10, BorderType.CONSTANT)).toStrictEqual(-1);
 });
 
 test('REPLICATE - negative', () => {

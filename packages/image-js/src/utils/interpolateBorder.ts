@@ -8,6 +8,9 @@ export function interpolateBorder(
   if (point >= 0 && point < length) {
     return point;
   }
+  if (type === BorderType.CONSTANT) {
+    return -1;
+  }
   if (point > 0 - length && point < length + length - 1) {
     if (type === BorderType.REPLICATE) {
       if (point < 0) {

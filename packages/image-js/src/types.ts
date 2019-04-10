@@ -5,3 +5,8 @@ export enum BorderType {
   WRAP = 'WRAP',
   REFLECT_101 = 'REFLECT_101'
 }
+
+export enum InterpolationType {
+  NEAREST = 'NEAREST',
+  BILINEAR = 'BILINEAR'
+}
