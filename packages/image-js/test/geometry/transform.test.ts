@@ -1,5 +1,5 @@
 import { getTestImage } from 'test';
-import { transform, readSync, writeSync } from 'ijs';
+import { transform, readSync } from 'ijs';
 
 describe('transform with a transformation matrix', () => {
   it('compare result of translation with opencv', () => {
