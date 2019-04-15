@@ -5,7 +5,7 @@ import {
 import { Matrix } from 'ml-matrix';
 
 import { Image } from '../Image';
-import { clamp } from '../utils/clamp';
+import { getClamp, ClampFunction } from '../utils/clamp';
 import { BorderType } from '../types';
 import { interpolateBorder } from '../utils/interpolateBorder';
 import { round } from '../utils/round';
@@ -25,6 +25,7 @@ export function directConvolution(
   const { borderType } = options;
 
   const newImage = getOutputImage(image, options);
+  const clamp = getClamp(newImage);
 
   for (let c = 0; c < image.channels; c++) {
     for (let x = 0; x < image.width; x++) {
@@ -36,7 +37,8 @@ export function directConvolution(
           c,
           image,
           kernel,
-          borderType
+          borderType,
+          clamp
         );
       }
     }
@@ -55,43 +57,55 @@ export function separableConvolution(
   if (normalize) {
     [kernelX, kernelY] = normalizeSeparatedKernel(kernelX, kernelY);
   }
-  const kernelOffsetX = (kernelX.length - 1) / 2;
-  const kernelOffsetY = (kernelY.length - 1) / 2;
-  const hFactor = image.channels * image.width;
+  const doubleKernelOffsetX = kernelX.length - 1;
+  const kernelOffsetX = doubleKernelOffsetX / 2;
+  const doubleKernelOffsetY = kernelY.length - 1;
+  const kernelOffsetY = doubleKernelOffsetY / 2;
+
+  const { width, height, channels, data } = image;
+
+  const hFactor = channels * width;
+  const cutWidth = width - doubleKernelOffsetX;
+
   const newImage = Image.createFrom(image);
+  const clamp = getClamp(newImage);
 
   const rowConvolution = new DirectConvolution(
-    image.width,
+    width,
     kernelX,
     ConvolutionBorderType.CUT
   );
   const columnConvolution = new DirectConvolution(
-    image.height,
+    height,
     kernelY,
     ConvolutionBorderType.CUT
   );
 
-  for (let c = 0; c < image.channels; c++) {
-    const imgArr = [];
-    for (let y = 0; y < image.height; y++) {
-      const row = [];
-      const rowIndex = y * image.width * image.channels;
-      for (let x = 0; x < image.width; x++) {
-        row.push(image.data[rowIndex + x * image.channels + c]);
+  const rowData = new Float64Array(width);
+  const columnData = new Float64Array(height);
+  const convolvedData = new Float64Array(cutWidth * height);
+
+  for (let c = 0; c < channels; c++) {
+    for (let y = 0; y < height; y++) {
+      const rowIndex = y * hFactor;
+      for (let x = 0; x < width; x++) {
+        rowData[x] = data[rowIndex + x * channels + c];
       }
-      imgArr.push(rowConvolution.convolve(row).slice());
+      const convolvedRow = rowConvolution.convolve(rowData);
+      for (let x = 0; x < cutWidth; x++) {
+        convolvedData[y * cutWidth + x] = convolvedRow[x];
+      }
     }
 
-    for (let x = 0; x < image.width - 2 * kernelOffsetX; x++) {
-      const wOffset = (x + kernelOffsetX) * image.channels;
-      const column = [];
-      for (let y = 0; y < image.height; y++) {
-        column.push(imgArr[y][x]);
+    for (let x = 0; x < cutWidth; x++) {
+      const wOffset = (x + kernelOffsetX) * channels;
+      for (let y = 0; y < height; y++) {
+        columnData[y] = convolvedData[y * cutWidth + x];
       }
-      const result = columnConvolution.convolve(column);
+      const result = columnConvolution.convolve(columnData);
       for (let i = 0; i < result.length; i++) {
         const idx = (i + kernelOffsetY) * hFactor + wOffset + c;
-        newImage.data[idx] = round(clamp(result[i], newImage));
+        newImage.data[idx] = round(clamp(result[i]));
       }
     }
   }
@@ -103,14 +117,14 @@ export function separableConvolution(
   const kernel = matrixY.mmul(matrixX).to2DArray();
 
   // Apply convolution on the left and right borders
-  for (let c = 0; c < image.channels; c++) {
-    for (let bY = 0; bY < image.height; bY++) {
+  for (let c = 0; c < channels; c++) {
+    for (let bY = 0; bY < height; bY++) {
       for (let bX = 0; bX < kernelOffsetX; bX++) {
-        const idx = (bY * image.width + bX) * image.channels + c;
+        const idx = (bY * width + bX) * channels + c;
 
-        const bXopp = image.width - bX - 1;
-        const bYopp = image.height - bY - 1;
-        const idxOpp = (bYopp * image.width + bXopp) * image.channels + c;
+        const bXopp = width - bX - 1;
+        const bYopp = height - bY - 1;
+        const idxOpp = (bYopp * width + bXopp) * channels + c;
 
         newImage.data[idx] = computeConvolutionPixel(
           bX,
@@ -118,7 +132,8 @@ export function separableConvolution(
           c,
           image,
           kernel,
-          borderType
+          borderType,
+          clamp
         );
         newImage.data[idxOpp] = computeConvolutionPixel(
           bXopp,
@@ -126,20 +141,21 @@ export function separableConvolution(
           c,
           image,
           kernel,
-          borderType
+          borderType,
+          clamp
         );
       }
     }
   }
 
   // apply the convolution on the top and bottom borders
-  for (let c = 0; c < image.channels; c++) {
-    for (let bX = 0; bX < image.width; bX++) {
+  for (let c = 0; c < channels; c++) {
+    for (let bX = 0; bX < width; bX++) {
       for (let bY = 0; bY < kernelOffsetY; bY++) {
-        const idx = (bY * image.width + bX) * image.channels + c;
-        const bXopp = image.width - bX - 1;
-        const bYopp = image.height - bY - 1;
-        const idxOpp = (bYopp * image.width + bXopp) * image.channels + c;
+        const idx = (bY * width + bX) * channels + c;
+        const bXopp = width - bX - 1;
+        const bYopp = height - bY - 1;
+        const idxOpp = (bYopp * width + bXopp) * channels + c;
 
         newImage.data[idx] = computeConvolutionPixel(
           bX,
@@ -147,7 +163,8 @@ export function separableConvolution(
           c,
           image,
           kernel,
-          borderType
+          borderType,
+          clamp
         );
         newImage.data[idxOpp] = computeConvolutionPixel(
           bXopp,
@@ -155,7 +172,8 @@ export function separableConvolution(
           c,
           image,
           kernel,
-          borderType
+          borderType,
+          clamp
         );
       }
     }
@@ -170,7 +188,8 @@ function computeConvolutionPixel(
   channel: number,
   image: Image,
   kernel: number[][],
-  borderType: BorderType = BorderType.REFLECT_101
+  borderType: BorderType = BorderType.REFLECT_101,
+  clamp: ClampFunction
 ): number {
   let val = 0;
   const kernelWidth = kernel[0].length;
@@ -195,7 +214,7 @@ function computeConvolutionPixel(
     }
   }
 
-  return round(clamp(val, image));
+  return round(clamp(val));
 }
 
 function normalizeSeparatedKernel(
