@@ -1,6 +1,6 @@
 import { inverse, Matrix } from 'ml-matrix';
 
-import { Image } from '../Image';
+import { Image, ImageCoordinates } from '../Image';
 import { getInterpolationFunction } from '../utils/interpolatePixel';
 import { InterpolationType, BorderType } from '../types';
 
@@ -11,6 +11,7 @@ interface ITransformOptions {
   borderType?: BorderType;
   inverse?: boolean;
   borderValue?: number;
+  fullImage?: boolean;
 }
 
 export function transform(
@@ -18,8 +19,53 @@ export function transform(
   transform: number[][],
   options: ITransformOptions = {}
 ): Image {
-  const width = options.width || image.width;
-  const height = options.height || image.height;
+  let width = options.width || image.width;
+  let height = options.height || image.height;
+
+  if (options.fullImage) {
+    transform = transform.map((row) => row.slice());
+    transform[0][2] = 0;
+    transform[1][2] = 0;
+    const corners = [
+      image.getCoordinates(ImageCoordinates.TOP_LEFT),
+      image.getCoordinates(ImageCoordinates.TOP_RIGHT),
+      image.getCoordinates(ImageCoordinates.BOTTOM_RIGHT),
+      image.getCoordinates(ImageCoordinates.BOTTOM_LEFT)
+    ];
+
+    corners[1][0] += 1;
+    corners[2][0] += 1;
+    corners[2][1] += 1;
+    corners[3][1] += 1;
+
+    const transformedCorners = corners.map((corner) => {
+      return [
+        transformPoint(transform[0], corner[0], corner[1]),
+        transformPoint(transform[1], corner[0], corner[1])
+      ];
+    });
+
+    const xCoordinates = transformedCorners.map((c) => c[0]);
+    const yCoordinates = transformedCorners.map((c) => c[1]);
+    const maxX = Math.max(...xCoordinates);
+    const maxY = Math.max(...yCoordinates);
+    const minX = Math.min(...xCoordinates);
+    const minY = Math.min(...yCoordinates);
+    const center = [(image.width - 1) / 2, (image.height - 1) / 2];
+
+    width = maxX - minX;
+    height = maxY - minY;
+
+    const centerX = transformPoint(transform[0], center[0], center[1]);
+    const centerY = transformPoint(transform[1], center[0], center[1]);
+    const a = (width - 1) / 2 - centerX;
+    const b = (height - 1) / 2 - centerY;
+    transform[0][2] = a;
+    transform[1][2] = b;
+    width = Math.round(width);
+    height = Math.round(height);
+  }
+
   const borderType = options.borderType || BorderType.CONSTANT;
   const borderValue = options.borderValue || 0;
   const interpolationType =
@@ -31,7 +77,7 @@ export function transform(
   ) {
     throw new Error(
       `transformation matrix must be 2x3, found ${transform.length}x${
-        transform[0].length
+        transform[1].length
       }`
     );
   }
@@ -51,8 +97,8 @@ export function transform(
     const hOffset = hFactor * y;
     for (let x = 0; x < newImage.width; x++) {
       const wOffset = hOffset + x * image.channels;
-      const nx = transformPointX(transform, x, y);
-      const ny = transformPointY(transform, x, y);
+      const nx = transformPoint(transform[0], x, y);
+      const ny = transformPoint(transform[1], x, y);
       for (let c = 0; c < newImage.channels; c++) {
         const newValue = interpolate(image, nx, ny, c, borderType, borderValue);
         newImage.data[wOffset + c] = newValue;
@@ -63,10 +109,6 @@ export function transform(
   return newImage;
 }
 
-function transformPointX(transform: number[][], x: number, y: number): number {
-  return transform[0][0] * x + transform[0][1] * y + transform[0][2];
-}
-
-function transformPointY(transform: number[][], x: number, y: number): number {
-  return transform[1][0] * x + transform[1][1] * y + transform[1][2];
+function transformPoint(transform: number[], x: number, y: number): number {
+  return transform[0] * x + transform[1] * y + transform[2];
 }

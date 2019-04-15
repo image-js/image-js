@@ -19,6 +19,14 @@ export enum ImageKind {
   RGBA = 'RGBA'
 }
 
+export enum ImageCoordinates {
+  CENTER = 'CENTER',
+  TOP_LEFT = 'TOP_LEFT',
+  TOP_RIGHT = 'TOP_RIGHT',
+  BOTTOM_LEFT = 'BOTTOM_LEFT',
+  BOTTOM_RIGHT = 'BOTTOM_RIGHT'
+}
+
 export interface INewImageOptions {
   /**
    * Number of bits per value in each channel.
@@ -364,6 +372,33 @@ export class Image {
 
   public split(): Image[] {
     return split(this);
+  }
+
+  public getCoordinates(
+    coordinates: ImageCoordinates,
+    round: boolean = false
+  ): [number, number] {
+    switch (coordinates) {
+      case ImageCoordinates.CENTER: {
+        const centerX = (this.width - 1) / 2;
+        const centerY = (this.height - 1) / 2;
+        if (round) {
+          return [Math.round(centerX), Math.round(centerY)];
+        } else {
+          return [centerX, centerY];
+        }
+      }
+      case ImageCoordinates.TOP_LEFT:
+        return [0, 0];
+      case ImageCoordinates.TOP_RIGHT:
+        return [this.width - 1, 0];
+      case ImageCoordinates.BOTTOM_LEFT:
+        return [0, this.height - 1];
+      case ImageCoordinates.BOTTOM_RIGHT:
+        return [this.width - 1, this.height - 1];
+      default:
+        throw new Error(`Unknow image coordinates ${coordinates}`);
+    }
   }
 }
 
