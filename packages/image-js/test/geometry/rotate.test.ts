@@ -1,5 +1,5 @@
-import { rotate, readSync, writeSync, BorderType } from 'ijs';
-import { getTestImage, decodeImage } from 'test';
+import { rotate, readSync, BorderType } from 'ijs';
+import { getTestImage } from 'test';
 
 test('rotate + scale compared to opencv', () => {
   const expected = readSync('test/img/testRotate.png');
