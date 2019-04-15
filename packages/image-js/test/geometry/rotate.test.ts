@@ -1,5 +1,14 @@
-import { rotate, readSync, BorderType } from 'ijs';
-import { getTestImage } from 'test';
+import {
+  rotate,
+  readSync,
+  BorderType
+  // writeSync,
+  // InterpolationType
+} from 'ijs';
+import {
+  getTestImage
+  // decodeImage
+} from 'test';
 
 test('rotate + scale compared to opencv', () => {
   const expected = readSync('test/img/testRotate.png');
@@ -15,10 +24,12 @@ test('rotate + scale compared to opencv', () => {
 
 // test('dummy', () => {
 //   const img = decodeImage('grayscale_by_zimmyrose.png');
-//   const rotated = rotate(img, 125, {
+//   const rotated = rotate(img, 45, {
 //     scale: 1.5,
 //     borderType: BorderType.CONSTANT,
-//     fullImage: true
+//     fullImage: true,
+//     interpolationType: InterpolationType.BILINEAR,
+//     borderValue: 255
 //   });
 
 //   writeSync('rotated.png', rotated);
