@@ -1,5 +1,5 @@
 import {
-  directConvolution as directConvolution1D,
+  DirectConvolution,
   BorderType as ConvolutionBorderType
 } from 'ml-convolution';
 import { Matrix } from 'ml-matrix';
@@ -60,6 +60,17 @@ export function separableConvolution(
   const hFactor = image.channels * image.width;
   const newImage = Image.createFrom(image);
 
+  const rowConvolution = new DirectConvolution(
+    image.width,
+    kernelX,
+    ConvolutionBorderType.CUT
+  );
+  const columnConvolution = new DirectConvolution(
+    image.height,
+    kernelY,
+    ConvolutionBorderType.CUT
+  );
+
   for (let c = 0; c < image.channels; c++) {
     const imgArr = [];
     for (let y = 0; y < image.height; y++) {
@@ -68,7 +79,7 @@ export function separableConvolution(
       for (let x = 0; x < image.width; x++) {
         row.push(image.data[rowIndex + x * image.channels + c]);
       }
-      imgArr.push(directConvolution1D(row, kernelX, ConvolutionBorderType.CUT));
+      imgArr.push(rowConvolution.convolve(row).slice());
     }
 
     for (let x = 0; x < image.width - 2 * kernelOffsetX; x++) {
@@ -77,11 +88,7 @@ export function separableConvolution(
       for (let y = 0; y < image.height; y++) {
         column.push(imgArr[y][x]);
       }
-      const result = directConvolution1D(
-        column,
-        kernelY,
-        ConvolutionBorderType.CUT
-      );
+      const result = columnConvolution.convolve(column);
       for (let i = 0; i < result.length; i++) {
         const idx = (i + kernelOffsetY) * hFactor + wOffset + c;
         newImage.data[idx] = round(clamp(result[i], newImage));
