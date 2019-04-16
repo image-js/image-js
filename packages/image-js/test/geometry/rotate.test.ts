@@ -1,7 +1,8 @@
 import {
   rotate,
   readSync,
-  BorderType
+  BorderType,
+  InterpolationType
   // writeSync,
   // InterpolationType
 } from 'ijs';
@@ -16,6 +17,7 @@ test('rotate + scale compared to opencv', () => {
   const rotated = rotate(img, 30, {
     scale: 0.8,
     borderType: BorderType.REFLECT,
+    interpolationType: InterpolationType.NEAREST,
     center: [2, 4]
   });
 
