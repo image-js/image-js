@@ -14,7 +14,7 @@ import {
 import { round } from '../utils/round';
 import { getOutputImage } from '../utils/getOutputImage';
 
-interface ISeparableConvolutionOptions {
+export interface IConvolutionOptions {
   borderType?: BorderType;
   borderValue?: number;
   normalize?: boolean;
@@ -24,7 +24,7 @@ interface ISeparableConvolutionOptions {
 export function directConvolution(
   image: Image,
   kernel: number[][],
-  options: ISeparableConvolutionOptions = {}
+  options: IConvolutionOptions = {}
 ): Image {
   const { borderType = BorderType.REFLECT_101, borderValue = 0 } = options;
   const interpolateBorder = getBorderInterpolation(borderType, borderValue);
@@ -56,7 +56,7 @@ export function separableConvolution(
   image: Image,
   kernelX: number[],
   kernelY: number[],
-  options: ISeparableConvolutionOptions = {}
+  options: IConvolutionOptions = {}
 ): Image {
   const {
     normalize,

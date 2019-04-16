@@ -7,6 +7,7 @@ export interface IBlurOptions {
   width: number;
   height: number;
   borderType?: BorderType;
+  borderValue?: number;
   out?: Image;
 }
 
@@ -17,7 +18,6 @@ export function blur(image: Image, options: IBlurOptions): Image {
 
   return separableConvolution(image, kernelX, kernelY, {
     normalize: true,
-    borderType: options.borderType,
-    out: options.out
+    ...options
   });
 }

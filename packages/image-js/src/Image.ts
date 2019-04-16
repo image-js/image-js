@@ -4,6 +4,24 @@ import { convertColor, IConvertColorOptions } from './operations/convertColor';
 import { convertDepth } from './operations/convertDepth';
 import { split } from './operations/split';
 import { IHistogramOptions, histogram } from './compute';
+import {
+  IBlurOptions,
+  blur,
+  IConvolutionOptions,
+  directConvolution,
+  separableConvolution,
+  gaussianBlur,
+  GaussianBlurOptions
+} from './filters';
+import {
+  IResizeOptions,
+  resize,
+  IRotateOptions,
+  rotate,
+  ITransformOptions,
+  transform
+} from './geometry';
+import { ThresholdOptions, threshold } from './operations';
 
 type ImageDataArray = Uint8Array | Uint16Array;
 
@@ -353,11 +371,51 @@ export class Image {
 
   // FILTERS
 
+  public blur(options: IBlurOptions): Image {
+    return blur(this, options);
+  }
+
+  public directConvolution(
+    kernel: number[][],
+    options?: IConvolutionOptions
+  ): Image {
+    return directConvolution(this, kernel, options);
+  }
+
+  public separableConvolution(
+    kernelX: number[],
+    kernelY: number[],
+    options?: IConvolutionOptions
+  ): Image {
+    return separableConvolution(this, kernelX, kernelY, options);
+  }
+
+  public gaussianBlur(options: GaussianBlurOptions): Image {
+    return gaussianBlur(this, options);
+  }
+
   /**
    * Invert the colors of the image.
    */
   public invert(options?: IInvertOptions): Image {
     return invert(this, options);
+  }
+
+  // GEOMETRY
+
+  public resize(options: IResizeOptions): Image {
+    return resize(this, options);
+  }
+
+  public rotate(angle: number, options?: IRotateOptions): Image {
+    return rotate(this, angle, options);
+  }
+
+  public transform(
+    transformMatrix: number[][],
+    options?: ITransformOptions
+  ): Image {
+    return transform(this, transformMatrix, options);
   }
 
   // OPERATIONS
@@ -372,6 +430,10 @@ export class Image {
 
   public split(): Image[] {
     return split(this);
+  }
+
+  public threshold(options: ThresholdOptions): Image {
+    return threshold(this, options);
   }
 
   public getCoordinates(

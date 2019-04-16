@@ -9,7 +9,7 @@ interface IGaussianBlurBaseOptions {
   out?: Image;
 }
 
-export interface IGaussianBlurOptions extends IGaussianBlurBaseOptions {
+export interface IGaussianBlurSigmaOptions extends IGaussianBlurBaseOptions {
   sigma: number;
 }
 
@@ -18,6 +18,10 @@ export interface IGaussianBlurXYOptions extends IGaussianBlurBaseOptions {
   sigmaY: number;
 }
 
+export type GaussianBlurOptions =
+  | IGaussianBlurSigmaOptions
+  | IGaussianBlurXYOptions;
+
 function getRadius(size: number): number {
   if (size % 2 !== 1 || size < 0) {
     throw new Error('gaussian blur size must be positive and odd');
@@ -25,12 +29,9 @@ function getRadius(size: number): number {
   return (size - 1) / 2;
 }
 
-function gaussianBlurImpl(image: Image, options: IGaussianBlurXYOptions): Image;
-function gaussianBlurImpl(image: Image, options: IGaussianBlurOptions): Image;
-
-function gaussianBlurImpl(
+export function gaussianBlur(
   image: Image,
-  options: IGaussianBlurOptions | IGaussianBlurXYOptions
+  options: GaussianBlurOptions
 ): Image {
   if ('sigma' in options) {
     const { size, sigma } = options;
@@ -69,5 +70,3 @@ function getKernel(radius: number, sigma: number): number[] {
   }
   return kernel;
 }
-
-export const gaussianBlur = gaussianBlurImpl;

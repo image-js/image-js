@@ -17,7 +17,7 @@ export interface ITransformOptions {
 
 export function transform(
   image: Image,
-  transform: number[][],
+  transformMatrix: number[][],
   options: ITransformOptions = {}
 ): Image {
   const {
@@ -28,9 +28,9 @@ export function transform(
   let { width = image.width, height = image.height } = options;
 
   if (options.fullImage) {
-    transform = transform.map((row) => row.slice());
-    transform[0][2] = 0;
-    transform[1][2] = 0;
+    transformMatrix = transformMatrix.map((row) => row.slice());
+    transformMatrix[0][2] = 0;
+    transformMatrix[1][2] = 0;
     const corners = [
       image.getCoordinates(ImageCoordinates.TOP_LEFT),
       image.getCoordinates(ImageCoordinates.TOP_RIGHT),
@@ -45,8 +45,8 @@ export function transform(
 
     const transformedCorners = corners.map((corner) => {
       return [
-        transformPoint(transform[0], corner[0], corner[1]),
-        transformPoint(transform[1], corner[0], corner[1])
+        transformPoint(transformMatrix[0], corner[0], corner[1]),
+        transformPoint(transformMatrix[1], corner[0], corner[1])
       ];
     });
 
@@ -61,31 +61,31 @@ export function transform(
     width = maxX - minX;
     height = maxY - minY;
 
-    const centerX = transformPoint(transform[0], center[0], center[1]);
-    const centerY = transformPoint(transform[1], center[0], center[1]);
+    const centerX = transformPoint(transformMatrix[0], center[0], center[1]);
+    const centerY = transformPoint(transformMatrix[1], center[0], center[1]);
     const a = (width - 1) / 2 - centerX;
     const b = (height - 1) / 2 - centerY;
-    transform[0][2] = a;
-    transform[1][2] = b;
+    transformMatrix[0][2] = a;
+    transformMatrix[1][2] = b;
     width = Math.round(width);
     height = Math.round(height);
   }
 
   if (
-    transform.length !== 2 ||
-    transform[0].length !== 3 ||
-    transform[1].length !== 3
+    transformMatrix.length !== 2 ||
+    transformMatrix[0].length !== 3 ||
+    transformMatrix[1].length !== 3
   ) {
     throw new Error(
-      `transformation matrix must be 2x3, found ${transform.length}x${
-        transform[1].length
+      `transformation matrix must be 2x3, found ${transformMatrix.length}x${
+        transformMatrix[1].length
       }`
     );
   }
 
   if (!options.inverse) {
-    transform = [transform[0], transform[1], [0, 0, 1]];
-    transform = inverse(new Matrix(transform)).to2DArray();
+    transformMatrix = [transformMatrix[0], transformMatrix[1], [0, 0, 1]];
+    transformMatrix = inverse(new Matrix(transformMatrix)).to2DArray();
   }
   const newImage = Image.createFrom(image, {
     width,
@@ -100,8 +100,8 @@ export function transform(
     const hOffset = hFactor * y;
     for (let x = 0; x < newImage.width; x++) {
       const wOffset = hOffset + x * image.channels;
-      const nx = transformPoint(transform[0], x, y);
-      const ny = transformPoint(transform[1], x, y);
+      const nx = transformPoint(transformMatrix[0], x, y);
+      const ny = transformPoint(transformMatrix[1], x, y);
       for (let c = 0; c < newImage.channels; c++) {
         const newValue = interpolate(image, nx, ny, c, interpolateBorder);
         newImage.data[wOffset + c] = newValue;

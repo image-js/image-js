@@ -28,13 +28,17 @@ interface IThresholdOptionsBase {
   out?: Image;
 }
 
-export interface IThresholdOptions extends IThresholdOptionsBase {
+export interface IThresholdOptionsThreshold extends IThresholdOptionsBase {
   threshold: number;
 }
 
 export interface IThresholdOptionsAlgorithm extends IThresholdOptionsBase {
   algorithm: ThresholdAlgorithm;
 }
+
+export type ThresholdOptions =
+  | IThresholdOptionsThreshold
+  | IThresholdOptionsAlgorithm;
 
 export function computeThreshold(
   image: Image,
@@ -59,15 +63,7 @@ export function computeThreshold(
 
 // TODO: add support for other threshold types.
 // See: https://docs.opencv.org/4.0.1/d7/d1b/group__imgproc__misc.html#gaa9e58d2860d4afa658ef70a9b1115576
-export function threshold(image: Image, options: IThresholdOptions): Image;
-export function threshold(
-  image: Image,
-  options: IThresholdOptionsAlgorithm
-): Image;
-export function threshold(
-  image: Image,
-  options: IThresholdOptions | IThresholdOptionsAlgorithm
-): Image {
+export function threshold(image: Image, options: ThresholdOptions): Image {
   let thresholdValue: number;
   if ('threshold' in options) {
     thresholdValue = options.threshold;
