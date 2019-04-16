@@ -1,29 +1,39 @@
 <!DOCTYPE html>
 <head>
   <script src="dist/image.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.3/ace.js"></script>
+  <style type="text/css" media="screen">
+    #editor { 
+        width: 600px;
+        height: 500px;
+    }
+</style>
 </head>
 <body>
   <h1>image-js demos</h1>
   <div>
-    <button type="button" onclick="doIt();">Do it!</button>
+    <label>
+      Select a file:
+      <input id="file" type="file" accept="image/*" />
+    </label>
+    <button id="loadExample" type="button">Or load the example</button>
   </div>
   <div>
-    <img id="img" src="img/cyclopean_isles_sicily_italy.jpg" />
+    <p>Your file:</p>
+    <canvas id="image"></canvas>
   </div>
-  <div>
-    <canvas id="canvas"></canvas>
-  </div>
-  <script>
-    function doIt() {
-      const img = document.getElementById('img');
-
-      const image = IJS.readImg(img);
-      const inverted = image.invert();
-      inverted.fillAlpha(255);
-
-      const canvas = document.getElementById('canvas');
-      IJS.writeCanvas(canvas, inverted);
-    }
-  </script>
+  <div id="editor">
+function process(image, IJS) {
+  return IJS.rotate(image, 40);
+}
+</div>
+<div>
+  <button id="doTreatment" type="button">Execute script</button>
+</div>
+<div>
+  <p>Result:</p>
+  <canvas id="result"></canvas>
+</div>
+  <script src="index.js"></script>
 </body>
 </html>

@@ -1,2 +1,7 @@
+env:
+  browser: true
 globals:
   IJS: true
+  ace: true
+parserOptions:
+  sourceType: script

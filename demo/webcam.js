@@ -1,5 +1,4 @@
-/* eslint-disable import/unambiguous */
-/* eslint-env browser */
+'use strict';
 
 let greyCache;
 
