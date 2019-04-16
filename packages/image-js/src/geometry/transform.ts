@@ -4,6 +4,7 @@ import { Image, ImageCoordinates } from '../Image';
 import { getInterpolationFunction } from '../utils/interpolatePixel';
 import { InterpolationType, BorderType } from '../types';
 import { getBorderInterpolation } from '../utils/interpolateBorder';
+import { getClamp } from '../utils/clamp';
 
 export interface ITransformOptions {
   width?: number;
@@ -93,6 +94,7 @@ export function transform(
   });
 
   const interpolateBorder = getBorderInterpolation(borderType, borderValue);
+  const clamp = getClamp(newImage);
 
   const interpolate = getInterpolationFunction(interpolationType);
   const hFactor = newImage.width * newImage.channels;
@@ -103,7 +105,14 @@ export function transform(
       const nx = transformPoint(transformMatrix[0], x, y);
       const ny = transformPoint(transformMatrix[1], x, y);
       for (let c = 0; c < newImage.channels; c++) {
-        const newValue = interpolate(image, nx, ny, c, interpolateBorder);
+        const newValue = interpolate(
+          image,
+          nx,
+          ny,
+          c,
+          interpolateBorder,
+          clamp
+        );
         newImage.data[wOffset + c] = newValue;
       }
     }

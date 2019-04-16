@@ -9,7 +9,7 @@ export interface IResizeOptions {
   xFactor?: number;
   yFactor?: number;
   preserveAspectRatio?: boolean;
-  interpolation?: InterpolationType;
+  interpolationType?: InterpolationType;
 }
 
 export function resize(image: Image, options: IResizeOptions): Image {
@@ -18,7 +18,7 @@ export function resize(image: Image, options: IResizeOptions): Image {
   return transform(image, transformation, {
     width,
     height,
-    interpolationType: options.interpolation
+    interpolationType: options.interpolationType
   });
 }
 

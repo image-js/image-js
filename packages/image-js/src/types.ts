@@ -8,5 +8,6 @@ export enum BorderType {
 
 export enum InterpolationType {
   NEAREST = 'NEAREST',
-  BILINEAR = 'BILINEAR'
+  BILINEAR = 'BILINEAR',
+  BICUBIC = 'BICUBIC'
 }
