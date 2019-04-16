@@ -7,12 +7,16 @@ import { Matrix } from 'ml-matrix';
 import { Image } from '../Image';
 import { getClamp, ClampFunction } from '../utils/clamp';
 import { BorderType } from '../types';
-import { interpolateBorder } from '../utils/interpolateBorder';
+import {
+  getBorderInterpolation,
+  BorderInterpolationFunction
+} from '../utils/interpolateBorder';
 import { round } from '../utils/round';
 import { getOutputImage } from '../utils/getOutputImage';
 
 interface ISeparableConvolutionOptions {
   borderType?: BorderType;
+  borderValue?: number;
   normalize?: boolean;
   out?: Image;
 }
@@ -22,7 +26,8 @@ export function directConvolution(
   kernel: number[][],
   options: ISeparableConvolutionOptions = {}
 ): Image {
-  const { borderType } = options;
+  const { borderType = BorderType.REFLECT_101, borderValue = 0 } = options;
+  const interpolateBorder = getBorderInterpolation(borderType, borderValue);
 
   const newImage = getOutputImage(image, options);
   const clamp = getClamp(newImage);
@@ -37,7 +42,7 @@ export function directConvolution(
           c,
           image,
           kernel,
-          borderType,
+          interpolateBorder,
           clamp
         );
       }
@@ -53,7 +58,12 @@ export function separableConvolution(
   kernelY: number[],
   options: ISeparableConvolutionOptions = {}
 ): Image {
-  const { normalize, borderType } = options;
+  const {
+    normalize,
+    borderType = BorderType.REFLECT_101,
+    borderValue = 0
+  } = options;
+  const interpolateBorder = getBorderInterpolation(borderType, borderValue);
   if (normalize) {
     [kernelX, kernelY] = normalizeSeparatedKernel(kernelX, kernelY);
   }
@@ -132,7 +142,7 @@ export function separableConvolution(
           c,
           image,
           kernel,
-          borderType,
+          interpolateBorder,
           clamp
         );
         newImage.data[idxOpp] = computeConvolutionPixel(
@@ -141,7 +151,7 @@ export function separableConvolution(
           c,
           image,
           kernel,
-          borderType,
+          interpolateBorder,
           clamp
         );
       }
@@ -163,7 +173,7 @@ export function separableConvolution(
           c,
           image,
           kernel,
-          borderType,
+          interpolateBorder,
           clamp
         );
         newImage.data[idxOpp] = computeConvolutionPixel(
@@ -172,7 +182,7 @@ export function separableConvolution(
           c,
           image,
           kernel,
-          borderType,
+          interpolateBorder,
           clamp
         );
       }
@@ -188,7 +198,7 @@ function computeConvolutionPixel(
   channel: number,
   image: Image,
   kernel: number[][],
-  borderType: BorderType = BorderType.REFLECT_101,
+  interpolateBorder: BorderInterpolationFunction,
   clamp: ClampFunction
 ): number {
   let val = 0;
@@ -200,17 +210,14 @@ function computeConvolutionPixel(
   for (let kY = 0; kY < kernelHeight; kY++) {
     for (let kX = 0; kX < kernelWidth; kX++) {
       const kernelValue = kernel[kY][kX];
-      const imgX = interpolateBorder(
-        x + kX - kernelOffsetX,
-        image.width,
-        borderType
-      );
-      const imgY = interpolateBorder(
-        y + kY - kernelOffsetY,
-        image.height,
-        borderType
-      );
-      val += kernelValue * image.getValue(imgY, imgX, channel);
+      val +=
+        kernelValue *
+        interpolateBorder(
+          x + kX - kernelOffsetX,
+          y + kY - kernelOffsetY,
+          channel,
+          image
+        );
     }
   }
 

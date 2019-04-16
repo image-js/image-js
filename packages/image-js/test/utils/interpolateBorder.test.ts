@@ -1,82 +1,91 @@
-import { BorderType } from 'ijs';
+import { BorderType, Image } from 'ijs';
 
-import { interpolateBorder } from '../../src/utils/interpolateBorder';
+import {
+  getBorderInterpolation,
+  interpolateConstantPoint,
+  interpolateReflectPoint,
+  interpolateReplicatePoint,
+  interpolateWrapPoint,
+  interpolateReflect101Point
+} from '../../src/utils/interpolateBorder';
 
 test('in range', () => {
-  expect(interpolateBorder(0, 10, BorderType.REFLECT)).toBe(0);
-  expect(interpolateBorder(1, 10, BorderType.REFLECT)).toBe(1);
-  expect(interpolateBorder(5, 10, BorderType.REFLECT)).toBe(5);
-  expect(interpolateBorder(9, 10, BorderType.REFLECT)).toBe(9);
+  expect(interpolateReflectPoint(0, 10)).toBe(0);
+  expect(interpolateReflectPoint(1, 10)).toBe(1);
+  expect(interpolateReflectPoint(5, 10)).toBe(5);
+  expect(interpolateReflectPoint(9, 10)).toBe(9);
 });
 
 test('too far', () => {
+  const image = new Image(10, 10);
+  const interpolate = getBorderInterpolation(BorderType.REFLECT, 0);
   const exp = /interpolateBorder only supports borders smaller than the original image/;
-  expect(() => interpolateBorder(-10, 10, BorderType.REFLECT)).toThrow(exp);
-  expect(() => interpolateBorder(19, 10, BorderType.REFLECT)).toThrow(exp);
-  expect(() => interpolateBorder(-110, 10, BorderType.REFLECT)).toThrow(exp);
-  expect(() => interpolateBorder(200, 10, BorderType.REFLECT)).toThrow(exp);
+  expect(() => interpolate(-10, 0, 0, image)).toThrow(exp);
+  expect(() => interpolate(19, 0, 0, image)).toThrow(exp);
+  expect(() => interpolate(-110, 0, 0, image)).toThrow(exp);
+  expect(() => interpolate(200, 0, 0, image)).toThrow(exp);
 });
 
 test('CONSTANT', () => {
-  expect(interpolateBorder(-4, 10, BorderType.CONSTANT)).toStrictEqual(-1);
-  expect(interpolateBorder(0, 10, BorderType.CONSTANT)).toStrictEqual(0);
-  expect(interpolateBorder(1, 10, BorderType.CONSTANT)).toStrictEqual(1);
-  expect(interpolateBorder(-200, 10, BorderType.CONSTANT)).toStrictEqual(-1);
-  expect(interpolateBorder(200, 10, BorderType.CONSTANT)).toStrictEqual(-1);
+  expect(interpolateConstantPoint(-4, 10)).toStrictEqual(-1);
+  expect(interpolateConstantPoint(0, 10)).toStrictEqual(0);
+  expect(interpolateConstantPoint(1, 10)).toStrictEqual(1);
+  expect(interpolateConstantPoint(-200, 10)).toStrictEqual(-1);
+  expect(interpolateConstantPoint(200, 10)).toStrictEqual(-1);
 });
 
 test('REPLICATE - negative', () => {
-  expect(interpolateBorder(-1, 10, BorderType.REPLICATE)).toBe(0);
-  expect(interpolateBorder(-2, 10, BorderType.REPLICATE)).toBe(0);
-  expect(interpolateBorder(-8, 10, BorderType.REPLICATE)).toBe(0);
-  expect(interpolateBorder(-9, 10, BorderType.REPLICATE)).toBe(0);
+  expect(interpolateReplicatePoint(-1, 10)).toBe(0);
+  expect(interpolateReplicatePoint(-2, 10)).toBe(0);
+  expect(interpolateReplicatePoint(-8, 10)).toBe(0);
+  expect(interpolateReplicatePoint(-9, 10)).toBe(0);
 });
 
 test('REPLICATE - positive', () => {
-  expect(interpolateBorder(10, 10, BorderType.REPLICATE)).toBe(9);
-  expect(interpolateBorder(11, 10, BorderType.REPLICATE)).toBe(9);
-  expect(interpolateBorder(17, 10, BorderType.REPLICATE)).toBe(9);
-  expect(interpolateBorder(18, 10, BorderType.REPLICATE)).toBe(9);
+  expect(interpolateReplicatePoint(10, 10)).toBe(9);
+  expect(interpolateReplicatePoint(11, 10)).toBe(9);
+  expect(interpolateReplicatePoint(17, 10)).toBe(9);
+  expect(interpolateReplicatePoint(18, 10)).toBe(9);
 });
 
 test('REFLECT - negative', () => {
-  expect(interpolateBorder(-1, 10, BorderType.REFLECT)).toBe(0);
-  expect(interpolateBorder(-2, 10, BorderType.REFLECT)).toBe(1);
-  expect(interpolateBorder(-8, 10, BorderType.REFLECT)).toBe(7);
-  expect(interpolateBorder(-9, 10, BorderType.REFLECT)).toBe(8);
+  expect(interpolateReflectPoint(-1, 10)).toBe(0);
+  expect(interpolateReflectPoint(-2, 10)).toBe(1);
+  expect(interpolateReflectPoint(-8, 10)).toBe(7);
+  expect(interpolateReflectPoint(-9, 10)).toBe(8);
 });
 
 test('REFLECT - positive', () => {
-  expect(interpolateBorder(10, 10, BorderType.REFLECT)).toBe(9);
-  expect(interpolateBorder(11, 10, BorderType.REFLECT)).toBe(8);
-  expect(interpolateBorder(17, 10, BorderType.REFLECT)).toBe(2);
-  expect(interpolateBorder(18, 10, BorderType.REFLECT)).toBe(1);
+  expect(interpolateReflectPoint(10, 10)).toBe(9);
+  expect(interpolateReflectPoint(11, 10)).toBe(8);
+  expect(interpolateReflectPoint(17, 10)).toBe(2);
+  expect(interpolateReflectPoint(18, 10)).toBe(1);
 });
 
 test('WRAP - negative', () => {
-  expect(interpolateBorder(-1, 10, BorderType.WRAP)).toBe(9);
-  expect(interpolateBorder(-2, 10, BorderType.WRAP)).toBe(8);
-  expect(interpolateBorder(-8, 10, BorderType.WRAP)).toBe(2);
-  expect(interpolateBorder(-9, 10, BorderType.WRAP)).toBe(1);
+  expect(interpolateWrapPoint(-1, 10)).toBe(9);
+  expect(interpolateWrapPoint(-2, 10)).toBe(8);
+  expect(interpolateWrapPoint(-8, 10)).toBe(2);
+  expect(interpolateWrapPoint(-9, 10)).toBe(1);
 });
 
 test('WRAP - positive', () => {
-  expect(interpolateBorder(10, 10, BorderType.WRAP)).toBe(0);
-  expect(interpolateBorder(11, 10, BorderType.WRAP)).toBe(1);
-  expect(interpolateBorder(17, 10, BorderType.WRAP)).toBe(7);
-  expect(interpolateBorder(18, 10, BorderType.WRAP)).toBe(8);
+  expect(interpolateWrapPoint(10, 10)).toBe(0);
+  expect(interpolateWrapPoint(11, 10)).toBe(1);
+  expect(interpolateWrapPoint(17, 10)).toBe(7);
+  expect(interpolateWrapPoint(18, 10)).toBe(8);
 });
 
 test('REFLECT_101 - negative', () => {
-  expect(interpolateBorder(-1, 10, BorderType.REFLECT_101)).toBe(1);
-  expect(interpolateBorder(-2, 10, BorderType.REFLECT_101)).toBe(2);
-  expect(interpolateBorder(-8, 10, BorderType.REFLECT_101)).toBe(8);
-  expect(interpolateBorder(-9, 10, BorderType.REFLECT_101)).toBe(9);
+  expect(interpolateReflect101Point(-1, 10)).toBe(1);
+  expect(interpolateReflect101Point(-2, 10)).toBe(2);
+  expect(interpolateReflect101Point(-8, 10)).toBe(8);
+  expect(interpolateReflect101Point(-9, 10)).toBe(9);
 });
 
 test('REFLECT_101 - positive', () => {
-  expect(interpolateBorder(10, 10, BorderType.REFLECT_101)).toBe(8);
-  expect(interpolateBorder(11, 10, BorderType.REFLECT_101)).toBe(7);
-  expect(interpolateBorder(17, 10, BorderType.REFLECT_101)).toBe(1);
-  expect(interpolateBorder(18, 10, BorderType.REFLECT_101)).toBe(0);
+  expect(interpolateReflect101Point(10, 10)).toBe(8);
+  expect(interpolateReflect101Point(11, 10)).toBe(7);
+  expect(interpolateReflect101Point(17, 10)).toBe(1);
+  expect(interpolateReflect101Point(18, 10)).toBe(0);
 });

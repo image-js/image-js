@@ -3,6 +3,7 @@ import { inverse, Matrix } from 'ml-matrix';
 import { Image, ImageCoordinates } from '../Image';
 import { getInterpolationFunction } from '../utils/interpolatePixel';
 import { InterpolationType, BorderType } from '../types';
+import { getBorderInterpolation } from '../utils/interpolateBorder';
 
 interface ITransformOptions {
   width?: number;
@@ -19,8 +20,12 @@ export function transform(
   transform: number[][],
   options: ITransformOptions = {}
 ): Image {
-  let width = options.width || image.width;
-  let height = options.height || image.height;
+  const {
+    borderType = BorderType.CONSTANT,
+    borderValue = 0,
+    interpolationType = InterpolationType.NEAREST
+  } = options;
+  let { width = image.width, height = image.height } = options;
 
   if (options.fullImage) {
     transform = transform.map((row) => row.slice());
@@ -66,10 +71,6 @@ export function transform(
     height = Math.round(height);
   }
 
-  const borderType = options.borderType || BorderType.CONSTANT;
-  const borderValue = options.borderValue || 0;
-  const interpolationType =
-    options.interpolationType || InterpolationType.NEAREST;
   if (
     transform.length !== 2 ||
     transform[0].length !== 3 ||
@@ -91,6 +92,8 @@ export function transform(
     height
   });
 
+  const interpolateBorder = getBorderInterpolation(borderType, borderValue);
+
   const interpolate = getInterpolationFunction(interpolationType);
   const hFactor = newImage.width * newImage.channels;
   for (let y = 0; y < newImage.height; y++) {
@@ -100,7 +103,7 @@ export function transform(
       const nx = transformPoint(transform[0], x, y);
       const ny = transformPoint(transform[1], x, y);
       for (let c = 0; c < newImage.channels; c++) {
-        const newValue = interpolate(image, nx, ny, c, borderType, borderValue);
+        const newValue = interpolate(image, nx, ny, c, interpolateBorder);
         newImage.data[wOffset + c] = newValue;
       }
     }
