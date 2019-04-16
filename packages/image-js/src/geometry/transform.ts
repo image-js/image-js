@@ -5,7 +5,7 @@ import { getInterpolationFunction } from '../utils/interpolatePixel';
 import { InterpolationType, BorderType } from '../types';
 import { getBorderInterpolation } from '../utils/interpolateBorder';
 
-interface ITransformOptions {
+export interface ITransformOptions {
   width?: number;
   height?: number;
   interpolationType?: InterpolationType;
@@ -23,7 +23,7 @@ export function transform(
   const {
     borderType = BorderType.CONSTANT,
     borderValue = 0,
-    interpolationType = InterpolationType.NEAREST
+    interpolationType = InterpolationType.BILINEAR
   } = options;
   let { width = image.width, height = image.height } = options;
 

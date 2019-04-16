@@ -3,7 +3,7 @@ import { InterpolationType, BorderType } from '../types';
 
 import { transform } from './transform';
 
-interface IRotateOptions {
+export interface IRotateOptions {
   center?: ImageCoordinates | [number, number];
   scale?: number;
   width?: number;
