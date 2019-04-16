@@ -1,17 +1,7 @@
-import {
-  rotate,
-  readSync,
-  BorderType,
-  InterpolationType
-  // writeSync,
-  // InterpolationType
-} from 'ijs';
-import {
-  getTestImage
-  // decodeImage
-} from 'test';
+import { rotate, readSync, BorderType, InterpolationType } from 'ijs';
+import { getTestImage } from 'test';
 
-test('rotate + scale compared to opencv', () => {
+test('rotate + scale compared to opencv (nearest)', () => {
   const expected = readSync('test/img/testRotate.png');
   const img = getTestImage();
   const rotated = rotate(img, 30, {
@@ -24,15 +14,28 @@ test('rotate + scale compared to opencv', () => {
   expect(rotated.data).toStrictEqual(expected.data);
 });
 
-// test('dummy', () => {
-//   const img = decodeImage('grayscale_by_zimmyrose.png');
-//   const rotated = rotate(img, 45, {
-//     scale: 1.5,
-//     borderType: BorderType.CONSTANT,
-//     fullImage: true,
+// test('rotate + scale compared to opencv (bilinear)', () => {
+//   const expected = readSync('test/img/testRotateBilinear.png');
+//   const img = getTestImage();
+//   const rotated = rotate(img, 30, {
+//     scale: 1.4,
+//     borderType: BorderType.REFLECT,
 //     interpolationType: InterpolationType.BILINEAR,
-//     borderValue: 255
+//     center: [2, 4]
 //   });
 
-//   writeSync('rotated.png', rotated);
+//   expect(rotated.data).toStrictEqual(expected.data);
+// });
+
+// test('rotate + scale compared to opencv (bicubic)', () => {
+//   const expected = readSync('test/img/testRotateBicubic.png');
+//   const img = getTestImage();
+//   const rotated = rotate(img, 30, {
+//     scale: 1.4,
+//     borderType: BorderType.REFLECT,
+//     interpolationType: InterpolationType.BICUBIC,
+//     center: [2, 4]
+//   });
+
+//   expect(rotated.data).toStrictEqual(expected.data);
 // });
