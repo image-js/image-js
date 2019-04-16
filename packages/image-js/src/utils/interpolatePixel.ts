@@ -2,6 +2,7 @@ import { Image } from '../Image';
 import { BorderType, InterpolationType } from '../types';
 
 import { interpolateBorder } from './interpolateBorder';
+import { round } from './round';
 
 type InterpolationFunction = (
   image: Image,
@@ -84,5 +85,5 @@ export function interpolateBilinear(
 
   const r1 = (px2 - x) * vx1y1 + (x - px1) * vx2y1;
   const r2 = (px2 - x) * vx1y2 + (x - px1) * vx2y2;
-  return (py2 - y) * r1 + (y - py1) * r2;
+  return round((py2 - y) * r1 + (y - py1) * r2);
 }
