@@ -21,12 +21,9 @@ interface IRotateOptions {
 export function rotate(
   image: Image,
   angle: number,
-  options: IRotateOptions
+  options: IRotateOptions = {}
 ): Image {
-  const center = options.center || ImageCoordinates.CENTER;
-  const scale = options.scale || 1;
-  const width = options.width;
-  const height = options.height;
+  const { center = ImageCoordinates.CENTER, scale = 1 } = options;
 
   let centerCoordinates;
   if (typeof center === 'string') {
@@ -36,14 +33,7 @@ export function rotate(
   }
   const transformMatrix = getRotationMatrix(angle, centerCoordinates, scale);
 
-  return transform(image, transformMatrix, {
-    width,
-    height,
-    borderType: options.borderType,
-    interpolationType: options.interpolationType,
-    borderValue: options.borderValue,
-    fullImage: options.fullImage
-  });
+  return transform(image, transformMatrix, options);
 }
 
 function getRotationMatrix(
