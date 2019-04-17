@@ -53,24 +53,24 @@ function interpolateBilinear(
   channel: number,
   interpolateBorder: BorderInterpolationFunction
 ): number {
-  const px1 = Math.floor(x);
-  const py1 = Math.floor(y);
+  const px0 = Math.floor(x);
+  const py0 = Math.floor(y);
 
-  if (px1 === x && py1 === y) {
-    return interpolateBorder(px1, py1, channel, image);
+  if (px0 === x && py0 === y) {
+    return interpolateBorder(px0, py0, channel, image);
   }
 
-  const px2 = px1 + 1;
-  const py2 = py1 + 1;
+  const px1 = px0 + 1;
+  const py1 = py0 + 1;
 
+  const vx0y0 = interpolateBorder(px0, py0, channel, image);
+  const vx1y0 = interpolateBorder(px1, py0, channel, image);
+  const vx0y1 = interpolateBorder(px0, py1, channel, image);
   const vx1y1 = interpolateBorder(px1, py1, channel, image);
-  const vx1y2 = interpolateBorder(px1, py2, channel, image);
-  const vx2y1 = interpolateBorder(px2, py1, channel, image);
-  const vx2y2 = interpolateBorder(px2, py2, channel, image);
 
-  const r1 = (px2 - x) * vx1y1 + (x - px1) * vx2y1;
-  const r2 = (px2 - x) * vx1y2 + (x - px1) * vx2y2;
-  return round((py2 - y) * r1 + (y - py1) * r2);
+  const r1 = (px1 - x) * vx0y0 + (x - px0) * vx1y0;
+  const r2 = (px1 - x) * vx0y1 + (x - px0) * vx1y1;
+  return round((py1 - y) * r1 + (y - py0) * r2);
 }
 
 function interpolateBicubic(
