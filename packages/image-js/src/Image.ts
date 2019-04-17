@@ -292,6 +292,17 @@ export class Image {
     this.data[(y * this.width + x) * this.channels + channel] = value;
   }
 
+  public [Symbol.for('nodejs.util.inspect.custom')](): string {
+    return `Image {
+  width: ${this.width}
+  height: ${this.height}
+  depth: ${this.depth}
+  kind: ${this.kind}
+  channels: ${this.channels}
+  data: ${printData(this)}
+}`;
+  }
+
   /**
    * Fill the image with a value or a color
    */
@@ -492,4 +503,27 @@ function createPixelArray(
   }
 
   return arr;
+}
+
+function printData(img: Image): string {
+  const channels = [];
+  for (let c = 0; c < img.channels; c++) {
+    channels.push(`[${printChannel(img, c)}]`);
+  }
+  return `{
+    ${channels.join('\n\n    ')}
+  }`;
+}
+
+function printChannel(img: Image, c: number): string {
+  const result = [];
+  const padding = img.depth === 8 ? 3 : 5;
+  for (let i = 0; i < img.height; i++) {
+    const line = [];
+    for (let j = 0; j < img.width; j++) {
+      line.push(String(img.getValue(i, j, c)).padStart(padding, ' '));
+    }
+    result.push(`[${line.join(' ')}]`);
+  }
+  return result.join('\n     ');
 }
