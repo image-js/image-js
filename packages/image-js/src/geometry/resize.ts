@@ -1,7 +1,8 @@
 import { Image } from '../Image';
-import { InterpolationType } from '../types';
-
-import { transform } from './transform';
+import { InterpolationType, BorderType } from '../types';
+import { getInterpolationFunction } from '../utils/interpolatePixel';
+import { getBorderInterpolation } from '../utils/interpolateBorder';
+import { getClamp } from '../utils/clamp';
 
 export interface IResizeOptions {
   width?: number;
@@ -10,16 +11,44 @@ export interface IResizeOptions {
   yFactor?: number;
   preserveAspectRatio?: boolean;
   interpolationType?: InterpolationType;
+  borderType?: BorderType;
+  borderValue?: number;
 }
 
 export function resize(image: Image, options: IResizeOptions): Image {
-  const { width, height, xFactor, yFactor } = checkOptions(image, options);
-  const transformation = [[xFactor, 0, 0], [0, yFactor, 0]];
-  return transform(image, transformation, {
-    width,
-    height,
-    interpolationType: options.interpolationType
-  });
+  const {
+    interpolationType = InterpolationType.BILINEAR,
+    borderType = BorderType.CONSTANT,
+    borderValue = 0
+  } = options;
+  const { width, height } = checkOptions(image, options);
+  const newImage = Image.createFrom(image, { width, height });
+  const interpolate = getInterpolationFunction(interpolationType);
+  const interpolateBorder = getBorderInterpolation(borderType, borderValue);
+  const clamp = getClamp(newImage);
+  const hFactor = newImage.width * newImage.channels;
+  const intervalX = (image.width - 1) / (width - 1);
+  const intervalY = (image.height - 1) / (height - 1);
+  for (let y = 0; y < newImage.height; y++) {
+    const hOffset = hFactor * y;
+    for (let x = 0; x < newImage.width; x++) {
+      const wOffset = hOffset + x * image.channels;
+      const nx = x * intervalX;
+      const ny = y * intervalY;
+      for (let c = 0; c < newImage.channels; c++) {
+        const newValue = interpolate(
+          image,
+          nx,
+          ny,
+          c,
+          interpolateBorder,
+          clamp
+        );
+        newImage.data[wOffset + c] = newValue;
+      }
+    }
+  }
+  return newImage;
 }
 
 function checkOptions(
