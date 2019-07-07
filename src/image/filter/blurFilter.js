@@ -18,12 +18,8 @@ export default function blurFilter(options = {}) {
   for (let i = 0; i < n; i++) {
     kernel[i] = new Array(n);
     for (let j = 0; j < n; j++) {
-      kernel[i][j] = 1;
+      kernel[i][j] = 1 / (n * n);
     }
-  }
-
-  for (let i = 0; i < kernel.length; i++) {
-    kernel[i] = 1;
   }
 
   return this.convolution(kernel);
