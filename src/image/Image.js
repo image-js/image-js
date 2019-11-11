@@ -209,11 +209,24 @@ export default class Image {
     const maxValue = bitDepth === 32 ? Number.MAX_VALUE : 2 ** bitDepth - 1;
 
     if (data === undefined) {
-      data = createPixelArray(size, components, alpha, channels, bitDepth, maxValue);
+      data = createPixelArray(
+        size,
+        components,
+        alpha,
+        channels,
+        bitDepth,
+        maxValue
+      );
     } else {
-      const expectedLength = getTheoreticalPixelArraySize(size, channels, bitDepth);
+      const expectedLength = getTheoreticalPixelArraySize(
+        size,
+        channels,
+        bitDepth
+      );
       if (data.length !== expectedLength) {
-        throw new RangeError(`incorrect data size: ${data.length}. Should be ${expectedLength}`);
+        throw new RangeError(
+          `incorrect data size: ${data.length}. Should be ${expectedLength}`
+        );
       }
     }
 
@@ -330,10 +343,14 @@ export default class Image {
    */
   static createFrom(other, options) {
     const newOptions = getImageParameters(other);
-    Object.assign(newOptions, {
-      parent: other,
-      position: [0, 0]
-    }, options);
+    Object.assign(
+      newOptions,
+      {
+        parent: other,
+        position: [0, 0]
+      },
+      options
+    );
     return new Image(newOptions);
   }
 

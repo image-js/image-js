@@ -32,8 +32,9 @@ export default function convolution(kernel, options = {}) {
     border = 'copy',
     algorithm = 'auto'
   } = options;
-
-  let newImage = Image.createFrom(this, { bitDepth });
+  let createOptions = {};
+  if (bitDepth) createOptions.bitDepth = bitDepth;
+  let newImage = Image.createFrom(this, createOptions);
 
   channels = validateArrayOfChannels(this, channels, true);
 
@@ -123,7 +124,10 @@ export default function convolution(kernel, options = {}) {
       for (x = 0; x < this.width; x++) {
         index = y * this.width + x;
         if (clamped) {
-          newImage.data[index * this.channels + c] = clamp(tmpResult[index], newImage);
+          newImage.data[index * this.channels + c] = clamp(
+            tmpResult[index],
+            newImage
+          );
         } else {
           newImage.data[index * this.channels + c] = tmpResult[index];
         }
