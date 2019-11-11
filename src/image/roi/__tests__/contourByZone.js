@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-
 import { asc as sortAsc } from 'num-sort';
 
 describe('Get the number of pixels touching the adjacent zones', function () {

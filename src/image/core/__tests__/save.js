@@ -1,4 +1,5 @@
 import fs from 'fs';
+
 import { Image, load, refreshTmpDir, tmpDir, getSquare, get1BitSquare } from 'test/common';
 
 describe('save to disk', () => {

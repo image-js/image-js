@@ -1,5 +1,4 @@
 import { Image, load } from 'test/common';
-
 import { createCanvas } from 'canvas';
 
 test('constructor defaults', () => {

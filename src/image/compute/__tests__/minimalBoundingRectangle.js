@@ -1,6 +1,5 @@
 import { Image } from 'test/common';
 import binary from 'test/binary';
-
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
 import { angle } from '../../../util/points';

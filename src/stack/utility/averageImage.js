@@ -5,8 +5,8 @@ import Image from '../../image/Image';
  * @instance
  * @return {Image}
  */
-export default function average() {
-  this.checkProcessable('average', {
+export default function averageImage() {
+  this.checkProcessable('averageImage', {
     bitDepth: [8, 16]
   });
 

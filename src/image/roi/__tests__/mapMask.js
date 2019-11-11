@@ -1,5 +1,4 @@
 import { Image } from 'test/common';
-
 import { desc as sortDesc } from 'num-sort';
 
 describe('map a binary image (mask) 2 x 2', function () {

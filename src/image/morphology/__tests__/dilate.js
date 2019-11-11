@@ -1,6 +1,5 @@
 import binary from 'test/binary';
 import { Image } from 'test/common';
-
 import Matrix from 'ml-matrix';
 
 describe('check the dilate function', function () {

@@ -1,5 +1,6 @@
-import { Image, load, getImage } from 'test/common';
 import * as fs from 'fs';
+
+import { Image, load, getImage } from 'test/common';
 
 describe('Load PNG', function () {
   const tests = [

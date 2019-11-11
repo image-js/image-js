@@ -1,5 +1,6 @@
-import { Image, load, getImage } from 'test/common';
 import { readFileSync } from 'fs';
+
+import { Image, load, getImage } from 'test/common';
 
 describe('Load JPEG', function () {
   const tests = [

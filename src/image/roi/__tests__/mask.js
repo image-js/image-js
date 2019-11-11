@@ -1,5 +1,4 @@
 import { Image, load } from 'test/common';
-
 import { asc as sortAsc } from 'num-sort';
 
 describe('we check mask', function () {

@@ -1,6 +1,5 @@
 import { Image } from 'test/common';
 import binary from 'test/binary';
-
 import Matrix from 'ml-matrix';
 
 
