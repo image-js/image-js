@@ -2,7 +2,7 @@ import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import json from 'rollup-plugin-json';
 import resolve from 'rollup-plugin-node-resolve';
-import terser from 'rollup-plugin-terser';
+import { terser } from 'rollup-plugin-terser';
 
 function getBaseConfig() {
   return {
@@ -11,7 +11,8 @@ function getBaseConfig() {
       exports: 'named',
       file: 'dist/image.js',
       format: 'umd',
-      name: 'IJS'
+      name: 'IJS',
+      sourcemap: true
     },
     plugins: [
       babel(),
