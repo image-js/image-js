@@ -59,9 +59,10 @@
   },
   "jest": {
     "testEnvironment": "node",
-      "testPathIgnorePatterns" : [
-        "<rootDir>/lib/" 
-      ]
+    "testPathIgnorePatterns": [
+      "<rootDir>/lib/",
+      "<rootDir>/node_modules/"
+    ]
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
