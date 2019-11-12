@@ -1,15 +1,15 @@
-import { decode as decodePng } from 'fast-png';
-import { decode as decodeJpegExif } from 'fast-jpeg';
-import { decode as decodeJpeg } from 'jpeg-js';
-import { decode as decodeTiff } from 'tiff';
-import imageType from 'image-type';
+import { decode as decodePng } from "fast-png";
+import { decode as decodeJpegExif } from "fast-jpeg";
+import { decode as decodeJpeg } from "jpeg-js";
+import { decode as decodeTiff } from "tiff";
+import imageType from "image-type";
 
-import Image from '../Image';
-import Stack from '../../stack/Stack';
-import { decode as base64Decode, toBase64URL } from '../../util/base64';
-import { GREY } from '../model/model';
+import Image from "../Image";
+import Stack from "../../stack/Stack";
+import { decode as base64Decode, toBase64URL } from "../../util/base64";
+import { GREY } from "../model/model";
 
-import { fetchBinary, DOMImage, createCanvas } from './environment';
+import { fetchBinary, DOMImage, createCanvas } from "./environment";
 
 const isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
 
@@ -25,7 +25,7 @@ const isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
  * const image = await Image.load('https://example.com/image.png');
  */
 export default function load(image, options) {
-  if (typeof image === 'string') {
+  if (typeof image === "string") {
     return loadURL(image, options);
   } else if (image instanceof ArrayBuffer) {
     return Promise.resolve(loadBinary(new Uint8Array(image)));
@@ -40,17 +40,17 @@ function loadBinary(image, base64Url) {
   const type = imageType(image);
   if (type) {
     switch (type.mime) {
-      case 'image/png':
+      case "image/png":
         return loadPNG(image);
-      case 'image/jpeg':
+      case "image/jpeg":
         return loadJPEG(image);
-      case 'image/tiff':
+      case "image/tiff":
         return loadTIFF(image);
       default:
         return loadGeneric(getBase64(type.mime));
     }
   }
-  return loadGeneric(getBase64('application/octet-stream'));
+  return loadGeneric(getBase64("application/octet-stream"));
   function getBase64(type) {
     if (base64Url) {
       return base64Url;
@@ -68,7 +68,7 @@ function loadURL(url, options) {
   } else {
     binaryDataP = fetchBinary(url, options);
   }
-  return binaryDataP.then((binaryData) => {
+  return binaryDataP.then(binaryData => {
     const uint8 = new Uint8Array(binaryData);
     return loadBinary(uint8, dataURL ? url : undefined);
   });
@@ -76,50 +76,41 @@ function loadURL(url, options) {
 
 function loadPNG(data) {
   const png = decodePng(data);
-
+  let channels = png.channels;
   let components;
   let alpha = 0;
-  switch (png.colourType) {
-    case 0:
-      components = 1;
-      break;
-    case 2:
-      components = 3;
-      break;
-    case 3:
-      return loadPNGFromPalette(png);
-    case 4:
-      components = 1;
-      alpha = 1;
-      break;
-    case 6:
-      components = 3;
-      alpha = 1;
-      break;
-    default:
-      throw new Error(`Unexpected colourType: ${png.colourType}`);
+  if (channels === 2 || channels === 4) {
+    components = channels - 1;
+    alpha = 1;
+  } else {
+    components = channels;
+  }
+  if (png.palette) {
+    return loadPNGFromPalette(png);
   }
 
   return new Image(png.width, png.height, png.data, {
     components,
     alpha,
-    bitDepth: png.bitDepth
+    bitDepth: png.depth
   });
 }
 
 function loadPNGFromPalette(png) {
   const pixels = png.width * png.height;
   const data = new Uint8Array(pixels * 3);
-  const pixelsPerByte = 8 / png.bitDepth;
-  const factor = png.bitDepth < 8 ? pixelsPerByte : 1;
-  const mask = parseInt('1'.repeat(png.bitDepth), 2);
+  const pixelsPerByte = 8 / png.depth;
+  const factor = png.depth < 8 ? pixelsPerByte : 1;
+  const mask = parseInt("1".repeat(png.depth), 2);
   let dataIndex = 0;
 
   for (let i = 0; i < pixels; i++) {
     const index = Math.floor(i / factor);
     let value = png.data[index];
-    if (png.bitDepth < 8) {
-      value = (value >>> (png.bitDepth * (pixelsPerByte - 1 - (i % pixelsPerByte)))) & mask;
+    if (png.depth < 8) {
+      value =
+        (value >>> (png.depth * (pixelsPerByte - 1 - (i % pixelsPerByte)))) &
+        mask;
     }
     const paletteValue = png.palette[value];
     data[dataIndex++] = paletteValue[0];
@@ -180,18 +171,18 @@ function getImageFromIFD(image) {
 
 function loadGeneric(url, options) {
   options = options || {};
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     let image = new DOMImage();
-    image.onload = function () {
+    image.onload = function() {
       let w = image.width;
       let h = image.height;
       let canvas = createCanvas(w, h);
-      let ctx = canvas.getContext('2d');
+      let ctx = canvas.getContext("2d");
       ctx.drawImage(image, 0, 0, w, h);
       let data = ctx.getImageData(0, 0, w, h).data;
       resolve(new Image(w, h, data, options));
     };
-    image.onerror = function () {
+    image.onerror = function() {
       reject(new Error(`Could not load ${url}`));
     };
     image.src = url;

@@ -1,12 +1,17 @@
-import { canvasToBlob } from 'blob-util';
-import { encode as encodeBmp } from 'fast-bmp';
-import { encode as realEncodePng } from 'fast-png';
-import { encode as realEncodeJpeg } from 'jpeg-js';
+import { canvasToBlob } from "blob-util";
+import { encode as encodeBmp } from "fast-bmp";
+import { encode as realEncodePng } from "fast-png";
+import { encode as realEncodeJpeg } from "jpeg-js";
 
-import { toBase64URL } from '../../util/base64';
+import { toBase64URL } from "../../util/base64";
 
-import { ImageData, createCanvas, createWriteStream, writeFile } from './environment';
-import { getType } from './mediaTypes';
+import {
+  ImageData,
+  createCanvas,
+  createWriteStream,
+  writeFile
+} from "./environment";
+import { getType } from "./mediaTypes";
 
 function encodeJpeg(image, options = {}) {
   const data = {
@@ -21,16 +26,14 @@ function encodePng(image, options) {
   const data = {
     width: image.width,
     height: image.height,
-    components: image.components,
-    alpha: image.alpha,
-    bitDepth: image.bitDepth,
+    channels: image.channels,
+    depth: image.bitDepth,
     data: image.data
   };
 
-  if (data.bitDepth === 1 || data.bitDepth === 32) {
-    data.bitDepth = 8;
-    data.components = 3;
-    data.alpha = 1;
+  if (data.depth === 1 || data.depth === 32) {
+    data.depth = 8;
+    data.channels = 4;
     data.data = image.getRGBAData();
   }
 
@@ -50,10 +53,7 @@ const exportMethods = {
    * @return {Promise} - Resolves when the file is fully written
    */
   save(path, options = {}) {
-    const {
-      useCanvas = false,
-      encoder: encoderOptions = undefined
-    } = options;
+    const { useCanvas = false, encoder: encoderOptions = undefined } = options;
 
     let { format } = options;
     if (!format) {
@@ -64,12 +64,12 @@ const exportMethods = {
       }
     }
     if (!format) {
-      throw new Error('file format not provided');
+      throw new Error("file format not provided");
     }
     return new Promise((resolve, reject) => {
       let stream, buffer;
       switch (format.toLowerCase()) {
-        case 'png': {
+        case "png": {
           if (useCanvas) {
             stream = this.getCanvas().pngStream();
           } else {
@@ -77,15 +77,15 @@ const exportMethods = {
           }
           break;
         }
-        case 'jpg':
-        case 'jpeg':
+        case "jpg":
+        case "jpeg":
           if (useCanvas) {
             stream = this.getCanvas().jpegStream();
           } else {
             buffer = encodeJpeg(this, encoderOptions);
           }
           break;
-        case 'bmp':
+        case "bmp":
           buffer = encodeBmp(this, encoderOptions);
           break;
         default:
@@ -93,11 +93,11 @@ const exportMethods = {
       }
       if (stream) {
         let out = createWriteStream(path);
-        out.on('finish', resolve);
-        out.on('error', reject);
+        out.on("finish", resolve);
+        out.on("error", reject);
         stream.pipe(out);
       } else if (buffer) {
-        writeFile(path, buffer, (err) => {
+        writeFile(path, buffer, err => {
           if (err) {
             reject(err);
             return;
@@ -118,25 +118,22 @@ const exportMethods = {
    * @param {object} [options.encoder] - Specify options for the encoder if applicable.
    * @return {string|Promise<string>}
    */
-  toDataURL(type = 'image/png', options = {}) {
-    if (typeof type === 'object') {
+  toDataURL(type = "image/png", options = {}) {
+    if (typeof type === "object") {
       options = type;
-      type = 'image/png';
+      type = "image/png";
     }
-    const {
-      useCanvas = false,
-      encoder: encoderOptions = undefined
-    } = options;
+    const { useCanvas = false, encoder: encoderOptions = undefined } = options;
     type = getType(type);
     function dataUrl(encoder, ctx) {
       const u8 = encoder(ctx, encoderOptions);
       return toBase64URL(u8, type);
     }
-    if (type === 'image/bmp') {
+    if (type === "image/bmp") {
       return dataUrl(encodeBmp, this);
-    } else if (type === 'image/png' && !useCanvas) {
+    } else if (type === "image/png" && !useCanvas) {
       return dataUrl(encodePng, this);
-    } else if (type === 'image/jpeg' && !useCanvas) {
+    } else if (type === "image/jpeg" && !useCanvas) {
       return dataUrl(encodeJpeg, this);
     } else {
       return this.getCanvas().toDataURL(type);
@@ -153,17 +150,14 @@ const exportMethods = {
    * @return {Uint8Array}
    */
   toBuffer(options = {}) {
-    const {
-      format = 'png',
-      encoder: encoderOptions = undefined
-    } = options;
+    const { format = "png", encoder: encoderOptions = undefined } = options;
     switch (format.toLowerCase()) {
-      case 'png':
+      case "png":
         return encodePng(this, encoderOptions);
-      case 'jpeg':
-      case 'jpg':
+      case "jpeg":
+      case "jpg":
         return encodeJpeg(this, encoderOptions);
-      case 'bmp':
+      case "bmp":
         return encodeBmp(this, encoderOptions);
       default:
         throw new RangeError(`invalid output format: ${format}`);
@@ -178,14 +172,14 @@ const exportMethods = {
    * @param {object} [options] - Same options as toDataURL
    * @return {string|Promise<string>}
    */
-  toBase64(type = 'image/png', options = {}) {
+  toBase64(type = "image/png", options = {}) {
     if (options.async) {
-      return this.toDataURL(type, options).then(function (dataURL) {
-        return dataURL.substring(dataURL.indexOf(',') + 1);
+      return this.toDataURL(type, options).then(function(dataURL) {
+        return dataURL.substring(dataURL.indexOf(",") + 1);
       });
     } else {
       const dataURL = this.toDataURL(type, options);
-      return dataURL.substring(dataURL.indexOf(',') + 1);
+      return dataURL.substring(dataURL.indexOf(",") + 1);
     }
   },
 
@@ -198,7 +192,7 @@ const exportMethods = {
    * @param {string} [quality=0.8] A Number between 0 and 1 indicating image quality if the requested type is image/jpeg or image/webp. If this argument is anything else, the default value for image quality is used. Other arguments are ignored.
    * @return {Promise}
    */
-  toBlob(type = 'image/png', quality = 0.8) {
+  toBlob(type = "image/png", quality = 0.8) {
     return canvasToBlob(this.getCanvas(), type, quality);
   },
 
@@ -209,9 +203,13 @@ const exportMethods = {
    * @return {Canvas}
    */
   getCanvas() {
-    const data = new ImageData(this.getRGBAData({ clamped: true }), this.width, this.height);
+    const data = new ImageData(
+      this.getRGBAData({ clamped: true }),
+      this.width,
+      this.height
+    );
     let canvas = createCanvas(this.width, this.height);
-    let ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext("2d");
     ctx.putImageData(data, 0, 0);
     return canvas;
   }
