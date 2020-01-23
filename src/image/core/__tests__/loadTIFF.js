@@ -1,10 +1,11 @@
 import { load } from 'test/common';
 
-describe('Load TIFF', function () {
+describe('Load TIFF', function() {
   const tests = [
     // ['name', components, alpha, bitDepth]
     ['grey8', 1, 0, 8],
-    ['grey16', 1, 0, 16]
+    ['grey16', 1, 0, 16],
+    ['palette', 3, 0, 16],
   ];
 
   it.each(tests)('%s', async (name, components, alpha, bitDepth) => {
@@ -14,7 +15,7 @@ describe('Load TIFF', function () {
     expect(img.bitDepth).toBe(bitDepth);
     expect(img.meta).toMatchObject({
       tiff: expect.any(Object),
-      exif: expect.any(Object)
+      exif: expect.any(Object),
     });
   });
 });

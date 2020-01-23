@@ -7,7 +7,7 @@ import imageType from 'image-type';
 import Image from '../Image';
 import Stack from '../../stack/Stack';
 import { decode as base64Decode, toBase64URL } from '../../util/base64';
-import { GREY } from '../model/model';
+import { GREY, RGB } from '../model/model';
 
 import { fetchBinary, DOMImage, createCanvas } from './environment';
 
@@ -92,7 +92,7 @@ function loadPNG(data) {
   return new Image(png.width, png.height, png.data, {
     components,
     alpha,
-    bitDepth: png.depth
+    bitDepth: png.depth,
   });
 }
 
@@ -121,7 +121,7 @@ function loadPNGFromPalette(png) {
   return new Image(png.width, png.height, data, {
     components: 3,
     alpha: false,
-    bitDepth: 8
+    bitDepth: 8,
   });
 }
 
@@ -146,7 +146,7 @@ function loadTIFF(data) {
 
 function getMetadata(image) {
   const metadata = {
-    tiff: image
+    tiff: image,
   };
   if (image.exif) {
     metadata.exif = image.exif;
@@ -158,22 +158,43 @@ function getMetadata(image) {
 }
 
 function getImageFromIFD(image) {
-  return new Image(image.width, image.height, image.data, {
-    components: 1,
-    alpha: 0,
-    colorModel: GREY,
-    bitDepth: image.bitsPerSample.length
-      ? image.bitsPerSample[0]
-      : image.bitsPerSample,
-    meta: getMetadata(image)
-  });
+  if (image.type === 3) {
+    // Palette
+    const data = new Uint16Array(3 * image.width * image.height);
+    const palette = image.palette;
+    let ptr = 0;
+    for (let i = 0; i < image.data.length; i++) {
+      const index = image.data[i];
+      const color = palette[index];
+      data[ptr++] = color[0];
+      data[ptr++] = color[1];
+      data[ptr++] = color[2];
+    }
+    return new Image(image.width, image.height, data, {
+      components: 3,
+      alpha: 0,
+      colorModel: RGB,
+      bitDepth: 16,
+      meta: getMetadata(image),
+    });
+  } else {
+    return new Image(image.width, image.height, image.data, {
+      components: 1,
+      alpha: 0,
+      colorModel: GREY,
+      bitDepth: image.bitsPerSample.length
+        ? image.bitsPerSample[0]
+        : image.bitsPerSample,
+      meta: getMetadata(image),
+    });
+  }
 }
 
 function loadGeneric(url, options) {
   options = options || {};
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     let image = new DOMImage();
-    image.onload = function () {
+    image.onload = function() {
       let w = image.width;
       let h = image.height;
       let canvas = createCanvas(w, h);
@@ -182,7 +203,7 @@ function loadGeneric(url, options) {
       let data = ctx.getImageData(0, 0, w, h).data;
       resolve(new Image(w, h, data, options));
     };
-    image.onerror = function () {
+    image.onerror = function() {
       reject(new Error(`Could not load ${url}`));
     };
     image.src = url;
