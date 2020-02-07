@@ -1,6 +1,6 @@
 {
   "name": "@image-js/roi",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "Work with regions of interest (ROI) of images",
   "license": "MIT",
   "main": "lib/index.js",
@@ -25,7 +25,7 @@
     "src"
   ],
   "devDependencies": {
-    "image-js": "^1.0.0-alpha.2"
+    "image-js": "^1.0.0-alpha.3"
   },
   "peerDependencies": {
     "image-js": "^1.0.0-alpha.2"
