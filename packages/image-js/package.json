@@ -20,10 +20,9 @@
     "src"
   ],
   "dependencies": {
-    "@types/jpeg-js": "^0.3.0",
-    "fast-png": "^4.0.1",
-    "jpeg-js": "^0.3.5",
+    "fast-png": "^5.0.1",
+    "jpeg-js": "^0.3.6",
     "ml-convolution": "^2.0.0",
-    "ml-matrix": "^6.0.0"
+    "ml-matrix": "^6.4.1"
   }
 }

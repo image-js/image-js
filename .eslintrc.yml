@@ -1,4 +1,10 @@
 extends: cheminfo-typescript
+parserOptions:
+  project:
+    - tsconfig.jest.json
+    - test/tsconfig.json
+    - packages/image-js/tsconfig.json
+    - packages/roi/tsconfig.json
 rules:
   no-useless-constructor: off
   no-dupe-class-members: off

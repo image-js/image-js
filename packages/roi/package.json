@@ -28,6 +28,6 @@
     "image-js": "^1.0.0-alpha.2"
   },
   "peerDependencies": {
-    "image-js": "0.0.0"
+    "image-js": "^1.0.0-alpha.2"
   }
 }
