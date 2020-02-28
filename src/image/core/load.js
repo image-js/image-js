@@ -98,10 +98,12 @@ function loadPNG(data) {
 
 function loadPNGFromPalette(png) {
   const pixels = png.width * png.height;
-  const data = new Uint8Array(pixels * 3);
+  const channels = png.palette[0].length;
+  const data = new Uint8Array(pixels * channels);
   const pixelsPerByte = 8 / png.depth;
   const factor = png.depth < 8 ? pixelsPerByte : 1;
   const mask = parseInt('1'.repeat(png.depth), 2);
+  const hasAlpha = channels === 4;
   let dataIndex = 0;
 
   for (let i = 0; i < pixels; i++) {
@@ -116,11 +118,14 @@ function loadPNGFromPalette(png) {
     data[dataIndex++] = paletteValue[0];
     data[dataIndex++] = paletteValue[1];
     data[dataIndex++] = paletteValue[2];
+    if (hasAlpha) {
+      data[dataIndex++] = paletteValue[3];
+    }
   }
 
   return new Image(png.width, png.height, data, {
     components: 3,
-    alpha: false,
+    alpha: hasAlpha,
     bitDepth: 8,
   });
 }
