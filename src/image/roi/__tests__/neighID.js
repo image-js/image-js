@@ -1,7 +1,7 @@
-import { asc as sortAsc } from 'num-sort';
-import { Image } from 'test/common';
+import { ascending as sortAsc } from "num-sort";
+import { Image } from "test/common";
 
-describe('Get the ids of neighbour touching the Roi', function () {
+describe("Get the ids of neighbour touching the Roi", function () {
   let map = [
     0,
     0,
@@ -45,7 +45,7 @@ describe('Get the ids of neighbour touching the Roi', function () {
 
   let roiManager = img.getRoiManager();
   roiManager.putMap(map);
-  it('IDs of neighbour', function () {
+  it("IDs of neighbour", function () {
     let result = roiManager.getRois();
     expect(result[0].borderIDs.sort(sortAsc)).toStrictEqual([0, 2, 3]);
     expect(result[1].borderIDs).toStrictEqual([1, 3]);

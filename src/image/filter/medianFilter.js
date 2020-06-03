@@ -1,7 +1,7 @@
-import { asc as sortAsc } from 'num-sort';
+import { ascending as sortAsc } from "num-sort";
 
-import { validateArrayOfChannels } from '../../util/channel';
-import Image from '../Image';
+import { validateArrayOfChannels } from "../../util/channel";
+import Image from "../Image";
 
 /**
  * Each pixel of the image becomes the median of the neighbor pixels.
@@ -14,14 +14,14 @@ import Image from '../Image';
  * @return {Image}
  */
 export default function medianFilter(options = {}) {
-  let { radius = 1, border = 'copy', channels } = options;
+  let { radius = 1, border = "copy", channels } = options;
 
-  this.checkProcessable('medianFilter', {
+  this.checkProcessable("medianFilter", {
     bitDepth: [8, 16],
   });
 
   if (radius < 1) {
-    throw new Error('radius must be greater than 0');
+    throw new Error("radius must be greater than 0");
   }
 
   channels = validateArrayOfChannels(this, channels, true);

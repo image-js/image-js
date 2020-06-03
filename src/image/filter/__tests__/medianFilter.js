@@ -1,7 +1,7 @@
-import { Image } from 'test/common';
+import { Image } from "test/common";
 
-describe('check the median filter', function () {
-  it('check for GREY image', function () {
+describe("check the median filter", function () {
+  it("check for GREY image", function () {
     let image = new Image(
       5,
       5,
@@ -32,7 +32,7 @@ describe('check the median filter', function () {
         4,
         5,
       ],
-      { kind: 'GREY' },
+      { kind: "GREY" }
     );
 
     expect(Array.from(image.medianFilter().data)).toStrictEqual([
@@ -64,7 +64,7 @@ describe('check the median filter', function () {
     ]);
   });
 
-  it('check for GREY image with large values', function () {
+  it("check for GREY image with large values", function () {
     let image = new Image(
       5,
       5,
@@ -95,7 +95,7 @@ describe('check the median filter', function () {
         4,
         5,
       ],
-      { kind: 'GREY' },
+      { kind: "GREY" }
     );
 
     expect(Array.from(image.medianFilter({ radius: 1 }).data)).toStrictEqual([
