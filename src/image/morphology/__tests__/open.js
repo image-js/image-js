@@ -1,13 +1,12 @@
-import Matrix from 'ml-matrix';
-import { Image } from 'test/common';
+import { Image } from "test/common";
 
-describe('check the open function', function () {
-  it('check for GREY image 5x5', function () {
-    let kernel = new Matrix([
+describe("check the open function", function () {
+  it("check for GREY image 5x5", function () {
+    let kernel = [
       [1, 1, 1],
       [1, 1, 1],
       [1, 1, 1],
-    ]);
+    ];
     let image = new Image(
       5,
       5,
@@ -38,7 +37,7 @@ describe('check the open function', function () {
         255,
         255,
       ],
-      { kind: 'GREY' },
+      { kind: "GREY" }
     );
 
     expect(Array.from(image.open({ kernel }).data)).toStrictEqual([
@@ -70,12 +69,12 @@ describe('check the open function', function () {
     ]);
   });
 
-  it('check for GREY image 5x5 2 iterations', function () {
-    let kernel = new Matrix([
+  it("check for GREY image 5x5 2 iterations", function () {
+    let kernel = [
       [1, 1, 1],
       [1, 1, 1],
       [1, 1, 1],
-    ]);
+    ];
     let image = new Image(
       5,
       5,
@@ -106,11 +105,11 @@ describe('check the open function', function () {
         255,
         255,
       ],
-      { kind: 'GREY' },
+      { kind: "GREY" }
     );
 
     expect(
-      Array.from(image.open({ kernel, iterations: 2 }).data),
+      Array.from(image.open({ kernel, iterations: 2 }).data)
     ).toStrictEqual([
       255,
       255,
