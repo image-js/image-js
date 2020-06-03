@@ -1,5 +1,5 @@
-import Image from '../../Image';
 import { factorDimensions } from '../../../util/converter';
+import Image from '../../Image';
 import { validInterpolations, checkInterpolation } from '../../internal/checks';
 
 import nearestNeighbor from './nearestNeighbor';
@@ -20,7 +20,7 @@ export default function resize(options = {}) {
   const {
     factor = 1,
     interpolation = validInterpolations.nearestneighbor,
-    preserveAspectRatio = true
+    preserveAspectRatio = true,
   } = options;
 
   const interpolationToUse = checkInterpolation(interpolation);
@@ -53,14 +53,20 @@ export default function resize(options = {}) {
 
   let shiftX = Math.round((this.width - width) / 2);
   let shiftY = Math.round((this.height - height) / 2);
-  const newImage = Image.createFrom(this, { width, height, position: [shiftX, shiftY] });
+  const newImage = Image.createFrom(this, {
+    width,
+    height,
+    position: [shiftX, shiftY],
+  });
 
   switch (interpolationToUse) {
     case validInterpolations.nearestneighbor:
       nearestNeighbor.call(this, newImage, width, height);
       break;
     default:
-      throw new Error(`unsupported resize interpolation: ${interpolationToUse}`);
+      throw new Error(
+        `unsupported resize interpolation: ${interpolationToUse}`,
+      );
   }
 
   return newImage;

@@ -9,17 +9,38 @@ describe('we check paintPoints', function () {
     }
     let image = new Image(size, size, data, { kind: 'RGB' });
 
-
-    let points = [[1, 1], [3, 2]];
+    let points = [
+      [1, 1],
+      [3, 2],
+    ];
     image.paintPoints(points, { color: 'red', shape: { kind: 'smallCross' } });
 
-
     let marked = [
-      0, 1, 0, 0, 0,
-      1, 1, 1, 1, 0,
-      0, 1, 1, 1, 1,
-      0, 0, 0, 1, 0,
-      0, 0, 0, 0, 0
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
     ];
 
     let result = new Array(size * size * 3);
@@ -37,4 +58,3 @@ describe('we check paintPoints', function () {
     expect(Array.from(image.data)).toStrictEqual(result);
   });
 });
-

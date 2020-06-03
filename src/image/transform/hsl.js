@@ -1,8 +1,8 @@
 // http://www.easyrgb.com/index.php?X=MATH&H=18#text18
 // check rgbToHsl : https://bgrins.github.io/TinyColor/docs/tinycolor.html
 
-import { RGB, HSL } from '../model/model';
 import Image from '../Image';
+import { RGB, HSL } from '../model/model';
 
 /**
  * Make a copy of the current image and convert the color model to HSL
@@ -19,11 +19,11 @@ export default function hsl() {
   this.checkProcessable('hsl', {
     bitDepth: [8, 16],
     alpha: [0, 1],
-    colorModel: [RGB]
+    colorModel: [RGB],
   });
 
   let newImage = Image.createFrom(this, {
-    colorModel: HSL
+    colorModel: HSL,
   });
 
   let threshold = Math.floor(this.maxValue / 2);
@@ -41,7 +41,8 @@ export default function hsl() {
     let luminance = (max + min) / 2;
     if (max !== min) {
       let delta = max - min;
-      saturation = luminance > threshold ? delta / (2 - max - min) : delta / (max + min);
+      saturation =
+        luminance > threshold ? delta / (2 - max - min) : delta / (max + min);
       switch (max) {
         case red:
           hue = (green - blue) / delta + (green < blue ? 6 : 0);

@@ -17,6 +17,6 @@ test('stack getMinImage', function () {
     5,
     6,
     7,
-    8
+    8,
   ]);
 });

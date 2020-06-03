@@ -6,7 +6,7 @@
  */
 export default function flipX() {
   this.checkProcessable('flipX', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   for (let i = 0; i < this.height; i++) {

@@ -1,12 +1,12 @@
-import { Image } from 'test/common';
 import { desc as sortDesc } from 'num-sort';
+import { Image } from 'test/common';
 
 describe('map a binary image (mask) 2 x 2', function () {
   let imageData = new Uint8Array(1);
   imageData[0] = 192;
 
   let img = new Image(2, 2, imageData, {
-    kind: 'BINARY'
+    kind: 'BINARY',
   });
 
   let roiManager = img.getRoiManager();
@@ -38,7 +38,7 @@ describe('map a binary image 4 x 4 in 2 zones', function () {
   imageData[1] = 0;
 
   let img = new Image(4, 4, imageData, {
-    kind: 'BINARY'
+    kind: 'BINARY',
   });
 
   let roiManager = img.getRoiManager();
@@ -68,7 +68,7 @@ describe('map a binary image 4 x 4 in 3 zones', function () {
   imageData[1] = 192;
 
   let img = new Image(4, 4, imageData, {
-    kind: 'BINARY'
+    kind: 'BINARY',
   });
 
   let roiManager = img.getRoiManager();

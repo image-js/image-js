@@ -8,7 +8,7 @@ import newArray from 'new-array';
  */
 export default function max() {
   this.checkProcessable('max', {
-    bitDepth: [8, 16, 32]
+    bitDepth: [8, 16, 32],
   });
 
   let result = newArray(this.channels, -Infinity);

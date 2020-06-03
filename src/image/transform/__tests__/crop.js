@@ -3,29 +3,51 @@ import { Image, getHash } from 'test/common';
 describe('check the crop transform', function () {
   let image;
   beforeEach(function () {
-    image = new Image(5, 5,
+    image = new Image(
+      5,
+      5,
       [
-        0, 0, 0, 0, 0,
-        0, 1, 1, 1, 1,
-        0, 1, 2, 2, 2,
-        0, 1, 2, 4, 3,
-        0, 1, 2, 3, 3
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        2,
+        2,
+        2,
+        0,
+        1,
+        2,
+        4,
+        3,
+        0,
+        1,
+        2,
+        3,
+        3,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
   });
 
   it('check the right extract for GREY image', function () {
     let result = image.crop({
       x: 0,
-      y: 0
+      y: 0,
     });
 
     expect(getHash(result)).toBe(getHash(image));
 
     result = image.crop({
       x: 2,
-      y: 2
+      y: 2,
     });
     expect(Array.from(result.data)).toStrictEqual([2, 2, 2, 2, 4, 3, 2, 3, 3]);
 
@@ -33,16 +55,15 @@ describe('check the crop transform', function () {
       x: 0,
       y: 0,
       height: 2,
-      width: 2
+      width: 2,
     });
     expect(Array.from(result.data)).toStrictEqual([0, 0, 0, 1]);
-
 
     result = image.crop({
       x: 2,
       y: 2,
       height: 2,
-      width: 2
+      width: 2,
     });
     expect(Array.from(result.data)).toStrictEqual([2, 2, 2, 4]);
 
@@ -50,7 +71,7 @@ describe('check the crop transform', function () {
       x: 1,
       y: 3,
       height: 1,
-      width: 4
+      width: 4,
     });
     expect(Array.from(result.data)).toStrictEqual([1, 2, 4, 3]);
   });
@@ -61,7 +82,7 @@ describe('check the crop transform', function () {
     expect(image.parent).toBe(original);
     let result = image.crop({
       x: 2,
-      y: 3
+      y: 3,
     });
     let grey = result.grey();
     expect(grey.parent).toBe(result);
@@ -75,7 +96,7 @@ describe('check the crop transform', function () {
       x: 1.2,
       y: 2.8,
       height: 1.1,
-      width: 3.7
+      width: 3.7,
     });
     expect(Array.from(result.data)).toStrictEqual([1, 2, 4, 3]);
   });
@@ -86,7 +107,7 @@ describe('check the crop transform', function () {
         x: -2,
         y: 2,
         height: 2,
-        width: 2
+        width: 2,
       });
     }).toThrow(/x and y .* must be positive numbers/);
 
@@ -95,7 +116,7 @@ describe('check the crop transform', function () {
         x: 2,
         y: 2,
         height: -2,
-        width: 2
+        width: 2,
       });
     }).toThrow(/width and height .* must be positive numbers/);
 
@@ -104,7 +125,7 @@ describe('check the crop transform', function () {
         x: 100,
         y: 2,
         height: 2,
-        width: 2
+        width: 2,
       });
     }).toThrow(/origin .* out of range/);
 
@@ -113,9 +134,8 @@ describe('check the crop transform', function () {
         x: 2,
         y: 2,
         height: 2,
-        width: 100
+        width: 100,
       });
     }).toThrow(/size is out of range/);
   });
 });
-

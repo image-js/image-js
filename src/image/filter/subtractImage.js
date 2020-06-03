@@ -15,7 +15,7 @@ import Image from '../Image';
 export default function subtractImage(otherImage, options = {}) {
   let { bitDepth = this.bitDepth, channels, absolute = false } = options;
   this.checkProcessable('subtractImage', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
   if (this.width !== otherImage.width || this.height !== otherImage.height) {
     throw new Error('subtractImage: both images must have the same size');
@@ -25,12 +25,12 @@ export default function subtractImage(otherImage, options = {}) {
     this.bitDepth !== otherImage.bitDepth
   ) {
     throw new Error(
-      'subtractImage: both images must have the same alpha and bitDepth'
+      'subtractImage: both images must have the same alpha and bitDepth',
     );
   }
   if (this.channels !== otherImage.channels) {
     throw new Error(
-      'subtractImage: both images must have the same number of channels'
+      'subtractImage: both images must have the same number of channels',
     );
   }
 

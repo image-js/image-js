@@ -17,6 +17,6 @@ test('stack getAverageImage', function () {
     6,
     7,
     8,
-    9
+    9,
   ]);
 });

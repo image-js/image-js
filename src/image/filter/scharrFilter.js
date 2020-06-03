@@ -15,8 +15,11 @@ import gradientFilter from './gradientFilter';
  * @see {@link https://en.wikipedia.org/wiki/Sobel_operator#Alternative_operators}
  */
 export default function scharrFilter(options) {
-  return gradientFilter.call(this, Object.assign({}, options, {
-    kernelX: SCHARR_X,
-    kernelY: SCHARR_Y
-  }));
+  return gradientFilter.call(
+    this,
+    Object.assign({}, options, {
+      kernelX: SCHARR_X,
+      kernelY: SCHARR_Y,
+    }),
+  );
 }

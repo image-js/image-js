@@ -3,28 +3,30 @@ import Image from '../../../image/Image';
 const defaultOptions = {
   regression: {
     kernelType: 'polynomial',
-    kernelOptions: { degree: 2, constant: 1 }
+    kernelOptions: { degree: 2, constant: 1 },
   },
   threshold: 0.02,
   roi: {
     minSurface: 100,
-    positive: false
+    positive: false,
   },
   sampling: 20,
-  include: []
+  include: [],
 };
 
 function run(image, options, onStep) {
   options = Object.assign({}, defaultOptions, options);
   const manager = this.manager;
   if (Array.isArray(image)) {
-    return Promise.all(image.map(function (img) {
-      const run = runOnce(manager, img, options);
-      if (typeof onStep === 'function') {
-        run.then(onStep);
-      }
-      return run;
-    }));
+    return Promise.all(
+      image.map(function (img) {
+        const run = runOnce(manager, img, options);
+        if (typeof onStep === 'function') {
+          run.then(onStep);
+        }
+        return run;
+      }),
+    );
   } else {
     return runOnce(manager, image, options);
   }
@@ -60,10 +62,14 @@ function work() {
 
     const pixels = grey.getPixelsGrid({
       sampling: options.sampling,
-      mask: realMask
+      mask: realMask,
     });
 
-    const background = image.getBackground(pixels.xyS, pixels.zS, options.regression);
+    const background = image.getBackground(
+      pixels.xyS,
+      pixels.zS,
+      options.regression,
+    );
     maybeInclude('background', background);
 
     const corrected = image.subtract(background);

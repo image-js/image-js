@@ -12,20 +12,26 @@ describe('Get the maxLength of the Roi and the points', function () {
   data[1] = 196;
 
   let mask = new Image(4, 4, data, {
-    kind: 'BINARY'
+    kind: 'BINARY',
   });
 
   let roiManager = mask.getRoiManager();
   roiManager.fromMask(mask);
   it('vectors X and Y', function () {
     let results = roiManager.getRois();
-    expect(results[0].points.slice(0, 3)).toStrictEqual([[2, 0], [3, 0], [0, 1]]);
+    expect(results[0].points.slice(0, 3)).toStrictEqual([
+      [2, 0],
+      [3, 0],
+      [0, 1],
+    ]);
   });
-
 
   it('maxLengthPoints', function () {
     let result = roiManager.getRois();
-    expect(result[0].maxLengthPoints).toStrictEqual([[3, 0], [1, 3]]);
+    expect(result[0].maxLengthPoints).toStrictEqual([
+      [3, 0],
+      [1, 3],
+    ]);
   });
 
   it('maxLength', function () {

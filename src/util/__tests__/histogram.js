@@ -1,4 +1,7 @@
-import { mean as meanFromHistogram, median as medianFromHistogram } from '../histogram';
+import {
+  mean as meanFromHistogram,
+  median as medianFromHistogram,
+} from '../histogram';
 
 describe('we check histogram utilities', function () {
   it('should check meanFromHistogram', function () {

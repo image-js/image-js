@@ -1,10 +1,10 @@
-import { Image, load, getHash } from 'test/common';
 import binary from 'test/binary';
+import { Image, load, getHash } from 'test/common';
 
 describe('we check we can extract a part of B/W image', function () {
   it('check the extract without specify position', async () => {
     let mask = new Image(2, 2, {
-      kind: 'BINARY'
+      kind: 'BINARY',
     });
     mask.setBitXY(0, 0);
     mask.setBitXY(1, 1);
@@ -16,7 +16,9 @@ describe('we check we can extract a part of B/W image', function () {
   });
 
   it('check a binary image extract', function () {
-    let image = new Image(8, 8,
+    let image = new Image(
+      8,
+      8,
       binary`
         00011000
         00011000
@@ -27,20 +29,24 @@ describe('we check we can extract a part of B/W image', function () {
         00011000
         00011000
       `,
-      { kind: 'BINARY' }
+      { kind: 'BINARY' },
     );
 
-    let mask = new Image(4, 4,
+    let mask = new Image(
+      4,
+      4,
       binary`
         1111
         0000
         1111
         0000
-      `, {
+      `,
+      {
         kind: 'BINARY',
         parent: image,
-        position: [2, 2]
-      });
+        position: [2, 2],
+      },
+    );
 
     let extract = image.extract(mask);
     expect(extract.bitDepth).toBe(1);
@@ -54,27 +60,32 @@ describe('we check we can extract a part of B/W image', function () {
     `);
   });
 
-
   it('check a rectangular binary image extract', function () {
-    let image = new Image(8, 4,
+    let image = new Image(
+      8,
+      4,
       binary`
         00011000
         00011000
         00011000
         11111111
       `,
-      { kind: 'BINARY' }
+      { kind: 'BINARY' },
     );
 
-    let mask = new Image(4, 2,
+    let mask = new Image(
+      4,
+      2,
       binary`
         1111
         0000
-      `, {
+      `,
+      {
         kind: 'BINARY',
         parent: image,
-        position: [3, 2]
-      });
+        position: [3, 2],
+      },
+    );
 
     let extract = image.extract(mask);
     expect(extract.bitDepth).toBe(1);
@@ -91,7 +102,7 @@ describe('we check we can extract a part of B/W image', function () {
     let mask = new Image(2, 2, {
       kind: 'BINARY',
       position: [1, 1],
-      parent: image
+      parent: image,
     });
 
     mask.setBitXY(0, 0);
@@ -103,10 +114,14 @@ describe('we check we can extract a part of B/W image', function () {
     expect(extract.height).toBe(2);
 
     expect(Array.from(extract.data)).toStrictEqual([
-      0, 255,
-      255, 255,
-      255, 0,
-      0, 0
+      0,
+      255,
+      255,
+      255,
+      255,
+      0,
+      0,
+      0,
     ]);
 
     /* This corresponds to an extract if it was RGBA image */

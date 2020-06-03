@@ -1,5 +1,5 @@
-import Image from '../Image';
 import Stack from '../../stack/Stack';
+import Image from '../Image';
 import { GREY } from '../model/model';
 
 /**
@@ -10,12 +10,10 @@ import { GREY } from '../model/model';
  * @return {Stack}
  */
 export default function split(options = {}) {
-  let {
-    preserveAlpha = true
-  } = options;
+  let { preserveAlpha = true } = options;
 
   this.checkProcessable('split', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   // split will always return a stack of images
@@ -31,7 +29,7 @@ export default function split(options = {}) {
       let newImage = Image.createFrom(this, {
         components: 1,
         alpha: true,
-        colorModel: GREY
+        colorModel: GREY,
       });
       let ptr = 0;
       for (let j = 0; j < data.length; j += this.channels) {
@@ -45,7 +43,7 @@ export default function split(options = {}) {
       let newImage = Image.createFrom(this, {
         components: 1,
         alpha: false,
-        colorModel: GREY
+        colorModel: GREY,
       });
       let ptr = 0;
       for (let j = 0; j < data.length; j += this.channels) {

@@ -33,5 +33,5 @@ Promise.all(toLoad).then(
   },
   function (error) {
     console.log(error);
-  }
+  },
 );

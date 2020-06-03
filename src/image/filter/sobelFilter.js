@@ -15,8 +15,11 @@ import gradientFilter from './gradientFilter';
  * @see {@link https://en.wikipedia.org/wiki/Sobel_operator}
  */
 export default function sobelFilter(options) {
-  return gradientFilter.call(this, Object.assign({}, options, {
-    kernelX: SOBEL_X,
-    kernelY: SOBEL_Y
-  }));
+  return gradientFilter.call(
+    this,
+    Object.assign({}, options, {
+      kernelX: SOBEL_X,
+      kernelY: SOBEL_Y,
+    }),
+  );
 }

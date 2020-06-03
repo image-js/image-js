@@ -9,7 +9,7 @@ const bitMethods = {
    * @return {number} 0: bit is unset, 1: bit is set
    */
   getBit(pixel) {
-    return (this.data[getSlot(pixel)] & (1 << getShift(pixel))) ? 1 : 0;
+    return this.data[getSlot(pixel)] & (1 << getShift(pixel)) ? 1 : 0;
   },
 
   /**
@@ -90,7 +90,7 @@ const bitMethods = {
    */
   toggleBitXY(x, y) {
     this.toggleBit(y * this.width + x);
-  }
+  },
 };
 
 function getSlot(pixel) {

@@ -16,7 +16,8 @@ export default function triangle(histogram) {
       break;
     }
   }
-  if (min > 0) { // line to the (p==0) point, not to histogram[min]
+  if (min > 0) {
+    // line to the (p==0) point, not to histogram[min]
     min--;
   }
 
@@ -31,7 +32,8 @@ export default function triangle(histogram) {
       break;
     }
   }
-  if (min2 < histogram.length - 1) { // line to the (p==0) point, not to data[min]
+  if (min2 < histogram.length - 1) {
+    // line to the (p==0) point, not to data[min]
     min2++;
   }
 
@@ -44,15 +46,15 @@ export default function triangle(histogram) {
 
   // find which is the furthest side
   let inverted = false;
-  if ((max - min) < (min2 - max)) {
+  if (max - min < min2 - max) {
     // reverse the histogram
     inverted = true;
-    let left  = 0;                      // index of leftmost element
-    let right = histogram.length - 1;   // index of rightmost element
+    let left = 0; // index of leftmost element
+    let right = histogram.length - 1; // index of rightmost element
     while (left < right) {
       // exchange the left and right elements
       let temp = histogram[left];
-      histogram[left]  = histogram[right];
+      histogram[left] = histogram[right];
       histogram[right] = temp;
       // move the bounds toward the center
       left++;
@@ -69,7 +71,7 @@ export default function triangle(histogram) {
   // describe line by nx * x + ny * y - d = 0
   let nx, ny, d;
   // nx is just the max frequency as the other point has freq=0
-  nx = histogram[max];   // -min; // data[min]; //  lowest value bmin = (p=0)% in the image
+  nx = histogram[max]; // -min; // data[min]; //  lowest value bmin = (p=0)% in the image
   ny = min - max;
   d = Math.sqrt(nx * nx + ny * ny);
   nx /= d;
@@ -90,16 +92,16 @@ export default function triangle(histogram) {
 
   if (inverted) {
     // The histogram might be used for something else, so let's reverse it back
-    let left  = 0;
+    let left = 0;
     let right = histogram.length - 1;
     while (left < right) {
       let temp = histogram[left];
-      histogram[left]  = histogram[right];
+      histogram[left] = histogram[right];
       histogram[right] = temp;
       left++;
       right--;
     }
-    return (histogram.length - 1 - split);
+    return histogram.length - 1 - split;
   } else {
     return split;
   }

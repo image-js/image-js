@@ -21,13 +21,13 @@ export default class RoiLayer {
   }
 
   /**
-     * Roi are created from a roiMap
-     * The roiMap contains mainty an array of identifiers that define
-     * for each data to which Roi it belongs
-     * @memberof RoiManager
-     * @instance
-     * @return {Roi[]}
-     */
+   * Roi are created from a roiMap
+   * The roiMap contains mainty an array of identifiers that define
+   * for each data to which Roi it belongs
+   * @memberof RoiManager
+   * @instance
+   * @return {Roi[]}
+   */
   createRoi() {
     // we need to find all all the different IDs there is in the data
     let data = this.roiMap.data;

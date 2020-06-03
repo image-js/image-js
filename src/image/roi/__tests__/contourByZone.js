@@ -1,14 +1,44 @@
-import { Image } from 'test/common';
 import { asc as sortAsc } from 'num-sort';
+import { Image } from 'test/common';
 
 describe('Get the number of pixels touching the adjacent zones', function () {
   let map = [
-    0, 0, 1, 1, 1, 2,
-    1, 1, 1, 1, 2, 2,
-    1, 1, 1, 2, 2, 2,
-    3, 3, 1, 2, 2, 2,
-    3, 3, 3, 3, 2, 2,
-    3, 3, 3, 3, 2, 2
+    0,
+    0,
+    1,
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    2,
+    2,
+    1,
+    1,
+    1,
+    2,
+    2,
+    2,
+    3,
+    3,
+    1,
+    2,
+    2,
+    2,
+    3,
+    3,
+    3,
+    3,
+    2,
+    2,
+    3,
+    3,
+    3,
+    3,
+    2,
+    2,
   ];
 
   let img = new Image(6, 6);

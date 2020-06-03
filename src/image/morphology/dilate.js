@@ -15,17 +15,23 @@ import Image from '../Image';
  */
 export default function dilate(options = {}) {
   let {
-    kernel = [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
-    iterations = 1
+    kernel = [
+      [1, 1, 1],
+      [1, 1, 1],
+      [1, 1, 1],
+    ],
+    iterations = 1,
   } = options;
 
   this.checkProcessable('dilate', {
     bitDepth: [1, 8, 16],
     components: 1,
-    alpha: 0
+    alpha: 0,
   });
   if (kernel.columns % 2 === 0 || kernel.rows % 2 === 0) {
-    throw new TypeError('dilate: The number of rows and columns of the kernel must be odd');
+    throw new TypeError(
+      'dilate: The number of rows and columns of the kernel must be odd',
+    );
   }
 
   let onlyOnes = true;
@@ -43,14 +49,24 @@ export default function dilate(options = {}) {
     if (this.bitDepth === 1) {
       if (onlyOnes) {
         const newImage = result.clone();
-        result = dilateOnceBinaryOnlyOnes(result, newImage, kernel.length, kernel[0].length);
+        result = dilateOnceBinaryOnlyOnes(
+          result,
+          newImage,
+          kernel.length,
+          kernel[0].length,
+        );
       } else {
         const newImage = Image.createFrom(result);
         result = dilateOnceBinary(result, newImage, kernel);
       }
     } else if (onlyOnes) {
       const newImage = Image.createFrom(result);
-      result = dilateOnceGreyOnlyOnes(result, newImage, kernel.length, kernel[0].length);
+      result = dilateOnceGreyOnlyOnes(
+        result,
+        newImage,
+        kernel.length,
+        kernel[0].length,
+      );
     } else {
       const newImage = Image.createFrom(result);
       result = dilateOnceGrey(result, newImage, kernel);
@@ -95,7 +111,11 @@ function dilateOnceGreyOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
   for (let y = 0; y < img.height; y++) {
     for (let x = 0; x < img.width; x++) {
       let max = 0;
-      for (let h = Math.max(0, y - radiusY); h < Math.min(img.height, y + radiusY + 1); h++) {
+      for (
+        let h = Math.max(0, y - radiusY);
+        h < Math.min(img.height, y + radiusY + 1);
+        h++
+      ) {
         const value = img.getValueXY(x, h, 0);
         if (value > max) {
           max = value;
@@ -106,7 +126,11 @@ function dilateOnceGreyOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
 
     for (let x = 0; x < img.width; x++) {
       let max = 0;
-      for (let i = Math.max(0, x - radiusX); i < Math.min(img.width, x + radiusX + 1); i++) {
+      for (
+        let i = Math.max(0, x - radiusX);
+        i < Math.min(img.width, x + radiusX + 1);
+        i++
+      ) {
         if (maxList[i] > max) {
           max = maxList[i];
         }
@@ -158,7 +182,11 @@ function dilateOnceBinaryOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
   for (let y = 0; y < img.height; y++) {
     for (let x = 0; x < img.width; x++) {
       maxList[x] = 0;
-      for (let h = Math.max(0, y - radiusY); h < Math.min(img.height, y + radiusY + 1); h++) {
+      for (
+        let h = Math.max(0, y - radiusY);
+        h < Math.min(img.height, y + radiusY + 1);
+        h++
+      ) {
         if (img.getBitXY(x, h) === 1) {
           maxList[x] = 1;
           break;
@@ -168,7 +196,11 @@ function dilateOnceBinaryOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
 
     for (let x = 0; x < img.width; x++) {
       if (newImage.getBitXY(x, y) === 1) continue;
-      for (let i = Math.max(0, x - radiusX); i < Math.min(img.width, x + radiusX + 1); i++) {
+      for (
+        let i = Math.max(0, x - radiusX);
+        i < Math.min(img.width, x + radiusX + 1);
+        i++
+      ) {
         if (maxList[i] === 1) {
           newImage.setBitXY(x, y);
           break;

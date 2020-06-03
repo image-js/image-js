@@ -53,4 +53,3 @@ export function mean(histogram) {
 
   return sum / total;
 }
-

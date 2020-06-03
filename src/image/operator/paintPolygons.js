@@ -17,11 +17,12 @@ export default function paintPolygons(polygons, options = {}) {
   let optionsCopy = Object.assign({}, options);
 
   this.checkProcessable('paintPolygons', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
-  let colors = getColors(Object.assign({}, options, { numberColors: polygons.length }));
-
+  let colors = getColors(
+    Object.assign({}, options, { numberColors: polygons.length }),
+  );
 
   for (let i = 0; i < polygons.length; i++) {
     optionsCopy.color = colors[i % colors.length];

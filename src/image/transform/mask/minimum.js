@@ -6,7 +6,8 @@
 // See http://www.cs.tut.fi/~ant/histthresh/ for an excellent slide presentation
 // and the original Matlab code
 export default function minimum(histogram) {
-  if (histogram.length < 2) { // validate that the histogram has at least two color values
+  if (histogram.length < 2) {
+    // validate that the histogram has at least two color values
     return 0;
   }
   let iterations = 0; // number of iterations of the smoothing process
@@ -22,33 +23,40 @@ export default function minimum(histogram) {
   while (!bimodalTest(histogramCopy)) {
     histogramCopy = smoothed(histogramCopy);
     iterations++;
-    if (iterations > 10000) { // if they occur more than 10000 iterations it returns -1
+    if (iterations > 10000) {
+      // if they occur more than 10000 iterations it returns -1
       return threshold;
     }
   }
   threshold = minimumBetweenPeeks(histogramCopy, max);
   return threshold;
 }
-function smoothed(histogram) { // Smooth with a 3 point running mean filter
+function smoothed(histogram) {
+  // Smooth with a 3 point running mean filter
   let auHistogram = new Array(histogram.length); // a copy of the histograma for the smoothing process
   for (let i = 1; i < histogram.length - 1; i++) {
     auHistogram[i] = (histogram[i - 1] + histogram[i] + histogram[i + 1]) / 3;
   }
   auHistogram[0] = (histogram[0] + histogram[1]) / 3;
-  auHistogram[histogram.length - 1] = (histogram[histogram.length - 2] + histogram[histogram.length - 1]) / 3;
+  auHistogram[histogram.length - 1] =
+    (histogram[histogram.length - 2] + histogram[histogram.length - 1]) / 3;
   return auHistogram;
 }
 function minimumBetweenPeeks(histogramBimodal, max) {
   let threshold;
   for (let i = 1; i < max; i++) {
-    if (histogramBimodal[i - 1] > histogramBimodal[i] && histogramBimodal[i + 1] >= histogramBimodal[i]) {
+    if (
+      histogramBimodal[i - 1] > histogramBimodal[i] &&
+      histogramBimodal[i + 1] >= histogramBimodal[i]
+    ) {
       threshold = i;
       break;
     }
   }
   return threshold;
 }
-function bimodalTest(histogram) { // It is responsible for determining if a histogram is bimodal
+function bimodalTest(histogram) {
+  // It is responsible for determining if a histogram is bimodal
   let len = histogram.length;
   let isBimodal = false;
   let peaks = 0;

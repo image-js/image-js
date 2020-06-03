@@ -9,21 +9,22 @@ import DisjointSet from 'ml-disjoint-set';
 
 import RoiMap from '../RoiMap';
 
-const direction4X = [-1,  0];
+const direction4X = [-1, 0];
 const direction4Y = [0, -1];
 const neighbours4 = [null, null];
 
-const direction8X = [-1, -1,  0,  1];
+const direction8X = [-1, -1, 0, 1];
 const direction8Y = [0, -1, -1, -1];
 const neighbours8 = [null, null, null, null];
 
 /*
 Implementation of the connected-component labeling algorithm
  */
-export default function fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
-  const {
-    allowCorners = false
-  } = options;
+export default function fromMaskConnectedComponentLabelingAlgorithm(
+  mask,
+  options = {},
+) {
+  const { allowCorners = false } = options;
   let neighbours = 4;
   if (allowCorners) {
     neighbours = 8;
@@ -68,7 +69,10 @@ export default function fromMaskConnectedComponentLabelingAlgorithm(mask, option
               neighboursList[k] = null;
             } else {
               neighboursList[k] = neighbour;
-              if (!smallestNeighbour || neighboursList[k].value < smallestNeighbour.value) {
+              if (
+                !smallestNeighbour ||
+                neighboursList[k].value < smallestNeighbour.value
+              ) {
                 smallestNeighbour = neighboursList[k];
               }
             }

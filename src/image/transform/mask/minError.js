@@ -35,16 +35,19 @@ export default function minError(histogram, total) {
     nu = (sumB2 - sumB1) / (sumA2 - sumA1);
     p = sumA1 / sumA2;
     q = (sumA2 - sumA1) / sumA2;
-    sigma2 = sumC1 / sumA1 - (mu * mu);
-    tau2 = (sumC2 - sumC1) / (sumA2 - sumA1) - (nu * nu);
+    sigma2 = sumC1 / sumA1 - mu * mu;
+    tau2 = (sumC2 - sumC1) / (sumA2 - sumA1) - nu * nu;
 
     // The terms of the quadratic equation to be solved.
     w0 = 1.0 / sigma2 - 1.0 / tau2;
     w1 = mu / sigma2 - nu / tau2;
-    w2 = (mu * mu) / sigma2 - (nu * nu) / tau2 + Math.log10((sigma2 * (q * q)) / (tau2 * (p * p)));
+    w2 =
+      (mu * mu) / sigma2 -
+      (nu * nu) / tau2 +
+      Math.log10((sigma2 * (q * q)) / (tau2 * (p * p)));
 
     // If the next threshold would be imaginary, return with the current one.
-    sqterm = (w1 * w1) - w0 * w2;
+    sqterm = w1 * w1 - w0 * w2;
     if (sqterm < 0) {
       return threshold;
     }

@@ -19,8 +19,8 @@ export default function Matrix(width, height, defaultValue) {
 Matrix.prototype.localMin = function (x, y) {
   let min = this[x][y];
   let position = [x, y];
-  for (let i = (Math.max(0, x - 1)); i < Math.min(this.length, x + 2); i++) {
-    for (let j = (Math.max(0, y - 1)); j < Math.min(this[0].length, y + 2); j++) {
+  for (let i = Math.max(0, x - 1); i < Math.min(this.length, x + 2); i++) {
+    for (let j = Math.max(0, y - 1); j < Math.min(this[0].length, y + 2); j++) {
       if (this[i][j] < min) {
         min = this[i][j];
         position = [i, j];
@@ -29,15 +29,15 @@ Matrix.prototype.localMin = function (x, y) {
   }
   return {
     position: position,
-    value: min
+    value: min,
   };
 };
 
 Matrix.prototype.localMax = function (x, y) {
   let max = this[x][y];
   let position = [x, y];
-  for (let i = (Math.max(0, x - 1)); i < Math.min(this.length, x + 2); i++) {
-    for (let j = (Math.max(0, y - 1)); j < Math.min(this[0].length, y + 2); j++) {
+  for (let i = Math.max(0, x - 1); i < Math.min(this.length, x + 2); i++) {
+    for (let j = Math.max(0, y - 1); j < Math.min(this[0].length, y + 2); j++) {
       if (this[i][j] > max) {
         max = this[i][j];
         position = [i, j];
@@ -46,14 +46,14 @@ Matrix.prototype.localMax = function (x, y) {
   }
   return {
     position: position,
-    value: max
+    value: max,
   };
 };
 
 Matrix.prototype.localSearch = function (x, y, value) {
   let results = [];
-  for (let i = (Math.max(0, x - 1)); i < Math.min(this.length, x + 2); i++) {
-    for (let j = (Math.max(0, y - 1)); j < Math.min(this[0].length, y + 2); j++) {
+  for (let i = Math.max(0, x - 1); i < Math.min(this.length, x + 2); i++) {
+    for (let j = Math.max(0, y - 1); j < Math.min(this[0].length, y + 2); j++) {
       if (this[i][j] === value) {
         results.push([i, j]);
       }

@@ -11,23 +11,23 @@ import { GREY } from '../model/model';
  * @param {boolean} [options.keepAlpha=false]
  * @return {Image}
  */
-export default function combineChannels(method = defaultCombineMethod, options = {}) {
-  let {
-    mergeAlpha = false,
-    keepAlpha = false
-  } = options;
+export default function combineChannels(
+  method = defaultCombineMethod,
+  options = {},
+) {
+  let { mergeAlpha = false, keepAlpha = false } = options;
 
   mergeAlpha &= this.alpha;
   keepAlpha &= this.alpha;
 
   this.checkProcessable('combineChannels', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   let newImage = Image.createFrom(this, {
     components: 1,
     alpha: keepAlpha,
-    colorModel: GREY
+    colorModel: GREY,
   });
 
   let ptr = 0;
@@ -35,7 +35,9 @@ export default function combineChannels(method = defaultCombineMethod, options =
     // TODO quite slow because we create a new pixel each time
     let value = method(this.getPixel(i));
     if (mergeAlpha) {
-      newImage.data[ptr++] = value * this.data[i * this.channels + this.components] / this.maxValue;
+      newImage.data[ptr++] =
+        (value * this.data[i * this.channels + this.components]) /
+        this.maxValue;
     } else {
       newImage.data[ptr++] = value;
       if (keepAlpha) {

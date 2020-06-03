@@ -1,5 +1,5 @@
-import { getOutputImageOrInPlace } from '../internal/getOutputImage';
 import getImageParameters from '../internal/getImageParameters';
+import { getOutputImageOrInPlace } from '../internal/getOutputImage';
 
 /**
  * Inserts an image within another image.
@@ -15,11 +15,7 @@ import getImageParameters from '../internal/getImageParameters';
 export default function insert(toInsert, options = {}) {
   const parameters = getImageParameters(toInsert);
   this.checkProcessable('insert', parameters);
-  let {
-    x = 0,
-    y = 0
-  } = options;
-
+  let { x = 0, y = 0 } = options;
 
   const out = getOutputImageOrInPlace(this, options, { copy: true });
   const maxY = Math.min(out.height, y + toInsert.height);
@@ -39,7 +35,6 @@ export default function insert(toInsert, options = {}) {
       }
     }
   }
-
 
   return out;
 }

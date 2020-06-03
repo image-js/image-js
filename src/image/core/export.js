@@ -9,7 +9,7 @@ import {
   ImageData,
   createCanvas,
   createWriteStream,
-  writeFile
+  writeFile,
 } from './environment';
 import { getType } from './mediaTypes';
 
@@ -17,7 +17,7 @@ function encodeJpeg(image, options = {}) {
   const data = {
     width: image.width,
     height: image.height,
-    data: image.getRGBAData()
+    data: image.getRGBAData(),
   };
   return realEncodeJpeg(data, options.quality).data;
 }
@@ -28,7 +28,7 @@ function encodePng(image, options) {
     height: image.height,
     channels: image.channels,
     depth: image.bitDepth,
-    data: image.data
+    data: image.data,
   };
 
   if (data.depth === 1 || data.depth === 32) {
@@ -206,13 +206,13 @@ const exportMethods = {
     const data = new ImageData(
       this.getRGBAData({ clamped: true }),
       this.width,
-      this.height
+      this.height,
     );
     let canvas = createCanvas(this.width, this.height);
     let ctx = canvas.getContext('2d');
     ctx.putImageData(data, 0, 0);
     return canvas;
-  }
+  },
 };
 
 export default function setExportMethods(Image) {

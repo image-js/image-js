@@ -1,50 +1,143 @@
-import { Image } from 'test/common';
-import binary from 'test/binary';
 import Matrix from 'ml-matrix';
-
+import binary from 'test/binary';
+import { Image } from 'test/common';
 
 describe('check the close function', function () {
   it('check for GREY image 5x5', function () {
-    let kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]);
-    let image = new Image(5, 5,
+    let kernel = new Matrix([
+      [1, 1, 1],
+      [1, 1, 1],
+      [1, 1, 1],
+    ]);
+    let image = new Image(
+      5,
+      5,
       [
-        255, 255, 0, 255, 255,
-        255, 0, 0, 0, 255,
-        255, 0, 0, 0, 255,
-        255, 0, 0, 0, 255,
-        255, 255, 0, 255, 255
+        255,
+        255,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        255,
+        255,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
     expect(Array.from(image.close({ kernel }).data)).toStrictEqual([
-      255, 255, 255, 255, 255,
-      255, 0, 0, 0, 255,
-      255, 0, 0, 0, 255,
-      255, 0, 0, 0, 255,
-      255, 255, 255, 255, 255
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      0,
+      0,
+      0,
+      255,
+      255,
+      0,
+      0,
+      0,
+      255,
+      255,
+      0,
+      0,
+      0,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
     ]);
   });
 
   it('check for GREY image 5x5 2 iterations', function () {
-    let kernel = new Matrix([[1, 1, 1], [1, 1, 1], [1, 1, 1]]);
-    let image = new Image(5, 5,
+    let kernel = new Matrix([
+      [1, 1, 1],
+      [1, 1, 1],
+      [1, 1, 1],
+    ]);
+    let image = new Image(
+      5,
+      5,
       [
-        255, 255, 0, 255, 255,
-        255, 0, 0, 0, 255,
-        255, 0, 0, 0, 255,
-        255, 0, 0, 0, 255,
-        255, 255, 0, 255, 255
+        255,
+        255,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        255,
+        255,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
-    expect(Array.from(image.close({ kernel, iterations: 2 }).data)).toStrictEqual([
-      255, 255, 255, 255, 255,
-      255, 0, 0, 0, 255,
-      255, 0, 0, 0, 255,
-      255, 0, 0, 0, 255,
-      255, 255, 255, 255, 255
+    expect(
+      Array.from(image.close({ kernel, iterations: 2 }).data),
+    ).toStrictEqual([
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      0,
+      0,
+      0,
+      255,
+      255,
+      0,
+      0,
+      0,
+      255,
+      255,
+      0,
+      0,
+      0,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
     ]);
   });
 
@@ -59,13 +152,18 @@ describe('check the close function', function () {
      |xx xx|
      */
 
-    let mask = new Image(5, 5, binary`
+    let mask = new Image(
+      5,
+      5,
+      binary`
       11011
       10001
       10001
       10001
       11011
-    `, { kind: 'BINARY' });
+    `,
+      { kind: 'BINARY' },
+    );
 
     expect(mask.close().data).toStrictEqual(
       binary`
@@ -74,7 +172,7 @@ describe('check the close function', function () {
         10001
         10001
         11111
-    `);
+    `,
+    );
   });
 });
-

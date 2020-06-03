@@ -3,7 +3,7 @@ import { Image } from 'test/common';
 let img;
 beforeEach(() => {
   img = new Image(8, 2, {
-    kind: 'BINARY'
+    kind: 'BINARY',
   });
 });
 

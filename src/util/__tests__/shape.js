@@ -13,7 +13,8 @@ describe('we check Shape class', function () {
           10001
           01010
           00100
-      `);
+      `,
+    );
   });
 
   it('should yield a cross', function () {
@@ -28,7 +29,7 @@ describe('we check Shape class', function () {
       [1, 0],
       [2, 0],
       [0, 1],
-      [0, 2]
+      [0, 2],
     ]);
   });
 
@@ -38,7 +39,7 @@ describe('we check Shape class', function () {
     expect(Array.from(shape.matrix)).toStrictEqual([
       [0, 1, 0],
       [1, 1, 1],
-      [0, 1, 0]
+      [0, 1, 0],
     ]);
   });
 
@@ -56,7 +57,7 @@ describe('we check Shape class', function () {
       [0, 0, 1, 0, 0],
       [1, 1, 1, 1, 1],
       [0, 0, 1, 0, 0],
-      [0, 0, 1, 0, 0]
+      [0, 0, 1, 0, 0],
     ]);
   });
 
@@ -67,14 +68,14 @@ describe('we check Shape class', function () {
       [1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1],
-      [1, 1, 1, 1, 1]
+      [1, 1, 1, 1, 1],
     ]);
 
     let shape2 = new Shape({ shape: 'square', width: 5, height: 3 });
     expect(Array.from(shape2.matrix)).toStrictEqual([
       [1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1],
-      [1, 1, 1, 1, 1]
+      [1, 1, 1, 1, 1],
     ]);
   });
 
@@ -85,14 +86,19 @@ describe('we check Shape class', function () {
       [1, 0, 0, 0, 1],
       [1, 0, 0, 0, 1],
       [1, 0, 0, 0, 1],
-      [1, 1, 1, 1, 1]
+      [1, 1, 1, 1, 1],
     ]);
 
-    let shape2 = new Shape({ shape: 'square', width: 5, height: 3, filled: false });
+    let shape2 = new Shape({
+      shape: 'square',
+      width: 5,
+      height: 3,
+      filled: false,
+    });
     expect(Array.from(shape2.matrix)).toStrictEqual([
       [1, 1, 1, 1, 1],
       [1, 0, 0, 0, 1],
-      [1, 1, 1, 1, 1]
+      [1, 1, 1, 1, 1],
     ]);
   });
 
@@ -103,14 +109,14 @@ describe('we check Shape class', function () {
       [0, 0, 1, 0, 0],
       [0, 1, 1, 1, 0],
       [0, 1, 1, 1, 0],
-      [1, 1, 1, 1, 1]
+      [1, 1, 1, 1, 1],
     ]);
 
     let shape2 = new Shape({ shape: 'triangle', width: 5, height: 3 });
     expect(Array.from(shape2.matrix)).toStrictEqual([
       [0, 0, 1, 0, 0],
       [0, 1, 1, 1, 0],
-      [1, 1, 1, 1, 1]
+      [1, 1, 1, 1, 1],
     ]);
   });
 
@@ -121,7 +127,7 @@ describe('we check Shape class', function () {
       [0, 1, 1, 1, 0],
       [1, 1, 1, 1, 1],
       [0, 1, 1, 1, 0],
-      [0, 0, 1, 0, 0]
+      [0, 0, 1, 0, 0],
     ]);
   });
 
@@ -133,10 +139,9 @@ describe('we check Shape class', function () {
       [1, 1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1, 1],
       [0, 1, 1, 1, 1, 0],
-      [0, 0, 1, 1, 0, 0]
+      [0, 0, 1, 1, 0, 0],
     ]);
   });
-
 
   it('should yield the right ellipse', function () {
     let shape = new Shape({ shape: 'ellipse', width: 9, height: 5 });
@@ -145,7 +150,7 @@ describe('we check Shape class', function () {
       [0, 1, 1, 1, 1, 1, 1, 1, 0],
       [1, 1, 1, 1, 1, 1, 1, 1, 1],
       [0, 1, 1, 1, 1, 1, 1, 1, 0],
-      [0, 0, 0, 0, 1, 0, 0, 0, 0]
+      [0, 0, 0, 0, 1, 0, 0, 0, 0],
     ]);
   });
 
@@ -156,7 +161,7 @@ describe('we check Shape class', function () {
       [0, 1, 0, 1, 0],
       [1, 0, 0, 0, 1],
       [0, 1, 0, 1, 0],
-      [0, 0, 1, 0, 0]
+      [0, 0, 1, 0, 0],
     ]);
   });
 
@@ -168,23 +173,33 @@ describe('we check Shape class', function () {
       [1, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 1],
       [0, 1, 0, 0, 1, 0],
-      [0, 0, 1, 1, 0, 0]
+      [0, 0, 1, 1, 0, 0],
     ]);
   });
 
   it('should yield the right empty ellipse', function () {
-    let shape = new Shape({ shape: 'ellipse', width: 9, height: 5, filled: false });
+    let shape = new Shape({
+      shape: 'ellipse',
+      width: 9,
+      height: 5,
+      filled: false,
+    });
     expect(Array.from(shape.matrix)).toStrictEqual([
       [0, 0, 0, 0, 1, 0, 0, 0, 0],
       [0, 1, 1, 1, 0, 1, 1, 1, 0],
       [1, 0, 0, 0, 0, 0, 0, 0, 1],
       [0, 1, 1, 1, 0, 1, 1, 1, 0],
-      [0, 0, 0, 0, 1, 0, 0, 0, 0]
+      [0, 0, 0, 0, 1, 0, 0, 0, 0],
     ]);
   });
 
   it('should yield the right vertical empty ellipse', function () {
-    let shape = new Shape({ shape: 'ellipse', width: 5, height: 9, filled: false });
+    let shape = new Shape({
+      shape: 'ellipse',
+      width: 5,
+      height: 9,
+      filled: false,
+    });
     expect(Array.from(shape.matrix)).toStrictEqual([
       [0, 0, 1, 0, 0],
       [0, 1, 0, 1, 0],
@@ -194,7 +209,7 @@ describe('we check Shape class', function () {
       [0, 1, 0, 1, 0],
       [0, 1, 0, 1, 0],
       [0, 1, 0, 1, 0],
-      [0, 0, 1, 0, 0]
+      [0, 0, 1, 0, 0],
     ]);
   });
 
@@ -215,8 +230,7 @@ describe('we check Shape class', function () {
       [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
       [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
       [0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
     ]);
   });
 });
-

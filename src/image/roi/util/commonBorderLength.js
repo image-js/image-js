@@ -1,4 +1,3 @@
-
 // We calculate all the border length with the neighbours
 
 export default function commonBorderLength(roiMap) {
@@ -25,7 +24,12 @@ export default function commonBorderLength(roiMap) {
         for (let dir = 0; dir < 4; dir++) {
           let newX = x + dx[dir];
           let newY = y + dy[dir];
-          if (newX >= 0 && newY >= 0 && newX < roiMap.width && newY < roiMap.height) {
+          if (
+            newX >= 0 &&
+            newY >= 0 &&
+            newX < roiMap.width &&
+            newY < roiMap.height
+          ) {
             let neighbourRoiID = data[newX + newY * roiMap.width];
             if (currentRoiID !== neighbourRoiID) {
               isBorder = true;

@@ -5,15 +5,11 @@ import Image from '../Image';
 let computedPropertyDescriptor = {
   configurable: true,
   enumerable: false,
-  get: undefined
+  get: undefined,
 };
 
 export function extendMethod(name, method, options = {}) {
-  let {
-    inPlace = false,
-    returnThis = true,
-    partialArgs = []
-  } = options;
+  let { inPlace = false, returnThis = true, partialArgs = [] } = options;
 
   if (inPlace) {
     Image.prototype[name] = function (...args) {
@@ -34,9 +30,7 @@ export function extendMethod(name, method, options = {}) {
 }
 
 export function extendProperty(name, method, options = {}) {
-  let {
-    partialArgs = []
-  } = options;
+  let { partialArgs = [] } = options;
 
   computedPropertyDescriptor.get = function () {
     if (this.computed === null) {

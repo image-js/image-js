@@ -1,15 +1,44 @@
-
 import RoiMap from '../../RoiMap';
 
 describe('Calculate mergeRoi from a roiMap', function () {
   it('work with simple case', function () {
     let map = [
-      0, 0, 1, 1, 1, 2,
-      1, 1, 1, 1, 2, 2,
-      1, 1, 1, 2, 2, 2,
-      3, 3, 1, 2, 2, 2,
-      3, 3, 3, 3, 2, 2,
-      3, 3, 3, 3, 2, 2
+      0,
+      0,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      3,
+      2,
+      2,
+      3,
+      3,
+      3,
+      3,
+      2,
+      2,
     ];
 
     /*
@@ -22,28 +51,88 @@ describe('Calculate mergeRoi from a roiMap', function () {
     let roiMap = new RoiMap({ width: 6, height: 6 }, map);
     let result = roiMap.mergeRoi({
       minCommonBorderLength: 4,
-      maxCommonBorderLength: 4
+      maxCommonBorderLength: 4,
     });
 
     let expected = [
-      0, 0, 1, 1, 1, 1,
-      1, 1, 1, 1, 1, 1,
-      1, 1, 1, 1, 1, 1,
-      3, 3, 1, 1, 1, 1,
-      3, 3, 3, 3, 1, 1,
-      3, 3, 3, 3, 1, 1
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      3,
+      3,
+      1,
+      1,
+      1,
+      1,
+      3,
+      3,
+      3,
+      3,
+      1,
+      1,
+      3,
+      3,
+      3,
+      3,
+      1,
+      1,
     ];
     expect(result.data).toStrictEqual(expected);
   });
 
   it('should work with complex case', function () {
     let map = [
-      -1, -1, 1, 1, 1, 2,
-      1, 1, 1, 1, 2, 2,
-      1, 1, 1, 2, 2, 2,
-      3, 3, 1, 2, 2, 2,
-      3, 3, 3, 3, 2, 2,
-      3, 3, 3, 3, 2, 2
+      -1,
+      -1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      3,
+      2,
+      2,
+      3,
+      3,
+      3,
+      3,
+      2,
+      2,
     ];
 
     /*
@@ -57,15 +146,45 @@ describe('Calculate mergeRoi from a roiMap', function () {
     let roiMap = new RoiMap({ width: 6, height: 6 }, map);
     let result = roiMap.mergeRoi({
       minCommonBorderLength: 3,
-      maxCommonBorderLength: 4
+      maxCommonBorderLength: 4,
     });
     let expected = [
-      -1, -1, -1, -1, -1, -1,
-      -1, -1, -1, -1, -1, -1,
-      -1, -1, -1, -1, -1, -1,
-      -1, -1, -1, -1, -1, -1,
-      -1, -1, -1, -1, -1, -1,
-      -1, -1, -1, -1, -1, -1
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
     ];
 
     expect(result.data).toStrictEqual(expected);
@@ -73,38 +192,94 @@ describe('Calculate mergeRoi from a roiMap', function () {
 
   it('should work with more complex case', function () {
     let map = [
-      -1, -1, 1, 1, 1, 2,
-      1, 1, 1, 1, 2, 2,
-      1, 1, 1, 2, 2, 2,
-      3, 3, 1, 2, 2, 2,
-      3, 3, 3, 3, 2, 2,
-      3, 3, 3, 3, 2, 2
+      -1,
+      -1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      1,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      3,
+      2,
+      2,
+      3,
+      3,
+      3,
+      3,
+      2,
+      2,
     ];
 
     let roiMap = new RoiMap({ width: 6, height: 6 }, map);
     let result = roiMap.mergeRoi({
       minCommonBorderLength: 2,
-      maxCommonBorderLength: 2
+      maxCommonBorderLength: 2,
     });
 
     let expected = [
-      -1, -1, -1, -1, -1, 2,
-      -1, -1, -1, -1, 2, 2,
-      -1, -1, -1, 2, 2, 2,
-      2, 2, -1, 2, 2, 2,
-      2, 2, 2, 2, 2, 2,
-      2, 2, 2, 2, 2, 2
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2,
+      -1,
+      -1,
+      -1,
+      -1,
+      2,
+      2,
+      -1,
+      -1,
+      -1,
+      2,
+      2,
+      2,
+      2,
+      2,
+      -1,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
     ];
 
     expect(result.data).toStrictEqual(expected);
   });
 
   it('check with common border ratio', function () {
-    let map = [
-      1, 1, 1,
-      2, 2, 2,
-      3, 3, 0
-    ];
+    let map = [1, 1, 1, 2, 2, 2, 3, 3, 0];
 
     /*
          Border info:
@@ -117,22 +292,38 @@ describe('Calculate mergeRoi from a roiMap', function () {
     let result = roiMap.mergeRoi({
       minCommonBorderRatio: 0.8,
       maxCommonBorderRatio: 1,
-      algorithm: 'commonBorderRatio'
+      algorithm: 'commonBorderRatio',
     });
-    let expected = [
-      1, 1, 1,
-      1, 1, 1,
-      1, 1, 0
-    ];
+    let expected = [1, 1, 1, 1, 1, 1, 1, 1, 0];
     expect(result.data).toStrictEqual(expected);
   });
 
   it('check with common border ratio more complex', function () {
     let map = [
-      1, 1, 1, 1, 1, 1,
-      1, 2, 2, 3, 3, 1,
-      1, 2, 2, 3, 3, 1,
-      1, 1, 1, 1, 1, 1
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      3,
+      3,
+      1,
+      1,
+      2,
+      2,
+      3,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
     ];
 
     /*
@@ -146,13 +337,33 @@ describe('Calculate mergeRoi from a roiMap', function () {
     let result = roiMap.mergeRoi({
       minCommonBorderRatio: 0.7,
       maxCommonBorderRatio: 0.9,
-      algorithm: 'commonBorderRatio'
+      algorithm: 'commonBorderRatio',
     });
     let expected = [
-      1, 1, 1, 1, 1, 1,
-      1, 2, 2, 3, 3, 1,
-      1, 2, 2, 3, 3, 1,
-      1, 1, 1, 1, 1, 1
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      3,
+      3,
+      1,
+      1,
+      2,
+      2,
+      3,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
     ];
     expect(result.data).toStrictEqual(expected);
   });

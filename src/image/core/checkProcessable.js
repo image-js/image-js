@@ -15,7 +15,9 @@ export default function checkProcessable(processName, options = {}) {
       bitDepth = [bitDepth];
     }
     if (!bitDepth.includes(this.bitDepth)) {
-      throw new TypeError(`The process: ${processName} can only be applied if bit depth is in: ${bitDepth}`);
+      throw new TypeError(
+        `The process: ${processName} can only be applied if bit depth is in: ${bitDepth}`,
+      );
     }
   }
   if (alpha) {
@@ -23,7 +25,9 @@ export default function checkProcessable(processName, options = {}) {
       alpha = [alpha];
     }
     if (!alpha.includes(this.alpha)) {
-      throw new TypeError(`The process: ${processName} can only be applied if alpha is in: ${alpha}`);
+      throw new TypeError(
+        `The process: ${processName} can only be applied if alpha is in: ${alpha}`,
+      );
     }
   }
   if (colorModel) {
@@ -31,7 +35,9 @@ export default function checkProcessable(processName, options = {}) {
       colorModel = [colorModel];
     }
     if (!colorModel.includes(this.colorModel)) {
-      throw new TypeError(`The process: ${processName} can only be applied if color model is in: ${colorModel}`);
+      throw new TypeError(
+        `The process: ${processName} can only be applied if color model is in: ${colorModel}`,
+      );
     }
   }
   if (components) {
@@ -41,7 +47,9 @@ export default function checkProcessable(processName, options = {}) {
     if (!components.includes(this.components)) {
       let errorMessage = `The process: ${processName} can only be applied if the number of components is in: ${components}`;
       if (components.length === 1 && components[0] === 1) {
-        throw new TypeError(`${errorMessage}.\rYou should transform your image using "image.grey()" before applying the algorithm.`);
+        throw new TypeError(
+          `${errorMessage}.\rYou should transform your image using "image.grey()" before applying the algorithm.`,
+        );
       } else {
         throw new TypeError(errorMessage);
       }
@@ -52,7 +60,9 @@ export default function checkProcessable(processName, options = {}) {
       channels = [channels];
     }
     if (!channels.includes(this.channels)) {
-      throw new TypeError(`The process: ${processName} can only be applied if the number of channels is in: ${channels}`);
+      throw new TypeError(
+        `The process: ${processName} can only be applied if the number of channels is in: ${channels}`,
+      );
     }
   }
 }

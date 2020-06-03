@@ -4,7 +4,10 @@ describe('Core methods of Stack objects', function () {
   let stack = new Stack([getSquare(), getSquare()]);
 
   it('Stack.load', async () => {
-    const images = await Stack.load([getImage('BW2x2.png'), getImage('BW3x3.png')]);
+    const images = await Stack.load([
+      getImage('BW2x2.png'),
+      getImage('BW3x3.png'),
+    ]);
     expect(images).toHaveLength(2);
     expect(images).toBeInstanceOf(Stack);
     expect(images[0]).toBeInstanceOf(Image);
@@ -14,7 +17,9 @@ describe('Core methods of Stack objects', function () {
   });
 
   it('Stack.load with error', async () => {
-    await expect(Stack.load([getImage('BW2x2.png'), getImage('inexistant')])).rejects.toThrow(/ENOENT/);
+    await expect(
+      Stack.load([getImage('BW2x2.png'), getImage('inexistant')]),
+    ).rejects.toThrow(/ENOENT/);
   });
 
   it('should be an Array', function () {

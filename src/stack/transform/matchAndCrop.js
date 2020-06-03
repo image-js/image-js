@@ -16,22 +16,19 @@ import Stack from '../Stack';
  * @return {Stack}
  */
 export default function matchAndCrop(options = {}) {
-  let {
-    algorithm = 'matchToPrevious',
-    ignoreBorder = [0, 0]
-  } = options;
+  let { algorithm = 'matchToPrevious', ignoreBorder = [0, 0] } = options;
 
   this.checkProcessable('matchAndCrop', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
-  let matchToPrevious = (algorithm === 'matchToPrevious');
+  let matchToPrevious = algorithm === 'matchToPrevious';
 
   let parent = this[0];
   let results = [];
   results[0] = {
     position: [0, 0],
-    image: this[0]
+    image: this[0],
   };
 
   let relativePosition = [0, 0];
@@ -41,8 +38,11 @@ export default function matchAndCrop(options = {}) {
     let position = parent.getBestMatch(this[i], { border: ignoreBorder });
 
     results[i] = {
-      position: [position[0] + relativePosition[0], position[1] + relativePosition[1]],
-      image: this[i]
+      position: [
+        position[0] + relativePosition[0],
+        position[1] + relativePosition[1],
+      ],
+      image: this[i],
     };
     if (matchToPrevious) {
       relativePosition[0] += position[0];
@@ -82,7 +82,7 @@ export default function matchAndCrop(options = {}) {
       x: leftShift - result.position[0],
       y: topShift - result.position[1],
       width: parent.width - rightShift - leftShift,
-      height: parent.height - bottomShift - topShift
+      height: parent.height - bottomShift - topShift,
     });
   }
 

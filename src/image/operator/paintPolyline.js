@@ -1,4 +1,3 @@
-
 /**
  * Paint a polyline defined by an array of points.
  * @memberof Image
@@ -10,18 +9,15 @@
  * @return {this} The original painted image
  */
 export default function paintPolyline(points, options = {}) {
-  let {
-    color = [this.maxValue, 0, 0],
-    closed = false
-  } = options;
+  let { color = [this.maxValue, 0, 0], closed = false } = options;
 
   this.checkProcessable('paintPoints', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   let numberChannels = Math.min(this.channels, color.length);
 
-  for (let i = 0; i < (points.length - 1 + closed); i++) {
+  for (let i = 0; i < points.length - 1 + closed; i++) {
     let from = points[i];
     let to = points[(i + 1) % points.length];
 
@@ -40,10 +36,10 @@ export default function paintPolyline(points, options = {}) {
       let yPoint = Math.round(y);
 
       if (
-        (xPoint >= 0) &&
-                (yPoint >= 0) &&
-                (xPoint < this.width) &&
-                (yPoint < this.height)
+        xPoint >= 0 &&
+        yPoint >= 0 &&
+        xPoint < this.width &&
+        yPoint < this.height
       ) {
         let position = (xPoint + yPoint * this.width) * this.channels;
         for (let channel = 0; channel < numberChannels; channel++) {

@@ -2,7 +2,7 @@ import { cssColor } from 'color-functions';
 
 export function css2array(string) {
   let color = cssColor(string);
-  return [color.r, color.g, color.b, Math.round(color.a * 255 / 100)];
+  return [color.r, color.g, color.b, Math.round((color.a * 255) / 100)];
 }
 
 function hue2rgb(p, q, t) {
@@ -30,7 +30,7 @@ function hsl2rgb(h, s, l) {
   l /= 100;
 
   if (s === 0) {
-    r = g = b = (l * 255);
+    r = g = b = l * 255;
   } else {
     if (l <= 0.5) {
       m2 = l * (s + 1);
@@ -52,16 +52,23 @@ export function getDistinctColors(numColors) {
   let j = 0;
   for (let i = 0; i < 360; i += 360 / numColors) {
     j++;
-    let color = hsl2rgb(i, 100, 30 + j % 4 * 15);
-    colors[j - 1] = [Math.round(color.r * 255), Math.round(color.g * 255), Math.round(color.b * 255)];
+    let color = hsl2rgb(i, 100, 30 + (j % 4) * 15);
+    colors[j - 1] = [
+      Math.round(color.r * 255),
+      Math.round(color.g * 255),
+      Math.round(color.b * 255),
+    ];
   }
   return colors;
 }
 
 export function getRandomColor() {
-  return [(Math.floor(Math.random() * 256)), (Math.floor(Math.random() * 256)), (Math.floor(Math.random() * 256))];
+  return [
+    Math.floor(Math.random() * 256),
+    Math.floor(Math.random() * 256),
+    Math.floor(Math.random() * 256),
+  ];
 }
-
 
 /**
  * returns an array of colors based on various options
@@ -80,7 +87,7 @@ export function getColors(options) {
     color,
     colors,
     randomColors, // true / false
-    numberColors = 50
+    numberColors = 50,
   } = options;
 
   if (color && !Array.isArray(color)) {

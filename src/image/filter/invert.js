@@ -1,5 +1,5 @@
-import { getOutputImageOrInPlace } from '../internal/getOutputImage';
 import copyAlphaChannel from '../internal/copyAlphaChannel';
+import { getOutputImageOrInPlace } from '../internal/getOutputImage';
 
 /**
  * Invert the colors of an image
@@ -12,7 +12,7 @@ import copyAlphaChannel from '../internal/copyAlphaChannel';
  */
 export default function invert(options = {}) {
   this.checkProcessable('invert', {
-    bitDepth: [1, 8, 16]
+    bitDepth: [1, 8, 16],
   });
 
   const out = getOutputImageOrInPlace(this, options);

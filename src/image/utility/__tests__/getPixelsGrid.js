@@ -1,5 +1,5 @@
-import { Image } from 'test/common';
 import binary from 'test/binary';
+import { Image } from 'test/common';
 
 describe('we check getPixelsGrid', function () {
   it('should yield the right array of pixels in presence of a mask', function () {
@@ -22,12 +22,14 @@ describe('we check getPixelsGrid', function () {
     let pixels = image.getPixelsGrid({
       sampling: [2, 2],
       painted: false,
-      mask: mask
+      mask: mask,
     });
 
-    expect(pixels.xyS).toStrictEqual([[1, 1], [4, 1]]);
+    expect(pixels.xyS).toStrictEqual([
+      [1, 1],
+      [4, 1],
+    ]);
     expect(pixels.zS).toStrictEqual([[7], [10]]);
     expect(typeof pixels.painted).toBe('undefined');
   });
 });
-

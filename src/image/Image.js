@@ -7,14 +7,14 @@ import {
   getKind,
   verifyKindDefinition,
   createPixelArray,
-  getTheoreticalPixelArraySize
+  getTheoreticalPixelArraySize,
 } from './core/kind';
 import { RGBA } from './core/kindNames';
 import load from './core/load';
 import valueMethods from './core/valueMethods';
 import extend from './extend';
-import RoiManager from './roi/manager';
 import getImageParameters from './internal/getImageParameters';
+import RoiManager from './roi/manager';
 
 const objectToString = Object.prototype.toString;
 
@@ -215,17 +215,17 @@ export default class Image {
         alpha,
         channels,
         bitDepth,
-        maxValue
+        maxValue,
       );
     } else {
       const expectedLength = getTheoreticalPixelArraySize(
         size,
         channels,
-        bitDepth
+        bitDepth,
       );
       if (data.length !== expectedLength) {
         throw new RangeError(
-          `incorrect data size: ${data.length}. Should be ${expectedLength}`
+          `incorrect data size: ${data.length}. Should be ${expectedLength}`,
         );
       }
     }
@@ -302,7 +302,7 @@ export default class Image {
       enumerable: false,
       writable: true,
       configurable: true,
-      value: options.parent || null
+      value: options.parent || null,
     });
     this.position = options.position || [0, 0];
 
@@ -347,9 +347,9 @@ export default class Image {
       newOptions,
       {
         parent: other,
-        position: [0, 0]
+        position: [0, 0],
       },
-      options
+      options,
     );
     return new Image(newOptions);
   }

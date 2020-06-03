@@ -1,8 +1,8 @@
 import { direct, fft } from 'ml-matrix-convolution';
 
-import Image from '../Image';
 import { validateArrayOfChannels } from '../../util/channel';
 import { validateKernel } from '../../util/kernel';
+import Image from '../Image';
 import { clamp } from '../internal/clamp';
 
 import convolutionSeparable from './convolutionSeparable';
@@ -30,7 +30,7 @@ export default function convolution(kernel, options = {}) {
     normalize = false,
     divisor = 1,
     border = 'copy',
-    algorithm = 'auto'
+    algorithm = 'auto',
   } = options;
   let createOptions = {};
   if (bitDepth) createOptions.bitDepth = bitDepth;
@@ -42,7 +42,7 @@ export default function convolution(kernel, options = {}) {
     ({ kernel } = validateKernel(kernel));
   } else if (!Array.isArray(kernel) || kernel.length !== 2) {
     throw new RangeError(
-      'separable convolution requires two arrays of numbers to represent the kernel'
+      'separable convolution requires two arrays of numbers to represent the kernel',
     );
   }
 
@@ -88,14 +88,14 @@ export default function convolution(kernel, options = {}) {
         rows: this.height,
         cols: this.width,
         normalize: normalize,
-        divisor: divisor
+        divisor: divisor,
       });
     } else if (algorithm === 'separable') {
       tmpResult = convolutionSeparable(
         tmpData,
         kernel,
         this.width,
-        this.height
+        this.height,
       );
       if (normalize) {
         divisor = 0;
@@ -115,7 +115,7 @@ export default function convolution(kernel, options = {}) {
         rows: this.height,
         cols: this.width,
         normalize: normalize,
-        divisor: divisor
+        divisor: divisor,
       });
     }
 
@@ -126,7 +126,7 @@ export default function convolution(kernel, options = {}) {
         if (clamped) {
           newImage.data[index * this.channels + c] = clamp(
             tmpResult[index],
-            newImage
+            newImage,
           );
         } else {
           newImage.data[index * this.channels + c] = tmpResult[index];

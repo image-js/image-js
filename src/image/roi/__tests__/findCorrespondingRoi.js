@@ -2,29 +2,71 @@ import { Image } from 'test/common';
 
 describe('findCorrespondingRoi', function () {
   it('should yield the correct object containing corresponding roi ids and pixels', function () {
-    let img1 = new Image(5, 5,
+    let img1 = new Image(
+      5,
+      5,
       [
-        0, 0,   0,   0,   0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 0,   0,   0,   0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
-
-    let img2 = new Image(5, 5,
+    let img2 = new Image(
+      5,
+      5,
       [
-        0, 0,   0,   0,   0,
-        0, 255, 0,   255, 0,
-        0, 255, 0,   255, 0,
-        0,  0,  0,   255, 0,
-        0,  0,  0,   0,   0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        0,
+        0,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
-
 
     expect(img1.width).toBe(5);
     expect(img1.height).toBe(5);
@@ -44,7 +86,11 @@ describe('findCorrespondingRoi', function () {
     let related = roiManager1.findCorrespondingRoi(roiMap2);
     expect(Array.from(related[0].id)).toStrictEqual([1, -1, 2]);
     expect(Array.from(related[0].surface)).toStrictEqual([2, 4, 3]);
-    expect(Array.from(related[0].roiSurfaceCovered)).toStrictEqual([(2 / 9), (4 / 9), (3 / 9)]);
+    expect(Array.from(related[0].roiSurfaceCovered)).toStrictEqual([
+      2 / 9,
+      4 / 9,
+      3 / 9,
+    ]);
     expect(related[0].same).toStrictEqual(5);
     expect(related[0].opposite).toStrictEqual(4);
     expect(related[0].total).toStrictEqual(9);
@@ -56,26 +102,70 @@ describe('findCorrespondingRoi', function () {
     expect(related[1].total).toStrictEqual(16);
   });
   it('should yield the correct object containing corresponding roi ids and pixels (switch imgs from prev test)', function () {
-    let img1 = new Image(5, 5,
+    let img1 = new Image(
+      5,
+      5,
       [
-        0, 0,   0,   0,   0,
-        0, 255, 0,   255, 0,
-        0, 255, 0,   255, 0,
-        0,  0,  0,   255, 0,
-        0,  0,  0,   0,   0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        0,
+        0,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
-    let img2 = new Image(5, 5,
+    let img2 = new Image(
+      5,
+      5,
       [
-        0, 0,   0,   0,   0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 0,   0,   0,   0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
     expect(img1.width).toBe(5);
@@ -107,36 +197,81 @@ describe('findCorrespondingRoi', function () {
     expect(related[1].total).toStrictEqual(3);
     expect(Array.from(related[2].id)).toStrictEqual([-1, 1]);
     expect(Array.from(related[2].surface)).toStrictEqual([16, 4]);
-    expect(Array.from(related[2].roiSurfaceCovered)).toStrictEqual([(16 / 20), (4 / 20)]);
+    expect(Array.from(related[2].roiSurfaceCovered)).toStrictEqual([
+      16 / 20,
+      4 / 20,
+    ]);
     expect(related[2].same).toStrictEqual(16);
     expect(related[2].opposite).toStrictEqual(4);
     expect(related[2].total).toStrictEqual(20);
   });
 
   it('should yield the correct object containing 2 elements with same roi ids and different number of pixels (covering entire image)', function () {
-    let img1 = new Image(5, 5,
+    let img1 = new Image(
+      5,
+      5,
       [
-        0, 0,   0,   0,   0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 0,   0,   0,   0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
-
-    let img2 = new Image(5, 5,
+    let img2 = new Image(
+      5,
+      5,
       [
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
-
 
     expect(img1.width).toBe(5);
     expect(img1.height).toBe(5);
@@ -169,29 +304,71 @@ describe('findCorrespondingRoi', function () {
   });
 
   it('should yield the correct object containing 1 element with one roi id and al of pixels (covering entire image)', function () {
-    let img1 = new Image(5, 5,
+    let img1 = new Image(
+      5,
+      5,
       [
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
-
-    let img2 = new Image(5, 5,
+    let img2 = new Image(
+      5,
+      5,
       [
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
-
 
     expect(img1.width).toBe(5);
     expect(img1.height).toBe(5);

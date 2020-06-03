@@ -8,7 +8,7 @@ import newArray from 'new-array';
  */
 export default function sum() {
   this.checkProcessable('sum', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   let result = newArray(this.channels, 0);

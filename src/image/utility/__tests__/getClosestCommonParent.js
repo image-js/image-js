@@ -2,15 +2,37 @@ import { Image } from 'test/common';
 
 describe('getClosestCommonParent', function () {
   it('correct common parent for masks with one ancestor each', function () {
-    let img1 = new Image(5, 5,
+    let img1 = new Image(
+      5,
+      5,
       [
-        0, 0, 0, 0, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 0, 0, 0, 0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
     let mask1 = img1.mask();
     let mask2 = img1.mask();
@@ -18,15 +40,37 @@ describe('getClosestCommonParent', function () {
   });
 
   it('correct common parent for masks with same number of ancestors', function () {
-    let img1 = new Image(5, 5,
+    let img1 = new Image(
+      5,
+      5,
       [
-        0, 0, 0, 0, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 0, 0, 0, 0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
     let mask1 = img1.mask();
@@ -40,15 +84,37 @@ describe('getClosestCommonParent', function () {
   });
 
   it('correct common parent for masks with a different number of ancestors', function () {
-    let img1 = new Image(5, 5,
+    let img1 = new Image(
+      5,
+      5,
       [
-        0, 0, 0, 0, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 0, 0, 0, 0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
     let mask1 = img1.mask();
@@ -64,15 +130,37 @@ describe('getClosestCommonParent', function () {
   });
 
   it('correct common parent for masks with a multiple number of common ancestors', function () {
-    let img1 = new Image(5, 5,
+    let img1 = new Image(
+      5,
+      5,
       [
-        0, 0, 0, 0, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 0, 0, 0, 0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
     let mask1 = img1.mask();
@@ -88,15 +176,37 @@ describe('getClosestCommonParent', function () {
   });
 
   it('correct common parent for one mask having the other as an ancestor', function () {
-    let img1 = new Image(5, 5,
+    let img1 = new Image(
+      5,
+      5,
       [
-        0, 0, 0, 0, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 0, 0, 0, 0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
     let mask1 = img1.mask();
@@ -108,15 +218,37 @@ describe('getClosestCommonParent', function () {
   });
 
   it('common parent for one mask and original image is original image', function () {
-    let img1 = new Image(5, 5,
+    let img1 = new Image(
+      5,
+      5,
       [
-        0, 0, 0, 0, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 0, 0, 0, 0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
     let mask1 = img1.mask();
@@ -124,25 +256,69 @@ describe('getClosestCommonParent', function () {
   });
 
   it('common parent for masks with different original images', function () {
-    let img1 = new Image(5, 5,
+    let img1 = new Image(
+      5,
+      5,
       [
-        0, 0, 0, 0, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 0, 0, 0, 0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
-    let img2 = new Image(5, 5,
+    let img2 = new Image(
+      5,
+      5,
       [
-        0, 0,   0,   0,   0,
-        0, 255, 0,   255, 0,
-        0, 255, 0,   255, 0,
-        0,  0,  0,   255, 0,
-        0,  0,  0,   0,   0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        0,
+        0,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
     let mask1 = img1.mask();

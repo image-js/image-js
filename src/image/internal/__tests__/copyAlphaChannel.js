@@ -6,7 +6,20 @@ test('copy from RGBA to RGBA', () => {
   const from = new Image(3, 1, [1, 1, 1, 0, 2, 2, 2, 127, 3, 3, 3, 255]);
   const to = new Image(3, 1);
   copyAlphaChannel(from, to);
-  expect(Array.from(to.data)).toStrictEqual([0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 255]);
+  expect(Array.from(to.data)).toStrictEqual([
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    127,
+    0,
+    0,
+    0,
+    255,
+  ]);
 });
 
 test('copy from RGBA to GREYA', () => {
@@ -20,7 +33,20 @@ test('copy from GREYA to RGBA', () => {
   const from = new Image(3, 1, [1, 0, 2, 127, 3, 255], { kind: 'GREYA' });
   const to = new Image(3, 1);
   copyAlphaChannel(from, to);
-  expect(Array.from(to.data)).toStrictEqual([0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 255]);
+  expect(Array.from(to.data)).toStrictEqual([
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    127,
+    0,
+    0,
+    0,
+    255,
+  ]);
 });
 
 test('ignores when no alpha in source', () => {

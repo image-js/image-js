@@ -17,11 +17,12 @@ export default function paintPolylines(polylines, options = {}) {
   let optionsCopy = Object.assign({}, options);
 
   this.checkProcessable('paintPolylines', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
-  let colors = getColors(Object.assign({}, options, { numberColors: polylines.length }));
-
+  let colors = getColors(
+    Object.assign({}, options, { numberColors: polylines.length }),
+  );
 
   for (let i = 0; i < polylines.length; i++) {
     optionsCopy.color = colors[i % colors.length];

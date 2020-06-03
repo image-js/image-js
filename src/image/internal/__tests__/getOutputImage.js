@@ -1,23 +1,20 @@
 import { Image } from 'test/common';
 
-import {
-  getOutputImage,
-  getOutputImageOrInPlace
-} from '../getOutputImage';
+import { getOutputImage, getOutputImageOrInPlace } from '../getOutputImage';
 
 const thisImage = new Image(2, 3);
 
 test('inPlace has wrong type', () => {
   [null, 'string', 42, [], {}].forEach((value) => {
-    expect(
-      () => getOutputImageOrInPlace(thisImage, { inPlace: value })
+    expect(() =>
+      getOutputImageOrInPlace(thisImage, { inPlace: value }),
     ).toThrow(/inPlace option must be a boolean/);
   });
 });
 
 test('inPlace is true, out is set', () => {
-  expect(
-    () => getOutputImageOrInPlace(thisImage, { inPlace: true, out: thisImage })
+  expect(() =>
+    getOutputImageOrInPlace(thisImage, { inPlace: true, out: thisImage }),
   ).toThrow(/out option must not be set/);
 });
 
@@ -51,9 +48,9 @@ test('getOutputImage no out with params', () => {
 
 test('getOutputImage wrong out', () => {
   [null, 'string', true, 42, [], {}].forEach((value) => {
-    expect(
-      () => getOutputImage(thisImage, { out: value })
-    ).toThrow(/out must be an Image object/);
+    expect(() => getOutputImage(thisImage, { out: value })).toThrow(
+      /out must be an Image object/,
+    );
   });
 });
 
@@ -69,14 +66,14 @@ test('getOutputImage with requirements OK - pass other', () => {
 });
 
 test('getOutputImage with requirements NOK - pass this', () => {
-  expect(
-    () => getOutputImage(thisImage, { out: thisImage }, { width: 4 })
+  expect(() =>
+    getOutputImage(thisImage, { out: thisImage }, { width: 4 }),
   ).toThrow(/cannot use out\. Its width must be "4" \(found "2"\)/);
 });
 
 test('getOutputImage with requirements NOK - pass other', () => {
   const other = Image.createFrom(thisImage);
-  expect(
-    () => getOutputImage(thisImage, { out: other }, { width: 4 })
-  ).toThrow(/cannot use out\. Its width must be "4" \(found "2"\)/);
+  expect(() => getOutputImage(thisImage, { out: other }, { width: 4 })).toThrow(
+    /cannot use out\. Its width must be "4" \(found "2"\)/,
+  );
 });

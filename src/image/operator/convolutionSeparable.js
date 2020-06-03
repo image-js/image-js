@@ -1,6 +1,11 @@
 import { directConvolution } from 'ml-convolution';
 
-export default function convolutionSeparable(data, separatedKernel, width, height) {
+export default function convolutionSeparable(
+  data,
+  separatedKernel,
+  width,
+  height,
+) {
   const result = new Array(data.length);
   let tmp, conv, offset, kernel;
 

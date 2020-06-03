@@ -23,6 +23,8 @@ test('test-binary', () => {
       00000000
       00001111
     `;
-    expect(result).toStrictEqual(new Uint8Array([0b11111111, 0b00000000, 0b00001111]));
+    expect(result).toStrictEqual(
+      new Uint8Array([0b11111111, 0b00000000, 0b00001111]),
+    );
   }
 });

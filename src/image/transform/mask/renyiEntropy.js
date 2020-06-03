@@ -89,8 +89,10 @@ export default function renyiEntropy(histogram, total) {
 
     /* Total entropy */
     let totEnt1 = entBack1 + entObj1;
-    let totEnt2 = term2 * ((entBack2 * entObj2) > 0.0 ? Math.log(entBack2 * entObj2) : 0.0);
-    let totEnt3 = term3 * ((entBack3 * entObj3) > 0.0 ? Math.log(entBack3 * entObj3) : 0.0);
+    let totEnt2 =
+      term2 * (entBack2 * entObj2 > 0.0 ? Math.log(entBack2 * entObj2) : 0.0);
+    let totEnt3 =
+      term3 * (entBack3 * entObj3 > 0.0 ? Math.log(entBack3 * entObj3) : 0.0);
 
     if (totEnt1 > maxEnt1) {
       maxEnt1 = totEnt1;
@@ -131,7 +133,11 @@ export default function renyiEntropy(histogram, total) {
 
   /* Determine the optimal threshold value */
   let omega = P1[tStars[2]] - P1[tStars[0]];
-  optThreshold = Math.round(tStars[0] * (P1[tStars[0]] + 0.25 * omega * betas[0]) + 0.25 * tStars[1] * omega * betas[1] + tStars[2] * (P2[tStars[2]] + 0.25 * omega * betas[2]));
+  optThreshold = Math.round(
+    tStars[0] * (P1[tStars[0]] + 0.25 * omega * betas[0]) +
+      0.25 * tStars[1] * omega * betas[1] +
+      tStars[2] * (P2[tStars[2]] + 0.25 * omega * betas[2]),
+  );
 
   return optThreshold;
 }

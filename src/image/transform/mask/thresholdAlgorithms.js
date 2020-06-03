@@ -10,7 +10,7 @@ import moments from './moments';
 import otsu from './otsu';
 import percentile from './percentile';
 import renyiEntropy from './renyiEntropy.js';
-import shanbhag from  './shanbhag';
+import shanbhag from './shanbhag';
 import triangle from './triangle';
 import yen from './yen';
 
@@ -33,7 +33,7 @@ export const methods = {
   renyientropy: renyiEntropy,
   shanbhag,
   triangle,
-  yen
+  yen,
 };
 
 export const names = {};

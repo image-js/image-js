@@ -45,10 +45,10 @@ export default function maxEntropy(histogram, total) {
   // Calculate the total entropy each gray-level
   // and find the threshold that maximizes it
   let threshold = -1;
-  let totEnt;  // total entropy
+  let totEnt; // total entropy
   let maxEnt = Number.MIN_VALUE; // max entropy
   let entBack; // entropy of the background pixels at a given threshold
-  let entObj;  // entropy of the object pixels at a given threshold
+  let entObj; // entropy of the object pixels at a given threshold
 
   for (let it = firstBin; it <= lastBin; it++) {
     /* Entropy of the background pixels */

@@ -18,11 +18,11 @@ export default function level(options = {}) {
     algorithm = 'range',
     channels,
     min = this.min,
-    max = this.max
+    max = this.max,
   } = options;
 
   this.checkProcessable('level', {
-    bitDepth: [8, 16, 32]
+    bitDepth: [8, 16, 32],
   });
 
   channels = validateArrayOfChannels(this, { channels: channels });
@@ -37,7 +37,6 @@ export default function level(options = {}) {
       max = max.filter((a, index) => channels.includes(index));
     }
   }
-
 
   switch (algorithm) {
     case 'range':
@@ -77,7 +76,7 @@ function processImage(image, min, max, channels) {
     } else {
       factor[i] = (image.maxValue + 1 - delta) / (max[i] - min[i]);
     }
-    min[i] += ((0.5 - delta / 2) / factor[i]);
+    min[i] += (0.5 - delta / 2) / factor[i];
   }
 
   /*
@@ -87,14 +86,15 @@ function processImage(image, min, max, channels) {
      But doing this we need to deal with Math.round that gives 256 if the value is 255.5
      */
 
-
   for (let j = 0; j < channels.length; j++) {
     let c = channels[j];
     if (factor[j] !== 0) {
       for (let i = 0; i < image.data.length; i += image.channels) {
-        image.data[i + c] = Math.min(Math.max(0, ((image.data[i + c] - min[j]) * factor[j] + 0.5) | 0), image.maxValue);
+        image.data[i + c] = Math.min(
+          Math.max(0, ((image.data[i + c] - min[j]) * factor[j] + 0.5) | 0),
+          image.maxValue,
+        );
       }
     }
   }
 }
-

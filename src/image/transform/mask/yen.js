@@ -41,7 +41,12 @@ export default function yen(histogram, total) {
   let maxCrit = Number.MIN_VALUE;
   let crit;
   for (let it = 0; it < histogram.length; it++) {
-    crit = -1.0 * ((P1Sq[it] * P2Sq[it]) > 0.0 ? Math.log(P1Sq[it] * P2Sq[it]) : 0.0) + 2 * ((P1[it] * (1.0 - P1[it])) > 0.0 ? Math.log(P1[it] * (1.0 - P1[it])) : 0.0);
+    crit =
+      -1.0 * (P1Sq[it] * P2Sq[it] > 0.0 ? Math.log(P1Sq[it] * P2Sq[it]) : 0.0) +
+      2 *
+        (P1[it] * (1.0 - P1[it]) > 0.0
+          ? Math.log(P1[it] * (1.0 - P1[it]))
+          : 0.0);
     if (crit > maxCrit) {
       maxCrit = crit;
       threshold = it;

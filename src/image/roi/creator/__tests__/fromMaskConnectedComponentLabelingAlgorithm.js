@@ -33,27 +33,89 @@ describe('we check fromMask2', function () {
     let mapData = fromMaskConnectedComponentLabelingAlgorithm(mask).data;
 
     const expected = [
-      0, 1, 0, 2, 0, 3,
-      0, 0, 2, 2, 0, 3,
-      0, 5, 0, 0, 6, 0,
-      0, 0, 0, 0, 0, 7,
-      0, 8, 8, 8, 0, 0,
-      0, 0, 0, 0, 0, 0
+      0,
+      1,
+      0,
+      2,
+      0,
+      3,
+      0,
+      0,
+      2,
+      2,
+      0,
+      3,
+      0,
+      5,
+      0,
+      0,
+      6,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      7,
+      0,
+      8,
+      8,
+      8,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
     ];
 
     expect(Array.from(mapData)).toStrictEqual(expected);
   });
 
   it('should yield the right map with 8 neighbours', function () {
-    let mapData = fromMaskConnectedComponentLabelingAlgorithm(mask, { allowCorners: true }).data;
+    let mapData = fromMaskConnectedComponentLabelingAlgorithm(mask, {
+      allowCorners: true,
+    }).data;
 
     const expected = [
-      0, 1, 0, 1, 0, 1,
-      0, 0, 1, 1, 0, 1,
-      0, 1, 0, 0, 1, 0,
-      0, 0, 0, 0, 0, 1,
-      0, 4, 4, 4, 0, 0,
-      0, 0, 0, 0, 0, 0
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      4,
+      4,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
     ];
 
     expect(Array.from(mapData)).toStrictEqual(expected);

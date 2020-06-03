@@ -9,12 +9,11 @@ import { checkRow, checkChannel } from '../internal/checks';
  */
 export default function getRow(row, channel = 0) {
   this.checkProcessable('getRow', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   checkRow(this, row);
   checkChannel(this, channel);
-
 
   let array = new Array(this.width);
   let ptr = 0;

@@ -1,12 +1,12 @@
 import Image from '../Image';
 
+import RoiLayer from './RoiLayer';
+import RoiMap from './RoiMap';
 import fromMask from './creator/fromMask';
 import fromMaskConnectedComponentLabelingAlgorithm from './creator/fromMaskConnectedComponentLabelingAlgorithm';
 import fromMaxima from './creator/fromMaxima';
-import fromWaterShed from './creator/fromWaterShed';
 import fromPoints from './creator/fromPoints';
-import RoiMap from './RoiMap';
-import RoiLayer from './RoiLayer';
+import fromWaterShed from './creator/fromWaterShed';
 
 /**
  * A manager of Regions of Interest. A RoiManager is related to a specific Image
@@ -42,12 +42,11 @@ export default class RoiManager {
     return this;
   }
 
-
   /**
-     * @param {number[]} map
-     * @param {object} [options]
-     * @return {this}
-     */
+   * @param {number[]} map
+   * @param {object} [options]
+   * @return {this}
+   */
   putMap(map, options = {}) {
     let roiMap = new RoiMap(this._image, map);
     let opt = Object.assign({}, this._options, options);
@@ -70,19 +69,22 @@ export default class RoiManager {
     return this;
   }
 
-
   fromMaskConnectedComponentLabelingAlgorithm(mask, options = {}) {
     let opt = Object.assign({}, this._options, options);
-    let roiMap = fromMaskConnectedComponentLabelingAlgorithm.call(this._image, mask, options);
+    let roiMap = fromMaskConnectedComponentLabelingAlgorithm.call(
+      this._image,
+      mask,
+      options,
+    );
     this._layers[opt.label] = new RoiLayer(roiMap, opt);
     return this;
   }
 
   /**
-     *
-     * @param {object} [options]
-     * @return {RoiMap}
-     */
+   *
+   * @param {object} [options]
+   * @return {RoiMap}
+   */
   getMap(options = {}) {
     let opt = Object.assign({}, this._options, options);
     this._assertLayerWithLabel(opt.label);
@@ -90,28 +92,28 @@ export default class RoiManager {
   }
 
   /**
-     * Return statistics about rows
-     * @param {object} [options]
-     * @return {object[]}
-     */
+   * Return statistics about rows
+   * @param {object} [options]
+   * @return {object[]}
+   */
   rowsInfo(options = {}) {
     return this.getMap(options).rowsInfo();
   }
 
   /**
-     * Return statistics about columns
-     * @param {object} [options]
-     * @return {object[]}
-     */
+   * Return statistics about columns
+   * @param {object} [options]
+   * @return {object[]}
+   */
   colsInfo(options = {}) {
     return this.getMap(options).rowsInfo();
   }
 
   /**
-     * Return the IDs of the Regions Of Interest (Roi) as an array of number
-     * @param {object} [options]
-     * @return {number[]}
-     */
+   * Return the IDs of the Regions Of Interest (Roi) as an array of number
+   * @param {object} [options]
+   * @return {number[]}
+   */
   getRoiIds(options = {}) {
     let rois = this.getRois(options);
     if (rois) {
@@ -125,21 +127,21 @@ export default class RoiManager {
   }
 
   /**
-     * Allows to select ROI based on size, label and sign.
-     * @param {object} [options={}]
-     * @param {string} [options.label='default'] Label of the layer containing the ROI
-     * @param {boolean} [options.positive=true] Select the positive region of interest
-     * @param {boolean} [options.negative=true] Select he negative region of interest
-     * @param {number} [options.minSurface=0]
-     * @param {number} [options.maxSurface=Number.POSITIVE_INFINITY]
-     * @param {number} [options.minWidth=0]
-     * @param {number} [options.minHeight=Number.POSITIVE_INFINITY]
-     * @param {number} [options.maxWidth=0]
-     * @param {number} [options.maxHeight=Number.POSITIVE_INFINITY]
-     * @param {number} [options.minRatio=0] Ratio width / height
-     * @param {number} [options.maxRatio=Number.POSITIVE_INFINITY]
-     * @return {Roi[]}
-     */
+   * Allows to select ROI based on size, label and sign.
+   * @param {object} [options={}]
+   * @param {string} [options.label='default'] Label of the layer containing the ROI
+   * @param {boolean} [options.positive=true] Select the positive region of interest
+   * @param {boolean} [options.negative=true] Select he negative region of interest
+   * @param {number} [options.minSurface=0]
+   * @param {number} [options.maxSurface=Number.POSITIVE_INFINITY]
+   * @param {number} [options.minWidth=0]
+   * @param {number} [options.minHeight=Number.POSITIVE_INFINITY]
+   * @param {number} [options.maxWidth=0]
+   * @param {number} [options.maxHeight=Number.POSITIVE_INFINITY]
+   * @param {number} [options.minRatio=0] Ratio width / height
+   * @param {number} [options.maxRatio=Number.POSITIVE_INFINITY]
+   * @return {Roi[]}
+   */
   getRois(options = {}) {
     let {
       label = this._options.label,
@@ -152,7 +154,7 @@ export default class RoiManager {
       minHeight = 0,
       maxHeight = Number.POSITIVE_INFINITY,
       minRatio = 0,
-      maxRatio = Number.POSITIVE_INFINITY
+      maxRatio = Number.POSITIVE_INFINITY,
     } = options;
 
     if (!this._layers[label]) {
@@ -163,16 +165,16 @@ export default class RoiManager {
 
     const rois = [];
     for (const roi of allRois) {
-      if (((roi.id < 0 && negative) || roi.id > 0 && positive)
-                && roi.surface >= minSurface
-                && roi.surface <= maxSurface
-                && roi.width >= minWidth
-                && roi.width <= maxWidth
-                && roi.height >= minHeight
-                && roi.height <= maxHeight
-                && roi.ratio >= minRatio
-                && roi.ratio <= maxRatio
-
+      if (
+        ((roi.id < 0 && negative) || (roi.id > 0 && positive)) &&
+        roi.surface >= minSurface &&
+        roi.surface <= maxSurface &&
+        roi.width >= minWidth &&
+        roi.width <= maxWidth &&
+        roi.height >= minHeight &&
+        roi.height <= maxHeight &&
+        roi.ratio >= minRatio &&
+        roi.ratio <= maxRatio
       ) {
         rois.push(roi);
       }
@@ -188,9 +190,7 @@ export default class RoiManager {
    * @return {Roi}
    */
   getRoi(roiId, options = {}) {
-    const {
-      label = this._options.label
-    } = options;
+    const { label = this._options.label } = options;
 
     if (!this._layers[label]) {
       throw new Error(`this Roi layer (${label}) does not exist`);
@@ -205,11 +205,11 @@ export default class RoiManager {
   }
 
   /**
-     * Returns an array of masks
-     * See {@link Roi.getMask} for the options
-     * @param {object} [options]
-     * @return {Image[]} Retuns an array of masks (1 bit Image)
-     */
+   * Returns an array of masks
+   * See {@link Roi.getMask} for the options
+   * @param {object} [options]
+   * @return {Image[]} Retuns an array of masks (1 bit Image)
+   */
   getMasks(options = {}) {
     let rois = this.getRois(options);
 
@@ -242,9 +242,7 @@ export default class RoiManager {
    * @return {Image} - The painted RGBA 8 bits image
    */
   paint(options = {}) {
-    let {
-      labelProperty
-    } = options;
+    let { labelProperty } = options;
     if (!this._painted) {
       this._painted = this._image.rgba8();
     }
@@ -262,7 +260,9 @@ export default class RoiManager {
 
   // return a mask corresponding to all the selected masks
   getMask(options = {}) {
-    let mask = new Image(this._image.width, this._image.height, { kind: 'BINARY' });
+    let mask = new Image(this._image.width, this._image.height, {
+      kind: 'BINARY',
+    });
     let masks = this.getMasks(options);
 
     for (let i = 0; i < masks.length; i++) {
@@ -281,12 +281,12 @@ export default class RoiManager {
   }
 
   /**
-     * Reset the changes to the current painted iamge to the image that was
-     * used during the creation of the RoiManager except if a new image is
-     * specified as parameter;
-     * @param {object} [options]
-     * @param {Image} [options.image] A new iamge that you would like to sue for painting over
-     */
+   * Reset the changes to the current painted iamge to the image that was
+   * used during the creation of the RoiManager except if a new image is
+   * specified as parameter;
+   * @param {object} [options]
+   * @param {Image} [options.image] A new iamge that you would like to sue for painting over
+   */
   resetPainted(options = {}) {
     const { image } = options;
     if (image) {
@@ -297,18 +297,18 @@ export default class RoiManager {
   }
 
   /**
-     * In place modification of the roiMap that joins regions of interest
-     * @param {object} [options]
-     * @param {string|function(object,number,number)} [options.algorithm='commonBorderLength'] algorithm used to decide which ROIs are merged.
-     *      Current implemented algorithms are 'commonBorderLength' that use the parameters
-     *      'minCommonBorderLength' and 'maxCommonBorderLength' as well as 'commonBorderRatio' that uses
-     *      the parameters 'minCommonBorderRatio' and 'maxCommonBorderRatio'.
-     * @param {number} [options.minCommonBorderLength=5] minimal common number of pixels for merging
-     * @param {number} [options.maxCommonBorderLength=100] maximal common number of pixels for merging
-     * @param {number} [options.minCommonBorderRatio=0.3] minimal common border ratio for merging
-     * @param {number} [options.maxCommonBorderRatio=1] maximal common border ratio for merging
-     * @return {this}
-     */
+   * In place modification of the roiMap that joins regions of interest
+   * @param {object} [options]
+   * @param {string|function(object,number,number)} [options.algorithm='commonBorderLength'] algorithm used to decide which ROIs are merged.
+   *      Current implemented algorithms are 'commonBorderLength' that use the parameters
+   *      'minCommonBorderLength' and 'maxCommonBorderLength' as well as 'commonBorderRatio' that uses
+   *      the parameters 'minCommonBorderRatio' and 'maxCommonBorderRatio'.
+   * @param {number} [options.minCommonBorderLength=5] minimal common number of pixels for merging
+   * @param {number} [options.maxCommonBorderLength=100] maximal common number of pixels for merging
+   * @param {number} [options.minCommonBorderRatio=0.3] minimal common border ratio for merging
+   * @param {number} [options.maxCommonBorderRatio=1] maximal common border ratio for merging
+   * @return {this}
+   */
   mergeRoi(options = {}) {
     const roiMap = this.getMap(options);
     roiMap.mergeRoi(options);
@@ -342,11 +342,11 @@ export default class RoiManager {
   }
 
   /**
-     * Finds all corresponding ROIs for all ROIs in the manager
-     * @param {number[]} roiMap
-     * @param {object} [options]
-     * @return {Array} array of objects returned in correspondingRoisInformation
-     */
+   * Finds all corresponding ROIs for all ROIs in the manager
+   * @param {number[]} roiMap
+   * @param {object} [options]
+   * @return {Array} array of objects returned in correspondingRoisInformation
+   */
   findCorrespondingRoi(roiMap, options = {}) {
     let allRois = this.getRois(options);
     let allRelated = [];
@@ -356,12 +356,17 @@ export default class RoiManager {
       let y = currentRoi.minY;
       let allPoints = currentRoi.points;
       let roiSign = Math.sign(currentRoi.id);
-      let currentRelated = correspondingRoisInformation(x, y, allPoints, roiMap, roiSign);
+      let currentRelated = correspondingRoisInformation(
+        x,
+        y,
+        allPoints,
+        roiMap,
+        roiSign,
+      );
       allRelated.push(currentRelated);
     }
     return allRelated;
   }
-
 
   _assertLayerWithLabel(label) {
     if (!this._layers[label]) {
@@ -384,12 +389,19 @@ export default class RoiManager {
  * @private
  */
 function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
-  let correspondingRois = { id: [], surface: [], roiSurfaceCovered: [], same: 0, opposite: 0, total: 0 };
+  let correspondingRois = {
+    id: [],
+    surface: [],
+    roiSurfaceCovered: [],
+    same: 0,
+    opposite: 0,
+    total: 0,
+  };
   for (let i = 0; i < points.length; i++) {
     let currentPoint = points[i];
     let currentX = currentPoint[0];
     let currentY = currentPoint[1];
-    let correspondingRoiMapIndex = (currentX + x) + (currentY + y) * roiMap.width;
+    let correspondingRoiMapIndex = currentX + x + (currentY + y) * roiMap.width;
     let value = roiMap.data[correspondingRoiMapIndex];
 
     if (value > 0 || value < 0) {
@@ -409,10 +421,10 @@ function correspondingRoisInformation(x, y, points, roiMap, roiSign) {
     } else {
       correspondingRois.opposite += correspondingRois.surface[i];
     }
-    correspondingRois.roiSurfaceCovered[i] = correspondingRois.surface[i] / points.length;
+    correspondingRois.roiSurfaceCovered[i] =
+      correspondingRois.surface[i] / points.length;
   }
   correspondingRois.total = correspondingRois.opposite + correspondingRois.same;
 
   return correspondingRois;
 }
-

@@ -15,17 +15,23 @@ import Image from '../Image';
  */
 export default function erode(options = {}) {
   let {
-    kernel = [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
-    iterations = 1
+    kernel = [
+      [1, 1, 1],
+      [1, 1, 1],
+      [1, 1, 1],
+    ],
+    iterations = 1,
   } = options;
 
   this.checkProcessable('erode', {
     bitDepth: [1, 8, 16],
     components: 1,
-    alpha: 0
+    alpha: 0,
   });
   if (kernel.columns % 2 === 0 || kernel.rows % 2 === 0) {
-    throw new TypeError('erode: The number of rows and columns of the kernel must be odd');
+    throw new TypeError(
+      'erode: The number of rows and columns of the kernel must be odd',
+    );
   }
 
   let onlyOnes = true;
@@ -43,14 +49,24 @@ export default function erode(options = {}) {
     if (this.bitDepth === 1) {
       if (onlyOnes) {
         const newImage = result.clone();
-        result = erodeOnceBinaryOnlyOnes(result, newImage, kernel.length, kernel[0].length);
+        result = erodeOnceBinaryOnlyOnes(
+          result,
+          newImage,
+          kernel.length,
+          kernel[0].length,
+        );
       } else {
         const newImage = Image.createFrom(result);
         result = erodeOnceBinary(result, newImage, kernel);
       }
     } else if (onlyOnes) {
       const newImage = Image.createFrom(result);
-      result = erodeOnceGreyOnlyOnes(result, newImage, kernel.length, kernel[0].length);
+      result = erodeOnceGreyOnlyOnes(
+        result,
+        newImage,
+        kernel.length,
+        kernel[0].length,
+      );
     } else {
       const newImage = Image.createFrom(result);
       result = erodeOnceGrey(result, newImage, kernel);
@@ -95,7 +111,11 @@ function erodeOnceGreyOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
   for (let y = 0; y < img.height; y++) {
     for (let x = 0; x < img.width; x++) {
       let min = img.maxValue;
-      for (let h = Math.max(0, y - radiusY); h < Math.min(img.height, y + radiusY + 1); h++) {
+      for (
+        let h = Math.max(0, y - radiusY);
+        h < Math.min(img.height, y + radiusY + 1);
+        h++
+      ) {
         const value = img.getValueXY(x, h, 0);
         if (value < min) {
           min = value;
@@ -106,7 +126,11 @@ function erodeOnceGreyOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
 
     for (let x = 0; x < img.width; x++) {
       let min = img.maxValue;
-      for (let i = Math.max(0, x - radiusX); i < Math.min(img.width, x + radiusX + 1); i++) {
+      for (
+        let i = Math.max(0, x - radiusX);
+        i < Math.min(img.width, x + radiusX + 1);
+        i++
+      ) {
         if (minList[i] < min) {
           min = minList[i];
         }
@@ -158,7 +182,11 @@ function erodeOnceBinaryOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
   for (let y = 0; y < img.height; y++) {
     for (let x = 0; x < img.width; x++) {
       minList[x] = 1;
-      for (let h = Math.max(0, y - radiusY); h < Math.min(img.height, y + radiusY + 1); h++) {
+      for (
+        let h = Math.max(0, y - radiusY);
+        h < Math.min(img.height, y + radiusY + 1);
+        h++
+      ) {
         if (img.getBitXY(x, h) === 0) {
           minList[x] = 0;
           break;
@@ -168,7 +196,11 @@ function erodeOnceBinaryOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
 
     for (let x = 0; x < img.width; x++) {
       if (newImage.getBitXY(x, y) === 0) continue;
-      for (let i = Math.max(0, x - radiusX); i < Math.min(img.width, x + radiusX + 1); i++) {
+      for (
+        let i = Math.max(0, x - radiusX);
+        i < Math.min(img.width, x + radiusX + 1);
+        i++
+      ) {
         if (minList[i] === 0) {
           newImage.clearBitXY(x, y);
           break;

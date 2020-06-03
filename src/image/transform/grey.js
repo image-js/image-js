@@ -1,6 +1,6 @@
-import { GREY } from '../model/model';
-import { getOutputImage } from '../internal/getOutputImage';
 import { clamp } from '../internal/clamp';
+import { getOutputImage } from '../internal/getOutputImage';
+import { GREY } from '../model/model';
 
 import { methods } from './greyAlgorithms';
 
@@ -38,7 +38,7 @@ export default function grey(options = {}) {
 
   this.checkProcessable('grey', {
     bitDepth: [8, 16],
-    alpha: [0, 1]
+    alpha: [0, 1],
   });
 
   if (this.components === 1) {
@@ -54,7 +54,7 @@ export default function grey(options = {}) {
   let newImage = getOutputImage(this, options, {
     components: 1,
     alpha: keepAlpha,
-    colorModel: GREY
+    colorModel: GREY,
   });
 
   let method;
@@ -74,12 +74,12 @@ export default function grey(options = {}) {
         (method(this.data[i], this.data[i + 1], this.data[i + 2], this) *
           this.data[i + this.components]) /
           this.maxValue,
-        this
+        this,
       );
     } else {
       newImage.data[ptr++] = clamp(
         method(this.data[i], this.data[i + 1], this.data[i + 2], this),
-        this
+        this,
       );
       if (newImage.alpha) {
         newImage.data[ptr++] = this.data[i + this.components];

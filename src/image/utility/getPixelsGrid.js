@@ -12,7 +12,7 @@ export default function getPixelsGrid(options = {}) {
 
   this.checkProcessable('getPixelsGrid', {
     bitDepth: [8, 16],
-    channels: 1
+    channels: 1,
   });
 
   if (!Array.isArray(sampling)) {

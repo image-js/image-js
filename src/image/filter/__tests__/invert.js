@@ -74,6 +74,8 @@ describe('invert', function () {
     let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 240]);
 
     const out = new Image(1, 2, { kind: 'GREY' });
-    expect(() => image.invert({ out })).toThrow(/cannot use out\. Its components must be "3" \(found "1"\)/);
+    expect(() => image.invert({ out })).toThrow(
+      /cannot use out\. Its components must be "3" \(found "1"\)/,
+    );
   });
 });

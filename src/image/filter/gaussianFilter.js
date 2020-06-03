@@ -10,19 +10,18 @@
  * @return {Image}
  */
 export default function gaussianFilter(options = {}) {
-  let {
-    radius = 1,
-    sigma,
-    channels,
-    border = 'copy'
-  } = options;
+  let { radius = 1, sigma, channels, border = 'copy' } = options;
 
   this.checkProcessable('gaussian', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   const kernel = getKernel(radius, sigma);
-  return this.convolution([kernel, kernel], { border, channels, algorithm: 'separable' });
+  return this.convolution([kernel, kernel], {
+    border,
+    channels,
+    algorithm: 'separable',
+  });
 }
 
 function getKernel(radius, sigma) {

@@ -11,4 +11,3 @@ describe('check sum', function () {
     expect(image.getMean()).toStrictEqual([230, 84, 121]);
   });
 });
-

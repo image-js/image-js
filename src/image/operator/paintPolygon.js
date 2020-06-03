@@ -1,12 +1,22 @@
-
 function deleteDouble(points) {
   let finalPoints = [];
   for (let i = 0; i < points.length; i++) {
-    if (points[i][0] === points[(i + 1) % points.length][0] && points[i][1] === points[(i + 1) % points.length][1]) {
+    if (
+      points[i][0] === points[(i + 1) % points.length][0] &&
+      points[i][1] === points[(i + 1) % points.length][1]
+    ) {
       continue;
-    } else if (points[i][0] === points[(i - 1 + points.length) % points.length][0] && points[i][1] === points[(i - 1 + points.length) % points.length][1]) {
+    } else if (
+      points[i][0] === points[(i - 1 + points.length) % points.length][0] &&
+      points[i][1] === points[(i - 1 + points.length) % points.length][1]
+    ) {
       continue;
-    } else if (points[(i + 1) % points.length][0] === points[(i - 1 + points.length) % points.length][0] && points[(i - 1 + points.length) % points.length][1] === points[(i + 1) % points.length][1]) {
+    } else if (
+      points[(i + 1) % points.length][0] ===
+        points[(i - 1 + points.length) % points.length][0] &&
+      points[(i - 1 + points.length) % points.length][1] ===
+        points[(i + 1) % points.length][1]
+    ) {
       continue; // we don't consider this point only
     } else {
       finalPoints.push(points[i]);
@@ -27,13 +37,13 @@ function lineBetweenTwoPoints(p1, p2) {
 
 function isAtTheRightOfTheLine(x, y, line, height) {
   if (line.vertical === true) {
-    return (line.b <= x);
+    return line.b <= x;
   } else {
     if (line.a === 0) {
       return false;
     } else {
       const xline = (y - line.b) / line.a;
-      return (xline < x && xline >= 0 && xline <= height);
+      return xline < x && xline >= 0 && xline <= height;
     }
   }
 }
@@ -49,13 +59,10 @@ function isAtTheRightOfTheLine(x, y, line, height) {
  * @return {this} The original painted image
  */
 export default function paintPolygon(points, options = {}) {
-  let {
-    color = [this.maxValue, 0, 0],
-    filled = false
-  } = options;
+  let { color = [this.maxValue, 0, 0], filled = false } = options;
 
   this.checkProcessable('paintPoints', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   options.closed = true;
@@ -72,11 +79,14 @@ export default function paintPolygon(points, options = {}) {
       }
     }
     for (let p = 0; p < filteredPoints.length; p++) {
-      const line = lineBetweenTwoPoints(filteredPoints[p], filteredPoints[(p + 1) % filteredPoints.length]);
+      const line = lineBetweenTwoPoints(
+        filteredPoints[p],
+        filteredPoints[(p + 1) % filteredPoints.length],
+      );
       for (let y = 0; y < this.height; y++) {
         for (let x = 0; x < this.width; x++) {
           if (isAtTheRightOfTheLine(x, y, line, this.height)) {
-            matrixBinary[y][x] = (matrixBinary[y][x] === 0) ? 1 : 0;
+            matrixBinary[y][x] = matrixBinary[y][x] === 0 ? 1 : 0;
           }
         }
       }

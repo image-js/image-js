@@ -5,7 +5,7 @@
  */
 export default function min() {
   this.checkProcessable('min', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   let min = this[0].min;

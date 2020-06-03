@@ -1,5 +1,5 @@
-import { Image, load } from 'test/common';
 import { createCanvas } from 'canvas';
+import { Image, load } from 'test/common';
 
 test('constructor defaults', () => {
   let img = new Image();
@@ -11,7 +11,9 @@ test('constructor defaults', () => {
 test('invalid constructor use', () => {
   expect(() => new Image(0, 0)).toThrow(/width must be a positive integer/);
   expect(() => new Image(5, 0)).toThrow(/height must be a positive integer/);
-  expect(() => new Image(10, 10, { kind: 'BLABLA' })).toThrow(/invalid image kind: BLABLA/);
+  expect(() => new Image(10, 10, { kind: 'BLABLA' })).toThrow(
+    /invalid image kind: BLABLA/,
+  );
   expect(() => new Image(10, 10, 10)).toThrow(/options must be an object/);
   expect(() => new Image({ kind: 42 })).toThrow(/kind must be a string/);
 });
@@ -35,8 +37,22 @@ test('create from Canvas', () => {
   ctx.fillRect(0, 0, 2, 1);
   let img = Image.fromCanvas(canvas);
   expect(Array.from(img.data)).toStrictEqual([
-    255,   0,   0, 255, 255,   0,   0, 255,
-    0,     0,   0,   0,   0,   0,   0,   0
+    255,
+    0,
+    0,
+    255,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
   ]);
 });
 

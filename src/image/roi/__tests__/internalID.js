@@ -32,7 +32,6 @@ describe('we check the internalMapID', function () {
   });
 });
 
-
 describe('we check the internalMapID with complex image', function () {
   it('should yield the right internapMapIDs', async () => {
     const img = await load('BW15x15transparent.png');
@@ -58,4 +57,3 @@ describe('we check the internalMapID with complex image', function () {
     expect(rois[1].internalIDs).toStrictEqual([1]);
   });
 });
-

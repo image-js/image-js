@@ -8,7 +8,7 @@
 let { Image } = require('../../src');
 
 let img = new Image(16, 1, {
-  kind: 'BINARY'
+  kind: 'BINARY',
 });
 
 img.setBitXY(15, 0);

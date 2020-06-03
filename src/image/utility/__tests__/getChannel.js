@@ -9,7 +9,6 @@ describe('get a specific channel from an image', function () {
     let blue = image.getChannel(2);
     let alpha = image.getChannel('a');
 
-
     expect(red.components).toBe(1);
     expect(red.channels).toBe(1);
     expect(red.bitDepth).toBe(8);
@@ -35,7 +34,7 @@ describe('get a specific channel from an image', function () {
     let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 0]);
 
     let red = image.getChannel('r', {
-      mergeAlpha: true
+      mergeAlpha: true,
     });
 
     expect(red.components).toBe(1);
@@ -49,7 +48,7 @@ describe('get a specific channel from an image', function () {
     let image = new Image(1, 2, [230, 83, 120, 255, 100, 140, 13, 0]);
 
     let red = image.getChannel('r', {
-      keepAlpha: true
+      keepAlpha: true,
     });
 
     expect(red.channels).toBe(2);
@@ -59,4 +58,3 @@ describe('get a specific channel from an image', function () {
     expect(Array.from(red.data)).toStrictEqual([230, 255, 100, 0]);
   });
 });
-

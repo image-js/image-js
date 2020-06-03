@@ -2,14 +2,11 @@ import { Image } from 'test/common';
 
 describe('check getMatrix class', function () {
   it('should yield a Matrix object', function () {
-    let image = new Image(5, 4,
-      [
-        0, 0, 0, 0, 0,
-        0, 1, 1, 1, 1,
-        0, 1, 2, 2, 2,
-        0, 1, 3, 3, 3
-      ],
-      { kind: 'GREY' }
+    let image = new Image(
+      5,
+      4,
+      [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 2, 2, 2, 0, 1, 3, 3, 3],
+      { kind: 'GREY' },
     );
 
     let matrix = image.getMatrix();

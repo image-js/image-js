@@ -37,7 +37,6 @@ export default class RoiMap {
     return commonBorderLength(this);
   }
 
-
   mergeRoi(options = {}) {
     return mergeRoi.call(this, options);
   }
@@ -63,7 +62,7 @@ export default class RoiMap {
         zeroPixel: 0,
         positiveRoi: 0,
         negativeRoi: 0,
-        medianChange: 0
+        medianChange: 0,
       };
       rowsInfo[currentRow++] = info;
       let positives = {};
@@ -95,7 +94,9 @@ export default class RoiMap {
       }
       changes.push(current);
       // TODO use median package
-      info.medianChange = changes.sort((a, b) => a - b)[Math.floor(changes.length / 2)];
+      info.medianChange = changes.sort((a, b) => a - b)[
+        Math.floor(changes.length / 2)
+      ];
       info.positiveRoiIDs = Object.keys(positives);
       info.negativeRoiIDs = Object.keys(negatives);
       info.positiveRoi = info.positiveRoiIDs.length;
@@ -115,7 +116,7 @@ export default class RoiMap {
         zeroPixel: 0,
         positiveRoi: 0,
         negativeRoi: 0,
-        medianChange: 0
+        medianChange: 0,
       };
       colsInfo[currentCol++] = info;
       let positives = {};
@@ -147,7 +148,9 @@ export default class RoiMap {
       }
       changes.push(current);
       // TODO use median package
-      info.medianChange = changes.sort((a, b) => a - b)[Math.floor(changes.length / 2)];
+      info.medianChange = changes.sort((a, b) => a - b)[
+        Math.floor(changes.length / 2)
+      ];
       info.positiveRoiIDs = Object.keys(positives);
       info.negativeRoiIDs = Object.keys(negatives);
       info.positiveRoi = info.positiveRoiIDs.length;

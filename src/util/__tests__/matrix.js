@@ -21,7 +21,13 @@ describe('check matrix class', function () {
 
   it('check localSearch', function () {
     let results = matrix.localSearch(4, 3, 1);
-    expect(results).toStrictEqual([[3, 2], [3, 3], [3, 4], [5, 2], [5, 3], [5, 4]]);
+    expect(results).toStrictEqual([
+      [3, 2],
+      [3, 3],
+      [3, 4],
+      [5, 2],
+      [5, 3],
+      [5, 4],
+    ]);
   });
 });
-

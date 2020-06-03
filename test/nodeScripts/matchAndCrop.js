@@ -39,7 +39,7 @@ function processImage(image, i) {
   // original image
   let rois = roiManager.getRois('default', {
     negative: false,
-    minSurface: 10
+    minSurface: 10,
   });
 
   // we corner is the correct one ... we need to find the corner that
@@ -76,7 +76,7 @@ function processImage(image, i) {
     x: fromX - frameBorder,
     y: fromY - frameBorder,
     width: width + 2 * frameBorder,
-    height: height + 2 * frameBorder
+    height: height + 2 * frameBorder,
   };
   console.log(fromX, fromY, meanX, meanY, options);
   let crop = image.crop(options);

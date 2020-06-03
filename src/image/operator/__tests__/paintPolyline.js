@@ -9,15 +9,38 @@ describe('we check paintPolyline', function () {
     }
     let image = new Image(size, size, data, { kind: 'RGB' });
 
-    let points = [[1, 1], [3, 3]];
+    let points = [
+      [1, 1],
+      [3, 3],
+    ];
     image.paintPolyline(points);
 
     let painted = [
-      0, 0, 0, 0, 0,
-      0, 1, 0, 0, 0,
-      0, 0, 1, 0, 0,
-      0, 0, 0, 1, 0,
-      0, 0, 0, 0, 0
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
     ];
 
     let exptected = getExpected(painted, [255, 0, 0]);
@@ -33,15 +56,40 @@ describe('we check paintPolyline', function () {
     }
     let image = new Image(size, size, data, { kind: 'RGB' });
 
-    let points = [[1, 1], [4, 1], [4, 3], [1, 3]];
+    let points = [
+      [1, 1],
+      [4, 1],
+      [4, 3],
+      [1, 3],
+    ];
     image.paintPolyline(points);
 
     let painted = [
-      0, 0, 0, 0, 0,
-      0, 1, 1, 1, 1,
-      0, 0, 0, 0, 1,
-      0, 1, 1, 1, 1,
-      0, 0, 0, 0, 0
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
     ];
 
     let exptected = getExpected(painted, [255, 0, 0]);
@@ -57,22 +105,45 @@ describe('we check paintPolyline', function () {
     }
     let image = new Image(size, size, data, { kind: 'GREY' });
 
-    let points = [[2, 0], [4, 2], [0, 2]];
+    let points = [
+      [2, 0],
+      [4, 2],
+      [0, 2],
+    ];
     image.paintPolyline(points);
 
     let painted = [
-      0, 0, 1, 0, 0,
-      0, 0, 0, 1, 0,
-      1, 1, 1, 1, 1,
-      0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
     ];
 
     let exptected = getExpectedGrey(painted, [255, 0, 0]);
     expect(Array.from(image.data)).toStrictEqual(exptected);
   });
 });
-
 
 function getExpected(painted, color) {
   let result = new Array(painted.length * 3);

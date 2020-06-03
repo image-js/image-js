@@ -24,13 +24,12 @@ export default function gradientFilter(options = {}) {
     kernelX,
     kernelY,
     channels,
-    bitDepth = this.bitDepth
+    bitDepth = this.bitDepth,
   } = options;
 
   this.checkProcessable('gradientFilter', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
-
 
   switch (direction) {
     case 'x':
@@ -38,14 +37,14 @@ export default function gradientFilter(options = {}) {
       return convolution.call(this, kernelX, {
         channels: channels,
         border: border,
-        bitDepth
+        bitDepth,
       });
     case 'y':
       if (!kernelY) throw new Error('kernelY option is missing');
       return convolution.call(this, kernelY, {
         channels: channels,
         border: border,
-        bitDepth
+        bitDepth,
       });
     case 'xy': {
       if (!kernelX) throw new Error('kernelX option is missing');
@@ -53,12 +52,12 @@ export default function gradientFilter(options = {}) {
       const gX = convolution.call(this, kernelX, {
         channels: channels,
         border: border,
-        bitDepth: 32
+        bitDepth: 32,
       });
       const gY = convolution.call(this, kernelY, {
         channels: channels,
         border: border,
-        bitDepth: 32
+        bitDepth: 32,
       });
       return gX.hypotenuse(gY, { bitDepth, channels: channels });
     }

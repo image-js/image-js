@@ -23,7 +23,6 @@ export default function getClosestCommonParent(mask) {
   let m1 = this;
   let m2 = mask;
 
-
   while (depthMask1 !== depthMask2) {
     if (depthMask1 > depthMask2) {
       m1 = m1.parent;
@@ -84,4 +83,3 @@ function getFurthestParent(mask, depth) {
   }
   return m;
 }
-

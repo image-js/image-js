@@ -7,7 +7,7 @@ histogram[0] = 63;
 histogram[1] = 192;
 
 let mask = new Image(4, 4, histogram, {
-  kind: 'BINARY'
+  kind: 'BINARY',
 });
 
 let roiManager = mask.getRoiManager();
@@ -26,7 +26,7 @@ for (let i = 0; i < rois.length; i++) {
     ' contourMask:',
     rois[i].external,
     ' border:',
-    rois[i].border
+    rois[i].border,
   );
 }
 

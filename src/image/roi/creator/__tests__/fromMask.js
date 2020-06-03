@@ -32,12 +32,42 @@ describe('we check fromMask', function () {
     let mapData = fromMask(mask).data;
 
     const expected = [
-      -1,  1, -2,  4, -3,  6,
-      -1, -1,  4,  4, -3,  6,
-      -1,  2, -1, -1,  5, -4,
-      -1, -1, -1, -1, -1,  7,
-      -1,  3,  3,  3, -1, -1,
-      -1, -1, -1, -1, -1, -1
+      -1,
+      1,
+      -2,
+      4,
+      -3,
+      6,
+      -1,
+      -1,
+      4,
+      4,
+      -3,
+      6,
+      -1,
+      2,
+      -1,
+      -1,
+      5,
+      -4,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      7,
+      -1,
+      3,
+      3,
+      3,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
     ];
 
     expect(Array.from(mapData)).toStrictEqual(expected);
@@ -47,12 +77,42 @@ describe('we check fromMask', function () {
     let mapData = fromMask(mask, { allowCorners: true }).data;
 
     const expected = [
-      -1,  1, -1,  1, -1,  1,
-      -1, -1,  1,  1, -1,  1,
-      -1,  1, -1, -1,  1, -1,
-      -1, -1, -1, -1, -1,  1,
-      -1,  2,  2,  2, -1, -1,
-      -1, -1, -1, -1, -1, -1
+      -1,
+      1,
+      -1,
+      1,
+      -1,
+      1,
+      -1,
+      -1,
+      1,
+      1,
+      -1,
+      1,
+      -1,
+      1,
+      -1,
+      -1,
+      1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1,
+      -1,
+      2,
+      2,
+      2,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
     ];
 
     expect(Array.from(mapData)).toStrictEqual(expected);
@@ -64,6 +124,7 @@ describe('we check fromMask', function () {
     let pos = true;
     for (let i = 0; i < size; i++) {
       for (let j = 0; j < size; j++) {
+        // eslint-disable-next-line jest/no-if
         if (pos) mask.setBitXY(i, j);
         pos = !pos;
       }

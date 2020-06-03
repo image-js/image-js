@@ -49,7 +49,7 @@ export function rotate(radians, srcPoints, destPoints) {
   for (let i = 0; i < destPoints.length; ++i) {
     destPoints[i] = [
       cos * srcPoints[i][0] - sin * srcPoints[i][1],
-      sin * srcPoints[i][0] + cos * srcPoints[i][1]
+      sin * srcPoints[i][0] + cos * srcPoints[i][1],
     ];
   }
   return destPoints;
@@ -94,7 +94,12 @@ export function boundary(points) {
   let yMin = minMaxValues[0][1];
   let xMax = minMaxValues[1][0];
   let yMax = minMaxValues[1][1];
-  return [[xMin, yMin], [xMax, yMin], [xMax, yMax], [xMin, yMax]];
+  return [
+    [xMin, yMin],
+    [xMax, yMin],
+    [xMax, yMax],
+    [xMin, yMax],
+  ];
 }
 
 /**
@@ -114,7 +119,10 @@ export function minMax(points) {
     if (points[i][1] < yMin) yMin = points[i][1];
     if (points[i][1] < yMax) yMax = points[i][1];
   }
-  return [[xMin, yMin], [xMax, yMax]];
+  return [
+    [xMin, yMin],
+    [xMax, yMax],
+  ];
 }
 
 /**

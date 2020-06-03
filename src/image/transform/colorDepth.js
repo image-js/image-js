@@ -14,7 +14,7 @@ import Image from '../Image';
  */
 export default function colorDepth(newColorDepth = 8) {
   this.checkProcessable('colorDepth', {
-    bitDepth: [1, 8, 16]
+    bitDepth: [1, 8, 16],
   });
 
   if (![8, 16].includes(newColorDepth)) {
@@ -50,7 +50,7 @@ export default function colorDepth(newColorDepth = 8) {
         }
       } else {
         for (let i = 0; i < this.data.length; i++) {
-          newImage.data[i] = this.data[i] << 8 | this.data[i];
+          newImage.data[i] = (this.data[i] << 8) | this.data[i];
         }
       }
       break;

@@ -23,7 +23,16 @@ describe('add', function () {
 
     let image2 = new Image(1, 2, [1, 2, 3, 4, 5, 6, 7, 8]);
     // by default alpha is untouched
-    expect(image2.add([1, 2, 3, 4, 5, 6, 7, 8]).data).toStrictEqual([2, 4, 6, 4, 10, 12, 14, 8]);
+    expect(image2.add([1, 2, 3, 4, 5, 6, 7, 8]).data).toStrictEqual([
+      2,
+      4,
+      6,
+      4,
+      10,
+      12,
+      14,
+      8,
+    ]);
   });
 });
 
@@ -44,65 +53,195 @@ describe('subtract', function () {
 
 describe('subtract image', function () {
   it('should subtract an image to another', function () {
-    let image = new Image(5, 5,
+    let image = new Image(
+      5,
+      5,
       [
-        0, 0, 255, 0, 255,
-        0, 0, 255, 0, 255,
-        0, 0, 255, 0, 255,
-        0, 0, 255, 0, 255,
-        0, 0, 255, 0, 255
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        255,
+        0,
+        255,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
-    let image2 = new Image(5, 5,
+    let image2 = new Image(
+      5,
+      5,
       [
-        255, 0, 0, 0, 255,
-        255, 0, 0, 0, 255,
-        255, 0, 0, 0, 255,
-        255, 0, 0, 0, 255,
-        255, 0, 0, 0, 255
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
     expect(Array.from(image.subtractImage(image2).data)).toStrictEqual([
-      0, 0, 255, 0, 0,
-      0, 0, 255, 0, 0,
-      0, 0, 255, 0, 0,
-      0, 0, 255, 0, 0,
-      0, 0, 255, 0, 0
+      0,
+      0,
+      255,
+      0,
+      0,
+      0,
+      0,
+      255,
+      0,
+      0,
+      0,
+      0,
+      255,
+      0,
+      0,
+      0,
+      0,
+      255,
+      0,
+      0,
+      0,
+      0,
+      255,
+      0,
+      0,
     ]);
   });
   it('should subtract an image to another with absolute = true', function () {
-    let image = new Image(5, 5,
+    let image = new Image(
+      5,
+      5,
       [
-        0, 0, 255, 0, 255,
-        0, 0, 255, 0, 255,
-        0, 0, 255, 0, 255,
-        0, 0, 255, 0, 255,
-        0, 0, 255, 0, 255
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        255,
+        0,
+        255,
+        0,
+        0,
+        255,
+        0,
+        255,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
-    let image2 = new Image(5, 5,
+    let image2 = new Image(
+      5,
+      5,
       [
-        255, 0, 0, 0, 255,
-        255, 0, 0, 0, 255,
-        255, 0, 0, 0, 255,
-        255, 0, 0, 0, 255,
-        255, 0, 0, 0, 255
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
-    expect(Array.from(image.subtractImage(image2, { absolute: true }).data)).toStrictEqual([
-      255, 0, 255, 0, 0,
-      255, 0, 255, 0, 0,
-      255, 0, 255, 0, 0,
-      255, 0, 255, 0, 0,
-      255, 0, 255, 0, 0
+    expect(
+      Array.from(image.subtractImage(image2, { absolute: true }).data),
+    ).toStrictEqual([
+      255,
+      0,
+      255,
+      0,
+      0,
+      255,
+      0,
+      255,
+      0,
+      0,
+      255,
+      0,
+      255,
+      0,
+      0,
+      255,
+      0,
+      255,
+      0,
+      0,
+      255,
+      0,
+      255,
+      0,
+      0,
     ]);
   });
 });

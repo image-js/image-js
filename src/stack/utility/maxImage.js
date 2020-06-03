@@ -7,7 +7,7 @@ import Image from '../../image/Image';
  */
 export default function maxImage() {
   this.checkProcessable('max', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   let image = Image.createFrom(this[0]);

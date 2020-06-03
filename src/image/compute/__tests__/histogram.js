@@ -17,10 +17,9 @@ describe('calculate the histogram', function () {
     expect(histogram[255]).toBe(0);
   });
 
-
   it('check histogram property', function () {
     let image = new Image(1, 4, [230, 255, 230, 255, 230, 255, 13, 1], {
-      kind: 'GREYA'
+      kind: 'GREYA',
     });
 
     let histogram = image.histogram;
@@ -35,7 +34,7 @@ describe('calculate the histogram', function () {
 
   it('check 16 slots histogram', function () {
     let image = new Image(1, 4, [230, 255, 230, 255, 230, 255, 13, 1], {
-      kind: 'GREYA'
+      kind: 'GREYA',
     });
 
     let histogram = image.getHistogram({ maxSlots: 16 });
@@ -47,15 +46,37 @@ describe('calculate the histogram', function () {
   });
 
   it('check histogram for 1 bit image', function () {
-    let image = new Image(5, 5,
+    let image = new Image(
+      5,
+      5,
       [
-        0, 0, 0, 0, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 0, 0, 0, 0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
     let image2 = image.mask();
     let histogram = image2.getHistogram();
@@ -63,4 +84,3 @@ describe('calculate the histogram', function () {
     expect(histogram[1]).toStrictEqual(9);
   });
 });
-

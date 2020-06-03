@@ -2,15 +2,37 @@ import { Image } from 'test/common';
 
 describe('getIntersection', function () {
   it('correct intersection for two 2x2 Roi not intersecting (before transformation) in 5x5 image', function () {
-    let img1 = new Image(5, 5,
+    let img1 = new Image(
+      5,
+      5,
       [
-        255, 255, 0,   0,   0,
-        255, 255, 0,   0,   0,
-        0,   0,   255, 255, 0,
-        0,   0,   255, 255, 0,
-        0,   0,   0,   0,   0
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
     let roiManager1 = img1.getRoiManager();
@@ -42,25 +64,69 @@ describe('getIntersection', function () {
   });
 
   it('correct intersection for 2 Roi in 2 5x5 images', function () {
-    let img1 = new Image(5, 5,
+    let img1 = new Image(
+      5,
+      5,
       [
-        255, 255, 255, 0, 0,
-        255, 255, 255, 0, 0,
-        255, 255, 255, 0, 0,
-        0,   0,   0,   0, 0,
-        0,   0,   0,   0, 0
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
-    let img2 = new Image(5, 5,
+    let img2 = new Image(
+      5,
+      5,
       [
-        0, 0,   0,   0, 0,
-        0, 255, 255, 0, 0,
-        0, 255, 255, 0, 0,
-        0, 0,   0,   0, 0,
-        0, 0,   0,   0, 0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
     // TODO find how to force parent
@@ -77,7 +143,6 @@ describe('getIntersection', function () {
 
     let mask3 = rois1[0].getMask();
     let mask4 = rois2[0].getMask();
-
 
     let intersectNull = mask3.getIntersection(mask4);
     expect(intersectNull.commonWhitePixels).toHaveLength(4);

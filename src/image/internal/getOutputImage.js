@@ -13,7 +13,12 @@ import getImageParameters from './getImageParameters';
  * @param {object} internalOptions - Some additional options on the way to create the output image
  * @return {Image}
  */
-export function getOutputImage(thisImage, options, newParameters, internalOptions = {}) {
+export function getOutputImage(
+  thisImage,
+  options,
+  newParameters,
+  internalOptions = {},
+) {
   const { out } = options;
   if (out === undefined) {
     if (internalOptions.copy) {
@@ -25,10 +30,15 @@ export function getOutputImage(thisImage, options, newParameters, internalOption
     if (!Image.isImage(out)) {
       throw new TypeError('out must be an Image object');
     }
-    const requirements = Object.assign(getImageParameters(thisImage), newParameters);
+    const requirements = Object.assign(
+      getImageParameters(thisImage),
+      newParameters,
+    );
     for (const property in requirements) {
       if (out[property] !== requirements[property]) {
-        throw new RangeError(`cannot use out. Its ${property} must be "${requirements[property]}" (found "${out[property]}")`);
+        throw new RangeError(
+          `cannot use out. Its ${property} must be "${requirements[property]}" (found "${out[property]}")`,
+        );
       }
     }
     return out;
@@ -52,7 +62,9 @@ export function getOutputImageOrInPlace(thisImage, options, internalOptions) {
   }
   if (options.inPlace) {
     if (options.out !== undefined) {
-      throw new TypeError('out option must not be set if inPlace option is true');
+      throw new TypeError(
+        'out option must not be set if inPlace option is true',
+      );
     }
     return thisImage;
   }

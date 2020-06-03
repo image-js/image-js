@@ -8,7 +8,7 @@
  */
 export default function getMoment(xPower = 0, yPower = 0) {
   this.checkProcessable('getMoment', {
-    bitDepth: [1]
+    bitDepth: [1],
   });
 
   let m = 0;

@@ -5,7 +5,7 @@ import { validateChannel } from '../channel';
 describe('we check the validateChannel method', function () {
   it('check for a RGB image', function () {
     let image = new Image(2, 2, {
-      kind: 'RGB'
+      kind: 'RGB',
     });
 
     expect(validateChannel(image, 'r')).toBe(0);
@@ -24,7 +24,7 @@ describe('we check the validateChannel method', function () {
 
   it('check for a RGBA image', function () {
     let image = new Image(2, 2, {
-      kind: 'RGBA'
+      kind: 'RGBA',
     });
 
     expect(validateChannel(image, 'r')).toBe(0);
@@ -41,7 +41,7 @@ describe('we check the validateChannel method', function () {
 
   it('check for a GreyA image', function () {
     let image = new Image(2, 2, {
-      kind: 'GREYA'
+      kind: 'GREYA',
     });
 
     expect(validateChannel(image, 0)).toBe(0);
@@ -59,4 +59,3 @@ describe('we check the validateChannel method', function () {
     }).toThrow(/alpha channel may not/);
   });
 });
-

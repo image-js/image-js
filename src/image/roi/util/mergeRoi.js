@@ -1,4 +1,3 @@
-
 /**
  * In place modification of the roiMap that joins regions of interest
  * @param {object} [options]
@@ -19,20 +18,25 @@ export default function mergeRoi(options = {}) {
     minCommonBorderLength = 5,
     maxCommonBorderLength = 100,
     minCommonBorderRatio = 0.3,
-    maxCommonBorderRatio = 1
+    maxCommonBorderRatio = 1,
   } = options;
 
   let checkFunction = function (currentInfo, currentID, neighbourID) {
-    return (currentInfo[neighbourID] >= minCommonBorderLength &&
-            currentInfo[neighbourID] <= maxCommonBorderLength);
+    return (
+      currentInfo[neighbourID] >= minCommonBorderLength &&
+      currentInfo[neighbourID] <= maxCommonBorderLength
+    );
   };
   if (typeof algorithm === 'function') {
     checkFunction = algorithm;
   }
   if (algorithm.toLowerCase() === 'commonborderratio') {
     checkFunction = function (currentInfo, currentID, neighbourID) {
-      let ratio = Math.min(currentInfo[neighbourID] / currentInfo[currentID], 1);
-      return (ratio >= minCommonBorderRatio && ratio <= maxCommonBorderRatio);
+      let ratio = Math.min(
+        currentInfo[neighbourID] / currentInfo[currentID],
+        1,
+      );
+      return ratio >= minCommonBorderRatio && ratio <= maxCommonBorderRatio;
     };
   }
   const roiMap = this;
@@ -44,7 +48,8 @@ export default function mergeRoi(options = {}) {
     let currentInfo = borderLengths[currentID];
     let neighbourIDs = Object.keys(currentInfo);
     for (let neighbourID of neighbourIDs) {
-      if (neighbourID !== currentID) { // it is not myself ...
+      if (neighbourID !== currentID) {
+        // it is not myself ...
         if (checkFunction(currentInfo, currentID, neighbourID)) {
           // the common border are in the range. We should merge
           let newNeighbourID = neighbourID;
@@ -61,7 +66,8 @@ export default function mergeRoi(options = {}) {
             }
             newMap[smallerID][largerID] = true;
             oldToNew[largerID] = smallerID;
-            if (newMap[largerID]) { // need to put everything to smallerID and remove property
+            if (newMap[largerID]) {
+              // need to put everything to smallerID and remove property
               for (let id of Object.keys(newMap[largerID])) {
                 newMap[smallerID][id] = true;
                 oldToNew[id] = smallerID;

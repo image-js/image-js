@@ -14,7 +14,7 @@ export default function percentile(histogram) {
   let temp = 1.0;
 
   for (let i = 0; i < histogram.length; i++) {
-    avec[i] = Math.abs((partialSum(histogram, i) / total) - percentile);
+    avec[i] = Math.abs(partialSum(histogram, i) / total - percentile);
     if (avec[i] < temp) {
       temp = avec[i];
       threshold = i;

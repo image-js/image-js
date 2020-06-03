@@ -5,7 +5,7 @@ export default function rotateFree(degrees, options = {}) {
   const {
     interpolation = validInterpolations.nearestneighbor,
     width = this.width,
-    height = this.height
+    height = this.height,
   } = options;
 
   if (typeof degrees !== 'number') {
@@ -14,14 +14,21 @@ export default function rotateFree(degrees, options = {}) {
   const interpolationToUse = checkInterpolation(interpolation);
 
   const radians = (degrees * Math.PI) / 180;
-  const newWidth = Math.floor(Math.abs(width * Math.cos(radians)) + Math.abs(height * Math.sin(radians)));
-  const newHeight = Math.floor(Math.abs(height * Math.cos(radians)) + Math.abs(width * Math.sin(radians)));
-  const newImage = Image.createFrom(this, { width: newWidth, height: newHeight });
+  const newWidth = Math.floor(
+    Math.abs(width * Math.cos(radians)) + Math.abs(height * Math.sin(radians)),
+  );
+  const newHeight = Math.floor(
+    Math.abs(height * Math.cos(radians)) + Math.abs(width * Math.sin(radians)),
+  );
+  const newImage = Image.createFrom(this, {
+    width: newWidth,
+    height: newHeight,
+  });
   const cos = Math.cos(-radians);
   const sin = Math.sin(-radians);
 
-  let x0 = (newWidth / 2);
-  let y0 = (newHeight / 2);
+  let x0 = newWidth / 2;
+  let y0 = newHeight / 2;
   if (newWidth % 2 === 0) {
     x0 = x0 - 0.5;
     if (newHeight % 2 === 0) {
@@ -43,20 +50,49 @@ export default function rotateFree(degrees, options = {}) {
 
   switch (interpolationToUse) {
     case validInterpolations.nearestneighbor:
-      return rotateNearestNeighbor(this, newImage, incrementX, incrementY, x0, y0, cos, sin);
+      return rotateNearestNeighbor(
+        this,
+        newImage,
+        incrementX,
+        incrementY,
+        x0,
+        y0,
+        cos,
+        sin,
+      );
     case validInterpolations.bilinear:
-      return rotateBilinear(this, newImage, incrementX, incrementY, x0, y0, cos, sin);
+      return rotateBilinear(
+        this,
+        newImage,
+        incrementX,
+        incrementY,
+        x0,
+        y0,
+        cos,
+        sin,
+      );
     default:
-      throw new Error(`unsupported rotate interpolation: ${interpolationToUse}`);
+      throw new Error(
+        `unsupported rotate interpolation: ${interpolationToUse}`,
+      );
   }
 }
 
-function rotateNearestNeighbor(thisImage, newImage, incrementX, incrementY, x0, y0, cos, sin) {
+function rotateNearestNeighbor(
+  thisImage,
+  newImage,
+  incrementX,
+  incrementY,
+  x0,
+  y0,
+  cos,
+  sin,
+) {
   for (let i = 0; i < newImage.width; i += 1) {
     for (let j = 0; j < newImage.height; j += 1) {
       for (let c = 0; c < thisImage.channels; c++) {
-        let x = Math.round((i - x0) * cos - ((j - y0) * sin) + x0) + incrementX;
-        let y = Math.round((j - y0) * cos + ((i - x0) * sin) + y0) + incrementY;
+        let x = Math.round((i - x0) * cos - (j - y0) * sin + x0) + incrementX;
+        let y = Math.round((j - y0) * cos + (i - x0) * sin + y0) + incrementY;
 
         if (x < 0 || x >= thisImage.width || y < 0 || y >= thisImage.height) {
           if (thisImage.alpha === 1 && c === thisImage.channels - 1) {
@@ -73,12 +109,21 @@ function rotateNearestNeighbor(thisImage, newImage, incrementX, incrementY, x0, 
   return newImage;
 }
 
-function rotateBilinear(thisImage, newImage, incrementX, incrementY, x0, y0, cos, sin) {
+function rotateBilinear(
+  thisImage,
+  newImage,
+  incrementX,
+  incrementY,
+  x0,
+  y0,
+  cos,
+  sin,
+) {
   let stride = thisImage.width * thisImage.channels;
   for (let j = 0; j < newImage.height; j++) {
     for (let i = 0; i < newImage.width; i++) {
-      let x = ((i - x0) * cos - (j - y0) * sin + x0) + incrementX;
-      let y = ((j - y0) * cos + (i - x0) * sin + y0) + incrementY;
+      let x = (i - x0) * cos - (j - y0) * sin + x0 + incrementX;
+      let y = (j - y0) * cos + (i - x0) * sin + y0 + incrementY;
       let x1 = x | 0;
       let y1 = y | 0;
       let xDiff = x - x1;
@@ -98,7 +143,12 @@ function rotateBilinear(thisImage, newImage, incrementX, incrementY, x0, y0, cos
           let C = thisImage.data[index + stride];
           let D = thisImage.data[index + stride + thisImage.channels];
 
-          let result = (A + xDiff * (B - A) + yDiff * (C - A) + xDiff * yDiff * (A - B - C + D)) | 0;
+          let result =
+            (A +
+              xDiff * (B - A) +
+              yDiff * (C - A) +
+              xDiff * yDiff * (A - B - C + D)) |
+            0;
 
           newImage.setValueXY(i, j, c, result);
         }

@@ -24,7 +24,7 @@ export default function otsu(histogramCounts, total) {
     }
     sumB = sumB + ii * histogramCounts[ii];
     const mF = (sum1 - sumB) / wF;
-    const between = wB * wF * ((sumB / wB) - mF) * ((sumB / wB) - mF);
+    const between = wB * wF * (sumB / wB - mF) * (sumB / wB - mF);
     if (between >= maximum) {
       level = ii;
       maximum = between;

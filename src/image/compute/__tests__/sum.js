@@ -8,4 +8,3 @@ describe('check sum', function () {
     expect(image.getSum()).toStrictEqual([330, 223, 133, 256]);
   });
 });
-

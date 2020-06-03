@@ -33,7 +33,7 @@ describe('resize', function () {
   describe('binary images using a factor', function () {
     it('up - 2 factor', function () {
       let binary = new Image(2, 2, [144], {
-        kind: 'BINARY'
+        kind: 'BINARY',
       });
       let newImage = binary.resize({ factor: 2 });
       expect(newImage.width).toBe(4);
@@ -42,7 +42,7 @@ describe('resize', function () {
     });
     it('up - 1.5 factor', function () {
       let binary = new Image(2, 2, [144], {
-        kind: 'BINARY'
+        kind: 'BINARY',
       });
       let newImage = binary.resize({ factor: 1.5 });
       expect(newImage.width).toBe(3);
@@ -51,7 +51,7 @@ describe('resize', function () {
     });
     it('down - 0.5 factor', function () {
       let binary = new Image(4, 4, [204, 51], {
-        kind: 'BINARY'
+        kind: 'BINARY',
       });
       let newImage = binary.resize({ factor: 0.5 });
       expect(newImage.width).toBe(2);
@@ -62,7 +62,7 @@ describe('resize', function () {
 
     it('down - 0.01 factor', function () {
       let binary = new Image(4, 4, [204, 51], {
-        kind: 'BINARY'
+        kind: 'BINARY',
       });
       let newImage = binary.resize({ factor: 0.01 });
       expect(newImage.width).toBe(1);
@@ -104,7 +104,7 @@ describe('resize', function () {
   describe('binary images with preserveAspectRatio', function () {
     it('up - auto width', function () {
       let binary = new Image(2, 2, [144], {
-        kind: 'BINARY'
+        kind: 'BINARY',
       });
       let newImage = binary.resize({ height: 4 });
       expect(newImage.width).toBe(4);
@@ -113,7 +113,7 @@ describe('resize', function () {
     });
     it('up - auto height', function () {
       let binary = new Image(2, 2, [144], {
-        kind: 'BINARY'
+        kind: 'BINARY',
       });
       let newImage = binary.resize({ width: 3 });
       expect(newImage.width).toBe(3);
@@ -122,7 +122,7 @@ describe('resize', function () {
     });
     it('down - auto width', function () {
       let binary = new Image(4, 4, [204, 51], {
-        kind: 'BINARY'
+        kind: 'BINARY',
       });
       let newImage = binary.resize({ height: 2 });
       expect(newImage.width).toBe(2);
@@ -132,7 +132,7 @@ describe('resize', function () {
 
     it('down - auto height', function () {
       let binary = new Image(4, 4, [204, 51], {
-        kind: 'BINARY'
+        kind: 'BINARY',
       });
       let newImage = binary.resize({ width: 1 });
       expect(newImage.width).toBe(1);
@@ -172,14 +172,22 @@ describe('resize', function () {
 
     it('with up factor', function () {
       const image = new Image(10, 12);
-      const result = image.resize({ factor: 2, height: 5, preserveAspectRatio: false });
+      const result = image.resize({
+        factor: 2,
+        height: 5,
+        preserveAspectRatio: false,
+      });
       expect(result.width).toBe(20);
       expect(result.height).toBe(10);
     });
 
     it('with down factor', function () {
       const image = new Image(10, 12);
-      const result = image.resize({ factor: 0.5, height: 5, preserveAspectRatio: false });
+      const result = image.resize({
+        factor: 0.5,
+        height: 5,
+        preserveAspectRatio: false,
+      });
       expect(result.width).toBe(5);
       expect(result.height).toBe(3);
     });
@@ -188,7 +196,7 @@ describe('resize', function () {
   describe('binary images without preserveAspectRatio', function () {
     it('up - with height', function () {
       let binary = new Image(2, 2, [144], {
-        kind: 'BINARY'
+        kind: 'BINARY',
       });
       let newImage = binary.resize({ height: 4, preserveAspectRatio: false });
       expect(newImage.width).toBe(2);
@@ -196,7 +204,7 @@ describe('resize', function () {
     });
     it('up - with width', function () {
       let binary = new Image(2, 2, [144], {
-        kind: 'BINARY'
+        kind: 'BINARY',
       });
       let newImage = binary.resize({ width: 3, preserveAspectRatio: false });
       expect(newImage.width).toBe(3);
@@ -204,7 +212,7 @@ describe('resize', function () {
     });
     it('down - with height', function () {
       let binary = new Image(4, 4, [204, 51], {
-        kind: 'BINARY'
+        kind: 'BINARY',
       });
       let newImage = binary.resize({ height: 2, preserveAspectRatio: false });
       expect(newImage.width).toBe(4);
@@ -212,7 +220,7 @@ describe('resize', function () {
     });
     it('down - with width', function () {
       let binary = new Image(4, 4, [204, 51], {
-        kind: 'BINARY'
+        kind: 'BINARY',
       });
       let newImage = binary.resize({ width: 1, preserveAspectRatio: false });
       expect(newImage.width).toBe(1);

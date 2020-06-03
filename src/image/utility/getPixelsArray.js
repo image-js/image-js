@@ -7,7 +7,7 @@
  */
 export default function getPixelsArray() {
   this.checkProcessable('getPixelsArray', {
-    bitDepth: [8, 16, 32]
+    bitDepth: [8, 16, 32],
   });
 
   let array = new Array(this.size);

@@ -8,13 +8,13 @@ const cross = [
   [0, 0, 1, 0, 0],
   [1, 1, 1, 1, 1],
   [0, 0, 1, 0, 0],
-  [0, 0, 1, 0, 0]
+  [0, 0, 1, 0, 0],
 ];
 
 const smallCross = [
   [0, 1, 0],
   [1, 1, 1],
-  [0, 1, 0]
+  [0, 1, 0],
 ];
 
 /**
@@ -75,9 +75,9 @@ export default class Shape {
   }
 
   /**
-     * Returns an array of [x,y] points
-     * @return {Array<Array<number>>} - Array of [x,y] points
-     */
+   * Returns an array of [x,y] points
+   * @return {Array<Array<number>>} - Array of [x,y] points
+   */
   getPoints() {
     let matrix = this.matrix;
     let points = [];
@@ -92,12 +92,12 @@ export default class Shape {
   }
 
   /**
-     * Returns a Mask (1 bit Image) corresponding to this shape.
-     * @return {Image}
-     */
+   * Returns a Mask (1 bit Image) corresponding to this shape.
+   * @return {Image}
+   */
   getMask() {
     let img = new Image(this.width, this.height, {
-      kind: BINARY
+      kind: BINARY,
     });
     for (let y = 0; y < this.matrix.length; y++) {
       for (let x = 0; x < this.matrix[0].length; x++) {
@@ -136,15 +136,15 @@ function rectangle(width, height, options) {
 
 function ellipse(width, height, options) {
   const matrix = Matrix.zeros(height, width, options);
-  let yEven = 1 - height % 2;
-  let xEven = 1 - width % 2;
+  let yEven = 1 - (height % 2);
+  let xEven = 1 - (width % 2);
   let a = Math.floor((width - 1) / 2); // horizontal ellipse axe
   let b = Math.floor((height - 1) / 2); // vertical ellipse axe
   let a2 = a * a;
   let b2 = b * b;
   if (options.filled) {
     for (let y = 0; y <= b; y++) {
-      let shift = Math.floor(Math.sqrt(a2 - a2 * y * y / b2));
+      let shift = Math.floor(Math.sqrt(a2 - (a2 * y * y) / b2));
       for (let x = a - shift; x <= a; x++) {
         matrix.set(b - y, x, 1);
         matrix.set(b + y + yEven, x, 1);
@@ -154,7 +154,7 @@ function ellipse(width, height, options) {
     }
   } else {
     for (let y = 0; y <= b; y++) {
-      let shift = Math.floor(Math.sqrt(a2 - a2 * y * y / b2));
+      let shift = Math.floor(Math.sqrt(a2 - (a2 * y * y) / b2));
       let x = a - shift;
       matrix.set(b - y, x, 1);
       matrix.set(b + y + yEven, x, 1);
@@ -163,7 +163,7 @@ function ellipse(width, height, options) {
     }
 
     for (let x = 0; x <= a; x++) {
-      let shift = Math.floor(Math.sqrt(b2 - b2 * x * x / a2));
+      let shift = Math.floor(Math.sqrt(b2 - (b2 * x * x) / a2));
       let y = b - shift;
       matrix.set(y, a - x, 1);
       matrix.set(y, a + x + xEven, 1);
@@ -180,8 +180,8 @@ function triangle(width, height, options) {
   }
   const matrix = Matrix.zeros(height, width, options);
   for (let y = 0; y < height; y++) {
-    let shift = Math.floor((1 - y / height) * width / 2);
-    for (let x = shift; x < (width - shift); x++) {
+    let shift = Math.floor(((1 - y / height) * width) / 2);
+    for (let x = shift; x < width - shift; x++) {
       matrix.set(y, x, 1);
     }
   }

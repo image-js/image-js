@@ -8,21 +8,19 @@ describe('Create mask from a GREY image', function () {
     expect(image.mask({ threshold: 0.9 }).data[0]).toBe(0b00001000);
     expect(image.mask({ threshold: 128 }).data[0]).toBe(0b00011000);
     expect(image.mask({ threshold: '50%' }).data[0]).toBe(0b00011000);
-    expect(image
-      .mask({ threshold: '50%', invert: true })
-      .data[0]).toBe(0b11100000);
-    expect(image
-      .mask({ algorithm: 'percentile' })
-      .data[0]).toBe(0b01111000);
-    (expect(function () {
+    expect(image.mask({ threshold: '50%', invert: true }).data[0]).toBe(
+      0b11100000,
+    );
+    expect(image.mask({ algorithm: 'percentile' }).data[0]).toBe(0b01111000);
+    expect(function () {
       image.mask({ algorithm: 'XXX' });
-    }).toThrow(/^unknown thresholding algorithm: XXX$/));
+    }).toThrow(/^unknown thresholding algorithm: XXX$/);
   });
 });
 
 describe('Create a mask from a greyA image', function () {
   let image = new Image(4, 1, [255, 255, 0, 255, 255, 0, 0, 0], {
-    kind: 'GREYA'
+    kind: 'GREYA',
   });
 
   it('should create a mask for a threshold of 0.5 using alpha channel', function () {
@@ -74,13 +72,13 @@ describe('Create a mask from a greyA image', function () {
 describe('Create a mask from a greyA image using percentile algorithm', function () {
   it('should give the right result', function () {
     let image = new Image(4, 1, [0, 255, 63, 255, 127, 255, 255, 255], {
-      kind: 'GREYA'
+      kind: 'GREYA',
     });
 
     let mask = image.mask({
       algorithm: 'percentile',
       useAlpha: false,
-      invert: false
+      invert: false,
     });
 
     expect(mask.channels).toBe(1);

@@ -1,12 +1,12 @@
-import { decode as decodePng } from 'fast-png';
 import { decode as decodeJpegExif } from 'fast-jpeg';
+import { decode as decodePng } from 'fast-png';
+import imageType from 'image-type';
 import { decode as decodeJpeg } from 'jpeg-js';
 import { decode as decodeTiff } from 'tiff';
-import imageType from 'image-type';
 
-import Image from '../Image';
 import Stack from '../../stack/Stack';
 import { decode as base64Decode, toBase64URL } from '../../util/base64';
+import Image from '../Image';
 import { GREY } from '../model/model';
 
 import { fetchBinary, DOMImage, createCanvas } from './environment';
@@ -92,7 +92,7 @@ function loadPNG(data) {
   return new Image(png.width, png.height, png.data, {
     components,
     alpha,
-    bitDepth: png.depth
+    bitDepth: png.depth,
   });
 }
 
@@ -121,7 +121,7 @@ function loadPNGFromPalette(png) {
   return new Image(png.width, png.height, data, {
     components: 3,
     alpha: false,
-    bitDepth: 8
+    bitDepth: 8,
   });
 }
 
@@ -146,7 +146,7 @@ function loadTIFF(data) {
 
 function getMetadata(image) {
   const metadata = {
-    tiff: image
+    tiff: image,
   };
   if (image.exif) {
     metadata.exif = image.exif;
@@ -165,7 +165,7 @@ function getImageFromIFD(image) {
     bitDepth: image.bitsPerSample.length
       ? image.bitsPerSample[0]
       : image.bitsPerSample,
-    meta: getMetadata(image)
+    meta: getMetadata(image),
   });
 }
 

@@ -13,9 +13,10 @@ export function checkNumberArray(value) {
       return value.data;
     }
     if (!isArray(value)) {
-      throw new Error('checkNumberArray: the value should be either a number, array or Image');
+      throw new Error(
+        'checkNumberArray: the value should be either a number, array or Image',
+      );
     }
     return value;
   }
 }
-

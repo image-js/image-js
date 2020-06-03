@@ -23,10 +23,34 @@ describe('we check that each Roi is surrounded by the expected border', function
     expect(rois).toBeInstanceOf(Array);
     expect(rois).toHaveLength(4);
 
-    check(rois[0], { externalIDs: [-1], surface: 1, external: 1, box: 1, border: 1 });
-    check(rois[1], { externalIDs: [1], surface: 9, external: 8, box: 8, border: 8 });
-    check(rois[2], { externalIDs: [2], surface: 39, external: 39, box: 39, border: 39 });
-    check(rois[3], { externalIDs: [-1], surface: 72, external: 32, box: 32, border: 44 });
+    check(rois[0], {
+      externalIDs: [-1],
+      surface: 1,
+      external: 1,
+      box: 1,
+      border: 1,
+    });
+    check(rois[1], {
+      externalIDs: [1],
+      surface: 9,
+      external: 8,
+      box: 8,
+      border: 8,
+    });
+    check(rois[2], {
+      externalIDs: [2],
+      surface: 39,
+      external: 39,
+      box: 39,
+      border: 39,
+    });
+    check(rois[3], {
+      externalIDs: [-1],
+      surface: 72,
+      external: 32,
+      box: 32,
+      border: 44,
+    });
   });
 });
 

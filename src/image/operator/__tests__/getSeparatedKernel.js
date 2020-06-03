@@ -2,13 +2,25 @@ import getSeparatedKernel from '../getSeparatedKernel';
 
 describe('getSeparatedKernel', () => {
   it('should return null if not separable', () => {
-    expect(getSeparatedKernel([[3, 1, 2], [4, 5, 9], [6, 8, 10]])).toBeNull();
+    expect(
+      getSeparatedKernel([
+        [3, 1, 2],
+        [4, 5, 9],
+        [6, 8, 10],
+      ]),
+    ).toBeNull();
   });
 
   it.each([
     [[[1, 2, 1]]],
     [[[0, 2, 1]]],
-    [[[1, 0, -1], [2, 0, -2], [1, 0, -1]]]
+    [
+      [
+        [1, 0, -1],
+        [2, 0, -2],
+        [1, 0, -1],
+      ],
+    ],
   ])('should return an array of kernel components', function verify(kernel) {
     const [v, h] = getSeparatedKernel(kernel);
     expect(v).toHaveLength(kernel.length);
@@ -20,4 +32,3 @@ describe('getSeparatedKernel', () => {
     }
   });
 });
-

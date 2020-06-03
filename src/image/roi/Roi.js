@@ -1,8 +1,8 @@
 import robustPointInPolygon from 'robust-point-in-polygon';
 
+import Shape from '../../util/Shape';
 import Image from '../Image';
 import * as KindNames from '../core/kindNames';
-import Shape from '../../util/Shape';
 
 /**
  * Class to manage Region Of Interests
@@ -243,7 +243,7 @@ export default class Roi {
       let img = new Image(this.width, this.height, {
         kind: KindNames.BINARY,
         position: [this.minX, this.minY],
-        parent: this.map.parent
+        parent: this.map.parent,
       });
 
       for (let x = 0; x < this.width; x++) {
@@ -286,7 +286,7 @@ export default class Roi {
       let img = new Image(this.width, this.height, {
         kind: KindNames.BINARY,
         position: [this.minX, this.minY],
-        parent: this.map.parent
+        parent: this.map.parent,
       });
 
       for (let x = 0; x < this.width; x++) {
@@ -310,7 +310,7 @@ export default class Roi {
       let img = new Image(this.width, this.height, {
         kind: KindNames.BINARY,
         position: [this.minX, this.minY],
-        parent: this.map.parent
+        parent: this.map.parent,
       });
 
       for (let x = 0; x < this.width; x++) {
@@ -333,7 +333,7 @@ export default class Roi {
       let img = new Image(this.width, this.height, {
         kind: KindNames.BINARY,
         position: [this.minX, this.minY],
-        parent: this.map.parent
+        parent: this.map.parent,
       });
 
       for (let x = 0; x < this.width; x++) {
@@ -356,7 +356,7 @@ export default class Roi {
       img.parent = this.map.parent;
       img.position = [
         this.minX + this.center[0] - 1,
-        this.minY + this.center[1] - 1
+        this.minY + this.center[1] - 1,
       ];
 
       this.computed.centerMask = img;
@@ -369,7 +369,7 @@ export default class Roi {
       const img = new Image(this.width, this.height, {
         kind: KindNames.BINARY,
         position: [this.minX, this.minY],
-        parent: this.map.parent
+        parent: this.map.parent,
       });
 
       const hull = this.contourMask.monotoneChainConvexHull();
@@ -391,7 +391,7 @@ export default class Roi {
       const img = new Image(this.width, this.height, {
         kind: KindNames.BINARY,
         position: [this.minX, this.minY],
-        parent: this.map.parent
+        parent: this.map.parent,
       });
 
       const mbr = this.mask.minimalBoundingRectangle();
@@ -453,7 +453,7 @@ export default class Roi {
     if (!this.computed.maxLength) {
       let maxLength = Math.sqrt(
         Math.pow(this.maxLengthPoints[0][0] - this.maxLengthPoints[1][0], 2) +
-          Math.pow(this.maxLengthPoints[0][1] - this.maxLengthPoints[1][1], 2)
+          Math.pow(this.maxLengthPoints[0][1] - this.maxLengthPoints[1][1], 2),
       );
       this.computed.maxLength = maxLength;
     }
@@ -484,7 +484,7 @@ export default class Roi {
       meanY: this.meanY,
       height: this.height,
       width: this.width,
-      surface: this.surface
+      surface: this.surface,
     };
   }
 }
@@ -536,7 +536,7 @@ function getBorders(roi) {
   });
   return {
     ids: ids,
-    lengths: borderLengths
+    lengths: borderLengths,
   };
 }
 

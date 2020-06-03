@@ -3,7 +3,7 @@ import { Image, load } from 'test/common';
 describe('we check the relative position', function () {
   it('check the extract without specify position', async () => {
     let mask = new Image(2, 2, {
-      kind: 'BINARY'
+      kind: 'BINARY',
     });
     mask.setBitXY(0, 0);
     mask.setBitXY(1, 1);
@@ -15,7 +15,7 @@ describe('we check the relative position', function () {
 
   it('check the extract without specify position but force top parent', async () => {
     let mask = new Image(2, 2, {
-      kind: 'BINARY'
+      kind: 'BINARY',
     });
     mask.setBitXY(0, 0);
     mask.setBitXY(1, 1);
@@ -30,7 +30,7 @@ describe('we check the relative position', function () {
     let mask = new Image(2, 2, {
       kind: 'BINARY',
       position: [1, 1],
-      parent: image
+      parent: image,
     });
 
     mask.setBitXY(0, 0);

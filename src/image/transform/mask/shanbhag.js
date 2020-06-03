@@ -44,12 +44,12 @@ export default function shanbhag(histogram, total) {
   let term;
   let totEnt; // total entropy
   let entBack; // entropy of the background pixels at a given threshold
-  let entObj;  // entropy of the object pixels at a given threshold
+  let entObj; // entropy of the object pixels at a given threshold
   for (let it = firstBin; it <= lastBin; it++) {
     /* Entropy of the background pixels */
     entBack = 0.0;
     term = 0.5 / P1[it];
-    for (let ih = 1; ih <= it; ih++)  {
+    for (let ih = 1; ih <= it; ih++) {
       entBack -= normHisto[ih] * Math.log(1.0 - term * P1[ih - 1]);
     }
     entBack *= term;

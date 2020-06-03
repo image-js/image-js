@@ -6,12 +6,20 @@ function sub(a = 1, b = 2) {
 
 describe('Image extensions', function () {
   Image.extendMethod('testMethod1', sub);
-  Image.extendMethod('testMethod2', function () {
-    return this.width;
-  }, { inPlace: true, returnThis: false });
-  Image.extendMethod('testMethod3', function () {
-    this.clone();
-  }, { inPlace: true });
+  Image.extendMethod(
+    'testMethod2',
+    function () {
+      return this.width;
+    },
+    { inPlace: true, returnThis: false },
+  );
+  Image.extendMethod(
+    'testMethod3',
+    function () {
+      this.clone();
+    },
+    { inPlace: true },
+  );
   Image.extendMethod('testMethod4', sub, { partialArgs: [6] });
   describe('extendMethod', function () {
     let img = getSquare();

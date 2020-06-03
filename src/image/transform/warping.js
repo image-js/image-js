@@ -37,7 +37,7 @@ function order4Points(pts) {
   if (pts[indexMinX2][1] < pts[indexMinX][1]) {
     tl = pts[indexMinX2];
     bl = pts[indexMinX];
-    if (indexMinX !== ((indexMinX2 + 1) % 4)) {
+    if (indexMinX !== (indexMinX2 + 1) % 4) {
       tr = pts[(indexMinX2 + 1) % 4];
       br = pts[(indexMinX2 + 2) % 4];
     } else {
@@ -47,7 +47,7 @@ function order4Points(pts) {
   } else {
     bl = pts[indexMinX2];
     tl = pts[indexMinX];
-    if (indexMinX2 !== ((indexMinX + 1) % 4)) {
+    if (indexMinX2 !== (indexMinX + 1) % 4) {
       tr = pts[(indexMinX + 1) % 4];
       br = pts[(indexMinX + 2) % 4];
     } else {
@@ -64,7 +64,11 @@ function distance2Points(p1, p2) {
 }
 
 function crossVect(u, v) {
-  let result = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
+  let result = [
+    u[1] * v[2] - u[2] * v[1],
+    u[2] * v[0] - u[0] * v[2],
+    u[0] * v[1] - u[1] * v[0],
+  ];
   return result;
 }
 
@@ -72,7 +76,6 @@ function dotVect(u, v) {
   let result = u[0] * v[0] + u[1] * v[1] + u[2] * v[2];
   return result;
 }
-
 
 function computeWidthAndHeigth(tl, tr, br, bl, widthImage, heightImage) {
   let w = Math.max(distance2Points(tl, tr), distance2Points(bl, br));
@@ -94,7 +97,6 @@ function computeWidthAndHeigth(tl, tr, br, bl, widthImage, heightImage) {
   let n2 = [k2 * m2[0] - m1[0], k2 * m2[1] - m1[1], k2 * m2[2] - m1[2]];
   let n3 = [k3 * m3[0] - m1[0], k3 * m3[1] - m1[1], k3 * m3[2] - m1[2]];
 
-
   let n21 = n2[0];
   let n22 = n2[1];
   let n23 = n2[2];
@@ -103,15 +105,23 @@ function computeWidthAndHeigth(tl, tr, br, bl, widthImage, heightImage) {
   let n32 = n3[1];
   let n33 = n3[2];
 
-
-  let f = (1.0 / (n23 * n33)) * ((n21 * n31 - (n21 * n33 + n23 * n31) * u0 + n23 * n33 * u0 * u0) + (n22 * n32 - (n22 * n33 + n23 * n32) * v0 + n23 * n33 * v0 * v0));
+  let f =
+    (1.0 / (n23 * n33)) *
+    (n21 * n31 -
+      (n21 * n33 + n23 * n31) * u0 +
+      n23 * n33 * u0 * u0 +
+      (n22 * n32 - (n22 * n33 + n23 * n32) * v0 + n23 * n33 * v0 * v0));
   if (f >= 0) {
     f = Math.sqrt(f);
   } else {
     f = Math.sqrt(-f);
   }
 
-  let A = new Matrix([[f, 0, u0], [0, f, v0], [0, 0, 1]]);
+  let A = new Matrix([
+    [f, 0, u0],
+    [0, f, v0],
+    [0, 0, 1],
+  ]);
   let At = A.transpose();
   let Ati = inverse(At);
   let Ai = inverse(A);
@@ -119,8 +129,10 @@ function computeWidthAndHeigth(tl, tr, br, bl, widthImage, heightImage) {
   let n2R = Matrix.rowVector(n2);
   let n3R = Matrix.rowVector(n3);
 
-  let arReal = Math.sqrt(dotVect(n2R.mmul(Ati).mmul(Ai).to1DArray(), n2) / dotVect(n3R.mmul(Ati).mmul(Ai).to1DArray(), n3));
-
+  let arReal = Math.sqrt(
+    dotVect(n2R.mmul(Ati).mmul(Ai).to1DArray(), n2) /
+      dotVect(n3R.mmul(Ati).mmul(Ai).to1DArray(), n3),
+  );
 
   if (arReal === 0 || arVis === 0) {
     finalW = Math.ceil(w);
@@ -135,9 +147,11 @@ function computeWidthAndHeigth(tl, tr, br, bl, widthImage, heightImage) {
   return [finalW, finalH];
 }
 
-
-function projectionPoint(x, y, a, b, c, d, e, f, g, h, image, channel)  {
-  let [newX, newY] = [(a * x + b * y + c) / (g * x + h * y + 1), (d * x + e * y + f) / (g * x + h * y + 1)];
+function projectionPoint(x, y, a, b, c, d, e, f, g, h, image, channel) {
+  let [newX, newY] = [
+    (a * x + b * y + c) / (g * x + h * y + 1),
+    (d * x + e * y + f) / (g * x + h * y + 1),
+  ];
   return image.getValueXY(Math.floor(newX), Math.floor(newY), channel);
 }
 
@@ -156,12 +170,12 @@ function projectionPoint(x, y, a, b, c, d, e, f, g, h, image, channel)  {
  */
 
 export default function warpingFourPoints(pts, options = {}) {
-  let {
-    calculateRatio = true
-  } = options;
+  let { calculateRatio = true } = options;
 
   if (pts.length !== 4) {
-    throw new Error(`The array pts must have four elements, which are the four corners. Currently, pts have ${pts.length} elements`);
+    throw new Error(
+      `The array pts must have four elements, which are the four corners. Currently, pts have ${pts.length} elements`,
+    );
   }
 
   let [pt1, pt2, pt3, pt4] = pts;
@@ -171,12 +185,26 @@ export default function warpingFourPoints(pts, options = {}) {
   let widthRect;
   let heightRect;
   if (calculateRatio) {
-    [widthRect, heightRect] = computeWidthAndHeigth(tl, tr, br, bl, this.width, this.height);
+    [widthRect, heightRect] = computeWidthAndHeigth(
+      tl,
+      tr,
+      br,
+      bl,
+      this.width,
+      this.height,
+    );
   } else {
-    widthRect = Math.ceil(Math.max(distance2Points(tl, tr), distance2Points(bl, br)));
-    heightRect = Math.ceil(Math.max(distance2Points(tl, bl), distance2Points(tr, br)));
+    widthRect = Math.ceil(
+      Math.max(distance2Points(tl, tr), distance2Points(bl, br)),
+    );
+    heightRect = Math.ceil(
+      Math.max(distance2Points(tl, bl), distance2Points(tr, br)),
+    );
   }
-  let newImage = Image.createFrom(this, { width: widthRect, height: heightRect });
+  let newImage = Image.createFrom(this, {
+    width: widthRect,
+    height: heightRect,
+  });
 
   let [X1, Y1] = tl;
   let [X2, Y2] = tr;
@@ -195,7 +223,7 @@ export default function warpingFourPoints(pts, options = {}) {
     [0, 0, 0, x1, y1, 1, -x1 * Y1, -y1 * Y1],
     [0, 0, 0, x2, y2, 1, -x2 * Y2, -y2 * Y2],
     [0, 0, 0, x3, y3, 1, -x3 * Y3, -y3 * Y3],
-    [0, 0, 0, x4, y4, 1, -x4 * Y4, -y4 * Y4]
+    [0, 0, 0, x4, y4, 1, -x4 * Y4, -y4 * Y4],
   ]);
 
   let D = Matrix.columnVector([X1, X2, X3, X4, Y1, Y2, Y3, Y4]);
@@ -209,7 +237,11 @@ export default function warpingFourPoints(pts, options = {}) {
   for (let channel = 0; channel < this.channels; channel++) {
     for (let i = 0; i < heightRect; i++) {
       for (let j = 0; j < widthRect; j++) {
-        Xt.set(i, j, projectionPoint(i, j, a, b, c, d, e, f, g, h, this, channel));
+        Xt.set(
+          i,
+          j,
+          projectionPoint(i, j, a, b, c, d, e, f, g, h, this, channel),
+        );
       }
     }
     newImage.setMatrix(Xt, { channel: channel });

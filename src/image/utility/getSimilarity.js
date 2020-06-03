@@ -17,17 +17,20 @@ export default function getSimilarity(image, options = {}) {
     channels,
     defaultAlpha,
     normalize,
-    border = [0, 0]
+    border = [0, 0],
   } = options;
 
   this.checkProcessable('getSimilarity', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   if (!Array.isArray(border)) {
     border = [border, border];
   }
-  channels = validateArrayOfChannels(this, { channels: channels, defaultAlpha: defaultAlpha });
+  channels = validateArrayOfChannels(this, {
+    channels: channels,
+    defaultAlpha: defaultAlpha,
+  });
 
   if (this.bitDepth !== image.bitDepth) {
     throw new Error('Both images must have the same bitDepth');
@@ -54,14 +57,22 @@ export default function getSimilarity(image, options = {}) {
   for (let i = 0; i < channels.length; i++) {
     let c = channels[i];
     let sumThis = normalize ? this.sum[c] : Math.max(this.sum[c], image.sum[c]);
-    let sumImage = normalize ? image.sum[c] : Math.max(this.sum[c], image.sum[c]);
+    let sumImage = normalize
+      ? image.sum[c]
+      : Math.max(this.sum[c], image.sum[c]);
 
     if (sumThis !== 0 && sumImage !== 0) {
       for (let x = minX; x < maxX; x++) {
         for (let y = minY; y < maxY; y++) {
           let indexThis = x * this.multiplierX + y * this.multiplierY + c;
-          let indexImage = indexThis + shift[0] * this.multiplierX + shift[1] * this.multiplierY;
-          results[i] += Math.min(this.data[indexThis] / sumThis, image.data[indexImage] / sumImage);
+          let indexImage =
+            indexThis +
+            shift[0] * this.multiplierX +
+            shift[1] * this.multiplierY;
+          results[i] += Math.min(
+            this.data[indexThis] / sumThis,
+            image.data[indexImage] / sumImage,
+          );
         }
       }
     }

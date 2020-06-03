@@ -10,4 +10,3 @@ describe('check min / max', function () {
     expect(image.getMax()).toStrictEqual([230, 140, 120, 255]);
   });
 });
-

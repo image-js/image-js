@@ -10,15 +10,10 @@ import RoiMap from '../RoiMap';
  * @return {RoiMap}
  */
 export default function fromMaxima(options = {}) {
-  let {
-    allowCorner = true,
-    onlyTop = false,
-    invert = false
-  } = options;
+  let { allowCorner = true, onlyTop = false, invert = false } = options;
 
   let image = this;
   image.checkProcessable('fromMaxima', { components: [1] });
-
 
   const PROCESS_TOP = 1;
   const PROCESS_NORMAL = 2;
@@ -31,15 +26,12 @@ export default function fromMaxima(options = {}) {
   let processed = new Int8Array(image.size);
   let variations = new Float32Array(image.size);
 
-
   let MAX_ARRAY = 0x0fffff; // should be enough for most of the cases
   let xToProcess = new Uint16Array(MAX_ARRAY + 1); // assign dynamically ????
   let yToProcess = new Uint16Array(MAX_ARRAY + 1); // mask +1 is of course mandatory !!!
 
-
   let from = 0;
   let to = 0;
-
 
   let xToProcessTop = new Uint16Array(MAX_ARRAY + 1); // assign dynamically ????
   let yToProcessTop = new Uint16Array(MAX_ARRAY + 1); // mask +1 is of course mandatory !!!
@@ -56,7 +48,6 @@ export default function fromMaxima(options = {}) {
     from++;
   }
 
-
   return new RoiMap(image, data);
 
   // we will look for the maxima (or minima) that is present in the picture
@@ -67,35 +58,45 @@ export default function fromMaxima(options = {}) {
       for (let x = 1; x < image.width - 1; x++) {
         let index = x + y * image.width;
         if (processed[index] === 0) {
-          let currentValue = (maxima) ? image.data[index] : -image.data[x + y * image.width];
-          if (image.data[y * image.width + x - 1] > currentValue) { // LEFT
+          let currentValue = maxima
+            ? image.data[index]
+            : -image.data[x + y * image.width];
+          if (image.data[y * image.width + x - 1] > currentValue) {
+            // LEFT
             continue;
           }
-          if (image.data[y * image.width + x + 1] > currentValue) { // RIGHT
+          if (image.data[y * image.width + x + 1] > currentValue) {
+            // RIGHT
             continue;
           }
-          if (image.data[(y - 1) * image.width + x] > currentValue) { // TOP
+          if (image.data[(y - 1) * image.width + x] > currentValue) {
+            // TOP
             continue;
           }
-          if (image.data[(y + 1) * image.width + x] > currentValue) { // BOTTOM
+          if (image.data[(y + 1) * image.width + x] > currentValue) {
+            // BOTTOM
             continue;
           }
           if (allowCorner) {
-            if (image.data[(y - 1) * image.width + x - 1] > currentValue) { // LEFT TOP
+            if (image.data[(y - 1) * image.width + x - 1] > currentValue) {
+              // LEFT TOP
               continue;
             }
-            if (image.data[(y - 1) * image.width + x + 1] > currentValue) { // RIGHT TOP
+            if (image.data[(y - 1) * image.width + x + 1] > currentValue) {
+              // RIGHT TOP
               continue;
             }
-            if (image.data[(y + 1) * image.width + x - 1] > currentValue) { // LEFT BOTTOM
+            if (image.data[(y + 1) * image.width + x - 1] > currentValue) {
+              // LEFT BOTTOM
               continue;
             }
-            if (image.data[(y + 1) * image.width + x + 1] > currentValue) { // RIGHT BOTTOM
+            if (image.data[(y + 1) * image.width + x + 1] > currentValue) {
+              // RIGHT BOTTOM
               continue;
             }
           }
 
-          data[index] = (maxima) ? ++positiveID : --negativeID;
+          data[index] = maxima ? ++positiveID : --negativeID;
 
           let valid = processTop(x, y, PROCESS_TOP);
           if (!valid) {
@@ -158,18 +159,26 @@ export default function fromMaxima(options = {}) {
           variations[index] = image.data[index] - currentValue;
           switch (type) {
             case PROCESS_TOP:
-              if (variations[index] === 0) { // we look for maxima
+              if (variations[index] === 0) {
+                // we look for maxima
                 // if we are next to a border ... it is not surrounded !
-                if (x === 0 || y === 0 || x === (image.width - 1) || y === (image.height - 1)) {
+                if (
+                  x === 0 ||
+                  y === 0 ||
+                  x === image.width - 1 ||
+                  y === image.height - 1
+                ) {
                   return false;
                 }
                 data[index] = currentID;
                 xToProcessTop[toTop & MAX_ARRAY] = x;
                 yToProcessTop[toTop & MAX_ARRAY] = y;
                 toTop++;
-              } else if (variations[index] > 0) { // not a global maximum
+              } else if (variations[index] > 0) {
+                // not a global maximum
                 return false;
-              } else { // a point we will have to process
+              } else {
+                // a point we will have to process
                 if (!onlyTop) {
                   data[index] = currentID;
                   xToProcess[to & MAX_ARRAY] = x;
@@ -179,7 +188,8 @@ export default function fromMaxima(options = {}) {
               }
               break;
             case PROCESS_NORMAL:
-              if (variations[index] <= 0) { // we look for maxima
+              if (variations[index] <= 0) {
+                // we look for maxima
                 data[index] = currentID;
                 xToProcess[to & MAX_ARRAY] = x;
                 yToProcess[to & MAX_ARRAY] = y;
@@ -195,4 +205,3 @@ export default function fromMaxima(options = {}) {
     return true;
   }
 }
-

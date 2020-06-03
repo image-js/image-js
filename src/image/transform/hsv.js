@@ -1,7 +1,7 @@
 // based on https://bgrins.github.io/TinyColor/docs/tinycolor.html
 
-import { RGB, HSV } from '../model/model';
 import Image from '../Image';
+import { RGB, HSV } from '../model/model';
 
 /**
  * Make a copy of the current image and convert the color model to HSV
@@ -18,11 +18,11 @@ export default function hsv() {
   this.checkProcessable('hsv', {
     bitDepth: [8, 16],
     alpha: [0, 1],
-    colorModel: [RGB]
+    colorModel: [RGB],
   });
 
   let newImage = Image.createFrom(this, {
-    colorModel: HSV
+    colorModel: HSV,
   });
 
   let ptr = 0;

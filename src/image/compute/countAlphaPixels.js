@@ -7,12 +7,10 @@
  * @return {number} Number of transparent pixels
  */
 export default function countAlphaPixels(options = {}) {
-  let {
-    alpha = 1
-  } = options;
+  let { alpha = 1 } = options;
   this.checkProcessable('countAlphaPixels', {
     bitDepth: [8, 16],
-    alpha: 1
+    alpha: 1,
   });
 
   let count = 0;

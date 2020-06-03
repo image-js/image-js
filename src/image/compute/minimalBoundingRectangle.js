@@ -1,8 +1,4 @@
-import {
-  rotate,
-  difference,
-  normalize
-} from '../../util/points';
+import { rotate, difference, normalize } from '../../util/points';
 
 import convexHullFunction from './monotoneChainConvexHull';
 
@@ -16,21 +12,22 @@ import convexHullFunction from './monotoneChainConvexHull';
  * @return {Array<Array<number>>}
  */
 export default function minimalBoundingRectangle(options = {}) {
-  const {
-    originalPoints = convexHullFunction.call(this)
-  } = options;
-
+  const { originalPoints = convexHullFunction.call(this) } = options;
 
   if (originalPoints.length === 0) {
     return [];
   }
 
   if (originalPoints.length === 1) {
-    return [originalPoints[0], originalPoints[0], originalPoints[0], originalPoints[0]];
+    return [
+      originalPoints[0],
+      originalPoints[0],
+      originalPoints[0],
+      originalPoints[0],
+    ];
   }
 
   const p = new Array(originalPoints.length);
-
 
   let minSurface = +Infinity;
   let minSurfaceAngle = 0;
@@ -79,7 +76,7 @@ export default function minimalBoundingRectangle(options = {}) {
         pMin,
         pMax,
         [pMax[0], pMax[1] - maxWidth],
-        [pMin[0], pMin[1] - maxWidth]
+        [pMin[0], pMin[1] - maxWidth],
       ];
     }
   }
@@ -87,13 +84,12 @@ export default function minimalBoundingRectangle(options = {}) {
   return mbr;
 }
 
-
 // the angle that allows to make the line going through p1 and p2 horizontal
 // this is an optimized version because it assume one vector is horizontal
 function getAngle(p1, p2) {
   let diff = difference(p2, p1);
   let vector = normalize(diff);
-  let angle = Math.acos((vector[0]));
+  let angle = Math.acos(vector[0]);
   if (vector[1] < 0) return -angle;
   return angle;
 }

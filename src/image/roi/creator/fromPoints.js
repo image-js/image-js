@@ -1,5 +1,5 @@
-import RoiMap from '../RoiMap';
 import Shape from '../../../util/Shape';
+import RoiMap from '../RoiMap';
 
 /**
  * @memberof RoiManager
@@ -23,10 +23,10 @@ export default function fromPoints(pointsToPaint, options = {}) {
       let xS = shapePoints[j][0];
       let yS = shapePoints[j][1];
       if (
-        ((xP + xS) >= 0) &&
-                ((yP + yS) >= 0) &&
-                ((xP + xS) < this.width) &&
-                ((yP + yS) < this.height)
+        xP + xS >= 0 &&
+        yP + yS >= 0 &&
+        xP + xS < this.width &&
+        yP + yS < this.height
       ) {
         data[xP + xS + (yP + yS) * this.width] = positiveID;
       }

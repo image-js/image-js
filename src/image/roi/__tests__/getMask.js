@@ -1,21 +1,46 @@
-import { Image } from 'test/common';
 import binary from 'test/binary';
+import { Image } from 'test/common';
 
 describe('Roi#getMask', function () {
   it('should yield the right mask', function () {
     let image = new Image(5, 5, { kind: 'GREY' });
 
-    let points = [[1, 1], [3, 2], [4, 4], [5, 0]];
+    let points = [
+      [1, 1],
+      [3, 2],
+      [4, 4],
+      [5, 0],
+    ];
 
     let roiManager = image.getRoiManager();
     roiManager.fromPoints(points, { kind: 'smallCross' });
 
     expect(Array.from(roiManager.getData())).toStrictEqual([
-      0, 1, 0, 0, 4,
-      1, 1, 1, 2, 0,
-      0, 1, 2, 2, 2,
-      0, 0, 0, 2, 3,
-      0, 0, 0, 3, 3
+      0,
+      1,
+      0,
+      0,
+      4,
+      1,
+      1,
+      1,
+      2,
+      0,
+      0,
+      1,
+      2,
+      2,
+      2,
+      0,
+      0,
+      0,
+      2,
+      3,
+      0,
+      0,
+      0,
+      3,
+      3,
     ]);
 
     let mask = roiManager.getMask({ minSurface: 5, maxSurface: 5 });
@@ -32,11 +57,31 @@ describe('Roi#getMask', function () {
 
   it('should yield the right mask, position and resize', function () {
     const data = [
-      0, 0, 0, 0, 0,
-      0, 1, 1, 1, 0,
-      0, 1, 1, 1, 0,
-      0, 1, 1, 1, 0,
-      0, 0, 0, 0, 0
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
     ];
     let image = new Image(5, 5, data, { kind: 'GREY' });
 
@@ -61,36 +106,90 @@ describe('Roi#getMask', function () {
 
     expect(rois[0].getMask().parent.size).toBe(25); // the mask image
     expect(rois[0].getMask().parent.parent.size).toBe(25); // the grey image
-    expect(rois[0].getMask().parent.parent.parent === null).toBe(true);  // no parent to grey image
-
+    expect(rois[0].getMask().parent.parent.parent === null).toBe(true); // no parent to grey image
 
     let roi0Mask = rois[0].getMask({ scale: 0.34 });
     expect(roi0Mask.position).toStrictEqual([2, 2]);
     expect(roi0Mask.parent.size).toBe(25); // the mask image
     expect(roi0Mask.parent.parent.size).toBe(25); // the grey image
-    expect(roi0Mask.parent.parent.parent === null).toBe(true);  // no parent to grey image
+    expect(roi0Mask.parent.parent.parent === null).toBe(true); // no parent to grey image
 
     let roi1Mask = rois[1].getMask({ scale: 0.2 });
     expect(roi1Mask.position).toStrictEqual([2, 2]);
 
-    let painted = roiManager.paint({ color: 'red', scale: 0.34, positive: true, negative: false });
+    let painted = roiManager.paint({
+      color: 'red',
+      scale: 0.34,
+      positive: true,
+      negative: false,
+    });
     expect(Array.from(painted.getChannel(0).data)).toStrictEqual([
-      0, 0, 0, 0, 0,
-      0, 1, 1, 1, 0,
-      0, 1, 255, 1, 0,
-      0, 1, 1, 1, 0,
-      0, 0, 0, 0, 0
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1,
+      255,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
     ]);
   });
 
   it('should work with convex hull', () => {
     const data = [
-      0, 0, 0, 0, 0, 0,
-      0, 1, 1, 1, 0, 0,
-      0, 1, 0, 0, 0, 0,
-      0, 1, 0, 0, 0, 0,
-      0, 1, 1, 1, 1, 1,
-      0, 0, 0, 0, 0, 0
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
     ];
     let image = new Image(6, 6, data, { kind: 'GREY' });
 
@@ -112,12 +211,42 @@ describe('Roi#getMask', function () {
 
   it('should work with mbr', () => {
     const data = [
-      0, 0, 0, 0, 0, 0,
-      0, 1, 1, 1, 0, 0,
-      0, 1, 0, 0, 0, 0,
-      0, 1, 0, 0, 0, 0,
-      0, 1, 1, 1, 1, 1,
-      0, 0, 0, 0, 0, 0
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
     ];
     let image = new Image(6, 6, data, { kind: 'GREY' });
 
@@ -137,4 +266,3 @@ describe('Roi#getMask', function () {
     `);
   });
 });
-

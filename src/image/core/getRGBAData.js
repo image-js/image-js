@@ -16,10 +16,12 @@ export default function getRGBAData(options = {}) {
   const { clamped } = options;
   this.checkProcessable('getRGBAData', {
     components: [1, 3],
-    bitDepth: [1, 8, 16, 32]
+    bitDepth: [1, 8, 16, 32],
   });
   const arrayLength = this.width * this.height * 4;
-  let newData = clamped ? new Uint8ClampedArray(arrayLength) : new Uint8Array(arrayLength);
+  let newData = clamped
+    ? new Uint8ClampedArray(arrayLength)
+    : new Uint8Array(arrayLength);
   if (this.bitDepth === 1) {
     fillDataFromBinary(this, newData);
   } else if (this.bitDepth === 32) {
@@ -61,7 +63,7 @@ function fillDataFromGrey32(image, newData) {
   const max = image.max[0];
   const range = max - min;
   for (let i = 0; i < image.size; i++) {
-    const val = Math.floor(255 * (image.data[i] - min) / range);
+    const val = Math.floor((255 * (image.data[i] - min)) / range);
     newData[i * 4] = val;
     newData[i * 4 + 1] = val;
     newData[i * 4 + 2] = val;
@@ -73,9 +75,9 @@ function fillDataFromRGB32(image, newData) {
   const max = Math.max(...image.max);
   const range = max - min;
   for (let i = 0; i < image.size; i++) {
-    const val1 = Math.floor(255 * (image.data[i * 3] - min) / range);
-    const val2 = Math.floor(255 * (image.data[i * 3 + 1] - min) / range);
-    const val3 = Math.floor(255 * (image.data[i * 3 + 2] - min) / range);
+    const val1 = Math.floor((255 * (image.data[i * 3] - min)) / range);
+    const val2 = Math.floor((255 * (image.data[i * 3 + 1] - min)) / range);
+    const val3 = Math.floor((255 * (image.data[i * 3 + 2] - min)) / range);
     newData[i * 4] = val1;
     newData[i * 4 + 1] = val2;
     newData[i * 4 + 2] = val3;
@@ -85,22 +87,27 @@ function fillDataFromRGB32(image, newData) {
 function fillDataFromGrey(image, newData) {
   for (let i = 0; i < image.size; i++) {
     newData[i * 4] = image.data[i * image.channels] >>> (image.bitDepth - 8);
-    newData[i * 4 + 1] = image.data[i * image.channels] >>> (image.bitDepth - 8);
-    newData[i * 4 + 2] = image.data[i * image.channels] >>> (image.bitDepth - 8);
+    newData[i * 4 + 1] =
+      image.data[i * image.channels] >>> (image.bitDepth - 8);
+    newData[i * 4 + 2] =
+      image.data[i * image.channels] >>> (image.bitDepth - 8);
   }
 }
 
 function fillDataFromRGB(image, newData) {
   for (let i = 0; i < image.size; i++) {
     newData[i * 4] = image.data[i * image.channels] >>> (image.bitDepth - 8);
-    newData[i * 4 + 1] = image.data[i * image.channels + 1] >>> (image.bitDepth - 8);
-    newData[i * 4 + 2] = image.data[i * image.channels + 2] >>> (image.bitDepth - 8);
+    newData[i * 4 + 1] =
+      image.data[i * image.channels + 1] >>> (image.bitDepth - 8);
+    newData[i * 4 + 2] =
+      image.data[i * image.channels + 2] >>> (image.bitDepth - 8);
   }
 }
 
 function copyAlpha(image, newData) {
   for (let i = 0; i < image.size; i++) {
-    newData[i * 4 + 3] = image.data[i * image.channels + image.components] >> (image.bitDepth - 8);
+    newData[i * 4 + 3] =
+      image.data[i * image.channels + image.components] >> (image.bitDepth - 8);
   }
 }
 

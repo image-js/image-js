@@ -6,7 +6,7 @@
  */
 export default function histogram(options) {
   this.checkProcessable('min', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   let histogram = this[0].getHistogram(options);

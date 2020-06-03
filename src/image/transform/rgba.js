@@ -16,7 +16,7 @@ export default function rgba() {
   this.checkProcessable('rgba', {
     bitDepth: [8, 16],
     alpha: [0, 1],
-    colorModel: [RGB]
+    colorModel: [RGB],
   });
 
   if (this.colorModel === RGB && this.alpha) {
@@ -24,7 +24,7 @@ export default function rgba() {
   }
 
   let newImage = Image.createFrom(this, {
-    alpha: 1
+    alpha: 1,
   });
 
   let ptr = 0;

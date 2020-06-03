@@ -5,7 +5,7 @@
  */
 export default function max() {
   this.checkProcessable('min', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   let max = this[0].max;

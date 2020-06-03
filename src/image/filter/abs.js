@@ -12,7 +12,7 @@ import { getOutputImageOrInPlace } from '../internal/getOutputImage';
  */
 export default function abs(options = {}) {
   this.checkProcessable('abs', {
-    bitDepth: [32]
+    bitDepth: [32],
   });
   const out = getOutputImageOrInPlace(this, options);
   absolute(this, out);

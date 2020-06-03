@@ -14,16 +14,23 @@ import Image from '../Image';
 export default function hypotenuse(otherImage, options = {}) {
   let { bitDepth = this.bitDepth, channels } = options;
   this.checkProcessable('hypotenuse', {
-    bitDepth: [8, 16, 32]
+    bitDepth: [8, 16, 32],
   });
   if (this.width !== otherImage.width || this.height !== otherImage.height) {
     throw new Error('hypotenuse: both images must have the same size');
   }
-  if (this.alpha !== otherImage.alpha || this.bitDepth !== otherImage.bitDepth) {
-    throw new Error('hypotenuse: both images must have the same alpha and bitDepth');
+  if (
+    this.alpha !== otherImage.alpha ||
+    this.bitDepth !== otherImage.bitDepth
+  ) {
+    throw new Error(
+      'hypotenuse: both images must have the same alpha and bitDepth',
+    );
   }
   if (this.channels !== otherImage.channels) {
-    throw new Error('hypotenuse: both images must have the same number of channels');
+    throw new Error(
+      'hypotenuse: both images must have the same number of channels',
+    );
   }
 
   let newImage = Image.createFrom(this, { bitDepth: bitDepth });
@@ -36,8 +43,12 @@ export default function hypotenuse(otherImage, options = {}) {
     let c = channels[j];
     for (let i = c; i < this.data.length; i += this.channels) {
       let value = Math.hypot(this.data[i], otherImage.data[i]);
-      if (clamped) { // we calculate the clamped result
-        newImage.data[i] = Math.min(Math.max(Math.round(value), 0), newImage.maxValue);
+      if (clamped) {
+        // we calculate the clamped result
+        newImage.data[i] = Math.min(
+          Math.max(Math.round(value), 0),
+          newImage.maxValue,
+        );
       } else {
         newImage.data[i] = value;
       }

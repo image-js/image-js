@@ -7,7 +7,7 @@ import Image from '../../image/Image';
  */
 export default function averageImage() {
   this.checkProcessable('averageImage', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   let data = new Uint32Array(this[0].data.length);

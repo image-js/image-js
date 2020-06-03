@@ -6,7 +6,7 @@
  */
 export default function points() {
   this.checkProcessable('points', {
-    bitDepth: [1]
+    bitDepth: [1],
   });
 
   const pixels = [];

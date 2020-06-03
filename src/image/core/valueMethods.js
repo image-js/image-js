@@ -111,7 +111,7 @@ const valueMethods = {
     }
     this.computed = null;
     return this;
-  }
+  },
 };
 
 export default function setValueMethods(Image) {

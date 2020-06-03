@@ -1,5 +1,5 @@
-import { Image } from 'test/common';
 import binary from 'test/binary';
+import { Image } from 'test/common';
 
 describe('we check that each Roi is surrounded by the expected zones', function () {
   const data = binary`
@@ -17,7 +17,7 @@ describe('we check that each Roi is surrounded by the expected zones', function 
      */
 
   let mask = new Image(4, 4, data, {
-    kind: 'BINARY'
+    kind: 'BINARY',
   });
 
   let roiManager = mask.getRoiManager();

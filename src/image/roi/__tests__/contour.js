@@ -2,15 +2,37 @@ import { Image } from 'test/common';
 
 describe('we check contourMask', function () {
   it('should yield the right contourMask size and value', function () {
-    let img = new Image(5, 5,
+    let img = new Image(
+      5,
+      5,
       [
-        0, 0,   0,   0,   0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 255, 255, 255, 0,
-        0, 0,   0,   0,   0
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        255,
+        255,
+        255,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
       ],
-      { kind: 'GREY' }
+      { kind: 'GREY' },
     );
 
     expect(img.width).toBe(5);
@@ -30,7 +52,6 @@ describe('we check contourMask', function () {
 
     expect(rois[0].surface).toBe(9);
     expect(rois[1].surface).toBe(16);
-
 
     let roiMask = rois[0].mask;
     expect(Array.from(roiMask.data)).toStrictEqual([255, 128]);

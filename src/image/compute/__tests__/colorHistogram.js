@@ -26,7 +26,24 @@ describe('calculate the colorHistogram', function () {
   });
 
   it('check getColorHistogram property with transparency', function () {
-    let image = new Image(1, 4, [0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 255, 255, 255, 255, 255]);
+    let image = new Image(1, 4, [
+      0,
+      0,
+      0,
+      255,
+      255,
+      255,
+      255,
+      0,
+      0,
+      0,
+      0,
+      255,
+      255,
+      255,
+      255,
+      255,
+    ]);
 
     let histogram = image.colorHistogram;
     expect(Array.from(histogram)).toHaveLength(512);

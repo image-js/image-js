@@ -13,17 +13,23 @@
  */
 export default function topHat(options = {}) {
   let {
-    kernel = [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
-    iterations = 1
+    kernel = [
+      [1, 1, 1],
+      [1, 1, 1],
+      [1, 1, 1],
+    ],
+    iterations = 1,
   } = options;
 
   this.checkProcessable('topHat', {
     bitDepth: [8, 16],
     components: 1,
-    alpha: 0
+    alpha: 0,
   });
   if (kernel.columns % 2 === 0 || kernel.rows % 2 === 0) {
-    throw new TypeError('topHat: The number of rows and columns of the kernel must be odd');
+    throw new TypeError(
+      'topHat: The number of rows and columns of the kernel must be odd',
+    );
   }
 
   let newImage = this;

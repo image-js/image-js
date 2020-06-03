@@ -17,44 +17,57 @@ export default function localMaxima(options = {}) {
     region = 3,
     removeClosePoints = 0,
     invert = false,
-    maxEquals = 2
+    maxEquals = 2,
   } = options;
   let image = this;
   this.checkProcessable('localMaxima', {
     bitDepth: [8, 16],
-    components: 1
+    components: 1,
   });
   region *= 4;
 
-  let maskExpectedValue = (invert) ? 0 : 1;
+  let maskExpectedValue = invert ? 0 : 1;
 
   let dx = [+1, 0, -1, 0, +1, +1, -1, -1, +2, 0, -2, 0, +2, +2, -2, -2];
   let dy = [0, +1, 0, -1, +1, -1, +1, -1, 0, +2, 0, -2, +2, -2, +2, -2];
-  let shift = (region <= 8) ? 1 : 2;
+  let shift = region <= 8 ? 1 : 2;
   let points = [];
   for (let currentY = shift; currentY < image.height - shift; currentY++) {
     for (let currentX = shift; currentX < image.width - shift; currentX++) {
-      if (mask && (mask.getBitXY(currentX, currentY) !== maskExpectedValue)) {
+      if (mask && mask.getBitXY(currentX, currentY) !== maskExpectedValue) {
         continue;
       }
       let counter = 0;
       let nbEquals = 0;
       let currentValue = image.data[currentX + currentY * image.width];
       for (let dir = 0; dir < region; dir++) {
-        if (invert) { // we search for minima
-          if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] > currentValue) {
+        if (invert) {
+          // we search for minima
+          if (
+            image.data[
+              currentX + dx[dir] + (currentY + dy[dir]) * image.width
+            ] > currentValue
+          ) {
             counter++;
           }
         } else {
-          if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] < currentValue) {
+          if (
+            image.data[
+              currentX + dx[dir] + (currentY + dy[dir]) * image.width
+            ] < currentValue
+          ) {
             counter++;
           }
         }
-        if (image.data[currentX + dx[dir] + (currentY + dy[dir]) * image.width] === currentValue) {
+        if (
+          image.data[
+            currentX + dx[dir] + (currentY + dy[dir]) * image.width
+          ] === currentValue
+        ) {
           nbEquals++;
         }
       }
-      if ((counter + nbEquals) === region && nbEquals <= maxEquals) {
+      if (counter + nbEquals === region && nbEquals <= maxEquals) {
         points.push([currentX, currentY]);
       }
     }
@@ -68,7 +81,12 @@ export default function localMaxima(options = {}) {
   if (removeClosePoints > 0) {
     for (let i = 0; i < points.length; i++) {
       for (let j = i + 1; j < points.length; j++) {
-        if (Math.sqrt(Math.pow(points[i][0] - points[j][0], 2) + Math.pow(points[i][1] - points[j][1], 2)) < removeClosePoints) {
+        if (
+          Math.sqrt(
+            Math.pow(points[i][0] - points[j][0], 2) +
+              Math.pow(points[i][1] - points[j][1], 2),
+          ) < removeClosePoints
+        ) {
           points[i][0] = (points[i][0] + points[j][0]) >> 1;
           points[i][1] = (points[i][1] + points[j][1]) >> 1;
           points.splice(j, 1);

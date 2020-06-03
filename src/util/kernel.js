@@ -3,9 +3,12 @@ import isInteger from 'is-integer';
 export function validateKernel(kernel) {
   let kHeight, kWidth;
   if (Array.isArray(kernel)) {
-    if (Array.isArray(kernel[0])) { // 2D array
-      if (((kernel.length & 1) === 0) || ((kernel[0].length & 1) === 0)) {
-        throw new RangeError('validateKernel: Kernel rows and columns should be odd numbers');
+    if (Array.isArray(kernel[0])) {
+      // 2D array
+      if ((kernel.length & 1) === 0 || (kernel[0].length & 1) === 0) {
+        throw new RangeError(
+          'validateKernel: Kernel rows and columns should be odd numbers',
+        );
       } else {
         kHeight = Math.floor(kernel.length / 2);
         kWidth = Math.floor(kernel[0].length / 2);

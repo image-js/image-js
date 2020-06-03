@@ -29,9 +29,11 @@ export function getThreshold(value, maxValue) {
   if (typeof value === 'string') {
     let last = value[value.length - 1];
     if (last !== '%') {
-      throw Error('getThreshold : if the value is a string it must finish by %');
+      throw Error(
+        'getThreshold : if the value is a string it must finish by %',
+      );
     }
-    return parseFloat(value) / 100 * maxValue;
+    return (parseFloat(value) / 100) * maxValue;
   } else if (typeof value === 'number') {
     if (value < 1) {
       return value * maxValue;
@@ -42,10 +44,9 @@ export function getThreshold(value, maxValue) {
   }
 }
 
-
 export function factorDimensions(factor, width, height) {
   factor = getFactor(factor);
-  let newWidth =  Math.round(factor * width);
+  let newWidth = Math.round(factor * width);
   let newHeight = Math.round(factor * height);
 
   if (newWidth <= 0) {
@@ -56,6 +57,6 @@ export function factorDimensions(factor, width, height) {
   }
   return {
     width: newWidth,
-    height: newHeight
+    height: newHeight,
   };
 }

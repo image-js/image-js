@@ -9,13 +9,11 @@ import { methods, names } from '../transform/mask/thresholdAlgorithms';
  * @return {number}
  */
 export default function getThreshold(options = {}) {
-  let {
-    algorithm = names.otsu
-  } = options;
+  let { algorithm = names.otsu } = options;
 
   this.checkProcessable('getThreshold', {
     components: 1,
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   let method = methods[algorithm.toLowerCase()];

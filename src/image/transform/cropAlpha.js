@@ -9,17 +9,17 @@
  */
 export default function cropAlpha(options = {}) {
   this.checkProcessable('cropAlpha', {
-    alpha: 1
+    alpha: 1,
   });
 
-  const {
-    threshold = this.maxValue
-  } = options;
+  const { threshold = this.maxValue } = options;
 
   let left = findLeft(this, threshold, this.components);
 
   if (left === -1) {
-    throw new Error('Could not find new dimensions. Threshold may be too high.');
+    throw new Error(
+      'Could not find new dimensions. Threshold may be too high.',
+    );
   }
 
   let top = findTop(this, threshold, this.components, left);
@@ -30,7 +30,7 @@ export default function cropAlpha(options = {}) {
     x: left,
     y: top,
     width: right - left + 1,
-    height: bottom - top + 1
+    height: bottom - top + 1,
   });
 }
 

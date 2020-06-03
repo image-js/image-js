@@ -10,13 +10,13 @@ import { validateChannel } from '../../util/channel';
  */
 export default function setChannel(channel, image) {
   this.checkProcessable('setChannel', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   image.checkProcessable('setChannel (image parameter check)', {
     bitDepth: [this.bitDepth],
     alpha: [0],
-    components: [1]
+    components: [1],
   });
 
   if (image.width !== this.width || image.height !== this.height) {

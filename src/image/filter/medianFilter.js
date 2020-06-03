@@ -14,14 +14,10 @@ import Image from '../Image';
  * @return {Image}
  */
 export default function medianFilter(options = {}) {
-  let {
-    radius = 1,
-    border = 'copy',
-    channels
-  } = options;
+  let { radius = 1, border = 'copy', channels } = options;
 
   this.checkProcessable('medianFilter', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
 
   if (radius < 1) {

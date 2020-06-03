@@ -1,5 +1,5 @@
-import { Image, load } from 'test/common';
 import { asc as sortAsc } from 'num-sort';
+import { Image, load } from 'test/common';
 
 describe('we check mask', function () {
   it('should yield the right mask size and value', async () => {
@@ -44,12 +44,7 @@ describe('we check mask', function () {
     expect(Array.from(roiMask.data)).toStrictEqual([252, 99, 31, 128]);
 
     roiFilledMask = rois[2].filledMask;
-    expect(Array.from(roiFilledMask.data)).toStrictEqual([
-      255,
-      255,
-      255,
-      128
-    ]);
+    expect(Array.from(roiFilledMask.data)).toStrictEqual([255, 255, 255, 128]);
 
     let centerMask = rois[0].centerMask;
     expect(centerMask.position).toStrictEqual([1, 1]);
@@ -72,7 +67,7 @@ describe('we check mask', function () {
       255,
       0,
       0,
-      255
+      255,
     ]);
   });
 });

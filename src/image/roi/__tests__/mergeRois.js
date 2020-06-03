@@ -40,16 +40,16 @@ test('errors', async () => {
   roiManager.fromMask(mask);
 
   expect(() => roiManager.mergeRois(1)).toThrow(
-    /Roi ids must be an array of integers/
+    /Roi ids must be an array of integers/,
   );
   expect(() => roiManager.mergeRois([1.4])).toThrow(
-    /Roi ids must be an array of integers/
+    /Roi ids must be an array of integers/,
   );
   expect(() => roiManager.mergeRois([1])).toThrow(
-    /Roi ids must have at least two elements/
+    /Roi ids must have at least two elements/,
   );
   expect(() => roiManager.mergeRois([1, 1])).toThrow(
-    /Roi ids must be all different/
+    /Roi ids must be all different/,
   );
   expect(() => roiManager.mergeRois([1, 5])).toThrow(/found no Roi with id 5/);
 });

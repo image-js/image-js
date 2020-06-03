@@ -13,8 +13,8 @@ import * as Model from '../image/model/model';
 export function validateArrayOfChannels(image, options = {}) {
   let {
     channels,
-    allowAlpha,  // are we allowing the selection of an alpha channel ?
-    defaultAlpha // if no channels are selected should we take the alpha channel ?
+    allowAlpha, // are we allowing the selection of an alpha channel ?
+    defaultAlpha, // if no channels are selected should we take the alpha channel ?
   } = options;
 
   if (typeof allowAlpha !== 'boolean') {
@@ -47,10 +47,11 @@ function validateChannels(image, channels, allowAlpha) {
   return channels;
 }
 
-
 export function validateChannel(image, channel, allowAlpha = true) {
   if (channel === undefined) {
-    throw new RangeError(`validateChannel : the channel has to be >=0 and <${image.channels}`);
+    throw new RangeError(
+      `validateChannel : the channel has to be >=0 and <${image.channels}`,
+    );
   }
 
   if (typeof channel === 'string') {
@@ -69,7 +70,7 @@ export function validateChannel(image, channel, allowAlpha = true) {
             case 'b':
               channel = 2;
               break;
-                        // no default
+            // no default
           }
         }
         break;
@@ -85,7 +86,7 @@ export function validateChannel(image, channel, allowAlpha = true) {
             case 'l':
               channel = 2;
               break;
-                        // no default
+            // no default
           }
         }
         break;
@@ -101,7 +102,7 @@ export function validateChannel(image, channel, allowAlpha = true) {
             case 'v':
               channel = 2;
               break;
-                        // no default
+            // no default
           }
         }
         break;
@@ -120,7 +121,7 @@ export function validateChannel(image, channel, allowAlpha = true) {
             case 'k':
               channel = 3;
               break;
-                        // no default
+            // no default
           }
         }
         break;
@@ -130,7 +131,9 @@ export function validateChannel(image, channel, allowAlpha = true) {
 
     if (channel === 'a') {
       if (!image.alpha) {
-        throw new Error('validateChannel : the image does not contain alpha channel');
+        throw new Error(
+          'validateChannel : the image does not contain alpha channel',
+        );
       }
       channel = image.components;
     }
@@ -141,7 +144,9 @@ export function validateChannel(image, channel, allowAlpha = true) {
   }
 
   if (channel >= image.channels) {
-    throw new RangeError(`validateChannel : the channel has to be >=0 and <${image.channels}`);
+    throw new RangeError(
+      `validateChannel : the channel has to be >=0 and <${image.channels}`,
+    );
   }
 
   if (!allowAlpha && channel >= image.components) {
