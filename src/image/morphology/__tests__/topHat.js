@@ -1,13 +1,12 @@
-import Matrix from 'ml-matrix';
-import { Image } from 'test/common';
+import { Image } from "test/common";
 
-describe('check the top hat function', function () {
-  it('check for GREY image 5x5', function () {
-    let kernel = new Matrix([
+describe("check the top hat function", function () {
+  it("check for GREY image 5x5", function () {
+    let kernel = [
       [1, 1, 1],
       [1, 1, 1],
       [1, 1, 1],
-    ]);
+    ];
     let image = new Image(
       5,
       5,
@@ -38,7 +37,7 @@ describe('check the top hat function', function () {
         0,
         0,
       ],
-      { kind: 'GREY' },
+      { kind: "GREY" }
     );
 
     expect(Array.from(image.topHat({ kernel: kernel }).data)).toStrictEqual([
@@ -69,12 +68,12 @@ describe('check the top hat function', function () {
       0,
     ]);
   });
-  it('check for GREY image 5x5 2 iterations', function () {
-    let kernel = new Matrix([
+  it("check for GREY image 5x5 2 iterations", function () {
+    let kernel = [
       [1, 1, 1],
       [1, 1, 1],
       [1, 1, 1],
-    ]);
+    ];
     let image = new Image(
       5,
       5,
@@ -105,11 +104,11 @@ describe('check the top hat function', function () {
         0,
         0,
       ],
-      { kind: 'GREY' },
+      { kind: "GREY" }
     );
 
     expect(
-      Array.from(image.topHat({ kernel: kernel, iterations: 2 }).data),
+      Array.from(image.topHat({ kernel: kernel, iterations: 2 }).data)
     ).toStrictEqual([
       0,
       0,
