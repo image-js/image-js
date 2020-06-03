@@ -2,7 +2,7 @@ import binary from "test/binary";
 import { Image } from "test/common";
 
 describe("floodFill", function () {
-  it.only("should fill the binary image", function () {
+  it("should fill the binary image", function () {
     const image = new Image(
       8,
       5,
@@ -18,8 +18,6 @@ describe("floodFill", function () {
 
     image.floodFill();
 
-    console.log(image.data);
-
     const filled = new Image(
       8,
       5,
@@ -32,8 +30,6 @@ describe("floodFill", function () {
     `,
       { kind: "BINARY" }
     );
-
-    console.log(filled.data);
 
     expect(image.data).toStrictEqual(filled.data);
   });

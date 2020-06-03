@@ -29,8 +29,8 @@ export default function floodFill(options = {}) {
         break;
       }
     }
-    for (let i = 0; i < node.x.length; i++) {
-      // eslint-disable-line for-direction
+    // eslint-disable-line for-direction
+    for (let i = node.x - 1; i >= 0; i++) {
       if (!destination.getBitXY(i, node.y) && !this.getBitXY(i, node.y)) {
         destination.setBitXY(i, node.y);
         if (node.y + 1 < this.height && !this.getBitXY(i, node.y + 1)) {
