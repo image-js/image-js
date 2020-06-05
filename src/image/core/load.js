@@ -7,7 +7,7 @@ import { decode as decodeTiff } from 'tiff';
 import Stack from '../../stack/Stack';
 import { decode as base64Decode, toBase64URL } from '../../util/base64';
 import Image from '../Image';
-import { GREY } from '../model/model';
+import { GREY, RGB } from '../model/model';
 
 import { fetchBinary, DOMImage, createCanvas } from './environment';
 
@@ -98,10 +98,12 @@ function loadPNG(data) {
 
 function loadPNGFromPalette(png) {
   const pixels = png.width * png.height;
-  const data = new Uint8Array(pixels * 3);
+  const channels = png.palette[0].length;
+  const data = new Uint8Array(pixels * channels);
   const pixelsPerByte = 8 / png.depth;
   const factor = png.depth < 8 ? pixelsPerByte : 1;
   const mask = parseInt('1'.repeat(png.depth), 2);
+  const hasAlpha = channels === 4;
   let dataIndex = 0;
 
   for (let i = 0; i < pixels; i++) {
@@ -116,11 +118,14 @@ function loadPNGFromPalette(png) {
     data[dataIndex++] = paletteValue[0];
     data[dataIndex++] = paletteValue[1];
     data[dataIndex++] = paletteValue[2];
+    if (hasAlpha) {
+      data[dataIndex++] = paletteValue[3];
+    }
   }
 
   return new Image(png.width, png.height, data, {
     components: 3,
-    alpha: false,
+    alpha: hasAlpha,
     bitDepth: 8,
   });
 }
@@ -158,15 +163,36 @@ function getMetadata(image) {
 }
 
 function getImageFromIFD(image) {
-  return new Image(image.width, image.height, image.data, {
-    components: 1,
-    alpha: 0,
-    colorModel: GREY,
-    bitDepth: image.bitsPerSample.length
-      ? image.bitsPerSample[0]
-      : image.bitsPerSample,
-    meta: getMetadata(image),
-  });
+  if (image.type === 3) {
+    // Palette
+    const data = new Uint16Array(3 * image.width * image.height);
+    const palette = image.palette;
+    let ptr = 0;
+    for (let i = 0; i < image.data.length; i++) {
+      const index = image.data[i];
+      const color = palette[index];
+      data[ptr++] = color[0];
+      data[ptr++] = color[1];
+      data[ptr++] = color[2];
+    }
+    return new Image(image.width, image.height, data, {
+      components: 3,
+      alpha: 0,
+      colorModel: RGB,
+      bitDepth: 16,
+      meta: getMetadata(image),
+    });
+  } else {
+    return new Image(image.width, image.height, image.data, {
+      components: 1,
+      alpha: 0,
+      colorModel: GREY,
+      bitDepth: image.bitsPerSample.length
+        ? image.bitsPerSample[0]
+        : image.bitsPerSample,
+      meta: getMetadata(image),
+    });
+  }
 }
 
 function loadGeneric(url, options) {

@@ -15,6 +15,7 @@ describe('Load PNG', function () {
     ['rgba64', 3, 1, 16],
     ['plt-4bpp', 3, 0, 8],
     ['plt-8bpp-color', 3, 0, 8],
+    ['plt-trns', 3, 1, 8],
   ];
 
   it.each(tests)(

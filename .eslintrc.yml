@@ -12,8 +12,9 @@ parserOptions:
 rules:
   no-var: error
   no-multi-spaces: off
+  space-before-function-paren: off
   import/no-cycle: off
   import/no-extraneous-dependencies: off
 
 settings:
-  import/core-modules: [ test ]
+  import/core-modules: [test]

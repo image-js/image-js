@@ -1,6 +1,6 @@
 {
   "name": "image-js",
-  "version": "0.21.8",
+  "version": "0.21.9",
   "description": "Image processing and manipulation in JavaScript",
   "keywords": [
     "image",
@@ -61,6 +61,13 @@
       "<rootDir>/lib/",
       "<rootDir>/node_modules/"
     ]
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "all"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.1",
