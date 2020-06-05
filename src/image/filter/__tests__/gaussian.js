@@ -1,7 +1,7 @@
-import { Image } from 'test/common';
+import { Image } from "test/common";
 
-describe('check the gaussian filter', function () {
-  it('check for GREY image', function () {
+describe("check the gaussian filter", function () {
+  it.only("check for GREY image", function () {
     let image = new Image(
       5,
       5,
@@ -32,7 +32,7 @@ describe('check the gaussian filter', function () {
         10,
         10,
       ],
-      { kind: 'GREY' },
+      { kind: "GREY" }
     );
 
     expect(Array.from(image.gaussianFilter().data)).toStrictEqual([
@@ -64,7 +64,7 @@ describe('check the gaussian filter', function () {
     ]);
   });
 
-  it('check for GREY image wider than taller', function () {
+  it("check for GREY image wider than taller", function () {
     let image = new Image(
       7,
       5,
@@ -105,11 +105,11 @@ describe('check the gaussian filter', function () {
         10,
         10,
       ],
-      { kind: 'GREY' },
+      { kind: "GREY" }
     );
 
     expect(
-      Array.from(image.gaussianFilter({ fft: false }).data),
+      Array.from(image.gaussianFilter({ fft: false }).data)
     ).toStrictEqual([
       12,
       12,
@@ -187,7 +187,7 @@ describe('check the gaussian filter', function () {
     ]);
   });
 
-  it('check for GREY image taller than wider', function () {
+  it("check for GREY image taller than wider", function () {
     let image = new Image(
       5,
       7,
@@ -228,11 +228,11 @@ describe('check the gaussian filter', function () {
         10,
         10,
       ],
-      { kind: 'GREY' },
+      { kind: "GREY" }
     );
 
     expect(
-      Array.from(image.gaussianFilter({ fft: false }).data),
+      Array.from(image.gaussianFilter({ fft: false }).data)
     ).toStrictEqual([
       12,
       12,
@@ -310,7 +310,7 @@ describe('check the gaussian filter', function () {
     ]);
   });
 
-  it('separable gaussian', function () {
+  it("separable gaussian", function () {
     let image = new Image(
       5,
       7,
@@ -351,11 +351,11 @@ describe('check the gaussian filter', function () {
         10,
         10,
       ],
-      { kind: 'GREY' },
+      { kind: "GREY" }
     );
 
     expect(
-      Array.from(image.gaussianFilter({ algorithm: 'separable' }).data),
+      Array.from(image.gaussianFilter({ algorithm: "separable" }).data)
     ).toStrictEqual([
       12,
       12,
@@ -395,7 +395,7 @@ describe('check the gaussian filter', function () {
     ]);
   });
 
-  it('xxx', function () {
+  it("xxx", function () {
     let image = new Image(
       5,
       7,
@@ -436,10 +436,10 @@ describe('check the gaussian filter', function () {
         255,
         255,
       ],
-      { kind: 'GREY' },
+      { kind: "GREY" }
     );
     expect(
-      Array.from(image.gaussianFilter({ algorithm: 'separable' }).data),
+      Array.from(image.gaussianFilter({ algorithm: "separable" }).data)
     ).toStrictEqual([
       255,
       255,
