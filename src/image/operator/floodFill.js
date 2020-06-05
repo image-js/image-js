@@ -1,13 +1,13 @@
-import LinkedList from "fast-list";
+import LinkedList from 'fast-list';
 
-import Image from "../Image";
+import Image from '../Image';
 
 export default function floodFill(options = {}) {
   const { x = 0, y = 0, inPlace = true } = options;
 
   const destination = inPlace ? this : Image.createFrom(this);
 
-  this.checkProcessable("floodFill", { bitDepth: 1 });
+  this.checkProcessable('floodFill', { bitDepth: 1 });
 
   const bit = this.getBitXY(x, y);
   if (bit) return destination;
@@ -29,7 +29,7 @@ export default function floodFill(options = {}) {
         break;
       }
     }
-    // eslint-disable-line for-direction
+    // eslint-disable-next-line for-direction
     for (let i = node.x - 1; i >= 0; i++) {
       if (!destination.getBitXY(i, node.y) && !this.getBitXY(i, node.y)) {
         destination.setBitXY(i, node.y);

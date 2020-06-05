@@ -5,7 +5,7 @@
 // M. Emre Celebi
 // 06.15.2007
 // Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
-import { ascending as sortAsc } from "num-sort";
+import { ascending as sortAsc } from 'num-sort';
 
 export default function renyiEntropy(histogram, total) {
   let optThreshold; // Optimal threshold
@@ -136,7 +136,7 @@ export default function renyiEntropy(histogram, total) {
   optThreshold = Math.round(
     tStars[0] * (P1[tStars[0]] + 0.25 * omega * betas[0]) +
       0.25 * tStars[1] * omega * betas[1] +
-      tStars[2] * (P2[tStars[2]] + 0.25 * omega * betas[2])
+      tStars[2] * (P2[tStars[2]] + 0.25 * omega * betas[2]),
   );
 
   return optThreshold;

@@ -1,6 +1,7 @@
-import zerosMatrix from "./zerosMatrix";
-import Image from "../image/Image";
-import { BINARY } from "../image/core/kindNames";
+import Image from '../image/Image';
+import { BINARY } from '../image/core/kindNames';
+
+import zerosMatrix from './zerosMatrix';
 
 const cross = [
   [0, 0, 1, 0, 0],
@@ -31,7 +32,7 @@ const smallCross = [
  */
 export default class Shape {
   constructor(options = {}) {
-    let { kind = "cross", shape, size, width, height, filled = true } = options;
+    let { kind = 'cross', shape, size, width, height, filled = true } = options;
     if (size) {
       width = size;
       height = size;
@@ -39,15 +40,15 @@ export default class Shape {
 
     if (shape) {
       switch (shape.toLowerCase()) {
-        case "square":
-        case "rectangle":
+        case 'square':
+        case 'rectangle':
           this.matrix = rectangle(width, height, { filled });
           break;
-        case "circle":
-        case "ellipse":
+        case 'circle':
+        case 'ellipse':
           this.matrix = ellipse(width, height, { filled });
           break;
-        case "triangle":
+        case 'triangle':
           this.matrix = triangle(width, height, { filled });
           break;
         default:
@@ -55,17 +56,17 @@ export default class Shape {
       }
     } else if (kind) {
       switch (kind.toLowerCase()) {
-        case "cross":
+        case 'cross':
           this.matrix = cross;
           break;
-        case "smallcross":
+        case 'smallcross':
           this.matrix = smallCross;
           break;
         default:
           throw new Error(`Shape: unexpected kind: ${kind}`);
       }
     } else {
-      throw new Error("Shape: expected a kind or a shape option");
+      throw new Error('Shape: expected a kind or a shape option');
     }
     this.height = this.matrix.length;
     this.width = this.matrix[0].length;
@@ -175,7 +176,7 @@ function ellipse(width, height, options) {
 
 function triangle(width, height, options) {
   if (!options.filled) {
-    throw new Error("Non filled triangle is not implemented");
+    throw new Error('Non filled triangle is not implemented');
   }
   const matrix = zerosMatrix(height, width, options);
   for (let y = 0; y < height; y++) {

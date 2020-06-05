@@ -1,8 +1,8 @@
-import binary from "test/binary";
-import { Image } from "test/common";
+import binary from 'test/binary';
+import { Image } from 'test/common';
 
-describe("check the close function", function () {
-  it("check for GREY image 5x5", function () {
+describe('check the close function', function () {
+  it('check for GREY image 5x5', function () {
     let kernel = [
       [1, 1, 1],
       [1, 1, 1],
@@ -38,7 +38,7 @@ describe("check the close function", function () {
         255,
         255,
       ],
-      { kind: "GREY" }
+      { kind: 'GREY' },
     );
 
     expect(Array.from(image.close({ kernel }).data)).toStrictEqual([
@@ -70,7 +70,7 @@ describe("check the close function", function () {
     ]);
   });
 
-  it("check for GREY image 5x5 2 iterations", function () {
+  it('check for GREY image 5x5 2 iterations', function () {
     let kernel = [
       [1, 1, 1],
       [1, 1, 1],
@@ -106,11 +106,11 @@ describe("check the close function", function () {
         255,
         255,
       ],
-      { kind: "GREY" }
+      { kind: 'GREY' },
     );
 
     expect(
-      Array.from(image.close({ kernel, iterations: 2 }).data)
+      Array.from(image.close({ kernel, iterations: 2 }).data),
     ).toStrictEqual([
       255,
       255,
@@ -140,7 +140,7 @@ describe("check the close function", function () {
     ]);
   });
 
-  it("check on 5x5 mask", function () {
+  it('check on 5x5 mask', function () {
     /*
      We will create the following mask
       ______
@@ -161,7 +161,7 @@ describe("check the close function", function () {
       10001
       11011
     `,
-      { kind: "BINARY" }
+      { kind: 'BINARY' },
     );
 
     expect(mask.close().data).toStrictEqual(
@@ -171,7 +171,7 @@ describe("check the close function", function () {
         10001
         10001
         11111
-    `
+    `,
     );
   });
 });

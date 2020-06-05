@@ -1,4 +1,4 @@
-import { SVD } from "ml-matrix";
+import { SVD } from 'ml-matrix';
 
 export default function getSeparatedKernel(kernel) {
   const svd = new SVD(kernel, { autoTranspose: true });

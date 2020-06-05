@@ -1,8 +1,8 @@
-import binary from "test/binary";
-import { Image } from "test/common";
+import binary from 'test/binary';
+import { Image } from 'test/common';
 
-describe("floodFill", function () {
-  it("should fill the binary image", function () {
+describe('floodFill', function () {
+  it('should fill the binary image', function () {
     const image = new Image(
       8,
       5,
@@ -13,7 +13,7 @@ describe("floodFill", function () {
         00111000
         11110000
     `,
-      { kind: "BINARY" }
+      { kind: 'BINARY' },
     );
 
     image.floodFill();
@@ -28,13 +28,13 @@ describe("floodFill", function () {
         11111000
         11110000
     `,
-      { kind: "BINARY" }
+      { kind: 'BINARY' },
     );
 
     expect(image.data).toStrictEqual(filled.data);
   });
 
-  it("should fill the binary image (not in place)", function () {
+  it('should fill the binary image (not in place)', function () {
     const image = new Image(
       8,
       5,
@@ -45,7 +45,7 @@ describe("floodFill", function () {
         00111000
         11110000
     `,
-      { kind: "BINARY" }
+      { kind: 'BINARY' },
     );
 
     const result = image.floodFill({ inPlace: false });
@@ -60,7 +60,7 @@ describe("floodFill", function () {
         11000000
         00000000
     `,
-      { kind: "BINARY" }
+      { kind: 'BINARY' },
     );
 
     expect(result.data).toStrictEqual(filled.data);

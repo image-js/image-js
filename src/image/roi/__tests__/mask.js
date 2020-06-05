@@ -1,9 +1,9 @@
-import { ascending as sortAsc } from "num-sort";
-import { Image, load } from "test/common";
+import { ascending as sortAsc } from 'num-sort';
+import { Image, load } from 'test/common';
 
-describe("we check mask", function () {
-  it("should yield the right mask size and value", async () => {
-    const img = await load("BW5x5.png");
+describe('we check mask', function () {
+  it('should yield the right mask size and value', async () => {
+    const img = await load('BW5x5.png');
     expect(img.width).toBe(5);
     expect(img.height).toBe(5);
 
@@ -57,7 +57,7 @@ describe("we check mask", function () {
     let masks = roiManager.getMasks();
 
     let painted = new Image(5, 5);
-    painted.paintMasks(masks, { color: "red" });
+    painted.paintMasks(masks, { color: 'red' });
 
     expect(Array.from(painted.data).slice(0, 8)).toStrictEqual([
       255,

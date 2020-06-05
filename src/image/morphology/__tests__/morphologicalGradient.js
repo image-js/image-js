@@ -1,7 +1,7 @@
-import { Image } from "test/common";
+import { Image } from 'test/common';
 
-describe("check the morphological gradient function", function () {
-  it("check for GREY image 5x5", function () {
+describe('check the morphological gradient function', function () {
+  it('check for GREY image 5x5', function () {
     let kernel = [
       [1, 1, 1],
       [1, 1, 1],
@@ -37,11 +37,11 @@ describe("check the morphological gradient function", function () {
         255,
         0,
       ],
-      { kind: "GREY" }
+      { kind: 'GREY' },
     );
 
     expect(
-      Array.from(image.morphologicalGradient({ kernel: kernel }).data)
+      Array.from(image.morphologicalGradient({ kernel: kernel }).data),
     ).toStrictEqual([
       255,
       255,
@@ -70,7 +70,7 @@ describe("check the morphological gradient function", function () {
       255,
     ]);
   });
-  it("check for GREY image 5x5 2 iterations", function () {
+  it('check for GREY image 5x5 2 iterations', function () {
     let kernel = [
       [1, 1, 1],
       [1, 1, 1],
@@ -106,13 +106,13 @@ describe("check the morphological gradient function", function () {
         255,
         0,
       ],
-      { kind: "GREY" }
+      { kind: 'GREY' },
     );
 
     expect(
       Array.from(
-        image.morphologicalGradient({ kernel: kernel, iterations: 2 }).data
-      )
+        image.morphologicalGradient({ kernel: kernel, iterations: 2 }).data,
+      ),
     ).toStrictEqual([
       0,
       255,
