@@ -124,7 +124,7 @@
     "new-array": "^1.0.0",
     "num-sort": "^2.1.0",
     "robust-point-in-polygon": "^1.0.3",
-    "tiff": "^4.0.0",
+    "tiff": "^4.1.0",
     "web-worker-manager": "^0.2.0"
   },
   "engines": {
