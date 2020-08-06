@@ -184,9 +184,9 @@ function getImageFromIFD(image) {
     });
   } else {
     return new Image(image.width, image.height, image.data, {
-      components: 1,
+      components: image.type === 2 ? 3 : 1,
       alpha: 0,
-      colorModel: GREY,
+      colorModel: image.type === 2 ? RGB : GREY,
       bitDepth: image.bitsPerSample.length
         ? image.bitsPerSample[0]
         : image.bitsPerSample,
