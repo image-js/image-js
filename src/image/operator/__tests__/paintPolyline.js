@@ -43,9 +43,9 @@ describe('we check paintPolyline', function () {
       0,
     ];
 
-    let exptected = getExpected(painted, [255, 0, 0]);
+    let expected = getExpected(painted, [255, 0, 0]);
 
-    expect(Array.from(image.data)).toStrictEqual(exptected);
+    expect(Array.from(image.data)).toStrictEqual(expected);
   });
 
   it('should yield the painted image with a rectangle', function () {
@@ -92,9 +92,9 @@ describe('we check paintPolyline', function () {
       0,
     ];
 
-    let exptected = getExpected(painted, [255, 0, 0]);
+    let expected = getExpected(painted, [255, 0, 0]);
 
-    expect(Array.from(image.data)).toStrictEqual(exptected);
+    expect(Array.from(image.data)).toStrictEqual(expected);
   });
 
   it('should yield the painted image B/W image with a triangle', function () {
@@ -140,8 +140,8 @@ describe('we check paintPolyline', function () {
       0,
     ];
 
-    let exptected = getExpectedGrey(painted, [255, 0, 0]);
-    expect(Array.from(image.data)).toStrictEqual(exptected);
+    let expected = getExpectedGrey(painted, [255, 0, 0]);
+    expect(Array.from(image.data)).toStrictEqual(expected);
   });
 });
 

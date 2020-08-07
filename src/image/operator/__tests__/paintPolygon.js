@@ -54,9 +54,38 @@ describe('we check paintPolygon', function () {
       0, 0, 0, 0, 0
     `;
 
-    let exptected = getExpected(painted, [255, 0, 0]);
+    let expected = getExpected(painted, [255, 0, 0]);
 
-    expect(Array.from(image.data)).toStrictEqual(exptected);
+    expect(Array.from(image.data)).toStrictEqual(expected);
+  });
+
+  it('should yield the painted image with a rectangle', function () {
+    let size = 5;
+    let data = new Array(size * size * 3);
+    for (let i = 0; i < data.length; i++) {
+      data[i] = i;
+    }
+    let image = new Image(size, size, data, { kind: 'RGB' });
+
+    let points = [
+      [1, 1],
+      [4, 1],
+      [4, 3],
+      [1, 3],
+    ];
+    image.paintPolygon(points);
+
+    let painted = array`
+      0, 0, 0, 0, 0
+      0, 1, 1, 1, 1
+      0, 1, 0, 0, 1
+      0, 1, 1, 1, 1
+      0, 0, 0, 0, 0
+    `;
+
+    let expected = getExpected(painted, [255, 0, 0]);
+
+    expect(Array.from(image.data)).toStrictEqual(expected);
   });
 
   it('should yield the painted image B/W image with a triangle', function () {
@@ -82,8 +111,8 @@ describe('we check paintPolygon', function () {
       0, 0, 0, 0, 0,
     `;
 
-    let exptected = getExpectedGrey(painted, [255, 0, 0]);
-    expect(Array.from(image.data)).toStrictEqual(exptected);
+    let expected = getExpectedGrey(painted, [255, 0, 0]);
+    expect(Array.from(image.data)).toStrictEqual(expected);
   });
 
   it('when there is two segments out of the polygon', function () {
@@ -115,8 +144,8 @@ describe('we check paintPolygon', function () {
       0, 0, 1, 0, 0
     `;
 
-    let exptected = getExpectedGrey(painted, [255, 0, 0]);
-    expect(Array.from(image.data)).toStrictEqual(exptected);
+    let expected = getExpectedGrey(painted, [255, 0, 0]);
+    expect(Array.from(image.data)).toStrictEqual(expected);
   });
 });
 
