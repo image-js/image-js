@@ -1,3 +1,5 @@
+import array from 'test/array';
+
 import { Image } from 'test/common';
 
 describe('we check paintPolygon', function () {
@@ -15,37 +17,17 @@ describe('we check paintPolygon', function () {
     ];
     image.paintPolygon(points);
 
-    let painted = [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ];
+    let painted = array`
+      0, 0, 0, 0, 0
+      0, 1, 0, 0, 0
+      0, 0, 1, 0, 0
+      0, 0, 0, 1, 0
+      0, 0, 0, 0, 0
+    `;
 
-    let exptected = getExpected(painted, [255, 0, 0]);
+    let expected = getExpected(painted, [255, 0, 0]);
 
-    expect(Array.from(image.data)).toStrictEqual(exptected);
+    expect(Array.from(image.data)).toStrictEqual(expected);
   });
 
   it('should yield the painted image with a rectangle', function () {
@@ -64,33 +46,13 @@ describe('we check paintPolygon', function () {
     ];
     image.paintPolygon(points);
 
-    let painted = [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      1,
-      1,
-      1,
-      0,
-      1,
-      0,
-      0,
-      1,
-      0,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ];
+    let painted = array`
+      0, 0, 0, 0, 0
+      0, 1, 1, 1, 1
+      0, 1, 0, 0, 1
+      0, 1, 1, 1, 1
+      0, 0, 0, 0, 0
+    `;
 
     let exptected = getExpected(painted, [255, 0, 0]);
 
@@ -112,33 +74,13 @@ describe('we check paintPolygon', function () {
     ];
     image.paintPolygon(points, { filled: true });
 
-    let painted = [
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      1,
-      1,
-      1,
-      0,
-      1,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ];
+    let painted = array`
+      0, 0, 1, 0, 0,
+      0, 1, 1, 1, 0,
+      1, 1, 1, 1, 1,
+      0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0,
+    `;
 
     let exptected = getExpectedGrey(painted, [255, 0, 0]);
     expect(Array.from(image.data)).toStrictEqual(exptected);
@@ -165,33 +107,13 @@ describe('we check paintPolygon', function () {
     ];
     image.paintPolygon(points, { filled: true });
 
-    let painted = [
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      1,
-      1,
-      1,
-      0,
-      1,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-    ];
+    let painted = array`
+      1, 1, 1, 0, 0
+      0, 1, 1, 1, 0
+      1, 1, 1, 1, 1
+      0, 0, 1, 0, 0
+      0, 0, 1, 0, 0
+    `;
 
     let exptected = getExpectedGrey(painted, [255, 0, 0]);
     expect(Array.from(image.data)).toStrictEqual(exptected);
