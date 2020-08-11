@@ -8,7 +8,7 @@ import Matrix from '../../util/matrix';
  * @param {object} [options]
  * @return {number[]}
  */
-export default function match(image, options = {}) {
+export default function getBestMatch(image, options = {}) {
   let { border } = options;
 
   this.checkProcessable('getChannel', {
