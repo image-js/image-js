@@ -177,7 +177,7 @@ function getImageFromIFD(image) {
     }
     return new Image(image.width, image.height, data, {
       components: 3,
-      alpha: 0,
+      alpha: image.alpha,
       colorModel: RGB,
       bitDepth: 16,
       meta: getMetadata(image),
@@ -185,7 +185,7 @@ function getImageFromIFD(image) {
   } else {
     return new Image(image.width, image.height, image.data, {
       components: image.type === 2 ? 3 : 1,
-      alpha: 0,
+      alpha: image.alpha,
       colorModel: image.type === 2 ? RGB : GREY,
       bitDepth: image.bitsPerSample.length
         ? image.bitsPerSample[0]
