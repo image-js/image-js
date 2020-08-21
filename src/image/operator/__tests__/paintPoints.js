@@ -48,6 +48,7 @@ describe('we check paintPoints', function () {
       result[i] = i;
     }
     for (let i = 0; i < result.length / 3; i++) {
+      // eslint-disable-next-line jest/no-if
       if (marked[i] === 1) {
         result[i * 3] = 255;
         result[i * 3 + 1] = 0;

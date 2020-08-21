@@ -1,5 +1,4 @@
 import array from 'test/array';
-
 import { Image } from 'test/common';
 
 describe('we check paintPolygon', function () {
@@ -22,35 +21,6 @@ describe('we check paintPolygon', function () {
       0, 1, 0, 0, 0
       0, 0, 1, 0, 0
       0, 0, 0, 1, 0
-      0, 0, 0, 0, 0
-    `;
-
-    let expected = getExpected(painted, [255, 0, 0]);
-
-    expect(Array.from(image.data)).toStrictEqual(expected);
-  });
-
-  it('should yield the painted image with a rectangle', function () {
-    let size = 5;
-    let data = new Array(size * size * 3);
-    for (let i = 0; i < data.length; i++) {
-      data[i] = i;
-    }
-    let image = new Image(size, size, data, { kind: 'RGB' });
-
-    let points = [
-      [1, 1],
-      [4, 1],
-      [4, 3],
-      [1, 3],
-    ];
-    image.paintPolygon(points);
-
-    let painted = array`
-      0, 0, 0, 0, 0
-      0, 1, 1, 1, 1
-      0, 1, 0, 0, 1
-      0, 1, 1, 1, 1
       0, 0, 0, 0, 0
     `;
 
@@ -117,7 +87,7 @@ describe('we check paintPolygon', function () {
     expect(Array.from(image.data)).toStrictEqual(expected);
   });
 
-  it.only('should yield the painted image with a filled square', function () {
+  it.skip('should yield the painted image with a filled square', function () {
     let size = 5;
     let data = new Array(size * size * 3);
     for (let i = 0; i < data.length; i++) {
