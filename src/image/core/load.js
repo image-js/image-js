@@ -151,7 +151,10 @@ function loadTIFF(data) {
 
 function getMetadata(image) {
   const metadata = {
-    tiff: image,
+    tiff: {
+      fields: image.fields,
+      tags: image.map,
+    },
   };
   if (image.exif) {
     metadata.exif = image.exif;
