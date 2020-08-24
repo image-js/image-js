@@ -1,12 +1,8 @@
 import binary from 'test/binary';
-import { Image } from 'test/common';
 
 describe('Monotone Chain Convex Hull', function () {
   it('should return the convex hull', function () {
-    let image = new Image(
-      8,
-      8,
-      binary`
+    let image = binary`
         00000000
         00011000
         00011000
@@ -15,9 +11,7 @@ describe('Monotone Chain Convex Hull', function () {
         00011000
         00011000
         00000000
-      `,
-      { kind: 'BINARY' },
-    );
+      `;
 
     expect(image.monotoneChainConvexHull()).toStrictEqual([
       [2, 3],
@@ -32,27 +26,18 @@ describe('Monotone Chain Convex Hull', function () {
   });
 
   it('should return the convex hull for one point', function () {
-    let image = new Image(
-      1,
-      1,
-      binary`
+    let image = binary`
         10000000
-      `,
-      { kind: 'BINARY' },
-    );
+      `;
 
     expect(image.monotoneChainConvexHull()).toStrictEqual([]);
   });
 
   it('should return the convex hull for two points', function () {
-    let image = new Image(
-      1,
-      2,
-      binary`
-        11000000
-      `,
-      { kind: 'BINARY' },
-    );
+    let image = binary`
+        1
+        1
+      `;
 
     expect(image.monotoneChainConvexHull()).toStrictEqual([
       [0, 0],

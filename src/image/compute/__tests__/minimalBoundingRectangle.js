@@ -9,10 +9,7 @@ expect.extend({ toBeDeepCloseTo });
 
 describe('Minimal bounding rectangle', function () {
   it('should return the minimal bounding box', function () {
-    let image = new Image(
-      8,
-      8,
-      binary`
+    let image = binary`
         00000000
         00011000
         00011000
@@ -21,9 +18,7 @@ describe('Minimal bounding rectangle', function () {
         00011000
         00011000
         00000000
-      `,
-      { kind: 'BINARY' },
-    );
+      `;
 
     const result = minimalBoundingRectangle.call(image);
     expect(result).toHaveLength(4);
@@ -39,18 +34,11 @@ describe('Minimal bounding rectangle', function () {
   });
 
   it('should return the small bounding box', function () {
-    let image = new Image(
-      8,
-      3,
-      binary`
+    let image = binary`
       10000001
       00011000
       10011010
-    `,
-      {
-        kind: 'BINARY',
-      },
-    );
+    `;
 
     const result = minimalBoundingRectangle.call(image);
     expect(result).toStrictEqual([
@@ -62,18 +50,11 @@ describe('Minimal bounding rectangle', function () {
   });
 
   it('should return the small bounding box 2', function () {
-    let image = new Image(
-      8,
-      3,
-      binary`
+    let image = binary`
       01000100
       00011000
       01011010
-    `,
-      {
-        kind: 'BINARY',
-      },
-    );
+    `;
 
     const result = minimalBoundingRectangle.call(image);
     expect(result).toStrictEqual([
@@ -85,18 +66,11 @@ describe('Minimal bounding rectangle', function () {
   });
 
   it('should return the small bounding box diamond', function () {
-    let image = new Image(
-      8,
-      3,
-      binary`
+    let image = binary`
       00000100
       00001110
       00000100
-    `,
-      {
-        kind: 'BINARY',
-      },
-    );
+      `;
 
     const result = minimalBoundingRectangle.call(image);
     expect(result).toBeDeepCloseTo(
@@ -111,10 +85,7 @@ describe('Minimal bounding rectangle', function () {
   });
 
   it('should return the small bounding box rectangle', function () {
-    let image = new Image(
-      8,
-      7,
-      binary`
+    let image = binary`
         00000000
         00001000
         00011100
@@ -122,10 +93,7 @@ describe('Minimal bounding rectangle', function () {
         00011111
         00001110
         00000100
-      `,
-      { kind: 'BINARY' },
-    );
-
+      `;
     const result = minimalBoundingRectangle.call(image);
     expect(result).toBeDeepCloseTo(
       [

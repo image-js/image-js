@@ -7,10 +7,5 @@ import mcch from 'monotone-chain-convex-hull';
  * @return {Array<Array<number>>}
  */
 export default function monotoneChainConvexHull() {
-  const image = this;
-  image.checkProcessable('monotoneChainConvexHull', { bitDepth: 1 });
-
-  const points = image.getPoints();
-
-  return mcch(points, { sorted: true });
+  return mcch(this.points, { sorted: true });
 }

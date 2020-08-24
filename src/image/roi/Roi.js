@@ -3,6 +3,8 @@ import robustPointInPolygon from 'robust-point-in-polygon';
 import Shape from '../../util/Shape';
 import Image from '../Image';
 import * as KindNames from '../core/kindNames';
+import minimalBoundingRectangle from '../compute/minimalBoundingRectangle';
+import feretDiameters from './feretDiameters';
 
 /**
  * Class to manage Region Of Interests
@@ -46,7 +48,7 @@ export default class Roi {
         mask = this.centerMask;
         break;
       case 'hull':
-        mask = this.hullMask;
+        mask = this.convexHullMask;
         break;
       case 'mbr':
         mask = this.mbrMask;
@@ -364,26 +366,92 @@ export default class Roi {
     return this.computed.centerMask;
   }
 
-  get hullMask() {
-    if (!this.computed.hullMask) {
+  get convexHull() {
+    if (!this.computed.convexHull) {
+      const convexHull = this.contourMask.monotoneChainConvexHull();
+      this.computed.convexHull = convexHull;
+    }
+    return this.computed.convexHull;
+  }
+
+  get convexHullMask() {
+    if (!this.computed.convexHullMask) {
+      const convexHull = this.convexHull;
       const img = new Image(this.width, this.height, {
         kind: KindNames.BINARY,
         position: [this.minX, this.minY],
         parent: this.map.parent,
       });
 
-      const hull = this.contourMask.monotoneChainConvexHull();
       for (let x = 0; x < this.width; x++) {
         for (let y = 0; y < this.height; y++) {
-          if (robustPointInPolygon(hull, [x, y]) !== 1) {
+          if (robustPointInPolygon(convexHull, [x, y]) !== 1) {
             img.setBitXY(x, y);
           }
         }
       }
 
-      this.computed.hullMask = img;
+      this.computed.convexHullMask = img;
     }
-    return this.computed.hullMask;
+    return this.computed.convexHullMask;
+  }
+
+  get mbr() {
+    if (!this.computed.mbr) {
+      let mbr = minimalBoundingRectangle({ originalPoints: this.convexHull });
+      if (mbr.length === 0) {
+        this.computed.mbr = {
+          length: 0,
+          width: 0,
+          surface: 0,
+          rectangle: mbr,
+        };
+      } else {
+        let first = mbr[0];
+        let second = mbr[1];
+        let third = mbr[2];
+        let length = Math.sqrt(
+          (first[0] - second[0]) ** 2 + (first[1] - second[1]) ** 2,
+        );
+        let width = Math.sqrt(
+          (third[0] - second[0]) ** 2 + (third[1] - second[1]) ** 2,
+        );
+        this.computed.mbr = {
+          length,
+          width,
+          surface: length * width,
+          rectangle: mbr,
+        };
+      }
+    }
+    return this.computed.mbr;
+  }
+
+  get feretDiameters() {
+    if (!this.computed.feretDiameters) {
+      this.computed.feretDiameters = feretDiameters({
+        originalPoints: this.convexHull,
+      });
+    }
+    return this.computed.feretDiameters;
+  }
+
+  /**
+   * Diameter of a circle of equal projection area
+   */
+  get eqpc() {
+    if (!this.computed.eqpc) {
+    }
+    return this.computed.eqpc;
+  }
+
+  /**
+   * Diameter of a circle of equal perimeter
+   */
+  get ped() {
+    if (!this.computed.ped) {
+    }
+    return this.computed.ped;
   }
 
   get mbrMask() {
