@@ -10,15 +10,7 @@ export default function monotoneChainConvexHull() {
   const image = this;
   image.checkProcessable('monotoneChainConvexHull', { bitDepth: 1 });
 
-  if (!image.convexHull) {
-    Object.defineProperty(image, 'convexHull', {
-      enumerable: false,
-      writable: true,
-    });
-    const points = image.getPoints();
+  const points = image.getPoints();
 
-    image.convexHull = mcch(points, { sorted: true });
-  }
-
-  return image.convexHull;
+  return mcch(points, { sorted: true });
 }
