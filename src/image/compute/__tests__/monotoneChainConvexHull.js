@@ -58,5 +58,16 @@ describe('Monotone Chain Convex Hull', function () {
       [0, 0],
       [0, 1],
     ]);
+    // should use the cache
+    expect(image.monotoneChainConvexHull()).toStrictEqual([
+      [0, 0],
+      [0, 1],
+    ]);
+
+    // we check also that the cache is defined
+    expect(image.convexHull).toStrictEqual([
+      [0, 0],
+      [0, 1],
+    ]);
   });
 });
