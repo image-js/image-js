@@ -3,15 +3,10 @@ import { Image } from 'test/common';
 
 describe('check moment', function () {
   it('should yield the correct moment', function () {
-    const image = new Image(
-      8,
-      2,
-      binary`
+    const image = binary`
       10000011
       10000000
-    `,
-      { kind: 'BINARY' },
-    );
+    `;
 
     expect(image.getMoment()).toBe(4);
     expect(image.getMoment(0, 0)).toBe(4);

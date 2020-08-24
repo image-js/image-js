@@ -134,18 +134,13 @@ describe('check the dilate function', function () {
   });
 
   it('check for BINARY image 5x5', function () {
-    const mask = new Image(
-      5,
-      5,
-      binary`
+    const mask = binary`
       10001
       00000
       00000
       00000
       10001
-    `,
-      { kind: 'BINARY' },
-    );
+    `;
 
     const expected = binary`
       11011
@@ -155,6 +150,6 @@ describe('check the dilate function', function () {
       11011
     `;
 
-    expect(mask.dilate().data).toStrictEqual(expected);
+    expect(mask.dilate().data).toStrictEqual(expected.data);
   });
 });

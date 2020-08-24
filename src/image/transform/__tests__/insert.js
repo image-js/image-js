@@ -28,29 +28,20 @@ test('insert on grey image', function () {
 });
 
 test('insert on binary image', function () {
-  let mask = new Image(
-    5,
-    5,
-    binary`
-      11111
-      11111
-      11111
-      11111
-      11111
-    `,
-    { kind: 'BINARY' },
-  );
+  let mask = binary`
+    11111
+    11111
+    11111
+    11111
+    11111
+  `;
 
-  let toInsert = new Image(
-    4,
-    3,
-    binary`
-     0001
-     0101
-     0001
-    `,
-    { kind: 'BINARY' },
-  );
+  let toInsert = binary`
+    0001
+    0101
+    0001
+  `;
+
   expect(mask.insert(toInsert).data).toStrictEqual(
     binary`
         00011
@@ -58,7 +49,7 @@ test('insert on binary image', function () {
         00011
         11111
         11111
-    `,
+    `.data,
   );
 
   expect(
@@ -68,12 +59,12 @@ test('insert on binary image', function () {
     }).data,
   ).toStrictEqual(
     binary`
-        11111
-        10001
-        10101
-        10001
-        11111
-      `,
+      11111
+      10001
+      10101
+      10001
+      11111
+    `.data,
   );
 
   expect(
@@ -83,11 +74,11 @@ test('insert on binary image', function () {
     }).data,
   ).toStrictEqual(
     binary`
-        11111
-        11111
-        11111
-        11111
-        11110
-      `,
+      11111
+      11111
+      11111
+      11111
+      11110
+    `.data,
   );
 });

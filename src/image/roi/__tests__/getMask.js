@@ -45,14 +45,16 @@ describe('Roi#getMask', function () {
 
     let mask = roiManager.getMask({ minSurface: 5, maxSurface: 5 });
 
+    let expected = binary`
+      01000
+      11110
+      01111
+      00010
+      00000
+    `;
+
     // only 2 Roi will be selected !
-    expect(mask.data).toStrictEqual(binary`
-        01000
-        11110
-        01111
-        00010
-        00000
-    `);
+    expect(mask.data).toStrictEqual(expected.data);
   });
 
   it('should yield the right mask, position and resize', function () {
@@ -87,13 +89,14 @@ describe('Roi#getMask', function () {
 
     let mask = image.mask({ threshold: 1, algorithm: 'threshold' });
 
-    expect(mask.data).toStrictEqual(binary`
-        00000
-        01110
-        01110
-        01110
-        00000
-    `);
+    const expected = binary`
+      00000
+      01110
+      01110
+      01110
+      00000
+    `;
+    expect(mask.data).toStrictEqual(expected.data);
 
     let roiManager = image.getRoiManager();
     roiManager.fromMask(mask, { positive: true, negative: false });
@@ -200,13 +203,14 @@ describe('Roi#getMask', function () {
     expect(rois).toHaveLength(2);
 
     const roi = rois[0];
-    const hullMask = roi.hullMask;
-    expect(hullMask.data).toStrictEqual(binary`
-        111001
-        110011
-        110111
-        110000
-    `);
+    const convexHullMask = roi.convexHullMask;
+    const expected = binary`
+      111001
+      110011
+      110111
+      110000
+    `;
+    expect(convexHullMask.data).toStrictEqual(expected.data);
   });
 
   it('should work with mbr', () => {
@@ -258,11 +262,12 @@ describe('Roi#getMask', function () {
 
     const roi = rois[0];
     const mbrMask = roi.mbrMask;
-    expect(mbrMask.data).toStrictEqual(binary`
+    const expected = binary`
       11111
       11111
       11111
       11111
-    `);
+    `;
+    expect(mbrMask.data).toStrictEqual(expected.data);
   });
 });

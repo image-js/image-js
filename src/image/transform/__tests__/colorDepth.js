@@ -18,15 +18,10 @@ describe('check the colorDepth transform', function () {
   });
 
   it('check the right colorDepth for MASK to 8 bit', function () {
-    let image = new Image(
-      4,
-      2,
-      binary`
+    let image = binary`
         0101
         0101
-    `,
-      { kind: 'BINARY' },
-    );
+    `;
     let newImage = image.colorDepth(8);
     expect(Array.from(newImage.data)).toStrictEqual([
       0,

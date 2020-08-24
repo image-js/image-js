@@ -151,18 +151,13 @@ describe('check the close function', function () {
      |xx xx|
      */
 
-    let mask = new Image(
-      5,
-      5,
-      binary`
+    let mask = binary`
       11011
       10001
       10001
       10001
       11011
-    `,
-      { kind: 'BINARY' },
-    );
+    `;
 
     expect(mask.close().data).toStrictEqual(
       binary`
@@ -171,7 +166,7 @@ describe('check the close function', function () {
         10001
         10001
         11111
-    `,
+    `.data,
     );
   });
 });

@@ -16,10 +16,7 @@ describe('we check we can extract a part of B/W image', function () {
   });
 
   it('check a binary image extract', function () {
-    let image = new Image(
-      8,
-      8,
-      binary`
+    let image = binary`
         00011000
         00011000
         00011000
@@ -28,9 +25,7 @@ describe('we check we can extract a part of B/W image', function () {
         00011000
         00011000
         00011000
-      `,
-      { kind: 'BINARY' },
-    );
+      `;
 
     let mask = new Image(
       4,
@@ -40,7 +35,7 @@ describe('we check we can extract a part of B/W image', function () {
         0000
         1111
         0000
-      `,
+      `.data,
       {
         kind: 'BINARY',
         parent: image,
@@ -52,26 +47,23 @@ describe('we check we can extract a part of B/W image', function () {
     expect(extract.bitDepth).toBe(1);
     expect(extract.height).toBe(4);
     expect(extract.width).toBe(4);
-    expect(extract.data).toStrictEqual(binary`
+    expect(extract.data).toStrictEqual(
+      binary`
       0110
       0000
       1111
       0000
-    `);
+    `.data,
+    );
   });
 
   it('check a rectangular binary image extract', function () {
-    let image = new Image(
-      8,
-      4,
-      binary`
+    let image = binary`
         00011000
         00011000
         00011000
         11111111
-      `,
-      { kind: 'BINARY' },
-    );
+      `;
 
     let mask = new Image(
       4,
@@ -79,7 +71,7 @@ describe('we check we can extract a part of B/W image', function () {
       binary`
         1111
         0000
-      `,
+      `.data,
       {
         kind: 'BINARY',
         parent: image,
@@ -91,10 +83,12 @@ describe('we check we can extract a part of B/W image', function () {
     expect(extract.bitDepth).toBe(1);
     expect(extract.height).toBe(2);
     expect(extract.width).toBe(4);
-    expect(extract.data).toStrictEqual(binary`
+    expect(extract.data).toStrictEqual(
+      binary`
       1100
       0000
-    `);
+    `.data,
+    );
   });
 
   it('check by specify 1,1 position with parent', async () => {

@@ -51,15 +51,10 @@ test('32 bit rgb image', () => {
 });
 
 test('binary image', () => {
-  const img = new Image({
-    width: 3,
-    height: 2,
-    kind: 'BINARY',
-    data: binary`
+  const img = binary`
       100
       011
-    `,
-  });
+    `;
 
   const data = img.getRGBAData();
   expect(Array.from(data)).toStrictEqual([
