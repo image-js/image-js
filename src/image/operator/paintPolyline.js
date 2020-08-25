@@ -34,7 +34,6 @@ export default function paintPolyline(points, options = {}) {
     for (let j = 0; j <= steps; j++) {
       let xPoint = Math.round(x);
       let yPoint = Math.round(y);
-
       if (
         xPoint >= 0 &&
         yPoint >= 0 &&

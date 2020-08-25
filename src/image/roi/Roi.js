@@ -54,6 +54,9 @@ export default class Roi {
       case 'mbr':
         mask = this.mbrMask;
         break;
+      case 'feret':
+        mask = this.feretMask;
+        break;
       default:
         mask = this.mask;
     }
@@ -455,6 +458,21 @@ export default class Roi {
       this.computed.ped = this.external / Math.PI;
     }
     return this.computed.ped;
+  }
+
+  get feretMask() {
+    if (!this.computed.feretMask) {
+      const image = new Image(this.width, this.height, {
+        kind: KindNames.BINARY,
+        position: [this.minX, this.minY],
+        parent: this.map.parent,
+      });
+
+      image.paintPolyline(this.feretDiameters.minLine);
+      image.paintPolyline(this.feretDiameters.maxLine);
+      this.computed.feretMask = image;
+    }
+    return this.computed.feretMask;
   }
 
   get mbrMask() {
