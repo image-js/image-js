@@ -103,6 +103,42 @@ export function boundary(points) {
 }
 
 /**
+ * Returns the perimeter represented by the points (a polygon)
+ * @param {Array<Array<number>>} points
+ */
+export function perimeter(vertices) {
+  let total = 0;
+  for (let i = 0; i < vertices.length; i++) {
+    let fromX = vertices[i][0];
+    let fromY = vertices[i][1];
+    let toX = vertices[i === vertices.length - 1 ? 0 : i + 1][0];
+    let toY = vertices[i === vertices.length - 1 ? 0 : i + 1][1];
+    total += Math.sqrt((toX - fromX) ** 2 + (toY - fromY) ** 2);
+  }
+  return total;
+}
+
+/**
+ * Returns the surface represented by the points (a polygon)
+ * @param {Array<Array<number>>} points
+ */
+export function surface(vertices) {
+  let total = 0;
+
+  for (let i = 0; i < vertices.length; i++) {
+    let addX = vertices[i][0];
+    let addY = vertices[i === vertices.length - 1 ? 0 : i + 1][1];
+    let subX = vertices[i === vertices.length - 1 ? 0 : i + 1][0];
+    let subY = vertices[i][1];
+
+    total += addX * addY * 0.5;
+    total -= subX * subY * 0.5;
+  }
+
+  return Math.abs(total);
+}
+
+/**
  * Returns 2 points with minimal and maximal XY
  * @param {Array<Array<number>>} points
  * @return {Array<Array<number>>}
@@ -117,7 +153,7 @@ export function minMax(points) {
     if (points[i][0] < xMin) xMin = points[i][0];
     if (points[i][0] > xMax) xMax = points[i][0];
     if (points[i][1] < yMin) yMin = points[i][1];
-    if (points[i][1] < yMax) yMax = points[i][1];
+    if (points[i][1] > yMax) yMax = points[i][1];
   }
   return [
     [xMin, yMin],
@@ -134,7 +170,9 @@ export function minMax(points) {
  * @private
  */
 export function moveToZeroZero(srcPoints, destPoints) {
-  if (destPoints === undefined) destPoints = new Array(srcPoints.length);
+  if (destPoints === undefined) {
+    destPoints = new Array(srcPoints.length).fill(0).map(() => []);
+  }
   let minMaxValues = minMax(srcPoints);
   let xMin = minMaxValues[0][0];
   let yMin = minMaxValues[0][1];
