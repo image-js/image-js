@@ -2,8 +2,9 @@ import robustPointInPolygon from 'robust-point-in-polygon';
 
 import Shape from '../../util/Shape';
 import Image from '../Image';
-import * as KindNames from '../core/kindNames';
 import minimalBoundingRectangle from '../compute/minimalBoundingRectangle';
+import * as KindNames from '../core/kindNames';
+
 import feretDiameters from './feretDiameters';
 
 /**
@@ -238,8 +239,8 @@ export default class Roi {
   }
 
   /**
-        Returns a binary image (mask) containing only the border of the mask
-     */
+    Returns a binary image (mask) containing only the border of the mask
+  */
   get contourMask() {
     if (!this.computed.contourMask) {
       let img = new Image(this.width, this.height, {
@@ -441,6 +442,7 @@ export default class Roi {
    */
   get eqpc() {
     if (!this.computed.eqpc) {
+      this.computed.eqpc = 2 * Math.sqrt(this.surface / Math.PI);
     }
     return this.computed.eqpc;
   }
@@ -450,6 +452,7 @@ export default class Roi {
    */
   get ped() {
     if (!this.computed.ped) {
+      this.computed.ped = this.external / Math.PI;
     }
     return this.computed.ped;
   }
