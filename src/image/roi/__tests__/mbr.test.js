@@ -1,5 +1,6 @@
-import oneRoi from 'test/oneRoi';
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
+import oneRoi from 'test/oneRoi';
+
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 describe('ROI minimum bounding rectangle', function () {

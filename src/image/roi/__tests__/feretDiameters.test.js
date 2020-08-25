@@ -1,9 +1,8 @@
+import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
 import oneRoi from 'test/oneRoi';
-import binary from 'test/binary';
 
 import feretDiameters from '../feretDiameters';
 
-import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 describe('Feret diameters', function () {

@@ -1,5 +1,4 @@
 import binary from 'test/binary';
-import { Image } from 'test/common';
 
 describe('check moment', function () {
   it('should yield the correct moment', function () {

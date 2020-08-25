@@ -1,5 +1,4 @@
 import { rotate, difference, normalize } from '../../util/points';
-
 import convexHullFunction from '../compute/monotoneChainConvexHull';
 
 /**
