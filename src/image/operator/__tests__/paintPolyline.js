@@ -1,4 +1,6 @@
 import { Image } from 'test/common';
+import array from 'test/array';
+import binary from 'test/binary';
 
 describe('we check paintPolyline', function () {
   it('should yield the painted image with a line', function () {
@@ -15,33 +17,12 @@ describe('we check paintPolyline', function () {
     ];
     image.paintPolyline(points);
 
-    let painted = [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ];
+    let painted = array`
+      0,0,0,0,0
+      0,1,0,0,0
+      0,0,1,0,0
+      0,0,0,1,0
+      0,0,0,0,0`;
 
     let expected = getExpected(painted, [255, 0, 0]);
 
@@ -64,33 +45,13 @@ describe('we check paintPolyline', function () {
     ];
     image.paintPolyline(points);
 
-    let painted = [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ];
+    let painted = array`
+      0,0,0,0,0,
+      0,1,1,1,1,
+      0,0,0,0,1,
+      0,1,1,1,1,
+      0,0,0,0,0,
+    `;
 
     let expected = getExpected(painted, [255, 0, 0]);
 
@@ -112,36 +73,39 @@ describe('we check paintPolyline', function () {
     ];
     image.paintPolyline(points);
 
-    let painted = [
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      1,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ];
+    let painted = array`
+      0,0,1,0,0,
+      0,0,0,1,0,
+      1,1,1,1,1,
+      0,0,0,0,0,
+      0,0,0,0,0,
+    `;
 
     let expected = getExpectedGrey(painted, [255, 0, 0]);
     expect(Array.from(image.data)).toStrictEqual(expected);
+  });
+
+  it('should yield the painted image binary image with a triangle', function () {
+    let size = 5;
+    let data = new Uint8Array(Math.ceil((size * size) / 8));
+    let image = new Image(size, size, data, { kind: 'BINARY' });
+
+    let points = [
+      [2, 0],
+      [4, 2],
+      [0, 2],
+    ];
+    image.paintPolyline(points);
+
+    let painted = binary`
+      00100
+      00010
+      11111
+      00000
+      00000
+    `;
+
+    expect(Array.from(image.data)).toStrictEqual(Array.from(painted.data));
   });
 });
 

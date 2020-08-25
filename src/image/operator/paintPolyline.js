@@ -12,7 +12,7 @@ export default function paintPolyline(points, options = {}) {
   let { color = [this.maxValue, 0, 0], closed = false } = options;
 
   this.checkProcessable('paintPoints', {
-    bitDepth: [8, 16],
+    bitDepth: [1, 8, 16],
   });
 
   let numberChannels = Math.min(this.channels, color.length);
@@ -41,9 +41,13 @@ export default function paintPolyline(points, options = {}) {
         xPoint < this.width &&
         yPoint < this.height
       ) {
-        let position = (xPoint + yPoint * this.width) * this.channels;
-        for (let channel = 0; channel < numberChannels; channel++) {
-          this.data[position + channel] = color[channel];
+        if (this.bitDepth === 1) {
+          this.setBitXY(xPoint, yPoint);
+        } else {
+          let position = (xPoint + yPoint * this.width) * this.channels;
+          for (let channel = 0; channel < numberChannels; channel++) {
+            this.data[position + channel] = color[channel];
+          }
         }
       }
 
