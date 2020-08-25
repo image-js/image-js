@@ -1,4 +1,5 @@
 import binary from 'test/binary';
+import array from 'test/array';
 import { Image } from 'test/common';
 
 describe('Roi#getMask', function () {
@@ -15,33 +16,13 @@ describe('Roi#getMask', function () {
     let roiManager = image.getRoiManager();
     roiManager.fromPoints(points, { kind: 'smallCross' });
 
-    expect(Array.from(roiManager.getData())).toStrictEqual([
-      0,
-      1,
-      0,
-      0,
-      4,
-      1,
-      1,
-      1,
-      2,
-      0,
-      0,
-      1,
-      2,
-      2,
-      2,
-      0,
-      0,
-      0,
-      2,
-      3,
-      0,
-      0,
-      0,
-      3,
-      3,
-    ]);
+    expect(Array.from(roiManager.getData())).toStrictEqual(array`
+      0,1,0,0,4,
+      1,1,1,2,0,
+      0,1,2,2,2,
+      0,0,0,2,3,
+      0,0,0,3,3,
+    `);
 
     let mask = roiManager.getMask({ minSurface: 5, maxSurface: 5 });
 
@@ -58,33 +39,13 @@ describe('Roi#getMask', function () {
   });
 
   it('should yield the right mask, position and resize', function () {
-    const data = [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      1,
-      1,
-      0,
-      0,
-      1,
-      1,
-      1,
-      0,
-      0,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ];
+    const data = array`
+      0,0,0,0,0,
+      0,1,1,1,0,
+      0,1,1,1,0,
+      0,1,1,1,0,
+      0,0,0,0,0,
+    `;
     let image = new Image(5, 5, data, { kind: 'GREY' });
 
     let mask = image.mask({ threshold: 1, algorithm: 'threshold' });
@@ -126,74 +87,24 @@ describe('Roi#getMask', function () {
       positive: true,
       negative: false,
     });
-    expect(Array.from(painted.getChannel(0).data)).toStrictEqual([
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      1,
-      1,
-      0,
-      0,
-      1,
-      255,
-      1,
-      0,
-      0,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ]);
+    expect(Array.from(painted.getChannel(0).data)).toStrictEqual(array`
+      0, 0, 0  , 0, 0,
+      0, 1, 1  , 1, 0,
+      0, 1, 255, 1, 0,
+      0, 1, 1  , 1, 0,
+      0, 0, 0  , 0, 0,
+    `);
   });
 
   it('should work with convex hull', () => {
-    const data = [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ];
+    const data = array`
+      0,0,0,0,0,0
+      0,1,1,1,0,0
+      0,1,0,0,0,0
+      0,1,0,0,0,0
+      0,1,1,1,1,1
+      0,0,0,0,0,0
+    `;
     let image = new Image(6, 6, data, { kind: 'GREY' });
 
     let mask = image.mask({ threshold: 1, algorithm: 'threshold' });
@@ -205,53 +116,23 @@ describe('Roi#getMask', function () {
     const roi = rois[0];
     const convexHullMask = roi.convexHullMask;
     const expected = binary`
-      111001
-      110011
-      110111
-      110000
+      11100
+      10010
+      10010
+      11111
     `;
     expect(convexHullMask.data).toStrictEqual(expected.data);
   });
 
   it('should work with mbr', () => {
-    const data = [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ];
+    const data = array`
+      0,0,0,0,0,0,
+      0,1,1,1,0,0,
+      0,1,0,0,0,0,
+      0,1,0,0,0,0,
+      0,1,1,1,1,1,
+      0,0,0,0,0,0,
+    `;
     let image = new Image(6, 6, data, { kind: 'GREY' });
 
     let mask = image.mask({ threshold: 1, algorithm: 'threshold' });
@@ -264,8 +145,8 @@ describe('Roi#getMask', function () {
     const mbrMask = roi.mbrMask;
     const expected = binary`
       11111
-      11111
-      11111
+      10001
+      10001
       11111
     `;
     expect(mbrMask.data).toStrictEqual(expected.data);

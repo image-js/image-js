@@ -1,3 +1,5 @@
+import { get } from 'lodash';
+
 import Image from '../Image';
 
 import RoiLayer from './RoiLayer';
@@ -221,6 +223,21 @@ export default class RoiManager {
   }
 
   /**
+   * Returns an array of masks
+   * See {@link Roi.getAnalysisMasks} for the options
+   * @param {object} [options]
+   * @return {Image[]} Retuns an array of masks (1 bit Image)
+   */
+  getAnalysisMasks(options = {}) {
+    const { analysisProperty } = options;
+    let maskProperty = `${analysisProperty}Mask`;
+    let rois = this.getRois(options);
+
+    if (rois.length === 0 || !rois[0][maskProperty]) return [];
+    return rois.map((roi) => roi[maskProperty]);
+  }
+
+  /**
    *
    * @param {object} [options]
    * @return {number[]}
@@ -242,19 +259,40 @@ export default class RoiManager {
    * @return {Image} - The painted RGBA 8 bits image
    */
   paint(options = {}) {
-    let { labelProperty } = options;
+    let { labelProperty, analysisProperty } = options;
+
     if (!this._painted) {
       this._painted = this._image.rgba8();
     }
     let masks = this.getMasks(options);
 
     if (labelProperty) {
-      let rois = this.getRois(options);
-      options.labels = rois.map((roi) => roi[labelProperty]);
+      const rois = this.getRois(options);
+      options.labels = rois.map((roi) => get(roi, labelProperty));
+      const max = Math.max(...options.labels);
+      if (isFinite(max)) {
+        if (max > 50) {
+          options.labels = options.labels.map(Math.round);
+        } else if (max > 10) {
+          options.labels = options.labels.map((number) => number.toFixed(1));
+        } else {
+          options.labels = options.labels.map((number) => number.toFixed(2));
+        }
+      }
       options.labelsPosition = rois.map((roi) => [roi.meanX, roi.meanY]);
     }
 
     this._painted.paintMasks(masks, options);
+
+    if (analysisProperty) {
+      let analysisMasks = this.getAnalysisMasks(options);
+
+      this._painted.paintMasks(analysisMasks, {
+        color: options.analysisColor,
+        alpha: options.analysisAlpha,
+      });
+    }
+
     return this._painted;
   }
 

@@ -116,6 +116,7 @@
     "is-integer": "^1.0.7",
     "jpeg-js": "^0.4.1",
     "js-priority-queue": "^0.1.5",
+    "lodash": "^4.17.20",
     "ml-convolution": "0.2.0",
     "ml-disjoint-set": "^1.0.0",
     "ml-matrix": "^6.5.1",

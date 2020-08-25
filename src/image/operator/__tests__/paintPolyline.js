@@ -1,6 +1,6 @@
-import { Image } from 'test/common';
 import array from 'test/array';
 import binary from 'test/binary';
+import { Image } from 'test/common';
 
 describe('we check paintPolyline', function () {
   it('should yield the painted image with a line', function () {

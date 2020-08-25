@@ -4,8 +4,8 @@ import oneRoi from 'test/oneRoi';
 
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
-describe('FeretMask', function () {
-  it('roi 4x4', function () {
+describe('mbrMask', function () {
+  it('roi 4x4 rectangle', function () {
     let roi = oneRoi`
         0110
         0110
@@ -13,13 +13,13 @@ describe('FeretMask', function () {
         0110
       `;
 
-    const mask = roi.getMask({ kind: 'feret' });
+    const mask = roi.getMask({ kind: 'mbr' });
 
     let expected = binary`
     11
-    10
-    01
-    01
+    11
+    11
+    11
   `;
 
     expect(Array.from(mask.data)).toStrictEqual(Array.from(expected.data));

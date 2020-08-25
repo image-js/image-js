@@ -1,6 +1,13 @@
 import robustPointInPolygon from 'robust-point-in-polygon';
 
 import Shape from '../../util/Shape';
+import {
+  round,
+  minMax as minMaxFct,
+  moveToZeroZero,
+  perimeter,
+  surface,
+} from '../../util/points';
 import Image from '../Image';
 import minimalBoundingRectangle from '../compute/minimalBoundingRectangle';
 import * as KindNames from '../core/kindNames';
@@ -373,7 +380,11 @@ export default class Roi {
   get convexHull() {
     if (!this.computed.convexHull) {
       const convexHull = this.contourMask.monotoneChainConvexHull();
-      this.computed.convexHull = convexHull;
+      this.computed.convexHull = {
+        surface: surface(convexHull),
+        perimeter: perimeter(convexHull),
+        polyline: convexHull,
+      };
     }
     return this.computed.convexHull;
   }
@@ -386,15 +397,7 @@ export default class Roi {
         position: [this.minX, this.minY],
         parent: this.map.parent,
       });
-
-      for (let x = 0; x < this.width; x++) {
-        for (let y = 0; y < this.height; y++) {
-          if (robustPointInPolygon(convexHull, [x, y]) !== 1) {
-            img.setBitXY(x, y);
-          }
-        }
-      }
-
+      img.paintPolyline(convexHull.polyline, { closed: true });
       this.computed.convexHullMask = img;
     }
     return this.computed.convexHullMask;
@@ -402,7 +405,9 @@ export default class Roi {
 
   get mbr() {
     if (!this.computed.mbr) {
-      let mbr = minimalBoundingRectangle({ originalPoints: this.convexHull });
+      let mbr = minimalBoundingRectangle({
+        originalPoints: this.convexHull.polyline,
+      });
       if (mbr.length === 0) {
         this.computed.mbr = {
           length: 0,
@@ -424,6 +429,7 @@ export default class Roi {
           length,
           width,
           surface: length * width,
+          perimeter: (length + width) * 2,
           rectangle: mbr,
         };
       }
@@ -434,7 +440,7 @@ export default class Roi {
   get feretDiameters() {
     if (!this.computed.feretDiameters) {
       this.computed.feretDiameters = feretDiameters({
-        originalPoints: this.convexHull,
+        originalPoints: this.convexHull.polyline,
       });
     }
     return this.computed.feretDiameters;
@@ -477,22 +483,32 @@ export default class Roi {
 
   get mbrMask() {
     if (!this.computed.mbrMask) {
-      const img = new Image(this.width, this.height, {
-        kind: KindNames.BINARY,
-        position: [this.minX, this.minY],
-        parent: this.map.parent,
-      });
+      let rectangle = round(this.mbr.rectangle);
+      if (rectangle.length > 0) {
+        // the problem is that the rectangle may be outside the roi
+        const minMax = minMaxFct(rectangle);
 
-      const mbr = this.mask.minimalBoundingRectangle();
-      for (let x = 0; x < this.width; x++) {
-        for (let y = 0; y < this.height; y++) {
-          if (robustPointInPolygon(mbr, [x, y]) !== 1) {
-            img.setBitXY(x, y);
-          }
-        }
+        const img = new Image(
+          minMax[1][0] - minMax[0][0] + 1,
+          minMax[1][1] - minMax[0][1] + 1,
+          {
+            kind: KindNames.BINARY,
+            position: [this.minX + minMax[0][0], this.minY + minMax[0][1]],
+            parent: this.map.parent,
+          },
+        );
+
+        rectangle = moveToZeroZero(rectangle);
+
+        img.paintPolyline(rectangle, { closed: true });
+        this.computed.mbrMask = img;
+      } else {
+        this.computed.mbrMask = new Image(1, 1, {
+          kind: KindNames.BINARY,
+          position: [this.minX, this.minY],
+          parent: this.map.parent,
+        });
       }
-
-      this.computed.mbrMask = img;
     }
     return this.computed.mbrMask;
   }
