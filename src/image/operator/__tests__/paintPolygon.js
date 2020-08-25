@@ -1,4 +1,5 @@
 import array from 'test/array';
+import binary from 'test/binary';
 import { Image } from 'test/common';
 
 describe('we check paintPolygon', function () {
@@ -174,6 +175,52 @@ describe('we check paintPolygon', function () {
 
     let expected = getExpectedGrey(painted, [255, 0, 0]);
     expect(Array.from(image.data)).toStrictEqual(expected);
+  });
+
+  it('should yield the painted binary image with a triangle', function () {
+    let size = 5;
+    let data = new Uint8Array(Math.ceil((size * size) / 8));
+    let image = new Image(size, size, data, { kind: 'BINARY' });
+
+    let points = [
+      [2, 0],
+      [4, 2],
+      [0, 2],
+    ];
+    image.paintPolygon(points);
+
+    let painted = binary`
+      00100
+      01010
+      11111
+      00000
+      00000
+    `;
+
+    expect(Array.from(image.data)).toStrictEqual(Array.from(painted.data));
+  });
+
+  it('should yield the filled painted binary image with a triangle', function () {
+    let size = 5;
+    let data = new Uint8Array(Math.ceil((size * size) / 8));
+    let image = new Image(size, size, data, { kind: 'BINARY' });
+
+    let points = [
+      [2, 0],
+      [4, 2],
+      [0, 2],
+    ];
+    image.paintPolygon(points, { filled: true });
+
+    let painted = binary`
+      00100
+      01110
+      11111
+      00000
+      00000
+    `;
+
+    expect(Array.from(image.data)).toStrictEqual(Array.from(painted.data));
   });
 });
 

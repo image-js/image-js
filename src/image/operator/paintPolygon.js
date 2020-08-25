@@ -12,7 +12,7 @@ export default function paintPolygon(points, options = {}) {
   let { color = [this.maxValue, 0, 0], filled = false } = options;
 
   this.checkProcessable('paintPoints', {
-    bitDepth: [8, 16],
+    bitDepth: [1, 8, 16],
   });
 
   options.closed = true;
@@ -44,10 +44,14 @@ export default function paintPolygon(points, options = {}) {
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
         if (matrixBinary[y][x] === 1) {
-          let numberChannels = Math.min(this.channels, color.length);
-          let position = (x + y * this.width) * this.channels;
-          for (let channel = 0; channel < numberChannels; channel++) {
-            this.data[position + channel] = color[channel];
+          if (this.bitDepth === 1) {
+            this.setBitXY(x, y);
+          } else {
+            let numberChannels = Math.min(this.channels, color.length);
+            let position = (x + y * this.width) * this.channels;
+            for (let channel = 0; channel < numberChannels; channel++) {
+              this.data[position + channel] = color[channel];
+            }
           }
         }
       }
