@@ -1,53 +1,3 @@
-function deleteDouble(points) {
-  let finalPoints = [];
-  for (let i = 0; i < points.length; i++) {
-    if (
-      points[i][0] === points[(i + 1) % points.length][0] &&
-      points[i][1] === points[(i + 1) % points.length][1]
-    ) {
-      continue;
-    } else if (
-      points[i][0] === points[(i - 1 + points.length) % points.length][0] &&
-      points[i][1] === points[(i - 1 + points.length) % points.length][1]
-    ) {
-      continue;
-    } else if (
-      points[(i + 1) % points.length][0] ===
-        points[(i - 1 + points.length) % points.length][0] &&
-      points[(i - 1 + points.length) % points.length][1] ===
-        points[(i + 1) % points.length][1]
-    ) {
-      continue; // we don't consider this point only
-    } else {
-      finalPoints.push(points[i]);
-    }
-  }
-  return finalPoints;
-}
-
-function lineBetweenTwoPoints(p1, p2) {
-  if (p1[0] === p2[0]) {
-    return { a: 0, b: p1[0], vertical: true }; // we store the x of the vertical line into b
-  } else {
-    const coeffA = (p2[1] - p1[1]) / (p2[0] - p1[0]);
-    const coeffB = p1[1] - coeffA * p1[0];
-    return { a: coeffA, b: coeffB, vertical: false };
-  }
-}
-
-function isAtTheRightOfTheLine(x, y, line, height) {
-  if (line.vertical === true) {
-    return line.b <= x;
-  } else {
-    if (line.a === 0) {
-      return false;
-    } else {
-      const xline = (y - line.b) / line.a;
-      return xline < x && xline >= 0 && xline <= height;
-    }
-  }
-}
-
 /**
  * Paint a polygon defined by an array of points.
  * @memberof Image
@@ -103,5 +53,55 @@ export default function paintPolygon(points, options = {}) {
       }
     }
     return this.paintPolyline(points, options);
+  }
+}
+
+function deleteDouble(points) {
+  let finalPoints = [];
+  for (let i = 0; i < points.length; i++) {
+    if (
+      points[i][0] === points[(i + 1) % points.length][0] &&
+      points[i][1] === points[(i + 1) % points.length][1]
+    ) {
+      continue;
+    } else if (
+      points[i][0] === points[(i - 1 + points.length) % points.length][0] &&
+      points[i][1] === points[(i - 1 + points.length) % points.length][1]
+    ) {
+      continue;
+    } else if (
+      points[(i + 1) % points.length][0] ===
+        points[(i - 1 + points.length) % points.length][0] &&
+      points[(i - 1 + points.length) % points.length][1] ===
+        points[(i + 1) % points.length][1]
+    ) {
+      continue; // we don't consider this point only
+    } else {
+      finalPoints.push(points[i]);
+    }
+  }
+  return finalPoints;
+}
+
+function lineBetweenTwoPoints(p1, p2) {
+  if (p1[0] === p2[0]) {
+    return { a: 0, b: p1[0], vertical: true }; // we store the x of the vertical line into b
+  } else {
+    const coeffA = (p2[1] - p1[1]) / (p2[0] - p1[0]);
+    const coeffB = p1[1] - coeffA * p1[0];
+    return { a: coeffA, b: coeffB, vertical: false };
+  }
+}
+
+function isAtTheRightOfTheLine(x, y, line, height) {
+  if (line.vertical === true) {
+    return line.b <= x;
+  } else {
+    if (line.a === 0) {
+      return false;
+    } else {
+      const xline = (y - line.b) / line.a;
+      return xline < x && xline >= 0 && xline <= height;
+    }
   }
 }
