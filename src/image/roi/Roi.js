@@ -410,8 +410,8 @@ export default class Roi {
       });
       if (mbr.length === 0) {
         this.computed.mbr = {
-          length: 0,
           width: 0,
+          height: 0,
           surface: 0,
           rectangle: mbr,
         };
@@ -419,17 +419,17 @@ export default class Roi {
         let first = mbr[0];
         let second = mbr[1];
         let third = mbr[2];
-        let length = Math.sqrt(
+        let width = Math.sqrt(
           (first[0] - second[0]) ** 2 + (first[1] - second[1]) ** 2,
         );
-        let width = Math.sqrt(
+        let height = Math.sqrt(
           (third[0] - second[0]) ** 2 + (third[1] - second[1]) ** 2,
         );
         this.computed.mbr = {
-          length,
           width,
-          surface: length * width,
-          perimeter: (length + width) * 2,
+          height,
+          surface: width * height,
+          perimeter: (width + height) * 2,
           rectangle: mbr,
         };
       }
@@ -565,6 +565,14 @@ export default class Roi {
     return this.computed.maxLength;
   }
 
+  get rectangularness() {
+    return this.surface / this.mbr.surface;
+  }
+
+  get compactness() {
+    return this.surface / this.convexHull.surface;
+  }
+
   get angle() {
     if (!this.computed.angle) {
       let points = this.maxLengthPoints;
@@ -590,6 +598,15 @@ export default class Roi {
       height: this.height,
       width: this.width,
       surface: this.surface,
+      mbrWidth: this.mbr.width,
+      mbrHeight: this.mbr.height,
+      mbrSurface: this.mbr.surface,
+      eqpc: this.eqpc,
+      ped: this.ped,
+      feretDiameterMin: this.feretDiameters.min,
+      feretDiameterMax: this.feretDiameters.max,
+      rectangularness: this.rectangularness,
+      compactness: this.compactness,
     };
   }
 }
