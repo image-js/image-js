@@ -1,5 +1,3 @@
-import robustPointInPolygon from 'robust-point-in-polygon';
-
 import Shape from '../../util/Shape';
 import {
   round,
@@ -570,7 +568,11 @@ export default class Roi {
     return this.surface / this.mbr.surface;
   }
 
-  get compactness() {
+  get sphericity() {
+    return this.eqpc / this.external;
+  }
+
+  get convexity() {
     return this.surface / this.convexHull.surface;
   }
 
@@ -606,8 +608,10 @@ export default class Roi {
       ped: this.ped,
       feretDiameterMin: this.feretDiameters.min,
       feretDiameterMax: this.feretDiameters.max,
+      ψA: this.feretDiameters.ψA,
+      sphericity: this.sphericity,
       rectangularness: this.rectangularness,
-      compactness: this.compactness,
+      convexity: this.convexity,
     };
   }
 }

@@ -1,5 +1,5 @@
-import binary from 'test/binary';
 import array from 'test/array';
+import binary from 'test/binary';
 import { Image } from 'test/common';
 
 describe('Roi#getMask', function () {
