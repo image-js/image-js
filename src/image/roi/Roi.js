@@ -413,6 +413,7 @@ export default class Roi {
           width: 0,
           height: 0,
           surface: 0,
+          perimeter: 0,
           rectangle: mbr,
         };
       } else {
