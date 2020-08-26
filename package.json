@@ -40,10 +40,8 @@
     "index.d.ts"
   ],
   "scripts": {
-    "build": "npm-run-all clean-dist --parallel compile build-dist",
-    "build-dist": "cross-env NODE_ENV=browser rollup -c",
+    "build": "cheminfo-build --root IJS",
     "build-doc": "documentation build src/index.js --github --output docs --format html --sort-order alpha",
-    "clean-dist": "rimraf dist && mkdir dist",
     "clean-lib": "rimraf lib",
     "compile": "npm run clean-lib && cross-env NODE_ENV=npm babel src --out-dir lib --ignore __tests__ --quiet",
     "eslint": "eslint src test/common.js test/nodeScripts --cache",
@@ -81,6 +79,7 @@
     "babel-jest": "^26.3.0",
     "benchmark": "^2.1.4",
     "canvas": "^2.6.1",
+    "cheminfo-build": "^1.1.4",
     "cross-env": "^7.0.2",
     "documentation": "^13.0.2",
     "eslint": "^7.7.0",
