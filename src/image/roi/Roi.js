@@ -572,6 +572,16 @@ export default class Roi {
     return this.eqpc / this.external;
   }
 
+  get roughness() {
+    /*Slide 23 https://static.horiba.com/fileadmin/Horiba/Products/Scientific/Particle_Characterization/Webinars/Slides/TE011.pdf */
+    return this.convexHull.perimeter / this.perimeter;
+  }
+
+  get roundness() {
+    /*Slide 24 https://static.horiba.com/fileadmin/Horiba/Products/Scientific/Particle_Characterization/Webinars/Slides/TE011.pdf */
+    return (4 * this.surface) / (Math.PI * this.feretDiameters.length.max) ** 2;
+  }
+
   get convexity() {
     return this.surface / this.convexHull.surface;
   }
@@ -612,6 +622,8 @@ export default class Roi {
       sphericity: this.sphericity,
       rectangularness: this.rectangularness,
       convexity: this.convexity,
+      roughness: this.roughness,
+      roundness: this.roundness
     };
   }
 }
