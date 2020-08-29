@@ -55,6 +55,7 @@ const bitMethods = {
    * @return {number} 0: bit is unset, 1: bit is set
    */
   getBitXY(x, y) {
+    if (x >= this.width || y >= this.height) return 0;
     return this.getBit(y * this.width + x);
   },
 
