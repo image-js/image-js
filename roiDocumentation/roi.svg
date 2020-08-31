@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="356">
+<rect x="2" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="222" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="266" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="310" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="46" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="46" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="46" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="46" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="46" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="46" y="222" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="46" y="266" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="46" y="310" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="90" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="90" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="90" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="90" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="darkgreen" />
+<rect x="90" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="90" y="222" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="90" y="266" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="90" y="310" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="134" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="134" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="134" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="darkgreen" />
+<rect x="134" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="134" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="darkgreen" />
+<rect x="134" y="222" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="134" y="266" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="134" y="310" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="178" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="178" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="darkgreen" />
+<rect x="178" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="178" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="178" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="178" y="222" width="40" height="40" stroke-width="0" stroke="white" fill="darkgreen" />
+<rect x="178" y="266" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="178" y="310" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="222" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="222" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="222" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="darkgreen" />
+<rect x="222" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="222" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="222" y="222" width="40" height="40" stroke-width="0" stroke="white" fill="darkgreen" />
+<rect x="222" y="266" width="40" height="40" stroke-width="0" stroke="white" fill="darkgreen" />
+<rect x="222" y="310" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="266" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="266" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="266" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="266" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="darkgreen" />
+<rect x="266" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="darkgreen" />
+<rect x="266" y="222" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="266" y="266" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="266" y="310" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="310" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="310" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="310" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="310" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="310" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="310" y="222" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="310" y="266" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="310" y="310" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="354" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="354" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="354" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="354" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="354" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="354" y="222" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="354" y="266" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="354" y="310" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<polygon points="" stroke="#009e73" stroke-width="4" fill="none" />
+<circle cx="200" cy="178" r="69.96000000000001" stroke="#cc79a7" stroke-width="4" fill="none" />
+<circle cx="200" cy="178" r="99.22" stroke="#0072b2" stroke-width="4" fill="none" />
+<text x="200" y="25" dominant-baseline="middle" text-anchor="middle" fill="darkred" font-weight="bold" font-size="16">
+Region of interest</text>
+<text x="20" y="276" dominant-baseline="top" text-anchor="left" fill="#d55e00" font-weight="bold" font-size="14">
+Surface: 16</text>
+<text x="20" y="296" dominant-baseline="top" text-anchor="left" fill="#d55e00" font-weight="bold" font-size="14">
+External: 10</text>
+<text x="20" y="316" dominant-baseline="top" text-anchor="left" fill="#cc79a7" font-weight="bold" font-size="14">
+eqpc: 4.51</text>
+<text x="20" y="336" dominant-baseline="top" text-anchor="left" fill="#0072b2" font-weight="bold" font-size="14">
+ped: 3.18</text>
+</svg>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="224" height="224">
+<rect x="2" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="46" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="46" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="46" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="46" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="46" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="90" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="90" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="90" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="90" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="90" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="134" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="134" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="134" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="134" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="134" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="178" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="178" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="178" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="178" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="178" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<polygon points="" stroke="#009e73" stroke-width="4" fill="none" />
+<line x1="44" y1="44" x2="132" y2="132" stroke="#cc79a7" stroke-width="8" />
+<line x1="44" y1="176" x2="176" y2="44" stroke="#0072b2" stroke-width="8" />
+<text x="112" y="25" dominant-baseline="middle" text-anchor="middle" fill="darkred" font-weight="bold" font-size="16">
+Feret diameters</text>
+<text x="100" y="164" dominant-baseline="top" text-anchor="left" fill="#cc79a7" font-weight="bold" font-size="14">
+min: 2.82</text>
+<text x="100" y="184" dominant-baseline="top" text-anchor="left" fill="#0072b2" font-weight="bold" font-size="14">
+max: 4.24</text>
+<text x="100" y="204" dominant-baseline="top" text-anchor="left" fill="#d55e00" font-weight="bold" font-size="14">
+&#968;A: 0.6667</text>
+</svg>

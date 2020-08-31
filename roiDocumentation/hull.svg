@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="224" height="224">
+<rect x="2" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="2" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="46" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="46" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="46" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="46" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="46" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="90" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="90" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="90" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="90" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="90" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="134" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="134" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#555" />
+<rect x="134" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="134" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="134" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="178" y="2" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="178" y="46" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="178" y="90" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="178" y="134" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<rect x="178" y="178" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
+<polygon points="44,44 44,176 88,176 176,88 176,44" stroke="#009e73" stroke-width="4" fill="none" />
+<text x="112" y="25" dominant-baseline="middle" text-anchor="middle" fill="darkred" font-weight="bold" font-size="16">
+Convex hull</text>
+<text x="100" y="184" dominant-baseline="top" text-anchor="left" fill="#d55e00" font-weight="bold" font-size="14">
+Surface: 7</text>
+<text x="100" y="204" dominant-baseline="top" text-anchor="left" fill="#d55e00" font-weight="bold" font-size="14">
+Perimeter: 10.82</text>
+</svg>
