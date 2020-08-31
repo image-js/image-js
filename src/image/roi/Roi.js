@@ -584,6 +584,10 @@ export default class Roi {
     return (4 * this.surface) / (Math.PI * this.feretDiameters.length.max) ** 2;
   }
 
+  get circularity() {
+    return this.perimeter ** 2 / this.surface;
+  }
+
   get convexity() {
     return this.surface / this.convexHull.surface;
   }
@@ -626,6 +630,7 @@ export default class Roi {
       convexity: this.convexity,
       roughness: this.roughness,
       roundness: this.roundness,
+      circularity: this.circularity,
     };
   }
 }
