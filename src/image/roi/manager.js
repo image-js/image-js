@@ -1,8 +1,5 @@
 import { get } from 'lodash';
-
 import { unit } from 'mathjs';
-
-console.log(unit);
 
 import Image from '../Image';
 
@@ -265,7 +262,6 @@ export default class RoiManager {
    * @return {Image} - The painted RGBA 8 bits image
    */
   paint(options = {}) {
-    console.log({ options });
     let { labelProperty, analysisProperty } = options;
 
     if (!this._painted) {
@@ -295,7 +291,7 @@ export default class RoiManager {
           options.pixelSize &&
           (isDistance || isSurface)
         ) {
-          unitLabel = isSurface ? options.unit + '^2' : options.unit;
+          unitLabel = isSurface ? `${options.unit}^2` : options.unit;
           let factor = isSurface ? options.pixelSize ** 2 : options.pixelSize;
           let sizeUnit = unit(unitLabel);
           options.labels = options.labels.map((value) => {
