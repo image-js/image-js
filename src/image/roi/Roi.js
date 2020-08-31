@@ -576,10 +576,6 @@ export default class Roi {
     return this.eqpc / this.external;
   }
 
-  get roughness() {
-    /*Slide 23 https://static.horiba.com/fileadmin/Horiba/Products/Scientific/Particle_Characterization/Webinars/Slides/TE011.pdf */
-    return this.convexHull.perimeter / this.perimeter;
-  }
 
   get roundness() {
     /*Slide 24 https://static.horiba.com/fileadmin/Horiba/Products/Scientific/Particle_Characterization/Webinars/Slides/TE011.pdf */
@@ -636,7 +632,6 @@ export default class Roi {
       rectangularness: this.rectangularness,
       convexity: this.convexity,
       solidity: this.solidity,
-      roughness: this.roughness,
       roundness: this.roundness,
       circularity: this.circularity,
     };
