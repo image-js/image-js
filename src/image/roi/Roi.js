@@ -591,8 +591,13 @@ export default class Roi {
   }
 
   get convexity() {
+    return this.convexHull.perimeter / this.perimeter;
+  }
+
+  get solidity() {
     return this.surface / this.convexHull.surface;
   }
+
 
   get angle() {
     if (!this.computed.angle) {
@@ -630,6 +635,7 @@ export default class Roi {
       sphericity: this.sphericity,
       rectangularness: this.rectangularness,
       convexity: this.convexity,
+      solidity: this.solidity,
       roughness: this.roughness,
       roundness: this.roundness,
       circularity: this.circularity,
