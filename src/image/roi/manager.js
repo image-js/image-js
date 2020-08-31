@@ -1,5 +1,9 @@
 import { get } from 'lodash';
 
+import { unit } from 'mathjs';
+
+console.log(unit);
+
 import Image from '../Image';
 
 import RoiLayer from './RoiLayer';
@@ -256,9 +260,12 @@ export default class RoiManager {
    * @param {string} [options.labelProperty] - Paint a mask property on the image.
    *                                  May be any property of the ROI like
    *                                  for example id, surface, width, height, meanX, meanY.
+   * @param {number} [options.pixelSize] Size of a pixel in SI
+   * @param {string} [options.unit="pixel"] Unit in which to display the values
    * @return {Image} - The painted RGBA 8 bits image
    */
   paint(options = {}) {
+    console.log({ options });
     let { labelProperty, analysisProperty } = options;
 
     if (!this._painted) {
@@ -270,13 +277,45 @@ export default class RoiManager {
       const rois = this.getRois(options);
       options.labels = rois.map((roi) => get(roi, labelProperty));
       const max = Math.max(...options.labels);
+
+      let isSurface = false;
+      let isDistance = false;
+      if (labelProperty.includes('surface')) {
+        isSurface = true;
+      } else if (
+        labelProperty.match(/(perimeter|min|max|external|width|height|length)/)
+      ) {
+        isDistance = true;
+      }
+
       if (isFinite(max)) {
+        let unitLabel = '';
+        if (
+          options.unit !== 'pixel' &&
+          options.pixelSize &&
+          (isDistance || isSurface)
+        ) {
+          unitLabel = isSurface ? options.unit + '^2' : options.unit;
+          let factor = isSurface ? options.pixelSize ** 2 : options.pixelSize;
+          let sizeUnit = unit(unitLabel);
+          options.labels = options.labels.map((value) => {
+            sizeUnit.value = value * factor;
+            return sizeUnit.toNumber(unitLabel);
+          });
+        }
+
         if (max > 50) {
-          options.labels = options.labels.map(Math.round);
+          options.labels = options.labels.map(
+            (number) => Math.round(number) + unitLabel,
+          );
         } else if (max > 10) {
-          options.labels = options.labels.map((number) => number.toFixed(1));
+          options.labels = options.labels.map(
+            (number) => number.toFixed(1) + unitLabel,
+          );
         } else {
-          options.labels = options.labels.map((number) => number.toFixed(2));
+          options.labels = options.labels.map(
+            (number) => number.toFixed(2) + unitLabel,
+          );
         }
       }
       options.labelsPosition = rois.map((roi) => [roi.meanX, roi.meanY]);
