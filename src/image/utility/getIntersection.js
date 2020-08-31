@@ -47,8 +47,8 @@ export default function getIntersection(mask2) {
     let posX;
     let posY;
     if (i !== 0) {
-      posX = Math.floor(i / (mask1.width - 1));
-      posY = i % (mask1.width - 1);
+      posX = Math.floor(i / mask1.width);
+      posY = i % mask1.width;
     }
     if (mask1.getBitXY(posX, posY) === 1) {
       intersection.whitePixelsMask1.push(allRelPos1[i]);
@@ -59,8 +59,8 @@ export default function getIntersection(mask2) {
     let posX = 0;
     let posY = 0;
     if (i !== 0) {
-      posX = Math.floor(i / (mask2.width - 1));
-      posY = i % (mask2.width - 1);
+      posX = Math.floor(i / mask2.width);
+      posY = i % mask2.width;
     }
     if (mask2.getBitXY(posX, posY) === 1) {
       intersection.whitePixelsMask2.push(allRelPos2[i]);

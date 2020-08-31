@@ -1,37 +1,18 @@
 import { Image } from 'test/common';
+import array from 'test/array';
 
 describe('getIntersection', function () {
   it('correct intersection for two 2x2 Roi not intersecting (before transformation) in 5x5 image', function () {
     let img1 = new Image(
       5,
       5,
-      [
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-      ],
+      array`
+        255, 255, 0,   0,   0
+        255, 255, 0,   0,   0
+        0,   0,   255, 255, 0
+        0,   0,   255, 255, 0
+        0,   0,   0,   0,   0
+      `,
       { kind: 'GREY' },
     );
 
@@ -67,65 +48,25 @@ describe('getIntersection', function () {
     let img1 = new Image(
       5,
       5,
-      [
-        255,
-        255,
-        255,
-        0,
-        0,
-        255,
-        255,
-        255,
-        0,
-        0,
-        255,
-        255,
-        255,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-      ],
+      array`
+        255, 255, 255, 0,  0,
+        255, 255, 255, 0,  0,
+        255, 255, 255, 0,  0,
+        0,   0,   0,   0,  0,
+        0,   0,   0,   0,  0,
+      `,
       { kind: 'GREY' },
     );
     let img2 = new Image(
       5,
       5,
-      [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-      ],
+      array`
+        0,   0,   0,   0,   0,
+        0,   255, 255, 0,   0,
+        0,   255, 255, 0,   0,
+        0,   0,   0,   0,   0,
+        0,   0,   0,   0,   0,
+      `,
       { kind: 'GREY' },
     );
 
