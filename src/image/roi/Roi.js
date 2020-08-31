@@ -412,6 +412,7 @@ export default class Roi {
           height: 0,
           surface: 0,
           perimeter: 0,
+          aspectRatio: 0,
           rectangle: mbr,
         };
       } else {
@@ -427,6 +428,7 @@ export default class Roi {
         this.computed.mbr = {
           width,
           height,
+          aspectRatio: width / height,
           surface: width * height,
           perimeter: (width + height) * 2,
           rectangle: mbr,
@@ -623,7 +625,7 @@ export default class Roi {
       rectangularness: this.rectangularness,
       convexity: this.convexity,
       roughness: this.roughness,
-      roundness: this.roundness
+      roundness: this.roundness,
     };
   }
 }
