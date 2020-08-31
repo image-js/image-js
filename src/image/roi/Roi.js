@@ -413,6 +413,7 @@ export default class Roi {
           surface: 0,
           perimeter: 0,
           aspectRatio: 0,
+          elongation: 0,
           rectangle: mbr,
         };
       } else {
@@ -428,6 +429,7 @@ export default class Roi {
         this.computed.mbr = {
           width,
           height,
+          elongation: 1 - width / height,
           aspectRatio: width / height,
           surface: width * height,
           perimeter: (width + height) * 2,
