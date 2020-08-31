@@ -12,15 +12,14 @@ describe('Monotone Chain Convex Hull', function () {
         00011000
         00000000
       `;
-
     expect(image.monotoneChainConvexHull()).toStrictEqual([
       [2, 3],
-      [2, 4],
-      [3, 6],
-      [4, 6],
-      [7, 4],
-      [7, 3],
-      [4, 1],
+      [2, 5],
+      [3, 7],
+      [5, 7],
+      [8, 5],
+      [8, 3],
+      [5, 1],
       [3, 1],
     ]);
   });
@@ -30,7 +29,12 @@ describe('Monotone Chain Convex Hull', function () {
         10000000
       `;
 
-    expect(image.monotoneChainConvexHull()).toStrictEqual([]);
+    expect(image.monotoneChainConvexHull()).toStrictEqual([
+      [0, 0],
+      [0, 1],
+      [1, 1],
+      [1, 0],
+    ]);
   });
 
   it('should return the convex hull for two points', function () {
@@ -41,7 +45,9 @@ describe('Monotone Chain Convex Hull', function () {
 
     expect(image.monotoneChainConvexHull()).toStrictEqual([
       [0, 0],
-      [0, 1],
+      [0, 2],
+      [1, 2],
+      [1, 0],
     ]);
   });
 });

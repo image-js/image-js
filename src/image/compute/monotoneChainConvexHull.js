@@ -7,5 +7,5 @@ import mcch from 'monotone-chain-convex-hull';
  * @return {Array<Array<number>>}
  */
 export default function monotoneChainConvexHull() {
-  return mcch(this.points, { sorted: true });
+  return mcch(this.extendedPoints, { sorted: false });
 }

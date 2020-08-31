@@ -10,19 +10,18 @@ describe('ROI minimum bounding rectangle', function () {
         111
         010
       `;
-
     expect(roi.mbr).toMatchCloseTo(
       {
-        width: 1.4142135623730951,
-        height: 1.414213562373095,
+        width: 2.8284,
+        height: 2.8284,
+        surface: 8,
+        perimeter: 11.3137,
         rectangle: [
-          [2, 1],
-          [1, 0],
-          [0, 1],
-          [1, 2],
+          [-0.5, 1.5],
+          [1.5, 3.5],
+          [3.5, 1.5],
+          [1.5, -0.5],
         ],
-        surface: 2,
-        perimeter: 5.65685424949238,
       },
       3,
     );
@@ -34,11 +33,16 @@ describe('ROI minimum bounding rectangle', function () {
       `;
     expect(roi.mbr).toMatchCloseTo(
       {
-        width: 0,
-        rectangle: [],
-        surface: 0,
-        height: 0,
-        perimeter: 0,
+        width: 1,
+        rectangle: [
+          [0, 0],
+          [0, 1],
+          [1, 1],
+          [1, 0],
+        ],
+        surface: 1,
+        height: 1,
+        perimeter: 4,
       },
       3,
     );
@@ -51,16 +55,16 @@ describe('ROI minimum bounding rectangle', function () {
       `;
     expect(roi.mbr).toMatchCloseTo(
       {
-        width: 1,
+        width: 2,
         rectangle: [
           [0, 0],
-          [0, 1],
-          [0, 1],
-          [0, 0],
+          [0, 2],
+          [1, 2],
+          [1, 0],
         ],
-        surface: 0,
-        height: 0,
-        perimeter: 2,
+        surface: 2,
+        height: 1,
+        perimeter: 6,
       },
       3,
     );

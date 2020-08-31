@@ -1,3 +1,5 @@
+import mcch from 'monotone-chain-convex-hull';
+
 import Shape from '../../util/Shape';
 import {
   round,
@@ -11,6 +13,9 @@ import minimalBoundingRectangle from '../compute/minimalBoundingRectangle';
 import * as KindNames from '../core/kindNames';
 
 import feretDiameters from './feretDiameters';
+
+// Many measurements:
+// https://www.sympatec.com/en/particle-measurement/glossary/particle-shape/#
 
 /**
  * Class to manage Region Of Interests
@@ -377,11 +382,53 @@ export default class Roi {
 
   get convexHull() {
     if (!this.computed.convexHull) {
-      const convexHull = this.contourMask.monotoneChainConvexHull();
+      const calculationPoints = [];
+      // slow approach, we check all the points
+      // for each point we take the 4 corners !!!!
+
+      for (let x = 0; x < this.width; x++) {
+        for (let y = 0; y < this.height; y++) {
+          if (
+            this.map.data[x + this.minX + (y + this.minY) * this.map.width] ===
+            this.id
+          ) {
+            // it also has to be on a border ...
+            if (x > 0 && x < this.width - 1 && y > 0 && y < this.height - 1) {
+              if (
+                this.map.data[
+                  x - 1 + this.minX + (y + this.minY) * this.map.width
+                ] !== this.id ||
+                this.map.data[
+                  x + 1 + this.minX + (y + this.minY) * this.map.width
+                ] !== this.id ||
+                this.map.data[
+                  x + this.minX + (y - 1 + this.minY) * this.map.width
+                ] !== this.id ||
+                this.map.data[
+                  x + this.minX + (y + 1 + this.minY) * this.map.width
+                ] !== this.id
+              ) {
+                calculationPoints.push([x, y]);
+                calculationPoints.push([x + 1, y]);
+                calculationPoints.push([x, y + 1]);
+                calculationPoints.push([x + 1, y + 1]);
+              }
+            } else {
+              calculationPoints.push([x, y]);
+              calculationPoints.push([x + 1, y]);
+              calculationPoints.push([x, y + 1]);
+              calculationPoints.push([x + 1, y + 1]);
+            }
+          }
+        }
+      }
+
+      const convexHull = mcch(calculationPoints);
+
       this.computed.convexHull = {
+        polyline: convexHull,
         surface: surface(convexHull),
         perimeter: perimeter(convexHull),
-        polyline: convexHull,
       };
     }
     return this.computed.convexHull;
@@ -390,7 +437,7 @@ export default class Roi {
   get convexHullMask() {
     if (!this.computed.convexHullMask) {
       const convexHull = this.convexHull;
-      const img = new Image(this.width, this.height, {
+      const img = new Image(this.width + 1, this.height + 1, {
         kind: KindNames.BINARY,
         position: [this.minX, this.minY],
         parent: this.map.parent,
@@ -467,7 +514,7 @@ export default class Roi {
 
   get feretMask() {
     if (!this.computed.feretMask) {
-      const image = new Image(this.width, this.height, {
+      const image = new Image(this.width + 1, this.height + 1, {
         kind: KindNames.BINARY,
         position: [this.minX, this.minY],
         parent: this.map.parent,
@@ -569,7 +616,7 @@ export default class Roi {
   }
 
   get sphericity() {
-    return this.eqpc / this.external;
+    return (this.eqpc * Math.PI) / this.convexHull.perimeter;
   }
 
   get convexity() {

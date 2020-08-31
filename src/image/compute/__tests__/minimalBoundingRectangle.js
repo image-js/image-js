@@ -40,10 +40,11 @@ describe('Minimal bounding rectangle', function () {
     `;
 
     const result = minimalBoundingRectangle.call(image);
+
     expect(result).toStrictEqual([
-      [0, 2],
-      [7, 2],
-      [7, 0],
+      [0, 3],
+      [8, 3],
+      [8, 0],
       [0, 0],
     ]);
   });
@@ -57,9 +58,9 @@ describe('Minimal bounding rectangle', function () {
 
     const result = minimalBoundingRectangle.call(image);
     expect(result).toStrictEqual([
-      [1, 2],
-      [6, 2],
-      [6, 0],
+      [1, 3],
+      [7, 3],
+      [7, 0],
       [1, 0],
     ]);
   });
@@ -74,10 +75,10 @@ describe('Minimal bounding rectangle', function () {
     const result = minimalBoundingRectangle.call(image);
     expect(result).toBeDeepCloseTo(
       [
-        [6, 1],
-        [5, 0],
-        [4, 1],
-        [5, 2],
+        [3.5, 1.5],
+        [5.5, 3.5],
+        [7.5, 1.5],
+        [5.5, -0.5],
       ],
       6,
     );
@@ -96,10 +97,10 @@ describe('Minimal bounding rectangle', function () {
     const result = minimalBoundingRectangle.call(image);
     expect(result).toBeDeepCloseTo(
       [
-        [2, 3],
-        [5, 6],
-        [7, 4],
-        [4, 1],
+        [8.5, 4.5],
+        [4.5, 0.5],
+        [1.5, 3.5],
+        [5.5, 7.5],
       ],
       6,
     );

@@ -1,8 +1,6 @@
 import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
 import oneRoi from 'test/oneRoi';
 
-import feretDiameters from '../feretDiameters';
-
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 describe('Feret diameters', function () {
@@ -12,18 +10,20 @@ describe('Feret diameters', function () {
         111
         010
       `;
+
     expect(roi.feretDiameters).toMatchCloseTo(
       {
-        min: 1.41421,
+        min: 2.8284,
         minLine: [
-          [1, 2],
-          [0, 1],
+          [1, 3],
+          [3, 1],
         ],
-        max: 2,
+        max: 3.1623,
         maxLine: [
           [0, 1],
-          [2, 1],
+          [3, 2],
         ],
+        ψA: 0.8944,
       },
       3,
     );
@@ -39,16 +39,17 @@ describe('Feret diameters', function () {
 
     expect(roi.feretDiameters).toMatchCloseTo(
       {
-        min: 1,
+        min: 2,
         minLine: [
           [0, 0],
-          [1, 0],
+          [2, 0],
         ],
-        max: 3.1622,
+        max: 4.4721,
         maxLine: [
           [0, 0],
-          [1, 3],
+          [2, 4],
         ],
+        ψA: 0.4472,
       },
       3,
     );
@@ -65,16 +66,17 @@ describe('Feret diameters', function () {
 
     expect(roi.feretDiameters).toMatchCloseTo(
       {
-        min: 2.8284,
+        min: 4.2426,
         minLine: [
-          [2, 4],
+          [3, 5],
           [0, 2],
         ],
-        max: 4,
+        max: 5.099,
         maxLine: [
           [0, 2],
-          [4, 2],
+          [5, 3],
         ],
+        ψA: 0.8321,
       },
       3,
     );
@@ -88,18 +90,20 @@ describe('Feret diameters', function () {
       111000
       100000
     `;
+
     expect(roi.feretDiameters).toMatchCloseTo(
       {
-        min: 3.7139,
+        min: 5,
         minLine: [
-          [1.3793, 0.5517],
-          [0, 4],
+          [0, 5],
+          [0, 0],
         ],
-        max: 5.385164807134504,
+        max: 6.7082,
         maxLine: [
           [0, 0],
-          [5, 2],
+          [6, 3],
         ],
+        ψA: 0.7453,
       },
       3,
     );
@@ -112,20 +116,20 @@ describe('Feret diameters', function () {
         100
       `;
 
-    const result = feretDiameters.call(roi);
-
+    const result = roi.feretDiameters;
     expect(result).toMatchCloseTo(
       {
-        min: 1.4142,
+        min: 2.8284,
         minLine: [
-          [1, 1],
+          [2, 2],
           [0, 0],
         ],
-        max: 2.8284,
+        max: 4.242,
         maxLine: [
-          [0, 2],
-          [2, 0],
+          [0, 3],
+          [3, 0],
         ],
+        ψA: 0.6667,
       },
       3,
     );

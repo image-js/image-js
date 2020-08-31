@@ -1,4 +1,4 @@
-import { surface, perimeter } from '../points';
+import { perimeter } from '../points';
 
 describe('utilities for points', function () {
   it('perimeter diamond', function () {

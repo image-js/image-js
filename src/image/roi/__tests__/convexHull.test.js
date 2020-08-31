@@ -4,6 +4,25 @@ import oneRoi from 'test/oneRoi';
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 describe('ROI convexHull', function () {
+  it('square', function () {
+    let roi = oneRoi`
+        000
+        011
+        011
+      `;
+
+    expect(roi.convexHull).toStrictEqual({
+      polyline: [
+        [0, 0],
+        [0, 2],
+        [2, 2],
+        [2, 0],
+      ],
+      surface: 4,
+      perimeter: 8,
+    });
+  });
+
   it('cross', function () {
     let roi = oneRoi`
         010
@@ -13,12 +32,16 @@ describe('ROI convexHull', function () {
 
     expect(roi.convexHull).toMatchCloseTo(
       {
-        surface: 2,
-        perimeter: 5.6568,
+        surface: 7,
+        perimeter: 9.656854,
         polyline: [
           [0, 1],
-          [1, 2],
-          [2, 1],
+          [0, 2],
+          [1, 3],
+          [2, 3],
+          [3, 2],
+          [3, 1],
+          [2, 0],
           [1, 0],
         ],
       },
@@ -35,12 +58,14 @@ describe('ROI convexHull', function () {
 
     expect(roi.convexHull).toMatchCloseTo(
       {
-        surface: 2,
-        perimeter: 6.8284,
+        surface: 7,
+        perimeter: 10.8284,
         polyline: [
           [0, 0],
-          [0, 2],
-          [2, 0],
+          [0, 3],
+          [1, 3],
+          [3, 1],
+          [3, 0],
         ],
       },
       3,
@@ -52,9 +77,14 @@ describe('ROI convexHull', function () {
         1
       `;
     expect(roi.convexHull).toStrictEqual({
-      surface: 0,
-      perimeter: 0,
-      polyline: [],
+      surface: 1,
+      perimeter: 4,
+      polyline: [
+        [0, 0],
+        [0, 1],
+        [1, 1],
+        [1, 0],
+      ],
     });
   });
 
@@ -65,11 +95,13 @@ describe('ROI convexHull', function () {
       `;
 
     expect(roi.convexHull).toMatchCloseTo({
-      surface: 0,
-      perimeter: 2,
+      surface: 2,
+      perimeter: 6,
       polyline: [
         [0, 0],
-        [0, 1],
+        [0, 2],
+        [1, 2],
+        [1, 0],
       ],
     });
   });

@@ -114,12 +114,14 @@ describe('Roi#getMask', function () {
     expect(rois).toHaveLength(2);
 
     const roi = rois[0];
+
     const convexHullMask = roi.convexHullMask;
     const expected = binary`
-      11100
-      10010
-      10010
-      11111
+      111100
+      100010
+      100010
+      100001
+      111111
     `;
     expect(convexHullMask.data).toStrictEqual(expected.data);
   });
@@ -144,10 +146,11 @@ describe('Roi#getMask', function () {
     const roi = rois[0];
     const mbrMask = roi.mbrMask;
     const expected = binary`
-      11111
-      10001
-      10001
-      11111
+      111111
+      100001
+      100001
+      100001
+      111111
     `;
     expect(mbrMask.data).toStrictEqual(expected.data);
   });

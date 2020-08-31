@@ -1,4 +1,4 @@
-import { surface, perimeter } from '../points';
+import { surface } from '../points';
 
 describe('utilities for points: surface', function () {
   it('square 1', function () {

@@ -16,10 +16,11 @@ describe('FeretMask', function () {
     const mask = roi.getMask({ kind: 'feret' });
 
     let expected = binary`
-    11
-    10
-    01
-    01
+    111
+    010
+    010
+    001
+    001
   `;
 
     expect(Array.from(mask.data)).toStrictEqual(Array.from(expected.data));

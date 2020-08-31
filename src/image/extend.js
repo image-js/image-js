@@ -87,6 +87,7 @@ import getLocalMaxima from './compute/localMaxima';
 import getMean from './compute/mean';
 import getMedian from './compute/median';
 import getPoints from './compute/points';
+import getExtendedPoints from './compute/extendedPoints';
 import getRelativePosition from './compute/relativePosition';
 import countAlphaPixels from './compute/countAlphaPixels';
 import monotoneChainConvexHull from './compute/monotoneChainConvexHull';
@@ -201,6 +202,10 @@ export default function extend(Image) {
   Image.extendMethod('getPoints', getPoints).extendProperty(
     'points',
     getPoints,
+  );
+  Image.extendMethod('getExtendedPoints', getExtendedPoints).extendProperty(
+    'extendedPoints',
+    getExtendedPoints,
   );
   Image.extendMethod('getRelativePosition', getRelativePosition);
 }
