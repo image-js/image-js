@@ -120,6 +120,32 @@ const imagesOptions = {
       },
     ],
   },
+  perimeter: {
+    image: `
+        000000000
+        000110000
+        000111000
+        001111100
+        000111100
+        000011100
+        000001100
+        000000000
+      `,
+    title: 'Perimeter',
+    textLines: ['Perimeter: 16.14'],
+    polygon: [
+      [4, 1],
+      [3, 2],
+      [3, 3],
+      [2.2, 3.5],
+      [3, 4],
+      [4, 5],
+      [6, 7],
+      [7, 6],
+      [7, 4],
+    ],
+    leftTextMargin: 20,
+  },
 };
 
 function getPixels(string) {
