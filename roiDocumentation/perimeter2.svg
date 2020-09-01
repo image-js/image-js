@@ -71,9 +71,7 @@
 <rect x="354" y="222" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
 <rect x="354" y="266" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
 <rect x="354" y="310" width="40" height="40" stroke-width="0" stroke="white" fill="#EEE" />
-<polygon points="176,44 132,88 132,132 96.80000000000001,154 132,176 176,220 264,308 308,264 308,176" stroke="#009e73" stroke-width="4" fill="none" />
+<polygon points="132,44 88,132 88,176 220,308 308,308 308,132 220,44" stroke="#009e73" stroke-width="4" fill="none" />
 <text x="200" y="25" dominant-baseline="middle" text-anchor="middle" fill="darkred" font-weight="bold" font-size="16">
-Internal perimeter</text>
-<text x="20" y="336" dominant-baseline="top" text-anchor="left" fill="#d55e00" font-weight="bold" font-size="14">
-Perimeter: 16.14</text>
+External perimeter</text>
 </svg>

@@ -45,19 +45,6 @@ const imagesOptions = {
       },
     ],
   },
-  concave: {
-    image: `
-        000000000
-        001111100
-        001110000
-        001111100
-        000011100
-        000001100
-        000111000
-        000000000
-    `,
-    title: 'Concave',
-  },
   mbr: {
     image: `
         000000000
@@ -144,7 +131,7 @@ const imagesOptions = {
         000001100
         000000000
       `,
-    title: 'Perimeter',
+    title: 'Internal perimeter',
     textLines: ['Perimeter: 16.14'],
     polygon: [
       [4, 1],
@@ -158,6 +145,55 @@ const imagesOptions = {
       [7, 4],
     ],
     leftTextMargin: 20,
+  },
+  perimeter2: {
+    image: `
+        000000000
+        000110000
+        000111000
+        001111100
+        000111100
+        000011100
+        000001100
+        000000000
+      `,
+    title: 'External perimeter',
+    polygon: [
+      [3, 1],
+      [2, 3],
+      [2, 4],
+      [5, 7],
+      [7, 7],
+      [7, 3],
+      [5, 1],
+    ],
+  },
+  concave: {
+    image: `
+        000000000
+        001111100
+        001110000
+        001111100
+        000011100
+        000001100
+        000111000
+        000000000
+    `,
+    title: 'External perimeter concave',
+    polygon: [
+      [2, 1],
+      [2, 4],
+      [4, 5],
+      [5, 5.5],
+      [3, 6],
+      [3, 7],
+      [6, 7],
+      [7, 6],
+      [7, 3],
+      [5, 2.5],
+      [7, 2],
+      [7, 1],
+    ],
   },
 };
 
