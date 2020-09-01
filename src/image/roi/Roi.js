@@ -505,6 +505,31 @@ export default class Roi {
   }
 
   /**
+   * Get the category in which each external pixel belongs
+   */
+  get perimeterInfo() {
+    if (!this.computed.perimeterInfo) {
+      this.computed.perimeterInfo = getPerimeterInfo(this);
+    }
+    return this.computed.perimeterInfo;
+  }
+
+  /**
+   * Return the perimeter of the ROI
+   */
+  get perimeter() {
+    let info = this.perimeterInfo;
+    let delta = 2 - Math.sqrt(2);
+    return (
+      info.one +
+      info.two * 2 +
+      info.three * 3 +
+      info.four * 4 -
+      delta * (info.two + info.three + info.four)
+    );
+  }
+
+  /**
    * Diameter of a circle of equal perimeter
    */
   get ped() {
@@ -827,6 +852,63 @@ function getBorder(roi) {
     }
   }
   return total + roi.box;
+}
+
+function getPerimeterInfo(roi) {
+  let roiMap = roi.map;
+  let data = roiMap.data;
+  let one = 0;
+  let two = 0;
+  let three = 0;
+  let four = 0;
+
+  for (let x = 0; x < roi.width; x++) {
+    for (let y = 0; y < roi.height; y++) {
+      let target = (y + roi.minY) * roiMap.width + x + roi.minX;
+      if (data[target] === roi.id) {
+        let nbAround = 0;
+        if (x === 0) {
+          nbAround++;
+        } else if (roi.externalIDs.includes(data[target - 1])) {
+          nbAround++;
+        }
+
+        if (x === roi.width - 1) {
+          nbAround++;
+        } else if (roi.externalIDs.includes(data[target + 1])) {
+          nbAround++;
+        }
+
+        if (y === 0) {
+          nbAround++;
+        } else if (roi.externalIDs.includes(data[target - roiMap.width])) {
+          nbAround++;
+        }
+
+        if (y === roi.height - 1) {
+          nbAround++;
+        } else if (roi.externalIDs.includes(data[target + roiMap.width])) {
+          nbAround++;
+        }
+        switch (nbAround) {
+          case 1:
+            one++;
+            break;
+          case 2:
+            two++;
+            break;
+          case 3:
+            three++;
+            break;
+          case 4:
+            four++;
+            break;
+          default:
+        }
+      }
+    }
+  }
+  return { one, two, three, four };
 }
 
 function getExternal(roi) {
