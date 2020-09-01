@@ -474,6 +474,8 @@ export default class Roi {
         this.computed.mbr = {
           width,
           height,
+          elongation: 1 - width / height,
+          aspectRatio: width / height,
           surface: width * height,
           perimeter: (width + height) * 2,
           rectangle: mbr,
@@ -611,8 +613,9 @@ export default class Roi {
     return this.computed.maxLength;
   }
 
-  get rectangularness() {
-    return this.surface / this.mbr.surface;
+  get roundness() {
+    /*Slide 24 https://static.horiba.com/fileadmin/Horiba/Products/Scientific/Particle_Characterization/Webinars/Slides/TE011.pdf */
+    return (4 * this.surface) / (Math.PI * this.feretDiameters.length.max) ** 2;
   }
 
   get sphericity() {
@@ -657,7 +660,7 @@ export default class Roi {
       feretDiameterMax: this.feretDiameters.max,
       ψA: this.feretDiameters.ψA,
       sphericity: this.sphericity,
-      rectangularness: this.rectangularness,
+      roundness: this.roundness,
       convexity: this.convexity,
     };
   }
