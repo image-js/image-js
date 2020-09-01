@@ -615,7 +615,7 @@ export default class Roi {
 
   get roundness() {
     /*Slide 24 https://static.horiba.com/fileadmin/Horiba/Products/Scientific/Particle_Characterization/Webinars/Slides/TE011.pdf */
-    return (4 * this.surface) / (Math.PI * this.feretDiameters.length.max) ** 2;
+    return (4 * this.surface) / (Math.PI * this.feretDiameters.max) ** 2;
   }
 
   get sphericity() {
