@@ -4,7 +4,7 @@ import oneRoi from 'test/oneRoi';
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 describe('ROI ped: diameter of a circle of equal perimeter', function () {
-  it('perimeter 6', function () {
+  it('nearly square', function () {
     let roi = oneRoi`
         111
         111
@@ -14,10 +14,10 @@ describe('ROI ped: diameter of a circle of equal perimeter', function () {
     let diameter = roi.ped;
     let perimeter = Math.PI * diameter;
 
-    expect(perimeter).toBeCloseTo(6);
+    expect(perimeter).toBeCloseTo(8.485, 2);
   });
 
-  it('perimeter 8', function () {
+  it('squere', function () {
     let roi = oneRoi`
         111
         111
@@ -27,10 +27,10 @@ describe('ROI ped: diameter of a circle of equal perimeter', function () {
     let diameter = roi.ped;
     let perimeter = Math.PI * diameter;
 
-    expect(perimeter).toBeCloseTo(8);
+    expect(perimeter).toBeCloseTo(9.656);
   });
 
-  it('perimeter 16', function () {
+  it('empty square', function () {
     let roi = oneRoi`
         0000000
         0111110
@@ -44,6 +44,6 @@ describe('ROI ped: diameter of a circle of equal perimeter', function () {
     let diameter = roi.ped;
     let perimeter = Math.PI * diameter;
 
-    expect(perimeter).toBeCloseTo(16);
+    expect(perimeter).toBeCloseTo(17.656);
   });
 });

@@ -525,7 +525,7 @@ export default class Roi {
       info.two * 2 +
       info.three * 3 +
       info.four * 4 -
-      delta * (info.two + info.three + info.four)
+      delta * (info.two + info.three * 2 + info.four)
     );
   }
 
@@ -534,7 +534,7 @@ export default class Roi {
    */
   get ped() {
     if (!this.computed.ped) {
-      this.computed.ped = this.external / Math.PI;
+      this.computed.ped = this.perimeter / Math.PI;
     }
     return this.computed.ped;
   }

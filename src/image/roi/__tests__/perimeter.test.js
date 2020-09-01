@@ -43,6 +43,6 @@ describe('perimeter', function () {
         1
       `;
 
-    expect(roi.perimeter).toBeCloseTo(7.656, 2);
+    expect(roi.perimeter).toBeCloseTo(6.485, 2);
   });
 });
