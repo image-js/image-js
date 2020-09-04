@@ -14,7 +14,7 @@ import convexHullFunction from '../compute/monotoneChainConvexHull';
 export default function feretDiameters(options = {}) {
   const { originalPoints = convexHullFunction.call(this) } = options;
   if (originalPoints.length === 0) {
-    return { min: 0, max: 0, minLine: [], maxLine: [], ψA: 1 };
+    return { min: 0, max: 0, minLine: [], maxLine: [], aspectRatio: 1 };
   }
 
   if (originalPoints.length === 1) {
@@ -23,7 +23,7 @@ export default function feretDiameters(options = {}) {
       max: 1,
       minLine: [originalPoints[0], originalPoints[0]],
       maxLine: [originalPoints[0], originalPoints[0]],
-      ψA: 1,
+      aspectRatio: 1,
     };
   }
 
@@ -86,7 +86,7 @@ export default function feretDiameters(options = {}) {
     minLine,
     max: maxWidth,
     maxLine,
-    ψA: minWidth / maxWidth,
+    aspectRatio: minWidth / maxWidth,
   };
 }
 

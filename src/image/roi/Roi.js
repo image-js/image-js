@@ -644,6 +644,7 @@ export default class Roi {
   }
 
   get sphericity() {
+    console.log(this.ped, this.perimeter);
     return (this.ped * Math.PI) / this.perimeter;
   }
 
@@ -683,7 +684,7 @@ export default class Roi {
       ped: this.ped,
       feretDiameterMin: this.feretDiameters.min,
       feretDiameterMax: this.feretDiameters.max,
-      ψA: this.feretDiameters.ψA,
+      aspectRatio: this.feretDiameters.aspectRatio,
       sphericity: this.sphericity,
       roundness: this.roundness,
       convexity: this.convexity,

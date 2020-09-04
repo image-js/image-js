@@ -101,7 +101,7 @@ const imagesOptions = {
     textLines: [
       { value: 'min: 2.82', style: { fill: colors[2] } },
       { value: 'max: 4.24', style: { fill: colors[3] } },
-      'ψA: 0.6667',
+      'aspectRatio: 0.6667',
     ],
     lines: [
       {

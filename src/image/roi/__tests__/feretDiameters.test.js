@@ -23,7 +23,7 @@ describe('Feret diameters', function () {
           [0, 1],
           [3, 2],
         ],
-        ψA: 0.8944,
+        aspectRatio: 0.8944,
       },
       3,
     );
@@ -49,7 +49,7 @@ describe('Feret diameters', function () {
           [0, 0],
           [2, 4],
         ],
-        ψA: 0.4472,
+        aspectRatio: 0.4472,
       },
       3,
     );
@@ -76,7 +76,7 @@ describe('Feret diameters', function () {
           [0, 2],
           [5, 3],
         ],
-        ψA: 0.8321,
+        aspectRatio: 0.8321,
       },
       3,
     );
@@ -103,7 +103,7 @@ describe('Feret diameters', function () {
           [0, 0],
           [6, 3],
         ],
-        ψA: 0.7453,
+        aspectRatio: 0.7453,
       },
       3,
     );
@@ -129,7 +129,7 @@ describe('Feret diameters', function () {
           [0, 3],
           [3, 0],
         ],
-        ψA: 0.6667,
+        aspectRatio: 0.6667,
       },
       3,
     );
