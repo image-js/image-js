@@ -647,7 +647,7 @@ export default class Roi {
     return (2 * Math.sqrt(this.surface * Math.PI)) / this.perimeter;
   }
 
-  get convexity() {
+  get solidity() {
     return this.surface / this.convexHull.surface;
   }
 
@@ -686,7 +686,7 @@ export default class Roi {
       aspectRatio: this.feretDiameters.aspectRatio,
       sphericity: this.sphericity,
       roundness: this.roundness,
-      convexity: this.convexity,
+      solidity: this.solidity,
       perimeter: this.perimeter,
     };
   }
