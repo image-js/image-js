@@ -13,7 +13,7 @@ describe('ROI sphericity', function () {
         11111
       `;
 
-    expect(roi.sphericity).toBeCloseTo(0.8862, 3);
+    expect(roi.sphericity).toBeCloseTo(1.0038, 3);
   });
 
   it('square cut corner', function () {
@@ -25,7 +25,7 @@ describe('ROI sphericity', function () {
         01110
       `;
 
-    expect(roi.sphericity).toBeCloseTo(0.92, 3);
+    expect(roi.sphericity).toBeCloseTo(1.0608, 3);
   });
 
   it('diamond', function () {
@@ -36,6 +36,6 @@ describe('ROI sphericity', function () {
         01110
         00100
       `;
-    expect(roi.sphericity).toBeCloseTo(0.8348, 3);
+    expect(roi.sphericity).toBeCloseTo(0.9854, 3);
   });
 });

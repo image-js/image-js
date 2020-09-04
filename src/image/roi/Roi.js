@@ -644,8 +644,7 @@ export default class Roi {
   }
 
   get sphericity() {
-    console.log(this.ped, this.perimeter);
-    return (this.ped * Math.PI) / this.perimeter;
+    return (2 * Math.sqrt(this.surface * Math.PI)) / this.perimeter;
   }
 
   get convexity() {
