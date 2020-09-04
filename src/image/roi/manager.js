@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import deepValue from '../../util/deepValue';
 import Qty from 'js-quantities';
 
 import Image from '../Image';
@@ -271,7 +271,7 @@ export default class RoiManager {
 
     if (labelProperty) {
       const rois = this.getRois(options);
-      options.labels = rois.map((roi) => get(roi, labelProperty));
+      options.labels = rois.map((roi) => deepValue(roi, labelProperty));
       const max = Math.max(...options.labels);
 
       let isSurface = false;
