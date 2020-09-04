@@ -238,6 +238,16 @@ export default class Roi {
   }
 
   /**
+     Calculates information about holes
+     */
+  get holesInfo() {
+    if (!this.computed.holesInfo) {
+      this.computed.holesInfo = getHolesInfo(this);
+    }
+    return this.computed.holesInfo;
+  }
+
+  /**
      Calculates the number of pixels that are involved in border
      Border are all the pixels that touch another "zone". It could be external
      or internal. If there is a hole in the zone it will be counted as a border.
@@ -934,6 +944,23 @@ function getExternal(roi) {
     }
   }
   return total + roi.box;
+}
+
+function getHolesInfo(roi) {
+  let surface = 0;
+  let width = roi.map.width;
+  let data = roi.map.data;
+  for (let x = 1; x < roi.width - 1; x++) {
+    for (let y = 1; y < roi.height - 1; y++) {
+      let target = (y + roi.minY) * width + x + roi.minX;
+      if (roi.internalIDs.includes(data[target]) && data[target] !== roi.id)
+        surface++;
+    }
+  }
+  return {
+    number: roi.internalIDs.length - 1,
+    surface,
+  };
 }
 
 /*
