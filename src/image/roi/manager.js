@@ -1,5 +1,5 @@
 import { get } from 'lodash';
-import { unit } from 'mathjs';
+import Qty from 'js-quantities';
 
 import Image from '../Image';
 
@@ -292,11 +292,11 @@ export default class RoiManager {
           (isDistance || isSurface)
         ) {
           unitLabel = isSurface ? `${options.unit}^2` : options.unit;
+          let siLabel = isSurface ? 'm^2' : 'm';
           let factor = isSurface ? options.pixelSize ** 2 : options.pixelSize;
-          let sizeUnit = unit(unitLabel);
+          const convert = Qty.swiftConverter(siLabel, unitLabel);
           options.labels = options.labels.map((value) => {
-            sizeUnit.value = value * factor;
-            return sizeUnit.toNumber(unitLabel);
+            return convert(factor * value);
           });
         }
 

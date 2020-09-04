@@ -644,7 +644,7 @@ export default class Roi {
   }
 
   get sphericity() {
-    return (this.eqpc * Math.PI) / this.convexHull.perimeter;
+    return (this.ped * Math.PI) / this.perimeter;
   }
 
   get convexity() {
@@ -687,6 +687,7 @@ export default class Roi {
       sphericity: this.sphericity,
       roundness: this.roundness,
       convexity: this.convexity,
+      perimeter: this.perimeter,
     };
   }
 }
