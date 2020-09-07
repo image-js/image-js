@@ -1,6 +1,6 @@
-import deepValue from '../../util/deepValue';
 import Qty from 'js-quantities';
 
+import deepValue from '../../util/deepValue';
 import Image from '../Image';
 
 import RoiLayer from './RoiLayer';

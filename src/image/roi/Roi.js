@@ -495,6 +495,10 @@ export default class Roi {
     return this.computed.mbr;
   }
 
+  get fillRatio() {
+    return this.surface / (this.surface + this.holesInfo.surface);
+  }
+
   get feretDiameters() {
     if (!this.computed.feretDiameters) {
       this.computed.feretDiameters = feretDiameters({
@@ -694,6 +698,7 @@ export default class Roi {
       feretDiameterMin: this.feretDiameters.min,
       feretDiameterMax: this.feretDiameters.max,
       aspectRatio: this.feretDiameters.aspectRatio,
+      fillRatio: this.fillRatio,
       sphericity: this.sphericity,
       roundness: this.roundness,
       solidity: this.solidity,
@@ -953,8 +958,9 @@ function getHolesInfo(roi) {
   for (let x = 1; x < roi.width - 1; x++) {
     for (let y = 1; y < roi.height - 1; y++) {
       let target = (y + roi.minY) * width + x + roi.minX;
-      if (roi.internalIDs.includes(data[target]) && data[target] !== roi.id)
+      if (roi.internalIDs.includes(data[target]) && data[target] !== roi.id) {
         surface++;
+      }
     }
   }
   return {
