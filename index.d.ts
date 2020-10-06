@@ -24,8 +24,8 @@ export declare class Image {
 
     static isImage(object: any): boolean;
     static fromCanvas(canvas: HTMLCanvasElement): Image;
-    static createFrom(other: Image, options: ImageConstructorOptions);
-    static load(image: (string|ArrayBuffer|Uint8Array), options?: RequestInit)
+    static createFrom(other: Image, options: ImageConstructorOptions): Image;
+    static load(image: (string|ArrayBuffer|Uint8Array), options?: RequestInit): Image;
 
     getRoiManager(): RoiManager;
     clone(): Image;
