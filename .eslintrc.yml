@@ -6,13 +6,9 @@ env:
   es6: true
 
 parserOptions:
-  ecmaVersion: 2017
   sourceType: module
 
 rules:
-  no-var: error
-  no-multi-spaces: off
-  space-before-function-paren: off
   import/no-cycle: off
   import/no-extraneous-dependencies: off
 

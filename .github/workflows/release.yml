@@ -1,0 +1,32 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - legacy
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v2.5.3
+        id: release
+        with:
+          token: ${{ secrets.BOT_TOKEN }}
+          release-type: node
+          package-name: 'image-js'
+          bump-minor-pre-major: Yes
+      - uses: actions/checkout@v2
+        # These if statements ensure that a publication only occurs when a new release is created
+        if: ${{ steps.release.outputs.release_created }}
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: 14
+          registry-url: 'https://registry.npmjs.org'
+        if: ${{ steps.release.outputs.release_created }}
+      - run: npm install
+        if: ${{ steps.release.outputs.release_created }}
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_BOT_TOKEN }}
+        if: ${{ steps.release.outputs.release_created }}

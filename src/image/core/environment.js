@@ -3,7 +3,6 @@ import { readFile, createWriteStream, writeFile } from 'fs';
 const message =
   'requires the canvas library. Install it with `npm install canvas@next`.';
 
-// eslint-disable-next-line import/no-mutable-exports
 let createCanvas, DOMImage, ImageData;
 try {
   const canvas = require('canvas');

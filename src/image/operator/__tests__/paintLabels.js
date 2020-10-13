@@ -39,7 +39,7 @@ describe.skip('paintLabels', function () {
     };
     image.paintLabels(labels, positions, options);
 
-    // how to have any test that can work on travis ?
+    // how to have any test that can work on CI ?
     let means = image.mean;
     expect(means[0]).toBeGreaterThan(0);
     expect(means[1]).toBeGreaterThan(0);
