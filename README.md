@@ -26,7 +26,7 @@ The following formats can be loaded by image-js:
 
 - PNG (8 or 16 bits, color or greyscale, with or without alpha, palette 1 - 8 bits)
 - JPEG
-- TIFF (8 or 16 bits, greyscale)
+- TIFF (8 or 16 bits, color or greyscale, supports LZW compression)
 
 The following formats can be saved by image-js:
 
