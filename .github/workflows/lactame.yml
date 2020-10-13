@@ -1,0 +1,24 @@
+name: Deploy build on lactame.com
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: 14.x
+      - name: Install dependencies
+        run: npm install
+      - name: Build project
+        run: npm run build
+      - name: Deploy to lactame.com
+        uses: zakodium/lactame-action@v1
+        with:
+          token: ${{ secrets.LACTAME_TOKEN }}
+          name: image-js
+          folder: dist

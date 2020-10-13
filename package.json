@@ -19,11 +19,11 @@
   "contributors": [
     "Luc Patiny"
   ],
-  "repository": "image-js/core",
+  "repository": "image-js/image-js",
   "bugs": {
-    "url": "https://github.com/image-js/core/issues"
+    "url": "https://github.com/image-js/image-js/issues"
   },
-  "homepage": "https://github.com/image-js/core",
+  "homepage": "https://github.com/image-js/image-js",
   "license": "MIT",
   "main": "./lib/index.js",
   "module": "./src/index.js",
@@ -41,17 +41,14 @@
   ],
   "scripts": {
     "build": "cheminfo-build --root IJS",
-    "build-doc": "documentation build src/index.js --github --output docs --format html --sort-order alpha",
     "clean-lib": "rimraf lib",
     "compile": "npm run clean-lib && cross-env NODE_ENV=npm babel src --out-dir lib --ignore __tests__ --quiet",
     "eslint": "eslint src test/common.js test/nodeScripts --cache",
     "eslint-fix": "npm run eslint -- --fix",
     "prepublishOnly": "npm run compile",
-    "publish-doc": "npm run build-doc && git add docs && git commit -m \"doc: rebuild docs\" && git push origin master",
-    "test": "run-s test-only eslint",
+    "test": "npm run test-only && npm run eslint",
     "test-coverage": "jest --coverage --runInBand",
-    "test-only": "jest",
-    "test-travis": "run-s test-coverage eslint"
+    "test-only": "jest"
   },
   "jest": {
     "testEnvironment": "node",
@@ -74,37 +71,27 @@
     "@babel/plugin-transform-modules-commonjs": "^7.10.4",
     "@babel/preset-env": "^7.11.5",
     "@babel/register": "^7.11.5",
-    "@types/jest": "^26.0.13",
+    "@types/jest": "^26.0.14",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^26.3.0",
+    "babel-jest": "^26.5.2",
     "benchmark": "^2.1.4",
     "canvas": "^2.6.1",
-    "cheminfo-build": "^1.1.4",
+    "cheminfo-build": "^1.1.7",
     "cross-env": "^7.0.2",
     "documentation": "^13.0.2",
-    "eslint": "^7.8.1",
-    "eslint-config-cheminfo": "^5.1.2",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest": "^23.20.0",
-    "eslint-plugin-prettier": "^3.1.4",
+    "eslint": "^7.11.0",
+    "eslint-config-cheminfo": "^5.2.2",
     "esm": "^3.2.25",
-    "jest": "^26.4.1",
+    "jest": "^26.5.3",
     "jest-matcher-deep-close-to": "^2.0.1",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.0.5",
+    "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
-    "rollup": "^2.26.10",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^7.0.2",
     "sha.js": "^2.4.11"
   },
   "dependencies": {
+    "@swiftcarrot/color-fns": "^3.2.0",
     "blob-util": "^2.0.2",
     "canny-edge-detector": "^1.0.0",
-    "color-functions": "^3.0.1",
     "fast-bmp": "^1.0.0",
     "fast-jpeg": "^1.0.1",
     "fast-list": "^1.0.3",
@@ -113,12 +100,12 @@
     "image-type": "^4.1.0",
     "is-array-type": "^1.0.0",
     "is-integer": "^1.0.7",
-    "jpeg-js": "^0.4.1",
+    "jpeg-js": "^0.4.2",
     "js-priority-queue": "^0.1.5",
     "js-quantities": "^1.7.5",
     "ml-convolution": "0.2.0",
     "ml-disjoint-set": "^1.0.0",
-    "ml-matrix": "^6.5.1",
+    "ml-matrix": "^6.5.3",
     "ml-matrix-convolution": "0.4.3",
     "ml-regression": "^5.0.0",
     "monotone-chain-convex-hull": "^1.0.0",
@@ -129,6 +116,6 @@
     "web-worker-manager": "^0.2.0"
   },
   "engines": {
-    "node": ">= 8.0.0"
+    "node": ">= 10.0.0"
   }
 }

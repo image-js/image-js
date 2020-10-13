@@ -1,4 +1,4 @@
-import { cssColor } from 'color-functions';
+import { cssColor } from '@swiftcarrot/color-fns';
 
 export function css2array(string) {
   let color = cssColor(string);

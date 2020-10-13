@@ -279,7 +279,7 @@ export default class RoiManager {
       if (labelProperty.includes('surface')) {
         isSurface = true;
       } else if (
-        labelProperty.match(/(perimeter|min|max|external|width|height|length)/)
+        /(?:perimeter|min|max|external|width|height|length)/.test(labelProperty)
       ) {
         isDistance = true;
       }

@@ -11,7 +11,7 @@ import { GREY, RGB } from '../model/model';
 
 import { fetchBinary, DOMImage, createCanvas } from './environment';
 
-const isDataURL = /^data:[a-z]+\/([a-z]+);base64,/;
+const isDataURL = /^data:[a-z]+\/(?:[a-z]+);base64,/;
 
 /**
  * Load an image

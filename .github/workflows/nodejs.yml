@@ -1,0 +1,36 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: legacy
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: 14.x
+      - name: Install dependencies
+        run: npm install
+      - name: Run ESLint
+        run: npm run eslint
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm run test-coverage
+      - name: Send coverage report to Codecov
+        uses: codecov/codecov-action@v1

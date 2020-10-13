@@ -1,7 +1,7 @@
 # image-js
 
 [![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
+[![build status][ci-image]][ci-url]
 [![Test coverage][codecov-image]][codecov-url]
 [![npm download][download-image]][download-url]
 
@@ -111,28 +111,28 @@ A greyscale image will be saved in the same folder.
 
 ```html
 <html>
-
-<head>
+  <head>
     <script src="https://www.lactame.com/lib/image-js/0.21.2/image.min.js"></script>
-</head>
+  </head>
 
-<body>
-    <img id="color" src="https://www.lactame.com/github/image-js/image-js/3073b80c7d626196cb669f9d617f491a8338ca66/test/img/taxi/original.jpeg" />
-    <img id='result' />
+  <body>
+    <img
+      id="color"
+      src="https://www.lactame.com/github/image-js/image-js/3073b80c7d626196cb669f9d617f491a8338ca66/test/img/taxi/original.jpeg"
+    />
+    <img id="result" />
 
     <script>
-        async function process() {
-            let image = await IJS.Image.load(document.getElementById('color').src);
+      async function process() {
+        let image = await IJS.Image.load(document.getElementById('color').src);
 
-            let grey=image.grey();
+        let grey = image.grey();
 
-            document.getElementById('result').src = grey.toDataURL();
-        }
-        process();
+        document.getElementById('result').src = grey.toDataURL();
+      }
+      process();
     </script>
-
-</body>
-
+  </body>
 </html>
 ```
 
@@ -193,11 +193,11 @@ follow the instructions to install it on your OS [here](https://github.com/Autom
 
 [MIT](./LICENSE)
 
-[npm-image]: https://img.shields.io/npm/v/image-js.svg?style=flat-square
+[npm-image]: https://img.shields.io/npm/v/image-js.svg
 [npm-url]: https://www.npmjs.com/package/image-js
-[travis-image]: https://img.shields.io/travis/image-js/image-js/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/image-js/image-js
-[codecov-image]: https://img.shields.io/codecov/c/github/image-js/image-js.svg?style=flat-square
+[ci-image]: https://github.com/image-js/image-js/workflows/Node.js%20CI/badge.svg?branch=legacy
+[ci-url]: https://github.com/image-js/image-js/actions?query=workflow%3A%22Node.js+CI%22
+[codecov-image]: https://img.shields.io/codecov/c/github/image-js/image-js.svg
 [codecov-url]: https://codecov.io/gh/image-js/image-js
-[download-image]: https://img.shields.io/npm/dm/image-js.svg?style=flat-square
+[download-image]: https://img.shields.io/npm/dm/image-js.svg
 [download-url]: https://www.npmjs.com/package/image-js

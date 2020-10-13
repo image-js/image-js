@@ -58,9 +58,9 @@ const exportMethods = {
     let { format } = options;
     if (!format) {
       // try to infer format from filename
-      const m = /\.([a-zA-Z]+)$/.exec(path);
+      const m = /\.(?<format>[a-zA-Z]+)$/.exec(path);
       if (m) {
-        format = m[1].toLowerCase();
+        format = m.groups.format.toLowerCase();
       }
     }
     if (!format) {
