@@ -136,7 +136,7 @@ function loadJPEG(data) {
   if (decodedExif.exif) {
     meta = getMetadata(decodedExif.exif);
   }
-  const jpeg = decodeJpeg(data, { useTArray: true });
+  const jpeg = decodeJpeg(data, { useTArray: true, maxMemoryUsageInMB: 1024 });
   return new Image(jpeg.width, jpeg.height, jpeg.data, { meta });
 }
 
