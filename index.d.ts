@@ -171,7 +171,7 @@ export declare class Image {
 export declare class Stack extends Array<Image> {
   static load: (files: string[]) => Stack;
 
-  getAverageFrame: Stack;
+  averageImage: Stack;
   // histogram
   // histograms
   // matchAndCrop
