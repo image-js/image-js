@@ -171,15 +171,18 @@ export declare class Image {
 export declare class Stack extends Array<Image> {
   static load: (files: string[]) => Stack;
 
-  averageImage: Stack;
+  constructor();
+  constructor(images: Image[]);
+
+  getAverageImage(): Stack;
   // histogram
   // histograms
   // matchAndCrop
   // max
-  maxImage: Image;
+  getMaxImage(): Image;
   // median
   // min
-  minImage: Image;
+  getMinImage(): Image;
 }
 
 export declare class RoiManager {}
