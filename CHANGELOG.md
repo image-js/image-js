@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.30.2](https://www.github.com/image-js/image-js/compare/v0.30.1...v0.30.2) (2020-10-18)
+
+
+### Bug Fixes
+
+* add basic Stack type definition ([#525](https://www.github.com/image-js/image-js/issues/525)) ([d5f1972](https://www.github.com/image-js/image-js/commit/d5f1972fc1f39b506882f46b7c6c7722157bfd4c))
+
 ### [0.30.1](https://www.github.com/image-js/image-js/compare/v0.30.0...v0.30.1) (2020-10-13)
 
 
