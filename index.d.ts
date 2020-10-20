@@ -174,7 +174,7 @@ export declare class Stack extends Array<Image> {
   constructor();
   constructor(images: Image[]);
 
-  getAverageImage(): Stack;
+  getAverageImage(): Image;
   // histogram
   // histograms
   // matchAndCrop
