@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.30.3](https://www.github.com/image-js/image-js/compare/v0.30.2...v0.30.3) (2020-10-20)
+
+
+### Bug Fixes
+
+* **types:** correct return type of Stack.getAverageImage to Image ([#529](https://www.github.com/image-js/image-js/issues/529)) ([ec6588c](https://www.github.com/image-js/image-js/commit/ec6588c2b0152bd865013ffe6fb3e5668c83cae3))
+
 ### [0.30.2](https://www.github.com/image-js/image-js/compare/v0.30.1...v0.30.2) (2020-10-18)
 
 
