@@ -1,4 +1,5 @@
 import mcch from 'monotone-chain-convex-hull';
+import robustPointInPolygon from 'robust-point-in-polygon';
 
 import Shape from '../../util/Shape';
 import {
@@ -58,10 +59,16 @@ export default class Roi {
       case 'center':
         mask = this.centerMask;
         break;
+      case 'mbr':
+        mask = this.mbrFilledMask;
+        break;
       case 'hull':
+        mask = this.convexHullFilledMask;
+        break;
+      case 'hullContour':
         mask = this.convexHullMask;
         break;
-      case 'mbr':
+      case 'mbrContour':
         mask = this.mbrMask;
         break;
       case 'feret':
@@ -458,6 +465,28 @@ export default class Roi {
     return this.computed.convexHullMask;
   }
 
+  get convexHullFilledMask() {
+    if (!this.computed.convexHullFilledMask) {
+      const convexHull = this.convexHull;
+      const img = new Image(this.width, this.height, {
+        kind: KindNames.BINARY,
+        position: [this.minX, this.minY],
+        parent: this.map.parent,
+      });
+
+      for (let x = 0; x < this.width; x++) {
+        for (let y = 0; y < this.height; y++) {
+          if (robustPointInPolygon(convexHull, [x, y]) !== 1) {
+            img.setBitXY(x, y);
+          }
+        }
+      }
+
+      this.computed.convexHullFilledMask = img;
+    }
+    return this.computed.convexHullFilledMask;
+  }
+
   get mbr() {
     if (!this.computed.mbr) {
       let mbr = minimalBoundingRectangle({
@@ -598,6 +627,29 @@ export default class Roi {
       }
     }
     return this.computed.mbrMask;
+  }
+
+  get mbrFilledMask() {
+    if (!this.computed.mbrFilledMask) {
+      const img = new Image(this.width, this.height, {
+        kind: KindNames.BINARY,
+        position: [this.minX, this.minY],
+        parent: this.map.parent,
+      });
+
+      const mbr = this.mask.minimalBoundingRectangle();
+      console.log(mbr)
+      for (let x = 0; x < this.width; x++) {
+        for (let y = 0; y < this.height; y++) {
+          if (robustPointInPolygon(mbr, [x, y]) !== 1) {
+            img.setBitXY(x, y);
+          }
+        }
+      }
+
+      this.computed.mbrFilledMask = img;
+    }
+    return this.computed.mbrFilledMask;
   }
 
   get points() {
