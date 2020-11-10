@@ -638,7 +638,6 @@ export default class Roi {
       });
 
       const mbr = this.mask.minimalBoundingRectangle();
-      console.log(mbr)
       for (let x = 0; x < this.width; x++) {
         for (let y = 0; y < this.height; y++) {
           if (robustPointInPolygon(mbr, [x, y]) !== 1) {
