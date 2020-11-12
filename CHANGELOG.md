@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.31.0](https://www.github.com/image-js/image-js/compare/v0.30.3...v0.31.0) (2020-11-12)
+
+
+### Features
+
+* restore old implementations of getMask with hull or mbr ([#532](https://www.github.com/image-js/image-js/issues/532)) ([4d51dbd](https://www.github.com/image-js/image-js/commit/4d51dbd7baffc4cc32d625b2912e4fbdabdf13a0))
+
 ### [0.30.3](https://www.github.com/image-js/image-js/compare/v0.30.2...v0.30.3) (2020-10-20)
 
 
