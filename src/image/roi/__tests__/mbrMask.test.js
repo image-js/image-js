@@ -4,7 +4,7 @@ import oneRoi from 'test/oneRoi';
 
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
-describe('mbrMask', function () {
+describe('mbrContour mask', function () {
   it('roi 4x4 rectangle', function () {
     let roi = oneRoi`
         0110
@@ -13,7 +13,7 @@ describe('mbrMask', function () {
         0110
       `;
 
-    const mask = roi.getMask({ kind: 'mbr' });
+    const mask = roi.getMask({ kind: 'mbrContour' });
 
     let expected = binary`
     111
