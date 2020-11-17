@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.31.1](https://www.github.com/image-js/image-js/compare/v0.31.0...v0.31.1) (2020-11-17)
+
+
+### Bug Fixes
+
+* correct hull filled mask ([81a8cd7](https://www.github.com/image-js/image-js/commit/81a8cd713add86fdb46f78024dacc343880d71cd))
+
 ## [0.31.0](https://www.github.com/image-js/image-js/compare/v0.30.3...v0.31.0) (2020-11-12)
 
 
