@@ -476,7 +476,7 @@ export default class Roi {
 
       for (let x = 0; x < this.width; x++) {
         for (let y = 0; y < this.height; y++) {
-          if (robustPointInPolygon(convexHull, [x, y]) !== 1) {
+          if (robustPointInPolygon(convexHull.polyline, [x, y]) !== 1) {
             img.setBitXY(x, y);
           }
         }
