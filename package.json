@@ -102,6 +102,7 @@
     "jpeg-js": "^0.4.2",
     "js-priority-queue": "^0.1.5",
     "js-quantities": "^1.7.5",
+    "median-quickselect": "^1.0.1",
     "ml-convolution": "0.2.0",
     "ml-disjoint-set": "^1.0.0",
     "ml-matrix": "^6.5.3",

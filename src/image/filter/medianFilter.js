@@ -1,8 +1,7 @@
-import { ascending as sortAsc } from 'num-sort';
 
 import { validateArrayOfChannels } from '../../util/channel';
 import Image from '../Image';
-
+import quickSelectMedian from 'median-quickselect'
 /**
  * Each pixel of the image becomes the median of the neighbor pixels.
  * @memberof Image
@@ -31,7 +30,6 @@ export default function medianFilter(options = {}) {
   let newImage = Image.createFrom(this);
 
   let size = (kWidth * 2 + 1) * (kHeight * 2 + 1);
-  let middle = Math.floor(size / 2);
   let kernel = new Array(size);
 
   for (let channel = 0; channel < channels.length; channel++) {
@@ -45,10 +43,10 @@ export default function medianFilter(options = {}) {
             kernel[n++] = this.data[index];
           }
         }
-        let index = (y * this.width + x) * this.channels + c;
-        let newValue = kernel.sort(sortAsc)[middle];
 
-        newImage.data[index] = newValue;
+        let index = (y * this.width + x) * this.channels + c;
+
+        newImage.data[index] = quickSelectMedian(kernel);
       }
     }
   }
