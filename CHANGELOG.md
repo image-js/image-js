@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.31.2](https://www.github.com/image-js/image-js/compare/v0.31.1...v0.31.2) (2020-12-10)
+
+
+### Performance Improvements
+
+* improve medianFilter ([#537](https://www.github.com/image-js/image-js/issues/537)) ([c341fac](https://www.github.com/image-js/image-js/commit/c341facf65745641510b5c53d1c00e6b3c69697e))
+
 ### [0.31.1](https://www.github.com/image-js/image-js/compare/v0.31.0...v0.31.1) (2020-11-17)
 
 
