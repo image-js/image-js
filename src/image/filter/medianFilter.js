@@ -1,7 +1,8 @@
+import quickSelectMedian from 'median-quickselect';
 
 import { validateArrayOfChannels } from '../../util/channel';
 import Image from '../Image';
-import quickSelectMedian from 'median-quickselect'
+
 /**
  * Each pixel of the image becomes the median of the neighbor pixels.
  * @memberof Image
