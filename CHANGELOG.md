@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.31.3](https://www.github.com/image-js/image-js/compare/v0.31.2...v0.31.3) (2020-12-14)
+
+
+### Bug Fixes
+
+* update dependencies ([#539](https://www.github.com/image-js/image-js/issues/539)) ([c972f63](https://www.github.com/image-js/image-js/commit/c972f63a181706c65ea144ec1e6a6edf92deba5a))
+
 ### [0.31.2](https://www.github.com/image-js/image-js/compare/v0.31.1...v0.31.2) (2020-12-10)
 
 
