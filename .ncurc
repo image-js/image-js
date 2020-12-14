@@ -1,5 +1,6 @@
 {
   "reject": [
-    "ml-convolution"
+    "ml-convolution",
+    "ml-matrix-convolution"
   ]
 }
