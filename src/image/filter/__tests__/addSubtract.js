@@ -1,4 +1,5 @@
 import { Image } from 'test/common';
+import array from 'test/array';
 
 describe('add', function () {
   it('should add a fix value to all channels of RGBA image, we dont touch alpha', function () {
@@ -53,195 +54,70 @@ describe('subtract', function () {
 
 describe('subtract image', function () {
   it('should subtract an image to another', function () {
+
     let image = new Image(
       5,
       5,
-      [
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-      ],
+      array`
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+      `,
       { kind: 'GREY' },
     );
 
     let image2 = new Image(
       5,
       5,
-      [
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-      ],
+      array`
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+    `,
       { kind: 'GREY' },
     );
 
-    expect(Array.from(image.subtractImage(image2).data)).toStrictEqual([
-      0,
-      0,
-      255,
-      0,
-      0,
-      0,
-      0,
-      255,
-      0,
-      0,
-      0,
-      0,
-      255,
-      0,
-      0,
-      0,
-      0,
-      255,
-      0,
-      0,
-      0,
-      0,
-      255,
-      0,
-      0,
+    expect(Array.from(image.subtractImage(image2).data)).toStrictEqual([0, 0, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 255, 0, 0,
     ]);
   });
   it('should subtract an image to another with absolute = true', function () {
     let image = new Image(
       5,
       5,
-      [
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-      ],
+      array`
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+      `,
       { kind: 'GREY' },
     );
 
     let image2 = new Image(
       5,
       5,
-      [
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-      ],
-      { kind: 'GREY' },
+      array`
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+    `, { kind: 'GREY' },
     );
 
     expect(
       Array.from(image.subtractImage(image2, { absolute: true }).data),
-    ).toStrictEqual([
-      255,
-      0,
-      255,
-      0,
-      0,
-      255,
-      0,
-      255,
-      0,
-      0,
-      255,
-      0,
-      255,
-      0,
-      0,
-      255,
-      0,
-      255,
-      0,
-      0,
-      255,
-      0,
-      255,
-      0,
-      0,
-    ]);
+    ).toStrictEqual(array`
+      255, 0, 255, 0, 0
+      255, 0, 255, 0, 0
+      255, 0, 255, 0, 0
+      255, 0, 255, 0, 0
+      255, 0, 255, 0, 0
+  `);
   });
 });
