@@ -7,7 +7,6 @@ import Image from '../Image';
  * @instance
  * @param {Image} otherImage
  * @param {object} [options={}]
- * @param {number} [options.bitDepth=this.bitDepth]
  * @param {number[]|string[]} [options.channels] : to which channel to apply the filter. By default all but alpha.
  * @param {number[]|string[]} [options.absolute=false] :.take the absolute value of the difference (default minimum=0)
  * @return {Image}
@@ -34,7 +33,7 @@ export default function subtractImage(otherImage, options = {}) {
     );
   }
 
-  let newImage = Image.createFrom(this, { bitDepth: bitDepth });
+  let newImage = this.clone();
 
   channels = validateArrayOfChannels(this, { channels: channels });
 

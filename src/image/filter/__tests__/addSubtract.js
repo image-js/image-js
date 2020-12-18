@@ -84,6 +84,106 @@ describe('subtract image', function () {
     expect(Array.from(image.subtractImage(image2).data)).toStrictEqual([0, 0, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 255, 0, 0,
     ]);
   });
+
+  it('should subtract a color image to another', function () {
+
+    let image = new Image(
+      1,
+      3,
+      array`
+        255, 0,   0,
+        0,   255, 0,
+        0,   0,   255,
+      `,
+      { kind: 'RGB' },
+    );
+
+    let image2 = new Image(
+      1,
+      3,
+      array`
+      127, 0,   0,
+      0,   127, 0,
+      0,   0,   127,
+    `,
+      { kind: 'RGB' },
+    );
+
+    expect(Array.from(image.subtractImage(image2).data)).toStrictEqual(
+      array`
+      128, 0,   0,
+      0,   128, 0,
+      0,   0,   128,
+    `
+    );
+  });
+
+  it('should subtract a color image to another with selected channels', function () {
+
+    let image = new Image(
+      1,
+      3,
+      array`
+        255, 0,   0,
+        0,   255, 0,
+        0,   0,   255,
+      `,
+      { kind: 'RGB' },
+    );
+
+    let image2 = new Image(
+      1,
+      3,
+      array`
+      127, 0,   0,
+      0,   127, 0,
+      0,   0,   127,
+    `,
+      { kind: 'RGB' },
+    );
+
+    expect(Array.from(image.subtractImage(image2).data)).toStrictEqual(
+      array`
+      128, 0,   0,
+      0,   128, 0,
+      0,   0,   128,
+    `
+    );
+  });
+
+  it('should subtract a color image to another with selected channels, only red', function () {
+
+    let image = new Image(
+      1,
+      3,
+      array`
+        255, 0,   0,
+        0,   255, 0,
+        0,   0,   255,
+      `,
+      { kind: 'RGB' },
+    );
+
+    let image2 = new Image(
+      1,
+      3,
+      array`
+      127, 0,   0,
+      0,   127, 0,
+      0,   0,   127,
+    `,
+      { kind: 'RGB' },
+    );
+
+    expect(Array.from(image.subtractImage(image2, { channels: 'r' }).data)).toStrictEqual(
+      array`
+      128, 0,   0,
+      0,   255, 0,
+      0,   0,   255,
+    `
+    );
+  });
+
   it('should subtract an image to another with absolute = true', function () {
     let image = new Image(
       5,
