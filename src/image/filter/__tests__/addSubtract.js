@@ -1,3 +1,4 @@
+import array from 'test/array';
 import { Image } from 'test/common';
 
 describe('add', function () {
@@ -56,66 +57,26 @@ describe('subtract image', function () {
     let image = new Image(
       5,
       5,
-      [
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-      ],
+      array`
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+      `,
       { kind: 'GREY' },
     );
 
     let image2 = new Image(
       5,
       5,
-      [
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-      ],
+      array`
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+    `,
       { kind: 'GREY' },
     );
 
@@ -147,101 +108,139 @@ describe('subtract image', function () {
       0,
     ]);
   });
+
+  it('should subtract a color image to another', function () {
+    let image = new Image(
+      1,
+      3,
+      array`
+        255, 0,   0,
+        0,   255, 0,
+        0,   0,   255,
+      `,
+      { kind: 'RGB' },
+    );
+
+    let image2 = new Image(
+      1,
+      3,
+      array`
+      127, 0,   0,
+      0,   127, 0,
+      0,   0,   127,
+    `,
+      { kind: 'RGB' },
+    );
+
+    expect(Array.from(image.subtractImage(image2).data)).toStrictEqual(
+      array`
+      128, 0,   0,
+      0,   128, 0,
+      0,   0,   128,
+    `,
+    );
+  });
+
+  it('should subtract a color image to another with selected channels', function () {
+    let image = new Image(
+      1,
+      3,
+      array`
+        255, 0,   0,
+        0,   255, 0,
+        0,   0,   255,
+      `,
+      { kind: 'RGB' },
+    );
+
+    let image2 = new Image(
+      1,
+      3,
+      array`
+      127, 0,   0,
+      0,   127, 0,
+      0,   0,   127,
+    `,
+      { kind: 'RGB' },
+    );
+
+    expect(Array.from(image.subtractImage(image2).data)).toStrictEqual(
+      array`
+      128, 0,   0,
+      0,   128, 0,
+      0,   0,   128,
+    `,
+    );
+  });
+
+  it('should subtract a color image to another with selected channels, only red', function () {
+    let image = new Image(
+      1,
+      3,
+      array`
+        255, 0,   0,
+        0,   255, 0,
+        0,   0,   255,
+      `,
+      { kind: 'RGB' },
+    );
+
+    let image2 = new Image(
+      1,
+      3,
+      array`
+      127, 0,   0,
+      0,   127, 0,
+      0,   0,   127,
+    `,
+      { kind: 'RGB' },
+    );
+
+    expect(
+      Array.from(image.subtractImage(image2, { channels: 'r' }).data),
+    ).toStrictEqual(
+      array`
+      128, 0,   0,
+      0,   255, 0,
+      0,   0,   255,
+    `,
+    );
+  });
+
   it('should subtract an image to another with absolute = true', function () {
     let image = new Image(
       5,
       5,
-      [
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-        0,
-        0,
-        255,
-        0,
-        255,
-      ],
+      array`
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+        0, 0, 255, 0, 255
+      `,
       { kind: 'GREY' },
     );
 
     let image2 = new Image(
       5,
       5,
-      [
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-        255,
-        0,
-        0,
-        0,
-        255,
-      ],
+      array`
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+       255, 0, 0, 0, 255
+    `,
       { kind: 'GREY' },
     );
 
-    expect(
-      Array.from(image.subtractImage(image2, { absolute: true }).data),
-    ).toStrictEqual([
-      255,
-      0,
-      255,
-      0,
-      0,
-      255,
-      0,
-      255,
-      0,
-      0,
-      255,
-      0,
-      255,
-      0,
-      0,
-      255,
-      0,
-      255,
-      0,
-      0,
-      255,
-      0,
-      255,
-      0,
-      0,
-    ]);
+    expect(Array.from(image.subtractImage(image2, { absolute: true }).data))
+      .toStrictEqual(array`
+      255, 0, 255, 0, 0
+      255, 0, 255, 0, 0
+      255, 0, 255, 0, 0
+      255, 0, 255, 0, 0
+      255, 0, 255, 0, 0
+  `);
   });
 });
