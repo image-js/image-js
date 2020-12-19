@@ -1,5 +1,4 @@
 import { validateArrayOfChannels } from '../../util/channel';
-import Image from '../Image';
 
 /**
  * Calculate a new image that is the subtraction between the current image and the otherImage.
@@ -12,7 +11,7 @@ import Image from '../Image';
  * @return {Image}
  */
 export default function subtractImage(otherImage, options = {}) {
-  let { bitDepth = this.bitDepth, channels, absolute = false } = options;
+  let { channels, absolute = false } = options;
   this.checkProcessable('subtractImage', {
     bitDepth: [8, 16],
   });
