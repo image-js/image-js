@@ -94,3 +94,5 @@ dist
 
 # TypeScript
 *.tsbuildinfo
+
+.DS_Store
