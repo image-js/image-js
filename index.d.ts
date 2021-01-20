@@ -61,8 +61,9 @@ export declare class Image {
   // exportMethods
   save(path: string, options?: SaveOptions): Promise<void>;
   toDataURL(type?: string, options?: SaveOptions): string;
-  toBase64(type?: string, options?: SaveOptions): string;
-  toBlob(type?: string, quality?: number): Blob;
+  toBase64(type?: string, options?: SaveOptions): string | Promise<string>;
+  toBuffer(options?: SaveOptions): string;
+  toBlob(type?: string, quality?: number): Promise<Blob>;
   getCanvas(): HTMLCanvasElement;
 
   checkProcessable(processName: string, options: object): void;
