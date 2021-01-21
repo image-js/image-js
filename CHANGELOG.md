@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.31.4](https://www.github.com/image-js/image-js/compare/v0.31.3...v0.31.4) (2021-01-21)
+
+
+### Bug Fixes
+
+* roundness was not 1 for perfect circle ([#548](https://www.github.com/image-js/image-js/issues/548)) ([e73f596](https://www.github.com/image-js/image-js/commit/e73f59606218f274bbace969ae48af3bbe1d8b2a))
+
 ### [0.31.3](https://www.github.com/image-js/image-js/compare/v0.31.2...v0.31.3) (2020-12-14)
 
 
