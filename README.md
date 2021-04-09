@@ -1,16 +1,27 @@
 # image-js
-
-[![NPM version][npm-image]][npm-url]
-[![build status][ci-image]][ci-url]
-[![Test coverage][codecov-image]][codecov-url]
-[![npm download][download-image]][download-url]
-
 Advanced image processing and manipulation in JavaScript.
 
 image-js is a full-featured library that can deal with simple image processing
 (color leveling, grey image, mask, resize, rotation, etc.) as well as advanced
 processing on scientific images (Region of interest (ROI), Hull curve, minimal
 boundary rectangle (MBR), particle size and orientation, cell imaging, etc.).
+
+<h3 align="center">
+
+  <a href="https://www.zakodium.com">
+    <img src="https://www.zakodium.com/brand/zakodium-logo-white.svg" width="50" alt="Zakodium logo" />
+  </a>
+
+  <p>
+    Maintained by <a href="https://www.zakodium.com">Zakodium</a>
+  </p>
+
+  [![NPM version][npm-image]][npm-url]
+  [![build status][ci-image]][ci-url]
+  [![Test coverage][codecov-image]][codecov-url]
+  [![npm download][download-image]][download-url]
+  
+</h3>
 
 ## [API Documentation](https://image-js.github.io/image-js/)
 
