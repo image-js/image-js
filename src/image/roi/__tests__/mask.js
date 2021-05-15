@@ -1,4 +1,3 @@
-import { ascending as sortAsc } from 'num-sort';
 import { Image, load } from 'test/common';
 
 describe('we check mask', function () {
@@ -12,7 +11,7 @@ describe('we check mask', function () {
     let mask = img.mask({ invert: true });
     roiManager.fromMask(mask);
 
-    let roiIDs = roiManager.getRoiIds().sort(sortAsc);
+    let roiIDs = roiManager.getRoiIds().sort((a, b) => a - b);
     expect(roiIDs).toStrictEqual([-1, 1, 2]);
 
     let rois = roiManager.getRois();
@@ -60,14 +59,7 @@ describe('we check mask', function () {
     painted.paintMasks(masks, { color: 'red' });
 
     expect(Array.from(painted.data).slice(0, 8)).toStrictEqual([
-      255,
-      0,
-      0,
-      255,
-      255,
-      0,
-      0,
-      255,
+      255, 0, 0, 255, 255, 0, 0, 255,
     ]);
   });
 });

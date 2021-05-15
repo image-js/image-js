@@ -6,8 +6,6 @@
 // this method is 50 times SLOWER than invert !!!!!!
 
 export default function invertApply() {
-
-
   if (this.bitDepth === 1) {
     // we simply invert all the integers value
     // there could be a small mistake if the number of points
@@ -18,7 +16,7 @@ export default function invertApply() {
     }
   } else {
     this.checkProcessable('invertApply', {
-      bitDepth: [8, 16]
+      bitDepth: [8, 16],
     });
     this.apply(function (index) {
       for (let k = 0; k < this.components; k++) {

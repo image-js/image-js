@@ -19,19 +19,16 @@ load('rgb8.png').then(function (a) {
 });
 */
 
-
-
 load('cells/cells.jpg').then(function (img) {
-    //setLeft(a);
+  //setLeft(a);
 
-    var mask = img.grey().mask();
-    var manager = img.getRoiManager();
-    console.time('1');
-    manager.fromMask(mask, {label: 'mask1'});
-    console.timeEnd('1');
-    console.time('2');
-    manager.fromMask2(mask, {label: 'mask2'});
-    console.timeEnd('2');
-    console.log(manager);
-
+  var mask = img.grey().mask();
+  var manager = img.getRoiManager();
+  console.time('1');
+  manager.fromMask(mask, { label: 'mask1' });
+  console.timeEnd('1');
+  console.time('2');
+  manager.fromMask2(mask, { label: 'mask2' });
+  console.timeEnd('2');
+  console.log(manager);
 });

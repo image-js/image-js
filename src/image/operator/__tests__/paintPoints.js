@@ -16,31 +16,7 @@ describe('we check paintPoints', function () {
     image.paintPoints(points, { color: 'red', shape: { kind: 'smallCross' } });
 
     let marked = [
-      0,
-      1,
-      0,
-      0,
-      0,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      1,
-      1,
-      1,
-      1,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
+      0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
     ];
 
     let result = new Array(size * size * 3);

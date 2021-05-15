@@ -25,14 +25,7 @@ describe('add', function () {
     let image2 = new Image(1, 2, [1, 2, 3, 4, 5, 6, 7, 8]);
     // by default alpha is untouched
     expect(image2.add([1, 2, 3, 4, 5, 6, 7, 8]).data).toStrictEqual([
-      2,
-      4,
-      6,
-      4,
-      10,
-      12,
-      14,
-      8,
+      2, 4, 6, 4, 10, 12, 14, 8,
     ]);
   });
 });
@@ -81,31 +74,8 @@ describe('subtract image', function () {
     );
 
     expect(Array.from(image.subtractImage(image2).data)).toStrictEqual([
-      0,
-      0,
-      255,
-      0,
-      0,
-      0,
-      0,
-      255,
-      0,
-      0,
-      0,
-      0,
-      255,
-      0,
-      0,
-      0,
-      0,
-      255,
-      0,
-      0,
-      0,
-      0,
-      255,
-      0,
-      0,
+      0, 0, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0,
+      255, 0, 0,
     ]);
   });
 

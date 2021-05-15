@@ -1,4 +1,5 @@
 # image-js
+
 Advanced image processing and manipulation in JavaScript.
 
 image-js is a full-featured library that can deal with simple image processing
@@ -16,11 +17,11 @@ boundary rectangle (MBR), particle size and orientation, cell imaging, etc.).
     Maintained by <a href="https://www.zakodium.com">Zakodium</a>
   </p>
 
-  [![NPM version][npm-image]][npm-url]
-  [![build status][ci-image]][ci-url]
-  [![Test coverage][codecov-image]][codecov-url]
-  [![npm download][download-image]][download-url]
-  
+[![NPM version][npm-image]][npm-url]
+[![build status][ci-image]][ci-url]
+[![Test coverage][codecov-image]][codecov-url]
+[![npm download][download-image]][download-url]
+
 </h3>
 
 ## [API Documentation](https://image-js.github.io/image-js/)

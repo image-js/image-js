@@ -5,6 +5,7 @@ const message =
 
 let createCanvas, DOMImage, ImageData;
 try {
+  // eslint-disable-next-line import/no-unresolved
   const canvas = require('canvas');
   createCanvas = canvas.createCanvas;
   DOMImage = canvas.Image;

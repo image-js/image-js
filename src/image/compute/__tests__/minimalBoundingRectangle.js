@@ -1,4 +1,5 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
+
 import binary from 'test/binary';
 
 import { angle } from '../../../util/points';

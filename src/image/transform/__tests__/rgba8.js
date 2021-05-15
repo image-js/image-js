@@ -7,14 +7,7 @@ describe('check the rgba8 transform', function () {
     let newImage = image.rgba8();
 
     expect(Array.from(newImage.data)).toStrictEqual([
-      10,
-      10,
-      10,
-      255,
-      20,
-      20,
-      20,
-      255,
+      10, 10, 10, 255, 20, 20, 20, 255,
     ]);
   });
 
@@ -24,14 +17,7 @@ describe('check the rgba8 transform', function () {
     let newImage = image.rgba8();
 
     expect(Array.from(newImage.data)).toStrictEqual([
-      10,
-      10,
-      10,
-      127,
-      20,
-      20,
-      20,
-      255,
+      10, 10, 10, 127, 20, 20, 20, 255,
     ]);
   });
 
@@ -41,14 +27,7 @@ describe('check the rgba8 transform', function () {
     let newImage = image.rgba8();
 
     expect(Array.from(newImage.data)).toStrictEqual([
-      10,
-      20,
-      30,
-      255,
-      40,
-      50,
-      60,
-      255,
+      10, 20, 30, 255, 40, 50, 60, 255,
     ]);
   });
 
@@ -63,14 +42,7 @@ describe('check the rgba8 transform', function () {
     let newImage = image.rgba8();
 
     expect(Array.from(newImage.data)).toStrictEqual([
-      10,
-      20,
-      30,
-      255,
-      40,
-      50,
-      60,
-      255,
+      10, 20, 30, 255, 40, 50, 60, 255,
     ]);
   });
 });

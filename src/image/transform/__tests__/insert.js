@@ -12,18 +12,7 @@ test('insert on grey image', function () {
   let toInsert = new Image(2, 2, [0, 255, 0, 0], { kind: 'GREY' });
 
   expect(img.insert(toInsert).data).toStrictEqual([
-    0,
-    255,
-    100,
-    0,
-    0,
-    100,
-    100,
-    100,
-    100,
-    100,
-    100,
-    200,
+    0, 255, 100, 0, 0, 100, 100, 100, 100, 100, 100, 200,
   ]);
 });
 

@@ -5,9 +5,8 @@
 
 export default function invertPixel() {
   this.checkProcessable('invertPixel', {
-    bitDepth: [8, 16]
+    bitDepth: [8, 16],
   });
-
 
   for (let x = 0; x < this.width; x++) {
     for (let y = 0; y < this.height; y++) {
@@ -18,5 +17,4 @@ export default function invertPixel() {
       this.setPixelXY(x, y, value);
     }
   }
-
 }

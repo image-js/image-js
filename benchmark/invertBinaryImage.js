@@ -8,7 +8,6 @@ let Test = require('../test/test');
 
 let suite = new Benchmark.Suite();
 
-
 Image.load(Test.getImage('rgb8.png')).then(function (img) {
   let mask = img.split()[0].mask();
 
