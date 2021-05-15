@@ -1,4 +1,3 @@
-import { descending as sortDesc } from 'num-sort';
 import { Image } from 'test/common';
 
 describe('map a binary image (mask) 2 x 2', function () {
@@ -14,7 +13,7 @@ describe('map a binary image (mask) 2 x 2', function () {
   let data = roiManager.getData();
   let result = roiManager.getMap();
 
-  data.sort(sortDesc);
+  data.sort((a, b) => b - a);
 
   it('should have 4 data in 2 zones', function () {
     expect(data).toBeInstanceOf(Int16Array);

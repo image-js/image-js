@@ -25,13 +25,11 @@ describe('we check the validateArrayOfChannels method', function () {
     ).toStrictEqual([0, 1, 2]);
     expect(validateArrayOfChannels(image)).toStrictEqual([0, 1, 2]);
     expect(validateArrayOfChannels(image, { allowAlpha: true })).toStrictEqual([
-      0,
-      1,
-      2,
+      0, 1, 2,
     ]);
-    expect(
-      validateArrayOfChannels(image, { allowAlpha: false }),
-    ).toStrictEqual([0, 1, 2]);
+    expect(validateArrayOfChannels(image, { allowAlpha: false })).toStrictEqual(
+      [0, 1, 2],
+    );
     expect(
       validateArrayOfChannels(image, { defaultAlpha: true }),
     ).toStrictEqual([0, 1, 2]);

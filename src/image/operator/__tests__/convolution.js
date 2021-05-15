@@ -10,22 +10,7 @@ describe('check the convolution operator', function () {
     );
 
     expect(Array.from(image.convolution([1]).data)).toStrictEqual([
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
     ]);
 
     expect(
@@ -33,22 +18,7 @@ describe('check the convolution operator', function () {
     ).toStrictEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
 
     expect(Array.from(image.convolution([[1]]).data)).toStrictEqual([
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
     ]);
 
     expect(
@@ -69,22 +39,8 @@ describe('check the convolution operator', function () {
       4,
       4,
       [
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
-        1000,
-        1100,
-        1200,
-        1300,
-        1400,
-        1500,
-        1600,
+        100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300,
+        1400, 1500, 1600,
       ],
       { kind: 'GREY', bitDepth: 16 },
     );
@@ -92,22 +48,8 @@ describe('check the convolution operator', function () {
     expect(
       Array.from(image.convolution([[1]], { algorithm: 'fft' }).data),
     ).toStrictEqual([
-      100,
-      200,
-      300,
-      400,
-      500,
-      600,
-      700,
-      800,
-      900,
-      1000,
-      1100,
-      1200,
-      1300,
-      1400,
-      1500,
-      1600,
+      100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400,
+      1500, 1600,
     ]);
   });
 
@@ -122,22 +64,7 @@ describe('check the convolution operator', function () {
     expect(
       Array.from(image.convolution([1, 1, 1, 1, 1, 1, 1, 1, 1]).data),
     ).toStrictEqual([
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
+      13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
     ]);
 
     expect(
@@ -146,22 +73,7 @@ describe('check the convolution operator', function () {
           .data,
       ),
     ).toStrictEqual([
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
-      13,
+      13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
     ]);
   });
 
@@ -174,22 +86,7 @@ describe('check the convolution operator', function () {
     );
 
     expect(Array.from(image.convolution([[1, 2, 1]]).data)).toStrictEqual([
-      4,
-      4,
-      4,
-      4,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      7,
-      4,
-      4,
-      4,
-      4,
+      4, 4, 4, 4, 7, 7, 7, 7, 7, 7, 7, 7, 4, 4, 4, 4,
     ]);
 
     expect(
@@ -227,91 +124,23 @@ describe('check the convolution operator', function () {
     );
 
     expect(Array.from(image.convolution([1]).data)).toStrictEqual([
-      1,
-      255,
-      2,
-      255,
-      3,
-      255,
-      4,
-      255,
-      5,
-      255,
-      6,
-      255,
-      7,
-      255,
-      8,
-      255,
-      9,
-      255,
+      1, 255, 2, 255, 3, 255, 4, 255, 5, 255, 6, 255, 7, 255, 8, 255, 9, 255,
     ]);
 
     expect(
       Array.from(image.convolution([1], { algorithm: 'fft' }).data),
     ).toStrictEqual([
-      1,
-      255,
-      2,
-      255,
-      3,
-      255,
-      4,
-      255,
-      5,
-      255,
-      6,
-      255,
-      7,
-      255,
-      8,
-      255,
-      9,
-      255,
+      1, 255, 2, 255, 3, 255, 4, 255, 5, 255, 6, 255, 7, 255, 8, 255, 9, 255,
     ]);
 
     expect(Array.from(image.convolution([[1]]).data)).toStrictEqual([
-      1,
-      255,
-      2,
-      255,
-      3,
-      255,
-      4,
-      255,
-      5,
-      255,
-      6,
-      255,
-      7,
-      255,
-      8,
-      255,
-      9,
-      255,
+      1, 255, 2, 255, 3, 255, 4, 255, 5, 255, 6, 255, 7, 255, 8, 255, 9, 255,
     ]);
 
     expect(
       Array.from(image.convolution([[1]], { algorithm: 'fft' }).data),
     ).toStrictEqual([
-      1,
-      255,
-      2,
-      255,
-      3,
-      255,
-      4,
-      255,
-      5,
-      255,
-      6,
-      255,
-      7,
-      255,
-      8,
-      255,
-      9,
-      255,
+      1, 255, 2, 255, 3, 255, 4, 255, 5, 255, 6, 255, 7, 255, 8, 255, 9, 255,
     ]);
 
     expect(function () {

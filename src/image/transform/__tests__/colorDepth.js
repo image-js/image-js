@@ -10,10 +10,7 @@ describe('check the colorDepth transform', function () {
 
     newImage = image.colorDepth(16);
     expect(Array.from(newImage.data)).toStrictEqual([
-      0x0000,
-      0x7f7f,
-      0xffff,
-      0x1212,
+      0x0000, 0x7f7f, 0xffff, 0x1212,
     ]);
   });
 
@@ -24,26 +21,12 @@ describe('check the colorDepth transform', function () {
     `;
     let newImage = image.colorDepth(8);
     expect(Array.from(newImage.data)).toStrictEqual([
-      0,
-      255,
-      0,
-      255,
-      0,
-      255,
-      0,
-      255,
+      0, 255, 0, 255, 0, 255, 0, 255,
     ]);
 
     newImage = image.colorDepth(16);
     expect(Array.from(newImage.data)).toStrictEqual([
-      0,
-      65535,
-      0,
-      65535,
-      0,
-      65535,
-      0,
-      65535,
+      0, 65535, 0, 65535, 0, 65535, 0, 65535,
     ]);
   });
 
@@ -58,10 +41,7 @@ describe('check the colorDepth transform', function () {
 
     newImage = image.colorDepth(16);
     expect(Array.from(newImage.data)).toStrictEqual([
-      0x0000,
-      0x7fff,
-      0xffff,
-      0x1234,
+      0x0000, 0x7fff, 0xffff, 0x1234,
     ]);
 
     expect(function () {

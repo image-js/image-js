@@ -23,10 +23,7 @@ describe('check stack histogram method', function () {
     images.push(new Image(2, 1, [3, 1, 5, 255, 7, 8, 9, 255]));
 
     expect(images.getHistogram({ maxSlots: 4, channel: 0 })).toStrictEqual([
-      6,
-      0,
-      0,
-      0,
+      6, 0, 0, 0,
     ]);
   });
 });

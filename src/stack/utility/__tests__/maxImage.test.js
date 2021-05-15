@@ -10,13 +10,6 @@ test('stack getMaxImage', function () {
   images.push(new Image(8, 1, [3, 4, 5, 6, 6, 7, 8, 9], { kind: 'GREY' }));
 
   expect(Array.from(images.getMaxImage().data)).toStrictEqual([
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
+    3, 4, 5, 6, 7, 8, 9, 10,
   ]);
 });

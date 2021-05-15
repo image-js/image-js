@@ -7,18 +7,7 @@ test('copy from RGBA to RGBA', () => {
   const to = new Image(3, 1);
   copyAlphaChannel(from, to);
   expect(Array.from(to.data)).toStrictEqual([
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    127,
-    0,
-    0,
-    0,
-    255,
+    0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 255,
   ]);
 });
 
@@ -34,18 +23,7 @@ test('copy from GREYA to RGBA', () => {
   const to = new Image(3, 1);
   copyAlphaChannel(from, to);
   expect(Array.from(to.data)).toStrictEqual([
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    127,
-    0,
-    0,
-    0,
-    255,
+    0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 255,
   ]);
 });
 

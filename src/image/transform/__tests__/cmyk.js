@@ -10,14 +10,7 @@ describe('check the cmyk transform', function () {
     expect(newImage.bitDepth).toBe(8);
 
     expect(Array.from(newImage.data)).toStrictEqual([
-      0,
-      0,
-      255,
-      155,
-      255,
-      0,
-      0,
-      155,
+      0, 0, 255, 155, 255, 0, 0, 155,
     ]);
   });
 
@@ -33,16 +26,7 @@ describe('check the cmyk transform', function () {
     expect(newImage.bitDepth).toBe(16);
 
     expect(Array.from(newImage.data)).toStrictEqual([
-      0,
-      0,
-      65535,
-      49152,
-      127,
-      65535,
-      0,
-      0,
-      49152,
-      127,
+      0, 0, 65535, 49152, 127, 65535, 0, 0, 49152, 127,
     ]);
   });
 });

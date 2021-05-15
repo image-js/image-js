@@ -108,14 +108,7 @@ describe('we check we can extract a part of B/W image', function () {
     expect(extract.height).toBe(2);
 
     expect(Array.from(extract.data)).toStrictEqual([
-      0,
-      255,
-      255,
-      255,
-      255,
-      0,
-      0,
-      0,
+      0, 255, 255, 255, 255, 0, 0, 0,
     ]);
 
     /* This corresponds to an extract if it was RGBA image */

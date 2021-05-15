@@ -91,7 +91,6 @@ for (var i = 0; i < channels; i++) {
   }
 }
 
-
 test('Uint8Array', function () {
   let newData = new Array(channels);
   for (var i = 0; i < channels; i++) {
@@ -424,7 +423,7 @@ test('Uint8Array original', function () {
   let jLeft = x * channels;
 
   for (let i = y; i < y1; i++) {
-    let j = (i * width * channels) + jLeft;
+    let j = i * width * channels + jLeft;
     let jL = j + xWidth;
     for (; j < jL; j++) {
       newData[ptr++] = data8[j];
@@ -441,7 +440,9 @@ function getValue(data, i, j) {
 }
 
 function test(name, func) {
-  func(); func(); func();
+  func();
+  func();
+  func();
   let start = process.hrtime();
   for (let i = 0; i < ITER; i++) {
     func();

@@ -1,4 +1,3 @@
-import { createCanvas } from 'canvas';
 import { Image, load } from 'test/common';
 
 test('constructor defaults', () => {
@@ -31,28 +30,25 @@ test('construct a 32bit image', () => {
 });
 
 test('create from Canvas', () => {
-  let canvas = createCanvas(2, 2);
-  let ctx = canvas.getContext('2d');
-  ctx.fillStyle = 'red';
-  ctx.fillRect(0, 0, 2, 1);
+  // Create a fake canvas object
+  let canvas = {
+    getContext() {
+      return {
+        getImageData() {
+          return {
+            width: 2,
+            height: 2,
+            data: Uint8ClampedArray.from([
+              255, 0, 0, 255, 255, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0,
+            ]),
+          };
+        },
+      };
+    },
+  };
   let img = Image.fromCanvas(canvas);
   expect(Array.from(img.data)).toStrictEqual([
-    255,
-    0,
-    0,
-    255,
-    255,
-    0,
-    0,
-    255,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    255, 0, 0, 255, 255, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0,
   ]);
 });
 

@@ -52,22 +52,7 @@ describe('save to disk', () => {
     await img.save(imgBinary);
     const reloaded = await load(imgBinary);
     expect(Array.from(reloaded.data)).toStrictEqual([
-      255,
-      255,
-      255,
-      255,
-      0,
-      0,
-      0,
-      255,
-      0,
-      0,
-      0,
-      255,
-      255,
-      255,
-      255,
-      255,
+      255, 255, 255, 255, 0, 0, 0, 255, 0, 0, 0, 255, 255, 255, 255, 255,
     ]);
   });
 

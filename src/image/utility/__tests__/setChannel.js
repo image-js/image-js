@@ -28,14 +28,7 @@ describe('get a specific channel from an image', function () {
     expect(image.channels).toBe(4);
     expect(image.bitDepth).toBe(8);
     expect(Array.from(image.data)).toStrictEqual([
-      230,
-      83,
-      120,
-      55,
-      100,
-      140,
-      13,
-      77,
+      230, 83, 120, 55, 100, 140, 13, 77,
     ]);
   });
 });

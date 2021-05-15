@@ -2,7 +2,6 @@
 
 const { Image } = require('..');
 
-
 function getImage() {
   const image = new Image(1000, 500, { kind: 'BINARY' });
   for (let x = 0; x < image.width; x++) {

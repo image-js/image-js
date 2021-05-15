@@ -1,4 +1,3 @@
-
 let path = require('path');
 
 let SHA256 = require('sha.js').sha256;

@@ -11,6 +11,8 @@ parserOptions:
 rules:
   import/no-cycle: off
   import/no-extraneous-dependencies: off
+  # TODO: re-enable once https://github.com/benmosher/eslint-plugin-import/issues/2063 is fixed.
+  import/newline-after-import: off
 
 settings:
   import/core-modules: [test]

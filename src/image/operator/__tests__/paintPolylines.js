@@ -21,31 +21,8 @@ describe('we check paintPolylines', function () {
     let grey = image.grey();
 
     let expected = [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      54,
-      54,
-      54,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      18,
-      18,
-      18,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
+      0, 0, 0, 0, 0, 0, 54, 54, 54, 0, 0, 0, 0, 0, 0, 0, 18, 18, 18, 0, 0, 0, 0,
+      0, 0,
     ];
 
     expect(Array.from(grey.data)).toStrictEqual(expected);
