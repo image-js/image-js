@@ -41,7 +41,7 @@ const objectToString = Object.prototype.toString;
  *      8 and 16 bit depth images.
  * * position : an array of 2 elements that allows to define a relative position
  *      to a parent image. This will be used in a crop or in the management
- *      of Region Of Interests (Roi) for exmaple
+ *      of Region Of Interests (Roi) for example
  * * data : an array that contains all the points of the image.
  *      Depending the bitDepth Uint8Array (1 bit), Uint8Array (8 bits),
  *      Uint16Array (16 bits), Float32Array (32 bits)
@@ -121,7 +121,7 @@ const objectToString = Object.prototype.toString;
  * // the RoiManager. A RoiManager will be applied on the original image
  * // in order to be able to extract from the original image the regions
  *
- * // the result of this console.log result can diretly be pasted
+ * // the result of this console.log result can directly be pasted
  * // in the browser
  * // console.log(mask.toDataURL());
  *
@@ -164,6 +164,24 @@ const objectToString = Object.prototype.toString;
  *  var canvas = document.getElementById('myCanvasID');
  *  var image = IJS.fromCanvas(canvas);
  * </script>
+ *
+ * @example
+ * // Image from matrix of values
+ * const [min, max] = d3.extent(temperatures)
+ * const colorScaler = d3.scaleSequential([min, max], d3.interpolateRdYlBu);
+ *
+ * // size = rows * columns * channels
+ * const data = new Uint8Array(2*3*3);
+ * for (let i = 0; i < temperatures.length; i++) {
+ *   const {r, g, b} = d3.rgb(colorScaler(temperatures[i]));
+ *   data[i*3] = r;
+ *   data[i*3 + 1] = g;
+ *   data[i*3 + 2] = b;
+ * }
+ *
+ * const image = new Image(2, 3, data, { kind: 'RGB' });
+ * // or
+ * const image = new Image({ width: 2, height: 3, data, kind: 'RGB'});
  */
 export default class Image {
   constructor(width, height, data, options) {
