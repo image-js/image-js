@@ -1,6 +1,7 @@
 name: Deploy documentation.js on GitHub pages
 
 on:
+  workflow_dispatch:
   release:
     types: [published]
 
