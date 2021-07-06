@@ -6,6 +6,7 @@ describe('Load TIFF', () => {
     ['grey8', 1, 0, 8],
     ['grey16', 1, 0, 16],
     ['palette', 3, 0, 16],
+    ['grey32', 1, 0, 32],
   ];
 
   it.each(tests)('%s', async (name, components, alpha, bitDepth) => {
