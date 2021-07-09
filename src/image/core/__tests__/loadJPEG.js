@@ -31,4 +31,10 @@ describe('Load JPEG', function () {
       expect(img.bitDepth).toBe(bitDepth);
     },
   );
+
+  it('should adjust the orientation based on EXIF', async () => {
+    const img = await load('format/jpg/exif-orientation.jpeg');
+    expect(img.width).toBe(3024);
+    expect(img.height).toBe(4032);
+  });
 });
