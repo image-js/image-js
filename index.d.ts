@@ -84,8 +84,8 @@ export declare class Image {
   // divide
   // hypotenuse
   // background
-  // flipX
-  // flipY
+  flipX(): this;
+  flipY(): this;
 
   blurFilter(options?: { radius?: number }): Image;
   medianFilter(options?: {
