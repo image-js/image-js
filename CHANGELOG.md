@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.32.0](https://www.github.com/image-js/image-js/compare/v0.31.4...v0.32.0) (2021-07-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* auto-correct orientation of JPEG images according to EXIF (#563)
+* Removed support for Node.js 10
+
+### Bug Fixes
+
+* auto-correct orientation of JPEG images according to EXIF ([#563](https://www.github.com/image-js/image-js/issues/563)) ([6a2bcf3](https://www.github.com/image-js/image-js/commit/6a2bcf3d479cf4ea700785a17fa4488892a3e448))
+* **types:** add flipX and flipY to types ([2c14a85](https://www.github.com/image-js/image-js/commit/2c14a8510f4958f0c39c048300a9b4596f6268ee))
+* **types:** remove bilinear from supported resize interpolations ([a96eb4c](https://www.github.com/image-js/image-js/commit/a96eb4c40867b715a4411e85fe13dff005179f5d))
+
+
+### Miscellaneous Chores
+
+* update dependencies ([ec97242](https://www.github.com/image-js/image-js/commit/ec972424fa6b1e34a65898d0dd4e179d7da0bb0b))
+
 ### [0.31.4](https://www.github.com/image-js/image-js/compare/v0.31.3...v0.31.4) (2021-01-21)
 
 
