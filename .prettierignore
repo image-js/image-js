@@ -1,3 +1,4 @@
-package*.json
-CHANGELOG.md
-lib
+/package*.json
+/CHANGELOG.md
+/lib
+/dist

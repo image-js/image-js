@@ -137,7 +137,26 @@ function loadJPEG(data) {
     meta = getMetadata(decodedExif.exif);
   }
   const jpeg = decodeJpeg(data, { useTArray: true, maxMemoryUsageInMB: 1024 });
-  return new Image(jpeg.width, jpeg.height, jpeg.data, { meta });
+  let image = new Image(jpeg.width, jpeg.height, jpeg.data, { meta });
+  if (meta && meta.tiff.tags.Orientation) {
+    const orientation = meta.tiff.tags.Orientation;
+    if (orientation > 2) {
+      image = image.rotate(
+        {
+          3: 180,
+          4: 180,
+          5: 90,
+          6: 90,
+          7: 270,
+          8: 270,
+        }[orientation],
+      );
+    }
+    if ([2, 4, 5, 7].includes(orientation)) {
+      image = image.flipX();
+    }
+  }
+  return image;
 }
 
 function loadTIFF(data) {
