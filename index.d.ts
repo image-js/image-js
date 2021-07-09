@@ -291,7 +291,7 @@ export interface ResizeOptions {
   width?: number;
   height?: number;
   factor?: number;
-  interpolation?: InterpolationAlgorithm;
+  interpolation?: 'nearestNeighbor';
   preserveAspectRatio?: boolean;
 }
 
