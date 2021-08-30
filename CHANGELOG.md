@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.33.0](https://www.github.com/image-js/image-js/compare/v0.32.0...v0.33.0) (2021-08-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* Improve MBR speed
+
+### Bug Fixes
+
+* Improve MBR speed ([c77fec2](https://www.github.com/image-js/image-js/commit/c77fec2308bf7d1f23ddc352d21f4f53ee911c8d))
+
 ## [0.32.0](https://www.github.com/image-js/image-js/compare/v0.31.4...v0.32.0) (2021-07-09)
 
 
