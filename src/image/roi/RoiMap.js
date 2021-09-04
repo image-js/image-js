@@ -14,7 +14,8 @@ export default class RoiMap {
     this.parent = parent;
     this.width = parent.width;
     this.height = parent.height;
-    this.data = data;
+    this.data = data; // expected to be a Int16Array (to be enforce in typescript) !!!!!!
+    // TODO data should be private and we should keep a cache with negative, positive, min, max, etc
     this.negative = 0;
     this.positive = 0;
   }
