@@ -42,53 +42,54 @@ export default function fromMask(mask, options = {}) {
     xToProcess[0] = x;
     yToProcess[0] = y;
     while (from <= to) {
-      let currentX = xToProcess[from & MAX_ARRAY];
-      let currentY = yToProcess[from & MAX_ARRAY];
-      data[currentY * mask.width + currentX] = id;
+      const currentX = xToProcess[from & MAX_ARRAY];
+      const currentY = yToProcess[from & MAX_ARRAY];
+      const pixel = currentY * mask.width + currentX;
+      data[pixel] = id;
       // need to check all around mask pixel
       if (
         currentX > 0 &&
-        data[currentY * mask.width + currentX - 1] === 0 &&
-        mask.getBitXY(currentX - 1, currentY) === targetState
+        data[pixel - 1] === 0 &&
+        mask.getBit(pixel - 1) === targetState
       ) {
         // LEFT
         to++;
         xToProcess[to & MAX_ARRAY] = currentX - 1;
         yToProcess[to & MAX_ARRAY] = currentY;
-        data[currentY * mask.width + currentX - 1] = -32768;
+        data[pixel - 1] = -32768;
       }
       if (
         currentY > 0 &&
-        data[(currentY - 1) * mask.width + currentX] === 0 &&
-        mask.getBitXY(currentX, currentY - 1) === targetState
+        data[pixel - mask.width] === 0 &&
+        mask.getBit(pixel - mask.width) === targetState
       ) {
         // TOP
         to++;
         xToProcess[to & MAX_ARRAY] = currentX;
         yToProcess[to & MAX_ARRAY] = currentY - 1;
-        data[(currentY - 1) * mask.width + currentX] = -32768;
+        data[pixel - mask.width] = -32768;
       }
       if (
         currentX < mask.width - 1 &&
-        data[currentY * mask.width + currentX + 1] === 0 &&
-        mask.getBitXY(currentX + 1, currentY) === targetState
+        data[pixel + 1] === 0 &&
+        mask.getBit(pixel + 1) === targetState
       ) {
         // RIGHT
         to++;
         xToProcess[to & MAX_ARRAY] = currentX + 1;
         yToProcess[to & MAX_ARRAY] = currentY;
-        data[currentY * mask.width + currentX + 1] = -32768;
+        data[pixel + 1] = -32768;
       }
       if (
         currentY < mask.height - 1 &&
-        data[(currentY + 1) * mask.width + currentX] === 0 &&
-        mask.getBitXY(currentX, currentY + 1) === targetState
+        data[pixel + mask.width] === 0 &&
+        mask.getBit(pixel + mask.width) === targetState
       ) {
         // BOTTOM
         to++;
         xToProcess[to & MAX_ARRAY] = currentX;
         yToProcess[to & MAX_ARRAY] = currentY + 1;
-        data[(currentY + 1) * mask.width + currentX] = -32768;
+        data[pixel + mask.width] = -32768;
       }
       if (allowCorners) {
         if (
