@@ -29,15 +29,16 @@ export default class RoiLayer {
    * @return {Roi[]}
    */
   createRoi() {
-    // we need to find all all the different IDs there is in the data
+    // we need to find all the different IDs there is in the data
     let data = this.roiMap.data;
-    let mapIDs = {};
     this.roiMap.positive = 0;
     this.roiMap.negative = 0;
 
+    const usedIDs = new Uint8Array(65536);
+
     for (let i = 0; i < data.length; i++) {
-      if (data[i] && !mapIDs[data[i]]) {
-        mapIDs[data[i]] = true;
+      if (data[i] !== 0 && !usedIDs[data[i] + 32768]) {
+        usedIDs[data[i] + 32768] = 1;
         if (data[i] > 0) {
           this.roiMap.positive++;
         } else {
@@ -45,10 +46,14 @@ export default class RoiLayer {
         }
       }
     }
+    let mapIDs = [];
+    for (let i = 0; i < usedIDs.length; i++) {
+      if (usedIDs[i] !== 0) mapIDs.push(i - 32768);
+    }
 
     let rois = {};
 
-    for (let mapID in mapIDs) {
+    for (let mapID of mapIDs) {
       rois[mapID] = new Roi(this.roiMap, mapID * 1);
     }
     let width = this.roiMap.width;
@@ -79,7 +84,7 @@ export default class RoiLayer {
       }
     }
     let roiArray = [];
-    for (let mapID in mapIDs) {
+    for (let mapID of mapIDs) {
       rois[mapID].meanX /= rois[mapID].surface;
       rois[mapID].meanY /= rois[mapID].surface;
       roiArray.push(rois[mapID]);
