@@ -1,0 +1,32 @@
+name: Deploy TypeDoc on GitHub pages
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+env:
+  NODE_VERSION: 16.x
+  ENTRY_FILE: 'src/index.ts'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install dependencies
+        run: npm install
+      - name: Build documentation
+        uses: zakodium/typedoc-action@v2
+        with:
+          entry: ${{ env.ENTRY_FILE }}
+      - name: Deploy to GitHub pages
+        uses: JamesIves/github-pages-deploy-action@releases/v4
+        with:
+          token: ${{ secrets.BOT_TOKEN }}
+          branch: gh-pages
+          folder: docs
+          clean: true
