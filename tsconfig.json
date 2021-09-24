@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2020"
+  },
+  "include": ["./src/**/*"]
+}
