@@ -2,8 +2,9 @@ name: Deploy TypeDoc on GitHub pages
 
 on:
   workflow_dispatch:
-  release:
-    types: [published]
+  push:
+    branches: 
+      - main
 
 env:
   NODE_VERSION: 16.x
