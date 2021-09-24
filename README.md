@@ -11,14 +11,9 @@ Image processing and manipulation in JavaScript.
 
 `$ npm i image-js`
 
-## Usage
+## API
 
-```js
-import { myModule } from 'image-js';
-
-const result = myModule(args);
-// result is ...
-```
+Look at the [examples](./examples) directory for how the API is being designed.
 
 ## License
 
