@@ -16,14 +16,13 @@
   "scripts": {
     "check-types": "tsc --noEmit",
     "clean": "rimraf lib lib-esm",
-    "eslint": "eslint src --cache",
+    "eslint": "eslint src",
     "eslint-fix": "npm run eslint -- --fix",
     "prepack": "npm run tsc",
     "prettier": "prettier --check src",
     "prettier-write": "prettier --write src",
-    "test": "npm run test-coverage && npm run eslint && npm run prettier && npm run check-types",
-    "test-coverage": "npm run test-only -- --coverage",
-    "test-only": "jest",
+    "test": "npm run test-only && npm run eslint && npm run prettier && npm run check-types",
+    "test-only": "jest --coverage",
     "tsc": "npm run clean && npm run tsc-cjs && npm run tsc-esm",
     "tsc-cjs": "tsc --project tsconfig.cjs.json",
     "tsc-esm": "tsc --project tsconfig.esm.json"
