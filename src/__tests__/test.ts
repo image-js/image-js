@@ -1,7 +1,7 @@
-import { myModule } from '..';
+import { IJS } from '..';
 
 describe('test myModule', () => {
   it('should return 42', () => {
-    expect(myModule()).toBe(42);
+    expect(typeof IJS).toBe('function');
   });
 });
