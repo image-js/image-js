@@ -7,8 +7,8 @@ import { IJS } from '../IJS';
 import {
   encode,
   ImageFormat,
-  IEncodeOptionsPng,
-  IEncodeOptionsJpeg,
+  EncodeOptionsPng,
+  EncodeOptionsJpeg,
 } from './encode';
 
 const writeFilePromise = promisify(writeFile);
@@ -26,7 +26,7 @@ export async function write(path: string, image: IJS): Promise<void>;
 export async function write(
   path: string,
   image: IJS,
-  options: IEncodeOptionsPng,
+  options: EncodeOptionsPng,
 ): Promise<void>;
 /**
  * Write an image to the disk as JPEG.
@@ -35,12 +35,12 @@ export async function write(
 export async function write(
   path: string,
   image: IJS,
-  options: IEncodeOptionsJpeg,
+  options: EncodeOptionsJpeg,
 ): Promise<void>;
 export async function write(
   path: string,
   image: IJS,
-  options?: IEncodeOptionsPng | IEncodeOptionsJpeg,
+  options?: EncodeOptionsPng | EncodeOptionsJpeg,
 ): Promise<void> {
   const toWrite = getDataToWrite(path, image, options);
   await writeFilePromise(path, toWrite);
@@ -52,7 +52,7 @@ export async function write(
 export function writeSync(
   path: string,
   image: IJS,
-  options?: IEncodeOptionsPng | IEncodeOptionsJpeg,
+  options?: EncodeOptionsPng | EncodeOptionsJpeg,
 ): void {
   const toWrite = getDataToWrite(path, image, options);
   writeFileSync(path, toWrite);
@@ -61,7 +61,7 @@ export function writeSync(
 function getDataToWrite(
   path: string,
   image: IJS,
-  options?: IEncodeOptionsPng | IEncodeOptionsJpeg,
+  options?: EncodeOptionsPng | EncodeOptionsJpeg,
 ): Uint8Array {
   let format: ImageFormat;
   if (options === undefined) {

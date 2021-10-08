@@ -1,4 +1,4 @@
-import { decode, IDecodedPNG } from 'fast-png';
+import { decode, DecodedPng } from 'fast-png';
 
 import { IJS, ImageKind, ColorDepth } from '../IJS';
 
@@ -42,7 +42,7 @@ export function decodePng(buffer: Uint8Array): IJS {
   });
 }
 
-function loadPalettePNG(png: IDecodedPNG): IJS {
+function loadPalettePNG(png: DecodedPng): IJS {
   if (!png.palette) {
     throw new Error(
       'unexpected: there should be a palette when colourType is 3',

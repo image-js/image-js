@@ -1,7 +1,7 @@
 import { IJS } from '../IJS';
 
-import { encodeJpeg, IEncodeJpegOptions } from './encodeJpeg';
-import { encodePng, IEncodePngOptions } from './encodePng';
+import { encodeJpeg, EncodeJpegOptions } from './encodeJpeg';
+import { encodePng, EncodePngOptions } from './encodePng';
 
 export enum ImageFormat {
   png = 'png',
@@ -9,16 +9,16 @@ export enum ImageFormat {
   jpeg = 'jpeg',
 }
 
-export interface IEncodeOptionsPng {
+export interface EncodeOptionsPng {
   format: ImageFormat.png;
-  encoderOptions?: IEncodePngOptions;
+  encoderOptions?: EncodePngOptions;
 }
-export interface IEncodeOptionsJpeg {
+export interface EncodeOptionsJpeg {
   format: ImageFormat.jpg | ImageFormat.jpeg;
-  encoderOptions?: IEncodeJpegOptions;
+  encoderOptions?: EncodeJpegOptions;
 }
 
-const defaultPng: IEncodeOptionsPng = { format: ImageFormat.png };
+const defaultPng: EncodeOptionsPng = { format: ImageFormat.png };
 
 /**
  * Encodes the image to an output format.
@@ -31,16 +31,16 @@ export function encode(image: IJS): Uint8Array;
  * @param image - Image to encode.
  * @param options - Format and options passed to the PNG encoder.
  */
-export function encode(image: IJS, options: IEncodeOptionsPng): Uint8Array;
+export function encode(image: IJS, options: EncodeOptionsPng): Uint8Array;
 /**
  * Encodes the image to JPEG.
  * @param image - Image to encode.
  * @param options - Format and options passed to the JPEG encoder.
  */
-export function encode(image: IJS, options: IEncodeOptionsJpeg): Uint8Array;
+export function encode(image: IJS, options: EncodeOptionsJpeg): Uint8Array;
 export function encode(
   image: IJS,
-  options: IEncodeOptionsPng | IEncodeOptionsJpeg = defaultPng,
+  options: EncodeOptionsPng | EncodeOptionsJpeg = defaultPng,
 ): Uint8Array {
   if (options.format === ImageFormat.png) {
     return encodePng(image, options.encoderOptions);

@@ -12,7 +12,7 @@ const readFilePromise = promisify(readFile);
  * The file format is automatically selected based on the first few bytes.
  * @param path - The file path to read.
  */
-export async function read(path: string): Promise<IJS> {
+export async function read(path: string | URL): Promise<IJS> {
   const data = await readFilePromise(path);
   return decode(data);
 }
@@ -20,6 +20,6 @@ export async function read(path: string): Promise<IJS> {
 /**
  * Synchronous version of @see {@link read}.
  */
-export function readSync(path: string): IJS {
+export function readSync(path: string | URL): IJS {
   return decode(readFileSync(path));
 }

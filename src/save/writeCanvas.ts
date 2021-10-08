@@ -1,6 +1,6 @@
 import { IJS, ImageKind } from '../IJS';
 
-export interface IWriteCanvasOptions {
+export interface WriteCanvasOptions {
   /**
    * If set to `true` (default), the canvas element will be resized to fit the image.
    */
@@ -14,9 +14,9 @@ export interface IWriteCanvasOptions {
 }
 
 export function writeCanvas(
-  canvas: HTMLCanvasElement,
   image: IJS,
-  options: IWriteCanvasOptions = {},
+  canvas: HTMLCanvasElement,
+  options: WriteCanvasOptions = {},
 ): void {
   if (image.kind !== ImageKind.RGBA) {
     image = image.convertColor(ImageKind.RGBA);
