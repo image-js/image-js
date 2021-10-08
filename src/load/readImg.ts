@@ -1,9 +1,8 @@
-import {IJS } from '../IJS';
+import { IJS } from '../IJS';
 
 import { readCanvas } from './readCanvas';
 
 export function readImg(img: CanvasImageSource): IJS {
-  // eslint-disable-next-line no-undef
   const canvas = document.createElement('canvas');
   canvas.width = img.width as number;
   canvas.height = img.height as number;

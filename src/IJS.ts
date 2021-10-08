@@ -2,14 +2,14 @@ type ImageDataArray = Uint8Array | Uint16Array;
 
 export enum ColorDepth {
   UINT8 = 8,
-  UINT16 = 16
+  UINT16 = 16,
 }
 
 export enum ImageKind {
   GREY = 'GREY',
   GREYA = 'GREYA',
   RGB = 'RGB',
-  RGBA = 'RGBA'
+  RGBA = 'RGBA',
 }
 
 export enum ImageCoordinates {
@@ -17,7 +17,7 @@ export enum ImageCoordinates {
   TOP_LEFT = 'TOP_LEFT',
   TOP_RIGHT = 'TOP_RIGHT',
   BOTTOM_LEFT = 'BOTTOM_LEFT',
-  BOTTOM_RIGHT = 'BOTTOM_RIGHT'
+  BOTTOM_RIGHT = 'BOTTOM_RIGHT',
 }
 
 export interface INewImageOptions {
@@ -54,23 +54,23 @@ export type ImageValues = [number, number, number, number];
 const kinds: { [key in ImageKind]: { components: number; alpha: boolean } } = {
   [ImageKind.GREY]: {
     components: 1,
-    alpha: false
+    alpha: false,
   },
   [ImageKind.GREYA]: {
     components: 1,
-    alpha: true
+    alpha: true,
   },
   [ImageKind.RGB]: {
     components: 3,
-    alpha: false
+    alpha: false,
   },
   [ImageKind.RGBA]: {
     components: 3,
-    alpha: true
-  }
+    alpha: true,
+  },
 };
 
-export class IJS{
+export class IJS {
   /**
    * The number of columns of the image.
    */
@@ -137,7 +137,7 @@ export class IJS{
   public constructor(
     width?: number | INewImageOptions,
     height?: number,
-    options: INewImageOptions = {}
+    options: INewImageOptions = {},
   ) {
     if (typeof width !== 'number') {
       options = width || {};
@@ -156,13 +156,13 @@ export class IJS{
 
     if (width < 1 || !Number.isInteger(width)) {
       throw new RangeError(
-        `width must be an integer and at least 1. Received ${width}`
+        `width must be an integer and at least 1. Received ${width}`,
       );
     }
 
     if (height < 1 || !Number.isInteger(height)) {
       throw new RangeError(
-        `height must be an integer and at least 1. Received ${height}`
+        `height must be an integer and at least 1. Received ${height}`,
       );
     }
 
@@ -186,7 +186,7 @@ export class IJS{
         this.channels,
         this.alpha,
         this.depth,
-        maxValue
+        maxValue,
       );
     } else {
       if (depth === ColorDepth.UINT8 && data instanceof Uint16Array) {
@@ -197,7 +197,7 @@ export class IJS{
       const expectedLength = this.size * this.channels;
       if (data.length !== expectedLength) {
         throw new RangeError(
-          `incorrect data size: ${data.length}. Expected ${expectedLength}`
+          `incorrect data size: ${data.length}. Expected ${expectedLength}`,
         );
       }
       this.data = data;
@@ -214,7 +214,7 @@ export class IJS{
       height: other.height,
       depth: other.depth,
       kind: other.kind,
-      ...options
+      ...options,
     });
   }
 
@@ -289,9 +289,7 @@ export class IJS{
     } else {
       if (value.length !== this.channels) {
         throw new RangeError(
-          `the size of value must match the number of channels (${
-            this.channels
-          }). Got ${value.length} instead`
+          `the size of value must match the number of channels (${this.channels}). Got ${value.length} instead`,
         );
       }
       value.forEach((val) => validateValue(val, this));
@@ -325,7 +323,7 @@ export class IJS{
     validateValue(value, this);
     if (!this.alpha) {
       throw new Error(
-        'fillAlpha can only be called if the image has an alpha channel'
+        'fillAlpha can only be called if the image has an alpha channel',
       );
     }
     const alphaIndex = this.channels - 1;
@@ -345,86 +343,9 @@ export class IJS{
     }
   }
 
-  // COMPUTE
-
-  /**
-   * Returns a histogram of pixel intensities.
-   * @param image
-   */
-  public histogram(options?: IHistogramOptions): number[] {
-    return histogram(this, options);
-  }
-
-  // FILTERS
-
-  public blur(options: IBlurOptions): IJS {
-    return blur(this, options);
-  }
-
-  public directConvolution(
-    kernel: number[][],
-    options?: IConvolutionOptions
-  ): IJS {
-    return directConvolution(this, kernel, options);
-  }
-
-  public separableConvolution(
-    kernelX: number[],
-    kernelY: number[],
-    options?: IConvolutionOptions
-  ): IJS {
-    return separableConvolution(this, kernelX, kernelY, options);
-  }
-
-  public gaussianBlur(options: GaussianBlurOptions): IJS {
-    return gaussianBlur(this, options);
-  }
-
-  /**
-   * Invert the colors of the image.
-   */
-  public invert(options?: IInvertOptions): IJS {
-    return invert(this, options);
-  }
-
-  // GEOMETRY
-
-  public resize(options: IResizeOptions): IJS {
-    return resize(this, options);
-  }
-
-  public rotate(angle: number, options?: IRotateOptions): IJS {
-    return rotate(this, angle, options);
-  }
-
-  public transform(
-    transformMatrix: number[][],
-    options?: ITransformOptions
-  ): IJS {
-    return transform(this, transformMatrix, options);
-  }
-
-  // OPERATIONS
-
-  public convertColor(kind: ImageKind, options?: IConvertColorOptions): IJS {
-    return convertColor(this, kind, options);
-  }
-
-  public convertDepth(newDepth: ColorDepth): IJS {
-    return convertDepth(this, newDepth);
-  }
-
-  public split(): IJS[] {
-    return split(this);
-  }
-
-  public threshold(options: ThresholdOptions): IJS {
-    return threshold(this, options);
-  }
-
   public getCoordinates(
     coordinates: ImageCoordinates,
-    round: boolean = false
+    round = false,
   ): [number, number] {
     switch (coordinates) {
       case ImageCoordinates.CENTER: {
@@ -455,8 +376,8 @@ function createPixelArray(
   channels: number,
   alpha: boolean,
   depth: ColorDepth,
-  maxValue: number
-): IJSDataArray {
+  maxValue: number,
+): ImageDataArray {
   const length = channels * size;
   let arr;
   switch (depth) {
@@ -480,7 +401,7 @@ function createPixelArray(
   return arr;
 }
 
-function printData(img: Image): string {
+function printData(img: IJS): string {
   const channels = [];
   for (let c = 0; c < img.channels; c++) {
     channels.push(`[${printChannel(img, c)}]`);

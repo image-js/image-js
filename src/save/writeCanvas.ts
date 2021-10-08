@@ -1,4 +1,4 @@
-import {IJS, ImageKind } from '../IJS';
+import { IJS, ImageKind } from '../IJS';
 
 export interface IWriteCanvasOptions {
   /**
@@ -16,7 +16,7 @@ export interface IWriteCanvasOptions {
 export function writeCanvas(
   canvas: HTMLCanvasElement,
   image: IJS,
-  options: IWriteCanvasOptions = {}
+  options: IWriteCanvasOptions = {},
 ): void {
   if (image.kind !== ImageKind.RGBA) {
     image = image.convertColor(ImageKind.RGBA);
@@ -28,7 +28,7 @@ export function writeCanvas(
     dirtyX = 0,
     dirtyY = 0,
     dirtyWidth = image.width,
-    dirtyHeight = image.height
+    dirtyHeight = image.height,
   } = options;
   if (resizeCanvas) {
     canvas.width = image.width;
@@ -39,21 +39,20 @@ export function writeCanvas(
     throw new Error('could not get context from canvas element');
   }
   ctx.putImageData(
-    // eslint-disable-next-line no-undef
     new ImageData(
       new Uint8ClampedArray(
         image.data.buffer,
         image.data.byteOffset,
-        image.data.byteLength
+        image.data.byteLength,
       ),
       image.width,
-      image.height
+      image.height,
     ),
     dx,
     dy,
     dirtyX,
     dirtyY,
     dirtyWidth,
-    dirtyHeight
+    dirtyHeight,
   );
 }

@@ -1,7 +1,7 @@
 import { readFile, readFileSync } from 'fs';
 import { promisify } from 'util';
 
-import {IJS } from '../IJS';
+import { IJS } from '../IJS';
 
 import { decode } from './decode';
 
@@ -12,7 +12,7 @@ const readFilePromise = promisify(readFile);
  * The file format is automatically selected based on the first few bytes.
  * @param path - The file path to read.
  */
-export async function read(path: string): Promise<Image> {
+export async function read(path: string): Promise<IJS> {
   const data = await readFilePromise(path);
   return decode(data);
 }

@@ -2,13 +2,13 @@ import { writeFile, writeFileSync } from 'fs';
 import { extname } from 'path';
 import { promisify } from 'util';
 
-import {IJS } from '../IJS';
+import { IJS } from '../IJS';
 
 import {
   encode,
   ImageFormat,
   IEncodeOptionsPng,
-  IEncodeOptionsJpeg
+  IEncodeOptionsJpeg,
 } from './encode';
 
 const writeFilePromise = promisify(writeFile);
@@ -18,7 +18,7 @@ const writeFilePromise = promisify(writeFile);
  * The file format is determined automatically from the file's extension.
  * If the extension is not supported, an error will be thrown.
  */
-export async function write(path: string, image: Image): Promise<void>;
+export async function write(path: string, image: IJS): Promise<void>;
 /**
  * Write an image to the disk as PNG.
  * When the `png` format is specified, the file's extension doesn't matter.
@@ -26,7 +26,7 @@ export async function write(path: string, image: Image): Promise<void>;
 export async function write(
   path: string,
   image: IJS,
-  options: IEncodeOptionsPng
+  options: IEncodeOptionsPng,
 ): Promise<void>;
 /**
  * Write an image to the disk as JPEG.
@@ -35,12 +35,12 @@ export async function write(
 export async function write(
   path: string,
   image: IJS,
-  options: IEncodeOptionsJpeg
+  options: IEncodeOptionsJpeg,
 ): Promise<void>;
 export async function write(
   path: string,
   image: IJS,
-  options?: IEncodeOptionsPng | IEncodeOptionsJpeg
+  options?: IEncodeOptionsPng | IEncodeOptionsJpeg,
 ): Promise<void> {
   const toWrite = getDataToWrite(path, image, options);
   await writeFilePromise(path, toWrite);
@@ -52,7 +52,7 @@ export async function write(
 export function writeSync(
   path: string,
   image: IJS,
-  options?: IEncodeOptionsPng | IEncodeOptionsJpeg
+  options?: IEncodeOptionsPng | IEncodeOptionsJpeg,
 ): void {
   const toWrite = getDataToWrite(path, image, options);
   writeFileSync(path, toWrite);
@@ -61,13 +61,11 @@ export function writeSync(
 function getDataToWrite(
   path: string,
   image: IJS,
-  options?: IEncodeOptionsPng | IEncodeOptionsJpeg
+  options?: IEncodeOptionsPng | IEncodeOptionsJpeg,
 ): Uint8Array {
   let format: ImageFormat;
   if (options === undefined) {
-    const extension = extname(path)
-      .slice(1)
-      .toLowerCase();
+    const extension = extname(path).slice(1).toLowerCase();
     if (extension === 'png') {
       format = ImageFormat.png;
       return encode(image, { format });
@@ -76,7 +74,7 @@ function getDataToWrite(
       return encode(image, { format });
     } else {
       throw new Error(
-        'image format could not be determined from file extension. Please use a supported extension or specify the format option'
+        'image format could not be determined from file extension. Please use a supported extension or specify the format option',
       );
     }
   } else if (options.format === ImageFormat.png) {

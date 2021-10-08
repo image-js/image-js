@@ -1,6 +1,6 @@
 import { encode } from 'jpeg-js';
 
-import {IJS, ImageKind, ColorDepth } from '../IJS';
+import { IJS, ImageKind, ColorDepth } from '../IJS';
 
 export interface IEncodeJpegOptions {
   quality?: number;
@@ -8,7 +8,7 @@ export interface IEncodeJpegOptions {
 
 export function encodeJpeg(
   image: IJS,
-  options: IEncodeJpegOptions = {}
+  options: IEncodeJpegOptions = {},
 ): Uint8Array {
   const { quality = 50 } = options;
 

@@ -1,12 +1,12 @@
-import {IJS } from '../IJS';
+import { IJS } from '../IJS';
 
-import { encodePng, IEncodePngOptions } from './encodePng';
 import { encodeJpeg, IEncodeJpegOptions } from './encodeJpeg';
+import { encodePng, IEncodePngOptions } from './encodePng';
 
 export enum ImageFormat {
   png = 'png',
   jpg = 'jpg',
-  jpeg = 'jpeg'
+  jpeg = 'jpeg',
 }
 
 export interface IEncodeOptionsPng {
@@ -25,7 +25,7 @@ const defaultPng: IEncodeOptionsPng = { format: ImageFormat.png };
  * Defaults to PNG.
  * @param image - Image to encode.
  */
-export function encode(image: Image): Uint8Array;
+export function encode(image: IJS): Uint8Array;
 /**
  * Encodes the image to PNG.
  * @param image - Image to encode.
@@ -40,7 +40,7 @@ export function encode(image: IJS, options: IEncodeOptionsPng): Uint8Array;
 export function encode(image: IJS, options: IEncodeOptionsJpeg): Uint8Array;
 export function encode(
   image: IJS,
-  options: IEncodeOptionsPng | IEncodeOptionsJpeg = defaultPng
+  options: IEncodeOptionsPng | IEncodeOptionsJpeg = defaultPng,
 ): Uint8Array {
   if (options.format === ImageFormat.png) {
     return encodePng(image, options.encoderOptions);
