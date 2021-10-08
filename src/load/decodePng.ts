@@ -1,6 +1,6 @@
 import { decode, IDecodedPNG } from 'fast-png';
 
-import {IJS, ImageKind, ColorDepth } from '../IJS';
+import { IJS, ImageKind, ColorDepth } from '../IJS';
 
 /**
  * Decode a png. See the fast-png npm module.
@@ -38,14 +38,14 @@ export function decodePng(buffer: Uint8Array): IJS {
     height: png.height,
     kind,
     depth,
-    data: png.data
+    data: png.data,
   });
 }
 
 function loadPalettePNG(png: IDecodedPNG): IJS {
   if (!png.palette) {
     throw new Error(
-      'unexpected: there should be a palette when colourType is 3'
+      'unexpected: there should be a palette when colourType is 3',
     );
   }
   const pixels = png.width * png.height;
@@ -70,6 +70,6 @@ function loadPalettePNG(png: IDecodedPNG): IJS {
   }
 
   return new IJS(png.width, png.height, {
-    data
+    data,
   });
 }

@@ -6,7 +6,7 @@
  */
 export default function checkHeader(
   arr: Uint8Array,
-  header: number[]
+  header: number[],
 ): boolean {
   if (arr.length < header.length) {
     return false;

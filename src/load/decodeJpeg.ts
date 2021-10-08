@@ -1,15 +1,15 @@
 import { decode } from 'jpeg-js';
 
-import {IJS, ImageKind } from '../IJS';
+import { IJS, ImageKind } from '../IJS';
 
 /**
  * Decode a jpeg. See the jpeg-js npm module.
  * @param buffer The data to decode
  */
 export function decodeJpeg(buffer: Uint8Array): IJS {
-  const jpeg = decode(buffer, true);
+  const jpeg = decode(buffer, { useTArray: true });
   return new IJS(jpeg.width, jpeg.height, {
     data: jpeg.data,
-    kind: ImageKind.RGBA
+    kind: ImageKind.RGBA,
   });
 }

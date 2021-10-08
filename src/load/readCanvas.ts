@@ -1,4 +1,4 @@
-import {IJS, ImageKind } from '../IJS';
+import { IJS, ImageKind } from '../IJS';
 
 export function readCanvas(canvas: HTMLCanvasElement): IJS {
   const ctx = canvas.getContext('2d');
@@ -12,8 +12,8 @@ export function readCanvas(canvas: HTMLCanvasElement): IJS {
     data: new Uint8Array(
       imageData.data.buffer,
       imageData.data.byteOffset,
-      imageData.data.byteLength
+      imageData.data.byteLength,
     ),
-    kind: ImageKind.RGBA
+    kind: ImageKind.RGBA,
   });
 }

@@ -2,7 +2,7 @@ import { convertColor, IConvertColorOptions } from './operations/convertColor';
 import { convertDepth } from './operations/convertDepth';
 import { validateChannel, validateValue } from './utils/validators';
 
-type ImageDataArray = Uint8Array | Uint16Array;
+type ImageDataArray = Uint8Array | Uint16Array | Uint8ClampedArray;
 
 export enum ColorDepth {
   UINT8 = 8,
