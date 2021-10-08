@@ -1,3 +1,5 @@
+import { validateChannel, validateValue } from "./utils/validators";
+
 type ImageDataArray = Uint8Array | Uint16Array;
 
 export enum ColorDepth {
@@ -334,7 +336,7 @@ export class IJS {
    * Create a copy of this image.
    */
   public clone(): IJS {
-    return Image.createFrom(this, { data: this.data.slice() });
+    return IJS.createFrom(this, { data: this.data.slice() });
   }
 
   public changeEach(cb: (value: number) => number): void {

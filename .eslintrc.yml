@@ -1,1 +1,3 @@
 extends: cheminfo-typescript
+rules:
+  '@typescript-eslint/restrict-template-expressions': off

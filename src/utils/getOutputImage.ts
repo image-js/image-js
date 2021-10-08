@@ -32,7 +32,7 @@ export function getOutputImage(
   const { out } = options;
   const { newParameters } = internalOptions;
   if (out === undefined) {
-    return Image.createFrom(thisImage, newParameters);
+    return IJS.createFrom(thisImage, newParameters);
   } else {
     if (!(out instanceof IJS)) {
       throw new TypeError('out must be an Image object');
