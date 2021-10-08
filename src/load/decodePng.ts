@@ -1,6 +1,6 @@
 import { decode, DecodedPng } from 'fast-png';
 
-import { IJS, ImageKind, ColorDepth } from '../IJS';
+import { IJS, ImageColorModel, ColorDepth } from '../IJS';
 
 /**
  * Decode a png. See the fast-png npm module.
@@ -9,7 +9,7 @@ import { IJS, ImageKind, ColorDepth } from '../IJS';
 export function decodePng(buffer: Uint8Array): IJS {
   const png = decode(buffer);
 
-  let kind: ImageKind;
+  let colorModel: ImageColorModel;
   const depth: ColorDepth =
     png.depth === 16 ? ColorDepth.UINT16 : ColorDepth.UINT8;
 
@@ -19,24 +19,22 @@ export function decodePng(buffer: Uint8Array): IJS {
 
   switch (png.channels) {
     case 1:
-      kind = ImageKind.GREY;
+      colorModel = ImageColorModel.GREY;
       break;
     case 2:
-      kind = ImageKind.GREYA;
+      colorModel = ImageColorModel.GREYA;
       break;
     case 3:
-      kind = ImageKind.RGB;
+      colorModel = ImageColorModel.RGB;
       break;
     case 4:
-      kind = ImageKind.RGBA;
+      colorModel = ImageColorModel.RGBA;
       break;
     default:
       throw new Error(`Unexpected number of channels: ${png.channels}`);
   }
-  return new IJS({
-    width: png.width,
-    height: png.height,
-    kind,
+  return new IJS(png.width, png.height, {
+    colorModel: colorModel,
     depth,
     data: png.data,
   });

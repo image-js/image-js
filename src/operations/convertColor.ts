@@ -1,4 +1,4 @@
-import { IJS, ImageKind } from '../IJS';
+import { IJS, ImageColorModel } from '../IJS';
 import { getOutputImage } from '../utils/getOutputImage';
 
 export interface IConvertColorOptions {
@@ -7,35 +7,58 @@ export interface IConvertColorOptions {
 
 export function convertColor(
   image: IJS,
-  kind: ImageKind,
+  colorModel: ImageColorModel,
   options: IConvertColorOptions = {},
 ): IJS {
   const canConvert = new Map([
-    [ImageKind.GREY, [ImageKind.GREYA, ImageKind.RGB, ImageKind.RGBA]],
-    [ImageKind.GREYA, [ImageKind.GREY, ImageKind.RGB, ImageKind.RGBA]],
-    [ImageKind.RGB, [ImageKind.GREYA, ImageKind.GREY, ImageKind.RGBA]],
-    [ImageKind.RGBA, [ImageKind.GREYA, ImageKind.GREY, ImageKind.RGB]],
+    [
+      ImageColorModel.GREY,
+      [ImageColorModel.GREYA, ImageColorModel.RGB, ImageColorModel.RGBA],
+    ],
+    [
+      ImageColorModel.GREYA,
+      [ImageColorModel.GREY, ImageColorModel.RGB, ImageColorModel.RGBA],
+    ],
+    [
+      ImageColorModel.RGB,
+      [ImageColorModel.GREYA, ImageColorModel.GREY, ImageColorModel.RGBA],
+    ],
+    [
+      ImageColorModel.RGBA,
+      [ImageColorModel.GREYA, ImageColorModel.GREY, ImageColorModel.RGB],
+    ],
   ]);
 
-  if (image.kind === kind) {
-    throw new Error(`Cannot convert color, image is already ${kind}`);
+  if (image.colorModel === colorModel) {
+    throw new Error(`Cannot convert color, image is already ${colorModel}`);
   }
 
-  const canConvertTo = canConvert.get(image.kind);
-  if (!canConvertTo || !canConvertTo.includes(kind)) {
-    throw new Error(`conversion from ${image.kind} to ${kind} not implemented`);
+  const canConvertTo = canConvert.get(image.colorModel);
+  if (!canConvertTo || !canConvertTo.includes(colorModel)) {
+    throw new Error(
+      `conversion from ${image.colorModel} to ${colorModel} not implemented`,
+    );
   }
 
   const output = getOutputImage(image, options, {
-    newParameters: { kind },
+    newParameters: { colorModel: colorModel },
   });
 
-  if (image.kind === ImageKind.GREY || image.kind === ImageKind.GREYA) {
+  if (
+    image.colorModel === ImageColorModel.GREY ||
+    image.colorModel === ImageColorModel.GREYA
+  ) {
     convertGreyToAny(image, output);
   }
 
-  if (image.kind === ImageKind.RGB || image.kind === ImageKind.RGBA) {
-    if (kind === ImageKind.RGB || kind === ImageKind.RGBA) {
+  if (
+    image.colorModel === ImageColorModel.RGB ||
+    image.colorModel === ImageColorModel.RGBA
+  ) {
+    if (
+      colorModel === ImageColorModel.RGB ||
+      colorModel === ImageColorModel.RGBA
+    ) {
       convertRgbToRgb(image, output);
     } else {
       // GREYA or GREY

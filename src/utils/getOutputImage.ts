@@ -1,4 +1,4 @@
-import { IJS, INewImageOptions } from '../IJS';
+import { IJS, ImageOptions } from '../IJS';
 
 export interface IOutOptions {
   /**
@@ -13,7 +13,7 @@ interface IOutInternalOptions {
    * Parameters that will be combined with the ones from
    * thisImage`.
    */
-  newParameters?: INewImageOptions;
+  newParameters?: ImageOptions;
 }
 
 /**
@@ -37,12 +37,12 @@ export function getOutputImage(
     if (!(out instanceof IJS)) {
       throw new TypeError('out must be an Image object');
     }
-    const requirements: INewImageOptions = Object.assign(
+    const requirements: ImageOptions = Object.assign(
       {
         width: thisImage.width,
         height: thisImage.height,
         depth: thisImage.depth,
-        kind: thisImage.kind,
+        colorModel: thisImage.colorModel,
       },
       newParameters,
     );

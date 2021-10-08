@@ -1,4 +1,4 @@
-import { IJS, ImageKind } from '../IJS';
+import { IJS, ImageColorModel } from '../IJS';
 
 export function readCanvas(canvas: HTMLCanvasElement): IJS {
   const ctx = canvas.getContext('2d');
@@ -6,14 +6,12 @@ export function readCanvas(canvas: HTMLCanvasElement): IJS {
     throw new Error('could not get context from canvas element');
   }
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  return new IJS({
-    width: imageData.width,
-    height: imageData.height,
+  return new IJS(imageData.width, imageData.height, {
     data: new Uint8Array(
       imageData.data.buffer,
       imageData.data.byteOffset,
       imageData.data.byteLength,
     ),
-    kind: ImageKind.RGBA,
+    colorModel: ImageColorModel.RGBA,
   });
 }

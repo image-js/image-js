@@ -1,26 +1,26 @@
-import { ImageKind } from '../IJS';
+import { ImageColorModel } from '../IJS';
 
-interface IKindDefinitions {
+interface ColorModelDefinitions {
   [key: string]: {
     channels: number;
     alpha: boolean;
   };
 }
 
-export const kindDefinitions: IKindDefinitions = {
-  [ImageKind.GREY]: {
+export const colorModelDefinitions: ColorModelDefinitions = {
+  [ImageColorModel.GREY]: {
     channels: 1,
     alpha: false,
   },
-  [ImageKind.GREYA]: {
+  [ImageColorModel.GREYA]: {
     channels: 2,
     alpha: true,
   },
-  [ImageKind.RGB]: {
+  [ImageColorModel.RGB]: {
     channels: 3,
     alpha: false,
   },
-  [ImageKind.RGBA]: {
+  [ImageColorModel.RGBA]: {
     channels: 4,
     alpha: true,
   },

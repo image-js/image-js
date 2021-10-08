@@ -13,11 +13,9 @@ export function convertDepth(image: IJS, newDepth: ColorDepth): IJS {
 }
 
 function convertToUint16(image: IJS): IJS {
-  const newImage = new IJS({
-    width: image.width,
-    height: image.height,
+  const newImage = new IJS(image.width, image.height, {
     depth: ColorDepth.UINT16,
-    kind: image.kind,
+    colorModel: image.colorModel,
   });
 
   for (let i = 0; i < image.data.length; i++) {
@@ -28,11 +26,9 @@ function convertToUint16(image: IJS): IJS {
 }
 
 function convertToUint8(image: IJS): IJS {
-  const newImage = new IJS({
-    width: image.width,
-    height: image.height,
+  const newImage = new IJS(image.width, image.height, {
     depth: ColorDepth.UINT8,
-    kind: image.kind,
+    colorModel: image.colorModel,
   });
 
   for (let i = 0; i < image.data.length; i++) {
