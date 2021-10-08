@@ -1,6 +1,6 @@
 import { encode } from 'jpeg-js';
 
-import { Image, ImageKind, ColorDepth } from '../Image';
+import {IJS, ImageKind, ColorDepth } from '../IJS';
 
 export interface IEncodeJpegOptions {
   quality?: number;

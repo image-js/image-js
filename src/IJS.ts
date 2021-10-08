@@ -70,7 +70,7 @@ const kinds: { [key in ImageKind]: { components: number; alpha: boolean } } = {
   }
 };
 
-export class Image {
+export class IJS{
   /**
    * The number of columns of the image.
    */
@@ -123,14 +123,14 @@ export class Image {
   public readonly data: ImageDataArray;
 
   /**
-   * Construct a new image knowing its dimensions.
+   * Construct a new IJS knowing its dimensions.
    * @param width
    * @param height
    * @param options
    */
   public constructor(width: number, height: number, options?: INewImageOptions);
   /**
-   * Construct a new image only with options.
+   * Construct a new IJS only with options.
    * @param options
    */
   public constructor(options?: INewImageOptions);
@@ -205,11 +205,11 @@ export class Image {
   }
 
   /**
-   * Create a new image base on the properties of an existing one.
+   * Create a new IJS base on the properties of an existing one.
    * @param other - Reference image.
    */
-  public static createFrom(other: Image, options?: INewImageOptions): Image {
-    return new Image({
+  public static createFrom(other: Image, options?: INewImageOptions): IJS {
+    return new IJS({
       width: other.width,
       height: other.height,
       depth: other.depth,
@@ -335,7 +335,7 @@ export class Image {
   /**
    * Create a copy of this image.
    */
-  public clone(): Image {
+  public clone(): IJS {
     return Image.createFrom(this, { data: this.data.slice() });
   }
 
@@ -357,14 +357,14 @@ export class Image {
 
   // FILTERS
 
-  public blur(options: IBlurOptions): Image {
+  public blur(options: IBlurOptions): IJS {
     return blur(this, options);
   }
 
   public directConvolution(
     kernel: number[][],
     options?: IConvolutionOptions
-  ): Image {
+  ): IJS {
     return directConvolution(this, kernel, options);
   }
 
@@ -372,53 +372,53 @@ export class Image {
     kernelX: number[],
     kernelY: number[],
     options?: IConvolutionOptions
-  ): Image {
+  ): IJS {
     return separableConvolution(this, kernelX, kernelY, options);
   }
 
-  public gaussianBlur(options: GaussianBlurOptions): Image {
+  public gaussianBlur(options: GaussianBlurOptions): IJS {
     return gaussianBlur(this, options);
   }
 
   /**
    * Invert the colors of the image.
    */
-  public invert(options?: IInvertOptions): Image {
+  public invert(options?: IInvertOptions): IJS {
     return invert(this, options);
   }
 
   // GEOMETRY
 
-  public resize(options: IResizeOptions): Image {
+  public resize(options: IResizeOptions): IJS {
     return resize(this, options);
   }
 
-  public rotate(angle: number, options?: IRotateOptions): Image {
+  public rotate(angle: number, options?: IRotateOptions): IJS {
     return rotate(this, angle, options);
   }
 
   public transform(
     transformMatrix: number[][],
     options?: ITransformOptions
-  ): Image {
+  ): IJS {
     return transform(this, transformMatrix, options);
   }
 
   // OPERATIONS
 
-  public convertColor(kind: ImageKind, options?: IConvertColorOptions): Image {
+  public convertColor(kind: ImageKind, options?: IConvertColorOptions): IJS {
     return convertColor(this, kind, options);
   }
 
-  public convertDepth(newDepth: ColorDepth): Image {
+  public convertDepth(newDepth: ColorDepth): IJS {
     return convertDepth(this, newDepth);
   }
 
-  public split(): Image[] {
+  public split(): IJS[] {
     return split(this);
   }
 
-  public threshold(options: ThresholdOptions): Image {
+  public threshold(options: ThresholdOptions): IJS {
     return threshold(this, options);
   }
 
@@ -456,7 +456,7 @@ function createPixelArray(
   alpha: boolean,
   depth: ColorDepth,
   maxValue: number
-): ImageDataArray {
+): IJSDataArray {
   const length = channels * size;
   let arr;
   switch (depth) {

@@ -1,4 +1,4 @@
-import { Image, ImageKind } from '../Image';
+import {IJS, ImageKind } from '../IJS';
 
 export interface IWriteCanvasOptions {
   /**

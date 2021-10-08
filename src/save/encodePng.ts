@@ -1,6 +1,6 @@
 import { encode, IPNGEncoderOptions } from 'fast-png';
 
-import { Image } from '../Image';
+import {IJS } from '../IJS';
 
 export type IEncodePngOptions = IPNGEncoderOptions;
 

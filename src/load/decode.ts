@@ -1,4 +1,4 @@
-import { Image } from '../Image';
+import { IJS} from '../IJS';
 
 import checkHeader from './checkHeader';
 import { decodePng } from './decodePng';
@@ -12,7 +12,7 @@ const jpegHeader = [0xff, 0xd8, 0xff];
  * Possible formats: png and jpeg.
  * @param data - data to decode
  */
-export function decode(data: ArrayBufferView): Image {
+export function decode(data: ArrayBufferView): IJS {
   const typedArray = new Uint8Array(
     data.buffer,
     data.byteOffset,

@@ -1,7 +1,7 @@
 import { readFile, readFileSync } from 'fs';
 import { promisify } from 'util';
 
-import { Image } from '../Image';
+import {IJS } from '../IJS';
 
 import { decode } from './decode';
 
@@ -20,6 +20,6 @@ export async function read(path: string): Promise<Image> {
 /**
  * Synchronous version of @see {@link read}.
  */
-export function readSync(path: string): Image {
+export function readSync(path: string): IJS {
   return decode(readFileSync(path));
 }

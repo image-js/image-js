@@ -1,4 +1,4 @@
-import { Image } from '../Image';
+import {IJS } from '../IJS';
 
 import { encodePng, IEncodePngOptions } from './encodePng';
 import { encodeJpeg, IEncodeJpegOptions } from './encodeJpeg';

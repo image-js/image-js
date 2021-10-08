@@ -2,7 +2,7 @@ import { writeFile, writeFileSync } from 'fs';
 import { extname } from 'path';
 import { promisify } from 'util';
 
-import { Image } from '../Image';
+import {IJS } from '../IJS';
 
 import {
   encode,
