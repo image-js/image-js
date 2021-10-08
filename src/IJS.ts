@@ -9,7 +9,7 @@ export enum ColorDepth {
   UINT16 = 16,
 }
 
-export enum ImageKind {
+export enum ImageColorModel {
   GREY = 'GREY',
   GREYA = 'GREYA',
   RGB = 'RGB',
@@ -24,7 +24,7 @@ export enum ImageCoordinates {
   BOTTOM_RIGHT = 'BOTTOM_RIGHT',
 }
 
-export interface INewImageOptions {
+export interface ImageOptions {
   /**
    * Number of bits per value in each channel.
    * Default: `ColorDepth.UINT8`.
@@ -37,38 +37,30 @@ export interface INewImageOptions {
   data?: ImageDataArray;
 
   /**
-   * Height of the image.
-   */
-  height?: number;
-
-  /**
    * Kind of the created image.
    * Default: `ImageKind.RGB`.
    */
-  kind?: ImageKind;
-
-  /**
-   * Width of the image.
-   */
-  width?: number;
+  colorModel?: ImageColorModel;
 }
 
 export type ImageValues = [number, number, number, number];
 
-const kinds: { [key in ImageKind]: { components: number; alpha: boolean } } = {
-  [ImageKind.GREY]: {
+const kinds: {
+  [key in ImageColorModel]: { components: number; alpha: boolean };
+} = {
+  [ImageColorModel.GREY]: {
     components: 1,
     alpha: false,
   },
-  [ImageKind.GREYA]: {
+  [ImageColorModel.GREYA]: {
     components: 1,
     alpha: true,
   },
-  [ImageKind.RGB]: {
+  [ImageColorModel.RGB]: {
     components: 3,
     alpha: false,
   },
-  [ImageKind.RGBA]: {
+  [ImageColorModel.RGBA]: {
     components: 3,
     alpha: true,
   },
@@ -98,7 +90,7 @@ export class IJS {
   /**
    * The kind of the image.
    */
-  public readonly kind: ImageKind;
+  public readonly colorModel: ImageColorModel;
 
   /**
    * The number of color channels in the image, excluding the alpha channel.
@@ -124,7 +116,7 @@ export class IJS {
   /**
    * Typed array holding the image data.
    */
-  public readonly data: ImageDataArray;
+  public readonly data: ImageDataArray; // CHANGE to make
 
   /**
    * Construct a new IJS knowing its dimensions.
@@ -132,31 +124,16 @@ export class IJS {
    * @param height
    * @param options
    */
-  public constructor(width: number, height: number, options?: INewImageOptions);
-  /**
-   * Construct a new IJS only with options.
-   * @param options
-   */
-  public constructor(options?: INewImageOptions);
   public constructor(
-    width?: number | INewImageOptions,
-    height?: number,
-    options: INewImageOptions = {},
+    width: number,
+    height: number,
+    options: ImageOptions = {},
   ) {
-    if (typeof width !== 'number') {
-      options = width || {};
-      width = undefined;
-    }
-
-    if (width === undefined) {
-      width = options.width || 1;
-    }
-
-    if (height === undefined) {
-      height = options.height || 1;
-    }
-
-    const { depth = ColorDepth.UINT8, data, kind = ImageKind.RGB } = options;
+    const {
+      depth = ColorDepth.UINT8,
+      data,
+      colorModel: kind = ImageColorModel.RGB,
+    } = options;
 
     if (width < 1 || !Number.isInteger(width)) {
       throw new RangeError(
@@ -174,7 +151,7 @@ export class IJS {
     this.height = height;
     this.size = width * height;
     this.depth = depth;
-    this.kind = kind;
+    this.colorModel = kind;
 
     const kindDef = kinds[kind];
     this.components = kindDef.components;
@@ -212,12 +189,10 @@ export class IJS {
    * Create a new IJS base on the properties of an existing one.
    * @param other - Reference image.
    */
-  public static createFrom(other: IJS, options?: INewImageOptions): IJS {
-    return new IJS({
-      width: other.width,
-      height: other.height,
+  public static createFrom(other: IJS, options?: ImageOptions): IJS {
+    return new IJS(other.width, other.height, {
       depth: other.depth,
-      kind: other.kind,
+      colorModel: other.colorModel,
       ...options,
     });
   }
@@ -276,7 +251,7 @@ export class IJS {
   width: ${this.width}
   height: ${this.height}
   depth: ${this.depth}
-  kind: ${this.kind}
+  kind: ${this.colorModel}
   channels: ${this.channels}
   data: ${printData(this)}
 }`;
@@ -375,7 +350,10 @@ export class IJS {
   }
   // OPERATIONS
 
-  public convertColor(kind: ImageKind, options?: IConvertColorOptions): IJS {
+  public convertColor(
+    kind: ImageColorModel,
+    options?: IConvertColorOptions,
+  ): IJS {
     return convertColor(this, kind, options);
   }
 
