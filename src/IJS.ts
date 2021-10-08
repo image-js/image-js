@@ -1,4 +1,6 @@
-import { validateChannel, validateValue } from "./utils/validators";
+import { convertColor, IConvertColorOptions } from './operations/convertColor';
+import { convertDepth } from './operations/convertDepth';
+import { validateChannel, validateValue } from './utils/validators';
 
 type ImageDataArray = Uint8Array | Uint16Array;
 
@@ -370,6 +372,15 @@ export class IJS {
       default:
         throw new Error(`Unknow image coordinates ${coordinates}`);
     }
+  }
+  // OPERATIONS
+
+  public convertColor(kind: ImageKind, options?: IConvertColorOptions): IJS {
+    return convertColor(this, kind, options);
+  }
+
+  public convertDepth(newDepth: ColorDepth): IJS {
+    return convertDepth(this, newDepth);
   }
 }
 
