@@ -25,7 +25,7 @@ export async function write(path: string, image: Image): Promise<void>;
  */
 export async function write(
   path: string,
-  image: Image,
+  image: IJS,
   options: IEncodeOptionsPng
 ): Promise<void>;
 /**
@@ -34,12 +34,12 @@ export async function write(
  */
 export async function write(
   path: string,
-  image: Image,
+  image: IJS,
   options: IEncodeOptionsJpeg
 ): Promise<void>;
 export async function write(
   path: string,
-  image: Image,
+  image: IJS,
   options?: IEncodeOptionsPng | IEncodeOptionsJpeg
 ): Promise<void> {
   const toWrite = getDataToWrite(path, image, options);
@@ -51,7 +51,7 @@ export async function write(
  */
 export function writeSync(
   path: string,
-  image: Image,
+  image: IJS,
   options?: IEncodeOptionsPng | IEncodeOptionsJpeg
 ): void {
   const toWrite = getDataToWrite(path, image, options);
@@ -60,7 +60,7 @@ export function writeSync(
 
 function getDataToWrite(
   path: string,
-  image: Image,
+  image: IJS,
   options?: IEncodeOptionsPng | IEncodeOptionsJpeg
 ): Uint8Array {
   let format: ImageFormat;

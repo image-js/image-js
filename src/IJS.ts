@@ -208,7 +208,7 @@ export class IJS{
    * Create a new IJS base on the properties of an existing one.
    * @param other - Reference image.
    */
-  public static createFrom(other: Image, options?: INewImageOptions): IJS {
+  public static createFrom(other: IJS, options?: INewImageOptions): IJS {
     return new IJS({
       width: other.width,
       height: other.height,
@@ -490,7 +490,7 @@ function printData(img: Image): string {
   }`;
 }
 
-function printChannel(img: Image, c: number): string {
+function printChannel(img: IJS, c: number): string {
   const result = [];
   const padding = img.depth === 8 ? 3 : 5;
   for (let i = 0; i < img.height; i++) {

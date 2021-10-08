@@ -15,7 +15,7 @@ export interface IWriteCanvasOptions {
 
 export function writeCanvas(
   canvas: HTMLCanvasElement,
-  image: Image,
+  image: IJS,
   options: IWriteCanvasOptions = {}
 ): void {
   if (image.kind !== ImageKind.RGBA) {

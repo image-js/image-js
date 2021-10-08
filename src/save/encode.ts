@@ -31,15 +31,15 @@ export function encode(image: Image): Uint8Array;
  * @param image - Image to encode.
  * @param options - Format and options passed to the PNG encoder.
  */
-export function encode(image: Image, options: IEncodeOptionsPng): Uint8Array;
+export function encode(image: IJS, options: IEncodeOptionsPng): Uint8Array;
 /**
  * Encodes the image to JPEG.
  * @param image - Image to encode.
  * @param options - Format and options passed to the JPEG encoder.
  */
-export function encode(image: Image, options: IEncodeOptionsJpeg): Uint8Array;
+export function encode(image: IJS, options: IEncodeOptionsJpeg): Uint8Array;
 export function encode(
-  image: Image,
+  image: IJS,
   options: IEncodeOptionsPng | IEncodeOptionsJpeg = defaultPng
 ): Uint8Array {
   if (options.format === ImageFormat.png) {

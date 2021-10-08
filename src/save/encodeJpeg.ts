@@ -7,7 +7,7 @@ export interface IEncodeJpegOptions {
 }
 
 export function encodeJpeg(
-  image: Image,
+  image: IJS,
   options: IEncodeJpegOptions = {}
 ): Uint8Array {
   const { quality = 50 } = options;
