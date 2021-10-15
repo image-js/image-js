@@ -35,10 +35,6 @@
     "url": "https://github.com/image-js/image-js/issues"
   },
   "homepage": "https://github.com/image-js/image-js#readme",
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node"
-  },
   "devDependencies": {
     "@types/jest": "^27.0.2",
     "eslint": "^8.0.1",
