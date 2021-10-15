@@ -3,8 +3,10 @@ import { decode, DecodedPng } from 'fast-png';
 import { IJS, ImageColorModel, ColorDepth } from '../IJS';
 
 /**
- * Decode a png. See the fast-png npm module.
- * @param buffer The data to decode
+ * Decode a PNG. See the fast-png npm module.
+ *
+ * @param buffer - The data to decode.
+ * @returns The decoded image.
  */
 export function decodePng(buffer: Uint8Array): IJS {
   const png = decode(buffer);
@@ -40,6 +42,9 @@ export function decodePng(buffer: Uint8Array): IJS {
   });
 }
 
+/**
+ * @param png
+ */
 function loadPalettePNG(png: DecodedPng): IJS {
   if (!png.palette) {
     throw new Error(

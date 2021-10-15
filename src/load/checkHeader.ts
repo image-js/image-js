@@ -1,6 +1,5 @@
 /**
  * Check the presence of a header in a byte array.
- * @private
  * @param arr - The array to check.
  * @param header - The header to check the presence of.
  */
