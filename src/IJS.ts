@@ -45,7 +45,7 @@ export interface ImageOptions {
 
 export type ImageValues = [number, number, number, number];
 
-const kinds: {
+const colorModels: {
   [key in ImageColorModel]: { components: number; alpha: boolean };
 } = {
   [ImageColorModel.GREY]: {
@@ -88,7 +88,7 @@ export class IJS {
   public readonly depth: ColorDepth;
 
   /**
-   * The kind of the image.
+   * The color model of the image.
    */
   public readonly colorModel: ImageColorModel;
 
@@ -132,7 +132,7 @@ export class IJS {
     const {
       depth = ColorDepth.UINT8,
       data,
-      colorModel: kind = ImageColorModel.RGB,
+      colorModel = ImageColorModel.RGB,
     } = options;
 
     if (width < 1 || !Number.isInteger(width)) {
@@ -151,15 +151,14 @@ export class IJS {
     this.height = height;
     this.size = width * height;
     this.depth = depth;
-    this.colorModel = kind;
+    this.colorModel = colorModel;
 
-    const kindDef = kinds[kind];
+    const kindDef = colorModels[colorModel];
     this.components = kindDef.components;
     this.channels = kindDef.components + Number(kindDef.alpha);
     this.alpha = kindDef.alpha;
 
-    const maxValue = 2 ** depth - 1;
-    this.maxValue = maxValue;
+    this.maxValue = 2 ** depth - 1;
 
     if (data === undefined) {
       this.data = createPixelArray(
@@ -167,7 +166,7 @@ export class IJS {
         this.channels,
         this.alpha,
         this.depth,
-        maxValue,
+        this.maxValue,
       );
     } else {
       if (depth === ColorDepth.UINT8 && data instanceof Uint16Array) {
@@ -361,7 +360,9 @@ export class IJS {
     return convertDepth(this, newDepth);
   }
 }
-
+/**
+ * Create data array and set alpha channel to max value if applicable.
+ */
 function createPixelArray(
   size: number,
   channels: number,
