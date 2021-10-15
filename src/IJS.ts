@@ -116,7 +116,7 @@ export class IJS {
   /**
    * Typed array holding the image data.
    */
-  public readonly data: ImageDataArray; // CHANGE to make
+  private readonly data: ImageDataArray;
 
   /**
    * Construct a new IJS knowing its dimensions.
