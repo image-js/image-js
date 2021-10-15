@@ -38,13 +38,10 @@ export function writeCanvas(
   if (ctx === null) {
     throw new Error('could not get context from canvas element');
   }
+  const data = image.getRawImage().data;
   ctx.putImageData(
     new ImageData(
-      new Uint8ClampedArray(
-        image.data.buffer,
-        image.data.byteOffset,
-        image.data.byteLength,
-      ),
+      new Uint8ClampedArray(data.buffer, data.byteOffset, data.byteLength),
       image.width,
       image.height,
     ),

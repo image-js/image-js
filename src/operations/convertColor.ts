@@ -76,8 +76,15 @@ export function convertColor(
 
   return output;
 }
-
+/**
+ * Copy alpha channel of source to dest.
+ * @param source - Source image.
+ * @param dest - Destination image.
+ */
 function copyAlpha(source: IJS, dest: IJS): void {
+  if (source.size !== dest.size) {
+    throw new Error('source and destination have different sizes');
+  }
   if (!source.alpha) {
     throw new Error('source image does not have alpha');
   }
@@ -85,35 +92,27 @@ function copyAlpha(source: IJS, dest: IJS): void {
     throw new Error('destination does not have alpha');
   }
 
-  for (
-    let i = dest.channels - 1, j = source.channels - 1;
-    i < dest.data.length;
-    i += dest.channels, j += source.channels
-  ) {
-    dest.data[i] = source.data[j];
+  for (let i = 0; i < dest.size; i++) {
+    dest.setValueByIndex(
+      i,
+      dest.channels - 1,
+      source.getValueByIndex(i, source.channels - 1),
+    );
   }
 }
 
 function convertGreyToAny(image: IJS, newImage: IJS): void {
-  for (
-    let i = 0, iNew = 0;
-    i < image.data.length;
-    i += image.channels, iNew += newImage.channels
-  ) {
+  for (let i = 0; i < image.size; i++) {
     for (let j = 0; j < newImage.components; j++) {
-      newImage.data[iNew + j] = image.data[i];
+      newImage.setValueByIndex(i, j, image.getValueByIndex(i, j));
     }
   }
 }
 
 function convertRgbToRgb(image: IJS, newImage: IJS): void {
-  for (
-    let i = 0, iNew = 0;
-    i < image.data.length;
-    i += image.channels, iNew += newImage.channels
-  ) {
+  for (let i = 0; i < image.size; i++) {
     for (let j = 0; j < 3; j++) {
-      newImage.data[iNew + j] = image.data[i + j];
+      newImage.setValueByIndex(i, j, image.getValueByIndex(i, j));
     }
   }
 }
@@ -121,12 +120,16 @@ function convertRgbToRgb(image: IJS, newImage: IJS): void {
 function convertRgbToGrey(image: IJS, newImage: IJS): void {
   for (
     let i = 0, iNew = 0;
-    i < image.data.length;
+    i < image.size;
     i += image.channels, iNew += newImage.channels
   ) {
-    const r = image.data[i];
-    const g = image.data[i + 1];
-    const b = image.data[i + 2];
-    newImage.data[iNew] = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+    const r = image.getValueByIndex(i, 0);
+    const g = image.getValueByIndex(i, 1);
+    const b = image.getValueByIndex(i, 2);
+    newImage.setValueByIndex(
+      iNew,
+      0,
+      Math.round(0.299 * r + 0.587 * g + 0.114 * b),
+    );
   }
 }

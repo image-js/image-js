@@ -18,10 +18,11 @@ function convertToUint16(image: IJS): IJS {
     colorModel: image.colorModel,
   });
 
-  for (let i = 0; i < image.data.length; i++) {
-    newImage.data[i] = image.data[i] << 8;
+  for (let i = 0; i < image.size; i++) {
+    for (let j = 0; j < newImage.components; j++) {
+      newImage.setValueByIndex(i, j, image.getValueByIndex(i, j) << 8);
+    }
   }
-
   return newImage;
 }
 
@@ -30,10 +31,10 @@ function convertToUint8(image: IJS): IJS {
     depth: ColorDepth.UINT8,
     colorModel: image.colorModel,
   });
-
-  for (let i = 0; i < image.data.length; i++) {
-    newImage.data[i] = image.data[i] >> 8;
+  for (let i = 0; i < image.size; i++) {
+    for (let j = 0; j < newImage.components; j++) {
+      newImage.setValueByIndex(i, j, image.getValueByIndex(i, j) >> 8);
+    }
   }
-
   return newImage;
 }

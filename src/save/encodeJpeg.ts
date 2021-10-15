@@ -20,6 +20,6 @@ export function encodeJpeg(
   }
 
   // Image data after depth conversion will always be UInt8Array
-  const buffer = encode(image, quality).data;
+  const buffer = encode(image.getRawImage(), quality).data;
   return new Uint8Array(buffer, buffer.byteOffset, buffer.byteLength);
 }

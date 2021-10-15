@@ -263,6 +263,13 @@ export class IJS {
     this.data[index * this.channels + channel] = value;
   }
 
+  /**
+   * Return the raw image data.
+   */
+  public getRawImage() {
+    return { width: this.width, height: this.height, data: this.data };
+  }
+
   public [Symbol.for('nodejs.util.inspect.custom')](): string {
     return `Image {
   width: ${this.width}
