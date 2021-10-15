@@ -2,8 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
-    "outDir": "lib",
-    "declaration": true
+    "declaration": true,
+    "declarationMap": true
   },
-  "exclude": ["./src/**/__tests__"]
+  "exclude": ["./src/**/__tests__", "./jest.setup.ts", "./test/**/*"]
 }

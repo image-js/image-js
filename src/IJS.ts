@@ -1,19 +1,15 @@
 import { convertColor, IConvertColorOptions } from './operations/convertColor';
 import { convertDepth } from './operations/convertDepth';
+import { ImageColorModel, colorModels } from './utils/colorModels';
 import { validateChannel, validateValue } from './utils/validators';
+
+export { ImageColorModel };
 
 type ImageDataArray = Uint8Array | Uint16Array | Uint8ClampedArray;
 
 export enum ColorDepth {
   UINT8 = 8,
   UINT16 = 16,
-}
-
-export enum ImageColorModel {
-  GREY = 'GREY',
-  GREYA = 'GREYA',
-  RGB = 'RGB',
-  RGBA = 'RGBA',
 }
 
 export enum ImageCoordinates {
@@ -37,34 +33,13 @@ export interface ImageOptions {
   data?: ImageDataArray;
 
   /**
-   * Kind of the created image.
-   * Default: `ImageKind.RGB`.
+   * Color model of the created image.
+   * Default: `ImageColorModel.RGB`.
    */
   colorModel?: ImageColorModel;
 }
 
 export type ImageValues = [number, number, number, number];
-
-const colorModels: {
-  [key in ImageColorModel]: { components: number; alpha: boolean };
-} = {
-  [ImageColorModel.GREY]: {
-    components: 1,
-    alpha: false,
-  },
-  [ImageColorModel.GREYA]: {
-    components: 1,
-    alpha: true,
-  },
-  [ImageColorModel.RGB]: {
-    components: 3,
-    alpha: false,
-  },
-  [ImageColorModel.RGBA]: {
-    components: 3,
-    alpha: true,
-  },
-};
 
 export class IJS {
   /**
@@ -153,10 +128,10 @@ export class IJS {
     this.depth = depth;
     this.colorModel = colorModel;
 
-    const kindDef = colorModels[colorModel];
-    this.components = kindDef.components;
-    this.channels = kindDef.components + Number(kindDef.alpha);
-    this.alpha = kindDef.alpha;
+    const colorModelDef = colorModels[colorModel];
+    this.components = colorModelDef.components;
+    this.alpha = colorModelDef.alpha;
+    this.channels = colorModelDef.channels;
 
     this.maxValue = 2 ** depth - 1;
 
@@ -275,7 +250,7 @@ export class IJS {
   width: ${this.width}
   height: ${this.height}
   depth: ${this.depth}
-  kind: ${this.colorModel}
+  colorModel: ${this.colorModel}
   channels: ${this.channels}
   data: ${printData(this)}
 }`;
@@ -375,10 +350,10 @@ export class IJS {
   // OPERATIONS
 
   public convertColor(
-    kind: ImageColorModel,
+    colorModel: ImageColorModel,
     options?: IConvertColorOptions,
   ): IJS {
-    return convertColor(this, kind, options);
+    return convertColor(this, colorModel, options);
   }
 
   public convertDepth(newDepth: ColorDepth): IJS {

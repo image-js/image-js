@@ -22,7 +22,7 @@
     "prettier": "prettier --check src",
     "prettier-write": "prettier --write src",
     "test": "npm run test-only && npm run eslint && npm run prettier && npm run check-types",
-    "test-only": "jest --coverage",
+    "test-only": "jest",
     "tsc": "npm run clean && npm run tsc-cjs && npm run tsc-esm",
     "tsc-cjs": "tsc --project tsconfig.cjs.json",
     "tsc-esm": "tsc --project tsconfig.esm.json"
