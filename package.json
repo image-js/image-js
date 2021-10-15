@@ -38,7 +38,7 @@
   "devDependencies": {
     "@types/jest": "^27.0.2",
     "eslint": "^8.0.1",
-    "eslint-config-cheminfo-typescript": "^10.0.0",
+    "eslint-config-cheminfo-typescript": "^10.1.0",
     "jest": "^27.2.5",
     "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
