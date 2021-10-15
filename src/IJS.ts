@@ -197,12 +197,12 @@ export class IJS {
   }
 
   /**
-   * Get all the values of a pixel.
+   * Get all the channels of a pixel.
    * @param y - Row index.
    * @param x - Column index.
-   * @returns Values of the pixel.
+   * @returns Channels of the pixel.
    */
-  public get(y: number, x: number): number[] {
+  public getPixel(y: number, x: number): number[] {
     const result = [];
     const start = (y * this.width + x) * this.channels;
     for (let i = 0; i < this.channels; i++) {
@@ -212,12 +212,12 @@ export class IJS {
   }
 
   /**
-   * Set all the values of a pixel.
+   * Set all the channels of a pixel.
    * @param y - Row index.
    * @param x - Column index.
-   * @param value - Values of the pixel to set.
+   * @param value - New channel values of the pixel to set.
    */
-  public set(y: number, x: number, value: number[]): void {
+  public setPixel(y: number, x: number, value: number[]): void {
     const start = (y * this.width + x) * this.channels;
     for (let i = 0; i < this.channels; i++) {
       this.data[start + i] = value[i];
@@ -225,7 +225,7 @@ export class IJS {
   }
 
   /**
-   * Get the value of a specific pixel channel.
+   * Get the value of a specific pixel channel. Select pixel using coordinates.
    * @param y - Row index.
    * @param x - Column index.
    * @param channel - Channel index.
@@ -235,7 +235,7 @@ export class IJS {
   }
 
   /**
-   * Set the value of a specific pixel channel.
+   * Set the value of a specific pixel channel. Select pixel using coordinates.
    * @param y - Row index.
    * @param x - Column index.
    * @param channel - Channel index.
@@ -243,6 +243,24 @@ export class IJS {
    */
   public setValue(y: number, x: number, channel: number, value: number): void {
     this.data[(y * this.width + x) * this.channels + channel] = value;
+  }
+
+  /**
+   * Get the value of a specific pixel channel. Select pixel using index.
+   * @param index - Index of the pixel.
+   * @param channel - Channel index.
+   */
+  public getValueByIndex(index: number, channel: number): number {
+    return this.data[index * this.channels + channel];
+  }
+  /**
+   * Set the value of a specific pixel channel. Select pixel using index.
+   * @param index - Index of the pixel.
+   * @param channel - Channel index.
+   * @param value - Value to set.
+   */
+  public setValueByIndex(index: number, channel: number, value: number): void {
+    this.data[index * this.channels + channel] = value;
   }
 
   public [Symbol.for('nodejs.util.inspect.custom')](): string {
