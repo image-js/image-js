@@ -31,7 +31,7 @@ export function toMatchImage(
   } else if (received.colorModel !== expectedImage.colorModel) {
     error = `Expected image color model to be ${expectedImage.colorModel}, but got ${received.colorModel}`;
   } else {
-    for (let row = 0; row < received.height; row++) {
+    rowsLoop: for (let row = 0; row < received.height; row++) {
       for (let col = 0; col < received.width; col++) {
         const receivedPixel = received.getPixel(row, col);
         const expectedPixel = expectedImage.getPixel(row, col);
@@ -39,7 +39,7 @@ export function toMatchImage(
           error = `Expected pixel at (${col}, ${row}) to be [${expectedPixel.join(
             ', ',
           )}], but got [${receivedPixel.join(', ')}]`;
-          break;
+          break rowsLoop;
         }
       }
     }
