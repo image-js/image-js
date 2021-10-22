@@ -47,6 +47,8 @@
   },
   "dependencies": {
     "fast-png": "^6.1.0",
-    "jpeg-js": "^0.4.3"
+    "jpeg-js": "^0.4.3",
+    "ml-convolution": "^2.0.0",
+    "ml-matrix": "^6.8.0"
   }
 }

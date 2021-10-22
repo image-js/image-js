@@ -1,6 +1,6 @@
 import { IJS, ImageOptions } from '../IJS';
 
-export interface IOutOptions {
+export interface OutOptions {
   /**
    * Image to use as the output.
    * The image must have compatible properties or the method will throw.
@@ -8,7 +8,7 @@ export interface IOutOptions {
   out?: IJS;
 }
 
-interface IOutInternalOptions {
+interface OutInternalOptions {
   /**
    * Parameters that will be combined with the ones from
    * `thisImage`.
@@ -25,8 +25,8 @@ interface IOutInternalOptions {
  */
 export function getOutputImage(
   thisImage: IJS,
-  options: IOutOptions = {},
-  internalOptions: IOutInternalOptions = {},
+  options: OutOptions = {},
+  internalOptions: OutInternalOptions = {},
 ): IJS {
   const { out } = options;
   const { newParameters } = internalOptions;
