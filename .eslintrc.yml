@@ -1,3 +1,4 @@
+root: true
 extends: [cheminfo-typescript, cheminfo-typescript/jsdoc]
 rules:
   '@typescript-eslint/restrict-template-expressions': off

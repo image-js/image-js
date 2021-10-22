@@ -5,5 +5,11 @@
     "declaration": true,
     "declarationMap": true
   },
-  "exclude": ["./src/**/__tests__", "./jest.setup.ts", "./test/**/*"]
+  "exclude": [
+    "./demo/**/*",
+    "./src/**/__tests__",
+    "./jest.setup.ts",
+    "./test/**/*",
+    "./vite.config.ts"
+  ]
 }

@@ -1,11 +1,8 @@
-import { readFile, readFileSync } from 'fs';
-import { promisify } from 'util';
+import fs from 'fs';
 
 import { IJS } from '../IJS';
 
 import { decode } from './decode';
-
-const readFilePromise = promisify(readFile);
 
 /**
  * Read an image from the disk.
@@ -15,7 +12,7 @@ const readFilePromise = promisify(readFile);
  * @returns IJS instance.
  */
 export async function read(path: string | URL): Promise<IJS> {
-  const data = await readFilePromise(path);
+  const data = await fs.promises.readFile(path);
   return decode(data);
 }
 
@@ -26,5 +23,5 @@ export async function read(path: string | URL): Promise<IJS> {
  * @returns IJS instance.
  */
 export function readSync(path: string | URL): IJS {
-  return decode(readFileSync(path));
+  return decode(fs.readFileSync(path));
 }

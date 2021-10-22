@@ -1,6 +1,5 @@
-import { writeFile, writeFileSync } from 'fs';
-import { extname } from 'path';
-import { promisify } from 'util';
+import fs from 'fs';
+import path from 'path';
 
 import { IJS } from '../IJS';
 
@@ -10,8 +9,6 @@ import {
   EncodeOptionsPng,
   EncodeOptionsJpeg,
 } from './encode';
-
-const writeFilePromise = promisify(writeFile);
 
 /**
  * Write an image to the disk.
@@ -37,17 +34,26 @@ export async function write(
   image: IJS,
   options: EncodeOptionsJpeg,
 ): Promise<void>;
+/**
+ * @param path
+ * @param image
+ * @param options
+ */
 export async function write(
   path: string,
   image: IJS,
   options?: EncodeOptionsPng | EncodeOptionsJpeg,
 ): Promise<void> {
   const toWrite = getDataToWrite(path, image, options);
-  await writeFilePromise(path, toWrite);
+  await fs.promises.writeFile(path, toWrite);
 }
 
 /**
  * Synchronous version of @see {@link write}.
+ *
+ * @param path
+ * @param image
+ * @param options
  */
 export function writeSync(
   path: string,
@@ -55,17 +61,22 @@ export function writeSync(
   options?: EncodeOptionsPng | EncodeOptionsJpeg,
 ): void {
   const toWrite = getDataToWrite(path, image, options);
-  writeFileSync(path, toWrite);
+  fs.writeFileSync(path, toWrite);
 }
 
+/**
+ * @param destinationPath
+ * @param image
+ * @param options
+ */
 function getDataToWrite(
-  path: string,
+  destinationPath: string,
   image: IJS,
   options?: EncodeOptionsPng | EncodeOptionsJpeg,
 ): Uint8Array {
   let format: ImageFormat;
   if (options === undefined) {
-    const extension = extname(path).slice(1).toLowerCase();
+    const extension = path.extname(destinationPath).slice(1).toLowerCase();
     if (extension === 'png') {
       format = ImageFormat.png;
       return encode(image, { format });

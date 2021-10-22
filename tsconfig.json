@@ -5,7 +5,15 @@
     "outDir": "lib",
     "sourceMap": true,
     "strict": true,
-    "target": "es2020"
+    "target": "es2020",
+    "jsx": "react-jsx",
+    "useUnknownInCatchVariables": false
   },
-  "include": ["./src/**/*", "./jest.setup.ts", "./test/**/*"]
+  "include": [
+    "./demo/**/*",
+    "./jest.setup.ts",
+    "./src/**/*",
+    "./test/**/*",
+    "./vite.config.ts"
+  ]
 }
