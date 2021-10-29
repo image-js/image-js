@@ -21,4 +21,5 @@ export type TestImagePath =
   | 'opencv/testRotate.png'
   | 'opencv/testRotateBicubic.png'
   | 'opencv/testRotateBilinear.png'
-  | 'opencv/testTranslation.png';
+  | 'opencv/testTranslation.png'
+  | 'grayscale_by_zimmyrose.png';

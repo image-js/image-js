@@ -119,3 +119,6 @@ dist
 
 lib
 lib-esm
+
+# debug images
+src/**/*.png

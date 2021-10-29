@@ -21,6 +21,11 @@ export interface ConvolutionOptions {
   out?: IJS;
 }
 
+/**
+ * @param image
+ * @param kernel
+ * @param options
+ */
 export function directConvolution(
   image: IJS,
   kernel: number[][],
@@ -56,6 +61,12 @@ export function directConvolution(
   return newImage;
 }
 
+/**
+ * @param image
+ * @param kernelX
+ * @param kernelY
+ * @param options
+ */
 export function separableConvolution(
   image: IJS,
   kernelX: number[],
@@ -78,7 +89,6 @@ export function separableConvolution(
 
   const { width, height, channels } = image;
 
-  const hFactor = channels * width;
   const cutWidth = width - doubleKernelOffsetX;
 
   const newImage = IJS.createFrom(image);
@@ -111,13 +121,13 @@ export function separableConvolution(
     }
 
     for (let column = 0; column < cutWidth; column++) {
-      const wOffset = (column + kernelOffsetX) * channels;
-      for (let y = 0; y < height; y++) {
-        columnData[y] = convolvedData[y * cutWidth + column];
+      const wOffset = column + kernelOffsetX;
+      for (let row = 0; row < height; row++) {
+        columnData[row] = convolvedData[row * cutWidth + column];
       }
       const result = columnConvolution.convolve(columnData);
       for (let i = 0; i < result.length; i++) {
-        const index = (i + kernelOffsetY) * hFactor + wOffset;
+        const index = (i + kernelOffsetY) * width + wOffset;
         newImage.setValueByIndex(index, channel, round(clamp(result[i])));
       }
     }
@@ -133,11 +143,11 @@ export function separableConvolution(
   for (let channel = 0; channel < channels; channel++) {
     for (let bY = 0; bY < height; bY++) {
       for (let bX = 0; bX < kernelOffsetX; bX++) {
-        const index = (bY * width + bX) * channels;
+        const index = bY * width + bX;
 
         const bXopp = width - bX - 1;
         const bYopp = height - bY - 1;
-        const indexOpp = (bYopp * width + bXopp) * channels;
+        const indexOpp = bYopp * width + bXopp;
         newImage.setValueByIndex(
           index,
           channel,
@@ -172,10 +182,10 @@ export function separableConvolution(
   for (let channel = 0; channel < channels; channel++) {
     for (let bX = 0; bX < width; bX++) {
       for (let bY = 0; bY < kernelOffsetY; bY++) {
-        const index = (bY * width + bX) * channels;
+        const index = bY * width + bX;
         const bXopp = width - bX - 1;
         const bYopp = height - bY - 1;
-        const indexOpp = (bYopp * width + bXopp) * channels;
+        const indexOpp = bYopp * width + bXopp;
 
         newImage.setValueByIndex(
           index,
@@ -210,9 +220,18 @@ export function separableConvolution(
   return newImage;
 }
 
+/**
+ * @param column
+ * @param row
+ * @param channel
+ * @param image
+ * @param kernel
+ * @param interpolateBorder
+ * @param clamp
+ */
 function computeConvolutionPixel(
-  x: number,
-  y: number,
+  column: number,
+  row: number,
   channel: number,
   image: IJS,
   kernel: number[][],
@@ -231,8 +250,8 @@ function computeConvolutionPixel(
       val +=
         kernelValue *
         interpolateBorder(
-          x + kX - kernelOffsetX,
-          y + kY - kernelOffsetY,
+          column + kX - kernelOffsetX,
+          row + kY - kernelOffsetY,
           channel,
           image,
         );
@@ -242,6 +261,10 @@ function computeConvolutionPixel(
   return round(clamp(val));
 }
 
+/**
+ * @param kernelX
+ * @param kernelY
+ */
 function normalizeSeparatedKernel(
   kernelX: number[],
   kernelY: number[],
