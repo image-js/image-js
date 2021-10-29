@@ -9,8 +9,8 @@ export enum BorderType {
 }
 
 export type BorderInterpolationFunction = (
-  x: number,
-  y: number,
+  column: number,
+  row: number,
   channel: number,
   image: IJS,
 ) => number;
@@ -47,13 +47,13 @@ function checkRange(point: number, length: number): void {
 
 function getInterpolateConstant(value: number): BorderInterpolationFunction {
   return function interpolateConstant(
-    x: number,
-    y: number,
+    column: number,
+    row: number,
     channel: number,
     image: IJS,
   ): number {
-    const newX = interpolateConstantPoint(x, image.width);
-    const newY = interpolateConstantPoint(y, image.height);
+    const newX = interpolateConstantPoint(column, image.width);
+    const newY = interpolateConstantPoint(row, image.height);
     if (newX === -1 || newY === -1) {
       return value;
     }
@@ -72,14 +72,14 @@ export function interpolateConstantPoint(
 }
 
 function interpolateReplicate(
-  x: number,
-  y: number,
+  column: number,
+  row: number,
   channel: number,
   image: IJS,
 ): number {
   return image.getValue(
-    interpolateReplicatePoint(y, image.height),
-    interpolateReplicatePoint(x, image.width),
+    interpolateReplicatePoint(row, image.height),
+    interpolateReplicatePoint(column, image.width),
     channel,
   );
 }
@@ -100,14 +100,14 @@ export function interpolateReplicatePoint(
 }
 
 function interpolateReflect(
-  x: number,
-  y: number,
+  column: number,
+  row: number,
   channel: number,
   image: IJS,
 ): number {
   return image.getValue(
-    interpolateReflectPoint(y, image.height),
-    interpolateReflectPoint(x, image.width),
+    interpolateReflectPoint(row, image.height),
+    interpolateReflectPoint(column, image.width),
     channel,
   );
 }
@@ -125,14 +125,14 @@ export function interpolateReflectPoint(point: number, length: number): number {
 }
 
 function interpolateWrap(
-  x: number,
-  y: number,
+  column: number,
+  row: number,
   channel: number,
   image: IJS,
 ): number {
   return image.getValue(
-    interpolateWrapPoint(y, image.height),
-    interpolateWrapPoint(x, image.width),
+    interpolateWrapPoint(row, image.height),
+    interpolateWrapPoint(column, image.width),
     channel,
   );
 }
@@ -150,14 +150,14 @@ export function interpolateWrapPoint(point: number, length: number): number {
 }
 
 function interpolateReflect101(
-  x: number,
-  y: number,
+  column: number,
+  row: number,
   channel: number,
   image: IJS,
 ): number {
   return image.getValue(
-    interpolateReflect101Point(y, image.height),
-    interpolateReflect101Point(x, image.width),
+    interpolateReflect101Point(row, image.height),
+    interpolateReflect101Point(column, image.width),
     channel,
   );
 }

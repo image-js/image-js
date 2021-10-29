@@ -10,7 +10,9 @@ const jpegHeader = [0xff, 0xd8, 0xff];
 /**
  * Decode input data. Data format is automatically detected.
  * Possible formats: png and jpeg.
- * @param data - data to decode
+ *
+ * @param data - Data to decode.
+ * @returns The decoded image.
  */
 export function decode(data: ArrayBufferView): IJS {
   const typedArray = new Uint8Array(

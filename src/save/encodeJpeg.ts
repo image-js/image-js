@@ -6,6 +6,13 @@ export interface EncodeJpegOptions {
   quality?: number;
 }
 
+/**
+ * Creates a JPEG buffer from an image.
+ *
+ * @param image - The image instance.
+ * @param options - JPEG encoding options.
+ * @returns The buffer.
+ */
 export function encodeJpeg(
   image: IJS,
   options: EncodeJpegOptions = {},

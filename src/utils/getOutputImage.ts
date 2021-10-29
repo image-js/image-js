@@ -19,6 +19,7 @@ interface OutInternalOptions {
 /**
  * Use this function to support getting the output image of an algorithm from
  * user-supplied options.
+ *
  * @param thisImage - Current image on which the algorithm is applied.
  * @param options - Options object received by the algorithm.
  * @param internalOptions - Some additional private options.
@@ -34,7 +35,7 @@ export function getOutputImage(
     return IJS.createFrom(thisImage, newParameters);
   } else {
     if (!(out instanceof IJS)) {
-      throw new TypeError('out must be an Image object');
+      throw new TypeError('out must be an IJS object');
     }
     const requirements: ImageOptions = Object.assign(
       {

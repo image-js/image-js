@@ -5,6 +5,11 @@ export interface ConvertColorOptions {
   out?: IJS;
 }
 
+/**
+ * @param image
+ * @param colorModel
+ * @param options
+ */
 export function convertColor(
   image: IJS,
   colorModel: ImageColorModel,
@@ -78,6 +83,7 @@ export function convertColor(
 }
 /**
  * Copy alpha channel of source to dest.
+ *
  * @param source - Source image.
  * @param dest - Destination image.
  */
@@ -101,14 +107,22 @@ function copyAlpha(source: IJS, dest: IJS): void {
   }
 }
 
+/**
+ * @param image
+ * @param newImage
+ */
 function convertGreyToAny(image: IJS, newImage: IJS): void {
   for (let i = 0; i < image.size; i++) {
     for (let j = 0; j < newImage.components; j++) {
-      newImage.setValueByIndex(i, j, image.getValueByIndex(i, j));
+      newImage.setValueByIndex(i, j, image.getValueByIndex(i, 0));
     }
   }
 }
 
+/**
+ * @param image
+ * @param newImage
+ */
 function convertRgbToRgb(image: IJS, newImage: IJS): void {
   for (let i = 0; i < image.size; i++) {
     for (let j = 0; j < 3; j++) {
@@ -117,17 +131,17 @@ function convertRgbToRgb(image: IJS, newImage: IJS): void {
   }
 }
 
+/**
+ * @param image
+ * @param newImage
+ */
 function convertRgbToGrey(image: IJS, newImage: IJS): void {
-  for (
-    let i = 0, iNew = 0;
-    i < image.size;
-    i += image.channels, iNew += newImage.channels
-  ) {
+  for (let i = 0; i < image.size; i++) {
     const r = image.getValueByIndex(i, 0);
     const g = image.getValueByIndex(i, 1);
     const b = image.getValueByIndex(i, 2);
     newImage.setValueByIndex(
-      iNew,
+      i,
       0,
       Math.round(0.299 * r + 0.587 * g + 0.114 * b),
     );

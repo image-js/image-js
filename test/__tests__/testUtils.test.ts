@@ -1,4 +1,4 @@
-import { IJS } from '../../src';
+import { ColorDepth, IJS } from '../../src';
 
 describe('load', () => {
   it('should load the image synchronously', () => {
@@ -35,6 +35,14 @@ describe('createGreyImage', () => {
     expect(image.width).toBe(3);
     expect(image.height).toBe(4);
     expect(image.getPixel(1, 0)).toStrictEqual([4]);
+  });
+
+  it('should create a 16-bit image', () => {
+    const image = testUtils.createGreyImage([[1, 32768]], {
+      depth: ColorDepth.UINT16,
+    });
+    expect(image.depth).toBe(ColorDepth.UINT16);
+    expect(image.getValueByIndex(1, 0)).toBe(32768);
   });
 
   it('should throw if row length is not consistent (array)', () => {
@@ -85,6 +93,14 @@ describe('createRgbImage', () => {
     expect(image.getPixel(1, 0)).toStrictEqual([4, 5, 6]);
   });
 
+  it('should create a 16-bit image', () => {
+    const image = testUtils.createRgbImage([[1, 2, 32768]], {
+      depth: ColorDepth.UINT16,
+    });
+    expect(image.depth).toBe(ColorDepth.UINT16);
+    expect(image.getPixel(0, 0)).toStrictEqual([1, 2, 32768]);
+  });
+
   it('should throw if row length is not a multiple of 3', () => {
     expect(() =>
       testUtils.createRgbImage([
@@ -117,6 +133,14 @@ describe('createRgbaImage', () => {
     expect(image.width).toBe(2);
     expect(image.height).toBe(2);
     expect(image.getPixel(0, 1)).toStrictEqual([4, 5, 6, 128]);
+  });
+
+  it('should create a 16-bit image', () => {
+    const image = testUtils.createRgbaImage([[1, 2, 3, 32768]], {
+      depth: ColorDepth.UINT16,
+    });
+    expect(image.depth).toBe(ColorDepth.UINT16);
+    expect(image.getPixel(0, 0)).toStrictEqual([1, 2, 3, 32768]);
   });
 
   it('should throw if row length is not a multiple of 4', () => {

@@ -6,6 +6,7 @@ import { IJS, ImageColorModel } from '../IJS';
  * Decode a jpeg. See the jpeg-js npm module.
  *
  * @param buffer - The data to decode.
+ * @returns The decoded image.
  */
 export function decodeJpeg(buffer: Uint8Array): IJS {
   const jpeg = decode(buffer, { useTArray: true });

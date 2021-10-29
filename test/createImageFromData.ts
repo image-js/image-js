@@ -1,25 +1,52 @@
-import { IJS, ImageColorModel } from '../src';
+import {
+  ColorDepth,
+  IJS,
+  ImageColorModel,
+  ImageDataArray,
+  ImageOptions,
+} from '../src';
 import { colorModels } from '../src/utils/colorModels';
 
+export type CreateImageOptions = Pick<ImageOptions, 'depth'>;
+
+/**
+ * Create a new IJS object from image data.
+ *
+ * @param data - Image data.
+ * @param colorModel - Image color model.
+ * @param options - Additional options to create the image.
+ * @returns The new image.
+ */
 export function createImageFromData(
   data: number[][] | string,
   colorModel: ImageColorModel,
+  options: CreateImageOptions = {},
 ): IJS {
+  const { depth = ColorDepth.UINT8 } = options;
   if (Array.isArray(data)) {
-    return createImageFrom2DArray(data, colorModel);
+    return createImageFrom2DArray(data, colorModel, depth);
   } else {
-    return createImageFromString(data, colorModel);
+    return createImageFromString(data, colorModel, depth);
   }
 }
 
+/**
+ * Create a new IJS object from a 2D matrix.
+ *
+ * @param data - Image data.
+ * @param colorModel - Image color model.
+ * @param depth - Color depth.
+ * @returns - The new image.
+ */
 function createImageFrom2DArray(
   data: number[][],
   colorModel: ImageColorModel,
+  depth: ColorDepth,
 ): IJS {
   const { channels } = colorModels[colorModel];
   const height = data.length;
   const width = data[0].length / channels;
-  const imageData = new Uint8Array(height * width * channels);
+  const imageData = createDataArray(height * width * channels, depth);
   for (let row = 0; row < height; row++) {
     if (data[row].length % channels !== 0) {
       throw new Error(
@@ -42,19 +69,31 @@ function createImageFrom2DArray(
     }
   }
   return new IJS(width, height, {
-    depth: 8,
+    depth,
     colorModel,
     data: imageData,
   });
 }
 
-function createImageFromString(data: string, colorModel: ImageColorModel): IJS {
+/**
+ * Create a new IJS object from data encoded in a string.
+ *
+ * @param data - Image data.
+ * @param colorModel - Image color model.
+ * @param depth - Color depth.
+ * @returns - The new image.
+ */
+function createImageFromString(
+  data: string,
+  colorModel: ImageColorModel,
+  depth: ColorDepth,
+): IJS {
   const { channels } = colorModels[colorModel];
   const trimmed = data.trim();
   const lines = trimmed.split('\n');
   const height = lines.length;
   const width = lines[0].trim().split(/[^0-9]+/).length / channels;
-  const imageData = new Uint8Array(height * width * channels);
+  const imageData = createDataArray(height * width * channels, depth);
   for (let row = 0; row < height; row++) {
     const line = lines[row].trim();
     const values = line.split(/[^0-9]+/).map((v) => parseInt(v, 10));
@@ -79,8 +118,23 @@ function createImageFromString(data: string, colorModel: ImageColorModel): IJS {
     }
   }
   return new IJS(width, height, {
-    depth: 8,
+    depth,
     colorModel,
     data: imageData,
   });
+}
+
+/**
+ * Create a new data typed array for an image.
+ *
+ * @param size - Total size of the data array.
+ * @param depth - Color depth.
+ * @returns The created array.
+ */
+function createDataArray(size: number, depth: ColorDepth): ImageDataArray {
+  if (depth === ColorDepth.UINT8) {
+    return new Uint8Array(size);
+  } else {
+    return new Uint16Array(size);
+  }
 }

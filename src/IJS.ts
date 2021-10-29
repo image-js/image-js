@@ -10,12 +10,15 @@ import {
 import { invert, InvertOptions } from './filters/invert';
 import { convertColor, ConvertColorOptions } from './operations/convertColor';
 import { convertDepth } from './operations/convertDepth';
+import { split } from './operations/split';
 import { ImageColorModel, colorModels } from './utils/colorModels';
 import { validateChannel, validateValue } from './utils/validators';
 
+import { histogram, HistogramOptions } from '.';
+
 export { ImageColorModel };
 
-type ImageDataArray = Uint8Array | Uint16Array | Uint8ClampedArray;
+export type ImageDataArray = Uint8Array | Uint16Array | Uint8ClampedArray;
 
 export enum ColorDepth {
   UINT8 = 8,
@@ -47,6 +50,11 @@ export interface ImageOptions {
    * Default: `ImageColorModel.RGB`.
    */
   colorModel?: ImageColorModel;
+}
+
+export interface CreateFromOptions extends ImageOptions {
+  width?: number;
+  height?: number;
 }
 
 export type ImageValues = [number, number, number, number];
@@ -105,9 +113,10 @@ export class IJS {
 
   /**
    * Construct a new IJS knowing its dimensions.
-   * @param width
-   * @param height
-   * @param options
+   *
+   * @param width - Image width.
+   * @param height - Image height.
+   * @param options - Image options.
    */
   public constructor(
     width: number,
@@ -171,10 +180,14 @@ export class IJS {
 
   /**
    * Create a new IJS base on the properties of an existing one.
+   *
    * @param other - Reference image.
+   * @param options - Image options.
+   * @returns New image.
    */
-  public static createFrom(other: IJS, options?: ImageOptions): IJS {
-    return new IJS(other.width, other.height, {
+  public static createFrom(other: IJS, options: CreateFromOptions = {}): IJS {
+    const { width = other.width, height = other.height } = options;
+    return new IJS(width, height, {
       depth: other.depth,
       colorModel: other.colorModel,
       ...options,
@@ -187,9 +200,9 @@ export class IJS {
    * @param column - Column index.
    * @returns Channels of the pixel.
    */
-  public getPixel(row: number, x: number): number[] {
+  public getPixel(row: number, column: number): number[] {
     const result = [];
-    const start = (row * this.width + x) * this.channels;
+    const start = (row * this.width + column) * this.channels;
     for (let i = 0; i < this.channels; i++) {
       result.push(this.data[start + i]);
     }
@@ -214,6 +227,7 @@ export class IJS {
    * @param row - Row index.
    * @param column - Column index.
    * @param channel - Channel index.
+   * @returns Value of the specified channel of one pixel.
    */
   public getValue(row: number, column: number, channel: number): number {
     return this.data[(row * this.width + column) * this.channels + channel];
@@ -237,14 +251,17 @@ export class IJS {
 
   /**
    * Get the value of a specific pixel channel. Select pixel using index.
+   *
    * @param index - Index of the pixel.
    * @param channel - Channel index.
+   * @returns Value of the channel of the pixel.
    */
   public getValueByIndex(index: number, channel: number): number {
     return this.data[index * this.channels + channel];
   }
   /**
    * Set the value of a specific pixel channel. Select pixel using index.
+   *
    * @param index - Index of the pixel.
    * @param channel - Channel index.
    * @param value - Value to set.
@@ -255,13 +272,21 @@ export class IJS {
 
   /**
    * Return the raw image data.
+   *
+   * @returns The raw data.
    */
   public getRawImage() {
-    return { width: this.width, height: this.height, data: this.data };
+    return {
+      width: this.width,
+      height: this.height,
+      data: this.data,
+      channels: this.channels,
+      depth: this.depth,
+    };
   }
 
   public [Symbol.for('nodejs.util.inspect.custom')](): string {
-    return `Image {
+    return `IJS {
   width: ${this.width}
   height: ${this.height}
   depth: ${this.depth}
@@ -272,7 +297,10 @@ export class IJS {
   }
 
   /**
-   * Fill the image with a value or a color
+   * Fill the image with a value or a color.
+   *
+   * @param value - Value or color.
+   * @returns The image instance.
    */
   public fill(value: number | number[]): this {
     if (typeof value === 'number') {
@@ -296,9 +324,11 @@ export class IJS {
   }
 
   /**
-   * Fill one channel with a value
+   * Fill one channel with a value.
+   *
    * @param channel - The channel to fill.
    * @param value - The new value.
+   * @returns The image instance.
    */
   public fillChannel(channel: number, value: number): this {
     validateChannel(channel, this);
@@ -311,6 +341,9 @@ export class IJS {
 
   /**
    * Fill the alpha channel with the specified value.
+   *
+   * @param value - New channel value.
+   * @returns The image instance.
    */
   public fillAlpha(value: number): this {
     validateValue(value, this);
@@ -325,6 +358,8 @@ export class IJS {
 
   /**
    * Create a copy of this image.
+   *
+   * @returns The image clone.
    */
   public clone(): IJS {
     return IJS.createFrom(this, { data: this.data.slice() });
@@ -362,7 +397,17 @@ export class IJS {
         throw new Error(`Unknow image coordinates ${coordinates}`);
     }
   }
+
+  // COMPUTE
+  public histogram(options?: HistogramOptions): number[] {
+    return histogram(this, options);
+  }
+
   // OPERATIONS
+
+  public split(): IJS[] {
+    return split(this);
+  }
 
   public convertColor(
     colorModel: ImageColorModel,
@@ -406,8 +451,16 @@ export class IJS {
     return invert(this, options);
   }
 }
+
 /**
  * Create data array and set alpha channel to max value if applicable.
+ *
+ * @param size - Number of pixels.
+ * @param channels - Number of channels.
+ * @param alpha - Specify if there is alpha channel.
+ * @param depth - Number of bits per channel.
+ * @param maxValue
+ * @returns The new pixel array.
  */
 function createPixelArray(
   size: number,
@@ -439,6 +492,12 @@ function createPixelArray(
   return arr;
 }
 
+/**
+ * Returns the image data as a formatted string.
+ *
+ * @param img - The image instance.
+ * @returns Formatted string containing the image data.
+ */
 function printData(img: IJS): string {
   const channels = [];
   for (let c = 0; c < img.channels; c++) {
@@ -449,13 +508,20 @@ function printData(img: IJS): string {
   }`;
 }
 
-function printChannel(img: IJS, c: number): string {
+/**
+ * Returns all values of a channel as a string.
+ *
+ * @param img - Input image.
+ * @param channel - Specified channel.
+ * @returns Formatted string with all values of a channel.
+ */
+function printChannel(img: IJS, channel: number): string {
   const result = [];
   const padding = img.depth === 8 ? 3 : 5;
   for (let i = 0; i < img.height; i++) {
     const line = [];
     for (let j = 0; j < img.width; j++) {
-      line.push(String(img.getValue(i, j, c)).padStart(padding, ' '));
+      line.push(String(img.getValue(i, j, channel)).padStart(padding, ' '));
     }
     result.push(`[${line.join(' ')}]`);
   }

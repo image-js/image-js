@@ -11,6 +11,14 @@ interface MatcherResult {
   pass: boolean;
 }
 
+/**
+ * Match a received image to an expected image.
+ *
+ * @param this - Jest matcher context.
+ * @param received - Received image.
+ * @param expected - Expected image.
+ * @returns - Jest matcher result.
+ */
 export function toMatchImage(
   this: jest.MatcherContext,
   received: IJS,
@@ -51,11 +59,21 @@ export function toMatchImage(
   };
 }
 
+/**
+ * Match a received image to expected image data.
+ *
+ * @param this - Jest matcher context.
+ * @param received - Received image.
+ * @param expectedData - Expected image data.
+ * @returns - Jest matcher result.
+ */
 export function toMatchImageData(
   this: jest.MatcherContext,
   received: IJS,
   expectedData: number[][] | string,
 ): MatcherResult {
-  const expectedImage = createImageFromData(expectedData, received.colorModel);
+  const expectedImage = createImageFromData(expectedData, received.colorModel, {
+    depth: received.depth,
+  });
   return toMatchImage.call(this, received, expectedImage);
 }
