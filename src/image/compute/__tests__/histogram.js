@@ -57,7 +57,7 @@ describe('calculate the histogram', function () {
     );
     let image2 = image.mask();
     let histogram = image2.getHistogram();
-    expect(histogram[0]).toStrictEqual(16);
-    expect(histogram[1]).toStrictEqual(9);
+    expect(histogram[0]).toBe(16);
+    expect(histogram[1]).toBe(9);
   });
 });

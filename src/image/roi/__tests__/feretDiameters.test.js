@@ -125,7 +125,7 @@ describe('Feret diameters', function () {
           [2, 2],
           [0, 0],
         ],
-        max: 4.242,
+        max: 4.2426,
         maxLine: [
           [0, 3],
           [3, 0],

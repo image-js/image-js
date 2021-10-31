@@ -11,7 +11,7 @@ describe('calculate the overlap with another image', function () {
     expect(similarity).toBe(1);
 
     similarity = image.getSimilarity(image2);
-    expect(similarity).toStrictEqual(1);
+    expect(similarity).toBe(1);
 
     similarity = image.getSimilarity(image2, {
       average: false,
