@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.33.1](https://www.github.com/image-js/image-js/compare/v0.33.0...v0.33.1) (2021-10-31)
+
+
+### Bug Fixes
+
+* update TIFF decoder ([#575](https://www.github.com/image-js/image-js/issues/575)) ([8a09396](https://www.github.com/image-js/image-js/commit/8a0939620027957e41209549ffe595c7c3023a37))
+
 ## [0.33.0](https://www.github.com/image-js/image-js/compare/v0.32.0...v0.33.0) (2021-08-30)
 
 
