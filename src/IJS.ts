@@ -196,6 +196,7 @@ export class IJS {
 
   /**
    * Get all the channels of a pixel.
+   *
    * @param row - Row index.
    * @param column - Column index.
    * @returns Channels of the pixel.
@@ -211,6 +212,7 @@ export class IJS {
 
   /**
    * Set all the channels of a pixel.
+   *
    * @param row - Row index.
    * @param column - Column index.
    * @param value - New channel values of the pixel to set.
@@ -224,6 +226,7 @@ export class IJS {
 
   /**
    * Get the value of a specific pixel channel. Select pixel using coordinates.
+   *
    * @param row - Row index.
    * @param column - Column index.
    * @param channel - Channel index.
@@ -235,6 +238,7 @@ export class IJS {
 
   /**
    * Set the value of a specific pixel channel. Select pixel using coordinates.
+   *
    * @param row - Row index.
    * @param column - Column index.
    * @param channel - Channel index.
@@ -446,6 +450,8 @@ export class IJS {
 
   /**
    * Invert the colors of the image.
+   *
+   * @param options
    */
   public invert(options?: InvertOptions): IJS {
     return invert(this, options);

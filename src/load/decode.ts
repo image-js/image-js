@@ -1,15 +1,14 @@
+import imageType from 'image-type';
+
 import { IJS } from '../IJS';
 
-import checkHeader from './checkHeader';
 import { decodeJpeg } from './decodeJpeg';
 import { decodePng } from './decodePng';
-
-const pngHeader = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
-const jpegHeader = [0xff, 0xd8, 0xff];
+import { decodeTiff } from './decodeTiff';
 
 /**
  * Decode input data. Data format is automatically detected.
- * Possible formats: png and jpeg.
+ * Possible formats: png, jpeg and tiff.
  *
  * @param data - Data to decode.
  * @returns The decoded image.
@@ -20,11 +19,15 @@ export function decode(data: ArrayBufferView): IJS {
     data.byteOffset,
     data.byteLength,
   );
-  if (checkHeader(typedArray, pngHeader)) {
-    return decodePng(typedArray);
-  } else if (checkHeader(typedArray, jpegHeader)) {
-    return decodeJpeg(typedArray);
-  } else {
-    throw new Error('unrecognized data format');
+  const type = imageType(typedArray);
+  switch (type?.mime) {
+    case 'image/png':
+      return decodePng(typedArray);
+    case 'image/jpeg':
+      return decodeJpeg(typedArray);
+    case 'image/tiff':
+      return decodeTiff(typedArray);
+    default:
+      throw new Error('unrecognized data format');
   }
 }

@@ -46,9 +46,9 @@ export function getOutputImage(
       },
       newParameters,
     );
-    type keys = keyof typeof requirements;
+    type Keys = keyof typeof requirements;
     for (const property in requirements) {
-      const prop = property as keys;
+      const prop = property as Keys;
       if (out[prop] !== requirements[prop]) {
         throw new RangeError(
           `cannot use out. Its ${property} property must be ${requirements[prop]}. Found ${out[prop]}`,

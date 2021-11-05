@@ -16,7 +16,7 @@ export function decodePng(buffer: Uint8Array): IJS {
     png.depth === 16 ? ColorDepth.UINT16 : ColorDepth.UINT8;
 
   if (png.palette) {
-    return loadPalettePNG(png);
+    return loadPalettePng(png);
   }
 
   switch (png.channels) {
@@ -45,7 +45,7 @@ export function decodePng(buffer: Uint8Array): IJS {
 /**
  * @param png
  */
-function loadPalettePNG(png: DecodedPng): IJS {
+function loadPalettePng(png: DecodedPng): IJS {
   if (!png.palette) {
     throw new Error(
       'unexpected: there should be a palette when colourType is 3',
