@@ -87,7 +87,7 @@ export function convertColor(
  * @param source - Source image.
  * @param dest - Destination image.
  */
-function copyAlpha(source: IJS, dest: IJS): void {
+export function copyAlpha(source: IJS, dest: IJS): void {
   if (source.size !== dest.size) {
     throw new Error('source and destination have different sizes');
   }

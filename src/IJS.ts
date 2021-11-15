@@ -10,11 +10,22 @@ import {
 import { invert, InvertOptions } from './filters/invert';
 import { convertColor, ConvertColorOptions } from './operations/convertColor';
 import { convertDepth } from './operations/convertDepth';
+import grey from './operations/grey';
 import { split } from './operations/split';
 import { ImageColorModel, colorModels } from './utils/colorModels';
 import { validateChannel, validateValue } from './utils/validators';
 
-import { histogram, HistogramOptions } from '.';
+import {
+  GreyOptions,
+  histogram,
+  HistogramOptions,
+  resize,
+  ResizeOptions,
+  rotate,
+  RotateOptions,
+  transform,
+  TransformOptions,
+} from '.';
 
 export { ImageColorModel };
 
@@ -423,6 +434,11 @@ export class IJS {
   public convertDepth(newDepth: ColorDepth): IJS {
     return convertDepth(this, newDepth);
   }
+
+  public grey(options?: GreyOptions): IJS {
+    return grey(this, options);
+  }
+
   // FILTERS
 
   public blur(options: BlurOptions): IJS {
@@ -451,10 +467,28 @@ export class IJS {
   /**
    * Invert the colors of the image.
    *
-   * @param options
+   * @param options - Inversion options
+   * @returns The inverted image.
    */
   public invert(options?: InvertOptions): IJS {
     return invert(this, options);
+  }
+
+  // GEOMETRY
+
+  public rotate(angle: number, options?: RotateOptions): IJS {
+    return rotate(this, angle, options);
+  }
+
+  public resize(options: ResizeOptions): IJS {
+    return resize(this, options);
+  }
+
+  public transform(
+    transformMatrix: number[][],
+    options?: TransformOptions,
+  ): IJS {
+    return transform(this, transformMatrix, options);
   }
 }
 
@@ -465,7 +499,7 @@ export class IJS {
  * @param channels - Number of channels.
  * @param alpha - Specify if there is alpha channel.
  * @param depth - Number of bits per channel.
- * @param maxValue
+ * @param maxValue - Maximal acceptable value for the channels.
  * @returns The new pixel array.
  */
 function createPixelArray(
