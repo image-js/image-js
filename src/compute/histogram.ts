@@ -20,7 +20,7 @@ export interface HistogramOptions {
 export function histogram(
   image: IJS,
   options: HistogramOptions = {},
-): number[] {
+): Uint32Array {
   let { channel } = options;
   if (typeof channel !== 'number') {
     if (image.channels !== 1) {
@@ -29,7 +29,7 @@ export function histogram(
     channel = 0;
   }
   validateChannel(channel, image);
-  const hist = new Array(image.maxValue + 1).fill(0);
+  const hist = new Uint32Array(image.maxValue + 1);
   for (let i = 0; i < image.size; i++) {
     hist[image.getValueByIndex(i, channel)]++;
   }

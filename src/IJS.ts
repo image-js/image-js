@@ -414,7 +414,7 @@ export class IJS {
   }
 
   // COMPUTE
-  public histogram(options?: HistogramOptions): number[] {
+  public histogram(options?: HistogramOptions): Uint32Array {
     return histogram(this, options);
   }
 

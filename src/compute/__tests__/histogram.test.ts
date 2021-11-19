@@ -4,7 +4,7 @@ test('RGBA image - channel 0', () => {
     [100, 140, 13, 1],
   ]);
   const histogram = image.histogram({ channel: 0 });
-  const expected = new Array(256).fill(0);
+  const expected = new Uint32Array(256);
   expected[230] = 1;
   expected[100] = 1;
   expect(histogram).toStrictEqual(expected);
@@ -16,7 +16,7 @@ test('RGBA image - channel 2', () => {
     [100, 140, 120, 1],
   ]);
   const histogram = image.histogram({ channel: 2 });
-  const expected = new Array(256).fill(0);
+  const expected = new Uint32Array(256);
   expected[120] = 2;
   expect(histogram).toStrictEqual(expected);
 });

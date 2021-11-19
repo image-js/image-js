@@ -4,10 +4,14 @@
 // Journal of Histochemistry and Cytochemistry 25 (7), pp. 741-753
 //
 //  modified from Johannes Schindelin plugin
+
 /**
- * @param histogram
+ * Return a threshold for a histogram using Triangle algorithm.
+ *
+ * @param histogram - The image histogram.
+ * @returns The threshold.
  */
-export function triangle(histogram: number[]): number {
+export function triangle(histogram: Uint32Array): number {
   // find min and max
   let min = 0;
   let dmax = 0;

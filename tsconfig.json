@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "noImplicitReturns": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
     "outDir": "lib",
