@@ -14,6 +14,7 @@ interface OutInternalOptions {
    * `thisImage`.
    */
   newParameters?: ImageOptions;
+  clone?: boolean;
 }
 
 /**
@@ -30,9 +31,13 @@ export function getOutputImage(
   internalOptions: OutInternalOptions = {},
 ): IJS {
   const { out } = options;
-  const { newParameters } = internalOptions;
+  const { newParameters, clone } = internalOptions;
   if (out === undefined) {
-    return IJS.createFrom(thisImage, newParameters);
+    if (clone) {
+      return thisImage.clone();
+    } else {
+      return IJS.createFrom(thisImage, newParameters);
+    }
   } else {
     if (!(out instanceof IJS)) {
       throw new TypeError('out must be an IJS object');

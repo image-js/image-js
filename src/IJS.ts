@@ -10,6 +10,7 @@ import {
 import { invert, InvertOptions } from './filters/invert';
 import { convertColor, ConvertColorOptions } from './operations/convertColor';
 import { convertDepth } from './operations/convertDepth';
+import copyTo, { CopyToOptions } from './operations/copyTo';
 import grey from './operations/grey';
 import { split } from './operations/split';
 import { ImageColorModel, colorModels } from './utils/colorModels';
@@ -437,6 +438,10 @@ export class IJS {
 
   public grey(options?: GreyOptions): IJS {
     return grey(this, options);
+  }
+
+  public copyTo(target: IJS, options: CopyToOptions = {}): IJS {
+    return copyTo(this, target, options);
   }
 
   // FILTERS
