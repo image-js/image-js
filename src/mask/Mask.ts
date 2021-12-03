@@ -167,4 +167,48 @@ export class Mask {
     const index = row * this.width + column;
     this.data[index] = value;
   }
+
+  /**
+   * Get the value of a bit using index.
+   *
+   * @param index - Index of the pixel.
+   * @returns Value of the bit.
+   */
+  public getBitByIndex(index: number): number {
+    return this.data[index * this.channels];
+  }
+  /**
+   * Set the value of a bit using index.
+   *
+   * @param index - Index of the pixel.
+   * @param value - Value to set.
+   */
+  public setBitByIndex(index: number, value: number | boolean): void {
+    // that doesn't seem to be a good way
+    if (typeof value === 'number') {
+      if (value !== 0 && value !== 1) {
+        throw new Error(
+          `Trying to set bit to ${value}, but only acceptable values are 0 and 1.`,
+        );
+      }
+    } else {
+      value = value ? 1 : 0;
+    }
+    this.data[index * this.channels] = value;
+  }
+
+  /**
+   * Return the raw mask data.
+   *
+   * @returns The raw data.
+   */
+  public getRawImage() {
+    return {
+      width: this.width,
+      height: this.height,
+      data: this.data,
+      channels: this.channels,
+      depth: this.depth,
+    };
+  }
 }
