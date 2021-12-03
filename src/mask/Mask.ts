@@ -1,5 +1,8 @@
 import { ImageDataArray, ImageColorModel, ColorDepth, colorModels } from '..';
 
+// Is this a good approach?
+export type BitValue = 1 | 0 | boolean;
+
 export interface MaskOptions {
   /**
    * Typed array holding the mask data.
@@ -121,12 +124,47 @@ export class Mask {
   /**
    * Create a new Mask base on the properties of an existing one.
    *
-   * @param other - Reference image.
-   * @param options - Image options.
-   * @returns New image.
+   * @param other - Reference Mask.
+   * @param options - Mask options.
+   * @returns New mask.
    */
   public static createFrom(other: Mask, options: CreateFromOptions = {}): Mask {
     const { width = other.width, height = other.height } = options;
     return new Mask(width, height, options);
+  }
+
+  /**
+   * Get a bit of the mask.
+   *
+   * @param row - Row index.
+   * @param column - Column index.
+   * @returns The bit value.
+   */
+  public getBit(row: number, column: number): number {
+    const index = row * this.width + column;
+    return this.data[index];
+  }
+
+  /**
+   * Set the value of a bit.
+   *
+   * @param row - Row index.
+   * @param column - Column index.
+   * @param value - New bit value.
+   */
+  public setBit(row: number, column: number, value: number | boolean): void {
+    // that doesn't seem to be a good way
+    if (typeof value === 'number') {
+      if (value !== 0 && value !== 1) {
+        throw new Error(
+          `Trying to set bit to ${value}, but only acceptable values are 0 and 1.`,
+        );
+      }
+    } else {
+      value = value ? 1 : 0;
+    }
+
+    const index = row * this.width + column;
+    this.data[index] = value;
   }
 }
