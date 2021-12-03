@@ -1,4 +1,5 @@
 import { IJS, ImageColorModel } from '../../src';
+import { Mask } from '../../src/mask/Mask';
 
 describe('toMatchImage', () => {
   it('should load and match', () => {
@@ -75,5 +76,64 @@ describe('toMatchImageData', () => {
       1 2 
       3 4
     `);
+  });
+});
+
+describe('toMatchMask', () => {
+  it('should match identical masks', () => {
+    const mask1 = new Mask(1, 1);
+    const mask2 = new Mask(1, 1);
+    expect(mask1).toMatchMask(mask2);
+  });
+
+  it('should throw if the same instance is passed', () => {
+    const mask = new Mask(1, 1);
+    expect(() => expect(mask).toMatchMask(mask)).toThrow(
+      /Expected mask instances to be different/,
+    );
+  });
+
+  it('should throw if width is different', () => {
+    const mask1 = new Mask(1, 1);
+    const mask2 = new Mask(2, 1);
+    expect(() => expect(mask1).toMatchMask(mask2)).toThrow(/width/);
+  });
+
+  it('should throw if height is different', () => {
+    const mask1 = new Mask(1, 1);
+    const mask2 = new Mask(1, 2);
+    expect(() => expect(mask1).toMatchMask(mask2)).toThrow(/height/);
+  });
+
+  it('should throw if data is different', () => {
+    const mask1 = new Mask(2, 3);
+    const mask2 = new Mask(2, 3);
+    mask2.setBit(1, 0, 1);
+    mask2.setBit(2, 0, 1);
+    expect(() => expect(mask1).toMatchMask(mask2)).toThrow(
+      'Expected bit at (0, 1) to be 1, but got 0',
+    );
+  });
+});
+
+describe('toMatchMaskData', () => {
+  it.only('should work with 2D array', () => {
+    const mask = new IJS(2, 2, {
+      data: Uint8Array.of(1, 1, 0, 0),
+    });
+    expect(mask).toMatchMaskData([
+      [1, 1],
+      [0, 0],
+    ]);
+  });
+
+  it('should work with string', () => {
+    const mask = new IJS(2, 2, {
+      data: Uint8Array.of(1, 1, 0, 0),
+    });
+    expect(mask).toMatchMaskData(`
+        1 1 
+        0 0
+      `);
   });
 });

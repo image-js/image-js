@@ -1,7 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="./jest.d.ts" />
 
-import { IJS } from '../src';
+import { IJS, ImageColorModel } from '../src';
+import { Mask } from '../src/mask/Mask';
 
 import { TestImagePath } from './TestImagePath';
 import { createImageFromData } from './createImageFromData';
@@ -76,4 +77,67 @@ export function toMatchImageData(
     depth: received.depth,
   });
   return toMatchImage.call(this, received, expectedImage);
+}
+
+/**
+ * Match a received mask to an expected mask.
+ *
+ * @param this - Jest matcher context.
+ * @param received - Received mask.
+ * @param expected - Expected mask.
+ * @returns - Jest matcher result.
+ */
+export function toMatchMask(
+  this: jest.MatcherContext,
+  received: Mask,
+  expected: Mask,
+): MatcherResult {
+  let error: string | null = null;
+
+  if (received === expected) {
+    error = 'Expected mask instances to be different';
+  } else if (received.width !== expected.width) {
+    error = `Expected mask width to be ${expected.width}, but got ${received.width}`;
+  } else if (received.height !== expected.height) {
+    error = `Expected mask height to be ${expected.height}, but got ${received.height}`;
+  } else {
+    rowsLoop: for (let row = 0; row < received.height; row++) {
+      for (let col = 0; col < received.width; col++) {
+        const receivedBit = received.getBit(row, col);
+        const expectedBit = expected.getBit(row, col);
+        if (!this.equals(receivedBit, expectedBit)) {
+          error = `Expected bit at (${col}, ${row}) to be ${expectedBit}, but got ${receivedBit}`;
+          break rowsLoop;
+        }
+      }
+    }
+  }
+
+  return {
+    message: () => error || '',
+    pass: error === null,
+  };
+}
+
+/**
+ * Match a received mask to expected mask data.
+ *
+ * @param this - Jest matcher context.
+ * @param received - Received mask.
+ * @param expectedData - Expected mask data.
+ * @returns - Jest matcher result.
+ */
+export function toMatchMaskData(
+  this: jest.MatcherContext,
+  received: Mask,
+  expectedData: number[][] | string,
+): MatcherResult {
+  const expectedMask = createImageFromData(
+    expectedData,
+    ImageColorModel.BINARY,
+    {
+      depth: received.depth,
+    },
+  ) as unknown as Mask;
+  return toMatchMask.call(this, received, expectedMask);
 }
