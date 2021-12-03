@@ -2,7 +2,7 @@ import { ColorDepth, ImageColorModel } from '../..';
 import { Mask } from '../Mask';
 
 describe('create new masks', () => {
-  it('should create a 8-bit image', () => {
+  it('should create a mask', () => {
     const mask = new Mask(10, 20);
     expect(mask).toMatchObject({
       width: 10,
@@ -10,12 +10,12 @@ describe('create new masks', () => {
       size: 200,
       depth: ColorDepth.UINT1,
       colorModel: ImageColorModel.BINARY,
-      components: 3,
-      channels: 3,
+      components: 1,
+      channels: 1,
       alpha: false,
-      maxValue: 255,
+      maxValue: 1,
     });
-    expect(mask.getRawImage().data).toHaveLength(600);
+    expect(mask.getRawImage().data).toHaveLength(200);
   });
 
   it('should throw on wrong width', () => {
@@ -37,9 +37,9 @@ describe('create new masks', () => {
   });
 
   it('should throw on wrong data size', () => {
-    const data = new Uint16Array(2);
+    const data = new Uint8Array(2);
     expect(() => new Mask(2, 2, { data })).toThrow(
-      /incorrect data size: 2. Expected 12/,
+      /incorrect data size: 2. Expected 4/,
     );
   });
 });
@@ -49,13 +49,12 @@ describe('get and set bit', () => {
     expect(mask.getBit(15, 5)).toBe(0);
     mask.setBit(15, 5, 1);
     expect(mask.getBit(15, 5)).toBe(1);
-
-    it('should get and set by index', () => {
-      const mask = new Mask(10, 20);
-      expect(mask.getBitByIndex(15)).toBe(0);
-      mask.setBitByIndex(15, 1);
-      expect(mask.getBitByIndex(15)).toBe(1);
-    });
+  });
+  it('should get and set by index', () => {
+    const mask = new Mask(10, 20);
+    expect(mask.getBitByIndex(15)).toBe(0);
+    mask.setBitByIndex(15, 1);
+    expect(mask.getBitByIndex(15)).toBe(1);
   });
 });
 test('fill with a a value', () => {

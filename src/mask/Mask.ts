@@ -213,3 +213,22 @@ export class Mask {
     return this;
   }
 }
+
+/**
+ * Returns all values of a mask as a string.
+ *
+ * @param mask - Input mask.
+ * @returns Formatted string with all values of a mask.
+ */
+function printData(mask: Mask): string {
+  const result = [];
+  const padding = 2;
+  for (let i = 0; i < mask.height; i++) {
+    const line = [];
+    for (let j = 0; j < mask.width; j++) {
+      line.push(String(mask.getBit(i, j)).padStart(padding, ' '));
+    }
+    result.push(`[${line.join(' ')}]`);
+  }
+  return result.join('\n     ');
+}
