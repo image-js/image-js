@@ -1,4 +1,12 @@
-import { ImageDataArray, ImageColorModel, ColorDepth, colorModels } from '..';
+import {
+  ImageDataArray,
+  ImageColorModel,
+  ColorDepth,
+  colorModels,
+  convertColor,
+} from '..';
+
+import { convertToNumber } from './utils/convertor';
 
 // Is this a good approach?
 export type BitValue = 1 | 0 | boolean;
@@ -152,15 +160,9 @@ export class Mask {
    * @param column - Column index.
    * @param value - New bit value.
    */
-  public setBit(row: number, column: number, value: number | boolean): void {
+  public setBit(row: number, column: number, value: BitValue): void {
     // that doesn't seem to be a good way
-    if (typeof value === 'number') {
-      if (value !== 0 && value !== 1) {
-        throw new Error(
-          `Trying to set bit to ${value}, but only acceptable values are 0 and 1.`,
-        );
-      }
-    } else {
+    if (typeof value === 'boolean') {
       value = value ? 1 : 0;
     }
 
@@ -183,18 +185,10 @@ export class Mask {
    * @param index - Index of the pixel.
    * @param value - Value to set.
    */
-  public setBitByIndex(index: number, value: number | boolean): void {
+  public setBitByIndex(index: number, value: BitValue): void {
     // that doesn't seem to be a good way
-    if (typeof value === 'number') {
-      if (value !== 0 && value !== 1) {
-        throw new Error(
-          `Trying to set bit to ${value}, but only acceptable values are 0 and 1.`,
-        );
-      }
-    } else {
-      value = value ? 1 : 0;
-    }
-    this.data[index * this.channels] = value;
+    let result = convertToNumber(value);
+    this.data[index * this.channels] = result;
   }
 
   /**
@@ -207,8 +201,41 @@ export class Mask {
       width: this.width,
       height: this.height,
       data: this.data,
-      channels: this.channels,
-      depth: this.depth,
     };
+  }
+
+  public [Symbol.for('nodejs.util.inspect.custom')](): string {
+    return `Mask {
+  width: ${this.width}
+  height: ${this.height}
+  data: ${printData(this)}
+}`;
+  }
+
+  /**
+   * Fill the image with a value or a color.
+   *
+   * @param value - Value or color.
+   * @returns The image instance.
+   */
+  public fill(value: BitValue | BitValue[]): this {
+    if (typeof value === 'number') {
+      validateValue(value, this);
+      this.data.fill(value);
+      return this;
+    } else {
+      if (value.length !== this.channels) {
+        throw new RangeError(
+          `the size of value must match the number of channels (${this.channels}). Got ${value.length} instead`,
+        );
+      }
+      value.forEach((val) => validateValue(val, this));
+      for (let i = 0; i < this.data.length; i += this.channels) {
+        for (let j = 0; j <= this.channels; j++) {
+          this.data[i + j] = value[j];
+        }
+      }
+      return this;
+    }
   }
 }
