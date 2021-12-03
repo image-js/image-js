@@ -3,8 +3,8 @@ import { Mask } from '../Mask';
 
 describe('create new masks', () => {
   it('should create a 8-bit image', () => {
-    const img = new Mask(10, 20);
-    expect(img).toMatchObject({
+    const mask = new Mask(10, 20);
+    expect(mask).toMatchObject({
       width: 10,
       height: 20,
       size: 200,
@@ -15,7 +15,7 @@ describe('create new masks', () => {
       alpha: false,
       maxValue: 255,
     });
-    expect(img.getRawImage().data).toHaveLength(600);
+    expect(mask.getRawImage().data).toHaveLength(600);
   });
 
   it('should throw on wrong width', () => {
@@ -45,16 +45,24 @@ describe('create new masks', () => {
 });
 describe('get and set bit', () => {
   it('should get and set', () => {
-    const img = new Mask(10, 20);
-    expect(img.getBit(15, 5)).toBe(0);
-    img.setBit(15, 5, 1);
-    expect(img.getBit(15, 5)).toBe(1);
+    const mask = new Mask(10, 20);
+    expect(mask.getBit(15, 5)).toBe(0);
+    mask.setBit(15, 5, 1);
+    expect(mask.getBit(15, 5)).toBe(1);
 
     it('should get and set by index', () => {
-      const img = new Mask(10, 20);
-      expect(img.getBitByIndex(15)).toBe(0);
-      img.setBitByIndex(15, 5);
-      expect(img.getBitByIndex(15)).toBe(50);
+      const mask = new Mask(10, 20);
+      expect(mask.getBitByIndex(15)).toBe(0);
+      mask.setBitByIndex(15, 1);
+      expect(mask.getBitByIndex(15)).toBe(1);
     });
   });
+});
+test('fill with a a value', () => {
+  const mask = new Mask(2, 2);
+  mask.fill(1);
+  expect(mask).toMatchImageData([
+    [1, 1],
+    [1, 1],
+  ]);
 });

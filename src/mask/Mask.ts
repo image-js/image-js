@@ -1,10 +1,4 @@
-import {
-  ImageDataArray,
-  ImageColorModel,
-  ColorDepth,
-  colorModels,
-  convertColor,
-} from '..';
+import { ImageDataArray, ImageColorModel, ColorDepth, colorModels } from '..';
 
 import { convertToNumber } from './utils/convertor';
 
@@ -161,13 +155,9 @@ export class Mask {
    * @param value - New bit value.
    */
   public setBit(row: number, column: number, value: BitValue): void {
-    // that doesn't seem to be a good way
-    if (typeof value === 'boolean') {
-      value = value ? 1 : 0;
-    }
-
+    let result = convertToNumber(value);
     const index = row * this.width + column;
-    this.data[index] = value;
+    this.data[index] = result;
   }
 
   /**
@@ -186,7 +176,6 @@ export class Mask {
    * @param value - Value to set.
    */
   public setBitByIndex(index: number, value: BitValue): void {
-    // that doesn't seem to be a good way
     let result = convertToNumber(value);
     this.data[index * this.channels] = result;
   }
@@ -213,29 +202,14 @@ export class Mask {
   }
 
   /**
-   * Fill the image with a value or a color.
+   * Fill the mask with a value.
    *
-   * @param value - Value or color.
-   * @returns The image instance.
+   * @param value - Value of the bit.
+   * @returns The mask instance.
    */
-  public fill(value: BitValue | BitValue[]): this {
-    if (typeof value === 'number') {
-      validateValue(value, this);
-      this.data.fill(value);
-      return this;
-    } else {
-      if (value.length !== this.channels) {
-        throw new RangeError(
-          `the size of value must match the number of channels (${this.channels}). Got ${value.length} instead`,
-        );
-      }
-      value.forEach((val) => validateValue(val, this));
-      for (let i = 0; i < this.data.length; i += this.channels) {
-        for (let j = 0; j <= this.channels; j++) {
-          this.data[i + j] = value[j];
-        }
-      }
-      return this;
-    }
+  public fill(value: BitValue): this {
+    let result = convertToNumber(value);
+    this.data.fill(result);
+    return this;
   }
 }
