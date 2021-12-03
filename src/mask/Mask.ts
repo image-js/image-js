@@ -7,6 +7,11 @@ export interface MaskOptions {
   data?: ImageDataArray;
 }
 
+export interface CreateFromOptions extends MaskOptions {
+  width?: number;
+  height?: number;
+}
+
 export class Mask {
   /**
    * The number of columns of the mask.
@@ -94,20 +99,34 @@ export class Mask {
     this.channels = colorModelDef.channels;
 
     this.maxValue = 1;
-  
 
-  if (data === undefined) {
-    this.data = new Uint8Array(this.size);
-  } else {
-    if (!(data instanceof Uint8Array)) {
-      throw new Error(`data type is ${typeof data} but expected is Uint8Array`);
-    } 
-    const expectedLength = this.size * this.channels;
-    if (data.length !== expectedLength) {
-      throw new RangeError(
-        `incorrect data size: ${data.length}. Expected ${expectedLength}`,
-      );
+    if (data === undefined) {
+      this.data = new Uint8Array(this.size);
+    } else {
+      if (!(data instanceof Uint8Array)) {
+        throw new Error(
+          `data type is ${typeof data} but expected is Uint8Array`,
+        );
+      }
+      const expectedLength = this.size * this.channels;
+      if (data.length !== expectedLength) {
+        throw new RangeError(
+          `incorrect data size: ${data.length}. Expected ${expectedLength}`,
+        );
+      }
+      this.data = data;
     }
-    this.data = data;
+  }
+
+  /**
+   * Create a new Mask base on the properties of an existing one.
+   *
+   * @param other - Reference image.
+   * @param options - Image options.
+   * @returns New image.
+   */
+  public static createFrom(other: Mask, options: CreateFromOptions = {}): Mask {
+    const { width = other.width, height = other.height } = options;
+    return new Mask(width, height, options);
   }
 }
