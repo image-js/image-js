@@ -3,6 +3,7 @@ export enum ImageColorModel {
   GREYA = 'GREYA',
   RGB = 'RGB',
   RGBA = 'RGBA',
+  BINARY = 'BINARY',
 }
 
 export const colorModels: {
@@ -31,5 +32,10 @@ export const colorModels: {
     components: 3,
     alpha: true,
     channels: 4,
+  },
+  [ImageColorModel.BINARY]: {
+    components: 1,
+    alpha: false,
+    channels: 1,
   },
 };

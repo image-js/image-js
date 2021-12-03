@@ -28,11 +28,12 @@ import {
   TransformOptions,
 } from '.';
 
-export { ImageColorModel };
+export { ImageColorModel, colorModels };
 
 export type ImageDataArray = Uint8Array | Uint16Array | Uint8ClampedArray;
 
 export enum ColorDepth {
+  UINT1 = 1,
   UINT8 = 8,
   UINT16 = 16,
 }
