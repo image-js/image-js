@@ -1,7 +1,11 @@
 import { Mask } from '../..';
 import { IJS, ColorDepth } from '../../IJS';
 import { ImageColorModel } from '../colorModels';
-import { getOutputImage, maskToOutputImage } from '../getOutputImage';
+import {
+  getOutputImage,
+  imageToOutputMask,
+  maskToOutputImage,
+} from '../getOutputImage';
 
 describe('getOutputImage', () => {
   it('should default to creating an empty image', () => {
@@ -88,7 +92,6 @@ describe('getOutputImage', () => {
 });
 
 describe('maskToOutputImage', () => {
-  // TODO: enhance this test
   it('should default to creating an empty image', () => {
     const mask = new Mask(2, 2);
     const output = maskToOutputImage(mask);
@@ -103,7 +106,6 @@ describe('maskToOutputImage', () => {
       [0, 0],
     ]);
   });
-
   it('providing valid out', () => {
     const img = new Mask(1, 2);
     const out = new IJS(1, 2, { colorModel: ImageColorModel.GREY });
@@ -116,5 +118,49 @@ describe('maskToOutputImage', () => {
     expect(() => {
       maskToOutputImage(img, { out });
     }).toThrow(/cannot use out. Its width property must be 1. Found 2/);
+  });
+  it('should throw if out is not an image', () => {
+    const img = new IJS(1, 2);
+    // @ts-ignore
+    expect(() => maskToOutputImage(img, { out: 'str' })).toThrow(
+      /out must be an IJS object/,
+    );
+  });
+});
+
+describe('imageToOutputMask', () => {
+  it('should default to creating an empty mask', () => {
+    const image = new IJS(2, 2);
+    const output = imageToOutputMask(image);
+    expect(output).toMatchObject({
+      width: 2,
+      height: 2,
+      colorModel: ImageColorModel.BINARY,
+      depth: ColorDepth.UINT1,
+    });
+    expect(output).toMatchMaskData([
+      [0, 0],
+      [0, 0],
+    ]);
+  });
+  it('providing valid out', () => {
+    const img = new IJS(1, 2);
+    const out = new Mask(1, 2);
+    const output = imageToOutputMask(img, { out });
+    expect(output).toBe(out);
+  });
+  it('providing invalid out', () => {
+    const img = new IJS(1, 2);
+    const out = new Mask(2, 2);
+    expect(() => {
+      imageToOutputMask(img, { out });
+    }).toThrow(/cannot use out. Its width property must be 1. Found 2/);
+  });
+  it('should throw if out is not a mask', () => {
+    const img = new IJS(1, 2);
+    // @ts-ignore
+    expect(() => imageToOutputMask(img, { out: 'str' })).toThrow(
+      /out must be a Mask object/,
+    );
   });
 });

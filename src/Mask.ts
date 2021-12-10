@@ -126,7 +126,7 @@ export class Mask {
    * @returns New mask.
    */
   public static createFrom(
-    other: Mask,
+    other: Mask | IJS,
     options: MaskCreateFromOptions = {},
   ): Mask {
     const { width = other.width, height = other.height } = options;
