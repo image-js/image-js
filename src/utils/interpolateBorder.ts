@@ -15,6 +15,10 @@ export type BorderInterpolationFunction = (
   image: IJS,
 ) => number;
 
+/**
+ * @param type
+ * @param value
+ */
 export function getBorderInterpolation(
   type: BorderType,
   value: number,
@@ -61,6 +65,10 @@ function getInterpolateConstant(value: number): BorderInterpolationFunction {
   };
 }
 
+/**
+ * @param point
+ * @param length
+ */
 export function interpolateConstantPoint(
   point: number,
   length: number,
@@ -84,6 +92,10 @@ function interpolateReplicate(
   );
 }
 
+/**
+ * @param point
+ * @param length
+ */
 export function interpolateReplicatePoint(
   point: number,
   length: number,
@@ -112,6 +124,10 @@ function interpolateReflect(
   );
 }
 
+/**
+ * @param point
+ * @param length
+ */
 export function interpolateReflectPoint(point: number, length: number): number {
   if (point >= 0 && point < length) {
     return point;
@@ -137,6 +153,10 @@ function interpolateWrap(
   );
 }
 
+/**
+ * @param point
+ * @param length
+ */
 export function interpolateWrapPoint(point: number, length: number): number {
   if (point >= 0 && point < length) {
     return point;
@@ -162,6 +182,10 @@ function interpolateReflect101(
   );
 }
 
+/**
+ * @param point
+ * @param length
+ */
 export function interpolateReflect101Point(
   point: number,
   length: number,

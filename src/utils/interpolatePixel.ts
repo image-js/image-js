@@ -20,7 +20,10 @@ type InterpolationFunction = (
 ) => number;
 
 /**
- * @param interpolationType
+ * Get the interpolation function based on its name.
+ *
+ * @param interpolationType - Specified interpolation type.
+ * @returns The interpolation function.
  */
 export function getInterpolationFunction(
   interpolationType: InterpolationType,
@@ -42,10 +45,10 @@ export function getInterpolationFunction(
 }
 
 /**
- * @param image
- * @param column
- * @param row
- * @param channel
+ * @param image - The image to interpolate.
+ * @param column - Column index.
+ * @param row - Row index.
+ * @param channel - Channel index.
  * @param interpolateBorder
  */
 function interpolateNearest(
@@ -63,9 +66,9 @@ function interpolateNearest(
 
 /**
  * @param image
- * @param column
- * @param row
- * @param channel
+ * @param column - Column index.
+ * @param row - Row index.
+ * @param channel - Channel index.
  * @param interpolateBorder
  */
 function interpolateBilinear(
@@ -97,9 +100,9 @@ function interpolateBilinear(
 
 /**
  * @param image
- * @param column
- * @param row
- * @param channel
+ * @param column - Column index.
+ * @param row - Row index.
+ * @param channel - Channel index.
  * @param interpolateBorder
  * @param clamp
  */
