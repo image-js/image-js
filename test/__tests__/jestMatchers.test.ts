@@ -86,13 +86,6 @@ describe('toMatchMask', () => {
     expect(mask1).toMatchMask(mask2);
   });
 
-  it('should throw if the same instance is passed', () => {
-    const mask = new Mask(1, 1);
-    expect(() => expect(mask).toMatchMask(mask)).toThrow(
-      /Expected mask instances to be different/,
-    );
-  });
-
   it('should throw if width is different', () => {
     const mask1 = new Mask(1, 1);
     const mask2 = new Mask(2, 1);
@@ -117,8 +110,8 @@ describe('toMatchMask', () => {
 });
 
 describe('toMatchMaskData', () => {
-  it.only('should work with 2D array', () => {
-    const mask = new IJS(2, 2, {
+  it('should work with 2D array', () => {
+    const mask = new Mask(2, 2, {
       data: Uint8Array.of(1, 1, 0, 0),
     });
     expect(mask).toMatchMaskData([
@@ -128,7 +121,7 @@ describe('toMatchMaskData', () => {
   });
 
   it('should work with string', () => {
-    const mask = new IJS(2, 2, {
+    const mask = new Mask(2, 2, {
       data: Uint8Array.of(1, 1, 0, 0),
     });
     expect(mask).toMatchMaskData(`

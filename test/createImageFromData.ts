@@ -24,7 +24,6 @@ export function createImageFromData(
 ): IJS {
   const { depth = ColorDepth.UINT8 } = options;
   if (Array.isArray(data)) {
-    console.log(colorModel);
     return createImageFrom2DArray(data, colorModel, depth);
   } else {
     return createImageFromString(data, colorModel, depth);

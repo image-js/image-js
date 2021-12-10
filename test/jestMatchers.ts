@@ -90,13 +90,13 @@ export function toMatchImageData(
 export function toMatchMask(
   this: jest.MatcherContext,
   received: Mask,
-  expected: Mask,
+  expected: IJS | Mask,
 ): MatcherResult {
+  // converted = convertColor(received, ImageColorModel.GREY)
+  // toMatchImage.call(this, converted, expected)
   let error: string | null = null;
 
-  if (received === expected) {
-    error = 'Expected mask instances to be different';
-  } else if (received.width !== expected.width) {
+  if (received.width !== expected.width) {
     error = `Expected mask width to be ${expected.width}, but got ${received.width}`;
   } else if (received.height !== expected.height) {
     error = `Expected mask height to be ${expected.height}, but got ${received.height}`;
@@ -104,7 +104,7 @@ export function toMatchMask(
     rowsLoop: for (let row = 0; row < received.height; row++) {
       for (let col = 0; col < received.width; col++) {
         const receivedBit = received.getBit(row, col);
-        const expectedBit = expected.getBit(row, col);
+        const expectedBit = expected.getValue(row, col, 0);
         if (!this.equals(receivedBit, expectedBit)) {
           error = `Expected bit at (${col}, ${row}) to be ${expectedBit}, but got ${receivedBit}`;
           break rowsLoop;
@@ -138,6 +138,6 @@ export function toMatchMaskData(
     {
       depth: received.depth,
     },
-  ) as unknown as Mask;
+  );
   return toMatchMask.call(this, received, expectedMask);
 }
