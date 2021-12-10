@@ -1,7 +1,6 @@
-import { convertColor } from './mask/operations';
 import { boolToNumber } from './utils/boolToNumber';
 
-import { ImageColorModel, ColorDepth, colorModels, IJS } from '.';
+import { ImageColorModel, ColorDepth, colorModels, IJS, convertColor } from '.';
 
 // Is this a good approach?
 export type BitValue = 1 | 0 | boolean;
@@ -13,7 +12,7 @@ export interface MaskOptions {
   data?: Uint8Array;
 }
 
-export interface CreateFromOptions extends MaskOptions {
+export interface MaskCreateFromOptions extends MaskOptions {
   width?: number;
   height?: number;
 }
@@ -126,7 +125,10 @@ export class Mask {
    * @param options - Mask options.
    * @returns New mask.
    */
-  public static createFrom(other: Mask, options: CreateFromOptions = {}): Mask {
+  public static createFrom(
+    other: Mask,
+    options: MaskCreateFromOptions = {},
+  ): Mask {
     const { width = other.width, height = other.height } = options;
     return new Mask(width, height, options);
   }

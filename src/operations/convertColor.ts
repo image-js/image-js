@@ -54,34 +54,38 @@ export function convertColor(
     newParameters: { colorModel: colorModel },
   });
 
-  if (
-    image.colorModel === ImageColorModel.GREY ||
-    image.colorModel === ImageColorModel.GREYA
-  ) {
-    convertGreyToAny(image, output);
-  }
-
-  if (
-    image.colorModel === ImageColorModel.RGB ||
-    image.colorModel === ImageColorModel.RGBA
-  ) {
+  if (image instanceof IJS) {
     if (
-      colorModel === ImageColorModel.RGB ||
-      colorModel === ImageColorModel.RGBA
+      image.colorModel === ImageColorModel.GREY ||
+      image.colorModel === ImageColorModel.GREYA
     ) {
-      convertRgbToRgb(image, output);
-    } else {
-      // GREYA or GREY
-      convertRgbToGrey(image, output);
+      convertGreyToAny(image, output as IJS);
     }
-  }
 
-  if (!image.alpha && output.alpha) {
-    output.fillAlpha(output.maxValue);
-  }
+    if (
+      image.colorModel === ImageColorModel.RGB ||
+      image.colorModel === ImageColorModel.RGBA
+    ) {
+      if (
+        colorModel === ImageColorModel.RGB ||
+        colorModel === ImageColorModel.RGBA
+      ) {
+        convertRgbToRgb(image, output);
+      } else {
+        // GREYA or GREY
+        convertRgbToGrey(image, output);
+      }
+    }
 
-  if (image.alpha && output.alpha) {
-    copyAlpha(image, output);
+    if (!image.alpha && output.alpha) {
+      output.fillAlpha(output.maxValue);
+    }
+
+    if (image.alpha && output.alpha) {
+      copyAlpha(image, output);
+    }
+  } else if (image instanceof Mask) {
+    convertBinaryToGrey(image, output);
   }
 
   return output;

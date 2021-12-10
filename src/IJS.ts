@@ -1,3 +1,4 @@
+import { Mask } from './Mask';
 import {
   BlurOptions,
   blur,
@@ -198,7 +199,10 @@ export class IJS {
    * @param options - Image options.
    * @returns New image.
    */
-  public static createFrom(other: IJS, options: CreateFromOptions = {}): IJS {
+  public static createFrom(
+    other: IJS | Mask,
+    options: CreateFromOptions = {},
+  ): IJS {
     const { width = other.width, height = other.height } = options;
     return new IJS(width, height, {
       depth: other.depth,

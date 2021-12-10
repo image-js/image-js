@@ -71,20 +71,15 @@ export function getOutputImage(
 export function maskToOutputImage(mask: Mask, options: OutOptions = {}): IJS {
   const { out } = options;
   if (out === undefined) {
-    return IJS.createFrom(mask, newParameters);
+    return IJS.createFrom(mask);
   } else {
-    if (!(out instanceof IJS)) {
-      throw new TypeError('out must be an IJS object');
+    if (!(out instanceof Mask)) {
+      throw new TypeError('out must be a Mask object');
     }
-    const requirements: NewImageParameters = Object.assign(
-      {
-        width: mask.width,
-        height: mask.height,
-        depth: mask.depth,
-        colorModel: mask.colorModel,
-      },
-      newParameters,
-    );
+    const requirements: NewImageParameters = Object.assign({
+      width: mask.width,
+      height: mask.height,
+    });
     checkRequirements(requirements, out);
     return out;
   }
