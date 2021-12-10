@@ -1,4 +1,4 @@
-import { IJS } from '../src';
+import { Mask } from '../src';
 
 /**
  * Create a new Mask object from mask data.
@@ -6,7 +6,7 @@ import { IJS } from '../src';
  * @param data - Mask data.
  * @returns The new mask.
  */
-export function createMask(data: number[][] | string): IJS {
+export function createMask(data: number[][] | string): Mask {
   if (Array.isArray(data)) {
     return createMaskFrom2DArray(data);
   } else {
@@ -20,16 +20,22 @@ export function createMask(data: number[][] | string): IJS {
  * @param data - Mask data.
  * @returns The new mask.
  */
-function createMaskFrom2DArray(data: number[][]): IJS {
+function createMaskFrom2DArray(data: number[][]): Mask {
   const height = data.length;
   const width = data[0].length;
   const imageData = new Uint8Array(height * width);
+
   for (let row = 0; row < height; row++) {
+    if (data[row].length !== width) {
+      throw new Error(
+        `length of row ${row} (${data[row].length}) does not match width (${width})`,
+      );
+    }
     for (let col = 0; col < width; col++) {
       imageData[row * width + col] = data[row][col];
     }
   }
-  return new IJS(width, height, {
+  return new Mask(width, height, {
     data: imageData,
   });
 }
@@ -40,7 +46,7 @@ function createMaskFrom2DArray(data: number[][]): IJS {
  * @param data - Mask data.
  * @returns The new mask.
  */
-function createMaskFromString(data: string): IJS {
+function createMaskFromString(data: string): Mask {
   const trimmed = data.trim();
   const lines = trimmed.split('\n');
   const height = lines.length;
@@ -61,7 +67,7 @@ function createMaskFromString(data: string): IJS {
     }
   }
 
-  return new IJS(width, height, {
+  return new Mask(width, height, {
     data: imageData,
   });
 }

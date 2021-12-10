@@ -163,18 +163,17 @@ describe('createMask', () => {
     ]);
     expect(mask.width).toBe(3);
     expect(mask.height).toBe(4);
-    expect(mask.getPixel(1, 0)).toStrictEqual([0]);
+    expect(mask.getBit(1, 0)).toBe(0);
   });
 
   it('should create a mask from string', () => {
     const mask = testUtils.createMask(`
        0  0  0
        1  0  0
-       0  0  0
     `);
     expect(mask.width).toBe(3);
-    expect(mask.height).toBe(4);
-    expect(mask.getPixel(1, 0)).toStrictEqual([1]);
+    expect(mask.height).toBe(2);
+    expect(mask.getBit(1, 0)).toBe(1);
   });
 
   it('should throw if row length is not consistent (array)', () => {
