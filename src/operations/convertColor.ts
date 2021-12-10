@@ -1,6 +1,6 @@
 import { IJS, ImageColorModel } from '../IJS';
 import { Mask } from '../Mask';
-import { getOutputImage } from '../utils/getOutputImage';
+import { getOutputImage, maskToOutputImage } from '../utils/getOutputImage';
 
 export interface ConvertColorOptions {
   out?: IJS;
@@ -50,16 +50,16 @@ export function convertColor(
     );
   }
 
-  const output = getOutputImage(image, options, {
-    newParameters: { colorModel: colorModel },
-  });
-
   if (image instanceof IJS) {
+    const output = getOutputImage(image, options, {
+      newParameters: { colorModel: colorModel },
+    });
+
     if (
       image.colorModel === ImageColorModel.GREY ||
       image.colorModel === ImageColorModel.GREYA
     ) {
-      convertGreyToAny(image, output as IJS);
+      convertGreyToAny(image, output);
     }
 
     if (
@@ -84,12 +84,14 @@ export function convertColor(
     if (image.alpha && output.alpha) {
       copyAlpha(image, output);
     }
-  } else if (image instanceof Mask) {
+    return output;
+  } else {
+    const output = maskToOutputImage(image, options);
     convertBinaryToGrey(image, output);
+    return output;
   }
-
-  return output;
 }
+
 /**
  * Copy alpha channel of source to dest.
  *

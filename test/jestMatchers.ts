@@ -133,9 +133,6 @@ export function toMatchMaskData(
   const expectedMask = createImageFromData(
     expectedData,
     ImageColorModel.BINARY,
-    {
-      depth: received.depth,
-    },
   );
   return toMatchMask.call(this, received, expectedMask);
 }
