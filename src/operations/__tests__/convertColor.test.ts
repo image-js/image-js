@@ -1,4 +1,3 @@
-import { Mask } from '../../Mask';
 import { ImageColorModel } from '../../utils/colorModels';
 
 test('GREY to GREYA', () => {
@@ -94,17 +93,12 @@ test('RGBA to RGB', () => {
 });
 
 test('Mask to GREY', () => {
-  const mask = new Mask(2, 2);
-  mask.setBitByIndex(0, 1);
-
-  let img = mask.convertColor(ImageColorModel.GREY);
-  expect(img).toMatchImageData([
-    [255, 0],
+  const mask = testUtils.createMask([
+    [1, 1],
     [0, 0],
   ]);
-  mask.setBitByIndex(1, 1);
 
-  img = mask.convertColor(ImageColorModel.GREY);
+  let img = mask.convertColor(ImageColorModel.GREY);
   expect(img).toMatchImageData([
     [255, 255],
     [0, 0],
