@@ -1,6 +1,6 @@
 import util from 'util';
 
-import { ColorDepth, ImageColorModel } from '../..';
+import { ColorDepth, ImageColorModel } from '..';
 import { Mask } from '../Mask';
 
 describe('create new masks', () => {

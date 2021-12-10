@@ -1,5 +1,5 @@
 import { IJS } from '../src';
-import { Mask } from '../src/mask/Mask';
+import { Mask } from '../src/Mask';
 
 import { TestImagePath } from './TestImagePath';
 

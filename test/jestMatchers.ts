@@ -2,7 +2,7 @@
 /// <reference path="./jest.d.ts" />
 
 import { IJS, ImageColorModel } from '../src';
-import { Mask } from '../src/mask/Mask';
+import { Mask } from '../src/Mask';
 
 import { TestImagePath } from './TestImagePath';
 import { createImageFromData } from './createImageFromData';

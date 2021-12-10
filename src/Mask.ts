@@ -1,7 +1,7 @@
-import { ImageColorModel, ColorDepth, colorModels, IJS } from '..';
+import { convertColor } from './mask/operations';
+import { boolToNumber } from './utils/boolToNumber';
 
-import { convertColor } from './operations';
-import { convertToNumber } from './utils/convertor';
+import { ImageColorModel, ColorDepth, colorModels, IJS } from '.';
 
 // Is this a good approach?
 export type BitValue = 1 | 0 | boolean;
@@ -160,7 +160,7 @@ export class Mask {
    * @param value - New bit value.
    */
   public setBit(row: number, column: number, value: BitValue): void {
-    let result = convertToNumber(value);
+    let result = boolToNumber(value);
     const index = row * this.width + column;
     this.data[index] = result;
   }
@@ -182,7 +182,7 @@ export class Mask {
    * @param value - Value to set.
    */
   public setBitByIndex(index: number, value: BitValue): void {
-    let result = convertToNumber(value);
+    let result = boolToNumber(value);
     this.data[index * this.channels] = result;
   }
 
@@ -272,7 +272,7 @@ export class Mask {
    * @returns The mask instance.
    */
   public fill(value: BitValue): this {
-    let result = convertToNumber(value);
+    let result = boolToNumber(value);
     this.data.fill(result);
     return this;
   }

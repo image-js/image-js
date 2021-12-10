@@ -1,5 +1,5 @@
 import { IJS, ImageColorModel } from '../../src';
-import { Mask } from '../../src/mask/Mask';
+import { Mask } from '../../src/Mask';
 
 describe('toMatchImage', () => {
   it('should load and match', () => {

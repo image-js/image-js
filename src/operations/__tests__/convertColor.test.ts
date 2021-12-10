@@ -1,3 +1,4 @@
+import { Mask } from '../../Mask';
 import { ImageColorModel } from '../../utils/colorModels';
 
 test('GREY to GREYA', () => {
@@ -90,6 +91,17 @@ test('RGBA to RGB', () => {
 
   const converted = image.convertColor(ImageColorModel.RGB);
   expect(converted).toMatchImageData([[10, 20, 30, 40, 60, 70]]);
+});
+
+test('Mask to GREY', () => {
+  const mask = new Mask(2, 2);
+  mask.setBitByIndex(0, 1);
+
+  const img = mask.convertColor(ImageColorModel.GREY);
+  expect(img).toMatchImageData([
+    [255, 0],
+    [0, 0],
+  ]);
 });
 
 test('Cannot convert to same colorModel', () => {

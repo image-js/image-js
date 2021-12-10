@@ -1,4 +1,5 @@
 import { IJS, ImageColorModel } from '../IJS';
+import { Mask } from '../Mask';
 import { getOutputImage } from '../utils/getOutputImage';
 
 export interface ConvertColorOptions {
@@ -14,7 +15,7 @@ export interface ConvertColorOptions {
  * @returns The converted image.
  */
 export function convertColor(
-  image: IJS,
+  image: IJS | Mask,
   colorModel: ImageColorModel,
   options: ConvertColorOptions = {},
 ): IJS {
@@ -35,6 +36,7 @@ export function convertColor(
       ImageColorModel.RGBA,
       [ImageColorModel.GREYA, ImageColorModel.GREY, ImageColorModel.RGB],
     ],
+    [ImageColorModel.BINARY, [ImageColorModel.GREY]],
   ]);
 
   if (image.colorModel === colorModel) {
@@ -153,6 +155,22 @@ function convertRgbToGrey(image: IJS, newImage: IJS): void {
       i,
       0,
       Math.round(0.299 * r + 0.587 * g + 0.114 * b),
+    );
+  }
+}
+
+/**
+ * Convert Mask to GREY.
+ *
+ * @param mask - Mask to convert.
+ * @param newImage - Converted image.
+ */
+export function convertBinaryToGrey(mask: Mask, newImage: IJS): void {
+  for (let i = 0; i < mask.size; i++) {
+    newImage.setValueByIndex(
+      i,
+      0,
+      mask.getBitByIndex(i) ? newImage.maxValue : 0,
     );
   }
 }
