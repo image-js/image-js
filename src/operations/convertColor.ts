@@ -6,9 +6,12 @@ export interface ConvertColorOptions {
 }
 
 /**
- * @param image
- * @param colorModel
- * @param options
+ * Convert image to a different color model.
+ *
+ * @param image - Image to convert.
+ * @param colorModel - New color model.
+ * @param options - Convert color options.
+ * @returns The converted image.
  */
 export function convertColor(
   image: IJS,
@@ -108,8 +111,10 @@ export function copyAlpha(source: IJS, dest: IJS): void {
 }
 
 /**
- * @param image
- * @param newImage
+ * Convert grey image to other color model.
+ *
+ * @param image - Image to convert.
+ * @param newImage - Converted image.
  */
 function convertGreyToAny(image: IJS, newImage: IJS): void {
   for (let i = 0; i < image.size; i++) {
@@ -120,8 +125,10 @@ function convertGreyToAny(image: IJS, newImage: IJS): void {
 }
 
 /**
- * @param image
- * @param newImage
+ * Convert RGB image to RGB. Allows to use convert with an RGB target whatever the image color model is.
+ *
+ * @param image - Image to convert.
+ * @param newImage - Converted image.
  */
 function convertRgbToRgb(image: IJS, newImage: IJS): void {
   for (let i = 0; i < image.size; i++) {
@@ -132,8 +139,10 @@ function convertRgbToRgb(image: IJS, newImage: IJS): void {
 }
 
 /**
- * @param image
- * @param newImage
+ * Convert RGB image to GREY.
+ *
+ * @param image - Image to convert.
+ * @param newImage - Converted image.
  */
 function convertRgbToGrey(image: IJS, newImage: IJS): void {
   for (let i = 0; i < image.size; i++) {
