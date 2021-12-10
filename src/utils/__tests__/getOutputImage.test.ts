@@ -90,8 +90,8 @@ describe('getOutputImage', () => {
 describe('maskToOutputImage', () => {
   // TODO: enhance this test
   it('should default to creating an empty image', () => {
-    const img = new Mask(2, 2);
-    const output = maskToOutputImage(img);
+    const mask = new Mask(2, 2);
+    const output = maskToOutputImage(mask);
     expect(output).toMatchObject({
       width: 2,
       height: 2,
@@ -102,5 +102,19 @@ describe('maskToOutputImage', () => {
       [0, 0],
       [0, 0],
     ]);
+  });
+
+  it('providing valid out', () => {
+    const img = new Mask(1, 2);
+    const out = new IJS(1, 2, { colorModel: ImageColorModel.GREY });
+    const output = maskToOutputImage(img, { out });
+    expect(output).toBe(out);
+  });
+  it('providing invalid out', () => {
+    const img = new Mask(1, 2);
+    const out = new IJS(2, 2, { colorModel: ImageColorModel.GREY });
+    expect(() => {
+      maskToOutputImage(img, { out });
+    }).toThrow(/cannot use out. Its width property must be 1. Found 2/);
   });
 });

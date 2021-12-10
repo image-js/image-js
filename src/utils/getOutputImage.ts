@@ -1,3 +1,4 @@
+import { ColorDepth } from '..';
 import { CreateFromOptions, IJS, ImageColorModel } from '../IJS';
 import { Mask } from '../Mask';
 
@@ -76,10 +77,12 @@ export function maskToOutputImage(mask: Mask, options: OutOptions = {}): IJS {
     if (!(out instanceof IJS)) {
       throw new TypeError('out must be a IJS object');
     }
-    const requirements: NewImageParameters = Object.assign({
+    const requirements: NewImageParameters = {
       width: mask.width,
       height: mask.height,
-    });
+      depth: ColorDepth.UINT8,
+      colorModel: ImageColorModel.GREY,
+    };
     checkRequirements(requirements, out);
     return out;
   }
