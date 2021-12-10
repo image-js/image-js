@@ -92,8 +92,6 @@ export function toMatchMask(
   received: Mask,
   expected: IJS | Mask,
 ): MatcherResult {
-  // converted = convertColor(received, ImageColorModel.GREY)
-  // toMatchImage.call(this, converted, expected)
   let error: string | null = null;
 
   if (received.width !== expected.width) {
