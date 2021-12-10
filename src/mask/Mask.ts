@@ -124,7 +124,7 @@ export class Mask {
   }
 
   /**
-   * Create a new Mask base on the properties of an existing one.
+   * Create a new Mask based on the properties of an existing one.
    *
    * @param other - Reference Mask.
    * @param options - Mask options.
@@ -169,6 +169,7 @@ export class Mask {
   public getBitByIndex(index: number): number {
     return this.data[index * this.channels];
   }
+
   /**
    * Set the value of a bit using index.
    *
@@ -178,6 +179,64 @@ export class Mask {
   public setBitByIndex(index: number, value: BitValue): void {
     let result = convertToNumber(value);
     this.data[index * this.channels] = result;
+  }
+
+  /**
+   * Get a bit of the mask. Function exists for compatibility with IJS.
+   *
+   * @param row - Row index.
+   * @param column - Column index.
+   * @param channel - Index of the channel, must be zero.
+   * @returns The bit value.
+   */
+  public getValue(row: number, column: number, channel: number): number {
+    checkChannel(channel);
+    return this.getBit(row, column);
+  }
+
+  /**
+   * Set the value of a bit. Function exists for compatibility with IJS.
+   *
+   * @param row - Row index.
+   * @param column - Column index.
+   * @param channel - Index of the channel, must be zero.
+   * @param value - New bit value.
+   */
+  public setValue(
+    row: number,
+    column: number,
+    channel: number,
+    value: BitValue,
+  ): void {
+    checkChannel(channel);
+    this.setBit(row, column, value);
+  }
+
+  /**
+   * Get the value of a bit using index. Function exists for compatibility with IJS.
+   *
+   * @param index - Index of the pixel.
+   * @param channel - Index of the channel, must be zero.
+   * @returns Value of the bit.
+   */
+  public getValueByIndex(index: number, channel: number): number {
+    checkChannel(channel);
+    return this.getBitByIndex(index);
+  }
+  /**
+   * Set the value of a bit using index. Function exists for compatibility with IJS.
+   *
+   * @param index - Index of the pixel.
+   * @param channel - Index of the channel, must be zero.
+   * @param value - Value to set.
+   */
+  public setValueByIndex(
+    index: number,
+    channel: number,
+    value: BitValue,
+  ): void {
+    checkChannel(channel);
+    this.setBitByIndex(index, value);
   }
 
   /**
@@ -231,4 +290,15 @@ function printData(mask: Mask): string {
     result.push(`[${line.join(' ')}]`);
   }
   return result.join('\n     ');
+}
+
+/**
+ * Verify the channel value of a mask
+ *
+ * @param channel - The channel value
+ */
+function checkChannel(channel: number) {
+  if (channel !== 0) {
+    throw new Error(`Channel value must be 0 on type Mask, got ${channel}.`);
+  }
 }

@@ -60,8 +60,28 @@ describe('get and set bit', () => {
 test('fill with a a value', () => {
   const mask = new Mask(2, 2);
   mask.fill(1);
-  expect(mask).toMatchImageData([
+  expect(mask).toMatchMaskData([
     [1, 1],
     [1, 1],
   ]);
+});
+describe('get and set value', () => {
+  it('should get and set', () => {
+    const mask = new Mask(10, 20);
+    expect(mask.getValue(15, 5, 0)).toBe(0);
+    mask.setValue(15, 5, 0, 1);
+    expect(mask.getValue(15, 5, 0)).toBe(1);
+  });
+  it('should get and set by index', () => {
+    const mask = new Mask(10, 20);
+    expect(mask.getValueByIndex(15, 0)).toBe(0);
+    mask.setValueByIndex(15, 0, 1);
+    expect(mask.getValueByIndex(15, 0)).toBe(1);
+  });
+  it('wrong channel value', () => {
+    const mask = new Mask(10, 20);
+    expect(() => {
+      mask.getValue(1, 2, 2);
+    }).toThrow(/Channel value must be 0 on type Mask, got 2./);
+  });
 });
