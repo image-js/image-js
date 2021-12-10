@@ -204,8 +204,14 @@ export class IJS {
     options: CreateFromOptions = {},
   ): IJS {
     const { width = other.width, height = other.height } = options;
+    let depth;
+    if (other instanceof IJS) {
+      depth = other.depth;
+    } else {
+      depth = ColorDepth.UINT8;
+    }
     return new IJS(width, height, {
-      depth: other.depth,
+      depth: depth,
       colorModel: other.colorModel,
       ...options,
     });
