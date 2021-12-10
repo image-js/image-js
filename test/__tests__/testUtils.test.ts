@@ -152,3 +152,50 @@ describe('createRgbaImage', () => {
     ).toThrow(/is not a multiple of channels/);
   });
 });
+
+describe('createMask', () => {
+  it('should create a mask from matrix', () => {
+    const mask = testUtils.createMask([
+      [1, 0, 0],
+      [0, 1, 0],
+      [0, 0, 0],
+      [0, 0, 1],
+    ]);
+    expect(mask.width).toBe(3);
+    expect(mask.height).toBe(4);
+    expect(mask.getPixel(1, 0)).toStrictEqual([0]);
+  });
+
+  it('should create a mask from string', () => {
+    const mask = testUtils.createMask(`
+       0  0  0
+       1  0  0
+       0  0  0
+    `);
+    expect(mask.width).toBe(3);
+    expect(mask.height).toBe(4);
+    expect(mask.getPixel(1, 0)).toStrictEqual([1]);
+  });
+
+  it('should throw if row length is not consistent (array)', () => {
+    expect(() =>
+      testUtils.createMask([
+        [1, 0, 0],
+        [0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+      ]),
+    ).toThrow(/does not match width/);
+  });
+
+  it('should throw if row length is not consistent (string)', () => {
+    expect(() =>
+      testUtils.createMask(`
+       1  0  0
+       0  0 
+       0  0  0
+      0 0 0
+    `),
+    ).toThrow(/does not match width/);
+  });
+});

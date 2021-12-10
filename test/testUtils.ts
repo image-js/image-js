@@ -6,6 +6,9 @@ import { IJS, ImageColorModel, readSync } from '../src';
 
 import { TestImagePath } from './TestImagePath';
 import { createImageFromData, CreateImageOptions } from './createImageFromData';
+import { createMask } from './createMask';
+
+export { createMask };
 
 /**
  * Return the path to a given image.
@@ -115,6 +118,7 @@ declare global {
     createGreyaImage: typeof createGreyaImage;
     createRgbImage: typeof createRgbImage;
     createRgbaImage: typeof createRgbaImage;
+    createMask: typeof createMask;
     makeTmpDir: typeof makeTmpDir;
     cleanTmpDir: typeof cleanTmpDir;
   };
