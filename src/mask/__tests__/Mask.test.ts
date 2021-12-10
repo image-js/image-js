@@ -95,6 +95,13 @@ test('createFrom', () => {
   expect(mask.height).toBe(newMask.height);
 });
 
+test('clone', () => {
+  const mask = new Mask(2, 2);
+  mask.setBit(0, 1, 1);
+  const copy = mask.clone();
+  expect(copy).toMatchMask(mask);
+});
+
 test('check custom inspect', () => {
   const mask = new Mask(1, 2);
   expect(util.inspect(mask)).toMatchSnapshot();

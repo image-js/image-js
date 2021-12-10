@@ -1,5 +1,6 @@
-import { ImageDataArray, ImageColorModel, ColorDepth, colorModels } from '..';
+import { ImageColorModel, ColorDepth, colorModels, IJS } from '..';
 
+import { convertColor } from './operations';
 import { convertToNumber } from './utils/convertor';
 
 // Is this a good approach?
@@ -68,7 +69,7 @@ export class Mask {
   /**
    * Typed array holding the mask data.
    */
-  private readonly data: ImageDataArray;
+  private readonly data: Uint8Array;
 
   /**
    * Construct a new Mask knowing its dimensions.
@@ -128,6 +129,15 @@ export class Mask {
   public static createFrom(other: Mask, options: CreateFromOptions = {}): Mask {
     const { width = other.width, height = other.height } = options;
     return new Mask(width, height, options);
+  }
+
+  /**
+   * Create a copy of this image.
+   *
+   * @returns The image clone.
+   */
+  public clone(): Mask {
+    return Mask.createFrom(this, { data: this.data.slice() });
   }
 
   /**
@@ -265,6 +275,10 @@ export class Mask {
     let result = convertToNumber(value);
     this.data.fill(result);
     return this;
+  }
+
+  public convertColor(colorModel: ImageColorModel): IJS {
+    return convertColor(this, colorModel);
   }
 }
 
