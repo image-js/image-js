@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`check custom inspect 1`] = `
+"Mask {
+  width: 1
+  height: 2
+  data: [ 0]
+     [ 0]
+}"
+`;

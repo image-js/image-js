@@ -9,7 +9,7 @@ export interface MaskOptions {
   /**
    * Typed array holding the mask data.
    */
-  data?: ImageDataArray;
+  data?: Uint8Array;
 }
 
 export interface CreateFromOptions extends MaskOptions {
@@ -108,11 +108,6 @@ export class Mask {
     if (data === undefined) {
       this.data = new Uint8Array(this.size);
     } else {
-      if (!(data instanceof Uint8Array)) {
-        throw new Error(
-          `data type is ${typeof data} but expected is Uint8Array`,
-        );
-      }
       const expectedLength = this.size * this.channels;
       if (data.length !== expectedLength) {
         throw new RangeError(

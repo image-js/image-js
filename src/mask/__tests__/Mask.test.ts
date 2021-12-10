@@ -1,3 +1,5 @@
+import util from 'util';
+
 import { ColorDepth, ImageColorModel } from '../..';
 import { Mask } from '../Mask';
 
@@ -25,7 +27,6 @@ describe('create new masks', () => {
       /width must be an integer and at least 1. Received 0.5/,
     );
   });
-
   it('should throw on wrong height', () => {
     expect(() => new Mask(1, 0)).toThrow(
       /height must be an integer and at least 1. Received 0/,
@@ -34,7 +35,6 @@ describe('create new masks', () => {
       /height must be an integer and at least 1. Received 0.5/,
     );
   });
-
   it('should throw on wrong data size', () => {
     const data = new Uint8Array(2);
     expect(() => new Mask(2, 2, { data })).toThrow(
@@ -93,4 +93,9 @@ test('createFrom', () => {
   const newMask = Mask.createFrom(mask);
   expect(mask.width).toBe(newMask.width);
   expect(mask.height).toBe(newMask.height);
+});
+
+test('check custom inspect', () => {
+  const mask = new Mask(1, 2);
+  expect(util.inspect(mask)).toMatchSnapshot();
 });
