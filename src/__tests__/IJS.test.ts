@@ -112,6 +112,14 @@ describe('get and set pixels', () => {
   });
 });
 
+test('createFrom', () => {
+  const img = new IJS(2, 20, { colorModel: ImageColorModel.GREY });
+  const newImg = IJS.createFrom(img);
+  expect(img.width).toBe(newImg.width);
+  expect(img.height).toBe(newImg.height);
+  expect(img.colorModel).toBe(newImg.colorModel);
+});
+
 test('clone', () => {
   const img = new IJS(2, 2, { colorModel: ImageColorModel.GREY });
   img.setValue(0, 1, 0, 50);

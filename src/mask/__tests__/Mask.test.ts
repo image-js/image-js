@@ -17,7 +17,6 @@ describe('create new masks', () => {
     });
     expect(mask.getRawImage().data).toHaveLength(200);
   });
-
   it('should throw on wrong width', () => {
     expect(() => new Mask(0, 1)).toThrow(
       /width must be an integer and at least 1. Received 0/,
@@ -43,6 +42,7 @@ describe('create new masks', () => {
     );
   });
 });
+
 describe('get and set bit', () => {
   it('should get and set', () => {
     const mask = new Mask(10, 20);
@@ -57,14 +57,7 @@ describe('get and set bit', () => {
     expect(mask.getBitByIndex(15)).toBe(1);
   });
 });
-test('fill with a a value', () => {
-  const mask = new Mask(2, 2);
-  mask.fill(1);
-  expect(mask).toMatchMaskData([
-    [1, 1],
-    [1, 1],
-  ]);
-});
+
 describe('get and set value', () => {
   it('should get and set', () => {
     const mask = new Mask(10, 20);
@@ -84,4 +77,20 @@ describe('get and set value', () => {
       mask.getValue(1, 2, 2);
     }).toThrow(/Channel value must be 0 on type Mask, got 2./);
   });
+});
+
+test('fill with a value', () => {
+  const mask = new Mask(2, 2);
+  mask.fill(1);
+  expect(mask).toMatchMaskData([
+    [1, 1],
+    [1, 1],
+  ]);
+});
+
+test('createFrom', () => {
+  const mask = new Mask(2, 20);
+  const newMask = Mask.createFrom(mask);
+  expect(mask.width).toBe(newMask.width);
+  expect(mask.height).toBe(newMask.height);
 });
