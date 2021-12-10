@@ -1,4 +1,4 @@
-import { CreateFromOptions, IJS } from '../IJS';
+import { CreateFromOptions, IJS, ImageColorModel } from '../IJS';
 import { Mask } from '../Mask';
 
 export interface OutOptions {
@@ -71,10 +71,10 @@ export function getOutputImage(
 export function maskToOutputImage(mask: Mask, options: OutOptions = {}): IJS {
   const { out } = options;
   if (out === undefined) {
-    return IJS.createFrom(mask);
+    return IJS.createFrom(mask, { colorModel: ImageColorModel.GREY });
   } else {
-    if (!(out instanceof Mask)) {
-      throw new TypeError('out must be a Mask object');
+    if (!(out instanceof IJS)) {
+      throw new TypeError('out must be a IJS object');
     }
     const requirements: NewImageParameters = Object.assign({
       width: mask.width,

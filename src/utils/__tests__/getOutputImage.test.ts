@@ -1,6 +1,7 @@
+import { Mask } from '../..';
 import { IJS, ColorDepth } from '../../IJS';
 import { ImageColorModel } from '../colorModels';
-import { getOutputImage } from '../getOutputImage';
+import { getOutputImage, maskToOutputImage } from '../getOutputImage';
 
 describe('getOutputImage', () => {
   it('should default to creating an empty image', () => {
@@ -18,6 +19,24 @@ describe('getOutputImage', () => {
     expect(output).toMatchImageData([
       [0, 0],
       [0, 0],
+    ]);
+  });
+
+  it('should clone data', () => {
+    const img = testUtils.createGreyImage([
+      [0, 1],
+      [2, 3],
+    ]);
+    const output = getOutputImage(img, {}, { clone: true });
+    expect(output).toMatchObject({
+      width: 2,
+      height: 2,
+      colorModel: ImageColorModel.GREY,
+      depth: ColorDepth.UINT8,
+    });
+    expect(output).toMatchImageData([
+      [0, 1],
+      [2, 3],
     ]);
   });
 
@@ -65,5 +84,23 @@ describe('getOutputImage', () => {
     expect(() => getOutputImage(img, { out: 'str' })).toThrow(
       /out must be an IJS object/,
     );
+  });
+});
+
+describe('maskToOutputImage', () => {
+  // TODO: enhance this test
+  it('should default to creating an empty image', () => {
+    const img = new Mask(2, 2);
+    const output = maskToOutputImage(img);
+    expect(output).toMatchObject({
+      width: 2,
+      height: 2,
+      colorModel: ImageColorModel.GREY,
+      depth: ColorDepth.UINT8,
+    });
+    expect(output).toMatchImageData([
+      [0, 0],
+      [0, 0],
+    ]);
   });
 });
