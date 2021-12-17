@@ -6,20 +6,20 @@ test('threshold with a fixed value of 100', () => {
   const grey = testImage.convertColor(ImageColorModel.GREY);
   const th = threshold(grey, { threshold: 100 });
 
-  const expected = testUtils.createGreyImage([
-    [255, 255, 255, 255, 255, 255, 255, 255],
+  const expected = testUtils.createMask([
+    [1, 1, 1, 1, 1, 1, 1, 1],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 255, 255, 255, 255, 0],
-    [0, 0, 0, 255, 255, 255, 255, 0],
-    [0, 255, 255, 0, 0, 255, 255, 0],
-    [0, 255, 255, 0, 0, 255, 255, 0],
-    [0, 0, 0, 255, 255, 255, 255, 0],
-    [0, 0, 0, 255, 255, 255, 255, 0],
+    [0, 0, 0, 1, 1, 1, 1, 0],
+    [0, 0, 0, 1, 1, 1, 1, 0],
+    [0, 1, 1, 0, 0, 1, 1, 0],
+    [0, 1, 1, 0, 0, 1, 1, 0],
+    [0, 0, 0, 1, 1, 1, 1, 0],
+    [0, 0, 0, 1, 1, 1, 1, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [255, 255, 255, 255, 255, 255, 255, 255],
+    [1, 1, 1, 1, 1, 1, 1, 1],
   ]);
 
-  expect(th).toMatchImage(expected);
+  expect(th).toMatchMask(expected);
 });
 
 test('computeThreshold with OTSU', () => {
@@ -41,19 +41,19 @@ test('automatic threshold with OTSU', () => {
 
   const grey = testImage.convertColor(ImageColorModel.GREY);
   const th = threshold(grey, { algorithm: ThresholdAlgorithm.OTSU });
-  const expected = testUtils.createGreyImage([
-    [255, 255, 255, 255, 255, 255, 255, 255],
+  const expected = testUtils.createMask([
+    [1, 1, 1, 1, 1, 1, 1, 1],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 255, 255, 255, 255, 0],
-    [0, 0, 0, 255, 255, 255, 255, 0],
-    [0, 255, 255, 0, 0, 0, 0, 0],
-    [0, 255, 255, 0, 0, 0, 0, 0],
-    [0, 0, 0, 255, 255, 255, 255, 0],
-    [0, 0, 0, 255, 255, 255, 255, 0],
+    [0, 0, 0, 1, 1, 1, 1, 0],
+    [0, 0, 0, 1, 1, 1, 1, 0],
+    [0, 1, 1, 0, 0, 0, 0, 0],
+    [0, 1, 1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 1, 0],
+    [0, 0, 0, 1, 1, 1, 1, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [255, 255, 255, 255, 255, 255, 255, 255],
+    [1, 1, 1, 1, 1, 1, 1, 1],
   ]);
-  expect(th).toMatchImage(expected);
+  expect(th).toMatchMask(expected);
 });
 
 test('error too many channels', () => {

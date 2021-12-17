@@ -1,5 +1,6 @@
+import { Mask } from '..';
 import { IJS } from '../IJS';
-import { getOutputImage } from '../utils/getOutputImage';
+import { imageToOutputMask } from '../utils/getOutputImage';
 import { validateValue } from '../utils/validators';
 
 import huang from './thresholds/huang';
@@ -37,7 +38,7 @@ export enum ThresholdAlgorithm {
 }
 
 interface ThresholdOptionsBase {
-  out?: IJS;
+  out?: Mask;
 }
 
 export interface ThresholdOptionsThreshold extends ThresholdOptionsBase {
@@ -114,7 +115,7 @@ export function computeThreshold(
  * @param options - Threshold options.
  * @returns The converted image.
  */
-export function threshold(image: IJS, options: ThresholdOptions): IJS {
+export function threshold(image: IJS, options: ThresholdOptions): Mask {
   let thresholdValue: number;
   if ('threshold' in options) {
     thresholdValue = options.threshold;
@@ -123,12 +124,11 @@ export function threshold(image: IJS, options: ThresholdOptions): IJS {
   }
 
   validateValue(thresholdValue, image);
-  const result = getOutputImage(image, options);
+  const result = imageToOutputMask(image, options);
   for (let i = 0; i < image.size; i++) {
-    result.setValueByIndex(
+    result.setBitByIndex(
       i,
-      0,
-      image.getValueByIndex(i, 0) > thresholdValue ? image.maxValue : 0,
+      image.getValueByIndex(i, 0) > thresholdValue ? 1 : 0,
     );
   }
   return result;

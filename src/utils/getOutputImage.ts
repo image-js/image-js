@@ -11,8 +11,8 @@ export interface ImageOutOptions {
 }
 export interface MaskOutOptions {
   /**
-   * Image to use as the output.
-   * The image must have compatible properties or the method will throw.
+   * Mask to use as the output.
+   * The mask must have compatible properties or the method will throw.
    */
   out?: Mask;
 }
