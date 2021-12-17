@@ -99,12 +99,12 @@ export function maskToOutputImage(
 }
 
 /**
- * Use this function to support getting the output image of an algorithm from
- * user-supplied options when the input is a mask.
+ * Use this function to support getting the output mask of an algorithm from
+ * user-supplied options when the input is an image.
  *
- * @param image - Current mask on which the algorithm is applied.
+ * @param image - Current image on which the algorithm is applied.
  * @param options - Options object received by the algorithm.
- * @returns The output image.
+ * @returns The output mask.
  */
 export function imageToOutputMask(
   image: IJS,
@@ -140,5 +140,35 @@ function checkRequirements<ReqType extends object, OutType extends ReqType>(
         `cannot use out. Its ${property} property must be ${requirements[prop]}. Found ${out[prop]}`,
       );
     }
+  }
+}
+
+/**
+ * Use this function to support getting the output mask of an algorithm from
+ * user-supplied options when the input is an mask.
+ *
+ * @param mask - Current mask on which the algorithm is applied.
+ * @param options - Options object received by the algorithm.
+ * @returns The output mask.
+ */
+export function maskToOutputMask(
+  mask: Mask,
+  options: MaskOutOptions = {},
+): Mask {
+  const { out } = options;
+  if (out === undefined) {
+    return Mask.createFrom(mask);
+  } else {
+    if (!(out instanceof Mask)) {
+      throw new TypeError('out must be a Mask object');
+    }
+    const requirements: NewImageParameters = {
+      width: mask.width,
+      height: mask.height,
+      depth: ColorDepth.UINT1,
+      colorModel: ImageColorModel.BINARY,
+    };
+    checkRequirements(requirements, out);
+    return out;
   }
 }

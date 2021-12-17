@@ -5,6 +5,7 @@ import {
   getOutputImage,
   imageToOutputMask,
   maskToOutputImage,
+  maskToOutputMask,
 } from '../getOutputImage';
 
 describe('getOutputImage', () => {
@@ -160,6 +161,43 @@ describe('imageToOutputMask', () => {
     const img = new IJS(1, 2);
     // @ts-ignore
     expect(() => imageToOutputMask(img, { out: 'str' })).toThrow(
+      /out must be a Mask object/,
+    );
+  });
+});
+
+describe('maskToOutputMask', () => {
+  it('should default to creating an empty mask', () => {
+    const mask = new Mask(2, 2);
+    const output = maskToOutputMask(mask);
+    expect(output).toMatchObject({
+      width: 2,
+      height: 2,
+      colorModel: ImageColorModel.BINARY,
+      depth: ColorDepth.UINT1,
+    });
+    expect(output).toMatchMaskData([
+      [0, 0],
+      [0, 0],
+    ]);
+  });
+  it('providing valid out', () => {
+    const mask = new Mask(1, 2);
+    const out = new Mask(1, 2);
+    const output = maskToOutputMask(mask, { out });
+    expect(output).toBe(out);
+  });
+  it('providing invalid out', () => {
+    const mask = new Mask(1, 2);
+    const out = new Mask(2, 2);
+    expect(() => {
+      maskToOutputMask(mask, { out });
+    }).toThrow(/cannot use out. Its width property must be 1. Found 2/);
+  });
+  it('should throw if out is not a mask', () => {
+    const mask = new Mask(1, 2);
+    // @ts-ignore
+    expect(() => maskToOutputMask(mask, { out: 'str' })).toThrow(
       /out must be a Mask object/,
     );
   });
