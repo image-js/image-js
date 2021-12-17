@@ -1,3 +1,5 @@
+import { inspect } from 'util';
+
 import { IJS, ColorDepth } from '../IJS';
 import { ImageColorModel } from '../utils/colorModels';
 
@@ -220,4 +222,9 @@ test('fill alpha should throw if no alpha', () => {
   expect(() => img.fillAlpha(50)).toThrow(
     /fillAlpha can only be called if the image has an alpha channel/,
   );
+});
+
+test('check custom inspect', () => {
+  const mask = new IJS(1, 2);
+  expect(inspect(mask)).toMatchSnapshot();
 });
