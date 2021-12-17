@@ -47,7 +47,7 @@ function getImageFromIFD(ifd: TiffIfd): IJS {
   } else {
     return new IJS(ifd.width, ifd.height, {
       // TODO: handle float data
-      // @ts-expect-error
+      // @ts-expect-error float data not handled yet
       data: ifd.data,
       depth: ifd.bitsPerSample,
       colorModel:
