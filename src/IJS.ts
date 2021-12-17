@@ -486,7 +486,7 @@ export class IJS {
    * @param options - Inversion options
    * @returns The inverted image.
    */
-  public invert(options?: InvertOptions): IJS {
+  public invert(options?: InvertOptions): IJS | Mask {
     return invert(this, options);
   }
 

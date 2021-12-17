@@ -1,3 +1,4 @@
+import { invert, InvertOptions } from './filters';
 import { boolToNumber } from './utils/boolToNumber';
 
 import { ImageColorModel, ColorDepth, colorModels, IJS, convertColor } from '.';
@@ -281,6 +282,16 @@ export class Mask {
 
   public convertColor(colorModel: ImageColorModel): IJS {
     return convertColor(this, colorModel);
+  }
+
+  /**
+   * Invert the colors of the image.
+   *
+   * @param options - Inversion options
+   * @returns The inverted image.
+   */
+  public invert(options?: InvertOptions): IJS | Mask {
+    return invert(this, options);
   }
 }
 

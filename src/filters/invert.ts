@@ -1,12 +1,12 @@
-import { copyAlpha } from '..';
+import { copyAlpha, Mask } from '..';
 import { IJS } from '../IJS';
-import { getOutputImage } from '../utils/getOutputImage';
+import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage';
 
 export interface InvertOptions {
   /**
    * Image to which the inverted image has to be put.
    */
-  out?: IJS;
+  out?: IJS | Mask;
 }
 
 /**
@@ -17,22 +17,30 @@ export interface InvertOptions {
  * @returns The inverted image.
  */
 
-export function invert(image: IJS, options?: InvertOptions): IJS {
-  const newImage = getOutputImage(image, options);
-  if (image.alpha) {
-    copyAlpha(image, newImage);
-  }
-
-  const { maxValue } = newImage;
-  for (let i = 0; i < newImage.size; i++) {
-    for (let component = 0; component < image.components; component++) {
-      newImage.setValueByIndex(
-        i,
-        component,
-        maxValue - image.getValueByIndex(i, component),
-      );
+export function invert(image: IJS | Mask, options?: InvertOptions): IJS | Mask {
+  if (image instanceof IJS) {
+    const newImage = getOutputImage(image, options);
+    if (image.alpha) {
+      copyAlpha(image, newImage);
     }
-  }
 
-  return newImage;
+    const { maxValue } = newImage;
+    for (let i = 0; i < newImage.size; i++) {
+      for (let component = 0; component < image.components; component++) {
+        newImage.setValueByIndex(
+          i,
+          component,
+          maxValue - image.getValueByIndex(i, component),
+        );
+      }
+    }
+    return newImage;
+  } else {
+    const newImage = maskToOutputMask(image, options);
+
+    for (let i = 0; i < newImage.size; i++) {
+      newImage.setBitByIndex(i, !image.getBitByIndex(i));
+    }
+    return newImage;
+  }
 }

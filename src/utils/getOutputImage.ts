@@ -2,19 +2,12 @@ import { ColorDepth } from '..';
 import { CreateFromOptions, IJS, ImageColorModel } from '../IJS';
 import { Mask } from '../Mask';
 
-export interface ImageOutOptions {
+export interface OutOptions {
   /**
    * Image to use as the output.
    * The image must have compatible properties or the method will throw.
    */
-  out?: IJS;
-}
-export interface MaskOutOptions {
-  /**
-   * Mask to use as the output.
-   * The mask must have compatible properties or the method will throw.
-   */
-  out?: Mask;
+  out?: IJS | Mask;
 }
 
 type NewImageParameters = Omit<CreateFromOptions, 'data'>;
@@ -39,7 +32,7 @@ interface OutInternalOptions {
  */
 export function getOutputImage(
   thisImage: IJS,
-  options: ImageOutOptions = {},
+  options: OutOptions = {},
   internalOptions: OutInternalOptions = {},
 ): IJS {
   const { out } = options;
@@ -76,10 +69,7 @@ export function getOutputImage(
  * @param options - Options object received by the algorithm.
  * @returns The output image.
  */
-export function maskToOutputImage(
-  mask: Mask,
-  options: ImageOutOptions = {},
-): IJS {
+export function maskToOutputImage(mask: Mask, options: OutOptions = {}): IJS {
   const { out } = options;
   if (out === undefined) {
     return IJS.createFrom(mask, { colorModel: ImageColorModel.GREY });
@@ -106,10 +96,7 @@ export function maskToOutputImage(
  * @param options - Options object received by the algorithm.
  * @returns The output mask.
  */
-export function imageToOutputMask(
-  image: IJS,
-  options: MaskOutOptions = {},
-): Mask {
+export function imageToOutputMask(image: IJS, options: OutOptions = {}): Mask {
   const { out } = options;
   if (out === undefined) {
     return Mask.createFrom(image);
@@ -151,10 +138,7 @@ function checkRequirements<ReqType extends object, OutType extends ReqType>(
  * @param options - Options object received by the algorithm.
  * @returns The output mask.
  */
-export function maskToOutputMask(
-  mask: Mask,
-  options: MaskOutOptions = {},
-): Mask {
+export function maskToOutputMask(mask: Mask, options: OutOptions = {}): Mask {
   const { out } = options;
   if (out === undefined) {
     return Mask.createFrom(mask);
