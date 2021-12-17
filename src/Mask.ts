@@ -3,7 +3,6 @@ import { boolToNumber } from './utils/boolToNumber';
 
 import { ImageColorModel, ColorDepth, colorModels, IJS, convertColor } from '.';
 
-// Is this a good approach?
 export type BitValue = 1 | 0 | boolean;
 
 export interface MaskOptions {
@@ -144,7 +143,7 @@ export class Mask {
   }
 
   /**
-   * Get a bit of the mask.
+   * Get the value of a bit.
    *
    * @param row - Row index.
    * @param column - Column index.
@@ -190,7 +189,7 @@ export class Mask {
   }
 
   /**
-   * Get a bit of the mask. Function exists for compatibility with IJS.
+   * Get the value of a bit. Function exists for compatibility with IJS.
    *
    * @param row - Row index.
    * @param column - Column index.
@@ -290,7 +289,7 @@ export class Mask {
    * @param options - Inversion options
    * @returns The inverted image.
    */
-  public invert(options?: InvertOptions): IJS | Mask {
+  public invert(options?: InvertOptions): Mask {
     return invert(this, options);
   }
 }

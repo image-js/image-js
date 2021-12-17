@@ -9,6 +9,8 @@ export interface InvertOptions {
   out?: IJS | Mask;
 }
 
+export function invert(image: IJS, options?: InvertOptions): IJS;
+export function invert(image: Mask, options?: InvertOptions): Mask;
 /**
  * Invert the components of an image.
  *
@@ -16,7 +18,6 @@ export interface InvertOptions {
  * @param options - Invert options.
  * @returns The inverted image.
  */
-
 export function invert(image: IJS | Mask, options?: InvertOptions): IJS | Mask {
   if (image instanceof IJS) {
     const newImage = getOutputImage(image, options);

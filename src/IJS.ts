@@ -193,7 +193,7 @@ export class IJS {
   }
 
   /**
-   * Create a new IJS base on the properties of an existing one.
+   * Create a new IJS based on the properties of an existing one.
    *
    * @param other - Reference image.
    * @param options - Image options.
@@ -486,7 +486,7 @@ export class IJS {
    * @param options - Inversion options
    * @returns The inverted image.
    */
-  public invert(options?: InvertOptions): IJS | Mask {
+  public invert(options?: InvertOptions): IJS {
     return invert(this, options);
   }
 
