@@ -1,8 +1,8 @@
 import binary from 'test/binary';
 import { Image } from 'test/common';
 
-describe('check the erode function', function () {
-  it('check for GREY image 5x5', function () {
+describe('check the erode function', () => {
+  it('check for GREY image 5x5', () => {
     let image = new Image(
       5,
       5,
@@ -19,7 +19,7 @@ describe('check the erode function', function () {
     ]);
   });
 
-  it('check for another GREY image 5x5', function () {
+  it('check for another GREY image 5x5', () => {
     let image = new Image(
       5,
       5,
@@ -38,7 +38,7 @@ describe('check the erode function', function () {
     expect(Array.from(image.erode().data)).toStrictEqual(expected);
   });
 
-  it('check for binary image 5x5', function () {
+  it('check for binary image 5x5', () => {
     let mask = binary`
       10111
       10111
@@ -58,7 +58,7 @@ describe('check the erode function', function () {
     );
   });
 
-  it('checks erode with 2 iterations', function () {
+  it('checks erode with 2 iterations', () => {
     let mask = binary`
       10111
       10111
@@ -78,7 +78,7 @@ describe('check the erode function', function () {
     expect(mask.erode({ iterations: 2 }).data).toStrictEqual(expected.data);
   });
 
-  it('checks a 5x5 binary', function () {
+  it('checks a 5x5 binary', () => {
     const mask = binary`
       11111
       11011
@@ -98,7 +98,7 @@ describe('check the erode function', function () {
     );
   });
 
-  it('checks another 5x5 binary', function () {
+  it('checks another 5x5 binary', () => {
     const mask = binary`
       11011
       11011
@@ -118,7 +118,7 @@ describe('check the erode function', function () {
     expect(mask.erode().data).toStrictEqual(expected.data);
   });
 
-  it('checks from binary image 5x3 with vertical kernel', function () {
+  it('checks from binary image 5x3 with vertical kernel', () => {
     const kernel = [[1, 1, 1]];
     const mask = binary`
       110
@@ -139,7 +139,7 @@ describe('check the erode function', function () {
     expect(mask.erode({ kernel }).data).toStrictEqual(expected.data);
   });
 
-  it('checks from binary image 5x5, kernel with holes', function () {
+  it('checks from binary image 5x5, kernel with holes', () => {
     const kernel = [
       [1, 1, 1],
       [1, 0, 1],

@@ -1,20 +1,25 @@
-import Image from '../Image';
+import { IJS } from '../IJS';
+
+interface ErodeOptions {
+  /**
+   * 3x3 matrix. The kernel can only have ones and zeros.
+   */
+  kernel?: boolean[][];
+  iterations?: number;
+}
 
 /**
  * Erosion is one of two fundamental operations (with dilatation) in morphological
- * image processing from which all other morphological operations are based (from Wikipedia).
+ * IJS processing from which all other morphological operations are based (from Wikipedia).
  * Replaces each value with it's local minimum among the pixels with a kernel value of 1.
  * http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html
  * https://en.wikipedia.org/wiki/Erosion_(morphology)
  *
- * @memberof Image
- * @instance
- * @param {object} [options]
- * @param {Array<Array<number>>} [options.kernel] - The kernel can only have ones and zeros. Default: [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
- * @param {number} [options.iterations=1] - The number of successive erosions
- * @returns {Image}
+ * @param image - The image to process
+ * @param options - Erode options
+ * @returns - The eroded image.
  */
-export default function erode(options = {}) {
+export default function erode(image: IJS, options: ErodeOptions = {}): IJS {
   let {
     kernel = [
       [1, 1, 1],
@@ -24,12 +29,12 @@ export default function erode(options = {}) {
     iterations = 1,
   } = options;
 
-  this.checkProcessable('erode', {
+  checkProcessable('erode', {
     bitDepth: [1, 8, 16],
     components: 1,
     alpha: 0,
   });
-  if (kernel.columns % 2 === 0 || kernel.rows % 2 === 0) {
+  if (kernel.length % 2 === 0 || kernel[0].length % 2 === 0) {
     throw new TypeError(
       'erode: The number of rows and columns of the kernel must be odd',
     );
@@ -45,9 +50,9 @@ export default function erode(options = {}) {
     }
   }
 
-  let result = this;
+  let result = image;
   for (let i = 0; i < iterations; i++) {
-    if (this.bitDepth === 1) {
+    if (image.depth === 1) {
       if (onlyOnes) {
         const newImage = result.clone();
         result = erodeOnceBinaryOnlyOnes(
@@ -57,11 +62,11 @@ export default function erode(options = {}) {
           kernel[0].length,
         );
       } else {
-        const newImage = Image.createFrom(result);
+        const newImage = IJS.createFrom(result);
         result = erodeOnceBinary(result, newImage, kernel);
       }
     } else if (onlyOnes) {
-      const newImage = Image.createFrom(result);
+      const newImage = IJS.createFrom(result);
       result = erodeOnceGreyOnlyOnes(
         result,
         newImage,
@@ -69,7 +74,7 @@ export default function erode(options = {}) {
         kernel[0].length,
       );
     } else {
-      const newImage = Image.createFrom(result);
+      const newImage = IJS.createFrom(result);
       result = erodeOnceGrey(result, newImage, kernel);
     }
   }
