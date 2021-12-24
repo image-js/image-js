@@ -1,163 +1,160 @@
-describe('check the erode function', () => {
-  it('check for GREY image 5x5', () => {
-    let image = new Image(
-      5,
-      5,
-      [
-        255, 0, 255, 255, 255, 255, 0, 255, 255, 255, 255, 0, 255, 255, 255,
-        255, 0, 255, 255, 255, 255, 0, 255, 255, 255,
-      ],
-      { kind: 'GREY' },
-    );
+describe('erode', () => {
+  it('GREY image 5x5', () => {
+    let image = testUtils.createGreyImage([
+      [255, 0, 255, 255, 255],
+      [255, 0, 255, 255, 255],
+      [255, 0, 255, 255, 255],
+      [255, 0, 255, 255, 255],
+      [255, 0, 255, 255, 255],
+    ]);
 
-    expect(Array.from(image.erode().data)).toStrictEqual([
-      0, 0, 0, 255, 255, 0, 0, 0, 255, 255, 0, 0, 0, 255, 255, 0, 0, 0, 255,
-      255, 0, 0, 0, 255, 255,
+    expect(image.erode()).toMatchImageData([
+      [0, 0, 0, 255, 255],
+      [0, 0, 0, 255, 255],
+      [0, 0, 0, 255, 255],
+      [0, 0, 0, 255, 255],
+      [0, 0, 0, 255, 255],
     ]);
   });
 
-  it('check for another GREY image 5x5', () => {
-    let image = new Image(
-      5,
-      5,
-      [
-        255, 255, 255, 255, 255, 255, 255, 0, 255, 255, 255, 0, 0, 0, 255, 255,
-        255, 0, 255, 255, 255, 255, 255, 255, 255,
-      ],
-      { kind: 'GREY' },
-    );
+  it('another GREY image 5x5', () => {
+    let image = testUtils.createGreyImage([
+      [255, 255, 255, 255, 255],
+      [255, 255, 0, 255, 255],
+      [255, 0, 0, 0, 255],
+      [255, 255, 0, 255, 255],
+      [255, 255, 255, 255, 255],
+    ]);
 
     const expected = [
-      255, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0,
-      0, 255,
+      [255, 0, 0, 0, 255],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [255, 0, 0, 0, 255],
     ];
 
-    expect(Array.from(image.erode().data)).toStrictEqual(expected);
+    expect(image.erode()).toMatchImageData(expected);
   });
 
-  it('check for binary image 5x5', () => {
-    let mask = binary`
-      10111
-      10111
-      10111
-      10111
-      10111
-    `;
+  it('mask 5x5', () => {
+    let mask = testUtils.createMask(`
+      1 0 1 1 1
+      1 0 1 1 1
+      1 0 1 1 1
+      1 0 1 1 1
+      1 0 1 1 1
+    `);
 
-    expect(mask.erode().data).toStrictEqual(
-      binary`
-        00011
-        00011
-        00011
-        00011
-        00011
-      `.data,
-    );
+    expect(mask.erode()).toMatchMaskData(`
+        0 0 0 1 1
+        0 0 0 1 1
+        0 0 0 1 1
+        0 0 0 1 1
+        0 0 0 1 1
+      `);
   });
 
-  it('checks erode with 2 iterations', () => {
-    let mask = binary`
-      10111
-      10111
-      10111
-      10111
-      10111
+  it('erode with 2 iterations', () => {
+    let mask = testUtils.createMask(`
+      1 0 1 1 1
+      1 0 1 1 1
+      1 0 1 1 1
+      1 0 1 1 1
+      1 0 1 1 1
+    `);
+
+    const expected = `
+      0 0 0 0 1
+      0 0 0 0 1
+      0 0 0 0 1
+      0 0 0 0 1
+      0 0 0 0 1
     `;
 
-    const expected = binary`
-      00001
-      00001
-      00001
-      00001
-      00001
-    `;
-
-    expect(mask.erode({ iterations: 2 }).data).toStrictEqual(expected.data);
+    expect(mask.erode({ iterations: 2 })).toMatchMaskData(expected);
   });
 
-  it('checks a 5x5 binary', () => {
-    const mask = binary`
-      11111
-      11011
-      10001
-      11011
-      11111
-    `;
+  it('5x5 mask', () => {
+    const mask = testUtils.createMask(`
+      1 1 1 1 1
+      1 1 0 1 1
+      1 0 0 0 1
+      1 1 0 1 1
+      1 1 1 1 1
+    `);
 
-    expect(mask.erode().data).toStrictEqual(
-      binary`
-      10001
-      00000
-      00000
-      00000
-      10001
-    `.data,
-    );
+    expect(mask.erode()).toMatchMaskData(`
+      1 0 0 0 1
+      0 0 0 0 0
+      0 0 0 0 0
+      0 0 0 0 0
+      1 0 0 0 1
+    `);
   });
 
-  it('checks another 5x5 binary', () => {
-    const mask = binary`
-      11011
-      11011
-      00000
-      11011
-      11011
-    `;
+  it('another 5x5 mask', () => {
+    const mask = testUtils.createMask(`
+      1 1 0 1 1
+      1 1 0 1 1
+      0 0 0 0 0
+      1 1 0 1 1
+      1 1 0 1 1
+    `);
 
-    const expected = binary`
-      10001
-      00000
-      00000
-      00000
-      10001
-`;
+    const expected = `
+      1 0 0 0 1
+      0 0 0 0 0
+      0 0 0 0 0
+      0 0 0 0 0
+      1 0 0 0 1`;
 
-    expect(mask.erode().data).toStrictEqual(expected.data);
+    expect(mask.erode()).toMatchMaskData(expected);
   });
 
-  it('checks from binary image 5x3 with vertical kernel', () => {
+  it.only('mask 5x3 with vertical kernel', () => {
     const kernel = [[1, 1, 1]];
-    const mask = binary`
-      110
-      100
-      111
-      001
-      011
+    const mask = testUtils.createMask(`
+      1 1 0
+      1 0 0
+      1 1 1
+      0 0 1
+      0 1 1
+    `);
+
+    const expected = `
+      1 0 0
+      1 0 0
+      0 0 0
+      0 0 1
+      0 0 1
     `;
 
-    const expected = binary`
-      100
-      100
-      000
-      001
-      001
-    `;
-
-    expect(mask.erode({ kernel }).data).toStrictEqual(expected.data);
+    expect(mask.erode({ kernel })).toMatchMaskData(expected);
   });
 
-  it('checks from binary image 5x5, kernel with holes', () => {
+  it('mask 5x5, kernel with holes', () => {
     const kernel = [
       [1, 1, 1],
       [1, 0, 1],
       [1, 1, 1],
     ];
-    const mask = binary`
-      11111
-      11111
-      11101
-      11111
-      11111
+    const mask = testUtils.createMask(`
+      1 1 1 1 1
+      1 1 1 1 1
+      1 1 1 0 1
+      1 1 1 1 1
+      1 1 1 1 1
+    `);
+
+    const expected = `
+      1 1 1 1 1
+      1 1 0 0 0
+      1 1 0 1 0
+      1 1 0 0 0
+      1 1 1 1 1
     `;
 
-    const expected = binary`
-      11111
-      11000
-      11010
-      11000
-      11111
-    `;
-
-    expect(mask.erode({ kernel }).data).toStrictEqual(expected.data);
+    expect(mask.erode({ kernel })).toMatchMaskData(expected);
   });
 });

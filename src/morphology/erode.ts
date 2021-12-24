@@ -69,39 +69,41 @@ export function erode(
       }
     }
   }
+  console.log({ onlyOnes });
 
-  let result;
+  let result = image;
   for (let i = 0; i < iterations; i++) {
-    if (image instanceof Mask) {
+    if (result instanceof Mask) {
       if (onlyOnes) {
-        const newImage = image.clone();
+        const newImage = result.clone();
         result = erodeOnceBinaryOnlyOnes(
-          image,
+          result,
           newImage,
           kernel.length,
           kernel[0].length,
         );
       } else {
         const newImage = Mask.createFrom(image);
-        result = erodeOnceBinary(image, newImage, kernel);
+        result = erodeMask(result, newImage, kernel);
       }
     } else if (onlyOnes) {
       const newImage = IJS.createFrom(image);
-      result = erodeOnceGreyOnlyOnes(
-        image,
+      result = erodeGreyOnlyOnes(
+        result,
         newImage,
         kernel.length,
         kernel[0].length,
       );
     } else {
       const newImage = IJS.createFrom(image);
-      result = erodeOnceGrey(image, newImage, kernel);
+      result = erodeGrey(result, newImage, kernel);
     }
+    console.log(result);
   }
-  return result as IJS | Mask;
+  return result;
 }
 
-function erodeOnceGrey(img: IJS, newImage: IJS, kernel: number[][]) {
+function erodeGrey(img: IJS, newImage: IJS, kernel: number[][]) {
   const kernelWidth = kernel.length;
   const kernelHeight = kernel[0].length;
   let radiusX = (kernelWidth - 1) / 2;
@@ -125,7 +127,7 @@ function erodeOnceGrey(img: IJS, newImage: IJS, kernel: number[][]) {
   return newImage;
 }
 
-function erodeOnceGreyOnlyOnes(
+function erodeGreyOnlyOnes(
   img: IJS,
   newImage: IJS,
   kernelWidth: number,
@@ -172,7 +174,7 @@ function erodeOnceGreyOnlyOnes(
   return newImage;
 }
 
-function erodeOnceBinary(mask: Mask, newMask: Mask, kernel: number[][]): Mask {
+function erodeMask(mask: Mask, newMask: Mask, kernel: number[][]): Mask {
   const kernelWidth = kernel.length;
   const kernelHeight = kernel[0].length;
   let radiusX = (kernelWidth - 1) / 2;
