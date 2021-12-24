@@ -1,10 +1,15 @@
+import { ColorDepth, Mask } from '..';
 import { IJS } from '../IJS';
+import checkProcessable from '../utils/checkProcessable';
 
 interface ErodeOptions {
   /**
    * 3x3 matrix. The kernel can only have ones and zeros.
    */
-  kernel?: boolean[][];
+  kernel?: number[][];
+  /**
+   * Number of iterations of the algorithm.
+   */
   iterations?: number;
 }
 
@@ -19,7 +24,15 @@ interface ErodeOptions {
  * @param options - Erode options
  * @returns - The eroded image.
  */
-export default function erode(image: IJS, options: ErodeOptions = {}): IJS {
+export default function erode(
+  image: IJS | Mask,
+  options: ErodeOptions = {},
+): IJS | Mask {
+  let defaultKernel = false;
+  if (options.kernel === undefined) {
+    defaultKernel = true;
+  }
+
   let {
     kernel = [
       [1, 1, 1],
@@ -29,11 +42,14 @@ export default function erode(image: IJS, options: ErodeOptions = {}): IJS {
     iterations = 1,
   } = options;
 
-  checkProcessable('erode', {
-    bitDepth: [1, 8, 16],
-    components: 1,
-    alpha: 0,
-  });
+  if (image instanceof IJS) {
+    checkProcessable(image, 'erode', {
+      bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
+      components: 1,
+      alpha: false,
+    });
+  }
+
   if (kernel.length % 2 === 0 || kernel[0].length % 2 === 0) {
     throw new TypeError(
       'erode: The number of rows and columns of the kernel must be odd',
@@ -41,47 +57,49 @@ export default function erode(image: IJS, options: ErodeOptions = {}): IJS {
   }
 
   let onlyOnes = true;
-  outer: for (const row of kernel) {
-    for (const value of row) {
-      if (value !== 1) {
-        onlyOnes = false;
-        break outer;
+  if (!defaultKernel) {
+    outer: for (const row of kernel) {
+      for (const value of row) {
+        if (value !== 1) {
+          onlyOnes = false;
+          break outer;
+        }
       }
     }
   }
 
-  let result = image;
+  let result;
   for (let i = 0; i < iterations; i++) {
-    if (image.depth === 1) {
+    if (image instanceof Mask) {
       if (onlyOnes) {
-        const newImage = result.clone();
+        const newImage = image.clone();
         result = erodeOnceBinaryOnlyOnes(
-          result,
+          image,
           newImage,
           kernel.length,
           kernel[0].length,
         );
       } else {
-        const newImage = IJS.createFrom(result);
-        result = erodeOnceBinary(result, newImage, kernel);
+        const newImage = Mask.createFrom(image);
+        result = erodeOnceBinary(image, newImage, kernel);
       }
     } else if (onlyOnes) {
-      const newImage = IJS.createFrom(result);
+      const newImage = IJS.createFrom(image);
       result = erodeOnceGreyOnlyOnes(
-        result,
+        image,
         newImage,
         kernel.length,
         kernel[0].length,
       );
     } else {
-      const newImage = IJS.createFrom(result);
-      result = erodeOnceGrey(result, newImage, kernel);
+      const newImage = IJS.createFrom(image);
+      result = erodeOnceGrey(image, newImage, kernel);
     }
   }
-  return result;
+  return result as IJS | Mask;
 }
 
-function erodeOnceGrey(img, newImage, kernel) {
+function erodeOnceGrey(img: IJS, newImage: IJS, kernel: number[][]) {
   const kernelWidth = kernel.length;
   const kernelHeight = kernel[0].length;
   let radiusX = (kernelWidth - 1) / 2;
@@ -95,17 +113,22 @@ function erodeOnceGrey(img, newImage, kernel) {
           let i = ii - radiusX + x;
           let j = jj - radiusY + y;
           if (i < 0 || j < 0 || i >= img.width || j >= img.height) continue;
-          const value = img.getValueXY(i, j, 0);
+          const value = img.getValue(i, j, 0);
           if (value < min) min = value;
         }
       }
-      newImage.setValueXY(x, y, 0, min);
+      newImage.setValue(x, y, 0, min);
     }
   }
   return newImage;
 }
 
-function erodeOnceGreyOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
+function erodeOnceGreyOnlyOnes(
+  img: IJS,
+  newImage: IJS,
+  kernelWidth: number,
+  kernelHeight: number,
+) {
   const radiusX = (kernelWidth - 1) / 2;
   const radiusY = (kernelHeight - 1) / 2;
 
@@ -122,7 +145,7 @@ function erodeOnceGreyOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
         h < Math.min(img.height, y + radiusY + 1);
         h++
       ) {
-        const value = img.getValueXY(x, h, 0);
+        const value = img.getValue(x, h, 0);
         if (value < min) {
           min = value;
         }
@@ -141,27 +164,27 @@ function erodeOnceGreyOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
           min = minList[i];
         }
       }
-      newImage.setValueXY(x, y, 0, min);
+      newImage.setValue(x, y, 0, min);
     }
   }
   return newImage;
 }
 
-function erodeOnceBinary(img, newImage, kernel) {
+function erodeOnceBinary(mask: Mask, newMask: Mask, kernel: number[][]): Mask {
   const kernelWidth = kernel.length;
   const kernelHeight = kernel[0].length;
   let radiusX = (kernelWidth - 1) / 2;
   let radiusY = (kernelHeight - 1) / 2;
-  for (let y = 0; y < img.height; y++) {
-    for (let x = 0; x < img.width; x++) {
+  for (let y = 0; y < mask.height; y++) {
+    for (let x = 0; x < mask.width; x++) {
       let min = 1;
       intLoop: for (let jj = 0; jj < kernelHeight; jj++) {
         for (let ii = 0; ii < kernelWidth; ii++) {
           if (kernel[ii][jj] !== 1) continue;
           let i = ii - radiusX + x;
           let j = jj - radiusY + y;
-          if (j < 0 || i < 0 || i >= img.width || j >= img.height) continue;
-          const value = img.getBitXY(i, j);
+          if (j < 0 || i < 0 || i >= mask.width || j >= mask.height) continue;
+          const value = mask.getBit(i, j);
           if (value === 0) {
             min = 0;
             break intLoop;
@@ -169,50 +192,55 @@ function erodeOnceBinary(img, newImage, kernel) {
         }
       }
       if (min === 1) {
-        newImage.setBitXY(x, y);
+        newMask.setBit(x, y, 1);
       }
     }
   }
-  return newImage;
+  return newMask;
 }
 
-function erodeOnceBinaryOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
+function erodeOnceBinaryOnlyOnes(
+  mask: Mask,
+  newMask: Mask,
+  kernelWidth: number,
+  kernelHeight: number,
+): Mask {
   const radiusX = (kernelWidth - 1) / 2;
   const radiusY = (kernelHeight - 1) / 2;
 
   const minList = [];
-  for (let x = 0; x < img.width; x++) {
+  for (let x = 0; x < mask.width; x++) {
     minList.push(0);
   }
 
-  for (let y = 0; y < img.height; y++) {
-    for (let x = 0; x < img.width; x++) {
+  for (let y = 0; y < mask.height; y++) {
+    for (let x = 0; x < mask.width; x++) {
       minList[x] = 1;
       for (
         let h = Math.max(0, y - radiusY);
-        h < Math.min(img.height, y + radiusY + 1);
+        h < Math.min(mask.height, y + radiusY + 1);
         h++
       ) {
-        if (img.getBitXY(x, h) === 0) {
+        if (mask.getBit(x, h) === 0) {
           minList[x] = 0;
           break;
         }
       }
     }
 
-    for (let x = 0; x < img.width; x++) {
-      if (newImage.getBitXY(x, y) === 0) continue;
+    for (let x = 0; x < mask.width; x++) {
+      if (newMask.getBit(x, y) === 0) continue;
       for (
         let i = Math.max(0, x - radiusX);
-        i < Math.min(img.width, x + radiusX + 1);
+        i < Math.min(mask.width, x + radiusX + 1);
         i++
       ) {
         if (minList[i] === 0) {
-          newImage.clearBitXY(x, y);
+          newMask.setBit(x, y, 0);
           break;
         }
       }
     }
   }
-  return newImage;
+  return newMask;
 }
