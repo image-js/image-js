@@ -10,7 +10,7 @@ describe('checkProcessable', () => {
     ]);
     expect(() => {
       checkProcessable(img, 'test', {
-        depth: [ColorDepth.UINT1, ColorDepth.UINT16],
+        bitDepth: [ColorDepth.UINT1, ColorDepth.UINT16],
       });
     }).toThrow(
       /The process "test" can only be applied if bit depth is 1 or 16/,

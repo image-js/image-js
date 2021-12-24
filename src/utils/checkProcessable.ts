@@ -4,7 +4,7 @@ import { ColorDepth, IJS, ImageColorModel } from '..';
 const formatter = new Intl.ListFormat('en', { type: 'disjunction' });
 
 interface CheckOptions {
-  depth?: ColorDepth[] | ColorDepth;
+  bitDepth?: ColorDepth[] | ColorDepth;
   alpha?: boolean[] | boolean;
   colorModel?: ImageColorModel[] | ImageColorModel;
   components?: number[] | number;
@@ -23,7 +23,7 @@ export default function checkProcessable(
   processName: string,
   options: CheckOptions = {},
 ) {
-  let { depth: bitDepth, alpha, colorModel, components, channels } = options;
+  let { bitDepth, alpha, colorModel, components, channels } = options;
   if (bitDepth) {
     if (!Array.isArray(bitDepth)) {
       bitDepth = [bitDepth];
