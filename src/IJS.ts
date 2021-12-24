@@ -28,6 +28,7 @@ import {
   transform,
   TransformOptions,
 } from '.';
+import { erode, ErodeOptions } from './morphology';
 
 export { ImageColorModel, colorModels };
 
@@ -505,6 +506,17 @@ export class IJS {
     options?: TransformOptions,
   ): IJS {
     return transform(this, transformMatrix, options);
+  }
+
+  // MORPHOLOGY
+  /**
+   * Erode an image.
+   *
+   * @param options - Erode options
+   * @returns The eroded image.
+   */
+  public erode(options?: ErodeOptions): IJS {
+    return erode(this, options);
   }
 }
 

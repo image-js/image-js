@@ -2,7 +2,7 @@ import { ColorDepth, Mask } from '..';
 import { IJS } from '../IJS';
 import checkProcessable from '../utils/checkProcessable';
 
-interface ErodeOptions {
+export interface ErodeOptions {
   /**
    * 3x3 matrix. The kernel can only have ones and zeros.
    */
@@ -13,6 +13,8 @@ interface ErodeOptions {
   iterations?: number;
 }
 
+export function erode(image: IJS, options?: ErodeOptions): IJS;
+export function erode(image: Mask, options?: ErodeOptions): Mask;
 /**
  * Erosion is one of two fundamental operations (with dilatation) in morphological
  * IJS processing from which all other morphological operations are based (from Wikipedia).
@@ -24,7 +26,7 @@ interface ErodeOptions {
  * @param options - Erode options
  * @returns - The eroded image.
  */
-export default function erode(
+export function erode(
   image: IJS | Mask,
   options: ErodeOptions = {},
 ): IJS | Mask {

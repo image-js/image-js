@@ -1,4 +1,6 @@
 import { invert, InvertOptions } from './filters';
+import { ErodeOptions } from './morphology';
+import { erode } from './morphology/erode';
 import { boolToNumber } from './utils/boolToNumber';
 
 import { ImageColorModel, ColorDepth, colorModels, IJS, convertColor } from '.';
@@ -283,14 +285,26 @@ export class Mask {
     return convertColor(this, colorModel);
   }
 
+  // FILTERS
   /**
-   * Invert the colors of the image.
+   * Invert the colors of the mask.
    *
    * @param options - Inversion options
-   * @returns The inverted image.
+   * @returns The inverted mask.
    */
   public invert(options?: InvertOptions): Mask {
     return invert(this, options);
+  }
+
+  // MORPHOLOGY
+  /**
+   * Erode a Mask.
+   *
+   * @param options - Erode options
+   * @returns The eroded mask.
+   */
+  public erode(options?: ErodeOptions): Mask {
+    return erode(this, options);
   }
 }
 

@@ -1,6 +1,3 @@
-import binary from 'test/binary';
-import { Image } from 'test/common';
-
 describe('check the erode function', () => {
   it('check for GREY image 5x5', () => {
     let image = new Image(
