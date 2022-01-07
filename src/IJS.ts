@@ -28,7 +28,7 @@ import {
   transform,
   TransformOptions,
 } from '.';
-import { erode, ErodeOptions } from './morphology';
+import { dilate, DilateOptions, erode, ErodeOptions } from './morphology';
 
 export { ImageColorModel, colorModels };
 
@@ -512,11 +512,20 @@ export class IJS {
   /**
    * Erode an image.
    *
-   * @param options - Erode options
+   * @param options - Erode options.
    * @returns The eroded image.
    */
   public erode(options?: ErodeOptions): IJS {
     return erode(this, options);
+  }
+  /**
+   * Dilate an image.
+   *
+   * @param options - Dilate options.
+   * @returns The dilated image.
+   */
+  public dilate(options?: DilateOptions): IJS {
+    return dilate(this, options);
   }
 }
 
