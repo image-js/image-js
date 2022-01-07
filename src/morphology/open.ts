@@ -1,6 +1,8 @@
 import { ColorDepth, IJS, Mask } from '..';
 import checkProcessable from '../utils/checkProcessable';
 
+import { checkKernel } from './checkKernel';
+
 export interface OpenOptions {
   /**
    * 3x3 matrix. The kernel can only have ones and zeros.
@@ -44,11 +46,7 @@ export function open(image: IJS | Mask, options: OpenOptions = {}): IJS | Mask {
     });
   }
 
-  if (kernel.length % 2 === 0 || kernel[0].length % 2 === 0) {
-    throw new TypeError(
-      'open: The number of rows and columns of the kernel must be odd',
-    );
-  }
+  checkKernel(kernel, 'open');
 
   let newImage = image;
   for (let i = 0; i < iterations; i++) {
@@ -56,6 +54,5 @@ export function open(image: IJS | Mask, options: OpenOptions = {}): IJS | Mask {
     newImage = newImage.dilate({ kernel });
   }
 
-  console.log(newImage);
   return newImage;
 }

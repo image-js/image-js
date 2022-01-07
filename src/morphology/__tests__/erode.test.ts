@@ -221,23 +221,4 @@ describe('erode', () => {
 
     expect(mask.erode({ kernel })).toMatchMaskData(expected);
   });
-  it('even kernel size error', () => {
-    const kernel = [
-      [1, 1, 1],
-      [1, 0, 1],
-    ];
-    const mask = testUtils.createMask(`
-      1 1 1 1 1
-      1 1 1 1 1
-      1 1 1 0 1
-      1 1 1 1 1
-      1 1 1 1 1
-    `);
-
-    expect(() => {
-      mask.erode({ kernel });
-    }).toThrow(
-      /erode: The number of rows and columns of the kernel must be odd/,
-    );
-  });
 });

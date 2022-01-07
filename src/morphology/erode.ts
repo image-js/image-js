@@ -2,6 +2,8 @@ import { ColorDepth, Mask } from '..';
 import { IJS } from '../IJS';
 import checkProcessable from '../utils/checkProcessable';
 
+import { checkKernel } from './checkKernel';
+
 export interface ErodeOptions {
   /**
    * Matrix with odd dimensions (e.g. 1 by 3). The kernel can only have ones and zeros.
@@ -53,11 +55,7 @@ export function erode(
     });
   }
 
-  if (kernel.length % 2 === 0 || kernel[0].length % 2 === 0) {
-    throw new TypeError(
-      'erode: The number of rows and columns of the kernel must be odd',
-    );
-  }
+  checkKernel(kernel, 'erode');
 
   let onlyOnes = true;
   if (!defaultKernel) {

@@ -157,24 +157,4 @@ describe('dilate', () => {
 
     expect(mask.dilate({ kernel })).toMatchMask(expected);
   });
-
-  it('even kernel size error', () => {
-    const kernel = [
-      [1, 1, 1],
-      [1, 0, 1],
-    ];
-    const mask = testUtils.createMask(`
-      1 1 1 1 1
-      1 1 1 1 1
-      1 1 1 0 1
-      1 1 1 1 1
-      1 1 1 1 1
-    `);
-
-    expect(() => {
-      mask.dilate({ kernel });
-    }).toThrow(
-      /dilate: The number of rows and columns of the kernel must be odd/,
-    );
-  });
 });

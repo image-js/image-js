@@ -40,23 +40,25 @@ describe('open', () => {
     ]);
   });
 
-  it('even kernel size error', () => {
-    const kernel = [
-      [1, 1, 1],
-      [1, 0, 1],
-    ];
+  it('mask 5x5, 1x3 kernel with onlyOnes', () => {
+    let kernel = [[1, 1, 1]];
+
     const mask = testUtils.createMask(`
-      1 1 1 1 1
-      1 1 1 1 1
-      1 1 1 0 1
-      1 1 1 1 1
-      1 1 1 1 1
+      1 0 0 0 1
+      0 0 0 0 0
+      0 0 0 0 0
+      0 0 0 0 0
+      1 0 0 0 1
     `);
 
-    expect(() => {
-      mask.open({ kernel });
-    }).toThrow(
-      /open: The number of rows and columns of the kernel must be odd/,
-    );
+    const expected = testUtils.createMask(`
+      1 1 0 1 1
+      0 0 0 0 0
+      0 0 0 0 0
+      0 0 0 0 0
+      1 1 0 1 1
+    `);
+
+    expect(mask.dilate({ kernel })).toMatchMask(expected);
   });
 });
