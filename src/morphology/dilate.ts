@@ -27,7 +27,7 @@ export function dilate(image: Mask, options?: DilateOptions): Mask;
  * @param options - Dilate options.
  * @returns Dilated image.
  */
-export default function dilate(
+export function dilate(
   image: IJS | Mask,
   options: DilateOptions = {},
 ): Mask | IJS {
@@ -99,6 +99,8 @@ export default function dilate(
       result = dilateGrey(result, newImage, kernel);
     }
   }
+
+  console.log(result);
   return result;
 }
 
@@ -112,7 +114,7 @@ function dilateGrey(image: IJS, newImage: IJS, kernel: number[][]): IJS {
       let max = 0;
       for (let kernelRow = 0; kernelRow < kernelHeight; kernelRow++) {
         for (let kernelColumn = 0; kernelColumn < kernelWidth; kernelColumn++) {
-          if (kernel[kernelColumn][kernelRow] !== 1) continue;
+          if (kernel[kernelRow][kernelColumn] !== 1) continue;
           let currentColumn = kernelColumn - radiusX + column;
           let currentRow = kernelRow - radiusY + row;
           if (
@@ -190,7 +192,7 @@ function dilateMask(mask: Mask, newMask: Mask, kernel: number[][]): Mask {
       let max = 0;
       for (let kernelRow = 0; kernelRow < kernelHeight; kernelRow++) {
         for (let kernelColumn = 0; kernelColumn < kernelWidth; kernelColumn++) {
-          if (kernel[kernelColumn][kernelRow] !== 1) continue;
+          if (kernel[kernelRow][kernelColumn] !== 1) continue;
           let currentColumn = kernelColumn - radiusX + column;
           let currentRow = kernelRow - radiusY + row;
           if (
