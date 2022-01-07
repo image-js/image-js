@@ -1,5 +1,21 @@
-import { IJS } from '../IJS';
+import { Mask } from '..';
+import { ColorDepth, IJS } from '../IJS';
+import checkProcessable from '../utils/checkProcessable';
 
+export interface DilateOptions {
+  /**
+   * 3x3 matrix. The kernel can only have ones and zeros.
+   * Accessing a value: kernel[row][column]
+   */
+  kernel?: number[][];
+  /**
+   * Number of iterations of the algorithm.
+   */
+  iterations?: number;
+}
+
+export function dilate(image: IJS, options?: DilateOptions): IJS;
+export function dilate(image: Mask, options?: DilateOptions): Mask;
 /**
  * Dilatation is one of two fundamental operations (with erosion) in morphological
  * image processing from which all other morphological operations are based (from Wikipedia).
@@ -7,12 +23,19 @@ import { IJS } from '../IJS';
  * http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html
  * https://en.wikipedia.org/wiki/Dilation_(morphology)
  *
- * @param [options]
- * @param [options.kernel] - The kernel can only have ones and zeros. Default: [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
- * @param [options.iterations=1] - The number of successive erosions
- * @returns
+ * @param image - Image to dilate.
+ * @param options - Dilate options.
+ * @returns Dilated image.
  */
-export default function dilate(options = {}) {
+export default function dilate(
+  image: IJS | Mask,
+  options: DilateOptions = {},
+): Mask | IJS {
+  let defaultKernel = false;
+  if (options.kernel === undefined) {
+    defaultKernel = true;
+  }
+
   let {
     kernel = [
       [1, 1, 1],
@@ -22,190 +45,219 @@ export default function dilate(options = {}) {
     iterations = 1,
   } = options;
 
-  this.checkProcessable('dilate', {
-    bitDepth: [1, 8, 16],
-    components: 1,
-    alpha: 0,
-  });
-  if (kernel.columns % 2 === 0 || kernel.rows % 2 === 0) {
+  if (image instanceof IJS) {
+    checkProcessable(image, 'dilate', {
+      bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
+      components: 1,
+      alpha: false,
+    });
+  }
+
+  if (kernel.length % 2 === 0 || kernel[0].length % 2 === 0) {
     throw new TypeError(
       'dilate: The number of rows and columns of the kernel must be odd',
     );
   }
 
   let onlyOnes = true;
-  outer: for (const row of kernel) {
-    for (const value of row) {
-      if (value !== 1) {
-        onlyOnes = false;
-        break outer;
+  if (!defaultKernel) {
+    for (const row of kernel) {
+      for (const value of row) {
+        if (value !== 1) {
+          onlyOnes = false;
+          break;
+        }
       }
     }
   }
 
-  let result = this;
+  let result = image;
   for (let i = 0; i < iterations; i++) {
-    if (this.bitDepth === 1) {
+    if (result instanceof Mask) {
       if (onlyOnes) {
-        const newImage = result.clone();
-        result = dilateOnceBinaryOnlyOnes(
+        const newMask = result.clone();
+        result = dilatMaskOnlyOnes(
           result,
-          newImage,
-          kernel.length,
+          newMask,
           kernel[0].length,
+          kernel.length,
         );
       } else {
-        const newImage = IJS.createFrom(result);
-        result = dilateOnceBinary(result, newImage, kernel);
+        const newMask = Mask.createFrom(result);
+        result = dilateMask(result, newMask, kernel);
       }
     } else if (onlyOnes) {
       const newImage = IJS.createFrom(result);
-      result = dilateOnceGreyOnlyOnes(
+      result = dilateGreyOnlyOnes(
         result,
         newImage,
-        kernel.length,
         kernel[0].length,
+        kernel.length,
       );
     } else {
       const newImage = IJS.createFrom(result);
-      result = dilateOnceGrey(result, newImage, kernel);
+      result = dilateGrey(result, newImage, kernel);
     }
   }
   return result;
 }
 
-function dilateOnceGrey(img, newImage, kernel) {
-  const kernelWidth = kernel.length;
-  const kernelHeight = kernel[0].length;
+function dilateGrey(image: IJS, newImage: IJS, kernel: number[][]): IJS {
+  const kernelWidth = kernel[0].length;
+  const kernelHeight = kernel.length;
   let radiusX = (kernelWidth - 1) / 2;
   let radiusY = (kernelHeight - 1) / 2;
-  for (let y = 0; y < img.height; y++) {
-    for (let x = 0; x < img.width; x++) {
+  for (let row = 0; row < image.height; row++) {
+    for (let column = 0; column < image.width; column++) {
       let max = 0;
-      for (let jj = 0; jj < kernelHeight; jj++) {
-        for (let ii = 0; ii < kernelWidth; ii++) {
-          if (kernel[ii][jj] !== 1) continue;
-          let i = ii - radiusX + x;
-          let j = jj - radiusY + y;
-          if (i < 0 || j < 0 || i >= img.width || j >= img.height) continue;
-          const value = img.getValueXY(i, j, 0);
+      for (let kernelRow = 0; kernelRow < kernelHeight; kernelRow++) {
+        for (let kernelColumn = 0; kernelColumn < kernelWidth; kernelColumn++) {
+          if (kernel[kernelColumn][kernelRow] !== 1) continue;
+          let currentColumn = kernelColumn - radiusX + column;
+          let currentRow = kernelRow - radiusY + row;
+          if (
+            currentColumn < 0 ||
+            currentRow < 0 ||
+            currentColumn >= image.width ||
+            currentRow >= image.height
+          ) {
+            continue;
+          }
+          const value = image.getValue(currentRow, currentColumn, 0);
           if (value > max) max = value;
         }
       }
-      newImage.setValueXY(x, y, 0, max);
+      newImage.setValue(row, column, 0, max);
     }
   }
   return newImage;
 }
 
-function dilateOnceGreyOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
+function dilateGreyOnlyOnes(
+  image: IJS,
+  newImage: IJS,
+  kernelWidth: number,
+  kernelHeight: number,
+): IJS {
   const radiusX = (kernelWidth - 1) / 2;
   const radiusY = (kernelHeight - 1) / 2;
 
   const maxList = [];
-  for (let x = 0; x < img.width; x++) {
+  for (let column = 0; column < image.width; column++) {
     maxList.push(0);
   }
 
-  for (let y = 0; y < img.height; y++) {
-    for (let x = 0; x < img.width; x++) {
+  for (let row = 0; row < image.height; row++) {
+    for (let column = 0; column < image.width; column++) {
       let max = 0;
       for (
-        let h = Math.max(0, y - radiusY);
-        h < Math.min(img.height, y + radiusY + 1);
+        let h = Math.max(0, row - radiusY);
+        h < Math.min(image.height, row + radiusY + 1);
         h++
       ) {
-        const value = img.getValueXY(x, h, 0);
+        const value = image.getValue(h, column, 0);
         if (value > max) {
           max = value;
         }
       }
-      maxList[x] = max;
+      maxList[column] = max;
     }
 
-    for (let x = 0; x < img.width; x++) {
+    for (let column = 0; column < image.width; column++) {
       let max = 0;
       for (
-        let i = Math.max(0, x - radiusX);
-        i < Math.min(img.width, x + radiusX + 1);
+        let i = Math.max(0, column - radiusX);
+        i < Math.min(image.width, column + radiusX + 1);
         i++
       ) {
         if (maxList[i] > max) {
           max = maxList[i];
         }
       }
-      newImage.setValueXY(x, y, 0, max);
+      newImage.setValue(row, column, 0, max);
     }
   }
   return newImage;
 }
 
-function dilateOnceBinary(img, newImage, kernel) {
-  const kernelWidth = kernel.length;
-  const kernelHeight = kernel[0].length;
+function dilateMask(mask: Mask, newMask: Mask, kernel: number[][]): Mask {
+  const kernelWidth = kernel[0].length;
+  const kernelHeight = kernel.length;
   let radiusX = (kernelWidth - 1) / 2;
   let radiusY = (kernelHeight - 1) / 2;
-  for (let y = 0; y < img.height; y++) {
-    for (let x = 0; x < img.width; x++) {
+  for (let row = 0; row < mask.height; row++) {
+    for (let column = 0; column < mask.width; column++) {
       let max = 0;
-      intLoop: for (let jj = 0; jj < kernelHeight; jj++) {
-        for (let ii = 0; ii < kernelWidth; ii++) {
-          if (kernel[ii][jj] !== 1) continue;
-          let i = ii - radiusX + x;
-          let j = jj - radiusY + y;
-          if (j < 0 || i < 0 || i >= img.width || j >= img.height) continue;
-          const value = img.getBitXY(i, j);
+      for (let kernelRow = 0; kernelRow < kernelHeight; kernelRow++) {
+        for (let kernelColumn = 0; kernelColumn < kernelWidth; kernelColumn++) {
+          if (kernel[kernelColumn][kernelRow] !== 1) continue;
+          let currentColumn = kernelColumn - radiusX + column;
+          let currentRow = kernelRow - radiusY + row;
+          if (
+            currentRow < 0 ||
+            currentColumn < 0 ||
+            currentColumn >= mask.width ||
+            currentRow >= mask.height
+          ) {
+            continue;
+          }
+          const value = mask.getBit(currentRow, currentColumn);
           if (value === 1) {
             max = 1;
-            break intLoop;
+            break;
           }
         }
       }
       if (max === 1) {
-        newImage.setBitXY(x, y);
+        newMask.setBit(row, column, 1);
       }
     }
   }
-  return newImage;
+  return newMask;
 }
 
-function dilateOnceBinaryOnlyOnes(img, newImage, kernelWidth, kernelHeight) {
+function dilatMaskOnlyOnes(
+  mask: Mask,
+  newMask: Mask,
+  kernelWidth: number,
+  kernelHeight: number,
+): Mask {
   const radiusX = (kernelWidth - 1) / 2;
   const radiusY = (kernelHeight - 1) / 2;
 
   const maxList = [];
-  for (let x = 0; x < img.width; x++) {
+  for (let column = 0; column < mask.width; column++) {
     maxList.push(1);
   }
 
-  for (let y = 0; y < img.height; y++) {
-    for (let x = 0; x < img.width; x++) {
-      maxList[x] = 0;
+  for (let row = 0; row < mask.height; row++) {
+    for (let column = 0; column < mask.width; column++) {
+      maxList[column] = 0;
       for (
-        let h = Math.max(0, y - radiusY);
-        h < Math.min(img.height, y + radiusY + 1);
+        let h = Math.max(0, row - radiusY);
+        h < Math.min(mask.height, row + radiusY + 1);
         h++
       ) {
-        if (img.getBitXY(x, h) === 1) {
-          maxList[x] = 1;
+        if (mask.getBit(h, column) === 1) {
+          maxList[column] = 1;
           break;
         }
       }
     }
 
-    for (let x = 0; x < img.width; x++) {
-      if (newImage.getBitXY(x, y) === 1) continue;
+    for (let column = 0; column < mask.width; column++) {
+      if (newMask.getBit(row, column) === 1) continue;
       for (
-        let i = Math.max(0, x - radiusX);
-        i < Math.min(img.width, x + radiusX + 1);
+        let i = Math.max(0, column - radiusX);
+        i < Math.min(mask.width, column + radiusX + 1);
         i++
       ) {
         if (maxList[i] === 1) {
-          newImage.setBitXY(x, y);
+          newMask.setBit(row, column, 1);
           break;
         }
       }
     }
   }
-  return newImage;
+  return newMask;
 }
