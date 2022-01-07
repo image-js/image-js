@@ -81,8 +81,8 @@ export function erode(
         result = erodeMaskOnlyOnes(
           result,
           newImage,
-          kernel.length,
           kernel[0].length,
+          kernel.length,
         );
       } else {
         const newImage = Mask.createFrom(image);
@@ -93,8 +93,8 @@ export function erode(
       result = erodeGreyOnlyOnes(
         result,
         newImage,
-        kernel.length,
         kernel[0].length,
+        kernel.length,
       );
     } else {
       const newImage = IJS.createFrom(image);

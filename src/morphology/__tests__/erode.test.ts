@@ -37,7 +37,7 @@ describe('erode', () => {
     expect(image.erode()).toMatchImageData(expected);
   });
 
-  it.skip('GREY image 5x5, 1x3 onlyOnes kernel', () => {
+  it('GREY image 5x5, 1x3 onlyOnes kernel', () => {
     const kernel = [[1, 1, 1]];
 
     let image = testUtils.createGreyImage([
@@ -134,7 +134,7 @@ describe('erode', () => {
     expect(mask.erode()).toMatchMaskData(expected);
   });
 
-  it.only('mask 5x3, 3x1 kernel onlyOnes', () => {
+  it('mask 5x3, 3x1 kernel onlyOnes', () => {
     const kernel = [[1], [1], [1]];
     const mask = testUtils.createMask(`
       1 1 0
@@ -155,7 +155,7 @@ describe('erode', () => {
     expect(mask.erode({ kernel })).toMatchMaskData(expected);
   });
 
-  it('mask 5x3, 3x1 kernel with zeros', () => {
+  it.only('mask 5x3, 3x1 kernel with zeros', () => {
     const kernel = [[1], [1], [0]];
     const mask = testUtils.createMask(`
       1 1 0
@@ -166,9 +166,9 @@ describe('erode', () => {
     `);
 
     const expected = `
+      1 1 0
       1 0 0
       1 0 0
-      0 0 0
       0 0 1
       0 0 1
     `;
