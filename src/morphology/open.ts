@@ -26,10 +26,7 @@ export function open(image: Mask, options?: OpenOptions): Mask;
  * @param options - Open options
  * @returns The opened image
  */
-export default function open(
-  image: IJS | Mask,
-  options: OpenOptions = {},
-): IJS | Mask {
+export function open(image: IJS | Mask, options: OpenOptions = {}): IJS | Mask {
   let {
     kernel = [
       [1, 1, 1],
@@ -58,5 +55,7 @@ export default function open(
     newImage = newImage.erode({ kernel });
     newImage = newImage.dilate({ kernel });
   }
+
+  console.log(newImage);
   return newImage;
 }

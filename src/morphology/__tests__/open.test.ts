@@ -5,7 +5,7 @@ describe('open', () => {
       [1, 1, 1],
       [1, 1, 1],
     ];
-    let image = testUtils.createGreyImage([
+    const image = testUtils.createGreyImage([
       [255, 255, 0, 255, 255],
       [255, 0, 0, 0, 255],
       [255, 0, 0, 0, 255],
@@ -23,7 +23,7 @@ describe('open', () => {
   });
 
   it('GREY image 5x5, 2 iterations', () => {
-    let image = testUtils.createGreyImage([
+    const image = testUtils.createGreyImage([
       [255, 255, 255, 255, 255],
       [255, 255, 0, 255, 255],
       [255, 0, 0, 0, 255],
@@ -38,5 +38,25 @@ describe('open', () => {
       [255, 255, 0, 255, 255],
       [255, 255, 0, 255, 255],
     ]);
+  });
+
+  it('even kernel size error', () => {
+    const kernel = [
+      [1, 1, 1],
+      [1, 0, 1],
+    ];
+    const mask = testUtils.createMask(`
+      1 1 1 1 1
+      1 1 1 1 1
+      1 1 1 0 1
+      1 1 1 1 1
+      1 1 1 1 1
+    `);
+
+    expect(() => {
+      mask.open({ kernel });
+    }).toThrow(
+      /open: The number of rows and columns of the kernel must be odd/,
+    );
   });
 });
