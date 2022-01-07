@@ -1,44 +1,78 @@
+import { ColorDepth, IJS, Mask } from '..';
+import checkProcessable from '../utils/checkProcessable';
+
+export interface SubtractImageOptions {
+  absolute?: boolean;
+}
+
+export function subtractImage(
+  image: IJS,
+  otherImage: IJS,
+  options?: SubtractImageOptions,
+): IJS;
+export function subtractImage(
+  image: Mask,
+  otherImage: Mask,
+  options?: SubtractImageOptions,
+): Mask;
 /**
  * Calculate a new image that is the subtraction between the current image and the otherImage.
  *
- * @param {Image} otherImage
- * @param {object} [options={}]
- * @param {number[]|string[]} [options.channels] - : to which channel to apply the filter. By default all but alpha.
- * @param {number[]|string[]} [options.absolute=false] - :.take the absolute value of the difference (default minimum=0)
- * @returns {Image}
+ * @param image - Image from which to subtract
+ * @param otherImage - Image to subtract
+ * @param options - Subtract options.
+ * @returns The subtracted image
  */
-export default function subtractImage(otherImage, options = {}) {
-  let { channels, absolute = false } = options;
-  this.checkProcessable('subtractImage', {
-    bitDepth: [8, 16],
-  });
-  if (this.width !== otherImage.width || this.height !== otherImage.height) {
+export function subtractImage(
+  image: IJS | Mask,
+  otherImage: IJS | Mask,
+  options: SubtractImageOptions = {},
+): IJS | Mask {
+  let { absolute = false } = options;
+
+  if (image instanceof IJS) {
+    checkProcessable(image, 'subtractImage', {
+      bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
+      components: [1, 3],
+      alpha: false,
+    });
+  }
+
+  if (image.width !== otherImage.width || image.height !== otherImage.height) {
     throw new Error('subtractImage: both images must have the same size');
   }
-  if (
-    this.alpha !== otherImage.alpha ||
-    this.bitDepth !== otherImage.bitDepth
-  ) {
+  if (image.alpha !== otherImage.alpha || image.depth !== otherImage.depth) {
     throw new Error(
-      'subtractImage: both images must have the same alpha and bitDepth',
+      'subtractImage: both images must have the same alpha and depth',
     );
   }
-  if (this.channels !== otherImage.channels) {
+  if (image.channels !== otherImage.channels) {
     throw new Error(
       'subtractImage: both images must have the same number of channels',
     );
   }
 
-  let newImage = this.clone();
-
-  for (let j = 0; j < channels.length; j++) {
-    let c = channels[j];
-    for (let i = c; i < this.data.length; i += this.channels) {
-      let value = this.data[i] - otherImage.data[i];
+  let newImage = image.clone();
+  if (newImage instanceof IJS) {
+    for (let index = 0; index < image.size; index++) {
+      for (let channel = 0; channel < image.channels; channel++) {
+        let value =
+          image.getValueByIndex(index, channel) -
+          otherImage.getValueByIndex(index, channel);
+        if (absolute) {
+          newImage.setValueByIndex(index, channel, Math.abs(value));
+        } else {
+          newImage.setValueByIndex(index, channel, Math.max(value, 0));
+        }
+      }
+    }
+  } else if (image instanceof Mask && otherImage instanceof Mask) {
+    for (let index = 0; index < image.size; index++) {
+      let value = image.getBitByIndex(index) - otherImage.getBitByIndex(index);
       if (absolute) {
-        newImage.data[i] = Math.abs(value);
+        newImage.setBitByIndex(index, Math.abs(value) ? 1 : 0);
       } else {
-        newImage.data[i] = Math.max(value, 0);
+        newImage.setBitByIndex(index, Math.max(value, 0) ? 1 : 0);
       }
     }
   }

@@ -7,6 +7,8 @@ import {
   separableConvolution,
   gaussianBlur,
   GaussianBlurOptions,
+  subtractImage,
+  SubtractImageOptions,
 } from './filters';
 import { invert, InvertOptions } from './filters/invert';
 import {
@@ -498,6 +500,17 @@ export class IJS {
    */
   public invert(options?: InvertOptions): IJS {
     return invert(this, options);
+  }
+
+  /**
+   * Subtract otherImage from image.
+   *
+   * @param otherImage - Image to subtract
+   * @param options - Inversion options
+   * @returns The subtracted image.
+   */
+  public subtractImage(otherImage: IJS, options?: SubtractImageOptions): IJS {
+    return subtractImage(this, otherImage, options);
   }
 
   // GEOMETRY

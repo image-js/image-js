@@ -1,4 +1,9 @@
-import { invert, InvertOptions } from './filters';
+import {
+  invert,
+  InvertOptions,
+  subtractImage,
+  SubtractImageOptions,
+} from './filters';
 import {
   close,
   CloseOptions,
@@ -302,6 +307,17 @@ export class Mask {
    */
   public invert(options?: InvertOptions): Mask {
     return invert(this, options);
+  }
+
+  /**
+   * Subtract otherMask from mask.
+   *
+   * @param otherMask - Image to subtract
+   * @param options - Inversion options
+   * @returns The subtracted mask.
+   */
+  public subtractImage(otherMask: Mask, options?: SubtractImageOptions): Mask {
+    return subtractImage(this, otherMask, options);
   }
 
   // MORPHOLOGY
