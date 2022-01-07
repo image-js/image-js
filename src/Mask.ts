@@ -1,5 +1,11 @@
 import { invert, InvertOptions } from './filters';
-import { dilate, DilateOptions, ErodeOptions } from './morphology';
+import {
+  dilate,
+  DilateOptions,
+  ErodeOptions,
+  open,
+  OpenOptions,
+} from './morphology';
 import { erode } from './morphology/erode';
 import { boolToNumber } from './utils/boolToNumber';
 
@@ -315,6 +321,16 @@ export class Mask {
    */
   public dilate(options?: DilateOptions): Mask {
     return dilate(this, options);
+  }
+
+  /**
+   * Open an image.
+   *
+   * @param options - Open options.
+   * @returns The opened image.
+   */
+  public open(options?: OpenOptions): Mask {
+    return open(this, options);
   }
 }
 

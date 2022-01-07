@@ -9,6 +9,14 @@ import {
   GaussianBlurOptions,
 } from './filters';
 import { invert, InvertOptions } from './filters/invert';
+import {
+  dilate,
+  DilateOptions,
+  erode,
+  ErodeOptions,
+  open,
+  OpenOptions,
+} from './morphology';
 import { convertColor, ConvertColorOptions } from './operations/convertColor';
 import { convertDepth } from './operations/convertDepth';
 import copyTo, { CopyToOptions } from './operations/copyTo';
@@ -28,7 +36,6 @@ import {
   transform,
   TransformOptions,
 } from '.';
-import { dilate, DilateOptions, erode, ErodeOptions } from './morphology';
 
 export { ImageColorModel, colorModels };
 
@@ -526,6 +533,15 @@ export class IJS {
    */
   public dilate(options?: DilateOptions): IJS {
     return dilate(this, options);
+  }
+  /**
+   * Open an image.
+   *
+   * @param options - Open options.
+   * @returns The opened image.
+   */
+  public open(options?: OpenOptions): IJS {
+    return open(this, options);
   }
 }
 
