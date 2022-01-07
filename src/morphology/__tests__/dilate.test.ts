@@ -1,4 +1,4 @@
-describe('check the dilate function', () => {
+describe('dilate', () => {
   it('another GREY image 5x5, default kernel', () => {
     let image = testUtils.createGreyImage([
       [255, 0, 0, 0, 255],
@@ -37,6 +37,24 @@ describe('check the dilate function', () => {
       [255, 255, 0, 255, 255],
       [255, 255, 0, 255, 255],
       [255, 255, 0, 255, 255],
+    ]);
+  });
+
+  it('another GREY image 5x5, default kernel, 2 iterations', () => {
+    let image = testUtils.createGreyImage([
+      [255, 0, 0, 0, 255],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+    ]);
+
+    expect(image.dilate({ iterations: 2 })).toMatchImageData([
+      [255, 255, 255, 255, 255],
+      [255, 255, 255, 255, 255],
+      [255, 255, 255, 255, 255],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
     ]);
   });
 

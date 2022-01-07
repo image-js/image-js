@@ -4,7 +4,7 @@ import checkProcessable from '../utils/checkProcessable';
 
 export interface ErodeOptions {
   /**
-   * 3x3 matrix. The kernel can only have ones and zeros.
+   * Matrix with odd dimensions (e.g. 1 by 3). The kernel can only have ones and zeros.
    * Accessing a value: kernel[row][column]
    */
   kernel?: number[][];
