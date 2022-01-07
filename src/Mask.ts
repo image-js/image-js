@@ -1,5 +1,7 @@
 import { invert, InvertOptions } from './filters';
 import {
+  close,
+  CloseOptions,
   dilate,
   DilateOptions,
   ErodeOptions,
@@ -331,6 +333,16 @@ export class Mask {
    */
   public open(options?: OpenOptions): Mask {
     return open(this, options);
+  }
+
+  /**
+   * Close an image.
+   *
+   * @param options - Close options.
+   * @returns The closed image.
+   */
+  public close(options?: CloseOptions): Mask {
+    return close(this, options);
   }
 }
 

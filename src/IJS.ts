@@ -10,6 +10,8 @@ import {
 } from './filters';
 import { invert, InvertOptions } from './filters/invert';
 import {
+  close,
+  CloseOptions,
   dilate,
   DilateOptions,
   erode,
@@ -542,6 +544,16 @@ export class IJS {
    */
   public open(options?: OpenOptions): IJS {
     return open(this, options);
+  }
+
+  /**
+   * Close an image.
+   *
+   * @param options - Close options.
+   * @returns The closed image.
+   */
+  public close(options?: CloseOptions): IJS {
+    return close(this, options);
   }
 }
 
