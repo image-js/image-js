@@ -85,6 +85,7 @@ export function erode(
           kernel.length,
         );
       } else {
+        console.log('ERODE MASK');
         const newImage = Mask.createFrom(image);
         result = erodeMask(result, newImage, kernel);
       }
@@ -184,16 +185,16 @@ function erodeGreyOnlyOnes(
 }
 
 function erodeMask(mask: Mask, newMask: Mask, kernel: number[][]): Mask {
-  const kernelWidth = kernel.length;
-  const kernelHeight = kernel[0].length;
+  const kernelWidth = kernel[0].length;
+  const kernelHeight = kernel.length;
   let radiusX = (kernelWidth - 1) / 2;
   let radiusY = (kernelHeight - 1) / 2;
   for (let row = 0; row < mask.height; row++) {
     for (let column = 0; column < mask.width; column++) {
       let min = 1;
-      intLoop: for (let kernelRow = 0; kernelRow < kernelHeight; kernelRow++) {
+      for (let kernelRow = 0; kernelRow < kernelHeight; kernelRow++) {
         for (let kernelColumn = 0; kernelColumn < kernelWidth; kernelColumn++) {
-          if (kernel[kernelColumn][kernelRow] !== 1) continue;
+          if (kernel[kernelRow][kernelColumn] !== 1) continue;
           let currentColumn = kernelColumn - radiusX + column;
           let currentRow = kernelRow - radiusY + row;
           if (
@@ -207,12 +208,12 @@ function erodeMask(mask: Mask, newMask: Mask, kernel: number[][]): Mask {
           const value = mask.getBit(currentRow, currentColumn);
           if (value === 0) {
             min = 0;
-            break intLoop;
+            break;
           }
         }
       }
       if (min === 1) {
-        newMask.setBit(column, row, 1);
+        newMask.setBit(row, column, 1);
       }
     }
   }

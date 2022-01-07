@@ -155,7 +155,7 @@ describe('erode', () => {
     expect(mask.erode({ kernel })).toMatchMaskData(expected);
   });
 
-  it.only('mask 5x3, 3x1 kernel with zeros', () => {
+  it('mask 5x3, 3x1 kernel with zeros', () => {
     const kernel = [[1], [1], [0]];
     const mask = testUtils.createMask(`
       1 1 0
