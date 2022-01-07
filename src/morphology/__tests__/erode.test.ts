@@ -37,6 +37,28 @@ describe('erode', () => {
     expect(image.erode()).toMatchImageData(expected);
   });
 
+  it.skip('GREY image 5x5, 1x3 onlyOnes kernel', () => {
+    const kernel = [[1, 1, 1]];
+
+    let image = testUtils.createGreyImage([
+      [255, 255, 255, 255, 255],
+      [255, 255, 0, 255, 255],
+      [255, 0, 0, 0, 255],
+      [255, 255, 0, 255, 255],
+      [255, 255, 255, 255, 255],
+    ]);
+
+    const expected = [
+      [255, 255, 255, 255, 255],
+      [255, 0, 0, 0, 255],
+      [0, 0, 0, 0, 0],
+      [255, 0, 0, 0, 255],
+      [255, 255, 255, 255, 255],
+    ];
+
+    expect(image.erode({ kernel })).toMatchImageData(expected);
+  });
+
   it('mask 5x5', () => {
     let mask = testUtils.createMask(`
       1 0 1 1 1
@@ -112,8 +134,8 @@ describe('erode', () => {
     expect(mask.erode()).toMatchMaskData(expected);
   });
 
-  it('mask 5x3 with vertical kernel', () => {
-    const kernel = [[1, 1, 1]];
+  it.only('mask 5x3, 3x1 kernel onlyOnes', () => {
+    const kernel = [[1], [1], [1]];
     const mask = testUtils.createMask(`
       1 1 0
       1 0 0
@@ -133,6 +155,26 @@ describe('erode', () => {
     expect(mask.erode({ kernel })).toMatchMaskData(expected);
   });
 
+  it('mask 5x3, 3x1 kernel with zeros', () => {
+    const kernel = [[1], [1], [0]];
+    const mask = testUtils.createMask(`
+      1 1 0
+      1 0 0
+      1 1 1
+      0 0 1
+      0 1 1
+    `);
+
+    const expected = `
+      1 0 0
+      1 0 0
+      0 0 0
+      0 0 1
+      0 0 1
+    `;
+
+    expect(mask.erode({ kernel })).toMatchMaskData(expected);
+  });
   it('mask 5x5, kernel with holes', () => {
     const kernel = [
       [1, 1, 1],
