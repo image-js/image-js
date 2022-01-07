@@ -23,8 +23,8 @@ export function erode(image: Mask, options?: ErodeOptions): Mask;
  * http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html
  * https://en.wikipedia.org/wiki/Erosion_(morphology)
  *
- * @param image - The image to process
- * @param options - Erode options
+ * @param image - The image to erode.
+ * @param options - Erode options.
  * @returns - The eroded image.
  */
 export function erode(
@@ -77,8 +77,6 @@ export function erode(
   for (let i = 0; i < iterations; i++) {
     if (result instanceof Mask) {
       if (onlyOnes) {
-        console.log('go to erodeMaskOnlyOnes');
-
         const newImage = result.clone();
         result = erodeMaskOnlyOnes(
           result,
@@ -87,12 +85,10 @@ export function erode(
           kernel[0].length,
         );
       } else {
-        console.log('got to erodeMask');
         const newImage = Mask.createFrom(image);
         result = erodeMask(result, newImage, kernel);
       }
     } else if (onlyOnes) {
-      console.log('ERODE GRAY ONLY ONES');
       const newImage = IJS.createFrom(image);
       result = erodeGreyOnlyOnes(
         result,
@@ -109,53 +105,60 @@ export function erode(
   return result;
 }
 
-function erodeGrey(img: IJS, newImage: IJS, kernel: number[][]) {
+function erodeGrey(img: IJS, newImage: IJS, kernel: number[][]): IJS {
   const kernelWidth = kernel.length;
   const kernelHeight = kernel[0].length;
   let radiusX = (kernelWidth - 1) / 2;
   let radiusY = (kernelHeight - 1) / 2;
-  for (let y = 0; y < img.height; y++) {
-    for (let x = 0; x < img.width; x++) {
+  for (let row = 0; row < img.height; row++) {
+    for (let column = 0; column < img.width; column++) {
       let min = img.maxValue;
-      for (let jj = 0; jj < kernelHeight; jj++) {
-        for (let ii = 0; ii < kernelWidth; ii++) {
-          if (kernel[ii][jj] !== 1) continue;
-          let i = ii - radiusX + x;
-          let j = jj - radiusY + y;
-          if (i < 0 || j < 0 || i >= img.width || j >= img.height) continue;
-          const value = img.getValue(i, j, 0);
+      for (let kernelRow = 0; kernelRow < kernelHeight; kernelRow++) {
+        for (let kernelColumn = 0; kernelColumn < kernelWidth; kernelColumn++) {
+          if (kernel[kernelColumn][kernelRow] !== 1) continue;
+          let currentColumn = kernelColumn - radiusX + column;
+          let currentRow = kernelRow - radiusY + row;
+          if (
+            currentColumn < 0 ||
+            currentRow < 0 ||
+            currentColumn >= img.width ||
+            currentRow >= img.height
+          ) {
+            continue;
+          }
+          const value = img.getValue(currentRow, currentColumn, 0);
           if (value < min) min = value;
         }
       }
-      newImage.setValue(x, y, 0, min);
+      newImage.setValue(row, column, 0, min);
     }
   }
   return newImage;
 }
 
 function erodeGreyOnlyOnes(
-  img: IJS,
+  image: IJS,
   newImage: IJS,
   kernelWidth: number,
   kernelHeight: number,
-) {
+): IJS {
   const radiusX = (kernelWidth - 1) / 2;
   const radiusY = (kernelHeight - 1) / 2;
 
   const minList = [];
-  for (let x = 0; x < img.width; x++) {
+  for (let column = 0; column < image.width; column++) {
     minList.push(0);
   }
 
-  for (let row = 0; row < img.height; row++) {
-    for (let column = 0; column < img.width; column++) {
-      let min = img.maxValue;
+  for (let row = 0; row < image.height; row++) {
+    for (let column = 0; column < image.width; column++) {
+      let min = image.maxValue;
       for (
         let h = Math.max(0, row - radiusY);
-        h < Math.min(img.height, row + radiusY + 1);
+        h < Math.min(image.height, row + radiusY + 1);
         h++
       ) {
-        const value = img.getValue(column, h, 0);
+        const value = image.getValue(h, column, 0);
         if (value < min) {
           min = value;
         }
@@ -163,18 +166,18 @@ function erodeGreyOnlyOnes(
       minList[column] = min;
     }
 
-    for (let x = 0; x < img.width; x++) {
-      let min = img.maxValue;
+    for (let column = 0; column < image.width; column++) {
+      let min = image.maxValue;
       for (
-        let i = Math.max(0, x - radiusX);
-        i < Math.min(img.width, x + radiusX + 1);
+        let i = Math.max(0, column - radiusX);
+        i < Math.min(image.width, column + radiusX + 1);
         i++
       ) {
         if (minList[i] < min) {
           min = minList[i];
         }
       }
-      newImage.setValue(x, row, 0, min);
+      newImage.setValue(row, column, 0, min);
     }
   }
   return newImage;
@@ -188,13 +191,20 @@ function erodeMask(mask: Mask, newMask: Mask, kernel: number[][]): Mask {
   for (let row = 0; row < mask.height; row++) {
     for (let column = 0; column < mask.width; column++) {
       let min = 1;
-      intLoop: for (let jj = 0; jj < kernelHeight; jj++) {
-        for (let ii = 0; ii < kernelWidth; ii++) {
-          if (kernel[ii][jj] !== 1) continue;
-          let i = ii - radiusX + column;
-          let j = jj - radiusY + row;
-          if (j < 0 || i < 0 || i >= mask.width || j >= mask.height) continue;
-          const value = mask.getBit(i, j);
+      intLoop: for (let kernelRow = 0; kernelRow < kernelHeight; kernelRow++) {
+        for (let kernelColumn = 0; kernelColumn < kernelWidth; kernelColumn++) {
+          if (kernel[kernelColumn][kernelRow] !== 1) continue;
+          let currentColumn = kernelColumn - radiusX + column;
+          let currentRow = kernelRow - radiusY + row;
+          if (
+            currentRow < 0 ||
+            currentColumn < 0 ||
+            currentColumn >= mask.width ||
+            currentRow >= mask.height
+          ) {
+            continue;
+          }
+          const value = mask.getBit(currentRow, currentColumn);
           if (value === 0) {
             min = 0;
             break intLoop;
@@ -231,7 +241,7 @@ function erodeMaskOnlyOnes(
         h < Math.min(mask.height, row + radiusY + 1);
         h++
       ) {
-        if (mask.getBit(column, h) === 0) {
+        if (mask.getBit(h, column) === 0) {
           minList[column] = 0;
           break;
         }
@@ -239,14 +249,14 @@ function erodeMaskOnlyOnes(
     }
 
     for (let column = 0; column < mask.width; column++) {
-      if (newMask.getBit(column, row) === 0) continue;
+      if (newMask.getBit(row, column) === 0) continue;
       for (
         let i = Math.max(0, column - radiusX);
         i < Math.min(mask.width, column + radiusX + 1);
         i++
       ) {
         if (minList[i] === 0) {
-          newMask.setBit(column, row, 0);
+          newMask.setBit(row, column, 0);
           break;
         }
       }
