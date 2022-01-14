@@ -4,3 +4,4 @@ export * from './open';
 export * from './close';
 export * from './topHat';
 export * from './bottomHat';
+export * from './morphologicalGradient';

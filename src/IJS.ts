@@ -20,6 +20,8 @@ import {
   DilateOptions,
   erode,
   ErodeOptions,
+  morphologicalGradient,
+  MorphologicalGradientOptions,
   open,
   OpenOptions,
   topHat,
@@ -591,6 +593,16 @@ export class IJS {
    */
   public bottomHat(options?: BottomHatOptions): IJS {
     return bottomHat(this, options);
+  }
+
+  /**
+   * Apply morphological gradient to an image.
+   *
+   * @param options - morphological gradient options.
+   * @returns The processed image.
+   */
+  public morphologicalGradient(options?: MorphologicalGradientOptions): IJS {
+    return morphologicalGradient(this, options);
   }
 }
 

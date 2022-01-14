@@ -12,6 +12,8 @@ import {
   dilate,
   DilateOptions,
   ErodeOptions,
+  morphologicalGradient,
+  MorphologicalGradientOptions,
   open,
   OpenOptions,
   topHat,
@@ -383,6 +385,16 @@ export class Mask {
    */
   public bottomHat(options?: BottomHatOptions): Mask {
     return bottomHat(this, options);
+  }
+
+  /**
+   * Apply morphological gradient to an image.
+   *
+   * @param options - morphological gradient options.
+   * @returns The processed image.
+   */
+  public morphologicalGradient(options?: MorphologicalGradientOptions): Mask {
+    return morphologicalGradient(this, options);
   }
 }
 
