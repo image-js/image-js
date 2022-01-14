@@ -15,6 +15,11 @@ export function subtractImage(
   otherImage: Mask,
   options?: SubtractImageOptions,
 ): Mask;
+export function subtractImage(
+  image: IJS | Mask,
+  otherImage: IJS | Mask,
+  options: SubtractImageOptions,
+): IJS | Mask;
 /**
  * Calculate a new image that is the subtraction between the current image and the otherImage.
  *

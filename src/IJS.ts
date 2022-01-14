@@ -503,14 +503,14 @@ export class IJS {
   }
 
   /**
-   * Subtract otherImage from image.
+   * Subtract other from an image.
    *
-   * @param otherImage - Image to subtract
+   * @param other - Image to subtract
    * @param options - Inversion options
    * @returns The subtracted image.
    */
-  public subtractImage(otherImage: IJS, options?: SubtractImageOptions): IJS {
-    return subtractImage(this, otherImage, options);
+  public subtractImage(other: IJS, options?: SubtractImageOptions): IJS {
+    return subtractImage(this, other, options);
   }
 
   // GEOMETRY

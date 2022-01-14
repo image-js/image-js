@@ -310,14 +310,14 @@ export class Mask {
   }
 
   /**
-   * Subtract otherMask from mask.
+   * Subtract other from a mask.
    *
-   * @param otherMask - Image to subtract
+   * @param other - Image to subtract
    * @param options - Inversion options
    * @returns The subtracted mask.
    */
-  public subtractImage(otherMask: Mask, options?: SubtractImageOptions): Mask {
-    return subtractImage(this, otherMask, options);
+  public subtractImage(other: Mask, options?: SubtractImageOptions): Mask {
+    return subtractImage(this, other, options);
   }
 
   // MORPHOLOGY
