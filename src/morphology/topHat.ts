@@ -1,4 +1,6 @@
 import { ColorDepth, IJS, Mask } from '..';
+import { subtractImage } from '../filters';
+import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
 
 export interface TopHatOptions {
@@ -13,6 +15,8 @@ export interface TopHatOptions {
   iterations?: number;
 }
 
+export function topHat(image: IJS, options?: TopHatOptions): IJS;
+export function topHat(image: Mask, options?: TopHatOptions): Mask;
 /**
  * This function is the white top hat (also called top hat). In mathematical morphology and digital image processing,
  * top-hat transform is an operation that extracts small elements and details from given images.
@@ -24,7 +28,10 @@ export interface TopHatOptions {
  * @param options - Top hat options
  * @returns The top-hatted image
  */
-export default function topHat(image: IJS | Mask, options: TopHatOptions = {}) {
+export function topHat(
+  image: IJS | Mask,
+  options: TopHatOptions = {},
+): IJS | Mask {
   let {
     kernel = [
       [1, 1, 1],
@@ -42,16 +49,12 @@ export default function topHat(image: IJS | Mask, options: TopHatOptions = {}) {
     });
   }
 
-  if (kernel.length % 2 === 0 || kernel[0].length % 2 === 0) {
-    throw new TypeError(
-      'topHat: The number of rows and columns of the kernel must be odd',
-    );
-  }
+  checkKernel(kernel, 'topHat');
 
   let newImage = image;
   for (let i = 0; i < iterations; i++) {
     let openImage = newImage.open({ kernel });
-    newImage = openImage.subtractImage(newImage, { absolute: true });
+    newImage = subtractImage(openImage, newImage, { absolute: true });
   }
   return newImage;
 }

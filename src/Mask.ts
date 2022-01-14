@@ -12,6 +12,8 @@ import {
   ErodeOptions,
   open,
   OpenOptions,
+  topHat,
+  TopHatOptions,
 } from './morphology';
 import { erode } from './morphology/erode';
 import { boolToNumber } from './utils/boolToNumber';
@@ -359,6 +361,16 @@ export class Mask {
    */
   public close(options?: CloseOptions): Mask {
     return close(this, options);
+  }
+
+  /**
+   * Top hat of an image.
+   *
+   * @param options - Top hat options.
+   * @returns The top-hatted image.
+   */
+  public topHat(options?: TopHatOptions): Mask {
+    return topHat(this, options);
   }
 }
 

@@ -20,6 +20,8 @@ import {
   ErodeOptions,
   open,
   OpenOptions,
+  topHat,
+  TopHatOptions,
 } from './morphology';
 import { convertColor, ConvertColorOptions } from './operations/convertColor';
 import { convertDepth } from './operations/convertDepth';
@@ -567,6 +569,16 @@ export class IJS {
    */
   public close(options?: CloseOptions): IJS {
     return close(this, options);
+  }
+
+  /**
+   * Top hat of an image.
+   *
+   * @param options - Top hat options.
+   * @returns The top-hatted image.
+   */
+  public topHat(options?: TopHatOptions): IJS {
+    return topHat(this, options);
   }
 }
 
