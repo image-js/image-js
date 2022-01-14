@@ -1,10 +1,11 @@
 import { IJS, Mask } from '..';
 
 /**
- * @param image
- * @param index
- * @param columnOffset
- * @param rowOffset
+ * Return index of a neighbouring pixel.
+ * @param image - Image that is being processed
+ * @param index - Index of the pixel currently processed
+ * @param columnOffset - Column offset compared to the current pixel.
+ * @param rowOffset - Row offset compared to the current pixel.
  */
 export function getNeighbourIndex(
   image: Mask | IJS,
