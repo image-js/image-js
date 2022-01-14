@@ -1,5 +1,9 @@
 import { IJS } from '../..';
-import { getNeighbourIndex, rowColumnToIndex } from '../getNeighbourIndex';
+import {
+  getNeighbourIndex,
+  indexToRowColumn,
+  rowColumnToIndex,
+} from '../getNeighbourIndex';
 
 describe('getNeighbourIndex', () => {
   it('values in range', () => {
@@ -26,4 +30,16 @@ test('rowColumnToIndex', () => {
   expect(() => {
     rowColumnToIndex(image, 5, 0);
   }).toThrow('Pixel row and/or column are out of range.');
+});
+
+test('indexToRowColumn', () => {
+  let image = new IJS(3, 5);
+
+  expect(indexToRowColumn(image, 7)).toStrictEqual({ row: 2, column: 1 });
+  expect(indexToRowColumn(image, 9)).toStrictEqual({ row: 3, column: 0 });
+  expect(indexToRowColumn(image, 3)).toStrictEqual({ row: 1, column: 0 });
+
+  expect(() => {
+    indexToRowColumn(image, 20);
+  }).toThrow('Index is out of range.');
 });

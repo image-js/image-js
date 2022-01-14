@@ -39,9 +39,12 @@ export function indexToRowColumn(
   image: Mask | IJS,
   index: number,
 ): { row: number; column: number } {
+  if (index > image.size) {
+    throw new Error('Index is out of range.');
+  }
   let column = index % image.width;
-  let row = (index - column - 1) / image.width;
-  console.log(row, column);
+  let row = (index - column) / image.width;
+
   return { row, column };
 }
 
