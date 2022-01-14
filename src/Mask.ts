@@ -5,6 +5,8 @@ import {
   SubtractImageOptions,
 } from './filters';
 import {
+  bottomHat,
+  BottomHatOptions,
   close,
   CloseOptions,
   dilate,
@@ -371,6 +373,16 @@ export class Mask {
    */
   public topHat(options?: TopHatOptions): Mask {
     return topHat(this, options);
+  }
+
+  /**
+   * Bottom hat of an image.
+   *
+   * @param options - Bottom hat options.
+   * @returns The bottom-hatted image.
+   */
+  public bottomHat(options?: BottomHatOptions): Mask {
+    return bottomHat(this, options);
   }
 }
 

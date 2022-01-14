@@ -12,6 +12,8 @@ import {
 } from './filters';
 import { invert, InvertOptions } from './filters/invert';
 import {
+  bottomHat,
+  BottomHatOptions,
   close,
   CloseOptions,
   dilate,
@@ -579,6 +581,16 @@ export class IJS {
    */
   public topHat(options?: TopHatOptions): IJS {
     return topHat(this, options);
+  }
+
+  /**
+   * Bottom hat of an image.
+   *
+   * @param options - Bottom hat options.
+   * @returns The bottom-hatted image.
+   */
+  public bottomHat(options?: BottomHatOptions): IJS {
+    return bottomHat(this, options);
   }
 }
 
