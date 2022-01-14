@@ -1,7 +1,6 @@
 import { ColorDepth, IJS, Mask } from '..';
+import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
-
-import { checkKernel } from './checkKernel';
 
 export interface OpenOptions {
   /**

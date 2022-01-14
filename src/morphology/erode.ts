@@ -1,8 +1,7 @@
 import { ColorDepth, Mask } from '..';
 import { IJS } from '../IJS';
+import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
-
-import { checkKernel } from './checkKernel';
 
 export interface ErodeOptions {
   /**

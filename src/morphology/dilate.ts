@@ -1,8 +1,7 @@
 import { Mask } from '..';
 import { ColorDepth, IJS } from '../IJS';
+import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
-
-import { checkKernel } from './checkKernel';
 
 export interface DilateOptions {
   /**
