@@ -13,7 +13,7 @@ const MAX_ARRAY = 0x00ffff; // 65535 should be enough for most of the cases
 const toProcess = new Uint16Array(MAX_ARRAY + 1);
 
 /**
- * Set the pixels connected to the border of the image to zero. YOu can either use connectivity 4 (share an edge) or 8 (include corners)
+ * Set the pixels connected to the border of the image to zero. You can chose to allow corner connection of not with the `allowCorners` option.
  *
  * @param image - The image to process.
  * @param options - Clear border options.
@@ -34,17 +34,16 @@ export function clearBorder(
 
   // find relevant border pixels
   for (let pixelIndex of borderIterator(image)) {
-    if (newImage.getValueByIndex(pixelIndex, 0) === maxValue) {
+    if (newImage.getBitByIndex(pixelIndex) === maxValue) {
       toProcess[to++ % MAX_ARRAY] = pixelIndex;
-      newImage.setValueByIndex(pixelIndex, 0, 0);
+      newImage.setBitByIndex(pixelIndex, 0);
     }
   }
 
   // find pixels connected to the border pixels
   while (from <= to) {
-    const currentPixel = toProcess[from++ & MAX_ARRAY];
+    const currentPixel = toProcess[from++ % MAX_ARRAY];
     newImage.setBitByIndex(currentPixel, 0);
-
     if (to - from > MAX_ARRAY) {
       throw new Error(
         'clearBorder could not process image, overflow in the data processing array.',
@@ -98,7 +97,7 @@ export function clearBorder(
   return newImage;
 
   function addToProcess(pixel: number): void {
-    if (image.getBitByIndex(pixel) === image.maxValue) {
+    if (newImage.getBitByIndex(pixel) === image.maxValue) {
       toProcess[to++ % MAX_ARRAY] = pixel;
     }
   }

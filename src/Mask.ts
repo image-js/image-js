@@ -7,6 +7,8 @@ import {
 import {
   bottomHat,
   BottomHatOptions,
+  clearBorder,
+  ClearBorderOptions,
   close,
   CloseOptions,
   dilate,
@@ -390,11 +392,21 @@ export class Mask {
   /**
    * Apply morphological gradient to an image.
    *
-   * @param options - morphological gradient options.
+   * @param options - Morphological gradient options.
    * @returns The processed image.
    */
   public morphologicalGradient(options?: MorphologicalGradientOptions): Mask {
     return morphologicalGradient(this, options);
+  }
+
+  /**
+   * Remove elements connected to the borders of an image.
+   *
+   * @param options - Clear border options.
+   * @returns The processed image.
+   */
+  public clearBorder(options?: ClearBorderOptions): Mask {
+    return clearBorder(this, options);
   }
 }
 

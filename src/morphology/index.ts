@@ -5,3 +5,4 @@ export * from './close';
 export * from './topHat';
 export * from './bottomHat';
 export * from './morphologicalGradient';
+export * from './clearBorder';
