@@ -2,6 +2,8 @@ import { ColorDepth } from '..';
 import { CreateFromOptions, IJS, ImageColorModel } from '../IJS';
 import { Mask } from '../Mask';
 
+import { copyData } from './copyData';
+
 export interface OutOptions {
   /**
    * Image to use as the output.
@@ -60,6 +62,9 @@ export function getOutputImage(
       newParameters,
     );
     checkRequirements(requirements, out);
+    if (clone) {
+      copyData(out, thisImage);
+    }
     return out;
   }
 }
@@ -70,7 +75,6 @@ export function getOutputImage(
  *
  * @param mask - Current mask on which the algorithm is applied.
  * @param options - Options object received by the algorithm.
- * @param internalOptions
  * @returns The output image.
  */
 export function maskToOutputImage(mask: Mask, options: OutOptions = {}): IJS {
@@ -170,6 +174,9 @@ export function maskToOutputMask(
       colorModel: ImageColorModel.BINARY,
     };
     checkRequirements(requirements, out);
+    if (clone) {
+      copyData(out, mask);
+    }
     return out;
   }
 }

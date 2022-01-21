@@ -27,7 +27,7 @@ describe('getOutputImage', () => {
     ]);
   });
 
-  it('should clone data', () => {
+  it('should clone image when out undefined', () => {
     const img = testUtils.createGreyImage([
       [0, 1],
       [2, 3],
@@ -44,7 +44,19 @@ describe('getOutputImage', () => {
       [2, 3],
     ]);
   });
+  it('should clone data to out', () => {
+    const img = testUtils.createGreyImage([
+      [0, 1],
+      [2, 3],
+    ]);
 
+    let out = testUtils.createGreyImage([
+      [5, 6],
+      [7, 8],
+    ]);
+    const output = getOutputImage(img, { out }, { clone: true });
+    expect(out).toBe(output);
+  });
   it('should create with requirements', () => {
     const img = new IJS(1, 2);
     const requirements = {
@@ -200,5 +212,18 @@ describe('maskToOutputMask', () => {
     expect(() => maskToOutputMask(mask, { out: 'str' })).toThrow(
       /out must be a Mask object/,
     );
+  });
+  it('should clone data to out', () => {
+    const img = testUtils.createMask([
+      [0, 1],
+      [1, 0],
+    ]);
+
+    let out = testUtils.createMask([
+      [1, 0],
+      [0, 0],
+    ]);
+    const output = maskToOutputMask(img, { out }, { clone: true });
+    expect(out).toBe(output);
   });
 });
