@@ -3,3 +3,4 @@ export * from './gaussianBlur';
 export * from './convolution';
 export * from './blur';
 export * from './subtractImage';
+export * from './and';
