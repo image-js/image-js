@@ -18,6 +18,9 @@ interface OutInternalOptions {
    * `thisImage`.
    */
   newParameters?: NewImageParameters;
+  /**
+   * Specify if the values of the original image should be cloned.
+   */
   clone?: boolean;
 }
 
@@ -67,12 +70,16 @@ export function getOutputImage(
  *
  * @param mask - Current mask on which the algorithm is applied.
  * @param options - Options object received by the algorithm.
+ * @param internalOptions
  * @returns The output image.
  */
 export function maskToOutputImage(mask: Mask, options: OutOptions = {}): IJS {
   const { out } = options;
+
   if (out === undefined) {
-    return IJS.createFrom(mask, { colorModel: ImageColorModel.GREY });
+    return IJS.createFrom(mask, {
+      colorModel: ImageColorModel.GREY,
+    });
   } else {
     if (!(out instanceof IJS)) {
       throw new TypeError('out must be an IJS object');
@@ -136,12 +143,22 @@ function checkRequirements<ReqType extends object, OutType extends ReqType>(
  *
  * @param mask - Current mask on which the algorithm is applied.
  * @param options - Options object received by the algorithm.
+ * @param internalOptions - Additional private options.
  * @returns The output mask.
  */
-export function maskToOutputMask(mask: Mask, options: OutOptions = {}): Mask {
+export function maskToOutputMask(
+  mask: Mask,
+  options: OutOptions = {},
+  internalOptions: OutInternalOptions = {},
+): Mask {
   const { out } = options;
+  const { newParameters, clone } = internalOptions;
   if (out === undefined) {
-    return Mask.createFrom(mask);
+    if (clone) {
+      return mask.clone();
+    } else {
+      return Mask.createFrom(mask, newParameters);
+    }
   } else {
     if (!(out instanceof Mask)) {
       throw new TypeError('out must be a Mask object');
