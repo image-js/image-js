@@ -3,6 +3,9 @@ import { borderIterator } from '../utils/borderIterator';
 import { maskToOutputMask } from '../utils/getOutputImage';
 
 export interface ClearBorderOptions {
+  /**
+   * Consider pixels connected by corners?
+   */
   allowCorners?: boolean;
   /**
    * Image to which the inverted image has to be put.
