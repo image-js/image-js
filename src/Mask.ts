@@ -157,9 +157,9 @@ export class Mask {
   }
 
   /**
-   * Create a copy of this image.
+   * Create a copy of this mask.
    *
-   * @returns The image clone.
+   * @returns The mask clone.
    */
   public clone(): Mask {
     return Mask.createFrom(this, { data: this.data.slice() });

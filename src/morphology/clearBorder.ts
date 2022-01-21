@@ -1,5 +1,6 @@
 import { Mask } from '..';
 import { borderIterator } from '../utils/borderIterator';
+import { maskToOutputMask } from '../utils/getOutputImage';
 
 export interface ClearBorderOptions {
   allowCorners?: boolean;
@@ -9,13 +10,13 @@ export interface ClearBorderOptions {
   out?: Mask;
 }
 
-const MAX_ARRAY = 0x00ffff; // 65535 should be enough for most of the cases
-const toProcess = new Uint16Array(MAX_ARRAY + 1);
+const MAX_ARRAY = 65536; // 65536 should be enough for most of the cases
+const toProcess = new Uint16Array(MAX_ARRAY);
 
 /**
- * Set the pixels connected to the border of the image to zero. You can chose to allow corner connection of not with the `allowCorners` option.
+ * Set the pixels connected to the border of the mask to zero. You can chose to allow corner connection of not with the `allowCorners` option.
  *
- * @param image - The image to process.
+ * @param image - The mask to process.
  * @param options - Clear border options.
  * @returns The image with cleared borders.
  */
@@ -25,12 +26,14 @@ export function clearBorder(
 ): Mask {
   let { allowCorners = false } = options;
 
+  // toProcess.fill(0);
+
+  let newImage = maskToOutputMask(image, options, { clone: true });
+
   const maxValue = image.maxValue;
 
   let from = 0;
   let to = 0;
-
-  let newImage = image.clone();
 
   // find relevant border pixels
   for (let pixelIndex of borderIterator(image)) {
@@ -41,7 +44,7 @@ export function clearBorder(
   }
 
   // find pixels connected to the border pixels
-  while (from <= to) {
+  while (from < to) {
     const currentPixel = toProcess[from++ % MAX_ARRAY];
     newImage.setBitByIndex(currentPixel, 0);
     if (to - from > MAX_ARRAY) {
@@ -50,7 +53,7 @@ export function clearBorder(
       );
     }
 
-    // check if on a border
+    // check if pixel is on a border
     const topBorder = currentPixel < image.width;
     const leftBorder = currentPixel % image.width === 0;
     const rightBorder = currentPixel % image.width === image.width - 1;
@@ -75,24 +78,29 @@ export function clearBorder(
       addToProcess(right);
     }
     if (allowCorners) {
-      if (!leftBorder && !topBorder) {
-        const topLeft = currentPixel - image.width - 1;
-        addToProcess(topLeft);
+      if (!topBorder) {
+        if (!leftBorder) {
+          const topLeft = currentPixel - image.width - 1;
+          addToProcess(topLeft);
+        }
+        if (!rightBorder) {
+          const topRight = currentPixel - image.width + 1;
+          addToProcess(topRight);
+        }
       }
-      if (!topBorder && !rightBorder) {
-        const topRight = currentPixel - image.width + 1;
-        addToProcess(topRight);
-      }
-      if (!leftBorder && !bottomBorder) {
-        const bottomLeft = currentPixel + image.width - 1;
-        addToProcess(bottomLeft);
-      }
-      if (!bottomBorder && !rightBorder) {
-        const bottomRight = currentPixel + image.width + 1;
-        addToProcess(bottomRight);
+      if (!bottomBorder) {
+        if (!leftBorder) {
+          const bottomLeft = currentPixel + image.width - 1;
+          addToProcess(bottomLeft);
+        }
+        if (!rightBorder) {
+          const bottomRight = currentPixel + image.width + 1;
+          addToProcess(bottomRight);
+        }
       }
     }
   }
+  console.log({ toProcess, newImage });
 
   return newImage;
 
