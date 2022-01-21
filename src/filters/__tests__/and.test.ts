@@ -14,6 +14,6 @@ describe('and', () => {
     const other = testUtils.createMask([[1, 1, 1, 0, 0, 0]]);
     expect(() => {
       image.and(other);
-    }).toThrow('subtractImage: both images must have the same size');
+    }).toThrow('and: both masks must have the same size');
   });
 });

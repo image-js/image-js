@@ -3,6 +3,8 @@ import {
   AndOptions,
   invert,
   InvertOptions,
+  or,
+  OrOptions,
   subtractImage,
   SubtractImageOptions,
 } from './filters';
@@ -339,7 +341,16 @@ export class Mask {
   public and(other: Mask, options?: AndOptions): Mask {
     return and(this, other, options);
   }
-
+  /**
+   * Perform an OR operation on two masks.
+   *
+   * @param other - Second mask.
+   * @param options - And options.
+   * @returns OR of the two masks.
+   */
+  public or(other: Mask, options?: OrOptions): Mask {
+    return or(this, other, options);
+  }
   // MORPHOLOGY
   /**
    * Erode a Mask.
