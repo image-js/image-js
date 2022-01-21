@@ -100,7 +100,6 @@ export function clearBorder(
       }
     }
   }
-  console.log({ toProcess, newImage });
 
   return newImage;
 
