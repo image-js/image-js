@@ -1,19 +1,17 @@
-import { MatrixColumnSelectionView } from 'ml-matrix';
-
-import { ColorDepth, IJS, Mask } from '..';
+import { Mask } from '..';
 import { borderIterator } from '../utils/borderIterator';
-import checkProcessable from '../utils/checkProcessable';
-import { imageToOutputMask } from '../utils/getOutputImage';
 
 export interface ClearBorderOptions {
-  connectivity?: 4 | 8;
+  allowCorners?: boolean;
   /**
    * Image to which the inverted image has to be put.
    */
   out?: Mask;
 }
 
-export function clearBorder(image: Mask, options?: ClearBorderOptions): Mask;
+const MAX_ARRAY = 0x00ffff; // 65535 should be enough for most of the cases
+const toProcess = new Uint16Array(MAX_ARRAY + 1);
+
 /**
  * Set the pixels connected to the border of the image to zero. YOu can either use connectivity 4 (share an edge) or 8 (include corners)
  *
@@ -25,18 +23,8 @@ export function clearBorder(
   image: Mask,
   options: ClearBorderOptions = {},
 ): Mask {
-  let { connectivity = 4 } = options;
+  let { allowCorners = false } = options;
 
-  if (image instanceof IJS) {
-    checkProcessable(image, 'clearBorder', {
-      bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
-      components: 1,
-      alpha: false,
-    });
-  }
-
-  const MAX_ARRAY = 0x00ffff; // 65535 should be enough for most of the cases
-  let toProcess = new Uint16Array(MAX_ARRAY + 1);
   const maxValue = image.maxValue;
 
   let from = 0;
@@ -53,15 +41,65 @@ export function clearBorder(
   }
 
   // find pixels connected to the border pixels
-
   while (from <= to) {
+    const currentPixel = toProcess[from++ & MAX_ARRAY];
+    newImage.setBitByIndex(currentPixel, 0);
+
+    if (to - from > MAX_ARRAY) {
+      throw new Error(
+        'clearBorder could not process image, overflow in the data processing array.',
+      );
+    }
+
+    // check if on a border
+    const topBorder = currentPixel < image.width;
+    const leftBorder = currentPixel % image.width === 0;
+    const rightBorder = currentPixel % image.width === image.width - 1;
+    const bottomBorder = currentPixel > image.size - image.width;
+
     // check neighbours
-    let neighbourIndices = [];
-    if (connectivity === 8) {
-      if (toProcess[from] < image.width) {
+
+    if (!bottomBorder) {
+      const bottom = currentPixel + image.width;
+      addToProcess(bottom);
+    }
+    if (!leftBorder) {
+      const left = currentPixel - 1;
+      addToProcess(left);
+    }
+    if (!topBorder) {
+      const top = currentPixel - image.width;
+      addToProcess(top);
+    }
+    if (!rightBorder) {
+      const right = currentPixel + 1;
+      addToProcess(right);
+    }
+    if (allowCorners) {
+      if (!leftBorder && !topBorder) {
+        const topLeft = currentPixel - image.width - 1;
+        addToProcess(topLeft);
+      }
+      if (!topBorder && !rightBorder) {
+        const topRight = currentPixel - image.width + 1;
+        addToProcess(topRight);
+      }
+      if (!leftBorder && !bottomBorder) {
+        const bottomLeft = currentPixel + image.width - 1;
+        addToProcess(bottomLeft);
+      }
+      if (!bottomBorder && !rightBorder) {
+        const bottomRight = currentPixel + image.width + 1;
+        addToProcess(bottomRight);
       }
     }
   }
 
   return newImage;
+
+  function addToProcess(pixel: number): void {
+    if (image.getBitByIndex(pixel) === image.maxValue) {
+      toProcess[to++ % MAX_ARRAY] = pixel;
+    }
+  }
 }
