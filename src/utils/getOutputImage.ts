@@ -63,7 +63,7 @@ export function getOutputImage(
     );
     checkRequirements(requirements, out);
     if (clone) {
-      copyData(out, thisImage);
+      copyData(thisImage, out);
     }
     return out;
   }
@@ -175,7 +175,7 @@ export function maskToOutputMask(
     };
     checkRequirements(requirements, out);
     if (clone) {
-      copyData(out, mask);
+      copyData(mask, out);
     }
     return out;
   }
