@@ -18,6 +18,8 @@ import {
   dilate,
   DilateOptions,
   ErodeOptions,
+  floodFill,
+  FloodFillOptions,
   morphologicalGradient,
   MorphologicalGradientOptions,
   open,
@@ -351,6 +353,7 @@ export class Mask {
   public or(other: Mask, options?: OrOptions): Mask {
     return or(this, other, options);
   }
+
   // MORPHOLOGY
   /**
    * Erode a Mask.
@@ -430,6 +433,15 @@ export class Mask {
    */
   public clearBorder(options?: ClearBorderOptions): Mask {
     return clearBorder(this, options);
+  }
+  /**
+   * Remove elements connected to the borders of an image.
+   *
+   * @param options - Clear border options.
+   * @returns The processed image.
+   */
+  public floodFill(options?: FloodFillOptions): Mask {
+    return floodFill(this, options);
   }
 }
 
