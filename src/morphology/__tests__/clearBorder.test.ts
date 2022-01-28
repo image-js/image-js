@@ -18,6 +18,11 @@ describe('clearBorder', () => {
       [0, 0, 0, 0, 0],
     ]);
   });
+  it('Mask 1x1', () => {
+    let image = testUtils.createMask([[1]]);
+
+    expect(image.clearBorder()).toMatchMaskData([[0]]);
+  });
   it('Same mask, allow corners', () => {
     let image = testUtils.createMask([
       [0, 0, 1, 0, 0],
