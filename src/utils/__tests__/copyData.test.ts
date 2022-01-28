@@ -9,7 +9,7 @@ describe('copyData', () => {
       [4, 5, 6],
     ]);
     let target = new IJS(3, 2, { colorModel: ImageColorModel.GREY });
-    copyData(target, source);
+    copyData(source, target);
     expect(target).toMatchImageData([
       [1, 2, 3],
       [4, 5, 6],
@@ -22,7 +22,7 @@ describe('copyData', () => {
     ]);
     let target = new IJS(5, 2, { colorModel: ImageColorModel.GREY });
     expect(() => {
-      copyData(target, source);
+      copyData(source, target);
     }).toThrow('copyData: images width, height or color model is different');
   });
 });
