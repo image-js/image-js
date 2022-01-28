@@ -22,10 +22,8 @@ export interface FloodFillOptions {
 export function floodFill(mask: Mask, options: FloodFillOptions = {}): Mask {
   let { allowCorners = false } = options;
 
-  let newImage = maskToOutputMask(mask, options);
-
+  let newImage = maskToOutputMask(mask, options, { clone: true });
   let inverted = mask.invert();
   let cleared = inverted.clearBorder({ allowCorners });
-
-  return newImage.or(cleared);
+  return newImage.or(cleared, { out: newImage });
 }
