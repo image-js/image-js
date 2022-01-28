@@ -435,10 +435,10 @@ export class Mask {
     return clearBorder(this, options);
   }
   /**
-   * Remove elements connected to the borders of an image.
+   * Fill holes in regions of interest.
    *
-   * @param options - Clear border options.
-   * @returns The processed image.
+   * @param options - Flood fill options.
+   * @returns The filled mask.
    */
   public floodFill(options?: FloodFillOptions): Mask {
     return floodFill(this, options);
