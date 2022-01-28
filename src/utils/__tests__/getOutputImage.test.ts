@@ -56,6 +56,7 @@ describe('getOutputImage', () => {
     ]);
     const output = getOutputImage(img, { out }, { clone: true });
     expect(out).toBe(output);
+    expect(out).toMatchImage(img);
   });
   it('should create with requirements', () => {
     const img = new IJS(1, 2);
@@ -225,5 +226,15 @@ describe('maskToOutputMask', () => {
     ]);
     const output = maskToOutputMask(img, { out }, { clone: true });
     expect(out).toBe(output);
+    expect(out).toMatchMask(img);
+  });
+  it('should clone img to undefined out', () => {
+    const img = testUtils.createMask([
+      [0, 1],
+      [1, 0],
+    ]);
+
+    const output = maskToOutputMask(img, {}, { clone: true });
+    expect(output).toMatchMask(img);
   });
 });
