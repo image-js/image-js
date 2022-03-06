@@ -31,7 +31,7 @@ test('computeThreshold with OTSU', () => {
 });
 
 test('computeThreshold with OTSU (2)', () => {
-  const img = testUtils.load('grayscale_by_zimmyrose.png');
+  const img = testUtils.load('various/grayscale_by_zimmyrose.png');
   const thresholdValue = computeThreshold(img, ThresholdAlgorithm.OTSU);
   expect(thresholdValue).toBe(135);
 });

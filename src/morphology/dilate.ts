@@ -58,11 +58,11 @@ export function dilate(
 
   let onlyOnes = true;
   if (!defaultKernel) {
-    for (const row of kernel) {
+    outer: for (const row of kernel) {
       for (const value of row) {
         if (value !== 1) {
           onlyOnes = false;
-          break;
+          break outer;
         }
       }
     }

@@ -35,9 +35,11 @@ export async function write(
   options: EncodeOptionsJpeg,
 ): Promise<void>;
 /**
- * @param path
- * @param image
- * @param options
+ * Asynchronously write an image to the disk.
+ *
+ * @param path - Path where the image should be written.
+ * @param image - Image to save.
+ * @param options - Encode options.
  */
 export async function write(
   path: string,
@@ -51,9 +53,9 @@ export async function write(
 /**
  * Synchronous version of @see {@link write}.
  *
- * @param path
- * @param image
- * @param options
+ * @param path - Path where the image should be written.
+ * @param image - Image to save.
+ * @param options - Encode options.
  */
 export function writeSync(
   path: string,
@@ -66,8 +68,8 @@ export function writeSync(
 
 /**
  * @param destinationPath
- * @param image
- * @param options
+ * @param image - Image to save.
+ * @param options - Encode options.
  */
 function getDataToWrite(
   destinationPath: string,

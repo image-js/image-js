@@ -9,11 +9,16 @@ import {
   GaussianBlurOptions,
   subtractImage,
   SubtractImageOptions,
+  HypotenuseOptions,
+  rawDirectConvolution,
 } from './filters';
+import { hypotenuse } from './filters/hypotenuse';
 import { invert, InvertOptions } from './filters/invert';
 import {
   bottomHat,
   BottomHatOptions,
+  cannyEdgeDetector,
+  CannyEdgeOptions,
   close,
   CloseOptions,
   dilate,
@@ -486,6 +491,20 @@ export class IJS {
     return directConvolution(this, kernel, options);
   }
 
+  /**
+   * Compute direct convolution of an image and return an array with the raw values.
+   *
+   * @param kernel - Kernel used for the convolution.
+   * @param options - Convolution options.
+   * @returns Array with the raw convoluted values.
+   */
+  public rawDirectConvolution(
+    kernel: number[][],
+    options?: ConvolutionOptions,
+  ): Float64Array {
+    return rawDirectConvolution(this, kernel, options);
+  }
+
   public separableConvolution(
     kernelX: number[],
     kernelY: number[],
@@ -517,6 +536,17 @@ export class IJS {
    */
   public subtractImage(other: IJS, options?: SubtractImageOptions): IJS {
     return subtractImage(this, other, options);
+  }
+
+  /**
+   * Calculate a new image that is the hypotenuse between the current image and the other.
+   *
+   * @param other - Other image.
+   * @param options - Hypotenuse options.
+   * @returns Hypotenuse of the two images.
+   */
+  public hypotenuse(other: IJS, options?: HypotenuseOptions): IJS {
+    return hypotenuse(this, other, options);
   }
 
   // GEOMETRY
@@ -603,6 +633,16 @@ export class IJS {
    */
   public morphologicalGradient(options?: MorphologicalGradientOptions): IJS {
     return morphologicalGradient(this, options);
+  }
+
+  /**
+   * Apply Canny edge detection to an image.
+   *
+   * @param options - Canny edge detection options.
+   * @returns The processed image.
+   */
+  public cannyEdgeDetector(options?: CannyEdgeOptions): Mask {
+    return cannyEdgeDetector(this, options);
   }
 }
 

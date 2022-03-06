@@ -58,11 +58,11 @@ export function erode(
 
   let onlyOnes = true;
   if (!defaultKernel) {
-    for (const row of kernel) {
+    outer: for (const row of kernel) {
       for (const bit of row) {
         if (bit !== 1) {
           onlyOnes = false;
-          break;
+          break outer;
         }
       }
     }

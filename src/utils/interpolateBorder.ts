@@ -16,6 +16,10 @@ export type BorderInterpolationFunction = (
 ) => number;
 
 /**
+ * Pick the border interpolation algorithm.
+ * The different algorithms are illustrated here:
+ * https://vovkos.github.io/doxyrest-showcase/opencv/sphinx_rtd_theme/enum_cv_BorderTypes.html
+ *
  * @param type
  * @param value
  */

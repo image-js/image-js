@@ -6,6 +6,7 @@ import { Matrix } from 'ml-matrix';
 
 import { IJS } from '../IJS';
 import { getClamp, ClampFunction } from '../utils/clamp';
+import { getIndex } from '../utils/getIndex';
 import { getOutputImage } from '../utils/getOutputImage';
 import {
   BorderType,
@@ -22,9 +23,12 @@ export interface ConvolutionOptions {
 }
 
 /**
- * @param image
- * @param kernel
- * @param options
+ * Apply a direct convolution on an image using the specified kernel. The convolution corresponds of a weighted average of the surrounding pixels, the weights being defined in the kernel.
+ *
+ * @param image - The image to process.
+ * @param kernel - Kernel to use for the convolution. Should be a 2D matrix with odd number of rows and columns.
+ * @param options - Convolution options.
+ * @returns The convoluted image.
  */
 export function directConvolution(
   image: IJS,
@@ -32,29 +36,20 @@ export function directConvolution(
   options: ConvolutionOptions = {},
 ): IJS {
   const { borderType = BorderType.REFLECT_101, borderValue = 0 } = options;
-  const interpolateBorder = getBorderInterpolation(borderType, borderValue);
+
+  const convolutedData = rawDirectConvolution(image, kernel, {
+    borderType,
+    borderValue,
+  });
 
   const newImage = getOutputImage(image, options);
   const clamp = getClamp(newImage);
 
-  for (let channel = 0; channel < image.channels; channel++) {
-    for (let column = 0; column < image.width; column++) {
-      for (let row = 0; row < image.height; row++) {
-        newImage.setValue(
-          row,
-          column,
-          channel,
-          computeConvolutionPixel(
-            column,
-            row,
-            channel,
-            image,
-            kernel,
-            interpolateBorder,
-            clamp,
-          ),
-        );
-      }
+  for (let i = 0; i < image.size; i++) {
+    for (let channel = 0; channel < image.channels; channel++) {
+      let dataIndex = i * image.channels + channel;
+      let newValue = round(clamp(convolutedData[dataIndex]));
+      newImage.setValueByIndex(i, channel, newValue);
     }
   }
 
@@ -62,10 +57,51 @@ export function directConvolution(
 }
 
 /**
- * @param image
- * @param kernelX
- * @param kernelY
- * @param options
+ * Compute direct convolution of an image and return an array with the raw values.
+ *
+ * @param image - Image to process.
+ * @param kernel - 2D kernel used for the convolution.
+ * @param options - Convolution options.
+ * @returns Array with the raw convoluted values.
+ */
+export function rawDirectConvolution(
+  image: IJS,
+  kernel: number[][],
+  options: ConvolutionOptions = {},
+): Float64Array {
+  const { borderType = BorderType.REFLECT_101, borderValue = 0 } = options;
+  const interpolateBorder = getBorderInterpolation(borderType, borderValue);
+
+  let result = new Float64Array(image.size * image.channels);
+
+  for (let channel = 0; channel < image.channels; channel++) {
+    for (let row = 0; row < image.height; row++) {
+      for (let column = 0; column < image.width; column++) {
+        let index = getIndex(row, column, channel, image);
+        result[index] = computeConvolutionValue(
+          column,
+          row,
+          channel,
+          image,
+          kernel,
+          interpolateBorder,
+          { returnRawValue: true },
+        );
+      }
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Compute the separable convolution of an image.
+ *
+ * @param image - Image to convolute.
+ * @param kernelX - Kernel along x axis.
+ * @param kernelY - Kernel along y axis.
+ * @param options - Convolution options.
+ * @returns The convoluted image.
  */
 export function separableConvolution(
   image: IJS,
@@ -151,27 +187,27 @@ export function separableConvolution(
         newImage.setValueByIndex(
           index,
           channel,
-          computeConvolutionPixel(
+          computeConvolutionValue(
             bX,
             bY,
             channel,
             image,
             kernel,
             interpolateBorder,
-            clamp,
+            { clamp },
           ),
         );
         newImage.setValueByIndex(
           indexOpp,
           channel,
-          computeConvolutionPixel(
+          computeConvolutionValue(
             bXopp,
             bYopp,
             channel,
             image,
             kernel,
             interpolateBorder,
-            clamp,
+            { clamp },
           ),
         );
       }
@@ -190,27 +226,27 @@ export function separableConvolution(
         newImage.setValueByIndex(
           index,
           channel,
-          computeConvolutionPixel(
+          computeConvolutionValue(
             bX,
             bY,
             channel,
             image,
             kernel,
             interpolateBorder,
-            clamp,
+            { clamp },
           ),
         );
         newImage.setValueByIndex(
           indexOpp,
           channel,
-          computeConvolutionPixel(
+          computeConvolutionValue(
             bXopp,
             bYopp,
             channel,
             image,
             kernel,
             interpolateBorder,
-            clamp,
+            { clamp },
           ),
         );
       }
@@ -220,24 +256,44 @@ export function separableConvolution(
   return newImage;
 }
 
+export interface ComputeConvolutionValueOptions {
+  /**
+   * Specify wether the return value should not be clamped and rounded.
+   */
+  returnRawValue?: boolean;
+  /**
+   * If the value has to be clamped, specify the clamping function.
+   */
+  clamp?: ClampFunction;
+}
+
 /**
- * @param column
- * @param row
- * @param channel
- * @param image
- * @param kernel
- * @param interpolateBorder
- * @param clamp
+ * Compute the convolution of a value of a pixel in an image.
+ *
+ * @param column - Column of the pixel.
+ * @param row - Row of the pixel.
+ * @param channel - Channel to process.
+ * @param image - Image to process.
+ * @param kernel - Kernel for the convolutions.
+ * @param interpolateBorder - Function to interpolate the border pixels.
+ * @param options - Compute convolution value options.
+ * @returns The convoluted value.
  */
-function computeConvolutionPixel(
+export function computeConvolutionValue(
   column: number,
   row: number,
   channel: number,
   image: IJS,
   kernel: number[][],
   interpolateBorder: BorderInterpolationFunction,
-  clamp: ClampFunction,
+  options: ComputeConvolutionValueOptions = {},
 ): number {
+  let { returnRawValue = false, clamp } = options;
+
+  if (returnRawValue) {
+    clamp = undefined;
+  }
+
   let val = 0;
   const kernelWidth = kernel[0].length;
   const kernelHeight = kernel.length;
@@ -257,8 +313,11 @@ function computeConvolutionPixel(
         );
     }
   }
-
-  return round(clamp(val));
+  if (!clamp) {
+    return val;
+  } else {
+    return round(clamp(val));
+  }
 }
 
 /**

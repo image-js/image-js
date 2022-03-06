@@ -191,9 +191,9 @@ export class Mask {
    * @param value - New bit value.
    */
   public setBit(row: number, column: number, value: BitValue): void {
-    let result = boolToNumber(value);
     const index = row * this.width + column;
-    this.data[index] = result;
+    // @ts-expect-error: we know that value is a boolean
+    this.data[index] = value;
   }
 
   /**
