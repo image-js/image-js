@@ -38,14 +38,23 @@ export enum ThresholdAlgorithm {
 }
 
 interface ThresholdOptionsBase {
+  /**
+   * Image to use as the output.
+   */
   out?: Mask;
 }
 
 export interface ThresholdOptionsThreshold extends ThresholdOptionsBase {
+  /**
+   * Threshold value that should be used. Should be an integer between 0 and Image.maxValue.
+   */
   threshold: number;
 }
 
 export interface ThresholdOptionsAlgorithm extends ThresholdOptionsBase {
+  /**
+   * Specify a function to computes the threshold value.
+   */
   algorithm: ThresholdAlgorithm;
 }
 
@@ -113,7 +122,7 @@ export function computeThreshold(
  *
  * @param image - The grey image to convert.
  * @param options - Threshold options.
- * @returns The converted image.
+ * @returns The resulting mask.
  */
 export function threshold(image: IJS, options: ThresholdOptions): Mask {
   let thresholdValue: number;

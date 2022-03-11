@@ -1,7 +1,7 @@
 import { IJS, ImageColorModel } from '../IJS';
 
 /**
- * Create an array of single -channel images based on a multi-channel image.
+ * Create an array of single-channel images based on a multi-channel image.
  *
  * @param image - The image with many channels.
  * @returns Array of single-channel images.

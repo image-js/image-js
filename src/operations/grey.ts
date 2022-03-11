@@ -45,10 +45,10 @@ export interface GreyOptions {
  * Convert the current image to grayscale.
  * The source image has to be RGB or RGBA.
  * If there is an alpha channel you have to specify what to do:
- * keepAlpha :  keep the alpha channel, you will get a GREYA image
- * mergeAlpha : multiply each pixel of the image by the alpha
+ * - keepAlpha :  keep the alpha channel, you will get a GREYA image
+ * - mergeAlpha : multiply each pixel of the image by the alpha, you will get a GREY image
  *
- * @param image - Original image to convert to grey.
+ * @param image - Original color image to convert to grey.
  * @param options - The grey conversion options.
  * @returns The resulting grey image.
  */

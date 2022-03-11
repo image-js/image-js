@@ -1,7 +1,7 @@
 import { IJS, ColorDepth } from '../IJS';
 
 /**
- * Convert an image's color depth.
+ * Convert the color depth of an image.
  *
  * @param image - Image to convert.
  * @param newDepth - Depth to convert to.

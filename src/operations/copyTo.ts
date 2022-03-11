@@ -2,18 +2,27 @@ import { IJS } from '..';
 import { getOutputImage } from '../utils/getOutputImage';
 
 export interface CopyToOptions {
+  /**
+   * Columns offset from top-left target corner.
+   */
   columnOffset?: number;
+  /**
+   * Rows offset from top-left target corner.
+   */
   rowOffset?: number;
+  /**
+   * Image to use as the output.
+   */
   out?: IJS;
 }
 
 /**
  * Copy the image to another one by specifying the location in the target image.
  *
- * @param source - The source image
- * @param target - The target image
- * @param options - copyTo options
- * @returns The target with the source copied to it
+ * @param source - The source image.
+ * @param target - The target image.
+ * @param options - copyTo options.
+ * @returns The target with the source copied to it.
  */
 export default function copyTo(
   source: IJS,
