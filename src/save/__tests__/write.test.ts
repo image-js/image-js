@@ -63,6 +63,17 @@ test('write mask image to disk', async () => {
   const imgRead = await read(destination);
   expect(imgRead).toMatchImage(maskImage);
 });
+test('async write mask image to disk', async () => {
+  let img = testUtils.load('opencv/test.png');
+  img = img.convertColor(ImageColorModel.GREY);
+  let mask = img.threshold();
+  let maskImage = mask.convertColor(ImageColorModel.GREY);
+  const destination = join(tmpDir, 'image.png');
+  await write(destination, mask);
+  expect(existsSync(destination)).toBe(true);
+  const imgRead = await read(destination);
+  expect(imgRead).toMatchImage(maskImage);
+});
 
 test('image extension error', async () => {
   const img = testUtils.load('opencv/test.png');
