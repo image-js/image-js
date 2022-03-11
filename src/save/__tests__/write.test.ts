@@ -1,7 +1,7 @@
 import { existsSync } from 'fs';
 import { join } from 'path';
 
-import { write } from '..';
+import { write, writeSync } from '..';
 import { read } from '../..';
 import { ImageColorModel } from '../../utils/colorModels';
 import { ImageFormat } from '../encode';
@@ -14,7 +14,7 @@ afterEach(() => {
   testUtils.cleanTmpDir(tmpDir);
 });
 
-test('write image to disk', async () => {
+test('async write image to disk', async () => {
   const img = testUtils.load('opencv/test.png');
   const destination = join(tmpDir, 'image.png');
   await write(destination, img);
@@ -23,7 +23,7 @@ test('write image to disk', async () => {
   expect(imgRead).toMatchImage(img);
 });
 
-test('write image to disk (jpeg)', async () => {
+test('async write image to disk (jpeg)', async () => {
   const img = testUtils.load('opencv/test.png');
   const destination = join(tmpDir, 'image.jpeg');
   await write(destination, img, { format: ImageFormat.jpeg });
@@ -31,4 +31,43 @@ test('write image to disk (jpeg)', async () => {
   const imgRead = await read(destination);
   expect(imgRead.width).toBe(img.width);
   expect(imgRead.colorModel).toBe(ImageColorModel.RGBA);
+});
+
+test('write image to disk', async () => {
+  const img = testUtils.load('opencv/test.png');
+  const destination = join(tmpDir, 'image.png');
+  writeSync(destination, img);
+  expect(existsSync(destination)).toBe(true);
+  const imgRead = await read(destination);
+  expect(imgRead).toMatchImage(img);
+});
+
+test('write image to disk (jpeg)', async () => {
+  const img = testUtils.load('opencv/test.png');
+  const destination = join(tmpDir, 'image.jpeg');
+  writeSync(destination, img);
+  expect(existsSync(destination)).toBe(true);
+  const imgRead = await read(destination);
+  expect(imgRead.width).toBe(img.width);
+  expect(imgRead.colorModel).toBe(ImageColorModel.RGBA);
+});
+
+test('write mask image to disk', async () => {
+  let img = testUtils.load('opencv/test.png');
+  img = img.convertColor(ImageColorModel.GREY);
+  let mask = img.threshold();
+  let maskImage = mask.convertColor(ImageColorModel.GREY);
+  const destination = join(tmpDir, 'image.png');
+  writeSync(destination, mask);
+  expect(existsSync(destination)).toBe(true);
+  const imgRead = await read(destination);
+  expect(imgRead).toMatchImage(maskImage);
+});
+
+test('image extension error', async () => {
+  const img = testUtils.load('opencv/test.png');
+  const destination = join(tmpDir, 'image.tiff');
+  await expect(write(destination, img)).rejects.toThrow(
+    'image format could not be determined from file extension. Please use a supported extension or specify the format option',
+  );
 });
