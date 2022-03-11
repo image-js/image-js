@@ -55,7 +55,7 @@ export interface ThresholdOptionsAlgorithm extends ThresholdOptionsBase {
   /**
    * Specify a function to computes the threshold value.
    */
-  algorithm: ThresholdAlgorithm;
+  algorithm?: ThresholdAlgorithm;
 }
 
 export type ThresholdOptions =
@@ -71,7 +71,7 @@ export type ThresholdOptions =
  */
 export function computeThreshold(
   image: IJS,
-  algorithm: ThresholdAlgorithm,
+  algorithm: ThresholdAlgorithm = ThresholdAlgorithm.OTSU,
 ): number {
   if (image.channels !== 1) {
     throw new Error(
@@ -124,14 +124,13 @@ export function computeThreshold(
  * @param options - Threshold options.
  * @returns The resulting mask.
  */
-export function threshold(image: IJS, options: ThresholdOptions): Mask {
+export function threshold(image: IJS, options: ThresholdOptions = {}): Mask {
   let thresholdValue: number;
   if ('threshold' in options) {
     thresholdValue = options.threshold;
   } else {
     thresholdValue = computeThreshold(image, options.algorithm);
   }
-
   validateValue(thresholdValue, image);
   const result = imageToOutputMask(image, options);
   for (let i = 0; i < image.size; i++) {

@@ -36,11 +36,19 @@ test('computeThreshold with OTSU (2)', () => {
   expect(thresholdValue).toBe(135);
 });
 
+test('computeThreshold default should be Otsu', () => {
+  const img = testUtils.load('various/grayscale_by_zimmyrose.png');
+  const thresholdValue = computeThreshold(img);
+  expect(thresholdValue).toBe(135);
+});
+
 test('automatic threshold with OTSU', () => {
   const testImage = testUtils.load('opencv/test.png');
 
   const grey = testImage.convertColor(ImageColorModel.GREY);
   const th = threshold(grey, { algorithm: ThresholdAlgorithm.OTSU });
+  const defaultThreshold = threshold(grey);
+
   const expected = testUtils.createMask([
     [1, 1, 1, 1, 1, 1, 1, 1],
     [0, 0, 0, 0, 0, 0, 0, 0],
@@ -54,6 +62,7 @@ test('automatic threshold with OTSU', () => {
     [1, 1, 1, 1, 1, 1, 1, 1],
   ]);
   expect(th).toMatchMask(expected);
+  expect(defaultThreshold).toMatchMask(expected);
 });
 
 test('error too many channels', () => {

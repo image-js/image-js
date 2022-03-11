@@ -48,6 +48,7 @@ import {
   ResizeOptions,
   rotate,
   RotateOptions,
+  ThresholdOptions,
   transform,
   TransformOptions,
 } from '.';
@@ -478,6 +479,9 @@ export class IJS {
     return copyTo(this, target, options);
   }
 
+  public threshold(target: IJS, options: ThresholdOptions): IJS {
+    return this.threshold(this, options);
+  }
   // FILTERS
 
   public blur(options: BlurOptions): IJS {
