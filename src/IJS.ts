@@ -11,6 +11,10 @@ import {
   SubtractImageOptions,
   HypotenuseOptions,
   rawDirectConvolution,
+  GradientFilterOptions,
+  gradientFilter,
+  derivativeFilter,
+  DerivativeFilterOptions,
 } from './filters';
 import { hypotenuse } from './filters/hypotenuse';
 import { invert, InvertOptions } from './filters/invert';
@@ -518,6 +522,12 @@ export class IJS {
     return separableConvolution(this, kernelX, kernelY, options);
   }
 
+  /**
+   * Apply a gaussian filter to an image.
+   *
+   * @param options - Gaussian blur options.
+   * @returns The blurred image.
+   */
   public gaussianBlur(options: GaussianBlurOptions): IJS {
     return gaussianBlur(this, options);
   }
@@ -552,6 +562,26 @@ export class IJS {
    */
   public hypotenuse(other: IJS, options?: HypotenuseOptions): IJS {
     return hypotenuse(this, other, options);
+  }
+
+  /**
+   * Apply a gradient filter to an image.
+   *
+   * @param options - Gradient filter options.
+   * @returns The gradient image.
+   */
+  public gradientFilter(options: GradientFilterOptions): IJS {
+    return gradientFilter(this, options);
+  }
+
+  /**
+   * Apply a derivative filter to an image.
+   *
+   * @param options - Derivative filter options.
+   * @returns The processed image.
+   */
+  public derivativeFilter(options?: DerivativeFilterOptions): IJS {
+    return derivativeFilter(this, options);
   }
 
   // GEOMETRY

@@ -16,9 +16,27 @@ import {
 import { round } from '../utils/round';
 
 export interface ConvolutionOptions {
+  /**
+   * Specify how the borders should be handled.
+   *
+   * @default BorderType.REFLECT_101
+   */
   borderType?: BorderType;
+  /**
+   * Value of the border if BorderType is CONSTANT.
+   *
+   * @default 0
+   */
   borderValue?: number;
+  /**
+   * Should the kernel be normalised?
+   *
+   * @default false
+   */
   normalize?: boolean;
+  /**
+   * Image to which to output.
+   */
   out?: IJS;
 }
 

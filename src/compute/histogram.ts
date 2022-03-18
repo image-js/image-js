@@ -6,6 +6,8 @@ export interface HistogramOptions {
    * The channel for which to compute the histogram.
    * If it is unspecified, the image must have one channel or the method will
    * throw an error.
+   *
+   * @default 0
    */
   channel?: number;
 }

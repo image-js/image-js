@@ -3,15 +3,19 @@ import { getOutputImage } from '../utils/getOutputImage';
 
 export interface CopyToOptions {
   /**
-   * Columns offset from top-left target corner.
+   * X offset for the copy, the top left corner of the target image is the reference.
+   *
+   * @default 0
    */
   columnOffset?: number;
   /**
-   * Rows offset from top-left target corner.
+   * Y offset for the copy, the top left corner of the target image is the reference.
+   *
+   * @default 0
    */
   rowOffset?: number;
   /**
-   * Image to use as the output.
+   * Image to which to output.
    */
   out?: IJS;
 }

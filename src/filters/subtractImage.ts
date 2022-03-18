@@ -2,6 +2,11 @@ import { ColorDepth, IJS, Mask } from '..';
 import checkProcessable from '../utils/checkProcessable';
 
 export interface SubtractImageOptions {
+  /**
+   * Return the absolute difference for each pixel.
+   *
+   * @default false
+   */
   absolute?: boolean;
 }
 

@@ -5,7 +5,9 @@ import { separableConvolution } from './convolution';
 
 interface GaussianBlurBaseOptions {
   /**
-   * Specify how borders must be handled.
+   * Specify how the borders should be handled.
+   *
+   * @default BorderType.REFLECT_101
    */
   borderType?: BorderType;
   /**
@@ -16,12 +18,15 @@ interface GaussianBlurBaseOptions {
 
 export interface GaussianBlurSigmaOptions extends GaussianBlurBaseOptions {
   /**
-   * Size of the kernel
+   * Size of the kernel.
    */
   size?: number;
   /**
    * The standard deviation. Specifies the width of the gaussian function in the case where it is the same for x and y.
+   *
+   * @default 2 * Math.ceil(2 * sigma) + 1
    */
+
   sigma: number;
 }
 
@@ -36,10 +41,14 @@ export interface GaussianBlurXYOptions extends GaussianBlurBaseOptions {
   sigmaY: number;
   /**
    * Size of the X axis kernel
+   *
+   * @default 2 * Math.ceil(2 * sigmaX) + 1
    */
   sizeX?: number;
   /**
    * Size of the Y axis kernel
+   *
+   * @default 2 * Math.ceil(2 * sigma) + 1
    */
   sizeY?: number;
 }

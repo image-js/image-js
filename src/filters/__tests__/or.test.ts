@@ -2,7 +2,7 @@ describe('or', () => {
   it('mask OR itself', () => {
     const image = testUtils.createMask([[1, 1, 1, 1, 1, 1, 1, 1]]);
     const other = image;
-    expect(image.or(other)).toMatchMaskData([[1, 1, 1, 1, 1, 1, 1, 1]]);
+    expect(image.or(other)).toMatchMask(image);
   });
   it('two different masks', () => {
     const image = testUtils.createMask([[0, 0, 0, 0, 1, 1, 1, 1]]);

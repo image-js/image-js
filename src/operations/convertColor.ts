@@ -3,6 +3,9 @@ import { Mask } from '../Mask';
 import { getOutputImage, maskToOutputImage } from '../utils/getOutputImage';
 
 export interface ConvertColorOptions {
+  /**
+   * Image to which to output.
+   */
   out?: IJS;
 }
 

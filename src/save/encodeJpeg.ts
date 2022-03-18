@@ -3,6 +3,11 @@ import { encode } from 'jpeg-js';
 import { IJS, ImageColorModel, ColorDepth } from '../IJS';
 
 export interface EncodeJpegOptions {
+  /**
+   * Defines jpeg quality. Integer value between 1 and 100%, 100% being the best quality.
+   *
+   * @default 50
+   */
   quality?: number;
 }
 

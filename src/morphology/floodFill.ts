@@ -4,6 +4,8 @@ import { maskToOutputMask } from '../utils/getOutputImage';
 export interface FloodFillOptions {
   /**
    * Consider pixels connected by corners?
+   *
+   * @default false
    */
   allowCorners?: boolean;
   /**

@@ -54,6 +54,8 @@ export interface ThresholdOptionsThreshold extends ThresholdOptionsBase {
 export interface ThresholdOptionsAlgorithm extends ThresholdOptionsBase {
   /**
    * Specify a function to computes the threshold value.
+   *
+   *   @default ThresholdAlgorithm.OTSU
    */
   algorithm?: ThresholdAlgorithm;
 }

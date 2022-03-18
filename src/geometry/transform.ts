@@ -9,12 +9,41 @@ import {
 } from '../utils/interpolatePixel';
 
 export interface TransformOptions {
+  /**
+   * Width of the output image.
+   */
   width?: number;
+  /**
+   * Height of the output image.
+   */
   height?: number;
+  /**
+   * Method to use to interpolate the new pixels
+   *
+   * @default InterpolationType.BILINEAR
+   */
+
   interpolationType?: InterpolationType;
+  /**
+   * Specify how the borders should be handled.
+   *
+   * @default BorderType.CONSTANT
+   */
   borderType?: BorderType;
-  inverse?: boolean;
+  /**
+   * Value of the border if BorderType is CONSTANT.
+   *
+   * @default 0
+   */
   borderValue?: number;
+  /**
+   * Should the transform matrix be inverted?
+   */
+  inverse?: boolean;
+  /*
+    Bypasses width, height, and center options to include
+    every pixel of the original image inside the transformed image.
+  */
   fullImage?: boolean;
 }
 

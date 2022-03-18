@@ -1,4 +1,9 @@
-import { convertBinaryToGrey, IJS, ImageColorModel } from '../../src';
+import {
+  convertBinaryToGrey,
+  DerivativeFilters,
+  IJS,
+  ImageColorModel,
+} from '../../src';
 
 export function testCopyTo(image: IJS): IJS {
   let result = image.copyTo(image, {
@@ -49,4 +54,9 @@ export function testCannyEdgeOverlay(image: IJS): IJS {
   }
   result = greyEdges.copyTo(image);
   return result;
+}
+
+export function testDerivativeFilter(image: IJS): IJS {
+  image = image.convertColor(ImageColorModel.GREY);
+  return image.derivativeFilter({ filter: DerivativeFilters.PREWITT });
 }

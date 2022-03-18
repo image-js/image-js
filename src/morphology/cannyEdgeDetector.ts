@@ -7,19 +7,26 @@ import { imageToOutputMask } from '../utils/getOutputImage';
 export interface CannyEdgeOptions {
   /**
    * Lower threshold of the gaussian blur (indicates the weak edges to discard).
+   *
+   * @default 0.04
    */
   lowThreshold?: number;
   /**
    * Higher threshold of the gaussian blur (indicates the strong edges to keep). Value must be between 0 and 1.
+   *
+   * @default 0.1
    */
   highThreshold?: number;
   /**
    * Standard deviation of the gaussian blur (sigma). Value must be between 0 and 1.
    *
+   * @default { sigma: 1 }
    */
   gaussianBlurOptions?: GaussianBlurOptions;
   /**
    * Enable/ disable hysteresis steps.
+   *
+   * @default true
    */
   hysteresis?: boolean;
   /**

@@ -7,13 +7,43 @@ import {
 } from '../utils/interpolatePixel';
 
 export interface ResizeOptions {
+  /**
+   * Width of the output image.
+   */
   width?: number;
+  /**
+   * Height of the output image.
+   */
   height?: number;
+  /**
+   * Factor by which to scale the width.
+   */
   xFactor?: number;
+  /**
+   * Factor by which to scale the width.
+   */
   yFactor?: number;
+  /**
+   * Should the aspect ratio of the image be preserved?
+   */
   preserveAspectRatio?: boolean;
+  /**
+   * Method to use to interpolate the new pixels
+   *
+   * @default InterpolationType.BILINEAR
+   */
   interpolationType?: InterpolationType;
+  /**
+   * Specify how the borders should be handled.
+   *
+   * @default BorderType.CONSTANT
+   */
   borderType?: BorderType;
+  /**
+   * Value of the border if BorderType is CONSTANT.
+   *
+   * @default 0
+   */
   borderValue?: number;
 }
 
@@ -126,6 +156,8 @@ function checkOptions(
 /**
  * @param sizeOpt
  * @param factor
+ * @param sizeImg- -
+ * Should the aspect ratio of the image be preserved?
  * @param sizeImg
  * @param preserveAspectRatio
  */

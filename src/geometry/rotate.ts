@@ -5,17 +5,48 @@ import { InterpolationType } from '../utils/interpolatePixel';
 import { transform } from './transform';
 
 export interface RotateOptions {
+  /**
+   * Specify the rotation center point
+   *
+   * @default The center of the image.
+   */
   center?: ImageCoordinates | [number, number];
+  /**
+   * Scaling factor for the rotated image.
+   *
+   * @default 1
+   */
   scale?: number;
+  /**
+   * Width of the final image.
+   */
   width?: number;
+  /**
+   * Height of the final image.
+   */
   height?: number;
   /*
     Bypasses width, height, and center options to include
     every pixel of the original image inside the rotated image
   */
   fullImage?: boolean;
+  /**
+   * Method to use to interpolate the new pixels
+   *
+   * @default InterpolationType.BILINEAR
+   */
   interpolationType?: InterpolationType;
+  /**
+   * Specify how the borders should be handled.
+   *
+   * @default BorderType.CONSTANT
+   */
   borderType?: BorderType;
+  /**
+   * Value of the border if BorderType is CONSTANT.
+   *
+   * @default 0
+   */
   borderValue?: number;
 }
 

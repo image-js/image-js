@@ -3,6 +3,11 @@ import checkProcessable from '../utils/checkProcessable';
 import { validateChannels } from '../utils/validators';
 
 export interface HypotenuseOptions {
+  /**
+   * Depth of the resulting image.
+   *
+   * @default image.depth
+   */
   depth?: number;
   /**
    * To which channels to apply the filter. By default all but alpha.
