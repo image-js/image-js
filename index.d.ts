@@ -149,7 +149,11 @@ export declare class Image {
   // paintPoints
   // paintPolyline
   // paintPolylines
-  // paintPolygon
+  paintPolygon(points: Array<Array<number>>, options?: {
+    color?: Array<number>;
+    filled?: boolean;
+  }): Image;
+
   // paintPolygons
 
   // countAlphaPixels
