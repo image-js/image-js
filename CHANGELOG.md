@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.33.2](https://www.github.com/image-js/image-js/compare/v0.33.1...v0.33.2) (2022-03-28)
+
+
+### Bug Fixes
+
+* add TypeScript definition for paintPolygon() ([#587](https://www.github.com/image-js/image-js/issues/587)) ([d0c0541](https://www.github.com/image-js/image-js/commit/d0c054124ef38b0dea6a791780a6b83fda842ee8))
+
 ### [0.33.1](https://www.github.com/image-js/image-js/compare/v0.33.0...v0.33.1) (2021-10-31)
 
 
