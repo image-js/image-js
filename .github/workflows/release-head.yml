@@ -17,6 +17,6 @@ jobs:
         run: |
           VERSION=$(jq -r '.version' package.json)
           SHA=$(git rev-parse --short=10 HEAD)
-          npm version "${VERSION}-next-${SHA}"
+          npm version "${VERSION}-next-${SHA}" --no-git-tag-version
       - name: Publish HEAD tagged as next
         run: npm publish --tag next
