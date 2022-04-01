@@ -39,6 +39,7 @@ import {
 import { convertColor, ConvertColorOptions } from './operations/convertColor';
 import { convertDepth } from './operations/convertDepth';
 import copyTo, { CopyToOptions } from './operations/copyTo';
+import { crop, CropOptions } from './operations/crop';
 import grey from './operations/grey';
 import { split } from './operations/split';
 import { ImageColorModel, colorModels } from './utils/colorModels';
@@ -582,6 +583,16 @@ export class IJS {
    */
   public derivativeFilter(options?: DerivativeFilterOptions): IJS {
     return derivativeFilter(this, options);
+  }
+
+  /**
+   * Crop the input image to a desired size.
+   *
+   * @param [options] - Crop options.
+   * @returns The new cropped image
+   */
+  public crop(options?: CropOptions): IJS {
+    return crop(this, options);
   }
 
   // GEOMETRY

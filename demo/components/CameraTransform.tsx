@@ -16,7 +16,8 @@ interface CameraTransformProps {
 export default function CameraTransform(props: CameraTransformProps) {
   const [{ selectedCamera }] = useCameraContext();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasInputRef = useRef<HTMLCanvasElement>(null);
+  const canvasOutputRef = useRef<HTMLCanvasElement>(null);
   const transformRef = useRef<TransformFunction>(props.transform);
   const [error, setError] = useState<string>('');
   transformRef.current = props.transform;
@@ -33,20 +34,23 @@ export default function CameraTransform(props: CameraTransformProps) {
       video
         .play()
         .then(() => {
-          const canvas = canvasRef.current as HTMLCanvasElement;
-          if (!canvas) return;
-          canvas.height = video.videoHeight;
-          canvas.width = video.videoWidth;
-          const context = canvas.getContext('2d') as CanvasRenderingContext2D;
+          const canvasInput = canvasInputRef.current as HTMLCanvasElement;
+          const canvasOutput = canvasOutputRef.current as HTMLCanvasElement;
+          if (!canvasInput || !canvasOutput) return;
+          canvasInput.height = video.videoHeight;
+          canvasInput.width = video.videoWidth;
+          const inputContext = canvasInput.getContext(
+            '2d',
+          ) as CanvasRenderingContext2D;
           function nextFrame() {
-            context.drawImage(video, 0, 0);
-            const image = readCanvas(canvas);
+            inputContext.drawImage(video, 0, 0);
+            const image = readCanvas(canvasInput);
             try {
               let result = transformRef.current(image);
               if (result.colorModel !== ImageColorModel.RGBA) {
                 result = convertColor(result, ImageColorModel.RGBA);
               }
-              writeCanvas(result, canvas);
+              writeCanvas(result, canvasOutput);
             } catch (err) {
               setError(err.stack);
               console.error(err);
@@ -75,9 +79,15 @@ export default function CameraTransform(props: CameraTransformProps) {
         <ErrorAlert>
           <code>{error}</code>
         </ErrorAlert>
-      ) : (
-        <canvas ref={canvasRef} />
-      )}
+      ) : null}
+      <canvas
+        style={{ display: error ? 'block' : 'none' }}
+        ref={canvasInputRef}
+      />
+      <canvas
+        style={{ display: error ? 'none' : 'block' }}
+        ref={canvasOutputRef}
+      />
     </>
   );
 }

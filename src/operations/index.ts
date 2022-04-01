@@ -5,3 +5,4 @@ export * from './split';
 export * from './threshold';
 export * from './grey';
 export * from './copyTo';
+export * from './crop';
