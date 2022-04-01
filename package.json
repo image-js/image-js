@@ -2,13 +2,6 @@
   "name": "image-js",
   "version": "0.0.0",
   "description": "Image processing and manipulation in JavaScript",
-  "main": "./lib/index.js",
-  "module": "./lib-esm/index.js",
-  "types": "./lib/index.d.ts",
-  "exports": {
-    ".": "./lib/index.js",
-    "./roi": "./lib/roi/index.js"
-  },
   "keywords": [],
   "author": "Michaël Zasso",
   "license": "MIT",
@@ -17,6 +10,16 @@
     "lib",
     "lib-esm"
   ],
+  "exports": {
+    ".": {
+      "node": "./lib/index.js",
+      "default": "./lib-esm/index.js"
+    },
+    "./roi": {
+      "node": "./lib/roi/index.js",
+      "default": "./lib-esm/roi/index.js"
+    }
+  },
   "scripts": {
     "check-types": "tsc --noEmit",
     "clean": "rimraf lib lib-esm",
@@ -40,6 +43,14 @@
     "url": "https://github.com/image-js/image-js/issues"
   },
   "homepage": "https://github.com/image-js/image-js#readme",
+  "dependencies": {
+    "fast-png": "^6.1.0",
+    "image-type": "^4.1.0",
+    "jpeg-js": "^0.4.3",
+    "ml-convolution": "^2.0.0",
+    "ml-matrix": "^6.9.0",
+    "tiff": "^5.0.3"
+  },
   "devDependencies": {
     "@tailwindcss/forms": "^0.3.4",
     "@types/jest": "^27.4.1",
@@ -64,13 +75,5 @@
     "ts-jest": "^27.1.4",
     "typescript": "^4.6.3",
     "vite": "^2.9.1"
-  },
-  "dependencies": {
-    "fast-png": "^6.1.0",
-    "image-type": "^4.1.0",
-    "jpeg-js": "^0.4.3",
-    "ml-convolution": "^2.0.0",
-    "ml-matrix": "^6.9.0",
-    "tiff": "^5.0.3"
   }
 }
