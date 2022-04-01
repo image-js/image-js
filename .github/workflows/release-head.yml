@@ -11,6 +11,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: npm install
       - name: Bump version
@@ -20,3 +21,5 @@ jobs:
           npm version "${VERSION}-next-${SHA}" --no-git-tag-version
       - name: Publish HEAD tagged as next
         run: npm publish --tag next
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_BOT_TOKEN }}
