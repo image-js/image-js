@@ -5,6 +5,10 @@
   "main": "./lib/index.js",
   "module": "./lib-esm/index.js",
   "types": "./lib/index.d.ts",
+  "exports": {
+    ".": "./lib/index.js",
+    "./roi": "./lib/roi/index.js"
+  },
   "keywords": [],
   "author": "Michaël Zasso",
   "license": "MIT",

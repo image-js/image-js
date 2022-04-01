@@ -106,7 +106,10 @@ describe('fromMask', () => {
       [-1, -1, -1, -1, -1, -1],
     ];
 
-    expect(fromMask(mask).getMapMatrix()).toStrictEqual(expected);
+    const roiMapManager = fromMask(mask);
+    expect(roiMapManager.getMapMatrix()).toStrictEqual(expected);
+    expect(roiMapManager.map.nbNegative).toBe(4);
+    expect(roiMapManager.map.nbPositive).toBe(7);
   });
 
   it('6x6 mask, allowCorners true', () => {
