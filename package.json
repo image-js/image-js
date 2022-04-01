@@ -10,16 +10,8 @@
     "lib",
     "lib-esm"
   ],
-  "exports": {
-    ".": {
-      "node": "./lib/index.js",
-      "default": "./lib-esm/index.js"
-    },
-    "./roi": {
-      "node": "./lib/roi/index.js",
-      "default": "./lib-esm/roi/index.js"
-    }
-  },
+  "main": "./lib/index.js",
+  "module": "./lib-esm/index.js",
   "scripts": {
     "check-types": "tsc --noEmit",
     "clean": "rimraf lib lib-esm",
