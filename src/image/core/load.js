@@ -19,7 +19,10 @@ const isDataURL = /^data:[a-z]+\/(?:[a-z]+);base64,/;
  * @static
  * @param {string|ArrayBuffer|Buffer|Uint8Array} image - URL of the image (browser, can be a dataURL) or path (Node.js)
  * or buffer containing the binary data
- * @param {object} [options] - In the browser, the options object is passed to the underlying `fetch` call.
+ * @param {object} [options] - In the browser, the options object is passed to the underlying `fetch` call, along with
+ * the data URL. For binary data, the option specify decoding options.
+ * @param {boolean} [options.ignorePalette] - When set to true and loading a tiff from binary data, if the tiff is of
+ * type 3 (palette), load as single channel greyscale rather than as a psuedo-colored RGB.
  * @return {Promise<Image>}
  * @example
  * const image = await Image.load('https://example.com/image.png');
@@ -28,15 +31,23 @@ export default function load(image, options) {
   if (typeof image === 'string') {
     return loadURL(image, options);
   } else if (image instanceof ArrayBuffer) {
-    return Promise.resolve(loadBinary(new Uint8Array(image)));
+    return Promise.resolve(
+      loadBinary(
+        new Uint8Array(image),
+        undefined,
+        options ? options.ignorePalette : undefined,
+      ),
+    );
   } else if (image.buffer) {
-    return Promise.resolve(loadBinary(image));
+    return Promise.resolve(
+      loadBinary(image, undefined, options ? options.ignorePalette : undefined),
+    );
   } else {
     throw new Error('argument to "load" must be a string or buffer.');
   }
 }
 
-function loadBinary(image, base64Url) {
+function loadBinary(image, base64Url, ignorePalette) {
   const type = imageType(image);
   if (type) {
     switch (type.mime) {
@@ -45,7 +56,7 @@ function loadBinary(image, base64Url) {
       case 'image/jpeg':
         return loadJPEG(image);
       case 'image/tiff':
-        return loadTIFF(image);
+        return loadTIFF(image, ignorePalette);
       default:
         return loadGeneric(getBase64(type.mime));
     }
@@ -159,12 +170,16 @@ function loadJPEG(data) {
   return image;
 }
 
-function loadTIFF(data) {
+function loadTIFF(data, ignorePalette) {
   let result = decodeTiff(data);
   if (result.length === 1) {
-    return getImageFromIFD(result[0]);
+    return getImageFromIFD(result[0], ignorePalette);
   } else {
-    return new Stack(result.map(getImageFromIFD));
+    return new Stack(
+      result.map(function (image) {
+        return getImageFromIFD(image, ignorePalette);
+      }),
+    );
   }
 }
 
@@ -184,8 +199,8 @@ function getMetadata(image) {
   return metadata;
 }
 
-function getImageFromIFD(image) {
-  if (image.type === 3) {
+function getImageFromIFD(image, ignorePalette) {
+  if (!ignorePalette && image.type === 3) {
     // Palette
     const data = new Uint16Array(3 * image.width * image.height);
     const palette = image.palette;
