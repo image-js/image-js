@@ -32,7 +32,7 @@ export declare class Image {
   static createFrom(other: Image, options: ImageConstructorOptions): Image;
   static load(
     image: string | ArrayBuffer | Uint8Array,
-    options?: RequestInit | { ignorePalette: boolean },
+    options?: RequestInit & { ignorePalette: boolean },
   ): Promise<Image>;
 
   getRoiManager(): RoiManager;
