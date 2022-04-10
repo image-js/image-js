@@ -95,7 +95,7 @@ export function rawDirectConvolution(
   for (let channel = 0; channel < image.channels; channel++) {
     for (let row = 0; row < image.height; row++) {
       for (let column = 0; column < image.width; column++) {
-        let index = getIndex(row, column, channel, image);
+        let index = getIndex(row, column, image, channel);
         result[index] = computeConvolutionValue(
           column,
           row,

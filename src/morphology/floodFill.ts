@@ -1,7 +1,21 @@
 import { Mask } from '..';
-import { maskToOutputMask } from '../utils/getOutputImage';
+import { getIndex } from '../utils/getIndex';
+
+import { multipleFloodFill } from './multipleFloodFill';
 
 export interface FloodFillOptions {
+  /**
+   * Row coordinate of the starting point for the algorithm.
+   *
+   * @default 0
+   */
+  row?: number;
+  /**
+   * Column coordinate of the starting point for the algorithm.
+   *
+   * @default 0
+   */
+  column?: number;
   /**
    * Consider pixels connected by corners?
    *
@@ -9,23 +23,24 @@ export interface FloodFillOptions {
    */
   allowCorners?: boolean;
   /**
-   * Image to which the inverted image has to be put.
+   * Specify the output image.
    */
   out?: Mask;
 }
 
 /**
- * Fill holes in regions of interest.
+ * Apply a flood fill algorithm to an image.
  *
  * @param mask - Mask to process.
  * @param options - Flood fill options.
  * @returns The filled mask.
  */
 export function floodFill(mask: Mask, options: FloodFillOptions = {}): Mask {
-  let { allowCorners = false } = options;
-
-  let newImage = maskToOutputMask(mask, options, { clone: true });
-  let inverted = mask.invert();
-  let cleared = inverted.clearBorder({ allowCorners });
-  return newImage.or(cleared, { out: newImage });
+  let { row = 0, column = 0, allowCorners = false, out } = options;
+  const startPixel = getIndex(row, column, mask);
+  return multipleFloodFill(mask, {
+    startPixels: [startPixel],
+    allowCorners,
+    out,
+  });
 }

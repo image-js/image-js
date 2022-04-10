@@ -3,41 +3,41 @@ import { Mask } from '../..';
 describe('floodFill', () => {
   it('mask 5x5, default options', () => {
     let image = testUtils.createMask([
-      [0, 0, 0, 0, 0],
-      [0, 1, 1, 1, 0],
-      [0, 1, 0, 1, 0],
-      [0, 1, 1, 1, 0],
+      [0, 0, 1, 0, 0],
+      [0, 0, 1, 0, 0],
+      [0, 1, 0, 0, 0],
+      [1, 0, 0, 1, 0],
       [0, 0, 0, 0, 0],
     ]);
 
     expect(image.floodFill()).toMatchMaskData([
-      [0, 0, 0, 0, 0],
-      [0, 1, 1, 1, 0],
-      [0, 1, 1, 1, 0],
-      [0, 1, 1, 1, 0],
+      [1, 1, 1, 0, 0],
+      [1, 1, 1, 0, 0],
+      [1, 1, 0, 0, 0],
+      [1, 0, 0, 1, 0],
       [0, 0, 0, 0, 0],
     ]);
   });
-  it('pixels touching border', () => {
+  it('5x5 mask, other start point', () => {
     let image = testUtils.createMask([
-      [0, 1, 0, 1, 0],
-      [0, 1, 1, 1, 0],
-      [0, 1, 0, 0, 1],
-      [0, 1, 1, 1, 0],
+      [0, 0, 0, 0, 0],
+      [1, 1, 1, 1, 1],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
     ]);
 
-    expect(image.floodFill()).toMatchMaskData([
-      [0, 1, 0, 1, 0],
-      [0, 1, 1, 1, 0],
-      [0, 1, 1, 1, 1],
-      [0, 1, 1, 1, 0],
+    expect(image.floodFill({ row: 0, column: 3 })).toMatchMaskData([
+      [1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
     ]);
   });
   it('mask should not change', () => {
     let image = testUtils.createMask([
-      [0, 1, 0, 1, 0],
+      [1, 1, 0, 1, 0],
       [0, 1, 1, 1, 0],
       [0, 1, 0, 0, 0],
       [0, 1, 1, 1, 0],
@@ -45,7 +45,7 @@ describe('floodFill', () => {
     ]);
 
     expect(image.floodFill()).toMatchMaskData([
-      [0, 1, 0, 1, 0],
+      [1, 1, 0, 1, 0],
       [0, 1, 1, 1, 0],
       [0, 1, 0, 0, 0],
       [0, 1, 1, 1, 0],
@@ -54,27 +54,29 @@ describe('floodFill', () => {
   });
   it('allowCorners true', () => {
     let image = testUtils.createMask([
-      [0, 0, 0, 0, 0],
-      [1, 1, 1, 1, 0],
-      [1, 0, 1, 0, 1],
+      [0, 1, 0, 0, 0],
+      [1, 0, 1, 1, 0],
       [1, 1, 1, 1, 1],
+      [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
     ]);
 
-    expect(image.floodFill({ allowCorners: true })).toMatchMaskData([
-      [0, 0, 0, 0, 0],
-      [1, 1, 1, 1, 0],
-      [1, 1, 1, 0, 1],
+    expect(
+      image.floodFill({ row: 1, column: 1, allowCorners: true }),
+    ).toMatchMaskData([
       [1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1],
+      [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
     ]);
   });
   it('1x1 mask', () => {
     let image = testUtils.createMask([[0]]);
 
-    expect(image.floodFill({ allowCorners: true })).toMatchMaskData([[0]]);
+    expect(image.floodFill({ allowCorners: true })).toMatchMaskData([[1]]);
   });
-  it('Out option', () => {
+  it('out option', () => {
     let image = testUtils.createMask([
       [0, 0, 0, 0, 0],
       [0, 1, 1, 1, 0],
@@ -85,7 +87,8 @@ describe('floodFill', () => {
 
     const out = new Mask(5, 5);
 
-    image.floodFill({ out });
+    image.floodFill({ row: 2, column: 2, out });
+
     expect(out).toMatchMaskData([
       [0, 0, 0, 0, 0],
       [0, 1, 1, 1, 0],
@@ -94,22 +97,10 @@ describe('floodFill', () => {
       [0, 0, 0, 0, 0],
     ]);
   });
-  it('in place modification', () => {
-    let image = testUtils.createMask([
-      [0, 0, 0, 0, 0],
-      [0, 1, 1, 1, 0],
-      [0, 1, 0, 1, 0],
-      [0, 0, 1, 1, 0],
-      [0, 0, 1, 0, 0],
-    ]);
-
-    image.floodFill({ out: image });
-    expect(image).toMatchMaskData([
-      [0, 0, 0, 0, 0],
-      [0, 1, 1, 1, 0],
-      [0, 1, 1, 1, 0],
-      [0, 0, 1, 1, 0],
-      [0, 0, 1, 0, 0],
-    ]);
+  it('larger image', () => {
+    const image = testUtils.load('morphology/alphabetCannyEdge.png');
+    const mask = image.threshold();
+    const flooded = mask.floodFill();
+    expect(flooded).toMatchIJSSnapshot();
   });
 });

@@ -24,6 +24,8 @@ import {
   MorphologicalGradientOptions,
   open,
   OpenOptions,
+  solidFill,
+  SolidFillOptions,
   topHat,
   TopHatOptions,
 } from './morphology';
@@ -435,13 +437,22 @@ export class Mask {
     return clearBorder(this, options);
   }
   /**
-   * Fill holes in regions of interest.
+   * Apply flood fill algorithm from a given starting point.
    *
    * @param options - Flood fill options.
    * @returns The filled mask.
    */
   public floodFill(options?: FloodFillOptions): Mask {
     return floodFill(this, options);
+  }
+  /**
+   * Fill holes in regions of interest.
+   *
+   * @param options - Flood fill options.
+   * @returns The filled mask.
+   */
+  public solidFill(options?: SolidFillOptions): Mask {
+    return solidFill(this, options);
   }
 }
 

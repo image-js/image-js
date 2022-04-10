@@ -122,3 +122,4 @@ lib-esm
 
 # debug images
 src/**/*.png
+!src/**/__image_snapshots__/*.png

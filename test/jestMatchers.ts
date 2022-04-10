@@ -1,7 +1,12 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="./jest.d.ts" />
 
-import { IJS, ImageColorModel } from '../src';
+import {
+  MatchImageSnapshotOptions,
+  configureToMatchImageSnapshot,
+} from 'jest-image-snapshot';
+
+import { encodePng, IJS, ImageColorModel } from '../src';
 import { Mask } from '../src/Mask';
 
 import { TestImagePath } from './TestImagePath';
@@ -135,4 +140,29 @@ export function toMatchMaskData(
     ImageColorModel.BINARY,
   );
   return toMatchMask.call(this, received, expectedMask);
+}
+
+export const toMatchImageSnapshot = configureToMatchImageSnapshot({});
+
+/**
+ * Snapshot matching with IJS objects.
+ *
+ * @param this - Jest matcher context.
+ * @param received - Received image.
+ * @param options - Options.
+ * @returns - Jest matcher result.
+ */
+export function toMatchIJSSnapshot(
+  this: jest.MatcherContext,
+  received: IJS | Mask,
+  options?: MatchImageSnapshotOptions,
+): MatcherResult {
+  const receivedImage =
+    received instanceof Mask
+      ? received.convertColor(ImageColorModel.GREY)
+      : received;
+  const png = encodePng(receivedImage);
+  const buffer = Buffer.from(png.buffer, png.byteOffset, png.byteLength);
+  // @ts-expect-error The public types doesn't correspond to the implementation.
+  return toMatchImageSnapshot.call(this, buffer, options);
 }

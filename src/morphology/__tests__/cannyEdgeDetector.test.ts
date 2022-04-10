@@ -84,7 +84,7 @@ describe('cannyEdgeDetector', () => {
     const image = testUtils
       .load('various/alphabet.jpg')
       .convertColor(ImageColorModel.GREY);
-    const expected = testUtils.load('various/alphabetCannyEdges.png');
+    const expected = testUtils.load('morphology/alphabetCannyEdge.png');
     expect(
       image.cannyEdgeDetector().convertColor(ImageColorModel.GREY),
     ).toMatchImage(expected);
@@ -92,7 +92,7 @@ describe('cannyEdgeDetector', () => {
   it('compare grey image to expected', () => {
     const image = testUtils.load('various/grayscale_by_zimmyrose.png');
 
-    const expected = testUtils.load('various/grayscaleCannyEdge.png');
+    const expected = testUtils.load('morphology/grayscaleCannyEdge.png');
     expect(
       image.cannyEdgeDetector().convertColor(ImageColorModel.GREY),
     ).toMatchImage(expected);

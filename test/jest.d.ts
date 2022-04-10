@@ -1,3 +1,5 @@
+import { MatchImageSnapshotOptions } from 'jest-image-snapshot';
+
 import { IJS } from '../src';
 import { Mask } from '../src/Mask';
 
@@ -56,6 +58,15 @@ declare global {
        */
 
       toMatchMaskData(expectedImageData: string): R;
+
+      /**
+       * Same as `toMatchImageSnapshot`, but with an IJS or Mask instance, which
+       * will be automatically converted to PNG.
+       *
+       * @param options - Options of the jest-image-snapshot library.
+       * @see {@link https://github.com/americanexpress/jest-image-snapshot}
+       */
+      toMatchIJSSnapshot(options?: MatchImageSnapshotOptions): R;
     }
   }
 }
