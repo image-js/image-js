@@ -35,12 +35,12 @@ export default function load(image, options) {
       loadBinary(
         new Uint8Array(image),
         undefined,
-        options ? options.ignorePalette : undefined,
+        options && options.ignorePalette,
       ),
     );
   } else if (image.buffer) {
     return Promise.resolve(
-      loadBinary(image, undefined, options ? options.ignorePalette : undefined),
+      loadBinary(image, undefined, options && options.ignorePalette),
     );
   } else {
     throw new Error('argument to "load" must be a string or buffer.');
@@ -81,7 +81,11 @@ function loadURL(url, options) {
   }
   return binaryDataP.then((binaryData) => {
     const uint8 = new Uint8Array(binaryData);
-    return loadBinary(uint8, dataURL ? url : undefined);
+    return loadBinary(
+      uint8,
+      dataURL ? url : undefined,
+      options && options.ignorePalette,
+    );
   });
 }
 
