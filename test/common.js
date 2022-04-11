@@ -12,8 +12,8 @@ export { getImage, getHash };
 
 export { Image, Stack, IJS };
 
-export function load(name) {
-  return Image.load(getImage(name));
+export function load(name, options) {
+  return Image.load(getImage(name), options);
 }
 
 export function getSquare() {

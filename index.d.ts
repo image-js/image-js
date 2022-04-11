@@ -32,7 +32,7 @@ export declare class Image {
   static createFrom(other: Image, options: ImageConstructorOptions): Image;
   static load(
     image: string | ArrayBuffer | Uint8Array,
-    options?: RequestInit,
+    options?: RequestInit & { ignorePalette: boolean },
   ): Promise<Image>;
 
   getRoiManager(): RoiManager;
@@ -149,10 +149,13 @@ export declare class Image {
   // paintPoints
   // paintPolyline
   // paintPolylines
-  paintPolygon(points: Array<Array<number>>, options?: {
-    color?: Array<number>;
-    filled?: boolean;
-  }): Image;
+  paintPolygon(
+    points: Array<Array<number>>,
+    options?: {
+      color?: Array<number>;
+      filled?: boolean;
+    },
+  ): Image;
 
   // paintPolygons
 
