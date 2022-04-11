@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.34.0](https://www.github.com/image-js/image-js/compare/v0.33.2...v0.34.0) (2022-04-11)
+
+
+### Features
+
+* add option to ignore color palette in TIFF images ([#589](https://www.github.com/image-js/image-js/issues/589)) ([07aa7d5](https://www.github.com/image-js/image-js/commit/07aa7d591ca0f674fca83fbfef910e4e6243181e))
+
 ### [0.33.2](https://www.github.com/image-js/image-js/compare/v0.33.1...v0.33.2) (2022-03-28)
 
 
