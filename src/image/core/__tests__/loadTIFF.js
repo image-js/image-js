@@ -11,10 +11,7 @@ describe('Load TIFF', () => {
   ];
 
   it.each(tests)('%s', async (name, components, alpha, bitDepth, options) => {
-    const img =
-      options && options.ignorePalette
-        ? await load(`format/tif/${name}.tif`, options)
-        : await load(`format/tif/${name}.tif`);
+    const img = await load(`format/tif/${name}.tif`, options);
     expect(img.components).toBe(components);
     expect(img.alpha).toBe(alpha);
     expect(img.bitDepth).toBe(bitDepth);

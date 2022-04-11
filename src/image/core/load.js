@@ -22,7 +22,7 @@ const isDataURL = /^data:[a-z]+\/(?:[a-z]+);base64,/;
  * @param {object} [options] - In the browser, the options object is passed to the underlying `fetch` call, along with
  * the data URL. For binary data, the option specify decoding options.
  * @param {boolean} [options.ignorePalette] - When set to true and loading a tiff from binary data, if the tiff is of
- * type 3 (palette), load as single channel greyscale rather than as a psuedo-colored RGB.
+ * type 3 (palette), load as single channel greyscale rather than as a pseudo-colored RGB.
  * @return {Promise<Image>}
  * @example
  * const image = await Image.load('https://example.com/image.png');
@@ -62,6 +62,7 @@ function loadBinary(image, base64Url, ignorePalette) {
     }
   }
   return loadGeneric(getBase64('application/octet-stream'));
+
   function getBase64(type) {
     if (base64Url) {
       return base64Url;

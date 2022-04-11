@@ -31,6 +31,7 @@ export default function minimum(histogram) {
   threshold = minimumBetweenPeeks(histogramCopy, max);
   return threshold;
 }
+
 function smoothed(histogram) {
   // Smooth with a 3 point running mean filter
   let auHistogram = new Array(histogram.length); // a copy of the histograma for the smoothing process
@@ -42,6 +43,7 @@ function smoothed(histogram) {
     (histogram[histogram.length - 2] + histogram[histogram.length - 1]) / 3;
   return auHistogram;
 }
+
 function minimumBetweenPeeks(histogramBimodal, max) {
   let threshold;
   for (let i = 1; i < max; i++) {
@@ -55,6 +57,7 @@ function minimumBetweenPeeks(histogramBimodal, max) {
   }
   return threshold;
 }
+
 function bimodalTest(histogram) {
   // It is responsible for determining if a histogram is bimodal
   let len = histogram.length;

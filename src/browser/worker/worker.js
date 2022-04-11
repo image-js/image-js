@@ -26,6 +26,7 @@ class Worker {
     let manager;
     let url;
     let runner = {};
+
     function run(...args) {
       if (!manager) {
         this.checkUrl();
@@ -35,6 +36,7 @@ class Worker {
       }
       return method.run.call(runner, ...args);
     }
+
     run.reset = function () {
       if (manager) {
         manager.terminate();

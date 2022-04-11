@@ -125,10 +125,12 @@ const exportMethods = {
     }
     const { useCanvas = false, encoder: encoderOptions = undefined } = options;
     type = getType(type);
+
     function dataUrl(encoder, ctx) {
       const u8 = encoder(ctx, encoderOptions);
       return toBase64URL(u8, type);
     }
+
     if (type === 'image/bmp') {
       return dataUrl(encodeBmp, this);
     } else if (type === 'image/png' && !useCanvas) {

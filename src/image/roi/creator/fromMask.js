@@ -151,5 +151,6 @@ export default function fromMask(mask, options = {}) {
       }
     }
   }
+
   return new RoiMap(mask, data);
 }
