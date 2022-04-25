@@ -145,7 +145,17 @@ export declare class Image {
   // extract
   // floodFill
   // paintLabels
-  // paintMasks
+  paintMasks(masks: Image | Array<Image>, options?: {
+    color?: Array<number> | string;
+    colors?: Array<Array<number>> | Array<string>;
+    randomColors?: boolean;
+    distinctColors?: boolean;
+    alpha?: number;
+    labels?: Array<string>;
+    labelsPosition?: Array<Array<number>>;
+    labelColor?: string;
+    labelFont?: string;
+  }): Image;
   // paintPoints
   // paintPolyline
   // paintPolylines
