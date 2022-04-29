@@ -15,6 +15,8 @@ import {
   gradientFilter,
   derivativeFilter,
   DerivativeFilterOptions,
+  LevelOptions,
+  level,
 } from './filters';
 import { hypotenuse } from './filters/hypotenuse';
 import { invert, InvertOptions } from './filters/invert';
@@ -488,6 +490,17 @@ export class IJS {
   public threshold(options: ThresholdOptions = {}): Mask {
     return threshold(this, options);
   }
+
+  /**
+   * Crop the input image to a desired size.
+   *
+   * @param [options] - Crop options.
+   * @returns The new cropped image
+   */
+  public crop(options?: CropOptions): IJS {
+    return crop(this, options);
+  }
+
   // FILTERS
 
   public blur(options: BlurOptions): IJS {
@@ -586,13 +599,13 @@ export class IJS {
   }
 
   /**
-   * Crop the input image to a desired size.
+   * Level the image using the optional input and output value. This function allows you to enhance the image's contrast.
    *
-   * @param [options] - Crop options.
-   * @returns The new cropped image
+   * @param options - Level options.
+   * @returns The levelled image.
    */
-  public crop(options?: CropOptions): IJS {
-    return crop(this, options);
+  public level(options?: LevelOptions): IJS {
+    return level(this, options);
   }
 
   // GEOMETRY

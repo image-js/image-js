@@ -6,5 +6,6 @@ export * from './gaussianBlur';
 export * from './gradientFilter';
 export * from './hypotenuse';
 export * from './invert';
+export * from './level';
 export * from './or';
 export * from './subtractImage';

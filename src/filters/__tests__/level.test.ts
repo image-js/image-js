@@ -1,0 +1,108 @@
+describe('level', () => {
+  it('1x1 rgba image, default options', () => {
+    const image = testUtils.createRgbaImage([[100, 0, 0, 50]]);
+    expect(image.level()).toMatchImage(image);
+  });
+  it('1x1 rgba image, out to itself', () => {
+    const image = testUtils.createRgbaImage([[100, 0, 0, 50]]);
+    expect(image.level({ out: image })).toBe(image);
+  });
+  it('1x1 greya image, default options', () => {
+    const image = testUtils.createRgbaImage([[100, 50, 0, 50]]);
+    expect(image.level()).toMatchImage(image);
+  });
+  it('3x1 rgba image, custom input min and max', () => {
+    const image = testUtils.createRgbaImage([
+      [100, 0, 0, 50],
+      [125, 0, 0, 50],
+      [150, 0, 0, 50],
+    ]);
+    expect(image.level({ inputMin: 100, inputMax: 150 })).toMatchImageData([
+      [0, 0, 0, 50],
+      [127, 0, 0, 50],
+      [255, 0, 0, 50],
+    ]);
+  });
+  it('3x1 rgba image, custom output min and max', () => {
+    const image = testUtils.createRgbaImage([
+      [0, 0, 0, 50],
+      [127, 0, 0, 50],
+      [255, 0, 0, 50],
+    ]);
+    expect(image.level({ outputMin: 100, outputMax: 150 })).toMatchImageData([
+      [100, 100, 100, 50],
+      [124, 100, 100, 50],
+      [150, 100, 100, 50],
+    ]);
+  });
+  it('1x1 grey image, custom output and input values', () => {
+    const image = testUtils.createGreyImage([[255]]);
+    expect(
+      image.level({
+        inputMin: 50,
+        inputMax: 150,
+        outputMin: 100,
+        outputMax: 140,
+      }),
+    ).toMatchImageData([[140]]);
+  });
+  it('3x1 rgba image, custom output and input values', () => {
+    const image = testUtils.createRgbaImage([
+      [0, 10, 20, 50],
+      [30, 40, 50, 50],
+      [60, 70, 80, 50],
+    ]);
+    expect(
+      image.level({
+        inputMin: 10,
+        inputMax: 60,
+        outputMin: 0,
+        outputMax: 100,
+      }),
+    ).toMatchImageData([
+      [0, 0, 20, 50],
+      [40, 60, 80, 50],
+      [100, 100, 100, 50],
+    ]);
+  });
+  it('3x1 rgba image, custom channels', () => {
+    const image = testUtils.createRgbaImage([
+      [0, 10, 20, 50],
+      [30, 40, 50, 50],
+      [60, 70, 80, 50],
+    ]);
+    expect(
+      image.level({
+        inputMin: 10,
+        inputMax: 60,
+        outputMin: 0,
+        outputMax: 100,
+        channels: [1],
+      }),
+    ).toMatchImageData([
+      [0, 0, 20, 50],
+      [30, 60, 50, 50],
+      [60, 100, 80, 50],
+    ]);
+  });
+  it('3x1 rgba image, modify alpha', () => {
+    const image = testUtils.createRgbaImage([
+      [0, 10, 20, 50],
+      [30, 40, 50, 50],
+      [60, 70, 80, 50],
+    ]);
+    expect(
+      image.level({
+        inputMin: 10,
+        inputMax: 60,
+        outputMin: 0,
+        outputMax: 100,
+        channels: [0, 1, 2, 3],
+      }),
+    ).toMatchImageData([
+      [0, 0, 20, 80],
+      [40, 60, 80, 80],
+      [100, 100, 100, 80],
+    ]);
+  });
+});
