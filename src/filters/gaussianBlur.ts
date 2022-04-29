@@ -18,16 +18,15 @@ interface GaussianBlurBaseOptions {
 
 export interface GaussianBlurSigmaOptions extends GaussianBlurBaseOptions {
   /**
-   * Size of the kernel.
-   */
-  size?: number;
-  /**
    * The standard deviation. Specifies the width of the gaussian function in the case where it is the same for x and y.
+   */
+  sigma: number;
+  /**
+   * Size of the kernel.
    *
    * @default 2 * Math.ceil(2 * sigma) + 1
    */
-
-  sigma: number;
+  size?: number;
 }
 
 export interface GaussianBlurXYOptions extends GaussianBlurBaseOptions {
@@ -48,7 +47,7 @@ export interface GaussianBlurXYOptions extends GaussianBlurBaseOptions {
   /**
    * Size of the Y axis kernel
    *
-   * @default 2 * Math.ceil(2 * sigma) + 1
+   * @default 2 * Math.ceil(2 * sigmaY) + 1
    */
   sizeY?: number;
 }
