@@ -1,5 +1,5 @@
-import { RoiKind } from '../../RoiManager';
 import { RoisColorMode } from '../../colorRois';
+import { RoiKind } from '../../getRois';
 import { maxNumberRois, colorMapCenter } from '../constants';
 import { getColorMap } from '../getColorMap';
 

@@ -2,7 +2,7 @@ import { fromMask } from '..';
 import { colorRois } from '../colorRois';
 
 describe('colorRois', () => {
-  it('3x3 mask, cross', () => {
+  it('1x2 mask', () => {
     const mask = testUtils.createMask([[0, 1]]);
     const roiMapManager = fromMask(mask);
     const result = colorRois(roiMapManager);

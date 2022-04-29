@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`computeRois 3x3 mask 1`] = `
+Array [
+  Roi {
+    "column": 0,
+    "height": 2,
+    "id": 1,
+    "map": Object {
+      "data": Int16Array [
+        1,
+        1,
+        1,
+        1,
+        -1,
+        -1,
+        -1,
+        -1,
+        2,
+      ],
+      "height": 3,
+      "nbNegative": 1,
+      "nbPositive": 2,
+      "width": 3,
+    },
+    "row": 0,
+    "surface": 4,
+    "width": 3,
+  },
+  Roi {
+    "column": 2,
+    "height": 1,
+    "id": 2,
+    "map": Object {
+      "data": Int16Array [
+        1,
+        1,
+        1,
+        1,
+        -1,
+        -1,
+        -1,
+        -1,
+        2,
+      ],
+      "height": 3,
+      "nbNegative": 1,
+      "nbPositive": 2,
+      "width": 3,
+    },
+    "row": 2,
+    "surface": 1,
+    "width": 1,
+  },
+]
+`;
+
+exports[`computeRois 3x3 mask 2`] = `
+Array [
+  Roi {
+    "column": 0,
+    "height": 2,
+    "id": -1,
+    "map": Object {
+      "data": Int16Array [
+        1,
+        1,
+        1,
+        1,
+        -1,
+        -1,
+        -1,
+        -1,
+        2,
+      ],
+      "height": 3,
+      "nbNegative": 1,
+      "nbPositive": 2,
+      "width": 3,
+    },
+    "row": 1,
+    "surface": 4,
+    "width": 3,
+  },
+]
+`;

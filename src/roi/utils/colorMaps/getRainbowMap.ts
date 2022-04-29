@@ -1,4 +1,4 @@
-import { RoiKind } from '../../RoiManager';
+import { RoiKind } from '../../getRois';
 import { maxNumberRois, colorMapCenter } from '../constants';
 import { hsvToRgb } from '../hsvToRgb';
 import { rgbToNumber } from '../rgbToNumber';

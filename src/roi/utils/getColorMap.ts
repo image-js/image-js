@@ -1,5 +1,5 @@
-import { RoiKind } from '../RoiManager';
 import { RoisColorMode } from '../colorRois';
+import { RoiKind } from '../getRois';
 
 import { getBinaryMap } from './colorMaps/getBinaryMap';
 import { getRainbowMap } from './colorMaps/getRainbowMap';
@@ -37,6 +37,7 @@ export interface GetColorMapOptions {
  */
 export function getColorMap(options: GetColorMapOptions): Uint32Array {
   const { mode = RoisColorMode.BINARY } = options;
+  options = { roiKind: RoiKind.BW, ...options };
 
   switch (mode) {
     case RoisColorMode.BINARY:

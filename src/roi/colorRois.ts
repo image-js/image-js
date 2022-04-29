@@ -1,9 +1,10 @@
 import { IJS, ImageColorModel } from '..';
 
+import { RoiKind } from './getRois';
 import { colorMapCenter } from './utils/constants';
 import { getColorMap } from './utils/getColorMap';
 
-import { RoiKind, RoiMapManager } from '.';
+import { RoiMapManager } from '.';
 
 export enum RoisColorMode {
   /**
@@ -47,22 +48,23 @@ export function colorRois(
   options: ColorRoisOptions = {},
 ): IJS {
   const { roiKind = RoiKind.BW, mode = RoisColorMode.BINARY } = options;
+  const map = roiMapManager.getMap();
 
-  let image = new IJS(roiMapManager.map.width, roiMapManager.map.height, {
+  let image = new IJS(map.width, map.height, {
     colorModel: ImageColorModel.RGBA,
   });
 
   const colorMap = getColorMap({
     roiKind,
     mode,
-    nbNegative: roiMapManager.map.nbNegative,
-    nbPositive: roiMapManager.map.nbPositive,
+    nbNegative: map.nbNegative,
+    nbPositive: map.nbPositive,
   });
 
   let data32 = new Uint32Array(image.getRawImage().data.buffer);
 
   for (let index = 0; index < image.size; index++) {
-    data32[index] = colorMap[roiMapManager.map.data[index] + colorMapCenter];
+    data32[index] = colorMap[map.data[index] + colorMapCenter];
   }
 
   return image;

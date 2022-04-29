@@ -1,4 +1,4 @@
-import { RoiKind } from '../../RoiManager';
+import { RoiKind } from '../../getRois';
 import { maxNumberRois, colorMapCenter } from '../constants';
 import { hsvToRgb } from '../hsvToRgb';
 import { rgbToNumber } from '../rgbToNumber';
@@ -12,11 +12,6 @@ export interface GetSaturationMapOptions {
    * Number of white ID ROIs
    */
   nbPositive: number;
-  /**
-   * Specify which ROIs to colour.
-   *
-   * @default RoiKind.BW
-   */
   /**
    * Specify which ROIs to colour.
    *

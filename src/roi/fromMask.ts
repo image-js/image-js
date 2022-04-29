@@ -1,4 +1,5 @@
 import { Mask } from '..';
+import { assert } from '../utils/assert';
 
 import { RoiMapManager } from './RoiMapManager';
 import { maxNumberRois, maxRoiId } from './utils/constants';
@@ -15,8 +16,8 @@ export interface FromMaskOptions {
 /**
  * Extract the ROIs of an image.
  *
- * @param mask - Mask to extract the ROIs from
- * @param options - fromMask options
+ * @param mask - Mask to extract the ROIs from.
+ * @param options - From mask options.
  * @returns The corresponding ROI manager.
  */
 export function fromMask(
@@ -166,12 +167,11 @@ export function fromMask(
 
       from++;
 
-      if (to - from > MAX_ARRAY) {
-        throw new Error(
-          'analyseMask can not finish, the array to manage internal data is not big enough.' +
-            'You could improve mask by changing MAX_ARRAY',
-        );
-      }
+      assert(
+        to - from <= MAX_ARRAY,
+        'fromMask can not finish, the array to manage internal data is not big enough.' +
+          'You could improve mask by changing MAX_ARRAY',
+      );
     }
   }
   return new RoiMapManager({
