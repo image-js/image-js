@@ -15,11 +15,10 @@ import {
   gradientFilter,
   derivativeFilter,
   DerivativeFilterOptions,
-  LevelOptions,
-  level,
 } from './filters';
 import { hypotenuse } from './filters/hypotenuse';
 import { invert, InvertOptions } from './filters/invert';
+import { level, LevelOptions } from './filters/level';
 import {
   bottomHat,
   BottomHatOptions,
@@ -48,6 +47,8 @@ import { ImageColorModel, colorModels } from './utils/colorModels';
 import { validateChannel, validateValue } from './utils/validators';
 
 import {
+  extract,
+  ExtractOptions,
   GreyOptions,
   histogram,
   HistogramOptions,
@@ -499,6 +500,17 @@ export class IJS {
    */
   public crop(options?: CropOptions): IJS {
     return crop(this, options);
+  }
+
+  /**
+   * Extract the pixels of an image, as specified in a mask.
+   *
+   * @param mask - The mask defining which pixels to keep.
+   * @param options - Extract options.
+   * @returns The extracted image.
+   */
+  public extract(mask: Mask, options?: ExtractOptions): IJS {
+    return extract(this, mask, options);
   }
 
   // FILTERS
