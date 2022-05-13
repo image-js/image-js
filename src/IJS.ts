@@ -16,6 +16,7 @@ import {
   derivativeFilter,
   DerivativeFilterOptions,
 } from './filters';
+import { flip, FlipOptions } from './filters/flip';
 import { hypotenuse } from './filters/hypotenuse';
 import { invert, InvertOptions } from './filters/invert';
 import { level, LevelOptions } from './filters/level';
@@ -557,7 +558,15 @@ export class IJS {
   public gaussianBlur(options: GaussianBlurOptions): IJS {
     return gaussianBlur(this, options);
   }
-
+  /**
+   * Flip the image.
+   *
+   * @param options - Flip options
+   * @returns The flipped image.
+   */
+  public flip(options?: FlipOptions): IJS {
+    return flip(this, options);
+  }
   /**
    * Invert the colors of the image.
    *
