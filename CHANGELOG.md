@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.34.1](https://www.github.com/image-js/image-js/compare/v0.34.0...v0.34.1) (2022-05-17)
+
+
+### Bug Fixes
+
+* add TypeScript definition for paintMasks() ([#591](https://www.github.com/image-js/image-js/issues/591)) ([6edd169](https://www.github.com/image-js/image-js/commit/6edd169cf161b3658a89dfa7d193fb718cd3c25c))
+
 ## [0.34.0](https://www.github.com/image-js/image-js/compare/v0.33.2...v0.34.0) (2022-04-11)
 
 
