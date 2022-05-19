@@ -28,7 +28,7 @@ export interface CopyToOptions {
  * @param options - copyTo options.
  * @returns The target with the source copied to it.
  */
-export default function copyTo(
+export function copyTo(
   source: IJS,
   target: IJS,
   options: CopyToOptions = {},

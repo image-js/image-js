@@ -15,11 +15,14 @@ import {
   gradientFilter,
   derivativeFilter,
   DerivativeFilterOptions,
+  flip,
+  FlipOptions,
+  hypotenuse,
+  invert,
+  InvertOptions,
+  level,
+  LevelOptions,
 } from './filters';
-import { flip, FlipOptions } from './filters/flip';
-import { hypotenuse } from './filters/hypotenuse';
-import { invert, InvertOptions } from './filters/invert';
-import { level, LevelOptions } from './filters/level';
 import {
   bottomHat,
   BottomHatOptions,
@@ -38,12 +41,18 @@ import {
   topHat,
   TopHatOptions,
 } from './morphology';
-import { convertColor, ConvertColorOptions } from './operations/convertColor';
-import { convertDepth } from './operations/convertDepth';
-import copyTo, { CopyToOptions } from './operations/copyTo';
-import { crop, CropOptions } from './operations/crop';
-import grey from './operations/grey';
-import { split } from './operations/split';
+import {
+  convertColor,
+  ConvertColorOptions,
+  convertDepth,
+  copyTo,
+  CopyToOptions,
+  crop,
+  CropOptions,
+  grey,
+  split,
+} from './operations';
+import { Point, PaintLineOptions, paintLine } from './paint';
 import { ImageColorModel, colorModels } from './utils/colorModels';
 import { validateChannel, validateValue } from './utils/validators';
 
@@ -463,7 +472,10 @@ export class IJS {
   public histogram(options?: HistogramOptions): Uint32Array {
     return histogram(this, options);
   }
-
+  // PAINT
+  public paintLine(from: Point, to: Point, options: PaintLineOptions): IJS {
+    return paintLine(this, from, to, options);
+  }
   // OPERATIONS
 
   public split(): IJS[] {

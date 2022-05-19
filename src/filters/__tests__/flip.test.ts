@@ -14,6 +14,7 @@ describe('flip', () => {
       [13, 14, 15, 9, 10, 11],
     ]);
     expect(expected).toBe(out);
+    expect(expected).not.toBe(image);
   });
   it('flip with out parameter set to self', () => {
     const image = testUtils.createRgbaImage([[1, 2, 3, 4, 5, 6, 7, 8]]);

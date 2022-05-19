@@ -58,7 +58,7 @@ export interface GreyOptions {
  * @param options - The grey conversion options.
  * @returns The resulting grey image.
  */
-export default function grey(image: IJS, options: GreyOptions = {}): IJS {
+export function grey(image: IJS, options: GreyOptions = {}): IJS {
   let { algorithm = 'luma709', keepAlpha = false, mergeAlpha = true } = options;
 
   if (
