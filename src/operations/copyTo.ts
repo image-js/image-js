@@ -1,5 +1,6 @@
 import { IJS } from '..';
 import { getOutputImage } from '../utils/getOutputImage';
+import { setBlendedPixel } from '../utils/setBlendedPixel';
 
 export interface CopyToOptions {
   /**
@@ -40,68 +41,21 @@ export function copyTo(
   }
 
   const result = getOutputImage(target, options, { clone: true });
-  if (source.alpha) {
+
+  for (
+    let row = Math.max(rowOffset, 0);
+    row < Math.min(source.height + rowOffset, target.height);
+    row++
+  ) {
     for (
-      let row = Math.max(rowOffset, 0);
-      row < Math.min(source.height + rowOffset, target.height);
-      row++
+      let column = Math.max(columnOffset, 0);
+      column < Math.min(source.width + columnOffset, target.width);
+      column++
     ) {
-      for (
-        let column = Math.max(columnOffset, 0);
-        column < Math.min(source.width + columnOffset, target.width);
-        column++
-      ) {
-        let sourceAlpha = source.getValue(
-          column - columnOffset,
-          row - rowOffset,
-          source.channels - 1,
-        );
-        let targetAlpha = target.getValue(column, row, source.channels - 1);
-
-        let newAlpha =
-          sourceAlpha + targetAlpha * (1 - sourceAlpha / source.maxValue);
-
-        result.setValue(column, row, target.channels - 1, newAlpha);
-        for (let component = 0; component < source.components; component++) {
-          let sourceComponent = source.getValue(
-            column - columnOffset,
-            row - rowOffset,
-            component,
-          );
-          let targetComponent = target.getValue(column, row, component);
-
-          let newComponent =
-            (sourceComponent * sourceAlpha +
-              targetComponent *
-                targetAlpha *
-                (1 - sourceAlpha / source.maxValue)) /
-            newAlpha;
-
-          result.setValue(column, row, component, newComponent);
-        }
-      }
-    }
-  } else {
-    for (
-      let row = Math.max(rowOffset, 0);
-      row < Math.min(source.height + rowOffset, target.height);
-      row++
-    ) {
-      for (
-        let column = Math.max(columnOffset, 0);
-        column < Math.min(source.width + columnOffset, target.width);
-        column++
-      ) {
-        for (let component = 0; component < target.components; component++) {
-          let sourceComponent = source.getValue(
-            column - columnOffset,
-            row - rowOffset,
-            component,
-          );
-          result.setValue(column, row, component, sourceComponent);
-        }
-      }
+      let sourcePixel = source.getPixel(column - columnOffset, row - rowOffset);
+      setBlendedPixel(result, column, row, { color: sourcePixel });
     }
   }
+
   return result;
 }
