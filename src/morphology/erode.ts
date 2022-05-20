@@ -254,7 +254,7 @@ function erodeMaskOnlyOnes(
         i++
       ) {
         if (minList[i] === 0) {
-          newMask.setBit( column,row, 0);
+          newMask.setBit(column, row, 0);
           break;
         }
       }
