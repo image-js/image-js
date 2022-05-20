@@ -3,6 +3,11 @@ import { IJS } from '../IJS';
 import { getDefaultColor } from './getDefaultColor';
 
 export interface SetBlendedPixelOptions {
+  /**
+   * Color with which to blend the image pixel.
+   *
+   * @default Opaque black.
+   */
   color?: number[];
 }
 

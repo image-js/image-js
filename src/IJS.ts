@@ -51,6 +51,8 @@ import {
   crop,
   CropOptions,
   grey,
+  paintMask,
+  PaintMaskOptions,
   split,
 } from './operations';
 import { ImageColorModel, colorModels } from './utils/colorModels';
@@ -524,6 +526,17 @@ export class IJS {
    */
   public extract(mask: Mask, options?: ExtractOptions): IJS {
     return extract(this, mask, options);
+  }
+
+  /**
+   * Paint a mask onto an image and the given position and with the given color.
+   *
+   * @param mask - Mask to paint on the image.
+   * @param options - Paint mask options.
+   * @returns The painted image.
+   */
+  public paintMask(mask: Mask, options?: PaintMaskOptions): IJS {
+    return paintMask(this, mask, options);
   }
 
   // FILTERS
