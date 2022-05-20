@@ -2,6 +2,7 @@ import util from 'util';
 
 import { ColorDepth, ImageColorModel } from '..';
 import { Mask } from '../Mask';
+import { Point } from '../utils/types';
 
 describe('create new masks', () => {
   it('should create a mask', () => {
@@ -93,6 +94,15 @@ test('createFrom', () => {
   const newMask = Mask.createFrom(mask);
   expect(mask.width).toBe(newMask.width);
   expect(mask.height).toBe(newMask.height);
+});
+
+test('fromPoints', () => {
+  const points: Point[] = [[1, 1]];
+  expect(Mask.fromPoints(5, 3, points)).toMatchMaskData([
+    [0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+  ]);
 });
 
 test('clone', () => {

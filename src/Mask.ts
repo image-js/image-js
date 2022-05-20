@@ -33,6 +33,7 @@ import { erode } from './morphology/erode';
 import { boolToNumber } from './utils/boolToNumber';
 
 import { ImageColorModel, ColorDepth, colorModels, IJS, convertColor } from '.';
+import { Point } from './utils/types';
 
 export type BitValue = 1 | 0 | boolean;
 
@@ -162,6 +163,28 @@ export class Mask {
   ): Mask {
     const { width = other.width, height = other.height } = options;
     return new Mask(width, height, options);
+  }
+
+  /**
+   * Create a mask from an array of points.
+   *
+   * @param width - Width of the mask.
+   * @param height - Height of the mask.
+   *  @param points - Reference Mask.
+   * @returns New mask.
+   */
+  public static fromPoints(
+    width: number,
+    height: number,
+    points: Point[],
+  ): Mask {
+    let mask = new Mask(width, height);
+
+    for (const point of points) {
+      mask.setBit(point[0], point[1], 1);
+    }
+
+    return mask;
   }
 
   /**
@@ -335,6 +358,7 @@ export class Mask {
   public subtractImage(other: Mask, options?: SubtractImageOptions): Mask {
     return subtractImage(this, other, options);
   }
+
   /**
    * Perform an AND operation on two masks.
    *
