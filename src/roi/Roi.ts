@@ -1,6 +1,8 @@
 import { Mask } from '../Mask';
+import { Point } from '../utils/types';
 
 import { RoiMap } from './RoiMapManager';
+import { GetBorderPointOptions, getBorderPoints } from './getBorderPoints';
 import { getMask } from './getMask';
 
 export class Roi {
@@ -58,5 +60,16 @@ export class Roi {
    */
   public getMask(): Mask {
     return getMask(this);
+  }
+
+  /**
+   * Return an array with the coordinates of the pixels that are on the border of the ROI.
+   * The points are defined as [column, row].
+   *
+   * @param options - Get border points options.
+   * @returns The array of border pixels.
+   */
+  public getBorderPoints(options?: GetBorderPointOptions): Array<Point> {
+    return getBorderPoints(this, options);
   }
 }
