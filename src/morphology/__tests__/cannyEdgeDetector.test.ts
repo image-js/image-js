@@ -28,6 +28,28 @@ describe('cannyEdgeDetector', () => {
 
     expect(result).toMatchMask(expected);
   });
+  it('asymetrical image', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 250, 0, 0],
+    ]);
+
+    const expected = testUtils.createMask([
+      [0, 0, 0, 0, 0],
+      [0, 1, 1, 1, 0],
+      [0, 0, 0, 0, 0],
+    ]);
+
+    let result = image.cannyEdgeDetector({
+      lowThreshold: 0.08,
+      highThreshold: 0.1,
+      hysteresis: false,
+      gaussianBlurOptions: { sigma: 1, size: 1 },
+    });
+
+    expect(result).toMatchMask(expected);
+  });
   it('5x5 grey image with circle', () => {
     const image = testUtils.createGreyImage([
       [0, 0, 0, 0, 0],
