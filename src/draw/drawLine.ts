@@ -15,7 +15,7 @@ export interface Point {
    */
   column: number;
 }
-export interface PaintLineOptions {
+export interface DrawLineOptions {
   /**
    * Array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
@@ -38,11 +38,11 @@ export interface PaintLineOptions {
  * @param options - Paint Line options.
  * @returns The original painted image
  */
-export function paintLine(
+export function drawLine(
   image: IJS,
   from: Point,
   to: Point,
-  options: PaintLineOptions = {},
+  options: DrawLineOptions = {},
 ) {
   const newImage = getOutputImage(image, options, { clone: true });
   const { color = getDefaultColor(newImage) } = options;

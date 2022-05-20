@@ -1,4 +1,5 @@
 import { Mask } from './Mask';
+import { Point, DrawLineOptions, drawLine } from './draw';
 import {
   BlurOptions,
   blur,
@@ -52,7 +53,6 @@ import {
   grey,
   split,
 } from './operations';
-import { Point, PaintLineOptions, paintLine } from './paint';
 import { ImageColorModel, colorModels } from './utils/colorModels';
 import { validateChannel, validateValue } from './utils/validators';
 
@@ -473,8 +473,8 @@ export class IJS {
     return histogram(this, options);
   }
   // PAINT
-  public paintLine(from: Point, to: Point, options: PaintLineOptions): IJS {
-    return paintLine(this, from, to, options);
+  public drawLine(from: Point, to: Point, options: DrawLineOptions): IJS {
+    return drawLine(this, from, to, options);
   }
   // OPERATIONS
 
