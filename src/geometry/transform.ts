@@ -147,7 +147,7 @@ export function transform(
           interpolateBorder,
           clamp,
         );
-        newImage.setValue(row, column, channel, newValue);
+        newImage.setValue(column, row, channel, newValue);
       }
     }
   }

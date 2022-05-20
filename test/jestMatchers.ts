@@ -47,8 +47,8 @@ export function toMatchImage(
   } else {
     rowsLoop: for (let row = 0; row < received.height; row++) {
       for (let col = 0; col < received.width; col++) {
-        const receivedPixel = received.getPixel(row, col);
-        const expectedPixel = expectedImage.getPixel(row, col);
+        const receivedPixel = received.getPixel(col, row);
+        const expectedPixel = expectedImage.getPixel(col, row);
         if (!this.equals(receivedPixel, expectedPixel)) {
           error = `Expected pixel at (${col}, ${row}) to be [${expectedPixel.join(
             ', ',
@@ -106,8 +106,8 @@ export function toMatchMask(
   } else {
     rowsLoop: for (let row = 0; row < received.height; row++) {
       for (let col = 0; col < received.width; col++) {
-        const receivedBit = received.getBit(row, col);
-        const expectedBit = expected.getValue(row, col, 0);
+        const receivedBit = received.getBit(col, row);
+        const expectedBit = expected.getValue(col, row, 0);
         if (!this.equals(receivedBit, expectedBit)) {
           error = `Expected bit at (${col}, ${row}) to be ${expectedBit}, but got ${receivedBit}`;
           break rowsLoop;

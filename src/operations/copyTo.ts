@@ -52,23 +52,23 @@ export function copyTo(
         column++
       ) {
         let sourceAlpha = source.getValue(
-          row - rowOffset,
           column - columnOffset,
+          row - rowOffset,
           source.channels - 1,
         );
-        let targetAlpha = target.getValue(row, column, source.channels - 1);
+        let targetAlpha = target.getValue(column, row, source.channels - 1);
 
         let newAlpha =
           sourceAlpha + targetAlpha * (1 - sourceAlpha / source.maxValue);
 
-        result.setValue(row, column, target.channels - 1, newAlpha);
+        result.setValue(column, row, target.channels - 1, newAlpha);
         for (let component = 0; component < source.components; component++) {
           let sourceComponent = source.getValue(
-            row - rowOffset,
             column - columnOffset,
+            row - rowOffset,
             component,
           );
-          let targetComponent = target.getValue(row, column, component);
+          let targetComponent = target.getValue(column, row, component);
 
           let newComponent =
             (sourceComponent * sourceAlpha +
@@ -77,7 +77,7 @@ export function copyTo(
                 (1 - sourceAlpha / source.maxValue)) /
             newAlpha;
 
-          result.setValue(row, column, component, newComponent);
+          result.setValue(column, row, component, newComponent);
         }
       }
     }
@@ -94,11 +94,11 @@ export function copyTo(
       ) {
         for (let component = 0; component < target.components; component++) {
           let sourceComponent = source.getValue(
-            row - rowOffset,
             column - columnOffset,
+            row - rowOffset,
             component,
           );
-          result.setValue(row, column, component, sourceComponent);
+          result.setValue(column, row, component, sourceComponent);
         }
       }
     }

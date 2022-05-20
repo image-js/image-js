@@ -73,7 +73,7 @@ export function paintLine(
       yPoint < newImage.width
     ) {
       for (let channel = 0; channel < numberChannels; channel++) {
-        newImage.setValue(xPoint, yPoint, channel, color[channel]);
+        newImage.setValue(yPoint, xPoint, channel, color[channel]);
       }
     }
 

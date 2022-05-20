@@ -47,8 +47,8 @@ describe('toMatchImage', () => {
   it('should throw if data is different', () => {
     const image1 = new IJS(2, 3);
     const image2 = new IJS(2, 3);
-    image2.setValue(1, 0, 0, 128);
-    image2.setValue(2, 0, 0, 255);
+    image2.setValue(0, 1, 0, 128);
+    image2.setValue(0, 2, 0, 255);
     expect(() => expect(image1).toMatchImage(image2)).toThrow(
       /Expected pixel at \(0, 1\) to be \[128, 0, 0\], but got \[0, 0, 0\]/,
     );
@@ -101,8 +101,8 @@ describe('toMatchMask', () => {
   it('should throw if data is different', () => {
     const mask1 = new Mask(2, 3);
     const mask2 = new Mask(2, 3);
-    mask2.setBit(1, 0, 1);
-    mask2.setBit(2, 0, 1);
+    mask2.setBit(0, 1, 1);
+    mask2.setBit(0, 2, 1);
     expect(() => expect(mask1).toMatchMask(mask2)).toThrow(
       'Expected bit at (0, 1) to be 1, but got 0',
     );

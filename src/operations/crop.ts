@@ -83,9 +83,9 @@ export function crop(image: IJS, options: CropOptions = {}) {
   for (let currentRow = 0; currentRow < height; currentRow++) {
     for (let currentColumn = 0; currentColumn < width; currentColumn++) {
       newImage.setPixel(
-        currentRow,
         currentColumn,
-        image.getPixel(row + currentRow, column + currentColumn),
+        currentRow,
+        image.getPixel(column + currentColumn, row + currentRow),
       );
     }
   }

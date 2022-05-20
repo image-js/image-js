@@ -55,7 +55,7 @@ describe('create new images', () => {
       3, 4, 5
     ]);
     const img = new IJS(3, 2, { data, colorModel: ImageColorModel.GREY });
-    expect(img.getValue(1, 0, 0)).toBe(3);
+    expect(img.getValue(0, 1, 0)).toBe(3);
     expect(img.getRawImage().data).toBe(data);
   });
 
@@ -94,16 +94,16 @@ describe('create new images', () => {
 describe('get and set pixels', () => {
   it('should get and set', () => {
     const img = new IJS(10, 20);
-    expect(img.getPixel(15, 5)).toStrictEqual([0, 0, 0]);
-    img.setPixel(15, 5, [1, 3, 5]);
-    expect(img.getPixel(15, 5)).toStrictEqual([1, 3, 5]);
+    expect(img.getPixel(5, 15)).toStrictEqual([0, 0, 0]);
+    img.setPixel(5, 15, [1, 3, 5]);
+    expect(img.getPixel(5, 15)).toStrictEqual([1, 3, 5]);
   });
 
   it('should get and set value', () => {
     const img = new IJS(10, 20);
-    expect(img.getValue(15, 5, 0)).toBe(0);
-    img.setValue(15, 5, 0, 50);
-    expect(img.getValue(15, 5, 0)).toBe(50);
+    expect(img.getValue(5, 15, 0)).toBe(0);
+    img.setValue(5, 15, 0, 50);
+    expect(img.getValue(5, 15, 0)).toBe(50);
   });
 
   it('should get and set value by index', () => {
@@ -124,7 +124,7 @@ test('createFrom', () => {
 
 test('clone', () => {
   const img = new IJS(2, 2, { colorModel: ImageColorModel.GREY });
-  img.setValue(0, 1, 0, 50);
+  img.setValue(1, 0, 0, 50);
   const copy = img.clone();
   expect(copy).toMatchImage(img);
 });

@@ -60,12 +60,12 @@ function getInterpolateConstant(value: number): BorderInterpolationFunction {
     channel: number,
     image: IJS,
   ): number {
-    const newX = interpolateConstantPoint(column, image.width);
-    const newY = interpolateConstantPoint(row, image.height);
-    if (newX === -1 || newY === -1) {
+    const newColumn = interpolateConstantPoint(column, image.width);
+    const newRow = interpolateConstantPoint(row, image.height);
+    if (newColumn === -1 || newRow === -1) {
       return value;
     }
-    return image.getValue(newY, newX, channel);
+    return image.getValue(newColumn, newRow, channel);
   };
 }
 
@@ -90,8 +90,8 @@ function interpolateReplicate(
   image: IJS,
 ): number {
   return image.getValue(
-    interpolateReplicatePoint(row, image.height),
     interpolateReplicatePoint(column, image.width),
+    interpolateReplicatePoint(row, image.height),
     channel,
   );
 }
@@ -122,8 +122,8 @@ function interpolateReflect(
   image: IJS,
 ): number {
   return image.getValue(
-    interpolateReflectPoint(row, image.height),
     interpolateReflectPoint(column, image.width),
+    interpolateReflectPoint(row, image.height),
     channel,
   );
 }
@@ -151,8 +151,8 @@ function interpolateWrap(
   image: IJS,
 ): number {
   return image.getValue(
-    interpolateWrapPoint(row, image.height),
     interpolateWrapPoint(column, image.width),
+    interpolateWrapPoint(row, image.height),
     channel,
   );
 }
@@ -180,8 +180,8 @@ function interpolateReflect101(
   image: IJS,
 ): number {
   return image.getValue(
-    interpolateReflect101Point(row, image.height),
     interpolateReflect101Point(column, image.width),
+    interpolateReflect101Point(row, image.height),
     channel,
   );
 }

@@ -13,7 +13,7 @@ export function getMinMax(image: IJS) {
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {
       for (let channel = 0; channel < image.channels; channel++) {
-        let currentValue = image.getValue(row, column, channel);
+        let currentValue = image.getValue(column, row, channel);
         if (currentValue < min[channel]) {
           min[channel] = currentValue;
         }

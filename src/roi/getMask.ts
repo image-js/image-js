@@ -13,10 +13,10 @@ export function getMask(roi: Roi): Mask {
 
   for (let row = 0; row < roi.height; row++) {
     for (let column = 0; column < roi.width; column++) {
-      if (roi.getMapValue(roi.row + row, roi.column + column) === roi.id) {
-        mask.setBit(row, column, 1);
+      if (roi.getMapValue(roi.column + column, roi.row + row) === roi.id) {
+        mask.setBit(column, row, 1);
       } else {
-        mask.setBit(row, column, 0);
+        mask.setBit(column, row, 0);
       }
     }
   }

@@ -80,7 +80,7 @@ export function resize(image: IJS, options: ResizeOptions): IJS {
           interpolateBorder,
           clamp,
         );
-        newImage.setValue(row, column, channel, newValue);
+        newImage.setValue(column, row, channel, newValue);
       }
     }
   }

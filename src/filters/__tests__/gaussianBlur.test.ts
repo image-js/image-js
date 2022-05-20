@@ -15,9 +15,9 @@ describe('gaussianBlur', () => {
     let result = image.gaussianBlur(options);
 
     let sum = 0;
-    for (let i = 0; i < 5; i++) {
-      for (let j = 0; j < 5; j++) {
-        sum += result.getValue(i, j, 0);
+    for (let row = 0; row < 5; row++) {
+      for (let column = 0; column < 5; column++) {
+        sum += result.getValue(column, row, 0);
       }
     }
 
@@ -64,9 +64,9 @@ describe('gaussianBlur', () => {
     let result = image.gaussianBlur(options);
 
     let sum = 0;
-    for (let i = 0; i < 5; i++) {
-      for (let j = 0; j < 5; j++) {
-        sum += result.getValue(i, j, 0);
+    for (let row = 0; row < 5; row++) {
+      for (let column = 0; column < 5; column++) {
+        sum += result.getValue(column, row, 0);
       }
     }
 

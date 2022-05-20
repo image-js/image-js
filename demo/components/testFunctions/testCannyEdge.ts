@@ -34,8 +34,8 @@ export function testCannyEdgeOverlay(image: IJS): IJS {
   greyEdges = greyEdges.invert();
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {
-      if (greyEdges.getValue(row, column, 0) === greyEdges.maxValue) {
-        greyEdges.setValue(row, column, 3, 0);
+      if (greyEdges.getValue(column, row, 0) === greyEdges.maxValue) {
+        greyEdges.setValue(column, row, 3, 0);
       }
     }
   }

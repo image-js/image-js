@@ -124,11 +124,11 @@ function erodeGrey(img: IJS, newImage: IJS, kernel: number[][]): IJS {
           ) {
             continue;
           }
-          const value = img.getValue(currentRow, currentColumn, 0);
+          const value = img.getValue(currentColumn, currentRow, 0);
           if (value < min) min = value;
         }
       }
-      newImage.setValue(row, column, 0, min);
+      newImage.setValue(column, row, 0, min);
     }
   }
   return newImage;
@@ -156,7 +156,7 @@ function erodeGreyOnlyOnes(
         h < Math.min(image.height, row + radiusY + 1);
         h++
       ) {
-        const value = image.getValue(h, column, 0);
+        const value = image.getValue(column, h, 0);
         if (value < min) {
           min = value;
         }
@@ -175,7 +175,7 @@ function erodeGreyOnlyOnes(
           min = minList[i];
         }
       }
-      newImage.setValue(row, column, 0, min);
+      newImage.setValue(column, row, 0, min);
     }
   }
   return newImage;
@@ -202,7 +202,7 @@ function erodeMask(mask: Mask, newMask: Mask, kernel: number[][]): Mask {
           ) {
             continue;
           }
-          const value = mask.getBit(currentRow, currentColumn);
+          const value = mask.getBit(currentColumn, currentRow);
           if (value === 0) {
             min = 0;
             break;
@@ -210,7 +210,7 @@ function erodeMask(mask: Mask, newMask: Mask, kernel: number[][]): Mask {
         }
       }
       if (min === 1) {
-        newMask.setBit(row, column, 1);
+        newMask.setBit(column, row, 1);
       }
     }
   }
@@ -239,7 +239,7 @@ function erodeMaskOnlyOnes(
         h < Math.min(mask.height, row + radiusY + 1);
         h++
       ) {
-        if (mask.getBit(h, column) === 0) {
+        if (mask.getBit(column, h) === 0) {
           minList[column] = 0;
           break;
         }
@@ -247,14 +247,14 @@ function erodeMaskOnlyOnes(
     }
 
     for (let column = 0; column < mask.width; column++) {
-      if (newMask.getBit(row, column) === 0) continue;
+      if (newMask.getBit(column, row) === 0) continue;
       for (
         let i = Math.max(0, column - radiusX);
         i < Math.min(mask.width, column + radiusX + 1);
         i++
       ) {
         if (minList[i] === 0) {
-          newMask.setBit(row, column, 0);
+          newMask.setBit( column,row, 0);
           break;
         }
       }

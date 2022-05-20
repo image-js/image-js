@@ -12,15 +12,21 @@ export default function flipY(image: IJS): IJS {
     bitDepth: [8, 16],
   });
 
-  for (let i = 0; i < Math.floor(image.height / 2); i++) {
-    for (let j = 0; j < image.width; j++) {
-      const currentRow = i;
-      const oppositeRow = image.height - i - 1;
+  for (let row = 0; row < Math.floor(image.height / 2); row++) {
+    for (let column = 0; column < image.width; column++) {
+      const currentRow = row;
+      const oppositeRow = image.height - row - 1;
 
-      for (let k = 0; k < image.channels; k++) {
-        const tmp = image.getValue(currentRow, j, k);
-        image.setValue(currentRow, j, k, image.getValue(oppositeRow, j, k));
-        image.setValue(oppositeRow, j, k, tmp);
+      for (let channel = 0; channel < image.channels; channel++) {
+        const tmp = image.getValue(column, currentRow, channel);
+        image.setValue(
+          column,
+          currentRow,
+
+          channel,
+          image.getValue(column, oppositeRow, channel),
+        );
+        image.setValue(column, oppositeRow, channel, tmp);
       }
     }
   }

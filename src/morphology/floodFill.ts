@@ -37,7 +37,7 @@ export interface FloodFillOptions {
  */
 export function floodFill(mask: Mask, options: FloodFillOptions = {}): Mask {
   let { row = 0, column = 0, allowCorners = false, out } = options;
-  const startPixel = getIndex(row, column, mask);
+  const startPixel = getIndex(column, row, mask);
   return multipleFloodFill(mask, {
     startPixels: [startPixel],
     allowCorners,

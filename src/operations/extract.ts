@@ -61,14 +61,14 @@ export function extract(
   for (let resultRow = 0; resultRow < resultHeight; resultRow++) {
     for (let resultColumn = 0; resultColumn < resultWidth; resultColumn++) {
       if (
-        mask.getBit(maskStartRow + resultRow, maskStartColumn + resultColumn)
+        mask.getBit(maskStartColumn + resultColumn, maskStartRow + resultRow)
       ) {
         newImage.setPixel(
-          resultRow,
           resultColumn,
+          resultRow,
           image.getPixel(
-            imageStartRow + resultRow,
             imageStartColumn + resultColumn,
+            imageStartRow + resultRow,
           ),
         );
       }

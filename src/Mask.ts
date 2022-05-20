@@ -176,11 +176,11 @@ export class Mask {
   /**
    * Get the value of a bit.
    *
-   * @param row - Row index.
    * @param column - Column index.
+   * @param row - Row index.
    * @returns The bit value.
    */
-  public getBit(row: number, column: number): number {
+  public getBit(column: number, row: number): number {
     const index = row * this.width + column;
     return this.data[index];
   }
@@ -188,11 +188,11 @@ export class Mask {
   /**
    * Set the value of a bit.
    *
-   * @param row - Row index.
    * @param column - Column index.
+   * @param row - Row index.
    * @param value - New bit value.
    */
-  public setBit(row: number, column: number, value: BitValue): void {
+  public setBit(column: number, row: number, value: BitValue): void {
     const index = row * this.width + column;
     // @ts-expect-error: we know that value is a boolean
     this.data[index] = value;
@@ -222,32 +222,32 @@ export class Mask {
   /**
    * Get the value of a bit. Function exists for compatibility with IJS.
    *
-   * @param row - Row index.
    * @param column - Column index.
+   * @param row - Row index.
    * @param channel - Index of the channel, must be zero.
    * @returns The bit value.
    */
-  public getValue(row: number, column: number, channel: number): number {
+  public getValue(column: number, row: number, channel: number): number {
     checkChannel(channel);
-    return this.getBit(row, column);
+    return this.getBit(column, row);
   }
 
   /**
    * Set the value of a bit. Function exists for compatibility with IJS.
    *
-   * @param row - Row index.
    * @param column - Column index.
+   * @param row - Row index.
    * @param channel - Index of the channel, must be zero.
    * @param value - New bit value.
    */
   public setValue(
-    row: number,
     column: number,
+    row: number,
     channel: number,
     value: BitValue,
   ): void {
     checkChannel(channel);
-    this.setBit(row, column, value);
+    this.setBit(column, row, value);
   }
 
   /**
@@ -465,10 +465,10 @@ export class Mask {
 function printData(mask: Mask): string {
   const result = [];
   const padding = 2;
-  for (let i = 0; i < mask.height; i++) {
+  for (let row = 0; row < mask.height; row++) {
     const line = [];
-    for (let j = 0; j < mask.width; j++) {
-      line.push(String(mask.getBit(i, j)).padStart(padding, ' '));
+    for (let column = 0; column < mask.width; column++) {
+      line.push(String(mask.getBit(column, row)).padStart(padding, ' '));
     }
     result.push(`[${line.join(' ')}]`);
   }

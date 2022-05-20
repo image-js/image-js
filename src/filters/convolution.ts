@@ -95,7 +95,7 @@ export function rawDirectConvolution(
   for (let channel = 0; channel < image.channels; channel++) {
     for (let row = 0; row < image.height; row++) {
       for (let column = 0; column < image.width; column++) {
-        let index = getIndex(row, column, image, channel);
+        let index = getIndex(column, row, image, channel);
         result[index] = computeConvolutionValue(
           column,
           row,
@@ -166,7 +166,7 @@ export function separableConvolution(
   for (let channel = 0; channel < channels; channel++) {
     for (let row = 0; row < height; row++) {
       for (let column = 0; column < width; column++) {
-        rowData[column] = image.getValue(row, column, channel);
+        rowData[column] = image.getValue(column, row, channel);
       }
       const convolvedRow = rowConvolution.convolve(rowData);
       for (let column = 0; column < cutWidth; column++) {

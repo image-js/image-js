@@ -78,7 +78,7 @@ export function level(image: IJS, options: LevelOptions = {}) {
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {
       for (let channel of channels) {
-        let currentValue = image.getValue(row, column, channel);
+        let currentValue = image.getValue(column, row, channel);
 
         let clamped = Math.max(Math.min(currentValue, inputMax), inputMin);
 
@@ -88,7 +88,7 @@ export function level(image: IJS, options: LevelOptions = {}) {
           ratio ** (1 / gamma) * (outputMax - outputMin) + outputMin,
         );
 
-        newImage.setValue(row, column, channel, result);
+        newImage.setValue(column, row, channel, result);
       }
     }
   }

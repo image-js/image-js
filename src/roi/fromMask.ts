@@ -54,7 +54,7 @@ export function fromMask(
   function analyseSurface(column: number, row: number) {
     let from = 0;
     let to = 0;
-    let targetState = mask.getBit(row, column);
+    let targetState = mask.getBit(column, row);
     let id = targetState ? ++positiveId : --negativeId;
     if (positiveId > maxPositiveId || negativeId < maxNegativeId) {
       throw new Error('Too many regions of interest');
@@ -69,7 +69,7 @@ export function fromMask(
       if (
         currentColumn > 0 &&
         data[currentRow * mask.width + currentColumn - 1] === 0 &&
-        mask.getBit(currentRow, currentColumn - 1) === targetState
+        mask.getBit(currentColumn - 1, currentRow) === targetState
       ) {
         // LEFT
         to++;
@@ -80,7 +80,7 @@ export function fromMask(
       if (
         currentRow > 0 &&
         data[(currentRow - 1) * mask.width + currentColumn] === 0 &&
-        mask.getBit(currentRow - 1, currentColumn) === targetState
+        mask.getBit(currentColumn, currentRow - 1) === targetState
       ) {
         // TOP
         to++;
@@ -91,7 +91,7 @@ export function fromMask(
       if (
         currentColumn < mask.width - 1 &&
         data[currentRow * mask.width + currentColumn + 1] === 0 &&
-        mask.getBit(currentRow, currentColumn + 1) === targetState
+        mask.getBit(currentColumn + 1, currentRow) === targetState
       ) {
         // RIGHT
         to++;
@@ -102,7 +102,7 @@ export function fromMask(
       if (
         currentRow < mask.height - 1 &&
         data[(currentRow + 1) * mask.width + currentColumn] === 0 &&
-        mask.getBit(currentRow + 1, currentColumn) === targetState
+        mask.getBit(currentColumn, currentRow + 1) === targetState
       ) {
         // BOTTOM
         to++;
@@ -115,7 +115,7 @@ export function fromMask(
           currentColumn > 0 &&
           currentRow > 0 &&
           data[(currentRow - 1) * mask.width + currentColumn - 1] === 0 &&
-          mask.getBit(currentRow - 1, currentColumn - 1) === targetState
+          mask.getBit(currentColumn - 1, currentRow - 1) === targetState
         ) {
           // TOP LEFT
           to++;
@@ -128,7 +128,7 @@ export function fromMask(
           currentColumn < mask.width - 1 &&
           currentRow > 0 &&
           data[(currentRow - 1) * mask.width + currentColumn + 1] === 0 &&
-          mask.getBit(currentRow - 1, currentColumn + 1) === targetState
+          mask.getBit(currentColumn + 1, currentRow - 1) === targetState
         ) {
           // TOP RIGHT
           to++;
@@ -141,7 +141,7 @@ export function fromMask(
           currentColumn > 0 &&
           currentRow < mask.height - 1 &&
           data[(currentRow + 1) * mask.width + currentColumn - 1] === 0 &&
-          mask.getBit(currentRow + 1, currentColumn - 1) === targetState
+          mask.getBit(currentColumn - 1, currentRow + 1) === targetState
         ) {
           // BOTTOM LEFT
           to++;
@@ -154,7 +154,7 @@ export function fromMask(
           currentColumn < mask.width - 1 &&
           currentRow < mask.height - 1 &&
           data[(currentRow + 1) * mask.width + currentColumn + 1] === 0 &&
-          mask.getBit(currentRow + 1, currentColumn + 1) === targetState
+          mask.getBit(currentColumn + 1, currentRow + 1) === targetState
         ) {
           // BOTTOM RIGHT
           to++;

@@ -124,11 +124,11 @@ function dilateGrey(image: IJS, newImage: IJS, kernel: number[][]): IJS {
           ) {
             continue;
           }
-          const value = image.getValue(currentRow, currentColumn, 0);
+          const value = image.getValue(currentColumn, currentRow, 0);
           if (value > max) max = value;
         }
       }
-      newImage.setValue(row, column, 0, max);
+      newImage.setValue(column, row, 0, max);
     }
   }
   return newImage;
@@ -156,7 +156,7 @@ function dilateGreyOnlyOnes(
         h < Math.min(image.height, row + radiusY + 1);
         h++
       ) {
-        const value = image.getValue(h, column, 0);
+        const value = image.getValue(column, h, 0);
         if (value > max) {
           max = value;
         }
@@ -175,7 +175,7 @@ function dilateGreyOnlyOnes(
           max = maxList[i];
         }
       }
-      newImage.setValue(row, column, 0, max);
+      newImage.setValue(column, row, 0, max);
     }
   }
   return newImage;
@@ -202,7 +202,7 @@ function dilateMask(mask: Mask, newMask: Mask, kernel: number[][]): Mask {
           ) {
             continue;
           }
-          const value = mask.getBit(currentRow, currentColumn);
+          const value = mask.getBit(currentColumn, currentRow);
           if (value === 1) {
             max = 1;
             break;
@@ -210,7 +210,7 @@ function dilateMask(mask: Mask, newMask: Mask, kernel: number[][]): Mask {
         }
       }
       if (max === 1) {
-        newMask.setBit(row, column, 1);
+        newMask.setBit(column, row, 1);
       }
     }
   }
@@ -239,7 +239,7 @@ function dilatMaskOnlyOnes(
         h < Math.min(mask.height, row + radiusY + 1);
         h++
       ) {
-        if (mask.getBit(h, column) === 1) {
+        if (mask.getBit(column, h) === 1) {
           maxList[column] = 1;
           break;
         }
@@ -247,14 +247,14 @@ function dilatMaskOnlyOnes(
     }
 
     for (let column = 0; column < mask.width; column++) {
-      if (newMask.getBit(row, column) === 1) continue;
+      if (newMask.getBit(column, row) === 1) continue;
       for (
         let i = Math.max(0, column - radiusX);
         i < Math.min(mask.width, column + radiusX + 1);
         i++
       ) {
         if (maxList[i] === 1) {
-          newMask.setBit(row, column, 1);
+          newMask.setBit(column, row, 1);
           break;
         }
       }

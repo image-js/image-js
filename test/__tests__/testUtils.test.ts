@@ -22,7 +22,7 @@ describe('createGreyImage', () => {
     ]);
     expect(image.width).toBe(3);
     expect(image.height).toBe(4);
-    expect(image.getPixel(1, 0)).toStrictEqual([4]);
+    expect(image.getPixel(0, 1)).toStrictEqual([4]);
   });
 
   it('should create an image from string', () => {
@@ -34,7 +34,7 @@ describe('createGreyImage', () => {
     `);
     expect(image.width).toBe(3);
     expect(image.height).toBe(4);
-    expect(image.getPixel(1, 0)).toStrictEqual([4]);
+    expect(image.getPixel(0, 1)).toStrictEqual([4]);
   });
 
   it('should create a 16-bit image', () => {
@@ -42,7 +42,7 @@ describe('createGreyImage', () => {
       depth: ColorDepth.UINT16,
     });
     expect(image.depth).toBe(ColorDepth.UINT16);
-    expect(image.getValueByIndex(1, 0)).toBe(32768);
+    expect(image.getValueByIndex(0, 1)).toBe(32768);
   });
 
   it('should throw if row length is not consistent (array)', () => {
@@ -78,7 +78,7 @@ describe('createRgbImage', () => {
     ]);
     expect(image.width).toBe(1);
     expect(image.height).toBe(4);
-    expect(image.getPixel(1, 0)).toStrictEqual([4, 5, 6]);
+    expect(image.getPixel(0, 1)).toStrictEqual([4, 5, 6]);
   });
 
   it('should create an image from string', () => {
@@ -90,7 +90,7 @@ describe('createRgbImage', () => {
     `);
     expect(image.width).toBe(1);
     expect(image.height).toBe(4);
-    expect(image.getPixel(1, 0)).toStrictEqual([4, 5, 6]);
+    expect(image.getPixel(0, 1)).toStrictEqual([4, 5, 6]);
   });
 
   it('should create a 16-bit image', () => {
@@ -122,7 +122,7 @@ describe('createRgbaImage', () => {
     ]);
     expect(image.width).toBe(1);
     expect(image.height).toBe(4);
-    expect(image.getPixel(1, 0)).toStrictEqual([4, 5, 6, 128]);
+    expect(image.getPixel(0, 1)).toStrictEqual([4, 5, 6, 128]);
   });
 
   it('should create an image from string', () => {
@@ -132,7 +132,7 @@ describe('createRgbaImage', () => {
     `);
     expect(image.width).toBe(2);
     expect(image.height).toBe(2);
-    expect(image.getPixel(0, 1)).toStrictEqual([4, 5, 6, 128]);
+    expect(image.getPixel(1, 0)).toStrictEqual([4, 5, 6, 128]);
   });
 
   it('should create a 16-bit image', () => {
@@ -163,7 +163,7 @@ describe('createMask', () => {
     ]);
     expect(mask.width).toBe(3);
     expect(mask.height).toBe(4);
-    expect(mask.getBit(1, 0)).toBe(0);
+    expect(mask.getBit(0, 1)).toBe(0);
   });
 
   it('should create a mask from string', () => {
@@ -173,7 +173,7 @@ describe('createMask', () => {
     `);
     expect(mask.width).toBe(3);
     expect(mask.height).toBe(2);
-    expect(mask.getBit(1, 0)).toBe(1);
+    expect(mask.getBit(0, 1)).toBe(1);
   });
 
   it('should throw if row length is not consistent (array)', () => {

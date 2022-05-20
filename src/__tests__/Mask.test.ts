@@ -46,9 +46,9 @@ describe('create new masks', () => {
 describe('get and set bit', () => {
   it('should get and set', () => {
     const mask = new Mask(10, 20);
-    expect(mask.getBit(15, 5)).toBe(0);
-    mask.setBit(15, 5, 1);
-    expect(mask.getBit(15, 5)).toBe(1);
+    expect(mask.getBit(5, 15)).toBe(0);
+    mask.setBit(5, 15, 1);
+    expect(mask.getBit(5, 15)).toBe(1);
   });
   it('should get and set by index', () => {
     const mask = new Mask(10, 20);
@@ -61,9 +61,9 @@ describe('get and set bit', () => {
 describe('get and set value', () => {
   it('should get and set', () => {
     const mask = new Mask(10, 20);
-    expect(mask.getValue(15, 5, 0)).toBe(0);
-    mask.setValue(15, 5, 0, 1);
-    expect(mask.getValue(15, 5, 0)).toBe(1);
+    expect(mask.getValue(5, 15, 0)).toBe(0);
+    mask.setValue(5, 15, 0, 1);
+    expect(mask.getValue(5, 15, 0)).toBe(1);
   });
   it('should get and set by index', () => {
     const mask = new Mask(10, 20);
@@ -74,7 +74,7 @@ describe('get and set value', () => {
   it('wrong channel value', () => {
     const mask = new Mask(10, 20);
     expect(() => {
-      mask.getValue(1, 2, 2);
+      mask.getValue(2, 1, 2);
     }).toThrow(/Channel value must be 0 on type Mask, got 2./);
   });
 });
@@ -97,7 +97,7 @@ test('createFrom', () => {
 
 test('clone', () => {
   const mask = new Mask(2, 2);
-  mask.setBit(0, 1, 1);
+  mask.setBit(1, 0, 1);
   const copy = mask.clone();
   expect(copy).toMatchMask(mask);
 });

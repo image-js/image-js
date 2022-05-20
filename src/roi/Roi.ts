@@ -34,11 +34,11 @@ export class Roi {
   /**
    * Return the value at the given coordinates in an ROI map.
    *
-   * @param row - Row of the value.
    * @param column - Column of the value.
+   * @param row - Row of the value.
    * @returns The value at the given coordinates.
    */
-  public getMapValue(row: number, column: number) {
+  public getMapValue(column: number, row: number) {
     return this.map.data[this.map.width * row + column];
   }
 

@@ -139,10 +139,10 @@ describe('fromMask', () => {
     const size = 513;
     let mask = new Mask(size, size);
     let pos = true;
-    for (let i = 0; i < size; i++) {
-      for (let j = 0; j < size; j++) {
+    for (let row = 0; row < size; row++) {
+      for (let column = 0; column < size; column++) {
         // eslint-disable-next-line jest/no-if
-        if (pos) mask.setBit(i, j, 1);
+        if (pos) mask.setBit(column, row, 1);
         pos = !pos;
       }
     }
