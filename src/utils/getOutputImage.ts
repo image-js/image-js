@@ -62,7 +62,7 @@ export function getOutputImage(
       newParameters,
     );
     checkRequirements(requirements, out);
-    if (clone) {
+    if (clone && thisImage !== out) {
       copyData(thisImage, out);
     }
     return out;
@@ -174,7 +174,7 @@ export function maskToOutputMask(
       colorModel: ImageColorModel.BINARY,
     };
     checkRequirements(requirements, out);
-    if (clone) {
+    if (clone && mask !== out) {
       copyData(mask, out);
     }
     return out;
