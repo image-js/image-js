@@ -42,5 +42,5 @@ export function testCropBounce(image: IJS): IJS {
 
   const rgba = derivative.convertColor(ImageColorModel.RGBA);
 
-  return rgba.copyTo(image, { rowOffset: row, columnOffset: column });
+  return rgba.copyTo(image, { row: row, column: column });
 }

@@ -8,13 +8,13 @@ export interface CopyToOptions {
    *
    * @default 0
    */
-  columnOffset?: number;
+  column?: number;
   /**
    * Y offset for the copy, the top left corner of the target image is the reference.
    *
    * @default 0
    */
-  rowOffset?: number;
+  row?: number;
   /**
    * Image to which to output.
    */
@@ -34,7 +34,7 @@ export function copyTo(
   target: IJS,
   options: CopyToOptions = {},
 ): IJS {
-  const { columnOffset = 0, rowOffset = 0 } = options;
+  const { column = 0, row = 0 } = options;
 
   if (source.colorModel !== target.colorModel) {
     throw new Error('Source and target should have the same color model.');
@@ -43,17 +43,22 @@ export function copyTo(
   const result = getOutputImage(target, options, { clone: true });
 
   for (
-    let row = Math.max(rowOffset, 0);
-    row < Math.min(source.height + rowOffset, target.height);
-    row++
+    let currentRow = Math.max(row, 0);
+    currentRow < Math.min(source.height + row, target.height);
+    currentRow++
   ) {
     for (
-      let column = Math.max(columnOffset, 0);
-      column < Math.min(source.width + columnOffset, target.width);
-      column++
+      let currentColumn = Math.max(column, 0);
+      currentColumn < Math.min(source.width + column, target.width);
+      currentColumn++
     ) {
-      let sourcePixel = source.getPixel(column - columnOffset, row - rowOffset);
-      setBlendedPixel(result, column, row, { color: sourcePixel });
+      let sourcePixel = source.getPixel(
+        currentColumn - column,
+        currentRow - row,
+      );
+      setBlendedPixel(result, currentColumn, currentRow, {
+        color: sourcePixel,
+      });
     }
   }
 

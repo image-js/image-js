@@ -28,7 +28,7 @@ describe('Copy a source image to a target', () => {
   it('Bigger GREYA image with offset outside target', () => {
     let target = testUtils.createGreyaImage([[100, 0, 200, 0, 150, 0]]);
     let source = testUtils.createGreyaImage([[20, 255]]);
-    const result = source.copyTo(target, { rowOffset: -1 });
+    const result = source.copyTo(target, { row: -1 });
     expect(result).toMatchImageData([[100, 0, 200, 0, 150, 0]]);
   });
   it('GREY image', () => {
@@ -44,7 +44,7 @@ describe('Copy a source image to a target', () => {
       [200, 250],
     ]);
     let source = testUtils.createGreyImage([[20]]);
-    const result = source.copyTo(target, { rowOffset: 1, columnOffset: 1 });
+    const result = source.copyTo(target, { row: 1, column: 1 });
     expect(result).toMatchImageData([
       [100, 150],
       [200, 20],
@@ -55,7 +55,7 @@ describe('Copy a source image to a target', () => {
       [100, 150],
       [200, 250],
     ]);
-    const result = target.copyTo(target, { rowOffset: 1, columnOffset: 1 });
+    const result = target.copyTo(target, { row: 1, column: 1 });
     expect(result).toMatchImageData([
       [100, 150],
       [200, 100],
@@ -77,7 +77,7 @@ describe('Copy a source image to a target', () => {
       [100, 100],
     ]);
     let target = testUtils.createGreyImage([[20]]);
-    const result = source.copyTo(target, { rowOffset: -1, columnOffset: -1 });
+    const result = source.copyTo(target, { row: -1, column: -1 });
     expect(result).toMatchImageData([[250]]);
   });
   it('RGBA images', () => {
@@ -87,7 +87,7 @@ describe('Copy a source image to a target', () => {
       [7, 8, 9, 0],
     ]);
     let source = testUtils.createRgbaImage([[3, 3, 3, 255]]);
-    const result = source.copyTo(target, { rowOffset: 1, columnOffset: 0 });
+    const result = source.copyTo(target, { row: 1, column: 0 });
     expect(result).toMatchImageData([
       [1, 2, 3, 255],
       [3, 3, 3, 255],
