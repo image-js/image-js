@@ -20,8 +20,9 @@ export type BorderInterpolationFunction = (
  * The different algorithms are illustrated here:
  * https://vovkos.github.io/doxyrest-showcase/opencv/sphinx_rtd_theme/enum_cv_BorderTypes.html
  *
- * @param type
- * @param value
+ * @param type - The border type.
+ * @param value - A pixel value if BordetType.CONSTANT is used.
+ * @returns The border interpolation function.
  */
 export function getBorderInterpolation(
   type: BorderType,
@@ -70,8 +71,11 @@ function getInterpolateConstant(value: number): BorderInterpolationFunction {
 }
 
 /**
- * @param point
- * @param length
+ * Interpolate using a constant point.
+ *
+ * @param point - The point to interpolate.
+ * @param length  - The length of the image.
+ * @returns The interpolated point.
  */
 export function interpolateConstantPoint(
   point: number,
@@ -97,8 +101,11 @@ function interpolateReplicate(
 }
 
 /**
- * @param point
- * @param length
+ * Interpolate by replicating the border.
+ *
+ * @param point - The point to interpolate.
+ * @param length - The length of the image.
+ * @returns The interpolated point.
  */
 export function interpolateReplicatePoint(
   point: number,
@@ -129,8 +136,11 @@ function interpolateReflect(
 }
 
 /**
- * @param point
- * @param length
+ * Interpolate by reflecting the border.
+ *
+ * @param point - The point to interpolate.
+ * @param length - The length of the image.
+ * @returns The interpolated point.
  */
 export function interpolateReflectPoint(point: number, length: number): number {
   if (point >= 0 && point < length) {
@@ -158,8 +168,11 @@ function interpolateWrap(
 }
 
 /**
- * @param point
- * @param length
+ * Interpolate by wrapping the border.
+ *
+ * @param point - The point to interpolate.
+ * @param length - The length of the image.
+ * @returns The interpolated point.
  */
 export function interpolateWrapPoint(point: number, length: number): number {
   if (point >= 0 && point < length) {
@@ -187,8 +200,11 @@ function interpolateReflect101(
 }
 
 /**
- * @param point
- * @param length
+ * Interpolate by reflecting the border.
+ *
+ * @param point - The point to interpolate.
+ * @param length - The length of the image.
+ * @returns The interpolated point.
  */
 export function interpolateReflect101Point(
   point: number,

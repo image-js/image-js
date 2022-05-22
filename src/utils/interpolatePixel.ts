@@ -45,11 +45,14 @@ export function getInterpolationFunction(
 }
 
 /**
+ * Interpolate using nearest neighbor.
+ *
  * @param image - The image to interpolate.
  * @param column - Column index.
  * @param row - Row index.
  * @param channel - Channel index.
- * @param interpolateBorder
+ * @param interpolateBorder - Border interpolation function.
+ * @returns The interpolated value.
  */
 function interpolateNearest(
   image: IJS,
@@ -65,11 +68,14 @@ function interpolateNearest(
 }
 
 /**
- * @param image
+ * Interpolate using bilinear interpolation.
+ *
+ * @param image - The image to interpolate.
  * @param column - Column index.
  * @param row - Row index.
  * @param channel - Channel index.
- * @param interpolateBorder
+ * @param interpolateBorder - Border interpolation function.
+ * @returns The interpolated value.
  */
 function interpolateBilinear(
   image: IJS,
@@ -99,12 +105,15 @@ function interpolateBilinear(
 }
 
 /**
- * @param image
+ * Interpolate using bicubic interpolation.
+ *
+ * @param image - The image to interpolate.
  * @param column - Column index.
  * @param row - Row index.
  * @param channel - Channel index.
- * @param interpolateBorder
- * @param clamp
+ * @param interpolateBorder - Border interpolation function.
+ * @param clamp - Clamp function.
+ * @returns The interpolated value.
  */
 function interpolateBicubic(
   image: IJS,
@@ -152,11 +161,14 @@ function interpolateBicubic(
 }
 
 /**
- * @param a
- * @param b
- * @param c
- * @param d
- * @param x
+ * Cubic function.
+ *
+ * @param a - First value.
+ * @param b - Second value.
+ * @param c - Third value.
+ * @param d - Fourth value.
+ * @param x - X value.
+ * @returns The interpolated value.
  */
 function cubic(a: number, b: number, c: number, d: number, x: number): number {
   return (

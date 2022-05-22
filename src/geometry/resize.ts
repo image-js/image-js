@@ -88,8 +88,11 @@ export function resize(image: IJS, options: ResizeOptions): IJS {
 }
 
 /**
- * @param image
- * @param options
+ * Verify that the resize options are valid.
+ *
+ * @param image - Image.
+ * @param options - Resize options.
+ * @returns Resize options.
  */
 function checkOptions(
   image: IJS,
@@ -154,12 +157,13 @@ function checkOptions(
 }
 
 /**
- * @param sizeOpt
- * @param factor
- * @param sizeImg- -
- * Should the aspect ratio of the image be preserved?
- * @param sizeImg
- * @param preserveAspectRatio
+ * Compute automatic new size.
+ *
+ * @param sizeOpt - Size option.
+ * @param factor - Factor option.
+ * @param sizeImg - Size of the image.
+ * @param preserveAspectRatio - Whether to preserve the aspect ratio.
+ * @returns New size.
  */
 function getSize(
   sizeOpt: number | undefined,

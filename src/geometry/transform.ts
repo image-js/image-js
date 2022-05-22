@@ -156,9 +156,12 @@ export function transform(
 }
 
 /**
- * @param transform
- * @param column
- * @param row
+ * Apply a transformation to a point.
+ *
+ * @param transform - Transformation matrix.
+ * @param column - Column of the point.
+ * @param row - Row of the point.
+ * @returns New value.
  */
 function transformPoint(
   transform: number[],

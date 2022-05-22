@@ -73,9 +73,12 @@ export function writeSync(
 }
 
 /**
- * @param destinationPath
+ * Encode the image to the format specified by the file's extension.
+ *
+ * @param destinationPath - Image destination.
  * @param image - Image to save.
  * @param options - Encode options.
+ * @returns Buffer containing the encoded image.
  */
 function getDataToWrite(
   destinationPath: string,

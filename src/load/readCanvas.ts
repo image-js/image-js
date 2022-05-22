@@ -1,5 +1,11 @@
 import { IJS, ImageColorModel } from '../IJS';
 
+/**
+ * Read an image from an HTML canvas element.
+ *
+ * @param canvas - Canvas element.
+ * @returns The read image.
+ */
 export function readCanvas(canvas: HTMLCanvasElement): IJS {
   const ctx = canvas.getContext('2d');
   if (ctx === null) {

@@ -339,8 +339,11 @@ export function computeConvolutionValue(
 }
 
 /**
- * @param kernelX
- * @param kernelY
+ * Normalize a separated kernel.
+ *
+ * @param kernelX - Horizontal component of the separated kernel.
+ * @param kernelY - Vertical component of the separated kernel.
+ * @returns The normalized kernel.
  */
 function normalizeSeparatedKernel(
   kernelX: number[],

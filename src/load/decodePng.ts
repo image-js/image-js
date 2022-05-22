@@ -43,7 +43,10 @@ export function decodePng(buffer: Uint8Array): IJS {
 }
 
 /**
- * @param png
+ * Compute PNG data from palette information and return a new image.
+ *
+ * @param png - Decoded PNG.
+ * @returns The new image.
  */
 function loadPalettePng(png: DecodedPng): IJS {
   if (!png.palette) {

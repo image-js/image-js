@@ -7,7 +7,6 @@
  * Return a threshold for a histogram using Shanbhag algorithm.
  *
  * @param histogram - The image histogram.
- * @param histogrami
  * @param total - Total number of pixels of the image.
  * @returns The threshold.
  */
