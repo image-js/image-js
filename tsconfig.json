@@ -10,5 +10,11 @@
     "jsx": "react-jsx",
     "useUnknownInCatchVariables": false
   },
-  "include": ["./demo/**/*", "./jest.setup.ts", "./src/**/*", "./test/**/*"]
+  "include": [
+    "./demo/**/*",
+    "./jest.setup.ts",
+    "./src/**/*",
+    "./test/**/*",
+    "vite.config.ts"
+  ]
 }

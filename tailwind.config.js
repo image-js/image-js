@@ -1,12 +1,4 @@
 module.exports = {
-  mode: 'jit',
-  purge: ['./index.html', './demo/**/*.{vue,js,ts,jsx,tsx}'],
-  darkMode: false,
-  theme: {
-    extend: {},
-  },
-  variants: {
-    extend: {},
-  },
+  content: ['./index.html', './demo/**/*.{vue,js,ts,jsx,tsx}'],
   plugins: [require('@tailwindcss/forms')],
 };

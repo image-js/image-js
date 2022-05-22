@@ -1,4 +1,4 @@
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 
 import { CameraProvider } from '../contexts/cameraContext';
 
@@ -9,14 +9,10 @@ export default function App() {
   return (
     <CameraProvider>
       <HashRouter>
-        <Switch>
-          <Route path="/filters">
-            <Filters />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path="/filters" element={<Filters />} />
+          <Route path="/" element={<Home />} />
+        </Routes>
       </HashRouter>
     </CameraProvider>
   );

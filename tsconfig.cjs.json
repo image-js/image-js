@@ -9,6 +9,7 @@
     "./demo/**/*",
     "./src/**/__tests__",
     "./jest.setup.ts",
-    "./test/**/*"
+    "./test/**/*",
+    "vite.config.ts"
   ]
 }
