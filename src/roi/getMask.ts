@@ -1,25 +1,38 @@
 import { Mask } from '../Mask';
 
 import { Roi } from './Roi';
+import { getContourMask } from './getMask/getContourMask';
+import { getConvexHullMask } from './getMask/getConvexHullMask';
+
+export interface ContourMaskOptions {
+  kind: 'contour';
+  innerBorders?: boolean;
+  allowCorners?: boolean;
+  filled?: boolean;
+}
+
+export interface ConvexHullMaskOptions {
+  kind: 'convexHull';
+  filled?: boolean;
+}
+
+export type GetMaskOptions = ContourMaskOptions | ConvexHullMaskOptions;
 
 /**
- * Generate a mask the size of the bounding rectangle of the ROI, where the pixels inside the ROI are set to true and the rest to false.
+ * Generate a mask of an ROI. You can specify the kind of mask you want using the `kind` option.
  *
  * @param roi - The ROI to generate a mask for.
+ * @param options - Get mask options.
  * @returns The ROI mask.
  */
-export function getMask(roi: Roi): Mask {
-  let mask = new Mask(roi.width, roi.height);
-
-  for (let row = 0; row < roi.height; row++) {
-    for (let column = 0; column < roi.width; column++) {
-      if (roi.getMapValue(roi.column + column, roi.row + row) === roi.id) {
-        mask.setBit(column, row, 1);
-      } else {
-        mask.setBit(column, row, 0);
-      }
-    }
+export function getMask(roi: Roi, options: GetMaskOptions): Mask {
+  const { kind = 'contour' } = options;
+  switch (kind) {
+    case 'contour':
+      return getContourMask(roi, options as ContourMaskOptions);
+    case 'convexHull':
+      return getConvexHullMask(roi, options as ConvexHullMaskOptions);
+    default:
+      throw new Error('getMask: unsupported mask kind');
   }
-
-  return mask;
 }

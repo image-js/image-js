@@ -3,7 +3,7 @@ import { ArrayPoint } from '../utils/types';
 
 import { RoiMap } from './RoiMapManager';
 import { GetBorderPointOptions, getBorderPoints } from './getBorderPoints';
-import { getMask } from './getMask';
+import { getMask, GetMaskOptions } from './getMask';
 
 export class Roi {
   private map: RoiMap;
@@ -54,12 +54,13 @@ export class Roi {
   }
 
   /**
-   * Generate a mask the size of the bounding rectangle of the ROI, where the pixels inside the ROI are set to true and the rest to false.
+   * Generate a mask of an ROI. You can specify the kind of mask you want using the `kind` option.
    *
+   * @param options - Get Mask options
    * @returns The ROI mask.
    */
-  public getMask(): Mask {
-    return getMask(this);
+  public getMask(options: GetMaskOptions = {}): Mask {
+    return getMask(this, options);
   }
 
   /**
