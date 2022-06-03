@@ -1,9 +1,13 @@
 import { fromMask, IJS, ImageColorModel } from '../../../src';
 import { RoiKind } from '../../../src/roi/getRois';
-
+/**
+ * Make the image translucent, excepted where the largest black ROI is.
+ * @param image Image to process.
+ * @returns Processed image.
+ */
 export function testPaintMask(image: IJS): IJS {
   const grey = image.convertColor(ImageColorModel.GREY);
-  const mask = grey.threshold({ threshold: 50 });
+  const mask = grey.threshold({ threshold: 100 });
 
   const roiMapManager = fromMask(mask);
 
@@ -13,11 +17,12 @@ export function testPaintMask(image: IJS): IJS {
 
   const roiMask = biggestRoi.getMask();
 
-  const faded = image.fillAlpha(Math.round(image.maxValue / 2));
+  const faded = image.fillAlpha(Math.round(image.maxValue / 4));
 
   return faded.paintMask(roiMask, {
     row: biggestRoi.row,
     column: biggestRoi.column,
-    color: [0, 0, 255, 255],
+    blend: false,
+    color: [null, null, null, 255],
   });
 }
