@@ -97,7 +97,7 @@ export function paintMask(
           for (let channel = 0; channel < image.channels; channel++) {
             const currentValue = color[channel];
             if (typeof currentValue === 'number') {
-              result.setValue(row, column, channel, currentValue);
+              result.setValue(currentColumn, currentRow, channel, currentValue);
             }
           }
         }

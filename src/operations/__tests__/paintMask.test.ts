@@ -138,6 +138,26 @@ describe('paintMask', () => {
       [1, 2, 2, 7],
     ]);
   });
+  it('blend = false, change many pixels', () => {
+    const image = testUtils.createGreyaImage([
+      [30, 23, 2, 2],
+      [45, 65, 1, 5],
+      [1, 2, 2, 7],
+    ]);
+    const mask = testUtils.createMask([
+      [1, 1],
+      [0, 1],
+    ]);
+    const result = image.paintMask(mask, {
+      blend: false,
+      color: [0, 100],
+    });
+    expect(result).toMatchImageData([
+      [0, 100, 0, 100],
+      [45, 65, 0, 100],
+      [1, 2, 2, 7],
+    ]);
+  });
   it('test out option', () => {
     const image = testUtils.createGreyImage([
       [30, 23, 2, 2],
