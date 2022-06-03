@@ -17,7 +17,7 @@ describe('paintMask', () => {
       [1, 2, 2],
     ]);
   });
-  it.only('3x3 grey image, offset', () => {
+  it('3x3 grey image, offset', () => {
     const image = testUtils.createGreyImage([
       [30, 23, 2],
       [45, 65, 1],
@@ -28,8 +28,6 @@ describe('paintMask', () => {
       [1, 0],
     ]);
     const result = image.paintMask(mask, { column: 1 });
-
-    console.log(result);
 
     expect(result).toMatchImageData([
       [30, 23, 0],
@@ -48,8 +46,6 @@ describe('paintMask', () => {
       [1, 0, 1],
     ]);
     const result = image.paintMask(mask, { column: -1 });
-
-    console.log(result);
 
     expect(result).toMatchImageData([
       [0, 0, 2],
@@ -74,5 +70,16 @@ describe('paintMask', () => {
       [100, 65, 1],
       [1, 2, 2],
     ]);
+  });
+  it('3x3 grey image, transparent source', () => {
+    const image = testUtils.createRgbaImage([
+      [30, 23, 2, 2],
+      [45, 65, 1, 5],
+      [1, 2, 2, 7],
+    ]);
+    const mask = testUtils.createMask([[1]]);
+    const result = image.paintMask(mask, { color: [20, 30, 40, 0] });
+
+    expect(result).toMatchImage(image);
   });
 });
