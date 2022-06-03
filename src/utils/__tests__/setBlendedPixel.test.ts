@@ -29,4 +29,17 @@ describe('setBlendedPixel', () => {
     const component = (100 * 128 + 50 * 64 * (1 - 128 / 255)) / alpha;
     expect(image).toMatchImageData([[component, alpha]]);
   });
+  it('asymetrical test', () => {
+    let image = testUtils.createGreyaImage([
+      [50, 255, 1, 2, 3, 4],
+      [20, 30, 5, 6, 7, 8],
+      [1, 2, 3, 4, 5, 6],
+    ]);
+    setBlendedPixel(image, 2, 0, { color: [0, 125] });
+    expect(image).toMatchImageData([
+      [50, 255, 1, 2, 0, 127],
+      [20, 30, 5, 6, 7, 8],
+      [1, 2, 3, 4, 5, 6],
+    ]);
+  });
 });
