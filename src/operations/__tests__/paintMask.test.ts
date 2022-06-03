@@ -82,4 +82,16 @@ describe('paintMask', () => {
 
     expect(result).toMatchImage(image);
   });
+  it('custom color is incompatible with image', () => {
+    const image = testUtils.createRgbaImage([
+      [30, 23, 2, 2],
+      [45, 65, 1, 5],
+      [1, 2, 2, 7],
+    ]);
+    const mask = testUtils.createMask([[1]]);
+
+    expect(() => {
+      image.paintMask(mask, { color: [20] });
+    }).toThrow('paintMask: the given color is not compatible with the image');
+  });
 });
