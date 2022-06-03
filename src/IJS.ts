@@ -798,12 +798,23 @@ function createPixelArray(
  * @returns Formatted string containing the image data.
  */
 function printData(img: IJS): string {
-  const channels = [];
-  for (let c = 0; c < img.channels; c++) {
-    channels.push(`[${printChannel(img, c)}]`);
+  const result = [];
+  const padding = img.depth === 8 ? 3 : 5;
+
+  for (let row = 0; row < img.height; row++) {
+    const currentRow = [];
+    for (let column = 0; column < img.width; column++) {
+      for (let channel = 0; channel < img.channels; channel++) {
+        currentRow.push(
+          String(img.getValue(column, row, channel)).padStart(padding, ' '),
+        );
+      }
+    }
+    result.push(`[${currentRow.join(' ')}]`);
   }
+
   return `{
-    ${channels.join('\n\n    ')}
+    ${`[\n     ${result.join('\n     ')}\n    ]`}
   }`;
 }
 

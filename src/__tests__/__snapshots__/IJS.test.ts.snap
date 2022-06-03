@@ -1,6 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`check custom inspect 1`] = `
+exports[`check custom inspect, GREYA image 1`] = `
+"IJS {
+  width: 2
+  height: 2
+  depth: 8
+  colorModel: GREYA
+  channels: 2
+  data: {
+    [
+     [  0 255   0 255]
+     [  0 255   0 255]
+    ]
+  }
+}"
+`;
+
+exports[`check custom inspect, RGB image 1`] = `
 "IJS {
   width: 1
   height: 2
@@ -8,14 +24,10 @@ exports[`check custom inspect 1`] = `
   colorModel: RGB
   channels: 3
   data: {
-    [[  0]
-     [  0]]
-
-    [[  0]
-     [  0]]
-
-    [[  0]
-     [  0]]
+    [
+     [  0   0   0]
+     [  0   0   0]
+    ]
   }
 }"
 `;
