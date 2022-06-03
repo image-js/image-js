@@ -817,25 +817,3 @@ function printData(img: IJS): string {
     ${`[\n     ${result.join('\n     ')}\n    ]`}
   }`;
 }
-
-/**
- * Returns all values of a channel as a string.
- *
- * @param img - Input image.
- * @param channel - Specified channel.
- * @returns Formatted string with all values of a channel.
- */
-function printChannel(img: IJS, channel: number): string {
-  const result = [];
-  const padding = img.depth === 8 ? 3 : 5;
-  for (let row = 0; row < img.height; row++) {
-    const line = [];
-    for (let column = 0; column < img.width; column++) {
-      line.push(
-        String(img.getValue(column, row, channel)).padStart(padding, ' '),
-      );
-    }
-    result.push(`[${line.join(' ')}]`);
-  }
-  return result.join('\n     ');
-}

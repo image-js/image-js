@@ -1,7 +1,6 @@
 import { inspect } from 'util';
 
 import { IJS, ColorDepth } from '../IJS';
-import { Mask } from '../Mask';
 import { ImageColorModel } from '../utils/colorModels';
 
 describe('create new images', () => {
