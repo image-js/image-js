@@ -43,18 +43,18 @@ export function setBlendedPixel(
     let newAlpha =
       sourceAlpha + targetAlpha * (1 - sourceAlpha / image.maxValue);
 
-    image.setValue(row, column, image.channels - 1, newAlpha);
+    image.setValue(column, row, image.channels - 1, newAlpha);
 
     for (let component = 0; component < image.components; component++) {
       let sourceComponent = color[component];
-      let targetComponent = image.getValue(row, column, component);
+      let targetComponent = image.getValue(column, row, component);
 
       let newComponent =
         (sourceComponent * sourceAlpha +
           targetComponent * targetAlpha * (1 - sourceAlpha / image.maxValue)) /
         newAlpha;
 
-      image.setValue(row, column, component, newComponent);
+      image.setValue(column, row, component, newComponent);
     }
   }
 }
