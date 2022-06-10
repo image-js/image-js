@@ -33,4 +33,32 @@ describe('morphological gradient', () => {
       [0, 255, 255, 255, 0],
     ]);
   });
+  it('mask 5x5', () => {
+    let image = testUtils.createGreyImage([
+      [0, 1, 1, 1, 0],
+      [0, 1, 1, 1, 0],
+      [0, 1, 1, 1, 0],
+      [0, 1, 1, 1, 0],
+      [0, 1, 1, 1, 0],
+    ]);
+
+    expect(image.morphologicalGradient()).toMatchImageData([
+      [1, 1, 0, 1, 1],
+      [1, 1, 0, 1, 1],
+      [1, 1, 0, 1, 1],
+      [1, 1, 0, 1, 1],
+      [1, 1, 0, 1, 1],
+    ]);
+  });
+  it('mask 5x5, 2 iterations', () => {
+    let mask = testUtils.createMask([
+      [0, 1, 1, 1, 0],
+      [0, 1, 1, 1, 0],
+      [0, 1, 1, 1, 0],
+      [0, 1, 1, 1, 0],
+      [0, 1, 1, 1, 0],
+    ]);
+
+    expect(mask.morphologicalGradient({ iterations: 2 })).toMatchMask(mask);
+  });
 });
