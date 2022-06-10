@@ -7,17 +7,12 @@ import {
   BorderType,
   getBorderInterpolation,
 } from '../../utils/interpolateBorder';
-import {
-  computeConvolutionValue,
-  directConvolution,
-  separableConvolution,
-} from '../convolution';
+import { computeConvolutionValue } from '../convolution';
 
 describe('convolution functions', () => {
   it('separable convolution compared to opencv', async () => {
     const img = testUtils.load('opencv/test.png');
-    const convoluted = separableConvolution(
-      img,
+    const convoluted = img.separableConvolution(
       [0.1, 0.2, 0.3],
       [0.4, 0.5, 0.6, -0.3, -0.4],
       {
@@ -38,7 +33,7 @@ describe('convolution functions', () => {
     const kernelX = Matrix.rowVector([0.1, 0.2, 0.3]);
     const kernel = kernelY.mmul(kernelX).to2DArray();
 
-    const convoluted = directConvolution(img, kernel, {
+    const convoluted = img.directConvolution(kernel, {
       borderType: BorderType.REFLECT,
     });
 
@@ -57,9 +52,8 @@ describe('convolution functions', () => {
     const normalizedKernel = kernel.mul(1 / kernel.sum());
     // @ts-ignore
 
-    const img1 = directConvolution(img, normalizedKernel.to2DArray());
-    const img2 = separableConvolution(
-      img,
+    const img1 = img.directConvolution(normalizedKernel.to2DArray());
+    const img2 = img.separableConvolution(
       kernelX.to1DArray(),
       kernelY.to1DArray(),
       {

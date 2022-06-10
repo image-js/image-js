@@ -4,7 +4,7 @@ import { InterpolationType } from '../../utils/interpolatePixel';
 
 test('rotate + scale compared to opencv (nearest)', () => {
   const img = testUtils.load('opencv/test.png');
-  const rotated = rotate(img, 30, {
+  const rotated = img.rotate(30, {
     scale: 0.8,
     borderType: BorderType.REFLECT,
     interpolationType: InterpolationType.NEAREST,

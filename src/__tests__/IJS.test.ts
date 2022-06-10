@@ -1,6 +1,6 @@
 import { inspect } from 'util';
 
-import { IJS, ColorDepth } from '../IJS';
+import { IJS, ColorDepth, ImageCoordinates } from '../IJS';
 import { ImageColorModel } from '../utils/colorModels';
 
 describe('create new images', () => {
@@ -89,6 +89,23 @@ describe('create new images', () => {
       /unexpected color depth: 20/,
     );
   });
+  it('should throw depth 8 but data 16', () => {
+    const data = new Uint16Array([1, 2, 3, 4]);
+    expect(
+      () => new IJS(2, 2, { colorModel: ImageColorModel.GREY, data }),
+    ).toThrow('depth is 8 but data is Uint16Array');
+  });
+  it('should throw depth 16 but data 8', () => {
+    const data = new Uint8Array([1, 2, 3, 4]);
+    expect(
+      () =>
+        new IJS(2, 2, {
+          colorModel: ImageColorModel.GREY,
+          depth: ColorDepth.UINT16,
+          data,
+        }),
+    ).toThrow('depth is 16 but data is Uint8Array');
+  });
 });
 
 describe('get and set pixels', () => {
@@ -153,6 +170,22 @@ test('changeEach', () => {
     [0, 1, 2],
     [3, 4, 5],
   ]);
+});
+
+test('getCoordinates', () => {
+  const img = new IJS(4, 5);
+  expect(img.getCoordinates(ImageCoordinates.BOTTOM_LEFT)).toStrictEqual([
+    0, 4,
+  ]);
+  expect(img.getCoordinates(ImageCoordinates.BOTTOM_RIGHT)).toStrictEqual([
+    3, 4,
+  ]);
+  expect(img.getCoordinates(ImageCoordinates.CENTER)).toStrictEqual([1.5, 2]);
+  expect(img.getCoordinates(ImageCoordinates.CENTER, true)).toStrictEqual([
+    2, 2,
+  ]);
+  expect(img.getCoordinates(ImageCoordinates.TOP_LEFT)).toStrictEqual([0, 0]);
+  expect(img.getCoordinates(ImageCoordinates.TOP_RIGHT)).toStrictEqual([3, 0]);
 });
 
 test('fill with a constant color', () => {

@@ -1,11 +1,10 @@
 import { BorderType } from '../../utils/interpolateBorder';
-import { blur } from '../blur';
 
 describe('blur', () => {
   it('blur compared to opencv', async () => {
     const img = testUtils.load('opencv/test.png');
 
-    const blurred = blur(img, {
+    const blurred = img.blur({
       width: 3,
       height: 5,
       borderType: BorderType.REFLECT,
