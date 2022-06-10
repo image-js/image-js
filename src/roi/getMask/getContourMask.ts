@@ -27,7 +27,7 @@ export function getContourMask(
         }
       }
     }
-    // I feel like this won't work because the ROI touches the border
+
     if (!innerBorders) {
       mask.solidFill({ out: mask });
     }
