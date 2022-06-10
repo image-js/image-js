@@ -3,10 +3,7 @@ import mcch from 'monotone-chain-convex-hull';
 
 import { Mask } from '../../Mask';
 import { Roi } from '../Roi';
-
-export interface ConvexHullMaskOptions {
-  filled?: boolean;
-}
+import { ConvexHullMaskOptions } from '../getMask';
 
 /**
  * Create a mask with the pixels on the border of the ROI set to true.
@@ -17,7 +14,7 @@ export interface ConvexHullMaskOptions {
  */
 export function getConvexHullMask(
   roi: Roi,
-  options: ConvexHullMaskOptions,
+  options: ConvexHullMaskOptions = { kind: 'convexHull' },
 ): Mask {
   const { filled = false } = options;
   const borderPoints = roi.getBorderPoints();

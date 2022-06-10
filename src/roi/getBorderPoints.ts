@@ -9,7 +9,11 @@ export interface GetBorderPointOptions {
    * @default false
    */
   innerBorders?: boolean;
-
+  /**
+   * Consider pixels connected by corners?
+   *
+   * @default false
+   */
   allowCorners?: boolean;
 }
 

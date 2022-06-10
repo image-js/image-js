@@ -9,7 +9,10 @@ import { ContourMaskOptions } from '../getMask';
  * @param options - Get filled mask options.
  * @returns The ROI mask.
  */
-export function getContourMask(roi: Roi, options: ContourMaskOptions): Mask {
+export function getContourMask(
+  roi: Roi,
+  options: ContourMaskOptions = { kind: 'contour' },
+): Mask {
   const { filled = true, innerBorders = false } = options;
 
   if (filled) {
@@ -24,7 +27,7 @@ export function getContourMask(roi: Roi, options: ContourMaskOptions): Mask {
         }
       }
     }
-
+    // I feel like this won't work because the ROI touches the border
     if (!innerBorders) {
       mask.solidFill({ out: mask });
     }

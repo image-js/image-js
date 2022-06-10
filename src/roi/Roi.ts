@@ -59,7 +59,7 @@ export class Roi {
    * @param options - Get Mask options
    * @returns The ROI mask.
    */
-  public getMask(options: GetMaskOptions = {}): Mask {
+  public getMask(options: GetMaskOptions = { kind: 'contour' }): Mask {
     return getMask(this, options);
   }
 
