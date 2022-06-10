@@ -5,13 +5,14 @@ import convexHullFunction from './monotoneChainConvexHull';
 /**
  * Computes the minimum bounding box around a binary image
  * https://www.researchgate.net/profile/Lennert_Den_Boer2/publication/303783472_A_Fast_Algorithm_for_Generating_a_Minimal_Bounding_Rectangle/links/5751a14108ae6807fafb2aa5.pdf
+ *
  * @memberof Image
  * @instance
- * @param {object} [options]
- * @param {Array<Array<number>>} [options.originalPoints]
- * @return {Array<Array<number>>}
+ * @param [options]
+ * @param [options.originalPoints]
+ * @returns
  */
-export default function minimalBoundingRectangle(options = {}) {
+export function minimalBoundingRectangle(options = {}) {
   const { originalPoints = convexHullFunction.call(this) } = options;
   if (originalPoints.length === 0) {
     return [];
@@ -28,7 +29,7 @@ export default function minimalBoundingRectangle(options = {}) {
 
   const p = new Array(originalPoints.length);
 
-  let minSurface = +Infinity;
+  let minSurface = Number.POSITIVE_INFINITY;
   let minSurfaceAngle = 0;
   let mbr;
 
@@ -47,9 +48,9 @@ export default function minimalBoundingRectangle(options = {}) {
     let tMin = 0;
     let tMax = 0;
     let maxWidth = 0;
-    for (let j = 0; j < p.length; j++) {
-      let cX = p[j][0];
-      let cY = p[j][1];
+    for (let point of p) {
+      let cX = point[0];
+      let cY = point[1];
       let t = (cX - aX) / (bX - aX);
       if (tUndefined === true) {
         tUndefined = false;
