@@ -41,7 +41,7 @@ export interface TransformOptions {
    */
   inverse?: boolean;
   /*
-    Bypasses width, height, and center options to include
+    Bypasses width and height options to include
     every pixel of the original image inside the transformed image.
   */
   fullImage?: boolean;
@@ -117,7 +117,7 @@ export function transform(
     transformMatrix[1].length !== 3
   ) {
     throw new Error(
-      `transformation matrix must be 2x3, found ${transformMatrix.length}x${transformMatrix[1].length}`,
+      `transform: transformation matrix must be 2x3, found ${transformMatrix.length}x${transformMatrix[1].length}`,
     );
   }
 
