@@ -30,6 +30,7 @@ export type TestImagePath =
   | 'opencv/testRotateBicubic.png'
   | 'opencv/testRotateBilinear.png'
   | 'opencv/testTranslation.png'
+  | 'opencv/testResizeBilinear.png'
   | 'various/grayscale_by_zimmyrose.png'
   | 'various/alphabet.jpg'
   | 'morphology/alphabetCannyEdge.png'
