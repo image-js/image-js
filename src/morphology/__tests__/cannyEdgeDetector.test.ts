@@ -106,18 +106,21 @@ describe('cannyEdgeDetector', () => {
     const image = testUtils
       .load('various/alphabet.jpg')
       .convertColor(ImageColorModel.GREY);
-    const expected = testUtils.load('morphology/alphabetCannyEdge.png');
-    expect(
-      image.cannyEdgeDetector().convertColor(ImageColorModel.GREY),
-    ).toMatchImage(expected);
+
+    const expected = testUtils
+      .load('morphology/alphabetCannyEdge.png')
+      .threshold();
+
+    const result = image.cannyEdgeDetector();
+    expect(result).toMatchMask(expected);
   });
   it('compare grey image to expected', () => {
     const image = testUtils.load('various/grayscale_by_zimmyrose.png');
 
-    const expected = testUtils.load('morphology/grayscaleCannyEdge.png');
-    expect(
-      image.cannyEdgeDetector().convertColor(ImageColorModel.GREY),
-    ).toMatchImage(expected);
+    const expected = testUtils
+      .load('morphology/grayscaleCannyEdge.png')
+      .threshold();
+    expect(image.cannyEdgeDetector()).toMatchMask(expected);
   });
 });
 

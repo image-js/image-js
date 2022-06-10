@@ -76,7 +76,7 @@ export function multipleFloodFill(
   while (from < to) {
     if (to - from > MAX_ARRAY) {
       throw new Error(
-        'clearBorder: could not process image, overflow in the data processing array.',
+        'multipleFloodFill: could not process image, overflow in the data processing array.',
       );
     }
     const currentPixel = toProcess[from++ % MAX_ARRAY];
