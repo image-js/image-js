@@ -68,7 +68,6 @@ describe('getBorderPoints', () => {
     });
 
     let bordersMask = Mask.fromPoints(roi.width, roi.height, points);
-
     expect(bordersMask).toMatchMask(mask);
   });
   it('6x5 mask with hole, inner borders', () => {

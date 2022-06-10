@@ -13,8 +13,7 @@ export function getContourMask(
   roi: Roi,
   options: ContourMaskOptions = { kind: 'contour' },
 ): Mask {
-  const { filled = true, innerBorders = false } = options;
-
+  const { filled = true, innerBorders = true } = options;
   if (filled) {
     let mask = new Mask(roi.width, roi.height);
 

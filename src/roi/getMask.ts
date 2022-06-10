@@ -13,7 +13,7 @@ export interface ContourMaskOptions {
    */
   innerBorders?: boolean;
   /**
-   * Consider pixels connected by corners?
+   * Consider pixels connected by corners? This option is only useful if filled = false.
    *
    * @default false
    */
