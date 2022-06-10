@@ -121,6 +121,7 @@ function checkOptions(
   let newHeight: number;
 
   const maybeWidth = getSize(width, xFactor, image.width, preserveAspectRatio);
+
   const maybeHeight = getSize(
     height,
     yFactor,
@@ -178,7 +179,7 @@ function getSize(
       return sizeImg;
     }
   } else if (factor !== undefined) {
-    throw new Error('factor must not be passed with size');
+    throw new Error('factor must not be passed at the same time as size');
   } else {
     return sizeOpt;
   }
