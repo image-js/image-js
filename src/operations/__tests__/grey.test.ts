@@ -1,4 +1,4 @@
-describe('Grey transform', () => {
+describe('grey', () => {
   it('RGBA image', () => {
     let image = testUtils.createRgbaImage([
       [100, 150, 200, 255, 100, 150, 200, 0],
