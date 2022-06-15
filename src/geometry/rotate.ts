@@ -51,7 +51,7 @@ export interface RotateOptions {
 }
 
 /**
- * Rotate an image of a given angle.
+ * Rotate an image anti-clockwise of a given angle.
  *
  * @param image - Original image.
  * @param angle - Angle in degrees.
