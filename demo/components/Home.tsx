@@ -3,10 +3,10 @@ import { IJS } from '../../src';
 import CameraSelector from './CameraSelector';
 import CameraTransform from './CameraTransform';
 import Container from './Container';
-import { testGetContourMask } from './testFunctions/testGetContourMask';
+import { testRotate } from './testFunctions/testRotate';
 
 function testTransform(image: IJS) {
-  return testGetContourMask(image);
+  return testRotate(image);
 }
 
 export default function Home() {
