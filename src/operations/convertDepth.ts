@@ -9,7 +9,7 @@ import { IJS, ColorDepth } from '../IJS';
  */
 export function convertDepth(image: IJS, newDepth: ColorDepth): IJS {
   if (image.depth === newDepth) {
-    throw new Error('cannot convert image to same depth');
+    throw new Error('convertDepth: cannot convert image to same depth');
   }
 
   if (newDepth === ColorDepth.UINT16) {

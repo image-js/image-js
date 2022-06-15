@@ -58,4 +58,14 @@ describe('convert depth', () => {
       [3, 3, 3, 3, 4, 4, 4, 4],
     ]);
   });
+  it('throw if converting to same depth', () => {
+    const img = testUtils.createRgbaImage([
+      [256, 256, 256, 256, 512, 512, 512, 512],
+      [768, 768, 768, 768, 1024, 1024, 1024, 1024],
+    ]);
+
+    expect(() => {
+      img.convertDepth(ColorDepth.UINT8);
+    }).toThrow('convertDepth: cannot convert image to same depth');
+  });
 });
