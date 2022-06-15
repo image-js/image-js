@@ -60,4 +60,27 @@ describe('checkProcessable', () => {
       /The process "test" can only be applied if the number of channels is 2 or 3/,
     );
   });
+  it('only one valid depth or channel', () => {
+    const img = testUtils.createGreyImage([
+      [0, 1],
+      [2, 3],
+    ]);
+    expect(() => {
+      checkProcessable(img, 'test', {
+        bitDepth: ColorDepth.UINT8,
+        channels: 1,
+      });
+    }).not.toThrow();
+  });
+  it('only grey images accepted', () => {
+    const img = testUtils.createRgbImage([[0, 1, 2]]);
+    expect(() => {
+      checkProcessable(img, 'test', {
+        bitDepth: ColorDepth.UINT8,
+        components: 1,
+      });
+    }).toThrow(
+      `You should transform your image using "image.grey()" before applying the algorithm`,
+    );
+  });
 });

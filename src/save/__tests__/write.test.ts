@@ -14,10 +14,19 @@ afterEach(() => {
   testUtils.cleanTmpDir(tmpDir);
 });
 
-test('async write image to disk', async () => {
+test('async write image to disk (png)', async () => {
   const img = testUtils.load('opencv/test.png');
   const destination = join(tmpDir, 'image.png');
   await write(destination, img);
+  expect(existsSync(destination)).toBe(true);
+  const imgRead = await read(destination);
+  expect(imgRead).toMatchImage(img);
+});
+
+test('format option png', async () => {
+  const img = testUtils.load('opencv/test.png');
+  const destination = join(tmpDir, 'image.png');
+  await write(destination, img, { format: ImageFormat.png });
   expect(existsSync(destination)).toBe(true);
   const imgRead = await read(destination);
   expect(imgRead).toMatchImage(img);

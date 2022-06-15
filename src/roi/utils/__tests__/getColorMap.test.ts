@@ -1,9 +1,18 @@
 import { RoisColorMode } from '../../colorRois';
 import { RoiKind } from '../../getRois';
+import { getBinaryMap } from '../colorMaps/getBinaryMap';
 import { maxNumberRois, colorMapCenter } from '../constants';
 import { getColorMap } from '../getColorMap';
 
-describe('getBinaryMap', () => {
+describe('getColorMap', () => {
+  it('default options', () => {
+    const colorMap = getBinaryMap({ nbNegative: 1, nbPositive: 1 });
+
+    expect(colorMap).toHaveLength(maxNumberRois);
+    expect(colorMap[colorMapCenter - 1]).toBe(0xff0000ff); // red
+    expect(colorMap[colorMapCenter + 1]).toBe(0xff00ff00); // green
+  });
+
   it('binary, BW', () => {
     const colorMap = getColorMap({
       nbNegative: 1,
