@@ -1,6 +1,13 @@
 import { Mask } from '../../Mask';
+import { copyTo } from '../copyTo';
 
 describe('Copy a source image to a target', () => {
+  it('default options', () => {
+    let source = testUtils.createGreyImage([[100, 0]]);
+    let target = testUtils.createGreyImage([[50, 255]]);
+    const result = copyTo(source, target);
+    expect(result).toMatchImageData([[100, 0]]);
+  });
   it('GREYA images: transparent source, opaque target', () => {
     let source = testUtils.createGreyaImage([[100, 0]]);
     let target = testUtils.createGreyaImage([[50, 255]]);
