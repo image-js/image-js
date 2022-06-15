@@ -150,9 +150,9 @@ describe('getContourMask', () => {
   });
   it('test allowCorners true', () => {
     const mask = testUtils.createMask([
-      [1, 1, 1, 1, 1],
-      [1, 0, 0, 0, 1],
-      [0, 1, 1, 1, 1],
+      [1, 1, 1],
+      [1, 0, 1],
+      [0, 1, 1],
     ]);
     const roiMapManager = fromMask(mask);
 
@@ -160,10 +160,9 @@ describe('getContourMask', () => {
     const roiMask = getContourMask(roi, {
       kind: 'contour',
       allowCorners: true,
-      innerBorders: true,
+      innerBorders: false,
     });
 
-    console.log(mask);
     expect(roiMask).toMatchMaskData([
       [1, 1, 1],
       [1, 1, 1],
