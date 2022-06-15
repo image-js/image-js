@@ -2,7 +2,7 @@ import { decode } from '..';
 import { ColorDepth } from '../../IJS';
 import { ImageColorModel } from '../../utils/colorModels';
 
-describe('decode various formats', () => {
+describe('decode', () => {
   it('auto decode png', async () => {
     const buffer = testUtils.loadBuffer('formats/grey8.png');
     expect(() => decode(buffer)).not.toThrow();
@@ -17,6 +17,13 @@ describe('decode various formats', () => {
     const decoded = decode(buffer);
     expect(decoded.depth).toStrictEqual(ColorDepth.UINT8);
     expect(decoded.colorModel).toStrictEqual(ImageColorModel.RGBA);
+  });
+  it('auto decode tiff', async () => {
+    const buffer = testUtils.loadBuffer('formats/tif/grey8.tif');
+    expect(() => decode(buffer)).not.toThrow();
+    const decoded = decode(buffer);
+    expect(decoded.depth).toStrictEqual(ColorDepth.UINT8);
+    expect(decoded.colorModel).toStrictEqual(ImageColorModel.GREY);
   });
 });
 
