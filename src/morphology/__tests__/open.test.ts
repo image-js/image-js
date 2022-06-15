@@ -1,10 +1,5 @@
 describe('open', () => {
   it('GREY image 5x5', () => {
-    let kernel = [
-      [1, 1, 1],
-      [1, 1, 1],
-      [1, 1, 1],
-    ];
     const image = testUtils.createGreyImage([
       [255, 255, 0, 255, 255],
       [255, 0, 0, 0, 255],
@@ -13,7 +8,7 @@ describe('open', () => {
       [255, 255, 0, 255, 255],
     ]);
 
-    expect(image.open({ kernel })).toMatchImageData([
+    expect(image.open()).toMatchImageData([
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
