@@ -8,6 +8,12 @@ import { QpCard } from './qpCardData';
 
 extend([labPlugin]);
 
+/**
+ * Compute the third order variables for the regression from an RGB color.
+ *
+ * @param rgb - The rgb color.
+ * @returns The variables for the multivariate linear regression.
+ */
 function getRegressionVariables(rgb: RgbColor): number[] {
   const r = rgb.r;
   const g = rgb.g;
@@ -37,6 +43,9 @@ function normalizeRgb(color: RgbColor, image: IJS): RgbColor {
   };
 }
 
+/**
+ * Reference QP card data formatted to be easier to use for the multivariate linear regression.
+ */
 interface ReferenceDataForMlr {
   r: number[][];
   g: number[][];
@@ -62,6 +71,12 @@ export function formatReferenceForMlr(qpCard: QpCard): ReferenceDataForMlr {
   return referenceData;
 }
 
+/**
+ * Compute the variables for the multivariate linear regression based on the the input colors.
+ *
+ * @param inputColors - The input colors as an array of rgb objects.
+ * @returns The formatted input data for the regression.
+ */
 function formatInputForMlr(inputColors: RgbColor[]): number[][] {
   const inputData = [];
   for (let color of inputColors) {
@@ -78,7 +93,9 @@ export function getChannelCoefficients(
   inputData: number[][],
   referenceData: number[][],
 ): number[] {
-  return [1];
+  const mlr = new MLR(inputData, referenceData);
+
+  return mlr.tStats;
 }
 
 export function correctColor(
