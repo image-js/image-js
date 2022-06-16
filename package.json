@@ -45,6 +45,7 @@
     "jpeg-js": "^0.4.3",
     "ml-convolution": "^2.0.0",
     "ml-matrix": "^6.10.0",
+    "ml-regression-multivariate-linear": "^2.0.3",
     "tiff": "^5.0.3"
   },
   "devDependencies": {
