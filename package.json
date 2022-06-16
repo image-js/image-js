@@ -39,6 +39,7 @@
     "jest": "$jest"
   },
   "dependencies": {
+    "colord": "^2.9.2",
     "fast-png": "^6.1.0",
     "image-type": "^4.1.0",
     "jpeg-js": "^0.4.3",
