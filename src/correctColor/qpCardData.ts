@@ -31,7 +31,7 @@ export type QpCard = QpCardSquare[];
 /**
  * The QP card reference values in the L*a*b* format
  */
-export const ReferenceQpCard = [
+export const referenceQpCard = [
   {
     name: 'Cyan',
     lab: { l: 51.9, a: -31.8, b: -50.4 },
