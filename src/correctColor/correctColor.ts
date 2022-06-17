@@ -1,7 +1,8 @@
 import { RgbColor } from 'colord';
 import MLR from 'ml-regression-multivariate-linear';
 
-import { IJS } from '../IJS';
+import { IJS, ImageColorModel } from '../IJS';
+import checkProcessable from '../utils/checkProcessable';
 import { getClamp } from '../utils/clamp';
 
 import {
@@ -22,6 +23,10 @@ export function correctColor(
   measuredColors: RgbColor[],
   referenceColors: RgbColor[],
 ): IJS {
+  checkProcessable(image, 'correctColor', {
+    colorModel: [ImageColorModel.RGB, ImageColorModel.RGBA],
+  });
+
   const inputData = formatInputForMlr(measuredColors);
   const referenceData = formatReferenceForMlr(referenceColors);
 
@@ -31,18 +36,23 @@ export function correctColor(
 
   const result = IJS.createFrom(image);
 
-  for (let i = 0; i < image.size; i++) {
-    const pixel = image.getPixelByIndex(i);
-    const variables = getRegressionVariables(pixel[0], pixel[1], pixel[2]);
+  for (let row = 0; row < image.height; row++) {
+    for (let column = 0; column < image.width; column++) {
+      const pixel = image.getPixel(column, row);
+      const variables = getRegressionVariables(pixel[0], pixel[1], pixel[2]);
 
-    const clamp = getClamp(image);
+      const clamp = getClamp(image);
 
-    const newPixel = [0, 0, 0];
-    newPixel[0] = clamp(mlrRed.predict(variables)[0]);
-    newPixel[1] = clamp(mlrGreen.predict(variables)[0]);
-    newPixel[2] = clamp(mlrBlue.predict(variables)[0]);
+      const newPixel = [0, 0, 0];
+      newPixel[0] = clamp(mlrRed.predict(variables)[0]);
+      newPixel[1] = clamp(mlrGreen.predict(variables)[0]);
+      newPixel[2] = clamp(mlrBlue.predict(variables)[0]);
+      if (image.alpha) {
+        newPixel[3] = image.getValue(column, row, 3);
+      }
 
-    result.setPixelByIndex(i, newPixel);
+      result.setPixel(column, row, newPixel);
+    }
   }
 
   return result;

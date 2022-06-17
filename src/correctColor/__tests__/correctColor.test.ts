@@ -7,6 +7,42 @@ import { polish, polishAltered } from './testUtil/imageColors';
 import { referenceColorCard } from './testUtil/referenceColorCard';
 
 describe('correctColor', () => {
+  it('RGB image should not change', () => {
+    const image = testUtils.createRgbImage([[0, 0, 0, 10, 10, 10, 20, 20, 20]]);
+
+    const measuredColors = [
+      { r: 0, g: 0, b: 0 },
+      { r: 50, g: 50, b: 50 },
+      { r: 100, g: 100, b: 100 },
+      { r: 150, g: 150, b: 150 },
+      { r: 200, g: 200, b: 200 },
+    ];
+
+    const result = correctColor(image, measuredColors, measuredColors);
+
+    expect(result).toMatchImageData([[0, 0, 0, 9, 9, 9, 20, 20, 20]]);
+  });
+
+  it('RGBA image should not change', () => {
+    const image = testUtils.createRgbaImage([
+      [0, 0, 0, 0, 10, 10, 10, 100, 20, 20, 20, 200],
+    ]);
+
+    const measuredColors = [
+      { r: 0, g: 0, b: 0 },
+      { r: 50, g: 50, b: 50 },
+      { r: 100, g: 100, b: 100 },
+      { r: 150, g: 150, b: 150 },
+      { r: 200, g: 200, b: 200 },
+    ];
+
+    const result = correctColor(image, measuredColors, measuredColors);
+
+    expect(result).toMatchImageData([
+      [0, 0, 0, 0, 9, 9, 9, 100, 20, 20, 20, 200],
+    ]);
+  });
+
   it('small test image', () => {
     const image = testUtils.load('opencv/test.png');
 
