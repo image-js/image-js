@@ -299,6 +299,34 @@ export class IJS {
   }
 
   /**
+   * Get all the channels of a pixel using it's index.
+   *
+   * @param index - Index of the pixel.
+   * @returns Channels of the pixel.
+   */
+  public getPixelByIndex(index: number): number[] {
+    const result = [];
+    const start = index * this.channels;
+    for (let i = 0; i < this.channels; i++) {
+      result.push(this.data[start + i]);
+    }
+    return result;
+  }
+
+  /**
+   * Set all the channels of a pixel using it's index.
+   *
+   * @param index - Index of the pixel.
+   * @param value - New channel values of the pixel to set.
+   */
+  public setPixelByIndex(index: number, value: number[]): void {
+    const start = index * this.channels;
+    for (let i = 0; i < this.channels; i++) {
+      this.data[start + i] = value[i];
+    }
+  }
+
+  /**
    * Get the value of a specific pixel channel. Select pixel using coordinates.
    *
    * @param column - Column index.
