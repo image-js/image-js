@@ -1,30 +1,46 @@
 import { readSync } from '../../load';
 import { writeSync } from '../../save';
 import { correctColor } from '../correctColor';
-import { polishImageData } from '../imageColors';
-import { referenceQpCard } from '../referenceQpCard';
-import { arrayColorsToRgbColors, getReferenceColors } from '../util/formatData';
+
+import { getMeasuredColors, getReferenceColors } from './testUtil/formatData';
+import { polish, polishAltered } from './testUtil/imageColors';
+import { referenceColorCard } from './testUtil/referenceColorCard';
 
 describe('correctColor', () => {
   it('small test image', () => {
     const image = testUtils.load('opencv/test.png');
 
-    const measuredColors = arrayColorsToRgbColors(polishImageData.colors);
-    const referenceColors = getReferenceColors(referenceQpCard);
+    const measuredColors = getMeasuredColors(polish);
+    const referenceColors = getReferenceColors(referenceColorCard);
 
     const result = correctColor(image, measuredColors, referenceColors);
 
     expect(result).toMatchIJSSnapshot();
   });
 
-  it('polish scan data', () => {
-    const image = readSync('src/correctColor/__tests__/polish-scan.png');
+  it('polish scan', () => {
+    const image = readSync(
+      'src/correctColor/__tests__/testUtil/polish-scan.png',
+    );
 
-    const measuredColors = arrayColorsToRgbColors(polishImageData.colors);
-    const referenceColors = getReferenceColors(referenceQpCard);
+    const measuredColors = getMeasuredColors(polish);
+    const referenceColors = getReferenceColors(referenceColorCard);
 
     const result = correctColor(image, measuredColors, referenceColors);
 
-    writeSync('src/correctColor/__tests__/correctColor.png', result);
+    writeSync('src/correctColor/__tests__/corrected1.png', result);
+  });
+
+  it('polish scan with altered color balance', () => {
+    const image = readSync(
+      'src/correctColor/__tests__/testUtil/polish-scan-altered.tif',
+    );
+
+    const measuredColors = getMeasuredColors(polishAltered);
+    const referenceColors = getReferenceColors(referenceColorCard);
+
+    const result = correctColor(image, measuredColors, referenceColors);
+
+    writeSync('src/correctColor/__tests__/corrected2.png', result);
   });
 });

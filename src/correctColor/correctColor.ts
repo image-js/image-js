@@ -4,7 +4,10 @@ import MLR from 'ml-regression-multivariate-linear';
 import { IJS } from '../IJS';
 import { getClamp } from '../utils/clamp';
 
-import { formatInputForMlr, formatReferenceForMlr } from './util/formatData';
+import {
+  formatInputForMlr,
+  formatReferenceForMlr,
+} from './__tests__/testUtil/formatData';
 
 /**
  * Correct the colors in an image using the reference colors.

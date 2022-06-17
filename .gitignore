@@ -121,5 +121,6 @@ lib
 lib-esm
 
 # debug images
+src/**/*.tif
 src/**/*.png
 !src/**/__image_snapshots__/*.png

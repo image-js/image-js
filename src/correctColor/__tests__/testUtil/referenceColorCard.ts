@@ -1,6 +1,6 @@
 import { LabColor } from 'colord';
 
-export interface QpCardSquare {
+export interface ColorCardSquare {
   /**
    * Name of the color.
    */
@@ -26,12 +26,12 @@ export interface QpCardSquare {
   index: number;
 }
 
-export type QpCard = QpCardSquare[];
+export type ColorCard = ColorCardSquare[];
 
 /**
- * The QP card reference values in the L*a*b* format
+ * The color card reference values in the L*a*b* format
  */
-export const referenceQpCard = [
+export const referenceColorCard = [
   {
     name: 'Cyan',
     lab: { l: 51.9, a: -31.8, b: -50.4 },

@@ -3,4 +3,5 @@ module.exports = {
   testEnvironment: 'node',
   collectCoverage: true,
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  testMatch: ['**/?(*.)+(test).[jt]s?(x)'],
 };

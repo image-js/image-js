@@ -1,8 +1,9 @@
 import { colord, extend, RgbColor } from 'colord';
 import labPlugin from 'colord/plugins/lab';
 
-import { getRegressionVariables } from '../correctColor';
-import { QpCard } from '../referenceQpCard';
+import { getRegressionVariables } from '../../correctColor';
+
+import { ColorCard } from './referenceColorCard';
 
 extend([labPlugin]);
 
@@ -16,12 +17,26 @@ export interface ReferenceDataForMlr {
 }
 
 /**
+ * Convert RGB array colors to RGB object colors. Used to get the properly formatted measured colors.
+ *
+ * @param arrayColors - Array of RGB colors as 3 elements array.
+ * @returns Array of RGB objects.
+ */
+export function getMeasuredColors(arrayColors: number[][]): RgbColor[] {
+  const objectColors = [];
+  for (let color of arrayColors) {
+    objectColors.push({ r: color[0], g: color[1], b: color[2] });
+  }
+  return objectColors;
+}
+
+/**
  * Extract the colors from a QP card and convert them to RGB.
  *
  * @param qpCard - QP card containing the color reference values in L*a*b*.
  * @returns Array of reference RGB colors.
  */
-export function getReferenceColors(qpCard: QpCard): RgbColor[] {
+export function getReferenceColors(qpCard: ColorCard): RgbColor[] {
   let result: RgbColor[] = [];
   for (let square of qpCard) {
     result.push(colord(square.lab).toRgb());
@@ -62,18 +77,4 @@ export function formatInputForMlr(inputColors: RgbColor[]): number[][] {
     inputData.push(getRegressionVariables(color.r, color.g, color.b));
   }
   return inputData;
-}
-
-/**
- * Convert RGB array colors to RGB object colors.
- *
- * @param arrayColors - Array of RGB colors as 3 elements array.
- * @returns Array of RGB objects.
- */
-export function arrayColorsToRgbColors(arrayColors: number[][]): RgbColor[] {
-  const objectColors = [];
-  for (let color of arrayColors) {
-    objectColors.push({ r: color[0], g: color[1], b: color[2] });
-  }
-  return objectColors;
 }
