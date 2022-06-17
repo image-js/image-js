@@ -17,51 +17,80 @@ interface MatcherResult {
   pass: boolean;
 }
 
+export interface JestMatcherOptions {
+  /**
+   * Acceptable difference between the received image and the expected for each channel.
+   *
+   * @default 0
+   */
+  error?: number;
+}
+
 /**
  * Match a received image to an expected image.
  *
  * @param this - Jest matcher context.
  * @param received - Received image.
  * @param expected - Expected image.
+ * @param options - Jest matcher options.
  * @returns - Jest matcher result.
  */
 export function toMatchImage(
   this: jest.MatcherContext,
   received: IJS,
   expected: IJS | TestImagePath,
+  options: JestMatcherOptions = {},
 ): MatcherResult {
+  const { error = 0 } = options;
   const expectedImage =
     typeof expected === 'string' ? testUtils.load(expected) : expected;
-  let error: string | null = null;
+  let errorString: string | null = null;
 
   if (received === expected) {
-    error = 'Expected image instances to be different';
+    errorString = 'Expected image instances to be different';
   } else if (received.width !== expectedImage.width) {
-    error = `Expected image width to be ${expectedImage.width}, but got ${received.width}`;
+    errorString = `Expected image width to be ${expectedImage.width}, but got ${received.width}`;
   } else if (received.height !== expectedImage.height) {
-    error = `Expected image height to be ${expectedImage.height}, but got ${received.height}`;
+    errorString = `Expected image height to be ${expectedImage.height}, but got ${received.height}`;
   } else if (received.depth !== expectedImage.depth) {
-    error = `Expected image depth to be ${expectedImage.depth}, but got ${received.depth}`;
+    errorString = `Expected image depth to be ${expectedImage.depth}, but got ${received.depth}`;
   } else if (received.colorModel !== expectedImage.colorModel) {
-    error = `Expected image color model to be ${expectedImage.colorModel}, but got ${received.colorModel}`;
+    errorString = `Expected image color model to be ${expectedImage.colorModel}, but got ${received.colorModel}`;
   } else {
-    rowsLoop: for (let row = 0; row < received.height; row++) {
-      for (let col = 0; col < received.width; col++) {
-        const receivedPixel = received.getPixel(col, row);
-        const expectedPixel = expectedImage.getPixel(col, row);
-        if (!this.equals(receivedPixel, expectedPixel)) {
-          error = `Expected pixel at (${col}, ${row}) to be [${expectedPixel.join(
-            ', ',
-          )}], but got [${receivedPixel.join(', ')}]`;
-          break rowsLoop;
+    if (error === 0) {
+      rowsLoop: for (let row = 0; row < received.height; row++) {
+        for (let col = 0; col < received.width; col++) {
+          const receivedPixel = received.getPixel(col, row);
+          const expectedPixel = expectedImage.getPixel(col, row);
+          if (!this.equals(receivedPixel, expectedPixel)) {
+            errorString = `Expected pixel at (${col}, ${row}) to be [${expectedPixel.join(
+              ', ',
+            )}], but got [${receivedPixel.join(', ')}]`;
+            break rowsLoop;
+          }
+        }
+      }
+    } else {
+      rowsLoop: for (let row = 0; row < received.height; row++) {
+        for (let col = 0; col < received.width; col++) {
+          for (let channel = 0; channel < received.channels; channel++) {
+            const receivedValue = received.getValue(col, row, channel);
+            const expectedValue = expectedImage.getValue(col, row, channel);
+            if (Math.abs(receivedValue - expectedValue) > error) {
+              errorString = `Expected value at (${col}, ${row}) to be in range [${
+                expectedValue - error
+              },${expectedValue + error}], but got ${receivedValue}`;
+              break rowsLoop;
+            }
+          }
         }
       }
     }
   }
 
   return {
-    message: () => error || '',
-    pass: error === null,
+    message: () => errorString || '',
+    pass: errorString === null,
   };
 }
 
@@ -71,17 +100,19 @@ export function toMatchImage(
  * @param this - Jest matcher context.
  * @param received - Received image.
  * @param expectedData - Expected image data.
+ *  @param options - Jest matcher options.
  * @returns - Jest matcher result.
  */
 export function toMatchImageData(
   this: jest.MatcherContext,
   received: IJS,
   expectedData: number[][] | string,
+  options: JestMatcherOptions = {},
 ): MatcherResult {
   const expectedImage = createImageFromData(expectedData, received.colorModel, {
     depth: received.depth,
   });
-  return toMatchImage.call(this, received, expectedImage);
+  return toMatchImage.call(this, received, expectedImage, options);
 }
 
 /**

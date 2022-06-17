@@ -53,6 +53,15 @@ describe('toMatchImage', () => {
       /Expected pixel at \(0, 1\) to be \[128, 0, 0\], but got \[0, 0, 0\]/,
     );
   });
+  it('error range of 1', () => {
+    const received = testUtils.createGreyImage([[1, 2, 3, 4]]);
+    const expected = testUtils.createGreyImage([[1, 2, 3, 50]]);
+    expected.setValue(0, 1, 0, 128);
+    expected.setValue(0, 1, 0, 255);
+    expect(() => expect(received).toMatchImage(expected, { error: 1 })).toThrow(
+      /Expected value at \(3, 0\) to be in range \[49,51\], but got 4/,
+    );
+  });
 });
 
 describe('toMatchImageData', () => {
