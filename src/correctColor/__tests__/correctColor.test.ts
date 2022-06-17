@@ -1,40 +1,29 @@
 import { readSync } from '../../load';
 import { writeSync } from '../../save';
-import {
-  arraysToRgbColors,
-  correctColor,
-  formatReferenceForMlr,
-} from '../correctColor';
+import { correctColor } from '../correctColor';
 import { polishImageData } from '../imageColors';
 import { referenceQpCard } from '../referenceQpCard';
-
-describe('formatReferenceForMlr', () => {
-  it('convert reference QP card', () => {
-    const result = formatReferenceForMlr(referenceQpCard);
-    expect(result).toMatchSnapshot();
-    expect(result.r).toHaveLength(20);
-    expect(result.g).toHaveLength(20);
-    expect(result.b).toHaveLength(20);
-  });
-});
+import { arrayColorsToRgbColors, getReferenceColors } from '../util/formatData';
 
 describe('correctColor', () => {
   it('small test image', () => {
     const image = testUtils.load('opencv/test.png');
 
-    const inputData = arraysToRgbColors(polishImageData.colors);
+    const measuredColors = arrayColorsToRgbColors(polishImageData.colors);
+    const referenceColors = getReferenceColors(referenceQpCard);
 
-    const result = correctColor(image, inputData, referenceQpCard);
+    const result = correctColor(image, measuredColors, referenceColors);
 
-    writeSync('src/correctColor/__tests__/correctColor-test.png', result);
+    expect(result).toMatchIJSSnapshot();
   });
 
   it('polish scan data', () => {
-    const image = readSync('src/correctColor/__tests__/pol_example.png');
+    const image = readSync('src/correctColor/__tests__/polish-scan.png');
 
-    const inputData = arraysToRgbColors(polishImageData.colors);
+    const measuredColors = arrayColorsToRgbColors(polishImageData.colors);
+    const referenceColors = getReferenceColors(referenceQpCard);
 
-    const result = correctColor(image, inputData, referenceQpCard);
+    const result = correctColor(image, measuredColors, referenceColors);
 
     writeSync('src/correctColor/__tests__/correctColor.png', result);
   });
