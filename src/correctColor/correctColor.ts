@@ -3,22 +3,21 @@ import labPlugin from 'colord/plugins/lab';
 import MLR from 'ml-regression-multivariate-linear';
 
 import { IJS } from '../IJS';
+import { getClamp } from '../utils/clamp';
 
-import { QpCard } from './qpCardData';
+import { QpCard } from './referenceQpCard';
 
 extend([labPlugin]);
 
 /**
  * Compute the third order variables for the regression from an RGB color.
  *
- * @param rgb - The rgb color.
+ * @param r - Red component.
+ * @param g - Green component.
+ * @param b - Blue component.
  * @returns The variables for the multivariate linear regression.
  */
-function getRegressionVariables(rgb: RgbColor): number[] {
-  const r = rgb.r;
-  const g = rgb.g;
-  const b = rgb.b;
-
+function getRegressionVariables(r: number, g: number, b: number): number[] {
   return [
     r,
     g,
@@ -80,26 +79,57 @@ export function formatReferenceForMlr(qpCard: QpCard): ReferenceDataForMlr {
 function formatInputForMlr(inputColors: RgbColor[]): number[][] {
   const inputData = [];
   for (let color of inputColors) {
-    inputData.push(getRegressionVariables(color));
+    inputData.push(getRegressionVariables(color.r, color.g, color.b));
   }
   return inputData;
 }
 
 /**
- * @param inputData
- * @param referenceData
+ * @param arrayColors
  */
-export function getChannelCoefficients(
-  inputData: number[][],
-  referenceData: number[][],
-): number[] {
-  const mlr = new MLR(inputData, referenceData);
-
-  return mlr.tStats;
+export function arraysToRgbColors(arrayColors: number[][]): RgbColor[] {
+  const objectColors = [];
+  for (let color of arrayColors) {
+    objectColors.push({ r: color[0], g: color[1], b: color[2] });
+  }
+  return objectColors;
 }
 
+/**
+ * Correct the colors in an image using the reference colors.
+ *
+ * @param image - Image to process.
+ * @param inputColors - Colors from the image which will be compared to the reference.
+ * @param referenceQpCard - QP card containing reference colors.
+ * @returns Image with the colors corrected.
+ */
 export function correctColor(
   image: IJS,
-  inputColors,
+  inputColors: RgbColor[],
   referenceQpCard: QpCard,
-): IJS;
+): IJS {
+  const inputData = formatInputForMlr(inputColors);
+  const referenceData = formatReferenceForMlr(referenceQpCard);
+
+  const mlrRed = new MLR(inputData, referenceData.r);
+  const mlrGreen = new MLR(inputData, referenceData.g);
+  const mlrBlue = new MLR(inputData, referenceData.b);
+
+  const result = IJS.createFrom(image);
+
+  for (let i = 0; i < image.size; i++) {
+    const pixel = image.getPixelByIndex(i);
+    const variables = getRegressionVariables(pixel[0], pixel[1], pixel[2]);
+
+    const clamp = getClamp(image);
+
+    const newPixel = [0, 0, 0];
+    newPixel[0] = clamp(mlrRed.predict(variables)[0]);
+    newPixel[1] = clamp(mlrGreen.predict(variables)[0]);
+    newPixel[2] = clamp(mlrBlue.predict(variables)[0]);
+
+    result.setPixelByIndex(i, newPixel);
+  }
+
+  return result;
+}

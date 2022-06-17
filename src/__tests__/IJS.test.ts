@@ -99,6 +99,22 @@ describe('get and set pixels', () => {
     expect(img.getPixel(5, 15)).toStrictEqual([1, 3, 5]);
   });
 
+  it('should get and set by index', () => {
+    const img = new IJS(10, 20);
+    expect(img.getPixelByIndex(5)).toStrictEqual([0, 0, 0]);
+    img.setPixelByIndex(5, [1, 3, 5]);
+    expect(img.getPixelByIndex(5)).toStrictEqual([1, 3, 5]);
+  });
+
+  it('get pixel by index in grey image', () => {
+    const img = testUtils.createGreyImage([
+      [1, 2, 3],
+      [4, 5, 6],
+    ]);
+    expect(img.getPixelByIndex(0)).toStrictEqual([1]);
+    expect(img.getPixelByIndex(4)).toStrictEqual([5]);
+  });
+
   it('should get and set value', () => {
     const img = new IJS(10, 20);
     expect(img.getValue(5, 15, 0)).toBe(0);

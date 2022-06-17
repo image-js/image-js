@@ -190,3 +190,194 @@ Object {
   ],
 }
 `;
+
+exports[`formatReferenceForMlr convert reference QP card 1`] = `
+Object {
+  "b": Array [
+    Array [
+      210,
+    ],
+    Array [
+      65,
+    ],
+    Array [
+      58,
+    ],
+    Array [
+      60,
+    ],
+    Array [
+      207,
+    ],
+    Array [
+      116,
+    ],
+    Array [
+      54,
+    ],
+    Array [
+      99,
+    ],
+    Array [
+      60,
+    ],
+    Array [
+      92,
+    ],
+    Array [
+      55,
+    ],
+    Array [
+      161,
+    ],
+    Array [
+      172,
+    ],
+    Array [
+      58,
+    ],
+    Array [
+      248,
+    ],
+    Array [
+      38,
+    ],
+    Array [
+      105,
+    ],
+    Array [
+      150,
+    ],
+    Array [
+      177,
+    ],
+    Array [
+      210,
+    ],
+  ],
+  "g": Array [
+    Array [
+      141,
+    ],
+    Array [
+      59,
+    ],
+    Array [
+      180,
+    ],
+    Array [
+      69,
+    ],
+    Array [
+      161,
+    ],
+    Array [
+      26,
+    ],
+    Array [
+      155,
+    ],
+    Array [
+      51,
+    ],
+    Array [
+      119,
+    ],
+    Array [
+      85,
+    ],
+    Array [
+      232,
+    ],
+    Array [
+      47,
+    ],
+    Array [
+      136,
+    ],
+    Array [
+      142,
+    ],
+    Array [
+      249,
+    ],
+    Array [
+      42,
+    ],
+    Array [
+      104,
+    ],
+    Array [
+      146,
+    ],
+    Array [
+      179,
+    ],
+    Array [
+      216,
+    ],
+  ],
+  "r": Array [
+    Array [
+      0,
+    ],
+    Array [
+      236,
+    ],
+    Array [
+      254,
+    ],
+    Array [
+      106,
+    ],
+    Array [
+      122,
+    ],
+    Array [
+      224,
+    ],
+    Array [
+      41,
+    ],
+    Array [
+      101,
+    ],
+    Array [
+      110,
+    ],
+    Array [
+      227,
+    ],
+    Array [
+      253,
+    ],
+    Array [
+      0,
+    ],
+    Array [
+      94,
+    ],
+    Array [
+      255,
+    ],
+    Array [
+      246,
+    ],
+    Array [
+      39,
+    ],
+    Array [
+      102,
+    ],
+    Array [
+      144,
+    ],
+    Array [
+      177,
+    ],
+    Array [
+      214,
+    ],
+  ],
+}
+`;

@@ -1,5 +1,12 @@
-import { formatReferenceForMlr, getChannelCoefficients } from '../correctColor';
-import { referenceQpCard } from '../qpCardData';
+import { readSync } from '../../load';
+import { writeSync } from '../../save';
+import {
+  arraysToRgbColors,
+  correctColor,
+  formatReferenceForMlr,
+} from '../correctColor';
+import { polishImageData } from '../imageColors';
+import { referenceQpCard } from '../referenceQpCard';
 
 describe('formatReferenceForMlr', () => {
   it('convert reference QP card', () => {
@@ -10,20 +17,25 @@ describe('formatReferenceForMlr', () => {
     expect(result.b).toHaveLength(20);
   });
 });
-describe('getChannelCoefficients', () => {
-  it('random data', () => {
-    const inputData = [
-      { r: 255, g: 0, b: 0 },
-      { r: 255, g: 255, b: 0 },
-      { r: 255, g: 0, b: 255 },
-      { r: 0, g: 255, b: 255 },
-      { r: 0, g: 255, b: 0 },
-    ];
-    const referenceData = {
-      r: [200, 150, 100, 50, 0],
-      g: [0, 20, 40, 60, 80],
-      b: [0, 10, 20, 30, 40],
-    };
-    console.log(getChannelCoefficients(inputData, referenceData));
+
+describe('correctColor', () => {
+  it('small test image', () => {
+    const image = testUtils.load('opencv/test.png');
+
+    const inputData = arraysToRgbColors(polishImageData.colors);
+
+    const result = correctColor(image, inputData, referenceQpCard);
+
+    writeSync('src/correctColor/__tests__/correctColor-test.png', result);
+  });
+
+  it('polish scan data', () => {
+    const image = readSync('src/correctColor/__tests__/pol_example.png');
+
+    const inputData = arraysToRgbColors(polishImageData.colors);
+
+    const result = correctColor(image, inputData, referenceQpCard);
+
+    writeSync('src/correctColor/__tests__/correctColor.png', result);
   });
 });
