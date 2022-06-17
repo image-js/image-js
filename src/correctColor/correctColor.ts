@@ -44,12 +44,24 @@ export function correctColor(
       const clamp = getClamp(image);
 
       const newPixel = [0, 0, 0];
-      newPixel[0] = clamp(mlrRed.predict(variables)[0]);
-      newPixel[1] = clamp(mlrGreen.predict(variables)[0]);
-      newPixel[2] = clamp(mlrBlue.predict(variables)[0]);
+
+      const red = mlrRed.predict(variables)[0];
+      const green = mlrGreen.predict(variables)[0];
+      const blue = mlrBlue.predict(variables)[0];
+      console.log({
+        red,
+        green,
+        blue,
+      });
+
+      newPixel[0] = clamp(red);
+      newPixel[1] = clamp(green);
+      newPixel[2] = clamp(blue);
       if (image.alpha) {
         newPixel[3] = image.getValue(column, row, 3);
       }
+
+      console.log({ newPixel });
 
       result.setPixel(column, row, newPixel);
     }

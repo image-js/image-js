@@ -34,4 +34,10 @@ export type TestImagePath =
   | 'various/alphabet.jpg'
   | 'morphology/alphabetCannyEdge.png'
   | 'morphology/grayscaleCannyEdge.png'
-  | 'morphology/grayscaleClearBorder.png';
+  | 'morphology/grayscaleClearBorder.png'
+  | 'correctColor/test.png'
+  | 'correctColor/color-balance.png'
+  | 'correctColor/exposure-minus-1.png'
+  | 'correctColor/exposure-plus-1.png'
+  | 'correctColor/inverted.png'
+  | 'correctColor/offsets.png';
