@@ -3,10 +3,10 @@ import { IJS } from '../../src';
 import CameraSelector from './CameraSelector';
 import CameraTransform from './CameraTransform';
 import Container from './Container';
-import { testPaintMask } from './testFunctions/testPaintMask';
+import { testCorrectColor } from './testFunctions/testCorrectColor';
 
 function testTransform(image: IJS) {
-  return testPaintMask(image);
+  return testCorrectColor(image);
 }
 
 export default function Home() {
