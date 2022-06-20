@@ -1,5 +1,11 @@
 import { Mask } from './Mask';
-import { Point, DrawLineOptions, drawLine } from './draw';
+import {
+  Point,
+  DrawLineOptions,
+  drawLine,
+  DrawRectangleOptions,
+  drawRectangle,
+} from './draw';
 import {
   BlurOptions,
   blur,
@@ -474,9 +480,17 @@ export class IJS {
   public histogram(options?: HistogramOptions): Uint32Array {
     return histogram(this, options);
   }
-  // PAINT
-  public drawLine(from: Point, to: Point, options: DrawLineOptions): IJS {
+  // DRAW
+  public drawLine(from: Point, to: Point, options: DrawLineOptions = {}): IJS {
     return drawLine(this, from, to, options);
+  }
+  public drawRectangle(
+    position: Point,
+    width: number,
+    height: number,
+    options: DrawRectangleOptions = {},
+  ): IJS {
+    return drawRectangle(this, position, width, height, options);
   }
   // OPERATIONS
 
