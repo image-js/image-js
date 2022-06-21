@@ -1,4 +1,7 @@
+import { RgbColor } from 'colord';
+
 import { Mask } from './Mask';
+import { correctColor } from './correctColor';
 import {
   Point,
   DrawLineOptions,
@@ -694,6 +697,20 @@ export class IJS {
    */
   public level(options?: LevelOptions): IJS {
     return level(this, options);
+  }
+
+  /**
+   * Correct the colors in an image using the reference colors.
+   *
+   * @param measuredColors - Colors from the image, which will be compared to the reference.
+   * @param referenceColors - Reference colors.
+   * @returns Image with the colors corrected.
+   */
+  public correctColor(
+    measuredColors: RgbColor[],
+    referenceColors: RgbColor[],
+  ): IJS {
+    return correctColor(this, measuredColors, referenceColors);
   }
 
   // GEOMETRY

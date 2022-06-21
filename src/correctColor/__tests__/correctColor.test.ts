@@ -17,7 +17,7 @@ describe('correctColor', () => {
       { r: 200, g: 200, b: 200 },
     ];
 
-    const result = correctColor(image, measuredColors, measuredColors);
+    const result = image.correctColor(measuredColors, measuredColors);
 
     expect(result).toMatchImage(image, { error: 1 });
   });
