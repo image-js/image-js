@@ -5,10 +5,7 @@ import { IJS, ImageColorModel } from '../IJS';
 import checkProcessable from '../utils/checkProcessable';
 import { getClamp } from '../utils/clamp';
 
-import {
-  formatInputForMlr,
-  formatReferenceForMlr,
-} from './__tests__/testUtil/formatData';
+import { formatInputForMlr, formatReferenceForMlr } from './utils/formatData';
 
 /**
  * Correct the colors in an image using the reference colors.

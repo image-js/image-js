@@ -1,10 +1,9 @@
-import { writeSync } from '../../save';
 import { correctColor } from '../correctColor';
+import { getMeasuredColors, getReferenceColors } from '../utils/formatData';
+import { getImageColors } from '../utils/getImageColors';
 
-import { getMeasuredColors, getReferenceColors } from './testUtil/formatData';
-import { getImageColors } from './testUtil/getImageColors';
-import { polish } from './testUtil/imageColors';
-import { referenceColorCard } from './testUtil/referenceColorCard';
+import { polish } from './testUtils/imageColors';
+import { referenceColorCard } from './testUtils/referenceColorCard';
 
 describe('correctColor', () => {
   it('RGB image should not change', () => {
@@ -125,8 +124,6 @@ describe('correctColor', () => {
 
     const result = correctColor(image, measuredColors, referenceColors);
 
-    writeSync('src/correctColor/__tests__/inverted.png', result);
-
     expect(result).toMatchImage(reference, { error: 1 });
   });
 
@@ -139,24 +136,18 @@ describe('correctColor', () => {
 
     const result = correctColor(image, measuredColors, referenceColors);
 
-    writeSync('src/correctColor/__tests__/offsets.png', result);
-
     // all colors are nearly perfectly corrected, expect the gray
     expect(result).toMatchIJSSnapshot();
   });
 
   it('inverted, black and white pixel', () => {
     const image = testUtils.createRgbImage([[0, 0, 0, 255, 255, 255]]);
-    writeSync('src/correctColor/__tests__/inverted-bw-image.png', image);
     const reference = testUtils.createRgbImage([[255, 255, 255, 0, 0, 0]]);
-    writeSync('src/correctColor/__tests__/inverted-bw-ref.png', reference);
 
     const measuredColors = getImageColors(image);
     const referenceColors = getImageColors(reference);
 
     const result = correctColor(image, measuredColors, referenceColors);
-
-    writeSync('src/correctColor/__tests__/inverted-bw.png', result);
 
     expect(result).toMatchImage(reference, { error: 1 });
   });

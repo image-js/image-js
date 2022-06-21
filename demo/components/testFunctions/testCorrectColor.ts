@@ -1,11 +1,11 @@
 import { IJS } from '../../../src';
+import { polishAltered } from '../../../src/correctColor/__tests__/testUtils/imageColors';
+import { referenceColorCard } from '../../../src/correctColor/__tests__/testUtils/referenceColorCard';
+import { correctColor } from '../../../src/correctColor/correctColor';
 import {
   getMeasuredColors,
   getReferenceColors,
-} from '../../../src/correctColor/__tests__/testUtil/formatData';
-import { polishAltered } from '../../../src/correctColor/__tests__/testUtil/imageColors';
-import { referenceColorCard } from '../../../src/correctColor/__tests__/testUtil/referenceColorCard';
-import { correctColor } from '../../../src/correctColor/correctColor';
+} from '../../../src/correctColor/utils/formatData';
 
 /**
  * Copy a black and a red square to the source image.
