@@ -27,8 +27,8 @@ export function correctColor(
     colorModel: [ImageColorModel.RGB, ImageColorModel.RGBA],
   });
 
-  const inputData = formatInputForMlr(measuredColors);
-  const referenceData = formatReferenceForMlr(referenceColors);
+  const inputData = formatInputForMlr(measuredColors, image.maxValue);
+  const referenceData = formatReferenceForMlr(referenceColors, image.maxValue);
 
   const mlrRed = new MLR(inputData, referenceData.r);
   const mlrGreen = new MLR(inputData, referenceData.g);
@@ -39,20 +39,20 @@ export function correctColor(
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {
       const pixel = image.getPixel(column, row);
-      const variables = getRegressionVariables(pixel[0], pixel[1], pixel[2]);
+      const variables = getRegressionVariables(
+        pixel[0],
+        pixel[1],
+        pixel[2],
+        image.maxValue,
+      );
 
       const clamp = getClamp(image);
 
       const newPixel = [0, 0, 0];
 
-      const red = mlrRed.predict(variables)[0];
-      const green = mlrGreen.predict(variables)[0];
-      const blue = mlrBlue.predict(variables)[0];
-      console.log({
-        red,
-        green,
-        blue,
-      });
+      const red = mlrRed.predict(variables)[0] * image.maxValue;
+      const green = mlrGreen.predict(variables)[0] * image.maxValue;
+      const blue = mlrBlue.predict(variables)[0] * image.maxValue;
 
       newPixel[0] = clamp(red);
       newPixel[1] = clamp(green);
@@ -60,8 +60,6 @@ export function correctColor(
       if (image.alpha) {
         newPixel[3] = image.getValue(column, row, 3);
       }
-
-      console.log({ newPixel });
 
       result.setPixel(column, row, newPixel);
     }
@@ -76,13 +74,18 @@ export function correctColor(
  * @param r - Red component.
  * @param g - Green component.
  * @param b - Blue component.
+ * @param maxValue - Maximal acceptable value for the image to process.
  * @returns The variables for the multivariate linear regression.
  */
 export function getRegressionVariables(
   r: number,
   g: number,
   b: number,
+  maxValue: number,
 ): number[] {
+  r /= maxValue;
+  g /= maxValue;
+  b /= maxValue;
   return [
     r,
     g,

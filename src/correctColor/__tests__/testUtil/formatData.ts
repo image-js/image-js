@@ -46,35 +46,41 @@ export function getReferenceColors(qpCard: ColorCard): RgbColor[] {
 }
 
 /**
- * Format data from a QP card to use as a reference in a multivariate linear regression.
+ * Format and normalise data from a QP card to use as a reference in a multivariate linear regression.
  *
  * @param referenceColors - Array of RGB colors used as a reference.
+ * @param maxValue - Maximal acceptable value for the image to process.
  * @returns The formatted data.
  */
 export function formatReferenceForMlr(
   referenceColors: RgbColor[],
+  maxValue: number,
 ): ReferenceDataForMlr {
   const referenceData: ReferenceDataForMlr = { r: [], g: [], b: [] };
 
   for (let color of referenceColors) {
-    referenceData.r.push([color.r]);
-    referenceData.g.push([color.g]);
-    referenceData.b.push([color.b]);
+    referenceData.r.push([color.r / maxValue]);
+    referenceData.g.push([color.g / maxValue]);
+    referenceData.b.push([color.b / maxValue]);
   }
 
   return referenceData;
 }
 
 /**
- * Compute the variables for the multivariate linear regression based on the the input colors.
+ * Compute the variables for the multivariate linear regression based on the the input colors. Values are normalised between 0 and 1.
  *
  * @param inputColors - The input colors as an array of rgb objects.
+ * @param maxValue - Maximal acceptable value for the image to process.
  * @returns The formatted input data for the regression.
  */
-export function formatInputForMlr(inputColors: RgbColor[]): number[][] {
+export function formatInputForMlr(
+  inputColors: RgbColor[],
+  maxValue: number,
+): number[][] {
   const inputData = [];
   for (let color of inputColors) {
-    inputData.push(getRegressionVariables(color.r, color.g, color.b));
+    inputData.push(getRegressionVariables(color.r, color.g, color.b, maxValue));
   }
   return inputData;
 }

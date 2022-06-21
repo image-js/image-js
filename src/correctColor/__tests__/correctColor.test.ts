@@ -145,7 +145,7 @@ describe('correctColor', () => {
     expect(result).toMatchIJSSnapshot();
   });
 
-  it.only('inverted, black and white pixel', () => {
+  it('inverted, black and white pixel', () => {
     const image = testUtils.createRgbImage([[0, 0, 0, 255, 255, 255]]);
     writeSync('src/correctColor/__tests__/inverted-bw-image.png', image);
     const reference = testUtils.createRgbImage([[255, 255, 255, 0, 0, 0]]);
