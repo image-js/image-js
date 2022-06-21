@@ -24,6 +24,12 @@ export function correctColor(
     colorModel: [ImageColorModel.RGB, ImageColorModel.RGBA],
   });
 
+  if (measuredColors.length !== referenceColors.length) {
+    throw new Error(
+      'correctColor: number of measured colors and reference colors differ',
+    );
+  }
+
   const inputData = formatInputForMlr(measuredColors, image.maxValue);
   const referenceData = formatReferenceForMlr(referenceColors, image.maxValue);
 

@@ -92,8 +92,11 @@ describe('correctColor', () => {
   });
 
   it('exposure -1', () => {
-    const image = testUtils.load('correctColor/exposure-minus-1.png');
-    const reference = testUtils.load('correctColor/test.png');
+    let image = testUtils.load('correctColor/exposure-minus-1.png');
+    let reference = testUtils.load('correctColor/test.png');
+
+    image = image.crop({ row: 2, column: 1, width: 6, height: 6 });
+    reference = reference.crop({ row: 2, column: 1, width: 6, height: 6 });
 
     const measuredColors = getImageColors(image);
     const referenceColors = getImageColors(reference);
@@ -104,8 +107,11 @@ describe('correctColor', () => {
   });
 
   it('exposure +1', () => {
-    const image = testUtils.load('correctColor/exposure-plus-1.png');
-    const reference = testUtils.load('correctColor/test.png');
+    let image = testUtils.load('correctColor/exposure-plus-1.png');
+    let reference = testUtils.load('correctColor/test.png');
+
+    image = image.crop({ row: 2, column: 1, width: 6, height: 6 });
+    reference = reference.crop({ row: 2, column: 1, width: 6, height: 6 });
 
     const measuredColors = getImageColors(image);
     const referenceColors = getImageColors(reference);
@@ -116,8 +122,11 @@ describe('correctColor', () => {
   });
 
   it('inverted', () => {
-    const image = testUtils.load('correctColor/inverted.png');
-    const reference = testUtils.load('correctColor/test.png');
+    let image = testUtils.load('correctColor/inverted.png');
+    let reference = testUtils.load('correctColor/test.png');
+
+    image = image.crop({ row: 2, column: 1, width: 6, height: 6 });
+    reference = reference.crop({ row: 2, column: 1, width: 6, height: 6 });
 
     const measuredColors = getImageColors(image);
     const referenceColors = getImageColors(reference);
@@ -128,8 +137,11 @@ describe('correctColor', () => {
   });
 
   it('offsets', () => {
-    const image = testUtils.load('correctColor/offsets.png');
-    const reference = testUtils.load('correctColor/test.png');
+    let image = testUtils.load('correctColor/offsets.png');
+    let reference = testUtils.load('correctColor/test.png');
+
+    image = image.crop({ row: 2, column: 1, width: 6, height: 6 });
+    reference = reference.crop({ row: 2, column: 1, width: 6, height: 6 });
 
     const measuredColors = getImageColors(image);
     const referenceColors = getImageColors(reference);
@@ -150,5 +162,31 @@ describe('correctColor', () => {
     const result = correctColor(image, measuredColors, referenceColors);
 
     expect(result).toMatchImage(reference, { error: 1 });
+  });
+
+  it('should throw on different array length', () => {
+    const image = testUtils.createRgbImage([
+      [10, 10, 10, 100, 100, 100, 150, 150, 150],
+    ]);
+
+    const measuredColors = [
+      { r: 5, g: 5, b: 5 },
+      { r: 55, g: 55, b: 55 },
+      { r: 105, g: 105, b: 105 },
+    ];
+
+    const referenceColors = [
+      { r: 0, g: 0, b: 0 },
+      { r: 50, g: 50, b: 50 },
+      { r: 100, g: 100, b: 100 },
+      { r: 150, g: 150, b: 150 },
+      { r: 200, g: 200, b: 200 },
+    ];
+
+    expect(() => {
+      image.correctColor(measuredColors, referenceColors);
+    }).toThrow(
+      'correctColor: number of measured colors and reference colors differ',
+    );
   });
 });
