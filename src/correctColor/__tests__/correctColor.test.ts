@@ -136,7 +136,7 @@ describe('correctColor', () => {
 
     const result = correctColor(image, measuredColors, referenceColors);
 
-    // all colors are nearly perfectly corrected, expect the gray
+    // All colors are nearly perfectly corrected, except the gray.
     expect(result).toMatchIJSSnapshot();
   });
 

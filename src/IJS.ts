@@ -302,7 +302,7 @@ export class IJS {
   }
 
   /**
-   * Get all the channels of a pixel using it's index.
+   * Get all the channels of a pixel using its index.
    *
    * @param index - Index of the pixel.
    * @returns Channels of the pixel.
@@ -317,7 +317,7 @@ export class IJS {
   }
 
   /**
-   * Set all the channels of a pixel using it's index.
+   * Set all the channels of a pixel using its index.
    *
    * @param index - Index of the pixel.
    * @param value - New channel values of the pixel to set.
