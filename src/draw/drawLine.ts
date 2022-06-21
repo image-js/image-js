@@ -28,15 +28,13 @@ export interface DrawLineOptions {
   out?: IJS;
 }
 /**
- * Paint a line defined by an array of points.
+ * Draw a line defined by an array of points.
  *
- * @memberof Image
- * @instance
  * @param image - Image to process.
  * @param from - Line starting point.
  * @param to - Line ending point.
- * @param options - Paint Line options.
- * @returns The original painted image
+ * @param options - Draw Line options.
+ * @returns The original drew image
  */
 export function drawLine(
   image: IJS,
@@ -47,38 +45,37 @@ export function drawLine(
   const newImage = getOutputImage(image, options, { clone: true });
   const { color = getDefaultColor(newImage) } = options;
 
-  checkProcessable(newImage, 'paintPoints', {
+  checkProcessable(newImage, 'drawPoints', {
     bitDepth: [8, 16],
   });
 
   const numberChannels = Math.min(newImage.channels, color.length);
 
-  const dx = to.row - from.row;
-  const dy = to.column - from.column;
-  const steps = Math.max(Math.abs(dx), Math.abs(dy));
+  const dRow = to.row - from.row;
+  const dColumn = to.column - from.column;
+  const steps = Math.max(Math.abs(dRow), Math.abs(dColumn));
 
-  const xIncrement = dx / steps;
-  const yIncrement = dy / steps;
+  const rowIncrement = dRow / steps;
+  const columnIncrement = dColumn / steps;
 
-  let x = from.row;
-  let y = from.column;
+  let { row, column } = from;
 
-  for (let j = 0; j <= steps; j++) {
-    const xPoint = Math.round(x);
-    const yPoint = Math.round(y);
+  for (let step = 0; step <= steps; step++) {
+    const rowPoint = Math.round(row);
+    const columnPoint = Math.round(column);
     if (
-      xPoint >= 0 &&
-      yPoint >= 0 &&
-      xPoint < newImage.height &&
-      yPoint < newImage.width
+      rowPoint >= 0 &&
+      columnPoint >= 0 &&
+      rowPoint < newImage.height &&
+      columnPoint < newImage.width
     ) {
       for (let channel = 0; channel < numberChannels; channel++) {
-        newImage.setValue(yPoint, xPoint, channel, color[channel]);
+        newImage.setValue(columnPoint, rowPoint, channel, color[channel]);
       }
     }
 
-    x = x + xIncrement;
-    y = y + yIncrement;
+    row = row + rowIncrement;
+    column = column + columnIncrement;
   }
 
   return newImage;

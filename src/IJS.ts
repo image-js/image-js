@@ -6,6 +6,10 @@ import {
   Point,
   DrawLineOptions,
   drawLine,
+  drawPolygon,
+  drawPolyline,
+  DrawPolygonOptions,
+  DrawPolylineOptions,
   DrawRectangleOptions,
   drawRectangle,
 } from './draw';
@@ -523,8 +527,13 @@ export class IJS {
   ): IJS {
     return drawRectangle(this, position, width, height, options);
   }
+  public drawPolyline(points: Point[], options: DrawPolylineOptions): IJS {
+    return drawPolyline(this, points, options);
+  }
+  public drawPolygon(points: Point[], options: DrawPolygonOptions): IJS {
+    return drawPolygon(this, points, options);
+  }
   // OPERATIONS
-
   public split(): IJS[] {
     return split(this);
   }

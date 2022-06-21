@@ -1,7 +1,7 @@
 import { IJS } from '../../IJS';
 
-describe('we check drawline', () => {
-  it('draw line image', () => {
+describe('we check drawLine', () => {
+  it('drawLine image', () => {
     const image = testUtils.createRgbImage([
       [100, 150, 200, 100, 150, 0],
       [100, 200, 5, 3, 200, 0],
@@ -19,7 +19,7 @@ describe('we check drawline', () => {
     ]);
     expect(expected).not.toBe(image);
   });
-  it('draw line with out parameter set to self', () => {
+  it('drawLine with out parameter set to self', () => {
     const image = testUtils.createRgbImage([
       [100, 150, 200, 100, 150, 0],
       [100, 200, 5, 3, 200, 0],
@@ -40,7 +40,7 @@ describe('we check drawline', () => {
     ]);
     expect(expected).toBe(image);
   });
-  it('draw line with out parameter', () => {
+  it('drawLine with out parameter', () => {
     const out = new IJS(2, 3);
     const image = testUtils.createRgbImage([
       [100, 150, 200, 100, 150, 0],
