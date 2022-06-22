@@ -37,37 +37,11 @@ export function drawPolyline(
     bitDepth: [8, 16],
   });
 
-  const numberChannels = Math.min(newImage.channels, color.length);
   for (let i = 0; i < points.length - 1; i++) {
     const from = points[i];
     const to = points[i + 1];
 
-    const dColumn = to.column - from.column;
-    const dRow = to.row - from.row;
-    const steps = Math.max(Math.abs(dColumn), Math.abs(dRow));
-
-    const columnIncrement = dColumn / steps;
-    const rowIncrement = dRow / steps;
-
-    let { row, column } = from;
-
-    for (let step = 0; step <= steps; step++) {
-      const rowPoint = Math.round(row);
-      const columnPoint = Math.round(column);
-      if (
-        columnPoint >= 0 &&
-        rowPoint >= 0 &&
-        columnPoint < newImage.width &&
-        rowPoint < newImage.height
-      ) {
-        for (let channel = 0; channel < numberChannels; channel++) {
-          newImage.setValue(columnPoint, rowPoint, channel, color[channel]);
-        }
-      }
-
-      row = row + rowIncrement;
-      column = column + columnIncrement;
-    }
+    newImage.drawLine(from, to, { out: newImage, color });
   }
   return newImage;
 }

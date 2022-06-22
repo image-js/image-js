@@ -31,14 +31,13 @@ describe('drawLine on Mask', () => {
     const from = { row: 0, column: 0 };
     const to = { row: 5, column: 2 };
     const result = mask.drawLine(from, to);
-    console.log(result);
 
     expect(result).toMatchMaskData([
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
+      [1, 0, 0, 0, 0],
+      [1, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0],
+      [0, 1, 0, 0, 0],
+      [0, 0, 1, 0, 0],
     ]);
     expect(result).not.toBe(mask);
   });

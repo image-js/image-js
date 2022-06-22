@@ -62,7 +62,7 @@ describe('drawLine on IJS', () => {
     expect(expected).toBe(out);
     expect(expected).not.toBe(image);
   });
-  it('draw horizontal line', () => {
+  it('draw nearly horizontal line', () => {
     const image = testUtils.createGreyImage([
       [0, 0, 0, 0],
       [0, 0, 0, 0],
@@ -82,7 +82,7 @@ describe('drawLine on IJS', () => {
     ]);
     expect(expected).not.toBe(image);
   });
-  it('draw vertical line', () => {
+  it('draw nearly vertical line', () => {
     const image = testUtils.createGreyImage([
       [0, 0, 0, 0],
       [0, 0, 0, 0],

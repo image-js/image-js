@@ -1,7 +1,7 @@
 import { IJS } from '../../IJS';
 
-describe('we check paintPolyline', () => {
-  it('drawPolyline in an image', () => {
+describe('drawPolyline', () => {
+  it('RGB image', () => {
     const image = testUtils.createRgbImage([
       [100, 150, 200, 100, 150, 0],
       [100, 200, 5, 3, 200, 0],
@@ -19,7 +19,7 @@ describe('we check paintPolyline', () => {
     ]);
     expect(expected).not.toBe(image);
   });
-  it('drawPolyline with out parameter set to self', () => {
+  it('out parameter set to self', () => {
     const image = testUtils.createRgbImage([
       [100, 150, 200, 100, 150, 0],
       [100, 200, 5, 3, 200, 0],
@@ -42,7 +42,7 @@ describe('we check paintPolyline', () => {
     ]);
     expect(expected).toBe(image);
   });
-  it('drawPolyline with out parameter', () => {
+  it('out to other image', () => {
     const out = new IJS(2, 4);
     const image = testUtils.createRgbImage([
       [100, 150, 200, 100, 150, 0],
