@@ -3,7 +3,7 @@ import checkProcessable from '../utils/checkProcessable';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
 
-import { Point } from './drawLine';
+import { Point } from './drawLineOnMask';
 import { DrawPolylineOptions } from './drawPolyline';
 
 export interface Line {
@@ -52,7 +52,7 @@ export function drawPolygon(
   } = options;
 
   let newImage = getOutputImage(image, options, { clone: true });
-  checkProcessable(newImage, 'drawPolyline', {
+  checkProcessable(newImage, 'drawPolygon', {
     bitDepth: [8, 16],
   });
   const filteredPoints = deleteDouble(points);

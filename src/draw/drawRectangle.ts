@@ -3,7 +3,7 @@ import checkProcessable from '../utils/checkProcessable';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
 
-import { Point } from './drawLine';
+import { Point } from './drawLineOnMask';
 
 export interface DrawRectangleOptions {
   /**

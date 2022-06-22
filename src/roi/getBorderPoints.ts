@@ -1,4 +1,4 @@
-import { Point } from '../utils/types';
+import { ArrayPoint } from '../utils/types';
 
 import { Roi } from './Roi';
 
@@ -25,14 +25,14 @@ export interface GetBorderPointOptions {
 export function getBorderPoints(
   roi: Roi,
   options: GetBorderPointOptions = {},
-): Array<Point> {
+): Array<ArrayPoint> {
   const { innerBorders = false, allowCorners = false } = options;
   const mask = roi.getMask();
   if (!innerBorders) {
     mask.solidFill({ out: mask });
   }
 
-  let borders: Array<Point> = [];
+  let borders: Array<ArrayPoint> = [];
 
   // first process frame pixels
   for (let column = 0; column < mask.width; column++) {

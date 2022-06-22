@@ -1,3 +1,4 @@
+import { drawLineOnMask, DrawLineOnMaskOptions, Point } from './draw';
 import {
   and,
   AndOptions,
@@ -31,9 +32,9 @@ import {
 } from './morphology';
 import { erode } from './morphology/erode';
 import { boolToNumber } from './utils/boolToNumber';
+import { ArrayPoint } from './utils/types';
 
 import { ImageColorModel, ColorDepth, colorModels, IJS, convertColor } from '.';
-import { Point } from './utils/types';
 
 export type BitValue = 1 | 0 | boolean;
 
@@ -170,13 +171,13 @@ export class Mask {
    *
    * @param width - Width of the mask.
    * @param height - Height of the mask.
-   *  @param points - Reference Mask.
+   * @param points - Reference Mask.
    * @returns New mask.
    */
   public static fromPoints(
     width: number,
     height: number,
-    points: Point[],
+    points: ArrayPoint[],
   ): Mask {
     let mask = new Mask(width, height);
 
@@ -284,6 +285,7 @@ export class Mask {
     checkChannel(channel);
     return this.getBitByIndex(index);
   }
+
   /**
    * Set the value of a bit using index. Function exists for compatibility with IJS.
    *
@@ -477,6 +479,15 @@ export class Mask {
    */
   public solidFill(options?: SolidFillOptions): Mask {
     return solidFill(this, options);
+  }
+
+  // DRAW
+  public drawLine(
+    from: Point,
+    to: Point,
+    options: DrawLineOnMaskOptions = {},
+  ): Mask {
+    return drawLineOnMask(this, from, to, options);
   }
 }
 

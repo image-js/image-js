@@ -1,1 +1,1 @@
-export type Point = [column: number, row: number];
+export type ArrayPoint = [column: number, row: number];

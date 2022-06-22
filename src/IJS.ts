@@ -4,14 +4,14 @@ import { Mask } from './Mask';
 import { correctColor } from './correctColor';
 import {
   Point,
-  DrawLineOptions,
-  drawLine,
+  drawLineOnIjs,
   drawPolygon,
   drawPolyline,
   DrawPolygonOptions,
   DrawPolylineOptions,
   DrawRectangleOptions,
   drawRectangle,
+  DrawLineOnIjsOptions,
 } from './draw';
 import {
   BlurOptions,
@@ -515,9 +515,14 @@ export class IJS {
   public histogram(options?: HistogramOptions): Uint32Array {
     return histogram(this, options);
   }
+
   // DRAW
-  public drawLine(from: Point, to: Point, options: DrawLineOptions = {}): IJS {
-    return drawLine(this, from, to, options);
+  public drawLine(
+    from: Point,
+    to: Point,
+    options: DrawLineOnIjsOptions = {},
+  ): IJS {
+    return drawLineOnIjs(this, from, to, options);
   }
   public drawRectangle(
     position: Point,
