@@ -39,7 +39,7 @@ export function drawRectangle(
   width: number,
   height: number,
   options: DrawRectangleOptions = {},
-) {
+): IJS {
   const newImage = getOutputImage(image, options, { clone: true });
   const { color = getDefaultColor(newImage), fill } = options;
 

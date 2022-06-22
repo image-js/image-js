@@ -35,7 +35,7 @@ export function drawLineOnMask(
   from: Point,
   to: Point,
   options: DrawLineOnMaskOptions = {},
-) {
+): Mask {
   const newMask = maskToOutputMask(mask, options, { clone: true });
 
   const { rowIncrement, columnIncrement, steps } = getIncrements(from, to);

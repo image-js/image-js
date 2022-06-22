@@ -8,7 +8,7 @@ import { DrawPolylineOnIjsOptions } from './drawPolylineOnIjs';
 import { deleteDouble } from './utils/deleteDouble';
 import { isAtTheRightOfTheLine, lineBetweenTwoPoints } from './utils/lineUtils';
 
-export interface DrawPolygonOptions extends DrawPolylineOnIjsOptions {
+export interface DrawPolygonOnIjsOptions extends DrawPolylineOnIjsOptions {
   /**
    * Fill color - array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
@@ -28,22 +28,29 @@ export interface DrawPolygonOptions extends DrawPolylineOnIjsOptions {
  * @param options - Draw Line options.
  * @returns The image with the polygon drawing.
  */
-export function drawPolygon(
+export function drawPolygonOnIjs(
   image: IJS,
   points: Point[],
-  options: DrawPolygonOptions = {},
-) {
+  options: DrawPolygonOnIjsOptions = {},
+): IJS {
   const {
     fill = getDefaultColor(image),
     filled = false,
     ...otherOptions
   } = options;
 
-  let newImage = getOutputImage(image, options, { clone: true });
-  checkProcessable(newImage, 'drawPolygon', {
+  if (fill.length !== image.channels) {
+    throw new Error('drawPolygon: fill color is not compatible with image.');
+  }
+
+  checkProcessable(image, 'drawPolygon', {
     bitDepth: [8, 16],
   });
+
+  let newImage = getOutputImage(image, options, { clone: true });
+
   const filteredPoints = deleteDouble(points);
+
   if (filled === false) {
     return newImage.drawPolyline([...points, points[0]], otherOptions);
   } else {

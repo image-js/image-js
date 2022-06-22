@@ -21,7 +21,7 @@ export function drawPolylineOnMask(
   mask: Mask,
   points: Point[],
   options: DrawPolylineOnMaskOptions = {},
-) {
+): Mask {
   let newImage = maskToOutputMask(mask, options, { clone: true });
 
   for (let i = 0; i < points.length - 1; i++) {

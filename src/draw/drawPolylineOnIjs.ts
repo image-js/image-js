@@ -29,7 +29,7 @@ export function drawPolylineOnIjs(
   image: IJS,
   points: Point[],
   options: DrawPolylineOnIjsOptions = {},
-) {
+): IJS {
   let newImage = getOutputImage(image, options, { clone: true });
 
   const { color = getDefaultColor(image) } = options;

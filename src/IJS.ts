@@ -5,9 +5,9 @@ import { correctColor } from './correctColor';
 import {
   Point,
   drawLineOnIjs,
-  drawPolygon,
+  drawPolygonOnIjs,
   drawPolylineOnIjs,
-  DrawPolygonOptions,
+  DrawPolygonOnIjsOptions,
   DrawPolylineOnIjsOptions,
   DrawRectangleOptions,
   drawRectangle,
@@ -574,8 +574,11 @@ export class IJS {
    * @param options - Draw Line options.
    * @returns The image with the polygon drawing.
    */
-  public drawPolygon(points: Point[], options: DrawPolygonOptions = {}): IJS {
-    return drawPolygon(this, points, options);
+  public drawPolygon(
+    points: Point[],
+    options: DrawPolygonOnIjsOptions = {},
+  ): IJS {
+    return drawPolygonOnIjs(this, points, options);
   }
 
   // OPERATIONS

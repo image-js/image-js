@@ -32,7 +32,7 @@ export function drawLineOnIjs(
   from: Point,
   to: Point,
   options: DrawLineOnIjsOptions = {},
-) {
+): IJS {
   const newImage = getOutputImage(image, options, { clone: true });
   const { color = getDefaultColor(newImage) } = options;
 
