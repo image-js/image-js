@@ -4,7 +4,7 @@ import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
 
 import { Point } from './drawLineOnMask';
-import { DrawPolylineOptions } from './drawPolyline';
+import { DrawPolylineOnIjsOptions } from './drawPolylineOnIjs';
 
 export interface Line {
   /**
@@ -20,7 +20,7 @@ export interface Line {
    */
   vertical: boolean;
 }
-export interface DrawPolygonOptions extends DrawPolylineOptions {
+export interface DrawPolygonOptions extends DrawPolylineOnIjsOptions {
   /**
    * Fill color - array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *

@@ -16,7 +16,7 @@ export interface Point {
 
 export interface DrawLineOnMaskOptions {
   /**
-   * Image to which the resulting image has to be put.
+   * Mask to which the result has to be put.
    */
   out?: Mask;
 }

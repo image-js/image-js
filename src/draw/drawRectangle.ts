@@ -22,6 +22,7 @@ export interface DrawRectangleOptions {
    */
   out?: IJS;
 }
+
 /**
  * Draw a rectangle defined by position of the top-left corner, width and height.
  *

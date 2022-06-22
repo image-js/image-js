@@ -1,4 +1,10 @@
-import { drawLineOnMask, DrawLineOnMaskOptions, Point } from './draw';
+import {
+  drawLineOnMask,
+  DrawLineOnMaskOptions,
+  drawPolylineOnMask,
+  DrawPolylineOnMaskOptions,
+  Point,
+} from './draw';
 import {
   and,
   AndOptions,
@@ -482,12 +488,35 @@ export class Mask {
   }
 
   // DRAW
+
+  /**
+   * Draw a line defined by two points onto a mask.
+   *
+   * @param from - Line starting point.
+   * @param to - Line ending point.
+   * @param options - Draw Line options.
+   * @returns The mask with the line drawing.
+   */
   public drawLine(
     from: Point,
     to: Point,
     options: DrawLineOnMaskOptions = {},
   ): Mask {
     return drawLineOnMask(this, from, to, options);
+  }
+
+  /**
+   * Draw a polyline defined by an array of points on a mask.
+   *
+   * @param points - Polyline array of points.
+   * @param options - Draw polyline options.
+   * @returns The mask with the polyline drawing.
+   */
+  public drawPolyline(
+    points: Point[],
+    options: DrawPolylineOnMaskOptions = {},
+  ): Mask {
+    return drawPolylineOnMask(this, points, options);
   }
 }
 

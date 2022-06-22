@@ -5,7 +5,7 @@ import { getOutputImage } from '../utils/getOutputImage';
 
 import { Point } from './drawLineOnMask';
 
-export interface DrawPolylineOptions {
+export interface DrawPolylineOnIjsOptions {
   /**
    * Lines color - array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
@@ -18,17 +18,17 @@ export interface DrawPolylineOptions {
   out?: IJS;
 }
 /**
- * Draw a polyline defined by an array of points onto an image.
+ * Draw a polyline defined by an array of points on an image.
  *
  * @param image - Image to process.
  * @param points - Polyline array of points.
  * @param options - Draw polyline options.
  * @returns The image with the polyline drawing.
  */
-export function drawPolyline(
+export function drawPolylineOnIjs(
   image: IJS,
   points: Point[],
-  options: DrawPolylineOptions = {},
+  options: DrawPolylineOnIjsOptions = {},
 ) {
   let newImage = getOutputImage(image, options, { clone: true });
 

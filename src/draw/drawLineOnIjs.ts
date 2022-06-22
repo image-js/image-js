@@ -17,6 +17,7 @@ export interface DrawLineOnIjsOptions {
    */
   out?: IJS;
 }
+
 /**
  * Draw a line defined by two points onto an image.
  *
