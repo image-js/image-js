@@ -560,7 +560,10 @@ export class IJS {
    * @param options - Draw polyline options.
    * @returns The image with the polyline drawing.
    */
-  public drawPolyline(points: Point[], options: DrawPolylineOnIjsOptions): IJS {
+  public drawPolyline(
+    points: Point[],
+    options: DrawPolylineOnIjsOptions = {},
+  ): IJS {
     return drawPolylineOnIjs(this, points, options);
   }
 
@@ -571,7 +574,7 @@ export class IJS {
    * @param options - Draw Line options.
    * @returns The image with the polygon drawing.
    */
-  public drawPolygon(points: Point[], options: DrawPolygonOptions): IJS {
+  public drawPolygon(points: Point[], options: DrawPolygonOptions = {}): IJS {
     return drawPolygon(this, points, options);
   }
 
