@@ -6,9 +6,9 @@ import {
   Point,
   drawLineOnIjs,
   drawPolygon,
-  drawPolyline,
+  drawPolylineOnIjs,
   DrawPolygonOptions,
-  DrawPolylineOptions,
+  DrawPolylineOnIjsOptions,
   DrawRectangleOptions,
   drawRectangle,
   DrawLineOnIjsOptions,
@@ -512,11 +512,21 @@ export class IJS {
   }
 
   // COMPUTE
+
   public histogram(options?: HistogramOptions): Uint32Array {
     return histogram(this, options);
   }
 
   // DRAW
+
+  /**
+   * Draw a line defined by two points onto an image.
+   *
+   * @param from - Line starting point.
+   * @param to - Line ending point.
+   * @param options - Draw Line options.
+   * @returns The mask with the line drawing.
+   */
   public drawLine(
     from: Point,
     to: Point,
@@ -524,6 +534,16 @@ export class IJS {
   ): IJS {
     return drawLineOnIjs(this, from, to, options);
   }
+
+  /**
+   * Draw a rectangle defined by position of the top-left corner, width and height.
+   *
+   * @param position - Rectangle position.
+   * @param width - Rectangle width.
+   * @param height - Rectangle height.
+   * @param options - Draw rectangle options.
+   * @returns The image with the rectangle drawing.
+   */
   public drawRectangle(
     position: Point,
     width: number,
@@ -532,12 +552,29 @@ export class IJS {
   ): IJS {
     return drawRectangle(this, position, width, height, options);
   }
-  public drawPolyline(points: Point[], options: DrawPolylineOptions): IJS {
-    return drawPolyline(this, points, options);
+
+  /**
+   * Draw a polyline defined by an array of points on an image.
+   *
+   * @param points - Polyline array of points.
+   * @param options - Draw polyline options.
+   * @returns The image with the polyline drawing.
+   */
+  public drawPolyline(points: Point[], options: DrawPolylineOnIjsOptions): IJS {
+    return drawPolylineOnIjs(this, points, options);
   }
+
+  /**
+   * Draw a polygon defined by an array of points onto an image.
+   *
+   * @param points - Polygon vertices.
+   * @param options - Draw Line options.
+   * @returns The image with the polygon drawing.
+   */
   public drawPolygon(points: Point[], options: DrawPolygonOptions): IJS {
     return drawPolygon(this, points, options);
   }
+
   // OPERATIONS
   public split(): IJS[] {
     return split(this);
