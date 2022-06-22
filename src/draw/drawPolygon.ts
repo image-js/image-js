@@ -16,15 +16,15 @@ export interface Line {
    */
   b: number;
   /**
-   * Line is vertical
+   * Line is vertical.
    */
   vertical: boolean;
 }
 export interface DrawPolygonOptions extends DrawPolylineOptions {
   /**
-   * fill color - array of N elements (e.g. R, G, B or G, A), N being the number of channels.
+   * Fill color - array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
-   * @default black
+   * @default 'black'
    */
   fill?: number[];
   /**
@@ -33,12 +33,12 @@ export interface DrawPolygonOptions extends DrawPolylineOptions {
   filled?: boolean;
 }
 /**
- * Draw a polygon defined by an array of points.
+ * Draw a polygon defined by an array of points onto an image.
  *
  * @param image - Image to process.
- * @param points - Polygon points.
+ * @param points - Polygon vertices.
  * @param options - Draw Line options.
- * @returns The original drew image
+ * @returns The image with the polygon drawing.
  */
 export function drawPolygon(
   image: IJS,
@@ -96,7 +96,7 @@ export function drawPolygon(
  * Delete double in polygon points.
  *
  * @param points - Polygon points array.
- * @returns Cleaned polygon points array
+ * @returns Cleaned polygon points array.
  */
 function deleteDouble(points: Point[]): Point[] {
   const finalPoints: Point[] = [];
@@ -126,11 +126,11 @@ function deleteDouble(points: Point[]): Point[] {
   return finalPoints;
 }
 /**
- * Get line between two points.
+ * Get the parameters of a line defined by two points.
  *
  * @param p1 - First line point.
- * @param p2 - Second line point
- * @returns Line between point
+ * @param p2 - Second line point.
+ * @returns Line between the points.
  */
 function lineBetweenTwoPoints(p1: Point, p2: Point): Line {
   if (p1.column === p2.column) {
@@ -142,12 +142,12 @@ function lineBetweenTwoPoints(p1: Point, p2: Point): Line {
   }
 }
 /**
- * Check if the point is on the right of a line.
+ * Check if a point is on the right side of a line.
  *
  * @param point - Point.
  * @param line - Line.
  * @param height - Image height.
- * @returns Point at the right of the line
+ * @returns Is the point on the right side of the line?
  */
 function isAtTheRightOfTheLine(
   point: Point,

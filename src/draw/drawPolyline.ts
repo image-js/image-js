@@ -7,9 +7,9 @@ import { Point } from './drawLine';
 
 export interface DrawPolylineOptions {
   /**
-   * lines color - array of N elements (e.g. R, G, B or G, A), N being the number of channels.
+   * Lines color - array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
-   * @default black
+   * @default 'black'
    */
   color?: number[];
   /**
@@ -18,12 +18,12 @@ export interface DrawPolylineOptions {
   out?: IJS;
 }
 /**
- * Draw a polyline defined by an array of points.
+ * Draw a polyline defined by an array of points onto an image.
  *
  * @param image - Image to process.
  * @param points - Polyline array of points.
  * @param options - Draw polyline options.
- * @returns The original drew image
+ * @returns The image with the polyline drawing.
  */
 export function drawPolyline(
   image: IJS,

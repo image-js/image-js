@@ -5,21 +5,21 @@ import { getOutputImage } from '../utils/getOutputImage';
 
 export interface Point {
   /**
-   * point row
+   * Point row.
    *
    */
   row: number;
   /**
-   * point column
+   * Point column.
    *
    */
   column: number;
 }
 export interface DrawLineOptions {
   /**
-   * Array of N elements (e.g. R, G, B or G, A), N being the number of channels.
+   * Color of the line. Should be an array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
-   * @default black
+   * @default 'black'
    */
   color?: number[];
   /**
@@ -28,13 +28,13 @@ export interface DrawLineOptions {
   out?: IJS;
 }
 /**
- * Draw a line defined by an array of points.
+ * Draw a line defined by two points onto an image.
  *
  * @param image - Image to process.
  * @param from - Line starting point.
  * @param to - Line ending point.
  * @param options - Draw Line options.
- * @returns The original drew image
+ * @returns The with the line drawing.
  */
 export function drawLine(
   image: IJS,

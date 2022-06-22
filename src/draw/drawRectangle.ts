@@ -7,9 +7,9 @@ import { Point } from './drawLine';
 
 export interface DrawRectangleOptions {
   /**
-   * Rectangle border color array of N elements (e.g. R, G, B or G, A), N being the number of channels.
+   * Color of the rectangle's border. Should be an array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
-   * @default "black"
+   * @default 'black'
    */
   color?: number[] | 'none';
   /**
@@ -23,16 +23,14 @@ export interface DrawRectangleOptions {
   out?: IJS;
 }
 /**
- * Draw a rectangle defined by position, width and height.
+ * Draw a rectangle defined by position of the top-left corner, width and height.
  *
- * @memberof Image
- * @instance
  * @param image - Image to process.
  * @param position - Rectangle position.
  * @param width - Rectangle width.
  * @param height - Rectangle height.
  * @param options - Draw rectangle options.
- * @returns The original drew image
+ * @returns The image with the rectangle drawing.
  */
 export function drawRectangle(
   image: IJS,
