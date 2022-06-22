@@ -9,16 +9,16 @@ describe('we check drawRectangle', () => {
       [150, 200, 255, 6, 150, 0],
     ]);
 
-    const expected = image.drawRectangle(start, image.width, image.height, {
+    const result = image.drawRectangle(start, image.width, image.height, {
       color: [255, 0, 0],
     });
 
-    expect(expected).toMatchImageData([
+    expect(result).toMatchImageData([
       [255, 0, 0, 255, 0, 0],
       [255, 0, 0, 255, 0, 0],
       [255, 0, 0, 255, 0, 0],
     ]);
-    expect(expected).not.toBe(image);
+    expect(result).not.toBe(image);
   });
   it('draw rectangle with out parameter set to self', () => {
     const image = testUtils.createRgbImage([
@@ -27,17 +27,17 @@ describe('we check drawRectangle', () => {
       [100, 100, 255, 6, 150, 5, 5, 3, 200],
     ]);
 
-    const expected = image.drawRectangle(start, image.width, image.height, {
+    const result = image.drawRectangle(start, image.width, image.height, {
       color: [255, 0, 0],
       fill: [0, 5, 2],
       out: image,
     });
-    expect(expected).toMatchImageData([
+    expect(result).toMatchImageData([
       [255, 0, 0, 255, 0, 0, 255, 0, 0],
       [255, 0, 0, 0, 5, 2, 255, 0, 0],
       [255, 0, 0, 255, 0, 0, 255, 0, 0],
     ]);
-    expect(expected).toBe(image);
+    expect(result).toBe(image);
   });
   it('draw rectangle with out parameter', () => {
     const out = new IJS(2, 3);
@@ -46,18 +46,18 @@ describe('we check drawRectangle', () => {
       [100, 200, 5, 3, 200, 0],
       [150, 200, 255, 6, 150, 0],
     ]);
-    const expected = image.drawRectangle(start, image.width, image.height, {
+    const result = image.drawRectangle(start, image.width, image.height, {
       color: [255, 0, 0],
       fill: [1, 1, 1],
       out,
     });
-    expect(expected).toMatchImageData([
+    expect(result).toMatchImageData([
       [255, 0, 0, 255, 0, 0],
       [255, 0, 0, 255, 0, 0],
       [255, 0, 0, 255, 0, 0],
     ]);
-    expect(expected).toBe(out);
-    expect(expected).not.toBe(image);
+    expect(result).toBe(out);
+    expect(result).not.toBe(image);
   });
   it('draw rectangle in grey image', () => {
     const image = testUtils.createGreyImage([
@@ -68,10 +68,10 @@ describe('we check drawRectangle', () => {
       [1, 1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1, 1],
     ]);
-    const expected = image.drawRectangle(start, image.width, image.height, {
+    const result = image.drawRectangle(start, image.width, image.height, {
       color: [2],
     });
-    expect(expected).toMatchImageData([
+    expect(result).toMatchImageData([
       [2, 2, 2, 2, 2, 2],
       [2, 1, 1, 1, 1, 2],
       [2, 1, 1, 1, 1, 2],
@@ -79,7 +79,7 @@ describe('we check drawRectangle', () => {
       [2, 1, 1, 1, 1, 2],
       [2, 2, 2, 2, 2, 2],
     ]);
-    expect(expected).not.toBe(image);
+    expect(result).not.toBe(image);
   });
   it('draw filled rectangle in grey image', () => {
     const image = testUtils.createGreyImage([
@@ -90,11 +90,11 @@ describe('we check drawRectangle', () => {
       [1, 1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1, 1],
     ]);
-    const expected = image.drawRectangle(start, image.width, image.height, {
+    const result = image.drawRectangle(start, image.width, image.height, {
       color: [2],
       fill: [3],
     });
-    expect(expected).toMatchImageData([
+    expect(result).toMatchImageData([
       [2, 2, 2, 2, 2, 2],
       [2, 3, 3, 3, 3, 2],
       [2, 3, 3, 3, 3, 2],
@@ -102,7 +102,7 @@ describe('we check drawRectangle', () => {
       [2, 3, 3, 3, 3, 2],
       [2, 2, 2, 2, 2, 2],
     ]);
-    expect(expected).not.toBe(image);
+    expect(result).not.toBe(image);
   });
   it('draw filled rectangle with no stroke', () => {
     const image = testUtils.createGreyImage([
@@ -113,11 +113,11 @@ describe('we check drawRectangle', () => {
       [1, 1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1, 1],
     ]);
-    const expected = image.drawRectangle(start, image.width, image.height, {
+    const result = image.drawRectangle(start, image.width, image.height, {
       color: 'none',
       fill: [3],
     });
-    expect(expected).toMatchImageData([
+    expect(result).toMatchImageData([
       [1, 1, 1, 1, 1, 1],
       [1, 3, 3, 3, 3, 1],
       [1, 3, 3, 3, 3, 1],
@@ -125,7 +125,7 @@ describe('we check drawRectangle', () => {
       [1, 3, 3, 3, 3, 1],
       [1, 1, 1, 1, 1, 1],
     ]);
-    expect(expected).not.toBe(image);
+    expect(result).not.toBe(image);
   });
   it('draw rectangle with no options', () => {
     const image = testUtils.createGreyImage([
@@ -136,8 +136,8 @@ describe('we check drawRectangle', () => {
       [1, 1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1, 1],
     ]);
-    const expected = image.drawRectangle(start, image.width, image.height);
-    expect(expected).toMatchImageData([
+    const result = image.drawRectangle(start, image.width, image.height);
+    expect(result).toMatchImageData([
       [0, 0, 0, 0, 0, 0],
       [0, 1, 1, 1, 1, 0],
       [0, 1, 1, 1, 1, 0],
@@ -145,6 +145,6 @@ describe('we check drawRectangle', () => {
       [0, 1, 1, 1, 1, 0],
       [0, 0, 0, 0, 0, 0],
     ]);
-    expect(expected).not.toBe(image);
+    expect(result).not.toBe(image);
   });
 });
