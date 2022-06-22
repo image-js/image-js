@@ -5,21 +5,9 @@ import { getOutputImage } from '../utils/getOutputImage';
 
 import { Point } from './drawLineOnMask';
 import { DrawPolylineOnIjsOptions } from './drawPolylineOnIjs';
+import { deleteDouble } from './utils/deleteDouble';
+import { isAtTheRightOfTheLine, lineBetweenTwoPoints } from './utils/lineUtils';
 
-export interface Line {
-  /**
-   * Line slope.
-   */
-  a: number;
-  /**
-   * Line y-intercept.
-   */
-  b: number;
-  /**
-   * Line is vertical.
-   */
-  vertical: boolean;
-}
 export interface DrawPolygonOptions extends DrawPolylineOnIjsOptions {
   /**
    * Fill color - array of N elements (e.g. R, G, B or G, A), N being the number of channels.
@@ -90,79 +78,5 @@ export function drawPolygon(
       }
     }
     return newImage.drawPolyline([...points, points[0]], otherOptions);
-  }
-}
-/**
- * Delete double in polygon points.
- *
- * @param points - Polygon points array.
- * @returns Cleaned polygon points array.
- */
-function deleteDouble(points: Point[]): Point[] {
-  const finalPoints: Point[] = [];
-  for (let i = 0; i < points.length; i++) {
-    if (
-      points[i].column === points[(i + 1) % points.length].column &&
-      points[i].row === points[(i + 1) % points.length].row
-    ) {
-      continue;
-    } else if (
-      points[i].column ===
-        points[(i - 1 + points.length) % points.length].column &&
-      points[i].row === points[(i - 1 + points.length) % points.length].row
-    ) {
-      continue;
-    } else if (
-      points[(i + 1) % points.length].column ===
-        points[(i - 1 + points.length) % points.length].column &&
-      points[(i - 1 + points.length) % points.length].row ===
-        points[(i + 1) % points.length].row
-    ) {
-      continue; // we don't consider newImage point only
-    } else {
-      finalPoints.push(points[i]);
-    }
-  }
-  return finalPoints;
-}
-/**
- * Get the parameters of a line defined by two points.
- *
- * @param p1 - First line point.
- * @param p2 - Second line point.
- * @returns Line between the points.
- */
-function lineBetweenTwoPoints(p1: Point, p2: Point): Line {
-  if (p1.column === p2.column) {
-    return { a: 0, b: p1.column, vertical: true }; // we store the x of the vertical line into b
-  } else {
-    const a = (p2.row - p1.row) / (p2.column - p1.column);
-    const b = p1.row - a * p1.column;
-    return { a, b, vertical: false };
-  }
-}
-/**
- * Check if a point is on the right side of a line.
- *
- * @param point - Point.
- * @param line - Line.
- * @param height - Image height.
- * @returns Is the point on the right side of the line?
- */
-function isAtTheRightOfTheLine(
-  point: Point,
-  line: Line,
-  height: number,
-): boolean {
-  const { row, column } = point;
-  if (line.vertical === true) {
-    return line.b <= column;
-  } else {
-    if (line.a === 0) {
-      return false;
-    } else {
-      const xLine = (row - line.b) / line.a;
-      return xLine < column && xLine >= 0 && xLine <= height;
-    }
   }
 }
