@@ -173,6 +173,52 @@ export class Mask {
   }
 
   /**
+   * Geta pixel of the mask.
+   *
+   * @param column - Column index.
+   * @param row - Row index.
+   * @returns The pixel.
+   */
+  public getPixel(column: number, row: number): number[] {
+    const result = [];
+    const index = row * this.width + column;
+    result.push(this.data[index]);
+    return result;
+  }
+
+  /**
+   * Set a pixel.
+   *
+   * @param column - Column index.
+   * @param row - Row index.
+   * @param value - The pixelvalue.
+   */
+  public setPixel(column: number, row: number, value: number[]): void {
+    const index = row * this.width + column;
+    this.data[index] = value[0];
+  }
+
+  /**
+   * Get a pixel using its index.
+   *
+   * @param index - Index of the pixel.
+   * @returns The pixel.
+   */
+  public getPixelByIndex(index: number): number[] {
+    return [this.data[index]];
+  }
+
+  /**
+   * Set a pixel using its index.
+   *
+   * @param index - Index of the pixel.
+   * @param value - Newvalue of the pixel to set.
+   */
+  public setPixelByIndex(index: number, value: number[]): void {
+    this.data[index] = value[0];
+  }
+
+  /**
    * Create a mask from an array of points.
    *
    * @param width - Width of the mask.
