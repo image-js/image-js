@@ -71,7 +71,7 @@ describe('drawPolygon on Mask', () => {
       [0, 0, 0],
     ]);
     const result = mask.drawPolygon([], {
-      color: [255, 0, 0],
+      strokeColor: [255, 0, 0],
     });
 
     expect(result).toMatchImage(mask);

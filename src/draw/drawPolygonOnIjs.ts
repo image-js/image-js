@@ -14,11 +14,7 @@ export interface DrawPolygonOnIjsOptions extends DrawPolylineOnIjsOptions {
    *
    * @default 'black'
    */
-  fill?: number[];
-  /**
-   * Fill polygon.
-   */
-  filled?: boolean;
+  fillColor?: number[];
 }
 /**
  * Draw a polygon defined by an array of points onto an image.
@@ -33,11 +29,7 @@ export function drawPolygonOnIjs(
   points: Point[],
   options: DrawPolygonOnIjsOptions = {},
 ): IJS {
-  const {
-    fill = getDefaultColor(image),
-    filled = false,
-    ...otherOptions
-  } = options;
+  const { fillColor: fill = getDefaultColor(image), ...otherOptions } = options;
 
   if (fill.length !== image.channels) {
     throw new Error('drawPolygon: fill color is not compatible with image.');
@@ -49,7 +41,7 @@ export function drawPolygonOnIjs(
 
   let newImage = getOutputImage(image, options, { clone: true });
 
-  if (filled === false) {
+  if (!fill) {
     return newImage.drawPolyline([...points, points[0]], otherOptions);
   } else {
     let matrixBinary: number[][] = [];

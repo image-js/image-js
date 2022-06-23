@@ -11,7 +11,7 @@ describe('drawPolyline on IJS', () => {
       { row: 1, column: 0 },
       { row: 2, column: 1 },
     ];
-    const result = image.drawPolyline(points, { color: [255, 0, 0] });
+    const result = image.drawPolyline(points, { strokeColor: [255, 0, 0] });
     expect(result).toMatchImageData([
       [100, 150, 200, 100, 150, 0],
       [255, 0, 0, 3, 200, 0],
@@ -31,7 +31,7 @@ describe('drawPolyline on IJS', () => {
       { row: 0, column: 1 },
     ];
     const result = image.drawPolyline(points, {
-      color: [255, 0, 0],
+      strokeColor: [255, 0, 0],
       out: image,
     });
 
@@ -56,7 +56,7 @@ describe('drawPolyline on IJS', () => {
       { row: 2, column: 1 },
     ];
     const result = image.drawPolyline(points, {
-      color: [255, 0, 0],
+      strokeColor: [255, 0, 0],
       out,
     });
 
@@ -83,7 +83,7 @@ describe('drawPolyline on IJS', () => {
       { row: 3, column: 2 },
       { row: 3, column: 2 },
     ];
-    const result = image.drawPolyline(points, { color: [1] });
+    const result = image.drawPolyline(points, { strokeColor: [1] });
 
     expect(result).toMatchImageData([
       [1, 0, 0, 0],

@@ -11,7 +11,7 @@ export interface DrawPolylineOnIjsOptions {
    *
    * @default black
    */
-  color?: number[];
+  strokeColor?: number[];
   /**
    * Image to which the resulting image has to be put.
    */
@@ -33,7 +33,7 @@ export function drawPolylineOnIjs(
 ): IJS {
   let newImage = getOutputImage(image, options, { clone: true });
 
-  const { color = getDefaultColor(image) } = options;
+  const { strokeColor: color = getDefaultColor(image) } = options;
   checkProcessable(newImage, 'drawPolyline', {
     bitDepth: [8, 16],
   });
@@ -42,7 +42,7 @@ export function drawPolylineOnIjs(
     const from = points[i];
     const to = points[i + 1];
 
-    newImage.drawLine(from, to, { out: newImage, color });
+    newImage.drawLine(from, to, { out: newImage, strokeColor: color });
   }
   return newImage;
 }

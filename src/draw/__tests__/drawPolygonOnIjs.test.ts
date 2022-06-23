@@ -11,7 +11,7 @@ describe('drawPolygon on IJS', () => {
       { row: 0, column: 0 },
       { row: 1, column: 1 },
     ];
-    const result = image.drawPolygon(points, { color: [255, 0, 0] });
+    const result = image.drawPolygon(points, { strokeColor: [255, 0, 0] });
     expect(result).toMatchImageData([
       [255, 0, 0, 100, 150, 0],
       [100, 200, 5, 255, 0, 0],
@@ -31,7 +31,7 @@ describe('drawPolygon on IJS', () => {
       { row: 2, column: 0 },
     ];
     const result = image.drawPolygon(points, {
-      color: [255, 0, 0],
+      strokeColor: [255, 0, 0],
       out: image,
     });
 
@@ -55,7 +55,7 @@ describe('drawPolygon on IJS', () => {
       { row: 2, column: 0 },
     ];
     const result = image.drawPolygon(points, {
-      color: [255, 0, 0],
+      strokeColor: [255, 0, 0],
       out,
     });
 
@@ -74,7 +74,7 @@ describe('drawPolygon on IJS', () => {
       [150, 200, 255, 6, 150, 0],
     ]);
     const result = image.drawPolygon([], {
-      color: [255, 0, 0],
+      strokeColor: [255, 0, 0],
     });
 
     expect(result).toMatchImage(image);
@@ -93,9 +93,8 @@ describe('drawPolygon on IJS', () => {
       { row: 3, column: 0 },
     ];
     const result = image.drawPolygon(points, {
-      color: [1],
-      fill: [2],
-      filled: true,
+      strokeColor: [1],
+      fillColor: [2],
     });
     expect(result).toMatchImageData([
       [1, 0, 0, 0],
@@ -120,9 +119,8 @@ describe('drawPolygon on IJS', () => {
       { row: 3, column: 0 },
     ];
     const result = image.drawPolygon(points, {
-      color: [1],
-      fill: [2],
-      filled: true,
+      strokeColor: [1],
+      fillColor: [2],
     });
 
     expect(result).toMatchImageData([
@@ -147,9 +145,8 @@ describe('drawPolygon on IJS', () => {
       { row: 0, column: 0 },
     ];
     const result = image.drawPolygon(points, {
-      color: [1],
-      fill: [2],
-      filled: true,
+      strokeColor: [1],
+      fillColor: [2],
     });
 
     expect(result).toMatchImageData([

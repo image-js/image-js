@@ -10,7 +10,7 @@ describe('drawLine on IJS', () => {
 
     const from = { row: 0, column: 0 };
     const to = { row: 1, column: 1 };
-    const result = image.drawLine(from, to, { color: [255, 0, 0] });
+    const result = image.drawLine(from, to, { strokeColor: [255, 0, 0] });
 
     expect(result).toMatchImageData([
       [255, 0, 0, 100, 150, 0],
@@ -29,7 +29,7 @@ describe('drawLine on IJS', () => {
     const from = { row: 0, column: 0 };
     const to = { row: 1, column: 1 };
     const result = image.drawLine(from, to, {
-      color: [255, 0, 0],
+      strokeColor: [255, 0, 0],
       out: image,
     });
 
@@ -50,7 +50,7 @@ describe('drawLine on IJS', () => {
     const from = { row: 0, column: 0 };
     const to = { row: 1, column: 1 };
     const result = image.drawLine(from, to, {
-      color: [255, 0, 0],
+      strokeColor: [255, 0, 0],
       out,
     });
 
@@ -72,7 +72,7 @@ describe('drawLine on IJS', () => {
     const from = { row: 1, column: 0 };
     const to = { row: 2, column: 3 };
     const result = image.drawLine(from, to, {
-      color: [1],
+      strokeColor: [1],
     });
     expect(result).toMatchImageData([
       [0, 0, 0, 0],
@@ -92,7 +92,7 @@ describe('drawLine on IJS', () => {
     const from = { row: 0, column: 1 };
     const to = { row: 3, column: 2 };
     const result = image.drawLine(from, to, {
-      color: [1],
+      strokeColor: [1],
     });
     expect(result).toMatchImageData([
       [0, 1, 0, 0],
@@ -112,7 +112,7 @@ describe('drawLine on IJS', () => {
     const from = { row: 0, column: 1 };
     const to = { row: 0, column: 1 };
     const result = image.drawLine(from, to, {
-      color: [1],
+      strokeColor: [1],
     });
 
     expect(result).toMatchImage(image);
@@ -127,7 +127,7 @@ describe('drawLine on IJS', () => {
     const from = { row: 0, column: 0 };
     const to = { row: image.height, column: image.width };
     const result = image.drawLine(from, to, {
-      color: [1],
+      strokeColor: [1],
     });
 
     expect(result).toMatchImageData([

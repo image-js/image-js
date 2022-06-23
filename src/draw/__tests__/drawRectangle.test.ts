@@ -10,7 +10,7 @@ describe('drawRectangle', () => {
     ]);
 
     const result = image.drawRectangle(start, image.width, image.height, {
-      color: [255, 0, 0],
+      strokeColor: [255, 0, 0],
     });
 
     expect(result).toMatchImageData([
@@ -28,8 +28,8 @@ describe('drawRectangle', () => {
     ]);
 
     const result = image.drawRectangle(start, image.width, image.height, {
-      color: [255, 0, 0],
-      fill: [0, 5, 2],
+      strokeColor: [255, 0, 0],
+      fillColor: [0, 5, 2],
       out: image,
     });
     expect(result).toMatchImageData([
@@ -47,8 +47,8 @@ describe('drawRectangle', () => {
       [150, 200, 255, 6, 150, 0],
     ]);
     const result = image.drawRectangle(start, image.width, image.height, {
-      color: [255, 0, 0],
-      fill: [1, 1, 1],
+      strokeColor: [255, 0, 0],
+      fillColor: [1, 1, 1],
       out,
     });
     expect(result).toMatchImageData([
@@ -69,7 +69,7 @@ describe('drawRectangle', () => {
       [1, 1, 1, 1, 1, 1],
     ]);
     const result = image.drawRectangle(start, image.width, image.height, {
-      color: [2],
+      strokeColor: [2],
     });
     expect(result).toMatchImageData([
       [2, 2, 2, 2, 2, 2],
@@ -91,8 +91,8 @@ describe('drawRectangle', () => {
       [1, 1, 1, 1, 1, 1],
     ]);
     const result = image.drawRectangle(start, image.width, image.height, {
-      color: [2],
-      fill: [3],
+      strokeColor: [2],
+      fillColor: [3],
     });
     expect(result).toMatchImageData([
       [2, 2, 2, 2, 2, 2],
@@ -114,8 +114,8 @@ describe('drawRectangle', () => {
       [1, 1, 1, 1, 1, 1],
     ]);
     const result = image.drawRectangle(start, image.width, image.height, {
-      color: 'none',
-      fill: [3],
+      strokeColor: 'none',
+      fillColor: [3],
     });
     expect(result).toMatchImageData([
       [1, 1, 1, 1, 1, 1],

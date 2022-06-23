@@ -11,7 +11,7 @@ export interface DrawLineOnIjsOptions {
    *
    * @default 'black'
    */
-  color?: number[];
+  strokeColor?: number[];
   /**
    * Image to which the resulting image has to be put.
    */
@@ -34,7 +34,7 @@ export function drawLineOnIjs(
   options: DrawLineOnIjsOptions = {},
 ): IJS {
   const newImage = getOutputImage(image, options, { clone: true });
-  const { color = getDefaultColor(newImage) } = options;
+  const { strokeColor: color = getDefaultColor(newImage) } = options;
 
   checkProcessable(newImage, 'drawLine', {
     bitDepth: [8, 16],

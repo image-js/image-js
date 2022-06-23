@@ -12,12 +12,12 @@ export interface DrawRectangleOptions<OutType> {
    *
    * @default black
    */
-  color?: number[] | 'none';
+  strokeColor?: number[] | 'none';
   /**
    * Rectangle fill color array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
    */
-  fill?: number[];
+  fillColor?: number[];
   /**
    * Image to which the resulting image has to be put.
    */
@@ -62,7 +62,8 @@ export function drawRectangle(
     newImage = maskToOutputMask(image, options, { clone: true });
   }
 
-  const { color = getDefaultColor(newImage), fill } = options;
+  const { strokeColor: color = getDefaultColor(newImage), fillColor: fill } =
+    options;
 
   checkProcessable(newImage, 'drawRectangle', {
     bitDepth: [8, 16],
