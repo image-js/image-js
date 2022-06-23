@@ -15,13 +15,13 @@ export interface CropOptions {
    */
   column?: number;
   /**
-   * Specify the width of te cropped image
+   * Specify the width of the cropped image.
    *
    * @default image.width
    */
   width?: number;
   /**
-   * Specify the width of te cropped image
+   * Specify the width of the cropped image.
    *
    * @default image.height
    */

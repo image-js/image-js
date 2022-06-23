@@ -4,9 +4,31 @@ import checkProcessable from '../utils/checkProcessable';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage';
 
-import { Point } from './drawLineOnMask';
-
 export interface DrawRectangleOptions<OutType> {
+  /**
+   * Row of the top-left corner of the rectangle.
+   *
+   * @default 0
+   */
+  row?: number;
+  /**
+   * Column of the top-left corner of the rectangle.
+   *
+   * @default 0
+   */
+  column?: number;
+  /**
+   * Specify the width of the rectangle.
+   *
+   * @default image.width
+   */
+  width?: number;
+  /**
+   * Specify the width of the rectangle
+   *
+   * @default image.height
+   */
+  height?: number;
   /**
    * Color of the rectangle's border. Should be an array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
@@ -26,35 +48,29 @@ export interface DrawRectangleOptions<OutType> {
 
 export function drawRectangle(
   image: IJS,
-  position: Point,
-  width: number,
-  height: number,
   options: DrawRectangleOptions<IJS>,
 ): IJS;
 export function drawRectangle(
   image: Mask,
-  position: Point,
-  width: number,
-  height: number,
   options: DrawRectangleOptions<Mask>,
 ): Mask;
 /**
  * Draw a rectangle defined by position of the top-left corner, width and height.
  *
  * @param image - Image to process.
- * @param position - Rectangle position.
- * @param width - Rectangle width.
- * @param height - Rectangle height.
  * @param options - Draw rectangle options.
  * @returns The image with the rectangle drawing.
  */
 export function drawRectangle(
   image: IJS | Mask,
-  position: Point,
-  width: number,
-  height: number,
   options: DrawRectangleOptions<Mask | IJS> = {},
 ): IJS | Mask {
+  const {
+    row = 0,
+    column = 0,
+    width = image.width,
+    height = image.height,
+  } = options;
   let newImage: IJS | Mask;
   if (image instanceof IJS) {
     newImage = getOutputImage(image, options, { clone: true });
@@ -70,36 +86,44 @@ export function drawRectangle(
   });
 
   if (color !== 'none') {
-    for (let col = position.column; col < position.column + width; col++) {
-      newImage.setPixel(col, position.row, color);
-      newImage.setPixel(col, position.row + height - 1, color);
+    for (
+      let currentColumn = column;
+      currentColumn < column + width;
+      currentColumn++
+    ) {
+      newImage.setPixel(currentColumn, row, color);
+      newImage.setPixel(currentColumn, row + height - 1, color);
     }
-    for (let row = position.row + 1; row < position.row + height - 1; row++) {
-      newImage.setPixel(position.column, row, color);
-      newImage.setPixel(position.column + width - 1, row, color);
+    for (
+      let currentRow = row + 1;
+      currentRow < row + height - 1;
+      currentRow++
+    ) {
+      newImage.setPixel(column, currentRow, color);
+      newImage.setPixel(column + width - 1, currentRow, color);
 
       if (fill) {
-        for (
-          let col = position.column + 1;
-          col < position.column + width - 1;
-          col++
-        ) {
-          newImage.setPixel(col, row, fill);
-          newImage.setPixel(col, row, fill);
+        for (let col = column + 1; col < column + width - 1; col++) {
+          newImage.setPixel(col, currentRow, fill);
+          newImage.setPixel(col, currentRow, fill);
         }
       }
     }
   }
   // color is none but fill is defined
   else if (fill) {
-    for (let row = position.row + 1; row < position.row + height - 1; row++) {
+    for (
+      let currentRow = row + 1;
+      currentRow < row + height - 1;
+      currentRow++
+    ) {
       for (
-        let col = position.column + 1;
-        col < position.column + width - 1;
-        col++
+        let currentColumn = column + 1;
+        currentColumn < column + width - 1;
+        currentColumn++
       ) {
-        newImage.setPixel(col, row, fill);
-        newImage.setPixel(col, row, fill);
+        newImage.setPixel(currentColumn, currentRow, fill);
+        newImage.setPixel(currentColumn, currentRow, fill);
       }
     }
   }

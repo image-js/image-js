@@ -594,19 +594,11 @@ export class Mask {
   /**
    * Draw a rectangle defined by position of the top-left corner, width and height.
    *
-   * @param position - Rectangle position.
-   * @param width - Rectangle width.
-   * @param height - Rectangle height.
    * @param options - Draw rectangle options.
    * @returns The image with the rectangle drawing.
    */
-  public drawRectangle(
-    position: Point,
-    width: number,
-    height: number,
-    options: DrawRectangleOptions<Mask> = {},
-  ): Mask {
-    return drawRectangle(this, position, width, height, options);
+  public drawRectangle(options: DrawRectangleOptions<Mask> = {}): Mask {
+    return drawRectangle(this, options);
   }
 
   // OPERATIONS

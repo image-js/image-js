@@ -1,7 +1,6 @@
 import { IJS } from '../../IJS';
 
 describe('drawRectangle', () => {
-  const start = { row: 0, column: 0 };
   it('RGB image', () => {
     const image = testUtils.createRgbImage([
       [100, 150, 200, 100, 150, 0],
@@ -9,7 +8,9 @@ describe('drawRectangle', () => {
       [150, 200, 255, 6, 150, 0],
     ]);
 
-    const result = image.drawRectangle(start, image.width, image.height, {
+    const result = image.drawRectangle({
+      width: image.width,
+      height: image.height,
       strokeColor: [255, 0, 0],
     });
 
@@ -27,7 +28,9 @@ describe('drawRectangle', () => {
       [100, 100, 255, 6, 150, 5, 5, 3, 200],
     ]);
 
-    const result = image.drawRectangle(start, image.width, image.height, {
+    const result = image.drawRectangle({
+      width: image.width,
+      height: image.height,
       strokeColor: [255, 0, 0],
       fillColor: [0, 5, 2],
       out: image,
@@ -46,7 +49,9 @@ describe('drawRectangle', () => {
       [100, 200, 5, 3, 200, 0],
       [150, 200, 255, 6, 150, 0],
     ]);
-    const result = image.drawRectangle(start, image.width, image.height, {
+    const result = image.drawRectangle({
+      width: image.width,
+      height: image.height,
       strokeColor: [255, 0, 0],
       fillColor: [1, 1, 1],
       out,
@@ -68,7 +73,9 @@ describe('drawRectangle', () => {
       [1, 1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1, 1],
     ]);
-    const result = image.drawRectangle(start, image.width, image.height, {
+    const result = image.drawRectangle({
+      width: image.width,
+      height: image.height,
       strokeColor: [2],
     });
     expect(result).toMatchImageData([
@@ -90,7 +97,9 @@ describe('drawRectangle', () => {
       [1, 1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1, 1],
     ]);
-    const result = image.drawRectangle(start, image.width, image.height, {
+    const result = image.drawRectangle({
+      width: image.width,
+      height: image.height,
       strokeColor: [2],
       fillColor: [3],
     });
@@ -113,7 +122,9 @@ describe('drawRectangle', () => {
       [1, 1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1, 1],
     ]);
-    const result = image.drawRectangle(start, image.width, image.height, {
+    const result = image.drawRectangle({
+      width: image.width,
+      height: image.height,
       strokeColor: 'none',
       fillColor: [3],
     });
@@ -136,7 +147,33 @@ describe('drawRectangle', () => {
       [1, 1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1, 1],
     ]);
-    const result = image.drawRectangle(start, image.width, image.height);
+    const result = image.drawRectangle({
+      width: image.width,
+      height: image.height,
+    });
+    expect(result).toMatchImageData([
+      [0, 0, 0, 0, 0, 0],
+      [0, 1, 1, 1, 1, 0],
+      [0, 1, 1, 1, 1, 0],
+      [0, 1, 1, 1, 1, 0],
+      [0, 1, 1, 1, 1, 0],
+      [0, 0, 0, 0, 0, 0],
+    ]);
+    expect(result).not.toBe(image);
+  });
+  it('mask', () => {
+    const image = testUtils.createMask([
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+    ]);
+    const result = image.drawRectangle({
+      width: 4,
+      height: 4,
+    });
     expect(result).toMatchImageData([
       [0, 0, 0, 0, 0, 0],
       [0, 1, 1, 1, 1, 0],
