@@ -1,4 +1,5 @@
 import { Mask } from '../../Mask';
+import { drawLineOnMask } from '../drawLineOnMask';
 
 describe('drawLine on Mask', () => {
   it('3x3 mask, diagonal', () => {
@@ -167,5 +168,24 @@ describe('drawLine on Mask', () => {
     const result = mask.drawLine(from, to);
 
     expect(result).toMatchMask(mask);
+  });
+  it('default options', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+
+    const from = { row: 0, column: 0 };
+    const to = { row: mask.height, column: mask.width };
+    const result = drawLineOnMask(mask, from, to);
+
+    expect(result).toMatchMaskData([
+      [1, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 1, 0],
+      [0, 0, 0, 1],
+    ]);
   });
 });

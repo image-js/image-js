@@ -1,4 +1,5 @@
 import { IJS } from '../../IJS';
+import { drawPolylineOnIjs } from '../drawPolylineOnIjs';
 
 describe('drawPolyline on IJS', () => {
   it('RGB image', () => {
@@ -92,5 +93,26 @@ describe('drawPolyline on IJS', () => {
       [1, 1, 1, 0],
     ]);
     expect(result).not.toBe(image);
+  });
+  it('default options', () => {
+    const image = testUtils.createGreyImage([
+      [10, 10, 10, 10],
+      [10, 10, 10, 10],
+      [10, 10, 10, 10],
+      [10, 10, 10, 10],
+    ]);
+
+    const points = [
+      { row: 0, column: 0 },
+      { row: image.height, column: image.width },
+    ];
+    const result = drawPolylineOnIjs(image, points);
+
+    expect(result).toMatchImageData([
+      [0, 10, 10, 10],
+      [10, 0, 10, 10],
+      [10, 10, 0, 10],
+      [10, 10, 10, 0],
+    ]);
   });
 });

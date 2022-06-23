@@ -1,6 +1,5 @@
 import { IJS } from '../IJS';
 import checkProcessable from '../utils/checkProcessable';
-import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
 
 import { Point } from './drawLineOnMask';
@@ -29,11 +28,7 @@ export function drawPolygonOnIjs(
   points: Point[],
   options: DrawPolygonOnIjsOptions = {},
 ): IJS {
-  const { fillColor: fill = getDefaultColor(image), ...otherOptions } = options;
-
-  if (fill.length !== image.channels) {
-    throw new Error('drawPolygon: fill color is not compatible with image.');
-  }
+  const { fillColor, ...otherOptions } = options;
 
   checkProcessable(image, 'drawPolygon', {
     bitDepth: [8, 16],
@@ -41,9 +36,13 @@ export function drawPolygonOnIjs(
 
   let newImage = getOutputImage(image, options, { clone: true });
 
-  if (!fill) {
+  if (fillColor === undefined) {
     return newImage.drawPolyline([...points, points[0]], otherOptions);
   } else {
+    if (fillColor.length !== image.channels) {
+      throw new Error('drawPolygon: fill color is not compatible with image.');
+    }
+
     let matrixBinary: number[][] = [];
     for (let i = 0; i < newImage.height; i++) {
       matrixBinary[i] = [];
@@ -68,9 +67,9 @@ export function drawPolygonOnIjs(
     for (let row = 0; row < newImage.height; row++) {
       for (let column = 0; column < newImage.width; column++) {
         if (matrixBinary[row][column] === 1) {
-          let numberChannels = Math.min(newImage.channels, fill.length);
+          let numberChannels = Math.min(newImage.channels, fillColor.length);
           for (let channel = 0; channel < numberChannels; channel++) {
-            newImage.setValue(column, row, channel, fill[channel]);
+            newImage.setValue(column, row, channel, fillColor[channel]);
           }
         }
       }

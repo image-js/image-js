@@ -1,4 +1,5 @@
 import { IJS } from '../../IJS';
+import { drawRectangle } from '../drawRectangle';
 
 describe('drawRectangle', () => {
   it('RGB image', () => {
@@ -161,8 +162,8 @@ describe('drawRectangle', () => {
     ]);
     expect(result).not.toBe(image);
   });
-  it('mask', () => {
-    const image = testUtils.createMask([
+  it('mask, not filled', () => {
+    const mask = testUtils.createMask([
       [0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0],
@@ -170,11 +171,43 @@ describe('drawRectangle', () => {
       [0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0],
     ]);
-    const result = image.drawRectangle({
+    const result = mask.drawRectangle({
       width: 4,
       height: 4,
+      strokeColor: [1],
+      row: 1,
+      column: 1,
     });
-    expect(result).toMatchImageData([
+
+    expect(result).toMatchMaskData([
+      [0, 0, 0, 0, 0, 0],
+      [0, 1, 1, 1, 1, 0],
+      [0, 1, 0, 0, 1, 0],
+      [0, 1, 0, 0, 1, 0],
+      [0, 1, 1, 1, 1, 0],
+      [0, 0, 0, 0, 0, 0],
+    ]);
+    expect(result).not.toBe(mask);
+  });
+  it('mask, filled', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+    ]);
+    const result = mask.drawRectangle({
+      width: 4,
+      height: 4,
+      fillColor: [1],
+      strokeColor: [1],
+      row: 1,
+      column: 1,
+    });
+
+    expect(result).toMatchMaskData([
       [0, 0, 0, 0, 0, 0],
       [0, 1, 1, 1, 1, 0],
       [0, 1, 1, 1, 1, 0],
@@ -182,6 +215,24 @@ describe('drawRectangle', () => {
       [0, 1, 1, 1, 1, 0],
       [0, 0, 0, 0, 0, 0],
     ]);
-    expect(result).not.toBe(image);
+  });
+  it('mask, no options', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+    ]);
+    const result = mask.drawRectangle();
+
+    expect(result).toMatchMask(mask);
+    expect(result).not.toBe(mask);
+  });
+  it('mask, call directly, no options', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+    ]);
+    const result = drawRectangle(mask);
+
+    expect(result).toMatchMask(mask);
   });
 });

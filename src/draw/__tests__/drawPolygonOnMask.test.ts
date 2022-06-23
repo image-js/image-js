@@ -1,4 +1,5 @@
 import { Mask } from '../../Mask';
+import { drawPolygonOnMask } from '../drawPolygonOnMask';
 
 describe('drawPolygon on Mask', () => {
   it('3x3 mask', () => {
@@ -173,5 +174,26 @@ describe('drawPolygon on Mask', () => {
       [1, 1, 1, 0],
     ]);
     expect(result).not.toBe(mask);
+  });
+  it('default options', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+
+    const points = [
+      { row: 0, column: 0 },
+      { row: mask.height, column: mask.width },
+    ];
+    const result = drawPolygonOnMask(mask, points);
+
+    expect(result).toMatchMaskData([
+      [1, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 1, 0],
+      [0, 0, 0, 1],
+    ]);
   });
 });

@@ -1,4 +1,5 @@
 import { IJS } from '../../IJS';
+import { drawPolygonOnIjs } from '../drawPolygonOnIjs';
 
 describe('drawPolygon on IJS', () => {
   it('RGB image', () => {
@@ -104,6 +105,29 @@ describe('drawPolygon on IJS', () => {
     ]);
     expect(result).not.toBe(image);
   });
+  it('grey image, no fill', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const points = [
+      { row: 0, column: 0 },
+      { row: 3, column: 3 },
+      { row: 3, column: 0 },
+    ];
+    const result = image.drawPolygon(points, {
+      strokeColor: [1],
+    });
+    expect(result).toMatchImageData([
+      [1, 0, 0, 0],
+      [1, 1, 0, 0],
+      [1, 0, 1, 0],
+      [1, 1, 1, 1],
+    ]);
+    expect(result).not.toBe(image);
+  });
   it('should handle duplicate points', () => {
     const image = testUtils.createGreyImage([
       [0, 0, 0, 0],
@@ -156,5 +180,46 @@ describe('drawPolygon on IJS', () => {
       [1, 1, 1, 1],
     ]);
     expect(result).not.toBe(image);
+  });
+  it('stroke color not compatible with image', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const points = [
+      { row: 0, column: 0 },
+      { row: 3, column: 3 },
+      { row: 3, column: 0 },
+      { row: 0, column: 0 },
+    ];
+    expect(() => {
+      image.drawPolygon(points, {
+        strokeColor: [1],
+        fillColor: [2, 5],
+      });
+    }).toThrow('drawPolygon: fill color is not compatible with image.');
+  });
+  it('default options', () => {
+    const image = testUtils.createGreyImage([
+      [10, 10, 10, 10],
+      [10, 10, 10, 10],
+      [10, 10, 10, 10],
+      [10, 10, 10, 10],
+    ]);
+
+    const points = [
+      { row: 0, column: 0 },
+      { row: image.height, column: image.width },
+    ];
+    const result = drawPolygonOnIjs(image, points);
+
+    expect(result).toMatchImageData([
+      [0, 10, 10, 10],
+      [10, 0, 10, 10],
+      [10, 10, 0, 10],
+      [10, 10, 10, 0],
+    ]);
   });
 });

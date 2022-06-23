@@ -48,11 +48,11 @@ export interface DrawRectangleOptions<OutType> {
 
 export function drawRectangle(
   image: IJS,
-  options: DrawRectangleOptions<IJS>,
+  options?: DrawRectangleOptions<IJS>,
 ): IJS;
 export function drawRectangle(
   image: Mask,
-  options: DrawRectangleOptions<Mask>,
+  options?: DrawRectangleOptions<Mask>,
 ): Mask;
 /**
  * Draw a rectangle defined by position of the top-left corner, width and height.
@@ -70,20 +70,19 @@ export function drawRectangle(
     column = 0,
     width = image.width,
     height = image.height,
+    strokeColor: color = getDefaultColor(image),
+    fillColor: fill,
   } = options;
+
   let newImage: IJS | Mask;
   if (image instanceof IJS) {
+    checkProcessable(image, 'drawRectangle', {
+      bitDepth: [8, 16],
+    });
     newImage = getOutputImage(image, options, { clone: true });
   } else {
     newImage = maskToOutputMask(image, options, { clone: true });
   }
-
-  const { strokeColor: color = getDefaultColor(newImage), fillColor: fill } =
-    options;
-
-  checkProcessable(newImage, 'drawRectangle', {
-    bitDepth: [8, 16],
-  });
 
   if (color !== 'none') {
     for (

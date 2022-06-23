@@ -1,4 +1,5 @@
 import { IJS } from '../../IJS';
+import { drawLineOnIjs } from '../drawLineOnIjs';
 
 describe('drawLine on IJS', () => {
   it('RGB image', () => {
@@ -136,5 +137,19 @@ describe('drawLine on IJS', () => {
       [0, 0, 1, 0],
       [0, 0, 0, 1],
     ]);
+  });
+  it('default options', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+
+    const from = { row: 0, column: 0 };
+    const to = { row: image.height, column: image.width };
+    const result = drawLineOnIjs(image, from, to);
+
+    expect(result).toMatchImage(image);
   });
 });
