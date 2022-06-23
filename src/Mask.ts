@@ -40,7 +40,15 @@ import { erode } from './morphology/erode';
 import { boolToNumber } from './utils/boolToNumber';
 import { ArrayPoint } from './utils/types';
 
-import { ImageColorModel, ColorDepth, colorModels, IJS, convertColor } from '.';
+import {
+  ImageColorModel,
+  ColorDepth,
+  colorModels,
+  IJS,
+  convertColor,
+  CopyToOptions,
+  copyTo,
+} from '.';
 
 export type BitValue = 1 | 0 | boolean;
 
@@ -563,6 +571,19 @@ export class Mask {
     options: DrawPolylineOnMaskOptions = {},
   ): Mask {
     return drawPolylineOnMask(this, points, options);
+  }
+
+  // OPERATIONS
+
+  /**
+   * Copy the mask to another one by specifying the location in the target mask.
+   *
+   * @param target - The target mask.
+   * @param options - copyTo options.
+   * @returns The target with the source copied to it.
+   */
+  public copyTo(target: Mask, options: CopyToOptions<Mask> = {}): Mask {
+    return copyTo(this, target, options);
   }
 }
 

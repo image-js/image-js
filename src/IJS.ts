@@ -601,7 +601,7 @@ export class IJS {
     return grey(this, options);
   }
 
-  public copyTo(target: IJS, options: CopyToOptions = {}): IJS {
+  public copyTo(target: IJS, options: CopyToOptions<IJS> = {}): IJS {
     return copyTo(this, target, options);
   }
 

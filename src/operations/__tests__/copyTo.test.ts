@@ -1,3 +1,5 @@
+import { Mask } from '../../Mask';
+
 describe('Copy a source image to a target', () => {
   it('GREYA images: transparent source, opaque target', () => {
     let source = testUtils.createGreyaImage([[100, 0]]);
@@ -101,6 +103,63 @@ describe('Copy a source image to a target', () => {
     const result = source.copyTo(target, { out: target });
     expect(target).toBe(result);
     expect(copy).toMatchImage(target);
+  });
+  it('mask, no offsets', () => {
+    let target = new Mask(4, 3);
+
+    let source = testUtils.createMask([
+      [1, 1],
+      [1, 1],
+    ]);
+    const result = source.copyTo(target, { row: 0, column: 0 });
+    expect(result).toMatchImageData([
+      [1, 1, 0, 0],
+      [1, 1, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+  });
+  it('mask, positive offsets', () => {
+    let target = new Mask(4, 3);
+
+    let source = testUtils.createMask([
+      [1, 1],
+      [1, 1],
+    ]);
+    const result = source.copyTo(target, { row: 0, column: 1 });
+    expect(result).toMatchImageData([
+      [0, 1, 1, 0],
+      [0, 1, 1, 0],
+      [0, 0, 0, 0],
+    ]);
+  });
+  it('mask, offsets out of target', () => {
+    let target = new Mask(4, 3);
+
+    let source = testUtils.createMask([
+      [1, 1],
+      [1, 1],
+    ]);
+    const result = source.copyTo(target, { row: 2, column: 3 });
+
+    expect(result).toMatchImageData([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 1],
+    ]);
+  });
+  it('mask, negative offsets', () => {
+    let target = new Mask(4, 3);
+
+    let source = testUtils.createMask([
+      [1, 1],
+      [1, 1],
+    ]);
+    const result = source.copyTo(target, { row: -1, column: 0 });
+    expect(result).toMatchImageData([
+      [1, 1, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
   });
   it('incompatible image types', () => {
     let source = testUtils.createGreyImage([[100, 255]]);
