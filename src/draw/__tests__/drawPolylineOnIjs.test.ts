@@ -69,4 +69,28 @@ describe('drawPolyline on IJS', () => {
     expect(result).toBe(out);
     expect(result).not.toBe(image);
   });
+  it('should handle duplicate points', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const points = [
+      { row: 0, column: 0 },
+      { row: 0, column: 0 },
+      { row: 3, column: 0 },
+      { row: 3, column: 2 },
+      { row: 3, column: 2 },
+    ];
+    const result = image.drawPolyline(points, { color: [1] });
+
+    expect(result).toMatchImageData([
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+      [1, 1, 1, 0],
+    ]);
+    expect(result).not.toBe(image);
+  });
 });

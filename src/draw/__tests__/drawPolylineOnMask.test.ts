@@ -66,4 +66,28 @@ describe('drawPolyline on Mask', () => {
     expect(result).toBe(out);
     expect(result).not.toBe(mask);
   });
+  it('should handle duplicate points', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const points = [
+      { row: 0, column: 0 },
+      { row: 0, column: 0 },
+      { row: 3, column: 0 },
+      { row: 3, column: 2 },
+      { row: 3, column: 2 },
+    ];
+    const result = mask.drawPolyline(points);
+
+    expect(result).toMatchMaskData([
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+      [1, 1, 1, 0],
+    ]);
+    expect(result).not.toBe(mask);
+  });
 });
