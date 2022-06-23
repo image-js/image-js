@@ -147,7 +147,7 @@ describe('drawPolygon on Mask', () => {
     ]);
     expect(result).not.toBe(mask);
   });
-  it.only('should handle duplicate points', () => {
+  it('should handle duplicate points', () => {
     const mask = testUtils.createMask([
       [0, 0, 0, 0],
       [0, 0, 0, 0],
@@ -165,8 +165,6 @@ describe('drawPolygon on Mask', () => {
     const result = mask.drawPolygon(points, {
       filled: true,
     });
-
-    console.log(result);
 
     expect(result).toMatchMaskData([
       [1, 1, 1, 0],

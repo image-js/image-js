@@ -3,7 +3,7 @@ import { maskToOutputMask } from '../utils/getOutputImage';
 
 import { Point } from './drawLineOnMask';
 import { DrawPolylineOnMaskOptions } from './drawPolylineOnMask';
-import { deleteDouble } from './utils/deleteDouble';
+import { deleteDuplicates } from './utils/deleteDuplicates';
 import { isAtTheRightOfTheLine, lineBetweenTwoPoints } from './utils/lineUtils';
 
 export interface DrawPolygonOnMaskOptions extends DrawPolylineOnMaskOptions {
@@ -36,8 +36,7 @@ export function drawPolygonOnMask(
 
   let polygonMask = Mask.createFrom(newMask);
 
-  const filteredPoints = deleteDouble(points);
-  console.log({ filteredPoints });
+  const filteredPoints = deleteDuplicates(points);
 
   for (let i = 0; i < filteredPoints.length; i++) {
     const line = lineBetweenTwoPoints(

@@ -5,7 +5,7 @@ import { getOutputImage } from '../utils/getOutputImage';
 
 import { Point } from './drawLineOnMask';
 import { DrawPolylineOnIjsOptions } from './drawPolylineOnIjs';
-import { deleteDouble } from './utils/deleteDouble';
+import { deleteDuplicates } from './utils/deleteDuplicates';
 import { isAtTheRightOfTheLine, lineBetweenTwoPoints } from './utils/lineUtils';
 
 export interface DrawPolygonOnIjsOptions extends DrawPolylineOnIjsOptions {
@@ -59,8 +59,7 @@ export function drawPolygonOnIjs(
         matrixBinary[i].push(0);
       }
     }
-    const filteredPoints = deleteDouble(points);
-    console.log({ filteredPoints });
+    const filteredPoints = deleteDuplicates(points);
     for (let i = 0; i < filteredPoints.length; i++) {
       const line = lineBetweenTwoPoints(
         filteredPoints[i],

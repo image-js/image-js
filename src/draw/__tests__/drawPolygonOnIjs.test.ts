@@ -1,7 +1,7 @@
 import { IJS } from '../../IJS';
 
 describe('drawPolygon on IJS', () => {
-  it.only('RGB image', () => {
+  it('RGB image', () => {
     const image = testUtils.createRgbImage([
       [100, 150, 200, 100, 150, 0],
       [100, 200, 5, 3, 200, 0],
@@ -105,7 +105,7 @@ describe('drawPolygon on IJS', () => {
     ]);
     expect(result).not.toBe(image);
   });
-  it.only('should handle duplicate points', () => {
+  it('should handle duplicate points', () => {
     const image = testUtils.createGreyImage([
       [0, 0, 0, 0],
       [0, 0, 0, 0],
@@ -125,7 +125,33 @@ describe('drawPolygon on IJS', () => {
       filled: true,
     });
 
-    console.log(result);
+    expect(result).toMatchImageData([
+      [1, 0, 0, 0],
+      [1, 1, 0, 0],
+      [1, 2, 1, 0],
+      [1, 1, 1, 1],
+    ]);
+    expect(result).not.toBe(image);
+  });
+  it('first and last points are the same', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const points = [
+      { row: 0, column: 0 },
+      { row: 3, column: 3 },
+      { row: 3, column: 0 },
+      { row: 0, column: 0 },
+    ];
+    const result = image.drawPolygon(points, {
+      color: [1],
+      fill: [2],
+      filled: true,
+    });
+
     expect(result).toMatchImageData([
       [1, 0, 0, 0],
       [1, 1, 0, 0],
