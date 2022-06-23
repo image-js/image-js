@@ -548,7 +548,7 @@ export class IJS {
     position: Point,
     width: number,
     height: number,
-    options: DrawRectangleOptions = {},
+    options: DrawRectangleOptions<IJS> = {},
   ): IJS {
     return drawRectangle(this, position, width, height, options);
   }

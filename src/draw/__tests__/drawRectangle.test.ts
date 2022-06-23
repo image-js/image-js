@@ -1,8 +1,8 @@
 import { IJS } from '../../IJS';
 
-describe('we check drawRectangle', () => {
+describe('drawRectangle', () => {
   const start = { row: 0, column: 0 };
-  it('draw rectangle in an image', () => {
+  it('RGB image', () => {
     const image = testUtils.createRgbImage([
       [100, 150, 200, 100, 150, 0],
       [100, 200, 5, 3, 200, 0],
@@ -20,7 +20,7 @@ describe('we check drawRectangle', () => {
     ]);
     expect(result).not.toBe(image);
   });
-  it('draw rectangle with out parameter set to self', () => {
+  it('out parameter set to self', () => {
     const image = testUtils.createRgbImage([
       [100, 100, 200, 100, 100, 100, 150, 200, 255],
       [100, 100, 5, 3, 100, 100, 150, 200, 255],
@@ -39,7 +39,7 @@ describe('we check drawRectangle', () => {
     ]);
     expect(result).toBe(image);
   });
-  it('draw rectangle with out parameter', () => {
+  it('out to other image', () => {
     const out = new IJS(2, 3);
     const image = testUtils.createRgbImage([
       [100, 150, 200, 100, 150, 0],

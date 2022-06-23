@@ -1,4 +1,4 @@
-import { ColorDepth, IJS, ImageColorModel } from '..';
+import { ColorDepth, IJS, ImageColorModel, Mask } from '..';
 
 // @ts-expect-error Intl types don't exist yet
 const formatter = new Intl.ListFormat('en', { type: 'disjunction' });
@@ -19,7 +19,7 @@ interface CheckOptions {
  * @param options - Check processable options
  */
 export default function checkProcessable(
-  image: IJS,
+  image: IJS | Mask,
   processName: string,
   options: CheckOptions = {},
 ) {

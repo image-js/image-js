@@ -9,6 +9,7 @@ export interface DrawPolylineOnMaskOptions {
    */
   out?: Mask;
 }
+
 /**
  * Draw a polyline defined by an array of points on an image.
  *

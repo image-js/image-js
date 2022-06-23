@@ -7,9 +7,9 @@ import { Point } from './drawLineOnMask';
 
 export interface DrawPolylineOnIjsOptions {
   /**
-   * Lines color - array of N elements (e.g. R, G, B or G, A), N being the number of channels.
+   * Line color - array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
-   * @default 'black'
+   * @default black
    */
   color?: number[];
   /**
@@ -17,6 +17,7 @@ export interface DrawPolylineOnIjsOptions {
    */
   out?: IJS;
 }
+
 /**
  * Draw a polyline defined by an array of points on an image.
  *
