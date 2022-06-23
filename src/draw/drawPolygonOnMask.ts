@@ -30,22 +30,15 @@ export function drawPolygonOnMask(
 
   let newMask = maskToOutputMask(mask, options, { clone: true });
 
-  const filteredPoints = deleteDouble(points);
-
-  newMask.drawPolyline([...points, points[0]], otherOptions);
   if (filled === false) {
-    return newMask;
+    return newMask.drawPolyline([...points, points[0]], otherOptions);
   }
 
   let polygonMask = Mask.createFrom(newMask);
 
-  let matrixBinary: number[][] = [];
-  for (let i = 0; i < newMask.height; i++) {
-    matrixBinary[i] = [];
-    for (let j = 0; j < newMask.width; j++) {
-      matrixBinary[i].push(0);
-    }
-  }
+  const filteredPoints = deleteDouble(points);
+  console.log({ filteredPoints });
+
   for (let i = 0; i < filteredPoints.length; i++) {
     const line = lineBetweenTwoPoints(
       filteredPoints[i],
@@ -54,14 +47,23 @@ export function drawPolygonOnMask(
     for (let row = 0; row < newMask.height; row++) {
       for (let column = 0; column < newMask.width; column++) {
         if (isAtTheRightOfTheLine({ column, row }, line, newMask.height)) {
-          polygonMask.getBit(column, row) === 0
-            ? polygonMask.setBit(column, row, 1)
-            : polygonMask.setBit(column, row, 0);
+          if (polygonMask.getBit(column, row)) {
+            polygonMask.setBit(column, row, 0);
+          } else {
+            polygonMask.setBit(column, row, 1);
+          }
         }
       }
     }
   }
 
-  // TODO: copy polygonMask to newMask before returning
-  return newMask;
+  for (let row = 0; row < mask.height; row++) {
+    for (let column = 0; column < mask.width; column++) {
+      if (polygonMask.getBit(column, row)) {
+        newMask.setBit(column, row, 1);
+      }
+    }
+  }
+
+  return newMask.drawPolyline([...points, points[0]], otherOptions);
 }

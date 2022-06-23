@@ -161,6 +161,24 @@ describe('Copy a source image to a target', () => {
       [0, 0, 0, 0],
     ]);
   });
+  it('mask, target with some values', () => {
+    let target = testUtils.createMask([
+      [0, 0, 0, 1],
+      [0, 0, 1, 1],
+      [0, 0, 0, 1],
+    ]);
+
+    let source = testUtils.createMask([
+      [1, 1],
+      [1, 1],
+    ]);
+    const result = source.copyTo(target, { row: 0, column: 1 });
+    expect(result).toMatchImageData([
+      [0, 1, 1, 1],
+      [0, 1, 1, 1],
+      [0, 0, 0, 1],
+    ]);
+  });
   it('incompatible image types', () => {
     let source = testUtils.createGreyImage([[100, 255]]);
     let target = testUtils.createGreyaImage([[50, 0]]);

@@ -1,6 +1,8 @@
 import {
   drawLineOnMask,
   DrawLineOnMaskOptions,
+  drawPolygonOnMask,
+  DrawPolygonOnMaskOptions,
   drawPolylineOnMask,
   DrawPolylineOnMaskOptions,
   Point,
@@ -571,6 +573,20 @@ export class Mask {
     options: DrawPolylineOnMaskOptions = {},
   ): Mask {
     return drawPolylineOnMask(this, points, options);
+  }
+
+  /**
+   * Draw a polygon defined by an array of points onto an mask.
+   *
+   * @param points - Polygon vertices.
+   * @param options - Draw Line options.
+   * @returns The mask with the polygon drawing.
+   */
+  public drawPolygon(
+    points: Point[],
+    options: DrawPolygonOnMaskOptions = {},
+  ): Mask {
+    return drawPolygonOnMask(this, points, options);
   }
 
   // OPERATIONS

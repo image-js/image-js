@@ -49,8 +49,6 @@ export function drawPolygonOnIjs(
 
   let newImage = getOutputImage(image, options, { clone: true });
 
-  const filteredPoints = deleteDouble(points);
-
   if (filled === false) {
     return newImage.drawPolyline([...points, points[0]], otherOptions);
   } else {
@@ -61,6 +59,8 @@ export function drawPolygonOnIjs(
         matrixBinary[i].push(0);
       }
     }
+    const filteredPoints = deleteDouble(points);
+    console.log({ filteredPoints });
     for (let i = 0; i < filteredPoints.length; i++) {
       const line = lineBetweenTwoPoints(
         filteredPoints[i],
