@@ -38,6 +38,10 @@ export function drawLineOnMask(
 ): Mask {
   const newMask = maskToOutputMask(mask, options, { clone: true });
 
+  if (from.column === to.column && from.row === to.row) {
+    return newMask;
+  }
+
   const { rowIncrement, columnIncrement, steps } = getIncrements(from, to);
 
   let { row, column } = from;

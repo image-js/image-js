@@ -102,4 +102,39 @@ describe('drawLine on IJS', () => {
     ]);
     expect(result).not.toBe(image);
   });
+  it('same from and to', () => {
+    const image = testUtils.createGreyImage([
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+    ]);
+    const from = { row: 0, column: 1 };
+    const to = { row: 0, column: 1 };
+    const result = image.drawLine(from, to, {
+      color: [1],
+    });
+
+    expect(result).toMatchImage(image);
+  });
+  it('point contains image.width and image.height', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const from = { row: 0, column: 0 };
+    const to = { row: image.height, column: image.width };
+    const result = image.drawLine(from, to, {
+      color: [1],
+    });
+
+    expect(result).toMatchImageData([
+      [1, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 1, 0],
+      [0, 0, 0, 1],
+    ]);
+  });
 });

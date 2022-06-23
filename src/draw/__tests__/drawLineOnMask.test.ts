@@ -155,4 +155,17 @@ describe('drawLine on Mask', () => {
     ]);
     expect(expected).not.toBe(image);
   });
+  it('same from and to', () => {
+    const mask = testUtils.createMask([
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+    ]);
+    const from = { row: 0, column: 1 };
+    const to = { row: 0, column: 1 };
+    const result = mask.drawLine(from, to);
+
+    expect(result).toMatchMask(mask);
+  });
 });
