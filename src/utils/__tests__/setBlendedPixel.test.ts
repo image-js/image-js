@@ -42,4 +42,24 @@ describe('setBlendedPixel', () => {
       [1, 2, 3, 4, 5, 6],
     ]);
   });
+  it('2x2 mask, default options', () => {
+    let mask = testUtils.createMask([
+      [1, 0],
+      [0, 0],
+    ]);
+    setBlendedPixel(mask, 1, 0);
+    expect(mask).toMatchMask(mask);
+  });
+  it('2x2 mask, color is 1', () => {
+    let mask = testUtils.createMask([
+      [1, 0],
+      [0, 0],
+    ]);
+    setBlendedPixel(mask, 1, 0, { color: [1] });
+
+    expect(mask).toMatchMaskData([
+      [1, 1],
+      [0, 0],
+    ]);
+  });
 });
