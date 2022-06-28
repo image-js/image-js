@@ -1,18 +1,6 @@
 import { Mask } from '../Mask';
 import { maskToOutputMask } from '../utils/getOutputImage';
-
-export interface Point {
-  /**
-   * Point row.
-   *
-   */
-  row: number;
-  /**
-   * Point column.
-   *
-   */
-  column: number;
-}
+import { Point } from '../utils/types';
 
 export interface DrawLineOnMaskOptions {
   /**

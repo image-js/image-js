@@ -3,7 +3,6 @@ import { RgbColor } from 'colord';
 import { Mask } from './Mask';
 import { correctColor } from './correctColor';
 import {
-  Point,
   drawLineOnIjs,
   drawPolygonOnIjs,
   drawPolylineOnIjs,
@@ -69,6 +68,7 @@ import {
   split,
 } from './operations';
 import { ImageColorModel, colorModels } from './utils/colorModels';
+import { Point } from './utils/types';
 import { validateChannel, validateValue } from './utils/validators';
 
 import {

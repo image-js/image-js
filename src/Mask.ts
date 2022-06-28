@@ -7,7 +7,6 @@ import {
   DrawPolylineOnMaskOptions,
   drawRectangle,
   DrawRectangleOptions,
-  Point,
 } from './draw';
 import {
   and,
@@ -42,7 +41,7 @@ import {
 } from './morphology';
 import { erode } from './morphology/erode';
 import { boolToNumber } from './utils/boolToNumber';
-import { ArrayPoint } from './utils/types';
+import { ArrayPoint, Point } from './utils/types';
 
 import {
   ImageColorModel,

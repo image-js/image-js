@@ -1,7 +1,7 @@
 import { Mask } from '../Mask';
 import { maskToOutputMask } from '../utils/getOutputImage';
+import { Point } from '../utils/types';
 
-import { Point } from './drawLineOnMask';
 import { DrawPolylineOnMaskOptions } from './drawPolylineOnMask';
 import { deleteDuplicates } from './utils/deleteDuplicates';
 import { isAtTheRightOfTheLine, lineBetweenTwoPoints } from './utils/lineUtils';

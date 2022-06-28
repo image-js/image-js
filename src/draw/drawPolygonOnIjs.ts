@@ -1,8 +1,8 @@
 import { IJS } from '../IJS';
 import checkProcessable from '../utils/checkProcessable';
 import { getOutputImage } from '../utils/getOutputImage';
+import { Point } from '../utils/types';
 
-import { Point } from './drawLineOnMask';
 import { DrawPolylineOnIjsOptions } from './drawPolylineOnIjs';
 import { deleteDuplicates } from './utils/deleteDuplicates';
 import { isAtTheRightOfTheLine, lineBetweenTwoPoints } from './utils/lineUtils';

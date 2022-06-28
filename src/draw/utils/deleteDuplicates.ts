@@ -1,4 +1,4 @@
-import { Point } from '../drawLineOnMask';
+import { Point } from '../../utils/types';
 
 /**
  * Remove duplicate points from array.

@@ -2,8 +2,9 @@ import { IJS } from '../IJS';
 import checkProcessable from '../utils/checkProcessable';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
+import { Point } from '../utils/types';
 
-import { getIncrements, Point } from './drawLineOnMask';
+import { getIncrements } from './drawLineOnMask';
 
 export interface DrawLineOnIjsOptions {
   /**
