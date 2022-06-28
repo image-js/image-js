@@ -1,26 +1,24 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
-import binary from 'test/binary';
-
 import { angle } from '../../../util/points';
-import minimalBoundingRectangle from '../minimalBoundingRectangle';
+import { getMbrCorners } from '../getMbrMask';
 
 expect.extend({ toBeDeepCloseTo });
 
-describe('Minimal bounding rectangle', function () {
-  it('should return the minimal bounding box', function () {
-    let image = binary`
-        00000000
-        00011000
-        00011000
-        00111111
-        00111111
-        00011000
-        00011000
-        00000000
-      `;
+describe('Minimal bounding rectangle', () => {
+  it('should return the minimal bounding box', () => {
+    let image = testUtils.createMask(`
+      00000000
+      00011000
+      00011000
+      00111111
+      00111111
+      00011000
+      00011000
+      00000000
+    `);
 
-    const result = minimalBoundingRectangle.call(image);
+    const result = getMbrCorners(image);
     expect(result).toHaveLength(4);
 
     for (let i = 0; i < 4; i++) {
@@ -33,14 +31,14 @@ describe('Minimal bounding rectangle', function () {
     }
   });
 
-  it('should return the small bounding box', function () {
-    let image = binary`
+  it('should return the small bounding box', () => {
+    let image = testUtils.createMask(`
       10000001
       00011000
       10011010
-    `;
+    `);
 
-    const result = minimalBoundingRectangle.call(image);
+    const result = getMbrCorners(image);
 
     expect(result).toStrictEqual([
       [0, 3],
@@ -50,14 +48,14 @@ describe('Minimal bounding rectangle', function () {
     ]);
   });
 
-  it('should return the small bounding box 2', function () {
-    let image = binary`
+  it('should return the small bounding box 2', () => {
+    let image = testUtils.createMask(`
       01000100
       00011000
       01011010
-    `;
+    `);
 
-    const result = minimalBoundingRectangle.call(image);
+    const result = getMbrCorners(image);
     expect(result).toStrictEqual([
       [1, 3],
       [7, 3],
@@ -66,14 +64,14 @@ describe('Minimal bounding rectangle', function () {
     ]);
   });
 
-  it('should return the small bounding box diamond', function () {
-    let image = binary`
+  it('should return the small bounding box diamond', () => {
+    let image = testUtils.createMask(`
       00000100
       00001110
       00000100
-      `;
+      `);
 
-    const result = minimalBoundingRectangle.call(image);
+    const result = getMbrCorners(image);
     expect(result).toBeDeepCloseTo(
       [
         [3.5, 1.5],
@@ -85,8 +83,8 @@ describe('Minimal bounding rectangle', function () {
     );
   });
 
-  it('should return the small bounding box rectangle', function () {
-    let image = binary`
+  it('should return the small bounding box rectangle', () => {
+    let image = testUtils.createMask(`
         00000000
         00001000
         00011100
@@ -94,8 +92,8 @@ describe('Minimal bounding rectangle', function () {
         00011111
         00001110
         00000100
-      `;
-    const result = minimalBoundingRectangle.call(image);
+      `);
+    const result = getMbrCorners(image);
     expect(result).toBeDeepCloseTo(
       [
         [8.5, 4.5],
@@ -107,7 +105,7 @@ describe('Minimal bounding rectangle', function () {
     );
   });
 
-  it('should return the small bounding box rectangle from points', function () {
+  it('should return the small bounding box rectangle from points', () => {
     const result = minimalBoundingRectangle({
       originalPoints: [
         [0, 1],
@@ -129,7 +127,7 @@ describe('Minimal bounding rectangle', function () {
     );
   });
 
-  it('should return the small bouding rectangle for one point', function () {
+  it('should return the small bouding rectangle for one point', () => {
     const result = minimalBoundingRectangle({
       originalPoints: [[2, 2]],
     });
@@ -141,14 +139,14 @@ describe('Minimal bounding rectangle', function () {
     ]);
   });
 
-  it('should return the small bouding rectangle for nothing', function () {
+  it('should return the small bouding rectangle for nothing', () => {
     const result = minimalBoundingRectangle({
       originalPoints: [],
     });
     expect(result).toStrictEqual([]);
   });
 
-  it('should return the small bouding rectangle for 2 points', function () {
+  it('should return the small bouding rectangle for 2 points', () => {
     const result = minimalBoundingRectangle({
       originalPoints: [
         [2, 2],
