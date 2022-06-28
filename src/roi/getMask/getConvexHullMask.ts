@@ -24,11 +24,18 @@ export function getConvexHullMask(
   options: ConvexHullMaskOptions = { kind: 'convexHull' },
 ): Mask {
   const { filled = true } = options;
+
+  if (roi.surface === 1) {
+    let result = new Mask(1, 1);
+    result.setBit(0, 0, 1);
+    return result;
+  }
+
   const borderPoints = roi.getBorderPoints();
-  // todo: use draw functions on mask to convert the vertices into a polygon
-
   const vertices = mcch(borderPoints);
-  let result = new Mask(roi.width, roi.height);
+  const mask = new Mask(roi.width, roi.height);
 
-  return result.drawPolygon(vertices, { filled });
+  const result = mask.drawPolygon(vertices, { filled });
+
+  return result;
 }
