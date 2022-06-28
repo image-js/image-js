@@ -118,7 +118,7 @@ describe('Copy a source image to a target', () => {
       [1, 1],
       [1, 1],
     ]);
-    const result = source.copyTo(target, { row: 0, column: 0 });
+    const result = source.copyTo(target);
     expect(result).toMatchImageData([
       [1, 1, 0, 0],
       [1, 1, 0, 0],
