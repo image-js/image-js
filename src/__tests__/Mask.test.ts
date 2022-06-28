@@ -2,7 +2,7 @@ import util from 'util';
 
 import { ColorDepth, ImageColorModel } from '..';
 import { Mask } from '../Mask';
-import { ArrayPoint } from '../utils/types';
+import { Point } from '../utils/types';
 
 describe('create new masks', () => {
   it('should create a mask', () => {
@@ -113,7 +113,7 @@ test('createFrom', () => {
 });
 
 test('fromPoints', () => {
-  const points: ArrayPoint[] = [[1, 1]];
+  const points: Point[] = [{ column: 1, row: 1 }];
   expect(Mask.fromPoints(5, 3, points)).toMatchMaskData([
     [0, 0, 0, 0, 0],
     [0, 1, 0, 0, 0],

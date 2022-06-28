@@ -1,40 +1,11 @@
 import { Mask } from '../Mask';
 
 import { Roi } from './Roi';
-import { getContourMask } from './getMask/getContourMask';
-import { getConvexHullMask } from './getMask/getConvexHullMask';
-
-export interface ContourMaskOptions {
-  kind: 'contour';
-  /**
-   * Should the inner borders be returned too?
-   *
-   * @default false
-   */
-  innerBorders?: boolean;
-  /**
-   * Consider pixels connected by corners? This option is only useful if filled = false.
-   *
-   * @default false
-   */
-  allowCorners?: boolean;
-  /**
-   * Specify wether the pixels inside the ROI should be set to 1.
-   *
-   * @default true
-   */
-  filled?: boolean;
-}
-
-export interface ConvexHullMaskOptions {
-  kind: 'convexHull';
-  /**
-   * Specify wether the pixels inside the ROI should be set to 1.
-   *
-   * @default true
-   */
-  filled?: boolean;
-}
+import { ContourMaskOptions, getContourMask } from './getMask/getContourMask';
+import {
+  ConvexHullMaskOptions,
+  getConvexHullMask,
+} from './getMask/getConvexHullMask';
 
 export type GetMaskOptions = ContourMaskOptions | ConvexHullMaskOptions;
 

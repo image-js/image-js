@@ -1,6 +1,27 @@
 import { Mask } from '../../Mask';
 import { Roi } from '../Roi';
-import { ContourMaskOptions } from '../getMask';
+
+export interface ContourMaskOptions {
+  kind: 'contour';
+  /**
+   * Should the inner borders be returned too?
+   *
+   * @default false
+   */
+  innerBorders?: boolean;
+  /**
+   * Consider pixels connected by corners? This option is only useful if filled = false.
+   *
+   * @default false
+   */
+  allowCorners?: boolean;
+  /**
+   * Specify wether the pixels inside the ROI should be set to 1.
+   *
+   * @default true
+   */
+  filled?: boolean;
+}
 
 /**
  * Generate a mask of the roi. You can either only return the borders, or the filled mask.
