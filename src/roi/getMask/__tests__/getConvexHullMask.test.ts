@@ -3,8 +3,7 @@ import { RoiKind } from '../../getRois';
 import { getConvexHullMask } from '../getConvexHullMask';
 
 describe('getConvexHullMask', () => {
-  // the following tests fail because there is a bug with filled polygons
-  it.skip('cross', () => {
+  it('cross', () => {
     const mask = testUtils.createMask([
       [0, 1, 0],
       [1, 1, 1],
@@ -36,25 +35,6 @@ describe('getConvexHullMask', () => {
     expect(roiMask).toMatchMaskData([
       [0, 1, 0],
       [1, 0, 1],
-      [0, 1, 0],
-    ]);
-  });
-  it('T', () => {
-    const mask = testUtils.createMask([
-      [1, 1, 1],
-      [0, 1, 0],
-      [0, 1, 0],
-    ]);
-    const roiMapManager = fromMask(mask);
-
-    const roi = roiMapManager.getRois({ kind: RoiKind.WHITE })[0];
-    const roiMask = getConvexHullMask(roi);
-
-    // console.log(roiMask);
-
-    expect(roiMask).toMatchMaskData([
-      [1, 1, 1],
-      [0, 1, 0],
       [0, 1, 0],
     ]);
   });
@@ -104,6 +84,30 @@ describe('getConvexHullMask', () => {
       [1, 0, 0, 0, 1],
       [0, 1, 0, 1, 0],
       [0, 0, 1, 0, 0],
+    ]);
+  });
+  it('random shape, filled = false', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 1, 0, 0],
+      [0, 0, 1, 0, 0],
+      [0, 0, 1, 1, 1],
+      [0, 1, 0, 0, 0],
+      [1, 0, 0, 0, 0],
+    ]);
+    const roiMapManager = fromMask(mask, { allowCorners: true });
+
+    const roi = roiMapManager.getRois({ kind: RoiKind.WHITE })[0];
+    const roiMask = getConvexHullMask(roi, {
+      kind: 'convexHull',
+      filled: false,
+    });
+
+    expect(roiMask).toMatchMaskData([
+      [0, 0, 1, 0, 0],
+      [0, 0, 1, 1, 0],
+      [0, 1, 0, 0, 1],
+      [0, 1, 1, 1, 0],
+      [1, 1, 0, 0, 0],
     ]);
   });
   it('test fill', () => {

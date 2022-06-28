@@ -129,7 +129,6 @@ describe('drawPolygon on IJS', () => {
     ]);
     expect(result).not.toBe(image);
   });
-  // the two following tests fail because there is a bug with filled polygons
   it('3x3 image, tilted square, filled', () => {
     const image = new IJS(3, 3, { colorModel: ImageColorModel.GREY });
     const points = [

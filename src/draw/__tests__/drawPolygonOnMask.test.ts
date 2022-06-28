@@ -148,7 +148,6 @@ describe('drawPolygon on Mask', () => {
     ]);
     expect(result).not.toBe(mask);
   });
-  // the following tests fail because there is a bug with filled polygons
   it('3x3 mask, tilted square, filled', () => {
     const mask = new Mask(3, 3);
     const points = [

@@ -5,6 +5,6 @@ exports[`check custom inspect 1`] = `
   width: 1
   height: 2
   data: [ 0]
-     [ 0]
+        [ 0]
 }"
 `;
