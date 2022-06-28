@@ -1,4 +1,4 @@
-import { Point } from '../../utils/types';
+import { Point } from './points';
 
 export interface Line {
   /**
