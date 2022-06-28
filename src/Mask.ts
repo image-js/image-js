@@ -630,7 +630,7 @@ function printData(mask: Mask): string {
     }
     result.push(`[${line.join(' ')}]`);
   }
-  return result.join('\n     ');
+  return result.join('\n        ');
 }
 
 /**
