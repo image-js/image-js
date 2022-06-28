@@ -23,7 +23,7 @@ export function getConvexHullMask(
   roi: Roi,
   options: ConvexHullMaskOptions = { kind: 'convexHull' },
 ): Mask {
-  const { filled = false } = options;
+  const { filled = true } = options;
   const borderPoints = roi.getBorderPoints();
   // todo: use draw functions on mask to convert the vertices into a polygon
 
