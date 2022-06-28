@@ -1,5 +1,5 @@
 import { IJS, Mask } from '../..';
-import { ImageColorModel } from '../colorModels';
+import { ImageColorModel } from '../constants/colorModels';
 import { getIndex } from '../getIndex';
 
 describe('getIndex', () => {

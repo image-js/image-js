@@ -4,7 +4,7 @@ import { IJS } from '../IJS';
 import { arrayPointsToObjects } from '../utils/arrayPointsToObjects';
 import checkProcessable from '../utils/checkProcessable';
 import { getOutputImage } from '../utils/getOutputImage';
-import { Point } from '../utils/types';
+import { Point } from '../utils/geometry/points';
 
 import { DrawPolylineOnIjsOptions } from './drawPolylineOnIjs';
 import { deleteDuplicates } from './utils/deleteDuplicates';

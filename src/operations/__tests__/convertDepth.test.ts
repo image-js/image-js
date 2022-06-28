@@ -1,5 +1,5 @@
 import { ColorDepth } from '../../IJS';
-import { ImageColorModel } from '../../utils/colorModels';
+import { ImageColorModel } from '../../utils/constants/colorModels';
 
 describe('convert depth', () => {
   it('Uint8 to Uint16', () => {

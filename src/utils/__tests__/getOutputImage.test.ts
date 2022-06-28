@@ -1,6 +1,6 @@
 import { Mask } from '../..';
 import { IJS, ColorDepth } from '../../IJS';
-import { ImageColorModel } from '../colorModels';
+import { ImageColorModel } from '../constants/colorModels';
 import {
   getOutputImage,
   imageToOutputMask,

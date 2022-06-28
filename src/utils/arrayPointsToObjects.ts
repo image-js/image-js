@@ -1,4 +1,4 @@
-import { ArrayPoint, Point } from './types';
+import { ArrayPoint, Point } from './geometry/points';
 
 /**
  * Convert object points into array points.

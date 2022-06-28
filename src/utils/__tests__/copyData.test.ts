@@ -1,5 +1,5 @@
 import { IJS } from '../..';
-import { ImageColorModel } from '../colorModels';
+import { ImageColorModel } from '../constants/colorModels';
 import { copyData } from '../copyData';
 
 describe('copyData', () => {

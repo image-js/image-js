@@ -2,7 +2,7 @@ import util from 'util';
 
 import { ColorDepth, ImageColorModel } from '..';
 import { Mask } from '../Mask';
-import { Point } from '../utils/types';
+import { Point } from '../utils/geometry/points';
 
 describe('create new masks', () => {
   it('should create a mask', () => {

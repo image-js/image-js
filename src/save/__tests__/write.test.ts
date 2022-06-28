@@ -3,7 +3,7 @@ import { join } from 'path';
 
 import { write, writeSync } from '..';
 import { read } from '../..';
-import { ImageColorModel } from '../../utils/colorModels';
+import { ImageColorModel } from '../../utils/constants/colorModels';
 import { ImageFormat } from '../encode';
 
 let tmpDir: string;

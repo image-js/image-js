@@ -69,8 +69,8 @@ import {
   PaintMaskOptions,
   split,
 } from './operations';
-import { ImageColorModel, colorModels } from './utils/colorModels';
-import { Point } from './utils/types';
+import { ImageColorModel, colorModels } from './utils/constants/colorModels';
+import { Point } from './utils/geometry/points';
 import { validateChannel, validateValue } from './utils/validators';
 
 import {

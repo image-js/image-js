@@ -1,7 +1,7 @@
 import { IJS } from '../IJS';
 import { Mask } from '../Mask';
 
-import { ImageColorModel } from './colorModels';
+import { ImageColorModel } from './constants/colorModels';
 
 /**
  * Get the black colorfor a given color model.

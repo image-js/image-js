@@ -1,5 +1,5 @@
 import { Mask } from '../Mask';
-import { Point } from '../utils/types';
+import { Point } from '../utils/geometry/points';
 
 import { RoiMap } from './RoiMapManager';
 import { GetBorderPointOptions, getBorderPoints } from './getBorderPoints';

@@ -7,7 +7,7 @@ import {
   SCHARR_Y,
   SOBEL_X,
   SOBEL_Y,
-} from '../utils/kernels';
+} from '../utils/constants/kernels';
 
 export enum DerivativeFilters {
   SOBEL = 'SOBEL',

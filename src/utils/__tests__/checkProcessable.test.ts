@@ -1,6 +1,6 @@
 import { ColorDepth } from '../..';
 import checkProcessable from '../checkProcessable';
-import { ImageColorModel } from '../colorModels';
+import { ImageColorModel } from '../constants/colorModels';
 
 describe('checkProcessable', () => {
   it('wrong bit depth', () => {

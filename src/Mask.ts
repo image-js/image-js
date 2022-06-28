@@ -41,7 +41,7 @@ import {
 } from './morphology';
 import { erode } from './morphology/erode';
 import { boolToNumber } from './utils/boolToNumber';
-import { Point } from './utils/types';
+import { Point } from './utils/geometry/points';
 
 import {
   ImageColorModel,

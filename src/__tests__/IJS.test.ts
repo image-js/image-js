@@ -1,7 +1,7 @@
 import { inspect } from 'util';
 
 import { IJS, ColorDepth, ImageCoordinates } from '../IJS';
-import { ImageColorModel } from '../utils/colorModels';
+import { ImageColorModel } from '../utils/constants/colorModels';
 
 describe('create new images', () => {
   it('should create a 8-bit image', () => {

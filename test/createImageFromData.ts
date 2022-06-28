@@ -5,7 +5,7 @@ import {
   ImageDataArray,
   ImageOptions,
 } from '../src';
-import { colorModels } from '../src/utils/colorModels';
+import { colorModels } from '../src/utils/constants/colorModels';
 
 export type CreateImageOptions = Pick<ImageOptions, 'depth'>;
 

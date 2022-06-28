@@ -3,7 +3,7 @@ import robustPointInPolygon from 'robust-point-in-polygon';
 import { Mask } from '../Mask';
 import { arrayPointsToObjects } from '../utils/arrayPointsToObjects';
 import { maskToOutputMask } from '../utils/getOutputImage';
-import { Point } from '../utils/types';
+import { Point } from '../utils/geometry/points';
 
 import { DrawPolylineOnMaskOptions } from './drawPolylineOnMask';
 import { deleteDuplicates } from './utils/deleteDuplicates';

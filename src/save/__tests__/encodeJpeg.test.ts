@@ -1,7 +1,7 @@
 import { encodeJpeg } from '..';
 import { ColorDepth } from '../../IJS';
 import { decode } from '../../load/decode';
-import { ImageColorModel } from '../../utils/colorModels';
+import { ImageColorModel } from '../../utils/constants/colorModels';
 
 describe('encode JPEG', () => {
   it('encode an 8-bit rgba image', () => {

@@ -1,6 +1,6 @@
 import { decodePng } from '..';
 import { ColorDepth } from '../../IJS';
-import { ImageColorModel } from '../../utils/colorModels';
+import { ImageColorModel } from '../../utils/constants/colorModels';
 
 describe('Load PNG', () => {
   const tests = [

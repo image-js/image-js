@@ -1,4 +1,4 @@
-import { ImageColorModel } from '../../utils/colorModels';
+import { ImageColorModel } from '../../utils/constants/colorModels';
 import { computeThreshold, threshold, ThresholdAlgorithm } from '../threshold';
 
 test('threshold with a fixed value of 100', () => {

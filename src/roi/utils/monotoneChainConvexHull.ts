@@ -1,4 +1,4 @@
-import { Point } from '../../utils/types';
+import { Point } from '../../utils/geometry/points';
 
 interface MCCHOptions {
   sorted?: boolean;

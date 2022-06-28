@@ -1,6 +1,6 @@
 import { decodeJpeg } from '..';
 import { ColorDepth } from '../../IJS';
-import { ImageColorModel } from '../../utils/colorModels';
+import { ImageColorModel } from '../../utils/constants/colorModels';
 
 describe('Load JPEG', () => {
   const tests = [['grey6'], ['grey12'], ['rgb6'], ['rgb12']] as const;

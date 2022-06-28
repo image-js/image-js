@@ -1,4 +1,4 @@
-import { ImageColorModel } from '../../utils/colorModels';
+import { ImageColorModel } from '../../utils/constants/colorModels';
 import { copyAlpha } from '../convertColor';
 
 describe('convertColor', () => {

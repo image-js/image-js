@@ -1,4 +1,4 @@
-import { ImageColorModel } from '../../utils/colorModels';
+import { ImageColorModel } from '../../utils/constants/colorModels';
 
 test('split RGB', () => {
   const img = testUtils.createRgbImage([[0, 1, 2, 253, 254, 255]]);
