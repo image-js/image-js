@@ -41,7 +41,7 @@ import {
 } from './morphology';
 import { erode } from './morphology/erode';
 import { boolToNumber } from './utils/boolToNumber';
-import { ArrayPoint, Point } from './utils/types';
+import { Point } from './utils/types';
 
 import {
   ImageColorModel,
@@ -240,12 +240,12 @@ export class Mask {
   public static fromPoints(
     width: number,
     height: number,
-    points: ArrayPoint[],
+    points: Point[],
   ): Mask {
     let mask = new Mask(width, height);
 
     for (const point of points) {
-      mask.setBit(point[0], point[1], 1);
+      mask.setBit(point.column, point.row, 1);
     }
 
     return mask;

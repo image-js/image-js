@@ -1,4 +1,4 @@
-import { ArrayPoint } from '../utils/types';
+import { Point } from '../utils/types';
 
 import { Roi } from './Roi';
 
@@ -29,30 +29,30 @@ export interface GetBorderPointOptions {
 export function getBorderPoints(
   roi: Roi,
   options: GetBorderPointOptions = {},
-): Array<ArrayPoint> {
+): Array<Point> {
   const { innerBorders = false, allowCorners = false } = options;
   const mask = roi.getMask();
   if (!innerBorders) {
     mask.solidFill({ out: mask });
   }
 
-  let borders: Array<ArrayPoint> = [];
+  let borders: Array<Point> = [];
 
   // first process frame pixels
   for (let column = 0; column < mask.width; column++) {
     if (mask.getBit(column, 0)) {
-      borders.push([column, 0]);
+      borders.push({ column, row: 0 });
     }
     if (mask.getBit(column, mask.height - 1)) {
-      borders.push([column, mask.height - 1]);
+      borders.push({ column, row: mask.height - 1 });
     }
   }
   for (let row = 0; row < mask.height; row++) {
     if (mask.getBit(0, row)) {
-      borders.push([0, row]);
+      borders.push({ column: 0, row });
     }
     if (mask.getBit(mask.width - 1, row)) {
-      borders.push([mask.width - 1, row]);
+      borders.push({ column: mask.width - 1, row });
     }
   }
 
@@ -65,7 +65,7 @@ export function getBorderPoints(
           mask.getBit(column + 1, row) === 0 ||
           mask.getBit(column, row + 1) === 0
         ) {
-          borders.push([column, row]);
+          borders.push({ column, row });
         }
 
         if (allowCorners) {
@@ -75,7 +75,7 @@ export function getBorderPoints(
             mask.getBit(column + 1, row - 1) === 0 ||
             mask.getBit(column + 1, row + 1) === 0
           ) {
-            borders.push([column, row]);
+            borders.push({ column, row });
           }
         }
       }
