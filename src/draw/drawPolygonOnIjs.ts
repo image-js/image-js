@@ -64,6 +64,7 @@ export function drawPolygonOnIjs(
         }
       }
     }
+
     for (let row = 0; row < newImage.height; row++) {
       for (let column = 0; column < newImage.width; column++) {
         if (matrixBinary[row][column] === 1) {

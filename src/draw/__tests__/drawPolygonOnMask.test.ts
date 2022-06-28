@@ -148,6 +148,26 @@ describe('drawPolygon on Mask', () => {
     ]);
     expect(result).not.toBe(mask);
   });
+  // the following tests fail because there is a bug with filled polygons
+  it.skip('3x3 mask, tilted square, filled', () => {
+    const mask = new Mask(3, 3);
+    const points = [
+      { column: 0, row: 1 },
+      { column: 1, row: 2 },
+      { column: 2, row: 1 },
+      { column: 1, row: 0 },
+    ];
+
+    const result = mask.drawPolygon(points, {
+      filled: true,
+    });
+
+    expect(result).toMatchMaskData([
+      [0, 1, 0],
+      [1, 1, 1],
+      [0, 1, 0],
+    ]);
+  });
   it('should handle duplicate points', () => {
     const mask = testUtils.createMask([
       [0, 0, 0, 0],

@@ -50,7 +50,7 @@ describe('getConvexHullMask', () => {
     const roi = roiMapManager.getRois({ kind: RoiKind.WHITE })[0];
     const roiMask = getConvexHullMask(roi);
 
-    console.log(roiMask);
+    // console.log(roiMask);
 
     expect(roiMask).toMatchMaskData([
       [1, 1, 1],
