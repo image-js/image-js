@@ -97,6 +97,7 @@ describe('drawPolygon on IJS', () => {
       strokeColor: [1],
       fillColor: [2],
     });
+
     expect(result).toMatchImageData([
       [1, 0, 0, 0],
       [1, 1, 0, 0],
@@ -129,7 +130,7 @@ describe('drawPolygon on IJS', () => {
     expect(result).not.toBe(image);
   });
   // the two following tests fail because there is a bug with filled polygons
-  it.skip('3x3 image, tilted square, filled', () => {
+  it('3x3 image, tilted square, filled', () => {
     const image = new IJS(3, 3, { colorModel: ImageColorModel.GREY });
     const points = [
       { column: 0, row: 1 },
@@ -139,17 +140,17 @@ describe('drawPolygon on IJS', () => {
     ];
 
     const result = image.drawPolygon(points, {
-      fillColor: [42],
+      fillColor: [6],
       strokeColor: [3],
     });
 
-    expect(result).toMatchMaskData([
-      [0, 1, 0],
-      [1, 1, 1],
-      [0, 1, 0],
+    expect(result).toMatchImageData([
+      [0, 3, 0],
+      [3, 6, 3],
+      [0, 3, 0],
     ]);
   });
-  it.skip('5x5 image, tilted square, filled', () => {
+  it('5x5 image, tilted square, filled', () => {
     const image = new IJS(5, 5, { colorModel: ImageColorModel.GREY });
     const points = [
       { column: 0, row: 2 },
@@ -162,8 +163,7 @@ describe('drawPolygon on IJS', () => {
       fillColor: [6],
       strokeColor: [3],
     });
-
-    expect(result).toMatchMaskData([
+    expect(result).toMatchImageData([
       [0, 0, 3, 0, 0],
       [0, 3, 6, 3, 0],
       [3, 6, 6, 6, 3],

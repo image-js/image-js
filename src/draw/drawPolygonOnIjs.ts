@@ -1,11 +1,13 @@
+import robustPointInPolygon from 'robust-point-in-polygon';
+
 import { IJS } from '../IJS';
+import { arrayPointsToObjects } from '../utils/arrayPointsToObjects';
 import checkProcessable from '../utils/checkProcessable';
 import { getOutputImage } from '../utils/getOutputImage';
 import { Point } from '../utils/types';
 
 import { DrawPolylineOnIjsOptions } from './drawPolylineOnIjs';
 import { deleteDuplicates } from './utils/deleteDuplicates';
-import { isAtTheRightOfTheLine, lineBetweenTwoPoints } from './utils/lineUtils';
 
 export interface DrawPolygonOnIjsOptions extends DrawPolylineOnIjsOptions {
   /**
@@ -43,38 +45,18 @@ export function drawPolygonOnIjs(
       throw new Error('drawPolygon: fill color is not compatible with image.');
     }
 
-    let matrixBinary: number[][] = [];
-    for (let i = 0; i < newImage.height; i++) {
-      matrixBinary[i] = [];
-      for (let j = 0; j < newImage.width; j++) {
-        matrixBinary[i].push(0);
-      }
-    }
     const filteredPoints = deleteDuplicates(points);
-    for (let i = 0; i < filteredPoints.length; i++) {
-      const line = lineBetweenTwoPoints(
-        filteredPoints[i],
-        filteredPoints[(i + 1) % filteredPoints.length],
-      );
-      for (let row = 0; row < newImage.height; row++) {
-        for (let column = 0; column < newImage.width; column++) {
-          if (isAtTheRightOfTheLine({ column, row }, line, newImage.height)) {
-            matrixBinary[row][column] = matrixBinary[row][column] === 0 ? 1 : 0;
-          }
-        }
-      }
-    }
+
+    const arrayPoints = arrayPointsToObjects(filteredPoints);
 
     for (let row = 0; row < newImage.height; row++) {
       for (let column = 0; column < newImage.width; column++) {
-        if (matrixBinary[row][column] === 1) {
-          let numberChannels = Math.min(newImage.channels, fillColor.length);
-          for (let channel = 0; channel < numberChannels; channel++) {
-            newImage.setValue(column, row, channel, fillColor[channel]);
-          }
+        if (robustPointInPolygon(arrayPoints, [column, row]) === -1) {
+          newImage.setPixel(column, row, fillColor);
         }
       }
     }
-    return newImage.drawPolyline([...points, points[0]], otherOptions);
   }
+
+  return newImage.drawPolyline([...points, points[0]], otherOptions);
 }

@@ -1,10 +1,12 @@
+import robustPointInPolygon from 'robust-point-in-polygon';
+
 import { Mask } from '../Mask';
+import { arrayPointsToObjects } from '../utils/arrayPointsToObjects';
 import { maskToOutputMask } from '../utils/getOutputImage';
 import { Point } from '../utils/types';
 
 import { DrawPolylineOnMaskOptions } from './drawPolylineOnMask';
 import { deleteDuplicates } from './utils/deleteDuplicates';
-import { isAtTheRightOfTheLine, lineBetweenTwoPoints } from './utils/lineUtils';
 
 export interface DrawPolygonOnMaskOptions extends DrawPolylineOnMaskOptions {
   /**
@@ -34,31 +36,12 @@ export function drawPolygonOnMask(
     return newMask.drawPolyline([...points, points[0]], otherOptions);
   }
 
-  let polygonMask = Mask.createFrom(newMask);
-
   const filteredPoints = deleteDuplicates(points);
+  const arrayPoints = arrayPointsToObjects(filteredPoints);
 
-  for (let i = 0; i < filteredPoints.length; i++) {
-    const line = lineBetweenTwoPoints(
-      filteredPoints[i],
-      filteredPoints[(i + 1) % filteredPoints.length],
-    );
-    for (let row = 0; row < newMask.height; row++) {
-      for (let column = 0; column < newMask.width; column++) {
-        if (isAtTheRightOfTheLine({ column, row }, line, newMask.height)) {
-          if (polygonMask.getBit(column, row)) {
-            polygonMask.setBit(column, row, 0);
-          } else {
-            polygonMask.setBit(column, row, 1);
-          }
-        }
-      }
-    }
-  }
-
-  for (let row = 0; row < mask.height; row++) {
-    for (let column = 0; column < mask.width; column++) {
-      if (polygonMask.getBit(column, row)) {
+  for (let row = 0; row < newMask.height; row++) {
+    for (let column = 0; column < newMask.width; column++) {
+      if (robustPointInPolygon(arrayPoints, [column, row]) === -1) {
         newMask.setBit(column, row, 1);
       }
     }
