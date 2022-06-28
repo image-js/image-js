@@ -3,103 +3,103 @@ import { monotoneChainConvexHull as mcch } from '../monotoneChainConvexHull';
 describe('monotoneChainConvexHull', () => {
   it('basic square', () => {
     const result = mcch([
-      [0, 0],
-      [0, 1],
-      [1, 0],
-      [1, 1],
+      { column: 0, row: 0 },
+      { column: 0, row: 1 },
+      { column: 1, row: 0 },
+      { column: 1, row: 1 },
     ]);
     expect(result).toStrictEqual([
-      [0, 0],
-      [0, 1],
-      [1, 1],
-      [1, 0],
+      { column: 0, row: 0 },
+      { column: 0, row: 1 },
+      { column: 1, row: 1 },
+      { column: 1, row: 0 },
     ]);
   });
 
   it('mixed square', () => {
     const result = mcch([
-      [0, 0],
-      [1, 0],
-      [0, 1],
-      [1, 1],
-      [0, 1],
-      [1, 1],
-      [0, 2],
-      [1, 2],
-      [1, 0],
-      [2, 0],
-      [1, 1],
-      [2, 1],
-      [1, 1],
-      [2, 1],
-      [1, 2],
-      [2, 2],
+      { column: 0, row: 0 },
+      { column: 1, row: 0 },
+      { column: 0, row: 1 },
+      { column: 1, row: 1 },
+      { column: 0, row: 1 },
+      { column: 1, row: 1 },
+      { column: 0, row: 2 },
+      { column: 1, row: 2 },
+      { column: 1, row: 0 },
+      { column: 2, row: 0 },
+      { column: 1, row: 1 },
+      { column: 2, row: 1 },
+      { column: 1, row: 1 },
+      { column: 2, row: 1 },
+      { column: 1, row: 2 },
+      { column: 2, row: 2 },
     ]);
     expect(result).toStrictEqual([
-      [0, 0],
-      [0, 2],
-      [2, 2],
-      [2, 0],
+      { column: 0, row: 0 },
+      { column: 0, row: 2 },
+      { column: 2, row: 2 },
+      { column: 2, row: 0 },
     ]);
   });
 
   it('rectangle with inside points', () => {
     const result = mcch([
-      [1, 1],
-      [3, 0],
-      [2, 1],
-      [3, 2],
-      [1, 2],
-      [0, 2],
-      [0, 0],
+      { column: 1, row: 1 },
+      { column: 3, row: 0 },
+      { column: 2, row: 1 },
+      { column: 3, row: 2 },
+      { column: 1, row: 2 },
+      { column: 0, row: 2 },
+      { column: 0, row: 0 },
     ]);
     expect(result).toStrictEqual([
-      [0, 0],
-      [0, 2],
-      [3, 2],
-      [3, 0],
+      { column: 0, row: 0 },
+      { column: 0, row: 2 },
+      { column: 3, row: 2 },
+      { column: 3, row: 0 },
     ]);
   });
 
   it('more complex shape', () => {
     const result = mcch([
-      [-1, -1],
-      [0, 0],
-      [0, -2],
-      [1, 0],
-      [1, 2],
-      [4, 1],
-      [0, 8],
-      [3, 6],
-      [2, 4],
+      { column: -1, row: -1 },
+      { column: 0, row: 0 },
+      { column: 0, row: -2 },
+      { column: 1, row: 0 },
+      { column: 1, row: 2 },
+      { column: 4, row: 1 },
+      { column: 0, row: 8 },
+      { column: 3, row: 6 },
+      { column: 2, row: 4 },
     ]);
     expect(result).toStrictEqual([
-      [-1, -1],
-      [0, 8],
-      [3, 6],
-      [4, 1],
-      [0, -2],
+      { column: -1, row: -1 },
+      { column: 0, row: 8 },
+      { column: 3, row: 6 },
+      { column: 4, row: 1 },
+      { column: 0, row: -2 },
     ]);
   });
 
   it('already sorted', () => {
     const result = mcch(
       [
-        [0, 0],
-        [0, 2],
-        [1, 1],
-        [1, 2],
-        [2, 1],
-        [3, 0],
-        [3, 2],
+        { column: 0, row: 0 },
+        { column: 0, row: 2 },
+        { column: 1, row: 1 },
+        { column: 1, row: 2 },
+        { column: 2, row: 1 },
+        { column: 3, row: 0 },
+        { column: 3, row: 2 },
       ],
       { sorted: true },
     );
     expect(result).toStrictEqual([
-      [0, 0],
-      [0, 2],
-      [3, 2],
-      [3, 0],
+      { column: 0, row: 0 },
+      { column: 0, row: 2 },
+      { column: 3, row: 2 },
+      { column: 3, row: 0 },
     ]);
   });
 });

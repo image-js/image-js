@@ -1,7 +1,9 @@
+import { Point } from '../../utils/types';
+
 interface MCCHOptions {
   sorted?: boolean;
 }
-type Point = [number, number];
+
 /**
  * Computes the convex hull of a binary image using Andrew's Monotone Chain Algorithm
  * http://www.algorithmist.com/index.php/Monotone_Chain_Convex_Hull
@@ -44,12 +46,17 @@ export function monotoneChainConvexHull(
 }
 
 function cw(p1: Point, p2: Point, p3: Point) {
-  return (p2[1] - p1[1]) * (p3[0] - p1[0]) - (p2[0] - p1[0]) * (p3[1] - p1[1]);
+  return (
+    (p2.row - p1.row) * (p3.column - p1.column) -
+    (p2.column - p1.column) * (p3.row - p1.row)
+  );
 }
 
 function byXThenY(point1: Point, point2: Point) {
-  if (point1[0] === point2[0]) {
-    return point1[1] - point2[1];
+  if (point1.column === point2.column) {
+    return point1.row - point2.row;
   }
-  return point1[0] - point2[0];
+  return point1.column - point2.column;
 }
+
+// 0 -> column, 1 -> row
