@@ -24,12 +24,12 @@ export interface CopyToOptions<OutType> {
 export function copyTo(
   source: IJS,
   target: IJS,
-  options: CopyToOptions<IJS>,
+  options?: CopyToOptions<IJS>,
 ): IJS;
 export function copyTo(
   source: Mask,
   target: Mask,
-  options: CopyToOptions<Mask>,
+  options?: CopyToOptions<Mask>,
 ): Mask;
 /**
  * Copy the image to another one by specifying the location in the target image.
