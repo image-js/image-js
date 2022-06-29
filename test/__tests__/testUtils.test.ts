@@ -224,6 +224,23 @@ describe('createRoi', () => {
     expect(roi.height).toBe(1);
     expect(roi.id).toBe(1);
   });
+
+  it('should create an ROI from larger string', () => {
+    const roi = testUtils.createRoi(`
+    0 0 0 0 0 0 0 0
+    0 0 0 1 1 0 0 0
+    0 0 0 1 1 0 0 0
+    0 0 1 1 1 1 1 1
+    0 0 1 1 1 1 1 1
+    0 0 0 1 1 0 0 0
+    0 0 0 1 1 0 0 0
+    0 0 0 0 0 0 0 0
+    `);
+    expect(roi.width).toBe(6);
+    expect(roi.height).toBe(6);
+    expect(roi.id).toBe(1);
+  });
+
   it('should throw if multiple ROIs found', () => {
     expect(() =>
       testUtils.createRoi([

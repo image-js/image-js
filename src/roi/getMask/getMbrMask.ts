@@ -32,7 +32,10 @@ export function getMbrMask(
 ): Mask {
   const { filled = true } = options;
 
-  return new Mask(1, 1);
+  const corners = getMbrCorners(roi);
+  const dimensions = getMbrMaskSize(corners);
+  const mask = new Mask(dimensions.width, dimensions.height);
+  return mask.drawPolygon(corners, { filled });
 }
 
 /**
@@ -52,27 +55,28 @@ export function getMbrCorners(roi: Roi): Point[] {
     return [vertices[0], vertices[0], vertices[0], vertices[0]];
   }
 
-  let corners: Point[] = [];
+  let rotatedVertices: Point[] = [];
   let minSurface = Number.POSITIVE_INFINITY;
   let minSurfaceAngle = 0;
-  let mbr;
+  let mbr: Point[] = [];
 
   for (let i = 0; i < vertices.length; i++) {
     let angle = getAngle(vertices[i], vertices[(i + 1) % vertices.length]);
+    console.log({ angle });
+    rotatedVertices = rotate(-angle, vertices);
+    console.log({ rotatedVertices });
 
-    corners = rotate(-angle, vertices);
-
-    // we rotate and translate so that this axe is in the bottom
-    let aX = corners[i].column;
-    let aY = corners[i].row;
-    let bX = corners[(i + 1) % corners.length].column;
-    let bY = corners[(i + 1) % corners.length].row;
+    // we rotate and translate so that this segment is at the bottom
+    let aX = rotatedVertices[i].column;
+    let aY = rotatedVertices[i].row;
+    let bX = rotatedVertices[(i + 1) % rotatedVertices.length].column;
+    let bY = rotatedVertices[(i + 1) % rotatedVertices.length].row;
 
     let tUndefined = true;
     let tMin = 0;
     let tMax = 0;
     let maxWidth = 0;
-    for (let point of corners) {
+    for (let point of rotatedVertices) {
       let cX = point.column;
       let cY = point.row;
       let t = (cX - aX) / (bX - aX);
@@ -106,8 +110,8 @@ export function getMbrCorners(roi: Roi): Point[] {
       ];
     }
   }
-  const test = rotate(minSurfaceAngle, mbr);
-  return mbr;
+
+  return rotate(minSurfaceAngle, mbr);
 }
 
 /**
@@ -121,7 +125,27 @@ export function getMbrCorners(roi: Roi): Point[] {
 function getAngle(p1: Point, p2: Point): number {
   let diff = difference(p2, p1);
   let vector = normalize(diff);
-  let angle = Math.acos(vector[0]);
-  if (vector[1] < 0) return -angle;
+  let angle = Math.acos(vector.column);
+  if (vector.row < 0) return -angle;
   return angle;
+}
+
+/**
+ * @param corners
+ */
+export function getMbrMaskSize(corners: Point[]): {
+  width: number;
+  height: number;
+} {
+  const sortedColumns = corners.sort((a, b) => {
+    return a.column - b.column;
+  });
+  const width = sortedColumns[0].column - sortedColumns[3].column;
+
+  const sortedRows = corners.sort((a, b) => {
+    return a.row - b.row;
+  });
+  const height = sortedRows[0].row - sortedRows[3].row;
+
+  return { width, height };
 }

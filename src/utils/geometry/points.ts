@@ -51,11 +51,11 @@ export function rotate(radians: number, points: Point[]): Point[] {
   let result: Point[] = [];
   let cos = Math.cos(radians);
   let sin = Math.sin(radians);
-  for (let i = 0; i < result.length; ++i) {
-    result[i] = {
-      column: cos * points[i].column - sin * points[i].row,
-      row: sin * points[i].column + cos * points[i].row,
-    };
+  for (let point of points) {
+    result.push({
+      column: cos * point.column - sin * point.row,
+      row: sin * point.column + cos * point.row,
+    });
   }
   return result;
 }

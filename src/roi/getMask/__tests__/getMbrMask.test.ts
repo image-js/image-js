@@ -5,20 +5,20 @@ import { getMbrCorners } from '../getMbrMask';
 
 expect.extend({ toBeDeepCloseTo });
 
-describe('getMbrMask', () => {
+describe('getMbrCorners', () => {
   it('should return the minimal bounding box', () => {
-    let image = testUtils.createMask(`
-      00000000
-      00011000
-      00011000
-      00111111
-      00111111
-      00011000
-      00011000
-      00000000
+    let roi = testUtils.createRoi(`
+      0 0 0 0 0 0 0 0
+      0 0 0 1 1 0 0 0
+      0 0 0 1 1 0 0 0
+      0 0 1 1 1 1 1 1
+      0 0 1 1 1 1 1 1
+      0 0 0 1 1 0 0 0
+      0 0 0 1 1 0 0 0
+      0 0 0 0 0 0 0 0
     `);
 
-    const result = getMbrCorners(image);
+    const result = getMbrCorners(roi);
     expect(result).toHaveLength(4);
 
     for (let i = 0; i < 4; i++) {
@@ -31,14 +31,17 @@ describe('getMbrMask', () => {
     }
   });
 
-  it('should return the small bounding box', () => {
-    let image = testUtils.createMask(`
-      10000001
-      00011000
-      10011010
-    `);
+  it.only('should return the small bounding box', () => {
+    let roi = testUtils.createRoi(
+      `
+      1 0 0 0 0 0 0 1
+      0 1 1 1 1 1 1 0
+      1 0 0 1 1 0 1 0
+    `,
+      { allowCorners: true },
+    );
 
-    const result = getMbrCorners(image);
+    const result = getMbrCorners(roi);
 
     expect(result).toStrictEqual([
       [0, 3],
@@ -49,13 +52,13 @@ describe('getMbrMask', () => {
   });
 
   it('should return the small bounding box 2', () => {
-    let image = testUtils.createMask(`
-      01000100
-      00011000
-      01011010
+    let roi = testUtils.createRoi(`
+      0 1 0 0 0 1 0 0
+      0 0 0 1 1 0 0 0
+      0 1 0 1 1 0 1 0
     `);
 
-    const result = getMbrCorners(image);
+    const result = getMbrCorners(roi);
     expect(result).toStrictEqual([
       [1, 3],
       [7, 3],
@@ -65,13 +68,13 @@ describe('getMbrMask', () => {
   });
 
   it('should return the small bounding box diamond', () => {
-    let image = testUtils.createMask(`
-      00000100
-      00001110
-      00000100
+    let roi = testUtils.createRoi(`
+      0 0 0 0 0 1 0 0
+      0 0 0 0 1 1 1 0
+      0 0 0 0 0 1 0 0
       `);
 
-    const result = getMbrCorners(image);
+    const result = getMbrCorners(roi);
     expect(result).toBeDeepCloseTo(
       [
         [3.5, 1.5],
@@ -84,81 +87,22 @@ describe('getMbrMask', () => {
   });
 
   it('should return the small bounding box rectangle', () => {
-    let image = testUtils.createMask(`
-        00000000
-        00001000
-        00011100
-        00111110
-        00011111
-        00001110
-        00000100
+    let roi = testUtils.createRoi(`
+        0 0 0 0 0 0 0 0
+        0 0 0 0 1 0 0 0
+        0 0 0 1 1 1 0 0
+        0 0 1 1 1 1 1 0
+        0 0 0 1 1 1 1 1
+        0 0 0 0 1 1 1 0
+        0 0 0 0 0 1 0 0
       `);
-    const result = getMbrCorners(image);
+    const result = getMbrCorners(roi);
     expect(result).toBeDeepCloseTo(
       [
         [8.5, 4.5],
         [4.5, 0.5],
         [1.5, 3.5],
         [5.5, 7.5],
-      ],
-      6,
-    );
-  });
-
-  it('should return the small bounding box rectangle from points', () => {
-    const result = minimalBoundingRectangle({
-      originalPoints: [
-        [0, 1],
-        [1, 0],
-        [3, 2],
-        [2, 4],
-        [1, 4],
-        [0, 3],
-      ],
-    });
-    expect(result).toBeDeepCloseTo(
-      [
-        [-1, 2],
-        [1, 0],
-        [3.5, 2.5],
-        [1.5, 4.5],
-      ],
-      6,
-    );
-  });
-
-  it('should return the small bouding rectangle for one point', () => {
-    const result = minimalBoundingRectangle({
-      originalPoints: [[2, 2]],
-    });
-    expect(result).toStrictEqual([
-      [2, 2],
-      [2, 2],
-      [2, 2],
-      [2, 2],
-    ]);
-  });
-
-  it('should return the small bouding rectangle for nothing', () => {
-    const result = minimalBoundingRectangle({
-      originalPoints: [],
-    });
-    expect(result).toStrictEqual([]);
-  });
-
-  it('should return the small bouding rectangle for 2 points', () => {
-    const result = minimalBoundingRectangle({
-      originalPoints: [
-        [2, 2],
-        [3, 3],
-      ],
-    });
-    expect(result).toBeDeepCloseTo(
-      [
-        [2, 2],
-        [3, 3],
-        [3, 3],
-        [2, 2],
       ],
       6,
     );
