@@ -5,7 +5,7 @@ import { getMbrCorners } from '../getMbrMask';
 
 expect.extend({ toBeDeepCloseTo });
 
-describe('Minimal bounding rectangle', () => {
+describe('getMbrMask', () => {
   it('should return the minimal bounding box', () => {
     let image = testUtils.createMask(`
       00000000
