@@ -198,3 +198,40 @@ describe('createMask', () => {
     ).toThrow(/does not match width/);
   });
 });
+
+describe('createRoi', () => {
+  it('should create an ROI from matrix, allowCorners = true', () => {
+    const roi = testUtils.createRoi(
+      [
+        [1, 0, 0],
+        [0, 1, 1],
+        [0, 0, 1],
+        [0, 0, 1],
+      ],
+      { allowCorners: true },
+    );
+    expect(roi.width).toBe(3);
+    expect(roi.height).toBe(4);
+    expect(roi.id).toBe(1);
+  });
+
+  it('should create an ROI from string', () => {
+    const roi = testUtils.createRoi(`
+       0  0  0
+       1  0  0
+    `);
+    expect(roi.width).toBe(1);
+    expect(roi.height).toBe(1);
+    expect(roi.id).toBe(1);
+  });
+  it('should throw if multiple ROIs found', () => {
+    expect(() =>
+      testUtils.createRoi([
+        [1, 1, 0],
+        [1, 0, 1],
+        [0, 0, 1],
+        [0, 0, 1],
+      ]),
+    ).toThrow(/createRoi: multiple ROIs found./);
+  });
+});

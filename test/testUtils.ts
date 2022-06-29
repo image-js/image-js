@@ -2,7 +2,9 @@ import { readFileSync, mkdtempSync, rmSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
-import { IJS, ImageColorModel, readSync } from '../src';
+import { fromMask, IJS, ImageColorModel, readSync } from '../src';
+import { Roi } from '../src/roi/Roi';
+import { RoiKind } from '../src/roi/getRois';
 
 import { TestImagePath } from './TestImagePath';
 import { createImageFromData, CreateImageOptions } from './createImageFromData';
@@ -76,6 +78,34 @@ export function createRgbImage(
   return createImageFromData(imageData, ImageColorModel.RGB, options);
 }
 
+export interface CreateRoiOptions {
+  /**
+   * Are pixels connected by corners considered as the same ROI?
+   */
+  allowCorners?: boolean;
+}
+
+/**
+ * Create an ROI from a mask data array or a string. The data should only contain one ROI!
+ *
+ * @param imageData - Raw mask data.
+ * @param options - Create ROI options
+ * @returns The corresponding ROI.
+ */
+export function createRoi(
+  imageData: number[][] | string,
+  options: CreateRoiOptions = {},
+): Roi {
+  const mask = createMask(imageData);
+  const roiMapManager = fromMask(mask, options);
+
+  const rois = roiMapManager.getRois({ kind: RoiKind.WHITE });
+  if (rois.length > 1) {
+    throw new Error('createRoi: multiple ROIs found.');
+  }
+  return rois[0];
+}
+
 /**
  * Create an image from 8-bit RGBA data.
  *
@@ -119,6 +149,7 @@ declare global {
     createRgbImage: typeof createRgbImage;
     createRgbaImage: typeof createRgbaImage;
     createMask: typeof createMask;
+    createRoi: typeof createRoi;
     makeTmpDir: typeof makeTmpDir;
     cleanTmpDir: typeof cleanTmpDir;
   };
