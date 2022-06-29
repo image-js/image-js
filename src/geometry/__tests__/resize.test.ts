@@ -33,7 +33,6 @@ describe('resize', () => {
       width: 300,
       height: 100,
     });
-    writeSync('src/geometry/__tests__/resizeWidthHeight.png', resized);
 
     expect(resized.width).toBe(300);
     expect(resized.height).toBe(100);
@@ -91,6 +90,6 @@ describe('resize', () => {
 
     expect(() => {
       img.resize({ yFactor: 2, height: 50 });
-    }).toThrow('factor must not be passed at the same time as size');
+    }).toThrow('factor and size cannot be passed together');
   });
 });

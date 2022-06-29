@@ -179,7 +179,7 @@ function getSize(
       return sizeImg;
     }
   } else if (factor !== undefined) {
-    throw new Error('factor must not be passed at the same time as size');
+    throw new Error('factor and size cannot be passed together');
   } else {
     return sizeOpt;
   }

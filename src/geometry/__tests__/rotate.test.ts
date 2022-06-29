@@ -47,11 +47,11 @@ describe('rotate', () => {
     const img = testUtils.load('opencv/test.png');
     const rotated = img.rotate(90);
 
-    const rotatedString = img.rotate(90, {
+    const rotatedAroundCenter = img.rotate(90, {
       center: ImageCoordinates.CENTER,
     });
 
-    expect(rotated).toMatchImage(rotatedString);
+    expect(rotated).toMatchImage(rotatedAroundCenter);
   });
 
   it('coordinates as a string', () => {
@@ -60,11 +60,11 @@ describe('rotate', () => {
       center: [3.5, 4.5],
     });
 
-    const rotatedString = img.rotate(90, {
+    const rotatedAroundCenter = img.rotate(90, {
       center: ImageCoordinates.CENTER,
     });
 
-    expect(rotated).toMatchImage(rotatedString);
+    expect(rotated).toMatchImage(rotatedAroundCenter);
   });
 
   it('rotate around corner', () => {
