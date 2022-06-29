@@ -1,6 +1,6 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
-import { angle } from '../../../util/points';
+import { angle } from '../../../utils/geometry/points';
 import { getMbrCorners } from '../getMbrMask';
 
 expect.extend({ toBeDeepCloseTo });
