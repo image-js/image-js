@@ -3,10 +3,11 @@ import { IJS } from '../../src';
 import CameraSelector from './CameraSelector';
 import CameraTransform from './CameraTransform';
 import Container from './Container';
-import { testRotate } from './testFunctions/testRotate';
+import { testGetMbrMask } from './testFunctions/testGetMbrMask';
 
 function testTransform(image: IJS) {
-  return testRotate(image);
+  image.flip({ out: image });
+  return testGetMbrMask(image);
 }
 
 export default function Home() {
