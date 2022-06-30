@@ -20,7 +20,7 @@ export interface GetBorderPointOptions {
 // TODO: This function could be optimised by following the contour instead of scanning all pixels.
 /**
  * Return an array with the coordinates of the pixels that are on the border of the ROI.
- * The points are defined as [column, row].
+ * The reference is the top-left corner of the ROI.
  *
  * @param roi - ROI to process.
  * @param options - Get border points options.
