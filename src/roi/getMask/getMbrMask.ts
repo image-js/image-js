@@ -6,6 +6,7 @@ import {
   Point,
 } from '../../utils/geometry/points';
 import { Roi } from '../Roi';
+import { getExtendedBorderPoints } from '../utils/getExtendedBorderPoints';
 import { monotoneChainConvexHull } from '../utils/monotoneChainConvexHull';
 
 export interface MbrMaskOptions {
@@ -45,8 +46,8 @@ export function getMbrMask(
  * @returns The array of corners.
  */
 export function getMbrCorners(roi: Roi): Point[] {
-  const vertices = monotoneChainConvexHull(roi.getBorderPoints());
-  console.log({ vertices });
+  const vertices = monotoneChainConvexHull(getExtendedBorderPoints(roi));
+
   if (roi.surface === 0) {
     return [];
   }
@@ -62,7 +63,7 @@ export function getMbrCorners(roi: Roi): Point[] {
 
   for (let i = 0; i < vertices.length; i++) {
     let angle = getAngle(vertices[i], vertices[(i + 1) % vertices.length]);
-    console.log({ angle });
+
     rotatedVertices = rotate(-angle, vertices);
     // console.log({ rotatedVertices });
 
@@ -98,7 +99,7 @@ export function getMbrCorners(roi: Roi): Point[] {
     let maxPoint = { column: aX + tMax * (bX - aX), row: aY };
 
     let currentSurface = Math.abs(maxWidth * (tMin - tMax) * (bX - aX));
-    // console.log({ currentSurface });
+
     if (currentSurface < minSurface) {
       minSurfaceAngle = angle;
       minSurface = currentSurface;

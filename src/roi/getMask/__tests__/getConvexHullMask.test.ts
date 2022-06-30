@@ -38,6 +38,25 @@ describe('getConvexHullMask', () => {
       [0, 1, 0],
     ]);
   });
+  it('small triangle', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 1],
+      [0, 1, 1],
+      [1, 1, 1],
+    ]);
+    const roiMapManager = fromMask(mask);
+
+    const roi = roiMapManager.getRois({ kind: RoiKind.WHITE })[0];
+    const roiMask = getConvexHullMask(roi, {
+      kind: 'convexHull',
+      filled: false,
+    });
+    expect(roiMask).toMatchMaskData([
+      [0, 0, 1],
+      [0, 1, 1],
+      [1, 1, 1],
+    ]);
+  });
   it('1 pixel ROI', () => {
     const mask = testUtils.createMask([
       [0, 0, 0],
