@@ -104,10 +104,10 @@ export function getMbrCorners(roi: Roi): Point[] {
       minSurfaceAngle = angle;
       minSurface = currentSurface;
       mbr = [
-        minPoint,
         maxPoint,
-        { column: maxPoint.column, row: maxPoint.row - maxWidth },
+        minPoint,
         { column: minPoint.column, row: minPoint.row - maxWidth },
+        { column: maxPoint.column, row: maxPoint.row - maxWidth },
       ];
     }
   }
@@ -145,12 +145,14 @@ export function getMbrMaskSize(corners: Point[]): {
   const sortedColumns = corners.sort((a, b) => {
     return a.column - b.column;
   });
-  const width = sortedColumns[0].column - sortedColumns[3].column;
+  const width = Math.ceil(
+    Math.abs(sortedColumns[0].column - sortedColumns[3].column),
+  );
 
   const sortedRows = corners.sort((a, b) => {
     return a.row - b.row;
   });
-  const height = sortedRows[0].row - sortedRows[3].row;
+  const height = Math.ceil(Math.abs(sortedRows[0].row - sortedRows[3].row));
 
   return { width, height };
 }
