@@ -46,12 +46,12 @@ export function getMbrMask(
  */
 export function getMbrCorners(roi: Roi): Point[] {
   const vertices = monotoneChainConvexHull(roi.getBorderPoints());
-
-  if (vertices.length === 0) {
+  console.log({ vertices });
+  if (roi.surface === 0) {
     return [];
   }
 
-  if (vertices.length === 1) {
+  if (roi.surface === 1) {
     return [vertices[0], vertices[0], vertices[0], vertices[0]];
   }
 
@@ -64,7 +64,7 @@ export function getMbrCorners(roi: Roi): Point[] {
     let angle = getAngle(vertices[i], vertices[(i + 1) % vertices.length]);
     console.log({ angle });
     rotatedVertices = rotate(-angle, vertices);
-    console.log({ rotatedVertices });
+    // console.log({ rotatedVertices });
 
     // we rotate and translate so that this segment is at the bottom
     let aX = rotatedVertices[i].column;
@@ -98,7 +98,7 @@ export function getMbrCorners(roi: Roi): Point[] {
     let maxPoint = { column: aX + tMax * (bX - aX), row: aY };
 
     let currentSurface = Math.abs(maxWidth * (tMin - tMax) * (bX - aX));
-
+    // console.log({ currentSurface });
     if (currentSurface < minSurface) {
       minSurfaceAngle = angle;
       minSurface = currentSurface;
@@ -110,6 +110,7 @@ export function getMbrCorners(roi: Roi): Point[] {
       ];
     }
   }
+  // console.log({ mbr });
 
   return rotate(minSurfaceAngle, mbr);
 }
@@ -131,7 +132,10 @@ function getAngle(p1: Point, p2: Point): number {
 }
 
 /**
- * @param corners
+ * Compute the MBR mask dimensions from the rectangle corners.
+ *
+ * @param corners - The corners of the MBR.
+ * @returns The width and height of the mask.
  */
 export function getMbrMaskSize(corners: Point[]): {
   width: number;

@@ -6,8 +6,12 @@ import {
   ConvexHullMaskOptions,
   getConvexHullMask,
 } from './getMask/getConvexHullMask';
+import { getMbrMask, MbrMaskOptions } from './getMask/getMbrMask';
 
-export type GetMaskOptions = ContourMaskOptions | ConvexHullMaskOptions;
+export type GetMaskOptions =
+  | ContourMaskOptions
+  | ConvexHullMaskOptions
+  | MbrMaskOptions;
 
 /**
  * Generate a mask of an ROI. You can specify the kind of mask you want using the `kind` option.
@@ -26,6 +30,8 @@ export function getMask(
       return getContourMask(roi, options);
     case 'convexHull':
       return getConvexHullMask(roi, options);
+    case 'mbr':
+      return getMbrMask(roi, options);
     default:
       throw new Error('getMask: unsupported mask kind');
   }

@@ -6,8 +6,8 @@ import { getMbrCorners } from '../getMbrMask';
 expect.extend({ toBeDeepCloseTo });
 
 describe('getMbrCorners', () => {
-  it('should return the minimal bounding box', () => {
-    let roi = testUtils.createRoi(`
+  it('verify angle is correct', () => {
+    const roi = testUtils.createRoi(`
       0 0 0 0 0 0 0 0
       0 0 0 1 1 0 0 0
       0 0 0 1 1 0 0 0
@@ -31,8 +31,32 @@ describe('getMbrCorners', () => {
     }
   });
 
-  it.only('should return the small bounding box', () => {
-    let roi = testUtils.createRoi(
+  it('small rectangular ROI', () => {
+    const roi = testUtils.createRoi(
+      [
+        [0, 0, 1],
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 0, 0],
+      ],
+      { allowCorners: true },
+    );
+
+    const result = getMbrCorners(roi);
+
+    expect(result).toBeDeepCloseTo(
+      [
+        { column: 0, row: 3 },
+        { column: 2.8, row: 1.6 },
+        { column: 2, row: 0 },
+        { column: -0.8, row: 1.4 },
+      ],
+      6,
+    );
+  });
+
+  it('horizontal MBR', () => {
+    const roi = testUtils.createRoi(
       `
       1 0 0 0 0 0 0 1
       0 1 1 1 1 1 1 0
@@ -44,50 +68,55 @@ describe('getMbrCorners', () => {
     const result = getMbrCorners(roi);
 
     expect(result).toStrictEqual([
-      [0, 3],
-      [8, 3],
-      [8, 0],
-      [0, 0],
+      { column: 0, row: 3 },
+      { column: 8, row: 3 },
+      { column: 8, row: 0 },
+      { column: 0, row: 0 },
     ]);
   });
 
-  it('should return the small bounding box 2', () => {
-    let roi = testUtils.createRoi(`
-      0 1 0 0 0 1 0 0
-      0 0 0 1 1 0 0 0
-      0 1 0 1 1 0 1 0
-    `);
+  it('other horizontal MBR', () => {
+    const roi = testUtils.createRoi(
+      `
+      1 0 0 0 1 0 
+      0 1 1 1 1 0 
+      1 0 1 1 0 1 
+    `,
+      { allowCorners: true },
+    );
 
     const result = getMbrCorners(roi);
+    console.log({ result });
     expect(result).toStrictEqual([
-      [1, 3],
-      [7, 3],
-      [7, 0],
-      [1, 0],
+      { column: 0, row: 3 },
+      { column: 6, row: 3 },
+      { column: 6, row: 0 },
+      { column: 0, row: 0 },
     ]);
   });
 
-  it('should return the small bounding box diamond', () => {
-    let roi = testUtils.createRoi(`
-      0 0 0 0 0 1 0 0
-      0 0 0 0 1 1 1 0
-      0 0 0 0 0 1 0 0
+  it.only('small tilted rectangle', () => {
+    const roi = testUtils.createRoi(`
+     0 1 0
+     1 1 1
+     0 1 0
       `);
 
     const result = getMbrCorners(roi);
+    console.log({ result });
     expect(result).toBeDeepCloseTo(
       [
-        [3.5, 1.5],
-        [5.5, 3.5],
-        [7.5, 1.5],
-        [5.5, -0.5],
+        { column: 3.5, row: 1.5 },
+        { column: 5.5, row: 3.5 },
+        { column: 7.5, row: 1.5 },
+        { column: 5.5, row: -0.5 },
       ],
       6,
     );
   });
 
-  it('should return the small bounding box rectangle', () => {
-    let roi = testUtils.createRoi(`
+  it('large tilted rectangle', () => {
+    const roi = testUtils.createRoi(`
         0 0 0 0 0 0 0 0
         0 0 0 0 1 0 0 0
         0 0 0 1 1 1 0 0
@@ -99,10 +128,84 @@ describe('getMbrCorners', () => {
     const result = getMbrCorners(roi);
     expect(result).toBeDeepCloseTo(
       [
-        [8.5, 4.5],
-        [4.5, 0.5],
-        [1.5, 3.5],
-        [5.5, 7.5],
+        { column: 8.5, row: 4.5 },
+        { column: 4.5, row: 0.5 },
+        { column: 1.5, row: 3.5 },
+        { column: 5.5, row: 7.5 },
+      ],
+      6,
+    );
+  });
+
+  it('MBR for random ROI', () => {
+    const roi = testUtils.createRoi([
+      [0, 1, 0, 0, 0],
+      [1, 1, 1, 0, 0],
+      [1, 1, 1, 1, 0],
+      [1, 1, 1, 0, 0],
+      [0, 1, 1, 0, 0],
+    ]);
+    const result = getMbrCorners(roi);
+    expect(result).toBeDeepCloseTo(
+      [
+        { column: 3.5, row: 2.5 },
+        { column: 1, row: 0 },
+        { column: -1, row: 2 },
+        { column: 1.5, row: 4.5 },
+      ],
+      6,
+    );
+  });
+
+  it('one point ROI', () => {
+    const roi = testUtils.createRoi([[1]]);
+    const result = getMbrCorners(roi);
+    expect(result).toStrictEqual([
+      { column: 0, row: 0 },
+      { column: 0, row: 0 },
+      { column: 0, row: 0 },
+      { column: 0, row: 0 },
+    ]);
+  });
+
+  it('2 points ROI', () => {
+    const roi = testUtils.createRoi(
+      [
+        [1, 0],
+        [0, 1],
+      ],
+      { allowCorners: true },
+    );
+    const result = getMbrCorners(roi);
+
+    expect(result).toBeDeepCloseTo(
+      [
+        { column: 0, row: 0 },
+        { column: 1, row: 1 },
+        { column: 1, row: 1 },
+        { column: 0, row: 0 },
+      ],
+      6,
+    );
+  });
+
+  it('small triangular ROI', () => {
+    const roi = testUtils.createRoi(
+      [
+        [1, 1],
+        [1, 0],
+      ],
+      { allowCorners: true },
+    );
+
+    const result = getMbrCorners(roi);
+
+    expect(result).toBeDeepCloseTo(
+      [
+        { column: 0, row: 0 },
+        { column: 0, row: 1 },
+        { column: 1, row: 1 },
+        { column: 1, row: 0 },
       ],
       6,
     );
