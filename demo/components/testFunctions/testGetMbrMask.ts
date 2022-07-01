@@ -1,6 +1,5 @@
-import { fromMask, IJS, ImageColorModel } from '../../../src';
+import { fromMask, getMask, IJS, ImageColorModel } from '../../../src';
 import { getContourMask } from '../../../src/roi/getMask/getContourMask';
-import { getMbrMask } from '../../../src/roi/getMask/getMbrMask';
 import { RoiKind } from '../../../src/roi/getRois';
 
 /**
@@ -11,19 +10,20 @@ import { RoiKind } from '../../../src/roi/getRois';
  */
 export function testGetMbrMask(image: IJS): IJS {
   const grey = image.convertColor(ImageColorModel.GREY);
-  const mask = grey.threshold({ threshold: 30 });
+  const mask = grey.threshold();
   const roiMapManager = fromMask(mask);
 
   const rois = roiMapManager.getRois({ kind: RoiKind.BLACK });
 
   const roi = rois.sort((a, b) => b.surface - a.surface)[0];
-  let mbr = getMbrMask(roi, {
+  let mbr = getMask(roi, {
     kind: 'mbr',
     filled: false,
   });
   let roiMask = getContourMask(roi, {
     kind: 'contour',
     filled: true,
+    innerBorders: false,
   });
 
   let result = image.paintMask(roiMask, {

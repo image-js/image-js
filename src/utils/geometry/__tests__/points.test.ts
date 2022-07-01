@@ -2,6 +2,8 @@ import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
 import { rotate } from '../points';
 
+import { rotateTests } from './rotateTests';
+
 expect.extend({ toBeDeepCloseTo });
 
 describe('rotate', () => {
@@ -119,7 +121,7 @@ describe('rotate', () => {
       { column: -1 / Math.sqrt(2), row: -1 / Math.sqrt(2) },
     ]);
   });
-  it.only('points should not be crossed after rotation', () => {
+  it('points should not be crossed after rotation 0', () => {
     const minSurfaceAngle = -2.2983747776642183;
     const mbr = [
       {
@@ -163,5 +165,17 @@ describe('rotate', () => {
     ];
 
     expect(result).toBeDeepCloseTo(expected);
+  });
+  it('points should not be crossed after rotation 1', () => {
+    const result = rotate(rotateTests[1].minSurfaceAngle, rotateTests[1].mbr);
+    console.log({ result });
+
+    expect(result).toBeDeepCloseTo(rotateTests[1].mbrRotated);
+  });
+  it.only('points should not be crossed after rotation 2', () => {
+    const result = rotate(rotateTests[2].minSurfaceAngle, rotateTests[2].mbr);
+    console.log({ result });
+
+    expect(result).toBeDeepCloseTo(rotateTests[2].mbrRotated);
   });
 });

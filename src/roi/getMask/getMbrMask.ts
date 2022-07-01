@@ -48,10 +48,6 @@ export function getMbrMask(
 export function getMbrCorners(roi: Roi): Point[] {
   const vertices = monotoneChainConvexHull(getExtendedBorderPoints(roi));
 
-  if (roi.surface === 0) {
-    return [];
-  }
-
   if (roi.surface === 1) {
     return [vertices[0], vertices[0], vertices[0], vertices[0]];
   }
@@ -111,9 +107,11 @@ export function getMbrCorners(roi: Roi): Point[] {
       ];
     }
   }
-  // console.log({ mbr });
 
-  return rotate(minSurfaceAngle, mbr);
+  const mbrRotated = rotate(minSurfaceAngle, mbr);
+
+  console.log({ minSurfaceAngle, mbr, mbrRotated });
+  return mbrRotated;
 }
 
 /**
