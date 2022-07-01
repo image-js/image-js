@@ -131,11 +131,11 @@ describe('getMbr', () => {
   it('one point ROI', () => {
     const mask = testUtils.createMask([[1]]);
     const result = getMbrFromMask(mask);
-    expect(result).toStrictEqual([
+    expect(result).toBeDeepCloseTo([
+      { column: 0, row: 1 },
       { column: 0, row: 0 },
-      { column: 0, row: 0 },
-      { column: 0, row: 0 },
-      { column: 0, row: 0 },
+      { column: 1, row: 0 },
+      { column: 1, row: 1 },
     ]);
   });
 

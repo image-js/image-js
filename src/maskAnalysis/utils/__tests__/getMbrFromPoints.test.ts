@@ -81,10 +81,10 @@ test.each([
       { column: 0, row: -10 },
     ],
     [
-      { column: 0, row: 0 },
       { column: 10, row: 0 },
-      { column: 10, row: -10 },
+      { column: 0, row: 0 },
       { column: 0, row: -10 },
+      { column: 10, row: -10 },
     ],
   ],
   [
@@ -97,9 +97,9 @@ test.each([
     ],
     [
       { column: 5, row: 1 },
-      { column: 7, row: 3 },
-      { column: 4, row: 6 },
       { column: 2, row: 4 },
+      { column: 4, row: 6 },
+      { column: 7, row: 3 },
     ],
   ],
   [
@@ -170,7 +170,12 @@ test.each([
         row: 187,
       },
     ],
-    [],
+    [
+      { column: 208.53593512417638, row: -1.0071971616827256 },
+      { column: 320.3418651799291, row: 130.45691839837812 },
+      { column: 95.34358844399394, row: 321.81059300557524 },
+      { column: -16.46234161175873, row: 190.34647744551438 },
+    ],
   ],
 ])('getMbrFromPoints (%s)', (_, inputPoints, expectedPoints) => {
   const result = getMbrFromPoints(inputPoints);
