@@ -74,7 +74,7 @@ export default function CameraTransform(props: CameraTransformProps) {
 
   return (
     <>
-      <video ref={videoRef} />
+      <video ref={videoRef} style={{ transform: 'scaleX(-1)' }} />
       {error ? (
         <ErrorAlert>
           <code>{error}</code>
