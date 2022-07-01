@@ -41,7 +41,8 @@ export function normalize(point: Point) {
 }
 
 /**
- * Rotate an array of points by an angle in radians (counter-clockwise).
+ * Rotate an array of points by an angle in radians.
+ * The rotation is clockwise and the reference is (0,0).
  *
  * @param radians - Angle in radians.
  * @param points - Source points
