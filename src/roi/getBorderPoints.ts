@@ -1,4 +1,4 @@
-import { GetBorderPointOptions } from '../maskAnalysis';
+import { GetBorderPointsOptions } from '../maskAnalysis';
 import { Point } from '../utils/geometry/points';
 
 import { Roi } from './Roi';
@@ -13,7 +13,7 @@ import { Roi } from './Roi';
  */
 export function getBorderPoints(
   roi: Roi,
-  options: GetBorderPointOptions = {},
+  options: GetBorderPointsOptions = {},
 ): Array<Point> {
   const mask = roi.getMask();
 

@@ -1,6 +1,6 @@
 import { Mask } from '../../Mask';
+import { monotoneChainConvexHull as mcch } from '../../maskAnalysis/utils/monotoneChainConvexHull';
 import { Roi } from '../Roi';
-import { monotoneChainConvexHull as mcch } from '../utils/monotoneChainConvexHull';
 
 export interface ConvexHullMaskOptions {
   kind: 'convexHull';

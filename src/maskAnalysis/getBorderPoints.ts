@@ -1,7 +1,7 @@
 import { Mask } from '../Mask';
 import { Point } from '../utils/geometry/points';
 
-export interface GetBorderPointOptions {
+export interface GetBorderPointsOptions {
   /**
    * Should the inner borders be returned too?
    *
@@ -27,7 +27,7 @@ export interface GetBorderPointOptions {
  */
 export function getBorderPoints(
   mask: Mask,
-  options: GetBorderPointOptions = {},
+  options: GetBorderPointsOptions = {},
 ): Array<Point> {
   const { innerBorders = false, allowCorners = false } = options;
 
