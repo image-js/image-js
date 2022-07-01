@@ -18,6 +18,7 @@ import {
   subtractImage,
   SubtractImageOptions,
 } from './filters';
+import { GetBorderPointOptions, getBorderPoints } from './maskAnalysis';
 import {
   bottomHat,
   BottomHatOptions,
@@ -443,6 +444,11 @@ export class Mask {
    */
   public or(other: Mask, options?: OrOptions): Mask {
     return or(this, other, options);
+  }
+
+  // MASK ANALYSIS
+  public getBorderPoints(options?: GetBorderPointOptions) {
+    return getBorderPoints(this, options);
   }
 
   // MORPHOLOGY
