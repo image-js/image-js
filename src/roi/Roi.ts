@@ -1,8 +1,9 @@
 import { Mask } from '../Mask';
+import { GetBorderPointsOptions } from '../maskAnalysis';
 import { Point } from '../utils/geometry/points';
 
 import { RoiMap } from './RoiMapManager';
-import { GetBorderPointOptions, getBorderPoints } from './getBorderPoints';
+import { getBorderPoints } from './getBorderPoints';
 import { getMask, GetMaskOptions } from './getMask';
 
 export class Roi {
@@ -70,7 +71,7 @@ export class Roi {
    * @param options - Get border points options.
    * @returns The array of border pixels.
    */
-  public getBorderPoints(options?: GetBorderPointOptions): Array<Point> {
+  public getBorderPoints(options?: GetBorderPointsOptions): Array<Point> {
     return getBorderPoints(this, options);
   }
 }

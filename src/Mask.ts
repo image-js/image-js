@@ -18,7 +18,8 @@ import {
   subtractImage,
   SubtractImageOptions,
 } from './filters';
-import { GetBorderPointOptions, getBorderPoints } from './maskAnalysis';
+import { GetBorderPointsOptions, getBorderPoints } from './maskAnalysis';
+import { getMbr } from './maskAnalysis/getMbr';
 import {
   bottomHat,
   BottomHatOptions,
@@ -447,8 +448,22 @@ export class Mask {
   }
 
   // MASK ANALYSIS
-  public getBorderPoints(options?: GetBorderPointOptions) {
+  /**
+   * Get the coordinates of the points on the border of a shape defined in a mask.
+   *
+   * @param options - Get border points options.
+   * @returns Array of boder points.
+   */
+  public getBorderPoints(options?: GetBorderPointsOptions): Point[] {
     return getBorderPoints(this, options);
+  }
+  /**
+   * Get the corners of the minimum bounding rectangle of a shape defined in a mask.
+   *
+   * @returns Array of boder points.
+   */
+  public getMbr(): Point[] {
+    return getMbr(this);
   }
 
   // MORPHOLOGY
