@@ -1,20 +1,20 @@
-import { Mask } from '../Mask';
-import { difference, normalize, Point, rotate } from '../utils/geometry/points';
-
-import { getExtendedBorderPoints } from './utils/getExtendedBorderPoints';
-import { monotoneChainConvexHull } from './utils/monotoneChainConvexHull';
+import {
+  difference,
+  normalize,
+  Point,
+  rotate,
+} from '../../utils/geometry/points';
 
 /**
- * Get the four corners of the minimun bounding rectangle of an ROI.
+ * Get the four corners of the minimun bounding rectangle from a set of points defining a simple convex polygon.
+ * https://www.researchgate.net/profile/Lennert_Den_Boer2/publication/303783472_A_Fast_Algorithm_for_Generating_a_Minimal_Bounding_Rectangle/links/5751a14108ae6807fafb2aa5.pdf
  *
- * @param mask - The ROI to process.
+ * @param points - Points from which to compute the MBR.
  * @returns The array of corners.
  */
-export function getMbr(mask: Mask): Point[] {
-  const vertices = monotoneChainConvexHull(getExtendedBorderPoints(mask));
-
-  if (mask.size === 1 && mask.getBit(0, 0) === 1) {
-    return [vertices[0], vertices[0], vertices[0], vertices[0]];
+export function getMbrFromPoints(points: readonly Point[]): Point[] {
+  if (points.length === 1) {
+    return [points[0], points[0], points[0], points[0]];
   }
 
   let rotatedVertices: Point[] = [];
@@ -22,10 +22,10 @@ export function getMbr(mask: Mask): Point[] {
   let minSurfaceAngle = 0;
   let mbr: Point[] = [];
 
-  for (let i = 0; i < vertices.length; i++) {
-    let angle = getAngle(vertices[i], vertices[(i + 1) % vertices.length]);
+  for (let i = 0; i < points.length; i++) {
+    let angle = getAngle(points[i], points[(i + 1) % points.length]);
 
-    rotatedVertices = rotate(-angle, vertices);
+    rotatedVertices = rotate(-angle, points);
     // console.log({ rotatedVertices });
 
     // we rotate and translate so that this segment is at the bottom
@@ -74,7 +74,6 @@ export function getMbr(mask: Mask): Point[] {
   }
 
   const mbrRotated = rotate(minSurfaceAngle, mbr);
-
   return mbrRotated;
 }
 

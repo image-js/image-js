@@ -19,7 +19,7 @@ import {
   SubtractImageOptions,
 } from './filters';
 import { GetBorderPointsOptions, getBorderPoints } from './maskAnalysis';
-import { getMbr } from './maskAnalysis/getMbr';
+import { getMbrFromMask } from './maskAnalysis/getMbrFromMask';
 import {
   bottomHat,
   BottomHatOptions,
@@ -463,7 +463,7 @@ export class Mask {
    * @returns Array of boder points.
    */
   public getMbr(): Point[] {
-    return getMbr(this);
+    return getMbrFromMask(this);
   }
 
   // MORPHOLOGY

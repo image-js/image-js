@@ -14,7 +14,6 @@ export interface MbrMaskOptions {
 
 /**
  * Computes the minimum bounding rectangle of an ROI.
- * https://www.researchgate.net/profile/Lennert_Den_Boer2/publication/303783472_A_Fast_Algorithm_for_Generating_a_Minimal_Bounding_Rectangle/links/5751a14108ae6807fafb2aa5.pdf
  *
  * @param roi - The ROI to process.
  * @param options - Get MBR mask options.
@@ -38,18 +37,19 @@ export function getMbrMask(
  * @param corners - The corners of the MBR.
  * @returns The width and height of the mask.
  */
-export function getMbrMaskSize(corners: Point[]): {
+export function getMbrMaskSize(corners: readonly Point[]): {
   width: number;
   height: number;
 } {
-  const sortedColumns = corners.sort((a, b) => {
+  const copy = corners.slice();
+  const sortedColumns = copy.sort((a, b) => {
     return a.column - b.column;
   });
   const width = Math.ceil(
     Math.abs(sortedColumns[0].column - sortedColumns[3].column),
   );
 
-  const sortedRows = corners.sort((a, b) => {
+  const sortedRows = copy.sort((a, b) => {
     return a.row - b.row;
   });
   const height = Math.ceil(Math.abs(sortedRows[0].row - sortedRows[3].row));

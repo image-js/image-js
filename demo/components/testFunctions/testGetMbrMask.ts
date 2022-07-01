@@ -10,7 +10,7 @@ import { RoiKind } from '../../../src/roi/getRois';
  */
 export function testGetMbrMask(image: IJS): IJS {
   const grey = image.convertColor(ImageColorModel.GREY);
-  const mask = grey.threshold();
+  const mask = grey.threshold({ threshold: 35 });
   const roiMapManager = fromMask(mask);
 
   const rois = roiMapManager.getRois({ kind: RoiKind.BLACK });

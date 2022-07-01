@@ -48,7 +48,7 @@ export function normalize(point: Point) {
  * @param points - Source points
  * @returns The points after rotation.
  */
-export function rotate(radians: number, points: Point[]): Point[] {
+export function rotate(radians: number, points: readonly Point[]): Point[] {
   let result: Point[] = [];
   const cos = Math.cos(radians);
   const sin = Math.sin(radians);
