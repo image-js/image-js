@@ -1,6 +1,11 @@
 import { Point } from '../../utils/geometry/points';
 
-interface MCCHOptions {
+interface McchOptions {
+  /**
+   * Whether the input points are already sorted or not (sort by column and then row).
+   *
+   * @default false
+   */
   sorted?: boolean;
 }
 
@@ -10,13 +15,13 @@ interface MCCHOptions {
  *
  * @param points - An array of points.
  * @param options - MCCH Algorithm options.
- * @returns Coordinates of the convex hull in clockwise order
+ * @returns Coordinates of the convex hull in clockwise order.
  */
 export function monotoneChainConvexHull(
   points: Point[],
-  options: MCCHOptions = {},
+  options: McchOptions = {},
 ): Point[] {
-  const { sorted } = options;
+  const { sorted = false } = options;
   if (!sorted) {
     points.sort(byXThenY);
   }
