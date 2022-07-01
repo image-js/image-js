@@ -50,8 +50,8 @@ export function normalize(point: Point) {
  */
 export function rotate(radians: number, points: Point[]): Point[] {
   let result: Point[] = [];
-  let cos = Math.cos(radians);
-  let sin = Math.sin(radians);
+  const cos = Math.cos(radians);
+  const sin = Math.sin(radians);
   for (let point of points) {
     result.push({
       column: cos * point.column - sin * point.row,
