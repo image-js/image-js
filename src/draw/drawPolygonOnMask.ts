@@ -32,7 +32,7 @@ export function drawPolygonOnMask(
 
   let newMask = maskToOutputMask(mask, options, { clone: true });
 
-  if (filled === false) {
+  if (!filled) {
     return newMask.drawPolyline([...points, points[0]], otherOptions);
   }
 

@@ -36,7 +36,7 @@ function getImageFromIFD(ifd: TiffIfd): IJS {
       data[ptr++] = color[2];
     }
     return new IJS(ifd.width, ifd.height, {
-      data: data,
+      data,
       // TODO: handle alpha properly
       colorModel: ifd.alpha ? ImageColorModel.RGBA : ImageColorModel.RGB,
       // TODO: handle other bit depths

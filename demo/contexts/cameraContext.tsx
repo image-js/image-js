@@ -5,6 +5,7 @@ import {
   ReactNode,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
 } from 'react';
 
@@ -53,16 +54,13 @@ const cameraStateReducer = produce(
           state.selectedCamera = null;
         } else if (state.selectedCamera === null) {
           state.selectedCamera = action.firstCamera;
-        } else {
-          if (
-            !state.cameras.find(
-              (camera) =>
-                camera.deviceId === action.firstCamera.device.deviceId,
-            )
-          ) {
-            // The selected camera disappeared. Use another one.
-            state.selectedCamera = action.firstCamera;
-          }
+        } else if (
+          !state.cameras.find(
+            (camera) => camera.deviceId === action.firstCamera.device.deviceId,
+          )
+        ) {
+          // The selected camera disappeared. Use another one.
+          state.selectedCamera = action.firstCamera;
         }
         break;
       }
@@ -80,6 +78,10 @@ export function CameraProvider(props: { children: ReactNode }) {
   const [cameraState, dispatch] = useReducer(
     cameraStateReducer,
     defaultCameraState,
+  );
+  const value = useMemo<CameraContext>(
+    () => [cameraState, dispatch],
+    [cameraState],
   );
   useEffect(() => {
     async function getCameras() {
@@ -112,7 +114,7 @@ export function CameraProvider(props: { children: ReactNode }) {
   }, []);
 
   return (
-    <cameraContext.Provider value={[cameraState, dispatch]}>
+    <cameraContext.Provider value={value}>
       {props.children}
     </cameraContext.Provider>
   );

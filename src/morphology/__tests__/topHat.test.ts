@@ -30,7 +30,7 @@ describe('top hat', () => {
       [0, 0, 255, 0, 0],
     ]);
 
-    expect(image.topHat({ kernel: kernel, iterations: 2 })).toMatchImageData([
+    expect(image.topHat({ kernel, iterations: 2 })).toMatchImageData([
       [0, 0, 255, 0, 0],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],

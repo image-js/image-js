@@ -111,7 +111,7 @@ describe('clearBorder', () => {
 
     const out = new Mask(5, 5);
 
-    image.clearBorder({ allowCorners: true, out: out });
+    image.clearBorder({ allowCorners: true, out });
     expect(out).toMatchMaskData([
       [0, 0, 0, 0, 0],
       [0, 0, 0, 1, 0],

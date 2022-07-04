@@ -36,7 +36,7 @@ export function decodePng(buffer: Uint8Array): IJS {
       throw new Error(`Unexpected number of channels: ${png.channels}`);
   }
   return new IJS(png.width, png.height, {
-    colorModel: colorModel,
+    colorModel,
     depth,
     data: png.data,
   });

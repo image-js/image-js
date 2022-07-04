@@ -55,7 +55,7 @@ export function convertColor(
 
   if (image instanceof IJS) {
     const output = getOutputImage(image, options, {
-      newParameters: { colorModel: colorModel },
+      newParameters: { colorModel },
     });
 
     if (

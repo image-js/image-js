@@ -11,13 +11,13 @@
  * @returns The threshold.
  */
 export default function shanbhag(histogram: Uint32Array, total: number) {
-  const normHisto = new Array(histogram.length); // normalized histogram
+  const normHisto = new Array<number>(histogram.length); // normalized histogram
   for (let ih = 0; ih < histogram.length; ih++) {
     normHisto[ih] = histogram[ih] / total;
   }
 
-  const P1 = new Array(histogram.length); // cumulative normalized histogram
-  const P2 = new Array(histogram.length);
+  const P1 = new Array<number>(histogram.length); // cumulative normalized histogram
+  const P2 = new Array<number>(histogram.length);
   P1[0] = normHisto[0];
   P2[0] = 1.0 - P1[0];
   for (let ih = 1; ih < histogram.length; ih++) {

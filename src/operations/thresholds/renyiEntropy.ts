@@ -17,9 +17,9 @@ export default function renyiEntropy(histogram: Uint32Array, total: number) {
   let firstBin; // First non-zero bin
   let lastBin; // last non-zero bin
 
-  const normHisto = new Array(histogram.length); // normalized histogram
-  const P1 = new Array(histogram.length); // accumulative normalized histogram
-  const P2 = new Array(histogram.length); // accumulative normalized histogram
+  const normHisto = new Array<number>(histogram.length); // normalized histogram
+  const P1 = new Array<number>(histogram.length); // accumulative normalized histogram
+  const P2 = new Array<number>(histogram.length); // accumulative normalized histogram
 
   // Entropy Variables
   let threshold1 = 0;
@@ -128,12 +128,10 @@ export default function renyiEntropy(histogram: Uint32Array, total: number) {
     } else {
       betas = [0, 1, 3];
     }
+  } else if (Math.abs(tStars[1] - tStars[2]) <= 5) {
+    betas = [3, 1, 0];
   } else {
-    if (Math.abs(tStars[1] - tStars[2]) <= 5) {
-      betas = [3, 1, 0];
-    } else {
-      betas = [1, 2, 1];
-    }
+    betas = [1, 2, 1];
   }
 
   /* Determine the optimal threshold value */

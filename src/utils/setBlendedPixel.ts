@@ -31,7 +31,6 @@ export function setBlendedPixel(
 
   if (!image.alpha) {
     image.setPixel(column, row, color);
-    return;
   } else {
     assert(image instanceof IJS);
 

@@ -52,15 +52,13 @@ export function getOutputImage(
     if (!(out instanceof IJS)) {
       throw new TypeError('out must be an IJS object');
     }
-    const requirements: NewImageParameters = Object.assign(
-      {
-        width: thisImage.width,
-        height: thisImage.height,
-        depth: thisImage.depth,
-        colorModel: thisImage.colorModel,
-      },
-      newParameters,
-    );
+    const requirements: NewImageParameters = {
+      width: thisImage.width,
+      height: thisImage.height,
+      depth: thisImage.depth,
+      colorModel: thisImage.colorModel,
+      ...newParameters,
+    };
     checkRequirements(requirements, out);
     if (clone && thisImage !== out) {
       copyData(thisImage, out);

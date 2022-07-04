@@ -98,7 +98,7 @@ describe('getOutputImage', () => {
 
   it('should throw if out is not an image', () => {
     const img = new IJS(1, 2);
-    // @ts-ignore
+    // @ts-expect-error
     expect(() => getOutputImage(img, { out: 'str' })).toThrow(
       /out must be an IJS object/,
     );
@@ -135,7 +135,7 @@ describe('maskToOutputImage', () => {
   });
   it('should throw if out is not an image', () => {
     const img = new IJS(1, 2);
-    // @ts-ignore
+    // @ts-expect-error
     expect(() => maskToOutputImage(img, { out: 'str' })).toThrow(
       /out must be an IJS object/,
     );
@@ -172,7 +172,7 @@ describe('imageToOutputMask', () => {
   });
   it('should throw if out is not a mask', () => {
     const img = new IJS(1, 2);
-    // @ts-ignore
+    // @ts-expect-error
     expect(() => imageToOutputMask(img, { out: 'str' })).toThrow(
       /out must be a Mask object/,
     );
@@ -209,7 +209,7 @@ describe('maskToOutputMask', () => {
   });
   it('should throw if out is not a mask', () => {
     const mask = new Mask(1, 2);
-    // @ts-ignore
+    // @ts-expect-error
     expect(() => maskToOutputMask(mask, { out: 'str' })).toThrow(
       /out must be a Mask object/,
     );

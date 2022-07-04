@@ -6,8 +6,10 @@ import {
   drawLineOnIjs,
   drawPolygonOnIjs,
   drawPolylineOnIjs,
+  drawCircleOnIjs,
   DrawPolygonOnIjsOptions,
   DrawPolylineOnIjsOptions,
+  DrawCircleOnIjsOptions,
   DrawRectangleOptions,
   drawRectangle,
   DrawLineOnIjsOptions,
@@ -586,6 +588,21 @@ export class IJS {
     return drawPolygonOnIjs(this, points, options);
   }
 
+  /**
+   * Draw a circle defined by center and radius onto an image.
+   *
+   * @param center - Circle center.
+   * @param radius - Circle radius
+   * @param options - Draw circle options.
+   * @returns The image with the circle drawing.
+   */
+  public drawCircle(
+    center: Point,
+    radius: number,
+    options: DrawCircleOnIjsOptions,
+  ): IJS {
+    return drawCircleOnIjs(this, center, radius, options);
+  }
   // OPERATIONS
   public split(): IJS[] {
     return split(this);

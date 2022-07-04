@@ -40,7 +40,8 @@ export default function huang(histogram: Uint32Array): number {
   }
 
   const mu1 = new Array(histogram.length);
-  sumPix = numPix = 0;
+  sumPix = 0;
+  numPix = 0;
   for (let ih = lastBin; ih > 0; ih--) {
     sumPix += ih * histogram[ih];
     numPix += histogram[ih];
