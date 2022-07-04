@@ -271,7 +271,7 @@ export class IJS {
       depth = ColorDepth.UINT8;
     }
     return new IJS(width, height, {
-      depth: depth,
+      depth,
       colorModel: other.colorModel,
       ...options,
     });
@@ -520,7 +520,7 @@ export class IJS {
       case ImageCoordinates.BOTTOM_RIGHT:
         return [this.width - 1, this.height - 1];
       default:
-        throw new Error(`Unknow image coordinates ${coordinates}`);
+        throw new Error(`Unknown image coordinates ${coordinates}`);
     }
   }
 

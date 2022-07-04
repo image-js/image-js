@@ -1,10 +1,10 @@
+import { line } from 'bresenham-zingl';
+
 import { IJS } from '../IJS';
 import checkProcessable from '../utils/checkProcessable';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
 import { Point } from '../utils/types';
-
-import { getIncrements } from './drawLineOnMask';
 
 export interface DrawLineOnIjsOptions {
   /**
@@ -47,27 +47,16 @@ export function drawLineOnIjs(
 
   const numberChannels = Math.min(newImage.channels, color.length);
 
-  const { rowIncrement, columnIncrement, steps } = getIncrements(from, to);
-
-  let { row, column } = from;
-
-  for (let step = 0; step <= steps; step++) {
-    const rowPoint = Math.round(row);
-    const columnPoint = Math.round(column);
-    if (
-      rowPoint >= 0 &&
-      columnPoint >= 0 &&
-      rowPoint < newImage.height &&
-      columnPoint < newImage.width
-    ) {
+  line(
+    from.column,
+    from.row,
+    to.column,
+    to.row,
+    (column: number, row: number) => {
       for (let channel = 0; channel < numberChannels; channel++) {
-        newImage.setValue(columnPoint, rowPoint, channel, color[channel]);
+        newImage.setValue(column, row, channel, color[channel]);
       }
-    }
-
-    row += rowIncrement;
-    column += columnIncrement;
-  }
-
+    },
+  );
   return newImage;
 }

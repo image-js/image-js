@@ -46,14 +46,12 @@ export function isAtTheRightOfTheLine(
   height: number,
 ): boolean {
   const { row, column } = point;
-  if (line.vertical === true) {
+  if (line.vertical) {
     return line.b <= column;
+  } else if (line.a === 0) {
+    return false;
   } else {
-    if (line.a === 0) {
-      return false;
-    } else {
-      const xLine = (row - line.b) / line.a;
-      return xLine < column && xLine >= 0 && xLine <= height;
-    }
+    const xLine = (row - line.b) / line.a;
+    return xLine < column && xLine >= 0 && xLine <= height;
   }
 }

@@ -39,6 +39,7 @@
     "jest": "$jest"
   },
   "dependencies": {
+    "bresenham-zingl": "^0.1.1",
     "colord": "^2.9.2",
     "fast-png": "^6.1.0",
     "image-type": "^4.1.0",
@@ -58,7 +59,7 @@
     "@types/robust-point-in-polygon": "^1.0.2",
     "@vitejs/plugin-react": "^1.3.2",
     "autoprefixer": "^10.4.7",
-    "clsx": "^1.1.1",
+    "clsx": "^1.2.0",
     "eslint": "^8.16.0",
     "eslint-config-cheminfo-react": "^8.2.1",
     "eslint-config-cheminfo-typescript": "^10.4.0",
