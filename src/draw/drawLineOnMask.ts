@@ -1,3 +1,5 @@
+import { line } from 'bresenham-zingl';
+
 import { Mask } from '../Mask';
 import { maskToOutputMask } from '../utils/getOutputImage';
 import { Point } from '../utils/types';
@@ -26,49 +28,14 @@ export function drawLineOnMask(
 ): Mask {
   const newMask = maskToOutputMask(mask, options, { clone: true });
 
-  if (from.column === to.column && from.row === to.row) {
-    return newMask;
-  }
-
-  const { rowIncrement, columnIncrement, steps } = getIncrements(from, to);
-
-  let { row, column } = from;
-
-  for (let step = 0; step <= steps; step++) {
-    const rowPoint = Math.round(row);
-    const columnPoint = Math.round(column);
-    if (
-      rowPoint >= 0 &&
-      columnPoint >= 0 &&
-      rowPoint < newMask.height &&
-      columnPoint < newMask.width
-    ) {
-      newMask.setBit(columnPoint, rowPoint, 1);
-    }
-
-    row += rowIncrement;
-    column += columnIncrement;
-  }
-
+  line(
+    from.column,
+    from.row,
+    to.column,
+    to.row,
+    (column: number, row: number) => {
+      newMask.setBit(column, row, 1);
+    },
+  );
   return newMask;
-}
-
-/**
- * Compute variables used to draw a line.
- *
- * @param from - Starting point.
- * @param to - Ending point
- * @returns Useful variables.
- */
-export function getIncrements(
-  from: Point,
-  to: Point,
-): { rowIncrement: number; columnIncrement: number; steps: number } {
-  const dRow = to.row - from.row;
-  const dColumn = to.column - from.column;
-  const steps = Math.max(Math.abs(dRow), Math.abs(dColumn));
-
-  const rowIncrement = dRow / steps;
-  const columnIncrement = dColumn / steps;
-  return { rowIncrement, columnIncrement, steps };
 }

@@ -215,4 +215,28 @@ describe('drawPolygon on Mask', () => {
       [0, 0, 0, 1],
     ]);
   });
+  it('big mask', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+    ]);
+
+    const points = [
+      { column: 0, row: 4 },
+      { column: 4, row: 2 },
+      { column: 2, row: 0 },
+    ];
+    const result = mask.drawPolygon(points);
+
+    expect(result).toMatchMaskData([
+      [0, 0, 1, 0, 0],
+      [0, 1, 0, 1, 0],
+      [0, 1, 0, 1, 1],
+      [1, 1, 1, 0, 0],
+      [1, 0, 0, 0, 0],
+    ]);
+  });
 });

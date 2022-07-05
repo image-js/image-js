@@ -84,7 +84,7 @@ describe('drawLine on Mask', () => {
     expect(expected).not.toBe(mask);
   });
   it('draw nearly horizontal line', () => {
-    const image = testUtils.createMask([
+    const mask = testUtils.createMask([
       [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
@@ -92,18 +92,18 @@ describe('drawLine on Mask', () => {
     ]);
     const from = { row: 1, column: 0 };
     const to = { row: 2, column: 3 };
-    const expected = image.drawLine(from, to);
+    const expected = mask.drawLine(from, to);
     expect(expected).toMatchMaskData([
       [0, 0, 0, 0],
       [1, 1, 0, 0],
       [0, 0, 1, 1],
       [0, 0, 0, 0],
     ]);
-    expect(expected).not.toBe(image);
+    expect(expected).not.toBe(mask);
   });
 
   it('draw horizontal line', () => {
-    const image = testUtils.createMask([
+    const mask = testUtils.createMask([
       [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
@@ -111,17 +111,17 @@ describe('drawLine on Mask', () => {
     ]);
     const from = { row: 1, column: 0 };
     const to = { row: 1, column: 3 };
-    const expected = image.drawLine(from, to);
+    const expected = mask.drawLine(from, to);
     expect(expected).toMatchMaskData([
       [0, 0, 0, 0],
       [1, 1, 1, 1],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
     ]);
-    expect(expected).not.toBe(image);
+    expect(expected).not.toBe(mask);
   });
   it('draw nearly vertical line', () => {
-    const image = testUtils.createMask([
+    const mask = testUtils.createMask([
       [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
@@ -129,17 +129,17 @@ describe('drawLine on Mask', () => {
     ]);
     const from = { row: 0, column: 1 };
     const to = { row: 3, column: 2 };
-    const expected = image.drawLine(from, to);
+    const expected = mask.drawLine(from, to);
     expect(expected).toMatchMaskData([
       [0, 1, 0, 0],
       [0, 1, 0, 0],
       [0, 0, 1, 0],
       [0, 0, 1, 0],
     ]);
-    expect(expected).not.toBe(image);
+    expect(expected).not.toBe(mask);
   });
   it('draw vertical line', () => {
-    const image = testUtils.createMask([
+    const mask = testUtils.createMask([
       [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
@@ -147,14 +147,14 @@ describe('drawLine on Mask', () => {
     ]);
     const from = { row: 0, column: 1 };
     const to = { row: 3, column: 1 };
-    const expected = image.drawLine(from, to);
+    const expected = mask.drawLine(from, to);
     expect(expected).toMatchMaskData([
       [0, 1, 0, 0],
       [0, 1, 0, 0],
       [0, 1, 0, 0],
       [0, 1, 0, 0],
     ]);
-    expect(expected).not.toBe(image);
+    expect(expected).not.toBe(mask);
   });
   it('same from and to', () => {
     const mask = testUtils.createMask([
@@ -167,7 +167,13 @@ describe('drawLine on Mask', () => {
     const to = { row: 0, column: 1 };
     const result = mask.drawLine(from, to);
 
-    expect(result).toMatchMask(mask);
+    expect(result).toMatchMaskData([
+      [1, 1, 0, 0],
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+    ]);
+    expect(result).not.toBe(mask);
   });
   it('default options', () => {
     const mask = testUtils.createMask([

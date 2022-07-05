@@ -41,12 +41,7 @@ export function drawLineOnIjs(
     bitDepth: [8, 16],
   });
 
-  if (from.column === to.column && from.row === to.row) {
-    return newImage;
-  }
-
   const numberChannels = Math.min(newImage.channels, color.length);
-
   line(
     from.column,
     from.row,

@@ -116,7 +116,13 @@ describe('drawLine on IJS', () => {
       strokeColor: [1],
     });
 
-    expect(result).toMatchImage(image);
+    expect(result).toMatchImageData([
+      [1, 1, 0, 0],
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+    ]);
+    expect(result).not.toBe(image);
   });
   it('point contains image.width and image.height', () => {
     const image = testUtils.createGreyImage([
@@ -151,6 +157,25 @@ describe('drawLine on IJS', () => {
     const result = drawLineOnIjs(image, from, to);
 
     expect(result).toMatchImage(image);
+  });
+  it('complicated line', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+    ]);
+
+    const from = { column: 0, row: 2 };
+    const to = { column: 4, row: 0 };
+
+    const result = image.drawLine(from, to, {
+      strokeColor: [1],
+    });
+    expect(result).toMatchImageData([
+      [0, 0, 0, 1, 1],
+      [0, 1, 1, 0, 0],
+      [1, 0, 0, 0, 0],
+    ]);
   });
   it('big image example', () => {
     const image = testUtils.createGreyImage([
