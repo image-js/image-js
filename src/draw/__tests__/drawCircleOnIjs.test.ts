@@ -101,6 +101,58 @@ describe('we check drawCircle', () => {
     ]);
     expect(expected).not.toBe(image);
   });
+  it('circle with radius<0', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ]);
+    const center = { row: 1, column: 1 };
+    const radius = -1;
+    expect(() => {
+      image.drawCircle(center, radius, {
+        color: [1],
+      });
+    }).toThrow('Circle radius must be positive');
+  });
+  it('draw grey filled circle, radius=0', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ]);
+    const center = { row: 1, column: 1 };
+    const radius = 0;
+    const expected = image.drawCircle(center, radius, {
+      color: [1],
+      fill: [2],
+    });
+    expect(expected).toMatchImageData([
+      [0, 0, 0],
+      [0, 1, 0],
+      [0, 0, 0],
+    ]);
+    expect(expected).not.toBe(image);
+  });
+  it('draw grey filled circle, radius=1', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ]);
+    const center = { row: 1, column: 1 };
+    const radius = 1;
+    const expected = image.drawCircle(center, radius, {
+      color: [1],
+      fill: [2],
+    });
+    expect(expected).toMatchImageData([
+      [0, 1, 0],
+      [1, 2, 1],
+      [0, 1, 0],
+    ]);
+    expect(expected).not.toBe(image);
+  });
   it('draw grey filled circle', () => {
     const image = testUtils.createGreyImage([
       [0, 0, 0, 0, 0, 0],
@@ -124,7 +176,41 @@ describe('we check drawCircle', () => {
     ]);
     expect(expected).not.toBe(image);
   });
-  it('big image test', () => {
+  it('big image not filled', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ]);
+    const center = { row: 5, column: 6 };
+    const radius = 4;
+    const expected = image.drawCircle(center, radius, {
+      color: [1],
+    });
+    expect(expected).toMatchImageData([
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+      [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+      [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+      [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+      [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+      [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+      [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ]);
+    expect(expected).not.toBe(image);
+  });
+  it('big image filled', () => {
     const image = testUtils.createGreyImage([
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

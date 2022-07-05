@@ -1,3 +1,5 @@
+import { circle } from 'bresenham-zingl';
+
 import { IJS } from '../IJS';
 import checkProcessable from '../utils/checkProcessable';
 import { getDefaultColor } from '../utils/getDefaultColor';
@@ -43,71 +45,44 @@ export function drawCircleOnIjs(
 ): IJS {
   const newImage = getOutputImage(image, options, { clone: true });
   const { color = getDefaultColor(newImage), fill } = options;
-  const { row: cRow, column: cColumn } = center;
   checkProcessable(newImage, 'paintPoints', {
     bitDepth: [8, 16],
   });
 
-  /**
-   *
-   * Draw all other 7 pixels
-   * Present at symmetric position
-   *
-   * @param column - Position column.
-   * @param row - Position row.
-   */
-  function drawCircle(column: number, row: number) {
-    newImage.setPixel(column + cColumn, row + cRow, color);
-    newImage.setPixel(row + cColumn, column + cRow, color);
-    newImage.setPixel(-row + cColumn, column + cRow, color);
-    newImage.setPixel(column + cColumn, -row + cRow, color);
-    // if (column !== 0) {
-    newImage.setPixel(-column + cColumn, row + cRow, color);
-    newImage.setPixel(row + cColumn, -column + cRow, color);
-    newImage.setPixel(-row + cColumn, -column + cRow, color);
-    newImage.setPixel(-column + cColumn, -row + cRow, color);
-    // }
-    if (fill) {
-      fillCircle(column, row);
-    }
+  if (radius < 0) {
+    throw new Error('Circle radius must be positive');
+  }
+  if (radius === 0) {
+    newImage.setPixel(center.column, center.row, color);
+    return newImage;
   }
 
-  /**
-   *
-   * Fill circle symmetrically
-   *
-   * @param column - Point column.
-   * @param row - Point row.
-   */
-  function fillCircle(column: number, row: number) {
-    if (fill) {
-      for (let i = column; i < row; i++) {
-        newImage.setPixel(column + cColumn, i + cRow, fill);
-        newImage.setPixel(column + cColumn, -i + cRow, fill);
-        newImage.setPixel(i + cColumn, column + cRow, fill);
-        newImage.setPixel(-i + cColumn, column + cRow, fill);
-        // if (column !== 0) {
-        newImage.setPixel(-column + cColumn, i + cRow, fill);
-        newImage.setPixel(-column + cColumn, -i + cRow, fill);
-        newImage.setPixel(i + cColumn, -column + cRow, fill);
-        newImage.setPixel(-i + cColumn, -column + cRow, fill);
-        // }
+  if (!fill) {
+    circle(center.column, center.row, radius, (column: number, row: number) => {
+      newImage.setPixel(column, row, color);
+    });
+  } else {
+    if (radius === 1) {
+      newImage.setPixel(center.column, center.row, fill);
+    }
+    circle(center.column, center.row, radius, (column: number, row: number) => {
+      newImage.setPixel(column, row, color);
+
+      //todo: fill is not optimal we can fill symmetrically
+      if (column - 1 > center.column) {
+        newImage.drawLine(
+          { row, column: column - 1 },
+          { row, column: center.column },
+          { strokeColor: fill, out: newImage },
+        );
+      } else if (column + 1 < center.column) {
+        newImage.drawLine(
+          { row, column: column + 1 },
+          { row, column: center.column },
+          { strokeColor: fill, out: newImage },
+        );
       }
-    }
-  }
-  let column = 0;
-  let row = radius;
-  let d = 3 - 2 * radius;
-  drawCircle(column, row);
-  while (row >= column) {
-    column++;
-    if (d > 0) {
-      row--;
-      d = d + 4 * (column - row) + 10;
-    } else {
-      d = d + 4 * column + 6;
-    }
-    drawCircle(column, row);
+    });
   }
 
   return newImage;
