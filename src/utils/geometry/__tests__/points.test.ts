@@ -4,7 +4,7 @@ import { rotate } from '../points';
 
 expect.extend({ toBeDeepCloseTo });
 
-describe('rotate', () => {
+describe('points (rotate)', () => {
   it('90 degrees', () => {
     const points = [
       { column: 0, row: 0 },
