@@ -190,4 +190,21 @@ describe('getMbr', () => {
       6,
     );
   });
+  it('empty mask', () => {
+    const mask = testUtils.createMask([
+      [0, 0],
+      [0, 0],
+    ]);
+
+    const result = getMbr(mask);
+
+    expect(result).toStrictEqual({
+      corners: [],
+      angle: 0,
+      width: 0,
+      height: 0,
+      surface: 0,
+      perimeter: 0,
+    });
+  });
 });

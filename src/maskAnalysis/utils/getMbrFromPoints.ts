@@ -14,6 +14,16 @@ import { Mbr } from '../getMbr';
  * @returns The array of corners.
  */
 export function getMbrFromPoints(points: readonly Point[]): Mbr {
+  if (points.length === 0) {
+    return {
+      corners: [],
+      angle: 0,
+      width: 0,
+      height: 0,
+      surface: 0,
+      perimeter: 0,
+    };
+  }
   if (points.length === 1) {
     return {
       corners: [points[0], points[0], points[0], points[0]],

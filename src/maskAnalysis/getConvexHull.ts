@@ -33,6 +33,13 @@ export interface ConvexHull {
  */
 export function getConvexHull(mask: Mask): ConvexHull {
   const borderPoints = mask.getBorderPoints();
+  if (borderPoints.length === 0) {
+    return {
+      points: [],
+      surface: 0,
+      perimeter: 0,
+    };
+  }
   const points = mcch(borderPoints);
   const perimeter = getPolygonPerimeter(points);
   const surface = getPolygonArea(points);

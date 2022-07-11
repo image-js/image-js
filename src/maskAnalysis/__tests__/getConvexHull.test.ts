@@ -87,4 +87,18 @@ describe('getConvexHull', () => {
       { column: 2, row: 0 },
     ]);
   });
+  it('empty mask', () => {
+    const mask = testUtils.createMask([
+      [0, 0],
+      [0, 0],
+    ]);
+
+    const result = mask.getConvexHull();
+
+    expect(result).toStrictEqual({
+      points: [],
+      surface: 0,
+      perimeter: 0,
+    });
+  });
 });
