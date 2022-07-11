@@ -11,7 +11,7 @@ import { monotoneChainConvexHull } from './utils/monotoneChainConvexHull';
  * @param mask - The ROI to process.
  * @returns The array of corners.
  */
-export function getMbrFromMask(mask: Mask): Point[] {
+export function getMbr(mask: Mask): Point[] {
   const vertices = monotoneChainConvexHull(getExtendedBorderPoints(mask));
 
   return getMbrFromPoints(vertices);

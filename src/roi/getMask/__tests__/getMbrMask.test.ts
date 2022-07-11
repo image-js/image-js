@@ -36,7 +36,6 @@ describe('getMbrMask', () => {
       `);
 
     const result = roi.getMask({ kind: 'mbr' });
-
     expect(result).toMatchMaskData([
       [0, 1, 0],
       [1, 1, 1],

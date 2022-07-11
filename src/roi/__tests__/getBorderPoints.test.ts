@@ -11,9 +11,9 @@ describe('getBorderPoints', () => {
       [0, 0, 0, 0, 0],
     ]);
 
-    let points = roi.getBorderPoints();
+    const points = roi.getBorderPoints();
 
-    let bordersMask = Mask.fromPoints(roi.width, roi.height, points);
+    const bordersMask = Mask.fromPoints(roi.width, roi.height, points);
 
     expect(bordersMask).toMatchMaskData([
       [1, 1, 1, 1, 1],
