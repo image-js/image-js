@@ -8,3 +8,11 @@ exports[`check custom inspect 1`] = `
         [ 0]
 }"
 `;
+
+exports[`check custom inspect with image too large 1`] = `
+"Mask {
+  width: 25
+  height: 25
+  data: [...]
+}"
+`;

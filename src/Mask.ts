@@ -18,7 +18,12 @@ import {
   subtractImage,
   SubtractImageOptions,
 } from './filters';
-import { GetBorderPointsOptions, getBorderPoints } from './maskAnalysis';
+import {
+  GetBorderPointsOptions,
+  getBorderPoints,
+  getConvexHull,
+  ConvexHull,
+} from './maskAnalysis';
 import { getMbr, Mbr } from './maskAnalysis/getMbr';
 import {
   bottomHat,
@@ -381,10 +386,16 @@ export class Mask {
   }
 
   public [Symbol.for('nodejs.util.inspect.custom')](): string {
+    let dataString;
+    if (this.height > 20 || this.width > 20) {
+      dataString = '[...]';
+    } else {
+      dataString = printData(this);
+    }
     return `Mask {
   width: ${this.width}
   height: ${this.height}
-  data: ${printData(this)}
+  data: ${dataString}
 }`;
   }
 
@@ -457,6 +468,16 @@ export class Mask {
   public getBorderPoints(options?: GetBorderPointsOptions): Point[] {
     return getBorderPoints(this, options);
   }
+
+  /**
+   * Get the vertices of the convex Hull polygon of a mask.
+   *
+   * @returns Array of the vertices of the convex Hull in clockwise order.
+   */
+  public getConvexHull(): ConvexHull {
+    return getConvexHull(this);
+  }
+
   /**
    * Get the corners of the minimum bounding rectangle of a shape defined in a mask.
    *

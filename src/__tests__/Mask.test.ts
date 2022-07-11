@@ -132,3 +132,9 @@ test('check custom inspect', () => {
   const mask = new Mask(1, 2);
   expect(util.inspect(mask)).toMatchSnapshot();
 });
+
+test('check custom inspect with image too large', () => {
+  const image = new Mask(25, 25);
+
+  expect(util.inspect(image)).toMatchSnapshot();
+});

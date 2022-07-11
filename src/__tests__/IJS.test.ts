@@ -278,8 +278,15 @@ test('check custom inspect, RGB image', () => {
 
   expect(inspect(image)).toMatchSnapshot();
 });
+
 test('check custom inspect, GREYA image', () => {
   const image = new IJS(2, 2, { colorModel: ImageColorModel.GREYA });
+
+  expect(inspect(image)).toMatchSnapshot();
+});
+
+test('check custom inspect with image too large', () => {
+  const image = new IJS(25, 25, { colorModel: ImageColorModel.GREYA });
 
   expect(inspect(image)).toMatchSnapshot();
 });

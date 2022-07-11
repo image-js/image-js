@@ -1,5 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`check custom inspect with image too large 1`] = `
+"IJS {
+  width: 25
+  height: 25
+  depth: 8
+  colorModel: GREYA
+  channels: 2
+  data: [...]
+}"
+`;
+
 exports[`check custom inspect, GREYA image 1`] = `
 "IJS {
   width: 2

@@ -403,13 +403,19 @@ export class IJS {
   }
 
   public [Symbol.for('nodejs.util.inspect.custom')](): string {
+    let dataString;
+    if (this.height > 20 || this.width > 20) {
+      dataString = '[...]';
+    } else {
+      dataString = printData(this);
+    }
     return `IJS {
   width: ${this.width}
   height: ${this.height}
   depth: ${this.depth}
   colorModel: ${this.colorModel}
   channels: ${this.channels}
-  data: ${printData(this)}
+  data: ${dataString}
 }`;
   }
 
