@@ -55,3 +55,14 @@ export function isAtTheRightOfTheLine(
     return xLine < column && xLine >= 0 && xLine <= height;
   }
 }
+
+/**
+ * Compute the length of a segment defined by two points.
+ *
+ * @param p1 - First point.
+ * @param p2 - Second point.
+ * @returns Length of the segment.
+ */
+export function getLineLength(p1: Point, p2: Point): number {
+  return Math.sqrt((p1.column - p2.column) ** 2 + (p1.row - p2.row) ** 2);
+}
