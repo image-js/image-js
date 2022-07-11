@@ -16,27 +16,31 @@ export function testGetMbrMask(image: IJS): IJS {
   const rois = roiMapManager.getRois({ kind: RoiKind.BLACK });
 
   const roi = rois.sort((a, b) => b.surface - a.surface)[0];
-  let mbr = getMask(roi, {
-    kind: 'mbr',
-    filled: false,
-  });
-  let roiMask = getContourMask(roi, {
-    kind: 'contour',
-    filled: true,
-    innerBorders: false,
-  });
+  if (roi) {
+    let mbr = getMask(roi, {
+      kind: 'mbr',
+      filled: false,
+    });
+    let roiMask = getContourMask(roi, {
+      kind: 'contour',
+      filled: true,
+      innerBorders: false,
+    });
 
-  let result = image.paintMask(roiMask, {
-    row: roi.row,
-    column: roi.column,
-    color: [0, 0, 255, 255],
-  });
+    let result = image.paintMask(roiMask, {
+      row: roi.row,
+      column: roi.column,
+      color: [0, 0, 255, 255],
+    });
 
-  result = result.paintMask(mbr, {
-    row: roi.row,
-    column: roi.column,
-    color: [0, 255, 0, 255],
-  });
+    result = result.paintMask(mbr, {
+      row: roi.row,
+      column: roi.column,
+      color: [0, 255, 0, 255],
+    });
 
-  return result;
+    return result;
+  } else {
+    return image;
+  }
 }
