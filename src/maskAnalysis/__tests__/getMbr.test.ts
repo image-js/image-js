@@ -18,7 +18,7 @@ describe('getMbr', () => {
       0 0 0 0 0 0 0 0
     `);
 
-    const result = getMbr(mask);
+    const result = getMbr(mask).corners;
     expect(result).toHaveLength(4);
 
     for (let i = 0; i < 4; i++) {
@@ -39,7 +39,7 @@ describe('getMbr', () => {
       [1, 0, 0],
     ]);
 
-    const result = getMbr(mask);
+    const result = getMbr(mask).corners;
     expect(result).toBeDeepCloseTo(
       [
         { column: 4, row: 1 },
@@ -62,12 +62,19 @@ describe('getMbr', () => {
 
     const result = getMbr(mask);
 
-    expect(result).toStrictEqual([
-      { column: 8, row: 3 },
-      { column: 0, row: 3 },
-      { column: 0, row: 0 },
-      { column: 8, row: 0 },
-    ]);
+    expect(result).toStrictEqual({
+      corners: [
+        { column: 8, row: 3 },
+        { column: 0, row: 3 },
+        { column: 0, row: 0 },
+        { column: 8, row: 0 },
+      ],
+      angle: 0,
+      width: 8,
+      height: 3,
+      perimeter: 22,
+      surface: 24,
+    });
   });
 
   it('other horizontal MBR', () => {
@@ -80,12 +87,19 @@ describe('getMbr', () => {
     );
 
     const result = getMbr(mask);
-    expect(result).toStrictEqual([
-      { column: 6, row: 3 },
-      { column: 0, row: 3 },
-      { column: 0, row: 0 },
-      { column: 6, row: 0 },
-    ]);
+    expect(result).toStrictEqual({
+      corners: [
+        { column: 6, row: 3 },
+        { column: 0, row: 3 },
+        { column: 0, row: 0 },
+        { column: 6, row: 0 },
+      ],
+      angle: 0,
+      width: 6,
+      height: 3,
+      surface: 18,
+      perimeter: 18,
+    });
   });
 
   it('small tilted rectangle', () => {
@@ -96,7 +110,7 @@ describe('getMbr', () => {
       `);
 
     const result = getMbr(mask);
-    expect(result).toBeDeepCloseTo(
+    expect(result.corners).toBeDeepCloseTo(
       [
         { column: 1.5, row: 3.5 },
         { column: -0.5, row: 1.5 },
@@ -105,6 +119,7 @@ describe('getMbr', () => {
       ],
       6,
     );
+    expect(result.angle).toBeCloseTo(Math.PI / 4);
   });
 
   it('large tilted rectangle', () => {
@@ -116,7 +131,7 @@ describe('getMbr', () => {
         0 0 1 1 1 0
         0 0 0 1 0 0
       `);
-    const result = getMbr(mask);
+    const result = getMbr(mask).corners;
     expect(result).toBeDeepCloseTo(
       [
         { column: 2.5, row: -0.5 },
@@ -130,7 +145,7 @@ describe('getMbr', () => {
 
   it('one point ROI', () => {
     const mask = testUtils.createMask([[1]]);
-    const result = getMbr(mask);
+    const result = getMbr(mask).corners;
     expect(result).toBeDeepCloseTo([
       { column: 0, row: 1 },
       { column: 0, row: 0 },
@@ -144,7 +159,7 @@ describe('getMbr', () => {
       [1, 0],
       [0, 1],
     ]);
-    const result = getMbr(mask);
+    const result = getMbr(mask).corners;
 
     expect(result).toBeDeepCloseTo(
       [
@@ -163,7 +178,7 @@ describe('getMbr', () => {
       [1, 0],
     ]);
 
-    const result = getMbr(mask);
+    const result = getMbr(mask).corners;
 
     expect(result).toBeDeepCloseTo(
       [

@@ -4,6 +4,7 @@ import {
   Point,
   rotate,
 } from '../../utils/geometry/points';
+import { Mbr } from '../getMbr';
 
 /**
  * Get the four corners of the minimun bounding rectangle from a set of points defining a simple convex polygon.
@@ -12,9 +13,16 @@ import {
  * @param points - Points from which to compute the MBR.
  * @returns The array of corners.
  */
-export function getMbrFromPoints(points: readonly Point[]): Point[] {
+export function getMbrFromPoints(points: readonly Point[]): Mbr {
   if (points.length === 1) {
-    return [points[0], points[0], points[0], points[0]];
+    return {
+      corners: [points[0], points[0], points[0], points[0]],
+      perimeter: 0,
+      surface: 0,
+      angle: 0,
+      width: 0,
+      height: 0,
+    };
   }
 
   let rotatedVertices: Point[] = [];
@@ -74,7 +82,17 @@ export function getMbrFromPoints(points: readonly Point[]): Point[] {
   }
 
   const mbrRotated = rotate(minSurfaceAngle, mbr);
-  return mbrRotated;
+  const width = mbr[0].column - mbr[2].column;
+  const height = mbr[0].row - mbr[2].row;
+
+  return {
+    corners: mbrRotated,
+    surface: minSurface,
+    angle: minSurfaceAngle,
+    width,
+    height,
+    perimeter: 2 * width + 2 * height,
+  };
 }
 
 /**

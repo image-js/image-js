@@ -25,7 +25,7 @@ export function getMbrMask(
 ): Mask {
   const { filled = true } = options;
   const mask = roi.getMask();
-  const corners = mask.getMbr();
+  const corners = mask.getMbr().corners;
   const dimensions = getMbrMaskSize(corners);
   const result = new Mask(dimensions.width, dimensions.height);
   return result.drawPolygon(corners, { filled });

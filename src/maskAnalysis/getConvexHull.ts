@@ -8,7 +8,7 @@ import {
 import { monotoneChainConvexHull as mcch } from './utils/monotoneChainConvexHull';
 
 /**
- * Convex Hull polygon of a mask or ROI.
+ * Convex Hull polygon of a mask.
  */
 export interface ConvexHull {
   /**

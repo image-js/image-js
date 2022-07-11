@@ -178,6 +178,6 @@ test.each([
     ],
   ],
 ])('getMbrFromPoints (%s)', (_, inputPoints, expectedPoints) => {
-  const result = getMbrFromPoints(inputPoints);
+  const result = getMbrFromPoints(inputPoints).corners;
   expect(result).toBeDeepCloseTo(expectedPoints);
 });
