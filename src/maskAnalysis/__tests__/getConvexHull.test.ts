@@ -9,7 +9,7 @@ describe('getConvexHull', () => {
     ]);
 
     const convexHull = getConvexHull(mask);
-    expect(convexHull).toStrictEqual([
+    expect(convexHull.points).toStrictEqual([
       { column: 0, row: 1 },
       { column: 1, row: 2 },
       { column: 2, row: 1 },
@@ -25,7 +25,7 @@ describe('getConvexHull', () => {
     ]);
 
     const convexHull = getConvexHull(mask);
-    expect(convexHull).toStrictEqual([
+    expect(convexHull.points).toStrictEqual([
       { column: 0, row: 2 },
       { column: 2, row: 2 },
       { column: 2, row: 0 },
@@ -39,7 +39,7 @@ describe('getConvexHull', () => {
     ]);
 
     const convexHull = getConvexHull(mask);
-    expect(convexHull).toStrictEqual([]);
+    expect(convexHull.points).toStrictEqual([]);
   });
   it('2 pixels ROI', () => {
     const mask = testUtils.createMask([
@@ -49,7 +49,7 @@ describe('getConvexHull', () => {
     ]);
 
     const convexHull = getConvexHull(mask);
-    expect(convexHull).toStrictEqual([
+    expect(convexHull.points).toStrictEqual([
       { column: 1, row: 1 },
       { column: 2, row: 1 },
     ]);
@@ -64,7 +64,7 @@ describe('getConvexHull', () => {
     ]);
 
     const convexHull = getConvexHull(mask);
-    expect(convexHull).toStrictEqual([
+    expect(convexHull.points).toStrictEqual([
       { column: 0, row: 2 },
       { column: 2, row: 4 },
       { column: 4, row: 2 },
@@ -81,7 +81,7 @@ describe('getConvexHull', () => {
     ]);
 
     const convexHull = getConvexHull(mask);
-    expect(convexHull).toStrictEqual([
+    expect(convexHull.points).toStrictEqual([
       { column: 0, row: 4 },
       { column: 4, row: 2 },
       { column: 2, row: 0 },

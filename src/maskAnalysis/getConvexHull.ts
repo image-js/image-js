@@ -1,15 +1,40 @@
 import { Mask } from '../Mask';
 import { Point } from '../utils/geometry/points';
+import {
+  getPolygonArea,
+  getPolygonPerimeter,
+} from '../utils/geometry/polygons';
 
 import { monotoneChainConvexHull as mcch } from './utils/monotoneChainConvexHull';
 
 /**
- * Get the vertices of the convex Hull polygon of a mask
- *
- * @param mask - Mask to process
- * @returns Array of the vertices of the convex Hull
+ * Convex Hull polygon of a mask or ROI.
  */
-export function getConvexHull(mask: Mask): Point[] {
+export interface ConvexHull {
+  /**
+   * Vertices of the convex Hull in clockwise order.
+   */
+  points: Point[];
+  /**
+   * Perimeter of the convex Hull.
+   */
+  perimeter: number;
+  /**
+   * Surface of the convex Hull.
+   */
+  surface: number;
+}
+
+/**
+ * Get the vertices of the convex Hull polygon of a mask.
+ *
+ * @param mask - Mask to process.
+ * @returns Array of the vertices of the convex Hull in clockwise order.
+ */
+export function getConvexHull(mask: Mask): ConvexHull {
   const borderPoints = mask.getBorderPoints();
-  return mcch(borderPoints);
+  const points = mcch(borderPoints);
+  const perimeter = getPolygonPerimeter(points);
+  const surface = getPolygonArea(points);
+  return { points, perimeter, surface };
 }
