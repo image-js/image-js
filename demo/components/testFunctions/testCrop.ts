@@ -30,8 +30,7 @@ export function testCropBounce(image: IJS): IJS {
   row += rowInterval;
 
   const cropped = image.crop({
-    column,
-    row,
+    origin: { column, row },
     width,
     height,
   });

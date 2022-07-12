@@ -1,20 +1,15 @@
 import { IJS } from '../IJS';
 import { Mask } from '../Mask';
 import { assert } from '../utils/assert';
+import { Point } from '../utils/geometry/points';
 
 export interface ExtractOptions {
   /**
-   * Specify the row of the top-left corner of the mask on the image.
+   * Origin of the ROI relative to a the parent image (top-left corner).
    *
-   * @default 0
+   * @default {row: 0, column: 0}
    */
-  row?: number;
-  /**
-   * Specify the column of the top-left corner of the mask on the image.
-   *
-   * @default 0
-   */
-  column?: number;
+  origin?: Point;
 }
 
 /**
@@ -30,7 +25,8 @@ export function extract(
   mask: Mask,
   options: ExtractOptions = {},
 ): IJS {
-  const { row = 0, column = 0 } = options;
+  const { origin = { row: 0, column: 0 } } = options;
+  const { row, column } = origin;
 
   assert(
     row < image.height &&

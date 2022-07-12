@@ -32,7 +32,9 @@ describe('extract', () => {
       [1, 1],
     ]);
 
-    expect(image.extract(mask, { row: 1, column: 1 })).toMatchImageData([
+    expect(
+      image.extract(mask, { origin: { row: 1, column: 1 } }),
+    ).toMatchImageData([
       [0, 0],
       [11, 10],
     ]);
@@ -48,9 +50,9 @@ describe('extract', () => {
       [1, 1],
     ]);
 
-    expect(image.extract(mask, { row: -1, column: -1 })).toMatchImageData([
-      [1, 10],
-    ]);
+    expect(
+      image.extract(mask, { origin: { row: -1, column: -1 } }),
+    ).toMatchImageData([[1, 10]]);
   });
   it('negative row and positive column', () => {
     const image = testUtils.createGreyaImage([
@@ -63,9 +65,9 @@ describe('extract', () => {
       [1, 1],
     ]);
 
-    expect(image.extract(mask, { row: -1, column: 1 })).toMatchImageData([
-      [3, 10],
-    ]);
+    expect(
+      image.extract(mask, { origin: { row: -1, column: 1 } }),
+    ).toMatchImageData([[3, 10]]);
   });
   it('image and mask have no overlap', () => {
     const image = testUtils.createGreyaImage([
@@ -79,10 +81,10 @@ describe('extract', () => {
     ]);
 
     expect(() => {
-      image.extract(mask, { row: 4, column: 4 });
+      image.extract(mask, { origin: { row: 4, column: 4 } });
     }).toThrow('extract: image and mask have no overlap');
     expect(() => {
-      image.extract(mask, { row: -2, column: 4 });
+      image.extract(mask, { origin: { row: -2, column: 4 } });
     }).toThrow('extract: image and mask have no overlap');
   });
 });

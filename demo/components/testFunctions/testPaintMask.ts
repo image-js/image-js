@@ -20,8 +20,7 @@ export function testPaintMask(image: IJS): IJS {
   const faded = image.fillAlpha(Math.round(image.maxValue / 4));
 
   return faded.paintMask(roiMask, {
-    row: biggestRoi.row,
-    column: biggestRoi.column,
+    origin: biggestRoi.origin,
     blend: false,
     color: [null, null, null, 255],
   });
