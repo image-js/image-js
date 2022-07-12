@@ -48,8 +48,7 @@ export function paintMask(
     color = getDefaultColor(image),
     blend = true,
   } = options;
-  const row = origin.row;
-  const column = origin.column;
+  const { column, row } = origin;
 
   if (color.length !== image.channels) {
     throw new Error(

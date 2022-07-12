@@ -14,6 +14,12 @@ export interface DrawLineOnIjsOptions {
    */
   strokeColor?: number[];
   /**
+   * Origin of the line relative to a the parent image (top-left corner).
+   *
+   * @default {row: 0, column: 0}
+   */
+  origin?: Point;
+  /**
    * Image to which the resulting image has to be put.
    */
   out?: IJS;
@@ -35,22 +41,22 @@ export function drawLineOnIjs(
   options: DrawLineOnIjsOptions = {},
 ): IJS {
   const newImage = getOutputImage(image, options, { clone: true });
-  const { strokeColor: color = getDefaultColor(newImage) } = options;
+  const {
+    strokeColor: color = getDefaultColor(newImage),
+    origin = { column: 0, row: 0 },
+  } = options;
 
   checkProcessable(newImage, 'drawLine', {
     bitDepth: [8, 16],
   });
 
-  const numberChannels = Math.min(newImage.channels, color.length);
   line(
-    from.column,
-    from.row,
-    to.column,
-    to.row,
+    Math.round(origin.column + from.column),
+    Math.round(origin.row + from.row),
+    Math.round(origin.column + to.column),
+    Math.round(origin.row + to.row),
     (column: number, row: number) => {
-      for (let channel = 0; channel < numberChannels; channel++) {
-        newImage.setValue(column, row, channel, color[channel]);
-      }
+      newImage.setVisiblePixel(column, row, color);
     },
   );
   return newImage;

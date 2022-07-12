@@ -4,6 +4,12 @@ import { maskToOutputMask } from '../utils/getOutputImage';
 
 export interface DrawPolylineOnMaskOptions {
   /**
+   * Origin of the rectangle relative to a the parent image (top-left corner).
+   *
+   * @default {row: 0, column: 0}
+   */
+  origin?: Point;
+  /**
    * Mask to which the resulting image has to be put.
    */
   out?: Mask;
@@ -27,7 +33,7 @@ export function drawPolylineOnMask(
     const from = points[i];
     const to = points[i + 1];
 
-    newImage.drawLine(from, to, { out: newImage });
+    newImage.drawLine(from, to, { out: newImage, origin: options.origin });
   }
   return newImage;
 }

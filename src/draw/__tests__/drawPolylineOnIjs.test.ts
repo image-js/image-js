@@ -115,4 +115,38 @@ describe('drawPolyline on IJS', () => {
       [10, 10, 10, 0],
     ]);
   });
+  it('different origin', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const points = [
+      { row: 0, column: 0 },
+      { row: 1, column: 0 },
+      { row: 1, column: 1 },
+    ];
+    let result = image.drawPolyline(points, {
+      origin: { column: 1, row: 0 },
+      strokeColor: [1],
+    });
+    expect(result).toMatchImageData([
+      [0, 1, 0, 0],
+      [0, 1, 1, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    result = image.drawPolyline(points, {
+      origin: { column: 3, row: 0 },
+      strokeColor: [1],
+    });
+    console.log({ result });
+    expect(result).toMatchImageData([
+      [0, 0, 0, 1],
+      [0, 0, 0, 1],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+  });
 });

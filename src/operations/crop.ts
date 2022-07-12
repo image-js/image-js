@@ -41,9 +41,7 @@ export function crop(image: IJS, options: CropOptions = {}) {
     width = image.width - origin.column,
     height = image.height - origin.row,
   } = options;
-
-  const row = origin.row;
-  const column = origin.column;
+  const { column, row } = origin;
 
   checkProcessable(image, 'crop', {
     bitDepth: [8, 16],

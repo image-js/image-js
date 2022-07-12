@@ -239,4 +239,28 @@ describe('drawPolygon on Mask', () => {
       [1, 0, 0, 0, 0],
     ]);
   });
+  it('different origin', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const points = [
+      { row: 0, column: 3 },
+      { row: 3, column: 0 },
+      { row: 0, column: 0 },
+    ];
+    const result = mask.drawPolygon(points, {
+      origin: { column: 2, row: 0 },
+      filled: true,
+    });
+    expect(result).toMatchMaskData([
+      [0, 0, 1, 1],
+      [0, 0, 1, 1],
+      [0, 0, 1, 1],
+      [0, 0, 1, 0],
+    ]);
+    expect(result).not.toBe(mask);
+  });
 });

@@ -6,6 +6,12 @@ import { maskToOutputMask } from '../utils/getOutputImage';
 
 export interface DrawLineOnMaskOptions {
   /**
+   * Origin of the line relative to a the parent image (top-left corner).
+   *
+   * @default {row: 0, column: 0}
+   */
+  origin?: Point;
+  /**
    * Mask to which the result has to be put.
    */
   out?: Mask;
@@ -26,14 +32,15 @@ export function drawLineOnMask(
   to: Point,
   options: DrawLineOnMaskOptions = {},
 ): Mask {
+  const { origin = { column: 0, row: 0 } } = options;
   const newMask = maskToOutputMask(mask, options, { clone: true });
   line(
-    Math.round(from.column),
-    Math.round(from.row),
-    Math.round(to.column),
-    Math.round(to.row),
+    Math.round(origin.column + from.column),
+    Math.round(origin.row + from.row),
+    Math.round(origin.column + to.column),
+    Math.round(origin.row + to.row),
     (column: number, row: number) => {
-      newMask.setBit(column, row, 1);
+      newMask.setVisiblePixel(column, row, [1]);
     },
   );
   return newMask;

@@ -112,4 +112,28 @@ describe('drawPolyline on Mask', () => {
       [0, 0, 0, 1],
     ]);
   });
+  it('different origin', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const points = [
+      { row: 0, column: 0 },
+      { row: 1, column: 0 },
+      { row: 1, column: 1 },
+    ];
+    const result = mask.drawPolyline(points, {
+      origin: { column: 1, row: 0 },
+    });
+    console.log({ result });
+    expect(result).toMatchMaskData([
+      [0, 1, 0, 0],
+      [0, 1, 1, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    expect(result).not.toBe(mask);
+  });
 });

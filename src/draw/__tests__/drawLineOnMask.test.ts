@@ -249,4 +249,56 @@ describe('drawLine on Mask', () => {
       [0, 0, 0, 0, 1],
     ]);
   });
+  it('different origin', () => {
+    const image = testUtils.createMask([
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+    ]);
+    const from = { row: 0, column: 1 };
+    const to = { row: 1, column: 0 };
+    const result = image.drawLine(from, to, {
+      origin: { column: 1, row: 1 },
+    });
+    expect(result).toMatchMaskData([
+      [1, 0, 0, 0],
+      [1, 0, 1, 0],
+      [1, 1, 0, 0],
+      [1, 0, 0, 0],
+    ]);
+    expect(result).not.toBe(image);
+  });
+  it('different origin, line out of mask', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const points = [
+      { row: 0, column: 0 },
+      { row: 3, column: 3 },
+    ];
+    let result = mask.drawLine(points[0], points[1], {
+      origin: { column: 0, row: 0 },
+    });
+    expect(result).toMatchMaskData([
+      [1, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 1, 0],
+      [0, 0, 0, 1],
+    ]);
+
+    result = mask.drawLine(points[0], points[1], {
+      origin: { column: 3, row: 0 },
+    });
+    expect(result).toMatchMaskData([
+      [0, 0, 0, 1],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    expect(result).not.toBe(mask);
+  });
 });

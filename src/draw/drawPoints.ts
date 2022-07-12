@@ -13,6 +13,12 @@ export interface DrawPointsOptions {
    */
   color?: number[];
   /**
+   * Origin of the points relative to a the parent image (top-left corner).
+   *
+   * @default {row: 0, column: 0}
+   */
+  origin?: Point;
+  /**
    * Image to which the resulting image has to be put.
    */
   out?: IJS;
@@ -48,14 +54,19 @@ export function drawPoints(
   } else {
     newImage = maskToOutputMask(image, options, { clone: true });
   }
-  const { color = getDefaultColor(newImage) } = options;
+  const { color = getDefaultColor(newImage), origin = { row: 0, column: 0 } } =
+    options;
 
   checkProcessable(newImage, 'drawPoints', {
     bitDepth: [1, 8, 16],
   });
 
   for (const point of points) {
-    newImage.setPixel(point.column, point.row, color);
+    newImage.setPixel(
+      origin.column + point.column,
+      origin.row + point.row,
+      color,
+    );
   }
 
   return newImage;

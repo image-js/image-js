@@ -209,4 +209,81 @@ describe('drawLine on IJS', () => {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
     ]);
   });
+  it('line out of image', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const from = { row: 0, column: 0 };
+    const to = { row: 3, column: 8 };
+    const result = image.drawLine(from, to, {
+      strokeColor: [1],
+      origin: { column: 0, row: 0 },
+    });
+
+    expect(result).toMatchImageData([
+      [1, 1, 0, 0],
+      [0, 0, 1, 1],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+  });
+  it('different origin', () => {
+    const image = testUtils.createGreyImage([
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+      [1, 0, 0, 0],
+    ]);
+    const from = { row: 0, column: 1 };
+    const to = { row: 1, column: 0 };
+    const result = image.drawLine(from, to, {
+      strokeColor: [1],
+      origin: { column: 1, row: 1 },
+    });
+
+    expect(result).toMatchImageData([
+      [1, 0, 0, 0],
+      [1, 0, 1, 0],
+      [1, 1, 0, 0],
+      [1, 0, 0, 0],
+    ]);
+    expect(result).not.toBe(image);
+  });
+  it('different origin, line out of image', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const points = [
+      { row: 0, column: 0 },
+      { row: 3, column: 3 },
+    ];
+    let result = image.drawLine(points[0], points[1], {
+      origin: { column: 0, row: 0 },
+      strokeColor: [1],
+    });
+    expect(result).toMatchImageData([
+      [1, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 1, 0],
+      [0, 0, 0, 1],
+    ]);
+
+    result = image.drawLine(points[0], points[1], {
+      origin: { column: 3, row: 0 },
+      strokeColor: [1],
+    });
+    expect(result).toMatchImageData([
+      [0, 0, 0, 1],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    expect(result).not.toBe(image);
+  });
 });

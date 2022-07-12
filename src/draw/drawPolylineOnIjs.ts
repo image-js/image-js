@@ -1,8 +1,8 @@
 import { IJS } from '../IJS';
 import checkProcessable from '../utils/checkProcessable';
+import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
-import { Point } from '../utils/geometry/points';
 
 export interface DrawPolylineOnIjsOptions {
   /**
@@ -11,6 +11,12 @@ export interface DrawPolylineOnIjsOptions {
    * @default black
    */
   strokeColor?: number[];
+  /**
+   * Origin of the rectangle relative to a the parent image (top-left corner).
+   *
+   * @default {row: 0, column: 0}
+   */
+  origin?: Point;
   /**
    * Image to which the resulting image has to be put.
    */
@@ -30,18 +36,21 @@ export function drawPolylineOnIjs(
   points: Point[],
   options: DrawPolylineOnIjsOptions = {},
 ): IJS {
-  let newImage = getOutputImage(image, options, { clone: true });
+  const {
+    strokeColor: color = getDefaultColor(image),
+    origin = { column: 0, row: 0 },
+  } = options;
 
-  const { strokeColor: color = getDefaultColor(image) } = options;
-  checkProcessable(newImage, 'drawPolyline', {
+  checkProcessable(image, 'drawPolyline', {
     bitDepth: [8, 16],
   });
+  let newImage = getOutputImage(image, options, { clone: true });
 
   for (let i = 0; i < points.length - 1; i++) {
     const from = points[i];
     const to = points[i + 1];
 
-    newImage.drawLine(from, to, { out: newImage, strokeColor: color });
+    newImage.drawLine(from, to, { out: newImage, strokeColor: color, origin });
   }
   return newImage;
 }

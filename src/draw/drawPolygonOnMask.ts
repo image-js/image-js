@@ -13,6 +13,12 @@ export interface DrawPolygonOnMaskOptions extends DrawPolylineOnMaskOptions {
    * Fill polygon.
    */
   filled?: boolean;
+  /**
+   * Origin of the rectangle relative to a the parent image (top-left corner).
+   *
+   * @default {row: 0, column: 0}
+   */
+  origin?: Point;
 }
 
 /**
@@ -28,12 +34,19 @@ export function drawPolygonOnMask(
   points: Point[],
   options: DrawPolygonOnMaskOptions = {},
 ): Mask {
-  const { filled = false, ...otherOptions } = options;
+  const {
+    filled = false,
+    origin = { column: 0, row: 0 },
+    ...otherOptions
+  } = options;
 
   let newMask = maskToOutputMask(mask, options, { clone: true });
 
   if (!filled) {
-    return newMask.drawPolyline([...points, points[0]], otherOptions);
+    return newMask.drawPolyline([...points, points[0]], {
+      origin,
+      ...otherOptions,
+    });
   }
 
   const filteredPoints = deleteDuplicates(points);
@@ -42,10 +55,13 @@ export function drawPolygonOnMask(
   for (let row = 0; row < newMask.height; row++) {
     for (let column = 0; column < newMask.width; column++) {
       if (robustPointInPolygon(arrayPoints, [column, row]) === -1) {
-        newMask.setBit(column, row, 1);
+        newMask.setBit(origin.column + column, origin.row + row, 1);
       }
     }
   }
 
-  return newMask.drawPolyline([...points, points[0]], otherOptions);
+  return newMask.drawPolyline([...points, points[0]], {
+    origin,
+    ...otherOptions,
+  });
 }

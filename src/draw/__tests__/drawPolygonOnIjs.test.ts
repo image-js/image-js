@@ -264,4 +264,28 @@ describe('drawPolygon on IJS', () => {
       [10, 10, 10, 0],
     ]);
   });
+  it('different origin', () => {
+    const mask = testUtils.createGreyImage([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const points = [
+      { row: 0, column: 3 },
+      { row: 3, column: 0 },
+      { row: 0, column: 0 },
+    ];
+    const result = mask.drawPolygon(points, {
+      origin: { column: 1, row: 0 },
+      strokeColor: [1],
+      fillColor: [5],
+    });
+    expect(result).toMatchImageData([
+      [0, 1, 1, 1],
+      [0, 1, 5, 1],
+      [0, 1, 1, 0],
+      [0, 1, 0, 0],
+    ]);
+  });
 });

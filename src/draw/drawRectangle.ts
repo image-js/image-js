@@ -1,22 +1,17 @@
 import { IJS } from '../IJS';
 import { Mask } from '../Mask';
 import checkProcessable from '../utils/checkProcessable';
+import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage';
 
 export interface DrawRectangleOptions<OutType> {
   /**
-   * Row of the top-left corner of the rectangle.
+   * Origin of the rectangle relative to a the parent image (top-left corner).
    *
-   * @default 0
+   * @default {row: 0, column: 0}
    */
-  row?: number;
-  /**
-   * Column of the top-left corner of the rectangle.
-   *
-   * @default 0
-   */
-  column?: number;
+  origin?: Point;
   /**
    * Specify the width of the rectangle.
    *
@@ -66,13 +61,13 @@ export function drawRectangle(
   options: DrawRectangleOptions<Mask | IJS> = {},
 ): IJS | Mask {
   const {
-    row = 0,
-    column = 0,
+    origin = { column: 0, row: 0 },
     width = image.width,
     height = image.height,
     strokeColor: color = getDefaultColor(image),
     fillColor: fill,
   } = options;
+  const { column, row } = origin;
 
   let newImage: IJS | Mask;
   if (image instanceof IJS) {

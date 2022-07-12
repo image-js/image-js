@@ -3,8 +3,8 @@ import robustPointInPolygon from 'robust-point-in-polygon';
 import { IJS } from '../IJS';
 import { arrayPointsToObjects } from '../utils/arrayPointsToObjects';
 import checkProcessable from '../utils/checkProcessable';
-import { getOutputImage } from '../utils/getOutputImage';
 import { Point } from '../utils/geometry/points';
+import { getOutputImage } from '../utils/getOutputImage';
 
 import { DrawPolylineOnIjsOptions } from './drawPolylineOnIjs';
 import { deleteDuplicates } from './utils/deleteDuplicates';
@@ -16,6 +16,12 @@ export interface DrawPolygonOnIjsOptions extends DrawPolylineOnIjsOptions {
    * @default 'black'
    */
   fillColor?: number[];
+  /**
+   * Origin of the rectangle relative to a the parent image (top-left corner).
+   *
+   * @default {row: 0, column: 0}
+   */
+  origin?: Point;
 }
 /**
  * Draw a polygon defined by an array of points onto an image.
@@ -30,7 +36,11 @@ export function drawPolygonOnIjs(
   points: Point[],
   options: DrawPolygonOnIjsOptions = {},
 ): IJS {
-  const { fillColor, ...otherOptions } = options;
+  const {
+    fillColor,
+    origin = { column: 0, row: 0 },
+    ...otherOptions
+  } = options;
 
   checkProcessable(image, 'drawPolygon', {
     bitDepth: [8, 16],
@@ -39,7 +49,10 @@ export function drawPolygonOnIjs(
   let newImage = getOutputImage(image, options, { clone: true });
 
   if (fillColor === undefined) {
-    return newImage.drawPolyline([...points, points[0]], otherOptions);
+    return newImage.drawPolyline([...points, points[0]], {
+      origin,
+      ...otherOptions,
+    });
   } else {
     if (fillColor.length !== image.channels) {
       throw new Error('drawPolygon: fill color is not compatible with image.');
@@ -52,11 +65,18 @@ export function drawPolygonOnIjs(
     for (let row = 0; row < newImage.height; row++) {
       for (let column = 0; column < newImage.width; column++) {
         if (robustPointInPolygon(arrayPoints, [column, row]) === -1) {
-          newImage.setPixel(column, row, fillColor);
+          newImage.setPixel(
+            origin.column + column,
+            origin.row + row,
+            fillColor,
+          );
         }
       }
     }
   }
 
-  return newImage.drawPolyline([...points, points[0]], otherOptions);
+  return newImage.drawPolyline([...points, points[0]], {
+    origin,
+    ...otherOptions,
+  });
 }

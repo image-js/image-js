@@ -97,10 +97,10 @@ describe('drawPoints', () => {
 
   it('mask', () => {
     const image = testUtils.createMask([
-      [1, 1, 1, 1],
-      [1, 1, 1, 1],
-      [1, 1, 1, 1],
-      [1, 1, 1, 1],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
     ]);
     const points = [
       { row: 0, column: 0 },
@@ -109,19 +109,19 @@ describe('drawPoints', () => {
     ];
     const result = image.drawPoints(points);
     expect(result).toMatchImageData([
-      [0, 0, 1, 1],
-      [0, 1, 1, 1],
-      [1, 1, 1, 1],
-      [1, 1, 1, 1],
+      [1, 1, 0, 0],
+      [1, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
     ]);
     expect(result).not.toBe(image);
   });
   it('default options', () => {
     const image = testUtils.createMask([
-      [1, 1, 1, 1],
-      [1, 1, 1, 1],
-      [1, 1, 1, 1],
-      [1, 1, 1, 1],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
     ]);
     const points = [
       { row: 2, column: 2 },
@@ -130,10 +130,32 @@ describe('drawPoints', () => {
     ];
     const result = drawPoints(image, points);
     expect(result).toMatchImageData([
-      [1, 1, 0, 1],
-      [1, 1, 1, 1],
-      [0, 1, 0, 1],
-      [1, 1, 1, 1],
+      [0, 0, 1, 0],
+      [0, 0, 0, 0],
+      [1, 0, 1, 0],
+      [0, 0, 0, 0],
+    ]);
+    expect(result).not.toBe(image);
+  });
+  it('different origin', () => {
+    const image = testUtils.createMask([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const points = [
+      { row: -1, column: -1 },
+      { row: -1, column: 0 },
+      { row: 0, column: 1 },
+      { row: 0, column: 0 },
+    ];
+    const result = drawPoints(image, points, { origin: { column: 2, row: 2 } });
+    expect(result).toMatchImageData([
+      [0, 0, 0, 0],
+      [0, 1, 1, 0],
+      [0, 0, 1, 1],
+      [0, 0, 0, 0],
     ]);
     expect(result).not.toBe(image);
   });

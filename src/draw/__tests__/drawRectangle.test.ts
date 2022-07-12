@@ -175,8 +175,7 @@ describe('drawRectangle', () => {
       width: 4,
       height: 4,
       strokeColor: [1],
-      row: 1,
-      column: 1,
+      origin: { column: 1, row: 1 },
     });
 
     expect(result).toMatchMaskData([
@@ -203,8 +202,7 @@ describe('drawRectangle', () => {
       height: 4,
       fillColor: [1],
       strokeColor: [1],
-      row: 1,
-      column: 1,
+      origin: { column: 1, row: 1 },
     });
 
     expect(result).toMatchMaskData([
@@ -223,7 +221,10 @@ describe('drawRectangle', () => {
     ]);
     const result = mask.drawRectangle();
 
-    expect(result).toMatchMask(mask);
+    expect(result).toMatchMaskData([
+      [1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1],
+    ]);
     expect(result).not.toBe(mask);
   });
   it('mask, call directly, no options', () => {
@@ -233,6 +234,9 @@ describe('drawRectangle', () => {
     ]);
     const result = drawRectangle(mask);
 
-    expect(result).toMatchMask(mask);
+    expect(result).toMatchMaskData([
+      [1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1],
+    ]);
   });
 });
