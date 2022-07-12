@@ -1,5 +1,4 @@
 import { fromMask, IJS, ImageColorModel } from '../../../src';
-import { getContourMask } from '../../../src/roi/getMask/getContourMask';
 import { RoiKind } from '../../../src/roi/getRois';
 /**
  * Paint the border of the larger black ROI on the image.
@@ -16,15 +15,12 @@ export function testGetContourMask(image: IJS): IJS {
 
   const roi = rois.sort((a, b) => b.surface - a.surface)[0];
 
-  let roiMask = getContourMask(roi, {
-    kind: 'contour',
-    filled: true,
+  let roiMask = roi.getMask({
     innerBorders: false,
   });
 
   return image.paintMask(roiMask, {
-    row: roi.row,
-    column: roi.column,
+    origin: roi.origin,
     color: [0, 255, 0, 255],
   });
 }

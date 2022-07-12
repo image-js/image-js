@@ -127,7 +127,6 @@ describe('drawPolyline on Mask', () => {
     const result = mask.drawPolyline(points, {
       origin: { column: 1, row: 0 },
     });
-    console.log({ result });
     expect(result).toMatchMaskData([
       [0, 1, 0, 0],
       [0, 1, 1, 0],

@@ -20,8 +20,7 @@ export function testGetBorderPoints(image: IJS): IJS {
   let borderMask = Mask.fromPoints(roi.width, roi.height, points);
 
   return image.paintMask(borderMask, {
-    row: roi.row,
-    column: roi.column,
+    origin: roi.origin,
     color: [0, 255, 0, 255],
   });
 }

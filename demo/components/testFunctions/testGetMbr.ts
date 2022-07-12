@@ -1,5 +1,4 @@
-import { fromMask, getMask, IJS, ImageColorModel } from '../../../src';
-import { getContourMask } from '../../../src/roi/getMask/getContourMask';
+import { fromMask, IJS, ImageColorModel } from '../../../src';
 import { RoiKind } from '../../../src/roi/getRois';
 
 /**
@@ -8,7 +7,7 @@ import { RoiKind } from '../../../src/roi/getRois';
  * @param image - Input image.
  * @returns The image with the MBR.
  */
-export function testGetMbrMask(image: IJS): IJS {
+export function testGetMbr(image: IJS): IJS {
   const grey = image.convertColor(ImageColorModel.GREY);
   const mask = grey.threshold({ threshold: 35 });
   const roiMapManager = fromMask(mask);
@@ -17,26 +16,17 @@ export function testGetMbrMask(image: IJS): IJS {
 
   const roi = rois.sort((a, b) => b.surface - a.surface)[0];
   if (roi) {
-    let mbr = getMask(roi, {
-      kind: 'mbr',
-      filled: false,
-    });
-    let roiMask = getContourMask(roi, {
-      kind: 'contour',
-      filled: true,
-      innerBorders: false,
-    });
+    const roiMask = roi.getMask();
+    let mbr = roiMask.getMbr();
 
     let result = image.paintMask(roiMask, {
-      row: roi.row,
-      column: roi.column,
+      origin: roi.origin,
       color: [0, 0, 255, 255],
     });
 
-    result = result.paintMask(mbr, {
-      row: roi.row,
-      column: roi.column,
-      color: [0, 255, 0, 255],
+    result = result.drawPolygon(mbr.corners, {
+      origin: roi.origin,
+      strokeColor: [0, 255, 0, 255],
     });
 
     return result;

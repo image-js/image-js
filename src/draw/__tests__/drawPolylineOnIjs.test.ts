@@ -141,7 +141,6 @@ describe('drawPolyline on IJS', () => {
       origin: { column: 3, row: 0 },
       strokeColor: [1],
     });
-    console.log({ result });
     expect(result).toMatchImageData([
       [0, 0, 0, 1],
       [0, 0, 0, 1],
