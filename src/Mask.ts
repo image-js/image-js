@@ -230,6 +230,19 @@ export class Mask {
   }
 
   /**
+   * Set all a pixel to a given value if the coordinates are inside the mask.
+   *
+   * @param column - Column index.
+   * @param row - Row index.
+   * @param value - New color of the pixel to set.
+   */
+  public setVisiblePixel(column: number, row: number, value: number[]): void {
+    if (column >= 0 && column < this.width && row >= 0 && row < this.height) {
+      this.setPixel(column, row, value);
+    }
+  }
+
+  /**
    * Get a pixel using its index.
    *
    * @param index - Index of the pixel.

@@ -315,12 +315,25 @@ export class IJS {
    *
    * @param column - Column index.
    * @param row - Row index.
-   * @param value - New channel values of the pixel to set.
+   * @param value - New color of the pixel to set.
    */
   public setPixel(column: number, row: number, value: number[]): void {
     const start = (row * this.width + column) * this.channels;
     for (let i = 0; i < this.channels; i++) {
       this.data[start + i] = value[i];
+    }
+  }
+
+  /**
+   * Set all the channels of a pixel if the coordinates are inside the image.
+   *
+   * @param column - Column index.
+   * @param row - Row index.
+   * @param value - New color of the pixel to set.
+   */
+  public setVisiblePixel(column: number, row: number, value: number[]): void {
+    if (column >= 0 && column < this.width && row >= 0 && row < this.height) {
+      this.setPixel(column, row, value);
     }
   }
 
