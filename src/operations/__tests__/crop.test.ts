@@ -21,8 +21,7 @@ describe('crop', () => {
       [1, 2, 3, 3, 0],
     ]);
     let result = image.crop({
-      row: 2,
-      column: 2,
+      origin: { row: 2, column: 2 },
     });
     expect(result).toMatchImageData([
       [2, 2, 0],
@@ -31,8 +30,7 @@ describe('crop', () => {
     ]);
 
     result = image.crop({
-      row: 0,
-      column: 0,
+      origin: { row: 0, column: 0 },
       height: 2,
       width: 2,
     });
@@ -42,8 +40,7 @@ describe('crop', () => {
     ]);
 
     result = image.crop({
-      row: 2,
-      column: 2,
+      origin: { row: 2, column: 2 },
       height: 2,
       width: 2,
     });
@@ -53,8 +50,7 @@ describe('crop', () => {
     ]);
 
     result = image.crop({
-      row: 1,
-      column: 3,
+      origin: { row: 1, column: 3 },
       height: 1,
     });
     expect(result).toMatchImageData([[1, 1]]);
@@ -65,8 +61,7 @@ describe('crop', () => {
 
     expect(() => {
       image.crop({
-        column: -10,
-        row: 2,
+        origin: { column: -10, row: 2 },
         height: 2,
         width: 2,
       });
@@ -74,8 +69,7 @@ describe('crop', () => {
 
     expect(() => {
       image.crop({
-        column: 2,
-        row: 2,
+        origin: { column: 2, row: 2 },
         height: -2,
         width: 2,
       });
@@ -83,8 +77,7 @@ describe('crop', () => {
 
     expect(() => {
       image.crop({
-        column: 100,
-        row: 2,
+        origin: { column: 100, row: 2 },
         height: 2,
         width: 2,
       });
@@ -92,8 +85,7 @@ describe('crop', () => {
 
     expect(() => {
       image.crop({
-        column: 2,
-        row: 2,
+        origin: { column: 2, row: 2 },
         height: 2,
         width: 100,
       });

@@ -27,7 +27,7 @@ describe('paintMask', () => {
       [0, 1],
       [1, 0],
     ]);
-    const result = image.paintMask(mask, { column: 1 });
+    const result = image.paintMask(mask, { origin: { column: 1, row: 0 } });
 
     expect(result).toMatchImageData([
       [30, 23, 0],
@@ -45,7 +45,7 @@ describe('paintMask', () => {
       [0, 1, 1],
       [1, 0, 1],
     ]);
-    const result = image.paintMask(mask, { column: -1 });
+    const result = image.paintMask(mask, { origin: { column: -1, row: 0 } });
 
     expect(result).toMatchImageData([
       [0, 0, 2],

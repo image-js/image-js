@@ -40,7 +40,10 @@ export function getContourMask(
 
     for (let row = 0; row < roi.height; row++) {
       for (let column = 0; column < roi.width; column++) {
-        if (roi.getMapValue(roi.column + column, roi.row + row) === roi.id) {
+        if (
+          roi.getMapValue(roi.origin.column + column, roi.origin.row + row) ===
+          roi.id
+        ) {
           mask.setBit(column, row, 1);
         } else {
           mask.setBit(column, row, 0);

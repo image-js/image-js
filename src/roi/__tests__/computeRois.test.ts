@@ -9,8 +9,7 @@ describe('computeRois', () => {
     computeRois(roiMapManager);
 
     const whiteRoi = new Roi(roiMapManager.getMap(), 1);
-    whiteRoi.row = 0;
-    whiteRoi.column = 0;
+    whiteRoi.origin = { row: 0, column: 0 };
     whiteRoi.height = 1;
     whiteRoi.width = 1;
     whiteRoi.surface = 1;
@@ -19,8 +18,7 @@ describe('computeRois', () => {
     expect(roiMapManager.whiteRois).toStrictEqual([whiteRoi]);
 
     const blackRoi = new Roi(roiMapManager.getMap(), -1);
-    blackRoi.row = 0;
-    blackRoi.column = 1;
+    blackRoi.origin = { row: 0, column: 1 };
     blackRoi.height = 1;
     blackRoi.width = 1;
     blackRoi.surface = 1;

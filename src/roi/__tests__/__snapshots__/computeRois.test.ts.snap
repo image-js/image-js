@@ -3,7 +3,6 @@
 exports[`computeRois 3x3 mask 1`] = `
 Array [
   Roi {
-    "column": 0,
     "height": 2,
     "id": 1,
     "map": Object {
@@ -23,12 +22,14 @@ Array [
       "nbPositive": 2,
       "width": 3,
     },
-    "row": 0,
+    "origin": Object {
+      "column": 0,
+      "row": 0,
+    },
     "surface": 4,
     "width": 3,
   },
   Roi {
-    "column": 2,
     "height": 1,
     "id": 2,
     "map": Object {
@@ -48,7 +49,10 @@ Array [
       "nbPositive": 2,
       "width": 3,
     },
-    "row": 2,
+    "origin": Object {
+      "column": 2,
+      "row": 2,
+    },
     "surface": 1,
     "width": 1,
   },
@@ -58,7 +62,6 @@ Array [
 exports[`computeRois 3x3 mask 2`] = `
 Array [
   Roi {
-    "column": 0,
     "height": 2,
     "id": -1,
     "map": Object {
@@ -78,7 +81,10 @@ Array [
       "nbPositive": 2,
       "width": 3,
     },
-    "row": 1,
+    "origin": Object {
+      "column": 0,
+      "row": 1,
+    },
     "surface": 4,
     "width": 3,
   },

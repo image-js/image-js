@@ -130,7 +130,7 @@ export interface ImageOptions {
   colorModel?: ImageColorModel;
 
   /**
-   * Origin of the image relative to a the parent image.
+   * Origin of the image relative to a the parent image (top-left corner).
    *
    * @default {row: 0, column: 0}
    */

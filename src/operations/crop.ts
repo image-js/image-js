@@ -1,19 +1,14 @@
 import { IJS } from '../IJS';
 import checkProcessable from '../utils/checkProcessable';
+import { Point } from '../utils/geometry/points';
 
 export interface CropOptions {
   /**
-   * Specify from what row the image should be cropped.
+   * Origin of the crop relative to a the parent image (top-left corner).
    *
-   * @default 0
+   * @default {row: 0, column: 0}
    */
-  row?: number;
-  /**
-   * Specify from what colum the image should be cropped.
-   *
-   * @default 0
-   */
-  column?: number;
+  origin?: Point;
   /**
    * Specify the width of the cropped image.
    *
@@ -42,11 +37,13 @@ export interface CropOptions {
  */
 export function crop(image: IJS, options: CropOptions = {}) {
   const {
-    row = 0,
-    column = 0,
-    width = image.width - column,
-    height = image.height - row,
+    origin = { row: 0, column: 0 },
+    width = image.width - origin.column,
+    height = image.height - origin.row,
   } = options;
+
+  const row = origin.row;
+  const column = origin.column;
 
   checkProcessable(image, 'crop', {
     bitDepth: [8, 16],

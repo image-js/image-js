@@ -9,8 +9,7 @@ describe('getRois', () => {
     const rois = getRois(roiMapManager);
 
     const roi = new Roi(roiMapManager.getMap(), 1);
-    roi.row = 0;
-    roi.column = 0;
+    roi.origin = { row: 0, column: 0 };
     roi.height = 1;
     roi.width = 1;
     roi.surface = 1;

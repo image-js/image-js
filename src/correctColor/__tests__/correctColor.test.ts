@@ -95,8 +95,12 @@ describe('correctColor', () => {
     let image = testUtils.load('correctColor/exposure-minus-1.png');
     let reference = testUtils.load('correctColor/test.png');
 
-    image = image.crop({ row: 2, column: 1, width: 6, height: 6 });
-    reference = reference.crop({ row: 2, column: 1, width: 6, height: 6 });
+    image = image.crop({ origin: { row: 2, column: 1 }, width: 6, height: 6 });
+    reference = reference.crop({
+      origin: { row: 2, column: 1 },
+      width: 6,
+      height: 6,
+    });
 
     const measuredColors = getImageColors(image);
     const referenceColors = getImageColors(reference);
@@ -110,8 +114,12 @@ describe('correctColor', () => {
     let image = testUtils.load('correctColor/exposure-plus-1.png');
     let reference = testUtils.load('correctColor/test.png');
 
-    image = image.crop({ row: 2, column: 1, width: 6, height: 6 });
-    reference = reference.crop({ row: 2, column: 1, width: 6, height: 6 });
+    image = image.crop({ origin: { row: 2, column: 1 }, width: 6, height: 6 });
+    reference = reference.crop({
+      origin: { row: 2, column: 1 },
+      width: 6,
+      height: 6,
+    });
 
     const measuredColors = getImageColors(image);
     const referenceColors = getImageColors(reference);
@@ -125,8 +133,12 @@ describe('correctColor', () => {
     let image = testUtils.load('correctColor/inverted.png');
     let reference = testUtils.load('correctColor/test.png');
 
-    image = image.crop({ row: 2, column: 1, width: 6, height: 6 });
-    reference = reference.crop({ row: 2, column: 1, width: 6, height: 6 });
+    image = image.crop({ origin: { row: 2, column: 1 }, width: 6, height: 6 });
+    reference = reference.crop({
+      origin: { row: 2, column: 1 },
+      width: 6,
+      height: 6,
+    });
 
     const measuredColors = getImageColors(image);
     const referenceColors = getImageColors(reference);
@@ -140,8 +152,12 @@ describe('correctColor', () => {
     let image = testUtils.load('correctColor/offsets.png');
     let reference = testUtils.load('correctColor/test.png');
 
-    image = image.crop({ row: 2, column: 1, width: 6, height: 6 });
-    reference = reference.crop({ row: 2, column: 1, width: 6, height: 6 });
+    image = image.crop({ origin: { row: 2, column: 1 }, width: 6, height: 6 });
+    reference = reference.crop({
+      origin: { row: 2, column: 1 },
+      width: 6,
+      height: 6,
+    });
 
     const measuredColors = getImageColors(image);
     const referenceColors = getImageColors(reference);

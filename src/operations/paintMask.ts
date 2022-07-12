@@ -1,22 +1,17 @@
 import { IJS } from '../IJS';
 import { Mask } from '../Mask';
+import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
 import { setBlendedPixel } from '../utils/setBlendedPixel';
 
 export interface PaintMaskOptions {
   /**
-   * X offset for the copy, the top left corner of the target image is the reference.
+   * Top-left corner of the mask relative to a the parent image.
    *
-   * @default 0
+   * @default {row: 0, column: 0}
    */
-  column?: number;
-  /**
-   * Y offset for the copy, the top left corner of the target image is the reference.
-   *
-   * @default 0
-   */
-  row?: number;
+  origin?: Point;
   /**
    * Color with which to blend the image pixel.
    *
@@ -49,11 +44,12 @@ export function paintMask(
   options: PaintMaskOptions = {},
 ): IJS {
   const {
-    column = 0,
-    row = 0,
+    origin = { row: 0, column: 0 },
     color = getDefaultColor(image),
     blend = true,
   } = options;
+  const row = origin.row;
+  const column = origin.column;
 
   if (color.length !== image.channels) {
     throw new Error(
