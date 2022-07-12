@@ -7,19 +7,36 @@ import { getBorderPoints } from './getBorderPoints';
 import { getMask, GetMaskOptions } from './getMask';
 
 export class Roi {
+  /**
+   * Original map with all the ROI IDs.
+   */
   private map: RoiMap;
+  /**
+   * ID of the ROI. Positive for white ROIs and negative for black ones.
+   */
   public id: number;
-  public row: number;
-  public column: number;
+  /**
+   * Origin of the ROI. The top-left corner of the rectangle around
+   * the ROI relative to the original image.
+   */
+  public origin: Point;
+  /**
+   * Width of the ROI.
+   */
   public width: number;
+  /**
+   * Height of the ROI.
+   */
   public height: number;
+  /**
+   * Surface of the ROI.
+   */
   public surface: number;
 
   public constructor(map: RoiMap, id: number) {
     this.map = map;
     this.id = id;
-    this.row = map.height;
-    this.column = map.width;
+    this.origin = { row: map.height, column: map.width };
     this.width = 0;
     this.height = 0;
     this.surface = 0;

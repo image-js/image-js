@@ -64,6 +64,12 @@ export type BitValue = 1 | 0 | boolean;
 
 export interface MaskOptions {
   /**
+   * Origin of the image relative to a the parent image.
+   *
+   * @default {row: 0, column: 0}
+   */
+  origin?: Point;
+  /**
    * Typed array holding the mask data.
    */
   data?: Uint8Array;
@@ -123,6 +129,11 @@ export class Mask {
   public readonly maxValue: number;
 
   /**
+   * Origin of the image relative to a the parent image.
+   */
+  public readonly origin: Point;
+
+  /**
    * Typed array holding the mask data.
    */
   private readonly data: Uint8Array;
@@ -135,7 +146,7 @@ export class Mask {
    * @param options - Image options.
    */
   public constructor(width: number, height: number, options: MaskOptions = {}) {
-    const { data } = options;
+    const { data, origin = { row: 0, column: 0 } } = options;
 
     if (width < 1 || !Number.isInteger(width)) {
       throw new RangeError(
@@ -154,6 +165,7 @@ export class Mask {
     this.size = width * height;
     this.depth = ColorDepth.UINT1;
     this.colorModel = ImageColorModel.BINARY;
+    this.origin = origin;
 
     const colorModelDef = colorModels[this.colorModel];
     this.components = colorModelDef.components;

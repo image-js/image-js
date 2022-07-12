@@ -112,7 +112,8 @@ export enum ImageCoordinates {
 export interface ImageOptions {
   /**
    * Number of bits per value in each channel.
-   * Default: `ColorDepth.UINT8`.
+   *
+   * @default `ColorDepth.UINT8`.
    */
   depth?: ColorDepth;
 
@@ -123,9 +124,17 @@ export interface ImageOptions {
 
   /**
    * Color model of the created image.
-   * Default: `ImageColorModel.RGB`.
+   *
+   * @default `ImageColorModel.RGB`.
    */
   colorModel?: ImageColorModel;
+
+  /**
+   * Origin of the image relative to a the parent image.
+   *
+   * @default {row: 0, column: 0}
+   */
+  origin?: Point;
 }
 
 export interface CreateFromOptions extends ImageOptions {
@@ -181,7 +190,10 @@ export class IJS {
    * The maximum value that a pixel channel can have.
    */
   public readonly maxValue: number;
-
+  /**
+   * Origin of the image relative to a the parent image.
+   */
+  public readonly origin: Point;
   /**
    * Typed array holding the image data.
    */
@@ -203,6 +215,7 @@ export class IJS {
       depth = ColorDepth.UINT8,
       data,
       colorModel = ImageColorModel.RGB,
+      origin = { row: 0, column: 0 },
     } = options;
 
     if (width < 1 || !Number.isInteger(width)) {
@@ -222,6 +235,7 @@ export class IJS {
     this.size = width * height;
     this.depth = depth;
     this.colorModel = colorModel;
+    this.origin = origin;
 
     const colorModelDef = colorModels[colorModel];
     this.components = colorModelDef.components;
