@@ -1,4 +1,7 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
+import { ImageColorModel } from '../../IJS';
+import { fromMask } from '../../roi';
+import { RoiKind } from '../../roi/getRois';
 
 import { angle } from '../../utils/geometry/points';
 import { getMbr } from '../getMbr';
@@ -206,5 +209,30 @@ describe('getMbr', () => {
       surface: 0,
       perimeter: 0,
     });
+  });
+  it('draw mbr on large image', () => {
+    const image = testUtils.load('various/grayscale_by_zimmyrose.png');
+    const rgbaImage = image.convertColor(ImageColorModel.RGBA);
+    const mask = image.threshold({ threshold: 200 });
+    const roiMapManager = fromMask(mask);
+
+    const rois = roiMapManager.getRois({ kind: RoiKind.WHITE });
+
+    const roi = rois.sort((a, b) => b.surface - a.surface)[0];
+
+    const roiMask = roi.getMask();
+    let mbr = roiMask.getMbr();
+
+    let result = rgbaImage.paintMask(roiMask, {
+      origin: roi.origin,
+      color: [0, 0, 255, 255],
+    });
+
+    result = result.drawPolygon(mbr.corners, {
+      origin: roi.origin,
+      strokeColor: [0, 255, 0, 255],
+    });
+
+    expect(result).toMatchIJSSnapshot();
   });
 });

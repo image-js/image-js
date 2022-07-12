@@ -4,10 +4,11 @@ import { Mask } from '../Mask';
 import { ImageColorModel } from './constants/colorModels';
 
 /**
- * Get the black color for a given color model.
+ * Get the default color for a given color model.
+ * The color is black for images and 1 for masks.
  *
  * @param image - The used image.
- * @returns Black color.
+ * @returns Default color.
  */
 export function getDefaultColor(image: IJS | Mask): number[] {
   switch (image.colorModel) {
@@ -20,7 +21,7 @@ export function getDefaultColor(image: IJS | Mask): number[] {
     case ImageColorModel.RGBA:
       return [0, 0, 0, image.maxValue];
     case ImageColorModel.BINARY:
-      return [0];
+      return [1];
     default:
       throw new Error(
         `image color model ${image.colorModel} is not compatible`,
