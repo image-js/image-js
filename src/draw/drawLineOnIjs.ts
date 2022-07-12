@@ -2,9 +2,9 @@ import { line } from 'bresenham-zingl';
 
 import { IJS } from '../IJS';
 import checkProcessable from '../utils/checkProcessable';
+import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
-import { Point } from '../utils/geometry/points';
 
 export interface DrawLineOnIjsOptions {
   /**

@@ -8,6 +8,7 @@ import {
   drawRectangle,
   DrawRectangleOptions,
 } from './draw';
+import { drawPoints, DrawPointsOptions } from './draw/drawPoints';
 import {
   and,
   AndOptions,
@@ -599,6 +600,17 @@ export class Mask {
   }
 
   // DRAW
+
+  /**
+   * Draw a set of points on a mask.
+   *
+   * @param points - Array of points.
+   * @param options - Draw points on IJS options.
+   * @returns New mask.
+   */
+  public drawPoints(points: Point[], options: DrawPointsOptions = {}): Mask {
+    return drawPoints(this, points, options);
+  }
 
   /**
    * Draw a line defined by two points onto a mask.

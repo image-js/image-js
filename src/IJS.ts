@@ -14,6 +14,7 @@ import {
   drawRectangle,
   DrawLineOnIjsOptions,
 } from './draw';
+import { drawPoints, DrawPointsOptions } from './draw/drawPoints';
 import {
   BlurOptions,
   blur,
@@ -553,6 +554,17 @@ export class IJS {
   }
 
   // DRAW
+
+  /**
+   * Draw a set of points on an image.
+   *
+   * @param points - Array of points.
+   * @param options - Draw points on IJS options.
+   * @returns New mask.
+   */
+  public drawPoints(points: Point[], options: DrawPointsOptions = {}): IJS {
+    return drawPoints(this, points, options);
+  }
 
   /**
    * Draw a line defined by two points onto an image.

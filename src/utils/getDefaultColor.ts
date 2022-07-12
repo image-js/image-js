@@ -4,7 +4,7 @@ import { Mask } from '../Mask';
 import { ImageColorModel } from './constants/colorModels';
 
 /**
- * Get the black colorfor a given color model.
+ * Get the black color for a given color model.
  *
  * @param image - The used image.
  * @returns Black color.
