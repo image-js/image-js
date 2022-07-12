@@ -1,6 +1,6 @@
 import { Mask } from '../Mask';
-import { maskToOutputMask } from '../utils/getOutputImage';
 import { Point } from '../utils/geometry/points';
+import { maskToOutputMask } from '../utils/getOutputImage';
 
 export interface DrawPolylineOnMaskOptions {
   /**
@@ -23,7 +23,6 @@ export function drawPolylineOnMask(
   options: DrawPolylineOnMaskOptions = {},
 ): Mask {
   let newImage = maskToOutputMask(mask, options, { clone: true });
-
   for (let i = 0; i < points.length - 1; i++) {
     const from = points[i];
     const to = points[i + 1];

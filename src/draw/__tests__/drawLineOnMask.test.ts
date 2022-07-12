@@ -194,4 +194,59 @@ describe('drawLine on Mask', () => {
       [0, 0, 0, 1],
     ]);
   });
+  it('3x3 mask, non-integer coordinates', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ]);
+
+    const from = { row: 0.5, column: 0.5 };
+    const to = { row: 1.5, column: 1.5 };
+    const result = mask.drawLine(from, to);
+    expect(result).toMatchMaskData([
+      [0, 0, 0],
+      [0, 1, 0],
+      [0, 0, 1],
+    ]);
+    expect(result).not.toBe(mask);
+  });
+  it('3x3 mask, non-integer coordinates, verify symmetry', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ]);
+
+    const from = { row: 1.5, column: 1.5 };
+    const to = { row: 0.5, column: 0.5 };
+    const result = mask.drawLine(from, to);
+    expect(result).toMatchMaskData([
+      [0, 0, 0],
+      [0, 1, 0],
+      [0, 0, 1],
+    ]);
+    expect(result).not.toBe(mask);
+  });
+  it('5x5 mask, non-integer coordinates', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+    ]);
+
+    const from = { row: 0, column: 0 };
+    const to = { row: 4.5, column: 4.5 };
+    const result = mask.drawLine(from, to);
+
+    expect(result).toMatchMaskData([
+      [1, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0],
+      [0, 0, 1, 0, 0],
+      [0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 1],
+    ]);
+  });
 });

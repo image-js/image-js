@@ -1,8 +1,8 @@
 import { line } from 'bresenham-zingl';
 
 import { Mask } from '../Mask';
-import { maskToOutputMask } from '../utils/getOutputImage';
 import { Point } from '../utils/geometry/points';
+import { maskToOutputMask } from '../utils/getOutputImage';
 
 export interface DrawLineOnMaskOptions {
   /**
@@ -27,12 +27,11 @@ export function drawLineOnMask(
   options: DrawLineOnMaskOptions = {},
 ): Mask {
   const newMask = maskToOutputMask(mask, options, { clone: true });
-
   line(
-    from.column,
-    from.row,
-    to.column,
-    to.row,
+    Math.round(from.column),
+    Math.round(from.row),
+    Math.round(to.column),
+    Math.round(to.row),
     (column: number, row: number) => {
       newMask.setBit(column, row, 1);
     },

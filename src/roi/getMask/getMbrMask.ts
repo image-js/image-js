@@ -25,11 +25,12 @@ export function getMbrMask(
 ): Mask {
   const { filled = true } = options;
   const mask = roi.getMask();
-
   const mbr = mask.getMbr();
   const dimensions = getMbrMaskSize(mbr.corners);
+
   const newMask = new Mask(dimensions.width, dimensions.height);
-  return newMask.drawPolygon(mbr.corners, { filled });
+  const result = newMask.drawPolygon(mbr.corners, { filled });
+  return result;
 }
 
 /**
