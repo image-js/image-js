@@ -8,3 +8,4 @@ export * from './morphology';
 export * from './operations';
 export * from './roi';
 export * from './save';
+export { Point } from './utils/geometry/points';
