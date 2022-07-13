@@ -7,7 +7,7 @@ import { setBlendedPixel } from '../utils/setBlendedPixel';
 
 export interface PaintMaskOptions {
   /**
-   * Top-left corner of the mask relative to a the parent image.
+   * Top-left corner of the mask relative to a parent image.
    *
    * @default {row: 0, column: 0}
    */

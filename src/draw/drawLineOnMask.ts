@@ -6,7 +6,7 @@ import { maskToOutputMask } from '../utils/getOutputImage';
 
 export interface DrawLineOnMaskOptions {
   /**
-   * Origin of the line relative to a the parent image (top-left corner).
+   * Origin of the line relative to a parent image (top-left corner).
    *
    * @default {row: 0, column: 0}
    */

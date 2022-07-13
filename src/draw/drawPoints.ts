@@ -13,7 +13,7 @@ export interface DrawPointsOptions {
    */
   color?: number[];
   /**
-   * Origin of the points relative to a the parent image (top-left corner).
+   * Origin of the points relative to a parent image (top-left corner).
    *
    * @default {row: 0, column: 0}
    */
