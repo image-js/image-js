@@ -32,7 +32,7 @@ export function getBorderPoints(
   const { innerBorders = false, allowCorners = false } = options;
 
   if (!innerBorders) {
-    mask.solidFill({ out: mask });
+    mask = mask.solidFill();
   }
 
   let borders: Array<Point> = [];

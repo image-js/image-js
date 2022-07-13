@@ -230,7 +230,7 @@ export class Mask {
   }
 
   /**
-   * Set all a pixel to a given value if the coordinates are inside the mask.
+   * Set a pixel to a given value if the coordinates are inside the mask.
    *
    * @param column - Column index.
    * @param row - Row index.

@@ -1,8 +1,8 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
+
 import { ImageColorModel } from '../../IJS';
 import { fromMask } from '../../roi';
 import { RoiKind } from '../../roi/getRois';
-
 import { angle } from '../../utils/geometry/points';
 import { getMbr } from '../getMbr';
 
@@ -220,7 +220,7 @@ describe('getMbr', () => {
 
     const roi = rois.sort((a, b) => b.surface - a.surface)[0];
 
-    const roiMask = roi.getMask();
+    const roiMask = roi.getMask({ innerBorders: false });
     let mbr = roiMask.getMbr();
 
     let result = rgbaImage.paintMask(roiMask, {

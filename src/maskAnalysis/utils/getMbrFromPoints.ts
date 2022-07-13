@@ -44,9 +44,8 @@ export function getMbrFromPoints(points: readonly Point[]): Mbr {
     let angle = getAngle(points[i], points[(i + 1) % points.length]);
 
     rotatedVertices = rotate(-angle, points);
-    // console.log({ rotatedVertices });
 
-    // we rotate and translate so that this segment is at the bottom
+    // Rotate and translate so that this segment is at the bottom.
     let aX = rotatedVertices[i].column;
     let aY = rotatedVertices[i].row;
     let bX = rotatedVertices[(i + 1) % rotatedVertices.length].column;
@@ -60,7 +59,7 @@ export function getMbrFromPoints(points: readonly Point[]): Mbr {
       let cX = point.column;
       let cY = point.row;
       let t = (cX - aX) / (bX - aX);
-      if (tUndefined === true) {
+      if (tUndefined) {
         tUndefined = false;
         tMin = t;
         tMax = t;
