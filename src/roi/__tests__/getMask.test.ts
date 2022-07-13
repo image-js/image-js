@@ -145,4 +145,17 @@ describe('getMask', () => {
       [0, 1, 1],
     ]);
   });
+  it('mask should have same origin as ROI', () => {
+    const mask = testUtils.createMask([
+      [0, 1, 1],
+      [0, 0, 1],
+      [0, 1, 1],
+    ]);
+    const roiMapManager = fromMask(mask);
+
+    const roi = roiMapManager.getRois({ kind: RoiKind.WHITE })[0];
+    const roiMask = roi.getMask();
+
+    expect(roiMask.origin).toStrictEqual(roi.origin);
+  });
 });

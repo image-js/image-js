@@ -25,7 +25,7 @@ export interface GetMaskOptions {
  */
 export function getMask(roi: Roi, options: GetMaskOptions = {}): Mask {
   const { innerBorders = true } = options;
-  let mask = new Mask(roi.width, roi.height);
+  let mask = new Mask(roi.width, roi.height, { origin: roi.origin });
 
   for (let row = 0; row < roi.height; row++) {
     for (let column = 0; column < roi.width; column++) {

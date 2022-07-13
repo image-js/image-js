@@ -70,6 +70,7 @@ import {
   PaintMaskOptions,
   split,
 } from './operations';
+import { cropAlpha, CropAlphaOptions } from './operations/cropAlpha';
 import { ImageColorModel, colorModels } from './utils/constants/colorModels';
 import { Point } from './utils/geometry/points';
 import { validateChannel, validateValue } from './utils/validators';
@@ -684,6 +685,17 @@ export class IJS {
    */
   public crop(options?: CropOptions): IJS {
     return crop(this, options);
+  }
+
+  /**
+   * Crops the image based on the alpha channel
+   * This removes lines and columns where the alpha channel is lower than a threshold value.
+   *
+   * @param options - Crop alpha options.
+   * @returns The cropped image.
+   */
+  public cropAlpha(options: CropAlphaOptions = {}): IJS {
+    return cropAlpha(this, options);
   }
 
   /**

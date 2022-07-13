@@ -1,0 +1,99 @@
+import { IJS } from '../IJS';
+import checkProcessable from '../utils/checkProcessable';
+
+export interface CropAlphaOptions {
+  /**
+   * Threshold from which rows and columns should be kept.
+   */
+  threshold?: number;
+}
+
+/**
+ * Crops the image based on the alpha channel
+ * This removes lines and columns where the alpha channel is lower than a threshold value.
+ *
+ * @param image - Image to process.
+ * @param options - Crop alpha options.
+ * @returns The cropped image.
+ */
+export function cropAlpha(image: IJS, options: CropAlphaOptions = {}): IJS {
+  checkProcessable(image, 'cropAlpha', {
+    alpha: true,
+  });
+
+  const { threshold = image.maxValue } = options;
+
+  let left = findLeft(image, threshold, image.components);
+
+  if (left === -1) {
+    throw new Error(
+      'Could not find new dimensions. Threshold may be too high.',
+    );
+  }
+
+  let top = findTop(image, threshold, image.components, left);
+  let bottom = findBottom(image, threshold, image.components, left);
+  let right = findRight(image, threshold, image.components, left, top, bottom);
+
+  return image.crop({
+    origin: { column: left, row: top },
+    width: right - left + 1,
+    height: bottom - top + 1,
+  });
+}
+
+function findLeft(image: IJS, threshold: number, channel: number) {
+  for (let row = 0; row < image.width; row++) {
+    for (let column = 0; column < image.height; column++) {
+      if (image.getValue(row, column, channel) >= threshold) {
+        return row;
+      }
+    }
+  }
+  return -1;
+}
+
+function findTop(image: IJS, threshold: number, channel: number, left: number) {
+  for (let row = 0; row < image.height; row++) {
+    for (let column = left; column < image.width; column++) {
+      if (image.getValue(column, row, channel) >= threshold) {
+        return row;
+      }
+    }
+  }
+  return -1;
+}
+
+function findBottom(
+  image: IJS,
+  threshold: number,
+  channel: number,
+  left: number,
+) {
+  for (let row = image.height - 1; row >= 0; row--) {
+    for (let column = left; column < image.width; column++) {
+      if (image.getValue(column, row, channel) >= threshold) {
+        return row;
+      }
+    }
+  }
+  return -1;
+}
+
+function findRight(
+  image: IJS,
+  threshold: number,
+  channel: number,
+  left: number,
+  top: number,
+  bottom: number,
+) {
+  for (let row = image.width - 1; row >= left; row--) {
+    for (let column = top; column <= bottom; column++) {
+      if (image.getValue(row, column, channel) >= threshold) {
+        return row;
+      }
+    }
+  }
+  return -1;
+}
