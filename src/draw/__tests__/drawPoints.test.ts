@@ -159,4 +159,27 @@ describe('drawPoints', () => {
     ]);
     expect(result).not.toBe(image);
   });
+  it('points outside image', () => {
+    const image = testUtils.createMask([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const points = [
+      { row: -1, column: -1 },
+      { row: -1, column: 0 },
+      { row: 0, column: 1 },
+      { row: 0, column: 0 },
+      { row: 2, column: 6 },
+    ];
+    const result = drawPoints(image, points);
+    expect(result).toMatchImageData([
+      [1, 1, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    expect(result).not.toBe(image);
+  });
 });

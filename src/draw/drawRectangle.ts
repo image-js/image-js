@@ -85,21 +85,21 @@ export function drawRectangle(
       currentColumn < column + width;
       currentColumn++
     ) {
-      newImage.setPixel(currentColumn, row, color);
-      newImage.setPixel(currentColumn, row + height - 1, color);
+      newImage.setVisiblePixel(currentColumn, row, color);
+      newImage.setVisiblePixel(currentColumn, row + height - 1, color);
     }
     for (
       let currentRow = row + 1;
       currentRow < row + height - 1;
       currentRow++
     ) {
-      newImage.setPixel(column, currentRow, color);
-      newImage.setPixel(column + width - 1, currentRow, color);
+      newImage.setVisiblePixel(column, currentRow, color);
+      newImage.setVisiblePixel(column + width - 1, currentRow, color);
 
       if (fill) {
         for (let col = column + 1; col < column + width - 1; col++) {
-          newImage.setPixel(col, currentRow, fill);
-          newImage.setPixel(col, currentRow, fill);
+          newImage.setVisiblePixel(col, currentRow, fill);
+          newImage.setVisiblePixel(col, currentRow, fill);
         }
       }
     }
@@ -116,8 +116,8 @@ export function drawRectangle(
         currentColumn < column + width - 1;
         currentColumn++
       ) {
-        newImage.setPixel(currentColumn, currentRow, fill);
-        newImage.setPixel(currentColumn, currentRow, fill);
+        newImage.setVisiblePixel(currentColumn, currentRow, fill);
+        newImage.setVisiblePixel(currentColumn, currentRow, fill);
       }
     }
   }

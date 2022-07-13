@@ -245,4 +245,22 @@ describe('we check drawCircle', () => {
     ]);
     expect(expected).not.toBe(image);
   });
+  it('points outside image', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ]);
+    const center = { row: 1, column: 2 };
+    const radius = 1;
+    const expected = image.drawCircle(center, radius, {
+      color: [1],
+      fill: [2],
+    });
+    expect(expected).toMatchImageData([
+      [0, 0, 1],
+      [0, 1, 2],
+      [0, 0, 1],
+    ]);
+  });
 });

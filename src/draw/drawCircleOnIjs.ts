@@ -53,20 +53,20 @@ export function drawCircleOnIjs(
     throw new Error('Circle radius must be positive');
   }
   if (radius === 0) {
-    newImage.setPixel(center.column, center.row, color);
+    newImage.setVisiblePixel(center.column, center.row, color);
     return newImage;
   }
 
   if (!fill) {
     circle(center.column, center.row, radius, (column: number, row: number) => {
-      newImage.setPixel(column, row, color);
+      newImage.setVisiblePixel(column, row, color);
     });
   } else {
     if (radius === 1) {
-      newImage.setPixel(center.column, center.row, fill);
+      newImage.setVisiblePixel(center.column, center.row, fill);
     }
     circle(center.column, center.row, radius, (column: number, row: number) => {
-      newImage.setPixel(column, row, color);
+      newImage.setVisiblePixel(column, row, color);
 
       //todo: fill is not optimal we can fill symmetrically
       if (column - 1 > center.column) {
