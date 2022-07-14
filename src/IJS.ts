@@ -493,6 +493,21 @@ export class IJS {
   }
 
   /**
+   * Get one channelof the image as an array.
+   *
+   * @param channel - The channel to fill.
+   * @returns Array with the channel values.
+   */
+  public getChannel(channel: number): number[] {
+    validateChannel(channel, this);
+    let result = new Array(this.size);
+    for (let i = channel; i < this.data.length; i += this.channels) {
+      result.push(this.data[i]);
+    }
+    return result;
+  }
+
+  /**
    * Fill the alpha channel with the specified value.
    *
    * @param value - New channel value.
