@@ -110,6 +110,7 @@ test('createFrom', () => {
   const newMask = Mask.createFrom(mask);
   expect(mask.width).toBe(newMask.width);
   expect(mask.height).toBe(newMask.height);
+  expect(mask.origin).toMatchObject(newMask.origin);
 });
 
 test('fromPoints', () => {

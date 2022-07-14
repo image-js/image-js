@@ -103,6 +103,14 @@ describe('getOutputImage', () => {
       /out must be an IJS object/,
     );
   });
+  it('should keep source origin', () => {
+    const img = new IJS(2, 2, { origin: { row: 1, column: 2 } });
+    let output = getOutputImage(img, {}, { clone: true });
+    expect(output.origin).toMatchObject(img.origin);
+
+    output = getOutputImage(img);
+    expect(output.origin).toMatchObject(img.origin);
+  });
 });
 
 describe('maskToOutputImage', () => {
@@ -140,6 +148,11 @@ describe('maskToOutputImage', () => {
       /out must be an IJS object/,
     );
   });
+  it('should keep source origin', () => {
+    const mask = new Mask(1, 2);
+    const output = maskToOutputImage(mask);
+    expect(output.origin).toMatchObject(mask.origin);
+  });
 });
 
 describe('imageToOutputMask', () => {
@@ -176,6 +189,11 @@ describe('imageToOutputMask', () => {
     expect(() => imageToOutputMask(img, { out: 'str' })).toThrow(
       /out must be a Mask object/,
     );
+  });
+  it('should keep source origin', () => {
+    const img = new IJS(1, 2);
+    const output = imageToOutputMask(img);
+    expect(output.origin).toMatchObject(img.origin);
   });
 });
 
@@ -236,5 +254,13 @@ describe('maskToOutputMask', () => {
 
     const output = maskToOutputMask(img, {}, { clone: true });
     expect(output).toMatchMask(img);
+  });
+  it('should keep source origin', () => {
+    const mask = new Mask(2, 2, { origin: { row: 1, column: 2 } });
+    let output = maskToOutputMask(mask, {}, { clone: true });
+    expect(output.origin).toMatchObject(mask.origin);
+
+    output = maskToOutputMask(mask);
+    expect(output.origin).toMatchObject(mask.origin);
   });
 });

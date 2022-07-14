@@ -199,8 +199,12 @@ export class Mask {
     other: Mask | IJS,
     options: MaskCreateFromOptions = {},
   ): Mask {
-    const { width = other.width, height = other.height } = options;
-    return new Mask(width, height, options);
+    const {
+      width = other.width,
+      height = other.height,
+      origin = other.origin,
+    } = options;
+    return new Mask(width, height, { origin, ...options });
   }
 
   /**

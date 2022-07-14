@@ -153,6 +153,7 @@ test('createFrom', () => {
   expect(img.width).toBe(newImg.width);
   expect(img.height).toBe(newImg.height);
   expect(img.colorModel).toBe(newImg.colorModel);
+  expect(img.origin).toMatchObject(newImg.origin);
 });
 
 test('clone', () => {

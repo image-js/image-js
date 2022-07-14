@@ -291,6 +291,7 @@ export class IJS {
     return new IJS(width, height, {
       depth,
       colorModel: other.colorModel,
+      origin: other.origin,
       ...options,
     });
   }
