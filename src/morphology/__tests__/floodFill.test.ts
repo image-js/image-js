@@ -27,7 +27,7 @@ describe('floodFill', () => {
       [0, 0, 0, 0, 0],
     ]);
 
-    expect(image.floodFill({ row: 0, column: 3 })).toMatchMaskData([
+    expect(image.floodFill({ origin: { row: 0, column: 3 } })).toMatchMaskData([
       [1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1],
       [0, 0, 0, 0, 0],
@@ -62,7 +62,7 @@ describe('floodFill', () => {
     ]);
 
     expect(
-      image.floodFill({ row: 1, column: 1, allowCorners: true }),
+      image.floodFill({ origin: { row: 1, column: 1 }, allowCorners: true }),
     ).toMatchMaskData([
       [1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1],
@@ -87,7 +87,7 @@ describe('floodFill', () => {
 
     const out = new Mask(5, 5);
 
-    image.floodFill({ row: 2, column: 2, out });
+    image.floodFill({ origin: { row: 2, column: 2 }, out });
 
     expect(out).toMatchMaskData([
       [0, 0, 0, 0, 0],

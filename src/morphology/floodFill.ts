@@ -1,21 +1,15 @@
-import { Mask } from '..';
+import { Mask, Point } from '..';
 import { getIndex } from '../utils/getIndex';
 
 import { multipleFloodFill } from './multipleFloodFill';
 
 export interface FloodFillOptions {
   /**
-   * Row coordinate of the starting point for the algorithm.
+   * Origin for the algorithm relative to the top-left corner of the image.
    *
-   * @default 0
+   * @default {row: 0, column: 0}
    */
-  row?: number;
-  /**
-   * Column coordinate of the starting point for the algorithm.
-   *
-   * @default 0
-   */
-  column?: number;
+  origin?: Point;
   /**
    * Consider pixels connected by corners?
    *
@@ -36,8 +30,8 @@ export interface FloodFillOptions {
  * @returns The filled mask.
  */
 export function floodFill(mask: Mask, options: FloodFillOptions = {}): Mask {
-  let { row = 0, column = 0, allowCorners = false, out } = options;
-  const startPixel = getIndex(column, row, mask);
+  let { origin = { row: 0, column: 0 }, allowCorners = false, out } = options;
+  const startPixel = getIndex(origin.column, origin.row, mask);
   return multipleFloodFill(mask, {
     startPixels: [startPixel],
     allowCorners,
