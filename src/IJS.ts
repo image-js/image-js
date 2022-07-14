@@ -1,6 +1,7 @@
 import { RgbColor } from 'colord';
 
 import { Mask } from './Mask';
+import { average } from './compute/average';
 import { correctColor } from './correctColor';
 import {
   drawLineOnIjs,
@@ -90,6 +91,7 @@ import {
   transform,
   TransformOptions,
 } from '.';
+import { median } from './compute/median';
 
 export { ImageColorModel, colorModels };
 
@@ -581,6 +583,24 @@ export class IJS {
 
   public histogram(options?: HistogramOptions): Uint32Array {
     return histogram(this, options);
+  }
+
+  /**
+   * Compute the average pixel of an image.
+   *
+   * @returns The average pixel.
+   */
+  public average(): number[] {
+    return average(this);
+  }
+
+  /**
+   * Compute the average pixel of an image.
+   *
+   * @returns The average pixel.
+   */
+  public median(): number[] {
+    return median(this);
   }
 
   // DRAW
