@@ -263,4 +263,30 @@ describe('drawPolygon on Mask', () => {
     ]);
     expect(result).not.toBe(mask);
   });
+  it('outside of mask', () => {
+    const mask = testUtils.createMask([
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+    ]);
+
+    const points = [
+      { column: 0, row: 4 },
+      { column: 5, row: -1 },
+      { column: 1, row: -1 },
+    ];
+    const result = mask.drawPolygon(points, {
+      filled: true,
+    });
+    expect(result).toMatchMaskData([
+      [0, 1, 1, 1, 1],
+      [0, 1, 1, 1, 0],
+      [1, 1, 1, 0, 0],
+      [1, 1, 0, 0, 0],
+      [1, 0, 0, 0, 0],
+    ]);
+    expect(result).not.toBe(mask);
+  });
 });

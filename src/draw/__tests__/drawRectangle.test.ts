@@ -162,6 +162,32 @@ describe('drawRectangle', () => {
     ]);
     expect(result).not.toBe(image);
   });
+  it('outside of image', () => {
+    const image = testUtils.createGreyImage([
+      [1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1],
+    ]);
+    const result = image.drawRectangle({
+      width: image.width,
+      height: image.height,
+      strokeColor: [2],
+      fillColor: [3],
+      origin: { column: 1, row: 1 },
+    });
+    expect(result).toMatchImageData([
+      [1, 1, 1, 1, 1, 1],
+      [1, 2, 2, 2, 2, 2],
+      [1, 2, 3, 3, 3, 3],
+      [1, 2, 3, 3, 3, 3],
+      [1, 2, 3, 3, 3, 3],
+      [1, 2, 3, 3, 3, 3],
+    ]);
+    expect(result).not.toBe(image);
+  });
   it('mask, not filled', () => {
     const mask = testUtils.createMask([
       [0, 0, 0, 0, 0, 0],
@@ -239,7 +265,7 @@ describe('drawRectangle', () => {
       [1, 1, 1, 1, 1, 1],
     ]);
   });
-  it('points out of image', () => {
+  it('points out of mask', () => {
     const mask = testUtils.createMask([
       [0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0],

@@ -94,9 +94,8 @@ describe('drawPoints', () => {
     expect(result).toBe(out);
     expect(result).not.toBe(image);
   });
-
   it('mask', () => {
-    const image = testUtils.createMask([
+    const mask = testUtils.createMask([
       [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
@@ -107,17 +106,17 @@ describe('drawPoints', () => {
       { row: 1, column: 0 },
       { row: 0, column: 1 },
     ];
-    const result = image.drawPoints(points);
-    expect(result).toMatchImageData([
+    const result = mask.drawPoints(points);
+    expect(result).toMatchMaskData([
       [1, 1, 0, 0],
       [1, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
     ]);
-    expect(result).not.toBe(image);
+    expect(result).not.toBe(mask);
   });
   it('default options', () => {
-    const image = testUtils.createMask([
+    const mask = testUtils.createMask([
       [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
@@ -128,17 +127,17 @@ describe('drawPoints', () => {
       { row: 2, column: 0 },
       { row: 0, column: 2 },
     ];
-    const result = drawPoints(image, points);
-    expect(result).toMatchImageData([
+    const result = drawPoints(mask, points);
+    expect(result).toMatchMaskData([
       [0, 0, 1, 0],
       [0, 0, 0, 0],
       [1, 0, 1, 0],
       [0, 0, 0, 0],
     ]);
-    expect(result).not.toBe(image);
+    expect(result).not.toBe(mask);
   });
   it('different origin', () => {
-    const image = testUtils.createMask([
+    const mask = testUtils.createMask([
       [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
@@ -150,17 +149,17 @@ describe('drawPoints', () => {
       { row: 0, column: 1 },
       { row: 0, column: 0 },
     ];
-    const result = drawPoints(image, points, { origin: { column: 2, row: 2 } });
-    expect(result).toMatchImageData([
+    const result = drawPoints(mask, points, { origin: { column: 2, row: 2 } });
+    expect(result).toMatchMaskData([
       [0, 0, 0, 0],
       [0, 1, 1, 0],
       [0, 0, 1, 1],
       [0, 0, 0, 0],
     ]);
-    expect(result).not.toBe(image);
+    expect(result).not.toBe(mask);
   });
-  it('points outside image', () => {
-    const image = testUtils.createMask([
+  it('points outside mask', () => {
+    const mask = testUtils.createMask([
       [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
@@ -173,13 +172,13 @@ describe('drawPoints', () => {
       { row: 0, column: 0 },
       { row: 2, column: 6 },
     ];
-    const result = drawPoints(image, points);
-    expect(result).toMatchImageData([
+    const result = drawPoints(mask, points);
+    expect(result).toMatchMaskData([
       [1, 1, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
     ]);
-    expect(result).not.toBe(image);
+    expect(result).not.toBe(mask);
   });
 });

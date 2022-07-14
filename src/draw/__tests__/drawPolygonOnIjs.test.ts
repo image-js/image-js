@@ -288,4 +288,28 @@ describe('drawPolygon on IJS', () => {
       [0, 1, 0, 0],
     ]);
   });
+  it('outside of image', () => {
+    const image = testUtils.createGreyImage([
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ]);
+    const points = [
+      { row: 0, column: 0 },
+      { row: 4, column: 4 },
+      { row: 4, column: -2 },
+    ];
+    const result = image.drawPolygon(points, {
+      strokeColor: [1],
+      fillColor: [2],
+    });
+    expect(result).toMatchImageData([
+      [1, 0, 0, 0],
+      [1, 1, 0, 0],
+      [2, 2, 1, 0],
+      [2, 2, 2, 1],
+    ]);
+    expect(result).not.toBe(image);
+  });
 });
