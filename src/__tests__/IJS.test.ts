@@ -253,6 +253,26 @@ test('fill channel invalid channel', () => {
   );
 });
 
+test('get channel', () => {
+  const image = testUtils.createRgbaImage([
+    [1, 2, 3, 1],
+    [1, 2, 3, 1],
+    [11, 2, 2, 2],
+    [1, 3, 3, 3],
+    [1, 6, 4, 3],
+  ]);
+
+  let expected = [
+    [1, 1, 11, 1, 1],
+    [2, 2, 2, 3, 6],
+    [3, 3, 2, 3, 4],
+    [1, 1, 2, 3, 3],
+  ];
+  for (let i = 0; i < image.channels; i++) {
+    expect(image.getChannel(i)).toStrictEqual(expected[i]);
+  }
+});
+
 test('fill alpha', () => {
   const img = new IJS(1, 2, { colorModel: ImageColorModel.RGBA });
   img.fillAlpha(0);

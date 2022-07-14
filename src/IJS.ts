@@ -2,6 +2,7 @@ import { RgbColor } from 'colord';
 
 import { Mask } from './Mask';
 import { average } from './compute/average';
+import { median } from './compute/median';
 import { correctColor } from './correctColor';
 import {
   drawLineOnIjs,
@@ -91,7 +92,6 @@ import {
   transform,
   TransformOptions,
 } from '.';
-import { median } from './compute/median';
 
 export { ImageColorModel, colorModels };
 
@@ -495,7 +495,7 @@ export class IJS {
   }
 
   /**
-   * Get one channelof the image as an array.
+   * Get one channel of the image as an array.
    *
    * @param channel - The channel to fill.
    * @returns Array with the channel values.
@@ -503,8 +503,8 @@ export class IJS {
   public getChannel(channel: number): number[] {
     validateChannel(channel, this);
     let result = new Array(this.size);
-    for (let i = channel; i < this.data.length; i += this.channels) {
-      result.push(this.data[i]);
+    for (let i = 0; i < this.size; i++) {
+      result[i] = this.data[channel + i * this.channels];
     }
     return result;
   }
