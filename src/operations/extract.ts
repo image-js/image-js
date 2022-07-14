@@ -43,6 +43,7 @@ export function extract(
 
   let newImage = new IJS(resultWidth, resultHeight, {
     colorModel: image.colorModel,
+    origin: image.origin,
   });
 
   if (newImage.alpha) {

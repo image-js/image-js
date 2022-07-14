@@ -29,6 +29,7 @@ function convertToUint16(image: IJS): IJS {
   const newImage = new IJS(image.width, image.height, {
     depth: ColorDepth.UINT16,
     colorModel: image.colorModel,
+    origin: image.origin,
   });
 
   for (let i = 0; i < image.size; i++) {
@@ -49,6 +50,7 @@ function convertToUint8(image: IJS): IJS {
   const newImage = new IJS(image.width, image.height, {
     depth: ColorDepth.UINT8,
     colorModel: image.colorModel,
+    origin: image.origin,
   });
   for (let i = 0; i < image.size; i++) {
     for (let j = 0; j < newImage.channels; j++) {
