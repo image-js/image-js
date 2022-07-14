@@ -61,6 +61,7 @@ function findTop(image: IJS, threshold: number, channel: number, left: number) {
       }
     }
   }
+  /* istanbul ignore next */
   return -1;
 }
 
@@ -77,6 +78,7 @@ function findBottom(
       }
     }
   }
+  /* istanbul ignore next */
   return -1;
 }
 
@@ -95,5 +97,6 @@ function findRight(
       }
     }
   }
+  /* istanbul ignore next */
   return -1;
 }

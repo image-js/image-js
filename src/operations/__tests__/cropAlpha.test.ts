@@ -1,3 +1,5 @@
+import { cropAlpha } from '../cropAlpha';
+
 describe('cropAlpha', () => {
   it('GREYA, no crop', () => {
     const image = testUtils.createGreyaImage([
@@ -7,7 +9,7 @@ describe('cropAlpha', () => {
       [10, 255, 11, 255, 12, 255],
     ]);
 
-    const cropped = image.cropAlpha();
+    const cropped = cropAlpha(image);
     expect(cropped).toMatchImage(image);
   });
 
