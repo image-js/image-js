@@ -1,7 +1,7 @@
 import { IJS } from '../IJS';
 
 /**
- * Compute the mean pixel of an image.
+ * Compute the mean pixel of an image. The mean is computed on each channel individually.
  *
  * @param image - Image to process.
  * @returns The mean pixel.

@@ -3,7 +3,7 @@ import quickMedian from 'median-quickselect';
 
 import { IJS } from '../IJS';
 /**
- * Returns the median pixel of the image.
+ * Returns the median pixel of the image. The median is computed on each channel individually.
  *
  * @param image - Image to process.
  * @returns Median pixel.
