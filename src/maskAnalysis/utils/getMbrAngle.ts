@@ -1,4 +1,5 @@
 import { Point } from '../../geometry';
+import { toDegrees } from '../../utils/geometry/angles';
 
 import { getAngle } from './getMbrFromPoints';
 
@@ -8,10 +9,10 @@ const topFirst = (mbrPoint1: Point, mbrPoint2: Point) =>
   mbrPoint1.row >= mbrPoint2.row ? -1 : 1;
 
 /**
- * Get the angle between the MBR and a horizontal line.
+ * Get the angle in degrees between the MBR and a horizontal line.
  *
  * @param mbr - MBR to process.
- * @returns The angle.
+ * @returns The angle in degrees.
  */
 export function getMbrAngle(mbr: readonly Point[]): number {
   const sorted = mbr.slice().sort(leftFirst);
@@ -21,5 +22,5 @@ export function getMbrAngle(mbr: readonly Point[]): number {
   right.sort(topFirst);
   const topLeft = left[0];
   const topRight = right[0];
-  return getAngle(topLeft, topRight);
+  return toDegrees(getAngle(topLeft, topRight));
 }

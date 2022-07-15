@@ -122,7 +122,7 @@ describe('getMbr', () => {
       ],
       6,
     );
-    expect(result.angle).toBeCloseTo(Math.PI / 4);
+    expect(result.angle).toBeCloseTo(45);
   });
 
   it('large tilted rectangle', () => {

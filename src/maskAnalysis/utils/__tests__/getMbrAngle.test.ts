@@ -13,7 +13,7 @@ test.each([
       { column: 1, row: -Math.sqrt(3) },
       { column: -1, row: -1 },
     ],
-    -Math.PI / 6,
+    -30,
   ],
   [
     '45 degrees, wider than long',
@@ -23,7 +23,7 @@ test.each([
       { column: -2, row: -4 },
       { column: -3, row: -3 },
     ],
-    Math.PI / 4,
+    45,
   ],
   [
     '-45 degrees, longer than wide',
@@ -33,7 +33,7 @@ test.each([
       { column: 2, row: -4 },
       { column: -1, row: -1 },
     ],
-    -Math.PI / 4,
+    -45,
   ],
   [
     '0 degrees, wider than high',
