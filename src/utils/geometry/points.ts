@@ -32,8 +32,8 @@ export function difference(p1: Point, p2: Point) {
 /**
  * Normalize a point (more precisely the vector from the origin to the point).
  *
- * @param point - Point to normalise.
- * @returns - Normalised point.
+ * @param point - Point to normalize.
+ * @returns - Normalized point.
  */
 export function normalize(point: Point) {
   let length = Math.sqrt(point.column ** 2 + point.row ** 2);
@@ -70,20 +70,4 @@ export function rotate(radians: number, points: readonly Point[]): Point[] {
  */
 export function dot(p1: Point, p2: Point) {
   return p1.column * p2.column + p1.row * p2.row;
-}
-
-/**
- * Returns the angle between 3 points. The first one is the point where the angle is.
- *
- * @param origin - Origin where the angle has to be measured.
- * @param p1 - First point.
- * @param p2 - Second point.
- * @returns The angle in radians.
- */
-export function angle(origin: Point, p1: Point, p2: Point): number {
-  let v1 = normalize(difference(p1, origin));
-  let v2 = normalize(difference(p2, origin));
-  let dotProduct = dot(v1, v2);
-  // TODO this code is not correct because it may return the opposite angle
-  return Math.acos(dotProduct);
 }
