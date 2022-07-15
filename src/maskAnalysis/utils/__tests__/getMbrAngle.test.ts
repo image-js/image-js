@@ -6,34 +6,34 @@ expect.extend({ toBeDeepCloseTo });
 
 test.each([
   [
-    '-30 degrees',
+    '30 degrees',
     [
       { column: 0, row: 0 },
       { column: Math.sqrt(3), row: -1 },
       { column: 1, row: -Math.sqrt(3) },
       { column: -1, row: -1 },
     ],
-    -30,
+    30,
   ],
   [
-    '45 degrees, wider than long',
+    '-45 degrees, wider than long',
     [
       { column: 0, row: 0 },
       { column: 1, row: -1 },
       { column: -2, row: -4 },
       { column: -3, row: -3 },
     ],
-    45,
+    -45,
   ],
   [
-    '-45 degrees, longer than wide',
+    '45 degrees, longer than wide',
     [
       { column: 0, row: 0 },
       { column: 3, row: -3 },
       { column: 2, row: -4 },
       { column: -1, row: -1 },
     ],
-    -45,
+    45,
   ],
   [
     '0 degrees, wider than high',

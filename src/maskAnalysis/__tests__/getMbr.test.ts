@@ -65,7 +65,7 @@ describe('getMbr', () => {
 
     const result = getMbr(mask);
 
-    expect(result).toStrictEqual({
+    expect(result).toBeDeepCloseTo({
       corners: [
         { column: 8, row: 3 },
         { column: 0, row: 3 },
@@ -90,7 +90,7 @@ describe('getMbr', () => {
     );
 
     const result = getMbr(mask);
-    expect(result).toStrictEqual({
+    expect(result).toBeDeepCloseTo({
       corners: [
         { column: 6, row: 3 },
         { column: 0, row: 3 },
@@ -122,7 +122,7 @@ describe('getMbr', () => {
       ],
       6,
     );
-    expect(result.angle).toBeCloseTo(45);
+    expect(result.angle).toBeCloseTo(-45);
   });
 
   it('large tilted rectangle', () => {
