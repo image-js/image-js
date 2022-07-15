@@ -10,7 +10,7 @@ export class Roi {
   /**
    * Original map with all the ROI IDs.
    */
-  private map: RoiMap;
+  private readonly map: RoiMap;
   /**
    * ID of the ROI. Positive for white ROIs and negative for black ones.
    */
