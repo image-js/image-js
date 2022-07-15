@@ -1,7 +1,7 @@
 import { RgbColor } from 'colord';
 
 import { Mask } from './Mask';
-import { average } from './compute/average';
+import { mean } from './compute/mean';
 import { median } from './compute/median';
 import { correctColor } from './correctColor';
 import {
@@ -586,18 +586,18 @@ export class IJS {
   }
 
   /**
-   * Compute the average pixel of an image.
+   * Compute the mean pixel of an image.
    *
-   * @returns The average pixel.
+   * @returns The mean pixel.
    */
-  public average(): number[] {
-    return average(this);
+  public mean(): number[] {
+    return mean(this);
   }
 
   /**
-   * Compute the average pixel of an image.
+   * Compute the median pixel of an image.
    *
-   * @returns The average pixel.
+   * @returns The median pixel.
    */
   public median(): number[] {
     return median(this);
