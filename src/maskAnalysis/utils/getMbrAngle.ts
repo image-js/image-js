@@ -1,7 +1,7 @@
 import { Point } from '../../geometry';
 import { toDegrees } from '../../utils/geometry/angles';
 
-import { getAngle } from './getMbrFromPoints';
+import { getAngle } from './getAngle';
 
 const leftFirst = (mbrPoint1: Point, mbrPoint2: Point) =>
   mbrPoint1.column <= mbrPoint2.column ? -1 : 1;

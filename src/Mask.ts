@@ -25,6 +25,8 @@ import {
   getBorderPoints,
   getConvexHull,
   ConvexHull,
+  Feret,
+  getFeret,
 } from './maskAnalysis';
 import { getMbr, Mbr } from './maskAnalysis/getMbr';
 import {
@@ -513,6 +515,15 @@ export class Mask {
    */
   public getMbr(): Mbr {
     return getMbr(this);
+  }
+
+  /**
+   * Computes the Feret data.
+   *
+   * @returns The Feret diameters.
+   */
+  public getFeret(): Feret {
+    return getFeret(this);
   }
 
   // MORPHOLOGY
