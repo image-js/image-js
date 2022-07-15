@@ -6,6 +6,8 @@ import {
 } from '../../utils/geometry/points';
 import { Mbr } from '../getMbr';
 
+import { getMbrAngle } from './getMbrAngle';
+
 /**
  * Get the four corners of the minimun bounding rectangle from a set of points defining a simple convex polygon.
  * https://www.researchgate.net/profile/Lennert_Den_Boer2/publication/303783472_A_Fast_Algorithm_for_Generating_a_Minimal_Bounding_Rectangle/links/5751a14108ae6807fafb2aa5.pdf
@@ -93,11 +95,12 @@ export function getMbrFromPoints(points: readonly Point[]): Mbr {
   const mbrRotated = rotate(minSurfaceAngle, mbr);
   const width = mbr[0].column - mbr[2].column;
   const height = mbr[0].row - mbr[2].row;
+  const mbrAngle = getMbrAngle(mbrRotated);
 
   return {
     corners: mbrRotated,
     surface: minSurface,
-    angle: minSurfaceAngle,
+    angle: mbrAngle,
     width,
     height,
     perimeter: 2 * width + 2 * height,
@@ -105,14 +108,14 @@ export function getMbrFromPoints(points: readonly Point[]): Mbr {
 }
 
 /**
- *  The angle that allows to make the line going through p1 and p2 horizontal.
- *  This is an optimized version because it assumes that one of the vectors is horizontal.
+ * The angle that allows to make the line going through p1 and p2 horizontal.
+ * This is an optimized version because it assumes that one of the points is on the line y=0.
  *
  * @param p1 - First point.
  * @param p2 - Second point.
  * @returns Rotation angle to make the line horizontal.
  */
-function getAngle(p1: Point, p2: Point): number {
+export function getAngle(p1: Point, p2: Point): number {
   let diff = difference(p2, p1);
   let vector = normalize(diff);
   let angle = Math.acos(vector.column);

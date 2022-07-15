@@ -3,7 +3,7 @@ import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 import { ImageColorModel } from '../../IJS';
 import { fromMask } from '../../roi';
 import { RoiKind } from '../../roi/getRois';
-import { angle } from '../../utils/geometry/points';
+import { angle } from '../../utils/geometry/angles';
 import { getMbr } from '../getMbr';
 
 expect.extend({ toBeDeepCloseTo });
