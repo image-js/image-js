@@ -1,6 +1,6 @@
-import { average } from '../average';
+import { mean } from '../mean';
 
-describe('average', () => {
+describe('mean', () => {
   it('5x1 RGB image', () => {
     const image = testUtils.createRgbImage([
       [1, 2, 3],
@@ -10,7 +10,7 @@ describe('average', () => {
       [1, 2, 3],
     ]);
 
-    const result = average(image);
+    const result = mean(image);
 
     expect(result).toStrictEqual([1, 2, 3]);
   });
@@ -23,7 +23,7 @@ describe('average', () => {
       [1, 6, 3, 0],
     ]);
 
-    const result = image.average();
+    const result = image.mean();
 
     expect(result).toStrictEqual([3, 3, 3, 0]);
   });
@@ -33,7 +33,7 @@ describe('average', () => {
       [1, 2, 3, 0],
     ]);
 
-    const result = image.average();
+    const result = image.mean();
 
     expect(result).toStrictEqual([1.5]);
   });
