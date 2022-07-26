@@ -45,6 +45,7 @@
     "eslint": "eslint src test/common.js test/nodeScripts --cache",
     "eslint-fix": "npm run eslint -- --fix",
     "prepack": "npm run compile",
+    "prepare": "npm run compile",
     "prettier": "prettier --check .",
     "prettier-write": "prettier --write .",
     "test": "npm run test-only && npm run eslint && npm run prettier",
