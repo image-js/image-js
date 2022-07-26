@@ -12,6 +12,9 @@ import rotateFree from './rotateFree';
  * @return {Image} The new rotated image
  */
 export function rotate(angle, options) {
+  this.checkProcessable('rotate', {
+    bitDepth: [1, 8, 16]
+  });
   if (typeof angle !== 'number') {
     throw new TypeError('angle must be a number');
   }
@@ -23,39 +26,65 @@ export function rotate(angle, options) {
   switch (angle % 360) {
     case 0:
       return this.clone();
+
     case 90:
       return rotateRight.call(this);
+
     case 180:
       return rotate180.call(this);
+
     case 270:
       return rotateLeft.call(this);
+
     default:
       return rotateFree.call(this, angle, options);
   }
 }
-
 /**
  * Rotates an image counter-clockwise
  * @memberof Image
  * @instance
  * @return {Image} The new rotated image
  */
+
+
 export function rotateLeft() {
-  const newImage = Image.createFrom(this, {
-    width: this.height,
-    height: this.width,
-  });
-  const newMaxHeight = newImage.height - 1;
-  for (let i = 0; i < this.height; i++) {
-    for (let j = 0; j < this.width; j++) {
-      for (let k = 0; k < this.channels; k++) {
-        newImage.setValueXY(i, newMaxHeight - j, k, this.getValueXY(j, i, k));
+  if(this.bitDepth === 1) {
+    const newImage = new Image(this.height, this.width, {
+      kind: 'BINARY',
+      parent: this
+    });
+
+    const newMaxHeight = newImage.height - 1;
+
+    for (let i = 0; i < this.height; i++) {
+      for (let j = 0; j < this.width; j++) {
+        if(this.getBitXY(j, i)) {
+          newImage.setBitXY(i, newMaxHeight - j);
+        }
       }
     }
-  }
-  return newImage;
-}
 
+    return newImage;
+  } else {
+    const newImage = Image.createFrom(this, {
+      width: this.height,
+      height: this.width
+    });
+
+    const newMaxHeight = newImage.height - 1;
+
+    for (let i = 0; i < this.height; i++) {
+      for (let j = 0; j < this.width; j++) {
+        for (let k = 0; k < this.channels; k++) {
+          newImage.setValueXY(i, newMaxHeight - j, k, this.getValueXY(j, i, k));
+        }
+      }
+    }
+
+    return newImage;
+  }
+}
 /**
  * Rotates an image clockwise
  * @memberof Image
@@ -63,37 +92,78 @@ export function rotateLeft() {
  * @return {Image} The new rotated image
  */
 
+
 export function rotateRight() {
-  const newImage = Image.createFrom(this, {
-    width: this.height,
-    height: this.width,
-  });
-  const newMaxWidth = newImage.width - 1;
-  for (let i = 0; i < this.height; i++) {
-    for (let j = 0; j < this.width; j++) {
-      for (let k = 0; k < this.channels; k++) {
-        newImage.setValueXY(newMaxWidth - i, j, k, this.getValueXY(j, i, k));
+  if(this.bitDepth === 1) {
+    const newImage = new Image(this.height, this.width, {
+      kind: 'BINARY',
+      parent: this
+    });
+
+    const newMaxWidth = newImage.width - 1;
+
+    for (let i = 0; i < this.height; i++) {
+      for (let j = 0; j < this.width; j++) {
+        if(this.getBitXY(j, i)) {
+          newImage.setBitXY(newMaxWidth - i, j);
+        }
       }
     }
+
+    return newImage;
+  } else {
+    const newImage = Image.createFrom(this, {
+      width: this.height,
+      height: this.width
+    });
+
+    const newMaxWidth = newImage.width - 1;
+
+    for (let i = 0; i < this.height; i++) {
+      for (let j = 0; j < this.width; j++) {
+        for (let k = 0; k < this.channels; k++) {
+          newImage.setValueXY(newMaxWidth - i, j, k, this.getValueXY(j, i, k));
+        }
+      }
+    }
+
+    return newImage;
   }
-  return newImage;
 }
 
 function rotate180() {
-  const newImage = Image.createFrom(this);
-  const newMaxWidth = newImage.width - 1;
-  const newMaxHeight = newImage.height - 1;
-  for (let i = 0; i < this.height; i++) {
-    for (let j = 0; j < this.width; j++) {
-      for (let k = 0; k < this.channels; k++) {
-        newImage.setValueXY(
-          newMaxWidth - j,
-          newMaxHeight - i,
-          k,
-          this.getValueXY(j, i, k),
-        );
+  if(this.bitDepth === 1) {
+    const newImage = new Image(this.width, this.height, {
+      kind: 'BINARY',
+      parent: this
+    });
+
+    const newMaxWidth = newImage.width - 1;
+    const newMaxHeight = newImage.height - 1;
+
+    for (let i = 0; i < this.height; i++) {
+      for (let j = 0; j < this.width; j++) {
+        if(this.getBitXY(j, i)) {
+          newImage.setBitXY(newMaxWidth - j, newMaxHeight - i);
+        }
       }
     }
+
+    return newImage;
+  } else {
+    const newImage = Image.createFrom(this);
+
+    const newMaxWidth = newImage.width - 1;
+    const newMaxHeight = newImage.height - 1;
+
+    for (let i = 0; i < this.height; i++) {
+      for (let j = 0; j < this.width; j++) {
+        for (let k = 0; k < this.channels; k++) {
+          newImage.setValueXY(newMaxWidth - j, newMaxHeight - i, k, this.getValueXY(j, i, k));
+        }
+      }
+    }
+
+    return newImage;
   }
-  return newImage;
 }
