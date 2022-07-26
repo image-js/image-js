@@ -705,11 +705,10 @@ export class Mask {
  */
 function printData(mask: Mask): string {
   const result = [];
-  const padding = 2;
   for (let row = 0; row < mask.height; row++) {
     const line = [];
     for (let column = 0; column < mask.width; column++) {
-      line.push(String(mask.getBit(column, row)).padStart(padding, ' '));
+      line.push(String(mask.getBit(column, row)));
     }
     result.push(`[${line.join(' ')}]`);
   }

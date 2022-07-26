@@ -4,8 +4,8 @@ exports[`check custom inspect 1`] = `
 "Mask {
   width: 1
   height: 2
-  data: [ 0]
-        [ 0]
+  data: [0]
+        [0]
 }"
 `;
 
