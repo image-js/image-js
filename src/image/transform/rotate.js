@@ -13,7 +13,7 @@ import rotateFree from './rotateFree';
  */
 export function rotate(angle, options) {
   this.checkProcessable('rotate', {
-    bitDepth: [1, 8, 16]
+    bitDepth: [1, 8, 16],
   });
   if (typeof angle !== 'number') {
     throw new TypeError('angle must be a number');
@@ -47,19 +47,18 @@ export function rotate(angle, options) {
  * @return {Image} The new rotated image
  */
 
-
 export function rotateLeft() {
-  if(this.bitDepth === 1) {
+  if (this.bitDepth === 1) {
     const newImage = new Image(this.height, this.width, {
       kind: 'BINARY',
-      parent: this
+      parent: this,
     });
 
     const newMaxHeight = newImage.height - 1;
 
     for (let i = 0; i < this.height; i++) {
       for (let j = 0; j < this.width; j++) {
-        if(this.getBitXY(j, i)) {
+        if (this.getBitXY(j, i)) {
           newImage.setBitXY(i, newMaxHeight - j);
         }
       }
@@ -69,7 +68,7 @@ export function rotateLeft() {
   } else {
     const newImage = Image.createFrom(this, {
       width: this.height,
-      height: this.width
+      height: this.width,
     });
 
     const newMaxHeight = newImage.height - 1;
@@ -92,19 +91,18 @@ export function rotateLeft() {
  * @return {Image} The new rotated image
  */
 
-
 export function rotateRight() {
-  if(this.bitDepth === 1) {
+  if (this.bitDepth === 1) {
     const newImage = new Image(this.height, this.width, {
       kind: 'BINARY',
-      parent: this
+      parent: this,
     });
 
     const newMaxWidth = newImage.width - 1;
 
     for (let i = 0; i < this.height; i++) {
       for (let j = 0; j < this.width; j++) {
-        if(this.getBitXY(j, i)) {
+        if (this.getBitXY(j, i)) {
           newImage.setBitXY(newMaxWidth - i, j);
         }
       }
@@ -114,7 +112,7 @@ export function rotateRight() {
   } else {
     const newImage = Image.createFrom(this, {
       width: this.height,
-      height: this.width
+      height: this.width,
     });
 
     const newMaxWidth = newImage.width - 1;
@@ -132,10 +130,10 @@ export function rotateRight() {
 }
 
 function rotate180() {
-  if(this.bitDepth === 1) {
+  if (this.bitDepth === 1) {
     const newImage = new Image(this.width, this.height, {
       kind: 'BINARY',
-      parent: this
+      parent: this,
     });
 
     const newMaxWidth = newImage.width - 1;
@@ -143,7 +141,7 @@ function rotate180() {
 
     for (let i = 0; i < this.height; i++) {
       for (let j = 0; j < this.width; j++) {
-        if(this.getBitXY(j, i)) {
+        if (this.getBitXY(j, i)) {
           newImage.setBitXY(newMaxWidth - j, newMaxHeight - i);
         }
       }
@@ -159,7 +157,12 @@ function rotate180() {
     for (let i = 0; i < this.height; i++) {
       for (let j = 0; j < this.width; j++) {
         for (let k = 0; k < this.channels; k++) {
-          newImage.setValueXY(newMaxWidth - j, newMaxHeight - i, k, this.getValueXY(j, i, k));
+          newImage.setValueXY(
+            newMaxWidth - j,
+            newMaxHeight - i,
+            k,
+            this.getValueXY(j, i, k),
+          );
         }
       }
     }

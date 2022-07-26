@@ -21,10 +21,10 @@ export default function crop(options = {}) {
     x = 0,
     y = 0,
     width = this.width - x,
-    height = this.height - y
+    height = this.height - y,
   } = options;
   this.checkProcessable('crop', {
-    bitDepth: [1, 8, 16]
+    bitDepth: [1, 8, 16],
   });
   x = Math.round(x);
   y = Math.round(y);
@@ -32,52 +32,48 @@ export default function crop(options = {}) {
   height = Math.round(height);
 
   if (x > this.width - 1 || y > this.height - 1) {
-    throw new RangeError(`crop: origin (x:${x}, y:${y}) out of range (${this.width - 1}; ${this.height - 1})`);
+    throw new RangeError(
+      `crop: origin (x:${x}, y:${y}) out of range (${this.width - 1}; ${
+        this.height - 1
+      })`,
+    );
   }
 
   if (width <= 0 || height <= 0) {
-    throw new RangeError(`crop: width and height (width:${width}; height:${height}) must be positive numbers`);
+    throw new RangeError(
+      `crop: width and height (width:${width}; height:${height}) must be positive numbers`,
+    );
   }
 
   if (x < 0 || y < 0) {
-    throw new RangeError(`crop: x and y (x:${x}, y:${y}) must be positive numbers`);
+    throw new RangeError(
+      `crop: x and y (x:${x}, y:${y}) must be positive numbers`,
+    );
   }
 
   if (width > this.width - x || height > this.height - y) {
-    throw new RangeError(`crop: (x: ${x}, y:${y}, width:${width}, height:${height}) size is out of range`);
+    throw new RangeError(
+      `crop: (x: ${x}, y:${y}, width:${width}, height:${height}) size is out of range`,
+    );
   }
 
   let result = this;
-  if(this.bitDepth === 1) {
+  if (this.bitDepth === 1) {
     const newImage = new Image(width, height, {
       kind: 'BINARY',
-      parent: this
+      parent: this,
     });
-    result = cropBinary(
-        this,
-        newImage,
-        x,
-        y,
-        width,
-        height
-      );
+    result = cropBinary(this, newImage, x, y, width, height);
   } else {
     const newImage = Image.createFrom(this, {
       width,
       height,
-      position: [x, y]
+      position: [x, y],
     });
-    result = cropDefault(
-        this,
-        newImage,
-        x,
-        y,
-        width,
-        height
-      );
+    result = cropDefault(this, newImage, x, y, width, height);
   }
 
-  return result
+  return result;
 }
 
 function cropDefault(img, newImage, x, y, width, height) {
@@ -92,7 +88,7 @@ function cropDefault(img, newImage, x, y, width, height) {
     let jL = j + xWidth;
 
     for (; j < jL; j++) {
-        newImage.data[ptr++] = img.data[j];
+      newImage.data[ptr++] = img.data[j];
     }
   }
 
@@ -111,7 +107,7 @@ function cropBinary(img, newImage, x, y, width, height) {
     let jL = j + xWidth;
 
     for (; j < jL; j++) {
-      if(img.getBit(j)) {
+      if (img.getBit(j)) {
         newImage.setBit(ptr);
       }
       ++ptr;
