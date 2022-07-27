@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`computeRois 3x3 mask 1`] = `
+exports[`3x3 mask 1`] = `
 Array [
   Roi {
     "height": 2,
@@ -59,7 +59,7 @@ Array [
 ]
 `;
 
-exports[`computeRois 3x3 mask 2`] = `
+exports[`3x3 mask 2`] = `
 Array [
   Roi {
     "height": 2,

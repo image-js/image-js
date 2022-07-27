@@ -1,8 +1,4 @@
-import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
-
 import { getMbrAngle } from '../getMbrAngle';
-
-expect.extend({ toBeDeepCloseTo });
 
 test.each([
   [

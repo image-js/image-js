@@ -1,10 +1,6 @@
-import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
-
 import { getPolygonArea, getPolygonPerimeter } from '../polygons';
 
-expect.extend({ toBeDeepCloseTo });
-
-describe('polygons (getPolygonPerimeter)', () => {
+describe('getPolygonPerimeter', () => {
   it('perimeter zero', () => {
     const points = [
       { column: 0, row: 0 },
@@ -13,6 +9,7 @@ describe('polygons (getPolygonPerimeter)', () => {
 
     expect(getPolygonPerimeter(points)).toBe(0);
   });
+
   it('square', () => {
     const points = [
       { column: 0, row: 0 },
@@ -24,7 +21,8 @@ describe('polygons (getPolygonPerimeter)', () => {
     expect(getPolygonPerimeter(points)).toBe(4);
   });
 });
-describe('polygons (getPolygonArea)', () => {
+
+describe('getPolygonArea', () => {
   it('area zero', () => {
     const points = [
       { column: 0, row: 0 },
@@ -35,6 +33,7 @@ describe('polygons (getPolygonArea)', () => {
 
     expect(getPolygonArea(points)).toBe(0);
   });
+
   it('square', () => {
     const points = [
       { column: 0, row: 0 },
@@ -45,6 +44,7 @@ describe('polygons (getPolygonArea)', () => {
 
     expect(getPolygonArea(points)).toBe(1);
   });
+
   it('rectangle', () => {
     const points = [
       { column: 0, row: 0 },
@@ -55,6 +55,7 @@ describe('polygons (getPolygonArea)', () => {
 
     expect(getPolygonArea(points)).toBe(12);
   });
+
   it('square with negative values', () => {
     const points = [
       { column: -1, row: -1 },
@@ -65,6 +66,7 @@ describe('polygons (getPolygonArea)', () => {
 
     expect(getPolygonArea(points)).toBe(4);
   });
+
   it('triangle', () => {
     const points = [
       { column: 0, row: 0 },

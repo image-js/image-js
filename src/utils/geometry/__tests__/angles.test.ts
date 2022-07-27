@@ -1,15 +1,11 @@
-import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
-
 import { toDegrees } from '../angles';
 import { rotate } from '../points';
-
-expect.extend({ toBeDeepCloseTo });
 
 test('toDegrees', () => {
   expect(toDegrees(Math.PI / 2)).toBe(90);
 });
 
-describe('angles (rotate)', () => {
+describe('rotate', () => {
   it('90 degrees', () => {
     const points = [
       { column: 0, row: 0 },

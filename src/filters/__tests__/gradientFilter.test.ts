@@ -16,41 +16,41 @@ const image = testUtils.createGreyImage([
   [1, 1, 1],
 ]);
 
-describe('gradientFilter', () => {
-  it('gradientX', () => {
-    const result = image.gradientFilter({
-      kernelX,
-      borderType: BorderType.CONSTANT,
-    });
+test('gradientX', () => {
+  const result = image.gradientFilter({
+    kernelX,
+    borderType: BorderType.CONSTANT,
+  });
 
-    expect(result).toMatchImageData([
-      [1, 1, 1],
-      [1, 2, 2],
-      [1, 2, 2],
-    ]);
-  });
-  it('gradientY', () => {
-    const result = image.gradientFilter({
-      kernelY,
-      borderType: BorderType.CONSTANT,
-    });
+  expect(result).toMatchImageData([
+    [1, 1, 1],
+    [1, 2, 2],
+    [1, 2, 2],
+  ]);
+});
 
-    expect(result).toMatchImageData([
-      [1, 1, 0],
-      [1, 2, 1],
-      [0, 1, 1],
-    ]);
+test('gradientY', () => {
+  const result = image.gradientFilter({
+    kernelY,
+    borderType: BorderType.CONSTANT,
   });
-  it('gradientX and gradientY', () => {
-    const result = image.gradientFilter({
-      kernelX,
-      kernelY,
-      borderType: BorderType.CONSTANT,
-    });
-    expect(result).toMatchImageData([
-      [1, 1, 1],
-      [1, 2, 2],
-      [1, 2, 2],
-    ]);
+
+  expect(result).toMatchImageData([
+    [1, 1, 0],
+    [1, 2, 1],
+    [0, 1, 1],
+  ]);
+});
+
+test('gradientX and gradientY', () => {
+  const result = image.gradientFilter({
+    kernelX,
+    kernelY,
+    borderType: BorderType.CONSTANT,
   });
+  expect(result).toMatchImageData([
+    [1, 1, 1],
+    [1, 2, 2],
+    [1, 2, 2],
+  ]);
 });

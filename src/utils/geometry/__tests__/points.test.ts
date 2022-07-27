@@ -1,8 +1,4 @@
-import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
-
 import { normalize } from '../points';
-
-expect.extend({ toBeDeepCloseTo });
 
 describe('normalize', () => {
   it('simple numbers', () => {

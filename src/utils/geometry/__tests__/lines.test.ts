@@ -1,10 +1,6 @@
-import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
-
 import { getLineLength } from '../lines';
 
-expect.extend({ toBeDeepCloseTo });
-
-describe('lines (getLineLength)', () => {
+describe('getLineLength', () => {
   it('length zero', () => {
     const points = [
       { column: 0, row: 0 },
