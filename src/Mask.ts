@@ -1,3 +1,4 @@
+import { ColorDepth, colorModels, IJS, ImageColorModel } from './IJS';
 import {
   drawLineOnMask,
   DrawLineOnMaskOptions,
@@ -48,18 +49,15 @@ import {
   TopHatOptions,
 } from './morphology';
 import { erode } from './morphology/erode';
+import {
+  convertColor,
+  copyTo,
+  CopyToOptions,
+  paintMaskOnMask,
+  PaintMaskOnMaskOptions,
+} from './operations';
 import { boolToNumber } from './utils/boolToNumber';
 import { Point } from './utils/geometry/points';
-
-import {
-  ImageColorModel,
-  ColorDepth,
-  colorModels,
-  IJS,
-  convertColor,
-  CopyToOptions,
-  copyTo,
-} from '.';
 
 export type BitValue = 1 | 0 | boolean;
 
@@ -694,6 +692,17 @@ export class Mask {
    */
   public copyTo(target: Mask, options: CopyToOptions<Mask> = {}): Mask {
     return copyTo(this, target, options);
+  }
+
+  /**
+   * Paint a mask onto another mask and the given position and with the given value.
+   *
+   * @param mask - Mask to paint.
+   * @param options - Paint mask options.
+   * @returns The painted mask.
+   */
+  public paintMask(mask: Mask, options?: PaintMaskOnMaskOptions): Mask {
+    return paintMaskOnMask(this, mask, options);
   }
 }
 

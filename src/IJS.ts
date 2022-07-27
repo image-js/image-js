@@ -68,8 +68,8 @@ import {
   crop,
   CropOptions,
   grey,
-  paintMask,
-  PaintMaskOptions,
+  paintMaskOnIjs,
+  PaintMaskOnIjsOptions,
   split,
 } from './operations';
 import { cropAlpha, CropAlphaOptions } from './operations/cropAlpha';
@@ -752,8 +752,8 @@ export class IJS {
    * @param options - Paint mask options.
    * @returns The painted image.
    */
-  public paintMask(mask: Mask, options?: PaintMaskOptions): IJS {
-    return paintMask(this, mask, options);
+  public paintMask(mask: Mask, options?: PaintMaskOnIjsOptions): IJS {
+    return paintMaskOnIjs(this, mask, options);
   }
 
   // FILTERS

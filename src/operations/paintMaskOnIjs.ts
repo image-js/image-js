@@ -5,7 +5,7 @@ import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
 import { setBlendedPixel } from '../utils/setBlendedPixel';
 
-export interface PaintMaskOptions {
+export interface PaintMaskOnIjsOptions {
   /**
    * Top-left corner of the mask relative to a parent image.
    *
@@ -38,10 +38,10 @@ export interface PaintMaskOptions {
  * @param options - Paint mask options.
  * @returns The painted image.
  */
-export function paintMask(
+export function paintMaskOnIjs(
   image: IJS,
   mask: Mask,
-  options: PaintMaskOptions = {},
+  options: PaintMaskOnIjsOptions = {},
 ): IJS {
   const {
     origin = { row: 0, column: 0 },
