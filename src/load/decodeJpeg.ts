@@ -9,7 +9,11 @@ import { IJS, ImageColorModel } from '../IJS';
  * @returns The decoded image.
  */
 export function decodeJpeg(buffer: Uint8Array): IJS {
-  const jpeg = decode(buffer, { useTArray: true });
+  const jpeg = decode(buffer, {
+    useTArray: true,
+    maxMemoryUsageInMB: Infinity,
+    maxResolutionInMP: Infinity,
+  });
   return new IJS(jpeg.width, jpeg.height, {
     data: jpeg.data,
     colorModel: ImageColorModel.RGBA,
