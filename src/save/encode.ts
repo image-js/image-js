@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 
 import { encodeJpeg, EncodeJpegOptions } from './encodeJpeg';
 import { encodePng, EncodePngOptions } from './encodePng';
@@ -26,21 +26,21 @@ const defaultPng: EncodeOptionsPng = { format: ImageFormat.png };
  *
  * @param image - Image to encode.
  */
-export function encode(image: IJS): Uint8Array;
+export function encode(image: Image): Uint8Array;
 /**
  * Encodes the image to PNG.
  *
  * @param image - Image to encode.
  * @param options - Format and options passed to the PNG encoder.
  */
-export function encode(image: IJS, options: EncodeOptionsPng): Uint8Array;
+export function encode(image: Image, options: EncodeOptionsPng): Uint8Array;
 /**
  * Encodes the image to JPEG.
  *
  * @param image - Image to encode.
  * @param options - Format and options passed to the JPEG encoder.
  */
-export function encode(image: IJS, options: EncodeOptionsJpeg): Uint8Array;
+export function encode(image: Image, options: EncodeOptionsJpeg): Uint8Array;
 /**
  * Encode an image in JPEG or PNG format.
  *
@@ -49,7 +49,7 @@ export function encode(image: IJS, options: EncodeOptionsJpeg): Uint8Array;
  * @returns The encoded image.
  */
 export function encode(
-  image: IJS,
+  image: Image,
   options: EncodeOptionsPng | EncodeOptionsJpeg = defaultPng,
 ): Uint8Array {
   if (options.format === ImageFormat.png) {

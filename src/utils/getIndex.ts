@@ -1,9 +1,9 @@
-import { IJS, Mask } from '..';
+import { Image, Mask } from '..';
 
 export function getIndex(
   column: number,
   row: number,
-  image: IJS,
+  image: Image,
   channel: number,
 ): number;
 export function getIndex(column: number, row: number, image: Mask): number;
@@ -19,7 +19,7 @@ export function getIndex(column: number, row: number, image: Mask): number;
 export function getIndex(
   column: number,
   row: number,
-  image: IJS | Mask,
+  image: Image | Mask,
   channel = 0,
 ): number {
   return (row * image.width + column) * image.channels + channel;

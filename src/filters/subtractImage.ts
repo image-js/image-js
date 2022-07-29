@@ -1,4 +1,4 @@
-import { ColorDepth, IJS, Mask } from '..';
+import { ColorDepth, Image, Mask } from '..';
 import checkProcessable from '../utils/checkProcessable';
 
 export interface SubtractImageOptions {
@@ -11,20 +11,20 @@ export interface SubtractImageOptions {
 }
 
 export function subtractImage(
-  image: IJS,
-  otherImage: IJS,
+  image: Image,
+  otherImage: Image,
   options?: SubtractImageOptions,
-): IJS;
+): Image;
 export function subtractImage(
   image: Mask,
   otherImage: Mask,
   options?: SubtractImageOptions,
 ): Mask;
 export function subtractImage(
-  image: IJS | Mask,
-  otherImage: IJS | Mask,
+  image: Image | Mask,
+  otherImage: Image | Mask,
   options: SubtractImageOptions,
-): IJS | Mask;
+): Image | Mask;
 /**
  * Calculate a new image that is the subtraction between the current image and the otherImage.
  *
@@ -34,13 +34,13 @@ export function subtractImage(
  * @returns The subtracted image
  */
 export function subtractImage(
-  image: IJS | Mask,
-  otherImage: IJS | Mask,
+  image: Image | Mask,
+  otherImage: Image | Mask,
   options: SubtractImageOptions = {},
-): IJS | Mask {
+): Image | Mask {
   let { absolute = false } = options;
 
-  if (image instanceof IJS) {
+  if (image instanceof Image) {
     checkProcessable(image, 'subtractImage', {
       bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
       components: [1, 3],
@@ -63,7 +63,7 @@ export function subtractImage(
   }
 
   let newImage = image.clone();
-  if (newImage instanceof IJS) {
+  if (newImage instanceof Image) {
     for (let index = 0; index < image.size; index++) {
       for (let channel = 0; channel < image.channels; channel++) {
         let value =

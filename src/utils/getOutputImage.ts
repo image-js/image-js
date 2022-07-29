@@ -1,5 +1,5 @@
 import { ColorDepth } from '..';
-import { CreateFromOptions, IJS, ImageColorModel } from '../IJS';
+import { CreateFromOptions, Image, ImageColorModel } from '../Image';
 import { Mask } from '../Mask';
 
 import { copyData } from './copyData';
@@ -9,7 +9,7 @@ export interface OutOptions {
    * Image to use as the output.
    * The image must have compatible properties or the method will throw.
    */
-  out?: IJS | Mask;
+  out?: Image | Mask;
 }
 
 type NewImageParameters = Omit<CreateFromOptions, 'data'>;
@@ -36,21 +36,21 @@ interface OutInternalOptions {
  * @returns The output image.
  */
 export function getOutputImage(
-  thisImage: IJS,
+  thisImage: Image,
   options: OutOptions = {},
   internalOptions: OutInternalOptions = {},
-): IJS {
+): Image {
   const { out } = options;
   const { newParameters, clone } = internalOptions;
   if (out === undefined) {
     if (clone) {
       return thisImage.clone();
     } else {
-      return IJS.createFrom(thisImage, newParameters);
+      return Image.createFrom(thisImage, newParameters);
     }
   } else {
-    if (!(out instanceof IJS)) {
-      throw new TypeError('out must be an IJS object');
+    if (!(out instanceof Image)) {
+      throw new TypeError('out must be an Image object');
     }
     const requirements: NewImageParameters = {
       width: thisImage.width,
@@ -75,16 +75,16 @@ export function getOutputImage(
  * @param options - Options object received by the algorithm.
  * @returns The output image.
  */
-export function maskToOutputImage(mask: Mask, options: OutOptions = {}): IJS {
+export function maskToOutputImage(mask: Mask, options: OutOptions = {}): Image {
   const { out } = options;
 
   if (out === undefined) {
-    return IJS.createFrom(mask, {
+    return Image.createFrom(mask, {
       colorModel: ImageColorModel.GREY,
     });
   } else {
-    if (!(out instanceof IJS)) {
-      throw new TypeError('out must be an IJS object');
+    if (!(out instanceof Image)) {
+      throw new TypeError('out must be an Image object');
     }
     const requirements: NewImageParameters = {
       width: mask.width,
@@ -105,7 +105,10 @@ export function maskToOutputImage(mask: Mask, options: OutOptions = {}): IJS {
  * @param options - Options object received by the algorithm.
  * @returns The output mask.
  */
-export function imageToOutputMask(image: IJS, options: OutOptions = {}): Mask {
+export function imageToOutputMask(
+  image: Image,
+  options: OutOptions = {},
+): Mask {
   const { out } = options;
   if (out === undefined) {
     return Mask.createFrom(image);

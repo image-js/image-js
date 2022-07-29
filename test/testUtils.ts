@@ -2,7 +2,7 @@ import { readFileSync, mkdtempSync, rmSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
-import { fromMask, IJS, ImageColorModel, readSync } from '../src';
+import { fromMask, Image, ImageColorModel, readSync } from '../src';
 import { Roi } from '../src/roi/Roi';
 import { RoiKind } from '../src/roi/getRois';
 
@@ -38,7 +38,7 @@ export function loadBuffer(path: TestImagePath): Uint8Array {
  * @param path - Path to the image.
  * @returns The image.
  */
-export function load(path: TestImagePath): IJS {
+export function load(path: TestImagePath): Image {
   return readSync(join(__dirname, 'img', path));
 }
 /**
@@ -51,7 +51,7 @@ export function load(path: TestImagePath): IJS {
 export function createGreyImage(
   imageData: number[][] | string,
   options?: CreateImageOptions,
-): IJS {
+): Image {
   return createImageFromData(imageData, ImageColorModel.GREY, options);
 }
 
@@ -61,7 +61,7 @@ export function createGreyImage(
  * @param imageData - Raw image data.
  * @returns The greya Image.
  */
-export function createGreyaImage(imageData: number[][] | string): IJS {
+export function createGreyaImage(imageData: number[][] | string): Image {
   return createImageFromData(imageData, ImageColorModel.GREYA);
 }
 /**
@@ -74,7 +74,7 @@ export function createGreyaImage(imageData: number[][] | string): IJS {
 export function createRgbImage(
   imageData: number[][] | string,
   options?: CreateImageOptions,
-): IJS {
+): Image {
   return createImageFromData(imageData, ImageColorModel.RGB, options);
 }
 
@@ -116,7 +116,7 @@ export function createRoi(
 export function createRgbaImage(
   imageData: number[][] | string,
   options?: CreateImageOptions,
-): IJS {
+): Image {
   return createImageFromData(imageData, ImageColorModel.RGBA, options);
 }
 
@@ -126,7 +126,7 @@ export function createRgbaImage(
  * @returns The path to the created directory.
  */
 export function makeTmpDir(): string {
-  return mkdtempSync(join(tmpdir(), 'ijs-test-'));
+  return mkdtempSync(join(tmpdir(), 'image-js-test-'));
 }
 
 /**

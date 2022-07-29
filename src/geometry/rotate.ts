@@ -1,4 +1,4 @@
-import { IJS, ImageCoordinates } from '../IJS';
+import { Image, ImageCoordinates } from '../Image';
 import { BorderType } from '../utils/interpolateBorder';
 import { InterpolationType } from '../utils/interpolatePixel';
 
@@ -59,10 +59,10 @@ export interface RotateOptions {
  * @returns A new rotated image.
  */
 export function rotate(
-  image: IJS,
+  image: Image,
   angle: number,
   options: RotateOptions = {},
-): IJS {
+): Image {
   const { center = ImageCoordinates.CENTER, scale = 1 } = options;
 
   let centerCoordinates;

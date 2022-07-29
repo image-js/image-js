@@ -1,4 +1,4 @@
-import { IJS } from '../../IJS';
+import { Image } from '../../Image';
 import {
   BorderType,
   getBorderInterpolation,
@@ -17,7 +17,7 @@ test('in range', () => {
 });
 
 test('too far', () => {
-  const image = new IJS(10, 10);
+  const image = new Image(10, 10);
   const interpolate = getBorderInterpolation(BorderType.REFLECT, 0);
   const exp =
     /interpolateBorder only supports borders smaller than the original image/;

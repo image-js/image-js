@@ -1,4 +1,4 @@
-import { IJS } from '../../IJS';
+import { Image } from '../../Image';
 
 test('GREY image, default options', () => {
   const image = testUtils.createGreyImage([
@@ -56,7 +56,7 @@ test('GREY image, various origins and sizes', () => {
 });
 
 test('invalid argument ranges', () => {
-  const image = new IJS(5, 5);
+  const image = new Image(5, 5);
 
   expect(() => {
     image.crop({

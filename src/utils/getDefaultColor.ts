@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { Mask } from '../Mask';
 
 import { ImageColorModel } from './constants/colorModels';
@@ -10,7 +10,7 @@ import { ImageColorModel } from './constants/colorModels';
  * @param image - The used image.
  * @returns Default color.
  */
-export function getDefaultColor(image: IJS | Mask): number[] {
+export function getDefaultColor(image: Image | Mask): number[] {
   switch (image.colorModel) {
     case ImageColorModel.GREY:
       return [0];

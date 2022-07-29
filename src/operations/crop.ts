@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import checkProcessable from '../utils/checkProcessable';
 import { Point } from '../utils/geometry/points';
 
@@ -35,7 +35,7 @@ export interface CropOptions {
  *   column:100
  * });
  */
-export function crop(image: IJS, options: CropOptions = {}) {
+export function crop(image: Image, options: CropOptions = {}) {
   const {
     origin = { row: 0, column: 0 },
     width = image.width - origin.column,
@@ -70,7 +70,7 @@ export function crop(image: IJS, options: CropOptions = {}) {
     );
   }
 
-  const newImage = IJS.createFrom(image, {
+  const newImage = Image.createFrom(image, {
     width,
     height,
   });

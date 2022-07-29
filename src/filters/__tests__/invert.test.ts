@@ -1,7 +1,7 @@
 import { Mask } from '../..';
-import { IJS } from '../../IJS';
+import { Image } from '../../Image';
 
-describe('image is an IJS', () => {
+describe('image is an Image', () => {
   it('invert an RGB image', () => {
     const img = testUtils.createRgbImage([[0, 50, 127, 255, 250, 4]]);
     const inverted = img.invert();
@@ -50,7 +50,7 @@ describe('image is an IJS', () => {
       [100, 140, 13],
     ]);
 
-    const out = new IJS(1, 2);
+    const out = new Image(1, 2);
     const inverted = image.invert({ out });
     expect(inverted).toMatchImageData([
       [25, 172, 135],

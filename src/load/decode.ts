@@ -1,6 +1,6 @@
 import imageType from 'image-type';
 
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 
 import { decodeJpeg } from './decodeJpeg';
 import { decodePng } from './decodePng';
@@ -13,7 +13,7 @@ import { decodeTiff } from './decodeTiff';
  * @param data - Data to decode.
  * @returns The decoded image.
  */
-export function decode(data: ArrayBufferView): IJS {
+export function decode(data: ArrayBufferView): Image {
   const typedArray = new Uint8Array(
     data.buffer,
     data.byteOffset,

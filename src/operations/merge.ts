@@ -1,4 +1,4 @@
-import { IJS, ImageColorModel } from '../IJS';
+import { Image, ImageColorModel } from '../Image';
 
 /**
  * Inverse of split. Merges multiple single-channel images into one.
@@ -6,7 +6,7 @@ import { IJS, ImageColorModel } from '../IJS';
  * @param images - An array of single-channel images.
  * @returns The merged image.
  */
-export function merge(images: IJS[]): IJS {
+export function merge(images: Image[]): Image {
   const channels = images.length;
 
   let colorModel: ImageColorModel;
@@ -40,7 +40,7 @@ export function merge(images: IJS[]): IJS {
     }
   }
 
-  const newImage = IJS.createFrom(first, { colorModel });
+  const newImage = Image.createFrom(first, { colorModel });
   for (let c = 0; c < channels; c++) {
     const img = images[c];
     for (let i = 0; i < newImage.size; i++) {

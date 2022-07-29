@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { Mask } from '../Mask';
 import checkProcessable from '../utils/checkProcessable';
 import { Point } from '../utils/geometry/points';
@@ -21,14 +21,14 @@ export interface DrawPointsOptions {
   /**
    * Image to which the resulting image has to be put.
    */
-  out?: IJS;
+  out?: Image;
 }
 
 export function drawPoints(
-  image: IJS,
+  image: Image,
   points: Point[],
   options?: DrawPointsOptions,
-): IJS;
+): Image;
 export function drawPoints(
   image: Mask,
   points: Point[],
@@ -40,16 +40,16 @@ export function drawPoints(
  *
  * @param image - The image on which to draw the points.
  * @param points - Array of points.
- * @param options - Draw points on IJS options.
+ * @param options - Draw points on Image options.
  * @returns New mask.
  */
 export function drawPoints(
-  image: IJS | Mask,
+  image: Image | Mask,
   points: Point[],
   options: DrawPointsOptions = {},
-): IJS | Mask {
+): Image | Mask {
   let newImage;
-  if (image instanceof IJS) {
+  if (image instanceof Image) {
     newImage = getOutputImage(image, options, { clone: true });
   } else {
     newImage = maskToOutputMask(image, options, { clone: true });

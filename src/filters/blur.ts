@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { BorderType } from '../utils/interpolateBorder';
 
 import { separableConvolution } from './convolution';
@@ -27,7 +27,7 @@ export interface BlurOptions {
   /**
    * Image to which to output.
    */
-  out?: IJS;
+  out?: Image;
 }
 
 /**
@@ -37,7 +37,7 @@ export interface BlurOptions {
  * @param options - Blur options
  * @returns The blurred image.
  */
-export function blur(image: IJS, options: BlurOptions): IJS {
+export function blur(image: Image, options: BlurOptions): Image {
   const { width, height } = options;
   const kernelX = new Array(width).fill(1);
   const kernelY = new Array(height).fill(1);

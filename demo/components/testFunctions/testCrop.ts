@@ -1,4 +1,4 @@
-import { DerivativeFilters, IJS, ImageColorModel } from '../../../src';
+import { DerivativeFilters, Image, ImageColorModel } from '../../../src';
 // options
 const cropImageRatio = 2; // defines the size of the cropped image
 const interval = 2; // defines the speed
@@ -10,7 +10,7 @@ let row = 0;
 let columnInterval: number;
 let rowInterval: number;
 
-export function testCropBounce(image: IJS): IJS {
+export function testCropBounce(image: Image): Image {
   const width = Math.floor(image.width / cropImageRatio);
   const height = Math.floor(image.height / cropImageRatio);
 

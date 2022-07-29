@@ -1,5 +1,5 @@
 import { Mask } from '..';
-import { ColorDepth, IJS } from '../IJS';
+import { ColorDepth, Image } from '../Image';
 import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
 
@@ -19,7 +19,7 @@ export interface DilateOptions {
   iterations?: number;
 }
 
-export function dilate(image: IJS, options?: DilateOptions): IJS;
+export function dilate(image: Image, options?: DilateOptions): Image;
 export function dilate(image: Mask, options?: DilateOptions): Mask;
 /**
  * Dilatation is one of two fundamental operations (with erosion) in morphological
@@ -33,9 +33,9 @@ export function dilate(image: Mask, options?: DilateOptions): Mask;
  * @returns Dilated image.
  */
 export function dilate(
-  image: IJS | Mask,
+  image: Image | Mask,
   options: DilateOptions = {},
-): Mask | IJS {
+): Mask | Image {
   let defaultKernel = false;
   if (options.kernel === undefined) {
     defaultKernel = true;
@@ -50,7 +50,7 @@ export function dilate(
     iterations = 1,
   } = options;
 
-  if (image instanceof IJS) {
+  if (image instanceof Image) {
     checkProcessable(image, 'dilate', {
       bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
       components: 1,
@@ -88,7 +88,7 @@ export function dilate(
         result = dilateMask(result, newMask, kernel);
       }
     } else if (onlyOnes) {
-      const newImage = IJS.createFrom(result);
+      const newImage = Image.createFrom(result);
       result = dilateGreyOnlyOnes(
         result,
         newImage,
@@ -96,14 +96,14 @@ export function dilate(
         kernel.length,
       );
     } else {
-      const newImage = IJS.createFrom(result);
+      const newImage = Image.createFrom(result);
       result = dilateGrey(result, newImage, kernel);
     }
   }
   return result;
 }
 
-function dilateGrey(image: IJS, newImage: IJS, kernel: number[][]): IJS {
+function dilateGrey(image: Image, newImage: Image, kernel: number[][]): Image {
   const kernelWidth = kernel[0].length;
   const kernelHeight = kernel.length;
   let radiusX = (kernelWidth - 1) / 2;
@@ -135,11 +135,11 @@ function dilateGrey(image: IJS, newImage: IJS, kernel: number[][]): IJS {
 }
 
 function dilateGreyOnlyOnes(
-  image: IJS,
-  newImage: IJS,
+  image: Image,
+  newImage: Image,
   kernelWidth: number,
   kernelHeight: number,
-): IJS {
+): Image {
   const radiusX = (kernelWidth - 1) / 2;
   const radiusY = (kernelHeight - 1) / 2;
 

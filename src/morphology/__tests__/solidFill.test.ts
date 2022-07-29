@@ -1,5 +1,5 @@
 import { encodePng, Mask } from '../..';
-import { ImageColorModel } from '../../IJS';
+import { ImageColorModel } from '../../Image';
 
 test('mask 5x5, default options', () => {
   let image = testUtils.createMask([

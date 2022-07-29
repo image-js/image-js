@@ -1,7 +1,7 @@
-import { IJS } from '../../IJS';
+import { Image } from '../../Image';
 
 test('invert with out parameter', () => {
-  const out = new IJS(2, 2);
+  const out = new Image(2, 2);
   const image = testUtils.createRgbImage([
     [1, 2, 3, 5, 6, 7],
     [9, 10, 11, 13, 14, 15],

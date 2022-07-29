@@ -75,7 +75,7 @@ test('small RGB image with true reference and measured colors', () => {
 
   const result = correctColor(image, measuredColors, referenceColors);
 
-  expect(result).toMatchIJSSnapshot();
+  expect(result).toMatchImageSnapshot();
 });
 
 test('modified color balance', () => {
@@ -164,7 +164,7 @@ test('offsets', () => {
   const result = correctColor(image, measuredColors, referenceColors);
 
   // All colors are nearly perfectly corrected, except the gray.
-  expect(result).toMatchIJSSnapshot();
+  expect(result).toMatchImageSnapshot();
 });
 
 test('inverted, black and white pixel', () => {

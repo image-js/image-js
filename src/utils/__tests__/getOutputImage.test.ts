@@ -1,5 +1,5 @@
 import { Mask } from '../..';
-import { IJS, ColorDepth } from '../../IJS';
+import { Image, ColorDepth } from '../../Image';
 import { ImageColorModel } from '../constants/colorModels';
 import {
   getOutputImage,
@@ -59,7 +59,7 @@ describe('getOutputImage', () => {
     expect(out).toMatchImage(img);
   });
   it('should create with requirements', () => {
-    const img = new IJS(1, 2);
+    const img = new Image(1, 2);
     const requirements = {
       colorModel: ImageColorModel.GREY,
     };
@@ -70,11 +70,11 @@ describe('getOutputImage', () => {
   });
 
   it('should accept out with matching requirements', () => {
-    const img = new IJS(1, 2);
+    const img = new Image(1, 2);
     const requirements = {
       colorModel: ImageColorModel.GREY,
     };
-    const correct = new IJS(1, 2, requirements);
+    const correct = new Image(1, 2, requirements);
     const output = getOutputImage(
       img,
       { out: correct },
@@ -84,11 +84,11 @@ describe('getOutputImage', () => {
   });
 
   it('should throw with non-matching requirements', () => {
-    const img = new IJS(1, 2);
+    const img = new Image(1, 2);
     const requirements = {
       colorModel: ImageColorModel.GREY,
     };
-    const incorrect = new IJS(1, 2);
+    const incorrect = new Image(1, 2);
     expect(() =>
       getOutputImage(img, { out: incorrect }, { newParameters: requirements }),
     ).toThrow(
@@ -97,14 +97,14 @@ describe('getOutputImage', () => {
   });
 
   it('should throw if out is not an image', () => {
-    const img = new IJS(1, 2);
+    const img = new Image(1, 2);
     // @ts-expect-error
     expect(() => getOutputImage(img, { out: 'str' })).toThrow(
-      /out must be an IJS object/,
+      /out must be an Image object/,
     );
   });
   it('should keep source origin', () => {
-    const img = new IJS(2, 2, { origin: { row: 1, column: 2 } });
+    const img = new Image(2, 2, { origin: { row: 1, column: 2 } });
     let output = getOutputImage(img, {}, { clone: true });
     expect(output.origin).toStrictEqual(img.origin);
 
@@ -130,22 +130,22 @@ describe('maskToOutputImage', () => {
   });
   it('providing valid out', () => {
     const img = new Mask(1, 2);
-    const out = new IJS(1, 2, { colorModel: ImageColorModel.GREY });
+    const out = new Image(1, 2, { colorModel: ImageColorModel.GREY });
     const output = maskToOutputImage(img, { out });
     expect(output).toBe(out);
   });
   it('providing invalid out', () => {
     const img = new Mask(1, 2);
-    const out = new IJS(2, 2, { colorModel: ImageColorModel.GREY });
+    const out = new Image(2, 2, { colorModel: ImageColorModel.GREY });
     expect(() => {
       maskToOutputImage(img, { out });
     }).toThrow(/cannot use out. Its width property must be 1. Found 2/);
   });
   it('should throw if out is not an image', () => {
-    const img = new IJS(1, 2);
+    const img = new Image(1, 2);
     // @ts-expect-error
     expect(() => maskToOutputImage(img, { out: 'str' })).toThrow(
-      /out must be an IJS object/,
+      /out must be an Image object/,
     );
   });
   it('should keep source origin', () => {
@@ -157,7 +157,7 @@ describe('maskToOutputImage', () => {
 
 describe('imageToOutputMask', () => {
   it('should default to creating an empty mask', () => {
-    const image = new IJS(2, 2);
+    const image = new Image(2, 2);
     const output = imageToOutputMask(image);
     expect(output).toMatchObject({
       width: 2,
@@ -171,27 +171,27 @@ describe('imageToOutputMask', () => {
     ]);
   });
   it('providing valid out', () => {
-    const img = new IJS(1, 2);
+    const img = new Image(1, 2);
     const out = new Mask(1, 2);
     const output = imageToOutputMask(img, { out });
     expect(output).toBe(out);
   });
   it('providing invalid out', () => {
-    const img = new IJS(1, 2);
+    const img = new Image(1, 2);
     const out = new Mask(2, 2);
     expect(() => {
       imageToOutputMask(img, { out });
     }).toThrow(/cannot use out. Its width property must be 1. Found 2/);
   });
   it('should throw if out is not a mask', () => {
-    const img = new IJS(1, 2);
+    const img = new Image(1, 2);
     // @ts-expect-error
     expect(() => imageToOutputMask(img, { out: 'str' })).toThrow(
       /out must be a Mask object/,
     );
   });
   it('should keep source origin', () => {
-    const img = new IJS(1, 2);
+    const img = new Image(1, 2);
     const output = imageToOutputMask(img);
     expect(output.origin).toStrictEqual(img.origin);
   });

@@ -1,4 +1,4 @@
-import { ColorDepth, IJS } from '..';
+import { ColorDepth, Image } from '..';
 import { BorderType } from '../utils/interpolateBorder';
 import {
   PREWITT_X,
@@ -51,9 +51,9 @@ export interface DerivativeFilterOptions {
  * @returns The processed image.
  */
 export function derivativeFilter(
-  image: IJS,
+  image: Image,
   options: DerivativeFilterOptions = {},
-): IJS {
+): Image {
   const { filter = DerivativeFilters.SOBEL } = options;
   let kernelX = SOBEL_X;
   let kernelY = SOBEL_Y;

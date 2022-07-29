@@ -1,10 +1,10 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import checkProcessable from '../utils/checkProcessable';
 import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
 
-export interface DrawPolylineOnIjsOptions {
+export interface DrawPolylineOnImageOptions {
   /**
    * Line color - array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
@@ -20,7 +20,7 @@ export interface DrawPolylineOnIjsOptions {
   /**
    * Image to which the resulting image has to be put.
    */
-  out?: IJS;
+  out?: Image;
 }
 
 /**
@@ -31,11 +31,11 @@ export interface DrawPolylineOnIjsOptions {
  * @param options - Draw polyline options.
  * @returns The image with the polyline drawing.
  */
-export function drawPolylineOnIjs(
-  image: IJS,
+export function drawPolylineOnImage(
+  image: Image,
   points: Point[],
-  options: DrawPolylineOnIjsOptions = {},
-): IJS {
+  options: DrawPolylineOnImageOptions = {},
+): Image {
   const {
     strokeColor: color = getDefaultColor(image),
     origin = { column: 0, row: 0 },

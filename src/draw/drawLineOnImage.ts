@@ -1,12 +1,12 @@
 import { line } from 'bresenham-zingl';
 
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import checkProcessable from '../utils/checkProcessable';
 import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
 
-export interface DrawLineOnIjsOptions {
+export interface DrawLineOnImageOptions {
   /**
    * Color of the line. Should be an array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
@@ -22,7 +22,7 @@ export interface DrawLineOnIjsOptions {
   /**
    * Image to which the resulting image has to be put.
    */
-  out?: IJS;
+  out?: Image;
 }
 
 /**
@@ -34,12 +34,12 @@ export interface DrawLineOnIjsOptions {
  * @param options - Draw Line options.
  * @returns The mask with the line drawing.
  */
-export function drawLineOnIjs(
-  image: IJS,
+export function drawLineOnImage(
+  image: Image,
   from: Point,
   to: Point,
-  options: DrawLineOnIjsOptions = {},
-): IJS {
+  options: DrawLineOnImageOptions = {},
+): Image {
   const newImage = getOutputImage(image, options, { clone: true });
   const {
     strokeColor: color = getDefaultColor(newImage),

@@ -5,16 +5,16 @@ import { mean } from './compute/mean';
 import { median } from './compute/median';
 import { correctColor } from './correctColor';
 import {
-  drawLineOnIjs,
-  drawPolygonOnIjs,
-  drawPolylineOnIjs,
-  drawCircleOnIjs,
-  DrawPolygonOnIjsOptions,
-  DrawPolylineOnIjsOptions,
-  DrawCircleOnIjsOptions,
+  drawLineOnImage,
+  drawPolygonOnImage,
+  drawPolylineOnImage,
+  drawCircleOnImage,
+  DrawPolygonOnImageOptions,
+  DrawPolylineOnImageOptions,
+  DrawCircleOnImageOptions,
   DrawRectangleOptions,
   drawRectangle,
-  DrawLineOnIjsOptions,
+  DrawLineOnImageOptions,
 } from './draw';
 import { drawPoints, DrawPointsOptions } from './draw/drawPoints';
 import {
@@ -68,8 +68,8 @@ import {
   crop,
   CropOptions,
   grey,
-  paintMaskOnIjs,
-  PaintMaskOnIjsOptions,
+  paintMaskOnImage,
+  PaintMaskOnImageOptions,
   split,
 } from './operations';
 import { cropAlpha, CropAlphaOptions } from './operations/cropAlpha';
@@ -148,7 +148,7 @@ export interface CreateFromOptions extends ImageOptions {
 
 export type ImageValues = [number, number, number, number];
 
-export class IJS {
+export class Image {
   /**
    * The number of columns of the image.
    */
@@ -204,7 +204,7 @@ export class IJS {
   private readonly data: ImageDataArray;
 
   /**
-   * Construct a new IJS knowing its dimensions.
+   * Construct a new Image knowing its dimensions.
    *
    * @param width - Image width.
    * @param height - Image height.
@@ -273,24 +273,24 @@ export class IJS {
   }
 
   /**
-   * Create a new IJS based on the properties of an existing one.
+   * Create a new Image based on the properties of an existing one.
    *
    * @param other - Reference image.
    * @param options - Image options.
    * @returns New image.
    */
   public static createFrom(
-    other: IJS | Mask,
+    other: Image | Mask,
     options: CreateFromOptions = {},
-  ): IJS {
+  ): Image {
     const { width = other.width, height = other.height } = options;
     let depth;
-    if (other instanceof IJS) {
+    if (other instanceof Image) {
       depth = other.depth;
     } else {
       depth = ColorDepth.UINT8;
     }
-    return new IJS(width, height, {
+    return new Image(width, height, {
       depth,
       colorModel: other.colorModel,
       origin: other.origin,
@@ -441,7 +441,7 @@ export class IJS {
     } else {
       dataString = printData(this);
     }
-    return `IJS {
+    return `Image {
   width: ${this.width}
   height: ${this.height}
   depth: ${this.depth}
@@ -531,8 +531,8 @@ export class IJS {
    *
    * @returns The image clone.
    */
-  public clone(): IJS {
-    return IJS.createFrom(this, { data: this.data.slice() });
+  public clone(): Image {
+    return Image.createFrom(this, { data: this.data.slice() });
   }
   /**
    * Modify all the values of the image using the given callback.
@@ -609,10 +609,10 @@ export class IJS {
    * Draw a set of points on an image.
    *
    * @param points - Array of points.
-   * @param options - Draw points on IJS options.
+   * @param options - Draw points on Image options.
    * @returns New mask.
    */
-  public drawPoints(points: Point[], options: DrawPointsOptions = {}): IJS {
+  public drawPoints(points: Point[], options: DrawPointsOptions = {}): Image {
     return drawPoints(this, points, options);
   }
 
@@ -627,9 +627,9 @@ export class IJS {
   public drawLine(
     from: Point,
     to: Point,
-    options: DrawLineOnIjsOptions = {},
-  ): IJS {
-    return drawLineOnIjs(this, from, to, options);
+    options: DrawLineOnImageOptions = {},
+  ): Image {
+    return drawLineOnImage(this, from, to, options);
   }
 
   /**
@@ -638,7 +638,7 @@ export class IJS {
    * @param options - Draw rectangle options.
    * @returns The image with the rectangle drawing.
    */
-  public drawRectangle(options: DrawRectangleOptions<IJS> = {}): IJS {
+  public drawRectangle(options: DrawRectangleOptions<Image> = {}): Image {
     return drawRectangle(this, options);
   }
 
@@ -651,9 +651,9 @@ export class IJS {
    */
   public drawPolyline(
     points: Point[],
-    options: DrawPolylineOnIjsOptions = {},
-  ): IJS {
-    return drawPolylineOnIjs(this, points, options);
+    options: DrawPolylineOnImageOptions = {},
+  ): Image {
+    return drawPolylineOnImage(this, points, options);
   }
 
   /**
@@ -665,9 +665,9 @@ export class IJS {
    */
   public drawPolygon(
     points: Point[],
-    options: DrawPolygonOnIjsOptions = {},
-  ): IJS {
-    return drawPolygonOnIjs(this, points, options);
+    options: DrawPolygonOnImageOptions = {},
+  ): Image {
+    return drawPolygonOnImage(this, points, options);
   }
 
   /**
@@ -681,31 +681,31 @@ export class IJS {
   public drawCircle(
     center: Point,
     radius: number,
-    options: DrawCircleOnIjsOptions,
-  ): IJS {
-    return drawCircleOnIjs(this, center, radius, options);
+    options: DrawCircleOnImageOptions,
+  ): Image {
+    return drawCircleOnImage(this, center, radius, options);
   }
   // OPERATIONS
-  public split(): IJS[] {
+  public split(): Image[] {
     return split(this);
   }
 
   public convertColor(
     colorModel: ImageColorModel,
     options?: ConvertColorOptions,
-  ): IJS {
+  ): Image {
     return convertColor(this, colorModel, options);
   }
 
-  public convertDepth(newDepth: ColorDepth): IJS {
+  public convertDepth(newDepth: ColorDepth): Image {
     return convertDepth(this, newDepth);
   }
 
-  public grey(options?: GreyOptions): IJS {
+  public grey(options?: GreyOptions): Image {
     return grey(this, options);
   }
 
-  public copyTo(target: IJS, options: CopyToOptions<IJS> = {}): IJS {
+  public copyTo(target: Image, options: CopyToOptions<Image> = {}): Image {
     return copyTo(this, target, options);
   }
 
@@ -719,7 +719,7 @@ export class IJS {
    * @param [options] - Crop options.
    * @returns The new cropped image
    */
-  public crop(options?: CropOptions): IJS {
+  public crop(options?: CropOptions): Image {
     return crop(this, options);
   }
 
@@ -730,7 +730,7 @@ export class IJS {
    * @param options - Crop alpha options.
    * @returns The cropped image.
    */
-  public cropAlpha(options: CropAlphaOptions = {}): IJS {
+  public cropAlpha(options: CropAlphaOptions = {}): Image {
     return cropAlpha(this, options);
   }
 
@@ -741,7 +741,7 @@ export class IJS {
    * @param options - Extract options.
    * @returns The extracted image.
    */
-  public extract(mask: Mask, options?: ExtractOptions): IJS {
+  public extract(mask: Mask, options?: ExtractOptions): Image {
     return extract(this, mask, options);
   }
 
@@ -752,20 +752,20 @@ export class IJS {
    * @param options - Paint mask options.
    * @returns The painted image.
    */
-  public paintMask(mask: Mask, options?: PaintMaskOnIjsOptions): IJS {
-    return paintMaskOnIjs(this, mask, options);
+  public paintMask(mask: Mask, options?: PaintMaskOnImageOptions): Image {
+    return paintMaskOnImage(this, mask, options);
   }
 
   // FILTERS
 
-  public blur(options: BlurOptions): IJS {
+  public blur(options: BlurOptions): Image {
     return blur(this, options);
   }
 
   public directConvolution(
     kernel: number[][],
     options?: ConvolutionOptions,
-  ): IJS {
+  ): Image {
     return directConvolution(this, kernel, options);
   }
 
@@ -787,7 +787,7 @@ export class IJS {
     kernelX: number[],
     kernelY: number[],
     options?: ConvolutionOptions,
-  ): IJS {
+  ): Image {
     return separableConvolution(this, kernelX, kernelY, options);
   }
 
@@ -797,7 +797,7 @@ export class IJS {
    * @param options - Gaussian blur options.
    * @returns The blurred image.
    */
-  public gaussianBlur(options: GaussianBlurOptions): IJS {
+  public gaussianBlur(options: GaussianBlurOptions): Image {
     return gaussianBlur(this, options);
   }
   /**
@@ -806,7 +806,7 @@ export class IJS {
    * @param options - Flip options
    * @returns The flipped image.
    */
-  public flip(options?: FlipOptions): IJS {
+  public flip(options?: FlipOptions): Image {
     return flip(this, options);
   }
   /**
@@ -815,7 +815,7 @@ export class IJS {
    * @param options - Inversion options
    * @returns The inverted image.
    */
-  public invert(options?: InvertOptions): IJS {
+  public invert(options?: InvertOptions): Image {
     return invert(this, options);
   }
 
@@ -826,7 +826,7 @@ export class IJS {
    * @param options - Inversion options
    * @returns The subtracted image.
    */
-  public subtractImage(other: IJS, options?: SubtractImageOptions): IJS {
+  public subtractImage(other: Image, options?: SubtractImageOptions): Image {
     return subtractImage(this, other, options);
   }
 
@@ -837,7 +837,7 @@ export class IJS {
    * @param options - Hypotenuse options.
    * @returns Hypotenuse of the two images.
    */
-  public hypotenuse(other: IJS, options?: HypotenuseOptions): IJS {
+  public hypotenuse(other: Image, options?: HypotenuseOptions): Image {
     return hypotenuse(this, other, options);
   }
 
@@ -847,7 +847,7 @@ export class IJS {
    * @param options - Gradient filter options.
    * @returns The gradient image.
    */
-  public gradientFilter(options: GradientFilterOptions): IJS {
+  public gradientFilter(options: GradientFilterOptions): Image {
     return gradientFilter(this, options);
   }
 
@@ -857,7 +857,7 @@ export class IJS {
    * @param options - Derivative filter options.
    * @returns The processed image.
    */
-  public derivativeFilter(options?: DerivativeFilterOptions): IJS {
+  public derivativeFilter(options?: DerivativeFilterOptions): Image {
     return derivativeFilter(this, options);
   }
 
@@ -867,7 +867,7 @@ export class IJS {
    * @param options - Level options.
    * @returns The levelled image.
    */
-  public level(options?: LevelOptions): IJS {
+  public level(options?: LevelOptions): Image {
     return level(this, options);
   }
 
@@ -881,24 +881,24 @@ export class IJS {
   public correctColor(
     measuredColors: RgbColor[],
     referenceColors: RgbColor[],
-  ): IJS {
+  ): Image {
     return correctColor(this, measuredColors, referenceColors);
   }
 
   // GEOMETRY
 
-  public rotate(angle: number, options?: RotateOptions): IJS {
+  public rotate(angle: number, options?: RotateOptions): Image {
     return rotate(this, angle, options);
   }
 
-  public resize(options: ResizeOptions): IJS {
+  public resize(options: ResizeOptions): Image {
     return resize(this, options);
   }
 
   public transform(
     transformMatrix: number[][],
     options?: TransformOptions,
-  ): IJS {
+  ): Image {
     return transform(this, transformMatrix, options);
   }
 
@@ -909,7 +909,7 @@ export class IJS {
    * @param options - Erode options.
    * @returns The eroded image.
    */
-  public erode(options?: ErodeOptions): IJS {
+  public erode(options?: ErodeOptions): Image {
     return erode(this, options);
   }
   /**
@@ -918,7 +918,7 @@ export class IJS {
    * @param options - Dilate options.
    * @returns The dilated image.
    */
-  public dilate(options?: DilateOptions): IJS {
+  public dilate(options?: DilateOptions): Image {
     return dilate(this, options);
   }
   /**
@@ -927,7 +927,7 @@ export class IJS {
    * @param options - Open options.
    * @returns The opened image.
    */
-  public open(options?: OpenOptions): IJS {
+  public open(options?: OpenOptions): Image {
     return open(this, options);
   }
 
@@ -937,7 +937,7 @@ export class IJS {
    * @param options - Close options.
    * @returns The closed image.
    */
-  public close(options?: CloseOptions): IJS {
+  public close(options?: CloseOptions): Image {
     return close(this, options);
   }
 
@@ -947,7 +947,7 @@ export class IJS {
    * @param options - Top hat options.
    * @returns The top-hatted image.
    */
-  public topHat(options?: TopHatOptions): IJS {
+  public topHat(options?: TopHatOptions): Image {
     return topHat(this, options);
   }
 
@@ -957,7 +957,7 @@ export class IJS {
    * @param options - Bottom hat options.
    * @returns The bottom-hatted image.
    */
-  public bottomHat(options?: BottomHatOptions): IJS {
+  public bottomHat(options?: BottomHatOptions): Image {
     return bottomHat(this, options);
   }
 
@@ -967,7 +967,7 @@ export class IJS {
    * @param options - morphological gradient options.
    * @returns The processed image.
    */
-  public morphologicalGradient(options?: MorphologicalGradientOptions): IJS {
+  public morphologicalGradient(options?: MorphologicalGradientOptions): Image {
     return morphologicalGradient(this, options);
   }
 
@@ -1028,7 +1028,7 @@ function createPixelArray(
  * @param img - The image instance.
  * @returns Formatted string containing the image data.
  */
-function printData(img: IJS): string {
+function printData(img: Image): string {
   const result = [];
   const padding = img.depth === 8 ? 3 : 5;
 

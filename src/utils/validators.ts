@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 
 /**
  * Validate an array of channels.
@@ -6,7 +6,7 @@ import { IJS } from '../IJS';
  * @param channels - Array of channels.
  * @param image - The image being processed
  */
-export function validateChannels(channels: number[], image: IJS): void {
+export function validateChannels(channels: number[], image: Image): void {
   for (const channel of channels) {
     validateChannel(channel, image);
   }
@@ -18,7 +18,7 @@ export function validateChannels(channels: number[], image: IJS): void {
  * @param channel - Channel index to validate.
  * @param image - The image being processed.
  */
-export function validateChannel(channel: number, image: IJS): void {
+export function validateChannel(channel: number, image: Image): void {
   if (!Number.isInteger(channel) || channel >= image.channels || channel < 0) {
     throw new RangeError(
       `invalid channel: ${channel}. It must be a positive integer smaller than ${image.channels}`,
@@ -32,7 +32,7 @@ export function validateChannel(channel: number, image: IJS): void {
  * @param value - Value to validate.
  * @param image - Image from which the value comes.
  */
-export function validateValue(value: number, image: IJS): void {
+export function validateValue(value: number, image: Image): void {
   if (!Number.isInteger(value) || value > image.maxValue || value < 0) {
     throw new RangeError(
       `invalid value: ${value}. It must be a positive integer smaller than ${

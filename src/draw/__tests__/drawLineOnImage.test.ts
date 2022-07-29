@@ -1,5 +1,5 @@
-import { IJS } from '../../IJS';
-import { drawLineOnIjs } from '../drawLineOnIjs';
+import { Image } from '../../Image';
+import { drawLineOnImage } from '../drawLineOnImage';
 
 test('RGB image', () => {
   const image = testUtils.createRgbImage([
@@ -43,7 +43,7 @@ test('out parameter set to self', () => {
 });
 
 test('out to other image', () => {
-  const out = new IJS(2, 3);
+  const out = new Image(2, 3);
   const image = testUtils.createRgbImage([
     [100, 150, 200, 100, 150, 0],
     [100, 200, 5, 3, 200, 0],
@@ -160,7 +160,7 @@ test('default options', () => {
 
   const from = { row: 0, column: 0 };
   const to = { row: image.height, column: image.width };
-  const result = drawLineOnIjs(image, from, to);
+  const result = drawLineOnImage(image, from, to);
 
   expect(result).toMatchImage(image);
 });

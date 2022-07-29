@@ -1,4 +1,4 @@
-import { ColorDepth, colorModels, IJS, ImageColorModel } from './IJS';
+import { ColorDepth, colorModels, Image, ImageColorModel } from './Image';
 import {
   drawLineOnMask,
   DrawLineOnMaskOptions,
@@ -194,7 +194,7 @@ export class Mask {
    * @returns New mask.
    */
   public static createFrom(
-    other: Mask | IJS,
+    other: Mask | Image,
     options: MaskCreateFromOptions = {},
   ): Mask {
     const {
@@ -342,7 +342,7 @@ export class Mask {
   }
 
   /**
-   * Get the value of a bit. Function exists for compatibility with IJS.
+   * Get the value of a bit. Function exists for compatibility with Image.
    *
    * @param column - Column index.
    * @param row - Row index.
@@ -355,7 +355,7 @@ export class Mask {
   }
 
   /**
-   * Set the value of a bit. Function exists for compatibility with IJS.
+   * Set the value of a bit. Function exists for compatibility with Image.
    *
    * @param column - Column index.
    * @param row - Row index.
@@ -373,7 +373,7 @@ export class Mask {
   }
 
   /**
-   * Get the value of a bit using index. Function exists for compatibility with IJS.
+   * Get the value of a bit using index. Function exists for compatibility with Image.
    *
    * @param index - Index of the pixel.
    * @param channel - Index of the channel, must be zero.
@@ -385,7 +385,7 @@ export class Mask {
   }
 
   /**
-   * Set the value of a bit using index. Function exists for compatibility with IJS.
+   * Set the value of a bit using index. Function exists for compatibility with Image.
    *
    * @param index - Index of the pixel.
    * @param channel - Index of the channel, must be zero.
@@ -439,7 +439,7 @@ export class Mask {
     return this;
   }
 
-  public convertColor(colorModel: ImageColorModel): IJS {
+  public convertColor(colorModel: ImageColorModel): Image {
     return convertColor(this, colorModel);
   }
 
@@ -620,7 +620,7 @@ export class Mask {
    * Draw a set of points on a mask.
    *
    * @param points - Array of points.
-   * @param options - Draw points on IJS options.
+   * @param options - Draw points on Image options.
    * @returns New mask.
    */
   public drawPoints(points: Point[], options: DrawPointsOptions = {}): Mask {

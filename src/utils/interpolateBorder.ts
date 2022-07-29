@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 
 export enum BorderType {
   CONSTANT = 'CONSTANT',
@@ -12,7 +12,7 @@ export type BorderInterpolationFunction = (
   column: number,
   row: number,
   channel: number,
-  image: IJS,
+  image: Image,
 ) => number;
 
 /**
@@ -59,7 +59,7 @@ function getInterpolateConstant(value: number): BorderInterpolationFunction {
     column: number,
     row: number,
     channel: number,
-    image: IJS,
+    image: Image,
   ): number {
     const newColumn = interpolateConstantPoint(column, image.width);
     const newRow = interpolateConstantPoint(row, image.height);
@@ -91,7 +91,7 @@ function interpolateReplicate(
   column: number,
   row: number,
   channel: number,
-  image: IJS,
+  image: Image,
 ): number {
   return image.getValue(
     interpolateReplicatePoint(column, image.width),
@@ -126,7 +126,7 @@ function interpolateReflect(
   column: number,
   row: number,
   channel: number,
-  image: IJS,
+  image: Image,
 ): number {
   return image.getValue(
     interpolateReflectPoint(column, image.width),
@@ -158,7 +158,7 @@ function interpolateWrap(
   column: number,
   row: number,
   channel: number,
-  image: IJS,
+  image: Image,
 ): number {
   return image.getValue(
     interpolateWrapPoint(column, image.width),
@@ -190,7 +190,7 @@ function interpolateReflect101(
   column: number,
   row: number,
   channel: number,
-  image: IJS,
+  image: Image,
 ): number {
   return image.getValue(
     interpolateReflect101Point(column, image.width),

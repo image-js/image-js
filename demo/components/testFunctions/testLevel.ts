@@ -1,4 +1,4 @@
-import { IJS } from '../../../src';
+import { Image } from '../../../src';
 
 /**
  * Enhance contrast of the source image using level.
@@ -6,7 +6,7 @@ import { IJS } from '../../../src';
  * @param image - Input image.
  * @returns The treated image.
  */
-export function testLevel(image: IJS): IJS {
+export function testLevel(image: Image): Image {
   return image.level({
     inputMin: 50,
     inputMax: 200,

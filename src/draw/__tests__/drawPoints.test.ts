@@ -1,4 +1,4 @@
-import { IJS, ImageColorModel } from '../../IJS';
+import { Image, ImageColorModel } from '../../Image';
 import { drawPoints } from '../drawPoints';
 
 test('RGB image', () => {
@@ -73,7 +73,7 @@ test('out parameter set to self', () => {
 });
 
 test('out to other image', () => {
-  const out = new IJS(4, 4, { colorModel: ImageColorModel.GREY });
+  const out = new Image(4, 4, { colorModel: ImageColorModel.GREY });
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0],
     [0, 0, 0, 0],

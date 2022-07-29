@@ -1,5 +1,5 @@
 import { decodeJpeg } from '..';
-import { ColorDepth } from '../../IJS';
+import { ColorDepth } from '../../Image';
 import { ImageColorModel } from '../../utils/constants/colorModels';
 
 const tests = [['grey6'], ['grey12'], ['rgb6'], ['rgb12']] as const;

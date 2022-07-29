@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 
 import { ClampFunction } from './clamp';
 import { BorderInterpolationFunction } from './interpolateBorder';
@@ -11,7 +11,7 @@ export enum InterpolationType {
 }
 
 type InterpolationFunction = (
-  image: IJS,
+  image: Image,
   column: number,
   row: number,
   channel: number,
@@ -55,7 +55,7 @@ export function getInterpolationFunction(
  * @returns The interpolated value.
  */
 function interpolateNearest(
-  image: IJS,
+  image: Image,
   column: number,
   row: number,
   channel: number,
@@ -78,7 +78,7 @@ function interpolateNearest(
  * @returns The interpolated value.
  */
 function interpolateBilinear(
-  image: IJS,
+  image: Image,
   column: number,
   row: number,
   channel: number,
@@ -116,7 +116,7 @@ function interpolateBilinear(
  * @returns The interpolated value.
  */
 function interpolateBicubic(
-  image: IJS,
+  image: Image,
   column: number,
   row: number,
   channel: number,

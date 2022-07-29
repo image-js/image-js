@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { Mask } from '../Mask';
 import checkProcessable from '../utils/checkProcessable';
 import { Point } from '../utils/geometry/points';
@@ -42,9 +42,9 @@ export interface DrawRectangleOptions<OutType> {
 }
 
 export function drawRectangle(
-  image: IJS,
-  options?: DrawRectangleOptions<IJS>,
-): IJS;
+  image: Image,
+  options?: DrawRectangleOptions<Image>,
+): Image;
 export function drawRectangle(
   image: Mask,
   options?: DrawRectangleOptions<Mask>,
@@ -57,9 +57,9 @@ export function drawRectangle(
  * @returns The image with the rectangle drawing.
  */
 export function drawRectangle(
-  image: IJS | Mask,
-  options: DrawRectangleOptions<Mask | IJS> = {},
-): IJS | Mask {
+  image: Image | Mask,
+  options: DrawRectangleOptions<Mask | Image> = {},
+): Image | Mask {
   const {
     origin = { column: 0, row: 0 },
     width = image.width,
@@ -69,8 +69,8 @@ export function drawRectangle(
   } = options;
   const { column, row } = origin;
 
-  let newImage: IJS | Mask;
-  if (image instanceof IJS) {
+  let newImage: Image | Mask;
+  if (image instanceof Image) {
     checkProcessable(image, 'drawRectangle', {
       bitDepth: [8, 16],
     });

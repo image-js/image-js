@@ -1,5 +1,5 @@
 import { decode } from '..';
-import { ColorDepth } from '../../IJS';
+import { ColorDepth } from '../../Image';
 import { ImageColorModel } from '../../utils/constants/colorModels';
 
 test('auto decode png', async () => {

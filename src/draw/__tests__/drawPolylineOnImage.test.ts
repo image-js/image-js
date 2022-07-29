@@ -1,5 +1,5 @@
-import { IJS } from '../../IJS';
-import { drawPolylineOnIjs } from '../drawPolylineOnIjs';
+import { Image } from '../../Image';
+import { drawPolylineOnImage } from '../drawPolylineOnImage';
 
 test('RGB image', () => {
   const image = testUtils.createRgbImage([
@@ -45,7 +45,7 @@ test('out parameter set to self', () => {
 });
 
 test('out to other image', () => {
-  const out = new IJS(2, 4);
+  const out = new Image(2, 4);
   const image = testUtils.createRgbImage([
     [100, 150, 200, 100, 150, 0],
     [100, 200, 5, 3, 200, 0],
@@ -109,7 +109,7 @@ test('default options', () => {
     { row: 0, column: 0 },
     { row: image.height, column: image.width },
   ];
-  const result = drawPolylineOnIjs(image, points);
+  const result = drawPolylineOnImage(image, points);
 
   expect(result).toMatchImageData([
     [0, 10, 10, 10],

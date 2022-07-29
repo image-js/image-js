@@ -1,4 +1,4 @@
-import { IJS } from '../../../src';
+import { Image } from '../../../src';
 import { polishAltered } from '../../../src/correctColor/__tests__/testUtils/imageColors';
 import { referenceColorCard } from '../../../src/correctColor/__tests__/testUtils/referenceColorCard';
 import { correctColor } from '../../../src/correctColor/correctColor';
@@ -13,7 +13,7 @@ import {
  * @param image - Input image.
  * @returns The treated image.
  */
-export function testCorrectColor(image: IJS): IJS {
+export function testCorrectColor(image: Image): Image {
   const measuredColors = getMeasuredColors(polishAltered);
   const referenceColors = getReferenceColors(referenceColorCard);
   console.log('correct color');

@@ -1,4 +1,4 @@
-import { IJS } from '..';
+import { Image } from '..';
 import checkProcessable from '../utils/checkProcessable';
 import { validateChannels } from '../utils/validators';
 
@@ -24,10 +24,10 @@ export interface HypotenuseOptions {
  * @returns Hypotenuse of the two images.
  */
 export function hypotenuse(
-  image: IJS,
-  otherImage: IJS,
+  image: Image,
+  otherImage: Image,
   options: HypotenuseOptions = {},
-): IJS {
+): Image {
   let { depth = image.depth, channels = [] } = options;
 
   for (let i = 0; i < image.components; i++) {
@@ -54,7 +54,7 @@ export function hypotenuse(
 
   validateChannels(channels, image);
 
-  let newImage = IJS.createFrom(image, { depth });
+  let newImage = Image.createFrom(image, { depth });
 
   for (const channel of channels) {
     for (let i = 0; i < image.size; i++) {

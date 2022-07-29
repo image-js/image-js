@@ -1,4 +1,4 @@
-import { fromMask, IJS, ImageColorModel } from '../../../src';
+import { fromMask, Image, ImageColorModel } from '../../../src';
 import { RoiKind } from '../../../src/roi/getRois';
 
 /**
@@ -7,8 +7,8 @@ import { RoiKind } from '../../../src/roi/getRois';
  * @param image - Input image.
  * @returns The treated image.
  */
-export function testExtract(image: IJS): IJS {
-  const background = new IJS(image.width, image.height, {
+export function testExtract(image: Image): Image {
+  const background = new Image(image.width, image.height, {
     colorModel: ImageColorModel.RGBA,
   });
 
@@ -27,7 +27,7 @@ export function testExtract(image: IJS): IJS {
  * @param image - The image from which to extract the ROI.
  * @returns - The extracted ROI.
  */
-export function testExtractRoi(image: IJS): IJS {
+export function testExtractRoi(image: Image): Image {
   const grey = image.convertColor(ImageColorModel.GREY);
   const mask = grey.threshold();
 

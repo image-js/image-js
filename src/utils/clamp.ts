@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 
 export type ClampFunction = (value: number) => number;
 
@@ -8,7 +8,7 @@ export type ClampFunction = (value: number) => number;
  * @param image - The image for which the clamp function is needed.
  * @returns The clamp function.
  */
-export function getClamp(image: IJS): ClampFunction {
+export function getClamp(image: Image): ClampFunction {
   if (image.maxValue === 255) {
     return clamp255;
   }

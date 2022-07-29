@@ -1,11 +1,11 @@
-import { fromMask, IJS, ImageColorModel } from '../../../src';
+import { fromMask, Image, ImageColorModel } from '../../../src';
 import { RoiKind } from '../../../src/roi/getRois';
 /**
  * Paint the border of the larger black ROI on the image.
  * @param image The image to process
  * @returns The processed image.
  */
-export function testGetContourMask(image: IJS): IJS {
+export function testGetContourMask(image: Image): Image {
   const grey = image.convertColor(ImageColorModel.GREY);
   const mask = grey.threshold();
 

@@ -1,15 +1,15 @@
 import robustPointInPolygon from 'robust-point-in-polygon';
 
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { arrayPointsToObjects } from '../utils/arrayPointsToObjects';
 import checkProcessable from '../utils/checkProcessable';
 import { Point } from '../utils/geometry/points';
 import { getOutputImage } from '../utils/getOutputImage';
 
-import { DrawPolylineOnIjsOptions } from './drawPolylineOnIjs';
+import { DrawPolylineOnImageOptions } from './drawPolylineOnImage';
 import { deleteDuplicates } from './utils/deleteDuplicates';
 
-export interface DrawPolygonOnIjsOptions extends DrawPolylineOnIjsOptions {
+export interface DrawPolygonOnImageOptions extends DrawPolylineOnImageOptions {
   /**
    * Fill color - array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
@@ -31,11 +31,11 @@ export interface DrawPolygonOnIjsOptions extends DrawPolylineOnIjsOptions {
  * @param options - Draw Line options.
  * @returns The image with the polygon drawing.
  */
-export function drawPolygonOnIjs(
-  image: IJS,
+export function drawPolygonOnImage(
+  image: Image,
   points: Point[],
-  options: DrawPolygonOnIjsOptions = {},
-): IJS {
+  options: DrawPolygonOnImageOptions = {},
+): Image {
   const {
     fillColor,
     origin = { column: 0, row: 0 },

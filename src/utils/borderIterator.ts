@@ -1,4 +1,4 @@
-import { Mask, IJS } from '..';
+import { Mask, Image } from '..';
 
 /**
  * Create function that allows to iterate on the pixels of the border of an image.
@@ -6,7 +6,7 @@ import { Mask, IJS } from '..';
  * @param image - Image for which to create the border iterator.
  * @yields - Index of the border pixel.
  */
-export function* borderIterator(image: IJS | Mask) {
+export function* borderIterator(image: Image | Mask) {
   for (let col = 0; col < image.width; col++) {
     yield col;
   }

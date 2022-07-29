@@ -1,11 +1,11 @@
-import { IJS } from '../../src';
+import { Image } from '../../src';
 
 import CameraSelector from './CameraSelector';
 import CameraTransform from './CameraTransform';
 import Container from './Container';
 import { testGetMbr } from './testFunctions/testGetMbr';
 
-function testTransform(image: IJS) {
+function testTransform(image: Image) {
   image.flip({ out: image });
   return testGetMbr(image);
 }

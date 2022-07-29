@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { BorderType } from '../utils/interpolateBorder';
 
 import { separableConvolution } from './convolution';
@@ -13,7 +13,7 @@ interface GaussianBlurBaseOptions {
   /**
    * Image to which the resulting image has to be put.
    */
-  out?: IJS;
+  out?: Image;
 }
 
 export interface GaussianBlurSigmaOptions extends GaussianBlurBaseOptions {
@@ -72,7 +72,10 @@ function getRadius(size: number): number {
  * @param options - Gaussian blur options.
  * @returns The blurred image.
  */
-export function gaussianBlur(image: IJS, options: GaussianBlurOptions): IJS {
+export function gaussianBlur(
+  image: Image,
+  options: GaussianBlurOptions,
+): Image {
   if ('sigma' in options) {
     const { sigma, size = getSize(sigma) } = options;
     const radius = getRadius(size);

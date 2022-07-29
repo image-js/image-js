@@ -1,7 +1,7 @@
 import { decode } from 'tiff';
 
 import { ImageColorModel } from '..';
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 
 type TiffIfd = ReturnType<typeof decode>[number];
 
@@ -11,7 +11,7 @@ type TiffIfd = ReturnType<typeof decode>[number];
  * @param buffer - The data to decode.
  * @returns The decoded image.
  */
-export function decodeTiff(buffer: Uint8Array): IJS {
+export function decodeTiff(buffer: Uint8Array): Image {
   let result = decode(buffer);
   return getImageFromIFD(result[0]);
   // TODO: handle stacks (many IFDs)
@@ -23,7 +23,7 @@ export function decodeTiff(buffer: Uint8Array): IJS {
  * @param ifd - The IFD.
  * @returns The decoded image.
  */
-function getImageFromIFD(ifd: TiffIfd): IJS {
+function getImageFromIFD(ifd: TiffIfd): Image {
   if (ifd.type === 3) {
     // Palette
     const data = new Uint16Array(3 * ifd.width * ifd.height);
@@ -35,7 +35,7 @@ function getImageFromIFD(ifd: TiffIfd): IJS {
       data[ptr++] = color[1];
       data[ptr++] = color[2];
     }
-    return new IJS(ifd.width, ifd.height, {
+    return new Image(ifd.width, ifd.height, {
       data,
       // TODO: handle alpha properly
       colorModel: ifd.alpha ? ImageColorModel.RGBA : ImageColorModel.RGB,
@@ -45,7 +45,7 @@ function getImageFromIFD(ifd: TiffIfd): IJS {
       //meta: getMetadata(ifd),
     });
   } else {
-    return new IJS(ifd.width, ifd.height, {
+    return new Image(ifd.width, ifd.height, {
       // TODO: handle float data
       // @ts-expect-error float data not handled yet
       data: ifd.data,

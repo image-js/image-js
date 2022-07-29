@@ -1,7 +1,7 @@
 import { RgbColor } from 'colord';
 import MLR from 'ml-regression-multivariate-linear';
 
-import { IJS, ImageColorModel } from '../IJS';
+import { Image, ImageColorModel } from '../Image';
 import checkProcessable from '../utils/checkProcessable';
 import { getClamp } from '../utils/clamp';
 
@@ -18,10 +18,10 @@ import { formatInputForMlr, formatReferenceForMlr } from './utils/formatData';
  * @returns Image with the colors corrected.
  */
 export function correctColor(
-  image: IJS,
+  image: Image,
   measuredColors: RgbColor[],
   referenceColors: RgbColor[],
-): IJS {
+): Image {
   checkProcessable(image, 'correctColor', {
     colorModel: [ImageColorModel.RGB, ImageColorModel.RGBA],
   });
@@ -39,7 +39,7 @@ export function correctColor(
   const mlrGreen = new MLR(inputData, referenceData.g);
   const mlrBlue = new MLR(inputData, referenceData.b);
 
-  const result = IJS.createFrom(image);
+  const result = Image.createFrom(image);
 
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {

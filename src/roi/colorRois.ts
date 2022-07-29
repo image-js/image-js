@@ -1,4 +1,4 @@
-import { IJS, ImageColorModel } from '..';
+import { Image, ImageColorModel } from '..';
 
 import { RoiKind } from './getRois';
 import { colorMapCenter } from './utils/constants';
@@ -46,11 +46,11 @@ export interface ColorRoisOptions {
 export function colorRois(
   roiMapManager: RoiMapManager,
   options: ColorRoisOptions = {},
-): IJS {
+): Image {
   const { roiKind = RoiKind.BW, mode = RoisColorMode.BINARY } = options;
   const map = roiMapManager.getMap();
 
-  let image = new IJS(map.width, map.height, {
+  let image = new Image(map.width, map.height, {
     colorModel: ImageColorModel.RGBA,
   });
 

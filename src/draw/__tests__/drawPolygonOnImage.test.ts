@@ -1,5 +1,5 @@
-import { IJS, ImageColorModel } from '../../IJS';
-import { drawPolygonOnIjs } from '../drawPolygonOnIjs';
+import { Image, ImageColorModel } from '../../Image';
+import { drawPolygonOnImage } from '../drawPolygonOnImage';
 
 test('RGB image', () => {
   const image = testUtils.createRgbImage([
@@ -45,7 +45,7 @@ test('out parameter set to self', () => {
 });
 
 test('out to other image', () => {
-  const out = new IJS(2, 3);
+  const out = new Image(2, 3);
   const image = testUtils.createRgbImage([
     [100, 150, 200, 100, 150, 0],
     [100, 200, 5, 3, 200, 0],
@@ -135,7 +135,7 @@ test('grey image, no fill', () => {
 });
 
 test('3x3 image, tilted square, filled', () => {
-  const image = new IJS(3, 3, { colorModel: ImageColorModel.GREY });
+  const image = new Image(3, 3, { colorModel: ImageColorModel.GREY });
   const points = [
     { column: 0, row: 1 },
     { column: 1, row: 2 },
@@ -156,7 +156,7 @@ test('3x3 image, tilted square, filled', () => {
 });
 
 test('5x5 image, tilted square, filled', () => {
-  const image = new IJS(5, 5, { colorModel: ImageColorModel.GREY });
+  const image = new Image(5, 5, { colorModel: ImageColorModel.GREY });
   const points = [
     { column: 0, row: 2 },
     { column: 2, row: 4 },
@@ -265,7 +265,7 @@ test('default options', () => {
     { row: 0, column: 0 },
     { row: image.height, column: image.width },
   ];
-  const result = drawPolygonOnIjs(image, points);
+  const result = drawPolygonOnImage(image, points);
 
   expect(result).toMatchImageData([
     [0, 10, 10, 10],

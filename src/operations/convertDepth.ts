@@ -1,4 +1,4 @@
-import { IJS, ColorDepth } from '../IJS';
+import { Image, ColorDepth } from '../Image';
 
 /**
  * Convert the color depth of an image.
@@ -7,7 +7,7 @@ import { IJS, ColorDepth } from '../IJS';
  * @param newDepth - Depth to convert to.
  * @returns Converted image.
  */
-export function convertDepth(image: IJS, newDepth: ColorDepth): IJS {
+export function convertDepth(image: Image, newDepth: ColorDepth): Image {
   if (image.depth === newDepth) {
     throw new Error('convertDepth: cannot convert image to same depth');
   }
@@ -25,8 +25,8 @@ export function convertDepth(image: IJS, newDepth: ColorDepth): IJS {
  * @param image - Image to convert.
  * @returns Converted image.
  */
-function convertToUint16(image: IJS): IJS {
-  const newImage = new IJS(image.width, image.height, {
+function convertToUint16(image: Image): Image {
+  const newImage = new Image(image.width, image.height, {
     depth: ColorDepth.UINT16,
     colorModel: image.colorModel,
     origin: image.origin,
@@ -46,8 +46,8 @@ function convertToUint16(image: IJS): IJS {
  * @param image - Image to convert.
  * @returns Converted image.
  */
-function convertToUint8(image: IJS): IJS {
-  const newImage = new IJS(image.width, image.height, {
+function convertToUint8(image: Image): Image {
+  const newImage = new Image(image.width, image.height, {
     depth: ColorDepth.UINT8,
     colorModel: image.colorModel,
     origin: image.origin,

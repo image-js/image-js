@@ -1,4 +1,4 @@
-import { ImageColorModel } from '../../IJS';
+import { ImageColorModel } from '../../Image';
 import { fromMask } from '../../roi';
 import { RoiKind } from '../../roi/getRois';
 import { angle } from '../../utils/geometry/angles';
@@ -230,5 +230,5 @@ test('draw mbr on large image', () => {
     strokeColor: [0, 255, 0, 255],
   });
 
-  expect(result).toMatchIJSSnapshot();
+  expect(result).toMatchImageSnapshot();
 });

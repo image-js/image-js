@@ -1,4 +1,4 @@
-import { ColorDepth, IJS, Mask } from '..';
+import { ColorDepth, Image, Mask } from '..';
 import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
 
@@ -18,7 +18,7 @@ export interface OpenOptions {
   iterations?: number;
 }
 
-export function open(image: IJS, options?: OpenOptions): IJS;
+export function open(image: Image, options?: OpenOptions): Image;
 export function open(image: Mask, options?: OpenOptions): Mask;
 /**
  * In mathematical morphology, opening is the dilation of the erosion of a set A by a structuring element B.
@@ -31,7 +31,10 @@ export function open(image: Mask, options?: OpenOptions): Mask;
  * @param options - Open options
  * @returns The opened image
  */
-export function open(image: IJS | Mask, options: OpenOptions = {}): IJS | Mask {
+export function open(
+  image: Image | Mask,
+  options: OpenOptions = {},
+): Image | Mask {
   let {
     kernel = [
       [1, 1, 1],
@@ -41,7 +44,7 @@ export function open(image: IJS | Mask, options: OpenOptions = {}): IJS | Mask {
     iterations = 1,
   } = options;
 
-  if (image instanceof IJS) {
+  if (image instanceof Image) {
     checkProcessable(image, 'open', {
       bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
       components: 1,

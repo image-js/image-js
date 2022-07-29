@@ -167,5 +167,5 @@ test('larger image', () => {
   const image = testUtils.load('various/grayscale_by_zimmyrose.png');
   const mask = image.threshold();
   const cleared = mask.clearBorder();
-  expect(cleared).toMatchIJSSnapshot();
+  expect(cleared).toMatchImageSnapshot();
 });

@@ -1,4 +1,4 @@
-import { IJS, ImageColorModel } from '../../../src';
+import { Image, ImageColorModel } from '../../../src';
 
 /**
  * Copy a black and a red square to the source image.
@@ -6,15 +6,15 @@ import { IJS, ImageColorModel } from '../../../src';
  * @param image - Input image.
  * @returns The treated image.
  */
-export function testCopyTo(image: IJS): IJS {
+export function testCopyTo(image: Image): Image {
   let result = image.copyTo(image, {
     origin: {
       row: image.height / 2,
       column: image.width / 2,
     },
   });
-  let blackSquare = new IJS(50, 50, { colorModel: ImageColorModel.RGBA });
-  let redSquare = new IJS(150, 150, { colorModel: ImageColorModel.RGBA });
+  let blackSquare = new Image(50, 50, { colorModel: ImageColorModel.RGBA });
+  let redSquare = new Image(150, 150, { colorModel: ImageColorModel.RGBA });
   redSquare.fillChannel(0, 255);
   redSquare.fillAlpha(100);
   result = blackSquare.copyTo(result, {

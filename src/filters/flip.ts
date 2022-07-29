@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { getOutputImage } from '../utils/getOutputImage';
 
 import flipX from './flipX';
@@ -14,7 +14,7 @@ export interface FlipOptions {
   /**
    * Image to which the resulting image has to be put.
    */
-  out?: IJS;
+  out?: Image;
 }
 
 /**
@@ -25,7 +25,7 @@ export interface FlipOptions {
  * @param options - Flip options.
  * @returns - The processed image.
  */
-export function flip(image: IJS, options: FlipOptions = {}): IJS {
+export function flip(image: Image, options: FlipOptions = {}): Image {
   const { axis = 'horizontal' } = options;
   let newImage = getOutputImage(image, options, { clone: true });
   if (axis === 'horizontal') {

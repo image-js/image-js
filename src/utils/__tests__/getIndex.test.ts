@@ -1,4 +1,4 @@
-import { IJS, Mask } from '../..';
+import { Image, Mask } from '../..';
 import { ImageColorModel } from '../constants/colorModels';
 import { getIndex } from '../getIndex';
 
@@ -21,7 +21,7 @@ test('mask, check specific values', () => {
 });
 
 test('image, check specific values', () => {
-  let image = new IJS(3, 4, { colorModel: ImageColorModel.RGB });
+  let image = new Image(3, 4, { colorModel: ImageColorModel.RGB });
 
   expect(getIndex(1, 1, image, 0)).toBe(12);
   expect(getIndex(1, 2, image, 1)).toBe(22);

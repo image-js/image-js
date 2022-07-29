@@ -1,4 +1,4 @@
-import { ColorDepth, IJS, ImageColorModel } from '..';
+import { ColorDepth, Image, ImageColorModel } from '..';
 import checkProcessable from '../utils/checkProcessable';
 import { BorderType } from '../utils/interpolateBorder';
 
@@ -60,9 +60,9 @@ export type GradientFilterOptions =
  * @returns The gradient image.
  */
 export function gradientFilter(
-  image: IJS,
+  image: Image,
   options: GradientFilterOptions,
-): IJS {
+): Image {
   const { borderType = BorderType.REPLICATE, borderValue = 0 } = options;
 
   checkProcessable(image, 'gradientFilter', {
@@ -82,7 +82,7 @@ export function gradientFilter(
       borderValue,
     });
 
-    let gradient = new IJS(image.width, image.height, {
+    let gradient = new Image(image.width, image.height, {
       colorModel: ImageColorModel.GREY,
     });
 

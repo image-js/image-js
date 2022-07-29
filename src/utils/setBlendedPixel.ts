@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { Mask } from '../Mask';
 
 import { assert } from './assert';
@@ -22,7 +22,7 @@ export interface SetBlendedPixelOptions {
  * @param options - Set blended pixel options.
  */
 export function setBlendedPixel(
-  image: IJS | Mask,
+  image: Image | Mask,
   column: number,
   row: number,
   options: SetBlendedPixelOptions = {},
@@ -32,7 +32,7 @@ export function setBlendedPixel(
   if (!image.alpha) {
     image.setPixel(column, row, color);
   } else {
-    assert(image instanceof IJS);
+    assert(image instanceof Image);
 
     const sourceAlpha = color[color.length - 1];
 

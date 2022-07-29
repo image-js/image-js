@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import checkProcessable from '../utils/checkProcessable';
 import { getClamp } from '../utils/clamp';
 import { getOutputImage } from '../utils/getOutputImage';
@@ -45,7 +45,7 @@ export interface LevelOptions {
   /**
    * Image to which to output.
    */
-  out?: IJS;
+  out?: Image;
 }
 
 /**
@@ -55,7 +55,7 @@ export interface LevelOptions {
  * @param options - Level options.
  * @returns The levelled image.
  */
-export function level(image: IJS, options: LevelOptions = {}) {
+export function level(image: Image, options: LevelOptions = {}) {
   let {
     inputMin = 0,
     inputMax = image.maxValue,

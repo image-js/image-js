@@ -1,11 +1,11 @@
-import { fromMask, IJS, ImageColorModel } from '../../../src';
+import { fromMask, Image, ImageColorModel } from '../../../src';
 import { RoiKind } from '../../../src/roi/getRois';
 /**
  * Make the image translucent, excepted where the largest black ROI is.
  * @param image Image to process.
  * @returns Processed image.
  */
-export function testPaintMask(image: IJS): IJS {
+export function testPaintMask(image: Image): Image {
   const grey = image.convertColor(ImageColorModel.GREY);
   const mask = grey.threshold({ threshold: 100 });
 

@@ -1,4 +1,4 @@
-import { IJS } from '..';
+import { Image } from '..';
 
 /**
  * Converts R, G and B values to a single value using Luma 709 standard({@link https://en.wikipedia.org/wiki/Luma_(video)}).
@@ -118,7 +118,7 @@ export function black(
   red: number,
   green: number,
   blue: number,
-  image: IJS,
+  image: Image,
 ): number {
   return Math.min(
     image.maxValue - red,
@@ -139,7 +139,7 @@ export function cyan(
   red: number,
   green: number,
   blue: number,
-  image: IJS,
+  image: Image,
 ): number {
   let blackColor = black(red, green, blue, image);
   return (
@@ -160,7 +160,7 @@ export function magenta(
   red: number,
   green: number,
   blue: number,
-  image: IJS,
+  image: Image,
 ): number {
   let blackColor = black(red, green, blue, image);
   return (
@@ -182,7 +182,7 @@ export function yellow(
   red: number,
   green: number,
   blue: number,
-  image: IJS,
+  image: Image,
 ): number {
   let blackColor = black(red, green, blue, image);
   return (
@@ -204,7 +204,7 @@ export function hue(
   red: number,
   green: number,
   blue: number,
-  image: IJS,
+  image: Image,
 ): number {
   let minValue = min(red, green, blue);
   let maxValue = max(red, green, blue);
@@ -243,7 +243,7 @@ export function saturation(
   red: number,
   green: number,
   blue: number,
-  image: IJS,
+  image: Image,
 ): number {
   // from HSV model
   let minValue = min(red, green, blue);

@@ -1,4 +1,4 @@
-import { IJS, ImageColorModel, Mask } from '..';
+import { Image, ImageColorModel, Mask } from '..';
 import { GaussianBlurOptions } from '../filters';
 import checkProcessable from '../utils/checkProcessable';
 import { getIndex } from '../utils/getIndex';
@@ -55,7 +55,7 @@ const kernelY = [
  * @returns The processed image.
  */
 export function cannyEdgeDetector(
-  image: IJS,
+  image: Image,
   options: CannyEdgeOptions = {},
 ): Mask {
   const {

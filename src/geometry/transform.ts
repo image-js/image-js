@@ -1,6 +1,6 @@
 import { inverse, Matrix } from 'ml-matrix';
 
-import { IJS, ImageCoordinates } from '../IJS';
+import { Image, ImageCoordinates } from '../Image';
 import { getClamp } from '../utils/clamp';
 import { getBorderInterpolation, BorderType } from '../utils/interpolateBorder';
 import {
@@ -56,10 +56,10 @@ export interface TransformOptions {
  * @returns The new image.
  */
 export function transform(
-  image: IJS,
+  image: Image,
   transformMatrix: number[][],
   options: TransformOptions = {},
-): IJS {
+): Image {
   const {
     borderType = BorderType.CONSTANT,
     borderValue = 0,
@@ -125,7 +125,7 @@ export function transform(
     transformMatrix = [transformMatrix[0], transformMatrix[1], [0, 0, 1]];
     transformMatrix = inverse(new Matrix(transformMatrix)).to2DArray();
   }
-  const newImage = IJS.createFrom(image, {
+  const newImage = Image.createFrom(image, {
     width,
     height,
   });

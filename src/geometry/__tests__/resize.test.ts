@@ -1,4 +1,4 @@
-import { ImageColorModel } from '../../IJS';
+import { ImageColorModel } from '../../Image';
 import { encodePng, writeSync } from '../../save';
 
 test.skip('compares result of resize with opencv', () => {

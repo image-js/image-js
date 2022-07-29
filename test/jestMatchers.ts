@@ -6,7 +6,7 @@ import {
   configureToMatchImageSnapshot,
 } from 'jest-image-snapshot';
 
-import { encodePng, IJS, ImageColorModel } from '../src';
+import { encodePng, Image, ImageColorModel } from '../src';
 import { Mask } from '../src/Mask';
 
 import { TestImagePath } from './TestImagePath';
@@ -37,8 +37,8 @@ export interface JestMatcherOptions {
  */
 export function toMatchImage(
   this: jest.MatcherContext,
-  received: IJS,
-  expected: IJS | TestImagePath,
+  received: Image,
+  expected: Image | TestImagePath,
   options: JestMatcherOptions = {},
 ): MatcherResult {
   const { error = 0 } = options;
@@ -56,32 +56,30 @@ export function toMatchImage(
     errorString = `Expected image depth to be ${expectedImage.depth}, but got ${received.depth}`;
   } else if (received.colorModel !== expectedImage.colorModel) {
     errorString = `Expected image color model to be ${expectedImage.colorModel}, but got ${received.colorModel}`;
-  } else {
-    if (error === 0) {
-      rowsLoop: for (let row = 0; row < received.height; row++) {
-        for (let col = 0; col < received.width; col++) {
-          const receivedPixel = received.getPixel(col, row);
-          const expectedPixel = expectedImage.getPixel(col, row);
-          if (!this.equals(receivedPixel, expectedPixel)) {
-            errorString = `Expected pixel at (${col}, ${row}) to be [${expectedPixel.join(
-              ', ',
-            )}], but got [${receivedPixel.join(', ')}]`;
-            break rowsLoop;
-          }
+  } else if (error === 0) {
+    rowsLoop: for (let row = 0; row < received.height; row++) {
+      for (let col = 0; col < received.width; col++) {
+        const receivedPixel = received.getPixel(col, row);
+        const expectedPixel = expectedImage.getPixel(col, row);
+        if (!this.equals(receivedPixel, expectedPixel)) {
+          errorString = `Expected pixel at (${col}, ${row}) to be [${expectedPixel.join(
+            ', ',
+          )}], but got [${receivedPixel.join(', ')}]`;
+          break rowsLoop;
         }
       }
-    } else {
-      rowsLoop: for (let row = 0; row < received.height; row++) {
-        for (let col = 0; col < received.width; col++) {
-          for (let channel = 0; channel < received.channels; channel++) {
-            const receivedValue = received.getValue(col, row, channel);
-            const expectedValue = expectedImage.getValue(col, row, channel);
-            if (Math.abs(receivedValue - expectedValue) > error) {
-              errorString = `Expected value at (${col}, ${row}) to be in range [${
-                expectedValue - error
-              },${expectedValue + error}], but got ${receivedValue}`;
-              break rowsLoop;
-            }
+    }
+  } else {
+    rowsLoop: for (let row = 0; row < received.height; row++) {
+      for (let col = 0; col < received.width; col++) {
+        for (let channel = 0; channel < received.channels; channel++) {
+          const receivedValue = received.getValue(col, row, channel);
+          const expectedValue = expectedImage.getValue(col, row, channel);
+          if (Math.abs(receivedValue - expectedValue) > error) {
+            errorString = `Expected value at (${col}, ${row}) to be in range [${
+              expectedValue - error
+            },${expectedValue + error}], but got ${receivedValue}`;
+            break rowsLoop;
           }
         }
       }
@@ -105,7 +103,7 @@ export function toMatchImage(
  */
 export function toMatchImageData(
   this: jest.MatcherContext,
-  received: IJS,
+  received: Image,
   expectedData: number[][] | string,
   options: JestMatcherOptions = {},
 ): MatcherResult {
@@ -126,7 +124,7 @@ export function toMatchImageData(
 export function toMatchMask(
   this: jest.MatcherContext,
   received: Mask,
-  expected: IJS | Mask,
+  expected: Image | Mask,
 ): MatcherResult {
   let error: string | null = null;
 
@@ -173,27 +171,34 @@ export function toMatchMaskData(
   return toMatchMask.call(this, received, expectedMask);
 }
 
-export const toMatchImageSnapshot = configureToMatchImageSnapshot({});
+const toMatchImageFileSnapshot = configureToMatchImageSnapshot({});
 
 /**
- * Snapshot matching with IJS objects.
+ * Snapshot matching with Image objects.
  *
  * @param this - Jest matcher context.
  * @param received - Received image.
  * @param options - Options.
  * @returns - Jest matcher result.
  */
-export function toMatchIJSSnapshot(
+export function toMatchImageSnapshot(
   this: jest.MatcherContext,
-  received: IJS | Mask,
+  received: Image | Mask | Uint8Array,
   options?: MatchImageSnapshotOptions,
 ): MatcherResult {
-  const receivedImage =
-    received instanceof Mask
-      ? received.convertColor(ImageColorModel.GREY)
-      : received;
-  const png = encodePng(receivedImage);
+  let png: Uint8Array;
+
+  if (ArrayBuffer.isView(received)) {
+    png = received;
+  } else {
+    const receivedImage =
+      received instanceof Mask
+        ? received.convertColor(ImageColorModel.GREY)
+        : received;
+    png = encodePng(receivedImage);
+  }
+
   const buffer = Buffer.from(png.buffer, png.byteOffset, png.byteLength);
   // @ts-expect-error The public types doesn't correspond to the implementation.
-  return toMatchImageSnapshot.call(this, buffer, options);
+  return toMatchImageFileSnapshot.call(this, buffer, options);
 }

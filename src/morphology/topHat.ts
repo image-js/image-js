@@ -1,4 +1,4 @@
-import { ColorDepth, IJS, Mask } from '..';
+import { ColorDepth, Image, Mask } from '..';
 import { subtractImage } from '../filters';
 import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
@@ -19,7 +19,7 @@ export interface TopHatOptions {
   iterations?: number;
 }
 
-export function topHat(image: IJS, options?: TopHatOptions): IJS;
+export function topHat(image: Image, options?: TopHatOptions): Image;
 export function topHat(image: Mask, options?: TopHatOptions): Mask;
 /**
  * This function is the white top hat (also called top hat). In mathematical morphology and digital image processing,
@@ -33,9 +33,9 @@ export function topHat(image: Mask, options?: TopHatOptions): Mask;
  * @returns The top-hatted image
  */
 export function topHat(
-  image: IJS | Mask,
+  image: Image | Mask,
   options: TopHatOptions = {},
-): IJS | Mask {
+): Image | Mask {
   let {
     kernel = [
       [1, 1, 1],
@@ -45,7 +45,7 @@ export function topHat(
     iterations = 1,
   } = options;
 
-  if (image instanceof IJS) {
+  if (image instanceof Image) {
     checkProcessable(image, 'topHat', {
       bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
       components: 1,

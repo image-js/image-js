@@ -1,6 +1,6 @@
 import { circle } from 'bresenham-zingl';
 
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import checkProcessable from '../utils/checkProcessable';
 import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
@@ -8,7 +8,7 @@ import { getOutputImage } from '../utils/getOutputImage';
 
 // Inspired by https://www.geeksforgeeks.org/bresenhams-circle-drawing-algorithm/
 
-export interface DrawCircleOnIjsOptions {
+export interface DrawCircleOnImageOptions {
   /**
    * Circle border color array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
@@ -24,7 +24,7 @@ export interface DrawCircleOnIjsOptions {
   /**
    * Image to which the resulting image has to be put.
    */
-  out?: IJS;
+  out?: Image;
 }
 
 /**
@@ -37,12 +37,12 @@ export interface DrawCircleOnIjsOptions {
  * @param options - Draw circle options.
  * @returns The original drawn image
  */
-export function drawCircleOnIjs(
-  image: IJS,
+export function drawCircleOnImage(
+  image: Image,
   center: Point,
   radius: number,
-  options: DrawCircleOnIjsOptions = {},
-): IJS {
+  options: DrawCircleOnImageOptions = {},
+): Image {
   const newImage = getOutputImage(image, options, { clone: true });
   const { color = getDefaultColor(newImage), fill } = options;
   checkProcessable(newImage, 'paintPoints', {

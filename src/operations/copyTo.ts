@@ -1,4 +1,4 @@
-import { IJS, Mask, Point } from '..';
+import { Image, Mask, Point } from '..';
 import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage';
 import { setBlendedPixel } from '../utils/setBlendedPixel';
 
@@ -16,10 +16,10 @@ export interface CopyToOptions<OutType> {
 }
 
 export function copyTo(
-  source: IJS,
-  target: IJS,
-  options?: CopyToOptions<IJS>,
-): IJS;
+  source: Image,
+  target: Image,
+  options?: CopyToOptions<Image>,
+): Image;
 export function copyTo(
   source: Mask,
   target: Mask,
@@ -34,10 +34,10 @@ export function copyTo(
  * @returns The target with the source copied to it.
  */
 export function copyTo(
-  source: IJS | Mask,
-  target: IJS | Mask,
-  options: CopyToOptions<IJS | Mask> = {},
-): IJS | Mask {
+  source: Image | Mask,
+  target: Image | Mask,
+  options: CopyToOptions<Image | Mask> = {},
+): Image | Mask {
   const { origin = { column: 0, row: 0 } } = options;
   const { column, row } = origin;
 
@@ -45,8 +45,8 @@ export function copyTo(
     throw new Error('Source and target should have the same color model.');
   }
 
-  let result: IJS | Mask;
-  if (target instanceof IJS) {
+  let result: Image | Mask;
+  if (target instanceof Image) {
     result = getOutputImage(target, options, { clone: true });
   } else {
     result = maskToOutputMask(target, options, { clone: true });

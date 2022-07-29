@@ -1,6 +1,6 @@
-import { IJS, Mask } from '..';
+import { Image, Mask } from '..';
 
-export function copyData(source: IJS, target: IJS): void;
+export function copyData(source: Image, target: Image): void;
 export function copyData(source: Mask, target: Mask): void;
 /**
  * Copy the data of an source to the target image.
@@ -8,7 +8,7 @@ export function copyData(source: Mask, target: Mask): void;
  * @param source - Image which data is copied.
  * @param target - Image to which the data must be copied.
  */
-export function copyData(source: IJS | Mask, target: IJS | Mask): void {
+export function copyData(source: Image | Mask, target: Image | Mask): void {
   if (
     target.width !== source.width ||
     target.height !== source.height ||

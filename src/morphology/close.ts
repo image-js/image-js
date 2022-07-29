@@ -1,4 +1,4 @@
-import { ColorDepth, IJS, Mask } from '..';
+import { ColorDepth, Image, Mask } from '..';
 import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
 
@@ -18,7 +18,7 @@ export interface CloseOptions {
   iterations?: number;
 }
 
-export function close(image: IJS, options?: CloseOptions): IJS;
+export function close(image: Image, options?: CloseOptions): Image;
 export function close(image: Mask, options?: CloseOptions): Mask;
 /**
  * In mathematical morphology, the closing of a set A by a structuring element B is the erosion of the dilation of that set (Wikipedia).
@@ -31,9 +31,9 @@ export function close(image: Mask, options?: CloseOptions): Mask;
  * @returns Closed image.
  */
 export function close(
-  image: IJS | Mask,
+  image: Image | Mask,
   options: CloseOptions = {},
-): IJS | Mask {
+): Image | Mask {
   let {
     kernel = [
       [1, 1, 1],
@@ -43,7 +43,7 @@ export function close(
     iterations = 1,
   } = options;
 
-  if (image instanceof IJS) {
+  if (image instanceof Image) {
     checkProcessable(image, 'close', {
       bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
       components: 1,

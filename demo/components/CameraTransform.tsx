@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { IJS, ImageColorModel, readCanvas, writeCanvas } from '../../src';
+import { Image, ImageColorModel, readCanvas, writeCanvas } from '../../src';
 import { convertColor } from '../../src/operations/convertColor';
 import { useCameraContext } from '../contexts/cameraContext';
 
 import ErrorAlert from './ErrorAlert';
 import UnavailableCamera from './UnavailableCamera';
 
-type TransformFunction = (image: IJS) => IJS;
+type TransformFunction = (image: Image) => Image;
 
 interface CameraTransformProps {
   transform: TransformFunction;

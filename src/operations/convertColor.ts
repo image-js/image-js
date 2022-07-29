@@ -1,4 +1,4 @@
-import { IJS, ImageColorModel } from '../IJS';
+import { Image, ImageColorModel } from '../Image';
 import { Mask } from '../Mask';
 import { getOutputImage, maskToOutputImage } from '../utils/getOutputImage';
 
@@ -6,7 +6,7 @@ export interface ConvertColorOptions {
   /**
    * Image to which to output.
    */
-  out?: IJS;
+  out?: Image;
 }
 
 /**
@@ -18,10 +18,10 @@ export interface ConvertColorOptions {
  * @returns The converted image.
  */
 export function convertColor(
-  image: IJS | Mask,
+  image: Image | Mask,
   colorModel: ImageColorModel,
   options: ConvertColorOptions = {},
-): IJS {
+): Image {
   const canConvert = new Map([
     [
       ImageColorModel.GREY,
@@ -53,7 +53,7 @@ export function convertColor(
     );
   }
 
-  if (image instanceof IJS) {
+  if (image instanceof Image) {
     const output = getOutputImage(image, options, {
       newParameters: { colorModel },
     });
@@ -101,7 +101,7 @@ export function convertColor(
  * @param source - Source image.
  * @param dest - Destination image.
  */
-export function copyAlpha(source: IJS, dest: IJS): void {
+export function copyAlpha(source: Image, dest: Image): void {
   if (source.size !== dest.size) {
     throw new Error('source and destination have different sizes');
   }
@@ -127,7 +127,7 @@ export function copyAlpha(source: IJS, dest: IJS): void {
  * @param image - Image to convert.
  * @param newImage - Converted image.
  */
-function convertGreyToAny(image: IJS, newImage: IJS): void {
+function convertGreyToAny(image: Image, newImage: Image): void {
   for (let i = 0; i < image.size; i++) {
     for (let j = 0; j < newImage.components; j++) {
       newImage.setValueByIndex(i, j, image.getValueByIndex(i, 0));
@@ -141,7 +141,7 @@ function convertGreyToAny(image: IJS, newImage: IJS): void {
  * @param image - Image to convert.
  * @param newImage - Converted image.
  */
-function convertRgbToRgb(image: IJS, newImage: IJS): void {
+function convertRgbToRgb(image: Image, newImage: Image): void {
   for (let i = 0; i < image.size; i++) {
     for (let j = 0; j < 3; j++) {
       newImage.setValueByIndex(i, j, image.getValueByIndex(i, j));
@@ -155,7 +155,7 @@ function convertRgbToRgb(image: IJS, newImage: IJS): void {
  * @param image - Image to convert.
  * @param newImage - Converted image.
  */
-function convertRgbToGrey(image: IJS, newImage: IJS): void {
+function convertRgbToGrey(image: Image, newImage: Image): void {
   for (let i = 0; i < image.size; i++) {
     const r = image.getValueByIndex(i, 0);
     const g = image.getValueByIndex(i, 1);
@@ -174,7 +174,7 @@ function convertRgbToGrey(image: IJS, newImage: IJS): void {
  * @param mask - Mask to convert.
  * @param newImage - Converted image.
  */
-export function convertBinaryToGrey(mask: Mask, newImage: IJS): void {
+export function convertBinaryToGrey(mask: Mask, newImage: Image): void {
   for (let i = 0; i < mask.size; i++) {
     newImage.setValueByIndex(
       i,

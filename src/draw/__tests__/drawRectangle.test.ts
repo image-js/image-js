@@ -1,4 +1,4 @@
-import { IJS } from '../../IJS';
+import { Image } from '../../Image';
 import { drawRectangle } from '../drawRectangle';
 
 test('RGB image', () => {
@@ -45,7 +45,7 @@ test('out parameter set to self', () => {
 });
 
 test('out to other image', () => {
-  const out = new IJS(2, 3);
+  const out = new Image(2, 3);
   const image = testUtils.createRgbImage([
     [100, 150, 200, 100, 150, 0],
     [100, 200, 5, 3, 200, 0],

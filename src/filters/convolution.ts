@@ -4,7 +4,7 @@ import {
 } from 'ml-convolution';
 import { Matrix } from 'ml-matrix';
 
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { getClamp, ClampFunction } from '../utils/clamp';
 import { getIndex } from '../utils/getIndex';
 import { getOutputImage } from '../utils/getOutputImage';
@@ -37,7 +37,7 @@ export interface ConvolutionOptions {
   /**
    * Image to which to output.
    */
-  out?: IJS;
+  out?: Image;
 }
 
 /**
@@ -49,10 +49,10 @@ export interface ConvolutionOptions {
  * @returns The convoluted image.
  */
 export function directConvolution(
-  image: IJS,
+  image: Image,
   kernel: number[][],
   options: ConvolutionOptions = {},
-): IJS {
+): Image {
   const { borderType = BorderType.REFLECT_101, borderValue = 0 } = options;
 
   const convolutedData = rawDirectConvolution(image, kernel, {
@@ -83,7 +83,7 @@ export function directConvolution(
  * @returns Array with the raw convoluted values.
  */
 export function rawDirectConvolution(
-  image: IJS,
+  image: Image,
   kernel: number[][],
   options: ConvolutionOptions = {},
 ): Float64Array {
@@ -122,11 +122,11 @@ export function rawDirectConvolution(
  * @returns The convoluted image.
  */
 export function separableConvolution(
-  image: IJS,
+  image: Image,
   kernelX: number[],
   kernelY: number[],
   options: ConvolutionOptions = {},
-): IJS {
+): Image {
   const {
     normalize,
     borderType = BorderType.REFLECT_101,
@@ -145,7 +145,7 @@ export function separableConvolution(
 
   const cutWidth = width - doubleKernelOffsetX;
 
-  const newImage = IJS.createFrom(image);
+  const newImage = Image.createFrom(image);
   const clamp = getClamp(newImage);
 
   const rowConvolution = new DirectConvolution(
@@ -301,7 +301,7 @@ export function computeConvolutionValue(
   column: number,
   row: number,
   channel: number,
-  image: IJS,
+  image: Image,
   kernel: number[][],
   interpolateBorder: BorderInterpolationFunction,
   options: ComputeConvolutionValueOptions = {},

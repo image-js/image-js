@@ -1,6 +1,6 @@
 import { RgbColor } from 'colord';
 
-import { IJS } from '../../IJS';
+import { Image } from '../../Image';
 
 /**
  * Extract the colors of an image in order to use them for color correction. Should be used on small images only (smaller than 10x10 pixels), because it is these colors that will be used in the model (MLR).
@@ -8,7 +8,7 @@ import { IJS } from '../../IJS';
  * @param image - Image from which to get the colors.
  * @returns Array of colors.
  */
-export function getImageColors(image: IJS): RgbColor[] {
+export function getImageColors(image: Image): RgbColor[] {
   let colors: RgbColor[] = [];
 
   for (let row = 0; row < image.height; row++) {

@@ -1,4 +1,4 @@
-import { fromMask, IJS, ImageColorModel } from '../../../src';
+import { fromMask, Image, ImageColorModel } from '../../../src';
 import { RoiKind } from '../../../src/roi/getRois';
 
 /**
@@ -7,7 +7,7 @@ import { RoiKind } from '../../../src/roi/getRois';
  * @param image - Input image.
  * @returns The image with the MBR.
  */
-export function testGetMbr(image: IJS): IJS {
+export function testGetMbr(image: Image): Image {
   const grey = image.convertColor(ImageColorModel.GREY);
   const mask = grey.threshold({ threshold: 35 });
   const roiMapManager = fromMask(mask);

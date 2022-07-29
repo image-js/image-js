@@ -1,6 +1,6 @@
 import { encode, PngEncoderOptions } from 'fast-png';
 
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 
 export type EncodePngOptions = PngEncoderOptions;
 
@@ -11,6 +11,9 @@ export type EncodePngOptions = PngEncoderOptions;
  * @param options - PNG encoding options.
  * @returns The buffer.
  */
-export function encodePng(image: IJS, options?: EncodePngOptions): Uint8Array {
+export function encodePng(
+  image: Image,
+  options?: EncodePngOptions,
+): Uint8Array {
   return encode(image.getRawImage(), options);
 }

@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 
 import { readCanvas } from './readCanvas';
 
@@ -8,7 +8,7 @@ import { readCanvas } from './readCanvas';
  * @param img - Image source such as an <img> or <svg> element.
  * @returns The read image.
  */
-export function readImg(img: CanvasImageSource): IJS {
+export function readImg(img: CanvasImageSource): Image {
   const canvas = document.createElement('canvas');
   canvas.width = img.width as number;
   canvas.height = img.height as number;

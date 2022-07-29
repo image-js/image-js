@@ -1,4 +1,4 @@
-import { ColorDepth, IJS, Mask } from '..';
+import { ColorDepth, Image, Mask } from '..';
 import { subtractImage } from '../filters';
 import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
@@ -19,7 +19,7 @@ export interface BottomHatOptions {
   iterations?: number;
 }
 
-export function bottomHat(image: IJS, options?: BottomHatOptions): IJS;
+export function bottomHat(image: Image, options?: BottomHatOptions): Image;
 export function bottomHat(image: Mask, options?: BottomHatOptions): Mask;
 /**
  * This function is the black top hat (also called bottom hat).
@@ -35,9 +35,9 @@ export function bottomHat(image: Mask, options?: BottomHatOptions): Mask;
  * @returns The bottom-hatted image
  */
 export function bottomHat(
-  image: IJS | Mask,
+  image: Image | Mask,
   options: BottomHatOptions = {},
-): IJS | Mask {
+): Image | Mask {
   let {
     kernel = [
       [1, 1, 1],
@@ -47,7 +47,7 @@ export function bottomHat(
     iterations = 1,
   } = options;
 
-  if (image instanceof IJS) {
+  if (image instanceof Image) {
     checkProcessable(image, 'bottomHat', {
       bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
       components: 1,

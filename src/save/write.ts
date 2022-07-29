@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { Mask, IJS, ImageColorModel } from '..';
+import { Mask, Image, ImageColorModel } from '..';
 
 import {
   encode,
@@ -15,14 +15,14 @@ import {
  * The file format is determined automatically from the file's extension.
  * If the extension is not supported, an error will be thrown.
  */
-export async function write(path: string, image: IJS | Mask): Promise<void>;
+export async function write(path: string, image: Image | Mask): Promise<void>;
 /**
  * Write an image to the disk as PNG.
  * When the `png` format is specified, the file's extension doesn't matter.
  */
 export async function write(
   path: string,
-  image: IJS | Mask,
+  image: Image | Mask,
   options: EncodeOptionsPng,
 ): Promise<void>;
 /**
@@ -31,7 +31,7 @@ export async function write(
  */
 export async function write(
   path: string,
-  image: IJS | Mask,
+  image: Image | Mask,
   options: EncodeOptionsJpeg,
 ): Promise<void>;
 /**
@@ -43,7 +43,7 @@ export async function write(
  */
 export async function write(
   path: string,
-  image: IJS | Mask,
+  image: Image | Mask,
   options?: EncodeOptionsPng | EncodeOptionsJpeg,
 ): Promise<void> {
   if (image instanceof Mask) {
@@ -62,7 +62,7 @@ export async function write(
  */
 export function writeSync(
   path: string,
-  image: IJS | Mask,
+  image: Image | Mask,
   options?: EncodeOptionsPng | EncodeOptionsJpeg,
 ): void {
   if (image instanceof Mask) {
@@ -82,7 +82,7 @@ export function writeSync(
  */
 function getDataToWrite(
   destinationPath: string,
-  image: IJS,
+  image: Image,
   options?: EncodeOptionsPng | EncodeOptionsJpeg,
 ): Uint8Array {
   let format: ImageFormat;

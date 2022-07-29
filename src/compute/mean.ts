@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 
 /**
  * Compute the mean pixel of an image. The mean is computed on each channel individually.
@@ -6,7 +6,7 @@ import { IJS } from '../IJS';
  * @param image - Image to process.
  * @returns The mean pixel.
  */
-export function mean(image: IJS): number[] {
+export function mean(image: Image): number[] {
   let pixel = new Array(image.channels).fill(0);
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {

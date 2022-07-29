@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import checkProcessable from '../utils/checkProcessable';
 
 export interface CropAlphaOptions {
@@ -16,7 +16,7 @@ export interface CropAlphaOptions {
  * @param options - Crop alpha options.
  * @returns The cropped image.
  */
-export function cropAlpha(image: IJS, options: CropAlphaOptions = {}): IJS {
+export function cropAlpha(image: Image, options: CropAlphaOptions = {}): Image {
   checkProcessable(image, 'cropAlpha', {
     alpha: true,
   });
@@ -42,7 +42,7 @@ export function cropAlpha(image: IJS, options: CropAlphaOptions = {}): IJS {
   });
 }
 
-function findLeft(image: IJS, threshold: number, channel: number) {
+function findLeft(image: Image, threshold: number, channel: number) {
   for (let row = 0; row < image.width; row++) {
     for (let column = 0; column < image.height; column++) {
       if (image.getValue(row, column, channel) >= threshold) {
@@ -53,7 +53,12 @@ function findLeft(image: IJS, threshold: number, channel: number) {
   return -1;
 }
 
-function findTop(image: IJS, threshold: number, channel: number, left: number) {
+function findTop(
+  image: Image,
+  threshold: number,
+  channel: number,
+  left: number,
+) {
   for (let row = 0; row < image.height; row++) {
     for (let column = left; column < image.width; column++) {
       if (image.getValue(column, row, channel) >= threshold) {
@@ -66,7 +71,7 @@ function findTop(image: IJS, threshold: number, channel: number, left: number) {
 }
 
 function findBottom(
-  image: IJS,
+  image: Image,
   threshold: number,
   channel: number,
   left: number,
@@ -83,7 +88,7 @@ function findBottom(
 }
 
 function findRight(
-  image: IJS,
+  image: Image,
   threshold: number,
   channel: number,
   left: number,

@@ -1,6 +1,6 @@
 import {
   ColorDepth,
-  IJS,
+  Image,
   ImageColorModel,
   ImageDataArray,
   ImageOptions,
@@ -10,7 +10,7 @@ import { colorModels } from '../src/utils/constants/colorModels';
 export type CreateImageOptions = Pick<ImageOptions, 'depth'>;
 
 /**
- * Create a new IJS object from image data.
+ * Create a new Image object from image data.
  *
  * @param data - Image data.
  * @param colorModel - Image color model.
@@ -21,7 +21,7 @@ export function createImageFromData(
   data: number[][] | string,
   colorModel: ImageColorModel,
   options: CreateImageOptions = {},
-): IJS {
+): Image {
   const { depth = ColorDepth.UINT8 } = options;
   if (Array.isArray(data)) {
     return createImageFrom2DArray(data, colorModel, depth);
@@ -31,7 +31,7 @@ export function createImageFromData(
 }
 
 /**
- * Create a new IJS object from a 2D matrix.
+ * Create a new Image object from a 2D matrix.
  *
  * @param data - Image data.
  * @param colorModel - Image color model.
@@ -42,7 +42,7 @@ function createImageFrom2DArray(
   data: number[][],
   colorModel: ImageColorModel,
   depth: ColorDepth,
-): IJS {
+): Image {
   const { channels } = colorModels[colorModel];
   const height = data.length;
   const width = data[0].length / channels;
@@ -68,7 +68,7 @@ function createImageFrom2DArray(
       }
     }
   }
-  return new IJS(width, height, {
+  return new Image(width, height, {
     depth,
     colorModel,
     data: imageData,
@@ -76,7 +76,7 @@ function createImageFrom2DArray(
 }
 
 /**
- * Create a new IJS object from data encoded in a string.
+ * Create a new Image object from data encoded in a string.
  *
  * @param data - Image data.
  * @param colorModel - Image color model.
@@ -87,7 +87,7 @@ function createImageFromString(
   data: string,
   colorModel: ImageColorModel,
   depth: ColorDepth,
-): IJS {
+): Image {
   const { channels } = colorModels[colorModel];
   const trimmed = data.trim();
   const lines = trimmed.split('\n');
@@ -117,7 +117,7 @@ function createImageFromString(
       }
     }
   }
-  return new IJS(width, height, {
+  return new Image(width, height, {
     depth,
     colorModel,
     data: imageData,

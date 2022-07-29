@@ -1,4 +1,4 @@
-import { IJS, ImageColorModel } from '../../../src';
+import { Image, ImageColorModel } from '../../../src';
 import { fromMask, RoisColorMode, colorRois } from '../../../src/roi';
 import { RoiKind } from '../../../src/roi/getRois';
 
@@ -8,7 +8,7 @@ import { RoiKind } from '../../../src/roi/getRois';
  * @param image - Input image.
  * @returns The treated image.
  */
-export function testColorRois(image: IJS): IJS {
+export function testColorRois(image: Image): Image {
   const grey = image.convertColor(ImageColorModel.GREY);
   const mask = grey.threshold();
 
@@ -20,7 +20,7 @@ export function testColorRois(image: IJS): IJS {
   });
 
   // create a black image
-  const black = new IJS(image.width, image.height, {
+  const black = new Image(image.width, image.height, {
     colorModel: ImageColorModel.RGBA,
   });
   // overlay ROIs on the black image

@@ -1,4 +1,4 @@
-import { IJS, ImageColorModel } from '../IJS';
+import { Image, ImageColorModel } from '../Image';
 
 export interface WriteCanvasOptions {
   /**
@@ -41,7 +41,7 @@ export interface WriteCanvasOptions {
  * @param options - Write canvas options.
  */
 export function writeCanvas(
-  image: IJS,
+  image: Image,
   canvas: HTMLCanvasElement,
   options: WriteCanvasOptions = {},
 ): void {

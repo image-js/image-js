@@ -1,5 +1,5 @@
 import { decodePng } from '..';
-import { ColorDepth } from '../../IJS';
+import { ColorDepth } from '../../Image';
 import { ImageColorModel } from '../../utils/constants/colorModels';
 
 const tests = [

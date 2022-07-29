@@ -1,5 +1,5 @@
 import { ColorDepth, Mask } from '..';
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
 
@@ -19,11 +19,11 @@ export interface ErodeOptions {
   iterations?: number;
 }
 
-export function erode(image: IJS, options?: ErodeOptions): IJS;
+export function erode(image: Image, options?: ErodeOptions): Image;
 export function erode(image: Mask, options?: ErodeOptions): Mask;
 /**
  * Erosion is one of two fundamental operations (with dilatation) in morphological
- * IJS processing from which all other morphological operations are based (from Wikipedia).
+ * Image processing from which all other morphological operations are based (from Wikipedia).
  * Replaces each value with it's local minimum among the pixels with a kernel value of 1.
  * http://docs.opencv.org/2.4/doc/tutorials/imgproc/erosion_dilatation/erosion_dilatation.html
  * https://en.wikipedia.org/wiki/Erosion_(morphology)
@@ -33,9 +33,9 @@ export function erode(image: Mask, options?: ErodeOptions): Mask;
  * @returns - The eroded image.
  */
 export function erode(
-  image: IJS | Mask,
+  image: Image | Mask,
   options: ErodeOptions = {},
-): IJS | Mask {
+): Image | Mask {
   let defaultKernel = false;
   if (options.kernel === undefined) {
     defaultKernel = true;
@@ -50,7 +50,7 @@ export function erode(
     iterations = 1,
   } = options;
 
-  if (image instanceof IJS) {
+  if (image instanceof Image) {
     checkProcessable(image, 'erode', {
       bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
       components: 1,
@@ -88,7 +88,7 @@ export function erode(
         result = erodeMask(result, newImage, kernel);
       }
     } else if (onlyOnes) {
-      const newImage = IJS.createFrom(image);
+      const newImage = Image.createFrom(image);
       result = erodeGreyOnlyOnes(
         result,
         newImage,
@@ -96,14 +96,14 @@ export function erode(
         kernel.length,
       );
     } else {
-      const newImage = IJS.createFrom(image);
+      const newImage = Image.createFrom(image);
       result = erodeGrey(result, newImage, kernel);
     }
   }
   return result;
 }
 
-function erodeGrey(img: IJS, newImage: IJS, kernel: number[][]): IJS {
+function erodeGrey(img: Image, newImage: Image, kernel: number[][]): Image {
   const kernelWidth = kernel[0].length;
   const kernelHeight = kernel.length;
   let radiusX = (kernelWidth - 1) / 2;
@@ -135,11 +135,11 @@ function erodeGrey(img: IJS, newImage: IJS, kernel: number[][]): IJS {
 }
 
 function erodeGreyOnlyOnes(
-  image: IJS,
-  newImage: IJS,
+  image: Image,
+  newImage: Image,
   kernelWidth: number,
   kernelHeight: number,
-): IJS {
+): Image {
   const radiusX = (kernelWidth - 1) / 2;
   const radiusY = (kernelHeight - 1) / 2;
 

@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { getClamp } from '../utils/clamp';
 import { getBorderInterpolation, BorderType } from '../utils/interpolateBorder';
 import {
@@ -54,14 +54,14 @@ export interface ResizeOptions {
  * @param options - Resize options.
  * @returns The new image.
  */
-export function resize(image: IJS, options: ResizeOptions): IJS {
+export function resize(image: Image, options: ResizeOptions): Image {
   const {
     interpolationType = InterpolationType.BILINEAR,
     borderType = BorderType.CONSTANT,
     borderValue = 0,
   } = options;
   const { width, height } = checkOptions(image, options);
-  const newImage = IJS.createFrom(image, { width, height });
+  const newImage = Image.createFrom(image, { width, height });
   const interpolate = getInterpolationFunction(interpolationType);
   const interpolateBorder = getBorderInterpolation(borderType, borderValue);
   const clamp = getClamp(newImage);
@@ -95,7 +95,7 @@ export function resize(image: IJS, options: ResizeOptions): IJS {
  * @returns Resize options.
  */
 function checkOptions(
-  image: IJS,
+  image: Image,
   options: ResizeOptions,
 ): { width: number; height: number; xFactor: number; yFactor: number } {
   const {

@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { validateChannel } from '../utils/validators';
 
 export interface HistogramOptions {
@@ -20,7 +20,7 @@ export interface HistogramOptions {
  * @returns - The histogram.
  */
 export function histogram(
-  image: IJS,
+  image: Image,
   options: HistogramOptions = {},
 ): Uint32Array {
   let { channel } = options;

@@ -1,5 +1,5 @@
 import { Mask } from '..';
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { imageToOutputMask } from '../utils/getOutputImage';
 import { validateValue } from '../utils/validators';
 
@@ -72,7 +72,7 @@ export type ThresholdOptions =
  * @returns The threshold value for the image.
  */
 export function computeThreshold(
-  image: IJS,
+  image: Image,
   algorithm: ThresholdAlgorithm = ThresholdAlgorithm.OTSU,
 ): number {
   if (image.channels !== 1) {
@@ -126,7 +126,7 @@ export function computeThreshold(
  * @param options - Threshold options.
  * @returns The resulting mask.
  */
-export function threshold(image: IJS, options: ThresholdOptions = {}): Mask {
+export function threshold(image: Image, options: ThresholdOptions = {}): Mask {
   let thresholdValue: number;
   if ('threshold' in options) {
     thresholdValue = options.threshold;

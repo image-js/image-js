@@ -1,5 +1,5 @@
 import { encodeJpeg } from '..';
-import { ColorDepth } from '../../IJS';
+import { ColorDepth } from '../../Image';
 import { decode } from '../../load/decode';
 import { ImageColorModel } from '../../utils/constants/colorModels';
 

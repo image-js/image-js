@@ -1,8 +1,8 @@
-import { ColorDepth, IJS, ImageColorModel } from '../../IJS';
+import { ColorDepth, Image, ImageColorModel } from '../../Image';
 import { getClamp } from '../clamp';
 
 test("clamp 65'536", () => {
-  const image = new IJS(2, 1, {
+  const image = new Image(2, 1, {
     colorModel: ImageColorModel.GREY,
     depth: ColorDepth.UINT16,
   });

@@ -106,5 +106,5 @@ test('larger image', () => {
   const image = testUtils.load('morphology/alphabetCannyEdge.png');
   const mask = image.threshold();
   const flooded = mask.floodFill();
-  expect(flooded).toMatchIJSSnapshot();
+  expect(flooded).toMatchImageSnapshot();
 });

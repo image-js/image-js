@@ -1,11 +1,11 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { Mask } from '../Mask';
 import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
 import { setBlendedPixel } from '../utils/setBlendedPixel';
 
-export interface PaintMaskOnIjsOptions {
+export interface PaintMaskOnImageOptions {
   /**
    * Top-left corner of the mask relative to a parent image.
    *
@@ -27,7 +27,7 @@ export interface PaintMaskOnIjsOptions {
   /**
    * Image to which to output.
    */
-  out?: IJS;
+  out?: Image;
 }
 
 /**
@@ -38,11 +38,11 @@ export interface PaintMaskOnIjsOptions {
  * @param options - Paint mask options.
  * @returns The painted image.
  */
-export function paintMaskOnIjs(
-  image: IJS,
+export function paintMaskOnImage(
+  image: Image,
   mask: Mask,
-  options: PaintMaskOnIjsOptions = {},
-): IJS {
+  options: PaintMaskOnImageOptions = {},
+): Image {
   const {
     origin = { row: 0, column: 0 },
     color = getDefaultColor(image),

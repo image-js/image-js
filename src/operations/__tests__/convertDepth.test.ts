@@ -1,4 +1,4 @@
-import { ColorDepth } from '../../IJS';
+import { ColorDepth } from '../../Image';
 import { ImageColorModel } from '../../utils/constants/colorModels';
 
 test('Uint8 to Uint16', () => {

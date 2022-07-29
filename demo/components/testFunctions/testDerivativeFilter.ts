@@ -1,4 +1,4 @@
-import { DerivativeFilters, IJS, ImageColorModel } from '../../../src';
+import { DerivativeFilters, Image, ImageColorModel } from '../../../src';
 
 /**
  * Apply a derivative filter to the source image.
@@ -6,7 +6,7 @@ import { DerivativeFilters, IJS, ImageColorModel } from '../../../src';
  * @param image - Input image.
  * @returns The treated image.
  */
-export function testDerivativeFilter(image: IJS): IJS {
+export function testDerivativeFilter(image: Image): Image {
   image = image.convertColor(ImageColorModel.GREY);
   return image.derivativeFilter({ filter: DerivativeFilters.PREWITT });
 }

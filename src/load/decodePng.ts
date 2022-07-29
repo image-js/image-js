@@ -1,6 +1,6 @@
 import { decode, DecodedPng } from 'fast-png';
 
-import { IJS, ImageColorModel, ColorDepth } from '../IJS';
+import { Image, ImageColorModel, ColorDepth } from '../Image';
 
 /**
  * Decode a PNG. See the fast-png npm module.
@@ -8,7 +8,7 @@ import { IJS, ImageColorModel, ColorDepth } from '../IJS';
  * @param buffer - The data to decode.
  * @returns The decoded image.
  */
-export function decodePng(buffer: Uint8Array): IJS {
+export function decodePng(buffer: Uint8Array): Image {
   const png = decode(buffer);
 
   let colorModel: ImageColorModel;
@@ -35,7 +35,7 @@ export function decodePng(buffer: Uint8Array): IJS {
     default:
       throw new Error(`Unexpected number of channels: ${png.channels}`);
   }
-  return new IJS(png.width, png.height, {
+  return new Image(png.width, png.height, {
     colorModel,
     depth,
     data: png.data,
@@ -48,7 +48,7 @@ export function decodePng(buffer: Uint8Array): IJS {
  * @param png - Decoded PNG.
  * @returns The new image.
  */
-function loadPalettePng(png: DecodedPng): IJS {
+function loadPalettePng(png: DecodedPng): Image {
   if (!png.palette) {
     throw new Error(
       'unexpected: there should be a palette when colourType is 3',
@@ -75,7 +75,7 @@ function loadPalettePng(png: DecodedPng): IJS {
     data[dataIndex++] = paletteValue[2];
   }
 
-  return new IJS(png.width, png.height, {
+  return new Image(png.width, png.height, {
     data,
   });
 }

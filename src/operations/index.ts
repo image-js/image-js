@@ -7,5 +7,5 @@ export * from './threshold';
 export * from './grey';
 export * from './copyTo';
 export * from './crop';
-export * from './paintMaskOnIjs';
+export * from './paintMaskOnImage';
 export * from './paintMaskOnMask';

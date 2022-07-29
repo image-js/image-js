@@ -1,15 +1,15 @@
 import { copyAlpha, Mask } from '..';
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage';
 
 export interface InvertOptions {
   /**
    * Image to which the inverted image has to be put.
    */
-  out?: IJS | Mask;
+  out?: Image | Mask;
 }
 
-export function invert(image: IJS, options?: InvertOptions): IJS;
+export function invert(image: Image, options?: InvertOptions): Image;
 export function invert(image: Mask, options?: InvertOptions): Mask;
 /**
  * Invert the components of an image.
@@ -18,8 +18,11 @@ export function invert(image: Mask, options?: InvertOptions): Mask;
  * @param options - Invert options.
  * @returns The inverted image.
  */
-export function invert(image: IJS | Mask, options?: InvertOptions): IJS | Mask {
-  if (image instanceof IJS) {
+export function invert(
+  image: Image | Mask,
+  options?: InvertOptions,
+): Image | Mask {
+  if (image instanceof Image) {
     const newImage = getOutputImage(image, options);
     if (image.alpha) {
       copyAlpha(image, newImage);

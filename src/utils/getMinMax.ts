@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 
 /**
  * Find the min and max values of each channel of the image.
@@ -6,7 +6,7 @@ import { IJS } from '../IJS';
  * @param image - Image to process.
  * @returns An object with arrays of the min and max values.
  */
-export function getMinMax(image: IJS) {
+export function getMinMax(image: Image) {
   const min = new Array(image.channels).fill(image.maxValue);
   const max = new Array(image.channels).fill(0);
 

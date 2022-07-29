@@ -1,4 +1,4 @@
-import { IJS, ImageColorModel } from '..';
+import { Image, ImageColorModel } from '..';
 import { getClamp } from '../utils/clamp';
 import { getOutputImage } from '../utils/getOutputImage';
 
@@ -19,7 +19,7 @@ export type GreyAlgorithmCallback = (
   red: number,
   green: number,
   blue: number,
-  image: IJS,
+  image: Image,
 ) => number;
 
 export interface GreyOptions {
@@ -44,7 +44,7 @@ export interface GreyOptions {
   /**
    * Image to which to output.
    */
-  out?: IJS;
+  out?: Image;
 }
 
 /**
@@ -58,7 +58,7 @@ export interface GreyOptions {
  * @param options - The grey conversion options.
  * @returns The resulting grey image.
  */
-export function grey(image: IJS, options: GreyOptions = {}): IJS {
+export function grey(image: Image, options: GreyOptions = {}): Image {
   let { algorithm = 'luma709', keepAlpha = false, mergeAlpha = true } = options;
 
   if (

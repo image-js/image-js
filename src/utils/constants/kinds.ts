@@ -1,4 +1,4 @@
-import { ImageColorModel } from '../../IJS';
+import { ImageColorModel } from '../../Image';
 
 interface ColorModelDefinitions {
   [key: string]: {

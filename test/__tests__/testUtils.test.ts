@@ -1,9 +1,9 @@
-import { ColorDepth, IJS } from '../../src';
+import { ColorDepth, Image } from '../../src';
 
 describe('load', () => {
   it('should load the image synchronously', () => {
     const image = testUtils.load('opencv/test.png');
-    expect(image).toBeInstanceOf(IJS);
+    expect(image).toBeInstanceOf(Image);
   });
 
   it('should throw and have TS error for bad path', () => {

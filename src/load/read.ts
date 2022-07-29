@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 
 import { decode } from './decode';
 
@@ -9,9 +9,9 @@ import { decode } from './decode';
  * The file format is automatically selected based on the first few bytes.
  *
  * @param path - The path to the image.
- * @returns IJS instance.
+ * @returns Image instance.
  */
-export async function read(path: string | URL): Promise<IJS> {
+export async function read(path: string | URL): Promise<Image> {
   const data = await fs.promises.readFile(path);
   return decode(data);
 }
@@ -20,8 +20,8 @@ export async function read(path: string | URL): Promise<IJS> {
  * Synchronous version of @see {@link read}.
  *
  * @param path - The path to the image.
- * @returns IJS instance.
+ * @returns Image instance.
  */
-export function readSync(path: string | URL): IJS {
+export function readSync(path: string | URL): Image {
   return decode(fs.readFileSync(path));
 }

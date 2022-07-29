@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import checkProcessable from '../utils/checkProcessable';
 
 /**
@@ -7,7 +7,7 @@ import checkProcessable from '../utils/checkProcessable';
  * @param image - Image to process.
  * @returns The processed image.
  */
-export default function flipY(image: IJS): IJS {
+export default function flipY(image: Image): Image {
   checkProcessable(image, 'flipY', {
     bitDepth: [8, 16],
   });

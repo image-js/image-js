@@ -1,4 +1,4 @@
-import { IJS } from '../IJS';
+import { Image } from '../Image';
 import { Mask } from '../Mask';
 import { assert } from '../utils/assert';
 import { Point } from '../utils/geometry/points';
@@ -21,10 +21,10 @@ export interface ExtractOptions {
  * @returns The extracted image.
  */
 export function extract(
-  image: IJS,
+  image: Image,
   mask: Mask,
   options: ExtractOptions = {},
-): IJS {
+): Image {
   const { origin = { row: 0, column: 0 } } = options;
   const { row, column } = origin;
 
@@ -41,7 +41,7 @@ export function extract(
   const resultHeight =
     Math.min(image.height, mask.height + row) - Math.max(0, row);
 
-  let newImage = new IJS(resultWidth, resultHeight, {
+  let newImage = new Image(resultWidth, resultHeight, {
     colorModel: image.colorModel,
     origin,
   });

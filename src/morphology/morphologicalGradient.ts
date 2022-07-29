@@ -1,4 +1,4 @@
-import { ColorDepth, IJS, Mask } from '..';
+import { ColorDepth, Image, Mask } from '..';
 import { subtractImage } from '../filters';
 import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
@@ -20,9 +20,9 @@ export interface MorphologicalGradientOptions {
 }
 
 export function morphologicalGradient(
-  image: IJS,
+  image: Image,
   options?: MorphologicalGradientOptions,
-): IJS;
+): Image;
 export function morphologicalGradient(
   image: Mask,
   options?: MorphologicalGradientOptions,
@@ -37,7 +37,7 @@ export function morphologicalGradient(
  * @returns The processed image
  */
 export function morphologicalGradient(
-  image: IJS | Mask,
+  image: Image | Mask,
   options: MorphologicalGradientOptions = {},
 ) {
   let {
@@ -49,7 +49,7 @@ export function morphologicalGradient(
     iterations = 1,
   } = options;
 
-  if (image instanceof IJS) {
+  if (image instanceof Image) {
     checkProcessable(image, 'bottomHat', {
       bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
       components: 1,
