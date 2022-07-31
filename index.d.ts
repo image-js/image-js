@@ -135,7 +135,7 @@ export declare class Image {
   // split
   // getChannel
   // combineChannels
-  // setChannel
+  setChannel(channel: any, image: Image): this
   // getSimilarity
   // getPixelsGrid
   // getBestMatch
@@ -206,7 +206,7 @@ export declare class Stack extends Array<Image> {
   getMinImage(): Image;
 }
 
-export declare class RoiManager {}
+export declare class RoiManager { }
 
 export interface ImageConstructorOptions {
   width?: number;
