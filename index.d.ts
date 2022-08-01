@@ -135,7 +135,7 @@ export declare class Image {
   // split
   // getChannel
   // combineChannels
-  // setChannel
+  setChannel(channel: any, image: Image): this;
   // getSimilarity
   // getPixelsGrid
   // getBestMatch
