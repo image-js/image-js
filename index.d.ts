@@ -133,7 +133,7 @@ export declare class Image {
   // getThreshold
 
   // split
-  // getChannel
+  getChannel(channel: (number | string), options?: GetChannelOptions): Image
   // combineChannels
   setChannel(channel: any, image: Image): this;
   // getSimilarity
@@ -206,7 +206,12 @@ export declare class Stack extends Array<Image> {
   getMinImage(): Image;
 }
 
-export declare class RoiManager {}
+export declare class RoiManager { }
+
+export interface GetChannelOptions {
+  keepAlpha?: boolean;
+  mergeAlpha?: boolean;
+}
 
 export interface ImageConstructorOptions {
   width?: number;
