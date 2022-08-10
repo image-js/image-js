@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.35.1](https://www.github.com/image-js/image-js/compare/v0.35.0...v0.35.1) (2022-08-10)
+
+
+### Bug Fixes
+
+* add TypeScript definition to many methods ([#600](https://www.github.com/image-js/image-js/issues/600)) ([6caaf19](https://www.github.com/image-js/image-js/commit/6caaf19f0651945f798def1a1193b5d1ccf4d9f0))
+
 ## [0.35.0](https://www.github.com/image-js/image-js/compare/v0.34.1...v0.35.0) (2022-08-01)
 
 
