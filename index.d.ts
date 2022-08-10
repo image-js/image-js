@@ -77,12 +77,30 @@ export declare class Image {
     min?: number;
     max?: number;
   }): this;
-  // add
-  // subtract
-  // subtractImage
-  // multiply
-  // divide
-  // hypotenuse
+  add(
+    value: Array<number> | Image | number,
+    options?: { channels?: Array<Channel> },
+  ): this;
+  subtract(
+    value: Array<number> | Image | number,
+    options?: { channels?: Array<Channel> },
+  ): this;
+  subtractImage(
+    otherImage: Image,
+    options?: { channels?: Array<Channel>; absolute?: boolean },
+  ): this;
+  multiply(
+    value: Array<number> | Image | number,
+    options?: { channels?: Array<Channel> },
+  ): this;
+  divide(
+    value: Array<number> | Image | number,
+    options?: { channels?: Array<Channel> },
+  ): this;
+  hypotenuse(
+    otherImage: Image,
+    options?: { bitDepth?: number; channels?: Array<Channel> },
+  ): Image;
   // background
   flipX(): this;
   flipY(): this;
@@ -108,37 +126,68 @@ export declare class Image {
 
   // warpingFourPoints
   crop(options?: CropOptions): Image;
-  // cropAlpha
+  cropAlpha(options?: { threshold?: number }): Image;
   resize(options?: ResizeOptions): Image;
-  // hsv
-  // hsl
-  // cmyk
-  // rgba8
+  hsv(): Image;
+  hsl(): Image;
+  cmyk(): Image;
+  rgba8(): Image;
   grey(options?: GreyOptions): Image;
   mask(options?: MaskOptions): Image;
-  // pad
-  // colorDepth
-  // setBorder
+  pad(options?: {
+    size?: number;
+    algorithm?: 'set' | 'copy';
+    color?: Array<number>;
+  }): Image;
+  colorDepth(newColorDepth: 8 | 16): Image;
+  setBorder(options?: {
+    size?: number;
+    algorithm?: 'set' | 'copy';
+    color?: Array<number>;
+  }): Image;
   rotate(angle: number, options?: RotateOptions): Image;
   rotateLeft(): Image;
   rotateRight(): Image;
 
-  // getRow
-  // getColumn
-  // getMatrix
-  // setMatrix
-  // getPixelsArray
+  getRow(row: number, channel?: number): Array<number>;
+  getColumn(row: number, channel?: number): Array<number>;
+  getMatrix(options?: { channel?: number }): Matrix;
+  setMatrix(matrix: Matrix, options?: { channel?: number });
+  getPixelsArray(): Array<Array<number>>;
   // getIntersection
-  // getClosestCommonParent
-  // getThreshold
+  getClosestCommonParent(mask: Image): Image;
+  getThreshold(options?: { algorithm?: ThresholdAlgorithm }): number;
 
-  // split
-  // getChannel
-  // combineChannels
+  split(options?: { preserveAlpha?: boolean }): Stack;
+  getChannel(
+    channel: Channel,
+    options?: { keepAlpha?: boolean; mergeAlpha?: boolean },
+  ): Image;
+  combineChannels(
+    method?: Function,
+    options?: { keepAlpha?: boolean; mergeAlpha?: boolean },
+  ): Image;
   setChannel(channel: any, image: Image): this;
-  // getSimilarity
-  // getPixelsGrid
-  // getBestMatch
+  getSimilarity(
+    image: Image,
+    options?: {
+      shift?: Array<number>;
+      average?: boolean;
+      channels?: Array<Channel>;
+      defaultAlpha?: boolean;
+      normalize?: boolean;
+      border?: Array<number>;
+    },
+  ): Array<number> | number;
+  getPixelsGrid(options?: {
+    sampling?: Array<number>;
+    painted?: boolean;
+    mask?: Image;
+  }): { xyS: Array<number>; zS: Array<number>; painted: Image };
+  getBestMatch(
+    image: Image,
+    options?: { border?: Array<number> },
+  ): Array<number>;
 
   // cannyEdge
   convolution(kernel: Kernel, options?: ConvolutionOptions): Image;
@@ -207,6 +256,15 @@ export declare class Stack extends Array<Image> {
 }
 
 export declare class RoiManager {}
+
+export declare class Matrix extends Array<Array<number>> {
+  constructor();
+  constructor(width: number, height: number, defaultValue?: number);
+
+  localMin(x: number, y: number): { position: Array<number>; value: number };
+  localMax(x: number, y: number): { position: Array<number>; value: number };
+  localSearch(x: number, y: number, value: number): Array<Array<number>>;
+}
 
 export interface ImageConstructorOptions {
   width?: number;
@@ -391,5 +449,6 @@ export type BinaryValue = 0 | 1;
 export type SelectedChannels = number | string | Array<number> | Array<string>;
 export type BinaryKernel = Array<Array<BinaryValue>>;
 export type Kernel = Array<Array<number>>;
+export type Channel = number | string;
 
 export default Image;
