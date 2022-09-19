@@ -128,7 +128,7 @@ export declare class Image {
     pts: Array<Array<number>>,
     options?: {
       calculateRatio?: boolean;
-    }
+    },
   ): Image;
   crop(options?: CropOptions): Image;
   cropAlpha(options?: { threshold?: number }): Image;
@@ -199,8 +199,8 @@ export declare class Image {
   extract(
     mask: Image,
     options?: {
-      position?: Array<number>
-    }
+      position?: Array<number>;
+    },
   ): this;
   // floodFill
   paintLabels(
@@ -209,9 +209,9 @@ export declare class Image {
     options?: {
       color?: Array<number> | string;
       colors?: Array<Array<number>> | Array<string>;
-      font?: string | Array<string>
-      rotate?: number | Array<number>
-    }
+      font?: string | Array<string>;
+      rotate?: number | Array<number>;
+    },
   ): this;
   paintMasks(
     masks: Image | Array<Image>,
@@ -235,14 +235,14 @@ export declare class Image {
       randomColors?: boolean;
       distinctColors?: boolean;
       shape?: object;
-    }
+    },
   ): this;
   paintPolyline(
     points: Array<Array<number>>,
     options?: {
       color?: Array<number>;
       closed?: boolean;
-    }
+    },
   ): this;
   paintPolylines(
     polylines: Array<Array<Array<number>>>,
@@ -252,7 +252,7 @@ export declare class Image {
       randomColors?: boolean;
       distinctColors?: boolean;
       shape?: object;
-    }
+    },
   ): this;
   paintPolygon(
     points: Array<Array<number>>,
@@ -269,51 +269,35 @@ export declare class Image {
       randomColors?: boolean;
       distinctColors?: boolean;
       shape?: object;
-    }
+    },
   ): this;
 
-  countAlphaPixels(
-    options?: {
-      alpha?: number
-    }
-  ): number;
-  monotoneChainConvexHull(): Array<Array<number>>
-  minimalBoundingRectangle(
-    options?: {
-      originalPoints?: Array<Array<number>>
-    }
-  ): Array<Array<number>>;
-  getHistogram(
-    options?: {
-      maxSlots?: number;
-      channel?: number;
-      useAlpha?: boolean;
-    }
-  ): Array<number>;
-  getHistograms(
-    options?: {
-      maxSlots?: number;
-    }
-  ): Array<Array<number>>;
-  getColorHistogram(
-    options?: {
-      useAlpha?: boolean;
-      nbSlots?: number;
-    }
-  ): Array<number>;
+  countAlphaPixels(options?: { alpha?: number }): number;
+  monotoneChainConvexHull(): Array<Array<number>>;
+  minimalBoundingRectangle(options?: {
+    originalPoints?: Array<Array<number>>;
+  }): Array<Array<number>>;
+  getHistogram(options?: {
+    maxSlots?: number;
+    channel?: number;
+    useAlpha?: boolean;
+  }): Array<number>;
+  getHistograms(options?: { maxSlots?: number }): Array<Array<number>>;
+  getColorHistogram(options?: {
+    useAlpha?: boolean;
+    nbSlots?: number;
+  }): Array<number>;
   getMin(): Array<number>;
   getMax(): Array<number>;
   getSum(): Array<number>;
   getMoment(xPower: number, yPower: number): number;
-  getLocalMaxima(
-    options?: {
-      mask?: Image;
-      region?: number;
-      removeClosePoints?: number;
-      invert?: boolean;
-      maxEquals?: number;
-    }
-  ): Array<number>;
+  getLocalMaxima(options?: {
+    mask?: Image;
+    region?: number;
+    removeClosePoints?: number;
+    invert?: boolean;
+    maxEquals?: number;
+  }): Array<number>;
   getMedian(): Array<number>;
   getMean(): Array<number>;
   getPoints(): Array<Array<number>>;
@@ -321,7 +305,7 @@ export declare class Image {
     targetImage: Image,
     options?: {
       defaultFurther?: boolean;
-    }
+    },
   ): Array<number> | boolean;
 }
 
