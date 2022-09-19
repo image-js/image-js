@@ -124,7 +124,12 @@ export declare class Image {
   blackHat(options?: MorphologicalOptions): Image;
   morphologicalGradient(options?: MorphologicalOptions): Image;
 
-  // warpingFourPoints
+  warpingFourPoints(
+    pts: Array<Array<number>>,
+    options?: {
+      calculateRatio?: boolean;
+    }
+  ): Image;
   crop(options?: CropOptions): Image;
   cropAlpha(options?: { threshold?: number }): Image;
   resize(options?: ResizeOptions): Image;
@@ -154,7 +159,7 @@ export declare class Image {
   getMatrix(options?: { channel?: number }): Matrix;
   setMatrix(matrix: Matrix, options?: { channel?: number });
   getPixelsArray(): Array<Array<number>>;
-  // getIntersection
+  getIntersection(mask2: Image): object;
   getClosestCommonParent(mask: Image): Image;
   getThreshold(options?: { algorithm?: ThresholdAlgorithm }): number;
 
@@ -191,9 +196,23 @@ export declare class Image {
 
   // cannyEdge
   convolution(kernel: Kernel, options?: ConvolutionOptions): Image;
-  // extract
+  extract(
+    mask: Image,
+    options?: {
+      position?: Array<number>
+    }
+  ): this;
   // floodFill
-  // paintLabels
+  paintLabels(
+    labels: Array<string>,
+    positions: Array<Array<number>>,
+    options?: {
+      color?: Array<number> | string;
+      colors?: Array<Array<number>> | Array<string>;
+      font?: string | Array<string>
+      rotate?: number | Array<number>
+    }
+  ): this;
   paintMasks(
     masks: Image | Array<Image>,
     options?: {
@@ -207,35 +226,103 @@ export declare class Image {
       labelColor?: string;
       labelFont?: string;
     },
-  ): Image;
-  // paintPoints
-  // paintPolyline
-  // paintPolylines
+  ): this;
+  paintPoints(
+    points: Array<Array<number>>,
+    options?: {
+      color?: Array<number> | string;
+      colors?: Array<Array<number>> | Array<string>;
+      randomColors?: boolean;
+      distinctColors?: boolean;
+      shape?: object;
+    }
+  ): this;
+  paintPolyline(
+    points: Array<Array<number>>,
+    options?: {
+      color?: Array<number>;
+      closed?: boolean;
+    }
+  ): this;
+  paintPolylines(
+    polylines: Array<Array<Array<number>>>,
+    options?: {
+      color?: Array<number> | string;
+      colors?: Array<Array<number>> | Array<string>;
+      randomColors?: boolean;
+      distinctColors?: boolean;
+      shape?: object;
+    }
+  ): this;
   paintPolygon(
     points: Array<Array<number>>,
     options?: {
       color?: Array<number>;
       filled?: boolean;
     },
-  ): Image;
+  ): this;
+  paintPolygons(
+    points: Array<Array<Array<number>>>,
+    options?: {
+      color?: Array<number> | string;
+      colors?: Array<Array<number>> | Array<string>;
+      randomColors?: boolean;
+      distinctColors?: boolean;
+      shape?: object;
+    }
+  ): this;
 
-  // paintPolygons
-
-  // countAlphaPixels
-  // monotoneChainConvexHull
-  // minimalBoundingRectangle
-  // getHistogram
-  // getHistograms
-  // getColorHistogram
-  // getMin
-  // getMax
-  // getSum
-  // getMoment
-  // getLocalMaxima
-  // getMedian
-  // getMean
-  // getPoints
-  // getRelativePosition
+  countAlphaPixels(
+    options?: {
+      alpha?: number
+    }
+  ): number;
+  monotoneChainConvexHull(): Array<Array<number>>
+  minimalBoundingRectangle(
+    options?: {
+      originalPoints?: Array<Array<number>>
+    }
+  ): Array<Array<number>>;
+  getHistogram(
+    options?: {
+      maxSlots?: number;
+      channel?: number;
+      useAlpha?: boolean;
+    }
+  ): Array<number>;
+  getHistograms(
+    options?: {
+      maxSlots?: number;
+    }
+  ): Array<Array<number>>;
+  getColorHistogram(
+    options?: {
+      useAlpha?: boolean;
+      nbSlots?: number;
+    }
+  ): Array<number>;
+  getMin(): Array<number>;
+  getMax(): Array<number>;
+  getSum(): Array<number>;
+  getMoment(xPower: number, yPower: number): number;
+  getLocalMaxima(
+    options?: {
+      mask?: Image;
+      region?: number;
+      removeClosePoints?: number;
+      invert?: boolean;
+      maxEquals?: number;
+    }
+  ): Array<number>;
+  getMedian(): Array<number>;
+  getMean(): Array<number>;
+  getPoints(): Array<Array<number>>;
+  getRelativePosition(
+    targetImage: Image,
+    options?: {
+      defaultFurther?: boolean;
+    }
+  ): Array<number> | boolean;
 }
 
 export declare class Stack extends Array<Image> {
