@@ -2,15 +2,15 @@ import { css2array } from '../../util/color';
 import { RGB } from '../model/model';
 
 /**
- * Paint a mask or masks on the current image.
+ * Paint a label or labels on the current image.
  * @memberof Image
  * @instance
  *
- * @param {Array<string>}       [labels] - Array of labels to display. Should the the same size as masks.
- * @param {Array<Array>}        [positions] - Array of labels to display. Should the the same size as masks.
- * @param {object}              [options]
- * @param {number[]|string}     [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
- * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
+ * @param {Array<string>}           [labels] - Array of labels to display.
+ * @param {Array<Array<number>>}    [positions] - Array of points [x,y] where the labels should be displayed.
+ * @param {object}                  [options]
+ * @param {Array<number>|string}    [options.color='red'] - Array of 3 elements (R, G, B) or a valid css color.
+ * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each label.
  * @param {string|Array<string>} [options.font='12px Helvetica'] - Paint the labels in a different CSS style
  * @param {number|Array<number>} [options.rotate=0] - Rotate each label of a define angle
  * @return {this} The original painted image
