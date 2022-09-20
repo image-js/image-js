@@ -5,6 +5,7 @@ import {
   getPolygonPerimeter,
 } from '../utils/geometry/polygons';
 
+import { getExtendedBorderPoints } from './utils/getExtendedBorderPoints';
 import { monotoneChainConvexHull as mcch } from './utils/monotoneChainConvexHull';
 
 /**
@@ -32,7 +33,7 @@ export interface ConvexHull {
  * @returns Array of the vertices of the convex Hull in clockwise order.
  */
 export function getConvexHull(mask: Mask): ConvexHull {
-  const borderPoints = mask.getBorderPoints();
+  const borderPoints = getExtendedBorderPoints(mask);
   if (borderPoints.length === 0) {
     return {
       points: [],
