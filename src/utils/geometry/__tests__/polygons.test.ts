@@ -76,4 +76,13 @@ describe('getPolygonArea', () => {
 
     expect(getPolygonArea(points)).toBe(12);
   });
+  it('other triangle', () => {
+    const points = [
+      { column: 0, row: 2 },
+      { column: 2, row: 2 },
+      { column: 2, row: 0 },
+    ];
+
+    expect(getPolygonArea(points)).toBe(2);
+  });
 });

@@ -30,5 +30,5 @@ export function getPolygonArea(points: Point[]): number {
     area += points[current].column * points[next].row;
     area -= points[current].row * points[next].column;
   }
-  return area / 2;
+  return Math.abs(area / 2);
 }
