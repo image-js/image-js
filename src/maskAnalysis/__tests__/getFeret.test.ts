@@ -3,12 +3,34 @@ import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
 expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 describe('getFeret', () => {
-  it.only('3x3 mask', () => {
-    let mask = testUtils.createMask(`
-        0 1 0
-        1 1 1
-        0 1 0
-      `);
+  it('empty mask', () => {
+    let mask = testUtils.createMask(`0 0 0`);
+    const result = mask.getFeret();
+    expect(result).toBeDeepCloseTo(
+      {
+        minDiameter: {
+          length: 0,
+          angle: 0,
+          points: [
+            { column: 0, row: 0 },
+            { column: 0, row: 0 },
+          ],
+        },
+        maxDiameter: {
+          length: 0,
+          angle: 0,
+          points: [
+            { column: 0, row: 0 },
+            { column: 0, row: 0 },
+          ],
+        },
+        aspectRatio: 1,
+      },
+      3,
+    );
+  });
+  it('mask with only 1 pixel', () => {
+    let mask = testUtils.createMask(`0 1 0`);
     const result = mask.getFeret();
     console.log({ result });
     console.log({
@@ -18,15 +40,45 @@ describe('getFeret', () => {
     expect(result).toBeDeepCloseTo(
       {
         minDiameter: {
-          length: 2.8284,
-          angle: -45,
+          length: 1,
+          angle: 90,
           points: [
             { column: 1, row: 3 },
             { column: 3, row: 1 },
           ],
         },
         maxDiameter: {
+          length: 1.414,
+          points: [
+            { column: 1, row: 0 },
+            { column: 2, row: 1 },
+          ],
+        },
+        aspectRatio: 0.707,
+      },
+      3,
+    );
+  });
+  it('mask 3x3', () => {
+    let mask = testUtils.createMask(`
+        0 1 0
+        1 1 1
+        0 1 0
+      `);
+    const result = mask.getFeret();
+    expect(result).toBeDeepCloseTo(
+      {
+        minDiameter: {
+          length: 2.8284,
+          angle: 45,
+          points: [
+            { column: 0, row: 2 },
+            { column: 3, row: 1 },
+          ],
+        },
+        maxDiameter: {
           length: 3.1623,
+          angle: 18.43,
           points: [
             { column: 0, row: 1 },
             { column: 3, row: 2 },
@@ -34,11 +86,11 @@ describe('getFeret', () => {
         },
         aspectRatio: 0.8944,
       },
-      3,
+      2,
     );
   });
 
-  it('mask 4x4', () => {
+  it.only('mask 4x4', () => {
     let mask = testUtils.createMask(`
         0 1 1 0
         0 1 1 0
@@ -47,59 +99,76 @@ describe('getFeret', () => {
       `);
 
     const result = mask.getFeret();
-    expect(result).toMatchCloseTo(
+
+    expect(result).toBeDeepCloseTo(
       {
-        min: 2,
-        minLine: [
-          [0, 0],
-          [2, 0],
-        ],
-        max: 4.4721,
-        maxLine: [
-          [0, 0],
-          [2, 4],
-        ],
+        minDiameter: {
+          length: 2,
+          angle: 90,
+          points: [
+            { column: 1, row: 0 },
+            { column: 3, row: 0 },
+          ],
+        },
+        maxDiameter: {
+          length: 4.4721,
+          angle: 63.43,
+          points: [
+            { column: 1, row: 0 },
+            { column: 3, row: 4 },
+          ],
+        },
         aspectRatio: 0.4472,
       },
-      3,
+      2,
     );
   });
 
   it('mask 5x5', () => {
     let mask = testUtils.createMask(`
-        00100
-        00100
-        11111
-        00100
-        00100
+        0 0 1 0 0
+        0 0 1 0 0
+        1 1 1 1 1
+        0 0 1 0 0
+        0 0 1 0 0
       `);
 
     const result = mask.getFeret();
-    expect(result).toMatchCloseTo(
+    console.log({
+      minPoints: result.minDiameter.points,
+      maxPoints: result.maxDiameter.points,
+    });
+    expect(result).toBeDeepCloseTo(
       {
-        min: 4.2426,
-        minLine: [
-          [3, 5],
-          [0, 2],
-        ],
-        max: 5.099,
-        maxLine: [
-          [0, 2],
-          [5, 3],
-        ],
-        aspectRatio: 0.8321,
+        minDiameter: {
+          length: 4.2426,
+          angle: 0,
+          points: [
+            { column: 3, row: 5 },
+            { column: 0, row: 2 },
+          ],
+        },
+        maxDiameter: {
+          length: 5.099,
+          angle: 0,
+          points: [
+            { column: 0, row: 2 },
+            { column: 5, row: 3 },
+          ],
+        },
+        aspectRatio: 0.4472,
       },
-      3,
+      2,
     );
   });
 
   it('triangle 5x5', () => {
     let mask = testUtils.createMask(`
-      100000
-      111000
-      111111
-      111000
-      100000
+      1 0 0 0 0 0
+      1 1 1 0 0 0
+      1 1 1 1 1 1
+      1 1 1 0 0 0
+      1 0 0 0 0 0
     `);
 
     const result = mask.getFeret();
@@ -123,9 +192,9 @@ describe('getFeret', () => {
 
   it('square triangle 3x3', () => {
     let mask = testUtils.createMask(`
-        111
-        100
-        100
+        1 1 1
+        1 0 0
+        1 0 0
       `);
 
     const result = mask.getFeret();

@@ -45,18 +45,24 @@ export interface Feret {
  * @returns The Feret diameters.
  */
 export function getFeret(mask: Mask): Feret {
-  const originalPoints = mask.getConvexHull().points;
-  console.log({ originalPoints });
-  if (originalPoints.length === 1) {
+  const hull = mask.getConvexHull();
+  const originalPoints = hull.points;
+  if (hull.surface === 0) {
     return {
       minDiameter: {
-        length: 1,
-        points: [originalPoints[0], originalPoints[0]],
+        length: 0,
+        points: [
+          { column: 0, row: 0 },
+          { column: 0, row: 0 },
+        ],
         angle: 0,
       },
       maxDiameter: {
-        length: 1,
-        points: [originalPoints[0], originalPoints[0]],
+        length: 0,
+        points: [
+          { column: 0, row: 0 },
+          { column: 0, row: 0 },
+        ],
         angle: 0,
       },
       aspectRatio: 1,
