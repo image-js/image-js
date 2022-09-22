@@ -1,8 +1,4 @@
-import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
-
 import { getConvexHull } from '../getConvexHull';
-
-expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 test('cross', () => {
   const mask = testUtils.createMask([
