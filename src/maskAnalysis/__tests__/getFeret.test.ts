@@ -43,12 +43,13 @@ describe('getFeret', () => {
           length: 1,
           angle: 90,
           points: [
-            { column: 1, row: 3 },
-            { column: 3, row: 1 },
+            { column: 1, row: 0 },
+            { column: 1, row: 1 },
           ],
         },
         maxDiameter: {
           length: 1.414,
+          angle: 45,
           points: [
             { column: 1, row: 0 },
             { column: 2, row: 1 },
@@ -90,7 +91,7 @@ describe('getFeret', () => {
     );
   });
 
-  it.only('mask 4x4', () => {
+  it('mask 4x4', () => {
     let mask = testUtils.createMask(`
         0 1 1 0
         0 1 1 0
@@ -134,15 +135,12 @@ describe('getFeret', () => {
       `);
 
     const result = mask.getFeret();
-    console.log({
-      minPoints: result.minDiameter.points,
-      maxPoints: result.maxDiameter.points,
-    });
+
     expect(result).toBeDeepCloseTo(
       {
         minDiameter: {
           length: 4.2426,
-          angle: 0,
+          angle: -45,
           points: [
             { column: 3, row: 5 },
             { column: 0, row: 2 },
@@ -150,13 +148,13 @@ describe('getFeret', () => {
         },
         maxDiameter: {
           length: 5.099,
-          angle: 0,
+          angle: 11.31,
           points: [
             { column: 0, row: 2 },
             { column: 5, row: 3 },
           ],
         },
-        aspectRatio: 0.4472,
+        aspectRatio: 0.832,
       },
       2,
     );
@@ -172,18 +170,25 @@ describe('getFeret', () => {
     `);
 
     const result = mask.getFeret();
-    expect(result).toMatchCloseTo(
+
+    expect(result).toBeDeepCloseTo(
       {
-        min: 5,
-        minLine: [
-          [0, 5],
-          [0, 0],
-        ],
-        max: 6.7082,
-        maxLine: [
-          [0, 0],
-          [6, 3],
-        ],
+        minDiameter: {
+          length: 5,
+          angle: 0,
+          points: [
+            { column: 0, row: 5 },
+            { column: 0, row: 0 },
+          ],
+        },
+        maxDiameter: {
+          length: 6.7082,
+          angle: 26.565,
+          points: [
+            { column: 0, row: 0 },
+            { column: 6, row: 3 },
+          ],
+        },
         aspectRatio: 0.7453,
       },
       3,
@@ -198,18 +203,24 @@ describe('getFeret', () => {
       `);
 
     const result = mask.getFeret();
-    expect(result).toMatchCloseTo(
+    expect(result).toBeDeepCloseTo(
       {
-        min: 2.8284,
-        minLine: [
-          [2, 2],
-          [0, 0],
-        ],
-        max: 4.2426,
-        maxLine: [
-          [0, 3],
-          [3, 0],
-        ],
+        minDiameter: {
+          length: 2.8284,
+          angle: -45,
+          points: [
+            { column: 1, row: 3 },
+            { column: 0, row: 0 },
+          ],
+        },
+        maxDiameter: {
+          length: 4.2426,
+          angle: -45,
+          points: [
+            { column: 0, row: 3 },
+            { column: 3, row: 0 },
+          ],
+        },
         aspectRatio: 0.6667,
       },
       3,
