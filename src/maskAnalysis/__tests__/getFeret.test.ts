@@ -1,4 +1,4 @@
-it('empty mask', () => {
+test('empty mask', () => {
   let mask = testUtils.createMask(`0 0 0`);
   const result = mask.getFeret();
   expect(result).toBeDeepCloseTo(
@@ -24,7 +24,7 @@ it('empty mask', () => {
     3,
   );
 });
-it.skip('mask with only 1 pixel', () => {
+test.skip('mask with only 1 pixel', () => {
   let mask = testUtils.createMask(`0 1 0`);
   const result = mask.getFeret();
   // the minimum diameter points are not as expected,
@@ -52,7 +52,7 @@ it.skip('mask with only 1 pixel', () => {
     3,
   );
 });
-it('mask 3x3', () => {
+test('mask 3x3', () => {
   let mask = testUtils.createMask(`
         0 1 0
         1 1 1
@@ -83,7 +83,7 @@ it('mask 3x3', () => {
   );
 });
 
-it('mask 4x4', () => {
+test('mask 4x4', () => {
   let mask = testUtils.createMask(`
         0 1 1 0
         0 1 1 0
@@ -117,7 +117,7 @@ it('mask 4x4', () => {
   );
 });
 
-it('mask 5x5', () => {
+test('mask 5x5', () => {
   let mask = testUtils.createMask(`
         0 0 1 0 0
         0 0 1 0 0
@@ -152,7 +152,7 @@ it('mask 5x5', () => {
   );
 });
 
-it('triangle 5x5', () => {
+test('triangle 5x5', () => {
   let mask = testUtils.createMask(`
       1 0 0 0 0 0
       1 1 1 0 0 0
@@ -187,7 +187,7 @@ it('triangle 5x5', () => {
   );
 });
 
-it('square triangle 3x3', () => {
+test('square triangle 3x3', () => {
   let mask = testUtils.createMask(`
         1 1 1
         1 0 0
