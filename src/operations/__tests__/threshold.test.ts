@@ -64,6 +64,22 @@ test('automatic threshold with OTSU', () => {
   expect(th).toMatchMask(expected);
   expect(defaultThreshold).toMatchMask(expected);
 });
+test('threshold in percents', () => {
+  const grey = testUtils.createGreyImage([
+    [1, 2, 3],
+    [10, 20, 30],
+    [50, 60, 70],
+  ]);
+
+  const th = threshold(grey, { threshold: '10%' });
+
+  const expected = testUtils.createMask([
+    [0, 0, 0],
+    [0, 0, 1],
+    [1, 1, 1],
+  ]);
+  expect(th).toMatchMask(expected);
+});
 
 test('error too many channels', () => {
   const testImage = testUtils.load('opencv/test.png');
@@ -71,4 +87,28 @@ test('error too many channels', () => {
   expect(() =>
     threshold(testImage, { algorithm: ThresholdAlgorithm.OTSU }),
   ).toThrow(/threshold can only be computed on images with one channel/);
+});
+test('error threshold in percents out of range', () => {
+  const testImage = testUtils.load('opencv/test.png');
+
+  expect(() => threshold(testImage, { threshold: '150%' })).toThrow(
+    /threshold: threshold in percents is out of range 0 to 100/,
+  );
+});
+test('error threshold out of range', () => {
+  const testImage = testUtils.load('opencv/test.png');
+
+  expect(() => threshold(testImage, { threshold: 450 })).toThrow(
+    /invalid value: 450. It must be a positive value smaller than 256/,
+  );
+});
+test('error threshold string format wrong', () => {
+  const testImage = testUtils.load('opencv/test.png');
+
+  expect(() => threshold(testImage, { threshold: '150' })).toThrow(
+    /threshold: unrecognised threshold format/,
+  );
+  expect(() => threshold(testImage, { threshold: 'abc%' })).toThrow(
+    /threshold: unrecognised threshold format/,
+  );
 });

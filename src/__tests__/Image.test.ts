@@ -198,6 +198,15 @@ test('fill with a constant color', () => {
   ]);
 });
 
+test('fill with a float value', () => {
+  const img = new Image(2, 2);
+  img.fill(10.7);
+  expect(img).toMatchImageData([
+    [10, 10, 10, 10, 10, 10],
+    [10, 10, 10, 10, 10, 10],
+  ]);
+});
+
 test('fill with a color as RGBA array', () => {
   const img = new Image(1, 2);
   img.fill([1, 2, 3]);
@@ -210,14 +219,14 @@ test('fill with a color as RGBA array', () => {
 test('fill with out of range value', () => {
   const img = new Image(1, 1);
   expect(() => img.fill(256)).toThrow(
-    /invalid value: 256. It must be a positive integer smaller than 256/,
+    /invalid value: 256. It must be a positive value smaller than 256/,
   );
 });
 
 test('fill with out of range value in array', () => {
   const img = new Image(1, 1);
   expect(() => img.fill([0, -1, 2])).toThrow(
-    /invalid value: -1. It must be a positive integer smaller than 256/,
+    /invalid value: -1. It must be a positive value smaller than 256/,
   );
 });
 
