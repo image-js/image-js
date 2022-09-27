@@ -24,7 +24,7 @@ test('empty mask', () => {
     3,
   );
 });
-test.skip('mask with only 1 pixel', () => {
+test('mask with only 1 pixel', () => {
   let mask = testUtils.createMask(`0 1 0`);
   const result = mask.getFeret();
   // the minimum diameter points are not as expected,
@@ -36,7 +36,7 @@ test.skip('mask with only 1 pixel', () => {
         angle: 90,
         points: [
           { column: 1, row: 0 },
-          { column: 1, row: 1 },
+          { column: 2, row: 1 },
         ],
       },
       maxDiameter: {

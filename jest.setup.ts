@@ -5,9 +5,8 @@ import * as testUtils from './test/testUtils';
 
 expect.extend({
   toBeDeepCloseTo,
+  toMatchCloseTo,
   ...jestMatchers,
 });
-
-expect.extend({ toBeDeepCloseTo, toMatchCloseTo });
 
 globalThis.testUtils = testUtils;
