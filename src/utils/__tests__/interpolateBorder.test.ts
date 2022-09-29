@@ -90,3 +90,10 @@ test('REFLECT_101 - positive', () => {
   expect(interpolateReflect101Point(17, 10)).toBe(1);
   expect(interpolateReflect101Point(18, 10)).toBe(0);
 });
+
+test('unknown type', () => {
+  // @ts-expect-error
+  expect(() => getBorderInterpolation('unknown', 5)).toThrow(
+    /interpolateBorder cannot be used with border type unknown/,
+  );
+});

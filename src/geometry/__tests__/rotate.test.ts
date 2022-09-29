@@ -1,6 +1,6 @@
 import { rotate } from '..';
 import { ImageColorModel, ImageCoordinates } from '../../Image';
-import { encodePng } from '../../save';
+import { encodePng, writeSync } from '../../save';
 import { BorderType } from '../../utils/interpolateBorder';
 import { InterpolationType } from '../../utils/interpolatePixel';
 
@@ -16,7 +16,7 @@ test('rotate + scale compared to opencv (nearest)', () => {
   expect(rotated).toMatchImage('opencv/testRotate.png');
 });
 
-test.skip('rotate + scale compared to opencv (bilinear)', () => {
+test('rotate + scale compared to opencv (bilinear)', () => {
   const img = testUtils.load('opencv/test.png');
 
   const rotated = rotate(img, 30, {
@@ -25,11 +25,10 @@ test.skip('rotate + scale compared to opencv (bilinear)', () => {
     interpolationType: InterpolationType.BILINEAR,
     center: [2, 4],
   });
-
-  expect(rotated).toMatchImage('opencv/testRotateBilinear.png');
+  expect(rotated).toMatchImage('opencv/testRotateBilinear.png', { error: 5 });
 });
 
-test.skip('rotate + scale compared to opencv (bicubic)', () => {
+test('rotate + scale compared to opencv (bicubic)', () => {
   const img = testUtils.load('opencv/test.png');
 
   const rotated = rotate(img, 30, {
@@ -39,7 +38,7 @@ test.skip('rotate + scale compared to opencv (bicubic)', () => {
     center: [2, 4],
   });
 
-  expect(rotated).toMatchImage('opencv/testRotateBicubic.png');
+  expect(rotated).toMatchImage('opencv/testRotateBicubic.png', { error: 13 });
 });
 
 test('default options', () => {
