@@ -1,6 +1,7 @@
 import { Image } from '../Image';
 
 import { readCanvas } from './readCanvas';
+// TODO: Create nodejs version that throws an error
 
 /**
  * Read an image from an HTML image source.

@@ -33,6 +33,7 @@ export interface WriteCanvasOptions {
   dirtyHeight?: number;
 }
 
+// TODO: Create nodejs version that throws an error
 /**
  * Draw the image in an HTML canvas.
  *
