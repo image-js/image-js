@@ -1,6 +1,6 @@
 import { rotate } from '..';
 import { ImageColorModel, ImageCoordinates } from '../../Image';
-import { encodePng, writeSync } from '../../save';
+import { encodePng } from '../../save';
 import { BorderType } from '../../utils/interpolateBorder';
 import { InterpolationType } from '../../utils/interpolatePixel';
 
