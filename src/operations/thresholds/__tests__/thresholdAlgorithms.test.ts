@@ -1,8 +1,8 @@
 import { computeThreshold, ThresholdAlgorithm } from '../../threshold';
 
-test.skip('Huang should work like ImageJ', async () => {
+test('Huang should work similarily to ImageJ', async () => {
   const img = testUtils.load('various/grayscale_by_zimmyrose.png');
-  expect(computeThreshold(img, ThresholdAlgorithm.HUANG)).toBe(134);
+  expect(computeThreshold(img, ThresholdAlgorithm.HUANG)).toBe(132);
 });
 
 test('Intermodes should work like ImageJ', async () => {
@@ -20,9 +20,9 @@ test('Percentile should work like ImageJ', async () => {
   expect(computeThreshold(img, ThresholdAlgorithm.PERCENTILE)).toBe(90);
 });
 
-test.skip('Li should work like ImageJ', async () => {
+test('Li should work similarily to ImageJ', async () => {
   const img = testUtils.load('various/grayscale_by_zimmyrose.png');
-  expect(computeThreshold(img, ThresholdAlgorithm.LI)).toBe(115);
+  expect(computeThreshold(img, ThresholdAlgorithm.LI)).toBe(117);
 });
 
 test('MaxEntropy should work like ImageJ', async () => {
@@ -55,9 +55,9 @@ test('Otsu should work like ImageJ', async () => {
   expect(computeThreshold(img, ThresholdAlgorithm.OTSU)).toBe(135);
 });
 
-test.skip('RenyiEntropy should work like ImageJ', async () => {
+test('RenyiEntropy should work similarily to ImageJ', async () => {
   const img = testUtils.load('various/grayscale_by_zimmyrose.png');
-  expect(computeThreshold(img, ThresholdAlgorithm.RENYI_ENTROPY)).toBe(115);
+  expect(computeThreshold(img, ThresholdAlgorithm.RENYI_ENTROPY)).toBe(116);
 });
 
 test('Shanbhag should work like ImageJ', async () => {
