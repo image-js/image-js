@@ -1,5 +1,5 @@
 import { ColorDepth, Image, Mask } from '..';
-import { subtractImage } from '../filters';
+import { subtract } from '../compare';
 import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
 
@@ -58,7 +58,7 @@ export function topHat(
   let newImage = image;
   for (let i = 0; i < iterations; i++) {
     let openImage = newImage.open({ kernel });
-    newImage = subtractImage(openImage, newImage, { absolute: true });
+    newImage = subtract(openImage, newImage, { absolute: true });
   }
   return newImage;
 }

@@ -10,17 +10,17 @@ export interface SubtractImageOptions {
   absolute?: boolean;
 }
 
-export function subtractImage(
+export function subtract(
   image: Image,
   otherImage: Image,
   options?: SubtractImageOptions,
 ): Image;
-export function subtractImage(
+export function subtract(
   image: Mask,
   otherImage: Mask,
   options?: SubtractImageOptions,
 ): Mask;
-export function subtractImage(
+export function subtract(
   image: Image | Mask,
   otherImage: Image | Mask,
   options: SubtractImageOptions,
@@ -33,7 +33,7 @@ export function subtractImage(
  * @param options - Subtract options.
  * @returns The subtracted image
  */
-export function subtractImage(
+export function subtract(
   image: Image | Mask,
   otherImage: Image | Mask,
   options: SubtractImageOptions = {},
@@ -41,7 +41,7 @@ export function subtractImage(
   let { absolute = false } = options;
 
   if (image instanceof Image) {
-    checkProcessable(image, 'subtractImage', {
+    checkProcessable(image, 'subtract', {
       bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
       components: [1, 3],
       alpha: false,
@@ -49,16 +49,14 @@ export function subtractImage(
   }
 
   if (image.width !== otherImage.width || image.height !== otherImage.height) {
-    throw new Error('subtractImage: both images must have the same size');
+    throw new Error('subtract: both images must have the same size');
   }
   if (image.alpha !== otherImage.alpha || image.depth !== otherImage.depth) {
-    throw new Error(
-      'subtractImage: both images must have the same alpha and depth',
-    );
+    throw new Error('subtract: both images must have the same alpha and depth');
   }
   if (image.channels !== otherImage.channels) {
     throw new Error(
-      'subtractImage: both images must have the same number of channels',
+      'subtract: both images must have the same number of channels',
     );
   }
 

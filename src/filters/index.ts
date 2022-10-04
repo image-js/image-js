@@ -8,5 +8,4 @@ export * from './hypotenuse';
 export * from './invert';
 export * from './level';
 export * from './or';
-export * from './subtractImage';
 export * from './flip';

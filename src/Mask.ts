@@ -1,4 +1,5 @@
 import { ColorDepth, colorModels, Image, ImageColorModel } from './Image';
+import { subtract, SubtractImageOptions } from './compare';
 import {
   drawLineOnMask,
   DrawLineOnMaskOptions,
@@ -17,8 +18,6 @@ import {
   InvertOptions,
   or,
   OrOptions,
-  subtractImage,
-  SubtractImageOptions,
 } from './filters';
 import {
   GetBorderPointsOptions,
@@ -463,8 +462,8 @@ export class Mask {
    * @param options - Inversion options
    * @returns The subtracted mask.
    */
-  public subtractImage(other: Mask, options?: SubtractImageOptions): Mask {
-    return subtractImage(this, other, options);
+  public subtract(other: Mask, options?: SubtractImageOptions): Mask {
+    return subtract(this, other, options);
   }
 
   /**

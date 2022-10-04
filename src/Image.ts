@@ -1,6 +1,8 @@
 import { RgbColor } from 'colord';
 
 import { Mask } from './Mask';
+import { subtract, SubtractImageOptions } from './compare';
+import { meanDifference } from './compare/meanDifference';
 import { mean } from './compute/mean';
 import { median } from './compute/median';
 import { correctColor } from './correctColor';
@@ -25,8 +27,6 @@ import {
   separableConvolution,
   gaussianBlur,
   GaussianBlurOptions,
-  subtractImage,
-  SubtractImageOptions,
   HypotenuseOptions,
   rawDirectConvolution,
   GradientFilterOptions,
@@ -579,6 +579,28 @@ export class Image {
     }
   }
 
+  // COMPARE
+  /**
+   * Subtract other from an image.
+   *
+   * @param other - Image to subtract
+   * @param options - Inversion options
+   * @returns The subtracted image.
+   */
+  public subtract(other: Image, options: SubtractImageOptions = {}): Image {
+    return subtract(this, other, options);
+  }
+
+  /**
+   * Compute the mean difference between two images.
+   *
+   * @param other - Second image.
+   * @returns Mean difference between the two images.
+   */
+  public meanDifference(other: Image): number {
+    return meanDifference(this, other);
+  }
+
   // COMPUTE
 
   public histogram(options?: HistogramOptions): Uint32Array {
@@ -809,7 +831,9 @@ export class Image {
   public flip(options?: FlipOptions): Image {
     return flip(this, options);
   }
+
   /**
+   *
    * Invert the colors of the image.
    *
    * @param options - Inversion options
@@ -817,17 +841,6 @@ export class Image {
    */
   public invert(options?: InvertOptions): Image {
     return invert(this, options);
-  }
-
-  /**
-   * Subtract other from an image.
-   *
-   * @param other - Image to subtract
-   * @param options - Inversion options
-   * @returns The subtracted image.
-   */
-  public subtractImage(other: Image, options?: SubtractImageOptions): Image {
-    return subtractImage(this, other, options);
   }
 
   /**

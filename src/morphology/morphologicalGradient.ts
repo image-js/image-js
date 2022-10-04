@@ -1,5 +1,5 @@
 import { ColorDepth, Image, Mask } from '..';
-import { subtractImage } from '../filters';
+import { subtract } from '../compare';
 import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
 
@@ -62,7 +62,7 @@ export function morphologicalGradient(
   for (let i = 0; i < iterations; i++) {
     let dilatedImage = newImage.dilate({ kernel });
     let erodedImage = newImage.erode({ kernel });
-    newImage = subtractImage(dilatedImage, erodedImage, { absolute: true });
+    newImage = subtract(dilatedImage, erodedImage, { absolute: true });
   }
 
   return newImage;
