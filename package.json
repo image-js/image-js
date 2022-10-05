@@ -81,7 +81,7 @@
     "@swiftcarrot/color-fns": "^3.2.0",
     "blob-util": "^2.0.2",
     "canny-edge-detector": "^1.0.0",
-    "fast-bmp": "^1.0.0",
+    "fast-bmp": "^2.0.1",
     "fast-jpeg": "^1.0.1",
     "fast-list": "^1.0.3",
     "fast-png": "^6.1.0",
