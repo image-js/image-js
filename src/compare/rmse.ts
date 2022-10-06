@@ -30,5 +30,5 @@ export function mse(image: Image, otherImage: Image): number {
       sum += Math.pow(value, 2);
     }
   }
-  return sum / image.size;
+  return sum / (image.size * image.channels);
 }
