@@ -640,10 +640,11 @@ export class Image {
   /**
    * Compute the mean pixel of an image.
    *
+   * @param options - Mean options.
    * @returns The mean pixel.
    */
-  public mean(): number[] {
-    return mean(this);
+  public mean(options = {}): number[] | number {
+    return mean(this, options);
   }
 
   /**

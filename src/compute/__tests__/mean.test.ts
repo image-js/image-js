@@ -9,7 +9,7 @@ test('5x1 RGB image', () => {
     [1, 2, 3],
   ]);
 
-  const result = mean(image);
+  const result = mean(image, {});
 
   expect(result).toStrictEqual([1, 2, 3]);
 });
@@ -37,4 +37,18 @@ test('2x4 GREY image', () => {
   const result = image.mean();
 
   expect(result).toStrictEqual([1.5]);
+});
+
+test('channelwise = false', () => {
+  const image = testUtils.createRgbImage([
+    [1, 2, 3],
+    [1, 2, 3],
+    [1, 2, 3],
+    [1, 2, 3],
+    [1, 2, 3],
+  ]);
+
+  const result = image.mean({ channelwise: false });
+
+  expect(result).toBe(2);
 });
