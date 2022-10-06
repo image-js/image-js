@@ -1,7 +1,7 @@
 import { RgbColor } from 'colord';
 
 import { Mask } from './Mask';
-import { subtract, SubtractImageOptions } from './compare';
+import { psnr, subtract, SubtractImageOptions } from './compare';
 import { meanDifference } from './compare/meanDifference';
 import { mse, rmse } from './compare/rmse';
 import { mean } from './compute/mean';
@@ -619,6 +619,16 @@ export class Image {
    */
   public rmse(other: Image): number {
     return rmse(this, other);
+  }
+
+  /**
+   * Compute the Peak signal-to-noise ratio (PSNR) between two images.
+   *
+   * @param other - Second image.
+   * @returns PSNR of the two images in decibels.
+   */
+  public psnr(other: Image): number {
+    return psnr(this, other);
   }
 
   // COMPUTE

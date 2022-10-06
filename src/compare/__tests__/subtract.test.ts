@@ -1,9 +1,7 @@
 test('subtract image to itself', async () => {
   const image = testUtils.createRgbImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);
   const other = image;
-  expect(image.subtract(other)).toMatchImageData([
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ]);
+  expect(image.subtract(other)).toMatchImageData([[0, 0, 0, 0, 0, 0, 0, 0, 0]]);
 });
 
 test('absolute = false', async () => {
@@ -30,8 +28,8 @@ test('subtract mask to itself', async () => {
 
 test('absolute = false with masks', async () => {
   const image = testUtils.createMask([[1, 1, 0, 0]]);
-  const other = testUtils.createMask([[1, 1, 1, 1]]);
-  expect(image.subtract(other)).toMatchMaskData([[0, 0, 0, 0]]);
+  const other = testUtils.createMask([[0, 1, 1, 1]]);
+  expect(image.subtract(other)).toMatchMaskData([[1, 0, 0, 0]]);
 });
 
 test('absolute = true with masks', async () => {
