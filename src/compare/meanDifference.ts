@@ -8,7 +8,7 @@ import { Image } from '..';
  * @returns Mean difference between the two images.
  */
 export function meanDifference(image: Image, otherImage: Image): number {
-  const difference = image.subtract(otherImage);
+  const difference = image.subtract(otherImage, { absolute: true });
   let nbValues = 0;
   let sum = 0;
   for (let i = 0; i < image.size; i++) {
