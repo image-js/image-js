@@ -6,6 +6,7 @@ import { meanDifference } from './compare/meanDifference';
 import { mse, rmse } from './compare/rmse';
 import { mean } from './compute/mean';
 import { median } from './compute/median';
+import { variance } from './compute/variance';
 import { correctColor } from './correctColor';
 import {
   drawLineOnImage,
@@ -654,6 +655,15 @@ export class Image {
    */
   public median(): number[] {
     return median(this);
+  }
+
+  /**
+   * Compute the variance of an image.
+   *
+   * @returns The variance.
+   */
+  public variance(): number {
+    return variance(this);
   }
 
   // DRAW
