@@ -3,6 +3,7 @@ import { RgbColor } from 'colord';
 import { Mask } from './Mask';
 import { subtract, SubtractImageOptions } from './compare';
 import { meanDifference } from './compare/meanDifference';
+import { mse, rmse } from './compare/rmse';
 import { mean } from './compute/mean';
 import { median } from './compute/median';
 import { correctColor } from './correctColor';
@@ -599,6 +600,25 @@ export class Image {
    */
   public meanDifference(other: Image): number {
     return meanDifference(this, other);
+  }
+  /**
+   * Compute the Mean Square Error (MSE) between two images.
+   *
+   * @param other - Second image.
+   * @returns MSE of the two images.
+   */
+  public mse(other: Image): number {
+    return mse(this, other);
+  }
+
+  /**
+   * Compute the Root Mean Square Error (RMSE) between two images.
+   *
+   * @param other - Second image.
+   * @returns MSE of the two images.
+   */
+  public rmse(other: Image): number {
+    return rmse(this, other);
   }
 
   // COMPUTE
