@@ -16,8 +16,6 @@ import extend from './extend';
 import getImageParameters from './internal/getImageParameters';
 import RoiManager from './roi/manager';
 
-const objectToString = Object.prototype.toString;
-
 /**
  * Class representing an image.
  * This class allows to manipulate easily images directly in the browser or in node.
@@ -337,7 +335,7 @@ export default class Image {
   }
 
   static isImage(object) {
-    return object instanceof Image || objectToString.call(object) === '[object IJSImage]';
+    return object instanceof Image;
   }
 
   /**
