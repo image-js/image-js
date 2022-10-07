@@ -337,7 +337,7 @@ export default class Image {
   }
 
   static isImage(object) {
-    return objectToString.call(object) === '[object IJSImage]';
+    return object instanceof Image || objectToString.call(object) === '[object IJSImage]';
   }
 
   /**
