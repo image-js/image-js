@@ -1,6 +1,6 @@
 # image-js
 
-Advanced image processing and manipulation in JavaScript.
+Advanced image processing and manipulation in [JavaScript](https://www.interviewbit.com/javascript-cheat-sheet).
 
 image-js is a full-featured library that can deal with simple image processing
 (color leveling, grey image, mask, resize, rotation, etc.) as well as advanced
