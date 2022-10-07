@@ -1,5 +1,13 @@
 # Changelog
 
+### [0.35.2](https://www.github.com/image-js/image-js/compare/v0.35.1...v0.35.2) (2022-10-07)
+
+
+### Bug Fixes
+
+* add more typescript definitions ([#606](https://www.github.com/image-js/image-js/issues/606)) ([e4eb534](https://www.github.com/image-js/image-js/commit/e4eb5341314a322cb6addec998fd24b21e0c2143))
+* bump fast-bmp to 2.0.1 ([#608](https://www.github.com/image-js/image-js/issues/608)) ([2ddabf9](https://www.github.com/image-js/image-js/commit/2ddabf9a21824c094b30bc93849308a228007b19))
+
 ### [0.35.1](https://www.github.com/image-js/image-js/compare/v0.35.0...v0.35.1) (2022-08-10)
 
 
