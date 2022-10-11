@@ -4,6 +4,7 @@ import { Mask } from './Mask';
 import { psnr, subtract, SubtractImageOptions } from './compare';
 import { meanDifference } from './compare/meanDifference';
 import { mse, rmse } from './compare/rmse';
+import { ssim, SsimOptions } from './compare/ssim';
 import { mean } from './compute/mean';
 import { median } from './compute/median';
 import { variance } from './compute/variance';
@@ -630,6 +631,17 @@ export class Image {
    */
   public psnr(other: Image): number {
     return psnr(this, other);
+  }
+
+  /**
+   * Compute the Structural Similarity (SSIM) of two GREY images.
+   *
+   * @param other - Second image.
+   * @param options
+   * @returns SSIM of the two images.
+   */
+  public ssim(other: Image, options: Partial<SsimOptions> = {}): number {
+    return ssim(this, other, options);
   }
 
   // COMPUTE

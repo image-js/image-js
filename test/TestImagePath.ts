@@ -41,4 +41,7 @@ export type TestImagePath =
   | 'correctColor/exposure-minus-1.png'
   | 'correctColor/exposure-plus-1.png'
   | 'correctColor/inverted.png'
-  | 'correctColor/offsets.png';
+  | 'correctColor/offsets.png'
+  | 'ssim/ssim-original.png'
+  | 'ssim/ssim-0.840.png'
+  | 'ssim/ssim-0.662.png';
