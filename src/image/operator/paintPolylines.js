@@ -4,7 +4,7 @@ import { getColors } from '../../util/color';
  * Paint polylines on the current image.
  * @memberof Image
  * @instance
- * @param {Array<Array<number>>} polylines - Array of array of [x,y] points
+ * @param {Array<Array<Array<number>>>} polylines - Array of array of [x,y] points
  * @param {object} [options]
  * @param {Array<number>|string}     [options.color] - Array of 3 elements (R, G, B) or a valid css color.
  * @param {Array<Array<number>>|Array<string>} [options.colors] - Array of Array of 3 elements (R, G, B) for each color of each mask
