@@ -53,7 +53,7 @@ export default function pad(options = {}) {
   let newImage = Image.createFrom(this, {
     width: newWidth,
     height: newHeight,
-    position: [-size[0], -size[1]]
+    position: [-size[0], -size[1]],
   });
 
   copy(this, newImage, size[0], size[1]);
