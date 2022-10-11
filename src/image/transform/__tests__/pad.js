@@ -29,7 +29,6 @@ describe('check the pad transform', function () {
       1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4,
     ]);
 
-    console.log(Array.from(image.pad({ size: 1 }).data));
     expect(Array.from(image.pad({ size: 1 }).data)).toStrictEqual([
       1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3,
       3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4,
