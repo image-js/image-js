@@ -1,5 +1,6 @@
 import { ColorDepth, Image, Mask } from '..';
 import checkProcessable from '../utils/checkProcessable';
+import { validateForComparison } from '../utils/validators';
 
 export interface SubtractImageOptions {
   /**
@@ -48,17 +49,7 @@ export function subtract(
     });
   }
 
-  if (image.width !== otherImage.width || image.height !== otherImage.height) {
-    throw new Error('subtract: both images must have the same size');
-  }
-  if (image.alpha !== otherImage.alpha || image.depth !== otherImage.depth) {
-    throw new Error('subtract: both images must have the same alpha and depth');
-  }
-  if (image.channels !== otherImage.channels) {
-    throw new Error(
-      'subtract: both images must have the same number of channels',
-    );
-  }
+  validateForComparison('subtract', image, otherImage);
 
   let newImage = image.clone();
   if (newImage instanceof Image) {

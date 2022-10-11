@@ -1,4 +1,5 @@
 import { Image } from '../Image';
+import { Mask } from '../Mask';
 
 /**
  * Validate an array of channels.
@@ -38,6 +39,33 @@ export function validateValue(value: number, image: Image): void {
       `invalid value: ${value}. It must be a positive value smaller than ${
         image.maxValue + 1
       }`,
+    );
+  }
+}
+
+/**
+ * Validate that two images are compatible for comparison functions.
+ *
+ * @param process
+ * @param image - first image.
+ * @param other - Second image.
+ */
+export function validateForComparison(
+  process: string,
+  image: Image | Mask,
+  other: Image | Mask,
+): void {
+  if (image.width !== other.width || image.height !== other.height) {
+    throw new Error(`${process}: both images must have the same size`);
+  }
+  if (image.alpha !== other.alpha || image.depth !== other.depth) {
+    throw new Error(
+      `${process}: both images must have the same alpha and depth`,
+    );
+  }
+  if (image.channels !== other.channels) {
+    throw new Error(
+      `${process}: both images must have the same number of channels`,
     );
   }
 }
