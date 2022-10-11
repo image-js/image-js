@@ -1,7 +1,8 @@
 import { Image } from '..';
 
 /**
- * Compute the mean difference between two images. Ignore values that are zero in both images.
+ * Compute the mean difference between two images.
+ * Ignore values that are zero in both images.
  *
  * @param image - First image.
  * @param otherImage - Second image.

@@ -16,6 +16,7 @@ export function rmse(image: Image, otherImage: Image): number {
 
 /**
  * Compute the Mean Square Error (MSE) between two images.
+ * The input images can have any number of channels.
  *
  * @param image - First image.
  * @param otherImage - Second image.
