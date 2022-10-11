@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.35.0](https://www.github.com/image-js/image-js/compare/v0.34.1...v0.35.0) (2022-08-01)
+
+
+### Features
+
+* allow rotate & crop for bitDepth = 1 images ([#596](https://www.github.com/image-js/image-js/issues/596)) ([622b909](https://www.github.com/image-js/image-js/commit/622b9093f17698dd18c3564773a59dd54d4e7f7e))
+
+
+### Bug Fixes
+
+* add TypeScript definition to setChannel() method ([#597](https://www.github.com/image-js/image-js/issues/597)) ([551c334](https://www.github.com/image-js/image-js/commit/551c334bdcd9f8ea2972c31197ee0847a14ead3b))
+
 ### [0.34.1](https://www.github.com/image-js/image-js/compare/v0.34.0...v0.34.1) (2022-05-17)
 
 

@@ -116,3 +116,45 @@ describe('check the crop transform', function () {
     }).toThrow(/size is out of range/);
   });
 });
+
+describe('check the crop transform on binary image', function () {
+  let image;
+  beforeEach(function () {
+    image = new Image(5, 5, [0x03, 0xce, 0xf7, 0x80], { kind: 'BINARY' });
+  });
+
+  it('check the right extract for GREY image', function () {
+    let result = image.crop();
+    expect(getHash(result)).toBe(getHash(image));
+
+    result = image.crop({
+      x: 2,
+      y: 2,
+    });
+    expect(Array.from(result.data)).toStrictEqual([0xff, 0x80]);
+
+    result = image.crop({
+      x: 0,
+      y: 0,
+      height: 2,
+      width: 2,
+    });
+    expect(Array.from(result.data)).toStrictEqual([0x10]);
+
+    result = image.crop({
+      x: 2,
+      y: 2,
+      height: 2,
+      width: 2,
+    });
+    expect(Array.from(result.data)).toStrictEqual([0xf0]);
+
+    result = image.crop({
+      x: 1,
+      y: 3,
+      height: 1,
+      width: 4,
+    });
+    expect(Array.from(result.data)).toStrictEqual([0xf0]);
+  });
+});
