@@ -62,6 +62,7 @@ export default function crop(options = {}) {
     const newImage = new Image(width, height, {
       kind: 'BINARY',
       parent: this,
+      position: [x, y],
     });
     result = cropBinary(this, newImage, x, y, width, height);
   } else {

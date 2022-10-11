@@ -15,6 +15,8 @@ export default function paintPolyline(points, options = {}) {
     bitDepth: [1, 8, 16],
   });
 
+  color = color.length ? color : [color];
+
   let numberChannels = Math.min(this.channels, color.length);
 
   for (let i = 0; i < points.length - 1 + closed; i++) {
@@ -41,7 +43,8 @@ export default function paintPolyline(points, options = {}) {
         yPoint < this.height
       ) {
         if (this.bitDepth === 1) {
-          (color.length?color[0]:color)?this.setBitXY(xPoint, yPoint):this.clearBitXY(xPoint, yPoint);
+          if (color[0] === 1) this.setBitXY(x, y);
+          else this.clearBitXY(x, y);
         } else {
           let position = (xPoint + yPoint * this.width) * this.channels;
           for (let channel = 0; channel < numberChannels; channel++) {
