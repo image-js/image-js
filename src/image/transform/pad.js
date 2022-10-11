@@ -50,7 +50,11 @@ export default function pad(options = {}) {
   let newHeight = this.height + size[1] * 2;
   let channels = this.channels;
 
-  let newImage = Image.createFrom(this, { width: newWidth, height: newHeight });
+  let newImage = Image.createFrom(this, {
+    width: newWidth,
+    height: newHeight,
+    position: [-size[0], -size[1]]
+  });
 
   copy(this, newImage, size[0], size[1]);
 
