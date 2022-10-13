@@ -8,7 +8,7 @@ import { computeSsim, SsimOptions } from './computeSsim';
  *
  * @param image - First image.
  * @param otherImage - Second image.
- * @param options
+ * @param options - SsimOptions
  * @returns SSIM of the two images.
  */
 export function computeDssim(
@@ -16,6 +16,6 @@ export function computeDssim(
   otherImage: Image,
   options: SsimOptions = {},
 ): number {
-  const ssim = computeSsim(image, otherImage, options);
+  const ssim = computeSsim(image, otherImage, options).mssim;
   return (1 - ssim) / 2;
 }

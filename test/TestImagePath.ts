@@ -43,5 +43,7 @@ export type TestImagePath =
   | 'correctColor/inverted.png'
   | 'correctColor/offsets.png'
   | 'ssim/ssim-original.png'
-  | 'ssim/ssim-0.840.png'
-  | 'ssim/ssim-0.662.png';
+  | 'ssim/ssim-contrast.png'
+  | 'ssim/ssim-saltPepper.png'
+  | 'ssim/ssim-blurry.png'
+  | 'ssim/ssim-compressed.png';
