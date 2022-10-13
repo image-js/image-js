@@ -9,9 +9,9 @@ import { Image } from '..';
  * @returns RMSE of the two images.
  */
 export function rmse(image: Image, otherImage: Image): number {
-  const mse = image.mse(otherImage);
+  const globalMse = mse(image, otherImage);
 
-  return Math.sqrt(mse);
+  return Math.sqrt(globalMse);
 }
 
 /**

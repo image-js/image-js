@@ -1,11 +1,7 @@
 import { RgbColor } from 'colord';
 
 import { Mask } from './Mask';
-import { psnr, subtract, SubtractImageOptions } from './compare';
-import { meanDifference } from './compare/meanDifference';
-import { mse, rmse } from './compare/rmse';
-import { ssim, SsimOptions } from './compare/ssim';
-import { mean } from './compute/mean';
+import { subtract, SubtractImageOptions } from './compare';
 import { median } from './compute/median';
 import { variance } from './compute/variance';
 import { correctColor } from './correctColor';
@@ -86,6 +82,7 @@ import {
   GreyOptions,
   histogram,
   HistogramOptions,
+  mean,
   resize,
   ResizeOptions,
   rotate,
@@ -594,56 +591,6 @@ export class Image {
     return subtract(this, other, options);
   }
 
-  /**
-   * Compute the mean difference between two images.
-   *
-   * @param other - Second image.
-   * @returns Mean difference between the two images.
-   */
-  public meanDifference(other: Image): number {
-    return meanDifference(this, other);
-  }
-  /**
-   * Compute the Mean Square Error (MSE) between two images.
-   *
-   * @param other - Second image.
-   * @returns MSE of the two images.
-   */
-  public mse(other: Image): number {
-    return mse(this, other);
-  }
-
-  /**
-   * Compute the Root Mean Square Error (RMSE) between two images.
-   *
-   * @param other - Second image.
-   * @returns MSE of the two images.
-   */
-  public rmse(other: Image): number {
-    return rmse(this, other);
-  }
-
-  /**
-   * Compute the Peak signal-to-noise ratio (PSNR) between two images.
-   *
-   * @param other - Second image.
-   * @returns PSNR of the two images in decibels.
-   */
-  public psnr(other: Image): number {
-    return psnr(this, other);
-  }
-
-  /**
-   * Compute the Structural Similarity (SSIM) of two GREY images.
-   *
-   * @param other - Second image.
-   * @param options
-   * @returns SSIM of the two images.
-   */
-  public ssim(other: Image, options: Partial<SsimOptions> = {}): number {
-    return ssim(this, other, options);
-  }
-
   // COMPUTE
 
   public histogram(options?: HistogramOptions): Uint32Array {
@@ -653,11 +600,10 @@ export class Image {
   /**
    * Compute the mean pixel of an image.
    *
-   * @param options - Mean options.
    * @returns The mean pixel.
    */
-  public mean(options = {}): number[] | number {
-    return mean(this, options);
+  public mean(): number[] {
+    return mean(this);
   }
 
   /**
@@ -670,11 +616,11 @@ export class Image {
   }
 
   /**
-   * Compute the variance of an image.
+   * Compute the variance of each channel of an image.
    *
-   * @returns The variance.
+   * @returns The variance of the channels of the image.
    */
-  public variance(): number {
+  public variance(): number[] {
     return variance(this);
   }
 

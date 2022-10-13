@@ -1,9 +1,9 @@
 import { variance } from '../variance';
 
 test('1x1 RGB image', () => {
-  const image = testUtils.createRgbImage([[1, 2, 3]]);
+  const image = testUtils.createGreyImage([[1, 2, 3]]);
 
-  expect(variance(image)).toStrictEqual(2 / 3);
+  expect(variance(image)).toStrictEqual([2 / 3]);
 });
 
 test('GREY image', () => {
@@ -14,5 +14,5 @@ test('GREY image', () => {
 
   const result = image.variance();
 
-  expect(result).toBe(525);
+  expect(result).toStrictEqual([525]);
 });

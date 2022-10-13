@@ -1,5 +1,7 @@
 import { Image } from '..';
 
+import { rmse } from './rmse';
+
 /**
  * Compute the Peak signal-to-noise ratio (PSNR) between two images.
  * The larger the PSNR, the more similar the images.
@@ -10,7 +12,7 @@ import { Image } from '..';
  * @returns PSNR of the two images in decibels.
  */
 export function psnr(image: Image, otherImage: Image): number {
-  const rmse = image.rmse(otherImage);
+  const rmsePixel = rmse(image, otherImage);
 
-  return 20 * Math.log10(image.maxValue / (rmse + Number.MIN_VALUE));
+  return 20 * Math.log10(image.maxValue / (rmsePixel + Number.MIN_VALUE));
 }
