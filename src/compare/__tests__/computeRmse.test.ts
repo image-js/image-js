@@ -1,24 +1,25 @@
-import { psnr } from '../psnr';
+import { computeMse, computeRmse } from '../computeRmse';
 
 test('twice the same image', async () => {
   const image = testUtils.createRgbImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);
   const other = image;
-  expect(psnr(image, other)).toBe(Number.POSITIVE_INFINITY);
+  expect(computeRmse(image, other)).toBe(0);
 });
 
 test('images are full of zeros', async () => {
   const image = testUtils.createRgbImage([[0, 0, 0, 0, 0, 0]]);
   const other = image;
-  expect(psnr(image, other)).toBe(Number.POSITIVE_INFINITY);
+  expect(computeRmse(image, other)).toBe(0);
 });
 test('should be symetrical', async () => {
   const image = testUtils.createGreyImage([[1, 2, 3, 4, 5]]);
   const other = testUtils.createGreyImage([[0, 0, 0, 0, 0]]);
-  expect(psnr(image, other)).toBeCloseTo(37.717);
-  expect(psnr(other, image)).toBeCloseTo(37.717);
+  expect(computeMse(image, other)).toBe(11);
+  expect(computeMse(other, image)).toBe(11);
 });
 test('RGBA images', async () => {
   const image = testUtils.createRgbaImage([[50, 100, 150, 200]]);
   const other = testUtils.createRgbaImage([[0, 50, 100, 150]]);
-  expect(psnr(image, other)).toBe(20 * Math.log10(255 / 50));
+  expect(computeMse(image, other)).toBe(2500);
+  expect(computeRmse(image, other)).toBe(50);
 });

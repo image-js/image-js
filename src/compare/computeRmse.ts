@@ -8,8 +8,8 @@ import { Image } from '..';
  * @param otherImage - Second image.
  * @returns RMSE of the two images.
  */
-export function rmse(image: Image, otherImage: Image): number {
-  const globalMse = mse(image, otherImage);
+export function computeRmse(image: Image, otherImage: Image): number {
+  const globalMse = computeMse(image, otherImage);
 
   return Math.sqrt(globalMse);
 }
@@ -22,7 +22,7 @@ export function rmse(image: Image, otherImage: Image): number {
  * @param otherImage - Second image.
  * @returns MSE of the two images.
  */
-export function mse(image: Image, otherImage: Image): number {
+export function computeMse(image: Image, otherImage: Image): number {
   const difference = image.subtract(otherImage, { absolute: true });
   let sum = 0;
   for (let i = 0; i < image.size; i++) {

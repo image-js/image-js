@@ -1,16 +1,16 @@
-import { ssim as bufferSsim, Options as BufferSsimOptions } from 'ssim.js';
+import { ssim as bufferSsim } from 'ssim.js';
 
 import { ColorDepth, Image } from '..';
 import checkProcessable from '../utils/checkProcessable';
 import { validateForComparison } from '../utils/validators';
 
-export interface SsimOptions extends BufferSsimOptions {
+export interface SsimOptions {
   /**
    * Window size for SSIM map.
    *
    * @default Number.min(11, image.width, image.height)
    */
-  windowSize: number;
+  windowSize?: number;
 }
 
 /**
@@ -25,10 +25,10 @@ export interface SsimOptions extends BufferSsimOptions {
  * @param options
  * @returns SSIM of the two images.
  */
-export function ssim(
+export function computeSsim(
   image: Image,
   otherImage: Image,
-  options: Partial<SsimOptions>,
+  options: SsimOptions = {},
 ): number {
   if (options.windowSize) {
     options.windowSize = Math.min(11, image.height, image.width);
@@ -54,13 +54,8 @@ export function ssim(
     data: otherData,
   };
 
-  console.log({ imageBuffer });
-  console.log({ otherBuffer });
-
   // TODO: handle 16 bits images -> check lib options
   const ssim = bufferSsim(imageBuffer, otherBuffer, options);
-
-  console.log({ ssim });
 
   return ssim.mssim;
 }

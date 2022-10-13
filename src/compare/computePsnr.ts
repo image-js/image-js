@@ -1,6 +1,6 @@
 import { Image } from '..';
 
-import { rmse } from './rmse';
+import { computeRmse } from './computeRmse';
 
 /**
  * Compute the Peak signal-to-noise ratio (PSNR) between two images.
@@ -11,8 +11,8 @@ import { rmse } from './rmse';
  * @param otherImage - Second image.
  * @returns PSNR of the two images in decibels.
  */
-export function psnr(image: Image, otherImage: Image): number {
-  const rmsePixel = rmse(image, otherImage);
+export function computePsnr(image: Image, otherImage: Image): number {
+  const rmsePixel = computeRmse(image, otherImage);
 
   return 20 * Math.log10(image.maxValue / (rmsePixel + Number.MIN_VALUE));
 }
