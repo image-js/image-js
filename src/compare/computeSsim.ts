@@ -1,6 +1,6 @@
 import { ssim as bufferSsim } from 'ssim.js';
 
-import { ColorDepth, Image, ImageColorModel, writeSync } from '..';
+import { ColorDepth, Image, ImageColorModel } from '..';
 import checkProcessable from '../utils/checkProcessable';
 import { validateForComparison } from '../utils/validators';
 
@@ -88,18 +88,6 @@ export function computeSsim(
     windowSize,
     ssim: algorithm,
   });
-
-  const result = new Image(ssim.ssim_map.width, ssim.ssim_map.height);
-
-  for (let i = 0; i < result.size; i++) {
-    const currentValue = Math.abs(ssim.ssim_map.data[i]);
-    if (isNaN(currentValue)) {
-      result.setPixelByIndex(i, [255, 0, 0]);
-    } else {
-      result.setPixelByIndex(i, [0, 255 * currentValue, 0]);
-    }
-  }
-  writeSync('./src/compare/rgb-ssimMap-fast.png', result);
 
   return {
     mssim: ssim.mssim,

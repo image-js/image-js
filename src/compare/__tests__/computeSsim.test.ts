@@ -108,3 +108,14 @@ test('should handle RGBA images', async () => {
     .convertColor(ImageColorModel.RGBA);
   expect(computeSsim(original, other).mssim).toBeCloseTo(0.594, 2);
 });
+
+test('windowSize too large error', async () => {
+  const image = testUtils.createGreyImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);
+  const other = image;
+  expect(() => {
+    computeSsim(image, other, { windowSize: 5 });
+  }).toThrow('ssim: windowSize cannot exceed image dimensions');
+  expect(() => {
+    computeSsim(image, other, { windowSize: 20 });
+  }).toThrow('ssim: windowSize cannot exceed image dimensions');
+});
