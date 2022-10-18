@@ -22,6 +22,19 @@ test('ssim should be zero', async () => {
   expect(computeSsim(image, other).mssim).toBeCloseTo(0, 3);
 });
 
+test('ssim should be -1 (anti-correlated images)', async () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0],
+    [255, 255, 255],
+  ]);
+  const other = testUtils.createGreyImage([
+    [255, 255, 255],
+    [0, 0, 0],
+  ]);
+  expect(image === other).toBe(false);
+  expect(computeSsim(image, other).mssim).toBeCloseTo(-1, 2);
+});
+
 test('original with itself', async () => {
   const original = testUtils.load('ssim/ssim-original.png');
   const other = original;
@@ -53,4 +66,45 @@ test('compressed', async () => {
   const original = testUtils.load('ssim/ssim-original.png');
   const other = testUtils.load('ssim/ssim-compressed.png');
   expect(computeSsim(original, other).mssim).toBeCloseTo(0.7178, 1);
+});
+
+test('compressed, algorithm = fast', async () => {
+  const original = testUtils.load('ssim/ssim-original.png');
+  const other = testUtils.load('ssim/ssim-compressed.png');
+  expect(computeSsim(original, other, { algorithm: 'fast' }).mssim).toBeCloseTo(
+    0.7178,
+    1,
+  );
+});
+
+test('compressed, algorithm = bezkrovny', async () => {
+  const original = testUtils.load('ssim/ssim-original.png');
+  const other = testUtils.load('ssim/ssim-compressed.png');
+  expect(
+    computeSsim(original, other, { algorithm: 'bezkrovny' }).mssim,
+  ).toBeCloseTo(0.7178, 1);
+});
+
+test('compressed, algorithm = weber', async () => {
+  const original = testUtils.load('ssim/ssim-original.png');
+  const other = testUtils.load('ssim/ssim-compressed.png');
+  expect(
+    computeSsim(original, other, { algorithm: 'weber' }).mssim,
+  ).toBeCloseTo(0.7178, 1);
+});
+
+test('should handle RGB images', async () => {
+  const original = testUtils.load('opencv/test.png');
+  const other = testUtils.load('opencv/testGaussianBlur.png');
+  expect(computeSsim(original, other).mssim).toBeCloseTo(0.594, 2);
+});
+
+test('should handle RGBA images', async () => {
+  const original = testUtils
+    .load('opencv/test.png')
+    .convertColor(ImageColorModel.RGBA);
+  const other = testUtils
+    .load('opencv/testGaussianBlur.png')
+    .convertColor(ImageColorModel.RGBA);
+  expect(computeSsim(original, other).mssim).toBeCloseTo(0.594, 2);
 });

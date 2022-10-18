@@ -1,6 +1,6 @@
 import { ssim as bufferSsim } from 'ssim.js';
 
-import { ColorDepth, Image, ImageColorModel } from '..';
+import { ColorDepth, Image, ImageColorModel, writeSync } from '..';
 import checkProcessable from '../utils/checkProcessable';
 import { validateForComparison } from '../utils/validators';
 
@@ -11,6 +11,12 @@ export interface SsimOptions {
    * @default Math.min(11, image.width, image.height)
    */
   windowSize?: number;
+  /**
+   * Algorithm to use to compute the SSIM.
+   *
+   * @default 'original'
+   */
+  algorithm?: 'fast' | 'original' | 'bezkrovny' | 'weber';
 }
 
 export interface Ssim {
@@ -43,7 +49,7 @@ export function computeSsim(
   otherImage: Image,
   options: SsimOptions = {},
 ): Ssim {
-  let { windowSize } = options;
+  let { windowSize, algorithm = 'original' } = options;
 
   if (windowSize) {
     if (windowSize > image.width || windowSize > image.height) {
@@ -52,15 +58,14 @@ export function computeSsim(
   } else {
     windowSize = Math.min(11, image.height, image.width);
   }
-
   checkProcessable(image, 'ssim', {
     bitDepth: [ColorDepth.UINT8],
-    channels: [1, 4],
+    channels: [1, 3, 4],
   });
 
   validateForComparison('ssim', image, otherImage);
 
-  if (image.colorModel === ImageColorModel.GREY) {
+  if (image.colorModel !== ImageColorModel.RGBA) {
     image = image.convertColor(ImageColorModel.RGBA);
     otherImage = otherImage.convertColor(ImageColorModel.RGBA);
   }
@@ -81,8 +86,23 @@ export function computeSsim(
 
   const ssim = bufferSsim(imageBuffer, otherBuffer, {
     windowSize,
-    ssim: 'original',
+    ssim: algorithm,
   });
 
-  return { mssim: ssim.mssim, ssimMap: ssim.ssim_map };
+  const result = new Image(ssim.ssim_map.width, ssim.ssim_map.height);
+
+  for (let i = 0; i < result.size; i++) {
+    const currentValue = Math.abs(ssim.ssim_map.data[i]);
+    if (isNaN(currentValue)) {
+      result.setPixelByIndex(i, [255, 0, 0]);
+    } else {
+      result.setPixelByIndex(i, [0, 255 * currentValue, 0]);
+    }
+  }
+  writeSync('./src/compare/rgb-ssimMap-fast.png', result);
+
+  return {
+    mssim: ssim.mssim,
+    ssimMap: ssim.ssim_map,
+  };
 }
