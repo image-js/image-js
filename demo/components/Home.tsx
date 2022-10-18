@@ -3,11 +3,11 @@ import { Image } from '../../src';
 import CameraSelector from './CameraSelector';
 import CameraTransform from './CameraTransform';
 import Container from './Container';
-import { testGetFeret } from './testFunctions/testGetFeret';
+import { testComputeSsim } from './testFunctions/testComputeSsim';
 
 function testTransform(image: Image) {
   image.flip({ out: image });
-  return testGetFeret(image);
+  return testComputeSsim(image);
 }
 
 export default function Home() {
