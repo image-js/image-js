@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 
 import { Image, ImageColorModel, readCanvas, writeCanvas } from '../../src';
 import { convertColor } from '../../src/operations/convertColor';
@@ -8,24 +8,29 @@ import ErrorAlert from './ErrorAlert';
 import SnapshotImage from './SnapshotImage';
 import UnavailableCamera from './UnavailableCamera';
 
-type TransformFunction = (image: Image) => Image;
+type TransformFunction =
+  | ((image: Image) => Image)
+  | ((image: Image, snapshot: Image | null) => Image);
 
 interface CameraTransformProps {
   transform: TransformFunction;
+  canvasInputRef: RefObject<HTMLCanvasElement>;
+  snapshotUrl: string;
+  snapshotImageRef: RefObject<Image | null>;
 }
 
 export default function CameraTransform(props: CameraTransformProps) {
+  const { canvasInputRef, transform, snapshotUrl, snapshotImageRef } = props;
   const [{ selectedCamera }] = useCameraContext();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasInputRef = useRef<HTMLCanvasElement>(null);
   const canvasOutputRef = useRef<HTMLCanvasElement>(null);
-  const transformRef = useRef<TransformFunction>(props.transform);
+  const transformRef = useRef<TransformFunction>(transform);
   const [error, setError] = useState<string>('');
-  transformRef.current = props.transform;
+  transformRef.current = transform;
   useEffect(() => {
     // Reset error if transform is changed.
     setError('');
-  }, [props.transform]);
+  }, [transform]);
   useEffect(() => {
     if (!selectedCamera || error) return;
     const video = videoRef.current as HTMLVideoElement;
@@ -47,7 +52,10 @@ export default function CameraTransform(props: CameraTransformProps) {
             inputContext.drawImage(video, 0, 0);
             const image = readCanvas(canvasInput);
             try {
-              let result = transformRef.current(image);
+              let result = transformRef.current(
+                image,
+                snapshotImageRef.current,
+              );
               if (result.colorModel !== ImageColorModel.RGBA) {
                 result = convertColor(result, ImageColorModel.RGBA);
               }
@@ -68,7 +76,7 @@ export default function CameraTransform(props: CameraTransformProps) {
         cancelAnimationFrame(nextFrameRequest);
       }
     };
-  }, [error, selectedCamera]);
+  }, [canvasInputRef, snapshotImageRef, error, selectedCamera]);
   if (!selectedCamera) {
     return <UnavailableCamera />;
   }
@@ -77,7 +85,7 @@ export default function CameraTransform(props: CameraTransformProps) {
     <>
       <div className="flex gap-1">
         <video ref={videoRef} style={{ transform: 'scaleX(-1)' }} />
-        <SnapshotImage />
+        <SnapshotImage snapshotUrl={snapshotUrl} />
       </div>
       {error ? (
         <ErrorAlert>
@@ -86,12 +94,12 @@ export default function CameraTransform(props: CameraTransformProps) {
       ) : null}
 
       <canvas
-        style={{ display: error ? 'block' : 'none' }}
+        style={{ transform: 'scaleX(-1)', display: error ? 'block' : 'none' }}
         ref={canvasInputRef}
       />
 
       <canvas
-        style={{ display: error ? 'none' : 'block' }}
+        style={{ transform: 'scaleX(-1)', display: error ? 'none' : 'block' }}
         ref={canvasOutputRef}
       />
     </>
