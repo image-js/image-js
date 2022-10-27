@@ -5,6 +5,7 @@ import { convertColor } from '../../src/operations/convertColor';
 import { useCameraContext } from '../contexts/cameraContext';
 
 import ErrorAlert from './ErrorAlert';
+import SnapshotImage from './SnapshotImage';
 import UnavailableCamera from './UnavailableCamera';
 
 type TransformFunction = (image: Image) => Image;
@@ -74,16 +75,21 @@ export default function CameraTransform(props: CameraTransformProps) {
 
   return (
     <>
-      <video ref={videoRef} style={{ transform: 'scaleX(-1)' }} />
+      <div className="flex gap-1">
+        <video ref={videoRef} style={{ transform: 'scaleX(-1)' }} />
+        <SnapshotImage />
+      </div>
       {error ? (
         <ErrorAlert>
           <code>{error}</code>
         </ErrorAlert>
       ) : null}
+
       <canvas
         style={{ display: error ? 'block' : 'none' }}
         ref={canvasInputRef}
       />
+
       <canvas
         style={{ display: error ? 'none' : 'block' }}
         ref={canvasOutputRef}

@@ -25,5 +25,8 @@ export function testComputeSsim(image: Image): Image {
     data,
   });
 
+  // console.log(image.width, image.height);
+  // console.log(ssimMap.width, ssimMap.height);
+
   return ssimMap;
 }
