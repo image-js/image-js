@@ -6,11 +6,11 @@ import CameraSelector from './CameraSelector';
 import CameraSnapshotButton from './CameraSnapshotButton';
 import CameraTransform from './CameraTransform';
 import Container from './Container';
-import { testLevel } from './testFunctions/testLevel';
+import { testComputeSsim } from './comparisonFunctions/testComputeSsim';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function testTransform(image: Image, snapshot: Image | null) {
-  return testLevel(image);
+  return testComputeSsim(image, snapshot);
 }
 
 export default function Home() {

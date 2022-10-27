@@ -7,17 +7,17 @@ import { computeSsim } from '../../../src/compare/computeSsim';
  * @param image - Input image.
  * @returns The structural similarity matrix.
  */
-export function testComputeSsim(image: Image): Image {
-  // It is the gaussian blur that is slow.
-  const blurry = image.gaussianBlur({ sigma: 3 });
-  const ssim = computeSsim(image, blurry, {
+export function testComputeSsim(image: Image, snapshot: Image | null): Image {
+  if (snapshot === null) return image;
+
+  const ssim = computeSsim(image, snapshot, {
     windowSize: 100,
     algorithm: 'fast',
   });
-
+  console.log(ssim.ssimMap);
   let data = new Uint8Array(ssim.ssimMap.data);
   for (let i = 0; i < data.length; i++) {
-    data[i] = ssim.ssimMap.data[i] * 255;
+    data[i] = Math.abs(ssim.ssimMap.data[i]) * 255;
   }
 
   const ssimMap = new Image(ssim.ssimMap.width, ssim.ssimMap.height, {
