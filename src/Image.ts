@@ -832,8 +832,7 @@ export class Image {
   }
 
   /**
-   *
-   * Invert the colors of the image.
+   *   Invert the colors of the image.
    *
    * @param options - Inversion options
    * @returns The inverted image.
