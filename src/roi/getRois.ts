@@ -53,14 +53,22 @@ export function getRois(
     computeRois(roiMapManager);
   }
   let rois;
-  if (kind === RoiKind.BLACK) {
-    rois = roiMapManager.blackRois;
-  } else if (kind === RoiKind.WHITE) {
-    rois = roiMapManager.whiteRois;
-  } else if (kind === RoiKind.BW) {
-    rois = [...roiMapManager.whiteRois, ...roiMapManager.blackRois];
-  } else {
-    throw new Error('getRois: unknown ROI kind');
+  switch (kind) {
+    case RoiKind.BLACK: {
+      rois = roiMapManager.blackRois;
+      break;
+    }
+    case RoiKind.WHITE: {
+      rois = roiMapManager.whiteRois;
+      break;
+    }
+    case RoiKind.BW: {
+      rois = [...roiMapManager.whiteRois, ...roiMapManager.blackRois];
+      break;
+    }
+    default: {
+      throw new Error('getRois: unknown ROI kind');
+    }
   }
 
   return rois.filter(

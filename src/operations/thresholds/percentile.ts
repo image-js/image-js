@@ -18,7 +18,7 @@ export default function percentile(histogram: Uint32Array): number {
   const avec = new Array(histogram.length);
 
   const total = partialSum(histogram, histogram.length - 1);
-  let temp = 1.0;
+  let temp = 1;
 
   for (let i = 0; i < histogram.length; i++) {
     avec[i] = Math.abs(partialSum(histogram, i) / total - percentile);

@@ -27,11 +27,11 @@ export default function maxEntropy(
   const P1 = new Array<number>(histogram.length); // cumulative normalized histogram
   const P2 = new Array<number>(histogram.length);
   P1[0] = normHisto[0];
-  P2[0] = 1.0 - P1[0];
+  P2[0] = 1 - P1[0];
 
   for (let ih = 1; ih < histogram.length; ih++) {
     P1[ih] = P1[ih - 1] + normHisto[ih];
-    P2[ih] = 1.0 - P1[ih];
+    P2[ih] = 1 - P1[ih];
   }
 
   /* Determine the first non-zero bin */
@@ -62,7 +62,7 @@ export default function maxEntropy(
 
   for (let it = firstBin; it <= lastBin; it++) {
     /* Entropy of the background pixels */
-    entBack = 0.0;
+    entBack = 0;
     for (let ih = 0; ih <= it; ih++) {
       if (histogram[ih] !== 0) {
         entBack -= (normHisto[ih] / P1[it]) * Math.log(normHisto[ih] / P1[it]);
@@ -70,7 +70,7 @@ export default function maxEntropy(
     }
 
     /* Entropy of the object pixels */
-    entObj = 0.0;
+    entObj = 0;
     for (let ih = it + 1; ih < histogram.length; ih++) {
       if (histogram[ih] !== 0) {
         entObj -= (normHisto[ih] / P2[it]) * Math.log(normHisto[ih] / P2[it]);

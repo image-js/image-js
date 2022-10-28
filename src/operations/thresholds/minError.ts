@@ -23,7 +23,7 @@ export default function minError(
   let mu, nu, p, q, sigma2, tau2, w0, w1, w2, sqterm, temp;
 
   /* Calculate the mean gray-level */
-  let mean = 0.0;
+  let mean = 0;
   for (let ih = 0; ih < histogram.length; ih++) {
     mean += ih * histogram[ih];
   }
@@ -49,7 +49,7 @@ export default function minError(
     tau2 = (sumC2 - sumC1) / (sumA2 - sumA1) - nu * nu;
 
     // The terms of the quadratic equation to be solved.
-    w0 = 1.0 / sigma2 - 1.0 / tau2;
+    w0 = 1 / sigma2 - 1 / tau2;
     w1 = mu / sigma2 - nu / tau2;
     w2 =
       (mu * mu) / sigma2 -
@@ -66,7 +66,7 @@ export default function minError(
     Tprev = threshold;
     temp = (w1 + Math.sqrt(sqterm)) / w0;
 
-    if (isNaN(temp)) {
+    if (Number.isNaN(temp)) {
       threshold = Tprev;
     } else {
       threshold = Math.floor(temp);

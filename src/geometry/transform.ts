@@ -64,10 +64,11 @@ export function transform(
     borderType = BorderType.CONSTANT,
     borderValue = 0,
     interpolationType = InterpolationType.BILINEAR,
+    fullImage,
   } = options;
   let { width = image.width, height = image.height } = options;
 
-  if (options.fullImage) {
+  if (fullImage) {
     transformMatrix = transformMatrix.map((row) => row.slice());
     transformMatrix[0][2] = 0;
     transformMatrix[1][2] = 0;

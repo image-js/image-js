@@ -10,16 +10,24 @@ export function merge(images: Image[]): Image {
   const channels = images.length;
 
   let colorModel: ImageColorModel;
-  if (channels === 2) {
-    colorModel = ImageColorModel.GREYA;
-  } else if (channels === 3) {
-    colorModel = ImageColorModel.RGB;
-  } else if (channels === 4) {
-    colorModel = ImageColorModel.RGBA;
-  } else {
-    throw new RangeError(
-      `merge expects an array of two to four images. Got ${channels}`,
-    );
+  switch (channels) {
+    case 2: {
+      colorModel = ImageColorModel.GREYA;
+      break;
+    }
+    case 3: {
+      colorModel = ImageColorModel.RGB;
+      break;
+    }
+    case 4: {
+      colorModel = ImageColorModel.RGBA;
+      break;
+    }
+    default: {
+      throw new RangeError(
+        `merge expects an array of two to four images. Got ${channels}`,
+      );
+    }
   }
 
   const first = images[0];

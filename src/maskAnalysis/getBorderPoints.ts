@@ -67,15 +67,14 @@ export function getBorderPoints(
           borders.push({ column, row });
         }
 
-        if (allowCorners) {
-          if (
-            mask.getBit(column - 1, row - 1) === 0 ||
+        if (
+          allowCorners &&
+          (mask.getBit(column - 1, row - 1) === 0 ||
             mask.getBit(column - 1, row + 1) === 0 ||
             mask.getBit(column + 1, row - 1) === 0 ||
-            mask.getBit(column + 1, row + 1) === 0
-          ) {
-            borders.push({ column, row });
-          }
+            mask.getBit(column + 1, row + 1) === 0)
+        ) {
+          borders.push({ column, row });
         }
       }
     }

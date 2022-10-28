@@ -58,7 +58,7 @@ function loadPalettePng(png: DecodedPng): Image {
   const data = new Uint8Array(pixels * 3);
   const pixelsPerByte = 8 / png.depth;
   const factor = png.depth < 8 ? pixelsPerByte : 1;
-  const mask = parseInt('1'.repeat(png.depth), 2);
+  const mask = Number.parseInt('1'.repeat(png.depth), 2);
   let dataIndex = 0;
 
   for (let i = 0; i < pixels; i++) {

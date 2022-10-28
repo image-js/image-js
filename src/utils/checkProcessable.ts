@@ -94,5 +94,5 @@ export default function checkProcessable(
 type ArrayType = number[] | ImageColorModel[] | ColorDepth[] | boolean[];
 
 function format(array: ArrayType) {
-  return formatter.format(array.map((element) => String(element)));
+  return formatter.format(array.map(String));
 }

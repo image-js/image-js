@@ -175,8 +175,6 @@ function cubic(a: number, b: number, c: number, d: number, x: number): number {
     b +
     0.5 *
       x *
-      (c -
-        a +
-        x * (2.0 * a - 5.0 * b + 4.0 * c - d + x * (3.0 * (b - c) + d - a)))
+      (c - a + x * (2 * a - 5 * b + 4 * c - d + x * (3 * (b - c) + d - a)))
   );
 }

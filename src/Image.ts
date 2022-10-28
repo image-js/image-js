@@ -93,7 +93,7 @@ import {
   TransformOptions,
 } from '.';
 
-export { ImageColorModel, colorModels };
+export { ImageColorModel, colorModels } from './utils/constants/colorModels';
 
 export type ImageDataArray = Uint8Array | Uint16Array | Uint8ClampedArray;
 /**
@@ -468,7 +468,7 @@ export class Image {
           `the size of value must match the number of channels (${this.channels}). Got ${value.length} instead`,
         );
       }
-      value.forEach((val) => validateValue(val, this));
+      for (const val of value) validateValue(val, this);
       for (let i = 0; i < this.data.length; i += this.channels) {
         for (let j = 0; j <= this.channels; j++) {
           this.data[i + j] = value[j];

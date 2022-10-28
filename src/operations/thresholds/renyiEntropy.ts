@@ -25,23 +25,23 @@ export default function renyiEntropy(histogram: Uint32Array, total: number) {
   let threshold1 = 0;
   let threshold2 = 0;
   let threshold3 = 0;
-  let maxEnt1 = 0.0;
-  let maxEnt2 = 0.0;
-  let maxEnt3 = 0.0;
+  let maxEnt1 = 0;
+  let maxEnt2 = 0;
+  let maxEnt3 = 0;
   const alpha2 = 0.5;
-  const term2 = 1.0 / (1.0 - alpha2);
-  const alpha3 = 2.0;
-  const term3 = 1.0 / (1.0 - alpha3);
+  const term2 = 1 / (1 - alpha2);
+  const alpha3 = 2;
+  const term3 = 1 / (1 - alpha3);
 
   for (let ih = 0; ih < histogram.length; ih++) {
     normHisto[ih] = histogram[ih] / total;
   }
 
   P1[0] = normHisto[0];
-  P2[0] = 1.0 - P1[0];
+  P2[0] = 1 - P1[0];
   for (let ih = 1; ih < histogram.length; ih++) {
     P1[ih] = P1[ih - 1] + normHisto[ih];
-    P2[ih] = 1.0 - P1[ih];
+    P2[ih] = 1 - P1[ih];
   }
 
   /* Determine the first non-zero bin */
@@ -69,9 +69,9 @@ export default function renyiEntropy(histogram: Uint32Array, total: number) {
      */
   for (let it = firstBin; it <= lastBin; it++) {
     /* Entropy of the background pixels */
-    let entBack1 = 0.0;
-    let entBack2 = 0.0;
-    let entBack3 = 0.0;
+    let entBack1 = 0;
+    let entBack2 = 0;
+    let entBack3 = 0;
     for (let ih = 0; ih <= it; ih++) {
       if (histogram[ih] !== 0) {
         entBack1 -= (normHisto[ih] / P1[it]) * Math.log(normHisto[ih] / P1[it]);
@@ -81,9 +81,9 @@ export default function renyiEntropy(histogram: Uint32Array, total: number) {
     }
 
     /* Entropy of the object pixels */
-    let entObj1 = 0.0;
-    let entObj2 = 0.0;
-    let entObj3 = 0.0;
+    let entObj1 = 0;
+    let entObj2 = 0;
+    let entObj3 = 0;
     for (let ih = it + 1; ih < histogram.length; ih++) {
       if (histogram[ih] !== 0) {
         entObj1 -= (normHisto[ih] / P2[it]) * Math.log(normHisto[ih] / P2[it]);
@@ -95,9 +95,9 @@ export default function renyiEntropy(histogram: Uint32Array, total: number) {
     /* Total entropy */
     const totEnt1 = entBack1 + entObj1;
     const totEnt2 =
-      term2 * (entBack2 * entObj2 > 0.0 ? Math.log(entBack2 * entObj2) : 0.0);
+      term2 * (entBack2 * entObj2 > 0 ? Math.log(entBack2 * entObj2) : 0);
     const totEnt3 =
-      term3 * (entBack3 * entObj3 > 0.0 ? Math.log(entBack3 * entObj3) : 0.0);
+      term3 * (entBack3 * entObj3 > 0 ? Math.log(entBack3 * entObj3) : 0);
 
     if (totEnt1 > maxEnt1) {
       maxEnt1 = totEnt1;

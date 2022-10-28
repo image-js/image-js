@@ -38,7 +38,7 @@ export default function yen(histogram: Uint32Array, total: number): number {
   }
 
   const P2Sq = new Array<number>(histogram.length);
-  P2Sq[histogram.length - 1] = 0.0;
+  P2Sq[histogram.length - 1] = 0;
   for (let ih = histogram.length - 2; ih >= 0; ih--) {
     P2Sq[ih] = P2Sq[ih + 1] + normHisto[ih + 1] * normHisto[ih + 1];
   }
@@ -49,11 +49,8 @@ export default function yen(histogram: Uint32Array, total: number): number {
   let crit;
   for (let it = 0; it < histogram.length; it++) {
     crit =
-      -1.0 * (P1Sq[it] * P2Sq[it] > 0.0 ? Math.log(P1Sq[it] * P2Sq[it]) : 0.0) +
-      2 *
-        (P1[it] * (1.0 - P1[it]) > 0.0
-          ? Math.log(P1[it] * (1.0 - P1[it]))
-          : 0.0);
+      -1 * (P1Sq[it] * P2Sq[it] > 0 ? Math.log(P1Sq[it] * P2Sq[it]) : 0) +
+      2 * (P1[it] * (1 - P1[it]) > 0 ? Math.log(P1[it] * (1 - P1[it])) : 0);
     if (crit > maxCrit) {
       maxCrit = crit;
       threshold = it;

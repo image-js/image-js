@@ -34,7 +34,7 @@ export default function li(histogram: Uint32Array, total: number): number {
   let temp;
 
   /* Calculate the mean gray-level */
-  mean = 0.0;
+  mean = 0;
   for (let ih = 0; ih < histogram.length; ih++) {
     mean += ih * histogram[ih];
   }
@@ -56,7 +56,7 @@ export default function li(histogram: Uint32Array, total: number): number {
       sumBack += ih * histogram[ih];
       numBack += histogram[ih];
     }
-    meanBack = numBack === 0 ? 0.0 : sumBack / numBack;
+    meanBack = numBack === 0 ? 0 : sumBack / numBack;
 
     /* Object */
     sumObj = 0;
@@ -65,7 +65,7 @@ export default function li(histogram: Uint32Array, total: number): number {
       sumObj += ih * histogram[ih];
       numObj += histogram[ih];
     }
-    meanObj = numObj === 0 ? 0.0 : sumObj / numObj;
+    meanObj = numObj === 0 ? 0 : sumObj / numObj;
     temp = (meanBack - meanObj) / (Math.log(meanBack) - Math.log(meanObj));
 
     if (temp < -Number.EPSILON) {

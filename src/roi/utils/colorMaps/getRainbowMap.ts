@@ -34,14 +34,22 @@ export function getRainbowMap(options: GetRainbowMapOptions): Uint32Array {
   const hueRange = 360;
 
   let step: number;
-  if (roiKind === RoiKind.BW) {
-    step = hueRange / (nbNegative + nbPositive);
-  } else if (roiKind === RoiKind.BLACK) {
-    step = hueRange / nbNegative;
-  } else if (roiKind === RoiKind.WHITE) {
-    step = hueRange / nbPositive;
-  } else {
-    throw new Error('getRainbowMap: unrecognised ROI kind');
+  switch (roiKind) {
+    case RoiKind.BW: {
+      step = hueRange / (nbNegative + nbPositive);
+      break;
+    }
+    case RoiKind.BLACK: {
+      step = hueRange / nbNegative;
+      break;
+    }
+    case RoiKind.WHITE: {
+      step = hueRange / nbPositive;
+      break;
+    }
+    default: {
+      throw new Error('getRainbowMap: unrecognised ROI kind');
+    }
   }
 
   // negative values

@@ -152,8 +152,8 @@ function checkOptions(
   return {
     width: newWidth,
     height: newHeight,
-    xFactor: xFactor ? xFactor : newWidth / image.width,
-    yFactor: yFactor ? yFactor : newHeight / image.height,
+    xFactor: xFactor ?? newWidth / image.width,
+    yFactor: yFactor ?? newHeight / image.height,
   };
 }
 

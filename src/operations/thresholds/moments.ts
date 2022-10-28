@@ -16,11 +16,11 @@
  */
 export default function moments(histogram: Uint32Array, total: number): number {
   // moments
-  const m0 = 1.0;
-  let m1 = 0.0;
-  let m2 = 0.0;
-  let m3 = 0.0;
-  let sum = 0.0;
+  const m0 = 1;
+  let m1 = 0;
+  let m2 = 0;
+  let m3 = 0;
+  let sum = 0;
   let threshold = -1;
   const histogramLength = histogram.length;
   const normalizedHistogram = new Array(histogramLength);
@@ -42,8 +42,8 @@ export default function moments(histogram: Uint32Array, total: number): number {
   const c0 = (-m2 * m2 + m1 * m3) / cd;
   const c1 = (m0 * -m3 + m2 * m1) / cd;
   // new two gray values where z0<z1
-  const z0 = 0.5 * (-c1 - Math.sqrt(c1 * c1 - 4.0 * c0));
-  const z1 = 0.5 * (-c1 + Math.sqrt(c1 * c1 - 4.0 * c0));
+  const z0 = 0.5 * (-c1 - Math.sqrt(c1 * c1 - 4 * c0));
+  const z1 = 0.5 * (-c1 + Math.sqrt(c1 * c1 - 4 * c0));
   const p0 =
     (z1 - m1) /
     (z1 -

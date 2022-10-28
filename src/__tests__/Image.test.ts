@@ -1,4 +1,4 @@
-import { inspect } from 'util';
+import { inspect } from 'node:util';
 
 import { Image, ColorDepth, ImageCoordinates } from '../Image';
 import { ImageColorModel } from '../utils/constants/colorModels';

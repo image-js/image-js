@@ -11,8 +11,8 @@ import { Image, ImageColorModel } from '../Image';
 export function decodeJpeg(buffer: Uint8Array): Image {
   const jpeg = decode(buffer, {
     useTArray: true,
-    maxMemoryUsageInMB: Infinity,
-    maxResolutionInMP: Infinity,
+    maxMemoryUsageInMB: Number.POSITIVE_INFINITY,
+    maxResolutionInMP: Number.POSITIVE_INFINITY,
   });
   return new Image(jpeg.width, jpeg.height, {
     data: jpeg.data,

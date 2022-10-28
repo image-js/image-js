@@ -19,10 +19,10 @@ export default function shanbhag(histogram: Uint32Array, total: number) {
   const P1 = new Array<number>(histogram.length); // cumulative normalized histogram
   const P2 = new Array<number>(histogram.length);
   P1[0] = normHisto[0];
-  P2[0] = 1.0 - P1[0];
+  P2[0] = 1 - P1[0];
   for (let ih = 1; ih < histogram.length; ih++) {
     P1[ih] = P1[ih - 1] + normHisto[ih];
-    P2[ih] = 1.0 - P1[ih];
+    P2[ih] = 1 - P1[ih];
   }
 
   /* Determine the first non-zero bin */
@@ -54,18 +54,18 @@ export default function shanbhag(histogram: Uint32Array, total: number) {
   let entObj; // entropy of the object pixels at a given threshold
   for (let it = firstBin; it <= lastBin; it++) {
     /* Entropy of the background pixels */
-    entBack = 0.0;
+    entBack = 0;
     term = 0.5 / P1[it];
     for (let ih = 1; ih <= it; ih++) {
-      entBack -= normHisto[ih] * Math.log(1.0 - term * P1[ih - 1]);
+      entBack -= normHisto[ih] * Math.log(1 - term * P1[ih - 1]);
     }
     entBack *= term;
 
     /* Entropy of the object pixels */
-    entObj = 0.0;
+    entObj = 0;
     term = 0.5 / P2[it];
     for (let ih = it + 1; ih < histogram.length; ih++) {
-      entObj -= normHisto[ih] * Math.log(1.0 - term * P2[ih]);
+      entObj -= normHisto[ih] * Math.log(1 - term * P2[ih]);
     }
     entObj *= term;
 

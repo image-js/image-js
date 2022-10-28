@@ -40,7 +40,7 @@ export default function intermodes(histogram: Uint32Array): number {
       tt += i;
     }
   }
-  return Math.floor(tt / 2.0);
+  return Math.floor(tt / 2);
 }
 
 function bimodalTest(iHisto: Uint32Array): boolean {

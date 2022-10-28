@@ -28,8 +28,8 @@ export function invert(
       copyAlpha(image, newImage);
     }
 
-    const { maxValue } = newImage;
-    for (let i = 0; i < newImage.size; i++) {
+    const { maxValue, size } = newImage;
+    for (let i = 0; i < size; i++) {
       for (let component = 0; component < image.components; component++) {
         newImage.setValueByIndex(
           i,

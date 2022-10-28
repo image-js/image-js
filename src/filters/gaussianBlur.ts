@@ -77,11 +77,11 @@ export function gaussianBlur(
   options: GaussianBlurOptions,
 ): Image {
   if ('sigma' in options) {
-    const { sigma, size = getSize(sigma) } = options;
+    const { sigma, size = getSize(sigma), borderType } = options;
     const radius = getRadius(size);
     const kernel = getKernel(radius, sigma);
     return separableConvolution(image, kernel, kernel, {
-      borderType: options.borderType,
+      borderType,
     });
   } else {
     const {
@@ -89,6 +89,7 @@ export function gaussianBlur(
       sigmaY,
       sizeX = getSize(sigmaX),
       sizeY = getSize(sigmaY),
+      borderType,
     } = options;
 
     const radiusX = getRadius(sizeX);
@@ -97,7 +98,7 @@ export function gaussianBlur(
     const kernelX = getKernel(radiusX, sigmaX);
     const kernelY = getKernel(radiusY, sigmaY);
     return separableConvolution(image, kernelX, kernelY, {
-      borderType: options.borderType,
+      borderType,
     });
   }
 }
@@ -105,7 +106,8 @@ export function gaussianBlur(
 function getKernel(radius: number, sigma: number): number[] {
   const n = radius * 2 + 1;
   const kernel = new Array(n);
-  const sigmaX = sigma ? sigma : ((n - 1) * 0.5 - 1) * 0.3 + 0.8;
+  // TODO: check if sigma can really be 0 or undefined.
+  const sigmaX = sigma || ((n - 1) * 0.5 - 1) * 0.3 + 0.8;
   const scale2X = -0.5 / (sigmaX * sigmaX);
   let sum = 0;
   for (let i = 0; i < n; i++) {

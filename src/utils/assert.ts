@@ -6,6 +6,6 @@
  */
 export function assert(value: unknown, message?: string): asserts value {
   if (!value) {
-    throw new Error(message ? message : 'unreachable');
+    throw new Error(message || 'unreachable');
   }
 }

@@ -1,5 +1,5 @@
-import { existsSync } from 'fs';
-import { join } from 'path';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 
 import { write, writeSync } from '..';
 import { read } from '../..';
@@ -16,7 +16,7 @@ afterEach(() => {
 
 test('async write image to disk (png)', async () => {
   const img = testUtils.load('opencv/test.png');
-  const destination = join(tmpDir, 'image.png');
+  const destination = path.join(tmpDir, 'image.png');
   await write(destination, img);
   expect(existsSync(destination)).toBe(true);
   const imgRead = await read(destination);
@@ -25,7 +25,7 @@ test('async write image to disk (png)', async () => {
 
 test('format option png', async () => {
   const img = testUtils.load('opencv/test.png');
-  const destination = join(tmpDir, 'image.png');
+  const destination = path.join(tmpDir, 'image.png');
   await write(destination, img, { format: ImageFormat.png });
   expect(existsSync(destination)).toBe(true);
   const imgRead = await read(destination);
@@ -34,7 +34,7 @@ test('format option png', async () => {
 
 test('async write image to disk (jpeg)', async () => {
   const img = testUtils.load('opencv/test.png');
-  const destination = join(tmpDir, 'image.jpeg');
+  const destination = path.join(tmpDir, 'image.jpeg');
   await write(destination, img, { format: ImageFormat.jpeg });
   expect(existsSync(destination)).toBe(true);
   const imgRead = await read(destination);
@@ -44,7 +44,7 @@ test('async write image to disk (jpeg)', async () => {
 
 test('write image to disk', async () => {
   const img = testUtils.load('opencv/test.png');
-  const destination = join(tmpDir, 'image.png');
+  const destination = path.join(tmpDir, 'image.png');
   writeSync(destination, img);
   expect(existsSync(destination)).toBe(true);
   const imgRead = await read(destination);
@@ -53,7 +53,7 @@ test('write image to disk', async () => {
 
 test('write image to disk (jpeg)', async () => {
   const img = testUtils.load('opencv/test.png');
-  const destination = join(tmpDir, 'image.jpeg');
+  const destination = path.join(tmpDir, 'image.jpeg');
   writeSync(destination, img);
   expect(existsSync(destination)).toBe(true);
   const imgRead = await read(destination);
@@ -66,7 +66,7 @@ test('write mask image to disk', async () => {
   img = img.convertColor(ImageColorModel.GREY);
   let mask = img.threshold();
   let maskImage = mask.convertColor(ImageColorModel.GREY);
-  const destination = join(tmpDir, 'image.png');
+  const destination = path.join(tmpDir, 'image.png');
   writeSync(destination, mask);
   expect(existsSync(destination)).toBe(true);
   const imgRead = await read(destination);
@@ -77,7 +77,7 @@ test('async write mask image to disk', async () => {
   img = img.convertColor(ImageColorModel.GREY);
   let mask = img.threshold();
   let maskImage = mask.convertColor(ImageColorModel.GREY);
-  const destination = join(tmpDir, 'image.png');
+  const destination = path.join(tmpDir, 'image.png');
   await write(destination, mask);
   expect(existsSync(destination)).toBe(true);
   const imgRead = await read(destination);
@@ -86,7 +86,7 @@ test('async write mask image to disk', async () => {
 
 test('image extension error', async () => {
   const img = testUtils.load('opencv/test.png');
-  const destination = join(tmpDir, 'image.tiff');
+  const destination = path.join(tmpDir, 'image.tiff');
   await expect(write(destination, img)).rejects.toThrow(
     'image format could not be determined from file extension. Please use a supported extension or specify the format option',
   );

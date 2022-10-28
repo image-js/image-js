@@ -29,7 +29,7 @@ export default function huang(histogram: Uint32Array): number {
     }
   }
 
-  const term = 1.0 / (lastBin - firstBin);
+  const term = 1 / (lastBin - firstBin);
   const mu0 = new Array(histogram.length);
   let sumPix = 0;
   let numPix = 0;
