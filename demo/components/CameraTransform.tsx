@@ -8,7 +8,7 @@ import ErrorAlert from './ErrorAlert';
 import SnapshotImage from './SnapshotImage';
 import UnavailableCamera from './UnavailableCamera';
 
-type TransformFunction =
+export type TransformFunction =
   | ((image: Image) => Image)
   | ((image: Image, snapshot: Image | null) => Image);
 

@@ -1,7 +1,7 @@
 import { Point, rotate } from '../../utils/geometry/points';
 import { Mbr } from '../getMbr';
-import { getAngle } from './getAngle';
 
+import { getAngle } from './getAngle';
 import { getMbrAngle } from './getMbrAngle';
 
 /**

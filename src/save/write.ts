@@ -14,11 +14,18 @@ import {
  * Write an image to the disk.
  * The file format is determined automatically from the file's extension.
  * If the extension is not supported, an error will be thrown.
+ *
+ * @param path
+ * @param image
  */
 export async function write(path: string, image: Image | Mask): Promise<void>;
 /**
  * Write an image to the disk as PNG.
  * When the `png` format is specified, the file's extension doesn't matter.
+ *
+ * @param path
+ * @param image
+ * @param options
  */
 export async function write(
   path: string,
@@ -28,6 +35,10 @@ export async function write(
 /**
  * Write an image to the disk as JPEG.
  * When the `jpeg` format is specified, the file's extension doesn't matter.
+ *
+ * @param path
+ * @param image
+ * @param options
  */
 export async function write(
   path: string,

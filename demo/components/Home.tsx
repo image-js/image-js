@@ -4,14 +4,11 @@ import { Image } from '../../src';
 
 import CameraSelector from './CameraSelector';
 import CameraSnapshotButton from './CameraSnapshotButton';
-import CameraTransform from './CameraTransform';
+import CameraTransform, { TransformFunction } from './CameraTransform';
 import Container from './Container';
-import { testComputeSsim } from './comparisonFunctions/testComputeSsim';
+import { testCannyEdge } from './testFunctions/testCannyEdge';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function testTransform(image: Image, snapshot: Image | null) {
-  return testComputeSsim(image, snapshot);
-}
+const testTransform: TransformFunction = testCannyEdge;
 
 export default function Home() {
   const snapshotImageRef = useRef<Image>(null);

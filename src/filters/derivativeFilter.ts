@@ -1,5 +1,4 @@
 import { ColorDepth, Image } from '..';
-import { BorderType } from '../utils/interpolateBorder';
 import {
   PREWITT_X,
   PREWITT_Y,
@@ -8,6 +7,7 @@ import {
   SOBEL_X,
   SOBEL_Y,
 } from '../utils/constants/kernels';
+import { BorderType } from '../utils/interpolateBorder';
 
 export enum DerivativeFilters {
   SOBEL = 'SOBEL',
