@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`3x3 mask 1`] = `
-[
+Array [
   Roi {
     "height": 2,
     "id": 1,
-    "map": {
+    "map": Object {
       "data": Int16Array [
         1,
         1,
@@ -22,7 +22,7 @@ exports[`3x3 mask 1`] = `
       "nbPositive": 2,
       "width": 3,
     },
-    "origin": {
+    "origin": Object {
       "column": 0,
       "row": 0,
     },
@@ -32,7 +32,7 @@ exports[`3x3 mask 1`] = `
   Roi {
     "height": 1,
     "id": 2,
-    "map": {
+    "map": Object {
       "data": Int16Array [
         1,
         1,
@@ -49,7 +49,7 @@ exports[`3x3 mask 1`] = `
       "nbPositive": 2,
       "width": 3,
     },
-    "origin": {
+    "origin": Object {
       "column": 2,
       "row": 2,
     },
@@ -60,11 +60,11 @@ exports[`3x3 mask 1`] = `
 `;
 
 exports[`3x3 mask 2`] = `
-[
+Array [
   Roi {
     "height": 2,
     "id": -1,
-    "map": {
+    "map": Object {
       "data": Int16Array [
         1,
         1,
@@ -81,7 +81,7 @@ exports[`3x3 mask 2`] = `
       "nbPositive": 2,
       "width": 3,
     },
-    "origin": {
+    "origin": Object {
       "column": 0,
       "row": 1,
     },

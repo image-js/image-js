@@ -702,7 +702,7 @@ export class Image {
   public drawCircle(
     center: Point,
     radius: number,
-    options: DrawCircleOnImageOptions,
+    options: DrawCircleOnImageOptions = {},
   ): Image {
     return drawCircleOnImage(this, center, radius, options);
   }

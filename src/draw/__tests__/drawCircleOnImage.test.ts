@@ -273,3 +273,19 @@ test('points outside image', () => {
     [0, 0, 1],
   ]);
 });
+
+test('default options', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ]);
+  const center = { row: 1, column: 1 };
+  const radius = 1;
+  const expected = image.drawCircle(center, radius, { color: [1] });
+  expect(expected).toMatchImageData([
+    [0, 1, 0],
+    [1, 0, 1],
+    [0, 1, 0],
+  ]);
+});
