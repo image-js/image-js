@@ -74,7 +74,6 @@ export function getFastKeypoints(
 
   const allKeypoints: FastKeypoint[] = [];
 
-  // Non-Maximal Suppression
   let scoreArray = new Float64Array(image.size);
   for (let corner of possibleCorners) {
     const score = getKeypointScore(corner, image, threshold);
@@ -87,6 +86,7 @@ export function getFastKeypoints(
     return allKeypoints.slice(0, maxNbFeatures);
   }
 
+  // Non-Maximal Suppression
   const nmsKeypoints: FastKeypoint[] = [];
   for (let corner of possibleCorners) {
     const currentScore =

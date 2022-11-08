@@ -13,7 +13,7 @@ test('7x7 image, not corner', () => {
 
   let result = isFastKeypoint(origin, image);
 
-  expect(result).toBeFalsy();
+  expect(result).toBe(false);
 });
 
 test('7x7 image with straight line', () => {
@@ -31,7 +31,7 @@ test('7x7 image with straight line', () => {
 
   let result = isFastKeypoint(origin, image);
 
-  expect(result).toBeFalsy();
+  expect(result).toBe(false);
 });
 
 test('7x7 image with corner 90 degrees', () => {
@@ -49,7 +49,7 @@ test('7x7 image with corner 90 degrees', () => {
 
   let result = isFastKeypoint(origin, image);
 
-  expect(result).toBeFalsy();
+  expect(result).toBe(false);
 });
 test('7x7 image with darker and lighter areas', () => {
   const image = testUtils.createGreyImage([
@@ -83,7 +83,7 @@ test('7x7 image with segment', () => {
 
   let result = isFastKeypoint(origin, image);
 
-  expect(result).toBeTruthy();
+  expect(result).toBe(true);
 });
 test('7x7 image, threshold = 60', () => {
   const image = testUtils.createGreyImage([
@@ -101,7 +101,7 @@ test('7x7 image, threshold = 60', () => {
     threshold: 60,
   });
 
-  expect(result).toBeFalsy();
+  expect(result).toBe(false);
 });
 test('7x7 image with corner 90 degrees, n=9', () => {
   const image = testUtils.createGreyImage([
@@ -118,5 +118,5 @@ test('7x7 image with corner 90 degrees, n=9', () => {
 
   let result = isFastKeypoint(origin, image, { nbContiguousPixels: 9 });
 
-  expect(result).toBeTruthy();
+  expect(result).toBe(true);
 });
