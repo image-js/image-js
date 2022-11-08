@@ -39,6 +39,7 @@ export function isFastKeypoint(
   let brighter = 0;
   let darker = 0;
 
+  // determine whether points on circle are darker or brighter
   for (let point of quickTestPoints) {
     const pointIntensity = image.getValue(
       origin.column + point.column,
@@ -69,8 +70,7 @@ export function isFastKeypoint(
     }
   }
 
-  console.log(comparisonArray);
-
+  // compute number of repeating and touching values
   let currentLength = 1;
   let counterArray = [];
   for (let i = 0; i < comparisonArray.length; i++) {
@@ -79,7 +79,11 @@ export function isFastKeypoint(
 
     if (currentValue === nextValue) {
       if (i === comparisonArray.length - 1) {
-        counterArray[0] += currentLength;
+        if (counterArray.length === 0) {
+          counterArray.push(currentLength);
+        } else {
+          counterArray[0] += currentLength;
+        }
       } else {
         currentLength++;
       }
@@ -88,8 +92,6 @@ export function isFastKeypoint(
       currentLength = 1;
     }
   }
-
-  console.log(counterArray);
 
   if (Math.max(...counterArray) >= nbContiguousPixels) {
     return true;

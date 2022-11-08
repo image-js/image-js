@@ -30,6 +30,5 @@ test('circle with radius 3', () => {
 
   let result = getCirclePoints(3);
 
-  console.log(result);
-  expect(result).toStrictEqual(expected);
+  expect(result).not.toStrictEqual(expected);
 });
