@@ -4,16 +4,15 @@ import { Point } from '../geometry';
 import { circlePoints } from './isFastKeypoint';
 
 /**
- * Compute the score of a keypoint for non maximal suppression.
- * This value will be used to remove all corners which
- * don't have the highest value within the adjacent keypoints.
+ * Compute the score of a keypoint using the function described in the FAST article.
+ * DOI: https://doi.org/10.1007/11744023_34
  *
  * @param origin - Keypoint coordinates.
  * @param image - Image to process
  * @param threshold - FAST threshold.
  * @returns Score of the corner.
  */
-export function getKeypointScore(
+export function getFastScore(
   origin: Point,
   image: Image,
   threshold: number,

@@ -4,7 +4,7 @@ import checkProcessable from '../utils/checkProcessable';
 import { getIndex } from '../utils/getIndex';
 import { surroundingPixels } from '../utils/surroundingPixels';
 
-import { getKeypointScore } from './getKeypointScore';
+import { getFastScore } from './getFastScore';
 import { isFastKeypoint, IsFastKeypointOptions } from './isFastKeypoint';
 
 export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
@@ -16,6 +16,8 @@ export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
   maxNbFeatures?: number;
   /**
    * Should non-max suppression be applied to the keypoints?
+   * This removes all keypoints which
+   * don't have the highest value within the adjacent keypoints.
    *
    * @default true
    */
@@ -29,13 +31,14 @@ export interface FastKeypoint {
   origin: Point;
   /**
    * Score of the keypoint, the bigger it is, the better the feature.
+   * It is the criteria used for the non-maximal suppression.
    */
   score: number;
 }
 
 /**
  * Find the features in a GREY image according to the FAST (Features from Accelerated Segment Test) algorithm.
- * Based on the paper Machine Learning for High-Speed Corner Detection
+ * Based on the paper Machine Learning for High-Speed Corner Detection.
  * DOI: https://doi.org/10.1007/11744023_34
  *
  * @param image - The image to process.
@@ -76,7 +79,7 @@ export function getFastKeypoints(
 
   let scoreArray = new Float64Array(image.size);
   for (let corner of possibleCorners) {
-    const score = getKeypointScore(corner, image, threshold);
+    const score = getFastScore(corner, image, threshold);
     scoreArray[getIndex(corner.column, corner.row, image, 0)] = score;
     allKeypoints.push({ origin: corner, score });
   }
