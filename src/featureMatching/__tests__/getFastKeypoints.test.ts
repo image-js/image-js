@@ -18,6 +18,23 @@ test('alphabet image, default options', () => {
   expect(image).toMatchImageSnapshot();
 });
 
+test('alphabet image, nonMaxSuppression = false', () => {
+  const image = testUtils.load('various/alphabet.jpg');
+  const grey = image.convertColor(ImageColorModel.GREY);
+
+  const keypoints = getFastKeypoints(grey, { nonMaxSuppression: false });
+
+  const keypointsCoordinates = keypoints.map((kpt) => kpt.origin);
+
+  image.drawPoints(keypointsCoordinates, {
+    color: [255, 0, 0, 255],
+    out: image,
+  });
+
+  expect(keypoints).toHaveLength(500);
+  expect(image).toMatchImageSnapshot();
+});
+
 test('alphabet image, maxNbFeatures = 10', () => {
   const image = testUtils.load('various/alphabet.jpg');
   const grey = image.convertColor(ImageColorModel.GREY);

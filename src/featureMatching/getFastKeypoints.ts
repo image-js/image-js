@@ -14,6 +14,12 @@ export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
    * @default 500
    */
   maxNbFeatures?: number;
+  /**
+   * Should non-max suppression be applied to the keypoints?
+   *
+   * @default true
+   */
+  nonMaxSuppression?: boolean;
 }
 
 export interface FastKeypoint {
@@ -44,6 +50,7 @@ export function getFastKeypoints(
     maxNbFeatures = 500,
     nbContiguousPixels = 12,
     threshold = 20,
+    nonMaxSuppression = true,
   } = options;
 
   checkProcessable(image, 'getFastKeypoints', {
@@ -65,14 +72,22 @@ export function getFastKeypoints(
     }
   }
 
+  const allKeypoints: FastKeypoint[] = [];
+
   // Non-Maximal Suppression
   let scoreArray = new Float64Array(image.size);
   for (let corner of possibleCorners) {
-    scoreArray[getIndex(corner.column, corner.row, image, 0)] =
-      getKeypointScore(corner, image, threshold);
+    const score = getKeypointScore(corner, image, threshold);
+    scoreArray[getIndex(corner.column, corner.row, image, 0)] = score;
+    allKeypoints.push({ origin: corner, score });
   }
 
-  const keypoints: FastKeypoint[] = [];
+  if (!nonMaxSuppression) {
+    allKeypoints.sort((a, b) => b.score - a.score);
+    return allKeypoints.slice(0, maxNbFeatures);
+  }
+
+  const nmsKeypoints: FastKeypoint[] = [];
   for (let corner of possibleCorners) {
     const currentScore =
       scoreArray[getIndex(corner.column, corner.row, image, 0)];
@@ -89,12 +104,12 @@ export function getFastKeypoints(
         ];
       if (neighbourScore > currentScore) break;
       if (i === surroundingPixels.length - 1) {
-        keypoints.push({ origin: corner, score: currentScore });
+        nmsKeypoints.push({ origin: corner, score: currentScore });
       }
     }
   }
 
-  keypoints.sort((a, b) => b.score - a.score);
+  nmsKeypoints.sort((a, b) => b.score - a.score);
 
-  return keypoints.slice(0, maxNbFeatures);
+  return nmsKeypoints.slice(0, maxNbFeatures);
 }
