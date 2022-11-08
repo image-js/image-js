@@ -32,8 +32,8 @@ export interface FastKeypoint {
  * Based on the paper Machine Learning for High-Speed Corner Detection
  * DOI: https://doi.org/10.1007/11744023_34
  *
- * @param image
- * @param options
+ * @param image - The image to process.
+ * @param options - Get FAST keypoints options.
  * @returns The FAST keypoints.
  */
 export function getFastKeypoints(
