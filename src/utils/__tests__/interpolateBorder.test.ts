@@ -92,7 +92,7 @@ test('REFLECT_101 - positive', () => {
 });
 
 test('unknown type', () => {
-  // @ts-expect-error
+  // @ts-expect-error: testing JS problem
   expect(() => getBorderInterpolation('unknown', 5)).toThrow(
     /interpolateBorder cannot be used with border type unknown/,
   );

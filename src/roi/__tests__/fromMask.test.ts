@@ -143,7 +143,6 @@ test('exceed max number of ROIs error', () => {
   let pos = true;
   for (let row = 0; row < size; row++) {
     for (let column = 0; column < size; column++) {
-      // eslint-disable-next-line jest/no-if
       if (pos) mask.setBit(column, row, 1);
       pos = !pos;
     }
