@@ -66,7 +66,6 @@ export function getFastKeypoints(
   }
 
   // Non-Maximal Suppression
-
   let scoreArray = new Float64Array(image.size);
   for (let corner of possibleCorners) {
     scoreArray[getIndex(corner.column, corner.row, image, 0)] =
@@ -94,6 +93,7 @@ export function getFastKeypoints(
       }
     }
   }
+
   keypoints.sort((a, b) => b.score - a.score);
 
   return keypoints.slice(0, maxNbFeatures);
