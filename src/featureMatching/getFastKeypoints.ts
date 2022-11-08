@@ -1,15 +1,19 @@
 import { Image } from '../Image';
 import { Point } from '../geometry';
 import checkProcessable from '../utils/checkProcessable';
-import { getCirclePoints, getCompassPoints } from '../utils/getCirclePoints';
+import { getIndex } from '../utils/getIndex';
+import { surroundingPixels } from '../utils/surroundingPixels';
 
-export interface GetFastKeypointsOptions {
+import { getKeypointScore } from './getKeypointScore';
+import { isFastKeypoint, IsFastKeypointOptions } from './isFastKeypoint';
+
+export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
   /**
    * Maximum number of features to return.
    *
    * @default 500
    */
-  maxNbFeatures: number;
+  maxNbFeatures?: number;
 }
 
 export interface FastKeypoint {
@@ -18,7 +22,7 @@ export interface FastKeypoint {
    */
   origin: Point;
   /**
-   * Score of the keypoint, the smaller it is, the better the feature.
+   * Score of the keypoint, the bigger it is, the better the feature.
    */
   score: number;
 }
@@ -34,7 +38,7 @@ export interface FastKeypoint {
  */
 export function getFastKeypoints(
   image: Image,
-  options: GetFastKeypointsOptions,
+  options: GetFastKeypointsOptions = {},
 ): FastKeypoint[] {
   const {
     maxNbFeatures = 500,
@@ -47,10 +51,50 @@ export function getFastKeypoints(
     alpha: false,
   });
 
-  const fastRadius = 3;
+  let possibleCorners: Point[] = [];
+  for (let row = 0; row < image.height; row++) {
+    for (let column = 0; column < image.width; column++) {
+      if (
+        isFastKeypoint({ row, column }, image, {
+          nbContiguousPixels,
+          threshold,
+        })
+      ) {
+        possibleCorners.push({ row, column });
+      }
+    }
+  }
 
-  const compassPoints = getCompassPoints(fastRadius);
-  const circlePoints = getCirclePoints(fastRadius);
+  // Non-Maximal Suppression
 
-  return 0;
+  let scoreArray = new Float64Array(image.size);
+  for (let corner of possibleCorners) {
+    scoreArray[getIndex(corner.column, corner.row, image, 0)] =
+      getKeypointScore(corner, image, threshold);
+  }
+
+  const keypoints: FastKeypoint[] = [];
+  for (let corner of possibleCorners) {
+    const currentScore =
+      scoreArray[getIndex(corner.column, corner.row, image, 0)];
+    for (let i = 0; i < surroundingPixels.length; i++) {
+      const neighbour = surroundingPixels[i];
+      const neighbourScore =
+        scoreArray[
+          getIndex(
+            corner.column + neighbour.column,
+            corner.row + neighbour.row,
+            image,
+            0,
+          )
+        ];
+      if (neighbourScore > currentScore) break;
+      if (i === surroundingPixels.length - 1) {
+        keypoints.push({ origin: corner, score: currentScore });
+      }
+    }
+  }
+  keypoints.sort((a, b) => b.score - a.score);
+
+  return keypoints.slice(0, maxNbFeatures);
 }
