@@ -17,21 +17,44 @@ export interface IsFastKeypointOptions {
   threshold?: number;
 }
 
+// Points for a circle with radius = 3
+export const circlePoints = [
+  { row: 0, column: 3 },
+  { row: 1, column: 3 },
+  { row: 2, column: 2 },
+  { row: 3, column: 1 },
+  { row: 3, column: 0 },
+  { row: 3, column: -1 },
+  { row: 2, column: -2 },
+  { row: 1, column: -3 },
+  { row: 0, column: -3 },
+  { row: -1, column: -3 },
+  { row: -2, column: -2 },
+  { row: -3, column: -1 },
+  { row: -3, column: 0 },
+  { row: -3, column: 1 },
+  { row: -2, column: 2 },
+  { row: -1, column: 3 },
+];
+
+const quickTestPoints = [
+  { row: 0, column: 3 },
+  { row: 3, column: 0 },
+  { row: 0, column: -3 },
+  { row: -3, column: 0 },
+];
+
 /**
  * Determine wether a pixel in an image is a corner according to the FAST algorithm.
  *
  * @param origin - Pixel to process.
  * @param image - Image to process
- * @param quickTestPoints - Right, bottom, left and top points of the circle
- * @param circlePoints - Points of the circle around the current pixel.
  * @param options - Is FAST keypoint options.
  * @returns Whether the current pixel is a corner or not.
  */
 export function isFastKeypoint(
   origin: Point,
   image: Image,
-  quickTestPoints: Point[],
-  circlePoints: Point[],
   options: IsFastKeypointOptions = {},
 ): boolean {
   const { nbContiguousPixels = 12, threshold = 20 } = options;
@@ -39,21 +62,24 @@ export function isFastKeypoint(
   let brighter = 0;
   let darker = 0;
 
-  // determine whether points on circle are darker or brighter
-  for (let point of quickTestPoints) {
-    const pointIntensity = image.getValue(
-      origin.column + point.column,
-      origin.row + point.row,
-      0,
-    );
-    if (currentIntensity - pointIntensity > threshold) {
-      darker++;
-    } else if (pointIntensity - currentIntensity > threshold) {
-      brighter++;
+  // quick test to exlude non corners
+  if (nbContiguousPixels >= 12) {
+    for (let point of quickTestPoints) {
+      const pointIntensity = image.getValue(
+        origin.column + point.column,
+        origin.row + point.row,
+        0,
+      );
+      if (currentIntensity - pointIntensity > threshold) {
+        darker++;
+      } else if (pointIntensity - currentIntensity > threshold) {
+        brighter++;
+      }
     }
+    if (darker < 3 && brighter < 3) return false;
   }
-  if (darker < 3 && brighter < 3) return false;
 
+  // determine whether points on circle are darker or brighter
   let comparisonArray = [];
   for (let point of circlePoints) {
     const pointIntensity = image.getValue(
@@ -61,9 +87,9 @@ export function isFastKeypoint(
       origin.row + point.row,
       0,
     );
-    if (currentIntensity - pointIntensity > threshold) {
+    if (currentIntensity + threshold <= pointIntensity) {
       comparisonArray.push(-1); // circle point is lighter
-    } else if (pointIntensity - currentIntensity > threshold) {
+    } else if (pointIntensity <= currentIntensity - threshold) {
       comparisonArray.push(1); // circle point is darker
     } else {
       comparisonArray.push(0); // circle point is similar
