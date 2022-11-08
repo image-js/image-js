@@ -71,6 +71,24 @@ test('alphabet image, threshold = 100', () => {
   expect(image).toMatchImageSnapshot();
 });
 
+test('alphabet, fastRadius = 5', () => {
+  const image = testUtils.load('various/alphabet.jpg');
+  const grey = image.convertColor(ImageColorModel.GREY);
+  const keypoints = getFastKeypoints(grey, { fastRadius: 5 });
+
+  const keypointsCoordinates = keypoints.map((kpt) => kpt.origin);
+
+  for (let keypoint of keypointsCoordinates) {
+    image.drawCircle(keypoint, 5, {
+      color: [255, 0, 0, 255],
+      out: image,
+    });
+  }
+
+  expect(keypoints).toHaveLength(137);
+  expect(image).toMatchImageSnapshot();
+});
+
 test('grayscale image, threshold = 100', () => {
   const grey = testUtils.load('various/grayscale_by_zimmyrose.png');
   const keypoints = getFastKeypoints(grey, { threshold: 100 });

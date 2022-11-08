@@ -1,6 +1,7 @@
 import { Image } from '../Image';
 import { Point } from '../geometry';
 import checkProcessable from '../utils/checkProcessable';
+import { getCirclePoints, getCompassPoints } from '../utils/getCirclePoints';
 import { getIndex } from '../utils/getIndex';
 import { surroundingPixels } from '../utils/surroundingPixels';
 
@@ -22,6 +23,12 @@ export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
    * @default true
    */
   nonMaxSuppression?: boolean;
+  /**
+   * Radius of the circle used for the algorithm.
+   *
+   * @default 3
+   */
+  fastRadius?: number;
 }
 
 export interface FastKeypoint {
@@ -49,9 +56,14 @@ export function getFastKeypoints(
   image: Image,
   options: GetFastKeypointsOptions = {},
 ): FastKeypoint[] {
+  const { fastRadius = 3 } = options;
+
+  const circlePoints = getCirclePoints(fastRadius);
+  const compassPoints = getCompassPoints(fastRadius);
+
   const {
     maxNbFeatures = 500,
-    nbContiguousPixels = 12,
+    nbContiguousPixels = (3 / 4) * circlePoints.length,
     threshold = 20,
     nonMaxSuppression = true,
   } = options;
@@ -65,7 +77,7 @@ export function getFastKeypoints(
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {
       if (
-        isFastKeypoint({ row, column }, image, {
+        isFastKeypoint({ row, column }, image, circlePoints, compassPoints, {
           nbContiguousPixels,
           threshold,
         })
@@ -79,7 +91,7 @@ export function getFastKeypoints(
 
   let scoreArray = new Float64Array(image.size);
   for (let corner of possibleCorners) {
-    const score = getFastScore(corner, image, threshold);
+    const score = getFastScore(corner, image, threshold, circlePoints);
     scoreArray[getIndex(corner.column, corner.row, image, 0)] = score;
     allKeypoints.push({ origin: corner, score });
   }

@@ -4,9 +4,9 @@ import { Point } from '../geometry';
 export interface IsFastKeypointOptions {
   /**
    * Number of contiguous pixels on the circle that should have an intensity difference with current pixel larger than threshold.
-   * This value is recommended to be 12.
+   * This value is recommended to be 3/4 of the circle points.
    *
-   * @default 12
+   * @default 3/4*circlePoints.length
    */
   nbContiguousPixels?: number;
   /**
@@ -17,44 +17,21 @@ export interface IsFastKeypointOptions {
   threshold?: number;
 }
 
-// Points for a circle with radius = 3
-export const circlePoints = [
-  { row: 0, column: 3 },
-  { row: 1, column: 3 },
-  { row: 2, column: 2 },
-  { row: 3, column: 1 },
-  { row: 3, column: 0 },
-  { row: 3, column: -1 },
-  { row: 2, column: -2 },
-  { row: 1, column: -3 },
-  { row: 0, column: -3 },
-  { row: -1, column: -3 },
-  { row: -2, column: -2 },
-  { row: -3, column: -1 },
-  { row: -3, column: 0 },
-  { row: -3, column: 1 },
-  { row: -2, column: 2 },
-  { row: -1, column: 3 },
-];
-
-const quickTestPoints = [
-  { row: 0, column: 3 },
-  { row: 3, column: 0 },
-  { row: 0, column: -3 },
-  { row: -3, column: 0 },
-];
-
 /**
  * Determine wether a pixel in an image is a corner according to the FAST algorithm.
  *
  * @param origin - Pixel to process.
  * @param image - Image to process
+ * @param circlePoints - Coordinates of the points on the circle.
+ * @param compassPoints - Compass points for quick test.
  * @param options - Is FAST keypoint options.
  * @returns Whether the current pixel is a corner or not.
  */
 export function isFastKeypoint(
   origin: Point,
   image: Image,
+  circlePoints: Point[],
+  compassPoints: Point[],
   options: IsFastKeypointOptions = {},
 ): boolean {
   const { nbContiguousPixels = 12, threshold = 20 } = options;
@@ -64,7 +41,7 @@ export function isFastKeypoint(
 
   // quick test to exlude non corners
   if (nbContiguousPixels >= 12) {
-    for (let point of quickTestPoints) {
+    for (let point of compassPoints) {
       const pointIntensity = image.getValue(
         origin.column + point.column,
         origin.row + point.row,

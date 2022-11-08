@@ -1,8 +1,11 @@
 import { ImageColorModel, Image } from '../../Image';
+import { getCirclePoints, getCompassPoints } from '../../utils/getCirclePoints';
 import { isFastKeypoint } from '../isFastKeypoint';
 
 const fastRadius = 3;
 const fastDiameter = 2 * fastRadius + 1;
+const compassPoints = getCompassPoints(fastRadius);
+const circlePoints = getCirclePoints(fastRadius);
 
 test('7x7 image, not corner', () => {
   const image = new Image(fastDiameter, fastDiameter, {
@@ -11,7 +14,7 @@ test('7x7 image, not corner', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = isFastKeypoint(origin, image);
+  let result = isFastKeypoint(origin, image, circlePoints, compassPoints);
 
   expect(result).toBe(false);
 });
@@ -29,7 +32,7 @@ test('7x7 image with straight line', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = isFastKeypoint(origin, image);
+  let result = isFastKeypoint(origin, image, circlePoints, compassPoints);
 
   expect(result).toBe(false);
 });
@@ -47,7 +50,7 @@ test('7x7 image with corner 90 degrees', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = isFastKeypoint(origin, image);
+  let result = isFastKeypoint(origin, image, circlePoints, compassPoints);
 
   expect(result).toBe(false);
 });
@@ -64,7 +67,7 @@ test('7x7 image with darker and lighter areas', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = isFastKeypoint(origin, image);
+  let result = isFastKeypoint(origin, image, circlePoints, compassPoints);
 
   expect(result).toBeTruthy();
 });
@@ -81,7 +84,7 @@ test('7x7 image with segment', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = isFastKeypoint(origin, image);
+  let result = isFastKeypoint(origin, image, circlePoints, compassPoints);
 
   expect(result).toBe(true);
 });
@@ -97,7 +100,7 @@ test('7x7 image, threshold = 60', () => {
   ]);
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = isFastKeypoint(origin, image, {
+  let result = isFastKeypoint(origin, image, circlePoints, compassPoints, {
     threshold: 60,
   });
 
@@ -116,7 +119,9 @@ test('7x7 image with corner 90 degrees, n=9', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = isFastKeypoint(origin, image, { nbContiguousPixels: 9 });
+  let result = isFastKeypoint(origin, image, circlePoints, compassPoints, {
+    nbContiguousPixels: 9,
+  });
 
   expect(result).toBe(true);
 });
