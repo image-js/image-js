@@ -4,7 +4,7 @@ import { Point } from '../geometry';
 
 /**
  * Get the coordinates of the points on a circle. The reference is the center of the circle.
- * Caution: the points are not sorted.
+ * The first point is the right one and they are then sorted clockwise.
  *
  * @param radius - Radius of the circle.
  * @returns The coordinates of the points on a circle of given diameter.
@@ -16,7 +16,18 @@ export function getCirclePoints(radius: number): Point[] {
     circlePoints.push({ row: row - radius, column: column - radius });
   });
 
-  return circlePoints;
+  let firstQuarter: Point[] = [];
+  let secondQuarter: Point[] = [];
+  let thirdQuarter: Point[] = [];
+  let fourthQuarter: Point[] = [];
+
+  for (let i = 0; i < circlePoints.length / 4; i++) {
+    firstQuarter.push(circlePoints[(4 * i) % circlePoints.length]);
+    secondQuarter.push(circlePoints[(4 * i + 1) % circlePoints.length]);
+    thirdQuarter.push(circlePoints[(4 * i + 2) % circlePoints.length]);
+    fourthQuarter.push(circlePoints[(4 * i + 3) % circlePoints.length]);
+  }
+  return firstQuarter.concat(secondQuarter, thirdQuarter, fourthQuarter);
 }
 
 /**
