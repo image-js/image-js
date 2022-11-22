@@ -8,7 +8,6 @@ import { Point } from '../geometry';
  * @param origin - Keypoint coordinates.
  * @param image - Image to process
  * @param threshold - FAST threshold.
-
  * @param circlePoints - Coordinates of the points on the circle.
  * @returns Score of the corner.
  */

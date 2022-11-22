@@ -21,11 +21,11 @@ export function getCirclePoints(radius: number): Point[] {
   let thirdQuarter: Point[] = [];
   let fourthQuarter: Point[] = [];
 
-  for (let i = 0; i < circlePoints.length / 4; i++) {
-    firstQuarter.push(circlePoints[(4 * i) % circlePoints.length]);
-    secondQuarter.push(circlePoints[(4 * i + 1) % circlePoints.length]);
-    thirdQuarter.push(circlePoints[(4 * i + 2) % circlePoints.length]);
-    fourthQuarter.push(circlePoints[(4 * i + 3) % circlePoints.length]);
+  for (let i = 0; i < circlePoints.length; i = i + 4) {
+    firstQuarter.push(circlePoints[i % circlePoints.length]);
+    secondQuarter.push(circlePoints[(i + 1) % circlePoints.length]);
+    thirdQuarter.push(circlePoints[(i + 2) % circlePoints.length]);
+    fourthQuarter.push(circlePoints[(i + 3) % circlePoints.length]);
   }
   return firstQuarter.concat(secondQuarter, thirdQuarter, fourthQuarter);
 }
