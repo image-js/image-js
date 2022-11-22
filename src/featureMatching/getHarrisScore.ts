@@ -2,6 +2,7 @@ import Matrix, { EigenvalueDecomposition, WrapperMatrix1D } from 'ml-matrix';
 
 import { Image } from '../Image';
 import { Point } from '../geometry';
+import { writeSync } from '../save';
 import { SOBEL_X, SOBEL_Y } from '../utils/constants/kernels';
 
 export interface GetHarrisScoreOptions {
@@ -11,35 +12,59 @@ export interface GetHarrisScoreOptions {
    *
    * @default 7
    */
-  windowSize: number;
+  windowSize?: number;
   /**
-   * Constant for the score computation. SHould be between 0.04 and 0.06.
+   * Constant for the score computation. Should be between 0.04 and 0.06 (empirical values).
    *
    * @default 0.04
    */
-  harrisConstant: number;
+  harrisConstant?: number;
 }
+
 /**
  * Get the Harris score of a corner. The idea behind the algorithm is that a
  * slight shift of a window around a corner along x and y shoud result in
  * a very different image.
  * https://en.wikipedia.org/wiki/Harris_corner_detector#:~:text=The%20Harris%20corner%20detector%20is,improvement%20of%20Moravec's%20corner%20detector.
  *
- * @param image - Image to which the corner belongs.
- * @param origin - Top-left corner of the
+ * We distinguish 3 cases:
+ * - the score is highly negative: you have an edge
+ * - the abolute value of the score is small: the region is flat
+ * - the score is highly positive: you have a corner
+ *
+ * @param image - Image to which the corner belongs. It must be a greyscale image with only one channel.
+ * @param origin - Center of the window, where the corner should be.
  * @param options - Get Harris score options.
  * @returns The Harris score.
  */
 export function getHarrisScore(
   image: Image,
   origin: Point,
-  options: GetHarrisScoreOptions,
+  options: GetHarrisScoreOptions = {},
 ): number {
   const { windowSize = 7, harrisConstant = 0.04 } = options;
 
-  const window = image.crop({ origin, width: windowSize, height: windowSize });
+  writeSync('./src/featureMatching/__tests__/image.png', image);
+
+  if (!(windowSize % 2)) {
+    throw new Error('getHarrisScore: windowSize should be an odd integer.');
+  }
+
+  const cropOrigin = {
+    row: origin.row - (windowSize - 1) / 2,
+    column: origin.column - (windowSize - 1) / 2,
+  };
+  const window = image.crop({
+    origin: cropOrigin,
+    width: windowSize,
+    height: windowSize,
+  });
   const xDerivative = window.gradientFilter({ kernelX: SOBEL_X });
   const yDerivative = window.gradientFilter({ kernelY: SOBEL_Y });
+
+  writeSync('./src/featureMatching/__tests__/window.png', window);
+  writeSync('./src/featureMatching/__tests__/xDerivative.png', xDerivative);
+  writeSync('./src/featureMatching/__tests__/yDerivative.png', yDerivative);
 
   const xMatrix = new WrapperMatrix1D(xDerivative.getRawImage().data, {
     rows: xDerivative.height,
@@ -64,6 +89,7 @@ export function getHarrisScore(
   const eigenValues = new EigenvalueDecomposition(structureTensor)
     .realEigenvalues;
 
+  console.log(eigenValues);
   return (
     eigenValues[0] * eigenValues[1] -
     harrisConstant * Math.pow(eigenValues[0] + eigenValues[1], 2)

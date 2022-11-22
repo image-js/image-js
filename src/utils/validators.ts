@@ -46,8 +46,8 @@ export function validateValue(value: number, image: Image): void {
 /**
  * Validate that two images are compatible for comparison functions.
  *
- * @param process
- * @param image - first image.
+ * @param process - Process name.
+ * @param image - First image.
  * @param other - Second image.
  */
 export function validateForComparison(

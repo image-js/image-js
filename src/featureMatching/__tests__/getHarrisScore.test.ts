@@ -1,5 +1,6 @@
 import { ImageColorModel, Image } from '../../Image';
 import { getCirclePoints, getCompassPoints } from '../../utils/getCirclePoints';
+import { getHarrisScore } from '../getHarrisScore';
 import { isFastKeypoint } from '../isFastKeypoint';
 
 const fastRadius = 3;
@@ -14,9 +15,9 @@ test('7x7 image, not corner', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = isFastKeypoint(origin, image, circlePoints, compassPoints);
+  let result = getHarrisScore(image, origin);
 
-  expect(result).toBe(false);
+  expect(result).toBe(0);
 });
 
 test('7x7 image with straight line', () => {
@@ -24,7 +25,7 @@ test('7x7 image with straight line', () => {
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
-    [1, 1, 1, 1, 1, 1, 1],
+    [255, 255, 255, 255, 255, 255, 255],
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
@@ -32,9 +33,9 @@ test('7x7 image with straight line', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = isFastKeypoint(origin, image, circlePoints, compassPoints);
+  let result = getHarrisScore(image, origin, { windowSize: 7 });
 
-  expect(result).toBe(false);
+  expect(result).toBe(0);
 });
 
 test('7x7 image with corner 90 degrees', () => {
@@ -50,10 +51,11 @@ test('7x7 image with corner 90 degrees', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = isFastKeypoint(origin, image, circlePoints, compassPoints);
+  let result = getHarrisScore(image, origin);
 
-  expect(result).toBe(false);
+  expect(result).toBe(0);
 });
+
 test('7x7 image with darker and lighter areas', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0, 0, 0],
@@ -67,9 +69,9 @@ test('7x7 image with darker and lighter areas', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = isFastKeypoint(origin, image, circlePoints, compassPoints);
+  let result = getHarrisScore(image, origin, { windowSize: 7 });
 
-  expect(result).toBe(true);
+  expect(result).toBe(0);
 });
 test('7x7 image with segment', () => {
   const image = testUtils.createGreyImage([
@@ -84,9 +86,9 @@ test('7x7 image with segment', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = isFastKeypoint(origin, image, circlePoints, compassPoints);
+  let result = getHarrisScore(image, origin, { windowSize: 7 });
 
-  expect(result).toBe(true);
+  expect(result).toBe(0);
 });
 test('7x7 image, threshold = 60', () => {
   const image = testUtils.createGreyImage([
@@ -100,11 +102,9 @@ test('7x7 image, threshold = 60', () => {
   ]);
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = isFastKeypoint(origin, image, circlePoints, compassPoints, {
-    threshold: 60,
-  });
+  let result = getHarrisScore(image, origin, { windowSize: 7 });
 
-  expect(result).toBe(false);
+  expect(result).toBe(0);
 });
 test('7x7 image with corner 90 degrees, n=9', () => {
   const image = testUtils.createGreyImage([
@@ -119,9 +119,7 @@ test('7x7 image with corner 90 degrees, n=9', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = isFastKeypoint(origin, image, circlePoints, compassPoints, {
-    nbContiguousPixels: 9,
-  });
+  let result = getHarrisScore(image, origin, { windowSize: 7 });
 
-  expect(result).toBe(true);
+  expect(result).toBe(0);
 });
