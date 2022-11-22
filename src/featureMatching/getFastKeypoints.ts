@@ -6,7 +6,7 @@ import { getIndex } from '../utils/getIndex';
 import { surroundingPixels } from '../utils/surroundingPixels';
 
 import { getFastScore } from './getFastScore';
-import { getHarrisScore } from './getHarrisScore';
+import { getHarrisScore, GetHarrisScoreOptions } from './getHarrisScore';
 import { isFastKeypoint, IsFastKeypointOptions } from './isFastKeypoint';
 
 export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
@@ -36,6 +36,10 @@ export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
    * @default 'FAST'
    */
   scoreAlgorithm?: 'HARRIS' | 'FAST';
+  /**
+   * Options for the Harris score computation.
+   */
+  harrisScoreOptions?: GetHarrisScoreOptions;
   /**
    * Should the keypoint scores be normalised between 0 (worst corner) and 1 (best corner).
    * This feature is only useful if you want to verify the keypoints scores.
@@ -74,6 +78,7 @@ export function getFastKeypoints(
     fastRadius = 3,
     scoreAlgorithm = 'FAST',
     normaliseScores = false,
+    harrisScoreOptions = { windowSize: 7, harrisConstant: 0.04 },
   } = options;
 
   const circlePoints = getCirclePoints(fastRadius);
@@ -106,7 +111,7 @@ export function getFastKeypoints(
         let score = 0;
         switch (scoreAlgorithm) {
           case 'HARRIS':
-            score = getHarrisScore(image, corner);
+            score = getHarrisScore(image, corner, harrisScoreOptions);
             break;
           case 'FAST':
             score = getFastScore(image, corner, threshold, circlePoints);
