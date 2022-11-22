@@ -131,7 +131,7 @@ test('alphabet image, scoreAlgorithm = HARRIS, nms = false', () => {
   expect(image).toMatchImageSnapshot();
 });
 
-test.only('alphabet image, scoreAlgorithm = HARRIS', () => {
+test('alphabet image, scoreAlgorithm = HARRIS', () => {
   const image = testUtils.load('various/alphabet.jpg');
   const grey = image.convertColor(ImageColorModel.GREY);
   const keypoints = getFastKeypoints(grey, {
@@ -149,7 +149,7 @@ test.only('alphabet image, scoreAlgorithm = HARRIS', () => {
 
   writeSync('./src/featureMatching/__tests__/harrisScore.png', image);
 
-  expect(keypoints).toHaveLength(500);
+  expect(keypoints).toHaveLength(158);
   expect(image).toMatchImageSnapshot();
 });
 
