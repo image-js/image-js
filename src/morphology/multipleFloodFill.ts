@@ -131,8 +131,6 @@ export function multipleFloodFill(
     }
   }
 
-  return newMask;
-
   function addToProcess(pixel: number): void {
     if (alreadyConsidered.getBitByIndex(pixel)) return;
     if (newMask.getBitByIndex(pixel) === startPixelValue) {
@@ -140,4 +138,6 @@ export function multipleFloodFill(
       alreadyConsidered.setBitByIndex(pixel, 1);
     }
   }
+
+  return newMask;
 }
