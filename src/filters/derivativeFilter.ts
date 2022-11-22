@@ -21,6 +21,8 @@ export enum DerivativeFilters {
 export interface DerivativeFilterOptions {
   /**
    * Algorithm to use for the derivative filter.
+   *
+   * @default SOBEL
    */
   filter?: DerivativeFilters;
   /**
