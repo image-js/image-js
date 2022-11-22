@@ -15,25 +15,25 @@ export interface LevelOptions {
   /**
    * Minimal input value.
    *
-   * @default image.minValue
+   * @default 0
    */
   inputMin?: number;
   /**
    * Maximal input value.
    *
-   * @default image.minValue
+   * @default image.maxValue
    */
   inputMax?: number;
   /**
    * Minimal output value.
    *
-   * @default image.minValue
+   * @default 0
    */
   outputMin?: number;
   /**
    * Maximal output value.
    *
-   * @default image.minValue
+   * @default image.maxValue
    */
   outputMax?: number;
   /**
