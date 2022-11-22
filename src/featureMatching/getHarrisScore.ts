@@ -74,7 +74,7 @@ export function getHarrisScore(
   });
 
   const xx = xMatrix.mmul(xMatrix);
-  const xy = xMatrix.mmul(yMatrix);
+  const xy = yMatrix.mmul(xMatrix);
   const yy = yMatrix.mmul(yMatrix);
 
   const xxSum = xx.sum();
@@ -89,7 +89,6 @@ export function getHarrisScore(
   const eigenValues = new EigenvalueDecomposition(structureTensor)
     .realEigenvalues;
 
-  console.log(eigenValues);
   return (
     eigenValues[0] * eigenValues[1] -
     harrisConstant * Math.pow(eigenValues[0] + eigenValues[1], 2)
