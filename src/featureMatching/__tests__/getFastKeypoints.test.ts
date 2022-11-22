@@ -90,9 +90,12 @@ test('alphabet, fastRadius = 5', () => {
   expect(image).toMatchImageSnapshot();
 });
 
-test('grayscale image, threshold = 100', () => {
+test('grayscale image, threshold = 100, normaliseScores = true', () => {
   const grey = testUtils.load('various/grayscale_by_zimmyrose.png');
-  const keypoints = getFastKeypoints(grey, { threshold: 100 });
+  const keypoints = getFastKeypoints(grey, {
+    threshold: 100,
+    normaliseScores: true,
+  });
 
   const keypointsCoordinates = keypoints.map((kpt) => kpt.origin);
 
@@ -105,15 +108,18 @@ test('grayscale image, threshold = 100', () => {
   }
 
   expect(keypoints).toHaveLength(19);
+  expect(keypoints[0].score).toBe(1);
+  expect(keypoints).toMatchSnapshot();
   expect(image).toMatchImageSnapshot();
 });
 
-test('alphabet image, scoreAlgorithm = HARRIS, nms = false', () => {
+test('alphabet image, scoreAlgorithm = HARRIS, nms = false, normaliseScores=true', () => {
   const image = testUtils.load('various/alphabet.jpg');
   const grey = image.convertColor(ImageColorModel.GREY);
   const keypoints = getFastKeypoints(grey, {
     scoreAlgorithm: 'HARRIS',
     nonMaxSuppression: false,
+    normaliseScores: true,
   });
 
   const keypointsCoordinates = keypoints.map((kpt) => kpt.origin);
@@ -127,6 +133,7 @@ test('alphabet image, scoreAlgorithm = HARRIS, nms = false', () => {
 
   writeSync('./src/featureMatching/__tests__/harrisScore.png', image);
 
+  expect(keypoints).toMatchSnapshot();
   expect(keypoints).toHaveLength(500);
   expect(image).toMatchImageSnapshot();
 });

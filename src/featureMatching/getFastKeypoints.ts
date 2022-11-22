@@ -36,6 +36,13 @@ export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
    * @default 'FAST'
    */
   scoreAlgorithm?: 'HARRIS' | 'FAST';
+  /**
+   * Should the keypoint scores be normalised between 0 (worst corner) and 1 (best corner).
+   * This feature is only useful if you want to verify the keypoints scores.
+   *
+   * @default false
+   */
+  normaliseScores?: boolean;
 }
 
 export interface FastKeypoint {
@@ -63,7 +70,11 @@ export function getFastKeypoints(
   image: Image,
   options: GetFastKeypointsOptions = {},
 ): FastKeypoint[] {
-  const { fastRadius = 3, scoreAlgorithm = 'FAST' } = options;
+  const {
+    fastRadius = 3,
+    scoreAlgorithm = 'FAST',
+    normaliseScores = false,
+  } = options;
 
   const circlePoints = getCirclePoints(fastRadius);
   const compassPoints = getCompassPoints(fastRadius);
@@ -80,71 +91,87 @@ export function getFastKeypoints(
     alpha: false,
   });
 
-  let possibleCorners: Point[] = [];
+  const allKeypoints: FastKeypoint[] = [];
+
+  let scoreArray = new Float64Array(image.size).fill(Number.NEGATIVE_INFINITY);
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {
+      const corner = { row, column };
       if (
-        isFastKeypoint({ row, column }, image, circlePoints, compassPoints, {
+        isFastKeypoint(corner, image, circlePoints, compassPoints, {
           nbContiguousPixels,
           threshold,
         })
       ) {
-        possibleCorners.push({ row, column });
+        let score = 0;
+        switch (scoreAlgorithm) {
+          case 'HARRIS':
+            score = getHarrisScore(image, corner);
+            break;
+          case 'FAST':
+            score = getFastScore(image, corner, threshold, circlePoints);
+            break;
+          default:
+            throw new Error(
+              `getFastKeypoints: undefined score algorithm ${scoreAlgorithm}`,
+            );
+        }
+        scoreArray[getIndex(corner.column, corner.row, image, 0)] = score;
+        allKeypoints.push({ origin: corner, score });
       }
     }
   }
 
-  const allKeypoints: FastKeypoint[] = [];
-
-  let scoreArray = new Float64Array(image.size).fill(Number.NEGATIVE_INFINITY);
-  for (let corner of possibleCorners) {
-    let score = 0;
-    switch (scoreAlgorithm) {
-      case 'HARRIS':
-        score = getHarrisScore(image, corner);
-        break;
-      case 'FAST':
-        score = getFastScore(image, corner, threshold, circlePoints);
-        break;
-      default:
-        throw new Error(
-          `getFastKeypoints: undefined score algorithm ${scoreAlgorithm}`,
-        );
-    }
-    scoreArray[getIndex(corner.column, corner.row, image, 0)] = score;
-    allKeypoints.push({ origin: corner, score });
-  }
-
+  let keypoints: FastKeypoint[] = [];
   if (!nonMaxSuppression) {
-    allKeypoints.sort((a, b) => b.score - a.score);
-    return allKeypoints.slice(0, maxNbFeatures);
-  }
-
-  // Non-Maximal Suppression
-  const nmsKeypoints: FastKeypoint[] = [];
-
-  for (let corner of possibleCorners) {
-    const currentScore =
-      scoreArray[getIndex(corner.column, corner.row, image, 0)];
-    for (let i = 0; i < surroundingPixels.length; i++) {
-      const neighbour = surroundingPixels[i];
-      const neighbourScore =
+    keypoints = allKeypoints;
+  } else {
+    // Non-Maximal Suppression
+    for (let keypoint of allKeypoints) {
+      const currentScore =
         scoreArray[
-          getIndex(
-            corner.column + neighbour.column,
-            corner.row + neighbour.row,
-            image,
-            0,
-          )
+          getIndex(keypoint.origin.column, keypoint.origin.row, image, 0)
         ];
-      if (neighbourScore > currentScore) break;
-      if (i === surroundingPixels.length - 1) {
-        nmsKeypoints.push({ origin: corner, score: currentScore });
+      for (let i = 0; i < surroundingPixels.length; i++) {
+        const neighbour = surroundingPixels[i];
+        const neighbourScore =
+          scoreArray[
+            getIndex(
+              keypoint.origin.column + neighbour.column,
+              keypoint.origin.row + neighbour.row,
+              image,
+              0,
+            )
+          ];
+        if (neighbourScore > currentScore) break;
+        if (i === surroundingPixels.length - 1) {
+          keypoints.push(keypoint);
+        }
       }
     }
   }
 
-  nmsKeypoints.sort((a, b) => b.score - a.score);
+  keypoints.sort((a, b) => b.score - a.score);
+  if (normaliseScores) {
+    keypoints = getNormalisedKeypoints(keypoints);
+  }
+  return keypoints.slice(0, maxNbFeatures);
+}
 
-  return nmsKeypoints.slice(0, maxNbFeatures);
+/**
+ * Normalises the keypoints scores, the best keypoint having a score of 1 and the worst a score of 0.
+ *
+ * @param keypoints - The keypoints to process.
+ * @returns Keypoints with normalised scores.
+ */
+function getNormalisedKeypoints(keypoints: FastKeypoint[]): FastKeypoint[] {
+  const minValue = keypoints[keypoints.length - 1].score;
+  const maxValue = keypoints[0].score;
+  const scoreRange = maxValue - minValue;
+
+  for (let keypoint of keypoints) {
+    keypoint.score = (keypoint.score - minValue) / scoreRange;
+  }
+
+  return keypoints;
 }
