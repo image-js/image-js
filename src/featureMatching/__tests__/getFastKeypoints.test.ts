@@ -1,4 +1,5 @@
 import { ImageColorModel } from '../../Image';
+import { writeSync } from '../../save';
 import { getFastKeypoints } from '../getFastKeypoints';
 
 test('alphabet image, default options', () => {
@@ -104,6 +105,51 @@ test('grayscale image, threshold = 100', () => {
   }
 
   expect(keypoints).toHaveLength(19);
+  expect(image).toMatchImageSnapshot();
+});
+
+test('alphabet image, scoreAlgorithm = HARRIS, nms = false', () => {
+  const image = testUtils.load('various/alphabet.jpg');
+  const grey = image.convertColor(ImageColorModel.GREY);
+  const keypoints = getFastKeypoints(grey, {
+    scoreAlgorithm: 'HARRIS',
+    nonMaxSuppression: false,
+  });
+
+  const keypointsCoordinates = keypoints.map((kpt) => kpt.origin);
+
+  for (let keypoint of keypointsCoordinates) {
+    image.drawCircle(keypoint, 5, {
+      color: [255, 0, 0, 255],
+      out: image,
+    });
+  }
+
+  writeSync('./src/featureMatching/__tests__/harrisScore.png', image);
+
+  expect(keypoints).toHaveLength(500);
+  expect(image).toMatchImageSnapshot();
+});
+
+test.only('alphabet image, scoreAlgorithm = HARRIS', () => {
+  const image = testUtils.load('various/alphabet.jpg');
+  const grey = image.convertColor(ImageColorModel.GREY);
+  const keypoints = getFastKeypoints(grey, {
+    scoreAlgorithm: 'HARRIS',
+  });
+
+  const keypointsCoordinates = keypoints.map((kpt) => kpt.origin);
+
+  for (let keypoint of keypointsCoordinates) {
+    image.drawCircle(keypoint, 5, {
+      color: [255, 0, 0, 255],
+      out: image,
+    });
+  }
+
+  writeSync('./src/featureMatching/__tests__/harrisScore.png', image);
+
+  expect(keypoints).toHaveLength(500);
   expect(image).toMatchImageSnapshot();
 });
 

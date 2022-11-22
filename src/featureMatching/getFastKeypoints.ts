@@ -6,6 +6,7 @@ import { getIndex } from '../utils/getIndex';
 import { surroundingPixels } from '../utils/surroundingPixels';
 
 import { getFastScore } from './getFastScore';
+import { getHarrisScore } from './getHarrisScore';
 import { isFastKeypoint, IsFastKeypointOptions } from './isFastKeypoint';
 
 export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
@@ -29,6 +30,12 @@ export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
    * @default 3
    */
   fastRadius?: number;
+  /**
+   * Algorithm to use to compute corners score.
+   *
+   * @default 'FAST'
+   */
+  scoreAlgorithm?: 'HARRIS' | 'FAST';
 }
 
 export interface FastKeypoint {
@@ -56,7 +63,7 @@ export function getFastKeypoints(
   image: Image,
   options: GetFastKeypointsOptions = {},
 ): FastKeypoint[] {
-  const { fastRadius = 3 } = options;
+  const { fastRadius = 3, scoreAlgorithm = 'FAST' } = options;
 
   const circlePoints = getCirclePoints(fastRadius);
   const compassPoints = getCompassPoints(fastRadius);
@@ -89,9 +96,21 @@ export function getFastKeypoints(
 
   const allKeypoints: FastKeypoint[] = [];
 
-  let scoreArray = new Float64Array(image.size);
+  let scoreArray = new Float64Array(image.size).fill(Number.NEGATIVE_INFINITY);
   for (let corner of possibleCorners) {
-    const score = getFastScore(corner, image, threshold, circlePoints);
+    let score = 0;
+    switch (scoreAlgorithm) {
+      case 'HARRIS':
+        score = getHarrisScore(image, corner);
+        break;
+      case 'FAST':
+        score = getFastScore(image, corner, threshold, circlePoints);
+        break;
+      default:
+        throw new Error(
+          `getFastKeypoints: undefined score algorithm ${scoreAlgorithm}`,
+        );
+    }
     scoreArray[getIndex(corner.column, corner.row, image, 0)] = score;
     allKeypoints.push({ origin: corner, score });
   }
@@ -103,6 +122,7 @@ export function getFastKeypoints(
 
   // Non-Maximal Suppression
   const nmsKeypoints: FastKeypoint[] = [];
+
   for (let corner of possibleCorners) {
     const currentScore =
       scoreArray[getIndex(corner.column, corner.row, image, 0)];
