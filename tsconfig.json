@@ -15,6 +15,7 @@
     "./jest.setup.ts",
     "./src/**/*",
     "./test/**/*",
-    "vite.config.ts"
+    "vite.config.ts",
+    "scripts"
   ]
 }

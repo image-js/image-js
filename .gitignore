@@ -126,4 +126,4 @@ src/**/*.png
 !src/**/__image_snapshots__/*.png
 
 # test scripts
-src/scripts
+scripts
