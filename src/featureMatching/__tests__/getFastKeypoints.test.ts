@@ -94,11 +94,11 @@ test('alphabet, fastRadius = 5', () => {
   expect(image).toMatchImageSnapshot();
 });
 
-test('grayscale image, threshold = 100, normaliseScores = true', () => {
+test('grayscale image, threshold = 100, normalizeScores = true', () => {
   const grey = testUtils.load('various/grayscale_by_zimmyrose.png');
   const keypoints = getFastKeypoints(grey, {
     threshold: 100,
-    normaliseScores: true,
+    normalizeScores: true,
   });
 
   const keypointsCoordinates = keypoints.map((kpt) => kpt.origin);
@@ -117,13 +117,13 @@ test('grayscale image, threshold = 100, normaliseScores = true', () => {
   expect(image).toMatchImageSnapshot();
 });
 
-test('alphabet image, scoreAlgorithm = HARRIS, nms = false, normaliseScores=true', () => {
+test('alphabet image, scoreAlgorithm = HARRIS, nms = false, normalizeScores=true', () => {
   const image = testUtils.load('various/alphabet.jpg');
   const grey = image.convertColor(ImageColorModel.GREY);
   const keypoints = getFastKeypoints(grey, {
     scoreAlgorithm: 'HARRIS',
     nonMaxSuppression: false,
-    normaliseScores: true,
+    normalizeScores: true,
   });
 
   const keypointsCoordinates = keypoints.map((kpt) => kpt.origin);

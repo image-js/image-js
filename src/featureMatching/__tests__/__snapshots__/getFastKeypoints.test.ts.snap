@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`alphabet image, scoreAlgorithm = HARRIS, nms = false, normaliseScores=true 1`] = `
+exports[`alphabet image, scoreAlgorithm = HARRIS, nms = false, normalizeScores=true 1`] = `
 [
   {
     "origin": {
@@ -3505,7 +3505,7 @@ exports[`alphabet image, scoreAlgorithm = HARRIS, nms = false, normaliseScores=t
 ]
 `;
 
-exports[`grayscale image, threshold = 100, normaliseScores = true 1`] = `
+exports[`grayscale image, threshold = 100, normalizeScores = true 1`] = `
 [
   {
     "origin": {

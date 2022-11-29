@@ -45,7 +45,7 @@ export function getReferenceColors(qpCard: ColorCard): RgbColor[] {
 }
 
 /**
- * Format and normalise data from a QP card to use as a reference in a multivariate linear regression.
+ * Format and normalize data from a QP card to use as a reference in a multivariate linear regression.
  *
  * @param referenceColors - Array of RGB colors used as a reference.
  * @param maxValue - Maximal acceptable value for the image to process.
@@ -67,7 +67,7 @@ export function formatReferenceForMlr(
 }
 
 /**
- * Compute the variables for the multivariate linear regression based on the the input colors. Values are normalised between 0 and 1.
+ * Compute the variables for the multivariate linear regression based on the the input colors. Values are normalized between 0 and 1.
  *
  * @param inputColors - The input colors as an array of rgb objects.
  * @param maxValue - Maximal acceptable value for the image to process.
