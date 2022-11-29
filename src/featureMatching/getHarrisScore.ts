@@ -2,7 +2,6 @@ import Matrix, { EigenvalueDecomposition, WrapperMatrix1D } from 'ml-matrix';
 
 import { Image } from '../Image';
 import { Point } from '../geometry';
-import { writeSync } from '../save';
 import { SOBEL_X, SOBEL_Y } from '../utils/constants/kernels';
 
 export interface GetHarrisScoreOptions {
@@ -44,8 +43,6 @@ export function getHarrisScore(
 ): number {
   const { windowSize = 7, harrisConstant = 0.04 } = options;
 
-  writeSync('./src/featureMatching/__tests__/image.png', image);
-
   if (!(windowSize % 2)) {
     throw new Error('getHarrisScore: windowSize should be an odd integer.');
   }
@@ -61,10 +58,6 @@ export function getHarrisScore(
   });
   const xDerivative = window.gradientFilter({ kernelX: SOBEL_X });
   const yDerivative = window.gradientFilter({ kernelY: SOBEL_Y });
-
-  writeSync('./src/featureMatching/__tests__/window.png', window);
-  writeSync('./src/featureMatching/__tests__/xDerivative.png', xDerivative);
-  writeSync('./src/featureMatching/__tests__/yDerivative.png', yDerivative);
 
   const xMatrix = new WrapperMatrix1D(xDerivative.getRawImage().data, {
     rows: xDerivative.height,

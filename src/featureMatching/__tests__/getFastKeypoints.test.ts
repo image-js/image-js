@@ -1,5 +1,4 @@
 import { ImageColorModel } from '../../Image';
-import { writeSync } from '../../save';
 import { getFastKeypoints } from '../getFastKeypoints';
 
 test('alphabet image, default options', () => {
@@ -10,11 +9,12 @@ test('alphabet image, default options', () => {
 
   const keypointsCoordinates = keypoints.map((kpt) => kpt.origin);
 
-  image.drawPoints(keypointsCoordinates, {
-    color: [255, 0, 0, 255],
-    out: image,
-  });
-
+  for (let keypoint of keypointsCoordinates) {
+    image.drawCircle(keypoint, 5, {
+      color: [255, 0, 0, 255],
+      out: image,
+    });
+  }
   expect(keypoints).toHaveLength(119);
   expect(image).toMatchImageSnapshot();
 });
@@ -27,29 +27,33 @@ test('alphabet image, nonMaxSuppression = false', () => {
 
   const keypointsCoordinates = keypoints.map((kpt) => kpt.origin);
 
-  image.drawPoints(keypointsCoordinates, {
-    color: [255, 0, 0, 255],
-    out: image,
-  });
+  for (let keypoint of keypointsCoordinates) {
+    image.drawCircle(keypoint, 5, {
+      color: [255, 0, 0, 255],
+      out: image,
+    });
+  }
 
   expect(keypoints).toHaveLength(500);
   expect(image).toMatchImageSnapshot();
 });
 
-test('alphabet image, maxNbFeatures = 10', () => {
+test('alphabet image, maxNbFeatures = 50', () => {
   const image = testUtils.load('various/alphabet.jpg');
   const grey = image.convertColor(ImageColorModel.GREY);
 
-  const keypoints = getFastKeypoints(grey, { maxNbFeatures: 10 });
+  const keypoints = getFastKeypoints(grey, { maxNbFeatures: 50 });
 
   const keypointsCoordinates = keypoints.map((kpt) => kpt.origin);
 
-  image.drawPoints(keypointsCoordinates, {
-    color: [255, 0, 0, 255],
-    out: image,
-  });
+  for (let keypoint of keypointsCoordinates) {
+    image.drawCircle(keypoint, 5, {
+      color: [255, 0, 0, 255],
+      out: image,
+    });
+  }
 
-  expect(keypoints).toHaveLength(10);
+  expect(keypoints).toHaveLength(50);
   expect(image).toMatchImageSnapshot();
 });
 
@@ -131,10 +135,8 @@ test('alphabet image, scoreAlgorithm = HARRIS, nms = false, normaliseScores=true
     });
   }
 
-  writeSync('./src/featureMatching/__tests__/harrisScore.png', image);
-
-  expect(keypoints).toMatchSnapshot();
   expect(keypoints).toHaveLength(500);
+  expect(keypoints).toMatchSnapshot();
   expect(image).toMatchImageSnapshot();
 });
 
@@ -154,9 +156,28 @@ test('alphabet image, scoreAlgorithm = HARRIS', () => {
     });
   }
 
-  writeSync('./src/featureMatching/__tests__/harrisScore.png', image);
-
   expect(keypoints).toHaveLength(158);
+  expect(image).toMatchImageSnapshot();
+});
+
+test('alphabet image, scoreAlgorithm = HARRIS, maxNbFeatures = 50', () => {
+  const image = testUtils.load('various/alphabet.jpg');
+  const grey = image.convertColor(ImageColorModel.GREY);
+  const keypoints = getFastKeypoints(grey, {
+    scoreAlgorithm: 'HARRIS',
+    maxNbFeatures: 50,
+  });
+
+  const keypointsCoordinates = keypoints.map((kpt) => kpt.origin);
+
+  for (let keypoint of keypointsCoordinates) {
+    image.drawCircle(keypoint, 5, {
+      color: [255, 0, 0, 255],
+      out: image,
+    });
+  }
+
+  expect(keypoints).toHaveLength(50);
   expect(image).toMatchImageSnapshot();
 });
 

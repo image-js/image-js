@@ -31,7 +31,7 @@ test('7x7 image with horizontal line', () => {
 
   let result = getHarrisScore(image, origin, { windowSize: 7 });
 
-  expect(result).toBe(0);
+  expect(result).toBeCloseTo(-8287371225);
 });
 
 test('7x7 image with corner 90 degrees, bottom-right', () => {
@@ -49,7 +49,7 @@ test('7x7 image with corner 90 degrees, bottom-right', () => {
 
   let result = getHarrisScore(image, origin);
 
-  expect(result).toBe(0);
+  expect(result).toBeCloseTo(80505891900);
 });
 
 test('7x7 image with corner 90 degrees, bottom-left', () => {
@@ -67,10 +67,10 @@ test('7x7 image with corner 90 degrees, bottom-left', () => {
 
   let result = getHarrisScore(image, origin);
 
-  expect(result).toBe(0);
+  expect(result).toBeCloseTo(-91499343525);
 });
 
-test.only('7x7 image with other corner', () => {
+test('7x7 image with other corner', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
@@ -85,7 +85,7 @@ test.only('7x7 image with other corner', () => {
 
   let result = getHarrisScore(image, origin);
 
-  expect(result).toBe(0);
+  expect(result).toBeCloseTo(-12998500000);
 });
 
 test('7x7 image with darker and lighter areas', () => {
@@ -103,7 +103,7 @@ test('7x7 image with darker and lighter areas', () => {
 
   let result = getHarrisScore(image, origin, { windowSize: 7 });
 
-  expect(result).toBe(0);
+  expect(result).toBeCloseTo(-1688675564600);
 });
 test('7x7 image with segment', () => {
   const image = testUtils.createGreyImage([
@@ -120,5 +120,5 @@ test('7x7 image with segment', () => {
 
   let result = getHarrisScore(image, origin, { windowSize: 7 });
 
-  expect(result).toBe(0);
+  expect(result).toBeCloseTo(13084874375);
 });
