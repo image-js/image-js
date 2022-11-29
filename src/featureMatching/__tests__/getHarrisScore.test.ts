@@ -105,6 +105,7 @@ test('7x7 image with darker and lighter areas', () => {
 
   expect(result).toBeCloseTo(-1688675564600);
 });
+
 test('7x7 image with segment', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0, 0, 0],
@@ -121,4 +122,22 @@ test('7x7 image with segment', () => {
   let result = getHarrisScore(image, origin, { windowSize: 7 });
 
   expect(result).toBeCloseTo(13084874375);
+});
+
+test('windowSize error', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 200, 0, 0, 0],
+    [0, 0, 0, 100, 0, 0, 0],
+    [0, 0, 0, 100, 0, 0, 0],
+    [0, 0, 0, 100, 0, 0, 0],
+  ]);
+
+  const origin = { row: fastRadius, column: fastRadius };
+
+  expect(() => getHarrisScore(image, origin, { windowSize: 6 })).toThrow(
+    'getHarrisScore: windowSize should be an odd integer',
+  );
 });
