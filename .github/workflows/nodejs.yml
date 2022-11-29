@@ -10,5 +10,4 @@ jobs:
   nodejs:
     uses: zakodium/workflows/.github/workflows/nodejs.yml@nodejs-v1
     with:
-      node-version-matrix: '[14, 16, 18]'
       lint-check-types: true
