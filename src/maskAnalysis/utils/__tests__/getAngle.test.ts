@@ -31,6 +31,9 @@ test.each([
     { column: Math.sqrt(3), row: 1 },
     Math.PI / 6,
   ],
+  ['180 degrees', { column: 0, row: 0 }, { column: -1, row: 0 }, Math.PI],
+  ['270 degrees', { column: 0, row: 0 }, { column: 0, row: 1 }, Math.PI / 2],
+  ['90 degrees', { column: 0, row: 0 }, { column: 0, row: -1 }, -Math.PI / 2],
 ])('getAngle (%s)', (_, point1, point2, expectedAngle) => {
   const result = getAngle(point1, point2);
   expect(result).toBeCloseTo(expectedAngle);

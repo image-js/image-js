@@ -706,6 +706,7 @@ export class Image {
   ): Image {
     return drawCircleOnImage(this, center, radius, options);
   }
+
   // OPERATIONS
   public split(): Image[] {
     return split(this);
