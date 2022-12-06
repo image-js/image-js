@@ -550,7 +550,7 @@ export class Image {
    *
    * @param coordinates - The point for which you want the coordinates.
    * @param round - Should the coordinates be rounded? This is useful when you want the center of the image.
-   * @returns Coordinates of the point in the format [x, y].
+   * @returns Coordinates of the point in the format [column, row].
    */
   public getCoordinates(
     coordinates: ImageCoordinates,
