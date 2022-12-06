@@ -4,7 +4,7 @@ import { Point } from '../geometry';
 import { getIntensityMoment } from './getIntensityMoment';
 
 /**
- * Compute the intensity centroid of an image for each channel.
+ * Compute the intensity centroid of an image for each channel relatively to the center of the image.
  * Original article: {@link https://doi.org/10.1006/cviu.1998.0719}
  *
  * @see {@link https://en.wikipedia.org/wiki/Image_moment}

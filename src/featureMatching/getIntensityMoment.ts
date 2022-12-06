@@ -11,7 +11,8 @@ export interface GetIntensityMomentOptions {
 }
 
 /**
- * Compute the pq order intensity moment of the image.
+ * Compute the pq order intensity moment of the image
+ * relatively to the origin defined in the options.
  * Original article: {@link https://doi.org/10.1006/cviu.1998.0719}
  *
  * @see {@link https://en.wikipedia.org/wiki/Image_moment}
