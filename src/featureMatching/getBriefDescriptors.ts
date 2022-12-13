@@ -1,6 +1,5 @@
 import { Image, ImageColorModel, ImageCoordinates } from '../Image';
 import { GaussianBlurOptions } from '../filters';
-import { writeSync } from '../save';
 import checkProcessable from '../utils/checkProcessable';
 import { InterpolationType } from '../utils/interpolatePixel';
 
@@ -76,8 +75,6 @@ export function getBriefDescriptors(
 
   const smoothed = image.gaussianBlur(smoothingOptions);
 
-  writeSync('src/featureMatching/__tests__/smoothed.png', smoothed);
-
   const descriptors: Uint8Array[] = [];
 
   for (let keypoint of keypoints) {
@@ -93,19 +90,15 @@ export function getBriefDescriptors(
 
     const cropped = extractSquareImage(smoothed, keypoint.origin, cropWidth);
 
-    writeSync('src/featureMatching/__tests__/cropped.png', cropped);
-
     const rotateCenter = cropped.getCoordinates(ImageCoordinates.CENTER);
     const rotated = cropped.rotate(keypoint.angle, {
       center: rotateCenter,
       interpolationType: InterpolationType.NEAREST,
     });
-    writeSync('src/featureMatching/__tests__/rotated.png', rotated);
 
     const cropCenter = rotated.getCoordinates(ImageCoordinates.CENTER);
     const cropOrigin = { column: cropCenter[0], row: cropCenter[1] };
     const patch = extractSquareImage(rotated, cropOrigin, patchSize);
-    writeSync('src/featureMatching/__tests__/patch.png', patch);
 
     const descriptor = new Uint8Array(descriptorLength);
     for (let i = 0; i < descriptorLength; i++) {

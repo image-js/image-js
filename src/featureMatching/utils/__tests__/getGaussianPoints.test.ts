@@ -61,3 +61,31 @@ test('10000 gaussian points, sigma = 1', () => {
 
   expect(image).toMatchImageSnapshot();
 });
+
+test('default pairs of points for getBriefDescriptors', () => {
+  const size = 32;
+  const nbPairs = 256;
+  const scalingFactor = 20;
+
+  const image = new Image(size * scalingFactor, size * scalingFactor, {
+    colorModel: ImageColorModel.GREY,
+  });
+
+  const points = getGaussianPoints(size, size, { nbPoints: nbPairs * 2 });
+
+  const center = image.getCoordinates(ImageCoordinates.CENTER);
+  const absolutePoints = points.map((point) => {
+    return {
+      column: point.column * scalingFactor + center[0],
+      row: point.row * scalingFactor + center[1],
+    };
+  });
+
+  for (let i = 0; i < nbPairs; i++) {
+    const p1 = absolutePoints[i];
+    const p2 = absolutePoints[i + nbPairs];
+    image.drawLine(p1, p2, { strokeColor: [255], out: image });
+  }
+
+  expect(image).toMatchImageSnapshot();
+});
