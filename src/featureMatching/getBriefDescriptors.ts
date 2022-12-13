@@ -1,5 +1,8 @@
-import { Image, ImageCoordinates } from '../Image';
+import { Image, ImageColorModel, ImageCoordinates } from '../Image';
 import { GaussianBlurOptions } from '../filters';
+import { crop } from '../operations';
+import { writeSync } from '../save';
+import checkProcessable from '../utils/checkProcessable';
 import { InterpolationType } from '../utils/interpolatePixel';
 
 import { OrientedFastKeypoint } from './getOrientedFastKeypoints';
@@ -58,6 +61,11 @@ export function getBriefDescriptors(
     pointsDistributionOptions,
   } = options;
 
+  checkProcessable(image, 'getBriefDescriptors', {
+    alpha: false,
+    colorModel: ImageColorModel.GREY,
+  });
+
   if (!(patchSize % 2)) {
     throw new Error('getBriefDescriptors: patchSize should be an odd integer');
   }
@@ -69,26 +77,35 @@ export function getBriefDescriptors(
 
   const smoothed = image.gaussianBlur(smoothingOptions);
 
+  writeSync('src/featureMatching/__tests__/smoothed.png', smoothed);
+
   const descriptors: Uint8Array[] = [];
 
   for (let keypoint of keypoints) {
-    const currentRow = keypoint.origin.row;
-    const currentColumn = keypoint.origin.column;
     // crop smallest square surrounding the tilted patch of the keypoint
     // todo: verify the crop width -> should it be odd??
     const cropWidth = Math.ceil(
-      patchSize * (Math.cos(keypoint.angle) + Math.sin(keypoint.angle)),
+      patchSize *
+        (Math.abs(Math.cos(keypoint.angle)) +
+          Math.abs(Math.sin(keypoint.angle))),
     );
+
     const cropped = extractSquareImage(smoothed, keypoint.origin, cropWidth);
 
+    writeSync('src/featureMatching/__tests__/cropped.png', cropped);
+
+    const rotateCenter = cropped.getCoordinates(ImageCoordinates.CENTER);
     const rotated = cropped.rotate(keypoint.angle, {
-      center: [currentColumn, currentRow],
+      center: rotateCenter,
       interpolationType: InterpolationType.NEAREST,
     });
+    writeSync('src/featureMatching/__tests__/rotated.png', rotated);
 
-    const center = image.getCoordinates(ImageCoordinates.CENTER);
-    const origin = { column: center[0], row: center[1] };
-    const patch = extractSquareImage(rotated, origin, patchSize);
+    const cropCenter = rotated.getCoordinates(ImageCoordinates.CENTER);
+    const cropOrigin = { column: cropCenter[0], row: cropCenter[1] };
+    console.log({ cropOrigin });
+    const patch = extractSquareImage(rotated, cropOrigin, patchSize);
+    writeSync('src/featureMatching/__tests__/patch.png', patch);
 
     const descriptor = new Uint8Array(descriptorLength);
     for (let i = 0; i < descriptorLength; i++) {

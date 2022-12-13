@@ -14,10 +14,11 @@ export function extractSquareImage(
   origin: Point,
   patchSize: number,
 ): Image {
-  const cropOffset = (patchSize - 1) / 2;
+  // todo: the rounding shouldn't be done here
+  const cropOffset = Math.round((patchSize - 1) / 2);
   const cropOrigin = {
-    column: origin.column - cropOffset,
-    row: origin.row - cropOffset,
+    column: Math.round(origin.column - cropOffset),
+    row: Math.round(origin.row - cropOffset),
   };
 
   return image.crop({
