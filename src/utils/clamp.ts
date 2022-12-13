@@ -37,3 +37,6 @@ function clamp255(value: number): number {
 function clamp65535(value: number): number {
   return Math.min(Math.max(value, 0), 65535);
 }
+
+export const clamp = (min: number, max: number) => (value: number) =>
+  Math.max(Math.min(value, max), min);
