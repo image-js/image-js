@@ -12,9 +12,10 @@ test('gaussian values, size 20', () => {
 });
 
 test('10000 gaussian points, default options', () => {
-  const image = new Image(15, 15, { colorModel: ImageColorModel.GREY });
+  const size = 15;
+  const image = new Image(size, size, { colorModel: ImageColorModel.GREY });
 
-  const points = getGaussianPoints(image, { nbPoints: 10000 });
+  const points = getGaussianPoints(size, size, { nbPoints: 10000 });
 
   const center = image.getCoordinates(ImageCoordinates.CENTER);
   for (let point of points) {
@@ -37,9 +38,10 @@ test('10000 gaussian points, default options', () => {
 });
 
 test('10000 gaussian points, sigma = 1', () => {
-  const image = new Image(15, 15, { colorModel: ImageColorModel.GREY });
+  const size = 15;
+  const image = new Image(size, size, { colorModel: ImageColorModel.GREY });
 
-  const points = getGaussianPoints(image, { nbPoints: 10000, sigma: 1 });
+  const points = getGaussianPoints(size, size, { nbPoints: 10000, sigma: 1 });
   const center = image.getCoordinates(ImageCoordinates.CENTER);
   for (let point of points) {
     const current = image.getValue(

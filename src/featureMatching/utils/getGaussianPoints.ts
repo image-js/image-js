@@ -1,6 +1,5 @@
 import { createRandomArray } from 'ml-spectra-processing';
 
-import { Image } from '../../Image';
 import { Point } from '../../geometry';
 import { clamp } from '../../utils/clamp';
 
@@ -30,22 +29,24 @@ export interface GetGaussianPointsOptions {
 }
 
 /**
- * Get the coordinates of points inside of the image, spread with a
- * gaussian distribution around the center of the image.
- * The reference point with coordinates (0,0) is the center of the image.
+ * Get the coordinates of random points inside of the given dimensions, spread with a
+ * gaussian distribution around the center of the dimensions.
+ * The reference point with coordinates (0,0) is the center of the patch.
  *
- * @param image - Image for which to generate the gaussian points. The points will be within the image dimensions.
+ * @param width - Width in which the points should be.
+ * @param height - Height in which the points should be.
  * @param options - Get gaussian points options.
  * @returns An array of random points with a gaussian distribution.
  */
 export function getGaussianPoints(
-  image: Image,
+  width: number,
+  height: number,
   options: GetGaussianPointsOptions = {},
 ): Point[] {
   const { nbPoints = 1024, xSeed = 0, ySeed = 1, sigma } = options;
 
-  const xCoordinates = getGaussianValues(image.width, xSeed, nbPoints, sigma);
-  const yCoordinates = getGaussianValues(image.height, ySeed, nbPoints, sigma);
+  const xCoordinates = getGaussianValues(width, xSeed, nbPoints, sigma);
+  const yCoordinates = getGaussianValues(height, ySeed, nbPoints, sigma);
 
   let points: Point[] = [];
   for (let i = 0; i < nbPoints; i++) {
