@@ -1,0 +1,89 @@
+import { createRandomArray } from 'ml-spectra-processing';
+
+import { Image } from '../../Image';
+import { Point } from '../../geometry';
+import { clamp } from '../../utils/clamp';
+
+export interface GetGaussianPointsOptions {
+  /**
+   * Number of points to generate.
+   *
+   * @default 1024
+   */
+  nbPoints?: number;
+  /**
+   * Seed of the gaussian distribution for the x coordinates.
+   *
+   * @default 0
+   */
+  xSeed?: number;
+  /**
+   * Seed of the gaussian distribution for the y coordinates.
+   *
+   * @default 1
+   */
+  ySeed?: number;
+  /**
+   * The standard deviation for the gaussian distribution.
+   */
+  sigma?: number;
+}
+
+/**
+ * Get the coordinates of points inside of the image, spread with a
+ * gaussian distribution around the center of the image.
+ * The reference point with coordinates (0,0) is the center of the image.
+ *
+ * @param image - Image for which to generate the gaussian points. The points will be within the image dimensions.
+ * @param options - Get gaussian points options.
+ * @returns An array of random points with a gaussian distribution.
+ */
+export function getGaussianPoints(
+  image: Image,
+  options: GetGaussianPointsOptions = {},
+): Point[] {
+  const { nbPoints = 1024, xSeed = 0, ySeed = 1, sigma } = options;
+
+  const xCoordinates = getGaussianValues(image.width, xSeed, nbPoints, sigma);
+  const yCoordinates = getGaussianValues(image.height, ySeed, nbPoints, sigma);
+
+  let points: Point[] = [];
+  for (let i = 0; i < nbPoints; i++) {
+    points.push({ column: xCoordinates[i], row: yCoordinates[i] });
+  }
+
+  return points;
+}
+
+/**
+ * Generate an array of values
+ * that follow a gaussian distribution with a mean value of zero.
+ *
+ * @param size - Specifies the width of the gaussian distribution.
+ * @param seed - Seed for the random generator.
+ * @param nbValues - Number of values wanted.
+ * @param sigma - The standard deviation. The default value is the optimal SD for BRIEF.
+ * @returns Array of values with gaussian distribution.
+ */
+export function getGaussianValues(
+  size: number,
+  seed: number,
+  nbValues: number,
+  sigma = size / 5,
+): Float64Array {
+  const width = (size - 1) / 2;
+
+  const array = createRandomArray({
+    distribution: 'normal',
+    seed,
+    length: nbValues,
+    standardDeviation: sigma,
+    mean: 0,
+  });
+
+  const result = array.map((value) => {
+    const rounded = Math.round(value);
+    return clamp(-width, width)(rounded);
+  });
+  return result;
+}
