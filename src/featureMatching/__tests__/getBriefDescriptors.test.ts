@@ -26,7 +26,7 @@ test('alphabet image, maxNbFeatures = 10', () => {
   expect(descriptors).toMatchSnapshot();
 });
 
-test.only('should work with small patch size', () => {
+test('should work with small patch size', () => {
   const image = testUtils.load('various/alphabet.jpg');
   const grey = image.convertColor(ImageColorModel.GREY);
 
@@ -34,7 +34,6 @@ test.only('should work with small patch size', () => {
   expect(keypoints).toHaveLength(10);
 
   const keypoint = keypoints.slice(0, 1);
-  console.log(keypoint);
 
   const keypointCoordinates = keypoint.map((kpt) => kpt.origin);
 
@@ -49,6 +48,22 @@ test.only('should work with small patch size', () => {
 
   const descriptor = getBriefDescriptors(grey, keypoint, { patchSize: 5 });
 
-  console.log(descriptor);
   expect(descriptor).toMatchSnapshot();
+});
+
+test('count occurences of 1 and 0 with default options', () => {
+  const image = testUtils.load('various/alphabet.jpg');
+  const grey = image.convertColor(ImageColorModel.GREY);
+
+  const keypoint = getOrientedFastKeypoints(grey, { maxNbFeatures: 1 });
+
+  const descriptor = getBriefDescriptors(grey, keypoint)[0];
+
+  let nbOnes = 0;
+  for (let element of descriptor) {
+    if (element) nbOnes++;
+  }
+  const onesPercentage = (nbOnes / descriptor.length) * 100;
+
+  expect(onesPercentage).toBeCloseTo(11.33);
 });

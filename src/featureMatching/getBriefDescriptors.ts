@@ -1,6 +1,5 @@
 import { Image, ImageColorModel, ImageCoordinates } from '../Image';
 import { GaussianBlurOptions } from '../filters';
-import { crop } from '../operations';
 import { writeSync } from '../save';
 import checkProcessable from '../utils/checkProcessable';
 import { InterpolationType } from '../utils/interpolatePixel';
@@ -83,12 +82,14 @@ export function getBriefDescriptors(
 
   for (let keypoint of keypoints) {
     // crop smallest square surrounding the tilted patch of the keypoint
-    // todo: verify the crop width -> should it be odd??
-    const cropWidth = Math.ceil(
+    // we have to handle the fact that this square can have even dimensions
+    const rawWidth = Math.ceil(
       patchSize *
         (Math.abs(Math.cos(keypoint.angle)) +
           Math.abs(Math.sin(keypoint.angle))),
     );
+
+    const cropWidth = rawWidth % 2 ? rawWidth : rawWidth + 1;
 
     const cropped = extractSquareImage(smoothed, keypoint.origin, cropWidth);
 
@@ -103,7 +104,6 @@ export function getBriefDescriptors(
 
     const cropCenter = rotated.getCoordinates(ImageCoordinates.CENTER);
     const cropOrigin = { column: cropCenter[0], row: cropCenter[1] };
-    console.log({ cropOrigin });
     const patch = extractSquareImage(rotated, cropOrigin, patchSize);
     writeSync('src/featureMatching/__tests__/patch.png', patch);
 
