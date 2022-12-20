@@ -40,9 +40,22 @@ test('RGB image, 01', () => {
   expect(result).toStrictEqual([2, 0, -2]);
 });
 
-test('image dimensions error', () => {
-  const image = new Image(4, 4, { colorModel: ImageColorModel.GREY });
-  expect(() => getIntensityMoment(image, 0, 1)).toThrow(
-    'getIntensityMoment: image dimensions should be odd',
-  );
+test('4x4 image, 01', () => {
+  const image = testUtils.createGreyImage([
+    [1, 0, 4, 5],
+    [2, 0, 3, 5],
+    [3, 0, 2, 5],
+    [4, 0, 1, 5],
+  ]);
+  const result = getIntensityMoment(image, 0, 1);
+  expect(result).toStrictEqual([0]);
+});
+
+test('2x2 image, 01', () => {
+  const image = testUtils.createGreyImage([
+    [1, 0],
+    [2, 0],
+  ]);
+  const result = getIntensityMoment(image, 0, 1);
+  expect(result).toStrictEqual([0.5]);
 });

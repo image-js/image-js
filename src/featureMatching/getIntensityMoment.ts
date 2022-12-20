@@ -1,4 +1,4 @@
-import { Image } from '../Image';
+import { Image, ImageCoordinates } from '../Image';
 import { Point } from '../geometry';
 
 export interface GetIntensityMomentOptions {
@@ -28,12 +28,7 @@ export function getIntensityMoment(
   q: number,
   options: GetIntensityMomentOptions = {},
 ): number[] {
-  if (!(image.height % 2 && image.width % 2)) {
-    throw new Error('getIntensityMoment: image dimensions should be odd');
-  }
-  const {
-    origin = { row: (image.height - 1) / 2, column: (image.width - 1) / 2 },
-  } = options;
+  const { origin = image.getCoordinates(ImageCoordinates.CENTER) } = options;
 
   let moment = new Array(image.channels).fill(0);
   for (let row = 0; row < image.height; row++) {
