@@ -10,7 +10,7 @@ test('rotate + scale compared to opencv (nearest)', () => {
     scale: 0.8,
     borderType: BorderType.REFLECT,
     interpolationType: InterpolationType.NEAREST,
-    center: [2, 4],
+    center: { column: 2, row: 4 },
   });
 
   expect(rotated).toMatchImage('opencv/testRotate.png');
@@ -23,7 +23,7 @@ test('rotate + scale compared to opencv (bilinear)', () => {
     scale: 1.4,
     borderType: BorderType.REFLECT,
     interpolationType: InterpolationType.BILINEAR,
-    center: [2, 4],
+    center: { column: 2, row: 4 },
   });
   expect(rotated).toMatchImage('opencv/testRotateBilinear.png', { error: 5 });
 });
@@ -35,7 +35,7 @@ test('rotate + scale compared to opencv (bicubic)', () => {
     scale: 1.4,
     borderType: BorderType.REFLECT,
     interpolationType: InterpolationType.BICUBIC,
-    center: [2, 4],
+    center: { column: 2, row: 4 },
   });
 
   expect(rotated).toMatchImage('opencv/testRotateBicubic.png', { error: 13 });
@@ -55,7 +55,7 @@ test('default options', () => {
 test('coordinates as a string', () => {
   const img = testUtils.load('opencv/test.png');
   const rotated = img.rotate(90, {
-    center: [3.5, 4.5],
+    center: { column: 3.5, row: 4.5 },
   });
 
   const rotatedAroundCenter = img.rotate(90, {

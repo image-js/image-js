@@ -86,8 +86,8 @@ export function transform(
 
     const transformedCorners = corners.map((corner) => {
       return [
-        transformPoint(transformMatrix[0], corner[0], corner[1]),
-        transformPoint(transformMatrix[1], corner[0], corner[1]),
+        transformPoint(transformMatrix[0], corner.column, corner.row),
+        transformPoint(transformMatrix[1], corner.column, corner.row),
       ];
     });
 
