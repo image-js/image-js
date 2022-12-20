@@ -1,4 +1,5 @@
 import { Image, ImageCoordinates } from '../Image';
+import { Point } from '../utils/geometry/points';
 import { BorderType } from '../utils/interpolateBorder';
 import { InterpolationType } from '../utils/interpolatePixel';
 
@@ -10,7 +11,7 @@ export interface RotateOptions {
    *
    * @default The center of the image.
    */
-  center?: ImageCoordinates | [number, number];
+  center?: ImageCoordinates | Point;
   /**
    * Scaling factor for the rotated image.
    *
@@ -86,14 +87,14 @@ export function rotate(
  */
 function getRotationMatrix(
   angle: number,
-  center: [number, number],
+  center: Point,
   scale: number,
 ): number[][] {
   const angleRadians = (angle * Math.PI) / 180;
   const cos = scale * Math.cos(angleRadians);
   const sin = scale * Math.sin(angleRadians);
   return [
-    [cos, sin, (1 - cos) * center[0] - sin * center[1]],
-    [-sin, cos, sin * center[0] + (1 - cos) * center[1]],
+    [cos, sin, (1 - cos) * center.column - sin * center.row],
+    [-sin, cos, sin * center.column + (1 - cos) * center.row],
   ];
 }
