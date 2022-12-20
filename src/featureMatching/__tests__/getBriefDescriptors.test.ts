@@ -65,5 +65,17 @@ test('count occurences of 1 and 0 with default options', () => {
   }
   const onesPercentage = (nbOnes / descriptor.length) * 100;
 
+  // in the BRIEF article, they say that the optimal value would be 50%
   expect(onesPercentage).toBeCloseTo(11.33);
+});
+
+test('patch size error', () => {
+  const image = testUtils.load('various/alphabet.jpg');
+  const grey = image.convertColor(ImageColorModel.GREY);
+
+  const keypoint = getOrientedFastKeypoints(grey, { maxNbFeatures: 1 });
+
+  expect(() => getBriefDescriptors(grey, keypoint, { patchSize: 4 })).toThrow(
+    'getBriefDescriptors: patchSize should be an odd integer',
+  );
 });
