@@ -552,28 +552,25 @@ export class Image {
    * @param round - Should the coordinates be rounded? This is useful when you want the center of the image.
    * @returns Coordinates of the point in the format [column, row].
    */
-  public getCoordinates(
-    coordinates: ImageCoordinates,
-    round = false,
-  ): [number, number] {
+  public getCoordinates(coordinates: ImageCoordinates, round = false): Point {
     switch (coordinates) {
       case ImageCoordinates.CENTER: {
         const centerX = (this.width - 1) / 2;
         const centerY = (this.height - 1) / 2;
         if (round) {
-          return [Math.round(centerX), Math.round(centerY)];
+          return { column: Math.round(centerX), row: Math.round(centerY) };
         } else {
-          return [centerX, centerY];
+          return { column: centerX, row: centerY };
         }
       }
       case ImageCoordinates.TOP_LEFT:
-        return [0, 0];
+        return { column: 0, row: 0 };
       case ImageCoordinates.TOP_RIGHT:
-        return [this.width - 1, 0];
+        return { column: this.width - 1, row: 0 };
       case ImageCoordinates.BOTTOM_LEFT:
-        return [0, this.height - 1];
+        return { column: 0, row: this.height - 1 };
       case ImageCoordinates.BOTTOM_RIGHT:
-        return [this.width - 1, this.height - 1];
+        return { column: this.width - 1, row: this.height - 1 };
       default:
         throw new Error(`Unknown image coordinates ${coordinates}`);
     }

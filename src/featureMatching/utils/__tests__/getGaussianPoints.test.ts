@@ -20,14 +20,14 @@ test('10000 gaussian points, default options', () => {
   const center = image.getCoordinates(ImageCoordinates.CENTER);
   for (let point of points) {
     const current = image.getValue(
-      point.column + center[0],
-      point.row + center[1],
+      point.column + center.column,
+      point.row + center.row,
       0,
     );
     if (current < 255) {
       image.setValue(
-        point.column + center[0],
-        point.row + center[1],
+        point.column + center.column,
+        point.row + center.row,
         0,
         current + 1,
       );
@@ -45,14 +45,14 @@ test('10000 gaussian points, sigma = 1', () => {
   const center = image.getCoordinates(ImageCoordinates.CENTER);
   for (let point of points) {
     const current = image.getValue(
-      point.column + center[0],
-      point.row + center[1],
+      point.column + center.column,
+      point.row + center.row,
       0,
     );
     if (current < 255) {
       image.setValue(
-        point.column + center[0],
-        point.row + center[1],
+        point.column + center.column,
+        point.row + center.row,
         0,
         current + 1,
       );
@@ -76,8 +76,8 @@ test('default pairs of points for getBriefDescriptors', () => {
   const center = image.getCoordinates(ImageCoordinates.CENTER);
   const absolutePoints = points.map((point) => {
     return {
-      column: point.column * scalingFactor + center[0],
-      row: point.row * scalingFactor + center[1],
+      column: point.column * scalingFactor + center.column,
+      row: point.row * scalingFactor + center.row,
     };
   });
 

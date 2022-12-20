@@ -79,10 +79,10 @@ export function transform(
       image.getCoordinates(ImageCoordinates.BOTTOM_LEFT),
     ];
 
-    corners[1][0] += 1;
-    corners[2][0] += 1;
-    corners[2][1] += 1;
-    corners[3][1] += 1;
+    corners[1].column += 1;
+    corners[2].column += 1;
+    corners[2].row += 1;
+    corners[3].row += 1;
 
     const transformedCorners = corners.map((corner) => {
       return [

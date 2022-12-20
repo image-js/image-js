@@ -175,18 +175,30 @@ test('changeEach', () => {
 
 test('getCoordinates', () => {
   const img = new Image(4, 5);
-  expect(img.getCoordinates(ImageCoordinates.BOTTOM_LEFT)).toStrictEqual([
-    0, 4,
-  ]);
-  expect(img.getCoordinates(ImageCoordinates.BOTTOM_RIGHT)).toStrictEqual([
-    3, 4,
-  ]);
-  expect(img.getCoordinates(ImageCoordinates.CENTER)).toStrictEqual([1.5, 2]);
-  expect(img.getCoordinates(ImageCoordinates.CENTER, true)).toStrictEqual([
-    2, 2,
-  ]);
-  expect(img.getCoordinates(ImageCoordinates.TOP_LEFT)).toStrictEqual([0, 0]);
-  expect(img.getCoordinates(ImageCoordinates.TOP_RIGHT)).toStrictEqual([3, 0]);
+  expect(img.getCoordinates(ImageCoordinates.BOTTOM_LEFT)).toStrictEqual({
+    column: 0,
+    row: 4,
+  });
+  expect(img.getCoordinates(ImageCoordinates.BOTTOM_RIGHT)).toStrictEqual({
+    column: 3,
+    row: 4,
+  });
+  expect(img.getCoordinates(ImageCoordinates.CENTER)).toStrictEqual({
+    column: 1.5,
+    row: 2,
+  });
+  expect(img.getCoordinates(ImageCoordinates.CENTER, true)).toStrictEqual({
+    column: 2,
+    row: 2,
+  });
+  expect(img.getCoordinates(ImageCoordinates.TOP_LEFT)).toStrictEqual({
+    column: 0,
+    row: 0,
+  });
+  expect(img.getCoordinates(ImageCoordinates.TOP_RIGHT)).toStrictEqual({
+    column: 3,
+    row: 0,
+  });
 });
 
 test('fill with a constant color', () => {

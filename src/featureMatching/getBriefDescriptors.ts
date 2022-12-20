@@ -96,8 +96,7 @@ export function getBriefDescriptors(
       interpolationType: InterpolationType.NEAREST,
     });
 
-    const cropCenter = rotated.getCoordinates(ImageCoordinates.CENTER);
-    const cropOrigin = { column: cropCenter[0], row: cropCenter[1] };
+    const cropOrigin = rotated.getCoordinates(ImageCoordinates.CENTER);
     const patch = extractSquareImage(rotated, cropOrigin, patchSize);
 
     const descriptor = new Uint8Array(descriptorLength);
