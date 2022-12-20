@@ -38,5 +38,15 @@ function clamp65535(value: number): number {
   return Math.min(Math.max(value, 0), 65535);
 }
 
-export const clamp = (min: number, max: number) => (value: number) =>
-  Math.max(Math.min(value, max), min);
+/**
+ * Clamp a value to a given range.
+ *
+ * @param min - Lower threshold.
+ * @param max - Upper threshold.
+ * @returns The clamped value.
+ */
+export function getClampFromTo(min: number, max: number) {
+  return function clamp(value: number) {
+    return Math.max(Math.min(value, max), min);
+  };
+}

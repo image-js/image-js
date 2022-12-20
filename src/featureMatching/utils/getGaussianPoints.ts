@@ -1,7 +1,7 @@
 import { createRandomArray } from 'ml-spectra-processing';
 
 import { Point } from '../../geometry';
-import { clamp } from '../../utils/clamp';
+import { getClampFromTo } from '../../utils/clamp';
 
 export interface GetGaussianPointsOptions {
   /**
@@ -84,7 +84,7 @@ export function getGaussianValues(
 
   const result = array.map((value) => {
     const rounded = Math.round(value);
-    return clamp(-width, width)(rounded);
+    return getClampFromTo(-width, width)(rounded);
   });
   return result;
 }
