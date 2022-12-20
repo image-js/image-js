@@ -29,7 +29,7 @@ export interface GetBriefDescriptorsOptions {
   /**
    * Number of bits of the final descriptor.
    *
-   * @default 512
+   * @default 256
    */
   descriptorLength?: 128 | 256 | 512;
 }
