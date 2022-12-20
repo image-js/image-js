@@ -3,7 +3,7 @@ import { getHammingDistance } from './utils/getHammingDistance';
 
 // todo: implement bruteForceManyMatches -> N best matches for each source descriptor
 
-export interface BestMatch {
+export interface Match {
   sourceIndex: number;
   destinationIndex: number;
   distance: number;
@@ -19,8 +19,8 @@ export interface BestMatch {
 export function bruteForceOneMatch(
   source: BriefDescriptor[],
   destination: BriefDescriptor[],
-): BestMatch[] {
-  const bestMatches: BestMatch[] = [];
+): Match[] {
+  const bestMatches: Match[] = [];
   for (let sourceIndex = 0; sourceIndex < source.length; sourceIndex++) {
     let minDistance = Number.POSITIVE_INFINITY;
     let index = 0;
