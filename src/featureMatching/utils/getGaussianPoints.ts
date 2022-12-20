@@ -81,10 +81,11 @@ export function getGaussianValues(
     standardDeviation: sigma,
     mean: 0,
   });
+  const clamp = getClampFromTo(-width, width);
 
   const result = array.map((value) => {
     const rounded = Math.round(value);
-    return getClampFromTo(-width, width)(rounded);
+    return clamp(rounded);
   });
   return result;
 }

@@ -39,11 +39,11 @@ function clamp65535(value: number): number {
 }
 
 /**
- * Clamp a value to a given range.
+ * Get a function that clamps a value to a given range.
  *
  * @param min - Lower threshold.
  * @param max - Upper threshold.
- * @returns The clamped value.
+ * @returns The clamping function.
  */
 export function getClampFromTo(min: number, max: number) {
   return function clamp(value: number) {
