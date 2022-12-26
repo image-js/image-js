@@ -57,6 +57,13 @@ describe('get and set bit', () => {
     mask.setBitByIndex(15, 1);
     expect(mask.getBitByIndex(15)).toBe(1);
   });
+  it('should get and set value by point', () => {
+    const point = { column: 15, row: 0 };
+    const mask = new Mask(10, 20);
+    expect(mask.getValueByPoint(point)).toBe(0);
+    mask.setValueByPoint(point, 1);
+    expect(mask.getValueByPoint(point)).toBe(1);
+  });
 });
 
 describe('get and set value', () => {

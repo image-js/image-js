@@ -420,6 +420,28 @@ export class Image {
   }
 
   /**
+   * Get the value of a specific pixel channel. Select pixel using a point.
+   *
+   * @param point - Coordinates of the desired pixel.
+   * @param channel - Channel index.
+   * @returns Value of the channel of the pixel.
+   */
+  public getValueByPoint(point: Point, channel: number): number {
+    return this.getValue(point.column, point.row, channel);
+  }
+
+  /**
+   * Set the value of a specific pixel channel. Select pixel using a point.
+   *
+   * @param point - Coordinates of the pixel.
+   * @param channel - Channel index.
+   * @param value - Value to set.
+   */
+  public setValueByPoint(point: Point, channel: number, value: number): void {
+    this.setValue(point.column, point.row, channel, value);
+  }
+
+  /**
    * Return the raw image data.
    *
    * @returns The raw data.

@@ -17,7 +17,7 @@ export function getFastScore(
   threshold: number,
   circlePoints: Point[],
 ): number {
-  const currentIntensity = image.getValue(origin.column, origin.row, 0);
+  const currentIntensity = image.getValueByPoint(origin, 0);
 
   let brighterSum = 0;
   let darkerSum = 0;

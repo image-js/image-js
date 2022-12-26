@@ -402,6 +402,26 @@ export class Mask {
   }
 
   /**
+   * Get the value of a specific bit. Select bit using a point.
+   *
+   * @param point - Coordinates of the desired biz.
+   * @returns Value of the bit.
+   */
+  public getValueByPoint(point: Point): number {
+    return this.getValue(point.column, point.row, 0);
+  }
+
+  /**
+   * Set the value of a specific bit. Select bit using a point.
+   *
+   * @param point - Coordinates of the bit.
+   * @param value - Value to set.
+   */
+  public setValueByPoint(point: Point, value: BitValue): void {
+    this.setValue(point.column, point.row, 0, value);
+  }
+
+  /**
    * Return the raw mask data.
    *
    * @returns The raw data.

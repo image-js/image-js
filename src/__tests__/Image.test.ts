@@ -145,6 +145,14 @@ describe('get and set pixels', () => {
     img.setValueByIndex(15, 0, 50);
     expect(img.getValueByIndex(15, 0)).toBe(50);
   });
+
+  it('should get and set value by point', () => {
+    const point = { column: 15, row: 0 };
+    const img = new Image(10, 20);
+    expect(img.getValueByPoint(point, 0)).toBe(0);
+    img.setValueByPoint(point, 0, 50);
+    expect(img.getValueByPoint(point, 0)).toBe(50);
+  });
 });
 
 test('createFrom', () => {

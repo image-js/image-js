@@ -35,7 +35,7 @@ export function isFastKeypoint(
   options: IsFastKeypointOptions = {},
 ): boolean {
   const { nbContiguousPixels = 12, threshold = 20 } = options;
-  const currentIntensity = image.getValue(origin.column, origin.row, 0);
+  const currentIntensity = image.getValueByPoint(origin, 0);
   let brighter = 0;
   let darker = 0;
 
