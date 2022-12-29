@@ -32,7 +32,7 @@ test('gaussian values, size 20', () => {
   expect(getGaussianValues(20, 0, 10)).toStrictEqual(result);
 });
 
-test('10000 gaussian points, default options', () => {
+test('default options', () => {
   const size = 15;
   const image = new Image(size, size, { colorModel: ImageColorModel.GREY });
 
