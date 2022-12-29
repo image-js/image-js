@@ -35,6 +35,8 @@ export interface DrawMatchesOptions {
    * @default 3
    */
   keypointSize?: number;
+  showScore: boolean;
+  nbScoreShades: 10;
 }
 
 /**
