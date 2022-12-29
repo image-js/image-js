@@ -1,13 +1,16 @@
 import { Image, ImageColorModel } from '../Image';
 
 import { Match } from './bruteForceMatch';
+import { drawKeypoints } from './drawKeypoints';
 import { FastKeypoint } from './getFastKeypoints';
 
 export interface DrawMatchesOptions {
   /**
    * Circles diameter in pixels.
+   *
+   * @default 10
    */
-  circleDiameter?: 10;
+  circleDiameter?: number;
   /**
    * Annotations color.
    *
@@ -104,29 +107,30 @@ export function drawMatches(
     });
   }
 
-  const keypointRadius = Math.ceil(keypointSize / 2);
   if (showKeypoints) {
-    for (let keypoint of sourceKeypoints) {
-      result.drawCircle(keypoint.origin, keypointRadius, {
-        color: keypointColor,
-        fill: keypointColor,
-        out: result,
-      });
-    }
+    drawKeypoints(result, sourceKeypoints, {
+      markerSize: keypointSize,
+      color: keypointColor,
+      fill: true,
+      out: result,
+    });
+    let newDestinationKeypoints: FastKeypoint[] = [];
     for (let keypoint of destinationKeypoints) {
-      result.drawCircle(
-        {
+      const newKeypoint = {
+        origin: {
           column: keypoint.origin.column + source.width,
           row: keypoint.origin.row,
         },
-        keypointRadius,
-        {
-          color: keypointColor,
-          fill: keypointColor,
-          out: result,
-        },
-      );
+        score: keypoint.score,
+      };
+      newDestinationKeypoints.push(newKeypoint);
     }
+    drawKeypoints(result, newDestinationKeypoints, {
+      markerSize: keypointSize,
+      color: keypointColor,
+      fill: true,
+      out: result,
+    });
   }
 
   return result;

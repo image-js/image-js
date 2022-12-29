@@ -1,18 +1,31 @@
 import { Image, ImageColorModel } from '../Image';
+import { getOutputImage } from '../utils/getOutputImage';
 
 import { FastKeypoint } from './getFastKeypoints';
 
 export interface DrawKeypointsOptions {
   /**
-   * Circles diameter in pixels.
+   * Markers size in pixels.
+   *
+   * @default 10
    */
-  circleDiameter?: 10;
+  markerSize?: number;
   /**
    * Annotations color.
    *
    * @default [255,0,0]
    */
   color?: number[];
+  /**
+   * Should the markers be filled?
+   *
+   * @default false
+   */
+  fill?: boolean;
+  /**
+   * Image to which the resulting image has to be put.
+   */
+  out?: Image;
 }
 
 /**
@@ -28,17 +41,23 @@ export function drawKeypoints(
   keypoints: FastKeypoint[],
   options: DrawKeypointsOptions = {},
 ): Image {
-  const { circleDiameter = 10, color = [255, 0, 0] } = options;
+  const { markerSize = 10, color = [255, 0, 0], fill = false } = options;
+  let fillColor = fill ? color : undefined;
+
+  const newImage = getOutputImage(image, options, { clone: true });
 
   if (image.colorModel !== ImageColorModel.RGB) {
-    image = image.convertColor(ImageColorModel.RGB);
+    newImage.convertColor(ImageColorModel.RGB, { out: newImage });
   }
+
+  const radius = Math.ceil(markerSize / 2);
   for (let keypoint of keypoints) {
-    image.drawCircle(keypoint.origin, circleDiameter / 2, {
+    newImage.drawCircle(keypoint.origin, radius, {
+      fill: fillColor,
       color,
-      out: image,
+      out: newImage,
     });
   }
 
-  return image;
+  return newImage;
 }
