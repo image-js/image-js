@@ -33,7 +33,7 @@ test('alphabet image as source and destination', () => {
   expect(result).toMatchImageSnapshot();
 });
 
-test.only('destination rotated', () => {
+test('destination rotated', () => {
   const source = testUtils.load('various/alphabet.jpg');
   const grey = source.convertColor(ImageColorModel.GREY);
   const sourceKeypoints = getOrientedFastKeypoints(grey);
