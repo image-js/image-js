@@ -1,4 +1,5 @@
 import { Image, ImageColorModel } from '../Image';
+import { writeSync } from '../save';
 
 import { Match } from './bruteForceMatch';
 import { FastKeypoint } from './getFastKeypoints';
@@ -14,6 +15,24 @@ export interface DrawMatchesOptions {
    * @default [255,0,0]
    */
   color?: number[];
+  /**
+   * Should the original keypoints be displayes?
+   *
+   * @returns false
+   */
+  showKeypoints?: boolean;
+  /**
+   * Keypoints color.
+   *
+   * @default [0,255,0]
+   */
+  keypointColor?: number[];
+  /**
+   * Keypoint marker size.
+   *
+   * @default 3
+   */
+  keypointSize?: number;
 }
 
 /**
@@ -36,7 +55,13 @@ export function drawMatches(
   matches: Match[],
   options: DrawMatchesOptions = {},
 ): Image {
-  const { circleDiameter = 10, color = [255, 0, 0] } = options;
+  const {
+    circleDiameter = 10,
+    color = [255, 0, 0],
+    showKeypoints = false,
+    keypointColor = [0, 255, 0],
+    keypointSize = 5,
+  } = options;
 
   if (source.colorModel !== ImageColorModel.RGB) {
     source = source.convertColor(ImageColorModel.RGB);
@@ -56,17 +81,21 @@ export function drawMatches(
     origin: { column: source.width, row: 0 },
   });
 
+  const radius = Math.ceil(circleDiameter / 2);
   for (let match of matches) {
     const sourcePoint = sourceKeypoints[match.sourceIndex].origin;
-    result.drawCircle(sourcePoint, circleDiameter, {
+    result.drawCircle(sourcePoint, radius, {
       color,
       out: result,
     });
 
-    const destinationPoint =
+    const relativeDestinationPoint =
       destinationKeypoints[match.destinationIndex].origin;
-    destinationPoint.column += source.width;
-    result.drawCircle(destinationPoint, circleDiameter, {
+    const destinationPoint = {
+      column: relativeDestinationPoint.column + source.width,
+      row: relativeDestinationPoint.row,
+    };
+    result.drawCircle(destinationPoint, radius, {
       color,
       out: result,
     });
@@ -76,5 +105,31 @@ export function drawMatches(
     });
   }
 
+  const keypointRadius = Math.ceil(keypointSize / 2);
+  if (showKeypoints) {
+    for (let keypoint of sourceKeypoints) {
+      result.drawCircle(keypoint.origin, keypointRadius, {
+        color: keypointColor,
+        fill: keypointColor,
+        out: result,
+      });
+    }
+    for (let keypoint of destinationKeypoints) {
+      result.drawCircle(
+        {
+          column: keypoint.origin.column + source.width,
+          row: keypoint.origin.row,
+        },
+        keypointRadius,
+        {
+          color: keypointColor,
+          fill: keypointColor,
+          out: result,
+        },
+      );
+    }
+  }
+
+  writeSync('src/featureMatching/result.png', result);
   return result;
 }

@@ -16,10 +16,12 @@ export interface DrawKeypointsOptions {
 }
 
 /**
+ * Draw keypoints on an image.
  *
- * @param image
- * @param keypoints
- * @param options
+ * @param image - The source image of the keypoints.
+ * @param keypoints - The FAST keypoints.
+ * @param options - Draw keypoints options.
+ * @returns The image with the keypoints indicated by empty circles.
  */
 export function drawKeypoints(
   image: Image,

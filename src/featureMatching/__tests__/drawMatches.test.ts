@@ -33,7 +33,7 @@ test('alphabet image as source and destination', () => {
   expect(result).toMatchImageSnapshot();
 });
 
-test.only('destination slightly rotated', () => {
+test.only('destination rotated', () => {
   const source = testUtils.load('various/alphabet.jpg');
   const grey = source.convertColor(ImageColorModel.GREY);
   const sourceKeypoints = getOrientedFastKeypoints(grey);
@@ -43,7 +43,6 @@ test.only('destination slightly rotated', () => {
     .load('various/alphabet.jpg')
     .rotate(10, { fullImage: true });
   const grey2 = destination.convertColor(ImageColorModel.GREY);
-  expect(destination).toMatchImageSnapshot();
 
   const destinationKeypoints = getOrientedFastKeypoints(grey2);
   const destinationDescriptors = getBriefDescriptors(
@@ -63,6 +62,7 @@ test.only('destination slightly rotated', () => {
     sourceKeypoints,
     destinationKeypoints,
     matches,
+    { showKeypoints: true },
   );
 
   expect(result).toMatchImageSnapshot();
