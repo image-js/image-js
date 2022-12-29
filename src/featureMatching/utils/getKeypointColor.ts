@@ -22,7 +22,9 @@ export function getKeypointColor(
   const score = keypoints[index].score;
   const colorIndex =
     colors.length -
-    Math.floor(((colors.length - 1) * score) / (maxScore - minScore));
-
+    1 -
+    Math.floor(
+      ((colors.length - 1) * (score - minScore)) / (maxScore - minScore),
+    );
   return colors[colorIndex];
 }
