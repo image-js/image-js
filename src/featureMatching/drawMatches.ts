@@ -22,10 +22,10 @@ export interface DrawMatchesOptions {
  *
  * @param source - The source image.
  * @param destination - The destination image.
- * @param sourceKeypoints
- * @param destinationKeypoints
+ * @param sourceKeypoints - Source keypoints.
+ * @param destinationKeypoints - Destination keypoints.
  * @param matches - The matches between source and destination.
- * @param options
+ * @param options - Draw matches options.
  * @returns The comparison image.
  */
 export function drawMatches(

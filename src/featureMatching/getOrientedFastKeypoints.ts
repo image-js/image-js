@@ -8,6 +8,7 @@ import {
   GetFastKeypointsOptions,
 } from './getFastKeypoints';
 import { getIntensityCentroid } from './getIntensityCentroid';
+import { checkBorderDistance } from './utils/checkBorderDistance';
 
 export interface GetOrientedFastKeypointsOptions
   extends GetFastKeypointsOptions {
@@ -43,14 +44,10 @@ export function getOrientedFastKeypoints(
   const { windowSize = 7 } = options;
 
   const fastKeypoints = getFastKeypoints(image, options);
-
   const borderDistance = (windowSize - 1) / 2;
   // handle edge cases: remove keypoints too close to border
   for (let i = 0; i < fastKeypoints.length; i++) {
-    if (
-      fastKeypoints[i].origin.column < borderDistance ||
-      fastKeypoints[i].origin.row < borderDistance
-    ) {
+    if (!checkBorderDistance(image, fastKeypoints[i].origin, borderDistance)) {
       fastKeypoints.splice(i, 1);
     }
   }

@@ -4,6 +4,7 @@ import checkProcessable from '../utils/checkProcessable';
 import { InterpolationType } from '../utils/interpolatePixel';
 
 import { OrientedFastKeypoint } from './getOrientedFastKeypoints';
+import { checkBorderDistance } from './utils/checkBorderDistance';
 import { compareIntensity } from './utils/compareIntensity';
 import { extractSquareImage } from './utils/extractSquareImage';
 import {
@@ -89,11 +90,8 @@ export function getBriefDescriptors(
     const cropWidth = rawWidth % 2 ? rawWidth : rawWidth + 1;
 
     // ignore keypoints that are too close to the border of the image
-    let minBorderDistance = (cropWidth - 1) / 2;
-    if (
-      minBorderDistance + keypoint.origin.column >= smoothed.width ||
-      minBorderDistance + keypoint.origin.row >= smoothed.height
-    ) {
+    let borderDistance = (cropWidth - 1) / 2;
+    if (!checkBorderDistance(smoothed, keypoint.origin, borderDistance)) {
       continue;
     }
 
