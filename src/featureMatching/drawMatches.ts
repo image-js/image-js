@@ -3,6 +3,8 @@ import { Image, ImageColorModel } from '../Image';
 import { Match } from './bruteForceMatch';
 import { drawKeypoints } from './drawKeypoints';
 import { FastKeypoint } from './getFastKeypoints';
+import { getKeypointColor } from './utils/getKeypointColor';
+import { getScoreColors } from './utils/getScoreColors';
 
 export interface DrawMatchesOptions {
   /**
@@ -35,8 +37,18 @@ export interface DrawMatchesOptions {
    * @default 3
    */
   keypointSize?: number;
-  showScore: boolean;
-  nbScoreShades: 10;
+  /**
+   * Should the score of the keypoints reflect in their color?
+   *
+   * @default false
+   */
+  showScore?: boolean;
+  /**
+   * Number of shades for the keypoints (the brighter the shade, the higher the score).
+   *
+   * @default 6
+   */
+  nbScoreShades?: number;
 }
 
 /**
@@ -65,6 +77,8 @@ export function drawMatches(
     showKeypoints = false,
     keypointColor = [0, 255, 0],
     keypointSize = 5,
+    showScore,
+    nbScoreShades,
   } = options;
 
   if (source.colorModel !== ImageColorModel.RGB) {
@@ -110,29 +124,47 @@ export function drawMatches(
   }
 
   if (showKeypoints) {
-    drawKeypoints(result, sourceKeypoints, {
-      markerSize: keypointSize,
-      color: keypointColor,
-      fill: true,
-      out: result,
-    });
-    let newDestinationKeypoints: FastKeypoint[] = [];
-    for (let keypoint of destinationKeypoints) {
-      const newKeypoint = {
-        origin: {
-          column: keypoint.origin.column + source.width,
-          row: keypoint.origin.row,
-        },
-        score: keypoint.score,
-      };
-      newDestinationKeypoints.push(newKeypoint);
+    const keypointRadius = Math.ceil(keypointSize / 2);
+
+    const sourceColors = getScoreColors(source, keypointColor, nbScoreShades);
+
+    for (let i = 0; i < sourceKeypoints.length; i++) {
+      let color = keypointColor;
+
+      if (showScore) {
+        color = getKeypointColor(sourceKeypoints, i, sourceColors);
+      }
+      result.drawCircle(sourceKeypoints[i].origin, keypointRadius, {
+        color,
+        fill: keypointColor,
+        out: result,
+      });
     }
-    drawKeypoints(result, newDestinationKeypoints, {
-      markerSize: keypointSize,
-      color: keypointColor,
-      fill: true,
-      out: result,
-    });
+    const destinationColors = getScoreColors(
+      destination,
+      keypointColor,
+      nbScoreShades,
+    );
+    for (let i = 0; i < destinationKeypoints.length; i++) {
+      let color = keypointColor;
+
+      if (showScore) {
+        color = getKeypointColor(destinationKeypoints, i, destinationColors);
+      }
+
+      result.drawCircle(
+        {
+          column: destinationKeypoints[i].origin.column + source.width,
+          row: destinationKeypoints[i].origin.row,
+        },
+        keypointRadius,
+        {
+          color,
+          fill: keypointColor,
+          out: result,
+        },
+      );
+    }
   }
 
   return result;

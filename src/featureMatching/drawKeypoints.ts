@@ -2,6 +2,8 @@ import { Image, ImageColorModel } from '../Image';
 import { getOutputImage } from '../utils/getOutputImage';
 
 import { FastKeypoint } from './getFastKeypoints';
+import { getKeypointColor } from './utils/getKeypointColor';
+import { getScoreColors } from './utils/getScoreColors';
 
 export interface DrawKeypointsOptions {
   /**
@@ -23,6 +25,18 @@ export interface DrawKeypointsOptions {
    */
   fill?: boolean;
   /**
+   * Should the score of the keypoints reflect in their color?
+   *
+   * @default false
+   */
+  showScore?: boolean;
+  /**
+   * Number of shades for the keypoints (the brighter the shade, the higher the score).
+   *
+   * @default 6
+   */
+  nbScoreShades?: number;
+  /**
    * Image to which the resulting image has to be put.
    */
   out?: Image;
@@ -41,20 +55,35 @@ export function drawKeypoints(
   keypoints: FastKeypoint[],
   options: DrawKeypointsOptions = {},
 ): Image {
-  const { markerSize = 10, color = [255, 0, 0], fill = false } = options;
-  let fillColor = fill ? color : undefined;
+  const {
+    markerSize = 10,
+    fill = false,
+    showScore = false,
+    nbScoreShades = 6,
+  } = options;
+  let { color = [255, 0, 0] } = options;
 
-  const newImage = getOutputImage(image, options, { clone: true });
+  let newImage = getOutputImage(image, options, { clone: true });
 
   if (image.colorModel !== ImageColorModel.RGB) {
-    newImage.convertColor(ImageColorModel.RGB, { out: newImage });
+    newImage = newImage.convertColor(ImageColorModel.RGB);
   }
 
+  const colors = getScoreColors(image, color, nbScoreShades);
+  console.log(colors);
+
   const radius = Math.ceil(markerSize / 2);
-  for (let keypoint of keypoints) {
-    newImage.drawCircle(keypoint.origin, radius, {
+  for (let i = 0; i < keypoints.length; i++) {
+    let keypointColor = color;
+    if (showScore) {
+      keypointColor = getKeypointColor(keypoints, i, colors);
+    }
+    console.log(keypointColor);
+    let fillColor = fill ? keypointColor : undefined;
+
+    newImage.drawCircle(keypoints[i].origin, radius, {
       fill: fillColor,
-      color,
+      color: keypointColor,
       out: newImage,
     });
   }

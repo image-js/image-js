@@ -15,7 +15,7 @@ export function getScoreColors(
   nbShades: number,
 ): number[][] {
   const maxValue = Math.max(...keypointColor);
-  const minValue = maxValue * 0.05;
+  const minValue = maxValue * 0.1;
 
   const interval = Math.floor((maxValue - minValue) / (nbShades - 1));
   const clamp = getClampFromTo(0, image.maxValue);
