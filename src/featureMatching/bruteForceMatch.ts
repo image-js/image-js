@@ -3,9 +3,33 @@ import { getHammingDistance } from './utils/getHammingDistance';
 
 // todo: implement bruteForceManyMatches -> N best matches for each source descriptor
 
+export interface BruteForceMatchOptions {
+  /**
+   * Should the matches be sorted from best to worst?
+   *
+   * @default false
+   */
+  sort?: boolean;
+  /**
+   * Number of best matches to return
+   *
+   * @default source.length
+   */
+  nbBestMatches?: number;
+}
+
 export interface Match {
+  /**
+   * Index of the source keypoint.
+   */
   sourceIndex: number;
+  /**
+   * Index of the destination keypoint.
+   */
   destinationIndex: number;
+  /**
+   * Distance from source to destination keypoints.
+   */
   distance: number;
 }
 
@@ -14,13 +38,18 @@ export interface Match {
  *
  * @param source - Source descriptors.
  * @param destination - Destination descriptors.
+ * @param options - Brute force amtch options.
  * @returns The best match for each source descriptor.
  */
 export function bruteForceOneMatch(
   source: BriefDescriptor[],
   destination: BriefDescriptor[],
+  options: BruteForceMatchOptions = {},
 ): Match[] {
-  const bestMatches: Match[] = [];
+  const { sort = !!options.nbBestMatches, nbBestMatches = source.length } =
+    options;
+
+  const matches: Match[] = [];
   for (let sourceIndex = 0; sourceIndex < source.length; sourceIndex++) {
     let minDistance = Number.POSITIVE_INFINITY;
     let index = 0;
@@ -38,11 +67,14 @@ export function bruteForceOneMatch(
         index = destinationIndex;
       }
     }
-    bestMatches.push({
+    matches.push({
       sourceIndex,
       destinationIndex: index,
       distance: minDistance,
     });
   }
-  return bestMatches;
+  if (sort) {
+    matches.sort((a, b) => a.distance - b.distance);
+  }
+  return matches.slice(0, nbBestMatches);
 }

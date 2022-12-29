@@ -14,12 +14,6 @@ export interface DrawMatchesOptions {
    * @default [255,0,0]
    */
   color?: number[];
-  /**
-   * Number of best matches to display.
-   *
-   * @default matches.length
-   */
-  nbBestMatches?: number;
 }
 
 /**
@@ -57,7 +51,7 @@ export function drawMatches(
   );
 
   source.copyTo(result, { out: result });
-  source.copyTo(result, {
+  destination.copyTo(result, {
     out: result,
     origin: { column: source.width, row: 0 },
   });
