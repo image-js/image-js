@@ -1,4 +1,5 @@
 import { ImageColorModel } from '../../Image';
+import { drawKeypoints } from '../drawKeypoints';
 import { getFastKeypoints } from '../getFastKeypoints';
 
 test('alphabet image, default options', () => {
@@ -7,16 +8,8 @@ test('alphabet image, default options', () => {
 
   const keypoints = getFastKeypoints(grey);
 
-  const keypointsCoordinates = keypoints.map((kpt) => kpt.origin);
-
-  for (let keypoint of keypointsCoordinates) {
-    image.drawCircle(keypoint, 5, {
-      color: [255, 0, 0, 255],
-      out: image,
-    });
-  }
   expect(keypoints).toHaveLength(119);
-  expect(image).toMatchImageSnapshot();
+  expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
 });
 
 test('alphabet image, nonMaxSuppression = false', () => {

@@ -81,13 +81,13 @@ export function getBriefDescriptors(
   for (let keypoint of keypoints) {
     // crop smallest square surrounding the tilted patch of the keypoint
     // we have to handle the fact that this square can have even dimensions
-    const rawWidth = Math.ceil(
+    const rawWidth = Math.floor(
       patchSize *
         (Math.abs(Math.cos(keypoint.angle)) +
           Math.abs(Math.sin(keypoint.angle))),
     );
 
-    const cropWidth = rawWidth % 2 ? rawWidth : rawWidth + 1;
+    const cropWidth = rawWidth % 2 ? rawWidth : rawWidth - 1;
 
     // ignore keypoints that are too close to the border of the image
     let borderDistance = (cropWidth - 1) / 2;

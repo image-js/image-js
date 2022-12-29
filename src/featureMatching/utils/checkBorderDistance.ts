@@ -13,11 +13,11 @@ export function checkBorderDistance(
   image: Image,
   point: Point,
   distance: number,
-) {
+): boolean {
   return (
-    point.column > distance &&
-    point.row > distance &&
-    image.width - point.column > distance &&
-    image.height - point.row > distance
+    point.column >= distance &&
+    point.row >= distance &&
+    image.width - point.column >= distance &&
+    image.height - point.row >= distance
   );
 }

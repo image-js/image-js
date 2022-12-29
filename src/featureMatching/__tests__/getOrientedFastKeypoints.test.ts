@@ -1,6 +1,6 @@
 import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints';
 
-test('7x7 image, angle = 90°', () => {
+test.only('7x7 image, angle = 90°', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
