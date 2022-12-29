@@ -88,6 +88,15 @@ export function getBriefDescriptors(
 
     const cropWidth = rawWidth % 2 ? rawWidth : rawWidth + 1;
 
+    // ignore keypoints that are too close to the border of the image
+    let minBorderDistance = (cropWidth - 1) / 2;
+    if (
+      minBorderDistance + keypoint.origin.column >= smoothed.width ||
+      minBorderDistance + keypoint.origin.row >= smoothed.height
+    ) {
+      continue;
+    }
+
     const cropped = extractSquareImage(smoothed, keypoint.origin, cropWidth);
 
     const rotateCenter = cropped.getCoordinates(ImageCoordinates.CENTER);

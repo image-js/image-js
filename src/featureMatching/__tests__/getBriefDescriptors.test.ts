@@ -79,3 +79,10 @@ test('patch size error', () => {
     'getBriefDescriptors: patchSize should be an odd integer',
   );
 });
+
+test('alphabet image should work', () => {
+  const source = testUtils.load('various/alphabet.jpg');
+  const grey = source.convertColor(ImageColorModel.GREY);
+  const sourceKeypoints = getOrientedFastKeypoints(grey);
+  expect(() => getBriefDescriptors(grey, sourceKeypoints)).not.toThrow();
+});
