@@ -1,19 +1,20 @@
-import { ImageColorModel } from '../../Image';
+import { ImageColorModel, Image } from '../../Image';
 import { bruteForceOneMatch } from '../bruteForceMatch';
-import { getBriefDescriptors } from '../getBriefDescriptors';
+import { BriefDescriptor, getBriefDescriptors } from '../getBriefDescriptors';
 import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints';
 
-const source = testUtils.load('various/alphabet.jpg');
-const grey = source.convertColor(ImageColorModel.GREY);
-const sourceKeypoints = getOrientedFastKeypoints(grey);
-const sourceDescriptors = getBriefDescriptors(grey, sourceKeypoints);
-
-const destination = testUtils.load('various/alphabet.jpg');
-const grey2 = destination.convertColor(ImageColorModel.GREY);
-const destinationKeypoints = getOrientedFastKeypoints(grey2);
-const destinationDescriptors = getBriefDescriptors(grey2, destinationKeypoints);
+function getDescriptors(image: Image): BriefDescriptor[] {
+  const grey = image.convertColor(ImageColorModel.GREY);
+  const sourceKeypoints = getOrientedFastKeypoints(grey);
+  return getBriefDescriptors(grey, sourceKeypoints);
+}
 
 test('nbBestMatches = 5', () => {
+  const source = testUtils.load('featureMatching/alphabet.jpg');
+  const sourceDescriptors = getDescriptors(source);
+  const destination = testUtils.load('featureMatching/alphabet.jpg');
+  const destinationDescriptors = getDescriptors(destination);
+
   const matches = bruteForceOneMatch(
     sourceDescriptors,
     destinationDescriptors,
