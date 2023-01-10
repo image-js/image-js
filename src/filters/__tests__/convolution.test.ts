@@ -1,7 +1,6 @@
 import { Matrix } from 'ml-matrix';
 
 import { rawDirectConvolution } from '..';
-import { writeSync } from '../../save/write';
 import { getClamp } from '../../utils/clamp';
 import {
   BorderType,
@@ -21,8 +20,7 @@ describe('convolution functions', () => {
     );
 
     const expected = testUtils.load('opencv/testConv.png');
-    writeSync(`${__dirname}/conv_expected.png`, expected);
-    writeSync(`${__dirname}/conv_got.png`, convoluted);
+
     expect(convoluted).toMatchImage(expected);
   });
 

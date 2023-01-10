@@ -1,5 +1,5 @@
 import { ImageColorModel } from '../../Image';
-import { encodePng, writeSync } from '../../save';
+import { encodePng } from '../../save';
 
 test.skip('compares result of resize with opencv', () => {
   const img = testUtils.load('opencv/test.png');
@@ -8,8 +8,6 @@ test.skip('compares result of resize with opencv', () => {
     xFactor: 10,
     yFactor: 10,
   });
-
-  writeSync('src/geometry/__tests__/resize.png', resized);
 
   expect(resized).toMatchImage('opencv/testResizeBilinear.png');
 });

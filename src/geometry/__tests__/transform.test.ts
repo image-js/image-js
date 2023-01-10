@@ -1,5 +1,3 @@
-import { writeSync } from '../../save';
-
 test('compare result of translation with opencv', () => {
   const img = testUtils.load('opencv/test.png');
   const translation = [
@@ -10,7 +8,6 @@ test('compare result of translation with opencv', () => {
     width: 16,
     height: 20,
   });
-  writeSync('src/geometry/__tests__/transformed.png', transformed);
 
   expect(transformed).toMatchImage('opencv/testTranslation.png');
 });
@@ -27,7 +24,6 @@ test.skip('fullImage = true', () => {
     height: 15,
     fullImage: true,
   });
-  writeSync('src/geometry/__tests__/transformed-fullImage.png', transformed);
 
   expect(transformed).toMatchImage('opencv/testTranslation.png');
 });
