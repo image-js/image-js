@@ -46,4 +46,14 @@ export type TestImagePath =
   | 'ssim/ssim-contrast.png'
   | 'ssim/ssim-saltPepper.png'
   | 'ssim/ssim-blurry.png'
-  | 'ssim/ssim-compressed.png';
+  | 'ssim/ssim-compressed.png'
+  | 'featureMatching/alphabet.jpg'
+  | 'featureMatching/alphabetRotated2.jpg'
+  | 'featureMatching/alphabetRotated5.jpg'
+  | 'featureMatching/alphabetRotated10.jpg'
+  | 'featureMatching/alphabetRotated-2.jpg'
+  | 'featureMatching/alphabetRotated-5.jpg'
+  | 'featureMatching/alphabetRotated-10.jpg'
+  | 'featureMatching/alphabetTranslated10.jpg'
+  | 'featureMatching/alphabetTranslated20.jpg'
+  | 'featureMatching/alphabetTranslated50.jpg';
