@@ -30,6 +30,17 @@ export function difference(p1: Point, p2: Point) {
 }
 
 /**
+ * Calculates a new point that is the sum p1 + p2
+ *
+ * @param p1 - First point.
+ * @param p2 - Second Point.
+ * @returns Sum of the two points.
+ */
+export function sum(p1: Point, p2: Point) {
+  return { column: p1.column + p2.column, row: p1.row + p2.row };
+}
+
+/**
  * Normalize a point (more precisely the vector from the origin to the point).
  *
  * @param point - Point to normalize.

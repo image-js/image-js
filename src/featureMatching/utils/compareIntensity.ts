@@ -1,5 +1,15 @@
-import { Image } from '../../Image';
+import { Image, ImageCoordinates } from '../../Image';
 import { Point } from '../../geometry';
+import { sum } from '../../utils/geometry/points';
+
+export interface CompareIntensityOptions {
+  /**
+   * Origin of the points coordinates relative to the top-left corner.
+   *
+   * @default Center of the image.
+   */
+  origin?: Point;
+}
 
 /**
  * Compare the intensity of two pixels of a GREY image.
@@ -7,11 +17,21 @@ import { Point } from '../../geometry';
  * @param image - Source image of the pixels.
  * @param p1 - First point.
  * @param p2 - Second point.
+ * @param options
  * @returns Wether p1 is darker that p2.
  */
-export function compareIntensity(image: Image, p1: Point, p2: Point): boolean {
-  const intensity1 = image.getValueByPoint(p1, 0);
-  const intensity2 = image.getValueByPoint(p2, 0);
+export function compareIntensity(
+  image: Image,
+  p1: Point,
+  p2: Point,
+  options: CompareIntensityOptions = {},
+): boolean {
+  const { origin = image.getCoordinates(ImageCoordinates.CENTER) } = options;
+
+  const absoluteP1 = sum(p1, origin);
+  const absoluteP2 = sum(p2, origin);
+  const intensity1 = image.getValueByPoint(absoluteP1, 0);
+  const intensity2 = image.getValueByPoint(absoluteP2, 0);
 
   return intensity1 < intensity2;
 }
