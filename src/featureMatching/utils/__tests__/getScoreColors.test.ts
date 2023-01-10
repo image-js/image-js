@@ -6,7 +6,7 @@ test('generate 10 blue shades', () => {
   const image = new Image(side, side);
 
   const nbShades = 10;
-  const colors = getScoreColors(image, [0, 0, 255], nbShades);
+  const colors = getScoreColors(image, [0, 0, 255], { nbShades });
 
   for (let i = 0; i < nbShades; i++) {
     image.drawRectangle({
@@ -27,7 +27,7 @@ test('generate 5 yellow shades', () => {
   const image = new Image(side, side);
 
   const nbShades = 5;
-  const colors = getScoreColors(image, [255, 255, 0], nbShades);
+  const colors = getScoreColors(image, [255, 255, 0], { nbShades });
 
   for (let i = 0; i < nbShades; i++) {
     image.drawRectangle({

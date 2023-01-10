@@ -14,7 +14,7 @@ test('keypoint should all have a different color', () => {
     { origin, score: 1 },
   ];
 
-  const colors = getScoreColors(image, [255, 0, 0], 5);
+  const colors = getScoreColors(image, [255, 0, 0], { nbShades: 5 });
   let result = [];
   for (let i = 0; i < keypoints.length; i++) {
     result.push(getKeypointColor(keypoints, i, colors));
@@ -32,7 +32,7 @@ test('keypoint with more random scores', () => {
     { origin, score: 1 },
   ];
 
-  const colors = getScoreColors(image, [255, 0, 0], 5);
+  const colors = getScoreColors(image, [255, 0, 0], { nbShades: 5 });
 
   let result = [];
   for (let i = 0; i < keypoints.length; i++) {
@@ -40,9 +40,9 @@ test('keypoint with more random scores', () => {
   }
   expect(result).toStrictEqual([
     [255, 0, 0],
-    [198, 0, 0],
-    [27, 0, 0],
-    [27, 0, 0],
-    [27, 0, 0],
+    [204, 0, 0],
+    [51, 0, 0],
+    [51, 0, 0],
+    [51, 0, 0],
   ]);
 });
