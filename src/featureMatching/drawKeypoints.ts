@@ -3,7 +3,7 @@ import { getOutputImage } from '../utils/getOutputImage';
 
 import { FastKeypoint } from './getFastKeypoints';
 import { getKeypointColor } from './utils/getKeypointColor';
-import { getScoreColors } from './utils/getScoreColors';
+import { getScoreColors, GetScoreColorsOptions } from './utils/getScoreColors';
 
 export interface DrawKeypointsOptions {
   /**
@@ -40,6 +40,10 @@ export interface DrawKeypointsOptions {
    * Image to which the resulting image has to be put.
    */
   out?: Image;
+  /**
+   * Options for the coloring of the keypoints depending on their score (useful if showScore = true).
+   */
+  showScoreOptions?: GetScoreColorsOptions;
 }
 
 /**
@@ -59,7 +63,7 @@ export function drawKeypoints(
     markerSize = 10,
     fill = false,
     showScore = false,
-    nbScoreShades = 6,
+    showScoreOptions,
   } = options;
   let { color = [255, 0, 0] } = options;
 
@@ -69,8 +73,7 @@ export function drawKeypoints(
     newImage = newImage.convertColor(ImageColorModel.RGB);
   }
 
-  const colors = getScoreColors(image, color, nbScoreShades);
-  console.log(colors);
+  const colors = getScoreColors(image, color, showScoreOptions);
 
   const radius = Math.ceil(markerSize / 2);
   for (let i = 0; i < keypoints.length; i++) {
@@ -78,7 +81,6 @@ export function drawKeypoints(
     if (showScore) {
       keypointColor = getKeypointColor(keypoints, i, colors);
     }
-    console.log(keypointColor);
     let fillColor = fill ? keypointColor : undefined;
 
     newImage.drawCircle(keypoints[i].origin, radius, {

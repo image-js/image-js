@@ -1,10 +1,9 @@
 import { Image, ImageColorModel } from '../Image';
 
 import { Match } from './bruteForceMatch';
-import { drawKeypoints } from './drawKeypoints';
 import { FastKeypoint } from './getFastKeypoints';
 import { getKeypointColor } from './utils/getKeypointColor';
-import { getScoreColors } from './utils/getScoreColors';
+import { getScoreColors, GetScoreColorsOptions } from './utils/getScoreColors';
 
 export interface DrawMatchesOptions {
   /**
@@ -44,11 +43,9 @@ export interface DrawMatchesOptions {
    */
   showScore?: boolean;
   /**
-   * Number of shades for the keypoints (the brighter the shade, the higher the score).
-   *
-   * @default 6
+   * Options for the coloring of the keypoints depending on their score (useful if showScore = true).
    */
-  nbScoreShades?: number;
+  showScoreOptions?: GetScoreColorsOptions;
 }
 
 /**
@@ -78,7 +75,7 @@ export function drawMatches(
     keypointColor = [0, 255, 0],
     keypointSize = 5,
     showScore,
-    nbScoreShades,
+    showScoreOptions,
   } = options;
 
   if (source.colorModel !== ImageColorModel.RGB) {
@@ -126,7 +123,11 @@ export function drawMatches(
   if (showKeypoints) {
     const keypointRadius = Math.ceil(keypointSize / 2);
 
-    const sourceColors = getScoreColors(source, keypointColor, nbScoreShades);
+    const sourceColors = getScoreColors(
+      source,
+      keypointColor,
+      showScoreOptions,
+    );
 
     for (let i = 0; i < sourceKeypoints.length; i++) {
       let color = keypointColor;
@@ -143,7 +144,7 @@ export function drawMatches(
     const destinationColors = getScoreColors(
       destination,
       keypointColor,
-      nbScoreShades,
+      showScoreOptions,
     );
     for (let i = 0; i < destinationKeypoints.length; i++) {
       let color = keypointColor;
