@@ -1,5 +1,5 @@
 import { Image, ImageColorModel, ImageCoordinates } from '../Image';
-import { GaussianBlurOptions } from '../filters';
+import { GaussianBlurSigmaOptions } from '../filters';
 import checkProcessable from '../utils/checkProcessable';
 import { InterpolationType } from '../utils/interpolatePixel';
 
@@ -16,7 +16,7 @@ export interface GetBriefDescriptorsOptions {
   /**
    * Options to smooth the image patch before comparing pairs of points.
    */
-  smoothingOptions?: GaussianBlurOptions;
+  smoothingOptions?: GaussianBlurSigmaOptions;
   /**
    * Options to modify the gaussian distribution used to generate the points to compare.
    */
@@ -28,11 +28,11 @@ export interface GetBriefDescriptorsOptions {
    */
   patchSize?: number;
   /**
-   * Number of bits of the final descriptor.
+   * Number of bits of the final descriptor. Typically a power or 2: 128, 256, 512.
    *
    * @default 256
    */
-  descriptorLength?: 128 | 256 | 512;
+  descriptorLength?: number;
 }
 
 export type BriefDescriptor = Uint8Array;
@@ -56,7 +56,10 @@ export function getBriefDescriptors(
   const {
     patchSize = 31,
     descriptorLength = 256,
-    smoothingOptions = { sigma: Math.sqrt(2), size: 9 },
+    smoothingOptions = {
+      sigma: Math.sqrt(2),
+      size: Math.min(image.height, image.width, 9),
+    },
     pointsDistributionOptions,
   } = options;
 
@@ -67,6 +70,10 @@ export function getBriefDescriptors(
 
   if (!(patchSize % 2)) {
     throw new Error('getBriefDescriptors: patchSize must be an odd integer');
+  }
+
+  if (Math.min(image.width, image.height) < patchSize) {
+    throw new Error(`image is too small for patchsize = ${patchSize}`);
   }
 
   const gaussianPoints = getGaussianPoints(patchSize, patchSize, {
