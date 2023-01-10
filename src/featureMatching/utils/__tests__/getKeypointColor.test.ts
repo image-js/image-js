@@ -46,3 +46,22 @@ test('keypoint with more random scores', () => {
     [51, 0, 0],
   ]);
 });
+
+test('all keypoints have same score', () => {
+  const image = new Image(5, 5);
+  const keypoints = [
+    { origin, score: 50 },
+    { origin, score: 50 },
+  ];
+
+  const colors = getScoreColors(image, [255, 0, 0], { nbShades: 5 });
+
+  let result = [];
+  for (let i = 0; i < keypoints.length; i++) {
+    result.push(getKeypointColor(keypoints, i, colors));
+  }
+  expect(result).toStrictEqual([
+    [255, 0, 0],
+    [255, 0, 0],
+  ]);
+});
