@@ -137,7 +137,7 @@ export function drawMatches(
       }
       result.drawCircle(sourceKeypoints[i].origin, keypointRadius, {
         color,
-        fill: keypointColor,
+        fill: color,
         out: result,
       });
     }
@@ -161,7 +161,7 @@ export function drawMatches(
         keypointRadius,
         {
           color,
-          fill: keypointColor,
+          fill: color,
           out: result,
         },
       );

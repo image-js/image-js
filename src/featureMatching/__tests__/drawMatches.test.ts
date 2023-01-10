@@ -62,7 +62,7 @@ test('destination rotated', () => {
     sourceKeypoints,
     destinationKeypoints,
     matches,
-    { showKeypoints: true },
+    { showKeypoints: true, showScore: true },
   );
 
   expect(result).toMatchImageSnapshot();
