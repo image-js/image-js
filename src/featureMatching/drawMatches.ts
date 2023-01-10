@@ -1,5 +1,4 @@
 import { Image, ImageColorModel } from '../Image';
-import { writeSync } from '../save';
 
 import { Match } from './bruteForceMatch';
 import { FastKeypoint } from './getFastKeypoints';
@@ -130,6 +129,5 @@ export function drawMatches(
     }
   }
 
-  writeSync('src/featureMatching/result.png', result);
   return result;
 }

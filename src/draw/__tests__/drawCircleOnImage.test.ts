@@ -105,7 +105,7 @@ test('draw grey circle', () => {
   expect(expected).not.toBe(image);
 });
 
-test('circle with radius<0', () => {
+test('negative radius error', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0],
     [0, 0, 0],
@@ -117,7 +117,21 @@ test('circle with radius<0', () => {
     image.drawCircle(center, radius, {
       color: [1],
     });
-  }).toThrow('Circle radius must be positive');
+  }).toThrow('drawCircle: circle radius must be positive');
+});
+test('non-integer radius error', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ]);
+  const center = { row: 1, column: 1 };
+  const radius = 0.5;
+  expect(() => {
+    image.drawCircle(center, radius, {
+      color: [1],
+    });
+  }).toThrow('drawCircle: radius must be an integer');
 });
 
 test('draw grey filled circle, radius=0', () => {

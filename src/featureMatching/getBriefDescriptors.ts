@@ -66,7 +66,7 @@ export function getBriefDescriptors(
   });
 
   if (!(patchSize % 2)) {
-    throw new Error('getBriefDescriptors: patchSize should be an odd integer');
+    throw new Error('getBriefDescriptors: patchSize must be an odd integer');
   }
 
   const gaussianPoints = getGaussianPoints(patchSize, patchSize, {

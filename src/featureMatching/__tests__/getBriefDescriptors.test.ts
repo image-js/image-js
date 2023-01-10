@@ -76,7 +76,7 @@ test('patch size error', () => {
   const keypoint = getOrientedFastKeypoints(grey, { maxNbFeatures: 1 });
 
   expect(() => getBriefDescriptors(grey, keypoint, { patchSize: 4 })).toThrow(
-    'getBriefDescriptors: patchSize should be an odd integer',
+    'getBriefDescriptors: patchSize must be an odd integer',
   );
 });
 

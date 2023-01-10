@@ -49,12 +49,12 @@ export function drawCircleOnImage(
     bitDepth: [8, 16],
   });
 
-  if (Math.round(radius) !== radius) {
-    throw new Error('drawCircle: radius should be an integer');
+  if (!Number.isInteger(radius)) {
+    throw new Error('drawCircle: radius must be an integer');
   }
 
   if (radius < 0) {
-    throw new Error('Circle radius must be positive');
+    throw new Error('drawCircle: circle radius must be positive');
   }
   if (radius === 0) {
     newImage.setVisiblePixel(center.column, center.row, color);
