@@ -1,4 +1,4 @@
-import { FastKeypoint } from '../getFastKeypoints';
+import { FastKeypoint } from '../keypoints/getFastKeypoints';
 
 /**
  * Get the shade the keypoint with given index should have (the color is an indicator

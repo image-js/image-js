@@ -1,5 +1,5 @@
-import { Image } from '../Image';
-import { Point } from '../geometry';
+import { Image } from '../../Image';
+import { Point } from '../../geometry';
 
 export interface IsFastKeypointOptions {
   /**

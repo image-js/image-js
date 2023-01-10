@@ -1,9 +1,9 @@
-import { Image } from '../Image';
-import { Point } from '../geometry';
-import checkProcessable from '../utils/checkProcessable';
-import { getCirclePoints, getCompassPoints } from '../utils/getCirclePoints';
-import { getIndex } from '../utils/getIndex';
-import { surroundingPixels } from '../utils/surroundingPixels';
+import { Image } from '../../Image';
+import { Point } from '../../geometry';
+import checkProcessable from '../../utils/checkProcessable';
+import { getCirclePoints, getCompassPoints } from '../../utils/getCirclePoints';
+import { getIndex } from '../../utils/getIndex';
+import { surroundingPixels } from '../../utils/surroundingPixels';
 
 import { getFastScore } from './getFastScore';
 import { getHarrisScore, GetHarrisScoreOptions } from './getHarrisScore';

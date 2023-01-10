@@ -1,5 +1,5 @@
-import { Image, ImageCoordinates } from '../Image';
-import { Point } from '../geometry';
+import { Image, ImageCoordinates } from '../../Image';
+import { Point } from '../../geometry';
 
 export interface GetIntensityMomentOptions {
   /**

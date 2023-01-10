@@ -1,6 +1,7 @@
-import { Image } from '../Image';
-import { getAngle } from '../maskAnalysis/utils/getAngle';
-import { toDegrees } from '../utils/geometry/angles';
+import { Image } from '../../Image';
+import { getAngle } from '../../maskAnalysis/utils/getAngle';
+import { toDegrees } from '../../utils/geometry/angles';
+import { checkBorderDistance } from '../utils/checkBorderDistance';
 
 import {
   FastKeypoint,
@@ -8,7 +9,6 @@ import {
   GetFastKeypointsOptions,
 } from './getFastKeypoints';
 import { getIntensityCentroid } from './getIntensityCentroid';
-import { checkBorderDistance } from './utils/checkBorderDistance';
 
 export interface GetOrientedFastKeypointsOptions
   extends GetFastKeypointsOptions {

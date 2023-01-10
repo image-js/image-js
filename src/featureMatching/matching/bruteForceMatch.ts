@@ -1,5 +1,6 @@
-import { BriefDescriptor } from './getBriefDescriptors';
-import { getHammingDistance } from './utils/getHammingDistance';
+import { BriefDescriptor } from '../descriptors/getBriefDescriptors';
+
+import { getHammingDistance } from './getHammingDistance';
 
 // todo: implement bruteForceManyMatches -> N best matches for each source descriptor
 

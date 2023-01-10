@@ -1,8 +1,8 @@
 import Matrix, { EigenvalueDecomposition, WrapperMatrix1D } from 'ml-matrix';
 
-import { Image } from '../Image';
-import { Point } from '../geometry';
-import { SOBEL_X, SOBEL_Y } from '../utils/constants/kernels';
+import { Image } from '../../Image';
+import { Point } from '../../geometry';
+import { SOBEL_X, SOBEL_Y } from '../../utils/constants/kernels';
 
 export interface GetHarrisScoreOptions {
   /**

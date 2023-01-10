@@ -1,5 +1,8 @@
-import { ImageColorModel, Image } from '../../Image';
-import { getCirclePoints, getCompassPoints } from '../../utils/getCirclePoints';
+import { ImageColorModel, Image } from '../../../Image';
+import {
+  getCirclePoints,
+  getCompassPoints,
+} from '../../../utils/getCirclePoints';
 import { isFastKeypoint } from '../isFastKeypoint';
 
 const fastRadius = 3;

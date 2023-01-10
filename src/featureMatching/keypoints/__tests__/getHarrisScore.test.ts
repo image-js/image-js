@@ -1,4 +1,4 @@
-import { ImageColorModel, Image } from '../../Image';
+import { ImageColorModel, Image } from '../../../Image';
 import { getHarrisScore } from '../getHarrisScore';
 
 const fastRadius = 3;

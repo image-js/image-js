@@ -1,9 +1,8 @@
-import { Image, ImageColorModel } from '../Image';
-
-import { Match } from './bruteForceMatch';
-import { FastKeypoint } from './getFastKeypoints';
-import { getKeypointColor } from './utils/getKeypointColor';
-import { getScoreColors, GetScoreColorsOptions } from './utils/getScoreColors';
+import { Image, ImageColorModel } from '../../Image';
+import { FastKeypoint } from '../keypoints/getFastKeypoints';
+import { Match } from '../matching/bruteForceMatch';
+import { getKeypointColor } from '../utils/getKeypointColor';
+import { getScoreColors, GetScoreColorsOptions } from '../utils/getScoreColors';
 
 export interface DrawMatchesOptions {
   /**

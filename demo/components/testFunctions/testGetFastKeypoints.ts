@@ -1,5 +1,5 @@
 import { Image, ImageColorModel } from '../../../src';
-import { getFastKeypoints } from '../../../src/featureMatching/getFastKeypoints';
+import { getFastKeypoints } from '../../../src/featureMatching/keypoints/getFastKeypoints';
 
 /**
  * Find the FAST keypoints in the video.

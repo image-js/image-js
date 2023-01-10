@@ -1,6 +1,6 @@
-import { ImageColorModel, Image, ImageCoordinates } from '../../Image';
+import { ImageColorModel, Image, ImageCoordinates } from '../../../Image';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
 import { getBriefDescriptors } from '../getBriefDescriptors';
-import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints';
 
 test('alphabet image, maxNbFeatures = 10', () => {
   const image = testUtils.load('various/alphabet.jpg');

@@ -1,9 +1,8 @@
-import { Image, ImageColorModel } from '../Image';
-import { getOutputImage } from '../utils/getOutputImage';
-
-import { FastKeypoint } from './getFastKeypoints';
-import { getKeypointColor } from './utils/getKeypointColor';
-import { getScoreColors, GetScoreColorsOptions } from './utils/getScoreColors';
+import { Image, ImageColorModel } from '../../Image';
+import { getOutputImage } from '../../utils/getOutputImage';
+import { FastKeypoint } from '../keypoints/getFastKeypoints';
+import { getKeypointColor } from '../utils/getKeypointColor';
+import { getScoreColors, GetScoreColorsOptions } from '../utils/getScoreColors';
 
 export interface DrawKeypointsOptions {
   /**

@@ -1,4 +1,4 @@
-import { BriefDescriptor } from '../getBriefDescriptors';
+import { BriefDescriptor } from '../descriptors/getBriefDescriptors';
 
 /**
  * Compute the Hamming distance between two bit strings.

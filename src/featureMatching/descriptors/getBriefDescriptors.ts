@@ -1,16 +1,15 @@
-import { Image, ImageColorModel, ImageCoordinates } from '../Image';
-import { GaussianBlurSigmaOptions } from '../filters';
-import checkProcessable from '../utils/checkProcessable';
-import { InterpolationType } from '../utils/interpolatePixel';
-
-import { OrientedFastKeypoint } from './getOrientedFastKeypoints';
-import { checkBorderDistance } from './utils/checkBorderDistance';
-import { compareIntensity } from './utils/compareIntensity';
-import { extractSquareImage } from './utils/extractSquareImage';
+import { Image, ImageColorModel, ImageCoordinates } from '../../Image';
+import { GaussianBlurSigmaOptions } from '../../filters';
+import checkProcessable from '../../utils/checkProcessable';
+import { InterpolationType } from '../../utils/interpolatePixel';
+import { OrientedFastKeypoint } from '../keypoints/getOrientedFastKeypoints';
+import { checkBorderDistance } from '../utils/checkBorderDistance';
+import { compareIntensity } from '../utils/compareIntensity';
+import { extractSquareImage } from '../utils/extractSquareImage';
 import {
   getGaussianPoints,
   GetGaussianPointsOptions,
-} from './utils/getGaussianPoints';
+} from '../utils/getGaussianPoints';
 
 export interface GetBriefDescriptorsOptions {
   /**

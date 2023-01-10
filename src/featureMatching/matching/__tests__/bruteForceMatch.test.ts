@@ -1,7 +1,10 @@
-import { ImageColorModel, Image } from '../../Image';
+import { ImageColorModel, Image } from '../../../Image';
+import {
+  BriefDescriptor,
+  getBriefDescriptors,
+} from '../../descriptors/getBriefDescriptors';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
 import { bruteForceOneMatch } from '../bruteForceMatch';
-import { BriefDescriptor, getBriefDescriptors } from '../getBriefDescriptors';
-import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints';
 
 function getDescriptors(image: Image): BriefDescriptor[] {
   const grey = image.convertColor(ImageColorModel.GREY);

@@ -1,4 +1,4 @@
-import { ImageColorModel, Image } from '../../Image';
+import { ImageColorModel, Image } from '../../../Image';
 import { getIntensityCentroid } from '../getIntensityCentroid';
 
 test('3x3 empty image', () => {

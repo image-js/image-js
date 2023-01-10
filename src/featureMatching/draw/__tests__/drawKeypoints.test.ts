@@ -1,6 +1,6 @@
-import { ImageColorModel } from '../../Image';
+import { ImageColorModel } from '../../../Image';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
 import { drawKeypoints } from '../drawKeypoints';
-import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints';
 
 test('alphabet image with score coloring', () => {
   const image = testUtils.load('various/alphabet.jpg');

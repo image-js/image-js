@@ -1,8 +1,8 @@
-import { ImageColorModel } from '../../Image';
-import { bruteForceOneMatch } from '../bruteForceMatch';
+import { ImageColorModel } from '../../../Image';
+import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
+import { bruteForceOneMatch } from '../../matching/bruteForceMatch';
 import { drawMatches } from '../drawMatches';
-import { getBriefDescriptors } from '../getBriefDescriptors';
-import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints';
 
 test('alphabet image as source and destination, nbKeypoint = 10', () => {
   const source = testUtils.load('various/alphabet.jpg');
