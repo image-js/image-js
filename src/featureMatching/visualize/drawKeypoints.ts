@@ -1,10 +1,18 @@
 import { Image, ImageColorModel } from '../../Image';
+import { Point } from '../../geometry';
+import { sum } from '../../utils/geometry/points';
 import { getOutputImage } from '../../utils/getOutputImage';
 import { FastKeypoint } from '../keypoints/getFastKeypoints';
 import { getKeypointColor } from '../utils/getKeypointColor';
 import { getScoreColors, GetScoreColorsOptions } from '../utils/getScoreColors';
 
 export interface DrawKeypointsOptions {
+  /**
+   * Origin of the keypoints in the image.
+   *
+   * @default {row: 0, column: 0}
+   */
+  origin?: Point;
   /**
    * Markers size in pixels.
    *
@@ -29,12 +37,6 @@ export interface DrawKeypointsOptions {
    * @default false
    */
   showScore?: boolean;
-  /**
-   * Number of shades for the keypoints (the brighter the shade, the higher the score).
-   *
-   * @default 6
-   */
-  nbScoreShades?: number;
   /**
    * Image to which the resulting image has to be put.
    */
@@ -62,6 +64,7 @@ export function drawKeypoints(
     markerSize = 10,
     fill = false,
     showScore = false,
+    origin = { row: 0, column: 0 },
     showScoreOptions,
   } = options;
   let { color = [255, 0, 0] } = options;
@@ -82,7 +85,9 @@ export function drawKeypoints(
     }
     let fillColor = fill ? keypointColor : undefined;
 
-    newImage.drawCircle(keypoints[i].origin, radius, {
+    const absoluteKeypoint = sum(keypoints[i].origin, origin);
+
+    newImage.drawCircle(absoluteKeypoint, radius, {
       fill: fillColor,
       color: keypointColor,
       out: newImage,
