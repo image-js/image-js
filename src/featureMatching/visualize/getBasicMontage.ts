@@ -1,4 +1,4 @@
-import { Image, ImageColorModel } from '../../../Image';
+import { Image, ImageColorModel } from '../../Image';
 
 /**
  * Create a new image containing the input images side by side.

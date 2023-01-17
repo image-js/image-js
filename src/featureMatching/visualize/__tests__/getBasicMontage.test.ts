@@ -1,4 +1,4 @@
-import { getBasicMontage } from './getBasicMontage';
+import { getBasicMontage } from '../getBasicMontage';
 
 test('check montage is correct', () => {
   const image1 = testUtils.load('featureMatching/alphabet.jpg');
