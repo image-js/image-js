@@ -6,6 +6,12 @@ import {
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
 import { bruteForceOneMatch } from '../bruteForceMatch';
 
+/**
+ * Get BRIEF descriptors for an image
+ *
+ * @param image - The image.
+ * @returns The descriptors.
+ */
 function getDescriptors(image: Image): BriefDescriptor[] {
   const grey = image.convertColor(ImageColorModel.GREY);
   const sourceKeypoints = getOrientedFastKeypoints(grey);
