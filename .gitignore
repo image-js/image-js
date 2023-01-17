@@ -125,6 +125,3 @@ lib-esm
 src/**/*.tif
 src/**/*.png
 !src/**/__image_snapshots__/*.png
-
-# test scripts
-scripts
