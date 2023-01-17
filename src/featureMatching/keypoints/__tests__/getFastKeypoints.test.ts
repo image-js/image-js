@@ -1,5 +1,5 @@
 import { ImageColorModel } from '../../../Image';
-import { drawKeypoints } from '../../draw/drawKeypoints';
+import { drawKeypoints } from '../../visualize/drawKeypoints';
 import { getFastKeypoints } from '../getFastKeypoints';
 
 test('alphabet image, default options', () => {
