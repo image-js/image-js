@@ -21,3 +21,22 @@ test('matches should all have a different color', () => {
   }
   expect(result).toStrictEqual(colors);
 });
+
+test('all matches have same distance', () => {
+  const image = new Image(5, 5);
+  const matches: Match[] = [
+    { sourceIndex: 0, destinationIndex: 0, distance: 3 },
+    { sourceIndex: 0, destinationIndex: 0, distance: 3 },
+  ];
+
+  const colors = getColors(image, [255, 0, 0], { nbShades: 5 });
+
+  let result = [];
+  for (let i = 0; i < matches.length; i++) {
+    result.push(getMatchColor(matches, i, colors));
+  }
+  expect(result).toStrictEqual([
+    [255, 0, 0],
+    [255, 0, 0],
+  ]);
+});

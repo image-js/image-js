@@ -53,6 +53,5 @@ export class Montage {
       destinationKeypoints,
       options,
     );
-    // modify this.image
   }
 }
