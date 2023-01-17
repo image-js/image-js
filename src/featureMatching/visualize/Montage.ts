@@ -7,6 +7,15 @@ import { drawKeypoints, DrawKeypointsOptions } from './drawKeypoints';
 import { drawMatches, DrawMatchesOptions } from './drawMatches';
 import { getBasicMontage } from './getBasicMontage';
 
+export interface MontageOptions {
+  /**
+   * Factor by which to scale the images.
+   *
+   * @default 1
+   */
+  scale?: number;
+}
+
 export class Montage {
   public readonly leftWidth: number;
   public readonly leftHeight: number;
@@ -20,17 +29,23 @@ export class Montage {
 
   public image: Image;
 
-  public constructor(image1: Image, image2: Image) {
-    this.leftWidth = image1.width;
-    this.rightWidth = image1.width;
-    this.leftHeight = image1.height;
-    this.rightHeight = image2.height;
+  public constructor(
+    image1: Image,
+    image2: Image,
+    options: MontageOptions = {},
+  ) {
+    const { scale = 1 } = options;
+
+    this.leftWidth = scale * image1.width;
+    this.rightWidth = scale * image1.width;
+    this.leftHeight = scale * image1.height;
+    this.rightHeight = scale * image2.height;
 
     this.leftOrigin = { row: 0, column: image1.width };
 
-    this.width = image1.width + image2.width;
-    this.height = Math.max(image1.width, image2.width);
-    this.image = getBasicMontage(image1, image2);
+    this.width = this.leftWidth + this.rightWidth;
+    this.height = Math.max(this.leftHeight, this.rightHeight);
+    this.image = getBasicMontage(image1, image2, scale);
   }
 
   public drawKeypoints(

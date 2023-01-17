@@ -5,9 +5,14 @@ import { Image, ImageColorModel } from '../../Image';
  *
  * @param image1 - First image.
  * @param image2 - Second image.
+ * @param scale - Factor by which to scale the images
  * @returns The basic montage.
  */
-export function getBasicMontage(image1: Image, image2: Image): Image {
+export function getBasicMontage(
+  image1: Image,
+  image2: Image,
+  scale: number,
+): Image {
   if (image1.colorModel !== ImageColorModel.RGB) {
     image1 = image1.convertColor(ImageColorModel.RGB);
   }
@@ -16,14 +21,16 @@ export function getBasicMontage(image1: Image, image2: Image): Image {
   }
 
   const result = new Image(
-    image1.width + image2.width,
-    Math.max(image1.height, image2.height),
+    scale * (image1.width + image2.width),
+    scale * Math.max(image1.height, image2.height),
   );
 
-  image1.copyTo(result, { out: result });
-  image2.copyTo(result, {
+  image1
+    .resize({ xFactor: scale, yFactor: scale })
+    .copyTo(result, { out: result });
+  image2.resize({ xFactor: scale, yFactor: scale }).copyTo(result, {
     out: result,
-    origin: { column: image1.width, row: 0 },
+    origin: { column: scale * image1.width, row: 0 },
   });
 
   return result;
