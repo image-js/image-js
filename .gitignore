@@ -125,3 +125,6 @@ lib-esm
 src/**/*.tif
 src/**/*.png
 !src/**/__image_snapshots__/*.png
+
+# ignore images in test scripts folder
+scripts/**.png
