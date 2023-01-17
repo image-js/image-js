@@ -17,7 +17,7 @@ export function checkBorderDistance(
   return (
     point.column >= distance &&
     point.row >= distance &&
-    image.width - point.column >= distance &&
-    image.height - point.row >= distance
+    image.width - point.column > distance &&
+    image.height - point.row > distance
   );
 }

@@ -1,3 +1,4 @@
+import { ImageColorModel } from '../../../Image';
 import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints';
 
 test('7x7 image, angle = 90°', () => {
@@ -73,4 +74,14 @@ test('7x7 image, angle = -45°', () => {
     origin: { row: 3, column: 3 },
     score: 2780,
   });
+});
+
+test('check we handle edge cases properly', () => {
+  const image = testUtils
+    .load('featureMatching/crop1.png')
+    .convertColor(ImageColorModel.GREY);
+
+  const keypoints = getOrientedFastKeypoints(image);
+
+  expect(keypoints.length).toBe(403);
 });

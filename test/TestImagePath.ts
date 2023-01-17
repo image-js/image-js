@@ -56,4 +56,7 @@ export type TestImagePath =
   | 'featureMatching/alphabetRotated-10.jpg'
   | 'featureMatching/alphabetTranslated10.jpg'
   | 'featureMatching/alphabetTranslated20.jpg'
-  | 'featureMatching/alphabetTranslated50.jpg';
+  | 'featureMatching/alphabetTranslated50.jpg'
+  | 'featureMatching/crop1.png'
+  | 'featureMatching/crop2.png'
+  | 'featureMatching/crop3.png';
