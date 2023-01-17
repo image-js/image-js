@@ -34,20 +34,47 @@ export function crosscheck(
 ): Match[] {
   let result: Match[] = [];
 
-  for (let srcDstMatch of srcDstMatches) {
-    for (let dstSrcMatch of dstSrcMatches) {
-      if (
-        srcDstMatch.sourceIndex === dstSrcMatch.destinationIndex &&
-        srcDstMatch.destinationIndex === dstSrcMatch.sourceIndex
-      ) {
-        result.push({
-          distance: Math.min(srcDstMatch.distance, dstSrcMatch.distance),
-          sourceIndex: srcDstMatch.sourceIndex,
-          destinationIndex: dstSrcMatch.destinationIndex,
-        });
-      }
+  const sorted1 = sortBySourceDest(srcDstMatches);
+  const sorted2 = sortBySourceDest(dstSrcMatches);
+
+  let pointer1 = 0;
+  let pointer2 = 0;
+
+  while (pointer1 < sorted1.length && pointer2 < sorted2.length) {
+    const current1 = sorted1[pointer1];
+    const current2 = sorted2[pointer2];
+
+    if (current1.sourceIndex > current2.sourceIndex) {
+      pointer2++;
+    } else if (current1.sourceIndex < current2.sourceIndex) {
+      pointer1++;
+    } else if (current1.destinationIndex > current2.destinationIndex) {
+      pointer2++;
+    } else if (current1.destinationIndex < current2.destinationIndex) {
+      pointer1++;
+    } else {
+      result.push({
+        distance: Math.min(current1.distance, current2.distance),
+        sourceIndex: current1.sourceIndex,
+        destinationIndex: current1.destinationIndex,
+      });
+      pointer1++;
+      pointer2++;
     }
   }
-
   return result;
+}
+
+/**
+ * Source array of matches by source index and then destination index.
+ *
+ * @param matches - Array of matches to sort.
+ * @returns Sorted copy of the array of matches.
+ */
+function sortBySourceDest(matches: Match[]): Match[] {
+  return matches.slice().sort((match1, match2) => {
+    if (match1.sourceIndex < match2.sourceIndex) return -1;
+    if (match1.sourceIndex < match2.sourceIndex) return 1;
+    return match1.destinationIndex - match2.destinationIndex;
+  });
 }
