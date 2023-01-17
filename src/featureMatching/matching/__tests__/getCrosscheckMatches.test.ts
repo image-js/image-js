@@ -1,27 +1,21 @@
 import { ImageColorModel } from '../../../Image';
 import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors';
-import { drawMatches } from '../../draw/drawMatches';
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
 import { Match } from '../bruteForceMatch';
 import { crosscheck, getCrosscheckMatches } from '../getCrosscheckMatches';
 
 describe('crosscheck', () => {
   it('all matches are common', () => {
-    const matches1: Match[] = [
-      { sourceIndex: 0, destinationIndex: 0, distance: 1 },
-      { sourceIndex: 0, destinationIndex: 2, distance: 3 },
-      { sourceIndex: 3, destinationIndex: 5, distance: 5 },
-    ];
-    const matches2: Match[] = [
+    const matches: Match[] = [
       { sourceIndex: 0, destinationIndex: 0, distance: 1 },
       { sourceIndex: 0, destinationIndex: 2, distance: 3 },
       { sourceIndex: 3, destinationIndex: 5, distance: 5 },
     ];
 
-    expect(crosscheck(matches1, matches2)).toStrictEqual(matches1);
+    expect(crosscheck(matches, matches)).toStrictEqual(matches);
   });
 
-  it('all matches are common', () => {
+  it('no matches in common', () => {
     const matches1: Match[] = [
       { sourceIndex: 0, destinationIndex: 0, distance: 1 },
       { sourceIndex: 0, destinationIndex: 2, distance: 3 },
@@ -49,8 +43,49 @@ describe('crosscheck', () => {
     ];
 
     expect(crosscheck(matches1, matches2)).toStrictEqual([
-      { sourceIndex: 9, destinationIndex: 3, distance: 1 },
+      { sourceIndex: 9, destinationIndex: 3, distance: 5 },
     ]);
+  });
+
+  it('matches have different lengths', () => {
+    const matches1: Match[] = [
+      { sourceIndex: 9, destinationIndex: 3, distance: 1 },
+      { sourceIndex: 10, destinationIndex: 14, distance: 3 },
+      { sourceIndex: 7, destinationIndex: 3, distance: 5 },
+    ];
+    const matches2: Match[] = [
+      { sourceIndex: 9, destinationIndex: 4, distance: 1 },
+      { sourceIndex: 1, destinationIndex: 2, distance: 3 },
+      { sourceIndex: 9, destinationIndex: 3, distance: 5 },
+      { sourceIndex: 5, destinationIndex: 4, distance: 1 },
+      { sourceIndex: 1, destinationIndex: 14, distance: 3 },
+      { sourceIndex: 10, destinationIndex: 30, distance: 1 },
+      { sourceIndex: 10, destinationIndex: 14, distance: 3 },
+    ];
+
+    expect(crosscheck(matches1, matches2)).toStrictEqual([
+      { sourceIndex: 9, destinationIndex: 3, distance: 5 },
+      { sourceIndex: 10, destinationIndex: 14, distance: 3 },
+    ]);
+  });
+
+  it('should be symmetrical', () => {
+    const matches1: Match[] = [
+      { sourceIndex: 9, destinationIndex: 3, distance: 1 },
+      { sourceIndex: 0, destinationIndex: 14, distance: 3 },
+      { sourceIndex: 7, destinationIndex: 3, distance: 5 },
+    ];
+    const matches2: Match[] = [
+      { sourceIndex: 9, destinationIndex: 3, distance: 5 },
+      { sourceIndex: 5, destinationIndex: 4, distance: 1 },
+      { sourceIndex: 1, destinationIndex: 14, distance: 3 },
+      { sourceIndex: 10, destinationIndex: 30, distance: 1 },
+      { sourceIndex: 10, destinationIndex: 14, distance: 3 },
+    ];
+
+    expect(crosscheck(matches1, matches2)).toStrictEqual(
+      crosscheck(matches2, matches1),
+    );
   });
 });
 
@@ -69,26 +104,13 @@ describe('getCrosscheckMatches', () => {
       destinationKeypoints,
     );
 
-    const result = getCrosscheckMatches(
+    const crosscheckMatches = getCrosscheckMatches(
       sourceDescriptors,
       destinationDescriptors,
     );
 
-    console.log(result.length);
-
-    expect(result).toStrictEqual([
-      { sourceIndex: 9, destinationIndex: 3, distance: 1 },
+    expect(crosscheckMatches).toStrictEqual([
+      { sourceIndex: 66, destinationIndex: 80, distance: 30 },
     ]);
-
-    expect(
-      drawMatches(
-        source,
-        destination,
-        sourceKeypoints,
-        destinationKeypoints,
-        result,
-        { showKeypoints: true, showScore: true },
-      ),
-    ).toMatchImageSnapshot();
   });
 });

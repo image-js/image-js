@@ -1,4 +1,5 @@
 import { BriefDescriptor } from '../descriptors/getBriefDescriptors';
+import { sortBySourceDest } from '../utils/sortBySourceDest';
 
 import { bruteForceOneMatch, Match } from './bruteForceMatch';
 
@@ -22,7 +23,7 @@ export function getCrosscheckMatches(
 /**
  * Return the indices of pairs the keypoints that are mutually the best match.
  * This means that if B is the best match for A, A should be the best match for B.
- * The distance of the resulting matches is the minimum distance between the two.
+ * The distance of the resulting matches is the maximum distance between the two.
  *
  * @param srcDstMatches - Best matches computed from source do destination.
  * @param dstSrcMatches - Best matches computed from destination to source.
@@ -54,7 +55,7 @@ export function crosscheck(
       pointer1++;
     } else {
       result.push({
-        distance: Math.min(current1.distance, current2.distance),
+        distance: Math.max(current1.distance, current2.distance),
         sourceIndex: current1.sourceIndex,
         destinationIndex: current1.destinationIndex,
       });
@@ -63,18 +64,4 @@ export function crosscheck(
     }
   }
   return result;
-}
-
-/**
- * Source array of matches by source index and then destination index.
- *
- * @param matches - Array of matches to sort.
- * @returns Sorted copy of the array of matches.
- */
-function sortBySourceDest(matches: Match[]): Match[] {
-  return matches.slice().sort((match1, match2) => {
-    if (match1.sourceIndex < match2.sourceIndex) return -1;
-    if (match1.sourceIndex < match2.sourceIndex) return 1;
-    return match1.destinationIndex - match2.destinationIndex;
-  });
 }
