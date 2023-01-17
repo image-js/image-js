@@ -2,6 +2,8 @@ import { ImageColorModel } from '../../../Image';
 import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors';
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
 import { bruteForceOneMatch } from '../../matching/bruteForceMatch';
+import { Montage } from '../Montage';
+import { DrawKeypointsOptions } from '../drawKeypoints';
 import { drawMatches } from '../drawMatches';
 
 test('alphabet image as source and destination, nbKeypoint = 10', () => {
@@ -22,12 +24,13 @@ test('alphabet image as source and destination, nbKeypoint = 10', () => {
 
   const matches = bruteForceOneMatch(sourceDescriptors, destinationDescriptors);
 
+  const montage = new Montage(source, destination);
+
   const result = drawMatches(
-    source,
-    destination,
+    montage,
+    matches,
     sourceKeypoints,
     destinationKeypoints,
-    matches,
   );
 
   expect(result).toMatchImageSnapshot();
@@ -57,13 +60,13 @@ test('destination rotated +2°', () => {
     { nbBestMatches: 20 },
   );
 
+  const montage = new Montage(source, destination);
+
   const result = drawMatches(
-    source,
-    destination,
+    montage,
+    matches,
     sourceKeypoints,
     destinationKeypoints,
-    matches,
-    { showScore: true },
   );
 
   expect(result).toMatchImageSnapshot();
@@ -88,15 +91,49 @@ test('destination rotated +10°', () => {
     destinationDescriptors,
     { nbBestMatches: 10 },
   );
+  const montage = new Montage(source, destination);
 
-  const result = drawMatches(
-    source,
-    destination,
-    sourceKeypoints,
+  montage.drawMatches(matches, sourceKeypoints, destinationKeypoints);
+
+  const options: DrawKeypointsOptions = {
+    fill: true,
+    color: [0, 255, 0],
+    showScore: true,
+    markerSize: 6,
+  };
+  montage.drawKeypoints(sourceKeypoints, options);
+  montage.drawKeypoints(destinationKeypoints, {
+    ...options,
+    origin: montage.leftOrigin,
+  });
+
+  expect(montage.image).toMatchImageSnapshot();
+});
+
+test('showDistance = true', () => {
+  const source = testUtils.load('featureMatching/alphabet.jpg');
+  const grey = source.convertColor(ImageColorModel.GREY);
+  const sourceKeypoints = getOrientedFastKeypoints(grey);
+  const sourceDescriptors = getBriefDescriptors(grey, sourceKeypoints);
+
+  const destination = testUtils.load('featureMatching/alphabetRotated10.jpg');
+  const grey2 = destination.convertColor(ImageColorModel.GREY);
+  const destinationKeypoints = getOrientedFastKeypoints(grey2);
+  const destinationDescriptors = getBriefDescriptors(
+    grey2,
     destinationKeypoints,
-    matches,
-    { showKeypoints: true, showScore: true },
   );
 
-  expect(result).toMatchImageSnapshot();
+  const matches = bruteForceOneMatch(
+    sourceDescriptors,
+    destinationDescriptors,
+    { nbBestMatches: 10 },
+  );
+  const montage = new Montage(source, destination);
+
+  montage.drawMatches(matches, sourceKeypoints, destinationKeypoints, {
+    showDistance: true,
+  });
+
+  expect(montage.image).toMatchImageSnapshot();
 });

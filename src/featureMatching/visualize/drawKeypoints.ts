@@ -3,8 +3,8 @@ import { Point } from '../../geometry';
 import { sum } from '../../utils/geometry/points';
 import { getOutputImage } from '../../utils/getOutputImage';
 import { FastKeypoint } from '../keypoints/getFastKeypoints';
+import { getColors, GetColorsOptions } from '../utils/getColors';
 import { getKeypointColor } from '../utils/getKeypointColor';
-import { getScoreColors, GetScoreColorsOptions } from '../utils/getScoreColors';
 
 export interface DrawKeypointsOptions {
   /**
@@ -44,7 +44,7 @@ export interface DrawKeypointsOptions {
   /**
    * Options for the coloring of the keypoints depending on their score (useful if showScore = true).
    */
-  showScoreOptions?: GetScoreColorsOptions;
+  showScoreOptions?: GetColorsOptions;
 }
 
 /**
@@ -75,7 +75,7 @@ export function drawKeypoints(
     newImage = newImage.convertColor(ImageColorModel.RGB);
   }
 
-  const colors = getScoreColors(image, color, showScoreOptions);
+  const colors = getColors(image, color, showScoreOptions);
 
   const radius = Math.ceil(markerSize / 2);
   for (let i = 0; i < keypoints.length; i++) {

@@ -1,8 +1,10 @@
-import { Image, ImageColorModel } from '../../Image';
+import { Image } from '../../Image';
 import { FastKeypoint } from '../keypoints/getFastKeypoints';
 import { Match } from '../matching/bruteForceMatch';
-import { getKeypointColor } from '../utils/getKeypointColor';
-import { getScoreColors, GetScoreColorsOptions } from '../utils/getScoreColors';
+import { getColors, GetColorsOptions } from '../utils/getColors';
+import { getMatchColor } from '../utils/getMatchColor';
+
+import { Montage } from './Montage';
 
 export interface DrawMatchesOptions {
   /**
@@ -18,153 +20,73 @@ export interface DrawMatchesOptions {
    */
   color?: number[];
   /**
-   * Should the original keypoints be displayes?
-   *
-   * @returns false
-   */
-  showKeypoints?: boolean;
-  /**
-   * Keypoints color.
-   *
-   * @default [0,255,0]
-   */
-  keypointColor?: number[];
-  /**
-   * Keypoint marker size.
-   *
-   * @default 3
-   */
-  keypointSize?: number;
-  /**
-   * Should the score of the keypoints reflect in their color?
+   * Should the matches be colored depending on the distance?
    *
    * @default false
    */
-  showScore?: boolean;
+  showDistance?: boolean;
   /**
-   * Options for the coloring of the keypoints depending on their score (useful if showScore = true).
+   * Options for the coloring of the matches depending on their distance (useful if showDistance = true).
    */
-  showScoreOptions?: GetScoreColorsOptions;
+  showDistanceOptions?: GetColorsOptions;
 }
 
 /**
- * Draw the source descriptors on the source image and
- * their matches on the destination image side by side.
+ * Draw the the matches between two images on their montage.
  *
- * @param source - The source image.
- * @param destination - The destination image.
+ * @param montage - The montage of two images to match.
+ * @param matches - The matches between source and destination.
  * @param sourceKeypoints - Source keypoints.
  * @param destinationKeypoints - Destination keypoints.
- * @param matches - The matches between source and destination.
  * @param options - Draw matches options.
  * @returns The comparison image.
  */
 export function drawMatches(
-  source: Image,
-  destination: Image,
+  montage: Montage,
+  matches: Match[],
   sourceKeypoints: FastKeypoint[],
   destinationKeypoints: FastKeypoint[],
-  matches: Match[],
+
   options: DrawMatchesOptions = {},
 ): Image {
   const {
     circleDiameter = 10,
     color = [255, 0, 0],
-    showKeypoints = false,
-    keypointColor = [0, 255, 0],
-    keypointSize = 5,
-    showScore,
-    showScoreOptions,
+    showDistance = false,
+    showDistanceOptions,
   } = options;
 
-  if (source.colorModel !== ImageColorModel.RGB) {
-    source = source.convertColor(ImageColorModel.RGB);
-  }
-  if (destination.colorModel !== ImageColorModel.RGB) {
-    destination = destination.convertColor(ImageColorModel.RGB);
-  }
+  let result = montage.image;
 
-  const result = new Image(
-    source.width + destination.width,
-    Math.max(source.height, destination.height),
-  );
-
-  source.copyTo(result, { out: result });
-  destination.copyTo(result, {
-    out: result,
-    origin: { column: source.width, row: 0 },
-  });
+  const colors = getColors(result, color, showDistanceOptions);
 
   const radius = Math.ceil(circleDiameter / 2);
-  for (let match of matches) {
-    const sourcePoint = sourceKeypoints[match.sourceIndex].origin;
+  for (let i = 0; i < matches.length; i++) {
+    let matchColor = color;
+    if (showDistance) {
+      matchColor = getMatchColor(matches, i, colors);
+    }
+    const sourcePoint = sourceKeypoints[matches[i].sourceIndex].origin;
     result.drawCircle(sourcePoint, radius, {
-      color,
+      color: matchColor,
       out: result,
     });
 
     const relativeDestinationPoint =
-      destinationKeypoints[match.destinationIndex].origin;
+      destinationKeypoints[matches[i].destinationIndex].origin;
+
     const destinationPoint = {
-      column: relativeDestinationPoint.column + source.width,
+      column: relativeDestinationPoint.column + montage.leftWidth,
       row: relativeDestinationPoint.row,
     };
     result.drawCircle(destinationPoint, radius, {
-      color,
+      color: matchColor,
       out: result,
     });
     result.drawLine(sourcePoint, destinationPoint, {
       out: result,
-      strokeColor: color,
+      strokeColor: matchColor,
     });
-  }
-
-  if (showKeypoints) {
-    const keypointRadius = Math.ceil(keypointSize / 2);
-
-    const sourceColors = getScoreColors(
-      source,
-      keypointColor,
-      showScoreOptions,
-    );
-
-    for (let i = 0; i < sourceKeypoints.length; i++) {
-      let color = keypointColor;
-
-      if (showScore) {
-        color = getKeypointColor(sourceKeypoints, i, sourceColors);
-      }
-      result.drawCircle(sourceKeypoints[i].origin, keypointRadius, {
-        color,
-        fill: color,
-        out: result,
-      });
-    }
-    const destinationColors = getScoreColors(
-      destination,
-      keypointColor,
-      showScoreOptions,
-    );
-    for (let i = 0; i < destinationKeypoints.length; i++) {
-      let color = keypointColor;
-
-      if (showScore) {
-        color = getKeypointColor(destinationKeypoints, i, destinationColors);
-      }
-
-      result.drawCircle(
-        {
-          column: destinationKeypoints[i].origin.column + source.width,
-          row: destinationKeypoints[i].origin.row,
-        },
-        keypointRadius,
-        {
-          color,
-          fill: color,
-          out: result,
-        },
-      );
-    }
   }
 
   return result;

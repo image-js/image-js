@@ -15,8 +15,6 @@ test('matches should all have a different color', () => {
 
   const colors = getColors(image, [255, 0, 0], { nbShades: 5 });
 
-  console.log(colors);
-
   let result = [];
   for (let i = 0; i < matches.length; i++) {
     result.push(getMatchColor(matches, i, colors));
