@@ -102,7 +102,7 @@ export class Montage {
       this.width = Math.max(this.sourceWidth, this.destinationWidth);
       this.height = this.sourceHeight + this.destinationHeight;
     } else {
-      throw new Error(`unknow disposition type`);
+      throw new Error(`unknown disposition type`);
     }
 
     if (source.colorModel !== ImageColorModel.RGB) {

@@ -27,6 +27,12 @@ describe('constructor', () => {
       new Montage(source, source, { scale: 1.5 });
     }).toThrow('scale should be an integer');
   });
+  it('unknown disposition type', () => {
+    expect(() => {
+      // @ts-expect-error: test for JS users
+      new Montage(source, source, { disposition: 'test' });
+    }).toThrow('unknown disposition type');
+  });
 });
 
 describe('drawKeypoints', () => {
