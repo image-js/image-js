@@ -18,6 +18,15 @@ export interface GetOrientedFastKeypointsOptions
    * @default 7
    */
   windowSize?: number;
+  /**
+   * Minimal distance of the keypoints to the border.
+   * This option is really important for the correct generation of the descriptors.
+   * minBorderDistance should be at least (patchSize-1)/2
+   * where patchSize is an option of getBriefDescriptors.
+   *
+   * @default 15
+   */
+  minBorderDistance?: number;
 }
 
 export interface OrientedFastKeypoint extends FastKeypoint {
@@ -41,10 +50,10 @@ export function getOrientedFastKeypoints(
   image: Image,
   options: GetOrientedFastKeypointsOptions = {},
 ): OrientedFastKeypoint[] {
-  const { windowSize = 7 } = options;
+  const { windowSize = 7, minBorderDistance = 15 } = options;
 
   const fastKeypoints = getFastKeypoints(image, options);
-  const borderDistance = (windowSize - 1) / 2;
+  const borderDistance = Math.max((windowSize - 1) / 2, minBorderDistance);
   // handle edge cases: remove keypoints too close to border
   for (let i = 0; i < fastKeypoints.length; i++) {
     if (!checkBorderDistance(image, fastKeypoints[i].origin, borderDistance)) {
