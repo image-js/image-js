@@ -93,7 +93,9 @@ test('destination rotated +10°', () => {
   );
   const montage = new Montage(source, destination);
 
-  montage.drawMatches(matches, sourceKeypoints, destinationKeypoints);
+  montage.drawMatches(matches, sourceKeypoints, destinationKeypoints, {
+    maxNbMatches: 20,
+  });
 
   const options: DrawKeypointsOptions = {
     fill: true,
