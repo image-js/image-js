@@ -1,13 +1,16 @@
-import { Image } from '../../Image';
+import { Image, ImageColorModel } from '../../Image';
 import { Point } from '../../geometry';
 import { FastKeypoint } from '../keypoints/getFastKeypoints';
 import { Match } from '../matching/bruteForceMatch';
 
 import { drawKeypoints, DrawKeypointsOptions } from './drawKeypoints';
 import { drawMatches, DrawMatchesOptions } from './drawMatches';
-import { getBasicMontage } from './getBasicMontage';
 import { scaleKeypoints } from './scaleKeypoints';
 
+export enum MontageDispositions {
+  HORIZONTAL = 'HORIZONTAL',
+  VERTICAL = 'VERTICAL',
+}
 export interface MontageOptions {
   /**
    * Factor by which to scale the images.
@@ -15,29 +18,35 @@ export interface MontageOptions {
    * @default 1
    */
   scale?: number;
+  /**
+   * How should the images be aligned: vertically or horizontally.
+   *
+   * @default MontageDispositions.HORIZONTAL
+   */
+  disposition?: MontageDispositions;
 }
 
 export class Montage {
   /**
-   * Scaled width of the left images.
+   * Scaled width of the first image.
    */
-  public readonly leftWidth: number;
+  public readonly sourceWidth: number;
   /**
-   * Scaled height of the left images.
+   * Scaled height of the first image.
    */
-  public readonly leftHeight: number;
+  public readonly sourceHeight: number;
   /**
-   * Scaled width of the right images.
+   * Scaled width of the second image.
    */
-  public readonly rightWidth: number;
+  public readonly destinationWidth: number;
   /**
-   * Scaled height of the right images.
+   * Scaled height of the second image.
    */
-  public readonly rightHeight: number;
+  public readonly destinationHeight: number;
   /**
-   * Origin of the right image relative to top-left corner of the Montage.
+   * Origin of the destination / second image relative to top-left corner of the Montage.
    */
-  public readonly leftOrigin: Point;
+  public readonly destinationOrigin: Point;
   /**
    * Width of the Montage.
    */
@@ -50,6 +59,9 @@ export class Montage {
    * Factor by which to scale the images are scaled in the montage.
    */
   public readonly scale: number;
+
+  public readonly disposition: MontageDispositions;
+
   /**
    * Image of the Montage.
    */
@@ -58,28 +70,55 @@ export class Montage {
   /**
    * Create a Montage of two images. The two images are placed side by side for comparison.
    *
-   * @param image1 - Left image.
-   * @param image2 - Right image.
+   * @param source - First image.
+   * @param destination - Second image.
    * @param options  - Montage options.
    */
   public constructor(
-    image1: Image,
-    image2: Image,
+    source: Image,
+    destination: Image,
     options: MontageOptions = {},
   ) {
-    const { scale = 1 } = options;
+    const { scale = 1, disposition = MontageDispositions.HORIZONTAL } = options;
 
     this.scale = scale;
-    this.leftWidth = scale * image1.width;
-    this.rightWidth = scale * image1.width;
-    this.leftHeight = scale * image1.height;
-    this.rightHeight = scale * image2.height;
+    this.disposition = disposition;
 
-    this.leftOrigin = { row: 0, column: this.rightWidth };
+    this.sourceWidth = scale * source.width;
+    this.destinationWidth = scale * destination.width;
+    this.sourceHeight = scale * source.height;
+    this.destinationHeight = scale * destination.height;
 
-    this.width = this.leftWidth + this.rightWidth;
-    this.height = Math.max(this.leftHeight, this.rightHeight);
-    this.image = getBasicMontage(image1, image2, scale);
+    if (disposition === MontageDispositions.HORIZONTAL) {
+      this.destinationOrigin = { row: 0, column: this.sourceWidth };
+      this.width = this.sourceWidth + this.destinationWidth;
+      this.height = Math.max(this.sourceHeight, this.destinationHeight);
+    } else if (disposition === MontageDispositions.VERTICAL) {
+      this.destinationOrigin = { row: this.sourceHeight, column: 0 };
+      this.width = Math.max(this.sourceWidth, this.destinationWidth);
+      this.height = this.sourceHeight + this.destinationHeight;
+    } else {
+      throw new Error(`unknow disposition type`);
+    }
+
+    if (source.colorModel !== ImageColorModel.RGB) {
+      source = source.convertColor(ImageColorModel.RGB);
+    }
+    if (destination.colorModel !== ImageColorModel.RGB) {
+      destination = destination.convertColor(ImageColorModel.RGB);
+    }
+
+    const image = new Image(this.width, this.height);
+
+    source
+      .resize({ xFactor: scale, yFactor: scale })
+      .copyTo(image, { out: image });
+    destination.resize({ xFactor: scale, yFactor: scale }).copyTo(image, {
+      out: image,
+      origin: this.destinationOrigin,
+    });
+
+    this.image = image;
   }
 
   /**

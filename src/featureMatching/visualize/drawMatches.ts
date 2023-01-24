@@ -91,8 +91,9 @@ export function drawMatches(
       scaledDestination[matches[i].destinationIndex].origin;
 
     const destinationPoint = {
-      column: relativeDestinationPoint.column + montage.leftWidth,
-      row: relativeDestinationPoint.row,
+      column:
+        relativeDestinationPoint.column + montage.destinationOrigin.column,
+      row: relativeDestinationPoint.row + montage.destinationOrigin.row,
     };
     result.drawCircle(destinationPoint, radius, {
       color: matchColor,

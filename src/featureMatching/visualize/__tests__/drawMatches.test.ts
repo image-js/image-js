@@ -106,7 +106,7 @@ test('destination rotated +10°', () => {
   montage.drawKeypoints(sourceKeypoints, options);
   montage.drawKeypoints(destinationKeypoints, {
     ...options,
-    origin: montage.leftOrigin,
+    origin: montage.destinationOrigin,
   });
 
   expect(montage.image).toMatchImageSnapshot();
