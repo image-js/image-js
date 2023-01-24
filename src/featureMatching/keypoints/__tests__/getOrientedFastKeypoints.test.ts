@@ -76,7 +76,7 @@ test('7x7 image, angle = -45°', () => {
   });
 });
 
-test.only('check we handle edge cases properly', () => {
+test('check we handle edge cases properly', () => {
   const image = testUtils
     .load('featureMatching/crop1.png')
     .convertColor(ImageColorModel.GREY);

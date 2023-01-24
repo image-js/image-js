@@ -89,7 +89,7 @@ export function getBriefDescriptors(
     // we have to handle the fact that this square can have even dimensions
 
     const radAngle = (keypoint.angle * Math.PI) / 180;
-    console.log(radAngle);
+
     const rawWidth = Math.floor(
       patchSize * (Math.abs(Math.cos(radAngle)) + Math.abs(Math.sin(radAngle))),
     );
