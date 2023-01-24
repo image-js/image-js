@@ -5,6 +5,7 @@ import { getColors, GetColorsOptions } from '../utils/getColors';
 import { getMatchColor } from '../utils/getMatchColor';
 
 import { Montage } from './Montage';
+import { scaleKeypoints } from './scaleKeypoints';
 
 export interface DrawMatchesOptions {
   /**
@@ -56,6 +57,9 @@ export function drawMatches(
     showDistanceOptions,
   } = options;
 
+  const scaledSource = scaleKeypoints(sourceKeypoints, montage.scale);
+  const scaledDestination = scaleKeypoints(destinationKeypoints, montage.scale);
+
   let result = montage.image;
 
   const colors = getColors(result, color, showDistanceOptions);
@@ -66,14 +70,14 @@ export function drawMatches(
     if (showDistance) {
       matchColor = getMatchColor(matches, i, colors);
     }
-    const sourcePoint = sourceKeypoints[matches[i].sourceIndex].origin;
+    const sourcePoint = scaledSource[matches[i].sourceIndex].origin;
     result.drawCircle(sourcePoint, radius, {
       color: matchColor,
       out: result,
     });
 
     const relativeDestinationPoint =
-      destinationKeypoints[matches[i].destinationIndex].origin;
+      scaledDestination[matches[i].destinationIndex].origin;
 
     const destinationPoint = {
       column: relativeDestinationPoint.column + montage.leftWidth,

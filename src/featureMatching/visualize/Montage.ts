@@ -110,14 +110,11 @@ export class Montage {
     destinationKeypoints: FastKeypoint[],
     options: DrawMatchesOptions = {},
   ): void {
-    const scaledSource = scaleKeypoints(sourceKeypoints, this.scale);
-    const scaledDestination = scaleKeypoints(destinationKeypoints, this.scale);
-
     this.image = drawMatches(
       this,
       matches,
-      scaledSource,
-      scaledDestination,
+      sourceKeypoints,
+      destinationKeypoints,
       options,
     );
   }
