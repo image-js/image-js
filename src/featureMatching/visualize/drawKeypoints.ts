@@ -38,6 +38,12 @@ export interface DrawKeypointsOptions {
    */
   showScore?: boolean;
   /**
+   * Maximal number of matches with smallest distance to draw.
+   *
+   * @default keypoints.length
+   */
+  maxNbKeypoints?: number;
+  /**
    * Image to which the resulting image has to be put.
    */
   out?: Image;
@@ -67,7 +73,11 @@ export function drawKeypoints(
     origin = { row: 0, column: 0 },
     showScoreOptions,
   } = options;
-  let { color = [255, 0, 0] } = options;
+  let { color = [255, 0, 0], maxNbKeypoints = keypoints.length } = options;
+
+  if (maxNbKeypoints > keypoints.length) {
+    maxNbKeypoints = keypoints.length;
+  }
 
   let newImage = getOutputImage(image, options, { clone: true });
 
@@ -78,7 +88,7 @@ export function drawKeypoints(
   const colors = getColors(image, color, showScoreOptions);
 
   const radius = Math.ceil(markerSize / 2);
-  for (let i = 0; i < keypoints.length; i++) {
+  for (let i = 0; i < maxNbKeypoints; i++) {
     let keypointColor = color;
     if (showScore) {
       keypointColor = getKeypointColor(keypoints, i, colors);

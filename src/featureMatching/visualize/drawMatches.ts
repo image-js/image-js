@@ -30,6 +30,12 @@ export interface DrawMatchesOptions {
    * Options for the coloring of the matches depending on their distance (useful if showDistance = true).
    */
   showDistanceOptions?: GetColorsOptions;
+  /**
+   * Maximal number of keypoints with best score to draw.
+   *
+   * @default matches.length
+   */
+  maxNbMatches?: number;
 }
 
 /**
@@ -56,6 +62,11 @@ export function drawMatches(
     showDistance = false,
     showDistanceOptions,
   } = options;
+  let { maxNbMatches = matches.length } = options;
+
+  if (maxNbMatches > matches.length) {
+    maxNbMatches = matches.length;
+  }
 
   const scaledSource = scaleKeypoints(sourceKeypoints, montage.scale);
   const scaledDestination = scaleKeypoints(destinationKeypoints, montage.scale);
@@ -65,7 +76,7 @@ export function drawMatches(
   const colors = getColors(result, color, showDistanceOptions);
 
   const radius = Math.ceil(circleDiameter / 2);
-  for (let i = 0; i < matches.length; i++) {
+  for (let i = 0; i < maxNbMatches; i++) {
     let matchColor = color;
     if (showDistance) {
       matchColor = getMatchColor(matches, i, colors);

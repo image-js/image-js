@@ -133,6 +133,7 @@ test('showDistance = true', () => {
 
   montage.drawMatches(matches, sourceKeypoints, destinationKeypoints, {
     showDistance: true,
+    maxNbMatches: 5,
   });
 
   expect(montage.image).toMatchImageSnapshot();
