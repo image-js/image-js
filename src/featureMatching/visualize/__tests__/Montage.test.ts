@@ -22,6 +22,11 @@ describe('constructor', () => {
     });
     expect(montage.image).toMatchImageSnapshot();
   });
+  it('error scale should be integer', () => {
+    expect(() => {
+      new Montage(source, source, { scale: 1.5 });
+    }).toThrow('scale should be an integer');
+  });
 });
 
 describe('drawKeypoints', () => {
@@ -66,30 +71,26 @@ describe('drawMatches', () => {
 
     expect(montage.image).toMatchImageSnapshot();
   });
-  it('scale = 1.5', () => {
+  it('scale = 2', () => {
     const descriptors = getBriefDescriptors(grey, sourceKeypoints);
-
-    console.log(sourceKeypoints.length, descriptors.length);
 
     const matches = bruteForceOneMatch(descriptors, descriptors);
 
-    const montage = new Montage(source, source, { scale: 1.5 });
+    const montage = new Montage(source, source, { scale: 2 });
     montage.drawMatches(matches, sourceKeypoints, sourceKeypoints);
 
     expect(montage.image).toMatchImageSnapshot();
-    expect(montage.height).toBe(1.5 * source.height);
+    expect(montage.height).toBe(2 * source.height);
   });
   it('disposition vertical', () => {
     const descriptors = getBriefDescriptors(grey, sourceKeypoints);
     const matches = bruteForceOneMatch(descriptors, descriptors);
 
     const montage = new Montage(source, source, {
-      scale: 1.5,
       disposition: MontageDispositions.VERTICAL,
     });
     montage.drawMatches(matches, sourceKeypoints, sourceKeypoints);
 
-    expect(montage.width).toBe(1.5 * source.width);
     expect(montage.image).toMatchImageSnapshot();
   });
 });
