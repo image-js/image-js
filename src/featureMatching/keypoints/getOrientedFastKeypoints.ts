@@ -53,13 +53,25 @@ export function getOrientedFastKeypoints(
   const { windowSize = 7, minBorderDistance = 15 } = options;
 
   const fastKeypoints = getFastKeypoints(image, options);
-  const borderDistance = Math.max((windowSize - 1) / 2, minBorderDistance);
+  const borderDistance = (windowSize - 1) / 2;
+
   // handle edge cases: remove keypoints too close to border
   for (let i = 0; i < fastKeypoints.length; i++) {
-    if (!checkBorderDistance(image, fastKeypoints[i].origin, borderDistance)) {
+    const trueMinBorderDistance = Math.max(borderDistance, minBorderDistance);
+    if (
+      !checkBorderDistance(
+        image,
+        fastKeypoints[i].origin,
+        trueMinBorderDistance,
+      )
+    ) {
       fastKeypoints.splice(i, 1);
     }
   }
+
+  console.log(borderDistance);
+  console.log(fastKeypoints.length);
+  console.log(image.width, image.height);
 
   let orientedFastKeypoints: OrientedFastKeypoint[] = [];
   for (let keypoint of fastKeypoints) {

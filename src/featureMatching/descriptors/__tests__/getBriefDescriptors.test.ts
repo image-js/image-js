@@ -24,6 +24,7 @@ test('alphabet image, maxNbFeatures = 10', () => {
   const descriptors = getBriefDescriptors(grey, keypoints);
 
   expect(descriptors).toMatchSnapshot();
+  expect(descriptors.length).toBe(keypoints.length);
 });
 
 test('should work with small patch size', () => {
@@ -80,11 +81,13 @@ test('patch size error', () => {
   );
 });
 
-test('alphabet image should work', () => {
+test.only('alphabet image should work', () => {
   const source = testUtils.load('various/alphabet.jpg');
   const grey = source.convertColor(ImageColorModel.GREY);
   const sourceKeypoints = getOrientedFastKeypoints(grey);
   expect(() => getBriefDescriptors(grey, sourceKeypoints)).not.toThrow();
+  const descriptors = getBriefDescriptors(grey, sourceKeypoints);
+  expect(descriptors.length).toBe(sourceKeypoints.length);
 });
 
 test('image too small for patchsize', () => {

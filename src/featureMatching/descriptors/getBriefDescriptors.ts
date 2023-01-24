@@ -83,14 +83,15 @@ export function getBriefDescriptors(
   const smoothed = image.gaussianBlur(smoothingOptions);
 
   const descriptors: Uint8Array[] = [];
-
+  let counter = 0;
   for (let keypoint of keypoints) {
     // crop smallest square surrounding the tilted patch of the keypoint
     // we have to handle the fact that this square can have even dimensions
+
+    const radAngle = (keypoint.angle * Math.PI) / 180;
+    console.log(radAngle);
     const rawWidth = Math.floor(
-      patchSize *
-        (Math.abs(Math.cos(keypoint.angle)) +
-          Math.abs(Math.sin(keypoint.angle))),
+      patchSize * (Math.abs(Math.cos(radAngle)) + Math.abs(Math.sin(radAngle))),
     );
 
     const cropWidth = rawWidth % 2 ? rawWidth : rawWidth - 1;
@@ -98,6 +99,7 @@ export function getBriefDescriptors(
     // ignore keypoints that are too close to the border of the image
     let borderDistance = (cropWidth - 1) / 2;
     if (!checkBorderDistance(smoothed, keypoint.origin, borderDistance)) {
+      console.log(++counter, borderDistance, cropWidth, rawWidth, patchSize);
       continue;
     }
 
