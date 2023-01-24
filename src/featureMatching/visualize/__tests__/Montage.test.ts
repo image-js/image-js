@@ -12,3 +12,14 @@ test('drawKeypoints with default options', () => {
 
   expect(montage.image).toMatchImageSnapshot();
 });
+
+test('drawKeypoints with scale = 2', () => {
+  const source = testUtils.load('featureMatching/alphabet.jpg');
+  const grey = source.convertColor(ImageColorModel.GREY);
+  const sourceKeypoints = getOrientedFastKeypoints(grey);
+
+  const montage = new Montage(source, source, { scale: 2 });
+  montage.drawKeypoints(sourceKeypoints);
+
+  expect(montage.image).toMatchImageSnapshot();
+});

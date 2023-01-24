@@ -6,6 +6,7 @@ import { Match } from '../matching/bruteForceMatch';
 import { drawKeypoints, DrawKeypointsOptions } from './drawKeypoints';
 import { drawMatches, DrawMatchesOptions } from './drawMatches';
 import { getBasicMontage } from './getBasicMontage';
+import { scaleKeypoints } from './scaleKeypoints';
 
 export interface MontageOptions {
   /**
@@ -26,6 +27,7 @@ export class Montage {
 
   public readonly width: number;
   public readonly height: number;
+  public readonly scale: number;
 
   public image: Image;
 
@@ -36,12 +38,13 @@ export class Montage {
   ) {
     const { scale = 1 } = options;
 
+    this.scale = scale;
     this.leftWidth = scale * image1.width;
     this.rightWidth = scale * image1.width;
     this.leftHeight = scale * image1.height;
     this.rightHeight = scale * image2.height;
 
-    this.leftOrigin = { row: 0, column: image1.width };
+    this.leftOrigin = { row: 0, column: this.rightWidth };
 
     this.width = this.leftWidth + this.rightWidth;
     this.height = Math.max(this.leftHeight, this.rightHeight);
@@ -52,7 +55,8 @@ export class Montage {
     keypoints: FastKeypoint[],
     options: DrawKeypointsOptions = {},
   ): void {
-    this.image = drawKeypoints(this.image, keypoints, options);
+    const scaledKeypoints = scaleKeypoints(keypoints, this.scale);
+    this.image = drawKeypoints(this.image, scaledKeypoints, options);
   }
 
   public drawMatches(
@@ -61,11 +65,14 @@ export class Montage {
     destinationKeypoints: FastKeypoint[],
     options: DrawMatchesOptions = {},
   ): void {
+    const scaledSource = scaleKeypoints(sourceKeypoints, this.scale);
+    const scaledDestination = scaleKeypoints(destinationKeypoints, this.scale);
+
     this.image = drawMatches(
       this,
       matches,
-      sourceKeypoints,
-      destinationKeypoints,
+      scaledSource,
+      scaledDestination,
       options,
     );
   }
