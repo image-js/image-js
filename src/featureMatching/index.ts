@@ -1,4 +1,5 @@
 export * from './matching/bruteForceMatch';
+export * from './matching/getCrosscheckMatches';
 export * from './visualize/drawKeypoints';
 export * from './visualize/drawMatches';
 export * from './visualize/Montage';
