@@ -2,6 +2,8 @@
 // Project: https://github.com/image-js/image-js
 // Definitions by: Michaël Zasso <https://github.com/targos>
 
+import Matrix from "ml-matrix";
+
 // Global variable exposed by UMD bundle
 export as namespace IJS;
 
@@ -327,15 +329,6 @@ export declare class Stack extends Array<Image> {
 }
 
 export declare class RoiManager {}
-
-export declare class Matrix extends Array<Array<number>> {
-  constructor();
-  constructor(width: number, height: number, defaultValue?: number);
-
-  localMin(x: number, y: number): { position: Array<number>; value: number };
-  localMax(x: number, y: number): { position: Array<number>; value: number };
-  localSearch(x: number, y: number, value: number): Array<Array<number>>;
-}
 
 export interface ImageConstructorOptions {
   width?: number;
