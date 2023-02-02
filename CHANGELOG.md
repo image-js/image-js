@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.35.3](https://www.github.com/image-js/image-js/compare/v0.35.2...v0.35.3) (2023-02-02)
+
+
+### Bug Fixes
+
+* **types:** wrong matrix definition ([#616](https://www.github.com/image-js/image-js/issues/616)) ([e265e2a](https://www.github.com/image-js/image-js/commit/e265e2a38c835e8b09678e003426e128e7c951ae))
+
 ### [0.35.2](https://www.github.com/image-js/image-js/compare/v0.35.1...v0.35.2) (2022-10-07)
 
 
