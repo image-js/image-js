@@ -1,4 +1,5 @@
 import { Image } from '../Image';
+import { getRadius } from '../utils/getRadius';
 import { BorderType } from '../utils/interpolateBorder';
 
 import { separableConvolution } from './convolution';
@@ -55,15 +56,6 @@ export interface GaussianBlurXYOptions extends GaussianBlurBaseOptions {
 export type GaussianBlurOptions =
   | GaussianBlurSigmaOptions
   | GaussianBlurXYOptions;
-
-function getRadius(size: number): number {
-  if (size % 2 !== 1 || size < 0) {
-    throw new Error(
-      'gaussianBlur: gaussian blur size must be positive and odd',
-    );
-  }
-  return (size - 1) / 2;
-}
 
 /**
  * Apply a gaussian filter to an image.

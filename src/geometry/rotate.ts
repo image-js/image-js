@@ -7,7 +7,7 @@ import { transform } from './transform';
 
 export interface RotateOptions {
   /**
-   * Specify the rotation center point as a predefined string or a [column, row] point.
+   * Specify the rotation center point as a predefined string or a Point.
    *
    * @default The center of the image.
    */

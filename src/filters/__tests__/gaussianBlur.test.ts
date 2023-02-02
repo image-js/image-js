@@ -44,7 +44,7 @@ test('size error', () => {
 
   expect(() => {
     image.gaussianBlur(options);
-  }).toThrow('gaussianBlur: gaussian blur size must be positive and odd');
+  }).toThrow('size must be positive and odd');
 });
 
 test('x and y kernels', () => {
