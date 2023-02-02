@@ -2,7 +2,7 @@
 // Project: https://github.com/image-js/image-js
 // Definitions by: Michaël Zasso <https://github.com/targos>
 
-import Matrix from "ml-matrix";
+import Matrix from 'ml-matrix';
 
 // Global variable exposed by UMD bundle
 export as namespace IJS;
