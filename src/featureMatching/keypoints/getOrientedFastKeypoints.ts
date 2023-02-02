@@ -1,6 +1,7 @@
 import { Image } from '../../Image';
 import { getAngle } from '../../maskAnalysis/utils/getAngle';
 import { toDegrees } from '../../utils/geometry/angles';
+import { getRadius } from '../../utils/getRadius';
 import { checkBorderDistance } from '../utils/checkBorderDistance';
 
 import {
@@ -19,14 +20,13 @@ export interface GetOrientedFastKeypointsOptions
    */
   windowSize?: number;
   /**
-   * Minimal distance of the keypoints to the border.
    * This option is really important for the correct generation of the descriptors.
-   * minBorderDistance should be at least patchSize
-   * where patchSize is an option of getBriefDescriptors.
+   * Should be at least patchSize, where patchSize is an option of getBriefDescriptors.
+   * This will exclude all keypoints that are too close to the border for the correspondig descriptor to be generated.
    *
    * @default 31
    */
-  minBorderDistance?: number;
+  descriptorsPatchSize?: number;
 }
 
 export interface OrientedFastKeypoint extends FastKeypoint {
@@ -50,20 +50,22 @@ export function getOrientedFastKeypoints(
   image: Image,
   options: GetOrientedFastKeypointsOptions = {},
 ): OrientedFastKeypoint[] {
-  const { windowSize = 7, minBorderDistance = 31 } = options;
+  const { windowSize = 7, descriptorsPatchSize = 31 } = options;
 
   const fastKeypoints = getFastKeypoints(image, options);
-  const borderDistance = (windowSize - 1) / 2;
+  const windowRadius = getRadius(windowSize);
+  const rotatedPatchRadius = Math.ceil(
+    Math.sqrt(2) * getRadius(descriptorsPatchSize),
+  );
+
+  const minBorderDistance = Math.max(windowRadius, rotatedPatchRadius);
+
+  console.log(minBorderDistance);
 
   // handle edge cases: remove keypoints too close to border
   for (let i = 0; i < fastKeypoints.length; i++) {
-    const trueMinBorderDistance = Math.min(borderDistance, minBorderDistance);
     if (
-      !checkBorderDistance(
-        image,
-        fastKeypoints[i].origin,
-        trueMinBorderDistance,
-      )
+      !checkBorderDistance(image, fastKeypoints[i].origin, minBorderDistance)
     ) {
       fastKeypoints.splice(i, 1);
     }
@@ -72,8 +74,8 @@ export function getOrientedFastKeypoints(
   let orientedFastKeypoints: OrientedFastKeypoint[] = [];
   for (let keypoint of fastKeypoints) {
     const cropOrigin = {
-      row: keypoint.origin.row - borderDistance,
-      column: keypoint.origin.column - borderDistance,
+      row: keypoint.origin.row - windowRadius,
+      column: keypoint.origin.column - windowRadius,
     };
     const window = image.crop({
       origin: cropOrigin,

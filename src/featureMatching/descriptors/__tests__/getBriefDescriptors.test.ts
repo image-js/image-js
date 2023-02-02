@@ -81,10 +81,15 @@ test('patch size error', () => {
   );
 });
 
-test.only('alphabet image should work', () => {
+test('alphabet image should work', () => {
   const source = testUtils.load('various/alphabet.jpg');
   const grey = source.convertColor(ImageColorModel.GREY);
-  const sourceKeypoints = getOrientedFastKeypoints(grey);
+
+  const descriptorsPatchSize = 31;
+
+  const sourceKeypoints = getOrientedFastKeypoints(grey, {
+    descriptorsPatchSize,
+  });
   expect(() => getBriefDescriptors(grey, sourceKeypoints)).not.toThrow();
   const descriptors = getBriefDescriptors(grey, sourceKeypoints);
   expect(descriptors.length).toBe(sourceKeypoints.length);

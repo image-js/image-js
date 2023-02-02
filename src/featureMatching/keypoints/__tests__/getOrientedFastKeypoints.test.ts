@@ -12,7 +12,9 @@ test('7x7 image, angle = 90°', () => {
     [0, 0, 0, 100, 0, 0, 0],
   ]);
 
-  const result = getOrientedFastKeypoints(image, { minBorderDistance: 3 })[0];
+  const result = getOrientedFastKeypoints(image, {
+    descriptorsPatchSize: 3,
+  })[0];
   expect(result).toStrictEqual({
     angle: 90,
     origin: { row: 3, column: 3 },
@@ -31,7 +33,9 @@ test('7x7 image, angle = 180°', () => {
     [0, 0, 0, 0, 0, 0, 0],
   ]);
 
-  const result = getOrientedFastKeypoints(image, { minBorderDistance: 3 })[0];
+  const result = getOrientedFastKeypoints(image, {
+    descriptorsPatchSize: 3,
+  })[0];
   expect(result).toStrictEqual({
     angle: 180,
     origin: { row: 3, column: 3 },
@@ -50,7 +54,9 @@ test('7x7 image, angle = 0°', () => {
     [0, 0, 0, 0, 0, 0, 100],
   ]);
 
-  const result = getOrientedFastKeypoints(image, { minBorderDistance: 3 })[0];
+  const result = getOrientedFastKeypoints(image, {
+    descriptorsPatchSize: 3,
+  })[0];
   expect(result).toStrictEqual({
     angle: 0,
     origin: { row: 3, column: 3 },
@@ -68,7 +74,9 @@ test('7x7 image, angle = -45°', () => {
     [0, 0, 0, 0, 0, 0, 0],
   ]);
 
-  const result = getOrientedFastKeypoints(image, { minBorderDistance: 3 })[0];
+  const result = getOrientedFastKeypoints(image, {
+    descriptorsPatchSize: 3,
+  })[0];
   expect(result).toBeDeepCloseTo({
     angle: -45,
     origin: { row: 3, column: 3 },

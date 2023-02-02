@@ -1,6 +1,7 @@
 import { Image, ImageColorModel, ImageCoordinates } from '../../Image';
 import { GaussianBlurSigmaOptions } from '../../filters';
 import checkProcessable from '../../utils/checkProcessable';
+import { getRadius } from '../../utils/getRadius';
 import { InterpolationType } from '../../utils/interpolatePixel';
 import { OrientedFastKeypoint } from '../keypoints/getOrientedFastKeypoints';
 import { checkBorderDistance } from '../utils/checkBorderDistance';
@@ -96,11 +97,14 @@ export function getBriefDescriptors(
 
     const cropWidth = rawWidth % 2 ? rawWidth : rawWidth - 1;
 
-    // ignore keypoints that are too close to the border of the image
-    let borderDistance = (cropWidth - 1) / 2;
+    // we are not allowing keypoints that are too close to the border of the image
+    let borderDistance = getRadius(cropWidth);
+
     if (!checkBorderDistance(smoothed, keypoint.origin, borderDistance)) {
       console.log(++counter, borderDistance, cropWidth, rawWidth, patchSize);
-      continue;
+      throw new Error(
+        `keypoint is too close to border: keypoint origin = {column: ${keypoint.origin.column}, row: ${keypoint.origin.row}, minBorderDistance = ${borderDistance}`,
+      );
     }
 
     const cropped = extractSquareImage(smoothed, keypoint.origin, cropWidth);

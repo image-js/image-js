@@ -78,6 +78,8 @@ test('destination rotated +10°', () => {
   const sourceKeypoints = getOrientedFastKeypoints(grey);
   const sourceDescriptors = getBriefDescriptors(grey, sourceKeypoints);
 
+  expect(sourceKeypoints.length).toBe(sourceDescriptors.length);
+
   const destination = testUtils.load('featureMatching/alphabetRotated10.jpg');
   const grey2 = destination.convertColor(ImageColorModel.GREY);
   const destinationKeypoints = getOrientedFastKeypoints(grey2);
@@ -85,6 +87,8 @@ test('destination rotated +10°', () => {
     grey2,
     destinationKeypoints,
   );
+
+  expect(destinationKeypoints.length).toBe(destinationDescriptors.length);
 
   const matches = bruteForceOneMatch(
     sourceDescriptors,
