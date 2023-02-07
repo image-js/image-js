@@ -1,7 +1,7 @@
 import { OrientedFastKeypoint } from '../../getOrientedFastKeypoints';
 import { getKeypointsInRadius } from '../getKeypointsInRadius';
 
-test('3x3 empty image', () => {
+test('array of 3 keypoints', () => {
   const keypoints: OrientedFastKeypoint[] = [
     { origin: { row: 0, column: 0 }, angle: 0, score: 3 },
     { origin: { row: 1, column: 0 }, angle: 0, score: 5 },
