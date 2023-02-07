@@ -15,7 +15,7 @@ import { bruteForceOneMatch } from '../bruteForceMatch';
 function getDescriptors(image: Image): BriefDescriptor[] {
   const grey = image.convertColor(ImageColorModel.GREY);
   const sourceKeypoints = getOrientedFastKeypoints(grey);
-  return getBriefDescriptors(grey, sourceKeypoints);
+  return getBriefDescriptors(grey, sourceKeypoints).descriptors;
 }
 
 test('nbBestMatches = 5', () => {

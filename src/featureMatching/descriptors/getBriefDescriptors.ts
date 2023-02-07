@@ -15,6 +15,8 @@ import {
 export interface GetBriefDescriptorsOptions {
   /**
    * Options to smooth the image patch before comparing pairs of points.
+   * Default values are the ones recommended in the original BRIEF article.
+   * DOI: https://doi.org/10.1007/978-3-642-15561-1_56
    */
   smoothingOptions?: GaussianBlurSigmaOptions;
   /**
@@ -36,6 +38,10 @@ export interface GetBriefDescriptorsOptions {
 }
 
 export type BriefDescriptor = Uint8Array;
+export type Brief = {
+  keypoints: OrientedFastKeypoint[];
+  descriptors: BriefDescriptor[];
+};
 
 /**
  * Generate the rBRIEF descriptors for the desired keypoints of an image.
@@ -52,7 +58,7 @@ export function getBriefDescriptors(
   image: Image,
   keypoints: OrientedFastKeypoint[],
   options: GetBriefDescriptorsOptions = {},
-): BriefDescriptor[] {
+): Brief {
   const {
     patchSize = 31,
     descriptorLength = 256,
@@ -84,7 +90,8 @@ export function getBriefDescriptors(
   const smoothed = image.gaussianBlur(smoothingOptions);
 
   const descriptors: Uint8Array[] = [];
-  let counter = 0;
+  const filteredKeypoints: OrientedFastKeypoint[] = [];
+
   for (let keypoint of keypoints) {
     // crop smallest square surrounding the tilted patch of the keypoint
     // we have to handle the fact that this square can have even dimensions
@@ -101,10 +108,7 @@ export function getBriefDescriptors(
     let borderDistance = getRadius(cropWidth);
 
     if (!checkBorderDistance(smoothed, keypoint.origin, borderDistance)) {
-      console.log(++counter, borderDistance, cropWidth, rawWidth, patchSize);
-      throw new Error(
-        `keypoint is too close to border: keypoint origin = {column: ${keypoint.origin.column}, row: ${keypoint.origin.row}, minBorderDistance = ${borderDistance}`,
-      );
+      continue;
     }
 
     const cropped = extractSquareImage(smoothed, keypoint.origin, cropWidth);
@@ -125,7 +129,8 @@ export function getBriefDescriptors(
       descriptor[i] = Number(compareIntensity(patch, p1, p2));
     }
     descriptors.push(descriptor);
+    filteredKeypoints.push(keypoint);
   }
 
-  return descriptors;
+  return { keypoints: filteredKeypoints, descriptors };
 }

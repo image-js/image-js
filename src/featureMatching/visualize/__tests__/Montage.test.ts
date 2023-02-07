@@ -78,24 +78,24 @@ describe('drawMatches', () => {
     expect(montage.image).toMatchImageSnapshot();
   });
   it('scale = 2', () => {
-    const descriptors = getBriefDescriptors(grey, sourceKeypoints);
+    const brief = getBriefDescriptors(grey, sourceKeypoints);
 
-    const matches = bruteForceOneMatch(descriptors, descriptors);
+    const matches = bruteForceOneMatch(brief.descriptors, brief.descriptors);
 
     const montage = new Montage(source, source, { scale: 2 });
-    montage.drawMatches(matches, sourceKeypoints, sourceKeypoints);
+    montage.drawMatches(matches, brief.keypoints, brief.keypoints);
 
     expect(montage.image).toMatchImageSnapshot();
     expect(montage.height).toBe(2 * source.height);
   });
   it('disposition vertical', () => {
-    const descriptors = getBriefDescriptors(grey, sourceKeypoints);
-    const matches = bruteForceOneMatch(descriptors, descriptors);
+    const brief = getBriefDescriptors(grey, sourceKeypoints);
+    const matches = bruteForceOneMatch(brief.descriptors, brief.descriptors);
 
     const montage = new Montage(source, source, {
       disposition: MontageDisposition.VERTICAL,
     });
-    montage.drawMatches(matches, sourceKeypoints, sourceKeypoints);
+    montage.drawMatches(matches, brief.keypoints, brief.keypoints);
 
     expect(montage.image).toMatchImageSnapshot();
   });

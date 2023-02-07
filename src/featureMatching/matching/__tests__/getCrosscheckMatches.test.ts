@@ -94,7 +94,10 @@ describe('getCrosscheckMatches', () => {
     const source = testUtils.load('featureMatching/alphabet.jpg');
     const grey = source.convertColor(ImageColorModel.GREY);
     const sourceKeypoints = getOrientedFastKeypoints(grey);
-    const sourceDescriptors = getBriefDescriptors(grey, sourceKeypoints);
+    const sourceDescriptors = getBriefDescriptors(
+      grey,
+      sourceKeypoints,
+    ).descriptors;
 
     const destination = testUtils.load('featureMatching/alphabetRotated-2.jpg');
     const grey2 = destination.convertColor(ImageColorModel.GREY);
@@ -102,7 +105,7 @@ describe('getCrosscheckMatches', () => {
     const destinationDescriptors = getBriefDescriptors(
       grey2,
       destinationKeypoints,
-    );
+    ).descriptors;
 
     const crosscheckMatches = getCrosscheckMatches(
       sourceDescriptors,
@@ -110,7 +113,10 @@ describe('getCrosscheckMatches', () => {
     );
 
     expect(crosscheckMatches).toStrictEqual([
-      { sourceIndex: 66, destinationIndex: 80, distance: 30 },
+      { distance: 21, sourceIndex: 15, destinationIndex: 24 },
+      { distance: 21, sourceIndex: 24, destinationIndex: 15 },
+      { distance: 36, sourceIndex: 39, destinationIndex: 16 },
+      { distance: 24, sourceIndex: 65, destinationIndex: 80 },
     ]);
   });
 });

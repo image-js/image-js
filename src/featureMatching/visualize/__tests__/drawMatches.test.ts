@@ -10,27 +10,27 @@ test('alphabet image as source and destination, nbKeypoint = 10', () => {
   const source = testUtils.load('various/alphabet.jpg');
   const grey = source.convertColor(ImageColorModel.GREY);
   const sourceKeypoints = getOrientedFastKeypoints(grey, { maxNbFeatures: 10 });
-  const sourceDescriptors = getBriefDescriptors(grey, sourceKeypoints);
+  const sourceBrief = getBriefDescriptors(grey, sourceKeypoints);
 
   const destination = testUtils.load('various/alphabet.jpg');
   const grey2 = destination.convertColor(ImageColorModel.GREY);
   const destinationKeypoints = getOrientedFastKeypoints(grey2, {
     maxNbFeatures: 10,
   });
-  const destinationDescriptors = getBriefDescriptors(
-    grey2,
-    destinationKeypoints,
-  );
+  const destinationBrief = getBriefDescriptors(grey2, destinationKeypoints);
 
-  const matches = bruteForceOneMatch(sourceDescriptors, destinationDescriptors);
+  const matches = bruteForceOneMatch(
+    sourceBrief.descriptors,
+    destinationBrief.descriptors,
+  );
 
   const montage = new Montage(source, destination);
 
   const result = drawMatches(
     montage,
     matches,
-    sourceKeypoints,
-    destinationKeypoints,
+    sourceBrief.keypoints,
+    destinationBrief.keypoints,
   );
 
   expect(result).toMatchImageSnapshot();
@@ -41,22 +41,22 @@ test('destination rotated +2°', () => {
     .load('featureMatching/alphabet.jpg')
     .convertColor(ImageColorModel.GREY);
   const sourceKeypoints = getOrientedFastKeypoints(source);
-  const sourceDescriptors = getBriefDescriptors(source, sourceKeypoints);
+  const sourceBrief = getBriefDescriptors(source, sourceKeypoints);
 
   const destination = testUtils
     .load('featureMatching/alphabetRotated2.jpg')
     .convertColor(ImageColorModel.GREY);
   const destinationKeypoints = getOrientedFastKeypoints(destination);
-  const destinationDescriptors = getBriefDescriptors(
+  const destinationBrief = getBriefDescriptors(
     destination,
     destinationKeypoints,
   );
-  expect(sourceKeypoints.length).toBe(119);
-  expect(destinationKeypoints.length).toBe(135);
+  expect(sourceBrief.keypoints.length).toBe(114);
+  expect(destinationBrief.keypoints.length).toBe(135);
 
   const matches = bruteForceOneMatch(
-    sourceDescriptors,
-    destinationDescriptors,
+    sourceBrief.descriptors,
+    destinationBrief.descriptors,
     { nbBestMatches: 20 },
   );
 
@@ -65,8 +65,8 @@ test('destination rotated +2°', () => {
   const result = drawMatches(
     montage,
     matches,
-    sourceKeypoints,
-    destinationKeypoints,
+    sourceBrief.keypoints,
+    destinationBrief.keypoints,
   );
 
   expect(result).toMatchImageSnapshot();
@@ -76,30 +76,28 @@ test('destination rotated +10°', () => {
   const source = testUtils.load('featureMatching/alphabet.jpg');
   const grey = source.convertColor(ImageColorModel.GREY);
   const sourceKeypoints = getOrientedFastKeypoints(grey);
-  const sourceDescriptors = getBriefDescriptors(grey, sourceKeypoints);
-
-  expect(sourceKeypoints.length).toBe(sourceDescriptors.length);
+  const sourceBrief = getBriefDescriptors(grey, sourceKeypoints);
 
   const destination = testUtils.load('featureMatching/alphabetRotated10.jpg');
   const grey2 = destination.convertColor(ImageColorModel.GREY);
   const destinationKeypoints = getOrientedFastKeypoints(grey2);
-  const destinationDescriptors = getBriefDescriptors(
-    grey2,
-    destinationKeypoints,
-  );
-
-  expect(destinationKeypoints.length).toBe(destinationDescriptors.length);
+  const destinationBrief = getBriefDescriptors(grey2, destinationKeypoints);
 
   const matches = bruteForceOneMatch(
-    sourceDescriptors,
-    destinationDescriptors,
+    sourceBrief.descriptors,
+    destinationBrief.descriptors,
     { nbBestMatches: 10 },
   );
   const montage = new Montage(source, destination);
 
-  montage.drawMatches(matches, sourceKeypoints, destinationKeypoints, {
-    maxNbMatches: 20,
-  });
+  montage.drawMatches(
+    matches,
+    sourceBrief.keypoints,
+    destinationBrief.keypoints,
+    {
+      maxNbMatches: 20,
+    },
+  );
 
   const options: DrawKeypointsOptions = {
     fill: true,
@@ -107,8 +105,8 @@ test('destination rotated +10°', () => {
     showScore: true,
     markerSize: 6,
   };
-  montage.drawKeypoints(sourceKeypoints, options);
-  montage.drawKeypoints(destinationKeypoints, {
+  montage.drawKeypoints(sourceBrief.keypoints, options);
+  montage.drawKeypoints(destinationBrief.keypoints, {
     ...options,
     origin: montage.destinationOrigin,
   });
@@ -120,27 +118,29 @@ test('showDistance = true', () => {
   const source = testUtils.load('featureMatching/alphabet.jpg');
   const grey = source.convertColor(ImageColorModel.GREY);
   const sourceKeypoints = getOrientedFastKeypoints(grey);
-  const sourceDescriptors = getBriefDescriptors(grey, sourceKeypoints);
+  const sourceBrief = getBriefDescriptors(grey, sourceKeypoints);
 
   const destination = testUtils.load('featureMatching/alphabetRotated10.jpg');
   const grey2 = destination.convertColor(ImageColorModel.GREY);
   const destinationKeypoints = getOrientedFastKeypoints(grey2);
-  const destinationDescriptors = getBriefDescriptors(
-    grey2,
-    destinationKeypoints,
-  );
+  const destinationBrief = getBriefDescriptors(grey2, destinationKeypoints);
 
   const matches = bruteForceOneMatch(
-    sourceDescriptors,
-    destinationDescriptors,
+    sourceBrief.descriptors,
+    destinationBrief.descriptors,
     { nbBestMatches: 10 },
   );
   const montage = new Montage(source, destination);
 
-  montage.drawMatches(matches, sourceKeypoints, destinationKeypoints, {
-    showDistance: true,
-    maxNbMatches: 5,
-  });
+  montage.drawMatches(
+    matches,
+    sourceBrief.keypoints,
+    destinationBrief.keypoints,
+    {
+      showDistance: true,
+      maxNbMatches: 5,
+    },
+  );
 
   expect(montage.image).toMatchImageSnapshot();
 });
