@@ -102,6 +102,15 @@ test('alphabet image, scoreAlgorithm = HARRIS, maxNbFeatures = 50', () => {
   expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
 });
 
+test('star', () => {
+  const image = testUtils.load('featureMatching/star.png');
+  const grey = image.convertColor(ImageColorModel.GREY);
+  const keypoints = getFastKeypoints(grey);
+
+  expect(keypoints).toHaveLength(55);
+  expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
+});
+
 test('wrong color model error', () => {
   const image = testUtils.load('various/alphabet.jpg');
   expect(() => {
