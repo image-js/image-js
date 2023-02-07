@@ -19,14 +19,6 @@ export interface GetOrientedFastKeypointsOptions
    * @default 7
    */
   windowSize?: number;
-  /**
-   * This option is really important for the correct generation of the descriptors.
-   * Should be at least patchSize, where patchSize is an option of getBriefDescriptors.
-   * This will exclude all keypoints that are too close to the border for the correspondig descriptor to be generated.
-   *
-   * @default 31
-   */
-  descriptorsPatchSize?: number;
 }
 
 export interface OrientedFastKeypoint extends FastKeypoint {
@@ -50,23 +42,15 @@ export function getOrientedFastKeypoints(
   image: Image,
   options: GetOrientedFastKeypointsOptions = {},
 ): OrientedFastKeypoint[] {
-  const { windowSize = 7, descriptorsPatchSize = 31 } = options;
+  const { windowSize = 7 } = options;
 
   const fastKeypoints = getFastKeypoints(image, options);
-  const windowRadius = getRadius(windowSize);
-  const rotatedPatchRadius = Math.ceil(
-    Math.sqrt(2) * getRadius(descriptorsPatchSize),
-  );
 
-  const minBorderDistance = Math.max(windowRadius, rotatedPatchRadius);
-
-  console.log(minBorderDistance);
+  const borderDistance = getRadius(windowSize);
 
   // handle edge cases: remove keypoints too close to border
   for (let i = 0; i < fastKeypoints.length; i++) {
-    if (
-      !checkBorderDistance(image, fastKeypoints[i].origin, minBorderDistance)
-    ) {
+    if (!checkBorderDistance(image, fastKeypoints[i].origin, borderDistance)) {
       fastKeypoints.splice(i, 1);
     }
   }
@@ -74,8 +58,8 @@ export function getOrientedFastKeypoints(
   let orientedFastKeypoints: OrientedFastKeypoint[] = [];
   for (let keypoint of fastKeypoints) {
     const cropOrigin = {
-      row: keypoint.origin.row - windowRadius,
-      column: keypoint.origin.column - windowRadius,
+      row: keypoint.origin.row - borderDistance,
+      column: keypoint.origin.column - borderDistance,
     };
     const window = image.crop({
       origin: cropOrigin,
