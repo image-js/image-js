@@ -2,7 +2,7 @@ import { ImageColorModel, Image } from '../../../Image';
 import {
   getCirclePoints,
   getCompassPoints,
-} from '../../../utils/getCirclePoints';
+} from '../../../utils/geometry/getCirclePoints';
 import { isFastKeypoint } from '../isFastKeypoint';
 
 const fastRadius = 3;

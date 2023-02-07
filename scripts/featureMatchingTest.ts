@@ -8,18 +8,19 @@ import {
   DrawKeypointsOptions,
   GetFastKeypointsOptions,
   getCrosscheckMatches,
+  MontageDispositions,
 } from '../src/featureMatching';
 import { ImageColorModel, readSync, writeSync } from '../src';
 import { IsFastKeypointOptions } from '../src/featureMatching/keypoints/isFastKeypoint';
 
-const keypointOptions: GetFastKeypointsOptions = { maxNbFeatures: 50 };
+const keypointOptions: GetFastKeypointsOptions = {};
 
 const source = readSync('../test/img/featureMatching/crop1.png').convertColor(
   ImageColorModel.GREY,
 );
 
 const sourceKeypoints = getOrientedFastKeypoints(source, keypointOptions);
-const sourceDescriptors = getBriefDescriptors(source, sourceKeypoints);
+const sourceBrief = getBriefDescriptors(source, sourceKeypoints);
 
 const destination = readSync(
   '../test/img/featureMatching/crop3.png',
@@ -28,30 +29,49 @@ const destinationKeypoints = getOrientedFastKeypoints(
   destination,
   keypointOptions,
 );
-const destinationDescriptors = getBriefDescriptors(
-  destination,
-  destinationKeypoints,
-);
+const destinationBrief = getBriefDescriptors(destination, destinationKeypoints);
 
+console.log({
+  source: { width: source.width, height: source.height },
+  destination: { width: destination.width, height: destination.height },
+});
 console.log({
   keypoints: {
     sourceLength: sourceKeypoints.length,
     destinationLength: destinationKeypoints.length,
   },
   descriptors: {
-    sourceLength: sourceDescriptors.length,
-    destinationLength: destinationDescriptors.length,
+    sourceLength: sourceBrief.descriptors.length,
+    destinationLength: destinationBrief.descriptors.length,
   },
 });
 
-const matches = getCrosscheckMatches(sourceDescriptors, destinationDescriptors);
+const crossMatches = getCrosscheckMatches(
+  sourceBrief.descriptors,
+  destinationBrief.descriptors,
+);
 
-console.log('nb matches: ' + matches.length);
+const matches = bruteForceOneMatch(
+  sourceBrief.descriptors,
+  destinationBrief.descriptors,
+  { nbBestMatches: 20 },
+);
 
-const montage = new Montage(source, destination, { scale: 2 });
+console.log('nb matches: ' + crossMatches.length);
+
+const montage = new Montage(source, destination, {
+  scale: 2,
+  disposition: MontageDispositions.VERTICAL,
+});
 
 montage.drawMatches(matches, sourceKeypoints, destinationKeypoints, {
   showDistance: true,
+  color: [255, 0, 0],
+});
+
+montage.drawMatches(crossMatches, sourceKeypoints, destinationKeypoints, {
+  showDistance: true,
+  color: [0, 0, 255],
 });
 
 const kptOptions: DrawKeypointsOptions = {
@@ -64,7 +84,7 @@ const kptOptions: DrawKeypointsOptions = {
 montage.drawKeypoints(sourceKeypoints, kptOptions);
 montage.drawKeypoints(destinationKeypoints, {
   ...kptOptions,
-  origin: montage.leftOrigin,
+  origin: montage.destinationOrigin,
 });
 
 writeSync('./result.png', montage.image);

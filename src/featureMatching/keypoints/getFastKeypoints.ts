@@ -1,7 +1,10 @@
 import { Image } from '../../Image';
 import { Point } from '../../geometry';
 import checkProcessable from '../../utils/checkProcessable';
-import { getCirclePoints, getCompassPoints } from '../../utils/getCirclePoints';
+import {
+  getCirclePoints,
+  getCompassPoints,
+} from '../../utils/geometry/getCirclePoints';
 import { getIndex } from '../../utils/getIndex';
 import { surroundingPixels } from '../../utils/surroundingPixels';
 
