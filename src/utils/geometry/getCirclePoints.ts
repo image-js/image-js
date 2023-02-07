@@ -1,6 +1,6 @@
 import { circle } from 'bresenham-zingl';
 
-import { Point } from '../geometry';
+import { Point } from '../../geometry';
 
 /**
  * Get the coordinates of the points on a circle. The reference is the center of the circle.
