@@ -3,6 +3,8 @@ import { Point } from '../../geometry';
 import { sum } from '../../utils/geometry/points';
 import { getOutputImage } from '../../utils/getOutputImage';
 import { FastKeypoint } from '../keypoints/getFastKeypoints';
+import { OrientedFastKeypoint } from '../keypoints/getOrientedFastKeypoints';
+import { isFastKeypoint } from '../keypoints/isFastKeypoint';
 import { getColors, GetColorsOptions } from '../utils/getColors';
 import { getKeypointColor } from '../utils/getKeypointColor';
 
@@ -42,6 +44,7 @@ export interface DrawKeypointsOptions {
    *
    * @default keypoints.length
    */
+
   maxNbKeypoints?: number;
   /**
    * Image to which the resulting image has to be put.
@@ -51,6 +54,15 @@ export interface DrawKeypointsOptions {
    * Options for the coloring of the keypoints depending on their score (useful if showScore = true).
    */
   showScoreOptions?: GetColorsOptions;
+}
+
+interface DrawOrientedKeypointsOptions extends DrawKeypointsOptions {
+  /**
+   * Show the orientation of the keypoints.
+   *
+   * @default false
+   */
+  showOrientation?: boolean;
 }
 
 /**
@@ -102,7 +114,25 @@ export function drawKeypoints(
       color: keypointColor,
       out: newImage,
     });
+    if (showOrientation) {
+      const angle = keypoints[i].angle;
+      const from = absoluteKeypoint;
+      const to: Point = {
+        row: from.column + radius * Math.cos(angle),
+        column: from.row + radius * Math.sin(angle),
+      };
+      newImage.drawLine(from, to, {
+        strokeColor: keypointColor,
+        out: newImage,
+      });
+    }
   }
 
   return newImage;
+}
+
+function isOrientedFastKeypoint(
+  kpt: FastKeypoint,
+): kpt is OrientedFastKeypoint {
+  return 'angle' in kpt && typeof kpt.angle === 'number';
 }
