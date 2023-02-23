@@ -7,7 +7,7 @@ import { drawKeypoints, DrawKeypointsOptions } from './drawKeypoints';
 import { drawMatches, DrawMatchesOptions } from './drawMatches';
 import { scaleKeypoints } from './scaleKeypoints';
 
-export enum MontageDispositions {
+export enum MontageDisposition {
   HORIZONTAL = 'HORIZONTAL',
   VERTICAL = 'VERTICAL',
 }
@@ -23,7 +23,7 @@ export interface MontageOptions {
    *
    * @default MontageDispositions.HORIZONTAL
    */
-  disposition?: MontageDispositions;
+  disposition?: MontageDisposition;
 }
 
 export class Montage {
@@ -60,7 +60,7 @@ export class Montage {
    */
   public readonly scale: number;
 
-  public readonly disposition: MontageDispositions;
+  public readonly disposition: MontageDisposition;
 
   /**
    * Image of the Montage.
@@ -79,7 +79,7 @@ export class Montage {
     destination: Image,
     options: MontageOptions = {},
   ) {
-    const { scale = 1, disposition = MontageDispositions.HORIZONTAL } = options;
+    const { scale = 1, disposition = MontageDisposition.HORIZONTAL } = options;
 
     if (!Number.isInteger(scale)) {
       throw new Error('scale should be an integer');
@@ -93,11 +93,11 @@ export class Montage {
     this.sourceHeight = scale * source.height;
     this.destinationHeight = scale * destination.height;
 
-    if (disposition === MontageDispositions.HORIZONTAL) {
+    if (disposition === MontageDisposition.HORIZONTAL) {
       this.destinationOrigin = { row: 0, column: this.sourceWidth };
       this.width = this.sourceWidth + this.destinationWidth;
       this.height = Math.max(this.sourceHeight, this.destinationHeight);
-    } else if (disposition === MontageDispositions.VERTICAL) {
+    } else if (disposition === MontageDisposition.VERTICAL) {
       this.destinationOrigin = { row: this.sourceHeight, column: 0 };
       this.width = Math.max(this.sourceWidth, this.destinationWidth);
       this.height = this.sourceHeight + this.destinationHeight;

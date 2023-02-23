@@ -13,17 +13,13 @@ export function scaleKeypoints(
 ): FastKeypoint[] {
   if (scale === 1) return keypoints.slice();
 
-  let result: FastKeypoint[] = [];
-
-  for (let kpt of keypoints) {
-    result.push({
+  return keypoints.map((kpt) => {
+    return {
       origin: {
         row: kpt.origin.row * scale,
         column: kpt.origin.column * scale,
       },
       score: kpt.score,
-    });
-  }
-
-  return result;
+    };
+  });
 }
