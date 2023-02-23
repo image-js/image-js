@@ -1,5 +1,4 @@
 import { ImageColorModel } from '../../../../Image';
-import { writeSync } from '../../../../save';
 import { drawKeypoints } from '../../../visualize/drawKeypoints';
 import { filterBestKeypoints } from '../../filterBestKeypoints';
 import {
@@ -19,18 +18,27 @@ test('array of 3 keypoints', () => {
   ]);
 });
 
-test.only('star', () => {
+test('many clusters of keypoints', () => {
+  const keypoints: OrientedFastKeypoint[] = [
+    { origin: { row: 0, column: 0 }, angle: 0, score: 3 },
+    { origin: { row: 1, column: 0 }, angle: 0, score: 5 },
+    { origin: { row: 10, column: 10 }, angle: 0, score: 6 },
+    { origin: { row: 10, column: 11 }, angle: 0, score: 9 },
+  ];
+  const result = filterBestKeypoints(keypoints);
+  expect(result).toStrictEqual([
+    { origin: { row: 1, column: 0 }, angle: 0, score: 5 },
+    { origin: { row: 10, column: 11 }, angle: 0, score: 9 },
+  ]);
+});
+
+test('star', () => {
   let image = testUtils.load('featureMatching/star.png');
   const grey = image.convertColor(ImageColorModel.GREY);
   const keypoints = getOrientedFastKeypoints(grey, {
     // scoreAlgorithm: 'HARRIS', // a lot better results with this option
   });
   const filteredKeypoints = filterBestKeypoints(keypoints, 5);
-
-  console.log({
-    keypoints: keypoints.length,
-    filteredKeypoints: filteredKeypoints.length,
-  });
 
   image = drawKeypoints(image, keypoints, {
     showScore: true,
