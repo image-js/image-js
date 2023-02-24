@@ -34,9 +34,17 @@ test('nbBestMatches = 5', () => {
   expect(matches.length).toBe(5);
 });
 
-test.only('scalene triangle', () => {
+const sources = ['scaleneTriangle', 'polygon', 'polygon', 'polygon'];
+const destinations = [
+  'scaleneTriangle2',
+  'polygon2',
+  'polygonRotated180degrees',
+  'polygonRotated10degrees',
+];
+
+test('scalene triangle', () => {
   const source = testUtils
-    .load('featureMatching/scaleneTriangle.png')
+    .load('featureMatching/polygons/scaleneTriangle.png')
     .convertColor(ImageColorModel.GREY);
   const sourceKeypoints = getOrientedFastKeypoints(source);
   const sourceDescriptors = getBriefDescriptors(
@@ -44,7 +52,7 @@ test.only('scalene triangle', () => {
     sourceKeypoints,
   ).descriptors;
   const destination = testUtils
-    .load('featureMatching/scaleneTriangle2.png')
+    .load('featureMatching/polygons/scaleneTriangle2.png')
     .convertColor(ImageColorModel.GREY);
   const destinationKeypoints = getOrientedFastKeypoints(destination);
   const destinationDescriptors = getBriefDescriptors(
@@ -54,7 +62,45 @@ test.only('scalene triangle', () => {
 
   const matches = bruteForceOneMatch(sourceDescriptors, destinationDescriptors);
 
-  // expect(matches.length).toBe(2);
+  expect(matches.length).toBe(2);
+
+  const montage = new Montage(source, destination);
+  montage.drawKeypoints(sourceKeypoints);
+  montage.drawKeypoints(destinationKeypoints, {
+    origin: montage.destinationOrigin,
+  });
+  montage.drawMatches(matches, sourceKeypoints, destinationKeypoints);
+
+  expect(montage.image).toMatchImageSnapshot();
+});
+
+it.each([
+  {
+    source: 'scaleneTriangle',
+    destination: 'scaleneTriangle2',
+    expected: 2,
+  },
+])('various polygons ($data.source and $data.destination)', (data) => {
+  const source = testUtils
+    .load(`featureMatching/polygons/${data.source}.png`)
+    .convertColor(ImageColorModel.GREY);
+  const sourceKeypoints = getOrientedFastKeypoints(source);
+  const sourceDescriptors = getBriefDescriptors(
+    source,
+    sourceKeypoints,
+  ).descriptors;
+  const destination = testUtils
+    .load(`featureMatching/polygons/${data.destination}.png`)
+    .convertColor(ImageColorModel.GREY);
+  const destinationKeypoints = getOrientedFastKeypoints(destination);
+  const destinationDescriptors = getBriefDescriptors(
+    destination,
+    destinationKeypoints,
+  ).descriptors;
+
+  const matches = bruteForceOneMatch(sourceDescriptors, destinationDescriptors);
+
+  expect(matches.length).toBe(data.expected);
 
   const montage = new Montage(source, destination);
   montage.drawKeypoints(sourceKeypoints);
