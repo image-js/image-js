@@ -4,7 +4,6 @@ import { sum } from '../../utils/geometry/points';
 import { getOutputImage } from '../../utils/getOutputImage';
 import { FastKeypoint } from '../keypoints/getFastKeypoints';
 import { OrientedFastKeypoint } from '../keypoints/getOrientedFastKeypoints';
-import { isFastKeypoint } from '../keypoints/isFastKeypoint';
 import { getColors, GetColorsOptions } from '../utils/getColors';
 import { getKeypointColor } from '../utils/getKeypointColor';
 
@@ -65,6 +64,16 @@ interface DrawOrientedKeypointsOptions extends DrawKeypointsOptions {
   showOrientation?: boolean;
 }
 
+export function drawKeypoints(
+  image: Image,
+  keypoints: FastKeypoint[],
+  options: DrawKeypointsOptions,
+): Image;
+export function drawKeypoints(
+  image: Image,
+  keypoints: OrientedFastKeypoint[],
+  options: DrawOrientedKeypointsOptions,
+): Image;
 /**
  * Draw keypoints on an image.
  *
@@ -75,8 +84,8 @@ interface DrawOrientedKeypointsOptions extends DrawKeypointsOptions {
  */
 export function drawKeypoints(
   image: Image,
-  keypoints: FastKeypoint[],
-  options: DrawKeypointsOptions = {},
+  keypoints: FastKeypoint[] | OrientedFastKeypoint[],
+  options: DrawKeypointsOptions | DrawOrientedKeypointsOptions = {},
 ): Image {
   const {
     markerSize = 10,
@@ -101,26 +110,34 @@ export function drawKeypoints(
 
   const radius = Math.ceil(markerSize / 2);
   for (let i = 0; i < maxNbKeypoints; i++) {
+    let keypoint = keypoints[i];
     let keypointColor = color;
     if (showScore) {
       keypointColor = getKeypointColor(keypoints, i, colors);
     }
     let fillColor = fill ? keypointColor : undefined;
 
-    const absoluteKeypoint = sum(keypoints[i].origin, origin);
+    const absoluteOrigin = sum(keypoint.origin, origin);
 
-    newImage.drawCircle(absoluteKeypoint, radius, {
+    newImage.drawCircle(absoluteOrigin, radius, {
       fill: fillColor,
       color: keypointColor,
       out: newImage,
     });
-    if (showOrientation) {
-      const angle = keypoints[i].angle;
-      const from = absoluteKeypoint;
+    if (
+      isOrientedFastKeypoint(keypoint) &&
+      (options as DrawOrientedKeypointsOptions).showOrientation
+    ) {
+      const angle = keypoint.angle;
+      console.log(radius, angle);
+      const from = absoluteOrigin;
       const to: Point = {
-        row: from.column + radius * Math.cos(angle),
-        column: from.row + radius * Math.sin(angle),
+        row:
+          from.column + Math.round(radius * Math.cos((angle * Math.PI) / 180)),
+        column:
+          from.row + Math.round(radius * Math.sin((angle * Math.PI) / 180)),
       };
+      console.log({ from, to });
       newImage.drawLine(from, to, {
         strokeColor: keypointColor,
         out: newImage,

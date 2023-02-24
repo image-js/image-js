@@ -28,3 +28,12 @@ test('only draw 5 best matches', () => {
 
   expect(result).toMatchImageSnapshot();
 });
+
+test('draw orientation', () => {
+  const result = drawKeypoints(image, keypoints, {
+    showOrientation: true,
+    color: [0, 255, 0],
+  });
+
+  expect(result).toMatchImageSnapshot();
+});
