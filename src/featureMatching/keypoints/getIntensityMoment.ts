@@ -33,11 +33,10 @@ export function getIntensityMoment(
   let moment = new Array(image.channels).fill(0);
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {
+      const xDistance = column - origin.column;
+      const yDistance = row - origin.row;
       for (let channel = 0; channel < image.channels; channel++) {
-        const xDistance = column - origin.column;
-        const yDistance = row - origin.row;
         const intensity = image.getValue(column, row, channel);
-
         moment[channel] += xDistance ** p * yDistance ** q * intensity;
       }
     }
