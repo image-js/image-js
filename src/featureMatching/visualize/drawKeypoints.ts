@@ -129,15 +129,12 @@ export function drawKeypoints(
       (options as DrawOrientedKeypointsOptions).showOrientation
     ) {
       const angle = keypoint.angle;
-      console.log(radius, angle);
       const from = absoluteOrigin;
+      const radAngle = (angle * Math.PI) / 180;
       const to: Point = {
-        row:
-          from.column + Math.round(radius * Math.cos((angle * Math.PI) / 180)),
-        column:
-          from.row + Math.round(radius * Math.sin((angle * Math.PI) / 180)),
+        column: from.column + Math.round(radius * Math.sin(radAngle)),
+        row: from.row + Math.round(radius * Math.cos(radAngle)),
       };
-      console.log({ from, to });
       newImage.drawLine(from, to, {
         strokeColor: keypointColor,
         out: newImage,
