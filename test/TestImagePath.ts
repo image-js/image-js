@@ -60,4 +60,6 @@ export type TestImagePath =
   | 'featureMatching/crop1.png'
   | 'featureMatching/crop2.png'
   | 'featureMatching/crop3.png'
-  | 'featureMatching/star.png';
+  | 'featureMatching/star.png'
+  | 'featureMatching/scaleneTriangle.png'
+  | 'featureMatching/scaleneTriangle2.png';
