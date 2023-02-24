@@ -33,6 +33,6 @@ test('too close to border error', () => {
     [0, 0, 0, 0, 0],
   ]);
   expect(() => {
-    getPatchIntensityMoment(image, 0, 1, { radius: 3 });
+    getPatchIntensityMoment(image, 0, 1);
   }).toThrow('desired patch is too close to image border');
 });
