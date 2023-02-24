@@ -60,6 +60,10 @@ export type TestImagePath =
   | 'featureMatching/crop1.png'
   | 'featureMatching/crop2.png'
   | 'featureMatching/crop3.png'
-  | 'featureMatching/star.png'
-  | 'featureMatching/scaleneTriangle.png'
-  | 'featureMatching/scaleneTriangle2.png';
+  | 'featureMatching/polygons/star.png'
+  | 'featureMatching/polygons/scaleneTriangle.png'
+  | 'featureMatching/polygons/scaleneTriangle2.png'
+  | 'featureMatching/polygons/polygon.png'
+  | 'featureMatching/polygons/polygon2.png'
+  | 'featureMatching/polygons/polygonRotated180degrees.png'
+  | 'featureMatching/polygons/polygonRotated10degrees.png';
