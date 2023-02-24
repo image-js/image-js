@@ -9,7 +9,7 @@ import {
   getFastKeypoints,
   GetFastKeypointsOptions,
 } from './getFastKeypoints';
-import { getIntensityCentroid } from './getIntensityCentroid';
+import { getPatchIntensityCentroid } from './getPatchIntensityCentroid';
 
 export interface GetOrientedFastKeypointsOptions
   extends GetFastKeypointsOptions {
@@ -57,17 +57,10 @@ export function getOrientedFastKeypoints(
 
   let orientedFastKeypoints: OrientedFastKeypoint[] = [];
   for (let keypoint of fastKeypoints) {
-    const cropOrigin = {
-      row: keypoint.origin.row - borderDistance,
-      column: keypoint.origin.column - borderDistance,
-    };
-    const window = image.crop({
-      origin: cropOrigin,
-      width: windowSize,
-      height: windowSize,
-    });
-
-    const centroid = getIntensityCentroid(window)[0];
+    const centroid = getPatchIntensityCentroid(image, {
+      origin: keypoint.origin,
+      radius: borderDistance,
+    })[0];
     const angle = toDegrees(getAngle({ column: 0, row: 0 }, centroid));
     orientedFastKeypoints.push({ ...keypoint, angle });
   }
