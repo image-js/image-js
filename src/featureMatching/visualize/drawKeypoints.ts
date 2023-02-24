@@ -67,12 +67,12 @@ interface DrawOrientedKeypointsOptions extends DrawKeypointsOptions {
 export function drawKeypoints(
   image: Image,
   keypoints: FastKeypoint[],
-  options: DrawKeypointsOptions,
+  options?: DrawKeypointsOptions,
 ): Image;
 export function drawKeypoints(
   image: Image,
   keypoints: OrientedFastKeypoint[],
-  options: DrawOrientedKeypointsOptions,
+  options?: DrawOrientedKeypointsOptions,
 ): Image;
 /**
  * Draw keypoints on an image.

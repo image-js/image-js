@@ -111,12 +111,11 @@ describe('getCrosscheckMatches', () => {
       sourceDescriptors,
       destinationDescriptors,
     );
-
     expect(crosscheckMatches).toStrictEqual([
-      { distance: 21, sourceIndex: 15, destinationIndex: 24 },
-      { distance: 21, sourceIndex: 24, destinationIndex: 15 },
-      { distance: 36, sourceIndex: 39, destinationIndex: 16 },
-      { distance: 24, sourceIndex: 65, destinationIndex: 80 },
+      { distance: 30, sourceIndex: 15, destinationIndex: 24 },
+      { distance: 30, sourceIndex: 24, destinationIndex: 15 },
+      { distance: 31, sourceIndex: 57, destinationIndex: 47 },
+      { distance: 24, sourceIndex: 106, destinationIndex: 106 },
     ]);
   });
 });
