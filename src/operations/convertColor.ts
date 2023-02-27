@@ -47,7 +47,7 @@ export function convertColor(
   }
 
   const canConvertTo = canConvert.get(image.colorModel);
-  if (!canConvertTo || !canConvertTo.includes(colorModel)) {
+  if (!canConvertTo?.includes(colorModel)) {
     throw new Error(
       `conversion from ${image.colorModel} to ${colorModel} not implemented`,
     );
