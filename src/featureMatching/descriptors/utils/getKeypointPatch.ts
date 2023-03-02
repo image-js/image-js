@@ -20,13 +20,13 @@ export interface GetKeypointPatchOptions {
  * @param image - Image from which to extract the patch.
  * @param keypoint - Keypoint around which to extract the patch.
  * @param options - Get keypoint patch options.
- * @returns The patch around the keypoint or null if the keypoint is too close to the border of the image.
+ * @returns The patch around the keypoint.
  */
 export function getKeypointPatch(
   image: Image,
   keypoint: OrientedFastKeypoint,
   options: GetKeypointPatchOptions,
-): Image | null {
+): Image {
   const { patchSize = 31 } = options;
   // crop smallest square surrounding the tilted patch of the keypoint
   // we have to handle the fact that this square can have even dimensions
@@ -43,7 +43,7 @@ export function getKeypointPatch(
   let borderDistance = getRadius(cropWidth);
 
   if (!checkBorderDistance(image, keypoint.origin, borderDistance)) {
-    return null;
+    throw new Error('keypoint is too close to border for given patch size');
   }
 
   const cropped = extractSquareImage(image, keypoint.origin, cropWidth);

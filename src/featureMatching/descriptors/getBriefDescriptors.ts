@@ -91,7 +91,12 @@ export function getBriefDescriptors(
   const filteredKeypoints: OrientedFastKeypoint[] = [];
 
   for (let keypoint of keypoints) {
-    const patch = getKeypointPatch(smoothed, keypoint, { patchSize });
+    let patch: Image;
+    try {
+      patch = getKeypointPatch(smoothed, keypoint, { patchSize });
+    } catch (err) {
+      continue;
+    }
     if (patch === null) continue;
 
     const descriptor = new Uint8Array(descriptorLength);
