@@ -16,10 +16,13 @@ import { getBrief } from './getBrief';
 import { GetColorsOptions } from '../../src/featureMatching/utils/getColors';
 import { getMinMax } from '../../src/utils/getMinMax';
 
+import util from 'util';
+import { sliceBrief } from './sliceBrief';
+util.inspect.defaultOptions.depth = 5;
+
 const getBriefOptions = {
   windowSize: 31,
   bestKptRadius: 5,
-  minScore: 1500,
 };
 
 let source = readSync('../../test/img/featureMatching/crop1.png').convertColor(
@@ -47,8 +50,18 @@ console.log({
   destination: { width: destination.width, height: destination.height },
 });
 
-const sourceBrief = getBrief(source, getBriefOptions);
-const destinationBrief = getBrief(destination, getBriefOptions);
+const sliceBriefOptions = { start: 0, end: 20 };
+
+const sourceBrief = sliceBrief(
+  getBrief(source, getBriefOptions),
+  sliceBriefOptions,
+);
+const destinationBrief = sliceBrief(
+  getBrief(destination, getBriefOptions),
+  sliceBriefOptions,
+);
+
+console.table(sourceBrief.keypoints);
 
 console.log({
   keypoints: {
