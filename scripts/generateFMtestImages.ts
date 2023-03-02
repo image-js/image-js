@@ -6,7 +6,7 @@ const original = readSync('../test/img/featureMatching/alphabet.jpg');
 
 const angles = [-10, -5, -2, 2, 5, 10];
 for (let angle of angles) {
-  const rotated = original.rotate(angle, { fullImage: true });
+  const rotated = original.transformRotate(angle, { fullImage: true });
   writeSync(`../test/img/featureMatching/alphabetRotated${angle}.jpg`, rotated);
 }
 

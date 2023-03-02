@@ -1,11 +1,9 @@
 import { Image, ImageCoordinates } from '../Image';
 import { Point } from '../utils/geometry/points';
-import { BorderType } from '../utils/interpolateBorder';
-import { InterpolationType } from '../utils/interpolatePixel';
 
-import { transform } from './transform';
+import { transform, TransformOptions } from './transform';
 
-export interface RotateOptions {
+export interface TransformRotateOptions extends TransformOptions {
   /**
    * Specify the rotation center point as a predefined string or a Point.
    *
@@ -18,37 +16,6 @@ export interface RotateOptions {
    * @default 1
    */
   scale?: number;
-  /**
-   * Width of the final image.
-   */
-  width?: number;
-  /**
-   * Height of the final image.
-   */
-  height?: number;
-  /*
-    Bypasses width, height, and center options to include
-    every pixel of the original image inside the rotated image
-  */
-  fullImage?: boolean;
-  /**
-   * Method to use to interpolate the new pixels
-   *
-   * @default InterpolationType.BILINEAR
-   */
-  interpolationType?: InterpolationType;
-  /**
-   * Specify how the borders should be handled.
-   *
-   * @default BorderType.CONSTANT
-   */
-  borderType?: BorderType;
-  /**
-   * Value of the border if BorderType is CONSTANT.
-   *
-   * @default 0
-   */
-  borderValue?: number;
 }
 
 /**
@@ -59,12 +26,16 @@ export interface RotateOptions {
  * @param options - Rotate options.
  * @returns A new rotated image.
  */
-export function rotate(
+export function transformRotate(
   image: Image,
   angle: number,
-  options: RotateOptions = {},
+  options: TransformRotateOptions = {},
 ): Image {
-  const { center = ImageCoordinates.CENTER, scale = 1 } = options;
+  const {
+    center = ImageCoordinates.CENTER,
+    scale = 1,
+    ...otherOptions
+  } = options;
 
   let centerCoordinates;
   if (typeof center === 'string') {
@@ -74,7 +45,7 @@ export function rotate(
   }
   const transformMatrix = getRotationMatrix(angle, centerCoordinates, scale);
 
-  return transform(image, transformMatrix, options);
+  return transform(image, transformMatrix, otherOptions);
 }
 
 /**

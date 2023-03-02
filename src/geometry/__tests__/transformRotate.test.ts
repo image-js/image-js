@@ -1,4 +1,4 @@
-import { rotate } from '..';
+import { transformRotate } from '..';
 import { ImageColorModel, ImageCoordinates } from '../../Image';
 import { encodePng } from '../../save';
 import { BorderType } from '../../utils/interpolateBorder';
@@ -6,7 +6,7 @@ import { InterpolationType } from '../../utils/interpolatePixel';
 
 test('rotate + scale compared to opencv (nearest)', () => {
   const img = testUtils.load('opencv/test.png');
-  const rotated = img.rotate(30, {
+  const rotated = img.transformRotate(30, {
     scale: 0.8,
     borderType: BorderType.REFLECT,
     interpolationType: InterpolationType.NEAREST,
@@ -19,7 +19,7 @@ test('rotate + scale compared to opencv (nearest)', () => {
 test('rotate + scale compared to opencv (bilinear)', () => {
   const img = testUtils.load('opencv/test.png');
 
-  const rotated = rotate(img, 30, {
+  const rotated = transformRotate(img, 30, {
     scale: 1.4,
     borderType: BorderType.REFLECT,
     interpolationType: InterpolationType.BILINEAR,
@@ -31,7 +31,7 @@ test('rotate + scale compared to opencv (bilinear)', () => {
 test('rotate + scale compared to opencv (bicubic)', () => {
   const img = testUtils.load('opencv/test.png');
 
-  const rotated = rotate(img, 30, {
+  const rotated = transformRotate(img, 30, {
     scale: 1.4,
     borderType: BorderType.REFLECT,
     interpolationType: InterpolationType.BICUBIC,
@@ -43,9 +43,9 @@ test('rotate + scale compared to opencv (bicubic)', () => {
 
 test('default options', () => {
   const img = testUtils.load('opencv/test.png');
-  const rotated = img.rotate(90);
+  const rotated = img.transformRotate(90);
 
-  const rotatedAroundCenter = img.rotate(90, {
+  const rotatedAroundCenter = img.transformRotate(90, {
     center: ImageCoordinates.CENTER,
   });
 
@@ -54,11 +54,11 @@ test('default options', () => {
 
 test('coordinates as a string', () => {
   const img = testUtils.load('opencv/test.png');
-  const rotated = img.rotate(90, {
+  const rotated = img.transformRotate(90, {
     center: { column: 3.5, row: 4.5 },
   });
 
-  const rotatedAroundCenter = img.rotate(90, {
+  const rotatedAroundCenter = img.transformRotate(90, {
     center: ImageCoordinates.CENTER,
   });
 
@@ -67,7 +67,7 @@ test('coordinates as a string', () => {
 
 test('rotate around corner', () => {
   const img = testUtils.load('opencv/test.png');
-  const rotated = img.rotate(15, {
+  const rotated = img.transformRotate(15, {
     center: ImageCoordinates.BOTTOM_LEFT,
   });
 
@@ -80,7 +80,7 @@ test('rotate around corner', () => {
 
 test('rotate around center', () => {
   const img = testUtils.load('opencv/test.png');
-  const rotated = img.rotate(90, {
+  const rotated = img.transformRotate(90, {
     center: ImageCoordinates.CENTER,
   });
 
@@ -93,7 +93,7 @@ test('rotate around center', () => {
 
 test('fullImage option', () => {
   const img = testUtils.load('opencv/test.png');
-  const rotated = img.rotate(15, {
+  const rotated = img.transformRotate(15, {
     center: ImageCoordinates.BOTTOM_LEFT,
     fullImage: true,
   });

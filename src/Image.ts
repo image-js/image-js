@@ -89,13 +89,13 @@ import {
   mean,
   resize,
   ResizeOptions,
-  rotate,
-  RotateOptions,
   threshold,
   ThresholdOptions,
   transform,
   TransformOptions,
-} from '.';
+  transformRotate,
+  TransformRotateOptions,
+} from './index';
 
 export { ImageColorModel, colorModels } from './utils/constants/colorModels';
 
@@ -944,10 +944,6 @@ export class Image {
 
   // GEOMETRY
 
-  public rotate(angle: number, options?: RotateOptions): Image {
-    return rotate(this, angle, options);
-  }
-
   public resize(options: ResizeOptions): Image {
     return resize(this, options);
   }
@@ -957,6 +953,13 @@ export class Image {
     options?: TransformOptions,
   ): Image {
     return transform(this, transformMatrix, options);
+  }
+
+  public transformRotate(
+    angle: number,
+    options?: TransformRotateOptions,
+  ): Image {
+    return transformRotate(this, angle, options);
   }
 
   // MORPHOLOGY

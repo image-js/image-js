@@ -40,10 +40,10 @@ export interface TransformOptions {
    * Should the transform matrix be inverted?
    */
   inverse?: boolean;
-  /*
-    Bypasses width and height options to include
-    every pixel of the original image inside the transformed image.
-  */
+  /**
+   * Bypasses width and height options to include
+   * every pixel of the original image inside the transformed image.
+   */
   fullImage?: boolean;
 }
 
