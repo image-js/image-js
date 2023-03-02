@@ -82,7 +82,7 @@ test('image too small for patchsize', () => {
   const image = new Image(5, 5, { colorModel: ImageColorModel.GREY });
   const sourceKeypoints = getOrientedFastKeypoints(image);
   expect(() => getBriefDescriptors(image, sourceKeypoints)).toThrow(
-    'image is too small for patchsize = 31',
+    'image is too small for patchSize = 31',
   );
 });
 

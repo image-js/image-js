@@ -1,16 +1,14 @@
-import { Image, ImageColorModel, ImageCoordinates } from '../../Image';
+import { Image, ImageColorModel } from '../../Image';
 import { GaussianBlurSigmaOptions } from '../../filters';
 import checkProcessable from '../../utils/checkProcessable';
-import { getRadius } from '../../utils/getRadius';
-import { InterpolationType } from '../../utils/interpolatePixel';
 import { OrientedFastKeypoint } from '../keypoints/getOrientedFastKeypoints';
-import { checkBorderDistance } from '../utils/checkBorderDistance';
 import { compareIntensity } from '../utils/compareIntensity';
-import { extractSquareImage } from '../utils/extractSquareImage';
 import {
   getGaussianPoints,
   GetGaussianPointsOptions,
 } from '../utils/getGaussianPoints';
+
+import { getKeypointPatch } from './utils/getKeypointPatch';
 
 export interface GetBriefDescriptorsOptions {
   /**
@@ -79,7 +77,7 @@ export function getBriefDescriptors(
   }
 
   if (Math.min(image.width, image.height) < patchSize) {
-    throw new Error(`image is too small for patchsize = ${patchSize}`);
+    throw new Error(`image is too small for patchSize = ${patchSize}`);
   }
 
   const gaussianPoints = getGaussianPoints(patchSize, patchSize, {
@@ -93,34 +91,8 @@ export function getBriefDescriptors(
   const filteredKeypoints: OrientedFastKeypoint[] = [];
 
   for (let keypoint of keypoints) {
-    // crop smallest square surrounding the tilted patch of the keypoint
-    // we have to handle the fact that this square can have even dimensions
-
-    const radAngle = (keypoint.angle * Math.PI) / 180;
-
-    const rawWidth = Math.floor(
-      patchSize * (Math.abs(Math.cos(radAngle)) + Math.abs(Math.sin(radAngle))),
-    );
-
-    const cropWidth = rawWidth % 2 ? rawWidth : rawWidth - 1;
-
-    // we are not allowing keypoints that are too close to the border of the image
-    let borderDistance = getRadius(cropWidth);
-
-    if (!checkBorderDistance(smoothed, keypoint.origin, borderDistance)) {
-      continue;
-    }
-
-    const cropped = extractSquareImage(smoothed, keypoint.origin, cropWidth);
-
-    const rotateCenter = cropped.getCoordinates(ImageCoordinates.CENTER);
-    const rotated = cropped.rotate(keypoint.angle, {
-      center: rotateCenter,
-      interpolationType: InterpolationType.NEAREST,
-    });
-
-    const cropOrigin = rotated.getCoordinates(ImageCoordinates.CENTER);
-    const patch = extractSquareImage(rotated, cropOrigin, patchSize);
+    const patch = getKeypointPatch(smoothed, keypoint, { patchSize });
+    if (patch === null) continue;
 
     const descriptor = new Uint8Array(descriptorLength);
     for (let i = 0; i < descriptorLength; i++) {
