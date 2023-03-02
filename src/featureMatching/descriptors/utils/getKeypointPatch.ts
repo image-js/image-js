@@ -25,7 +25,7 @@ export interface GetKeypointPatchOptions {
 export function getKeypointPatch(
   image: Image,
   keypoint: OrientedFastKeypoint,
-  options: GetKeypointPatchOptions,
+  options: GetKeypointPatchOptions = {},
 ): Image {
   const { patchSize = 31 } = options;
   // crop smallest square surrounding the tilted patch of the keypoint
