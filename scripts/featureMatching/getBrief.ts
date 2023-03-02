@@ -9,6 +9,7 @@ import { getOrientedFastKeypoints } from '../../src/featureMatching/keypoints/ge
 export interface GetBriefOptions {
   windowSize?: number;
   bestKptRadius?: number;
+  minScore?: number;
 }
 
 /**
@@ -20,7 +21,7 @@ export interface GetBriefOptions {
  * @returns The Brief.
  */
 export function getBrief(image: Image, options: GetBriefOptions = {}): Brief {
-  const { windowSize = 15, bestKptRadius = 10 } = options;
+  const { windowSize = 15, bestKptRadius = 10, minScore } = options;
   const allSourceKeypoints = getOrientedFastKeypoints(image, {
     windowSize,
   });
@@ -29,5 +30,15 @@ export function getBrief(image: Image, options: GetBriefOptions = {}): Brief {
     bestKptRadius,
   );
 
-  return getBriefDescriptors(image, sourceKeypoints);
+  const brief = getBriefDescriptors(image, sourceKeypoints);
+  if (minScore) {
+    for (let i = 0; i < brief.keypoints.length; i++) {
+      if (brief.keypoints[i].score < minScore)
+        return {
+          keypoints: brief.keypoints.slice(0, i - 1),
+          descriptors: brief.descriptors.slice(0, i - 1),
+        };
+    }
+  }
+  return brief;
 }

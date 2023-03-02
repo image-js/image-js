@@ -19,6 +19,7 @@ import { getMinMax } from '../../src/utils/getMinMax';
 const getBriefOptions = {
   windowSize: 31,
   bestKptRadius: 5,
+  minScore: 1500,
 };
 
 let source = readSync('../../test/img/featureMatching/crop1.png').convertColor(
@@ -30,10 +31,9 @@ source.level({
   inputMax: sourceExtremums.max[0],
   out: source,
 });
-console.log({ sourceExtremums });
 
 let destination = readSync(
-  '../../test/img/featureMatching/crop3.png',
+  '../../test/img/featureMatching/crop2.png',
 ).convertColor(ImageColorModel.GREY);
 const destinationExtremums = getMinMax(destination);
 destination.level({
@@ -58,6 +58,10 @@ console.log({
   descriptors: {
     sourceLength: sourceBrief.descriptors.length,
     destinationLength: destinationBrief.descriptors.length,
+  },
+  maxScore: {
+    source: sourceBrief.keypoints[0].score,
+    destination: destinationBrief.keypoints[0].score,
   },
 });
 

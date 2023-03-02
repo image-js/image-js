@@ -6,7 +6,7 @@ Install `ts-node` with
 npm i -g ts-node
 ```
 
-Use the following command. The `--log-error` option is used to avoid some typing error.
+Use the following command. The `--transpileOnly` option is used to avoid some typing error.
 
 ```bash
 ts-node --log-error yourScript.ts
@@ -19,5 +19,5 @@ npm i -g nodemon
 ```
 
 ```bash
-nodemon --log-error yourScript.ts
+nodemon --transpileOnly yourScript.ts
 ```
