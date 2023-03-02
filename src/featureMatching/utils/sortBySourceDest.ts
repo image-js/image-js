@@ -1,7 +1,7 @@
 import { Match } from '../matching/bruteForceMatch';
 
 /**
- * Source array of matches by source index and then destination index.
+ * Sort array of matches by source index and then destination index.
  *
  * @param matches - Array of matches to sort.
  * @returns Sorted copy of the array of matches.
