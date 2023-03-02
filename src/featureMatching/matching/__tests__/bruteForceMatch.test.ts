@@ -1,3 +1,4 @@
+import { TestImagePath } from '../../../../test/TestImagePath';
 import { ImageColorModel, Image } from '../../../Image';
 import {
   BriefDescriptor,
@@ -34,55 +35,34 @@ test('nbBestMatches = 5', () => {
   expect(matches.length).toBe(5);
 });
 
-const sources = ['scaleneTriangle', 'polygon', 'polygon', 'polygon'];
-const destinations = [
-  'scaleneTriangle2',
-  'polygon2',
-  'polygonRotated180degrees',
-  'polygonRotated10degrees',
-];
-
-test('scalene triangle', () => {
-  const source = testUtils
-    .load('featureMatching/polygons/scaleneTriangle.png')
-    .convertColor(ImageColorModel.GREY);
-  const sourceKeypoints = getOrientedFastKeypoints(source);
-  const sourceDescriptors = getBriefDescriptors(
-    source,
-    sourceKeypoints,
-  ).descriptors;
-  const destination = testUtils
-    .load('featureMatching/polygons/scaleneTriangle2.png')
-    .convertColor(ImageColorModel.GREY);
-  const destinationKeypoints = getOrientedFastKeypoints(destination);
-  const destinationDescriptors = getBriefDescriptors(
-    destination,
-    destinationKeypoints,
-  ).descriptors;
-
-  const matches = bruteForceOneMatch(sourceDescriptors, destinationDescriptors);
-
-  expect(matches.length).toBe(2);
-
-  const montage = new Montage(source, destination);
-  montage.drawKeypoints(sourceKeypoints);
-  montage.drawKeypoints(destinationKeypoints, {
-    origin: montage.destinationOrigin,
-  });
-  montage.drawMatches(matches, sourceKeypoints, destinationKeypoints);
-
-  expect(montage.image).toMatchImageSnapshot();
-});
-
-it.each([
+test.each([
   {
+    message: 'scalene triangle',
     source: 'scaleneTriangle',
     destination: 'scaleneTriangle2',
     expected: 2,
   },
-])('various polygons ($data.source and $data.destination)', (data) => {
+  {
+    message: 'polygon',
+    source: 'polygon',
+    destination: 'polygon2',
+    expected: 7,
+  },
+  {
+    message: 'polygon rotated 180°',
+    source: 'polygon',
+    destination: 'polygonRotated180degrees',
+    expected: 7,
+  },
+  {
+    message: 'polygon rotated 10°',
+    source: 'polygon',
+    destination: 'polygonRotated10degrees',
+    expected: 7,
+  },
+])('various polygons ($message)', (data) => {
   const source = testUtils
-    .load(`featureMatching/polygons/${data.source}.png`)
+    .load(`featureMatching/polygons/${data.source}.png` as TestImagePath)
     .convertColor(ImageColorModel.GREY);
   const sourceKeypoints = getOrientedFastKeypoints(source);
   const sourceDescriptors = getBriefDescriptors(
@@ -90,7 +70,7 @@ it.each([
     sourceKeypoints,
   ).descriptors;
   const destination = testUtils
-    .load(`featureMatching/polygons/${data.destination}.png`)
+    .load(`featureMatching/polygons/${data.destination}.png` as TestImagePath)
     .convertColor(ImageColorModel.GREY);
   const destinationKeypoints = getOrientedFastKeypoints(destination);
   const destinationDescriptors = getBriefDescriptors(

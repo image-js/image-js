@@ -1,6 +1,8 @@
+import { TestImagePath } from '../../../../test/TestImagePath';
 import { ImageColorModel } from '../../../Image';
 import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors';
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
+import { Montage } from '../../visualize/Montage';
 import { Match } from '../bruteForceMatch';
 import { crosscheck, getCrosscheckMatches } from '../getCrosscheckMatches';
 
@@ -117,5 +119,64 @@ describe('getCrosscheckMatches', () => {
       { distance: 31, sourceIndex: 57, destinationIndex: 47 },
       { distance: 24, sourceIndex: 106, destinationIndex: 106 },
     ]);
+  });
+  it.each([
+    {
+      message: 'scalene triangle',
+      source: 'scaleneTriangle',
+      destination: 'scaleneTriangle2',
+      expected: 2,
+    },
+    {
+      message: 'polygon',
+      source: 'polygon',
+      destination: 'polygon2',
+      expected: 7,
+    },
+    {
+      message: 'polygon rotated 180°',
+      source: 'polygon',
+      destination: 'polygonRotated180degrees',
+      expected: 1,
+    },
+    {
+      message: 'polygon rotated 10°',
+      source: 'polygon',
+      destination: 'polygonRotated10degrees',
+      expected: 3,
+    },
+  ])('various polygons ($message)', (data) => {
+    const source = testUtils
+      .load(`featureMatching/polygons/${data.source}.png` as TestImagePath)
+      .convertColor(ImageColorModel.GREY);
+    const sourceKeypoints = getOrientedFastKeypoints(source);
+    const sourceDescriptors = getBriefDescriptors(
+      source,
+      sourceKeypoints,
+    ).descriptors;
+    const destination = testUtils
+      .load(`featureMatching/polygons/${data.destination}.png` as TestImagePath)
+      .convertColor(ImageColorModel.GREY);
+    const destinationKeypoints = getOrientedFastKeypoints(destination);
+    const destinationDescriptors = getBriefDescriptors(
+      destination,
+      destinationKeypoints,
+    ).descriptors;
+
+    const matches = getCrosscheckMatches(
+      sourceDescriptors,
+      destinationDescriptors,
+    );
+
+    expect(matches.length).toBe(data.expected);
+
+    const montage = new Montage(source, destination);
+    montage.drawKeypoints(sourceKeypoints);
+    montage.drawKeypoints(destinationKeypoints, {
+      origin: montage.destinationOrigin,
+    });
+    montage.drawMatches(matches, sourceKeypoints, destinationKeypoints);
+
+    expect(montage.image).toMatchImageSnapshot();
   });
 });
