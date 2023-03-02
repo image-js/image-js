@@ -1,6 +1,7 @@
 import { TestImagePath } from '../../../../test/TestImagePath';
 import { ImageColorModel } from '../../../Image';
 import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors';
+import { getBestKeypointsInRadius } from '../../keypoints/getBestKeypointsInRadius';
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
 import { Montage } from '../../visualize/Montage';
 import { Match } from '../bruteForceMatch';
@@ -179,4 +180,79 @@ describe('getCrosscheckMatches', () => {
 
     expect(montage.image).toMatchImageSnapshot();
   });
+});
+
+test.each([
+  {
+    message: 'scalene triangle',
+    source: 'scaleneTriangle',
+    destination: 'scaleneTriangle2',
+    expected: 2,
+  },
+  {
+    message: 'polygon',
+    source: 'polygon',
+    destination: 'polygon2',
+    expected: 7,
+  },
+  {
+    message: 'polygon rotated 180°',
+    source: 'polygon',
+    destination: 'polygonRotated180degrees',
+    expected: 3,
+  },
+  {
+    message: 'polygon rotated 10°',
+    source: 'polygon',
+    destination: 'polygonRotated10degrees',
+    expected: 3,
+  },
+])('various polygons, change kpt window size ($message)', (data) => {
+  const kptWindowSize = 15;
+  const bestKptRadius = 10;
+
+  const source = testUtils
+    .load(`featureMatching/polygons/${data.source}.png` as TestImagePath)
+    .convertColor(ImageColorModel.GREY);
+  const allSourceKeypoints = getOrientedFastKeypoints(source, {
+    windowSize: kptWindowSize,
+  });
+  const sourceKeypoints = getBestKeypointsInRadius(
+    allSourceKeypoints,
+    bestKptRadius,
+  );
+  const sourceDescriptors = getBriefDescriptors(
+    source,
+    sourceKeypoints,
+  ).descriptors;
+  const destination = testUtils
+    .load(`featureMatching/polygons/${data.destination}.png` as TestImagePath)
+    .convertColor(ImageColorModel.GREY);
+  const allDestinationKeypoints = getOrientedFastKeypoints(destination, {
+    windowSize: kptWindowSize,
+  });
+  const destinationKeypoints = getBestKeypointsInRadius(
+    allDestinationKeypoints,
+    bestKptRadius,
+  );
+  const destinationDescriptors = getBriefDescriptors(
+    destination,
+    destinationKeypoints,
+  ).descriptors;
+
+  const matches = getCrosscheckMatches(
+    sourceDescriptors,
+    destinationDescriptors,
+  );
+
+  expect(matches.length).toBe(data.expected);
+
+  const montage = new Montage(source, destination);
+  montage.drawKeypoints(sourceKeypoints);
+  montage.drawKeypoints(destinationKeypoints, {
+    origin: montage.destinationOrigin,
+  });
+  montage.drawMatches(matches, sourceKeypoints, destinationKeypoints);
+
+  expect(montage.image).toMatchImageSnapshot();
 });
