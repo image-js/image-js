@@ -3,6 +3,7 @@ import checkProcessable from '../utils/checkProcessable';
 import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
+import { validateColor } from '../utils/validators';
 
 export interface DrawPolylineOnImageOptions {
   /**
@@ -45,6 +46,8 @@ export function drawPolylineOnImage(
     bitDepth: [8, 16],
   });
   let newImage = getOutputImage(image, options, { clone: true });
+
+  validateColor(color, newImage);
 
   for (let i = 0; i < points.length - 1; i++) {
     const from = points[i];

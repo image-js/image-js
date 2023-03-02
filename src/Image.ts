@@ -16,8 +16,12 @@ import {
   DrawRectangleOptions,
   drawRectangle,
   DrawLineOnImageOptions,
+  drawPoints,
+  DrawPointsOptions,
+  drawMarker,
+  DrawMarkerOptions,
+  drawMarkers,
 } from './draw';
-import { drawPoints, DrawPointsOptions } from './draw/drawPoints';
 import {
   BlurOptions,
   blur,
@@ -724,6 +728,28 @@ export class Image {
     options: DrawCircleOnImageOptions = {},
   ): Image {
     return drawCircleOnImage(this, center, radius, options);
+  }
+
+  /**
+   * Draw a marker on the image.
+   *
+   * @param point - Marker center point.
+   * @param options - Draw marker options.
+   * @returns The image with the marker drawing.
+   */
+  public drawMarker(point: Point, options: DrawMarkerOptions = {}): Image {
+    return drawMarker(this, point, options);
+  }
+
+  /**
+   * Draw markers on the image.
+   *
+   * @param points - Markers center points.
+   * @param options - Draw marker options.
+   * @returns The image with the markers drawing.
+   */
+  public drawMarkers(points: Point[], options: DrawMarkerOptions = {}): Image {
+    return drawMarkers(this, points, options);
   }
 
   // OPERATIONS

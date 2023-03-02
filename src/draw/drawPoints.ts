@@ -4,6 +4,7 @@ import checkProcessable from '../utils/checkProcessable';
 import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage';
+import { validateColor } from '../utils/validators';
 
 export interface DrawPointsOptions {
   /**
@@ -48,14 +49,15 @@ export function drawPoints(
   points: Point[],
   options: DrawPointsOptions = {},
 ): Image | Mask {
+  const { color = getDefaultColor(image), origin = { row: 0, column: 0 } } =
+    options;
   let newImage;
   if (image instanceof Image) {
     newImage = getOutputImage(image, options, { clone: true });
+    validateColor(color, newImage);
   } else {
     newImage = maskToOutputMask(image, options, { clone: true });
   }
-  const { color = getDefaultColor(newImage), origin = { row: 0, column: 0 } } =
-    options;
 
   checkProcessable(newImage, 'drawPoints', {
     bitDepth: [1, 8, 16],

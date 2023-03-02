@@ -5,6 +5,7 @@ import checkProcessable from '../utils/checkProcessable';
 import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
+import { validateColor } from '../utils/validators';
 
 export interface DrawLineOnImageOptions {
   /**
@@ -45,6 +46,8 @@ export function drawLineOnImage(
     strokeColor: color = getDefaultColor(newImage),
     origin = { column: 0, row: 0 },
   } = options;
+
+  validateColor(color, newImage);
 
   checkProcessable(newImage, 'drawLine', {
     bitDepth: [8, 16],

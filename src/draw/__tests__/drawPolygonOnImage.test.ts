@@ -250,7 +250,9 @@ test('stroke color not compatible with image', () => {
       strokeColor: [1],
       fillColor: [2, 5],
     });
-  }).toThrow('drawPolygon: fill color is not compatible with image.');
+  }).toThrow(
+    'invalid channel: 2. It must be a positive integer smaller than 2',
+  );
 });
 
 test('default options', () => {

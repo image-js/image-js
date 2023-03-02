@@ -5,6 +5,7 @@ import { arrayPointsToObjects } from '../utils/arrayPointsToObjects';
 import checkProcessable from '../utils/checkProcessable';
 import { Point } from '../utils/geometry/points';
 import { getOutputImage } from '../utils/getOutputImage';
+import { validateColor } from '../utils/validators';
 
 import { DrawPolylineOnImageOptions } from './drawPolylineOnImage';
 import { deleteDuplicates } from './utils/deleteDuplicates';
@@ -54,9 +55,7 @@ export function drawPolygonOnImage(
       ...otherOptions,
     });
   } else {
-    if (fillColor.length !== image.channels) {
-      throw new Error('drawPolygon: fill color is not compatible with image.');
-    }
+    validateColor(fillColor, newImage);
 
     const filteredPoints = deleteDuplicates(points);
 

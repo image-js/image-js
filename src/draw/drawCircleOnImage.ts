@@ -5,6 +5,7 @@ import checkProcessable from '../utils/checkProcessable';
 import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
+import { validateColor } from '../utils/validators';
 
 // Inspired by https://www.geeksforgeeks.org/bresenhams-circle-drawing-algorithm/
 
@@ -45,6 +46,9 @@ export function drawCircleOnImage(
 ): Image {
   const newImage = getOutputImage(image, options, { clone: true });
   const { color = getDefaultColor(newImage), fill } = options;
+
+  validateColor(color, newImage);
+
   checkProcessable(newImage, 'paintPoints', {
     bitDepth: [8, 16],
   });

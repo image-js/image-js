@@ -20,10 +20,24 @@ export function validateChannels(channels: number[], image: Image): void {
  * @param image - The image being processed.
  */
 export function validateChannel(channel: number, image: Image): void {
-  if (!Number.isInteger(channel) || channel >= image.channels || channel < 0) {
+  if (!Number.isInteger(channel) || channel > image.channels || channel < 0) {
     throw new RangeError(
-      `invalid channel: ${channel}. It must be a positive integer smaller than ${image.channels}`,
+      `invalid channel: ${channel}. It must be a positive integer smaller than ${
+        image.channels + 1
+      }`,
     );
+  }
+}
+
+/**
+ * Validates that array of svalues passed by the user are positive and within range.
+ *
+ * @param values - Array of values to validate.
+ * @param image - Image from which the values come.
+ */
+export function validateValues(values: number[], image: Image): void {
+  for (const value of values) {
+    validateValue(value, image);
   }
 }
 
@@ -68,4 +82,15 @@ export function validateForComparison(
       `${process}: both images must have the same number of channels`,
     );
   }
+}
+
+/**
+ * Checks if the given color is valid.
+ *
+ * @param image - Image .
+ * @param color - Color to check.
+ */
+export function validateColor(color: number[], image: Image): void {
+  validateChannel(color.length, image);
+  validateValues(color, image);
 }

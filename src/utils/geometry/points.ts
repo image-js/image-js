@@ -5,7 +5,8 @@ export type ArrayPoint = [column: number, row: number];
 
 /**
  * Coordinates of a point in an image with the top-left corner being the reference point.
- */ export interface Point {
+ */
+export interface Point {
   /**
    * Point row.
    *
