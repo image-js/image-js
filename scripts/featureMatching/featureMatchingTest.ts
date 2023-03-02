@@ -13,19 +13,34 @@ import {
 } from '../../src/featureMatching';
 import { ImageColorModel, readSync, writeSync } from '../../src';
 import { getBrief } from './getBrief';
+import { GetColorsOptions } from '../../src/featureMatching/utils/getColors';
+import { getMinMax } from '../../src/utils/getMinMax';
 
 const getBriefOptions = {
-  windowSize: 15,
-  bestKptRadius: 10,
+  windowSize: 31,
+  bestKptRadius: 5,
 };
 
-const source = readSync('../../test/img/featureMatching/crop1.png')
-  .convertColor(ImageColorModel.GREY)
-  .level({ inputMin: 50, inputMax: 200 });
+let source = readSync('../../test/img/featureMatching/crop1.png').convertColor(
+  ImageColorModel.GREY,
+);
+const sourceExtremums = getMinMax(source);
+source.level({
+  inputMin: sourceExtremums.min[0],
+  inputMax: sourceExtremums.max[0],
+  out: source,
+});
+console.log({ sourceExtremums });
 
-const destination = readSync('../../test/img/featureMatching/crop3.png')
-  .convertColor(ImageColorModel.GREY)
-  .level({ inputMin: 50, inputMax: 200 });
+let destination = readSync(
+  '../../test/img/featureMatching/crop3.png',
+).convertColor(ImageColorModel.GREY);
+const destinationExtremums = getMinMax(destination);
+destination.level({
+  inputMin: destinationExtremums.min[0],
+  inputMax: destinationExtremums.max[0],
+  out: destination,
+});
 
 console.log({
   source: { width: source.width, height: source.height },
@@ -49,7 +64,6 @@ console.log({
 const matches = bruteForceOneMatch(
   sourceBrief.descriptors,
   destinationBrief.descriptors,
-  { nbBestMatches: 20 },
 );
 console.log('nb matches: ' + matches.length);
 
@@ -64,6 +78,8 @@ const montage = new Montage(source, destination, {
   disposition: MontageDisposition.VERTICAL,
 });
 
+const showDistanceOptions: GetColorsOptions = { minValueFactor: 0.2 };
+
 montage.drawMatches(
   matches,
   sourceBrief.keypoints,
@@ -71,6 +87,7 @@ montage.drawMatches(
   {
     showDistance: true,
     color: [255, 0, 0],
+    showDistanceOptions,
   },
 );
 
@@ -81,6 +98,7 @@ montage.drawMatches(
   {
     showDistance: true,
     color: [0, 0, 255],
+    showDistanceOptions,
   },
 );
 

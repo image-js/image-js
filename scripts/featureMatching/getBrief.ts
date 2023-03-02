@@ -24,9 +24,10 @@ export function getBrief(image: Image, options: GetBriefOptions = {}): Brief {
   const allSourceKeypoints = getOrientedFastKeypoints(image, {
     windowSize,
   });
-  const sourceKeypoints = getBestKeypointsInRadius(
+  let sourceKeypoints = getBestKeypointsInRadius(
     allSourceKeypoints,
     bestKptRadius,
   );
+
   return getBriefDescriptors(image, sourceKeypoints);
 }
