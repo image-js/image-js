@@ -3,6 +3,7 @@ import { FastKeypoint } from '../keypoints/getFastKeypoints';
 import { Match } from '../matching/bruteForceMatch';
 import { getColors, GetColorsOptions } from '../utils/getColors';
 import { getMatchColor } from '../utils/getMatchColor';
+import { sortByDistance } from '../utils/sortByDistance';
 
 import { Montage } from './Montage';
 import { scaleKeypoints } from './scaleKeypoints';
@@ -76,10 +77,11 @@ export function drawMatches(
   const colors = getColors(result, color, showDistanceOptions);
 
   const radius = Math.ceil(circleDiameter / 2);
+  const matchesSortedByDistance = sortByDistance(matches);
   for (let i = 0; i < maxNbMatches; i++) {
     let matchColor = color;
     if (showDistance) {
-      matchColor = getMatchColor(matches, i, colors);
+      matchColor = getMatchColor(matchesSortedByDistance, i, colors);
     }
     const sourcePoint = scaledSource[matches[i].sourceIndex].origin;
     result.drawCircle(sourcePoint, radius, {
