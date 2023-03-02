@@ -1,10 +1,10 @@
-import { ImageColorModel } from '../../../../Image';
-import { drawKeypoints } from '../../../visualize/drawKeypoints';
-import { filterBestKeypoints } from '../../filterBestKeypoints';
+import { ImageColorModel } from '../../../Image';
+import { drawKeypoints } from '../../visualize/drawKeypoints';
+import { getBestKeypointsInRadius } from '../getBestKeypointsInRadius';
 import {
   getOrientedFastKeypoints,
   OrientedFastKeypoint,
-} from '../../getOrientedFastKeypoints';
+} from '../getOrientedFastKeypoints';
 
 test('array of 3 keypoints', () => {
   const keypoints: OrientedFastKeypoint[] = [
@@ -12,7 +12,7 @@ test('array of 3 keypoints', () => {
     { origin: { row: 1, column: 0 }, angle: 0, score: 5 },
     { origin: { row: 0, column: 2 }, angle: 0, score: 6 },
   ];
-  const result = filterBestKeypoints(keypoints);
+  const result = getBestKeypointsInRadius(keypoints);
   expect(result).toStrictEqual([
     { origin: { row: 0, column: 2 }, angle: 0, score: 6 },
   ]);
@@ -25,7 +25,7 @@ test('many clusters of keypoints', () => {
     { origin: { row: 10, column: 10 }, angle: 0, score: 6 },
     { origin: { row: 10, column: 11 }, angle: 0, score: 9 },
   ];
-  const result = filterBestKeypoints(keypoints);
+  const result = getBestKeypointsInRadius(keypoints);
   expect(result).toStrictEqual([
     { origin: { row: 1, column: 0 }, angle: 0, score: 5 },
     { origin: { row: 10, column: 11 }, angle: 0, score: 9 },
@@ -33,12 +33,12 @@ test('many clusters of keypoints', () => {
 });
 
 test('star', () => {
-  let image = testUtils.load('featureMatching/star.png');
+  let image = testUtils.load('featureMatching/polygons/star.png');
   const grey = image.convertColor(ImageColorModel.GREY);
   const keypoints = getOrientedFastKeypoints(grey, {
     // scoreAlgorithm: 'HARRIS', // a lot better results with this option
   });
-  const filteredKeypoints = filterBestKeypoints(keypoints, 5);
+  const filteredKeypoints = getBestKeypointsInRadius(keypoints, 5);
 
   image = drawKeypoints(image, keypoints, {
     showScore: true,

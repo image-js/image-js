@@ -8,7 +8,7 @@ import { getKeypointsInRadius } from './utils/getKeypointsInRadius';
  * @param radius - Minimum distance in pixels between two keypoints.
  * @returns The filtered keypoints.
  */
-export function filterBestKeypoints(
+export function getBestKeypointsInRadius(
   keypoints: OrientedFastKeypoint[],
   radius = 5,
 ): OrientedFastKeypoint[] {

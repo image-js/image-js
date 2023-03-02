@@ -103,7 +103,7 @@ test('alphabet image, scoreAlgorithm = HARRIS, maxNbFeatures = 50', () => {
 });
 
 test('star', () => {
-  const image = testUtils.load('featureMatching/star.png');
+  const image = testUtils.load('featureMatching/polygons/star.png');
   const grey = image.convertColor(ImageColorModel.GREY);
   const keypoints = getFastKeypoints(grey);
 
