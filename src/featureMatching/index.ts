@@ -7,3 +7,4 @@ export * from './descriptors/getBriefDescriptors';
 export * from './keypoints/getFastKeypoints';
 export * from './keypoints/getIntensityCentroid';
 export * from './keypoints/getOrientedFastKeypoints';
+export * from './keypoints/getBestKeypointsInRadius';
