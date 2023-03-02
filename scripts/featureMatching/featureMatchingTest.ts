@@ -15,24 +15,26 @@ import { ImageColorModel, readSync, writeSync } from '../../src';
 import { getBrief } from './getBrief';
 
 const getBriefOptions = {
-  windowSize: 7,
+  windowSize: 15,
   bestKptRadius: 10,
 };
 
 const source = readSync('../../test/img/featureMatching/crop1.png')
   .convertColor(ImageColorModel.GREY)
   .level({ inputMin: 50, inputMax: 200 });
-const sourceBrief = getBrief(source, getBriefOptions);
 
 const destination = readSync('../../test/img/featureMatching/crop3.png')
   .convertColor(ImageColorModel.GREY)
   .level({ inputMin: 50, inputMax: 200 });
-const destinationBrief = getBrief(destination, getBriefOptions);
 
 console.log({
   source: { width: source.width, height: source.height },
   destination: { width: destination.width, height: destination.height },
 });
+
+const sourceBrief = getBrief(source, getBriefOptions);
+const destinationBrief = getBrief(destination, getBriefOptions);
+
 console.log({
   keypoints: {
     sourceLength: sourceBrief.keypoints.length,

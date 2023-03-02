@@ -21,7 +21,6 @@ export interface GetBriefOptions {
  */
 export function getBrief(image: Image, options: GetBriefOptions = {}): Brief {
   const { windowSize = 15, bestKptRadius = 10 } = options;
-
   const allSourceKeypoints = getOrientedFastKeypoints(image, {
     windowSize,
   });
