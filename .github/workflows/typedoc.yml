@@ -7,7 +7,7 @@ on:
       - main
 
 env:
-  NODE_VERSION: 16.x
+  NODE_VERSION: 18.x
   ENTRY_FILE: 'src/index.ts'
 
 jobs:
