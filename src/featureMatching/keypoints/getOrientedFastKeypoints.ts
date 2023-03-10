@@ -46,12 +46,12 @@ export function getOrientedFastKeypoints(
 
   const fastKeypoints = getFastKeypoints(image, options);
 
-  const borderDistance = getRadius(windowSize);
+  const radius = getRadius(windowSize);
 
   // handle edge cases: remove keypoints too close to border
   let keypoints: FastKeypoint[] = [];
   for (let keypoint of fastKeypoints) {
-    if (checkBorderDistance(image, keypoint.origin, borderDistance)) {
+    if (checkBorderDistance(image, keypoint.origin, radius)) {
       keypoints.push(keypoint);
     }
   }
@@ -60,7 +60,7 @@ export function getOrientedFastKeypoints(
   for (let keypoint of keypoints) {
     const centroid = getPatchIntensityCentroid(image, {
       origin: keypoint.origin,
-      radius: borderDistance,
+      radius,
     })[0];
     const angle = toDegrees(getAngle({ column: 0, row: 0 }, centroid));
     orientedFastKeypoints.push({ ...keypoint, angle });

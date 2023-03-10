@@ -96,3 +96,55 @@ test('angle should never be NaN', () => {
     expect(isNaN(keypoint.angle)).toBe(false);
   }
 });
+
+test('check angle for different windowSize', () => {
+  const image = testUtils
+    .load('featureMatching/polygons/scaleneTriangle10.png')
+    .convertColor(ImageColorModel.GREY);
+
+  const keypoints7 = getOrientedFastKeypoints(image);
+  const keypoints15 = getOrientedFastKeypoints(image, { windowSize: 15 });
+  const keypoints31 = getOrientedFastKeypoints(image, { windowSize: 31 });
+
+  expect([keypoints7, keypoints15, keypoints31]).toBeDeepCloseTo(
+    [
+      [
+        {
+          origin: { row: 607, column: 132 },
+          score: 2680,
+          angle: 145.3,
+        },
+        {
+          origin: { row: 50, column: 292 },
+          score: 2662,
+          angle: -112.2,
+        },
+      ],
+      [
+        {
+          origin: { row: 607, column: 132 },
+          score: 2680,
+          angle: 123.7,
+        },
+        {
+          origin: { row: 50, column: 292 },
+          score: 2662,
+          angle: -95.4,
+        },
+      ],
+      [
+        {
+          origin: { row: 607, column: 132 },
+          score: 2680,
+          angle: 120,
+        },
+        {
+          origin: { row: 50, column: 292 },
+          score: 2662,
+          angle: -92.1,
+        },
+      ],
+    ],
+    1,
+  );
+});

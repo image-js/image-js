@@ -63,6 +63,7 @@ export function bruteForceOneMatch(
         source[sourceIndex],
         destination[destinationIndex],
       );
+
       if (distance < minDistance) {
         minDistance = distance;
         index = destinationIndex;

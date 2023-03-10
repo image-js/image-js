@@ -10,7 +10,7 @@ import { Montage } from '../../visualize/Montage';
 import { bruteForceOneMatch } from '../bruteForceMatch';
 
 /**
- * Get BRIEF descriptors for an image
+ * Get BRIEF descriptors for an image.
  *
  * @param image - The image.
  * @returns The descriptors.
@@ -41,6 +41,24 @@ test.each([
     message: 'scalene triangle',
     source: 'scaleneTriangle',
     destination: 'scaleneTriangle2',
+    expected: 2,
+  },
+  {
+    message: 'scalene triangle rotated 10°',
+    source: 'scaleneTriangle',
+    destination: 'scaleneTriangle10',
+    expected: 2,
+  },
+  {
+    message: 'scalene triangle rotated 90°',
+    source: 'scaleneTriangle',
+    destination: 'scaleneTriangle90',
+    expected: 2,
+  },
+  {
+    message: 'scalene triangle rotated 180°',
+    source: 'scaleneTriangle',
+    destination: 'scaleneTriangle180',
     expected: 2,
   },
   {
@@ -101,6 +119,24 @@ test.each([
     expected: 2,
   },
   {
+    message: 'scalene triangle rotated 10°',
+    source: 'scaleneTriangle',
+    destination: 'scaleneTriangle10',
+    expected: 2,
+  },
+  {
+    message: 'scalene triangle rotated 90°',
+    source: 'scaleneTriangle',
+    destination: 'scaleneTriangle90',
+    expected: 2,
+  },
+  {
+    message: 'scalene triangle rotated 180°',
+    source: 'scaleneTriangle',
+    destination: 'scaleneTriangle180',
+    expected: 2,
+  },
+  {
     message: 'polygon',
     source: 'polygon',
     destination: 'polygon2',
@@ -118,7 +154,7 @@ test.each([
     destination: 'polygonRotated10degrees',
     expected: 7,
   },
-])('various polygons, change kpt window size ($message)', (data) => {
+])('various polygons, windowSize = 15 ($message)', (data) => {
   const kptWindowSize = 15;
   const bestKptRadius = 10;
 
@@ -145,6 +181,49 @@ test.each([
   const destinationKeypoints = getBestKeypointsInRadius(
     allDestinationKeypoints,
     bestKptRadius,
+  );
+  const destinationDescriptors = getBriefDescriptors(
+    destination,
+    destinationKeypoints,
+  ).descriptors;
+
+  const matches = bruteForceOneMatch(sourceDescriptors, destinationDescriptors);
+
+  expect(matches.length).toBe(data.expected);
+
+  const montage = new Montage(source, destination);
+  montage.drawKeypoints(sourceKeypoints);
+  montage.drawKeypoints(destinationKeypoints, {
+    origin: montage.destinationOrigin,
+  });
+  montage.drawMatches(matches, sourceKeypoints, destinationKeypoints);
+
+  expect(montage.image).toMatchImageSnapshot();
+});
+
+test('scalene triangle', () => {
+  const data = {
+    message: 'scalene triangle rotated 10°',
+    source: 'scaleneTriangle',
+    destination: 'scaleneTriangle10',
+    expected: 2,
+  };
+
+  const source = testUtils
+    .load(`featureMatching/polygons/${data.source}.png` as TestImagePath)
+    .convertColor(ImageColorModel.GREY);
+  const allSourceKeypoints = getOrientedFastKeypoints(source, {});
+  const sourceKeypoints = getBestKeypointsInRadius(allSourceKeypoints);
+  const sourceDescriptors = getBriefDescriptors(
+    source,
+    sourceKeypoints,
+  ).descriptors;
+  const destination = testUtils
+    .load(`featureMatching/polygons/${data.destination}.png` as TestImagePath)
+    .convertColor(ImageColorModel.GREY);
+  const allDestinationKeypoints = getOrientedFastKeypoints(destination, {});
+  const destinationKeypoints = getBestKeypointsInRadius(
+    allDestinationKeypoints,
   );
   const destinationDescriptors = getBriefDescriptors(
     destination,

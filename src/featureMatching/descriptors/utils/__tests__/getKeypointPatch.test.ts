@@ -58,3 +58,24 @@ test('patch had black pixels on border', () => {
 
   expect(result).toMatchImageSnapshot();
 });
+
+test.each([
+  {
+    message: 'scalene triangle',
+    image: 'scaleneTriangle',
+  },
+  {
+    message: 'scalene triangle rotated 10°',
+    image: 'scaleneTriangle10',
+  },
+])('windowSize = 15 ($message)', (data) => {
+  const image = testUtils
+    .load(`featureMatching/polygons/${data.image}.png` as TestImagePath)
+    .convertColor(ImageColorModel.GREY);
+
+  const keypoints = getOrientedFastKeypoints(image, { windowSize: 15 });
+
+  for (let keypoint of keypoints) {
+    expect(getKeypointPatch(image, keypoint)).toMatchImageSnapshot();
+  }
+});
