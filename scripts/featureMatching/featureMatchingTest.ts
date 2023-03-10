@@ -36,7 +36,7 @@ source.level({
 });
 
 let destination = readSync(
-  '../../test/img/featureMatching/crop2.png',
+  '../../test/img/featureMatching/crop3.png',
 ).convertColor(ImageColorModel.GREY);
 const destinationExtremums = getMinMax(destination);
 destination.level({
