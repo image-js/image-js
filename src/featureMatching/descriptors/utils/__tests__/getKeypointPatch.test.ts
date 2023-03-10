@@ -12,6 +12,11 @@ test.each([
     expected: 2,
   },
   {
+    message: 'scalene triangle rotated 10°',
+    image: 'scaleneTriangle10',
+    expected: 2,
+  },
+  {
     message: 'polygon rotated 180°',
     image: 'polygonRotated180degrees',
     expected: 8,
@@ -35,4 +40,21 @@ test.each([
   for (let keypoint of keypoints) {
     expect(getKeypointPatch(image, keypoint)).toMatchImageSnapshot();
   }
+});
+
+test('patch had black pixels on border', () => {
+  const image = testUtils.load(
+    `featureMatching/polygons/polygonRotated180degrees.png`,
+  );
+
+  const grey = image.convertColor(ImageColorModel.GREY);
+
+  const allKeypoints = getOrientedFastKeypoints(grey, { windowSize: 15 });
+  const keypoints = getBestKeypointsInRadius(allKeypoints, 10);
+  const keypoint = keypoints[4];
+
+  const result = getKeypointPatch(image, keypoint);
+  expect(result.width).toBe(31);
+
+  expect(result).toMatchImageSnapshot();
 });

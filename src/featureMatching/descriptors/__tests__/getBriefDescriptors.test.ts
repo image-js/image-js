@@ -1,5 +1,6 @@
 import { ImageColorModel, Image, ImageCoordinates } from '../../../Image';
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
+import { getHammingDistance } from '../../matching/getHammingDistance';
 import { drawKeypoints } from '../../visualize/drawKeypoints';
 import { getBriefDescriptors } from '../getBriefDescriptors';
 
@@ -110,4 +111,47 @@ test('verify descriptor is correct (descriptorLength = 10)', () => {
   expect(descriptor).toStrictEqual(
     new Uint8Array([0, 0, 0, 0, 0, 0, 1, 0, 1, 0]),
   );
+});
+
+test.only('compare scalene triangle keypoints', () => {
+  const source = testUtils
+    .load('featureMatching/polygons/scaleneTriangle.png')
+    .convertColor(ImageColorModel.GREY);
+  const sourceKeypoints = getOrientedFastKeypoints(source);
+  const sourceBrief = getBriefDescriptors(source, sourceKeypoints);
+  const destination = testUtils
+    .load('featureMatching/polygons/scaleneTriangle10.png')
+    .convertColor(ImageColorModel.GREY);
+  const destinationKeypoints = getOrientedFastKeypoints(destination);
+  const destinationBrief = getBriefDescriptors(
+    destination,
+    destinationKeypoints,
+  );
+  let result = [];
+
+  for (
+    let srcIndex = 0;
+    srcIndex < sourceBrief.descriptors.length;
+    srcIndex++
+  ) {
+    for (
+      let dstIndex = 0;
+      dstIndex < destinationBrief.descriptors.length;
+      dstIndex++
+    ) {
+      const distance = getHammingDistance(
+        sourceBrief.descriptors[srcIndex],
+        destinationBrief.descriptors[dstIndex],
+      );
+      result.push({ srcIndex, dstIndex, distance });
+    }
+  }
+
+  // 0-0 and 1-1 are the correct matches, so this looks good
+  expect(result).toStrictEqual([
+    { srcIndex: 0, dstIndex: 0, distance: 15 },
+    { srcIndex: 0, dstIndex: 1, distance: 73 },
+    { srcIndex: 1, dstIndex: 0, distance: 77 },
+    { srcIndex: 1, dstIndex: 1, distance: 11 },
+  ]);
 });
