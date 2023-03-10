@@ -68,6 +68,14 @@ test.each([
     message: 'scalene triangle rotated 10°',
     image: 'scaleneTriangle10',
   },
+  {
+    message: 'better scalene triangle',
+    image: 'betterScaleneTriangle',
+  },
+  {
+    message: 'better scalene triangle rotated 90',
+    image: 'betterScaleneTriangle90',
+  },
 ])('windowSize = 15 ($message)', (data) => {
   const image = testUtils
     .load(`featureMatching/polygons/${data.image}.png` as TestImagePath)

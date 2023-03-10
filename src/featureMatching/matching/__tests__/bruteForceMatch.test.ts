@@ -62,6 +62,12 @@ test.each([
     expected: 2,
   },
   {
+    message: 'better scalene triangle',
+    source: 'betterScaleneTriangle',
+    destination: 'betterScaleneTriangle90',
+    expected: 2,
+  },
+  {
     message: 'polygon',
     source: 'polygon',
     destination: 'polygon2',
