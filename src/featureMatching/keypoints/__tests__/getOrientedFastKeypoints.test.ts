@@ -1,4 +1,5 @@
 import { ImageColorModel } from '../../../Image';
+import { drawKeypoints } from '../../visualize/drawKeypoints';
 import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints';
 
 test('7x7 image, angle = 90°', () => {
@@ -142,6 +143,63 @@ test('check angle for different windowSize', () => {
           origin: { row: 50, column: 292 },
           score: 2662,
           angle: -92.1,
+        },
+      ],
+    ],
+    1,
+  );
+});
+
+test('angle diff should be 90°', () => {
+  const windowSize = 15;
+  const markerSize = 15;
+
+  const image = testUtils
+    .load('featureMatching/polygons/betterScaleneTriangle.png')
+    .convertColor(ImageColorModel.GREY);
+
+  const rotated = testUtils
+    .load('featureMatching/polygons/betterScaleneTriangle90.png')
+    .convertColor(ImageColorModel.GREY);
+
+  const keypoints = getOrientedFastKeypoints(image, { windowSize });
+  const keypointsRotated = getOrientedFastKeypoints(rotated, { windowSize });
+  console.log(keypoints, keypointsRotated);
+
+  expect(
+    drawKeypoints(image, keypoints, { markerSize, showOrientation: true }),
+  ).toMatchImageSnapshot();
+  expect(
+    drawKeypoints(rotated, keypointsRotated, {
+      markerSize,
+      showOrientation: true,
+    }),
+  ).toMatchImageSnapshot();
+
+  expect([keypoints, keypointsRotated]).toBeDeepCloseTo(
+    [
+      [
+        {
+          origin: { row: 607, column: 132 },
+          score: 2680,
+          angle: 145.3,
+        },
+        {
+          origin: { row: 50, column: 292 },
+          score: 2662,
+          angle: -112.2,
+        },
+      ],
+      [
+        {
+          origin: { row: 607, column: 132 },
+          score: 2680,
+          angle: 123.7,
+        },
+        {
+          origin: { row: 50, column: 292 },
+          score: 2662,
+          angle: -95.4,
         },
       ],
     ],
