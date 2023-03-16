@@ -1,5 +1,5 @@
 import { BriefDescriptor } from '../descriptors/getBriefDescriptors';
-import { sortBySourceDest } from '../utils/sortBySourceDest';
+import { sortByDestSource, sortBySourceDest } from '../utils/sortBySourceDest';
 
 import { bruteForceOneMatch, Match } from './bruteForceMatch';
 
@@ -35,29 +35,29 @@ export function crosscheck(
 ): Match[] {
   let result: Match[] = [];
 
-  const sorted1 = sortBySourceDest(srcDstMatches);
-  const sorted2 = sortBySourceDest(dstSrcMatches);
+  const sortedSrcDst = sortBySourceDest(srcDstMatches);
+  const sortedDstSrc = sortByDestSource(dstSrcMatches);
 
   let pointer1 = 0;
   let pointer2 = 0;
 
-  while (pointer1 < sorted1.length && pointer2 < sorted2.length) {
-    const current1 = sorted1[pointer1];
-    const current2 = sorted2[pointer2];
+  while (pointer1 < sortedSrcDst.length && pointer2 < sortedDstSrc.length) {
+    const match1 = sortedSrcDst[pointer1];
+    const match2 = sortedDstSrc[pointer2];
 
-    if (current1.sourceIndex > current2.sourceIndex) {
+    if (match1.sourceIndex > match2.destinationIndex) {
       pointer2++;
-    } else if (current1.sourceIndex < current2.sourceIndex) {
+    } else if (match1.sourceIndex < match2.destinationIndex) {
       pointer1++;
-    } else if (current1.destinationIndex > current2.destinationIndex) {
+    } else if (match1.destinationIndex > match2.sourceIndex) {
       pointer2++;
-    } else if (current1.destinationIndex < current2.destinationIndex) {
+    } else if (match1.destinationIndex < match2.sourceIndex) {
       pointer1++;
     } else {
       result.push({
-        distance: Math.max(current1.distance, current2.distance),
-        sourceIndex: current1.sourceIndex,
-        destinationIndex: current1.destinationIndex,
+        distance: Math.max(match1.distance, match2.distance),
+        sourceIndex: match1.sourceIndex,
+        destinationIndex: match1.destinationIndex,
       });
       pointer1++;
       pointer2++;
