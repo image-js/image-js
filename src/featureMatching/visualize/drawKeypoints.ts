@@ -132,8 +132,8 @@ export function drawKeypoints(
       const from = absoluteOrigin;
       const radAngle = (angle * Math.PI) / 180;
       const to: Point = {
-        column: from.column + Math.round(radius * Math.sin(radAngle)),
-        row: from.row + Math.round(radius * Math.cos(radAngle)),
+        column: from.column + Math.round(radius * Math.cos(radAngle)),
+        row: from.row - Math.round(radius * Math.sin(radAngle)),
       };
       newImage.drawLine(from, to, {
         strokeColor: keypointColor,
