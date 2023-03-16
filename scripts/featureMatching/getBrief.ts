@@ -7,7 +7,7 @@ import {
 import { getOrientedFastKeypoints } from '../../src/featureMatching/keypoints/getOrientedFastKeypoints';
 
 export interface GetBriefOptions {
-  windowSize?: number;
+  centroidPatchDiameter?: number;
   bestKptRadius?: number;
   minScore?: number;
 }
@@ -21,9 +21,9 @@ export interface GetBriefOptions {
  * @returns The Brief.
  */
 export function getBrief(image: Image, options: GetBriefOptions = {}): Brief {
-  const { windowSize = 15, bestKptRadius = 10, minScore } = options;
+  const { centroidPatchDiameter = 15, bestKptRadius = 10, minScore } = options;
   const allSourceKeypoints = getOrientedFastKeypoints(image, {
-    windowSize,
+    centroidPatchDiameter,
   });
   let sourceKeypoints = getBestKeypointsInRadius(
     allSourceKeypoints,

@@ -12,7 +12,7 @@ import {
   getBestKeypointsInRadius,
 } from '../../src/featureMatching';
 import { ImageColorModel, readSync, writeSync } from '../../src';
-import { getBrief } from './getBrief';
+import { getBrief, GetBriefOptions } from './getBrief';
 import { GetColorsOptions } from '../../src/featureMatching/utils/getColors';
 import { getMinMax } from '../../src/utils/getMinMax';
 
@@ -20,14 +20,15 @@ import util from 'util';
 import { sliceBrief } from './sliceBrief';
 util.inspect.defaultOptions.depth = 5;
 
-const getBriefOptions = {
-  windowSize: 31,
+const getBriefOptions: GetBriefOptions = {
+  centroidPatchDiameter: 31,
   bestKptRadius: 5,
 };
 
 let source = readSync('../../test/img/featureMatching/crop1.png').convertColor(
   ImageColorModel.GREY,
 );
+// fix contrast
 const sourceExtremums = getMinMax(source);
 source.level({
   inputMin: sourceExtremums.min[0],
@@ -38,6 +39,7 @@ source.level({
 let destination = readSync(
   '../../test/img/featureMatching/crop3.png',
 ).convertColor(ImageColorModel.GREY);
+// fix contrast
 const destinationExtremums = getMinMax(destination);
 destination.level({
   inputMin: destinationExtremums.min[0],
@@ -104,6 +106,7 @@ montage.drawMatches(
   {
     showDistance: true,
     color: [255, 0, 0],
+    circleDiameter: getBriefOptions.centroidPatchDiameter,
     showDistanceOptions,
   },
 );
@@ -115,6 +118,7 @@ montage.drawMatches(
   {
     showDistance: true,
     color: [0, 0, 255],
+    circleDiameter: getBriefOptions.centroidPatchDiameter,
     showDistanceOptions,
   },
 );
