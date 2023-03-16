@@ -93,3 +93,17 @@ export function dot(p1: Point, p2: Point) {
 export function round(point: Point): Point {
   return { column: Math.round(point.column), row: Math.round(point.row) };
 }
+
+/**
+ * Sort an array of points by column then row.
+ *
+ * @param points - Array of points to sort.
+ * @returns Sorted points.
+ */
+export function sortByColumnRow(points: Point[]): Point[] {
+  return points.slice().sort((point1, point2) => {
+    if (point1.column < point2.column) return -1;
+    if (point1.column > point2.column) return 1;
+    return point1.row - point2.row;
+  });
+}
