@@ -3,7 +3,7 @@ import { circle, line } from 'bresenham-zingl';
 import { Point } from '../../geometry';
 
 /**
- * Get the coordinates of the points on a circle. The reference is the origin of the circle.
+ * Get the coordinates of the points on a circle. The reference is the center of the circle.
  * The first point is the right one and they are then sorted clockwise.
  *
  * @param radius - Radius of the circle.
@@ -37,24 +37,34 @@ export function getCirclePoints(radius: number): Point[] {
  * @param center - Center of the cirlce.
  * @returns The coordinates of the points in a circle of given radius.
  */
-export function getFilledCirclePoints(radius: number, center: Point): Point[] {
+export function getFilledCirclePoints(
+  radius: number,
+  center: Point = { column: 0, row: 0 },
+): Point[] {
   let circlePoints: Point[] = [];
 
+  if (radius === 0) {
+    return [center];
+  }
   if (radius === 1) {
     circlePoints.push(center);
   }
   circle(center.column, center.row, radius, (column: number, row: number) => {
-    circlePoints.push({ row: row - radius, column: column - radius });
+    circlePoints.push({ row, column });
 
     if (column - 1 > center.column) {
-      getLinePoints(
-        { row, column: column - 1 },
-        { row, column: center.column },
+      circlePoints.push(
+        ...getLinePoints(
+          { row, column: column - 1 },
+          { row, column: center.column },
+        ),
       );
     } else if (column + 1 < center.column) {
-      getLinePoints(
-        { row, column: column + 1 },
-        { row, column: center.column },
+      circlePoints.push(
+        ...getLinePoints(
+          { row, column: column + 1 },
+          { row, column: center.column },
+        ),
       );
     }
   });

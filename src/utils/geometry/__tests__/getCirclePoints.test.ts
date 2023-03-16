@@ -1,3 +1,5 @@
+import { Image } from '../../../Image';
+import { ImageColorModel } from '../../constants/colorModels';
 import {
   getCirclePoints,
   getCompassPoints,
@@ -77,10 +79,45 @@ test('horizonal line', () => {
 });
 
 test('filled circle with radius 1', () => {
-  expect(getFilledCirclePoints(1, { column: 0, row: 0 })).toStrictEqual([
+  const points = getFilledCirclePoints(1, { column: 0, row: 0 });
+
+  expect(points.length).toBe(5);
+  expect(points).toStrictEqual([
+    { row: 0, column: 0 },
     { row: 0, column: 1 },
     { row: 1, column: 0 },
     { row: 0, column: -1 },
     { row: -1, column: 0 },
   ]);
+});
+
+test('filled circle with radius 0', () => {
+  expect(getFilledCirclePoints(0, { column: 0, row: 0 })).toStrictEqual([
+    { row: 0, column: 0 },
+  ]);
+});
+
+test('filled circle with radius 5', () => {
+  const emptyImage = new Image(11, 11, { colorModel: ImageColorModel.GREY });
+  const center = { row: 5, column: 5 };
+
+  const points = getFilledCirclePoints(5, center);
+
+  expect(
+    emptyImage.drawPoints(points, { color: [255] }),
+  ).toMatchImageSnapshot();
+
+  expect(emptyImage.drawPoints(points, { color: [255] })).toMatchImage(
+    emptyImage.drawCircle(center, 5, { fill: [255], color: [255] }),
+  );
+});
+
+test('check for points twice in array', () => {
+  const emptyImage = new Image(5, 5, { colorModel: ImageColorModel.GREY });
+  const points = getFilledCirclePoints(2, { column: 0, row: 0 });
+
+  expect(points.length).toBe(21);
+  expect(
+    emptyImage.drawPoints(points, { color: [255] }),
+  ).toMatchImageSnapshot();
 });
