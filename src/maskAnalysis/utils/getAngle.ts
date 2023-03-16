@@ -11,9 +11,31 @@ import { difference, normalize, Point } from '../../utils/geometry/points';
  * @returns Rotation angle in radians to make the line horizontal.
  */
 export function getAngle(p1: Point, p2: Point): number {
-  let diff = difference(p2, p1);
-  let vector = normalize(diff);
-  let angle = Math.acos(vector.column);
+  const diff = difference(p2, p1);
+  const vector = normalize(diff);
+  const angle = Math.acos(vector.column);
   if (vector.row < 0) return -angle;
   return angle;
+}
+
+/**
+ * Compute the mathematical angle in radians of the segment p1-p2.
+ *
+ * @param p1 - First point.
+ * @param p2 - Second point.
+ * @returns The angle of the segment in radians.
+ */
+export function getMathAngle(p1: Point, p2: Point): number {
+  const diff = difference(p2, p1);
+  const vector = normalize(diff);
+  const atan = -Math.atan(vector.row / vector.column);
+  if (vector.column < 0) {
+    if (vector.row < 0) {
+      return atan - Math.PI;
+    } else {
+      return atan + Math.PI;
+    }
+  } else {
+    return atan;
+  }
 }
