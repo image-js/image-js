@@ -1,6 +1,9 @@
 import { circle, line } from 'bresenham-zingl';
 
+import { deleteDuplicates } from '../../draw/utils/deleteDuplicates';
 import { Point } from '../../geometry';
+
+import { sortByColumnRow } from './points';
 
 /**
  * Get the coordinates of the points on a circle. The reference is the center of the circle.
@@ -31,7 +34,7 @@ export function getCirclePoints(radius: number): Point[] {
 }
 
 /**
- * Get the coordinates of the points in a circle of given radius.
+ * Get the coordinates of the points in a circle of given radius. The points are sorted by column then row.
  *
  * @param radius - Radius of the circle.
  * @param center - Center of the cirlce.
@@ -69,7 +72,9 @@ export function getFilledCirclePoints(
     }
   });
 
-  return circlePoints;
+  const sorted = sortByColumnRow(circlePoints);
+
+  return deleteDuplicates(sorted);
 }
 
 /**
