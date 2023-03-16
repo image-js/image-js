@@ -44,25 +44,6 @@ test.each([
   }
 });
 
-test('patch had black pixels on border', () => {
-  const image = testUtils
-    .load(`featureMatching/polygons/polygonRotated180degrees.png`)
-    .invert();
-
-  const grey = image.convertColor(ImageColorModel.GREY);
-
-  const allKeypoints = getOrientedFastKeypoints(grey, {
-    centroidPatchDiameter: 15,
-  });
-  const keypoints = getBestKeypointsInRadius(allKeypoints, 10);
-  const keypoint = keypoints[4];
-
-  const result = getKeypointPatch(image, keypoint);
-  expect(result.width).toBe(31);
-
-  expect(result).toMatchImageSnapshot();
-});
-
 test.each([
   {
     message: 'scalene triangle',
@@ -80,7 +61,7 @@ test.each([
     message: 'better scalene triangle rotated 90',
     image: 'betterScaleneTriangle90',
   },
-])('windowSize = 15 ($message)', (data) => {
+])('centroidPatchDiameter = 15 ($message)', (data) => {
   const image = testUtils
     .load(`featureMatching/polygons/${data.image}.png` as TestImagePath)
     .convertColor(ImageColorModel.GREY)
@@ -93,4 +74,23 @@ test.each([
   for (let keypoint of keypoints) {
     expect(getKeypointPatch(image, keypoint)).toMatchImageSnapshot();
   }
+});
+
+test('patch had black pixels on border', () => {
+  const image = testUtils
+    .load(`featureMatching/polygons/polygonRotated180degrees.png`)
+    .invert();
+
+  const grey = image.convertColor(ImageColorModel.GREY);
+
+  const allKeypoints = getOrientedFastKeypoints(grey, {
+    centroidPatchDiameter: 15,
+  });
+  const keypoints = getBestKeypointsInRadius(allKeypoints, 10);
+  const keypoint = keypoints[4];
+
+  const result = getKeypointPatch(image, keypoint);
+  expect(result.width).toBe(31);
+
+  expect(result).toMatchImageSnapshot();
 });
