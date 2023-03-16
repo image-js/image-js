@@ -1,4 +1,9 @@
-import { getCirclePoints, getCompassPoints } from '../getCirclePoints';
+import {
+  getCirclePoints,
+  getCompassPoints,
+  getFilledCirclePoints,
+  getLinePoints,
+} from '../getCirclePoints';
 
 test('circle with radius 1', () => {
   expect(getCirclePoints(1)).toStrictEqual([
@@ -54,6 +59,25 @@ test('circle with radius 3', () => {
 
 test('compass points, radius 1', () => {
   expect(getCompassPoints(1)).toStrictEqual([
+    { row: 0, column: 1 },
+    { row: 1, column: 0 },
+    { row: 0, column: -1 },
+    { row: -1, column: 0 },
+  ]);
+});
+
+test('horizonal line', () => {
+  expect(
+    getLinePoints({ column: 0, row: 0 }, { column: 2, row: 0 }),
+  ).toStrictEqual([
+    { row: 0, column: 0 },
+    { row: 0, column: 1 },
+    { row: 0, column: 2 },
+  ]);
+});
+
+test('filled circle with radius 1', () => {
+  expect(getFilledCirclePoints(1, { column: 0, row: 0 })).toStrictEqual([
     { row: 0, column: 1 },
     { row: 1, column: 0 },
     { row: 0, column: -1 },
