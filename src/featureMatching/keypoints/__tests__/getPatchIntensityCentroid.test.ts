@@ -61,6 +61,7 @@ test('patch, default options', () => {
   const radius = 3;
 
   const centroid = getPatchIntensityCentroid(image)[0];
+  expect(centroid).toBeDeepCloseTo({ column: -1.179, row: -0.183 });
 
   const center = image.getCoordinates(ImageCoordinates.CENTER);
 

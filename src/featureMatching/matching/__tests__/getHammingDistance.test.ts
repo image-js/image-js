@@ -58,14 +58,14 @@ test.each([
     .load('featureMatching/polygons/scaleneTriangle.png')
     .convertColor(ImageColorModel.GREY);
   const sourceKeypoints = getOrientedFastKeypoints(source, {
-    windowSize: data.windowSize,
+    centroidPatchDiameter: data.windowSize,
   });
   const sourceBrief = getBriefDescriptors(source, sourceKeypoints);
   const destination = testUtils
     .load('featureMatching/polygons/scaleneTriangle10.png')
     .convertColor(ImageColorModel.GREY);
   const destinationKeypoints = getOrientedFastKeypoints(destination, {
-    windowSize: data.windowSize,
+    centroidPatchDiameter: data.windowSize,
   });
   const destinationBrief = getBriefDescriptors(
     destination,

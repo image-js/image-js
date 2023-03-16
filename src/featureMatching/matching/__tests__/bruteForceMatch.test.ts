@@ -168,7 +168,7 @@ test.each([
     .load(`featureMatching/polygons/${data.source}.png` as TestImagePath)
     .convertColor(ImageColorModel.GREY);
   const allSourceKeypoints = getOrientedFastKeypoints(source, {
-    windowSize: kptWindowSize,
+    centroidPatchDiameter: kptWindowSize,
   });
   const sourceKeypoints = getBestKeypointsInRadius(
     allSourceKeypoints,
@@ -182,7 +182,7 @@ test.each([
     .load(`featureMatching/polygons/${data.destination}.png` as TestImagePath)
     .convertColor(ImageColorModel.GREY);
   const allDestinationKeypoints = getOrientedFastKeypoints(destination, {
-    windowSize: kptWindowSize,
+    centroidPatchDiameter: kptWindowSize,
   });
   const destinationKeypoints = getBestKeypointsInRadius(
     allDestinationKeypoints,

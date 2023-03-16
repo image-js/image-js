@@ -1,8 +1,9 @@
+import { TestImagePath } from '../../../../test/TestImagePath';
 import { ImageColorModel } from '../../../Image';
 import { drawKeypoints } from '../../visualize/drawKeypoints';
 import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints';
 
-test('7x7 image, angle = 90°', () => {
+test('7x7 image, angle = -90°', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
@@ -15,7 +16,45 @@ test('7x7 image, angle = 90°', () => {
 
   const result = getOrientedFastKeypoints(image)[0];
   expect(result).toStrictEqual({
-    angle: 90,
+    angle: -90,
+    origin: { row: 3, column: 3 },
+    score: 2780,
+  });
+});
+
+test('7x7 image, angle = 135°', () => {
+  const image = testUtils.createGreyImage([
+    [100, 0, 0, 0, 0, 0, 0],
+    [0, 100, 0, 0, 0, 0, 0],
+    [0, 0, 100, 0, 0, 0, 0],
+    [0, 0, 0, 200, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+  ]);
+
+  const result = getOrientedFastKeypoints(image)[0];
+  expect(result).toStrictEqual({
+    angle: -225,
+    origin: { row: 3, column: 3 },
+    score: 2780,
+  });
+});
+
+test('7x7 image, angle = -135°', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 200, 0, 0, 0],
+    [0, 0, 100, 0, 0, 0, 0],
+    [0, 100, 0, 0, 0, 0, 0],
+    [100, 0, 0, 0, 0, 0, 0],
+  ]);
+
+  const result = getOrientedFastKeypoints(image)[0];
+  expect(result).toStrictEqual({
+    angle: 225,
     origin: { row: 3, column: 3 },
     score: 2780,
   });
@@ -53,12 +92,12 @@ test('7x7 image, angle = 0°', () => {
 
   const result = getOrientedFastKeypoints(image)[0];
   expect(result).toStrictEqual({
-    angle: 0,
+    angle: -0,
     origin: { row: 3, column: 3 },
     score: 2680,
   });
 });
-test('7x7 image, angle = -45°', () => {
+test('7x7 image, angle = 45°', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0, 0, 100],
     [0, 0, 0, 0, 0, 100, 0],
@@ -71,10 +110,67 @@ test('7x7 image, angle = -45°', () => {
 
   const result = getOrientedFastKeypoints(image)[0];
   expect(result).toBeDeepCloseTo({
+    angle: 45,
+    origin: { row: 3, column: 3 },
+    score: 2780,
+  });
+});
+
+test('7x7 image, angle = -45°', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 200, 0, 0, 0],
+    [0, 0, 0, 0, 100, 0, 0],
+    [0, 0, 0, 0, 0, 100, 0],
+    [0, 0, 0, 0, 0, 0, 100],
+  ]);
+
+  const result = getOrientedFastKeypoints(image)[0];
+  expect(result).toBeDeepCloseTo({
     angle: -45,
     origin: { row: 3, column: 3 },
     score: 2780,
   });
+});
+
+test('patch with one keypoint', () => {
+  const image = testUtils.load('featureMatching/patch.png').invert();
+
+  const keypoints = getOrientedFastKeypoints(image);
+
+  expect(
+    drawKeypoints(image, keypoints, { markerSize: 7, showOrientation: true }),
+  ).toMatchImageSnapshot();
+
+  expect(keypoints).toBeDeepCloseTo([
+    {
+      angle: -187.205,
+      origin: { row: 15, column: 14 },
+      score: 3290,
+    },
+  ]);
+});
+
+test('patch with one keypoint, centroidPatchDiameter=15', () => {
+  const image = testUtils.load('featureMatching/patch.png').invert();
+
+  const keypoints = getOrientedFastKeypoints(image, {
+    centroidPatchDiameter: 15,
+  });
+
+  expect(
+    drawKeypoints(image, keypoints, { markerSize: 7, showOrientation: true }),
+  ).toMatchImageSnapshot();
+
+  expect(keypoints).toBeDeepCloseTo([
+    {
+      angle: 191.8,
+      origin: { row: 15, column: 14 },
+      score: 3290,
+    },
+  ]);
 });
 
 test('check we handle edge cases properly', () => {
@@ -98,111 +194,42 @@ test('angle should never be NaN', () => {
   }
 });
 
-test('check angle for different windowSize', () => {
-  const image = testUtils
-    .load('featureMatching/polygons/scaleneTriangle10.png')
-    .convertColor(ImageColorModel.GREY);
-
-  const keypoints7 = getOrientedFastKeypoints(image);
-  const keypoints15 = getOrientedFastKeypoints(image, { windowSize: 15 });
-  const keypoints31 = getOrientedFastKeypoints(image, { windowSize: 31 });
-
-  expect([keypoints7, keypoints15, keypoints31]).toBeDeepCloseTo(
-    [
-      [
-        {
-          origin: { row: 607, column: 132 },
-          score: 2680,
-          angle: 145.3,
-        },
-        {
-          origin: { row: 50, column: 292 },
-          score: 2662,
-          angle: -112.2,
-        },
-      ],
-      [
-        {
-          origin: { row: 607, column: 132 },
-          score: 2680,
-          angle: 123.7,
-        },
-        {
-          origin: { row: 50, column: 292 },
-          score: 2662,
-          angle: -95.4,
-        },
-      ],
-      [
-        {
-          origin: { row: 607, column: 132 },
-          score: 2680,
-          angle: 120,
-        },
-        {
-          origin: { row: 50, column: 292 },
-          score: 2662,
-          angle: -92.1,
-        },
-      ],
-    ],
-    1,
-  );
-});
-
-test('angle diff should be 90°', () => {
-  const windowSize = 15;
-  const markerSize = 15;
+test.each([
+  {
+    message: 'betterScaleneTriangle',
+    image: 'betterScaleneTriangle',
+  },
+  {
+    message: 'betterScaleneTriangle90',
+    image: 'betterScaleneTriangle90',
+  },
+])('orientation should look correct ($message)', (data) => {
+  const markerSize = 7;
 
   const image = testUtils
-    .load('featureMatching/polygons/betterScaleneTriangle.png')
-    .convertColor(ImageColorModel.GREY);
-
-  const rotated = testUtils
-    .load('featureMatching/polygons/betterScaleneTriangle90.png')
-    .convertColor(ImageColorModel.GREY);
-
-  const keypoints = getOrientedFastKeypoints(image, { windowSize });
-  const keypointsRotated = getOrientedFastKeypoints(rotated, { windowSize });
-  console.log(keypoints, keypointsRotated);
+    .load(`featureMatching/polygons/${data.image}.png` as TestImagePath)
+    .convertColor(ImageColorModel.GREY)
+    .invert();
+  const keypoints = getOrientedFastKeypoints(image);
 
   expect(
     drawKeypoints(image, keypoints, { markerSize, showOrientation: true }),
   ).toMatchImageSnapshot();
-  expect(
-    drawKeypoints(rotated, keypointsRotated, {
-      markerSize,
-      showOrientation: true,
-    }),
-  ).toMatchImageSnapshot();
+});
 
-  expect([keypoints, keypointsRotated]).toBeDeepCloseTo(
-    [
-      [
-        {
-          origin: { row: 607, column: 132 },
-          score: 2680,
-          angle: 145.3,
-        },
-        {
-          origin: { row: 50, column: 292 },
-          score: 2662,
-          angle: -112.2,
-        },
-      ],
-      [
-        {
-          origin: { row: 607, column: 132 },
-          score: 2680,
-          angle: 123.7,
-        },
-        {
-          origin: { row: 50, column: 292 },
-          score: 2662,
-          angle: -95.4,
-        },
-      ],
-    ],
-    1,
-  );
+test('check angle for different windowSize', () => {
+  const image = testUtils
+    .load('featureMatching/polygons/scaleneTriangle10.png')
+    .convertColor(ImageColorModel.GREY)
+    .invert();
+
+  const angle77 = getOrientedFastKeypoints(image)[0].angle;
+  const angle15 = getOrientedFastKeypoints(image, {
+    centroidPatchDiameter: 15,
+  })[0].angle;
+  const angle31 = getOrientedFastKeypoints(image, {
+    centroidPatchDiameter: 31,
+  })[0].angle;
+
+  expect([angle77, angle15, angle31]).toBeDeepCloseTo([69.81, 62.84, 61.79], 0);
 });
