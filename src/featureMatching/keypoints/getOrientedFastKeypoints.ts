@@ -59,7 +59,7 @@ export function getOrientedFastKeypoints(
   let orientedFastKeypoints: OrientedFastKeypoint[] = [];
   for (let keypoint of keypoints) {
     const centroid = getPatchIntensityCentroid(image, {
-      origin: keypoint.origin,
+      center: keypoint.origin,
       radius,
     })[0];
     const angle = toDegrees(getAngle({ column: 0, row: 0 }, centroid));

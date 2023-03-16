@@ -1,5 +1,6 @@
 import { Image, ImageCoordinates } from '../../Image';
 import { Point } from '../../geometry';
+import { getFilledCirclePoints } from '../../utils/geometry/getCirclePoints';
 import { checkBorderDistance } from '../utils/checkBorderDistance';
 
 export interface GetPatchIntensityMomentOptions {
@@ -8,7 +9,7 @@ export interface GetPatchIntensityMomentOptions {
    *
    * @default The center of the image.
    */
-  origin?: Point;
+  center?: Point;
   /**
    * Radius of the circular window.
    *
@@ -27,7 +28,7 @@ export interface GetPatchIntensityMomentOptions {
  * @param p - Order along x.
  * @param q - Order along y.
  * @param options - Get intensity moment options.
- * @returns The intensity moment of order pq or the circular window.
+ * @returns The intensity moment of order pq of the circular window relative to the center.
  */
 export function getPatchIntensityMoment(
   image: Image,
@@ -35,29 +36,25 @@ export function getPatchIntensityMoment(
   q: number,
   options: GetPatchIntensityMomentOptions = {},
 ): number[] {
-  const { origin = image.getCoordinates(ImageCoordinates.CENTER), radius = 3 } =
-    options;
+  const {
+    center: origin = image.getCoordinates(ImageCoordinates.CENTER),
+    radius = 3,
+  } = options;
 
   if (!checkBorderDistance(image, origin, radius)) {
     throw new Error(`desired patch is too close to image border`);
   }
-
   let moment = new Array(image.channels).fill(0);
-  for (let row = origin.row - radius; row < origin.row + radius; row++) {
-    for (
-      let column = origin.column - radius;
-      column < origin.column + radius;
-      column++
-    ) {
-      const xDistance = column - origin.column;
-      const yDistance = row - origin.row;
 
-      if (xDistance ** 2 + yDistance ** 2 <= radius ** 2) {
-        for (let channel = 0; channel < image.channels; channel++) {
-          const intensity = image.getValue(column, row, channel);
-          moment[channel] += xDistance ** p * yDistance ** q * intensity;
-        }
-      }
+  let relativeCirclePoints = getFilledCirclePoints(radius);
+  for (let point of relativeCirclePoints) {
+    for (let channel = 0; channel < image.channels; channel++) {
+      const intensity = image.getValue(
+        point.column + origin.column,
+        point.row + origin.row,
+        channel,
+      );
+      moment[channel] += point.column ** p * point.row ** q * intensity;
     }
   }
   return moment;

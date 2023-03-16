@@ -333,7 +333,6 @@ export class Image {
     const start = (row * this.width + column) * this.channels;
     for (let i = 0; i < this.channels; i++) {
       this.data[start + i] = value[i];
-      console.log(this.data[start + i], value[i]);
     }
   }
 
@@ -346,7 +345,6 @@ export class Image {
    */
   public setVisiblePixel(column: number, row: number, value: number[]): void {
     if (column >= 0 && column < this.width && row >= 0 && row < this.height) {
-      console.log(value);
       this.setPixel(column, row, value);
     }
   }

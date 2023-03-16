@@ -8,25 +8,68 @@ test('3x3 empty image', () => {
   expect(result).toStrictEqual([{ column: 0, row: 0 }]);
 });
 
-test.only('patch, default options', () => {
-  const image = testUtils.load('featureMatching/patch.png');
-  console.log(image.colorModel);
+test('3x3 image', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0],
+    [1, 0, 0],
+    [0, 0, 0],
+  ]);
+  const result = getPatchIntensityCentroid(image, { radius: 1 });
+  expect(result).toStrictEqual([{ column: -1, row: 0 }]);
+});
 
-  const centroid = round(getPatchIntensityCentroid(image)[0]);
-  console.log(centroid);
+test('5x5 image', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 9],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+  ]);
+  const result = getPatchIntensityCentroid(image, { radius: 2 });
+  expect(result).toStrictEqual([{ column: 1.9, row: 0 }]);
+});
+
+test('5x5 image, diagonal line', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0],
+    [0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+  ]);
+  const result = getPatchIntensityCentroid(image, { radius: 2 });
+  expect(result).toStrictEqual([{ column: -0.5, row: -0.5 }]);
+});
+
+test('check window is circular', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 0],
+    [0, 0, 0, 1, 0],
+    [0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 100],
+  ]);
+  const result = getPatchIntensityCentroid(image, { radius: 2 });
+  expect(result).toStrictEqual([{ column: 1, row: 0 }]);
+});
+
+test('patch, default options', () => {
+  const image = testUtils.load('featureMatching/patch.png');
+  image.invert({ out: image });
+
+  const radius = 3;
+
+  const centroid = getPatchIntensityCentroid(image)[0];
 
   const center = image.getCoordinates(ImageCoordinates.CENTER);
 
-  const point = sum(center, centroid);
-  console.log(point);
+  const point = round(sum(center, centroid));
 
   const result = image.convertColor(ImageColorModel.RGB);
-  for (let i = 14; i < 15; i++) {
-    result.drawPoints([{ row: i, column: i }], {
-      color: [0, 255, 0],
-      out: result,
-    });
-  }
+  result.drawCircle(center, radius + 1, { color: [255, 0, 0], out: result });
+
+  result.drawPoints([point], { color: [0, 255, 0], out: result });
 
   expect(result).toMatchImageSnapshot();
 });
