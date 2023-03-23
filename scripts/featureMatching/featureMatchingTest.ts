@@ -17,7 +17,7 @@ import { GetColorsOptions } from '../../src/featureMatching/utils/getColors';
 import { getMinMax } from '../../src/utils/getMinMax';
 
 import util from 'util';
-import { sliceBrief } from './sliceBrief';
+import { sliceBrief } from '../../src/featureMatching/descriptors/utils/sliceBrief';
 util.inspect.defaultOptions.depth = 5;
 
 const getBriefOptions: GetBriefOptions = {
