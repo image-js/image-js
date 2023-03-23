@@ -6,13 +6,13 @@ import { getKeypointPatch } from '../getKeypointPatch';
 
 test.each([
   {
-    message: 'better scalene triangle',
-    image: 'betterScaleneTriangle',
+    message: 'scalene triangle',
+    image: 'scaleneTriangle',
     expected: 2,
   },
   {
-    message: 'better scalene triangle rotated 90',
-    image: 'betterScaleneTriangle90',
+    message: 'scalene triangle rotated 90',
+    image: 'scaleneTriangle90',
     expected: 2,
   },
 ])('default options ($message)', (data) => {
@@ -36,13 +36,13 @@ test.each([
 
 test.each([
   {
-    message: 'better scalene triangle',
-    image: 'betterScaleneTriangle',
+    message: 'scalene triangle',
+    image: 'scaleneTriangle',
     expected: 2,
   },
   {
-    message: 'better scalene triangle rotated 90',
-    image: 'betterScaleneTriangle90',
+    message: 'scalene triangle rotated 90',
+    image: 'scaleneTriangle90',
     expected: 2,
   },
 ])('centroidPatchDiameter = 31 ($message)', (data) => {

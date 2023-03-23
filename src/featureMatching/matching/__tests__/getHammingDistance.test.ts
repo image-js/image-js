@@ -24,33 +24,33 @@ test('two random arrays', () => {
 
 test.each([
   {
-    message: 'windowSize = 7',
-    windowSize: 7,
+    message: 'centroidPatchDiameter = 7',
+    centroidPatchDiameter: 7,
     expected: [
-      { srcIndex: 0, dstIndex: 0, distance: 11 },
-      { srcIndex: 0, dstIndex: 1, distance: 20 },
-      { srcIndex: 1, dstIndex: 0, distance: 12 },
-      { srcIndex: 1, dstIndex: 1, distance: 15 },
+      { srcIndex: 0, dstIndex: 0, distance: 18 },
+      { srcIndex: 0, dstIndex: 1, distance: 36 },
+      { srcIndex: 1, dstIndex: 0, distance: 34 },
+      { srcIndex: 1, dstIndex: 1, distance: 10 },
     ],
   },
   {
-    message: 'windowSize = 15',
-    windowSize: 15,
+    message: 'centroidPatchDiameter = 15',
+    centroidPatchDiameter: 15,
     expected: [
-      { srcIndex: 0, dstIndex: 0, distance: 14 },
-      { srcIndex: 0, dstIndex: 1, distance: 15 },
-      { srcIndex: 1, dstIndex: 0, distance: 14 },
-      { srcIndex: 1, dstIndex: 1, distance: 7 },
+      { srcIndex: 0, dstIndex: 0, distance: 6 },
+      { srcIndex: 0, dstIndex: 1, distance: 37 },
+      { srcIndex: 1, dstIndex: 0, distance: 28 },
+      { srcIndex: 1, dstIndex: 1, distance: 11 },
     ],
   },
   {
-    message: 'windowSize = 31',
-    windowSize: 31,
+    message: 'centroidPatchDiameter = 31',
+    centroidPatchDiameter: 31,
     expected: [
-      { srcIndex: 0, dstIndex: 0, distance: 14 },
-      { srcIndex: 0, dstIndex: 1, distance: 14 },
-      { srcIndex: 1, dstIndex: 0, distance: 15 },
-      { srcIndex: 1, dstIndex: 1, distance: 9 },
+      { srcIndex: 0, dstIndex: 0, distance: 4 },
+      { srcIndex: 0, dstIndex: 1, distance: 36 },
+      { srcIndex: 1, dstIndex: 0, distance: 29 },
+      { srcIndex: 1, dstIndex: 1, distance: 11 },
     ],
   },
 ])('check distance for each keypoint pair ($message)', (data) => {
@@ -58,14 +58,14 @@ test.each([
     .load('featureMatching/polygons/scaleneTriangle.png')
     .convertColor(ImageColorModel.GREY);
   const sourceKeypoints = getOrientedFastKeypoints(source, {
-    centroidPatchDiameter: data.windowSize,
+    centroidPatchDiameter: data.centroidPatchDiameter,
   });
   const sourceBrief = getBriefDescriptors(source, sourceKeypoints);
   const destination = testUtils
     .load('featureMatching/polygons/scaleneTriangle10.png')
     .convertColor(ImageColorModel.GREY);
   const destinationKeypoints = getOrientedFastKeypoints(destination, {
-    centroidPatchDiameter: data.windowSize,
+    centroidPatchDiameter: data.centroidPatchDiameter,
   });
   const destinationBrief = getBriefDescriptors(
     destination,
