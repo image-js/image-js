@@ -101,71 +101,17 @@ describe('crosscheck', () => {
 });
 
 describe('getCrosscheckMatches', () => {
-  it.each([
-    {
-      message: 'scalene triangle',
-      source: 'scaleneTriangle',
-      destination: 'scaleneTriangle2',
-      expected: 1,
-    },
-    {
-      message: 'polygon',
-      source: 'polygon',
-      destination: 'polygon2',
-      expected: 7,
-    },
-    {
-      message: 'polygon rotated 180°',
-      source: 'polygon',
-      destination: 'polygonRotated180degrees',
-      expected: 3,
-    },
-    {
-      message: 'polygon rotated 10°',
-      source: 'polygon',
-      destination: 'polygonRotated10degrees',
-      expected: 4,
-    },
-  ])('various polygons ($message)', (data) => {
-    const source = testUtils
-      .load(`featureMatching/polygons/${data.source}.png` as TestImagePath)
-      .convertColor(ImageColorModel.GREY);
-    const sourceKeypoints = getOrientedFastKeypoints(source);
-    const sourceDescriptors = getBriefDescriptors(
-      source,
-      sourceKeypoints,
-    ).descriptors;
-    const destination = testUtils
-      .load(`featureMatching/polygons/${data.destination}.png` as TestImagePath)
-      .convertColor(ImageColorModel.GREY);
-    const destinationKeypoints = getOrientedFastKeypoints(destination);
-    const destinationDescriptors = getBriefDescriptors(
-      destination,
-      destinationKeypoints,
-    ).descriptors;
-
-    const matches = getCrosscheckMatches(
-      sourceDescriptors,
-      destinationDescriptors,
-    );
-
-    expect(matches.length).toBe(data.expected);
-
-    const montage = new Montage(source, destination);
-    montage.drawKeypoints(sourceKeypoints);
-    montage.drawKeypoints(destinationKeypoints, {
-      origin: montage.destinationOrigin,
-    });
-    montage.drawMatches(matches, sourceKeypoints, destinationKeypoints);
-
-    expect(montage.image).toMatchImageSnapshot();
-  });
-
   test.each([
     {
       message: 'scalene triangle',
       source: 'scaleneTriangle',
       destination: 'scaleneTriangle2',
+      expected: 2,
+    },
+    {
+      message: 'scalene triangle 90',
+      source: 'scaleneTriangle',
+      destination: 'scaleneTriangle90',
       expected: 2,
     },
     {
@@ -178,7 +124,7 @@ describe('getCrosscheckMatches', () => {
       message: 'polygon rotated 180°',
       source: 'polygon',
       destination: 'polygonRotated180degrees',
-      expected: 5,
+      expected: 6,
     },
     {
       message: 'polygon rotated 10°',
@@ -186,8 +132,8 @@ describe('getCrosscheckMatches', () => {
       destination: 'polygonRotated10degrees',
       expected: 4,
     },
-  ])('various polygons, change centroid patch diameter ($message)', (data) => {
-    const patchDiameter = 15;
+  ])('various polygons, centroidPatchDiameter = 31 ($message)', (data) => {
+    const patchDiameter = 31;
 
     // remove keypoints too close to one another
     const bestKptRadius = 10;
