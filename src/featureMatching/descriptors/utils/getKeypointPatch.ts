@@ -48,7 +48,7 @@ export function getKeypointPatch(
 
   const cropped = extractSquareImage(image, keypoint.origin, cropWidth);
 
-  const rotated = cropped.transformRotate(keypoint.angle, {
+  const rotated = cropped.transformRotate(-keypoint.angle, {
     center: ImageCoordinates.CENTER,
     interpolationType: InterpolationType.NEAREST,
   });

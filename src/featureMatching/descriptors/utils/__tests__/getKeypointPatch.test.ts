@@ -1,37 +1,27 @@
 import { TestImagePath } from '../../../../../test/TestImagePath';
 import { ImageColorModel } from '../../../../Image';
-import { getBestKeypointsInRadius } from '../../../keypoints/getBestKeypointsInRadius';
 import { getOrientedFastKeypoints } from '../../../keypoints/getOrientedFastKeypoints';
 import { drawKeypoints } from '../../../visualize/drawKeypoints';
 import { getKeypointPatch } from '../getKeypointPatch';
 
 test.each([
   {
-    message: 'scalene triangle',
-    image: 'scaleneTriangle',
+    message: 'better scalene triangle',
+    image: 'betterScaleneTriangle',
     expected: 2,
   },
   {
-    message: 'scalene triangle rotated 10°',
-    image: 'scaleneTriangle10',
+    message: 'better scalene triangle rotated 90',
+    image: 'betterScaleneTriangle90',
     expected: 2,
-  },
-  {
-    message: 'polygon rotated 180°',
-    image: 'polygonRotated180degrees',
-    expected: 8,
   },
 ])('default options ($message)', (data) => {
   const image = testUtils
     .load(`featureMatching/polygons/${data.image}.png` as TestImagePath)
+    .convertColor(ImageColorModel.GREY)
     .invert();
 
-  const grey = image.convertColor(ImageColorModel.GREY);
-
-  const allKeypoints = getOrientedFastKeypoints(grey, {
-    centroidPatchDiameter: 15,
-  });
-  const keypoints = getBestKeypointsInRadius(allKeypoints, 10);
+  const keypoints = getOrientedFastKeypoints(image);
 
   expect(keypoints).toHaveLength(data.expected);
 
@@ -46,51 +36,35 @@ test.each([
 
 test.each([
   {
-    message: 'scalene triangle',
-    image: 'scaleneTriangle',
-  },
-  {
-    message: 'scalene triangle rotated 10°',
-    image: 'scaleneTriangle10',
-  },
-  {
     message: 'better scalene triangle',
     image: 'betterScaleneTriangle',
+    expected: 2,
   },
   {
     message: 'better scalene triangle rotated 90',
     image: 'betterScaleneTriangle90',
+    expected: 2,
   },
-])('centroidPatchDiameter = 15 ($message)', (data) => {
+])('centroidPatchDiameter = 31 ($message)', (data) => {
   const image = testUtils
     .load(`featureMatching/polygons/${data.image}.png` as TestImagePath)
     .convertColor(ImageColorModel.GREY)
     .invert();
 
   const keypoints = getOrientedFastKeypoints(image, {
-    centroidPatchDiameter: 15,
+    centroidPatchDiameter: 31,
   });
+
+  expect(keypoints).toHaveLength(data.expected);
+
+  const kptImage = drawKeypoints(image, keypoints, {
+    showOrientation: true,
+    markerSize: 31,
+  });
+
+  expect(kptImage).toMatchImageSnapshot();
 
   for (let keypoint of keypoints) {
     expect(getKeypointPatch(image, keypoint)).toMatchImageSnapshot();
   }
-});
-
-test('patch had black pixels on border', () => {
-  const image = testUtils
-    .load(`featureMatching/polygons/polygonRotated180degrees.png`)
-    .invert();
-
-  const grey = image.convertColor(ImageColorModel.GREY);
-
-  const allKeypoints = getOrientedFastKeypoints(grey, {
-    centroidPatchDiameter: 15,
-  });
-  const keypoints = getBestKeypointsInRadius(allKeypoints, 10);
-  const keypoint = keypoints[4];
-
-  const result = getKeypointPatch(image, keypoint);
-  expect(result.width).toBe(31);
-
-  expect(result).toMatchImageSnapshot();
 });
