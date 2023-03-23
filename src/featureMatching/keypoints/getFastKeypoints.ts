@@ -43,13 +43,6 @@ export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
    * Options for the Harris score computation.
    */
   harrisScoreOptions?: GetHarrisScoreOptions;
-  /**
-   * Should the keypoint scores be normalized between 0 (worst corner) and 1 (best corner).
-   * This feature is only useful if you want to verify the keypoints scores.
-   *
-   * @default false
-   */
-  normalizeScores?: boolean;
 }
 
 export interface FastKeypoint {
@@ -80,7 +73,6 @@ export function getFastKeypoints(
   const {
     fastRadius = 3,
     scoreAlgorithm = 'FAST',
-    normalizeScores = false,
     harrisScoreOptions,
   } = options;
 
@@ -160,26 +152,6 @@ export function getFastKeypoints(
   }
 
   keypoints.sort((a, b) => b.score - a.score);
-  if (normalizeScores) {
-    keypoints = getNormalizedKeypoints(keypoints);
-  }
+
   return keypoints.slice(0, maxNbFeatures);
-}
-
-/**
- * Normalizes the keypoints scores, the best keypoint having a score of 1 and the worst a score of 0.
- *
- * @param keypoints - The keypoints to process.
- * @returns Keypoints with normalized scores.
- */
-function getNormalizedKeypoints(keypoints: FastKeypoint[]): FastKeypoint[] {
-  const minValue = keypoints[keypoints.length - 1].score;
-  const maxValue = keypoints[0].score;
-  const scoreRange = maxValue - minValue;
-
-  for (let keypoint of keypoints) {
-    keypoint.score = (keypoint.score - minValue) / scoreRange;
-  }
-
-  return keypoints;
 }
