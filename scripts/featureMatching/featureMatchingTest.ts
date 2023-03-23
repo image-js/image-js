@@ -25,8 +25,11 @@ const getBriefOptions: GetBriefOptions = {
   bestKptRadius: 5,
 };
 
+const firstNumber = 1;
+const secondNumber = 2;
+
 let source = readSync(
-  '../../test/img/featureMatching/id-crops/crop1.png',
+  `../../test/img/featureMatching/id-crops/crop${firstNumber}.png`,
 ).convertColor(ImageColorModel.GREY);
 // fix contrast
 const sourceExtremums = getMinMax(source);
@@ -37,7 +40,7 @@ source.level({
 });
 
 let destination = readSync(
-  '../../test/img/featureMatching/id-crops/crop3.png',
+  `../../test/img/featureMatching/id-crops/crop${secondNumber}.png`,
 ).convertColor(ImageColorModel.GREY);
 // fix contrast
 const destinationExtremums = getMinMax(destination);
@@ -52,16 +55,10 @@ console.log({
   destination: { width: destination.width, height: destination.height },
 });
 
-const sliceBriefOptions = { start: 0, end: 20 };
+const sliceBriefOptions = { start: 0, end: 15 };
 
-const sourceBrief = sliceBrief(
-  getBrief(source, getBriefOptions),
-  sliceBriefOptions,
-);
-const destinationBrief = sliceBrief(
-  getBrief(destination, getBriefOptions),
-  sliceBriefOptions,
-);
+const sourceBrief = getBrief(source, getBriefOptions);
+const destinationBrief = getBrief(destination, getBriefOptions);
 
 console.table(sourceBrief.keypoints);
 
@@ -80,11 +77,11 @@ console.log({
   },
 });
 
-const matches = bruteForceOneMatch(
-  sourceBrief.descriptors,
-  destinationBrief.descriptors,
-);
-console.log('nb matches: ' + matches.length);
+// const matches = bruteForceOneMatch(
+//   sourceBrief.descriptors,
+//   destinationBrief.descriptors,
+// );
+// console.log('nb matches: ' + matches.length);
 
 const crossMatches = getCrosscheckMatches(
   sourceBrief.descriptors,
@@ -99,17 +96,17 @@ const montage = new Montage(source, destination, {
 
 const showDistanceOptions: GetColorsOptions = { minValueFactor: 0.2 };
 
-montage.drawMatches(
-  matches,
-  sourceBrief.keypoints,
-  destinationBrief.keypoints,
-  {
-    showDistance: true,
-    color: [255, 0, 0],
-    circleDiameter: getBriefOptions.centroidPatchDiameter,
-    showDistanceOptions,
-  },
-);
+// montage.drawMatches(
+//   matches,
+//   sourceBrief.keypoints,
+//   destinationBrief.keypoints,
+//   {
+//     showDistance: true,
+//     color: [255, 0, 0],
+//     circleDiameter: getBriefOptions.centroidPatchDiameter,
+//     showDistanceOptions,
+//   },
+// );
 
 montage.drawMatches(
   crossMatches,
@@ -136,6 +133,6 @@ montage.drawKeypoints(destinationBrief.keypoints, {
   origin: montage.destinationOrigin,
 });
 
-writeSync('./result.png', montage.image);
+writeSync(`./results/result-${firstNumber}-${secondNumber}.png`, montage.image);
 
 console.log('IMAGE WRITTEN TO DISK');
