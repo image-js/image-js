@@ -25,9 +25,9 @@ const getBriefOptions: GetBriefOptions = {
   bestKptRadius: 5,
 };
 
-let source = readSync('../../test/img/featureMatching/crop1.png').convertColor(
-  ImageColorModel.GREY,
-);
+let source = readSync(
+  '../../test/img/featureMatching/id-crops/crop1.png',
+).convertColor(ImageColorModel.GREY);
 // fix contrast
 const sourceExtremums = getMinMax(source);
 source.level({
@@ -37,7 +37,7 @@ source.level({
 });
 
 let destination = readSync(
-  '../../test/img/featureMatching/crop3.png',
+  '../../test/img/featureMatching/id-crops/crop3.png',
 ).convertColor(ImageColorModel.GREY);
 // fix contrast
 const destinationExtremums = getMinMax(destination);

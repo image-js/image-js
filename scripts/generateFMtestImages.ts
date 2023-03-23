@@ -9,9 +9,9 @@ const basePath = join(__dirname, '../test/img/featureMatching/polygons');
 
 console.log(basePath);
 
-const original = readSync(`${basePath}/scaleneTriangle.png`);
+const original = readSync(`${basePath}/betterScaleneTriangle.png`);
 
-const angles = [10, 90, 180];
+const angles = [2, 10, 90, 180];
 for (let angle of angles) {
   const rotated = original.transformRotate(angle, { fullImage: true });
   writeSync(`${basePath}/scaleneTriangle${angle}.png`, rotated);

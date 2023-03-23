@@ -87,7 +87,7 @@ test('patch, default options', () => {
   expect(result).toMatchImageSnapshot();
 });
 
-test('better triangle keypoint', () => {
+test('scalene triangle keypoint', () => {
   const origin = { row: 332, column: 253 };
   const size = 7;
   const radius = (size - 1) / 2;
@@ -98,7 +98,7 @@ test('better triangle keypoint', () => {
   };
 
   const origialImage = testUtils
-    .load('featureMatching/polygons/betterScaleneTriangle.png')
+    .load('featureMatching/polygons/scaleneTriangle.png')
     .convertColor(ImageColorModel.GREY)
     .invert();
 
@@ -123,8 +123,8 @@ test('better triangle keypoint', () => {
   expect(result).toMatchImageSnapshot();
 });
 
-test('better triangle 90 keypoint', () => {
-  const origin = { row: 730, column: 291 };
+test('scalene triangle 90 keypoint', () => {
+  const origin = { row: 868, column: 332 };
   const size = 7;
   const radius = (size - 1) / 2;
 
@@ -133,19 +133,19 @@ test('better triangle 90 keypoint', () => {
     column: origin.column - radius,
   };
 
-  const origialImage = testUtils
-    .load('featureMatching/polygons/betterScaleneTriangle90.png')
+  const originalImage = testUtils
+    .load('featureMatching/polygons/scaleneTriangle90.png')
     .convertColor(ImageColorModel.GREY)
     .invert();
 
-  const image = origialImage.crop({
+  const image = originalImage.crop({
     origin: cropOrigin,
     width: size,
     height: size,
   });
 
   const centroid = getPatchIntensityCentroid(image, { radius })[0];
-  expect(centroid).toBeDeepCloseTo({ column: 0.634, row: -1.074 });
+  expect(centroid).toBeDeepCloseTo({ column: 0.204, row: -1.281 });
 
   const center = image.getCoordinates(ImageCoordinates.CENTER);
 

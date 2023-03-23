@@ -175,14 +175,14 @@ test('patch with one keypoint, centroidPatchDiameter=15', () => {
 
 test.each([
   {
-    message: 'betterScaleneTriangle',
-    image: 'betterScaleneTriangle',
+    message: 'scaleneTriangle',
+    image: 'scaleneTriangle',
   },
   {
-    message: 'betterScaleneTriangle90',
-    image: 'betterScaleneTriangle90',
+    message: 'scaleneTriangle90',
+    image: 'scaleneTriangle90',
   },
-])('patchDiameter = 31 ($message)', (data) => {
+])('centroidPatchDiameter = 31 ($message)', (data) => {
   const centroidPatchDiameter = 31;
 
   const image = testUtils
@@ -213,7 +213,7 @@ test('verify single keypoint orientation', () => {
   const centroidPatchDiameter = 31;
 
   const origialImage = testUtils
-    .load('featureMatching/polygons/betterScaleneTriangle.png')
+    .load('featureMatching/polygons/scaleneTriangle.png')
     .convertColor(ImageColorModel.GREY)
     .invert();
 
@@ -237,7 +237,7 @@ test('verify single keypoint orientation', () => {
 test('small patchsize and large marker', () => {
   // this test shows that the orientation is not good when the centroidPatchDiameter is too small
   // ideally we should use the same patch size for orientation and descriptors (getKeypointPatch)
-  const origin = { row: 730, column: 291 };
+  const origin = { row: 868, column: 332 };
   const size = 51;
   const radius = (size - 1) / 2;
 
@@ -249,7 +249,7 @@ test('small patchsize and large marker', () => {
   const centroidPatchDiameter = 7;
 
   const origialImage = testUtils
-    .load('featureMatching/polygons/betterScaleneTriangle90.png')
+    .load('featureMatching/polygons/scaleneTriangle90.png')
     .convertColor(ImageColorModel.GREY)
     .invert();
 
@@ -270,7 +270,8 @@ test('small patchsize and large marker', () => {
   expect(result).toMatchImageSnapshot();
 });
 
-test('check angle for different windowSize', () => {
+test('check angle for different centroidPatchDiameter', () => {
+  // we can see the impact of patch size on the orientation
   const image = testUtils
     .load('featureMatching/polygons/scaleneTriangle10.png')
     .convertColor(ImageColorModel.GREY)
@@ -284,5 +285,5 @@ test('check angle for different windowSize', () => {
     centroidPatchDiameter: 31,
   })[0].angle;
 
-  expect([angle77, angle15, angle31]).toBeDeepCloseTo([69.81, 62.84, 61.79], 0);
+  expect([angle15, angle31, angle77]).toBeDeepCloseTo([5.15, 3.64, 9.71], 0);
 });
