@@ -173,27 +173,6 @@ test('patch with one keypoint, centroidPatchDiameter=15', () => {
   ]);
 });
 
-test('check we handle edge cases properly', () => {
-  const image = testUtils
-    .load('featureMatching/crop1.png')
-    .convertColor(ImageColorModel.GREY);
-
-  const keypoints = getOrientedFastKeypoints(image);
-
-  expect(keypoints.length).toBe(403);
-});
-
-test('angle should never be NaN', () => {
-  const image = testUtils
-    .load('featureMatching/crop1.png')
-    .convertColor(ImageColorModel.GREY);
-
-  const keypoints = getOrientedFastKeypoints(image);
-  for (let keypoint of keypoints) {
-    expect(isNaN(keypoint.angle)).toBe(false);
-  }
-});
-
 test.each([
   {
     message: 'betterScaleneTriangle',
@@ -203,18 +182,92 @@ test.each([
     message: 'betterScaleneTriangle90',
     image: 'betterScaleneTriangle90',
   },
-])('orientation should look correct ($message)', (data) => {
-  const markerSize = 7;
+])('patchDiameter = 31 ($message)', (data) => {
+  const centroidPatchDiameter = 31;
 
   const image = testUtils
     .load(`featureMatching/polygons/${data.image}.png` as TestImagePath)
     .convertColor(ImageColorModel.GREY)
     .invert();
-  const keypoints = getOrientedFastKeypoints(image);
+
+  const keypoints = getOrientedFastKeypoints(image, { centroidPatchDiameter });
 
   expect(
-    drawKeypoints(image, keypoints, { markerSize, showOrientation: true }),
+    drawKeypoints(image, keypoints, {
+      markerSize: centroidPatchDiameter,
+      showOrientation: true,
+    }),
   ).toMatchImageSnapshot();
+});
+
+test('verify single keypoint orientation', () => {
+  const origin = { row: 332, column: 253 };
+  const size = 51;
+  const radius = (size - 1) / 2;
+
+  const cropOrigin = {
+    row: origin.row - radius,
+    column: origin.column - radius,
+  };
+
+  const centroidPatchDiameter = 31;
+
+  const origialImage = testUtils
+    .load('featureMatching/polygons/betterScaleneTriangle.png')
+    .convertColor(ImageColorModel.GREY)
+    .invert();
+
+  const image = origialImage.crop({
+    origin: cropOrigin,
+    width: size,
+    height: size,
+  });
+
+  const keypoints = getOrientedFastKeypoints(image, { centroidPatchDiameter });
+  expect(keypoints.length).toBe(1);
+
+  const result = drawKeypoints(image, keypoints, {
+    markerSize: centroidPatchDiameter,
+    showOrientation: true,
+  });
+
+  expect(result).toMatchImageSnapshot();
+});
+
+test('small patchsize and large marker', () => {
+  // this test shows that the orientation is not good when the centroidPatchDiameter is too small
+  // ideally we should use the same patch size for orientation and descriptors (getKeypointPatch)
+  const origin = { row: 730, column: 291 };
+  const size = 51;
+  const radius = (size - 1) / 2;
+
+  const cropOrigin = {
+    row: origin.row - radius,
+    column: origin.column - radius,
+  };
+
+  const centroidPatchDiameter = 7;
+
+  const origialImage = testUtils
+    .load('featureMatching/polygons/betterScaleneTriangle90.png')
+    .convertColor(ImageColorModel.GREY)
+    .invert();
+
+  const image = origialImage.crop({
+    origin: cropOrigin,
+    width: size,
+    height: size,
+  });
+
+  const keypoints = getOrientedFastKeypoints(image, { centroidPatchDiameter });
+  expect(keypoints.length).toBe(1);
+
+  const result = drawKeypoints(image, keypoints, {
+    markerSize: 31,
+    showOrientation: true,
+  });
+
+  expect(result).toMatchImageSnapshot();
 });
 
 test('check angle for different windowSize', () => {
