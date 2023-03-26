@@ -46,7 +46,7 @@ export interface Feret {
  */
 export function getFeret(mask: Mask): Feret {
   const hull = mask.getConvexHull();
-  const originalPoints = hull.points;
+  const hullPoints = hull.points;
   if (hull.surface === 0) {
     return {
       minDiameter: {
@@ -74,23 +74,23 @@ export function getFeret(mask: Mask): Feret {
   let minWidthAngle = 0;
   let minLinePoints: Point[] = [];
 
-  for (let i = 0; i < originalPoints.length; i++) {
+  for (let i = 0; i < hullPoints.length; i++) {
     let angle = getAngle(
-      originalPoints[i],
-      originalPoints[(i + 1) % originalPoints.length],
+      hullPoints[i],
+      hullPoints[(i + 1) % hullPoints.length],
     );
 
     // We rotate so that it is parallel to X axis.
-    const temporaryPoints = rotate(-angle, originalPoints);
+    const rotatedPoints = rotate(-angle, hullPoints);
 
     let currentWidth = 0;
     let currentMinLinePoints: Point[] = [];
 
-    for (let j = 0; j < originalPoints.length; j++) {
-      let absWidth = Math.abs(temporaryPoints[i].row - temporaryPoints[j].row);
+    for (let j = 0; j < hullPoints.length; j++) {
+      let absWidth = Math.abs(rotatedPoints[i].row - rotatedPoints[j].row);
       if (absWidth > currentWidth) {
         currentWidth = absWidth;
-        currentMinLinePoints = [temporaryPoints[i], temporaryPoints[j]];
+        currentMinLinePoints = [rotatedPoints[i], rotatedPoints[j]];
       }
     }
     if (currentWidth < minWidth) {
@@ -108,14 +108,14 @@ export function getFeret(mask: Mask): Feret {
   // Compute maximum diameter
   let maxLinePoints: Point[] = [];
   let maxSquaredWidth = 0;
-  for (let i = 0; i < originalPoints.length - 1; i++) {
-    for (let j = i + 1; j < originalPoints.length; j++) {
+  for (let i = 0; i < hullPoints.length - 1; i++) {
+    for (let j = i + 1; j < hullPoints.length; j++) {
       let currentSquaredWidth =
-        (originalPoints[i].column - originalPoints[j].column) ** 2 +
-        (originalPoints[i].row - originalPoints[j].row) ** 2;
+        (hullPoints[i].column - hullPoints[j].column) ** 2 +
+        (hullPoints[i].row - hullPoints[j].row) ** 2;
       if (currentSquaredWidth > maxSquaredWidth) {
         maxSquaredWidth = currentSquaredWidth;
-        maxLinePoints = [originalPoints[i], originalPoints[j]];
+        maxLinePoints = [hullPoints[i], hullPoints[j]];
       }
     }
   }
