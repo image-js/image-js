@@ -85,6 +85,7 @@ describe('create new images', () => {
   });
 
   it('should throw on wrong bit depth', () => {
+    // @ts-expect-error we want to test the error.
     expect(() => new Image(1, 1, { depth: 20 })).toThrow(
       /unexpected color depth: 20/,
     );

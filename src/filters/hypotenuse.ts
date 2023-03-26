@@ -35,7 +35,7 @@ export function hypotenuse(
   }
 
   checkProcessable(image, 'hypotenuse', {
-    bitDepth: [8, 16, 32],
+    bitDepth: [8, 16],
   });
 
   if (image.width !== otherImage.width || image.height !== otherImage.height) {
