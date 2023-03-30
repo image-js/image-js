@@ -1,6 +1,6 @@
 import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 
-import { getAngle, getMathAngle } from '../getAngle';
+import { getAngle, getClockwiseAngle } from '../getAngle';
 
 expect.extend({ toBeDeepCloseTo });
 
@@ -82,6 +82,6 @@ test.each([
     Math.PI / 4,
   ],
 ])('getMathAngle (%s)', (_, point1, point2, expectedAngle) => {
-  const result = getMathAngle(point1, point2);
+  const result = getClockwiseAngle(point1, point2);
   expect(result).toBeCloseTo(expectedAngle);
 });

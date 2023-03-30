@@ -19,13 +19,13 @@ export function getAngle(p1: Point, p2: Point): number {
 }
 
 /**
- * Compute the mathematical angle in radians of the segment p1-p2.
+ * Compute the clockwise angle in radians between the x-axis and the segment p1-p2.
  *
  * @param p1 - First point.
  * @param p2 - Second point.
- * @returns The angle of the segment in radians.
+ * @returns Clockwise angle between x-axis and the segment.
  */
-export function getMathAngle(p1: Point, p2: Point): number {
+export function getClockwiseAngle(p1: Point, p2: Point): number {
   const diff = difference(p2, p1);
   const vector = normalize(diff);
   const atan = -Math.atan(vector.row / vector.column);

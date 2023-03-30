@@ -1,5 +1,5 @@
 import { Image } from '../../Image';
-import { getMathAngle } from '../../maskAnalysis/utils/getAngle';
+import { getClockwiseAngle } from '../../maskAnalysis/utils/getAngle';
 import { toDegrees } from '../../utils/geometry/angles';
 import { getRadius } from '../../utils/getRadius';
 import { checkBorderDistance } from '../utils/checkBorderDistance';
@@ -62,7 +62,7 @@ export function getOrientedFastKeypoints(
       center: keypoint.origin,
       radius,
     })[0];
-    const angle = toDegrees(getMathAngle({ column: 0, row: 0 }, centroid));
+    const angle = toDegrees(getClockwiseAngle({ column: 0, row: 0 }, centroid));
     orientedFastKeypoints.push({ ...keypoint, angle });
   }
   return orientedFastKeypoints;
