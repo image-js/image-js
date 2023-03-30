@@ -81,7 +81,7 @@ test.each([
     { column: 5, row: 4 },
     Math.PI / 4,
   ],
-])('getMathAngle (%s)', (_, point1, point2, expectedAngle) => {
+])('getClockwiseAngle (%s)', (_, point1, point2, expectedAngle) => {
   const result = getClockwiseAngle(point1, point2);
   expect(result).toBeCloseTo(expectedAngle);
 });
