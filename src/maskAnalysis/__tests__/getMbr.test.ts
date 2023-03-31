@@ -16,7 +16,7 @@ test('verify that angle is correct', () => {
       0 0 0 0 0 0 0 0
     `);
 
-  const result = getMbr(mask).corners;
+  const result = getMbr(mask).points;
   expect(result).toHaveLength(4);
 
   for (let i = 0; i < 4; i++) {
@@ -37,7 +37,7 @@ test('small rectangular ROI', () => {
     [1, 0, 0],
   ]);
 
-  const result = getMbr(mask).corners;
+  const result = getMbr(mask).points;
   expect(result).toBeDeepCloseTo(
     [
       { column: 4, row: 1 },
@@ -61,7 +61,7 @@ test('horizontal MBR', () => {
   const result = getMbr(mask);
 
   expect(result).toBeDeepCloseTo({
-    corners: [
+    points: [
       { column: 8, row: 3 },
       { column: 0, row: 3 },
       { column: 0, row: 0 },
@@ -86,7 +86,7 @@ test('other horizontal MBR', () => {
 
   const result = getMbr(mask);
   expect(result).toBeDeepCloseTo({
-    corners: [
+    points: [
       { column: 6, row: 3 },
       { column: 0, row: 3 },
       { column: 0, row: 0 },
@@ -108,7 +108,7 @@ test('small tilted rectangle', () => {
       `);
 
   const result = getMbr(mask);
-  expect(result.corners).toBeDeepCloseTo(
+  expect(result.points).toBeDeepCloseTo(
     [
       { column: 1.5, row: 3.5 },
       { column: -0.5, row: 1.5 },
@@ -129,7 +129,7 @@ test('large tilted rectangle', () => {
         0 0 1 1 1 0
         0 0 0 1 0 0
       `);
-  const result = getMbr(mask).corners;
+  const result = getMbr(mask).points;
   expect(result).toBeDeepCloseTo(
     [
       { column: 2.5, row: -0.5 },
@@ -143,7 +143,7 @@ test('large tilted rectangle', () => {
 
 test('one point ROI', () => {
   const mask = testUtils.createMask([[1]]);
-  const result = getMbr(mask).corners;
+  const result = getMbr(mask).points;
   expect(result).toBeDeepCloseTo([
     { column: 0, row: 1 },
     { column: 0, row: 0 },
@@ -157,7 +157,7 @@ test('2 points ROI', () => {
     [1, 0],
     [0, 1],
   ]);
-  const result = getMbr(mask).corners;
+  const result = getMbr(mask).points;
 
   expect(result).toBeDeepCloseTo(
     [
@@ -176,7 +176,7 @@ test('small triangular ROI', () => {
     [1, 0],
   ]);
 
-  const result = getMbr(mask).corners;
+  const result = getMbr(mask).points;
 
   expect(result).toBeDeepCloseTo(
     [
@@ -198,7 +198,7 @@ test('empty mask', () => {
   const result = getMbr(mask);
 
   expect(result).toStrictEqual({
-    corners: [],
+    points: [],
     angle: 0,
     width: 0,
     height: 0,
@@ -225,7 +225,7 @@ test('draw mbr on large image', () => {
     color: [0, 0, 255, 255],
   });
 
-  result = result.drawPolygon(mbr.corners, {
+  result = result.drawPolygon(mbr.points, {
     origin: roi.origin,
     strokeColor: [0, 255, 0, 255],
   });

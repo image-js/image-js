@@ -66,7 +66,9 @@ exports[`3x3 mask 1`] = `
     "id": 1,
     "mbr": {
       "angle": -0,
-      "corners": [
+      "height": 2.9999999999999996,
+      "perimeter": 10,
+      "points": [
         {
           "column": 3,
           "row": -3.834758505292834e-17,
@@ -84,8 +86,6 @@ exports[`3x3 mask 1`] = `
           "row": -2.2204460492503128e-16,
         },
       ],
-      "height": 2.9999999999999996,
-      "perimeter": 10,
       "surface": 5.999999999999999,
       "width": 2,
     },
@@ -161,7 +161,9 @@ exports[`3x3 mask 1`] = `
     "id": 2,
     "mbr": {
       "angle": 0,
-      "corners": [
+      "height": 1,
+      "perimeter": 4,
+      "points": [
         {
           "column": 6.123233995736766e-17,
           "row": 1,
@@ -179,8 +181,6 @@ exports[`3x3 mask 1`] = `
           "row": 0.9999999999999999,
         },
       ],
-      "height": 1,
-      "perimeter": 4,
       "surface": 1,
       "width": 1,
     },
@@ -269,7 +269,9 @@ exports[`3x3 mask 2`] = `
     "id": -1,
     "mbr": {
       "angle": -0,
-      "corners": [
+      "height": 2.9999999999999996,
+      "perimeter": 10,
+      "points": [
         {
           "column": 3,
           "row": -3.834758505292834e-17,
@@ -287,8 +289,6 @@ exports[`3x3 mask 2`] = `
           "row": -2.2204460492503128e-16,
         },
       ],
-      "height": 2.9999999999999996,
-      "perimeter": 10,
       "surface": 5.999999999999999,
       "width": 2,
     },

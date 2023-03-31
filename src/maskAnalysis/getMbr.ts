@@ -12,7 +12,7 @@ export interface Mbr {
   /**
    * Vertices of the MBR in clockwise order.
    */
-  corners: Point[];
+  points: Point[];
   /**
    * Perimeter of the MBR.
    */

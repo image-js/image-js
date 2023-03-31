@@ -14,7 +14,7 @@ import { getMbrAngle } from './getMbrAngle';
 export function getMbrFromPoints(points: readonly Point[]): Mbr {
   if (points.length === 0) {
     return {
-      corners: [],
+      points: [],
       angle: 0,
       width: 0,
       height: 0,
@@ -24,7 +24,7 @@ export function getMbrFromPoints(points: readonly Point[]): Mbr {
   }
   if (points.length === 1) {
     return {
-      corners: [points[0], points[0], points[0], points[0]],
+      points: [points[0], points[0], points[0], points[0]],
       perimeter: 0,
       surface: 0,
       angle: 0,
@@ -94,7 +94,7 @@ export function getMbrFromPoints(points: readonly Point[]): Mbr {
   const mbrAngle = getMbrAngle(mbrRotated);
 
   return {
-    corners: mbrRotated,
+    points: mbrRotated,
     surface: minSurface,
     angle: mbrAngle,
     width,

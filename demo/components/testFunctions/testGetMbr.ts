@@ -24,7 +24,7 @@ export function testGetMbr(image: Image): Image {
       color: [0, 0, 255, 255],
     });
 
-    result = result.drawPolygon(mbr.corners, {
+    result = result.drawPolygon(mbr.points, {
       origin: roi.origin,
       strokeColor: [0, 255, 0, 255],
     });
