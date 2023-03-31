@@ -22,6 +22,7 @@ test('getMap', () => {
 
   const rois = roiMapManager.getRois();
   const result = rois[0].getMap().data;
+
   const expected = new Int16Array([-1, 1, -3, 1, 1, 1, -2, -2, -2]);
   expect(result).toStrictEqual(expected);
 });

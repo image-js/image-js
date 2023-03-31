@@ -11,7 +11,6 @@ export function computeRois(roiMapManager: RoiMapManager): void {
 
   const whites = new Array(map.nbPositive);
   const blacks = new Array(map.nbNegative);
-
   for (let i = 0; i < map.nbPositive; i++) {
     whites[i] = {
       minRow: map.height,
@@ -22,8 +21,11 @@ export function computeRois(roiMapManager: RoiMapManager): void {
       id: i + 1,
     };
   }
+
   for (let i = 0; i < map.nbNegative; i++) {
     blacks[i] = {
+      borderLengths: [],
+      borderIDs: [],
       minRow: map.height,
       minColumn: map.width,
       maxRow: -1,
@@ -64,24 +66,24 @@ export function computeRois(roiMapManager: RoiMapManager): void {
   roiMapManager.whiteRois = new Array<Roi>(map.nbPositive);
   roiMapManager.blackRois = new Array<Roi>(map.nbNegative);
 
+  for (let i = 0; i < map.nbNegative; i++) {
+    let width = blacks[i].maxColumn - blacks[i].minColumn + 1;
+    let height = blacks[i].maxRow - blacks[i].minRow + 1;
+    let origin = { row: blacks[i].minRow, column: blacks[i].minColumn };
+    let id = blacks[i].id;
+    let surface = blacks[i].surface;
+    let blackRoi = new Roi(map, id, width, height, origin, surface);
+    roiMapManager.blackRois[i] = blackRoi;
+  }
+
   for (let i = 0; i < map.nbPositive; i++) {
-    let whiteRoi = new Roi(map, i);
-    whiteRoi.origin = { row: whites[i].minRow, column: whites[i].minColumn };
-    whiteRoi.width = whites[i].maxColumn - whites[i].minColumn + 1;
-    whiteRoi.height = whites[i].maxRow - whites[i].minRow + 1;
-    whiteRoi.surface = whites[i].surface;
-    whiteRoi.id = whites[i].id;
+    let width = whites[i].maxColumn - whites[i].minColumn + 1;
+    let height = whites[i].maxRow - whites[i].minRow + 1;
+    let origin = { row: whites[i].minRow, column: whites[i].minColumn };
+    let id = whites[i].id;
+    let surface = whites[i].surface;
+    let whiteRoi = new Roi(map, id, width, height, origin, surface);
 
     roiMapManager.whiteRois[i] = whiteRoi;
-  }
-  for (let i = 0; i < map.nbNegative; i++) {
-    let blackRoi = new Roi(map, i);
-    blackRoi.origin = { row: blacks[i].minRow, column: blacks[i].minColumn };
-    blackRoi.width = blacks[i].maxColumn - blacks[i].minColumn + 1;
-    blackRoi.height = blacks[i].maxRow - blacks[i].minRow + 1;
-    blackRoi.surface = blacks[i].surface;
-    blackRoi.id = blacks[i].id;
-
-    roiMapManager.blackRois[i] = blackRoi;
   }
 }

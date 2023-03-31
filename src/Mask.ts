@@ -66,7 +66,7 @@ export interface MaskOptions {
   /**
    * Origin of the image relative to a parent image.
    *
-   * @default {row: 0, column: 0}
+   * @default {row: 0, column: 0 }
    */
   origin?: Point;
   /**
@@ -512,7 +512,7 @@ export class Mask {
    * Get the coordinates of the points on the border of a shape defined in a mask.
    *
    * @param options - Get border points options.
-   * @returns Array of boder points.
+   * @returns Array of border points.
    */
   public getBorderPoints(options?: GetBorderPointsOptions): Point[] {
     return getBorderPoints(this, options);

@@ -12,7 +12,6 @@ test('3x3 mask, cross', () => {
     [1, 1, 1],
     [-2, 1, -4],
   ];
-
   expect(fromMask(mask).getMapMatrix()).toStrictEqual(expected);
 });
 

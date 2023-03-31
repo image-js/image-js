@@ -2,57 +2,197 @@
 
 exports[`3x3 mask 1`] = `
 [
-  Roi {
+  {
+    "convexHull": {
+      "perimeter": 9.23606797749979,
+      "points": [
+        {
+          "column": 0,
+          "row": 0,
+        },
+        {
+          "column": 0,
+          "row": 2,
+        },
+        {
+          "column": 1,
+          "row": 2,
+        },
+        {
+          "column": 3,
+          "row": 1,
+        },
+        {
+          "column": 3,
+          "row": 0,
+        },
+      ],
+      "surface": 5,
+    },
+    "eqpc": 2.256758334191025,
+    "feret": {
+      "aspectRatio": 0.554700196225229,
+      "maxDiameter": {
+        "angle": -33.690067525979785,
+        "length": 3.605551275463989,
+        "points": [
+          {
+            "column": 0,
+            "row": 2,
+          },
+          {
+            "column": 3,
+            "row": 0,
+          },
+        ],
+      },
+      "minDiameter": {
+        "angle": 180,
+        "length": 1.9999999999999996,
+        "points": [
+          {
+            "column": 3,
+            "row": 0,
+          },
+          {
+            "column": 0,
+            "row": 2,
+          },
+        ],
+      },
+    },
+    "fillRatio": 1,
     "height": 2,
     "id": 1,
-    "map": {
-      "data": Int16Array [
-        1,
-        1,
-        1,
-        1,
-        -1,
-        -1,
-        -1,
-        -1,
-        2,
+    "mbr": {
+      "angle": -0,
+      "corners": [
+        {
+          "column": 3,
+          "row": -3.834758505292834e-17,
+        },
+        {
+          "column": 3,
+          "row": 2,
+        },
+        {
+          "column": 3.2162452993532727e-16,
+          "row": 2,
+        },
+        {
+          "column": 4.440892098500626e-16,
+          "row": -2.2204460492503128e-16,
+        },
       ],
-      "height": 3,
-      "nbNegative": 1,
-      "nbPositive": 2,
-      "width": 3,
+      "height": 2.9999999999999996,
+      "perimeter": 10,
+      "surface": 5.999999999999999,
+      "width": 2,
     },
     "origin": {
       "column": 0,
       "row": 0,
     },
+    "ped": 2.0643291761037372,
+    "perimeter": 6.485281374238571,
+    "roundness": 0.39176601376466547,
+    "solidity": 0.8,
+    "sphericity": 1.0932163146821783,
     "surface": 4,
     "width": 3,
   },
-  Roi {
+  {
+    "convexHull": {
+      "perimeter": 4,
+      "points": [
+        {
+          "column": 0,
+          "row": 0,
+        },
+        {
+          "column": 0,
+          "row": 1,
+        },
+        {
+          "column": 1,
+          "row": 1,
+        },
+        {
+          "column": 1,
+          "row": 0,
+        },
+      ],
+      "surface": 1,
+    },
+    "eqpc": 1.1283791670955126,
+    "feret": {
+      "aspectRatio": 0.7071067811865475,
+      "maxDiameter": {
+        "angle": 45.00000000000001,
+        "length": 1.4142135623730951,
+        "points": [
+          {
+            "column": 0,
+            "row": 0,
+          },
+          {
+            "column": 1,
+            "row": 1,
+          },
+        ],
+      },
+      "minDiameter": {
+        "angle": 90,
+        "length": 1,
+        "points": [
+          {
+            "column": 0,
+            "row": 0,
+          },
+          {
+            "column": 1,
+            "row": 0,
+          },
+        ],
+      },
+    },
+    "fillRatio": 1,
     "height": 1,
     "id": 2,
-    "map": {
-      "data": Int16Array [
-        1,
-        1,
-        1,
-        1,
-        -1,
-        -1,
-        -1,
-        -1,
-        2,
+    "mbr": {
+      "angle": 0,
+      "corners": [
+        {
+          "column": 6.123233995736766e-17,
+          "row": 1,
+        },
+        {
+          "column": 0,
+          "row": 0,
+        },
+        {
+          "column": 1,
+          "row": -6.123233995736766e-17,
+        },
+        {
+          "column": 1,
+          "row": 0.9999999999999999,
+        },
       ],
-      "height": 3,
-      "nbNegative": 1,
-      "nbPositive": 2,
-      "width": 3,
+      "height": 1,
+      "perimeter": 4,
+      "surface": 1,
+      "width": 1,
     },
     "origin": {
       "column": 2,
       "row": 2,
     },
+    "ped": 0.4501581580785531,
+    "perimeter": 1.4142135623730951,
+    "roundness": 0.6366197723675812,
+    "solidity": 1,
+    "sphericity": 2.5066282746310002,
     "surface": 1,
     "width": 1,
   },
@@ -61,30 +201,106 @@ exports[`3x3 mask 1`] = `
 
 exports[`3x3 mask 2`] = `
 [
-  Roi {
+  {
+    "convexHull": {
+      "perimeter": 8.82842712474619,
+      "points": [
+        {
+          "column": 0,
+          "row": 1,
+        },
+        {
+          "column": 0,
+          "row": 2,
+        },
+        {
+          "column": 2,
+          "row": 2,
+        },
+        {
+          "column": 3,
+          "row": 1,
+        },
+        {
+          "column": 3,
+          "row": 0,
+        },
+        {
+          "column": 1,
+          "row": 0,
+        },
+      ],
+      "surface": 5,
+    },
+    "eqpc": 2.256758334191025,
+    "feret": {
+      "aspectRatio": 0.5547001962252291,
+      "maxDiameter": {
+        "angle": -33.690067525979785,
+        "length": 3.605551275463989,
+        "points": [
+          {
+            "column": 0,
+            "row": 2,
+          },
+          {
+            "column": 3,
+            "row": 0,
+          },
+        ],
+      },
+      "minDiameter": {
+        "angle": 0,
+        "length": 2,
+        "points": [
+          {
+            "column": 0,
+            "row": 2,
+          },
+          {
+            "column": 3,
+            "row": 0,
+          },
+        ],
+      },
+    },
+    "fillRatio": 1,
     "height": 2,
     "id": -1,
-    "map": {
-      "data": Int16Array [
-        1,
-        1,
-        1,
-        1,
-        -1,
-        -1,
-        -1,
-        -1,
-        2,
+    "mbr": {
+      "angle": -0,
+      "corners": [
+        {
+          "column": 3,
+          "row": -3.834758505292834e-17,
+        },
+        {
+          "column": 3,
+          "row": 2,
+        },
+        {
+          "column": 3.2162452993532727e-16,
+          "row": 2,
+        },
+        {
+          "column": 4.440892098500626e-16,
+          "row": -2.2204460492503128e-16,
+        },
       ],
-      "height": 3,
-      "nbNegative": 1,
-      "nbPositive": 2,
-      "width": 3,
+      "height": 2.9999999999999996,
+      "perimeter": 10,
+      "surface": 5.999999999999999,
+      "width": 2,
     },
     "origin": {
       "column": 0,
       "row": 1,
     },
+    "ped": 1.8006326323142123,
+    "perimeter": 5.656854249492381,
+    "roundness": 0.39176601376466547,
+    "solidity": 0.8,
+    "sphericity": 1.2533141373155001,
     "surface": 4,
     "width": 3,
   },

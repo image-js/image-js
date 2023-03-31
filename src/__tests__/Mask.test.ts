@@ -114,6 +114,7 @@ test('fill with a value', () => {
 
 test('createFrom', () => {
   const mask = new Mask(2, 20);
+
   const newMask = Mask.createFrom(mask);
   expect(mask.width).toBe(newMask.width);
   expect(mask.height).toBe(newMask.height);
@@ -138,11 +139,11 @@ test('clone', () => {
 
 test('check custom inspect', () => {
   const mask = new Mask(1, 2);
+
   expect(util.inspect(mask)).toMatchSnapshot();
 });
 
 test('check custom inspect with image too large', () => {
   const image = new Mask(25, 25);
-
   expect(util.inspect(image)).toMatchSnapshot();
 });
