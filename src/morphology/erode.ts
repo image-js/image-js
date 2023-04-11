@@ -1,4 +1,4 @@
-import { ColorDepth, Mask } from '..';
+import { Mask } from '..';
 import { Image } from '../Image';
 import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
@@ -52,7 +52,7 @@ export function erode(
 
   if (image instanceof Image) {
     checkProcessable(image, 'erode', {
-      bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
+      bitDepth: [1, 8, 16],
       components: 1,
       alpha: false,
     });

@@ -1,6 +1,6 @@
 import util from 'node:util';
 
-import { ColorDepth, ImageColorModel } from '..';
+import { ImageColorModel } from '..';
 import { Mask } from '../Mask';
 import { Point } from '../utils/geometry/points';
 
@@ -11,7 +11,7 @@ describe('create new masks', () => {
       width: 10,
       height: 20,
       size: 200,
-      depth: ColorDepth.UINT1,
+      depth: 1,
       colorModel: ImageColorModel.BINARY,
       components: 1,
       channels: 1,

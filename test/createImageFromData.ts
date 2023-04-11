@@ -22,7 +22,7 @@ export function createImageFromData(
   colorModel: ImageColorModel,
   options: CreateImageOptions = {},
 ): Image {
-  const { depth = ColorDepth.UINT8 } = options;
+  const { depth = 8 } = options;
   if (Array.isArray(data)) {
     return createImageFrom2DArray(data, colorModel, depth);
   } else {
@@ -132,7 +132,7 @@ function createImageFromString(
  * @returns The created array.
  */
 function createDataArray(size: number, depth: ColorDepth): ImageDataArray {
-  if (depth === ColorDepth.UINT8) {
+  if (depth === 8) {
     return new Uint8Array(size);
   } else {
     return new Uint16Array(size);

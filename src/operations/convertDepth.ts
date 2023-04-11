@@ -12,7 +12,7 @@ export function convertDepth(image: Image, newDepth: ColorDepth): Image {
     throw new Error('convertDepth: cannot convert image to same depth');
   }
 
-  if (newDepth === ColorDepth.UINT16) {
+  if (newDepth === 16) {
     return convertToUint16(image);
   } else {
     return convertToUint8(image);
@@ -27,7 +27,7 @@ export function convertDepth(image: Image, newDepth: ColorDepth): Image {
  */
 function convertToUint16(image: Image): Image {
   const newImage = new Image(image.width, image.height, {
-    depth: ColorDepth.UINT16,
+    depth: 16,
     colorModel: image.colorModel,
     origin: image.origin,
   });
@@ -48,7 +48,7 @@ function convertToUint16(image: Image): Image {
  */
 function convertToUint8(image: Image): Image {
   const newImage = new Image(image.width, image.height, {
-    depth: ColorDepth.UINT8,
+    depth: 8,
     colorModel: image.colorModel,
     origin: image.origin,
   });

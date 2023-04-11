@@ -1,7 +1,7 @@
 import { decode } from 'tiff';
 
 import { ImageColorModel } from '..';
-import { Image } from '../Image';
+import { ColorDepth, Image } from '../Image';
 
 type TiffIfd = ReturnType<typeof decode>[number];
 
@@ -49,7 +49,7 @@ function getImageFromIFD(ifd: TiffIfd): Image {
       // TODO: handle float data
       // @ts-expect-error float data not handled yet
       data: ifd.data,
-      depth: ifd.bitsPerSample,
+      depth: ifd.bitsPerSample as ColorDepth,
       colorModel:
         ifd.type === 2
           ? ifd.alpha

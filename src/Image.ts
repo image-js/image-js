@@ -104,14 +104,11 @@ import {
 export { ImageColorModel, colorModels } from './utils/constants/colorModels';
 
 export type ImageDataArray = Uint8Array | Uint16Array | Uint8ClampedArray;
+
 /**
  * Bit depth of the image (nb of bits that encode each value in the image).
  */
-export enum ColorDepth {
-  UINT1 = 1,
-  UINT8 = 8,
-  UINT16 = 16,
-}
+export type ColorDepth = 1 | 8 | 16;
 
 export enum ImageCoordinates {
   CENTER = 'CENTER',
@@ -125,7 +122,7 @@ export interface ImageOptions {
   /**
    * Number of bits per value in each channel.
    *
-   * @default `ColorDepth.UINT8`.
+   * @default `8`.
    */
   depth?: ColorDepth;
 
@@ -224,7 +221,7 @@ export class Image {
     options: ImageOptions = {},
   ) {
     const {
-      depth = ColorDepth.UINT8,
+      depth = 8,
       data,
       colorModel = ImageColorModel.RGB,
       origin = { row: 0, column: 0 },
@@ -265,9 +262,9 @@ export class Image {
         this.maxValue,
       );
     } else {
-      if (depth === ColorDepth.UINT8 && data instanceof Uint16Array) {
+      if (depth === 8 && data instanceof Uint16Array) {
         throw new Error(`depth is ${depth} but data is Uint16Array`);
-      } else if (depth === ColorDepth.UINT16 && data instanceof Uint8Array) {
+      } else if (depth === 16 && data instanceof Uint8Array) {
         throw new Error(`depth is ${depth} but data is Uint8Array`);
       }
       const expectedLength = this.size * this.channels;
@@ -292,11 +289,11 @@ export class Image {
     options: CreateFromOptions = {},
   ): Image {
     const { width = other.width, height = other.height } = options;
-    let depth;
+    let depth: ColorDepth;
     if (other instanceof Image) {
       depth = other.depth;
     } else {
-      depth = ColorDepth.UINT8;
+      depth = 8;
     }
     return new Image(width, height, {
       depth,
@@ -1070,10 +1067,10 @@ function createPixelArray(
   const length = channels * size;
   let arr;
   switch (depth) {
-    case ColorDepth.UINT8:
+    case 8:
       arr = new Uint8Array(length);
       break;
-    case ColorDepth.UINT16:
+    case 16:
       arr = new Uint16Array(length);
       break;
     default:

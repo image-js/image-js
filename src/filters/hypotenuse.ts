@@ -1,4 +1,4 @@
-import { Image } from '..';
+import { ColorDepth, Image } from '..';
 import checkProcessable from '../utils/checkProcessable';
 import { validateChannels } from '../utils/validators';
 
@@ -8,7 +8,7 @@ export interface HypotenuseOptions {
    *
    * @default image.depth
    */
-  depth?: number;
+  depth?: ColorDepth;
   /**
    * To which channels to apply the filter. By default all but alpha.
    */

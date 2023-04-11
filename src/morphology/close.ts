@@ -1,4 +1,4 @@
-import { ColorDepth, Image, Mask } from '..';
+import { Image, Mask } from '..';
 import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
 
@@ -45,7 +45,7 @@ export function close(
 
   if (image instanceof Image) {
     checkProcessable(image, 'close', {
-      bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
+      bitDepth: [1, 8, 16],
       components: 1,
       alpha: false,
     });

@@ -163,7 +163,7 @@ export class Mask {
     this.width = width;
     this.height = height;
     this.size = width * height;
-    this.depth = ColorDepth.UINT1;
+    this.depth = 1;
     this.colorModel = ImageColorModel.BINARY;
     this.origin = origin;
 

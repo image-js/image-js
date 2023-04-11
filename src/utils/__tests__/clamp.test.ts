@@ -1,10 +1,10 @@
-import { ColorDepth, Image, ImageColorModel } from '../../Image';
+import { Image, ImageColorModel } from '../../Image';
 import { getClamp } from '../clamp';
 
 test("clamp 65'536", () => {
   const image = new Image(2, 1, {
     colorModel: ImageColorModel.GREY,
-    depth: ColorDepth.UINT16,
+    depth: 16,
   });
 
   const clamp = getClamp(image);

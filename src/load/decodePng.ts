@@ -1,6 +1,6 @@
 import { decode, DecodedPng } from 'fast-png';
 
-import { Image, ImageColorModel, ColorDepth } from '../Image';
+import { ColorDepth, Image, ImageColorModel } from '../Image';
 
 /**
  * Decode a PNG. See the fast-png npm module.
@@ -12,8 +12,7 @@ export function decodePng(buffer: Uint8Array): Image {
   const png = decode(buffer);
 
   let colorModel: ImageColorModel;
-  const depth: ColorDepth =
-    png.depth === 16 ? ColorDepth.UINT16 : ColorDepth.UINT8;
+  const depth: ColorDepth = png.depth === 16 ? 16 : 8;
 
   if (png.palette) {
     return loadPalettePng(png);

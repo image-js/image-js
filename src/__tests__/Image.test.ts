@@ -1,6 +1,6 @@
 import { inspect } from 'node:util';
 
-import { Image, ColorDepth, ImageCoordinates } from '../Image';
+import { Image, ImageCoordinates } from '../Image';
 import { ImageColorModel } from '../utils/constants/colorModels';
 
 describe('create new images', () => {
@@ -10,7 +10,7 @@ describe('create new images', () => {
       width: 10,
       height: 20,
       size: 200,
-      depth: ColorDepth.UINT8,
+      depth: 8,
       colorModel: ImageColorModel.RGB,
       components: 3,
       channels: 3,
@@ -21,12 +21,12 @@ describe('create new images', () => {
   });
 
   it('should create a 16-bit image', () => {
-    const img = new Image(10, 20, { depth: ColorDepth.UINT16 });
+    const img = new Image(10, 20, { depth: 16 });
     expect(img).toMatchObject({
       width: 10,
       height: 20,
       size: 200,
-      depth: ColorDepth.UINT16,
+      depth: 16,
       colorModel: ImageColorModel.RGB,
       components: 3,
       channels: 3,
@@ -39,7 +39,7 @@ describe('create new images', () => {
   it('should create a grey image with alpha', () => {
     const img = new Image(10, 20, { colorModel: ImageColorModel.GREYA });
     expect(img).toMatchObject({
-      depth: ColorDepth.UINT8,
+      depth: 8,
       colorModel: ImageColorModel.GREYA,
       components: 1,
       channels: 2,
@@ -79,7 +79,7 @@ describe('create new images', () => {
 
   it('should throw on wrong data size', () => {
     const data = new Uint16Array(2);
-    expect(() => new Image(2, 2, { data, depth: ColorDepth.UINT16 })).toThrow(
+    expect(() => new Image(2, 2, { data, depth: 16 })).toThrow(
       /incorrect data size: 2. Expected 12/,
     );
   });
@@ -102,7 +102,7 @@ describe('create new images', () => {
       () =>
         new Image(2, 2, {
           colorModel: ImageColorModel.GREY,
-          depth: ColorDepth.UINT16,
+          depth: 16,
           data,
         }),
     ).toThrow('depth is 16 but data is Uint8Array');

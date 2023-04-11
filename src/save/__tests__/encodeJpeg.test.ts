@@ -1,5 +1,4 @@
 import { encodeJpeg } from '..';
-import { ColorDepth } from '../../Image';
 import { decode } from '../../load/decode';
 import { ImageColorModel } from '../../utils/constants/colorModels';
 
@@ -15,7 +14,7 @@ test('encode an 8-bit rgba image', () => {
   expect(reloaded.width).toBe(2);
   expect(reloaded.height).toBe(2);
   expect(reloaded.colorModel).toStrictEqual(ImageColorModel.RGBA);
-  expect(reloaded.depth).toStrictEqual(ColorDepth.UINT8);
+  expect(reloaded.depth).toStrictEqual(8);
 });
 
 test('decode the encoded jpeg returns image with same characteristics', () => {
@@ -34,12 +33,12 @@ test('encoding a 16-bit image should convert it to a 8-bit image', () => {
       [256, 512],
       [768, 1024],
     ],
-    { depth: ColorDepth.UINT16 },
+    { depth: 16 },
   );
   const encoded = encodeJpeg(image);
   const reloaded = decode(encoded);
   expect(reloaded.width).toBe(2);
   expect(reloaded.height).toBe(2);
   expect(reloaded.colorModel).toStrictEqual(ImageColorModel.RGBA);
-  expect(reloaded.depth).toStrictEqual(ColorDepth.UINT8);
+  expect(reloaded.depth).toStrictEqual(8);
 });

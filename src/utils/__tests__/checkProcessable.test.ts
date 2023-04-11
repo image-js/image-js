@@ -1,4 +1,3 @@
-import { ColorDepth } from '../..';
 import checkProcessable from '../checkProcessable';
 import { ImageColorModel } from '../constants/colorModels';
 
@@ -9,7 +8,7 @@ test('wrong bit depth', () => {
   ]);
   expect(() => {
     checkProcessable(img, 'test', {
-      bitDepth: [ColorDepth.UINT1, ColorDepth.UINT16],
+      bitDepth: [1, 16],
     });
   }).toThrow(/The process "test" can only be applied if bit depth is 1 or 16/);
 });
@@ -69,7 +68,7 @@ test('only one valid depth or channel', () => {
   ]);
   expect(() => {
     checkProcessable(img, 'test', {
-      bitDepth: ColorDepth.UINT8,
+      bitDepth: 8,
       channels: 1,
     });
   }).not.toThrow();
@@ -79,7 +78,7 @@ test('only grey images accepted', () => {
   const img = testUtils.createRgbImage([[0, 1, 2]]);
   expect(() => {
     checkProcessable(img, 'test', {
-      bitDepth: ColorDepth.UINT8,
+      bitDepth: 8,
       components: 1,
     });
   }).toThrow(

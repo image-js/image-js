@@ -1,4 +1,3 @@
-import { ColorDepth } from '..';
 import { CreateFromOptions, Image, ImageColorModel } from '../Image';
 import { Mask } from '../Mask';
 
@@ -89,7 +88,7 @@ export function maskToOutputImage(mask: Mask, options: OutOptions = {}): Image {
     const requirements: NewImageParameters = {
       width: mask.width,
       height: mask.height,
-      depth: ColorDepth.UINT8,
+      depth: 8,
       colorModel: ImageColorModel.GREY,
     };
     checkRequirements(requirements, out);
@@ -119,7 +118,7 @@ export function imageToOutputMask(
     const requirements: NewImageParameters = {
       width: image.width,
       height: image.height,
-      depth: ColorDepth.UINT1,
+      depth: 1,
       colorModel: ImageColorModel.BINARY,
     };
     checkRequirements(requirements, out);
@@ -171,7 +170,7 @@ export function maskToOutputMask(
     const requirements: NewImageParameters = {
       width: mask.width,
       height: mask.height,
-      depth: ColorDepth.UINT1,
+      depth: 1,
       colorModel: ImageColorModel.BINARY,
     };
     checkRequirements(requirements, out);

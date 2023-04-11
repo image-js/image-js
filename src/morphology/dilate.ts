@@ -1,5 +1,5 @@
 import { Mask } from '..';
-import { ColorDepth, Image } from '../Image';
+import { Image } from '../Image';
 import { checkKernel } from '../utils/checkKernel';
 import checkProcessable from '../utils/checkProcessable';
 
@@ -52,7 +52,7 @@ export function dilate(
 
   if (image instanceof Image) {
     checkProcessable(image, 'dilate', {
-      bitDepth: [ColorDepth.UINT1, ColorDepth.UINT8, ColorDepth.UINT16],
+      bitDepth: [1, 8, 16],
       components: 1,
       alpha: false,
     });

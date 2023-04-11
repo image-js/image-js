@@ -1,6 +1,6 @@
 import { ssim as bufferSsim } from 'ssim.js';
 
-import { ColorDepth, Image, ImageColorModel } from '..';
+import { Image, ImageColorModel } from '..';
 import checkProcessable from '../utils/checkProcessable';
 import { validateForComparison } from '../utils/validators';
 
@@ -59,7 +59,7 @@ export function computeSsim(
     windowSize = Math.min(11, image.height, image.width);
   }
   checkProcessable(image, 'ssim', {
-    bitDepth: [ColorDepth.UINT8],
+    bitDepth: [8],
     channels: [1, 3, 4],
   });
 

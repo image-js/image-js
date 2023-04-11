@@ -1,5 +1,5 @@
 import { Mask } from '../..';
-import { Image, ColorDepth } from '../../Image';
+import { Image } from '../../Image';
 import { ImageColorModel } from '../constants/colorModels';
 import {
   getOutputImage,
@@ -19,7 +19,7 @@ describe('getOutputImage', () => {
       width: 2,
       height: 2,
       colorModel: ImageColorModel.GREY,
-      depth: ColorDepth.UINT8,
+      depth: 8,
     });
     expect(output).toMatchImageData([
       [0, 0],
@@ -37,7 +37,7 @@ describe('getOutputImage', () => {
       width: 2,
       height: 2,
       colorModel: ImageColorModel.GREY,
-      depth: ColorDepth.UINT8,
+      depth: 8,
     });
     expect(output).toMatchImageData([
       [0, 1],
@@ -121,7 +121,7 @@ describe('maskToOutputImage', () => {
       width: 2,
       height: 2,
       colorModel: ImageColorModel.GREY,
-      depth: ColorDepth.UINT8,
+      depth: 8,
     });
     expect(output).toMatchImageData([
       [0, 0],
@@ -163,7 +163,7 @@ describe('imageToOutputMask', () => {
       width: 2,
       height: 2,
       colorModel: ImageColorModel.BINARY,
-      depth: ColorDepth.UINT1,
+      depth: 1,
     });
     expect(output).toMatchMaskData([
       [0, 0],
@@ -205,7 +205,7 @@ describe('maskToOutputMask', () => {
       width: 2,
       height: 2,
       colorModel: ImageColorModel.BINARY,
-      depth: ColorDepth.UINT1,
+      depth: 1,
     });
     expect(output).toMatchMaskData([
       [0, 0],

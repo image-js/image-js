@@ -1,16 +1,17 @@
-import { ColorDepth, ImageColorModel } from '../..';
+import { ImageColorModel } from '../..';
 import { decodeTiff } from '../decodeTiff';
 
 const tests = [
   // ['name', components, alpha, bitDepth]
-  ['grey8', ImageColorModel.GREY, ColorDepth.UINT8],
-  ['grey16', ImageColorModel.GREY, ColorDepth.UINT16],
-  // ['grey32', ImageColorModel.GREY, ColorDepth.UINT32],
-  ['greya16', ImageColorModel.GREYA, ColorDepth.UINT8],
-  ['greya32', ImageColorModel.GREYA, ColorDepth.UINT16],
-  ['rgba8', ImageColorModel.RGBA, ColorDepth.UINT8],
-  ['rgb16', ImageColorModel.RGB, ColorDepth.UINT16],
-  ['palette', ImageColorModel.RGB, ColorDepth.UINT16],
+  ['grey8', ImageColorModel.GREY, 8],
+  ['grey16', ImageColorModel.GREY, 16],
+  // TODO: support 32 bits again.
+  // ['grey32', ImageColorModel.GREY, 32],
+  ['greya16', ImageColorModel.GREYA, 8],
+  ['greya32', ImageColorModel.GREYA, 16],
+  ['rgba8', ImageColorModel.RGBA, 8],
+  ['rgb16', ImageColorModel.RGB, 16],
+  ['palette', ImageColorModel.RGB, 16],
 ] as const;
 
 test.each(tests)('%s', async (name, colorModel, depth) => {
