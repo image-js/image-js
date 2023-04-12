@@ -1,17 +1,16 @@
-import { fromMask, Image, ImageColorModel, Mask } from '../../../src';
-import { RoiKind } from '../../../src/roi/getRois';
+import { fromMask, Image, Mask } from '../../../src';
 /**
  * Paint the border of the larger black ROI on the image.
  * @param image The image to process
  * @returns The processed image.
  */
 export function testGetBorderPoints(image: Image): Image {
-  const grey = image.convertColor(ImageColorModel.GREY);
+  const grey = image.convertColor('GREY');
   const mask = grey.threshold();
 
   const roiMapManager = fromMask(mask);
 
-  const rois = roiMapManager.getRois({ kind: RoiKind.BLACK });
+  const rois = roiMapManager.getRois({ kind: 'black' });
 
   const roi = rois.sort((a, b) => b.surface - a.surface)[0];
 

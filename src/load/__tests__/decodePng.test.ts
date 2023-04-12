@@ -1,18 +1,17 @@
 import { decodePng } from '..';
-import { ImageColorModel } from '../../utils/constants/colorModels';
 
 const tests = [
   // ['name', components, alpha, bitDepth]
-  ['grey8', 8, ImageColorModel.GREY],
-  ['grey16', 16, ImageColorModel.GREY],
-  ['greya16', 8, ImageColorModel.GREYA],
-  ['greya32', 16, ImageColorModel.GREYA],
-  ['rgb24', 8, ImageColorModel.RGB],
-  ['rgb48', 16, ImageColorModel.RGB],
-  ['rgba32', 8, ImageColorModel.RGBA],
-  ['rgba64', 16, ImageColorModel.RGBA],
-  ['plt-4bpp', 8, ImageColorModel.RGB],
-  ['plt-8bpp-color', 8, ImageColorModel.RGB],
+  ['grey8', 8, 'GREY'],
+  ['grey16', 16, 'GREY'],
+  ['greya16', 8, 'GREYA'],
+  ['greya32', 16, 'GREYA'],
+  ['rgb24', 8, 'RGB'],
+  ['rgb48', 16, 'RGB'],
+  ['rgba32', 8, 'RGBA'],
+  ['rgba64', 16, 'RGBA'],
+  ['plt-4bpp', 8, 'RGB'],
+  ['plt-8bpp-color', 8, 'RGB'],
 ] as const;
 
 test.each(tests)(

@@ -1,4 +1,4 @@
-import { Image, ImageColorModel } from '../../Image';
+import { Image } from '../../Image';
 import { drawPolygonOnImage } from '../drawPolygonOnImage';
 
 test('RGB image', () => {
@@ -135,7 +135,7 @@ test('grey image, no fill', () => {
 });
 
 test('3x3 image, tilted square, filled', () => {
-  const image = new Image(3, 3, { colorModel: ImageColorModel.GREY });
+  const image = new Image(3, 3, { colorModel: 'GREY' });
   const points = [
     { column: 0, row: 1 },
     { column: 1, row: 2 },
@@ -156,7 +156,7 @@ test('3x3 image, tilted square, filled', () => {
 });
 
 test('5x5 image, tilted square, filled', () => {
-  const image = new Image(5, 5, { colorModel: ImageColorModel.GREY });
+  const image = new Image(5, 5, { colorModel: 'GREY' });
   const points = [
     { column: 0, row: 2 },
     { column: 2, row: 4 },

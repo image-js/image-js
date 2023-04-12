@@ -3,8 +3,6 @@ import path from 'node:path';
 
 import { write, writeSync } from '..';
 import { read } from '../..';
-import { ImageColorModel } from '../../utils/constants/colorModels';
-import { ImageFormat } from '../encode';
 
 let tmpDir: string;
 beforeEach(() => {
@@ -26,7 +24,7 @@ test('async write image to disk (png)', async () => {
 test('format option png', async () => {
   const img = testUtils.load('opencv/test.png');
   const destination = path.join(tmpDir, 'image.png');
-  await write(destination, img, { format: ImageFormat.png });
+  await write(destination, img, { format: 'png' });
   expect(existsSync(destination)).toBe(true);
   const imgRead = await read(destination);
   expect(imgRead).toMatchImage(img);
@@ -35,11 +33,11 @@ test('format option png', async () => {
 test('async write image to disk (jpeg)', async () => {
   const img = testUtils.load('opencv/test.png');
   const destination = path.join(tmpDir, 'image.jpeg');
-  await write(destination, img, { format: ImageFormat.jpeg });
+  await write(destination, img, { format: 'jpeg' });
   expect(existsSync(destination)).toBe(true);
   const imgRead = await read(destination);
   expect(imgRead.width).toBe(img.width);
-  expect(imgRead.colorModel).toBe(ImageColorModel.RGBA);
+  expect(imgRead.colorModel).toBe('RGBA');
 });
 
 test('write image to disk', async () => {
@@ -58,14 +56,14 @@ test('write image to disk (jpeg)', async () => {
   expect(existsSync(destination)).toBe(true);
   const imgRead = await read(destination);
   expect(imgRead.width).toBe(img.width);
-  expect(imgRead.colorModel).toBe(ImageColorModel.RGBA);
+  expect(imgRead.colorModel).toBe('RGBA');
 });
 
 test('write mask image to disk', async () => {
   let img = testUtils.load('opencv/test.png');
-  img = img.convertColor(ImageColorModel.GREY);
+  img = img.convertColor('GREY');
   let mask = img.threshold();
-  let maskImage = mask.convertColor(ImageColorModel.GREY);
+  let maskImage = mask.convertColor('GREY');
   const destination = path.join(tmpDir, 'image.png');
   writeSync(destination, mask);
   expect(existsSync(destination)).toBe(true);
@@ -74,9 +72,9 @@ test('write mask image to disk', async () => {
 });
 test('async write mask image to disk', async () => {
   let img = testUtils.load('opencv/test.png');
-  img = img.convertColor(ImageColorModel.GREY);
+  img = img.convertColor('GREY');
   let mask = img.threshold();
-  let maskImage = mask.convertColor(ImageColorModel.GREY);
+  let maskImage = mask.convertColor('GREY');
   const destination = path.join(tmpDir, 'image.png');
   await write(destination, mask);
   expect(existsSync(destination)).toBe(true);

@@ -1,9 +1,9 @@
-import { Image, ImageColorModel, ImageCoordinates } from '../../../Image';
+import { Image } from '../../../Image';
 import { Point } from '../../../geometry';
 import { getGaussianPoints, getGaussianValues } from '../getGaussianPoints';
 
 function drawGaussianPoints(image: Image, points: Point[]): Image {
-  const center = image.getCoordinates(ImageCoordinates.CENTER);
+  const center = image.getCoordinates('center');
   for (let point of points) {
     const current = image.getValue(
       point.column + center.column,
@@ -34,7 +34,7 @@ test('gaussian values, size 20', () => {
 
 test('default options', () => {
   const size = 15;
-  const image = new Image(size, size, { colorModel: ImageColorModel.GREY });
+  const image = new Image(size, size, { colorModel: 'GREY' });
 
   const points = getGaussianPoints(size, size);
 
@@ -43,7 +43,7 @@ test('default options', () => {
 
 test('10000 gaussian points, sigma = 1', () => {
   const size = 15;
-  const image = new Image(size, size, { colorModel: ImageColorModel.GREY });
+  const image = new Image(size, size, { colorModel: 'GREY' });
 
   const points = getGaussianPoints(size, size, { nbPoints: 10000, sigma: 1 });
 
@@ -52,7 +52,7 @@ test('10000 gaussian points, sigma = 1', () => {
 
 test('10000 gaussian points, sigma = 1', () => {
   const size = 15;
-  const image = new Image(size, size, { colorModel: ImageColorModel.GREY });
+  const image = new Image(size, size, { colorModel: 'GREY' });
 
   const points = getGaussianPoints(size, size, { nbPoints: 10000, sigma: 1 });
   expect(drawGaussianPoints(image, points)).toMatchImageSnapshot();
@@ -64,12 +64,12 @@ test('default pairs of points for getBriefDescriptors', () => {
   const scalingFactor = 20;
 
   const image = new Image(size * scalingFactor, size * scalingFactor, {
-    colorModel: ImageColorModel.GREY,
+    colorModel: 'GREY',
   });
 
   const points = getGaussianPoints(size, size, { nbPoints: nbPairs * 2 });
 
-  const center = image.getCoordinates(ImageCoordinates.CENTER);
+  const center = image.getCoordinates('center');
   const absolutePoints = points.map((point) => {
     return {
       column: point.column * scalingFactor + center.column,

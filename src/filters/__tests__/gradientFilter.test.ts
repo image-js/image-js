@@ -1,5 +1,3 @@
-import { BorderType } from '../../utils/interpolateBorder';
-
 const kernelX = [
   [1, 0, 0],
   [0, 1, 0],
@@ -10,6 +8,7 @@ const kernelY = [
   [0, 0, 0],
   [0, 0, 1],
 ];
+
 const image = testUtils.createGreyImage([
   [1, 1, 1],
   [1, 1, 1],
@@ -19,7 +18,7 @@ const image = testUtils.createGreyImage([
 test('gradientX', () => {
   const result = image.gradientFilter({
     kernelX,
-    borderType: BorderType.CONSTANT,
+    borderType: 'constant',
   });
 
   expect(result).toMatchImageData([
@@ -32,7 +31,7 @@ test('gradientX', () => {
 test('gradientY', () => {
   const result = image.gradientFilter({
     kernelY,
-    borderType: BorderType.CONSTANT,
+    borderType: 'constant',
   });
 
   expect(result).toMatchImageData([
@@ -46,7 +45,7 @@ test('gradientX and gradientY', () => {
   const result = image.gradientFilter({
     kernelX,
     kernelY,
-    borderType: BorderType.CONSTANT,
+    borderType: 'constant',
   });
   expect(result).toMatchImageData([
     [1, 1, 1],
@@ -54,3 +53,6 @@ test('gradientX and gradientY', () => {
     [1, 2, 2],
   ]);
 });
+
+// To make TypeScript know it's a module
+export {};

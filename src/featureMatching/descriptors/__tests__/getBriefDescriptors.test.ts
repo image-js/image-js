@@ -1,10 +1,10 @@
-import { ImageColorModel, Image, ImageCoordinates } from '../../../Image';
+import { Image } from '../../../Image';
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
 import { getBriefDescriptors } from '../getBriefDescriptors';
 
 test('count occurences of 1 and 0 with default options', () => {
   const image = testUtils.load('various/alphabet.jpg');
-  const grey = image.convertColor(ImageColorModel.GREY);
+  const grey = image.convertColor('GREY');
 
   const keypoint = getOrientedFastKeypoints(grey, { maxNbFeatures: 1 });
 
@@ -22,7 +22,7 @@ test('count occurences of 1 and 0 with default options', () => {
 
 test('patch size error', () => {
   const image = testUtils.load('various/alphabet.jpg');
-  const grey = image.convertColor(ImageColorModel.GREY);
+  const grey = image.convertColor('GREY');
 
   const keypoint = getOrientedFastKeypoints(grey, { maxNbFeatures: 1 });
 
@@ -33,7 +33,7 @@ test('patch size error', () => {
 
 test('alphabet image should work', () => {
   const source = testUtils.load('various/alphabet.jpg');
-  const grey = source.convertColor(ImageColorModel.GREY);
+  const grey = source.convertColor('GREY');
 
   const sourceKeypoints = getOrientedFastKeypoints(grey);
   expect(() => getBriefDescriptors(grey, sourceKeypoints)).not.toThrow();
@@ -42,7 +42,7 @@ test('alphabet image should work', () => {
 });
 
 test('image too small for patchsize', () => {
-  const image = new Image(5, 5, { colorModel: ImageColorModel.GREY });
+  const image = new Image(5, 5, { colorModel: 'GREY' });
   const sourceKeypoints = getOrientedFastKeypoints(image);
   expect(() => getBriefDescriptors(image, sourceKeypoints)).toThrow(
     'image is too small for patchSize = 31',
@@ -51,14 +51,14 @@ test('image too small for patchsize', () => {
 
 test('verify descriptor is correct (descriptorLength = 10)', () => {
   const size = 5;
-  const image = new Image(size, size, { colorModel: ImageColorModel.GREY });
+  const image = new Image(size, size, { colorModel: 'GREY' });
   for (let i = 0; i < 2 * size; i++) {
     image.setPixelByIndex(i, [255]);
   }
 
   const keypoint = [
     {
-      origin: image.getCoordinates(ImageCoordinates.CENTER),
+      origin: image.getCoordinates('center'),
       angle: 0,
       score: 1,
     },

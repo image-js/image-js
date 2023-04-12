@@ -1,4 +1,4 @@
-import { Image, ImageColorModel } from '../Image';
+import { Image } from '../Image';
 
 /**
  * Read an image from an HTML canvas element.
@@ -18,6 +18,6 @@ export function readCanvas(canvas: HTMLCanvasElement): Image {
       imageData.data.byteOffset,
       imageData.data.byteLength,
     ),
-    colorModel: ImageColorModel.RGBA,
+    colorModel: 'RGBA',
   });
 }

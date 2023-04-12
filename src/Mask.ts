@@ -164,7 +164,7 @@ export class Mask {
     this.height = height;
     this.size = width * height;
     this.depth = 1;
-    this.colorModel = ImageColorModel.BINARY;
+    this.colorModel = 'BINARY';
     this.origin = origin;
 
     const colorModelDef = colorModels[this.colorModel];

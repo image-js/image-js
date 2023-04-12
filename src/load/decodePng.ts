@@ -20,16 +20,16 @@ export function decodePng(buffer: Uint8Array): Image {
 
   switch (png.channels) {
     case 1:
-      colorModel = ImageColorModel.GREY;
+      colorModel = 'GREY';
       break;
     case 2:
-      colorModel = ImageColorModel.GREYA;
+      colorModel = 'GREYA';
       break;
     case 3:
-      colorModel = ImageColorModel.RGB;
+      colorModel = 'RGB';
       break;
     case 4:
-      colorModel = ImageColorModel.RGBA;
+      colorModel = 'RGBA';
       break;
     default:
       throw new Error(`Unexpected number of channels: ${png.channels}`);

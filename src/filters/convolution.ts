@@ -19,11 +19,11 @@ export interface ConvolutionOptions {
   /**
    * Specify how the borders should be handled.
    *
-   * @default BorderType.REFLECT_101
+   * @default 'reflect101'
    */
   borderType?: BorderType;
   /**
-   * Value of the border if BorderType is CONSTANT.
+   * Value of the border if BorderType is 'constant'.
    *
    * @default 0
    */
@@ -53,7 +53,7 @@ export function directConvolution(
   kernel: number[][],
   options: ConvolutionOptions = {},
 ): Image {
-  const { borderType = BorderType.REFLECT_101, borderValue = 0 } = options;
+  const { borderType = 'reflect101', borderValue = 0 } = options;
 
   const convolutedData = rawDirectConvolution(image, kernel, {
     borderType,
@@ -87,7 +87,7 @@ export function rawDirectConvolution(
   kernel: number[][],
   options: ConvolutionOptions = {},
 ): Float64Array {
-  const { borderType = BorderType.REFLECT_101, borderValue = 0 } = options;
+  const { borderType = 'reflect101', borderValue = 0 } = options;
   const interpolateBorder = getBorderInterpolation(borderType, borderValue);
 
   let result = new Float64Array(image.size * image.channels);
@@ -127,11 +127,7 @@ export function separableConvolution(
   kernelY: number[],
   options: ConvolutionOptions = {},
 ): Image {
-  const {
-    normalize,
-    borderType = BorderType.REFLECT_101,
-    borderValue = 0,
-  } = options;
+  const { normalize, borderType = 'reflect101', borderValue = 0 } = options;
   const interpolateBorder = getBorderInterpolation(borderType, borderValue);
   if (normalize) {
     [kernelX, kernelY] = normalizeSeparatedKernel(kernelX, kernelY);

@@ -1,4 +1,4 @@
-import { ImageColorModel, Image } from '../../../Image';
+import { Image } from '../../../Image';
 import { getHarrisScore } from '../getHarrisScore';
 
 const fastRadius = 3;
@@ -6,7 +6,7 @@ const fastDiameter = 2 * fastRadius + 1;
 
 test('7x7 image, full of zeros', () => {
   const image = new Image(fastDiameter, fastDiameter, {
-    colorModel: ImageColorModel.GREY,
+    colorModel: 'GREY',
   });
 
   const origin = { row: fastRadius, column: fastRadius };

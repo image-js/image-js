@@ -4,11 +4,14 @@ import { ClampFunction } from './clamp';
 import { BorderInterpolationFunction } from './interpolateBorder';
 import { round } from './round';
 
-export enum InterpolationType {
-  NEAREST = 'NEAREST',
-  BILINEAR = 'BILINEAR',
-  BICUBIC = 'BICUBIC',
-}
+export const InterpolationType = {
+  NEAREST: 'nearest',
+  BILINEAR: 'bilinear',
+  BICUBIC: 'bicubic',
+} as const;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type InterpolationType =
+  (typeof InterpolationType)[keyof typeof InterpolationType];
 
 type InterpolationFunction = (
   image: Image,
@@ -29,13 +32,13 @@ export function getInterpolationFunction(
   interpolationType: InterpolationType,
 ): InterpolationFunction {
   switch (interpolationType) {
-    case InterpolationType.NEAREST: {
+    case 'nearest': {
       return interpolateNearest;
     }
-    case InterpolationType.BILINEAR: {
+    case 'bilinear': {
       return interpolateBilinear;
     }
-    case InterpolationType.BICUBIC: {
+    case 'bicubic': {
       return interpolateBicubic;
     }
     default: {

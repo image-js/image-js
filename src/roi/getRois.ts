@@ -2,11 +2,13 @@ import { Roi } from './Roi';
 import { RoiMapManager } from './RoiMapManager';
 import { computeRois } from './computeRois';
 
-export enum RoiKind {
-  BLACK = 'BLACK',
-  WHITE = 'WHITE',
-  BW = 'BW',
-}
+export const RoiKind = {
+  BLACK: 'black',
+  WHITE: 'white',
+  BW: 'bw',
+} as const;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type RoiKind = (typeof RoiKind)[keyof typeof RoiKind];
 
 export interface GetRoisOptions {
   /**
@@ -24,7 +26,7 @@ export interface GetRoisOptions {
   /**
    * Kind of ROIs to keep
    *
-   * @default RoiKind.WHITE
+   * @default 'white'
    */
   kind?: RoiKind;
 }
@@ -43,7 +45,7 @@ export function getRois(
   const {
     minSurface = 0,
     maxSurface = Number.MAX_SAFE_INTEGER,
-    kind = 'WHITE',
+    kind = 'white',
   } = options;
 
   if (
@@ -54,15 +56,15 @@ export function getRois(
   }
   let rois;
   switch (kind) {
-    case RoiKind.BLACK: {
+    case 'black': {
       rois = roiMapManager.blackRois;
       break;
     }
-    case RoiKind.WHITE: {
+    case 'white': {
       rois = roiMapManager.whiteRois;
       break;
     }
-    case RoiKind.BW: {
+    case 'bw': {
       rois = [...roiMapManager.whiteRois, ...roiMapManager.blackRois];
       break;
     }

@@ -32,17 +32,17 @@ export interface ResizeOptions {
   /**
    * Method to use to interpolate the new pixels
    *
-   * @default InterpolationType.BILINEAR
+   * @default 'bilinear'
    */
   interpolationType?: InterpolationType;
   /**
    * Specify how the borders should be handled.
    *
-   * @default BorderType.CONSTANT
+   * @default 'constant'
    */
   borderType?: BorderType;
   /**
-   * Value of the border if BorderType is CONSTANT.
+   * Value of the border if BorderType is 'constant'.
    *
    * @default 0
    */
@@ -58,8 +58,8 @@ export interface ResizeOptions {
  */
 export function resize(image: Image, options: ResizeOptions): Image {
   const {
-    interpolationType = InterpolationType.BILINEAR,
-    borderType = BorderType.CONSTANT,
+    interpolationType = 'bilinear',
+    borderType = 'constant',
     borderValue = 0,
   } = options;
   const { width, height } = checkOptions(image, options);

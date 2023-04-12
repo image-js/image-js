@@ -1,9 +1,8 @@
-import { ImageColorModel } from '../../utils/constants/colorModels';
-import { computeThreshold, threshold, ThresholdAlgorithm } from '../threshold';
+import { computeThreshold, threshold } from '../threshold';
 
 test('threshold with a fixed value of 100', () => {
   const testImage = testUtils.load('opencv/test.png');
-  const grey = testImage.convertColor(ImageColorModel.GREY);
+  const grey = testImage.convertColor('GREY');
   const th = threshold(grey, { threshold: 100 });
 
   const expected = testUtils.createMask([
@@ -25,14 +24,14 @@ test('threshold with a fixed value of 100', () => {
 test('computeThreshold with OTSU', () => {
   const testImage = testUtils.load('opencv/test.png');
 
-  const grey = testImage.convertColor(ImageColorModel.GREY);
-  const thresholdValue = computeThreshold(grey, ThresholdAlgorithm.OTSU);
+  const grey = testImage.convertColor('GREY');
+  const thresholdValue = computeThreshold(grey, 'otsu');
   expect(thresholdValue).toBe(127);
 });
 
 test('computeThreshold with OTSU (2)', () => {
   const img = testUtils.load('various/grayscale_by_zimmyrose.png');
-  const thresholdValue = computeThreshold(img, ThresholdAlgorithm.OTSU);
+  const thresholdValue = computeThreshold(img, 'otsu');
   expect(thresholdValue).toBe(135);
 });
 
@@ -45,8 +44,8 @@ test('computeThreshold default should be Otsu', () => {
 test('automatic threshold with OTSU', () => {
   const testImage = testUtils.load('opencv/test.png');
 
-  const grey = testImage.convertColor(ImageColorModel.GREY);
-  const th = threshold(grey, { algorithm: ThresholdAlgorithm.OTSU });
+  const grey = testImage.convertColor('GREY');
+  const th = threshold(grey, { algorithm: 'otsu' });
   const defaultThreshold = threshold(grey);
 
   const expected = testUtils.createMask([
@@ -84,9 +83,9 @@ test('threshold in percents', () => {
 test('error too many channels', () => {
   const testImage = testUtils.load('opencv/test.png');
 
-  expect(() =>
-    threshold(testImage, { algorithm: ThresholdAlgorithm.OTSU }),
-  ).toThrow(/threshold can only be computed on images with one channel/);
+  expect(() => threshold(testImage, { algorithm: 'otsu' })).toThrow(
+    /threshold can only be computed on images with one channel/,
+  );
 });
 test('error threshold in percents out of range', () => {
   const testImage = testUtils.load('opencv/test.png');

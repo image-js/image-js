@@ -1,6 +1,5 @@
-import { ImageCoordinates, Image } from '../../../Image';
+import { Image } from '../../../Image';
 import { getRadius } from '../../../utils/getRadius';
-import { InterpolationType } from '../../../utils/interpolatePixel';
 import { OrientedFastKeypoint } from '../../keypoints/getOrientedFastKeypoints';
 import { checkBorderDistance } from '../../utils/checkBorderDistance';
 import { extractSquareImage } from '../../utils/extractSquareImage';
@@ -49,11 +48,11 @@ export function getKeypointPatch(
   const cropped = extractSquareImage(image, keypoint.origin, cropWidth);
 
   const rotated = cropped.transformRotate(-keypoint.angle, {
-    center: ImageCoordinates.CENTER,
-    interpolationType: InterpolationType.NEAREST,
+    center: 'center',
+    interpolationType: 'nearest',
   });
 
-  const cropOrigin = rotated.getCoordinates(ImageCoordinates.CENTER);
+  const cropOrigin = rotated.getCoordinates('center');
   const result = extractSquareImage(rotated, cropOrigin, patchSize);
 
   return result;

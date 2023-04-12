@@ -1,6 +1,6 @@
 import { decode } from 'jpeg-js';
 
-import { Image, ImageColorModel } from '../Image';
+import { Image } from '../Image';
 
 /**
  * Decode a jpeg. See the jpeg-js npm module.
@@ -16,6 +16,6 @@ export function decodeJpeg(buffer: Uint8Array): Image {
   });
   return new Image(jpeg.width, jpeg.height, {
     data: jpeg.data,
-    colorModel: ImageColorModel.RGBA,
+    colorModel: 'RGBA',
   });
 }

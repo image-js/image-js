@@ -1,4 +1,4 @@
-import { Image, ImageColorModel } from '../../src';
+import { Image } from '../../src';
 import { Mask } from '../../src/Mask';
 
 describe('toMatchImage', () => {
@@ -39,8 +39,8 @@ describe('toMatchImage', () => {
   });
 
   it('should throw if color model is different', () => {
-    const image1 = new Image(1, 1, { colorModel: ImageColorModel.GREY });
-    const image2 = new Image(1, 1, { colorModel: ImageColorModel.RGB });
+    const image1 = new Image(1, 1, { colorModel: 'GREY' });
+    const image2 = new Image(1, 1, { colorModel: 'RGB' });
     expect(() => expect(image1).toMatchImage(image2)).toThrow(/color model/);
   });
 
@@ -67,7 +67,7 @@ describe('toMatchImage', () => {
 describe('toMatchImageData', () => {
   it('should work with 2D array', () => {
     const image = new Image(2, 2, {
-      colorModel: ImageColorModel.GREY,
+      colorModel: 'GREY',
       data: Uint8Array.of(1, 2, 3, 4),
     });
     expect(image).toMatchImageData([
@@ -78,7 +78,7 @@ describe('toMatchImageData', () => {
 
   it('should work with string', () => {
     const image = new Image(2, 2, {
-      colorModel: ImageColorModel.GREY,
+      colorModel: 'GREY',
       data: Uint8Array.of(1, 2, 3, 4),
     });
     expect(image).toMatchImageData(`

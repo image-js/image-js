@@ -1,4 +1,4 @@
-import { Image, ImageColorModel } from '../../Image';
+import { Image } from '../../Image';
 import { Point } from '../../geometry';
 import { sum } from '../../utils/geometry/points';
 import { getOutputImage } from '../../utils/getOutputImage';
@@ -102,8 +102,8 @@ export function drawKeypoints(
 
   let newImage = getOutputImage(image, options, { clone: true });
 
-  if (image.colorModel !== ImageColorModel.RGB) {
-    newImage = newImage.convertColor(ImageColorModel.RGB);
+  if (image.colorModel !== 'RGB') {
+    newImage = newImage.convertColor('RGB');
   }
 
   const colors = getColors(image, color, showScoreOptions);

@@ -2,9 +2,8 @@ import { readFileSync, mkdtempSync, rmSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
-import { fromMask, Image, ImageColorModel, readSync } from '../src';
+import { fromMask, Image, readSync } from '../src';
 import { Roi } from '../src/roi/Roi';
-import { RoiKind } from '../src/roi/getRois';
 
 import { TestImagePath } from './TestImagePath';
 import { createImageFromData, CreateImageOptions } from './createImageFromData';
@@ -52,7 +51,7 @@ export function createGreyImage(
   imageData: number[][] | string,
   options?: CreateImageOptions,
 ): Image {
-  return createImageFromData(imageData, ImageColorModel.GREY, options);
+  return createImageFromData(imageData, 'GREY', options);
 }
 
 /**
@@ -62,7 +61,7 @@ export function createGreyImage(
  * @returns The greya Image.
  */
 export function createGreyaImage(imageData: number[][] | string): Image {
-  return createImageFromData(imageData, ImageColorModel.GREYA);
+  return createImageFromData(imageData, 'GREYA');
 }
 /**
  * Create an image from 8-bit RGB data.
@@ -75,7 +74,7 @@ export function createRgbImage(
   imageData: number[][] | string,
   options?: CreateImageOptions,
 ): Image {
-  return createImageFromData(imageData, ImageColorModel.RGB, options);
+  return createImageFromData(imageData, 'RGB', options);
 }
 
 export interface CreateRoiOptions {
@@ -99,7 +98,7 @@ export function createRoi(
   const mask = createMask(imageData);
   const roiMapManager = fromMask(mask, options);
 
-  const rois = roiMapManager.getRois({ kind: RoiKind.WHITE });
+  const rois = roiMapManager.getRois({ kind: 'white' });
   if (rois.length > 1) {
     throw new Error('createRoi: multiple ROIs found.');
   }
@@ -117,7 +116,7 @@ export function createRgbaImage(
   imageData: number[][] | string,
   options?: CreateImageOptions,
 ): Image {
-  return createImageFromData(imageData, ImageColorModel.RGBA, options);
+  return createImageFromData(imageData, 'RGBA', options);
 }
 
 /**

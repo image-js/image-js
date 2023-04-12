@@ -1,5 +1,4 @@
 import { TestImagePath } from '../../../../../test/TestImagePath';
-import { ImageColorModel } from '../../../../Image';
 import { getOrientedFastKeypoints } from '../../../keypoints/getOrientedFastKeypoints';
 import { drawKeypoints } from '../../../visualize/drawKeypoints';
 import { getKeypointPatch } from '../getKeypointPatch';
@@ -18,7 +17,7 @@ test.each([
 ])('default options ($message)', (data) => {
   const image = testUtils
     .load(`featureMatching/polygons/${data.image}.png` as TestImagePath)
-    .convertColor(ImageColorModel.GREY)
+    .convertColor('GREY')
     .invert();
 
   const keypoints = getOrientedFastKeypoints(image);
@@ -48,7 +47,7 @@ test.each([
 ])('centroidPatchDiameter = 31 ($message)', (data) => {
   const image = testUtils
     .load(`featureMatching/polygons/${data.image}.png` as TestImagePath)
-    .convertColor(ImageColorModel.GREY)
+    .convertColor('GREY')
     .invert();
 
   const keypoints = getOrientedFastKeypoints(image, {

@@ -11,7 +11,7 @@ import {
   MontageDisposition,
   getBestKeypointsInRadius,
 } from '../../src/featureMatching';
-import { ImageColorModel, readSync, writeSync } from '../../src';
+import { readSync, writeSync } from '../../src';
 import { getBrief, GetBriefOptions } from './getBrief';
 import { GetColorsOptions } from '../../src/featureMatching/utils/getColors';
 import { getMinMax } from '../../src/utils/getMinMax';
@@ -30,7 +30,7 @@ const secondNumber = 2;
 
 let source = readSync(
   `../../test/img/featureMatching/id-crops/crop${firstNumber}.png`,
-).convertColor(ImageColorModel.GREY);
+).convertColor('GREY');
 // fix contrast
 const sourceExtremums = getMinMax(source);
 source.level({
@@ -41,7 +41,7 @@ source.level({
 
 let destination = readSync(
   `../../test/img/featureMatching/id-crops/crop${secondNumber}.png`,
-).convertColor(ImageColorModel.GREY);
+).convertColor('GREY');
 // fix contrast
 const destinationExtremums = getMinMax(destination);
 destination.level({
@@ -91,7 +91,7 @@ console.log('nb crosscheck matches: ' + crossMatches.length);
 
 const montage = new Montage(source, destination, {
   scale: 2,
-  disposition: MontageDisposition.VERTICAL,
+  disposition: 'vertical',
 });
 
 const showDistanceOptions: GetColorsOptions = { minValueFactor: 0.2 };

@@ -1,6 +1,4 @@
-import { ImageColorModel } from '../../Image';
 import { fromMask } from '../../roi';
-import { RoiKind } from '../../roi/getRois';
 import { angle } from '../../utils/geometry/angles';
 import { getMbr } from '../getMbr';
 
@@ -209,11 +207,11 @@ test('empty mask', () => {
 
 test('draw mbr on large image', () => {
   const image = testUtils.load('various/grayscale_by_zimmyrose.png');
-  const rgbaImage = image.convertColor(ImageColorModel.RGBA);
+  const rgbaImage = image.convertColor('RGBA');
   const mask = image.threshold({ threshold: 200 });
   const roiMapManager = fromMask(mask);
 
-  const rois = roiMapManager.getRois({ kind: RoiKind.WHITE });
+  const rois = roiMapManager.getRois({ kind: 'white' });
 
   const roi = rois.sort((a, b) => b.surface - a.surface)[0];
 

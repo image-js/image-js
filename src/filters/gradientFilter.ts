@@ -1,16 +1,16 @@
-import { ColorDepth, Image, ImageColorModel } from '..';
+import { ColorDepth, Image } from '..';
 import checkProcessable from '../utils/checkProcessable';
-import { BorderType } from '../utils/interpolateBorder';
+import type { BorderType } from '../utils/interpolateBorder';
 
 export interface GradientFilterBaseOptions {
   /**
    * Specify how the borders should be handled.
    *
-   * @default BorderType.REPLICATE
+   * @default 'replicate'
    */
   borderType?: BorderType;
   /**
-   * Value of the border if BorderType is CONSTANT.
+   * Value of the border if BorderType is 'constant'.
    *
    * @default 0
    */
@@ -63,11 +63,11 @@ export function gradientFilter(
   image: Image,
   options: GradientFilterOptions,
 ): Image {
-  const { borderType = BorderType.REPLICATE, borderValue = 0 } = options;
+  const { borderType = 'replicate', borderValue = 0 } = options;
 
   checkProcessable(image, 'gradientFilter', {
     bitDepth: [8, 16],
-    colorModel: ImageColorModel.GREY,
+    colorModel: 'GREY',
   });
 
   if ('kernelX' in options && 'kernelY' in options) {
@@ -83,7 +83,7 @@ export function gradientFilter(
     });
 
     let gradient = new Image(image.width, image.height, {
-      colorModel: ImageColorModel.GREY,
+      colorModel: 'GREY',
     });
 
     for (let i = 0; i < image.size; i++) {

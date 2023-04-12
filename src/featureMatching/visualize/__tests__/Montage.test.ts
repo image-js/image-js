@@ -1,12 +1,12 @@
-import { ImageColorModel, Image } from '../../../Image';
+import { Image } from '../../../Image';
 import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors';
 import { FastKeypoint } from '../../keypoints/getFastKeypoints';
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
 import { bruteForceOneMatch, Match } from '../../matching/bruteForceMatch';
-import { Montage, MontageDisposition } from '../Montage';
+import { Montage } from '../Montage';
 
 const source = testUtils.load('featureMatching/alphabet.jpg');
-const grey = source.convertColor(ImageColorModel.GREY);
+const grey = source.convertColor('GREY');
 const sourceKeypoints = getOrientedFastKeypoints(grey);
 
 describe('constructor', () => {
@@ -18,7 +18,7 @@ describe('constructor', () => {
   it('disposition vertical', () => {
     const source = testUtils.load('featureMatching/alphabet.jpg');
     const montage = new Montage(source, source, {
-      disposition: MontageDisposition.VERTICAL,
+      disposition: 'vertical',
     });
     expect(montage.image).toMatchImageSnapshot();
   });
@@ -50,7 +50,7 @@ describe('drawKeypoints', () => {
   });
   it('disposition vertical', () => {
     const montage = new Montage(source, source, {
-      disposition: MontageDisposition.VERTICAL,
+      disposition: 'vertical',
     });
     montage.drawKeypoints(sourceKeypoints, {
       origin: montage.destinationOrigin,
@@ -62,7 +62,7 @@ describe('drawKeypoints', () => {
 
 describe('drawMatches', () => {
   it('simple test', () => {
-    const image = new Image(100, 50, { colorModel: ImageColorModel.GREY });
+    const image = new Image(100, 50, { colorModel: 'GREY' });
     const keypoint: FastKeypoint[] = [
       { origin: { column: 20, row: 10 }, score: 0 },
     ];
@@ -71,7 +71,7 @@ describe('drawMatches', () => {
     ];
 
     const montage = new Montage(image, image, {
-      disposition: MontageDisposition.VERTICAL,
+      disposition: 'vertical',
     });
     montage.drawMatches(matches, keypoint, keypoint);
 
@@ -93,7 +93,7 @@ describe('drawMatches', () => {
     const matches = bruteForceOneMatch(brief.descriptors, brief.descriptors);
 
     const montage = new Montage(source, source, {
-      disposition: MontageDisposition.VERTICAL,
+      disposition: 'vertical',
     });
     montage.drawMatches(matches, brief.keypoints, brief.keypoints);
 

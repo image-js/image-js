@@ -1,6 +1,6 @@
 import { inverse, Matrix } from 'ml-matrix';
 
-import { Image, ImageCoordinates } from '../Image';
+import { Image } from '../Image';
 import { getClamp } from '../utils/clamp';
 import { getBorderInterpolation, BorderType } from '../utils/interpolateBorder';
 import {
@@ -20,18 +20,18 @@ export interface TransformOptions {
   /**
    * Method to use to interpolate the new pixels
    *
-   * @default InterpolationType.BILINEAR
+   * @default 'bilinear'
    */
 
   interpolationType?: InterpolationType;
   /**
    * Specify how the borders should be handled.
    *
-   * @default BorderType.CONSTANT
+   * @default 'constant'
    */
   borderType?: BorderType;
   /**
-   * Value of the border if BorderType is CONSTANT.
+   * Value of the border if BorderType is 'constant'.
    *
    * @default 0
    */
@@ -61,9 +61,9 @@ export function transform(
   options: TransformOptions = {},
 ): Image {
   const {
-    borderType = BorderType.CONSTANT,
+    borderType = 'constant',
     borderValue = 0,
-    interpolationType = InterpolationType.BILINEAR,
+    interpolationType = 'bilinear',
     fullImage,
   } = options;
   let { width = image.width, height = image.height } = options;
@@ -73,10 +73,10 @@ export function transform(
     transformMatrix[0][2] = 0;
     transformMatrix[1][2] = 0;
     const corners = [
-      image.getCoordinates(ImageCoordinates.TOP_LEFT),
-      image.getCoordinates(ImageCoordinates.TOP_RIGHT),
-      image.getCoordinates(ImageCoordinates.BOTTOM_RIGHT),
-      image.getCoordinates(ImageCoordinates.BOTTOM_LEFT),
+      image.getCoordinates('top-left'),
+      image.getCoordinates('top-right'),
+      image.getCoordinates('bottom-right'),
+      image.getCoordinates('bottom-left'),
     ];
 
     corners[1].column += 1;

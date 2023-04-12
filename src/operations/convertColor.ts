@@ -22,24 +22,12 @@ export function convertColor(
   colorModel: ImageColorModel,
   options: ConvertColorOptions = {},
 ): Image {
-  const canConvert = new Map([
-    [
-      ImageColorModel.GREY,
-      [ImageColorModel.GREYA, ImageColorModel.RGB, ImageColorModel.RGBA],
-    ],
-    [
-      ImageColorModel.GREYA,
-      [ImageColorModel.GREY, ImageColorModel.RGB, ImageColorModel.RGBA],
-    ],
-    [
-      ImageColorModel.RGB,
-      [ImageColorModel.GREYA, ImageColorModel.GREY, ImageColorModel.RGBA],
-    ],
-    [
-      ImageColorModel.RGBA,
-      [ImageColorModel.GREYA, ImageColorModel.GREY, ImageColorModel.RGB],
-    ],
-    [ImageColorModel.BINARY, [ImageColorModel.GREY]],
+  const canConvert = new Map<ImageColorModel, Array<ImageColorModel>>([
+    ['GREY', ['GREYA', 'RGB', 'RGBA']],
+    ['GREYA', ['GREY', 'RGB', 'RGBA']],
+    ['RGB', ['GREY', 'GREYA', 'RGBA']],
+    ['RGBA', ['GREY', 'GREYA', 'RGB']],
+    ['BINARY', ['GREY']],
   ]);
 
   if (image.colorModel === colorModel) {
@@ -58,21 +46,12 @@ export function convertColor(
       newParameters: { colorModel },
     });
 
-    if (
-      image.colorModel === ImageColorModel.GREY ||
-      image.colorModel === ImageColorModel.GREYA
-    ) {
+    if (image.colorModel === 'GREY' || image.colorModel === 'GREYA') {
       convertGreyToAny(image, output);
     }
 
-    if (
-      image.colorModel === ImageColorModel.RGB ||
-      image.colorModel === ImageColorModel.RGBA
-    ) {
-      if (
-        colorModel === ImageColorModel.RGB ||
-        colorModel === ImageColorModel.RGBA
-      ) {
+    if (image.colorModel === 'RGB' || image.colorModel === 'RGBA') {
+      if (colorModel === 'RGB' || colorModel === 'RGBA') {
         convertRgbToRgb(image, output);
       } else {
         // GREYA or GREY

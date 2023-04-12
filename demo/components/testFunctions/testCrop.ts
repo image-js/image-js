@@ -1,4 +1,4 @@
-import { DerivativeFilters, Image, ImageColorModel } from '../../../src';
+import { Image } from '../../../src';
 // options
 const cropImageRatio = 2; // defines the size of the cropped image
 const interval = 2; // defines the speed
@@ -36,10 +36,10 @@ export function testCropBounce(image: Image): Image {
   });
   const grey = cropped.grey();
   const derivative = grey.derivativeFilter({
-    filter: DerivativeFilters.PREWITT,
+    filter: 'prewitt',
   });
 
-  const rgba = derivative.convertColor(ImageColorModel.RGBA);
+  const rgba = derivative.convertColor('RGBA');
 
   return rgba.copyTo(image, { origin: { row, column } });
 }

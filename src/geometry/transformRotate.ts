@@ -31,11 +31,7 @@ export function transformRotate(
   angle: number,
   options: TransformRotateOptions = {},
 ): Image {
-  const {
-    center = ImageCoordinates.CENTER,
-    scale = 1,
-    ...otherOptions
-  } = options;
+  const { center = 'center', scale = 1, ...otherOptions } = options;
 
   let centerCoordinates;
   if (typeof center === 'string') {

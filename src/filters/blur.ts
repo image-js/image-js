@@ -15,11 +15,11 @@ export interface BlurOptions {
   /**
    * Explicit how to handle the borders.
    *
-   * @default BorderType.REFLECT_101
+   * @default 'reflect101'
    */
   borderType?: BorderType;
   /**
-   * Value of the border if BorderType is CONSTANT.
+   * Value of the border if BorderType is 'constant'.
    *
    * @default 0
    */

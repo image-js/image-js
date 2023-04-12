@@ -1,4 +1,3 @@
-import { ImageColorModel } from '../../../Image';
 import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors';
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
 import { bruteForceOneMatch } from '../../matching/bruteForceMatch';
@@ -8,12 +7,12 @@ import { drawMatches } from '../drawMatches';
 
 test('alphabet image as source and destination, nbKeypoint = 10', () => {
   const source = testUtils.load('various/alphabet.jpg');
-  const grey = source.convertColor(ImageColorModel.GREY);
+  const grey = source.convertColor('GREY');
   const sourceKeypoints = getOrientedFastKeypoints(grey, { maxNbFeatures: 10 });
   const sourceBrief = getBriefDescriptors(grey, sourceKeypoints);
 
   const destination = testUtils.load('various/alphabet.jpg');
-  const grey2 = destination.convertColor(ImageColorModel.GREY);
+  const grey2 = destination.convertColor('GREY');
   const destinationKeypoints = getOrientedFastKeypoints(grey2, {
     maxNbFeatures: 10,
   });
@@ -39,13 +38,13 @@ test('alphabet image as source and destination, nbKeypoint = 10', () => {
 test('destination rotated +2°', () => {
   const source = testUtils
     .load('featureMatching/alphabet.jpg')
-    .convertColor(ImageColorModel.GREY);
+    .convertColor('GREY');
   const sourceKeypoints = getOrientedFastKeypoints(source);
   const sourceBrief = getBriefDescriptors(source, sourceKeypoints);
 
   const destination = testUtils
     .load('featureMatching/alphabetRotated2.jpg')
-    .convertColor(ImageColorModel.GREY);
+    .convertColor('GREY');
   const destinationKeypoints = getOrientedFastKeypoints(destination);
   const destinationBrief = getBriefDescriptors(
     destination,
@@ -74,12 +73,12 @@ test('destination rotated +2°', () => {
 
 test('destination rotated +10°', () => {
   const source = testUtils.load('featureMatching/alphabet.jpg');
-  const grey = source.convertColor(ImageColorModel.GREY);
+  const grey = source.convertColor('GREY');
   const sourceKeypoints = getOrientedFastKeypoints(grey);
   const sourceBrief = getBriefDescriptors(grey, sourceKeypoints);
 
   const destination = testUtils.load('featureMatching/alphabetRotated10.jpg');
-  const grey2 = destination.convertColor(ImageColorModel.GREY);
+  const grey2 = destination.convertColor('GREY');
   const destinationKeypoints = getOrientedFastKeypoints(grey2);
   const destinationBrief = getBriefDescriptors(grey2, destinationKeypoints);
 
@@ -116,12 +115,12 @@ test('destination rotated +10°', () => {
 
 test('showDistance = true', () => {
   const source = testUtils.load('featureMatching/alphabet.jpg');
-  const grey = source.convertColor(ImageColorModel.GREY);
+  const grey = source.convertColor('GREY');
   const sourceKeypoints = getOrientedFastKeypoints(grey);
   const sourceBrief = getBriefDescriptors(grey, sourceKeypoints);
 
   const destination = testUtils.load('featureMatching/alphabetRotated10.jpg');
-  const grey2 = destination.convertColor(ImageColorModel.GREY);
+  const grey2 = destination.convertColor('GREY');
   const destinationKeypoints = getOrientedFastKeypoints(grey2);
   const destinationBrief = getBriefDescriptors(grey2, destinationKeypoints);
 

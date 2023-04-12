@@ -1,4 +1,3 @@
-import { ImageColorModel } from '../../../Image';
 import { drawKeypoints } from '../../visualize/drawKeypoints';
 import { getBestKeypointsInRadius } from '../getBestKeypointsInRadius';
 import {
@@ -34,7 +33,7 @@ test('many clusters of keypoints', () => {
 
 test('star', () => {
   let image = testUtils.load('featureMatching/polygons/star.png');
-  const grey = image.convertColor(ImageColorModel.GREY);
+  const grey = image.convertColor('GREY');
   const keypoints = getOrientedFastKeypoints(grey, {
     // scoreAlgorithm: 'HARRIS', // a lot better results with this option
   });

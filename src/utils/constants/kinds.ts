@@ -1,5 +1,3 @@
-import { ImageColorModel } from '../../Image';
-
 interface ColorModelDefinitions {
   [key: string]: {
     channels: number;
@@ -8,19 +6,19 @@ interface ColorModelDefinitions {
 }
 
 export const colorModelDefinitions: ColorModelDefinitions = {
-  [ImageColorModel.GREY]: {
+  grey: {
     channels: 1,
     alpha: false,
   },
-  [ImageColorModel.GREYA]: {
+  greya: {
     channels: 2,
     alpha: true,
   },
-  [ImageColorModel.RGB]: {
+  rgb: {
     channels: 3,
     alpha: false,
   },
-  [ImageColorModel.RGBA]: {
+  rgba: {
     channels: 4,
     alpha: true,
   },

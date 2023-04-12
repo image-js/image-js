@@ -2,10 +2,7 @@ import { Matrix } from 'ml-matrix';
 
 import { rawDirectConvolution } from '..';
 import { getClamp } from '../../utils/clamp';
-import {
-  BorderType,
-  getBorderInterpolation,
-} from '../../utils/interpolateBorder';
+import { getBorderInterpolation } from '../../utils/interpolateBorder';
 import { computeConvolutionValue } from '../convolution';
 
 describe('convolution functions', () => {
@@ -15,7 +12,7 @@ describe('convolution functions', () => {
       [0.1, 0.2, 0.3],
       [0.4, 0.5, 0.6, -0.3, -0.4],
       {
-        borderType: BorderType.REFLECT,
+        borderType: 'reflect',
       },
     );
 
@@ -32,7 +29,7 @@ describe('convolution functions', () => {
     const kernel = kernelY.mmul(kernelX).to2DArray();
 
     const convoluted = img.directConvolution(kernel, {
-      borderType: BorderType.REFLECT,
+      borderType: 'reflect',
     });
 
     const expected = testUtils.load('opencv/testConv.png');
@@ -74,7 +71,7 @@ describe('computeConvolutionValue', () => {
       [1, 1, 1],
     ];
     const clamp = getClamp(image);
-    const interpolateBorder = getBorderInterpolation(BorderType.REFLECT_101, 0);
+    const interpolateBorder = getBorderInterpolation('reflect101', 0);
     expect(
       computeConvolutionValue(1, 1, 0, image, kernel, interpolateBorder, {
         clamp,
@@ -94,7 +91,7 @@ describe('computeConvolutionValue', () => {
     ];
     const clamp = getClamp(image);
 
-    const interpolateBorder = getBorderInterpolation(BorderType.REFLECT_101, 0);
+    const interpolateBorder = getBorderInterpolation('reflect101', 0);
     expect(
       computeConvolutionValue(1, 1, 0, image, kernel, interpolateBorder, {
         clamp,
@@ -112,7 +109,7 @@ describe('computeConvolutionValue', () => {
       [1, 1, 1],
       [1, 1, 1],
     ];
-    const interpolateBorder = getBorderInterpolation(BorderType.REFLECT_101, 0);
+    const interpolateBorder = getBorderInterpolation('reflect101', 0);
 
     expect(
       computeConvolutionValue(1, 1, 0, image, kernel, interpolateBorder, {

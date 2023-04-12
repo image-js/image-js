@@ -1,6 +1,5 @@
-import { Image, ImageColorModel } from '../../../src';
-import { fromMask, RoisColorMode, colorRois } from '../../../src/roi';
-import { RoiKind } from '../../../src/roi/getRois';
+import { Image } from '../../../src';
+import { fromMask, colorRois } from '../../../src/roi';
 
 /**
  * Make a mask out of the image and detect all ROIs. Returns only the white ROIs on a black background.
@@ -9,19 +8,19 @@ import { RoiKind } from '../../../src/roi/getRois';
  * @returns The treated image.
  */
 export function testColorRois(image: Image): Image {
-  const grey = image.convertColor(ImageColorModel.GREY);
+  const grey = image.convertColor('GREY');
   const mask = grey.threshold();
 
   const roiMapManager = fromMask(mask);
 
   let colorImage = colorRois(roiMapManager, {
-    roiKind: RoiKind.WHITE,
-    mode: RoisColorMode.RAINBOW,
+    roiKind: 'white',
+    mode: 'rainbow',
   });
 
   // create a black image
   const black = new Image(image.width, image.height, {
-    colorModel: ImageColorModel.RGBA,
+    colorModel: 'RGBA',
   });
   // overlay ROIs on the black image
   black.fill([0, 0, 0, 255]);

@@ -19,23 +19,26 @@ import shanbhag from './thresholds/shanbhag';
 import { triangle } from './thresholds/triangle';
 import yen from './thresholds/yen';
 
-export enum ThresholdAlgorithm {
-  HUANG = 'HUANG',
-  INTERMODES = 'INTERMODES',
-  ISODATA = 'ISODATA',
-  LI = 'LI',
-  MAX_ENTROPY = 'MAX_ENTROPY',
-  MEAN = 'MEAN',
-  MIN_ERROR = 'MIN_ERROR',
-  MINIMUM = 'MINIMUM',
-  MOMENTS = 'MOMENTS',
-  OTSU = 'OTSU',
-  PERCENTILE = 'PERCENTILE',
-  RENYI_ENTROPY = 'RENYI_ENTROPY',
-  SHANBHAG = 'SHANBHAG',
-  TRIANGLE = 'TRIANGLE',
-  YEN = 'YEN',
-}
+export const ThresholdAlgorithm = {
+  HUANG: 'huang',
+  INTERMODES: 'intermodes',
+  ISODATA: 'isodata',
+  LI: 'li',
+  MAX_ENTROPY: 'maxEntropy',
+  MEAN: 'mean',
+  MIN_ERROR: 'minError',
+  MINIMUM: 'minimum',
+  MOMENTS: 'moments',
+  OTSU: 'otsu',
+  PERCENTILE: 'percentile',
+  RENYI_ENTROPY: 'renyiEntropy',
+  SHANBHAG: 'shanbhag',
+  TRIANGLE: 'triangle',
+  YEN: 'yen',
+} as const;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type ThresholdAlgorithm =
+  (typeof ThresholdAlgorithm)[keyof typeof ThresholdAlgorithm];
 
 interface ThresholdOptionsBase {
   /**
@@ -55,7 +58,7 @@ export interface ThresholdOptionsAlgorithm extends ThresholdOptionsBase {
   /**
    * Specify a function to computes the threshold value.
    *
-   *   @default ThresholdAlgorithm.OTSU
+   *   @default 'otsu'
    */
   algorithm?: ThresholdAlgorithm;
 }
@@ -73,7 +76,7 @@ export type ThresholdOptions =
  */
 export function computeThreshold(
   image: Image,
-  algorithm: ThresholdAlgorithm = ThresholdAlgorithm.OTSU,
+  algorithm: ThresholdAlgorithm = 'otsu',
 ): number {
   if (image.channels !== 1) {
     throw new Error(
@@ -83,35 +86,35 @@ export function computeThreshold(
   const histogram = image.histogram();
 
   switch (algorithm) {
-    case ThresholdAlgorithm.HUANG:
+    case 'huang':
       return huang(histogram);
-    case ThresholdAlgorithm.INTERMODES:
+    case 'intermodes':
       return intermodes(histogram);
-    case ThresholdAlgorithm.ISODATA:
+    case 'isodata':
       return isodata(histogram);
-    case ThresholdAlgorithm.LI:
+    case 'li':
       return li(histogram, image.size);
-    case ThresholdAlgorithm.MAX_ENTROPY:
+    case 'maxEntropy':
       return maxEntropy(histogram, image.size);
-    case ThresholdAlgorithm.MEAN:
+    case 'mean':
       return mean(histogram, image.size);
-    case ThresholdAlgorithm.MINIMUM:
+    case 'minimum':
       return minimum(histogram);
-    case ThresholdAlgorithm.MIN_ERROR:
+    case 'minError':
       return minError(histogram, image.size);
-    case ThresholdAlgorithm.MOMENTS:
+    case 'moments':
       return moments(histogram, image.size);
-    case ThresholdAlgorithm.OTSU:
+    case 'otsu':
       return otsu(histogram, image.size);
-    case ThresholdAlgorithm.PERCENTILE:
+    case 'percentile':
       return percentile(histogram);
-    case ThresholdAlgorithm.RENYI_ENTROPY:
+    case 'renyiEntropy':
       return renyiEntropy(histogram, image.size);
-    case ThresholdAlgorithm.SHANBHAG:
+    case 'shanbhag':
       return shanbhag(histogram, image.size);
-    case ThresholdAlgorithm.TRIANGLE:
+    case 'triangle':
       return triangle(histogram);
-    case ThresholdAlgorithm.YEN:
+    case 'yen':
       return yen(histogram, image.size);
     default:
       throw new RangeError(`unsupported threshold algorithm: ${algorithm}`);

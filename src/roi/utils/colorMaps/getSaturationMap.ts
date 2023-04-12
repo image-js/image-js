@@ -15,7 +15,7 @@ export interface GetSaturationMapOptions {
   /**
    * Specify which ROIs to colour.
    *
-   * @default RoiKind.BW
+   * @default 'bw'
    */
   roiKind?: RoiKind;
   /**
@@ -44,7 +44,7 @@ export function getSaturationMap(
   const {
     nbNegative,
     nbPositive,
-    roiKind = RoiKind.BW,
+    roiKind = 'bw',
     whiteHue = 0,
     blackHue = 240,
   } = options;
@@ -57,7 +57,7 @@ export function getSaturationMap(
 
   // negative values
   let counter = 0;
-  if (roiKind === RoiKind.BW || roiKind === RoiKind.BLACK) {
+  if (roiKind === 'bw' || roiKind === 'black') {
     for (let i = colorMapCenter - nbNegative; i < colorMapCenter; i++) {
       const hsv = [blackHue, 255 - counter++ * negativeStep, 255];
       colorMap[i] = rgbToNumber(hsvToRgb(hsv));
@@ -65,7 +65,7 @@ export function getSaturationMap(
   }
   // positive values
   counter = 0;
-  if (roiKind === RoiKind.BW || roiKind === RoiKind.WHITE) {
+  if (roiKind === 'bw' || roiKind === 'white') {
     for (let i = colorMapCenter + 1; i < colorMapCenter + 1 + nbPositive; i++) {
       const hsv = [whiteHue, 255 - counter++ * positiveStep, 255];
       colorMap[i] = rgbToNumber(hsvToRgb(hsv));

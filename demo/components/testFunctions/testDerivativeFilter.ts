@@ -1,4 +1,4 @@
-import { DerivativeFilters, Image, ImageColorModel } from '../../../src';
+import { Image } from '../../../src';
 
 /**
  * Apply a derivative filter to the source image.
@@ -7,6 +7,6 @@ import { DerivativeFilters, Image, ImageColorModel } from '../../../src';
  * @returns The treated image.
  */
 export function testDerivativeFilter(image: Image): Image {
-  image = image.convertColor(ImageColorModel.GREY);
-  return image.derivativeFilter({ filter: DerivativeFilters.PREWITT });
+  image = image.convertColor('GREY');
+  return image.derivativeFilter({ filter: 'prewitt' });
 }

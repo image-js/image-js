@@ -1,9 +1,9 @@
-import { ImageColorModel, Image } from '../../../Image';
+import { Image } from '../../../Image';
 import { compareIntensity } from '../compareIntensity';
 
 test('verify descriptor is correct (descriptorLength = 10)', () => {
   const size = 5;
-  const image = new Image(size, size, { colorModel: ImageColorModel.GREY });
+  const image = new Image(size, size, { colorModel: 'GREY' });
   for (let i = 0; i < 2 * size; i++) {
     image.setPixelByIndex(i, [255]);
   }

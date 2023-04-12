@@ -1,4 +1,4 @@
-import { Image, ImageCoordinates } from '../../../src';
+import { Image } from '../../../src';
 
 /**
  * Apply a derivative filter to the source image.
@@ -7,5 +7,5 @@ import { Image, ImageCoordinates } from '../../../src';
  * @returns The treated image.
  */
 export function testRotate(image: Image): Image {
-  return image.transformRotate(-15, { center: ImageCoordinates.BOTTOM_RIGHT });
+  return image.transformRotate(-15, { center: 'bottom-right' });
 }

@@ -1,5 +1,4 @@
 import { encodePng, Mask } from '../..';
-import { ImageColorModel } from '../../Image';
 
 test('mask 5x5, default options', () => {
   let image = testUtils.createMask([
@@ -123,9 +122,7 @@ test('larger image', () => {
   const image = testUtils.load('morphology/alphabetCannyEdge.png');
   const mask = image.threshold();
   const solided = mask.solidFill();
-  const png = Buffer.from(
-    encodePng(solided.convertColor(ImageColorModel.GREY)),
-  );
+  const png = Buffer.from(encodePng(solided.convertColor('GREY')));
 
   expect(png).toMatchImageSnapshot();
 });

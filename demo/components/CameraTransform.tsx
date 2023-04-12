@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
 
-import { Image, ImageColorModel, readCanvas, writeCanvas } from '../../src';
+import { Image, readCanvas, writeCanvas } from '../../src';
 import { convertColor } from '../../src/operations/convertColor';
 import { useCameraContext } from '../contexts/cameraContext';
 
@@ -56,8 +56,8 @@ export default function CameraTransform(props: CameraTransformProps) {
                 image,
                 snapshotImageRef.current,
               );
-              if (result.colorModel !== ImageColorModel.RGBA) {
-                result = convertColor(result, ImageColorModel.RGBA);
+              if (result.colorModel !== 'RGBA') {
+                result = convertColor(result, 'RGBA');
               }
               writeCanvas(result, canvasOutput);
             } catch (err) {

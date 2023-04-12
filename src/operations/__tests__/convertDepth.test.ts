@@ -1,5 +1,3 @@
-import { ImageColorModel } from '../../utils/constants/colorModels';
-
 test('Uint8 to Uint16', () => {
   const img = testUtils.createGreyImage([
     [1, 2],
@@ -10,7 +8,7 @@ test('Uint8 to Uint16', () => {
   expect(newImg.width).toBe(2);
   expect(newImg.height).toBe(2);
   expect(newImg.depth).toStrictEqual(16);
-  expect(newImg.colorModel).toStrictEqual(ImageColorModel.GREY);
+  expect(newImg.colorModel).toStrictEqual('GREY');
   expect(newImg).toMatchImageData([
     [256, 512],
     [768, 1024],
@@ -30,7 +28,7 @@ test('Uint16 to Uint8', () => {
   expect(newImg.width).toBe(2);
   expect(newImg.height).toBe(2);
   expect(newImg.depth).toStrictEqual(8);
-  expect(newImg.colorModel).toStrictEqual(ImageColorModel.GREY);
+  expect(newImg.colorModel).toStrictEqual('GREY');
   expect(newImg).toMatchImageData([
     [0, 1],
     [2, 7],
@@ -49,7 +47,7 @@ test('Uint16 to Uint8 for rgba', () => {
   const newImg = img.convertDepth(8);
   expect(newImg.width).toBe(2);
   expect(newImg.height).toBe(2);
-  expect(newImg.colorModel).toStrictEqual(ImageColorModel.RGBA);
+  expect(newImg.colorModel).toStrictEqual('RGBA');
   expect(newImg.depth).toStrictEqual(8);
   expect(newImg).toMatchImageData([
     [1, 1, 1, 1, 2, 2, 2, 2],

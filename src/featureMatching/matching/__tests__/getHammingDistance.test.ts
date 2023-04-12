@@ -1,4 +1,3 @@
-import { ImageColorModel } from '../../../Image';
 import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors';
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
 import { getHammingDistance } from '../getHammingDistance';
@@ -56,14 +55,14 @@ test.each([
 ])('check distance for each keypoint pair ($message)', (data) => {
   const source = testUtils
     .load('featureMatching/polygons/scaleneTriangle.png')
-    .convertColor(ImageColorModel.GREY);
+    .convertColor('GREY');
   const sourceKeypoints = getOrientedFastKeypoints(source, {
     centroidPatchDiameter: data.centroidPatchDiameter,
   });
   const sourceBrief = getBriefDescriptors(source, sourceKeypoints);
   const destination = testUtils
     .load('featureMatching/polygons/scaleneTriangle10.png')
-    .convertColor(ImageColorModel.GREY);
+    .convertColor('GREY');
   const destinationKeypoints = getOrientedFastKeypoints(destination, {
     centroidPatchDiameter: data.centroidPatchDiameter,
   });

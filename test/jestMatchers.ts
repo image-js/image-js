@@ -6,7 +6,7 @@ import {
   configureToMatchImageSnapshot,
 } from 'jest-image-snapshot';
 
-import { encodePng, Image, ImageColorModel } from '../src';
+import { encodePng, Image } from '../src';
 import { Mask } from '../src/Mask';
 
 import { TestImagePath } from './TestImagePath';
@@ -164,10 +164,7 @@ export function toMatchMaskData(
   received: Mask,
   expectedData: number[][] | string,
 ): MatcherResult {
-  const expectedMask = createImageFromData(
-    expectedData,
-    ImageColorModel.BINARY,
-  );
+  const expectedMask = createImageFromData(expectedData, 'BINARY');
   return toMatchMask.call(this, received, expectedMask);
 }
 
@@ -192,9 +189,7 @@ export function toMatchImageSnapshot(
     png = received;
   } else {
     const receivedImage =
-      received instanceof Mask
-        ? received.convertColor(ImageColorModel.GREY)
-        : received;
+      received instanceof Mask ? received.convertColor('GREY') : received;
     png = encodePng(receivedImage);
   }
 

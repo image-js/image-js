@@ -1,6 +1,5 @@
 import { decode } from 'tiff';
 
-import { ImageColorModel } from '..';
 import { ColorDepth, Image } from '../Image';
 
 type TiffIfd = ReturnType<typeof decode>[number];
@@ -38,7 +37,7 @@ function getImageFromIFD(ifd: TiffIfd): Image {
     return new Image(ifd.width, ifd.height, {
       data,
       // TODO: handle alpha properly
-      colorModel: ifd.alpha ? ImageColorModel.RGBA : ImageColorModel.RGB,
+      colorModel: ifd.alpha ? 'RGBA' : 'RGB',
       // TODO: handle other bit depths
       depth: 16,
       // TODO: implement metadata
@@ -53,11 +52,11 @@ function getImageFromIFD(ifd: TiffIfd): Image {
       colorModel:
         ifd.type === 2
           ? ifd.alpha
-            ? ImageColorModel.RGBA
-            : ImageColorModel.RGB
+            ? 'RGBA'
+            : 'RGB'
           : ifd.alpha
-          ? ImageColorModel.GREYA
-          : ImageColorModel.GREY,
+          ? 'GREYA'
+          : 'GREY',
       // meta: getMetadata(ifd),
     });
   }

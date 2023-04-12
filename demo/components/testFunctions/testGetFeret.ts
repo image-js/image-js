@@ -1,5 +1,4 @@
-import { fromMask, Image, ImageColorModel } from '../../../src';
-import { RoiKind } from '../../../src/roi/getRois';
+import { fromMask, Image } from '../../../src';
 
 /**
  * Draw the Feret diameters of the largest ROI detected in the image.
@@ -8,11 +7,11 @@ import { RoiKind } from '../../../src/roi/getRois';
  * @returns The image with the Feret diameters.
  */
 export function testGetFeret(image: Image): Image {
-  const grey = image.convertColor(ImageColorModel.GREY);
+  const grey = image.convertColor('GREY');
   const mask = grey.threshold({ threshold: 35 });
   const roiMapManager = fromMask(mask);
 
-  const rois = roiMapManager.getRois({ kind: RoiKind.BLACK });
+  const rois = roiMapManager.getRois({ kind: 'black' });
 
   const roi = rois.sort((a, b) => b.surface - a.surface)[0];
   if (roi) {

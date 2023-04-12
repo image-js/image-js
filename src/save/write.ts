@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { Mask, Image, ImageColorModel } from '..';
+import { Mask, Image } from '..';
 
 import {
   encode,
@@ -58,7 +58,7 @@ export async function write(
   options?: EncodeOptionsPng | EncodeOptionsJpeg,
 ): Promise<void> {
   if (image instanceof Mask) {
-    image = image.convertColor(ImageColorModel.GREY);
+    image = image.convertColor('GREY');
   }
   const toWrite = getDataToWrite(path, image, options);
   await fs.promises.writeFile(path, toWrite);
@@ -77,7 +77,7 @@ export function writeSync(
   options?: EncodeOptionsPng | EncodeOptionsJpeg,
 ): void {
   if (image instanceof Mask) {
-    image = image.convertColor(ImageColorModel.GREY);
+    image = image.convertColor('GREY');
   }
   const toWrite = getDataToWrite(path, image, options);
   fs.writeFileSync(path, toWrite);
@@ -100,22 +100,19 @@ function getDataToWrite(
   if (options === undefined) {
     const extension = path.extname(destinationPath).slice(1).toLowerCase();
     if (extension === 'png') {
-      format = ImageFormat.png;
+      format = 'png';
       return encode(image, { format });
     } else if (extension === 'jpg' || extension === 'jpeg') {
-      format = ImageFormat.jpg;
+      format = 'jpg';
       return encode(image, { format });
     } else {
       throw new Error(
         'image format could not be determined from file extension. Please use a supported extension or specify the format option',
       );
     }
-  } else if (options.format === ImageFormat.png) {
+  } else if (options.format === 'png') {
     return encode(image, options);
-  } else if (
-    options.format === ImageFormat.jpg ||
-    options.format === ImageFormat.jpeg
-  ) {
+  } else if (options.format === 'jpg' || options.format === 'jpeg') {
     return encode(image, options);
   } else {
     throw new RangeError(`unknown format: ${options.format}`);

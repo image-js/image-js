@@ -1,4 +1,4 @@
-import { convertBinaryToGrey, Image, ImageColorModel } from '../../../src';
+import { convertBinaryToGrey, Image } from '../../../src';
 
 /**
  * Detect the edges in the image using Canny edge detection
@@ -7,7 +7,7 @@ import { convertBinaryToGrey, Image, ImageColorModel } from '../../../src';
  * @returns The treated image.
  */
 export function testCannyEdge(image: Image): Image {
-  let result = image.convertColor(ImageColorModel.GREY);
+  let result = image.convertColor('GREY');
   result = result.gaussianBlur({ size: 7, sigma: 4 });
   const edges = result.cannyEdgeDetector({
     lowThreshold: 0.08,
@@ -24,13 +24,13 @@ export function testCannyEdge(image: Image): Image {
  * @returns The treated image.
  */
 export function testCannyEdgeOverlay(image: Image): Image {
-  let result = image.convertColor(ImageColorModel.GREY);
+  let result = image.convertColor('GREY');
   const edges = result.cannyEdgeDetector({
     lowThreshold: 0.08,
     highThreshold: 0.1,
   });
-  let greyEdges = edges.convertColor(ImageColorModel.GREY);
-  greyEdges = greyEdges.convertColor(ImageColorModel.RGBA);
+  let greyEdges = edges.convertColor('GREY');
+  greyEdges = greyEdges.convertColor('RGBA');
   greyEdges = greyEdges.invert();
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {

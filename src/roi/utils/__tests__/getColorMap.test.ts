@@ -1,5 +1,3 @@
-import { RoisColorMode } from '../../colorRois';
-import { RoiKind } from '../../getRois';
 import { getBinaryMap } from '../colorMaps/getBinaryMap';
 import { maxNumberRois, colorMapCenter } from '../constants';
 import { getColorMap } from '../getColorMap';
@@ -27,7 +25,7 @@ test('binary, WHITE', () => {
   const colorMap = getColorMap({
     nbNegative: 1,
     nbPositive: 1,
-    roiKind: RoiKind.WHITE,
+    roiKind: 'white',
   });
 
   expect(colorMap[colorMapCenter - 1]).toBe(0);
@@ -38,7 +36,7 @@ test('binary, BLACK', () => {
   const colorMap = getColorMap({
     nbNegative: 1,
     nbPositive: 1,
-    roiKind: RoiKind.BLACK,
+    roiKind: 'black',
   });
 
   expect(colorMap[colorMapCenter - 1]).toBe(0xff0000ff);
@@ -47,7 +45,7 @@ test('binary, BLACK', () => {
 
 test('SATURATION, 1 negative and 1 positive ROIs', () => {
   const colorMap = getColorMap({
-    mode: RoisColorMode.SATURATION,
+    mode: 'saturation',
     nbNegative: 1,
     nbPositive: 1,
   });
@@ -58,10 +56,10 @@ test('SATURATION, 1 negative and 1 positive ROIs', () => {
 
 test('RAINBOW, 1 negative and 2 positive ROIs, WHITE', () => {
   const colorMap = getColorMap({
-    mode: RoisColorMode.RAINBOW,
+    mode: 'rainbow',
     nbNegative: 1,
     nbPositive: 2,
-    roiKind: RoiKind.WHITE,
+    roiKind: 'white',
   });
 
   expect(colorMap[colorMapCenter - 1]).toBe(0); // transparent
@@ -71,10 +69,10 @@ test('RAINBOW, 1 negative and 2 positive ROIs, WHITE', () => {
 
 test('RAINBOW, 1 negative and 2 positive ROIs, BLACK', () => {
   const colorMap = getColorMap({
-    mode: RoisColorMode.RAINBOW,
+    mode: 'rainbow',
     nbNegative: 1,
     nbPositive: 2,
-    roiKind: RoiKind.BLACK,
+    roiKind: 'black',
   });
 
   expect(colorMap[colorMapCenter - 1]).toBe(0xff0000ff);
@@ -84,10 +82,10 @@ test('RAINBOW, 1 negative and 2 positive ROIs, BLACK', () => {
 
 test('RAINBOW, 1 negative and 1 positive ROIs, BW', () => {
   const colorMap = getColorMap({
-    mode: RoisColorMode.RAINBOW,
+    mode: 'rainbow',
     nbNegative: 1,
     nbPositive: 1,
-    roiKind: RoiKind.BW,
+    roiKind: 'bw',
   });
 
   expect(colorMap[colorMapCenter - 1]).toBe(0xff0000ff);

@@ -1,5 +1,4 @@
 import { TestImagePath } from '../../../../test/TestImagePath';
-import { ImageColorModel } from '../../../Image';
 import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors';
 import { getBestKeypointsInRadius } from '../../keypoints/getBestKeypointsInRadius';
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
@@ -140,7 +139,7 @@ describe('getCrosscheckMatches', () => {
 
     const source = testUtils
       .load(`featureMatching/polygons/${data.source}.png` as TestImagePath)
-      .convertColor(ImageColorModel.GREY);
+      .convertColor('GREY');
     const allSourceKeypoints = getOrientedFastKeypoints(source, {
       centroidPatchDiameter: patchDiameter,
     });
@@ -154,7 +153,7 @@ describe('getCrosscheckMatches', () => {
     ).descriptors;
     const destination = testUtils
       .load(`featureMatching/polygons/${data.destination}.png` as TestImagePath)
-      .convertColor(ImageColorModel.GREY);
+      .convertColor('GREY');
     const allDestinationKeypoints = getOrientedFastKeypoints(destination, {
       centroidPatchDiameter: patchDiameter,
     });

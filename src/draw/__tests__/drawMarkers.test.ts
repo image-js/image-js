@@ -1,4 +1,4 @@
-import { ImageColorModel, Image } from '../../Image';
+import { Image } from '../../Image';
 
 test('square', () => {
   const image = testUtils.createGreyImage([
@@ -72,7 +72,7 @@ test('out parameter set to self', () => {
   expect(result).toBe(image);
 });
 test('out to other image', () => {
-  const out = new Image(4, 4, { colorModel: ImageColorModel.GREY });
+  const out = new Image(4, 4, { colorModel: 'GREY' });
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0],
     [0, 0, 0, 0],

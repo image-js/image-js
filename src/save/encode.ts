@@ -3,22 +3,24 @@ import { Image } from '../Image';
 import { encodeJpeg, EncodeJpegOptions } from './encodeJpeg';
 import { encodePng, EncodePngOptions } from './encodePng';
 
-export enum ImageFormat {
-  png = 'png',
-  jpg = 'jpg',
-  jpeg = 'jpeg',
-}
+export const ImageFormat = {
+  PNG: 'png',
+  JPG: 'jpg',
+  JPEG: 'jpeg',
+} as const;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type ImageFormat = (typeof ImageFormat)[keyof typeof ImageFormat];
 
 export interface EncodeOptionsPng {
-  format: ImageFormat.png;
+  format: 'png';
   encoderOptions?: EncodePngOptions;
 }
 export interface EncodeOptionsJpeg {
-  format: ImageFormat.jpg | ImageFormat.jpeg;
+  format: 'jpg' | 'jpeg';
   encoderOptions?: EncodeJpegOptions;
 }
 
-const defaultPng: EncodeOptionsPng = { format: ImageFormat.png };
+const defaultPng: EncodeOptionsPng = { format: 'png' };
 
 /**
  * Encodes the image to an output format.
@@ -55,12 +57,9 @@ export function encode(
   image: Image,
   options: EncodeOptionsPng | EncodeOptionsJpeg = defaultPng,
 ): Uint8Array {
-  if (options.format === ImageFormat.png) {
+  if (options.format === 'png') {
     return encodePng(image, options.encoderOptions);
-  } else if (
-    options.format === ImageFormat.jpg ||
-    options.format === ImageFormat.jpeg
-  ) {
+  } else if (options.format === 'jpg' || options.format === 'jpeg') {
     return encodeJpeg(image, options.encoderOptions);
   } else {
     throw new RangeError(`unknown format: ${options.format}`);

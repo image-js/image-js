@@ -1,4 +1,4 @@
-import { Image, ImageColorModel } from '../../../src';
+import { Image } from '../../../src';
 import { getFastKeypoints } from '../../../src/featureMatching/keypoints/getFastKeypoints';
 
 /**
@@ -8,7 +8,7 @@ import { getFastKeypoints } from '../../../src/featureMatching/keypoints/getFast
  * @returns The image with the fast keypoints.
  */
 export function testGetFastKeypoints(image: Image): Image {
-  const grey = image.convertColor(ImageColorModel.GREY);
+  const grey = image.convertColor('GREY');
   const blurred = grey.gaussianBlur({ size: 7, sigma: 4 });
   const keypoints = getFastKeypoints(blurred);
 

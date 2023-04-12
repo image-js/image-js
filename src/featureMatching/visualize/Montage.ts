@@ -1,4 +1,4 @@
-import { Image, ImageColorModel } from '../../Image';
+import { Image } from '../../Image';
 import { Point } from '../../geometry';
 import { FastKeypoint } from '../keypoints/getFastKeypoints';
 import { Match } from '../matching/bruteForceMatch';
@@ -7,10 +7,14 @@ import { drawKeypoints, DrawKeypointsOptions } from './drawKeypoints';
 import { drawMatches, DrawMatchesOptions } from './drawMatches';
 import { scaleKeypoints } from './scaleKeypoints';
 
-export enum MontageDisposition {
-  HORIZONTAL = 'HORIZONTAL',
-  VERTICAL = 'VERTICAL',
-}
+export const MontageDisposition = {
+  HORIZONTAL: 'horizontal',
+  VERTICAL: 'vertical',
+} as const;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type MontageDisposition =
+  (typeof MontageDisposition)[keyof typeof MontageDisposition];
+
 export interface MontageOptions {
   /**
    * Factor by which to scale the images.
@@ -21,7 +25,7 @@ export interface MontageOptions {
   /**
    * How should the images be aligned: vertically or horizontally.
    *
-   * @default MontageDispositions.HORIZONTAL
+   * @default 'horizontal'
    */
   disposition?: MontageDisposition;
 }
@@ -79,7 +83,7 @@ export class Montage {
     destination: Image,
     options: MontageOptions = {},
   ) {
-    const { scale = 1, disposition = MontageDisposition.HORIZONTAL } = options;
+    const { scale = 1, disposition = 'horizontal' } = options;
 
     if (!Number.isInteger(scale)) {
       throw new Error('scale should be an integer');
@@ -93,11 +97,11 @@ export class Montage {
     this.sourceHeight = scale * source.height;
     this.destinationHeight = scale * destination.height;
 
-    if (disposition === MontageDisposition.HORIZONTAL) {
+    if (disposition === 'horizontal') {
       this.destinationOrigin = { row: 0, column: this.sourceWidth };
       this.width = this.sourceWidth + this.destinationWidth;
       this.height = Math.max(this.sourceHeight, this.destinationHeight);
-    } else if (disposition === MontageDisposition.VERTICAL) {
+    } else if (disposition === 'vertical') {
       this.destinationOrigin = { row: this.sourceHeight, column: 0 };
       this.width = Math.max(this.sourceWidth, this.destinationWidth);
       this.height = this.sourceHeight + this.destinationHeight;
@@ -105,11 +109,11 @@ export class Montage {
       throw new Error(`unknown disposition type`);
     }
 
-    if (source.colorModel !== ImageColorModel.RGB) {
-      source = source.convertColor(ImageColorModel.RGB);
+    if (source.colorModel !== 'RGB') {
+      source = source.convertColor('RGB');
     }
-    if (destination.colorModel !== ImageColorModel.RGB) {
-      destination = destination.convertColor(ImageColorModel.RGB);
+    if (destination.colorModel !== 'RGB') {
+      destination = destination.convertColor('RGB');
     }
 
     const image = new Image(this.width, this.height);

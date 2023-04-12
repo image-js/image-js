@@ -1,12 +1,14 @@
 import { Image } from '../Image';
 
-export enum BorderType {
-  CONSTANT = 'CONSTANT',
-  REPLICATE = 'REPLICATE',
-  REFLECT = 'REFLECT',
-  WRAP = 'WRAP',
-  REFLECT_101 = 'REFLECT_101',
-}
+export const BorderType = {
+  CONSTANT: 'constant',
+  REPLICATE: 'replicate',
+  REFLECT: 'reflect',
+  WRAP: 'wrap',
+  REFLECT_101: 'reflect101',
+} as const;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type BorderType = (typeof BorderType)[keyof typeof BorderType];
 
 export type BorderInterpolationFunction = (
   column: number,
@@ -21,7 +23,7 @@ export type BorderInterpolationFunction = (
  * https://vovkos.github.io/doxyrest-showcase/opencv/sphinx_rtd_theme/enum_cv_BorderTypes.html
  *
  * @param type - The border type.
- * @param value - A pixel value if BordetType.CONSTANT is used.
+ * @param value - A pixel value if BorderType.CONSTANT is used.
  * @returns The border interpolation function.
  */
 export function getBorderInterpolation(
@@ -29,15 +31,15 @@ export function getBorderInterpolation(
   value: number,
 ): BorderInterpolationFunction {
   switch (type) {
-    case BorderType.CONSTANT:
+    case 'constant':
       return getInterpolateConstant(value);
-    case BorderType.REPLICATE:
+    case 'replicate':
       return interpolateReplicate;
-    case BorderType.REFLECT:
+    case 'reflect':
       return interpolateReflect;
-    case BorderType.REFLECT_101:
+    case 'reflect101':
       return interpolateReflect101;
-    case BorderType.WRAP:
+    case 'wrap':
       return interpolateWrap;
     default:
       throw new Error(

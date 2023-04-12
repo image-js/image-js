@@ -1,5 +1,4 @@
 import { getDirection } from '..';
-import { ImageColorModel } from '../..';
 
 describe('cannyEdgeDetector', () => {
   it('5x5 grey image with dot', () => {
@@ -103,9 +102,7 @@ describe('cannyEdgeDetector', () => {
     expect(result).toMatchMask(expected);
   });
   it('compare alphabet image to expected', () => {
-    const image = testUtils
-      .load('various/alphabet.jpg')
-      .convertColor(ImageColorModel.GREY);
+    const image = testUtils.load('various/alphabet.jpg').convertColor('GREY');
 
     const expected = testUtils
       .load('morphology/alphabetCannyEdge.png')

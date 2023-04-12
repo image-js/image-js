@@ -1,6 +1,3 @@
-import { DerivativeFilters } from '..';
-import { BorderType } from '../../utils/interpolateBorder';
-
 const image = testUtils.createGreyImage([
   [1, 1, 1],
   [1, 1, 1],
@@ -9,7 +6,7 @@ const image = testUtils.createGreyImage([
 
 test('Sobel', () => {
   const result = image.derivativeFilter({
-    borderType: BorderType.CONSTANT,
+    borderType: 'constant',
   });
 
   expect(result).toMatchImageData([
@@ -21,8 +18,8 @@ test('Sobel', () => {
 
 test('Scharr', () => {
   const result = image.derivativeFilter({
-    filter: DerivativeFilters.SCHARR,
-    borderType: BorderType.CONSTANT,
+    filter: 'scharr',
+    borderType: 'constant',
   });
 
   expect(result).toMatchImageData([
@@ -34,8 +31,8 @@ test('Scharr', () => {
 
 test('Prewitt', () => {
   const result = image.derivativeFilter({
-    filter: DerivativeFilters.PREWITT,
-    borderType: BorderType.CONSTANT,
+    filter: 'prewitt',
+    borderType: 'constant',
   });
 
   expect(result).toMatchImageData([
@@ -44,3 +41,6 @@ test('Prewitt', () => {
     [2, 3, 2],
   ]);
 });
+
+// To make TypeScript know it's a module
+export {};

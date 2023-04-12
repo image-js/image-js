@@ -1,8 +1,8 @@
-import { ImageColorModel, Image } from '../../../Image';
+import { Image } from '../../../Image';
 import { getIntensityCentroid } from '../getIntensityCentroid';
 
 test('3x3 empty image', () => {
-  const image = new Image(3, 3, { colorModel: ImageColorModel.GREY });
+  const image = new Image(3, 3, { colorModel: 'GREY' });
   const result = getIntensityCentroid(image);
   expect(result).toStrictEqual([{ column: 0, row: 0 }]);
 });

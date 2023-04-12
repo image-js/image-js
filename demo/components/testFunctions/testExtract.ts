@@ -1,5 +1,4 @@
-import { fromMask, Image, ImageColorModel } from '../../../src';
-import { RoiKind } from '../../../src/roi/getRois';
+import { fromMask, Image } from '../../../src';
 
 /**
  * Extract the pixels of a mask from the image.
@@ -9,12 +8,12 @@ import { RoiKind } from '../../../src/roi/getRois';
  */
 export function testExtract(image: Image): Image {
   const background = new Image(image.width, image.height, {
-    colorModel: ImageColorModel.RGBA,
+    colorModel: 'RGBA',
   });
 
   background.fill([0, 255, 0, 255]);
 
-  const grey = image.convertColor(ImageColorModel.GREY);
+  const grey = image.convertColor('GREY');
   const mask = grey.threshold();
 
   const extracted = image.extract(mask);
@@ -28,11 +27,11 @@ export function testExtract(image: Image): Image {
  * @returns - The extracted ROI.
  */
 export function testExtractRoi(image: Image): Image {
-  const grey = image.convertColor(ImageColorModel.GREY);
+  const grey = image.convertColor('GREY');
   const mask = grey.threshold();
 
   const roiMapManager = fromMask(mask);
-  const rois = roiMapManager.getRois({ kind: RoiKind.WHITE, minSurface: 100 });
+  const rois = roiMapManager.getRois({ kind: 'white', minSurface: 100 });
 
   const roiMask = rois[0].getMask();
 

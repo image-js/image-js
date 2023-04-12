@@ -1,5 +1,5 @@
 import { computeDssim } from '..';
-import { Image, ImageColorModel } from '../..';
+import { Image } from '../..';
 
 test('twice the same image', async () => {
   const image = testUtils.createGreyImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);
@@ -14,7 +14,7 @@ test('should be symetrical', async () => {
 });
 
 test('dssim should be 0.5', async () => {
-  const image = new Image(11, 11, { colorModel: ImageColorModel.GREY });
+  const image = new Image(11, 11, { colorModel: 'GREY' });
   const other = Image.createFrom(image).fill(255);
 
   expect(image === other).toBe(false);

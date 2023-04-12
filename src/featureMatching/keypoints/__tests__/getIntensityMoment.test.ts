@@ -1,8 +1,8 @@
-import { ImageColorModel, Image } from '../../../Image';
+import { Image } from '../../../Image';
 import { getIntensityMoment } from '../getIntensityMoment';
 
 test('3x3 empty image, 00', () => {
-  const image = new Image(3, 3, { colorModel: ImageColorModel.GREY });
+  const image = new Image(3, 3, { colorModel: 'GREY' });
   const result = getIntensityMoment(image, 0, 0);
   expect(result).toStrictEqual([0]);
 });

@@ -1,5 +1,4 @@
 import { Image } from '../../../Image';
-import { ImageColorModel } from '../../constants/colorModels';
 import {
   getCirclePoints,
   getCompassPoints,
@@ -98,7 +97,7 @@ test('filled circle with radius 0', () => {
 });
 
 test('filled circle with radius 5', () => {
-  const emptyImage = new Image(11, 11, { colorModel: ImageColorModel.GREY });
+  const emptyImage = new Image(11, 11, { colorModel: 'GREY' });
   const center = { row: 5, column: 5 };
 
   const points = getFilledCirclePoints(5, center);
@@ -113,7 +112,7 @@ test('filled circle with radius 5', () => {
 });
 
 test('check for points twice in array', () => {
-  const emptyImage = new Image(5, 5, { colorModel: ImageColorModel.GREY });
+  const emptyImage = new Image(5, 5, { colorModel: 'GREY' });
   const points = getFilledCirclePoints(2, { column: 2, row: 2 });
 
   expect(points.length).toBe(21);

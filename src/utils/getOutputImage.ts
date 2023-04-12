@@ -1,4 +1,4 @@
-import { CreateFromOptions, Image, ImageColorModel } from '../Image';
+import { CreateFromOptions, Image } from '../Image';
 import { Mask } from '../Mask';
 
 import { copyData } from './copyData';
@@ -79,7 +79,7 @@ export function maskToOutputImage(mask: Mask, options: OutOptions = {}): Image {
 
   if (out === undefined) {
     return Image.createFrom(mask, {
-      colorModel: ImageColorModel.GREY,
+      colorModel: 'GREY',
     });
   } else {
     if (!(out instanceof Image)) {
@@ -89,7 +89,7 @@ export function maskToOutputImage(mask: Mask, options: OutOptions = {}): Image {
       width: mask.width,
       height: mask.height,
       depth: 8,
-      colorModel: ImageColorModel.GREY,
+      colorModel: 'GREY',
     };
     checkRequirements(requirements, out);
     return out;
@@ -119,7 +119,7 @@ export function imageToOutputMask(
       width: image.width,
       height: image.height,
       depth: 1,
-      colorModel: ImageColorModel.BINARY,
+      colorModel: 'BINARY',
     };
     checkRequirements(requirements, out);
     return out;
@@ -171,7 +171,7 @@ export function maskToOutputMask(
       width: mask.width,
       height: mask.height,
       depth: 1,
-      colorModel: ImageColorModel.BINARY,
+      colorModel: 'BINARY',
     };
     checkRequirements(requirements, out);
     if (clone && mask !== out) {

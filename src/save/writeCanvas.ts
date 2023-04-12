@@ -1,4 +1,4 @@
-import { Image, ImageColorModel } from '../Image';
+import { Image } from '../Image';
 
 export interface WriteCanvasOptions {
   /**
@@ -46,8 +46,8 @@ export function writeCanvas(
   canvas: HTMLCanvasElement,
   options: WriteCanvasOptions = {},
 ): void {
-  if (image.colorModel !== ImageColorModel.RGBA) {
-    image = image.convertColor(ImageColorModel.RGBA);
+  if (image.colorModel !== 'RGBA') {
+    image = image.convertColor('RGBA');
   }
   const {
     resizeCanvas = true,

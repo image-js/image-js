@@ -1,4 +1,4 @@
-import { Image, ImageColorModel } from '../Image';
+import { Image } from '../Image';
 
 /**
  * Create an array of single-channel images based on a multi-channel image.
@@ -10,7 +10,7 @@ export function split(image: Image): Image[] {
   const result = [];
   for (let c = 0; c < image.channels; c++) {
     const channel = Image.createFrom(image, {
-      colorModel: ImageColorModel.GREY,
+      colorModel: 'GREY',
     });
     for (let i = 0; i < channel.size; i++) {
       channel.setValueByIndex(i, 0, image.getValueByIndex(i, c));

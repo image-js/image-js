@@ -61,10 +61,7 @@ export interface GreyOptions {
 export function grey(image: Image, options: GreyOptions = {}): Image {
   let { algorithm = 'luma709', keepAlpha = false, mergeAlpha = true } = options;
 
-  if (
-    image.colorModel !== ImageColorModel.RGB &&
-    image.colorModel !== ImageColorModel.RGBA
-  ) {
+  if (image.colorModel !== 'RGB' && image.colorModel !== 'RGBA') {
     throw new Error('Image color model is not RGB or RGBA');
   }
 
@@ -74,7 +71,7 @@ export function grey(image: Image, options: GreyOptions = {}): Image {
     mergeAlpha = false;
   }
 
-  let newColorModel = keepAlpha ? ImageColorModel.GREYA : ImageColorModel.GREY;
+  let newColorModel: ImageColorModel = keepAlpha ? 'GREYA' : 'GREY';
 
   let newImage = getOutputImage(image, options, {
     newParameters: { colorModel: newColorModel },

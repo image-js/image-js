@@ -12,15 +12,15 @@ export function merge(images: Image[]): Image {
   let colorModel: ImageColorModel;
   switch (channels) {
     case 2: {
-      colorModel = ImageColorModel.GREYA;
+      colorModel = 'GREYA';
       break;
     }
     case 3: {
-      colorModel = ImageColorModel.RGB;
+      colorModel = 'RGB';
       break;
     }
     case 4: {
-      colorModel = ImageColorModel.RGBA;
+      colorModel = 'RGBA';
       break;
     }
     default: {

@@ -1,5 +1,4 @@
 import { Image, Mask } from '../..';
-import { ImageColorModel } from '../constants/colorModels';
 import { getIndex } from '../getIndex';
 
 test('mask, index should increment regularly', () => {
@@ -21,7 +20,7 @@ test('mask, check specific values', () => {
 });
 
 test('image, check specific values', () => {
-  let image = new Image(3, 4, { colorModel: ImageColorModel.RGB });
+  let image = new Image(3, 4, { colorModel: 'RGB' });
 
   expect(getIndex(1, 1, image, 0)).toBe(12);
   expect(getIndex(1, 2, image, 1)).toBe(22);

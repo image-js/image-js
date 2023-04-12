@@ -1,12 +1,11 @@
 import { decode } from '..';
-import { ImageColorModel } from '../../utils/constants/colorModels';
 
 test('auto decode png', async () => {
   const buffer = testUtils.loadBuffer('formats/grey8.png');
   expect(() => decode(buffer)).not.toThrow();
   const decoded = decode(buffer);
   expect(decoded.depth).toStrictEqual(8);
-  expect(decoded.colorModel).toStrictEqual(ImageColorModel.GREY);
+  expect(decoded.colorModel).toStrictEqual('GREY');
 });
 
 test('auto decode jpeg', async () => {
@@ -14,7 +13,7 @@ test('auto decode jpeg', async () => {
   expect(() => decode(buffer)).not.toThrow();
   const decoded = decode(buffer);
   expect(decoded.depth).toStrictEqual(8);
-  expect(decoded.colorModel).toStrictEqual(ImageColorModel.RGBA);
+  expect(decoded.colorModel).toStrictEqual('RGBA');
 });
 
 test('auto decode tiff', async () => {
@@ -22,7 +21,7 @@ test('auto decode tiff', async () => {
   expect(() => decode(buffer)).not.toThrow();
   const decoded = decode(buffer);
   expect(decoded.depth).toStrictEqual(8);
-  expect(decoded.colorModel).toStrictEqual(ImageColorModel.GREY);
+  expect(decoded.colorModel).toStrictEqual('GREY');
 });
 
 test('should throw for too small data', () => {

@@ -1,4 +1,3 @@
-import { ImageColorModel } from '../../../../Image';
 import { getOrientedFastKeypoints } from '../../../keypoints/getOrientedFastKeypoints';
 import { getBriefDescriptors } from '../../getBriefDescriptors';
 import { sliceBrief } from '../sliceBrief';
@@ -6,7 +5,7 @@ import { sliceBrief } from '../sliceBrief';
 test('default options', () => {
   const image = testUtils
     .load(`featureMatching/polygons/polygon.png`)
-    .convertColor(ImageColorModel.GREY)
+    .convertColor('GREY')
     .invert();
 
   const keypoints = getOrientedFastKeypoints(image);
@@ -21,7 +20,7 @@ test('default options', () => {
 test('slice 0 to 3', () => {
   const image = testUtils
     .load(`featureMatching/polygons/polygon.png`)
-    .convertColor(ImageColorModel.GREY)
+    .convertColor('GREY')
     .invert();
 
   const keypoints = getOrientedFastKeypoints(image);
@@ -36,7 +35,7 @@ test('slice 0 to 3', () => {
 test('range error', () => {
   const image = testUtils
     .load(`featureMatching/polygons/polygon.png`)
-    .convertColor(ImageColorModel.GREY)
+    .convertColor('GREY')
     .invert();
 
   const keypoints = getOrientedFastKeypoints(image);

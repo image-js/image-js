@@ -1,6 +1,6 @@
 import { encode } from 'jpeg-js';
 
-import { Image, ImageColorModel } from '../Image';
+import { Image } from '../Image';
 
 export interface EncodeJpegOptions {
   /**
@@ -24,8 +24,8 @@ export function encodeJpeg(
 ): Uint8Array {
   const { quality = 50 } = options;
 
-  if (image.colorModel !== ImageColorModel.RGBA) {
-    image = image.convertColor(ImageColorModel.RGBA);
+  if (image.colorModel !== 'RGBA') {
+    image = image.convertColor('RGBA');
   }
   if (image.depth !== 8) {
     image = image.convertDepth(8);

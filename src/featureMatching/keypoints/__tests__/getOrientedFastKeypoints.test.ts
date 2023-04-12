@@ -1,5 +1,4 @@
 import { TestImagePath } from '../../../../test/TestImagePath';
-import { ImageColorModel } from '../../../Image';
 import { drawKeypoints } from '../../visualize/drawKeypoints';
 import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints';
 
@@ -187,7 +186,7 @@ test.each([
 
   const image = testUtils
     .load(`featureMatching/polygons/${data.image}.png` as TestImagePath)
-    .convertColor(ImageColorModel.GREY)
+    .convertColor('GREY')
     .invert();
 
   const keypoints = getOrientedFastKeypoints(image, { centroidPatchDiameter });
@@ -214,7 +213,7 @@ test('verify single keypoint orientation', () => {
 
   const origialImage = testUtils
     .load('featureMatching/polygons/scaleneTriangle.png')
-    .convertColor(ImageColorModel.GREY)
+    .convertColor('GREY')
     .invert();
 
   const image = origialImage.crop({
@@ -250,7 +249,7 @@ test('small patchsize and large marker', () => {
 
   const origialImage = testUtils
     .load('featureMatching/polygons/scaleneTriangle90.png')
-    .convertColor(ImageColorModel.GREY)
+    .convertColor('GREY')
     .invert();
 
   const image = origialImage.crop({
@@ -274,7 +273,7 @@ test('check angle for different centroidPatchDiameter', () => {
   // we can see the impact of patch size on the orientation
   const image = testUtils
     .load('featureMatching/polygons/scaleneTriangle10.png')
-    .convertColor(ImageColorModel.GREY)
+    .convertColor('GREY')
     .invert();
 
   const angle77 = getOrientedFastKeypoints(image)[0].angle;

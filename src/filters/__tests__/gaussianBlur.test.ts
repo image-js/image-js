@@ -1,5 +1,4 @@
-import { BorderType } from '../../utils/interpolateBorder';
-import { gaussianBlur } from '../gaussianBlur';
+import { GaussianBlurOptions, gaussianBlur } from '../gaussianBlur';
 
 test('symmetrical kernel, should return the kernel itself', () => {
   const image = testUtils.createGreyImage([
@@ -9,7 +8,11 @@ test('symmetrical kernel, should return the kernel itself', () => {
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
   ]);
-  const options = { size: 5, sigma: 1, borderType: BorderType.REPLICATE };
+  const options: GaussianBlurOptions = {
+    size: 5,
+    sigma: 1,
+    borderType: 'replicate',
+  };
 
   let result = image.gaussianBlur(options);
 
@@ -55,11 +58,11 @@ test('x and y kernels', () => {
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
   ]);
-  const options = {
+  const options: GaussianBlurOptions = {
     size: 5,
     sigmaX: 1,
     sigmaY: 1,
-    borderType: BorderType.REPLICATE,
+    borderType: 'replicate',
   };
 
   let result = image.gaussianBlur(options);
@@ -85,8 +88,8 @@ test('x and y kernels', () => {
 
 test.skip('gaussian blur should have same result as opencv', () => {
   const img = testUtils.load('opencv/test.png');
-  const options = {
-    borderType: BorderType.REFLECT,
+  const options: GaussianBlurOptions = {
+    borderType: 'reflect',
     size: 3,
     sigmaX: 1,
     sigmaY: 1,

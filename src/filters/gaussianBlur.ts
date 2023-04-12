@@ -1,6 +1,6 @@
 import { Image } from '../Image';
 import { getRadius } from '../utils/getRadius';
-import { BorderType } from '../utils/interpolateBorder';
+import type { BorderType } from '../utils/interpolateBorder';
 
 import { separableConvolution } from './convolution';
 
@@ -8,7 +8,7 @@ interface GaussianBlurBaseOptions {
   /**
    * Specify how the borders should be handled.
    *
-   * @default BorderType.REFLECT_101
+   * @default 'reflect101'
    */
   borderType?: BorderType;
   /**

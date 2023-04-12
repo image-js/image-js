@@ -1,6 +1,5 @@
 import { Image } from '../../Image';
 import {
-  BorderType,
   getBorderInterpolation,
   interpolateConstantPoint,
   interpolateReflectPoint,
@@ -18,7 +17,7 @@ test('in range', () => {
 
 test('too far', () => {
   const image = new Image(10, 10);
-  const interpolate = getBorderInterpolation(BorderType.REFLECT, 0);
+  const interpolate = getBorderInterpolation('reflect', 0);
   const exp =
     /interpolateBorder only supports borders smaller than the original image/;
   expect(() => interpolate(-10, 0, 0, image)).toThrow(exp);

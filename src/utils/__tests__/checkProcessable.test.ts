@@ -1,5 +1,4 @@
 import checkProcessable from '../checkProcessable';
-import { ImageColorModel } from '../constants/colorModels';
 
 test('wrong bit depth', () => {
   const img = testUtils.createGreyImage([
@@ -29,7 +28,7 @@ test('wrong color model', () => {
     [2, 3],
   ]);
   expect(() => {
-    checkProcessable(img, 'test', { colorModel: [ImageColorModel.RGB] });
+    checkProcessable(img, 'test', { colorModel: ['RGB'] });
   }).toThrow(/The process "test" can only be applied if color model is RGB/);
 });
 

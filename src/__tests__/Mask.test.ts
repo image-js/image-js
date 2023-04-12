@@ -1,6 +1,5 @@
 import util from 'node:util';
 
-import { ImageColorModel } from '..';
 import { Mask } from '../Mask';
 import { Point } from '../utils/geometry/points';
 
@@ -12,7 +11,7 @@ describe('create new masks', () => {
       height: 20,
       size: 200,
       depth: 1,
-      colorModel: ImageColorModel.BINARY,
+      colorModel: 'BINARY',
       components: 1,
       channels: 1,
       alpha: false,

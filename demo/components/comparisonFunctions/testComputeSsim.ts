@@ -1,4 +1,4 @@
-import { Image, ImageColorModel } from '../../../src';
+import { Image } from '../../../src';
 import { computeSsim } from '../../../src/compare/computeSsim';
 
 /**
@@ -21,7 +21,7 @@ export function testComputeSsim(image: Image, snapshot: Image | null): Image {
   }
 
   const ssimMap = new Image(ssim.ssimMap.width, ssim.ssimMap.height, {
-    colorModel: ImageColorModel.GREY,
+    colorModel: 'GREY',
     data,
   });
 

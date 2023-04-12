@@ -1,4 +1,4 @@
-import { Image, ImageCoordinates } from '../../Image';
+import { Image } from '../../Image';
 import { Point } from '../../geometry';
 import { sum } from '../../utils/geometry/points';
 
@@ -26,7 +26,7 @@ export function compareIntensity(
   p2: Point,
   options: CompareIntensityOptions = {},
 ): boolean {
-  const { origin = image.getCoordinates(ImageCoordinates.CENTER) } = options;
+  const { origin = image.getCoordinates('center') } = options;
 
   const absoluteP1 = sum(p1, origin);
   const absoluteP2 = sum(p2, origin);

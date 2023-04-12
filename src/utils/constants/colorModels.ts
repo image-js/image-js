@@ -1,39 +1,43 @@
-export enum ImageColorModel {
-  GREY = 'GREY',
-  GREYA = 'GREYA',
-  RGB = 'RGB',
-  RGBA = 'RGBA',
-  BINARY = 'BINARY',
-}
+export const ImageColorModel = {
+  GREY: 'GREY',
+  GREYA: 'GREYA',
+  RGB: 'RGB',
+  RGBA: 'RGBA',
+  BINARY: 'BINARY',
+} as const;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type ImageColorModel =
+  (typeof ImageColorModel)[keyof typeof ImageColorModel];
 
-export const colorModels: {
-  [key in ImageColorModel]: {
+export const colorModels: Record<
+  ImageColorModel,
+  {
     components: number;
     alpha: boolean;
     channels: number;
-  };
-} = {
-  [ImageColorModel.GREY]: {
+  }
+> = {
+  GREY: {
     components: 1,
     alpha: false,
     channels: 1,
   },
-  [ImageColorModel.GREYA]: {
+  GREYA: {
     components: 1,
     alpha: true,
     channels: 2,
   },
-  [ImageColorModel.RGB]: {
+  RGB: {
     components: 3,
     alpha: false,
     channels: 3,
   },
-  [ImageColorModel.RGBA]: {
+  RGBA: {
     components: 3,
     alpha: true,
     channels: 4,
   },
-  [ImageColorModel.BINARY]: {
+  BINARY: {
     components: 1,
     alpha: false,
     channels: 1,

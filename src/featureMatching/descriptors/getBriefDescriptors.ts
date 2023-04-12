@@ -1,4 +1,4 @@
-import { Image, ImageColorModel } from '../../Image';
+import { Image } from '../../Image';
 import { GaussianBlurSigmaOptions } from '../../filters';
 import checkProcessable from '../../utils/checkProcessable';
 import { OrientedFastKeypoint } from '../keypoints/getOrientedFastKeypoints';
@@ -69,7 +69,7 @@ export function getBriefDescriptors(
 
   checkProcessable(image, 'getBriefDescriptors', {
     alpha: false,
-    colorModel: ImageColorModel.GREY,
+    colorModel: 'GREY',
   });
 
   if (!(patchSize % 2)) {

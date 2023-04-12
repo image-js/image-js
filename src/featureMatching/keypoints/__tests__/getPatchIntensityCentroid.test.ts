@@ -1,9 +1,9 @@
-import { ImageColorModel, Image, ImageCoordinates } from '../../../Image';
+import { Image } from '../../../Image';
 import { round, sum } from '../../../utils/geometry/points';
 import { getPatchIntensityCentroid } from '../getPatchIntensityCentroid';
 
 test('3x3 empty image', () => {
-  const image = new Image(7, 7, { colorModel: ImageColorModel.GREY });
+  const image = new Image(7, 7, { colorModel: 'GREY' });
   const result = getPatchIntensityCentroid(image);
   expect(result).toStrictEqual([{ column: 0, row: 0 }]);
 });
@@ -75,11 +75,11 @@ test('patch, default options', () => {
   const centroid = getPatchIntensityCentroid(image)[0];
   expect(centroid).toBeDeepCloseTo({ column: -1.179, row: -0.183 });
 
-  const center = image.getCoordinates(ImageCoordinates.CENTER);
+  const center = image.getCoordinates('center');
 
   const point = round(sum(center, centroid));
 
-  const result = image.convertColor(ImageColorModel.RGB);
+  const result = image.convertColor('RGB');
   result.drawCircle(center, radius + 1, { color: [255, 0, 0], out: result });
 
   result.drawPoints([point], { color: [0, 255, 0], out: result });
@@ -99,7 +99,7 @@ test('scalene triangle keypoint', () => {
 
   const origialImage = testUtils
     .load('featureMatching/polygons/scaleneTriangle.png')
-    .convertColor(ImageColorModel.GREY)
+    .convertColor('GREY')
     .invert();
 
   const image = origialImage.crop({
@@ -111,11 +111,11 @@ test('scalene triangle keypoint', () => {
   const centroid = getPatchIntensityCentroid(image, { radius })[0];
   expect(centroid).toBeDeepCloseTo({ column: 1.281, row: 0.204 });
 
-  const center = image.getCoordinates(ImageCoordinates.CENTER);
+  const center = image.getCoordinates('center');
 
   const point = round(sum(center, centroid));
 
-  const result = image.convertColor(ImageColorModel.RGB);
+  const result = image.convertColor('RGB');
   result.drawCircle(center, radius + 1, { color: [255, 0, 0], out: result });
 
   result.drawPoints([point], { color: [0, 255, 0], out: result });
@@ -135,7 +135,7 @@ test('scalene triangle 90 keypoint', () => {
 
   const originalImage = testUtils
     .load('featureMatching/polygons/scaleneTriangle90.png')
-    .convertColor(ImageColorModel.GREY)
+    .convertColor('GREY')
     .invert();
 
   const image = originalImage.crop({
@@ -147,11 +147,11 @@ test('scalene triangle 90 keypoint', () => {
   const centroid = getPatchIntensityCentroid(image, { radius })[0];
   expect(centroid).toBeDeepCloseTo({ column: 0.204, row: -1.281 });
 
-  const center = image.getCoordinates(ImageCoordinates.CENTER);
+  const center = image.getCoordinates('center');
 
   const point = round(sum(center, centroid));
 
-  const result = image.convertColor(ImageColorModel.RGB);
+  const result = image.convertColor('RGB');
   result.drawCircle(center, radius + 1, { color: [255, 0, 0], out: result });
 
   result.drawPoints([point], { color: [0, 255, 0], out: result });

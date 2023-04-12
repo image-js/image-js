@@ -1,4 +1,4 @@
-import { ImageColorModel, Image } from '../../../Image';
+import { Image } from '../../../Image';
 import {
   getCirclePoints,
   getCompassPoints,
@@ -12,7 +12,7 @@ const circlePoints = getCirclePoints(fastRadius);
 
 test('7x7 image, not corner', () => {
   const image = new Image(fastDiameter, fastDiameter, {
-    colorModel: ImageColorModel.GREY,
+    colorModel: 'GREY',
   });
 
   const origin = { row: fastRadius, column: fastRadius };

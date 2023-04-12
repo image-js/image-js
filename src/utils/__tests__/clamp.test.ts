@@ -1,9 +1,9 @@
-import { Image, ImageColorModel } from '../../Image';
+import { Image } from '../../Image';
 import { getClamp } from '../clamp';
 
 test("clamp 65'536", () => {
   const image = new Image(2, 1, {
-    colorModel: ImageColorModel.GREY,
+    colorModel: 'GREY',
     depth: 16,
   });
 

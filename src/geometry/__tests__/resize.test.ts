@@ -1,4 +1,3 @@
-import { ImageColorModel } from '../../Image';
 import { encodePng } from '../../save';
 
 test.skip('compares result of resize with opencv', () => {
@@ -43,9 +42,7 @@ test('has to match snapshot', () => {
     yFactor: 10,
   });
 
-  const png = Buffer.from(
-    encodePng(resized.convertColor(ImageColorModel.GREY)),
-  );
+  const png = Buffer.from(encodePng(resized.convertColor('GREY')));
 
   expect(png).toMatchImageSnapshot();
 });

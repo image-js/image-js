@@ -1,5 +1,5 @@
 import { computeMse } from '..';
-import { Image, ImageColorModel } from '../..';
+import { Image } from '../..';
 import { computeSsim } from '../computeSsim';
 
 test('twice the same image', async () => {
@@ -15,7 +15,7 @@ test('should be symetrical', async () => {
 });
 
 test('ssim should be zero', async () => {
-  const image = new Image(11, 11, { colorModel: ImageColorModel.GREY });
+  const image = new Image(11, 11, { colorModel: 'GREY' });
   const other = Image.createFrom(image).fill(255);
 
   expect(image === other).toBe(false);
@@ -100,12 +100,10 @@ test('should handle RGB images', async () => {
 });
 
 test('should handle RGBA images', async () => {
-  const original = testUtils
-    .load('opencv/test.png')
-    .convertColor(ImageColorModel.RGBA);
+  const original = testUtils.load('opencv/test.png').convertColor('RGBA');
   const other = testUtils
     .load('opencv/testGaussianBlur.png')
-    .convertColor(ImageColorModel.RGBA);
+    .convertColor('RGBA');
   expect(computeSsim(original, other).mssim).toBeCloseTo(0.594, 2);
 });
 

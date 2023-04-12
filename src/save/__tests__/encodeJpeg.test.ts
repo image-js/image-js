@@ -1,6 +1,5 @@
 import { encodeJpeg } from '..';
 import { decode } from '../../load/decode';
-import { ImageColorModel } from '../../utils/constants/colorModels';
 
 test('encode an 8-bit rgba image', () => {
   const image = testUtils.createRgbaImage([
@@ -13,7 +12,7 @@ test('encode an 8-bit rgba image', () => {
   const reloaded = decode(encoded);
   expect(reloaded.width).toBe(2);
   expect(reloaded.height).toBe(2);
-  expect(reloaded.colorModel).toStrictEqual(ImageColorModel.RGBA);
+  expect(reloaded.colorModel).toStrictEqual('RGBA');
   expect(reloaded.depth).toStrictEqual(8);
 });
 
@@ -39,6 +38,6 @@ test('encoding a 16-bit image should convert it to a 8-bit image', () => {
   const reloaded = decode(encoded);
   expect(reloaded.width).toBe(2);
   expect(reloaded.height).toBe(2);
-  expect(reloaded.colorModel).toStrictEqual(ImageColorModel.RGBA);
+  expect(reloaded.colorModel).toStrictEqual('RGBA');
   expect(reloaded.depth).toStrictEqual(8);
 });

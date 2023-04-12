@@ -1,5 +1,3 @@
-import { ImageColorModel } from '../../utils/constants/colorModels';
-
 test('split RGB', () => {
   const img = testUtils.createRgbImage([[0, 1, 2, 253, 254, 255]]);
   const split = img.split();
@@ -8,7 +6,7 @@ test('split RGB', () => {
     expect(g).toMatchObject({
       width: 2,
       height: 1,
-      colorModel: ImageColorModel.GREY,
+      colorModel: 'GREY',
     });
   }
   expect(split[0]).toMatchImageData([[0, 253]]);

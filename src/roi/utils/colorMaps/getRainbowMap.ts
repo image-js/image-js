@@ -15,7 +15,7 @@ export interface GetRainbowMapOptions {
   /**
    * Specify which ROIs to colour.
    *
-   * @default RoiKind.BW
+   * @default 'bw'
    */
   roiKind?: RoiKind;
 }
@@ -27,7 +27,7 @@ export interface GetRainbowMapOptions {
  * @returns The colored map.
  */
 export function getRainbowMap(options: GetRainbowMapOptions): Uint32Array {
-  const { nbNegative, nbPositive, roiKind = RoiKind.BW } = options;
+  const { nbNegative, nbPositive, roiKind = 'bw' } = options;
 
   let colorMap = new Uint32Array(maxNumberRois);
 
@@ -35,15 +35,15 @@ export function getRainbowMap(options: GetRainbowMapOptions): Uint32Array {
 
   let step: number;
   switch (roiKind) {
-    case RoiKind.BW: {
+    case 'bw': {
       step = hueRange / (nbNegative + nbPositive);
       break;
     }
-    case RoiKind.BLACK: {
+    case 'black': {
       step = hueRange / nbNegative;
       break;
     }
-    case RoiKind.WHITE: {
+    case 'white': {
       step = hueRange / nbPositive;
       break;
     }
@@ -54,7 +54,7 @@ export function getRainbowMap(options: GetRainbowMapOptions): Uint32Array {
 
   // negative values
   let hue = 0;
-  if (roiKind === RoiKind.BW || roiKind === RoiKind.BLACK) {
+  if (roiKind === 'bw' || roiKind === 'black') {
     for (let i = colorMapCenter - nbNegative; i < colorMapCenter; i++) {
       const hsv = [hue, 255, 255];
       colorMap[i] = rgbToNumber(hsvToRgb(hsv));
@@ -62,7 +62,7 @@ export function getRainbowMap(options: GetRainbowMapOptions): Uint32Array {
     }
   }
   // positive values
-  if (roiKind === RoiKind.BW || roiKind === RoiKind.WHITE) {
+  if (roiKind === 'bw' || roiKind === 'white') {
     for (let i = colorMapCenter + 1; i < colorMapCenter + 1 + nbPositive; i++) {
       const hsv = [hue, 255, 255];
       colorMap[i] = rgbToNumber(hsvToRgb(hsv));

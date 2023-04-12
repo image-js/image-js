@@ -110,13 +110,16 @@ export type ImageDataArray = Uint8Array | Uint16Array | Uint8ClampedArray;
  */
 export type ColorDepth = 1 | 8 | 16;
 
-export enum ImageCoordinates {
-  CENTER = 'CENTER',
-  TOP_LEFT = 'TOP_LEFT',
-  TOP_RIGHT = 'TOP_RIGHT',
-  BOTTOM_LEFT = 'BOTTOM_LEFT',
-  BOTTOM_RIGHT = 'BOTTOM_RIGHT',
-}
+export const ImageCoordinates = {
+  CENTER: 'center',
+  TOP_LEFT: 'top-left',
+  TOP_RIGHT: 'top-right',
+  BOTTOM_LEFT: 'bottom-left',
+  BOTTOM_RIGHT: 'bottom-right',
+} as const;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type ImageCoordinates =
+  (typeof ImageCoordinates)[keyof typeof ImageCoordinates];
 
 export interface ImageOptions {
   /**
@@ -134,7 +137,7 @@ export interface ImageOptions {
   /**
    * Color model of the created image.
    *
-   * @default `ImageColorModel.RGB`.
+   * @default 'RGB'.
    */
   colorModel?: ImageColorModel;
 
@@ -181,7 +184,7 @@ export class Image {
 
   /**
    * The number of color channels in the image, excluding the alpha channel.
-   * A grey image has 1 component. An RGB image has 3 components.
+   * A GREY image has 1 component. An RGB image has 3 components.
    */
   public readonly components: number;
 
@@ -223,7 +226,7 @@ export class Image {
     const {
       depth = 8,
       data,
-      colorModel = ImageColorModel.RGB,
+      colorModel = 'RGB',
       origin = { row: 0, column: 0 },
     } = options;
 
@@ -581,7 +584,7 @@ export class Image {
    */
   public getCoordinates(coordinates: ImageCoordinates, round = false): Point {
     switch (coordinates) {
-      case ImageCoordinates.CENTER: {
+      case 'center': {
         const centerX = (this.width - 1) / 2;
         const centerY = (this.height - 1) / 2;
         if (round) {
@@ -590,13 +593,13 @@ export class Image {
           return { column: centerX, row: centerY };
         }
       }
-      case ImageCoordinates.TOP_LEFT:
+      case 'top-left':
         return { column: 0, row: 0 };
-      case ImageCoordinates.TOP_RIGHT:
+      case 'top-right':
         return { column: this.width - 1, row: 0 };
-      case ImageCoordinates.BOTTOM_LEFT:
+      case 'bottom-left':
         return { column: 0, row: this.height - 1 };
-      case ImageCoordinates.BOTTOM_RIGHT:
+      case 'bottom-right':
         return { column: this.width - 1, row: this.height - 1 };
       default:
         throw new Error(`Unknown image coordinates ${coordinates}`);

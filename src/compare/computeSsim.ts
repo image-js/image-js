@@ -1,6 +1,6 @@
 import { ssim as bufferSsim } from 'ssim.js';
 
-import { Image, ImageColorModel } from '..';
+import { Image } from '..';
 import checkProcessable from '../utils/checkProcessable';
 import { validateForComparison } from '../utils/validators';
 
@@ -65,9 +65,9 @@ export function computeSsim(
 
   validateForComparison('ssim', image, otherImage);
 
-  if (image.colorModel !== ImageColorModel.RGBA) {
-    image = image.convertColor(ImageColorModel.RGBA);
-    otherImage = otherImage.convertColor(ImageColorModel.RGBA);
+  if (image.colorModel !== 'RGBA') {
+    image = image.convertColor('RGBA');
+    otherImage = otherImage.convertColor('RGBA');
   }
 
   const imageData = new Uint8ClampedArray(image.getRawImage().data);
