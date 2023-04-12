@@ -61,6 +61,7 @@
     "@tailwindcss/forms": "^0.5.3",
     "@types/jest": "^29.5.0",
     "@types/jest-image-snapshot": "^6.1.0",
+    "@types/node": "^18.15.11",
     "@types/picomatch": "^2.3.0",
     "@types/react": "^18.0.34",
     "@types/react-dom": "^18.0.11",
