@@ -1,4 +1,4 @@
-import { ColorDepth, colorModels, Image, ImageColorModel } from './Image';
+import { ColorDepth, Image } from './Image';
 import { subtract, SubtractImageOptions } from './compare';
 import {
   drawLineOnMask,
@@ -58,6 +58,7 @@ import {
   PaintMaskOnMaskOptions,
 } from './operations';
 import { boolToNumber } from './utils/boolToNumber';
+import { ImageColorModel, colorModels } from './utils/constants/colorModels';
 import { Point } from './utils/geometry/points';
 
 export type BitValue = 1 | 0 | boolean;

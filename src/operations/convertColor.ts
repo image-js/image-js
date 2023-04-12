@@ -1,5 +1,6 @@
-import { Image, ImageColorModel } from '../Image';
+import { Image } from '../Image';
 import { Mask } from '../Mask';
+import { ImageColorModel } from '../utils/constants/colorModels';
 import { getOutputImage, maskToOutputImage } from '../utils/getOutputImage';
 
 export interface ConvertColorOptions {

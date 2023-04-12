@@ -101,8 +101,6 @@ import {
   ThresholdOptions,
 } from './index';
 
-export { ImageColorModel, colorModels } from './utils/constants/colorModels';
-
 export type ImageDataArray = Uint8Array | Uint16Array | Uint8ClampedArray;
 
 /**

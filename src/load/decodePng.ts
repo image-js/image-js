@@ -1,6 +1,7 @@
 import { decode, DecodedPng } from 'fast-png';
 
-import { ColorDepth, Image, ImageColorModel } from '../Image';
+import { ColorDepth, Image } from '../Image';
+import { ImageColorModel } from '../utils/constants/colorModels';
 
 /**
  * Decode a PNG. See the fast-png npm module.
