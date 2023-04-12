@@ -1,5 +1,6 @@
 import fs from 'node:fs';
-import path from 'node:path';
+import { dirname, extname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { Mask, Image } from '..';
 
@@ -10,40 +11,55 @@ import {
   EncodeOptionsJpeg,
 } from './encode';
 
+export interface WriteOptions {
+  /**
+   * If true, attempts to create all the missing directories recursively.
+   */
+  recursive?: boolean;
+}
+
+export type WriteOptionsPng = WriteOptions & EncodeOptionsPng;
+export type WriteOptionsJpeg = WriteOptions & EncodeOptionsJpeg;
+
 /**
  * Write an image to the disk.
  * The file format is determined automatically from the file's extension.
  * If the extension is not supported, an error will be thrown.
  *
- * @param path - Path where the image should be written.
+ * @param path - Path or file URL where the image should be written.
  * @param image - Image to save.
+ * @param options - Write options.
  */
-export async function write(path: string, image: Image | Mask): Promise<void>;
+export async function write(
+  path: string | URL,
+  image: Image | Mask,
+  options?: WriteOptions,
+): Promise<void>;
 /**
  * Write an image to the disk as PNG.
  * When the `png` format is specified, the file's extension doesn't matter.
  *
- * @param path - Path where the image should be written.
+ * @param path - Path or file URL where the image should be written.
  * @param image - Image to save.
  * @param options - Encode options for png images.
  */
 export async function write(
-  path: string,
+  path: string | URL,
   image: Image | Mask,
-  options: EncodeOptionsPng,
+  options: WriteOptionsPng,
 ): Promise<void>;
 /**
  * Write an image to the disk as JPEG.
  * When the `jpeg` format is specified, the file's extension doesn't matter.
  *
- * @param path - Path where the image should be written.
+ * @param path - Path or file URL where the image should be written.
  * @param image - Image to save.
  * @param options - Encode options for jpeg images.
  */
 export async function write(
-  path: string,
+  path: string | URL,
   image: Image | Mask,
-  options: EncodeOptionsJpeg,
+  options: WriteOptionsJpeg,
 ): Promise<void>;
 /**
  * Asynchronously write an image to the disk.
@@ -53,14 +69,21 @@ export async function write(
  * @param options - Encode options.
  */
 export async function write(
-  path: string,
+  path: string | URL,
   image: Image | Mask,
-  options?: EncodeOptionsPng | EncodeOptionsJpeg,
+  options?: WriteOptionsPng | WriteOptionsJpeg | WriteOptions,
 ): Promise<void> {
+  if (typeof path !== 'string') {
+    path = fileURLToPath(path);
+  }
   if (image instanceof Mask) {
     image = image.convertColor('GREY');
   }
   const toWrite = getDataToWrite(path, image, options);
+  if (options?.recursive) {
+    const dir = dirname(path);
+    await fs.promises.mkdir(dir, { recursive: true });
+  }
   await fs.promises.writeFile(path, toWrite);
 }
 
@@ -72,14 +95,21 @@ export async function write(
  * @param options - Encode options.
  */
 export function writeSync(
-  path: string,
+  path: string | URL,
   image: Image | Mask,
-  options?: EncodeOptionsPng | EncodeOptionsJpeg,
+  options?: WriteOptionsPng | WriteOptionsJpeg | WriteOptions,
 ): void {
+  if (typeof path !== 'string') {
+    path = fileURLToPath(path);
+  }
   if (image instanceof Mask) {
     image = image.convertColor('GREY');
   }
   const toWrite = getDataToWrite(path, image, options);
+  if (options?.recursive) {
+    const dir = dirname(path);
+    fs.mkdirSync(dir, { recursive: true });
+  }
   fs.writeFileSync(path, toWrite);
 }
 
@@ -94,11 +124,11 @@ export function writeSync(
 function getDataToWrite(
   destinationPath: string,
   image: Image,
-  options?: EncodeOptionsPng | EncodeOptionsJpeg,
+  options?: WriteOptionsPng | WriteOptionsJpeg | WriteOptions,
 ): Uint8Array {
   let format: ImageFormat;
-  if (options === undefined) {
-    const extension = path.extname(destinationPath).slice(1).toLowerCase();
+  if (!options || !('format' in options)) {
+    const extension = extname(destinationPath).slice(1).toLowerCase();
     if (extension === 'png') {
       format = 'png';
       return encode(image, { format });
