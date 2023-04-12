@@ -4,7 +4,38 @@ import { getOutputImage } from '../utils/getOutputImage';
 
 import * as greyAlgorithms from './greyAlgorithms';
 
-export type GreyAlgorithms = keyof typeof greyAlgorithms;
+export const GreyAlgorithm = {
+  LUMA_709: 'luma709',
+  LUMA_601: 'luma601',
+  MAX: 'max',
+  MIN: 'min',
+  AVERAGE: 'average',
+  MINMAX: 'minmax',
+  RED: 'red',
+  GREEN: 'green',
+  BLUE: 'blue',
+  BLACK: 'black',
+  CYAN: 'cyan',
+  MAGENTA: 'magenta',
+  YELLOW: 'yellow',
+  HUE: 'hue',
+  SATURATION: 'saturation',
+  LIGHTNESS: 'lightness',
+} as const satisfies Record<string, keyof typeof greyAlgorithms>;
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type GreyAlgorithm = (typeof GreyAlgorithm)[keyof typeof GreyAlgorithm];
+
+{
+  // Check that all the algorithms are in the enum.
+  const algos = new Set<string>(Object.values(GreyAlgorithm));
+  for (const algo of Object.keys(greyAlgorithms)) {
+    if (!algos.has(algo)) {
+      throw new Error(
+        `Grey algorithm ${algo} is missing in the GreyAlgorithm enum`,
+      );
+    }
+  }
+}
 
 /**
  * Call back that converts the RGB channels to grey. It is clamped afterwards.
@@ -28,7 +59,7 @@ export interface GreyOptions {
    *
    * @default 'luma709'
    */
-  algorithm?: GreyAlgorithms | GreyAlgorithmCallback;
+  algorithm?: GreyAlgorithm | GreyAlgorithmCallback;
   /**
    * Specify wether to keep an alpha channel in the new image or not.
    *
