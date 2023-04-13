@@ -88,6 +88,26 @@ test('Diagonal of 1, allow corners', () => {
   ]);
 });
 
+test('Diagonal of 1, color=black', () => {
+  let image = testUtils.createMask([
+    [1, 0, 0, 0, 0],
+    [0, 1, 0, 1, 0],
+    [0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 1],
+  ]);
+  image = image.invert();
+  let result = image.clearBorder({ color: 'black' });
+  result = result.invert();
+  expect(result).toMatchMaskData([
+    [0, 0, 0, 0, 0],
+    [0, 1, 0, 1, 0],
+    [0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0],
+  ]);
+});
+
 test('5x5 mask, full', () => {
   let image = testUtils.createMask([
     [1, 1, 1, 1, 1],

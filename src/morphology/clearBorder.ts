@@ -14,6 +14,13 @@ export interface ClearBorderOptions {
    * Image to which the resulting image has to be put.
    */
   out?: Mask;
+  /**
+   * Clear either white or black area touching the border.
+   * In practice it will invert the color.
+   *
+   * @default 'white'
+   */
+  color?: 'white' | 'black';
 }
 /**
  * Set the pixels connected to the border of the mask to zero. You can chose to allow corner connection of not with the `allowCorners` option.
@@ -26,11 +33,11 @@ export function clearBorder(
   mask: Mask,
   options: ClearBorderOptions = {},
 ): Mask {
-  let { allowCorners = false, out } = options;
+  let { allowCorners = false, out, color = 'white' } = options;
   return multipleFloodFill(mask, {
     startPixels: borderIterator(mask),
-    startPixelValue: 1,
-    newPixelValue: 0,
+    startPixelValue: color === 'white' ? 1 : 0,
+    newPixelValue: color === 'white' ? 0 : 1,
     allowCorners,
     out,
   });
