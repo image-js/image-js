@@ -1,6 +1,34 @@
 import { fromMask } from '..';
 import { Mask } from '../..';
 
+test('3x3 mask, black', () => {
+  const mask = testUtils.createMask([
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ]);
+  const expected = [
+    [-1, -1, -1],
+    [-1, -1, -1],
+    [-1, -1, -1],
+  ];
+  expect(fromMask(mask).getMapMatrix()).toStrictEqual(expected);
+});
+
+test('3x3 mask, white', () => {
+  const mask = testUtils.createMask([
+    [1, 1, 1],
+    [1, 1, 1],
+    [1, 1, 1],
+  ]);
+  const expected = [
+    [1, 1, 1],
+    [1, 1, 1],
+    [1, 1, 1],
+  ];
+  expect(fromMask(mask).getMapMatrix()).toStrictEqual(expected);
+});
+
 test('3x3 mask, cross', () => {
   const mask = testUtils.createMask([
     [0, 1, 0],
