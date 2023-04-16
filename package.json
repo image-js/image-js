@@ -8,7 +8,8 @@
   "files": [
     "src",
     "lib",
-    "lib-esm"
+    "lib-esm",
+    "dist-types"
   ],
   "main": "./lib/index.js",
   "module": "./lib-esm/index.js",
@@ -17,12 +18,13 @@
     "lib-esm/load/read.js": "./lib-esm/load/read.browser.js"
   },
   "scripts": {
+    "api-extractor": "rimraf dist-types && api-extractor run --local",
     "check-types": "tsc --noEmit",
     "clean": "rimraf lib lib-esm",
     "demo": "vite --open",
     "eslint": "eslint src demo",
     "eslint-fix": "npm run eslint -- --fix",
-    "prepack": "npm run tsc",
+    "prepack": "npm run tsc && npm run api-extractor",
     "prettier": "prettier --check src demo",
     "prettier-write": "prettier --write src demo",
     "test": "npm run test-only && npm run eslint && npm run prettier && npm run check-types",
@@ -58,6 +60,7 @@
     "tiff": "^5.0.3"
   },
   "devDependencies": {
+    "@microsoft/api-extractor": "^7.34.4",
     "@tailwindcss/forms": "^0.5.3",
     "@types/jest": "^29.5.0",
     "@types/jest-image-snapshot": "^6.1.0",
