@@ -1,6 +1,9 @@
 import { Matrix } from 'ml-matrix';
 
+import { Mask } from '../Mask';
+
 import { Roi } from './Roi';
+import { FromMaskOptions, fromMask } from './fromMask';
 import { getRois, GetRoisOptions } from './getRois';
 
 export interface RoiManager {
@@ -78,5 +81,9 @@ export class RoiMapManager implements RoiManager {
 
   public getRois(options: GetRoisOptions = {}): Roi[] {
     return getRois(this, options);
+  }
+
+  public static fromMask(mask: Mask, options: FromMaskOptions = {}) {
+    return fromMask(mask, options);
   }
 }
