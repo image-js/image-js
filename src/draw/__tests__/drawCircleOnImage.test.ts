@@ -117,7 +117,7 @@ test('negative radius error', () => {
     image.drawCircle(center, radius, {
       color: [1],
     });
-  }).toThrow('drawCircle: circle radius must be positive');
+  }).toThrow('circle radius must be positive');
 });
 test('non-integer radius error', () => {
   const image = testUtils.createGreyImage([
@@ -131,7 +131,7 @@ test('non-integer radius error', () => {
     image.drawCircle(center, radius, {
       color: [1],
     });
-  }).toThrow('drawCircle: radius must be an integer');
+  }).toThrow('circle radius must be an integer');
 });
 
 test('draw grey filled circle, radius=0', () => {

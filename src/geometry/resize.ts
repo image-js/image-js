@@ -24,7 +24,7 @@ export interface ResizeOptions {
    */
   yFactor?: number;
   /**
-   * Should the aspect ratio of the image be preserved?
+   * Whether the aspect ratio of the image should be preserved.
    *
    * @default true
    */

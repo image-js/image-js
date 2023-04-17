@@ -112,8 +112,8 @@ test('windowSize too large error', async () => {
   const other = image;
   expect(() => {
     computeSsim(image, other, { windowSize: 5 });
-  }).toThrow('ssim: windowSize cannot exceed image dimensions');
+  }).toThrow('windowSize cannot exceed image dimensions');
   expect(() => {
     computeSsim(image, other, { windowSize: 20 });
-  }).toThrow('ssim: windowSize cannot exceed image dimensions');
+  }).toThrow('windowSize cannot exceed image dimensions');
 });

@@ -10,7 +10,7 @@ describe('create new masks', () => {
       width: 10,
       height: 20,
       size: 200,
-      depth: 1,
+      bitDepth: 1,
       colorModel: 'BINARY',
       components: 1,
       channels: 1,

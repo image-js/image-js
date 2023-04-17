@@ -4,7 +4,7 @@ import { Roi } from './Roi';
 
 export interface GetMaskOptions {
   /**
-   * Should the inner borders be returned too?
+   * Whether the inner borders should be returned too.
    *
    * @default false
    */

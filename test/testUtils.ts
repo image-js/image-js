@@ -100,7 +100,7 @@ export function createRoi(
 
   const rois = roiMapManager.getRois({ kind: 'white' });
   if (rois.length > 1) {
-    throw new Error('createRoi: multiple ROIs found.');
+    throw new Error('multiple ROIs found');
   }
   return rois[0];
 }

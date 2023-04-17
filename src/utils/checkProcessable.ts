@@ -1,10 +1,10 @@
-import { ColorDepth, Image, ImageColorModel, Mask } from '..';
+import { BitDepth, Image, ImageColorModel, Mask } from '..';
 
 // @ts-expect-error Intl types don't exist yet
 const formatter = new Intl.ListFormat('en', { type: 'disjunction' });
 
 interface CheckOptions {
-  bitDepth?: ColorDepth[] | ColorDepth;
+  bitDepth?: BitDepth[] | BitDepth;
   alpha?: boolean[] | boolean;
   colorModel?: ImageColorModel[] | ImageColorModel;
   components?: number[] | number;
@@ -28,9 +28,9 @@ export default function checkProcessable(
     if (!Array.isArray(bitDepth)) {
       bitDepth = [bitDepth];
     }
-    if (!bitDepth.includes(image.depth)) {
+    if (!bitDepth.includes(image.bitDepth)) {
       throw new TypeError(
-        `The process "${processName}" can only be applied if bit depth is ${format(
+        `The process "${processName}" can only be applied if bitDepth is ${format(
           bitDepth,
         )}`,
       );
@@ -70,7 +70,7 @@ export default function checkProcessable(
       )}`;
       if (components.length === 1 && components[0] === 1) {
         throw new TypeError(
-          `${errorMessage}.\rYou should transform your image using "image.grey()" before applying the algorithm.`,
+          `${errorMessage}.\nYou should transform your image using "image.grey()" before applying the algorithm.`,
         );
       } else {
         throw new TypeError(errorMessage);
@@ -91,7 +91,7 @@ export default function checkProcessable(
   }
 }
 
-type ArrayType = number[] | ImageColorModel[] | ColorDepth[] | boolean[];
+type ArrayType = number[] | ImageColorModel[] | BitDepth[] | boolean[];
 
 function format(array: ArrayType) {
   return formatter.format(array.map(String));

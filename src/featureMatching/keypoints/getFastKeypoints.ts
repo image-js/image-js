@@ -20,7 +20,7 @@ export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
    */
   maxNbFeatures?: number;
   /**
-   * Should non-max suppression be applied to the keypoints?
+   * Whether to apply non-max suppression to the keypoints.
    * This removes all keypoints which
    * don't have the highest value within the adjacent keypoints.
    *

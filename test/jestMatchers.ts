@@ -52,8 +52,8 @@ export function toMatchImage(
     errorString = `Expected image width to be ${expectedImage.width}, but got ${received.width}`;
   } else if (received.height !== expectedImage.height) {
     errorString = `Expected image height to be ${expectedImage.height}, but got ${received.height}`;
-  } else if (received.depth !== expectedImage.depth) {
-    errorString = `Expected image depth to be ${expectedImage.depth}, but got ${received.depth}`;
+  } else if (received.bitDepth !== expectedImage.bitDepth) {
+    errorString = `Expected image bitDepth to be ${expectedImage.bitDepth}, but got ${received.bitDepth}`;
   } else if (received.colorModel !== expectedImage.colorModel) {
     errorString = `Expected image color model to be ${expectedImage.colorModel}, but got ${received.colorModel}`;
   } else if (error === 0) {
@@ -108,7 +108,7 @@ export function toMatchImageData(
   options: JestMatcherOptions = {},
 ): MatcherResult {
   const expectedImage = createImageFromData(expectedData, received.colorModel, {
-    depth: received.depth,
+    bitDepth: received.bitDepth,
   });
   return toMatchImage.call(this, received, expectedImage, options);
 }

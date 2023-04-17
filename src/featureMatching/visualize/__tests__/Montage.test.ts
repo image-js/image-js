@@ -22,10 +22,10 @@ describe('constructor', () => {
     });
     expect(montage.image).toMatchImageSnapshot();
   });
-  it('error scale should be integer', () => {
+  it('should error when scale is not an integer', () => {
     expect(() => {
       new Montage(source, source, { scale: 1.5 });
-    }).toThrow('scale should be an integer');
+    }).toThrow('scale must be an integer');
   });
   it('unknown disposition type', () => {
     expect(() => {

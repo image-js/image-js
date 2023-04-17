@@ -13,7 +13,7 @@ export interface GetRainbowMapOptions {
    */
   nbPositive: number;
   /**
-   * Specify which ROIs to colour.
+   * Specify which ROIs to color.
    *
    * @default 'bw'
    */
@@ -48,7 +48,7 @@ export function getRainbowMap(options: GetRainbowMapOptions): Uint32Array {
       break;
     }
     default: {
-      throw new Error('getRainbowMap: unrecognised ROI kind');
+      throw new Error(`unrecognized ROI kind: ${roiKind}`);
     }
   }
 

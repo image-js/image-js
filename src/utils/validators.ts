@@ -72,9 +72,9 @@ export function validateForComparison(
   if (image.width !== other.width || image.height !== other.height) {
     throw new Error(`${process}: both images must have the same size`);
   }
-  if (image.alpha !== other.alpha || image.depth !== other.depth) {
+  if (image.alpha !== other.alpha || image.bitDepth !== other.bitDepth) {
     throw new Error(
-      `${process}: both images must have the same alpha and depth`,
+      `${process}: both images must have the same alpha and bitDepth`,
     );
   }
   if (image.channels !== other.channels) {

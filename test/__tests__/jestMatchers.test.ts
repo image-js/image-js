@@ -32,10 +32,10 @@ describe('toMatchImage', () => {
     expect(() => expect(image1).toMatchImage(image2)).toThrow(/height/);
   });
 
-  it('should throw if depth is different', () => {
-    const image1 = new Image(1, 1, { depth: 8 });
-    const image2 = new Image(1, 1, { depth: 16 });
-    expect(() => expect(image1).toMatchImage(image2)).toThrow(/depth/);
+  it('should throw if bit depth is different', () => {
+    const image1 = new Image(1, 1, { bitDepth: 8 });
+    const image2 = new Image(1, 1, { bitDepth: 16 });
+    expect(() => expect(image1).toMatchImage(image2)).toThrow(/bitDepth/);
   });
 
   it('should throw if color model is different', () => {

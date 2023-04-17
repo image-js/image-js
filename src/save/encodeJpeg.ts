@@ -27,11 +27,11 @@ export function encodeJpeg(
   if (image.colorModel !== 'RGBA') {
     image = image.convertColor('RGBA');
   }
-  if (image.depth !== 8) {
-    image = image.convertDepth(8);
+  if (image.bitDepth !== 8) {
+    image = image.convertBitDepth(8);
   }
 
-  // Image data after depth conversion will always be UInt8Array
+  // Image data after bit depth conversion will always be UInt8Array
   const buffer = encode(image.getRawImage(), quality).data;
   return new Uint8Array(buffer, buffer.byteOffset, buffer.byteLength);
 }

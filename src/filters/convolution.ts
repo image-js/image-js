@@ -29,7 +29,7 @@ export interface ConvolutionOptions {
    */
   borderValue?: number;
   /**
-   * Should the kernel be normalized?
+   * Whether the kernel should be normalized.
    *
    * @default false
    */

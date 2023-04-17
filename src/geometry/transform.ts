@@ -37,7 +37,7 @@ export interface TransformOptions {
    */
   borderValue?: number;
   /**
-   * Should the transform matrix be inverted?
+   * Whether the transform matrix should be inverted.
    */
   inverse?: boolean;
   /**

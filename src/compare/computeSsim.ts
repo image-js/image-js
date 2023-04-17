@@ -53,7 +53,7 @@ export function computeSsim(
 
   if (windowSize) {
     if (windowSize > image.width || windowSize > image.height) {
-      throw new Error('ssim: windowSize cannot exceed image dimensions');
+      throw new Error('windowSize cannot exceed image dimensions');
     }
   } else {
     windowSize = Math.min(11, image.height, image.width);

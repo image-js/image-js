@@ -1,4 +1,4 @@
-import { ColorDepth, Image } from '..';
+import { BitDepth, Image } from '..';
 import {
   PREWITT_X,
   PREWITT_Y,
@@ -41,11 +41,11 @@ export interface DerivativeFilterOptions {
    */
   borderValue?: number;
   /**
-   * Specify the bitDepth of the resulting image.
+   * Specify the bit depth of the resulting image.
    *
    * @default image.bitDepth
    */
-  bitDepth?: ColorDepth;
+  bitDepth?: BitDepth;
 }
 
 /**
@@ -75,7 +75,7 @@ export function derivativeFilter(
       kernelY = PREWITT_Y;
       break;
     default:
-      throw new Error('derivativeFilter: unrecognised derivative filter.');
+      throw new Error(`unrecognized derivative filter: ${filter}`);
   }
 
   return image.gradientFilter({ kernelX, kernelY, ...options });

@@ -9,7 +9,7 @@ test('wrong bit depth', () => {
     checkProcessable(img, 'test', {
       bitDepth: [1, 16],
     });
-  }).toThrow(/The process "test" can only be applied if bit depth is 1 or 16/);
+  }).toThrow(/The process "test" can only be applied if bitDepth is 1 or 16/);
 });
 
 test('wrong alpha', () => {
@@ -60,7 +60,7 @@ test('wrong number of channels', () => {
   );
 });
 
-test('only one valid depth or channel', () => {
+test('only one valid bit depth or channel', () => {
   const img = testUtils.createGreyImage([
     [0, 1],
     [2, 3],
@@ -81,6 +81,6 @@ test('only grey images accepted', () => {
       components: 1,
     });
   }).toThrow(
-    `You should transform your image using "image.grey()" before applying the algorithm`,
+    'You should transform your image using "image.grey()" before applying the algorithm',
   );
 });

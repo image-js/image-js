@@ -13,10 +13,10 @@ const tests = [
   ['palette', 'RGB', 16],
 ] as const;
 
-test.each(tests)('%s', async (name, colorModel, depth) => {
+test.each(tests)('%s', async (name, colorModel, bitDepth) => {
   const buffer = testUtils.loadBuffer(`formats/tif/${name}.tif`);
   const img = decodeTiff(buffer);
 
   expect(img.colorModel).toBe(colorModel);
-  expect(img.depth).toBe(depth);
+  expect(img.bitDepth).toBe(bitDepth);
 });

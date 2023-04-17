@@ -6,5 +6,5 @@ test.each(tests)('should load from buffer %s', async (name) => {
   const buffer = testUtils.loadBuffer(`formats/${name}.jpg`);
   const img = decodeJpeg(buffer);
   expect(img.colorModel).toBe('RGBA');
-  expect(img.depth).toBe(8);
+  expect(img.bitDepth).toBe(8);
 });

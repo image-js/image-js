@@ -86,7 +86,7 @@ export class Montage {
     const { scale = 1, disposition = 'horizontal' } = options;
 
     if (!Number.isInteger(scale)) {
-      throw new Error('scale should be an integer');
+      throw new Error('scale must be an integer');
     }
 
     this.scale = scale;

@@ -22,7 +22,7 @@ export interface DrawMatchesOptions {
    */
   color?: number[];
   /**
-   * Should the matches be colored depending on the distance?
+   * Whether the matches should be colored depending on the distance.
    *
    * @default false
    */

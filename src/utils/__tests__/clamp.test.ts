@@ -4,7 +4,7 @@ import { getClamp } from '../clamp';
 test("clamp 65'536", () => {
   const image = new Image(2, 1, {
     colorModel: 'GREY',
-    depth: 16,
+    bitDepth: 16,
   });
 
   const clamp = getClamp(image);

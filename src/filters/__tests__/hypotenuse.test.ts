@@ -21,16 +21,16 @@ test('different size error', async () => {
 
   expect(() => {
     image.hypotenuse(otherImage);
-  }).toThrow('hypotenuse: both images must have the same size');
+  }).toThrow('both images must have the same size');
 });
 
-test('different depth or alpha error', async () => {
+test('different bit depth or alpha error', async () => {
   const image = testUtils.createRgbaImage([[3, 5, 8, 7]]);
   const otherImage = testUtils.createGreyImage([[4]]);
 
   expect(() => {
     image.hypotenuse(otherImage);
-  }).toThrow('hypotenuse: both images must have the same alpha and bitDepth');
+  }).toThrow('both images must have the same alpha and bitDepth');
 });
 
 test('different number of channels', async () => {
@@ -39,5 +39,5 @@ test('different number of channels', async () => {
 
   expect(() => {
     image.hypotenuse(otherImage);
-  }).toThrow('hypotenuse: both images must have the same number of channels');
+  }).toThrow('both images must have the same number of channels');
 });

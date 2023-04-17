@@ -10,7 +10,7 @@ export const RoisColorMode = {
   /**
    * Only two acceptable values: red or green
    */
-  BINARY: 'BINARY',
+  BINARY: 'binary',
   /**
    * Palette of reds and blues.
    */
@@ -27,11 +27,11 @@ export interface ColorRoisOptions {
   /**
    * Define the color mode to use to color the ROIs.
    *
-   * @default ColorMode.BINARY
+   * @default 'binary'
    */
   mode?: RoisColorMode;
   /**
-   * Specify which ROIs to colour.
+   * Specify which ROIs to color.
    *
    * @default 'bw'
    */
@@ -49,7 +49,7 @@ export function colorRois(
   roiMapManager: RoiMapManager,
   options: ColorRoisOptions = {},
 ): Image {
-  const { roiKind = 'bw', mode = 'BINARY' } = options;
+  const { roiKind = 'bw', mode = 'binary' } = options;
   const map = roiMapManager.getMap();
 
   let image = new Image(map.width, map.height, {

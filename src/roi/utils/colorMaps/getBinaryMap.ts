@@ -17,7 +17,7 @@ export interface GetBinaryMapOptions {
    */
   nbPositive: number;
   /**
-   * Specify which ROIs to colour.
+   * Specify which ROIs to color.
    *
    * @default 'bw'
    */

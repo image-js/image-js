@@ -1,4 +1,4 @@
-import { ColorDepth, Image } from '..';
+import { BitDepth, Image } from '..';
 import checkProcessable from '../utils/checkProcessable';
 import type { BorderType } from '../utils/interpolateBorder';
 
@@ -16,11 +16,11 @@ export interface GradientFilterBaseOptions {
    */
   borderValue?: number;
   /**
-   * Specify the bitDepth of the resulting image.
+   * Specify the bit depth of the resulting image.
    *
    * @default image.bitDepth
    */
-  bitDepth?: ColorDepth;
+  bitDepth?: BitDepth;
 }
 
 export interface GradientFilterXOptions extends GradientFilterBaseOptions {

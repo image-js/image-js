@@ -20,7 +20,7 @@ export function and(mask: Mask, otherMask: Mask, options?: AndOptions): Mask {
   const newMask = maskToOutputMask(mask, options);
 
   if (mask.width !== otherMask.width || mask.height !== otherMask.height) {
-    throw new Error('and: both masks must have the same size');
+    throw new Error('both masks must have the same size');
   }
 
   for (let i = 0; i < newMask.size; i++) {

@@ -4,10 +4,10 @@ test('Uint8 to Uint16', () => {
     [3, 4],
   ]);
 
-  const newImg = img.convertDepth(16);
+  const newImg = img.convertBitDepth(16);
   expect(newImg.width).toBe(2);
   expect(newImg.height).toBe(2);
-  expect(newImg.depth).toStrictEqual(16);
+  expect(newImg.bitDepth).toStrictEqual(16);
   expect(newImg.colorModel).toStrictEqual('GREY');
   expect(newImg).toMatchImageData([
     [256, 512],
@@ -21,13 +21,13 @@ test('Uint16 to Uint8', () => {
       [30, 260],
       [512, 2047],
     ],
-    { depth: 16 },
+    { bitDepth: 16 },
   );
 
-  const newImg = img.convertDepth(8);
+  const newImg = img.convertBitDepth(8);
   expect(newImg.width).toBe(2);
   expect(newImg.height).toBe(2);
-  expect(newImg.depth).toStrictEqual(8);
+  expect(newImg.bitDepth).toStrictEqual(8);
   expect(newImg.colorModel).toStrictEqual('GREY');
   expect(newImg).toMatchImageData([
     [0, 1],
@@ -41,27 +41,27 @@ test('Uint16 to Uint8 for rgba', () => {
       [256, 256, 256, 256, 512, 512, 512, 512],
       [768, 768, 768, 768, 1024, 1024, 1024, 1024],
     ],
-    { depth: 16 },
+    { bitDepth: 16 },
   );
 
-  const newImg = img.convertDepth(8);
+  const newImg = img.convertBitDepth(8);
   expect(newImg.width).toBe(2);
   expect(newImg.height).toBe(2);
   expect(newImg.colorModel).toStrictEqual('RGBA');
-  expect(newImg.depth).toStrictEqual(8);
+  expect(newImg.bitDepth).toStrictEqual(8);
   expect(newImg).toMatchImageData([
     [1, 1, 1, 1, 2, 2, 2, 2],
     [3, 3, 3, 3, 4, 4, 4, 4],
   ]);
 });
 
-test('throw if converting to same depth', () => {
+test('throw if converting to same bit depth', () => {
   const img = testUtils.createRgbaImage([
     [256, 256, 256, 256, 512, 512, 512, 512],
     [768, 768, 768, 768, 1024, 1024, 1024, 1024],
   ]);
 
   expect(() => {
-    img.convertDepth(8);
-  }).toThrow('convertDepth: cannot convert image to same depth');
+    img.convertBitDepth(8);
+  }).toThrow('cannot convert image to same bitDepth');
 });

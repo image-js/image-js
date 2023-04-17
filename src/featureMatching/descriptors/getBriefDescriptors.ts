@@ -73,7 +73,7 @@ export function getBriefDescriptors(
   });
 
   if (!(patchSize % 2)) {
-    throw new Error('getBriefDescriptors: patchSize must be an odd integer');
+    throw new Error('patchSize must be an odd integer');
   }
 
   if (Math.min(image.width, image.height) < patchSize) {

@@ -27,13 +27,13 @@ export interface DrawKeypointsOptions {
    */
   color?: number[];
   /**
-   * Should the markers be filled?
+   * Whether to fill the markers.
    *
    * @default false
    */
   fill?: boolean;
   /**
-   * Should the score of the keypoints reflect in their color?
+   * Whether the score of the keypoints should be reflected in their color.
    *
    * @default false
    */

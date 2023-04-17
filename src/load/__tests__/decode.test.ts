@@ -4,7 +4,7 @@ test('auto decode png', async () => {
   const buffer = testUtils.loadBuffer('formats/grey8.png');
   expect(() => decode(buffer)).not.toThrow();
   const decoded = decode(buffer);
-  expect(decoded.depth).toStrictEqual(8);
+  expect(decoded.bitDepth).toStrictEqual(8);
   expect(decoded.colorModel).toStrictEqual('GREY');
 });
 
@@ -12,7 +12,7 @@ test('auto decode jpeg', async () => {
   const buffer = testUtils.loadBuffer('formats/rgb12.jpg');
   expect(() => decode(buffer)).not.toThrow();
   const decoded = decode(buffer);
-  expect(decoded.depth).toStrictEqual(8);
+  expect(decoded.bitDepth).toStrictEqual(8);
   expect(decoded.colorModel).toStrictEqual('RGBA');
 });
 
@@ -20,7 +20,7 @@ test('auto decode tiff', async () => {
   const buffer = testUtils.loadBuffer('formats/tif/grey8.tif');
   expect(() => decode(buffer)).not.toThrow();
   const decoded = decode(buffer);
-  expect(decoded.depth).toStrictEqual(8);
+  expect(decoded.bitDepth).toStrictEqual(8);
   expect(decoded.colorModel).toStrictEqual('GREY');
 });
 

@@ -13,7 +13,7 @@ export interface GetSaturationMapOptions {
    */
   nbPositive: number;
   /**
-   * Specify which ROIs to colour.
+   * Specify which ROIs to color.
    *
    * @default 'bw'
    */

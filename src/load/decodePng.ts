@@ -1,6 +1,6 @@
 import { decode, DecodedPng } from 'fast-png';
 
-import { ColorDepth, Image } from '../Image';
+import { BitDepth, Image } from '../Image';
 import { ImageColorModel } from '../utils/constants/colorModels';
 
 /**
@@ -13,7 +13,7 @@ export function decodePng(buffer: Uint8Array): Image {
   const png = decode(buffer);
 
   let colorModel: ImageColorModel;
-  const depth: ColorDepth = png.depth === 16 ? 16 : 8;
+  const bitDepth: BitDepth = png.depth === 16 ? 16 : 8;
 
   if (png.palette) {
     return loadPalettePng(png);
@@ -37,7 +37,7 @@ export function decodePng(buffer: Uint8Array): Image {
   }
   return new Image(png.width, png.height, {
     colorModel,
-    depth,
+    bitDepth,
     data: png.data,
   });
 }

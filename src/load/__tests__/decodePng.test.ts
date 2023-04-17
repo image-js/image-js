@@ -16,10 +16,10 @@ const tests = [
 
 test.each(tests)(
   'should load from buffer %s',
-  async (name, depth, colorModel) => {
+  async (name, bitDepth, colorModel) => {
     const buffer = testUtils.loadBuffer(`formats/${name}.png`);
     const img = decodePng(buffer);
-    expect(img.depth).toBe(depth);
+    expect(img.bitDepth).toBe(bitDepth);
     expect(img.colorModel).toBe(colorModel);
   },
 );

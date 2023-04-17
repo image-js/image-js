@@ -34,7 +34,7 @@ test('throw on image with sizes different', () => {
   const img2 = testUtils.createGreyImage([[0, 1, 254, 255]]);
   expect(() => {
     merge([img1, img2]);
-  }).toThrow('all images must have the same width, height and depth');
+  }).toThrow('all images must have the same width, height and bitDepth');
 });
 
 test('throw on too many images', () => {

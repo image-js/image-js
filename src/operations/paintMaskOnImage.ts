@@ -19,7 +19,7 @@ export interface PaintMaskOnImageOptions {
    */
   color?: Array<number | null>;
   /**
-   * Should the given color be blended with the original pixel?
+   * Whether the given color should be blended with the original pixel.
    *
    * @default true
    */

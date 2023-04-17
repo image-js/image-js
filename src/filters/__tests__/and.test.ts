@@ -15,5 +15,5 @@ test('different size error', () => {
   const other = testUtils.createMask([[1, 1, 1, 0, 0, 0]]);
   expect(() => {
     image.and(other);
-  }).toThrow('and: both masks must have the same size');
+  }).toThrow('both masks must have the same size');
 });
