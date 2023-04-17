@@ -23,10 +23,10 @@ test('throw on image with more than 1 channel', () => {
   const img2 = testUtils.createGreyImage([[0, 1, 254, 255]]);
   expect(() => {
     merge([img1, img2]);
-  }).toThrow('each image must have one channel. Got 2');
+  }).toThrow('each image must have one channel. Received 2');
   expect(() => {
     merge([img2, img1]);
-  }).toThrow('each image must have one channel. Got 2');
+  }).toThrow('each image must have one channel. Received 2');
 });
 
 test('throw on image with sizes different', () => {
@@ -42,5 +42,5 @@ test('throw on too many images', () => {
   const img2 = testUtils.createGreyImage([[0, 1, 254, 255]]);
   expect(() => {
     merge([img1, img2, img1, img2, img1]);
-  }).toThrow('merge expects an array of two to four images. Got 5');
+  }).toThrow('merge expects an array of two to four images. Received 5');
 });

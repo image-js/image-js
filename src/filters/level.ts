@@ -67,7 +67,7 @@ export function level(image: Image, options: LevelOptions = {}) {
 
   validateChannels(channels, image);
 
-  checkProcessable(image, 'level', {
+  checkProcessable(image, {
     bitDepth: [8, 16],
   });
 

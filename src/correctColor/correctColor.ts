@@ -22,13 +22,13 @@ export function correctColor(
   measuredColors: RgbColor[],
   referenceColors: RgbColor[],
 ): Image {
-  checkProcessable(image, 'correctColor', {
+  checkProcessable(image, {
     colorModel: ['RGB', 'RGBA'],
   });
 
   if (measuredColors.length !== referenceColors.length) {
-    throw new Error(
-      'correctColor: number of measured colors and reference colors differ',
+    throw new RangeError(
+      'number of measured colors and reference colors must be the same',
     );
   }
 

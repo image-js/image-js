@@ -43,7 +43,7 @@ export function drawPolygonOnImage(
     ...otherOptions
   } = options;
 
-  checkProcessable(image, 'drawPolygon', {
+  checkProcessable(image, {
     bitDepth: [8, 16],
   });
 

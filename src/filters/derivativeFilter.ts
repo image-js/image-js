@@ -75,7 +75,7 @@ export function derivativeFilter(
       kernelY = PREWITT_Y;
       break;
     default:
-      throw new Error(`unrecognized derivative filter: ${filter}`);
+      throw new RangeError(`invalid derivative filter: ${filter}`);
   }
 
   return image.gradientFilter({ kernelX, kernelY, ...options });

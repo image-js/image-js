@@ -6,10 +6,10 @@ test('wrong bit depth', () => {
     [2, 3],
   ]);
   expect(() => {
-    checkProcessable(img, 'test', {
+    checkProcessable(img, {
       bitDepth: [1, 16],
     });
-  }).toThrow(/The process "test" can only be applied if bitDepth is 1 or 16/);
+  }).toThrow('image bitDepth must be 1 or 16 to apply this algorithm');
 });
 
 test('wrong alpha', () => {
@@ -18,8 +18,8 @@ test('wrong alpha', () => {
     [2, 3],
   ]);
   expect(() => {
-    checkProcessable(img, 'test', { alpha: true });
-  }).toThrow(/The process "test" can only be applied if alpha is true/);
+    checkProcessable(img, { alpha: true });
+  }).toThrow('image alpha must be true to apply this algorithm');
 });
 
 test('wrong color model', () => {
@@ -28,8 +28,8 @@ test('wrong color model', () => {
     [2, 3],
   ]);
   expect(() => {
-    checkProcessable(img, 'test', { colorModel: ['RGB'] });
-  }).toThrow(/The process "test" can only be applied if color model is RGB/);
+    checkProcessable(img, { colorModel: ['RGB'] });
+  }).toThrow('image colorModel must be RGB to apply this algorithm');
 });
 
 test('wrong number of components', () => {
@@ -38,12 +38,10 @@ test('wrong number of components', () => {
     [2, 3],
   ]);
   expect(() => {
-    checkProcessable(img, 'test', {
+    checkProcessable(img, {
       components: [2, 4],
     });
-  }).toThrow(
-    /The process "test" can only be applied if the number of components is 2 or 4/,
-  );
+  }).toThrow('image components must be 2 or 4 to apply this algorithm');
 });
 
 test('wrong number of channels', () => {
@@ -52,12 +50,10 @@ test('wrong number of channels', () => {
     [2, 3],
   ]);
   expect(() => {
-    checkProcessable(img, 'test', {
+    checkProcessable(img, {
       channels: [2, 3],
     });
-  }).toThrow(
-    /The process "test" can only be applied if the number of channels is 2 or 3/,
-  );
+  }).toThrow(/image channels must be 2 or 3 to apply this algorithm/);
 });
 
 test('only one valid bit depth or channel', () => {
@@ -66,7 +62,7 @@ test('only one valid bit depth or channel', () => {
     [2, 3],
   ]);
   expect(() => {
-    checkProcessable(img, 'test', {
+    checkProcessable(img, {
       bitDepth: 8,
       channels: 1,
     });
@@ -76,11 +72,11 @@ test('only one valid bit depth or channel', () => {
 test('only grey images accepted', () => {
   const img = testUtils.createRgbImage([[0, 1, 2]]);
   expect(() => {
-    checkProcessable(img, 'test', {
+    checkProcessable(img, {
       bitDepth: 8,
       components: 1,
     });
   }).toThrow(
-    'You should transform your image using "image.grey()" before applying the algorithm',
+    'image components must be 1 to apply this algorithm. The image can be converted using "image.grey()"',
   );
 });

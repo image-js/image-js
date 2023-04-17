@@ -1,5 +1,7 @@
 import { Image } from '../Image';
 
+import { assert } from './assert';
+
 export type ClampFunction = (value: number) => number;
 
 /**
@@ -11,11 +13,10 @@ export type ClampFunction = (value: number) => number;
 export function getClamp(image: Image): ClampFunction {
   if (image.maxValue === 255) {
     return clamp255;
-  }
-  if (image.maxValue === 65535) {
+  } else {
+    assert(image.maxValue === 65535);
     return clamp65535;
   }
-  throw new Error(`unknown maxValue: ${image.maxValue}`);
 }
 
 /**

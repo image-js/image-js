@@ -42,14 +42,14 @@ export function subtract(
   let { absolute = false } = options;
 
   if (image instanceof Image) {
-    checkProcessable(image, 'subtract', {
+    checkProcessable(image, {
       bitDepth: [1, 8, 16],
       components: [1, 3],
       alpha: false,
     });
   }
 
-  validateForComparison('subtract', image, otherImage);
+  validateForComparison(image, otherImage);
 
   let newImage = image.clone();
   if (newImage instanceof Image) {

@@ -40,7 +40,7 @@ export function getPatchIntensityMoment(
     options;
 
   if (!checkBorderDistance(image, origin, radius)) {
-    throw new Error(`desired patch is too close to image border`);
+    throw new RangeError(`desired patch is too close to image border`);
   }
   let moment = new Array(image.channels).fill(0);
 

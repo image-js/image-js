@@ -28,7 +28,7 @@ export function sliceBrief(
 ): Brief {
   const { start = 0, end = brief.keypoints.length } = options;
   if (start < 0 || end > brief.keypoints.length) {
-    throw new Error('start or end are out of range');
+    throw new RangeError('start or end are out of range');
   }
   return {
     keypoints: brief.keypoints.slice(start, end),

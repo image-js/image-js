@@ -1,4 +1,5 @@
 import { Image } from '../Image';
+import { assert } from '../utils/assert';
 
 export interface WriteCanvasOptions {
   /**
@@ -63,9 +64,7 @@ export function writeCanvas(
     canvas.height = image.height;
   }
   const ctx = canvas.getContext('2d');
-  if (ctx === null) {
-    throw new Error('could not get context from canvas element');
-  }
+  assert(ctx);
   const data = image.getRawImage().data;
   ctx.putImageData(
     new ImageData(

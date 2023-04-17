@@ -60,35 +60,29 @@ export function validateValue(value: number, image: Image): void {
 /**
  * Validate that two images are compatible for comparison functions.
  *
- * @param process - Process name.
  * @param image - First image.
  * @param other - Second image.
  */
 export function validateForComparison(
-  process: string,
   image: Image | Mask,
   other: Image | Mask,
 ): void {
   if (image.width !== other.width || image.height !== other.height) {
-    throw new Error(`${process}: both images must have the same size`);
+    throw new RangeError('both images must have the same size');
   }
   if (image.alpha !== other.alpha || image.bitDepth !== other.bitDepth) {
-    throw new Error(
-      `${process}: both images must have the same alpha and bitDepth`,
-    );
+    throw new RangeError('both images must have the same alpha and bitDepth');
   }
   if (image.channels !== other.channels) {
-    throw new Error(
-      `${process}: both images must have the same number of channels`,
-    );
+    throw new RangeError('both images must have the same number of channels');
   }
 }
 
 /**
  * Checks if the given color is valid.
  *
- * @param image - Image .
  * @param color - Color to check.
+ * @param image - Image.
  */
 export function validateColor(color: number[], image: Image): void {
   validateChannel(color.length, image);

@@ -6,6 +6,8 @@
  *
  */
 
+import { assert } from '../../utils/assert';
+
 /**
  * Return a threshold for a histogram using Intermodes algorithm.
  *
@@ -28,9 +30,7 @@ export default function intermodes(histogram: Uint32Array): number {
     }
     iHisto[histogram.length - 1] = (current + next) / 3;
     iter++;
-    if (iter > 10000) {
-      throw new Error('Intermodes Threshold not found after 10000 iterations');
-    }
+    assert(iter < 1000, 'Intermodes threshold not found after 1000 iterations');
   }
 
   // The threshold is the mean between the two peaks.

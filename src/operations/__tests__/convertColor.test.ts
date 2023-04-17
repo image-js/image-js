@@ -103,11 +103,11 @@ test('Mask to GREY', () => {
   ]);
 });
 
-test('Cannot convert to same colorModel', () => {
+test('cannot convert to same colorModel', () => {
   const image = testUtils.createRgbImage([[10, 20, 30, 40, 60, 70]]);
 
   expect(() => image.convertColor('RGB')).toThrow(
-    /Cannot convert color, image is already RGB/,
+    /cannot convert color, image is already RGB/,
   );
 });
 

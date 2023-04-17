@@ -176,5 +176,5 @@ test('exceed max number of ROIs error', () => {
   }
   expect(() => {
     fromMask(mask);
-  }).toThrow(/Too many regions of interest/);
+  }).toThrow(/too many regions of interest/);
 });

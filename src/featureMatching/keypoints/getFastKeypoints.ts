@@ -86,7 +86,7 @@ export function getFastKeypoints(
     nonMaxSuppression = true,
   } = options;
 
-  checkProcessable(image, 'getFastKeypoints', {
+  checkProcessable(image, {
     channels: [1],
     alpha: false,
   });
@@ -112,9 +112,7 @@ export function getFastKeypoints(
             score = getFastScore(image, corner, threshold, circlePoints);
             break;
           default:
-            throw new Error(
-              `getFastKeypoints: undefined score algorithm ${scoreAlgorithm}`,
-            );
+            throw new RangeError(`invalid score algorithm: ${scoreAlgorithm}`);
         }
         scoreArray[getIndex(corner.column, corner.row, image, 0)] = score;
         allKeypoints.push({ origin: corner, score });

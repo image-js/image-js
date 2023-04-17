@@ -49,12 +49,12 @@ function createImageFrom2DArray(
   const imageData = createDataArray(height * width * channels, bitDepth);
   for (let row = 0; row < height; row++) {
     if (data[row].length % channels !== 0) {
-      throw new Error(
+      throw new RangeError(
         `length of row ${row} (${data[row].length}) is not a multiple of channels (${channels})`,
       );
     }
     if (data[row].length !== width * channels) {
-      throw new Error(
+      throw new RangeError(
         `length of row ${row} (${
           data[row].length / channels
         }) does not match width (${width})`,
@@ -98,12 +98,12 @@ function createImageFromString(
     const line = lines[row].trim();
     const values = line.split(/[^0-9]+/).map((v) => parseInt(v, 10));
     if (values.length % channels !== 0) {
-      throw new Error(
+      throw new RangeError(
         `length of row ${row} (${values.length}) is not a multiple of channels (${channels})`,
       );
     }
     if (values.length !== width * channels) {
-      throw new Error(
+      throw new RangeError(
         `length of row ${row} (${
           values.length / channels
         }) does not match width (${width})`,

@@ -762,6 +762,8 @@ function printData(mask: Mask): string {
  */
 function checkChannel(channel: number) {
   if (channel !== 0) {
-    throw new Error(`Channel value must be 0 on type Mask, got ${channel}.`);
+    throw new RangeError(
+      `channel value must be 0 on type Mask. Received ${channel}`,
+    );
   }
 }

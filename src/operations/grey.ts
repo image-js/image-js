@@ -1,4 +1,6 @@
 import { Image, ImageColorModel } from '..';
+import { assert } from '../utils/assert';
+import checkProcessable from '../utils/checkProcessable';
 import { getClamp } from '../utils/clamp';
 import { getOutputImage } from '../utils/getOutputImage';
 
@@ -29,11 +31,10 @@ export type GreyAlgorithm = (typeof GreyAlgorithm)[keyof typeof GreyAlgorithm];
   // Check that all the algorithms are in the enum.
   const algos = new Set<string>(Object.values(GreyAlgorithm));
   for (const algo of Object.keys(greyAlgorithms)) {
-    if (!algos.has(algo)) {
-      throw new Error(
-        `Grey algorithm ${algo} is missing in the GreyAlgorithm enum`,
-      );
-    }
+    assert(
+      algos.has(algo),
+      `Grey algorithm ${algo} is missing in the GreyAlgorithm enum`,
+    );
   }
 }
 
@@ -92,9 +93,9 @@ export interface GreyOptions {
 export function grey(image: Image, options: GreyOptions = {}): Image {
   let { algorithm = 'luma709', keepAlpha = false, mergeAlpha = true } = options;
 
-  if (image.colorModel !== 'RGB' && image.colorModel !== 'RGBA') {
-    throw new Error('Image color model is not RGB or RGBA');
-  }
+  checkProcessable(image, {
+    colorModel: ['RGB', 'RGBA'],
+  });
 
   keepAlpha = keepAlpha && image.alpha;
   mergeAlpha = mergeAlpha && image.alpha;

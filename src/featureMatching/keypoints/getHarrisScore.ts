@@ -44,7 +44,7 @@ export function getHarrisScore(
   const { windowSize = 7, harrisConstant = 0.04 } = options;
 
   if (!(windowSize % 2)) {
-    throw new Error('windowSize must be an odd integer');
+    throw new TypeError('windowSize must be an odd integer');
   }
 
   const cropOrigin = {

@@ -51,14 +51,14 @@ export function dilate(
   } = options;
 
   if (image instanceof Image) {
-    checkProcessable(image, 'dilate', {
+    checkProcessable(image, {
       bitDepth: [1, 8, 16],
       components: 1,
       alpha: false,
     });
   }
 
-  checkKernel(kernel, 'dilate');
+  checkKernel(kernel);
 
   let onlyOnes = true;
   if (!defaultKernel) {

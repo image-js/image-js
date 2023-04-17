@@ -22,5 +22,5 @@ test('check error', () => {
   let target = new Image(5, 2, { colorModel: 'GREY' });
   expect(() => {
     copyData(source, target);
-  }).toThrow('copyData: images width, height or color model is different');
+  }).toThrow('images width, height or color model is different');
 });

@@ -42,7 +42,9 @@ export function getKeypointPatch(
   let borderDistance = getRadius(cropWidth);
 
   if (!checkBorderDistance(image, keypoint.origin, borderDistance)) {
-    throw new Error('keypoint is too close to border for given patch size');
+    throw new RangeError(
+      'keypoint is too close to border for given patch size',
+    );
   }
 
   const cropped = extractSquareImage(image, keypoint.origin, cropWidth);

@@ -48,7 +48,7 @@ export function getRainbowMap(options: GetRainbowMapOptions): Uint32Array {
       break;
     }
     default: {
-      throw new Error(`unrecognized ROI kind: ${roiKind}`);
+      throw new RangeError(`invalid ROI kind: ${roiKind}`);
     }
   }
 

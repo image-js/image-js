@@ -62,6 +62,6 @@ export function encode(
   } else if (options.format === 'jpg' || options.format === 'jpeg') {
     return encodeJpeg(image, options.encoderOptions);
   } else {
-    throw new RangeError(`unknown format: ${options.format}`);
+    throw new RangeError(`invalid format: ${options.format}`);
   }
 }

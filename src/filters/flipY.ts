@@ -8,7 +8,7 @@ import checkProcessable from '../utils/checkProcessable';
  * @returns The processed image.
  */
 export default function flipY(image: Image): Image {
-  checkProcessable(image, 'flipY', {
+  checkProcessable(image, {
     bitDepth: [8, 16],
   });
 

@@ -5,7 +5,7 @@ export type RotateAngle = 90 | 180 | 270 | -90 | -180 | -270;
 /**
  * Rotates an image in multiples of 90 degrees.
  *
- * @param image
+ * @param image - The image to rotate.
  * @param angle - The angle to rotate the image by. Positive values rotate clockwise, negative values rotate counter-clockwise.
  * @returns - The rotated image.
  */
@@ -57,7 +57,7 @@ export function rotate(image: Image, angle: RotateAngle): Image {
       }
     }
   } else {
-    throw new Error(`invalid angle: ${angle}`);
+    throw new RangeError(`invalid angle: ${angle}`);
   }
 
   return newImage;

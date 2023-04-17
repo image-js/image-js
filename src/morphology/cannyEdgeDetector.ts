@@ -68,7 +68,7 @@ export function cannyEdgeDetector(
   const minValue = lowThreshold * image.maxValue;
   const maxValue = highThreshold * image.maxValue;
 
-  checkProcessable(image, 'cannyEdgeDetector', {
+  checkProcessable(image, {
     colorModel: 'GREY',
   });
 

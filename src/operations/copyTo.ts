@@ -42,9 +42,7 @@ export function copyTo(
   const { column, row } = origin;
 
   if (source.colorModel !== target.colorModel) {
-    throw new Error(
-      'copyTo: source and target must have the same color model.',
-    );
+    throw new RangeError('source and target must have the same color model');
   }
 
   let result: Image | Mask;

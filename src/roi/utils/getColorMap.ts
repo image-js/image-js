@@ -47,6 +47,6 @@ export function getColorMap(options: GetColorMapOptions): Uint32Array {
     case 'rainbow':
       return getRainbowMap(options);
     default:
-      throw new Error(`unknown color mode: ${mode}`);
+      throw new RangeError(`invalid color mode: ${mode}`);
   }
 }

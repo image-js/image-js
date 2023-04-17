@@ -26,26 +26,30 @@ export function merge(images: Image[]): Image {
     }
     default: {
       throw new RangeError(
-        `merge expects an array of two to four images. Got ${channels}`,
+        `merge expects an array of two to four images. Received ${channels}`,
       );
     }
   }
 
   const first = images[0];
   if (first.channels !== 1) {
-    throw new Error(`each image must have one channel. Got ${first.channels}`);
+    throw new RangeError(
+      `each image must have one channel. Received ${first.channels}`,
+    );
   }
   for (let i = 1; i < channels; i++) {
     const img = images[i];
     if (img.channels !== 1) {
-      throw new Error(`each image must have one channel. Got ${img.channels}`);
+      throw new RangeError(
+        `each image must have one channel. Received ${img.channels}`,
+      );
     }
     if (
       img.width !== first.width ||
       img.height !== first.height ||
       img.bitDepth !== first.bitDepth
     ) {
-      throw new Error(
+      throw new RangeError(
         'all images must have the same width, height and bitDepth',
       );
     }

@@ -45,7 +45,7 @@ test('difference size images should throw', async () => {
   const other = testUtils.createRgbImage([[5, 5, 5, 10, 10, 10]]);
   expect(() => {
     image.subtract(other);
-  }).toThrow(`subtract: both images must have the same size`);
+  }).toThrow(`both images must have the same size`);
 });
 
 test('different alpha should throw', async () => {
@@ -55,7 +55,7 @@ test('different alpha should throw', async () => {
   const other = testUtils.createRgbImage([[1, 1, 1, 5, 5, 5, 10, 10, 10]]);
   expect(() => {
     image.subtract(other);
-  }).toThrow(`subtract: both images must have the same alpha and bitDepth`);
+  }).toThrow(`both images must have the same alpha and bitDepth`);
 });
 
 test('different number of channels should throw', async () => {
@@ -63,5 +63,5 @@ test('different number of channels should throw', async () => {
   const other = testUtils.createRgbImage([[1, 1, 1, 5, 5, 5, 10, 10, 10]]);
   expect(() => {
     image.subtract(other);
-  }).toThrow(`subtract: both images must have the same number of channels`);
+  }).toThrow(`both images must have the same number of channels`);
 });

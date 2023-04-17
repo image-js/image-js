@@ -1,6 +1,7 @@
 import { decode, DecodedPng } from 'fast-png';
 
 import { BitDepth, Image } from '../Image';
+import { assert } from '../utils/assert';
 import { ImageColorModel } from '../utils/constants/colorModels';
 
 /**
@@ -33,7 +34,7 @@ export function decodePng(buffer: Uint8Array): Image {
       colorModel = 'RGBA';
       break;
     default:
-      throw new Error(`Unexpected number of channels: ${png.channels}`);
+      throw new RangeError(`invalid number of channels: ${png.channels}`);
   }
   return new Image(png.width, png.height, {
     colorModel,
@@ -49,11 +50,7 @@ export function decodePng(buffer: Uint8Array): Image {
  * @returns The new image.
  */
 function loadPalettePng(png: DecodedPng): Image {
-  if (!png.palette) {
-    throw new Error(
-      'unexpected: there should be a palette when colourType is 3',
-    );
-  }
+  assert(png.palette);
   const pixels = png.width * png.height;
   const data = new Uint8Array(pixels * 3);
   const pixelsPerByte = 8 / png.depth;

@@ -28,6 +28,6 @@ export function decode(data: ArrayBufferView): Image {
     case 'image/tiff':
       return decodeTiff(typedArray);
     default:
-      throw new Error('unrecognized data format');
+      throw new RangeError(`invalid data format: ${type?.mime}`);
   }
 }

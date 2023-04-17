@@ -9,7 +9,7 @@ import { Image, BitDepth } from '../Image';
  */
 export function convertBitDepth(image: Image, newBitDepth: BitDepth): Image {
   if (image.bitDepth === newBitDepth) {
-    throw new Error('cannot convert image to same bitDepth');
+    throw new RangeError('cannot convert image to same bitDepth');
   }
 
   if (newBitDepth === 16) {

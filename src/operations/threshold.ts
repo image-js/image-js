@@ -79,7 +79,7 @@ export function computeThreshold(
   algorithm: ThresholdAlgorithm = 'otsu',
 ): number {
   if (image.channels !== 1) {
-    throw new Error(
+    throw new TypeError(
       'threshold can only be computed on images with one channel',
     );
   }
@@ -117,7 +117,7 @@ export function computeThreshold(
     case 'yen':
       return yen(histogram, image.size);
     default:
-      throw new RangeError(`unsupported threshold algorithm: ${algorithm}`);
+      throw new RangeError(`invalid threshold algorithm: ${algorithm}`);
   }
 }
 

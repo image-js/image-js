@@ -56,9 +56,10 @@ export function fromMask(
     let to = 0;
     let targetState = mask.getBit(column, row);
     let id = targetState ? ++positiveId : --negativeId;
-    if (positiveId > maxPositiveId || negativeId < maxNegativeId) {
-      throw new Error('Too many regions of interest');
-    }
+    assert(
+      positiveId <= maxPositiveId && negativeId >= maxNegativeId,
+      'too many regions of interest',
+    );
     columnToProcess[0] = column;
     rowToProcess[0] = row;
     while (from <= to) {

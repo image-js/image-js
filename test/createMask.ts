@@ -27,7 +27,7 @@ function createMaskFrom2DArray(data: number[][]): Mask {
 
   for (let row = 0; row < height; row++) {
     if (data[row].length !== width) {
-      throw new Error(
+      throw new RangeError(
         `length of row ${row} (${data[row].length}) does not match width (${width})`,
       );
     }
@@ -57,7 +57,7 @@ function createMaskFromString(data: string): Mask {
     const values = line.split(/[^0-9]+/).map((v) => parseInt(v, 10));
 
     if (values.length !== width) {
-      throw new Error(
+      throw new RangeError(
         `length of row ${row} (${values.length}) does not match width (${width})`,
       );
     }

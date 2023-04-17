@@ -25,9 +25,13 @@ test('auto decode tiff', async () => {
 });
 
 test('should throw for too small data', () => {
-  expect(() => decode(new Uint8Array(0))).toThrow(/unrecognized data format/);
+  expect(() => decode(new Uint8Array(0))).toThrow(
+    /invalid data format: undefined/,
+  );
 });
 
 test('should throw for unknown data', () => {
-  expect(() => decode(new Uint8Array(10))).toThrow(/unrecognized data format/);
+  expect(() => decode(new Uint8Array(10))).toThrow(
+    /invalid data format: undefined/,
+  );
 });

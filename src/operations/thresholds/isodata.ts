@@ -4,6 +4,9 @@
  * IEEE Transactions on Systems, Man and Cybernetics 8: 630-632.
  *
  */
+
+import { assert } from '../../utils/assert';
+
 /**
  * Return a threshold for a histogram using Isodata algorithm.
  *
@@ -45,9 +48,7 @@ export default function isodata(histogram: Uint32Array): number {
       }
     }
     g++;
-    if (g > histogram.length - 2) {
-      throw new Error('Threshold not found');
-    }
+    assert(g <= histogram.length - 2, 'Threshold not found');
   }
   return g;
 }

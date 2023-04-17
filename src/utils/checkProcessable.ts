@@ -15,12 +15,10 @@ interface CheckOptions {
  * This method checks if a process can be applied on the current image
  *
  * @param image - Image for which compatibility has to be checked
- * @param processName - Name of the process to apply
  * @param options - Check processable options
  */
 export default function checkProcessable(
   image: Image | Mask,
-  processName: string,
   options: CheckOptions = {},
 ) {
   let { bitDepth, alpha, colorModel, components, channels } = options;
@@ -29,10 +27,8 @@ export default function checkProcessable(
       bitDepth = [bitDepth];
     }
     if (!bitDepth.includes(image.bitDepth)) {
-      throw new TypeError(
-        `The process "${processName}" can only be applied if bitDepth is ${format(
-          bitDepth,
-        )}`,
+      throw new RangeError(
+        `image bitDepth must be ${format(bitDepth)} to apply this algorithm`,
       );
     }
   }
@@ -41,10 +37,8 @@ export default function checkProcessable(
       alpha = [alpha];
     }
     if (!alpha.includes(image.alpha)) {
-      throw new TypeError(
-        `The process "${processName}" can only be applied if alpha is ${format(
-          alpha,
-        )}`,
+      throw new RangeError(
+        `image alpha must be ${format(alpha)} to apply this algorithm`,
       );
     }
   }
@@ -53,10 +47,10 @@ export default function checkProcessable(
       colorModel = [colorModel];
     }
     if (!colorModel.includes(image.colorModel)) {
-      throw new TypeError(
-        `The process "${processName}" can only be applied if color model is ${format(
+      throw new RangeError(
+        `image colorModel must be ${format(
           colorModel,
-        )}`,
+        )} to apply this algorithm`,
       );
     }
   }
@@ -65,15 +59,15 @@ export default function checkProcessable(
       components = [components];
     }
     if (!components.includes(image.components)) {
-      let errorMessage = `The process "${processName}" can only be applied if the number of components is ${format(
+      const errorMessage = `image components must be ${format(
         components,
-      )}`;
+      )} to apply this algorithm`;
       if (components.length === 1 && components[0] === 1) {
-        throw new TypeError(
-          `${errorMessage}.\nYou should transform your image using "image.grey()" before applying the algorithm.`,
+        throw new RangeError(
+          `${errorMessage}. The image can be converted using "image.grey()"`,
         );
       } else {
-        throw new TypeError(errorMessage);
+        throw new RangeError(errorMessage);
       }
     }
   }
@@ -82,10 +76,8 @@ export default function checkProcessable(
       channels = [channels];
     }
     if (!channels.includes(image.channels)) {
-      throw new TypeError(
-        `The process "${processName}" can only be applied if the number of channels is ${format(
-          channels,
-        )}`,
+      throw new RangeError(
+        `image channels must be ${format(channels)} to apply this algorithm`,
       );
     }
   }

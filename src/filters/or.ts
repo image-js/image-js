@@ -20,7 +20,7 @@ export function or(mask: Mask, otherMask: Mask, options?: OrOptions): Mask {
   const newMask = maskToOutputMask(mask, options);
 
   if (mask.width !== otherMask.width || mask.height !== otherMask.height) {
-    throw new Error('both masks must have the same size');
+    throw new RangeError('both masks must have the same size');
   }
 
   for (let i = 0; i < newMask.size; i++) {

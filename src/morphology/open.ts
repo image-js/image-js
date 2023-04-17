@@ -45,14 +45,14 @@ export function open(
   } = options;
 
   if (image instanceof Image) {
-    checkProcessable(image, 'open', {
+    checkProcessable(image, {
       bitDepth: [1, 8, 16],
       components: 1,
       alpha: false,
     });
   }
 
-  checkKernel(kernel, 'open');
+  checkKernel(kernel);
 
   let newImage = image;
   for (let i = 0; i < iterations; i++) {

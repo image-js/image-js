@@ -65,7 +65,7 @@ export function gradientFilter(
 ): Image {
   const { borderType = 'replicate', borderValue = 0 } = options;
 
-  checkProcessable(image, 'gradientFilter', {
+  checkProcessable(image, {
     bitDepth: [8, 16],
     colorModel: 'GREY',
   });
@@ -101,6 +101,6 @@ export function gradientFilter(
       borderValue,
     });
   } else {
-    throw new Error(`kernelX and KernelY are not defined`);
+    throw new TypeError(`kernelX and KernelY are not defined`);
   }
 }

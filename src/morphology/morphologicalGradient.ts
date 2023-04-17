@@ -50,13 +50,13 @@ export function morphologicalGradient(
   } = options;
 
   if (image instanceof Image) {
-    checkProcessable(image, 'bottomHat', {
+    checkProcessable(image, {
       bitDepth: [1, 8, 16],
       components: 1,
       alpha: false,
     });
   }
-  checkKernel(kernel, 'morphologicalGradient');
+  checkKernel(kernel);
 
   let newImage = image;
   for (let i = 0; i < iterations; i++) {

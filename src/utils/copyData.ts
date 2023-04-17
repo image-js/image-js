@@ -14,9 +14,7 @@ export function copyData(source: Image | Mask, target: Image | Mask): void {
     target.height !== source.height ||
     target.colorModel !== source.colorModel
   ) {
-    throw new Error(
-      'copyData: images width, height or color model is different',
-    );
+    throw new RangeError('images width, height or color model is different');
   }
   // @ts-expect-error Accessing data, which is private
   target.data = source.data.slice();

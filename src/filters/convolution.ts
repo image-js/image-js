@@ -349,7 +349,7 @@ function normalizeSeparatedKernel(
   const sumKernelY = kernelY.reduce((prev, current) => prev + current, 0);
   const prod = sumKernelX * sumKernelY;
   if (prod < 0) {
-    throw new Error('this separated kernel cannot be normalized');
+    throw new RangeError('this separated kernel cannot be normalized');
   }
   const factor = 1 / Math.sqrt(Math.abs(prod));
   return [kernelX.map((v) => v * factor), kernelY.map((v) => v * factor)];

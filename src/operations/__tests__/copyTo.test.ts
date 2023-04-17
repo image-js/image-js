@@ -208,6 +208,6 @@ test('incompatible image types', () => {
   let target = testUtils.createGreyaImage([[50, 0]]);
 
   expect(() => source.copyTo(target)).toThrow(
-    /copyTo: source and target must have the same color model./,
+    /source and target must have the same color model/,
   );
 });

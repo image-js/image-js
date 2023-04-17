@@ -58,7 +58,7 @@ export function drawMarker(
   } = options;
 
   validateColor(color, newImage);
-  checkProcessable(newImage, 'drawMarker', {
+  checkProcessable(newImage, {
     bitDepth: [8, 16],
   });
   if (shape === 'circle') {

@@ -96,7 +96,7 @@ test('custom color is incompatible with image', () => {
 
   expect(() => {
     image.paintMask(mask, { color: [20] });
-  }).toThrow('paintMask: the given color is not compatible with the image');
+  }).toThrow('the given color is not compatible with the image');
 });
 
 test('blend is true but color has null values', () => {
@@ -109,7 +109,7 @@ test('blend is true but color has null values', () => {
 
   expect(() => {
     image.paintMask(mask, { color: [null, 0, 0, 255] });
-  }).toThrow('paintMask: cannot have null channels in color if blend is true');
+  }).toThrow('cannot have null channels in color if blend is true');
 });
 
 test('blend = false, all values null', () => {

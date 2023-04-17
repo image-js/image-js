@@ -34,21 +34,21 @@ export function hypotenuse(
     channels.push(i);
   }
 
-  checkProcessable(image, 'hypotenuse', {
+  checkProcessable(image, {
     bitDepth: [8, 16],
   });
 
   if (image.width !== otherImage.width || image.height !== otherImage.height) {
-    throw new Error('both images must have the same size');
+    throw new RangeError('both images must have the same size');
   }
   if (
     image.alpha !== otherImage.alpha ||
     image.bitDepth !== otherImage.bitDepth
   ) {
-    throw new Error('both images must have the same alpha and bitDepth');
+    throw new RangeError('both images must have the same alpha and bitDepth');
   }
   if (image.channels !== otherImage.channels) {
-    throw new Error('both images must have the same number of channels');
+    throw new RangeError('both images must have the same number of channels');
   }
 
   validateChannels(channels, image);

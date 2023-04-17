@@ -1,4 +1,5 @@
 import { Image } from '..';
+import { assert } from '../utils/assert';
 
 /**
  * Converts R, G and B values to a single value using Luma 709 standard({@link https://en.wikipedia.org/wiki/Luma_(video)}).
@@ -206,27 +207,23 @@ export function hue(
   blue: number,
   image: Image,
 ): number {
-  let minValue = min(red, green, blue);
-  let maxValue = max(red, green, blue);
+  const minValue = min(red, green, blue);
+  const maxValue = max(red, green, blue);
   if (maxValue === minValue) {
     return 0;
   }
   let hue = 0;
-  let delta = maxValue - minValue;
+  const delta = maxValue - minValue;
 
-  switch (maxValue) {
-    case red:
-      hue = (green - blue) / delta + (green < blue ? 6 : 0);
-      break;
-    case green:
-      hue = (blue - red) / delta + 2;
-      break;
-    case blue:
-      hue = (red - green) / delta + 4;
-      break;
-    default:
-      throw new Error('unreachable');
+  if (maxValue === red) {
+    hue = (green - blue) / delta + (green < blue ? 6 : 0);
+  } else if (maxValue === green) {
+    hue = (blue - red) / delta + 2;
+  } else {
+    assert(maxValue === blue);
+    hue = (red - green) / delta + 4;
   }
+
   return ((hue / 6) * image.maxValue) >> 0;
 }
 

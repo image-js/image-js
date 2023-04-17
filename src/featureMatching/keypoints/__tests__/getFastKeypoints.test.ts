@@ -66,9 +66,7 @@ test('wrong color model error', () => {
   const image = testUtils.load('various/alphabet.jpg');
   expect(() => {
     getFastKeypoints(image);
-  }).toThrow(
-    'The process "getFastKeypoints" can only be applied if the number of channels is 1',
-  );
+  }).toThrow('image channels must be 1 to apply this algorithm');
 });
 
 test('undefined score algorithm error', () => {
@@ -77,5 +75,5 @@ test('undefined score algorithm error', () => {
   expect(() => {
     // @ts-expect-error: test for js users
     getFastKeypoints(grey, { scoreAlgorithm: 'test' });
-  }).toThrow('getFastKeypoints: undefined score algorithm test');
+  }).toThrow('invalid score algorithm: test');
 });

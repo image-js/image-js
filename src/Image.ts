@@ -264,9 +264,9 @@ export class Image {
       );
     } else {
       if (bitDepth === 8 && data instanceof Uint16Array) {
-        throw new Error(`bitDepth is ${bitDepth} but data is Uint16Array`);
+        throw new RangeError(`bitDepth is ${bitDepth} but data is Uint16Array`);
       } else if (bitDepth === 16 && data instanceof Uint8Array) {
-        throw new Error(`bitDepth is ${bitDepth} but data is Uint8Array`);
+        throw new RangeError(`bitDepth is ${bitDepth} but data is Uint8Array`);
       }
       const expectedLength = this.size * this.channels;
       if (data.length !== expectedLength) {
@@ -493,7 +493,7 @@ export class Image {
     } else {
       if (value.length !== this.channels) {
         throw new RangeError(
-          `the size of value must match the number of channels (${this.channels}). Got ${value.length} instead`,
+          `the size of value must match the number of channels (${this.channels}). Received ${value.length}`,
         );
       }
       for (const val of value) validateValue(val, this);
@@ -546,7 +546,7 @@ export class Image {
   public fillAlpha(value: number): this {
     validateValue(value, this);
     if (!this.alpha) {
-      throw new Error(
+      throw new TypeError(
         'fillAlpha can only be called if the image has an alpha channel',
       );
     }
@@ -600,7 +600,7 @@ export class Image {
       case 'bottom-right':
         return { column: this.width - 1, row: this.height - 1 };
       default:
-        throw new Error(`Unknown image coordinates ${coordinates}`);
+        throw new RangeError(`invalid image coordinates: ${coordinates}`);
     }
   }
 
@@ -1075,7 +1075,7 @@ function createPixelArray(
       arr = new Uint16Array(length);
       break;
     default:
-      throw new Error(`unexpected bitDepth: ${bitDepth}`);
+      throw new RangeError(`invalid bitDepth: ${bitDepth}`);
   }
 
   // Alpha channel is 100% by default.

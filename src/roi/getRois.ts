@@ -69,7 +69,7 @@ export function getRois(
       break;
     }
     default: {
-      throw new Error(`unknown ROI kind: ${kind}`);
+      throw new RangeError(`invalid ROI kind: ${kind}`);
     }
   }
 

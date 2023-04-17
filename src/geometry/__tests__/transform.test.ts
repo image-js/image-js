@@ -36,5 +36,5 @@ test('should throw if matrix has wrong size', () => {
   ];
   expect(() => {
     img.transform(translation);
-  }).toThrow('transform: transformation matrix must be 2x3, found 2x4');
+  }).toThrow('transformation matrix must be 2x3. Received 2x4');
 });

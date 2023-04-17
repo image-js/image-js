@@ -42,7 +42,7 @@ export function getInterpolationFunction(
       return interpolateBicubic;
     }
     default: {
-      throw new Error(`interpolation ${interpolationType} not implemented`);
+      throw new RangeError(`invalid interpolationType: ${interpolationType}`);
     }
   }
 }

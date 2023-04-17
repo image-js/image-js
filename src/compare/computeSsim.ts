@@ -53,17 +53,17 @@ export function computeSsim(
 
   if (windowSize) {
     if (windowSize > image.width || windowSize > image.height) {
-      throw new Error('windowSize cannot exceed image dimensions');
+      throw new RangeError('windowSize cannot exceed image dimensions');
     }
   } else {
     windowSize = Math.min(11, image.height, image.width);
   }
-  checkProcessable(image, 'ssim', {
+  checkProcessable(image, {
     bitDepth: [8],
     channels: [1, 3, 4],
   });
 
-  validateForComparison('ssim', image, otherImage);
+  validateForComparison(image, otherImage);
 
   if (image.colorModel !== 'RGBA') {
     image = image.convertColor('RGBA');

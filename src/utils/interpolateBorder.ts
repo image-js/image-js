@@ -42,17 +42,13 @@ export function getBorderInterpolation(
     case 'wrap':
       return interpolateWrap;
     default:
-      throw new Error(
-        `interpolateBorder cannot be used with border type ${type}`,
-      );
+      throw new RangeError(`invalid border type: ${type}`);
   }
 }
 
 function checkRange(point: number, length: number): void {
   if (point <= 0 - length || point >= length + length - 1) {
-    throw new RangeError(
-      'interpolateBorder only supports borders smaller than the original image',
-    );
+    throw new RangeError('border must be smaller than the original image');
   }
 }
 

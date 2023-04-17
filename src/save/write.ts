@@ -136,8 +136,8 @@ function getDataToWrite(
       format = 'jpg';
       return encode(image, { format });
     } else {
-      throw new Error(
-        'image format could not be determined from file extension. Please use a supported extension or specify the format option',
+      throw new RangeError(
+        'image format could not be determined from file extension. Use a supported extension or specify the format option',
       );
     }
   } else if (options.format === 'png') {
@@ -145,6 +145,6 @@ function getDataToWrite(
   } else if (options.format === 'jpg' || options.format === 'jpeg') {
     return encode(image, options);
   } else {
-    throw new RangeError(`unknown format: ${options.format}`);
+    throw new RangeError(`invalid format: ${options.format}`);
   }
 }

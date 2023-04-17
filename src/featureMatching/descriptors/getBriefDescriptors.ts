@@ -67,17 +67,17 @@ export function getBriefDescriptors(
     pointsDistributionOptions,
   } = options;
 
-  checkProcessable(image, 'getBriefDescriptors', {
+  checkProcessable(image, {
     alpha: false,
     colorModel: 'GREY',
   });
 
   if (!(patchSize % 2)) {
-    throw new Error('patchSize must be an odd integer');
+    throw new TypeError('patchSize must be an odd integer');
   }
 
   if (Math.min(image.width, image.height) < patchSize) {
-    throw new Error(`image is too small for patchSize = ${patchSize}`);
+    throw new RangeError(`image is too small for patchSize = ${patchSize}`);
   }
 
   const gaussianPoints = getGaussianPoints(patchSize, patchSize, {

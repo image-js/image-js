@@ -27,11 +27,11 @@ describe('constructor', () => {
       new Montage(source, source, { scale: 1.5 });
     }).toThrow('scale must be an integer');
   });
-  it('unknown disposition type', () => {
+  it('invalid disposition type', () => {
     expect(() => {
-      // @ts-expect-error: test for JS users
+      // @ts-expect-error: invalid disposition type
       new Montage(source, source, { disposition: 'test' });
-    }).toThrow('unknown disposition type');
+    }).toThrow('invalid disposition type: test');
   });
 });
 

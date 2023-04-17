@@ -7,8 +7,6 @@ test('should throw', () => {
   ];
 
   expect(() => {
-    checkKernel(kernel, 'blabla');
-  }).toThrow(
-    /blabla: The number of rows and columns of the kernel must be odd/,
-  );
+    checkKernel(kernel);
+  }).toThrow(/the number of rows and columns of the kernel must be odd/);
 });

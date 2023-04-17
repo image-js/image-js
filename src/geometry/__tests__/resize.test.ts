@@ -80,7 +80,7 @@ test('should throw no parameter', () => {
   expect(() => {
     img.resize({});
   }).toThrow(
-    'At least one of the width, height, xFactor or yFactor options must be passed',
+    'at least one of the width, height, xFactor or yFactor options must be passed',
   );
 });
 

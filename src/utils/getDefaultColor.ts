@@ -1,6 +1,8 @@
 import { Image } from '../Image';
 import { Mask } from '../Mask';
 
+import { assert } from './assert';
+
 /**
  * Get the default color for a given color model.
  * The color is black for images and 1 for masks.
@@ -21,8 +23,6 @@ export function getDefaultColor(image: Image | Mask): number[] {
     case 'BINARY':
       return [1];
     default:
-      throw new Error(
-        `image color model ${image.colorModel} is not compatible`,
-      );
+      assert(false, `invalid image color model: ${image.colorModel}`);
   }
 }

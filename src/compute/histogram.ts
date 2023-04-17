@@ -26,7 +26,9 @@ export function histogram(
   let { channel } = options;
   if (typeof channel !== 'number') {
     if (image.channels !== 1) {
-      throw new Error('channel option is mandatory for multi-channel images');
+      throw new TypeError(
+        'channel option is mandatory for multi-channel images',
+      );
     }
     channel = 0;
   }

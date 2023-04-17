@@ -59,7 +59,7 @@ export function drawPoints(
     newImage = maskToOutputMask(image, options, { clone: true });
   }
 
-  checkProcessable(newImage, 'drawPoints', {
+  checkProcessable(newImage, {
     bitDepth: [1, 8, 16],
   });
 

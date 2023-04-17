@@ -42,7 +42,7 @@ export function drawPolylineOnImage(
     origin = { column: 0, row: 0 },
   } = options;
 
-  checkProcessable(image, 'drawPolyline', {
+  checkProcessable(image, {
     bitDepth: [8, 16],
   });
   let newImage = getOutputImage(image, options, { clone: true });

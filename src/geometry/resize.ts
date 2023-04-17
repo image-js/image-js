@@ -1,4 +1,5 @@
 import { Image } from '../Image';
+import { assert } from '../utils/assert';
 import { getClamp } from '../utils/clamp';
 import { getBorderInterpolation, BorderType } from '../utils/interpolateBorder';
 import {
@@ -114,8 +115,8 @@ function checkOptions(
     xFactor === undefined &&
     yFactor === undefined
   ) {
-    throw new Error(
-      'At least one of the width, height, xFactor or yFactor options must be passed',
+    throw new TypeError(
+      'at least one of the width, height, xFactor or yFactor options must be passed',
     );
   }
 
@@ -132,21 +133,15 @@ function checkOptions(
   );
 
   if (maybeWidth === undefined) {
-    if (maybeHeight !== undefined) {
-      newWidth = Math.round(maybeHeight * (image.width / image.height));
-    } else {
-      throw new Error('UNREACHABLE');
-    }
+    assert(maybeHeight !== undefined);
+    newWidth = Math.round(maybeHeight * (image.width / image.height));
   } else {
     newWidth = maybeWidth;
   }
 
   if (maybeHeight === undefined) {
-    if (maybeWidth !== undefined) {
-      newHeight = Math.round(maybeWidth * (image.height / image.width));
-    } else {
-      throw new Error('UNREACHABLE');
-    }
+    assert(maybeWidth !== undefined);
+    newHeight = Math.round(maybeWidth * (image.height / image.width));
   } else {
     newHeight = maybeHeight;
   }
@@ -181,7 +176,7 @@ function getSize(
       return sizeImg;
     }
   } else if (factor !== undefined) {
-    throw new Error('factor and size cannot be passed together');
+    throw new TypeError('factor and size cannot be passed together');
   } else {
     return sizeOpt;
   }

@@ -8,7 +8,7 @@ import checkProcessable from '../utils/checkProcessable';
  * @returns The processed image.
  */
 export default function flipX(image: Image): Image {
-  checkProcessable(image, 'flipX', {
+  checkProcessable(image, {
     bitDepth: [8, 16],
   });
   for (let row = 0; row < image.height; row++) {

@@ -1,6 +1,7 @@
 import { inspect } from 'node:util';
 
-import { Image } from '../Image';
+import { Image, ImageCoordinates } from '../Image';
+import { Point } from '../geometry';
 
 describe('create new images', () => {
   it('should create a 8-bit image', () => {
@@ -86,7 +87,7 @@ describe('create new images', () => {
   it('should throw on wrong bit depth', () => {
     // @ts-expect-error we want to test the error.
     expect(() => new Image(1, 1, { bitDepth: 20 })).toThrow(
-      /unexpected bitDepth: 20/,
+      /invalid bitDepth: 20/,
     );
   });
   it('should throw with bit depth 8 but data 16', () => {
@@ -181,32 +182,31 @@ test('changeEach', () => {
   ]);
 });
 
-test('getCoordinates', () => {
+test.each<[ImageCoordinates, Point]>([
+  ['bottom-left', { column: 0, row: 4 }],
+  ['bottom-right', { column: 3, row: 4 }],
+  ['center', { column: 1.5, row: 2 }],
+  ['top-left', { column: 0, row: 0 }],
+  ['top-right', { column: 3, row: 0 }],
+])('getCoordinates - %s', (coordinates, point) => {
   const img = new Image(4, 5);
-  expect(img.getCoordinates('bottom-left')).toStrictEqual({
-    column: 0,
-    row: 4,
-  });
-  expect(img.getCoordinates('bottom-right')).toStrictEqual({
-    column: 3,
-    row: 4,
-  });
-  expect(img.getCoordinates('center')).toStrictEqual({
-    column: 1.5,
-    row: 2,
-  });
+  expect(img.getCoordinates(coordinates)).toStrictEqual(point);
+});
+
+test('getCoordinates - with rounding', () => {
+  const img = new Image(4, 5);
   expect(img.getCoordinates('center', true)).toStrictEqual({
     column: 2,
     row: 2,
   });
-  expect(img.getCoordinates('top-left')).toStrictEqual({
-    column: 0,
-    row: 0,
-  });
-  expect(img.getCoordinates('top-right')).toStrictEqual({
-    column: 3,
-    row: 0,
-  });
+});
+
+test('getCoordinates - bad parameter', () => {
+  const img = new Image(4, 5);
+  // @ts-expect-error bad parameter
+  expect(() => img.getCoordinates('bad')).toThrow(
+    /invalid image coordinates: bad/,
+  );
 });
 
 test('fill with a constant color', () => {
@@ -253,7 +253,7 @@ test('fill with out of range value in array', () => {
 test('fill with channel mismatch', () => {
   const img = new Image(1, 1);
   expect(() => img.fill([0, 1, 2, 3])).toThrow(
-    /the size of value must match the number of channels \(3\). Got 4 instead/,
+    /the size of value must match the number of channels \(3\). Received 4/,
   );
 });
 

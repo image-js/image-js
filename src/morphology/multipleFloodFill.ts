@@ -1,5 +1,6 @@
 import { Mask } from '..';
 import { BitValue } from '../Mask';
+import { assert } from '../utils/assert';
 import { maskToOutputMask } from '../utils/getOutputImage';
 
 export interface MultipleFloodFillOptions {
@@ -74,11 +75,7 @@ export function multipleFloodFill(
 
   // find pixels connected to the border pixels
   while (from < to) {
-    if (to - from > MAX_ARRAY) {
-      throw new Error(
-        'multipleFloodFill: could not process image, overflow in the data processing array.',
-      );
-    }
+    assert(to - from <= MAX_ARRAY);
     const currentPixel = toProcess[from++ % MAX_ARRAY];
     newMask.setBitByIndex(currentPixel, newPixelValue);
 
@@ -88,7 +85,7 @@ export function multipleFloodFill(
     const rightBorder = currentPixel % mask.width === mask.width - 1;
     const bottomBorder = currentPixel > mask.size - mask.width;
 
-    // check neighbours
+    // check neighbors
 
     if (!bottomBorder) {
       const bottom = currentPixel + mask.width;

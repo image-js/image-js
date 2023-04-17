@@ -43,30 +43,30 @@ export function crop(image: Image, options: CropOptions = {}) {
   } = options;
   const { column, row } = origin;
 
-  checkProcessable(image, 'crop', {
+  checkProcessable(image, {
     bitDepth: [8, 16],
   });
 
   if (row > image.height - 1 || column > image.width - 1) {
-    throw new Error(
-      `crop: origin (row:${row}, column:${column}) out of range (${
+    throw new RangeError(
+      `origin (row:${row}, column:${column}) out of range (${
         image.width - 1
       }; ${image.height - 1})`,
     );
   }
   if (width <= 0 || height <= 0) {
-    throw new Error(
-      `crop: width and height (width:${width}; height:${height}) must be positive numbers`,
+    throw new RangeError(
+      `width and height (width:${width}; height:${height}) must be positive numbers`,
     );
   }
   if (row < 0 || column < 0) {
-    throw new Error(
-      `crop: row and column (row:${row}, column:${column}) must be positive numbers`,
+    throw new RangeError(
+      `row and column (row:${row}, column:${column}) must be positive numbers`,
     );
   }
   if (width > image.width - column || height > image.height - row) {
-    throw new Error(
-      `crop: (row:${row}, column: ${column}, width:${width}, height:${height}) size is out of range`,
+    throw new RangeError(
+      `(row:${row}, column: ${column}, width:${width}, height:${height}) size is out of range`,
     );
   }
 

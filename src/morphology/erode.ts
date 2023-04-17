@@ -51,14 +51,14 @@ export function erode(
   } = options;
 
   if (image instanceof Image) {
-    checkProcessable(image, 'erode', {
+    checkProcessable(image, {
       bitDepth: [1, 8, 16],
       components: 1,
       alpha: false,
     });
   }
 
-  checkKernel(kernel, 'erode');
+  checkKernel(kernel);
 
   let onlyOnes = true;
   if (!defaultKernel) {

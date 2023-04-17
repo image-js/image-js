@@ -17,7 +17,7 @@ export interface CropAlphaOptions {
  * @returns The cropped image.
  */
 export function cropAlpha(image: Image, options: CropAlphaOptions = {}): Image {
-  checkProcessable(image, 'cropAlpha', {
+  checkProcessable(image, {
     alpha: true,
   });
 
@@ -26,8 +26,8 @@ export function cropAlpha(image: Image, options: CropAlphaOptions = {}): Image {
   let left = findLeft(image, threshold, image.components);
 
   if (left === -1) {
-    throw new Error(
-      'Could not find new dimensions. Threshold may be too high.',
+    throw new RangeError(
+      `could not find new dimensions. Threshold may be too high: ${threshold}`,
     );
   }
 

@@ -92,7 +92,7 @@ describe('getOutputImage', () => {
     expect(() =>
       getOutputImage(img, { out: incorrect }, { newParameters: requirements }),
     ).toThrow(
-      /cannot use out. Its colorModel property must be GREY. Found RGB/,
+      /cannot use out image. Its colorModel property must be GREY. Received RGB/,
     );
   });
 
@@ -100,7 +100,7 @@ describe('getOutputImage', () => {
     const img = new Image(1, 2);
     // @ts-expect-error: testing JS problem
     expect(() => getOutputImage(img, { out: 'str' })).toThrow(
-      /out must be an Image object/,
+      'out must be an Image',
     );
   });
   it('should keep source origin', () => {
@@ -139,13 +139,15 @@ describe('maskToOutputImage', () => {
     const out = new Image(2, 2, { colorModel: ImageColorModel.GREY });
     expect(() => {
       maskToOutputImage(img, { out });
-    }).toThrow(/cannot use out. Its width property must be 1. Found 2/);
+    }).toThrow(
+      /cannot use out image. Its width property must be 1. Received 2/,
+    );
   });
   it('should throw if out is not an image', () => {
     const img = new Image(1, 2);
     // @ts-expect-error: testing JS problem
     expect(() => maskToOutputImage(img, { out: 'str' })).toThrow(
-      /out must be an Image object/,
+      'out must be an Image',
     );
   });
   it('should keep source origin', () => {
@@ -181,13 +183,15 @@ describe('imageToOutputMask', () => {
     const out = new Mask(2, 2);
     expect(() => {
       imageToOutputMask(img, { out });
-    }).toThrow(/cannot use out. Its width property must be 1. Found 2/);
+    }).toThrow(
+      /cannot use out image. Its width property must be 1. Received 2/,
+    );
   });
   it('should throw if out is not a mask', () => {
     const img = new Image(1, 2);
     // @ts-expect-error: testing JS problem
     expect(() => imageToOutputMask(img, { out: 'str' })).toThrow(
-      /out must be a Mask object/,
+      'out must be a Mask',
     );
   });
   it('should keep source origin', () => {
@@ -223,13 +227,15 @@ describe('maskToOutputMask', () => {
     const out = new Mask(2, 2);
     expect(() => {
       maskToOutputMask(mask, { out });
-    }).toThrow(/cannot use out. Its width property must be 1. Found 2/);
+    }).toThrow(
+      /cannot use out image. Its width property must be 1. Received 2/,
+    );
   });
   it('should throw if out is not a mask', () => {
     const mask = new Mask(1, 2);
     // @ts-expect-error: testing JS problem
     expect(() => maskToOutputMask(mask, { out: 'str' })).toThrow(
-      /out must be a Mask object/,
+      'out must be a Mask',
     );
   });
   it('should clone data to out', () => {

@@ -200,7 +200,5 @@ test('should throw on different array length', () => {
 
   expect(() => {
     image.correctColor(measuredColors, referenceColors);
-  }).toThrow(
-    'correctColor: number of measured colors and reference colors differ',
-  );
+  }).toThrow('number of measured colors and reference colors must be the same');
 });
