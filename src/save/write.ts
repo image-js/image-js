@@ -1,6 +1,6 @@
 import fs from 'node:fs';
-import { dirname, extname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import nodePath from 'node:path';
+import url from 'node:url';
 
 import { Mask, Image } from '..';
 
@@ -74,14 +74,14 @@ export async function write(
   options?: WriteOptionsPng | WriteOptionsJpeg | WriteOptions,
 ): Promise<void> {
   if (typeof path !== 'string') {
-    path = fileURLToPath(path);
+    path = url.fileURLToPath(path);
   }
   if (image instanceof Mask) {
     image = image.convertColor('GREY');
   }
   const toWrite = getDataToWrite(path, image, options);
   if (options?.recursive) {
-    const dir = dirname(path);
+    const dir = nodePath.dirname(path);
     await fs.promises.mkdir(dir, { recursive: true });
   }
   await fs.promises.writeFile(path, toWrite);
@@ -100,14 +100,14 @@ export function writeSync(
   options?: WriteOptionsPng | WriteOptionsJpeg | WriteOptions,
 ): void {
   if (typeof path !== 'string') {
-    path = fileURLToPath(path);
+    path = url.fileURLToPath(path);
   }
   if (image instanceof Mask) {
     image = image.convertColor('GREY');
   }
   const toWrite = getDataToWrite(path, image, options);
   if (options?.recursive) {
-    const dir = dirname(path);
+    const dir = nodePath.dirname(path);
     fs.mkdirSync(dir, { recursive: true });
   }
   fs.writeFileSync(path, toWrite);
@@ -128,7 +128,7 @@ function getDataToWrite(
 ): Uint8Array {
   let format: ImageFormat;
   if (!options || !('format' in options)) {
-    const extension = extname(destinationPath).slice(1).toLowerCase();
+    const extension = nodePath.extname(destinationPath).slice(1).toLowerCase();
     if (extension === 'png') {
       format = 'png';
       return encode(image, { format });
