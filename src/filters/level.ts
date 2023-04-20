@@ -17,31 +17,31 @@ export interface LevelOptions {
    *
    * @default 0
    */
-  inputMin?: number;
+  inputMin?: number | number[];
   /**
    * Maximal input value.
    *
    * @default image.maxValue
    */
-  inputMax?: number;
+  inputMax?: number | number[];
   /**
    * Minimal output value.
    *
    * @default 0
    */
-  outputMin?: number;
+  outputMin?: number | number[];
   /**
    * Maximal output value.
    *
    * @default image.maxValue
    */
-  outputMax?: number;
+  outputMax?: number | number[];
   /**
    * Specifies the shape of the curve connecting the two points.
    *
    * @default 1
    */
-  gamma?: number;
+  gamma?: number | number[];
   /**
    * Image to which to output.
    */
@@ -75,17 +75,31 @@ export function level(image: Image, options: LevelOptions = {}) {
 
   const clamp = getClamp(image);
 
+  inputMin = getValueArray(inputMin, image.channels);
+  inputMax = getValueArray(inputMax, image.channels);
+  outputMin = getValueArray(outputMin, image.channels);
+  outputMax = getValueArray(outputMax, image.channels);
+  gamma = getValueArray(gamma, image.channels);
+
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {
       for (let channel of channels) {
         let currentValue = image.getValue(column, row, channel);
 
-        let clamped = Math.max(Math.min(currentValue, inputMax), inputMin);
+        let clamped = Math.max(
+          Math.min(currentValue, inputMax[channel]),
+          inputMin[channel],
+        );
 
-        const ratio = clamp((clamped - inputMin) / (inputMax - inputMin));
+        const ratio = clamp(
+          (clamped - inputMin[channel]) /
+            (inputMax[channel] - inputMin[channel]),
+        );
 
         const result = clamp(
-          ratio ** (1 / gamma) * (outputMax - outputMin) + outputMin,
+          ratio ** (1 / gamma[channel]) *
+            (outputMax[channel] - outputMin[channel]) +
+            outputMin[channel],
         );
 
         newImage.setValue(column, row, channel, result);
@@ -93,4 +107,26 @@ export function level(image: Image, options: LevelOptions = {}) {
     }
   }
   return newImage;
+}
+
+/**
+ * Get an array with correct values for each channel to process.
+ *
+ * @param value - Number or array to transform to the final array.
+ * @param imageChannels - Number of channels processed in the level function.
+ * @returns Array of values for each channel.
+ */
+function getValueArray(
+  value: number | number[],
+  imageChannels: number,
+): number[] {
+  if (Array.isArray(value)) {
+    if (value.length === imageChannels) {
+      return value;
+    } else {
+      throw new Error('array length is not compatible with channel option');
+    }
+  } else {
+    return new Array(imageChannels).fill(value);
+  }
 }
