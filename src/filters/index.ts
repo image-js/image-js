@@ -2,6 +2,7 @@ export * from './and';
 export * from './blur';
 export * from './convolution';
 export * from './derivativeFilter';
+export * from './enhanceContrast';
 export * from './gaussianBlur';
 export * from './gradientFilter';
 export * from './hypotenuse';
