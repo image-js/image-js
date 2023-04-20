@@ -154,3 +154,17 @@ test('3x1 rgba image, arrays as input', () => {
     [100, 100, 80, 50],
   ]);
 });
+
+test('parameters array length error', () => {
+  const image = testUtils.createRgbaImage([
+    [0, 10, 20, 50],
+    [30, 40, 50, 50],
+    [60, 70, 80, 50],
+  ]);
+
+  expect(() => {
+    image.level({
+      inputMin: [0],
+    });
+  }).toThrow('array length is not compatible with channel option');
+});
