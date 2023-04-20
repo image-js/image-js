@@ -1,7 +1,6 @@
 import { Image } from '../Image';
 import checkProcessable from '../utils/checkProcessable';
 import { ImageColorModel } from '../utils/constants/colorModels';
-import { getOutputImage } from '../utils/getOutputImage';
 
 export interface AutoLevelOptions {
   /**
@@ -21,9 +20,6 @@ export function autoLevel(image: Image, options: AutoLevelOptions = {}): Image {
   checkProcessable(image, {
     bitDepth: [8, 16],
   });
-
-  let newImage = getOutputImage(image, options, { clone: true });
-
   const minMax = image.minMax();
 
   let channels: number[] = new Array(image.components)
@@ -36,7 +32,7 @@ export function autoLevel(image: Image, options: AutoLevelOptions = {}): Image {
     channels = [0, 1, 2];
   }
 
-  return newImage.level({
+  return image.level({
     inputMin: minMax.min,
     inputMax: minMax.max,
     outputMin: 0,
