@@ -9,7 +9,7 @@ test('should work with crop', () => {
     [0, 0, 0, 0, 0],
   ]);
 
-  const mask = image.threshold({ threshold: 100 });
+  const mask = image.threshold({ threshold: 100 / 255 });
 
   expect(mask).toMatchMaskData([
     [0, 0, 0, 0, 0],

@@ -8,7 +8,7 @@ import { fromMask, Image } from '../../../src';
  */
 export function testGetConvexHull(image: Image): Image {
   const grey = image.convertColor('GREY');
-  const mask = grey.threshold({ threshold: 35 });
+  const mask = grey.threshold({ threshold: 35 / 255 });
   const roiMapManager = fromMask(mask);
 
   const rois = roiMapManager.getRois({ kind: 'black' });

@@ -6,7 +6,7 @@ import { fromMask, Image } from '../../../src';
  */
 export function testPaintMask(image: Image): Image {
   const grey = image.convertColor('GREY');
-  const mask = grey.threshold({ threshold: 100 });
+  const mask = grey.threshold({ threshold: 100 / 255 });
 
   const roiMapManager = fromMask(mask);
 

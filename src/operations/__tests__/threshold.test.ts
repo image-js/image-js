@@ -3,7 +3,7 @@ import { computeThreshold, threshold } from '../threshold';
 test('threshold with a fixed value of 100', () => {
   const testImage = testUtils.load('opencv/test.png');
   const grey = testImage.convertColor('GREY');
-  const th = threshold(grey, { threshold: 100 });
+  const th = threshold(grey, { threshold: 100 / 255 });
 
   const expected = testUtils.createMask([
     [1, 1, 1, 1, 1, 1, 1, 1],
@@ -70,7 +70,7 @@ test('threshold in percents', () => {
     [50, 60, 70],
   ]);
 
-  const th = threshold(grey, { threshold: '10%' });
+  const th = threshold(grey, { threshold: 0.1 });
 
   const expected = testUtils.createMask([
     [0, 0, 0],
@@ -87,27 +87,10 @@ test('error too many channels', () => {
     /threshold can only be computed on images with one channel/,
   );
 });
-test('error threshold in percents out of range', () => {
-  const testImage = testUtils.load('opencv/test.png');
-
-  expect(() => threshold(testImage, { threshold: '150%' })).toThrow(
-    /threshold: threshold in percents is out of range 0 to 100/,
-  );
-});
 test('error threshold out of range', () => {
   const testImage = testUtils.load('opencv/test.png');
 
   expect(() => threshold(testImage, { threshold: 450 })).toThrow(
-    /invalid value: 450. It must be a positive value smaller than 256/,
-  );
-});
-test('error threshold string format wrong', () => {
-  const testImage = testUtils.load('opencv/test.png');
-
-  expect(() => threshold(testImage, { threshold: '150' })).toThrow(
-    /threshold: unrecognised threshold format/,
-  );
-  expect(() => threshold(testImage, { threshold: 'abc%' })).toThrow(
-    /threshold: unrecognised threshold format/,
+    /threshold must be a value between 0 and 1/,
   );
 });
