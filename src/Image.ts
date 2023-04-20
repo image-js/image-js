@@ -88,6 +88,7 @@ import {
 } from './operations';
 import { cropAlpha, CropAlphaOptions } from './operations/cropAlpha';
 import { ImageColorModel, colorModels } from './utils/constants/colorModels';
+import { getMinMax } from './utils/getMinMax';
 import { validateChannel, validateValue } from './utils/validators';
 
 import {
@@ -445,6 +446,15 @@ export class Image {
    */
   public setValueByPoint(point: Point, channel: number, value: number): void {
     this.setValue(point.column, point.row, channel, value);
+  }
+
+  /**
+   * Find the min and max values of each channel of the image.
+   *
+   * @returns An object with arrays of the min and max values.
+   */
+  public minMax(): { min: number[]; max: number[] } {
+    return getMinMax(this);
   }
 
   /**

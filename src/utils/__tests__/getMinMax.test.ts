@@ -35,3 +35,15 @@ test('rgba image', () => {
     max: [4, 9, 7, 7],
   });
 });
+
+test('image.minMax', () => {
+  const image = testUtils.createRgbaImage([
+    [1, 2, 3, 8],
+    [5, 1, 0, 5],
+    [7, 9, 2, 7],
+  ]);
+  expect(image.minMax()).toStrictEqual({
+    min: [1, 1, 0, 5],
+    max: [7, 9, 3, 8],
+  });
+});
