@@ -34,7 +34,7 @@ export interface DrawRectangleOptions<OutType> {
    * Rectangle fill color array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
    */
-  fillColor?: number[];
+  fillColor?: number[] | 'none';
   /**
    * Image to which the resulting image has to be put.
    */
@@ -65,7 +65,7 @@ export function drawRectangle(
     width = image.width,
     height = image.height,
     strokeColor: color = getDefaultColor(image),
-    fillColor: fill,
+    fillColor,
   } = options;
   const { column, row } = origin;
 
@@ -96,16 +96,18 @@ export function drawRectangle(
       newImage.setVisiblePixel(column, currentRow, color);
       newImage.setVisiblePixel(column + width - 1, currentRow, color);
 
-      if (fill) {
+      if (fillColor) {
+        if (fillColor === 'none') continue;
         for (let col = column + 1; col < column + width - 1; col++) {
-          newImage.setVisiblePixel(col, currentRow, fill);
-          newImage.setVisiblePixel(col, currentRow, fill);
+          newImage.setVisiblePixel(col, currentRow, fillColor);
+          newImage.setVisiblePixel(col, currentRow, fillColor);
         }
       }
     }
   }
   // color is none but fill is defined
-  else if (fill) {
+  else if (fillColor) {
+    if (fillColor === 'none') return newImage;
     for (
       let currentRow = row + 1;
       currentRow < row + height - 1;
@@ -116,8 +118,8 @@ export function drawRectangle(
         currentColumn < column + width - 1;
         currentColumn++
       ) {
-        newImage.setVisiblePixel(currentColumn, currentRow, fill);
-        newImage.setVisiblePixel(currentColumn, currentRow, fill);
+        newImage.setVisiblePixel(currentColumn, currentRow, fillColor);
+        newImage.setVisiblePixel(currentColumn, currentRow, fillColor);
       }
     }
   }

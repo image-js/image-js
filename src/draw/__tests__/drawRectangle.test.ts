@@ -168,6 +168,31 @@ test('draw rectangle with no options', () => {
   expect(result).not.toBe(image);
 });
 
+test('fillColor = none', () => {
+  const image = testUtils.createGreyImage([
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+  ]);
+  const result = image.drawRectangle({
+    width: image.width,
+    height: image.height,
+    fillColor: 'none',
+  });
+  expect(result).toMatchImageData([
+    [0, 0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 1, 0],
+    [0, 1, 1, 1, 1, 0],
+    [0, 1, 1, 1, 1, 0],
+    [0, 1, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0],
+  ]);
+  expect(result).not.toBe(image);
+});
+
 test('outside of image', () => {
   const image = testUtils.createGreyImage([
     [1, 1, 1, 1, 1, 1],
