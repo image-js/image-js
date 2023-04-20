@@ -76,7 +76,7 @@ test('innerBorders false', () => {
 
   const roi = roiMapManager.getRois({ kind: 'white' })[0];
   const roiMask = getMask(roi, {
-    innerBorders: false,
+    solidFill: true,
   });
 
   expect(roiMask).toMatchMaskData([
@@ -96,7 +96,7 @@ test('innerBorders true', () => {
 
   const roi = roiMapManager.getRois({ kind: 'white' })[0];
   const roiMask = getMask(roi, {
-    innerBorders: true,
+    solidFill: false,
   });
 
   expect(roiMask).toMatchMaskData([
@@ -118,7 +118,7 @@ test('larger mask, innerBorders false', () => {
 
   const roi = roiMapManager.getRois({ kind: 'white' })[0];
   const roiMask = getMask(roi, {
-    innerBorders: false,
+    solidFill: true,
   });
 
   expect(roiMask).toMatchMaskData([
@@ -140,8 +140,7 @@ test('allowCorners true', () => {
 
   const roi = roiMapManager.getRois({ kind: 'white' })[0];
   const roiMask = getMask(roi, {
-    allowCorners: true,
-    innerBorders: false,
+    solidFill: true,
   });
 
   expect(roiMask).toMatchMaskData([

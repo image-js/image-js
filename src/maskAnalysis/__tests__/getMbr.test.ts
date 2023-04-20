@@ -215,7 +215,7 @@ test('draw mbr on large image', () => {
 
   const roi = rois.sort((a, b) => b.surface - a.surface)[0];
 
-  const roiMask = roi.getMask({ innerBorders: false });
+  const roiMask = roi.getMask({ solidFill: true });
   let mbr = roiMask.getMbr();
 
   let result = rgbaImage.paintMask(roiMask, {

@@ -4,27 +4,22 @@ import { Roi } from './Roi';
 
 export interface GetMaskOptions {
   /**
-   * Whether the inner borders should be returned too.
+   * Should the ROI holes be filled in the resulting mask?
    *
    * @default false
    */
-  innerBorders?: boolean;
-  /**
-   * Consider pixels connected by corners? This option is only useful if filled = false.
-   *
-   * @default false
-   */
-  allowCorners?: boolean;
+  solidFill?: boolean;
 }
+
 /**
- * Generate a mask of an ROI. You can specify the kind of mask you want using the `kind` option.
+ * Generate a mask of an ROI.
  *
  * @param roi - The ROI to generate a mask for.
  * @param options - Get mask options.
  * @returns The ROI mask.
  */
 export function getMask(roi: Roi, options: GetMaskOptions = {}): Mask {
-  const { innerBorders = true } = options;
+  const { solidFill = false } = options;
   let mask = new Mask(roi.width, roi.height, { origin: roi.origin });
 
   for (let row = 0; row < roi.height; row++) {
@@ -40,7 +35,7 @@ export function getMask(roi: Roi, options: GetMaskOptions = {}): Mask {
     }
   }
 
-  if (!innerBorders) {
+  if (solidFill) {
     mask.solidFill({ out: mask });
   }
 
