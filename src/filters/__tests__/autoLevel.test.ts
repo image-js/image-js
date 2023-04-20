@@ -1,4 +1,4 @@
-import { enhanceContrast } from '../enhanceContrast';
+import { autoLevel } from '../autoLevel';
 
 test('3x1 rgba image, custom output min and max', () => {
   const image = testUtils.createRgbaImage([
@@ -7,7 +7,7 @@ test('3x1 rgba image, custom output min and max', () => {
     [255, 200, 0, 50],
   ]);
 
-  const result = enhanceContrast(image);
+  const result = autoLevel(image);
 
   expect(result).toMatchImageData([
     [0, 0, 0, 50],
@@ -18,7 +18,7 @@ test('3x1 rgba image, custom output min and max', () => {
 
 test('1x3 grey image', () => {
   const image = testUtils.createGreyImage([[50, 100]]);
-  expect(enhanceContrast(image)).toMatchImageData([[0, 255]]);
+  expect(autoLevel(image)).toMatchImageData([[0, 255]]);
 });
 
 test('alpha should not be modified', () => {
@@ -26,7 +26,7 @@ test('alpha should not be modified', () => {
     [50, 100],
     [100, 50],
   ]);
-  expect(enhanceContrast(image)).toMatchImageData([
+  expect(autoLevel(image)).toMatchImageData([
     [0, 100],
     [255, 50],
   ]);
@@ -38,7 +38,7 @@ test('out option', () => {
     [30, 40],
     [60, 70],
   ]);
-  const result = enhanceContrast(image, { out: image });
+  const result = autoLevel(image, { out: image });
   expect(result).toMatchImageData([
     [0, 10],
     [127, 40],
@@ -49,5 +49,5 @@ test('out option', () => {
 
 test('bigger image', () => {
   const image = testUtils.load('featureMatching/id-crops/crop1.png');
-  expect(enhanceContrast(image)).toMatchImageSnapshot();
+  expect(autoLevel(image)).toMatchImageSnapshot();
 });

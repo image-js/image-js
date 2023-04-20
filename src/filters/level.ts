@@ -124,7 +124,9 @@ function getValueArray(
     if (value.length === imageChannels) {
       return value;
     } else {
-      throw new Error('array length is not compatible with channel option');
+      throw new RangeError(
+        'array length is not compatible with channel option',
+      );
     }
   } else {
     return new Array(imageChannels).fill(value);

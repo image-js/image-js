@@ -3,7 +3,7 @@ import checkProcessable from '../utils/checkProcessable';
 import { ImageColorModel } from '../utils/constants/colorModels';
 import { getOutputImage } from '../utils/getOutputImage';
 
-export interface EnhanceContrastOptions {
+export interface AutoLevelOptions {
   /**
    * Image to which to output.
    */
@@ -17,10 +17,7 @@ export interface EnhanceContrastOptions {
  * @param options - Enhance contrast options.
  * @returns The enhanced image.
  */
-export function enhanceContrast(
-  image: Image,
-  options: EnhanceContrastOptions = {},
-): Image {
+export function autoLevel(image: Image, options: AutoLevelOptions = {}): Image {
   checkProcessable(image, {
     bitDepth: [8, 16],
   });
