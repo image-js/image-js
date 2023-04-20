@@ -64,8 +64,8 @@ export function drawRectangle(
     origin = { column: 0, row: 0 },
     width = image.width,
     height = image.height,
-    strokeColor: color = getDefaultColor(image),
-    fillColor,
+    strokeColor = getDefaultColor(image),
+    fillColor = 'none',
   } = options;
   const { column, row } = origin;
 
@@ -79,35 +79,25 @@ export function drawRectangle(
     newImage = maskToOutputMask(image, options, { clone: true });
   }
 
-  if (color !== 'none') {
+  if (strokeColor !== 'none') {
     for (
       let currentColumn = column;
       currentColumn < column + width;
       currentColumn++
     ) {
-      newImage.setVisiblePixel(currentColumn, row, color);
-      newImage.setVisiblePixel(currentColumn, row + height - 1, color);
+      newImage.setVisiblePixel(currentColumn, row, strokeColor);
+      newImage.setVisiblePixel(currentColumn, row + height - 1, strokeColor);
     }
     for (
       let currentRow = row + 1;
       currentRow < row + height - 1;
       currentRow++
     ) {
-      newImage.setVisiblePixel(column, currentRow, color);
-      newImage.setVisiblePixel(column + width - 1, currentRow, color);
-
-      if (fillColor) {
-        if (fillColor === 'none') continue;
-        for (let col = column + 1; col < column + width - 1; col++) {
-          newImage.setVisiblePixel(col, currentRow, fillColor);
-          newImage.setVisiblePixel(col, currentRow, fillColor);
-        }
-      }
+      newImage.setVisiblePixel(column, currentRow, strokeColor);
+      newImage.setVisiblePixel(column + width - 1, currentRow, strokeColor);
     }
   }
-  // color is none but fill is defined
-  else if (fillColor) {
-    if (fillColor === 'none') return newImage;
+  if (fillColor !== 'none') {
     for (
       let currentRow = row + 1;
       currentRow < row + height - 1;
