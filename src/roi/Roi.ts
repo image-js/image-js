@@ -13,20 +13,23 @@ import { RoiMap } from './RoiMapManager';
 import { getBorderPoints } from './getBorderPoints';
 import { getMask, GetMaskOptions } from './getMask';
 
+interface Border {
+  connectedID: number; // refers to the roiID of the contiguous ROI
+  length: number;
+}
 interface Computed {
   perimeter: number;
-  borderIDs: number[];
+  borders: Border[]; // external and internal ids which are not equal to the current roi ID
   perimeterInfo: { one: number; two: number; three: number; four: number };
   externalLengths: number[];
   borderLengths: number[];
   box: number;
   points: number[][];
   holesInfo: { number: number; surface: number };
-  external: number;
   boxIDs: number[];
   eqpc: number;
   ped: number;
-  externalIDs: number[];
+  externalBorders: Border[];
   roundness: number;
   convexHull: { points: Point[]; surface: number; perimeter: number };
   mbr: Mbr;
@@ -60,9 +63,10 @@ export class Roi {
   /**
    * Surface of the ROI.
    */
-
   public readonly surface: number;
-
+  /**
+   * Cached values of properties to improve performance
+   */
   #computed: Partial<Computed>;
 
   public constructor(
@@ -91,7 +95,7 @@ export class Roi {
   }
 
   /**
-   * Return the value at the given coordinates in an ROI map.
+   * Returns the value at the given coordinates in an ROI map.
    *
    * @param column - Column of the value.
    * @param row - Row of the value.
@@ -102,7 +106,7 @@ export class Roi {
   }
 
   /**
-   * Return the ratio between the width and the height of the bounding rectangle of the ROI.
+   * Returns the ratio between the width and the height of the bounding rectangle of the ROI.
    *
    * @returns The width by height ratio.
    */
@@ -111,7 +115,7 @@ export class Roi {
   }
 
   /**
-   * Generate a mask of an ROI. You can specify the kind of mask you want using the `kind` option.
+   * Generates a mask of an ROI. You can specify the kind of mask you want using the `kind` option.
    *
    * @param options - Get Mask options
    * @returns The ROI mask.
@@ -139,13 +143,6 @@ export class Roi {
   public getBorderPoints(options?: GetBorderPointsOptions): Array<Point> {
     return getBorderPoints(this, options);
   }
-  //TODO The ids and length should be in one computed property which returns an array of {id: number, length: number}
-  _computeBorderIDs(): { ids: number[]; lengths: number[] } {
-    const borders = getBorders(this);
-    this.#computed.borderIDs = borders.ids;
-    this.#computed.borderLengths = borders.lengths;
-    return borders;
-  }
 
   /**
    * Return an array of ROIs IDs that are included in the current ROI.
@@ -161,9 +158,9 @@ export class Roi {
   /**
    * Return an array of ROIs IDs that touch the current ROI.
    */
-  get externalIDs(): number[] {
-    return this.#getComputed('externalIDs', () => {
-      return this.getExternalIDs().externalIDs;
+  get externalBorders(): Border[] {
+    return this.#getComputed('externalBorders', () => {
+      return this.getExternalBorders();
     });
   }
   get perimeterInfo() {
@@ -189,7 +186,10 @@ export class Roi {
       delta * (info.two + info.three * 2 + info.four)
     );
   }
-
+  /**
+   * An array of tuples, each tuple being the x and y coordinates of the ROI point.
+   * the current ROI points
+   */
   get points() {
     return this.#getComputed('points', () => {
       let points = [];
@@ -221,63 +221,62 @@ export class Roi {
       return 2 * Math.sqrt(this.surface / Math.PI);
     });
   }
-
+  /**
+   * Number of holes in the ROI and their total surface.
+   * Used to calculate fillRatio.
+   */
   get holesInfo() {
     return this.#getComputed('holesInfo', () => {
       return getHolesInfo(this);
     });
   }
 
-  getExternalIDs(): {
-    externalIDs: number[];
-    externalLengths: number[];
-  } {
+  getExternalBorders(): Border[] {
     // take all the borders and remove the internal one ...
-    let borders = this.borderIDs;
-    let lengths = this.borderLengths;
+    let borders = this.borders;
 
-    this.#computed.externalLengths = [];
-    this.#computed.externalIDs = [];
-
+    let externalBorders = [];
+    let externalIDs = [];
     let internals = this.internalIDs;
 
-    for (let i = 0; i < borders.length; i++) {
-      if (!internals.includes(borders[i])) {
-        this.#computed.externalIDs.push(borders[i]);
-        this.#computed.externalLengths.push(lengths[i]);
+    for (let border of borders) {
+      if (!internals.includes(border.connectedID)) {
+        const element: Border = {
+          connectedID: border.connectedID,
+          length: border.length,
+        };
+        externalIDs.push(element.connectedID);
+        externalBorders.push(element);
       }
     }
-    const externalIDs = this.#computed.externalIDs;
-    const externalLengths = this.#computed.externalLengths;
-    return { externalIDs, externalLengths };
+
+    return externalBorders;
   }
-  //TODO Should be merged together in one borders property
-  get borderIDs() {
-    return this.#getComputed('borderIDs', () => {
-      return this._computeBorderIDs().ids;
+
+  /**
+   *Calculates the borders' IDs and lengths
+   */
+  get borders() {
+    return this.#getComputed('borders', () => {
+      return getBorders(this);
     });
   }
 
-  get borderLengths() {
-    return this.#getComputed('borderLengths', () => {
-      return this._computeBorderIDs().lengths;
-    });
-  }
   /**
-   * Getter that calculates fill ratio of the ROI
+   * Calculates fill ratio of the ROI
    */
   get fillRatio() {
     return this.surface / (this.surface + this.holesInfo.surface);
   }
   /**
-   * Getter that calculates sphericity of the ROI
+   * Calculates sphericity of the ROI
    */
   get sphericity() {
     return (2 * Math.sqrt(this.surface * Math.PI)) / this.perimeter;
   }
 
   /**
-   * Getter that calculates solidity of the ROI
+   * Calculates solidity of the ROI
    */
   get solidity() {
     return this.surface / getConvexHull(this.getMask()).surface;
@@ -288,7 +287,9 @@ export class Roi {
       return getConvexHull(this.getMask());
     });
   }
-
+  /**
+   * Calculates minimum bounding rectangle
+   */
   get mbr() {
     return this.#getComputed('mbr', () => {
       return getMbr(this.getMask());
@@ -353,6 +354,7 @@ export class Roi {
     });
   }
 
+  //  A helper function to cache already calculated properties
   #getComputed<T extends keyof Computed>(
     property: T,
     callback: () => Computed[T],
@@ -365,6 +367,12 @@ export class Roi {
     return this.#computed[property] as Computed[T];
   }
   //TODO Make this private
+  /**
+   * Calculates the correct index on the map of ROI
+   *
+   * @param y
+   * @param x
+   */
   computeIndex(y: number, x: number): number {
     const roiMap = this.getMap();
     return (y + this.origin.row) * roiMap.width + x + this.origin.column;
@@ -383,7 +391,7 @@ function getPerimeterInfo(roi: Roi) {
   let two = 0;
   let three = 0;
   let four = 0;
-
+  let externalIDs = roi.externalBorders.map((element) => element.connectedID);
   for (let column = 0; column < roi.width; column++) {
     for (let row = 0; row < roi.height; row++) {
       let target = roi.computeIndex(row, column);
@@ -391,25 +399,25 @@ function getPerimeterInfo(roi: Roi) {
         let nbAround = 0;
         if (column === 0) {
           nbAround++;
-        } else if (roi.externalIDs.includes(data[target - 1])) {
+        } else if (externalIDs.includes(data[target - 1])) {
           nbAround++;
         }
 
         if (column === roiMap.width - 1) {
           nbAround++;
-        } else if (roi.externalIDs.includes(data[target + 1])) {
+        } else if (externalIDs.includes(data[target + 1])) {
           nbAround++;
         }
 
         if (row === 0) {
           nbAround++;
-        } else if (roi.externalIDs.includes(data[target - roiMap.width])) {
+        } else if (externalIDs.includes(data[target - roiMap.width])) {
           nbAround++;
         }
 
         if (row === roiMap.height - 1) {
           nbAround++;
-        } else if (roi.externalIDs.includes(data[target + roiMap.width])) {
+        } else if (externalIDs.includes(data[target + roiMap.width])) {
           nbAround++;
         }
         switch (nbAround) {
@@ -454,7 +462,12 @@ function getHolesInfo(roi: Roi) {
     surface,
   };
 }
-
+/**
+ * Calculates internal IDs of the ROI
+ *
+ * @param roi
+ * @returns internalIDs
+ */
 function getInternalIDs(roi: Roi) {
   let internal = [roi.id];
   let roiMap = roi.getMap();
@@ -557,7 +570,7 @@ function getBoxIDs(roi: Roi): number[] {
  * @param roi - ROI
  * @returns borders' length and their IDs
  */
-function getBorders(roi: Roi): { ids: number[]; lengths: number[] } {
+function getBorders(roi: Roi): Border[] {
   const roiMap = roi.getMap();
   const data = roiMap.data;
   let surroudingIDs = new Set<number>(); // allows to get a unique list without indexOf
@@ -600,12 +613,11 @@ function getBorders(roi: Roi): { ids: number[]; lengths: number[] } {
       }
     }
   }
-  let ids: number[] = Array.from(surroudingIDs);
-  let borderLengths = ids.map((id) => {
-    return surroundingBorders.get(id);
+  let id: number[] = Array.from(surroudingIDs);
+  return id.map((id) => {
+    return {
+      connectedID: id,
+      length: surroundingBorders.get(id),
+    };
   });
-  return {
-    ids,
-    lengths: borderLengths,
-  };
 }

@@ -32,6 +32,7 @@ describe('ROI perimeter', () => {
     ]);
 
     const rois = fromMask(mask).getRois();
+
     expect(rois[0].perimeter).toBeCloseTo(9.656, 2);
   });
   it('perimeter of ROI surrounded by 4 external sides', () => {
