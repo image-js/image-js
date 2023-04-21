@@ -275,6 +275,10 @@ export class Roi {
     return (2 * Math.sqrt(this.surface * Math.PI)) / this.perimeter;
   }
 
+  get filledSurface() {
+    return this.surface + this.holesInfo.surface;
+  }
+
   /**
    * Calculates solidity of the ROI
    */
@@ -327,6 +331,7 @@ export class Roi {
       perimeter: this.perimeter,
       convexHull: this.convexHull,
       mbr: this.mbr,
+      filledSurface: this.filledSurface,
       centroid: this.centroid,
     };
   }
