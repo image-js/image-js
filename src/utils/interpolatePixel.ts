@@ -90,21 +90,28 @@ function interpolateBilinear(
   const px0 = Math.floor(column);
   const py0 = Math.floor(row);
 
-  if (px0 === column && py0 === row) {
-    return interpolateBorder(px0, py0, channel, image);
-  }
-
   const px1 = px0 + 1;
   const py1 = py0 + 1;
 
-  const vx0y0 = interpolateBorder(px0, py0, channel, image);
-  const vx1y0 = interpolateBorder(px1, py0, channel, image);
-  const vx0y1 = interpolateBorder(px0, py1, channel, image);
-  const vx1y1 = interpolateBorder(px1, py1, channel, image);
+  if (px1 < image.width && py1 < image.height && px0 >= 0 && py0 >= 0) {
+    const vx0y0 = image.getValue(px0, py0, channel);
+    const vx1y0 = image.getValue(px1, py0, channel);
+    const vx0y1 = image.getValue(px0, py1, channel);
+    const vx1y1 = image.getValue(px1, py1, channel);
 
-  const r1 = (px1 - column) * vx0y0 + (column - px0) * vx1y0;
-  const r2 = (px1 - column) * vx0y1 + (column - px0) * vx1y1;
-  return round((py1 - row) * r1 + (row - py0) * r2);
+    const r1 = (px1 - column) * vx0y0 + (column - px0) * vx1y0;
+    const r2 = (px1 - column) * vx0y1 + (column - px0) * vx1y1;
+    return round((py1 - row) * r1 + (row - py0) * r2);
+  } else {
+    const vx0y0 = interpolateBorder(px0, py0, channel, image);
+    const vx1y0 = interpolateBorder(px1, py0, channel, image);
+    const vx0y1 = interpolateBorder(px0, py1, channel, image);
+    const vx1y1 = interpolateBorder(px1, py1, channel, image);
+
+    const r1 = (px1 - column) * vx0y0 + (column - px0) * vx1y0;
+    const r2 = (px1 - column) * vx0y1 + (column - px0) * vx1y1;
+    return round((py1 - row) * r1 + (row - py0) * r2);
+  }
 }
 
 /**
