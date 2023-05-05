@@ -12,6 +12,7 @@ import { Point } from '../utils/geometry/points';
 import { RoiMap } from './RoiMapManager';
 import { getBorderPoints } from './getBorderPoints';
 import { getMask, GetMaskOptions } from './getMask';
+import { Ellipse, getEllipse } from './properties/getEllipse';
 
 interface Border {
   connectedID: number; // refers to the roiID of the contiguous ROI
@@ -36,6 +37,7 @@ interface Computed {
   fillRatio: number;
   internalIDs: number[];
   feret: Feret;
+  ellipse: Ellipse;
   centroid: Point;
 }
 export class Roi {
@@ -392,6 +394,13 @@ export class Roi {
     });
   }
 
+  get ellipse(): Ellipse {
+    return this.#getComputed('ellipse', () => {
+      const ellipse = getEllipse(this);
+      return ellipse;
+    });
+  }
+
   /**
    * Number of holes in the ROI and their total surface.
    * Used to calculate fillRatio.
@@ -608,7 +617,7 @@ export class Roi {
    * @param x
    */
   computeIndex(y: number, x: number): number {
-    const roiMap = this.getMap();
+    const roiMap = this.map;
     return (y + this.origin.row) * roiMap.width + x + this.origin.column;
   }
 }
