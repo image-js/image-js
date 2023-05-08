@@ -54,7 +54,7 @@
     "ml-convolution": "^2.0.0",
     "ml-matrix": "^6.10.4",
     "ml-regression-multivariate-linear": "^2.0.4",
-    "ml-spectra-processing": "^12.1.0",
+    "ml-spectra-processing": "^12.4.0",
     "robust-point-in-polygon": "^1.0.3",
     "ssim.js": "^3.5.0",
     "tiff": "^5.0.3"
@@ -69,7 +69,7 @@
     "@types/react": "^18.0.35",
     "@types/react-dom": "^18.0.11",
     "@types/robust-point-in-polygon": "^1.0.2",
-    "@vitejs/plugin-react": "^3.1.0",
+    "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.4.14",
     "clsx": "^1.2.1",
     "cross-env": "^7.0.3",
@@ -91,6 +91,6 @@
     "tailwindcss": "^3.3.1",
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.4",
-    "vite": "^4.2.1"
+    "vite": "^4.3.5"
   }
 }
