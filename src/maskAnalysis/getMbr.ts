@@ -33,6 +33,10 @@ export interface Mbr {
    * Angle between the rectangle and a horizontal line in radians.
    */
   angle: number;
+  /**
+   *Ratio between width and height.
+   */
+  aspectRatio: number;
 }
 
 /**

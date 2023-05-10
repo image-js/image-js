@@ -20,6 +20,7 @@ export function getMbrFromPoints(points: readonly Point[]): Mbr {
       height: 0,
       surface: 0,
       perimeter: 0,
+      aspectRatio: 0,
     };
   }
   if (points.length === 1) {
@@ -30,6 +31,7 @@ export function getMbrFromPoints(points: readonly Point[]): Mbr {
       angle: 0,
       width: 0,
       height: 0,
+      aspectRatio: 1,
     };
   }
 
@@ -92,6 +94,7 @@ export function getMbrFromPoints(points: readonly Point[]): Mbr {
   const width = mbr[0].column - mbr[2].column;
   const height = mbr[0].row - mbr[2].row;
   const mbrAngle = getMbrAngle(mbrRotated);
+  const ratio = height / width;
 
   return {
     points: mbrRotated,
@@ -100,5 +103,6 @@ export function getMbrFromPoints(points: readonly Point[]): Mbr {
     width,
     height,
     perimeter: 2 * width + 2 * height,
+    aspectRatio: ratio,
   };
 }

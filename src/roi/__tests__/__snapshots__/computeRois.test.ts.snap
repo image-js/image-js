@@ -71,6 +71,7 @@ exports[`3x3 mask 1`] = `
     "id": 1,
     "mbr": {
       "angle": -0,
+      "aspectRatio": 1.4999999999999998,
       "height": 2.9999999999999996,
       "perimeter": 10,
       "points": [
@@ -171,6 +172,7 @@ exports[`3x3 mask 1`] = `
     "id": 2,
     "mbr": {
       "angle": 0,
+      "aspectRatio": 1,
       "height": 1,
       "perimeter": 4,
       "points": [
@@ -284,6 +286,7 @@ exports[`3x3 mask 2`] = `
     "id": -1,
     "mbr": {
       "angle": -0,
+      "aspectRatio": 1.4999999999999998,
       "height": 2.9999999999999996,
       "perimeter": 10,
       "points": [
