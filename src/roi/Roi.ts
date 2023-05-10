@@ -237,8 +237,8 @@ export class Roi {
       let two = 0;
       let three = 0;
       let four = 0;
-      let externalIDs = this.externalBorders.map(
-        (element) => element.connectedID,
+      let externalIDs = new Set(
+        this.externalBorders.map((element) => element.connectedID),
       );
       for (let column = 0; column < this.width; column++) {
         for (let row = 0; row < this.height; row++) {
@@ -247,25 +247,25 @@ export class Roi {
             let nbAround = 0;
             if (column === 0) {
               nbAround++;
-            } else if (externalIDs.includes(data[target - 1])) {
+            } else if (externalIDs.has(data[target - 1])) {
               nbAround++;
             }
 
             if (column === roiMap.width - 1) {
               nbAround++;
-            } else if (externalIDs.includes(data[target + 1])) {
+            } else if (externalIDs.has(data[target + 1])) {
               nbAround++;
             }
 
             if (row === 0) {
               nbAround++;
-            } else if (externalIDs.includes(data[target - roiMap.width])) {
+            } else if (externalIDs.has(data[target - roiMap.width])) {
               nbAround++;
             }
 
             if (row === roiMap.height - 1) {
               nbAround++;
-            } else if (externalIDs.includes(data[target + roiMap.width])) {
+            } else if (externalIDs.has(data[target + roiMap.width])) {
               nbAround++;
             }
             switch (nbAround) {

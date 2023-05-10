@@ -94,7 +94,7 @@ export function getBriefDescriptors(
     let patch: Image;
     try {
       patch = getKeypointPatch(smoothed, keypoint, { patchSize });
-    } catch (err) {
+    } catch {
       continue;
     }
     if (patch === null) continue;

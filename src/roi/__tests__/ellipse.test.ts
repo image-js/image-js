@@ -14,21 +14,21 @@ test('ellipse on a small figure 3x3', () => {
     center: { column: 1, row: 1 },
     majorAxis: {
       points: [
-        { column: NaN, row: Infinity },
-        { column: NaN, row: -Infinity },
+        { column: Number.NaN, row: Number.POSITIVE_INFINITY },
+        { column: Number.NaN, row: Number.NEGATIVE_INFINITY },
       ],
-      length: Infinity,
-      angle: NaN,
+      length: Number.POSITIVE_INFINITY,
+      angle: Number.NaN,
     },
     minorAxis: {
       points: [
-        { column: NaN, row: NaN },
-        { column: NaN, row: NaN },
+        { column: Number.NaN, row: Number.NaN },
+        { column: Number.NaN, row: Number.NaN },
       ],
-      length: NaN,
-      angle: NaN,
+      length: Number.NaN,
+      angle: Number.NaN,
     },
-    surface: NaN,
+    surface: Number.NaN,
   });
 });
 test('ellipse on a small figure 3x3', () => {

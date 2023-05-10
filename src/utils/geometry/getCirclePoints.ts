@@ -33,16 +33,18 @@ export function getCirclePoints(radius: number): Point[] {
   return firstQuarter.concat(secondQuarter, thirdQuarter, fourthQuarter);
 }
 
+const zeroPoint: Point = { row: 0, column: 0 };
+
 /**
  * Get the coordinates of the points in a circle of given radius. The points are sorted by column then row.
  *
  * @param radius - Radius of the circle.
- * @param center - Center of the cirlce.
+ * @param center - Center of the circle.
  * @returns The coordinates of the points in a circle of given radius.
  */
 export function getFilledCirclePoints(
   radius: number,
-  center: Point = { column: 0, row: 0 },
+  center: Point = zeroPoint,
 ): Point[] {
   let circlePoints: Point[] = [];
 
