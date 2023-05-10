@@ -1,12 +1,10 @@
-import { rotate } from '..';
-
 const image = testUtils.createGreyImage(`
  1 2 3
  4 5 6
 `);
 
 test('rotate by 90 degrees', () => {
-  const rotated = rotate(image, 90);
+  const rotated = image.rotate(90);
 
   expect(rotated).toMatchImageData(`
    4 1
@@ -16,7 +14,7 @@ test('rotate by 90 degrees', () => {
 });
 
 test('rotate by 180 degrees', () => {
-  const rotated = rotate(image, 180);
+  const rotated = image.rotate(180);
 
   expect(rotated).toMatchImageData(`
    6 5 4
@@ -25,7 +23,7 @@ test('rotate by 180 degrees', () => {
 });
 
 test('rotate by 270 degrees', () => {
-  const rotated = rotate(image, 270);
+  const rotated = image.rotate(270);
 
   expect(rotated).toMatchImageData(`
    3 6
@@ -40,7 +38,7 @@ test('with an rgb image', () => {
    7 8 9 | 10 11 12
   `);
 
-  const rotated = rotate(image, 90);
+  const rotated = image.rotate(90);
 
   expect(rotated).toMatchImageData(`
     7 8 9 | 1 2 3
