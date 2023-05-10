@@ -22,7 +22,7 @@
     "check-types": "tsc --noEmit",
     "clean": "rimraf lib lib-esm",
     "demo": "vite --open",
-    "eslint": "eslint src demo",
+    "eslint": "eslint src demo --cache",
     "eslint-fix": "npm run eslint -- --fix",
     "prepack": "npm run tsc && npm run api-extractor",
     "prettier": "prettier --check src demo",
