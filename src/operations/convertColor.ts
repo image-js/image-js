@@ -28,7 +28,7 @@ export function convertColor(
     ['GREYA', ['GREY', 'RGB', 'RGBA']],
     ['RGB', ['GREY', 'GREYA', 'RGBA']],
     ['RGBA', ['GREY', 'GREYA', 'RGB']],
-    ['BINARY', ['GREY']],
+    ['BINARY', ['GREY', 'RGB', 'RGBA']],
   ]);
 
   if (image.colorModel === colorModel) {
@@ -68,10 +68,16 @@ export function convertColor(
       copyAlpha(image, output);
     }
     return output;
-  } else {
+  } else if (colorModel === 'GREY') {
     const output = maskToOutputImage(image, options);
     convertBinaryToGrey(image, output);
     return output;
+  } else {
+    const img = new Image(image.width, image.height, {
+      colorModel,
+    });
+    convertBinaryToRgb(image, img);
+    return img;
   }
 }
 
@@ -161,5 +167,23 @@ export function convertBinaryToGrey(mask: Mask, newImage: Image): void {
       0,
       mask.getBitByIndex(i) ? newImage.maxValue : 0,
     );
+  }
+}
+
+/**
+ * Convert mask to RGB or RGBA
+ *
+ * @param mask - Mask to convert.
+ * @param newImage - Converted image.
+ */
+export function convertBinaryToRgb(mask: Mask, newImage: Image): void {
+  const black = new Array(newImage.components).fill(0);
+  const white = new Array(newImage.components).fill(newImage.maxValue);
+  if (newImage.alpha) {
+    black.push(newImage.maxValue);
+    white.push(newImage.maxValue);
+  }
+  for (let i = 0; i < mask.size; i++) {
+    newImage.setPixelByIndex(i, mask.getBitByIndex(i) ? white : black);
   }
 }

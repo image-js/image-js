@@ -103,19 +103,49 @@ test('Mask to GREY', () => {
   ]);
 });
 
+test('Mask to RGBA', () => {
+  const mask = testUtils.createMask(`
+    0 0
+    1 0
+    0 1
+  `);
+
+  const img = mask.convertColor('RGBA');
+  expect(img).toMatchImageData([
+    [0, 0, 0, 255, 0, 0, 0, 255],
+    [255, 255, 255, 255, 0, 0, 0, 255],
+    [0, 0, 0, 255, 255, 255, 255, 255],
+  ]);
+});
+
+test('Mask to RGB', () => {
+  const mask = testUtils.createMask(`
+    0 0
+    1 0
+    0 1
+  `);
+
+  const img = mask.convertColor('RGB');
+  expect(img).toMatchImageData([
+    [0, 0, 0, 0, 0, 0],
+    [255, 255, 255, 0, 0, 0],
+    [0, 0, 0, 255, 255, 255],
+  ]);
+});
+
+test('conversion not implemented', () => {
+  const image = testUtils.createGreyImage([[0, 255, 0, 255, 0, 255]]);
+
+  expect(() => image.convertColor('BINARY')).toThrow(
+    /conversion from GREY to BINARY not implemented/,
+  );
+});
+
 test('cannot convert to same colorModel', () => {
   const image = testUtils.createRgbImage([[10, 20, 30, 40, 60, 70]]);
 
   expect(() => image.convertColor('RGB')).toThrow(
     /cannot convert color, image is already RGB/,
-  );
-});
-
-test('conversion not implemented', () => {
-  const image = testUtils.createMask([[0, 1, 0, 1, 0, 1]]);
-
-  expect(() => image.convertColor('RGB')).toThrow(
-    /conversion from BINARY to RGB not implemented/,
   );
 });
 

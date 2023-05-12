@@ -1,3 +1,4 @@
+import { Mask } from '..';
 import { Image } from '../Image';
 import { assert } from '../utils/assert';
 
@@ -39,11 +40,12 @@ export interface WriteCanvasOptions {
  * Draw the image in an HTML canvas.
  *
  * @param image - The image to draw.
+ * @param imageOrMask
  * @param canvas - The HTML canvas.
  * @param options - Write canvas options.
  */
 export function writeCanvas(
-  image: Image,
+  image: Image | Mask,
   canvas: HTMLCanvasElement,
   options: WriteCanvasOptions = {},
 ): void {
