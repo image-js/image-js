@@ -43,6 +43,8 @@ import {
   InvertOptions,
   level,
   LevelOptions,
+  pixelate,
+  PixelateOptions,
 } from './filters';
 import {
   Point,
@@ -839,6 +841,10 @@ export class Image {
 
   public blur(options: BlurOptions): Image {
     return blur(this, options);
+  }
+
+  public pixelate(options: PixelateOptions): Image {
+    return pixelate(this, options);
   }
 
   public directConvolution(

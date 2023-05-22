@@ -10,3 +10,4 @@ export * from './invert';
 export * from './level';
 export * from './or';
 export * from './flip';
+export * from './pixelate';
