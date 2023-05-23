@@ -83,6 +83,15 @@ export class RoiMapManager implements RoiManager {
     return getRois(this, options);
   }
 
+  public getRoiById(roiID: number): Roi {
+    const rois = this.getRois();
+    const foundRoi = rois.find((roi) => roi.id === roiID);
+    if (!foundRoi) {
+      throw new Error(`invalid ID: ${roiID}`);
+    }
+    return foundRoi;
+  }
+
   public static fromMask(mask: Mask, options: FromMaskOptions = {}) {
     return fromMask(mask, options);
   }
