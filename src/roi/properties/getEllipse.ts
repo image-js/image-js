@@ -1,7 +1,7 @@
 import { EigenvalueDecomposition } from 'ml-matrix';
 import { xVariance, xyCovariance } from 'ml-spectra-processing';
 
-import { FeretDiameter } from '../../maskAnalysis';
+import { Point } from '../..';
 import { getAngle } from '../../maskAnalysis/utils/getAngle';
 import { assert } from '../../utils/assert';
 import { toDegrees } from '../../utils/geometry/angles';
@@ -12,8 +12,9 @@ export interface Ellipse {
     column: number;
     row: number;
   };
-  majorAxis: FeretDiameter;
-  minorAxis: FeretDiameter;
+  majorAxis: { points: [Point, Point]; length: number; angle: number };
+
+  minorAxis: { points: [Point, Point]; length: number; angle: number };
   surface: number;
 }
 /**

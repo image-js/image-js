@@ -18,8 +18,11 @@ export interface FeretDiameter {
    * Angle between the diameter and a horizontal line in degrees.
    */
   angle: number;
+  /**
+   * Calliper lines that pass by endpoints of Feret diameters.
+   */
+  calliperLines: [[Point, Point], [Point, Point]];
 }
-
 export interface Feret {
   /**
    * Smaller Feret diameter.
@@ -56,6 +59,16 @@ export function getFeret(mask: Mask): Feret {
           { column: 0, row: 0 },
         ],
         angle: 0,
+        calliperLines: [
+          [
+            { column: 0, row: 0 },
+            { column: 0, row: 0 },
+          ],
+          [
+            { column: 0, row: 0 },
+            { column: 0, row: 0 },
+          ],
+        ],
       },
       maxDiameter: {
         length: 0,
@@ -64,6 +77,16 @@ export function getFeret(mask: Mask): Feret {
           { column: 0, row: 0 },
         ],
         angle: 0,
+        calliperLines: [
+          [
+            { column: 0, row: 0 },
+            { column: 0, row: 0 },
+          ],
+          [
+            { column: 0, row: 0 },
+            { column: 0, row: 0 },
+          ],
+        ],
       },
       aspectRatio: 1,
     };
@@ -73,7 +96,7 @@ export function getFeret(mask: Mask): Feret {
   let minWidth = Number.POSITIVE_INFINITY;
   let minWidthAngle = 0;
   let minLinePoints: Point[] = [];
-
+  let minLines: [[Point, Point], [Point, Point]] | undefined;
   for (let i = 0; i < hullPoints.length; i++) {
     let angle = getAngle(
       hullPoints[i],
@@ -82,7 +105,6 @@ export function getFeret(mask: Mask): Feret {
 
     // We rotate so that it is parallel to X axis.
     const rotatedPoints = rotate(-angle, hullPoints);
-
     let currentWidth = 0;
     let currentMinLinePoints: Point[] = [];
 
@@ -97,17 +119,29 @@ export function getFeret(mask: Mask): Feret {
       minWidth = currentWidth;
       minWidthAngle = angle;
       minLinePoints = currentMinLinePoints;
+      const { minIndex: currentMin, maxIndex: currentMax } =
+        findPointIndexesOfExtremeColumns(rotatedPoints);
+      minLines = getMinLines(
+        minWidthAngle,
+        currentMin,
+        currentMax,
+        rotatedPoints,
+        minLinePoints,
+      );
     }
   }
-  const minDiameter = {
+
+  const minDiameter: FeretDiameter = {
     points: rotate(minWidthAngle, minLinePoints),
     length: minWidth,
     angle: toDegrees(minWidthAngle),
+    calliperLines: minLines as [[Point, Point], [Point, Point]],
   };
 
   // Compute maximum diameter
   let maxLinePoints: Point[] = [];
   let maxSquaredWidth = 0;
+  let maxLineIndex: number[] = [];
   for (let i = 0; i < hullPoints.length - 1; i++) {
     for (let j = i + 1; j < hullPoints.length; j++) {
       let currentSquaredWidth =
@@ -116,14 +150,27 @@ export function getFeret(mask: Mask): Feret {
       if (currentSquaredWidth > maxSquaredWidth) {
         maxSquaredWidth = currentSquaredWidth;
         maxLinePoints = [hullPoints[i], hullPoints[j]];
+        maxLineIndex = [i, j];
       }
     }
   }
+  const maxAngle = getAngle(maxLinePoints[0], maxLinePoints[1]);
+  let rotatedMaxPoints = rotate(-maxAngle, hullPoints);
 
+  const { minIndex: currentMin, maxIndex: currentMax } =
+    findPointsIndexesOfExtremeRows(rotatedMaxPoints);
+  let maxLines = getMaxLines(
+    maxAngle,
+    currentMin,
+    currentMax,
+    rotatedMaxPoints,
+    maxLineIndex,
+  );
   const maxDiameter = {
     length: Math.sqrt(maxSquaredWidth),
     angle: toDegrees(getAngle(maxLinePoints[0], maxLinePoints[1])),
     points: maxLinePoints,
+    calliperLines: maxLines,
   };
 
   return {
@@ -131,4 +178,96 @@ export function getFeret(mask: Mask): Feret {
     maxDiameter,
     aspectRatio: minDiameter.length / maxDiameter.length,
   };
+}
+
+function findPointIndexesOfExtremeColumns(points: Point[]): {
+  minIndex: number;
+  maxIndex: number;
+} {
+  let maxIndex = 0;
+  let minIndex = 0;
+
+  for (let i = 0; i < points.length; i++) {
+    if (points[i].column > points[maxIndex].column) {
+      maxIndex = i;
+    }
+    if (points[i].column < points[minIndex].column) {
+      minIndex = i;
+    }
+  }
+  return { minIndex, maxIndex };
+}
+function findPointsIndexesOfExtremeRows(points: Point[]): {
+  minIndex: number;
+  maxIndex: number;
+} {
+  let maxIndex = 0;
+  let minIndex = 0;
+  for (let i = 0; i < points.length; i++) {
+    if (points[i].row > points[maxIndex].row) {
+      maxIndex = i;
+    }
+    if (points[i].row < points[minIndex].row) {
+      minIndex = i;
+    }
+  }
+  return { minIndex, maxIndex };
+}
+
+function getMinLines(
+  angle: number,
+  min: number,
+  max: number,
+  rotatedPoints: Point[],
+  feretPoints: Point[],
+): [[Point, Point], [Point, Point]] {
+  let minLine1: [Point, Point] = [
+    { column: rotatedPoints[min].column, row: feretPoints[0].row },
+    {
+      column: rotatedPoints[max].column,
+      row: feretPoints[0].row,
+    },
+  ];
+  let minLine2: [Point, Point] = [
+    {
+      column: rotatedPoints[min].column,
+      row: feretPoints[1].row,
+    },
+    {
+      column: rotatedPoints[max].column,
+      row: feretPoints[1].row,
+    },
+  ];
+
+  return [rotate(angle, minLine1), rotate(angle, minLine2)] as [
+    [Point, Point],
+    [Point, Point],
+  ];
+}
+function getMaxLines(
+  angle: number,
+  min: number,
+  max: number,
+  rotatedPoints: Point[],
+  index: number[],
+): [[Point, Point], [Point, Point]] {
+  let maxLine1: [Point, Point] = [
+    { column: rotatedPoints[index[0]].column, row: rotatedPoints[min].row },
+    {
+      column: rotatedPoints[index[0]].column,
+      row: rotatedPoints[max].row,
+    },
+  ];
+  let maxLine2: [Point, Point] = [
+    { column: rotatedPoints[index[1]].column, row: rotatedPoints[min].row },
+    {
+      column: rotatedPoints[index[1]].column,
+      row: rotatedPoints[max].row,
+    },
+  ];
+
+  return [rotate(angle, maxLine1), rotate(angle, maxLine2)] as [
+    [Point, Point],
+    [Point, Point],
+  ];
 }
