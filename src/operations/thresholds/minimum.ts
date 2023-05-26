@@ -8,7 +8,6 @@
 
 /**
  * Return a threshold for a histogram.
- *
  * @param histogram - Image histogram.
  * @returns The threshold.
  */
@@ -48,13 +47,13 @@ export default function minimum(histogram: Uint32Array): number {
 }
 function smoothed(histogram: number[]): number[] {
   // Smooth with a 3 point running mean filter
-  const auHistogram = new Array(histogram.length); // a copy of the histograma for the smoothing process
+  const auHistogram = new Array(histogram.length); // a copy of the histogram for the smoothing process
   for (let i = 1; i < histogram.length - 1; i++) {
     auHistogram[i] = (histogram[i - 1] + histogram[i] + histogram[i + 1]) / 3;
   }
   auHistogram[0] = (histogram[0] + histogram[1]) / 3;
   auHistogram[histogram.length - 1] =
-    (histogram[histogram.length - 2] + histogram[histogram.length - 1]) / 3;
+    ((histogram.at(-2) as number) + (histogram.at(-1) as number)) / 3;
   return auHistogram;
 }
 

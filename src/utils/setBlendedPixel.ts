@@ -7,7 +7,6 @@ import { getDefaultColor } from './getDefaultColor';
 export interface SetBlendedPixelOptions {
   /**
    * Color with which to blend the image pixel.
-   *
    * @default Opaque black.
    */
   color?: number[];
@@ -15,7 +14,6 @@ export interface SetBlendedPixelOptions {
 
 /**
  * Blend the given pixel with the pixel at the specified location in the image.
- *
  * @param image - The image with which to blend.
  * @param column - Column of the target pixel.
  * @param row - Row of the target pixel.
@@ -34,7 +32,7 @@ export function setBlendedPixel(
   } else {
     assert(image instanceof Image);
 
-    const sourceAlpha = color[color.length - 1];
+    const sourceAlpha = color.at(-1) as number;
 
     if (sourceAlpha === image.maxValue) {
       image.setPixel(column, row, color);

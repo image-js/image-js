@@ -3,7 +3,6 @@ import { Match } from '../matching/bruteForceMatch';
 /**
  * Get the shade of the match with given index (the color is an indicator
  * of the distance). The matches should be sorted with smallest distance first.
- *
  * @param matches - The sorted keypoints.
  * @param index - Index of the keypoint.
  * @param colors - The colors from which to pick (sorted from brightest to darkest).
@@ -14,7 +13,7 @@ export function getMatchColor(
   index: number,
   colors: number[][],
 ): number[] {
-  const maxDistance = matches[matches.length - 1].distance;
+  const maxDistance = (matches.at(-1) as Match).distance;
   const minDistance = matches[0].distance;
   if (minDistance === maxDistance) {
     return colors[0];
