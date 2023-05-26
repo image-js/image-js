@@ -91,18 +91,22 @@ export function getMbrFromPoints(points: readonly Point[]): Mbr {
   }
 
   const mbrRotated = rotate(minSurfaceAngle, mbr);
-  const width = mbr[0].column - mbr[2].column;
-  const height = mbr[0].row - mbr[2].row;
+  const sides = [
+    Math.hypot(mbr[0].column - mbr[1].column, mbr[0].row - mbr[1].row),
+    Math.hypot(mbr[0].column - mbr[3].column, mbr[0].row - mbr[3].row),
+  ];
+  const maxSide = Math.max(...sides);
+  const minSide = Math.min(...sides);
   const mbrAngle = getMbrAngle(mbrRotated);
-  const ratio = height / width;
+  const ratio = minSide / maxSide;
 
   return {
     points: mbrRotated,
     surface: minSurface,
     angle: mbrAngle,
-    width,
-    height,
-    perimeter: 2 * width + 2 * height,
+    width: maxSide,
+    height: minSide,
+    perimeter: 2 * maxSide + 2 * minSide,
     aspectRatio: ratio,
   };
 }

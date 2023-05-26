@@ -10,6 +10,7 @@ test.each([
       { column: 3, row: 3 },
       { column: 3, row: 3 },
     ],
+    1,
   ],
   [
     'vertical line',
@@ -23,6 +24,7 @@ test.each([
       { column: 3, row: 3 },
       { column: 3, row: 5 },
     ],
+    0,
   ],
   [
     'skewed line',
@@ -36,6 +38,7 @@ test.each([
       { column: 3, row: 3 },
       { column: 5, row: 5 },
     ],
+    0,
   ],
   [
     'triangle',
@@ -50,6 +53,7 @@ test.each([
       { column: 0, row: 1 },
       { column: 1, row: 1 },
     ],
+    1,
   ],
   [
     'polygon',
@@ -67,6 +71,7 @@ test.each([
       { column: 0, row: 3 },
       { column: 7, row: 3 },
     ],
+    0.42857,
   ],
   [
     'negative values',
@@ -82,6 +87,7 @@ test.each([
       { column: 0, row: -10 },
       { column: 10, row: -10 },
     ],
+    1,
   ],
   [
     'skewed rectangle',
@@ -97,6 +103,7 @@ test.each([
       { column: 4, row: 6 },
       { column: 7, row: 3 },
     ],
+    0.66667,
   ],
   [
     'complex test',
@@ -172,8 +179,11 @@ test.each([
       { column: 95.34358844399394, row: 321.81059300557524 },
       { column: -16.46234161175873, row: 190.34647744551438 },
     ],
+    0.5843,
   ],
-])('getMbrFromPoints (%s)', (_, inputPoints, expectedPoints) => {
-  const result = getMbrFromPoints(inputPoints).points;
-  expect(result).toBeDeepCloseTo(expectedPoints);
+])('getMbrFromPoints (%s)', (_, inputPoints, expectedPoints, ratio) => {
+  const result = getMbrFromPoints(inputPoints);
+
+  expect(result.points).toBeDeepCloseTo(expectedPoints);
+  expect(result.aspectRatio).toBeDeepCloseTo(ratio);
 });
