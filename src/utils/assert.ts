@@ -9,3 +9,12 @@ export function assert(value: unknown, message?: string): asserts value {
     throw new Error(message || 'unreachable');
   }
 }
+
+/**
+ * Makes sure that all cases are handled
+ *
+ * @param x - cases of value to check
+ */
+export function assertUnreachable(x: never): never {
+  throw new Error(`unreachable: ${String(x)}`);
+}

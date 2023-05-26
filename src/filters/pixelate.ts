@@ -1,18 +1,27 @@
+import { xMedian } from 'ml-spectra-processing';
+
 import { Image, Point } from '..';
+import { assertUnreachable } from '../utils/assert';
 import { getOutputImage } from '../utils/getOutputImage';
 
 export interface PixelateOptions {
   /**
-   *  range of pixelated area
+   *  range of pixelated area.
    */
   cellSize: number;
+  /**
+   * algorithm to use.
+   *
+   * @default center
+   */
+  algorithm?: 'center' | 'median' | 'mean';
   /**
    * Image to which to output.
    */
   out?: Image;
 }
 
-interface CenterOptions {
+interface GetValueOptions {
   /*
    * width of a region to look for center
    */
@@ -35,7 +44,7 @@ interface CenterOptions {
  * @returns pixelated Image
  */
 export function pixelate(image: Image, options: PixelateOptions): Image {
-  const { cellSize } = options;
+  const { cellSize, algorithm = 'center' } = options;
   if (!Number.isInteger(cellSize)) {
     throw new TypeError('cellSize must be an integer');
   }
@@ -44,22 +53,18 @@ export function pixelate(image: Image, options: PixelateOptions): Image {
   }
   const newImage = getOutputImage(image, options);
 
+  const getCellValue = getCellValueFunction(algorithm);
+
   for (let channel = 0; channel < image.channels; channel++) {
     for (let column = 0; column < image.width; column += cellSize) {
       for (let row = 0; row < image.height; row += cellSize) {
         const currentCellWidth = Math.min(cellSize, image.width - column);
         const currentCellHeight = Math.min(cellSize, image.height - row);
-
-        const center = getCenter({
+        let value = getCellValue(image, channel, {
           width: currentCellWidth,
           height: currentCellHeight,
-          origin: {
-            column,
-            row,
-          },
+          origin: { column, row },
         });
-
-        const value = image.getValue(center.column, center.row, channel);
 
         for (
           let newColumn = column;
@@ -78,13 +83,19 @@ export function pixelate(image: Image, options: PixelateOptions): Image {
 }
 
 /**
- *Find the center of a rectangle to be pixelated
+ *Computes the center value for the current sector
  *
  *
- * @param options - CenterOptions
- * @returns Point
+ * @param image - image used for the algorithm
+ * @param channel - image channel toto find center value of
+ * @param options - GetValueOptions
+ * @returns center value
  */
-function getCenter(options: CenterOptions): Point {
+function getCellCenter(
+  image: Image,
+  channel: number,
+  options: GetValueOptions,
+): number {
   const center = {
     column: Math.floor(
       (options.origin.column + options.origin.column + options.width - 1) / 2,
@@ -93,6 +104,81 @@ function getCenter(options: CenterOptions): Point {
       (options.origin.row + options.origin.row + options.height - 1) / 2,
     ),
   };
+  const value = image.getValue(center.column, center.row, channel);
+  return value;
+}
+/**
+ * Computes mean value for the current sector
+ *
+ * @param image - image used for algorithm
+ * @param channel - current channel of an image
+ * @param options - GetValueOptions
+ * @returns mean value
+ */
+function getCellMean(image: Image, channel: number, options: GetValueOptions) {
+  let sum = 0;
 
-  return center;
+  for (
+    let column = options.origin.column;
+    column < options.origin.column + options.width;
+    column++
+  ) {
+    for (
+      let row = options.origin.row;
+      row < options.origin.row + options.height;
+      row++
+    ) {
+      sum += image.getValue(column, row, channel);
+    }
+  }
+  return Math.round(sum / (options.width * options.height));
+}
+/**
+ * Computes a median value for the current sector
+ *
+ * @param image - image used algorithm
+ * @param channel - current channel of an image
+ * @param options - GetValueOptions
+ * @returns median value
+ */
+function getCellMedian(
+  image: Image,
+  channel: number,
+  options: GetValueOptions,
+) {
+  let array = [];
+  for (
+    let column = options.origin.column;
+    column < options.origin.column + options.width;
+    column++
+  ) {
+    for (
+      let row = options.origin.row;
+      row < options.origin.row + options.height;
+      row++
+    ) {
+      array.push(image.getValue(column, row, channel));
+    }
+  }
+
+  return xMedian(array);
+}
+/**
+ *  Chooses which algorithm to use for pixelization and returns a function to use for computation
+ *
+ * @param algorithm - string with the name of an algorithm
+ * @returns function
+ */
+function getCellValueFunction(algorithm: 'center' | 'mean' | 'median') {
+  switch (algorithm) {
+    case 'mean':
+      return getCellMean;
+    case 'median':
+      return getCellMedian;
+    case 'center':
+      return getCellCenter;
+    default:
+      assertUnreachable(algorithm);
+      break;
+  }
 }

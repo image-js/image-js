@@ -15,6 +15,21 @@ describe('pixelization of images', () => {
       [6, 6, 8],
     ]);
   });
+  it('pixelate a simple grey image with xMedian', () => {
+    let img = testUtils.createGreyImage([
+      [1, 1, 2],
+      [2, 3, 4],
+      [6, 7, 8],
+    ]);
+
+    let result = img.pixelate({ cellSize: 2, algorithm: 'median' });
+
+    expect(result).toMatchImageData([
+      [1, 1, 2],
+      [1, 1, 2],
+      [6, 6, 8],
+    ]);
+  });
   it('pixelate a bigger grey image', () => {
     let img = testUtils.createGreyImage([
       [1, 1, 2, 2, 2],
@@ -72,6 +87,24 @@ describe('pixelization of images', () => {
       [4, 9, 0, 4],
     ]);
   });
+  it('pixelate an RGBA H-like image with mean algorithm', () => {
+    let img = testUtils.createRgbaImage([
+      [5, 1, 2, 5],
+      [5, 5, 5, 5],
+      [4, 4, 4, 4],
+      [4, 9, 0, 4],
+      [4, 9, 0, 4],
+    ]);
+
+    let result = pixelate(img, { cellSize: 3, algorithm: 'mean' });
+    expect(result).toMatchImageData([
+      [5, 3, 4, 5],
+      [5, 3, 4, 5],
+      [5, 3, 4, 5],
+      [4, 9, 0, 4],
+      [4, 9, 0, 4],
+    ]);
+  });
   it('throws a Range error', () => {
     let img = testUtils.createRgbaImage([
       [1, 1, 2, 2],
@@ -96,4 +129,17 @@ describe('pixelization of images', () => {
       img.pixelate({ cellSize: 2.3 });
     }).toThrow(new TypeError('cellSize must be an integer'));
   });
+});
+it('throws a Type error', () => {
+  let img = testUtils.createRgbaImage([
+    [1, 1, 2, 2],
+    [2, 3, 4, 2],
+    [6, 7, 8, 3],
+    [2, 9, 4, 0],
+    [1, 9, 9, 9],
+  ]);
+  expect(() => {
+    //@ts-expect-error error testing
+    img.pixelate({ cellSize: 2, algorithm: 'test' });
+  }).toThrow(new Error(`unreachable: test`));
 });
