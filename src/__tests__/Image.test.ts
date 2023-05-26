@@ -90,6 +90,7 @@ describe('create new images', () => {
       /invalid bitDepth: 20/,
     );
   });
+
   it('should throw with bit depth 8 but data 16', () => {
     const data = new Uint16Array([1, 2, 3, 4]);
     expect(() => new Image(2, 2, { colorModel: 'GREY', data })).toThrow(

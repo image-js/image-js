@@ -88,16 +88,7 @@ export class Roi {
     this.#computed = {};
   }
   /**
-   * Get the ROI map of the original image.
-   *
-   * @returns The ROI map.
-   */
-  public getMap(): RoiMap {
-    return this.map;
-  }
-
-  /**
-   * Returns the value at the given coordinates in an ROI map.
+   * Return the value at the given coordinates in an ROI map.
    *
    * @param column - Column of the value.
    * @param row - Row of the value.
@@ -223,6 +214,7 @@ export class Roi {
       return externalBorders;
     });
   }
+
   /**
    * Calculates and caches the number of sides by which each pixel is touched externally
    *
@@ -237,9 +229,11 @@ export class Roi {
       let two = 0;
       let three = 0;
       let four = 0;
+
       let externalIDs = new Set(
         this.externalBorders.map((element) => element.connectedID),
       );
+
       for (let column = 0; column < this.width; column++) {
         for (let row = 0; row < this.height; row++) {
           let target = this.computeIndex(row, column);
