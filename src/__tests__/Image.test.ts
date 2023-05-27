@@ -341,3 +341,35 @@ test('check custom inspect with image too large', () => {
 
   expect(inspect(image)).toMatchSnapshot();
 });
+
+test('check getColumn and getRow methods on an RGBA image', () => {
+  const image = testUtils.createRgbaImage([
+    [1, 2, 3, 1],
+    [1, 2, 3, 1],
+    [11, 2, 2, 2],
+    [1, 3, 3, 3],
+    [1, 6, 4, 3],
+  ]);
+
+  const resultRow = image.getRow(2);
+  const resultColumn = image.getColumn(0);
+  expect(resultRow).toStrictEqual([[11], [2], [2], [2]]);
+  expect(resultColumn).toStrictEqual([
+    [1, 1, 11, 1, 1],
+    [2, 2, 2, 3, 6],
+    [3, 3, 2, 3, 4],
+    [1, 1, 2, 3, 3],
+  ]);
+});
+test('check getColumn and getRow methods', () => {
+  const image = testUtils.createGreyImage([
+    [1, 5, 1],
+    [1, 2, 1],
+    [11, 2, 2],
+  ]);
+
+  const resultRow = image.getRow(2);
+  const resultColumn = image.getColumn(0);
+  expect(resultRow).toStrictEqual([[11, 2, 2]]);
+  expect(resultColumn).toStrictEqual([[1, 1, 11]]);
+});
