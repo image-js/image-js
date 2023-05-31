@@ -151,7 +151,7 @@ export class Roi {
 
       if (this.height > 2) {
         for (let column = 0; column < this.width; column++) {
-          let target = this.computeIndex(0, column);
+          let target = this.#computeIndex(0, column);
           if (internal.includes(data[target])) {
             let id = data[target + roiMap.width];
             if (!internal.includes(id) && !this.boxIDs.includes(id)) {
@@ -164,7 +164,7 @@ export class Roi {
       let array = new Array(4);
       for (let column = 1; column < this.width - 1; column++) {
         for (let row = 1; row < this.height - 1; row++) {
-          let target = this.computeIndex(row, column);
+          let target = this.#computeIndex(row, column);
           if (internal.includes(data[target])) {
             // we check if one of the neighbour is not yet in
 
@@ -236,7 +236,7 @@ export class Roi {
 
       for (let column = 0; column < this.width; column++) {
         for (let row = 0; row < this.height; row++) {
-          let target = this.computeIndex(row, column);
+          let target = this.#computeIndex(row, column);
           if (data[target] === this.id) {
             let nbAround = 0;
             if (column === 0) {
@@ -332,7 +332,7 @@ export class Roi {
       // we check the first line and the last line
       for (let row of [0, this.height - 1]) {
         for (let column = 0; column < this.width; column++) {
-          let target = this.computeIndex(row, column);
+          let target = this.#computeIndex(row, column);
           if (
             column - this.origin.column > 0 &&
             data[target] === this.id &&
@@ -355,7 +355,7 @@ export class Roi {
       // we check the first column and the last column
       for (let column of [0, this.width - 1]) {
         for (let row = 0; row < this.height; row++) {
-          let target = this.computeIndex(row, column);
+          let target = this.#computeIndex(row, column);
           if (
             row - this.origin.row > 0 &&
             data[target] === this.id &&
@@ -407,7 +407,7 @@ export class Roi {
       const data = this.map.data;
       for (let column = 1; column < this.width - 1; column++) {
         for (let row = 1; row < this.height - 1; row++) {
-          let target = this.computeIndex(row, column);
+          let target = this.#computeIndex(row, column);
           if (
             this.internalIDs.includes(data[target]) &&
             data[target] !== this.id
@@ -575,7 +575,7 @@ export class Roi {
       let sumRow = 0;
       for (let column = 0; column < this.width; column++) {
         for (let row = 0; row < this.height; row++) {
-          let target = this.computeIndex(row, column);
+          let target = this.#computeIndex(row, column);
           if (data[target] === this.id) {
             sumColumn += column;
             sumRow += row;
@@ -610,7 +610,7 @@ export class Roi {
    * @param y
    * @param x
    */
-  computeIndex(y: number, x: number): number {
+  #computeIndex(y: number, x: number): number {
     const roiMap = this.map;
     return (y + this.origin.row) * roiMap.width + x + this.origin.column;
   }
