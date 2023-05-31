@@ -121,9 +121,7 @@ export class Roi {
    * Diameter of a circle of equal perimeter
    */
   get ped() {
-    return this.#getComputed('ped', () => {
-      return this.perimeter / Math.PI;
-    });
+    return this.perimeter / Math.PI;
   }
 
   /**
@@ -383,9 +381,7 @@ export class Roi {
    * Returns the diameter of a circle of equal projection area
    */
   get eqpc() {
-    return this.#getComputed('eqpc', () => {
-      return 2 * Math.sqrt(this.surface / Math.PI);
-    });
+    return 2 * Math.sqrt(this.surface / Math.PI);
   }
 
   get ellipse(): Ellipse {
