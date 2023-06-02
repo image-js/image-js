@@ -10,10 +10,12 @@ import { readCanvas } from './readCanvas';
  * @param img - Image source such as an <img> or <svg> element.
  * @returns The read image.
  */
-export function readImg(img: CanvasImageSource): Image {
+export function readImg(
+  img: Extract<CanvasImageSource, Record<'width' | 'height', number>>,
+): Image {
   const canvas = document.createElement('canvas');
-  canvas.width = img.width as number;
-  canvas.height = img.height as number;
+  canvas.width = img.width;
+  canvas.height = img.height;
   const ctx = canvas.getContext('2d');
   assert(ctx);
   ctx.drawImage(img, 0, 0);
