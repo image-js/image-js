@@ -7,7 +7,6 @@
 
 /**
  * Return a threshold for a histogram using Triangle algorithm.
- *
  * @param histogram - The image histogram.
  * @returns The threshold.
  */

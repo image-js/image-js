@@ -6,7 +6,6 @@ import { assert } from './assert';
 /**
  * Get the default color for a given color model.
  * The color is black for images and 1 for masks.
- *
  * @param image - The used image.
  * @returns Default color.
  */

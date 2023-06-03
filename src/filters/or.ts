@@ -10,7 +10,6 @@ export interface OrOptions {
 
 /**
  * Perform an OR operation on two masks.
- *
  * @param mask - First mask.
  * @param otherMask - Second mask.
  * @param options - Or options.

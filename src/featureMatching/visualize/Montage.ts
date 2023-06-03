@@ -18,13 +18,11 @@ export type MontageDisposition =
 export interface MontageOptions {
   /**
    * Factor by which to scale the images.
-   *
    * @default 1
    */
   scale?: number;
   /**
    * How should the images be aligned: vertically or horizontally.
-   *
    * @default 'horizontal'
    */
   disposition?: MontageDisposition;
@@ -73,7 +71,6 @@ export class Montage {
 
   /**
    * Create a Montage of two images. The two images are placed side by side for comparison.
-   *
    * @param source - First image.
    * @param destination - Second image.
    * @param options  - Montage options.
@@ -131,7 +128,6 @@ export class Montage {
 
   /**
    * Draw keypoints on the Montage.
-   *
    * @param keypoints - Keypoints to draw.
    * @param options - Draw keypoints options.
    */
@@ -145,10 +141,9 @@ export class Montage {
 
   /**
    * Draw the matches between source and destination keypoints.
-   *
    * @param matches - Matches to draw.
    * @param sourceKeypoints - Source keypoints.
-   * @param destinationKeypoints  - Destination keypoints
+   * @param destinationKeypoints  - Destination keypoints.
    * @param options - Draw matches options.
    */
   public drawMatches(

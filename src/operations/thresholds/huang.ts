@@ -6,7 +6,6 @@
 
 /**
  * Return a threshold for a histogram using Huang algorithm.
- *
  * @param histogram - Image histogram.
  * @returns The threshold.
  */

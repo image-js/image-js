@@ -11,7 +11,6 @@ export interface CropAlphaOptions {
 /**
  * Crops the image based on the alpha channel
  * This removes lines and columns where the alpha channel is lower than a threshold value.
- *
  * @param image - Image to process.
  * @param options - Crop alpha options.
  * @returns The cropped image.

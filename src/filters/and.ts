@@ -10,7 +10,6 @@ export interface AndOptions {
 
 /**
  * Perform an AND operation on two masks.
- *
  * @param mask - First mask.
  * @param otherMask - Second mask.
  * @param options - And options.

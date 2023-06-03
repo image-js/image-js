@@ -7,7 +7,6 @@ import { extractSquareImage } from '../../utils/extractSquareImage';
 export interface GetKeypointPatchOptions {
   /**
    * Size of the patch around the keypoint used to compute the descriptor.
-   *
    * @default 31
    */
   patchSize?: number;
@@ -15,7 +14,6 @@ export interface GetKeypointPatchOptions {
 
 /**
  * Get the patch around the keypoint with given size.
- *
  * @param image - Image from which to extract the patch.
  * @param keypoint - Keypoint around which to extract the patch.
  * @param options - Get keypoint patch options.

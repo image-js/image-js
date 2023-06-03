@@ -18,19 +18,16 @@ import { round } from '../utils/round';
 export interface ConvolutionOptions {
   /**
    * Specify how the borders should be handled.
-   *
    * @default 'reflect101'
    */
   borderType?: BorderType;
   /**
    * Value of the border if BorderType is 'constant'.
-   *
    * @default 0
    */
   borderValue?: number;
   /**
    * Whether the kernel should be normalized.
-   *
    * @default false
    */
   normalize?: boolean;
@@ -42,7 +39,6 @@ export interface ConvolutionOptions {
 
 /**
  * Apply a direct convolution on an image using the specified kernel. The convolution corresponds of a weighted average of the surrounding pixels, the weights being defined in the kernel.
- *
  * @param image - The image to process.
  * @param kernel - Kernel to use for the convolution. Should be a 2D matrix with odd number of rows and columns.
  * @param options - Convolution options.
@@ -76,7 +72,6 @@ export function directConvolution(
 
 /**
  * Compute direct convolution of an image and return an array with the raw values.
- *
  * @param image - Image to process.
  * @param kernel - 2D kernel used for the convolution.
  * @param options - Convolution options.
@@ -114,7 +109,6 @@ export function rawDirectConvolution(
 
 /**
  * Compute the separable convolution of an image.
- *
  * @param image - Image to convolute.
  * @param kernelX - Kernel along x axis.
  * @param kernelY - Kernel along y axis.
@@ -208,7 +202,6 @@ export interface ComputeConvolutionValueOptions {
 
 /**
  * Compute the convolution of a value of a pixel in an image.
- *
  * @param column - Column of the pixel.
  * @param row - Row of the pixel.
  * @param channel - Channel to process.
@@ -261,7 +254,6 @@ export function computeConvolutionValue(
 
 /**
  * Normalize a separated kernel.
- *
  * @param kernelX - Horizontal component of the separated kernel.
  * @param kernelY - Vertical component of the separated kernel.
  * @returns The normalized kernel.

@@ -10,8 +10,7 @@ import { formatInputForMlr, formatReferenceForMlr } from './utils/formatData';
 /**
  * Correct the colors in an image using the reference colors.
  * Algorithm is based on the paper "Color correction using improved linear regression algorithm".
- * DOI: 10.1109/ICTS.2015.7379874
- *
+ * DOI: 10.1109/ICTS.2015.7379874.
  * @param image - Image to process.
  * @param measuredColors - Colors from the image, which will be compared to the reference.
  * @param referenceColors - Reference colors.
@@ -75,7 +74,6 @@ export function correctColor(
 
 /**
  * Compute the third order variables for the regression from an RGB color.
- *
  * @param r - Red component.
  * @param g - Green component.
  * @param b - Blue component.

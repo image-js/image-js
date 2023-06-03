@@ -10,7 +10,6 @@ import { assert } from '../../utils/assert';
 
 /**
  * Return a threshold for a histogram using Intermodes algorithm.
- *
  * @param histogram - Image histogram.
  * @returns The threshold.
  */

@@ -18,11 +18,9 @@ export interface Ellipse {
   surface: number;
 }
 /**
- *Calculates ellipse on around ROI
- *
- * @param roi - region of interest
- * @param surface - the surface of ROI that ellipse should match
- * @returns Ellipse
+ * Calculates ellipse on around ROI.
+ * @param roi - Region of interest.
+ * @returns Ellipse.
  */
 export function getEllipse(roi: Roi): Ellipse {
   let xCenter = roi.centroid.column;

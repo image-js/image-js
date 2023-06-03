@@ -4,7 +4,6 @@ import { Image } from '../Image';
 
 /**
  * Decode a jpeg. See the jpeg-js npm module.
- *
  * @param buffer - The data to decode.
  * @returns The decoded image.
  */

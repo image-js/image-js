@@ -25,10 +25,10 @@ export type WriteOptionsJpeg = WriteOptions & EncodeOptionsJpeg;
  * Write an image to the disk.
  * The file format is determined automatically from the file's extension.
  * If the extension is not supported, an error will be thrown.
- *
  * @param path - Path or file URL where the image should be written.
  * @param image - Image to save.
  * @param options - Write options.
+ * @returns A promise that resolves when the image is written.
  */
 export async function write(
   path: string | URL,
@@ -38,10 +38,10 @@ export async function write(
 /**
  * Write an image to the disk as PNG.
  * When the `png` format is specified, the file's extension doesn't matter.
- *
  * @param path - Path or file URL where the image should be written.
  * @param image - Image to save.
  * @param options - Encode options for png images.
+ * @returns A promise that resolves when the image is written.
  */
 export async function write(
   path: string | URL,
@@ -51,10 +51,10 @@ export async function write(
 /**
  * Write an image to the disk as JPEG.
  * When the `jpeg` format is specified, the file's extension doesn't matter.
- *
  * @param path - Path or file URL where the image should be written.
  * @param image - Image to save.
  * @param options - Encode options for jpeg images.
+ * @returns A promise that resolves when the image is written.
  */
 export async function write(
   path: string | URL,
@@ -63,7 +63,6 @@ export async function write(
 ): Promise<void>;
 /**
  * Asynchronously write an image to the disk.
- *
  * @param path - Path where the image should be written.
  * @param image - Image to save.
  * @param options - Encode options.
@@ -89,7 +88,6 @@ export async function write(
 
 /**
  * Synchronous version of @see {@link write}.
- *
  * @param path - Path where the image should be written.
  * @param image - Image to save.
  * @param options - Encode options.
@@ -115,7 +113,6 @@ export function writeSync(
 
 /**
  * Encode the image to the format specified by the file's extension.
- *
  * @param destinationPath - Image destination.
  * @param image - Image to save.
  * @param options - Encode options.

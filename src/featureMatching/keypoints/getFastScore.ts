@@ -3,9 +3,8 @@ import { Point } from '../../geometry';
 
 /**
  * Compute the score of a keypoint using the function described in the FAST article.
- * DOI: https://doi.org/10.1007/11744023_34
- *
- * @param image - Image to process
+ * DOI: https://doi.org/10.1007/11744023_34.
+ * @param image - Image to process.
  * @param origin - Keypoint coordinates.
  * @param threshold - FAST threshold.
  * @param circlePoints - Coordinates of the points on the circle.

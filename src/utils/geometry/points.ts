@@ -20,8 +20,7 @@ export interface Point {
 }
 
 /**
- * Calculates a new point that is the difference p1 - p2
- *
+ * Calculates a new point that is the difference p1 - p2.
  * @param p1 - First point.
  * @param p2 - Second Point.
  * @returns Difference between the two points.
@@ -31,8 +30,7 @@ export function difference(p1: Point, p2: Point): Point {
 }
 
 /**
- * Calculates a new point that is the sum p1 + p2
- *
+ * Calculates a new point that is the sum p1 + p2.
  * @param p1 - First point.
  * @param p2 - Second Point.
  * @returns Sum of the two points.
@@ -43,7 +41,6 @@ export function sum(p1: Point, p2: Point): Point {
 
 /**
  * Normalize a point (more precisely the vector from the origin to the point).
- *
  * @param point - Point to normalize.
  * @returns - Normalized point.
  */
@@ -55,9 +52,8 @@ export function normalize(point: Point): Point {
 /**
  * Rotate an array of points by an angle in radians.
  * The rotation is clockwise and the reference is (0,0).
- *
  * @param radians - Angle in radians.
- * @param points - Source points
+ * @param points - Source points.
  * @returns The points after rotation.
  */
 export function rotate(radians: number, points: readonly Point[]): Point[] {
@@ -75,7 +71,6 @@ export function rotate(radians: number, points: readonly Point[]): Point[] {
 
 /**
  * Dot product of 2 points assuming vectors starting from (0,0).
- *
  * @param p1 - First point.
  * @param p2 - Second point.
  * @returns Dot product between the two vectors.
@@ -86,7 +81,6 @@ export function dot(p1: Point, p2: Point) {
 
 /**
  * Round the coordinates of the point.
- *
  * @param point - The point.
  * @returns Rounded coordinates of the point.
  */
@@ -96,7 +90,6 @@ export function round(point: Point): Point {
 
 /**
  * Sort an array of points by column then row.
- *
  * @param points - Array of points to sort.
  * @returns Sorted points.
  */

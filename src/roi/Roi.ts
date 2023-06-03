@@ -96,7 +96,6 @@ export class Roi {
   }
   /**
    * Return the value at the given coordinates in an ROI map.
-   *
    * @param column - Column of the value.
    * @param row - Row of the value.
    * @returns The value at the given coordinates.
@@ -107,7 +106,6 @@ export class Roi {
 
   /**
    * Returns the ratio between the width and the height of the bounding rectangle of the ROI.
-   *
    * @returns The width by height ratio.
    */
   public getRatio(): number {
@@ -116,7 +114,6 @@ export class Roi {
 
   /**
    * Generates a mask of an ROI. You can specify the kind of mask you want using the `kind` option.
-   *
    * @param options - Get Mask options.
    * @returns The ROI mask.
    */
@@ -126,7 +123,6 @@ export class Roi {
 
   /**
    * Computes the diameter of a circle that has the same perimeter as the particle image.
-   *
    * @returns Ped value in pixels.
    */
   get ped() {
@@ -136,7 +132,6 @@ export class Roi {
   /**
    * Return an array with the coordinates of the pixels that are on the border of the ROI.
    * The points are defined as [column, row].
-   *
    * @param options - Get border points options.
    * @returns The array of border pixels.
    */
@@ -147,8 +142,7 @@ export class Roi {
   /**
    * Returns an array of ROIs IDs that are included in the current ROI.
    * This will be useful to know if there are some holes in the ROI.
-   *
-   * @returns internalIDs
+   * @returns InternalIDs.
    */
   get internalIDs() {
     return this.#getComputed('internalIDs', () => {
@@ -195,7 +189,6 @@ export class Roi {
 
   /**
    * Returns an array of ROIs IDs that touch the current ROI.
-   *
    * @returns The array of Borders.
    */
   get externalBorders(): Border[] {
@@ -224,7 +217,6 @@ export class Roi {
 
   /**
    * Calculates and caches the number of sides by which each pixel is touched externally.
-   *
    * @returns An object which tells how many pixels are exposed externally to how many sides.
    */
   get perimeterInfo() {
@@ -295,7 +287,6 @@ export class Roi {
    * The perimeter is calculated using the sum of all the external borders of the ROI to which we subtract:
    * (2 - √2) * the number of pixels that have 2 external borders
    * 2 * (2 - √2) * the number of pixels that have 3 external borders
-   *
    * @returns Perimeter value in pixels.
    */
 
@@ -311,9 +302,7 @@ export class Roi {
     );
   }
   /**
-   *
    * Computes current ROI points.
-   *
    * @returns Array of points. It's an array of tuples, each tuple being the x and y coordinates of the ROI point.
    */
   get points() {
@@ -391,16 +380,15 @@ export class Roi {
   }
 
   /**
-   * Computes the diameter of a circle of equal projection area. It is a diameter of a circle that has the same surface as the ROI.
-   *
-   * @returns Eqpc value in pixels.
+   * Computes the diameter of a circle of equal projection area (EQPC).
+   * It is a diameter of a circle that has the same surface as the ROI.
+   * @returns `eqpc` value in pixels.
    */
   get eqpc() {
     return 2 * Math.sqrt(this.surface / Math.PI);
   }
   /**
    * Computes ellipse of ROI. It is the smallest ellipse that fits the ROI.
-   *
    * @returns Ellipse
    */
   get ellipse(): Ellipse {
@@ -413,7 +401,6 @@ export class Roi {
   /**
    * Number of holes in the ROI and their total surface.
    * Used to calculate fillRatio.
-   *
    * @returns The surface of holes in ROI in pixels.
    */
   get holesInfo() {
@@ -439,8 +426,7 @@ export class Roi {
   }
 
   /**
-   *Calculates and caches border's length and their IDs.
-   *
+   * Calculates and caches border's length and their IDs.
    * @returns Borders' length and their IDs.
    */
   get borders() {
@@ -510,7 +496,6 @@ export class Roi {
   }
   /**
    * Computes fill ratio of the ROI. It is calculated by dividing ROI's actual surface over the surface combined with holes, to see how holes affect its surface.
-   *
    * @returns Fill ratio value.
    */
   get fillRatio() {
@@ -519,7 +504,6 @@ export class Roi {
   /**
    * Computes sphericity of the ROI.
    * Sphericity is a measure of the degree to which a particle approximates the shape of a sphere, and is independent of its size. The value is always between 0 and 1. The less spheric the ROI is the smaller is the number.
-   *
    * @returns Sphericity value.
    */
   get sphericity() {
@@ -527,8 +511,6 @@ export class Roi {
   }
   /**
    * Computes the surface of the ROI, including the surface of the holes.
-   *
-   *
    * @returns Surface including holes measured in pixels.
    */
   get filledSurface() {
@@ -536,9 +518,8 @@ export class Roi {
   }
 
   /**
-   *The solidity describes the extent to which a shape is convex or concave.
+   * The solidity describes the extent to which a shape is convex or concave.
    * The solidity of a completely convex shape is 1, the farther the it deviates from 1, the greater the extent of concavity in the shape of the ROI.
-   *
    * @returns Solidity value.
    */
   get solidity() {
@@ -548,7 +529,6 @@ export class Roi {
 
   /**
    *Computes convex hull. It is the smallest convex set that contains it.
-   *
    * @see https://en.wikipedia.org/wiki/Convex_hull
    * @returns Convex hull.
    */
@@ -560,7 +540,6 @@ export class Roi {
   /**
    * Computes the minimum bounding rectangle.
    * In digital image processing, the bounding box is merely the coordinates of the rectangular border that fully encloses a digital image when it is placed over a page, a canvas, a screen or other similar bidimensional background.
-   *
    * @returns The minimum bounding rectangle.
    */
   get mbr() {
@@ -578,9 +557,8 @@ export class Roi {
   }
   /**
    * This is not a diameter in its actual sense but the common basis of a group of diameters derived from the distance of two tangents to the contour of the particle in a well-defined orientation.
-   *  In simpler words, the method corresponds to the measurement by a slide gauge (slide gauge principle).
+   * In simpler words, the method corresponds to the measurement by a slide gauge (slide gauge principle).
    * In general it is defined as the distance between two parallel tangents of the particle at an arbitrary angle. The minimum Feret diameter is often used as the diameter equivalent to a sieve analysis.
-   *
    * @returns The maximum and minimum Feret Diameters.
    */
 
@@ -591,7 +569,6 @@ export class Roi {
   }
   /**
    * A JSON object with all the data about ROI.
-   *
    * @returns All current ROI properties as one object.
    */
   toJSON() {
@@ -617,7 +594,6 @@ export class Roi {
   }
   /**
    * Computes a center of mass of the current ROI.
-   *
    * @returns point
    */
   get centroid() {
@@ -659,7 +635,6 @@ export class Roi {
 
   /**
    * Calculates the correct index on the map of ROI.
-   *
    * @param y - Map row
    * @param x - Map column
    * @returns Index within the ROI map.

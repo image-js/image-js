@@ -10,7 +10,6 @@ const topFirst = (mbrPoint1: Point, mbrPoint2: Point) =>
 
 /**
  * Get the anti-clockwise angle in degrees between the MBR and a horizontal line.
- *
  * @param mbr - MBR to process.
  * @returns The angle in degrees.
  */

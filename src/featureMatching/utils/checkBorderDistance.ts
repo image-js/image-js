@@ -3,7 +3,6 @@ import { Point } from '../../geometry';
 
 /**
  * Check that a point is not too close to the border of the image.
- *
  * @param image - Image to process.
  * @param point - The interest point.
  * @param distance - The minimum distance to the border required.

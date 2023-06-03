@@ -13,7 +13,6 @@ export function invert(image: Image, options?: InvertOptions): Image;
 export function invert(image: Mask, options?: InvertOptions): Mask;
 /**
  * Invert the components of an image.
- *
  * @param image - The image to invert.
  * @param options - Invert options.
  * @returns The inverted image.

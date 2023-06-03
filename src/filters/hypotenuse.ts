@@ -5,7 +5,6 @@ import { validateChannels } from '../utils/validators';
 export interface HypotenuseOptions {
   /**
    * Bit depth of the resulting image.
-   *
    * @default image.bitDepth
    */
   bitDepth?: BitDepth;
@@ -17,7 +16,6 @@ export interface HypotenuseOptions {
 
 /**
  * Calculate a new image that is the hypotenuse between the current image and the otherImage.
- *
  * @param image - First image to process.
  * @param otherImage - Second image.
  * @param options - Hypotenuse options.

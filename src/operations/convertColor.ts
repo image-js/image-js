@@ -12,7 +12,6 @@ export interface ConvertColorOptions {
 
 /**
  * Convert image to a different color model.
- *
  * @param image - Image to convert.
  * @param colorModel - New color model.
  * @param options - Convert color options.
@@ -83,7 +82,6 @@ export function convertColor(
 
 /**
  * Copy alpha channel of source to dest.
- *
  * @param source - Source image.
  * @param dest - Destination image.
  */
@@ -109,7 +107,6 @@ export function copyAlpha(source: Image, dest: Image): void {
 
 /**
  * Convert grey image to other color model.
- *
  * @param image - Image to convert.
  * @param newImage - Converted image.
  */
@@ -123,7 +120,6 @@ function convertGreyToAny(image: Image, newImage: Image): void {
 
 /**
  * Convert RGB image to RGB. Allows to use convert with an RGB target whatever the image color model is.
- *
  * @param image - Image to convert.
  * @param newImage - Converted image.
  */
@@ -137,7 +133,6 @@ function convertRgbToRgb(image: Image, newImage: Image): void {
 
 /**
  * Convert RGB image to GREY.
- *
  * @param image - Image to convert.
  * @param newImage - Converted image.
  */
@@ -156,7 +151,6 @@ function convertRgbToGrey(image: Image, newImage: Image): void {
 
 /**
  * Convert Mask to GREY.
- *
  * @param mask - Mask to convert.
  * @param newImage - Converted image.
  */
@@ -171,8 +165,7 @@ export function convertBinaryToGrey(mask: Mask, newImage: Image): void {
 }
 
 /**
- * Convert mask to RGB or RGBA
- *
+ * Convert mask to RGB or RGBA.
  * @param mask - Mask to convert.
  * @param newImage - Converted image.
  */

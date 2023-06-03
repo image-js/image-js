@@ -6,7 +6,6 @@ type TiffIfd = ReturnType<typeof decode>[number];
 
 /**
  * Decode a TIFF. See the tiff module.
- *
  * @param buffer - The data to decode.
  * @returns The decoded image.
  */
@@ -18,7 +17,6 @@ export function decodeTiff(buffer: Uint8Array): Image {
 
 /**
  * Create image from a single IFD.
- *
  * @param ifd - The IFD.
  * @returns The decoded image.
  */

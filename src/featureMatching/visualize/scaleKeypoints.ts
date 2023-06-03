@@ -2,7 +2,6 @@ import { FastKeypoint } from '../keypoints/getFastKeypoints';
 
 /**
  * Scales the coordinates of the keypoints.
- *
  * @param keypoints - Keypoints to scale.
  * @param scale - Scalar by which to multiply the coordinates.
  * @returns Scaled keypoints (copy of the original array).

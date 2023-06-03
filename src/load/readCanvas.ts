@@ -3,7 +3,6 @@ import { assert } from '../utils/assert';
 
 /**
  * Read an image from an HTML canvas element.
- *
  * @param canvas - Canvas element.
  * @returns The read image.
  */

@@ -5,7 +5,6 @@ import { validateForComparison } from '../utils/validators';
 export interface SubtractImageOptions {
   /**
    * Return the absolute difference for each pixel.
-   *
    * @default false
    */
   absolute?: boolean;
@@ -28,11 +27,10 @@ export function subtract(
 ): Image | Mask;
 /**
  * Calculate a new image that is the subtraction between the current image and the otherImage.
- *
- * @param image - Image from which to subtract
- * @param otherImage - Image to subtract
+ * @param image - Image from which to subtract.
+ * @param otherImage - Image to subtract.
  * @param options - Subtract options.
- * @returns The subtracted image
+ * @returns The subtracted image.
  */
 export function subtract(
   image: Image | Mask,

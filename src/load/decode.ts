@@ -9,7 +9,6 @@ import { decodeTiff } from './decodeTiff';
 /**
  * Decode input data. Data format is automatically detected.
  * Possible formats: png, jpeg and tiff.
- *
  * @param data - Data to decode.
  * @returns The decoded image.
  */

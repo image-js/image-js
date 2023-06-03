@@ -11,7 +11,6 @@ export interface AutoLevelOptions {
 
 /**
  * Enhance the contrast of an image by spanning each channel on the range [0, image.maxValue].
- *
  * @param image - The image to enhance.
  * @param options - Enhance contrast options.
  * @returns The enhanced image.

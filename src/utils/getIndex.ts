@@ -9,7 +9,6 @@ export function getIndex(
 export function getIndex(column: number, row: number, image: Mask): number;
 /**
  * Compute the current pixel index based on the value coordinates.
- *
  * @param column - Column of the value.
  * @param row - Row of the value.
  * @param image - The image that is being processed.

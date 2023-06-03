@@ -1,6 +1,5 @@
 /**
  * Checks the that the dimensions of the kernel are odd.
- *
  * @param kernel - Kernel passed to a morphology function.
  */
 export function checkKernel(kernel: number[][]) {

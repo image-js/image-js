@@ -10,37 +10,31 @@ import { getKeypointColor } from '../utils/getKeypointColor';
 export interface DrawKeypointsOptions {
   /**
    * Origin of the keypoints in the image.
-   *
    * @default {row: 0, column: 0}
    */
   origin?: Point;
   /**
    * Markers size in pixels.
-   *
    * @default 10
    */
   markerSize?: number;
   /**
    * Annotations color.
-   *
    * @default [255,0,0]
    */
   color?: number[];
   /**
    * Whether to fill the markers.
-   *
    * @default false
    */
   fill?: boolean;
   /**
    * Whether the score of the keypoints should be reflected in their color.
-   *
    * @default false
    */
   showScore?: boolean;
   /**
    * Maximal number of matches with smallest distance to draw.
-   *
    * @default keypoints.length
    */
 
@@ -58,7 +52,6 @@ export interface DrawKeypointsOptions {
 interface DrawOrientedKeypointsOptions extends DrawKeypointsOptions {
   /**
    * Show the orientation of the keypoints.
-   *
    * @default false
    */
   showOrientation?: boolean;
@@ -76,7 +69,6 @@ export function drawKeypoints(
 ): Image;
 /**
  * Draw keypoints on an image.
- *
  * @param image - The source image of the keypoints.
  * @param keypoints - The FAST keypoints.
  * @param options - Draw keypoints options.

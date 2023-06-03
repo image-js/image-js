@@ -7,7 +7,6 @@
 
 /**
  * Return a threshold for a histogram using Otsu algorithm.
- *
  * @param histogramCounts - The image histogram.
  * @param total - Total number of pixels of the image.
  * @returns The threshold.

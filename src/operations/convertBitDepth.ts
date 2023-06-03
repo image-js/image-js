@@ -2,7 +2,6 @@ import { Image, BitDepth } from '../Image';
 
 /**
  * Convert the bit depth of an image.
- *
  * @param image - Image to convert.
  * @param newBitDepth - Bit depth to convert to.
  * @returns Converted image.
@@ -21,7 +20,6 @@ export function convertBitDepth(image: Image, newBitDepth: BitDepth): Image {
 
 /**
  * Convert bit depth to 16 bits.
- *
  * @param image - Image to convert.
  * @returns Converted image.
  */
@@ -42,7 +40,6 @@ function convertToUint16(image: Image): Image {
 
 /**
  * Convert bit depth to 8 bits.
- *
  * @param image - Image to convert.
  * @returns Converted image.
  */

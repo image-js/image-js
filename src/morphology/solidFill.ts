@@ -4,7 +4,6 @@ import { maskToOutputMask } from '../utils/getOutputImage';
 export interface SolidFillOptions {
   /**
    * Consider pixels connected by corners?
-   *
    * @default false
    */
   allowCorners?: boolean;
@@ -16,7 +15,6 @@ export interface SolidFillOptions {
 
 /**
  * Fill holes in regions of interest.
- *
  * @param mask - Mask to process.
  * @param options - Flood fill options.
  * @returns The filled mask.

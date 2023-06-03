@@ -5,13 +5,11 @@ import { maskToOutputMask } from '../utils/getOutputImage';
 export interface PaintMaskOnMaskOptions {
   /**
    * Top-left corner of the mask relative to a parent image.
-   *
    * @default {row: 0, column: 0}
    */
   origin?: Point;
   /**
    * Value with which to set the pixel.
-   *
    * @default 1
    */
   value?: BitValue;
@@ -23,7 +21,6 @@ export interface PaintMaskOnMaskOptions {
 
 /**
  * Paint a mask onto an image and the given position and with the given color.
- *
  * @param image - Image on which to paint the mask.
  * @param mask - Mask to paint on the image.
  * @param options - Paint mask options.

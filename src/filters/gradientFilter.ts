@@ -5,19 +5,16 @@ import type { BorderType } from '../utils/interpolateBorder';
 export interface GradientFilterBaseOptions {
   /**
    * Specify how the borders should be handled.
-   *
    * @default 'replicate'
    */
   borderType?: BorderType;
   /**
    * Value of the border if BorderType is 'constant'.
-   *
    * @default 0
    */
   borderValue?: number;
   /**
    * Specify the bit depth of the resulting image.
-   *
    * @default image.bitDepth
    */
   bitDepth?: BitDepth;
@@ -54,7 +51,6 @@ export type GradientFilterOptions =
 
 /**
  * Apply a gradient filter to an image.
- *
  * @param image - The image to process.
  * @param options - Gradient filter options.
  * @returns The gradient image.

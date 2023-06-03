@@ -40,10 +40,9 @@ export interface Feret {
 }
 
 /**
- * Computes the Feret diameters
- * https://www.sympatec.com/en/particle-measurement/glossary/particle-shape/#
- * http://portal.s2nano.org:8282/files/TEM_protocol_NANoREG.pdf
- *
+ * Computes the Feret diameters.
+ * @see {@link https://www.sympatec.com/en/particle-measurement/glossary/particle-shape/#}
+ * @see {@link http://portal.s2nano.org:8282/files/TEM_protocol_NANoREG.pdf}
  * @param mask - The mask of the ROI.
  * @returns The Feret diameters.
  */

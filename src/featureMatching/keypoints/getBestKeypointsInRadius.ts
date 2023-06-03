@@ -3,7 +3,6 @@ import { getKeypointsInRadius } from './utils/getKeypointsInRadius';
 
 /**
  * Return the best keypoints within the given radius in pixels.
- *
  * @param keypoints - Keypoints to process.
  * @param radius - Minimum distance in pixels between two keypoints.
  * @returns The filtered keypoints.

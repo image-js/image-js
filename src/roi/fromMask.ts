@@ -7,7 +7,6 @@ import { maxNumberRois, maxRoiId } from './utils/constants';
 export interface FromMaskOptions {
   /**
    * Consider pixels connected by corners as same ROI?
-   *
    * @default false
    */
   allowCorners?: boolean;
@@ -15,7 +14,6 @@ export interface FromMaskOptions {
 
 /**
  * Extract the ROIs of an image.
- *
  * @param mask - Mask to extract the ROIs from.
  * @param options - From mask options.
  * @returns The corresponding ROI manager.

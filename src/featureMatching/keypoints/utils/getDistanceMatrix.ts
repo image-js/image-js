@@ -4,7 +4,6 @@ export type DistanceMatrix = Float64Array[];
 
 /**
  * Compute the squared distance from each keypoint to the other ones.
- *
  * @param keypoints - Keypoints to process.
  * @returns Distance matrix.
  */

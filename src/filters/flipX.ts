@@ -3,7 +3,6 @@ import checkProcessable from '../utils/checkProcessable';
 
 /**
  * Apply a flipX filter to an image.
- *
  * @param image - Image to process.
  * @returns The processed image.
  */

@@ -1,8 +1,7 @@
 import { difference, dot, normalize, Point } from './points';
 
 /**
- * Convert radians to degrees
- *
+ * Convert radians to degrees.
  * @param radians - Angle in radians.
  * @returns  Angle in degrees.
  */
@@ -12,7 +11,6 @@ export function toDegrees(radians: number): number {
 
 /**
  * Returns the angle between 3 points. The first one is the point where the angle is.
- *
  * @param origin - Origin where the angle has to be measured.
  * @param p1 - First point.
  * @param p2 - Second point.

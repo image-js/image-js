@@ -4,7 +4,6 @@ export function copyData(source: Image, target: Image): void;
 export function copyData(source: Mask, target: Mask): void;
 /**
  * Copy the data of an source to the target image.
- *
  * @param source - Image which data is copied.
  * @param target - Image to which the data must be copied.
  */

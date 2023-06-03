@@ -28,7 +28,6 @@ interface OutInternalOptions {
 /**
  * Use this function to support getting the output image of an algorithm from
  * user-supplied options.
- *
  * @param thisImage - Current image on which the algorithm is applied.
  * @param options - Options object received by the algorithm.
  * @param internalOptions - Some additional private options.
@@ -69,7 +68,6 @@ export function getOutputImage(
 /**
  * Use this function to support getting the output image of an algorithm from
  * user-supplied options when the input is a mask.
- *
  * @param mask - Current mask on which the algorithm is applied.
  * @param options - Options object received by the algorithm.
  * @returns The output image.
@@ -99,7 +97,6 @@ export function maskToOutputImage(mask: Mask, options: OutOptions = {}): Image {
 /**
  * Use this function to support getting the output mask of an algorithm from
  * user-supplied options when the input is an image.
- *
  * @param image - Current image on which the algorithm is applied.
  * @param options - Options object received by the algorithm.
  * @returns The output mask.
@@ -144,7 +141,6 @@ function checkRequirements<ReqType extends object, OutType extends ReqType>(
 /**
  * Use this function to support getting the output mask of an algorithm from
  * user-supplied options when the input is an mask.
- *
  * @param mask - Current mask on which the algorithm is applied.
  * @param options - Options object received by the algorithm.
  * @param internalOptions - Additional private options.

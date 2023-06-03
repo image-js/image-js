@@ -28,7 +28,6 @@ export interface ConvexHull {
 
 /**
  * Get the vertices of the convex Hull polygon of a mask.
- *
  * @param mask - Mask to process.
  * @returns Array of the vertices of the convex Hull in clockwise order.
  */

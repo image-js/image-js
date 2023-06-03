@@ -5,7 +5,6 @@ import { assert } from '../utils/assert';
 export interface WriteCanvasOptions {
   /**
    * If set to `true`, the canvas element will be resized to fit the image.
-   *
    * @default true
    */
   resizeCanvas?: boolean;
@@ -38,9 +37,7 @@ export interface WriteCanvasOptions {
 // TODO: Create nodejs version that throws an error
 /**
  * Draw the image in an HTML canvas.
- *
  * @param image - The image to draw.
- * @param imageOrMask
  * @param canvas - The HTML canvas.
  * @param options - Write canvas options.
  */

@@ -6,7 +6,6 @@ import { readCanvas } from './readCanvas';
 
 /**
  * Read an image from an HTML image source.
- *
  * @param img - Image source such as an <img> or <svg> element.
  * @returns The read image.
  */

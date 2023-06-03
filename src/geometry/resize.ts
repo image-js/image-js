@@ -26,25 +26,21 @@ export interface ResizeOptions {
   yFactor?: number;
   /**
    * Whether the aspect ratio of the image should be preserved.
-   *
    * @default true
    */
   preserveAspectRatio?: boolean;
   /**
-   * Method to use to interpolate the new pixels
-   *
+   * Method to use to interpolate the new pixels.
    * @default 'bilinear'
    */
   interpolationType?: InterpolationType;
   /**
    * Specify how the borders should be handled.
-   *
    * @default 'constant'
    */
   borderType?: BorderType;
   /**
    * Value of the border if BorderType is 'constant'.
-   *
    * @default 0
    */
   borderValue?: number;
@@ -52,7 +48,6 @@ export interface ResizeOptions {
 
 /**
  * Returns a resized copy of an image.
- *
  * @param image - Original image.
  * @param options - Resize options.
  * @returns The new image.
@@ -92,7 +87,6 @@ export function resize(image: Image, options: ResizeOptions): Image {
 
 /**
  * Verify that the resize options are valid.
- *
  * @param image - Image.
  * @param options - Resize options.
  * @returns Resize options.
@@ -156,7 +150,6 @@ function checkOptions(
 
 /**
  * Compute automatic new size.
- *
  * @param sizeOpt - Size option.
  * @param factor - Factor option.
  * @param sizeImg - Size of the image.

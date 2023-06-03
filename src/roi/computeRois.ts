@@ -3,8 +3,7 @@ import { RoiMapManager } from './RoiMapManager';
 
 /**
  * Generate an array of ROIs based on an ROI map manager.
- *
- * @param roiMapManager - Roi map manager to use
+ * @param roiMapManager - Roi map manager to use.
  */
 export function computeRois(roiMapManager: RoiMapManager): void {
   const map = roiMapManager.getMap();

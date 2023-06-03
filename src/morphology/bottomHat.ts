@@ -7,13 +7,11 @@ export interface BottomHatOptions {
   /**
    * 3x3 matrix. The kernel can only have ones and zeros.
    * Accessing a value: kernel[row][column].
-   *
    * @default [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
    */
   kernel?: number[][];
   /**
    * Number of iterations of the algorithm.
-   *
    * @default 1
    */
   iterations?: number;
@@ -28,11 +26,10 @@ export function bottomHat(image: Mask, options?: BottomHatOptions): Mask;
  * The black top-hat transform is defined dually as the difference between the closed and the input image.
  * Top-hat transforms are used for various image processing tasks, such as feature extraction, background equalization,
  * image enhancement, and others. (Wikipedia)
- * http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html
- *
- * @param image - Image to process
- * @param options - Bottom hat options
- * @returns The bottom-hatted image
+ * @see {@link http://docs.opencv.org/2.4/doc/tutorials/imgproc/opening_closing_hats/opening_closing_hats.html}
+ * @param image - Image to process.
+ * @param options - Bottom hat options.
+ * @returns The bottom-hatted image.
  */
 export function bottomHat(
   image: Image | Mask,

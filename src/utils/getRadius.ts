@@ -1,6 +1,5 @@
 /**
  * Compute the radius of the circle of given size.
- *
  * @param size - Size of the circle.
  * @returns The radius.
  */

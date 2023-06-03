@@ -15,7 +15,6 @@ import { isFastKeypoint, IsFastKeypointOptions } from './isFastKeypoint';
 export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
   /**
    * Maximum number of features to return.
-   *
    * @default 500
    */
   maxNbFeatures?: number;
@@ -23,19 +22,16 @@ export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
    * Whether to apply non-max suppression to the keypoints.
    * This removes all keypoints which
    * don't have the highest value within the adjacent keypoints.
-   *
    * @default true
    */
   nonMaxSuppression?: boolean;
   /**
    * Radius of the circle used for the algorithm.
-   *
    * @default 3
    */
   fastRadius?: number;
   /**
    * Algorithm to use to compute corners score.
-   *
    * @default 'FAST'
    */
   scoreAlgorithm?: 'HARRIS' | 'FAST';
@@ -60,8 +56,7 @@ export interface FastKeypoint {
 /**
  * Find the features in a GREY image according to the FAST (Features from Accelerated Segment Test) algorithm.
  * Based on the paper Machine Learning for High-Speed Corner Detection.
- * DOI: https://doi.org/10.1007/11744023_34
- *
+ * DOI: https://doi.org/10.1007/11744023_34.
  * @param image - The image to process.
  * @param options - Get FAST keypoints options.
  * @returns The FAST keypoints.

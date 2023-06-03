@@ -8,7 +8,6 @@
 
 /**
  * Return a threshold for a histogram using percentiles.
- *
  * @param histogram - Image histogram.
  * @returns The threshold.
  */

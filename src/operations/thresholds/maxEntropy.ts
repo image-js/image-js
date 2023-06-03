@@ -10,7 +10,6 @@
 
 /**
  * Return a threshold for a histogram using maximal enthropy algorithm.
- *
  * @param histogram - Image histogram.
  * @param total - Number of pixels in the image.
  * @returns The threshold.

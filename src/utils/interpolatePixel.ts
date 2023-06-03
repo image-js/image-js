@@ -24,7 +24,6 @@ type InterpolationFunction = (
 
 /**
  * Get the interpolation function based on its name.
- *
  * @param interpolationType - Specified interpolation type.
  * @returns The interpolation function.
  */
@@ -49,7 +48,6 @@ export function getInterpolationFunction(
 
 /**
  * Interpolate using nearest neighbor.
- *
  * @param image - The image to interpolate.
  * @param column - Column index.
  * @param row - Row index.
@@ -72,7 +70,6 @@ function interpolateNearest(
 
 /**
  * Interpolate using bilinear interpolation.
- *
  * @param image - The image to interpolate.
  * @param column - Column index.
  * @param row - Row index.
@@ -116,7 +113,6 @@ function interpolateBilinear(
 
 /**
  * Interpolate using bicubic interpolation.
- *
  * @param image - The image to interpolate.
  * @param column - Column index.
  * @param row - Row index.
@@ -172,7 +168,6 @@ function interpolateBicubic(
 
 /**
  * Cubic function.
- *
  * @param a - First value.
  * @param b - Second value.
  * @param c - Third value.

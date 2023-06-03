@@ -6,13 +6,11 @@ import { transform, TransformOptions } from './transform';
 export interface TransformRotateOptions extends TransformOptions {
   /**
    * Specify the rotation center point as a predefined string or a Point.
-   *
    * @default The center of the image.
    */
   center?: ImageCoordinates | Point;
   /**
    * Scaling factor for the rotated image.
-   *
    * @default 1
    */
   scale?: number;
@@ -20,7 +18,6 @@ export interface TransformRotateOptions extends TransformOptions {
 
 /**
  * Rotate an image anti-clockwise of a given angle.
- *
  * @param image - Original image.
  * @param angle - Angle in degrees.
  * @param options - Rotate options.
@@ -46,7 +43,6 @@ export function transformRotate(
 
 /**
  * Generates a rotation matrix for the given angle.
- *
  * @param angle - Angle in degrees.
  * @param center - Center point of the image.
  * @param scale - Scaling factor.

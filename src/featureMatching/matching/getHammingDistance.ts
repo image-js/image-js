@@ -2,7 +2,6 @@ import { BriefDescriptor } from '../descriptors/getBriefDescriptors';
 
 /**
  * Compute the Hamming distance between two bit strings.
- *
  * @see {@link https://en.wikipedia.org/wiki/Hamming_distance}
  * @param descriptor1 - First bit string.
  * @param descriptor2 - Second bit string.

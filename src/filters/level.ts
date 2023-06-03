@@ -8,37 +8,31 @@ export interface LevelOptions {
   /**
    * Specify which channels should be processed. To process the alpha as well,
    * specify the channels as [0,1,2,3] for RGBA images and [0,1] for GREYA.
-   *
    * @default All components of the image the image (no alpha).
    */
   channels?: number[];
   /**
    * Minimal input value.
-   *
    * @default 0
    */
   inputMin?: number | number[];
   /**
    * Maximal input value.
-   *
    * @default image.maxValue
    */
   inputMax?: number | number[];
   /**
    * Minimal output value.
-   *
    * @default 0
    */
   outputMin?: number | number[];
   /**
    * Maximal output value.
-   *
    * @default image.maxValue
    */
   outputMax?: number | number[];
   /**
    * Specifies the shape of the curve connecting the two points.
-   *
    * @default 1
    */
   gamma?: number | number[];
@@ -50,7 +44,6 @@ export interface LevelOptions {
 
 /**
  * Level the image using the optional input and output value. This function allows you to enhance the image's contrast.
- *
  * @param image - Image to process.
  * @param options - Level options.
  * @returns The levelled image.
@@ -111,7 +104,6 @@ export function level(image: Image, options: LevelOptions = {}) {
 
 /**
  * Get an array with correct values for each channel to process.
- *
  * @param value - Number or array to transform to the final array.
  * @param imageChannels - Number of channels processed in the level function.
  * @returns Array of values for each channel.

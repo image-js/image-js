@@ -7,7 +7,6 @@ import { maskToOutputMask } from '../utils/getOutputImage';
 export interface DrawLineOnMaskOptions {
   /**
    * Origin of the line relative to a parent image (top-left corner).
-   *
    * @default {row: 0, column: 0}
    */
   origin?: Point;
@@ -19,7 +18,6 @@ export interface DrawLineOnMaskOptions {
 
 /**
  * Draw a line defined by two points onto a mask.
- *
  * @param mask - Mask to process.
  * @param from - Line starting point.
  * @param to - Line ending point.

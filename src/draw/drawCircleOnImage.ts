@@ -12,7 +12,6 @@ import { validateColor } from '../utils/validators';
 export interface DrawCircleOnImageOptions {
   /**
    * Circle border color array of N elements (e.g. R, G, B or G, A), N being the number of channels.
-   *
    * @default black
    */
   color?: number[];
@@ -29,14 +28,12 @@ export interface DrawCircleOnImageOptions {
 }
 
 /**
- *
  * Draw a circle defined by center and radius.
- *
  * @param image - Image to process.
  * @param center - Circle center point.
  * @param radius - Circle radius.
  * @param options - Draw circle options.
- * @returns The original drawn image
+ * @returns The original drawn image.
  */
 export function drawCircleOnImage(
   image: Image,

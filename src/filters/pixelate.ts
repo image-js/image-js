@@ -6,12 +6,11 @@ import { getOutputImage } from '../utils/getOutputImage';
 
 export interface PixelateOptions {
   /**
-   *  range of pixelated area.
+   *  Range of pixelated area.
    */
   cellSize: number;
   /**
    * algorithm to use.
-   *
    * @default center
    */
   algorithm?: 'center' | 'median' | 'mean';
@@ -37,11 +36,10 @@ interface GetValueOptions {
 }
 
 /**
- *Function to pixelate an image
- *
- * @param image - image to be pixelated
- * @param options - PixelateOptions
- * @returns pixelated Image
+ * Function to pixelate an image.
+ * @param image - Image to be pixelated.
+ * @param options - PixelateOptions.
+ * @returns Pixelated Image.
  */
 export function pixelate(image: Image, options: PixelateOptions): Image {
   const { cellSize, algorithm = 'center' } = options;
@@ -83,9 +81,7 @@ export function pixelate(image: Image, options: PixelateOptions): Image {
 }
 
 /**
- *Computes the center value for the current sector
- *
- *
+ * Computes the center value for the current sector
  * @param image - image used for the algorithm
  * @param channel - image channel toto find center value of
  * @param options - GetValueOptions
@@ -109,7 +105,6 @@ function getCellCenter(
 }
 /**
  * Computes mean value for the current sector
- *
  * @param image - image used for algorithm
  * @param channel - current channel of an image
  * @param options - GetValueOptions
@@ -135,7 +130,6 @@ function getCellMean(image: Image, channel: number, options: GetValueOptions) {
 }
 /**
  * Computes a median value for the current sector
- *
  * @param image - image used algorithm
  * @param channel - current channel of an image
  * @param options - GetValueOptions
@@ -165,7 +159,6 @@ function getCellMedian(
 }
 /**
  *  Chooses which algorithm to use for pixelization and returns a function to use for computation
- *
  * @param algorithm - string with the name of an algorithm
  * @returns function
  */

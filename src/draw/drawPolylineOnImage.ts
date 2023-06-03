@@ -8,13 +8,11 @@ import { validateColor } from '../utils/validators';
 export interface DrawPolylineOnImageOptions {
   /**
    * Line color - array of N elements (e.g. R, G, B or G, A), N being the number of channels.
-   *
    * @default black
    */
   strokeColor?: number[];
   /**
    * Origin of the rectangle relative to a parent image (top-left corner).
-   *
    * @default {row: 0, column: 0}
    */
   origin?: Point;
@@ -26,7 +24,6 @@ export interface DrawPolylineOnImageOptions {
 
 /**
  * Draw a polyline defined by an array of points on an image.
- *
  * @param image - Image to process.
  * @param points - Polyline array of points.
  * @param options - Draw polyline options.

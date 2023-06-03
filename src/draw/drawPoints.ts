@@ -9,13 +9,11 @@ import { validateColor } from '../utils/validators';
 export interface DrawPointsOptions {
   /**
    * Color of the points. Should be an array of N elements (e.g. R, G, B or G, A), N being the number of channels.
-   *
    * @default 'black'
    */
   color?: number[];
   /**
    * Origin of the points relative to a parent image (top-left corner).
-   *
    * @default {row: 0, column: 0}
    */
   origin?: Point;
@@ -38,7 +36,6 @@ export function drawPoints(
 
 /**
  * Draw a set of points on an image or a mask.
- *
  * @param image - The image on which to draw the points.
  * @param points - Array of points.
  * @param options - Draw points on Image options.

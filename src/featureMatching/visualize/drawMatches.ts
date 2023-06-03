@@ -11,19 +11,16 @@ import { scaleKeypoints } from './scaleKeypoints';
 export interface DrawMatchesOptions {
   /**
    * Circles diameter in pixels.
-   *
    * @default 10
    */
   circleDiameter?: number;
   /**
    * Annotations color.
-   *
    * @default [255,0,0]
    */
   color?: number[];
   /**
    * Whether the matches should be colored depending on the distance.
-   *
    * @default false
    */
   showDistance?: boolean;
@@ -33,7 +30,6 @@ export interface DrawMatchesOptions {
   showDistanceOptions?: GetColorsOptions;
   /**
    * Maximal number of keypoints with best score to draw.
-   *
    * @default matches.length
    */
   maxNbMatches?: number;
@@ -41,7 +37,6 @@ export interface DrawMatchesOptions {
 
 /**
  * Draw the the matches between two images on their montage.
- *
  * @param montage - The montage of two images to match.
  * @param matches - The matches between source and destination.
  * @param sourceKeypoints - Source keypoints.

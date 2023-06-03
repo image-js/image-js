@@ -1,6 +1,5 @@
 /**
  * Round a pixel value.
- *
  * @param value - Value of the pixel.
  * @returns The rounded value.
  */

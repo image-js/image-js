@@ -6,7 +6,6 @@ export type DistanceMatrix = Float64Array[];
 
 /**
  * Find all keypoints within radius from the current keypoint.
- *
  * @param keypoints - Keypoints to process.
  * @param radius - Radius in which the surrounding keypoints should be.
  * @returns Array of keypoints within radius for each of the keypoints.

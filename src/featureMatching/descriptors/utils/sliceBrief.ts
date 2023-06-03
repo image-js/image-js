@@ -3,13 +3,11 @@ import { Brief } from '../..';
 export interface SliceBriefOptions {
   /**
    * Start index.
-   *
    * @default 0
    */
   start?: number;
   /**
    * End index.
-   *
    * @default brief.keypoints.length
    */
   end?: number;
@@ -17,8 +15,7 @@ export interface SliceBriefOptions {
 
 /**
  * Slice a Brief to keep only the desired keypoints and the corresponding descriptors.
- *
- * @param brief - Brief to process
+ * @param brief - Brief to process.
  * @param options - Slice Brief options.
  * @returns The desired keypoints + descriptors.
  */

@@ -6,7 +6,6 @@ import { ImageColorModel } from '../utils/constants/colorModels';
 
 /**
  * Decode a PNG. See the fast-png npm module.
- *
  * @param buffer - The data to decode.
  * @returns The decoded image.
  */
@@ -45,7 +44,6 @@ export function decodePng(buffer: Uint8Array): Image {
 
 /**
  * Compute PNG data from palette information and return a new image.
- *
  * @param png - Decoded PNG.
  * @returns The new image.
  */

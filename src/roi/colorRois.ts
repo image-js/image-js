@@ -8,7 +8,7 @@ import { RoiMapManager } from '.';
 
 export const RoisColorMode = {
   /**
-   * Only two acceptable values: red or green
+   * Only two acceptable values: red or green.
    */
   BINARY: 'binary',
   /**
@@ -26,13 +26,11 @@ export type RoisColorMode = (typeof RoisColorMode)[keyof typeof RoisColorMode];
 export interface ColorRoisOptions {
   /**
    * Define the color mode to use to color the ROIs.
-   *
    * @default 'binary'
    */
   mode?: RoisColorMode;
   /**
    * Specify which ROIs to color.
-   *
    * @default 'bw'
    */
   roiKind?: RoiKind;
@@ -40,7 +38,6 @@ export interface ColorRoisOptions {
 
 /**
  * Generate an image with all the ROIs of various colors.
- *
  * @param roiMapManager - The ROI map manager.
  * @param options - Color ROIs options.
  * @returns The colored image.

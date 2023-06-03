@@ -2,7 +2,6 @@ import { Match } from '../matching/bruteForceMatch';
 
 /**
  * Sort array of matches by source index and then destination index.
- *
  * @param matches - Array of matches to sort.
  * @returns Sorted copy of the array of matches.
  */
@@ -16,7 +15,6 @@ export function sortBySourceDest(matches: Match[]): Match[] {
 
 /**
  * Sort array of matches by destination index and then source index.
- *
  * @param matches - Array of matches to sort.
  * @returns Sorted copy of the array of matches.
  */

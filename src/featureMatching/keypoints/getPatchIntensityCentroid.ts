@@ -8,8 +8,7 @@ import {
 
 /**
  * Compute the intensity centroid of the circular patch in an image for each channel relatively to the center of the image.
- * Original article: {@link https://doi.org/10.1006/cviu.1998.0719}
- *
+ * Original article: {@link https://doi.org/10.1006/cviu.1998.0719}.
  * @see {@link https://en.wikipedia.org/wiki/Image_moment}
  * @param image - Image to process.
  * @param options - Patch intensity centroid options.

@@ -4,7 +4,6 @@ export type RotateAngle = 90 | 180 | 270 | -90 | -180 | -270;
 
 /**
  * Rotates an image in multiples of 90 degrees.
- *
  * @param image - The image to rotate.
  * @param angle - The angle to rotate the image by. Positive values rotate clockwise, negative values rotate counter-clockwise.
  * @returns - The rotated image.

@@ -6,7 +6,6 @@ import { DrawMarkerOptions, drawMarker } from './drawMarker';
 
 /**
  * Draw markers on the image.
- *
  * @param image - Image to process.
  * @param points - Markers center points.
  * @param options - Draw marker options.

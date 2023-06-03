@@ -17,7 +17,6 @@ export interface Line {
 
 /**
  * Compute the length of a segment defined by two points.
- *
  * @param p1 - First point.
  * @param p2 - Second point.
  * @returns Length of the segment.

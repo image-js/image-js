@@ -6,7 +6,6 @@ export type EncodePngOptions = PngEncoderOptions;
 
 /**
  * Creates a PNG buffer from an image.
- *
  * @param image - The image instance.
  * @param options - PNG encoding options.
  * @returns The buffer.

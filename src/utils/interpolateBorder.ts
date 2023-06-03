@@ -20,8 +20,7 @@ export type BorderInterpolationFunction = (
 /**
  * Pick the border interpolation algorithm.
  * The different algorithms are illustrated here:
- * https://vovkos.github.io/doxyrest-showcase/opencv/sphinx_rtd_theme/enum_cv_BorderTypes.html
- *
+ * @see {@link https://vovkos.github.io/doxyrest-showcase/opencv/sphinx_rtd_theme/enum_cv_BorderTypes.html}
  * @param type - The border type.
  * @param value - A pixel value if BorderType.CONSTANT is used.
  * @returns The border interpolation function.
@@ -70,7 +69,6 @@ function getInterpolateConstant(value: number): BorderInterpolationFunction {
 
 /**
  * Interpolate using a constant point.
- *
  * @param point - The point to interpolate.
  * @param length  - The length of the image.
  * @returns The interpolated point.
@@ -100,7 +98,6 @@ function interpolateReplicate(
 
 /**
  * Interpolate by replicating the border.
- *
  * @param point - The point to interpolate.
  * @param length - The length of the image.
  * @returns The interpolated point.
@@ -135,7 +132,6 @@ function interpolateReflect(
 
 /**
  * Interpolate by reflecting the border.
- *
  * @param point - The point to interpolate.
  * @param length - The length of the image.
  * @returns The interpolated point.
@@ -167,7 +163,6 @@ function interpolateWrap(
 
 /**
  * Interpolate by wrapping the border.
- *
  * @param point - The point to interpolate.
  * @param length - The length of the image.
  * @returns The interpolated point.
@@ -199,7 +194,6 @@ function interpolateReflect101(
 
 /**
  * Interpolate by reflecting the border.
- *
  * @param point - The point to interpolate.
  * @param length - The length of the image.
  * @returns The interpolated point.

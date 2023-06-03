@@ -8,25 +8,21 @@ import { validateColor } from '../utils/validators';
 export interface DrawMarkerOptions {
   /**
    * Marker size, Odd number greater than 1.
-   *
    * @default 1
    */
   size?: number;
   /**
    * Marker shape.
-   *
    * @default 'cross'
    */
   shape?: 'circle' | 'triangle' | 'cross' | 'square';
   /**
    * Set marker as filled.
-   *
    * @default false
    */
   filled?: boolean;
   /**
    * Circle border color array of N elements (e.g. R, G, B or G, A), N being the number of channels.
-   *
    * @default black
    */
   color?: number[];
@@ -38,7 +34,6 @@ export interface DrawMarkerOptions {
 
 /**
  * Draw a marker on the image.
- *
  * @param image - Image to process.
  * @param point - Marker center point.
  * @param options - Draw marker options.

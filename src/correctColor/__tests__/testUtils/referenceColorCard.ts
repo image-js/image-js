@@ -9,7 +9,7 @@ export interface ColorCardSquare {
    * Color of the square in the L*a*b* format.
    *   - l in range [0,100] (percents)
    *   - a and b as a value in range [-128, 127]
-   *   - a is green to red and b is blue to yellow
+   *   - a is green to red and b is blue to yellow.
    */
   lab: LabColor;
   /**
@@ -29,7 +29,7 @@ export interface ColorCardSquare {
 export type ColorCard = ColorCardSquare[];
 
 /**
- * The color card reference values in the L*a*b* format
+ * The color card reference values in the L*a*b* format.
  */
 export const referenceColorCard = [
   {

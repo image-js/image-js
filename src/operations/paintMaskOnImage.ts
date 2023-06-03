@@ -8,19 +8,16 @@ import { setBlendedPixel } from '../utils/setBlendedPixel';
 export interface PaintMaskOnImageOptions {
   /**
    * Top-left corner of the mask relative to a parent image.
-   *
    * @default {row: 0, column: 0}
    */
   origin?: Point;
   /**
    * Color with which to blend the image pixel.
-   *
    * @default Opaque black.
    */
   color?: Array<number | null>;
   /**
    * Whether the given color should be blended with the original pixel.
-   *
    * @default true
    */
   blend?: boolean;
@@ -32,7 +29,6 @@ export interface PaintMaskOnImageOptions {
 
 /**
  * Paint a mask onto an image and the given position and with the given color.
- *
  * @param image - Image on which to paint the mask.
  * @param mask - Mask to paint on the image.
  * @param options - Paint mask options.

@@ -4,11 +4,10 @@ import { computeSsim, SsimOptions } from './computeSsim';
 
 /**
  * Compute the Structural Dissimilarity (DSSIM) of two GREY images.
- * https://en.wikipedia.org/wiki/Structural_similarity
- *
+ * @see {@link https://en.wikipedia.org/wiki/Structural_similarity}
  * @param image - First image.
  * @param otherImage - Second image.
- * @param options - SsimOptions
+ * @param options - Options.
  * @returns SSIM of the two images.
  */
 export function computeDssim(

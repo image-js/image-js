@@ -11,7 +11,6 @@ interface ExtendBordersOptions {
 
 /**
  * Extend the borders of an image according to the given border type.
- *
  * @param image - Image to extend.
  * @param options - Options.
  * @returns A copy of the image with extended borders.

@@ -2,7 +2,6 @@ import { Match } from '../matching/bruteForceMatch';
 
 /**
  * Source array of matches by ascending distance.
- *
  * @param matches - Array of matches to sort.
  * @returns Sorted copy of the array of matches.
  */

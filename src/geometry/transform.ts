@@ -18,21 +18,18 @@ export interface TransformOptions {
    */
   height?: number;
   /**
-   * Method to use to interpolate the new pixels
-   *
+   * Method to use to interpolate the new pixels.
    * @default 'bilinear'
    */
 
   interpolationType?: InterpolationType;
   /**
    * Specify how the borders should be handled.
-   *
    * @default 'constant'
    */
   borderType?: BorderType;
   /**
    * Value of the border if BorderType is 'constant'.
-   *
    * @default 0
    */
   borderValue?: number;
@@ -49,7 +46,6 @@ export interface TransformOptions {
 
 /**
  * Transforms an image using a matrix.
- *
  * @param image - Original image.
  * @param transformMatrix - 2×3 transform matrix.
  * @param options - Transform options.
@@ -158,7 +154,6 @@ export function transform(
 
 /**
  * Apply a transformation to a point.
- *
  * @param transform - Transformation matrix.
  * @param column - Column of the point.
  * @param row - Row of the point.

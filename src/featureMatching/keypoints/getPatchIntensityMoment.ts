@@ -6,13 +6,11 @@ import { checkBorderDistance } from '../utils/checkBorderDistance';
 export interface GetPatchIntensityMomentOptions {
   /**
    * Center of the circular window.
-   *
    * @default The center of the image.
    */
   center?: Point;
   /**
    * Radius of the circular window.
-   *
    * @default 3
    */
   radius?: number;
@@ -21,8 +19,7 @@ export interface GetPatchIntensityMomentOptions {
 /**
  * Compute the pq order intensity moment of the circular patch with given radius in the image,
  * relatively to the origin defined in the options.
- * Original article: {@link https://doi.org/10.1006/cviu.1998.0719}
- *
+ * Original article: {@link https://doi.org/10.1006/cviu.1998.0719}.
  * @see {@link https://en.wikipedia.org/wiki/Image_moment}
  * @param image - Image to process.
  * @param p - Order along x.

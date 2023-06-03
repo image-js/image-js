@@ -3,7 +3,6 @@ import { ImageColorModel } from '../utils/constants/colorModels';
 
 /**
  * Inverse of split. Merges multiple single-channel images into one.
- *
  * @param images - An array of single-channel images.
  * @returns The merged image.
  */
