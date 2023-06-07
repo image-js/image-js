@@ -57,6 +57,7 @@ import {
   transformRotate,
   TransformRotateOptions,
 } from './geometry';
+import { ImageMetadata } from './load/getMetadata';
 import {
   bottomHat,
   BottomHatOptions,
@@ -145,6 +146,8 @@ export interface ImageOptions {
    * @default {row: 0, column: 0}
    */
   origin?: Point;
+
+  meta?: ImageMetadata;
 }
 
 export interface CreateFromOptions extends ImageOptions {
@@ -204,6 +207,9 @@ export class Image {
    * Origin of the image relative to a the parent image.
    */
   public readonly origin: Point;
+
+  public readonly meta?: ImageMetadata;
+
   /**
    * Typed array holding the image data.
    */
@@ -225,6 +231,7 @@ export class Image {
       data,
       colorModel = 'RGB',
       origin = { row: 0, column: 0 },
+      meta,
     } = options;
 
     if (width < 1 || !Number.isInteger(width)) {
@@ -245,6 +252,7 @@ export class Image {
     this.bitDepth = bitDepth;
     this.colorModel = colorModel;
     this.origin = origin;
+    this.meta = meta;
 
     const colorModelDef = colorModels[colorModel];
     this.components = colorModelDef.components;

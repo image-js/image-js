@@ -33,6 +33,7 @@ export type TestImagePath =
   | 'opencv/testResizeBilinear.png'
   | 'various/grayscale_by_zimmyrose.png'
   | 'various/alphabet.jpg'
+  | 'various/without-metadata.jpg'
   | 'morphology/alphabetCannyEdge.png'
   | 'morphology/grayscaleCannyEdge.png'
   | 'morphology/grayscaleClearBorder.png'

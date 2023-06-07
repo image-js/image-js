@@ -47,6 +47,7 @@
   "dependencies": {
     "bresenham-zingl": "^0.1.1",
     "colord": "^2.9.3",
+    "fast-jpeg": "^2.0.0",
     "fast-png": "^6.1.0",
     "image-type": "^4.1.0",
     "jpeg-js": "^0.4.4",
