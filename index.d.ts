@@ -159,7 +159,7 @@ export declare class Image {
   getRow(row: number, channel?: number): Array<number>;
   getColumn(row: number, channel?: number): Array<number>;
   getMatrix(options?: { channel?: number }): Matrix;
-  setMatrix(matrix: Matrix, options?: { channel?: number });
+  setMatrix(matrix: Matrix, options?: { channel?: number }): this;
   getPixelsArray(): Array<Array<number>>;
   getIntersection(mask2: Image): object;
   getClosestCommonParent(mask: Image): Image;

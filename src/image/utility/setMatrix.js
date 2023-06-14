@@ -7,6 +7,8 @@ import { Matrix } from 'ml-matrix';
  * @param {Matrix} matrix
  * @param {object} [options]
  * @param {number} [options.channel]
+ *
+ * @return {this}
  */
 export default function setMatrix(matrix, options = {}) {
   matrix = new Matrix(matrix);
@@ -35,4 +37,6 @@ export default function setMatrix(matrix, options = {}) {
       this.setValueXY(y, x, channel, matrix.get(x, y));
     }
   }
+
+  return this;
 }
