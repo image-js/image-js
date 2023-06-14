@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.35.4](https://www.github.com/image-js/image-js/compare/v0.35.3...v0.35.4) (2023-06-14)
+
+
+### Bug Fixes
+
+* setMatrix() return this object ([#621](https://www.github.com/image-js/image-js/issues/621)) ([b4ca38e](https://www.github.com/image-js/image-js/commit/b4ca38efd196f87147f2f14f670b7214ed18f9b5))
+
 ### [0.35.3](https://www.github.com/image-js/image-js/compare/v0.35.2...v0.35.3) (2023-02-02)
 
 
