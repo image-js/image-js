@@ -47,7 +47,7 @@ describe('2D data (points)', () => {
     const destination = [
       { row: 2, column: -10 }, // outlier
       { row: 1, column: -2 },
-      { row: 0, column: -10 }, // outlier
+      { row: 0, column: 20 }, // outlier
       { row: -1, column: -2 },
       { row: -2, column: -2 },
       { row: -3, column: -2 },
