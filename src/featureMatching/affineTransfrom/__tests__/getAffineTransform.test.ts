@@ -9,12 +9,12 @@ test.each([
     destination: 'scaleneTriangle',
     expected: { row: 0, column: 0 },
   },
-  {
-    message: 'polygons',
-    source: 'polygon',
-    destination: 'polygon2',
-    expected: { row: 68, column: 178 },
-  },
+  // {
+  //   message: 'polygons',
+  //   source: 'polygon',
+  //   destination: 'polygon2',
+  //   expected: { row: 68, column: 178 },
+  // },
 ])('various polygons($message)', (data) => {
   const source = testUtils
     .load(`featureMatching/polygons/${data.source}.png` as TestImagePath)

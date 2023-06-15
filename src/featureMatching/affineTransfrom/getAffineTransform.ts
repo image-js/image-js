@@ -170,8 +170,8 @@ export function getAffineTransform(
       rotation: affineTransform.rotation,
       scale: affineTransform.scale,
       translation: {
-        column: affineTransform.translation.x,
-        row: affineTransform.translation.y,
+        column: Math.round(affineTransform.translation.x),
+        row: Math.round(affineTransform.translation.y),
       },
     },
     nbMatches: matches.length,
