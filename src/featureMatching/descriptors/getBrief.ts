@@ -1,10 +1,8 @@
-import { Image } from '../../src';
-import { getBestKeypointsInRadius } from '../../src/featureMatching';
-import {
-  Brief,
-  getBriefDescriptors,
-} from '../../src/featureMatching/descriptors/getBriefDescriptors';
-import { getOrientedFastKeypoints } from '../../src/featureMatching/keypoints/getOrientedFastKeypoints';
+import { getBestKeypointsInRadius } from '..';
+import { Image } from '../..';
+import { getOrientedFastKeypoints } from '../keypoints/getOrientedFastKeypoints';
+
+import { Brief, getBriefDescriptors } from './getBriefDescriptors';
 
 export interface GetBriefOptions {
   centroidPatchDiameter?: number;
@@ -14,11 +12,9 @@ export interface GetBriefOptions {
 
 /**
  * Get the keypoints and corresponding descriptors for an image.
- *
- * @param image
- * @param imagePath
- * @param options
- * @returns The Brief.
+ * @param image - Image to process.
+ * @param options - Get brief options.
+ * @returns The Brief (keypoints and corresponding descriptors).
  */
 export function getBrief(image: Image, options: GetBriefOptions = {}): Brief {
   const { centroidPatchDiameter = 15, bestKptRadius = 10, minScore } = options;
@@ -33,11 +29,12 @@ export function getBrief(image: Image, options: GetBriefOptions = {}): Brief {
   const brief = getBriefDescriptors(image, sourceKeypoints);
   if (minScore) {
     for (let i = 0; i < brief.keypoints.length; i++) {
-      if (brief.keypoints[i].score < minScore)
+      if (brief.keypoints[i].score < minScore) {
         return {
           keypoints: brief.keypoints.slice(0, i - 1),
           descriptors: brief.descriptors.slice(0, i - 1),
         };
+      }
     }
   }
   return brief;

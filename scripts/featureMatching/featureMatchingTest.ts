@@ -12,7 +12,10 @@ import {
   getBestKeypointsInRadius,
 } from '../../src/featureMatching';
 import { readSync, writeSync } from '../../src';
-import { getBrief, GetBriefOptions } from './getBrief';
+import {
+  getBrief,
+  GetBriefOptions,
+} from '../../src/featureMatching/descriptors/getBrief';
 import { GetColorsOptions } from '../../src/featureMatching/utils/getColors';
 import { getMinMax } from '../../src/utils/getMinMax';
 
@@ -25,6 +28,7 @@ const getBriefOptions: GetBriefOptions = {
   bestKptRadius: 5,
 };
 
+// define the two images to analyse
 const firstNumber = 1;
 const secondNumber = 2;
 
@@ -42,6 +46,7 @@ source.level({
 let destination = readSync(
   `../../test/img/featureMatching/id-crops/crop${secondNumber}.png`,
 ).convertColor('GREY');
+
 // fix contrast
 const destinationExtremums = getMinMax(destination);
 destination.level({
