@@ -27,6 +27,8 @@ export function copyTo(
 ): Mask;
 /**
  * Copy the image to another one by specifying the location in the target image.
+ * If the source image exceeds the boundaries of the target image, the excess pixels
+ * are ignored. The result image will have the same dimensions as the target image.
  * @param source - The source image.
  * @param target - The target image.
  * @param options - Options.
