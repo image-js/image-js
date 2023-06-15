@@ -1,8 +1,8 @@
 import { getAffineTransform as mlGetAffineTransform } from 'ml-affine-transform';
 import { ransac } from 'ml-ransac';
 
-import { getCrosscheckMatches } from '..';
-import { Point, Image } from '../..';
+import { Montage, MontageDisposition, getCrosscheckMatches } from '..';
+import { Point, Image, writeSync } from '../..';
 import { getMinMax } from '../../utils/getMinMax';
 import { getBrief } from '../descriptors/getBrief';
 
@@ -37,6 +37,16 @@ export interface GetAffineTransformOptions {
    * Max number of iterations of the ransac algorithm.
    */
   maxRansacNbIterations?: number;
+  /**
+   * Save images with matches for debugging.
+   * @default false
+   */
+  debug?: boolean;
+  /**
+   * Name of the debug image.
+   * @default 'montage'
+   */
+  debugImageName?: string;
 }
 
 export interface AffineTransform {
@@ -93,7 +103,11 @@ export function getAffineTransform(
     maxAngleError = 5,
     checkLimits = false,
     maxRansacNbIterations,
+    debug = false,
+    debugImageName = 'montage',
   } = options;
+  source = source.grey();
+  destination = destination.grey();
 
   // fix images contrast
   const sourceExtremums = getMinMax(source);
@@ -158,6 +172,19 @@ export function getAffineTransform(
 
     sourcePoints = inliers.map((i) => sourcePoints[i]);
     destinationPoints = inliers.map((i) => destinationPoints[i]);
+  }
+  if (debug) {
+    const montage = new Montage(source, destination, {
+      disposition: MontageDisposition.VERTICAL,
+    });
+
+    montage.drawMatches(
+      matches,
+      sourceBrief.keypoints,
+      destinationBrief.keypoints,
+    );
+
+    writeSync(`${__dirname}/${debugImageName}.png`, montage.image);
   }
 
   // compute affine transform from destination to reference
