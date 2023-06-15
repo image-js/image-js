@@ -1,3 +1,6 @@
+import { getAffineTransform } from 'ml-affine-transform';
+import { ransac } from 'ml-ransac';
+
 import {
   bruteForceOneMatch,
   getBestKeypointsInRadius,
@@ -5,6 +8,11 @@ import {
   getOrientedFastKeypoints,
 } from '..';
 import { Point, Image } from '../..';
+
+import { affineFitFunction } from './affineFitFunction';
+import { createAffineTransformModel } from './createAffineTransformModel';
+import { getEuclidianDistance } from './getEuclidianDistance';
+import { getMatrixFromPoints } from './getMatrixFromPoints';
 
 export interface GetDestinationOriginOptions {
   /**
@@ -19,23 +27,23 @@ export interface GetDestinationOriginOptions {
 
 /**
  *
- * @param reference
+ * @param source
  * @param destination
  * @param options
  */
 export function getDestinationOrigin(
-  reference: Image,
+  source: Image,
   destination: Image,
   options: GetDestinationOriginOptions = {},
 ): Point {
   const { keypointWindowSize = 31, bestKeypointRadius = 10 } = options;
   // find keypoints
 
-  const allreferenceKeypoints = getOrientedFastKeypoints(reference, {
+  const allSourceKeypoints = getOrientedFastKeypoints(source, {
     centroidPatchDiameter: keypointWindowSize,
   });
-  const referenceKeypoints = getBestKeypointsInRadius(
-    allreferenceKeypoints,
+  const sourceKeypoints = getBestKeypointsInRadius(
+    allSourceKeypoints,
     bestKeypointRadius,
   );
 
@@ -48,9 +56,9 @@ export function getDestinationOrigin(
   );
 
   // compute brief descriptors
-  const referenceDescriptors = getBriefDescriptors(
-    reference,
-    referenceKeypoints,
+  const sourceDescriptors = getBriefDescriptors(
+    source,
+    sourceKeypoints,
   ).descriptors;
 
   const destinationDescriptors = getBriefDescriptors(
@@ -59,14 +67,42 @@ export function getDestinationOrigin(
   ).descriptors;
 
   // match reference and destination keypoints
-  const matches = bruteForceOneMatch(
-    referenceDescriptors,
-    destinationDescriptors,
-  );
+  const matches = bruteForceOneMatch(sourceDescriptors, destinationDescriptors);
 
+  if (matches.length < 2) {
+    throw new Error(
+      'Insufficient number of matches found to compute affine transform (less than 2).',
+    );
+  }
   console.log(matches);
 
+  // extract source and destination points
+  let sourcePoints: Point[] = [];
+  let destinationPoints: Point[] = [];
+  for (const match of matches) {
+    sourcePoints.push(sourceKeypoints[match.sourceIndex].origin);
+    destinationPoints.push(destinationKeypoints[match.sourceIndex].origin);
+  }
+
   // find inliers with ransac
+  if (sourcePoints.length > 2) {
+    const inliers = ransac(sourcePoints, destinationPoints, {
+      distanceFunction: getEuclidianDistance,
+      modelFunction: createAffineTransformModel,
+      fitFunction: affineFitFunction,
+    }).inliers;
+    console.log({ inliers });
+    sourcePoints = inliers.map((i) => sourcePoints[i]);
+    destinationPoints = inliers.map((i) => destinationPoints[i]);
+  }
+
+  const sourceMatrix = getMatrixFromPoints(sourcePoints);
+  const destinationMatrix = getMatrixFromPoints(destinationPoints);
+  const affineTransform = getAffineTransform(sourceMatrix, destinationMatrix);
+
+  console.log(affineTransform);
   // compute affine transform from destination to reference
   // compute crop origin in destination
+
+  return { row: 0, column: 0 };
 }

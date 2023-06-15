@@ -1,6 +1,5 @@
 import { ransac } from 'ml-ransac';
 
-import { writeSync } from '../../..';
 import { affineFitFunction } from '../affineFitFunction';
 import { applyAffineTransfom } from '../applyAffineTransform';
 import { createAffineTransformModel } from '../createAffineTransformModel';
@@ -30,7 +29,6 @@ describe('2D data (points)', () => {
       distanceFunction: getEuclidianDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
-      sampleSize: 3,
     });
 
     expect(result.modelParameters).toBeDeepCloseTo([180, 0, 4, 1]);
@@ -57,7 +55,6 @@ describe('2D data (points)', () => {
       distanceFunction: getEuclidianDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
-      sampleSize: 3,
     });
 
     expect(result.modelParameters).toBeDeepCloseTo([180, 0, 4, 1]);
@@ -85,7 +82,6 @@ describe('2D data (points)', () => {
       distanceFunction: getEuclidianDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
-      sampleSize: 3,
     });
 
     expect(result.modelParameters).toBeDeepCloseTo([180, 9, 2, 1]);
@@ -97,7 +93,7 @@ describe('2D data (points)', () => {
 
     const image = drawResult(source, destination, resultPoints);
 
-    writeSync(`${__dirname}/polygon1.png`, image);
+    expect(image).toMatchImageSnapshot();
   });
   test('polygon rotated 90 degrees', () => {
     const source = [
@@ -124,7 +120,6 @@ describe('2D data (points)', () => {
       distanceFunction: getEuclidianDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
-      sampleSize: 3,
     });
 
     expect(result.modelParameters).toBeDeepCloseTo([-90, 0, 0, 1]);
@@ -136,6 +131,6 @@ describe('2D data (points)', () => {
 
     const image = drawResult(source, destination, resultPoints);
 
-    writeSync(`${__dirname}/polygon2.png`, image);
+    expect(image).toMatchImageSnapshot();
   });
 });
