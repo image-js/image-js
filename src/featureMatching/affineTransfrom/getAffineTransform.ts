@@ -1,4 +1,4 @@
-import { getAffineTransform } from 'ml-affine-transform';
+import { getAffineTransform as mlGetAffineTransform } from 'ml-affine-transform';
 import { ransac } from 'ml-ransac';
 
 import {
@@ -14,7 +14,7 @@ import { createAffineTransformModel } from './createAffineTransformModel';
 import { getEuclidianDistance } from './getEuclidianDistance';
 import { getMatrixFromPoints } from './getMatrixFromPoints';
 
-export interface GetDestinationOriginOptions {
+export interface GetAffineTransformOptions {
   /**
    * @default 31
    */
@@ -23,20 +23,48 @@ export interface GetDestinationOriginOptions {
    * @default 10
    */
   bestKeypointRadius?: number;
+  /**
+   * Verify scale and rotation are in acceptable limits.
+   *
+   * @default false
+   */
+  checkLimits?: boolean;
+  /**
+   * Maximal acceptable scale error. The scale between source and destination should be in range [0.9, 1.1].
+   */
+  maxScaleError?: 0.1;
+  /**
+   * Maximal rotation accepted between source and destination in degrees.
+   */
+  maxAngleError?: 5;
+}
+
+export interface AffineTransform {
+  rotation: number;
+  scale: number;
+  translation: Point;
 }
 
 /**
+ * Get the translation of the destination image required to align it on the source image.
  *
- * @param source
- * @param destination
- * @param options
+ * @param source - Source image.
+ * @param destination - Destination image.
+ * @param options - Get destination translation options.
+ * @returns The translation.
  */
-export function getDestinationOrigin(
+export function getAffineTransform(
   source: Image,
   destination: Image,
-  options: GetDestinationOriginOptions = {},
-): Point {
-  const { keypointWindowSize = 31, bestKeypointRadius = 10 } = options;
+  options: GetAffineTransformOptions = {},
+): AffineTransform {
+  const {
+    keypointWindowSize = 31,
+    bestKeypointRadius = 10,
+    maxScaleError = 0.1,
+    maxAngleError = 5,
+    checkLimits = false,
+  } = options;
   // find keypoints
 
   const allSourceKeypoints = getOrientedFastKeypoints(source, {
@@ -74,7 +102,6 @@ export function getDestinationOrigin(
       'Insufficient number of matches found to compute affine transform (less than 2).',
     );
   }
-  console.log(matches);
 
   // extract source and destination points
   let sourcePoints: Point[] = [];
@@ -91,18 +118,38 @@ export function getDestinationOrigin(
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
     }).inliers;
-    console.log({ inliers });
+
     sourcePoints = inliers.map((i) => sourcePoints[i]);
     destinationPoints = inliers.map((i) => destinationPoints[i]);
   }
 
+  // compute affine transform from destination to reference
+
   const sourceMatrix = getMatrixFromPoints(sourcePoints);
   const destinationMatrix = getMatrixFromPoints(destinationPoints);
-  const affineTransform = getAffineTransform(sourceMatrix, destinationMatrix);
+  const affineTransform = mlGetAffineTransform(sourceMatrix, destinationMatrix);
 
-  console.log(affineTransform);
-  // compute affine transform from destination to reference
+  if (checkLimits) {
+    if (Math.abs(affineTransform.scale - 1) > maxScaleError) {
+      throw new Error(
+        `Source and destination scales are too different. Scaling factor is ${affineTransform.scale}`,
+      );
+    }
+    if (Math.abs(affineTransform.rotation - 1) > maxAngleError) {
+      throw new Error(
+        `Source and destination orientations are too different. Rotation is ${affineTransform.rotation} degrees.`,
+      );
+    }
+  }
+
   // compute crop origin in destination
 
-  return { row: 0, column: 0 };
+  return {
+    rotation: affineTransform.rotation,
+    scale: affineTransform.scale,
+    translation: {
+      column: affineTransform.translation.x,
+      row: affineTransform.translation.y,
+    },
+  };
 }
