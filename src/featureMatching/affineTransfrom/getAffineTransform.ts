@@ -1,13 +1,10 @@
 import { getAffineTransform as mlGetAffineTransform } from 'ml-affine-transform';
 import { ransac } from 'ml-ransac';
 
-import {
-  bruteForceOneMatch,
-  getBestKeypointsInRadius,
-  getBriefDescriptors,
-  getOrientedFastKeypoints,
-} from '..';
-import { Point, Image } from '../..';
+import { Montage, MontageDisposition, getCrosscheckMatches } from '..';
+import { writeSync, Point, Image } from '../..';
+import { getMinMax } from '../../utils/getMinMax';
+import { getBrief } from '../descriptors/getBrief';
 
 import { affineFitFunction } from './affineFitFunction';
 import { createAffineTransformModel } from './createAffineTransformModel';
@@ -18,14 +15,13 @@ export interface GetAffineTransformOptions {
   /**
    * @default 31
    */
-  keypointWindowSize?: number;
+  centroidPatchDiameter?: number;
   /**
    * @default 10
    */
   bestKeypointRadius?: number;
   /**
    * Verify scale and rotation are in acceptable limits.
-   *
    * @default false
    */
   checkLimits?: boolean;
@@ -64,15 +60,22 @@ export interface GetAffineTransformResult {
    * The bigger this number is, the better.
    */
   nbMatches: number;
+  /**
+   * Number of inliers resulting from the ransac algorithm.
+   */
+  nbInliers: number;
+  /**
+   * Number of iterations of the RANSAC algorithm.
+   */
+  nbRansacIterations: number;
 }
 
 /**
- * Get the translation of the destination image required to align it on the source image.
- *
+ * Get the affine transformation from the source to the destination image.
  * @param source - Source image.
  * @param destination - Destination image.
  * @param options - Get destination translation options.
- * @returns The translation.
+ * @returns The affine transformation from source to destination image.
  */
 export function getAffineTransform(
   source: Image,
@@ -80,43 +83,42 @@ export function getAffineTransform(
   options: GetAffineTransformOptions = {},
 ): GetAffineTransformResult {
   const {
-    keypointWindowSize = 31,
-    bestKeypointRadius = 10,
+    centroidPatchDiameter = 31,
+    bestKeypointRadius = 5,
     maxScaleError = 0.1,
     maxAngleError = 5,
     checkLimits = false,
   } = options;
 
-  // find keypoints
-  const allSourceKeypoints = getOrientedFastKeypoints(source, {
-    centroidPatchDiameter: keypointWindowSize,
+  // fix images contrast
+  const sourceExtremums = getMinMax(source);
+  source.level({
+    inputMin: sourceExtremums.min[0],
+    inputMax: sourceExtremums.max[0],
+    out: source,
   });
-  const sourceKeypoints = getBestKeypointsInRadius(
-    allSourceKeypoints,
-    bestKeypointRadius,
-  );
-
-  const allDestinationKeypoints = getOrientedFastKeypoints(destination, {
-    centroidPatchDiameter: keypointWindowSize,
+  const destinationExtremums = getMinMax(destination);
+  destination.level({
+    inputMin: destinationExtremums.min[0],
+    inputMax: destinationExtremums.max[0],
+    out: destination,
   });
-  const destinationKeypoints = getBestKeypointsInRadius(
-    allDestinationKeypoints,
-    bestKeypointRadius,
-  );
 
-  // compute brief descriptors
-  const sourceDescriptors = getBriefDescriptors(
-    source,
-    sourceKeypoints,
-  ).descriptors;
-
-  const destinationDescriptors = getBriefDescriptors(
-    destination,
-    destinationKeypoints,
-  ).descriptors;
+  // compute briefs
+  const sourceBrief = getBrief(source, {
+    centroidPatchDiameter,
+    bestKptRadius: bestKeypointRadius,
+  });
+  const destinationBrief = getBrief(destination, {
+    centroidPatchDiameter,
+    bestKptRadius: bestKeypointRadius,
+  });
 
   // match reference and destination keypoints
-  const matches = bruteForceOneMatch(sourceDescriptors, destinationDescriptors);
+  const matches = getCrosscheckMatches(
+    sourceBrief.descriptors,
+    destinationBrief.descriptors,
+  );
 
   if (matches.length < 2) {
     throw new Error(
@@ -124,21 +126,41 @@ export function getAffineTransform(
     );
   }
 
+  const montage = new Montage(source, destination, {
+    disposition: MontageDisposition.VERTICAL,
+  });
+
+  montage.drawMatches(
+    matches,
+    sourceBrief.keypoints,
+    destinationBrief.keypoints,
+  );
+
+  writeSync(`${__dirname}/montage.png`, montage.image);
+
   // extract source and destination points
   let sourcePoints: Point[] = [];
   let destinationPoints: Point[] = [];
   for (const match of matches) {
-    sourcePoints.push(sourceKeypoints[match.sourceIndex].origin);
-    destinationPoints.push(destinationKeypoints[match.sourceIndex].origin);
+    sourcePoints.push(sourceBrief.keypoints[match.sourceIndex].origin);
+    destinationPoints.push(
+      destinationBrief.keypoints[match.destinationIndex].origin,
+    );
   }
 
   // find inliers with ransac
+  let nbInliers = sourcePoints.length;
+  let nbRansacIterations = 0;
   if (sourcePoints.length > 2) {
-    const inliers = ransac(sourcePoints, destinationPoints, {
+    const ransacResult = ransac(sourcePoints, destinationPoints, {
       distanceFunction: getEuclidianDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
-    }).inliers;
+    });
+    nbRansacIterations = ransacResult.nbIterations;
+
+    const inliers = ransacResult.inliers;
+    nbInliers = inliers.length;
 
     sourcePoints = inliers.map((i) => sourcePoints[i]);
     destinationPoints = inliers.map((i) => destinationPoints[i]);
@@ -175,5 +197,7 @@ export function getAffineTransform(
       },
     },
     nbMatches: matches.length,
+    nbInliers,
+    nbRansacIterations,
   };
 }
