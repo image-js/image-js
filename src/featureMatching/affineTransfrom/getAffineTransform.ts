@@ -40,9 +40,30 @@ export interface GetAffineTransformOptions {
 }
 
 export interface AffineTransform {
-  rotation: number;
-  scale: number;
+  /**
+   * Translation of source points along x and y axes.
+   */
   translation: Point;
+  /**
+   * Clockwise angle in degrees.
+   */
+  rotation: number;
+  /**
+   * Scaling factor from source to destination.
+   */
+  scale: number;
+}
+
+export interface GetAffineTransformResult {
+  /**
+   * Affine transformation from source to destination.
+   */
+  transform: AffineTransform;
+  /**
+   * Number of matches of feature matching between source and destination.
+   * The bigger this number is, the better.
+   */
+  nbMatches: number;
 }
 
 /**
@@ -57,7 +78,7 @@ export function getAffineTransform(
   source: Image,
   destination: Image,
   options: GetAffineTransformOptions = {},
-): AffineTransform {
+): GetAffineTransformResult {
   const {
     keypointWindowSize = 31,
     bestKeypointRadius = 10,
@@ -65,8 +86,8 @@ export function getAffineTransform(
     maxAngleError = 5,
     checkLimits = false,
   } = options;
-  // find keypoints
 
+  // find keypoints
   const allSourceKeypoints = getOrientedFastKeypoints(source, {
     centroidPatchDiameter: keypointWindowSize,
   });
@@ -145,11 +166,14 @@ export function getAffineTransform(
   // compute crop origin in destination
 
   return {
-    rotation: affineTransform.rotation,
-    scale: affineTransform.scale,
-    translation: {
-      column: affineTransform.translation.x,
-      row: affineTransform.translation.y,
+    transform: {
+      rotation: affineTransform.rotation,
+      scale: affineTransform.scale,
+      translation: {
+        column: affineTransform.translation.x,
+        row: affineTransform.translation.y,
+      },
     },
+    nbMatches: matches.length,
   };
 }

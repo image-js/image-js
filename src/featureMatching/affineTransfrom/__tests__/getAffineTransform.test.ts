@@ -5,17 +5,15 @@ import { getAffineTransform } from '../getAffineTransform';
 test.each([
   {
     message: 'twice same image',
-    imageName: 'twice-same-image',
     source: 'scaleneTriangle',
     destination: 'scaleneTriangle',
     expected: { row: 0, column: 0 },
   },
   {
-    message: 'scalene triangles',
-    imageName: 'scalene-triangles',
-    source: 'scaleneTriangle',
-    destination: 'scaleneTriangle2',
-    expected: { row: 39, column: 1 },
+    message: 'polygons',
+    source: 'polygon',
+    destination: 'polygon2',
+    expected: { row: 68, column: 178 },
   },
 ])('various polygons($message)', (data) => {
   const source = testUtils
@@ -28,10 +26,12 @@ test.each([
 
   const result = getAffineTransform(source, destination);
 
-  // expect(result).toBeDeepCloseTo(data.expected);
+  const transform = result.transform;
 
-  const image = overlapImages(source, destination, {
-    origin: result.translation,
+  expect(transform.translation).toBeDeepCloseTo(data.expected);
+
+  const image = overlapImages(destination, source, {
+    origin: transform.translation,
   });
 
   expect(image).toMatchImageSnapshot();

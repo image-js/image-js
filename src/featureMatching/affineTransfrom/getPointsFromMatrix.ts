@@ -1,6 +1,6 @@
 import Matrix from 'ml-matrix';
 
-import { Point } from './getMatrixFromPoints';
+import { Point } from '../..';
 
 /**
  * Convert matrix to points.
