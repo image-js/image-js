@@ -1,4 +1,4 @@
-import { Point, Image, ImageColorModel, Mask } from 'image-js';
+import { Point, Image, ImageColorModel, Mask } from '../..';
 
 /**
  * Draw source, destination and transformed points on an image.

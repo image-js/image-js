@@ -1,6 +1,6 @@
-import { Point } from 'image-js';
+import { ModelFunction } from 'ml-ransac';
 
-import { ModelFunction } from '../..';
+import { Point } from '../..';
 
 /**
  * Generate a function that applies the given transformation parameters to a point.

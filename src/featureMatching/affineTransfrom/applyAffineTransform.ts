@@ -1,6 +1,6 @@
-import { ModelFunction } from '../..';
+import { ModelFunction } from 'ml-ransac';
 
-import { Point } from './getMatrixFromPoints';
+import { Point } from '../..';
 
 /**
  * Apply a given transform to a set of points.

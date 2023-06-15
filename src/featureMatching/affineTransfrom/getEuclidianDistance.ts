@@ -1,4 +1,4 @@
-import { Point } from 'image-js';
+import { Point } from '../..';
 
 /**
  * Compute the distance between point 1 and point 2.

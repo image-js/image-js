@@ -30,9 +30,10 @@ describe('2D data (points)', () => {
       distanceFunction: getEuclidianDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
+      sampleSize: 3,
     });
 
-    expect(result.modelParameters).toStrictEqual([180, 0, 4, 1]);
+    expect(result.modelParameters).toBeDeepCloseTo([180, 0, 4, 1]);
   });
   it('6 points with outliers', () => {
     const source = [
@@ -56,9 +57,10 @@ describe('2D data (points)', () => {
       distanceFunction: getEuclidianDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
+      sampleSize: 3,
     });
 
-    expect(result.modelParameters).toStrictEqual([180, 0, 4, 1]);
+    expect(result.modelParameters).toBeDeepCloseTo([180, 0, 4, 1]);
     expect(result.inliers).toStrictEqual([1, 3, 4, 5]);
   });
 
@@ -83,6 +85,7 @@ describe('2D data (points)', () => {
       distanceFunction: getEuclidianDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
+      sampleSize: 3,
     });
 
     expect(result.modelParameters).toBeDeepCloseTo([180, 9, 2, 1]);
@@ -121,6 +124,7 @@ describe('2D data (points)', () => {
       distanceFunction: getEuclidianDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
+      sampleSize: 3,
     });
 
     expect(result.modelParameters).toBeDeepCloseTo([-90, 0, 0, 1]);

@@ -1,6 +1,6 @@
-import { Point } from 'image-js';
+import { getAffineTransform } from 'ml-affine-transform';
 
-import { getAffineTransform } from '../affineTransfrom/getAffineTransform';
+import { Point } from '../..';
 
 import { getMatrixFromPoints } from './getMatrixFromPoints';
 
