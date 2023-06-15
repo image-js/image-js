@@ -1,4 +1,4 @@
-import { writeSync, Image, ImageColorModel, Point, merge } from '../..';
+import { Image, ImageColorModel, Point, merge } from '../..';
 
 export interface OverlapImageOptions {
   /**
@@ -10,10 +10,12 @@ export interface OverlapImageOptions {
 }
 
 /**
+ * Overlap two images and specify the origin of the second one relatively to the first one. The first image is drawn in red and the second one in green.
  *
- * @param image1
- * @param image2
- * @param options
+ * @param image1 - First image.
+ * @param image2 - Second image.
+ * @param options - Overlap image options.
+ * @returns The overlapping images.
  */
 export function overlapImages(
   image1: Image,
@@ -31,15 +33,9 @@ export function overlapImages(
   const inverted1 = image1.invert();
   const inverted2 = image2.invert();
 
-  writeSync(`${__dirname}/inverted1.png`, inverted1);
-  writeSync(`${__dirname}/inverted2.png`, inverted2);
-
   const empty = Image.createFrom(inverted1);
 
-  writeSync(`${__dirname}/empty.png`, empty);
-
   const alignedGrey2 = inverted2.copyTo(empty, { origin });
-  writeSync(`${__dirname}/aligned.png`, alignedGrey2);
 
   const result = merge([inverted1, alignedGrey2, empty]);
 
