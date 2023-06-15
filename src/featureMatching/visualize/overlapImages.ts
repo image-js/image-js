@@ -3,15 +3,27 @@ import { Image, ImageColorModel, Point, merge } from '../..';
 export interface OverlapImageOptions {
   /**
    * Origin of the second image relatively to top-left corner of first image.
-   *
    * @default {row: 0, column: 0}
    */
   origin?: Point;
+
+  /**
+   * Desired rotation of image 2 in degrees.
+   * @default 0
+   */
+  angle?: number;
+
+  /**
+   * Factor by which to scale the second image.
+   * @default 1
+   */
+  scale?: number;
 }
 
 /**
- * Overlap two images and specify the origin of the second one relatively to the first one. The first image is drawn in red and the second one in green.
- *
+ * Overlap two images and specify. The first image can be translated,
+ * rotated and scaled to match the second one.
+ * The first image is drawn in red and the second one in green.
  * @param image1 - First image.
  * @param image2 - Second image.
  * @param options - Overlap image options.
@@ -22,7 +34,7 @@ export function overlapImages(
   image2: Image,
   options: OverlapImageOptions = {},
 ): Image {
-  const { origin = { row: 0, column: 0 } } = options;
+  const { origin = { row: 0, column: 0 }, angle = 0, scale = 1 } = options;
 
   if (image1.colorModel !== ImageColorModel.GREY) {
     image1 = image1.grey();
@@ -33,11 +45,14 @@ export function overlapImages(
   const inverted1 = image1.invert();
   const inverted2 = image2.invert();
 
-  const empty = Image.createFrom(inverted1);
+  const rotated = inverted1.transformRotate(angle);
+  const scaled = rotated.resize({ xFactor: scale, yFactor: scale });
 
-  const alignedGrey2 = inverted2.copyTo(empty, { origin });
+  const empty = Image.createFrom(inverted2);
 
-  const result = merge([inverted1, alignedGrey2, empty]);
+  const alignedGrey1 = scaled.copyTo(empty, { origin });
+
+  const result = merge([inverted1, alignedGrey1, empty]);
 
   return result;
 }
