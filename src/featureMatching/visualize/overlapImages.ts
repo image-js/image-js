@@ -1,4 +1,4 @@
-import { Image, ImageColorModel, Point, merge } from '../..';
+import { writeSync, Image, ImageColorModel, Point, merge } from '../..';
 
 export interface OverlapImageOptions {
   /**
@@ -22,16 +22,26 @@ export function overlapImages(
 ): Image {
   const { origin = { row: 0, column: 0 } } = options;
 
-  const grey1 = image1.grey().invert();
-  const grey2 = image2.grey().invert();
+  if (image1.colorModel !== ImageColorModel.GREY) {
+    image1 = image1.grey();
+  }
+  if (image2.colorModel !== ImageColorModel.GREY) {
+    image2 = image2.grey();
+  }
+  const inverted1 = image1.invert();
+  const inverted2 = image2.invert();
 
-  const empty = Image.createFrom(grey1, {
-    colorModel: ImageColorModel.GREY,
-  });
+  writeSync(`${__dirname}/inverted1.png`, inverted1);
+  writeSync(`${__dirname}/inverted2.png`, inverted2);
 
-  const alignedGrey2 = grey2.copyTo(empty, { origin });
+  const empty = Image.createFrom(inverted1);
 
-  const result = merge([grey1, alignedGrey2, empty]);
+  writeSync(`${__dirname}/empty.png`, empty);
+
+  const alignedGrey2 = inverted2.copyTo(empty, { origin });
+  writeSync(`${__dirname}/aligned.png`, alignedGrey2);
+
+  const result = merge([inverted1, alignedGrey2, empty]);
 
   return result;
 }
