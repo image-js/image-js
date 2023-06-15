@@ -1,8 +1,8 @@
 import { getAffineTransform as mlGetAffineTransform } from 'ml-affine-transform';
 import { ransac } from 'ml-ransac';
 
-import { Montage, MontageDisposition, getCrosscheckMatches } from '..';
-import { writeSync, Point, Image } from '../..';
+import { getCrosscheckMatches } from '..';
+import { Point, Image } from '../..';
 import { getMinMax } from '../../utils/getMinMax';
 import { getBrief } from '../descriptors/getBrief';
 
@@ -33,6 +33,10 @@ export interface GetAffineTransformOptions {
    * Maximal rotation accepted between source and destination in degrees.
    */
   maxAngleError?: 5;
+  /**
+   * Max number of iterations of the ransac algorithm.
+   */
+  maxRansacNbIterations?: number;
 }
 
 export interface AffineTransform {
@@ -88,6 +92,7 @@ export function getAffineTransform(
     maxScaleError = 0.1,
     maxAngleError = 5,
     checkLimits = false,
+    maxRansacNbIterations,
   } = options;
 
   // fix images contrast
@@ -126,18 +131,6 @@ export function getAffineTransform(
     );
   }
 
-  const montage = new Montage(source, destination, {
-    disposition: MontageDisposition.VERTICAL,
-  });
-
-  montage.drawMatches(
-    matches,
-    sourceBrief.keypoints,
-    destinationBrief.keypoints,
-  );
-
-  writeSync(`${__dirname}/montage.png`, montage.image);
-
   // extract source and destination points
   let sourcePoints: Point[] = [];
   let destinationPoints: Point[] = [];
@@ -156,6 +149,7 @@ export function getAffineTransform(
       distanceFunction: getEuclidianDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
+      maxNbIterations: maxRansacNbIterations,
     });
     nbRansacIterations = ransacResult.nbIterations;
 
@@ -192,8 +186,8 @@ export function getAffineTransform(
       rotation: affineTransform.rotation,
       scale: affineTransform.scale,
       translation: {
-        column: Math.round(affineTransform.translation.x),
-        row: Math.round(affineTransform.translation.y),
+        column: -Math.round(affineTransform.translation.x),
+        row: -Math.round(affineTransform.translation.y),
       },
     },
     nbMatches: matches.length,

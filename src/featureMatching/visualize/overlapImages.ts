@@ -1,4 +1,4 @@
-import { Image, ImageColorModel, Point, merge } from '../..';
+import { Image, ImageColorModel, ImageCoordinates, Point, merge } from '../..';
 
 export interface OverlapImageOptions {
   /**
@@ -8,7 +8,7 @@ export interface OverlapImageOptions {
   origin?: Point;
 
   /**
-   * Desired rotation of image 2 in degrees.
+   * Desired rotation of image 2 in degrees around its top-left corner.
    * @default 0
    */
   angle?: number;
@@ -45,14 +45,16 @@ export function overlapImages(
   const inverted1 = image1.invert();
   const inverted2 = image2.invert();
 
-  const rotated = inverted1.transformRotate(angle);
+  const rotated = inverted1.transformRotate(angle, {
+    center: ImageCoordinates.TOP_LEFT,
+  });
   const scaled = rotated.resize({ xFactor: scale, yFactor: scale });
 
   const empty = Image.createFrom(inverted2);
 
   const alignedGrey1 = scaled.copyTo(empty, { origin });
 
-  const result = merge([inverted1, alignedGrey1, empty]);
+  const result = merge([alignedGrey1, inverted2, empty]);
 
   return result;
 }

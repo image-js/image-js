@@ -4,7 +4,6 @@ import { Point } from '../..';
 
 /**
  * Convert matrix to points.
- *
  * @param matrix - Matrix to process.
  * @returns Array of points.
  */

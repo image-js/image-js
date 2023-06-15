@@ -2,7 +2,6 @@ import { Point } from '../..';
 
 /**
  * Compute the distance between point 1 and point 2.
- *
  * @param point1 - First point.
  * @param point2 - Second  point.
  * @returns Euclidian distance.

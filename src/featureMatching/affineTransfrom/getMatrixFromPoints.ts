@@ -5,7 +5,6 @@ import { Point } from '../..';
 /**
  * Convert row/column points to a matrix.
  * Last row is padded with **ones** (ignore third dimension).
- *
  * @param points - Points to process.
  * @returns The matrix.
  */
