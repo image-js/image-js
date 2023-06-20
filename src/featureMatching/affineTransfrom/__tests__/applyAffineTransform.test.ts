@@ -61,5 +61,6 @@ test('only one point', () => {
 
   const model = createAffineTransformModel([angle, -1, 0, 1 / 5]);
   const result = applyAffineTransfom(source, model);
+  // @ts-expect-error: toBeDeepCloseTo types are wrong
   expect(result).toBeDeepCloseTo(expected);
 });

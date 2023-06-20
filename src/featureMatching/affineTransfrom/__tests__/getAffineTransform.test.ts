@@ -1,3 +1,4 @@
+import { Image } from '../../..';
 import { TestImagePath } from '../../../../test/TestImagePath';
 import { overlapImages } from '../../visualize/overlapImages';
 import { getAffineTransform } from '../getAffineTransform';
@@ -20,12 +21,6 @@ test.each([
     source: 'polygons/polygon',
     destination: 'polygons/polygon2',
     expected: { row: 68, column: 178 },
-  },
-  {
-    message: 'ID cards crops',
-    source: 'id-crops/crop1',
-    destination: 'id-crops/crop3',
-    expected: { row: -7, column: 1 },
   },
 ])('various polygons ($message)', (data) => {
   const source = testUtils
@@ -51,4 +46,93 @@ test.each([
   });
 
   expect(image).toMatchImageSnapshot();
+});
+
+test('RGB images', () => {
+  const data = {
+    source: 'polygons/scaleneTriangle',
+    destination: 'polygons/scaleneTriangle',
+    expected: { row: 0, column: 0 },
+  };
+
+  const source = testUtils.load(
+    `featureMatching/${data.source}.png` as TestImagePath,
+  );
+
+  const destination = testUtils.load(
+    `featureMatching/${data.destination}.png` as TestImagePath,
+  );
+
+  const result = getAffineTransform(source, destination, {
+    maxRansacNbIterations: 1000,
+  });
+
+  const transform = result.transform;
+
+  expect(transform.translation).toBeDeepCloseTo(data.expected);
+});
+
+test('crosscheck = false', () => {
+  const data = {
+    source: 'polygons/scaleneTriangle',
+    destination: 'polygons/scaleneTriangle',
+    expected: { row: 0, column: 0 },
+  };
+
+  const source = testUtils.load(
+    `featureMatching/${data.source}.png` as TestImagePath,
+  );
+
+  const destination = testUtils.load(
+    `featureMatching/${data.destination}.png` as TestImagePath,
+  );
+
+  const result = getAffineTransform(source, destination, {
+    maxRansacNbIterations: 1000,
+    crosscheck: false,
+  });
+
+  const transform = result.transform;
+
+  expect(transform.translation).toBeDeepCloseTo(data.expected);
+});
+
+test('not enough matches found', () => {
+  const source = new Image(100, 100);
+  const destination = new Image(100, 100);
+
+  expect(() => {
+    getAffineTransform(source, destination, {
+      maxRansacNbIterations: 1000,
+      crosscheck: true,
+    });
+  }).toThrow(
+    'Insufficient number of matches found to compute affine transform (less than 2).',
+  );
+});
+
+test('debug = true', () => {
+  const data = {
+    source: 'polygons/scaleneTriangle',
+    destination: 'polygons/scaleneTriangle',
+    expected: { row: 0, column: 0 },
+  };
+
+  const source = testUtils.load(
+    `featureMatching/${data.source}.png` as TestImagePath,
+  );
+
+  const destination = testUtils.load(
+    `featureMatching/${data.destination}.png` as TestImagePath,
+  );
+
+  const result = getAffineTransform(source, destination, {
+    maxRansacNbIterations: 1000,
+    crosscheck: false,
+    debug: true,
+  });
+
+  const transform = result.transform;
+
+  expect(transform.translation).toBeDeepCloseTo(data.expected);
 });

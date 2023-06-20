@@ -8,7 +8,7 @@ import {
   bruteForceOneMatch,
   getCrosscheckMatches,
 } from '..';
-import { Point, Image, writeSync } from '../..';
+import { Point, Image, writeSync, ImageColorModel } from '../..';
 import { getMinMax } from '../../utils/getMinMax';
 import { getBrief } from '../descriptors/getBrief';
 import { filterEuclideanDistance } from '../matching/filterEuclideanDistance';
@@ -37,19 +37,6 @@ export interface GetAffineTransformOptions {
    * @default { column: 0, row: 0 }
    */
   destinationOrigin?: Point;
-  /**
-   * Verify scale and rotation are in acceptable limits.
-   * @default false
-   */
-  checkLimits?: boolean;
-  /**
-   * Maximal acceptable scale error. The scale between source and destination should be in range [0.9, 1.1].
-   */
-  maxScaleError?: 0.1;
-  /**
-   * Maximal rotation accepted between source and destination in degrees.
-   */
-  maxAngleError?: 5;
   /**
    * Max number of iterations of the ransac algorithm.
    */
@@ -118,16 +105,17 @@ export function getAffineTransform(
     bestKeypointRadius = 5,
     crosscheck = true,
     destinationOrigin = { column: 0, row: 0 },
-    maxScaleError = 0.1,
-    maxAngleError = 5,
-    checkLimits = false,
     maxRansacNbIterations,
     debug = false,
     debugImagePath = `${__dirname}/montage.png`,
   } = options;
+  if (source.colorModel !== ImageColorModel.GREY) {
+    source = source.grey();
+  }
 
-  source = source.grey();
-  destination = destination.grey();
+  if (destination.colorModel !== ImageColorModel.GREY) {
+    destination = destination.grey();
+  }
 
   // fix images contrast
   const sourceExtremums = getMinMax(source);
@@ -245,23 +233,6 @@ export function getAffineTransform(
     sourceMatrix,
     destinationMatrix,
   );
-
-  if (checkLimits) {
-    if (Math.abs(affineTransform.scale - 1) > maxScaleError) {
-      throw new Error(
-        `Source and destination scales are too different. Scaling factor is ${affineTransform.scale.toFixed(
-          2,
-        )}`,
-      );
-    }
-    if (Math.abs(affineTransform.rotation - 1) > maxAngleError) {
-      throw new Error(
-        `Source and destination orientations are too different. Rotation is ${affineTransform.rotation.toFixed(
-          2,
-        )} degrees.`,
-      );
-    }
-  }
 
   // compute crop origin in destination
 
