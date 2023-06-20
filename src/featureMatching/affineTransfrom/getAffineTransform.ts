@@ -11,11 +11,11 @@ import {
 import { Point, Image, writeSync } from '../..';
 import { getMinMax } from '../../utils/getMinMax';
 import { getBrief } from '../descriptors/getBrief';
-import { filterEuclidianDistance } from '../matching/filterEuclidianDistancetrue';
+import { filterEuclideanDistance } from '../matching/filterEuclideanDistance';
 
 import { affineFitFunction } from './affineFitFunction';
 import { createAffineTransformModel } from './createAffineTransformModel';
-import { getEuclidianDistance } from './getEuclidianDistance';
+import { getEuclideanDistance } from './getEuclideanDistance';
 import { getMatrixFromPoints } from './getMatrixFromPoints';
 
 export interface GetAffineTransformOptions {
@@ -166,7 +166,7 @@ export function getAffineTransform(
       destinationBrief.descriptors,
     );
 
-    matches = filterEuclidianDistance(
+    matches = filterEuclideanDistance(
       matches,
       sourceBrief.keypoints,
       destinationBrief.keypoints,
@@ -224,7 +224,7 @@ export function getAffineTransform(
   let nbRansacIterations = 0;
   if (sourcePoints.length > 2) {
     const ransacResult = ransac(sourcePoints, destinationPoints, {
-      distanceFunction: getEuclidianDistance,
+      distanceFunction: getEuclideanDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
       maxNbIterations: maxRansacNbIterations,

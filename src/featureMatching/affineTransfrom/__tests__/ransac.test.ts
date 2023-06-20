@@ -4,7 +4,7 @@ import { affineFitFunction } from '../affineFitFunction';
 import { applyAffineTransfom } from '../applyAffineTransform';
 import { createAffineTransformModel } from '../createAffineTransformModel';
 import { drawResult } from '../drawResult';
-import { getEuclidianDistance } from '../getEuclidianDistance';
+import { getEuclideanDistance } from '../getEuclideanDistance';
 
 describe('2D data (points)', () => {
   it('6 points perfectly aligned', () => {
@@ -26,7 +26,7 @@ describe('2D data (points)', () => {
     ];
 
     const result = ransac(source, destination, {
-      distanceFunction: getEuclidianDistance,
+      distanceFunction: getEuclideanDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
     });
@@ -52,7 +52,7 @@ describe('2D data (points)', () => {
     ];
 
     const result = ransac(source, destination, {
-      distanceFunction: getEuclidianDistance,
+      distanceFunction: getEuclideanDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
     });
@@ -79,7 +79,7 @@ describe('2D data (points)', () => {
       { column: 4, row: -2 },
     ];
     const result = ransac(source, destination, {
-      distanceFunction: getEuclidianDistance,
+      distanceFunction: getEuclideanDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
     });
@@ -117,7 +117,7 @@ describe('2D data (points)', () => {
       { column: 1, row: 5 },
     ];
     const result = ransac(source, destination, {
-      distanceFunction: getEuclidianDistance,
+      distanceFunction: getEuclideanDistance,
       modelFunction: createAffineTransformModel,
       fitFunction: affineFitFunction,
     });

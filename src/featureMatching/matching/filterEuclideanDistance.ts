@@ -1,7 +1,7 @@
 import { FastKeypoint, Match } from '..';
 import { Point } from '../..';
 
-export interface FilterEuclidianDistanceMatchesOptions {
+export interface FilterEuclideanDistanceMatchesOptions {
   /**
    * The origin of the destination image relative to the top-left corner of the source image.
    * @default { column: 0, row: 0 }
@@ -18,11 +18,11 @@ export interface FilterEuclidianDistanceMatchesOptions {
  * @param options - Filter smallest distance matches options.
  * @returns Only the matches from source to destination with the smallest distance.
  */
-export function filterEuclidianDistance(
+export function filterEuclideanDistance(
   matches: Match[],
   sourceKeypoints: FastKeypoint[],
   destinationKeypoints: FastKeypoint[],
-  options: FilterEuclidianDistanceMatchesOptions = {},
+  options: FilterEuclideanDistanceMatchesOptions = {},
 ): Match[] {
   const { origin = { column: 0, row: 0 } } = options;
 

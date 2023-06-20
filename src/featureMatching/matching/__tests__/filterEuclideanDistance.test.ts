@@ -1,5 +1,5 @@
 import { Match } from '../bruteForceMatch';
-import { filterEuclidianDistance } from '../filterEuclidianDistancetrue';
+import { filterEuclideanDistance } from '../filterEuclideanDistance';
 
 test('3 matches', () => {
   const matches: Match[] = [
@@ -20,7 +20,7 @@ test('3 matches', () => {
     { origin: { column: 0, row: 0 }, score: 0 },
   ];
 
-  const result = filterEuclidianDistance(
+  const result = filterEuclideanDistance(
     matches,
     sourceKeypoints,
     destinationKeypoints,
