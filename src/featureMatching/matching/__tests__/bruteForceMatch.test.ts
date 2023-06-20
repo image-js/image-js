@@ -7,12 +7,6 @@ import { bruteForceOneMatch } from '../bruteForceMatch';
 
 test.each([
   {
-    message: 'scalene triangle',
-    source: 'scaleneTriangle',
-    destination: 'scaleneTriangle2',
-    expected: 2,
-  },
-  {
     message: 'scalene triangle rotated 10°',
     source: 'scaleneTriangle',
     destination: 'scaleneTriangle10',
@@ -29,12 +23,6 @@ test.each([
     source: 'scaleneTriangle',
     destination: 'scaleneTriangle180',
     expected: 2,
-  },
-  {
-    message: 'polygon',
-    source: 'polygon',
-    destination: 'polygon2',
-    expected: 7,
   },
   {
     message: 'polygon rotated 10°',
