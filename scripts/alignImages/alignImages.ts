@@ -5,13 +5,9 @@ import { readSync } from '../../src/load/read';
 import { readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
 
-// empy results folder
-const path = join(__dirname, 'results');
-for (const file of readdirSync(path)) {
-  unlinkSync(join(path, file));
-}
-
 // global variables
+const emptyFolder = false;
+
 const margin = 20; // number of pixels to add around the reference ROI
 
 const rois = [
@@ -29,11 +25,18 @@ const rois = [
   },
 ];
 
+const imageNames = ['img2'];
 const roiIndices = [0];
 
-// load images
-const imageNames = ['img1'];
+// empy results folder
+if (emptyFolder) {
+  const path = join(__dirname, 'results');
+  for (const file of readdirSync(path)) {
+    unlinkSync(join(path, file));
+  }
+}
 
+// load images
 const reference = readSync(__dirname + '/images/reference.png');
 const images = imageNames.map((name) =>
   readSync(__dirname + '/images/' + name + '.png'),
@@ -77,6 +80,7 @@ for (let roiIndex of roiIndices) {
         roiCounter +
         '.png',
       checkLimits: false,
+      maxRansacNbIterations: 1000,
     });
 
     const transform = result.transform;
@@ -84,7 +88,7 @@ for (let roiIndex of roiIndices) {
 
     const overlapped = overlapImages(cropped, croppedRef, {
       origin: transform.translation,
-      angle: transform.rotation,
+      angle: -transform.rotation,
       scale: transform.scale,
     });
 
