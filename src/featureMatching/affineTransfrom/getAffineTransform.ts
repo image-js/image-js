@@ -33,7 +33,19 @@ export interface GetAffineTransformOptions {
    */
   crosscheck?: boolean;
   /**
+   * Should the contrast of the images be enhanced before feature matching.
+   * @default true
+   */
+  enhanceContrast?: boolean;
+  /**
+   * Margin in pixels all around the destination image. This margin is removed for
+   * the contrast improvement.
+   * @default 0
+   */
+  sourceMargin?: number;
+  /**
    * Origin of the destination image relative to the top-left corner of the source image.
+   * Roughly indicates the position of the destination image in the source image.
    * @default { column: 0, row: 0 }
    */
   destinationOrigin?: Point;
@@ -73,25 +85,36 @@ export interface GetAffineTransformResult {
    * Affine transformation from source to destination.
    */
   transform: AffineTransform;
-  /**
-   * Number of matches of feature matching between source and destination.
-   * The bigger this number is, the better.
-   */
-  nbMatches: number;
-  /**
-   * Number of inliers resulting from the ransac algorithm.
-   */
-  nbInliers: number;
-  /**
-   * Number of iterations of the RANSAC algorithm.
-   */
-  nbRansacIterations: number;
+  stats: {
+    /**
+     * Number of matches of feature matching between source and destination.
+     * The bigger this number is, the better.
+     */
+    nbMatches: number;
+    /**
+     * Number of inliers resulting from the ransac algorithm.
+     */
+    nbInliers: number;
+    /**
+     * Number of iterations of the RANSAC algorithm.
+     */
+    nbRansacIterations: number;
+    /**
+     * Number of source keypoints used for matching.
+     */
+    nbSourceKeypoints: number;
+    /**
+     * Number of destination keypoints used for matching.
+     */
+    nbDestinationKeypoints: number;
+  };
 }
 
 /**
  * Get the affine transformation from the source to the destination image.
- * @param source - Source image.
- * @param destination - Destination image.
+ * @param source - Source image. Should be the image to align on the reference image.
+ * It can have an additional margin, specified in the options.
+ * @param destination - Destination image. Should be the reference image.
  * @param options - Get destination translation options.
  * @returns The affine transformation from source to destination image.
  */
@@ -103,6 +126,8 @@ export function getAffineTransform(
   const {
     centroidPatchDiameter = 31,
     bestKeypointRadius = 5,
+    sourceMargin = 0,
+    enhanceContrast = true,
     crosscheck = true,
     destinationOrigin = { column: 0, row: 0 },
     maxRansacNbIterations,
@@ -117,19 +142,30 @@ export function getAffineTransform(
     destination = destination.grey();
   }
 
-  // fix images contrast
-  const sourceExtremums = getMinMax(source);
-  source.level({
-    inputMin: sourceExtremums.min[0],
-    inputMax: sourceExtremums.max[0],
-    out: source,
-  });
-  const destinationExtremums = getMinMax(destination);
-  destination.level({
-    inputMin: destinationExtremums.min[0],
-    inputMax: destinationExtremums.max[0],
-    out: destination,
-  });
+  // enhance images contrast
+  if (enhanceContrast) {
+    const sourceWithoutMargin = source.crop({
+      origin: { row: sourceMargin, column: sourceMargin },
+      width: source.width - 2 * sourceMargin,
+      height: source.height - 2 * sourceMargin,
+    });
+
+    const sourceExtremums = getMinMax(sourceWithoutMargin);
+    source.level({
+      inputMin: sourceExtremums.min[0],
+      inputMax: sourceExtremums.max[0],
+      out: source,
+    });
+
+    const destinationExtremums = getMinMax(destination);
+    destination.level({
+      inputMin: destinationExtremums.min[0],
+      inputMax: destinationExtremums.max[0],
+      out: destination,
+    });
+  }
+  writeSync(`${__dirname}/source.png`, source);
+  writeSync(`${__dirname}/destination.png`, destination);
 
   // compute briefs
   const sourceBrief = getBrief(source, {
@@ -140,6 +176,9 @@ export function getAffineTransform(
     centroidPatchDiameter,
     bestKptRadius: bestKeypointRadius,
   });
+
+  const nbSourceKeypoints = sourceBrief.keypoints.length;
+  const nbDestinationKeypoints = destinationBrief.keypoints.length;
 
   // match reference and destination keypoints
   let matches: Match[] = [];
@@ -168,6 +207,36 @@ export function getAffineTransform(
     );
   }
 
+  // extract source and destination points
+  let sourcePoints: Point[] = [];
+  let destinationPoints: Point[] = [];
+  for (const match of matches) {
+    sourcePoints.push(sourceBrief.keypoints[match.sourceIndex].origin);
+    destinationPoints.push(
+      destinationBrief.keypoints[match.destinationIndex].origin,
+    );
+  }
+
+  // find inliers with ransac
+  let nbInliers = sourcePoints.length;
+  let nbRansacIterations = 0;
+  let inliers: number[] = [];
+  if (sourcePoints.length > 2) {
+    const ransacResult = ransac(sourcePoints, destinationPoints, {
+      distanceFunction: getEuclideanDistance,
+      modelFunction: createAffineTransformModel,
+      fitFunction: affineFitFunction,
+      maxNbIterations: maxRansacNbIterations,
+    });
+    nbRansacIterations = ransacResult.nbIterations;
+
+    inliers = ransacResult.inliers;
+    nbInliers = inliers.length;
+
+    sourcePoints = inliers.map((i) => sourcePoints[i]);
+    destinationPoints = inliers.map((i) => destinationPoints[i]);
+  }
+
   // create debug image
   if (debug) {
     const montage = new Montage(source, destination, {
@@ -179,6 +248,20 @@ export function getAffineTransform(
       sourceBrief.keypoints,
       destinationBrief.keypoints,
       { showDistance: true },
+    );
+
+    const inlierMatches: Match[] = [];
+
+    // todo: check this line
+    for (let inlier of inliers) {
+      inlierMatches.push(matches[inlier]);
+    }
+
+    montage.drawMatches(
+      inlierMatches,
+      sourceBrief.keypoints,
+      destinationBrief.keypoints,
+      { color: [0, 0, 255] },
     );
 
     const drawKeypointsBaseOptions = {
@@ -195,35 +278,6 @@ export function getAffineTransform(
     });
 
     writeSync(debugImagePath, montage.image);
-  }
-
-  // extract source and destination points
-  let sourcePoints: Point[] = [];
-  let destinationPoints: Point[] = [];
-  for (const match of matches) {
-    sourcePoints.push(sourceBrief.keypoints[match.sourceIndex].origin);
-    destinationPoints.push(
-      destinationBrief.keypoints[match.destinationIndex].origin,
-    );
-  }
-
-  // find inliers with ransac
-  let nbInliers = sourcePoints.length;
-  let nbRansacIterations = 0;
-  if (sourcePoints.length > 2) {
-    const ransacResult = ransac(sourcePoints, destinationPoints, {
-      distanceFunction: getEuclideanDistance,
-      modelFunction: createAffineTransformModel,
-      fitFunction: affineFitFunction,
-      maxNbIterations: maxRansacNbIterations,
-    });
-    nbRansacIterations = ransacResult.nbIterations;
-
-    const inliers = ransacResult.inliers;
-    nbInliers = inliers.length;
-
-    sourcePoints = inliers.map((i) => sourcePoints[i]);
-    destinationPoints = inliers.map((i) => destinationPoints[i]);
   }
 
   // compute affine transform from destination to reference
@@ -245,8 +299,12 @@ export function getAffineTransform(
         row: Math.round(affineTransform.translation.y),
       },
     },
-    nbMatches: matches.length,
-    nbInliers,
-    nbRansacIterations,
+    stats: {
+      nbMatches: matches.length,
+      nbInliers,
+      nbRansacIterations,
+      nbSourceKeypoints,
+      nbDestinationKeypoints,
+    },
   };
 }
