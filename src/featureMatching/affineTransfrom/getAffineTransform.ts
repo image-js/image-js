@@ -43,10 +43,10 @@ export interface GetAffineTransformOptions {
    */
   debug?: boolean;
   /**
-   * Name of the debug image.
-   * @default 'montage'
+   * Path of the debug image.
+   * @default `${__dirname}/montage.png`
    */
-  debugImageName?: string;
+  debugImagePath?: string;
 }
 
 export interface AffineTransform {
@@ -104,7 +104,7 @@ export function getAffineTransform(
     checkLimits = false,
     maxRansacNbIterations,
     debug = false,
-    debugImageName = 'montage',
+    debugImagePath = `${__dirname}/montage.png`,
   } = options;
   source = source.grey();
   destination = destination.grey();
@@ -184,7 +184,7 @@ export function getAffineTransform(
       destinationBrief.keypoints,
     );
 
-    writeSync(`${__dirname}/${debugImageName}.png`, montage.image);
+    writeSync(debugImagePath, montage.image);
   }
 
   // compute affine transform from destination to reference
@@ -196,12 +196,16 @@ export function getAffineTransform(
   if (checkLimits) {
     if (Math.abs(affineTransform.scale - 1) > maxScaleError) {
       throw new Error(
-        `Source and destination scales are too different. Scaling factor is ${affineTransform.scale}`,
+        `Source and destination scales are too different. Scaling factor is ${affineTransform.scale.toFixed(
+          2,
+        )}`,
       );
     }
     if (Math.abs(affineTransform.rotation - 1) > maxAngleError) {
       throw new Error(
-        `Source and destination orientations are too different. Rotation is ${affineTransform.rotation} degrees.`,
+        `Source and destination orientations are too different. Rotation is ${affineTransform.rotation.toFixed(
+          2,
+        )} degrees.`,
       );
     }
   }
