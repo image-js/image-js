@@ -2,18 +2,14 @@ import { writeSync } from '../../src/save/write';
 import { getAffineTransform } from '../../src/featureMatching/affineTransfrom/getAffineTransform';
 import { overlapImages } from '../../src/featureMatching/visualize/overlapImages';
 import { readSync } from '../../src/load/read';
-import { opendir, unlink } from 'fs';
+import { readdirSync, unlinkSync } from 'fs';
+import { join } from 'path';
 
 // empy results folder
-const resultsPath = __dirname + '/results';
-opendir(resultsPath, async (err: any, dir: any) => {
-  if (err) throw err;
-  for await (const item of dir) {
-    unlink(resultsPath + '/' + item.name, (err: any) => {
-      if (err) throw err;
-    });
-  }
-});
+const path = join(__dirname, 'results');
+for (const file of readdirSync(path)) {
+  unlinkSync(join(path, file));
+}
 
 // global variables
 const margin = 20; // number of pixels to add around the reference ROI
@@ -33,8 +29,10 @@ const rois = [
   },
 ];
 
+const roiIndices = [0];
+
 // load images
-const imageNames = ['img2'];
+const imageNames = ['img1'];
 
 const reference = readSync(__dirname + '/images/reference.png');
 const images = imageNames.map((name) =>
@@ -43,7 +41,7 @@ const images = imageNames.map((name) =>
 
 console.log(images);
 
-for (let roiIndex = 0; roiIndex < rois.length; roiIndex++) {
+for (let roiIndex of roiIndices) {
   const roi = rois[roiIndex];
   const roiCounter = roiIndex + 1;
   const croppedRef = reference.crop({
@@ -57,7 +55,8 @@ for (let roiIndex = 0; roiIndex < rois.length; roiIndex++) {
   );
   for (let imageIndex = 0; imageIndex < images.length; imageIndex++) {
     const image = images[imageIndex];
-    const imageCounter = imageIndex + 1;
+    const imageCounter =
+      imageNames[imageIndex][imageNames[imageIndex].length - 1];
     const cropped = image.crop({
       origin: { column: roi.x, row: roi.y },
       width: roi.width,
