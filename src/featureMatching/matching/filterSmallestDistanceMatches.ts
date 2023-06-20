@@ -2,7 +2,7 @@ import { Match } from '..';
 
 /**
  * Use this function to only keep the match from source to destination with
- * the smallest distance for each destination keypoint.
+ * the smallest distance (score) for each destination keypoint.
  * @param matches - Matches from source to destination.
  * @returns Only the matches from source to destination with the smallest distance.
  */

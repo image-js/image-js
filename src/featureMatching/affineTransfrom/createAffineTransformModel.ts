@@ -5,9 +5,8 @@ import { Point } from '../..';
 /**
  * Generate a function that applies the given transformation parameters to a point.
  * The transform is an array of number in the format: [angle, x, y, scale].
- *
  * @param transform - Transformation to apply.
- * @returns Transformed point.
+ * @returns Function to transform a point.
  */
 export function createAffineTransformModel(
   transform: number[],

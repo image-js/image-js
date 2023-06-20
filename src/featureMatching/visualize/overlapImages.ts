@@ -36,6 +36,10 @@ export function overlapImages(
 ): Image {
   const { origin = { row: 0, column: 0 }, angle = 0, scale = 1 } = options;
 
+  if (scale === 0) {
+    throw new Error('Scale cannot be 0');
+  }
+
   if (image1.colorModel !== ImageColorModel.GREY) {
     image1 = image1.grey();
   }

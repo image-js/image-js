@@ -1,10 +1,17 @@
-import { getAffineTransform as mlGetAffineTransform } from 'ml-affine-transform';
+import { getAffineTransform as matrixGetAffineTransform } from 'ml-affine-transform';
 import { ransac } from 'ml-ransac';
 
-import { Montage, MontageDisposition, getCrosscheckMatches } from '..';
+import {
+  Match,
+  Montage,
+  MontageDisposition,
+  bruteForceOneMatch,
+  getCrosscheckMatches,
+} from '..';
 import { Point, Image, writeSync } from '../..';
 import { getMinMax } from '../../utils/getMinMax';
 import { getBrief } from '../descriptors/getBrief';
+import { filterEuclidianDistance } from '../matching/filterEuclidianDistancetrue';
 
 import { affineFitFunction } from './affineFitFunction';
 import { createAffineTransformModel } from './createAffineTransformModel';
@@ -20,6 +27,16 @@ export interface GetAffineTransformOptions {
    * @default 10
    */
   bestKeypointRadius?: number;
+  /**
+   * Should only the crossckeck matches be considered.
+   * @default true
+   */
+  crosscheck?: boolean;
+  /**
+   * Origin of the destination image relative to the top-left corner of the source image.
+   * @default { column: 0, row: 0 }
+   */
+  destinationOrigin?: Point;
   /**
    * Verify scale and rotation are in acceptable limits.
    * @default false
@@ -99,6 +116,8 @@ export function getAffineTransform(
   const {
     centroidPatchDiameter = 31,
     bestKeypointRadius = 5,
+    crosscheck = true,
+    destinationOrigin = { column: 0, row: 0 },
     maxScaleError = 0.1,
     maxAngleError = 5,
     checkLimits = false,
@@ -106,6 +125,7 @@ export function getAffineTransform(
     debug = false,
     debugImagePath = `${__dirname}/montage.png`,
   } = options;
+
   source = source.grey();
   destination = destination.grey();
 
@@ -134,15 +154,59 @@ export function getAffineTransform(
   });
 
   // match reference and destination keypoints
-  const matches = getCrosscheckMatches(
-    sourceBrief.descriptors,
-    destinationBrief.descriptors,
-  );
+  let matches: Match[] = [];
+  if (crosscheck) {
+    matches = getCrosscheckMatches(
+      sourceBrief.descriptors,
+      destinationBrief.descriptors,
+    );
+  } else {
+    matches = bruteForceOneMatch(
+      sourceBrief.descriptors,
+      destinationBrief.descriptors,
+    );
+
+    matches = filterEuclidianDistance(
+      matches,
+      sourceBrief.keypoints,
+      destinationBrief.keypoints,
+      { origin: destinationOrigin },
+    );
+  }
 
   if (matches.length < 2) {
     throw new Error(
       'Insufficient number of matches found to compute affine transform (less than 2).',
     );
+  }
+
+  // create debug image
+  if (debug) {
+    const montage = new Montage(source, destination, {
+      disposition: MontageDisposition.VERTICAL,
+    });
+
+    montage.drawMatches(
+      matches,
+      sourceBrief.keypoints,
+      destinationBrief.keypoints,
+      { showDistance: true },
+    );
+
+    const drawKeypointsBaseOptions = {
+      fill: true,
+      color: [0, 255, 0],
+      showScore: true,
+      markerSize: 3,
+    };
+
+    montage.drawKeypoints(sourceBrief.keypoints, drawKeypointsBaseOptions);
+    montage.drawKeypoints(destinationBrief.keypoints, {
+      origin: montage.destinationOrigin,
+      ...drawKeypointsBaseOptions,
+    });
+
+    writeSync(debugImagePath, montage.image);
   }
 
   // extract source and destination points
@@ -173,25 +237,14 @@ export function getAffineTransform(
     sourcePoints = inliers.map((i) => sourcePoints[i]);
     destinationPoints = inliers.map((i) => destinationPoints[i]);
   }
-  if (debug) {
-    const montage = new Montage(source, destination, {
-      disposition: MontageDisposition.VERTICAL,
-    });
-
-    montage.drawMatches(
-      matches,
-      sourceBrief.keypoints,
-      destinationBrief.keypoints,
-    );
-
-    writeSync(debugImagePath, montage.image);
-  }
 
   // compute affine transform from destination to reference
-
   const sourceMatrix = getMatrixFromPoints(sourcePoints);
   const destinationMatrix = getMatrixFromPoints(destinationPoints);
-  const affineTransform = mlGetAffineTransform(sourceMatrix, destinationMatrix);
+  const affineTransform = matrixGetAffineTransform(
+    sourceMatrix,
+    destinationMatrix,
+  );
 
   if (checkLimits) {
     if (Math.abs(affineTransform.scale - 1) > maxScaleError) {

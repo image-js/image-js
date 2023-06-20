@@ -2,7 +2,6 @@ import { Point, Image, ImageColorModel, Mask } from '../..';
 
 /**
  * Draw source, destination and transformed points on an image.
- *
  * @param source - Source points.
  * @param destination - Destination points.
  * @param result - Transformed points.
