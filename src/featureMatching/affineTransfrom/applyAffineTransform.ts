@@ -4,7 +4,6 @@ import { Point } from '../..';
 
 /**
  * Apply a given transform to a set of points.
- *
  * @param points - Points to process.
  * @param model - The transformation function.
  * @returns The transformed points.
