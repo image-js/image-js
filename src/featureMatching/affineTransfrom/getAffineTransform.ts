@@ -220,7 +220,7 @@ export function getAffineTransform(
   // find inliers with ransac
   let nbInliers = sourcePoints.length;
   let nbRansacIterations = 0;
-  let inliers: number[] = [];
+  let inliers: number[] = [0, 1];
   if (sourcePoints.length > 2) {
     const ransacResult = ransac(sourcePoints, destinationPoints, {
       distanceFunction: getEuclideanDistance,
@@ -233,8 +233,14 @@ export function getAffineTransform(
     inliers = ransacResult.inliers;
     nbInliers = inliers.length;
 
-    sourcePoints = inliers.map((i) => sourcePoints[i]);
-    destinationPoints = inliers.map((i) => destinationPoints[i]);
+    const newSrcPoints = [];
+    const newDstPoints = [];
+    for (let inlier of inliers) {
+      newSrcPoints.push(sourcePoints[inlier]);
+      newDstPoints.push(destinationPoints[inlier]);
+    }
+    sourcePoints = newSrcPoints;
+    destinationPoints = newDstPoints;
   }
 
   // create debug image
@@ -252,7 +258,6 @@ export function getAffineTransform(
 
     const inlierMatches: Match[] = [];
 
-    // todo: check this line
     for (let inlier of inliers) {
       inlierMatches.push(matches[inlier]);
     }
@@ -287,8 +292,6 @@ export function getAffineTransform(
     sourceMatrix,
     destinationMatrix,
   );
-
-  // compute crop origin in destination
 
   return {
     transform: {

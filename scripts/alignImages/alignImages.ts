@@ -25,8 +25,8 @@ const rois = [
   },
 ];
 
-const imageNames = ['img1'];
-const roiIndices = [0, 1];
+const imageNames = ['img2'];
+const roiIndices = [0];
 
 // empy results folder
 if (emptyFolder) {
@@ -72,7 +72,7 @@ for (let roiIndex of roiIndices) {
         roiCounter +
         '.png',
       maxRansacNbIterations: 1000,
-      crosscheck: true,
+      crosscheck: false,
       destinationOrigin: { row: margin, column: margin },
       sourceMargin: margin,
       enhanceContrast: true,

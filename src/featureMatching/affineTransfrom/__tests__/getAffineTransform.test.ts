@@ -18,9 +18,7 @@ test('RGB images', () => {
     `featureMatching/${data.destination}.png` as TestImagePath,
   );
 
-  const result = getAffineTransform(source, destination, {
-    maxRansacNbIterations: 1000,
-  });
+  const result = getAffineTransform(source, destination);
 
   const transform = result.transform;
 
