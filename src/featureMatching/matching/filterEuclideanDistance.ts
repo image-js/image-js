@@ -48,7 +48,9 @@ export function filterEuclideanDistance(
     }
   }
   result.push(
-    ...sameDestMatches.sort((a, b) => a.distance - b.distance).slice(0, 1),
+    ...sameDestMatches
+      .sort((a, b) => distanceSquared(a) - distanceSquared(b))
+      .slice(0, 1),
   );
   return result;
 
