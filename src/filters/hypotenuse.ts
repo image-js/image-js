@@ -1,6 +1,6 @@
 import { BitDepth, Image } from '..';
-import checkProcessable from '../utils/checkProcessable';
-import { validateChannels } from '../utils/validators';
+import checkProcessable from '../utils/validators/checkProcessable';
+import { validateChannels } from '../utils/validators/validators';
 
 export interface HypotenuseOptions {
   /**

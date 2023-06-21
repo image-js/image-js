@@ -1,6 +1,6 @@
 import { Image } from '../../Image';
 import { Point } from '../../geometry';
-import checkProcessable from '../../utils/checkProcessable';
+import checkProcessable from '../../utils/validators/checkProcessable';
 import {
   getCirclePoints,
   getCompassPoints,

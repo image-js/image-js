@@ -1,5 +1,5 @@
 import { BitDepth, Image } from '..';
-import checkProcessable from '../utils/checkProcessable';
+import checkProcessable from '../utils/validators/checkProcessable';
 import type { BorderType } from '../utils/interpolateBorder';
 
 export interface GradientFilterBaseOptions {

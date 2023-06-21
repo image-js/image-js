@@ -1,11 +1,11 @@
 import { circle } from 'bresenham-zingl';
 
 import { Image } from '../Image';
-import checkProcessable from '../utils/checkProcessable';
 import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
-import { validateColor } from '../utils/validators';
+import checkProcessable from '../utils/validators/checkProcessable';
+import { validateColor } from '../utils/validators/validators';
 
 import { roundPoint } from './utils/roundPoint';
 

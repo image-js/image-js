@@ -1,6 +1,6 @@
 import { Image, ImageColorModel } from '..';
-import { assert } from '../utils/assert';
-import checkProcessable from '../utils/checkProcessable';
+import { assert } from '../utils/validators/assert';
+import checkProcessable from '../utils/validators/checkProcessable';
 import { getClamp } from '../utils/clamp';
 import { getOutputImage } from '../utils/getOutputImage';
 

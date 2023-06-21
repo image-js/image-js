@@ -1,5 +1,5 @@
 import { Image } from '../Image';
-import { assert } from '../utils/assert';
+import { assert } from '../utils/validators/assert';
 
 import { readCanvas } from './readCanvas';
 // TODO: Create nodejs version that throws an error

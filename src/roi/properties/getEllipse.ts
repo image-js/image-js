@@ -3,7 +3,7 @@ import { xVariance, xyCovariance } from 'ml-spectra-processing';
 
 import { Point } from '../..';
 import { getAngle } from '../../maskAnalysis/utils/getAngle';
-import { assert } from '../../utils/assert';
+import { assert } from '../../utils/validators/assert';
 import { toDegrees } from '../../utils/geometry/angles';
 import { Roi } from '../Roi';
 

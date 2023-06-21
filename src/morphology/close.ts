@@ -1,6 +1,6 @@
 import { Image, Mask } from '..';
-import { checkKernel } from '../utils/checkKernel';
-import checkProcessable from '../utils/checkProcessable';
+import { checkKernel } from '../utils/validators/checkKernel';
+import checkProcessable from '../utils/validators/checkProcessable';
 
 export interface CloseOptions {
   /**

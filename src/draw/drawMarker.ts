@@ -1,9 +1,9 @@
 import { Image } from '../Image';
 import { Point } from '../geometry';
-import checkProcessable from '../utils/checkProcessable';
+import checkProcessable from '../utils/validators/checkProcessable';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
-import { validateColor } from '../utils/validators';
+import { validateColor } from '../utils/validators/validators';
 
 export interface DrawMarkerOptions {
   /**

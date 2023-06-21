@@ -1,6 +1,6 @@
 import { Image } from '../Image';
 
-import { assert } from './assert';
+import { assert } from './validators/assert';
 
 export type ClampFunction = (value: number) => number;
 

@@ -1,6 +1,6 @@
 import { Image, Mask } from '..';
 import { GaussianBlurOptions } from '../filters';
-import checkProcessable from '../utils/checkProcessable';
+import checkProcessable from '../utils/validators/checkProcessable';
 import { getIndex } from '../utils/getIndex';
 import { imageToOutputMask } from '../utils/getOutputImage';
 

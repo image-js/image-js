@@ -1,4 +1,4 @@
-import { BitDepth, Image, ImageColorModel, Mask } from '..';
+import { BitDepth, Image, ImageColorModel, Mask } from '../..';
 
 // @ts-expect-error Intl types don't exist yet
 const formatter = new Intl.ListFormat('en', { type: 'disjunction' });

@@ -1,5 +1,5 @@
 import { Image } from '..';
-import { assert } from '../utils/assert';
+import { assert } from '../utils/validators/assert';
 
 /**
  * Converts R, G and B values to a single value using Luma 709 standard({@link https://en.wikipedia.org/wiki/Luma_(video)}).

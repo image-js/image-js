@@ -1,7 +1,7 @@
 import { Image } from '../Image';
 import { Mask } from '../Mask';
 
-import { assert } from './assert';
+import { assert } from './validators/assert';
 import { getDefaultColor } from './getDefaultColor';
 
 export interface SetBlendedPixelOptions {

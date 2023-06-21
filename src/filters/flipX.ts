@@ -1,5 +1,5 @@
 import { Image } from '../Image';
-import checkProcessable from '../utils/checkProcessable';
+import checkProcessable from '../utils/validators/checkProcessable';
 
 /**
  * Apply a flipX filter to an image.

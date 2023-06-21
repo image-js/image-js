@@ -1,6 +1,6 @@
 import { Image } from '../Image';
 import { Mask } from '../Mask';
-import checkProcessable from '../utils/checkProcessable';
+import checkProcessable from '../utils/validators/checkProcessable';
 import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage';

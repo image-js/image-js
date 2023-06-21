@@ -1,8 +1,8 @@
 import { Image } from '../Image';
-import checkProcessable from '../utils/checkProcessable';
+import checkProcessable from '../utils/validators/checkProcessable';
 import { getClamp } from '../utils/clamp';
 import { getOutputImage } from '../utils/getOutputImage';
-import { validateChannels } from '../utils/validators';
+import { validateChannels } from '../utils/validators/validators';
 
 export interface LevelOptions {
   /**

@@ -1,6 +1,6 @@
 import { Image } from '../../Image';
 import { GaussianBlurSigmaOptions } from '../../filters';
-import checkProcessable from '../../utils/checkProcessable';
+import checkProcessable from '../../utils/validators/checkProcessable';
 import { OrientedFastKeypoint } from '../keypoints/getOrientedFastKeypoints';
 import { compareIntensity } from '../utils/compareIntensity';
 import {

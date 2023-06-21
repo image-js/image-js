@@ -1,4 +1,4 @@
-import { checkKernel } from '../checkKernel';
+import { checkKernel } from '../validators/checkKernel';
 
 test('should throw', () => {
   const kernel = [

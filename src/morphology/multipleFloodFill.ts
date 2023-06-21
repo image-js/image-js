@@ -1,6 +1,6 @@
 import { Mask } from '..';
 import { BitValue } from '../Mask';
-import { assert } from '../utils/assert';
+import { assert } from '../utils/validators/assert';
 import { maskToOutputMask } from '../utils/getOutputImage';
 
 export interface MultipleFloodFillOptions {

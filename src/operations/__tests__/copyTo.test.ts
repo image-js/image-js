@@ -113,6 +113,18 @@ test('RGBA images', () => {
     [7, 8, 9, 0],
   ]);
 });
+test('origin coordinates are floating values', () => {
+  let target = testUtils.createRgbaImage([
+    [1, 2, 3, 255],
+    [4, 5, 6, 255],
+    [7, 8, 9, 0],
+  ]);
+  let source = testUtils.createRgbaImage([[3, 3, 3, 255]]);
+
+  expect(() => {
+    source.copyTo(target, { origin: { row: 0.99, column: 0 } });
+  }).toThrow('Origin row and column must be integers');
+});
 
 test('testing out option', () => {
   let source = testUtils.createGreyaImage([[100, 255]]);

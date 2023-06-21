@@ -94,7 +94,7 @@ import {
 import { cropAlpha, CropAlphaOptions } from './operations/cropAlpha';
 import { ImageColorModel, colorModels } from './utils/constants/colorModels';
 import { getMinMax } from './utils/getMinMax';
-import { validateChannel, validateValue } from './utils/validators';
+import { validateChannel, validateValue } from './utils/validators/validators';
 
 import {
   extract,

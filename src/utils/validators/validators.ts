@@ -1,5 +1,5 @@
-import { Image } from '../Image';
-import { Mask } from '../Mask';
+import { Image } from '../../Image';
+import { Mask } from '../../Mask';
 
 /**
  * Validate an array of channels.

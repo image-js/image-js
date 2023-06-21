@@ -2,10 +2,10 @@ import robustPointInPolygon from 'robust-point-in-polygon';
 
 import { Image } from '../Image';
 import { arrayPointsToObjects } from '../utils/arrayPointsToObjects';
-import checkProcessable from '../utils/checkProcessable';
+import checkProcessable from '../utils/validators/checkProcessable';
 import { Point } from '../utils/geometry/points';
 import { getOutputImage } from '../utils/getOutputImage';
-import { validateColor } from '../utils/validators';
+import { validateColor } from '../utils/validators/validators';
 
 import { DrawPolylineOnImageOptions } from './drawPolylineOnImage';
 import { deleteDuplicates } from './utils/deleteDuplicates';

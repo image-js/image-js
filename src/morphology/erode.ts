@@ -1,7 +1,7 @@
 import { Mask } from '..';
 import { Image } from '../Image';
-import { checkKernel } from '../utils/checkKernel';
-import checkProcessable from '../utils/checkProcessable';
+import { checkKernel } from '../utils/validators/checkKernel';
+import checkProcessable from '../utils/validators/checkProcessable';
 
 export interface ErodeOptions {
   /**

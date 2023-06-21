@@ -1,4 +1,4 @@
-import { assert } from '../assert';
+import { assert } from '../validators/assert';
 
 test('should restrict type', () => {
   const variable: number | undefined = 3;

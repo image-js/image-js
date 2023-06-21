@@ -1,5 +1,5 @@
 import { Image } from '../Image';
-import { assert } from '../utils/assert';
+import { assert } from '../utils/validators/assert';
 import { getClamp } from '../utils/clamp';
 import { getBorderInterpolation, BorderType } from '../utils/interpolateBorder';
 import {

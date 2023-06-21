@@ -1,5 +1,5 @@
 import { Mask } from '..';
-import { assert } from '../utils/assert';
+import { assert } from '../utils/validators/assert';
 
 import { RoiMapManager } from './RoiMapManager';
 import { maxNumberRois, maxRoiId } from './utils/constants';

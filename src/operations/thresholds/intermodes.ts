@@ -6,7 +6,7 @@
  *
  */
 
-import { assert } from '../../utils/assert';
+import { assert } from '../../utils/validators/assert';
 
 /**
  * Return a threshold for a histogram using Intermodes algorithm.

@@ -1,4 +1,4 @@
-import checkProcessable from '../checkProcessable';
+import checkProcessable from '../validators/checkProcessable';
 
 test('wrong bit depth', () => {
   const img = testUtils.createGreyImage([

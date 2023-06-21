@@ -1,6 +1,6 @@
 import { Mask } from '..';
 import { Image } from '../Image';
-import { assert } from '../utils/assert';
+import { assert } from '../utils/validators/assert';
 
 export interface WriteCanvasOptions {
   /**
