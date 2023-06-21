@@ -20,7 +20,7 @@ export interface DrawPointsOptions {
   /**
    * Image to which the resulting image has to be put.
    */
-  out?: Image;
+  out?: Image | Mask;
 }
 
 export function drawPoints(

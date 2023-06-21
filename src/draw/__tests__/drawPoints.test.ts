@@ -72,6 +72,32 @@ test('out parameter set to self', () => {
   expect(result).toBe(image);
 });
 
+test('out parameter set to self (mask)', () => {
+  const image = testUtils.createMask([
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ]);
+  const points = [
+    { row: 0, column: 0 },
+    { row: 1, column: 1 },
+    { row: 2, column: 2 },
+  ];
+  const result = image.drawPoints(points, {
+    color: [1],
+    out: image,
+  });
+
+  expect(result).toMatchImageData([
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 0, 0],
+  ]);
+  expect(result).toBe(image);
+});
+
 test('out to other image', () => {
   const out = new Image(4, 4, { colorModel: 'GREY' });
   const image = testUtils.createGreyImage([
