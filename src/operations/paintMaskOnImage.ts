@@ -4,6 +4,7 @@ import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
 import { setBlendedPixel } from '../utils/setBlendedPixel';
+import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger';
 
 export interface PaintMaskOnImageOptions {
   /**
@@ -49,6 +50,8 @@ export function paintMaskOnImage(
   if (color.length !== image.channels) {
     throw new RangeError('the given color is not compatible with the image');
   }
+
+  checkPointIsInteger(origin, 'Origin');
 
   const result = getOutputImage(image, options, { clone: true });
   if (blend) {

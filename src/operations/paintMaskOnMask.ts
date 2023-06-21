@@ -1,6 +1,7 @@
 import { BitValue, Mask } from '../Mask';
 import { Point } from '../utils/geometry/points';
 import { maskToOutputMask } from '../utils/getOutputImage';
+import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger';
 
 export interface PaintMaskOnMaskOptions {
   /**
@@ -33,6 +34,8 @@ export function paintMaskOnMask(
 ): Mask {
   const { origin = { row: 0, column: 0 }, value = 1 } = options;
   const { column, row } = origin;
+
+  checkPointIsInteger(origin, 'Origin');
 
   const result = maskToOutputMask(image, options, { clone: true });
 

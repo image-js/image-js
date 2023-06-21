@@ -1,7 +1,8 @@
 import { Image } from '../Image';
 import { Mask } from '../Mask';
-import { assert } from '../utils/assert';
 import { Point } from '../utils/geometry/points';
+import { assert } from '../utils/validators/assert';
+import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger';
 
 export interface ExtractOptions {
   /**
@@ -33,6 +34,8 @@ export function extract(
       column + mask.height > 0,
     'extract: image and mask have no overlap',
   );
+
+  checkPointIsInteger(origin, 'Origin');
 
   const resultWidth =
     Math.min(image.width, mask.width + column) - Math.max(0, column);
