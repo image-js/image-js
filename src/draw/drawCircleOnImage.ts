@@ -7,6 +7,8 @@ import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
 import { validateColor } from '../utils/validators';
 
+import { roundPoint } from './utils/roundPoint';
+
 // Inspired by https://www.geeksforgeeks.org/bresenhams-circle-drawing-algorithm/
 
 export interface DrawCircleOnImageOptions {
@@ -57,6 +59,8 @@ export function drawCircleOnImage(
   if (radius < 0) {
     throw new RangeError('circle radius must be positive');
   }
+
+  center = roundPoint(center);
 
   if (radius === 0) {
     newImage.setVisiblePixel(center.column, center.row, color);

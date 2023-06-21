@@ -62,8 +62,8 @@ export function drawPoints(
 
   for (const point of points) {
     newImage.setVisiblePixel(
-      origin.column + point.column,
-      origin.row + point.row,
+      Math.round(origin.column + point.column),
+      Math.round(origin.row + point.row),
       color,
     );
   }

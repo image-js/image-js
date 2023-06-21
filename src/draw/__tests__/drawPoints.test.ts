@@ -46,6 +46,31 @@ test('GREY image', () => {
   expect(result).not.toBe(image);
 });
 
+test('floating point values', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ]);
+  const points = [
+    { row: 0, column: 0 },
+    { row: 2.99, column: 2.8 },
+    { row: 2.9, column: 0 },
+  ];
+  const result = image.drawPoints(points, {
+    color: [1],
+  });
+
+  expect(result).toMatchImageData([
+    [1, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [1, 0, 0, 1],
+  ]);
+  expect(result).not.toBe(image);
+});
+
 test('out parameter set to self', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0],

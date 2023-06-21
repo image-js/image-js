@@ -39,7 +39,7 @@ export function drawLineOnImage(
   options: DrawLineOnImageOptions = {},
 ): Image {
   const newImage = getOutputImage(image, options, { clone: true });
-  const {
+  let {
     strokeColor: color = getDefaultColor(newImage),
     origin = { column: 0, row: 0 },
   } = options;
