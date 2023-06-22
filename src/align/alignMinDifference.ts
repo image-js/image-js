@@ -12,6 +12,7 @@ export interface AlignMinDifferenceOptions {
 /**
  * Aligns two images by finding the translation that minimizes the mean difference
  * between them. The source image should fit entirely in the destination image.
+ * The images are converted to grayscale internally.
  * @param source - Image to align.
  * @param destination - Image to align to.
  * @param options - Align images min difference options.
