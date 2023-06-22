@@ -1,5 +1,4 @@
 export * from './descriptors/getBriefDescriptors';
-export * from './affineTransfrom/getAffineTransform';
 export * from './keypoints/getFastKeypoints';
 export * from './keypoints/getIntensityCentroid';
 export * from './keypoints/getOrientedFastKeypoints';

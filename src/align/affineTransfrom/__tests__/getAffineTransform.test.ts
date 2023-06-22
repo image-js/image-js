@@ -1,6 +1,6 @@
 import { Image } from '../../..';
 import { TestImagePath } from '../../../../test/TestImagePath';
-import { overlapImages } from '../../visualize/overlapImages';
+import { overlapImages } from '../../../featureMatching/visualize/overlapImages';
 import { getAffineTransform } from '../getAffineTransform';
 
 test('RGB images', () => {

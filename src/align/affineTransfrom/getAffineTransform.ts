@@ -7,11 +7,11 @@ import {
   MontageDisposition,
   bruteForceOneMatch,
   getCrosscheckMatches,
-} from '..';
+} from '../../featureMatching';
 import { Point, Image, writeSync, ImageColorModel } from '../..';
 import { getMinMax } from '../../utils/getMinMax';
-import { getBrief } from '../descriptors/getBrief';
-import { filterEuclideanDistance } from '../matching/filterEuclideanDistance';
+import { getBrief } from '../../featureMatching/descriptors/getBrief';
+import { filterEuclideanDistance } from '../../featureMatching/matching/filterEuclideanDistance';
 
 import { affineFitFunction } from './affineFitFunction';
 import { createAffineTransformModel } from './createAffineTransformModel';
@@ -163,11 +163,8 @@ export function getAffineTransform(
       inputMax: destinationExtremums.max[0],
       out: destination,
     });
-  }
-  writeSync(`${__dirname}/source.png`, source);
-  writeSync(`${__dirname}/destination.png`, destination);
+  } // compute briefs
 
-  // compute briefs
   const sourceBrief = getBrief(source, {
     centroidPatchDiameter,
     bestKptRadius: bestKeypointRadius,
