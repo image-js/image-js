@@ -3,19 +3,15 @@ import { subtract } from '../compare/subtract';
 
 export interface AlignImagesMinDifferenceOptions {
   /**
-   * Maximal translation along x axis in pixels.
-   * @default Max translation for which the images still overlap fully.
+   * Initial step size by which the images will be translated.
+   * @default Math.min(source.width, source.height, Math.max(xSpan, ySpan))
    */
-  xSpan?: number;
-  /**
-   * Maximal translation along y axis in pixels.
-   * @default Max translation for which the images still overlap fully.
-   */
-  ySpan?: number;
+  startStep?: number;
 }
 
 /**
- * Aligns two images by finding the translation that minimizes the mean difference between them.
+ * Aligns two images by finding the translation that minimizes the mean difference
+ * between them. The source image should fit entirely in the destination image.
  * @param source - Image to align.
  * @param destination - Image to align to.
  * @param options - Align images min difference options.
@@ -27,9 +23,11 @@ export function alignImagesMinDifference(
   destination: Image,
   options: AlignImagesMinDifferenceOptions = {},
 ): Point {
+  const xSpan = destination.width - source.width;
+  const ySpan = destination.height - source.height;
+
   const {
-    xSpan = destination.width - source.width,
-    ySpan = destination.height - source.height,
+    startStep = Math.min(source.width, source.height, Math.max(xSpan, ySpan)),
   } = options;
 
   if (xSpan < 0 || ySpan < 0) {
@@ -47,7 +45,7 @@ export function alignImagesMinDifference(
   let bestShiftX = 0;
   let bestShiftY = 0;
 
-  let step = Math.min(xSpan, ySpan);
+  let step = startStep;
   let startX = 0;
   let startY = 0;
   let endX = xSpan;
@@ -62,7 +60,6 @@ export function alignImagesMinDifference(
         });
         const imagesDiff = subtract(source, destinationCropped);
         const mean = imagesDiff.mean()[0];
-
         if (mean < bestMean) {
           bestMean = mean;
           bestShiftX = shiftX;
