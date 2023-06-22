@@ -1,7 +1,7 @@
 import { Image, ImageColorModel, Point } from '..';
 import { subtract } from '../compare/subtract';
 
-export interface AlignImagesMinDifferenceOptions {
+export interface AlignMinDifferenceOptions {
   /**
    * Initial step size by which the images will be translated.
    * @default Math.min(source.width, source.height, Math.max(xSpan, ySpan))
@@ -18,10 +18,10 @@ export interface AlignImagesMinDifferenceOptions {
  * @returns Translation that minimizes the mean difference between the images.
  * Gives the origin ot the source image relatively to the top-left corner of the destination image.
  */
-export function alignImagesMinDifference(
+export function alignMinDifference(
   source: Image,
   destination: Image,
-  options: AlignImagesMinDifferenceOptions = {},
+  options: AlignMinDifferenceOptions = {},
 ): Point {
   const xSpan = destination.width - source.width;
   const ySpan = destination.height - source.height;
