@@ -1,6 +1,7 @@
 import { getAffineTransform as matrixGetAffineTransform } from 'ml-affine-transform';
 import { ransac } from 'ml-ransac';
 
+import { Point, Image, writeSync, ImageColorModel } from '../..';
 import {
   Match,
   Montage,
@@ -8,10 +9,9 @@ import {
   bruteForceOneMatch,
   getCrosscheckMatches,
 } from '../../featureMatching';
-import { Point, Image, writeSync, ImageColorModel } from '../..';
-import { getMinMax } from '../../utils/getMinMax';
 import { getBrief } from '../../featureMatching/descriptors/getBrief';
 import { filterEuclideanDistance } from '../../featureMatching/matching/filterEuclideanDistance';
+import { getMinMax } from '../../utils/getMinMax';
 
 import { affineFitFunction } from './affineFitFunction';
 import { createAffineTransformModel } from './createAffineTransformModel';
@@ -134,10 +134,10 @@ export function getAffineTransform(
     debug = false,
     debugImagePath = `${__dirname}/montage.png`,
   } = options;
+
   if (source.colorModel !== ImageColorModel.GREY) {
     source = source.grey();
   }
-
   if (destination.colorModel !== ImageColorModel.GREY) {
     destination = destination.grey();
   }
