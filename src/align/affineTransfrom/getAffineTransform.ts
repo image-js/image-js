@@ -38,14 +38,10 @@ export interface GetAffineTransformOptions {
    */
   enhanceContrast?: boolean;
   /**
-   * Margin in pixels all around the destination image. This margin is removed for
-   * the contrast improvement.
-   * @default 0
-   */
-  sourceMargin?: number;
-  /**
    * Origin of the destination image relative to the top-left corner of the source image.
-   * Roughly indicates the position of the destination image in the source image.
+   * Roughly indicates the position of the destination image in the source image. Is used
+   * to filter matches by distance as well as to define a subarea of the source image to
+   * use for contrast enhancement.
    * @default { column: 0, row: 0 }
    */
   destinationOrigin?: Point;
@@ -126,7 +122,6 @@ export function getAffineTransform(
   const {
     centroidPatchDiameter = 31,
     bestKeypointRadius = 5,
-    sourceMargin = 0,
     enhanceContrast = true,
     crosscheck = true,
     destinationOrigin = { column: 0, row: 0 },
@@ -144,10 +139,18 @@ export function getAffineTransform(
 
   // enhance images contrast
   if (enhanceContrast) {
+    const width = Math.min(
+      source.width,
+      destination.width - destinationOrigin.column,
+    );
+    const height = Math.min(
+      source.height,
+      destination.height - destinationOrigin.row,
+    );
     const sourceWithoutMargin = source.crop({
-      origin: { row: sourceMargin, column: sourceMargin },
-      width: source.width - 2 * sourceMargin,
-      height: source.height - 2 * sourceMargin,
+      origin: { row: destinationOrigin.row, column: destinationOrigin.column },
+      width,
+      height,
     });
 
     const sourceExtremums = getMinMax(sourceWithoutMargin);
