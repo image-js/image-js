@@ -17,7 +17,7 @@ import { affineFitFunction } from './affineFitFunction';
 import { createAffineTransformModel } from './createAffineTransformModel';
 import { getEuclideanDistance } from './getEuclideanDistance';
 import { getMatrixFromPoints } from './getMatrixFromPoints';
-import { getSourceWitoutMargins } from './utils/getSourceWithoutMargins';
+import { getSourceWithoutMargins } from './utils/getSourceWithoutMargins';
 
 export interface GetAffineTransformOptions {
   /**
@@ -140,7 +140,7 @@ export function getAffineTransform(
 
   // enhance images contrast
   if (enhanceContrast) {
-    const sourceWithoutMargin = getSourceWitoutMargins(
+    const sourceWithoutMargin = getSourceWithoutMargins(
       source,
       destination,
       destinationOrigin,

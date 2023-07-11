@@ -7,7 +7,7 @@ import { Image, Point } from '../../..';
  * @param destinationOrigin - Estimated origin of the destination image in the source image (relative to top-left corner).
  * @returns The source image without margins.
  */
-export function getSourceWitoutMargins(
+export function getSourceWithoutMargins(
   source: Image,
   destination: Image,
   destinationOrigin: Point,
