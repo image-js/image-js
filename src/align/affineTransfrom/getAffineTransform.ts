@@ -17,6 +17,7 @@ import { affineFitFunction } from './affineFitFunction';
 import { createAffineTransformModel } from './createAffineTransformModel';
 import { getEuclideanDistance } from './getEuclideanDistance';
 import { getMatrixFromPoints } from './getMatrixFromPoints';
+import { getSourceWitoutMargins } from './utils/getSourceWithoutMargins';
 
 export interface GetAffineTransformOptions {
   /**
@@ -139,19 +140,11 @@ export function getAffineTransform(
 
   // enhance images contrast
   if (enhanceContrast) {
-    const width = Math.min(
-      source.width,
-      destination.width - destinationOrigin.column,
+    const sourceWithoutMargin = getSourceWitoutMargins(
+      source,
+      destination,
+      destinationOrigin,
     );
-    const height = Math.min(
-      source.height,
-      destination.height - destinationOrigin.row,
-    );
-    const sourceWithoutMargin = source.crop({
-      origin: { row: destinationOrigin.row, column: destinationOrigin.column },
-      width,
-      height,
-    });
 
     const sourceExtremums = getMinMax(sourceWithoutMargin);
     source.level({
@@ -166,8 +159,9 @@ export function getAffineTransform(
       inputMax: destinationExtremums.max[0],
       out: destination,
     });
-  } // compute briefs
+  }
 
+  // compute briefs
   const sourceBrief = getBrief(source, {
     centroidPatchDiameter,
     bestKptRadius: bestKeypointRadius,

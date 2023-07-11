@@ -1,9 +1,9 @@
 import { writeSync } from '../../src/save/write';
-import { getAffineTransform } from '../../src/featureMatching/affineTransfrom/getAffineTransform';
 import { overlapImages } from '../../src/featureMatching/visualize/overlapImages';
 import { readSync } from '../../src/load/read';
 import { readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
+import { getAffineTransform } from '../../src';
 
 // global variables
 const emptyFolder = true;
@@ -25,8 +25,8 @@ const rois = [
   },
 ];
 
-const imageNames = ['img2'];
-const roiIndices = [0];
+const imageNames = ['img1', 'img2', 'img3'];
+const roiIndices = [0, 1];
 
 // empy results folder
 if (emptyFolder) {
@@ -74,7 +74,6 @@ for (let roiIndex of roiIndices) {
       maxRansacNbIterations: 1000,
       crosscheck: false,
       destinationOrigin: { row: margin, column: margin },
-      sourceMargin: margin,
       enhanceContrast: true,
     });
 
