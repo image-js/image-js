@@ -1,32 +1,18 @@
 import { writeSync } from '../../src/save/write';
 import { overlapImages } from '../../src/featureMatching/visualize/overlapImages';
 import { readSync } from '../../src/load/read';
-import { readdirSync, unlinkSync } from 'fs';
+import { readFileSync, readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { getAffineTransform } from '../../src';
 
 // global variables
-const emptyFolder = true;
+const emptyFolder = true; // results
+const imageFolder = 'images/dataset2'; // folder containing images and rois
 
-const margin = 20; // number of pixels to add around the reference ROI
+const margin = 40; // number of pixels to add around the reference ROI
 
-const rois = [
-  {
-    x: 556,
-    y: 81,
-    width: 1070,
-    height: 163,
-  },
-  {
-    x: 903,
-    y: 1074,
-    width: 386,
-    height: 169,
-  },
-];
-
-const imageNames = ['img1', 'img2', 'img3'];
-const roiIndices = [0, 1];
+const imageNames = ['img1'];
+const roiIndices = [0];
 
 // empy results folder
 if (emptyFolder) {
@@ -36,10 +22,17 @@ if (emptyFolder) {
   }
 }
 
+// load ROIs
+const rawRois = readFileSync(
+  join(__dirname, imageFolder, '/rois.json'),
+  'utf-8',
+);
+const rois = JSON.parse(rawRois);
+
 // load images
-const reference = readSync(__dirname + '/images/reference.png');
+const reference = readSync(join(__dirname, imageFolder, '/reference.png'));
 const images = imageNames.map((name) =>
-  readSync(__dirname + '/images/' + name + '.png'),
+  readSync(join(__dirname, imageFolder, name + '.png')),
 );
 
 // align images
@@ -72,7 +65,7 @@ for (let roiIndex of roiIndices) {
         roiCounter +
         '.png',
       maxRansacNbIterations: 1000,
-      crosscheck: false,
+      crosscheck: true,
       destinationOrigin: { row: margin, column: margin },
       enhanceContrast: true,
     });
