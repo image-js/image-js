@@ -17,7 +17,7 @@ export interface AlignMinDifferenceOptions {
  * @param destination - Image to align to.
  * @param options - Align images min difference options.
  * @returns Translation that minimizes the mean difference between the images.
- * Gives the origin ot the source image relatively to the top-left corner of the destination image.
+ * Gives the origin of the source image relatively to the top-left corner of the destination image.
  */
 export function alignMinDifference(
   source: Image,
@@ -62,6 +62,7 @@ export function alignMinDifference(
         const imagesDiff = subtract(source, destinationCropped);
         const mean = imagesDiff.mean()[0];
         if (mean < bestMean) {
+          console.log({ mean, shiftX, shiftY });
           bestMean = mean;
           bestShiftX = shiftX;
           bestShiftY = shiftY;

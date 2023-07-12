@@ -145,6 +145,7 @@ export function getAffineTransform(
       destination,
       destinationOrigin,
     );
+    console.log({srcWidth: source.width, srcHeight: source.height, destWidth: destination.width, destHeight: destination.height})
 
     const sourceExtremums = getMinMax(sourceWithoutMargin);
     source.level({

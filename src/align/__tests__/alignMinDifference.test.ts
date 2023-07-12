@@ -1,3 +1,4 @@
+import { ImageColorModel, readSync, writeSync } from '../..';
 import { alignMinDifference } from '../alignMinDifference';
 
 test('1 pixel source', () => {
@@ -50,4 +51,39 @@ test('source too big', () => {
   expect(() => {
     alignMinDifference(source, destination);
   }).toThrow('Source image must fit entirely in destination image');
+});
+
+test('larger images', () => {
+  const side = 100;
+  const origin = { row: 30, column: 30 };
+  const destination = testUtils
+    .load('ssim/ssim-original.png')
+    .convertColor(ImageColorModel.RGB);
+  const source = destination.crop({ origin, width: side, height: side });
+
+  const result = alignMinDifference(source, destination);
+
+  const dstRectangles = destination;
+
+  // original crop in green
+  dstRectangles.drawRectangle({
+    origin,
+    width: side,
+    height: side,
+    strokeColor: [0, 255, 0],
+    out: dstRectangles,
+  });
+
+  // min diff crop in red
+  dstRectangles.drawRectangle({
+    origin: result,
+    width: side,
+    height: side,
+    strokeColor: [255, 0, 0],
+    out: dstRectangles,
+  });
+
+  writeSync(`${__dirname}/dstRectangles.png`, dstRectangles);
+  console.log({ result });
+  expect(result).toStrictEqual(origin);
 });
