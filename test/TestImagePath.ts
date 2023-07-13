@@ -73,4 +73,6 @@ export type TestImagePath =
   | 'featureMatching/polygons/polygonRotated180degrees.png'
   | 'featureMatching/polygons/polygonRotated10degrees.png'
   | 'align/cropped.png'
-  | 'align/croppedRef.png';
+  | 'align/croppedRef.png'
+  | 'align/cropped1.png'
+  | 'align/croppedRef1.png';

@@ -80,8 +80,8 @@ export function alignMinDifference(
     step /= 2;
     startX = Math.round(Math.max(0, bestShiftX - step));
     startY = Math.round(Math.max(0, bestShiftY - step));
-    endX = Math.round(Math.min(destination.width, bestShiftX + step));
-    endY = Math.round(Math.min(destination.height, bestShiftY + step));
+    endX = Math.round(Math.min(xSpan, bestShiftX + step));
+    endY = Math.round(Math.min(ySpan, bestShiftY + step));
   }
 
   return { row: bestShiftY, column: bestShiftX };

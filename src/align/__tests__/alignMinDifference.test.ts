@@ -89,3 +89,13 @@ test('id crops', () => {
 
   expect(overlap).toMatchImageSnapshot();
 });
+
+test('other id crops', () => {
+  const destination = testUtils.load('align/cropped1.png');
+  const source = testUtils.load('align/croppedRef1.png');
+  const result = alignMinDifference(source, destination);
+
+  const overlap = overlapImages(source, destination, { origin: result });
+
+  expect(overlap).toMatchImageSnapshot();
+});
