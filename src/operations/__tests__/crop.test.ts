@@ -64,7 +64,7 @@ test('invalid argument ranges', () => {
       height: 2,
       width: 2,
     });
-  }).toThrow(/row and column .* must be positive numbers/);
+  }).toThrow(/Row and column .* must be positive numbers/);
 
   expect(() => {
     image.crop({
@@ -72,7 +72,7 @@ test('invalid argument ranges', () => {
       height: -2,
       width: 2,
     });
-  }).toThrow(/width and height .* must be positive numbers/);
+  }).toThrow(/Width and height .* must be positive numbers/);
 
   expect(() => {
     image.crop({
@@ -80,7 +80,7 @@ test('invalid argument ranges', () => {
       height: 2,
       width: 2,
     });
-  }).toThrow(/origin .* out of range/);
+  }).toThrow(/Origin .* out of range/);
 
   expect(() => {
     image.crop({
@@ -88,5 +88,33 @@ test('invalid argument ranges', () => {
       height: 2,
       width: 100,
     });
-  }).toThrow(/size is out of range/);
+  }).toThrow(/Size is out of range/);
+});
+
+test('origin is not integer', () => {
+  const image = testUtils.createGreyImage([
+    [0, 1, 2, 3, 4],
+    [1, 1, 1, 1, 1],
+    [1, 2, 2, 2, 0],
+    [1, 2, 4, 3, 0],
+    [1, 2, 3, 3, 0],
+  ]);
+  expect(() => {
+    image.crop({
+      origin: { row: 1.5, column: 1.5 },
+    });
+  }).toThrow('Origin row and column must be integers');
+});
+
+test('width is not integer', () => {
+  const image = testUtils.createGreyImage([
+    [0, 1, 2, 3, 4],
+    [1, 1, 1, 1, 1],
+    [1, 2, 2, 2, 0],
+    [1, 2, 4, 3, 0],
+    [1, 2, 3, 3, 0],
+  ]);
+  expect(() => {
+    image.crop({ width: 3.5 });
+  }).toThrow('Width and height (width:3.5; height:5) must be integers');
 });

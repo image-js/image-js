@@ -1,6 +1,7 @@
 import { Image } from '../Image';
-import checkProcessable from '../utils/validators/checkProcessable';
 import { Point } from '../utils/geometry/points';
+import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger';
+import checkProcessable from '../utils/validators/checkProcessable';
 
 export interface CropOptions {
   /**
@@ -43,26 +44,34 @@ export function crop(image: Image, options: CropOptions = {}) {
     bitDepth: [8, 16],
   });
 
+  checkPointIsInteger(origin, 'Origin');
+
+  if (!Number.isInteger(width) || !Number.isInteger(height)) {
+    throw new RangeError(
+      `Width and height (width:${width}; height:${height}) must be integers`,
+    );
+  }
+
   if (row > image.height - 1 || column > image.width - 1) {
     throw new RangeError(
-      `origin (row:${row}, column:${column}) out of range (${
+      `Origin (row:${row}, column:${column}) out of range (${
         image.width - 1
       }; ${image.height - 1})`,
     );
   }
   if (width <= 0 || height <= 0) {
     throw new RangeError(
-      `width and height (width:${width}; height:${height}) must be positive numbers`,
+      `Width and height (width:${width}; height:${height}) must be positive numbers`,
     );
   }
   if (row < 0 || column < 0) {
     throw new RangeError(
-      `row and column (row:${row}, column:${column}) must be positive numbers`,
+      `Row and column (row:${row}, column:${column}) must be positive numbers`,
     );
   }
   if (width > image.width - column || height > image.height - row) {
     throw new RangeError(
-      `(row:${row}, column: ${column}, width:${width}, height:${height}) size is out of range`,
+      `Size is out of range (row:${row}, column:${column}, width:${width}, height:${height})`,
     );
   }
 
