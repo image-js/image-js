@@ -29,7 +29,7 @@ export function alignMinDifference(
   const {
     startStep = Math.max(
       Math.round(
-        Math.min(source.width, source.height, Math.max(xSpan, ySpan)) / 10,
+        Math.min(source.width, source.height, Math.max(xSpan, ySpan)) / 4,
       ),
       1,
     ),
