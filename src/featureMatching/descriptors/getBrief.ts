@@ -21,7 +21,7 @@ export function getBrief(image: Image, options: GetBriefOptions = {}): Brief {
   const allSourceKeypoints = getOrientedFastKeypoints(image, {
     centroidPatchDiameter,
   });
-  let sourceKeypoints = getBestKeypointsInRadius(
+  const sourceKeypoints = getBestKeypointsInRadius(
     allSourceKeypoints,
     bestKptRadius,
   );

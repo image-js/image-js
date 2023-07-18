@@ -31,7 +31,7 @@ export function close(
   image: Image | Mask,
   options: CloseOptions = {},
 ): Image | Mask {
-  let {
+  const {
     kernel = [
       [1, 1, 1],
       [1, 1, 1],

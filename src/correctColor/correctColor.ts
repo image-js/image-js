@@ -2,8 +2,8 @@ import { RgbColor } from 'colord';
 import MLR from 'ml-regression-multivariate-linear';
 
 import { Image } from '../Image';
-import checkProcessable from '../utils/validators/checkProcessable';
 import { getClamp } from '../utils/clamp';
+import checkProcessable from '../utils/validators/checkProcessable';
 
 import { formatInputForMlr, formatReferenceForMlr } from './utils/formatData';
 

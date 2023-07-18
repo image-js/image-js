@@ -1,6 +1,6 @@
 import { BitDepth, Image } from '..';
-import checkProcessable from '../utils/validators/checkProcessable';
 import type { BorderType } from '../utils/interpolateBorder';
+import checkProcessable from '../utils/validators/checkProcessable';
 
 export interface GradientFilterBaseOptions {
   /**
@@ -78,7 +78,7 @@ export function gradientFilter(
       borderValue,
     });
 
-    let gradient = new Image(image.width, image.height, {
+    const gradient = new Image(image.width, image.height, {
       colorModel: 'GREY',
     });
 

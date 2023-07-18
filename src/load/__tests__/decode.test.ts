@@ -1,6 +1,6 @@
 import { decode } from '..';
 
-test('auto decode png', async () => {
+test('auto decode png', () => {
   const buffer = testUtils.loadBuffer('formats/grey8.png');
   expect(() => decode(buffer)).not.toThrow();
   const decoded = decode(buffer);
@@ -8,7 +8,7 @@ test('auto decode png', async () => {
   expect(decoded.colorModel).toStrictEqual('GREY');
 });
 
-test('auto decode jpeg', async () => {
+test('auto decode jpeg', () => {
   const buffer = testUtils.loadBuffer('formats/rgb12.jpg');
   expect(() => decode(buffer)).not.toThrow();
   const decoded = decode(buffer);
@@ -16,7 +16,7 @@ test('auto decode jpeg', async () => {
   expect(decoded.colorModel).toStrictEqual('RGBA');
 });
 
-test('auto decode tiff', async () => {
+test('auto decode tiff', () => {
   const buffer = testUtils.loadBuffer('formats/tif/grey8.tif');
   expect(() => decode(buffer)).not.toThrow();
   const decoded = decode(buffer);

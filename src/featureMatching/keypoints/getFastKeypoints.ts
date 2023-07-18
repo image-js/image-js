@@ -1,12 +1,12 @@
 import { Image } from '../../Image';
 import { Point } from '../../geometry';
-import checkProcessable from '../../utils/validators/checkProcessable';
 import {
   getCirclePoints,
   getCompassPoints,
 } from '../../utils/geometry/getCirclePoints';
 import { getIndex } from '../../utils/getIndex';
 import { surroundingPixels } from '../../utils/surroundingPixels';
+import checkProcessable from '../../utils/validators/checkProcessable';
 
 import { getFastScore } from './getFastScore';
 import { getHarrisScore, GetHarrisScoreOptions } from './getHarrisScore';
@@ -88,7 +88,9 @@ export function getFastKeypoints(
 
   const allKeypoints: FastKeypoint[] = [];
 
-  let scoreArray = new Float64Array(image.size).fill(Number.NEGATIVE_INFINITY);
+  const scoreArray = new Float64Array(image.size).fill(
+    Number.NEGATIVE_INFINITY,
+  );
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {
       const corner = { row, column };
@@ -120,7 +122,7 @@ export function getFastKeypoints(
     keypoints = allKeypoints;
   } else {
     // Non-Maximal Suppression
-    for (let keypoint of allKeypoints) {
+    for (const keypoint of allKeypoints) {
       const currentScore =
         scoreArray[
           getIndex(keypoint.origin.column, keypoint.origin.row, image, 0)

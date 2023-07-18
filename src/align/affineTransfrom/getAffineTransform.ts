@@ -229,7 +229,7 @@ export function getAffineTransform(
 
     const newSrcPoints = [];
     const newDstPoints = [];
-    for (let inlier of inliers) {
+    for (const inlier of inliers) {
       newSrcPoints.push(sourcePoints[inlier]);
       newDstPoints.push(destinationPoints[inlier]);
     }
@@ -252,7 +252,7 @@ export function getAffineTransform(
 
     const inlierMatches: Match[] = [];
 
-    for (let inlier of inliers) {
+    for (const inlier of inliers) {
       inlierMatches.push(matches[inlier]);
     }
 

@@ -1,11 +1,11 @@
 import { Image } from '../Image';
-import { assert } from '../utils/validators/assert';
 import { getClamp } from '../utils/clamp';
 import { getBorderInterpolation, BorderType } from '../utils/interpolateBorder';
 import {
   getInterpolationFunction,
   InterpolationType,
 } from '../utils/interpolatePixel';
+import { assert } from '../utils/validators/assert';
 
 export interface ResizeOptions {
   /**

@@ -17,9 +17,9 @@ export function toDegrees(radians: number): number {
  * @returns The angle in radians.
  */
 export function angle(origin: Point, p1: Point, p2: Point): number {
-  let v1 = normalize(difference(p1, origin));
-  let v2 = normalize(difference(p2, origin));
-  let dotProduct = dot(v1, v2);
+  const v1 = normalize(difference(p1, origin));
+  const v2 = normalize(difference(p2, origin));
+  const dotProduct = dot(v1, v2);
   // TODO this code is not correct because it may return the opposite angle
   return Math.acos(dotProduct);
 }

@@ -2,13 +2,13 @@ import { pixelate } from '../pixelate';
 
 describe('pixelization of images', () => {
   it('pixelate a simple grey image', () => {
-    let img = testUtils.createGreyImage([
+    const img = testUtils.createGreyImage([
       [1, 1, 2],
       [2, 3, 4],
       [6, 7, 8],
     ]);
 
-    let result = img.pixelate({ cellSize: 2 });
+    const result = img.pixelate({ cellSize: 2 });
     expect(result).toMatchImageData([
       [1, 1, 2],
       [1, 1, 2],
@@ -16,13 +16,13 @@ describe('pixelization of images', () => {
     ]);
   });
   it('pixelate a simple grey image with xMedian', () => {
-    let img = testUtils.createGreyImage([
+    const img = testUtils.createGreyImage([
       [1, 1, 2],
       [2, 3, 4],
       [6, 7, 8],
     ]);
 
-    let result = img.pixelate({ cellSize: 2, algorithm: 'median' });
+    const result = img.pixelate({ cellSize: 2, algorithm: 'median' });
 
     expect(result).toMatchImageData([
       [1, 1, 2],
@@ -31,7 +31,7 @@ describe('pixelization of images', () => {
     ]);
   });
   it('pixelate a bigger grey image', () => {
-    let img = testUtils.createGreyImage([
+    const img = testUtils.createGreyImage([
       [1, 1, 2, 2, 2],
       [2, 3, 4, 2, 1],
       [6, 7, 8, 3, 4],
@@ -39,7 +39,7 @@ describe('pixelization of images', () => {
       [1, 9, 9, 9, 9],
     ]);
 
-    let result = pixelate(img, { cellSize: 3 });
+    const result = pixelate(img, { cellSize: 3 });
 
     expect(result).toMatchImageData([
       [3, 3, 3, 2, 2],
@@ -50,7 +50,7 @@ describe('pixelization of images', () => {
     ]);
   });
   it('pixelate an RGBA image', () => {
-    let img = testUtils.createRgbaImage([
+    const img = testUtils.createRgbaImage([
       [1, 1, 2, 2],
       [2, 3, 4, 2],
       [6, 7, 8, 3],
@@ -58,7 +58,7 @@ describe('pixelization of images', () => {
       [1, 9, 9, 9],
     ]);
 
-    let result = pixelate(img, { cellSize: 3 });
+    const result = pixelate(img, { cellSize: 3 });
 
     expect(result).toMatchImageData([
       [2, 3, 4, 2],
@@ -70,7 +70,7 @@ describe('pixelization of images', () => {
   });
 
   it('pixelate an RGBA H-like image', () => {
-    let img = testUtils.createRgbaImage([
+    const img = testUtils.createRgbaImage([
       [5, 1, 2, 5],
       [5, 5, 5, 5],
       [4, 4, 4, 4],
@@ -78,7 +78,7 @@ describe('pixelization of images', () => {
       [4, 9, 0, 4],
     ]);
 
-    let result = pixelate(img, { cellSize: 3 });
+    const result = pixelate(img, { cellSize: 3 });
     expect(result).toMatchImageData([
       [5, 5, 5, 5],
       [5, 5, 5, 5],
@@ -88,7 +88,7 @@ describe('pixelization of images', () => {
     ]);
   });
   it('pixelate an RGBA H-like image with mean algorithm', () => {
-    let img = testUtils.createRgbaImage([
+    const img = testUtils.createRgbaImage([
       [5, 1, 2, 5],
       [5, 5, 5, 5],
       [4, 4, 4, 4],
@@ -96,7 +96,7 @@ describe('pixelization of images', () => {
       [4, 9, 0, 4],
     ]);
 
-    let result = pixelate(img, { cellSize: 3, algorithm: 'mean' });
+    const result = pixelate(img, { cellSize: 3, algorithm: 'mean' });
     expect(result).toMatchImageData([
       [5, 3, 4, 5],
       [5, 3, 4, 5],
@@ -106,7 +106,7 @@ describe('pixelization of images', () => {
     ]);
   });
   it('throws a Range error', () => {
-    let img = testUtils.createRgbaImage([
+    const img = testUtils.createRgbaImage([
       [1, 1, 2, 2],
       [2, 3, 4, 2],
       [6, 7, 8, 3],
@@ -118,7 +118,7 @@ describe('pixelization of images', () => {
     }).toThrow(new RangeError('cellSize must be greater than 1'));
   });
   it('throws a Type error', () => {
-    let img = testUtils.createRgbaImage([
+    const img = testUtils.createRgbaImage([
       [1, 1, 2, 2],
       [2, 3, 4, 2],
       [6, 7, 8, 3],
@@ -131,7 +131,7 @@ describe('pixelization of images', () => {
   });
 });
 it('throws a Type error', () => {
-  let img = testUtils.createRgbaImage([
+  const img = testUtils.createRgbaImage([
     [1, 1, 2, 2],
     [2, 3, 4, 2],
     [6, 7, 8, 3],

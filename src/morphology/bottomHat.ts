@@ -35,7 +35,7 @@ export function bottomHat(
   image: Image | Mask,
   options: BottomHatOptions = {},
 ): Image | Mask {
-  let {
+  const {
     kernel = [
       [1, 1, 1],
       [1, 1, 1],
@@ -56,7 +56,7 @@ export function bottomHat(
 
   let newImage = image;
   for (let i = 0; i < iterations; i++) {
-    let openImage = newImage.close({ kernel });
+    const openImage = newImage.close({ kernel });
     newImage = subtract(openImage, newImage, { absolute: true });
   }
   return newImage;

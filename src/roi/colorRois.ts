@@ -49,7 +49,7 @@ export function colorRois(
   const { roiKind = 'bw', mode = 'binary' } = options;
   const map = roiMapManager.getMap();
 
-  let image = new Image(map.width, map.height, {
+  const image = new Image(map.width, map.height, {
     colorModel: 'RGBA',
   });
 
@@ -60,7 +60,7 @@ export function colorRois(
     nbPositive: map.nbPositive,
   });
 
-  let data32 = new Uint32Array(image.getRawImage().data.buffer);
+  const data32 = new Uint32Array(image.getRawImage().data.buffer);
 
   for (let index = 0; index < image.size; index++) {
     data32[index] = colorMap[map.data[index] + colorMapCenter];

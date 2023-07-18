@@ -86,7 +86,8 @@ export function drawKeypoints(
     origin = { row: 0, column: 0 },
     showScoreOptions,
   } = options;
-  let { color = [255, 0, 0], maxNbKeypoints = keypoints.length } = options;
+  let { maxNbKeypoints = keypoints.length } = options;
+  const { color = [255, 0, 0] } = options;
 
   if (maxNbKeypoints > keypoints.length) {
     maxNbKeypoints = keypoints.length;
@@ -102,12 +103,12 @@ export function drawKeypoints(
 
   const radius = Math.ceil(markerSize / 2);
   for (let i = 0; i < maxNbKeypoints; i++) {
-    let keypoint = keypoints[i];
+    const keypoint = keypoints[i];
     let keypointColor = color;
     if (showScore) {
       keypointColor = getKeypointColor(keypoints, i, colors);
     }
-    let fillColor = fill ? keypointColor : undefined;
+    const fillColor = fill ? keypointColor : undefined;
 
     const absoluteOrigin = sum(keypoint.origin, origin);
 

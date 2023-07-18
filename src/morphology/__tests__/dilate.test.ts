@@ -1,5 +1,5 @@
 test('another GREY image 5x5, default kernel', () => {
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [255, 0, 0, 0, 255],
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
@@ -17,12 +17,12 @@ test('another GREY image 5x5, default kernel', () => {
 });
 
 test('GREY image 5x5, 3x3 kernel onlyOnes', () => {
-  let kernel = [
+  const kernel = [
     [1, 1, 1],
     [1, 1, 1],
     [1, 1, 1],
   ];
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [255, 0, 0, 0, 255],
     [255, 0, 0, 0, 255],
     [255, 0, 0, 0, 255],
@@ -40,7 +40,7 @@ test('GREY image 5x5, 3x3 kernel onlyOnes', () => {
 });
 
 test('another GREY image 5x5, default kernel, 2 iterations', () => {
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [255, 0, 0, 0, 255],
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
@@ -58,8 +58,8 @@ test('another GREY image 5x5, default kernel, 2 iterations', () => {
 });
 
 test('GREY image 5x5, 3x1 kernel onlyOnes', () => {
-  let kernel = [[1], [1], [1]];
-  let image = testUtils.createGreyImage([
+  const kernel = [[1], [1], [1]];
+  const image = testUtils.createGreyImage([
     [255, 0, 0, 0, 255],
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
@@ -77,8 +77,8 @@ test('GREY image 5x5, 3x1 kernel onlyOnes', () => {
 });
 
 test('GREY image 5x5, 3x1 kernel with zero', () => {
-  let kernel = [[1], [1], [0]];
-  let image = testUtils.createGreyImage([
+  const kernel = [[1], [1], [0]];
+  const image = testUtils.createGreyImage([
     [255, 0, 0, 0, 255],
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
@@ -116,7 +116,7 @@ test('mask 5x5, default kernel', () => {
 });
 
 test('mask 5x5, 1x3 kernel onlyOnes', () => {
-  let kernel = [[1, 1, 1]];
+  const kernel = [[1, 1, 1]];
 
   const mask = testUtils.createMask(`
       1 0 0 0 1
@@ -138,7 +138,7 @@ test('mask 5x5, 1x3 kernel onlyOnes', () => {
 });
 
 test('mask 5x5, 1x3 kernel with zero', () => {
-  let kernel = [[1, 0, 1]];
+  const kernel = [[1, 0, 1]];
 
   const mask = testUtils.createMask(`
       1 0 0 0 1

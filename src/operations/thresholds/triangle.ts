@@ -79,7 +79,7 @@ export function triangle(histogram: Uint32Array): number {
   // nx is just the max frequency as the other point has freq=0
   nx = histogram[max]; // -min; // data[min]; //  lowest value bmin = (p=0)% in the image
   ny = min - max;
-  d = Math.sqrt(nx * nx + ny * ny);
+  d = Math.hypot(nx, ny);
   nx /= d;
   ny /= d;
   d = nx * min + ny * histogram[min];

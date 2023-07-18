@@ -22,7 +22,7 @@ export function cropAlpha(image: Image, options: CropAlphaOptions = {}): Image {
 
   const { threshold = image.maxValue } = options;
 
-  let left = findLeft(image, threshold, image.components);
+  const left = findLeft(image, threshold, image.components);
 
   if (left === -1) {
     throw new RangeError(
@@ -30,9 +30,16 @@ export function cropAlpha(image: Image, options: CropAlphaOptions = {}): Image {
     );
   }
 
-  let top = findTop(image, threshold, image.components, left);
-  let bottom = findBottom(image, threshold, image.components, left);
-  let right = findRight(image, threshold, image.components, left, top, bottom);
+  const top = findTop(image, threshold, image.components, left);
+  const bottom = findBottom(image, threshold, image.components, left);
+  const right = findRight(
+    image,
+    threshold,
+    image.components,
+    left,
+    top,
+    bottom,
+  );
 
   return image.crop({
     origin: { column: left, row: top },

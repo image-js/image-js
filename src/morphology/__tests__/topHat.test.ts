@@ -1,5 +1,5 @@
 test('GREY image 5x5, default kernel', () => {
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [0, 0, 255, 0, 0],
     [0, 255, 255, 255, 0],
     [0, 255, 255, 255, 0],
@@ -17,12 +17,12 @@ test('GREY image 5x5, default kernel', () => {
 });
 
 test('GREY image 5x5,default kernel, 2 iterations', () => {
-  let kernel = [
+  const kernel = [
     [1, 1, 1],
     [1, 1, 1],
     [1, 1, 1],
   ];
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [0, 0, 255, 0, 0],
     [0, 255, 255, 255, 0],
     [0, 255, 255, 255, 0],
@@ -40,7 +40,7 @@ test('GREY image 5x5,default kernel, 2 iterations', () => {
 });
 
 test('Mask 5x5, default kernel', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [0, 0, 1, 0, 0],
     [0, 1, 1, 1, 0],
     [0, 1, 1, 1, 0],

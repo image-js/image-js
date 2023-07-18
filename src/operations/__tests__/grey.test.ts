@@ -1,5 +1,5 @@
 test('RGBA image', () => {
-  let image = testUtils.createRgbaImage([
+  const image = testUtils.createRgbaImage([
     [100, 150, 200, 255, 100, 150, 200, 0],
   ]);
 
@@ -52,7 +52,7 @@ test('RGBA image', () => {
 });
 
 test('RGB image', () => {
-  let image = testUtils.createRgbImage([[100, 150, 200, 100, 150, 200]]);
+  const image = testUtils.createRgbImage([[100, 150, 200, 100, 150, 200]]);
 
   expect(
     image.grey({

@@ -1,8 +1,8 @@
 import { Image } from '../Image';
 import { Mask } from '../Mask';
 
-import { assert } from './validators/assert';
 import { getDefaultColor } from './getDefaultColor';
+import { assert } from './validators/assert';
 
 export interface SetBlendedPixelOptions {
   /**
@@ -41,16 +41,16 @@ export function setBlendedPixel(
 
     const targetAlpha = image.getValue(column, row, image.channels - 1);
 
-    let newAlpha =
+    const newAlpha =
       sourceAlpha + targetAlpha * (1 - sourceAlpha / image.maxValue);
 
     image.setValue(column, row, image.channels - 1, newAlpha);
 
     for (let component = 0; component < image.components; component++) {
-      let sourceComponent = color[component];
-      let targetComponent = image.getValue(column, row, component);
+      const sourceComponent = color[component];
+      const targetComponent = image.getValue(column, row, component);
 
-      let newComponent =
+      const newComponent =
         (sourceComponent * sourceAlpha +
           targetComponent * targetAlpha * (1 - sourceAlpha / image.maxValue)) /
         newAlpha;

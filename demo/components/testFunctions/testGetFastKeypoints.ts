@@ -12,7 +12,7 @@ export function testGetFastKeypoints(image: Image): Image {
   const blurred = grey.gaussianBlur({ size: 7, sigma: 4 });
   const keypoints = getFastKeypoints(blurred);
 
-  for (let keypoint of keypoints) {
+  for (const keypoint of keypoints) {
     image.drawCircle(keypoint.origin, 5, {
       color: [255, 0, 0, 255],
       out: image,

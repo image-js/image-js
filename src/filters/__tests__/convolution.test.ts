@@ -6,7 +6,7 @@ import { getBorderInterpolation } from '../../utils/interpolateBorder';
 import { computeConvolutionValue } from '../convolution';
 
 describe('convolution functions', () => {
-  it('separable convolution compared to opencv', async () => {
+  it('separable convolution compared to opencv', () => {
     const img = testUtils.load('opencv/test.png');
     const convoluted = img.separableConvolution(
       [0.1, 0.2, 0.3],
@@ -21,7 +21,7 @@ describe('convolution functions', () => {
     expect(convoluted).toMatchImage(expected);
   });
 
-  it('direct convolution compared to opencv', async () => {
+  it('direct convolution compared to opencv', () => {
     const img = testUtils.load('opencv/test.png');
 
     const kernelY = Matrix.columnVector([0.4, 0.5, 0.6, -0.3, -0.4]);
@@ -60,12 +60,12 @@ describe('convolution functions', () => {
 
 describe('computeConvolutionValue', () => {
   it('round and clamp', () => {
-    let image = testUtils.createGreyImage([
+    const image = testUtils.createGreyImage([
       [1, 1, 20],
       [1, 1, 1],
       [1, 1, 1],
     ]);
-    let kernel = [
+    const kernel = [
       [1, 1, 1],
       [1, 1, 1],
       [1, 1, 1],
@@ -79,12 +79,12 @@ describe('computeConvolutionValue', () => {
     ).toBe(28);
   });
   it('round and clamp with negative kernel values', () => {
-    let image = testUtils.createGreyImage([
+    const image = testUtils.createGreyImage([
       [1, 1, 1],
       [1, 1, 1],
       [1, 1, 1],
     ]);
-    let kernel = [
+    const kernel = [
       [-1, 1, -1],
       [1, 1, 1],
       [1, 1, 1],
@@ -99,12 +99,12 @@ describe('computeConvolutionValue', () => {
     ).toBe(5);
   });
   it('return raw value', () => {
-    let image = testUtils.createGreyImage([
+    const image = testUtils.createGreyImage([
       [1, 1, 1],
       [1, 1, 1],
       [1, 1, 1],
     ]);
-    let kernel = [
+    const kernel = [
       [0.5, 1, -1],
       [1, 1, 1],
       [1, 1, 1],
@@ -121,12 +121,12 @@ describe('computeConvolutionValue', () => {
 
 describe('rawDirectConvolution', () => {
   it('3x3 image and kernel', () => {
-    let image = testUtils.createGreyImage([
+    const image = testUtils.createGreyImage([
       [1, 1, 20],
       [1, 1, 1],
       [1, 1, 1],
     ]);
-    let kernel = [
+    const kernel = [
       [1, 1, 1],
       [1, 1, 1],
       [1, 1, 1],
@@ -136,12 +136,12 @@ describe('rawDirectConvolution', () => {
     expect(rawDirectConvolution(image, kernel)).toStrictEqual(expected);
   });
   it('3x3 image and kernel with floats', () => {
-    let image = testUtils.createGreyImage([
+    const image = testUtils.createGreyImage([
       [1, 1, 1],
       [1, 1, 1],
       [1, 1, 1],
     ]);
-    let kernel = [
+    const kernel = [
       [1, 1, 1],
       [1, 0.5, 1],
       [1, 1, 1],

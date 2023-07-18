@@ -35,7 +35,7 @@ test('GREY image 5x5, 2 iterations', () => {
 });
 
 test('mask 5x5, 1x3 kernel with onlyOnes', () => {
-  let kernel = [[1, 1, 1]];
+  const kernel = [[1, 1, 1]];
 
   const mask = testUtils.createMask(`
       1 0 0 0 1

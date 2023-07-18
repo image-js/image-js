@@ -50,7 +50,7 @@ describe('getOutputImage', () => {
       [2, 3],
     ]);
 
-    let out = testUtils.createGreyImage([
+    const out = testUtils.createGreyImage([
       [5, 6],
       [7, 8],
     ]);
@@ -244,7 +244,7 @@ describe('maskToOutputMask', () => {
       [1, 0],
     ]);
 
-    let out = testUtils.createMask([
+    const out = testUtils.createMask([
       [1, 0],
       [0, 0],
     ]);

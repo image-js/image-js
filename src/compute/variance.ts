@@ -9,7 +9,7 @@ import { Image } from '../Image';
 export function variance(image: Image): number[] {
   const mean = image.mean();
 
-  let sum = new Array(image.channels).fill(0);
+  const sum = new Array(image.channels).fill(0);
   for (let i = 0; i < image.size; i++) {
     for (let channel = 0; channel < image.channels; channel++) {
       sum[channel] += Math.pow(

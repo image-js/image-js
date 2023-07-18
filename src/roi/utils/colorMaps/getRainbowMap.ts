@@ -27,7 +27,7 @@ export interface GetRainbowMapOptions {
 export function getRainbowMap(options: GetRainbowMapOptions): Uint32Array {
   const { nbNegative, nbPositive, roiKind = 'bw' } = options;
 
-  let colorMap = new Uint32Array(maxNumberRois);
+  const colorMap = new Uint32Array(maxNumberRois);
 
   const hueRange = 360;
 

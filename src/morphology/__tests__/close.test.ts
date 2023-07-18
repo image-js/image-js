@@ -1,10 +1,10 @@
 test('check for GREY image 5x5', () => {
-  let kernel = [
+  const kernel = [
     [1, 1, 1],
     [1, 1, 1],
     [1, 1, 1],
   ];
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [255, 255, 0, 255, 255],
     [255, 0, 0, 0, 255],
     [255, 0, 0, 0, 255],
@@ -22,12 +22,12 @@ test('check for GREY image 5x5', () => {
 });
 
 test('check for GREY image 5x5 2 iterations', () => {
-  let kernel = [
+  const kernel = [
     [1, 1, 1],
     [1, 1, 1],
     [1, 1, 1],
   ];
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [255, 255, 0, 255, 255],
     [255, 0, 0, 0, 255],
     [255, 0, 0, 0, 255],
@@ -45,7 +45,7 @@ test('check for GREY image 5x5 2 iterations', () => {
 });
 
 test('check on 5x5 mask', () => {
-  let mask = testUtils.createMask(`
+  const mask = testUtils.createMask(`
       1 1 0 1 1
       1 0 0 0 1
       1 0 0 0 1

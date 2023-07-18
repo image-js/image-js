@@ -96,7 +96,7 @@ test('Mask to GREY', () => {
     [0, 0],
   ]);
 
-  let img = mask.convertColor('GREY');
+  const img = mask.convertColor('GREY');
   expect(img).toMatchImageData([
     [255, 255],
     [0, 0],

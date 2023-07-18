@@ -98,10 +98,10 @@ test.each([
       { column: 2, row: 4 },
     ],
     [
+      { column: 7, row: 3 },
       { column: 5, row: 1 },
       { column: 2, row: 4 },
       { column: 4, row: 6 },
-      { column: 7, row: 3 },
     ],
     0.66667,
   ],

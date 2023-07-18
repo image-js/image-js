@@ -4,7 +4,7 @@ import { getGaussianPoints, getGaussianValues } from '../getGaussianPoints';
 
 function drawGaussianPoints(image: Image, points: Point[]): Image {
   const center = image.getCoordinates('center');
-  for (let point of points) {
+  for (const point of points) {
     const current = image.getValue(
       point.column + center.column,
       point.row + center.row,

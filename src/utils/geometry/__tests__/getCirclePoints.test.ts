@@ -30,7 +30,7 @@ test('circle with radius 2', () => {
     { row: -1, column: 2 },
   ];
 
-  let result = getCirclePoints(2);
+  const result = getCirclePoints(2);
   expect(result).toStrictEqual(expected);
 });
 
@@ -54,7 +54,7 @@ test('circle with radius 3', () => {
     { row: -1, column: 3 },
   ];
 
-  let result = getCirclePoints(3);
+  const result = getCirclePoints(3);
   expect(result).toStrictEqual(expected);
 });
 

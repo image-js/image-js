@@ -1,6 +1,6 @@
 import { Image } from '../Image';
-import checkProcessable from '../utils/validators/checkProcessable';
 import { ImageColorModel } from '../utils/constants/colorModels';
+import checkProcessable from '../utils/validators/checkProcessable';
 
 export interface AutoLevelOptions {
   /**

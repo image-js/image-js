@@ -8,7 +8,7 @@ import { Image } from '../../Image';
  * @returns Array of colors.
  */
 export function getImageColors(image: Image): RgbColor[] {
-  let colors: RgbColor[] = [];
+  const colors: RgbColor[] = [];
 
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {

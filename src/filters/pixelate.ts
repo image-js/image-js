@@ -1,8 +1,8 @@
 import { xMedian } from 'ml-spectra-processing';
 
 import { Image, Point } from '..';
-import { assertUnreachable } from '../utils/validators/assert';
 import { getOutputImage } from '../utils/getOutputImage';
+import { assertUnreachable } from '../utils/validators/assert';
 
 export interface PixelateOptions {
   /**
@@ -58,7 +58,7 @@ export function pixelate(image: Image, options: PixelateOptions): Image {
       for (let row = 0; row < image.height; row += cellSize) {
         const currentCellWidth = Math.min(cellSize, image.width - column);
         const currentCellHeight = Math.min(cellSize, image.height - row);
-        let value = getCellValue(image, channel, {
+        const value = getCellValue(image, channel, {
           width: currentCellWidth,
           height: currentCellHeight,
           origin: { column, row },
@@ -140,7 +140,7 @@ function getCellMedian(
   channel: number,
   options: GetValueOptions,
 ) {
-  let array = [];
+  const array = [];
   for (
     let column = options.origin.column;
     column < options.origin.column + options.width;

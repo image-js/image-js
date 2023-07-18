@@ -36,7 +36,7 @@ export function computeRois(roiMapManager: RoiMapManager): void {
 
   for (let row = 0; row < map.height; row++) {
     for (let column = 0; column < map.width; column++) {
-      let currentIndex = roiMapManager.getMapValue(column, row);
+      const currentIndex = roiMapManager.getMapValue(column, row);
 
       let currentRoi;
       if (currentIndex < 0) {
@@ -66,22 +66,22 @@ export function computeRois(roiMapManager: RoiMapManager): void {
   roiMapManager.blackRois = new Array<Roi>(map.nbNegative);
 
   for (let i = 0; i < map.nbNegative; i++) {
-    let width = blacks[i].maxColumn - blacks[i].minColumn + 1;
-    let height = blacks[i].maxRow - blacks[i].minRow + 1;
-    let origin = { row: blacks[i].minRow, column: blacks[i].minColumn };
-    let id = blacks[i].id;
-    let surface = blacks[i].surface;
-    let blackRoi = new Roi(map, id, width, height, origin, surface);
+    const width = blacks[i].maxColumn - blacks[i].minColumn + 1;
+    const height = blacks[i].maxRow - blacks[i].minRow + 1;
+    const origin = { row: blacks[i].minRow, column: blacks[i].minColumn };
+    const id = blacks[i].id;
+    const surface = blacks[i].surface;
+    const blackRoi = new Roi(map, id, width, height, origin, surface);
     roiMapManager.blackRois[i] = blackRoi;
   }
 
   for (let i = 0; i < map.nbPositive; i++) {
-    let width = whites[i].maxColumn - whites[i].minColumn + 1;
-    let height = whites[i].maxRow - whites[i].minRow + 1;
-    let origin = { row: whites[i].minRow, column: whites[i].minColumn };
-    let id = whites[i].id;
-    let surface = whites[i].surface;
-    let whiteRoi = new Roi(map, id, width, height, origin, surface);
+    const width = whites[i].maxColumn - whites[i].minColumn + 1;
+    const height = whites[i].maxRow - whites[i].minRow + 1;
+    const origin = { row: whites[i].minRow, column: whites[i].minColumn };
+    const id = whites[i].id;
+    const surface = whites[i].surface;
+    const whiteRoi = new Roi(map, id, width, height, origin, surface);
 
     roiMapManager.whiteRois[i] = whiteRoi;
   }

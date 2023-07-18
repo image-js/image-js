@@ -1,10 +1,10 @@
-test('subtract image to itself', async () => {
+test('subtract image to itself', () => {
   const image = testUtils.createRgbImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);
   const other = image;
   expect(image.subtract(other)).toMatchImageData([[0, 0, 0, 0, 0, 0, 0, 0, 0]]);
 });
 
-test('absolute = false', async () => {
+test('absolute = false', () => {
   const image = testUtils.createRgbImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);
   const other = testUtils.createRgbImage([[0, 0, 0, 20, 20, 20, 15, 15, 15]]);
   expect(image.subtract(other, { absolute: false })).toMatchImageData([
@@ -12,7 +12,7 @@ test('absolute = false', async () => {
   ]);
 });
 
-test('absolute = true', async () => {
+test('absolute = true', () => {
   const image = testUtils.createRgbImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);
   const other = testUtils.createRgbImage([[0, 0, 0, 20, 20, 20, 15, 15, 15]]);
   expect(image.subtract(other, { absolute: true })).toMatchImageData([
@@ -20,19 +20,19 @@ test('absolute = true', async () => {
   ]);
 });
 
-test('subtract mask to itself', async () => {
+test('subtract mask to itself', () => {
   const image = testUtils.createMask([[1, 1, 0, 0]]);
   const other = image;
   expect(image.subtract(other)).toMatchMaskData([[0, 0, 0, 0]]);
 });
 
-test('absolute = false with masks', async () => {
+test('absolute = false with masks', () => {
   const image = testUtils.createMask([[1, 1, 0, 0]]);
   const other = testUtils.createMask([[0, 1, 1, 1]]);
   expect(image.subtract(other)).toMatchMaskData([[1, 0, 0, 0]]);
 });
 
-test('absolute = true with masks', async () => {
+test('absolute = true with masks', () => {
   const image = testUtils.createMask([[1, 1, 0, 0]]);
   const other = testUtils.createMask([[1, 1, 1, 1]]);
   expect(image.subtract(other, { absolute: true })).toMatchMaskData([
@@ -40,7 +40,7 @@ test('absolute = true with masks', async () => {
   ]);
 });
 
-test('difference size images should throw', async () => {
+test('difference size images should throw', () => {
   const image = testUtils.createRgbImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);
   const other = testUtils.createRgbImage([[5, 5, 5, 10, 10, 10]]);
   expect(() => {
@@ -48,7 +48,7 @@ test('difference size images should throw', async () => {
   }).toThrow(`both images must have the same size`);
 });
 
-test('different alpha should throw', async () => {
+test('different alpha should throw', () => {
   const image = testUtils.createRgbaImage([
     [5, 5, 5, 0, 10, 10, 10, 0, 15, 15, 15, 0],
   ]);
@@ -58,7 +58,7 @@ test('different alpha should throw', async () => {
   }).toThrow(`both images must have the same alpha and bitDepth`);
 });
 
-test('different number of channels should throw', async () => {
+test('different number of channels should throw', () => {
   const image = testUtils.createGreyImage([[5, 10, 15]]);
   const other = testUtils.createRgbImage([[1, 1, 1, 5, 5, 5, 10, 10, 10]]);
   expect(() => {

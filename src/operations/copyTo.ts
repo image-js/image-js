@@ -65,7 +65,7 @@ export function copyTo(
       currentColumn < Math.min(source.width + column, target.width);
       currentColumn++
     ) {
-      let sourcePixel = source.getPixel(
+      const sourcePixel = source.getPixel(
         currentColumn - column,
         currentRow - row,
       );

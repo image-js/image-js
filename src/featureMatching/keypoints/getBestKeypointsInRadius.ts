@@ -19,7 +19,7 @@ export function getBestKeypointsInRadius(
 
   for (let i = 0; i < size; i++) {
     const keypoint = keypoints[i];
-    for (let secondKeypointIndex of keypointsInRadius[i]) {
+    for (const secondKeypointIndex of keypointsInRadius[i]) {
       const secondKeypoint = keypoints[secondKeypointIndex];
       if (keypoint.score < secondKeypoint.score) {
         toIgnore[i] = 1;

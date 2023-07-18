@@ -22,5 +22,5 @@ export interface Line {
  * @returns Length of the segment.
  */
 export function getLineLength(p1: Point, p2: Point): number {
-  return Math.sqrt((p1.column - p2.column) ** 2 + (p1.row - p2.row) ** 2);
+  return Math.hypot(p1.column - p2.column, p1.row - p2.row);
 }

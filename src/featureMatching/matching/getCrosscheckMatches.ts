@@ -31,7 +31,7 @@ export function crosscheck(
   srcDstMatches: Match[],
   dstSrcMatches: Match[],
 ): Match[] {
-  let result: Match[] = [];
+  const result: Match[] = [];
 
   const sortedSrcDst = sortBySourceDest(srcDstMatches);
   const sortedDstSrc = sortByDestSource(dstSrcMatches);

@@ -1,4 +1,4 @@
-test('testing with pythagorean triples', async () => {
+test('testing with pythagorean triples', () => {
   const image = testUtils.createGreyImage([[3, 5, 8, 7]]);
   const otherImage = testUtils.createGreyImage([[4, 12, 15, 24]]);
 
@@ -6,7 +6,7 @@ test('testing with pythagorean triples', async () => {
   expect(image.hypotenuse(otherImage)).toMatchImage(expected);
 });
 
-test('function should be symmetrical', async () => {
+test('function should be symmetrical', () => {
   const image = testUtils.load('opencv/test.png');
   const otherImage = testUtils.load('opencv/testBlur.png');
 
@@ -15,7 +15,7 @@ test('function should be symmetrical', async () => {
   );
 });
 
-test('different size error', async () => {
+test('different size error', () => {
   const image = testUtils.createGreyImage([[3, 8, 7]]);
   const otherImage = testUtils.createGreyImage([[4, 12, 15, 24]]);
 
@@ -24,7 +24,7 @@ test('different size error', async () => {
   }).toThrow('both images must have the same size');
 });
 
-test('different bit depth or alpha error', async () => {
+test('different bit depth or alpha error', () => {
   const image = testUtils.createRgbaImage([[3, 5, 8, 7]]);
   const otherImage = testUtils.createGreyImage([[4]]);
 
@@ -33,7 +33,7 @@ test('different bit depth or alpha error', async () => {
   }).toThrow('both images must have the same alpha and bitDepth');
 });
 
-test('different number of channels', async () => {
+test('different number of channels', () => {
   const image = testUtils.createRgbaImage([[3, 5, 8, 7]]);
   const otherImage = testUtils.createGreyaImage([[4, 20]]);
 

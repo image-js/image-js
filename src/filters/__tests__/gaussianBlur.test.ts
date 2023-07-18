@@ -14,7 +14,7 @@ test('symmetrical kernel, should return the kernel itself', () => {
     borderType: 'replicate',
   };
 
-  let result = image.gaussianBlur(options);
+  const result = image.gaussianBlur(options);
 
   let sum = 0;
   for (let row = 0; row < 5; row++) {
@@ -65,7 +65,7 @@ test('x and y kernels', () => {
     borderType: 'replicate',
   };
 
-  let result = image.gaussianBlur(options);
+  const result = image.gaussianBlur(options);
 
   let sum = 0;
   for (let row = 0; row < 5; row++) {

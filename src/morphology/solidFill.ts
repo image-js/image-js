@@ -20,10 +20,10 @@ export interface SolidFillOptions {
  * @returns The filled mask.
  */
 export function solidFill(mask: Mask, options: SolidFillOptions = {}): Mask {
-  let { allowCorners = false } = options;
+  const { allowCorners = false } = options;
 
-  let newImage = maskToOutputMask(mask, options, { clone: true });
-  let inverted = mask.invert();
-  let cleared = inverted.clearBorder({ allowCorners });
+  const newImage = maskToOutputMask(mask, options, { clone: true });
+  const inverted = mask.invert();
+  const cleared = inverted.clearBorder({ allowCorners });
   return newImage.or(cleared, { out: newImage });
 }

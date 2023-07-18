@@ -25,14 +25,14 @@ export interface GetBorderPointsOptions {
 export function getBorderPoints(
   mask: Mask,
   options: GetBorderPointsOptions = {},
-): Array<Point> {
+): Point[] {
   const { innerBorders = false, allowCorners = false } = options;
 
   if (!innerBorders) {
     mask = mask.solidFill();
   }
 
-  let borders: Array<Point> = [];
+  const borders: Point[] = [];
 
   // first process frame pixels
   for (let column = 0; column < mask.width; column++) {

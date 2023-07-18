@@ -14,7 +14,7 @@ export function getIntensityCentroid(image: Image): Point[] {
   const moment10 = getIntensityMoment(image, 1, 0);
   const moment01 = getIntensityMoment(image, 0, 1);
   const moment00 = getIntensityMoment(image, 0, 0);
-  let centroid: Point[] = [];
+  const centroid: Point[] = [];
 
   for (let channel = 0; channel < image.channels; channel++) {
     if (moment00[channel] === 0) {

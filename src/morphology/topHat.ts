@@ -33,7 +33,7 @@ export function topHat(
   image: Image | Mask,
   options: TopHatOptions = {},
 ): Image | Mask {
-  let {
+  const {
     kernel = [
       [1, 1, 1],
       [1, 1, 1],
@@ -54,7 +54,7 @@ export function topHat(
 
   let newImage = image;
   for (let i = 0; i < iterations; i++) {
-    let openImage = newImage.open({ kernel });
+    const openImage = newImage.open({ kernel });
     newImage = subtract(openImage, newImage, { absolute: true });
   }
   return newImage;

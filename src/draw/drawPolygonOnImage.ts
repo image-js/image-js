@@ -2,9 +2,9 @@ import robustPointInPolygon from 'robust-point-in-polygon';
 
 import { Image } from '../Image';
 import { arrayPointsToObjects } from '../utils/arrayPointsToObjects';
-import checkProcessable from '../utils/validators/checkProcessable';
 import { Point } from '../utils/geometry/points';
 import { getOutputImage } from '../utils/getOutputImage';
+import checkProcessable from '../utils/validators/checkProcessable';
 import { validateColor } from '../utils/validators/validators';
 
 import { DrawPolylineOnImageOptions } from './drawPolylineOnImage';
@@ -44,7 +44,7 @@ export function drawPolygonOnImage(
     bitDepth: [8, 16],
   });
 
-  let newImage = getOutputImage(image, options, { clone: true });
+  const newImage = getOutputImage(image, options, { clone: true });
 
   if (fillColor === undefined) {
     return newImage.drawPolyline([...points, points[0]], {

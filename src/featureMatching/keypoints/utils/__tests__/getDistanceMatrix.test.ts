@@ -9,7 +9,7 @@ test('array of 3 keypoints', () => {
   ];
   const result = getDistanceMatrix(keypoints);
 
-  let array = result.map((line) => Array.from(line));
+  const array = result.map((line) => Array.from(line));
 
   expect(array).toStrictEqual([
     [0, 1, 4],

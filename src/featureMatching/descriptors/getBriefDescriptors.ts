@@ -34,10 +34,10 @@ export interface GetBriefDescriptorsOptions {
 }
 
 export type BriefDescriptor = Uint8Array;
-export type Brief = {
+export interface Brief {
   keypoints: OrientedFastKeypoint[];
   descriptors: BriefDescriptor[];
-};
+}
 
 /**
  * Generate the rBRIEF descriptors for the desired keypoints of an image.
@@ -87,7 +87,7 @@ export function getBriefDescriptors(
   const descriptors: Uint8Array[] = [];
   const filteredKeypoints: OrientedFastKeypoint[] = [];
 
-  for (let keypoint of keypoints) {
+  for (const keypoint of keypoints) {
     let patch: Image;
     try {
       patch = getKeypointPatch(smoothed, keypoint, { patchSize });

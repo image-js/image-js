@@ -16,7 +16,7 @@ export function testGetFeret(image: Image): Image {
   const roi = rois.sort((a, b) => b.surface - a.surface)[0];
   if (roi) {
     const roiMask = roi.getMask();
-    let feret = roiMask.getFeret();
+    const feret = roiMask.getFeret();
 
     let result = image.paintMask(roiMask, {
       origin: roi.origin,

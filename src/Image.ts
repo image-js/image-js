@@ -328,9 +328,9 @@ export class Image {
   }
 
   public getColumn(column: number): number[][] {
-    let columnValues = [];
+    const columnValues = [];
     for (let i = 0; i < this.channels; i++) {
-      let channelValues = [];
+      const channelValues = [];
       for (let j = 0; j < this.height; j++) {
         channelValues.push(this.getValue(column, j, i));
       }
@@ -340,9 +340,9 @@ export class Image {
   }
 
   public getRow(row: number): number[][] {
-    let rowValues = [];
+    const rowValues = [];
     for (let i = 0; i < this.channels; i++) {
-      let channelValues = [];
+      const channelValues = [];
       for (let j = 0; j < this.width; j++) {
         channelValues.push(this.getValue(j, row, i));
       }
@@ -554,7 +554,7 @@ export class Image {
    */
   public getChannel(channel: number): number[] {
     validateChannel(channel, this);
-    let result = new Array(this.size);
+    const result = new Array(this.size);
     for (let i = 0; i < this.size; i++) {
       result[i] = this.data[channel + i * this.channels];
     }

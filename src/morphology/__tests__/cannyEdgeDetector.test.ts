@@ -18,7 +18,7 @@ describe('cannyEdgeDetector', () => {
       [0, 0, 0, 0, 0],
     ]);
 
-    let result = image.cannyEdgeDetector({
+    const result = image.cannyEdgeDetector({
       lowThreshold: 0.08,
       highThreshold: 0.1,
       hysteresis: false,
@@ -40,7 +40,7 @@ describe('cannyEdgeDetector', () => {
       [0, 0, 0, 0, 0],
     ]);
 
-    let result = image.cannyEdgeDetector({
+    const result = image.cannyEdgeDetector({
       lowThreshold: 0.08,
       highThreshold: 0.1,
       hysteresis: false,
@@ -66,7 +66,7 @@ describe('cannyEdgeDetector', () => {
       [0, 0, 0, 0, 0],
     ]);
 
-    let result = image.cannyEdgeDetector({
+    const result = image.cannyEdgeDetector({
       lowThreshold: 0.08,
       highThreshold: 0.1,
       hysteresis: false,
@@ -93,7 +93,7 @@ describe('cannyEdgeDetector', () => {
       [0, 0, 0, 0, 0],
     ]);
 
-    let result = image.cannyEdgeDetector({
+    const result = image.cannyEdgeDetector({
       lowThreshold: 0.08,
       highThreshold: 0.1,
       hysteresis: true,

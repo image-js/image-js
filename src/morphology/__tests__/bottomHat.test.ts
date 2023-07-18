@@ -1,5 +1,5 @@
 test('GREY image 5x5', () => {
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [0, 0, 255, 0, 0],
     [0, 255, 255, 255, 0],
     [0, 255, 255, 255, 0],
@@ -17,7 +17,7 @@ test('GREY image 5x5', () => {
 });
 
 test('GREY image 5x5, 2 iterations', () => {
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [0, 0, 255, 0, 0],
     [0, 255, 255, 255, 0],
     [0, 255, 255, 255, 0],
@@ -35,7 +35,7 @@ test('GREY image 5x5, 2 iterations', () => {
 });
 
 test('mask 5x5', () => {
-  let mask = testUtils.createMask([
+  const mask = testUtils.createMask([
     [0, 0, 1, 0, 0],
     [0, 1, 1, 1, 0],
     [0, 1, 1, 1, 0],
@@ -53,7 +53,7 @@ test('mask 5x5', () => {
 });
 
 test('mask 5x5, 2 iterations', () => {
-  let mask = testUtils.createMask([
+  const mask = testUtils.createMask([
     [0, 0, 1, 0, 0],
     [0, 1, 1, 1, 0],
     [0, 1, 1, 1, 0],

@@ -292,7 +292,7 @@ test('get channel', () => {
     [1, 6, 4, 3],
   ]);
 
-  let expected = [
+  const expected = [
     [1, 1, 11, 1, 1],
     [2, 2, 2, 3, 6],
     [3, 3, 2, 3, 4],

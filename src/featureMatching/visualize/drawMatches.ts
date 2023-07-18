@@ -67,7 +67,7 @@ export function drawMatches(
   const scaledSource = scaleKeypoints(sourceKeypoints, montage.scale);
   const scaledDestination = scaleKeypoints(destinationKeypoints, montage.scale);
 
-  let result = montage.image;
+  const result = montage.image;
 
   const colors = getColors(result, color, showDistanceOptions);
 

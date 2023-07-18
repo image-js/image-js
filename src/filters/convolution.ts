@@ -61,8 +61,8 @@ export function directConvolution(
 
   for (let i = 0; i < image.size; i++) {
     for (let channel = 0; channel < image.channels; channel++) {
-      let dataIndex = i * image.channels + channel;
-      let newValue = round(clamp(convolutedData[dataIndex]));
+      const dataIndex = i * image.channels + channel;
+      const newValue = round(clamp(convolutedData[dataIndex]));
       newImage.setValueByIndex(i, channel, newValue);
     }
   }
@@ -85,12 +85,12 @@ export function rawDirectConvolution(
   const { borderType = 'reflect101', borderValue = 0 } = options;
   const interpolateBorder = getBorderInterpolation(borderType, borderValue);
 
-  let result = new Float64Array(image.size * image.channels);
+  const result = new Float64Array(image.size * image.channels);
 
   for (let channel = 0; channel < image.channels; channel++) {
     for (let row = 0; row < image.height; row++) {
       for (let column = 0; column < image.width; column++) {
-        let index = getIndex(column, row, image, channel);
+        const index = getIndex(column, row, image, channel);
         result[index] = computeConvolutionValue(
           column,
           row,
@@ -220,7 +220,8 @@ export function computeConvolutionValue(
   interpolateBorder: BorderInterpolationFunction,
   options: ComputeConvolutionValueOptions = {},
 ): number {
-  let { returnRawValue = false, clamp } = options;
+  let { clamp } = options;
+  const { returnRawValue = false } = options;
 
   if (returnRawValue) {
     clamp = undefined;

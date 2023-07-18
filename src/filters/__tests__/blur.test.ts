@@ -1,4 +1,4 @@
-test('blur compared to opencv', async () => {
+test('blur compared to opencv', () => {
   const img = testUtils.load('opencv/test.png');
 
   const blurred = img.blur({

@@ -53,7 +53,7 @@ export function hsvToRgb(hsv: number[]): Uint8Array {
     b = X;
   }
 
-  let rgb = new Uint8Array(3);
+  const rgb = new Uint8Array(3);
   rgb[0] = (r + m) * 255;
   rgb[1] = (g + m) * 255;
   rgb[2] = (b + m) * 255;

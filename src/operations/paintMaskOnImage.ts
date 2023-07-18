@@ -103,7 +103,7 @@ export function paintMaskOnImage(
 function checkColorIsNumberArray(
   color: Array<number | null>,
 ): asserts color is number[] {
-  for (let channel of color) {
+  for (const channel of color) {
     if (typeof channel !== 'number') {
       throw new TypeError(
         'cannot have null channels in color if blend is true',

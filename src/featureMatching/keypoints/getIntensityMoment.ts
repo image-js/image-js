@@ -28,7 +28,7 @@ export function getIntensityMoment(
 ): number[] {
   const { origin = image.getCoordinates('center') } = options;
 
-  let moment = new Array(image.channels).fill(0);
+  const moment = new Array(image.channels).fill(0);
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {
       const xDistance = column - origin.column;

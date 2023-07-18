@@ -166,7 +166,7 @@ test('6x6 mask, allowCorners true', () => {
 
 test('exceed max number of ROIs error', () => {
   const size = 513;
-  let mask = new Mask(size, size);
+  const mask = new Mask(size, size);
   let pos = true;
   for (let row = 0; row < size; row++) {
     for (let column = 0; column < size; column++) {

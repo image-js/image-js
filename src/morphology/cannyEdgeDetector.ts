@@ -1,8 +1,8 @@
 import { Image, Mask } from '..';
 import { GaussianBlurOptions } from '../filters';
-import checkProcessable from '../utils/validators/checkProcessable';
 import { getIndex } from '../utils/getIndex';
 import { imageToOutputMask } from '../utils/getOutputImage';
+import checkProcessable from '../utils/validators/checkProcessable';
 
 export interface CannyEdgeOptions {
   /**
@@ -75,13 +75,13 @@ export function cannyEdgeDetector(
   const gradientX = blurred.rawDirectConvolution(kernelY);
   const gradientY = blurred.rawDirectConvolution(kernelX);
 
-  let gradient = new Float64Array(image.size);
+  const gradient = new Float64Array(image.size);
   for (let i = 0; i < image.size; i++) {
     gradient[i] = Math.hypot(gradientX[i], gradientY[i]);
   }
 
-  let nonMaxSuppression = new Float64Array(image.size);
-  let edges = new Float64Array(image.size);
+  const nonMaxSuppression = new Float64Array(image.size);
+  const edges = new Float64Array(image.size);
 
   const finalImage = imageToOutputMask(image, options);
 
@@ -90,7 +90,7 @@ export function cannyEdgeDetector(
     for (let row = 1; row < height - 1; row++) {
       const currentGradientX = gradientX[getIndex(column, row, image, 0)];
       const currentGradientY = gradientY[getIndex(column, row, image, 0)];
-      let direction = getDirection(currentGradientX, currentGradientY);
+      const direction = getDirection(currentGradientX, currentGradientY);
       const currentGradient = gradient[getIndex(column, row, image, 0)];
       if (
         // horizontal
@@ -120,7 +120,7 @@ export function cannyEdgeDetector(
   }
 
   for (let i = 0; i < width * height; ++i) {
-    let currentNms = nonMaxSuppression[i];
+    const currentNms = nonMaxSuppression[i];
     let currentEdge = 0;
     if (currentNms > maxValue) {
       currentEdge++;
@@ -160,15 +160,15 @@ export function cannyEdgeDetector(
 
     // Hysteresis: second pass
     while (currentPixels.length > 0) {
-      let newPixels = [];
-      for (let currentPixel of currentPixels) {
+      const newPixels = [];
+      for (const currentPixel of currentPixels) {
         for (let j = -1; j < 2; ++j) {
           for (let k = -1; k < 2; ++k) {
             if (j === 0 && k === 0) {
               continue;
             }
-            let row = currentPixel[0] + j;
-            let column = currentPixel[1] + k;
+            const row = currentPixel[0] + j;
+            const column = currentPixel[1] + k;
             if (
               // there could be an error here
               edges[getIndex(column, row, image, 0)] === 1 &&

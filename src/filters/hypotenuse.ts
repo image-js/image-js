@@ -26,7 +26,7 @@ export function hypotenuse(
   otherImage: Image,
   options: HypotenuseOptions = {},
 ): Image {
-  let { bitDepth = image.bitDepth, channels = [] } = options;
+  const { bitDepth = image.bitDepth, channels = [] } = options;
 
   for (let i = 0; i < image.components; i++) {
     channels.push(i);
@@ -51,11 +51,11 @@ export function hypotenuse(
 
   validateChannels(channels, image);
 
-  let newImage = Image.createFrom(image, { bitDepth });
+  const newImage = Image.createFrom(image, { bitDepth });
 
   for (const channel of channels) {
     for (let i = 0; i < image.size; i++) {
-      let value = Math.hypot(
+      const value = Math.hypot(
         image.getValueByIndex(i, channel),
         otherImage.getValueByIndex(i, channel),
       );

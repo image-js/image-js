@@ -7,7 +7,5 @@ import { Point } from '../..';
  * @returns Euclidean distance.
  */
 export function getEuclideanDistance(point1: Point, point2: Point): number {
-  return Math.sqrt(
-    (point1.row - point2.row) ** 2 + (point1.column - point2.column) ** 2,
-  );
+  return Math.hypot(point1.row - point2.row, point1.column - point2.column);
 }

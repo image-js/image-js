@@ -6,13 +6,11 @@ export interface HistogramOptions {
    * The channel for which to compute the histogram.
    * If it is unspecified, the image must have one channel or the method will
    * throw an error.
-   *
    * @default 0
    */
   channel?: number;
   /**
    * The number of slots that histogram can have.
-   *
    * @default 256
    */
   slots?: number;
@@ -20,7 +18,6 @@ export interface HistogramOptions {
 
 /**
  * Returns a histogram of pixel intensities.
- *
  * @param image - The original image.
  * @param options - Histogram options.
  * @returns - The histogram.
@@ -29,7 +26,8 @@ export function histogram(
   image: Image,
   options: HistogramOptions = {},
 ): Uint32Array {
-  let { channel, slots = 256 } = options;
+  let { channel } = options;
+  const { slots = 256 } = options;
   if (!(slots !== 0 && (slots & (slots - 1)) === 0)) {
     throw new RangeError(
       'slots must be a power of 2, for example: 64, 256, 1024',
@@ -48,7 +46,7 @@ export function histogram(
   const hist = new Uint32Array(slots);
 
   let bitShift = 0;
-  let bitSlots = Math.log2(slots);
+  const bitSlots = Math.log2(slots);
   bitShift = image.bitDepth - bitSlots;
   for (let i = 0; i < image.size; i++) {
     hist[image.getValueByIndex(i, channel) >> bitShift]++;

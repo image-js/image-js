@@ -2,7 +2,7 @@ import { Image, Mask } from '../..';
 import { getIndex } from '../getIndex';
 
 test('mask, index should increment regularly', () => {
-  let mask = new Mask(3, 4);
+  const mask = new Mask(3, 4);
 
   let index = 0;
   for (let row = 0; row < mask.height; row++) {
@@ -13,14 +13,14 @@ test('mask, index should increment regularly', () => {
 });
 
 test('mask, check specific values', () => {
-  let mask = new Mask(3, 4);
+  const mask = new Mask(3, 4);
 
   expect(getIndex(1, 1, mask)).toBe(4);
   expect(getIndex(1, 2, mask)).toBe(7);
 });
 
 test('image, check specific values', () => {
-  let image = new Image(3, 4, { colorModel: 'RGB' });
+  const image = new Image(3, 4, { colorModel: 'RGB' });
 
   expect(getIndex(1, 1, image, 0)).toBe(12);
   expect(getIndex(1, 2, image, 1)).toBe(22);

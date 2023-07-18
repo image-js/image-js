@@ -37,7 +37,7 @@ export function getKeypointPatch(
   const cropWidth = rawWidth % 2 ? rawWidth : rawWidth + 1;
 
   // we are not allowing keypoints that are too close to the border of the image
-  let borderDistance = getRadius(cropWidth);
+  const borderDistance = getRadius(cropWidth);
 
   if (!checkBorderDistance(image, keypoint.origin, borderDistance)) {
     throw new RangeError(

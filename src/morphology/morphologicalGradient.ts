@@ -36,7 +36,7 @@ export function morphologicalGradient(
   image: Image | Mask,
   options: MorphologicalGradientOptions = {},
 ) {
-  let {
+  const {
     kernel = [
       [1, 1, 1],
       [1, 1, 1],
@@ -56,8 +56,8 @@ export function morphologicalGradient(
 
   let newImage = image;
   for (let i = 0; i < iterations; i++) {
-    let dilatedImage = newImage.dilate({ kernel });
-    let erodedImage = newImage.erode({ kernel });
+    const dilatedImage = newImage.dilate({ kernel });
+    const erodedImage = newImage.erode({ kernel });
     newImage = subtract(dilatedImage, erodedImage, { absolute: true });
   }
 

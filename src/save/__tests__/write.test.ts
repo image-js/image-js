@@ -63,8 +63,8 @@ test('sync write image to disk (jpeg)', () => {
 test('sync write mask image to disk', () => {
   let img = testUtils.load('opencv/test.png');
   img = img.convertColor('GREY');
-  let mask = img.threshold();
-  let maskImage = mask.convertColor('GREY');
+  const mask = img.threshold();
+  const maskImage = mask.convertColor('GREY');
   const destination = path.join(tmpDir, 'image.png');
   writeSync(destination, mask);
   expect(existsSync(destination)).toBe(true);
@@ -75,8 +75,8 @@ test('sync write mask image to disk', () => {
 test('async write mask image to disk', async () => {
   let img = testUtils.load('opencv/test.png');
   img = img.convertColor('GREY');
-  let mask = img.threshold();
-  let maskImage = mask.convertColor('GREY');
+  const mask = img.threshold();
+  const maskImage = mask.convertColor('GREY');
   const destination = path.join(tmpDir, 'image.png');
   await write(destination, mask);
   expect(existsSync(destination)).toBe(true);
@@ -123,10 +123,10 @@ test('sync write with recursive option', () => {
 test('unknown format error', () => {
   const img = testUtils.load('opencv/test.png');
   const destination = path.join(tmpDir, 'image.png');
-  // @ts-expect-error test invalid format
-  expect(() => writeSync(destination, img, { format: 'foo' })).toThrow(
-    /invalid format: foo/,
-  );
+  expect(() => {
+    // @ts-expect-error test invalid format
+    writeSync(destination, img, { format: 'foo' });
+  }).toThrow(/invalid format: foo/);
 });
 
 test('image extension error', async () => {

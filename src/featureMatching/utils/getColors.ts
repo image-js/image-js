@@ -33,10 +33,10 @@ export function getColors(
   const interval = Math.floor((maxValue - minValue) / (nbShades - 1));
   const clamp = getClampFromTo(0, image.maxValue);
 
-  let colors: number[][] = [];
+  const colors: number[][] = [];
   for (let i = 0; i < nbShades; i++) {
-    let color = [];
-    for (let channel of baseColor) {
+    const color = [];
+    for (const channel of baseColor) {
       color.push(clamp(channel - i * interval));
     }
     colors.push(color);

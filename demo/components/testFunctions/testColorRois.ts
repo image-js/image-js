@@ -13,7 +13,7 @@ export function testColorRois(image: Image): Image {
 
   const roiMapManager = fromMask(mask);
 
-  let colorImage = colorRois(roiMapManager, {
+  const colorImage = colorRois(roiMapManager, {
     roiKind: 'white',
     mode: 'rainbow',
   });

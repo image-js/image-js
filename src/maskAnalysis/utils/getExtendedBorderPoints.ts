@@ -15,9 +15,9 @@ export function getExtendedBorderPoints(mask: Mask): Point[] {
     innerBorders: false,
   });
 
-  let result: Point[] = [];
+  const result: Point[] = [];
 
-  for (let point of borderPoints) {
+  for (const point of borderPoints) {
     result.push(
       point,
       { column: point.column + 1, row: point.row },

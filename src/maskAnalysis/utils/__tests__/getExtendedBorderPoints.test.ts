@@ -4,9 +4,9 @@ import { getExtendedBorderPoints } from '../getExtendedBorderPoints';
 test('one pixel', () => {
   const mask = testUtils.createMask([[1]]);
 
-  let points = getExtendedBorderPoints(mask);
+  const points = getExtendedBorderPoints(mask);
 
-  let bordersMask = Mask.fromPoints(mask.width + 1, mask.height + 1, points);
+  const bordersMask = Mask.fromPoints(mask.width + 1, mask.height + 1, points);
 
   expect(bordersMask).toMatchMaskData([
     [1, 1],
@@ -20,9 +20,9 @@ test('2x2 mask, L', () => {
     [1, 1],
   ]);
 
-  let points = getExtendedBorderPoints(mask);
+  const points = getExtendedBorderPoints(mask);
 
-  let bordersMask = Mask.fromPoints(mask.width + 1, mask.height + 1, points);
+  const bordersMask = Mask.fromPoints(mask.width + 1, mask.height + 1, points);
 
   expect(bordersMask).toMatchMaskData([
     [1, 1, 0],
@@ -38,9 +38,9 @@ test('3x3 mask, cross', () => {
     [0, 1, 0],
   ]);
 
-  let points = getExtendedBorderPoints(mask);
+  const points = getExtendedBorderPoints(mask);
 
-  let extendedBorders = Mask.fromPoints(
+  const extendedBorders = Mask.fromPoints(
     mask.width + 1,
     mask.height + 1,
     points,

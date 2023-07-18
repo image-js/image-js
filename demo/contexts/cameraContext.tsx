@@ -106,11 +106,12 @@ export function CameraProvider(props: { children: ReactNode }) {
 
     navigator.mediaDevices.addEventListener('devicechange', handleDeviceChange);
     handleDeviceChange();
-    return () =>
+    return () => {
       navigator.mediaDevices.removeEventListener(
         'devicechange',
         handleDeviceChange,
       );
+    };
   }, []);
 
   return (

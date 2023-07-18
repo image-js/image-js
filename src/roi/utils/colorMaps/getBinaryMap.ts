@@ -47,7 +47,7 @@ export function getBinaryMap(options: GetBinaryMapOptions): Uint32Array {
     roiKind = 'bw',
   } = options;
 
-  let colorMap = new Uint32Array(maxNumberRois);
+  const colorMap = new Uint32Array(maxNumberRois);
 
   // negative values
   if (roiKind === 'bw' || roiKind === 'black') {

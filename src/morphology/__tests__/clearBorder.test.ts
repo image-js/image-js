@@ -1,7 +1,7 @@
 import { Mask } from '../..';
 
 test('5x5 mask, without corners', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [0, 0, 1, 0, 0],
     [0, 1, 1, 0, 0],
     [0, 0, 0, 1, 0],
@@ -19,13 +19,13 @@ test('5x5 mask, without corners', () => {
 });
 
 test('1x1 mask', () => {
-  let image = testUtils.createMask([[1]]);
+  const image = testUtils.createMask([[1]]);
 
   expect(image.clearBorder()).toMatchMaskData([[0]]);
 });
 
 test('Same mask, allow corners', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [0, 0, 1, 0, 0],
     [0, 1, 1, 0, 0],
     [0, 0, 0, 1, 0],
@@ -43,7 +43,7 @@ test('Same mask, allow corners', () => {
 });
 
 test('5x5 mask, large chunk inside, no corners', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [0, 0, 1, 0, 0],
     [0, 1, 1, 1, 0],
     [0, 1, 1, 1, 0],
@@ -61,7 +61,7 @@ test('5x5 mask, large chunk inside, no corners', () => {
 });
 
 test('3x5 mask, image should not change', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [0, 0, 0, 0, 0],
     [0, 1, 1, 1, 0],
     [0, 0, 0, 0, 0],
@@ -71,7 +71,7 @@ test('3x5 mask, image should not change', () => {
 });
 
 test('Diagonal of 1, allow corners', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [1, 0, 0, 0, 0],
     [0, 1, 0, 1, 0],
     [0, 0, 1, 0, 0],
@@ -109,7 +109,7 @@ test('Diagonal of 1, color=black', () => {
 });
 
 test('5x5 mask, full', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1],
@@ -127,7 +127,7 @@ test('5x5 mask, full', () => {
 });
 
 test('out option', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [1, 0, 0, 0, 0],
     [0, 1, 0, 1, 0],
     [0, 0, 0, 0, 0],
@@ -148,7 +148,7 @@ test('out option', () => {
 });
 
 test('5x5 mask, no pixels touching top', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [0, 0, 0, 0, 0],
     [0, 1, 1, 1, 0],
     [0, 0, 0, 0, 0],
@@ -166,7 +166,7 @@ test('5x5 mask, no pixels touching top', () => {
 });
 
 test('5x5 mask, snake', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [0, 0, 0, 0, 0],
     [0, 1, 1, 1, 0],
     [0, 0, 0, 1, 0],

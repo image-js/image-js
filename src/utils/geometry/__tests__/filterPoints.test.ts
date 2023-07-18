@@ -2,7 +2,7 @@ import getExtrema from '../../../compute/getExtrema';
 import { filterPoints } from '../filterPoints';
 
 test('combine minimum points after getExtrema function', () => {
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
     [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
     [5, 5, 5, 2, 5, 5, 5, 5, 5, 5],
@@ -15,9 +15,9 @@ test('combine minimum points after getExtrema function', () => {
     [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
   ]);
 
-  let points = getExtrema(image, { kind: 'minimum' });
+  const points = getExtrema(image, { kind: 'minimum' });
 
-  let result = filterPoints(points, image, {
+  const result = filterPoints(points, image, {
     removeClosePoints: 2,
     kind: 'minimum',
     channel: 0,
@@ -30,7 +30,7 @@ test('combine minimum points after getExtrema function', () => {
 });
 
 test('combine maximum points after getExtrema function', () => {
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 4, 4, 4, 1, 1, 1, 1, 1],
@@ -43,12 +43,12 @@ test('combine maximum points after getExtrema function', () => {
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   ]);
 
-  let points = getExtrema(image, {
+  const points = getExtrema(image, {
     kind: 'maximum',
     algorithm: 'star',
   });
 
-  let result = filterPoints(points, image, {
+  const result = filterPoints(points, image, {
     kind: 'maximum',
     removeClosePoints: 3,
   });
@@ -59,7 +59,7 @@ test('combine maximum points after getExtrema function', () => {
   ]);
 });
 test('test error handling', () => {
-  let image = testUtils.createRgbaImage([
+  const image = testUtils.createRgbaImage([
     [1, 1, 1, 1],
     [1, 1, 1, 1],
     [1, 1, 1, 1],
@@ -70,12 +70,12 @@ test('test error handling', () => {
     [1, 5, 6, 1],
   ]);
   expect(() => {
-    let points = getExtrema(image, {
+    const points = getExtrema(image, {
       kind: 'maximum',
       algorithm: 'star',
     });
 
-    let result = filterPoints(points, image, {
+    const result = filterPoints(points, image, {
       kind: 'maximum',
       removeClosePoints: 0,
     });

@@ -22,7 +22,7 @@ test('should be false', () => {
     { column: 4, row: 3 },
     { column: 3, row: 4 },
   ];
-  for (let point of points) {
+  for (const point of points) {
     expect(checkBorderDistance(image, point, distance)).toBe(false);
   }
 });

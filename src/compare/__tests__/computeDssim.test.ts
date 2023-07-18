@@ -1,19 +1,19 @@
 import { computeDssim } from '..';
 import { Image } from '../..';
 
-test('twice the same image', async () => {
+test('twice the same image', () => {
   const image = testUtils.createGreyImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);
   const other = image;
   expect(computeDssim(image, other)).toBe(0);
 });
 
-test('should be symetrical', async () => {
+test('should be symetrical', () => {
   const image = testUtils.createGreyImage([[1, 2, 3, 4, 5]]);
   const other = testUtils.createGreyImage([[0, 0, 0, 0, 0]]);
   expect(computeDssim(image, other)).toBe(computeDssim(other, image));
 });
 
-test('dssim should be 0.5', async () => {
+test('dssim should be 0.5', () => {
   const image = new Image(11, 11, { colorModel: 'GREY' });
   const other = Image.createFrom(image).fill(255);
 
@@ -21,7 +21,7 @@ test('dssim should be 0.5', async () => {
   expect(computeDssim(image, other)).toBeCloseTo(0.5);
 });
 
-test('dssim should be 1 (anti-correlated images)', async () => {
+test('dssim should be 1 (anti-correlated images)', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0],
     [255, 255, 255],
@@ -34,7 +34,7 @@ test('dssim should be 1 (anti-correlated images)', async () => {
   expect(computeDssim(image, other)).toBeCloseTo(1);
 });
 
-test('original with itself', async () => {
+test('original with itself', () => {
   const original = testUtils.load('ssim/ssim-original.png');
   const other = original;
   expect(computeDssim(original, other)).toBe(0);

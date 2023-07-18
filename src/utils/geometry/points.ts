@@ -45,7 +45,7 @@ export function sum(p1: Point, p2: Point): Point {
  * @returns - Normalized point.
  */
 export function normalize(point: Point): Point {
-  let length = Math.sqrt(point.column ** 2 + point.row ** 2);
+  const length = Math.hypot(point.column, point.row);
   return { column: point.column / length, row: point.row / length };
 }
 
@@ -57,10 +57,10 @@ export function normalize(point: Point): Point {
  * @returns The points after rotation.
  */
 export function rotate(radians: number, points: readonly Point[]): Point[] {
-  let results: Point[] = [];
+  const results: Point[] = [];
   const cos = Math.cos(radians);
   const sin = Math.sin(radians);
-  for (let point of points) {
+  for (const point of points) {
     results.push({
       column: cos * point.column - sin * point.row,
       row: sin * point.column + cos * point.row,

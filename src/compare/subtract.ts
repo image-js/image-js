@@ -37,7 +37,7 @@ export function subtract(
   otherImage: Image | Mask,
   options: SubtractImageOptions = {},
 ): Image | Mask {
-  let { absolute = false } = options;
+  const { absolute = false } = options;
 
   if (image instanceof Image) {
     checkProcessable(image, {
@@ -49,11 +49,11 @@ export function subtract(
 
   validateForComparison(image, otherImage);
 
-  let newImage = image.clone();
+  const newImage = image.clone();
   if (newImage instanceof Image) {
     for (let index = 0; index < image.size; index++) {
       for (let channel = 0; channel < image.channels; channel++) {
-        let value =
+        const value =
           image.getValueByIndex(index, channel) -
           otherImage.getValueByIndex(index, channel);
         if (absolute) {
@@ -65,7 +65,8 @@ export function subtract(
     }
   } else if (image instanceof Mask && otherImage instanceof Mask) {
     for (let index = 0; index < image.size; index++) {
-      let value = image.getBitByIndex(index) - otherImage.getBitByIndex(index);
+      const value =
+        image.getBitByIndex(index) - otherImage.getBitByIndex(index);
       if (absolute) {
         newImage.setBitByIndex(index, Math.abs(value) ? 1 : 0);
       } else {

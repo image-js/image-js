@@ -3,8 +3,8 @@ import { xVariance, xyCovariance } from 'ml-spectra-processing';
 
 import { Point } from '../..';
 import { getAngle } from '../../maskAnalysis/utils/getAngle';
-import { assert } from '../../utils/validators/assert';
 import { toDegrees } from '../../utils/geometry/angles';
+import { assert } from '../../utils/validators/assert';
 import { Roi } from '../Roi';
 
 export interface Ellipse {
@@ -23,16 +23,16 @@ export interface Ellipse {
  * @returns Ellipse.
  */
 export function getEllipse(roi: Roi): Ellipse {
-  let xCenter = roi.centroid.column;
-  let yCenter = roi.centroid.row;
+  const xCenter = roi.centroid.column;
+  const yCenter = roi.centroid.row;
 
-  let xCentered = roi.points.map((point: number[]) => point[0] - xCenter);
-  let yCentered = roi.points.map((point: number[]) => point[1] - yCenter);
+  const xCentered = roi.points.map((point: number[]) => point[0] - xCenter);
+  const yCentered = roi.points.map((point: number[]) => point[1] - yCenter);
 
-  let centeredXVariance = xVariance(xCentered, { unbiased: false });
-  let centeredYVariance = xVariance(yCentered, { unbiased: false });
+  const centeredXVariance = xVariance(xCentered, { unbiased: false });
+  const centeredYVariance = xVariance(yCentered, { unbiased: false });
 
-  let centeredCovariance = xyCovariance(
+  const centeredCovariance = xyCovariance(
     {
       x: xCentered,
       y: yCentered,
@@ -41,24 +41,20 @@ export function getEllipse(roi: Roi): Ellipse {
   );
 
   //spectral decomposition of the sample covariance matrix
-  let sampleCovarianceMatrix = [
+  const sampleCovarianceMatrix = [
     [centeredXVariance, centeredCovariance],
     [centeredCovariance, centeredYVariance],
   ];
-  let e = new EigenvalueDecomposition(sampleCovarianceMatrix);
-  let eigenvalues = e.realEigenvalues;
-  let vectors = e.eigenvectorMatrix;
-
-  let radiusMajor: number;
-  let radiusMinor: number;
-  let vectorMajor: number[];
-  let vectorMinor: number[];
+  const e = new EigenvalueDecomposition(sampleCovarianceMatrix);
+  const eigenvalues = e.realEigenvalues;
+  const vectors = e.eigenvectorMatrix;
 
   assert(eigenvalues[0] <= eigenvalues[1]);
-  radiusMajor = Math.sqrt(eigenvalues[1]);
-  radiusMinor = Math.sqrt(eigenvalues[0]);
-  vectorMajor = vectors.getColumn(1);
-  vectorMinor = vectors.getColumn(0);
+
+  let radiusMajor = Math.sqrt(eigenvalues[1]);
+  let radiusMinor = Math.sqrt(eigenvalues[0]);
+  const vectorMajor = vectors.getColumn(1);
+  const vectorMinor = vectors.getColumn(0);
 
   let majorAxisPoint1 = {
     column: xCenter + radiusMajor * vectorMajor[0],
@@ -77,13 +73,13 @@ export function getEllipse(roi: Roi): Ellipse {
     row: yCenter - radiusMinor * vectorMinor[1],
   };
 
-  let majorLength = Math.sqrt(
-    (majorAxisPoint1.column - majorAxisPoint2.column) ** 2 +
-      (majorAxisPoint1.row - majorAxisPoint2.row) ** 2,
+  let majorLength = Math.hypot(
+    majorAxisPoint1.column - majorAxisPoint2.column,
+    majorAxisPoint1.row - majorAxisPoint2.row,
   );
-  let minorLength = Math.sqrt(
-    (minorAxisPoint1.column - majorAxisPoint2.column) ** 2 +
-      (minorAxisPoint1.row - minorAxisPoint2.row) ** 2,
+  let minorLength = Math.hypot(
+    minorAxisPoint1.column - majorAxisPoint2.column,
+    minorAxisPoint1.row - minorAxisPoint2.row,
   );
 
   let ellipseSurface = (((minorLength / 2) * majorLength) / 2) * Math.PI;

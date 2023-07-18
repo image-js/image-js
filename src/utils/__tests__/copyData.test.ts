@@ -6,7 +6,7 @@ test('2x3 GREY image', () => {
     [1, 2, 3],
     [4, 5, 6],
   ]);
-  let target = new Image(3, 2, { colorModel: 'GREY' });
+  const target = new Image(3, 2, { colorModel: 'GREY' });
   copyData(source, target);
   expect(target).toMatchImageData([
     [1, 2, 3],
@@ -19,7 +19,7 @@ test('check error', () => {
     [1, 2, 3],
     [4, 5, 6],
   ]);
-  let target = new Image(5, 2, { colorModel: 'GREY' });
+  const target = new Image(5, 2, { colorModel: 'GREY' });
   expect(() => {
     copyData(source, target);
   }).toThrow('images width, height or color model is different');

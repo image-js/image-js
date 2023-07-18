@@ -2,19 +2,19 @@ import { computeMse } from '..';
 import { Image } from '../..';
 import { computeSsim } from '../computeSsim';
 
-test('twice the same image', async () => {
+test('twice the same image', () => {
   const image = testUtils.createGreyImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);
   const other = image;
   expect(computeSsim(image, other).mssim).toBe(1);
 });
 
-test('should be symetrical', async () => {
+test('should be symetrical', () => {
   const image = testUtils.createGreyImage([[1, 2, 3, 4, 5]]);
   const other = testUtils.createGreyImage([[0, 0, 0, 0, 0]]);
   expect(computeSsim(image, other).mssim).toBe(computeSsim(other, image).mssim);
 });
 
-test('ssim should be zero', async () => {
+test('ssim should be zero', () => {
   const image = new Image(11, 11, { colorModel: 'GREY' });
   const other = Image.createFrom(image).fill(255);
 
@@ -22,7 +22,7 @@ test('ssim should be zero', async () => {
   expect(computeSsim(image, other).mssim).toBeCloseTo(0, 3);
 });
 
-test('ssim should be -1 (anti-correlated images)', async () => {
+test('ssim should be -1 (anti-correlated images)', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0],
     [255, 255, 255],
@@ -35,7 +35,7 @@ test('ssim should be -1 (anti-correlated images)', async () => {
   expect(computeSsim(image, other).mssim).toBeCloseTo(-1, 2);
 });
 
-test('original with itself', async () => {
+test('original with itself', () => {
   const original = testUtils.load('ssim/ssim-original.png');
   const other = original;
   expect(computeSsim(original, other).mssim).toBe(1);
@@ -44,31 +44,31 @@ test('original with itself', async () => {
 
 // In the following tests the SSIM expected values were computed with Matlab.
 
-test('more contrast', async () => {
-  let original = testUtils.load('ssim/ssim-original.png');
-  let other = testUtils.load('ssim/ssim-contrast.png');
+test('more contrast', () => {
+  const original = testUtils.load('ssim/ssim-original.png');
+  const other = testUtils.load('ssim/ssim-contrast.png');
   expect(computeSsim(original, other).mssim).toBeCloseTo(0.8201, 1);
 });
 
-test('salt and pepper noise', async () => {
+test('salt and pepper noise', () => {
   const original = testUtils.load('ssim/ssim-original.png');
   const other = testUtils.load('ssim/ssim-saltPepper.png');
   expect(computeSsim(original, other).mssim).toBeCloseTo(0.7831);
 });
 
-test('blurry', async () => {
+test('blurry', () => {
   const original = testUtils.load('ssim/ssim-original.png');
   const other = testUtils.load('ssim/ssim-blurry.png');
   expect(computeSsim(original, other).mssim).toBeCloseTo(0.7659, 1);
 });
 
-test('compressed', async () => {
+test('compressed', () => {
   const original = testUtils.load('ssim/ssim-original.png');
   const other = testUtils.load('ssim/ssim-compressed.png');
   expect(computeSsim(original, other).mssim).toBeCloseTo(0.7178, 1);
 });
 
-test('compressed, algorithm = fast', async () => {
+test('compressed, algorithm = fast', () => {
   const original = testUtils.load('ssim/ssim-original.png');
   const other = testUtils.load('ssim/ssim-compressed.png');
   expect(computeSsim(original, other, { algorithm: 'fast' }).mssim).toBeCloseTo(
@@ -77,7 +77,7 @@ test('compressed, algorithm = fast', async () => {
   );
 });
 
-test('compressed, algorithm = bezkrovny', async () => {
+test('compressed, algorithm = bezkrovny', () => {
   const original = testUtils.load('ssim/ssim-original.png');
   const other = testUtils.load('ssim/ssim-compressed.png');
   expect(
@@ -85,7 +85,7 @@ test('compressed, algorithm = bezkrovny', async () => {
   ).toBeCloseTo(0.7178, 1);
 });
 
-test('compressed, algorithm = weber', async () => {
+test('compressed, algorithm = weber', () => {
   const original = testUtils.load('ssim/ssim-original.png');
   const other = testUtils.load('ssim/ssim-compressed.png');
   expect(
@@ -93,13 +93,13 @@ test('compressed, algorithm = weber', async () => {
   ).toBeCloseTo(0.7178, 1);
 });
 
-test('should handle RGB images', async () => {
+test('should handle RGB images', () => {
   const original = testUtils.load('opencv/test.png');
   const other = testUtils.load('opencv/testGaussianBlur.png');
   expect(computeSsim(original, other).mssim).toBeCloseTo(0.594, 2);
 });
 
-test('should handle RGBA images', async () => {
+test('should handle RGBA images', () => {
   const original = testUtils.load('opencv/test.png').convertColor('RGBA');
   const other = testUtils
     .load('opencv/testGaussianBlur.png')
@@ -107,7 +107,7 @@ test('should handle RGBA images', async () => {
   expect(computeSsim(original, other).mssim).toBeCloseTo(0.594, 2);
 });
 
-test('windowSize too large error', async () => {
+test('windowSize too large error', () => {
   const image = testUtils.createGreyImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);
   const other = image;
   expect(() => {

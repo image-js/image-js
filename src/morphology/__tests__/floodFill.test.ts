@@ -1,7 +1,7 @@
 import { Mask } from '../..';
 
 test('mask 5x5, default options', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [0, 0, 1, 0, 0],
     [0, 0, 1, 0, 0],
     [0, 1, 0, 0, 0],
@@ -19,7 +19,7 @@ test('mask 5x5, default options', () => {
 });
 
 test('5x5 mask, other start point', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [0, 0, 0, 0, 0],
     [1, 1, 1, 1, 1],
     [0, 0, 0, 0, 0],
@@ -37,7 +37,7 @@ test('5x5 mask, other start point', () => {
 });
 
 test('mask should not change', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [1, 1, 0, 1, 0],
     [0, 1, 1, 1, 0],
     [0, 1, 0, 0, 0],
@@ -55,7 +55,7 @@ test('mask should not change', () => {
 });
 
 test('allowCorners true', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [0, 1, 0, 0, 0],
     [1, 0, 1, 1, 0],
     [1, 1, 1, 1, 1],
@@ -75,13 +75,13 @@ test('allowCorners true', () => {
 });
 
 test('1x1 mask', () => {
-  let image = testUtils.createMask([[0]]);
+  const image = testUtils.createMask([[0]]);
 
   expect(image.floodFill({ allowCorners: true })).toMatchMaskData([[1]]);
 });
 
 test('out option', () => {
-  let image = testUtils.createMask([
+  const image = testUtils.createMask([
     [0, 0, 0, 0, 0],
     [0, 1, 1, 1, 0],
     [0, 1, 0, 1, 0],

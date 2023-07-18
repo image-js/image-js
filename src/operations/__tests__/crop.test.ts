@@ -7,7 +7,7 @@ test('GREY image, default options', () => {
     [1, 2, 2],
   ]);
 
-  let result = image.crop();
+  const result = image.crop();
   expect(result).toMatchImage(image);
 });
 

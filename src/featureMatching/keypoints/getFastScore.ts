@@ -20,7 +20,7 @@ export function getFastScore(
 
   let brighterSum = 0;
   let darkerSum = 0;
-  for (let point of circlePoints) {
+  for (const point of circlePoints) {
     const pointIntensity = image.getValue(
       origin.column + point.column,
       origin.row + point.row,

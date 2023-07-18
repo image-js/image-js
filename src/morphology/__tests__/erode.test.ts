@@ -1,5 +1,5 @@
 test('GREY image 5x5', () => {
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [255, 0, 255, 255, 255],
     [255, 0, 255, 255, 255],
     [255, 0, 255, 255, 255],
@@ -17,7 +17,7 @@ test('GREY image 5x5', () => {
 });
 
 test('another GREY image 5x5', () => {
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [255, 255, 255, 255, 255],
     [255, 255, 0, 255, 255],
     [255, 0, 0, 0, 255],
@@ -39,7 +39,7 @@ test('another GREY image 5x5', () => {
 test('GREY image 5x5, 1x3 onlyOnes kernel', () => {
   const kernel = [[1, 1, 1]];
 
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [255, 255, 255, 255, 255],
     [255, 255, 0, 255, 255],
     [255, 0, 0, 0, 255],
@@ -61,7 +61,7 @@ test('GREY image 5x5, 1x3 onlyOnes kernel', () => {
 test('GREY image 5x5, 1x3 kernel with zeros', () => {
   const kernel = [[1, 0, 1]];
 
-  let image = testUtils.createGreyImage([
+  const image = testUtils.createGreyImage([
     [255, 255, 255, 255, 255],
     [255, 255, 0, 255, 255],
     [255, 0, 0, 0, 255],
@@ -81,7 +81,7 @@ test('GREY image 5x5, 1x3 kernel with zeros', () => {
 });
 
 test('mask 5x5', () => {
-  let mask = testUtils.createMask(`
+  const mask = testUtils.createMask(`
       1 0 1 1 1
       1 0 1 1 1
       1 0 1 1 1
@@ -99,7 +99,7 @@ test('mask 5x5', () => {
 });
 
 test('erode with 2 iterations', () => {
-  let mask = testUtils.createMask(`
+  const mask = testUtils.createMask(`
       1 0 1 1 1
       1 0 1 1 1
       1 0 1 1 1

@@ -131,7 +131,7 @@ export function cyan(
   blue: number,
   image: Image,
 ): number {
-  let blackColor = black(red, green, blue, image);
+  const blackColor = black(red, green, blue, image);
   return (
     ((image.maxValue - red - blackColor) / (1 - blackColor / image.maxValue)) >>
     0
@@ -151,7 +151,7 @@ export function magenta(
   blue: number,
   image: Image,
 ): number {
-  let blackColor = black(red, green, blue, image);
+  const blackColor = black(red, green, blue, image);
   return (
     ((image.maxValue - green - blackColor) /
       (1 - blackColor / image.maxValue)) >>
@@ -172,7 +172,7 @@ export function yellow(
   blue: number,
   image: Image,
 ): number {
-  let blackColor = black(red, green, blue, image);
+  const blackColor = black(red, green, blue, image);
   return (
     ((image.maxValue - blue - blackColor) /
       (1 - blackColor / image.maxValue)) >>
@@ -228,9 +228,9 @@ export function saturation(
   image: Image,
 ): number {
   // from HSV model
-  let minValue = min(red, green, blue);
-  let maxValue = max(red, green, blue);
-  let delta = maxValue - minValue;
+  const minValue = min(red, green, blue);
+  const maxValue = max(red, green, blue);
+  const delta = maxValue - minValue;
   return maxValue === 0 ? 0 : (delta / maxValue) * image.maxValue;
 }
 
@@ -242,7 +242,7 @@ export function saturation(
  * @returns - Lightness of the pixel.
  */
 export function lightness(red: number, green: number, blue: number): number {
-  let minValue = min(red, green, blue);
-  let maxValue = max(red, green, blue);
+  const minValue = min(red, green, blue);
+  const maxValue = max(red, green, blue);
   return (maxValue + minValue) / 2;
 }

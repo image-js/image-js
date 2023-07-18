@@ -46,7 +46,8 @@ export function computeSsim(
   otherImage: Image,
   options: SsimOptions = {},
 ): Ssim {
-  let { windowSize, algorithm = 'original' } = options;
+  let { windowSize } = options;
+  const { algorithm = 'original' } = options;
 
   if (windowSize) {
     if (windowSize > image.width || windowSize > image.height) {

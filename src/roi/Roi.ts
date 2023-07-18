@@ -135,7 +135,7 @@ export class Roi {
    * @param options - Get border points options.
    * @returns The array of border pixels.
    */
-  public getBorderPoints(options?: GetBorderPointsOptions): Array<Point> {
+  public getBorderPoints(options?: GetBorderPointsOptions): Point[] {
     return getBorderPoints(this, options);
   }
 
@@ -146,15 +146,15 @@ export class Roi {
    */
   get internalIDs() {
     return this.#getComputed('internalIDs', () => {
-      let internal = [this.id];
-      let roiMap = this.map;
-      let data = roiMap.data;
+      const internal = [this.id];
+      const roiMap = this.map;
+      const data = roiMap.data;
 
       if (this.height > 2) {
         for (let column = 0; column < this.width; column++) {
-          let target = this.#computeIndex(0, column);
+          const target = this.#computeIndex(0, column);
           if (internal.includes(data[target])) {
-            let id = data[target + roiMap.width];
+            const id = data[target + roiMap.width];
             if (!internal.includes(id) && !this.boxIDs.includes(id)) {
               internal.push(id);
             }
@@ -162,10 +162,10 @@ export class Roi {
         }
       }
 
-      let array = new Array(4);
+      const array = new Array(4);
       for (let column = 1; column < this.width - 1; column++) {
         for (let row = 1; row < this.height - 1; row++) {
-          let target = this.#computeIndex(row, column);
+          const target = this.#computeIndex(row, column);
           if (internal.includes(data[target])) {
             // We check if one of the neighbor is not yet in.
             array[0] = data[target - 1];
@@ -174,7 +174,7 @@ export class Roi {
             array[3] = data[target + roiMap.width];
 
             for (let i = 0; i < 4; i++) {
-              let id = array[i];
+              const id = array[i];
               if (!internal.includes(id) && !this.boxIDs.includes(id)) {
                 internal.push(id);
               }
@@ -194,13 +194,13 @@ export class Roi {
   get externalBorders(): Border[] {
     return this.#getComputed('externalBorders', () => {
       // Takes all the borders and removes the internal one ...
-      let borders = this.borders;
+      const borders = this.borders;
 
-      let externalBorders = [];
-      let externalIDs = [];
-      let internals = this.internalIDs;
+      const externalBorders = [];
+      const externalIDs = [];
+      const internals = this.internalIDs;
 
-      for (let border of borders) {
+      for (const border of borders) {
         if (!internals.includes(border.connectedID)) {
           const element: Border = {
             connectedID: border.connectedID,
@@ -228,13 +228,13 @@ export class Roi {
       let three = 0;
       let four = 0;
 
-      let externalIDs = new Set(
+      const externalIDs = new Set(
         this.externalBorders.map((element) => element.connectedID),
       );
 
       for (let column = 0; column < this.width; column++) {
         for (let row = 0; row < this.height; row++) {
-          let target = this.#computeIndex(row, column);
+          const target = this.#computeIndex(row, column);
           if (data[target] === this.id) {
             let nbAround = 0;
             if (column === 0) {
@@ -291,7 +291,7 @@ export class Roi {
    */
 
   get perimeter() {
-    let info = this.perimeterInfo;
+    const info = this.perimeterInfo;
     const delta = 2 - Math.sqrt(2);
     return (
       info.one +
@@ -307,10 +307,10 @@ export class Roi {
    */
   get points() {
     return this.#getComputed('points', () => {
-      let points = [];
+      const points = [];
       for (let row = 0; row < this.height; row++) {
         for (let column = 0; column < this.width; column++) {
-          let target =
+          const target =
             (row + this.origin.row) * this.map.width +
             column +
             this.origin.column;
@@ -324,21 +324,21 @@ export class Roi {
   }
   get boxIDs() {
     return this.#getComputed('boxIDs', () => {
-      let surroundingIDs = new Set<number>(); // Allows to get a unique list without indexOf.
+      const surroundingIDs = new Set<number>(); // Allows to get a unique list without indexOf.
 
       const roiMap = this.map;
       const data = roiMap.data;
 
       // We check the first line and the last line.
-      for (let row of [0, this.height - 1]) {
+      for (const row of [0, this.height - 1]) {
         for (let column = 0; column < this.width; column++) {
-          let target = this.#computeIndex(row, column);
+          const target = this.#computeIndex(row, column);
           if (
             column - this.origin.column > 0 &&
             data[target] === this.id &&
             data[target - 1] !== this.id
           ) {
-            let value = data[target - 1];
+            const value = data[target - 1];
             surroundingIDs.add(value);
           }
           if (
@@ -346,22 +346,22 @@ export class Roi {
             data[target] === this.id &&
             data[target + 1] !== this.id
           ) {
-            let value = data[target + 1];
+            const value = data[target + 1];
             surroundingIDs.add(value);
           }
         }
       }
 
       // We check the first column and the last column.
-      for (let column of [0, this.width - 1]) {
+      for (const column of [0, this.width - 1]) {
         for (let row = 0; row < this.height; row++) {
-          let target = this.#computeIndex(row, column);
+          const target = this.#computeIndex(row, column);
           if (
             row - this.origin.row > 0 &&
             data[target] === this.id &&
             data[target - roiMap.width] !== this.id
           ) {
-            let value = data[target - roiMap.width];
+            const value = data[target - roiMap.width];
             surroundingIDs.add(value);
           }
           if (
@@ -369,7 +369,7 @@ export class Roi {
             data[target] === this.id &&
             data[target + roiMap.width] !== this.id
           ) {
-            let value = data[target + roiMap.width];
+            const value = data[target + roiMap.width];
             surroundingIDs.add(value);
           }
         }
@@ -409,7 +409,7 @@ export class Roi {
       const data = this.map.data;
       for (let column = 1; column < this.width - 1; column++) {
         for (let row = 1; row < this.height - 1; row++) {
-          let target = this.#computeIndex(row, column);
+          const target = this.#computeIndex(row, column);
           if (
             this.internalIDs.includes(data[target]) &&
             data[target] !== this.id
@@ -433,11 +433,11 @@ export class Roi {
     return this.#getComputed('borders', () => {
       const roiMap = this.map;
       const data = roiMap.data;
-      let surroudingIDs = new Set<number>();
-      let surroundingBorders = new Map();
-      let visitedData = new Set();
-      let dx = [+1, 0, -1, 0];
-      let dy = [0, +1, 0, -1];
+      const surroudingIDs = new Set<number>();
+      const surroundingBorders = new Map();
+      const visitedData = new Set();
+      const dx = [+1, 0, -1, 0];
+      const dy = [0, +1, 0, -1];
 
       for (
         let column = this.origin.column;
@@ -449,18 +449,18 @@ export class Roi {
           row <= this.origin.row + this.height;
           row++
         ) {
-          let target = column + row * roiMap.width;
+          const target = column + row * roiMap.width;
           if (data[target] === this.id) {
             for (let dir = 0; dir < 4; dir++) {
-              let newX = column + dx[dir];
-              let newY = row + dy[dir];
+              const newX = column + dx[dir];
+              const newY = row + dy[dir];
               if (
                 newX >= 0 &&
                 newY >= 0 &&
                 newX < roiMap.width &&
                 newY < roiMap.height
               ) {
-                let neighbour = newX + newY * roiMap.width;
+                const neighbour = newX + newY * roiMap.width;
 
                 if (
                   data[neighbour] !== this.id &&
@@ -485,7 +485,7 @@ export class Roi {
           }
         }
       }
-      let id: number[] = Array.from(surroudingIDs);
+      const id: number[] = Array.from(surroudingIDs);
       return id.map((id) => {
         return {
           connectedID: id,
@@ -604,7 +604,7 @@ export class Roi {
       let sumRow = 0;
       for (let column = 0; column < this.width; column++) {
         for (let row = 0; row < this.height; row++) {
-          let target = this.#computeIndex(row, column);
+          const target = this.#computeIndex(row, column);
           if (data[target] === this.id) {
             sumColumn += column;
             sumRow += row;

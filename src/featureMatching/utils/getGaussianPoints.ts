@@ -44,7 +44,7 @@ export function getGaussianPoints(
   const xCoordinates = getGaussianValues(width, xSeed, nbPoints, sigma);
   const yCoordinates = getGaussianValues(height, ySeed, nbPoints, sigma);
 
-  let points: Point[] = [];
+  const points: Point[] = [];
   for (let i = 0; i < nbPoints; i++) {
     points.push({ column: xCoordinates[i], row: yCoordinates[i] });
   }

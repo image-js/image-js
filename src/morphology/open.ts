@@ -32,7 +32,7 @@ export function open(
   image: Image | Mask,
   options: OpenOptions = {},
 ): Image | Mask {
-  let {
+  const {
     kernel = [
       [1, 1, 1],
       [1, 1, 1],

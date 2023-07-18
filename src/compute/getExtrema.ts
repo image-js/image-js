@@ -34,14 +34,14 @@ export default function getExtrema(
   image: Image,
   options: ExtremaOptions,
 ): Point[] {
-  let { kind = 'maximum', mask, algorithm = 'star', maxEquals = 2 } = options;
+  const { kind = 'maximum', mask, algorithm = 'star', maxEquals = 2 } = options;
   checkProcessable(image, {
     bitDepth: [8, 16],
     components: image.components,
   });
-  let searchingMinimum = kind === 'minimum';
+  const searchingMinimum = kind === 'minimum';
 
-  let maskExpectedValue = searchingMinimum ? 0 : 1;
+  const maskExpectedValue = searchingMinimum ? 0 : 1;
 
   const dx = [+1, 0, -1, 0, +1, +1, -1, -1, +2, 0, -2, 0, +2, +2, -2, -2];
   const dy = [0, +1, 0, -1, +1, -1, +1, -1, 0, +2, 0, -2, +2, -2, +2, -2];
@@ -59,8 +59,8 @@ export default function getExtrema(
     default:
       assertUnreachable(algorithm);
   }
-  let shift = dx.length <= 8 ? 1 : 2; // deal with borders
-  let points: Point[] = [];
+  const shift = dx.length <= 8 ? 1 : 2; // deal with borders
+  const points: Point[] = [];
   for (let channel = 0; channel < image.channels; channel++) {
     for (let currentY = shift; currentY < image.height - shift; currentY++) {
       for (let currentX = shift; currentX < image.width - shift; currentX++) {
@@ -69,7 +69,7 @@ export default function getExtrema(
         }
         let counter = 0;
         let nbEquals = 0;
-        let currentValue = image.getValue(currentX, currentY, channel);
+        const currentValue = image.getValue(currentX, currentY, channel);
         for (let dir = 0; dir < dx.length; dir++) {
           const currentAroundValue = image.getValue(
             currentX + dx[dir],

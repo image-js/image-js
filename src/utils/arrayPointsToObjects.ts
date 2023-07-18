@@ -6,9 +6,9 @@ import { ArrayPoint, Point } from './geometry/points';
  * @returns Array of points as arrays.
  */
 export function arrayPointsToObjects(points: Point[]): ArrayPoint[] {
-  let result: ArrayPoint[] = [];
+  const result: ArrayPoint[] = [];
 
-  for (let point of points) {
+  for (const point of points) {
     result.push([point.column, point.row]);
   }
   return result;

@@ -27,7 +27,7 @@ export interface FloodFillOptions {
  * @returns The filled mask.
  */
 export function floodFill(mask: Mask, options: FloodFillOptions = {}): Mask {
-  let { origin = { row: 0, column: 0 }, allowCorners = false, out } = options;
+  const { origin = { row: 0, column: 0 }, allowCorners = false, out } = options;
   const startPixel = getIndex(origin.column, origin.row, mask);
   return multipleFloodFill(mask, {
     startPixels: [startPixel],

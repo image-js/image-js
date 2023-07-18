@@ -1,7 +1,7 @@
 import { Mask } from '..';
 import { BitValue } from '../Mask';
-import { assert } from '../utils/validators/assert';
 import { maskToOutputMask } from '../utils/getOutputImage';
+import { assert } from '../utils/validators/assert';
 
 export interface MultipleFloodFillOptions {
   /**
@@ -43,16 +43,16 @@ export function multipleFloodFill(
   mask: Mask,
   options: MultipleFloodFillOptions = {},
 ): Mask {
-  let {
+  const {
     startPixels = [0],
     startPixelValue = 0,
     newPixelValue = 1,
     allowCorners = false,
   } = options;
 
-  let newMask = maskToOutputMask(mask, options, { clone: true });
+  const newMask = maskToOutputMask(mask, options, { clone: true });
 
-  let alreadyConsidered = Mask.createFrom(mask);
+  const alreadyConsidered = Mask.createFrom(mask);
 
   let from = 0;
   let to = 0;
@@ -60,7 +60,7 @@ export function multipleFloodFill(
   // const startPixelValue = mask.getBitByIndex(startPixels[0]);
 
   // find relevant border pixels
-  for (let pixelIndex of startPixels) {
+  for (const pixelIndex of startPixels) {
     if (newMask.getBitByIndex(pixelIndex) === startPixelValue) {
       toProcess[to++ % MAX_ARRAY] = pixelIndex;
       alreadyConsidered.setBitByIndex(pixelIndex, 1);

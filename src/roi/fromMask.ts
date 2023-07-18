@@ -30,14 +30,14 @@ export function fromMask(
   const maxNegativeId = -maxRoiId;
 
   // based on a binary image we will create plenty of small images
-  let data = new Int16Array(mask.size); // maxValue: maxPositiveId, minValue: maxNegativeId
+  const data = new Int16Array(mask.size); // maxValue: maxPositiveId, minValue: maxNegativeId
 
   // split will always return an array of images
   let positiveId = 0;
   let negativeId = 0;
 
-  let columnToProcess = new Uint16Array(maxNumberRois);
-  let rowToProcess = new Uint16Array(maxNumberRois);
+  const columnToProcess = new Uint16Array(maxNumberRois);
+  const rowToProcess = new Uint16Array(maxNumberRois);
 
   for (let column = 0; column < mask.width; column++) {
     for (let row = 0; row < mask.height; row++) {
@@ -52,8 +52,8 @@ export function fromMask(
   function analyseSurface(column: number, row: number) {
     let from = 0;
     let to = 0;
-    let targetState = mask.getBit(column, row);
-    let id = targetState ? ++positiveId : --negativeId;
+    const targetState = mask.getBit(column, row);
+    const id = targetState ? ++positiveId : --negativeId;
     assert(
       positiveId <= maxPositiveId && negativeId >= maxNegativeId,
       'too many regions of interest',
@@ -61,8 +61,8 @@ export function fromMask(
     columnToProcess[0] = column;
     rowToProcess[0] = row;
     while (from <= to) {
-      let currentColumn = columnToProcess[from & MAX_ARRAY];
-      let currentRow = rowToProcess[from & MAX_ARRAY];
+      const currentColumn = columnToProcess[from & MAX_ARRAY];
+      const currentRow = rowToProcess[from & MAX_ARRAY];
       data[currentRow * mask.width + currentColumn] = id;
       // need to check all around mask pixel
       if (

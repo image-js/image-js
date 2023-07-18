@@ -38,7 +38,7 @@ export function drawResult(
 
   return image;
 
-  function drawBlendedPoints(points: Point[], color: (number | null)[]) {
+  function drawBlendedPoints(points: Point[], color: Array<number | null>) {
     const mask = new Mask(imageSide, imageSide);
     const withPoints = mask.drawPoints(points, {
       color: [1],

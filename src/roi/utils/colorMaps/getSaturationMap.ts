@@ -45,7 +45,7 @@ export function getSaturationMap(
     blackHue = 240,
   } = options;
 
-  let colorMap = new Uint32Array(maxNumberRois);
+  const colorMap = new Uint32Array(maxNumberRois);
 
   const range = 255 - 63; // saturation range for good contrast
   const negativeStep = range / nbNegative;

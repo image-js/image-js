@@ -14,12 +14,9 @@ const tests = [
   ['plt-8bpp-color', 8, 'RGB'],
 ] as const;
 
-test.each(tests)(
-  'should load from buffer %s',
-  async (name, bitDepth, colorModel) => {
-    const buffer = testUtils.loadBuffer(`formats/${name}.png`);
-    const img = decodePng(buffer);
-    expect(img.bitDepth).toBe(bitDepth);
-    expect(img.colorModel).toBe(colorModel);
-  },
-);
+test.each(tests)('should load from buffer %s', (name, bitDepth, colorModel) => {
+  const buffer = testUtils.loadBuffer(`formats/${name}.png`);
+  const img = decodePng(buffer);
+  expect(img.bitDepth).toBe(bitDepth);
+  expect(img.colorModel).toBe(colorModel);
+});

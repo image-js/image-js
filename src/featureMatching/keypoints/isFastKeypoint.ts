@@ -38,7 +38,7 @@ export function isFastKeypoint(
 
   // quick test to exlude non corners
   if (nbContiguousPixels >= 12) {
-    for (let point of compassPoints) {
+    for (const point of compassPoints) {
       const pointIntensity = image.getValue(
         origin.column + point.column,
         origin.row + point.row,
@@ -54,8 +54,8 @@ export function isFastKeypoint(
   }
 
   // determine whether points on circle are darker or brighter
-  let comparisonArray = [];
-  for (let point of circlePoints) {
+  const comparisonArray = [];
+  for (const point of circlePoints) {
     const pointIntensity = image.getValue(
       origin.column + point.column,
       origin.row + point.row,
@@ -72,7 +72,7 @@ export function isFastKeypoint(
 
   // compute number of repeating and touching values
   let currentLength = 1;
-  let counterArray = [];
+  const counterArray = [];
   for (let i = 0; i < comparisonArray.length; i++) {
     const currentValue = comparisonArray[i];
     const nextValue = comparisonArray[(i + 1) % comparisonArray.length];

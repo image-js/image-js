@@ -14,9 +14,9 @@ export function testGetBorderPoints(image: Image): Image {
 
   const roi = rois.sort((a, b) => b.surface - a.surface)[0];
 
-  let points = roi.getBorderPoints();
+  const points = roi.getBorderPoints();
 
-  let borderMask = Mask.fromPoints(roi.width, roi.height, points);
+  const borderMask = Mask.fromPoints(roi.width, roi.height, points);
 
   return image.paintMask(borderMask, {
     origin: roi.origin,

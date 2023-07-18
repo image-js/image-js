@@ -28,7 +28,7 @@ test.each([
 
   expect(kptImage).toMatchImageSnapshot();
 
-  for (let keypoint of keypoints) {
+  for (const keypoint of keypoints) {
     expect(getKeypointPatch(image, keypoint)).toMatchImageSnapshot();
   }
 });
@@ -63,7 +63,7 @@ test.each([
 
   expect(kptImage).toMatchImageSnapshot();
 
-  for (let keypoint of keypoints) {
+  for (const keypoint of keypoints) {
     expect(getKeypointPatch(image, keypoint)).toMatchImageSnapshot();
   }
 });

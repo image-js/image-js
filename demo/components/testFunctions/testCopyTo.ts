@@ -13,8 +13,8 @@ export function testCopyTo(image: Image): Image {
       column: image.width / 2,
     },
   });
-  let blackSquare = new Image(50, 50, { colorModel: 'RGBA' });
-  let redSquare = new Image(150, 150, { colorModel: 'RGBA' });
+  const blackSquare = new Image(50, 50, { colorModel: 'RGBA' });
+  const redSquare = new Image(150, 150, { colorModel: 'RGBA' });
   redSquare.fillChannel(0, 255);
   redSquare.fillAlpha(100);
   result = blackSquare.copyTo(result, {

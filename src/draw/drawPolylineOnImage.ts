@@ -1,8 +1,8 @@
 import { Image } from '../Image';
-import checkProcessable from '../utils/validators/checkProcessable';
 import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
+import checkProcessable from '../utils/validators/checkProcessable';
 import { validateColor } from '../utils/validators/validators';
 
 export interface DrawPolylineOnImageOptions {
@@ -42,7 +42,7 @@ export function drawPolylineOnImage(
   checkProcessable(image, {
     bitDepth: [8, 16],
   });
-  let newImage = getOutputImage(image, options, { clone: true });
+  const newImage = getOutputImage(image, options, { clone: true });
 
   validateColor(color, newImage);
 

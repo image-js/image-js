@@ -12,7 +12,7 @@ type TiffIfd = ReturnType<typeof decode>[number];
  * @returns The decoded image.
  */
 export function decodeTiff(buffer: Uint8Array): Image {
-  let result = decode(buffer);
+  const result = decode(buffer);
   return getImageFromIFD(result[0]);
   // TODO: handle stacks (many IFDs)
 }
@@ -26,9 +26,9 @@ function getImageFromIFD(ifd: TiffIfd): Image {
   if (ifd.type === 3) {
     // Palette
     const data = new Uint16Array(3 * ifd.width * ifd.height);
-    const palette = ifd.palette as [number, number, number][];
+    const palette = ifd.palette as Array<[number, number, number]>;
     let ptr = 0;
-    for (let index of ifd.data) {
+    for (const index of ifd.data) {
       const color = palette[index];
       data[ptr++] = color[0];
       data[ptr++] = color[1];

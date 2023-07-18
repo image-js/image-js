@@ -12,9 +12,9 @@ export function applyAffineTransfom(
   points: Point[],
   model: ModelFunction<Point>,
 ): Point[] {
-  let result: Point[] = [];
+  const result: Point[] = [];
 
-  for (let point of points) {
+  for (const point of points) {
     const transformed = model(point);
     const roundedPoint = {
       row: Math.round(transformed.row),

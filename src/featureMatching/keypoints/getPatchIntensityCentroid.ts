@@ -21,7 +21,7 @@ export function getPatchIntensityCentroid(
   const moment10 = getPatchIntensityMoment(image, 1, 0, options);
   const moment01 = getPatchIntensityMoment(image, 0, 1, options);
   const moment00 = getPatchIntensityMoment(image, 0, 0, options);
-  let centroid: Point[] = [];
+  const centroid: Point[] = [];
 
   for (let channel = 0; channel < image.channels; channel++) {
     if (moment00[channel] === 0) {

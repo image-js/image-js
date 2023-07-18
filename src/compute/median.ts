@@ -8,7 +8,7 @@ import { Image } from '../Image';
  * @returns Median pixel.
  */
 export function median(image: Image): number[] {
-  let pixel = new Array(image.channels).fill(0);
+  const pixel = new Array(image.channels).fill(0);
 
   for (let i = 0; i < image.channels; i++) {
     const channel = image.getChannel(i);

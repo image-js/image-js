@@ -18,7 +18,7 @@ test('verify that angle is correct', () => {
   expect(result).toHaveLength(4);
 
   for (let i = 0; i < 4; i++) {
-    let currentAngle = angle(
+    const currentAngle = angle(
       result[(i + 1) % 4],
       result[i],
       result[(i + 2) % 4],
@@ -219,7 +219,7 @@ test('draw mbr on large image', () => {
   const roi = rois.sort((a, b) => b.surface - a.surface)[0];
 
   const roiMask = roi.getMask({ solidFill: true });
-  let mbr = roiMask.getMbr();
+  const mbr = roiMask.getMbr();
 
   let result = rgbaImage.paintMask(roiMask, {
     origin: roi.origin,

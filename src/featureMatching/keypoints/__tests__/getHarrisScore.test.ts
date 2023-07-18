@@ -11,7 +11,7 @@ test('7x7 image, full of zeros', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = getHarrisScore(image, origin);
+  const result = getHarrisScore(image, origin);
 
   expect(result).toBe(0);
 });
@@ -29,7 +29,7 @@ test('7x7 image with horizontal line', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = getHarrisScore(image, origin, { windowSize: 7 });
+  const result = getHarrisScore(image, origin, { windowSize: 7 });
 
   expect(result).toBeCloseTo(-8287371225);
 });
@@ -47,7 +47,7 @@ test('7x7 image with corner 90 degrees, bottom-right', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = getHarrisScore(image, origin);
+  const result = getHarrisScore(image, origin);
 
   expect(result).toBeCloseTo(80505891900);
 });
@@ -65,7 +65,7 @@ test('7x7 image with corner 90 degrees, bottom-left', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = getHarrisScore(image, origin);
+  const result = getHarrisScore(image, origin);
 
   expect(result).toBeCloseTo(-91499343525);
 });
@@ -83,7 +83,7 @@ test('7x7 image with other corner', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = getHarrisScore(image, origin);
+  const result = getHarrisScore(image, origin);
 
   expect(result).toBeCloseTo(-12998500000);
 });
@@ -101,7 +101,7 @@ test('7x7 image with darker and lighter areas', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = getHarrisScore(image, origin, { windowSize: 7 });
+  const result = getHarrisScore(image, origin, { windowSize: 7 });
 
   expect(result).toBeCloseTo(-1688675564600);
 });
@@ -119,7 +119,7 @@ test('7x7 image with segment', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  let result = getHarrisScore(image, origin, { windowSize: 7 });
+  const result = getHarrisScore(image, origin, { windowSize: 7 });
 
   expect(result).toBeCloseTo(13084874375);
 });

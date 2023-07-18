@@ -22,7 +22,7 @@ export function convertColor(
   colorModel: ImageColorModel,
   options: ConvertColorOptions = {},
 ): Image {
-  const canConvert = new Map<ImageColorModel, Array<ImageColorModel>>([
+  const canConvert = new Map<ImageColorModel, ImageColorModel[]>([
     ['GREY', ['GREYA', 'RGB', 'RGBA']],
     ['GREYA', ['GREY', 'RGB', 'RGBA']],
     ['RGB', ['GREY', 'GREYA', 'RGBA']],

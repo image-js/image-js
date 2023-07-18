@@ -30,7 +30,7 @@ export function clearBorder(
   mask: Mask,
   options: ClearBorderOptions = {},
 ): Mask {
-  let { allowCorners = false, out, color = 'white' } = options;
+  const { allowCorners = false, out, color = 'white' } = options;
   return multipleFloodFill(mask, {
     startPixels: borderIterator(mask),
     startPixelValue: color === 'white' ? 1 : 0,

@@ -1,8 +1,8 @@
 import { Image, ImageColorModel } from '..';
-import { assert } from '../utils/validators/assert';
-import checkProcessable from '../utils/validators/checkProcessable';
 import { getClamp } from '../utils/clamp';
 import { getOutputImage } from '../utils/getOutputImage';
+import { assert } from '../utils/validators/assert';
+import checkProcessable from '../utils/validators/checkProcessable';
 
 import * as greyAlgorithms from './greyAlgorithms';
 
@@ -86,7 +86,8 @@ export interface GreyOptions {
  * @returns The resulting grey image.
  */
 export function grey(image: Image, options: GreyOptions = {}): Image {
-  let { algorithm = 'luma709', keepAlpha = false, mergeAlpha = true } = options;
+  let { keepAlpha = false, mergeAlpha = true } = options;
+  const { algorithm = 'luma709' } = options;
 
   checkProcessable(image, {
     colorModel: ['RGB', 'RGBA'],
@@ -98,9 +99,9 @@ export function grey(image: Image, options: GreyOptions = {}): Image {
     mergeAlpha = false;
   }
 
-  let newColorModel: ImageColorModel = keepAlpha ? 'GREYA' : 'GREY';
+  const newColorModel: ImageColorModel = keepAlpha ? 'GREYA' : 'GREY';
 
-  let newImage = getOutputImage(image, options, {
+  const newImage = getOutputImage(image, options, {
     newParameters: { colorModel: newColorModel },
   });
 
@@ -112,7 +113,7 @@ export function grey(image: Image, options: GreyOptions = {}): Image {
     method = greyAlgorithms[algorithm];
   }
 
-  let clamp = getClamp(newImage);
+  const clamp = getClamp(newImage);
 
   for (let i = 0; i < image.size; i++) {
     const red = image.getValueByIndex(i, 0);

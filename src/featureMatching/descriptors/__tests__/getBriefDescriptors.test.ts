@@ -11,7 +11,7 @@ test('count occurences of 1 and 0 with default options', () => {
   const descriptor = getBriefDescriptors(grey, keypoint).descriptors[0];
 
   let nbOnes = 0;
-  for (let element of descriptor) {
+  for (const element of descriptor) {
     if (element) nbOnes++;
   }
   const onesPercentage = (nbOnes / descriptor.length) * 100;

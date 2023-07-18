@@ -268,7 +268,7 @@ export class Mask {
     height: number,
     points: Point[],
   ): Mask {
-    let mask = new Mask(width, height);
+    const mask = new Mask(width, height);
 
     for (const point of points) {
       mask.setBit(point.column, point.row, 1);
@@ -323,7 +323,7 @@ export class Mask {
    * @param value - Value to set.
    */
   public setBitByIndex(index: number, value: BitValue): void {
-    let result = boolToNumber(value);
+    const result = boolToNumber(value);
     this.data[index * this.channels] = result;
   }
 
@@ -432,7 +432,7 @@ export class Mask {
    * @returns The mask instance.
    */
   public fill(value: BitValue): this {
-    let result = boolToNumber(value);
+    const result = boolToNumber(value);
     this.data.fill(result);
     return this;
   }

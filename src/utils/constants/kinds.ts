@@ -1,9 +1,10 @@
-interface ColorModelDefinitions {
-  [key: string]: {
+type ColorModelDefinitions = Record<
+  string,
+  {
     channels: number;
     alpha: boolean;
-  };
-}
+  }
+>;
 
 export const colorModelDefinitions: ColorModelDefinitions = {
   grey: {

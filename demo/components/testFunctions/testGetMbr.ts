@@ -16,7 +16,7 @@ export function testGetMbr(image: Image): Image {
   const roi = rois.sort((a, b) => b.surface - a.surface)[0];
   if (roi) {
     const roiMask = roi.getMask();
-    let mbr = roiMask.getMbr();
+    const mbr = roiMask.getMbr();
 
     let result = image.paintMask(roiMask, {
       origin: roi.origin,

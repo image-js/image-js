@@ -22,7 +22,7 @@ export interface ReferenceDataForMlr {
  */
 export function getMeasuredColors(arrayColors: number[][]): RgbColor[] {
   const objectColors = [];
-  for (let color of arrayColors) {
+  for (const color of arrayColors) {
     objectColors.push({ r: color[0], g: color[1], b: color[2] });
   }
   return objectColors;
@@ -34,8 +34,8 @@ export function getMeasuredColors(arrayColors: number[][]): RgbColor[] {
  * @returns Array of reference RGB colors.
  */
 export function getReferenceColors(qpCard: ColorCard): RgbColor[] {
-  let result: RgbColor[] = [];
-  for (let square of qpCard) {
+  const result: RgbColor[] = [];
+  for (const square of qpCard) {
     result.push(colord(square.lab).toRgb());
   }
 
@@ -54,7 +54,7 @@ export function formatReferenceForMlr(
 ): ReferenceDataForMlr {
   const referenceData: ReferenceDataForMlr = { r: [], g: [], b: [] };
 
-  for (let color of referenceColors) {
+  for (const color of referenceColors) {
     referenceData.r.push([color.r / maxValue]);
     referenceData.g.push([color.g / maxValue]);
     referenceData.b.push([color.b / maxValue]);
@@ -74,7 +74,7 @@ export function formatInputForMlr(
   maxValue: number,
 ): number[][] {
   const inputData = [];
-  for (let color of inputColors) {
+  for (const color of inputColors) {
     inputData.push(getRegressionVariables(color.r, color.g, color.b, maxValue));
   }
   return inputData;

@@ -12,16 +12,16 @@ import { sortByColumnRow } from './points';
  * @returns The coordinates of the points on a circle of given diameter.
  */
 export function getCirclePoints(radius: number): Point[] {
-  let circlePoints: Point[] = [];
+  const circlePoints: Point[] = [];
 
   circle(radius, radius, radius, (column: number, row: number) => {
     circlePoints.push({ row: row - radius, column: column - radius });
   });
 
-  let firstQuarter: Point[] = [];
-  let secondQuarter: Point[] = [];
-  let thirdQuarter: Point[] = [];
-  let fourthQuarter: Point[] = [];
+  const firstQuarter: Point[] = [];
+  const secondQuarter: Point[] = [];
+  const thirdQuarter: Point[] = [];
+  const fourthQuarter: Point[] = [];
 
   for (let i = 0; i < circlePoints.length; i = i + 4) {
     firstQuarter.push(circlePoints[i % circlePoints.length]);
@@ -44,7 +44,7 @@ export function getFilledCirclePoints(
   radius: number,
   center: Point = zeroPoint,
 ): Point[] {
-  let circlePoints: Point[] = [];
+  const circlePoints: Point[] = [];
 
   if (radius === 0) {
     return [center];
@@ -84,7 +84,7 @@ export function getFilledCirclePoints(
  * @returns The coordinates of the points on the line.
  */
 export function getLinePoints(from: Point, to: Point): Point[] {
-  let linePoints: Point[] = [];
+  const linePoints: Point[] = [];
   line(
     from.column,
     from.row,
@@ -108,7 +108,7 @@ export function getLinePoints(from: Point, to: Point): Point[] {
  * @returns The coordinates of the compass points.
  */
 export function getCompassPoints(radius: number): Point[] {
-  let circlePoints: Point[] = [];
+  const circlePoints: Point[] = [];
 
   circle(radius, radius, radius, (column: number, row: number) => {
     circlePoints.push({ row: row - radius, column: column - radius });

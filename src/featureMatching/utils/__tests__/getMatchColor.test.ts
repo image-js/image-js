@@ -15,7 +15,7 @@ test('matches should all have a different color', () => {
 
   const colors = getColors(image, [255, 0, 0], { nbShades: 5 });
 
-  let result = [];
+  const result = [];
   for (let i = 0; i < matches.length; i++) {
     result.push(getMatchColor(matches, i, colors));
   }
@@ -31,7 +31,7 @@ test('all matches have same distance', () => {
 
   const colors = getColors(image, [255, 0, 0], { nbShades: 5 });
 
-  let result = [];
+  const result = [];
   for (let i = 0; i < matches.length; i++) {
     result.push(getMatchColor(matches, i, colors));
   }

@@ -31,7 +31,8 @@ export function filterPoints(
   image: Image,
   options: FilterPointsOptions,
 ) {
-  let { removeClosePoints = 0, kind = 'maximum', channel } = options;
+  const { removeClosePoints = 0, kind = 'maximum' } = options;
+  let { channel } = options;
   if (channel === undefined) {
     if (image.channels > 1) {
       throw new Error(
@@ -44,7 +45,7 @@ export function filterPoints(
 
   const isMax = kind === 'maximum';
 
-  let sortedPoints = points.slice().sort((a, b) => {
+  const sortedPoints = points.slice().sort((a, b) => {
     return (
       image.getValue(a.column, a.row, channel as number) -
       image.getValue(b.column, b.row, channel as number)

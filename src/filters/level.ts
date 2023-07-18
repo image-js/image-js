@@ -1,7 +1,7 @@
 import { Image } from '../Image';
-import checkProcessable from '../utils/validators/checkProcessable';
 import { getClamp } from '../utils/clamp';
 import { getOutputImage } from '../utils/getOutputImage';
+import checkProcessable from '../utils/validators/checkProcessable';
 import { validateChannels } from '../utils/validators/validators';
 
 export interface LevelOptions {
@@ -55,6 +55,8 @@ export function level(image: Image, options: LevelOptions = {}) {
     outputMin = 0,
     outputMax = image.maxValue,
     gamma = 1,
+  } = options;
+  const {
     channels = new Array(image.components).fill(0).map((value, index) => index),
   } = options;
 
@@ -64,7 +66,7 @@ export function level(image: Image, options: LevelOptions = {}) {
     bitDepth: [8, 16],
   });
 
-  let newImage = getOutputImage(image, options, { clone: true });
+  const newImage = getOutputImage(image, options, { clone: true });
 
   const clamp = getClamp(image);
 
@@ -76,10 +78,10 @@ export function level(image: Image, options: LevelOptions = {}) {
 
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {
-      for (let channel of channels) {
-        let currentValue = image.getValue(column, row, channel);
+      for (const channel of channels) {
+        const currentValue = image.getValue(column, row, channel);
 
-        let clamped = Math.max(
+        const clamped = Math.max(
           Math.min(currentValue, inputMax[channel]),
           inputMin[channel],
         );

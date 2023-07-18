@@ -40,24 +40,24 @@ export function getMbrFromPoints(points: readonly Point[]): Mbr {
   let mbr: Point[] = [];
 
   for (let i = 0; i < points.length; i++) {
-    let angle = getAngle(points[i], points[(i + 1) % points.length]);
+    const angle = getAngle(points[i], points[(i + 1) % points.length]);
 
     rotatedVertices = rotate(-angle, points);
 
     // Rotate and translate so that this segment is at the bottom.
-    let aX = rotatedVertices[i].column;
-    let aY = rotatedVertices[i].row;
-    let bX = rotatedVertices[(i + 1) % rotatedVertices.length].column;
-    let bY = rotatedVertices[(i + 1) % rotatedVertices.length].row;
+    const aX = rotatedVertices[i].column;
+    const aY = rotatedVertices[i].row;
+    const bX = rotatedVertices[(i + 1) % rotatedVertices.length].column;
+    const bY = rotatedVertices[(i + 1) % rotatedVertices.length].row;
 
     let tUndefined = true;
     let tMin = 0;
     let tMax = 0;
     let maxWidth = 0;
-    for (let point of rotatedVertices) {
-      let cX = point.column;
-      let cY = point.row;
-      let t = (cX - aX) / (bX - aX);
+    for (const point of rotatedVertices) {
+      const cX = point.column;
+      const cY = point.row;
+      const t = (cX - aX) / (bX - aX);
       if (tUndefined) {
         tUndefined = false;
         tMin = t;
@@ -66,16 +66,16 @@ export function getMbrFromPoints(points: readonly Point[]): Mbr {
         if (t < tMin) tMin = t;
         if (t > tMax) tMax = t;
       }
-      let width = (-(bX - aX) * cY + bX * aY - bY * aX) / (bX - aX);
+      const width = (-(bX - aX) * cY + bX * aY - bY * aX) / (bX - aX);
 
       if (Math.abs(width) > Math.abs(maxWidth)) {
         maxWidth = width;
       }
     }
-    let minPoint = { column: aX + tMin * (bX - aX), row: aY };
-    let maxPoint = { column: aX + tMax * (bX - aX), row: aY };
+    const minPoint = { column: aX + tMin * (bX - aX), row: aY };
+    const maxPoint = { column: aX + tMax * (bX - aX), row: aY };
 
-    let currentSurface = Math.abs(maxWidth * (tMin - tMax) * (bX - aX));
+    const currentSurface = Math.abs(maxWidth * (tMin - tMax) * (bX - aX));
 
     if (currentSurface < minSurface) {
       minSurfaceAngle = angle;

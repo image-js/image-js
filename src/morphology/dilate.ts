@@ -38,7 +38,7 @@ export function dilate(
     defaultKernel = true;
   }
 
-  let {
+  const {
     kernel = [
       [1, 1, 1],
       [1, 1, 1],
@@ -103,16 +103,16 @@ export function dilate(
 function dilateGrey(image: Image, newImage: Image, kernel: number[][]): Image {
   const kernelWidth = kernel[0].length;
   const kernelHeight = kernel.length;
-  let radiusX = (kernelWidth - 1) / 2;
-  let radiusY = (kernelHeight - 1) / 2;
+  const radiusX = (kernelWidth - 1) / 2;
+  const radiusY = (kernelHeight - 1) / 2;
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {
       let max = 0;
       for (let kernelRow = 0; kernelRow < kernelHeight; kernelRow++) {
         for (let kernelColumn = 0; kernelColumn < kernelWidth; kernelColumn++) {
           if (kernel[kernelRow][kernelColumn] !== 1) continue;
-          let currentColumn = kernelColumn - radiusX + column;
-          let currentRow = kernelRow - radiusY + row;
+          const currentColumn = kernelColumn - radiusX + column;
+          const currentRow = kernelRow - radiusY + row;
           if (
             currentColumn < 0 ||
             currentRow < 0 ||
@@ -181,16 +181,16 @@ function dilateGreyOnlyOnes(
 function dilateMask(mask: Mask, newMask: Mask, kernel: number[][]): Mask {
   const kernelWidth = kernel[0].length;
   const kernelHeight = kernel.length;
-  let radiusX = (kernelWidth - 1) / 2;
-  let radiusY = (kernelHeight - 1) / 2;
+  const radiusX = (kernelWidth - 1) / 2;
+  const radiusY = (kernelHeight - 1) / 2;
   for (let row = 0; row < mask.height; row++) {
     for (let column = 0; column < mask.width; column++) {
       let max = 0;
       for (let kernelRow = 0; kernelRow < kernelHeight; kernelRow++) {
         for (let kernelColumn = 0; kernelColumn < kernelWidth; kernelColumn++) {
           if (kernel[kernelRow][kernelColumn] !== 1) continue;
-          let currentColumn = kernelColumn - radiusX + column;
-          let currentRow = kernelRow - radiusY + row;
+          const currentColumn = kernelColumn - radiusX + column;
+          const currentRow = kernelRow - radiusY + row;
           if (
             currentRow < 0 ||
             currentColumn < 0 ||

@@ -70,7 +70,7 @@ test.each([
     destination,
     destinationKeypoints,
   );
-  let result = [];
+  const result = [];
 
   for (
     let srcIndex = 0;

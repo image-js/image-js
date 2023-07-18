@@ -12,7 +12,7 @@ export function getMinMax(image: Image): { min: number[]; max: number[] } {
   for (let row = 0; row < image.height; row++) {
     for (let column = 0; column < image.width; column++) {
       for (let channel = 0; channel < image.channels; channel++) {
-        let currentValue = image.getValue(column, row, channel);
+        const currentValue = image.getValue(column, row, channel);
         if (currentValue < min[channel]) {
           min[channel] = currentValue;
         }

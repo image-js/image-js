@@ -13,7 +13,7 @@ import { Roi } from './Roi';
 export function getBorderPoints(
   roi: Roi,
   options: GetBorderPointsOptions = {},
-): Array<Point> {
+): Point[] {
   const mask = roi.getMask();
 
   return mask.getBorderPoints(options);

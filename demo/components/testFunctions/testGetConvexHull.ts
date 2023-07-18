@@ -16,7 +16,7 @@ export function testGetConvexHull(image: Image): Image {
   const roi = rois.sort((a, b) => b.surface - a.surface)[0];
   if (roi) {
     const roiMask = roi.getMask();
-    let convexHull = roiMask.getConvexHull();
+    const convexHull = roiMask.getConvexHull();
 
     let result = image.paintMask(roiMask, {
       origin: roi.origin,
