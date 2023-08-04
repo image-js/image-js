@@ -6,7 +6,7 @@ import { multipleFloodFill } from './multipleFloodFill';
 export interface ClearBorderOptions {
   /**
    * Consider pixels connected by corners?
-   * @default false
+   * @default `false`
    */
   allowCorners?: boolean;
   /**
@@ -16,7 +16,7 @@ export interface ClearBorderOptions {
   /**
    * Clear either white or black area touching the border.
    * In practice it will invert the color.
-   * @default 'white'
+   * @default `'white'`
    */
   color?: 'white' | 'black';
 }

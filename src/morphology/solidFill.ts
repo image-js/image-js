@@ -4,7 +4,7 @@ import { maskToOutputMask } from '../utils/getOutputImage';
 export interface SolidFillOptions {
   /**
    * Consider pixels connected by corners?
-   * @default false
+   * @default `false`
    */
   allowCorners?: boolean;
   /**

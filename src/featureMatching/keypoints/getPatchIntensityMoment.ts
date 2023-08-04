@@ -6,12 +6,12 @@ import { checkBorderDistance } from '../utils/checkBorderDistance';
 export interface GetPatchIntensityMomentOptions {
   /**
    * Center of the circular window.
-   * @default The center of the image.
+   * @default `image.getCoordinates('center')`
    */
   center?: Point;
   /**
    * Radius of the circular window.
-   * @default 3
+   * @default `3`
    */
   radius?: number;
 }

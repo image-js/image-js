@@ -5,7 +5,7 @@ import { validateForComparison } from '../utils/validators/validators';
 export interface SubtractImageOptions {
   /**
    * Return the absolute difference for each pixel.
-   * @default false
+   * @default `false`
    */
   absolute?: boolean;
 }

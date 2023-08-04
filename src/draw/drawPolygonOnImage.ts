@@ -13,12 +13,12 @@ import { deleteDuplicates } from './utils/deleteDuplicates';
 export interface DrawPolygonOnImageOptions extends DrawPolylineOnImageOptions {
   /**
    * Fill color - array of N elements (e.g. R, G, B or G, A), N being the number of channels.
-   * @default 'black'
+   * @default A black pixel.
    */
   fillColor?: number[];
   /**
    * Origin of the rectangle relative to a parent image (top-left corner).
-   * @default {row: 0, column: 0}
+   * @default `{row: 0, column: 0}`
    */
   origin?: Point;
 }

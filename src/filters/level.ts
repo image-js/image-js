@@ -13,27 +13,27 @@ export interface LevelOptions {
   channels?: number[];
   /**
    * Minimal input value.
-   * @default 0
+   * @default `0`
    */
   inputMin?: number | number[];
   /**
    * Maximal input value.
-   * @default image.maxValue
+   * @default `image.maxValue`
    */
   inputMax?: number | number[];
   /**
    * Minimal output value.
-   * @default 0
+   * @default `0`
    */
   outputMin?: number | number[];
   /**
    * Maximal output value.
-   * @default image.maxValue
+   * @default `image.maxValue`
    */
   outputMax?: number | number[];
   /**
    * Specifies the shape of the curve connecting the two points.
-   * @default 1
+   *  @default `1`
    */
   gamma?: number | number[];
   /**

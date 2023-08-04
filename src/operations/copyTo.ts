@@ -6,7 +6,7 @@ import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger';
 export interface CopyToOptions<OutType> {
   /**
    * Origin for the crop relative to the top-left corner of the image.
-   * @default {row: 0, column: 0}
+   * @default `{row: 0, column: 0}`
    */
   origin?: Point;
   /**

@@ -6,12 +6,12 @@ import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger';
 export interface PaintMaskOnMaskOptions {
   /**
    * Top-left corner of the mask relative to a parent image.
-   * @default {row: 0, column: 0}
+   * @default `{row: 0, column: 0}`
    */
   origin?: Point;
   /**
    * Value with which to set the pixel.
-   * @default 1
+   * @default `1`
    */
   value?: BitValue;
   /**

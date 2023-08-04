@@ -18,17 +18,17 @@ import { round } from '../utils/round';
 export interface ConvolutionOptions {
   /**
    * Specify how the borders should be handled.
-   * @default 'reflect101'
+   * @default `'reflect101'`
    */
   borderType?: BorderType;
   /**
    * Value of the border if BorderType is 'constant'.
-   * @default 0
+   * @default `0`
    */
   borderValue?: number;
   /**
    * Whether the kernel should be normalized.
-   * @default false
+   * @default `false`
    */
   normalize?: boolean;
   /**

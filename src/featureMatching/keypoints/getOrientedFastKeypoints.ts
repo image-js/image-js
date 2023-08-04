@@ -15,7 +15,7 @@ export interface GetOrientedFastKeypointsOptions
   extends GetFastKeypointsOptions {
   /**
    * Diameter of the circle used for compotuation of the intensity centroid.
-   * @default 7
+   * @default `7`
    */
   centroidPatchDiameter?: number;
 }

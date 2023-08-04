@@ -26,12 +26,12 @@ export type RoisColorMode = (typeof RoisColorMode)[keyof typeof RoisColorMode];
 export interface ColorRoisOptions {
   /**
    * Define the color mode to use to color the ROIs.
-   * @default 'binary'
+   * @default `'binary'`
    */
   mode?: RoisColorMode;
   /**
    * Specify which ROIs to color.
-   * @default 'bw'
+   * @default `'bw'`
    */
   roiKind?: RoiKind;
 }

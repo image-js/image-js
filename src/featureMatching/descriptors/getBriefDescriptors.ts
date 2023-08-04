@@ -23,12 +23,12 @@ export interface GetBriefDescriptorsOptions {
   pointsDistributionOptions?: Omit<GetGaussianPointsOptions, 'nbPoints'>;
   /**
    * Size of the patch around the keypoint used to compute the descriptor.
-   * @default 31
+   * @default `31`
    */
   patchSize?: number;
   /**
    * Number of bits of the final descriptor. Typically a power or 2: 128, 256, 512.
-   * @default 256
+   * @default `256`
    */
   descriptorLength?: number;
 }

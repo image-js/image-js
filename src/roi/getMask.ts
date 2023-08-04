@@ -5,7 +5,7 @@ import { Roi } from './Roi';
 export interface GetMaskOptions {
   /**
    * Should the ROI holes be filled in the resulting mask?
-   * @default false
+   * @default `false`
    */
   solidFill?: boolean;
 }

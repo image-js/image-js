@@ -7,12 +7,12 @@ import { getHammingDistance } from './getHammingDistance';
 export interface BruteForceMatchOptions {
   /**
    * Whether to sort the matches from best to worst.
-   * @default false
+   * @default `false`
    */
   sort?: boolean;
   /**
    * Number of best matches to return.
-   * @default source.length
+   * @default `source.length`
    */
   nbBestMatches?: number;
 }

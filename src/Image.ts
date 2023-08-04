@@ -139,13 +139,13 @@ export interface ImageOptions {
 
   /**
    * Color model of the created image.
-   * @default 'RGB'.
+   * @default `'RGB'`.
    */
   colorModel?: ImageColorModel;
 
   /**
    * Origin of the image relative to a parent image (top-left corner).
-   * @default {row: 0, column: 0}
+   * @default `{row: 0, column: 0}`
    */
   origin?: Point;
 

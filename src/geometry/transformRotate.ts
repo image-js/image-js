@@ -6,12 +6,12 @@ import { transform, TransformOptions } from './transform';
 export interface TransformRotateOptions extends TransformOptions {
   /**
    * Specify the rotation center point as a predefined string or a Point.
-   * @default The center of the image.
+   * @default `'center'`.
    */
   center?: ImageCoordinates | Point;
   /**
    * Scaling factor for the rotated image.
-   * @default 1
+   *  @default `1`
    */
   scale?: number;
 }

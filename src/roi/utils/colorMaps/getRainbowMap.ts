@@ -14,7 +14,7 @@ export interface GetRainbowMapOptions {
   nbPositive: number;
   /**
    * Specify which ROIs to color.
-   * @default 'bw'
+   * @default `'bw'`
    */
   roiKind?: RoiKind;
 }

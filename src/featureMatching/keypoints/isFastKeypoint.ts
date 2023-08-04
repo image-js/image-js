@@ -5,12 +5,12 @@ export interface IsFastKeypointOptions {
   /**
    * Number of contiguous pixels on the circle that should have an intensity difference with current pixel larger than threshold.
    * This value is recommended to be 3/4 of the circle points.
-   * @default 3/4*circlePoints.length
+   * @default `3/4*circlePoints.length`
    */
   nbContiguousPixels?: number;
   /**
    * Threshold for the intensity difference.
-   * @default 20
+   * @default `20`
    */
   threshold?: number;
 }

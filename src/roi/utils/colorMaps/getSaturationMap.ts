@@ -14,17 +14,17 @@ export interface GetSaturationMapOptions {
   nbPositive: number;
   /**
    * Specify which ROIs to color.
-   * @default 'bw'
+   * @default `'bw'`
    */
   roiKind?: RoiKind;
   /**
    * Hue of white ROIs.
-   * @default 0
+   *  @default `0`
    */
   whiteHue?: number;
   /**
    * Hue of black ROIs.
-   * @default 240
+   * @default `240`
    */
   blackHue?: number;
 }

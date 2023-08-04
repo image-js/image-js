@@ -18,12 +18,12 @@ export type MontageDisposition =
 export interface MontageOptions {
   /**
    * Factor by which to scale the images.
-   * @default 1
+   *  @default `1`
    */
   scale?: number;
   /**
    * How should the images be aligned: vertically or horizontally.
-   * @default 'horizontal'
+   * @default `'horizontal'`
    */
   disposition?: MontageDisposition;
 }

@@ -6,17 +6,17 @@ import { getClampFromTo } from '../../utils/clamp';
 export interface GetGaussianPointsOptions {
   /**
    * Number of points to generate.
-   * @default 1024
+   * @default `1024`
    */
   nbPoints?: number;
   /**
    * Seed of the gaussian distribution for the x coordinates.
-   * @default 0
+   * @default `0`
    */
   xSeed?: number;
   /**
    * Seed of the gaussian distribution for the y coordinates.
-   * @default 1
+   * @default `1`
    */
   ySeed?: number;
   /**

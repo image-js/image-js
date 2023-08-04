@@ -15,24 +15,24 @@ import { isFastKeypoint, IsFastKeypointOptions } from './isFastKeypoint';
 export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
   /**
    * Maximum number of features to return.
-   * @default 500
+   * @default `500`
    */
   maxNbFeatures?: number;
   /**
    * Whether to apply non-max suppression to the keypoints.
    * This removes all keypoints which
    * don't have the highest value within the adjacent keypoints.
-   * @default true
+   * @default `true`
    */
   nonMaxSuppression?: boolean;
   /**
    * Radius of the circle used for the algorithm.
-   * @default 3
+   * @default `3`
    */
   fastRadius?: number;
   /**
    * Algorithm to use to compute corners score.
-   * @default 'FAST'
+   * @default `'FAST'`
    */
   scoreAlgorithm?: 'HARRIS' | 'FAST';
   /**

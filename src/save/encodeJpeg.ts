@@ -5,7 +5,7 @@ import { Image } from '../Image';
 export interface EncodeJpegOptions {
   /**
    * Defines jpeg quality. Integer value between 1 and 100%, 100% being the best quality.
-   * @default 50
+   * @default `50`
    */
   quality?: number;
 }

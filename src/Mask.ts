@@ -66,7 +66,7 @@ export type BitValue = 1 | 0 | boolean;
 export interface MaskOptions {
   /**
    * Origin of the image relative to a parent image.
-   * @default {row: 0, column: 0 }
+   * @default `{row: 0, column: 0 }`
    */
   origin?: Point;
   /**

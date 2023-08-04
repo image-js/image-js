@@ -18,17 +18,17 @@ export interface GetBinaryMapOptions {
   nbPositive: number;
   /**
    * Specify which ROIs to color.
-   * @default 'bw'
+   * @default `'bw'`
    */
   roiKind?: RoiKind;
   /**
    * Hue of white ROIs.
-   * @default 120
+   * @default `120`
    */
   whiteHue?: number;
   /**
    * Hue of black ROIs.
-   * @default 0
+   * @default `0`
    */
   blackHue?: number;
 }

@@ -56,17 +56,17 @@ export type GreyAlgorithmCallback = (
 export interface GreyOptions {
   /**
    * Specify the grey algorithm to use.
-   * @default 'luma709'
+   * @default `'luma709'`
    */
   algorithm?: GreyAlgorithm | GreyAlgorithmCallback;
   /**
    * Specify wether to keep an alpha channel in the new image or not.
-   * @default false
+   * @default `false`
    */
   keepAlpha?: boolean;
   /**
    * Specify wether to merge the alpha channel with the gray pixel or not.
-   * @default true
+   * @default `true`
    */
   mergeAlpha?: boolean;
   /**

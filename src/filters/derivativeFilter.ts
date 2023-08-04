@@ -24,22 +24,22 @@ export type DerivativeFilter =
 export interface DerivativeFilterOptions {
   /**
    * Algorithm to use for the derivative filter.
-   * @default SOBEL
+   * @default `SOBEL`
    */
   filter?: DerivativeFilter;
   /**
    * Specify how the borders should be handled.
-   * @default 'replicate'
+   * @default `'replicate'`
    */
   borderType?: BorderType;
   /**
    * Value of the border if BorderType is 'constant'.
-   * @default 0
+   * @default `0`
    */
   borderValue?: number;
   /**
    * Specify the bit depth of the resulting image.
-   * @default image.bitDepth
+   * @default `image.bitDepth`
    */
   bitDepth?: BitDepth;
 }

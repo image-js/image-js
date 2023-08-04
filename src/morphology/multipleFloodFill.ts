@@ -6,22 +6,22 @@ import { assert } from '../utils/validators/assert';
 export interface MultipleFloodFillOptions {
   /**
    * Points from which to start the flood fill.
-   * @default [0]
+   * @default `[0]`
    */
   startPixels?: Iterable<number>;
   /**
    * Initial value of the start pixel.
-   * @default 0
+   * @default `0`
    */
   startPixelValue?: BitValue;
   /**
    *  What value should the relevant pixels be set to?
-   * @default 1
+   * @default `1`
    */
   newPixelValue?: BitValue;
   /**
    * Consider pixels connected by corners?
-   * @default false
+   * @default `false`
    */
   allowCorners?: boolean;
   /**

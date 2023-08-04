@@ -4,7 +4,7 @@ import { Point } from '../../geometry';
 export interface GetIntensityMomentOptions {
   /**
    * Origin for the moment computation.
-   * @default The center of the image.
+   * @default `image.getCoordinates('center')`.
    */
   origin?: Point;
 }

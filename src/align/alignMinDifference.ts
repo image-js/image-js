@@ -4,7 +4,7 @@ import { subtract } from '../compare/subtract';
 export interface AlignMinDifferenceOptions {
   /**
    * Initial step size by which the images will be translated.
-   * @default Math.max(Math.round(Math.min(source.width, source.height, Math.max(xSpan, ySpan)) / 10,),1,)
+   * @default `Math.max(Math.round(Math.min(source.width, source.height, Math.max(xSpan, ySpan)) / 10,),1,)`
    */
   startStep?: number;
 }

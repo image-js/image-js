@@ -7,12 +7,12 @@ import { validateForComparison } from '../utils/validators/validators';
 export interface SsimOptions {
   /**
    * Window size for SSIM map.
-   * @default Math.min(11, image.width, image.height)
+   * @default `Math.min(11, image.width, image.height)`
    */
   windowSize?: number;
   /**
    * Algorithm to use to compute the SSIM.
-   * @default 'original'
+   * @default `'original'`
    */
   algorithm?: 'fast' | 'original' | 'bezkrovny' | 'weber';
 }

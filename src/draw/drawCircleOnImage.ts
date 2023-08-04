@@ -14,7 +14,7 @@ import { roundPoint } from './utils/roundPoint';
 export interface DrawCircleOnImageOptions {
   /**
    * Circle border color array of N elements (e.g. R, G, B or G, A), N being the number of channels.
-   * @default black
+   * @default A black pixel.
    */
   color?: number[];
   /**

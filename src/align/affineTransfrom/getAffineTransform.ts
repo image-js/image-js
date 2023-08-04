@@ -21,21 +21,21 @@ import { getSourceWithoutMargins } from './utils/getSourceWithoutMargins';
 
 export interface GetAffineTransformOptions {
   /**
-   * @default 31
+   * @default `31`
    */
   centroidPatchDiameter?: number;
   /**
-   * @default 10
+   * @default `10`
    */
   bestKeypointRadius?: number;
   /**
    * Should only the crossckeck matches be considered.
-   * @default true
+   * @default `true`
    */
   crosscheck?: boolean;
   /**
    * Should the contrast of the images be enhanced before feature matching.
-   * @default true
+   * @default `true`
    */
   enhanceContrast?: boolean;
   /**
@@ -43,7 +43,7 @@ export interface GetAffineTransformOptions {
    * Roughly indicates the position of the destination image in the source image. Is used
    * to filter matches by distance as well as to define a subarea of the source image to
    * use for contrast enhancement.
-   * @default { column: 0, row: 0 }
+   * @default `{ column: 0, row: 0 }`
    */
   destinationOrigin?: Point;
   /**
@@ -52,7 +52,7 @@ export interface GetAffineTransformOptions {
   maxRansacNbIterations?: number;
   /**
    * Save images with matches for debugging.
-   * @default false
+   * @default `false`
    */
   debug?: boolean;
   /**

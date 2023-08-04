@@ -4,7 +4,7 @@ import { Point } from '../..';
 export interface FilterEuclideanDistanceMatchesOptions {
   /**
    * The origin of the destination image relative to the top-left corner of the source image.
-   * @default { column: 0, row: 0 }
+   * @default `{ column: 0, row: 0 }`
    */
   origin?: Point;
 }

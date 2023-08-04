@@ -5,22 +5,22 @@ import checkProcessable from '../utils/validators/checkProcessable';
 interface ExtremaOptions {
   /**
    * Chooses what kind of extremum to compute.
-   * @default 'maximum'
+   * @default `'maximum'`
    */
   kind?: 'minimum' | 'maximum';
   /**
    * Uses mask to check if a point belongs to a ROI or not
-   * @default undefined
+   * @default `undefined`
    */
   mask?: Mask;
   /**
    * Chooses what kind of coverage algorithm to use to compute the extremum.
-   * @default 'star'
+   * @default `'star'`
    */
   algorithm?: 'cross' | 'square' | 'star';
   /**
    * Maximum number of points that can be equal to the extremum
-   * @default 2
+   * @default `2`
    */
   maxEquals?: number;
 }

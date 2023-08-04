@@ -3,12 +3,12 @@ import { Brief } from '../..';
 export interface SliceBriefOptions {
   /**
    * Start index.
-   * @default 0
+   * @default `0`
    */
   start?: number;
   /**
    * End index.
-   * @default brief.keypoints.length
+   * @default `brief.keypoints.length`
    */
   end?: number;
 }

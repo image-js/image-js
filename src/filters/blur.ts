@@ -14,12 +14,12 @@ export interface BlurOptions {
   height: number;
   /**
    * Explicit how to handle the borders.
-   * @default 'reflect101'
+   * @default `'reflect101'`
    */
   borderType?: BorderType;
   /**
    * Value of the border if BorderType is 'constant'.
-   * @default 0
+   * @default `0`
    */
   borderValue?: number;
   /**

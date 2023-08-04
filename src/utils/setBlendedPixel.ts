@@ -7,7 +7,7 @@ import { assert } from './validators/assert';
 export interface SetBlendedPixelOptions {
   /**
    * Color with which to blend the image pixel.
-   * @default Opaque black.
+   * @default `'Opaque black'`.
    */
   color?: number[];
 }

@@ -19,18 +19,18 @@ export interface TransformOptions {
   height?: number;
   /**
    * Method to use to interpolate the new pixels.
-   * @default 'bilinear'
+   * @default `'bilinear'`
    */
 
   interpolationType?: InterpolationType;
   /**
    * Specify how the borders should be handled.
-   * @default 'constant'
+   * @default `'constant'`
    */
   borderType?: BorderType;
   /**
    * Value of the border if BorderType is 'constant'.
-   * @default 0
+   *  @default `0`
    */
   borderValue?: number;
   /**

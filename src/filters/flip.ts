@@ -7,7 +7,7 @@ import flipY from './flipY';
 export interface FlipOptions {
   /**
    * Image to which the resulting image has to be put.
-   * @default 'horizontal'
+   * @default `'horizontal'`
    */
   axis?: 'horizontal' | 'vertical' | 'both';
   /**

@@ -6,17 +6,17 @@ import checkProcessable from '../utils/validators/checkProcessable';
 export interface CropOptions {
   /**
    * Origin of the crop relative to a parent image (top-left corner).
-   * @default {row: 0, column: 0}
+   * @default `{row: 0, column: 0}`
    */
   origin?: Point;
   /**
    * Specify the width of the cropped image.
-   * @default image.width
+   * @default `image.width`
    */
   width?: number;
   /**
    * Specify the width of the cropped image.
-   * @default image.height
+   * @default `image.height`
    */
   height?: number;
 }

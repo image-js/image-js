@@ -3,7 +3,7 @@ import { Point } from '../../utils/geometry/points';
 interface McchOptions {
   /**
    * Whether the input points are already sorted or not (sort by column and then row).
-   * @default false
+   * @default `false`
    */
   sorted?: boolean;
 }

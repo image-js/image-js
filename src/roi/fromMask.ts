@@ -7,7 +7,7 @@ import { maxNumberRois, maxRoiId } from './utils/constants';
 export interface FromMaskOptions {
   /**
    * Consider pixels connected by corners as same ROI?
-   * @default false
+   * @default `false`
    */
   allowCorners?: boolean;
 }

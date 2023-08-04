@@ -5,31 +5,31 @@ import { assert } from '../utils/validators/assert';
 export interface WriteCanvasOptions {
   /**
    * If set to `true`, the canvas element will be resized to fit the image.
-   * @default true
+   * @default `true`
    */
   resizeCanvas?: boolean;
   /**
-   * @default 0
+   * @default `0`
    */
   dx?: number;
   /**
-   * @default 0
+   *  @default `0`
    */
   dy?: number;
   /**
-   * @default 0
+   * @default `0`
    */
   dirtyX?: number;
   /**
-   * @default 0
+   * @default `0`
    */
   dirtyY?: number;
   /**
-   * @default image.width
+   * @default `image.width`
    */
   dirtyWidth?: number;
   /**
-   * @default image.height
+   * @default `image.height`
    */
   dirtyHeight?: number;
 }

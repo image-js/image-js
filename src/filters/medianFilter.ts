@@ -7,7 +7,7 @@ import checkProcessable from '../utils/validators/checkProcessable';
 export interface MedianFilterOptions {
   /**
    * Type of border algorithm to interpolate from.
-   * @default 'reflect101'
+   * @default `'reflect101'`
    */
   borderType: BorderType;
   /**
@@ -16,7 +16,7 @@ export interface MedianFilterOptions {
   borderValue?: number;
   /**
    * The radius of the cell to extract median value from. Must be odd.
-   * @default 1
+   *  @default `1`
    */
   cellSize: number;
 }

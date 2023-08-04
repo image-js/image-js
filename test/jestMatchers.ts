@@ -21,7 +21,7 @@ export interface JestMatcherOptions {
   /**
    * Acceptable difference between the received image and the expected for each channel.
    *
-   * @default 0
+   * @default `0`
    */
   error?: number;
 }

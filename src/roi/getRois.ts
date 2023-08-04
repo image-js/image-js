@@ -13,17 +13,17 @@ export type RoiKind = (typeof RoiKind)[keyof typeof RoiKind];
 export interface GetRoisOptions {
   /**
    * Minimal surface of the ROIs to keep.
-   * @default 0
+   * @default `0`
    */
   minSurface?: number;
   /**
    * Maximal surface of the ROIs to keep.
-   * @default Number.MAX_SAFE_INTEGER
+   * @default `Number.MAX_SAFE_INTEGER`
    */
   maxSurface?: number;
   /**
    * Kind of ROIs to keep.
-   * @default 'white'
+   * @default `'white'`
    */
   kind?: RoiKind;
 }

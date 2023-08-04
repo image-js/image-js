@@ -4,12 +4,12 @@ import { Point } from '../utils/geometry/points';
 export interface GetBorderPointsOptions {
   /**
    * Should the inner borders be returned too?
-   * @default false
+   * @default `false`
    */
   innerBorders?: boolean;
   /**
    * Consider pixels connected by corners?
-   * @default false
+   * @default `false`
    */
   allowCorners?: boolean;
 }

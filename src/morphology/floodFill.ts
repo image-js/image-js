@@ -6,12 +6,12 @@ import { multipleFloodFill } from './multipleFloodFill';
 export interface FloodFillOptions {
   /**
    * Origin for the algorithm relative to the top-left corner of the image.
-   * @default {row: 0, column: 0}
+   * @default `{row: 0, column: 0}`
    */
   origin?: Point;
   /**
    * Consider pixels connected by corners?
-   * @default false
+   * @default `false`
    */
   allowCorners?: boolean;
   /**

@@ -11,17 +11,17 @@ import { scaleKeypoints } from './scaleKeypoints';
 export interface DrawMatchesOptions {
   /**
    * Circles diameter in pixels.
-   * @default 10
+   * @default `10`
    */
   circleDiameter?: number;
   /**
    * Annotations color.
-   * @default [255,0,0]
+   * @default `[255,0,0]`
    */
   color?: number[];
   /**
    * Whether the matches should be colored depending on the distance.
-   * @default false
+   * @default `false`
    */
   showDistance?: boolean;
   /**
@@ -30,7 +30,7 @@ export interface DrawMatchesOptions {
   showDistanceOptions?: GetColorsOptions;
   /**
    * Maximal number of keypoints with best score to draw.
-   * @default matches.length
+   * @default `matches.length`
    */
   maxNbMatches?: number;
 }

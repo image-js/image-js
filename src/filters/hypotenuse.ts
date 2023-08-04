@@ -5,7 +5,7 @@ import { validateChannels } from '../utils/validators/validators';
 export interface HypotenuseOptions {
   /**
    * Bit depth of the resulting image.
-   * @default image.bitDepth
+   * @default `image.bitDepth`
    */
   bitDepth?: BitDepth;
   /**

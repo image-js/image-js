@@ -5,7 +5,7 @@ import { sum } from '../../utils/geometry/points';
 export interface CompareIntensityOptions {
   /**
    * Origin of the points coordinates relative to the top-left corner.
-   * @default Center of the image.
+   * @default `image.getCoordinates('center')`
    */
   origin?: Point;
 }

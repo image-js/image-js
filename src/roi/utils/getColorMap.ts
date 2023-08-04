@@ -16,13 +16,13 @@ export interface GetColorMapOptions {
   nbPositive: number;
   /**
    * Specify the mode: what colors to use in the color map.
-   * @default 'binary'
+   * @default `'binary'`
    */
   mode?: RoisColorMode;
 
   /**
    * Specify which ROIs to color.
-   * @default 'bw'
+   * @default `'bw'`
    */
   roiKind?: RoiKind;
 }

@@ -8,12 +8,12 @@ export interface GetHarrisScoreOptions {
   /**
    * Size of the window to compute the Harris score.
    * Should be an odd number so that the window can be centered on the corner.
-   * @default 7
+   * @default `7`
    */
   windowSize?: number;
   /**
    * Constant for the score computation. Should be between 0.04 and 0.06 (empirical values).
-   * @default 0.04
+   * @default `0.04`
    */
   harrisConstant?: number;
 }
