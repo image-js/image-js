@@ -70,7 +70,7 @@ export function gaussianBlur(
     return separableConvolution(image, kernel, kernel, {
       borderType,
     });
-  } else {
+  } else if ('sigmaX' in options && 'sigmaY' in options) {
     const {
       sigmaX,
       sigmaY,
@@ -87,6 +87,10 @@ export function gaussianBlur(
     return separableConvolution(image, kernelX, kernelY, {
       borderType,
     });
+  } else {
+    throw new TypeError(
+      'you must either define sigma or sigmaX and sigmaY in the options argument',
+    );
   }
 }
 
