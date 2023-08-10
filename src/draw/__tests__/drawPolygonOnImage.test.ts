@@ -110,6 +110,35 @@ test('grey image', () => {
   expect(result).not.toBe(image);
 });
 
+test('should handle points with floating values', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+  ]);
+  const points = [
+    { row: 0, column: 0 },
+    { row: 3.1, column: 3.1 },
+    { row: 3.1, column: 0 },
+  ];
+  const result = image.drawPolygon(points, {
+    origin: { column: 1.1, row: 1.1 },
+    strokeColor: [1],
+    fillColor: [2],
+  });
+
+  expect(result).toMatchImageData([
+    [0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0],
+    [0, 1, 1, 0, 0],
+    [0, 1, 2, 1, 0],
+    [0, 1, 1, 1, 1],
+  ]);
+  expect(result).not.toBe(image);
+});
+
 test('grey image, no fill', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0],

@@ -154,6 +154,32 @@ test('rectangle filled', () => {
   expect(result).not.toBe(mask);
 });
 
+test('should handle points with floating values', () => {
+  const mask = testUtils.createMask([
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 1],
+  ]);
+  const points = [
+    { row: 0.1, column: 0.1 },
+    { row: 3.1, column: 0.1 },
+    { row: 3.1, column: 2.1 },
+    { row: 0.1, column: 2.1 },
+  ];
+  const result = mask.drawPolygon(points, {
+    filled: true,
+  });
+
+  expect(result).toMatchMaskData([
+    [1, 1, 1, 0],
+    [1, 1, 1, 0],
+    [1, 1, 1, 0],
+    [1, 1, 1, 1],
+  ]);
+  expect(result).not.toBe(mask);
+});
+
 test('3x3 mask, tilted square, filled', () => {
   const mask = new Mask(3, 3);
   const points = [

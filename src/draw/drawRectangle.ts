@@ -56,14 +56,16 @@ export function drawRectangle(
   options: DrawRectangleOptions<Mask | Image> = {},
 ): Image | Mask {
   const {
+    width: rectangleWidth = image.width,
+    height: rectangleHeight = image.height,
     origin = { column: 0, row: 0 },
-    width = image.width,
-    height = image.height,
     strokeColor = getDefaultColor(image),
     fillColor = 'none',
   } = options;
-  const { column, row } = origin;
-
+  const width = Math.round(rectangleWidth);
+  const height = Math.round(rectangleHeight);
+  const column = Math.round(origin.column);
+  const row = Math.round(origin.row);
   let newImage: Image | Mask;
   if (image instanceof Image) {
     checkProcessable(image, {

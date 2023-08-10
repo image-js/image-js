@@ -18,10 +18,10 @@ test('square', () => {
     shape: 'square',
   });
   expect(result).toMatchImageData([
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 1, 0, 0],
     [0, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 1, 0],
   ]);
   expect(result).not.toBe(image);
 });
@@ -64,10 +64,10 @@ test('out parameter set to self', () => {
     out: image,
   });
   expect(result).toMatchImageData([
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 1, 0, 0],
     [0, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 1, 0],
   ]);
   expect(result).toBe(image);
 });
@@ -90,10 +90,10 @@ test('out to other image', () => {
     out,
   });
   expect(result).toMatchImageData([
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 1, 0, 0],
     [0, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 1, 0],
   ]);
   expect(result).toBe(out);
   expect(result).not.toBe(image);

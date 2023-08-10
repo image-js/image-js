@@ -62,8 +62,8 @@ export function drawPolygonOnImage(
       for (let column = 0; column < newImage.width; column++) {
         if (robustPointInPolygon(arrayPoints, [column, row]) === -1) {
           newImage.setPixel(
-            origin.column + column,
-            origin.row + row,
+            Math.round(origin.column) + column,
+            Math.round(origin.row) + row,
             fillColor,
           );
         }

@@ -73,8 +73,8 @@ test('square', () => {
   });
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
-    [0, 1, 0, 0],
     [0, 0, 0, 0],
+    [0, 0, 1, 0],
     [0, 0, 0, 0],
   ]);
   expect(result).not.toBe(image);
@@ -94,10 +94,10 @@ test('big square', () => {
     shape: 'square',
   });
   expect(result).toMatchImageData([
-    [1, 1, 1, 0],
-    [1, 0, 1, 0],
-    [1, 1, 1, 0],
     [0, 0, 0, 0],
+    [0, 1, 1, 1],
+    [0, 1, 0, 1],
+    [0, 1, 1, 1],
   ]);
   expect(result).not.toBe(image);
 });
@@ -117,10 +117,10 @@ test('filled big square', () => {
     shape: 'square',
   });
   expect(result).toMatchImageData([
-    [1, 1, 1, 0],
-    [1, 1, 1, 0],
-    [1, 1, 1, 0],
     [0, 0, 0, 0],
+    [0, 1, 1, 1],
+    [0, 1, 1, 1],
+    [0, 1, 1, 1],
   ]);
   expect(result).not.toBe(image);
 });
@@ -184,8 +184,8 @@ test('out parameter set to self', () => {
   });
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
-    [0, 1, 0, 0],
     [0, 0, 0, 0],
+    [0, 0, 1, 0],
     [0, 0, 0, 0],
   ]);
   expect(result).toBe(image);
@@ -206,10 +206,85 @@ test('out to other image', () => {
   });
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
-    [0, 1, 0, 0],
     [0, 0, 0, 0],
+    [0, 0, 1, 0],
     [0, 0, 0, 0],
   ]);
   expect(result).toBe(out);
   expect(result).not.toBe(image);
+});
+
+test('should handle points with floating values', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+  ]);
+  const point = { row: 3.1, column: 3.1 };
+
+  const square = image.drawMarker(point, {
+    color: [1],
+    size: 3.1,
+    filled: true,
+    shape: 'square',
+  });
+  expect(square).toMatchImageData([
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0],
+    [0, 0, 1, 1, 1, 0],
+    [0, 0, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0],
+  ]);
+
+  const triangle = image.drawMarker(point, {
+    color: [1],
+    size: 2.1,
+    filled: true,
+    shape: 'triangle',
+  });
+
+  expect(triangle).toMatchImageData([
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0],
+    [0, 0, 1, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+  ]);
+
+  const circle = image.drawMarker(point, {
+    color: [1],
+    size: 2.1,
+    filled: true,
+    shape: 'circle',
+  });
+
+  expect(circle).toMatchImageData([
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1],
+    [0, 1, 1, 1, 1, 1],
+    [0, 1, 1, 1, 1, 1],
+    [0, 0, 1, 1, 1, 0],
+  ]);
+
+  const cross = image.drawMarker(point, {
+    color: [1],
+    size: 2.1,
+    filled: true,
+    shape: 'cross',
+  });
+
+  expect(cross).toMatchImageData([
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 0, 0],
+    [0, 1, 1, 1, 1, 1],
+    [0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 1, 0, 0],
+  ]);
 });

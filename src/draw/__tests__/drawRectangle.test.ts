@@ -92,6 +92,34 @@ test('draw rectangle in grey image', () => {
   expect(result).not.toBe(image);
 });
 
+test('should handle points with floating values', () => {
+  const image = testUtils.createGreyImage([
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+  ]);
+  const { height, width, origin } = image;
+  const { column, row } = origin;
+  const result = image.drawRectangle({
+    origin: { column: column + 0.1, row: row + 0.1 },
+    width: width + 0.1,
+    height: height + 0.1,
+    strokeColor: [2],
+  });
+  expect(result).toMatchImageData([
+    [2, 2, 2, 2, 2, 2],
+    [2, 1, 1, 1, 1, 2],
+    [2, 1, 1, 1, 1, 2],
+    [2, 1, 1, 1, 1, 2],
+    [2, 1, 1, 1, 1, 2],
+    [2, 2, 2, 2, 2, 2],
+  ]);
+  expect(result).not.toBe(image);
+});
+
 test('draw filled rectangle in grey image', () => {
   const image = testUtils.createGreyImage([
     [1, 1, 1, 1, 1, 1],

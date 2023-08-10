@@ -122,6 +122,29 @@ test('draw grey circle', () => {
   expect(expected).not.toBe(image);
 });
 
+test('should handle points with floating values', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+  ]);
+  const center = { row: 2.1, column: 3.1 };
+  const radius = 2.1;
+  const expected = image.drawCircle(center, radius, {
+    color: [1],
+  });
+  expect(expected).toMatchImageData([
+    [0, 0, 1, 1, 1, 0],
+    [0, 1, 0, 0, 0, 1],
+    [0, 1, 0, 0, 0, 1],
+    [0, 1, 0, 0, 0, 1],
+    [0, 0, 1, 1, 1, 0],
+  ]);
+  expect(expected).not.toBe(image);
+});
+
 test('negative radius error', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0],

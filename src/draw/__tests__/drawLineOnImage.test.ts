@@ -107,6 +107,25 @@ test('draw nearly vertical line', () => {
   expect(result).not.toBe(image);
 });
 
+test('should handle points with floating values', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ]);
+  const from = { row: 1.1, column: 0.1 };
+  const to = { row: 2.1, column: 3.1 };
+  const result = image.drawLine(from, to, { strokeColor: [1] });
+  expect(result).toMatchImageData([
+    [0, 0, 0, 0],
+    [1, 1, 0, 0],
+    [0, 0, 1, 1],
+    [0, 0, 0, 0],
+  ]);
+  expect(result).not.toBe(image);
+});
+
 test('same from and to', () => {
   const image = testUtils.createGreyImage([
     [1, 0, 0, 0],

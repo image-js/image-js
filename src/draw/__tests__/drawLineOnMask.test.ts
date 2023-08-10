@@ -162,6 +162,25 @@ test('draw vertical line', () => {
   expect(expected).not.toBe(mask);
 });
 
+test('should handle points with floating values', () => {
+  const mask = testUtils.createMask([
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ]);
+  const from = { row: 1.1, column: 0.1 };
+  const to = { row: 2.1, column: 3.1 };
+  const expected = mask.drawLine(from, to);
+  expect(expected).toMatchMaskData([
+    [0, 0, 0, 0],
+    [1, 1, 0, 0],
+    [0, 0, 1, 1],
+    [0, 0, 0, 0],
+  ]);
+  expect(expected).not.toBe(mask);
+});
+
 test('same from and to', () => {
   const mask = testUtils.createMask([
     [1, 0, 0, 0],

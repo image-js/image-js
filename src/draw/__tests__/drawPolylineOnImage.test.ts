@@ -152,3 +152,27 @@ test('different origin', () => {
     [0, 0, 0, 0],
   ]);
 });
+
+test('should handle points with floating values', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ]);
+  const points = [
+    { row: 0.1, column: 0.1 },
+    { row: 1.1, column: 0.1 },
+    { row: 1.1, column: 1.1 },
+  ];
+  const result = image.drawPolyline(points, {
+    origin: { column: 2.1, row: 0.1 },
+    strokeColor: [1],
+  });
+  expect(result).toMatchImageData([
+    [0, 0, 1, 0],
+    [0, 0, 1, 1],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ]);
+});
