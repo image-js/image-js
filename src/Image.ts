@@ -1,7 +1,7 @@
 import { RgbColor } from 'colord';
 
 import { Mask } from './Mask';
-import { subtract, SubtractImageOptions } from './compare';
+import { subtract, add, SubtractImageOptions } from './compare';
 import { median } from './compute/median';
 import { variance } from './compute/variance';
 import { correctColor } from './correctColor';
@@ -634,6 +634,10 @@ export class Image {
    */
   public subtract(other: Image, options: SubtractImageOptions = {}): Image {
     return subtract(this, other, options);
+  }
+
+  public add(other: Image): Image {
+    return add(this, other);
   }
 
   // COMPUTE

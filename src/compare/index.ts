@@ -3,3 +3,4 @@ export * from './computePsnr';
 export * from './computeRmse';
 export * from './computeSsim';
 export * from './subtract';
+export * from './add';
