@@ -6,3 +6,4 @@ export * from './getMask';
 export * from './getRois';
 export * from './Roi';
 export * from './RoiMapManager';
+export * from './waterShed';

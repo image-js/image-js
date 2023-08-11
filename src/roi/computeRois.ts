@@ -37,7 +37,9 @@ export function computeRois(roiMapManager: RoiMapManager): void {
   for (let row = 0; row < map.height; row++) {
     for (let column = 0; column < map.width; column++) {
       const currentIndex = roiMapManager.getMapValue(column, row);
-
+      if (currentIndex === 0) {
+        continue;
+      }
       let currentRoi;
       if (currentIndex < 0) {
         currentRoi = blacks[-currentIndex - 1];

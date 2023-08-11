@@ -1,0 +1,197 @@
+import { computeThreshold } from '../..';
+import { createGreyImage, getInt16Array } from '../../../test/testUtils';
+import { waterShed } from '../waterShed';
+
+describe('Test WaterShed Roi generation', () => {
+  it('test 1,basic test without parameters/options', () => {
+    const image = createGreyImage([
+      [3, 3, 3, 3, 3],
+      [3, 2, 2, 2, 3],
+      [3, 2, 1, 2, 3],
+      [3, 2, 2, 2, 3],
+      [3, 3, 3, 3, 3],
+    ]);
+    const roiMapManager = waterShed(image, {});
+    const resultArray = testUtils.getInt16Array(`
+      -1, -1, -1, -1, -1,
+      -1, -1, -1, -1, -1,
+      -1, -1, -1, -1, -1,
+      -1, -1, -1, -1, -1,
+      -1, -1, -1, -1, -1,`);
+    expect(roiMapManager).toEqual({
+      map: {
+        data: resultArray,
+        nbPositive: 0,
+        nbNegative: 1,
+        width: 5,
+        height: 5,
+      },
+      whiteRois: [],
+      blackRois: [],
+    });
+  });
+
+  it('test 2, waterShed for a grey image', () => {
+    const image = createGreyImage([
+      [3, 3, 3, 3, 3, 3, 3, 3, 4, 4],
+      [3, 3, 2, 2, 2, 3, 3, 3, 4, 4],
+      [4, 3, 2, 1, 2, 2, 3, 3, 4, 4],
+      [4, 3, 2, 2, 2, 2, 3, 3, 3, 4],
+      [4, 4, 4, 3, 2, 3, 2, 3, 3, 4],
+      [4, 4, 4, 3, 3, 3, 3, 1, 3, 3],
+      [4, 3, 3, 3, 3, 3, 2, 2, 2, 3],
+      [4, 4, 3, 3, 3, 3, 2, 2, 2, 2],
+      [4, 4, 4, 4, 3, 2, 2, 2, 2, 3],
+      [4, 4, 4, 4, 3, 3, 3, 3, 2, 3],
+    ]);
+
+    const roiMapManager = waterShed(image, { threshold: 2 / 255 });
+
+    const resultArray = getInt16Array(`
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0,-2,-2,-2, 0, 0, 0, 0, 0,
+      0, 0,-2,-2,-2,-2, 0, 0, 0, 0,
+      0, 0,-2,-2,-2,-2, 0, 0, 0, 0,
+      0, 0, 0, 0,-2, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0,-1, 0, 0,
+      0, 0, 0, 0, 0, 0,-1,-1,-1, 0,
+      0, 0, 0, 0, 0, 0,-1,-1,-1,-1,
+      0, 0, 0, 0, 0,-1,-1,-1,-1, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,-1, 0,`);
+    expect(roiMapManager).toEqual({
+      map: {
+        data: resultArray,
+        nbPositive: 0,
+        nbNegative: 2,
+        width: 10,
+        height: 10,
+      },
+      whiteRois: [],
+      blackRois: [],
+    });
+    const rois = roiMapManager.getRois({ kind: 'bw' });
+    expect(rois[0].origin).toEqual({ column: 5, row: 5 });
+    expect(rois[1].origin).toEqual({ column: 2, row: 1 });
+  });
+
+  it('test 3, with threshold option', () => {
+    const image = createGreyImage([
+      [1, 1, 1, 1, 1],
+      [1, 2, 2, 2, 1],
+      [1, 2, 3, 2, 1],
+      [1, 2, 2, 2, 1],
+      [1, 1, 1, 1, 1],
+    ]);
+    const invertedImage = image.invert();
+    const roiMapManager = waterShed(invertedImage, {
+      threshold: 253 / image.maxValue,
+    });
+    const resultArray = getInt16Array(`
+      0, 0, 0, 0, 0,
+      0,-1,-1,-1, 0, 
+      0,-1,-1,-1, 0, 
+      0,-1,-1,-1, 0,
+      0, 0, 0, 0, 0,
+    `);
+    expect(roiMapManager).toEqual({
+      map: {
+        data: resultArray,
+        nbPositive: 0,
+        nbNegative: 1,
+        width: 5,
+        height: 5,
+      },
+      whiteRois: [],
+      blackRois: [],
+    });
+    const roi1 = roiMapManager.getRoiById(-1);
+
+    expect(roi1.surface).toEqual(9);
+    expect(roi1.width).toEqual(3);
+  });
+  it('test 4, waterShed through threshold value', () => {
+    const image = createGreyImage([
+      [3, 3, 3, 3, 3, 3, 3, 3, 4, 4],
+      [3, 3, 2, 2, 2, 3, 3, 3, 4, 4],
+      [4, 3, 2, 1, 2, 2, 3, 3, 4, 4],
+      [4, 3, 2, 2, 2, 2, 3, 3, 3, 4],
+      [4, 4, 4, 3, 2, 3, 3, 3, 3, 4],
+      [4, 4, 4, 3, 3, 3, 3, 3, 3, 3],
+      [4, 3, 3, 3, 3, 3, 2, 2, 2, 3],
+      [4, 4, 3, 3, 3, 3, 2, 1, 2, 2],
+      [4, 4, 4, 4, 3, 2, 2, 2, 2, 3],
+      [4, 4, 4, 4, 3, 3, 3, 3, 2, 3],
+    ]);
+    const threshold = computeThreshold(image, 'otsu');
+
+    const roiMapManager = waterShed(image, {
+      threshold: threshold / image.maxValue,
+    });
+    const resultArray = getInt16Array(`
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0,-2,-2,-2, 0, 0, 0, 0, 0, 
+      0, 0,-2,-2,-2,-2, 0, 0, 0, 0,
+      0, 0,-2,-2,-2,-2, 0, 0, 0, 0,
+      0, 0, 0, 0,-2, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+      0, 0, 0, 0, 0, 0,-1,-1,-1, 0,
+      0, 0, 0, 0, 0, 0,-1,-1,-1,-1,
+      0, 0, 0, 0, 0,-1,-1,-1,-1, 0,
+      0, 0, 0, 0, 0, 0, 0, 0,-1, 0,
+    `);
+    expect(roiMapManager).toEqual({
+      map: {
+        data: resultArray,
+        nbPositive: 0,
+        nbNegative: 2,
+        width: 10,
+        height: 10,
+      },
+      whiteRois: [],
+      blackRois: [],
+    });
+  });
+  it('test 5, waterShed through threshold mask and with inverted image', () => {
+    const image = createGreyImage([
+      [3, 3, 3, 3, 3, 3, 3, 3, 4, 4],
+      [3, 3, 2, 2, 2, 3, 3, 8, 4, 4],
+      [4, 3, 2, 1, 2, 2, 3, 3, 4, 4],
+      [4, 3, 2, 2, 6, 2, 3, 3, 3, 4],
+      [4, 4, 4, 3, 2, 3, 3, 3, 3, 4],
+      [4, 4, 4, 3, 3, 3, 3, 3, 3, 3],
+      [4, 3, 3, 3, 3, 6, 2, 2, 2, 3],
+      [4, 4, 3, 3, 3, 3, 2, 1, 2, 2],
+      [4, 4, 4, 4, 3, 2, 2, 2, 2, 3],
+      [4, 4, 4, 4, 3, 3, 3, 3, 9, 3],
+    ]);
+
+    const mask = image.threshold({ algorithm: 'otsu' });
+    const roiMapManager = waterShed(image, { mask });
+    const resultArray = getInt16Array(`
+      -2, -2, -2, -2, -2, -2, -2, -2, -2, -1,
+      -2, -2, -2, -2, -2, -2, -2,  0, -1, -1,
+      -2, -2, -2, -2, -2, -2, -2, -2, -1, -1, 
+      -2, -2, -2, -2,  0, -2, -2, -1, -1, -1,
+      -2, -2, -2, -2, -1, -2, -1, -1, -1, -1,
+      -2, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+      -1, -1, -1, -1, -1,  0, -1, -1, -1, -1,
+      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+      -1, -1, -1, -1, -1, -1, -1, -1,  0, -1,
+    `);
+    expect(roiMapManager).toEqual({
+      map: {
+        data: resultArray,
+        nbPositive: 0,
+        nbNegative: 2,
+        width: 10,
+        height: 10,
+      },
+      whiteRois: [],
+      blackRois: [],
+    });
+    const rois = roiMapManager.getRois({ kind: 'bw' });
+    expect(rois[0].origin).toEqual({ column: 0, row: 0 });
+    expect(rois[0].surface).toEqual(60);
+  });
+});

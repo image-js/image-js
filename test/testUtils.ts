@@ -11,6 +11,8 @@ import { createMask } from './createMask';
 
 
 
+
+
 /**
  * Return the path to a given image.
  * @param name - Test image name.
@@ -127,6 +129,19 @@ export function cleanTmpDir(dir: string): void {
   rmSync(dir, { recursive: true, force: true });
 }
 
+/**
+ * Creates an Int16Array from string
+ * @param string - represents Int16Array data
+ * @returns Int16Array
+ */
+export function getInt16Array(string: string) {
+  return new Int16Array(
+    string
+      .split(/[\n\r ,]+/)
+      .filter(Boolean)
+      .map(Number),
+  );
+}
 declare global {
   // eslint-disable-next-line no-var
   var testUtils: {
@@ -141,7 +156,9 @@ declare global {
     createRoi: typeof createRoi;
     makeTmpDir: typeof makeTmpDir;
     cleanTmpDir: typeof cleanTmpDir;
+    getInt16Array: typeof getInt16Array;
   };
 }
 
 export {createMask} from './createMask';
+
