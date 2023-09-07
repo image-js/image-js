@@ -96,6 +96,5 @@ test('other id crops', () => {
   const result = alignMinDifference(source, destination);
 
   const overlap = overlapImages(source, destination, { origin: result });
-
   expect(overlap).toMatchImageSnapshot();
 });

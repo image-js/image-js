@@ -57,9 +57,15 @@ export function subtract(
           image.getValueByIndex(index, channel) -
           otherImage.getValueByIndex(index, channel);
         if (absolute) {
-          newImage.setValueByIndex(index, channel, Math.abs(value));
+          if (value < 0) {
+            newImage.setValueByIndex(index, channel, -value);
+          } else {
+            newImage.setValueByIndex(index, channel, value);
+          }
+        } else if (value < 0) {
+          newImage.setValueByIndex(index, channel, 0);
         } else {
-          newImage.setValueByIndex(index, channel, Math.max(value, 0));
+          newImage.setValueByIndex(index, channel, value);
         }
       }
     }
@@ -68,9 +74,9 @@ export function subtract(
       const value =
         image.getBitByIndex(index) - otherImage.getBitByIndex(index);
       if (absolute) {
-        newImage.setBitByIndex(index, Math.abs(value) ? 1 : 0);
+        newImage.setBitByIndex(index, value ? 1 : 0);
       } else {
-        newImage.setBitByIndex(index, Math.max(value, 0) ? 1 : 0);
+        newImage.setBitByIndex(index, value > 0 ? 1 : 0);
       }
     }
   }

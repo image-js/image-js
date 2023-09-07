@@ -1,5 +1,4 @@
 import { Image, ImageColorModel, Point } from '..';
-import { subtract } from '../compare/subtract';
 
 export interface AlignMinDifferenceOptions {
   /**
@@ -46,7 +45,7 @@ export function alignMinDifference(
     destination = destination.grey();
   }
 
-  let bestMean = Number.POSITIVE_INFINITY;
+  let bestDifference = Number.POSITIVE_INFINITY;
   let bestShiftX = 0;
   let bestShiftY = 0;
 
@@ -60,18 +59,29 @@ export function alignMinDifference(
 
     for (let shiftX = startX; shiftX <= endX; shiftX += step) {
       for (let shiftY = startY; shiftY <= endY; shiftY += step) {
-        const destinationCropped = destination.crop({
-          origin: { row: shiftY, column: shiftX },
-          width: source.width,
-          height: source.height,
-        });
-
-        const imagesDiff = subtract(source, destinationCropped, {
-          absolute: true,
-        });
-        const mean = imagesDiff.mean()[0];
-        if (mean < bestMean) {
-          bestMean = mean;
+        let currentDifference = 0;
+        next: for (let column = 0; column < source.width; column++) {
+          for (let row = 0; row < source.height; row++) {
+            const sourceValue = source.getValue(column, row, 0);
+            const destinationValue = destination.getValue(
+              column + shiftX,
+              row + shiftY,
+              0,
+            );
+            const difference = sourceValue - destinationValue;
+            if (difference < 0) {
+              // Math.abs is super slow, this simple trick is 5x faster
+              currentDifference -= difference;
+            } else {
+              currentDifference += difference;
+            }
+            if (currentDifference > bestDifference) {
+              break next;
+            }
+          }
+        }
+        if (currentDifference < bestDifference) {
+          bestDifference = currentDifference;
           bestShiftX = shiftX;
           bestShiftY = shiftY;
         }
