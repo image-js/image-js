@@ -24,6 +24,6 @@ test('getMap', () => {
   // @ts-expect-error the map property is private
   const result = rois[0].map.data;
 
-  const expected = new Int16Array([-1, 1, -3, 1, 1, 1, -2, -2, -2]);
+  const expected = new Int32Array([-1, 1, -3, 1, 1, 1, -2, -2, -2]);
   expect(result).toStrictEqual(expected);
 });

@@ -30,7 +30,7 @@ export function fromMask(
   const maxNegativeId = -maxRoiId;
 
   // based on a binary image we will create plenty of small images
-  const data = new Int16Array(mask.size); // maxValue: maxPositiveId, minValue: maxNegativeId
+  const data = new Int32Array(mask.size); // maxValue: maxPositiveId, minValue: maxNegativeId
 
   // split will always return an array of images
   let positiveId = 0;

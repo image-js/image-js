@@ -1,5 +1,5 @@
 import { computeThreshold } from '../..';
-import { createGreyImage, getInt16Array } from '../../../test/testUtils';
+import { createGreyImage, getInt32Array } from '../../../test/testUtils';
 import { waterShed } from '../waterShed';
 
 describe('Test WaterShed Roi generation', () => {
@@ -12,7 +12,7 @@ describe('Test WaterShed Roi generation', () => {
       [3, 3, 3, 3, 3],
     ]);
     const roiMapManager = waterShed(image, {});
-    const resultArray = testUtils.getInt16Array(`
+    const resultArray = testUtils.getInt32Array(`
       -1, -1, -1, -1, -1,
       -1, -1, -1, -1, -1,
       -1, -1, -1, -1, -1,
@@ -47,7 +47,7 @@ describe('Test WaterShed Roi generation', () => {
 
     const roiMapManager = waterShed(image, { threshold: 2 / 255 });
 
-    const resultArray = getInt16Array(`
+    const resultArray = getInt32Array(`
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0,-2,-2,-2, 0, 0, 0, 0, 0,
       0, 0,-2,-2,-2,-2, 0, 0, 0, 0,
@@ -86,7 +86,7 @@ describe('Test WaterShed Roi generation', () => {
     const roiMapManager = waterShed(invertedImage, {
       threshold: 253 / image.maxValue,
     });
-    const resultArray = getInt16Array(`
+    const resultArray = getInt32Array(`
       0, 0, 0, 0, 0,
       0,-1,-1,-1, 0, 
       0,-1,-1,-1, 0, 
@@ -127,7 +127,7 @@ describe('Test WaterShed Roi generation', () => {
     const roiMapManager = waterShed(image, {
       threshold: threshold / image.maxValue,
     });
-    const resultArray = getInt16Array(`
+    const resultArray = getInt32Array(`
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0,-2,-2,-2, 0, 0, 0, 0, 0, 
       0, 0,-2,-2,-2,-2, 0, 0, 0, 0,
@@ -167,7 +167,7 @@ describe('Test WaterShed Roi generation', () => {
 
     const mask = image.threshold({ algorithm: 'otsu' });
     const roiMapManager = waterShed(image, { mask });
-    const resultArray = getInt16Array(`
+    const resultArray = getInt32Array(`
       -2, -2, -2, -2, -2, -2, -2, -2, -2, -1,
       -2, -2, -2, -2, -2, -2, -2,  0, -1, -1,
       -2, -2, -2, -2, -2, -2, -2, -2, -1, -1, 

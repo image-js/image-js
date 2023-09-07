@@ -9,10 +9,6 @@ import { TestImagePath } from './TestImagePath';
 import { createImageFromData, CreateImageOptions } from './createImageFromData';
 import { createMask } from './createMask';
 
-
-
-
-
 /**
  * Return the path to a given image.
  * @param name - Test image name.
@@ -142,6 +138,20 @@ export function getInt16Array(string: string) {
       .map(Number),
   );
 }
+
+/**
+ * Creates an Int32Array from string
+ * @param string - represents Int32Array data
+ * @returns Int32Array
+ */
+export function getInt32Array(string: string) {
+  return new Int32Array(
+    string
+      .split(/[\n\r ,]+/)
+      .filter(Boolean)
+      .map(Number),
+  );
+}
 declare global {
   // eslint-disable-next-line no-var
   var testUtils: {
@@ -157,8 +167,8 @@ declare global {
     makeTmpDir: typeof makeTmpDir;
     cleanTmpDir: typeof cleanTmpDir;
     getInt16Array: typeof getInt16Array;
+    getInt32Array: typeof getInt32Array;
   };
 }
 
-export {createMask} from './createMask';
-
+export { createMask } from './createMask';
