@@ -164,8 +164,8 @@ test('6x6 mask, allowCorners true', () => {
   );
 });
 
-test('exceed max number of ROIs error', () => {
-  const size = 513;
+test('no way to exceed max number of ROIs error', () => {
+  const size = 4097;
   const mask = new Mask(size, size);
   let pos = true;
   for (let row = 0; row < size; row++) {
@@ -174,7 +174,10 @@ test('exceed max number of ROIs error', () => {
       pos = !pos;
     }
   }
-  expect(() => {
-    fromMask(mask);
-  }).toThrow(/too many regions of interest/);
+
+  const roiMap = fromMask(mask);
+  //@ts-expect-error This is a test
+  expect(roiMap.map.nbNegative).toBe(8392704);
+  //@ts-expect-error This is a test
+  expect(roiMap.map.nbPositive).toBe(8392705);
 });

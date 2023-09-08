@@ -1,5 +1,4 @@
 import { RoiKind } from '../../getRois';
-import { maxNumberRois, colorMapCenter } from '../constants';
 import { hsvToRgb } from '../hsvToRgb';
 import { rgbToNumber } from '../rgbToNumber';
 
@@ -45,7 +44,7 @@ export function getSaturationMap(
     blackHue = 240,
   } = options;
 
-  const colorMap = new Uint32Array(maxNumberRois);
+  const colorMap = new Uint32Array(nbNegative + nbPositive + 1);
 
   const range = 255 - 63; // saturation range for good contrast
   const negativeStep = range / nbNegative;
@@ -54,17 +53,17 @@ export function getSaturationMap(
   // negative values
   let counter = 0;
   if (roiKind === 'bw' || roiKind === 'black') {
-    for (let i = colorMapCenter - nbNegative; i < colorMapCenter; i++) {
+    for (let i = -nbNegative; i < 0; i++) {
       const hsv = [blackHue, 255 - counter++ * negativeStep, 255];
-      colorMap[i] = rgbToNumber(hsvToRgb(hsv));
+      colorMap[i + nbNegative] = rgbToNumber(hsvToRgb(hsv));
     }
   }
   // positive values
   counter = 0;
   if (roiKind === 'bw' || roiKind === 'white') {
-    for (let i = colorMapCenter + 1; i < colorMapCenter + 1 + nbPositive; i++) {
+    for (let i = 1; i <= nbPositive; i++) {
       const hsv = [whiteHue, 255 - counter++ * positiveStep, 255];
-      colorMap[i] = rgbToNumber(hsvToRgb(hsv));
+      colorMap[i + nbNegative] = rgbToNumber(hsvToRgb(hsv));
     }
   }
   return colorMap;

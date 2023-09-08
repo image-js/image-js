@@ -1,7 +1,6 @@
 import { Image } from '..';
 
 import { RoiKind } from './getRois';
-import { colorMapCenter } from './utils/constants';
 import { getColorMap } from './utils/getColorMap';
 
 import { RoiMapManager } from '.';
@@ -63,7 +62,7 @@ export function colorRois(
   const data32 = new Uint32Array(image.getRawImage().data.buffer);
 
   for (let index = 0; index < image.size; index++) {
-    data32[index] = colorMap[map.data[index] + colorMapCenter];
+    data32[index] = colorMap[map.data[index] + map.nbNegative];
   }
 
   return image;

@@ -1,5 +1,4 @@
 import { RoiKind } from '../../getRois';
-import { maxNumberRois, colorMapCenter } from '../constants';
 import { hsvToRgb } from '../hsvToRgb';
 import { rgbToNumber } from '../rgbToNumber';
 
@@ -47,20 +46,20 @@ export function getBinaryMap(options: GetBinaryMapOptions): Uint32Array {
     roiKind = 'bw',
   } = options;
 
-  const colorMap = new Uint32Array(maxNumberRois);
+  const colorMap = new Uint32Array(nbNegative + nbPositive + 1);
 
   // negative values
   if (roiKind === 'bw' || roiKind === 'black') {
-    for (let i = colorMapCenter - nbNegative; i < colorMapCenter; i++) {
+    for (let i = -nbNegative; i < 0; i++) {
       const hsv = [blackHue, 255, 255];
-      colorMap[i] = rgbToNumber(hsvToRgb(hsv));
+      colorMap[i + nbNegative] = rgbToNumber(hsvToRgb(hsv));
     }
   }
   if (roiKind === 'bw' || roiKind === 'white') {
     // positive values
-    for (let i = colorMapCenter + 1; i < colorMapCenter + 1 + nbPositive; i++) {
+    for (let i = 1; i <= nbPositive; i++) {
       const hsv = [whiteHue, 255, 255];
-      colorMap[i] = rgbToNumber(hsvToRgb(hsv));
+      colorMap[i + nbNegative] = rgbToNumber(hsvToRgb(hsv));
     }
   }
 

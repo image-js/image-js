@@ -1,13 +1,9 @@
 import { getBinaryMap } from '../colorMaps/getBinaryMap';
-import { maxNumberRois, colorMapCenter } from '../constants';
 import { getColorMap } from '../getColorMap';
 
 test('default options', () => {
   const colorMap = getBinaryMap({ nbNegative: 1, nbPositive: 1 });
-
-  expect(colorMap).toHaveLength(maxNumberRois);
-  expect(colorMap[colorMapCenter - 1]).toBe(0xff0000ff); // red
-  expect(colorMap[colorMapCenter + 1]).toBe(0xff00ff00); // green
+  expect(Array.from(colorMap)).toStrictEqual([4278190335, 0, 4278255360]);
 });
 
 test('binary, BW', () => {
@@ -15,10 +11,7 @@ test('binary, BW', () => {
     nbNegative: 1,
     nbPositive: 1,
   });
-
-  expect(colorMap).toHaveLength(maxNumberRois);
-  expect(colorMap[colorMapCenter - 1]).toBe(0xff0000ff); // red
-  expect(colorMap[colorMapCenter + 1]).toBe(0xff00ff00); // green
+  expect(Array.from(colorMap)).toStrictEqual([4278190335, 0, 4278255360]);
 });
 
 test('binary, WHITE', () => {
@@ -27,9 +20,7 @@ test('binary, WHITE', () => {
     nbPositive: 1,
     roiKind: 'white',
   });
-
-  expect(colorMap[colorMapCenter - 1]).toBe(0);
-  expect(colorMap[colorMapCenter + 1]).toBe(0xff00ff00);
+  expect(Array.from(colorMap)).toStrictEqual([0, 0, 4278255360]);
 });
 
 test('binary, BLACK', () => {
@@ -38,9 +29,7 @@ test('binary, BLACK', () => {
     nbPositive: 1,
     roiKind: 'black',
   });
-
-  expect(colorMap[colorMapCenter - 1]).toBe(0xff0000ff);
-  expect(colorMap[colorMapCenter + 1]).toBe(0);
+  expect(Array.from(colorMap)).toStrictEqual([4278190335, 0, 0]);
 });
 
 test('SATURATION, 1 negative and 1 positive ROIs', () => {
@@ -49,9 +38,7 @@ test('SATURATION, 1 negative and 1 positive ROIs', () => {
     nbNegative: 1,
     nbPositive: 1,
   });
-
-  expect(colorMap[colorMapCenter - 1]).toBe(0xffff0000); // blue
-  expect(colorMap[colorMapCenter + 1]).toBe(0xff0000ff); // red
+  expect(Array.from(colorMap)).toStrictEqual([4294901760, 0, 4278190335]);
 });
 
 test('RAINBOW, 1 negative and 2 positive ROIs, WHITE', () => {
@@ -61,10 +48,7 @@ test('RAINBOW, 1 negative and 2 positive ROIs, WHITE', () => {
     nbPositive: 2,
     roiKind: 'white',
   });
-
-  expect(colorMap[colorMapCenter - 1]).toBe(0); // transparent
-  expect(colorMap[colorMapCenter + 1]).toBe(0xff0000ff); // red
-  expect(colorMap[colorMapCenter + 2]).toBe(0xffffff00); // turquoise
+  expect(Array.from(colorMap)).toStrictEqual([0, 0, 4278190335, 4294967040]);
 });
 
 test('RAINBOW, 1 negative and 2 positive ROIs, BLACK', () => {
@@ -74,21 +58,17 @@ test('RAINBOW, 1 negative and 2 positive ROIs, BLACK', () => {
     nbPositive: 2,
     roiKind: 'black',
   });
-
-  expect(colorMap[colorMapCenter - 1]).toBe(0xff0000ff);
-  expect(colorMap[colorMapCenter + 1]).toBe(0);
-  expect(colorMap[colorMapCenter + 2]).toBe(0);
+  expect(Array.from(colorMap)).toStrictEqual([4278190335, 0, 0, 0]);
 });
 
 test('RAINBOW, 1 negative and 1 positive ROIs, BW', () => {
   const colorMap = getColorMap({
     mode: 'rainbow',
-    nbNegative: 1,
+    nbNegative: 2,
     nbPositive: 1,
     roiKind: 'bw',
   });
-
-  expect(colorMap[colorMapCenter - 1]).toBe(0xff0000ff);
-  expect(colorMap[colorMapCenter + 1]).toBe(0xffffff00);
-  expect(colorMap[colorMapCenter + 2]).toBe(0);
+  expect(Array.from(colorMap)).toStrictEqual([
+    4278190335, 4278255360, 0, 4294901760,
+  ]);
 });
