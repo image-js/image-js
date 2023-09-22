@@ -11,7 +11,7 @@ Image processing and manipulation in JavaScript.
 
 `$ npm i image-js`
 
-## API
+## [API](https://image-js.github.io/image-js-typescript/)
 
 Look at the [examples](./examples) directory for how the API is being designed.
 
