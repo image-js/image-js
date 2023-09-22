@@ -81,7 +81,7 @@ export function computeThreshold(
       'threshold can only be computed on images with one channel',
     );
   }
-  const histogram = image.histogram({slots: 2**image.bitDepth});
+  const histogram = image.histogram();
 
   switch (algorithm) {
     case 'huang':

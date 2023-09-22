@@ -36,6 +36,23 @@ test('binary image', () => {
   expect(histogram[255]).toBe(9);
 });
 
+test('grey 16-bit image', () => {
+  const image = createImageFromData(
+    [
+      [0, 0, 0, 0, 0],
+      [0, 40000, 255, 255, 0],
+      [0, 255, 255, 255, 0],
+      [0, 255, 255, 255, 0],
+      [0, 0, 0, 0, 0],
+    ],
+    'GREY',
+    { bitDepth: 16 },
+  );
+  const histogram = image.histogram();
+
+  expect(histogram.length).toBe(2 ** 16);
+});
+
 test('grey 16-bit image with 2 slots', () => {
   const image = createImageFromData(
     [
