@@ -1,3 +1,4 @@
+import { ImageColorModel, Image } from '../..';
 import { computeThreshold, threshold } from '../threshold';
 
 test('threshold with a fixed value of 100', () => {
@@ -93,4 +94,25 @@ test('error threshold out of range', () => {
   expect(() => threshold(testImage, { threshold: 450 })).toThrow(
     /threshold must be a value between 0 and 1/,
   );
+});
+
+test('16 bits image simple', () => {
+  const image = new Image(2, 2, {
+    colorModel: ImageColorModel.GREY,
+    bitDepth: 16,
+    data: new Uint16Array([0, 100, 20000, 30000]),
+  });
+  const threshold = image.threshold();
+
+  expect(threshold).toMatchImageData([
+    [0, 0],
+    [1, 1],
+  ]);
+});
+
+test('16 bits image', () => {
+  const image = testUtils.load('formats/grey16.png');
+  const threshold = image.threshold();
+
+  expect(threshold).toMatchImageSnapshot();
 });
