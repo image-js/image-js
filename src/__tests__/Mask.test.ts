@@ -62,6 +62,7 @@ describe('get and set bit', () => {
     expect(mask.getValueByPoint(point)).toBe(0);
     mask.setValueByPoint(point, 1);
     expect(mask.getValueByPoint(point)).toBe(1);
+    expect(mask.getNbNonZeroPixels()).toBe(1);
   });
 });
 
@@ -109,6 +110,7 @@ test('fill with a value', () => {
     [1, 1],
     [1, 1],
   ]);
+  expect(mask.getNbNonZeroPixels()).toBe(4);
 });
 
 test('createFrom', () => {

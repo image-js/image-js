@@ -10,7 +10,7 @@ test('1 pixel source', () => {
   ]);
 
   const result = alignMinDifference(source, destination);
-  expect(result).toStrictEqual({ row: 2, column: 1 });
+  expect(result).toStrictEqual({ row: 2, column: 1, similarity: 1 });
 });
 
 test('4 pixels source', () => {
@@ -25,7 +25,11 @@ test('4 pixels source', () => {
   ]);
 
   const result = alignMinDifference(source, destination);
-  expect(result).toStrictEqual({ row: 1, column: 1 });
+  expect(result).toStrictEqual({
+    row: 1,
+    column: 1,
+    similarity: 0.8235294117647058,
+  });
 });
 
 test('twice same image', () => {
@@ -34,7 +38,7 @@ test('twice same image', () => {
   const destination = testUtils.load('opencv/test.png').grey();
 
   const result = alignMinDifference(source, destination);
-  expect(result).toStrictEqual({ row: 0, column: 0 });
+  expect(result).toStrictEqual({ row: 0, column: 0, similarity: 1 });
 });
 
 test('source too big', () => {
@@ -61,7 +65,7 @@ test('larger image and crop', () => {
 
   const result = alignMinDifference(source, destination);
 
-  expect(result).toStrictEqual(origin);
+  expect(result).toStrictEqual({ ...origin, similarity: 1 });
 });
 
 test('larger image and crop 2', () => {
@@ -72,7 +76,7 @@ test('larger image and crop 2', () => {
 
   const result = alignMinDifference(source, destination);
 
-  expect(result).toStrictEqual(origin);
+  expect(result).toStrictEqual({ ...origin, similarity: 1 });
 });
 
 test('id crops', () => {

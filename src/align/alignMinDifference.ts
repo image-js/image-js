@@ -1,4 +1,4 @@
-import { Image, Mask, Point } from '..';
+import { Image, Mask } from '..';
 import checkProcessable from '../utils/validators/checkProcessable';
 
 export interface AlignMinDifferenceOptions {
@@ -23,7 +23,7 @@ export function alignMinDifference(
   source: Image,
   destination: Image,
   options: AlignMinDifferenceOptions = {},
-): Point {
+) {
   checkProcessable(source, { components: 1, bitDepth: [8, 16], alpha: false });
 
   const xSpan = destination.width - source.width;
@@ -51,6 +51,13 @@ export function alignMinDifference(
   let startY = 0;
   let endX = xSpan;
   let endY = ySpan;
+
+  if (mask && mask.size !== source.size) {
+    throw new Error('Mask size must be equal to source size');
+  }
+
+  const nbPixelsToCheck = mask ? mask.getNbNonZeroPixels() : source.size;
+
   while (step >= 1) {
     step = Math.round(step);
 
@@ -94,5 +101,9 @@ export function alignMinDifference(
     endY = Math.round(Math.min(ySpan, bestShiftY + step));
   }
 
-  return { row: bestShiftY, column: bestShiftX };
+  return {
+    row: bestShiftY,
+    column: bestShiftX,
+    similarity: 1 - bestDifference / (nbPixelsToCheck * source.maxValue),
+  };
 }

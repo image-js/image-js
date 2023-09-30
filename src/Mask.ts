@@ -328,6 +328,20 @@ export class Mask {
   }
 
   /**
+   * Get the number of pixels that do not have the value 0.
+   * @returns
+   */
+  public getNbNonZeroPixels(): number {
+    let count = 0;
+    for (const datum of this.data) {
+      if (datum) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  /**
    * Get the value of a bit. Function exists for compatibility with Image.
    * @param column - Column index.
    * @param row - Row index.
