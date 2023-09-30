@@ -1,4 +1,4 @@
-import { Image, Point } from '..';
+import { Image, Mask, Point } from '..';
 import checkProcessable from '../utils/validators/checkProcessable';
 
 export interface AlignMinDifferenceOptions {
@@ -7,6 +7,7 @@ export interface AlignMinDifferenceOptions {
    * @default `Math.max(Math.round(Math.min(source.width, source.height, Math.max(xSpan, ySpan)) / 10,),1,)`
    */
   startStep?: number;
+  mask?: Mask;
 }
 
 /**
@@ -34,6 +35,7 @@ export function alignMinDifference(
       ),
       1,
     ),
+    mask,
   } = options;
 
   if (xSpan < 0 || ySpan < 0) {
@@ -57,6 +59,9 @@ export function alignMinDifference(
         let currentDifference = 0;
         next: for (let column = 0; column < source.width; column++) {
           for (let row = 0; row < source.height; row++) {
+            if (mask && !mask.getBit(column, row)) {
+              continue;
+            }
             const sourceValue = source.getValue(column, row, 0);
             const destinationValue = destination.getValue(
               column + shiftX,
