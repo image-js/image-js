@@ -1,4 +1,5 @@
-import { Image, ImageColorModel, Point } from '..';
+import { Image, Point } from '..';
+import checkProcessable from '../utils/validators/checkProcessable';
 
 export interface AlignMinDifferenceOptions {
   /**
@@ -9,9 +10,8 @@ export interface AlignMinDifferenceOptions {
 }
 
 /**
- * Aligns two images by finding the translation that minimizes the mean difference
+ * Aligns two grayscale images by finding the translation that minimizes the mean difference
  * between them. The source image should fit entirely in the destination image.
- * The images are converted to grayscale internally.
  * @param source - Image to align.
  * @param destination - Image to align to.
  * @param options - Align images min difference options.
@@ -23,6 +23,8 @@ export function alignMinDifference(
   destination: Image,
   options: AlignMinDifferenceOptions = {},
 ): Point {
+  checkProcessable(source, { components: 1, bitDepth: [8, 16], alpha: false });
+
   const xSpan = destination.width - source.width;
   const ySpan = destination.height - source.height;
   const {
@@ -36,13 +38,6 @@ export function alignMinDifference(
 
   if (xSpan < 0 || ySpan < 0) {
     throw new Error('Source image must fit entirely in destination image');
-  }
-
-  if (source.colorModel !== ImageColorModel.GREY) {
-    source = source.grey();
-  }
-  if (destination.colorModel !== ImageColorModel.GREY) {
-    destination = destination.grey();
   }
 
   let bestDifference = Number.POSITIVE_INFINITY;

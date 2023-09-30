@@ -12,7 +12,7 @@ export interface GetHarrisScoreOptions {
    */
   windowSize?: number;
   /**
-   * Constant for the score computation. Should be between 0.04 and 0.06 (empirical values).
+   * Constant for the score computation. Should be between 0.04 and 0.06 (empirical values). This consant is commonly called k.
    * @default `0.04`
    */
   harrisConstant?: number;

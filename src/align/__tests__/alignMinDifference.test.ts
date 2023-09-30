@@ -1,4 +1,4 @@
-import { ImageColorModel, overlapImages } from '../..';
+import { overlapImages } from '../..';
 import { alignMinDifference } from '../alignMinDifference';
 
 test('1 pixel source', () => {
@@ -29,9 +29,9 @@ test('4 pixels source', () => {
 });
 
 test('twice same image', () => {
-  const source = testUtils.load('opencv/test.png');
+  const source = testUtils.load('opencv/test.png').grey();
 
-  const destination = testUtils.load('opencv/test.png');
+  const destination = testUtils.load('opencv/test.png').grey();
 
   const result = alignMinDifference(source, destination);
   expect(result).toStrictEqual({ row: 0, column: 0 });
@@ -56,9 +56,7 @@ test('source too big', () => {
 test('larger image and crop', () => {
   const side = 100;
   const origin = { row: 30, column: 30 };
-  const destination = testUtils
-    .load('ssim/ssim-original.png')
-    .convertColor(ImageColorModel.RGB);
+  const destination = testUtils.load('ssim/ssim-original.png');
   const source = destination.crop({ origin, width: side, height: side });
 
   const result = alignMinDifference(source, destination);
@@ -69,9 +67,7 @@ test('larger image and crop', () => {
 test('larger image and crop 2', () => {
   const side = 100;
   const origin = { row: 50, column: 100 };
-  const destination = testUtils
-    .load('ssim/ssim-original.png')
-    .convertColor(ImageColorModel.RGB);
+  const destination = testUtils.load('ssim/ssim-original.png');
   const source = destination.crop({ origin, width: side, height: side });
 
   const result = alignMinDifference(source, destination);
@@ -80,8 +76,8 @@ test('larger image and crop 2', () => {
 });
 
 test('id crops', () => {
-  const destination = testUtils.load('align/cropped.png');
-  const source = testUtils.load('align/croppedRef.png');
+  const destination = testUtils.load('align/cropped.png').grey();
+  const source = testUtils.load('align/croppedRef.png').grey();
 
   const result = alignMinDifference(source, destination);
 
@@ -91,8 +87,8 @@ test('id crops', () => {
 });
 
 test('other id crops', () => {
-  const destination = testUtils.load('align/cropped1.png');
-  const source = testUtils.load('align/croppedRef1.png');
+  const destination = testUtils.load('align/cropped1.png').grey();
+  const source = testUtils.load('align/croppedRef1.png').grey();
   const result = alignMinDifference(source, destination);
 
   const overlap = overlapImages(source, destination, { origin: result });
