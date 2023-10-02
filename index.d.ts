@@ -358,7 +358,10 @@ export declare class RoiManager {
   putMap(map: Array<number>, options?: object): this;
   fromWaterShed(options?: object): void;
   fromMask(mask: Image, options?: object): this;
-  fromMaskConnectedComponentLabelingAlgorithm(mask: Image, options?: object): this;
+  fromMaskConnectedComponentLabelingAlgorithm(
+    mask: Image,
+    options?: object,
+  ): this;
   getMap(options?: object): Array<number>;
   rowsInfo(options?: object): Array<object>;
   colsInfo(options?: object): Array<object>;
