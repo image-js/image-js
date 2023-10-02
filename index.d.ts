@@ -37,7 +37,7 @@ export declare class Image {
     options?: RequestInit & { ignorePalette: boolean },
   ): Promise<Image>;
 
-  getRoiManager(): RoiManager;
+  getRoiManager(options?: RoiManagerOptions): RoiManager;
   clone(): Image;
 
   // valueMethods
@@ -328,7 +328,53 @@ export declare class Stack extends Array<Image> {
   getMinImage(): Image;
 }
 
-export declare class RoiManager {}
+interface RoiManagerOptions {
+  label?: string;
+}
+
+interface RoiSelectionOptions {
+  label?: string;
+  positive?: boolean;
+  negative?: boolean;
+  minSurface?: number;
+  maxSurface?: number;
+  minWidth?: number;
+  maxWidth?: number;
+  minHeight?: number;
+  maxHeight?: number;
+  minRatio?: number;
+  maxRatio?: number;
+  analysisProperty?: string;
+  labelProperty?: string;
+  pixelSize?: number;
+  unit?: string;
+}
+
+export declare class RoiManager {
+  constructor(image: Image, options?: RoiManagerOptions);
+
+  fromMaxima(options?: object): void;
+  fromPoints(points: Array<number>, options?: object): this;
+  putMap(map: Array<number>, options?: object): this;
+  fromWaterShed(options?: object): void;
+  fromMask(mask: Image, options?: object): this;
+  fromMaskConnectedComponentLabelingAlgorithm(mask: Image, options?: object): this;
+  getMap(options?: object): Array<number>;
+  rowsInfo(options?: object): Array<object>;
+  colsInfo(options?: object): Array<object>;
+  getRoiIds(options?: object): Array<number>;
+  getRois(options?: RoiSelectionOptions): Array<Image>;
+  getRoi(roiId: number, options?: object): Image;
+  getMasks(options?: object): Array<Image>;
+  getAnalysisMasks(options?: object): Array<Image>;
+  getData(options?: object): Array<number>;
+  paint(options?: object): Image;
+  getMask(options?: object): Image;
+  resetPainted(options?: object): void;
+  mergeRoi(options?: object): this;
+  mergeRois(roiIds: Array<number>, options?: object): this;
+  findCorrespondingRoi(roiMap: Array<number>, options?: object): Array<Image>;
+}
 
 export interface ImageConstructorOptions {
   width?: number;
