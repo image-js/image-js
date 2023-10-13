@@ -279,7 +279,7 @@ test('fill channel 2', () => {
 test('fill channel invalid channel', () => {
   const img = new Image(1, 2);
   expect(() => img.fillChannel(4, 50)).toThrow(
-    /invalid channel: 4. It must be a positive integer smaller than 4/,
+    /invalid channel: 4. It must be a positive integer smaller than 3/,
   );
 });
 

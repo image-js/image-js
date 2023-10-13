@@ -18,11 +18,9 @@ export function validateChannels(channels: number[], image: Image): void {
  * @param image - The image being processed.
  */
 export function validateChannel(channel: number, image: Image): void {
-  if (!Number.isInteger(channel) || channel > image.channels || channel < 0) {
+  if (!Number.isInteger(channel) || channel >= image.channels || channel < 0) {
     throw new RangeError(
-      `invalid channel: ${channel}. It must be a positive integer smaller than ${
-        image.channels + 1
-      }`,
+      `invalid channel: ${channel}. It must be a positive integer smaller than ${image.channels}`,
     );
   }
 }
@@ -79,6 +77,6 @@ export function validateForComparison(
  * @param image - Image.
  */
 export function validateColor(color: number[], image: Image): void {
-  validateChannel(color.length, image);
+  validateChannel(color.length - 1, image);
   validateValues(color, image);
 }

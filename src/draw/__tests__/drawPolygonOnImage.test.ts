@@ -280,7 +280,7 @@ test('stroke color not compatible with image', () => {
       fillColor: [2, 5],
     });
   }).toThrow(
-    'invalid channel: 2. It must be a positive integer smaller than 2',
+    'invalid channel: 1. It must be a positive integer smaller than 1',
   );
 });
 
