@@ -37,7 +37,7 @@ export declare class Image {
     options?: RequestInit & { ignorePalette: boolean },
   ): Promise<Image>;
 
-  getRoiManager(): RoiManager;
+  getRoiManager(options?: RoiManagerOptions): RoiManager;
   clone(): Image;
 
   // valueMethods
@@ -328,7 +328,254 @@ export declare class Stack extends Array<Image> {
   getMinImage(): Image;
 }
 
-export declare class RoiManager {}
+type RoiMapRowInfo = {
+  row: number;
+  positivePixel: number;
+  negativePixel: number;
+  zeroPixel: number;
+  positiveRoi: number;
+  negativeRoi: number;
+  medianChange: number;
+  positiveRoiIDs: string[];
+  negativeRoiIDs: string[];
+};
+
+type RoiMapColInfo = {
+  col: number;
+  positivePixel: number;
+  negativePixel: number;
+  zeroPixel: number;
+  positiveRoi: number;
+  negativeRoi: number;
+  medianChange: number;
+  positiveRoiIDs: string[];
+  negativeRoiIDs: string[];
+};
+
+export declare class RoiMap {
+  parent: Image;
+  width: number;
+  height: number;
+  data: Int32Array;
+  negative: number;
+  positive: number;
+
+  constructor(parent: Image, data: Int32Array);
+
+  get total(): number;
+  get minMax(): { min: number; max: number };
+  get commonBorderLength(): number[];
+
+  mergeRoi(options?: {
+    algorithm?: string | Function;
+    minCommonBorderLength?: number;
+    maxCommonBorderLength?: number;
+    minCommonBorderRatio?: number;
+    maxCommonBorderRatio?: number;
+  }): void;
+
+  mergeRois(rois: number[]): void;
+
+  rowsInfo(): RoiMapRowInfo[];
+
+  colsInfo(): RoiMapColInfo[];
+}
+
+export declare class RoiLayer {
+  roiMap: RoiMap;
+  options: Record<string, any>;
+  roi: Roi[];
+
+  constructor(roiMap: RoiMap, options?: Record<string, any>);
+
+  createRoi(): Roi[];
+}
+
+export declare class Roi {
+  map: RoiMap;
+  id: number;
+  minX: number;
+  maxX: number;
+  minY: number;
+  maxY: number;
+  meanX: number;
+  meanY: number;
+  surface: number;
+  computed: this;
+
+  constructor(map: RoiMap, id: number);
+
+  getMask(options?: {
+    scale?: number;
+    kind?:
+      | 'contour'
+      | 'box'
+      | 'filled'
+      | 'center'
+      | 'mbr'
+      | 'hull'
+      | 'hullContour'
+      | 'mbrContour'
+      | 'feret'
+      | 'normal';
+  }): Image;
+
+  get height(): number;
+  get width(): number;
+  get center(): [number, number];
+  get ratio(): number;
+  get center(): [number, number];
+  get ratio(): number;
+  get width(): number;
+  get height(): number;
+  get externalIDs(): number[];
+  get externalLengths(): number[];
+  get borderIDs(): number[];
+  get borderIDs(): number[];
+  get borderLengths(): number[];
+  get boxIDs(): number[];
+  get internalIDs(): number[];
+  get box(): number;
+  get external(): number;
+  get holesInfo(): { number: number; surface: number };
+  get border(): number;
+  get contourMask(): Image;
+  get boxMask(): Image;
+  get mask(): Image;
+  get filledMask(): Image;
+  get centerMask(): Image;
+  get convexHull(): {
+    polyline: number[][];
+    surface: number;
+    perimeter: number;
+  };
+  get convexHullMask(): Image;
+  get convexHullFilledMask(): Image;
+  get mbr(): {
+    width: number;
+    height: number;
+    elongation: number;
+    aspectRatio: number;
+    surface: number;
+    perimeter: number;
+    rectangle: number[][];
+  };
+  get fillRatio(): number;
+  get feretDiameters(): {
+    min: number;
+    max: number;
+    minLine: number[][];
+    maxLine: number[][];
+  };
+  get eqpc(): number;
+  get perimeterInfo(): {
+    one: number;
+    two: number;
+    three: number;
+    four: number;
+  };
+  get perimeter(): number;
+  get ped(): number;
+  get feretMask(): Image;
+  get mbrMask(): Image;
+  get mbrFilledMask(): Image;
+  get points(): [[number, number]];
+  get maxLengthPoints(): [[number, number], [number, number]];
+  get maxLength(): number;
+  get roundness(): number;
+  get sphericality(): number;
+  get solidity(): number;
+  get angle(): number;
+  toJSON(): {
+    id: number;
+    minX: number;
+    maxX: number;
+    minY: number;
+    maxY: number;
+    meanX: number;
+    meanY: number;
+    height: number;
+    width: number;
+    surface: number;
+    mbrWidth: number;
+    mbrHeight: number;
+    mbrSurface: number;
+    eqpc: number;
+    ped: number;
+    feretDiameterMin: number;
+    feretDiameterMax: number;
+    aspectRatio: number;
+    fillRatio: number;
+    sphericity: number;
+    roundness: number;
+    solidity: number;
+    perimeter: number;
+  };
+}
+
+export class RoiManager {
+  private _image: Image;
+  private _options: {
+    label?: string;
+    [key: string]: any;
+  };
+  private _layers: { [key: string]: RoiLayer };
+  private _painted: Image | null;
+
+  constructor(image: Image, options?: { label?: string });
+
+  fromMaxima(options?: Record<string, any>): void;
+  fromPoints(points: number[][], options?: Record<string, any>): this;
+  putMap(map: number[], options?: Record<string, any>): this;
+  fromWaterShed(options?: Record<string, any>): void;
+  fromMask(mask: Image, options?: Record<string, any>): this;
+  fromMaskConnectedComponentLabelingAlgorithm(
+    mask: Image,
+    options?: Record<string, any>,
+  ): this;
+  getMap(options?: Record<string, any>): RoiMap;
+  rowsInfo(options?: Record<string, any>): RoiMapRowInfo[];
+  colsInfo(options?: Record<string, any>): RoiMapColInfo[];
+  getRoiIds(options?: Record<string, any>): number[];
+  getRois(options?: {
+    label?: string;
+    positive?: boolean;
+    negative?: boolean;
+    minSurface?: number;
+    maxSurface?: number;
+    minWidth?: number;
+    maxWidth?: number;
+    minHeight?: number;
+    maxHeight?: number;
+    minRatio?: number;
+    maxRatio?: number;
+  }): Roi[];
+  getRoi(roiId: number, options?: { label?: string }): Roi;
+  getMasks(options?: Record<string, any>): Image[];
+  getAnalysisMasks(options?: { analysisProperty: string }): Image[];
+  getData(options?: Record<string, any>): number[];
+  paint(options?: {
+    labelProperty?: string;
+    analysisProperty?: string;
+    analysisProperty?: string;
+    labelProperty?: string;
+    analysisProperty?: string;
+    labelProperty?: string;
+    pixelSize?: number;
+    unit?: string;
+  }): Image;
+  getMask(options?: Record<string, any>): Image;
+  resetPainted(options?: { image?: Image }): void;
+  mergeRoi(options?: {
+    algorithm?: string;
+    minCommonBorderLength?: number;
+    maxCommonBorderLength?: number;
+    minCommonBorderRatio?: number;
+    maxCommonBorderRatio?: number;
+  }): this;
+  mergeRois(roiIds: number[], options?: Record<string, any>): this;
+  findCorrespondingRoi(roiMap: number[], options?: Record<string, any>): Roi[];
+}
 
 export interface ImageConstructorOptions {
   width?: number;
