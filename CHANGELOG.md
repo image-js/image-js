@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.35.5](https://www.github.com/image-js/image-js/compare/v0.35.4...v0.35.5) (2023-10-17)
+
+
+### Bug Fixes
+
+* add TypeScript definition to RoiManager ([#630](https://www.github.com/image-js/image-js/issues/630)) ([10bec0b](https://www.github.com/image-js/image-js/commit/10bec0b4b4794cf8c9d8459ebf77380829fa814d))
+
 ### [0.35.4](https://www.github.com/image-js/image-js/compare/v0.35.3...v0.35.4) (2023-06-14)
 
 
