@@ -246,6 +246,12 @@ export default class Image {
           `incorrect data size: ${data.length}. Should be ${expectedLength}`,
         );
       }
+
+      if (bitDepth === 1) {
+        const exceedingBits = data.length * 8 - size * channels;
+        data[data.length - 1] =
+          data[data.length - 1] & ~(0xff >> (8 - exceedingBits));
+      }
     }
 
     /**

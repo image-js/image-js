@@ -27,4 +27,13 @@ test('test-binary', () => {
       new Uint8Array([0b11111111, 0b00000000, 0b00001111]),
     );
   }
+
+  {
+    const result = binary`
+      1111
+      0000
+      1111
+    `;
+    expect(result.data).toStrictEqual(new Uint8Array([0b11110000, 0b11110000]));
+  }
 });
