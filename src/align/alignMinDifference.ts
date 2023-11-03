@@ -11,7 +11,7 @@ export interface AlignMinDifferenceOptions {
 }
 
 /**
- * Aligns two grayscale images by finding the translation that minimizes the mean difference
+ * Aligns two images by finding the translation that minimizes the mean difference of all channels.
  * between them. The source image should fit entirely in the destination image.
  * @param source - Image to align.
  * @param destination - Image to align to.
@@ -24,7 +24,9 @@ export function alignMinDifference(
   destination: Image,
   options: AlignMinDifferenceOptions = {},
 ) {
-  checkProcessable(source, { components: 1, bitDepth: [8, 16], alpha: false });
+  checkProcessable(source, {
+    bitDepth: [8, 16],
+  });
 
   const xSpan = destination.width - source.width;
   const ySpan = destination.height - source.height;
@@ -69,21 +71,23 @@ export function alignMinDifference(
             if (mask && !mask.getBit(column, row)) {
               continue;
             }
-            const sourceValue = source.getValue(column, row, 0);
-            const destinationValue = destination.getValue(
-              column + shiftX,
-              row + shiftY,
-              0,
-            );
-            const difference = sourceValue - destinationValue;
-            if (difference < 0) {
-              // Math.abs is super slow, this simple trick is 5x faster
-              currentDifference -= difference;
-            } else {
-              currentDifference += difference;
-            }
-            if (currentDifference > bestDifference) {
-              break next;
+            for (let channel = 0; channel < source.channels; channel++) {
+              const sourceValue = source.getValue(column, row, channel);
+              const destinationValue = destination.getValue(
+                column + shiftX,
+                row + shiftY,
+                channel,
+              );
+              const difference = sourceValue - destinationValue;
+              if (difference < 0) {
+                // Math.abs is super slow, this simple trick is 5x faster
+                currentDifference -= difference;
+              } else {
+                currentDifference += difference;
+              }
+              if (currentDifference > bestDifference) {
+                break next;
+              }
             }
           }
         }

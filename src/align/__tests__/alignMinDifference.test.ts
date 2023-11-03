@@ -98,3 +98,19 @@ test('other id crops', () => {
   const overlap = overlapImages(source, destination, { origin: result });
   expect(overlap).toMatchImageSnapshot();
 });
+
+test('RGB images', () => {
+  const destination = testUtils.createRgbImage([
+    [255, 255, 0, 255, 0, 0, 255, 0, 0],
+    [255, 0, 0, 255, 0, 0, 255, 0, 0],
+    [255, 0, 0, 255, 0, 0, 255, 0, 0],
+  ]);
+
+  const source = testUtils.createRgbImage([[255, 255, 0]]);
+
+  const result = alignMinDifference(source, destination, {
+    startStep: 1,
+  });
+
+  expect(result).toStrictEqual({ row: 0, column: 0, similarity: 1 });
+});
