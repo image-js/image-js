@@ -2,7 +2,7 @@
   "compilerOptions": {
     "noImplicitReturns": true,
     "esModuleInterop": true,
-    "moduleResolution": "node16",
+    "moduleResolution": "node",
     "outDir": "lib",
     "sourceMap": true,
     "strict": true,
