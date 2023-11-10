@@ -7,6 +7,11 @@ export interface AutoLevelOptions {
    * Image to which to output.
    */
   out?: Image;
+  /**
+   * Level all channels uniformly in order to preserve the color balance.
+   * @default false
+   */
+  uniform?: boolean;
 }
 
 /**
@@ -16,10 +21,28 @@ export interface AutoLevelOptions {
  * @returns The enhanced image.
  */
 export function autoLevel(image: Image, options: AutoLevelOptions = {}): Image {
+  const { uniform = false } = options;
   checkProcessable(image, {
     bitDepth: [8, 16],
   });
   const minMax = image.minMax();
+
+  let min: number | number[] = minMax.min;
+  let max: number | number[] = minMax.max;
+
+  if (uniform) {
+    let minDiffIndex = -1;
+    let previousDiff = -1;
+    for (let i = 0; i < minMax.max.length; i++) {
+      const difference = minMax.max[i] - minMax.min[i];
+      if (difference > previousDiff) {
+        minDiffIndex = i;
+        previousDiff = difference;
+      }
+    }
+    min = minMax.min[minDiffIndex];
+    max = minMax.max[minDiffIndex];
+  }
 
   let channels: number[] = new Array(image.components)
     .fill(0)
@@ -32,8 +55,8 @@ export function autoLevel(image: Image, options: AutoLevelOptions = {}): Image {
   }
 
   return image.level({
-    inputMin: minMax.min,
-    inputMax: minMax.max,
+    inputMin: min,
+    inputMax: max,
     outputMin: 0,
     outputMax: image.maxValue,
     channels,

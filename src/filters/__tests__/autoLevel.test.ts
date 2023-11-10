@@ -16,6 +16,33 @@ test('3x1 rgba image, custom output min and max', () => {
   ]);
 });
 
+test('3x1 rgba image, uniform = true, image should not change', () => {
+  const image = testUtils.createRgbaImage([
+    [0, 100, 0, 50],
+    [127, 150, 0, 50],
+    [255, 200, 0, 50],
+  ]);
+
+  const result = autoLevel(image, { uniform: true });
+
+  expect(result).toMatchImage(image);
+});
+
+test('3x1 rgb image, uniform = true', () => {
+  const image = testUtils.createRgbImage([
+    [0, 100, 0],
+    [150, 150, 0],
+    [200, 200, 0],
+  ]);
+
+  const result = autoLevel(image, { uniform: true });
+  expect(result).toMatchImageData([
+    [0, 127, 0],
+    [191, 191, 0],
+    [255, 255, 0],
+  ]);
+});
+
 test('1x3 grey image', () => {
   const image = testUtils.createGreyImage([[50, 100]]);
   expect(autoLevel(image)).toMatchImageData([[0, 255]]);
