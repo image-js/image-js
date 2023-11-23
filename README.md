@@ -21,9 +21,9 @@ Look at the [examples](./examples) directory for how the API is being designed.
 
 [npm-image]: https://img.shields.io/npm/v/image-js.svg
 [npm-url]: https://www.npmjs.com/package/image-js
-[ci-image]: https://github.com/image-js/image-js/workflows/Node.js%20CI/badge.svg?branch=main
-[ci-url]: https://github.com/image-js/image-js/actions?query=workflow%3A%22Node.js+CI%22
-[codecov-image]: https://img.shields.io/codecov/c/github/image-js/image-js.svg
-[codecov-url]: https://codecov.io/gh/image-js/image-js
+[ci-image]: https://github.com/image-js/image-js-typescript/actions/workflows/nodejs.yml/badge.svg
+[ci-url]: https://github.com/image-js/image-js-typescript/actions/workflows/nodejs.yml
+[codecov-image]: https://img.shields.io/codecov/c/github/image-js/image-js-typescript.svg
+[codecov-url]: https://codecov.io/gh/image-js/image-js-typescript
 [download-image]: https://img.shields.io/npm/dm/image-js.svg
 [download-url]: https://www.npmjs.com/package/image-js
