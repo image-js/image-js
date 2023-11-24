@@ -31,17 +31,17 @@ export function autoLevel(image: Image, options: AutoLevelOptions = {}): Image {
   let max: number | number[] = minMax.max;
 
   if (uniform) {
-    let minDiffIndex = -1;
+    let maxDiffIndex = -1;
     let previousDiff = -1;
     for (let i = 0; i < minMax.max.length; i++) {
       const difference = minMax.max[i] - minMax.min[i];
       if (difference > previousDiff) {
-        minDiffIndex = i;
+        maxDiffIndex = i;
         previousDiff = difference;
       }
     }
-    min = minMax.min[minDiffIndex];
-    max = minMax.max[minDiffIndex];
+    min = minMax.min[maxDiffIndex];
+    max = minMax.max[maxDiffIndex];
   }
 
   let channels: number[] = new Array(image.components)
