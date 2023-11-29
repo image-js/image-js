@@ -1,13 +1,9 @@
-import { BitDepth, Image } from '..';
+import { Image } from '..';
+import { getOutputImage } from '../utils/getOutputImage';
 import checkProcessable from '../utils/validators/checkProcessable';
 import { validateChannels } from '../utils/validators/validators';
 
 export interface HypotenuseOptions {
-  /**
-   * Bit depth of the resulting image.
-   * @default `image.bitDepth`
-   */
-  bitDepth?: BitDepth;
   /**
    * To which channels to apply the filter. By default all but alpha.
    */
@@ -26,11 +22,9 @@ export function hypotenuse(
   otherImage: Image,
   options: HypotenuseOptions = {},
 ): Image {
-  const { bitDepth = image.bitDepth, channels = [] } = options;
-
-  for (let i = 0; i < image.components; i++) {
-    channels.push(i);
-  }
+  const {
+    channels = new Array(image.components).fill(0).map((value, index) => index),
+  } = options;
 
   checkProcessable(image, {
     bitDepth: [8, 16],
@@ -51,7 +45,7 @@ export function hypotenuse(
 
   validateChannels(channels, image);
 
-  const newImage = Image.createFrom(image, { bitDepth });
+  const newImage = getOutputImage(image, {}, { clone: true });
 
   for (const channel of channels) {
     for (let i = 0; i < image.size; i++) {
@@ -59,6 +53,7 @@ export function hypotenuse(
         image.getValueByIndex(i, channel),
         otherImage.getValueByIndex(i, channel),
       );
+
       newImage.setValueByIndex(
         i,
         channel,
