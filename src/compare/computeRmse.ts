@@ -2,7 +2,7 @@ import { Image } from '..';
 
 /**
  * Compute the Root Mean Square Error (RMSE) between two images. It is just the square root of the MSE.
- * {@see @link https://en.wikipedia.org/wiki/Root-mean-square_deviation}
+ * @see {@link https://en.wikipedia.org/wiki/Root-mean-square_deviation}
  * @param image - First image.
  * @param otherImage - Second image.
  * @returns RMSE of the two images.

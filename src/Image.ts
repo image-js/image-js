@@ -1,54 +1,54 @@
 import { RgbColor } from 'colord';
 
 import { Mask } from './Mask';
-import { subtract, add, SubtractImageOptions } from './compare';
-import { median } from './compute/median';
+import { add, subtract, SubtractImageOptions } from './compare';
+import { median } from './compute';
 import { variance } from './compute/variance';
 import { correctColor } from './correctColor';
 import {
-  drawLineOnImage,
-  drawPolygonOnImage,
-  drawPolylineOnImage,
   drawCircleOnImage,
-  DrawPolygonOnImageOptions,
-  DrawPolylineOnImageOptions,
   DrawCircleOnImageOptions,
-  DrawRectangleOptions,
-  drawRectangle,
+  drawLineOnImage,
   DrawLineOnImageOptions,
-  drawPoints,
-  DrawPointsOptions,
   drawMarker,
   DrawMarkerOptions,
   drawMarkers,
+  drawPoints,
+  DrawPointsOptions,
+  drawPolygonOnImage,
+  DrawPolygonOnImageOptions,
+  drawPolylineOnImage,
+  DrawPolylineOnImageOptions,
+  drawRectangle,
+  DrawRectangleOptions,
 } from './draw';
 import {
-  BlurOptions,
   blur,
+  BlurOptions,
   ConvolutionOptions,
-  directConvolution,
-  separableConvolution,
-  gaussianBlur,
-  GaussianBlurOptions,
-  HypotenuseOptions,
-  rawDirectConvolution,
-  GradientFilterOptions,
-  gradientFilter,
   derivativeFilter,
   DerivativeFilterOptions,
+  directConvolution,
   flip,
   FlipOptions,
+  gaussianBlur,
+  GaussianBlurOptions,
+  gradientFilter,
+  GradientFilterOptions,
   hypotenuse,
+  HypotenuseOptions,
   invert,
   InvertOptions,
   level,
   LevelOptions,
   increaseContrast,
   IncreaseContrastOptions,
-  pixelate,
-  PixelateOptions,
   medianFilter,
   MedianFilterOptions,
+  pixelate,
+  PixelateOptions,
+  rawDirectConvolution,
+  separableConvolution,
 } from './filters';
 import {
   Point,
@@ -61,7 +61,6 @@ import {
   transformRotate,
   TransformRotateOptions,
 } from './geometry';
-import { ImageMetadata } from './load/getMetadata';
 import {
   bottomHat,
   BottomHatOptions,
@@ -81,20 +80,21 @@ import {
   TopHatOptions,
 } from './morphology';
 import {
+  convertBitDepth,
   convertColor,
   ConvertColorOptions,
-  convertBitDepth,
   copyTo,
   CopyToOptions,
   crop,
+  CropAlphaOptions,
   CropOptions,
   grey,
   paintMaskOnImage,
   PaintMaskOnImageOptions,
   split,
 } from './operations';
-import { cropAlpha, CropAlphaOptions } from './operations/cropAlpha';
-import { ImageColorModel, colorModels } from './utils/constants/colorModels';
+import { cropAlpha } from './operations/cropAlpha';
+import { colorModels, ImageColorModel } from './utils/constants/colorModels';
 import { getMinMax } from './utils/getMinMax';
 import { validateChannel, validateValue } from './utils/validators/validators';
 
@@ -104,6 +104,7 @@ import {
   GreyOptions,
   histogram,
   HistogramOptions,
+  ImageMetadata,
   mean,
   threshold,
   ThresholdOptions,

@@ -1,19 +1,19 @@
 import {
-  DirectConvolution,
   BorderType as ConvolutionBorderType,
+  DirectConvolution,
 } from 'ml-convolution';
 
 import { Image } from '../Image';
-import { getClamp, ClampFunction } from '../utils/clamp';
+import { getClamp } from '../utils/clamp';
 import { extendBorders } from '../utils/extendBorders';
 import { getIndex } from '../utils/getIndex';
 import { getOutputImage } from '../utils/getOutputImage';
-import {
-  BorderType,
-  getBorderInterpolation,
-  BorderInterpolationFunction,
-} from '../utils/interpolateBorder';
+import { BorderType, getBorderInterpolation } from '../utils/interpolateBorder';
 import { round } from '../utils/round';
+import {
+  BorderInterpolationFunction,
+  ClampFunction,
+} from '../utils/utils.types';
 
 export interface ConvolutionOptions {
   /**

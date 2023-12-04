@@ -2,28 +2,7 @@ import { createRandomArray } from 'ml-spectra-processing';
 
 import { Point } from '../../geometry';
 import { getClampFromTo } from '../../utils/clamp';
-
-export interface GetGaussianPointsOptions {
-  /**
-   * Number of points to generate.
-   * @default `1024`
-   */
-  nbPoints?: number;
-  /**
-   * Seed of the gaussian distribution for the x coordinates.
-   * @default `0`
-   */
-  xSeed?: number;
-  /**
-   * Seed of the gaussian distribution for the y coordinates.
-   * @default `1`
-   */
-  ySeed?: number;
-  /**
-   * The standard deviation for the gaussian distribution.
-   */
-  sigma?: number;
-}
+import { GetGaussianPointsOptions } from '../../utils/utils.types';
 
 /**
  * Get the coordinates of random points inside of the given dimensions, spread with a
@@ -78,9 +57,8 @@ export function getGaussianValues(
   });
   const clamp = getClampFromTo(-width, width);
 
-  const result = array.map((value) => {
+  return array.map((value) => {
     const rounded = Math.round(value);
     return clamp(rounded);
   });
-  return result;
 }

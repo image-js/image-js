@@ -1,32 +1,21 @@
 import { Mask } from '../Mask';
-import {
-  GetBorderPointsOptions,
-  getFeret,
-  Feret,
-  getConvexHull,
-  getMbr,
-  Mbr,
-} from '../maskAnalysis';
+import { Feret, GetBorderPointsOptions, Mbr } from '../maskAnalysis';
+import { getConvexHull } from '../maskAnalysis/getConvexHull';
+import { getFeret } from '../maskAnalysis/getFeret';
+import { getMbr } from '../maskAnalysis/getMbr';
 import { Point } from '../utils/geometry/points';
 
 import { RoiMap } from './RoiMapManager';
 import { getBorderPoints } from './getBorderPoints';
 import { getMask, GetMaskOptions } from './getMask';
-import { Ellipse, getEllipse } from './properties/getEllipse';
+import { getEllipse } from './properties/getEllipse';
+import { Border, Ellipse } from './roi.types';
+
 /**
  * Properties of borders of ROI.
  *
  */
-interface Border {
-  /**
-   * Refers  to the roiID of the contiguous ROI.
-   */
-  connectedID: number;
-  /**
-   * Length of the border with connectedID.
-   */
-  length: number;
-}
+
 interface Computed {
   perimeter: number;
   borders: Border[]; // external and internal ids which are not equal to the current roi ID
@@ -393,8 +382,7 @@ export class Roi {
    */
   get ellipse(): Ellipse {
     return this.#getComputed('ellipse', () => {
-      const ellipse = getEllipse(this);
-      return ellipse;
+      return getEllipse(this);
     });
   }
 

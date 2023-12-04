@@ -2,14 +2,6 @@ import { decode } from 'tiff';
 
 type TiffIfd = ReturnType<typeof decode>[number];
 
-export interface ImageMetadata {
-  tiff: {
-    fields: Map<number, unknown>;
-    tags: Record<string, unknown>;
-  };
-  exif: Record<string, unknown>;
-}
-
 /**
  * Get metadata from an IFD.
  * @param ifd - The IFD.

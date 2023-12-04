@@ -1,5 +1,5 @@
 import { Point, rotate } from '../../utils/geometry/points';
-import { Mbr } from '../getMbr';
+import { Mbr } from '../maskAnalysis.types';
 
 import { getAngle } from './getAngle';
 import { getMbrAngle } from './getMbrAngle';

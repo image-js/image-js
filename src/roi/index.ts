@@ -7,3 +7,4 @@ export * from './getRois';
 export * from './Roi';
 export * from './RoiMapManager';
 export * from './waterShed';
+export * from './roi.types';

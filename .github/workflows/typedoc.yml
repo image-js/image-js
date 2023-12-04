@@ -1,10 +1,11 @@
-name: Deploy TypeDoc on GitHub pages
+name: Typedoc
 
 on:
   workflow_dispatch:
   push:
     branches:
       - main
+  pull_request:
 
 env:
   NODE_VERSION: 18.x
@@ -24,7 +25,10 @@ jobs:
         uses: zakodium/typedoc-action@v2
         with:
           entry: ${{ env.ENTRY_FILE }}
+          name: ImageJS
+          treatWarningsAsErrors: ${{ github.ref != 'refs/heads/main' }}
       - name: Deploy to GitHub pages
+        if: github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@releases/v4
         with:
           token: ${{ secrets.BOT_TOKEN }}

@@ -1,7 +1,8 @@
 import { Image } from '../../Image';
+import { GetColorsOptions } from '../featureMatching.types';
 import { FastKeypoint } from '../keypoints/getFastKeypoints';
 import { Match } from '../matching/bruteForceMatch';
-import { getColors, GetColorsOptions } from '../utils/getColors';
+import { getColors } from '../utils/getColors';
 import { getMatchColor } from '../utils/getMatchColor';
 import { sortByDistance } from '../utils/sortByDistance';
 

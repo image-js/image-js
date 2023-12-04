@@ -1,8 +1,7 @@
 import { Image } from '../Image';
 
-import { ClampFunction } from './clamp';
-import { BorderInterpolationFunction } from './interpolateBorder';
 import { round } from './round';
+import { BorderInterpolationFunction, ClampFunction } from './utils.types';
 
 export const InterpolationType = {
   NEAREST: 'nearest',

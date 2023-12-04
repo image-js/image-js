@@ -1,18 +1,6 @@
 import { Image } from '../../Image';
 import { getClampFromTo } from '../../utils/clamp';
-
-export interface GetColorsOptions {
-  /**
-   * Number of shades to generate.
-   * @default `6`
-   */
-  nbShades?: number;
-  /**
-   * Factor between 0 and 1 by which to multiply the maximal value of the color to obtain the minimum value.
-   * @default `0.2`
-   */
-  minValueFactor?: number;
-}
+import { GetColorsOptions } from '../featureMatching.types';
 
 /**
  * Generate an array of colors to draw the keypoints depending on their score or the matches depending on the distance.

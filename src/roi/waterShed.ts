@@ -7,6 +7,7 @@ import getExtrema from '../compute/getExtrema';
 import { Point } from '../geometry';
 import { filterPoints } from '../utils/geometry/filterPoints';
 import checkProcessable from '../utils/validators/checkProcessable';
+
 /**
  * Point interface that is used in the queue data structure.
  */
@@ -25,7 +26,7 @@ interface PointWithIntensity {
   intensity: number;
 }
 
-interface WaterShedOptions {
+export interface WaterShedOptions {
   /**
    * @param points - Points which should be filled by watershed filter.
    * @default - minimum points from getExtrema() function.

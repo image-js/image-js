@@ -3,6 +3,8 @@ import { subtract, SubtractImageOptions } from './compare';
 import {
   drawLineOnMask,
   DrawLineOnMaskOptions,
+  drawPoints,
+  DrawPointsOptions,
   drawPolygonOnMask,
   DrawPolygonOnMaskOptions,
   drawPolylineOnMask,
@@ -10,7 +12,6 @@ import {
   drawRectangle,
   DrawRectangleOptions,
 } from './draw';
-import { drawPoints, DrawPointsOptions } from './draw/drawPoints';
 import {
   and,
   AndOptions,
@@ -19,15 +20,11 @@ import {
   or,
   OrOptions,
 } from './filters';
-import {
-  GetBorderPointsOptions,
-  getBorderPoints,
-  getConvexHull,
-  ConvexHull,
-  Feret,
-  getFeret,
-} from './maskAnalysis';
-import { getMbr, Mbr } from './maskAnalysis/getMbr';
+import { ConvexHull, Feret, GetBorderPointsOptions, Mbr } from './maskAnalysis';
+import { getBorderPoints } from './maskAnalysis/getBorderPoints';
+import { getConvexHull } from './maskAnalysis/getConvexHull';
+import { getFeret } from './maskAnalysis/getFeret';
+import { getMbr } from './maskAnalysis/getMbr';
 import {
   bottomHat,
   BottomHatOptions,
@@ -37,6 +34,7 @@ import {
   CloseOptions,
   dilate,
   DilateOptions,
+  erode,
   ErodeOptions,
   floodFill,
   FloodFillOptions,
@@ -49,7 +47,6 @@ import {
   topHat,
   TopHatOptions,
 } from './morphology';
-import { erode } from './morphology/erode';
 import {
   convertColor,
   copyTo,
@@ -58,7 +55,7 @@ import {
   PaintMaskOnMaskOptions,
 } from './operations';
 import { boolToNumber } from './utils/boolToNumber';
-import { ImageColorModel, colorModels } from './utils/constants/colorModels';
+import { colorModels, ImageColorModel } from './utils/constants/colorModels';
 import { Point } from './utils/geometry/points';
 
 export type BitValue = 1 | 0 | boolean;
@@ -323,8 +320,7 @@ export class Mask {
    * @param value - Value to set.
    */
   public setBitByIndex(index: number, value: BitValue): void {
-    const result = boolToNumber(value);
-    this.data[index * this.channels] = result;
+    this.data[index * this.channels] = boolToNumber(value);
   }
 
   /**

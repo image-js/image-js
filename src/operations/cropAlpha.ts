@@ -1,12 +1,7 @@
 import { Image } from '../Image';
 import checkProcessable from '../utils/validators/checkProcessable';
 
-export interface CropAlphaOptions {
-  /**
-   * Threshold from which rows and columns should be kept.
-   */
-  threshold?: number;
-}
+import { CropAlphaOptions } from './operations.types';
 
 /**
  * Crops the image based on the alpha channel

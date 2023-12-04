@@ -1,4 +1,5 @@
 export * from './descriptors/getBriefDescriptors';
+export * from './featureMatching.types';
 export * from './keypoints/getFastKeypoints';
 export * from './keypoints/getIntensityCentroid';
 export * from './keypoints/getOrientedFastKeypoints';

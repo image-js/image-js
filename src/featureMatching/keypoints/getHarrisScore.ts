@@ -3,20 +3,7 @@ import Matrix, { EigenvalueDecomposition, WrapperMatrix1D } from 'ml-matrix';
 import { Image } from '../../Image';
 import { Point } from '../../geometry';
 import { SOBEL_X, SOBEL_Y } from '../../utils/constants/kernels';
-
-export interface GetHarrisScoreOptions {
-  /**
-   * Size of the window to compute the Harris score.
-   * Should be an odd number so that the window can be centered on the corner.
-   * @default `7`
-   */
-  windowSize?: number;
-  /**
-   * Constant for the score computation. Should be between 0.04 and 0.06 (empirical values). This consant is commonly called k.
-   * @default `0.04`
-   */
-  harrisConstant?: number;
-}
+import { GetHarrisScoreOptions } from '../featureMatching.types';
 
 /**
  * Get the Harris score of a corner. The idea behind the algorithm is that a

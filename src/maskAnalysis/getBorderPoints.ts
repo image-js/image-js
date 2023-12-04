@@ -1,18 +1,7 @@
 import { Mask } from '../Mask';
 import { Point } from '../utils/geometry/points';
 
-export interface GetBorderPointsOptions {
-  /**
-   * Should the inner borders be returned too?
-   * @default `false`
-   */
-  innerBorders?: boolean;
-  /**
-   * Consider pixels connected by corners?
-   * @default `false`
-   */
-  allowCorners?: boolean;
-}
+import { GetBorderPointsOptions } from './maskAnalysis.types';
 
 // TODO: This function could be optimised by following the contour instead of scanning all pixels.
 /**
