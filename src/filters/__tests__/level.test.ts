@@ -1,16 +1,25 @@
-test('1x1 rgba image, default options', () => {
-  const image = testUtils.createRgbaImage([[100, 0, 0, 50]]);
-  expect(image.level()).toMatchImage(image);
+test('3x1 rgba image, default options', () => {
+  // should span contrast on the whole range
+  const image = testUtils.createRgbaImage([
+    [1, 0, 1, 50],
+    [2, 2, 0, 50],
+    [3, 1, 0, 50],
+  ]);
+  expect(image.level()).toMatchImageData([
+    [0, 0, 255, 50],
+    [127, 255, 0, 50],
+    [255, 127, 0, 50],
+  ]);
 });
 
 test('1x1 rgba image, out to itself', () => {
-  const image = testUtils.createRgbaImage([[100, 0, 0, 50]]);
+  const image = testUtils.createRgbaImage([[100, 50, 0, 50]]);
   expect(image.level({ out: image })).toBe(image);
 });
 
-test('1x1 greya image, default options', () => {
+test('1x4 greya image, default options', () => {
   const image = testUtils.createRgbaImage([[100, 50, 0, 50]]);
-  expect(image.level()).toMatchImage(image);
+  expect(image.level()).toMatchImageData([[0, 0, 0, 50]]);
 });
 
 test('3x1 rgba image, custom input min and max', () => {
@@ -29,12 +38,12 @@ test('3x1 rgba image, custom input min and max', () => {
 test('3x1 rgba image, custom output min and max', () => {
   const image = testUtils.createRgbaImage([
     [0, 0, 0, 50],
-    [127, 0, 0, 50],
+    [127, 1, 0, 50],
     [255, 0, 0, 50],
   ]);
   expect(image.level({ outputMin: 100, outputMax: 150 })).toMatchImageData([
     [100, 100, 100, 50],
-    [124, 100, 100, 50],
+    [124, 150, 100, 50],
     [150, 100, 100, 50],
   ]);
 });

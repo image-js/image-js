@@ -2,7 +2,7 @@ import { Image } from '../Image';
 import { ImageColorModel } from '../utils/constants/colorModels';
 import checkProcessable from '../utils/validators/checkProcessable';
 
-export interface AutoLevelOptions {
+export interface IncreaseContrastOptions {
   /**
    * Image to which to output.
    */
@@ -15,12 +15,16 @@ export interface AutoLevelOptions {
 }
 
 /**
- * Enhance the contrast of an image by spanning each channel on the range [0, image.maxValue].
+ * Increase the contrast of an image by spanning each channel on the range [0, image.maxValue].
+ * This algorithm is based on the level algorithm.
  * @param image - The image to enhance.
- * @param options - Enhance contrast options.
+ * @param options - Increase contrast options.
  * @returns The enhanced image.
  */
-export function autoLevel(image: Image, options: AutoLevelOptions = {}): Image {
+export function increaseContrast(
+  image: Image,
+  options: IncreaseContrastOptions = {},
+): Image {
   const { uniform = false } = options;
   checkProcessable(image, {
     bitDepth: [8, 16],

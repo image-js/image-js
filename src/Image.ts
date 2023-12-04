@@ -43,8 +43,8 @@ import {
   InvertOptions,
   level,
   LevelOptions,
-  autoLevel,
-  AutoLevelOptions,
+  increaseContrast,
+  IncreaseContrastOptions,
   pixelate,
   PixelateOptions,
   medianFilter,
@@ -938,12 +938,12 @@ export class Image {
   }
 
   /**
-   * Enhance the contrast of an image by spanning each channel on the range [0, image.maxValue].
-   * @param options - Enhance contrast options.
+   * Increase the contrast of an image by spanning each channel on the range [0, image.maxValue].
+   * @param options - Increase contrast options.
    * @returns The enhanced image.
    */
-  public autoLevel(options: AutoLevelOptions = {}): Image {
-    return autoLevel(this, options);
+  public increaseContrast(options: IncreaseContrastOptions = {}): Image {
+    return increaseContrast(this, options);
   }
 
   /**

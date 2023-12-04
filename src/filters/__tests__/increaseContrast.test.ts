@@ -1,4 +1,4 @@
-import { autoLevel } from '../autoLevel';
+import { increaseContrast } from '../increaseContrast';
 
 test('3x1 rgba image, custom output min and max', () => {
   const image = testUtils.createRgbaImage([
@@ -7,7 +7,7 @@ test('3x1 rgba image, custom output min and max', () => {
     [255, 200, 0, 50],
   ]);
 
-  const result = autoLevel(image);
+  const result = increaseContrast(image);
 
   expect(result).toMatchImageData([
     [0, 0, 0, 50],
@@ -23,7 +23,7 @@ test('3x1 rgba image, uniform = true, image should not change', () => {
     [255, 200, 0, 50],
   ]);
 
-  const result = autoLevel(image, { uniform: true });
+  const result = increaseContrast(image, { uniform: true });
 
   expect(result).toMatchImage(image);
 });
@@ -35,7 +35,7 @@ test('3x1 rgb image, uniform = true', () => {
     [200, 200, 0],
   ]);
 
-  const result = autoLevel(image, { uniform: true });
+  const result = increaseContrast(image, { uniform: true });
   expect(result).toMatchImageData([
     [0, 127, 0],
     [191, 191, 0],
@@ -45,7 +45,7 @@ test('3x1 rgb image, uniform = true', () => {
 
 test('1x3 grey image', () => {
   const image = testUtils.createGreyImage([[50, 100]]);
-  expect(autoLevel(image)).toMatchImageData([[0, 255]]);
+  expect(increaseContrast(image)).toMatchImageData([[0, 255]]);
 });
 
 test('alpha should not be modified', () => {
@@ -53,7 +53,7 @@ test('alpha should not be modified', () => {
     [50, 100],
     [100, 50],
   ]);
-  expect(autoLevel(image)).toMatchImageData([
+  expect(increaseContrast(image)).toMatchImageData([
     [0, 100],
     [255, 50],
   ]);
@@ -65,7 +65,7 @@ test('out option', () => {
     [30, 40],
     [60, 70],
   ]);
-  const result = autoLevel(image, { out: image });
+  const result = increaseContrast(image, { out: image });
   expect(result).toMatchImageData([
     [0, 10],
     [127, 40],
@@ -75,6 +75,6 @@ test('out option', () => {
 });
 
 test('bigger image', () => {
-  const image = testUtils.load('featureMatching/id-crops/crop1.png');
-  expect(autoLevel(image)).toMatchImageSnapshot();
+  const image = testUtils.load('featureMatching/id-crops/crop2.png');
+  expect(increaseContrast(image)).toMatchImageSnapshot();
 });

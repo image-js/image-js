@@ -12,22 +12,22 @@ export interface LevelOptions {
    */
   channels?: number[];
   /**
-   * Minimal input value.
-   * @default `0`
+   * Input lower bound.
+   * @default `image.minMax().min`
    */
   inputMin?: number | number[];
   /**
-   * Maximal input value.
-   * @default `image.maxValue`
+   * Input upper bound.
+   * @default `image.minMax().min`
    */
   inputMax?: number | number[];
   /**
-   * Minimal output value.
+   * output lower bound.
    * @default `0`
    */
   outputMin?: number | number[];
   /**
-   * Maximal output value.
+   * Output upper bound.
    * @default `image.maxValue`
    */
   outputMax?: number | number[];
@@ -43,15 +43,16 @@ export interface LevelOptions {
 }
 
 /**
- * Level the image using the optional input and output value. This function allows you to enhance the image's contrast.
+ * Level the image using the optional input and output value. The default options allow to increase the image's contrast.
  * @param image - Image to process.
  * @param options - Level options.
  * @returns The levelled image.
  */
 export function level(image: Image, options: LevelOptions = {}) {
+  const minMax = image.minMax();
   let {
-    inputMin = 0,
-    inputMax = image.maxValue,
+    inputMin = minMax.min,
+    inputMax = minMax.max,
     outputMin = 0,
     outputMax = image.maxValue,
     gamma = 1,
@@ -86,10 +87,12 @@ export function level(image: Image, options: LevelOptions = {}) {
           inputMin[channel],
         );
 
-        const ratio = clamp(
+        let ratio = clamp(
           (clamped - inputMin[channel]) /
             (inputMax[channel] - inputMin[channel]),
         );
+
+        if (Number.isNaN(ratio)) ratio = 0;
 
         const result = clamp(
           ratio ** (1 / gamma[channel]) *
