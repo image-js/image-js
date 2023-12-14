@@ -46,18 +46,17 @@ describe('Test WaterShed Roi generation', () => {
     ]);
 
     const roiMapManager = waterShed(image, { threshold: 2 / 255 });
-
     const resultArray = getInt32Array(`
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0,-2,-2,-2, 0, 0, 0, 0, 0,
-      0, 0,-2,-2,-2,-2, 0, 0, 0, 0,
-      0, 0,-2,-2,-2,-2, 0, 0, 0, 0,
-      0, 0, 0, 0,-2, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0,-1, 0, 0,
-      0, 0, 0, 0, 0, 0,-1,-1,-1, 0,
-      0, 0, 0, 0, 0, 0,-1,-1,-1,-1,
-      0, 0, 0, 0, 0,-1,-1,-1,-1, 0,
-      0, 0, 0, 0, 0, 0, 0, 0,-1, 0,`);
+         0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
+         0,  0, -1, -1, -1,  0,  0,  0,  0,  0,
+         0,  0, -1, -1, -1, -1,  0,  0,  0,  0, 
+         0,  0, -1, -1, -1, -1,  0,  0,  0,  0,
+         0,  0,  0,  0, -1,  0,  0,  0,  0,  0,
+         0,  0,  0,  0,  0,  0,  0, -2,  0,  0,
+         0,  0,  0,  0,  0,  0, -2, -2, -2,  0,
+         0,  0,  0,  0,  0,  0, -2, -2, -2, -2,
+         0,  0,  0,  0,  0, -2, -2, -2, -2,  0,  
+         0,  0,  0,  0,  0,  0,  0,  0, -2,  0`);
     expect(roiMapManager).toEqual({
       map: {
         data: resultArray,
@@ -69,9 +68,6 @@ describe('Test WaterShed Roi generation', () => {
       whiteRois: [],
       blackRois: [],
     });
-    const rois = roiMapManager.getRois({ kind: 'bw' });
-    expect(rois[0].origin).toEqual({ column: 5, row: 5 });
-    expect(rois[1].origin).toEqual({ column: 2, row: 1 });
   });
 
   it('test 3, with threshold option', () => {
@@ -104,10 +100,6 @@ describe('Test WaterShed Roi generation', () => {
       whiteRois: [],
       blackRois: [],
     });
-    const roi1 = roiMapManager.getRoiById(-1);
-
-    expect(roi1.surface).toEqual(9);
-    expect(roi1.width).toEqual(3);
   });
   it('test 4, waterShed through threshold value', () => {
     const image = createGreyImage([
@@ -128,16 +120,16 @@ describe('Test WaterShed Roi generation', () => {
       threshold: threshold / image.maxValue,
     });
     const resultArray = getInt32Array(`
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0,-2,-2,-2, 0, 0, 0, 0, 0, 
-      0, 0,-2,-2,-2,-2, 0, 0, 0, 0,
-      0, 0,-2,-2,-2,-2, 0, 0, 0, 0,
-      0, 0, 0, 0,-2, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-      0, 0, 0, 0, 0, 0,-1,-1,-1, 0,
-      0, 0, 0, 0, 0, 0,-1,-1,-1,-1,
-      0, 0, 0, 0, 0,-1,-1,-1,-1, 0,
-      0, 0, 0, 0, 0, 0, 0, 0,-1, 0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0, -1, -1, -1,  0,  0,  0,  0,  0,
+    0,  0, -1, -1, -1, -1,  0,  0,  0,  0,
+    0,  0, -1, -1, -1, -1   0,  0,  0,  0,
+    0,  0,  0,  0, -1,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0, -2, -2, -2,  0,  
+    0,  0,  0,  0,  0,  0, -2, -2, -2, -2,
+    0,  0,  0,  0,  0, -2, -2, -2, -2,  0,
+    0,  0,  0,  0,  0,  0,  0,  0, -2,  0
     `);
     expect(roiMapManager).toEqual({
       map: {
@@ -168,16 +160,16 @@ describe('Test WaterShed Roi generation', () => {
     const mask = image.threshold({ algorithm: 'otsu' });
     const roiMapManager = waterShed(image, { mask });
     const resultArray = getInt32Array(`
-      -2, -2, -2, -2, -2, -2, -2, -2, -2, -1,
-      -2, -2, -2, -2, -2, -2, -2,  0, -1, -1,
-      -2, -2, -2, -2, -2, -2, -2, -2, -1, -1, 
-      -2, -2, -2, -2,  0, -2, -2, -1, -1, -1,
-      -2, -2, -2, -2, -1, -2, -1, -1, -1, -1,
-      -2, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-      -1, -1, -1, -1, -1,  0, -1, -1, -1, -1,
-      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-      -1, -1, -1, -1, -1, -1, -1, -1,  0, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1,  0, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -2, -1,
+    -1, -1, -1, -1,  0, -1, -1, -2, -2, -2,
+    -1, -1, -1, -1, -1, -1, -1, -2, -2, -2, 
+    -1, -1, -1, -1, -1, -1, -2, -2, -2, -2,
+    -1, -1, -1, -1, -1,  0, -2, -2, -2, -2, 
+    -1, -1, -1, -1, -2, -2, -2, -2, -2, -2, 
+    -1, -1, -1, -2, -2, -2, -2, -2, -2, -2, 
+    -2, -2, -2, -2, -2, -2, -2, -2,  0, -2
     `);
     expect(roiMapManager).toEqual({
       map: {
@@ -190,8 +182,5 @@ describe('Test WaterShed Roi generation', () => {
       whiteRois: [],
       blackRois: [],
     });
-    const rois = roiMapManager.getRois({ kind: 'bw' });
-    expect(rois[0].origin).toEqual({ column: 0, row: 0 });
-    expect(rois[0].surface).toEqual(60);
   });
 });

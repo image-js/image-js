@@ -26,7 +26,7 @@ export function computeMse(image: Image, otherImage: Image): number {
   for (let i = 0; i < image.size; i++) {
     for (let channel = 0; channel < image.channels; channel++) {
       const value = difference.getValueByIndex(i, channel);
-      sum += Math.pow(value, 2);
+      sum += value ** 2;
     }
   }
   return sum / (image.size * image.channels);

@@ -68,6 +68,6 @@ export function getHarrisScore(
 
   return (
     eigenValues[0] * eigenValues[1] -
-    harrisConstant * Math.pow(eigenValues[0] + eigenValues[1], 2)
+    harrisConstant * (eigenValues[0] + eigenValues[1]) ** 2
   );
 }

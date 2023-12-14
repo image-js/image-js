@@ -78,7 +78,7 @@
     "autoprefixer": "^10.4.16",
     "clsx": "^2.0.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.53.0",
+    "eslint": "^8.55.0",
     "eslint-config-cheminfo-react": "^10.0.0",
     "eslint-config-cheminfo-typescript": "^12.0.4",
     "eslint-plugin-import": "^2.29.0",

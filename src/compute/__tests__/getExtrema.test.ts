@@ -1,4 +1,4 @@
-import getExtrema from '../getExtrema';
+import { getExtrema } from '../getExtrema';
 
 test('minimum of grey image from legacy code', () => {
   const image = testUtils.createGreyImage([

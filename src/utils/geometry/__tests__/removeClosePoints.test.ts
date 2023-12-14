@@ -1,32 +1,50 @@
-import getExtrema from '../../../compute/getExtrema';
-import { filterPoints } from '../filterPoints';
+import { getExtrema } from '../../../compute/getExtrema';
+import { removeClosePoints } from '../removeClosePoints';
 
-test('combine minimum points after getExtrema function', () => {
+test('combine minimum points on 5x5 image', () => {
   const image = testUtils.createGreyImage([
-    [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-    [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-    [5, 5, 5, 2, 5, 5, 5, 5, 5, 5],
-    [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-    [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-    [5, 3, 3, 3, 5, 5, 5, 5, 5, 5],
-    [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-    [5, 5, 5, 5, 5, 5, 2, 5, 5, 5],
-    [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-    [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
+    [5, 5, 5, 5, 5],
+    [5, 2, 2, 2, 5],
+    [5, 5, 5, 5, 5],
+    [5, 5, 5, 5, 5],
+    [5, 0, 1, 5, 5],
   ]);
 
-  const points = getExtrema(image, { kind: 'minimum' });
+  const points = [
+    { column: 1, row: 1 },
+    { column: 1, row: 4 },
+    { column: 3, row: 1 },
+    { column: 2, row: 4 },
+  ];
 
-  const result = filterPoints(points, image, {
-    removeClosePoints: 2,
+  const result = removeClosePoints(points, image, {
+    distance: 3,
     kind: 'minimum',
     channel: 0,
   });
   expect(result).toStrictEqual([
-    { column: 3, row: 5 },
-    { column: 6, row: 7 },
-    { column: 3, row: 2 },
+    { column: 1, row: 4 },
+    { column: 1, row: 1 },
   ]);
+});
+
+test('combine maximum points on 3x3 image', () => {
+  const image = testUtils.createGreyImage([
+    [1, 1, 1],
+    [1, 6, 6],
+    [1, 1, 1],
+  ]);
+  const points = [
+    { column: 2, row: 1 },
+    { column: 2, row: 2 },
+  ];
+
+  const result = removeClosePoints(points, image, {
+    distance: 2,
+    kind: 'maximum',
+  });
+
+  expect(result).toStrictEqual([{ column: 2, row: 1 }]);
 });
 
 test('combine maximum points after getExtrema function', () => {
@@ -48,14 +66,14 @@ test('combine maximum points after getExtrema function', () => {
     algorithm: 'star',
   });
 
-  const result = filterPoints(points, image, {
+  const result = removeClosePoints(points, image, {
     kind: 'maximum',
-    removeClosePoints: 3,
+    distance: 3,
   });
   expect(result).toStrictEqual([
-    { column: 2, row: 2 },
     { column: 3, row: 5 },
     { column: 7, row: 6 },
+    { column: 2, row: 2 },
   ]);
 });
 test('test error handling', () => {
@@ -75,9 +93,9 @@ test('test error handling', () => {
       algorithm: 'star',
     });
 
-    const result = filterPoints(points, image, {
+    const result = removeClosePoints(points, image, {
       kind: 'maximum',
-      removeClosePoints: 0,
+      distance: 0,
     });
     return result;
   }).toThrowError(

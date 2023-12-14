@@ -12,10 +12,7 @@ export function variance(image: Image): number[] {
   const sum = new Array(image.channels).fill(0);
   for (let i = 0; i < image.size; i++) {
     for (let channel = 0; channel < image.channels; channel++) {
-      sum[channel] += Math.pow(
-        image.getValueByIndex(i, channel) - mean[channel],
-        2,
-      );
+      sum[channel] += (image.getValueByIndex(i, channel) - mean[channel]) ** 2;
     }
   }
 

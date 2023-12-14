@@ -2,7 +2,7 @@ import { Image, Mask, Point } from '..';
 import { assertUnreachable } from '../utils/validators/assert';
 import checkProcessable from '../utils/validators/checkProcessable';
 
-interface ExtremaOptions {
+export interface ExtremaOptions {
   /**
    * Chooses what kind of extremum to compute.
    * @default `'maximum'`
@@ -30,10 +30,7 @@ interface ExtremaOptions {
  * @param options - ExtremaOptions
  * @returns Array of Points.
  */
-export default function getExtrema(
-  image: Image,
-  options: ExtremaOptions,
-): Point[] {
+export function getExtrema(image: Image, options: ExtremaOptions): Point[] {
   const { kind = 'maximum', mask, algorithm = 'star', maxEquals = 2 } = options;
   checkProcessable(image, {
     bitDepth: [8, 16],
