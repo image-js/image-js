@@ -84,6 +84,11 @@ export default function checkProcessable(
 
 type ArrayType = number[] | ImageColorModel[] | BitDepth[] | boolean[];
 
-function format(array: ArrayType) {
+/**
+ * Format array to a string.
+ * @param array - Array to format.
+ * @returns The formatted string.
+ */
+export function format(array: ArrayType) {
   return formatter.format(array.map(String));
 }
