@@ -14,7 +14,7 @@ type TiffIfd = ReturnType<typeof decode>[number];
 export function decodeTiff(buffer: Uint8Array): Image {
   const result = decode(buffer);
   return getImageFromIFD(result[0]);
-  // TODO: handle stacks (many IFDs)
+  // TODO: optimize not to decode whole file
 }
 
 /**
@@ -22,7 +22,7 @@ export function decodeTiff(buffer: Uint8Array): Image {
  * @param ifd - The IFD.
  * @returns The decoded image.
  */
-function getImageFromIFD(ifd: TiffIfd): Image {
+export function getImageFromIFD(ifd: TiffIfd): Image {
   if (ifd.type === 3) {
     // Palette
     const data = new Uint16Array(3 * ifd.width * ifd.height);
