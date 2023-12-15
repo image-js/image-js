@@ -1,10 +1,13 @@
 import { BitDepth } from 'fast-png';
 
 import { Image } from './Image';
-import { maxImage } from './stack/maxImage';
-import { meanImage } from './stack/meanImage';
-import { medianImage } from './stack/medianImage';
-import { minImage } from './stack/minImage';
+import { HistogramOptions } from './compute';
+import { histogram } from './stack/compute/histogram';
+import { maxImage } from './stack/compute/maxImage';
+import { meanImage } from './stack/compute/meanImage';
+import { medianImage } from './stack/compute/medianImage';
+import { minImage } from './stack/compute/minImage';
+import { sum } from './stack/compute/sum';
 import {
   checkImagesValid,
   verifySameDimensions,
@@ -64,7 +67,7 @@ export class Stack {
   }
 
   /**
-   * Clone a stack.
+   * Clone a stack. The images are a copy of the original images.
    * @returns A new stack with the same images.
    */
   public clone(): Stack {
@@ -157,10 +160,22 @@ export class Stack {
   }
 
   /**
-   * Get the global histogram of the stack.
+   * Return a 16 bits depth image containing the sum values of all the images in the stack for
+   * each pixel.
+   * @returns The sum image.
    */
-  // public getHistogram(): Uint32Array {}
+  public sum(): Image {
+    return sum(this);
+  }
 
+  /**
+   * Get the sum of all the histograms of the stack's images. If no channel is specified in the options, the images must be GREY.
+   * @param options - Histogram options.
+   * @returns The histogram of the stack.
+   */
+  public histogram(options: HistogramOptions = {}): Uint32Array {
+    return histogram(this, options);
+  }
   /**
    * Align all the images of the stack on the image at the given index.
    * @param refIndex - The index of the reference image.

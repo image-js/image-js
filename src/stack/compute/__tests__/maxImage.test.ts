@@ -1,8 +1,8 @@
 import { join } from 'node:path';
 
-import { Image } from '../../Image';
-import { Stack } from '../../Stack';
-import { getStackFromFolder } from '../utils/getStackFromFolder';
+import { Image } from '../../../Image';
+import { Stack } from '../../../Stack';
+import { getStackFromFolder } from '../../utils/getStackFromFolder';
 
 test('2 grey images', () => {
   const image1 = testUtils.createGreyImage([[1, 2, 3, 4]]);
@@ -18,7 +18,7 @@ test('2 grey images', () => {
 });
 
 test('more complex stack', () => {
-  const folder = join(__dirname, '../../../test/img/correctColor');
+  const folder = join(__dirname, '../../../../test/img/correctColor');
   const stack = getStackFromFolder(folder);
 
   expect(stack.maxImage()).toMatchImageSnapshot();

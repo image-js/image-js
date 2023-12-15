@@ -1,16 +1,17 @@
-import { Image } from '../Image';
-import { Stack } from '../Stack';
+import { Image } from '../../Image';
+import { Stack } from '../../Stack';
 
-import { checkProcessable } from './utils/checkProcessable';
+import { checkProcessable } from '../utils/checkProcessable';
 
 /**
- *  Returns a new image with the maximum values of each pixel from the stack.
+ *  Returns a new image with the minimum values of each pixel from the stack.
  * @param stack - Stack to process.
- * @returns The maximum image.
+ * @returns The minimum image.
  */
-export function maxImage(stack: Stack): Image {
+export function minImage(stack: Stack): Image {
   checkProcessable(stack, { sameDimensions: true });
   const newImage = Image.createFrom(stack.getImage(0));
+  newImage.fill(newImage.maxValue);
 
   const nbChannels = newImage.channels;
 
@@ -20,7 +21,7 @@ export function maxImage(stack: Stack): Image {
         newImage.setValueByIndex(
           j,
           channel,
-          Math.max(
+          Math.min(
             newImage.getValueByIndex(j, channel),
             stack.getValueByIndex(i, j, channel),
           ),

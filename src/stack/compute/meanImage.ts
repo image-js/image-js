@@ -1,7 +1,7 @@
-import { Image } from '../Image';
-import { Stack } from '../Stack';
+import { Image } from '../../Image';
+import { Stack } from '../../Stack';
 
-import { checkProcessable } from './utils/checkProcessable';
+import { checkProcessable } from '../utils/checkProcessable';
 
 /**
  *  Returns a new image with the average values of each pixel of the images of the stack.
