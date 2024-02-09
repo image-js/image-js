@@ -34,7 +34,6 @@ export function getExtrema(image: Image, options: ExtremaOptions): Point[] {
   const { kind = 'maximum', mask, algorithm = 'star', maxEquals = 2 } = options;
   checkProcessable(image, {
     bitDepth: [8, 16],
-    components: image.components,
   });
   const searchingMinimum = kind === 'minimum';
 
