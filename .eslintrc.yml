@@ -3,8 +3,5 @@ extends:
   - cheminfo-typescript
   - cheminfo-typescript/jsdoc
   - cheminfo-typescript/unicorn
-plugins:
-  - jest
 rules:
   '@typescript-eslint/restrict-template-expressions': off
-  'jest/no-focused-tests': 'error'

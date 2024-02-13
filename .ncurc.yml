@@ -1,0 +1,3 @@
+reject:
+  # Package is now ESM-only
+  - 'image-type'
