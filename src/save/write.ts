@@ -2,14 +2,9 @@ import fs from 'node:fs';
 import nodePath from 'node:path';
 import url from 'node:url';
 
-import { Mask, Image } from '..';
+import { Image, Mask } from '..';
 
-import {
-  encode,
-  ImageFormat,
-  EncodeOptionsPng,
-  EncodeOptionsJpeg,
-} from './encode';
+import { encode, EncodeOptionsJpeg, EncodeOptionsPng } from './encode';
 
 export interface WriteOptions {
   /**
@@ -123,25 +118,16 @@ function getDataToWrite(
   image: Image,
   options?: WriteOptionsPng | WriteOptionsJpeg | WriteOptions,
 ): Uint8Array {
-  let format: ImageFormat;
   if (!options || !('format' in options)) {
     const extension = nodePath.extname(destinationPath).slice(1).toLowerCase();
-    if (extension === 'png') {
-      format = 'png';
-      return encode(image, { format });
-    } else if (extension === 'jpg' || extension === 'jpeg') {
-      format = 'jpg';
-      return encode(image, { format });
+    if (extension === 'png' || extension === 'jpg' || extension === 'jpeg') {
+      return encode(image, { format: extension });
     } else {
       throw new RangeError(
         'image format could not be determined from file extension. Use a supported extension or specify the format option',
       );
     }
-  } else if (options.format === 'png') {
-    return encode(image, options);
-  } else if (options.format === 'jpg' || options.format === 'jpeg') {
-    return encode(image, options);
   } else {
-    throw new RangeError(`invalid format: ${options.format}`);
+    return encode(image, options);
   }
 }
