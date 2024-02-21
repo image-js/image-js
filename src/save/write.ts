@@ -121,7 +121,7 @@ function getDataToWrite(
   if (!options || !('format' in options)) {
     const extension = nodePath.extname(destinationPath).slice(1).toLowerCase();
     if (extension === 'png' || extension === 'jpg' || extension === 'jpeg') {
-      return encode(image, { format: extension });
+      return encode(image, { ...options, format: extension });
     } else {
       throw new RangeError(
         'image format could not be determined from file extension. Use a supported extension or specify the format option',
