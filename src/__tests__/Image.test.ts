@@ -155,6 +155,21 @@ describe('get and set pixels', () => {
     img.setValueByPoint(point, 0, 50);
     expect(img.getValueByPoint(point, 0)).toBe(50);
   });
+  it('should set clamped value', () => {
+    const img = new Image(10, 20);
+    img.setClampedValue(15, 0, 0, -50);
+    expect(img.getValue(15, 0, 0)).toBe(0);
+    img.setClampedValue(15, 0, 0, 99999);
+    expect(img.getValue(15, 0, 0)).toBe(img.maxValue);
+  });
+  it('should set clamped value by index', () => {
+    const img = new Image(10, 20);
+    expect(img.getValueByIndex(15, 0)).toBe(0);
+    img.setClampedValueByIndex(15, 0, -50);
+    expect(img.getValueByIndex(15, 0)).toBe(0);
+    img.setClampedValueByIndex(15, 0, 999999);
+    expect(img.getValueByIndex(15, 0)).toBe(img.maxValue);
+  });
 });
 
 test('createFrom', () => {

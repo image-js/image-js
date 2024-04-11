@@ -432,6 +432,24 @@ export class Image {
   }
 
   /**
+   * Set the value of a specific pixel channel. Select pixel using coordinates.
+   * If the value is out of range it is set to the closest extremety.
+   * @param column - Column index.
+   * @param row - Row index.
+   * @param channel - Channel index.
+   * @param value - Value to set.
+   */
+  public setClampedValue(
+    column: number,
+    row: number,
+    channel: number,
+    value: number,
+  ): void {
+    if (value < 0) value = 0;
+    else if (value > this.maxValue) value = this.maxValue;
+    this.data[(row * this.width + column) * this.channels + channel] = value;
+  }
+  /**
    * Get the value of a specific pixel channel. Select pixel using index.
    * @param index - Index of the pixel.
    * @param channel - Channel index.
@@ -447,6 +465,23 @@ export class Image {
    * @param value - Value to set.
    */
   public setValueByIndex(index: number, channel: number, value: number): void {
+    this.data[index * this.channels + channel] = value;
+  }
+
+  /**
+   * Set the value of a specific pixel channel. Select pixel using index.
+   * If the value is out of range it is set to the closest extremety.
+   * @param index - Index of the pixel.
+   * @param channel - Channel index.
+   * @param value - Value to set.
+   */
+  public setClampedValueByIndex(
+    index: number,
+    channel: number,
+    value: number,
+  ): void {
+    if (value < 0) value = 0;
+    else if (value > this.maxValue) value = this.maxValue;
     this.data[index * this.channels + channel] = value;
   }
 
