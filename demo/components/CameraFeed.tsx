@@ -12,7 +12,7 @@ export default function CameraFeed() {
     if (!video || !selectedCamera) return;
     video.srcObject = selectedCamera.stream;
     video.onloadedmetadata = () => {
-      video.play().catch(console.error);
+      video.play().catch((err: unknown) => console.error(err));
     };
   }, [selectedCamera]);
   if (!selectedCamera) {

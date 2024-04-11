@@ -29,7 +29,7 @@ export default function CameraSelector() {
                   camera: { device, stream },
                 });
               })
-              .catch(console.error);
+              .catch((err: unknown) => console.error(err));
           }
         }}
       >

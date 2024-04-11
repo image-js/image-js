@@ -39,7 +39,7 @@ export function getPatchIntensityMoment(
   if (!checkBorderDistance(image, origin, radius)) {
     throw new RangeError(`desired patch is too close to image border`);
   }
-  const moment = new Array(image.channels).fill(0);
+  const moment = new Array<number>(image.channels).fill(0);
 
   const relativeCirclePoints = getFilledCirclePoints(radius);
   for (const point of relativeCirclePoints) {
