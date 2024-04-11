@@ -3,7 +3,6 @@ import quickMedian from 'median-quickselect';
 
 import { Image } from '../../Image';
 import { Stack } from '../../Stack';
-
 import { checkProcessable } from '../utils/checkProcessable';
 
 /**

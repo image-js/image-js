@@ -2,7 +2,7 @@ import { inverse, Matrix } from 'ml-matrix';
 
 import { Image } from '../Image';
 import { getClamp } from '../utils/clamp';
-import { getBorderInterpolation, BorderType } from '../utils/interpolateBorder';
+import { BorderType, getBorderInterpolation } from '../utils/interpolateBorder';
 import {
   getInterpolationFunction,
   InterpolationType,

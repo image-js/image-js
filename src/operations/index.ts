@@ -7,6 +7,8 @@ export * from './threshold';
 export * from './grey';
 export * from './copyTo';
 export * from './crop';
+export * from './cropAlpha';
+export * from './cropRectangle';
 export * from './operations.types';
 export * from './paintMaskOnImage';
 export * from './paintMaskOnMask';

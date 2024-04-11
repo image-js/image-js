@@ -37,12 +37,12 @@ import {
   GradientFilterOptions,
   hypotenuse,
   HypotenuseOptions,
+  increaseContrast,
+  IncreaseContrastOptions,
   invert,
   InvertOptions,
   level,
   LevelOptions,
-  increaseContrast,
-  IncreaseContrastOptions,
   medianFilter,
   MedianFilterOptions,
   pixelate,
@@ -86,14 +86,16 @@ import {
   copyTo,
   CopyToOptions,
   crop,
+  cropAlpha,
   CropAlphaOptions,
   CropOptions,
+  cropRectangle,
+  CropRectangleOptions,
   grey,
   paintMaskOnImage,
   PaintMaskOnImageOptions,
   split,
 } from './operations';
-import { cropAlpha } from './operations/cropAlpha';
 import { colorModels, ImageColorModel } from './utils/constants/colorModels';
 import { getMinMax } from './utils/getMinMax';
 import { validateChannel, validateValue } from './utils/validators/validators';
@@ -840,6 +842,17 @@ export class Image {
    */
   public crop(options?: CropOptions): Image {
     return crop(this, options);
+  }
+
+  /**
+   * Crop an oriented rectangle from the image.
+   * If the rectangle's length or width are not an integers, its dimension is expanded in both directions such as the length and width are integers.
+   * @param points - The points of the rectangle. Points must be circling around the rectangle (clockwise or anti-clockwise)
+   * @param options - Crop options, see {@link CropRectangleOptions}
+   * @returns The cropped image. The orientation of the image is the one closest to the rectangle passed as input.
+   */
+  public cropRectangle(points: Point[], options?: CropRectangleOptions) {
+    return cropRectangle(this, points, options);
   }
 
   /**
