@@ -8,3 +8,12 @@ test('should encode what it decoded', () => {
   const imgDup = decode(encodePng(img));
   expect(imgDup).toMatchImage(img);
 });
+
+test('should encode a 16bits image correctly', () => {
+  const img = testUtils.load('formats/tif/grey16.tif');
+  expect(img.size).toBe(2700);
+  expect(img.bitDepth).toBe(16);
+  const imgDup = decode(encodePng(img));
+  expect(imgDup.bitDepth).toBe(16);
+  expect(imgDup).toMatchImage(img);
+});
