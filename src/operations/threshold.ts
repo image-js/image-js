@@ -41,6 +41,10 @@ export type ThresholdAlgorithm =
 
 interface ThresholdOptionsBase {
   /**
+   * Number of slots that histogram can have. Slots must be a power of 2.
+   */
+  slots?: number;
+  /**
    * Image to use as the output.
    */
   out?: Mask;
@@ -69,19 +73,20 @@ export type ThresholdOptions =
 /**
  * Compute threshold value for an image using the specified algorithm.
  * @param image - The grey image.
- * @param algorithm - Algorithm that defines the threshold.
+ * @param options - Threshold options.
  * @returns The threshold value for the image.
  */
 export function computeThreshold(
   image: Image,
-  algorithm: ThresholdAlgorithm = 'otsu',
+  options: ThresholdOptionsAlgorithm = {},
 ): number {
+  const { algorithm = 'otsu', slots } = options;
   if (image.channels !== 1) {
     throw new TypeError(
       'threshold can only be computed on images with one channel',
     );
   }
-  const histogram = image.histogram();
+  const histogram = image.histogram({ slots });
 
   switch (algorithm) {
     case 'huang':
@@ -136,7 +141,7 @@ export function threshold(image: Image, options: ThresholdOptions = {}): Mask {
     }
     thresholdValue = threshold * image.maxValue;
   } else {
-    thresholdValue = computeThreshold(image, options.algorithm);
+    thresholdValue = computeThreshold(image, options);
   }
   const result = imageToOutputMask(image, options);
   for (let i = 0; i < image.size; i++) {

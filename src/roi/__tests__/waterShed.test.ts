@@ -114,7 +114,7 @@ describe('Test WaterShed Roi generation', () => {
       [4, 4, 4, 4, 3, 2, 2, 2, 2, 3],
       [4, 4, 4, 4, 3, 3, 3, 3, 2, 3],
     ]);
-    const threshold = computeThreshold(image, 'otsu');
+    const threshold = computeThreshold(image, { algorithm: 'otsu' });
 
     const roiMapManager = waterShed(image, {
       threshold: threshold / image.maxValue,

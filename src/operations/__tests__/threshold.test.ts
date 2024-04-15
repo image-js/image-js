@@ -26,13 +26,13 @@ test('computeThreshold with OTSU', () => {
   const testImage = testUtils.load('opencv/test.png');
 
   const grey = testImage.convertColor('GREY');
-  const thresholdValue = computeThreshold(grey, 'otsu');
+  const thresholdValue = computeThreshold(grey, { algorithm: 'otsu' });
   expect(thresholdValue).toBe(127);
 });
 
 test('computeThreshold with OTSU (2)', () => {
   const img = testUtils.load('various/grayscale_by_zimmyrose.png');
-  const thresholdValue = computeThreshold(img, 'otsu');
+  const thresholdValue = computeThreshold(img, { algorithm: 'otsu' });
   expect(thresholdValue).toBe(135);
 });
 
@@ -115,4 +115,28 @@ test('16 bits image', () => {
   const threshold = image.threshold();
 
   expect(threshold).toMatchImageSnapshot();
+});
+
+test('16 bits image simple with default number of slots 2**16', () => {
+  const image = new Image(2, 2, {
+    colorModel: ImageColorModel.GREY,
+    bitDepth: 16,
+    data: new Uint16Array([0, 100, 20000, 30000]),
+  });
+  const threshold = image.threshold({ slots: 2 ** image.bitDepth });
+  const defaultThreshold = image.threshold();
+
+  expect(threshold).toEqual(defaultThreshold);
+});
+
+test('16 bits image simple with custom number of slots 2**8', () => {
+  const image = new Image(2, 2, {
+    colorModel: ImageColorModel.GREY,
+    bitDepth: 16,
+    data: new Uint16Array([0, 100, 20000, 30000]),
+  });
+  const threshold = image.threshold({ slots: 2 ** 8 });
+  const defaultThreshold = image.threshold();
+
+  expect(threshold).not.toEqual(defaultThreshold);
 });
