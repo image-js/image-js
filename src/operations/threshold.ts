@@ -87,38 +87,39 @@ export function computeThreshold(
     );
   }
   const histogram = image.histogram({ slots });
+  const scale = slots ? 2 ** image.bitDepth / slots : 1;
 
   switch (algorithm) {
     case 'huang':
-      return huang(histogram);
+      return huang(histogram) * scale;
     case 'intermodes':
-      return intermodes(histogram);
+      return intermodes(histogram) * scale;
     case 'isodata':
-      return isodata(histogram);
+      return isodata(histogram) * scale;
     case 'li':
-      return li(histogram, image.size);
+      return li(histogram, image.size) * scale;
     case 'maxEntropy':
-      return maxEntropy(histogram, image.size);
+      return maxEntropy(histogram, image.size) * scale;
     case 'mean':
-      return mean(histogram, image.size);
+      return mean(histogram, image.size) * scale;
     case 'minimum':
-      return minimum(histogram);
+      return minimum(histogram) * scale;
     case 'minError':
-      return minError(histogram, image.size);
+      return minError(histogram, image.size) * scale;
     case 'moments':
-      return moments(histogram, image.size);
+      return moments(histogram, image.size) * scale;
     case 'otsu':
-      return otsu(histogram, image.size);
+      return otsu(histogram, image.size) * scale;
     case 'percentile':
-      return percentile(histogram);
+      return percentile(histogram) * scale;
     case 'renyiEntropy':
-      return renyiEntropy(histogram, image.size);
+      return renyiEntropy(histogram, image.size) * scale;
     case 'shanbhag':
-      return shanbhag(histogram, image.size);
+      return shanbhag(histogram, image.size) * scale;
     case 'triangle':
-      return triangle(histogram);
+      return triangle(histogram) * scale;
     case 'yen':
-      return yen(histogram, image.size);
+      return yen(histogram, image.size) * scale;
     default:
       throw new RangeError(`invalid threshold algorithm: ${algorithm}`);
   }
