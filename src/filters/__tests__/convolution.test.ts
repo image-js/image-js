@@ -16,7 +16,7 @@ describe('convolution functions', () => {
       },
     );
 
-    const expected = testUtils.load('opencv/testConv.png');
+    const expected = testUtils.load('opencv/testConvolution.png');
 
     expect(convoluted).toMatchImage(expected);
   });
@@ -32,7 +32,7 @@ describe('convolution functions', () => {
       borderType: 'reflect',
     });
 
-    const expected = testUtils.load('opencv/testConv.png');
+    const expected = testUtils.load('opencv/testConvolution.png');
     expect(convoluted).toMatchImage(expected);
   });
 

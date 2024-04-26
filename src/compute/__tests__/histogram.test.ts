@@ -98,7 +98,7 @@ test('throw if slots is not a power of 2', () => {
     [0, 255, 255, 255, 0],
     [0, 0, 0, 0, 0],
   ]);
-  expect(() => image.histogram({ slots: 7 })).toThrowError(
+  expect(() => image.histogram({ slots: 7 })).toThrow(
     'slots must be a power of 2, for example: 64, 256, 1024',
   );
 });

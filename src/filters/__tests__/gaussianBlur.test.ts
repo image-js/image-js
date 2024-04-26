@@ -1,4 +1,8 @@
-import { GaussianBlurOptions, gaussianBlur } from '../gaussianBlur';
+import {
+  GaussianBlurOptions,
+  gaussianBlur,
+  GaussianBlurSigmaOptions,
+} from '../gaussianBlur';
 
 test('symmetrical kernel, should return the kernel itself', () => {
   const image = testUtils.createGreyImage([
@@ -102,26 +106,20 @@ test('x and y kernels', () => {
 
   expect(() => {
     return image.gaussianBlur(options);
-  }).toThrowError(
+  }).toThrow(
     'you must either define sigma or sigmaX and sigmaY in the options argument',
   );
 });
 
-test.skip('gaussian blur should have same result as opencv', () => {
+test('gaussian blur should have same result as opencv', () => {
   const img = testUtils.load('opencv/test.png');
-  const options: GaussianBlurOptions = {
+  const options: GaussianBlurSigmaOptions = {
     borderType: 'reflect',
     size: 3,
-    sigmaX: 1,
-    sigmaY: 1,
+    sigma: 1,
   };
   const blurred = gaussianBlur(img, options);
 
-  // const grey = convertColor(img, ImageKind.GREY);
-  // const greyBlurred = gaussianBlur(grey, options);
-  // console.log(greyBlurred.data);
-
   const expected = testUtils.load('opencv/testGaussianBlur.png');
-  // write('gaussian.png', blurred);
-  expect(expected).toMatchImage(blurred);
+  expect(blurred).toMatchImage(expected);
 });
