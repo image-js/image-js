@@ -36,6 +36,7 @@ export type TestImagePath =
   | 'opencv/testRotateBilinear.png'
   | 'opencv/testTranslate.png'
   | 'opencv/testResizeBilinear.png'
+  | 'opencv/testResizeNearest.png'
   | 'opencv/testAntiClockwiseRot90.png'
   | 'opencv/testClockwiseRot90.png'
   | 'opencv/testScale.png'

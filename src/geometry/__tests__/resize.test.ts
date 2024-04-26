@@ -1,6 +1,18 @@
 import { encodePng } from '../../save';
 
-test.skip('compares result of resize with opencv', () => {
+test.skip('compare result of resize with opencv (nearest)', () => {
+  const img = testUtils.load('opencv/test.png');
+
+  const resized = img.resize({
+    xFactor: 10,
+    yFactor: 10,
+    interpolationType: 'nearest',
+  });
+
+  expect(resized).toMatchImage('opencv/testResizeNearest.png');
+});
+
+test.skip('compare result of resize with opencv (bilinear)', () => {
   const img = testUtils.load('opencv/test.png');
 
   const resized = img.resize({

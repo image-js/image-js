@@ -13,6 +13,8 @@ dst = cv.warpAffine(img, M, dsize=(cols * scale, rows * scale), flags=cv.INTER_L
 cv.imwrite('testScale.png', dst)
 
 # Image resizing by 10.
+dst = cv.resize(img, (80, 100), interpolation=cv.INTER_NEAREST)
+cv.imwrite('testResizeNearest.png', dst)
 dst = cv.resize(img, (80, 100), interpolation=cv.INTER_LINEAR)
 cv.imwrite('testResizeBilinear.png', dst)
 
