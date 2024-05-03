@@ -1,11 +1,13 @@
 import { Image } from '../Image';
 import { getClamp } from '../utils/clamp';
-import { getBorderInterpolation, BorderType } from '../utils/interpolateBorder';
+import { BorderType, getBorderInterpolation } from '../utils/interpolateBorder';
 import {
   getInterpolationFunction,
   InterpolationType,
 } from '../utils/interpolatePixel';
 import { assert } from '../utils/validators/assert';
+
+import { transform } from './transform';
 
 export interface ResizeOptions {
   /**
@@ -58,7 +60,25 @@ export function resize(image: Image, options: ResizeOptions): Image {
     borderType = 'constant',
     borderValue = 0,
   } = options;
-  const { width, height } = checkOptions(image, options);
+  const { width, height, xFactor, yFactor } = checkOptions(image, options);
+
+  if (interpolationType === 'nearest') {
+    return transform(
+      image,
+      [
+        [xFactor, 0, xFactor / 2],
+        [0, yFactor, yFactor / 2],
+      ],
+      {
+        interpolationType,
+        borderType,
+        borderValue,
+        height,
+        width,
+      },
+    );
+  }
+
   const newImage = Image.createFrom(image, { width, height });
   const interpolate = getInterpolationFunction(interpolationType);
   const interpolateBorder = getBorderInterpolation(borderType, borderValue);
