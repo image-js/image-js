@@ -1,10 +1,6 @@
 import { Image } from '../Image';
-import { getClamp } from '../utils/clamp';
-import { BorderType, getBorderInterpolation } from '../utils/interpolateBorder';
-import {
-  getInterpolationFunction,
-  InterpolationType,
-} from '../utils/interpolatePixel';
+import { BorderType } from '../utils/interpolateBorder';
+import { InterpolationType } from '../utils/interpolatePixel';
 import { assert } from '../utils/validators/assert';
 
 import { transform } from './transform';
@@ -57,52 +53,25 @@ export interface ResizeOptions {
 export function resize(image: Image, options: ResizeOptions): Image {
   const {
     interpolationType = 'bilinear',
-    borderType = 'constant',
+    borderType = 'replicate',
     borderValue = 0,
   } = options;
   const { width, height, xFactor, yFactor } = checkOptions(image, options);
 
-  if (interpolationType === 'nearest') {
-    return transform(
-      image,
-      [
-        [xFactor, 0, xFactor / 2],
-        [0, yFactor, yFactor / 2],
-      ],
-      {
-        interpolationType,
-        borderType,
-        borderValue,
-        height,
-        width,
-      },
-    );
-  }
-
-  const newImage = Image.createFrom(image, { width, height });
-  const interpolate = getInterpolationFunction(interpolationType);
-  const interpolateBorder = getBorderInterpolation(borderType, borderValue);
-  const clamp = getClamp(newImage);
-  const intervalX = (image.width - 1) / (width - 1);
-  const intervalY = (image.height - 1) / (height - 1);
-  for (let row = 0; row < newImage.height; row++) {
-    for (let column = 0; column < newImage.width; column++) {
-      const nx = column * intervalX;
-      const ny = row * intervalY;
-      for (let channel = 0; channel < newImage.channels; channel++) {
-        const newValue = interpolate(
-          image,
-          nx,
-          ny,
-          channel,
-          interpolateBorder,
-          clamp,
-        );
-        newImage.setValue(column, row, channel, newValue);
-      }
-    }
-  }
-  return newImage;
+  return transform(
+    image,
+    [
+      [xFactor, 0, xFactor / 2],
+      [0, yFactor, yFactor / 2],
+    ],
+    {
+      interpolationType,
+      borderType,
+      borderValue,
+      height,
+      width,
+    },
+  );
 }
 
 /**

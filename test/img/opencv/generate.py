@@ -7,6 +7,12 @@ dirname = path.dirname(path.abspath(__file__))
 def writeImg(name, img):
     cv.imwrite(path.join(dirname, name), img)
 
+interpolations = [
+    [cv.INTER_NEAREST, 'nearest'],
+    [cv.INTER_LINEAR, 'bilinear'],
+    [cv.INTER_CUBIC, 'bicubic'],
+]
+
 img = cv.imread(path.join(dirname, 'test.png'))
 assert img is not None, "file could not be read, check with os.path.exists()"
 rows, cols = img.shape[0], img.shape[1]
@@ -19,10 +25,17 @@ dst = cv.warpAffine(img, M, dsize=(cols * scale, rows * scale), flags=cv.INTER_L
 writeImg('testScale.png', dst)
 
 # Image resizing.
-dst = cv.resize(img, (80, 100), interpolation=cv.INTER_NEAREST)
-writeImg('testResizeNearest.png', dst)
-dst = cv.resize(img, (80, 100), interpolation=cv.INTER_LINEAR)
-writeImg('testResizeBilinear.png', dst)
+sizes = [
+    [(80, 100), 'larger'],
+    [(8, 10), 'same'],
+    [(5, 6), 'smaller'],
+]
+for interpolation, interpolationName in interpolations:
+    for size, sizeName in sizes:
+        writeImg(
+            f'test_resize_{interpolationName}_{sizeName}.png',
+            cv.resize(img, size, interpolation=interpolation)
+        )
 
 # Image rotate counter-clockwise by 90 degrees
 M = np.float32([[0, 1, 0], [-1, 0, cols - 1]])
