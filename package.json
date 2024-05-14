@@ -58,6 +58,7 @@
     "ml-matrix": "^6.11.0",
     "ml-ransac": "^1.0.0",
     "ml-regression-multivariate-linear": "^2.0.4",
+    "ml-regression-polynomial-2d": "^0.2.0",
     "ml-spectra-processing": "^14.3.0",
     "robust-point-in-polygon": "^1.0.3",
     "ssim.js": "^3.5.0",
