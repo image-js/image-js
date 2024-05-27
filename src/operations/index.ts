@@ -13,3 +13,4 @@ export * from './operations.types';
 export * from './paintMaskOnImage';
 export * from './paintMaskOnMask';
 export * from './correctBackground';
+export * from './extendBorders';

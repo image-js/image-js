@@ -4,8 +4,8 @@ import {
 } from 'ml-convolution';
 
 import { Image } from '../Image';
+import { extendBorders } from '../operations/extendBorders';
 import { getClamp } from '../utils/clamp';
-import { extendBorders } from '../utils/extendBorders';
 import { getIndex } from '../utils/getIndex';
 import { getOutputImage } from '../utils/getOutputImage';
 import { BorderType, getBorderInterpolation } from '../utils/interpolateBorder';

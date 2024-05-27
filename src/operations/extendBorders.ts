@@ -1,11 +1,24 @@
 import { Image } from '../Image';
+import { BorderType, getBorderInterpolation } from '../utils/interpolateBorder';
 
-import { BorderType, getBorderInterpolation } from './interpolateBorder';
-
-interface ExtendBordersOptions {
+export interface ExtendBordersOptions {
+  /**
+   * Left and right border thickness.
+   */
   horizontal: number;
+  /**
+   *Top and bottom border thickness.
+   */
   vertical: number;
+  /**
+   * Specify how the borders should be handled.
+   * @default `'reflect101'`
+   */
   borderType?: BorderType;
+  /**
+   * Value of the border if BorderType is 'constant'.
+   * @default `0`
+   */
   borderValue?: number;
 }
 
