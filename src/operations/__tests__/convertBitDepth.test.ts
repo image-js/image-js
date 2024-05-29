@@ -65,3 +65,13 @@ test('throw if converting to same bit depth', () => {
     img.convertBitDepth(8);
   }).toThrow('cannot convert image to same bitDepth');
 });
+test('throw if converting to unsupported bit depth', () => {
+  const img = testUtils.createRgbaImage([
+    [256, 256, 256, 256, 512, 512, 512, 512],
+    [768, 768, 768, 768, 1024, 1024, 1024, 1024],
+  ]);
+
+  expect(() => {
+    img.convertBitDepth(1);
+  }).toThrow('This image bit depth is not supported: 1');
+});

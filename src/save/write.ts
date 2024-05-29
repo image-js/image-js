@@ -137,12 +137,12 @@ function getDataToWrite(
 ): Uint8Array {
   if (!options || !('format' in options)) {
     const extension = nodePath.extname(destinationPath).slice(1).toLowerCase();
-    if (extension === 'png' || extension === 'jpg' || extension === 'jpeg') {
-      if (image instanceof Mask) {
-        image = image.convertColor('GREY');
-      }
-      return encode(image, { ...options, format: extension });
-    } else if (extension === 'bmp') {
+    if (
+      extension === 'png' ||
+      extension === 'jpg' ||
+      extension === 'jpeg' ||
+      extension === 'bmp'
+    ) {
       return encode(image, { ...options, format: extension });
     } else {
       throw new RangeError(

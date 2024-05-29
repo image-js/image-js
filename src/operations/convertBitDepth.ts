@@ -13,8 +13,12 @@ export function convertBitDepth(image: Image, newBitDepth: BitDepth): Image {
 
   if (newBitDepth === 16) {
     return convertToUint16(image);
-  } else {
+  } else if (newBitDepth === 8) {
     return convertToUint8(image);
+  } else {
+    throw new RangeError(
+      `This image bit depth is not supported: ${newBitDepth}`,
+    );
   }
 }
 

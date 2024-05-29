@@ -17,3 +17,11 @@ test('should encode a 16bits image correctly', () => {
   expect(imgDup.bitDepth).toBe(16);
   expect(imgDup).toMatchImage(img);
 });
+
+test('add mask test', () => {
+  const img = testUtils.load('formats/tif/grey16.tif');
+  const mask = img.threshold();
+  const imgDup = decode(encodePng(mask));
+  expect(imgDup.colorModel).toBe('GREY');
+  expect(imgDup.bitDepth).toBe(8);
+});

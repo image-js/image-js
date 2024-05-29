@@ -9,7 +9,7 @@ import { Mask } from '../Mask';
  * @param mask - The mask instance.
  * @returns The buffer.
  */
-export function encodeBmp(mask: Mask | Image) {
+export function encodeBmp(mask: Image | Mask) {
   if (!(mask instanceof Mask)) {
     throw new TypeError('Image bmp encoding is not implemented.');
   }

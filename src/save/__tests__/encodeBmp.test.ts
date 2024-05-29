@@ -35,3 +35,13 @@ test('encode 10x2 mask', () => {
   const buffer = encodeBmp(mask).buffer;
   expect(buffer).toEqual(result.buffer);
 });
+test('should throw error', () => {
+  const image = testUtils.createGreyImage([
+    [255, 255, 255, 0, 0, 255, 0, 255, 0, 255],
+    [255, 0, 255, 0, 255, 0, 0, 255, 255, 255],
+  ]);
+
+  expect(() => encodeBmp(image)).toThrow(
+    'Image bmp encoding is not implemented.',
+  );
+});
