@@ -511,7 +511,7 @@ export class Roi {
    * @returns Solidity value.
    */
   get solidity() {
-    return this.surface / getConvexHull(this.getMask()).surface;
+    return this.surface / this.convexHull.surface;
   }
   //TODO Should be refactored to not need creating a new Mask.
 
