@@ -1,12 +1,12 @@
 import { EigenvalueDecomposition } from 'ml-matrix';
 import { xVariance, xyCovariance } from 'ml-spectra-processing';
 
+import { Point } from '../../geometry';
 import { getAngle } from '../../maskAnalysis/utils/getAngle';
 import { toDegrees } from '../../utils/geometry/angles';
 import { assert } from '../../utils/validators/assert';
 import { Roi } from '../Roi';
 import { Ellipse } from '../roi.types';
-
 /**
  * Calculates ellipse on around ROI.
  * @param roi - Region of interest.
@@ -16,8 +16,12 @@ export function getEllipse(roi: Roi): Ellipse {
   const xCenter = roi.centroid.column;
   const yCenter = roi.centroid.row;
 
-  const xCentered = roi.points.map((point: number[]) => point[0] - xCenter);
-  const yCentered = roi.points.map((point: number[]) => point[1] - yCenter);
+  const xCentered = roi.relativePoints.map(
+    (point: Point) => point.column - xCenter,
+  );
+  const yCentered = roi.relativePoints.map(
+    (point: Point) => point.row - yCenter,
+  );
 
   const centeredXVariance = xVariance(xCentered, { unbiased: false });
   const centeredYVariance = xVariance(yCentered, { unbiased: false });

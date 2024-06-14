@@ -11,11 +11,6 @@ import { getMask, GetMaskOptions } from './getMask';
 import { getEllipse } from './properties/getEllipse';
 import { Border, Ellipse } from './roi.types';
 
-/**
- * Properties of borders of ROI.
- *
- */
-
 interface Computed {
   perimeter: number;
   borders: Border[]; // external and internal ids which are not equal to the current roi ID
@@ -23,7 +18,8 @@ interface Computed {
   externalLengths: number[];
   borderLengths: number[];
   box: number;
-  points: number[][];
+  relativePoints: Point[];
+  absolutePoints: Point[];
   holesInfo: { number: number; surface: number };
   boxIDs: number[];
   externalBorders: Border[];
@@ -291,26 +287,26 @@ export class Roi {
     );
   }
   /**
-   * Computes current ROI points.
-   * @returns Array of points. It's an array of tuples, each tuple being the x and y coordinates of the ROI point.
+   * Computes ROI points relative to ROIs point of `origin`.
+   * @returns Array of points with relative ROI coordinates.
    */
-  get points() {
-    return this.#getComputed('points', () => {
-      const points = [];
-      for (let row = 0; row < this.height; row++) {
-        for (let column = 0; column < this.width; column++) {
-          const target =
-            (row + this.origin.row) * this.map.width +
-            column +
-            this.origin.column;
-          if (this.map.data[target] === this.id) {
-            points.push([column, row]);
-          }
-        }
-      }
+  get relativePoints() {
+    return this.#getComputed(`relativePoints`, () => {
+      const points = Array.from(this.points(false));
       return points;
     });
   }
+  /**
+   * Computes ROI points relative to Image's/Mask's point of `origin`.
+   * @returns Array of points with absolute ROI coordinates.
+   */
+  get absolutePoints() {
+    return this.#getComputed(`absolutePoints`, () => {
+      const points = Array.from(this.points(true));
+      return points;
+    });
+  }
+
   get boxIDs() {
     return this.#getComputed('boxIDs', () => {
       const surroundingIDs = new Set<number>(); // Allows to get a unique list without indexOf.
@@ -630,5 +626,31 @@ export class Roi {
   #computeIndex(y: number, x: number): number {
     const roiMap = this.map;
     return (y + this.origin.row) * roiMap.width + x + this.origin.column;
+  }
+
+  /**
+   * Generator function to calculate point's coordinates.
+   * @param absolute - controls whether coordinates should be relative to ROI's point of `origin` (relative), or relative to ROI's position on the Image/Mask (absolute).
+   * @yields Coordinates of each point of ROI.
+   */
+  *points(absolute: boolean) {
+    for (let row = 0; row < this.height; row++) {
+      for (let column = 0; column < this.width; column++) {
+        const target =
+          (row + this.origin.row) * this.map.width +
+          column +
+          this.origin.column;
+        if (this.map.data[target] === this.id) {
+          if (absolute) {
+            yield {
+              column: this.origin.column + column,
+              row: this.origin.row + row,
+            };
+          } else {
+            yield { column, row };
+          }
+        }
+      }
+    }
   }
 }
