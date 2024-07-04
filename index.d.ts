@@ -73,6 +73,7 @@ export declare class Image {
 
   // extend
   invert(options?: OutOrInplace): Image;
+  insert(toInsert: Image, options: InsertOptions): Image;
   abs(options?: OutOrInplace): Image;
   level(options?: {
     channels?: SelectedChannels;
@@ -155,7 +156,6 @@ export declare class Image {
   rotate(angle: number, options?: RotateOptions): Image;
   rotateLeft(): Image;
   rotateRight(): Image;
-
   getRow(row: number, channel?: number): Array<number>;
   getColumn(row: number, channel?: number): Array<number>;
   getMatrix(options?: { channel?: number }): Matrix;
@@ -612,6 +612,11 @@ export interface GaussianFilterOptions {
   algorithm?: ConvolutionAlgorithm;
 }
 
+export interface InsertOptions {
+  x?: number;
+  y?: number;
+  inPlace?: boolean;
+}
 export interface ConvolutionOptions {
   channels?: SelectedChannels;
   bitDepth?: BitDepth;
