@@ -105,6 +105,6 @@
     "web-worker-manager": "^0.2.0"
   },
   "engines": {
-    "node": ">= 12.0.0"
+    "node": ">= 16.0.0"
   }
 }
