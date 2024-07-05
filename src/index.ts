@@ -15,6 +15,8 @@ export * from './morphology';
 export * from './operations';
 export * from './roi';
 export * from './save';
+export * from './Stack';
+export { decodeStack } from './stack/load/decodeStack';
 export * from './utils/utils.types';
 export * from './utils/constants/channelLabels';
 export * from './utils/constants/colorModels';
