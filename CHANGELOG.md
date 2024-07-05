@@ -5,7 +5,7 @@
 
 ### Bug Fixes
 
-* update node versions for CI ([a58bf55](https://www.github.com/image-js/image-js/commit/a58bf5541e2f63718d44cbc45534db4abd48cc55))
+* add type for insert method ([faead4f](https://github.com/image-js/image-js/commit/faead4f71c0eb640e65fa9f2b17b31b3cc51351b))
 
 ### [0.35.5](https://www.github.com/image-js/image-js/compare/v0.35.4...v0.35.5) (2023-10-17)
 
