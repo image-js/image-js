@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.35.6](https://www.github.com/image-js/image-js/compare/v0.35.5...v0.35.6) (2024-07-05)
+
+
+### Bug Fixes
+
+* add type for insert method ([faead4f](https://github.com/image-js/image-js/commit/faead4f71c0eb640e65fa9f2b17b31b3cc51351b))
+
 ### [0.35.5](https://www.github.com/image-js/image-js/compare/v0.35.4...v0.35.5) (2023-10-17)
 
 
