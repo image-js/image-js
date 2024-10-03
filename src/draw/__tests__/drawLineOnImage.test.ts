@@ -20,6 +20,24 @@ test('RGB image', () => {
   expect(result).not.toBe(image);
 });
 
+test('RGBA image with different alphas', () => {
+  const image = testUtils.createRgbaImage([
+    [100, 150, 200, 150, 100, 150, 0, 150],
+    [100, 200, 5, 150, 3, 200, 0, 150],
+    [150, 200, 255, 150, 6, 150, 0, 150],
+  ]);
+
+  const from = { row: 0, column: 0 };
+  const to = { row: 1, column: 1 };
+  const result = image.drawLine(from, to, { strokeColor: [255, 0, 0, 50] });
+  expect(result).toMatchImageData([
+    [145, 106, 141, 170, 100, 150, 0, 150],
+    [100, 200, 5, 150, 76, 141, 0, 170],
+    [150, 200, 255, 150, 6, 150, 0, 150],
+  ]);
+  expect(result).not.toBe(image);
+});
+
 test('out parameter set to self', () => {
   const image = testUtils.createRgbImage([
     [100, 150, 200, 100, 150, 0],
@@ -297,6 +315,7 @@ test('different origin, line out of image', () => {
     origin: { column: 0, row: 0 },
     strokeColor: [1],
   });
+
   expect(result).toMatchImageData([
     [1, 0, 0, 0],
     [0, 1, 0, 0],

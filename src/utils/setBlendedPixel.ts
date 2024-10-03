@@ -4,28 +4,21 @@ import { Mask } from '../Mask';
 import { getDefaultColor } from './getDefaultColor';
 import { assert } from './validators/assert';
 
-export interface SetBlendedPixelOptions {
-  /**
-   * Color with which to blend the image pixel.
-   * @default `'Opaque black'`.
-   */
-  color?: number[];
-}
-
 /**
  * Blend the given pixel with the pixel at the specified location in the image.
  * @param image - The image with which to blend.
  * @param column - Column of the target pixel.
  * @param row - Row of the target pixel.
- * @param options - Set blended pixel options.
+ * @param color - Color with which to blend the image pixel. @default `'Opaque black'`.
  */
+
 export function setBlendedPixel(
   image: Image | Mask,
   column: number,
   row: number,
-  options: SetBlendedPixelOptions = {},
+  color?: number[],
 ) {
-  const { color = getDefaultColor(image) } = options;
+  color = color ?? getDefaultColor(image);
 
   if (!image.alpha) {
     image.setPixel(column, row, color);

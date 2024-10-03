@@ -69,9 +69,7 @@ export function copyTo(
         currentColumn - column,
         currentRow - row,
       );
-      setBlendedPixel(result, currentColumn, currentRow, {
-        color: sourcePixel,
-      });
+      setBlendedPixel(result, currentColumn, currentRow, sourcePixel);
     }
   }
 

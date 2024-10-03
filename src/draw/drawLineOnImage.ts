@@ -4,6 +4,7 @@ import { Image } from '../Image';
 import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
+import { setBlendedVisiblePixel } from '../utils/setBlendedVisiblePixel';
 import checkProcessable from '../utils/validators/checkProcessable';
 import { validateColor } from '../utils/validators/validators';
 
@@ -56,7 +57,7 @@ export function drawLineOnImage(
     Math.round(origin.column + to.column),
     Math.round(origin.row + to.row),
     (column: number, row: number) => {
-      newImage.setVisiblePixel(column, row, color);
+      setBlendedVisiblePixel(newImage, column, row, color);
     },
   );
   return newImage;

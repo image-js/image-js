@@ -4,6 +4,7 @@ import { Image } from '../Image';
 import { Point } from '../utils/geometry/points';
 import { getDefaultColor } from '../utils/getDefaultColor';
 import { getOutputImage } from '../utils/getOutputImage';
+import { setBlendedVisiblePixel } from '../utils/setBlendedVisiblePixel';
 import checkProcessable from '../utils/validators/checkProcessable';
 import { validateColor } from '../utils/validators/validators';
 
@@ -60,20 +61,20 @@ export function drawCircleOnImage(
   radius = Math.round(radius);
 
   if (radius === 0) {
-    newImage.setVisiblePixel(center.column, center.row, color);
+    setBlendedVisiblePixel(newImage, center.column, center.row, color);
     return newImage;
   }
 
   if (!fill) {
     circle(center.column, center.row, radius, (column: number, row: number) => {
-      newImage.setVisiblePixel(column, row, color);
+      setBlendedVisiblePixel(newImage, column, row, color);
     });
   } else {
     if (radius === 1) {
-      newImage.setVisiblePixel(center.column, center.row, fill);
+      setBlendedVisiblePixel(newImage, center.column, center.row, fill);
     }
     circle(center.column, center.row, radius, (column: number, row: number) => {
-      newImage.setVisiblePixel(column, row, color);
+      setBlendedVisiblePixel(newImage, column, row, color);
 
       //todo: fill is not optimal we can fill symmetrically
       if (column - 1 > center.column) {

@@ -68,9 +68,7 @@ export function paintMaskOnImage(
         currentColumn++
       ) {
         if (mask.getBit(currentColumn - column, currentRow - row)) {
-          setBlendedPixel(result, currentColumn, currentRow, {
-            color,
-          });
+          setBlendedPixel(result, currentColumn, currentRow, color);
         }
       }
     }

@@ -4,6 +4,7 @@ import { Image } from '../Image';
 import { arrayPointsToObjects } from '../utils/arrayPointsToObjects';
 import { Point } from '../utils/geometry/points';
 import { getOutputImage } from '../utils/getOutputImage';
+import { setBlendedVisiblePixel } from '../utils/setBlendedVisiblePixel';
 import checkProcessable from '../utils/validators/checkProcessable';
 import { validateColor } from '../utils/validators/validators';
 
@@ -61,7 +62,8 @@ export function drawPolygonOnImage(
     for (let row = 0; row < newImage.height; row++) {
       for (let column = 0; column < newImage.width; column++) {
         if (robustPointInPolygon(arrayPoints, [column, row]) === -1) {
-          newImage.setPixel(
+          setBlendedVisiblePixel(
+            newImage,
             Math.round(origin.column) + column,
             Math.round(origin.row) + row,
             fillColor,
