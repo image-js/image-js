@@ -84,7 +84,7 @@
     "fast-bmp": "^2.0.1",
     "fast-jpeg": "^1.0.1",
     "fast-list": "^1.0.3",
-    "fast-png": "^6.1.0",
+    "fast-png": "^6.2.0",
     "has-own": "^1.0.1",
     "image-type": "^4.1.0",
     "is-array-type": "^1.0.0",

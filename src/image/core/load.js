@@ -109,6 +109,7 @@ function loadPNG(data) {
     components,
     alpha,
     bitDepth: png.depth,
+    meta: { text: png.text },
   });
 }
 

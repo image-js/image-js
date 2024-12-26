@@ -16,4 +16,14 @@ describe('Image loading', () => {
     expect(img.width).toBe(5);
     expect(img.height).toBe(5);
   });
+
+  it('load meta information', async () => {
+    const img = await load('meta/blender.png');
+    expect(img).toMatchObject({
+      width: 200,
+      height: 200,
+      bitDepth: 16,
+      meta: { text: { Note: 'Distance to target [Km]: 10' } },
+    });
+  });
 });
