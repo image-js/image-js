@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.36.0](https://www.github.com/image-js/image-js/compare/v0.35.6...v0.36.0) (2024-12-26)
+
+
+### Features
+
+* extract text field from png as meta information ([180ccd4](https://www.github.com/image-js/image-js/commit/180ccd40a833bc9279a29ba83d16a83e9e724427))
+
 ### [0.35.6](https://www.github.com/image-js/image-js/compare/v0.35.5...v0.35.6) (2024-07-05)
 
 
