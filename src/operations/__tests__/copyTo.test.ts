@@ -99,6 +99,21 @@ test('negative offset', () => {
   expect(result).toMatchImageData([[250]]);
 });
 
+test('RGB images', () => {
+  const target = testUtils.createRgbImage([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+  ]);
+  const source = testUtils.createRgbImage([[3, 3, 3]]);
+  const result = source.copyTo(target, { origin: { row: 1, column: 0 } });
+  expect(result).toMatchImageData([
+    [1, 2, 3],
+    [3, 3, 3],
+    [7, 8, 9],
+  ]);
+});
+
 test('RGBA images', () => {
   const target = testUtils.createRgbaImage([
     [1, 2, 3, 255],
