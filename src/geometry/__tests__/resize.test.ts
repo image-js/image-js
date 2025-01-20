@@ -1,7 +1,7 @@
 import path from 'node:path';
 
-import { Image } from '../../Image';
-import { write } from '../../save';
+import type { Image } from '../../Image.js';
+import { write } from '../../save/index.js';
 
 async function writeDebug(resized: Image, type: string) {
   // @ts-expect-error Dynamic string.

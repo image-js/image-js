@@ -1,4 +1,4 @@
-import { fromMask } from '..';
+import { fromMask } from '../fromMask.js';
 
 describe('ROI surface', () => {
   it('surface of a figure with a hole', () => {

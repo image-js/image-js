@@ -1,9 +1,9 @@
-import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors';
-import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
-import { bruteForceOneMatch } from '../../matching/bruteForceMatch';
-import { Montage } from '../Montage';
-import { DrawKeypointsOptions } from '../drawKeypoints';
-import { drawMatches } from '../drawMatches';
+import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.js';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
+import { bruteForceOneMatch } from '../../matching/bruteForceMatch.js';
+import { Montage } from '../Montage.js';
+import type { DrawKeypointsOptions } from '../drawKeypoints.js';
+import { drawMatches } from '../drawMatches.js';
 
 test('alphabet image as source and destination, nbKeypoint = 10', () => {
   const source = testUtils.load('various/alphabet.jpg');

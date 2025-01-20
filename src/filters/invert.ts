@@ -1,6 +1,7 @@
-import { copyAlpha, Mask } from '..';
-import { Image } from '../Image';
-import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage';
+import { Image } from '../Image.js';
+import type { Mask } from '../Mask.js';
+import { copyAlpha } from '../operations/index.js';
+import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage.js';
 
 export interface InvertOptions {
   /**

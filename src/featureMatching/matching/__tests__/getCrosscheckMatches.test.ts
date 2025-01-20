@@ -1,10 +1,10 @@
-import { TestImagePath } from '../../../../test/TestImagePath';
-import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors';
-import { getBestKeypointsInRadius } from '../../keypoints/getBestKeypointsInRadius';
-import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
-import { Montage } from '../../visualize/Montage';
-import { Match } from '../bruteForceMatch';
-import { crosscheck, getCrosscheckMatches } from '../getCrosscheckMatches';
+import type { TestImagePath } from '../../../../test/TestImagePath.js';
+import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.js';
+import { getBestKeypointsInRadius } from '../../keypoints/getBestKeypointsInRadius.js';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
+import { Montage } from '../../visualize/Montage.js';
+import type { Match } from '../bruteForceMatch.js';
+import { crosscheck, getCrosscheckMatches } from '../getCrosscheckMatches.js';
 
 describe('crosscheck', () => {
   it('all matches are common', () => {

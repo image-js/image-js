@@ -1,4 +1,4 @@
-import { normalize, sortByColumnRow } from '../points';
+import { normalize, sortByColumnRow } from '../points.js';
 
 describe('normalize', () => {
   it('simple numbers', () => {

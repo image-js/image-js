@@ -1,6 +1,6 @@
-import { Image } from '../Image';
-import { Mask } from '../Mask';
-import { Point } from '../geometry';
+import type { Image } from '../Image.js';
+import type { Mask } from '../Mask.js';
+import type { Point } from '../geometry/index.js';
 
 interface SampleBackgroundPointsOptions {
   /**

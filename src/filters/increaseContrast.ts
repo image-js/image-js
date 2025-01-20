@@ -1,6 +1,6 @@
-import { Image } from '../Image';
-import { ImageColorModel } from '../utils/constants/colorModels';
-import checkProcessable from '../utils/validators/checkProcessable';
+import type { Image } from '../Image.js';
+import { ImageColorModel } from '../utils/constants/colorModels.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
 
 export interface IncreaseContrastOptions {
   /**

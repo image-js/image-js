@@ -1,5 +1,5 @@
-import { overlapImages } from '../..';
-import { alignMinDifference } from '../alignMinDifference';
+import { overlapImages } from '../../featureMatching/index.js';
+import { alignMinDifference } from '../alignMinDifference.js';
 
 test('1 pixel source', () => {
   const source = testUtils.createGreyImage([[255]]);

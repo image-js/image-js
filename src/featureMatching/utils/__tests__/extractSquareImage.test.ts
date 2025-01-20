@@ -1,4 +1,4 @@
-import { extractSquareImage } from '../extractSquareImage';
+import { extractSquareImage } from '../extractSquareImage.js';
 
 test('7x7 image, first origin', () => {
   const image = testUtils.createGreyImage([

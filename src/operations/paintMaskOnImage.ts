@@ -1,10 +1,10 @@
-import { Image } from '../Image';
-import { Mask } from '../Mask';
-import { Point } from '../utils/geometry/points';
-import { getDefaultColor } from '../utils/getDefaultColor';
-import { getOutputImage } from '../utils/getOutputImage';
-import { setBlendedPixel } from '../utils/setBlendedPixel';
-import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger';
+import type { Image } from '../Image.js';
+import type { Mask } from '../Mask.js';
+import type { Point } from '../utils/geometry/points.js';
+import { getDefaultColor } from '../utils/getDefaultColor.js';
+import { getOutputImage } from '../utils/getOutputImage.js';
+import { setBlendedPixel } from '../utils/setBlendedPixel.js';
+import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger.js';
 
 export interface PaintMaskOnImageOptions {
   /**

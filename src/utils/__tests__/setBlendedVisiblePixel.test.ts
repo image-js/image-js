@@ -1,4 +1,4 @@
-import { setBlendedVisiblePixel } from '../setBlendedVisiblePixel';
+import { setBlendedVisiblePixel } from '../setBlendedVisiblePixel.js';
 
 test('GREYA image, default options', () => {
   const image = testUtils.createGreyaImage([

@@ -1,6 +1,6 @@
 // run with `ts-node-transpile-only scripts/benchmark/resize.benchmark.ts`
 
-import { read } from '../../src';
+import { read } from '../../src/index.js';
 import { join } from 'path';
 
 async function doAll() {

@@ -1,7 +1,7 @@
-import { Image } from '../../..';
-import { TestImagePath } from '../../../../test/TestImagePath';
-import { overlapImages } from '../../../featureMatching/visualize/overlapImages';
-import { getAffineTransform } from '../getAffineTransform';
+import type { TestImagePath } from '../../../../test/TestImagePath.js';
+import { Image } from '../../../Image.js';
+import { overlapImages } from '../../../featureMatching/index.js';
+import { getAffineTransform } from '../getAffineTransform.js';
 
 test('RGB images', () => {
   const data = {

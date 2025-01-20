@@ -1,4 +1,4 @@
-import { Image } from '../Image';
+import { Image } from '../Image.js';
 
 export type RotateAngle = 90 | 180 | 270 | -90 | -180 | -270;
 

@@ -1,6 +1,8 @@
-import { Image, Mask, Point } from '..';
-import { assertUnreachable } from '../utils/validators/assert';
-import checkProcessable from '../utils/validators/checkProcessable';
+import type { Image } from '../Image.js';
+import type { Mask } from '../Mask.js';
+import type { Point } from '../geometry/index.js';
+import { assertUnreachable } from '../utils/validators/assert.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
 
 export interface ExtremaOptions {
   /**

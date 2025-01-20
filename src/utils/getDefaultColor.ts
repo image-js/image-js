@@ -1,7 +1,7 @@
-import { Image } from '../Image';
-import { Mask } from '../Mask';
+import { match } from 'ts-pattern';
 
-import { assert } from './validators/assert';
+import type { Image } from '../Image.js';
+import type { Mask } from '../Mask.js';
 
 /**
  * Get the default color for a given color model.
@@ -10,18 +10,11 @@ import { assert } from './validators/assert';
  * @returns Default color.
  */
 export function getDefaultColor(image: Image | Mask): number[] {
-  switch (image.colorModel) {
-    case 'GREY':
-      return [0];
-    case 'GREYA':
-      return [0, image.maxValue];
-    case 'RGB':
-      return [0, 0, 0];
-    case 'RGBA':
-      return [0, 0, 0, image.maxValue];
-    case 'BINARY':
-      return [1];
-    default:
-      assert(false, `invalid image color model: ${image.colorModel}`);
-  }
+  return match(image.colorModel)
+    .with('GREY', () => [0])
+    .with('GREYA', () => [0, image.maxValue])
+    .with('RGB', () => [0, 0, 0])
+    .with('RGBA', () => [0, 0, 0, image.maxValue])
+    .with('BINARY', () => [1])
+    .exhaustive();
 }

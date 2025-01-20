@@ -1,4 +1,4 @@
-import { getDefaultColor } from '../getDefaultColor';
+import { getDefaultColor } from '../getDefaultColor.js';
 
 test('GREY', () => {
   const image = testUtils.createGreyImage([

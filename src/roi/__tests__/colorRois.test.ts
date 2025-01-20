@@ -1,5 +1,5 @@
-import { fromMask } from '..';
-import { colorRois } from '../colorRois';
+import { colorRois } from '../colorRois.js';
+import { fromMask } from '../fromMask.js';
 
 test('1x2 mask', () => {
   const mask = testUtils.createMask([[0, 1]]);

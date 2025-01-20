@@ -1,4 +1,4 @@
-import { useCameraContext } from '../contexts/cameraContext';
+import { useCameraContext } from '../contexts/cameraContext.js';
 
 export default function CameraSelector() {
   const [{ cameras, selectedCamera }, dispatch] = useCameraContext();
@@ -29,7 +29,7 @@ export default function CameraSelector() {
                   camera: { device, stream },
                 });
               })
-              .catch((err: unknown) => console.error(err));
+              .catch((error: unknown) => console.error(error));
           }
         }}
       >

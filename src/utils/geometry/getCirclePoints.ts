@@ -1,9 +1,9 @@
 import { circle, line } from 'bresenham-zingl';
 
-import { deleteDuplicates } from '../../draw/utils/deleteDuplicates';
-import { Point } from '../../geometry';
+import { deleteDuplicates } from '../../draw/utils/deleteDuplicates.js';
+import type { Point } from '../../geometry/index.js';
 
-import { sortByColumnRow } from './points';
+import { sortByColumnRow } from './points.js';
 
 /**
  * Get the coordinates of the points on a circle. The reference is the center of the circle.

@@ -1,8 +1,8 @@
-import { fromMask, Image } from '../../../src';
+import type { Image } from '../../../src/index.js';
+import { fromMask } from '../../../src/index.js';
 
 /**
  * Draw the MBR of the largest ROI.
- *
  * @param image - Input image.
  * @returns The image with the MBR.
  */

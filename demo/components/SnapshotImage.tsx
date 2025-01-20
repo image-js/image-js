@@ -4,5 +4,7 @@ interface SnapshotImageProps {
 
 export default function SnapshotImage(props: SnapshotImageProps) {
   const { snapshotUrl: snapshot } = props;
-  return <img style={{ transform: 'scaleX(-1)' }} src={snapshot} />;
+  return snapshot ? (
+    <img alt="snapshot" style={{ transform: 'scaleX(-1)' }} src={snapshot} />
+  ) : null;
 }

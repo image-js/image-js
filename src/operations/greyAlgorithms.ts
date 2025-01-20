@@ -1,5 +1,5 @@
-import { Image } from '..';
-import { assert } from '../utils/validators/assert';
+import type { Image } from '../Image.js';
+import { assert } from '../utils/validators/assert.js';
 
 /**
  * Converts R, G and B values to a single value using Luma 709 standard({@link https://en.wikipedia.org/wiki/Luma_(video)}).

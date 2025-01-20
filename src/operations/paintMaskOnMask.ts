@@ -1,7 +1,7 @@
-import { BitValue, Mask } from '../Mask';
-import { Point } from '../utils/geometry/points';
-import { maskToOutputMask } from '../utils/getOutputImage';
-import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger';
+import type { BitValue, Mask } from '../Mask.js';
+import type { Point } from '../utils/geometry/points.js';
+import { maskToOutputMask } from '../utils/getOutputImage.js';
+import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger.js';
 
 export interface PaintMaskOnMaskOptions {
   /**

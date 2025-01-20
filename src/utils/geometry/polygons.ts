@@ -1,5 +1,5 @@
-import { getLineLength } from './lines';
-import { Point } from './points';
+import { getLineLength } from './lines.js';
+import type { Point } from './points.js';
 
 /**
  * Compute the perimeter of a polygon.

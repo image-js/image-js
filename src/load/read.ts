@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 
-import { Image } from '../Image';
+import type { Image } from '../Image.js';
 
-import { decode } from './decode';
+import { decode } from './decode.js';
 
 /**
  * Read an image from the disk.

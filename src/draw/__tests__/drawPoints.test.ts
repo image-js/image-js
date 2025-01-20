@@ -1,5 +1,5 @@
-import { Image } from '../../Image';
-import { drawPoints } from '../drawPoints';
+import { Image } from '../../Image.js';
+import { drawPoints } from '../drawPoints.js';
 
 test('RGB image', () => {
   const image = testUtils.createRgbImage([

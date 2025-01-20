@@ -1,5 +1,5 @@
-import { Image } from '../Image';
-import checkProcessable from '../utils/validators/checkProcessable';
+import type { Image } from '../Image.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
 
 /**
  * Apply a flipY filter to an image.

@@ -1,6 +1,6 @@
-import { Image } from '../../../Image';
-import { Point } from '../../../geometry';
-import { getGaussianPoints, getGaussianValues } from '../getGaussianPoints';
+import { Image } from '../../../Image.js';
+import type { Point } from '../../../geometry/index.js';
+import { getGaussianPoints, getGaussianValues } from '../getGaussianPoints.js';
 
 function drawGaussianPoints(image: Image, points: Point[]): Image {
   const center = image.getCoordinates('center');

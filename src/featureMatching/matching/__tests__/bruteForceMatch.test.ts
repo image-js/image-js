@@ -1,9 +1,9 @@
-import { TestImagePath } from '../../../../test/TestImagePath';
-import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors';
-import { getBestKeypointsInRadius } from '../../keypoints/getBestKeypointsInRadius';
-import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
-import { Montage } from '../../visualize/Montage';
-import { bruteForceOneMatch } from '../bruteForceMatch';
+import type { TestImagePath } from '../../../../test/TestImagePath.js';
+import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.js';
+import { getBestKeypointsInRadius } from '../../keypoints/getBestKeypointsInRadius.js';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
+import { Montage } from '../../visualize/Montage.js';
+import { bruteForceOneMatch } from '../bruteForceMatch.js';
 
 test.each([
   {

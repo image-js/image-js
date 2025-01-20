@@ -1,4 +1,4 @@
-import { overlapImages } from '../overlapImages';
+import { overlapImages } from '../overlapImages.js';
 
 test('two triangles', () => {
   const source = testUtils.load('featureMatching/polygons/scaleneTriangle.png');

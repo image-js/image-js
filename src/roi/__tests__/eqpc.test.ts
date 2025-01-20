@@ -1,4 +1,4 @@
-import { fromMask } from '..';
+import { fromMask } from '../fromMask.js';
 
 test('calculates eqpc to Roi', () => {
   const mask = testUtils.createMask([

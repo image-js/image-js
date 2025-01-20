@@ -1,6 +1,6 @@
-import { Image } from '../../../Image';
-import { Stack } from '../../../Stack';
-import { checkProcessable } from '../checkProcessable';
+import { Image } from '../../../Image.js';
+import { Stack } from '../../../Stack.js';
+import { checkProcessable } from '../checkProcessable.js';
 
 test('should throw if images have different sizes', () => {
   const image1 = testUtils.createGreyImage([[1, 2, 3, 4]]);

@@ -1,7 +1,7 @@
-import { Image } from '..';
-import { getOutputImage } from '../utils/getOutputImage';
-import checkProcessable from '../utils/validators/checkProcessable';
-import { validateChannels } from '../utils/validators/validators';
+import type { Image } from '../Image.js';
+import { getOutputImage } from '../utils/getOutputImage.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
+import { validateChannels } from '../utils/validators/validators.js';
 
 export interface HypotenuseOptions {
   /**
@@ -54,11 +54,7 @@ export function hypotenuse(
         otherImage.getValueByIndex(i, channel),
       );
 
-      newImage.setValueByIndex(
-        i,
-        channel,
-        value > newImage.maxValue ? newImage.maxValue : value,
-      );
+      newImage.setValueByIndex(i, channel, Math.min(value, newImage.maxValue));
     }
   }
 

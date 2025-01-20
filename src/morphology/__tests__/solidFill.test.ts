@@ -1,4 +1,5 @@
-import { encodePng, Mask } from '../..';
+import { Mask } from '../../Mask.js';
+import { encodePng } from '../../save/index.js';
 
 test('mask 5x5, default options', () => {
   const image = testUtils.createMask([

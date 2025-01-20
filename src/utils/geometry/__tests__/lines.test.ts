@@ -1,4 +1,4 @@
-import { getLineLength } from '../lines';
+import { getLineLength } from '../lines.js';
 
 describe('getLineLength', () => {
   it('length zero', () => {

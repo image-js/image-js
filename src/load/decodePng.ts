@@ -1,8 +1,10 @@
-import { decode, DecodedPng } from 'fast-png';
+import type { DecodedPng } from 'fast-png';
+import { decode } from 'fast-png';
 
-import { BitDepth, Image } from '../Image';
-import { ImageColorModel } from '../utils/constants/colorModels';
-import { assert } from '../utils/validators/assert';
+import type { BitDepth } from '../Image.js';
+import { Image } from '../Image.js';
+import type { ImageColorModel } from '../utils/constants/colorModels.js';
+import { assert } from '../utils/validators/assert.js';
 
 /**
  * Decode a PNG. See the fast-png npm module.

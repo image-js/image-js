@@ -1,5 +1,5 @@
-import { read } from '..';
-import { Image } from '../../Image';
+import { Image } from '../../Image.js';
+import { read } from '../read.js';
 
 test('read existing image', async () => {
   const img = await read(testUtils.getPath('formats/rgba32.png'));

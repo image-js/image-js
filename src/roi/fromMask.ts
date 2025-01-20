@@ -1,7 +1,7 @@
-import { Mask } from '..';
-import { assert } from '../utils/validators/assert';
+import type { Mask } from '../Mask.js';
+import { assert } from '../utils/validators/assert.js';
 
-import { RoiMapManager } from './RoiMapManager';
+import { RoiMapManager } from './RoiMapManager.js';
 
 export interface FromMaskOptions {
   /**

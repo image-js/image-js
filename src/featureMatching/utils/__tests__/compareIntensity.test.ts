@@ -1,5 +1,5 @@
-import { Image } from '../../../Image';
-import { compareIntensity } from '../compareIntensity';
+import { Image } from '../../../Image.js';
+import { compareIntensity } from '../compareIntensity.js';
 
 test('verify descriptor is correct (descriptorLength = 10)', () => {
   const size = 5;

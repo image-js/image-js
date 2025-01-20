@@ -1,5 +1,5 @@
-import { RoiMapManager } from '../RoiMapManager';
-import { fromMask } from '../fromMask';
+import { RoiMapManager } from '../RoiMapManager.js';
+import { fromMask } from '../fromMask.js';
 
 test('should work with crop', () => {
   const image = testUtils.createGreyImage([

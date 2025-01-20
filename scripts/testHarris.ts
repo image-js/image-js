@@ -1,6 +1,6 @@
 // @eslint-ignore
-import { Image } from '../src/Image';
-import { getHarrisScore } from '../src/featureMatching/getHarrisScore';
+import { Image } from '../src/Image.js';
+import { getHarrisScore } from '../src/featureMatching/getHarrisScore.js';
 
 const fastRadius = 3;
 

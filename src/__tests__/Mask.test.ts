@@ -1,7 +1,7 @@
 import util from 'node:util';
 
-import { Mask } from '../Mask';
-import { Point } from '../utils/geometry/points';
+import { Mask } from '../Mask.js';
+import type { Point } from '../utils/geometry/points.js';
 
 describe('create new masks', () => {
   it('should create a mask', () => {

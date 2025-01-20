@@ -1,12 +1,12 @@
-import { Image } from '../../Image';
-import { GaussianBlurSigmaOptions } from '../../filters';
-import { GetGaussianPointsOptions } from '../../utils/utils.types';
-import checkProcessable from '../../utils/validators/checkProcessable';
-import { OrientedFastKeypoint } from '../keypoints/getOrientedFastKeypoints';
-import { compareIntensity } from '../utils/compareIntensity';
-import { getGaussianPoints } from '../utils/getGaussianPoints';
+import type { Image } from '../../Image.js';
+import type { GaussianBlurSigmaOptions } from '../../filters/index.js';
+import type { GetGaussianPointsOptions } from '../../utils/utils.types.js';
+import checkProcessable from '../../utils/validators/checkProcessable.js';
+import type { OrientedFastKeypoint } from '../keypoints/getOrientedFastKeypoints.js';
+import { compareIntensity } from '../utils/compareIntensity.js';
+import { getGaussianPoints } from '../utils/getGaussianPoints.js';
 
-import { getKeypointPatch } from './utils/getKeypointPatch';
+import { getKeypointPatch } from './utils/getKeypointPatch.js';
 
 export interface GetBriefDescriptorsOptions {
   /**

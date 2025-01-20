@@ -1,4 +1,4 @@
-import { getMatrixFromPoints } from '../getMatrixFromPoints';
+import { getMatrixFromPoints } from '../getMatrixFromPoints.js';
 
 test('4 points', () => {
   const side = 3;

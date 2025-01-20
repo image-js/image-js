@@ -1,5 +1,5 @@
-import { Match } from '../bruteForceMatch';
-import { filterEuclideanDistance } from '../filterEuclideanDistance';
+import type { Match } from '../bruteForceMatch.js';
+import { filterEuclideanDistance } from '../filterEuclideanDistance.js';
 
 test('3 matches', () => {
   const matches: Match[] = [

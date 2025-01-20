@@ -1,9 +1,9 @@
-import { writeSync } from '../../src/save/write';
-import { overlapImages } from '../../src/featureMatching/visualize/overlapImages';
-import { readSync } from '../../src/load/read';
+import { writeSync } from '../../src/save/write.js';
+import { overlapImages } from '../../src/featureMatching/visualize/overlapImages.js';
+import { readSync } from '../../src/load/read.js';
 import { readFileSync, readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
-import { getAffineTransform } from '../../src';
+import { getAffineTransform } from '../../src/index.js';
 
 // global variables
 const emptyFolder = true; // results

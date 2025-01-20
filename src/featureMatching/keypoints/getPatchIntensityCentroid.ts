@@ -1,10 +1,8 @@
-import { Image } from '../../Image';
-import { Point } from '../../geometry';
+import type { Image } from '../../Image.js';
+import type { Point } from '../../geometry/index.js';
 
-import {
-  getPatchIntensityMoment,
-  GetPatchIntensityMomentOptions,
-} from './getPatchIntensityMoment';
+import type { GetPatchIntensityMomentOptions } from './getPatchIntensityMoment.js';
+import { getPatchIntensityMoment } from './getPatchIntensityMoment.js';
 
 /**
  * Compute the intensity centroid of the circular patch in an image for each channel relatively to the center of the image.

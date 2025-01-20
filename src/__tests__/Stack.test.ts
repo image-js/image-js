@@ -1,5 +1,5 @@
-import { Image } from '../Image';
-import { Stack } from '../Stack';
+import { Image } from '../Image.js';
+import { Stack } from '../Stack.js';
 
 describe('Stack constructor', () => {
   it('create a stack containing one image', () => {

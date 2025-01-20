@@ -1,5 +1,6 @@
-import { Image } from '../Image';
-import { BorderType, getBorderInterpolation } from '../utils/interpolateBorder';
+import { Image } from '../Image.js';
+import type { BorderType } from '../utils/interpolateBorder.js';
+import { getBorderInterpolation } from '../utils/interpolateBorder.js';
 
 export interface ExtendBordersOptions {
   /**

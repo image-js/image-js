@@ -1,18 +1,20 @@
-import { BitDepth } from 'fast-png';
+import type { BitDepth } from 'fast-png';
 
-import { Image } from './Image';
-import { HistogramOptions } from './compute';
-import { histogram } from './stack/compute/histogram';
-import { maxImage } from './stack/compute/maxImage';
-import { meanImage } from './stack/compute/meanImage';
-import { medianImage } from './stack/compute/medianImage';
-import { minImage } from './stack/compute/minImage';
-import { sum } from './stack/compute/sum';
+import type { Image } from './Image.js';
+import type { HistogramOptions } from './compute/index.js';
+import {
+  histogram,
+  maxImage,
+  meanImage,
+  medianImage,
+  minImage,
+  sum,
+} from './stack/index.js';
 import {
   checkImagesValid,
   verifySameDimensions,
-} from './stack/utils/checkImagesValid';
-import { ImageColorModel } from './utils/constants/colorModels';
+} from './stack/utils/checkImagesValid.js';
+import type { ImageColorModel } from './utils/constants/colorModels.js';
 
 export class Stack {
   /**

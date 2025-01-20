@@ -2,11 +2,13 @@ import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { fromMask, Image, Point, readSync, Roi } from '../src';
+import type { Image, Point, Roi } from '../src/index.js';
+import { fromMask, readSync } from '../src/index.js';
 
-import { TestImagePath } from './TestImagePath';
-import { createImageFromData, CreateImageOptions } from './createImageFromData';
-import { createMask } from './createMask';
+import type { TestImagePath } from './TestImagePath.js';
+import type { CreateImageOptions } from './createImageFromData.js';
+import { createImageFromData } from './createImageFromData.js';
+import { createMask } from './createMask.js';
 
 /**
  * Return the path to a given image.
@@ -176,4 +178,4 @@ declare global {
   };
 }
 
-export { createMask } from './createMask';
+export { createMask } from './createMask.js';

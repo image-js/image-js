@@ -1,9 +1,9 @@
-import { Image } from '../Image';
-import { Point } from '../utils/geometry/points';
-import { getDefaultColor } from '../utils/getDefaultColor';
-import { getOutputImage } from '../utils/getOutputImage';
-import checkProcessable from '../utils/validators/checkProcessable';
-import { validateColor } from '../utils/validators/validators';
+import type { Image } from '../Image.js';
+import type { Point } from '../utils/geometry/points.js';
+import { getDefaultColor } from '../utils/getDefaultColor.js';
+import { getOutputImage } from '../utils/getOutputImage.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
+import { validateColor } from '../utils/validators/validators.js';
 
 export interface DrawPolylineOnImageOptions {
   /**

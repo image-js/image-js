@@ -1,12 +1,12 @@
-import { Mask } from '../..';
-import { Image } from '../../Image';
-import { ImageColorModel } from '../constants/colorModels';
+import { Image } from '../../Image.js';
+import { Mask } from '../../Mask.js';
+import { ImageColorModel } from '../constants/colorModels.js';
 import {
   getOutputImage,
   imageToOutputMask,
   maskToOutputImage,
   maskToOutputMask,
-} from '../getOutputImage';
+} from '../getOutputImage.js';
 
 describe('getOutputImage', () => {
   it('should default to creating an empty image', () => {

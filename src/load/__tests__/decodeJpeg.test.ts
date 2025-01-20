@@ -1,4 +1,4 @@
-import { decodeJpeg } from '..';
+import { decodeJpeg } from '../decodeJpeg.js';
 
 const tests = [['grey6'], ['grey12'], ['rgb6'], ['rgb12']] as const;
 

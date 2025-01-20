@@ -1,5 +1,5 @@
-import { Point } from '../../geometry';
-import { variance } from '../variance';
+import type { Point } from '../../geometry/index.js';
+import { variance } from '../variance.js';
 
 test('1x1 RGB image', () => {
   const image = testUtils.createGreyImage([[1, 2, 3]]);

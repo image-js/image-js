@@ -1,4 +1,4 @@
-import { getPatchIntensityMoment } from '../getPatchIntensityMoment';
+import { getPatchIntensityMoment } from '../getPatchIntensityMoment.js';
 
 test('5x5 image, 01, radius = 1', () => {
   const image = testUtils.createGreyImage([

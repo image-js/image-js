@@ -1,6 +1,6 @@
-import { Image } from '../../../Image';
-import { channelLabels } from '../channelLabels';
-import { ImageColorModel } from '../colorModels';
+import { Image } from '../../../Image.js';
+import { channelLabels } from '../channelLabels.js';
+import { ImageColorModel } from '../colorModels.js';
 
 test.each([
   {

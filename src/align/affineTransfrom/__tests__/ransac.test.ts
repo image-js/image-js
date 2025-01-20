@@ -1,10 +1,10 @@
 import { ransac } from 'ml-ransac';
 
-import { affineFitFunction } from '../affineFitFunction';
-import { applyAffineTransfom } from '../applyAffineTransform';
-import { createAffineTransformModel } from '../createAffineTransformModel';
-import { drawResult } from '../drawResult';
-import { getEuclideanDistance } from '../getEuclideanDistance';
+import { affineFitFunction } from '../affineFitFunction.js';
+import { applyAffineTransfom } from '../applyAffineTransform.js';
+import { createAffineTransformModel } from '../createAffineTransformModel.js';
+import { drawResult } from '../drawResult.js';
+import { getEuclideanDistance } from '../getEuclideanDistance.js';
 
 describe('2D data (points)', () => {
   it('6 points perfectly aligned', () => {
@@ -33,6 +33,7 @@ describe('2D data (points)', () => {
 
     expect(result.modelParameters).toBeDeepCloseTo([180, 0, 4, 1]);
   });
+
   it('6 points with outliers', () => {
     const source = [
       { row: 2, column: 2 },
@@ -61,7 +62,7 @@ describe('2D data (points)', () => {
     expect(result.inliers).toStrictEqual([1, 3, 4, 5]);
   });
 
-  test('polygon rotated 180 degrees', () => {
+  it('polygon rotated 180 degrees', () => {
     const source = [
       { column: 4, row: 3 },
       { column: 2, row: 5 },
@@ -95,7 +96,8 @@ describe('2D data (points)', () => {
 
     expect(image).toMatchImageSnapshot();
   });
-  test('polygon rotated 90 degrees', () => {
+
+  it('polygon rotated 90 degrees', () => {
     const source = [
       { column: -6, row: -1 },
       { column: -4, row: -2 },

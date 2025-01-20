@@ -1,4 +1,4 @@
-import { createAffineTransformModel } from '../createAffineTransformModel';
+import { createAffineTransformModel } from '../createAffineTransformModel.js';
 
 test('wrong nb of parameters', () => {
   expect(() => {

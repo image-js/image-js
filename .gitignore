@@ -124,7 +124,7 @@ yarn.lock
 .DS_Store
 
 lib
-lib-esm
+lib-cjs
 
 # debug images
 src/**/*.tif
@@ -136,3 +136,5 @@ scripts/**/**.png
 scripts/**/**.json
 
 private
+
+.jest-image-snapshot-touched-files

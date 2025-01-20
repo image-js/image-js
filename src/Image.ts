@@ -1,123 +1,135 @@
-import { RgbColor } from 'colord';
+import type { RgbColor } from 'colord';
+import { match } from 'ts-pattern';
 
-import { Mask } from './Mask';
-import { add, subtract, SubtractImageOptions } from './compare';
-import { divide, DivideOptions } from './compare/divide';
-import { multiply, MultiplyOptions } from './compare/multiply';
-import {
+import type { Mask } from './Mask.js';
+import type { DivideOptions } from './compare/divide.js';
+import { divide } from './compare/divide.js';
+import { add, subtract } from './compare/index.js';
+import type { SubtractImageOptions } from './compare/index.js';
+import type { MultiplyOptions } from './compare/multiply.js';
+import { multiply } from './compare/multiply.js';
+import type {
   MedianOptions,
   MeanOptions,
-  median,
   VarianceOptions,
-  variance,
-} from './compute';
-import { correctColor } from './correctColor';
+  HistogramOptions,
+} from './compute/index.js';
+import { histogram, mean, median, variance } from './compute/index.js';
+import { correctColor } from './correctColor/index.js';
+import type {
+  DrawCircleOnImageOptions,
+  DrawLineOnImageOptions,
+  DrawMarkerOptions,
+  DrawPointsOptions,
+  DrawPolygonOnImageOptions,
+  DrawPolylineOnImageOptions,
+  DrawRectangleOptions,
+} from './draw/index.js';
 import {
   drawCircleOnImage,
-  DrawCircleOnImageOptions,
   drawLineOnImage,
-  DrawLineOnImageOptions,
   drawMarker,
-  DrawMarkerOptions,
   drawMarkers,
   drawPoints,
-  DrawPointsOptions,
   drawPolygonOnImage,
-  DrawPolygonOnImageOptions,
   drawPolylineOnImage,
-  DrawPolylineOnImageOptions,
   drawRectangle,
-  DrawRectangleOptions,
-} from './draw';
-import {
-  blur,
+} from './draw/index.js';
+import type {
   BlurOptions,
   ConvolutionOptions,
-  derivativeFilter,
   DerivativeFilterOptions,
+  FlipOptions,
+  GaussianBlurOptions,
+  GradientFilterOptions,
+  HypotenuseOptions,
+  IncreaseContrastOptions,
+  InvertOptions,
+  LevelOptions,
+  MedianFilterOptions,
+  PixelateOptions,
+} from './filters/index.js';
+import {
+  blur,
+  derivativeFilter,
   directConvolution,
   flip,
-  FlipOptions,
   gaussianBlur,
-  GaussianBlurOptions,
   gradientFilter,
-  GradientFilterOptions,
   hypotenuse,
-  HypotenuseOptions,
   increaseContrast,
-  IncreaseContrastOptions,
   invert,
-  InvertOptions,
   level,
-  LevelOptions,
   medianFilter,
-  MedianFilterOptions,
   pixelate,
-  PixelateOptions,
   rawDirectConvolution,
   separableConvolution,
-} from './filters';
-import {
+} from './filters/index.js';
+import type {
   Point,
-  resize,
   ResizeOptions,
-  rotate,
   RotateAngle,
-  transform,
   TransformOptions,
-  transformRotate,
   TransformRotateOptions,
-} from './geometry';
+} from './geometry/index.js';
+import {
+  resize,
+  rotate,
+  transform,
+  transformRotate,
+} from './geometry/index.js';
+import type { ImageMetadata } from './load/load.types.js';
+import type {
+  BottomHatOptions,
+  CannyEdgeOptions,
+  CloseOptions,
+  DilateOptions,
+  ErodeOptions,
+  MorphologicalGradientOptions,
+  OpenOptions,
+  TopHatOptions,
+} from './morphology/index.js';
 import {
   bottomHat,
-  BottomHatOptions,
   cannyEdgeDetector,
-  CannyEdgeOptions,
   close,
-  CloseOptions,
   dilate,
-  DilateOptions,
   erode,
-  ErodeOptions,
   morphologicalGradient,
-  MorphologicalGradientOptions,
   open,
-  OpenOptions,
   topHat,
-  TopHatOptions,
-} from './morphology';
+} from './morphology/index.js';
+import type {
+  ConvertColorOptions,
+  CopyToOptions,
+  CropAlphaOptions,
+  CropOptions,
+  CropRectangleOptions,
+  ExtractOptions,
+  GreyOptions,
+  PaintMaskOnImageOptions,
+  ThresholdOptions,
+} from './operations/index.js';
 import {
   convertBitDepth,
   convertColor,
-  ConvertColorOptions,
   copyTo,
-  CopyToOptions,
   crop,
   cropAlpha,
-  CropAlphaOptions,
-  CropOptions,
   cropRectangle,
-  CropRectangleOptions,
+  extract,
   grey,
   paintMaskOnImage,
-  PaintMaskOnImageOptions,
   split,
-} from './operations';
-import { colorModels, ImageColorModel } from './utils/constants/colorModels';
-import { getMinMax } from './utils/getMinMax';
-import { validateChannel, validateValue } from './utils/validators/validators';
-
-import {
-  extract,
-  ExtractOptions,
-  GreyOptions,
-  histogram,
-  HistogramOptions,
-  ImageMetadata,
-  mean,
   threshold,
-  ThresholdOptions,
-} from './index';
+} from './operations/index.js';
+import type { ImageColorModel } from './utils/constants/colorModels.js';
+import { colorModels } from './utils/constants/colorModels.js';
+import { getMinMax } from './utils/getMinMax.js';
+import {
+  validateChannel,
+  validateValue,
+} from './utils/validators/validators.js';
 
 export type ImageDataArray = Uint8Array | Uint16Array | Uint8ClampedArray;
 
@@ -649,8 +661,8 @@ export class Image {
    * @returns Coordinates of the point in the format [column, row].
    */
   public getCoordinates(coordinates: ImageCoordinates, round = false): Point {
-    switch (coordinates) {
-      case 'center': {
+    return match(coordinates)
+      .with('center', () => {
         const centerX = (this.width - 1) / 2;
         const centerY = (this.height - 1) / 2;
         if (round) {
@@ -658,18 +670,15 @@ export class Image {
         } else {
           return { column: centerX, row: centerY };
         }
-      }
-      case 'top-left':
-        return { column: 0, row: 0 };
-      case 'top-right':
-        return { column: this.width - 1, row: 0 };
-      case 'bottom-left':
-        return { column: 0, row: this.height - 1 };
-      case 'bottom-right':
-        return { column: this.width - 1, row: this.height - 1 };
-      default:
-        throw new RangeError(`invalid image coordinates: ${coordinates}`);
-    }
+      })
+      .with('top-left', () => ({ column: 0, row: 0 }))
+      .with('top-right', () => ({ column: this.width - 1, row: 0 }))
+      .with('bottom-left', () => ({ column: 0, row: this.height - 1 }))
+      .with('bottom-right', () => ({
+        column: this.width - 1,
+        row: this.height - 1,
+      }))
+      .exhaustive();
   }
 
   // COMPARE
@@ -1156,17 +1165,12 @@ function createPixelArray(
   maxValue: number,
 ): ImageDataArray {
   const length = channels * size;
-  let arr;
-  switch (bitDepth) {
-    case 8:
-      arr = new Uint8Array(length);
-      break;
-    case 16:
-      arr = new Uint16Array(length);
-      break;
-    default:
+  const arr = match(bitDepth)
+    .with(8, () => new Uint8Array(length))
+    .with(16, () => new Uint16Array(length))
+    .otherwise(() => {
       throw new RangeError(`invalid bitDepth: ${bitDepth}`);
-  }
+    });
 
   // Alpha channel is 100% by default.
   if (alpha) {

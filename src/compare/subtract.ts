@@ -1,6 +1,7 @@
-import { Image, Mask } from '..';
-import checkProcessable from '../utils/validators/checkProcessable';
-import { validateForComparison } from '../utils/validators/validators';
+import { Image } from '../Image.js';
+import { Mask } from '../Mask.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
+import { validateForComparison } from '../utils/validators/validators.js';
 
 export interface SubtractImageOptions {
   /**

@@ -1,5 +1,5 @@
-import { computeDssim } from '..';
-import { Image } from '../..';
+import { Image } from '../../Image.js';
+import { computeDssim } from '../computeDssim.js';
 
 test('twice the same image', () => {
   const image = testUtils.createGreyImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);

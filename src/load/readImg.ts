@@ -1,7 +1,7 @@
-import { Image } from '../Image';
-import { assert } from '../utils/validators/assert';
+import type { Image } from '../Image.js';
+import { assert } from '../utils/validators/assert.js';
 
-import { readCanvas } from './readCanvas';
+import { readCanvas } from './readCanvas.js';
 // TODO: Create nodejs version that throws an error
 
 /**

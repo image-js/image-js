@@ -1,9 +1,9 @@
 import { decode as decodeExif } from 'fast-jpeg';
 import { decode } from 'jpeg-js';
 
-import { Image } from '../Image';
+import { Image } from '../Image.js';
 
-import { getMetadata } from './getMetadata';
+import { getMetadata } from './getMetadata.js';
 
 /**
  * Decode a jpeg. See the jpeg-js npm module.

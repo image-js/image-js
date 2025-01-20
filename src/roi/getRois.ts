@@ -1,6 +1,8 @@
-import { Roi } from './Roi';
-import { RoiMapManager } from './RoiMapManager';
-import { computeRois } from './computeRois';
+import { match } from 'ts-pattern';
+
+import type { Roi } from './Roi.js';
+import type { RoiMapManager } from './RoiMapManager.js';
+import { computeRois } from './computeRois.js';
 
 export const RoiKind = {
   BLACK: 'black',
@@ -50,24 +52,12 @@ export function getRois(
   ) {
     computeRois(roiMapManager);
   }
-  let rois;
-  switch (kind) {
-    case 'black': {
-      rois = roiMapManager.blackRois;
-      break;
-    }
-    case 'white': {
-      rois = roiMapManager.whiteRois;
-      break;
-    }
-    case 'bw': {
-      rois = [...roiMapManager.whiteRois, ...roiMapManager.blackRois];
-      break;
-    }
-    default: {
-      throw new RangeError(`invalid ROI kind: ${kind}`);
-    }
-  }
+
+  const rois = match(kind)
+    .with('black', () => roiMapManager.blackRois)
+    .with('white', () => roiMapManager.whiteRois)
+    .with('bw', () => [...roiMapManager.whiteRois, ...roiMapManager.blackRois])
+    .exhaustive();
 
   return rois.filter(
     (roi) => roi.surface >= minSurface && roi.surface <= maxSurface,

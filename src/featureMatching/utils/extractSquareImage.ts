@@ -1,5 +1,5 @@
-import { Image } from '../../Image';
-import { Point } from '../../geometry';
+import type { Image } from '../../Image.js';
+import type { Point } from '../../geometry/index.js';
 
 /**
  * Crop the source image to given dimensions around the origin.

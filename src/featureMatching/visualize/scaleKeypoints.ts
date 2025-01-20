@@ -1,4 +1,4 @@
-import { FastKeypoint } from '../keypoints/getFastKeypoints';
+import type { FastKeypoint } from '../keypoints/getFastKeypoints.js';
 
 /**
  * Scales the coordinates of the keypoints.

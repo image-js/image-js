@@ -1,8 +1,8 @@
-import {
+import type {
   GaussianBlurOptions,
-  gaussianBlur,
   GaussianBlurSigmaOptions,
-} from '../gaussianBlur';
+} from '../gaussianBlur.js';
+import { gaussianBlur } from '../gaussianBlur.js';
 
 test('symmetrical kernel, should return the kernel itself', () => {
   const image = testUtils.createGreyImage([

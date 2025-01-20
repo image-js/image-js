@@ -1,5 +1,5 @@
-import { getMaskFromCannyEdge } from '../../operations/getMaskFromCannyEdge';
-import { sampleBackgroundPoints } from '../sampleBackgroundPoints';
+import { getMaskFromCannyEdge } from '../../operations/getMaskFromCannyEdge.js';
+import { sampleBackgroundPoints } from '../sampleBackgroundPoints.js';
 
 test('basic test', () => {
   const image = testUtils.createGreyImage([

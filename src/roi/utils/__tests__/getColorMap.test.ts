@@ -1,5 +1,5 @@
-import { getBinaryMap } from '../colorMaps/getBinaryMap';
-import { getColorMap } from '../getColorMap';
+import { getBinaryMap } from '../colorMaps/getBinaryMap.js';
+import { getColorMap } from '../getColorMap.js';
 
 test('default options', () => {
   const colorMap = getBinaryMap({ nbNegative: 1, nbPositive: 1 });

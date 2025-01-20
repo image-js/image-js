@@ -1,16 +1,16 @@
+/* eslint-disable no-invalid-this */
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="./jest.d.ts" />
 
-import {
-  MatchImageSnapshotOptions,
-  configureToMatchImageSnapshot,
-} from 'jest-image-snapshot';
+import type { MatcherState } from '@vitest/expect';
+import type { MatchImageSnapshotOptions } from 'jest-image-snapshot';
+import { configureToMatchImageSnapshot } from 'jest-image-snapshot';
 
-import { encodePng, Image } from '../src';
-import { Mask } from '../src/Mask';
+import type { Image } from '../src/index.js';
+import { encodePng, Mask } from '../src/index.js';
 
-import { TestImagePath } from './TestImagePath';
-import { createImageFromData } from './createImageFromData';
+import type { TestImagePath } from './TestImagePath.js';
+import { createImageFromData } from './createImageFromData.js';
 
 interface MatcherResult {
   message: () => string;
@@ -20,7 +20,6 @@ interface MatcherResult {
 export interface JestMatcherOptions {
   /**
    * Acceptable difference between the received image and the expected for each channel.
-   *
    * @default `0`
    */
   error?: number;
@@ -28,15 +27,13 @@ export interface JestMatcherOptions {
 
 /**
  * Match a received image to an expected image.
- *
- * @param this - Jest matcher context.
  * @param received - Received image.
  * @param expected - Expected image.
  * @param options - Jest matcher options.
  * @returns - Jest matcher result.
  */
 export function toMatchImage(
-  this: jest.MatcherContext,
+  this: MatcherState,
   received: Image,
   expected: Image | TestImagePath,
   options: JestMatcherOptions = {},
@@ -94,15 +91,13 @@ export function toMatchImage(
 
 /**
  * Match a received image to expected image data.
- *
- * @param this - Jest matcher context.
  * @param received - Received image.
  * @param expectedData - Expected image data.
  *  @param options - Jest matcher options.
  * @returns - Jest matcher result.
  */
 export function toMatchImageData(
-  this: jest.MatcherContext,
+  this: MatcherState,
   received: Image,
   expectedData: number[][] | string,
   options: JestMatcherOptions = {},
@@ -115,14 +110,12 @@ export function toMatchImageData(
 
 /**
  * Match a received mask to an expected mask.
- *
- * @param this - Jest matcher context.
  * @param received - Received mask.
  * @param expected - Expected mask.
  * @returns - Jest matcher result.
  */
 export function toMatchMask(
-  this: jest.MatcherContext,
+  this: MatcherState,
   received: Mask,
   expected: Image | Mask,
 ): MatcherResult {
@@ -153,14 +146,12 @@ export function toMatchMask(
 
 /**
  * Match a received mask to expected mask data.
- *
- * @param this - Jest matcher context.
  * @param received - Received mask.
  * @param expectedData - Expected mask data.
  * @returns - Jest matcher result.
  */
 export function toMatchMaskData(
-  this: jest.MatcherContext,
+  this: MatcherState,
   received: Mask,
   expectedData: number[][] | string,
 ): MatcherResult {
@@ -172,14 +163,12 @@ const toMatchImageFileSnapshot = configureToMatchImageSnapshot({});
 
 /**
  * Snapshot matching with Image objects.
- *
- * @param this - Jest matcher context.
  * @param received - Received image.
  * @param options - Options.
  * @returns - Jest matcher result.
  */
 export function toMatchImageSnapshot(
-  this: jest.MatcherContext,
+  this: MatcherState,
   received: Image | Mask | Uint8Array,
   options?: MatchImageSnapshotOptions,
 ): MatcherResult {

@@ -1,4 +1,4 @@
-import { Mask } from '../..';
+import { Mask } from '../../Mask.js';
 
 test('mask 5x5, default options', () => {
   const image = testUtils.createMask([

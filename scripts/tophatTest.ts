@@ -8,7 +8,7 @@ import {
   RoiKind,
   readSync,
   writeSync,
-} from '../src/index';
+} from '../src/index.js';
 
 const disk12 = [
   [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],

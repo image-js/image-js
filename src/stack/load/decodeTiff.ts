@@ -1,7 +1,7 @@
 import { decode } from 'tiff';
 
-import { Stack } from '../../Stack';
-import { getImageFromIFD } from '../../load/decodeTiff';
+import { Stack } from '../../Stack.js';
+import { getImageFromIFD } from '../../load/decodeTiff.js';
 
 /**
  * Decode a TIFF and create a stack of images.

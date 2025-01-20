@@ -1,4 +1,4 @@
-import { Image } from '../../Image';
+import { Image } from '../../Image.js';
 
 test('invert with out parameter', () => {
   const out = new Image(2, 2);

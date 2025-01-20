@@ -1,4 +1,5 @@
-import { Image, BitDepth } from '../Image';
+import type { BitDepth } from '../Image.js';
+import { Image } from '../Image.js';
 
 /**
  * Convert the bit depth of an image.

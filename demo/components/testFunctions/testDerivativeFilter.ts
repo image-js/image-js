@@ -1,8 +1,7 @@
-import { Image } from '../../../src';
+import type { Image } from '../../../src/index.js';
 
 /**
  * Apply a derivative filter to the source image.
- *
  * @param image - Input image.
  * @returns The treated image.
  */

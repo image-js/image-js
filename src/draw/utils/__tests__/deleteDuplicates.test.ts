@@ -1,4 +1,4 @@
-import { deleteDuplicates } from '../deleteDuplicates';
+import { deleteDuplicates } from '../deleteDuplicates.js';
 
 test('should remove duplicate points', () => {
   const points = [

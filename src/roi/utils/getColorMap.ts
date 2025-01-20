@@ -1,9 +1,11 @@
-import { RoisColorMode } from '../colorRois';
-import { RoiKind } from '../getRois';
+import { match } from 'ts-pattern';
 
-import { getBinaryMap } from './colorMaps/getBinaryMap';
-import { getRainbowMap } from './colorMaps/getRainbowMap';
-import { getSaturationMap } from './colorMaps/getSaturationMap';
+import type { RoisColorMode } from '../colorRois.js';
+import type { RoiKind } from '../getRois.js';
+
+import { getBinaryMap } from './colorMaps/getBinaryMap.js';
+import { getRainbowMap } from './colorMaps/getRainbowMap.js';
+import { getSaturationMap } from './colorMaps/getSaturationMap.js';
 
 export interface GetColorMapOptions {
   /**
@@ -36,14 +38,9 @@ export function getColorMap(options: GetColorMapOptions): Uint32Array {
   const { mode = 'binary' } = options;
   options = { roiKind: 'bw', ...options };
 
-  switch (mode) {
-    case 'binary':
-      return getBinaryMap(options);
-    case 'saturation':
-      return getSaturationMap(options);
-    case 'rainbow':
-      return getRainbowMap(options);
-    default:
-      throw new RangeError(`invalid color mode: ${mode}`);
-  }
+  return match(mode)
+    .with('binary', () => getBinaryMap(options))
+    .with('saturation', () => getSaturationMap(options))
+    .with('rainbow', () => getRainbowMap(options))
+    .exhaustive();
 }

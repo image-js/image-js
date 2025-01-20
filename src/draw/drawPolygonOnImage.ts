@@ -1,15 +1,15 @@
 import robustPointInPolygon from 'robust-point-in-polygon';
 
-import { Image } from '../Image';
-import { arrayPointsToObjects } from '../utils/arrayPointsToObjects';
-import { Point } from '../utils/geometry/points';
-import { getOutputImage } from '../utils/getOutputImage';
-import { setBlendedVisiblePixel } from '../utils/setBlendedVisiblePixel';
-import checkProcessable from '../utils/validators/checkProcessable';
-import { validateColor } from '../utils/validators/validators';
+import type { Image } from '../Image.js';
+import { arrayPointsToObjects } from '../utils/arrayPointsToObjects.js';
+import type { Point } from '../utils/geometry/points.js';
+import { getOutputImage } from '../utils/getOutputImage.js';
+import { setBlendedVisiblePixel } from '../utils/setBlendedVisiblePixel.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
+import { validateColor } from '../utils/validators/validators.js';
 
-import { DrawPolylineOnImageOptions } from './drawPolylineOnImage';
-import { deleteDuplicates } from './utils/deleteDuplicates';
+import type { DrawPolylineOnImageOptions } from './drawPolylineOnImage.js';
+import { deleteDuplicates } from './utils/deleteDuplicates.js';
 
 export interface DrawPolygonOnImageOptions extends DrawPolylineOnImageOptions {
   /**

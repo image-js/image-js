@@ -1,10 +1,12 @@
 import { Matrix } from 'ml-matrix';
 
-import { Mask } from '../Mask';
+import type { Mask } from '../Mask.js';
 
-import { Roi } from './Roi';
-import { FromMaskOptions, fromMask } from './fromMask';
-import { getRois, GetRoisOptions } from './getRois';
+import type { Roi } from './Roi.js';
+import type { FromMaskOptions } from './fromMask.js';
+import { fromMask } from './fromMask.js';
+import type { GetRoisOptions } from './getRois.js';
+import { getRois } from './getRois.js';
 
 export interface RoiManager {
   getRois(options: GetRoisOptions): Roi[];

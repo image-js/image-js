@@ -1,6 +1,6 @@
-import { OrientedFastKeypoint } from '../..';
+import type { OrientedFastKeypoint } from '../getOrientedFastKeypoints.js';
 
-import { getDistanceMatrix } from './getDistanceMatrix';
+import { getDistanceMatrix } from './getDistanceMatrix.js';
 
 export type DistanceMatrix = Float64Array[];
 

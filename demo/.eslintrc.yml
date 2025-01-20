@@ -1,4 +1,0 @@
-root: true
-extends: [cheminfo-react, cheminfo-typescript]
-rules:
-  no-console: off

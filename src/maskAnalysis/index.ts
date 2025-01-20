@@ -1,1 +1,1 @@
-export * from './maskAnalysis.types';
+export * from './maskAnalysis.types.js';

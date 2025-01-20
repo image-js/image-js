@@ -1,4 +1,4 @@
-import { Match } from '../matching/bruteForceMatch';
+import type { Match } from '../matching/bruteForceMatch.js';
 
 /**
  * Get the shade of the match with given index (the color is an indicator

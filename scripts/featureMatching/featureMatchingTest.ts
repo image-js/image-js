@@ -10,17 +10,17 @@ import {
   getCrosscheckMatches,
   MontageDisposition,
   getBestKeypointsInRadius,
-} from '../../src/featureMatching';
-import { readSync, writeSync } from '../../src';
+} from '../../src/featureMatching.js';
+import { readSync, writeSync } from '../../src/index.js';
 import {
   getBrief,
   GetBriefOptions,
-} from '../../src/featureMatching/descriptors/getBrief';
-import { GetColorsOptions } from '../../src/featureMatching/utils/getColors';
-import { getMinMax } from '../../src/utils/getMinMax';
+} from '../../src/featureMatching/descriptors/getBrief.js';
+import { GetColorsOptions } from '../../src/featureMatching/utils/getColors.js';
+import { getMinMax } from '../../src/utils/getMinMax.js';
 
 import util from 'util';
-import { sliceBrief } from '../../src/featureMatching/descriptors/utils/sliceBrief';
+import { sliceBrief } from '../../src/featureMatching/descriptors/utils/sliceBrief.js';
 util.inspect.defaultOptions.depth = 5;
 
 const getBriefOptions: GetBriefOptions = {

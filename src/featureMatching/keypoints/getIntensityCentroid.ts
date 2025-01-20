@@ -1,7 +1,7 @@
-import { Image } from '../../Image';
-import { Point } from '../../geometry';
+import type { Image } from '../../Image.js';
+import type { Point } from '../../geometry/index.js';
 
-import { getIntensityMoment } from './getIntensityMoment';
+import { getIntensityMoment } from './getIntensityMoment.js';
 
 /**
  * Compute the intensity centroid of an image for each channel relatively to the center of the image.

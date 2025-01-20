@@ -1,15 +1,12 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.esm.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "declarationMap": true
-  },
-  "exclude": [
-    "./demo/**/*",
-    "./src/**/__tests__",
-    "./jest.setup.ts",
-    "./test/**/*",
-    "vite.config.ts"
-  ]
+    "outDir": "lib-cjs",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "verbatimModuleSyntax": false,
+    "esModuleInterop": true,
+    "declaration": false,
+    "declarationMap": false
+  }
 }

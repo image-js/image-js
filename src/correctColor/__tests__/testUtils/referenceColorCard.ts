@@ -1,4 +1,4 @@
-import { LabColor } from 'colord';
+import type { LabColor } from 'colord';
 
 export interface ColorCardSquare {
   /**

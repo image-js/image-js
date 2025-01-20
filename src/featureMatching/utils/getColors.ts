@@ -1,6 +1,6 @@
-import { Image } from '../../Image';
-import { getClampFromTo } from '../../utils/clamp';
-import { GetColorsOptions } from '../featureMatching.types';
+import type { Image } from '../../Image.js';
+import { getClampFromTo } from '../../utils/clamp.js';
+import type { GetColorsOptions } from '../featureMatching.types.js';
 
 /**
  * Generate an array of colors to draw the keypoints depending on their score or the matches depending on the distance.

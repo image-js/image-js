@@ -1,4 +1,6 @@
-import { BitDepth, Image } from '..';
+import { match } from 'ts-pattern';
+
+import type { BitDepth, Image } from '../Image.js';
 import {
   PREWITT_X,
   PREWITT_Y,
@@ -6,8 +8,8 @@ import {
   SCHARR_Y,
   SOBEL_X,
   SOBEL_Y,
-} from '../utils/constants/kernels';
-import type { BorderType } from '../utils/interpolateBorder';
+} from '../utils/constants/kernels.js';
+import type { BorderType } from '../utils/interpolateBorder.js';
 
 export const DerivativeFilter = {
   SOBEL: 'sobel',
@@ -55,23 +57,15 @@ export function derivativeFilter(
   options: DerivativeFilterOptions = {},
 ): Image {
   const { filter = 'sobel' } = options;
-  let kernelX = SOBEL_X;
-  let kernelY = SOBEL_Y;
 
-  switch (filter) {
-    case 'sobel':
-      break;
-    case 'scharr':
-      kernelX = SCHARR_X;
-      kernelY = SCHARR_Y;
-      break;
-    case 'prewitt':
-      kernelX = PREWITT_X;
-      kernelY = PREWITT_Y;
-      break;
-    default:
-      throw new RangeError(`invalid derivative filter: ${filter}`);
-  }
+  const kernels = match<
+    DerivativeFilter,
+    { kernelX: number[][]; kernelY: number[][] }
+  >(filter)
+    .with('sobel', () => ({ kernelX: SOBEL_X, kernelY: SOBEL_Y }))
+    .with('scharr', () => ({ kernelX: SCHARR_X, kernelY: SCHARR_Y }))
+    .with('prewitt', () => ({ kernelX: PREWITT_X, kernelY: PREWITT_Y }))
+    .exhaustive();
 
-  return image.gradientFilter({ kernelX, kernelY, ...options });
+  return image.gradientFilter({ ...kernels, ...options });
 }

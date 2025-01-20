@@ -1,7 +1,7 @@
-import { Image } from '../../Image';
-import { rotatePoint } from '../../point/operations';
-import { Point } from '../../utils/geometry/points';
-import { assert } from '../../utils/validators/assert';
+import type { Image } from '../../Image.js';
+import { rotatePoint } from '../../point/operations.js';
+import type { Point } from '../../utils/geometry/points.js';
+import { assert } from '../../utils/validators/assert.js';
 
 test('straight rectangle top left', () => {
   const image = testUtils.createGreyImage([

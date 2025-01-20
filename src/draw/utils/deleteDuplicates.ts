@@ -1,4 +1,4 @@
-import { Point } from '../../utils/geometry/points';
+import type { Point } from '../../utils/geometry/points.js';
 
 /**
  * Remove duplicate points from array.

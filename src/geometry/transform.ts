@@ -1,12 +1,11 @@
 import { inverse, Matrix } from 'ml-matrix';
 
-import { Image } from '../Image';
-import { getClamp } from '../utils/clamp';
-import { BorderType, getBorderInterpolation } from '../utils/interpolateBorder';
-import {
-  getInterpolationFunction,
-  InterpolationType,
-} from '../utils/interpolatePixel';
+import { Image } from '../Image.js';
+import { getClamp } from '../utils/clamp.js';
+import type { BorderType } from '../utils/interpolateBorder.js';
+import { getBorderInterpolation } from '../utils/interpolateBorder.js';
+import type { InterpolationType } from '../utils/interpolatePixel.js';
+import { getInterpolationFunction } from '../utils/interpolatePixel.js';
 
 export interface TransformOptions {
   /**

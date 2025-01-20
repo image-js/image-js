@@ -1,7 +1,7 @@
-import { Image } from '../../../Image';
-import { Match } from '../../matching/bruteForceMatch';
-import { getColors } from '../getColors';
-import { getMatchColor } from '../getMatchColor';
+import { Image } from '../../../Image.js';
+import type { Match } from '../../matching/bruteForceMatch.js';
+import { getColors } from '../getColors.js';
+import { getMatchColor } from '../getMatchColor.js';
 
 test('matches should all have a different color', () => {
   const image = new Image(5, 5);

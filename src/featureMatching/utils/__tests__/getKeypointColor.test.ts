@@ -1,6 +1,6 @@
-import { Image } from '../../../Image';
-import { getColors } from '../getColors';
-import { getKeypointColor } from '../getKeypointColor';
+import { Image } from '../../../Image.js';
+import { getColors } from '../getColors.js';
+import { getKeypointColor } from '../getKeypointColor.js';
 
 const origin = { column: 0, row: 0 };
 

@@ -1,4 +1,4 @@
-import { createImageFromData } from '../../../test/createImageFromData';
+import { createImageFromData } from '../../../test/createImageFromData.js';
 
 test('RGBA image - channel 0', () => {
   const image = testUtils.createRgbaImage([

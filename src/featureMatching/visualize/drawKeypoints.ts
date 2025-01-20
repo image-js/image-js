@@ -1,12 +1,12 @@
-import { Image } from '../../Image';
-import { Point } from '../../geometry';
-import { sum } from '../../utils/geometry/points';
-import { getOutputImage } from '../../utils/getOutputImage';
-import { GetColorsOptions } from '../featureMatching.types';
-import { FastKeypoint } from '../keypoints/getFastKeypoints';
-import { OrientedFastKeypoint } from '../keypoints/getOrientedFastKeypoints';
-import { getColors } from '../utils/getColors';
-import { getKeypointColor } from '../utils/getKeypointColor';
+import type { Image } from '../../Image.js';
+import type { Point } from '../../geometry/index.js';
+import { sum } from '../../utils/geometry/points.js';
+import { getOutputImage } from '../../utils/getOutputImage.js';
+import type { GetColorsOptions } from '../featureMatching.types.js';
+import type { FastKeypoint } from '../keypoints/getFastKeypoints.js';
+import type { OrientedFastKeypoint } from '../keypoints/getOrientedFastKeypoints.js';
+import { getColors } from '../utils/getColors.js';
+import { getKeypointColor } from '../utils/getKeypointColor.js';
 
 export interface DrawKeypointsOptions {
   /**

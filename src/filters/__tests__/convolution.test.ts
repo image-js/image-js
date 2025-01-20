@@ -1,9 +1,11 @@
 import { Matrix } from 'ml-matrix';
 
-import { rawDirectConvolution } from '..';
-import { getClamp } from '../../utils/clamp';
-import { getBorderInterpolation } from '../../utils/interpolateBorder';
-import { computeConvolutionValue } from '../convolution';
+import { getClamp } from '../../utils/clamp.js';
+import { getBorderInterpolation } from '../../utils/interpolateBorder.js';
+import {
+  computeConvolutionValue,
+  rawDirectConvolution,
+} from '../convolution.js';
 
 describe('convolution functions', () => {
   it('separable convolution compared to opencv', () => {

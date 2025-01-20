@@ -1,22 +1,24 @@
-import { Mask } from '..';
-import { Image } from '../Image';
-import { imageToOutputMask } from '../utils/getOutputImage';
+import { match } from 'ts-pattern';
 
-import huang from './thresholds/huang';
-import intermodes from './thresholds/intermodes';
-import isodata from './thresholds/isodata';
-import li from './thresholds/li';
-import maxEntropy from './thresholds/maxEntropy';
-import mean from './thresholds/mean';
-import minError from './thresholds/minError';
-import minimum from './thresholds/minimum';
-import moments from './thresholds/moments';
-import { otsu } from './thresholds/otsu';
-import percentile from './thresholds/percentile';
-import renyiEntropy from './thresholds/renyiEntropy';
-import shanbhag from './thresholds/shanbhag';
-import { triangle } from './thresholds/triangle';
-import yen from './thresholds/yen';
+import type { Image } from '../Image.js';
+import type { Mask } from '../Mask.js';
+import { imageToOutputMask } from '../utils/getOutputImage.js';
+
+import huang from './thresholds/huang.js';
+import intermodes from './thresholds/intermodes.js';
+import isodata from './thresholds/isodata.js';
+import li from './thresholds/li.js';
+import maxEntropy from './thresholds/maxEntropy.js';
+import mean from './thresholds/mean.js';
+import minError from './thresholds/minError.js';
+import minimum from './thresholds/minimum.js';
+import moments from './thresholds/moments.js';
+import { otsu } from './thresholds/otsu.js';
+import percentile from './thresholds/percentile.js';
+import renyiEntropy from './thresholds/renyiEntropy.js';
+import shanbhag from './thresholds/shanbhag.js';
+import { triangle } from './thresholds/triangle.js';
+import yen from './thresholds/yen.js';
 
 export const ThresholdAlgorithm = {
   HUANG: 'huang',
@@ -89,40 +91,23 @@ export function computeThreshold(
   const histogram = image.histogram({ slots });
   const scale = slots ? 2 ** image.bitDepth / slots : 1;
 
-  switch (algorithm) {
-    case 'huang':
-      return huang(histogram) * scale;
-    case 'intermodes':
-      return intermodes(histogram) * scale;
-    case 'isodata':
-      return isodata(histogram) * scale;
-    case 'li':
-      return li(histogram, image.size) * scale;
-    case 'maxEntropy':
-      return maxEntropy(histogram, image.size) * scale;
-    case 'mean':
-      return mean(histogram, image.size) * scale;
-    case 'minimum':
-      return minimum(histogram) * scale;
-    case 'minError':
-      return minError(histogram, image.size) * scale;
-    case 'moments':
-      return moments(histogram, image.size) * scale;
-    case 'otsu':
-      return otsu(histogram, image.size) * scale;
-    case 'percentile':
-      return percentile(histogram) * scale;
-    case 'renyiEntropy':
-      return renyiEntropy(histogram, image.size) * scale;
-    case 'shanbhag':
-      return shanbhag(histogram, image.size) * scale;
-    case 'triangle':
-      return triangle(histogram) * scale;
-    case 'yen':
-      return yen(histogram, image.size) * scale;
-    default:
-      throw new RangeError(`invalid threshold algorithm: ${algorithm}`);
-  }
+  return match(algorithm)
+    .with('huang', () => huang(histogram) * scale)
+    .with('intermodes', () => intermodes(histogram) * scale)
+    .with('isodata', () => isodata(histogram) * scale)
+    .with('li', () => li(histogram, image.size) * scale)
+    .with('maxEntropy', () => maxEntropy(histogram, image.size) * scale)
+    .with('mean', () => mean(histogram, image.size) * scale)
+    .with('minimum', () => minimum(histogram) * scale)
+    .with('minError', () => minError(histogram, image.size) * scale)
+    .with('moments', () => moments(histogram, image.size) * scale)
+    .with('otsu', () => otsu(histogram, image.size) * scale)
+    .with('percentile', () => percentile(histogram) * scale)
+    .with('renyiEntropy', () => renyiEntropy(histogram, image.size) * scale)
+    .with('shanbhag', () => shanbhag(histogram, image.size) * scale)
+    .with('triangle', () => triangle(histogram) * scale)
+    .with('yen', () => yen(histogram, image.size) * scale)
+    .exhaustive();
 }
 
 // See: https://docs.opencv.org/4.0.1/d7/d1b/group__imgproc__misc.html#gaa9e58d2860d4afa658ef70a9b1115576

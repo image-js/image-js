@@ -1,7 +1,7 @@
-import { Mask } from '..';
-import { Image } from '../Image';
-import { checkKernel } from '../utils/validators/checkKernel';
-import checkProcessable from '../utils/validators/checkProcessable';
+import { Image } from '../Image.js';
+import { Mask } from '../Mask.js';
+import { checkKernel } from '../utils/validators/checkKernel.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
 
 export interface DilateOptions {
   /**

@@ -1,4 +1,4 @@
-import { Brief } from '../..';
+import type { Brief } from '../getBriefDescriptors.js';
 
 export interface SliceBriefOptions {
   /**

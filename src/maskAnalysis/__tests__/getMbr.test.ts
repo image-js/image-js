@@ -1,6 +1,6 @@
-import { fromMask } from '../../roi';
-import { angle } from '../../utils/geometry/angles';
-import { getMbr } from '../getMbr';
+import { fromMask } from '../../roi/index.js';
+import { angle } from '../../utils/geometry/angles.js';
+import { getMbr } from '../getMbr.js';
 
 test('verify that angle is correct', () => {
   const mask = testUtils.createMask(`

@@ -1,8 +1,7 @@
-import { Mask } from '../src';
+import { Mask } from '../src/Mask.js';
 
 /**
  * Create a new Mask object from mask data.
- *
  * @param data - Mask data.
  * @returns The new mask.
  */
@@ -16,7 +15,6 @@ export function createMask(data: number[][] | string): Mask {
 
 /**
  * Create a new Mask object from a 2D matrix.
- *
  * @param data - Mask data.
  * @returns The new mask.
  */
@@ -42,7 +40,6 @@ function createMaskFrom2DArray(data: number[][]): Mask {
 
 /**
  * Create a new Mask object from data encoded in a string.
- *
  * @param data - Mask data.
  * @returns The new mask.
  */
@@ -54,7 +51,7 @@ function createMaskFromString(data: string): Mask {
   const imageData = new Uint8Array(height * width);
   for (let row = 0; row < height; row++) {
     const line = lines[row].trim();
-    const values = line.split(/[^0-9]+/).map((v) => parseInt(v, 10));
+    const values = line.split(/[^0-9]+/).map((v) => Number.parseInt(v, 10));
 
     if (values.length !== width) {
       throw new RangeError(

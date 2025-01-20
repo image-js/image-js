@@ -1,4 +1,5 @@
-import { difference, normalize, Point } from '../../utils/geometry/points';
+import type { Point } from '../../utils/geometry/points.js';
+import { difference, normalize } from '../../utils/geometry/points.js';
 
 /**
  * The angle in radians of a vector relatively to the x axis.

@@ -1,4 +1,4 @@
-import { pixelate } from '../pixelate';
+import { pixelate } from '../pixelate.js';
 
 describe('pixelization of images', () => {
   it('pixelate a simple grey image', () => {

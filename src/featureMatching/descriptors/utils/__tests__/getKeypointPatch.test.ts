@@ -1,7 +1,7 @@
-import { TestImagePath } from '../../../../../test/TestImagePath';
-import { getOrientedFastKeypoints } from '../../../keypoints/getOrientedFastKeypoints';
-import { drawKeypoints } from '../../../visualize/drawKeypoints';
-import { getKeypointPatch } from '../getKeypointPatch';
+import type { TestImagePath } from '../../../../../test/TestImagePath.js';
+import { getOrientedFastKeypoints } from '../../../keypoints/getOrientedFastKeypoints.js';
+import { drawKeypoints } from '../../../visualize/drawKeypoints.js';
+import { getKeypointPatch } from '../getKeypointPatch.js';
 
 test.each([
   {

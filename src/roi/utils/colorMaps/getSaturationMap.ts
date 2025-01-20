@@ -1,6 +1,6 @@
-import { RoiKind } from '../../getRois';
-import { hsvToRgb } from '../hsvToRgb';
-import { rgbToNumber } from '../rgbToNumber';
+import type { RoiKind } from '../../getRois.js';
+import { hsvToRgb } from '../hsvToRgb.js';
+import { rgbToNumber } from '../rgbToNumber.js';
 
 export interface GetSaturationMapOptions {
   /**

@@ -1,7 +1,11 @@
-import { BriefDescriptor } from '../descriptors/getBriefDescriptors';
-import { sortByDestSource, sortBySourceDest } from '../utils/sortBySourceDest';
+import type { BriefDescriptor } from '../descriptors/getBriefDescriptors.js';
+import {
+  sortByDestSource,
+  sortBySourceDest,
+} from '../utils/sortBySourceDest.js';
 
-import { bruteForceOneMatch, Match } from './bruteForceMatch';
+import type { Match } from './bruteForceMatch.js';
+import { bruteForceOneMatch } from './bruteForceMatch.js';
 
 /**
  * Get the crosscheck matches from the source and destination descriptors.

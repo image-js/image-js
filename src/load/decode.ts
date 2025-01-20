@@ -1,10 +1,11 @@
 import imageType from 'image-type';
+import { match } from 'ts-pattern';
 
-import { Image } from '../Image';
+import type { Image } from '../Image.js';
 
-import { decodeJpeg } from './decodeJpeg';
-import { decodePng } from './decodePng';
-import { decodeTiff } from './decodeTiff';
+import { decodeJpeg } from './decodeJpeg.js';
+import { decodePng } from './decodePng.js';
+import { decodeTiff } from './decodeTiff.js';
 
 /**
  * Decode input data. Data format is automatically detected.
@@ -19,14 +20,11 @@ export function decode(data: ArrayBufferView): Image {
     data.byteLength,
   );
   const type = imageType(typedArray);
-  switch (type?.mime) {
-    case 'image/png':
-      return decodePng(typedArray);
-    case 'image/jpeg':
-      return decodeJpeg(typedArray);
-    case 'image/tiff':
-      return decodeTiff(typedArray);
-    default:
+  return match(type)
+    .with({ mime: 'image/png' }, () => decodePng(typedArray))
+    .with({ mime: 'image/jpeg' }, () => decodeJpeg(typedArray))
+    .with({ mime: 'image/tiff' }, () => decodeTiff(typedArray))
+    .otherwise(() => {
       throw new RangeError(`invalid data format: ${type?.mime}`);
-  }
+    });
 }

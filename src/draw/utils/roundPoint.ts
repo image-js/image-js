@@ -1,4 +1,4 @@
-import { Point } from '../..';
+import type { Point } from '../../geometry/index.js';
 
 /**
  * Round a point to the nearest integer.

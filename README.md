@@ -13,8 +13,6 @@ Image processing and manipulation in JavaScript.
 
 ## [API](https://image-js.github.io/image-js-typescript/)
 
-Look at the [examples](./examples) directory for how the API is being designed.
-
 ## Development
 
 See [Development documentation](./Development.md).

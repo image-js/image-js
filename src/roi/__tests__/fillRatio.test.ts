@@ -1,4 +1,4 @@
-import { fromMask } from '..';
+import { fromMask } from '../fromMask.js';
 
 test('fillRatio 4x4', () => {
   const mask = testUtils.createMask([

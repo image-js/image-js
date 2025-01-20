@@ -1,5 +1,5 @@
-import { Image } from '../../../Image';
-import { getColors } from '../getColors';
+import { Image } from '../../../Image.js';
+import { getColors } from '../getColors.js';
 
 test('generate 10 blue shades', () => {
   const side = 100;

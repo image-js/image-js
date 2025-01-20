@@ -1,8 +1,8 @@
-import Matrix from 'ml-matrix';
+import { Matrix } from 'ml-matrix';
 
-import { applyAffineTransfom } from '../applyAffineTransform';
-import { createAffineTransformModel } from '../createAffineTransformModel';
-import { getPointsFromMatrix } from '../getPointsFromMatrix';
+import { applyAffineTransfom } from '../applyAffineTransform.js';
+import { createAffineTransformModel } from '../createAffineTransformModel.js';
+import { getPointsFromMatrix } from '../getPointsFromMatrix.js';
 
 test('6 points aligned', () => {
   const source = [

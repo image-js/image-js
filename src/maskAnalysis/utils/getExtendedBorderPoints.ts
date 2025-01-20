@@ -1,5 +1,5 @@
-import { Mask } from '../../Mask';
-import { Point } from '../../utils/geometry/points';
+import type { Mask } from '../../Mask.js';
+import type { Point } from '../../utils/geometry/points.js';
 
 /**
  * Get the pixels that surround an ROI. The pixels include the top and left borders,

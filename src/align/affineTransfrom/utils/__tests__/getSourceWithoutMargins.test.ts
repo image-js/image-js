@@ -1,5 +1,5 @@
-import { Image } from '../../../../Image';
-import { getSourceWithoutMargins } from '../getSourceWithoutMargins';
+import { Image } from '../../../../Image.js';
+import { getSourceWithoutMargins } from '../getSourceWithoutMargins.js';
 
 test('destination fully in source', () => {
   const source = new Image(10, 10);

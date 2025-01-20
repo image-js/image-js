@@ -3,17 +3,18 @@ import {
   DirectConvolution,
 } from 'ml-convolution';
 
-import { Image } from '../Image';
-import { extendBorders } from '../operations/extendBorders';
-import { getClamp } from '../utils/clamp';
-import { getIndex } from '../utils/getIndex';
-import { getOutputImage } from '../utils/getOutputImage';
-import { BorderType, getBorderInterpolation } from '../utils/interpolateBorder';
-import { round } from '../utils/round';
-import {
+import { Image } from '../Image.js';
+import { extendBorders } from '../operations/extendBorders.js';
+import { getClamp } from '../utils/clamp.js';
+import { getIndex } from '../utils/getIndex.js';
+import { getOutputImage } from '../utils/getOutputImage.js';
+import type { BorderType } from '../utils/interpolateBorder.js';
+import { getBorderInterpolation } from '../utils/interpolateBorder.js';
+import { round } from '../utils/round.js';
+import type {
   BorderInterpolationFunction,
   ClampFunction,
-} from '../utils/utils.types';
+} from '../utils/utils.types.js';
 
 export interface ConvolutionOptions {
   /**

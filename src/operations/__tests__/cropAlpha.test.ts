@@ -1,4 +1,4 @@
-import { cropAlpha } from '../cropAlpha';
+import { cropAlpha } from '../cropAlpha.js';
 
 test('GREYA, no crop', () => {
   const image = testUtils.createGreyaImage([

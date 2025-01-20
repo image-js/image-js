@@ -1,6 +1,6 @@
 // generate some variations of the alphabet image for feature matching
 // run this script with: ts-node --log-error generateFMtestImages.ts
-import { readSync, writeSync, Image } from '../../src';
+import { readSync, writeSync, Image } from '../../src/index.js';
 import { join } from 'path';
 
 console.log(__dirname);

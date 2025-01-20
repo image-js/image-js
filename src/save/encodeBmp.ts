@@ -1,8 +1,8 @@
 //@ts-expect-error ts package not ready yet
 import * as bmp from 'fast-bmp';
 
-import { Image } from '../Image';
-import { Mask } from '../Mask';
+import type { Image } from '../Image.js';
+import { Mask } from '../Mask.js';
 
 /**
  * Creates a BMP buffer from a mask.

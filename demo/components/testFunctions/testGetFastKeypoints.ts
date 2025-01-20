@@ -1,9 +1,8 @@
-import { Image } from '../../../src';
-import { getFastKeypoints } from '../../../src/featureMatching/keypoints/getFastKeypoints';
+import { getFastKeypoints } from '../../../src/featureMatching/keypoints/getFastKeypoints.js';
+import type { Image } from '../../../src/index.js';
 
 /**
  * Find the FAST keypoints in the video.
- *
  * @param image - Input image.
  * @returns The image with the fast keypoints.
  */

@@ -1,8 +1,9 @@
-import { Image } from '../Image';
-import { Point } from '../geometry';
-import { getOutputImage } from '../utils/getOutputImage';
+import type { Image } from '../Image.js';
+import type { Point } from '../geometry/index.js';
+import { getOutputImage } from '../utils/getOutputImage.js';
 
-import { DrawMarkerOptions, drawMarker } from './drawMarker';
+import type { DrawMarkerOptions } from './drawMarker.js';
+import { drawMarker } from './drawMarker.js';
 
 /**
  * Draw markers on the image.

@@ -1,4 +1,4 @@
-import { Mask } from '../../Mask';
+import { Mask } from '../../Mask.js';
 
 test('6x5 mask with hole, no inner borders', () => {
   const roi = testUtils.createRoi([

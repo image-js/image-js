@@ -1,5 +1,5 @@
-import { Image } from '../../../Image';
-import { getHarrisScore } from '../getHarrisScore';
+import { Image } from '../../../Image.js';
+import { getHarrisScore } from '../getHarrisScore.js';
 
 const fastRadius = 3;
 const fastDiameter = 2 * fastRadius + 1;

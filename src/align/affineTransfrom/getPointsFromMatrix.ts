@@ -1,6 +1,6 @@
-import Matrix from 'ml-matrix';
+import type { Matrix } from 'ml-matrix';
 
-import { Point } from '../..';
+import type { Point } from '../../geometry/index.js';
 
 /**
  * Convert matrix to points.

@@ -1,4 +1,5 @@
-import { Image, Mask } from '..';
+import type { Image } from '../Image.js';
+import type { Mask } from '../Mask.js';
 
 export function getIndex(
   column: number,

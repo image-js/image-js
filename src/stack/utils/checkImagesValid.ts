@@ -1,4 +1,4 @@
-import { Image } from '../../Image';
+import type { Image } from '../../Image.js';
 
 /**
  * Verify all images of array have the same bit depth and color model.

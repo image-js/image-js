@@ -1,6 +1,6 @@
-import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors';
-import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
-import { getHammingDistance } from '../getHammingDistance';
+import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.js';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
+import { getHammingDistance } from '../getHammingDistance.js';
 
 test('distance should be 0', () => {
   const a = new Uint8Array([0, 1, 0, 0, 0, 0, 0]);

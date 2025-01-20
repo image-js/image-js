@@ -1,23 +1,26 @@
 import { getAffineTransform as matrixGetAffineTransform } from 'ml-affine-transform';
 import { ransac } from 'ml-ransac';
 
-import { Point, Image, writeSync, ImageColorModel } from '../..';
+import type { Image } from '../../Image.js';
+import { getBrief } from '../../featureMatching/descriptors/getBrief.js';
+import type { Match } from '../../featureMatching/index.js';
 import {
-  Match,
   Montage,
   MontageDisposition,
   bruteForceOneMatch,
   getCrosscheckMatches,
-} from '../../featureMatching';
-import { getBrief } from '../../featureMatching/descriptors/getBrief';
-import { filterEuclideanDistance } from '../../featureMatching/matching/filterEuclideanDistance';
-import { getMinMax } from '../../utils/getMinMax';
+} from '../../featureMatching/index.js';
+import { filterEuclideanDistance } from '../../featureMatching/matching/filterEuclideanDistance.js';
+import type { Point } from '../../geometry/index.js';
+import { writeSync } from '../../save/index.js';
+import { ImageColorModel } from '../../utils/constants/colorModels.js';
+import { getMinMax } from '../../utils/getMinMax.js';
 
-import { affineFitFunction } from './affineFitFunction';
-import { createAffineTransformModel } from './createAffineTransformModel';
-import { getEuclideanDistance } from './getEuclideanDistance';
-import { getMatrixFromPoints } from './getMatrixFromPoints';
-import { getSourceWithoutMargins } from './utils/getSourceWithoutMargins';
+import { affineFitFunction } from './affineFitFunction.js';
+import { createAffineTransformModel } from './createAffineTransformModel.js';
+import { getEuclideanDistance } from './getEuclideanDistance.js';
+import { getMatrixFromPoints } from './getMatrixFromPoints.js';
+import { getSourceWithoutMargins } from './utils/getSourceWithoutMargins.js';
 
 export interface GetAffineTransformOptions {
   /**

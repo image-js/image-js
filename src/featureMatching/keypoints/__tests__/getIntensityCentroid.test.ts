@@ -1,5 +1,5 @@
-import { Image } from '../../../Image';
-import { getIntensityCentroid } from '../getIntensityCentroid';
+import { Image } from '../../../Image.js';
+import { getIntensityCentroid } from '../getIntensityCentroid.js';
 
 test('3x3 empty image', () => {
   const image = new Image(3, 3, { colorModel: 'GREY' });

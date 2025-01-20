@@ -1,8 +1,9 @@
 import imageType from 'image-type';
+import { match } from 'ts-pattern';
 
-import { Stack } from '../../Stack';
+import type { Stack } from '../../Stack.js';
 
-import { decodeStackFromTiff } from './decodeTiff';
+import { decodeStackFromTiff } from './decodeTiff.js';
 
 /**
  * Decode input data and create stack. Data format is automatically detected.
@@ -17,10 +18,9 @@ export function decodeStack(data: ArrayBufferView): Stack {
     data.byteLength,
   );
   const type = imageType(typedArray);
-  switch (type?.mime) {
-    case 'image/tiff':
-      return decodeStackFromTiff(typedArray);
-    default:
+  return match(type)
+    .with({ mime: 'image/tiff' }, () => decodeStackFromTiff(typedArray))
+    .otherwise(() => {
       throw new RangeError(`invalid data format: ${type?.mime}`);
-  }
+    });
 }

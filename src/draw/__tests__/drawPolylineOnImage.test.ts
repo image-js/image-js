@@ -1,5 +1,5 @@
-import { Image } from '../../Image';
-import { drawPolylineOnImage } from '../drawPolylineOnImage';
+import { Image } from '../../Image.js';
+import { drawPolylineOnImage } from '../drawPolylineOnImage.js';
 
 test('RGB image', () => {
   const image = testUtils.createRgbImage([

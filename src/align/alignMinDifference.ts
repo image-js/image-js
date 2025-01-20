@@ -1,5 +1,6 @@
-import { Image, Mask } from '..';
-import checkProcessable from '../utils/validators/checkProcessable';
+import type { Image } from '../Image.js';
+import type { Mask } from '../Mask.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
 
 export interface AlignMinDifferenceOptions {
   /**

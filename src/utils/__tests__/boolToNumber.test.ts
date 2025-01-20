@@ -1,4 +1,4 @@
-import { boolToNumber } from '../boolToNumber';
+import { boolToNumber } from '../boolToNumber.js';
 
 test('convert number to number', () => {
   expect(boolToNumber(1)).toBe(1);

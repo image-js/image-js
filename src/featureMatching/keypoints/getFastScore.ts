@@ -1,5 +1,5 @@
-import { Image } from '../../Image';
-import { Point } from '../../geometry';
+import type { Image } from '../../Image.js';
+import type { Point } from '../../geometry/index.js';
 
 /**
  * Compute the score of a keypoint using the function described in the FAST article.

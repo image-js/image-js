@@ -1,5 +1,5 @@
-import { Image } from '../../Image';
-import { drawRectangle } from '../drawRectangle';
+import { Image } from '../../Image.js';
+import { drawRectangle } from '../drawRectangle.js';
 
 test('RGB image', () => {
   const image = testUtils.createRgbImage([

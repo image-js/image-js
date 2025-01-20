@@ -1,4 +1,4 @@
-import { decode } from 'tiff';
+import type { decode } from 'tiff';
 
 type TiffIfd = ReturnType<typeof decode>[number];
 

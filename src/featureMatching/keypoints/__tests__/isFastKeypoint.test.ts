@@ -1,9 +1,9 @@
-import { Image } from '../../../Image';
+import { Image } from '../../../Image.js';
 import {
   getCirclePoints,
   getCompassPoints,
-} from '../../../utils/geometry/getCirclePoints';
-import { isFastKeypoint } from '../isFastKeypoint';
+} from '../../../utils/geometry/getCirclePoints.js';
+import { isFastKeypoint } from '../isFastKeypoint.js';
 
 const fastRadius = 3;
 const fastDiameter = 2 * fastRadius + 1;

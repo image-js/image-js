@@ -1,4 +1,4 @@
-import { Point } from '../..';
+import type { Point } from '../../geometry/index.js';
 
 /**
  * Check that the coordinates of a point are integers.

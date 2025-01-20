@@ -1,6 +1,6 @@
-import { computeMse } from '..';
-import { Image } from '../..';
-import { computeSsim } from '../computeSsim';
+import { Image } from '../../Image.js';
+import { computeMse } from '../computeRmse.js';
+import { computeSsim } from '../computeSsim.js';
 
 test('twice the same image', () => {
   const image = testUtils.createGreyImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);

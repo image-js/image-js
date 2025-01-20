@@ -1,5 +1,5 @@
-import { Image } from '../../Image';
-import { drawPolygonOnImage } from '../drawPolygonOnImage';
+import { Image } from '../../Image.js';
+import { drawPolygonOnImage } from '../drawPolygonOnImage.js';
 
 test('RGB image', () => {
   const image = testUtils.createRgbImage([

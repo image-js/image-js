@@ -1,4 +1,4 @@
-import { decodeTiff } from '../decodeTiff';
+import { decodeTiff } from '../decodeTiff.js';
 
 const tests = [
   // ['name', components, alpha, bitDepth]

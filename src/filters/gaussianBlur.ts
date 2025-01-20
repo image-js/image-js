@@ -1,8 +1,8 @@
-import { Image } from '../Image';
-import { getRadius } from '../utils/getRadius';
-import type { BorderType } from '../utils/interpolateBorder';
+import type { Image } from '../Image.js';
+import { getRadius } from '../utils/getRadius.js';
+import type { BorderType } from '../utils/interpolateBorder.js';
 
-import { separableConvolution } from './convolution';
+import { separableConvolution } from './convolution.js';
 
 interface GaussianBlurBaseOptions {
   /**

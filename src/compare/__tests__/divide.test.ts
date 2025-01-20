@@ -1,5 +1,5 @@
-import { Image } from '../../Image';
-import { divide } from '../divide';
+import { Image } from '../../Image.js';
+import { divide } from '../divide.js';
 
 test('divide by 2', () => {
   let image = testUtils.createRgbaImage([

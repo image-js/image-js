@@ -1,5 +1,5 @@
-import { Image } from '../../Image';
-import { drawLineOnImage } from '../drawLineOnImage';
+import { Image } from '../../Image.js';
+import { drawLineOnImage } from '../drawLineOnImage.js';
 
 test('RGB image', () => {
   const image = testUtils.createRgbImage([

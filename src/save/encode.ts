@@ -1,9 +1,13 @@
-import { Image } from '../Image';
-import { Mask } from '../Mask';
+import { match, P } from 'ts-pattern';
 
-import { encodeBmp } from './encodeBmp';
-import { encodeJpeg, EncodeJpegOptions } from './encodeJpeg';
-import { encodePng, EncodePngOptions } from './encodePng';
+import type { Image } from '../Image.js';
+import type { Mask } from '../Mask.js';
+
+import { encodeBmp } from './encodeBmp.js';
+import type { EncodeJpegOptions } from './encodeJpeg.js';
+import { encodeJpeg } from './encodeJpeg.js';
+import type { EncodePngOptions } from './encodePng.js';
+import { encodePng } from './encodePng.js';
 
 export const ImageFormat = {
   PNG: 'png',
@@ -37,13 +41,13 @@ export function encode(
   image: Image | Mask,
   options: EncodeOptionsBmp | EncodeOptionsPng | EncodeOptionsJpeg = defaultPng,
 ): Uint8Array {
-  if (options.format === 'png') {
-    return encodePng(image, options.encoderOptions);
-  } else if (options.format === 'jpg' || options.format === 'jpeg') {
-    return encodeJpeg(image, options.encoderOptions);
-  } else if (options.format === 'bmp') {
-    return encodeBmp(image);
-  } else {
-    throw new RangeError(`invalid format: ${options.format}`);
-  }
+  return match(options)
+    .with({ format: 'png' }, (options) =>
+      encodePng(image, options.encoderOptions),
+    )
+    .with({ format: P.union('jpg', 'jpeg') }, (options) =>
+      encodeJpeg(image, options.encoderOptions),
+    )
+    .with({ format: 'bmp' }, () => encodeBmp(image))
+    .exhaustive();
 }

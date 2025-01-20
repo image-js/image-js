@@ -1,6 +1,6 @@
-import { Image } from '../Image';
-import { getOutputImage } from '../utils/getOutputImage';
-import { validateChannels } from '../utils/validators/validators';
+import type { Image } from '../Image.js';
+import { getOutputImage } from '../utils/getOutputImage.js';
+import { validateChannels } from '../utils/validators/validators.js';
 
 export interface DivideOptions {
   /**

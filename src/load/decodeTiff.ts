@@ -1,8 +1,9 @@
 import { decode } from 'tiff';
 
-import { BitDepth, Image } from '../Image';
+import type { BitDepth } from '../Image.js';
+import { Image } from '../Image.js';
 
-import { getMetadata } from './getMetadata';
+import { getMetadata } from './getMetadata.js';
 
 type TiffIfd = ReturnType<typeof decode>[number];
 

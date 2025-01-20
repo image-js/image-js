@@ -1,5 +1,5 @@
-import { Point } from '../../geometry';
-import { median } from '../median';
+import type { Point } from '../../geometry/index.js';
+import { median } from '../median.js';
 
 test('5x1 RGB image', () => {
   const image = testUtils.createRgbImage([

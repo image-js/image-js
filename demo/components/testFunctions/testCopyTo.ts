@@ -1,8 +1,7 @@
-import { Image } from '../../../src';
+import { Image } from '../../../src/index.js';
 
 /**
  * Copy a black and a red square to the source image.
- *
  * @param image - Input image.
  * @returns The treated image.
  */

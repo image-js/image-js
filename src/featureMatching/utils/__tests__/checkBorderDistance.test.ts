@@ -1,6 +1,6 @@
-import { Image } from '../../../Image';
-import { Point } from '../../../geometry';
-import { checkBorderDistance } from '../checkBorderDistance';
+import { Image } from '../../../Image.js';
+import type { Point } from '../../../geometry/index.js';
+import { checkBorderDistance } from '../checkBorderDistance.js';
 
 test('should be true', () => {
   const size = 7;

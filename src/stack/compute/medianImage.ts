@@ -1,9 +1,9 @@
 // @ts-expect-error: median-quisckselect has no types
 import quickMedian from 'median-quickselect';
 
-import { Image } from '../../Image';
-import { Stack } from '../../Stack';
-import { checkProcessable } from '../utils/checkProcessable';
+import { Image } from '../../Image.js';
+import type { Stack } from '../../Stack.js';
+import { checkProcessable } from '../utils/checkProcessable.js';
 
 /**
  *  Returns a new image with the median values of each pixel of the images of the stack.

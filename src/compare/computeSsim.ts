@@ -1,8 +1,8 @@
 import { ssim as bufferSsim } from 'ssim.js';
 
-import { Image } from '..';
-import checkProcessable from '../utils/validators/checkProcessable';
-import { validateForComparison } from '../utils/validators/validators';
+import type { Image } from '../Image.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
+import { validateForComparison } from '../utils/validators/validators.js';
 
 export interface SsimOptions {
   /**

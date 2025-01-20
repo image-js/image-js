@@ -1,6 +1,6 @@
-import { Image } from '../../Image';
-import { Point } from '../../geometry';
-import { sum } from '../../utils/geometry/points';
+import type { Image } from '../../Image.js';
+import type { Point } from '../../geometry/index.js';
+import { sum } from '../../utils/geometry/points.js';
 
 export interface CompareIntensityOptions {
   /**

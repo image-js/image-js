@@ -1,1 +1,1 @@
-export * from './removeClosePoints';
+export * from './removeClosePoints.js';

@@ -1,8 +1,8 @@
-import { Image } from '../Image';
-import { Mask } from '../Mask';
-import { Point } from '../utils/geometry/points';
-import { assert } from '../utils/validators/assert';
-import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger';
+import { Image } from '../Image.js';
+import type { Mask } from '../Mask.js';
+import type { Point } from '../utils/geometry/points.js';
+import { assert } from '../utils/validators/assert.js';
+import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger.js';
 
 export interface ExtractOptions {
   /**

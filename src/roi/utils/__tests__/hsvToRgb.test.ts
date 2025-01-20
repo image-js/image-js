@@ -1,4 +1,4 @@
-import { hsvToRgb } from '../hsvToRgb';
+import { hsvToRgb } from '../hsvToRgb.js';
 
 test('black', () => {
   const rgb = new Uint8Array([0, 0, 0]);

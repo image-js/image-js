@@ -1,6 +1,6 @@
-import { Image } from '../../../Image';
-import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
-import { getBriefDescriptors } from '../getBriefDescriptors';
+import { Image } from '../../../Image.js';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
+import { getBriefDescriptors } from '../getBriefDescriptors.js';
 
 test('count occurences of 1 and 0 with default options', () => {
   const image = testUtils.load('various/alphabet.jpg');

@@ -1,7 +1,7 @@
 import { encode } from 'jpeg-js';
 
-import { Image } from '../Image';
-import { Mask } from '../Mask';
+import type { Image } from '../Image.js';
+import { Mask } from '../Mask.js';
 
 export interface EncodeJpegOptions {
   /**

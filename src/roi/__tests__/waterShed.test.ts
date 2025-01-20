@@ -1,10 +1,9 @@
-import { computeThreshold } from '../..';
-import { createGreyImage, getInt32Array } from '../../../test/testUtils';
-import { waterShed } from '../waterShed';
+import { computeThreshold } from '../../operations/index.js';
+import { waterShed } from '../waterShed.js';
 
 describe('Test WaterShed Roi generation', () => {
   it('test 1,basic test without parameters/options', () => {
-    const image = createGreyImage([
+    const image = testUtils.createGreyImage([
       [3, 3, 3, 3, 3],
       [3, 2, 2, 2, 3],
       [3, 2, 1, 2, 3],
@@ -32,7 +31,7 @@ describe('Test WaterShed Roi generation', () => {
   });
 
   it('test 2, waterShed for a grey image', () => {
-    const image = createGreyImage([
+    const image = testUtils.createGreyImage([
       [3, 3, 3, 3, 3, 3, 3, 3, 4, 4],
       [3, 3, 2, 2, 2, 3, 3, 3, 4, 4],
       [4, 3, 2, 1, 2, 2, 3, 3, 4, 4],
@@ -46,7 +45,7 @@ describe('Test WaterShed Roi generation', () => {
     ]);
 
     const roiMapManager = waterShed(image, { threshold: 2 / 255 });
-    const resultArray = getInt32Array(`
+    const resultArray = testUtils.getInt32Array(`
          0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
          0,  0, -1, -1, -1,  0,  0,  0,  0,  0,
          0,  0, -1, -1, -1, -1,  0,  0,  0,  0, 
@@ -71,7 +70,7 @@ describe('Test WaterShed Roi generation', () => {
   });
 
   it('test 3, with threshold option', () => {
-    const image = createGreyImage([
+    const image = testUtils.createGreyImage([
       [1, 1, 1, 1, 1],
       [1, 2, 2, 2, 1],
       [1, 2, 3, 2, 1],
@@ -82,7 +81,7 @@ describe('Test WaterShed Roi generation', () => {
     const roiMapManager = waterShed(invertedImage, {
       threshold: 253 / image.maxValue,
     });
-    const resultArray = getInt32Array(`
+    const resultArray = testUtils.getInt32Array(`
       0, 0, 0, 0, 0,
       0,-1,-1,-1, 0, 
       0,-1,-1,-1, 0, 
@@ -102,7 +101,7 @@ describe('Test WaterShed Roi generation', () => {
     });
   });
   it('test 4, waterShed through threshold value', () => {
-    const image = createGreyImage([
+    const image = testUtils.createGreyImage([
       [3, 3, 3, 3, 3, 3, 3, 3, 4, 4],
       [3, 3, 2, 2, 2, 3, 3, 3, 4, 4],
       [4, 3, 2, 1, 2, 2, 3, 3, 4, 4],
@@ -119,7 +118,7 @@ describe('Test WaterShed Roi generation', () => {
     const roiMapManager = waterShed(image, {
       threshold: threshold / image.maxValue,
     });
-    const resultArray = getInt32Array(`
+    const resultArray = testUtils.getInt32Array(`
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0, -1, -1, -1,  0,  0,  0,  0,  0,
     0,  0, -1, -1, -1, -1,  0,  0,  0,  0,
@@ -144,7 +143,7 @@ describe('Test WaterShed Roi generation', () => {
     });
   });
   it('test 5, waterShed through threshold mask and with inverted image', () => {
-    const image = createGreyImage([
+    const image = testUtils.createGreyImage([
       [3, 3, 3, 3, 3, 3, 3, 3, 4, 4],
       [3, 3, 2, 2, 2, 3, 3, 8, 4, 4],
       [4, 3, 2, 1, 2, 2, 3, 3, 4, 4],
@@ -159,7 +158,7 @@ describe('Test WaterShed Roi generation', () => {
 
     const mask = image.threshold({ algorithm: 'otsu' });
     const roiMapManager = waterShed(image, { mask });
-    const resultArray = getInt32Array(`
+    const resultArray = testUtils.getInt32Array(`
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1,  0, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -2, -1,

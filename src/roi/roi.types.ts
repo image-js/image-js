@@ -1,4 +1,4 @@
-import { Point } from '../utils/geometry/points';
+import type { Point } from '../utils/geometry/points.js';
 
 export interface Ellipse {
   center: {

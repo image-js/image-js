@@ -1,5 +1,5 @@
-import { Image } from '../..';
-import { copyData } from '../copyData';
+import { Image } from '../../Image.js';
+import { copyData } from '../copyData.js';
 
 test('2x3 GREY image', () => {
   const source = testUtils.createGreyImage([

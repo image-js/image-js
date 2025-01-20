@@ -1,7 +1,8 @@
-import { fromMask, Image, Mask } from '../../../src';
+import type { Image } from '../../../src/index.js';
+import { fromMask, Mask } from '../../../src/index.js';
 /**
  * Paint the border of the larger black ROI on the image.
- * @param image The image to process
+ * @param image - The image to process
  * @returns The processed image.
  */
 export function testGetBorderPoints(image: Image): Image {

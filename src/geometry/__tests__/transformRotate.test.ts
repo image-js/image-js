@@ -1,5 +1,5 @@
-import { transformRotate } from '..';
-import { encodePng } from '../../save';
+import { encodePng } from '../../save/index.js';
+import { transformRotate } from '../transformRotate.js';
 
 test('rotate + scale compared to opencv (nearest)', () => {
   const img = testUtils.load('opencv/test.png');

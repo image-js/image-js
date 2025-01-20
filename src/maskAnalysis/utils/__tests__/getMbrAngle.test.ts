@@ -1,4 +1,4 @@
-import { getMbrAngle } from '../getMbrAngle';
+import { getMbrAngle } from '../getMbrAngle.js';
 
 test.each([
   [

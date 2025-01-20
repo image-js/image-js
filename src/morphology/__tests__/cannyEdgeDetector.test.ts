@@ -1,4 +1,4 @@
-import { getDirection } from '..';
+import { getDirection } from '../cannyEdgeDetector.js';
 
 describe('cannyEdgeDetector', () => {
   it('5x5 grey image with dot', () => {

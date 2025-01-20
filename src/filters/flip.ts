@@ -1,8 +1,8 @@
-import { Image } from '../Image';
-import { getOutputImage } from '../utils/getOutputImage';
+import type { Image } from '../Image.js';
+import { getOutputImage } from '../utils/getOutputImage.js';
 
-import flipX from './flipX';
-import flipY from './flipY';
+import flipX from './flipX.js';
+import flipY from './flipY.js';
 
 export interface FlipOptions {
   /**

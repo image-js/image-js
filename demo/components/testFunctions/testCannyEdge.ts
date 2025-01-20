@@ -1,8 +1,8 @@
-import { convertBinaryToGrey, Image } from '../../../src';
+import type { Image } from '../../../src/index.js';
+import { convertBinaryToGrey } from '../../../src/index.js';
 
 /**
  * Detect the edges in the image using Canny edge detection
- *
  * @param image - Input image.
  * @returns The treated image.
  */
@@ -19,7 +19,6 @@ export function testCannyEdge(image: Image): Image {
 
 /**
  * Detect the edges in the image using Canny edge detection and overlay the edges on the original image.
- *
  * @param image - Input image.
  * @returns The treated image.
  */

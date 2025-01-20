@@ -1,4 +1,4 @@
-import { Image } from '../../Image';
+import { Image } from '../../Image.js';
 
 test('draw circle image', () => {
   const image = testUtils.createRgbImage([

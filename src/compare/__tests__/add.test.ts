@@ -1,4 +1,4 @@
-import { add } from '../add';
+import { add } from '../add.js';
 
 test('add image to itself', () => {
   const image = testUtils.createRgbImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);

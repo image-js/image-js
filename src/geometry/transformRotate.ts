@@ -1,7 +1,8 @@
-import { Image, ImageCoordinates } from '../Image';
-import { Point } from '../utils/geometry/points';
+import type { Image, ImageCoordinates } from '../Image.js';
+import type { Point } from '../utils/geometry/points.js';
 
-import { transform, TransformOptions } from './transform';
+import type { TransformOptions } from './transform.js';
+import { transform } from './transform.js';
 
 export interface TransformRotateOptions extends TransformOptions {
   /**

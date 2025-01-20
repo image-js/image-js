@@ -1,5 +1,5 @@
-import { Mask } from '..';
-import { maskToOutputMask } from '../utils/getOutputImage';
+import type { Mask } from '../Mask.js';
+import { maskToOutputMask } from '../utils/getOutputImage.js';
 
 export interface SolidFillOptions {
   /**

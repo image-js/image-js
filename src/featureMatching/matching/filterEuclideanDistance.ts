@@ -1,5 +1,7 @@
-import { FastKeypoint, Match } from '..';
-import { Point } from '../..';
+import type { Point } from '../../geometry/index.js';
+import type { FastKeypoint } from '../keypoints/getFastKeypoints.js';
+
+import type { Match } from './bruteForceMatch.js';
 
 export interface FilterEuclideanDistanceMatchesOptions {
   /**

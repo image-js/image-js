@@ -1,7 +1,8 @@
 import { inspect } from 'node:util';
 
-import { Image, ImageCoordinates } from '../Image';
-import { Point } from '../geometry';
+import type { ImageCoordinates } from '../Image.js';
+import { Image } from '../Image.js';
+import type { Point } from '../geometry/index.js';
 
 describe('create new images', () => {
   it('should create a 8-bit image', () => {
@@ -220,9 +221,7 @@ test('getCoordinates - with rounding', () => {
 test('getCoordinates - bad parameter', () => {
   const img = new Image(4, 5);
   // @ts-expect-error bad parameter
-  expect(() => img.getCoordinates('bad')).toThrow(
-    /invalid image coordinates: bad/,
-  );
+  expect(() => img.getCoordinates('bad')).toThrow('bad');
 });
 
 test('fill with a constant color', () => {

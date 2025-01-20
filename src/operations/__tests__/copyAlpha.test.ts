@@ -1,4 +1,4 @@
-import { copyAlpha } from '../convertColor';
+import { copyAlpha } from '../convertColor.js';
 
 test('source and dest different sizes', () => {
   const source = testUtils.createRgbaImage([[10, 20, 30, 40, 60, 70, 80, 90]]);

@@ -1,11 +1,12 @@
-import { MutableRefObject, RefObject } from 'react';
+import type { RefObject } from 'react';
 
-import { readCanvas, Image } from '../../src';
+import type { Image } from '../../src/index.js';
+import { readCanvas } from '../../src/index.js';
 
 interface CameraSnapshotButtonProps {
-  snapshotImageRef: MutableRefObject<Image | null>;
+  snapshotImageRef: RefObject<Image | null>;
   setSnapshotUrl: (snapshotUrl: string) => void;
-  canvasInputRef: RefObject<HTMLCanvasElement>;
+  canvasInputRef: RefObject<HTMLCanvasElement | null>;
 }
 
 export default function CameraSnapshotButton(props: CameraSnapshotButtonProps) {

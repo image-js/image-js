@@ -1,5 +1,5 @@
-import { Mask } from '../..';
-import { Image } from '../../Image';
+import { Image } from '../../Image.js';
+import { Mask } from '../../Mask.js';
 
 describe('image is an Image', () => {
   it('invert an RGB image', () => {

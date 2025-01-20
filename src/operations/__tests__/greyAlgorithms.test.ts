@@ -1,5 +1,5 @@
-import { Image } from '../../Image';
-import { hue } from '../greyAlgorithms';
+import { Image } from '../../Image.js';
+import { hue } from '../greyAlgorithms.js';
 
 test('hue is zero', () => {
   const image = new Image(1, 1, { colorModel: 'RGBA' });

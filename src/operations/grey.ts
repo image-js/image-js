@@ -1,10 +1,11 @@
-import { Image, ImageColorModel } from '..';
-import { getClamp } from '../utils/clamp';
-import { getOutputImage } from '../utils/getOutputImage';
-import { assert } from '../utils/validators/assert';
-import checkProcessable from '../utils/validators/checkProcessable';
+import type { Image } from '../Image.js';
+import { getClamp } from '../utils/clamp.js';
+import type { ImageColorModel } from '../utils/constants/colorModels.js';
+import { getOutputImage } from '../utils/getOutputImage.js';
+import { assert } from '../utils/validators/assert.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
 
-import * as greyAlgorithms from './greyAlgorithms';
+import * as greyAlgorithms from './greyAlgorithms.js';
 
 export const GreyAlgorithm = {
   LUMA_709: 'luma709',
@@ -109,7 +110,6 @@ export function grey(image: Image, options: GreyOptions = {}): Image {
   if (typeof algorithm === 'function') {
     method = algorithm;
   } else {
-    // eslint-disable-next-line import/namespace
     method = greyAlgorithms[algorithm];
   }
 

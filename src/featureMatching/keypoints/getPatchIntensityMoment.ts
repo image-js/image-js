@@ -1,7 +1,7 @@
-import { Image } from '../../Image';
-import { Point } from '../../geometry';
-import { getFilledCirclePoints } from '../../utils/geometry/getCirclePoints';
-import { checkBorderDistance } from '../utils/checkBorderDistance';
+import type { Image } from '../../Image.js';
+import type { Point } from '../../geometry/index.js';
+import { getFilledCirclePoints } from '../../utils/geometry/getCirclePoints.js';
+import { checkBorderDistance } from '../utils/checkBorderDistance.js';
 
 export interface GetPatchIntensityMomentOptions {
   /**

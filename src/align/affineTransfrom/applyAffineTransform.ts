@@ -1,6 +1,6 @@
-import { ModelFunction } from 'ml-ransac';
+import type { ModelFunction } from 'ml-ransac';
 
-import { Point } from '../..';
+import type { Point } from '../../geometry/index.js';
 
 /**
  * Apply a given transform to a set of points.

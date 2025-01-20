@@ -1,4 +1,4 @@
-import { getPolygonArea, getPolygonPerimeter } from '../polygons';
+import { getPolygonArea, getPolygonPerimeter } from '../polygons.js';
 
 describe('getPolygonPerimeter', () => {
   it('perimeter zero', () => {

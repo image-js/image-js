@@ -1,7 +1,10 @@
 {
-  "extends": "./tsconfig.cjs.json",
-  "compilerOptions": {
-    "module": "es2020",
-    "outDir": "lib-esm"
-  }
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "./demo/**/*",
+    "./src/**/__tests__",
+    "./vitest.setup.ts",
+    "./test/**/*",
+    "vite*.ts"
+  ]
 }

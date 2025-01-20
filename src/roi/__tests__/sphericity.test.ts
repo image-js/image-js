@@ -1,4 +1,4 @@
-import { fromMask } from '..';
+import { fromMask } from '../fromMask.js';
 
 describe('ROI sphericity', () => {
   test('sphericity 1', () => {

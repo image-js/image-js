@@ -1,4 +1,4 @@
-import { decode } from '..';
+import { decode } from '../decode.js';
 
 test('auto decode png', () => {
   const buffer = testUtils.loadBuffer('formats/grey8.png');

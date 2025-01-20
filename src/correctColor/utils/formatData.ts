@@ -1,9 +1,13 @@
-import { colord, extend, RgbColor } from 'colord';
+import type { RgbColor } from 'colord';
+import { colord, extend } from 'colord';
 import labPlugin from 'colord/plugins/lab';
 
-import { ColorCard } from '../__tests__/testUtils/referenceColorCard';
-import { getRegressionVariables } from '../correctColor';
+import type { ColorCard } from '../__tests__/testUtils/referenceColorCard.js';
+import { getRegressionVariables } from '../correctColor.js';
 
+// We can't use ts-expect-error because it's not an error when compiling for CJS.
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore Module exports are not correctly typed.
 extend([labPlugin]);
 
 /**

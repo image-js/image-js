@@ -1,8 +1,9 @@
-import { Point, rotate } from '../../utils/geometry/points';
-import { Mbr } from '../maskAnalysis.types';
+import type { Point } from '../../utils/geometry/points.js';
+import { rotate } from '../../utils/geometry/points.js';
+import type { Mbr } from '../maskAnalysis.types.js';
 
-import { getAngle } from './getAngle';
-import { getMbrAngle } from './getMbrAngle';
+import { getAngle } from './getAngle.js';
+import { getMbrAngle } from './getMbrAngle.js';
 
 /**
  * Get the four corners of the minimum bounding rectangle from a set of points defining a simple convex polygon.

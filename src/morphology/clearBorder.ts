@@ -1,7 +1,7 @@
-import { Mask } from '..';
-import { borderIterator } from '../utils/borderIterator';
+import type { Mask } from '../Mask.js';
+import { borderIterator } from '../utils/borderIterator.js';
 
-import { multipleFloodFill } from './multipleFloodFill';
+import { multipleFloodFill } from './multipleFloodFill.js';
 
 export interface ClearBorderOptions {
   /**

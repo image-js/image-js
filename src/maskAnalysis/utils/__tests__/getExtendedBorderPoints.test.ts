@@ -1,5 +1,5 @@
-import { Mask } from '../../../Mask';
-import { getExtendedBorderPoints } from '../getExtendedBorderPoints';
+import { Mask } from '../../../Mask.js';
+import { getExtendedBorderPoints } from '../getExtendedBorderPoints.js';
 
 test('one pixel', () => {
   const mask = testUtils.createMask([[1]]);

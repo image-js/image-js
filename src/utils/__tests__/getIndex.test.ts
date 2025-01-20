@@ -1,5 +1,6 @@
-import { Image, Mask } from '../..';
-import { getIndex } from '../getIndex';
+import { Image } from '../../Image.js';
+import { Mask } from '../../Mask.js';
+import { getIndex } from '../getIndex.js';
 
 test('mask, index should increment regularly', () => {
   const mask = new Mask(3, 4);

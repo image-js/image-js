@@ -1,8 +1,9 @@
 import { xMedian } from 'ml-spectra-processing';
 
-import { Image, Point } from '..';
-import { getOutputImage } from '../utils/getOutputImage';
-import { assertUnreachable } from '../utils/validators/assert';
+import type { Image } from '../Image.js';
+import type { Point } from '../utils/geometry/points.js';
+import { getOutputImage } from '../utils/getOutputImage.js';
+import { assertUnreachable } from '../utils/validators/assert.js';
 
 export interface PixelateOptions {
   /**

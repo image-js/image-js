@@ -1,5 +1,5 @@
-import { fromMask } from '..';
-import { getRois } from '../getRois';
+import { fromMask } from '../fromMask.js';
+import { getRois } from '../getRois.js';
 
 test('3x3 mask, kind BLACK', () => {
   const mask = testUtils.createMask([

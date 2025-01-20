@@ -1,5 +1,5 @@
-import { decodeJpeg } from '../decodeJpeg';
-import { decodeTiff } from '../decodeTiff';
+import { decodeJpeg } from '../decodeJpeg.js';
+import { decodeTiff } from '../decodeTiff.js';
 
 test('without metadata', () => {
   const buffer = testUtils.loadBuffer(`various/without-metadata.jpg`);

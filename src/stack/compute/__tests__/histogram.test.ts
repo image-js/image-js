@@ -1,4 +1,4 @@
-import { Stack } from '../../../Stack';
+import { Stack } from '../../../Stack.js';
 
 test('two grey images, bitsDepth = 8', () => {
   const image = testUtils.createGreyImage([[1, 2, 3, 4]]);

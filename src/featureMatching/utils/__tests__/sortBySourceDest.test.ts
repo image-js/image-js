@@ -1,5 +1,5 @@
-import { Match } from '../../matching/bruteForceMatch';
-import { sortByDestSource, sortBySourceDest } from '../sortBySourceDest';
+import type { Match } from '../../matching/bruteForceMatch.js';
+import { sortByDestSource, sortBySourceDest } from '../sortBySourceDest.js';
 
 test('should sort by source then dest', () => {
   const matches: Match[] = [

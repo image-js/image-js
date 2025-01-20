@@ -1,11 +1,14 @@
-import { RgbColor } from 'colord';
+import type { RgbColor } from 'colord';
 import MLR from 'ml-regression-multivariate-linear';
 
-import { Image } from '../Image';
-import { getClamp } from '../utils/clamp';
-import checkProcessable from '../utils/validators/checkProcessable';
+import { Image } from '../Image.js';
+import { getClamp } from '../utils/clamp.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
 
-import { formatInputForMlr, formatReferenceForMlr } from './utils/formatData';
+import {
+  formatInputForMlr,
+  formatReferenceForMlr,
+} from './utils/formatData.js';
 
 /**
  * Correct the colors in an image using the reference colors.

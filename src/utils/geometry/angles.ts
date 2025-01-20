@@ -1,4 +1,5 @@
-import { difference, dot, normalize, Point } from './points';
+import type { Point } from './points.js';
+import { difference, dot, normalize } from './points.js';
 
 /**
  * Convert radians to degrees.

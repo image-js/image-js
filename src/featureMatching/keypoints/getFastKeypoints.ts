@@ -1,17 +1,20 @@
-import { Image } from '../../Image';
-import { Point } from '../../geometry';
+import { match } from 'ts-pattern';
+
+import type { Image } from '../../Image.js';
+import type { Point } from '../../geometry/index.js';
 import {
   getCirclePoints,
   getCompassPoints,
-} from '../../utils/geometry/getCirclePoints';
-import { getIndex } from '../../utils/getIndex';
-import { surroundingPixels } from '../../utils/surroundingPixels';
-import checkProcessable from '../../utils/validators/checkProcessable';
-import { GetHarrisScoreOptions } from '../featureMatching.types';
+} from '../../utils/geometry/getCirclePoints.js';
+import { getIndex } from '../../utils/getIndex.js';
+import { surroundingPixels } from '../../utils/surroundingPixels.js';
+import checkProcessable from '../../utils/validators/checkProcessable.js';
+import type { GetHarrisScoreOptions } from '../featureMatching.types.js';
 
-import { getFastScore } from './getFastScore';
-import { getHarrisScore } from './getHarrisScore';
-import { isFastKeypoint, IsFastKeypointOptions } from './isFastKeypoint';
+import { getFastScore } from './getFastScore.js';
+import { getHarrisScore } from './getHarrisScore.js';
+import type { IsFastKeypointOptions } from './isFastKeypoint.js';
+import { isFastKeypoint } from './isFastKeypoint.js';
 
 export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
   /**
@@ -87,6 +90,17 @@ export function getFastKeypoints(
     alpha: false,
   });
 
+  const getScore = match(scoreAlgorithm)
+    .with('HARRIS', () => {
+      return (image: Image, corner: Point) =>
+        getHarrisScore(image, corner, harrisScoreOptions);
+    })
+    .with('FAST', () => {
+      return (image: Image, corner: Point) =>
+        getFastScore(image, corner, threshold, circlePoints);
+    })
+    .exhaustive();
+
   const allKeypoints: FastKeypoint[] = [];
 
   const scoreArray = new Float64Array(image.size).fill(
@@ -101,17 +115,7 @@ export function getFastKeypoints(
           threshold,
         })
       ) {
-        let score = 0;
-        switch (scoreAlgorithm) {
-          case 'HARRIS':
-            score = getHarrisScore(image, corner, harrisScoreOptions);
-            break;
-          case 'FAST':
-            score = getFastScore(image, corner, threshold, circlePoints);
-            break;
-          default:
-            throw new RangeError(`invalid score algorithm: ${scoreAlgorithm}`);
-        }
+        const score = getScore(image, corner);
         scoreArray[getIndex(corner.column, corner.row, image, 0)] = score;
         allKeypoints.push({ origin: corner, score });
       }

@@ -1,7 +1,12 @@
-import { Image } from '../Image';
+import { match } from 'ts-pattern';
 
-import { round } from './round';
-import { BorderInterpolationFunction, ClampFunction } from './utils.types';
+import type { Image } from '../Image.js';
+
+import { round } from './round.js';
+import type {
+  BorderInterpolationFunction,
+  ClampFunction,
+} from './utils.types.js';
 
 export const InterpolationType = {
   NEAREST: 'nearest',
@@ -29,20 +34,11 @@ type InterpolationFunction = (
 export function getInterpolationFunction(
   interpolationType: InterpolationType,
 ): InterpolationFunction {
-  switch (interpolationType) {
-    case 'nearest': {
-      return interpolateNearest;
-    }
-    case 'bilinear': {
-      return interpolateBilinear;
-    }
-    case 'bicubic': {
-      return interpolateBicubic;
-    }
-    default: {
-      throw new RangeError(`invalid interpolationType: ${interpolationType}`);
-    }
-  }
+  return match(interpolationType)
+    .with('nearest', () => interpolateNearest)
+    .with('bilinear', () => interpolateBilinear)
+    .with('bicubic', () => interpolateBicubic)
+    .exhaustive();
 }
 
 /**

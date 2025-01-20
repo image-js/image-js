@@ -1,5 +1,5 @@
-import { FastKeypoint } from '../../keypoints/getFastKeypoints';
-import { scaleKeypoints } from '../scaleKeypoints';
+import type { FastKeypoint } from '../../keypoints/getFastKeypoints.js';
+import { scaleKeypoints } from '../scaleKeypoints.js';
 
 test('scale = 1', () => {
   const keypoints: FastKeypoint[] = [

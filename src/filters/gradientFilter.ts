@@ -1,6 +1,7 @@
-import { BitDepth, Image } from '..';
-import type { BorderType } from '../utils/interpolateBorder';
-import checkProcessable from '../utils/validators/checkProcessable';
+import type { BitDepth } from '../Image.js';
+import { Image } from '../Image.js';
+import type { BorderType } from '../utils/interpolateBorder.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
 
 export interface GradientFilterBaseOptions {
   /**

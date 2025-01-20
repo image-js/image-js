@@ -1,7 +1,7 @@
-import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors';
-import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
-import { bruteForceOneMatch } from '../../matching/bruteForceMatch';
-import { Montage } from '../Montage';
+import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.js';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
+import { bruteForceOneMatch } from '../../matching/bruteForceMatch.js';
+import { Montage } from '../Montage.js';
 
 const source = testUtils.load('featureMatching/alphabet.jpg');
 const grey = source.convertColor('GREY');

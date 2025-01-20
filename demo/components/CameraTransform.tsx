@@ -1,12 +1,14 @@
-import { RefObject, useEffect, useRef, useState } from 'react';
+import type { RefObject } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { Image, readCanvas, writeCanvas } from '../../src';
-import { convertColor } from '../../src/operations/convertColor';
-import { useCameraContext } from '../contexts/cameraContext';
+import type { Image } from '../../src/index.js';
+import { readCanvas, writeCanvas } from '../../src/index.js';
+import { convertColor } from '../../src/operations/convertColor.js';
+import { useCameraContext } from '../contexts/cameraContext.js';
 
-import ErrorAlert from './ErrorAlert';
-import SnapshotImage from './SnapshotImage';
-import UnavailableCamera from './UnavailableCamera';
+import ErrorAlert from './ErrorAlert.js';
+import SnapshotImage from './SnapshotImage.js';
+import UnavailableCamera from './UnavailableCamera.js';
 
 export type TransformFunction =
   | ((image: Image) => Image)
@@ -14,7 +16,7 @@ export type TransformFunction =
 
 interface CameraTransformProps {
   transform: TransformFunction;
-  canvasInputRef: RefObject<HTMLCanvasElement>;
+  canvasInputRef: RefObject<HTMLCanvasElement | null>;
   snapshotUrl: string;
   snapshotImageRef: RefObject<Image | null>;
 }
@@ -36,7 +38,7 @@ export default function CameraTransform(props: CameraTransformProps) {
     const video = videoRef.current as HTMLVideoElement;
     let nextFrameRequest: number;
     video.srcObject = selectedCamera.stream;
-    video.onloadedmetadata = () => {
+    const onLoadedMetadata = () => {
       video
         .play()
         .then(() => {
@@ -60,18 +62,20 @@ export default function CameraTransform(props: CameraTransformProps) {
                 result = convertColor(result, 'RGBA');
               }
               writeCanvas(result, canvasOutput);
-            } catch (err) {
-              setError(err.stack);
-              console.error(err);
+            } catch (error_) {
+              setError(error_.stack);
+              console.error(error_);
             }
             nextFrameRequest = requestAnimationFrame(nextFrame);
           }
           nextFrameRequest = requestAnimationFrame(nextFrame);
         })
-        .catch((err: unknown) => console.error(err));
+        .catch((error_: unknown) => console.error(error_));
     };
+    video.addEventListener('loadedmetadata', onLoadedMetadata);
 
     return () => {
+      video.removeEventListener('loadedmetadata', onLoadedMetadata);
       if (nextFrameRequest) {
         cancelAnimationFrame(nextFrameRequest);
       }

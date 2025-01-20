@@ -1,4 +1,4 @@
-import { Image } from '../../src';
+import { Image } from '../../src/index.js';
 
 describe('load', () => {
   it('should load the image synchronously', () => {

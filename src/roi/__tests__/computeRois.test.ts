@@ -1,6 +1,7 @@
-import { RoiMapManager, fromMask, waterShed } from '..';
-import { createGreyImage, getInt32Array } from '../../../test/testUtils';
-import { computeRois } from '../computeRois';
+import { RoiMapManager } from '../RoiMapManager.js';
+import { computeRois } from '../computeRois.js';
+import { fromMask } from '../fromMask.js';
+import { waterShed } from '../waterShed.js';
 
 test('3x3 mask', () => {
   const mask = testUtils.createMask([
@@ -18,7 +19,7 @@ test('3x3 mask', () => {
 });
 
 test('test 2, waterShed for a grey image', () => {
-  const image = createGreyImage([
+  const image = testUtils.createGreyImage([
     [3, 3, 3, 3, 3, 3, 3, 3, 4, 4],
     [3, 3, 2, 2, 2, 3, 3, 3, 4, 4],
     [4, 3, 2, 1, 2, 2, 3, 3, 4, 4],
@@ -34,7 +35,7 @@ test('test 2, waterShed for a grey image', () => {
   const roiMapManager = waterShed(image, { threshold: 2 / 255 });
 
   const result = new RoiMapManager({
-    data: getInt32Array(`
+    data: testUtils.getInt32Array(`
            0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
            0,  0, -1, -1, -1,  0,  0,  0,  0,  0,
            0,  0, -1, -1, -1, -1,  0,  0,  0,  0,

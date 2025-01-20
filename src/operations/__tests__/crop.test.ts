@@ -1,4 +1,4 @@
-import { Image } from '../../Image';
+import { Image } from '../../Image.js';
 
 test('GREY image, default options', () => {
   const image = testUtils.createGreyImage([

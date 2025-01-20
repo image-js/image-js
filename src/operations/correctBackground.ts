@@ -1,8 +1,8 @@
 import { PolynomialRegression2D } from 'ml-regression-polynomial-2d';
 
-import { Image } from '../Image';
-import { Point } from '../geometry';
-import checkProcessable from '../utils/validators/checkProcessable';
+import type { Image } from '../Image.js';
+import type { Point } from '../geometry/index.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
 
 export interface CorrectBackgroundOptions {
   /**

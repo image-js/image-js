@@ -1,4 +1,4 @@
-import { Image } from '..';
+import type { Image } from '../Image.js';
 
 /**
  * Compute the Root Mean Square Error (RMSE) between two images. It is just the square root of the MSE.

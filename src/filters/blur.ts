@@ -1,7 +1,7 @@
-import { Image } from '../Image';
-import { BorderType } from '../utils/interpolateBorder';
+import type { Image } from '../Image.js';
+import type { BorderType } from '../utils/interpolateBorder.js';
 
-import { separableConvolution } from './convolution';
+import { separableConvolution } from './convolution.js';
 
 export interface BlurOptions {
   /**

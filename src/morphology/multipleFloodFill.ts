@@ -1,7 +1,7 @@
-import { Mask } from '..';
-import { BitValue } from '../Mask';
-import { maskToOutputMask } from '../utils/getOutputImage';
-import { assert } from '../utils/validators/assert';
+import type { BitValue } from '../Mask.js';
+import { Mask } from '../Mask.js';
+import { maskToOutputMask } from '../utils/getOutputImage.js';
+import { assert } from '../utils/validators/assert.js';
 
 export interface MultipleFloodFillOptions {
   /**

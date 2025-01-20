@@ -1,4 +1,4 @@
-import flipY from '../flipY';
+import flipY from '../flipY.js';
 
 test('should flip pixels vertically of all RGBA components for a [2,1] image', () => {
   const image = testUtils.createRgbaImage([[1, 2, 3, 4, 5, 6, 7, 8]]);

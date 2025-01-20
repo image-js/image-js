@@ -1,5 +1,5 @@
-import { getExtrema } from '../../../compute/getExtrema';
-import { removeClosePoints } from '../removeClosePoints';
+import { getExtrema } from '../../../compute/getExtrema.js';
+import { removeClosePoints } from '../removeClosePoints.js';
 
 test('combine minimum points on 5x5 image', () => {
   const image = testUtils.createGreyImage([

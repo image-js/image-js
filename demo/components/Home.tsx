@@ -1,12 +1,13 @@
 import { useRef, useState } from 'react';
 
-import { Image } from '../../src';
+import type { Image } from '../../src/index.js';
 
-import CameraSelector from './CameraSelector';
-import CameraSnapshotButton from './CameraSnapshotButton';
-import CameraTransform, { TransformFunction } from './CameraTransform';
-import Container from './Container';
-import { testGetFastKeypoints } from './testFunctions/testGetFastKeypoints';
+import CameraSelector from './CameraSelector.js';
+import CameraSnapshotButton from './CameraSnapshotButton.js';
+import type { TransformFunction } from './CameraTransform.js';
+import CameraTransform from './CameraTransform.js';
+import Container from './Container.js';
+import { testGetFastKeypoints } from './testFunctions/testGetFastKeypoints.js';
 
 const testTransform: TransformFunction = testGetFastKeypoints;
 
@@ -14,7 +15,6 @@ export default function Home() {
   const snapshotImageRef = useRef<Image>(null);
   const canvasInputRef = useRef<HTMLCanvasElement>(null);
   const [snapshotUrl, setSnapshotUrl] = useState('');
-  console.log(snapshotUrl);
   return (
     <Container title="Home">
       <div className="space-y-1">

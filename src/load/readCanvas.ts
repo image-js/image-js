@@ -1,5 +1,5 @@
-import { Image } from '../Image';
-import { assert } from '../utils/validators/assert';
+import { Image } from '../Image.js';
+import { assert } from '../utils/validators/assert.js';
 
 /**
  * Read an image from an HTML canvas element.

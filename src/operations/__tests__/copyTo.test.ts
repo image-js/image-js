@@ -1,5 +1,5 @@
-import { Mask } from '../../Mask';
-import { copyTo } from '../copyTo';
+import { Mask } from '../../Mask.js';
+import { copyTo } from '../copyTo.js';
 
 test('default options', () => {
   const source = testUtils.createGreyImage([[100, 0]]);

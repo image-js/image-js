@@ -2,14 +2,15 @@ import fs from 'node:fs';
 import nodePath from 'node:path';
 import url from 'node:url';
 
-import { Image, Mask } from '..';
+import type { Image } from '../Image.js';
+import { Mask } from '../Mask.js';
 
-import {
-  encode,
+import type {
   EncodeOptionsBmp,
   EncodeOptionsJpeg,
   EncodeOptionsPng,
-} from './encode';
+} from './encode.js';
+import { encode } from './encode.js';
 
 export interface WriteOptions {
   /**

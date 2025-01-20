@@ -1,14 +1,23 @@
 {
   "compilerOptions": {
-    "noImplicitReturns": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
+    "lib": ["ES2022", "DOM"],
+    "types": [],
+    "target": "ES2022",
     "outDir": "lib",
-    "sourceMap": true,
-    "strict": true,
-    "target": "es2020",
     "jsx": "react-jsx",
+    "module": "NodeNext",
+    "strict": true,
+    "skipLibCheck": false,
+    "resolveJsonModule": false,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": false,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
     "useUnknownInCatchVariables": false
   },
-  "include": ["./demo/**/*", "./jest.setup.ts", "./src/**/*", "./test/**/*"]
+  "include": ["./demo/**/*",
+    "./vitest.setup.ts", "./src/**/*", "./test/**/*"]
 }

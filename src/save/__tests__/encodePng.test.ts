@@ -1,5 +1,5 @@
-import { encodePng } from '..';
-import { decode } from '../../load/decode';
+import { decode } from '../../load/decode.js';
+import { encodePng } from '../encodePng.js';
 
 test('should encode what it decoded', () => {
   const buffer = testUtils.loadBuffer('formats/grey8.png');

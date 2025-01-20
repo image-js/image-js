@@ -1,6 +1,6 @@
-import { TestImagePath } from '../../../../test/TestImagePath';
-import { drawKeypoints } from '../../visualize/drawKeypoints';
-import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints';
+import type { TestImagePath } from '../../../../test/TestImagePath.js';
+import { drawKeypoints } from '../../visualize/drawKeypoints.js';
+import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints.js';
 
 test('7x7 image, angle = -90°', () => {
   const image = testUtils.createGreyImage([

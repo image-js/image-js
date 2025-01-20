@@ -1,7 +1,8 @@
-import { fromMask, Image } from '../../../src';
+import type { Image } from '../../../src/index.js';
+import { fromMask } from '../../../src/index.js';
 /**
  * Make the image translucent, excepted where the largest black ROI is.
- * @param image Image to process.
+ * @param image - Image to process.
  * @returns Processed image.
  */
 export function testPaintMask(image: Image): Image {

@@ -1,5 +1,5 @@
-import { TestImagePath } from '../../../../test/TestImagePath';
-import { decodeStack } from '../decodeStack';
+import type { TestImagePath } from '../../../../test/TestImagePath.js';
+import { decodeStack } from '../decodeStack.js';
 
 test.each([
   {

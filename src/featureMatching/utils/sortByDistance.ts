@@ -1,4 +1,4 @@
-import { Match } from '../matching/bruteForceMatch';
+import type { Match } from '../matching/bruteForceMatch.js';
 
 /**
  * Source array of matches by ascending distance.

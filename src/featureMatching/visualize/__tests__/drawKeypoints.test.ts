@@ -1,5 +1,5 @@
-import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints';
-import { drawKeypoints } from '../drawKeypoints';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
+import { drawKeypoints } from '../drawKeypoints.js';
 
 const image = testUtils.load('various/alphabet.jpg');
 const grey = image.convertColor('GREY');

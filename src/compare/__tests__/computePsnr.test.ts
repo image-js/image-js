@@ -1,4 +1,4 @@
-import { computePsnr } from '../computePsnr';
+import { computePsnr } from '../computePsnr.js';
 
 test('twice the same image', () => {
   const image = testUtils.createRgbImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);

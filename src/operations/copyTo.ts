@@ -1,7 +1,9 @@
-import { Image, Mask, Point } from '..';
-import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage';
-import { setBlendedPixel } from '../utils/setBlendedPixel';
-import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger';
+import { Image } from '../Image.js';
+import type { Mask } from '../Mask.js';
+import type { Point } from '../geometry/index.js';
+import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage.js';
+import { setBlendedPixel } from '../utils/setBlendedPixel.js';
+import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger.js';
 
 export interface CopyToOptions<OutType> {
   /**

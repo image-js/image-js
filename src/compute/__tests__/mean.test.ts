@@ -1,5 +1,5 @@
-import { Point } from '../../geometry';
-import { mean } from '../mean';
+import type { Point } from '../../geometry/index.js';
+import { mean } from '../mean.js';
 
 test('5x1 RGB image', () => {
   const image = testUtils.createRgbImage([

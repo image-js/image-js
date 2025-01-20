@@ -1,4 +1,4 @@
-import { computeThreshold } from '../../threshold';
+import { computeThreshold } from '../../threshold.js';
 
 test('Huang should work similarily to ImageJ', () => {
   const img = testUtils.load('various/grayscale_by_zimmyrose.png');

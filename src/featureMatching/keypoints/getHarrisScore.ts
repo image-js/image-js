@@ -1,9 +1,9 @@
-import Matrix, { EigenvalueDecomposition, WrapperMatrix1D } from 'ml-matrix';
+import { Matrix, EigenvalueDecomposition, WrapperMatrix1D } from 'ml-matrix';
 
-import { Image } from '../../Image';
-import { Point } from '../../geometry';
-import { SOBEL_X, SOBEL_Y } from '../../utils/constants/kernels';
-import { GetHarrisScoreOptions } from '../featureMatching.types';
+import type { Image } from '../../Image.js';
+import type { Point } from '../../geometry/index.js';
+import { SOBEL_X, SOBEL_Y } from '../../utils/constants/kernels.js';
+import type { GetHarrisScoreOptions } from '../featureMatching.types.js';
 
 /**
  * Get the Harris score of a corner. The idea behind the algorithm is that a

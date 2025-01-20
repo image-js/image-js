@@ -1,6 +1,8 @@
-import { RoiKind } from '../../getRois';
-import { hsvToRgb } from '../hsvToRgb';
-import { rgbToNumber } from '../rgbToNumber';
+import { match } from 'ts-pattern';
+
+import type { RoiKind } from '../../getRois.js';
+import { hsvToRgb } from '../hsvToRgb.js';
+import { rgbToNumber } from '../rgbToNumber.js';
 
 export interface GetRainbowMapOptions {
   /**
@@ -30,24 +32,11 @@ export function getRainbowMap(options: GetRainbowMapOptions): Uint32Array {
 
   const hueRange = 360;
 
-  let step: number;
-  switch (roiKind) {
-    case 'bw': {
-      step = hueRange / (nbNegative + nbPositive);
-      break;
-    }
-    case 'black': {
-      step = hueRange / nbNegative;
-      break;
-    }
-    case 'white': {
-      step = hueRange / nbPositive;
-      break;
-    }
-    default: {
-      throw new RangeError(`invalid ROI kind: ${roiKind}`);
-    }
-  }
+  const step = match(roiKind)
+    .with('bw', () => hueRange / (nbNegative + nbPositive))
+    .with('black', () => hueRange / nbNegative)
+    .with('white', () => hueRange / nbPositive)
+    .exhaustive();
 
   // negative values
   let hue = 0;

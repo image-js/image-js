@@ -1,5 +1,5 @@
-import { Mask } from '../../Mask';
-import { drawLineOnMask } from '../drawLineOnMask';
+import { Mask } from '../../Mask.js';
+import { drawLineOnMask } from '../drawLineOnMask.js';
 
 test('3x3 mask, diagonal', () => {
   const mask = testUtils.createMask([

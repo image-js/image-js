@@ -1,12 +1,12 @@
 import { EigenvalueDecomposition } from 'ml-matrix';
 import { xVariance, xyCovariance } from 'ml-spectra-processing';
 
-import { Point } from '../../geometry';
-import { getAngle } from '../../maskAnalysis/utils/getAngle';
-import { toDegrees } from '../../utils/geometry/angles';
-import { assert } from '../../utils/validators/assert';
-import { Roi } from '../Roi';
-import { Ellipse } from '../roi.types';
+import type { Point } from '../../geometry/index.js';
+import { getAngle } from '../../maskAnalysis/utils/getAngle.js';
+import { toDegrees } from '../../utils/geometry/angles.js';
+import { assert } from '../../utils/validators/assert.js';
+import type { Roi } from '../Roi.js';
+import type { Ellipse } from '../roi.types.js';
 /**
  * Calculates ellipse on around ROI.
  * @param roi - Region of interest.

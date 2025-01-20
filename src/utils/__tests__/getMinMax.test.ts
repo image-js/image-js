@@ -1,4 +1,4 @@
-import { getMinMax } from '../getMinMax';
+import { getMinMax } from '../getMinMax.js';
 
 test('grey image', () => {
   const image = testUtils.createGreyImage([[1, 2, 3, 4, 5, 7, 4, 9, 6]]);

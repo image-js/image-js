@@ -1,5 +1,5 @@
-import { Image } from '../../Image';
-import { getClamp } from '../clamp';
+import { Image } from '../../Image.js';
+import { getClamp } from '../clamp.js';
 
 test("clamp 65'536", () => {
   const image = new Image(2, 1, {

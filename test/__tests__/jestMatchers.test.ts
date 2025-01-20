@@ -1,5 +1,5 @@
-import { Image } from '../../src';
-import { Mask } from '../../src/Mask';
+import { Mask } from '../../src/Mask.js';
+import { Image } from '../../src/index.js';
 
 describe('toMatchImage', () => {
   it('should load and match', () => {

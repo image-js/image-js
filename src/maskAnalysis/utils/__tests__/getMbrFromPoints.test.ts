@@ -1,4 +1,4 @@
-import { getMbrFromPoints } from '../getMbrFromPoints';
+import { getMbrFromPoints } from '../getMbrFromPoints.js';
 
 test.each([
   [

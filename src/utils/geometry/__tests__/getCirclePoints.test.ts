@@ -1,10 +1,10 @@
-import { Image } from '../../../Image';
+import { Image } from '../../../Image.js';
 import {
   getCirclePoints,
   getCompassPoints,
   getFilledCirclePoints,
   getLinePoints,
-} from '../getCirclePoints';
+} from '../getCirclePoints.js';
 
 test('circle with radius 1', () => {
   expect(getCirclePoints(1)).toStrictEqual([

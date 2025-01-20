@@ -1,8 +1,9 @@
 import { xMedian } from 'ml-spectra-processing';
 
-import { Image } from '../Image';
-import { getBorderInterpolation, BorderType } from '../utils/interpolateBorder';
-import checkProcessable from '../utils/validators/checkProcessable';
+import { Image } from '../Image.js';
+import type { BorderType } from '../utils/interpolateBorder.js';
+import { getBorderInterpolation } from '../utils/interpolateBorder.js';
+import checkProcessable from '../utils/validators/checkProcessable.js';
 
 export interface MedianFilterOptions {
   /**

@@ -1,6 +1,6 @@
-import { Image } from '../../Image';
-import { Stack } from '../../Stack';
-import { checkProcessable } from '../utils/checkProcessable';
+import { Image } from '../../Image.js';
+import type { Stack } from '../../Stack.js';
+import { checkProcessable } from '../utils/checkProcessable.js';
 
 /**
  *  Returns a new 16 bits depth image with the sum of each pixel of the images of the stack.

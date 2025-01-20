@@ -1,7 +1,7 @@
-import { Image } from '../Image';
+import type { Image } from '../Image.js';
 
-import { ClampFunction } from './utils.types';
-import { assert } from './validators/assert';
+import type { ClampFunction } from './utils.types.js';
+import { assert } from './validators/assert.js';
 
 /**
  * Get the clamp function for an image (depends on the image bit depth).

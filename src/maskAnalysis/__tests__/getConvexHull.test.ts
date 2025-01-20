@@ -1,4 +1,4 @@
-import { getConvexHull } from '../getConvexHull';
+import { getConvexHull } from '../getConvexHull.js';
 
 test('cross', () => {
   const mask = testUtils.createMask([

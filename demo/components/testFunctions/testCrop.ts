@@ -1,4 +1,4 @@
-import { Image } from '../../../src';
+import type { Image } from '../../../src/index.js';
 // options
 const cropImageRatio = 2; // defines the size of the cropped image
 const interval = 2; // defines the speed

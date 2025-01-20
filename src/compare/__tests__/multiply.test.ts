@@ -1,4 +1,4 @@
-import { Image } from '../../Image';
+import { Image } from '../../Image.js';
 
 test('multiply by 2', () => {
   let image = testUtils.createRgbaImage([

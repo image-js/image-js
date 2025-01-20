@@ -1,6 +1,6 @@
-import { Image } from '../../../Image';
-import { round, sum } from '../../../utils/geometry/points';
-import { getPatchIntensityCentroid } from '../getPatchIntensityCentroid';
+import { Image } from '../../../Image.js';
+import { round, sum } from '../../../utils/geometry/points.js';
+import { getPatchIntensityCentroid } from '../getPatchIntensityCentroid.js';
 
 test('3x3 empty image', () => {
   const image = new Image(7, 7, { colorModel: 'GREY' });

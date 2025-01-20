@@ -1,5 +1,5 @@
-import { Match } from '../bruteForceMatch';
-import { filterSmallestDistanceMatches } from '../filterSmallestDistanceMatches';
+import type { Match } from '../bruteForceMatch.js';
+import { filterSmallestDistanceMatches } from '../filterSmallestDistanceMatches.js';
 
 test('3 matches', () => {
   const matches: Match[] = [

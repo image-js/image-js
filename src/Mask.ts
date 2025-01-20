@@ -1,62 +1,65 @@
-import { BitDepth, Image } from './Image';
-import { subtract, SubtractImageOptions } from './compare';
+import type { BitDepth, Image } from './Image.js';
+import type { SubtractImageOptions } from './compare/index.js';
+import { subtract } from './compare/index.js';
 import {
   drawLineOnMask,
-  DrawLineOnMaskOptions,
   drawPoints,
-  DrawPointsOptions,
   drawPolygonOnMask,
-  DrawPolygonOnMaskOptions,
   drawPolylineOnMask,
-  DrawPolylineOnMaskOptions,
   drawRectangle,
+} from './draw/index.js';
+import type {
+  DrawLineOnMaskOptions,
+  DrawPointsOptions,
+  DrawPolygonOnMaskOptions,
+  DrawPolylineOnMaskOptions,
   DrawRectangleOptions,
-} from './draw';
-import {
-  and,
-  AndOptions,
-  invert,
-  InvertOptions,
-  or,
-  OrOptions,
-} from './filters';
-import { ConvexHull, Feret, GetBorderPointsOptions, Mbr } from './maskAnalysis';
-import { getBorderPoints } from './maskAnalysis/getBorderPoints';
-import { getConvexHull } from './maskAnalysis/getConvexHull';
-import { getFeret } from './maskAnalysis/getFeret';
-import { getMbr } from './maskAnalysis/getMbr';
+} from './draw/index.js';
+import type { AndOptions, InvertOptions, OrOptions } from './filters/index.js';
+import { and, invert, or } from './filters/index.js';
+import { getBorderPoints } from './maskAnalysis/getBorderPoints.js';
+import { getConvexHull } from './maskAnalysis/getConvexHull.js';
+import { getFeret } from './maskAnalysis/getFeret.js';
+import { getMbr } from './maskAnalysis/getMbr.js';
+import type {
+  ConvexHull,
+  Feret,
+  GetBorderPointsOptions,
+  Mbr,
+} from './maskAnalysis/index.js';
+import type {
+  BottomHatOptions,
+  ClearBorderOptions,
+  CloseOptions,
+  DilateOptions,
+  ErodeOptions,
+  FloodFillOptions,
+  MorphologicalGradientOptions,
+  OpenOptions,
+  SolidFillOptions,
+  TopHatOptions,
+} from './morphology/index.js';
 import {
   bottomHat,
-  BottomHatOptions,
   clearBorder,
-  ClearBorderOptions,
   close,
-  CloseOptions,
   dilate,
-  DilateOptions,
   erode,
-  ErodeOptions,
   floodFill,
-  FloodFillOptions,
   morphologicalGradient,
-  MorphologicalGradientOptions,
   open,
-  OpenOptions,
   solidFill,
-  SolidFillOptions,
   topHat,
-  TopHatOptions,
-} from './morphology';
-import {
-  convertColor,
-  copyTo,
+} from './morphology/index.js';
+import type {
   CopyToOptions,
-  paintMaskOnMask,
   PaintMaskOnMaskOptions,
-} from './operations';
-import { boolToNumber } from './utils/boolToNumber';
-import { colorModels, ImageColorModel } from './utils/constants/colorModels';
-import { Point } from './utils/geometry/points';
+} from './operations/index.js';
+import { convertColor, copyTo, paintMaskOnMask } from './operations/index.js';
+import { boolToNumber } from './utils/boolToNumber.js';
+import type { ImageColorModel } from './utils/constants/colorModels.js';
+import { colorModels } from './utils/constants/colorModels.js';
+import type { Point } from './utils/geometry/points.js';
 
 export type BitValue = 1 | 0 | boolean;
 

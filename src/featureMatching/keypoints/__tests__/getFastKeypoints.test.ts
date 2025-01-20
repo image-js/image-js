@@ -1,5 +1,5 @@
-import { drawKeypoints } from '../../visualize/drawKeypoints';
-import { getFastKeypoints } from '../getFastKeypoints';
+import { drawKeypoints } from '../../visualize/drawKeypoints.js';
+import { getFastKeypoints } from '../getFastKeypoints.js';
 
 test('alphabet image, default options', () => {
   const image = testUtils.load('various/alphabet.jpg');
@@ -75,5 +75,5 @@ test('undefined score algorithm error', () => {
   expect(() => {
     // @ts-expect-error: test for js users
     getFastKeypoints(grey, { scoreAlgorithm: 'test' });
-  }).toThrow('invalid score algorithm: test');
+  }).toThrow('test');
 });

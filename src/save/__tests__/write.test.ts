@@ -2,8 +2,8 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-import { write, writeSync } from '..';
-import { read, readSync } from '../..';
+import { read, readSync } from '../../load/index.js';
+import { write, writeSync } from '../write.js';
 
 let tmpDir: string;
 beforeEach(() => {
@@ -126,7 +126,7 @@ test('unknown format error', () => {
   expect(() => {
     // @ts-expect-error test invalid format
     writeSync(destination, img, { format: 'foo' });
-  }).toThrow(/invalid format: foo/);
+  }).toThrow(/foo/);
 });
 
 test('image extension error', async () => {

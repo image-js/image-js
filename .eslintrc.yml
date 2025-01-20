@@ -1,7 +1,0 @@
-root: true
-extends:
-  - cheminfo-typescript
-  - cheminfo-typescript/jsdoc
-  - cheminfo-typescript/unicorn
-rules:
-  '@typescript-eslint/restrict-template-expressions': off

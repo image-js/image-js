@@ -1,4 +1,4 @@
-import { decodePng } from '..';
+import { decodePng } from '../decodePng.js';
 
 const tests = [
   // ['name', components, alpha, bitDepth]

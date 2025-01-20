@@ -1,6 +1,6 @@
-import { RoiKind } from '../../getRois';
-import { hsvToRgb } from '../hsvToRgb';
-import { rgbToNumber } from '../rgbToNumber';
+import type { RoiKind } from '../../getRois.js';
+import { hsvToRgb } from '../hsvToRgb.js';
+import { rgbToNumber } from '../rgbToNumber.js';
 
 // warning: the values in a uint32 array are flipped!! e.g. [0,0,0,1] becomes 0x01000000
 // the bits values are therefore in the following order: ABGR

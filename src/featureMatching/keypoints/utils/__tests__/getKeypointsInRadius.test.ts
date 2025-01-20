@@ -1,5 +1,5 @@
-import { OrientedFastKeypoint } from '../../getOrientedFastKeypoints';
-import { getKeypointsInRadius } from '../getKeypointsInRadius';
+import type { OrientedFastKeypoint } from '../../getOrientedFastKeypoints.js';
+import { getKeypointsInRadius } from '../getKeypointsInRadius.js';
 
 test('array of 3 keypoints', () => {
   const keypoints: OrientedFastKeypoint[] = [

@@ -1,17 +1,15 @@
-import {
+import type {
   BitDepth,
-  Image,
   ImageColorModel,
   ImageDataArray,
   ImageOptions,
-} from '../src';
-import { colorModels } from '../src/utils/constants/colorModels';
+} from '../src/index.js';
+import { Image, colorModels } from '../src/index.js';
 
 export type CreateImageOptions = Pick<ImageOptions, 'bitDepth'>;
 
 /**
  * Create a new Image object from image data.
- *
  * @param data - Image data.
  * @param colorModel - Image color model.
  * @param options - Additional options to create the image.
@@ -32,7 +30,6 @@ export function createImageFromData(
 
 /**
  * Create a new Image object from a 2D matrix.
- *
  * @param data - Image data.
  * @param colorModel - Image color model.
  * @param bitDepth - Bit depth.
@@ -77,7 +74,6 @@ function createImageFrom2DArray(
 
 /**
  * Create a new Image object from data encoded in a string.
- *
  * @param data - Image data.
  * @param colorModel - Image color model.
  * @param bitDepth - Bit depth.
@@ -96,7 +92,7 @@ function createImageFromString(
   const imageData = createDataArray(height * width * channels, bitDepth);
   for (let row = 0; row < height; row++) {
     const line = lines[row].trim();
-    const values = line.split(/[^0-9]+/).map((v) => parseInt(v, 10));
+    const values = line.split(/[^0-9]+/).map((v) => Number.parseInt(v, 10));
     if (values.length % channels !== 0) {
       throw new RangeError(
         `length of row ${row} (${values.length}) is not a multiple of channels (${channels})`,
@@ -126,7 +122,6 @@ function createImageFromString(
 
 /**
  * Create a new data typed array for an image.
- *
  * @param size - Total size of the data array.
  * @param bitDepth - Bit depth.
  * @returns The created array.

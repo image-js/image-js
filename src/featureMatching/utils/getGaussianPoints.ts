@@ -1,8 +1,8 @@
 import { createRandomArray } from 'ml-spectra-processing';
 
-import { Point } from '../../geometry';
-import { getClampFromTo } from '../../utils/clamp';
-import { GetGaussianPointsOptions } from '../../utils/utils.types';
+import type { Point } from '../../geometry/index.js';
+import { getClampFromTo } from '../../utils/clamp.js';
+import type { GetGaussianPointsOptions } from '../../utils/utils.types.js';
 
 /**
  * Get the coordinates of random points inside of the given dimensions, spread with a

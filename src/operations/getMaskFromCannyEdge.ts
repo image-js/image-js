@@ -1,6 +1,6 @@
-import { Image } from '../Image';
-import { DilateOptions } from '../morphology';
-import { fromMask } from '../roi';
+import type { Image } from '../Image.js';
+import type { DilateOptions } from '../morphology/index.js';
+import { fromMask } from '../roi/index.js';
 
 /**
  * Creates a mask with ROI shapes with CannyEdge filter. Then these shapes

@@ -1,4 +1,5 @@
-import { Image, Point } from '../../..';
+import type { Image } from '../../../Image.js';
+import type { Point } from '../../../geometry/index.js';
 
 /**
  * Crop source image for contrast enhancement.

@@ -1,7 +1,8 @@
-import { CreateFromOptions, Image } from '../Image';
-import { Mask } from '../Mask';
+import type { CreateFromOptions } from '../Image.js';
+import { Image } from '../Image.js';
+import { Mask } from '../Mask.js';
 
-import { copyData } from './copyData';
+import { copyData } from './copyData.js';
 
 export interface OutOptions {
   /**
@@ -123,9 +124,9 @@ export function imageToOutputMask(
   }
 }
 
-function checkRequirements<ReqType extends object, OutType extends ReqType>(
+function checkRequirements<ReqType extends object>(
   requirements: ReqType,
-  out: OutType,
+  out: ReqType,
 ): void {
   type Keys = keyof ReqType;
   for (const property in requirements) {

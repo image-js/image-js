@@ -1,8 +1,8 @@
-import { fromMask, Image } from '../../../src';
+import type { Image } from '../../../src/index.js';
+import { fromMask } from '../../../src/index.js';
 
 /**
  * Draw the convex Hull polygon of the largest ROI in green and display the filled ROI in purple.
- *
  * @param image - Input image.
  * @returns The image with the convex Hull.
  */

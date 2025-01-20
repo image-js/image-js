@@ -1,5 +1,5 @@
-import { OrientedFastKeypoint } from './getOrientedFastKeypoints';
-import { getKeypointsInRadius } from './utils/getKeypointsInRadius';
+import type { OrientedFastKeypoint } from './getOrientedFastKeypoints.js';
+import { getKeypointsInRadius } from './utils/getKeypointsInRadius.js';
 
 /**
  * Return the best keypoints within the given radius in pixels.

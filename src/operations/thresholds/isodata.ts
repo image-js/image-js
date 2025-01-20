@@ -5,7 +5,7 @@
  *
  */
 
-import { assert } from '../../utils/validators/assert';
+import { assert } from '../../utils/validators/assert.js';
 
 /**
  * Return a threshold for a histogram using Isodata algorithm.

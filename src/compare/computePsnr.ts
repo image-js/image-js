@@ -1,6 +1,6 @@
-import { Image } from '..';
+import type { Image } from '../Image.js';
 
-import { computeRmse } from './computeRmse';
+import { computeRmse } from './computeRmse.js';
 
 /**
  * Compute the Peak signal-to-noise ratio (PSNR) between two images.

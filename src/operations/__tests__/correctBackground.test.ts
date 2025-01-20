@@ -1,7 +1,7 @@
-import { Point } from '../../geometry';
-import { sampleBackgroundPoints } from '../../utils/sampleBackgroundPoints';
-import { correctBackground } from '../correctBackground';
-import { getMaskFromCannyEdge } from '../getMaskFromCannyEdge';
+import type { Point } from '../../geometry/index.js';
+import { sampleBackgroundPoints } from '../../utils/sampleBackgroundPoints.js';
+import { correctBackground } from '../correctBackground.js';
+import { getMaskFromCannyEdge } from '../getMaskFromCannyEdge.js';
 
 test('basic test', () => {
   const image = testUtils.createGreyImage([

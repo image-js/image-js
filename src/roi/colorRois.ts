@@ -1,9 +1,8 @@
-import { Image } from '..';
+import { Image } from '../Image.js';
 
-import { RoiKind } from './getRois';
-import { getColorMap } from './utils/getColorMap';
-
-import { RoiMapManager } from '.';
+import type { RoiMapManager } from './RoiMapManager.js';
+import type { RoiKind } from './getRois.js';
+import { getColorMap } from './utils/getColorMap.js';
 
 export const RoisColorMode = {
   /**

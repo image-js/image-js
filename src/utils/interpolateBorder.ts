@@ -1,6 +1,8 @@
-import { Image } from '../Image';
+import { match } from 'ts-pattern';
 
-import { BorderInterpolationFunction } from './utils.types';
+import type { Image } from '../Image.js';
+
+import type { BorderInterpolationFunction } from './utils.types.js';
 
 export const BorderType = {
   CONSTANT: 'constant',
@@ -24,20 +26,13 @@ export function getBorderInterpolation(
   type: BorderType,
   value: number,
 ): BorderInterpolationFunction {
-  switch (type) {
-    case 'constant':
-      return getInterpolateConstant(value);
-    case 'replicate':
-      return interpolateReplicate;
-    case 'reflect':
-      return interpolateReflect;
-    case 'reflect101':
-      return interpolateReflect101;
-    case 'wrap':
-      return interpolateWrap;
-    default:
-      throw new RangeError(`invalid border type: ${type}`);
-  }
+  return match(type)
+    .with('constant', () => getInterpolateConstant(value))
+    .with('replicate', () => interpolateReplicate)
+    .with('reflect', () => interpolateReflect)
+    .with('reflect101', () => interpolateReflect101)
+    .with('wrap', () => interpolateWrap)
+    .exhaustive();
 }
 
 function checkRange(point: number, length: number): void {

@@ -1,4 +1,4 @@
-import { Image } from '../../Image';
+import { Image } from '../../Image.js';
 import {
   getBorderInterpolation,
   interpolateConstantPoint,
@@ -6,7 +6,7 @@ import {
   interpolateReplicatePoint,
   interpolateWrapPoint,
   interpolateReflect101Point,
-} from '../interpolateBorder';
+} from '../interpolateBorder.js';
 
 test('in range', () => {
   expect(interpolateReflectPoint(0, 10)).toBe(0);
@@ -91,7 +91,5 @@ test('REFLECT_101 - positive', () => {
 
 test('unknown type', () => {
   // @ts-expect-error: testing JS problem
-  expect(() => getBorderInterpolation('unknown', 5)).toThrow(
-    'invalid border type: unknown',
-  );
+  expect(() => getBorderInterpolation('unknown', 5)).toThrow(/unknown/);
 });

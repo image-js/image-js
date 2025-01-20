@@ -1,5 +1,5 @@
-import { Mask } from '../../Mask';
-import { drawPolylineOnMask } from '../drawPolylineOnMask';
+import { Mask } from '../../Mask.js';
+import { drawPolylineOnMask } from '../drawPolylineOnMask.js';
 
 test('3x3 mask', () => {
   const image = new Mask(3, 3);

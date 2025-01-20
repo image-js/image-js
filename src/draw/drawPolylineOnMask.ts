@@ -1,6 +1,6 @@
-import { Mask } from '../Mask';
-import { Point } from '../utils/geometry/points';
-import { maskToOutputMask } from '../utils/getOutputImage';
+import type { Mask } from '../Mask.js';
+import type { Point } from '../utils/geometry/points.js';
+import { maskToOutputMask } from '../utils/getOutputImage.js';
 
 export interface DrawPolylineOnMaskOptions {
   /**

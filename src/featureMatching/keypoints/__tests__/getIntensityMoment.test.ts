@@ -1,5 +1,5 @@
-import { Image } from '../../../Image';
-import { getIntensityMoment } from '../getIntensityMoment';
+import { Image } from '../../../Image.js';
+import { getIntensityMoment } from '../getIntensityMoment.js';
 
 test('3x3 empty image, 00', () => {
   const image = new Image(3, 3, { colorModel: 'GREY' });

@@ -1,4 +1,4 @@
-import { increaseContrast } from '../increaseContrast';
+import { increaseContrast } from '../increaseContrast.js';
 
 test('3x1 rgba image, custom output min and max', () => {
   const image = testUtils.createRgbaImage([

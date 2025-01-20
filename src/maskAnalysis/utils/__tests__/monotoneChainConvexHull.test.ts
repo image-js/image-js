@@ -1,4 +1,4 @@
-import { monotoneChainConvexHull as mcch } from '../monotoneChainConvexHull';
+import { monotoneChainConvexHull as mcch } from '../monotoneChainConvexHull.js';
 
 test('basic square', () => {
   const result = mcch([

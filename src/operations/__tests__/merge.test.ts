@@ -1,4 +1,4 @@
-import { merge } from '../merge';
+import { merge } from '../merge.js';
 
 test('merge into RGB', () => {
   const img = testUtils.createRgbImage([[0, 1, 2, 253, 254, 255]]);

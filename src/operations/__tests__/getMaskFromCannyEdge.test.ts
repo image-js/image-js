@@ -1,4 +1,4 @@
-import { getMaskFromCannyEdge } from '../getMaskFromCannyEdge';
+import { getMaskFromCannyEdge } from '../getMaskFromCannyEdge.js';
 
 test('basic test', () => {
   const image = testUtils.createGreyImage([

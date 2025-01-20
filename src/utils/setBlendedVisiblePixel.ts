@@ -1,7 +1,7 @@
-import { Image } from '../Image';
-import { Mask } from '../Mask';
+import type { Image } from '../Image.js';
+import type { Mask } from '../Mask.js';
 
-import { setBlendedPixel } from './setBlendedPixel';
+import { setBlendedPixel } from './setBlendedPixel.js';
 
 /**
  * Blend the given pixel with the pixel at the specified location in the image if the pixel is in image's bounds.

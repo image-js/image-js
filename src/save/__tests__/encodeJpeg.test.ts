@@ -1,5 +1,5 @@
-import { encodeJpeg } from '..';
-import { decode } from '../../load/decode';
+import { decode } from '../../load/decode.js';
+import { encodeJpeg } from '../encodeJpeg.js';
 
 test('encode an 8-bit rgba image', () => {
   const image = testUtils.createRgbaImage([

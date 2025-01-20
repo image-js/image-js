@@ -1,8 +1,7 @@
-import { Image } from '../../../src';
+import type { Image } from '../../../src/index.js';
 
 /**
  * Enhance contrast of the source image using level.
- *
  * @param image - Input image.
  * @returns The treated image.
  */

@@ -1,4 +1,4 @@
-import { extendBorders } from '../extendBorders';
+import { extendBorders } from '../extendBorders.js';
 
 test('grey image with basic value', () => {
   const image = testUtils.createGreyImage(`

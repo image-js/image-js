@@ -1,6 +1,6 @@
-import { getOrientedFastKeypoints } from '../../../keypoints/getOrientedFastKeypoints';
-import { getBriefDescriptors } from '../../getBriefDescriptors';
-import { sliceBrief } from '../sliceBrief';
+import { getOrientedFastKeypoints } from '../../../keypoints/getOrientedFastKeypoints.js';
+import { getBriefDescriptors } from '../../getBriefDescriptors.js';
+import { sliceBrief } from '../sliceBrief.js';
 
 test('default options', () => {
   const image = testUtils

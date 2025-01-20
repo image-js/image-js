@@ -1,4 +1,4 @@
-import { rgbToNumber } from '../rgbToNumber';
+import { rgbToNumber } from '../rgbToNumber.js';
 
 test('white', () => {
   const rgb = new Uint8Array([255, 255, 255]);
