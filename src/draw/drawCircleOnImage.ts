@@ -73,25 +73,51 @@ export function drawCircleOnImage(
     if (radius === 1) {
       setBlendedVisiblePixel(newImage, center.column, center.row, fill);
     }
+    //Starting points for the top and bottom row of the circle.
+    let prevRow = center.row + radius;
+
+    let index = 0;
     circle(center.column, center.row, radius, (column: number, row: number) => {
       setBlendedVisiblePixel(newImage, column, row, color);
-
-      //todo: fill is not optimal we can fill symmetrically
-      if (column - 1 > center.column) {
+      // Filling the first line of the circle.
+      if (index === 0) {
         newImage.drawLine(
           { row, column: column - 1 },
-          { row, column: center.column },
-          { strokeColor: fill, out: newImage },
-        );
-      } else if (column + 1 < center.column) {
-        newImage.drawLine(
-          { row, column: column + 1 },
-          { row, column: center.column },
+          {
+            row,
+            column: center.column - (column - center.column - 1),
+          },
           { strokeColor: fill, out: newImage },
         );
       }
+      // The algorithm used is Bresenham's circle algorithm (@link https://www.geeksforgeeks.org/bresenhams-circle-drawing-algorithm/) to find points that constitute the circle outline. However, in this algorithm The circle is divided in 4 parts instead of 8: top, right, bottom and left.
+      // The algorithm draws a point per quadrant until the circle is complete.
+      // We use bottom (index % 4 === 1, quadrant 2) point of the outline to fill the circle with color.
+      // Filling half of the circle.
+      if (index % 4 === 1 && prevRow !== row) {
+        // For quadrant 2, column < center.column
+        newImage.drawLine(
+          { row, column: column + 1 },
+          {
+            row,
+            column: center.column - (column - center.column + 1),
+          },
+          { strokeColor: fill, out: newImage },
+        );
+        prevRow = row;
+        // Filling top half of the circle.
+        newImage.drawLine(
+          { row: center.row - (row - center.row), column: column + 1 },
+          {
+            row: center.row - (row - center.row),
+            column: center.column - (column - center.column + 1),
+          },
+          { strokeColor: fill, out: newImage },
+        );
+      }
+
+      index++;
     });
   }
-
   return newImage;
 }
