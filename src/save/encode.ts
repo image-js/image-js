@@ -29,7 +29,7 @@ export interface EncodeOptionsJpeg {
 export interface EncodeOptionsBmp {
   format: 'bmp';
 }
-const defaultPng: EncodeOptionsPng = { format: 'png' };
+export const defaultPng: EncodeOptionsPng = { format: 'png' };
 
 /**
  * Encodes the image to the specified format
