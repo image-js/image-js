@@ -6,3 +6,4 @@ export * from './load.types.js';
 export * from './read.js';
 export * from './readCanvas.js';
 export * from './readImg.js';
+export * from './fetchURL.js';
