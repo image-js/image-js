@@ -197,9 +197,9 @@ export declare class Image {
   ): Array<number>;
 
   cannyEdge(options?: {
-    gaussianBlur: number;
-    lowThreshold: number;
-    highThreshold: number;
+    gaussianBlur?: number;
+    lowThreshold?: number;
+    highThreshold?: number;
   }): Image;
   convolution(kernel: Kernel, options?: ConvolutionOptions): Image;
   extract(
