@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.36.1](https://www.github.com/image-js/image-js/compare/v0.36.0...v0.36.1) (2025-04-09)
+
+
+### Bug Fixes
+
+* add types and documentation for cannyEdge parameters ([f73f9b4](https://www.github.com/image-js/image-js/commit/f73f9b4864029eae39f8dd3412d3991b84798fab))
+
 ## [0.36.0](https://www.github.com/image-js/image-js/compare/v0.35.6...v0.36.0) (2024-12-26)
 
 
