@@ -196,7 +196,11 @@ export declare class Image {
     options?: { border?: Array<number> },
   ): Array<number>;
 
-  // cannyEdge
+  cannyEdge(options?: {
+    gaussianBlur?: number;
+    lowThreshold?: number;
+    highThreshold?: number;
+  }): Image;
   convolution(kernel: Kernel, options?: ConvolutionOptions): Image;
   extract(
     mask: Image,
