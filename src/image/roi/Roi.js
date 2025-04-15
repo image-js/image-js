@@ -524,6 +524,10 @@ export default class Roi {
     return this.computed.mbr;
   }
 
+  get filledSurface() {
+    return this.surface + this.holesInfo.surface;
+  }
+
   get fillRatio() {
     return this.surface / (this.surface + this.holesInfo.surface);
   }
@@ -740,6 +744,7 @@ export default class Roi {
       meanY: this.meanY,
       height: this.height,
       width: this.width,
+      filledSurface: this.filledSurface,
       surface: this.surface,
       hullSurface: this.convexHull.surface,
       hullPerimeter: this.convexHull.perimeter,

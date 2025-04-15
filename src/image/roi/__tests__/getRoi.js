@@ -24,6 +24,7 @@ test('positive id', async () => {
     height: 1,
     width: 1,
     surface: 1,
+    filledSurface: 1,
     hullSurface: 1,
     hullPerimeter: 4,
     mbrWidth: 1,
