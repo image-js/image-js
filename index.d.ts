@@ -501,6 +501,8 @@ export declare class Roi {
     height: number;
     width: number;
     surface: number;
+    hullSurface: number;
+    hullPerimeter: number;
     mbrWidth: number;
     mbrHeight: number;
     mbrSurface: number;

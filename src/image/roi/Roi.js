@@ -741,6 +741,8 @@ export default class Roi {
       height: this.height,
       width: this.width,
       surface: this.surface,
+      hullSurface: this.convexHull.surface,
+      hullPerimeter: this.convexHull.perimeter,
       mbrWidth: this.mbr.width,
       mbrHeight: this.mbr.height,
       mbrSurface: this.mbr.surface,
