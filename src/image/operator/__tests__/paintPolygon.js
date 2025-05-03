@@ -222,6 +222,29 @@ describe('we check paintPolygon', function () {
 
     expect(Array.from(image.data)).toStrictEqual(Array.from(painted.data));
   });
+
+  it('should yield the filled painted binary image with a cut triangle', function () {
+    let size = 5;
+    let data = new Uint8Array(Math.ceil((size * size) / 8)).fill(0xff);
+    let image = new Image(size, size, data, { kind: 'BINARY' });
+
+    let points = [
+      [2, 0],
+      [4, 2],
+      [0, 2],
+    ];
+    image.paintPolygon(points, { filled: true, color: 0 });
+
+    let painted = binary`
+      11011
+      10001
+      00000
+      11111
+      11111
+    `;
+
+    expect(Array.from(image.data)).toStrictEqual(Array.from(painted.data));
+  });
 });
 
 function getExpected(painted, color) {

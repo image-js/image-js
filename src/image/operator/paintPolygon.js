@@ -15,6 +15,8 @@ export default function paintPolygon(points, options = {}) {
     bitDepth: [1, 8, 16],
   });
 
+  color = color.length ? color : [color];
+
   options.closed = true;
 
   let filteredPoints = deleteDouble(points);
@@ -45,7 +47,8 @@ export default function paintPolygon(points, options = {}) {
       for (let x = 0; x < this.width; x++) {
         if (matrixBinary[y][x] === 1) {
           if (this.bitDepth === 1) {
-            this.setBitXY(x, y);
+            if (color[0] === 1) this.setBitXY(x, y);
+            else this.clearBitXY(x, y);
           } else {
             let numberChannels = Math.min(this.channels, color.length);
             let position = (x + y * this.width) * this.channels;
