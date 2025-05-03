@@ -70,13 +70,15 @@ function processImage(image, min, max, channels) {
 
   for (let i = 0; i < channels.length; i++) {
     if (min[i] === 0 && max[i] === image.maxValue) {
-      factor[i] = 0;
-    } else if (max[i] === min[i]) {
-      factor[i] = 0;
+      factor[i] = -1; // untouched
     } else {
-      factor[i] = (image.maxValue + 1 - delta) / (max[i] - min[i]);
+      if (max[i] === min[i]) {
+        factor[i] = 0;
+      } else {
+        factor[i] = (image.maxValue + 1 - delta) / (max[i] - min[i]);
+      }
+      min[i] += (0.5 - delta / 2) / factor[i];
     }
-    min[i] += (0.5 - delta / 2) / factor[i];
   }
 
   /*
@@ -88,7 +90,7 @@ function processImage(image, min, max, channels) {
 
   for (let j = 0; j < channels.length; j++) {
     let c = channels[j];
-    if (factor[j] !== 0) {
+    if (factor[j] !== -1) {
       for (let i = 0; i < image.data.length; i += image.channels) {
         image.data[i + c] = Math.min(
           Math.max(0, ((image.data[i + c] - min[j]) * factor[j] + 0.5) | 0),
