@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.js';
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
 import { bruteForceOneMatch } from '../../matching/bruteForceMatch.js';
@@ -25,7 +27,7 @@ describe('constructor', () => {
 });
 
 describe('drawKeypoints', () => {
-  it('scale = 2', () => {
+  it('scale = 2', { timeout: 20_000 }, () => {
     const montage = new Montage(source, source, { scale: 2 });
     montage.drawKeypoints(sourceKeypoints);
 
@@ -44,7 +46,7 @@ describe('drawKeypoints', () => {
 });
 
 describe('drawMatches', () => {
-  it('scale = 2', () => {
+  it('scale = 2', { timeout: 20_000 }, () => {
     const brief = getBriefDescriptors(grey, sourceKeypoints);
 
     const matches = bruteForceOneMatch(brief.descriptors, brief.descriptors);

@@ -45,6 +45,7 @@ export default function CameraTransform(props: CameraTransformProps) {
           const canvasInput = canvasInputRef.current as HTMLCanvasElement;
           const canvasOutput = canvasOutputRef.current as HTMLCanvasElement;
           if (!canvasInput || !canvasOutput) return;
+          // eslint-disable-next-line react-hooks/react-compiler
           canvasInput.height = video.videoHeight;
           canvasInput.width = video.videoWidth;
           const inputContext = canvasInput.getContext(
@@ -63,7 +64,7 @@ export default function CameraTransform(props: CameraTransformProps) {
               }
               writeCanvas(result, canvasOutput);
             } catch (error_) {
-              setError(error_.stack);
+              setError((error_ as Error).stack as string);
               console.error(error_);
             }
             nextFrameRequest = requestAnimationFrame(nextFrame);

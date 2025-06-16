@@ -7,9 +7,9 @@ import CameraSnapshotButton from './CameraSnapshotButton.js';
 import type { TransformFunction } from './CameraTransform.js';
 import CameraTransform from './CameraTransform.js';
 import Container from './Container.js';
-import { testGetFastKeypoints } from './testFunctions/testGetFastKeypoints.js';
+import { testCannyEdge } from './testFunctions/testCannyEdge.js';
 
-const testTransform: TransformFunction = testGetFastKeypoints;
+const testTransform: TransformFunction = testCannyEdge;
 
 export default function Home() {
   const snapshotImageRef = useRef<Image>(null);

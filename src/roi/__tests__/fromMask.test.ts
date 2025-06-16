@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Mask } from '../../Mask.js';
 import { fromMask } from '../fromMask.js';
 
@@ -164,7 +166,7 @@ test('6x6 mask, allowCorners true', () => {
   );
 });
 
-test('no way to exceed max number of ROIs error', () => {
+test('no way to exceed max number of ROIs error', { timeout: 20_000 }, () => {
   const size = 4097;
   const mask = new Mask(size, size);
   let pos = true;

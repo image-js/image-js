@@ -1,26 +1,19 @@
+import util from 'node:util';
+
+import type { GetBriefOptions } from '../../src/featureMatching/descriptors/getBrief.js';
+import { getBrief } from '../../src/featureMatching/descriptors/getBrief.js';
 import {
-  Montage,
-  drawKeypoints,
-  drawMatches,
-  getOrientedFastKeypoints,
-  getBriefDescriptors,
-  bruteForceOneMatch,
-  DrawKeypointsOptions,
-  GetFastKeypointsOptions,
   getCrosscheckMatches,
-  MontageDisposition,
-  getBestKeypointsInRadius,
-} from '../../src/featureMatching.js';
-import { readSync, writeSync } from '../../src/index.js';
-import {
-  getBrief,
-  GetBriefOptions,
-} from '../../src/featureMatching/descriptors/getBrief.js';
-import { GetColorsOptions } from '../../src/featureMatching/utils/getColors.js';
+  Montage,
+  readSync,
+  writeSync,
+} from '../../src/index.js';
+import type {
+  DrawKeypointsOptions,
+  GetColorsOptions,
+} from '../../src/index.js';
 import { getMinMax } from '../../src/utils/getMinMax.js';
 
-import util from 'util';
-import { sliceBrief } from '../../src/featureMatching/descriptors/utils/sliceBrief.js';
 util.inspect.defaultOptions.depth = 5;
 
 const getBriefOptions: GetBriefOptions = {
@@ -32,7 +25,7 @@ const getBriefOptions: GetBriefOptions = {
 const firstNumber = 1;
 const secondNumber = 2;
 
-let source = readSync(
+const source = readSync(
   `../../test/img/featureMatching/id-crops/crop${firstNumber}.png`,
 ).convertColor('GREY');
 // fix contrast
@@ -43,7 +36,7 @@ source.level({
   out: source,
 });
 
-let destination = readSync(
+const destination = readSync(
   `../../test/img/featureMatching/id-crops/crop${secondNumber}.png`,
 ).convertColor('GREY');
 
@@ -59,8 +52,6 @@ console.log({
   source: { width: source.width, height: source.height },
   destination: { width: destination.width, height: destination.height },
 });
-
-const sliceBriefOptions = { start: 0, end: 15 };
 
 const sourceBrief = getBrief(source, getBriefOptions);
 const destinationBrief = getBrief(destination, getBriefOptions);
@@ -82,17 +73,11 @@ console.log({
   },
 });
 
-// const matches = bruteForceOneMatch(
-//   sourceBrief.descriptors,
-//   destinationBrief.descriptors,
-// );
-// console.log('nb matches: ' + matches.length);
-
 const crossMatches = getCrosscheckMatches(
   sourceBrief.descriptors,
   destinationBrief.descriptors,
 );
-console.log('nb crosscheck matches: ' + crossMatches.length);
+console.log(`nb crosscheck matches: ${crossMatches.length}`);
 
 const montage = new Montage(source, destination, {
   scale: 2,

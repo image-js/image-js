@@ -18,7 +18,7 @@ test('2 grey images', () => {
 });
 
 test('more complex stack', () => {
-  const folder = join(__dirname, '../../../../test/img/correctColor');
+  const folder = join(import.meta.dirname, '../../../../test/img/correctColor');
   const stack = getStackFromFolder(folder);
 
   expect(stack.maxImage()).toMatchImageSnapshot();

@@ -1,5 +1,5 @@
-import { writeFileSync } from 'fs';
-import { join } from 'path';
+import { writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 import { createRandomArray } from 'ml-spectra-processing';
 
@@ -11,4 +11,7 @@ const a = createRandomArray({
   length: 10000,
 });
 
-writeFileSync(join(__dirname, 'test.json'), JSON.stringify(Array.from(a)));
+writeFileSync(
+  join(import.meta.dirname, 'test.json'),
+  JSON.stringify(Array.from(a)),
+);

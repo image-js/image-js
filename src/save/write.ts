@@ -1,9 +1,6 @@
-import fs from 'node:fs';
-import nodePath from 'node:path';
-import url from 'node:url';
-
 import type { Image } from '../Image.js';
 import { Mask } from '../Mask.js';
+import { getNodeApiOrThrow } from '../utils/cross_platform.js';
 
 import type {
   EncodeOptionsBmp,
@@ -27,6 +24,7 @@ export type WriteOptionsBmp = WriteOptions & EncodeOptionsBmp;
  * Write an image to the disk.
  * The file format is determined automatically from the file's extension.
  * If the extension is not supported, an error will be thrown.
+ * This method is only implemented for Node.js.
  * @param path - Path or file URL where the image should be written.
  * @param image - Image to save.
  * @param options - Write options.
@@ -40,6 +38,7 @@ export async function write(
 /**
  * Write an image to the disk as PNG.
  * When the `png` format is specified, the file's extension doesn't matter.
+ * This method is only implemented for Node.js.
  * @param path - Path or file URL where the image should be written.
  * @param image - Image to save.
  * @param options - Encode options for png images.
@@ -53,6 +52,7 @@ export async function write(
 /**
  * Write an image to the disk as JPEG.
  * When the `jpeg` format is specified, the file's extension doesn't matter.
+ * This method is only implemented for Node.js.
  * @param path - Path or file URL where the image should be written.
  * @param image - Image to save.
  * @param options - Encode options for jpeg images.
@@ -67,6 +67,7 @@ export async function write(
 /**
  * Write an image to the disk as BMP.
  * When the `bmp` format is specified, the file's extension doesn't matter.
+ * This method is only implemented for Node.js.
  * @param path - Path or file URL where the image should be written.
  * @param image - Image to save.
  * @param options - Encode options for bmp images.
@@ -79,6 +80,7 @@ export async function write(
 ): Promise<void>;
 /**
  * Asynchronously write an image to the disk.
+ * This method is only implemented for Node.js.
  * @param path - Path where the image should be written.
  * @param image - Image to save.
  * @param options - Encode options.
@@ -88,22 +90,24 @@ export async function write(
   image: Image | Mask,
   options?: WriteOptionsBmp | WriteOptionsPng | WriteOptionsJpeg | WriteOptions,
 ): Promise<void> {
+  const nodeApi = getNodeApiOrThrow('write');
   if (typeof path !== 'string') {
-    path = url.fileURLToPath(path);
+    path = nodeApi.url.fileURLToPath(path);
   }
   if (image instanceof Mask) {
     image = image.convertColor('GREY');
   }
-  const toWrite = getDataToWrite(path, image, options);
+  const toWrite = getDataToWrite(path, image, options, nodeApi);
   if (options?.recursive) {
-    const dir = nodePath.dirname(path);
-    await fs.promises.mkdir(dir, { recursive: true });
+    const dir = nodeApi.path.dirname(path);
+    await nodeApi.fs.promises.mkdir(dir, { recursive: true });
   }
-  await fs.promises.writeFile(path, toWrite);
+  await nodeApi.fs.promises.writeFile(path, toWrite);
 }
 
 /**
  * Synchronous version of @see {@link write}.
+ * This method is only implemented for Node.js.
  * @param path - Path where the image should be written.
  * @param image - Image to save.
  * @param options - Encode options.
@@ -113,15 +117,16 @@ export function writeSync(
   image: Image | Mask,
   options?: WriteOptionsBmp | WriteOptionsPng | WriteOptionsJpeg | WriteOptions,
 ): void {
+  const nodeApi = getNodeApiOrThrow('writeSync');
   if (typeof path !== 'string') {
-    path = url.fileURLToPath(path);
+    path = nodeApi.url.fileURLToPath(path);
   }
-  const toWrite = getDataToWrite(path, image, options);
+  const toWrite = getDataToWrite(path, image, options, nodeApi);
   if (options?.recursive) {
-    const dir = nodePath.dirname(path);
-    fs.mkdirSync(dir, { recursive: true });
+    const dir = nodeApi.path.dirname(path);
+    nodeApi.fs.mkdirSync(dir, { recursive: true });
   }
-  fs.writeFileSync(path, toWrite);
+  nodeApi.fs.writeFileSync(path, toWrite);
 }
 
 /**
@@ -129,15 +134,25 @@ export function writeSync(
  * @param destinationPath - Image destination.
  * @param image - Image to save.
  * @param options - Encode options.
+ * @param nodeApi - Object with Node.js APIs.
  * @returns Buffer containing the encoded image.
  */
 function getDataToWrite(
   destinationPath: string,
   image: Image | Mask,
-  options?: WriteOptionsBmp | WriteOptionsPng | WriteOptionsJpeg | WriteOptions,
+  options:
+    | WriteOptionsBmp
+    | WriteOptionsPng
+    | WriteOptionsJpeg
+    | WriteOptions
+    | undefined,
+  nodeApi: ReturnType<typeof getNodeApiOrThrow>,
 ): Uint8Array {
   if (!options || !('format' in options)) {
-    const extension = nodePath.extname(destinationPath).slice(1).toLowerCase();
+    const extension = nodeApi.path
+      .extname(destinationPath)
+      .slice(1)
+      .toLowerCase();
     if (
       extension === 'png' ||
       extension === 'jpg' ||

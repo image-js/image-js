@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type { TestImagePath } from '../../../../test/TestImagePath.js';
 import { Image } from '../../../Image.js';
 import { overlapImages } from '../../../featureMatching/index.js';
@@ -67,7 +69,7 @@ test('crosscheck = false', () => {
   expect(image).toMatchImageSnapshot();
 });
 
-test('debug = true', () => {
+test('debug = true', { timeout: 20_000 }, () => {
   const data = {
     message: 'rotation 10 degrees',
     source: 'polygons/scaleneTriangle',

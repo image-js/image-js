@@ -1,4 +1,3 @@
-//@ts-expect-error ts package not ready yet
 import * as bmp from 'fast-bmp';
 
 import type { Image } from '../Image.js';
@@ -13,27 +12,13 @@ export function encodeBmp(mask: Image | Mask) {
   if (!(mask instanceof Mask)) {
     throw new TypeError('Image bmp encoding is not implemented.');
   }
-  const compressedBitMask = new Uint8Array(Math.ceil(mask.size / 8));
-  let destIndex = 0;
-  for (let index = 0; index < mask.size; index++) {
-    if (index % 8 === 0 && index !== 0) {
-      destIndex++;
-    }
-    if (destIndex !== compressedBitMask.length - 1) {
-      compressedBitMask[destIndex] <<= 1;
-      compressedBitMask[destIndex] |= mask.getBitByIndex(index);
-    } else {
-      compressedBitMask[destIndex] |= mask.getBitByIndex(index);
-      compressedBitMask[destIndex] <<= 7 - (index % 8);
-    }
-  }
-
+  const imageData = mask.getRawImage();
   return bmp.encode({
-    width: mask.width,
-    height: mask.height,
+    width: imageData.width,
+    height: imageData.height,
     components: 1,
-    bitDepth: 1,
+    bitsPerPixel: 1,
     channels: 1,
-    data: compressedBitMask,
+    data: imageData.data,
   });
 }

@@ -16,7 +16,7 @@ import { createMask } from './createMask.js';
  * @returns The path to the image.
  */
 export function getPath(name: TestImagePath): string {
-  return join(__dirname, 'img/', name);
+  return join(import.meta.dirname, 'img/', name);
 }
 
 /**
@@ -25,7 +25,7 @@ export function getPath(name: TestImagePath): string {
  * @returns Buffer of the image.
  */
 export function loadBuffer(path: TestImagePath): Uint8Array {
-  return readFileSync(join(__dirname, 'img', path));
+  return readFileSync(join(import.meta.dirname, 'img', path));
 }
 
 /**
@@ -34,7 +34,7 @@ export function loadBuffer(path: TestImagePath): Uint8Array {
  * @returns The image.
  */
 export function load(path: TestImagePath): Image {
-  return readSync(join(__dirname, 'img', path));
+  return readSync(join(import.meta.dirname, 'img', path));
 }
 /**
  * Create an image from 8-bit Grey data.
@@ -159,7 +159,6 @@ export function createPoints(...points: Array<[number, number]>): Point[] {
 }
 
 declare global {
-  // eslint-disable-next-line no-var
   var testUtils: {
     getPath: typeof getPath;
     loadBuffer: typeof loadBuffer;

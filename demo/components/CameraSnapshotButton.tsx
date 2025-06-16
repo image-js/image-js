@@ -16,6 +16,7 @@ export default function CameraSnapshotButton(props: CameraSnapshotButtonProps) {
       const url = canvasInputRef.current.toDataURL();
       const image = readCanvas(canvasInputRef.current);
       setSnapshotUrl(url);
+      // eslint-disable-next-line react-hooks/react-compiler
       snapshotImageRef.current = image;
     }
   }

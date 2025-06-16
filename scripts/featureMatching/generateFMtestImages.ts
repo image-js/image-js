@@ -1,18 +1,19 @@
 // generate some variations of the alphabet image for feature matching
-// run this script with: ts-node --log-error generateFMtestImages.ts
-import { readSync, writeSync, Image } from '../../src/index.js';
-import { join } from 'path';
+import { join } from 'node:path';
 
-console.log(__dirname);
+import { readSync, writeSync } from '../../src/index.js';
 
-const basePath = join(__dirname, '../test/img/featureMatching/polygons');
+const basePath = join(
+  import.meta.dirname,
+  '../test/img/featureMatching/polygons',
+);
 
 console.log(basePath);
 
 const original = readSync(`${basePath}/betterScaleneTriangle.png`);
 
 const angles = [2, 10, 90, 180];
-for (let angle of angles) {
+for (const angle of angles) {
   const rotated = original.transformRotate(angle, { fullImage: true });
   writeSync(`${basePath}/scaleneTriangle${angle}.png`, rotated);
 }

@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { encodeBmp } from '../encodeBmp.js';
 
 test('encode 5x5 mask', () => {

@@ -1,7 +1,3 @@
-/* eslint-disable no-invalid-this */
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path="./jest.d.ts" />
-
 import type { MatcherState } from '@vitest/expect';
 import type { MatchImageSnapshotOptions } from 'jest-image-snapshot';
 import { configureToMatchImageSnapshot } from 'jest-image-snapshot';

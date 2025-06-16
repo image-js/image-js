@@ -5,10 +5,10 @@ import type { Image } from '../../Image.js';
 import { getBrief } from '../../featureMatching/descriptors/getBrief.js';
 import type { Match } from '../../featureMatching/index.js';
 import {
-  Montage,
-  MontageDisposition,
   bruteForceOneMatch,
   getCrosscheckMatches,
+  Montage,
+  MontageDisposition,
 } from '../../featureMatching/index.js';
 import { filterEuclideanDistance } from '../../featureMatching/matching/filterEuclideanDistance.js';
 import type { Point } from '../../geometry/index.js';
@@ -60,7 +60,7 @@ export interface GetAffineTransformOptions {
   debug?: boolean;
   /**
    * Path of the debug image.
-   * @default `${__dirname}/montage.png`
+   * @default `${import.meta.dirname}/montage.png`
    */
   debugImagePath?: string;
 }
@@ -131,7 +131,7 @@ export function getAffineTransform(
     destinationOrigin = { column: 0, row: 0 },
     maxRansacNbIterations,
     debug = false,
-    debugImagePath = `${__dirname}/montage.png`,
+    debugImagePath = `${import.meta.dirname}/montage.png`,
   } = options;
 
   if (source.colorModel !== ImageColorModel.GREY) {

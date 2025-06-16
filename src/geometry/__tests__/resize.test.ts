@@ -6,11 +6,17 @@ import { write } from '../../save/index.js';
 async function writeDebug(resized: Image, type: string) {
   // @ts-expect-error Dynamic string.
   const expected = testUtils.load(`opencv/test_resize_${type}.png`);
-  await write(path.join(__dirname, `resize_${type}_expected.png`), expected);
-  await write(path.join(__dirname, `resize_${type}_resized.png`), resized);
+  await write(
+    path.join(import.meta.dirname, `resize_${type}_expected.png`),
+    expected,
+  );
+  await write(
+    path.join(import.meta.dirname, `resize_${type}_resized.png`),
+    resized,
+  );
   const subtraction = expected.subtract(resized);
   await write(
-    path.join(__dirname, `resize_${type}_subtraction.png`),
+    path.join(import.meta.dirname, `resize_${type}_subtraction.png`),
     subtraction,
   );
 }

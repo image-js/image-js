@@ -1,23 +1,8 @@
 {
+  "extends": "@zakodium/tsconfig/jsx",
   "compilerOptions": {
-    "lib": ["ES2022", "DOM"],
-    "types": [],
-    "target": "ES2022",
-    "outDir": "lib",
-    "jsx": "react-jsx",
-    "module": "NodeNext",
-    "strict": true,
-    "skipLibCheck": false,
-    "resolveJsonModule": false,
-    "forceConsistentCasingInFileNames": true,
-    "allowJs": false,
-    "isolatedModules": true,
-    "verbatimModuleSyntax": true,
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    "useUnknownInCatchVariables": false
+    "noUncheckedIndexedAccess": false,
+    "outDir": "lib"
   },
-  "include": ["./demo/**/*",
-    "./vitest.setup.ts", "./src/**/*", "./test/**/*"]
+  "include": ["demo", "scripts", "src", "test", "vite*.ts"]
 }

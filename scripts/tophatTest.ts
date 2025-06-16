@@ -1,15 +1,8 @@
-import { join } from 'path';
+import { join } from 'node:path';
 
-import {
-  RoiMapManager,
-  fromMask,
-  read,
-  write,
-  RoiKind,
-  readSync,
-  writeSync,
-} from '../src/index.js';
+import { readSync, writeSync } from '../src/index.js';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const disk12 = [
   [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
@@ -50,5 +43,5 @@ console.log('glaargh');
 const topHat = grey.topHat({ kernel });
 console.log('tophat succeeded');
 
-writeSync(join(__dirname, './background-grey.png'), grey);
-writeSync(join(__dirname, './background-topHat.png'), topHat);
+writeSync(join(import.meta.dirname, './background-grey.png'), grey);
+writeSync(join(import.meta.dirname, './background-topHat.png'), topHat);

@@ -1,15 +1,10 @@
-// run with `ts-node-transpile-only scripts/benchmark/resize.benchmark.ts`
+import { join } from 'node:path';
 
 import { read } from '../../src/index.js';
-import { join } from 'path';
 
-async function doAll() {
-  const image = await read(join(__dirname, 'large.jpg'));
+const image = await read(join(import.meta.dirname, 'large.jpg'));
 
-  console.time('resize');
+console.time('resize');
 
-  image.resize({ width: 6000, height: 4000, interpolationType: 'bilinear' });
-  console.timeEnd('resize');
-}
-
-doAll();
+image.resize({ width: 6000, height: 4000, interpolationType: 'bilinear' });
+console.timeEnd('resize');
