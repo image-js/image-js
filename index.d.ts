@@ -143,7 +143,7 @@ export declare class Image {
   grey(options?: GreyOptions): Image;
   mask(options?: MaskOptions): Image;
   pad(options?: {
-    size?: number;
+    size?: number | [number, number];
     algorithm?: 'set' | 'copy';
     color?: Array<number>;
   }): Image;
