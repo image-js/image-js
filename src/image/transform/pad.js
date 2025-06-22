@@ -7,7 +7,7 @@ import copy from '../internal/copy';
  * @memberof Image
  * @instance
  * @param {object} [options]
- * @param {number} [options.size=0]
+ * @param {number | [number, number]} [options.size=0]
  * @param {string} [options.algorithm='copy']
  * @param {array<number>} [options.color]
  * @return {Image}
