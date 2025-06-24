@@ -1,5 +1,5 @@
 import { polishAltered } from '../../../src/correctColor/__tests__/testUtils/imageColors.js';
-import { referenceColorCard } from '../../../src/correctColor/__tests__/testUtils/referenceColorCard.js';
+import { referenceColorCard } from '../../../src/correctColor/utils/referenceColorCard.ts';
 import { correctColor } from '../../../src/correctColor/correctColor.js';
 import {
   getMeasuredColors,

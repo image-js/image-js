@@ -47,7 +47,7 @@ export function transformRotate(
  * @param angle - Angle in degrees.
  * @param center - Center point of the image.
  * @param scale - Scaling factor.
- * @returns 2 x 3 rotation matrix.
+ * @returns 3 x 3 rotation matrix.
  */
 function getRotationMatrix(
   angle: number,
@@ -60,5 +60,6 @@ function getRotationMatrix(
   return [
     [cos, sin, (1 - cos) * center.column - sin * center.row],
     [-sin, cos, sin * center.column + (1 - cos) * center.row],
+    [0, 0, 1],
   ];
 }

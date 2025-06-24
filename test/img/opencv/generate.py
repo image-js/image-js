@@ -91,3 +91,72 @@ kernelX = np.float32([[0.1, 0.2, 0.3]])
 kernelY = np.float32([[0.4, 0.5, 0.6, -0.3, -0.4]])
 dst = cv.sepFilter2D(img, ddepth=-1, kernelX=kernelX, kernelY=kernelY, borderType=cv.BORDER_REFLECT)
 writeImg('testConvolution.png', dst)
+
+
+# Image perspective warp
+
+img = cv.imread(path.join(dirname,'poker_cards.png'))
+
+# Define source points (4 corners of the document in the image)
+# These points should be in clockwise or counter-clockwise order
+src_points = np.array([
+        [660, 290],
+        [970, 290],
+        [1100,660],
+[680,660],
+    ], dtype=np.float32)
+# Define destination points (rectangle)
+width, height = 420,393
+dst_points = np.array([
+    [0, 0],               # top-left
+    [width-1, 0],         # top-right
+    [width-1, height-1],  # bottom-right
+    [0, height-1]         # bottom-left
+], dtype=np.float32)
+M = cv.getPerspectiveTransform(src_points,dst_points)
+warped = cv.warpPerspective(img, M, (width, height),flags=cv.INTER_NEAREST)
+writeImg('test_perspective_warp_poker_cards_nearest.png',warped)
+
+
+
+img = cv.imread(path.join(dirname,'plants.png'))
+src_points = np.array([
+    [166.5, 195],
+    [858.5,9],
+    [911.5,786],
+    [154.5, 611],
+    ], dtype=np.float32)
+width, height = 1080,810
+dst_points = np.array([
+    [0, 0],               # top-left
+    [width-1, 0],         # top-right
+    [width-1, height-1],  # bottom-right
+    [0, height-1]         # bottom-left
+], dtype=np.float32)
+M = cv.getPerspectiveTransform(src_points,dst_points)
+warped = cv.warpPerspective(img, M, (width, height),flags=cv.INTER_NEAREST
+)
+writeImg('test_perspective_warp_plants_nearest.png',warped)
+
+img = cv.imread(path.join(dirname,'card.png'))
+
+# Define source points (4 corners of the document in the image)
+# These points should be in clockwise or counter-clockwise order
+src_points = np.array([
+    [55, 140],
+    [680,38],
+    [840, 340],
+    [145,  460],
+    ], dtype=np.float32)
+width, height =700,400
+dst_points = np.array([
+    [0, 0],               # top-left
+    [width-1, 0],         # top-right
+    [width-1, height-1],  # bottom-right
+    [0, height-1]         # bottom-left
+], dtype=np.float32)
+
+M = cv.getPerspectiveTransform(src_points,dst_points)
+warped = cv.warpPerspective(img, M, (width, height),flags=cv.INTER_NEAREST
+)
+writeImg('test_perspective_warp_card_nearest.png',warped)

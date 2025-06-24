@@ -3,7 +3,7 @@ import { getMeasuredColors, getReferenceColors } from '../utils/formatData.js';
 import { getImageColors } from '../utils/getImageColors.js';
 
 import { polish } from './testUtils/imageColors.js';
-import { referenceColorCard } from './testUtils/referenceColorCard.js';
+import { referenceColorCard } from '../utils/referenceColorCard.ts';
 
 test('RGB image should not change', () => {
   const image = testUtils.createRgbImage([[0, 0, 0, 10, 10, 10, 20, 20, 20]]);

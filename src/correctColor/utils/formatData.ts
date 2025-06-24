@@ -2,7 +2,7 @@ import type { RgbColor } from 'colord';
 import { colord, extend } from 'colord';
 import labPlugin from 'colord/plugins/lab';
 
-import type { ColorCard } from '../__tests__/testUtils/referenceColorCard.js';
+import type { ColorCard } from './referenceColorCard.ts';
 import { getRegressionVariables } from '../correctColor.js';
 
 // We can't use ts-expect-error because it's not an error when compiling for CJS.

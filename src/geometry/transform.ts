@@ -62,7 +62,6 @@ export function transform(
     fullImage,
   } = options;
   let { width = image.width, height = image.height } = options;
-
   if (fullImage) {
     transformMatrix = transformMatrix.map((row) => row.slice());
     transformMatrix[0][2] = 0;
@@ -81,8 +80,18 @@ export function transform(
 
     const transformedCorners = corners.map((corner) => {
       return [
-        transformPoint(transformMatrix[0], corner.column, corner.row),
-        transformPoint(transformMatrix[1], corner.column, corner.row),
+        transformPoint(
+          transformMatrix[0],
+          transformMatrix[2],
+          corner.column,
+          corner.row,
+        ),
+        transformPoint(
+          transformMatrix[1],
+          transformMatrix[2],
+          corner.column,
+          corner.row,
+        ),
       ];
     });
 
@@ -97,8 +106,18 @@ export function transform(
     width = maxX - minX;
     height = maxY - minY;
 
-    const centerX = transformPoint(transformMatrix[0], center[0], center[1]);
-    const centerY = transformPoint(transformMatrix[1], center[0], center[1]);
+    const centerX = transformPoint(
+      transformMatrix[0],
+      transformMatrix[2],
+      center[0],
+      center[1],
+    );
+    const centerY = transformPoint(
+      transformMatrix[1],
+      transformMatrix[2],
+      center[0],
+      center[1],
+    );
     const a = (width - 1) / 2 - centerX;
     const b = (height - 1) / 2 - centerY;
     transformMatrix[0][2] = a;
@@ -107,18 +126,16 @@ export function transform(
     height = Math.round(height);
   }
 
-  if (
-    transformMatrix.length !== 2 ||
-    transformMatrix[0].length !== 3 ||
-    transformMatrix[1].length !== 3
-  ) {
+  if (!isValidMatrix(transformMatrix)) {
     throw new TypeError(
-      `transformation matrix must be 2x3. Received ${transformMatrix.length}x${transformMatrix[1].length}`,
+      `transformation matrix must be 2x3 or 3x3. Received ${transformMatrix.length}x${transformMatrix[1].length}`,
     );
+  }
+  if (transformMatrix.length === 2) {
+    transformMatrix.push([0, 0, 1]);
   }
 
   if (!options.inverse) {
-    transformMatrix = [transformMatrix[0], transformMatrix[1], [0, 0, 1]];
     transformMatrix = inverse(new Matrix(transformMatrix)).to2DArray();
   }
   const newImage = Image.createFrom(image, {
@@ -132,8 +149,18 @@ export function transform(
   const interpolate = getInterpolationFunction(interpolationType);
   for (let row = 0; row < newImage.height; row++) {
     for (let column = 0; column < newImage.width; column++) {
-      const nx = transformPoint(transformMatrix[0], column, row);
-      const ny = transformPoint(transformMatrix[1], column, row);
+      const nx = transformPoint(
+        transformMatrix[0],
+        transformMatrix[2],
+        column,
+        row,
+      );
+      const ny = transformPoint(
+        transformMatrix[1],
+        transformMatrix[2],
+        column,
+        row,
+      );
       for (let channel = 0; channel < newImage.channels; channel++) {
         const newValue = interpolate(
           image,
@@ -154,14 +181,31 @@ export function transform(
 /**
  * Apply a transformation to a point.
  * @param transform - Transformation matrix.
+ * @param perspective - Perspective matrix.
  * @param column - Column of the point.
  * @param row - Row of the point.
  * @returns New value.
  */
 function transformPoint(
   transform: number[],
+  perspective: number[],
   column: number,
   row: number,
 ): number {
-  return transform[0] * column + transform[1] * row + transform[2];
+  return (
+    (transform[0] * column + transform[1] * row + transform[2]) /
+    (perspective[0] * column + perspective[1] * row + perspective[2])
+  );
+}
+
+function isValidMatrix(transformationMatrix: number[][]) {
+  return (
+    (transformationMatrix.length === 3 &&
+      transformationMatrix[0].length === 3 &&
+      transformationMatrix[1].length === 3 &&
+      transformationMatrix[2].length === 3) ||
+    (transformationMatrix.length === 2 &&
+      transformationMatrix[0].length === 3 &&
+      transformationMatrix[1].length === 3)
+  );
 }
