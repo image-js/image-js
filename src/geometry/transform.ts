@@ -62,6 +62,16 @@ export function transform(
     fullImage,
   } = options;
   let { width = image.width, height = image.height } = options;
+
+  if (!isValidMatrix(transformMatrix)) {
+    throw new TypeError(
+      `transformation matrix must be 2x3 or 3x3. Received ${transformMatrix.length}x${transformMatrix[1].length}`,
+    );
+  }
+  if (transformMatrix.length === 2) {
+    transformMatrix.push([0, 0, 1]);
+  }
+
   if (fullImage) {
     transformMatrix = transformMatrix.map((row) => row.slice());
     transformMatrix[0][2] = 0;
@@ -124,15 +134,6 @@ export function transform(
     transformMatrix[1][2] = b;
     width = Math.round(width);
     height = Math.round(height);
-  }
-
-  if (!isValidMatrix(transformMatrix)) {
-    throw new TypeError(
-      `transformation matrix must be 2x3 or 3x3. Received ${transformMatrix.length}x${transformMatrix[1].length}`,
-    );
-  }
-  if (transformMatrix.length === 2) {
-    transformMatrix.push([0, 0, 1]);
   }
 
   if (!options.inverse) {

@@ -34,6 +34,24 @@ test('compare result of clockwise rotation with opencv', () => {
   expect(transformed).toMatchImage('opencv/testClockwiseRot90.png');
 });
 
+test('compare result of clockwise rotation with opencv and fullImage:true', () => {
+  const img = testUtils.load('opencv/test.png');
+  const transformed = img.transform(
+    [
+      [0, -1, img.width + 1],
+      [1, 0, 0],
+    ],
+    {
+      inverse: false,
+      fullImage: true,
+      borderType: 'constant',
+      borderValue: 0,
+      interpolationType: 'bilinear',
+    },
+  );
+  expect(transformed).toMatchImage('opencv/testClockwiseRot90.png');
+});
+
 test('compare result of anti-clockwise rotation with opencv', () => {
   const img = testUtils.load('opencv/test.png');
   const transformed = img.transform(
