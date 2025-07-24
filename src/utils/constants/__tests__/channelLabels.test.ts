@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../../Image.js';
 import { channelLabels } from '../channelLabels.js';
 import { ImageColorModel } from '../colorModels.js';
@@ -34,6 +36,7 @@ test.each([
 
 test('channelLabels through image colorModel', () => {
   const image = new Image(2, 2);
+
   expect(channelLabels[image.colorModel]).toStrictEqual([
     'Red',
     'Green',

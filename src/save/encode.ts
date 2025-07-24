@@ -1,4 +1,4 @@
-import { match, P } from 'ts-pattern';
+import { P, match } from 'ts-pattern';
 
 import type { Image } from '../Image.js';
 import type { Mask } from '../Mask.js';

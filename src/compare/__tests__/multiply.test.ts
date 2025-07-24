@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../Image.js';
 
 test('multiply by 2', () => {
@@ -10,6 +12,7 @@ test('multiply by 2', () => {
     [255, 160, 240, 255],
     [200, 255, 26, 2],
   ]);
+
   expect(image).toStrictEqual(result);
 });
 
@@ -23,8 +26,10 @@ test('mulitply by 100', () => {
     [255, 255, 255, 255],
     [255, 255, 255, 100],
   ]);
+
   expect(image).toStrictEqual(result);
 });
+
 test('multiply by decimal', () => {
   let image = testUtils.createRgbaImage([
     [230, 80, 120, 255],
@@ -35,8 +40,10 @@ test('multiply by decimal', () => {
     [115, 40, 60, 127],
     [50, 70, 6, 0],
   ]);
+
   expect(image).toStrictEqual(result);
 });
+
 test('testing channels option', () => {
   let image = testUtils.createRgbaImage([
     [230, 80, 120, 255],
@@ -47,8 +54,10 @@ test('testing channels option', () => {
     [115, 40, 120, 255],
     [50, 70, 13, 1],
   ]);
+
   expect(image).toStrictEqual(result);
 });
+
 test('testing out option', () => {
   let image = testUtils.createRgbaImage([
     [230, 80, 120, 255],
@@ -60,5 +69,6 @@ test('testing out option', () => {
     [115, 40, 120, 255],
     [50, 70, 13, 1],
   ]);
+
   expect(out).toStrictEqual(result);
 });

@@ -1,4 +1,4 @@
-import { inverse, Matrix } from 'ml-matrix';
+import { Matrix, inverse } from 'ml-matrix';
 
 import { Image } from '../Image.js';
 import { getClamp } from '../utils/clamp.js';

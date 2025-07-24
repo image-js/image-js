@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../../Image.js';
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
 import { getBriefDescriptors } from '../getBriefDescriptors.js';
@@ -36,14 +38,18 @@ test('alphabet image should work', () => {
   const grey = source.convertColor('GREY');
 
   const sourceKeypoints = getOrientedFastKeypoints(grey);
+
   expect(() => getBriefDescriptors(grey, sourceKeypoints)).not.toThrow();
+
   const result = getBriefDescriptors(grey, sourceKeypoints);
-  expect(result.descriptors.length).toBe(result.keypoints.length);
+
+  expect(result.descriptors).toHaveLength(result.keypoints.length);
 });
 
 test('image too small for patchsize', () => {
   const image = new Image(5, 5, { colorModel: 'GREY' });
   const sourceKeypoints = getOrientedFastKeypoints(image);
+
   expect(() => getBriefDescriptors(image, sourceKeypoints)).toThrow(
     'image is too small for patchSize = 31',
   );

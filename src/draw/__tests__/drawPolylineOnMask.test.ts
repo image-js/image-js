@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Mask } from '../../Mask.js';
 import { drawPolylineOnMask } from '../drawPolylineOnMask.js';
 
@@ -8,6 +10,7 @@ test('3x3 mask', () => {
     { row: 2, column: 1 },
   ];
   const result = image.drawPolyline(points);
+
   expect(result).toMatchMaskData([
     [0, 0, 0],
     [1, 0, 0],
@@ -131,6 +134,7 @@ test('different origin', () => {
   const result = mask.drawPolyline(points, {
     origin: { column: 1, row: 0 },
   });
+
   expect(result).toMatchMaskData([
     [0, 1, 0, 0],
     [0, 1, 1, 0],
@@ -153,6 +157,7 @@ test('should handle points with floating values', () => {
     { row: 1.1, column: 1.1 },
   ];
   const result = mask.drawPolyline(points, { origin: { column: 1, row: 0 } });
+
   expect(result).toMatchMaskData([
     [0, 1, 0, 0],
     [0, 1, 1, 0],
@@ -179,6 +184,7 @@ test('different origin, outside of mask', () => {
   const result = mask.drawPolyline(points, {
     origin: { column: 0, row: 2 },
   });
+
   expect(result).toMatchMaskData([
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],

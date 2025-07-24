@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 test('1x1 image and mask', () => {
   const image = testUtils.createGreyImage([[100]]);
   const mask = testUtils.createMask([[1]]);

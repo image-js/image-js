@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.js';
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
 import { bruteForceOneMatch } from '../../matching/bruteForceMatch.js';
@@ -50,8 +52,9 @@ test('destination rotated +2°', () => {
     destination,
     destinationKeypoints,
   );
-  expect(sourceBrief.keypoints.length).toBe(114);
-  expect(destinationBrief.keypoints.length).toBe(135);
+
+  expect(sourceBrief.keypoints).toHaveLength(114);
+  expect(destinationBrief.keypoints).toHaveLength(135);
 
   const matches = bruteForceOneMatch(
     sourceBrief.descriptors,

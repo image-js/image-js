@@ -3,7 +3,7 @@ import type { MatchImageSnapshotOptions } from 'jest-image-snapshot';
 import { configureToMatchImageSnapshot } from 'jest-image-snapshot';
 
 import type { Image } from '../src/index.js';
-import { encodePng, Mask } from '../src/index.js';
+import { Mask, encodePng } from '../src/index.js';
 
 import type { TestImagePath } from './TestImagePath.js';
 import { createImageFromData } from './createImageFromData.js';

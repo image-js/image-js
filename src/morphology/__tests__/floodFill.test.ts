@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Mask } from '../../Mask.js';
 
 test('mask 5x5, default options', () => {
@@ -106,5 +108,6 @@ test('larger image', () => {
   const image = testUtils.load('morphology/alphabetCannyEdge.png');
   const mask = image.threshold();
   const flooded = mask.floodFill();
+
   expect(flooded).toMatchImageSnapshot();
 });

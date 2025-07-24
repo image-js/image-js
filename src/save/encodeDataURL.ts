@@ -7,7 +7,7 @@ import type {
   EncodeOptionsJpeg,
   EncodeOptionsPng,
 } from './encode.js';
-import { encode, defaultPng } from './encode.js';
+import { defaultPng, encode } from './encode.js';
 /**
  * Converts image into Data URL string.
  * @param image - Image to get base64 encoding from.

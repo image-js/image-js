@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { getMaskFromCannyEdge } from '../getMaskFromCannyEdge.js';
 
 test('basic test', () => {
@@ -16,7 +18,8 @@ test('basic test', () => {
     [0, 0, 0, 0, 0],
   ]);
   const fromCannyMask = getMaskFromCannyEdge(image, { iterations: 0 });
-  expect(fromCannyMask).toEqual(mask);
+
+  expect(fromCannyMask).toStrictEqual(mask);
 });
 
 test('testing 10x10 with dilation', () => {
@@ -45,7 +48,8 @@ test('testing 10x10 with dilation', () => {
     [0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
   ]);
   const fromCannyMask = getMaskFromCannyEdge(image);
-  expect(fromCannyMask).toEqual(mask);
+
+  expect(fromCannyMask).toStrictEqual(mask);
 });
 
 test('testing 7x7 without dilation', () => {
@@ -68,7 +72,8 @@ test('testing 7x7 without dilation', () => {
     [0, 0, 0, 0, 0, 0, 0],
   ]);
   const fromCannyMask = getMaskFromCannyEdge(image, { iterations: 0 });
-  expect(fromCannyMask).toEqual(mask);
+
+  expect(fromCannyMask).toStrictEqual(mask);
 });
 
 test('testing 7x7 with dilation', () => {
@@ -91,5 +96,6 @@ test('testing 7x7 with dilation', () => {
     [1, 1, 1, 1, 1, 1, 1],
   ]);
   const fromCannyMask = getMaskFromCannyEdge(image);
-  expect(fromCannyMask).toEqual(mask);
+
+  expect(fromCannyMask).toStrictEqual(mask);
 });

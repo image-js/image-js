@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Mask } from '../../Mask.js';
 import { drawLineOnMask } from '../drawLineOnMask.js';
 
@@ -96,6 +98,7 @@ test('draw nearly horizontal line', () => {
   const from = { row: 1, column: 0 };
   const to = { row: 2, column: 3 };
   const expected = mask.drawLine(from, to);
+
   expect(expected).toMatchMaskData([
     [0, 0, 0, 0],
     [1, 1, 0, 0],
@@ -115,6 +118,7 @@ test('draw horizontal line', () => {
   const from = { row: 1, column: 0 };
   const to = { row: 1, column: 3 };
   const expected = mask.drawLine(from, to);
+
   expect(expected).toMatchMaskData([
     [0, 0, 0, 0],
     [1, 1, 1, 1],
@@ -134,6 +138,7 @@ test('draw nearly vertical line', () => {
   const from = { row: 0, column: 1 };
   const to = { row: 3, column: 2 };
   const expected = mask.drawLine(from, to);
+
   expect(expected).toMatchMaskData([
     [0, 1, 0, 0],
     [0, 1, 0, 0],
@@ -153,6 +158,7 @@ test('draw vertical line', () => {
   const from = { row: 0, column: 1 };
   const to = { row: 3, column: 1 };
   const expected = mask.drawLine(from, to);
+
   expect(expected).toMatchMaskData([
     [0, 1, 0, 0],
     [0, 1, 0, 0],
@@ -172,6 +178,7 @@ test('should handle points with floating values', () => {
   const from = { row: 1.1, column: 0.1 };
   const to = { row: 2.1, column: 3.1 };
   const expected = mask.drawLine(from, to);
+
   expect(expected).toMatchMaskData([
     [0, 0, 0, 0],
     [1, 1, 0, 0],
@@ -231,6 +238,7 @@ test('3x3 mask, non-integer coordinates', () => {
   const from = { row: 0.5, column: 0.5 };
   const to = { row: 1.5, column: 1.5 };
   const result = mask.drawLine(from, to);
+
   expect(result).toMatchMaskData([
     [0, 0, 0],
     [0, 1, 0],
@@ -249,6 +257,7 @@ test('3x3 mask, non-integer coordinates, verify symmetry', () => {
   const from = { row: 1.5, column: 1.5 };
   const to = { row: 0.5, column: 0.5 };
   const result = mask.drawLine(from, to);
+
   expect(result).toMatchMaskData([
     [0, 0, 0],
     [0, 1, 0],
@@ -291,6 +300,7 @@ test('different origin', () => {
   const result = image.drawLine(from, to, {
     origin: { column: 1, row: 1 },
   });
+
   expect(result).toMatchMaskData([
     [1, 0, 0, 0],
     [1, 0, 1, 0],
@@ -314,6 +324,7 @@ test('different origin, line out of mask', () => {
   let result = mask.drawLine(points[0], points[1], {
     origin: { column: 0, row: 0 },
   });
+
   expect(result).toMatchMaskData([
     [1, 0, 0, 0],
     [0, 1, 0, 0],
@@ -324,6 +335,7 @@ test('different origin, line out of mask', () => {
   result = mask.drawLine(points[0], points[1], {
     origin: { column: 3, row: 0 },
   });
+
   expect(result).toMatchMaskData([
     [0, 0, 0, 1],
     [0, 0, 0, 0],

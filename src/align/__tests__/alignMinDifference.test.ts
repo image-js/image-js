@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { overlapImages } from '../../featureMatching/index.js';
 import { alignMinDifference } from '../alignMinDifference.js';
 
@@ -10,6 +12,7 @@ test('1 pixel source', () => {
   ]);
 
   const result = alignMinDifference(source, destination);
+
   expect(result).toStrictEqual({ row: 2, column: 1, similarity: 1 });
 });
 
@@ -25,6 +28,7 @@ test('4 pixels source', () => {
   ]);
 
   const result = alignMinDifference(source, destination);
+
   expect(result).toStrictEqual({
     row: 1,
     column: 1,
@@ -38,6 +42,7 @@ test('twice same image', () => {
   const destination = testUtils.load('opencv/test.png').grey();
 
   const result = alignMinDifference(source, destination);
+
   expect(result).toStrictEqual({ row: 0, column: 0, similarity: 1 });
 });
 
@@ -96,6 +101,7 @@ test('other id crops', () => {
   const result = alignMinDifference(source, destination);
 
   const overlap = overlapImages(source, destination, { origin: result });
+
   expect(overlap).toMatchImageSnapshot();
 });
 

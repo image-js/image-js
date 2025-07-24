@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type { Match } from '../../matching/bruteForceMatch.js';
 import { sortByDestSource, sortBySourceDest } from '../sortBySourceDest.js';
 
@@ -12,6 +14,7 @@ test('should sort by source then dest', () => {
   ];
 
   const result = sortBySourceDest(matches);
+
   expect(result).toStrictEqual([
     { sourceIndex: 1, destinationIndex: 2, distance: 3 },
     { sourceIndex: 1, destinationIndex: 14, distance: 3 },
@@ -33,6 +36,7 @@ test('should sort by dest then source', () => {
   ];
 
   const result = sortByDestSource(matches);
+
   expect(result).toStrictEqual([
     { sourceIndex: 1, destinationIndex: 2, distance: 3 },
     { sourceIndex: 7, destinationIndex: 3, distance: 5 },

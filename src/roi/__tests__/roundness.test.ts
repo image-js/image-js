@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { fromMask } from '../fromMask.js';
 
 test('roundness 1 ', () => {
@@ -9,6 +11,7 @@ test('roundness 1 ', () => {
   ]);
   const roiMapManager = fromMask(mask);
   const rois = roiMapManager.getRois();
+
   expect(rois[0].roundness).toBeCloseTo(0.5092, 2);
 });
 
@@ -21,5 +24,6 @@ test('roundness 2', () => {
   ]);
   const roiMapManager = fromMask(mask);
   const rois = roiMapManager.getRois();
+
   expect(rois[0].roundness).toBeCloseTo(0.42441, 2);
 });

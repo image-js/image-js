@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../../Image.js';
 import type { Point } from '../../../geometry/index.js';
 import { getGaussianPoints, getGaussianValues } from '../getGaussianPoints.js';
@@ -24,11 +26,13 @@ function drawGaussianPoints(image: Image, points: Point[]): Image {
 
 test('gaussian values, size 7', () => {
   const result = new Float64Array([-1, -1, 2, -2, 2, 2, 0, 2, 1, -1]);
+
   expect(getGaussianValues(7, 0, 10)).toStrictEqual(result);
 });
 
 test('gaussian values, size 20', () => {
   const result = new Float64Array([-3, -2, 6, -6, 6, 6, 1, 5, 3, -2]);
+
   expect(getGaussianValues(20, 0, 10)).toStrictEqual(result);
 });
 
@@ -50,11 +54,12 @@ test('10000 gaussian points, sigma = 1', () => {
   expect(drawGaussianPoints(image, points)).toMatchImageSnapshot();
 });
 
-test('10000 gaussian points, sigma = 1', () => {
+test('10000 gaussian points, sigma = 1 - 2', () => {
   const size = 15;
   const image = new Image(size, size, { colorModel: 'GREY' });
 
   const points = getGaussianPoints(size, size, { nbPoints: 10000, sigma: 1 });
+
   expect(drawGaussianPoints(image, points)).toMatchImageSnapshot();
 });
 

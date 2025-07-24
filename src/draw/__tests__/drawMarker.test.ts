@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../Image.js';
 
 test('cross', () => {
@@ -10,6 +12,7 @@ test('cross', () => {
   const point = { row: 2, column: 2 };
 
   const result = image.drawMarker(point, { color: [1] });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
     [0, 0, 1, 0],
@@ -18,6 +21,7 @@ test('cross', () => {
   ]);
   expect(result).not.toBe(image);
 });
+
 test('circle', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0],
@@ -28,6 +32,7 @@ test('circle', () => {
   const point = { row: 2, column: 2 };
 
   const result = image.drawMarker(point, { color: [1], shape: 'circle' });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
     [0, 0, 1, 0],
@@ -36,6 +41,7 @@ test('circle', () => {
   ]);
   expect(result).not.toBe(image);
 });
+
 test('filled circle', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0],
@@ -50,6 +56,7 @@ test('filled circle', () => {
     shape: 'circle',
     filled: true,
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
     [0, 0, 1, 0],
@@ -58,6 +65,7 @@ test('filled circle', () => {
   ]);
   expect(result).not.toBe(image);
 });
+
 test('square', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0],
@@ -71,6 +79,7 @@ test('square', () => {
     color: [1],
     shape: 'square',
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
     [0, 0, 0, 0],
@@ -79,6 +88,7 @@ test('square', () => {
   ]);
   expect(result).not.toBe(image);
 });
+
 test('big square', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0],
@@ -93,6 +103,7 @@ test('big square', () => {
     size: 3,
     shape: 'square',
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
     [0, 1, 1, 1],
@@ -101,6 +112,7 @@ test('big square', () => {
   ]);
   expect(result).not.toBe(image);
 });
+
 test('filled big square', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0],
@@ -116,6 +128,7 @@ test('filled big square', () => {
     filled: true,
     shape: 'square',
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
     [0, 1, 1, 1],
@@ -124,6 +137,7 @@ test('filled big square', () => {
   ]);
   expect(result).not.toBe(image);
 });
+
 test('big triangle', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0],
@@ -138,6 +152,7 @@ test('big triangle', () => {
     size: 2,
     shape: 'triangle',
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0, 0],
     [0, 0, 1, 0, 0],
@@ -146,6 +161,7 @@ test('big triangle', () => {
   ]);
   expect(result).not.toBe(image);
 });
+
 test('filled big triangle', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0],
@@ -161,6 +177,7 @@ test('filled big triangle', () => {
     filled: true,
     shape: 'triangle',
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0, 0],
     [0, 0, 1, 0, 0],
@@ -169,6 +186,7 @@ test('filled big triangle', () => {
   ]);
   expect(result).not.toBe(image);
 });
+
 test('out parameter set to self', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0],
@@ -182,6 +200,7 @@ test('out parameter set to self', () => {
     shape: 'square',
     out: image,
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
     [0, 0, 0, 0],
@@ -190,6 +209,7 @@ test('out parameter set to self', () => {
   ]);
   expect(result).toBe(image);
 });
+
 test('out to other image', () => {
   const out = new Image(4, 4, { colorModel: 'GREY' });
   const image = testUtils.createGreyImage([
@@ -204,6 +224,7 @@ test('out to other image', () => {
     shape: 'square',
     out,
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
     [0, 0, 0, 0],
@@ -231,6 +252,7 @@ test('should handle points with floating values', () => {
     filled: true,
     shape: 'square',
   });
+
   expect(square).toMatchImageData([
     [0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0],

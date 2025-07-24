@@ -1,8 +1,11 @@
+import { expect, test } from 'vitest';
+
 import { getBinaryMap } from '../colorMaps/getBinaryMap.js';
 import { getColorMap } from '../getColorMap.js';
 
 test('default options', () => {
   const colorMap = getBinaryMap({ nbNegative: 1, nbPositive: 1 });
+
   expect(Array.from(colorMap)).toStrictEqual([4278190335, 0, 4278255360]);
 });
 
@@ -11,6 +14,7 @@ test('binary, BW', () => {
     nbNegative: 1,
     nbPositive: 1,
   });
+
   expect(Array.from(colorMap)).toStrictEqual([4278190335, 0, 4278255360]);
 });
 
@@ -20,6 +24,7 @@ test('binary, WHITE', () => {
     nbPositive: 1,
     roiKind: 'white',
   });
+
   expect(Array.from(colorMap)).toStrictEqual([0, 0, 4278255360]);
 });
 
@@ -29,6 +34,7 @@ test('binary, BLACK', () => {
     nbPositive: 1,
     roiKind: 'black',
   });
+
   expect(Array.from(colorMap)).toStrictEqual([4278190335, 0, 0]);
 });
 
@@ -38,6 +44,7 @@ test('SATURATION, 1 negative and 1 positive ROIs', () => {
     nbNegative: 1,
     nbPositive: 1,
   });
+
   expect(Array.from(colorMap)).toStrictEqual([4294901760, 0, 4278190335]);
 });
 
@@ -48,6 +55,7 @@ test('RAINBOW, 1 negative and 2 positive ROIs, WHITE', () => {
     nbPositive: 2,
     roiKind: 'white',
   });
+
   expect(Array.from(colorMap)).toStrictEqual([0, 0, 4278190335, 4294967040]);
 });
 
@@ -58,6 +66,7 @@ test('RAINBOW, 1 negative and 2 positive ROIs, BLACK', () => {
     nbPositive: 2,
     roiKind: 'black',
   });
+
   expect(Array.from(colorMap)).toStrictEqual([4278190335, 0, 0, 0]);
 });
 
@@ -68,6 +77,7 @@ test('RAINBOW, 1 negative and 1 positive ROIs, BW', () => {
     nbPositive: 1,
     roiKind: 'bw',
   });
+
   expect(Array.from(colorMap)).toStrictEqual([
     4278190335, 4278255360, 0, 4294901760,
   ]);

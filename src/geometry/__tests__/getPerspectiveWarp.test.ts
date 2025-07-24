@@ -1,8 +1,10 @@
+import { describe, expect, it } from 'vitest';
+
 import { Image } from '../../Image.js';
 import { getPerspectiveWarp, order4Points } from '../getPerspectiveWarp.js';
 
 describe('4 points sorting', () => {
-  test('basic sorting test', () => {
+  it('basic sorting test', () => {
     const points = [
       { column: 0, row: 100 },
       { column: 0, row: 0 },
@@ -11,14 +13,16 @@ describe('4 points sorting', () => {
     ];
 
     const result = order4Points(points);
-    expect(result).toEqual([
+
+    expect(result).toStrictEqual([
       { column: 0, row: 0 },
       { column: 100, row: 1 },
       { column: 100, row: 100 },
       { column: 0, row: 100 },
     ]);
   });
-  test('inclined square', () => {
+
+  it('inclined square', () => {
     const points = [
       { column: 45, row: 0 },
       { column: 0, row: 45 },
@@ -27,14 +31,16 @@ describe('4 points sorting', () => {
     ];
 
     const result = order4Points(points);
-    expect(result).toEqual([
+
+    expect(result).toStrictEqual([
       { column: 0, row: 45 },
       { column: 90, row: 45 },
       { column: 45, row: 0 },
       { column: 45, row: 90 },
     ]);
   });
-  test('basic sorting test', () => {
+
+  it('basic sorting test 2', () => {
     const points = [
       { column: 155, row: 195 },
       { column: 154, row: 611 },
@@ -43,7 +49,8 @@ describe('4 points sorting', () => {
     ];
 
     const result = order4Points(points);
-    expect(result).toEqual([
+
+    expect(result).toStrictEqual([
       { column: 155, row: 195 },
 
       { column: 858.5, row: 700 },
@@ -67,11 +74,13 @@ describe('warping tests', () => {
     ];
     const matrix = getPerspectiveWarp(points);
     const result = image.transform(matrix.matrix, { inverse: true });
+
     expect(result.width).not.toBeLessThan(2);
     expect(result.height).not.toBeLessThan(2);
     expect(result.width).not.toBeGreaterThan(3);
     expect(result.height).not.toBeGreaterThan(3);
   });
+
   it('resize without rotation 2', () => {
     const image = new Image(4, 4, {
       data: new Uint8Array([
@@ -88,6 +97,7 @@ describe('warping tests', () => {
     ];
     const matrix = getPerspectiveWarp(points);
     const result = image.transform(matrix.matrix, { inverse: true });
+
     expect(result.width).not.toBeLessThan(3);
     expect(result.height).not.toBeLessThan(1);
     expect(result.width).not.toBeGreaterThan(4);
@@ -96,7 +106,7 @@ describe('warping tests', () => {
 });
 
 describe('openCV comparison', () => {
-  test('nearest interpolation plants', () => {
+  it('nearest interpolation plants', () => {
     const image = testUtils.load('opencv/plants.png');
     const openCvResult = testUtils.load(
       'opencv/test_perspective_warp_plants_nearest.png',
@@ -128,12 +138,12 @@ describe('openCV comparison', () => {
       height: 100,
     });
 
-    expect(result.width).toEqual(openCvResult.width);
-    expect(result.height).toEqual(openCvResult.height);
-    expect(croppedPiece).toEqual(croppedPieceOpenCv);
+    expect(result.width).toStrictEqual(openCvResult.width);
+    expect(result.height).toStrictEqual(openCvResult.height);
+    expect(croppedPiece).toStrictEqual(croppedPieceOpenCv);
   });
 
-  test('nearest interpolation card', () => {
+  it('nearest interpolation card', () => {
     const image = testUtils.load('opencv/card.png');
     const openCvResult = testUtils.load(
       'opencv/test_perspective_warp_card_nearest.png',
@@ -166,11 +176,12 @@ describe('openCV comparison', () => {
       height: 5,
     });
 
-    expect(result.width).toEqual(openCvResult.width);
-    expect(result.height).toEqual(openCvResult.height);
-    expect(croppedPiece).toEqual(croppedPieceOpenCv);
+    expect(result.width).toStrictEqual(openCvResult.width);
+    expect(result.height).toStrictEqual(openCvResult.height);
+    expect(croppedPiece).toStrictEqual(croppedPieceOpenCv);
   });
-  test('nearest interpolation poker card', () => {
+
+  it('nearest interpolation poker card', () => {
     const image = testUtils.load('opencv/poker_cards.png');
     const openCvResult = testUtils.load(
       'opencv/test_perspective_warp_poker_cards_nearest.png',
@@ -201,21 +212,22 @@ describe('openCV comparison', () => {
       height: 100,
     });
 
-    expect(result.width).toEqual(openCvResult.width);
-    expect(result.height).toEqual(openCvResult.height);
-    expect(cropped).toEqual(croppedCV);
+    expect(result.width).toStrictEqual(openCvResult.width);
+    expect(result.height).toStrictEqual(openCvResult.height);
+    expect(cropped).toStrictEqual(croppedCV);
   });
 });
 
 describe('error testing', () => {
-  test("should throw if there aren't 4 points", () => {
+  it("should throw if there aren't 4 points", () => {
     expect(() => {
       getPerspectiveWarp([{ column: 1, row: 1 }]);
     }).toThrow(
       'The array pts must have four elements, which are the four corners. Currently, pts have 1 elements',
     );
   });
-  test('should throw if either only width or only height are defined', () => {
+
+  it('should throw if either only width or only height are defined', () => {
     expect(() => {
       getPerspectiveWarp(
         [

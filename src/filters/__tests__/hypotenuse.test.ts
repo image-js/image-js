@@ -1,8 +1,11 @@
+import { expect, test } from 'vitest';
+
 test('testing with pythagorean triples', () => {
   const image = testUtils.createGreyImage([[3, 5, 8, 7]]);
   const otherImage = testUtils.createGreyImage([[4, 12, 15, 24]]);
 
   const expected = testUtils.createGreyImage([[5, 13, 17, 25]]);
+
   expect(image.hypotenuse(otherImage)).toMatchImage(expected);
 });
 
@@ -47,6 +50,7 @@ test('testing with a custom channel', () => {
   const otherImage = testUtils.createRgbImage([[4, 12, 15]]);
 
   const expected = testUtils.createRgbImage([[3, 13, 8]]);
+
   expect(image.hypotenuse(otherImage, { channels: [1] })).toMatchImage(
     expected,
   );
@@ -57,6 +61,7 @@ test('testing with custom channels', () => {
   const otherImage = testUtils.createRgbaImage([[4, 12, 15, 0]]);
 
   const expected = testUtils.createRgbaImage([[5, 13, 17, 0]]);
+
   expect(image.hypotenuse(otherImage, { channels: [0, 1, 2] })).toMatchImage(
     expected,
   );

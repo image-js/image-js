@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Mask } from '../../Mask.js';
 import { drawPolygonOnMask } from '../drawPolygonOnMask.js';
 
@@ -94,6 +96,7 @@ test('triangle not filled', () => {
     { row: 3, column: 0 },
   ];
   const result = mask.drawPolygon(points);
+
   expect(result).toMatchMaskData([
     [1, 0, 0, 0],
     [1, 1, 0, 0],
@@ -291,6 +294,7 @@ test('different origin', () => {
     origin: { column: 2, row: 0 },
     filled: true,
   });
+
   expect(result).toMatchMaskData([
     [0, 0, 1, 1],
     [0, 0, 1, 1],
@@ -317,6 +321,7 @@ test('outside of mask', () => {
   const result = mask.drawPolygon(points, {
     filled: true,
   });
+
   expect(result).toMatchMaskData([
     [0, 1, 1, 1, 1],
     [0, 1, 1, 1, 0],

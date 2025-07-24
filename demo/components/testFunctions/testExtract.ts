@@ -1,4 +1,4 @@
-import { fromMask, Image } from '../../../src/index.js';
+import { Image, fromMask } from '../../../src/index.js';
 
 /**
  * Extract the pixels of a mask from the image.

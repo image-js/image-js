@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { fromMask } from '../fromMask.js';
 
 test('calculates eqpc to Roi', () => {
@@ -9,6 +11,7 @@ test('calculates eqpc to Roi', () => {
   const roiMapManager = fromMask(mask);
 
   const rois = roiMapManager.getRois();
+
   expect(rois[0].eqpc).toBeCloseTo(2.52, 2);
 });
 
@@ -23,5 +26,6 @@ test('calculates surface from eqpc', () => {
   const rois = roiMapManager.getRois();
   const eqpc = rois[0].eqpc;
   const surface = Math.PI * (eqpc / 2) ** 2;
+
   expect(surface).toBeCloseTo(6);
 });

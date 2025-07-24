@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 test('3x1 rgba image, default options', () => {
   // should span contrast on the whole range
   const image = testUtils.createRgbaImage([
@@ -5,6 +7,7 @@ test('3x1 rgba image, default options', () => {
     [2, 2, 0, 50],
     [3, 1, 0, 50],
   ]);
+
   expect(image.level()).toMatchImageData([
     [0, 0, 255, 50],
     [127, 255, 0, 50],
@@ -14,11 +17,13 @@ test('3x1 rgba image, default options', () => {
 
 test('1x1 rgba image, out to itself', () => {
   const image = testUtils.createRgbaImage([[100, 50, 0, 50]]);
+
   expect(image.level({ out: image })).toBe(image);
 });
 
 test('1x4 greya image, default options', () => {
   const image = testUtils.createRgbaImage([[100, 50, 0, 50]]);
+
   expect(image.level()).toMatchImageData([[0, 0, 0, 50]]);
 });
 
@@ -28,6 +33,7 @@ test('3x1 rgba image, custom input min and max', () => {
     [125, 0, 0, 50],
     [150, 0, 0, 50],
   ]);
+
   expect(image.level({ inputMin: 100, inputMax: 150 })).toMatchImageData([
     [0, 0, 0, 50],
     [127, 0, 0, 50],
@@ -41,6 +47,7 @@ test('3x1 rgba image, custom output min and max', () => {
     [127, 1, 0, 50],
     [255, 0, 0, 50],
   ]);
+
   expect(image.level({ outputMin: 100, outputMax: 150 })).toMatchImageData([
     [100, 100, 100, 50],
     [124, 150, 100, 50],
@@ -50,6 +57,7 @@ test('3x1 rgba image, custom output min and max', () => {
 
 test('1x1 grey image, custom output and input values', () => {
   const image = testUtils.createGreyImage([[255]]);
+
   expect(
     image.level({
       inputMin: 50,
@@ -66,6 +74,7 @@ test('3x1 rgba image, custom output and input values', () => {
     [30, 40, 50, 50],
     [60, 70, 80, 50],
   ]);
+
   expect(
     image.level({
       inputMin: 10,
@@ -94,6 +103,7 @@ test('3x1 rgba image, custom channels', () => {
     outputMax: 100,
     channels: [1],
   });
+
   expect(result).toMatchImageData([
     [0, 0, 20, 50],
     [30, 60, 50, 50],
@@ -115,6 +125,7 @@ test('3x1 rgba image, other custom channels', () => {
     outputMax: 100,
     channels: [0, 3],
   });
+
   expect(result).toMatchImageData([
     [0, 10, 20, 80],
     [40, 40, 50, 80],
@@ -128,6 +139,7 @@ test('3x1 rgba image, modify alpha', () => {
     [30, 40, 50, 50],
     [60, 70, 80, 50],
   ]);
+
   expect(
     image.level({
       inputMin: 10,

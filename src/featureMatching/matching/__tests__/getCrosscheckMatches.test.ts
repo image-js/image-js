@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import type { TestImagePath } from '../../../../test/TestImagePath.js';
 import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.js';
 import { getBestKeypointsInRadius } from '../../keypoints/getBestKeypointsInRadius.js';
@@ -100,7 +102,7 @@ describe('crosscheck', () => {
 });
 
 describe('getCrosscheckMatches', () => {
-  test.each([
+  it.each([
     {
       message: 'scalene triangle',
       source: 'scaleneTriangle',
@@ -171,7 +173,7 @@ describe('getCrosscheckMatches', () => {
       destinationDescriptors,
     );
 
-    expect(matches.length).toBe(data.expected);
+    expect(matches).toHaveLength(data.expected);
 
     const montage = new Montage(source, destination);
     montage.drawKeypoints(sourceKeypoints);

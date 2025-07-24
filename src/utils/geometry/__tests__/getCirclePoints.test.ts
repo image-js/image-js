@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../../Image.js';
 import {
   getCirclePoints,
@@ -14,6 +16,7 @@ test('circle with radius 1', () => {
     { row: -1, column: 0 },
   ]);
 });
+
 test('circle with radius 2', () => {
   const expected = [
     { row: 0, column: 2 },
@@ -31,6 +34,7 @@ test('circle with radius 2', () => {
   ];
 
   const result = getCirclePoints(2);
+
   expect(result).toStrictEqual(expected);
 });
 
@@ -55,6 +59,7 @@ test('circle with radius 3', () => {
   ];
 
   const result = getCirclePoints(3);
+
   expect(result).toStrictEqual(expected);
 });
 
@@ -80,7 +85,7 @@ test('horizonal line', () => {
 test('filled circle with radius 1', () => {
   const points = getFilledCirclePoints(1, { column: 0, row: 0 });
 
-  expect(points.length).toBe(5);
+  expect(points).toHaveLength(5);
   expect(points).toStrictEqual([
     { row: 0, column: -1 },
     { row: -1, column: 0 },
@@ -115,7 +120,7 @@ test('check for points twice in array', () => {
   const emptyImage = new Image(5, 5, { colorModel: 'GREY' });
   const points = getFilledCirclePoints(2, { column: 2, row: 2 });
 
-  expect(points.length).toBe(21);
+  expect(points).toHaveLength(21);
   expect(
     emptyImage.drawPoints(points, { color: [255] }),
   ).toMatchImageSnapshot();

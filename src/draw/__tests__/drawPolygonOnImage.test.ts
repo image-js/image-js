@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../Image.js';
 import { drawPolygonOnImage } from '../drawPolygonOnImage.js';
 
@@ -12,6 +14,7 @@ test('RGB image', () => {
     { row: 1, column: 1 },
   ];
   const result = image.drawPolygon(points, { strokeColor: [255, 0, 0] });
+
   expect(result).toMatchImageData([
     [255, 0, 0, 100, 150, 0],
     [100, 200, 5, 255, 0, 0],
@@ -154,6 +157,7 @@ test('grey image, no fill', () => {
   const result = image.drawPolygon(points, {
     strokeColor: [1],
   });
+
   expect(result).toMatchImageData([
     [1, 0, 0, 0],
     [1, 1, 0, 0],
@@ -197,6 +201,7 @@ test('5x5 image, tilted square, filled', () => {
     fillColor: [6],
     strokeColor: [3],
   });
+
   expect(result).toMatchImageData([
     [0, 0, 3, 0, 0],
     [0, 3, 6, 3, 0],
@@ -274,6 +279,7 @@ test('stroke color not compatible with image', () => {
     { row: 3, column: 0 },
     { row: 0, column: 0 },
   ];
+
   expect(() => {
     image.drawPolygon(points, {
       strokeColor: [1],
@@ -323,6 +329,7 @@ test('different origin', () => {
     strokeColor: [1],
     fillColor: [5],
   });
+
   expect(result).toMatchImageData([
     [0, 1, 1, 1],
     [0, 1, 5, 1],
@@ -347,6 +354,7 @@ test('outside of image', () => {
     strokeColor: [1],
     fillColor: [2],
   });
+
   expect(result).toMatchImageData([
     [1, 0, 0, 0],
     [1, 1, 0, 0],

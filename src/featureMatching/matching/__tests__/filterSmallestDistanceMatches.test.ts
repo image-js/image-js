@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type { Match } from '../bruteForceMatch.js';
 import { filterSmallestDistanceMatches } from '../filterSmallestDistanceMatches.js';
 
@@ -9,6 +11,7 @@ test('3 matches', () => {
   ];
 
   const result = filterSmallestDistanceMatches(matches);
+
   expect(result).toStrictEqual([
     { sourceIndex: 0, destinationIndex: 0, distance: 1 },
     { sourceIndex: 1, destinationIndex: 2, distance: 3 },

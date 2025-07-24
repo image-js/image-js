@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { decodeTiff } from '../decodeTiff.js';
 
 const tests = [
@@ -16,6 +18,7 @@ const tests = [
 test.each(tests)('%s', (name, colorModel, bitDepth) => {
   const buffer = testUtils.loadBuffer(`formats/tif/${name}.tif`);
   const img = decodeTiff(buffer);
+
   expect(img.colorModel).toBe(colorModel);
   expect(img.bitDepth).toBe(bitDepth);
 });

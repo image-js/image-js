@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { fromMask } from '../fromMask.js';
 
 describe('ROI solidity', () => {
@@ -10,6 +12,7 @@ describe('ROI solidity', () => {
     ]);
     const roiMapManager = fromMask(mask);
     const rois = roiMapManager.getRois();
+
     expect(rois[0].solidity).toBeCloseTo(0.8571, 2);
   });
 
@@ -22,6 +25,7 @@ describe('ROI solidity', () => {
     ]);
     const roiMapManager = fromMask(mask);
     const rois = roiMapManager.getRois();
+
     expect(rois[0].solidity).toBeCloseTo(0.8571, 2);
   });
 });

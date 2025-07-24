@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { drawKeypoints } from '../../visualize/drawKeypoints.js';
 import { getBestKeypointsInRadius } from '../getBestKeypointsInRadius.js';
 import type { OrientedFastKeypoint } from '../getOrientedFastKeypoints.js';
@@ -10,6 +12,7 @@ test('array of 3 keypoints', () => {
     { origin: { row: 0, column: 2 }, angle: 0, score: 6 },
   ];
   const result = getBestKeypointsInRadius(keypoints);
+
   expect(result).toStrictEqual([
     { origin: { row: 0, column: 2 }, angle: 0, score: 6 },
   ]);
@@ -23,6 +26,7 @@ test('many clusters of keypoints', () => {
     { origin: { row: 10, column: 11 }, angle: 0, score: 9 },
   ];
   const result = getBestKeypointsInRadius(keypoints);
+
   expect(result).toStrictEqual([
     { origin: { row: 1, column: 0 }, angle: 0, score: 5 },
     { origin: { row: 10, column: 11 }, angle: 0, score: 9 },

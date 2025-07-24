@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { getAngle, getClockwiseAngle } from '../getAngle.js';
 
 test.each([
@@ -32,6 +34,7 @@ test.each([
   ['90 degrees', { column: 0, row: 0 }, { column: 0, row: -1 }, -Math.PI / 2],
 ])('getAngle (%s)', (_, point1, point2, expectedAngle) => {
   const result = getAngle(point1, point2);
+
   expect(result).toBeCloseTo(expectedAngle);
 });
 
@@ -79,5 +82,6 @@ test.each([
   ],
 ])('getClockwiseAngle (%s)', (_, point1, point2, expectedAngle) => {
   const result = getClockwiseAngle(point1, point2);
+
   expect(result).toBeCloseTo(expectedAngle);
 });

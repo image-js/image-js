@@ -14,6 +14,7 @@ test('3x3 mask, black', () => {
     [-1, -1, -1],
     [-1, -1, -1],
   ];
+
   expect(fromMask(mask).getMapMatrix()).toStrictEqual(expected);
 });
 
@@ -28,6 +29,7 @@ test('3x3 mask, white', () => {
     [1, 1, 1],
     [1, 1, 1],
   ];
+
   expect(fromMask(mask).getMapMatrix()).toStrictEqual(expected);
 });
 
@@ -42,6 +44,7 @@ test('3x3 mask, cross', () => {
     [1, 1, 1],
     [-2, 1, -4],
   ];
+
   expect(fromMask(mask).getMapMatrix()).toStrictEqual(expected);
 });
 
@@ -138,6 +141,7 @@ test('6x6 mask, allowCorners false', () => {
   ];
 
   const roiMapManager = fromMask(mask);
+
   expect(roiMapManager.getMapMatrix()).toStrictEqual(expected);
   expect(roiMapManager.getMap().nbNegative).toBe(4);
   expect(roiMapManager.getMap().nbPositive).toBe(7);
@@ -178,6 +182,7 @@ test('no way to exceed max number of ROIs error', { timeout: 20_000 }, () => {
   }
 
   const roiMap = fromMask(mask);
+
   //@ts-expect-error This is a test
   expect(roiMap.map.nbNegative).toBe(8392704);
   //@ts-expect-error This is a test

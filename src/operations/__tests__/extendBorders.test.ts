@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { extendBorders } from '../extendBorders.js';
 
 test('grey image with basic value', () => {
@@ -13,6 +15,7 @@ test('grey image with basic value', () => {
     vertical: 1,
     borderType: 'constant',
   });
+
   expect(newImage).toMatchImageData(` 
     0 0 0 0
     0 1 2 0 
@@ -36,6 +39,7 @@ test('grey image with wrap', () => {
     vertical: 3,
     borderType: 'wrap',
   });
+
   expect(newImage).toMatchImageData(` 
   5   6   3   4   5   6   3   4
   6   7   4   5   6   7   4   5

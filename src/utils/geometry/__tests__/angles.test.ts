@@ -1,3 +1,5 @@
+import { describe, expect, it, test } from 'vitest';
+
 import { toDegrees } from '../angles.js';
 import { rotate } from '../points.js';
 
@@ -19,6 +21,7 @@ describe('rotate', () => {
       { column: 0, row: 1 },
     ]);
   });
+
   it('180 degrees', () => {
     const points = [
       { column: 0, row: 0 },
@@ -32,6 +35,7 @@ describe('rotate', () => {
       { column: -1, row: 0 },
     ]);
   });
+
   it('360 degrees', () => {
     const points = [
       { column: 0, row: 0 },
@@ -45,6 +49,7 @@ describe('rotate', () => {
       { column: 1, row: 0 },
     ]);
   });
+
   it('-90 degrees', () => {
     const points = [
       { column: 0, row: 0 },
@@ -58,6 +63,7 @@ describe('rotate', () => {
       { column: 0, row: -1 },
     ]);
   });
+
   it('45 degrees', () => {
     const points = [
       { column: 0, row: 0 },
@@ -71,6 +77,7 @@ describe('rotate', () => {
       { column: 1 / Math.sqrt(2), row: 1 / Math.sqrt(2) },
     ]);
   });
+
   it('rotate small square 45 degrees', () => {
     const points = [
       { column: 0, row: 0 },
@@ -88,6 +95,7 @@ describe('rotate', () => {
       { column: -1 / Math.sqrt(2), row: 1 / Math.sqrt(2) },
     ]);
   });
+
   it('rotate small square 90 degrees', () => {
     const points = [
       { column: 0, row: 0 },
@@ -97,6 +105,7 @@ describe('rotate', () => {
     ];
 
     const result = rotate(Math.PI / 2, points);
+
     expect(result).toBeDeepCloseTo([
       { column: 0, row: 0 },
       { column: 0, row: 1 },
@@ -104,6 +113,7 @@ describe('rotate', () => {
       { column: -1, row: 0 },
     ]);
   });
+
   it('rotate small square 135 degrees', () => {
     const points = [
       { column: 0, row: 0 },
@@ -113,6 +123,7 @@ describe('rotate', () => {
     ];
 
     const result = rotate((3 * Math.PI) / 4, points);
+
     expect(result).toBeDeepCloseTo([
       { column: 0, row: 0 },
       { column: -1 / Math.sqrt(2), row: 1 / Math.sqrt(2) },
@@ -245,6 +256,7 @@ describe('rotate', () => {
     },
   ])('real data ($message)', (data) => {
     const result = rotate(data.minSurfaceAngle, data.mbr);
+
     expect(result).toBeDeepCloseTo(data.expected);
   });
 });

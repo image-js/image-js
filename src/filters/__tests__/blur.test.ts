@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 test('blur compared to opencv', () => {
   const img = testUtils.load('opencv/test.png');
 
@@ -8,5 +10,6 @@ test('blur compared to opencv', () => {
   });
 
   const expected = testUtils.load('opencv/testBlur.png');
+
   expect(blurred).toMatchImage(expected);
 });

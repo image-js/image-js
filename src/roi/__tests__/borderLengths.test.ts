@@ -1,4 +1,4 @@
-import { test } from 'vitest';
+import { expect, test } from 'vitest';
 
 import { fromMask } from '../fromMask.js';
 import { RoiKind } from '../getRois.js';
@@ -20,7 +20,7 @@ test('border lengths property 5x5', () => {
   ]);
 });
 
-test.fails.skip('border lengths property 4x4', () => {
+test('border lengths property 4x4', () => {
   const mask = testUtils.createMask([
     [0, 1, 1, 1],
     [0, 1, 0, 1],
@@ -35,7 +35,7 @@ test.fails.skip('border lengths property 4x4', () => {
   expect(rois[0].borders[0]).toStrictEqual({ connectedID: -1, length: 6 });
 });
 
-test('border lengths property 4x4', () => {
+test('border lengths property 4x4 2', () => {
   const mask = testUtils.createMask([
     [1, 0, 1, 1],
     [1, 0, 0, 1],
@@ -53,5 +53,5 @@ test('border lengths property 4x4', () => {
     { connectedID: -2, length: 2 },
     { connectedID: -1, length: 2 },
   ]);
-  expect(rois[0].borders[0].length).toStrictEqual(2);
+  expect(rois[0].borders[0]).toHaveLength(2);
 });

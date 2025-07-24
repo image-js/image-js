@@ -4,15 +4,15 @@ import { match } from 'ts-pattern';
 import type { Mask } from './Mask.js';
 import type { DivideOptions } from './compare/divide.js';
 import { divide } from './compare/divide.js';
-import { add, subtract } from './compare/index.js';
 import type { SubtractImageOptions } from './compare/index.js';
+import { add, subtract } from './compare/index.js';
 import type { MultiplyOptions } from './compare/multiply.js';
 import { multiply } from './compare/multiply.js';
 import type {
-  MedianOptions,
-  MeanOptions,
-  VarianceOptions,
   HistogramOptions,
+  MeanOptions,
+  MedianOptions,
+  VarianceOptions,
 } from './compute/index.js';
 import { histogram, mean, median, variance } from './compute/index.js';
 import { correctColor } from './correctColor/index.js';

@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 const kernelX = [
   [1, 0, 0],
   [0, 1, 0],
@@ -47,12 +49,10 @@ test('gradientX and gradientY', () => {
     kernelY,
     borderType: 'constant',
   });
+
   expect(result).toMatchImageData([
     [1, 1, 1],
     [1, 2, 2],
     [1, 2, 2],
   ]);
 });
-
-// To make TypeScript know it's a module
-export {};

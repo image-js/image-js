@@ -2,8 +2,9 @@ import type { RgbColor } from 'colord';
 import { colord, extend } from 'colord';
 import labPlugin from 'colord/plugins/lab';
 
-import type { ColorCard } from './referenceColorCard.ts';
 import { getRegressionVariables } from '../correctColor.js';
+
+import type { ColorCard } from './referenceColorCard.ts';
 
 // We can't use ts-expect-error because it's not an error when compiling for CJS.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

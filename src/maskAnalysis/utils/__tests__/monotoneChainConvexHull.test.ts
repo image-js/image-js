@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { monotoneChainConvexHull as mcch } from '../monotoneChainConvexHull.js';
 
 test('basic square', () => {
@@ -7,6 +9,7 @@ test('basic square', () => {
     { column: 1, row: 0 },
     { column: 1, row: 1 },
   ]);
+
   expect(result).toStrictEqual([
     { column: 0, row: 0 },
     { column: 0, row: 1 },
@@ -34,6 +37,7 @@ test('mixed square', () => {
     { column: 1, row: 2 },
     { column: 2, row: 2 },
   ]);
+
   expect(result).toStrictEqual([
     { column: 0, row: 0 },
     { column: 0, row: 2 },
@@ -52,6 +56,7 @@ test('rectangle with inside points', () => {
     { column: 0, row: 2 },
     { column: 0, row: 0 },
   ]);
+
   expect(result).toStrictEqual([
     { column: 0, row: 0 },
     { column: 0, row: 2 },
@@ -72,6 +77,7 @@ test('more complex shape', () => {
     { column: 3, row: 6 },
     { column: 2, row: 4 },
   ]);
+
   expect(result).toStrictEqual([
     { column: -1, row: -1 },
     { column: 0, row: 8 },
@@ -94,6 +100,7 @@ test('already sorted', () => {
     ],
     { sorted: true },
   );
+
   expect(result).toStrictEqual([
     { column: 0, row: 0 },
     { column: 0, row: 2 },

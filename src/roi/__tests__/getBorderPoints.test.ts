@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Mask } from '../../Mask.js';
 
 test('6x5 mask with hole, no inner borders', () => {

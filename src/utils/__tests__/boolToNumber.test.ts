@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { boolToNumber } from '../boolToNumber.js';
 
 test('convert number to number', () => {

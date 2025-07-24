@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { fromMask } from '../fromMask.js';
 
 test('should throw error', () => {
@@ -28,7 +30,7 @@ test('should give ROI of id = 1 ', () => {
   const roiMapManager = fromMask(mask);
   const roi = roiMapManager.getRoiById(1);
 
-  expect(roi.id).toStrictEqual(1);
+  expect(roi.id).toBe(1);
 });
 
 test('should give ROI of id = 3 ', () => {
@@ -42,5 +44,5 @@ test('should give ROI of id = 3 ', () => {
   const roiMapManager = fromMask(mask);
   const roi = roiMapManager.getRoiById(3);
 
-  expect(roi.id).toStrictEqual(3);
+  expect(roi.id).toBe(3);
 });

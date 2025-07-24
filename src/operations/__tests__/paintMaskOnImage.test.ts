@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 test('3x3 grey image, default options', () => {
   const image = testUtils.createGreyImage([
     [30, 23, 2],
@@ -123,6 +125,7 @@ test('blend = false, all values null', () => {
     blend: false,
     color: [null, null, null, null],
   });
+
   expect(result).toStrictEqual(image);
 });
 
@@ -137,6 +140,7 @@ test('blend = false, change red and alpha', () => {
     blend: false,
     color: [255, null, null, 255],
   });
+
   expect(result).toMatchImageData([
     [255, 23, 2, 255],
     [45, 65, 1, 5],
@@ -158,6 +162,7 @@ test('blend = false, change many pixels', () => {
     blend: false,
     color: [0, 100],
   });
+
   expect(result).toMatchImageData([
     [0, 100, 0, 100],
     [45, 65, 0, 100],
@@ -176,6 +181,7 @@ test('out option', () => {
     color: [255],
     out: image,
   });
+
   expect(image).toMatchImageData([
     [255, 23, 2, 2],
     [45, 65, 1, 5],

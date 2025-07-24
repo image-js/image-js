@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { RoiMapManager } from '../RoiMapManager.js';
 import { fromMask } from '../fromMask.js';
 
@@ -17,6 +19,7 @@ test('should work with crop', () => {
     [0, 0, 1, 1, 1],
     [0, 0, 0, 0, 0],
   ]);
+
   const roiMapManager = fromMask(mask);
   const rois = roiMapManager.getRois();
 

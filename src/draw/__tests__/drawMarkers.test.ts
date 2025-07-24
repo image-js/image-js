@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../Image.js';
 
 test('square', () => {
@@ -17,6 +19,7 @@ test('square', () => {
     color: [1],
     shape: 'square',
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
     [0, 1, 0, 0],
@@ -25,6 +28,7 @@ test('square', () => {
   ]);
   expect(result).not.toBe(image);
 });
+
 test('cross', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0],
@@ -38,6 +42,7 @@ test('cross', () => {
   ];
 
   const result = image.drawMarkers(points, { color: [1] });
+
   expect(result).toMatchImageData([
     [0, 1, 0, 0],
     [1, 1, 1, 0],
@@ -46,6 +51,7 @@ test('cross', () => {
   ]);
   expect(result).not.toBe(image);
 });
+
 test('out parameter set to self', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0],
@@ -63,6 +69,7 @@ test('out parameter set to self', () => {
     shape: 'square',
     out: image,
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
     [0, 1, 0, 0],
@@ -71,6 +78,7 @@ test('out parameter set to self', () => {
   ]);
   expect(result).toBe(image);
 });
+
 test('out to other image', () => {
   const out = new Image(4, 4, { colorModel: 'GREY' });
   const image = testUtils.createGreyImage([
@@ -89,6 +97,7 @@ test('out to other image', () => {
     shape: 'square',
     out,
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
     [0, 1, 0, 0],

@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type { Match } from '../bruteForceMatch.js';
 import { filterEuclideanDistance } from '../filterEuclideanDistance.js';
 

@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { getLineLength } from '../lines.js';
 
 describe('getLineLength', () => {
@@ -9,6 +11,7 @@ describe('getLineLength', () => {
 
     expect(getLineLength(points[0], points[1])).toBe(0);
   });
+
   it('horizontal line', () => {
     const points = [
       { column: 0, row: 0 },
@@ -17,6 +20,7 @@ describe('getLineLength', () => {
 
     expect(getLineLength(points[0], points[1])).toBe(10);
   });
+
   it('tilted line', () => {
     const points = [
       { column: 0, row: 0 },

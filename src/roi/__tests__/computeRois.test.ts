@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { RoiMapManager } from '../RoiMapManager.js';
 import { computeRois } from '../computeRois.js';
 import { fromMask } from '../fromMask.js';
@@ -11,6 +13,7 @@ test('3x3 mask', () => {
   ]);
   const roiMapManager = fromMask(mask);
   computeRois(roiMapManager);
+
   expect(roiMapManager.whiteRois).toHaveLength(2);
   expect(roiMapManager.blackRois).toHaveLength(1);
 
@@ -52,7 +55,9 @@ test('test 2, waterShed for a grey image', () => {
     width: 10,
     height: 10,
   });
+
   expect(roiMapManager).toStrictEqual(result);
+
   computeRois(roiMapManager);
 
   expect(roiMapManager.blackRois[0].origin).toStrictEqual({

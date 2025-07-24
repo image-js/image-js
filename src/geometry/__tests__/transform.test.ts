@@ -1,5 +1,7 @@
 //To look at the equivalent opencv code go to generate.py in test/img/opencv
 //folder.
+import { expect, test } from 'vitest';
+
 test('compare result of translation with opencv with default parameters', () => {
   const img = testUtils.load('opencv/test.png');
   const translation = [
@@ -31,6 +33,7 @@ test('compare result of clockwise rotation with opencv', () => {
       interpolationType: 'bilinear',
     },
   );
+
   expect(transformed).toMatchImage('opencv/testClockwiseRot90.png');
 });
 
@@ -49,6 +52,7 @@ test('compare result of clockwise rotation with opencv and fullImage:true', () =
       interpolationType: 'bilinear',
     },
   );
+
   expect(transformed).toMatchImage('opencv/testClockwiseRot90.png');
 });
 
@@ -69,6 +73,7 @@ test('compare result of anti-clockwise rotation with opencv', () => {
       interpolationType: 'bilinear',
     },
   );
+
   expect(transformed).toMatchImage('opencv/testAntiClockwiseRot90.png');
 });
 
@@ -87,8 +92,10 @@ test('get a vertical reflection of an image', () => {
       interpolationType: 'bilinear',
     },
   );
+
   expect(transformed).toMatchImage('opencv/testReflect.png');
 });
+
 //problematic test1
 //Scaling with test image works only if the image is scaled by 2 or by 4.
 test('get a scale of an image to 32*40', () => {
@@ -108,6 +115,7 @@ test('get a scale of an image to 32*40', () => {
       interpolationType: 'bilinear',
     },
   );
+
   expect(transformed).toMatchImage('opencv/testScale.png');
 });
 
@@ -125,6 +133,7 @@ test('affineTransformation', () => {
       borderType: 'constant',
     },
   );
+
   // OpenCV bilinear interpolation is less precise for speed.
   expect(transformed).toMatchImage('opencv/testAffineTransform.png', {
     error: 3,
@@ -137,6 +146,7 @@ test('should throw if matrix has wrong size', () => {
     [1, 0, 2, 3],
     [0, 1, 10, 4],
   ];
+
   expect(() => {
     img.transform(translation);
   }).toThrow('transformation matrix must be 2x3 or 3x3. Received 2x4');

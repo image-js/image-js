@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../../Image.js';
 import { getHarrisScore } from '../getHarrisScore.js';
 

@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Mask } from '../../Mask.js';
 
 test('5x5 mask, without corners', () => {
@@ -79,6 +81,7 @@ test('Diagonal of 1, allow corners', () => {
     [0, 0, 0, 0, 1],
   ]);
   const result = image.clearBorder({ allowCorners: true });
+
   expect(result).toMatchMaskData([
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
@@ -99,6 +102,7 @@ test('Diagonal of 1, color=black', () => {
   image = image.invert();
   let result = image.clearBorder({ color: 'black' });
   result = result.invert();
+
   expect(result).toMatchMaskData([
     [0, 0, 0, 0, 0],
     [0, 1, 0, 1, 0],
@@ -117,6 +121,7 @@ test('5x5 mask, full', () => {
     [1, 1, 1, 1, 1],
   ]);
   const result = image.clearBorder({ allowCorners: false });
+
   expect(result).toMatchMaskData([
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
@@ -138,6 +143,7 @@ test('out option', () => {
   const out = new Mask(5, 5);
 
   image.clearBorder({ allowCorners: true, out });
+
   expect(out).toMatchMaskData([
     [0, 0, 0, 0, 0],
     [0, 0, 0, 1, 0],
@@ -156,6 +162,7 @@ test('5x5 mask, no pixels touching top', () => {
     [0, 1, 0, 0, 1],
   ]);
   const result = image.clearBorder({ allowCorners: false });
+
   expect(result).toMatchMaskData([
     [0, 0, 0, 0, 0],
     [0, 1, 1, 1, 0],
@@ -174,6 +181,7 @@ test('5x5 mask, snake', () => {
     [0, 0, 0, 1, 1],
   ]);
   const result = image.clearBorder({ allowCorners: false });
+
   expect(result).toMatchMaskData([
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
@@ -187,5 +195,6 @@ test('larger image', () => {
   const image = testUtils.load('various/grayscale_by_zimmyrose.png');
   const mask = image.threshold();
   const cleared = mask.clearBorder();
+
   expect(cleared).toMatchImageSnapshot();
 });

@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { encode } from '../encode.js';
 import { encodeDataURL } from '../encodeDataURL.js';
 
@@ -27,6 +29,7 @@ test('basic image 2 (jpeg)', () => {
   const format = 'jpeg';
   const base64 = encodeDataURL(image, { format });
   const base64Data = Buffer.from(encode(image, { format })).toString('base64');
+
   expect(typeof base64).toBe('string');
   expect(base64Data).toMatchSnapshot();
 });
@@ -42,6 +45,7 @@ test('legacy image-js test', () => {
   const format = 'jpeg';
   const url = encodeDataURL(image, { format });
   const base64Data = Buffer.from(encode(image, { format })).toString('base64');
+
   expect(typeof url).toBe('string');
   expect(base64Data).toBe(url.slice(url.indexOf(',') + 1));
 });

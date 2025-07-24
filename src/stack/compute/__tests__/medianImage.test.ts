@@ -1,5 +1,7 @@
 import { join } from 'node:path';
 
+import { expect, test } from 'vitest';
+
 import { Image } from '../../../Image.js';
 import { Stack } from '../../../Stack.js';
 import { getStackFromFolder } from '../../utils/getStackFromFolder.js';
@@ -35,5 +37,6 @@ test('3 RGB images', () => {
 test('more complex stack', () => {
   const folder = join(import.meta.dirname, '../../../../test/img/correctColor');
   const stack = getStackFromFolder(folder);
+
   expect(stack.medianImage()).toMatchImageSnapshot();
 });

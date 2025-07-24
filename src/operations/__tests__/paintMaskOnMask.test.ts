@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 test('3x3 mask, default options', () => {
   const destMask = testUtils.createMask([
     [1, 0, 0],
@@ -85,6 +87,7 @@ test('out option', () => {
   destMask.paintMask(mask, {
     out: destMask,
   });
+
   expect(destMask).toMatchMaskData([
     [1, 0, 0, 0],
     [0, 0, 0, 0],

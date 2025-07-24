@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 test('RGBA image', () => {
   const image = testUtils.createRgbaImage([
     [100, 150, 200, 255, 100, 150, 200, 0],
@@ -73,10 +75,13 @@ test('RGB image', () => {
 
 test('wrong image color model', () => {
   let image = testUtils.createGreyaImage([[100, 255, 150, 0]]);
+
   expect(() => image.grey()).toThrow(
     /image colorModel must be RGB or RGBA to apply this algorithm/,
   );
+
   image = testUtils.createGreyImage([[100, 255, 150, 0]]);
+
   expect(() => image.grey()).toThrow(
     /image colorModel must be RGB or RGBA to apply this algorithm/,
   );
@@ -89,10 +94,12 @@ test('user-provided output', () => {
 
   const out = testUtils.createGreyImage([[0, 0]]);
   const result = image.grey({ out });
+
   expect(result).toBe(out);
   expect(out).toMatchImageData([[142, 0]]);
 
   const wrongOut = testUtils.createGreyaImage([[0, 0, 0, 0]]);
+
   expect(() => image.grey({ out: wrongOut })).toThrow(
     /cannot use out image. Its colorModel property must be GREY. Received GREYA/,
   );
@@ -105,10 +112,12 @@ test('wrong algorithm type', () => {
 
   const out = testUtils.createGreyImage([[0, 0]]);
   const result = image.grey({ out });
+
   expect(result).toBe(out);
   expect(out).toMatchImageData([[142, 0]]);
 
   const wrongOut = testUtils.createGreyaImage([[0, 0, 0, 0]]);
+
   expect(() => image.grey({ out: wrongOut })).toThrow(
     /cannot use out image. Its colorModel property must be GREY. Received GREYA/,
   );

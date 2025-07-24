@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { getOrientedFastKeypoints } from '../../../keypoints/getOrientedFastKeypoints.js';
 import { getBriefDescriptors } from '../../getBriefDescriptors.js';
 import { sliceBrief } from '../sliceBrief.js';
@@ -29,7 +31,7 @@ test('slice 0 to 3', () => {
 
   const result = sliceBrief(brief, { end: 3 });
 
-  expect(result.descriptors.length).toBe(3);
+  expect(result.descriptors).toHaveLength(3);
 });
 
 test('range error', () => {

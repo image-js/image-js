@@ -1,5 +1,7 @@
 import { join } from 'node:path';
 
+import { expect, test } from 'vitest';
+
 import { Image } from '../../../Image.js';
 import { Stack } from '../../../Stack.js';
 import { getStackFromFolder } from '../../utils/getStackFromFolder.js';

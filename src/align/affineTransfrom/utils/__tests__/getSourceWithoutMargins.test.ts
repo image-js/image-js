@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../../../Image.js';
 import { getSourceWithoutMargins } from '../getSourceWithoutMargins.js';
 
@@ -10,6 +12,7 @@ test('destination fully in source', () => {
     destination,
     destinationOrigin,
   );
+
   expect(result.width).toBe(5);
   expect(result.height).toBe(5);
 });
@@ -23,6 +26,7 @@ test('destination would exceed source', () => {
     destination,
     destinationOrigin,
   );
+
   expect(result.width).toBe(5);
   expect(result.height).toBe(5);
 });
@@ -41,6 +45,7 @@ test('origin different than 0,0', () => {
     destination,
     destinationOrigin,
   );
+
   expect(result).toMatchImageData([
     [6, 7],
     [10, 11],
@@ -61,5 +66,6 @@ test('origin different than 0,0 and on border', () => {
     destination,
     destinationOrigin,
   );
+
   expect(result).toMatchImageData([[16]]);
 });

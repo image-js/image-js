@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { createAffineTransformModel } from '../createAffineTransformModel.js';
 
 test('wrong nb of parameters', () => {

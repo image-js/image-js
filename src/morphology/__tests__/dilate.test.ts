@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 test('another GREY image 5x5, default kernel', () => {
   const image = testUtils.createGreyImage([
     [255, 0, 0, 0, 255],

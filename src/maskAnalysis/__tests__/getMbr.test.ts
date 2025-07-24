@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { fromMask } from '../../roi/index.js';
 import { angle } from '../../utils/geometry/angles.js';
 import { getMbr } from '../getMbr.js';
@@ -15,6 +17,7 @@ test('verify that angle is correct', () => {
     `);
 
   const result = getMbr(mask).points;
+
   expect(result).toHaveLength(4);
 
   for (let i = 0; i < 4; i++) {
@@ -23,6 +26,7 @@ test('verify that angle is correct', () => {
       result[i],
       result[(i + 2) % 4],
     );
+
     expect(Math.abs(currentAngle)).toBeCloseTo(Math.PI / 2, 1e-6);
   }
 });
@@ -36,6 +40,7 @@ test('small rectangular ROI', () => {
   ]);
 
   const result = getMbr(mask).points;
+
   expect(result).toBeDeepCloseTo(
     [
       { column: 4, row: 1 },
@@ -84,6 +89,7 @@ test('other horizontal MBR', () => {
   );
 
   const result = getMbr(mask);
+
   expect(result).toBeDeepCloseTo({
     points: [
       { column: 6, row: 3 },
@@ -108,6 +114,7 @@ test('small tilted rectangle', () => {
       `);
 
   const result = getMbr(mask);
+
   expect(result.points).toBeDeepCloseTo(
     [
       { column: 1.5, row: 3.5 },
@@ -130,6 +137,7 @@ test('large tilted rectangle', () => {
         0 0 0 1 0 0
       `);
   const result = getMbr(mask).points;
+
   expect(result).toBeDeepCloseTo(
     [
       { column: 2.5, row: -0.5 },
@@ -144,6 +152,7 @@ test('large tilted rectangle', () => {
 test('one point ROI', () => {
   const mask = testUtils.createMask([[1]]);
   const result = getMbr(mask).points;
+
   expect(result).toBeDeepCloseTo([
     { column: 0, row: 1 },
     { column: 0, row: 0 },
@@ -234,7 +243,7 @@ test('draw mbr on large image', () => {
   expect(result).toMatchImageSnapshot();
 });
 
-test('other horizontal MBR', () => {
+test('other horizontal MBR - aspect ratio', () => {
   const mask = testUtils.createMask(
     `
       1 0 0 0 1 0 
@@ -244,10 +253,11 @@ test('other horizontal MBR', () => {
   );
 
   const result = getMbr(mask);
+
   expect(result.aspectRatio).toBeCloseTo(0.5);
 });
 
-test('small triangular ROI', () => {
+test('small triangular ROI - aspect ratio', () => {
   const mask = testUtils.createMask([
     [0, 1, 0],
     [1, 1, 1],
@@ -259,7 +269,7 @@ test('small triangular ROI', () => {
   expect(result).toBeCloseTo(1);
 });
 
-test('small triangular ROI', () => {
+test('small triangular ROI 2 - aspect ratio', () => {
   const mask = testUtils.createMask([
     [0, 1, 0],
     [0, 1, 0],
@@ -272,7 +282,7 @@ test('small triangular ROI', () => {
   expect(result).toStrictEqual(0.25);
 });
 
-test('small triangular ROI', () => {
+test('small triangular ROI 3 - aspect ratio', () => {
   const mask = testUtils.createMask([[1, 1, 1, 1]]);
 
   const result = getMbr(mask).aspectRatio;

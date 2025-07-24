@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 const image = testUtils.createGreyImage([
   [1, 1, 1],
   [1, 1, 1],
@@ -41,6 +43,3 @@ test('Prewitt', () => {
     [2, 3, 2],
   ]);
 });
-
-// To make TypeScript know it's a module
-export {};

@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { getPatchIntensityMoment } from '../getPatchIntensityMoment.js';
 
 test('5x5 image, 01, radius = 1', () => {
@@ -9,6 +11,7 @@ test('5x5 image, 01, radius = 1', () => {
     [0, 0, 0, 0, 0],
   ]);
   const result = getPatchIntensityMoment(image, 0, 1, { radius: 1 });
+
   expect(result).toStrictEqual([-1]);
 });
 
@@ -21,6 +24,7 @@ test('5x5 image, 01, radius = 2', () => {
     [0, 0, 0, 0, 0],
   ]);
   const result = getPatchIntensityMoment(image, 0, 1, { radius: 2 });
+
   expect(result).toStrictEqual([-3]);
 });
 
@@ -33,6 +37,7 @@ test('5x5 image, 10, radius = 2', () => {
     [0, 0, 0, 0, 0],
   ]);
   const result = getPatchIntensityMoment(image, 1, 0, { radius: 2 });
+
   expect(result).toStrictEqual([4]);
 });
 
@@ -44,6 +49,7 @@ test('too close to border error', () => {
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
   ]);
+
   expect(() => {
     getPatchIntensityMoment(image, 0, 1);
   }).toThrow('desired patch is too close to image border');

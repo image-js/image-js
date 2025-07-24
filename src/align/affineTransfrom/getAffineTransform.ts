@@ -5,10 +5,10 @@ import type { Image } from '../../Image.js';
 import { getBrief } from '../../featureMatching/descriptors/getBrief.js';
 import type { Match } from '../../featureMatching/index.js';
 import {
-  bruteForceOneMatch,
-  getCrosscheckMatches,
   Montage,
   MontageDisposition,
+  bruteForceOneMatch,
+  getCrosscheckMatches,
 } from '../../featureMatching/index.js';
 import { filterEuclideanDistance } from '../../featureMatching/matching/filterEuclideanDistance.js';
 import type { Point } from '../../geometry/index.js';

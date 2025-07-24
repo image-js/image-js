@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type { Point } from '../../geometry/index.js';
 import { sampleBackgroundPoints } from '../../utils/sampleBackgroundPoints.js';
 import { correctBackground } from '../correctBackground.js';
@@ -29,7 +31,8 @@ test('basic test', () => {
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
   ]);
-  expect(newImage).toEqual(result);
+
+  expect(newImage).toStrictEqual(result);
 });
 
 test('test with object 8x8 and manually picked points', () => {
@@ -68,7 +71,8 @@ test('test with object 8x8 and manually picked points', () => {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
-  expect(newImage).toEqual(result);
+
+  expect(newImage).toStrictEqual(result);
 });
 
 test('test with object 8x8 and sampled points', () => {
@@ -104,7 +108,8 @@ test('test with object 8x8 and sampled points', () => {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
-  expect(newImage).toEqual(result);
+
+  expect(newImage).toStrictEqual(result);
 });
 
 test('basic screws image test', () => {
@@ -120,6 +125,7 @@ test('basic screws image test', () => {
     order: 2,
     backgroundKind: 'light',
   });
+
   expect(newImage).toMatchImageSnapshot();
 });
 
@@ -132,8 +138,10 @@ test('basic sudoku image test', () => {
     gridHeight: 15,
   });
   const newImage = correctBackground(image, { background: points });
+
   expect(newImage).toMatchImageSnapshot();
 });
+
 test('throw if insufficient number of points', () => {
   const image = testUtils.createGreyImage([
     [1, 2, 3, 4, 5],

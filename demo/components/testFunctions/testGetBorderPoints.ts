@@ -1,5 +1,5 @@
 import type { Image } from '../../../src/index.js';
-import { fromMask, Mask } from '../../../src/index.js';
+import { Mask, fromMask } from '../../../src/index.js';
 /**
  * Paint the border of the larger black ROI on the image.
  * @param image - The image to process

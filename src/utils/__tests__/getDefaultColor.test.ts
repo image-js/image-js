@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { getDefaultColor } from '../getDefaultColor.js';
 
 test('GREY', () => {
@@ -6,6 +8,7 @@ test('GREY', () => {
     [1, 1],
   ]);
   const expected = getDefaultColor(image);
+
   expect(expected).toStrictEqual([0]);
 });
 
@@ -15,6 +18,7 @@ test('GREYA', () => {
     [1, 255, 1, 255],
   ]);
   const expected = getDefaultColor(image);
+
   expect(expected).toStrictEqual([0, 255]);
 });
 
@@ -24,6 +28,7 @@ test('RBG', () => {
     [1, 255, 10, 1, 22, 255],
   ]);
   const expected = getDefaultColor(image);
+
   expect(expected).toStrictEqual([0, 0, 0]);
 });
 
@@ -33,5 +38,6 @@ test('RBGA', () => {
     [1, 10, 55, 255, 10, 1, 22, 255],
   ]);
   const expected = getDefaultColor(image);
+
   expect(expected).toStrictEqual([0, 0, 0, 255]);
 });

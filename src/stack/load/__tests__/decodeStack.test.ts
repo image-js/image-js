@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type { TestImagePath } from '../../../../test/TestImagePath.js';
 import { decodeStack } from '../decodeStack.js';
 
@@ -29,7 +31,9 @@ test.each([
 ])('stacks with 2 images ($colorModel, bitDepth = $bitDepth)', (data) => {
   const buffer = testUtils.loadBuffer(data.name as TestImagePath);
   const stack = decodeStack(buffer);
+
   expect(stack.size).toBe(data.pages);
+
   for (const image of stack) {
     expect(image.colorModel).toBe(data.colorModel);
     expect(image.bitDepth).toBe(data.bitDepth);
@@ -38,5 +42,6 @@ test.each([
 
 test('invalid data format', () => {
   const buffer = testUtils.loadBuffer('formats/grey8.png');
+
   expect(() => decodeStack(buffer)).toThrow('invalid data format: image/png');
 });

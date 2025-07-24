@@ -1,7 +1,8 @@
+import { assert, expect, test } from 'vitest';
+
 import type { Image } from '../../Image.js';
 import { rotatePoint } from '../../point/operations.js';
 import type { Point } from '../../utils/geometry/points.js';
-import { assert } from '../../utils/validators/assert.js';
 
 test('straight rectangle top left', () => {
   const image = testUtils.createGreyImage([
@@ -12,6 +13,7 @@ test('straight rectangle top left', () => {
   const points = testUtils.createPoints([0, 0], [2, 0], [2, 2], [0, 2]);
 
   const result = image.cropRectangle(points, { interpolationType: 'nearest' });
+
   expect(result).toMatchImage(
     testUtils.createGreyImage([
       [1, 2],
@@ -29,6 +31,7 @@ test('straight rectangle bottom right', () => {
   const points = testUtils.createPoints([1, 3], [3, 3], [3, 1], [1, 1]);
 
   const result = image.cropRectangle(points);
+
   expect(result).toMatchImage(
     testUtils.createGreyImage([
       [5, 6],
@@ -37,6 +40,7 @@ test('straight rectangle bottom right', () => {
   );
 });
 
+// eslint-disable-next-line vitest/expect-expect
 test('vertical rectangle with small angle', () => {
   const image = testUtils.createGreyImage([
     [1, 2, 3],
@@ -55,6 +59,7 @@ test('vertical rectangle with small angle', () => {
   });
 });
 
+// eslint-disable-next-line vitest/expect-expect
 test('horizontal rectangle with small angle', () => {
   const image = testUtils.createGreyImage([
     [1, 2, 3],
@@ -73,6 +78,7 @@ test('horizontal rectangle with small angle', () => {
   });
 });
 
+// eslint-disable-next-line vitest/expect-expect
 test('diagonal rectangle oriented slightly > 45 degrees clockwise', () => {
   const image = testUtils.createGreyImage([
     [1, 2, 3],
@@ -92,6 +98,7 @@ test('diagonal rectangle oriented slightly > 45 degrees clockwise', () => {
   });
 });
 
+// eslint-disable-next-line vitest/expect-expect
 test('diagonal rectangle oriented slightly below 45 degrees', () => {
   const image = testUtils.createGreyImage([
     [1, 2, 3],
@@ -120,7 +127,7 @@ function expectCropRectangleToMatch(options: {
   const { image, expected, points } = options;
   assert(options.points.length === 4, 'Expected to receive 4 points');
   const variants: Point[][] = [];
-  const pointsReversed = points.slice().reverse();
+  const pointsReversed = points.slice().toReversed();
   for (let i = 0; i < 4; i++) {
     const variant: Point[] = [];
     variants.push(variant);
@@ -140,6 +147,7 @@ function expectCropRectangleToMatch(options: {
     const result = image.cropRectangle(points, {
       interpolationType: 'nearest',
     });
+
     expect(result).toMatchImage(expected);
   }
 }

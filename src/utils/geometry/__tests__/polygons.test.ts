@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { getPolygonArea, getPolygonPerimeter } from '../polygons.js';
 
 describe('getPolygonPerimeter', () => {
@@ -76,6 +78,7 @@ describe('getPolygonArea', () => {
 
     expect(getPolygonArea(points)).toBe(12);
   });
+
   it('other triangle', () => {
     const points = [
       { column: 0, row: 2 },

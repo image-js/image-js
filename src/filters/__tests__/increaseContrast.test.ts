@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { increaseContrast } from '../increaseContrast.js';
 
 test('3x1 rgba image, custom output min and max', () => {
@@ -36,6 +38,7 @@ test('3x1 rgb image, uniform = true', () => {
   ]);
 
   const result = increaseContrast(image, { uniform: true });
+
   expect(result).toMatchImageData([
     [0, 127, 0],
     [191, 191, 0],
@@ -45,6 +48,7 @@ test('3x1 rgb image, uniform = true', () => {
 
 test('1x3 grey image', () => {
   const image = testUtils.createGreyImage([[50, 100]]);
+
   expect(increaseContrast(image)).toMatchImageData([[0, 255]]);
 });
 
@@ -53,6 +57,7 @@ test('alpha should not be modified', () => {
     [50, 100],
     [100, 50],
   ]);
+
   expect(increaseContrast(image)).toMatchImageData([
     [0, 100],
     [255, 50],
@@ -66,6 +71,7 @@ test('out option', () => {
     [60, 70],
   ]);
   const result = increaseContrast(image, { out: image });
+
   expect(result).toMatchImageData([
     [0, 10],
     [127, 40],
@@ -76,5 +82,6 @@ test('out option', () => {
 
 test('bigger image', () => {
   const image = testUtils.load('featureMatching/id-crops/crop2.png');
+
   expect(increaseContrast(image)).toMatchImageSnapshot();
 });

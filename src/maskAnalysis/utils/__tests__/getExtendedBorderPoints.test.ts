@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Mask } from '../../../Mask.js';
 import { getExtendedBorderPoints } from '../getExtendedBorderPoints.js';
 

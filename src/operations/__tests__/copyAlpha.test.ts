@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { copyAlpha } from '../convertColor.js';
 
 test('source and dest different sizes', () => {

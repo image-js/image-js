@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../../Image.js';
 import { round, sum } from '../../../utils/geometry/points.js';
 import { getPatchIntensityCentroid } from '../getPatchIntensityCentroid.js';
@@ -5,6 +7,7 @@ import { getPatchIntensityCentroid } from '../getPatchIntensityCentroid.js';
 test('3x3 empty image', () => {
   const image = new Image(7, 7, { colorModel: 'GREY' });
   const result = getPatchIntensityCentroid(image);
+
   expect(result).toStrictEqual([{ column: 0, row: 0 }]);
 });
 
@@ -15,6 +18,7 @@ test('3x3 image', () => {
     [0, 0, 0],
   ]);
   const result = getPatchIntensityCentroid(image, { radius: 1 });
+
   expect(result).toStrictEqual([{ column: -1, row: 0 }]);
 });
 
@@ -27,6 +31,7 @@ test('5x5 image', () => {
     [0, 0, 0, 0, 0],
   ]);
   const result = getPatchIntensityCentroid(image, { radius: 2 });
+
   expect(result).toStrictEqual([{ column: 1.9, row: 0 }]);
 });
 
@@ -39,6 +44,7 @@ test('5x5 image, diagonal line', () => {
     [0, 0, 0, 0, 0],
   ]);
   const result = getPatchIntensityCentroid(image, { radius: 2 });
+
   expect(result).toStrictEqual([{ column: -0.5, row: -0.5 }]);
 });
 
@@ -51,6 +57,7 @@ test('check window is circular', () => {
     [0, 0, 0, 0, 100],
   ]);
   const result = getPatchIntensityCentroid(image, { radius: 2 });
+
   expect(result).toStrictEqual([{ column: 1, row: 0 }]);
 });
 
@@ -63,6 +70,7 @@ test('triangle center of mass', () => {
     [0, 0, 0, 1, 0],
   ]);
   const result = getPatchIntensityCentroid(image, { radius: 2 });
+
   expect(result).toBeDeepCloseTo([{ column: 0.444, row: 0 }]);
 });
 
@@ -73,6 +81,7 @@ test('patch, default options', () => {
   const radius = 3;
 
   const centroid = getPatchIntensityCentroid(image)[0];
+
   expect(centroid).toBeDeepCloseTo({ column: -1.179, row: -0.183 });
 
   const center = image.getCoordinates('center');
@@ -109,6 +118,7 @@ test('scalene triangle keypoint', () => {
   });
 
   const centroid = getPatchIntensityCentroid(image, { radius })[0];
+
   expect(centroid).toBeDeepCloseTo({ column: 1.281, row: 0.204 });
 
   const center = image.getCoordinates('center');
@@ -145,6 +155,7 @@ test('scalene triangle 90 keypoint', () => {
   });
 
   const centroid = getPatchIntensityCentroid(image, { radius })[0];
+
   expect(centroid).toBeDeepCloseTo({ column: 0.204, row: -1.281 });
 
   const center = image.getCoordinates('center');

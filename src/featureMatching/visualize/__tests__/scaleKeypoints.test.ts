@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type { FastKeypoint } from '../../keypoints/getFastKeypoints.js';
 import { scaleKeypoints } from '../scaleKeypoints.js';
 

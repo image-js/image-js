@@ -13,8 +13,12 @@ test('encode 5x5 mask', () => {
   const mask = image.threshold({ threshold: 0.5 });
   const result = testUtils.loadBuffer('formats/bmp/5x5.bmp');
   const buffer = encodeBmp(mask).buffer;
+
+  // TODO: change to `toStrictEqual`.
+  // eslint-disable-next-line vitest/prefer-strict-equal
   expect(buffer).toEqual(result.buffer);
 });
+
 test('encode 6x4 mask', () => {
   const image = testUtils.createGreyImage([
     [255, 255, 255, 255, 255, 255],
@@ -25,8 +29,12 @@ test('encode 6x4 mask', () => {
   const mask = image.threshold({ threshold: 0.5 });
   const result = testUtils.loadBuffer('formats/bmp/6x4.bmp');
   const buffer = encodeBmp(mask).buffer;
+
+  // TODO: change to `toStrictEqual`.
+  // eslint-disable-next-line vitest/prefer-strict-equal
   expect(buffer).toEqual(result.buffer);
 });
+
 test('encode 10x2 mask', () => {
   const image = testUtils.createGreyImage([
     [255, 255, 255, 0, 0, 255, 0, 255, 0, 255],
@@ -35,8 +43,12 @@ test('encode 10x2 mask', () => {
   const mask = image.threshold({ threshold: 0.5 });
   const result = testUtils.loadBuffer('formats/bmp/10x2.bmp');
   const buffer = encodeBmp(mask).buffer;
+
+  // TODO: change to `toStrictEqual`.
+  // eslint-disable-next-line vitest/prefer-strict-equal
   expect(buffer).toEqual(result.buffer);
 });
+
 test('should throw error', () => {
   const image = testUtils.createGreyImage([
     [255, 255, 255, 0, 0, 255, 0, 255, 0, 255],

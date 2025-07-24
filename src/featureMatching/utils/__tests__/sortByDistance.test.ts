@@ -1,7 +1,9 @@
+import { expect, test } from 'vitest';
+
 import type { Match } from '../../matching/bruteForceMatch.js';
 import { sortByDistance } from '../sortByDistance.js';
 
-it('should sort by source then dest', () => {
+test('should sort by source then dest', () => {
   const matches: Match[] = [
     { sourceIndex: 9, destinationIndex: 3, distance: 1 },
     { sourceIndex: 1, destinationIndex: 14, distance: 2 },
@@ -12,6 +14,7 @@ it('should sort by source then dest', () => {
   ];
 
   const result = sortByDistance(matches);
+
   expect(result).toStrictEqual([
     { sourceIndex: 9, destinationIndex: 3, distance: 1 },
     { sourceIndex: 1, destinationIndex: 14, distance: 2 },

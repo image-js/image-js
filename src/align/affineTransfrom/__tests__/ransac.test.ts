@@ -1,4 +1,5 @@
 import { ransac } from 'ml-ransac';
+import { describe, expect, it } from 'vitest';
 
 import { affineFitFunction } from '../affineFitFunction.js';
 import { applyAffineTransfom } from '../applyAffineTransform.js';

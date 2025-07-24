@@ -2,15 +2,15 @@ import util from 'node:util';
 
 import type { GetBriefOptions } from '../../src/featureMatching/descriptors/getBrief.js';
 import { getBrief } from '../../src/featureMatching/descriptors/getBrief.js';
-import {
-  getCrosscheckMatches,
-  Montage,
-  readSync,
-  writeSync,
-} from '../../src/index.js';
 import type {
   DrawKeypointsOptions,
   GetColorsOptions,
+} from '../../src/index.js';
+import {
+  Montage,
+  getCrosscheckMatches,
+  readSync,
+  writeSync,
 } from '../../src/index.js';
 import { getMinMax } from '../../src/utils/getMinMax.js';
 

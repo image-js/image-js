@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../Image.js';
 import { drawRectangle } from '../drawRectangle.js';
 
@@ -36,6 +38,7 @@ test('out parameter set to self', () => {
     fillColor: [0, 5, 2],
     out: image,
   });
+
   expect(result).toMatchImageData([
     [255, 0, 0, 255, 0, 0, 255, 0, 0],
     [255, 0, 0, 0, 5, 2, 255, 0, 0],
@@ -58,6 +61,7 @@ test('out to other image', () => {
     fillColor: [1, 1, 1],
     out,
   });
+
   expect(result).toMatchImageData([
     [255, 0, 0, 255, 0, 0],
     [255, 0, 0, 255, 0, 0],
@@ -81,6 +85,7 @@ test('draw rectangle in grey image', () => {
     height: image.height,
     strokeColor: [2],
   });
+
   expect(result).toMatchImageData([
     [2, 2, 2, 2, 2, 2],
     [2, 1, 1, 1, 1, 2],
@@ -109,6 +114,7 @@ test('should handle points with floating values', () => {
     height: height + 0.1,
     strokeColor: [2],
   });
+
   expect(result).toMatchImageData([
     [2, 2, 2, 2, 2, 2],
     [2, 1, 1, 1, 1, 2],
@@ -135,6 +141,7 @@ test('draw filled rectangle in grey image', () => {
     strokeColor: [2],
     fillColor: [3],
   });
+
   expect(result).toMatchImageData([
     [2, 2, 2, 2, 2, 2],
     [2, 3, 3, 3, 3, 2],
@@ -161,6 +168,7 @@ test('draw filled rectangle with no stroke', () => {
     strokeColor: 'none',
     fillColor: [3],
   });
+
   expect(result).toMatchImageData([
     [1, 1, 1, 1, 1, 1],
     [1, 3, 3, 3, 3, 1],
@@ -185,6 +193,7 @@ test('draw rectangle with no options', () => {
     width: image.width,
     height: image.height,
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0, 0, 0],
     [0, 1, 1, 1, 1, 0],
@@ -210,6 +219,7 @@ test('fillColor = none', () => {
     height: image.height,
     fillColor: 'none',
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0, 0, 0],
     [0, 1, 1, 1, 1, 0],
@@ -237,6 +247,7 @@ test('outside of image', () => {
     fillColor: [3],
     origin: { column: 1, row: 1 },
   });
+
   expect(result).toMatchImageData([
     [1, 1, 1, 1, 1, 1],
     [1, 2, 2, 2, 2, 2],
@@ -345,6 +356,7 @@ test('points out of mask', () => {
     strokeColor: [1],
     origin: { column: 3, row: 3 },
   });
+
   expect(result).toMatchMaskData([
     [0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0],

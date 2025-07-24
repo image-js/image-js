@@ -1,9 +1,12 @@
+import { expect, test } from 'vitest';
+
 import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
 import { drawKeypoints } from '../drawKeypoints.js';
 
 const image = testUtils.load('various/alphabet.jpg');
 const grey = image.convertColor('GREY');
 const keypoints = getOrientedFastKeypoints(grey, { maxNbFeatures: 20 });
+
 test('alphabet image with score coloring', () => {
   const result = drawKeypoints(image, keypoints, {
     showScore: true,
@@ -17,6 +20,7 @@ test('alphabet image with score coloring', () => {
     fill: true,
     maxNbKeypoints: 50,
   });
+
   expect(maxNbKeypoints).toMatchImage(result);
 });
 

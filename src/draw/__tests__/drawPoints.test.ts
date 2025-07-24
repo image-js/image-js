@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../Image.js';
 import { drawPoints } from '../drawPoints.js';
 
@@ -13,6 +15,7 @@ test('RGB image', () => {
   ];
 
   const result = image.drawPoints(points, { color: [255, 0, 0] });
+
   expect(result).toMatchImageData([
     [255, 0, 0, 100, 150, 200],
     [100, 150, 200, 255, 0, 0],
@@ -158,6 +161,7 @@ test('mask', () => {
     { row: 0, column: 1 },
   ];
   const result = mask.drawPoints(points);
+
   expect(result).toMatchMaskData([
     [1, 1, 0, 0],
     [1, 0, 0, 0],
@@ -180,6 +184,7 @@ test('default options', () => {
     { row: 0, column: 2 },
   ];
   const result = drawPoints(mask, points);
+
   expect(result).toMatchMaskData([
     [0, 0, 1, 0],
     [0, 0, 0, 0],
@@ -203,6 +208,7 @@ test('different origin', () => {
     { row: 0, column: 0 },
   ];
   const result = drawPoints(mask, points, { origin: { column: 2, row: 2 } });
+
   expect(result).toMatchMaskData([
     [0, 0, 0, 0],
     [0, 1, 1, 0],
@@ -227,6 +233,7 @@ test('points outside mask', () => {
     { row: 2, column: 6 },
   ];
   const result = drawPoints(mask, points);
+
   expect(result).toMatchMaskData([
     [1, 1, 0, 0],
     [0, 0, 0, 0],

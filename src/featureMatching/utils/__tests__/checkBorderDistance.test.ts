@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../../Image.js';
 import type { Point } from '../../../geometry/index.js';
 import { checkBorderDistance } from '../checkBorderDistance.js';
@@ -8,6 +10,7 @@ test('should be true', () => {
 
   const distance = 3;
   const point: Point = { column: 3, row: 3 };
+
   expect(checkBorderDistance(image, point, distance)).toBe(true);
 });
 

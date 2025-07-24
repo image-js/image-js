@@ -1,10 +1,10 @@
 import { polishAltered } from '../../../src/correctColor/__tests__/testUtils/imageColors.js';
-import { referenceColorCard } from '../../../src/correctColor/utils/referenceColorCard.ts';
 import { correctColor } from '../../../src/correctColor/correctColor.js';
 import {
   getMeasuredColors,
   getReferenceColors,
 } from '../../../src/correctColor/utils/formatData.js';
+import { referenceColorCard } from '../../../src/correctColor/utils/referenceColorCard.ts';
 import type { Image } from '../../../src/index.js';
 
 /**

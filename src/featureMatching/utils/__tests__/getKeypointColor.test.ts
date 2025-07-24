@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../../Image.js';
 import { getColors } from '../getColors.js';
 import { getKeypointColor } from '../getKeypointColor.js';
@@ -19,6 +21,7 @@ test('keypoint should all have a different color', () => {
   for (let i = 0; i < keypoints.length; i++) {
     result.push(getKeypointColor(keypoints, i, colors));
   }
+
   expect(result).toStrictEqual(colors);
 });
 
@@ -38,6 +41,7 @@ test('keypoint with more random scores', () => {
   for (let i = 0; i < keypoints.length; i++) {
     result.push(getKeypointColor(keypoints, i, colors));
   }
+
   expect(result).toStrictEqual([
     [255, 0, 0],
     [204, 0, 0],
@@ -60,6 +64,7 @@ test('all keypoints have same score', () => {
   for (let i = 0; i < keypoints.length; i++) {
     result.push(getKeypointColor(keypoints, i, colors));
   }
+
   expect(result).toStrictEqual([
     [255, 0, 0],
     [255, 0, 0],

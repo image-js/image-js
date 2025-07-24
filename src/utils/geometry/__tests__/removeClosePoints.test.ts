@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { getExtrema } from '../../../compute/getExtrema.js';
 import { removeClosePoints } from '../removeClosePoints.js';
 
@@ -22,6 +24,7 @@ test('combine minimum points on 5x5 image', () => {
     kind: 'minimum',
     channel: 0,
   });
+
   expect(result).toStrictEqual([
     { column: 1, row: 4 },
     { column: 1, row: 1 },
@@ -70,12 +73,14 @@ test('combine maximum points after getExtrema function', () => {
     kind: 'maximum',
     distance: 3,
   });
+
   expect(result).toStrictEqual([
     { column: 3, row: 5 },
     { column: 7, row: 6 },
     { column: 2, row: 2 },
   ]);
 });
+
 test('test error handling', () => {
   const image = testUtils.createRgbaImage([
     [1, 1, 1, 1],
@@ -87,6 +92,7 @@ test('test error handling', () => {
     [1, 1, 1, 1],
     [1, 5, 6, 1],
   ]);
+
   expect(() => {
     const points = getExtrema(image, {
       kind: 'maximum',

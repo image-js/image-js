@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { setBlendedVisiblePixel } from '../setBlendedVisiblePixel.js';
 
 test('GREYA image, default options', () => {
@@ -6,6 +8,7 @@ test('GREYA image, default options', () => {
     [20, 30],
   ]);
   setBlendedVisiblePixel(image, 0, 1);
+
   expect(image).toMatchImageData([
     [50, 255],
     [0, 255],
@@ -20,6 +23,7 @@ test('GREYA image: set pixel out of bounds', () => {
   ];
   const image = testUtils.createGreyaImage(data);
   setBlendedVisiblePixel(image, 0, 5, [40, 40]);
+
   expect(image).toMatchImageData(data);
 });
 
@@ -31,6 +35,7 @@ test('RGBA image: set pixel out of bounds', () => {
   ];
   const image = testUtils.createGreyaImage(data);
   setBlendedVisiblePixel(image, 0, 5, [40, 40, 40, 40]);
+
   expect(image).toMatchImageData(data);
 });
 
@@ -41,6 +46,7 @@ test('asymetrical test', () => {
     [1, 2, 3, 4, 5, 6],
   ]);
   setBlendedVisiblePixel(image, 2, 0, [0, 125]);
+
   expect(image).toMatchImageData([
     [50, 255, 1, 2, 0, 127],
     [20, 30, 5, 6, 7, 8],

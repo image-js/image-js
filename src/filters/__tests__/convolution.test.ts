@@ -1,4 +1,5 @@
 import { Matrix } from 'ml-matrix';
+import { describe, expect, it } from 'vitest';
 
 import { getClamp } from '../../utils/clamp.js';
 import { getBorderInterpolation } from '../../utils/interpolateBorder.js';
@@ -35,6 +36,7 @@ describe('convolution functions', () => {
     });
 
     const expected = testUtils.load('opencv/testConvolution.png');
+
     expect(convoluted).toMatchImage(expected);
   });
 
@@ -74,12 +76,14 @@ describe('computeConvolutionValue', () => {
     ];
     const clamp = getClamp(image);
     const interpolateBorder = getBorderInterpolation('reflect101', 0);
+
     expect(
       computeConvolutionValue(1, 1, 0, image, kernel, interpolateBorder, {
         clamp,
       }),
     ).toBe(28);
   });
+
   it('round and clamp with negative kernel values', () => {
     const image = testUtils.createGreyImage([
       [1, 1, 1],
@@ -94,12 +98,14 @@ describe('computeConvolutionValue', () => {
     const clamp = getClamp(image);
 
     const interpolateBorder = getBorderInterpolation('reflect101', 0);
+
     expect(
       computeConvolutionValue(1, 1, 0, image, kernel, interpolateBorder, {
         clamp,
       }),
     ).toBe(5);
   });
+
   it('return raw value', () => {
     const image = testUtils.createGreyImage([
       [1, 1, 1],
@@ -135,8 +141,10 @@ describe('rawDirectConvolution', () => {
     ];
 
     const expected = Float64Array.from([9, 28, 28, 9, 28, 28, 9, 9, 9]);
+
     expect(rawDirectConvolution(image, kernel)).toStrictEqual(expected);
   });
+
   it('3x3 image and kernel with floats', () => {
     const image = testUtils.createGreyImage([
       [1, 1, 1],
@@ -152,6 +160,7 @@ describe('rawDirectConvolution', () => {
     const expected = Float64Array.from([
       8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5, 8.5,
     ]);
+
     expect(rawDirectConvolution(image, kernel)).toStrictEqual(expected);
   });
 });

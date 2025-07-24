@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Mask } from '../../Mask.js';
 import { encodePng } from '../../save/index.js';
 
@@ -91,6 +93,7 @@ test('Out option', () => {
   const out = new Mask(5, 5);
 
   image.solidFill({ out });
+
   expect(out).toMatchMaskData([
     [0, 0, 0, 0, 0],
     [0, 1, 1, 1, 0],
@@ -110,6 +113,7 @@ test('in place modification', () => {
   ]);
 
   image.solidFill({ out: image });
+
   expect(image).toMatchMaskData([
     [0, 0, 0, 0, 0],
     [0, 1, 1, 1, 0],

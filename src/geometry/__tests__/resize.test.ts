@@ -1,5 +1,7 @@
 import path from 'node:path';
 
+import { expect, test } from 'vitest';
+
 import type { Image } from '../../Image.js';
 import { write } from '../../save/index.js';
 
@@ -56,7 +58,7 @@ test('compare with OpenCV (nearest, smaller)', async () => {
   expect(resized).toMatchImage('opencv/test_resize_nearest_smaller.png');
 });
 
-test.skip('compare with OpenCV (bilinear, larger)', async () => {
+test.fails('compare with OpenCV (bilinear, larger)', async () => {
   const img = testUtils.load('opencv/test.png');
 
   const resized = img.resize({
@@ -69,7 +71,7 @@ test.skip('compare with OpenCV (bilinear, larger)', async () => {
   expect(resized).toMatchImage('opencv/test_resize_bilinear_larger.png');
 });
 
-test.skip('compare with OpenCV (bilinear, same)', async () => {
+test.fails('compare with OpenCV (bilinear, same)', async () => {
   const img = testUtils.load('opencv/test.png');
 
   const resized = img.resize({
@@ -81,7 +83,7 @@ test.skip('compare with OpenCV (bilinear, same)', async () => {
   expect(resized).toMatchImage('opencv/test_resize_bilinear_same.png');
 });
 
-test.skip('compare with OpenCV (bilinear, smaller)', async () => {
+test.fails('compare with OpenCV (bilinear, smaller)', async () => {
   const img = testUtils.load('opencv/test.png');
 
   const resized = img.resize({
@@ -94,7 +96,7 @@ test.skip('compare with OpenCV (bilinear, smaller)', async () => {
   expect(resized).toMatchImage('opencv/test_resize_bilinear_smaller.png');
 });
 
-test.skip('compare with OpenCV (bicubic, larger)', async () => {
+test.fails('compare with OpenCV (bicubic, larger)', async () => {
   const img = testUtils.load('opencv/test.png');
 
   const resized = img.resize({
@@ -108,7 +110,7 @@ test.skip('compare with OpenCV (bicubic, larger)', async () => {
   expect(resized).toMatchImage('opencv/test_resize_bicubic_larger.png');
 });
 
-test.skip('compare with OpenCV (bicubic, same)', async () => {
+test.fails('compare with OpenCV (bicubic, same)', async () => {
   const img = testUtils.load('opencv/test.png');
 
   const resized = img.resize({
@@ -121,7 +123,7 @@ test.skip('compare with OpenCV (bicubic, same)', async () => {
   expect(resized).toMatchImage('opencv/test_resize_bicubic_same.png');
 });
 
-test.skip('compare with OpenCV (bicubic, smaller)', async () => {
+test.fails('compare with OpenCV (bicubic, smaller)', async () => {
   const img = testUtils.load('opencv/test.png');
 
   const resized = img.resize({
@@ -142,6 +144,7 @@ test('result should have correct dimensions', () => {
     xFactor: 10,
     yFactor: 10,
   });
+
   expect(resized.width).toBe(10 * img.width);
   expect(resized.height).toBe(10 * img.height);
 });

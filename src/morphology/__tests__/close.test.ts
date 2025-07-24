@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 test('check for GREY image 5x5', () => {
   const kernel = [
     [1, 1, 1],

@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../Image.js';
 import { drawLineOnImage } from '../drawLineOnImage.js';
 
@@ -30,6 +32,7 @@ test('RGBA image with different alphas', () => {
   const from = { row: 0, column: 0 };
   const to = { row: 1, column: 1 };
   const result = image.drawLine(from, to, { strokeColor: [255, 0, 0, 50] });
+
   expect(result).toMatchImageData([
     [145, 106, 141, 170, 100, 150, 0, 150],
     [100, 200, 5, 150, 76, 141, 0, 170],
@@ -95,6 +98,7 @@ test('draw nearly horizontal line', () => {
   const result = image.drawLine(from, to, {
     strokeColor: [1],
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
     [1, 1, 0, 0],
@@ -116,6 +120,7 @@ test('draw nearly vertical line', () => {
   const result = image.drawLine(from, to, {
     strokeColor: [1],
   });
+
   expect(result).toMatchImageData([
     [0, 1, 0, 0],
     [0, 1, 0, 0],
@@ -135,6 +140,7 @@ test('should handle points with floating values', () => {
   const from = { row: 1.1, column: 0.1 };
   const to = { row: 2.1, column: 3.1 };
   const result = image.drawLine(from, to, { strokeColor: [1] });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
     [1, 1, 0, 0],
@@ -215,6 +221,7 @@ test('complicated line', () => {
   const result = image.drawLine(from, to, {
     strokeColor: [1],
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 1, 1],
     [0, 1, 1, 0, 0],
@@ -241,6 +248,7 @@ test('big image example', () => {
   const result = image.drawLine(from, to, {
     strokeColor: [1],
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -327,6 +335,7 @@ test('different origin, line out of image', () => {
     origin: { column: 3, row: 0 },
     strokeColor: [1],
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 1],
     [0, 0, 0, 0],

@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { fromMask } from '../fromMask.js';
 import { getMask } from '../getMask.js';
 
@@ -11,6 +13,7 @@ test('cross', () => {
 
   const rois = roiMapManager.getRois({ kind: 'white' });
   const roiMask = rois[0].getMask();
+
   expect(roiMask).toMatchMask(mask);
 });
 

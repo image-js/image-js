@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../Image.js';
 import { drawPolylineOnImage } from '../drawPolylineOnImage.js';
 
@@ -12,6 +14,7 @@ test('RGB image', () => {
     { row: 2, column: 1 },
   ];
   const result = image.drawPolyline(points, { strokeColor: [255, 0, 0] });
+
   expect(result).toMatchImageData([
     [100, 150, 200, 100, 150, 0],
     [255, 0, 0, 3, 200, 0],
@@ -135,16 +138,19 @@ test('different origin', () => {
     origin: { column: 1, row: 0 },
     strokeColor: [1],
   });
+
   expect(result).toMatchImageData([
     [0, 1, 0, 0],
     [0, 1, 1, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
   ]);
+
   result = image.drawPolyline(points, {
     origin: { column: 3, row: 0 },
     strokeColor: [1],
   });
+
   expect(result).toMatchImageData([
     [0, 0, 0, 1],
     [0, 0, 0, 1],
@@ -169,6 +175,7 @@ test('should handle points with floating values', () => {
     origin: { column: 2.1, row: 0.1 },
     strokeColor: [1],
   });
+
   expect(result).toMatchImageData([
     [0, 0, 1, 0],
     [0, 0, 1, 1],

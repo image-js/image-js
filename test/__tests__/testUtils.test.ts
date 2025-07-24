@@ -1,8 +1,11 @@
+import { describe, expect, it } from 'vitest';
+
 import { Image } from '../../src/index.js';
 
 describe('load', () => {
   it('should load the image synchronously', () => {
     const image = testUtils.load('opencv/test.png');
+
     expect(image).toBeInstanceOf(Image);
   });
 
@@ -20,6 +23,7 @@ describe('createGreyImage', () => {
       [7, 8, 9],
       [10, 11, 12],
     ]);
+
     expect(image.width).toBe(3);
     expect(image.height).toBe(4);
     expect(image.getPixel(0, 1)).toStrictEqual([4]);
@@ -32,6 +36,7 @@ describe('createGreyImage', () => {
        7  8  9
       10 11 12
     `);
+
     expect(image.width).toBe(3);
     expect(image.height).toBe(4);
     expect(image.getPixel(0, 1)).toStrictEqual([4]);
@@ -41,6 +46,7 @@ describe('createGreyImage', () => {
     const image = testUtils.createGreyImage([[1, 32768]], {
       bitDepth: 16,
     });
+
     expect(image.bitDepth).toBe(16);
     expect(image.getValueByIndex(0, 1)).toBe(32768);
   });
@@ -76,6 +82,7 @@ describe('createRgbImage', () => {
       [7, 8, 9],
       [10, 11, 12],
     ]);
+
     expect(image.width).toBe(1);
     expect(image.height).toBe(4);
     expect(image.getPixel(0, 1)).toStrictEqual([4, 5, 6]);
@@ -88,6 +95,7 @@ describe('createRgbImage', () => {
        7  8  9
       10 11 12
     `);
+
     expect(image.width).toBe(1);
     expect(image.height).toBe(4);
     expect(image.getPixel(0, 1)).toStrictEqual([4, 5, 6]);
@@ -97,6 +105,7 @@ describe('createRgbImage', () => {
     const image = testUtils.createRgbImage([[1, 2, 32768]], {
       bitDepth: 16,
     });
+
     expect(image.bitDepth).toBe(16);
     expect(image.getPixel(0, 0)).toStrictEqual([1, 2, 32768]);
   });
@@ -120,6 +129,7 @@ describe('createRgbaImage', () => {
       [7, 8, 9, 0],
       [10, 11, 12, 255],
     ]);
+
     expect(image.width).toBe(1);
     expect(image.height).toBe(4);
     expect(image.getPixel(0, 1)).toStrictEqual([4, 5, 6, 128]);
@@ -130,6 +140,7 @@ describe('createRgbaImage', () => {
        1  2  3 / 255 | 4  5  6 / 128
        7  8  9 / 0   | 10 11 12 / 255
     `);
+
     expect(image.width).toBe(2);
     expect(image.height).toBe(2);
     expect(image.getPixel(1, 0)).toStrictEqual([4, 5, 6, 128]);
@@ -139,6 +150,7 @@ describe('createRgbaImage', () => {
     const image = testUtils.createRgbaImage([[1, 2, 3, 32768]], {
       bitDepth: 16,
     });
+
     expect(image.bitDepth).toBe(16);
     expect(image.getPixel(0, 0)).toStrictEqual([1, 2, 3, 32768]);
   });
@@ -161,6 +173,7 @@ describe('createMask', () => {
       [0, 0, 0],
       [0, 0, 1],
     ]);
+
     expect(mask.width).toBe(3);
     expect(mask.height).toBe(4);
     expect(mask.getBit(0, 1)).toBe(0);
@@ -171,6 +184,7 @@ describe('createMask', () => {
        0  0  0
        1  0  0
     `);
+
     expect(mask.width).toBe(3);
     expect(mask.height).toBe(2);
     expect(mask.getBit(0, 1)).toBe(1);
@@ -210,6 +224,7 @@ describe('createRoi', () => {
       ],
       { allowCorners: true },
     );
+
     expect(roi.width).toBe(3);
     expect(roi.height).toBe(4);
     expect(roi.id).toBe(1);
@@ -220,6 +235,7 @@ describe('createRoi', () => {
        0  0  0
        1  0  0
     `);
+
     expect(roi.width).toBe(1);
     expect(roi.height).toBe(1);
     expect(roi.id).toBe(1);
@@ -236,6 +252,7 @@ describe('createRoi', () => {
     0 0 0 1 1 0 0 0
     0 0 0 0 0 0 0 0
     `);
+
     expect(roi.width).toBe(6);
     expect(roi.height).toBe(6);
     expect(roi.id).toBe(1);

@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 test('grey image 5x5', () => {
   const image = testUtils.createGreyImage([
     [1, 2, 3, 4, 5],
@@ -21,6 +23,7 @@ test('grey image 5x5', () => {
     [2, 2, 3, 4, 4],
   ]);
 });
+
 test('grey image 5x5 with bigger values', () => {
   const image = testUtils.createGreyImage([
     [10, 2, 20, 4, 5],
@@ -43,6 +46,7 @@ test('grey image 5x5 with bigger values', () => {
     [10, 2, 20, 4, 5],
   ]);
 });
+
 test('grey image 5x5 with different borderType and borderValue', () => {
   const image = testUtils.createGreyImage([
     [10, 2, 20, 4, 5],
@@ -56,6 +60,7 @@ test('grey image 5x5 with different borderType and borderValue', () => {
     cellSize: 7,
     borderValue: 1,
   });
+
   expect(result).toMatchImageData([
     [1, 1, 1, 1, 1],
     [1, 2, 2, 2, 1],

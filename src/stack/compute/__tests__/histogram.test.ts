@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Stack } from '../../../Stack.js';
 
 test('two grey images, bitsDepth = 8', () => {

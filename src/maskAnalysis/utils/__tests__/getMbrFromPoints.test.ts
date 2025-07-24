@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { getMbrFromPoints } from '../getMbrFromPoints.js';
 
 test.each([

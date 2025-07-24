@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { getConvexHull } from '../getConvexHull.js';
 
 test('cross', () => {
@@ -8,6 +10,7 @@ test('cross', () => {
   ]);
 
   const convexHull = getConvexHull(mask);
+
   expect(convexHull).toBeDeepCloseTo(
     {
       points: [
@@ -35,6 +38,7 @@ test('small triangle', () => {
   ]);
 
   const convexHull = getConvexHull(mask);
+
   expect(convexHull).toBeDeepCloseTo(
     {
       points: [
@@ -50,6 +54,7 @@ test('small triangle', () => {
     1,
   );
 });
+
 test('1 pixel ROI', () => {
   const mask = testUtils.createMask([
     [0, 0, 0],
@@ -58,6 +63,7 @@ test('1 pixel ROI', () => {
   ]);
 
   const convexHull = getConvexHull(mask);
+
   expect(convexHull).toBeDeepCloseTo(
     {
       points: [
@@ -72,6 +78,7 @@ test('1 pixel ROI', () => {
     1,
   );
 });
+
 test('2 pixels ROI', () => {
   const mask = testUtils.createMask([
     [0, 0, 0],
@@ -80,6 +87,7 @@ test('2 pixels ROI', () => {
   ]);
 
   const convexHull = getConvexHull(mask);
+
   expect(convexHull).toBeDeepCloseTo(
     {
       points: [
@@ -94,6 +102,7 @@ test('2 pixels ROI', () => {
     1,
   );
 });
+
 test('5x5 cross', () => {
   const mask = testUtils.createMask([
     [0, 0, 1, 0, 0],
@@ -104,6 +113,7 @@ test('5x5 cross', () => {
   ]);
 
   const convexHull = getConvexHull(mask);
+
   expect(convexHull).toBeDeepCloseTo(
     {
       points: [
@@ -122,6 +132,7 @@ test('5x5 cross', () => {
     1,
   );
 });
+
 test('random shape', () => {
   const mask = testUtils.createMask([
     [0, 0, 1, 0, 0],
@@ -132,6 +143,7 @@ test('random shape', () => {
   ]);
 
   const convexHull = getConvexHull(mask);
+
   expect(convexHull.points).toStrictEqual([
     { column: 0, row: 4 },
     { column: 0, row: 5 },
@@ -142,6 +154,7 @@ test('random shape', () => {
     { column: 2, row: 0 },
   ]);
 });
+
 test('empty mask', () => {
   const mask = testUtils.createMask([
     [0, 0],

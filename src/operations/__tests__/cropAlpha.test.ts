@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { cropAlpha } from '../cropAlpha.js';
 
 test('GREYA, no crop', () => {
@@ -9,6 +11,7 @@ test('GREYA, no crop', () => {
   ]);
 
   const cropped = cropAlpha(image);
+
   expect(cropped).toMatchImage(image);
 });
 
@@ -21,6 +24,7 @@ test('GREYA, some crop', () => {
   ]);
 
   const cropped = image.cropAlpha();
+
   expect(cropped).toMatchImageData([
     [2, 255, 3, 255],
     [5, 255, 6, 255],
@@ -37,6 +41,7 @@ test('GREYA, single pixel remains', () => {
   ]);
 
   const cropped = image.cropAlpha();
+
   expect(cropped).toMatchImageData([[5, 255]]);
 });
 
@@ -49,6 +54,7 @@ test('GREYA, other threshold', () => {
   ]);
 
   const cropped = image.cropAlpha({ threshold: 240 });
+
   expect(cropped).toMatchImageData([
     [2, 240, 3, 0],
     [5, 255, 6, 250],

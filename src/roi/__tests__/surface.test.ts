@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { fromMask } from '../fromMask.js';
 
 describe('ROI surface', () => {
@@ -10,7 +12,8 @@ describe('ROI surface', () => {
     ]);
 
     const rois = fromMask(mask).getRois();
-    expect(rois[0].surface).toStrictEqual(8);
+
+    expect(rois[0].surface).toBe(8);
   });
 
   it('surface of a slightly more complex figure', () => {
@@ -23,7 +26,8 @@ describe('ROI surface', () => {
     ]);
 
     const rois = fromMask(mask).getRois();
-    expect(rois[0].surface).toStrictEqual(13);
+
+    expect(rois[0].surface).toBe(13);
   });
 
   it('surface on multiple ROIs', () => {
@@ -36,8 +40,9 @@ describe('ROI surface', () => {
     ]);
 
     const rois = fromMask(mask).getRois();
-    expect(rois[0].surface).toStrictEqual(1);
-    expect(rois[1].surface).toStrictEqual(3);
-    expect(rois[2].surface).toStrictEqual(8);
+
+    expect(rois[0].surface).toBe(1);
+    expect(rois[1].surface).toBe(3);
+    expect(rois[2].surface).toBe(8);
   });
 });

@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../Image.js';
 import { getClamp } from '../clamp.js';
 
@@ -8,6 +10,7 @@ test("clamp 65'536", () => {
   });
 
   const clamp = getClamp(image);
+
   expect(clamp(2000000)).toBe(65535);
   expect(clamp(-535)).toBe(0);
 });

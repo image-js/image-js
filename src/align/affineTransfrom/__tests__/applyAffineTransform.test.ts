@@ -1,4 +1,5 @@
 import { Matrix } from 'ml-matrix';
+import { expect, test } from 'vitest';
 
 import { applyAffineTransfom } from '../applyAffineTransform.js';
 import { createAffineTransformModel } from '../createAffineTransformModel.js';
@@ -44,6 +45,7 @@ test('rectangle with scale = 2', () => {
 
   const model = createAffineTransformModel([-90, 2, 12, 2]);
   const result = applyAffineTransfom(source, model);
+
   expect(expected).toStrictEqual(result);
 });
 
@@ -61,6 +63,7 @@ test('only one point', () => {
 
   const model = createAffineTransformModel([angle, -1, 0, 1 / 5]);
   const result = applyAffineTransfom(source, model);
+
   // @ts-expect-error: toBeDeepCloseTo types are wrong
   expect(result).toBeDeepCloseTo(expected);
 });

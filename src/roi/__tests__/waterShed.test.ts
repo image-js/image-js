@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { computeThreshold } from '../../operations/index.js';
 import { waterShed } from '../waterShed.js';
 
@@ -17,16 +19,13 @@ describe('Test WaterShed Roi generation', () => {
       -1, -1, -1, -1, -1,
       -1, -1, -1, -1, -1,
       -1, -1, -1, -1, -1,`);
-    expect(roiMapManager).toEqual({
-      map: {
-        data: resultArray,
-        nbPositive: 0,
-        nbNegative: 1,
-        width: 5,
-        height: 5,
-      },
-      whiteRois: [],
-      blackRois: [],
+
+    expect(roiMapManager.getMap()).toStrictEqual({
+      data: resultArray,
+      nbPositive: 0,
+      nbNegative: 1,
+      width: 5,
+      height: 5,
     });
   });
 
@@ -56,16 +55,13 @@ describe('Test WaterShed Roi generation', () => {
          0,  0,  0,  0,  0,  0, -2, -2, -2, -2,
          0,  0,  0,  0,  0, -2, -2, -2, -2,  0,  
          0,  0,  0,  0,  0,  0,  0,  0, -2,  0`);
-    expect(roiMapManager).toEqual({
-      map: {
-        data: resultArray,
-        nbPositive: 0,
-        nbNegative: 2,
-        width: 10,
-        height: 10,
-      },
-      whiteRois: [],
-      blackRois: [],
+
+    expect(roiMapManager.getMap()).toStrictEqual({
+      data: resultArray,
+      nbPositive: 0,
+      nbNegative: 2,
+      width: 10,
+      height: 10,
     });
   });
 
@@ -88,18 +84,16 @@ describe('Test WaterShed Roi generation', () => {
       0,-1,-1,-1, 0,
       0, 0, 0, 0, 0,
     `);
-    expect(roiMapManager).toEqual({
-      map: {
-        data: resultArray,
-        nbPositive: 0,
-        nbNegative: 1,
-        width: 5,
-        height: 5,
-      },
-      whiteRois: [],
-      blackRois: [],
+
+    expect(roiMapManager.getMap()).toStrictEqual({
+      data: resultArray,
+      nbPositive: 0,
+      nbNegative: 1,
+      width: 5,
+      height: 5,
     });
   });
+
   it('test 4, waterShed through threshold value', () => {
     const image = testUtils.createGreyImage([
       [3, 3, 3, 3, 3, 3, 3, 3, 4, 4],
@@ -130,18 +124,16 @@ describe('Test WaterShed Roi generation', () => {
     0,  0,  0,  0,  0, -2, -2, -2, -2,  0,
     0,  0,  0,  0,  0,  0,  0,  0, -2,  0
     `);
-    expect(roiMapManager).toEqual({
-      map: {
-        data: resultArray,
-        nbPositive: 0,
-        nbNegative: 2,
-        width: 10,
-        height: 10,
-      },
-      whiteRois: [],
-      blackRois: [],
+
+    expect(roiMapManager.getMap()).toStrictEqual({
+      data: resultArray,
+      nbPositive: 0,
+      nbNegative: 2,
+      width: 10,
+      height: 10,
     });
   });
+
   it('test 5, waterShed through threshold mask and with inverted image', () => {
     const image = testUtils.createGreyImage([
       [3, 3, 3, 3, 3, 3, 3, 3, 4, 4],
@@ -170,16 +162,13 @@ describe('Test WaterShed Roi generation', () => {
     -1, -1, -1, -2, -2, -2, -2, -2, -2, -2, 
     -2, -2, -2, -2, -2, -2, -2, -2,  0, -2
     `);
-    expect(roiMapManager).toEqual({
-      map: {
-        data: resultArray,
-        nbPositive: 0,
-        nbNegative: 2,
-        width: 10,
-        height: 10,
-      },
-      whiteRois: [],
-      blackRois: [],
+
+    expect(roiMapManager.getMap()).toStrictEqual({
+      data: resultArray,
+      nbPositive: 0,
+      nbNegative: 2,
+      width: 10,
+      height: 10,
     });
   });
 });

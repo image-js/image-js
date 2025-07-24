@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { decodePng } from '../decodePng.js';
 
 const tests = [
@@ -17,6 +19,7 @@ const tests = [
 test.each(tests)('should load from buffer %s', (name, bitDepth, colorModel) => {
   const buffer = testUtils.loadBuffer(`formats/${name}.png`);
   const img = decodePng(buffer);
+
   expect(img.bitDepth).toBe(bitDepth);
   expect(img.colorModel).toBe(colorModel);
 });

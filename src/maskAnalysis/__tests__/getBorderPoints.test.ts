@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Mask } from '../../Mask.js';
 
 test('3x3 mask', () => {
@@ -56,6 +58,7 @@ test('5x5 mask with hole, inner borders, allow corners', () => {
   });
 
   const bordersMask = Mask.fromPoints(mask.width, mask.height, points);
+
   expect(bordersMask).toMatchMask(mask);
 });
 

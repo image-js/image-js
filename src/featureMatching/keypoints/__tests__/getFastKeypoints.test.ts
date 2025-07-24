@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { drawKeypoints } from '../../visualize/drawKeypoints.js';
 import { getFastKeypoints } from '../getFastKeypoints.js';
 
@@ -64,6 +66,7 @@ test('star', () => {
 
 test('wrong color model error', () => {
   const image = testUtils.load('various/alphabet.jpg');
+
   expect(() => {
     getFastKeypoints(image);
   }).toThrow('image channels must be 1 to apply this algorithm');
@@ -72,6 +75,7 @@ test('wrong color model error', () => {
 test('undefined score algorithm error', () => {
   const image = testUtils.load('various/alphabet.jpg');
   const grey = image.convertColor('GREY');
+
   expect(() => {
     // @ts-expect-error: test for js users
     getFastKeypoints(grey, { scoreAlgorithm: 'test' });

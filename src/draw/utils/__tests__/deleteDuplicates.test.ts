@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { deleteDuplicates } from '../deleteDuplicates.js';
 
 test('should remove duplicate points', () => {

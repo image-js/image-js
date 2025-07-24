@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../Image.js';
 import { ImageColorModel } from '../../utils/constants/colorModels.js';
 import { computeThreshold, threshold } from '../threshold.js';
@@ -28,18 +30,21 @@ test('computeThreshold with OTSU', () => {
 
   const grey = testImage.convertColor('GREY');
   const thresholdValue = computeThreshold(grey, { algorithm: 'otsu' });
+
   expect(thresholdValue).toBe(127);
 });
 
 test('computeThreshold with OTSU (2)', () => {
   const img = testUtils.load('various/grayscale_by_zimmyrose.png');
   const thresholdValue = computeThreshold(img, { algorithm: 'otsu' });
+
   expect(thresholdValue).toBe(135);
 });
 
 test('computeThreshold default should be Otsu', () => {
   const img = testUtils.load('various/grayscale_by_zimmyrose.png');
   const thresholdValue = computeThreshold(img);
+
   expect(thresholdValue).toBe(135);
 });
 
@@ -62,9 +67,11 @@ test('automatic threshold with OTSU', () => {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [1, 1, 1, 1, 1, 1, 1, 1],
   ]);
+
   expect(th).toMatchMask(expected);
   expect(defaultThreshold).toMatchMask(expected);
 });
+
 test('threshold in percents', () => {
   const grey = testUtils.createGreyImage([
     [1, 2, 3],
@@ -79,6 +86,7 @@ test('threshold in percents', () => {
     [0, 0, 1],
     [1, 1, 1],
   ]);
+
   expect(th).toMatchMask(expected);
 });
 
@@ -89,6 +97,7 @@ test('error too many channels', () => {
     /threshold can only be computed on images with one channel/,
   );
 });
+
 test('error threshold out of range', () => {
   const testImage = testUtils.load('opencv/test.png');
 
@@ -127,7 +136,7 @@ test('16 bits image simple with default number of slots 2**16', () => {
   const threshold = image.threshold({ slots: 2 ** image.bitDepth });
   const defaultSlotsThreshold = image.threshold();
 
-  expect(threshold).toEqual(defaultSlotsThreshold);
+  expect(threshold).toStrictEqual(defaultSlotsThreshold);
 });
 
 test('16 bits image simple with custom number of slots 2**8', () => {
@@ -139,5 +148,5 @@ test('16 bits image simple with custom number of slots 2**8', () => {
   const threshold = image.threshold({ slots: 2 ** 8 });
   const defaultSlotsThreshold = image.threshold();
 
-  expect(threshold).toEqual(defaultSlotsThreshold);
+  expect(threshold).toStrictEqual(defaultSlotsThreshold);
 });

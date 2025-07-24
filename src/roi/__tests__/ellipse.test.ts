@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { fromMask } from '../fromMask.js';
 
 test('ellipse on a small figure 3x3', () => {
@@ -31,7 +33,8 @@ test('ellipse on a small figure 3x3', () => {
     surface: Number.NaN,
   });
 });
-test('ellipse on a small figure 3x3', () => {
+
+test('ellipse on a small figure 3x3 2', () => {
   const mask = testUtils.createMask([
     [1, 1, 0],
     [0, 1, 0],
@@ -74,6 +77,7 @@ test('ellipse on 3x3 cross', () => {
 
   const rois = roiMapManager.getRois();
   const result = rois[0].ellipse;
+
   expect(result).toBeDeepCloseTo({
     center: { column: 1, row: 1 },
     majorAxis: {
@@ -95,6 +99,7 @@ test('ellipse on 3x3 cross', () => {
     surface: 5,
   });
 });
+
 test('ellipse on slightly changed 3x3 cross', () => {
   const mask = testUtils.createMask([
     [1, 1, 0],
@@ -105,6 +110,7 @@ test('ellipse on slightly changed 3x3 cross', () => {
 
   const rois = roiMapManager.getRois();
   const result = rois[0].ellipse;
+
   expect(result).toBeDeepCloseTo({
     center: { column: 0.8333333333333334, row: 0.8333333333333334 },
     majorAxis: {
@@ -126,6 +132,7 @@ test('ellipse on slightly changed 3x3 cross', () => {
     surface: 6.000000000000002,
   });
 });
+
 test('ellipse on 4x4 ROI', () => {
   const mask = testUtils.createMask([
     [0, 0, 1, 1],
@@ -137,6 +144,7 @@ test('ellipse on 4x4 ROI', () => {
 
   const rois = roiMapManager.getRois();
   const result = rois[0].ellipse;
+
   expect(result).toBeDeepCloseTo({
     center: { column: 1.7777777777777777, row: 1.7777777777777777 },
     majorAxis: {

@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../Image.js';
 
 test('GREY image, default options', () => {
@@ -8,6 +10,7 @@ test('GREY image, default options', () => {
   ]);
 
   const result = image.crop();
+
   expect(result).toMatchImage(image);
 });
 
@@ -22,6 +25,7 @@ test('GREY image, various origins and sizes', () => {
   let result = image.crop({
     origin: { row: 2, column: 2 },
   });
+
   expect(result).toMatchImageData([
     [2, 2, 0],
     [4, 3, 0],
@@ -33,6 +37,7 @@ test('GREY image, various origins and sizes', () => {
     height: 2,
     width: 2,
   });
+
   expect(result).toMatchImageData([
     [0, 1],
     [1, 1],
@@ -43,6 +48,7 @@ test('GREY image, various origins and sizes', () => {
     height: 2,
     width: 2,
   });
+
   expect(result).toMatchImageData([
     [2, 2],
     [4, 3],
@@ -52,6 +58,7 @@ test('GREY image, various origins and sizes', () => {
     origin: { row: 1, column: 3 },
     height: 1,
   });
+
   expect(result).toMatchImageData([[1, 1]]);
 });
 
@@ -99,6 +106,7 @@ test('origin is not integer', () => {
     [1, 2, 4, 3, 0],
     [1, 2, 3, 3, 0],
   ]);
+
   expect(() => {
     image.crop({
       origin: { row: 1.5, column: 1.5 },
@@ -114,6 +122,7 @@ test('width is not integer', () => {
     [1, 2, 4, 3, 0],
     [1, 2, 3, 3, 0],
   ]);
+
   expect(() => {
     image.crop({ width: 3.5 });
   }).toThrow('Width and height (width:3.5; height:5) must be integers');

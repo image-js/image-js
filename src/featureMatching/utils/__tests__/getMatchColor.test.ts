@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../../Image.js';
 import type { Match } from '../../matching/bruteForceMatch.js';
 import { getColors } from '../getColors.js';
@@ -19,6 +21,7 @@ test('matches should all have a different color', () => {
   for (let i = 0; i < matches.length; i++) {
     result.push(getMatchColor(matches, i, colors));
   }
+
   expect(result).toStrictEqual(colors);
 });
 
@@ -35,6 +38,7 @@ test('all matches have same distance', () => {
   for (let i = 0; i < matches.length; i++) {
     result.push(getMatchColor(matches, i, colors));
   }
+
   expect(result).toStrictEqual([
     [255, 0, 0],
     [255, 0, 0],

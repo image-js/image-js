@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type { TestImagePath } from '../../../../test/TestImagePath.js';
 import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.js';
 import { getBestKeypointsInRadius } from '../../keypoints/getBestKeypointsInRadius.js';
@@ -71,7 +73,7 @@ test.each([
 
   const matches = bruteForceOneMatch(sourceDescriptors, destinationDescriptors);
 
-  expect(matches.length).toBe(data.expected);
+  expect(matches).toHaveLength(data.expected);
 
   const montage = new Montage(source, destination, {
     disposition: 'vertical',

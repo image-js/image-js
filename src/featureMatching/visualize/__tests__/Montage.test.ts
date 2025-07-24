@@ -13,11 +13,13 @@ describe('constructor', () => {
   it('default options', () => {
     expect(new Montage(source, source).width).toBe(2 * source.width);
   });
+
   it('should error when scale is not an integer', () => {
     expect(() => {
       return new Montage(source, source, { scale: 1.5 });
     }).toThrow('scale must be an integer');
   });
+
   it('invalid disposition type', () => {
     expect(() => {
       // @ts-expect-error: invalid disposition type
@@ -33,6 +35,7 @@ describe('drawKeypoints', () => {
 
     expect(montage.image).toMatchImageSnapshot();
   });
+
   it('disposition vertical', () => {
     const montage = new Montage(source, source, {
       disposition: 'vertical',
@@ -57,6 +60,7 @@ describe('drawMatches', () => {
     expect(montage.image).toMatchImageSnapshot();
     expect(montage.height).toBe(2 * source.height);
   });
+
   it('disposition vertical', () => {
     const brief = getBriefDescriptors(grey, sourceKeypoints);
     const matches = bruteForceOneMatch(brief.descriptors, brief.descriptors);

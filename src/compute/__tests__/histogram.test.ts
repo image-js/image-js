@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { createImageFromData } from '../../../test/createImageFromData.js';
 
 test('RGBA image - channel 0', () => {
@@ -9,6 +11,7 @@ test('RGBA image - channel 0', () => {
   const expected = new Uint32Array(256);
   expected[230] = 1;
   expected[100] = 1;
+
   expect(histogram).toStrictEqual(expected);
 });
 
@@ -20,6 +23,7 @@ test('RGBA image - channel 2', () => {
   const histogram = image.histogram({ channel: 2 });
   const expected = new Uint32Array(256);
   expected[120] = 2;
+
   expect(histogram).toStrictEqual(expected);
 });
 
@@ -32,6 +36,7 @@ test('binary image', () => {
     [0, 0, 0, 0, 0],
   ]);
   const histogram = image.histogram();
+
   expect(histogram[0]).toBe(16);
   expect(histogram[255]).toBe(9);
 });
@@ -50,7 +55,7 @@ test('grey 16-bit image', () => {
   );
   const histogram = image.histogram();
 
-  expect(histogram.length).toBe(2 ** 16);
+  expect(histogram).toHaveLength(2 ** 16);
 });
 
 test('grey 16-bit image with 2 slots', () => {
@@ -80,16 +85,19 @@ test('binary image with 64 slots', () => {
     [0, 0, 0, 0, 0],
   ]);
   const histogram = image.histogram({ channel: 0, slots: 64 });
+
   expect(histogram[0]).toBe(16);
   expect(histogram[63]).toBe(9);
 });
 
 test('throw if channel option is missing', () => {
   const image = testUtils.load('opencv/test.png');
+
   expect(() => image.histogram()).toThrow(
     /channel option is mandatory for multi-channel images/,
   );
 });
+
 test('throw if slots is not a power of 2', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0],
@@ -98,6 +106,7 @@ test('throw if slots is not a power of 2', () => {
     [0, 255, 255, 255, 0],
     [0, 0, 0, 0, 0],
   ]);
+
   expect(() => image.histogram({ slots: 7 })).toThrow(
     'slots must be a power of 2, for example: 64, 256, 1024',
   );

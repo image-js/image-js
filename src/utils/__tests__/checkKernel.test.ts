@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { checkKernel } from '../validators/checkKernel.js';
 
 test('should throw', () => {

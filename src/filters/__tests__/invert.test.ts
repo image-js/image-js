@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { Image } from '../../Image.js';
 import { Mask } from '../../Mask.js';
 
@@ -5,6 +7,7 @@ describe('image is an Image', () => {
   it('invert an RGB image', () => {
     const img = testUtils.createRgbImage([[0, 50, 127, 255, 250, 4]]);
     const inverted = img.invert();
+
     expect(inverted).not.toBe(img);
     expect(inverted).toMatchImageData([[255, 205, 128, 0, 5, 251]]);
   });
@@ -14,6 +17,7 @@ describe('image is an Image', () => {
       [0, 50, 127, 200, 255, 250, 4, 200],
     ]);
     const inverted = img.invert();
+
     expect(inverted).not.toBe(img);
     expect(inverted).toMatchImageData([[255, 205, 128, 200, 0, 5, 251, 200]]);
   });
@@ -24,6 +28,7 @@ describe('image is an Image', () => {
       [255, 0],
     ]);
     const inverted = image.invert();
+
     expect(inverted).toMatchImageData([
       [255, 255],
       [0, 0],
@@ -37,6 +42,7 @@ describe('image is an Image', () => {
     ]);
 
     const inverted = image.invert();
+
     expect(inverted).not.toBe(image);
     expect(inverted).toMatchImageData([
       [65534, 65533],
@@ -52,6 +58,7 @@ describe('image is an Image', () => {
 
     const out = new Image(1, 2);
     const inverted = image.invert({ out });
+
     expect(inverted).toMatchImageData([
       [25, 172, 135],
       [155, 115, 242],
@@ -65,6 +72,7 @@ describe('image is an Image', () => {
       [255, 0],
     ]);
     image.invert({ out: image });
+
     expect(image).toMatchImageData([
       [255, 255],
       [0, 0],
@@ -76,9 +84,11 @@ describe('image is a Mask', () => {
   it('invert a Mask', () => {
     const mask = testUtils.createMask([[0, 1, 1, 1, 0, 0]]);
     const inverted = mask.invert();
+
     expect(inverted).not.toBe(mask);
     expect(inverted).toMatchMaskData([[1, 0, 0, 0, 1, 1]]);
   });
+
   it('invert with out parameter', () => {
     const mask = testUtils.createMask([
       [1, 1, 1],
@@ -87,6 +97,7 @@ describe('image is a Mask', () => {
 
     const out = new Mask(3, 2);
     const inverted = mask.invert({ out });
+
     expect(inverted).toMatchMaskData([
       [0, 0, 0],
       [1, 1, 1],
@@ -100,6 +111,7 @@ describe('image is a Mask', () => {
       [1, 0],
     ]);
     mask.invert({ out: mask });
+
     expect(mask).toMatchMaskData([
       [1, 0],
       [0, 1],

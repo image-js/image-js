@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { getExtrema } from '../getExtrema.js';
 
 test('minimum of grey image from legacy code', () => {
@@ -15,6 +17,7 @@ test('minimum of grey image from legacy code', () => {
   ]);
 
   const result = getExtrema(image, { kind: 'minimum' });
+
   expect(result).toStrictEqual([
     { column: 3, row: 2 },
     { column: 6, row: 7 },
@@ -67,6 +70,7 @@ test('maximum with square algorithm', () => {
   ]);
 
   const result = getExtrema(image, { kind: 'maximum', algorithm: 'square' });
+
   expect(result).toStrictEqual([
     { column: 1, row: 1 },
     { column: 2, row: 3 },
@@ -93,6 +97,7 @@ test('maximum with square algorithm with a mask option', () => {
     kind: 'maximum',
     algorithm: 'square',
   });
+
   expect(result).toStrictEqual([
     { column: 1, row: 1 },
     { column: 2, row: 3 },
@@ -107,6 +112,7 @@ test('testing for error handling', () => {
     [2, 3, 4, 0, 0],
     [0, 0, 0, 0, 0],
   ]);
+
   //@ts-expect-error error testing
   expect(() => getExtrema(image, { algorithm: 'blah' })).toThrow(
     /unreachable: blah/,

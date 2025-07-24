@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type { OrientedFastKeypoint } from '../../getOrientedFastKeypoints.js';
 import { getKeypointsInRadius } from '../getKeypointsInRadius.js';
 

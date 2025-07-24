@@ -1,9 +1,12 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../../Image.js';
 import { getIntensityCentroid } from '../getIntensityCentroid.js';
 
 test('3x3 empty image', () => {
   const image = new Image(3, 3, { colorModel: 'GREY' });
   const result = getIntensityCentroid(image);
+
   expect(result).toStrictEqual([{ column: 0, row: 0 }]);
 });
 
@@ -14,6 +17,7 @@ test('3x3 image', () => {
     [3, 0, 1],
   ]);
   const result = getIntensityCentroid(image);
+
   expect(result).toStrictEqual([{ column: 0, row: 0 }]);
 });
 
@@ -24,6 +28,7 @@ test('RGB image', () => {
     [3, 1, 1],
   ]);
   const result = getIntensityCentroid(image);
+
   expect(result).toStrictEqual([
     { column: 0, row: 1 / 3 },
     { column: 0, row: 0 },

@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../Image.js';
 import { Mask } from '../../Mask.js';
 import { getIndex } from '../getIndex.js';

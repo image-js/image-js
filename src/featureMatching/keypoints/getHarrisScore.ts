@@ -1,4 +1,4 @@
-import { Matrix, EigenvalueDecomposition, WrapperMatrix1D } from 'ml-matrix';
+import { EigenvalueDecomposition, Matrix, WrapperMatrix1D } from 'ml-matrix';
 
 import type { Image } from '../../Image.js';
 import type { Point } from '../../geometry/index.js';

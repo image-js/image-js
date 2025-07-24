@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type { TestImagePath } from '../../../../test/TestImagePath.js';
 import { drawKeypoints } from '../../visualize/drawKeypoints.js';
 import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints.js';
@@ -14,6 +16,7 @@ test('7x7 image, angle = -90°', () => {
   ]);
 
   const result = getOrientedFastKeypoints(image)[0];
+
   expect(result).toStrictEqual({
     angle: -90,
     origin: { row: 3, column: 3 },
@@ -33,6 +36,7 @@ test('7x7 image, angle = 135°', () => {
   ]);
 
   const result = getOrientedFastKeypoints(image)[0];
+
   expect(result).toStrictEqual({
     angle: -225,
     origin: { row: 3, column: 3 },
@@ -52,6 +56,7 @@ test('7x7 image, angle = -135°', () => {
   ]);
 
   const result = getOrientedFastKeypoints(image)[0];
+
   expect(result).toStrictEqual({
     angle: 225,
     origin: { row: 3, column: 3 },
@@ -71,6 +76,7 @@ test('7x7 image, angle = 180°', () => {
   ]);
 
   const result = getOrientedFastKeypoints(image)[0];
+
   expect(result).toStrictEqual({
     angle: 180,
     origin: { row: 3, column: 3 },
@@ -90,12 +96,14 @@ test('7x7 image, angle = 0°', () => {
   ]);
 
   const result = getOrientedFastKeypoints(image)[0];
+
   expect(result).toStrictEqual({
     angle: -0,
     origin: { row: 3, column: 3 },
     score: 2680,
   });
 });
+
 test('7x7 image, angle = 45°', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0, 0, 100],
@@ -108,6 +116,7 @@ test('7x7 image, angle = 45°', () => {
   ]);
 
   const result = getOrientedFastKeypoints(image)[0];
+
   expect(result).toBeDeepCloseTo({
     angle: 45,
     origin: { row: 3, column: 3 },
@@ -127,6 +136,7 @@ test('7x7 image, angle = -45°', () => {
   ]);
 
   const result = getOrientedFastKeypoints(image)[0];
+
   expect(result).toBeDeepCloseTo({
     angle: -45,
     origin: { row: 3, column: 3 },
@@ -223,7 +233,8 @@ test('verify single keypoint orientation', () => {
   });
 
   const keypoints = getOrientedFastKeypoints(image, { centroidPatchDiameter });
-  expect(keypoints.length).toBe(1);
+
+  expect(keypoints).toHaveLength(1);
 
   const result = drawKeypoints(image, keypoints, {
     markerSize: centroidPatchDiameter,
@@ -259,7 +270,8 @@ test('small patchsize and large marker', () => {
   });
 
   const keypoints = getOrientedFastKeypoints(image, { centroidPatchDiameter });
-  expect(keypoints.length).toBe(1);
+
+  expect(keypoints).toHaveLength(1);
 
   const result = drawKeypoints(image, keypoints, {
     markerSize: 31,

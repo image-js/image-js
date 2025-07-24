@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import checkProcessable from '../validators/checkProcessable.js';
 
 test('wrong bit depth', () => {
@@ -5,6 +7,7 @@ test('wrong bit depth', () => {
     [0, 1],
     [2, 3],
   ]);
+
   expect(() => {
     checkProcessable(img, {
       bitDepth: [1, 16],
@@ -17,6 +20,7 @@ test('wrong alpha', () => {
     [0, 1],
     [2, 3],
   ]);
+
   expect(() => {
     checkProcessable(img, { alpha: true });
   }).toThrow('image alpha must be true to apply this algorithm');
@@ -27,6 +31,7 @@ test('wrong color model', () => {
     [0, 1],
     [2, 3],
   ]);
+
   expect(() => {
     checkProcessable(img, { colorModel: ['RGB'] });
   }).toThrow('image colorModel must be RGB to apply this algorithm');
@@ -37,6 +42,7 @@ test('wrong number of components', () => {
     [0, 1],
     [2, 3],
   ]);
+
   expect(() => {
     checkProcessable(img, {
       components: [2, 4],
@@ -49,6 +55,7 @@ test('wrong number of channels', () => {
     [0, 1],
     [2, 3],
   ]);
+
   expect(() => {
     checkProcessable(img, {
       channels: [2, 3],
@@ -61,6 +68,7 @@ test('only one valid bit depth or channel', () => {
     [0, 1],
     [2, 3],
   ]);
+
   expect(() => {
     checkProcessable(img, {
       bitDepth: 8,
@@ -71,6 +79,7 @@ test('only one valid bit depth or channel', () => {
 
 test('only grey images accepted', () => {
   const img = testUtils.createRgbImage([[0, 1, 2]]);
+
   expect(() => {
     checkProcessable(img, {
       bitDepth: 8,

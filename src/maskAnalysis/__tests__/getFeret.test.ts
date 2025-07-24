@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 test('empty mask', () => {
   const mask = testUtils.createMask(`0 0 0`);
   const result = mask.getFeret();
@@ -45,9 +47,11 @@ test('empty mask', () => {
     3,
   );
 });
+
 test('mask with only 1 pixel', () => {
   const mask = testUtils.createMask(`0 1 0`);
   const result = mask.getFeret();
+
   // the minimum diameter points are not as expected,
   // but this is a very edge case so it does not matter too much
   expect(result).toBeDeepCloseTo(
@@ -93,6 +97,7 @@ test('mask with only 1 pixel', () => {
     3,
   );
 });
+
 test('mask 3x3', () => {
   const mask = testUtils.createMask(`
         0 1 0
@@ -100,6 +105,7 @@ test('mask 3x3', () => {
         0 1 0
       `);
   const result = mask.getFeret();
+
   expect(result).toBeDeepCloseTo(
     {
       minDiameter: {

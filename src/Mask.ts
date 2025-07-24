@@ -1,19 +1,19 @@
 import type { BitDepth, Image } from './Image.js';
 import type { SubtractImageOptions } from './compare/index.js';
 import { subtract } from './compare/index.js';
-import {
-  drawLineOnMask,
-  drawPoints,
-  drawPolygonOnMask,
-  drawPolylineOnMask,
-  drawRectangle,
-} from './draw/index.js';
 import type {
   DrawLineOnMaskOptions,
   DrawPointsOptions,
   DrawPolygonOnMaskOptions,
   DrawPolylineOnMaskOptions,
   DrawRectangleOptions,
+} from './draw/index.js';
+import {
+  drawLineOnMask,
+  drawPoints,
+  drawPolygonOnMask,
+  drawPolylineOnMask,
+  drawRectangle,
 } from './draw/index.js';
 import type { AndOptions, InvertOptions, OrOptions } from './filters/index.js';
 import { and, invert, or } from './filters/index.js';

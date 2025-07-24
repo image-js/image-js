@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../../Image.js';
 import {
   getCirclePoints,
@@ -57,6 +59,7 @@ test('7x7 image with corner 90 degrees', () => {
 
   expect(result).toBe(false);
 });
+
 test('7x7 image with darker and lighter areas', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0, 0, 0],
@@ -74,6 +77,7 @@ test('7x7 image with darker and lighter areas', () => {
 
   expect(result).toBe(true);
 });
+
 test('7x7 image with segment', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0, 0, 0],
@@ -91,6 +95,7 @@ test('7x7 image with segment', () => {
 
   expect(result).toBe(true);
 });
+
 test('7x7 image, threshold = 60', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0, 0, 0],
@@ -109,6 +114,7 @@ test('7x7 image, threshold = 60', () => {
 
   expect(result).toBe(false);
 });
+
 test('7x7 image with corner 90 degrees, n=9', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0, 0, 0],

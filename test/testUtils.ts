@@ -25,7 +25,8 @@ export function getPath(name: TestImagePath): string {
  * @returns Buffer of the image.
  */
 export function loadBuffer(path: TestImagePath): Uint8Array {
-  return readFileSync(join(import.meta.dirname, 'img', path));
+  const buffer = readFileSync(join(import.meta.dirname, 'img', path));
+  return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
 }
 
 /**

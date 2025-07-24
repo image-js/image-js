@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { getMaskFromCannyEdge } from '../../operations/getMaskFromCannyEdge.js';
 import { sampleBackgroundPoints } from '../sampleBackgroundPoints.js';
 
@@ -15,7 +17,8 @@ test('basic test', () => {
     gridWidth: 3,
     gridHeight: 3,
   });
-  expect(points).toEqual([
+
+  expect(points).toStrictEqual([
     { column: 0, row: 0 },
     { column: 1, row: 0 },
     { column: 2, row: 0 },
@@ -51,7 +54,8 @@ test('basic test with basic mask', () => {
     gridWidth: 3,
     gridHeight: 3,
   });
-  expect(points).toEqual([
+
+  expect(points).toStrictEqual([
     { column: 3, row: 1 },
     { column: 5, row: 1 },
     { column: 5, row: 3 },
@@ -60,7 +64,7 @@ test('basic test with basic mask', () => {
   ]);
 });
 
-test('basic test with basic mask', () => {
+test('basic test with basic mask 2', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
@@ -76,7 +80,8 @@ test('basic test with basic mask', () => {
     gridWidth: 3,
     gridHeight: 3,
   });
-  expect(points).toEqual([
+
+  expect(points).toStrictEqual([
     { column: 1, row: 1 },
     { column: 3, row: 1 },
     { column: 5, row: 1 },
@@ -91,7 +96,8 @@ test('basic test of default values', () => {
   ]);
 
   const points = sampleBackgroundPoints(image, { gridHeight: 3, gridWidth: 3 });
-  expect(points).toEqual([
+
+  expect(points).toStrictEqual([
     { column: 0, row: 0 },
     { column: 1, row: 0 },
     { column: 2, row: 0 },
@@ -111,6 +117,7 @@ test('throw an error', () => {
     [0, 0, 0],
   ]);
   const mask = getMaskFromCannyEdge(image, { iterations: 0 });
+
   expect(() =>
     sampleBackgroundPoints(image, { mask, gridWidth: -3, gridHeight: 3 }),
   ).toThrow(`The grid has bigger width than the image. Grid's width: -3`);

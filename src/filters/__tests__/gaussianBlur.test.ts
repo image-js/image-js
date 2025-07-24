@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type {
   GaussianBlurOptions,
   GaussianBlurSigmaOptions,
@@ -90,7 +92,7 @@ test('x and y kernels', () => {
   ]);
 });
 
-test('x and y kernels', () => {
+test('x and y kernels 2', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
@@ -121,5 +123,6 @@ test('gaussian blur should have same result as opencv', () => {
   const blurred = gaussianBlur(img, options);
 
   const expected = testUtils.load('opencv/testGaussianBlur.png');
+
   expect(blurred).toMatchImage(expected);
 });

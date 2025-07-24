@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { getMatrixFromPoints } from '../getMatrixFromPoints.js';
 
 test('4 points', () => {

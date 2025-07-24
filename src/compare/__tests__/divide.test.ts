@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../Image.js';
 import { divide } from '../divide.js';
 
@@ -11,6 +13,7 @@ test('divide by 2', () => {
     [115, 40, 60, 127],
     [50, 70, 6, 0],
   ]);
+
   expect(image).toStrictEqual(result);
 });
 
@@ -19,10 +22,12 @@ test('error when dividing by 0', () => {
     [230, 80, 120, 255],
     [100, 140, 13, 1],
   ]);
+
   expect(() => {
     divide(image, 0);
   }).toThrow('Cannot divide by 0');
 });
+
 test('divide by decimal', () => {
   let image = testUtils.createRgbaImage([
     [230, 80, 120, 255],
@@ -33,8 +38,10 @@ test('divide by decimal', () => {
     [255, 255, 255, 255],
     [255, 255, 52, 16],
   ]);
+
   expect(image).toStrictEqual(result);
 });
+
 test('divide by prime number', () => {
   let image = testUtils.createRgbaImage([
     [230, 80, 120, 255],
@@ -45,8 +52,10 @@ test('divide by prime number', () => {
     [32, 11, 17, 36],
     [14, 20, 1, 0],
   ]);
+
   expect(image).toStrictEqual(result);
 });
+
 test('testing channels option', () => {
   let image = testUtils.createRgbaImage([
     [230, 80, 120, 255],
@@ -57,8 +66,10 @@ test('testing channels option', () => {
     [32, 11, 120, 36],
     [14, 20, 13, 0],
   ]);
+
   expect(image).toStrictEqual(result);
 });
+
 test('testing out option', () => {
   const image = testUtils.createRgbaImage([
     [230, 80, 120, 255],
@@ -70,5 +81,6 @@ test('testing out option', () => {
     [32, 11, 17, 36],
     [14, 20, 1, 0],
   ]);
+
   expect(out).toStrictEqual(result);
 });

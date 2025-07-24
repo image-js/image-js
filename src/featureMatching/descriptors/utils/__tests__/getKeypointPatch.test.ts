@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type { TestImagePath } from '../../../../../test/TestImagePath.js';
 import { getOrientedFastKeypoints } from '../../../keypoints/getOrientedFastKeypoints.js';
 import { drawKeypoints } from '../../../visualize/drawKeypoints.js';

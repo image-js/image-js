@@ -1,11 +1,13 @@
+import { expect, test } from 'vitest';
+
 import { Image } from '../../Image.js';
 import {
   getBorderInterpolation,
   interpolateConstantPoint,
+  interpolateReflect101Point,
   interpolateReflectPoint,
   interpolateReplicatePoint,
   interpolateWrapPoint,
-  interpolateReflect101Point,
 } from '../interpolateBorder.js';
 
 test('in range', () => {
@@ -19,6 +21,7 @@ test('too far', () => {
   const image = new Image(10, 10);
   const interpolate = getBorderInterpolation('reflect', 0);
   const exp = 'border must be smaller than the original image';
+
   expect(() => interpolate(-10, 0, 0, image)).toThrow(exp);
   expect(() => interpolate(19, 0, 0, image)).toThrow(exp);
   expect(() => interpolate(-110, 0, 0, image)).toThrow(exp);
@@ -26,11 +29,11 @@ test('too far', () => {
 });
 
 test('CONSTANT', () => {
-  expect(interpolateConstantPoint(-4, 10)).toStrictEqual(-1);
+  expect(interpolateConstantPoint(-4, 10)).toBe(-1);
   expect(interpolateConstantPoint(0, 10)).toBe(0);
   expect(interpolateConstantPoint(1, 10)).toBe(1);
-  expect(interpolateConstantPoint(-200, 10)).toStrictEqual(-1);
-  expect(interpolateConstantPoint(200, 10)).toStrictEqual(-1);
+  expect(interpolateConstantPoint(-200, 10)).toBe(-1);
+  expect(interpolateConstantPoint(200, 10)).toBe(-1);
 });
 
 test('REPLICATE - negative', () => {

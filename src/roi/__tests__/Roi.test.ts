@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { fromMask } from '../fromMask.js';
 
 test('getRatio', () => {
@@ -9,6 +11,7 @@ test('getRatio', () => {
   const roiMapManager = fromMask(mask);
 
   const rois = roiMapManager.getRois();
+
   expect(rois[0].getRatio()).toBe(3 / 2);
 });
 
@@ -25,5 +28,6 @@ test('getMap', () => {
   const result = rois[0].map.data;
 
   const expected = new Int32Array([-1, 1, -3, 1, 1, 1, -2, -2, -2]);
+
   expect(result).toStrictEqual(expected);
 });

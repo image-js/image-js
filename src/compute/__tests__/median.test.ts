@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type { Point } from '../../geometry/index.js';
 import { median } from '../median.js';
 
@@ -77,6 +79,7 @@ test('must throw if array is empty', () => {
     [1, 2, 3, 2],
   ]);
   const points: Point[] = [];
+
   expect(() => {
     const result = image.median({ points });
     return result;
@@ -89,6 +92,7 @@ test("must throw if point's row is invalid", () => {
     [1, 2, 3, 2],
   ]);
   const points: Point[] = [{ column: 0, row: 2 }];
+
   expect(() => {
     const result = image.median({ points });
     return result;
@@ -101,11 +105,13 @@ test("must throw if point's column is invalid", () => {
     [1, 2, 3, 2],
   ]);
   const points: Point[] = [{ column: 4, row: 1 }];
+
   expect(() => {
     const result = image.median({ points });
     return result;
   }).toThrow('Invalid coordinate: {column: 4, row: 1}');
 });
+
 test('must throw if point has negative values.', () => {
   const image = testUtils.createRgbaImage([
     [1, 2, 3, 0],

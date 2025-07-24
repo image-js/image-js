@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type { Point } from '../../geometry/index.js';
 import { mean } from '../mean.js';
 
@@ -39,6 +41,7 @@ test('2x4 GREY image', () => {
 
   expect(result).toStrictEqual([1.5]);
 });
+
 test('mean from points', () => {
   const image = testUtils.createGreyImage([
     [1, 2, 3, 0],
@@ -53,6 +56,7 @@ test('mean from points', () => {
 
   expect(result).toStrictEqual([2]);
 });
+
 test('mean from points in rgba image', () => {
   const image = testUtils.createRgbaImage([
     [1, 2, 3, 0],
@@ -66,6 +70,7 @@ test('mean from points in rgba image', () => {
 
   expect(result).toStrictEqual([1, 2, 3, 0]);
 });
+
 test('must throw if array is empty', () => {
   const image = testUtils.createRgbaImage([
     [1, 2, 3, 0],
@@ -78,6 +83,7 @@ test('must throw if array is empty', () => {
     return result;
   }).toThrow('Array of coordinates is empty.');
 });
+
 test("must throw if point's row is invalid.", () => {
   const image = testUtils.createRgbaImage([
     [1, 2, 3, 0],
@@ -90,6 +96,7 @@ test("must throw if point's row is invalid.", () => {
     return result;
   }).toThrow('Invalid coordinate: {column: 0, row: 2}');
 });
+
 test("must throw if point's column is invalid.", () => {
   const image = testUtils.createRgbaImage([
     [1, 2, 3, 0],
@@ -102,6 +109,7 @@ test("must throw if point's column is invalid.", () => {
     return result;
   }).toThrow('Invalid coordinate: {column: 4, row: 1}');
 });
+
 test('must throw if point has negative values.', () => {
   const image = testUtils.createRgbaImage([
     [1, 2, 3, 0],
