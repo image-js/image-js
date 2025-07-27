@@ -3,7 +3,7 @@ import react from 'eslint-config-cheminfo-react/base';
 import typescript from 'eslint-config-cheminfo-typescript';
 
 export default defineConfig(
-  globalIgnores(['coverage', 'dist-types', 'lib']),
+  globalIgnores(['coverage', 'dist', 'dist-types', 'lib']),
   typescript,
   {
     rules: {

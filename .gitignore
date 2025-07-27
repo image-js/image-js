@@ -123,8 +123,8 @@ yarn.lock
 
 .DS_Store
 
+dist
 lib
-lib-cjs
 
 # debug images
 src/**/*.tif
