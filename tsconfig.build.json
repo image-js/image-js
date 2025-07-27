@@ -1,5 +1,6 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {},
-  "exclude": ["**/__tests__", "demo", "scripts", "test", "vite*.ts"]
+  "include": ["src"],
+  "exclude": ["**/__tests__"]
 }
