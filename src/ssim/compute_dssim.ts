@@ -1,7 +1,7 @@
 import type { Image } from '../Image.js';
 
-import type { SsimOptions } from './computeSsim.js';
-import { computeSsim } from './computeSsim.js';
+import type { SsimOptions } from './compute_ssim.js';
+import { computeSsim } from './compute_ssim.js';
 
 /**
  * Compute the Structural Dissimilarity (DSSIM) of two GREY images.

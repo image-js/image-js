@@ -11,7 +11,10 @@
     "lib",
     "src"
   ],
-  "exports": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./ssim": "./lib/ssim/index.js"
+  },
   "scripts": {
     "api-extractor": "rimraf dist-types && api-extractor run --local",
     "build": "npm run tsc && cheminfo-build --entry lib/index.js --root IJS",

@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
 import { Image } from '../../Image.js';
-import { computeMse } from '../computeRmse.js';
-import { computeSsim } from '../computeSsim.js';
+import { computeMse } from '../../compare/index.js';
+import { computeSsim } from '../compute_ssim.js';
 
 test('twice the same image', () => {
   const image = testUtils.createGreyImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);
