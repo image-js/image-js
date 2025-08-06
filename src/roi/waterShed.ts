@@ -101,8 +101,8 @@ export function waterShed(
       });
     }
   }
-  const dxs = [+1, 0, -1, 0, +1, +1, -1, -1];
-  const dys = [0, +1, 0, -1, +1, -1, +1, -1];
+  const dxs = [1, 0, -1, 0, 1, 1, -1, -1];
+  const dys = [0, 1, 0, -1, 1, -1, 1, -1];
   // Then we iterate through each points
 
   while (toProcess.length > 0) {

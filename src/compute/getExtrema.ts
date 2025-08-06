@@ -41,8 +41,8 @@ export function getExtrema(image: Image, options: ExtremaOptions): Point[] {
 
   const maskExpectedValue = searchingMinimum ? 0 : 1;
 
-  const dx = [+1, 0, -1, 0, +1, +1, -1, -1, +2, 0, -2, 0, +2, +2, -2, -2];
-  const dy = [0, +1, 0, -1, +1, -1, +1, -1, 0, +2, 0, -2, +2, -2, +2, -2];
+  const dx = [1, 0, -1, 0, 1, 1, -1, -1, 2, 0, -2, 0, 2, 2, -2, -2];
+  const dy = [0, 1, 0, -1, 1, -1, 1, -1, 0, 2, 0, -2, 2, -2, 2, -2];
   switch (algorithm) {
     case 'cross':
       dx.length = 4;
