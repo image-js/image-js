@@ -1,7 +1,7 @@
 import { Image } from '../Image.js';
 import type { Mask } from '../Mask.js';
 import { assert } from '../utils/validators/assert.js';
-
+import { Canvas } from 'skia-canvas';
 export interface WriteCanvasOptions {
   /**
    * If set to `true`, the canvas element will be resized to fit the image.
@@ -43,7 +43,7 @@ export interface WriteCanvasOptions {
  */
 export function writeCanvas(
   image: Image | Mask,
-  canvas: HTMLCanvasElement,
+  canvas: Canvas,
   options: WriteCanvasOptions = {},
 ): void {
   if (image.colorModel !== 'RGBA') {
@@ -61,13 +61,20 @@ export function writeCanvas(
     dirtyWidth = image.width,
     dirtyHeight = image.height,
   } = options;
-  if (resizeCanvas) {
+  /*if (resizeCanvas) {
     canvas.width = image.width;
     canvas.height = image.height;
-  }
+  }*/
   const ctx = canvas.getContext('2d');
   assert(ctx);
   const data = image.getRawImage().data;
+  console.log(
+    new ImageData(
+      new Uint8ClampedArray(data.buffer, data.byteOffset, data.byteLength),
+      image.width,
+      image.height,
+    ),
+  );
   ctx.putImageData(
     new ImageData(
       new Uint8ClampedArray(data.buffer, data.byteOffset, data.byteLength),
