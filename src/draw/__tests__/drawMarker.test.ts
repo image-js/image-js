@@ -11,7 +11,7 @@ test('cross', () => {
   ]);
   const point = { row: 2, column: 2 };
 
-  const result = image.drawMarker(point, { color: [1] });
+  const result = image.drawMarker(point, { strokeColor: [1] });
 
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
@@ -31,7 +31,7 @@ test('circle', () => {
   ]);
   const point = { row: 2, column: 2 };
 
-  const result = image.drawMarker(point, { color: [1], shape: 'circle' });
+  const result = image.drawMarker(point, { strokeColor: [1], shape: 'circle' });
 
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
@@ -52,9 +52,9 @@ test('filled circle', () => {
   const point = { row: 2, column: 2 };
 
   const result = image.drawMarker(point, {
-    color: [1],
+    strokeColor: [1],
     shape: 'circle',
-    filled: true,
+    fillColor: [1],
   });
 
   expect(result).toMatchImageData([
@@ -76,7 +76,7 @@ test('square', () => {
   const point = { row: 2, column: 2 };
 
   const result = image.drawMarker(point, {
-    color: [1],
+    strokeColor: [1],
     shape: 'square',
   });
 
@@ -99,7 +99,7 @@ test('big square', () => {
   const point = { row: 2, column: 2 };
 
   const result = image.drawMarker(point, {
-    color: [1],
+    strokeColor: [1],
     size: 3,
     shape: 'square',
   });
@@ -123,16 +123,16 @@ test('filled big square', () => {
   const point = { row: 2, column: 2 };
 
   const result = image.drawMarker(point, {
-    color: [1],
+    strokeColor: [1],
     size: 3,
-    filled: true,
+    fillColor: [0],
     shape: 'square',
   });
 
   expect(result).toMatchImageData([
     [0, 0, 0, 0],
     [0, 1, 1, 1],
-    [0, 1, 1, 1],
+    [0, 1, 0, 1],
     [0, 1, 1, 1],
   ]);
   expect(result).not.toBe(image);
@@ -148,7 +148,7 @@ test('big triangle', () => {
   const point = { row: 3, column: 2 };
 
   const result = image.drawMarker(point, {
-    color: [1],
+    strokeColor: [1],
     size: 2,
     shape: 'triangle',
   });
@@ -172,16 +172,16 @@ test('filled big triangle', () => {
   const point = { row: 3, column: 2 };
 
   const result = image.drawMarker(point, {
-    color: [1],
+    strokeColor: [1],
     size: 2,
-    filled: true,
+    fillColor: [255],
     shape: 'triangle',
   });
 
   expect(result).toMatchImageData([
     [0, 0, 0, 0, 0],
     [0, 0, 1, 0, 0],
-    [0, 1, 1, 1, 0],
+    [0, 1, 255, 1, 0],
     [1, 1, 1, 1, 1],
   ]);
   expect(result).not.toBe(image);
@@ -196,7 +196,7 @@ test('out parameter set to self', () => {
   ]);
   const point = { row: 2, column: 2 };
   const result = image.drawMarker(point, {
-    color: [1],
+    strokeColor: [1],
     shape: 'square',
     out: image,
   });
@@ -220,7 +220,7 @@ test('out to other image', () => {
   ]);
   const point = { row: 2, column: 2 };
   const result = image.drawMarker(point, {
-    color: [1],
+    strokeColor: [1],
     shape: 'square',
     out,
   });
@@ -247,9 +247,9 @@ test('should handle points with floating values', () => {
   const point = { row: 3.1, column: 3.1 };
 
   const square = image.drawMarker(point, {
-    color: [1],
+    strokeColor: [1],
     size: 3.1,
-    filled: true,
+    fillColor: [255],
     shape: 'square',
   });
 
@@ -257,31 +257,31 @@ test('should handle points with floating values', () => {
     [0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0],
     [0, 0, 1, 1, 1, 0],
-    [0, 0, 1, 1, 1, 0],
+    [0, 0, 1, 255, 1, 0],
     [0, 0, 1, 1, 1, 0],
     [0, 0, 0, 0, 0, 0],
   ]);
 
   const triangle = image.drawMarker(point, {
-    color: [1],
+    strokeColor: [1],
     size: 2.1,
-    filled: true,
+    fillColor: [0],
     shape: 'triangle',
   });
 
   expect(triangle).toMatchImageData([
     [0, 0, 0, 0, 0, 0],
     [0, 0, 0, 1, 0, 0],
-    [0, 0, 1, 1, 1, 0],
+    [0, 0, 1, 0, 1, 0],
     [0, 1, 1, 1, 1, 1],
     [0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0],
   ]);
 
   const circle = image.drawMarker(point, {
-    color: [1],
+    strokeColor: [1],
     size: 2.1,
-    filled: true,
+    fillColor: [1],
     shape: 'circle',
   });
 
@@ -295,9 +295,9 @@ test('should handle points with floating values', () => {
   ]);
 
   const cross = image.drawMarker(point, {
-    color: [1],
+    strokeColor: [1],
     size: 2.1,
-    filled: true,
+    fillColor: [1],
     shape: 'cross',
   });
 

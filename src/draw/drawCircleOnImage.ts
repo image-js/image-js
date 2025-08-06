@@ -17,12 +17,12 @@ export interface DrawCircleOnImageOptions {
    * Circle border color array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    * @default A black pixel.
    */
-  color?: number[];
+  strokeColor?: number[];
   /**
    * Circle fill color array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    *
    */
-  fill?: number[];
+  fillColor?: number[];
 
   /**
    * Image to which the resulting image has to be put.
@@ -45,9 +45,9 @@ export function drawCircleOnImage(
   options: DrawCircleOnImageOptions = {},
 ): Image {
   const newImage = getOutputImage(image, options, { clone: true });
-  const { color = getDefaultColor(newImage), fill } = options;
+  const { strokeColor = getDefaultColor(newImage), fillColor } = options;
 
-  validateColor(color, newImage);
+  validateColor(strokeColor, newImage);
 
   checkProcessable(newImage, {
     bitDepth: [8, 16],
@@ -61,24 +61,24 @@ export function drawCircleOnImage(
   radius = Math.round(radius);
 
   if (radius === 0) {
-    setBlendedVisiblePixel(newImage, center.column, center.row, color);
+    setBlendedVisiblePixel(newImage, center.column, center.row, strokeColor);
     return newImage;
   }
 
-  if (!fill) {
+  if (!fillColor) {
     circle(center.column, center.row, radius, (column: number, row: number) => {
-      setBlendedVisiblePixel(newImage, column, row, color);
+      setBlendedVisiblePixel(newImage, column, row, strokeColor);
     });
   } else {
     if (radius === 1) {
-      setBlendedVisiblePixel(newImage, center.column, center.row, fill);
+      setBlendedVisiblePixel(newImage, center.column, center.row, fillColor);
     }
     //Starting points for the top and bottom row of the circle.
     let prevRow = center.row + radius;
 
     let index = 0;
     circle(center.column, center.row, radius, (column: number, row: number) => {
-      setBlendedVisiblePixel(newImage, column, row, color);
+      setBlendedVisiblePixel(newImage, column, row, strokeColor);
       // Filling the first line of the circle.
       if (index === 0) {
         newImage.drawLine(
@@ -87,7 +87,7 @@ export function drawCircleOnImage(
             row,
             column: center.column - (column - center.column - 1),
           },
-          { strokeColor: fill, out: newImage },
+          { strokeColor: fillColor, out: newImage },
         );
       }
       // The algorithm used is Bresenham's circle algorithm (@link https://www.geeksforgeeks.org/bresenhams-circle-drawing-algorithm/) to find points that constitute the circle outline. However, in this algorithm The circle is divided in 4 parts instead of 8: top, right, bottom and left.
@@ -102,7 +102,7 @@ export function drawCircleOnImage(
             row,
             column: center.column - (column - center.column + 1),
           },
-          { strokeColor: fill, out: newImage },
+          { strokeColor: fillColor, out: newImage },
         );
         prevRow = row;
         // Filling top half of the circle.
@@ -112,7 +112,7 @@ export function drawCircleOnImage(
             row: center.row - (row - center.row),
             column: center.column - (column - center.column + 1),
           },
-          { strokeColor: fill, out: newImage },
+          { strokeColor: fillColor, out: newImage },
         );
       }
 

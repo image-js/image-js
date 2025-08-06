@@ -81,7 +81,7 @@ export function drawMatches(
     }
     const sourcePoint = scaledSource[matches[i].sourceIndex].origin;
     result.drawCircle(sourcePoint, radius, {
-      color: matchColor,
+      strokeColor: matchColor,
       out: result,
     });
 
@@ -94,7 +94,7 @@ export function drawMatches(
       row: relativeDestinationPoint.row + montage.destinationOrigin.row,
     };
     result.drawCircle(destinationPoint, radius, {
-      color: matchColor,
+      strokeColor: matchColor,
       out: result,
     });
     result.drawLine(sourcePoint, destinationPoint, {

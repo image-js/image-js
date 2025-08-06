@@ -11,7 +11,9 @@ test('draw circle image', () => {
 
   const center = { row: 1, column: 1 };
   const radius = 1;
-  const expected = image.drawCircle(center, radius, { color: [255, 0, 0] });
+  const expected = image.drawCircle(center, radius, {
+    strokeColor: [255, 0, 0],
+  });
 
   expect(expected).toMatchImageData([
     [100, 150, 200, 255, 0, 0, 0, 100, 150],
@@ -30,7 +32,9 @@ test('floating point values', () => {
 
   const center = { row: 0.99, column: 0.99 };
   const radius = 1;
-  const expected = image.drawCircle(center, radius, { color: [255, 0, 0] });
+  const expected = image.drawCircle(center, radius, {
+    strokeColor: [255, 0, 0],
+  });
 
   expect(expected).toMatchImageData([
     [100, 150, 200, 255, 0, 0, 0, 100, 150],
@@ -50,8 +54,8 @@ test('draw filled circle image', () => {
   const center = { row: 1, column: 1 };
   const radius = 1;
   const expected = image.drawCircle(center, radius, {
-    color: [255, 0, 0],
-    fill: [1, 2, 3],
+    strokeColor: [255, 0, 0],
+    fillColor: [1, 2, 3],
   });
 
   expect(expected).toMatchImageData([
@@ -71,7 +75,7 @@ test('draw circle with out parameter set to self', () => {
   const center = { row: 1, column: 1 };
   const radius = 1;
   const expected = image.drawCircle(center, radius, {
-    color: [255, 0, 0, 255],
+    strokeColor: [255, 0, 0, 255],
     out: image,
   });
 
@@ -93,7 +97,7 @@ test('draw circle with out parameter', () => {
   const center = { row: 1, column: 1 };
   const radius = 1;
   const expected = image.drawCircle(center, radius, {
-    color: [255, 0, 0],
+    strokeColor: [255, 0, 0],
     out,
   });
 
@@ -117,7 +121,7 @@ test('draw grey circle', () => {
   const center = { row: 2, column: 3 };
   const radius = 2;
   const expected = image.drawCircle(center, radius, {
-    color: [1],
+    strokeColor: [1],
   });
 
   expect(expected).toMatchImageData([
@@ -141,7 +145,7 @@ test('should handle points with floating values', () => {
   const center = { row: 2.1, column: 3.1 };
   const radius = 2.1;
   const expected = image.drawCircle(center, radius, {
-    color: [1],
+    strokeColor: [1],
   });
 
   expect(expected).toMatchImageData([
@@ -165,7 +169,7 @@ test('negative radius error', () => {
 
   expect(() => {
     image.drawCircle(center, radius, {
-      color: [1],
+      strokeColor: [1],
     });
   }).toThrow('circle radius must be positive');
 });
@@ -179,8 +183,8 @@ test('draw grey filled circle, radius=0', () => {
   const center = { row: 1, column: 1 };
   const radius = 0;
   const expected = image.drawCircle(center, radius, {
-    color: [1],
-    fill: [2],
+    strokeColor: [1],
+    fillColor: [2],
   });
 
   expect(expected).toMatchImageData([
@@ -200,8 +204,8 @@ test('draw grey filled circle, radius=1', () => {
   const center = { row: 1, column: 1 };
   const radius = 1;
   const expected = image.drawCircle(center, radius, {
-    color: [1],
-    fill: [2],
+    strokeColor: [1],
+    fillColor: [2],
   });
 
   expect(expected).toMatchImageData([
@@ -223,8 +227,8 @@ test('draw grey filled circle', () => {
   const center = { row: 2, column: 3 };
   const radius = 2;
   const expected = image.drawCircle(center, radius, {
-    color: [1],
-    fill: [2],
+    strokeColor: [1],
+    fillColor: [2],
   });
 
   expect(expected).toMatchImageData([
@@ -254,7 +258,7 @@ test('big image not filled', () => {
   const center = { row: 5, column: 6 };
   const radius = 4;
   const expected = image.drawCircle(center, radius, {
-    color: [1],
+    strokeColor: [1],
   });
 
   expect(expected).toMatchImageData([
@@ -290,7 +294,7 @@ test('larger floating point radius', () => {
   const center = { row: 5.1, column: 6.05 };
   const radius = 4.2;
   const expected = image.drawCircle(center, radius, {
-    color: [1],
+    strokeColor: [1],
   });
 
   expect(expected).toMatchImageData([
@@ -326,8 +330,8 @@ test('big image filled', () => {
   const center = { row: 5, column: 6 };
   const radius = 4;
   const expected = image.drawCircle(center, radius, {
-    color: [1],
-    fill: [2],
+    strokeColor: [1],
+    fillColor: [2],
   });
 
   expect(expected).toMatchImageData([
@@ -355,8 +359,8 @@ test('points outside image', () => {
   const center = { row: 1, column: 2 };
   const radius = 1;
   const expected = image.drawCircle(center, radius, {
-    color: [1],
-    fill: [2],
+    strokeColor: [1],
+    fillColor: [2],
   });
 
   expect(expected).toMatchImageData([
@@ -374,7 +378,7 @@ test('default options', () => {
   ]);
   const center = { row: 1, column: 1 };
   const radius = 1;
-  const expected = image.drawCircle(center, radius, { color: [1] });
+  const expected = image.drawCircle(center, radius, { strokeColor: [1] });
 
   expect(expected).toMatchImageData([
     [0, 1, 0],
@@ -400,8 +404,8 @@ test('draw circle image with transparent color', () => {
   const center = { row: 5, column: 2 };
   const radius = 2;
   const received = image.drawCircle(center, radius, {
-    fill: [255, 125],
-    color: [255, 255],
+    fillColor: [255, 125],
+    strokeColor: [255, 255],
   });
 
   const expected = testUtils.createGreyaImage([

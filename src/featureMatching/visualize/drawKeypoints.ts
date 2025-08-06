@@ -114,8 +114,8 @@ export function drawKeypoints(
     const absoluteOrigin = sum(keypoint.origin, origin);
 
     newImage.drawCircle(absoluteOrigin, radius, {
-      fill: fillColor,
-      color: keypointColor,
+      fillColor,
+      strokeColor: keypointColor,
       out: newImage,
     });
     if (

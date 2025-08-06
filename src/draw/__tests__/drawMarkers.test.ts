@@ -16,7 +16,7 @@ test('square', () => {
   ];
 
   const result = image.drawMarkers(points, {
-    color: [1],
+    strokeColor: [1],
     shape: 'square',
   });
 
@@ -41,7 +41,7 @@ test('cross', () => {
     { row: 2, column: 2 },
   ];
 
-  const result = image.drawMarkers(points, { color: [1] });
+  const result = image.drawMarkers(points, { strokeColor: [1] });
 
   expect(result).toMatchImageData([
     [0, 1, 0, 0],
@@ -65,7 +65,7 @@ test('out parameter set to self', () => {
     { row: 3, column: 2 },
   ];
   const result = image.drawMarkers(points, {
-    color: [1],
+    strokeColor: [1],
     shape: 'square',
     out: image,
   });
@@ -93,7 +93,7 @@ test('out to other image', () => {
     { row: 3, column: 2 },
   ];
   const result = image.drawMarkers(points, {
-    color: [1],
+    strokeColor: [1],
     shape: 'square',
     out,
   });

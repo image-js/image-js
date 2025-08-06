@@ -18,14 +18,13 @@ export interface DrawMarkerOptions {
   shape?: 'circle' | 'triangle' | 'cross' | 'square';
   /**
    * Set marker as filled.
-   * @default `false`
    */
-  filled?: boolean;
+  fillColor?: number[];
   /**
    * Circle border color array of N elements (e.g. R, G, B or G, A), N being the number of channels.
    * @default A black pixel.
    */
-  color?: number[];
+  strokeColor?: number[];
   /**
    * Image to which the resulting image has to be put.
    */
@@ -46,20 +45,21 @@ export function drawMarker(
 ): Image {
   const newImage = getOutputImage(image, options, { clone: true });
   const {
-    color = getDefaultColor(newImage),
-    filled = false,
+    strokeColor = getDefaultColor(newImage),
+    fillColor = getDefaultColor(newImage),
     shape = 'cross',
     size: markerSize = 1,
   } = options;
   const size = Math.round(markerSize);
-  validateColor(color, newImage);
+  validateColor(strokeColor, newImage);
+  validateColor(fillColor, newImage);
   checkProcessable(newImage, {
     bitDepth: [8, 16],
   });
   if (shape === 'circle') {
     newImage.drawCircle(point, size, {
-      color,
-      fill: filled ? color : undefined,
+      strokeColor,
+      fillColor,
       out: newImage,
     });
   }
@@ -70,8 +70,8 @@ export function drawMarker(
       { row: point.row, column: point.column - size },
     ];
     newImage.drawPolygon(points, {
-      strokeColor: color,
-      fillColor: filled ? color : undefined,
+      strokeColor,
+      fillColor,
       out: newImage,
     });
   }
@@ -79,12 +79,12 @@ export function drawMarker(
     newImage.drawLine(
       { row: point.row - size, column: point.column },
       { row: point.row + size, column: point.column },
-      { strokeColor: color, out: newImage },
+      { strokeColor, out: newImage },
     );
     newImage.drawLine(
       { row: point.row, column: point.column - size },
       { row: point.row, column: point.column + size },
-      { strokeColor: color, out: newImage },
+      { strokeColor, out: newImage },
     );
   }
   if (shape === 'square') {
@@ -96,8 +96,8 @@ export function drawMarker(
       origin,
       width: size,
       height: size,
-      strokeColor: color,
-      fillColor: filled ? color : undefined,
+      strokeColor,
+      fillColor,
       out: newImage,
     });
   }
