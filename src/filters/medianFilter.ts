@@ -35,11 +35,11 @@ export function medianFilter(image: Image, options: MedianFilterOptions) {
   });
 
   if (cellSize < 1) {
-    throw new RangeError(`cellSize must be greater than 0. Got ${cellSize}`);
+    throw new RangeError(`cellSize must be greater than 0. Got ${cellSize}.`);
   }
 
   if (cellSize % 2 === 0) {
-    throw new RangeError(`cellSize must be an odd number. Got ${cellSize}'`);
+    throw new RangeError(`cellSize must be an odd number. Got ${cellSize}.`);
   }
 
   const interpolateBorder = getBorderInterpolation(

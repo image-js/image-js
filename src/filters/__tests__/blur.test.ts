@@ -18,8 +18,8 @@ test('error handling', () => {
   const img = testUtils.load('opencv/test.png');
   expect(() => {
     img.blur({ width: 2, height: 2 });
-  }).toThrow('Width must be an odd number. Got 2.');
+  }).toThrow('Width must be an odd number and greater than 0. Got 2.');
   expect(() => {
-    img.blur({ width: -3, height: 2 });
-  }).toThrow('Width must be greater than 0. Got -3.');
+    img.blur({ width: 3, height: -2 });
+  }).toThrow('Height must be an odd number and greater than 0. Got -2.');
 });

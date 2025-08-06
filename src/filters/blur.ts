@@ -36,16 +36,18 @@ export interface BlurOptions {
  */
 export function blur(image: Image, options: BlurOptions): Image {
   const { width, height } = options;
-  if (width < 1 || height < 1) {
+
+  if (width < 1 || width % 2 === 0) {
     throw new RangeError(
-      `${width <= 0 ? `Width must be greater than 0. Got ${width}.` : `Height must be greater than 0. Got ${height}.`}`,
+      `Width must be an odd number and greater than 0. Got ${width}.`,
     );
   }
-  if (width % 2 === 0 || height % 2 === 0) {
+  if (height < 1 || height % 2 === 0) {
     throw new RangeError(
-      `${width % 2 === 0 ? `Width must be an odd number. Got ${width}.` : `Height must be an odd number. Got ${height}.`}`,
+      `Height must be an odd number and greater than 0. Got ${height}.`,
     );
   }
+
   const kernelX = new Array(width).fill(1);
   const kernelY = new Array(height).fill(1);
 
