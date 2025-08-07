@@ -19,7 +19,7 @@ export interface DrawMatchesOptions {
    * Annotations color.
    * @default `[255,0,0]`
    */
-  color?: number[];
+  strokeColor?: number[];
   /**
    * Whether the matches should be colored depending on the distance.
    * @default `false`
@@ -55,7 +55,7 @@ export function drawMatches(
 ): Image {
   const {
     circleDiameter = 10,
-    color = [255, 0, 0],
+    strokeColor = [255, 0, 0],
     showDistance = false,
     showDistanceOptions,
   } = options;
@@ -70,12 +70,12 @@ export function drawMatches(
 
   const result = montage.image;
 
-  const colors = getColors(result, color, showDistanceOptions);
+  const colors = getColors(result, strokeColor, showDistanceOptions);
 
   const radius = Math.ceil(circleDiameter / 2);
   const matchesSortedByDistance = sortByDistance(matches);
   for (let i = 0; i < maxNbMatches; i++) {
-    let matchColor = color;
+    let matchColor = strokeColor;
     if (showDistance) {
       matchColor = getMatchColor(matchesSortedByDistance, i, colors);
     }

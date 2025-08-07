@@ -263,7 +263,7 @@ export function getAffineTransform(
       inlierMatches,
       sourceBrief.keypoints,
       destinationBrief.keypoints,
-      { color: [0, 0, 255] },
+      { strokeColor: [0, 0, 255] },
     );
 
     const drawKeypointsBaseOptions = {
