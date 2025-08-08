@@ -16,7 +16,7 @@ export interface DrawMatchesOptions {
    */
   circleDiameter?: number;
   /**
-   * Annotations color. Should be an array of N elements (e.g. R, G, B or G, A), N being the number of channels. If a color has less channels than the image, the remaining channels will be set to 0..
+   * Annotations color - An array of numerical values, one for each channel of the image. If less values are defined than there are channels in the image, the remaining channels will be set to 0.
    * @default `[255,0,0]`
    */
   strokeColor?: number[];
