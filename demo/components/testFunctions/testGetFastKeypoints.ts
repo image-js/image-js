@@ -13,7 +13,7 @@ export function testGetFastKeypoints(image: Image): Image {
 
   for (const keypoint of keypoints) {
     image.drawCircle(keypoint.origin, 5, {
-      color: [255, 0, 0, 255],
+      strokeColor: [255, 0, 0, 255],
       out: image,
     });
   }

@@ -20,10 +20,10 @@ export interface DrawKeypointsOptions {
    */
   markerSize?: number;
   /**
-   * Annotations color.
+   * Keypoint's color - An array of numerical values, one for each channel of the image. If less values are defined than there are channels in the image, the remaining channels will be set to 0.
    * @default `[255,0,0]`
    */
-  color?: number[];
+  strokeColor?: number[];
   /**
    * Whether to fill the markers.
    * @default `false`
@@ -88,7 +88,7 @@ export function drawKeypoints(
     showScoreOptions,
   } = options;
   let { maxNbKeypoints = keypoints.length } = options;
-  const { color = [255, 0, 0] } = options;
+  const { strokeColor = [255, 0, 0] } = options;
 
   if (maxNbKeypoints > keypoints.length) {
     maxNbKeypoints = keypoints.length;
@@ -100,12 +100,12 @@ export function drawKeypoints(
     newImage = newImage.convertColor('RGB');
   }
 
-  const colors = getColors(image, color, showScoreOptions);
+  const colors = getColors(image, strokeColor, showScoreOptions);
 
   const radius = Math.ceil(markerSize / 2);
   for (let i = 0; i < maxNbKeypoints; i++) {
     const keypoint = keypoints[i];
-    let keypointColor = color;
+    let keypointColor = strokeColor;
     if (showScore) {
       keypointColor = getKeypointColor(keypoints, i, colors);
     }
@@ -114,8 +114,8 @@ export function drawKeypoints(
     const absoluteOrigin = sum(keypoint.origin, origin);
 
     newImage.drawCircle(absoluteOrigin, radius, {
-      fill: fillColor,
-      color: keypointColor,
+      fillColor,
+      strokeColor: keypointColor,
       out: newImage,
     });
     if (

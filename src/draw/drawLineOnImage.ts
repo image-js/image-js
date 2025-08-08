@@ -10,7 +10,7 @@ import { validateColor } from '../utils/validators/validators.js';
 
 export interface DrawLineOnImageOptions {
   /**
-   * Color of the line. Should be an array of N elements (e.g. R, G, B or G, A), N being the number of channels.
+   * Color of the line - An array of numerical values, one for each channel of the image. If less values are defined than there are channels in the image, the remaining channels will be set to 0.
    * @default A black pixel.
    */
   strokeColor?: number[];
@@ -41,11 +41,11 @@ export function drawLineOnImage(
 ): Image {
   const newImage = getOutputImage(image, options, { clone: true });
   const {
-    strokeColor: color = getDefaultColor(newImage),
+    strokeColor = getDefaultColor(newImage),
     origin = { column: 0, row: 0 },
   } = options;
 
-  validateColor(color, newImage);
+  validateColor(strokeColor, newImage);
 
   checkProcessable(newImage, {
     bitDepth: [8, 16],
@@ -57,7 +57,7 @@ export function drawLineOnImage(
     Math.round(origin.column + to.column),
     Math.round(origin.row + to.row),
     (column: number, row: number) => {
-      setBlendedVisiblePixel(newImage, column, row, color);
+      setBlendedVisiblePixel(newImage, column, row, strokeColor);
     },
   );
   return newImage;

@@ -49,7 +49,7 @@ test('star', () => {
 
   image = drawKeypoints(image, filteredKeypoints, {
     fill: false,
-    color: [0, 0, 255],
+    strokeColor: [0, 0, 255],
     markerSize: 2,
     out: image,
   });

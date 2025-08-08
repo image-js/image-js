@@ -112,7 +112,7 @@ test('filled circle with radius 5', () => {
   ).toMatchImageSnapshot();
 
   expect(emptyImage.drawPoints(points, { color: [255] })).toMatchImage(
-    emptyImage.drawCircle(center, 5, { fill: [255], color: [255] }),
+    emptyImage.drawCircle(center, 5, { fillColor: [255], strokeColor: [255] }),
   );
 });
 
