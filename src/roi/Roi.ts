@@ -425,8 +425,8 @@ export class Roi {
       const surroudingIDs = new Set<number>();
       const surroundingBorders = new Map();
       const visitedData = new Set();
-      const dx = [+1, 0, -1, 0];
-      const dy = [0, +1, 0, -1];
+      const dx = [1, 0, -1, 0];
+      const dy = [0, 1, 0, -1];
 
       for (
         let column = this.origin.column;

@@ -13,3 +13,19 @@ test('blur compared to opencv', () => {
 
   expect(blurred).toMatchImage(expected);
 });
+
+test('error handling', () => {
+  const img = testUtils.load('opencv/test.png');
+
+  expect(() => {
+    img.blur({ width: 2, height: 2 });
+  }).toThrow(
+    'Invalid property "width". Must be an odd number greater than 0. Received 2.',
+  );
+
+  expect(() => {
+    img.blur({ width: 3, height: -2 });
+  }).toThrow(
+    'Invalid property "height". Must be an odd number greater than 0. Received -2.',
+  );
+});
