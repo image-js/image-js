@@ -165,17 +165,16 @@ test('draw filled rectangle with no stroke', () => {
   const result = image.drawRectangle({
     width: image.width,
     height: image.height,
-    strokeColor: 'none',
     fillColor: [3],
   });
 
   expect(result).toMatchImageData([
-    [1, 1, 1, 1, 1, 1],
-    [1, 3, 3, 3, 3, 1],
-    [1, 3, 3, 3, 3, 1],
-    [1, 3, 3, 3, 3, 1],
-    [1, 3, 3, 3, 3, 1],
-    [1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0],
+    [0, 3, 3, 3, 3, 0],
+    [0, 3, 3, 3, 3, 0],
+    [0, 3, 3, 3, 3, 0],
+    [0, 3, 3, 3, 3, 0],
+    [0, 0, 0, 0, 0, 0],
   ]);
   expect(result).not.toBe(image);
 });
@@ -217,7 +216,6 @@ test('fillColor = none', () => {
   const result = image.drawRectangle({
     width: image.width,
     height: image.height,
-    fillColor: 'none',
   });
 
   expect(result).toMatchImageData([

@@ -23,15 +23,15 @@ export interface DrawRectangleOptions<OutType> {
    */
   height?: number;
   /**
-   * Color of the rectangle's border. Should be an array of N elements (e.g. R, G, B or G, A), N being the number of channels.
+   * Color of the rectangle's border. Should be an array of N elements (e.g. R, G, B or G, A), N being the number of channels. If a color has less channels than the image, the remaining channels will be set to 0.
    * @default A black pixel.
    */
-  strokeColor?: number[] | 'none';
+  strokeColor?: number[];
   /**
-   * Rectangle fill color array of N elements (e.g. R, G, B or G, A), N being the number of channels.
+   * Rectangle fill color array of N elements (e.g. R, G, B or G, A), N being the number of channels. If a color has less channels than the image, the remaining channels will be set to 0.
    *
    */
-  fillColor?: number[] | 'none';
+  fillColor?: number[];
   /**
    * Image to which the resulting image has to be put.
    */
@@ -61,7 +61,7 @@ export function drawRectangle(
     height: rectangleHeight = image.height,
     origin = { column: 0, row: 0 },
     strokeColor = getDefaultColor(image),
-    fillColor = 'none',
+    fillColor,
   } = options;
   const width = Math.round(rectangleWidth);
   const height = Math.round(rectangleHeight);
@@ -77,35 +77,29 @@ export function drawRectangle(
     newImage = maskToOutputMask(image, options, { clone: true });
   }
 
-  if (strokeColor !== 'none') {
-    for (
-      let currentColumn = column;
-      currentColumn < column + width;
-      currentColumn++
-    ) {
-      setBlendedVisiblePixel(newImage, currentColumn, row, strokeColor);
-      setBlendedVisiblePixel(
-        newImage,
-        currentColumn,
-        row + height - 1,
-        strokeColor,
-      );
-    }
-    for (
-      let currentRow = row + 1;
-      currentRow < row + height - 1;
-      currentRow++
-    ) {
-      setBlendedVisiblePixel(newImage, column, currentRow, strokeColor);
-      setBlendedVisiblePixel(
-        newImage,
-        column + width - 1,
-        currentRow,
-        strokeColor,
-      );
-    }
+  for (
+    let currentColumn = column;
+    currentColumn < column + width;
+    currentColumn++
+  ) {
+    setBlendedVisiblePixel(newImage, currentColumn, row, strokeColor);
+    setBlendedVisiblePixel(
+      newImage,
+      currentColumn,
+      row + height - 1,
+      strokeColor,
+    );
   }
-  if (fillColor !== 'none') {
+  for (let currentRow = row + 1; currentRow < row + height - 1; currentRow++) {
+    setBlendedVisiblePixel(newImage, column, currentRow, strokeColor);
+    setBlendedVisiblePixel(
+      newImage,
+      column + width - 1,
+      currentRow,
+      strokeColor,
+    );
+  }
+  if (fillColor) {
     for (
       let currentRow = row + 1;
       currentRow < row + height - 1;
