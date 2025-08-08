@@ -30,8 +30,12 @@ export function convertColor(
     ['BINARY', ['GREY', 'RGB', 'RGBA']],
   ]);
 
-  if (image.colorModel === colorModel) {
-    throw new TypeError(`cannot convert color, image is already ${colorModel}`);
+  if (image.colorModel === colorModel && colorModel !== 'BINARY') {
+    return getOutputImage(
+      image as Image,
+      { out: options.out },
+      { clone: true },
+    );
   }
 
   const canConvertTo = canConvert.get(image.colorModel);
