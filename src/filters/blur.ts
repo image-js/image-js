@@ -39,12 +39,12 @@ export function blur(image: Image, options: BlurOptions): Image {
 
   if (width < 1 || width % 2 === 0) {
     throw new RangeError(
-      `Width must be an odd number and greater than 0. Got ${width}.`,
+      `Invalid property "width". Must be an odd number greater than 0. Received ${width}.`,
     );
   }
   if (height < 1 || height % 2 === 0) {
     throw new RangeError(
-      `Height must be an odd number and greater than 0. Got ${height}.`,
+      `Invalid property "height". Must be an odd number greater than 0. Received ${height}.`,
     );
   }
 
