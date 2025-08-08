@@ -10,7 +10,7 @@ import { validateColor } from '../utils/validators/validators.js';
 
 export interface DrawLineOnImageOptions {
   /**
-   * Color of the line. Should be an array of N elements (e.g. R, G, B or G, A), N being the number of channels.
+   * Color of the line. Should be an array of N elements (e.g. R, G, B or G, A), N being the number of channels. If a color has less channels than the image, the remaining channels will be set to 0.
    * @default A black pixel.
    */
   strokeColor?: number[];

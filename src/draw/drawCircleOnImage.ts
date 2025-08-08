@@ -14,12 +14,12 @@ import { roundPoint } from './utils/roundPoint.js';
 
 export interface DrawCircleOnImageOptions {
   /**
-   * Circle border color array of N elements (e.g. R, G, B or G, A), N being the number of channels.
+   * Circle border color array of N elements (e.g. R, G, B or G, A), N being the number of channels. If a color has less channels than the image, the remaining channels will be set to 0.
    * @default A black pixel.
    */
   strokeColor?: number[];
   /**
-   * Circle fill color array of N elements (e.g. R, G, B or G, A), N being the number of channels.
+   * Circle fill color array of N elements (e.g. R, G, B or G, A), N being the number of channels. If a color has less channels than the image, the remaining channels will be set to 0.
    *
    */
   fillColor?: number[];
