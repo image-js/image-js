@@ -41,11 +41,11 @@ export function drawLineOnImage(
 ): Image {
   const newImage = getOutputImage(image, options, { clone: true });
   const {
-    strokeColor: color = getDefaultColor(newImage),
+    strokeColor = getDefaultColor(newImage),
     origin = { column: 0, row: 0 },
   } = options;
 
-  validateColor(color, newImage);
+  validateColor(strokeColor, newImage);
 
   checkProcessable(newImage, {
     bitDepth: [8, 16],
@@ -57,7 +57,7 @@ export function drawLineOnImage(
     Math.round(origin.column + to.column),
     Math.round(origin.row + to.row),
     (column: number, row: number) => {
-      setBlendedVisiblePixel(newImage, column, row, color);
+      setBlendedVisiblePixel(newImage, column, row, strokeColor);
     },
   );
   return newImage;

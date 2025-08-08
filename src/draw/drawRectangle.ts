@@ -5,6 +5,7 @@ import { getDefaultColor } from '../utils/getDefaultColor.js';
 import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage.js';
 import { setBlendedVisiblePixel } from '../utils/setBlendedVisiblePixel.js';
 import checkProcessable from '../utils/validators/checkProcessable.js';
+import { validateColor } from '../utils/validators/validators.ts';
 
 export interface DrawRectangleOptions<OutType> {
   /**
@@ -72,6 +73,10 @@ export function drawRectangle(
     checkProcessable(image, {
       bitDepth: [8, 16],
     });
+    validateColor(strokeColor, image);
+    if (fillColor) {
+      validateColor(fillColor, image);
+    }
     newImage = getOutputImage(image, options, { clone: true });
   } else {
     newImage = maskToOutputMask(image, options, { clone: true });
