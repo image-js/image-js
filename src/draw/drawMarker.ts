@@ -46,13 +46,16 @@ export function drawMarker(
   const newImage = getOutputImage(image, options, { clone: true });
   const {
     strokeColor = getDefaultColor(newImage),
-    fillColor = getDefaultColor(newImage),
+    fillColor,
     shape = 'cross',
     size: markerSize = 1,
   } = options;
   const size = Math.round(markerSize);
   validateColor(strokeColor, newImage);
-  validateColor(fillColor, newImage);
+  if (fillColor) {
+    validateColor(fillColor, newImage);
+  }
+
   checkProcessable(newImage, {
     bitDepth: [8, 16],
   });

@@ -294,6 +294,21 @@ test('should handle points with floating values', () => {
     [0, 0, 1, 1, 1, 0],
   ]);
 
+  const circleUnfilled = image.drawMarker(point, {
+    strokeColor: [1],
+    size: 2.1,
+    shape: 'circle',
+  });
+
+  expect(circleUnfilled).toMatchImageData([
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0],
+    [0, 1, 0, 0, 0, 1],
+    [0, 1, 0, 0, 0, 1],
+    [0, 1, 0, 0, 0, 1],
+    [0, 0, 1, 1, 1, 0],
+  ]);
+
   const cross = image.drawMarker(point, {
     strokeColor: [1],
     size: 2.1,
