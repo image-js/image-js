@@ -73,16 +73,16 @@ test('convert to same bit depth', () => {
 
 test('convert and use `out` option', () => {
   const img = testUtils.createRgbaImage([
-    [256, 256, 256, 256, 512, 512, 512, 512],
-    [768, 768, 768, 768, 1024, 1024, 1024, 1024],
+    [255, 255, 255, 255, 0, 0, 0, 0],
+    [0, 0, 0, 0, 255, 255, 255, 255],
   ]);
 
   expect(img.bitDepth).toBe(8);
 
   const newImage = testUtils.createRgbaImage(
     [
-      [255, 255, 255, 255, 255, 255, 255, 255],
-      [255, 255, 255, 255, 255, 255, 255, 255],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ],
     {
       bitDepth: 16,
@@ -92,6 +92,7 @@ test('convert and use `out` option', () => {
   img.convertBitDepth(16, { out: newImage });
 
   expect(newImage.bitDepth).toBe(16);
+  expect(newImage.getValue(0, 0, 0)).toBe(65280);
 });
 
 test('throw if converting to unsupported bit depth', () => {
