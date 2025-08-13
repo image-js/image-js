@@ -29,7 +29,7 @@ export function encodeJpeg(
     image = image.convertBitDepth(8);
   }
 
-  // Image data after bit depth conversion will always be UInt8Array
+  // Image data after bit depth conversion will always be UInt8Array.
   const buffer = encode(image.getRawImage(), quality).data;
-  return new Uint8Array(buffer, buffer.byteOffset, buffer.byteLength);
+  return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
 }
