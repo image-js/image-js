@@ -100,6 +100,7 @@ import {
   topHat,
 } from './morphology/index.js';
 import type {
+  ConvertBitDepthOptions,
   ConvertColorOptions,
   CopyToOptions,
   CropAlphaOptions,
@@ -855,8 +856,11 @@ export class Image {
     return convertColor(this, colorModel, options);
   }
 
-  public convertBitDepth(newDepth: BitDepth): Image {
-    return convertBitDepth(this, newDepth);
+  public convertBitDepth(
+    newDepth: BitDepth,
+    options?: ConvertBitDepthOptions,
+  ): Image {
+    return convertBitDepth(this, newDepth, options);
   }
 
   public grey(options?: GreyOptions): Image {
