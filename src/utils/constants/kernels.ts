@@ -11,15 +11,15 @@ export const DISCRETE_LAPLACE_8 = [
 ];
 
 export const SOBEL_X = [
-  [-1, 0, +1],
-  [-2, 0, +2],
-  [-1, 0, +1],
+  [-1, 0, 1],
+  [-2, 0, 2],
+  [-1, 0, 1],
 ];
 
 export const SOBEL_Y = [
   [-1, -2, -1],
   [0, 0, 0],
-  [+1, +2, +1],
+  [1, 2, 1],
 ];
 
 export const SCHARR_X = [

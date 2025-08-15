@@ -89,7 +89,10 @@ test('patch, default options', () => {
   const point = round(sum(center, centroid));
 
   const result = image.convertColor('RGB');
-  result.drawCircle(center, radius + 1, { color: [255, 0, 0], out: result });
+  result.drawCircle(center, radius + 1, {
+    strokeColor: [255, 0, 0],
+    out: result,
+  });
 
   result.drawPoints([point], { color: [0, 255, 0], out: result });
 
@@ -126,7 +129,10 @@ test('scalene triangle keypoint', () => {
   const point = round(sum(center, centroid));
 
   const result = image.convertColor('RGB');
-  result.drawCircle(center, radius + 1, { color: [255, 0, 0], out: result });
+  result.drawCircle(center, radius + 1, {
+    strokeColor: [255, 0, 0],
+    out: result,
+  });
 
   result.drawPoints([point], { color: [0, 255, 0], out: result });
 
@@ -163,7 +169,10 @@ test('scalene triangle 90 keypoint', () => {
   const point = round(sum(center, centroid));
 
   const result = image.convertColor('RGB');
-  result.drawCircle(center, radius + 1, { color: [255, 0, 0], out: result });
+  result.drawCircle(center, radius + 1, {
+    strokeColor: [255, 0, 0],
+    out: result,
+  });
 
   result.drawPoints([point], { color: [0, 255, 0], out: result });
 

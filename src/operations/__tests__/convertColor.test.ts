@@ -154,12 +154,11 @@ test('conversion not implemented', () => {
   );
 });
 
-test('cannot convert to same colorModel', () => {
+test('convert to same colorModel', () => {
   const image = testUtils.createRgbImage([[10, 20, 30, 40, 60, 70]]);
+  const result = image.convertColor('RGB');
 
-  expect(() => image.convertColor('RGB')).toThrow(
-    /cannot convert color, image is already RGB/,
-  );
+  expect(result).toStrictEqual(image);
 });
 
 test('GREY to RGBA 16-bit', () => {

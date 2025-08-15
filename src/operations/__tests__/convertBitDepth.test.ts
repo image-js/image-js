@@ -60,15 +60,39 @@ test('Uint16 to Uint8 for rgba', () => {
   ]);
 });
 
-test('throw if converting to same bit depth', () => {
+test('convert to same bit depth', () => {
   const img = testUtils.createRgbaImage([
     [256, 256, 256, 256, 512, 512, 512, 512],
     [768, 768, 768, 768, 1024, 1024, 1024, 1024],
   ]);
 
-  expect(() => {
-    img.convertBitDepth(8);
-  }).toThrow('cannot convert image to same bitDepth');
+  const result = img.convertBitDepth(8);
+
+  expect(result.bitDepth).toBe(8);
+});
+
+test('convert and use `out` option', () => {
+  const img = testUtils.createRgbaImage([
+    [255, 255, 255, 255, 0, 0, 0, 0],
+    [0, 0, 0, 0, 255, 255, 255, 255],
+  ]);
+
+  expect(img.bitDepth).toBe(8);
+
+  const newImage = testUtils.createRgbaImage(
+    [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+    ],
+    {
+      bitDepth: 16,
+    },
+  );
+
+  img.convertBitDepth(16, { out: newImage });
+
+  expect(newImage.bitDepth).toBe(16);
+  expect(newImage.getValue(0, 0, 0)).toBe(65280);
 });
 
 test('throw if converting to unsupported bit depth', () => {

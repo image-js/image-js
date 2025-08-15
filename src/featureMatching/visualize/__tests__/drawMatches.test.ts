@@ -103,7 +103,7 @@ test('destination rotated +10°', () => {
 
   const options: DrawKeypointsOptions = {
     fill: true,
-    color: [0, 255, 0],
+    strokeColor: [0, 255, 0],
     showScore: true,
     markerSize: 6,
   };

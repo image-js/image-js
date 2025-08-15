@@ -16,10 +16,10 @@ export interface DrawMatchesOptions {
    */
   circleDiameter?: number;
   /**
-   * Annotations color.
+   * Annotations color - An array of numerical values, one for each channel of the image. If less values are defined than there are channels in the image, the remaining channels will be set to 0.
    * @default `[255,0,0]`
    */
-  color?: number[];
+  strokeColor?: number[];
   /**
    * Whether the matches should be colored depending on the distance.
    * @default `false`
@@ -55,7 +55,7 @@ export function drawMatches(
 ): Image {
   const {
     circleDiameter = 10,
-    color = [255, 0, 0],
+    strokeColor = [255, 0, 0],
     showDistance = false,
     showDistanceOptions,
   } = options;
@@ -70,18 +70,18 @@ export function drawMatches(
 
   const result = montage.image;
 
-  const colors = getColors(result, color, showDistanceOptions);
+  const colors = getColors(result, strokeColor, showDistanceOptions);
 
   const radius = Math.ceil(circleDiameter / 2);
   const matchesSortedByDistance = sortByDistance(matches);
   for (let i = 0; i < maxNbMatches; i++) {
-    let matchColor = color;
+    let matchColor = strokeColor;
     if (showDistance) {
       matchColor = getMatchColor(matchesSortedByDistance, i, colors);
     }
     const sourcePoint = scaledSource[matches[i].sourceIndex].origin;
     result.drawCircle(sourcePoint, radius, {
-      color: matchColor,
+      strokeColor: matchColor,
       out: result,
     });
 
@@ -94,7 +94,7 @@ export function drawMatches(
       row: relativeDestinationPoint.row + montage.destinationOrigin.row,
     };
     result.drawCircle(destinationPoint, radius, {
-      color: matchColor,
+      strokeColor: matchColor,
       out: result,
     });
     result.drawLine(sourcePoint, destinationPoint, {

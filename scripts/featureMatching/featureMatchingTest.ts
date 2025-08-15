@@ -104,7 +104,7 @@ montage.drawMatches(
   destinationBrief.keypoints,
   {
     showDistance: true,
-    color: [0, 0, 255],
+    strokeColor: [0, 0, 255],
     circleDiameter: getBriefOptions.centroidPatchDiameter,
     showDistanceOptions,
   },
@@ -112,7 +112,7 @@ montage.drawMatches(
 
 const kptOptions: DrawKeypointsOptions = {
   markerSize: 3,
-  color: [0, 255, 0],
+  strokeColor: [0, 255, 0],
   showScore: true,
   fill: true,
 };
