@@ -50,7 +50,6 @@ export function drawLineOnImage(
   checkProcessable(newImage, {
     bitDepth: [8, 16],
   });
-
   line(
     Math.round(origin.column + from.column),
     Math.round(origin.row + from.row),

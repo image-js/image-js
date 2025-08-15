@@ -68,6 +68,7 @@ export function writeCanvas(
   const ctx = canvas.getContext('2d');
   assert(ctx);
   const data = image.getRawImage().data;
+
   ctx.putImageData(
     new ImageData(
       // @ts-expect-error ImageData types don't support SharedArrayBuffer.

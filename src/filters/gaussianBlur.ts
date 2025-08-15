@@ -97,7 +97,6 @@ export function gaussianBlur(
 function getKernel(radius: number, sigma: number): number[] {
   const n = radius * 2 + 1;
   const kernel = new Array(n);
-  // TODO: check if sigma can really be 0 or undefined.
   const sigmaX = sigma || ((n - 1) * 0.5 - 1) * 0.3 + 0.8;
   const scale2X = -0.5 / (sigmaX * sigmaX);
   let sum = 0;
