@@ -2,9 +2,7 @@
   "extends": "@zakodium/tsconfig/jsx",
   "compilerOptions": {
     "noUncheckedIndexedAccess": false,
-    "outDir": "lib",
-    "module": "es2022",
-    "target": "es2017"
+    "outDir": "lib"
   },
   "include": ["demo", "scripts", "src", "test", "vite*.ts"]
 }
