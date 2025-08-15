@@ -70,7 +70,12 @@ export function writeCanvas(
   const data = image.getRawImage().data;
 
   ctx.putImageData(
-    new ImageData(Uint8ClampedArray.from(data), image.width, image.height),
+    new ImageData(
+      // @ts-expect-error ImageData types don't support SharedArrayBuffer.
+      new Uint8ClampedArray(data.buffer, data.byteOffset, data.byteLength),
+      image.width,
+      image.height,
+    ),
     dx,
     dy,
     dirtyX,
