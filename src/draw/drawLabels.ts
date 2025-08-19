@@ -95,7 +95,7 @@ function toRgba8(image: Image) {
         result[index++] = srcData[i + 1] >>> (bitDepth - 8);
       }
       return result;
-    case 1:
+    default:
       for (let i = 0; i < srcData.length; i += numberOfChannels) {
         result[index++] = srcData[i] >>> (bitDepth - 8);
         result[index++] = srcData[i] >>> (bitDepth - 8);
@@ -104,8 +104,6 @@ function toRgba8(image: Image) {
       }
 
       return result;
-    default:
-      throw new RangeError('Unknown color model.');
   }
 }
 /**
@@ -136,12 +134,11 @@ function fromRgba8(srcData: Uint8ClampedArray, numberOfChannels: number) {
         result[index++] = 255;
       }
       return result;
-    case 1:
+
+    default:
       for (let i = 0; i < srcData.length; i += rgbaPixelSize) {
         result[index++] = srcData[i];
       }
       return result;
-    default:
-      throw new RangeError('Unknown color model.');
   }
 }
