@@ -119,3 +119,31 @@ test('test incomplete fill color', () => {
     failureThresholdType: 'percent',
   });
 });
+
+test("must throw if array aren't equal", () => {
+  const image = testUtils.createRgbaImage(
+    new Array(40).fill(new Array(200).fill(255)),
+  );
+
+  expect(() => {
+    const newImage = drawLabels(image, ['HI!', 255], [{ column: 0, row: 23 }], {
+      font: '20px Arial',
+      fontColor: [0],
+    });
+    return newImage;
+  }).toThrow('Positions and labels must be arrays of the same size.');
+});
+
+test('must throw if arrays are empty', () => {
+  const image = testUtils.createRgbaImage(
+    new Array(40).fill(new Array(200).fill(255)),
+  );
+
+  expect(() => {
+    const newImage = drawLabels(image, [], [], {
+      font: '20px Arial',
+      fontColor: [0],
+    });
+    return newImage;
+  }).toThrow('You must specify at least one label coordinate.');
+});

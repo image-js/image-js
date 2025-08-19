@@ -34,6 +34,12 @@ export function drawLabels(
   const { font = '12px Helvetica', fontColor = [255, 255, 255] } = options;
 
   validateValues(fontColor, image);
+  if (coordinates.length === 0) {
+    throw new RangeError('You must specify at least one label coordinate.');
+  }
+  if (labels.length !== coordinates.length) {
+    throw new Error('Positions and labels must be arrays of the same size.');
+  }
 
   const normalizedColor = [
     fontColor[0] ?? 255,
