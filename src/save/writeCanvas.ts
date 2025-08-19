@@ -68,14 +68,10 @@ export function writeCanvas(
   const ctx = canvas.getContext('2d');
   assert(ctx);
   const data = image.getRawImage().data;
-
   ctx.putImageData(
     new ImageData(
-      new Uint8ClampedArray(
-        data.buffer as ArrayBuffer,
-        data.byteOffset,
-        data.byteLength,
-      ),
+      // @ts-expect-error ImageData types don't support SharedArrayBuffer.
+      new Uint8ClampedArray(data.buffer, data.byteOffset, data.byteLength),
       image.width,
       image.height,
     ),
