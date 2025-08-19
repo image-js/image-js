@@ -3,6 +3,8 @@ import { Canvas } from 'skia-canvas';
 import { Image } from '../Image.ts';
 import type { Point } from '../geometry/index.ts';
 
+type Label = number | string;
+
 interface DrawLabelsWithCanvasOptions {
   /**
    *  Size and type of font.
@@ -21,9 +23,9 @@ interface DrawLabelsWithCanvasOptions {
  * @param options - DrawLabelsWithCanvasOptions.
  * @returns RGBA image.
  */
-export function drawLabelWithCanvas(
+export function drawLabels(
   image: Image,
-  labels: string[],
+  labels: Label[],
   coordinates: Point[],
   options: DrawLabelsWithCanvasOptions = {},
 ) {
@@ -38,7 +40,11 @@ export function drawLabelWithCanvas(
   for (let i = 0; i < labels.length; i++) {
     const coordinate = coordinates[i % coordinates.length];
     ctx.fillStyle = `rgba(${fontColor.join(',')})`;
-    ctx.fillText(labels[i % labels.length], coordinate.column, coordinate.row);
+    ctx.fillText(
+      labels[i % labels.length] as string,
+      coordinate.column,
+      coordinate.row,
+    );
   }
 
   const resultData = fromRgba8(
@@ -65,8 +71,8 @@ function toRgba8(image: Image) {
   let index = 0;
   switch (numberOfChannels) {
     case 4:
-      for (let i = 0; i < srcData.length; i += numberOfChannels) {
-        result[index++] = srcData[i] >>> (bitDepth - 8);
+      for (let i = 0; i < srcData.length; i++) {
+        result[i] = srcData[i] >>> (bitDepth - 8);
       }
       return result;
     case 3:
@@ -112,10 +118,7 @@ function fromRgba8(srcData: Uint8ClampedArray, numberOfChannels: number) {
   let index = 0;
   switch (numberOfChannels) {
     case 4:
-      for (let i = 0; i < srcData.length; i += rgbaPixelSize) {
-        result[index++] = srcData[i];
-      }
-      return result;
+      return srcData;
     case 3:
       for (let i = 0; i < srcData.length; i += rgbaPixelSize) {
         result[index++] = srcData[i];
