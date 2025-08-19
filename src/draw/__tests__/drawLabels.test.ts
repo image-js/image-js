@@ -102,3 +102,20 @@ test('test grey image with alpha', () => {
     failureThresholdType: 'percent',
   });
 });
+
+test('test incomplete fill color', () => {
+  const image = testUtils.createRgbaImage(
+    new Array(40).fill(new Array(200).fill(255)),
+  );
+
+  const newImage = drawLabels(image, ['HI!'], [{ column: 0, row: 23 }], {
+    font: '20px Arial',
+    fontColor: [0],
+  });
+
+  expect(newImage.colorModel).toStrictEqual(image.colorModel);
+  expect(newImage).toMatchImageSnapshot({
+    failureThreshold: 10,
+    failureThresholdType: 'percent',
+  });
+});

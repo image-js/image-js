@@ -2,6 +2,7 @@ import { Canvas } from 'skia-canvas';
 
 import { Image } from '../Image.js';
 import type { Point } from '../geometry/index.js';
+import { validateValues } from '../utils/validators/validators.js';
 
 type Label = number | string;
 
@@ -21,7 +22,7 @@ interface DrawLabelsWithCanvasOptions {
  * @param labels - Labels to draw.
  * @param coordinates - Coordinates where to draw labels.
  * @param options - DrawLabelsWithCanvasOptions.
- * @returns RGBA image.
+ * @returns Image with drawn labels.
  */
 export function drawLabels(
   image: Image,
@@ -32,6 +33,14 @@ export function drawLabels(
   const canvas = new Canvas(image.width, image.height);
   const { font = '12px Helvetica', fontColor = [255, 255, 255] } = options;
 
+  validateValues(fontColor, image);
+
+  const normalizedColor = [
+    fontColor[0] ?? 255,
+    fontColor[1] ?? 255,
+    fontColor[2] ?? 255,
+  ];
+
   const ctx = canvas.getContext('2d');
   const newData = toRgba8(image);
   const imageData = ctx.createImageData(image.width, image.height);
@@ -39,7 +48,7 @@ export function drawLabels(
   ctx.putImageData(imageData, 0, 0);
 
   ctx.font = font;
-  ctx.fillStyle = `rgba(${fontColor.join(',')})`;
+  ctx.fillStyle = `rgba(${normalizedColor.join(',')})`;
 
   for (let i = 0; i < labels.length; i++) {
     const coordinate = coordinates[i % coordinates.length];
@@ -73,6 +82,7 @@ function toRgba8(image: Image) {
   const bitDepth = image.bitDepth;
   const srcData = image.getRawImage().data;
   let index = 0;
+
   switch (numberOfChannels) {
     case 4:
       for (let i = 0; i < srcData.length; i++) {
