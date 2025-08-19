@@ -24,9 +24,9 @@ npm install image-js
 
 ## API
 
-### [Complete API documentation](https://image-js.github.io/image-js/)
+### [Complete API documentation](https://api.image-js.org/)
 
-### [Usage docs and guides](https://image-js-docs.pages.dev/docs/Getting%20started)
+### [Usage docs and guides](https://docs.image-js.org/)
 
 ## Development
 
