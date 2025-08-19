@@ -85,3 +85,20 @@ test('test grey image', () => {
     failureThresholdType: 'percent',
   });
 });
+
+test('test grey image with alpha', () => {
+  const image = testUtils.createGreyaImage(
+    new Array(15).fill(new Array(30).fill(255)),
+  );
+
+  const newImage = drawLabels(image, ['HI!'], [{ column: 0, row: 13 }], {
+    font: '10px Arial',
+    fontColor: [0, 0, 0],
+  });
+
+  expect(newImage.colorModel).toStrictEqual(image.colorModel);
+  expect(newImage).toMatchImageSnapshot({
+    failureThreshold: 10,
+    failureThresholdType: 'percent',
+  });
+});
