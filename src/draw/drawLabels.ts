@@ -1,7 +1,7 @@
 import { Canvas } from 'skia-canvas';
 
-import { Image } from '../Image.ts';
-import type { Point } from '../geometry/index.ts';
+import { Image } from '../Image.js';
+import type { Point } from '../geometry/index.js';
 
 type Label = number | string;
 
@@ -30,16 +30,20 @@ export function drawLabels(
   options: DrawLabelsWithCanvasOptions = {},
 ) {
   const canvas = new Canvas(image.width, image.height);
-  const { font = '12px Roboto', fontColor = [255, 255, 255] } = options;
+  const { font = '12px Helvetica', fontColor = [255, 255, 255] } = options;
+
   const ctx = canvas.getContext('2d');
   const newData = toRgba8(image);
   const imageData = ctx.createImageData(image.width, image.height);
   imageData.data.set(newData);
   ctx.putImageData(imageData, 0, 0);
+
   ctx.font = font;
+  ctx.fillStyle = `rgba(${fontColor.join(',')})`;
+
   for (let i = 0; i < labels.length; i++) {
     const coordinate = coordinates[i % coordinates.length];
-    ctx.fillStyle = `rgba(${fontColor.join(',')})`;
+
     ctx.fillText(
       labels[i % labels.length] as string,
       coordinate.column,
