@@ -1,0 +1,8 @@
+{
+  "cname": "api.image-js.org",
+  "favicon": "favicon.svg",
+  "sourceLinkExternal": true,
+  "markdownLinkExternal": true,
+  "githubPages": true,
+  "hideGenerator": true
+}
