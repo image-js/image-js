@@ -9,7 +9,5 @@ jobs:
   typedoc:
     # Documentation: https://github.com/zakodium/workflows#typedoc
     uses: zakodium/workflows/.github/workflows/typedoc.yml@typedoc-v1
-    with:
-      entry: 'src/index.ts src/ssim/index.ts'
     secrets:
       github-token: ${{ secrets.BOT_TOKEN }}
