@@ -5,16 +5,15 @@ import { drawLabels } from '../drawLabels.js';
 
 test('draw H on an image', () => {
   const image = testUtils.createGreyImage(
-    new Array(15).fill(new Array(15).fill(0)),
+    new Array(15).fill(new Array(15).fill(255)),
   );
-
   const newImage = drawLabels(image, ['H'], [{ column: 1, row: 14 }], {
     font: '20px Arial',
-    fontColor: [255, 255, 255],
+    fontColor: [0, 0, 0],
   });
 
   expect(newImage).toMatchImageSnapshot({
-    failureThreshold: 10,
+    failureThreshold: 0.5,
     failureThresholdType: 'percent',
   });
 });
