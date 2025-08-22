@@ -56,7 +56,7 @@ test('draw several labels', () => {
   });
 
   expect(newImage).toMatchImageSnapshot({
-    failureThreshold: 10,
+    failureThreshold: 0.5,
     failureThresholdType: 'percent',
   });
 });
@@ -89,7 +89,7 @@ test('test grey image', () => {
     ],
     {
       font: '20px Arial',
-      fontColor: [0, 0, 0],
+      fontColor: [255, 255, 255],
     },
   );
 
@@ -112,7 +112,7 @@ test('test grey image with alpha', () => {
 
   expect(newImage.colorModel).toStrictEqual(image.colorModel);
   expect(newImage).toMatchImageSnapshot({
-    failureThreshold: 10,
+    failureThreshold: 0.5,
     failureThresholdType: 'percent',
   });
 });
@@ -129,7 +129,7 @@ test('test incomplete fill color', () => {
 
   expect(newImage.colorModel).toStrictEqual(image.colorModel);
   expect(newImage).toMatchImageSnapshot({
-    failureThreshold: 10,
+    failureThreshold: 0.5,
     failureThresholdType: 'percent',
   });
 });

@@ -32,7 +32,7 @@ export function drawLabels(
 ) {
   const newImage = image.clone();
   const canvas = new Canvas(image.width, image.height);
-  const { font = '12px Helvetica', fontColor = [255, 255, 255, 1] } = options;
+  const { font = '12px Helvetica', fontColor = [255, 255, 255, 255] } = options;
 
   validateValues(fontColor, image);
   if (coordinates.length === 0) {
