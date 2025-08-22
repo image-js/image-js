@@ -1,6 +1,6 @@
 import { Canvas } from 'skia-canvas';
 
-import { Image } from '../Image.js';
+import type { Image, ImageDataArray } from '../Image.js';
 import type { Point } from '../geometry/index.js';
 import { validateValues } from '../utils/validators/validators.js';
 
@@ -12,7 +12,7 @@ interface DrawLabelsOptions {
    */
   font?: string;
   /**
-   *  Font color.
+   *  Font color.Should be in rgba8 format.
    */
   fontColor?: number[];
 }
@@ -22,7 +22,7 @@ interface DrawLabelsOptions {
  * @param labels - Labels to draw.
  * @param coordinates - Coordinates where to draw labels.
  * @param options - DrawLabelsWithCanvasOptions.
- * @returns Image with drawn labels.
+ * @returns new image with drawn labels on it.
  */
 export function drawLabels(
   image: Image,
@@ -30,8 +30,9 @@ export function drawLabels(
   coordinates: Point[],
   options: DrawLabelsOptions = {},
 ) {
+  const newImage = image.clone();
   const canvas = new Canvas(image.width, image.height);
-  const { font = '12px Helvetica', fontColor = [255, 255, 255] } = options;
+  const { font = '12px Helvetica', fontColor = [255, 255, 255, 1] } = options;
 
   validateValues(fontColor, image);
   if (coordinates.length === 0) {
@@ -40,17 +41,17 @@ export function drawLabels(
   if (labels.length !== coordinates.length) {
     throw new Error('Positions and labels must be arrays of the same size.');
   }
-
+  const alpha = fontColor[3] ? fontColor[3] / 255 : 1;
   const normalizedColor = [
     fontColor[0] ?? 255,
     fontColor[1] ?? 255,
     fontColor[2] ?? 255,
+    alpha,
   ];
 
   const ctx = canvas.getContext('2d');
   ctx.font = font;
   ctx.fillStyle = `rgba(${normalizedColor.join(',')})`;
-
   for (let i = 0; i < labels.length; i++) {
     const coordinate = coordinates[i % coordinates.length];
     ctx.fillText(
@@ -61,15 +62,11 @@ export function drawLabels(
   }
 
   layerCanvas(
-    image.getRawImage().data as ImageDataArray,
+    newImage.getRawImage().data,
     ctx.getImageData(0, 0, image.width, image.height).data,
     image.channels,
     image.bitDepth,
   );
-  const newImage = new Image(image.width, image.height, {
-    data: image.getRawImage().data,
-    colorModel: image.colorModel,
-  });
 
   return newImage;
 }
@@ -95,16 +92,31 @@ function layerCanvas(
   let canvasIndex = 0;
 
   for (let pixel = 0; pixel < pixelCount; pixel++) {
-    const alpha = canvasData[canvasIndex + 3] / 255;
-    const invAlpha = 1 - alpha;
+    const canvasAlpha = canvasData[canvasIndex + 3] / 255;
+
+    // Skip transparent canvas pixels completely
+    if (canvasAlpha === 0) {
+      imageIndex += numberOfChannels;
+      canvasIndex += 4;
+      continue;
+    }
+
+    const invAlpha = 1 - canvasAlpha;
 
     for (const channel of config.channels) {
       const targetIndex = imageIndex + channel.targetOffset;
       imageData[targetIndex] =
         Math.round(
-          canvasData[canvasIndex + channel.sourceIndex] * alpha +
+          canvasData[canvasIndex + channel.sourceIndex] * canvasAlpha +
             imageData[targetIndex] * invAlpha,
         ) << bitShift;
+    }
+    if (config.hasAlpha && typeof config.alphaOffset === 'number') {
+      const alphaIndex = imageIndex + config.alphaOffset;
+      const imageAlpha = (imageData[alphaIndex] >>> bitShift) / 255;
+
+      const newAlpha = canvasAlpha + imageAlpha * (1 - canvasAlpha);
+      imageData[alphaIndex] = Math.round(newAlpha * 255) << bitShift;
     }
 
     imageIndex += numberOfChannels;
@@ -114,22 +126,27 @@ function layerCanvas(
 
 interface ChannelConfig {
   channels: Array<{
-    sourceIndex: number; // Index in canvas data (0=R, 1=G, 2=B, 3=A)
-    targetOffset: number; // Offset in image data relative to pixel start
+    sourceIndex: number;
+    targetOffset: number;
   }>;
+  hasAlpha: boolean;
+  alphaOffset: number | undefined; // Required when hasAlpha is true
 }
 
 const CHANNEL_CONFIGS: Record<number, ChannelConfig> = {
   1: {
     // Grayscale
     channels: [{ sourceIndex: 0, targetOffset: 0 }],
+    hasAlpha: false,
+    alphaOffset: undefined,
   },
   2: {
     // Grayscale + Alpha
     channels: [
       { sourceIndex: 0, targetOffset: 0 }, // R -> Grayscale
-      { sourceIndex: 3, targetOffset: 1 }, // A -> Alpha
     ],
+    hasAlpha: true,
+    alphaOffset: 1,
   },
   3: {
     // RGB
@@ -138,14 +155,18 @@ const CHANNEL_CONFIGS: Record<number, ChannelConfig> = {
       { sourceIndex: 1, targetOffset: 1 }, // G -> G
       { sourceIndex: 2, targetOffset: 2 }, // B -> B
     ],
+    hasAlpha: false,
+    alphaOffset: undefined,
   },
+
   4: {
     // RGBA
     channels: [
       { sourceIndex: 0, targetOffset: 0 }, // R -> R
       { sourceIndex: 1, targetOffset: 1 }, // G -> G
       { sourceIndex: 2, targetOffset: 2 }, // B -> B
-      { sourceIndex: 3, targetOffset: 3 }, // A -> A
     ],
+    hasAlpha: true,
+    alphaOffset: 3,
   },
 };

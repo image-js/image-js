@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest';
 
+import { Image } from '../../Image.ts';
 import { fromMask } from '../../roi/fromMask.js';
 import { drawLabels } from '../drawLabels.js';
 
@@ -10,6 +11,20 @@ test('draw H on an image', () => {
   const newImage = drawLabels(image, ['H'], [{ column: 1, row: 14 }], {
     font: '20px Arial',
     fontColor: [0, 0, 0],
+  });
+
+  expect(newImage).toMatchImageSnapshot({
+    failureThreshold: 0.5,
+    failureThresholdType: 'percent',
+  });
+});
+
+test('draw transparent H', () => {
+  const image = new Image(100, 100, { bitDepth: 8, colorModel: 'RGBA' });
+
+  const newImage = drawLabels(image, ['Hell0'], [{ column: 1, row: 70 }], {
+    font: '40px Arial',
+    fontColor: [255, 255, 255, 125],
   });
 
   expect(newImage).toMatchImageSnapshot({
