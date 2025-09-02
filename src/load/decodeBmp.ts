@@ -12,7 +12,7 @@ import type { ImageColorModel } from '../utils/constants/colorModels.ts';
 export function decodeBmp(data: Uint8Array): Image | Mask {
   const decodedData = decode(data);
   if (decodedData.bitsPerPixel === 1) {
-    return new Mask(decodedData.width, decodedData.width, {
+    return new Mask(decodedData.width, decodedData.height, {
       data: decodedData.data as Uint8Array,
     });
   } else {
