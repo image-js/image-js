@@ -22,19 +22,12 @@ export function decodeBmp(data: Uint8Array): Image {
       case 1:
         colorModel = 'GREY';
         break;
-      case 2:
-        colorModel = 'GREYA';
-        break;
       case 3:
         colorModel = 'RGB';
         break;
-      case 4:
+      default:
         colorModel = 'RGBA';
         break;
-      default:
-        throw new RangeError(
-          `invalid number of channels: ${decodedData.channels}`,
-        );
     }
     return new Image(decodedData.width, decodedData.height, {
       colorModel,
