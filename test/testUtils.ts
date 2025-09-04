@@ -2,7 +2,7 @@ import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import type { Image, Mask, Point, Roi } from '../src/index.js';
+import type { Image, Point, Roi } from '../src/index.js';
 import { fromMask, readSync } from '../src/index.js';
 
 import type { TestImagePath } from './TestImagePath.js';
@@ -34,7 +34,7 @@ export function loadBuffer(path: TestImagePath): Uint8Array {
  * @param path - Path to the image.
  * @returns The image.
  */
-export function load(path: TestImagePath): Image | Mask {
+export function load(path: TestImagePath): Image {
   return readSync(join(import.meta.dirname, 'img', path));
 }
 /**

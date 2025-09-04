@@ -36,13 +36,13 @@ test('should decode grey image', () => {
   );
 });
 
-test('encode 5x5 mask', () => {
-  const mask = testUtils.createMask([
+test('decode 5x5 mask', () => {
+  const mask = testUtils.createGreyImage([
     [0, 0, 0, 0, 0],
-    [0, 1, 1, 1, 0],
-    [0, 1, 0, 1, 0],
-    [0, 1, 1, 1, 0],
-    [1, 0, 1, 0, 1],
+    [0, 255, 255, 255, 0],
+    [0, 255, 0, 255, 0],
+    [0, 255, 255, 255, 0],
+    [255, 0, 255, 0, 255],
   ]);
 
   const result = decodeBmp(testUtils.loadBuffer('formats/bmp/5x5.bmp'));
@@ -51,10 +51,10 @@ test('encode 5x5 mask', () => {
 });
 
 test('encode 6x4 mask', () => {
-  const mask = testUtils.createMask([
-    [1, 1, 1, 1, 1, 1],
+  const mask = testUtils.createGreyImage([
+    [255, 255, 255, 255, 255, 255],
     [0, 0, 0, 0, 0, 0],
-    [1, 1, 1, 1, 1, 1],
+    [255, 255, 255, 255, 255, 255],
     [0, 0, 0, 0, 0, 0],
   ]);
 
@@ -64,9 +64,9 @@ test('encode 6x4 mask', () => {
 });
 
 test('decode 10x2 mask', () => {
-  const mask = testUtils.createMask([
-    [1, 1, 1, 0, 0, 1, 0, 1, 0, 1],
-    [1, 0, 1, 0, 1, 0, 0, 1, 1, 1],
+  const mask = testUtils.createGreyImage([
+    [255, 255, 255, 0, 0, 255, 0, 255, 0, 255],
+    [255, 0, 255, 0, 255, 0, 0, 255, 255, 255],
   ]);
 
   const result = decodeBmp(testUtils.loadBuffer('formats/bmp/10x2.bmp'));

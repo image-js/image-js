@@ -2,7 +2,6 @@ import imageType from 'image-type';
 import { match } from 'ts-pattern';
 
 import type { Image } from '../Image.js';
-import type { Mask } from '../Mask.ts';
 
 import { decodeBmp } from './decodeBmp.ts';
 import { decodeJpeg } from './decodeJpeg.js';
@@ -14,7 +13,7 @@ import { decodeTiff } from './decodeTiff.js';
  * @param data - Data to decode.
  * @returns The decoded image.
  */
-export function decode(data: ArrayBufferView): Image | Mask {
+export function decode(data: ArrayBufferView): Image {
   const typedArray = new Uint8Array(
     data.buffer,
     data.byteOffset,

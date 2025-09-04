@@ -56,3 +56,10 @@ test('should encode RGB image', () => {
 
   expect(result).toStrictEqual(data);
 });
+
+test('should encode RGBA image', () => {
+  const data = testUtils.loadBuffer('formats/bmp/bmp_24.bmp');
+  const result = encodeBmp(testUtils.load('formats/bmp/bmp_24.bmp'));
+
+  expect(result).toStrictEqual(data);
+});

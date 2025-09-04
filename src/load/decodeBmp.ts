@@ -9,12 +9,13 @@ import type { ImageColorModel } from '../utils/constants/colorModels.ts';
  * @param data - The data to decode.
  * @returns The decoded image or mask.
  */
-export function decodeBmp(data: Uint8Array): Image | Mask {
+export function decodeBmp(data: Uint8Array): Image {
   const decodedData = decode(data);
   if (decodedData.bitsPerPixel === 1) {
-    return new Mask(decodedData.width, decodedData.height, {
+    const mask = new Mask(decodedData.width, decodedData.height, {
       data: decodedData.data as Uint8Array,
     });
+    return mask.convertColor('GREY');
   } else {
     let colorModel: ImageColorModel;
     switch (decodedData.channels) {
