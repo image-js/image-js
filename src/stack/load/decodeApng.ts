@@ -3,7 +3,6 @@ import { decodeApng } from 'fast-png';
 
 import { Image } from '../../Image.ts';
 import { Stack } from '../../Stack.ts';
-import { writeSync } from '../../save/write.ts';
 import type { ImageColorModel } from '../../utils/constants/colorModels.ts';
 
 /**
@@ -57,10 +56,7 @@ export function decodeStackFromApng(data: Uint8Array) {
   }
 
   const stack = new Stack(images);
-  let i = 0;
-  for (const image of stack.getImages()) {
-    writeSync(`${i++}.png`, image);
-  }
+
   return stack;
 }
 
