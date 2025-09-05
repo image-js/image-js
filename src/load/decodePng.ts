@@ -15,12 +15,16 @@ export function decodePng(buffer: Uint8Array): Image {
   const png = decode(buffer);
 
   let colorModel: ImageColorModel;
-  const bitDepth: BitDepth = png.depth === 16 ? 16 : 8;
-
+  const bitDepth: BitDepth = png.depth as BitDepth;
   if (png.palette) {
     return loadPalettePng(png);
   }
-
+  if (bitDepth === 1) {
+    return new Image(png.width, png.height, {
+      data: decodeBinary(png),
+      colorModel: 'GREY',
+    });
+  }
   switch (png.channels) {
     case 1:
       colorModel = 'GREY';
@@ -75,4 +79,30 @@ function loadPalettePng(png: DecodedPng): Image {
   return new Image(png.width, png.height, {
     data,
   });
+}
+
+function decodeBinary(png: DecodedPng): Uint8Array {
+  const totalPixels = png.width * png.height;
+  const result = new Uint8Array(totalPixels);
+  const pngData = png.data;
+  const padding = png.width % 8;
+  const bytesPerLine = Math.ceil(png.width / 8);
+  let pixelIndex = 0;
+  for (
+    let byteIndex = 0;
+    byteIndex < pngData.length && pixelIndex < totalPixels;
+    byteIndex++
+  ) {
+    const byte = pngData[byteIndex];
+    const limit = byteIndex % bytesPerLine === 0 ? 8 - padding : 0;
+    for (
+      let bitIndex = 7;
+      bitIndex >= limit && pixelIndex < totalPixels;
+      bitIndex--
+    ) {
+      const bit = (byte >> bitIndex) & 1;
+      result[pixelIndex++] = bit * 255;
+    }
+  }
+  return result;
 }
