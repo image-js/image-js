@@ -1,7 +1,9 @@
+import type { IndexedColors } from 'fast-png';
 import { decodeApng } from 'fast-png';
 
 import { Image } from '../../Image.ts';
 import { Stack } from '../../Stack.ts';
+import { writeSync } from '../../save/write.ts';
 import type { ImageColorModel } from '../../utils/constants/colorModels.ts';
 
 /**
@@ -15,7 +17,11 @@ export function decodeStackFromApng(data: Uint8Array) {
   let colorModel: ImageColorModel;
   switch (decodedApng.channels) {
     case 1:
-      colorModel = 'GREY';
+      if (decodedApng.palette) {
+        colorModel = decodedApng.palette[0].length === 3 ? 'RGB' : 'RGBA';
+      } else {
+        colorModel = 'GREY';
+      }
       break;
     case 2:
       colorModel = 'GREYA';
@@ -27,14 +33,43 @@ export function decodeStackFromApng(data: Uint8Array) {
       colorModel = 'RGBA';
       break;
   }
-  for (const image of decodedApng.frames) {
-    images.push(
-      new Image(decodedApng.width, decodedApng.height, {
-        data: image.data,
-        colorModel,
-      }),
-    );
+  if (decodedApng.palette) {
+    for (const image of decodedApng.frames) {
+      images.push(
+        new Image(decodedApng.width, decodedApng.height, {
+          data: convertIndexedData(
+            image.data as Uint8Array,
+            decodedApng.palette,
+          ),
+          colorModel,
+        }),
+      );
+    }
+  } else {
+    for (const image of decodedApng.frames) {
+      images.push(
+        new Image(decodedApng.width, decodedApng.height, {
+          data: image.data,
+          colorModel,
+        }),
+      );
+    }
   }
+
   const stack = new Stack(images);
+  let i = 0;
+  for (const image of stack.getImages()) {
+    writeSync(`${i++}.png`, image);
+  }
   return stack;
+}
+
+function convertIndexedData(data: Uint8Array, palette: IndexedColors) {
+  const result = new Uint8Array(data.length * palette[0].length);
+  for (let i = 0; i < data.length; i++) {
+    for (let channel = 0; channel < palette[0].length; channel++) {
+      result[i * palette[0].length + channel] = palette[data[i]][channel];
+    }
+  }
+  return result;
 }

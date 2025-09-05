@@ -34,6 +34,12 @@ test.each([
     bitDepth: 8,
     pages: 20,
   },
+  {
+    name: 'formats/squareApng.png',
+    colorModel: 'RGBA',
+    bitDepth: 8,
+    pages: 2,
+  },
 ])(
   'stacks with multiple images ($colorModel, bitDepth = $bitDepth)',
   (data) => {
