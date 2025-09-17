@@ -7,14 +7,10 @@ test('should decode RGBA image', () => {
 
   expect(result.channels).toBe(4);
   expect(result.components).toBe(3);
-  expect(result.getRawImage().data).toStrictEqual(
-    new Uint8Array(
-      [
-        [255, 0, 0, 255, 0, 255, 0, 255],
-        [0, 0, 255, 255, 255, 255, 255, 255],
-      ].flat(),
-    ),
-  );
+  expect(result).toMatchImageData([
+    [255, 0, 0, 255, 0, 255, 0, 255],
+    [0, 0, 255, 255, 255, 255, 255, 255],
+  ]);
 });
 
 test('should decode grey image', () => {
@@ -23,17 +19,13 @@ test('should decode grey image', () => {
   expect(result.channels).toBe(1);
   expect(result.components).toBe(1);
 
-  expect(result.getRawImage().data).toStrictEqual(
-    new Uint8Array(
-      [
-        [246, 246, 173, 0, 0],
-        [255, 255, 182, 113, 113],
-        [214, 214, 206, 246, 246],
-        [0, 0, 173, 255, 255],
-        [0, 0, 157, 214, 214],
-      ].flat(),
-    ),
-  );
+  expect(result).toMatchImageData([
+    [246, 246, 173, 0, 0],
+    [255, 255, 182, 113, 113],
+    [214, 214, 206, 246, 246],
+    [0, 0, 173, 255, 255],
+    [0, 0, 157, 214, 214],
+  ]);
 });
 
 test('decode 5x5 mask', () => {
@@ -47,7 +39,7 @@ test('decode 5x5 mask', () => {
 
   const result = decodeBmp(testUtils.loadBuffer('formats/bmp/5x5.bmp'));
 
-  expect(result).toStrictEqual(mask);
+  expect(result).toMatchImage(mask);
 });
 
 test('encode 6x4 mask', () => {
@@ -60,7 +52,7 @@ test('encode 6x4 mask', () => {
 
   const result = decodeBmp(testUtils.loadBuffer('formats/bmp/6x4.bmp'));
 
-  expect(result).toStrictEqual(mask);
+  expect(result).toMatchImage(mask);
 });
 
 test('decode 10x2 mask', () => {
@@ -71,5 +63,5 @@ test('decode 10x2 mask', () => {
 
   const result = decodeBmp(testUtils.loadBuffer('formats/bmp/10x2.bmp'));
 
-  expect(result).toStrictEqual(mask);
+  expect(result).toMatchImage(mask);
 });
