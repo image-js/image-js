@@ -43,13 +43,23 @@ test('encode 10x2 mask', () => {
   expect(buffer).toStrictEqual(result);
 });
 
-test('should throw error', () => {
-  const image = testUtils.createGreyImage([
-    [255, 255, 255, 0, 0, 255, 0, 255, 0, 255],
-    [255, 0, 255, 0, 255, 0, 0, 255, 255, 255],
-  ]);
+test('should encode grayscale image', () => {
+  const result = encodeBmp(testUtils.load('formats/bmp/6x4Grey.bmp'));
+  const data = testUtils.loadBuffer('formats/bmp/6x4Grey.bmp');
 
-  expect(() => encodeBmp(image)).toThrow(
-    'Image bmp encoding is not implemented.',
-  );
+  expect(result).toStrictEqual(data);
+});
+
+test('should encode RGB image', () => {
+  const data = testUtils.loadBuffer('formats/bmp/blackbuck.bmp');
+  const result = encodeBmp(testUtils.load('formats/bmp/blackbuck.bmp'));
+
+  expect(result).toStrictEqual(data);
+});
+
+test('should encode RGBA image', () => {
+  const data = testUtils.loadBuffer('formats/bmp/bmp_24.bmp');
+  const result = encodeBmp(testUtils.load('formats/bmp/bmp_24.bmp'));
+
+  expect(result).toStrictEqual(data);
 });

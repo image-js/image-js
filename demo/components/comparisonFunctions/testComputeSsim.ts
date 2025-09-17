@@ -4,7 +4,7 @@ import { computeSsim } from '../../../src/ssim/index.js';
 /**
  * Compute the structural similarity of the input image and the image blurred.
  * @param image - Input image.
- * @param snapshot
+ * @param snapshot - Snapshot to compare with.
  * @returns The structural similarity matrix.
  */
 export function testComputeSsim(image: Image, snapshot: Image | null): Image {

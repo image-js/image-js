@@ -2,7 +2,7 @@ import { expect, test } from 'vitest';
 
 import { fromMask } from '../fromMask.js';
 
-test('roundness 1 ', () => {
+test('roundness 1', () => {
   const mask = testUtils.createMask([
     [0, 1, 1, 0],
     [0, 1, 1, 0],

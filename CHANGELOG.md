@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0 (2025-08-20)
+
+
+ImageJS 1.0 is a complete TypeScript rewrite of the library.
+
+Please read our announcement post at <https://docs.image-js.org/blog/releases/1.0>.
+
 ## [0.37.0](https://www.github.com/image-js/image-js/compare/v0.36.1...v0.37.0) (2025-04-15)
 
 

@@ -13,7 +13,10 @@ export default defineConfig(
   {
     files: ['demo/**'],
     extends: [react],
-    rules: { 'no-console': 'off' },
+    rules: {
+      'no-console': 'off',
+      'jsdoc/require-jsdoc': 'off',
+    },
   },
   {
     files: ['scripts/**'],

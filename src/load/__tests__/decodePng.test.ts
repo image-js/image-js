@@ -14,6 +14,8 @@ const tests = [
   ['rgba64', 16, 'RGBA'],
   ['plt-4bpp', 8, 'RGB'],
   ['plt-8bpp-color', 8, 'RGB'],
+  ['bwImage', 8, 'GREY'],
+  ['polished_basalt_side', 8, 'RGB'],
 ] as const;
 
 test.each(tests)('should load from buffer %s', (name, bitDepth, colorModel) => {
