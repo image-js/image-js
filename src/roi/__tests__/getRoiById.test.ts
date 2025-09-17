@@ -17,7 +17,7 @@ test('should throw error', () => {
   }).toThrow(`invalid ID: 4`);
 });
 
-test('should give ROI of id = 1 ', () => {
+test('should give ROI of id = 1', () => {
   const image = testUtils.createGreyImage([
     [1, 2, 0, 0, 0],
     [5, 0, 0, 200, 0],
@@ -33,7 +33,7 @@ test('should give ROI of id = 1 ', () => {
   expect(roi.id).toBe(1);
 });
 
-test('should give ROI of id = 3 ', () => {
+test('should give ROI of id = 3', () => {
   const mask = testUtils.createMask([
     [1, 0, 1, 0, 1],
     [1, 0, 1, 1, 1],

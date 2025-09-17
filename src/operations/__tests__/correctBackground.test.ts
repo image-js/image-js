@@ -35,7 +35,7 @@ test('basic test', () => {
   expect(newImage).toStrictEqual(result);
 });
 
-test('test with object 8x8 and manually picked points', () => {
+test('with object 8x8 and manually picked points', () => {
   const image = testUtils.createGreyImage([
     [1, 2, 3, 4, 5, 6, 7, 8],
     [1, 2, 3, 4, 5, 6, 7, 8],
@@ -75,7 +75,7 @@ test('test with object 8x8 and manually picked points', () => {
   expect(newImage).toStrictEqual(result);
 });
 
-test('test with object 8x8 and sampled points', () => {
+test('with object 8x8 and sampled points', () => {
   const image = testUtils.createGreyImage([
     [1, 2, 3, 4, 5, 6, 7, 8],
     [1, 2, 3, 4, 5, 6, 7, 8],

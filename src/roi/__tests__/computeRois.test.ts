@@ -21,7 +21,7 @@ test('3x3 mask', () => {
   expect(roiMapManager.blackRois).toMatchSnapshot();
 });
 
-test('test 2, waterShed for a grey image', () => {
+test('waterShed for a grey image', () => {
   const image = testUtils.createGreyImage([
     [3, 3, 3, 3, 3, 3, 3, 3, 4, 4],
     [3, 3, 2, 2, 2, 3, 3, 3, 4, 4],

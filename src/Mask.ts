@@ -328,7 +328,7 @@ export class Mask {
 
   /**
    * Get the number of pixels that do not have the value 0.
-   * @returns
+   * @returns The number of non-zero pixels.
    */
   public getNbNonZeroPixels(): number {
     let count = 0;

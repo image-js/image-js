@@ -5,6 +5,7 @@ import type { Stack } from '../../Stack.js';
 
 import { decodeStackFromApng } from './decodeApng.ts';
 import { decodeStackFromTiff } from './decodeTiff.js';
+
 /**
  * Decode input data and create stack. Data format is automatically detected.
  * Possible formats: tiff.
