@@ -5,7 +5,7 @@ import { Mask } from '../Mask.ts';
 import type { ImageColorModel } from '../utils/constants/colorModels.ts';
 
 /**
- *Decode a bmp. See the fast-bmp npm module.
+ * Decode a BMP. See the fast-bmp npm module.
  * @param data - The data to decode.
  * @returns The decoded image or mask.
  */
