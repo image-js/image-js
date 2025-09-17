@@ -77,7 +77,7 @@ test('image color model remains unchanged', () => {
   expect(newImage.colorModel).toStrictEqual(image.colorModel);
 });
 
-test('test grey image', () => {
+test('grey image', () => {
   const image = testUtils.load('various/screws.png').grey();
 
   const newImage = drawLabels(
@@ -100,7 +100,7 @@ test('test grey image', () => {
   });
 });
 
-test('test grey image with alpha', () => {
+test('grey image with alpha', () => {
   const image = testUtils.createGreyaImage(
     new Array(15).fill(new Array(30).fill(255)),
   );
@@ -117,7 +117,7 @@ test('test grey image with alpha', () => {
   });
 });
 
-test('test incomplete fill color', () => {
+test('incomplete fill color', () => {
   const image = testUtils.createRgbaImage(
     new Array(40).fill(new Array(200).fill(255)),
   );
@@ -134,7 +134,7 @@ test('test incomplete fill color', () => {
   });
 });
 
-test("must throw if array aren't equal", () => {
+test("must throw if arrays aren't equal", () => {
   const image = testUtils.createRgbaImage(
     new Array(40).fill(new Array(200).fill(255)),
   );
