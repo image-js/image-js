@@ -106,7 +106,7 @@ test('grey image with alpha', () => {
   );
 
   const newImage = drawLabels(image, ['HI!'], [{ column: 0, row: 13 }], {
-    font: '10px Arial',
+    font: '10px monospace',
     fontColor: [0, 0, 0],
   });
 
