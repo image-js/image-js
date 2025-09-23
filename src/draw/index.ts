@@ -9,3 +9,4 @@ export * from './drawRectangle.js';
 export * from './drawPoints.js';
 export * from './drawMarker.js';
 export * from './drawMarkers.js';
+export * from './drawLabels.ts';

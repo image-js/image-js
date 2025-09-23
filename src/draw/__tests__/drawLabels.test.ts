@@ -105,7 +105,7 @@ test('grey image with alpha', () => {
     new Array(15).fill(new Array(30).fill(255)),
   );
 
-  const newImage = drawLabels(image, ['HI!'], [{ column: 0, row: 13 }], {
+  const newImage = image.drawLabels(['HI!'], [{ column: 0, row: 13 }], {
     font: '10px monospace',
     fontColor: [0, 0, 0],
   });
@@ -122,7 +122,7 @@ test('incomplete fill color', () => {
     new Array(40).fill(new Array(200).fill(255)),
   );
 
-  const newImage = drawLabels(image, ['HI!'], [{ column: 0, row: 23 }], {
+  const newImage = image.drawLabels(['HI!'], [{ column: 0, row: 23 }], {
     font: '20px Arial',
     fontColor: [0],
   });

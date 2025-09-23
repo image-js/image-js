@@ -4,9 +4,9 @@ import type { Image, ImageDataArray } from '../Image.js';
 import type { Point } from '../geometry/index.js';
 import { validateValues } from '../utils/validators/validators.js';
 
-type Label = number | string;
+export type Label = number | string;
 
-interface DrawLabelsOptions {
+export interface DrawLabelsOptions {
   /**
    *  Size and type of font.
    */
