@@ -13,6 +13,7 @@ const tests = [
   ['rgba8', 'RGBA', 8],
   ['rgb16', 'RGB', 16],
   ['palette', 'RGB', 16],
+  ['bw1bit', 'GREY', 8],
 ] as const;
 
 test.each(tests)('%s', (name, colorModel, bitDepth) => {

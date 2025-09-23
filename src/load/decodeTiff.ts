@@ -43,20 +43,31 @@ export function getImageFromIFD(ifd: TiffIfd): Image {
       bitDepth: 16,
       meta: getMetadata(ifd),
     });
+  } else if (ifd.type === 1 || ifd.type === 0) {
+    if (ifd.bitsPerSample !== 1) {
+      return new Image(ifd.width, ifd.height, {
+        // @ts-expect-error float data not handled yet
+        data: ifd.data,
+        bitDepth: ifd.bitsPerSample as BitDepth,
+        colorModel: ifd.alpha ? 'GREYA' : 'GREY',
+        meta: getMetadata(ifd),
+      });
+    } else {
+      return new Image(ifd.width, ifd.height, {
+        // @ts-expect-error float data not handled yet
+        data: ifd.data.map((pixel) => pixel * 255),
+        bitDepth: 8 as BitDepth,
+        colorModel: 'GREY',
+        meta: getMetadata(ifd),
+      });
+    }
   } else {
     return new Image(ifd.width, ifd.height, {
       // TODO: handle float data
       // @ts-expect-error float data not handled yet
       data: ifd.data,
       bitDepth: ifd.bitsPerSample as BitDepth,
-      colorModel:
-        ifd.type === 2
-          ? ifd.alpha
-            ? 'RGBA'
-            : 'RGB'
-          : ifd.alpha
-            ? 'GREYA'
-            : 'GREY',
+      colorModel: ifd.alpha ? 'RGBA' : 'RGB',
       meta: getMetadata(ifd),
     });
   }
