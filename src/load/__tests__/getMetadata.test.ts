@@ -18,8 +18,8 @@ test('with metadata', () => {
 });
 
 test('with metadata 2', () => {
-  const buffer = testUtils.loadBuffer(`formats/tif/grey32.tif`);
-  const img = decodeTiff(buffer);
-
-  expect(img.meta).toBeDefined();
+  expect(() => {
+    const buffer = testUtils.loadBuffer(`formats/tif/grey32.tif`);
+    decodeTiff(buffer);
+  }).toThrow('Float TIFF data is not supported.');
 });

@@ -13,9 +13,8 @@ type TiffIfd = ReturnType<typeof decode>[number];
  * @returns The decoded image.
  */
 export function decodeTiff(buffer: Uint8Array): Image {
-  const result = decode(buffer);
+  const result = decode(buffer, { pages: [0] });
   return getImageFromIFD(result[0]);
-  // TODO: optimize not to decode whole file
 }
 
 /**
@@ -24,6 +23,12 @@ export function decodeTiff(buffer: Uint8Array): Image {
  * @returns The decoded image.
  */
 export function getImageFromIFD(ifd: TiffIfd): Image {
+  if (ifd.data instanceof Float32Array || ifd.data instanceof Float64Array) {
+    throw new Error('Float TIFF data is not supported.');
+  }
+  if (ifd.type === 3 && ifd.extraSamples !== undefined) {
+    throw new Error('TIFF with palette and alpha channel is not supported.');
+  }
   if (ifd.type === 3) {
     // Palette
     const data = new Uint16Array(3 * ifd.width * ifd.height);
@@ -35,18 +40,16 @@ export function getImageFromIFD(ifd: TiffIfd): Image {
       data[ptr++] = color[1];
       data[ptr++] = color[2];
     }
+
     return new Image(ifd.width, ifd.height, {
       data,
-      // TODO: handle alpha properly
-      colorModel: ifd.alpha ? 'RGBA' : 'RGB',
-      // TODO: handle other bit depths
+      colorModel: 'RGB',
       bitDepth: 16,
       meta: getMetadata(ifd),
     });
   } else if (ifd.type === 1 || ifd.type === 0) {
     if (ifd.bitsPerSample !== 1) {
       return new Image(ifd.width, ifd.height, {
-        // @ts-expect-error float data not handled yet
         data: ifd.data,
         bitDepth: ifd.bitsPerSample as BitDepth,
         colorModel: ifd.alpha ? 'GREYA' : 'GREY',
@@ -54,7 +57,6 @@ export function getImageFromIFD(ifd: TiffIfd): Image {
       });
     } else {
       return new Image(ifd.width, ifd.height, {
-        // @ts-expect-error float data not handled yet
         data: ifd.data.map((pixel) => pixel * 255),
         bitDepth: 8 as BitDepth,
         colorModel: 'GREY',
@@ -63,8 +65,6 @@ export function getImageFromIFD(ifd: TiffIfd): Image {
     }
   } else {
     return new Image(ifd.width, ifd.height, {
-      // TODO: handle float data
-      // @ts-expect-error float data not handled yet
       data: ifd.data,
       bitDepth: ifd.bitsPerSample as BitDepth,
       colorModel: ifd.alpha ? 'RGBA' : 'RGB',
