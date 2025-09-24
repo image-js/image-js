@@ -70,6 +70,7 @@ export type TestImagePath =
   | 'formats/tif/greya16.tif'
   | 'formats/tif/greya32.tif'
   | 'formats/tif/palette.tif'
+  | 'formats/tif/palette_alpha.tif'
   | 'formats/tif/rgb16.tif'
   | 'formats/tif/rgb16-multi.tif'
   | 'formats/tif/rgba8.tif'
