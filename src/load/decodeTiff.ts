@@ -43,7 +43,10 @@ export function getImageFromIFD(ifd: TiffIfd): Image {
         data[ptr++] = color[0];
         data[ptr++] = color[1];
         data[ptr++] = color[2];
-        data[ptr++] = Math.round((ifd.data[index + 1] / 255) * 65535);
+        // To ensure that the value is 16 bits.
+        data[ptr++] = Math.round(
+          (ifd.data[index + 1] / 2 ** ifd.bitsPerSample) * 65535,
+        );
       }
     } else {
       for (
