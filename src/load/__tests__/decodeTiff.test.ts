@@ -6,13 +6,13 @@ const tests = [
   // ['name', components, alpha, bitDepth]
   ['grey8', 'GREY', 8],
   ['grey16', 'GREY', 16],
-  // TODO: support 32 bits again.
-  // ['grey32', 'GREY', 32],
   ['greya16', 'GREYA', 8],
   ['greya32', 'GREYA', 16],
   ['rgba8', 'RGBA', 8],
   ['rgb16', 'RGB', 16],
   ['palette', 'RGB', 16],
+  ['bw1bit', 'GREY', 8],
+  ['palette_alpha', 'RGBA', 16],
 ] as const;
 
 test.each(tests)('%s', (name, colorModel, bitDepth) => {
