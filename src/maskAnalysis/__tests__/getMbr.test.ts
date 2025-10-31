@@ -225,7 +225,8 @@ test('draw mbr on large image', () => {
 
   const rois = roiMapManager.getRois({ kind: 'white' });
 
-  const roi = rois.sort((a, b) => b.surface - a.surface)[0];
+  rois.sort((a, b) => b.surface - a.surface);
+  const roi = rois[0];
 
   const roiMask = roi.getMask({ solidFill: true });
   const mbr = roiMask.getMbr();

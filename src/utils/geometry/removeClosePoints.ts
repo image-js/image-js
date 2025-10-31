@@ -42,7 +42,8 @@ export function removeClosePoints(
   const channel = options?.channel || 0;
   const isMax = kind === 'maximum';
 
-  const sortedPoints = points.slice().sort(getSort(image, channel, isMax));
+  const sortedPoints = points.slice();
+  sortedPoints.sort(getSort(image, channel, isMax));
 
   if (distance > 0) {
     for (let i = 0; i < sortedPoints.length; i++) {

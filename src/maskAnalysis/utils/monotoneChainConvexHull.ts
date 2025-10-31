@@ -21,7 +21,8 @@ export function monotoneChainConvexHull(
 ): Point[] {
   const { sorted = false } = options;
   if (!sorted) {
-    points = points.slice().sort(byXThenY);
+    points = points.slice();
+    points.sort(byXThenY);
   }
 
   const n = points.length;

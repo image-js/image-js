@@ -28,9 +28,8 @@ export function filterEuclideanDistance(
 ): Match[] {
   const { origin = { column: 0, row: 0 } } = options;
 
-  const sorted = matches.sort(
-    (a, b) => a.destinationIndex - b.destinationIndex,
-  );
+  const sorted = matches.slice();
+  sorted.sort((a, b) => a.destinationIndex - b.destinationIndex);
 
   const result: Match[] = [];
   let sameDestMatches: Match[] = [];
@@ -39,21 +38,15 @@ export function filterEuclideanDistance(
     if (match.destinationIndex === currentIndex) {
       sameDestMatches.push(match);
     } else {
-      result.push(
-        ...sameDestMatches
-          .sort((a, b) => distanceSquared(a) - distanceSquared(b))
-          .slice(0, 1),
-      );
+      sameDestMatches.sort((a, b) => distanceSquared(a) - distanceSquared(b));
+      result.push(...sameDestMatches.slice(0, 1));
 
       currentIndex = match.destinationIndex;
       sameDestMatches = [match];
     }
   }
-  result.push(
-    ...sameDestMatches
-      .sort((a, b) => distanceSquared(a) - distanceSquared(b))
-      .slice(0, 1),
-  );
+  sameDestMatches.sort((a, b) => distanceSquared(a) - distanceSquared(b));
+  result.push(...sameDestMatches.slice(0, 1));
   return result;
 
   function distanceSquared(match: Match): number {

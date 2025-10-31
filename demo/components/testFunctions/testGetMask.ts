@@ -1,5 +1,6 @@
 import type { Image } from '../../../src/index.js';
 import { fromMask } from '../../../src/index.js';
+
 /**
  * Paint the border of the larger black ROI on the image.
  * @param image - The image to process
@@ -12,8 +13,8 @@ export function testGetContourMask(image: Image): Image {
   const roiMapManager = fromMask(mask);
 
   const rois = roiMapManager.getRois({ kind: 'black' });
-
-  const roi = rois.sort((a, b) => b.surface - a.surface)[0];
+  rois.sort((a, b) => b.surface - a.surface);
+  const roi = rois[0];
 
   const roiMask = roi.getMask({
     solidFill: true,
