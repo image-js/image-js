@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/image-js/image-js/compare/v1.0.0...v1.1.0) (2025-10-31)
+
+
+### Features
+
+* add new features from fast-bmp ([#748](https://github.com/image-js/image-js/issues/748)) ([147ef32](https://github.com/image-js/image-js/commit/147ef325f8337c0a9deee911dc35b2759e92449c))
+* add new tiff decoding features ([#751](https://github.com/image-js/image-js/issues/751)) ([32491a7](https://github.com/image-js/image-js/commit/32491a771dd8d36c8701b1660216ad354bd77263))
+* integrate new features from fast-png ([#749](https://github.com/image-js/image-js/issues/749)) ([9ad9566](https://github.com/image-js/image-js/commit/9ad9566a803256a87e94abadf3926af58da61461))
+
+
+### Bug Fixes
+
+* decoding palette PNG images with tRNS chunk ([#756](https://github.com/image-js/image-js/issues/756)) ([75c4231](https://github.com/image-js/image-js/commit/75c4231f742801fc1a8671e0bff991a86423339b))
+
 ## 1.0.0 (2025-08-20)
 
 
