@@ -6,7 +6,9 @@ import type { Match } from '../matching/bruteForceMatch.js';
  * @returns Sorted copy of the array of matches.
  */
 export function sortByDistance(matches: Match[]): Match[] {
-  return matches.slice().sort((match1, match2) => {
+  const sorted = matches.slice();
+  sorted.sort((match1, match2) => {
     return match1.distance - match2.distance;
   });
+  return sorted;
 }

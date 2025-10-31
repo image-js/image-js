@@ -1,5 +1,6 @@
 import type { Image } from '../../../src/index.js';
 import { fromMask } from '../../../src/index.js';
+
 /**
  * Make the image translucent, excepted where the largest black ROI is.
  * @param image - Image to process.
@@ -12,8 +13,8 @@ export function testPaintMask(image: Image): Image {
   const roiMapManager = fromMask(mask);
 
   const rois = roiMapManager.getRois({ kind: 'black' });
-
-  const biggestRoi = rois.sort((a, b) => b.surface - a.surface)[0];
+  rois.sort((a, b) => b.surface - a.surface);
+  const biggestRoi = rois[0];
 
   const roiMask = biggestRoi.getMask();
 

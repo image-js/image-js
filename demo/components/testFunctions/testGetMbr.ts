@@ -12,8 +12,8 @@ export function testGetMbr(image: Image): Image {
   const roiMapManager = fromMask(mask);
 
   const rois = roiMapManager.getRois({ kind: 'black' });
-
-  const roi = rois.sort((a, b) => b.surface - a.surface)[0];
+  rois.sort((a, b) => b.surface - a.surface);
+  const roi = rois[0];
   if (roi) {
     const roiMask = roi.getMask();
     const mbr = roiMask.getMbr();

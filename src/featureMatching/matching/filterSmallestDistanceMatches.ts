@@ -7,9 +7,8 @@ import type { Match } from './bruteForceMatch.js';
  * @returns Only the matches from source to destination with the smallest distance.
  */
 export function filterSmallestDistanceMatches(matches: Match[]): Match[] {
-  const sorted = matches.sort(
-    (a, b) => a.destinationIndex - b.destinationIndex,
-  );
+  const sorted = matches.slice();
+  sorted.sort((a, b) => a.destinationIndex - b.destinationIndex);
 
   const result: Match[] = [];
   let sameDestMatches: Match[] = [];
@@ -18,16 +17,14 @@ export function filterSmallestDistanceMatches(matches: Match[]): Match[] {
     if (match.destinationIndex === currentIndex) {
       sameDestMatches.push(match);
     } else {
-      result.push(
-        ...sameDestMatches.sort((a, b) => a.distance - b.distance).slice(0, 1),
-      );
+      sameDestMatches.sort((a, b) => a.distance - b.distance);
+      result.push(...sameDestMatches.slice(0, 1));
 
       currentIndex = match.destinationIndex;
       sameDestMatches = [match];
     }
   }
-  result.push(
-    ...sameDestMatches.sort((a, b) => a.distance - b.distance).slice(0, 1),
-  );
+  sameDestMatches.sort((a, b) => a.distance - b.distance);
+  result.push(...sameDestMatches.slice(0, 1));
   return result;
 }

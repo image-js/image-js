@@ -14,7 +14,8 @@ const topFirst = (mbrPoint1: Point, mbrPoint2: Point) =>
  * @returns The angle in degrees.
  */
 export function getMbrAngle(mbr: readonly Point[]): number {
-  const sorted = mbr.slice().sort(leftFirst);
+  const sorted = mbr.slice();
+  sorted.sort(leftFirst);
   const left = sorted.slice(0, 2);
   const right = sorted.slice(2, 4);
   left.sort(topFirst);

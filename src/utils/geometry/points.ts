@@ -94,9 +94,11 @@ export function round(point: Point): Point {
  * @returns Sorted points.
  */
 export function sortByColumnRow(points: Point[]): Point[] {
-  return points.slice().sort((point1, point2) => {
+  const sortedPoints = points.slice();
+  sortedPoints.sort((point1, point2) => {
     if (point1.column < point2.column) return -1;
     if (point1.column > point2.column) return 1;
     return point1.row - point2.row;
   });
+  return sortedPoints;
 }
