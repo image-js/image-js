@@ -8,7 +8,7 @@ import type { Match } from './bruteForceMatch.js';
  */
 export function filterSmallestDistanceMatches(matches: Match[]): Match[] {
   const sorted = matches.slice();
-  matches.sort((a, b) => a.destinationIndex - b.destinationIndex);
+  sorted.sort((a, b) => a.destinationIndex - b.destinationIndex);
 
   const result: Match[] = [];
   let sameDestMatches: Match[] = [];
