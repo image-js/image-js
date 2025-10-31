@@ -52,7 +52,7 @@
     "ml-spectra-processing": "^14.17.0",
     "robust-point-in-polygon": "^1.0.3",
     "ssim.js": "^3.5.0",
-    "tiff": "^7.1.1",
+    "tiff": "^7.1.2",
     "ts-pattern": "^5.8.0",
     "uint8-base64": "^1.0.0"
   },
