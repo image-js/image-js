@@ -41,6 +41,7 @@ export function decodePng(buffer: Uint8Array): Image {
     default:
       throw new RangeError(`invalid number of channels: ${png.channels}`);
   }
+
   return new Image(png.width, png.height, {
     colorModel,
     bitDepth,
@@ -56,7 +57,7 @@ export function decodePng(buffer: Uint8Array): Image {
 function loadPalettePng(png: DecodedPng): Image {
   assert(png.palette);
   const pixels = png.width * png.height;
-  const data = new Uint8Array(pixels * 3);
+  const data = new Uint8Array(pixels * png.palette[0].length);
   const pixelsPerByte = 8 / png.depth;
   const factor = png.depth < 8 ? pixelsPerByte : 1;
   const mask = Number.parseInt('1'.repeat(png.depth), 2);
@@ -71,13 +72,14 @@ function loadPalettePng(png: DecodedPng): Image {
         mask;
     }
     const paletteValue = png.palette[value];
-    data[dataIndex++] = paletteValue[0];
-    data[dataIndex++] = paletteValue[1];
-    data[dataIndex++] = paletteValue[2];
+    for (const paletteChannel of paletteValue) {
+      data[dataIndex++] = paletteChannel;
+    }
   }
 
   return new Image(png.width, png.height, {
     data,
+    colorModel: png.palette[0].length === 4 ? 'RGBA' : 'RGB',
   });
 }
 
