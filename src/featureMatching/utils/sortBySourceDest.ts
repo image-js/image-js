@@ -6,11 +6,13 @@ import type { Match } from '../matching/bruteForceMatch.js';
  * @returns Sorted copy of the array of matches.
  */
 export function sortBySourceDest(matches: Match[]): Match[] {
-  return matches.slice().sort((match1, match2) => {
+  const sorted = matches.slice();
+  sorted.sort((match1, match2) => {
     if (match1.sourceIndex < match2.sourceIndex) return -1;
     if (match1.sourceIndex > match2.sourceIndex) return 1;
     return match1.destinationIndex - match2.destinationIndex;
   });
+  return sorted;
 }
 
 /**
@@ -19,9 +21,11 @@ export function sortBySourceDest(matches: Match[]): Match[] {
  * @returns Sorted copy of the array of matches.
  */
 export function sortByDestSource(matches: Match[]): Match[] {
-  return matches.slice().sort((match1, match2) => {
+  const sorted = matches.slice();
+  sorted.sort((match1, match2) => {
     if (match1.destinationIndex < match2.destinationIndex) return -1;
     if (match1.destinationIndex > match2.destinationIndex) return 1;
     return match1.sourceIndex - match2.sourceIndex;
   });
+  return sorted;
 }

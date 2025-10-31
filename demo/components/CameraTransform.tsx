@@ -28,11 +28,16 @@ export default function CameraTransform(props: CameraTransformProps) {
   const canvasOutputRef = useRef<HTMLCanvasElement>(null);
   const transformRef = useRef<TransformFunction>(transform);
   const [error, setError] = useState<string>('');
-  transformRef.current = transform;
-  useEffect(() => {
+  const [previousTransform, setPreviousTransform] =
+    useState<TransformFunction>(transform);
+  if (previousTransform !== transform) {
+    setPreviousTransform(transform);
     // Reset error if transform is changed.
     setError('');
-  }, [transform]);
+  }
+  useEffect(() => {
+    transformRef.current = transform;
+  });
   useEffect(() => {
     if (!selectedCamera || error) return;
     const video = videoRef.current as HTMLVideoElement;
@@ -45,7 +50,6 @@ export default function CameraTransform(props: CameraTransformProps) {
           const canvasInput = canvasInputRef.current as HTMLCanvasElement;
           const canvasOutput = canvasOutputRef.current as HTMLCanvasElement;
           if (!canvasInput || !canvasOutput) return;
-          // eslint-disable-next-line react-hooks/react-compiler
           canvasInput.height = video.videoHeight;
           canvasInput.width = video.videoWidth;
           const inputContext = canvasInput.getContext(
