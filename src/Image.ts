@@ -840,16 +840,11 @@ export class Image {
   /**
    * Draw labels on the image.
    * @param labels - Labels to draw.
-   * @param coordinates - Labels' coordinates.
    * @param options - Draw labels' options.
    * @returns The image with the labels drawn.
    */
-  public drawLabels(
-    labels: Label[],
-    coordinates: Point[],
-    options: DrawLabelsOptions = {},
-  ): Image {
-    return drawLabels(this, labels, coordinates, options);
+  public drawLabels(labels: Label[], options: DrawLabelsOptions = {}): Image {
+    return drawLabels(this, labels, options);
   }
 
   /**

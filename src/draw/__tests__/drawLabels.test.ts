@@ -8,10 +8,14 @@ test('draw H on an image', () => {
   const image = testUtils.createGreyImage(
     new Array(15).fill(new Array(15).fill(255)),
   );
-  const newImage = drawLabels(image, ['H'], [{ column: 1, row: 14 }], {
-    font: '20px Arial',
-    fontColor: [0, 0, 0],
-  });
+  const newImage = drawLabels(
+    image,
+    [{ text: 'H', position: { column: 1, row: 14 } }],
+    {
+      font: '20px Arial',
+      fontColor: [0, 0, 0],
+    },
+  );
 
   expect(newImage).toMatchImageSnapshot({
     failureThreshold: 0.06,
@@ -22,10 +26,14 @@ test('draw H on an image', () => {
 test('draw transparent H', () => {
   const image = new Image(100, 100, { bitDepth: 8, colorModel: 'RGBA' });
 
-  const newImage = drawLabels(image, ['Hell0'], [{ column: 1, row: 70 }], {
-    font: '40px Arial',
-    fontColor: [255, 255, 255, 125],
-  });
+  const newImage = drawLabels(
+    image,
+    [{ text: 'Hell0', position: { column: 1, row: 70 } }],
+    {
+      font: '40px Arial',
+      fontColor: [255, 255, 255, 125],
+    },
+  );
 
   expect(newImage).toMatchImageSnapshot({
     failureThreshold: 0.05,
@@ -41,16 +49,14 @@ test('draw several labels', () => {
     .threshold({ algorithm: 'minimum' });
   const rois = fromMask(mask).getRois({ kind: 'black' });
   const image = mask.convertColor('RGB');
-  const labelNames = rois.map((roi) => {
-    return roi.id;
-  });
-  const labelCoords = rois.map((roi) => {
+  const labels = rois.map((roi) => {
     return {
-      column: roi.origin.column,
-      row: roi.origin.row,
+      text: roi.id,
+      position: { column: roi.origin.column, row: roi.origin.row },
     };
   });
-  const newImage = drawLabels(image, labelNames, labelCoords, {
+
+  const newImage = drawLabels(image, labels, {
     font: '20px Arial',
     fontColor: [255, 0, 0],
   });
@@ -66,8 +72,7 @@ test('image color model remains unchanged', () => {
 
   const newImage = drawLabels(
     image,
-    ['Hello world'],
-    [{ column: 200, row: 200 }],
+    [{ text: 'Hello world', position: { column: 200, row: 200 } }],
     {
       font: '20px Arial',
       fontColor: [0, 0, 255],
@@ -82,10 +87,9 @@ test('grey image', () => {
 
   const newImage = drawLabels(
     image,
-    ['Hello world', 255],
     [
-      { column: 200, row: 200 },
-      { column: 255, row: 255 },
+      { text: 'Hello world', position: { column: 200, row: 200 } },
+      { text: 255, position: { column: 255, row: 255 } },
     ],
     {
       font: '20px Arial',
@@ -105,10 +109,13 @@ test('grey image with alpha', () => {
     new Array(15).fill(new Array(30).fill(255)),
   );
 
-  const newImage = image.drawLabels(['HI!'], [{ column: 0, row: 13 }], {
-    font: '10px monospace',
-    fontColor: [0, 0, 0],
-  });
+  const newImage = image.drawLabels(
+    [{ text: 'HI!', position: { column: 0, row: 13 } }],
+    {
+      font: '10px monospace',
+      fontColor: [0, 0, 0],
+    },
+  );
 
   expect(newImage.colorModel).toStrictEqual(image.colorModel);
   expect(newImage).toMatchImageSnapshot({
@@ -122,10 +129,13 @@ test('incomplete fill color', () => {
     new Array(40).fill(new Array(200).fill(255)),
   );
 
-  const newImage = image.drawLabels(['HI!'], [{ column: 0, row: 23 }], {
-    font: '20px Arial',
-    fontColor: [0],
-  });
+  const newImage = image.drawLabels(
+    [{ text: 'HI!', position: { column: 0, row: 23 } }],
+    {
+      font: '20px Arial',
+      fontColor: [0],
+    },
+  );
 
   expect(newImage.colorModel).toStrictEqual(image.colorModel);
   expect(newImage).toMatchImageSnapshot({
@@ -134,30 +144,16 @@ test('incomplete fill color', () => {
   });
 });
 
-test("must throw if arrays aren't equal", () => {
-  const image = testUtils.createRgbaImage(
-    new Array(40).fill(new Array(200).fill(255)),
-  );
-
-  expect(() => {
-    const newImage = drawLabels(image, ['HI!', 255], [{ column: 0, row: 23 }], {
-      font: '20px Arial',
-      fontColor: [0],
-    });
-    return newImage;
-  }).toThrow('Positions and labels must be arrays of the same size.');
-});
-
 test('must throw if arrays are empty', () => {
   const image = testUtils.createRgbaImage(
     new Array(40).fill(new Array(200).fill(255)),
   );
 
   expect(() => {
-    const newImage = drawLabels(image, [], [], {
+    const newImage = drawLabels(image, [], {
       font: '20px Arial',
       fontColor: [0],
     });
     return newImage;
-  }).toThrow('You must specify at least one label coordinate.');
+  }).toThrow('At least one label must be provided');
 });

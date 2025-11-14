@@ -51,7 +51,7 @@
     "ml-regression-polynomial-2d": "^1.0.0",
     "ml-spectra-processing": "^14.18.0",
     "robust-point-in-polygon": "^1.0.3",
-    "skia-canvas": "^3.0.7",
+    "skia-canvas": "^3.0.8",
     "ssim.js": "^3.5.0",
     "tiff": "^7.1.2",
     "ts-pattern": "^5.9.0",
