@@ -3,12 +3,23 @@ import { Canvas } from 'skia-canvas';
 import type { Image, ImageDataArray } from '../Image.js';
 import type { Point } from '../geometry/index.js';
 import { validateValues } from '../utils/validators/validators.js';
-
+/**
+ * Label to draw on an image.
+ */
 export interface Label {
+  /**
+   * Text of the label.
+   */
   text: number | string;
+  /**
+   * Position to draw the label at.
+   */
   position: Point;
 }
 
+/**
+ * Options for drawing labels on an image.
+ */
 export interface DrawLabelsOptions {
   /**
    *  Size and type of font.
@@ -117,6 +128,9 @@ function layerCanvas(
   }
 }
 
+/**
+ * Configuration for different channel numbers when layering canvas with onto destination image.
+ */
 interface ChannelConfig {
   channelOffsets: number[];
   hasAlpha: boolean;
