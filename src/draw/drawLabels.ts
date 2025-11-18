@@ -1,8 +1,7 @@
-import { Canvas } from 'skia-canvas';
-
-import type { Image, ImageDataArray } from '../Image.js';
-import type { Point } from '../geometry/index.js';
-import { validateValues } from '../utils/validators/validators.js';
+import type { Image, ImageDataArray } from '../Image.ts';
+import type { Point } from '../geometry/index.ts';
+import { getCanvasContext } from '../utils/cross_platform.ts';
+import { validateValues } from '../utils/validators/validators.ts';
 /**
  * Label to draw on an image.
  */
@@ -43,7 +42,6 @@ export function drawLabels(
   options: DrawLabelsOptions = {},
 ) {
   const newImage = image.clone();
-  const canvas = new Canvas(image.width, image.height);
   const { font = '12px Helvetica', fontColor = [255, 255, 255, 255] } = options;
 
   if (labels.length === 0) {
@@ -58,7 +56,7 @@ export function drawLabels(
     alpha,
   ];
 
-  const ctx = canvas.getContext('2d');
+  const ctx = getCanvasContext(image.width, image.height);
   ctx.font = font;
   ctx.fillStyle = `rgba(${normalizedColor.join(',')})`;
   for (const label of labels) {
