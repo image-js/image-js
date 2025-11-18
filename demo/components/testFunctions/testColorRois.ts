@@ -1,5 +1,4 @@
-import { Image } from '../../../src/index.js';
-import { colorRois, fromMask } from '../../../src/roi/index.js';
+import { Image, colorRois, fromMask } from '../../image_js.ts';
 
 /**
  * Make a mask out of the image and detect all ROIs. Returns only the white ROIs on a black background.

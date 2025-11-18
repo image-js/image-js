@@ -1,4 +1,4 @@
-import type { Image } from '../../../src/index.js';
+import type { Image } from '../../image_js.ts';
 
 /**
  * Apply a derivative filter to the source image.

@@ -1,4 +1,4 @@
-import { Image } from '../../../src/index.js';
+import { Image } from '../../image_js.ts';
 
 /**
  * Copy a black and a red square to the source image.

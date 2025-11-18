@@ -1,5 +1,5 @@
-import type { Image } from '../../../src/index.js';
-import { fromMask } from '../../../src/index.js';
+import type { Image } from '../../image_js.ts';
+import { fromMask } from '../../image_js.ts';
 
 /**
  * Make the image translucent, excepted where the largest black ROI is.

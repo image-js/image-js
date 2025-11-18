@@ -1,5 +1,5 @@
-import type { Image } from '../../../src/index.js';
-import { fromMask } from '../../../src/index.js';
+import type { Image } from '../../image_js.ts';
+import { fromMask } from '../../image_js.ts';
 
 /**
  * Draw the Feret diameters of the largest ROI detected in the image.

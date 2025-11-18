@@ -1,5 +1,5 @@
-import type { Image } from '../../../src/index.js';
-import { convertBinaryToGrey } from '../../../src/index.js';
+import type { Image } from '../../image_js.ts';
+import { convertBinaryToGrey } from '../../image_js.ts';
 
 /**
  * Detect the edges in the image using Canny edge detection

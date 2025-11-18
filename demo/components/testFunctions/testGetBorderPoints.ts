@@ -1,5 +1,5 @@
-import type { Image } from '../../../src/index.js';
-import { Mask, fromMask } from '../../../src/index.js';
+import type { Image } from '../../image_js.ts';
+import { Mask, fromMask } from '../../image_js.ts';
 
 /**
  * Paint the border of the larger black ROI on the image.

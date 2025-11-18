@@ -22,7 +22,7 @@
     "api-extractor": "rimraf dist-types && api-extractor run --local",
     "build": "npm run tsc && npm run cheminfo-build",
     "check-types": "tsc --noEmit",
-    "cheminfo-build": "cheminfo-build --entry lib/index_full.js --root IJS",
+    "cheminfo-build": "cheminfo-build --entry lib/index_browser.js --root IJS",
     "clean": "rimraf coverage dist dist-types lib",
     "demo": "vite --open",
     "eslint": "eslint . --cache",
