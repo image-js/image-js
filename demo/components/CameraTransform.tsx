@@ -28,8 +28,9 @@ export default function CameraTransform(props: CameraTransformProps) {
   const canvasOutputRef = useRef<HTMLCanvasElement>(null);
   const transformRef = useRef<TransformFunction>(transform);
   const [error, setError] = useState<string>('');
-  const [previousTransform, setPreviousTransform] =
-    useState<TransformFunction>(transform);
+  const [previousTransform, setPreviousTransform] = useState<TransformFunction>(
+    () => transform,
+  );
   if (previousTransform !== transform) {
     setPreviousTransform(transform);
     // Reset error if transform is changed.
