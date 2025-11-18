@@ -61,8 +61,7 @@
     "allowScripts": {
       "@lavamoat/preinstall-always-fail": false,
       "skia-canvas": true,
-      "vite>esbuild": false,
-      "$root$": false
+      "vite>esbuild": false
     }
   },
   "devDependencies": {
