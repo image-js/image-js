@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../Image.ts';
-import { fromMask } from '../../roi/fromMask.js';
-import { drawLabels } from '../drawLabels.js';
+import { Image } from '../../../Image.ts';
+import { fromMask } from '../../../roi/fromMask.ts';
+import { drawLabels } from '../draw_labels.ts';
 
 test('draw H on an image', () => {
   const image = testUtils.createGreyImage(
@@ -109,7 +109,8 @@ test('grey image with alpha', () => {
     new Array(15).fill(new Array(30).fill(255)),
   );
 
-  const newImage = image.drawLabels(
+  const newImage = drawLabels(
+    image,
     [{ text: 'HI!', position: { column: 0, row: 13 } }],
     {
       font: '10px monospace',
@@ -129,7 +130,8 @@ test('incomplete fill color', () => {
     new Array(40).fill(new Array(200).fill(255)),
   );
 
-  const newImage = image.drawLabels(
+  const newImage = drawLabels(
+    image,
     [{ text: 'HI!', position: { column: 0, row: 23 } }],
     {
       font: '20px Arial',

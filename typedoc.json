@@ -1,6 +1,10 @@
 {
   "name": "ImageJS",
-  "entryPoints": ["src/index.ts", "src/ssim/index.ts"],
+  "entryPoints": [
+    "src/index.ts",
+    "src/extra/draw/index.ts",
+    "src/extra/ssim/index.ts"
+  ],
   "cname": "api.image-js.org",
   "favicon": "favicon.svg",
   "sourceLinkExternal": true,

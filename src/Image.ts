@@ -18,18 +18,15 @@ import { histogram, mean, median, variance } from './compute/index.js';
 import { correctColor } from './correctColor/index.js';
 import type {
   DrawCircleOnImageOptions,
-  DrawLabelsOptions,
   DrawLineOnImageOptions,
   DrawMarkerOptions,
   DrawPointsOptions,
   DrawPolygonOnImageOptions,
   DrawPolylineOnImageOptions,
   DrawRectangleOptions,
-  Label,
 } from './draw/index.js';
 import {
   drawCircleOnImage,
-  drawLabels,
   drawLineOnImage,
   drawMarker,
   drawMarkers,
@@ -835,16 +832,6 @@ export class Image {
    */
   public drawMarker(point: Point, options: DrawMarkerOptions = {}): Image {
     return drawMarker(this, point, options);
-  }
-
-  /**
-   * Draw labels on the image.
-   * @param labels - Labels to draw.
-   * @param options - Draw labels' options.
-   * @returns The image with the labels drawn.
-   */
-  public drawLabels(labels: Label[], options: DrawLabelsOptions = {}): Image {
-    return drawLabels(this, labels, options);
   }
 
   /**

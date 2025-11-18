@@ -9,7 +9,7 @@ import { assert } from './validators/assert.js';
  * @param image - The image with which to blend.
  * @param column - Column of the target pixel.
  * @param row - Row of the target pixel.
- * @param color - Color with which to blend the image pixel. @default `'Opaque black'`.
+ * @param color - Color with which to blend the image pixel. Default: `Opaque black`.
  */
 
 export function setBlendedPixel(

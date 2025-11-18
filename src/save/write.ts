@@ -106,7 +106,7 @@ export async function write(
 }
 
 /**
- * Synchronous version of @see {@link write}.
+ * Synchronous version of {@link write}.
  * This method is only implemented for Node.js.
  * @param path - Path where the image should be written.
  * @param image - Image to save.

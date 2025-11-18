@@ -17,7 +17,7 @@ export async function read(path: string | URL): Promise<Image> {
 }
 
 /**
- * Synchronous version of @see {@link read}.
+ * Synchronous version of {@link read}.
  * This method is only implemented for Node.js.
  * @param path - The path to the image.
  * @returns Image instance.

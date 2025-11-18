@@ -1,11 +1,12 @@
-import type { Image, ImageDataArray } from '../Image.ts';
-import type { Point } from '../geometry/index.ts';
-import { getCanvasContext } from '../utils/cross_platform.ts';
-import { validateValues } from '../utils/validators/validators.ts';
+import type { Image, ImageDataArray } from '../../Image.ts';
+import type { Point } from '../../geometry/index.ts';
+import { getCanvasContext } from '../../utils/cross_platform.ts';
+import { validateValues } from '../../utils/validators/validators.ts';
+
 /**
  * Label to draw on an image.
  */
-export interface Label {
+export interface DrawLabelsLabel {
   /**
    * Text of the label.
    */
@@ -29,16 +30,17 @@ export interface DrawLabelsOptions {
    */
   fontColor?: number[];
 }
+
 /**
- * Draws different labels on images.
+ * Draws labels on an image.
  * @param image - Image to draw labels on.
  * @param labels - Labels to draw.
- * @param options - DrawLabelsWithCanvasOptions.
+ * @param options - Options.
  * @returns new image with drawn labels on it.
  */
 export function drawLabels(
   image: Image,
-  labels: Label[],
+  labels: DrawLabelsLabel[],
   options: DrawLabelsOptions = {},
 ) {
   const newImage = image.clone();
