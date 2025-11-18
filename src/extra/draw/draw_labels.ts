@@ -52,9 +52,9 @@ export function drawLabels(
   validateValues(fontColor, image);
   const alpha = fontColor[3] ? fontColor[3] / 255 : 1;
   const normalizedColor = [
-    fontColor[0] ?? 255,
-    fontColor[1] ?? 255,
-    fontColor[2] ?? 255,
+    fontColor[0] ?? 0,
+    fontColor[1] ?? 0,
+    fontColor[2] ?? 0,
     alpha,
   ];
 
