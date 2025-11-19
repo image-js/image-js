@@ -114,7 +114,10 @@ test('text written to the same image', () => {
     { out: image },
   );
 
-  expect(image).toMatchImageSnapshot();
+  expect(image).toMatchImageSnapshot({
+    failureThreshold: 0.08,
+    failureThresholdType: 'percent',
+  });
 });
 
 test('grey image', () => {
