@@ -3,6 +3,7 @@ import type { CanvasRenderingContext2D as SkiaCanvasRenderingContext2D } from 's
 import type { Image, ImageDataArray } from '../../Image.ts';
 import type { Point } from '../../geometry/index.ts';
 import { getCanvasContext } from '../../utils/cross_platform.ts';
+import { getOutputImage } from '../../utils/getOutputImage.ts';
 import { validateValues } from '../../utils/validators/validators.ts';
 
 export interface DrawTextLabel {
@@ -24,17 +25,30 @@ export interface DrawTextLabel {
   fontColor?: number[];
 }
 
+export interface DrawTextOptions {
+  /**
+   * Image to which the resulting image has to be put.
+   */
+  out?: Image;
+}
+
 /**
  * Draws text on an image.
  * @param image - Image to write text on.
  * @param text - Text to write on the image.
+ * @param options - Out Options
  * @returns Image with drawn text.
  */
-export function drawText(image: Image, text: DrawTextLabel | DrawTextLabel[]) {
+export function drawText(
+  image: Image,
+  text: DrawTextLabel | DrawTextLabel[],
+  options?: DrawTextOptions,
+) {
   if (Array.isArray(text) && text.length === 0) {
     throw new Error('At least one text element must be provided');
   }
-  const newImage = image.clone();
+
+  const newImage = getOutputImage(image, options, { clone: true });
   const defaultFont = '12px Helvetica';
   const defaultColor = [255, 255, 255, 255];
 

@@ -98,6 +98,25 @@ test('image color model remains unchanged', () => {
   expect(newImage.colorModel).toStrictEqual(image.colorModel);
 });
 
+test('text written to the same image', () => {
+  const image = testUtils.load('various/screws.png');
+
+  drawText(
+    image,
+    [
+      {
+        content: 'Hello world',
+        position: { column: 200, row: 200 },
+        font: '20px Arial',
+        fontColor: [0, 0, 255],
+      },
+    ],
+    { out: image },
+  );
+
+  expect(image).toMatchImageSnapshot();
+});
+
 test('grey image', () => {
   const image = testUtils.load('various/screws.png').grey();
 
