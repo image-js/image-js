@@ -173,5 +173,5 @@ test('must throw if arrays are empty', () => {
   expect(() => {
     const newImage = drawText(image, []);
     return newImage;
-  }).toThrow('At least one label must be provided');
+  }).toThrow('At least one text element must be provided');
 });

@@ -31,8 +31,8 @@ export interface DrawTextLabel {
  * @returns Image with drawn text.
  */
 export function drawText(image: Image, text: DrawTextLabel | DrawTextLabel[]) {
-  if (text === undefined || (Array.isArray(text) && text.length === 0)) {
-    throw new Error('At least one label must be provided');
+  if (Array.isArray(text) && text.length === 0) {
+    throw new Error('At least one text element must be provided');
   }
   const newImage = image.clone();
   const defaultFont = '12px Helvetica';
