@@ -15,12 +15,6 @@ export interface DrawLabelsLabel {
    * Position to draw the label at.
    */
   position: Point;
-}
-
-/**
- * Options for drawing labels on an image.
- */
-export interface DrawLabelsOptions {
   /**
    *  Size and type of font.
    */
@@ -35,33 +29,29 @@ export interface DrawLabelsOptions {
  * Draws labels on an image.
  * @param image - Image to draw labels on.
  * @param labels - Labels to draw.
- * @param options - Options.
  * @returns new image with drawn labels on it.
  */
-export function drawLabels(
-  image: Image,
-  labels: DrawLabelsLabel[],
-  options: DrawLabelsOptions = {},
-) {
+export function drawLabels(image: Image, labels: DrawLabelsLabel[]) {
   const newImage = image.clone();
-  const { font = '12px Helvetica', fontColor = [255, 255, 255, 255] } = options;
 
   if (labels.length === 0) {
     throw new Error('At least one label must be provided');
   }
-  validateValues(fontColor, image);
-  const alpha = fontColor[3] ? fontColor[3] / 255 : 1;
-  const normalizedColor = [
-    fontColor[0] ?? 0,
-    fontColor[1] ?? 0,
-    fontColor[2] ?? 0,
-    alpha,
-  ];
 
   const ctx = getCanvasContext(image.width, image.height);
-  ctx.font = font;
-  ctx.fillStyle = `rgba(${normalizedColor.join(',')})`;
+
   for (const label of labels) {
+    ctx.font = label.font ?? '12px Helvetica';
+    const fontColor = label.fontColor ?? [255, 255, 255, 255];
+    validateValues(fontColor, image);
+    const alpha = fontColor[3] ? fontColor[3] / 255 : 1;
+    const normalizedColor = [
+      fontColor[0] ?? 0,
+      fontColor[1] ?? 0,
+      fontColor[2] ?? 0,
+      alpha,
+    ];
+    ctx.fillStyle = `rgba(${normalizedColor.join(',')})`;
     ctx.fillText(String(label.text), label.position.column, label.position.row);
   }
 

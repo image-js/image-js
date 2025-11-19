@@ -12,6 +12,7 @@
     "lib",
     "src"
   ],
+  "types": "./lib/index.d.ts",
   "exports": {
     ".": "./lib/index.js",
     "./full": "./lib/index_full.js",
