@@ -17,15 +17,27 @@ export interface DrawTextLabel {
   position: Point;
   /**
    *  Size and type of font.
+   *  If specified, this overrides the general font from DrawTextOptions.
    */
   font?: string;
   /**
    *  Font color. Should be in rgba8 format.
+   *  If specified, this overrides the general fontColor from DrawTextOptions.
    */
   fontColor?: number[];
 }
 
 export interface DrawTextOptions {
+  /**
+   *  General size and type of font.
+   *  Used as the default when font is not specified in individual text labels.
+   */
+  font?: string;
+  /**
+   *  General font color.
+   *  Used as the default when fontColor is not specified in individual text labels.
+   */
+  fontColor?: number[];
   /**
    * Image to which the resulting image has to be put.
    */
@@ -49,8 +61,8 @@ export function drawText(
   }
 
   const newImage = getOutputImage(image, options, { clone: true });
-  const defaultFont = '12px Helvetica';
-  const defaultColor = [255, 255, 255, 255];
+  const defaultFont = options?.font ?? '12px Helvetica';
+  const defaultColor = options?.fontColor ?? [255, 255, 255, 255];
 
   const ctx = getCanvasContext(image.width, image.height);
   if (!Array.isArray(text)) {

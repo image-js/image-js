@@ -166,6 +166,40 @@ test('grey image with alpha', () => {
   });
 });
 
+test('check color and font priorities', () => {
+  const image = testUtils.createRgbaImage(
+    new Array(150).fill(new Array(512).fill(255)),
+  );
+
+  const newImage = drawText(
+    image,
+    [
+      {
+        content: 'HI!',
+        position: { column: 2, row: 13 },
+      },
+      {
+        content: 'HELLO!',
+        position: { column: 15, row: 60 },
+        font: '25px Arial',
+        fontColor: [0, 0, 255],
+      },
+      {
+        content: 'Y0!',
+        position: { column: 40, row: 100 },
+        fontColor: [0, 255, 0],
+      },
+    ],
+    { fontColor: [255, 0, 0], font: '10px monospace' },
+  );
+
+  expect(newImage.colorModel).toStrictEqual(image.colorModel);
+  expect(newImage).toMatchImageSnapshot({
+    failureThreshold: 0.15,
+    failureThresholdType: 'percent',
+  });
+});
+
 test('incomplete fill color', () => {
   const image = testUtils.createRgbaImage(
     new Array(40).fill(new Array(200).fill(255)),
