@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/image-js/image-js/compare/v1.1.0...v1.2.0) (2025-11-21)
+
+
+### Features
+
+* add new method drawText ([#740](https://github.com/image-js/image-js/issues/740)) ([377a66b](https://github.com/image-js/image-js/commit/377a66b28068049c40561a79016a437d246e01b0))
+
 ## [1.1.0](https://github.com/image-js/image-js/compare/v1.0.0...v1.1.0) (2025-10-31)
 
 
