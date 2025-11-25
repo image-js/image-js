@@ -14,5 +14,11 @@ export function getMetadata(ifd: TiffIfd) {
       tags: ifd.map,
     },
     exif: ifd.exif as unknown as Record<string, unknown>,
+
+    resolution: {
+      x: ifd.xResolution,
+      y: ifd.yResolution,
+      unit: ifd.resolutionUnit,
+    },
   };
 }

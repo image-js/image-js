@@ -78,7 +78,7 @@ import {
   transform,
   transformRotate,
 } from './geometry/index.js';
-import type { ImageMetadata } from './load/load.types.js';
+import type { PngImageMetadata, TiffImageMetadata } from './load/load.types.js';
 import type {
   BottomHatOptions,
   CannyEdgeOptions,
@@ -174,7 +174,7 @@ export interface ImageOptions {
    */
   origin?: Point;
 
-  meta?: ImageMetadata;
+  meta?: TiffImageMetadata | PngImageMetadata;
 }
 
 export interface CreateFromOptions extends ImageOptions {
@@ -235,8 +235,7 @@ export class Image {
    */
   public readonly origin: Point;
 
-  public readonly meta?: ImageMetadata;
-
+  public readonly meta?: TiffImageMetadata | PngImageMetadata;
   /**
    * Typed array holding the image data.
    */

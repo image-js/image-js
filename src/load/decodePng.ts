@@ -6,6 +6,8 @@ import { Image } from '../Image.js';
 import type { ImageColorModel } from '../utils/constants/colorModels.js';
 import { assert } from '../utils/validators/assert.js';
 
+import type { PngImageMetadata } from './load.types.ts';
+
 /**
  * Decode a PNG. See the fast-png npm module.
  * @param buffer - The data to decode.
@@ -41,11 +43,15 @@ export function decodePng(buffer: Uint8Array): Image {
     default:
       throw new RangeError(`invalid number of channels: ${png.channels}`);
   }
+  const meta = png.resolution
+    ? ({ resolution: png.resolution } as PngImageMetadata)
+    : undefined;
 
   return new Image(png.width, png.height, {
     colorModel,
     bitDepth,
     data: png.data,
+    meta,
   });
 }
 
