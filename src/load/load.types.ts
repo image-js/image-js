@@ -7,10 +7,16 @@ export interface TiffImageMetadata {
 }
 
 export interface PngImageMetadata {
-  resolution: {
-    x: number;
-    y: number;
-    unit: number;
-  };
-  // Pixels per meter
+  resolution: Resolution;
 }
+
+export type Resolution =
+  | { x: number; y: number; unit: null }
+  | { x: number; y: number }
+  | {
+      x: number;
+      y: number;
+      originalValues: { x: number; y: number; unit: Unit };
+    };
+
+type Unit = 'inch' | 'centimeter';

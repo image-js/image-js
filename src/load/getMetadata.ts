@@ -1,5 +1,7 @@
 import type { decode } from 'tiff';
 
+import type { Resolution } from './load.types.ts';
+
 type TiffIfd = ReturnType<typeof decode>[number];
 
 /**
@@ -14,11 +16,39 @@ export function getMetadata(ifd: TiffIfd) {
       tags: ifd.map,
     },
     exif: ifd.exif as unknown as Record<string, unknown>,
-
-    resolution: {
-      x: ifd.xResolution,
-      y: ifd.yResolution,
-      unit: ifd.resolutionUnit,
-    },
+    resolution: getTiffResolution(ifd),
   };
+}
+/**
+ * Gets image resolution from its metadata and converts it into Pixels per meter, when it's possible. Also keeps original resolution values and units.
+ * @param ifd - Tiff metadata.
+ * @returns Resolution object.
+ */
+function getTiffResolution(ifd: TiffIfd): Resolution {
+  const inchesPerMeter = 39.3700787402;
+  const centimetersPerMeter = 100;
+  switch (ifd.resolutionUnit) {
+    case 1:
+      return { x: ifd.xResolution, y: ifd.yResolution, unit: null };
+    case 3:
+      return {
+        x: ifd.xResolution / centimetersPerMeter,
+        y: ifd.yResolution / centimetersPerMeter,
+        originalValues: {
+          x: ifd.xResolution,
+          y: ifd.yResolution,
+          unit: 'centimeter',
+        },
+      };
+    default:
+      return {
+        x: ifd.xResolution / inchesPerMeter,
+        y: ifd.yResolution / inchesPerMeter,
+        originalValues: {
+          x: ifd.xResolution,
+          y: ifd.yResolution,
+          unit: 'inch',
+        },
+      };
+  }
 }
