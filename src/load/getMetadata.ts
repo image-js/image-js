@@ -24,9 +24,13 @@ export function getMetadata(ifd: TiffIfd) {
  * @param ifd - Tiff metadata.
  * @returns Resolution object.
  */
-function getTiffResolution(ifd: TiffIfd): Resolution {
+function getTiffResolution(ifd: TiffIfd): Resolution | undefined {
   const inchesPerMeter = 39.3700787402;
   const centimetersPerMeter = 100;
+  if (!ifd.xResolution || !ifd.yResolution) {
+    return undefined;
+  }
+
   switch (ifd.resolutionUnit) {
     case 1:
       return { x: ifd.xResolution, y: ifd.yResolution, unit: null };

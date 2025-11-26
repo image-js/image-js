@@ -4,10 +4,11 @@ export interface TiffImageMetadata {
     tags: Record<string, unknown>;
   };
   exif: Record<string, unknown>;
+  resolution?: Resolution;
 }
 
 export interface PngImageMetadata {
-  resolution: Resolution;
+  resolution?: Resolution;
 }
 
 export type Resolution =
