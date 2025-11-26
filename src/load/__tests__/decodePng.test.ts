@@ -26,3 +26,17 @@ test.each(tests)('should load from buffer %s', (name, bitDepth, colorModel) => {
   expect(img.bitDepth).toBe(bitDepth);
   expect(img.colorModel).toBe(colorModel);
 });
+
+test('should extract image resolution', () => {
+  const image = testUtils.load('formats/polishedBasaltSide.png');
+
+  expect(image.meta).toBeUndefined();
+
+  const image2 = testUtils.load('formats/grey8.png');
+
+  expect(image2.meta?.resolution).toStrictEqual({ x: 2835, y: 2835 });
+
+  const image3 = testUtils.load('formats/grey16.png');
+
+  expect(image3.meta?.resolution).toStrictEqual({ x: 2835, y: 2835 });
+});

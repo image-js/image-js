@@ -15,6 +15,15 @@ test('with metadata', () => {
   const img = decodeJpeg(buffer);
 
   expect(img.meta).toBeDefined();
+  expect(img.meta?.resolution).toStrictEqual({
+    x: 1.828799999998025,
+    y: 1.828799999998025,
+    originalValues: {
+      unit: 'inch',
+      x: 72,
+      y: 72,
+    },
+  });
 });
 
 test('with metadata 2', () => {
