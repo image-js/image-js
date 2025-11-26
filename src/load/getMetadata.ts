@@ -38,6 +38,7 @@ function getTiffResolution(ifd: TiffIfd): Resolution | undefined {
       return {
         x: ifd.xResolution / centimetersPerMeter,
         y: ifd.yResolution / centimetersPerMeter,
+        unit: 'meter',
         originalValues: {
           x: ifd.xResolution,
           y: ifd.yResolution,
@@ -48,6 +49,7 @@ function getTiffResolution(ifd: TiffIfd): Resolution | undefined {
       return {
         x: ifd.xResolution / inchesPerMeter,
         y: ifd.yResolution / inchesPerMeter,
+        unit: 'meter',
         originalValues: {
           x: ifd.xResolution,
           y: ifd.yResolution,

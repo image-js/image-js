@@ -18,6 +18,7 @@ test('with metadata', () => {
   expect(img.meta?.resolution).toStrictEqual({
     x: 1.828799999998025,
     y: 1.828799999998025,
+    unit: 'meter',
     originalValues: {
       unit: 'inch',
       x: 72,

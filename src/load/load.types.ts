@@ -13,11 +13,12 @@ export interface PngImageMetadata {
 
 export type Resolution =
   | { x: number; y: number; unit: null }
-  | { x: number; y: number }
+  | { x: number; y: number; unit: 'meter' }
   | {
       x: number;
       y: number;
-      originalValues: { x: number; y: number; unit: Unit };
+      unit: 'meter';
+      originalValues: { x: number; y: number; unit: Exclude<Unit, 'meter'> };
     };
 
-type Unit = 'inch' | 'centimeter';
+type Unit = 'inch' | 'centimeter' | 'meter';

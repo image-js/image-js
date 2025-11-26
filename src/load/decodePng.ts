@@ -43,16 +43,21 @@ export function decodePng(buffer: Uint8Array): Image {
     default:
       throw new RangeError(`invalid number of channels: ${png.channels}`);
   }
-
-  const meta = png.resolution
-    ? png.resolution.unit === 1
-      ? /*If the resolution unit is meters*/ ({
-          resolution: { x: png.resolution.x, y: png.resolution.y },
-        } as PngImageMetadata)
-      : /*If resolution unit is unknown */ {
-          resolution: { x: png.resolution.x, y: png.resolution.y, unit: null },
-        }
-    : /*If resolution is undefined */ undefined;
+  let meta;
+  if (png.resolution) {
+    meta =
+      png.resolution.unit === 1
+        ? /*If the resolution unit is meters*/ ({
+            resolution: { x: png.resolution.x, y: png.resolution.y },
+          } as PngImageMetadata)
+        : /*If resolution unit is unknown */ {
+            resolution: {
+              x: png.resolution.x,
+              y: png.resolution.y,
+              unit: null,
+            },
+          };
+  }
 
   return new Image(png.width, png.height, {
     colorModel,
