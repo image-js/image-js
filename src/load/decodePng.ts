@@ -48,7 +48,11 @@ export function decodePng(buffer: Uint8Array): Image {
     meta =
       png.resolution.unit === 1
         ? /*If the resolution unit is meters*/ ({
-            resolution: { x: png.resolution.x, y: png.resolution.y },
+            resolution: {
+              x: png.resolution.x,
+              y: png.resolution.y,
+              unit: 'meter',
+            },
           } as PngImageMetadata)
         : /*If resolution unit is unknown */ {
             resolution: {
