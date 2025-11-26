@@ -25,6 +25,10 @@ test('with metadata', () => {
       y: 72,
     },
   });
+
+  const img2 = testUtils.load(`formats/tif/dog.tif`);
+
+  expect(img2.meta?.resolution).toBeUndefined();
 });
 
 test('with metadata 2', () => {
