@@ -62,6 +62,7 @@ export type TestImagePath =
   | 'formats/rgba64.png'
   | 'formats/squareApng.png'
   | 'formats/testApng.png'
+  | 'formats/unspecifiedRes.png'
   | 'formats/tif/bw1bit.tif'
   | 'formats/tif/dog.tif'
   | 'formats/tif/grey8.tif'

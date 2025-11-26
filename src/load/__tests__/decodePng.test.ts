@@ -47,4 +47,12 @@ test('should extract image resolution', () => {
     y: 2835,
     unit: 'meter',
   });
+
+  const image4 = testUtils.load('formats/unspecifiedRes.png');
+
+  expect(image4.meta?.resolution).toStrictEqual({
+    x: 300,
+    y: 300,
+    unit: null,
+  });
 });
