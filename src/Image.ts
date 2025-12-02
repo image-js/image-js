@@ -239,15 +239,16 @@ export class Image {
    */
   public readonly origin: Point;
 
+  /**
+   * Original image resolution.
+   */
+  public readonly originalResolution: Resolution | undefined;
+
   public readonly meta?: ImageMetadata;
   /**
    * Typed array holding the image data.
    */
   private readonly data: ImageDataArray;
-  /**
-   * Original image resolution.
-   */
-  private readonly originalResolution: Resolution | undefined;
 
   /**
    * Construct a new Image knowing its dimensions.
@@ -351,10 +352,6 @@ export class Image {
         throw new Error('Unknown resolution unit.');
     }
   }
-  public getOriginalResolution() {
-    return this.originalResolution;
-  }
-
   /**
    * Create a new Image based on the properties of an existing one.
    * @param other - Reference image.
