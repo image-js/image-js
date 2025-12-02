@@ -445,3 +445,19 @@ test('check getColumn and getRow methods', () => {
   expect(resultRow).toStrictEqual([[11, 2, 2]]);
   expect(resultColumn).toStrictEqual([[1, 1, 11]]);
 });
+
+test('check resolution cases for coverage', () => {
+  const image5 = new Image(10, 10, {
+    resolution: { xValue: 10, yValue: 10, unit: 'centimeter' },
+  });
+
+  expect(image5.normalizedResolution).toStrictEqual({ x: 10, y: 10 });
+
+  expect(() => {
+    const image6 = new Image(10, 10, {
+      //@ts-expect-error checking wrong unit for coverage
+      resolution: { xValue: 10, yValue: 10, unit: 'decimeter' },
+    });
+    return image6.normalizedResolution;
+  }).toThrow('Unknown resolution unit.');
+});
