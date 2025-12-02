@@ -39,7 +39,7 @@ test('should extract image resolution', () => {
     yValue: 2835,
     unit: 'meter',
   });
-  expect(image2.resolution).toStrictEqual({
+  expect(image2.normalizedResolution).toStrictEqual({
     x: 28.35,
     y: 28.35,
   });
@@ -51,12 +51,12 @@ test('should extract image resolution', () => {
     yValue: 2835,
     unit: 'meter',
   });
-  expect(image3.resolution).toStrictEqual({
+  expect(image3.normalizedResolution).toStrictEqual({
     x: 28.35,
     y: 28.35,
   });
 
   const image4 = testUtils.load('formats/unspecifiedRes.png');
 
-  expect(image4.resolution).toBeNull();
+  expect(image4.normalizedResolution).toBeNull();
 });

@@ -26,7 +26,7 @@ test.each(tests)('%s', (name, colorModel, bitDepth) => {
 test('should decode image resolution', () => {
   const img = testUtils.load('formats/tif/dog.tif');
 
-  expect(img.resolution).toBeUndefined();
+  expect(img.normalizedResolution).toBeUndefined();
 
   const img2 = testUtils.load('formats/tif/grey8-multi.tif');
 
@@ -35,7 +35,7 @@ test('should decode image resolution', () => {
     yValue: 72,
     unit: 'inch',
   });
-  expect(img2.resolution).toStrictEqual({
+  expect(img2.normalizedResolution).toStrictEqual({
     x: 28.346456692913385,
     y: 28.346456692913385,
   });

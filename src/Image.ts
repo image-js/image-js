@@ -323,7 +323,7 @@ export class Image {
    * Returns normalized resolution in pixels per centimeter. If resolution unit is unknown, return null.
    * @returns Object with x and y resolutions in pixel/cm.
    */
-  get resolution() {
+  get normalizedResolution() {
     if (!this.originalResolution) {
       return undefined;
     }
