@@ -9,7 +9,7 @@ export interface ImageMetadata {
 export interface Resolution {
   x: number;
   y: number;
-  unit: Unit;
+  unit: ResolutionUnit;
 }
 
-export type Unit = 'inch' | 'centimeter' | 'meter' | 'unknown';
+export type ResolutionUnit = 'inch' | 'centimeter' | 'meter' | 'unknown';
