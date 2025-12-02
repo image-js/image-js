@@ -22,3 +22,21 @@ test.each(tests)('%s', (name, colorModel, bitDepth) => {
   expect(img.colorModel).toBe(colorModel);
   expect(img.bitDepth).toBe(bitDepth);
 });
+
+test('should decode image resolution', () => {
+  const img = testUtils.load('formats/tif/dog.tif');
+
+  expect(img.resolution).toBeUndefined();
+
+  const img2 = testUtils.load('formats/tif/grey8-multi.tif');
+
+  expect(img2.getOriginalResolution()).toStrictEqual({
+    xValue: 72,
+    yValue: 72,
+    unit: 'inch',
+  });
+  expect(img2.resolution).toStrictEqual({
+    x: 1.828799999998025,
+    y: 1.828799999998025,
+  });
+});

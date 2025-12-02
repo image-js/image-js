@@ -78,7 +78,7 @@ import {
   transform,
   transformRotate,
 } from './geometry/index.js';
-import type { PngImageMetadata, TiffImageMetadata } from './load/load.types.js';
+import type { ImageMetadata, Resolution } from './load/load.types.js';
 import type {
   BottomHatOptions,
   CannyEdgeOptions,
@@ -173,8 +173,8 @@ export interface ImageOptions {
    * @default `{row: 0, column: 0}`
    */
   origin?: Point;
-
-  meta?: TiffImageMetadata | PngImageMetadata;
+  resolution?: Resolution;
+  meta?: ImageMetadata;
 }
 
 export interface CreateFromOptions extends ImageOptions {
@@ -235,11 +235,13 @@ export class Image {
    */
   public readonly origin: Point;
 
-  public readonly meta?: TiffImageMetadata | PngImageMetadata;
+  public readonly meta?: ImageMetadata;
   /**
    * Typed array holding the image data.
    */
   private readonly data: ImageDataArray;
+
+  private readonly originalResolution: Resolution | undefined;
 
   /**
    * Construct a new Image knowing its dimensions.
@@ -258,6 +260,7 @@ export class Image {
       colorModel = 'RGB',
       origin = { row: 0, column: 0 },
       meta,
+      resolution,
     } = options;
 
     if (width < 1 || !Number.isInteger(width)) {
@@ -279,7 +282,7 @@ export class Image {
     this.colorModel = colorModel;
     this.origin = origin;
     this.meta = meta;
-
+    this.originalResolution = resolution;
     const colorModelDef = colorModels[colorModel];
     this.components = colorModelDef.components;
     this.alpha = colorModelDef.alpha;
@@ -309,6 +312,38 @@ export class Image {
       }
       this.data = data;
     }
+  }
+
+  get resolution() {
+    if (!this.originalResolution) {
+      return undefined;
+    }
+    const inchesPerMeter = 39.3700787402;
+    const centimetersPerMeter = 100;
+    switch (this.originalResolution.unit) {
+      case 'inch':
+        return {
+          x: this.originalResolution.xValue / inchesPerMeter,
+          y: this.originalResolution.yValue / inchesPerMeter,
+        };
+      case 'centimeter':
+        return {
+          x: this.originalResolution.xValue / centimetersPerMeter,
+          y: this.originalResolution.yValue / centimetersPerMeter,
+        };
+      case 'meter':
+        return {
+          x: this.originalResolution.xValue,
+          y: this.originalResolution.yValue,
+        };
+      case 'unknown':
+        return null;
+      default:
+        throw new Error('Unknown resolution unit.');
+    }
+  }
+  public getOriginalResolution() {
+    return this.originalResolution;
   }
 
   /**

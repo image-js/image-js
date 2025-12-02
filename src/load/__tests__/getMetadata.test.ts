@@ -15,20 +15,6 @@ test('with metadata', () => {
   const img = decodeJpeg(buffer);
 
   expect(img.meta).toBeDefined();
-  expect(img.meta?.resolution).toStrictEqual({
-    x: 1.828799999998025,
-    y: 1.828799999998025,
-    unit: 'meter',
-    originalValues: {
-      unit: 'inch',
-      x: 72,
-      y: 72,
-    },
-  });
-
-  const img2 = testUtils.load(`formats/tif/dog.tif`);
-
-  expect(img2.meta?.resolution).toBeUndefined();
 });
 
 test('with metadata 2', () => {
