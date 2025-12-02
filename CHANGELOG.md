@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/image-js/image-js/compare/v1.2.0...v1.3.0) (2025-12-02)
+
+
+### Features
+
+* add a resolution field to image ([#764](https://github.com/image-js/image-js/issues/764)) ([cf4a647](https://github.com/image-js/image-js/commit/cf4a6472d853ec385d40161731b8de46dba6af5f))
+
 ## [1.2.0](https://github.com/image-js/image-js/compare/v1.1.0...v1.2.0) (2025-11-21)
 
 
