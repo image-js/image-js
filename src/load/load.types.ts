@@ -7,8 +7,8 @@ export interface ImageMetadata {
 }
 
 export interface Resolution {
-  xValue: number;
-  yValue: number;
+  x: number;
+  y: number;
   unit: Unit;
 }
 

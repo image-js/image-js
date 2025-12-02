@@ -6,7 +6,7 @@ import { Image } from '../Image.js';
 import type { ImageColorModel } from '../utils/constants/colorModels.js';
 import { assert } from '../utils/validators/assert.js';
 
-import type { Unit } from './load.types.ts';
+import type { Resolution } from './load.types.ts';
 
 /**
  * Decode a PNG. See the fast-png npm module.
@@ -43,19 +43,19 @@ export function decodePng(buffer: Uint8Array): Image {
     default:
       throw new RangeError(`invalid number of channels: ${png.channels}`);
   }
-  let resolution;
+  let resolution: Resolution | undefined;
   if (png.resolution) {
     resolution =
       png.resolution.unit === 1
         ? /*If the resolution unit is meters*/ {
-            xValue: png.resolution.x,
-            yValue: png.resolution.y,
-            unit: 'meter' as Unit,
+            x: png.resolution.x,
+            y: png.resolution.y,
+            unit: 'meter' as const,
           }
         : /*If resolution unit is unknown */ {
-            xValue: png.resolution.x,
-            yValue: png.resolution.y,
-            unit: 'unknown' as Unit,
+            x: png.resolution.x,
+            y: png.resolution.y,
+            unit: 'unknown' as const,
           };
   }
 

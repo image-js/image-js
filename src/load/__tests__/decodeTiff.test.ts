@@ -31,8 +31,8 @@ test('should decode image resolution', () => {
   const img2 = testUtils.load('formats/tif/grey8-multi.tif');
 
   expect(img2.originalResolution).toStrictEqual({
-    xValue: 72,
-    yValue: 72,
+    x: 72,
+    y: 72,
     unit: 'inch',
   });
   expect(img2.normalizedResolution).toStrictEqual({

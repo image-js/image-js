@@ -448,7 +448,7 @@ test('check getColumn and getRow methods', () => {
 
 test('check resolution cases for coverage', () => {
   const image5 = new Image(10, 10, {
-    resolution: { xValue: 10, yValue: 10, unit: 'centimeter' },
+    resolution: { x: 10, y: 10, unit: 'centimeter' },
   });
 
   expect(image5.normalizedResolution).toStrictEqual({ x: 10, y: 10 });

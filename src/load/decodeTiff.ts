@@ -111,20 +111,20 @@ function getTiffResolution(ifd: TiffIfd): Resolution | undefined {
   switch (ifd.resolutionUnit) {
     case 1:
       return {
-        xValue: ifd.xResolution,
-        yValue: ifd.yResolution,
+        x: ifd.xResolution,
+        y: ifd.yResolution,
         unit: 'unknown',
       };
     case 3:
       return {
-        xValue: ifd.xResolution,
-        yValue: ifd.yResolution,
+        x: ifd.xResolution,
+        y: ifd.yResolution,
         unit: 'centimeter',
       };
     default:
       return {
-        xValue: ifd.xResolution,
-        yValue: ifd.yResolution,
+        x: ifd.xResolution,
+        y: ifd.yResolution,
         unit: 'inch',
       };
   }

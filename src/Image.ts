@@ -333,18 +333,18 @@ export class Image {
     switch (this.originalResolution.unit) {
       case 'inch':
         return {
-          x: this.originalResolution.xValue / centimetersPerInch,
-          y: this.originalResolution.yValue / centimetersPerInch,
+          x: this.originalResolution.x / centimetersPerInch,
+          y: this.originalResolution.y / centimetersPerInch,
         };
       case 'centimeter':
         return {
-          x: this.originalResolution.xValue,
-          y: this.originalResolution.yValue,
+          x: this.originalResolution.x,
+          y: this.originalResolution.y,
         };
       case 'meter':
         return {
-          x: this.originalResolution.xValue / centimetersPerMeter,
-          y: this.originalResolution.yValue / centimetersPerMeter,
+          x: this.originalResolution.x / centimetersPerMeter,
+          y: this.originalResolution.y / centimetersPerMeter,
         };
       case 'unknown':
         return null;
