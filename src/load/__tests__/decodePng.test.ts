@@ -58,5 +58,11 @@ test('should extract image resolution', () => {
 
   const image4 = testUtils.load('formats/unspecifiedRes.png');
 
+  expect(image4.originalResolution).toBeDefined();
+  expect(image4.originalResolution).toStrictEqual({
+    x: 300,
+    y: 300,
+    unit: 'unknown',
+  });
   expect(image4.normalizedResolution).toBeNull();
 });
