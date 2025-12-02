@@ -36,7 +36,7 @@ test('should decode image resolution', () => {
     unit: 'inch',
   });
   expect(img2.resolution).toStrictEqual({
-    x: 1.828799999998025,
-    y: 1.828799999998025,
+    x: 28.346456692913385,
+    y: 28.346456692913385,
   });
 });

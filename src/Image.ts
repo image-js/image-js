@@ -173,7 +173,11 @@ export interface ImageOptions {
    * @default `{row: 0, column: 0}`
    */
   origin?: Point;
+  /**
+   * Original resolution decoded from the image.
+   */
   resolution?: Resolution;
+
   meta?: ImageMetadata;
 }
 
@@ -240,7 +244,9 @@ export class Image {
    * Typed array holding the image data.
    */
   private readonly data: ImageDataArray;
-
+  /**
+   * Original image resolution.
+   */
   private readonly originalResolution: Resolution | undefined;
 
   /**
@@ -313,28 +319,31 @@ export class Image {
       this.data = data;
     }
   }
-
+  /**
+   * Returns normalized resolution in pixels per centimeter. If resolution unit is unknown, return null.
+   * @returns Object with x and y resolutions in pixel/cm.
+   */
   get resolution() {
     if (!this.originalResolution) {
       return undefined;
     }
-    const inchesPerMeter = 39.3700787402;
+    const centimetersPerInch = 2.54;
     const centimetersPerMeter = 100;
     switch (this.originalResolution.unit) {
       case 'inch':
         return {
-          x: this.originalResolution.xValue / inchesPerMeter,
-          y: this.originalResolution.yValue / inchesPerMeter,
+          x: this.originalResolution.xValue / centimetersPerInch,
+          y: this.originalResolution.yValue / centimetersPerInch,
         };
       case 'centimeter':
         return {
-          x: this.originalResolution.xValue / centimetersPerMeter,
-          y: this.originalResolution.yValue / centimetersPerMeter,
+          x: this.originalResolution.xValue,
+          y: this.originalResolution.yValue,
         };
       case 'meter':
         return {
-          x: this.originalResolution.xValue,
-          y: this.originalResolution.yValue,
+          x: this.originalResolution.xValue / centimetersPerMeter,
+          y: this.originalResolution.yValue / centimetersPerMeter,
         };
       case 'unknown':
         return null;
