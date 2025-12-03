@@ -41,7 +41,7 @@ export interface ResizeOptions {
    * Value of the border if BorderType is 'constant'.
    * @default `0`
    */
-  borderValue?: number;
+  borderValue?: number | number[];
 }
 
 /**
