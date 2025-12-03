@@ -151,3 +151,62 @@ test('should throw if matrix has wrong size', () => {
     img.transform(translation);
   }).toThrow('transformation matrix must be 2x3 or 3x3. Received 2x4');
 });
+
+test('check borderValue behavior', () => {
+  const img = testUtils.load('opencv/test.png');
+  const matrix = [
+    [2, 1, 2],
+    [-1, 1, 2],
+  ];
+  const transformed = img.transform(matrix, {
+    interpolationType: 'nearest',
+    width: 10,
+    height: 8,
+    inverse: false,
+    borderValue: [255, 255],
+    borderType: 'constant',
+  });
+
+  expect(transformed).toMatchImage('opencv/test_border_value_yellow.png', {
+    error: 3,
+  });
+
+  const transformed2 = img.transform(matrix, {
+    interpolationType: 'nearest',
+    width: 10,
+    height: 8,
+    inverse: false,
+    borderValue: [255],
+    borderType: 'constant',
+  });
+
+  expect(transformed2).toMatchImage('opencv/test_border_value_red.png', {
+    error: 3,
+  });
+
+  const transformed3 = img.transform(matrix, {
+    interpolationType: 'nearest',
+    width: 10,
+    height: 8,
+    inverse: false,
+    borderValue: [0, 0, 255],
+    borderType: 'constant',
+  });
+
+  expect(transformed3).toMatchImage('opencv/test_border_value_blue.png', {
+    error: 3,
+  });
+
+  const transformed4 = img.transform(matrix, {
+    interpolationType: 'nearest',
+    width: 10,
+    height: 8,
+    inverse: false,
+    borderValue: [255, 255, 255],
+    borderType: 'constant',
+  });
+
+  expect(transformed4).toMatchImage('opencv/test_border_value_white.png', {
+    error: 3,
+  });
+});
