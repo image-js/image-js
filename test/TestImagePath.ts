@@ -121,6 +121,7 @@ export type TestImagePath =
   | 'ssim/ssim-saltPepper.png'
   | 'various/alphabet.jpg'
   | 'various/grayscale_by_zimmyrose.png'
+  | 'various/magicHatImageRotated.png'
   | 'various/screws.png'
   | 'various/sudoku.jpg'
   | 'various/without-metadata.jpg';

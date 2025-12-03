@@ -210,3 +210,19 @@ test('check borderValue behavior', () => {
     error: 3,
   });
 });
+
+test('check borderValue with alpha', () => {
+  const img = testUtils.load('formats/magicHatTrns.png');
+  const matrix = [
+    [1, 1, -225],
+    [-1, 1, 225],
+  ];
+  const result = img.transform(matrix, {
+    inverse: true,
+    interpolationType: 'nearest',
+    borderType: 'constant',
+    borderValue: [255, 255, 0, 125],
+  });
+
+  expect(result).toMatchImage('various/magicHatImageRotated.png');
+});
