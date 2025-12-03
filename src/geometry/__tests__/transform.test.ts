@@ -212,17 +212,58 @@ test('check borderValue behavior', () => {
 });
 
 test('check borderValue with alpha', () => {
-  const img = testUtils.load('formats/magicHatTrns.png');
+  const img = testUtils.createRgbaImage([
+    [
+      125, 125, 125, 255, 125, 125, 125, 255, 125, 125, 125, 255, 125, 125, 125,
+      255,
+    ],
+    [
+      125, 125, 125, 255, 255, 255, 255, 255, 255, 255, 255, 255, 125, 125, 125,
+      255,
+    ],
+    [
+      125, 125, 125, 255, 255, 255, 255, 255, 255, 255, 255, 255, 125, 125, 125,
+      255,
+    ],
+    [
+      125, 125, 125, 255, 125, 125, 125, 255, 125, 125, 125, 255, 125, 125, 125,
+      255,
+    ],
+  ]);
+
   const matrix = [
-    [1, 1, -225],
-    [-1, 1, 225],
+    [2, 0, 0],
+    [0, 2, 0],
   ];
   const result = img.transform(matrix, {
     inverse: true,
+    width: img.width,
+    height: img.height,
     interpolationType: 'nearest',
     borderType: 'constant',
-    borderValue: [255, 255, 0, 125],
+    borderValue: [125, 125, 125, 125],
   });
 
-  expect(result).toMatchImage('various/magicHatImageRotated.png');
+  expect(result.getRawImage().data).toStrictEqual(
+    new Uint8Array(
+      [
+        [
+          125, 125, 125, 255, 125, 125, 125, 255, 125, 125, 125, 125, 125, 125,
+          125, 125,
+        ],
+        [
+          125, 125, 125, 255, 255, 255, 255, 255, 125, 125, 125, 125, 125, 125,
+          125, 125,
+        ],
+        [
+          125, 125, 125, 125, 125, 125, 125, 125, 125, 125, 125, 125, 125, 125,
+          125, 125,
+        ],
+        [
+          125, 125, 125, 125, 125, 125, 125, 125, 125, 125, 125, 125, 125, 125,
+          125, 125,
+        ],
+      ].flat(),
+    ),
+  );
 });
