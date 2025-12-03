@@ -31,7 +31,7 @@ export interface TransformOptions {
    * Value of the border if BorderType is 'constant'.
    *  @default `0`
    */
-  borderValue?: number;
+  borderValue?: number | number[];
   /**
    * Whether the transform matrix should be inverted.
    */
