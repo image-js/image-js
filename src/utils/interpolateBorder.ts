@@ -24,8 +24,11 @@ export type BorderType = (typeof BorderType)[keyof typeof BorderType];
  */
 export function getBorderInterpolation(
   type: BorderType,
-  value: number[],
+  value: number | number[],
 ): BorderInterpolationFunction {
+  if (typeof value === 'number') {
+    value = new Array(4).fill(value);
+  }
   return match(type)
     .with('constant', () => getInterpolateConstant(value))
     .with('replicate', () => interpolateReplicate)

@@ -2,6 +2,7 @@ import { Matrix, inverse } from 'ml-matrix';
 
 import { Image } from '../Image.js';
 import { getClamp } from '../utils/clamp.js';
+import { getDefaultColor } from '../utils/getDefaultColor.ts';
 import type { BorderType } from '../utils/interpolateBorder.js';
 import { getBorderInterpolation } from '../utils/interpolateBorder.js';
 import type { InterpolationType } from '../utils/interpolatePixel.js';
@@ -56,20 +57,18 @@ export function transform(
   transformMatrix: number[][],
   options: TransformOptions = {},
 ): Image {
-  let { borderValue = new Array(image.channels).fill(0) } = options;
   const {
+    borderValue = getDefaultColor(image),
     borderType = 'constant',
     interpolationType = 'bilinear',
     fullImage,
   } = options;
   let { width = image.width, height = image.height } = options;
 
-  if (typeof borderValue === 'number') {
-    borderValue = new Array(image.channels).fill(
-      options.borderValue,
-    ) as number[];
+  if (Array.isArray(borderValue)) {
+    validateColor(borderValue, image);
   }
-  validateColor(borderValue, image);
+
   if (!isValidMatrix(transformMatrix)) {
     throw new TypeError(
       `transformation matrix must be 2x3 or 3x3. Received ${transformMatrix.length}x${transformMatrix[1].length}`,

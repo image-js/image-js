@@ -6,6 +6,7 @@ import {
 import { Image } from '../Image.js';
 import { extendBorders } from '../operations/extendBorders.js';
 import { getClamp } from '../utils/clamp.js';
+import { getDefaultColor } from '../utils/getDefaultColor.ts';
 import { getIndex } from '../utils/getIndex.js';
 import { getOutputImage } from '../utils/getOutputImage.js';
 import type { BorderType } from '../utils/interpolateBorder.js';
@@ -84,13 +85,11 @@ export function rawDirectConvolution(
   kernel: number[][],
   options: ConvolutionOptions = {},
 ): Float64Array {
-  let { borderValue = new Array(image.channels).fill(0) } = options;
-  const { borderType = 'reflect101' } = options;
-
-  if (typeof borderValue === 'number') {
-    borderValue = new Array(image.channels).fill(borderValue) as number[];
+  const { borderType = 'reflect101', borderValue = getDefaultColor(image) } =
+    options;
+  if (Array.isArray(borderValue)) {
+    validateColor(borderValue, image);
   }
-  validateColor(borderValue, image);
   const interpolateBorder = getBorderInterpolation(borderType, borderValue);
 
   const result = new Float64Array(image.size * image.channels);
