@@ -24,7 +24,7 @@ export type BorderType = (typeof BorderType)[keyof typeof BorderType];
  */
 export function getBorderInterpolation(
   type: BorderType,
-  value: number | number[],
+  value: number[],
 ): BorderInterpolationFunction {
   return match(type)
     .with('constant', () => getInterpolateConstant(value))
@@ -41,9 +41,7 @@ function checkRange(point: number, length: number): void {
   }
 }
 
-function getInterpolateConstant(
-  value: number | number[],
-): BorderInterpolationFunction {
+function getInterpolateConstant(value: number[]): BorderInterpolationFunction {
   return function interpolateConstant(
     column: number,
     row: number,
@@ -53,11 +51,7 @@ function getInterpolateConstant(
     const newColumn = interpolateConstantPoint(column, image.width);
     const newRow = interpolateConstantPoint(row, image.height);
     if (newColumn === -1 || newRow === -1) {
-      if (!Array.isArray(value)) {
-        return value;
-      } else {
-        return value[channel];
-      }
+      return value[channel];
     }
     return image.getValue(newColumn, newRow, channel);
   };

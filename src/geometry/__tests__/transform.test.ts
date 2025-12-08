@@ -167,6 +167,9 @@ test('check borderValue behavior', () => {
     borderType: 'constant',
   });
 
+  expect(img.colorModel).toBe('RGB');
+  expect(img.bitDepth).toBe(8);
+
   expect(transformed).toMatchImage('opencv/test_border_value_yellow.png', {
     error: 3,
   });
@@ -230,6 +233,9 @@ test('check borderValue with alpha', () => {
       255,
     ],
   ]);
+
+  expect(img.colorModel).toBe('RGBA');
+  expect(img.bitDepth).toBe(8);
 
   const matrix = [
     [2, 0, 0],

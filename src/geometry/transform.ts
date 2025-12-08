@@ -6,6 +6,7 @@ import type { BorderType } from '../utils/interpolateBorder.js';
 import { getBorderInterpolation } from '../utils/interpolateBorder.js';
 import type { InterpolationType } from '../utils/interpolatePixel.js';
 import { getInterpolationFunction } from '../utils/interpolatePixel.js';
+import { validateColor } from '../utils/validators/validators.ts';
 
 export interface TransformOptions {
   /**
@@ -55,14 +56,20 @@ export function transform(
   transformMatrix: number[][],
   options: TransformOptions = {},
 ): Image {
+  let { borderValue = new Array(image.channels).fill(0) } = options;
   const {
     borderType = 'constant',
-    borderValue = 0,
     interpolationType = 'bilinear',
     fullImage,
   } = options;
   let { width = image.width, height = image.height } = options;
 
+  if (typeof borderValue === 'number') {
+    borderValue = new Array(image.channels).fill(
+      options.borderValue,
+    ) as number[];
+  }
+  validateColor(borderValue, image);
   if (!isValidMatrix(transformMatrix)) {
     throw new TypeError(
       `transformation matrix must be 2x3 or 3x3. Received ${transformMatrix.length}x${transformMatrix[1].length}`,
