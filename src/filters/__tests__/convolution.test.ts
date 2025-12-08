@@ -75,7 +75,7 @@ describe('computeConvolutionValue', () => {
       [1, 1, 1],
     ];
     const clamp = getClamp(image);
-    const interpolateBorder = getBorderInterpolation('reflect101', 0);
+    const interpolateBorder = getBorderInterpolation('reflect101', [0]);
 
     expect(
       computeConvolutionValue(1, 1, 0, image, kernel, interpolateBorder, {
@@ -97,7 +97,7 @@ describe('computeConvolutionValue', () => {
     ];
     const clamp = getClamp(image);
 
-    const interpolateBorder = getBorderInterpolation('reflect101', 0);
+    const interpolateBorder = getBorderInterpolation('reflect101', [0]);
 
     expect(
       computeConvolutionValue(1, 1, 0, image, kernel, interpolateBorder, {
@@ -117,7 +117,7 @@ describe('computeConvolutionValue', () => {
       [1, 1, 1],
       [1, 1, 1],
     ];
-    const interpolateBorder = getBorderInterpolation('reflect101', 0);
+    const interpolateBorder = getBorderInterpolation('reflect101', [0]);
 
     expect(
       computeConvolutionValue(1, 1, 0, image, kernel, interpolateBorder, {

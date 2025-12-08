@@ -1,6 +1,7 @@
 import { Image } from '../Image.js';
 import type { BorderType } from '../utils/interpolateBorder.js';
 import { getBorderInterpolation } from '../utils/interpolateBorder.js';
+import { validateColor } from '../utils/validators/validators.ts';
 
 export interface ExtendBordersOptions {
   /**
@@ -20,7 +21,7 @@ export interface ExtendBordersOptions {
    * Value of the border if BorderType is 'constant'.
    * @default `0`
    */
-  borderValue?: number;
+  borderValue?: number | number[];
 }
 
 /**
@@ -33,13 +34,12 @@ export function extendBorders(
   image: Image,
   options: ExtendBordersOptions,
 ): Image {
-  const {
-    horizontal,
-    vertical,
-    borderType = 'reflect101',
-    borderValue = 0,
-  } = options;
-
+  let { borderValue = new Array(image.channels).fill(0) } = options;
+  const { horizontal, vertical, borderType = 'reflect101' } = options;
+  if (typeof borderValue === 'number') {
+    borderValue = new Array(image.channels).fill(borderValue) as number[];
+  }
+  validateColor(borderValue, image);
   const interpolateBorder = getBorderInterpolation(borderType, borderValue);
 
   const newImage = Image.createFrom(image, {

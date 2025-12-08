@@ -14,7 +14,7 @@ export interface MedianFilterOptions {
   /**
    * Value of border.
    */
-  borderValue?: number;
+  borderValue?: number | number[];
   /**
    * The radius of the cell to extract median value from. Must be odd.
    *  @default `1`
@@ -28,7 +28,8 @@ export interface MedianFilterOptions {
  * @returns Image after median filter.
  */
 export function medianFilter(image: Image, options: MedianFilterOptions) {
-  const { cellSize = 3, borderType = 'reflect101', borderValue } = options;
+  let { borderValue = new Array(image.channels).fill(0) } = options;
+  const { cellSize = 3, borderType = 'reflect101' } = options;
 
   checkProcessable(image, {
     bitDepth: [8, 16],
@@ -46,10 +47,10 @@ export function medianFilter(image: Image, options: MedianFilterOptions) {
     );
   }
 
-  const interpolateBorder = getBorderInterpolation(
-    borderType,
-    borderValue as number,
-  );
+  if (typeof borderValue === 'number') {
+    borderValue = new Array(image.channels).fill(borderValue);
+  }
+  const interpolateBorder = getBorderInterpolation(borderType, borderValue);
 
   const newImage = Image.createFrom(image);
   const size = cellSize ** 2;
