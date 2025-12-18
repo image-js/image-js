@@ -28,7 +28,7 @@ describe('Stack constructor', () => {
 
     expect(() => {
       return new Stack([image1, image2]);
-    }).toThrow('images must all have the same bit depth and color model');
+    }).toThrowError('images must all have the same bit depth and color model');
   });
 
   it('should throw if bit depths different', () => {
@@ -37,7 +37,7 @@ describe('Stack constructor', () => {
 
     expect(() => {
       return new Stack([image1, image2]);
-    }).toThrow('images must all have the same bit depth and color model');
+    }).toThrowError('images must all have the same bit depth and color model');
   });
 });
 

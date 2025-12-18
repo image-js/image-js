@@ -37,7 +37,6 @@ export const ThresholdAlgorithm = {
   TRIANGLE: 'triangle',
   YEN: 'yen',
 } as const;
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type ThresholdAlgorithm =
   (typeof ThresholdAlgorithm)[keyof typeof ThresholdAlgorithm];
 

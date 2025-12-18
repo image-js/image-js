@@ -171,7 +171,7 @@ test('negative radius error', () => {
     image.drawCircle(center, radius, {
       strokeColor: [1],
     });
-  }).toThrow('circle radius must be positive');
+  }).toThrowError('circle radius must be positive');
 });
 
 test('draw grey filled circle, radius=0', () => {

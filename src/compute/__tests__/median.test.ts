@@ -83,7 +83,7 @@ test('must throw if array is empty', () => {
   expect(() => {
     const result = image.median({ points });
     return result;
-  }).toThrow('Array of coordinates is empty.');
+  }).toThrowError('Array of coordinates is empty.');
 });
 
 test("must throw if point's row is invalid", () => {
@@ -96,7 +96,7 @@ test("must throw if point's row is invalid", () => {
   expect(() => {
     const result = image.median({ points });
     return result;
-  }).toThrow('Invalid coordinate: {column: 0, row: 2}');
+  }).toThrowError('Invalid coordinate: {column: 0, row: 2}');
 });
 
 test("must throw if point's column is invalid", () => {
@@ -109,7 +109,7 @@ test("must throw if point's column is invalid", () => {
   expect(() => {
     const result = image.median({ points });
     return result;
-  }).toThrow('Invalid coordinate: {column: 4, row: 1}');
+  }).toThrowError('Invalid coordinate: {column: 4, row: 1}');
 });
 
 test('must throw if point has negative values.', () => {
@@ -122,5 +122,5 @@ test('must throw if point has negative values.', () => {
   expect(() => {
     const result = image.mean({ points });
     return result;
-  }).toThrow('Invalid coordinate: {column: -14, row: 0}');
+  }).toThrowError('Invalid coordinate: {column: -14, row: 0}');
 });

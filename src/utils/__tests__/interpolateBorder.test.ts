@@ -22,10 +22,10 @@ test('too far', () => {
   const interpolate = getBorderInterpolation('reflect', [0]);
   const exp = 'border must be smaller than the original image';
 
-  expect(() => interpolate(-10, 0, 0, image)).toThrow(exp);
-  expect(() => interpolate(19, 0, 0, image)).toThrow(exp);
-  expect(() => interpolate(-110, 0, 0, image)).toThrow(exp);
-  expect(() => interpolate(200, 0, 0, image)).toThrow(exp);
+  expect(() => interpolate(-10, 0, 0, image)).toThrowError(exp);
+  expect(() => interpolate(19, 0, 0, image)).toThrowError(exp);
+  expect(() => interpolate(-110, 0, 0, image)).toThrowError(exp);
+  expect(() => interpolate(200, 0, 0, image)).toThrowError(exp);
 });
 
 test('CONSTANT', () => {
@@ -94,5 +94,5 @@ test('REFLECT_101 - positive', () => {
 
 test('unknown type', () => {
   // @ts-expect-error: testing JS problem
-  expect(() => getBorderInterpolation('unknown', 5)).toThrow(/unknown/);
+  expect(() => getBorderInterpolation('unknown', 5)).toThrowError(/unknown/);
 });

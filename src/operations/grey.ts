@@ -25,7 +25,6 @@ export const GreyAlgorithm = {
   SATURATION: 'saturation',
   LIGHTNESS: 'lightness',
 } as const satisfies Record<string, keyof typeof greyAlgorithms>;
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type GreyAlgorithm = (typeof GreyAlgorithm)[keyof typeof GreyAlgorithm];
 
 {

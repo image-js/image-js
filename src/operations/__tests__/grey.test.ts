@@ -76,13 +76,13 @@ test('RGB image', () => {
 test('wrong image color model', () => {
   let image = testUtils.createGreyaImage([[100, 255, 150, 0]]);
 
-  expect(() => image.grey()).toThrow(
+  expect(() => image.grey()).toThrowError(
     /image colorModel must be RGB or RGBA to apply this algorithm/,
   );
 
   image = testUtils.createGreyImage([[100, 255, 150, 0]]);
 
-  expect(() => image.grey()).toThrow(
+  expect(() => image.grey()).toThrowError(
     /image colorModel must be RGB or RGBA to apply this algorithm/,
   );
 });
@@ -100,7 +100,7 @@ test('user-provided output', () => {
 
   const wrongOut = testUtils.createGreyaImage([[0, 0, 0, 0]]);
 
-  expect(() => image.grey({ out: wrongOut })).toThrow(
+  expect(() => image.grey({ out: wrongOut })).toThrowError(
     /cannot use out image. Its colorModel property must be GREY. Received GREYA/,
   );
 });
@@ -118,7 +118,7 @@ test('wrong algorithm type', () => {
 
   const wrongOut = testUtils.createGreyaImage([[0, 0, 0, 0]]);
 
-  expect(() => image.grey({ out: wrongOut })).toThrow(
+  expect(() => image.grey({ out: wrongOut })).toThrowError(
     /cannot use out image. Its colorModel property must be GREY. Received GREYA/,
   );
 });

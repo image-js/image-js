@@ -29,10 +29,10 @@ test('throw on image with more than 1 channel', () => {
 
   expect(() => {
     merge([img1, img2]);
-  }).toThrow('each image must have one channel. Received 2');
+  }).toThrowError('each image must have one channel. Received 2');
   expect(() => {
     merge([img2, img1]);
-  }).toThrow('each image must have one channel. Received 2');
+  }).toThrowError('each image must have one channel. Received 2');
 });
 
 test('throw on image with sizes different', () => {
@@ -41,7 +41,7 @@ test('throw on image with sizes different', () => {
 
   expect(() => {
     merge([img1, img2]);
-  }).toThrow('all images must have the same width, height and bitDepth');
+  }).toThrowError('all images must have the same width, height and bitDepth');
 });
 
 test('throw on too many images', () => {
@@ -50,5 +50,5 @@ test('throw on too many images', () => {
 
   expect(() => {
     merge([img1, img2, img1, img2, img1]);
-  }).toThrow('merge expects an array of two to four images. Received 5');
+  }).toThrowError('merge expects an array of two to four images. Received 5');
 });

@@ -64,5 +64,7 @@ test.each([
 test('invalid data format', () => {
   const buffer = testUtils.loadBuffer('formats/grey12.jpg');
 
-  expect(() => decodeStack(buffer)).toThrow('invalid data format: image/jpeg');
+  expect(() => decodeStack(buffer)).toThrowError(
+    'invalid data format: image/jpeg',
+  );
 });

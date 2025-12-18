@@ -120,5 +120,5 @@ test('throw an error', () => {
 
   expect(() =>
     sampleBackgroundPoints(image, { mask, gridWidth: -3, gridHeight: 3 }),
-  ).toThrow(`The grid has bigger width than the image. Grid's width: -3`);
+  ).toThrowError(`The grid has bigger width than the image. Grid's width: -3`);
 });

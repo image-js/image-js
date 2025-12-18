@@ -193,7 +193,7 @@ test('should throw no parameter', () => {
 
   expect(() => {
     img.resize({});
-  }).toThrow(
+  }).toThrowError(
     'at least one of the width, height, xFactor or yFactor options must be passed',
   );
 });
@@ -203,5 +203,5 @@ test('should throw factor and size used at the same time', () => {
 
   expect(() => {
     img.resize({ yFactor: 2, height: 50 });
-  }).toThrow('factor and size cannot be passed together');
+  }).toThrowError('factor and size cannot be passed together');
 });

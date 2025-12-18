@@ -11,16 +11,16 @@ export interface MedianFilterOptions {
    * Type of border algorithm to interpolate from.
    * @default `'reflect101'`
    */
-  borderType: BorderType;
+  borderType?: BorderType;
   /**
    * Value of border.
    */
   borderValue?: number | number[];
   /**
    * The radius of the cell to extract median value from. Must be odd.
-   *  @default `1`
+   *  @default `3`
    */
-  cellSize: number;
+  cellSize?: number;
 }
 /**
  * Calculate a new image that replaces all pixel values by the median of neighbouring pixels.
@@ -28,7 +28,7 @@ export interface MedianFilterOptions {
  * @param options - MedianFilterOptions
  * @returns Image after median filter.
  */
-export function medianFilter(image: Image, options: MedianFilterOptions) {
+export function medianFilter(image: Image, options: MedianFilterOptions = {}) {
   const {
     cellSize = 3,
     borderType = 'reflect101',

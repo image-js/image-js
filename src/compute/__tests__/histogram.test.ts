@@ -93,7 +93,7 @@ test('binary image with 64 slots', () => {
 test('throw if channel option is missing', () => {
   const image = testUtils.load('opencv/test.png');
 
-  expect(() => image.histogram()).toThrow(
+  expect(() => image.histogram()).toThrowError(
     /channel option is mandatory for multi-channel images/,
   );
 });
@@ -107,7 +107,7 @@ test('throw if slots is not a power of 2', () => {
     [0, 0, 0, 0, 0],
   ]);
 
-  expect(() => image.histogram({ slots: 7 })).toThrow(
+  expect(() => image.histogram({ slots: 7 })).toThrowError(
     'slots must be a power of 2, for example: 64, 256, 1024',
   );
 });

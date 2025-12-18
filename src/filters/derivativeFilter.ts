@@ -19,7 +19,6 @@ export const DerivativeFilter = {
   // for 2x2 matrices, the current pixel corresponds to the top-left
   //  ROBERTS = 'roberts',
 } as const;
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type DerivativeFilter =
   (typeof DerivativeFilter)[keyof typeof DerivativeFilter];
 

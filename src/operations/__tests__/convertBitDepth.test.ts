@@ -103,5 +103,5 @@ test('throw if converting to unsupported bit depth', () => {
 
   expect(() => {
     img.convertBitDepth(1);
-  }).toThrow('This image bit depth is not supported: 1');
+  }).toThrowError('This image bit depth is not supported: 1');
 });

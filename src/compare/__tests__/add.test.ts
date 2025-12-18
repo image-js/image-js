@@ -43,7 +43,7 @@ test('different bitDepth should throw', () => {
 
   expect(() => {
     return add(image, other);
-  }).toThrow('both images must have the same alpha and bitDepth');
+  }).toThrowError('both images must have the same alpha and bitDepth');
 });
 
 test('different size images should throw', () => {
@@ -52,7 +52,7 @@ test('different size images should throw', () => {
 
   expect(() => {
     add(image, other);
-  }).toThrow(`both images must have the same size`);
+  }).toThrowError(`both images must have the same size`);
 });
 
 test('different number of channels should throw', () => {
@@ -61,7 +61,7 @@ test('different number of channels should throw', () => {
 
   expect(() => {
     image.subtract(other);
-  }).toThrow(`both images must have the same number of channels`);
+  }).toThrowError(`both images must have the same number of channels`);
 });
 
 test('different number of channels should throw 2', () => {
@@ -70,5 +70,5 @@ test('different number of channels should throw 2', () => {
 
   expect(() => {
     image.subtract(other);
-  }).toThrow(`both images must have the same number of channels`);
+  }).toThrowError(`both images must have the same number of channels`);
 });

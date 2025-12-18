@@ -85,7 +85,7 @@ test('error handling', () => {
       cellSize: 2,
       borderValue: 1,
     });
-  }).toThrow(
+  }).toThrowError(
     new RangeError(
       'Invalid property "cellSize". Must be an odd number. Received 2.',
     ),
@@ -97,7 +97,7 @@ test('error handling', () => {
       cellSize: 0,
       borderValue: 1,
     });
-  }).toThrow(
+  }).toThrowError(
     new RangeError(
       'Invalid property "cellSize". Must be greater than 0. Received 0.',
     ),

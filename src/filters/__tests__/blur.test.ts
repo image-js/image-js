@@ -19,13 +19,13 @@ test('error handling', () => {
 
   expect(() => {
     img.blur({ width: 2, height: 2 });
-  }).toThrow(
+  }).toThrowError(
     'Invalid property "width". Must be an odd number greater than 0. Received 2.',
   );
 
   expect(() => {
     img.blur({ width: 3, height: -2 });
-  }).toThrow(
+  }).toThrowError(
     'Invalid property "height". Must be an odd number greater than 0. Received -2.',
   );
 });

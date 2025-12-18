@@ -14,7 +14,7 @@ test('should throw error message', () => {
 
   expect(() => {
     assertValidator(variable === 2, 'Error message');
-  }).toThrow('Error message');
+  }).toThrowError('Error message');
 });
 
 test('should throw default error message', () => {
@@ -22,5 +22,5 @@ test('should throw default error message', () => {
 
   expect(() => {
     assertValidator(variable === 2);
-  }).toThrow('unreachable');
+  }).toThrowError('unreachable');
 });

@@ -9,7 +9,6 @@ export const RoiKind = {
   WHITE: 'white',
   BW: 'bw',
 } as const;
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type RoiKind = (typeof RoiKind)[keyof typeof RoiKind];
 
 export interface GetRoisOptions {

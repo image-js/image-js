@@ -11,10 +11,9 @@ import type {
 import { getFastKeypoints } from './getFastKeypoints.js';
 import { getPatchIntensityCentroid } from './getPatchIntensityCentroid.js';
 
-export interface GetOrientedFastKeypointsOptions
-  extends GetFastKeypointsOptions {
+export interface GetOrientedFastKeypointsOptions extends GetFastKeypointsOptions {
   /**
-   * Diameter of the circle used for compotuation of the intensity centroid.
+   * Diameter of the circle used for computation of the intensity centroid.
    * @default `7`
    */
   centroidPatchDiameter?: number;

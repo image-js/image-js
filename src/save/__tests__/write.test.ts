@@ -164,14 +164,14 @@ test('unknown format error', () => {
   expect(() => {
     // @ts-expect-error test invalid format
     writeSync(destination, img, { format: 'foo' });
-  }).toThrow(/foo/);
+  }).toThrowError(/foo/);
 });
 
 test('image extension error', async () => {
   const img = testUtils.load('opencv/test.png');
   const destination = path.join(tmpDir, 'image.tiff');
 
-  await expect(write(destination, img)).rejects.toThrow(
+  await expect(write(destination, img)).rejects.toThrowError(
     'image format could not be determined from file extension. Use a supported extension or specify the format option',
   );
 });

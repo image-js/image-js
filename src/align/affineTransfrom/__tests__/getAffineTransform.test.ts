@@ -113,7 +113,7 @@ test('not enough matches found', () => {
       maxRansacNbIterations: 1000,
       crosscheck: true,
     });
-  }).toThrow(
+  }).toThrowError(
     'Insufficient number of matches found to compute affine transform (less than 2).',
   );
 });

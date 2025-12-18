@@ -104,7 +104,7 @@ test('error handling', () => {
       distance: 0,
     });
     return result;
-  }).toThrow(
+  }).toThrowError(
     'image channel must be specified or image must have only one channel',
   );
 });

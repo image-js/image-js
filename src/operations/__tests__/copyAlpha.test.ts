@@ -8,7 +8,7 @@ test('source and dest different sizes', () => {
 
   expect(() => {
     copyAlpha(source, dest);
-  }).toThrow(/source and destination have different sizes/);
+  }).toThrowError(/source and destination have different sizes/);
 });
 
 test('source has no alpha', () => {
@@ -17,7 +17,7 @@ test('source has no alpha', () => {
 
   expect(() => {
     copyAlpha(source, dest);
-  }).toThrow(/source image does not have alpha/);
+  }).toThrowError(/source image does not have alpha/);
 });
 
 test('dest has no alpha', () => {
@@ -26,5 +26,5 @@ test('dest has no alpha', () => {
 
   expect(() => {
     copyAlpha(source, dest);
-  }).toThrow(/destination does not have alpha/);
+  }).toThrowError(/destination does not have alpha/);
 });

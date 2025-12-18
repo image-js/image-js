@@ -53,7 +53,7 @@ test('size error', () => {
 
   expect(() => {
     image.gaussianBlur(options);
-  }).toThrow('size must be positive and odd');
+  }).toThrowError('size must be positive and odd');
 });
 
 test('x and y kernels', () => {
@@ -108,7 +108,7 @@ test('x and y kernels 2', () => {
 
   expect(() => {
     return image.gaussianBlur(options);
-  }).toThrow(
+  }).toThrowError(
     'you must either define sigma or sigmaX and sigmaY in the options argument',
   );
 });

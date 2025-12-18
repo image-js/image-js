@@ -11,7 +11,9 @@ test('should throw if images have different sizes', () => {
 
   expect(() => {
     checkProcessable(stack, { sameDimensions: true });
-  }).toThrow('images must all have same dimensions to apply this algorithm');
+  }).toThrowError(
+    'images must all have same dimensions to apply this algorithm',
+  );
 });
 
 test('default options', () => {
@@ -21,7 +23,7 @@ test('default options', () => {
 
   expect(() => {
     checkProcessable(stack);
-  }).not.toThrow();
+  }).not.toThrowError();
 });
 
 test('should have alpha channel', () => {
@@ -31,7 +33,7 @@ test('should have alpha channel', () => {
 
   expect(() => {
     checkProcessable(stack, { alpha: true });
-  }).toThrow(
+  }).toThrowError(
     'stack images should have an alpha channel to apply this algorithm',
   );
 });
@@ -43,7 +45,7 @@ test('should not have alpha channel', () => {
 
   expect(() => {
     checkProcessable(stack, { alpha: false });
-  }).toThrow(
+  }).toThrowError(
     'stack images should not have an alpha channel to apply this algorithm',
   );
 });
@@ -54,5 +56,5 @@ test('bit depth error', () => {
 
   expect(() => {
     checkProcessable(stack, { bitDepth: 8 });
-  }).toThrow('image bitDepth must be 8 to apply this algorithm');
+  }).toThrowError('image bitDepth must be 8 to apply this algorithm');
 });

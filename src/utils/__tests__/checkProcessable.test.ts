@@ -12,7 +12,7 @@ test('wrong bit depth', () => {
     checkProcessable(img, {
       bitDepth: [1, 16],
     });
-  }).toThrow('image bitDepth must be 1 or 16 to apply this algorithm');
+  }).toThrowError('image bitDepth must be 1 or 16 to apply this algorithm');
 });
 
 test('wrong alpha', () => {
@@ -23,7 +23,7 @@ test('wrong alpha', () => {
 
   expect(() => {
     checkProcessable(img, { alpha: true });
-  }).toThrow('image alpha must be true to apply this algorithm');
+  }).toThrowError('image alpha must be true to apply this algorithm');
 });
 
 test('wrong color model', () => {
@@ -34,7 +34,7 @@ test('wrong color model', () => {
 
   expect(() => {
     checkProcessable(img, { colorModel: ['RGB'] });
-  }).toThrow('image colorModel must be RGB to apply this algorithm');
+  }).toThrowError('image colorModel must be RGB to apply this algorithm');
 });
 
 test('wrong number of components', () => {
@@ -47,7 +47,7 @@ test('wrong number of components', () => {
     checkProcessable(img, {
       components: [2, 4],
     });
-  }).toThrow('image components must be 2 or 4 to apply this algorithm');
+  }).toThrowError('image components must be 2 or 4 to apply this algorithm');
 });
 
 test('wrong number of channels', () => {
@@ -60,7 +60,7 @@ test('wrong number of channels', () => {
     checkProcessable(img, {
       channels: [2, 3],
     });
-  }).toThrow(/image channels must be 2 or 3 to apply this algorithm/);
+  }).toThrowError(/image channels must be 2 or 3 to apply this algorithm/);
 });
 
 test('only one valid bit depth or channel', () => {
@@ -74,7 +74,7 @@ test('only one valid bit depth or channel', () => {
       bitDepth: 8,
       channels: 1,
     });
-  }).not.toThrow();
+  }).not.toThrowError();
 });
 
 test('only grey images accepted', () => {
@@ -85,7 +85,7 @@ test('only grey images accepted', () => {
       bitDepth: 8,
       components: 1,
     });
-  }).toThrow(
+  }).toThrowError(
     'image components must be 1 to apply this algorithm. The image can be converted using "image.grey()"',
   );
 });

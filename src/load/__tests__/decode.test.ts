@@ -5,7 +5,7 @@ import { decode } from '../decode.js';
 test('auto decode png', () => {
   const buffer = testUtils.loadBuffer('formats/grey8.png');
 
-  expect(() => decode(buffer)).not.toThrow();
+  expect(() => decode(buffer)).not.toThrowError();
 
   const decoded = decode(buffer);
 
@@ -16,7 +16,7 @@ test('auto decode png', () => {
 test('auto decode jpeg', () => {
   const buffer = testUtils.loadBuffer('formats/rgb12.jpg');
 
-  expect(() => decode(buffer)).not.toThrow();
+  expect(() => decode(buffer)).not.toThrowError();
 
   const decoded = decode(buffer);
 
@@ -27,7 +27,7 @@ test('auto decode jpeg', () => {
 test('auto decode tiff', () => {
   const buffer = testUtils.loadBuffer('formats/tif/grey8.tif');
 
-  expect(() => decode(buffer)).not.toThrow();
+  expect(() => decode(buffer)).not.toThrowError();
 
   const decoded = decode(buffer);
 
@@ -36,13 +36,13 @@ test('auto decode tiff', () => {
 });
 
 test('should throw for too small data', () => {
-  expect(() => decode(new Uint8Array(0))).toThrow(
+  expect(() => decode(new Uint8Array(0))).toThrowError(
     /invalid data format: undefined/,
   );
 });
 
 test('should throw for unknown data', () => {
-  expect(() => decode(new Uint8Array(10))).toThrow(
+  expect(() => decode(new Uint8Array(10))).toThrowError(
     /invalid data format: undefined/,
   );
 });

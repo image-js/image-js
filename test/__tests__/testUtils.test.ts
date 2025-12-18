@@ -11,7 +11,7 @@ describe('load', () => {
 
   it('should throw and have TS error for bad path', () => {
     // @ts-expect-error - this is expected to fail
-    expect(() => testUtils.load('bad/path')).toThrow(/ENOENT/);
+    expect(() => testUtils.load('bad/path')).toThrowError(/ENOENT/);
   });
 });
 
@@ -59,7 +59,7 @@ describe('createGreyImage', () => {
         [7, 8, 9],
         [10, 11, 12],
       ]),
-    ).toThrow(/does not match width/);
+    ).toThrowError(/does not match width/);
   });
 
   it('should throw if row length is not consistent (string)', () => {
@@ -70,7 +70,7 @@ describe('createGreyImage', () => {
        7  8  9
       10 11 12
     `),
-    ).toThrow(/does not match width/);
+    ).toThrowError(/does not match width/);
   });
 });
 
@@ -117,7 +117,7 @@ describe('createRgbImage', () => {
         [4, 5, 6, 0],
         [7, 8, 9, 0],
       ]),
-    ).toThrow(/is not a multiple of channels/);
+    ).toThrowError(/is not a multiple of channels/);
   });
 });
 
@@ -161,7 +161,7 @@ describe('createRgbaImage', () => {
        1  2  3 | 4  5  6
        7  8  9 | 10 11 12
     `),
-    ).toThrow(/is not a multiple of channels/);
+    ).toThrowError(/is not a multiple of channels/);
   });
 });
 
@@ -198,7 +198,7 @@ describe('createMask', () => {
         [0, 0, 0],
         [0, 0, 0],
       ]),
-    ).toThrow(/does not match width/);
+    ).toThrowError(/does not match width/);
   });
 
   it('should throw if row length is not consistent (string)', () => {
@@ -209,7 +209,7 @@ describe('createMask', () => {
        0  0  0
       0 0 0
     `),
-    ).toThrow(/does not match width/);
+    ).toThrowError(/does not match width/);
   });
 });
 
@@ -266,6 +266,6 @@ describe('createRoi', () => {
         [0, 0, 1],
         [0, 0, 1],
       ]),
-    ).toThrow(/multiple ROIs found/);
+    ).toThrowError(/multiple ROIs found/);
   });
 });

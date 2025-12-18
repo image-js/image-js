@@ -163,5 +163,5 @@ test('throw if insufficient number of points', () => {
       order: 2,
       backgroundKind: 'dark',
     });
-  }).toThrow('Insufficient number of points to create regression model.');
+  }).toThrowError('Insufficient number of points to create regression model.');
 });

@@ -139,7 +139,7 @@ test('windowSize error', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  expect(() => getHarrisScore(image, origin, { windowSize: 6 })).toThrow(
+  expect(() => getHarrisScore(image, origin, { windowSize: 6 })).toThrowError(
     'windowSize must be an odd integer',
   );
 });

@@ -5,7 +5,6 @@ export const ImageColorModel = {
   RGBA: 'RGBA',
   BINARY: 'BINARY',
 } as const;
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type ImageColorModel =
   (typeof ImageColorModel)[keyof typeof ImageColorModel];
 

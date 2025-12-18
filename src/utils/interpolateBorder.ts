@@ -11,7 +11,6 @@ export const BorderType = {
   WRAP: 'wrap',
   REFLECT_101: 'reflect101',
 } as const;
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type BorderType = (typeof BorderType)[keyof typeof BorderType];
 
 /**

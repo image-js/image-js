@@ -18,7 +18,6 @@ export const RoisColorMode = {
    */
   RAINBOW: 'rainbow',
 } as const;
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type RoisColorMode = (typeof RoisColorMode)[keyof typeof RoisColorMode];
 
 export interface ColorRoisOptions {

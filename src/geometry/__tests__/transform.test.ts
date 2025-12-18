@@ -149,7 +149,7 @@ test('should throw if matrix has wrong size', () => {
 
   expect(() => {
     img.transform(translation);
-  }).toThrow('transformation matrix must be 2x3 or 3x3. Received 2x4');
+  }).toThrowError('transformation matrix must be 2x3 or 3x3. Received 2x4');
 });
 
 test('check borderValue behavior', () => {

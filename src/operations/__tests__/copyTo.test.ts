@@ -154,7 +154,7 @@ test('origin coordinates are floating values', () => {
 
   expect(() => {
     source.copyTo(target, { origin: { row: 0.99, column: 0 } });
-  }).toThrow('Origin row and column must be integers');
+  }).toThrowError('Origin row and column must be integers');
 });
 
 test('testing out option', () => {
@@ -255,7 +255,7 @@ test('incompatible image types', () => {
   const source = testUtils.createGreyImage([[100, 255]]);
   const target = testUtils.createGreyaImage([[50, 0]]);
 
-  expect(() => source.copyTo(target)).toThrow(
+  expect(() => source.copyTo(target)).toThrowError(
     /source and target must have the same color model/,
   );
 });

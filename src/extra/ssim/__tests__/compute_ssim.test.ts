@@ -128,8 +128,8 @@ test('windowSize too large error', () => {
 
   expect(() => {
     computeSsim(image, other, { windowSize: 5 });
-  }).toThrow('windowSize cannot exceed image dimensions');
+  }).toThrowError('windowSize cannot exceed image dimensions');
   expect(() => {
     computeSsim(image, other, { windowSize: 20 });
-  }).toThrow('windowSize cannot exceed image dimensions');
+  }).toThrowError('windowSize cannot exceed image dimensions');
 });

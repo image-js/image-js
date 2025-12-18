@@ -101,7 +101,7 @@ describe('getOutputImage', () => {
 
     expect(() =>
       getOutputImage(img, { out: incorrect }, { newParameters: requirements }),
-    ).toThrow(
+    ).toThrowError(
       /cannot use out image. Its colorModel property must be GREY. Received RGB/,
     );
   });
@@ -110,7 +110,7 @@ describe('getOutputImage', () => {
     const img = new Image(1, 2);
 
     // @ts-expect-error: testing JS problem
-    expect(() => getOutputImage(img, { out: 'str' })).toThrow(
+    expect(() => getOutputImage(img, { out: 'str' })).toThrowError(
       'out must be an Image',
     );
   });
@@ -158,7 +158,7 @@ describe('maskToOutputImage', () => {
 
     expect(() => {
       maskToOutputImage(img, { out });
-    }).toThrow(
+    }).toThrowError(
       /cannot use out image. Its width property must be 1. Received 2/,
     );
   });
@@ -167,7 +167,7 @@ describe('maskToOutputImage', () => {
     const img = new Image(1, 2);
 
     // @ts-expect-error: testing JS problem
-    expect(() => maskToOutputImage(img, { out: 'str' })).toThrow(
+    expect(() => maskToOutputImage(img, { out: 'str' })).toThrowError(
       'out must be an Image',
     );
   });
@@ -211,7 +211,7 @@ describe('imageToOutputMask', () => {
 
     expect(() => {
       imageToOutputMask(img, { out });
-    }).toThrow(
+    }).toThrowError(
       /cannot use out image. Its width property must be 1. Received 2/,
     );
   });
@@ -220,7 +220,7 @@ describe('imageToOutputMask', () => {
     const img = new Image(1, 2);
 
     // @ts-expect-error: testing JS problem
-    expect(() => imageToOutputMask(img, { out: 'str' })).toThrow(
+    expect(() => imageToOutputMask(img, { out: 'str' })).toThrowError(
       'out must be a Mask',
     );
   });
@@ -264,7 +264,7 @@ describe('maskToOutputMask', () => {
 
     expect(() => {
       maskToOutputMask(mask, { out });
-    }).toThrow(
+    }).toThrowError(
       /cannot use out image. Its width property must be 1. Received 2/,
     );
   });
@@ -273,7 +273,7 @@ describe('maskToOutputMask', () => {
     const mask = new Mask(1, 2);
 
     // @ts-expect-error: testing JS problem
-    expect(() => maskToOutputMask(mask, { out: 'str' })).toThrow(
+    expect(() => maskToOutputMask(mask, { out: 'str' })).toThrowError(
       'out must be a Mask',
     );
   });

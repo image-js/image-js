@@ -21,5 +21,5 @@ test('scale cannot be zero', () => {
 
   expect(() => {
     overlapImages(source, destination, { scale: 0 });
-  }).toThrow('Scale cannot be 0');
+  }).toThrowError('Scale cannot be 0');
 });

@@ -44,7 +44,7 @@ test('range error', () => {
 
   const brief = getBriefDescriptors(image, keypoints);
 
-  expect(() => sliceBrief(brief, { start: -1 })).toThrow(
+  expect(() => sliceBrief(brief, { start: -1 })).toThrowError(
     'start or end are out of range',
   );
 });

@@ -72,5 +72,7 @@ test('should throw if result is empty', () => {
 
   expect(() => {
     image.cropAlpha();
-  }).toThrow(/could not find new dimensions. Threshold may be too high: 255/);
+  }).toThrowError(
+    /could not find new dimensions. Threshold may be too high: 255/,
+  );
 });

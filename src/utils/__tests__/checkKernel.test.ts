@@ -10,5 +10,5 @@ test('should throw', () => {
 
   expect(() => {
     checkKernel(kernel);
-  }).toThrow(/the number of rows and columns of the kernel must be odd/);
+  }).toThrowError(/the number of rows and columns of the kernel must be odd/);
 });

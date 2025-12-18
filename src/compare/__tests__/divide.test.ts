@@ -25,7 +25,7 @@ test('error when dividing by 0', () => {
 
   expect(() => {
     divide(image, 0);
-  }).toThrow('Cannot divide by 0');
+  }).toThrowError('Cannot divide by 0');
 });
 
 test('divide by decimal', () => {

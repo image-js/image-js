@@ -26,5 +26,5 @@ test('check error', () => {
 
   expect(() => {
     copyData(source, target);
-  }).toThrow('images width, height or color model is different');
+  }).toThrowError('images width, height or color model is different');
 });

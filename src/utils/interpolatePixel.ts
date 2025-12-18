@@ -13,7 +13,6 @@ export const InterpolationType = {
   BILINEAR: 'bilinear',
   BICUBIC: 'bicubic',
 } as const;
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type InterpolationType =
   (typeof InterpolationType)[keyof typeof InterpolationType];
 
@@ -22,7 +21,7 @@ type InterpolationFunction = (
   column: number,
   row: number,
   channel: number,
-  intepolateBorder: BorderInterpolationFunction,
+  interpolateBorder: BorderInterpolationFunction,
   clamp: ClampFunction,
 ) => number;
 

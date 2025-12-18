@@ -222,7 +222,7 @@ describe('error testing', () => {
   it("should throw if there aren't 4 points", () => {
     expect(() => {
       getPerspectiveWarp([{ column: 1, row: 1 }]);
-    }).toThrow(
+    }).toThrowError(
       'The array pts must have four elements, which are the four corners. Currently, pts have 1 elements',
     );
   });
@@ -238,7 +238,7 @@ describe('error testing', () => {
         ],
         { width: 10 },
       );
-    }).toThrow(
+    }).toThrowError(
       'Invalid dimensions: `height` is missing. Either provide both width and height, or omit both to auto-calculate dimensions.',
     );
   });

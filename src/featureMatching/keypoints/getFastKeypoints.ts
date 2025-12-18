@@ -90,15 +90,16 @@ export function getFastKeypoints(
     alpha: false,
   });
 
+  function harrisScore(image: Image, corner: Point) {
+    return getHarrisScore(image, corner, harrisScoreOptions);
+  }
+  function fastScore(image: Image, corner: Point) {
+    return getFastScore(image, corner, threshold, circlePoints);
+  }
+
   const getScore = match(scoreAlgorithm)
-    .with('HARRIS', () => {
-      return (image: Image, corner: Point) =>
-        getHarrisScore(image, corner, harrisScoreOptions);
-    })
-    .with('FAST', () => {
-      return (image: Image, corner: Point) =>
-        getFastScore(image, corner, threshold, circlePoints);
-    })
+    .with('HARRIS', () => harrisScore)
+    .with('FAST', () => fastScore)
     .exhaustive();
 
   const allKeypoints: FastKeypoint[] = [];

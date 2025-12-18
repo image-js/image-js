@@ -17,14 +17,14 @@ describe('constructor', () => {
   it('should error when scale is not an integer', () => {
     expect(() => {
       return new Montage(source, source, { scale: 1.5 });
-    }).toThrow('scale must be an integer');
+    }).toThrowError('scale must be an integer');
   });
 
   it('invalid disposition type', () => {
     expect(() => {
       // @ts-expect-error: invalid disposition type
       return new Montage(source, source, { disposition: 'test' });
-    }).toThrow('invalid disposition type: test');
+    }).toThrowError('invalid disposition type: test');
   });
 });
 

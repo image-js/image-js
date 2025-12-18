@@ -5,7 +5,7 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     testTimeout: 10_000,
     coverage: {
-      include: ['src/**'],
+      include: ['src/**/*.ts'],
     },
     reporters: [
       'default',

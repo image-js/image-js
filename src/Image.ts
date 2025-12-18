@@ -146,7 +146,6 @@ export const ImageCoordinates = {
   BOTTOM_LEFT: 'bottom-left',
   BOTTOM_RIGHT: 'bottom-right',
 } as const;
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type ImageCoordinates =
   (typeof ImageCoordinates)[keyof typeof ImageCoordinates];
 
@@ -1087,12 +1086,13 @@ export class Image {
   ): Image {
     return correctColor(this, measuredColors, referenceColors);
   }
+
   /**
    * Apply a median filter to the image.
    * @param options - Options to apply for median filter.
    * @returns Image after median filter.
    */
-  public medianFilter(options: MedianFilterOptions) {
+  public medianFilter(options?: MedianFilterOptions) {
     return medianFilter(this, options);
   }
 

@@ -126,7 +126,7 @@ describe('pixelization of images', () => {
 
     expect(() => {
       img.pixelate({ cellSize: 1 });
-    }).toThrow(new RangeError('cellSize must be greater than 1'));
+    }).toThrowError(new RangeError('cellSize must be greater than 1'));
   });
 
   it('throws a Type error', () => {
@@ -140,7 +140,7 @@ describe('pixelization of images', () => {
 
     expect(() => {
       img.pixelate({ cellSize: 2.3 });
-    }).toThrow(new TypeError('cellSize must be an integer'));
+    }).toThrowError(new TypeError('cellSize must be an integer'));
   });
 });
 
@@ -156,5 +156,5 @@ test('throws a Type error', () => {
   expect(() => {
     //@ts-expect-error error testing
     img.pixelate({ cellSize: 2, algorithm: 'test' });
-  }).toThrow(new Error(`unreachable: test`));
+  }).toThrowError(new Error(`unreachable: test`));
 });

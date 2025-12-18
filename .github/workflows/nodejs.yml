@@ -12,4 +12,4 @@ jobs:
     uses: zakodium/workflows/.github/workflows/nodejs.yml@nodejs-v1
     with:
       lint-check-types: true
-      test-setup-command: npx allow-scripts run
+      test-setup-command: npm run allow-scripts

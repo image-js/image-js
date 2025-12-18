@@ -67,19 +67,19 @@ describe('create new images', () => {
   });
 
   it('should throw on wrong width', () => {
-    expect(() => new Image(0, 1)).toThrow(
+    expect(() => new Image(0, 1)).toThrowError(
       /width must be an integer and at least 1. Received 0/,
     );
-    expect(() => new Image(0.5, 1)).toThrow(
+    expect(() => new Image(0.5, 1)).toThrowError(
       /width must be an integer and at least 1. Received 0.5/,
     );
   });
 
   it('should throw on wrong height', () => {
-    expect(() => new Image(1, 0)).toThrow(
+    expect(() => new Image(1, 0)).toThrowError(
       /height must be an integer and at least 1. Received 0/,
     );
-    expect(() => new Image(1, 0.5)).toThrow(
+    expect(() => new Image(1, 0.5)).toThrowError(
       /height must be an integer and at least 1. Received 0.5/,
     );
   });
@@ -87,14 +87,14 @@ describe('create new images', () => {
   it('should throw on wrong data size', () => {
     const data = new Uint16Array(2);
 
-    expect(() => new Image(2, 2, { data, bitDepth: 16 })).toThrow(
+    expect(() => new Image(2, 2, { data, bitDepth: 16 })).toThrowError(
       /incorrect data size: 2. Expected 12/,
     );
   });
 
   it('should throw on wrong bit depth', () => {
     // @ts-expect-error we want to test the error.
-    expect(() => new Image(1, 1, { bitDepth: 20 })).toThrow(
+    expect(() => new Image(1, 1, { bitDepth: 20 })).toThrowError(
       /invalid bitDepth: 20/,
     );
   });
@@ -102,7 +102,7 @@ describe('create new images', () => {
   it('should throw with bit depth 8 but data 16', () => {
     const data = new Uint16Array([1, 2, 3, 4]);
 
-    expect(() => new Image(2, 2, { colorModel: 'GREY', data })).toThrow(
+    expect(() => new Image(2, 2, { colorModel: 'GREY', data })).toThrowError(
       'bitDepth is 8 but data is Uint16Array',
     );
   });
@@ -117,7 +117,7 @@ describe('create new images', () => {
           bitDepth: 16,
           data,
         }),
-    ).toThrow('bitDepth is 16 but data is Uint8Array');
+    ).toThrowError('bitDepth is 16 but data is Uint8Array');
   });
 });
 
@@ -263,7 +263,7 @@ test('getCoordinates - bad parameter', () => {
   const img = new Image(4, 5);
 
   // @ts-expect-error bad parameter
-  expect(() => img.getCoordinates('bad')).toThrow('bad');
+  expect(() => img.getCoordinates('bad')).toThrowError('bad');
 });
 
 test('fill with a constant color', () => {
@@ -299,7 +299,7 @@ test('fill with a color as RGBA array', () => {
 test('fill with out of range value', () => {
   const img = new Image(1, 1);
 
-  expect(() => img.fill(256)).toThrow(
+  expect(() => img.fill(256)).toThrowError(
     /invalid value: 256. It must be a positive value smaller than 256/,
   );
 });
@@ -307,7 +307,7 @@ test('fill with out of range value', () => {
 test('fill with out of range value in array', () => {
   const img = new Image(1, 1);
 
-  expect(() => img.fill([0, -1, 2])).toThrow(
+  expect(() => img.fill([0, -1, 2])).toThrowError(
     /invalid value: -1. It must be a positive value smaller than 256/,
   );
 });
@@ -315,7 +315,7 @@ test('fill with out of range value in array', () => {
 test('fill with channel mismatch', () => {
   const img = new Image(1, 1);
 
-  expect(() => img.fill([0, 1, 2, 3])).toThrow(
+  expect(() => img.fill([0, 1, 2, 3])).toThrowError(
     /the size of value must match the number of channels \(3\). Received 4/,
   );
 });
@@ -343,7 +343,7 @@ test('fill channel 2', () => {
 test('fill channel invalid channel', () => {
   const img = new Image(1, 2);
 
-  expect(() => img.fillChannel(4, 50)).toThrow(
+  expect(() => img.fillChannel(4, 50)).toThrowError(
     /invalid channel: 4. It must be a positive integer smaller than 3/,
   );
 });
@@ -388,7 +388,7 @@ test('fill alpha', () => {
 test('fill alpha should throw if no alpha', () => {
   const img = new Image(1, 1);
 
-  expect(() => img.fillAlpha(50)).toThrow(
+  expect(() => img.fillAlpha(50)).toThrowError(
     /fillAlpha can only be called if the image has an alpha channel/,
   );
 });
@@ -459,5 +459,5 @@ test('check resolution cases for coverage', () => {
       resolution: { xValue: 10, yValue: 10, unit: 'decimeter' },
     });
     return image6.normalizedResolution;
-  }).toThrow('Unknown resolution unit.');
+  }).toThrowError('Unknown resolution unit.');
 });

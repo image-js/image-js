@@ -28,9 +28,9 @@ test('patch size error', () => {
 
   const keypoint = getOrientedFastKeypoints(grey, { maxNbFeatures: 1 });
 
-  expect(() => getBriefDescriptors(grey, keypoint, { patchSize: 4 })).toThrow(
-    'patchSize must be an odd integer',
-  );
+  expect(() =>
+    getBriefDescriptors(grey, keypoint, { patchSize: 4 }),
+  ).toThrowError('patchSize must be an odd integer');
 });
 
 test('alphabet image should work', () => {
@@ -39,7 +39,7 @@ test('alphabet image should work', () => {
 
   const sourceKeypoints = getOrientedFastKeypoints(grey);
 
-  expect(() => getBriefDescriptors(grey, sourceKeypoints)).not.toThrow();
+  expect(() => getBriefDescriptors(grey, sourceKeypoints)).not.toThrowError();
 
   const result = getBriefDescriptors(grey, sourceKeypoints);
 
@@ -50,7 +50,7 @@ test('image too small for patchsize', () => {
   const image = new Image(5, 5, { colorModel: 'GREY' });
   const sourceKeypoints = getOrientedFastKeypoints(image);
 
-  expect(() => getBriefDescriptors(image, sourceKeypoints)).toThrow(
+  expect(() => getBriefDescriptors(image, sourceKeypoints)).toThrowError(
     'image is too small for patchSize = 31',
   );
 });

@@ -13,7 +13,6 @@ export const MontageDisposition = {
   HORIZONTAL: 'horizontal',
   VERTICAL: 'vertical',
 } as const;
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export type MontageDisposition =
   (typeof MontageDisposition)[keyof typeof MontageDisposition];
 
