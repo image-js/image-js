@@ -69,7 +69,7 @@ test('wrong color model error', () => {
 
   expect(() => {
     getFastKeypoints(image);
-  }).toThrowError('image channels must be 1 to apply this algorithm');
+  }).toThrow('image channels must be 1 to apply this algorithm');
 });
 
 test('undefined score algorithm error', () => {
@@ -79,5 +79,5 @@ test('undefined score algorithm error', () => {
   expect(() => {
     // @ts-expect-error: test for js users
     getFastKeypoints(grey, { scoreAlgorithm: 'test' });
-  }).toThrowError('test');
+  }).toThrow('test');
 });

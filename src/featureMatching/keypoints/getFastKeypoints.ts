@@ -13,6 +13,8 @@ import type { GetHarrisScoreOptions } from '../featureMatching.types.js';
 
 import { getFastScore } from './getFastScore.js';
 import { getHarrisScore } from './getHarrisScore.js';
+import type { GetShiTomasiScoreOptions } from './getShiTomasiScore.ts';
+import { getShiTomasiScore } from './getShiTomasiScore.ts';
 import type { IsFastKeypointOptions } from './isFastKeypoint.js';
 import { isFastKeypoint } from './isFastKeypoint.js';
 
@@ -38,11 +40,11 @@ export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
    * Algorithm to use to compute corners score.
    * @default `'FAST'`
    */
-  scoreAlgorithm?: 'HARRIS' | 'FAST';
+  scoreAlgorithm?: 'HARRIS' | 'FAST' | 'TOMASI';
   /**
    * Options for the Harris score computation.
    */
-  harrisScoreOptions?: GetHarrisScoreOptions;
+  scoreOptions?: GetHarrisScoreOptions | GetShiTomasiScoreOptions;
 }
 
 export interface FastKeypoint {
@@ -69,11 +71,7 @@ export function getFastKeypoints(
   image: Image,
   options: GetFastKeypointsOptions = {},
 ): FastKeypoint[] {
-  const {
-    fastRadius = 3,
-    scoreAlgorithm = 'FAST',
-    harrisScoreOptions,
-  } = options;
+  const { fastRadius = 3, scoreAlgorithm = 'FAST', scoreOptions } = options;
 
   const circlePoints = getCirclePoints(fastRadius);
   const compassPoints = getCompassPoints(fastRadius);
@@ -91,15 +89,23 @@ export function getFastKeypoints(
   });
 
   function harrisScore(image: Image, corner: Point) {
-    return getHarrisScore(image, corner, harrisScoreOptions);
+    return getHarrisScore(image, corner, scoreOptions as GetHarrisScoreOptions);
   }
   function fastScore(image: Image, corner: Point) {
     return getFastScore(image, corner, threshold, circlePoints);
+  }
+  function tomasiScore(image: Image, corner: Point) {
+    return getShiTomasiScore(
+      image,
+      corner,
+      scoreOptions as GetShiTomasiScoreOptions,
+    );
   }
 
   const getScore = match(scoreAlgorithm)
     .with('HARRIS', () => harrisScore)
     .with('FAST', () => fastScore)
+    .with('TOMASI', () => tomasiScore)
     .exhaustive();
 
   const allKeypoints: FastKeypoint[] = [];

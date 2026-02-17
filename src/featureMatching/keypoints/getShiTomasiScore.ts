@@ -1,31 +1,36 @@
 import { EigenvalueDecomposition, Matrix, WrapperMatrix1D } from 'ml-matrix';
 
-import type { Image } from '../../Image.js';
-import type { Point } from '../../geometry/index.js';
+import type { Image } from '../../Image.ts';
+import type { Point } from '../../index_full.ts';
 import { SOBEL_X, SOBEL_Y } from '../../utils/constants/kernels.js';
-import type { GetHarrisScoreOptions } from '../featureMatching.types.js';
+
+export interface GetShiTomasiScoreOptions {
+  qualityLevel?: number;
+  /**
+   * Size of the window to compute the Harris score.
+   * Should be an odd number so that the window can be centered on the corner.
+   * @default `7`
+   */
+  windowSize?: number;
+}
 
 /**
- * Get the Harris score of a corner. The idea behind the algorithm is that a
- * slight shift of a window around a corner along x and y should result in
- * a very different image.
- *
+ * Get the Shi-Tomasi score of a corner. The idea is similar to Harris score, but it removes constant to calculate the score and just takes the minimum from two eigenvalues.
  * We distinguish 3 cases:
  * - the score is highly negative: you have an edge
  * - the absolute value of the score is small: the region is flat
  * - the score is highly positive: you have a corner.
- * @see {@link https://en.wikipedia.org/wiki/Harris_corner_detector}
  * @param image - Image to which the corner belongs. It must be a greyscale image with only one channel.
  * @param origin - Center of the window, where the corner should be.
- * @param options - Get Harris score options.
- * @returns The Harris score.
+ * @param options  - Get Shi-Tomasi score options.
+ * @returns The Shi-Tomasi score.
  */
-export function getHarrisScore(
+export function getShiTomasiScore(
   image: Image,
   origin: Point,
-  options: GetHarrisScoreOptions = {},
+  options: GetShiTomasiScoreOptions = {},
 ): number {
-  const { windowSize = 7, harrisConstant = 0.04 } = options;
+  const { windowSize = 7 } = options;
 
   if (!(windowSize % 2)) {
     throw new TypeError('windowSize must be an odd integer');
@@ -66,8 +71,5 @@ export function getHarrisScore(
   const eigenValues = new EigenvalueDecomposition(structureTensor)
     .realEigenvalues;
 
-  return (
-    eigenValues[0] * eigenValues[1] -
-    harrisConstant * (eigenValues[0] + eigenValues[1]) ** 2
-  );
+  return Math.min(eigenValues[0], eigenValues[1]);
 }
