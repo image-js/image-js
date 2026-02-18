@@ -32,7 +32,6 @@ test('7x7 image with other corner', () => {
   ]);
 
   const origin = { row: 3, column: 3 };
-
   const result = getShiTomasiScore(image, origin);
 
   expect(result).toBeCloseTo(-22741.78461986476);

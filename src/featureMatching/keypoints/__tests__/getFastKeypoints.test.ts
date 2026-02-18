@@ -64,6 +64,30 @@ test('star', () => {
   expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
 });
 
+test('star with harris', () => {
+  const image = testUtils.load('featureMatching/polygons/star.png');
+  const grey = image.convertColor('GREY');
+  const keypoints = getFastKeypoints(grey, {
+    scoreAlgorithm: 'HARRIS',
+    nonMaxSuppression: true,
+  });
+
+  expect(keypoints).toHaveLength(25);
+  expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
+});
+
+test('star with shi-tomasi', () => {
+  const image = testUtils.load('featureMatching/polygons/star.png');
+  const grey = image.convertColor('GREY');
+  const keypoints = getFastKeypoints(grey, {
+    scoreAlgorithm: 'TOMASI',
+    nonMaxSuppression: true,
+  });
+
+  expect(keypoints).toHaveLength(33);
+  expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
+});
+
 test('wrong color model error', () => {
   const image = testUtils.load('various/alphabet.jpg');
 
