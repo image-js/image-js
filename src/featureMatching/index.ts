@@ -1,5 +1,7 @@
 export * from './descriptors/getBriefDescriptors.js';
 export * from './featureMatching.types.js';
+export * from './keypoints/getHarrisScore.js';
+export * from './keypoints/getShiTomasiScore.js';
 export * from './keypoints/getFastKeypoints.js';
 export * from './keypoints/getIntensityCentroid.js';
 export * from './keypoints/getOrientedFastKeypoints.js';
