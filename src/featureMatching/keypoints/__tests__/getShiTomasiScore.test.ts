@@ -54,3 +54,21 @@ test('7x7 image with corner 90 degrees, bottom-right', () => {
 
   expect(result).toBeCloseTo(130050);
 });
+
+test('windowSize error', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 200, 0, 0, 0],
+    [0, 0, 0, 100, 0, 0, 0],
+    [0, 0, 0, 100, 0, 0, 0],
+    [0, 0, 0, 100, 0, 0, 0],
+  ]);
+
+  const origin = { row: 3, column: 3 };
+
+  expect(() =>
+    getShiTomasiScore(image, origin, { windowSize: 6 }),
+  ).toThrowError('windowSize must be an odd integer');
+});
