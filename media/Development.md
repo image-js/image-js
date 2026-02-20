@@ -1,5 +1,14 @@
 # Development documentation
 
+## Install dependencies and run tests
+
+```bash
+npm ci
+# Necessary to setup skia-canvas.
+npm run allow-scipts
+npm test
+```
+
 ## Writing unit tests
 
 ### Tests that compare with OpenCV
