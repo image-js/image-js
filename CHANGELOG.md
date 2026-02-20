@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0](https://github.com/image-js/image-js/compare/v1.3.0...v1.4.0) (2026-02-20)
+
+
+### Features
+
+* add shi tomasi and harris score count ([#778](https://github.com/image-js/image-js/issues/778)) ([0ecd6d3](https://github.com/image-js/image-js/commit/0ecd6d3cf4126dd5555f1b0a5bb26f862513df53))
+* update dependencies ([#771](https://github.com/image-js/image-js/issues/771)) ([e7ffc4c](https://github.com/image-js/image-js/commit/e7ffc4cf4cea26007916b46b39c8b93d3ca7230a))
+
+
+### Bug Fixes
+
+* allow borderValue as array of channel values ([139400b](https://github.com/image-js/image-js/commit/139400b699ab96adfac1f4901e2df7fdadbfbe17))
+
 ## [1.3.0](https://github.com/image-js/image-js/compare/v1.2.0...v1.3.0) (2025-12-02)
 
 
