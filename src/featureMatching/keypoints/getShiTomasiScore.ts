@@ -1,5 +1,6 @@
 import type { Image } from '../../Image.ts';
 import type { Point } from '../../index_full.ts';
+
 import { getEigenvaluesForScore } from './getEigenvaluesForScore.js';
 
 export interface GetShiTomasiScoreOptions {

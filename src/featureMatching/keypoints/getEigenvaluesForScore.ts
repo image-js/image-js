@@ -1,14 +1,15 @@
+import { EigenvalueDecomposition, Matrix, WrapperMatrix1D } from 'ml-matrix';
+
 import type { Image } from '../../Image.ts';
 import type { Point } from '../../index_full.ts';
-import { EigenvalueDecomposition, Matrix, WrapperMatrix1D } from 'ml-matrix';
 import { SOBEL_X, SOBEL_Y } from '../../utils/constants/kernels.js';
 
 /**
- * A function that uses
- * @param image
- * @param origin
- * @param windowSize
- * @returns
+ * A function that calculates eigenvalues to calculate feature score for Harris and Shi-Tomasi algorithms.
+ * @param image - Image take data from.
+ * @param origin - Center of the window, where the corner should be.
+ * @param windowSize - Size of the window, where data should be scanned.
+ * @returns Array of two eigenvalues.
  */
 export function getEigenvaluesForScore(
   image: Image,

@@ -1,6 +1,7 @@
 import type { Image } from '../../Image.js';
 import type { Point } from '../../geometry/index.js';
 import type { GetHarrisScoreOptions } from '../featureMatching.types.js';
+
 import { getEigenvaluesForScore } from './getEigenvaluesForScore.js';
 
 /**
