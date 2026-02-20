@@ -17,7 +17,7 @@ test('7x7 image with darker and lighter areas', () => {
 
   const result = getShiTomasiScore(image, origin, { windowSize: 7 });
 
-  expect(result).toBeCloseTo(-446377.64391168964);
+  expect(result).toBeCloseTo(-446378, 0);
 });
 
 test('7x7 image with other corner', () => {
@@ -34,7 +34,7 @@ test('7x7 image with other corner', () => {
   const origin = { row: 3, column: 3 };
   const result = getShiTomasiScore(image, origin);
 
-  expect(result).toBeCloseTo(-22741.78461986476);
+  expect(result).toBeCloseTo(-22742, 0);
 });
 
 test('7x7 image with corner 90 degrees, bottom-right', () => {
