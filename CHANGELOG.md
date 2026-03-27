@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/image-js/image-js/compare/v1.4.0...v1.5.0) (2026-03-27)
+
+
+### Features
+
+* make skia-canvas an optional dependency ([#787](https://github.com/image-js/image-js/issues/787)) ([16861e9](https://github.com/image-js/image-js/commit/16861e9b32fdc85100423ab8391d6e8ff21c3ff4))
+
 ## [1.4.0](https://github.com/image-js/image-js/compare/v1.3.0...v1.4.0) (2026-02-20)
 
 
