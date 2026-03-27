@@ -24,6 +24,7 @@ let CanvasCtorNode: typeof SkiaCanvas;
 
 /**
  * Returns a 2D canvas context for rendering on the browser or Node.js.
+ * On Node.js this requires the optional `skia-canvas` package to be installed.
  * @param width - Width of the canvas.
  * @param height - Height of the canvas.
  * @returns The initialised canvas context.
@@ -33,7 +34,16 @@ export function getCanvasContext(
   height: number,
 ): OffscreenCanvasRenderingContext2D | SkiaCanvasRenderingContext2D {
   if (isNode()) {
-    CanvasCtorNode ??= getRequireFn()('skia-canvas').Canvas;
+    if (!CanvasCtorNode) {
+      try {
+        CanvasCtorNode = getRequireFn()('skia-canvas').Canvas;
+      } catch (error) {
+        throw new Error(
+          'drawText on Node.js requires the optional "skia-canvas" package. Install it with: npm install skia-canvas',
+          { cause: error },
+        );
+      }
+    }
     return new CanvasCtorNode(width, height).getContext('2d');
   } else {
     CanvasCtorBrowser ??= globalThis.OffscreenCanvas;
