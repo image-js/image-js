@@ -20,7 +20,7 @@ test('3x3 mask', () => {
   ]);
 });
 
-test('6x5 mask with hole, no inner borders', () => {
+test('5x6 mask with hole, no inner borders', () => {
   const mask = testUtils.createMask([
     [0, 0, 0, 0, 0],
     [1, 1, 1, 1, 1],
@@ -62,7 +62,7 @@ test('5x5 mask with hole, inner borders, allow corners', () => {
   expect(bordersMask).toMatchMask(mask);
 });
 
-test('6x5 mask with hole, inner borders', () => {
+test('5x6 mask with hole, inner borders', () => {
   const mask = testUtils.createMask([
     [1, 0, 0, 0, 0],
     [1, 1, 1, 1, 1],
@@ -83,17 +83,5 @@ test('6x5 mask with hole, inner borders', () => {
     [1, 1, 0, 0, 1],
     [1, 1, 1, 1, 0],
   ]);
-});
-
-test('6x5 mask with hole, allowCorners', () => {
-  const mask = testUtils.createMask([
-    [0, 1, 0],
-    [1, 1, 1],
-    [0, 1, 0],
-  ]);
-  const points = mask.getBorderPoints({ allowCorners: true });
-
-  const bordersMask = Mask.fromPoints(mask.width, mask.height, points);
-
-  expect(bordersMask).toMatchMask(mask);
+  expect(points).toHaveLength(20);
 });

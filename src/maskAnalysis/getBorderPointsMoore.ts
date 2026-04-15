@@ -8,7 +8,6 @@ interface Direction {
   dc: number;
   dr: number;
 }
-
 /**
  * Return an array with the coordinates of the pixels that are on the border of the mask using Moore's tracing algorithm.
  * The reference is the top-left corner of the ROI.
@@ -16,42 +15,53 @@ interface Direction {
  * @param options - Get border points options.
  * @returns The array of border pixels.
  */
-
 export function getBorderPointsMoore(
   mask: Mask,
   options: GetBorderPointsOptions = {},
 ): Point[] {
-  let index = 0;
+  const { innerBorders = false } = options;
+  if (!innerBorders) {
+    mask = mask.solidFill();
+  }
+  const contour: Point[] = [];
+  const visited = new Set<string>();
+  function key(p: Point) {
+    return `${p.column},${p.row}`;
+  }
+  for (let index = 0; index < mask.size; index++) {
+    const col = index % mask.width;
+    const row = Math.floor(index / mask.width);
+    const p = { column: col, row };
 
-  while (mask.getBitByIndex(index) !== 1) {
-    if (mask.getBitByIndex(index) === 1) {
-      break;
-    } else {
-      index++;
+    if (isBorderPixel(mask, col, row) && !visited.has(key(p))) {
+      const startingPoint = p;
+      const fakePrevious = findBackgroundNeighbor(mask, col, row);
+      contour.push(startingPoint);
+      visited.add(key(startingPoint));
+      const { currPoint, prevPoint } = findNextPoint(
+        mask,
+        startingPoint,
+        fakePrevious,
+      );
+      contour.push(currPoint);
+      visited.add(key(currPoint));
+      let backtrackPoint = prevPoint;
+      let currentPoint = currPoint;
+      while (
+        currentPoint.column !== startingPoint.column ||
+        currentPoint.row !== startingPoint.row
+      ) {
+        const currentPoints = findNextPoint(mask, currentPoint, backtrackPoint);
+        backtrackPoint = currentPoints.prevPoint;
+        currentPoint = currentPoints.currPoint;
+        if (!visited.has(key(currentPoint))) {
+          contour.push(currentPoint);
+          visited.add(key(currentPoint));
+        }
+      }
     }
   }
-  const col = index % mask.width;
-  const row = Math.floor(index / mask.width);
-  const startingPoint = { column: col, row };
-  const fakePrevious = { column: col - 1, row };
-  const contour = [startingPoint];
-  const { currPoint, prevPoint } = findNextPoint(
-    mask,
-    startingPoint,
-    fakePrevious,
-  );
-  contour.push(currPoint);
-  let backtrackPoint = prevPoint;
-  let currentPoint = currPoint;
-  while (
-    currentPoint.column !== startingPoint.column ||
-    currentPoint.row !== startingPoint.row
-  ) {
-    const currentPoints = findNextPoint(mask, currentPoint, backtrackPoint);
-    backtrackPoint = currentPoints.prevPoint;
-    currentPoint = currentPoints.currPoint;
-    contour.push(currentPoints.currPoint);
-  }
+
   return contour;
 }
 
@@ -100,4 +110,32 @@ function findNextPoint(
 
   // Should never happen for a valid closed contour
   throw new Error(`No next point found at (${current.column}, ${current.row})`);
+}
+
+function isBorderPixel(mask: Mask, col: number, row: number) {
+  if (getBitSafe(mask, col, row) !== 1) return false;
+
+  return (
+    getBitSafe(mask, col + 1, row) === 0 ||
+    getBitSafe(mask, col - 1, row) === 0 ||
+    getBitSafe(mask, col, row + 1) === 0 ||
+    getBitSafe(mask, col, row - 1) === 0
+  );
+}
+
+function findBackgroundNeighbor(mask: Mask, col: number, row: number): Point {
+  const candidates = [
+    { column: col - 1, row },
+    { column: col + 1, row },
+    { column: col, row: row - 1 },
+    { column: col, row: row + 1 },
+  ];
+
+  for (const p of candidates) {
+    if (getBitSafe(mask, p.column, p.row) === 0) {
+      return p;
+    }
+  }
+
+  throw new Error('No background neighbor found');
 }
