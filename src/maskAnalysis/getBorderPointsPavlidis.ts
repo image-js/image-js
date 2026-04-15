@@ -38,11 +38,10 @@ export function getBorderPointsPavlidis(
       if (mask.getBit(c, r) !== 1) continue;
       if (seen.has(`${r},${c}`)) continue;
 
-      const contour = traceFrom(mask, r, c, seen);
+      const contour = traceFrom(mask, c, r, seen);
       contours.push(...contour);
     }
   }
-
   return contours;
 }
 function traceFrom(
@@ -59,7 +58,6 @@ function traceFrom(
   const contour: Point[] = [];
 
   const start = { row, column };
-
   do {
     const key = `${row},${column}`;
     if (!seen.has(key)) {

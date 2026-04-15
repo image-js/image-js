@@ -23,6 +23,7 @@ export function getBorderPointsMoore(
   if (!innerBorders) {
     mask = mask.solidFill();
   }
+
   const contour: Point[] = [];
   const visited = new Set<string>();
   function key(p: Point) {
@@ -61,7 +62,6 @@ export function getBorderPointsMoore(
       }
     }
   }
-
   return contour;
 }
 
