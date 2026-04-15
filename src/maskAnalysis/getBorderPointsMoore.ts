@@ -42,8 +42,8 @@ export function getBorderPointsMoore(
       const { currPoint, prevPoint } = findNextPoint(
         mask,
         startingPoint,
-        fakePrevious,
-      );
+        fakePrevious as Point,
+      ) as { currPoint: Point; prevPoint: Point };
       contour.push(currPoint);
       visited.add(key(currPoint));
       let backtrackPoint = prevPoint;
@@ -53,8 +53,8 @@ export function getBorderPointsMoore(
         currentPoint.row !== startingPoint.row
       ) {
         const currentPoints = findNextPoint(mask, currentPoint, backtrackPoint);
-        backtrackPoint = currentPoints.prevPoint;
-        currentPoint = currentPoints.currPoint;
+        backtrackPoint = currentPoints?.prevPoint as Point;
+        currentPoint = currentPoints?.currPoint as Point;
         if (!visited.has(key(currentPoint))) {
           contour.push(currentPoint);
           visited.add(key(currentPoint));
@@ -69,7 +69,7 @@ function findNextPoint(
   mask: Mask,
   current: Point,
   previous: Point,
-): { prevPoint: Point; currPoint: Point } {
+): { prevPoint: Point; currPoint: Point } | void {
   let prevPoint = previous;
   const directions: Direction[] = [
     { dc: -1, dr: 0 }, // left
@@ -107,9 +107,6 @@ function findNextPoint(
       prevPoint = { column: newCol, row: newRow };
     }
   }
-
-  // Should never happen for a valid closed contour
-  throw new Error(`No next point found at (${current.column}, ${current.row})`);
 }
 
 function isBorderPixel(mask: Mask, col: number, row: number) {
@@ -123,7 +120,11 @@ function isBorderPixel(mask: Mask, col: number, row: number) {
   );
 }
 
-function findBackgroundNeighbor(mask: Mask, col: number, row: number): Point {
+function findBackgroundNeighbor(
+  mask: Mask,
+  col: number,
+  row: number,
+): Point | void {
   const candidates = [
     { column: col - 1, row },
     { column: col + 1, row },
@@ -136,6 +137,4 @@ function findBackgroundNeighbor(mask: Mask, col: number, row: number): Point {
       return p;
     }
   }
-
-  throw new Error('No background neighbor found');
 }
