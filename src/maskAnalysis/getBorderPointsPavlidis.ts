@@ -2,7 +2,7 @@ import type { Mask } from '../Mask.ts';
 import type { Point } from '../utils/geometry/points.ts';
 
 import type { GetBorderPointsOptions } from './maskAnalysis.types.ts';
-import { getBitSafe } from './utils/getBorderPointsUtils.ts';
+import { getBitSafe, makeVisitedArray } from './utils/getBorderPointsUtils.ts';
 
 type Direction = 0 | 1 | 2 | 3; // N, E, S, W
 
@@ -31,22 +31,16 @@ export function getBorderPointsPavlidis(
   if (!innerBorders) {
     mask = mask.solidFill();
   }
-  const contours: Point[] = [];
-  const seen = new Uint8Array(mask.width * mask.height);
-
-  for (let r = 0; r < mask.height; r++) {
-    for (let c = 0; c < mask.width; c++) {
-      const idx = r * mask.width + c;
-      if (mask.getBit(c, r) !== 1) continue;
-      if (seen[idx] === 1) continue;
-
-      const contour = traceFrom(mask, c, r, seen);
-      for (const p of contour) {
-        contours.push(p);
-      }
-    }
+  let index = 0;
+  while (mask.getBitByIndex(index) !== 1) {
+    index++;
   }
-  return contours;
+  const col = index % mask.width;
+  const row = Math.floor(index / mask.width);
+
+  const contour = traceFrom(mask, col, row);
+
+  return contour;
 }
 /**
  * Traces contour using Pavlidis algorithm.
@@ -56,18 +50,13 @@ export function getBorderPointsPavlidis(
  * @param seen - Array to track visited pixels.
  * @returns Array of contour points.
  */
-function traceFrom(
-  mask: Mask,
-  startCol: number,
-  startRow: number,
-  seen: Uint8Array,
-): Point[] {
+function traceFrom(mask: Mask, startCol: number, startRow: number): Point[] {
   let row = startRow;
   let column = startCol;
   let dir: Direction = getStartDirection(mask, column, row);
   // Fail safe in case algorithm starts turning in place.
   let inPlaceTurns = 0;
-
+  const seen = makeVisitedArray(mask);
   const contour: Point[] = [];
 
   do {
