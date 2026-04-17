@@ -25,7 +25,7 @@ function turnRight(d: Direction): Direction {
  */
 export function getBorderPointsPavlidis(
   mask: Mask,
-  options: GetBorderPointsOptions,
+  options: GetBorderPointsOptions = {},
 ): Point[] {
   const { innerBorders = false } = options;
   if (!innerBorders) {
