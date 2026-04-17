@@ -2,6 +2,7 @@ import type { Mask } from '../Mask.ts';
 import type { Point } from '../utils/geometry/points.ts';
 
 import type { GetBorderPointsOptions } from './maskAnalysis.types.ts';
+import { getBitSafe } from './utils/getBorderPointsUtils.ts';
 
 type Direction = 0 | 1 | 2 | 3; // N, E, S, W
 
@@ -47,6 +48,14 @@ export function getBorderPointsPavlidis(
   }
   return contours;
 }
+/**
+ * Traces contour using Pavlidis algorithm.
+ * @param mask - Mask in check.
+ * @param startCol - Starting column.
+ * @param startRow - Starting row.
+ * @param seen - Array to track visited pixels.
+ * @returns Array of contour points.
+ */
 function traceFrom(
   mask: Mask,
   startCol: number,
@@ -55,7 +64,8 @@ function traceFrom(
 ): Point[] {
   let row = startRow;
   let column = startCol;
-  let dir: Direction = 1;
+  let dir: Direction = getStartDirection(mask, column, row);
+  // Fail safe in case algorithm starts turning in place.
   let inPlaceTurns = 0;
 
   const contour: Point[] = [];
@@ -102,24 +112,10 @@ function traceFrom(
 
   return contour;
 }
-/**
- * Checks if the given column and row are within the bounds of the mask.
- * @param mask - Mask to check against.
- * @param col - Column index.
- * @param row - Row index.
- * @returns whether the given column and row are within the bounds of the mask.
- */
-function isInBounds(mask: Mask, col: number, row: number): boolean {
-  return col >= 0 && col < mask.width && row >= 0 && row < mask.height;
-}
 
-/**
- * Safely get the bit value at the given column and row in the mask, returning 0 if out of bounds.
- * @param mask - Mask to get the bit from.
- * @param col - Column index.
- * @param row - Row index.
- * @returns the bit value.
- */
-export function getBitSafe(mask: Mask, col: number, row: number): number {
-  return isInBounds(mask, col, row) ? mask.getBit(col, row) : 0;
+function getStartDirection(mask: Mask, col: number, row: number): Direction {
+  if (getBitSafe(mask, col, row - 1) === 0) return 2; // N is background, face S
+  if (getBitSafe(mask, col + 1, row) === 0) return 3; // E is background, face W
+  if (getBitSafe(mask, col, row + 1) === 0) return 0; // S is background, face N
+  return 1; // W is background, face E
 }

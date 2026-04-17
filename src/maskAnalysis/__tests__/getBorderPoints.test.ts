@@ -92,12 +92,12 @@ test('5x5 mask with hole, inner borders, allow corners', () => {
     { column: 0, row: 1 },
     { column: 1, row: 1 },
     { column: 2, row: 1 },
-    { column: 3, row: 1 },
     { column: 1, row: 2 },
-    { column: 3, row: 2 },
     { column: 1, row: 3 },
     { column: 2, row: 3 },
     { column: 3, row: 3 },
+    { column: 3, row: 2 },
+    { column: 3, row: 1 },
   ]);
   expect(bordersMask).toMatchMask(mask);
 });
@@ -123,5 +123,5 @@ test('5x6 mask with hole, inner borders', () => {
     [1, 1, 0, 0, 1],
     [1, 1, 1, 1, 0],
   ]);
-  expect(points).toHaveLength(20);
+  expect(points).toHaveLength(19);
 });
