@@ -33,6 +33,21 @@ test('5x6 mask with hole, no inner borders', () => {
 
   const bordersMask = Mask.fromPoints(mask.width, mask.height, points);
 
+  expect(points).toStrictEqual([
+    { column: 0, row: 1 },
+    { column: 1, row: 1 },
+    { column: 2, row: 1 },
+    { column: 3, row: 1 },
+    { column: 4, row: 1 },
+    { column: 3, row: 2 },
+    { column: 3, row: 3 },
+    { column: 4, row: 4 },
+    { column: 3, row: 4 },
+    { column: 2, row: 4 },
+    { column: 1, row: 4 },
+    { column: 1, row: 3 },
+    { column: 1, row: 2 },
+  ]);
   expect(bordersMask).toMatchMaskData([
     [0, 0, 0, 0, 0],
     [1, 1, 1, 1, 1],
@@ -56,9 +71,34 @@ test('5x5 mask with hole, inner borders, allow corners', () => {
     innerBorders: true,
     allowCorners: true,
   });
-
   const bordersMask = Mask.fromPoints(mask.width, mask.height, points);
 
+  expect(points).toStrictEqual([
+    { column: 0, row: 0 },
+    { column: 1, row: 0 },
+    { column: 2, row: 0 },
+    { column: 3, row: 0 },
+    { column: 4, row: 0 },
+    { column: 4, row: 1 },
+    { column: 4, row: 2 },
+    { column: 4, row: 3 },
+    { column: 4, row: 4 },
+    { column: 3, row: 4 },
+    { column: 2, row: 4 },
+    { column: 1, row: 4 },
+    { column: 0, row: 4 },
+    { column: 0, row: 3 },
+    { column: 0, row: 2 },
+    { column: 0, row: 1 },
+    { column: 1, row: 1 },
+    { column: 2, row: 1 },
+    { column: 3, row: 1 },
+    { column: 1, row: 2 },
+    { column: 3, row: 2 },
+    { column: 1, row: 3 },
+    { column: 2, row: 3 },
+    { column: 3, row: 3 },
+  ]);
   expect(bordersMask).toMatchMask(mask);
 });
 
