@@ -112,7 +112,13 @@ function traceFrom(
 
   return contour;
 }
-
+/**
+ * Get starting point to trace contour.
+ * @param mask - Mask in check.
+ * @param col - Pixel column.
+ * @param row - Pixel row.
+ * @returns direction.
+ */
 function getStartDirection(mask: Mask, col: number, row: number): Direction {
   if (getBitSafe(mask, col, row - 1) === 0) return 2; // N is background, face S
   if (getBitSafe(mask, col + 1, row) === 0) return 3; // E is background, face W

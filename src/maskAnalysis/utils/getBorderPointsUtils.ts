@@ -24,7 +24,7 @@ function isInBounds(mask: Mask, col: number, row: number): boolean {
 }
 /**
  * Creates an array to track visited pixels.
- * @param mask - mask to
+ * @param mask - Mask to get array size from.
  * @returns Uint8Array
  */
 export function makeVisitedArray(mask: Mask): Uint8Array {

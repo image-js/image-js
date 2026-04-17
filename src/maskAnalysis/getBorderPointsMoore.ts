@@ -5,7 +5,13 @@ import type { GetBorderPointsOptions } from './maskAnalysis.types.js';
 import { getBitSafe, makeVisitedArray } from './utils/getBorderPointsUtils.ts';
 
 interface Direction {
+  /**
+   * Horizontal direction change.
+   */
   dc: number;
+  /**
+   * Vertical direction change.
+   */
   dr: number;
 }
 /**
@@ -125,7 +131,13 @@ function isBorderPixel(mask: Mask, col: number, row: number) {
     getBitSafe(mask, col, row - 1) === 0
   );
 }
-
+/**
+ * Finds closest background neighbor to the border
+ * @param mask - Mask in check.
+ * @param col - Pixel column.
+ * @param row - Pixel row.
+ * @returns - Closest background point or fails silently.
+ */
 function findBackgroundNeighbor(
   mask: Mask,
   col: number,
