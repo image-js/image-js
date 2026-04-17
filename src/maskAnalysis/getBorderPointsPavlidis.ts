@@ -31,15 +31,18 @@ export function getBorderPointsPavlidis(
     mask = mask.solidFill();
   }
   const contours: Point[] = [];
-  const seen = new Set<string>();
+  const seen = new Uint8Array(mask.width * mask.height);
 
   for (let r = 0; r < mask.height; r++) {
     for (let c = 0; c < mask.width; c++) {
+      const idx = r * mask.width + c;
       if (mask.getBit(c, r) !== 1) continue;
-      if (seen.has(`${r},${c}`)) continue;
+      if (seen[idx] === 1) continue;
 
       const contour = traceFrom(mask, c, r, seen);
-      contours.push(...contour);
+      for (const p of contour) {
+        contours.push(p);
+      }
     }
   }
   return contours;
@@ -48,7 +51,7 @@ function traceFrom(
   mask: Mask,
   startCol: number,
   startRow: number,
-  seen: Set<string>,
+  seen: Uint8Array,
 ): Point[] {
   let row = startRow;
   let column = startCol;
@@ -57,11 +60,10 @@ function traceFrom(
 
   const contour: Point[] = [];
 
-  const start = { row, column };
   do {
-    const key = `${row},${column}`;
-    if (!seen.has(key)) {
-      seen.add(key);
+    const idx = row * mask.width + column;
+    if (!seen[idx]) {
+      seen[idx] = 1;
       contour.push({ row, column });
     }
 
@@ -96,75 +98,10 @@ function traceFrom(
       inPlaceTurns++;
       if (inPlaceTurns >= 4) break;
     }
-  } while (row !== start.row || column !== start.column);
-
-  return contour;
-} /*
-  // Find first foreground pixel
-  let startRow = -1;
-  let startCol = -1;
-  for (let r = 0; r < mask.height; r++) {
-    for (let c = 0; c < mask.width; c++) {
-      if (mask.getBit(c, r) === 1) {
-        startRow = r;
-        startCol = c;
-        break;
-      }
-    }
-    if (startRow !== -1) break;
-  }
-
-  if (startRow === -1) return [];
-
-  const contour: Point[] = [];
-  const seen = new Set<string>();
-  let row = startRow;
-  let column = startCol;
-  let dir: Direction = 1; // start facing East
-  let inPlaceTurns = 0;
-
-  do {
-    // add point if not already seen
-    const key = `${row},${column}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      contour.push({ row, column });
-    }
-
-    const left = turnLeft(dir);
-    const right = turnRight(dir);
-
-    const c1r = row + DR[left];
-    const c1c = column + DC[left];
-    const c2r = row + DR[dir];
-    const c2c = column + DC[dir];
-    const c3r = row + DR[right];
-    const c3c = column + DC[right];
-
-    if (getBitSafe(mask, c1c, c1r) === 1) {
-      dir = left;
-      row = c1r;
-      column = c1c;
-      inPlaceTurns = 0;
-    } else if (getBitSafe(mask, c2c, c2r) === 1) {
-      row = c2r;
-      column = c2c;
-      inPlaceTurns = 0;
-    } else if (getBitSafe(mask, c3c, c3r) === 1) {
-      dir = right;
-      row = c3r;
-      column = c3c;
-      inPlaceTurns = 0;
-    } else {
-      // no neighbor found, turn right in place
-      dir = right;
-      inPlaceTurns++;
-      if (inPlaceTurns >= 4) break; // isolated pixel
-    }
   } while (row !== startRow || column !== startCol);
 
   return contour;
-}*/
+}
 /**
  * Checks if the given column and row are within the bounds of the mask.
  * @param mask - Mask to check against.

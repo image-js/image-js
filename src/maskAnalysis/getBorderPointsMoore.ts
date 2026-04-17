@@ -25,39 +25,47 @@ export function getBorderPointsMoore(
   }
 
   const contour: Point[] = [];
-  const visited = new Set<string>();
-  function key(p: Point) {
-    return `${p.column},${p.row}`;
-  }
-  for (let index = 0; index < mask.size; index++) {
-    const col = index % mask.width;
-    const row = Math.floor(index / mask.width);
-    const p = { column: col, row };
+  const visited = new Uint8Array(mask.width * mask.height);
 
-    if (isBorderPixel(mask, col, row) && !visited.has(key(p))) {
-      const startingPoint = p;
-      const fakePrevious = findBackgroundNeighbor(mask, col, row);
-      contour.push(startingPoint);
-      visited.add(key(startingPoint));
-      const { currPoint, prevPoint } = findNextPoint(
-        mask,
-        startingPoint,
-        fakePrevious as Point,
-      ) as { currPoint: Point; prevPoint: Point };
-      contour.push(currPoint);
-      visited.add(key(currPoint));
-      let backtrackPoint = prevPoint;
-      let currentPoint = currPoint;
-      while (
-        currentPoint.column !== startingPoint.column ||
-        currentPoint.row !== startingPoint.row
-      ) {
-        const currentPoints = findNextPoint(mask, currentPoint, backtrackPoint);
-        backtrackPoint = currentPoints?.prevPoint as Point;
-        currentPoint = currentPoints?.currPoint as Point;
-        if (!visited.has(key(currentPoint))) {
-          contour.push(currentPoint);
-          visited.add(key(currentPoint));
+  function isVisited(p: Point) {
+    return visited[p.row * mask.width + p.column] === 1;
+  }
+  function markVisited(p: Point) {
+    visited[p.row * mask.width + p.column] = 1;
+  }
+
+  for (let row = 0; row < mask.height; row++) {
+    for (let col = 0; col < mask.width; col++) {
+      const p = { column: col, row };
+      if (isBorderPixel(mask, col, row) && !isVisited(p)) {
+        const startingPoint = p;
+        const fakePrevious = findBackgroundNeighbor(mask, col, row);
+        contour.push(startingPoint);
+        markVisited(startingPoint);
+        const { currPoint, prevPoint } = findNextPoint(
+          mask,
+          startingPoint,
+          fakePrevious as Point,
+        ) as { currPoint: Point; prevPoint: Point };
+        contour.push(currPoint);
+        markVisited(currPoint);
+        let backtrackPoint = prevPoint;
+        let currentPoint = currPoint;
+        while (
+          currentPoint.column !== startingPoint.column ||
+          currentPoint.row !== startingPoint.row
+        ) {
+          const currentPoints = findNextPoint(
+            mask,
+            currentPoint,
+            backtrackPoint,
+          );
+          backtrackPoint = currentPoints?.prevPoint as Point;
+          currentPoint = currentPoints?.currPoint as Point;
+          if (!isVisited(currentPoint)) {
+            contour.push(currentPoint);
+            markVisited(currentPoint);
+          }
         }
       }
     }
