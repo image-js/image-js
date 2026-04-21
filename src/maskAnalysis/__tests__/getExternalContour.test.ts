@@ -183,6 +183,18 @@ test('empty mask', () => {
   expect(contour).toStrictEqual([]);
 });
 
+test('empty mask with Pavlidis', () => {
+  const mask = testUtils.createMask([
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ]);
+
+  const contour = getExternalContour(mask, { connectivity: 4 });
+
+  expect(contour).toStrictEqual([]);
+});
+
 test('5x6 mask with hole, no inner borders', () => {
   const mask = testUtils.createMask([
     [0, 0, 0, 0, 0],

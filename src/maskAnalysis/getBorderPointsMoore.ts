@@ -26,6 +26,12 @@ const directions: Direction[] = [
   { dc: 0, dr: 1 }, // down
   { dc: -1, dr: 1 }, // down-left
 ];
+
+const directionIndexLookup = new Int8Array(9).fill(-1);
+for (let i = 0; i < directions.length; i++) {
+  const { dc, dr } = directions[i];
+  directionIndexLookup[(dr + 1) * 3 + (dc + 1)] = i;
+}
 /**
  * Return an array with the coordinates of the pixels that are on the border of the mask using Moore's tracing algorithm.
  * The reference is the top-left corner of the ROI.
@@ -107,10 +113,7 @@ function findNextPoint(
   const backDc = previous.column - current.column;
   const backDr = previous.row - current.row;
 
-  // Find where that direction is in the array
-  const startIndex = directions.findIndex(
-    ({ dc, dr }) => dc === backDc && dr === backDr,
-  );
+  const startIndex = directionIndexLookup[(backDr + 1) * 3 + (backDc + 1)];
 
   // Scan clockwise starting from that index.
   for (let i = 0; i < directions.length; i++) {

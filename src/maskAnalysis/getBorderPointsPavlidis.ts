@@ -25,9 +25,10 @@ function turnRight(d: Direction): Direction {
  */
 export function getBorderPointsPavlidis(mask: Mask): Point[] {
   let index = 0;
-  while (mask.getBitByIndex(index) !== 1) {
+  while (index < mask.size && mask.getBitByIndex(index) !== 1) {
     index++;
   }
+  if (index === mask.size) return [];
   const col = index % mask.width;
   const row = Math.floor(index / mask.width);
 
