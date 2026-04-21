@@ -1,7 +1,7 @@
 import type { Mask } from '../Mask.js';
 import type { Point } from '../utils/geometry/points.js';
 
-import { getBitSafe, makeVisitedArray } from './utils/getBorderPointsUtils.ts';
+import { getBitSafe } from './utils/getBorderPointsUtils.js';
 
 interface Direction {
   /**
@@ -36,40 +36,56 @@ export function getBorderPointsMoore(mask: Mask): Point[] {
   let index = 0;
 
   const contour: Point[] = [];
-  const visited = makeVisitedArray(mask);
-
-  while (mask.getBitByIndex(index) !== 1) {
+  const visited = new Uint8Array(mask.width * mask.height);
+  while (mask.getBitByIndex(index) !== 1 && index !== mask.size) {
     index++;
   }
+
+  if (index === mask.size) return contour;
   const col = index % mask.width;
   const row = Math.floor(index / mask.width);
-
   const startingPoint = { column: col, row };
-  const startingBacktrackPoint = { column: col - 1, row };
   let currentPoint = startingPoint;
+
   let idx = currentPoint.row * mask.width + currentPoint.column;
   visited[idx] = 1;
   contour.push(currentPoint);
-  let backtrackPoint = startingBacktrackPoint;
-  do {
+
+  const firstNext = findNextPoint(mask, currentPoint, { column: col - 1, row });
+  if (!firstNext) {
+    return contour;
+  }
+
+  const startingBacktrackPoints: Point[] = [firstNext.prevPoint];
+
+  let backtrackPoint = firstNext.prevPoint;
+  currentPoint = firstNext.currPoint;
+
+  while (true) {
     idx = currentPoint.row * mask.width + currentPoint.column;
     if (!visited[idx]) {
       visited[idx] = 1;
       contour.push(currentPoint);
     }
+
     const next = findNextPoint(mask, currentPoint, backtrackPoint);
-    backtrackPoint = next.prevPoint;
-    currentPoint = next.currPoint;
-  } while (
-    !(
+    backtrackPoint = next?.prevPoint as Point;
+    currentPoint = next?.currPoint as Point;
+    if (
       currentPoint.column === startingPoint.column &&
       currentPoint.row === startingPoint.row
-    ) ||
-    !(
-      backtrackPoint.column === startingBacktrackPoint.column &&
-      backtrackPoint.row === startingBacktrackPoint.row
-    )
-  );
+    ) {
+      if (
+        backtrackPoint.column ===
+          (startingBacktrackPoints.at(-1) as Point).column &&
+        backtrackPoint.row === (startingBacktrackPoints.at(-1) as Point).row
+      ) {
+        break;
+      } else {
+        startingBacktrackPoints.push(backtrackPoint);
+      }
+    }
+  }
 
   return contour;
 }
@@ -84,7 +100,7 @@ function findNextPoint(
   mask: Mask,
   current: Point,
   previous: Point,
-): { prevPoint: Point; currPoint: Point } {
+): { prevPoint: Point; currPoint: Point } | void {
   let prevPoint = previous;
 
   // Vector from current back to previous
@@ -97,7 +113,7 @@ function findNextPoint(
   );
 
   // Scan clockwise starting from that index.
-  for (let i = 0; i <= directions.length; i++) {
+  for (let i = 0; i < directions.length; i++) {
     const { dc, dr } = directions.at(
       (startIndex + i) % directions.length,
     ) as Direction;
@@ -115,7 +131,4 @@ function findNextPoint(
       prevPoint = { column: newCol, row: newRow };
     }
   }
-  // Only gets triggered if there is a bug. The function gets called only when
-  // contour is found.
-  throw new RangeError('No border point is found');
 }

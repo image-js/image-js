@@ -1,4 +1,4 @@
-import type { Mask } from '../../Mask.js';
+import type { Mask } from '../../Mask.ts';
 
 /**
  * Safely get the bit value at the given column and row in the mask, returning 0 if out of bounds.
@@ -21,12 +21,4 @@ export function getBitSafe(mask: Mask, col: number, row: number): number {
  */
 function isInBounds(mask: Mask, col: number, row: number): boolean {
   return col >= 0 && col < mask.width && row >= 0 && row < mask.height;
-}
-/**
- * Creates an array to track visited pixels.
- * @param mask - Mask to get array size from.
- * @returns Uint8Array
- */
-export function makeVisitedArray(mask: Mask): Uint8Array {
-  return new Uint8Array(mask.width * mask.height);
 }

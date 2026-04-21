@@ -1,8 +1,7 @@
 import type { Mask } from '../Mask.ts';
 import type { Point } from '../utils/geometry/points.ts';
 
-import type { GetBorderPointsOptions } from './maskAnalysis.types.ts';
-import { getBitSafe, makeVisitedArray } from './utils/getBorderPointsUtils.ts';
+import { getBitSafe } from './utils/getBorderPointsUtils.ts';
 
 type Direction = 0 | 1 | 2 | 3; // N, E, S, W
 
@@ -16,21 +15,16 @@ function turnLeft(d: Direction): Direction {
 function turnRight(d: Direction): Direction {
   return ((d + 1) % 4) as Direction;
 }
+
 /**
- * Return an array with the coordinates of the pixels that are on the border of the mask using Theo Pavlidis's tracing algorithm.
+ * Return an array with the coordinates of the pixels that are on the
+ * external border of the mask using Theo Pavlidis's tracing algorithm.
  * The reference is the top-left corner of the ROI.
  * @param mask - Mask to process.
- * @param options - Get border points options.
- * @returns The array of border pixels.
+ * @returns The array of external border pixels.
  */
-export function getBorderPointsPavlidis(
-  mask: Mask,
-  options: GetBorderPointsOptions = {},
-): Point[] {
-  const { innerBorders = false } = options;
-  if (!innerBorders) {
-    mask = mask.solidFill();
-  }
+export function getBorderPointsPavlidis(mask: Mask): Point[] {
+
   let index = 0;
   while (mask.getBitByIndex(index) !== 1) {
     index++;
@@ -38,25 +32,22 @@ export function getBorderPointsPavlidis(
   const col = index % mask.width;
   const row = Math.floor(index / mask.width);
 
-  const contour = traceFrom(mask, col, row);
-
-  return contour;
+  return traceFrom(mask, col, row);
 }
+
 /**
  * Traces contour using Pavlidis algorithm.
  * @param mask - Mask in check.
  * @param startCol - Starting column.
  * @param startRow - Starting row.
- * @param seen - Array to track visited pixels.
  * @returns Array of contour points.
  */
 function traceFrom(mask: Mask, startCol: number, startRow: number): Point[] {
   let row = startRow;
   let column = startCol;
   let dir: Direction = getStartDirection(mask, column, row);
-  // Fail safe in case algorithm starts turning in place.
   let inPlaceTurns = 0;
-  const seen = makeVisitedArray(mask);
+  const seen = new Uint8Array(mask.width * mask.height);
   const contour: Point[] = [];
 
   do {
@@ -101,12 +92,13 @@ function traceFrom(mask: Mask, startCol: number, startRow: number): Point[] {
 
   return contour;
 }
+
 /**
- * Get starting point to trace contour.
+ * Get starting direction to trace contour.
  * @param mask - Mask in check.
  * @param col - Pixel column.
  * @param row - Pixel row.
- * @returns direction.
+ * @returns Direction.
  */
 function getStartDirection(mask: Mask, col: number, row: number): Direction {
   if (getBitSafe(mask, col, row - 1) === 0) return 2; // N is background, face S
