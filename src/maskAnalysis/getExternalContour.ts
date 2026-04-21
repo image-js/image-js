@@ -19,11 +19,7 @@ export function getExternalContour(
   const { connectivity = 8 } = options;
   if (connectivity === 4) {
     return getBorderPointsPavlidis(mask);
-  } else if (connectivity === 8) {
-    return getBorderPointsMoore(mask);
   } else {
-    throw new Error(
-      `Invalid connectivity parameter.Acceptable value are 4 and 8. Given value is ${connectivity}`,
-    );
+    return getBorderPointsMoore(mask);
   }
 }
