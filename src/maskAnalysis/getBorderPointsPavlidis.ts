@@ -24,7 +24,6 @@ function turnRight(d: Direction): Direction {
  * @returns The array of external border pixels.
  */
 export function getBorderPointsPavlidis(mask: Mask): Point[] {
-
   let index = 0;
   while (mask.getBitByIndex(index) !== 1) {
     index++;
