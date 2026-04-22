@@ -26,7 +26,7 @@ const directions: Direction[] = [
   { dc: 0, dr: 1 }, // down
   { dc: -1, dr: 1 }, // down-left
 ];
-
+// Lookup table for directions' index.
 const directionIndexLookup = new Int8Array(9).fill(-1);
 for (let i = 0; i < directions.length; i++) {
   const { dc, dr } = directions[i];
