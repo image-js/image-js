@@ -23,27 +23,7 @@ test('square', () => {
   ]);
 });
 
-test('square with Pavlidis', () => {
-  const testMask = testUtils.createMask([
-    [1, 1, 1],
-    [1, 0, 1],
-    [1, 1, 1],
-  ]);
-  const points = getExternalContour(testMask, { connectivity: 4 });
-
-  expect(points).toStrictEqual([
-    { column: 0, row: 0 },
-    { column: 1, row: 0 },
-    { column: 2, row: 0 },
-    { column: 2, row: 1 },
-    { column: 2, row: 2 },
-    { column: 1, row: 2 },
-    { column: 0, row: 2 },
-    { column: 0, row: 1 },
-  ]);
-});
-
-test('random shape', () => {
+test('random shape with 8-connectivity', () => {
   const mask = testUtils.createMask([
     [0, 0, 1, 0, 0],
     [0, 0, 1, 0, 0],
@@ -64,7 +44,26 @@ test('random shape', () => {
   ]);
 });
 
-test('5x6 mask with hole, no inner borders', () => {
+test('random shape with 4-connectivity', () => {
+  const mask = testUtils.createMask([
+    [0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0],
+    [0, 0, 1, 1, 1],
+    [0, 1, 0, 0, 0],
+    [1, 0, 0, 0, 0],
+  ]);
+  const points = getExternalContour(mask, { connectivity: 4 });
+
+  expect(points).toStrictEqual([
+    { column: 2, row: 0 },
+    { column: 2, row: 1 },
+    { column: 2, row: 2 },
+    { column: 3, row: 2 },
+    { column: 4, row: 2 },
+  ]);
+});
+
+test('5x6 mask with hole with 4-connectivity', () => {
   const mask = testUtils.createMask([
     [0, 0, 0, 0, 0],
     [1, 1, 1, 1, 1],
@@ -73,7 +72,7 @@ test('5x6 mask with hole, no inner borders', () => {
     [0, 1, 1, 1, 1],
     [0, 0, 0, 0, 0],
   ]);
-  const points = getExternalContour(mask);
+  const points = getExternalContour(mask, { connectivity: 4 });
 
   const bordersMask = Mask.fromPoints(mask.width, mask.height, points);
 
