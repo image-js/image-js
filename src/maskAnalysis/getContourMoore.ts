@@ -1,7 +1,7 @@
-import type { Mask } from '../Mask.js';
-import type { Point } from '../utils/geometry/points.js';
+import type { Mask } from '../Mask.ts';
+import type { Point } from '../utils/geometry/points.ts';
 
-import { getBitSafe } from './utils/getBorderPointsUtils.js';
+import { getBitSafe } from './utils/getBorderPointsUtils.ts';
 
 interface Direction {
   /**
@@ -38,7 +38,7 @@ for (let i = 0; i < directions.length; i++) {
  * @param mask - Mask to process.
  * @returns The array of border pixels.
  */
-export function getBorderPointsMoore(mask: Mask): Point[] {
+export function getContourMoore(mask: Mask): Point[] {
   let index = 0;
 
   const contour: Point[] = [];
