@@ -1,4 +1,13 @@
 import type { Mask } from '../../Mask.ts';
+/**
+ * Gets point's row and column from their index and mask width.
+ * @param index - point's index.
+ * @param maskWidth - mask width.
+ * @returns array of point's row and column.
+ */
+export function getCoordsFromIndex(index: number, maskWidth: number) {
+  return [Math.floor(index / maskWidth), index % maskWidth];
+}
 
 /**
  * Safely get the bit value at the given column and row in the mask, returning 0 if out of bounds.

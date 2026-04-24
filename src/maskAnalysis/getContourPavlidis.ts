@@ -1,7 +1,10 @@
 import type { Mask } from '../Mask.ts';
 import type { Point } from '../utils/geometry/points.ts';
 
-import { getBitSafe } from './utils/getBorderPointsUtils.ts';
+import {
+  getBitSafe,
+  getCoordsFromIndex,
+} from './utils/getExternalContourUtils.ts';
 
 type Direction = 0 | 1 | 2 | 3; // N, E, S, W
 
@@ -29,8 +32,7 @@ export function getContourPavlidis(mask: Mask): Point[] {
     index++;
   }
   if (index === mask.size) return [];
-  const col = index % mask.width;
-  const row = Math.floor(index / mask.width);
+  const [row, col] = getCoordsFromIndex(index, mask.width);
 
   return traceFrom(mask, col, row);
 }

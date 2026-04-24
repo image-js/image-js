@@ -3,7 +3,10 @@ import assert from 'node:assert';
 import type { Mask } from '../Mask.ts';
 import type { Point } from '../utils/geometry/points.ts';
 
-import { getBitSafe } from './utils/getBorderPointsUtils.ts';
+import {
+  getBitSafe,
+  getCoordsFromIndex,
+} from './utils/getExternalContourUtils.ts';
 
 interface Direction {
   /**
@@ -50,8 +53,7 @@ export function getContourMoore(mask: Mask): Point[] {
   }
 
   if (index === mask.size) return contour;
-  const col = index % mask.width;
-  const row = Math.floor(index / mask.width);
+  const [row, col] = getCoordsFromIndex(index, mask.width);
   const startingPoint = { column: col, row };
   let currentPoint = startingPoint;
 
