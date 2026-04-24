@@ -9,7 +9,7 @@ test('square', () => {
     [1, 0, 1],
     [1, 1, 1],
   ]);
-  const points = getExternalContour(testMask);
+  const points = testMask.getExternalContour();
 
   expect(points).toStrictEqual([
     { column: 0, row: 0 },
