@@ -22,7 +22,7 @@ test('1 pixel ROI', () => {
     [0, 0, 0],
   ]);
 
-  const points= getContourPavlidis(mask);
+  const points = getContourPavlidis(mask);
 
   expect(points).toBeDeepCloseTo([{ column: 2, row: 1 }]);
 });
