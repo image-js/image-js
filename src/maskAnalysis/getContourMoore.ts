@@ -1,3 +1,5 @@
+import assert from 'node:assert';
+
 import type { Mask } from '../Mask.ts';
 import type { Point } from '../utils/geometry/points.ts';
 
@@ -53,8 +55,7 @@ export function getContourMoore(mask: Mask): Point[] {
   const startingPoint = { column: col, row };
   let currentPoint = startingPoint;
 
-  let idx = currentPoint.row * mask.width + currentPoint.column;
-  visited[idx] = 1;
+  visited[index] = 1;
   contour.push(currentPoint);
 
   const firstNext = findNextPoint(mask, currentPoint, { column: col - 1, row });
@@ -62,33 +63,33 @@ export function getContourMoore(mask: Mask): Point[] {
     return contour;
   }
 
-  const startingBacktrackPoints: Point[] = [firstNext.prevPoint];
+  let startingBacktrackPoint: Point = firstNext.prevPoint;
 
   let backtrackPoint = firstNext.prevPoint;
   currentPoint = firstNext.currPoint;
 
   while (true) {
-    idx = currentPoint.row * mask.width + currentPoint.column;
-    if (!visited[idx]) {
-      visited[idx] = 1;
+    index = currentPoint.row * mask.width + currentPoint.column;
+    if (!visited[index]) {
+      visited[index] = 1;
       contour.push(currentPoint);
     }
 
     const next = findNextPoint(mask, currentPoint, backtrackPoint);
-    backtrackPoint = next?.prevPoint as Point;
-    currentPoint = next?.currPoint as Point;
+    assert.ok(next, 'Next border point is undefined.');
+    backtrackPoint = next.prevPoint;
+    currentPoint = next.currPoint;
     if (
       currentPoint.column === startingPoint.column &&
       currentPoint.row === startingPoint.row
     ) {
       if (
-        backtrackPoint.column ===
-          (startingBacktrackPoints.at(-1) as Point).column &&
-        backtrackPoint.row === (startingBacktrackPoints.at(-1) as Point).row
+        backtrackPoint.column === startingBacktrackPoint.column &&
+        backtrackPoint.row === startingBacktrackPoint.row
       ) {
         break;
       } else {
-        startingBacktrackPoints.push(backtrackPoint);
+        startingBacktrackPoint = backtrackPoint;
       }
     }
   }
@@ -106,7 +107,7 @@ function findNextPoint(
   mask: Mask,
   current: Point,
   previous: Point,
-): { prevPoint: Point; currPoint: Point } | void {
+): { prevPoint: Point; currPoint: Point } | undefined {
   let prevPoint = previous;
 
   // Vector from current back to previous
@@ -134,4 +135,7 @@ function findNextPoint(
       prevPoint = { column: newCol, row: newRow };
     }
   }
+  // Is triggered only if the point has no neighbours. So it is undefined
+  // only if mask is made of one pixel.
+  return undefined;
 }

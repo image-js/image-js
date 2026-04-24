@@ -22,9 +22,9 @@ test('1 pixel ROI', () => {
     [0, 0, 0],
   ]);
 
-  const convexHull = getContourMoore(mask);
+  const points = getContourMoore(mask);
 
-  expect(convexHull).toBeDeepCloseTo([{ column: 2, row: 1 }]);
+  expect(points).toBeDeepCloseTo([{ column: 2, row: 1 }]);
 });
 
 test('horizontal line', () => {
