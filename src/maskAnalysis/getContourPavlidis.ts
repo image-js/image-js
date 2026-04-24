@@ -47,16 +47,22 @@ export function getContourPavlidis(mask: Mask): Point[] {
 function traceFrom(mask: Mask, startCol: number, startRow: number): Point[] {
   let row = startRow;
   let column = startCol;
-  let dir: Direction = getStartDirection(mask, column, row);
+  let dir: Direction = 2;
   let inPlaceTurns = 0;
   const seen = new Uint8Array(mask.width * mask.height);
   const contour: Point[] = [];
-
-  do {
+  let visits = 0;
+  while (true) {
     const idx = row * mask.width + column;
     if (!seen[idx]) {
       seen[idx] = 1;
       contour.push({ row, column });
+    } else if (row === startRow && column === startCol) {
+      if (visits === 2) {
+        break;
+      } else {
+        visits++;
+      }
     }
 
     const left = turnLeft(dir);
@@ -90,21 +96,7 @@ function traceFrom(mask: Mask, startCol: number, startRow: number): Point[] {
       inPlaceTurns++;
       if (inPlaceTurns >= 4) break;
     }
-  } while (row !== startRow || column !== startCol);
+  }
 
   return contour;
-}
-
-/**
- * Get starting direction to trace contour.
- * @param mask - Mask in check.
- * @param col - Pixel column.
- * @param row - Pixel row.
- * @returns Direction.
- */
-function getStartDirection(mask: Mask, col: number, row: number): Direction {
-  if (getBitSafe(mask, col, row - 1) === 0) return 2; // N is background, face S
-  if (getBitSafe(mask, col + 1, row) === 0) return 3; // E is background, face W
-  if (getBitSafe(mask, col, row + 1) === 0) return 0; // S is background, face N
-  return 1; // W is background, face E
 }
