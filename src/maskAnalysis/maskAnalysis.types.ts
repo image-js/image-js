@@ -70,12 +70,18 @@ export interface Mbr {
 
 export interface GetBorderPointsOptions {
   /**
-   * Should the inner borders be returned too?
+   * Whether to include borders around holes inside the mask.
+   * When `false`, the mask is solid-filled before processing, so only the outer contour is returned.
+   * When `true`, pixels bordering interior holes are returned as well.
    * @default `false`
    */
   innerBorders?: boolean;
   /**
-   * Consider pixels connected by corners?
+   * Whether to use 8-connectivity instead of 4-connectivity when detecting border pixels.
+   * When `false`, a pixel is considered a border only if at least one of its 4 orthogonal
+   * neighbors (up, down, left, right) is unset.
+   * When `true`, diagonal neighbors are also considered, so a pixel touching an unset pixel
+   * only by a corner is also returned as a border point.
    * @default `false`
    */
   allowCorners?: boolean;

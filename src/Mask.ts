@@ -19,6 +19,8 @@ import type { AndOptions, InvertOptions, OrOptions } from './filters/index.js';
 import { and, invert, or } from './filters/index.js';
 import { getBorderPoints } from './maskAnalysis/getBorderPoints.js';
 import { getConvexHull } from './maskAnalysis/getConvexHull.js';
+import type { GetExternalContourOptions } from './maskAnalysis/getExternalContour.ts';
+import { getExternalContour } from './maskAnalysis/getExternalContour.ts';
 import { getFeret } from './maskAnalysis/getFeret.js';
 import { getMbr } from './maskAnalysis/getMbr.js';
 import type {
@@ -501,6 +503,16 @@ export class Mask {
    */
   public getBorderPoints(options?: GetBorderPointsOptions): Point[] {
     return getBorderPoints(this, options);
+  }
+
+  /**
+   * Returns external contour of the mask. Unlike border points, returned points
+   * follow the shape of the mask.
+   * @param options - Get external contour options.
+   * @returns Array of contour points.
+   */
+  public getExternalContour(options?: GetExternalContourOptions) {
+    return getExternalContour(this, options);
   }
 
   /**

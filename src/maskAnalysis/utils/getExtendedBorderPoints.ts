@@ -1,5 +1,6 @@
 import type { Mask } from '../../Mask.js';
 import type { Point } from '../../utils/geometry/points.js';
+import { getExternalContour } from '../getExternalContour.ts';
 
 /**
  * Get the pixels that surround an ROI. The pixels include the top and left borders,
@@ -10,10 +11,7 @@ import type { Point } from '../../utils/geometry/points.js';
  * @returns - The array of points.
  */
 export function getExtendedBorderPoints(mask: Mask): Point[] {
-  const borderPoints = mask.getBorderPoints({
-    allowCorners: true,
-    innerBorders: false,
-  });
+  const borderPoints = getExternalContour(mask);
 
   const result: Point[] = [];
 
