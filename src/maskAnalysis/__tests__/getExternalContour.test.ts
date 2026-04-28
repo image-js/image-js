@@ -23,6 +23,26 @@ test('square', () => {
   ]);
 });
 
+test('filled square with 4-connectivity', () => {
+  const testMask = testUtils.createMask([
+    [1, 1, 1],
+    [1, 1, 1],
+    [1, 1, 1],
+  ]);
+  const points = testMask.getExternalContour({ connectivity: 4 });
+
+  expect(points).toStrictEqual([
+    { column: 0, row: 0 },
+    { column: 1, row: 0 },
+    { column: 2, row: 0 },
+    { column: 2, row: 1 },
+    { column: 2, row: 2 },
+    { column: 1, row: 2 },
+    { column: 0, row: 2 },
+    { column: 0, row: 1 },
+  ]);
+});
+
 test('random shape with 8-connectivity', () => {
   const mask = testUtils.createMask([
     [0, 0, 1, 0, 0],

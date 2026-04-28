@@ -115,3 +115,60 @@ test('5x6 mask with hole', () => {
     [1, 1, 1, 1, 0],
   ]);
 });
+
+test('concave shape', () => {
+  const testMask = testUtils.createMask([
+    [1, 1, 1],
+    [1, 0, 1],
+    [1, 0, 1],
+  ]);
+  const points = getContourMoore(testMask);
+
+  expect(points).toStrictEqual([
+    { column: 0, row: 0 },
+    { column: 1, row: 0 },
+    { column: 2, row: 0 },
+    { column: 2, row: 1 },
+    { column: 2, row: 2 },
+    { column: 0, row: 1 },
+    { column: 0, row: 2 },
+  ]);
+});
+
+test('concave shape upside down', () => {
+  const testMask = testUtils.createMask([
+    [1, 0, 1],
+    [1, 0, 1],
+    [1, 1, 1],
+  ]);
+  const points = getContourMoore(testMask);
+
+  expect(points).toStrictEqual([
+    { column: 0, row: 0 },
+    { column: 0, row: 1 },
+    { column: 1, row: 2 },
+    { column: 2, row: 1 },
+    { column: 2, row: 0 },
+    { column: 2, row: 2 },
+    { column: 0, row: 2 },
+  ]);
+});
+
+test('concave shape turned right', () => {
+  const testMask = testUtils.createMask([
+    [1, 1, 1],
+    [0, 0, 1],
+    [1, 1, 1],
+  ]);
+  const points = getContourMoore(testMask);
+
+  expect(points).toStrictEqual([
+    { column: 0, row: 0 },
+    { column: 1, row: 0 },
+    { column: 2, row: 0 },
+    { column: 2, row: 1 },
+    { column: 2, row: 2 },
+    { column: 1, row: 2 },
+    { column: 0, row: 2 },
+  ]);
+});
