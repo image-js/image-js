@@ -23,13 +23,13 @@ test('square', () => {
   ]);
 });
 
-test('filled square with 4-connectivity', () => {
+test('filled square with allowCorners', () => {
   const testMask = testUtils.createMask([
     [1, 1, 1],
     [1, 1, 1],
     [1, 1, 1],
   ]);
-  const points = testMask.getExternalContour({ connectivity: 4 });
+  const points = testMask.getExternalContour({ allowCorners: true });
 
   expect(points).toStrictEqual([
     { column: 0, row: 0 },
@@ -51,7 +51,7 @@ test('random shape with 8-connectivity', () => {
     [0, 1, 0, 0, 0],
     [1, 0, 0, 0, 0],
   ]);
-  const points = getExternalContour(mask);
+  const points = getExternalContour(mask, { allowCorners: false });
 
   expect(points).toBeDeepCloseTo([
     { column: 2, row: 0 },
@@ -64,7 +64,7 @@ test('random shape with 8-connectivity', () => {
   ]);
 });
 
-test('random shape with 4-connectivity', () => {
+test('random shape with allowCorners', () => {
   const mask = testUtils.createMask([
     [0, 0, 1, 0, 0],
     [0, 0, 1, 0, 0],
@@ -72,7 +72,7 @@ test('random shape with 4-connectivity', () => {
     [0, 1, 0, 0, 0],
     [1, 0, 0, 0, 0],
   ]);
-  const points = getExternalContour(mask, { connectivity: 4 });
+  const points = getExternalContour(mask, { allowCorners: true });
 
   expect(points).toStrictEqual([
     { column: 2, row: 0 },
@@ -83,7 +83,7 @@ test('random shape with 4-connectivity', () => {
   ]);
 });
 
-test('5x6 mask with hole with 4-connectivity', () => {
+test('5x6 mask with hole with allowCorners', () => {
   const mask = testUtils.createMask([
     [0, 0, 0, 0, 0],
     [1, 1, 1, 1, 1],
@@ -92,7 +92,7 @@ test('5x6 mask with hole with 4-connectivity', () => {
     [0, 1, 1, 1, 1],
     [0, 0, 0, 0, 0],
   ]);
-  const points = getExternalContour(mask, { connectivity: 4 });
+  const points = getExternalContour(mask, { allowCorners: true });
 
   const bordersMask = Mask.fromPoints(mask.width, mask.height, points);
 
