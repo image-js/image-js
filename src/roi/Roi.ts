@@ -1,5 +1,6 @@
 import type { Mask } from '../Mask.js';
 import { getConvexHull } from '../maskAnalysis/getConvexHull.js';
+import type { GetExternalContourOptions } from '../maskAnalysis/getExternalContour.ts';
 import { getFeret } from '../maskAnalysis/getFeret.js';
 import { getMbr } from '../maskAnalysis/getMbr.js';
 import type {
@@ -11,6 +12,7 @@ import type { Point } from '../utils/geometry/points.js';
 
 import type { RoiMap } from './RoiMapManager.js';
 import { getBorderPoints } from './getBorderPoints.js';
+import { getExternalContour } from './getExternalContour.ts';
 import type { GetMaskOptions } from './getMask.js';
 import { getMask } from './getMask.js';
 import { getEllipse } from './properties/getEllipse.js';
@@ -127,6 +129,15 @@ export class Roi {
    */
   public getBorderPoints(options?: GetBorderPointsOptions): Point[] {
     return getBorderPoints(this, options);
+  }
+
+  /**
+   * Finds external contour of the roi from its mask.
+   * @param options - GetExternalContourOptions.
+   * @returns Array of contour points.
+   */
+  public getExternalContour(options?: GetExternalContourOptions): Point[] {
+    return getExternalContour(this, options);
   }
 
   /**
