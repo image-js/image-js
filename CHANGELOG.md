@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.6.0](https://github.com/image-js/image-js/compare/v1.5.0...v1.6.0) (2026-04-29)
+
+
+### Features
+
+* add getExternalContour ([f2391ef](https://github.com/image-js/image-js/commit/f2391ef47f35826f0f979e9acab1dd9b3ee0aa15))
+* add getExternalContour to roi ([#802](https://github.com/image-js/image-js/issues/802)) ([fb4317a](https://github.com/image-js/image-js/commit/fb4317aeb7b90cf68fcd32b388c402e0c0105398))
+
+
+### Bug Fixes
+
+* remove dead code and fix bug in pavlidis ([bd8090d](https://github.com/image-js/image-js/commit/bd8090dac17d03b808107dfcf6b8d20ba2570ecf))
+
 ## [1.5.0](https://github.com/image-js/image-js/compare/v1.4.0...v1.5.0) (2026-03-27)
 
 
