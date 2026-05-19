@@ -43,22 +43,7 @@ export function decodePng(buffer: Uint8Array): Image {
     default:
       throw new RangeError(`invalid number of channels: ${png.channels}`);
   }
-  let resolution: Resolution | undefined;
-  if (png.resolution) {
-    resolution =
-      png.resolution.unit === 1
-        ? /*If the resolution unit is meters*/ {
-            x: png.resolution.x,
-            y: png.resolution.y,
-            unit: 'meter' as const,
-          }
-        : /*If resolution unit is unknown */ {
-            x: png.resolution.x,
-            y: png.resolution.y,
-            unit: 'unknown' as const,
-          };
-  }
-
+  const resolution = getResolution(png);
   return new Image(png.width, png.height, {
     colorModel,
     bitDepth,
@@ -94,10 +79,11 @@ function loadPalettePng(png: DecodedPng): Image {
       data[dataIndex++] = paletteChannel;
     }
   }
-
+  const resolution = getResolution(png);
   return new Image(png.width, png.height, {
     data,
     colorModel: png.palette[0].length === 4 ? 'RGBA' : 'RGB',
+    resolution,
   });
 }
 
@@ -125,4 +111,26 @@ function decodeBinary(png: DecodedPng): Uint8Array {
     }
   }
   return result;
+}
+/**
+ * Gets image's resolution from its parsed data.
+ * @param png - Parsed .png image.
+ * @returns Object with resolution data if exists.
+ */
+function getResolution(png: DecodedPng): Resolution | undefined {
+  if (png.resolution) {
+    return png.resolution.unit === 1
+      ? /*If the resolution unit is meters*/ {
+          x: png.resolution.x,
+          y: png.resolution.y,
+          unit: 'meter' as const,
+        }
+      : /*If resolution unit is unknown */ {
+          x: png.resolution.x,
+          y: png.resolution.y,
+          unit: 'unknown' as const,
+        };
+  } else {
+    return undefined;
+  }
 }
