@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/image-js/image-js/compare/v1.6.0...v1.6.1) (2026-05-19)
+
+
+### Bug Fixes
+
+* add resolution for indexed images ([62f52c6](https://github.com/image-js/image-js/commit/62f52c69987faf38dbbe9cbc1c7b8f5e3364dd04))
+
 ## [1.6.0](https://github.com/image-js/image-js/compare/v1.5.0...v1.6.0) (2026-04-29)
 
 
