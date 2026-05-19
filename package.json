@@ -63,16 +63,19 @@
   "optionalDependencies": {
     "skia-canvas": "^3.0.8"
   },
+  "overrides": {
+    "yargs": "^18.0.0"
+  },
   "lavamoat": {
     "allowScripts": {
       "@lavamoat/preinstall-always-fail": false,
-      "skia-canvas": true,
-      "vite>esbuild": false
+      "vite>esbuild": false,
+      "skia-canvas#3.0.8": true
     }
   },
   "devDependencies": {
-    "@lavamoat/allow-scripts": "^3.4.1",
-    "@lavamoat/preinstall-always-fail": "^2.1.1",
+    "@lavamoat/allow-scripts": "^5.0.2",
+    "@lavamoat/preinstall-always-fail": "^3.0.0",
     "@microsoft/api-extractor": "^7.55.2",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/vite": "^4.1.18",
