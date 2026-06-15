@@ -29,7 +29,7 @@ export function getShiTomasiScore(
   origin: Point,
   options: GetShiTomasiScoreOptions = {},
 ): number {
-  const { windowSize = 7 } = options;
+  const { windowSize } = options;
 
   const eigenValues = getEigenvaluesForScore(image, origin, windowSize);
   return Math.min(eigenValues[0], eigenValues[1]);

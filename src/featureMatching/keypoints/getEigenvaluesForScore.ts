@@ -1,6 +1,5 @@
-import { EigenvalueDecomposition, Matrix, WrapperMatrix1D } from 'ml-matrix';
-
 import type { Image } from '../../Image.ts';
+import { rawDirectConvolution } from '../../filters/convolution.ts';
 import type { Point } from '../../index_full.ts';
 import { SOBEL_X, SOBEL_Y } from '../../utils/constants/kernels.js';
 
@@ -14,43 +13,48 @@ import { SOBEL_X, SOBEL_Y } from '../../utils/constants/kernels.js';
 export function getEigenvaluesForScore(
   image: Image,
   origin: Point,
-  windowSize = 7,
+  windowSize = 5,
 ) {
   if (!(windowSize % 2)) {
     throw new TypeError('windowSize must be an odd integer');
   }
-
+  const kernelRadius = (SOBEL_X.length - 1) / 2;
+  const half = (windowSize - 1) / 2;
+  const padded = windowSize + 2 * kernelRadius;
   const cropOrigin = {
-    row: origin.row - (windowSize - 1) / 2,
-    column: origin.column - (windowSize - 1) / 2,
+    row: origin.row - half - kernelRadius,
+    column: origin.column - half - kernelRadius,
   };
   const window = image.crop({
     origin: cropOrigin,
-    width: windowSize,
-    height: windowSize,
-  });
-  const xDerivative = window.gradientFilter({ kernelX: SOBEL_X });
-  const yDerivative = window.gradientFilter({ kernelY: SOBEL_Y });
-
-  const xMatrix = new WrapperMatrix1D(xDerivative.getRawImage().data, {
-    rows: xDerivative.height,
-  });
-  const yMatrix = new WrapperMatrix1D(yDerivative.getRawImage().data, {
-    rows: yDerivative.height,
+    width: padded,
+    height: padded,
   });
 
-  const xx = xMatrix.mmul(xMatrix);
-  const xy = yMatrix.mmul(xMatrix);
-  const yy = yMatrix.mmul(yMatrix);
+  const xDerivative = rawDirectConvolution(window, SOBEL_X);
+  const yDerivative = rawDirectConvolution(window, SOBEL_Y);
 
-  const xxSum = xx.sum();
-  const xySum = xy.sum();
-  const yySum = yy.sum();
+  let xxSum = 0;
+  let xySum = 0;
+  let yySum = 0;
 
-  const structureTensor = new Matrix([
-    [xxSum, xySum],
-    [xySum, yySum],
-  ]);
+  for (let i = kernelRadius; i < window.height - kernelRadius; i++) {
+    for (let j = kernelRadius; j < window.width - kernelRadius; j++) {
+      const idx = i * window.width + j;
+      const gx = xDerivative[idx];
+      const gy = yDerivative[idx];
+      xxSum += gx * gx;
+      xySum += gx * gy;
+      yySum += gy * gy;
+    }
+  }
 
-  return new EigenvalueDecomposition(structureTensor).realEigenvalues;
+  const trace = xxSum + yySum;
+  const det = xxSum * yySum - xySum * xySum;
+  const disc = Math.sqrt((trace * trace) / 4 - det);
+
+  const lambda1 = trace / 2 + disc;
+  const lambda2 = trace / 2 - disc;
+
+  return [lambda1, lambda2];
 }

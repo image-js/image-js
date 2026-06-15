@@ -31,9 +31,9 @@ test('7x7 image with horizontal line', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  const result = getHarrisScore(image, origin, { windowSize: 7 });
+  const result = getHarrisScore(image, origin, { windowSize: 5 });
 
-  expect(result).toBeCloseTo(-8287371225);
+  expect(result).toBeCloseTo(-4329728640000);
 });
 
 test('7x7 image with corner 90 degrees, bottom-right', () => {
@@ -51,7 +51,7 @@ test('7x7 image with corner 90 degrees, bottom-right', () => {
 
   const result = getHarrisScore(image, origin);
 
-  expect(result).toBeCloseTo(80505891900);
+  expect(result).toBeCloseTo(18079323152400);
 });
 
 test('7x7 image with corner 90 degrees, bottom-left', () => {
@@ -59,7 +59,7 @@ test('7x7 image with corner 90 degrees, bottom-left', () => {
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
-    [255, 255, 255, 0, 0, 0, 0],
+    [255, 255, 255, 255, 0, 0, 0],
     [0, 0, 0, 255, 0, 0, 0],
     [0, 0, 0, 255, 0, 0, 0],
     [0, 0, 0, 255, 0, 0, 0],
@@ -69,7 +69,7 @@ test('7x7 image with corner 90 degrees, bottom-left', () => {
 
   const result = getHarrisScore(image, origin);
 
-  expect(result).toBeCloseTo(-91499343525);
+  expect(result).toBeCloseTo(18079323152400);
 });
 
 test('7x7 image with other corner', () => {
@@ -87,7 +87,7 @@ test('7x7 image with other corner', () => {
 
   const result = getHarrisScore(image, origin);
 
-  expect(result).toBeCloseTo(-12998500000);
+  expect(result).toBeCloseTo(6404000000);
 });
 
 test('7x7 image with darker and lighter areas', () => {
@@ -103,9 +103,9 @@ test('7x7 image with darker and lighter areas', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  const result = getHarrisScore(image, origin, { windowSize: 7 });
+  const result = getHarrisScore(image, origin, { windowSize: 5 });
 
-  expect(result).toBeCloseTo(-1688675564600);
+  expect(result).toBeCloseTo(256121000000);
 });
 
 test('7x7 image with segment', () => {
@@ -121,9 +121,9 @@ test('7x7 image with segment', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  const result = getHarrisScore(image, origin, { windowSize: 7 });
+  const result = getHarrisScore(image, origin, { windowSize: 5 });
 
-  expect(result).toBeCloseTo(13084874375);
+  expect(result).toBeCloseTo(380096000000);
 });
 
 test('windowSize error', () => {
