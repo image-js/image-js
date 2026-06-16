@@ -4,7 +4,6 @@ import type { Point } from '../../index_full.ts';
 import { getEigenvaluesForScore } from './getEigenvaluesForScore.js';
 
 export interface GetShiTomasiScoreOptions {
-  qualityLevel?: number;
   /**
    * Size of the window to compute the Harris score.
    * Should be an odd number so that the window can be centered on the corner.

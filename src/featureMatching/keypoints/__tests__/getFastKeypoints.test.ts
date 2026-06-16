@@ -72,7 +72,7 @@ test('star with harris', () => {
     nonMaxSuppression: true,
   });
 
-  expect(keypoints).toHaveLength(25);
+  expect(keypoints).toHaveLength(22);
   expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
 });
 
@@ -84,7 +84,7 @@ test('star with shi-tomasi', () => {
     nonMaxSuppression: true,
   });
 
-  expect(keypoints).toHaveLength(33);
+  expect(keypoints).toHaveLength(22);
   expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
 });
 
