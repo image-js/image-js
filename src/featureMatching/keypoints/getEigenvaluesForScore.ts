@@ -30,7 +30,6 @@ export function getEigenvaluesForScore(
     width: padded,
     height: padded,
   });
-
   const xDerivative = rawDirectConvolution(window, SOBEL_X);
   const yDerivative = rawDirectConvolution(window, SOBEL_Y);
 
@@ -51,7 +50,7 @@ export function getEigenvaluesForScore(
 
   const trace = xxSum + yySum;
   const det = xxSum * yySum - xySum * xySum;
-  const disc = Math.sqrt((trace * trace) / 4 - det);
+  const disc = Math.sqrt(Math.max(0, (trace * trace) / 4 - det));
 
   const lambda1 = trace / 2 + disc;
   const lambda2 = trace / 2 - disc;
