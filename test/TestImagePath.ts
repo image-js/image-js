@@ -120,6 +120,7 @@ export type TestImagePath =
   | 'ssim/ssim-original.png'
   | 'ssim/ssim-saltPepper.png'
   | 'various/alphabet.jpg'
+  | 'various/carton.png'
   | 'various/grayscale_by_zimmyrose.png'
   | 'various/magicHatImageRotated.png'
   | 'various/screws.png'
