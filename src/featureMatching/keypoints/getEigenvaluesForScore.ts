@@ -7,23 +7,23 @@ import { SOBEL_X, SOBEL_Y } from '../../utils/constants/kernels.js';
  * A function that calculates eigenvalues to calculate feature score for Harris and Shi-Tomasi algorithms.
  * @param image - Image take data from.
  * @param origin - Center of the window, where the corner should be.
- * @param windowSize - Size of the window, where data should be scanned.
+ * @param cropSize - Size of the window, where data should be scanned.
  * @returns Array of two eigenvalues.
  */
 export function getEigenvaluesForScore(
   image: Image,
   origin: Point,
-  windowSize = 5,
+  cropSize = 5,
 ) {
-  if (!(windowSize % 2)) {
+  if (!(cropSize % 2)) {
     throw new TypeError('windowSize must be an odd integer');
   }
   const kernelRadius = (SOBEL_X.length - 1) / 2;
-  const half = (windowSize - 1) / 2;
-  const padded = windowSize + 2 * kernelRadius;
+  const windowRadius = (cropSize - 1) / 2;
+  const padded = cropSize + 2 * kernelRadius;
   const cropOrigin = {
-    row: origin.row - half - kernelRadius,
-    column: origin.column - half - kernelRadius,
+    row: origin.row - windowRadius - kernelRadius,
+    column: origin.column - windowRadius - kernelRadius,
   };
   const window = image.crop({
     origin: cropOrigin,
