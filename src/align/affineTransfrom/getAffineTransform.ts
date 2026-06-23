@@ -60,7 +60,6 @@ export interface GetAffineTransformOptions {
   debug?: boolean;
   /**
    * Path of the debug image.
-   * @default `new URL('montage.png', import.meta.url)`
    */
   debugImagePath?: string | URL;
 }
