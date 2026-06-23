@@ -1,7 +1,6 @@
-import assert from 'node:assert';
-
 import type { Mask } from '../Mask.ts';
 import type { Point } from '../utils/geometry/points.ts';
+import { assert } from '../utils/validators/assert.ts';
 
 import {
   getBitSafe,
@@ -78,7 +77,7 @@ export function getContourMoore(mask: Mask): Point[] {
     }
 
     const next = findNextPoint(mask, currentPoint, backtrackPoint);
-    assert.ok(next, 'Next border point is undefined.');
+    assert(next, 'Next border point is undefined.');
     backtrackPoint = next.prevPoint;
     currentPoint = next.currPoint;
     if (

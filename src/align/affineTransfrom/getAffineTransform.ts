@@ -60,9 +60,9 @@ export interface GetAffineTransformOptions {
   debug?: boolean;
   /**
    * Path of the debug image.
-   * @default `${import.meta.dirname}/montage.png`
+   * @default `new URL('montage.png', import.meta.url)`
    */
-  debugImagePath?: string;
+  debugImagePath?: string | URL;
 }
 
 export interface AffineTransform {
@@ -131,7 +131,7 @@ export function getAffineTransform(
     destinationOrigin = { column: 0, row: 0 },
     maxRansacNbIterations,
     debug = false,
-    debugImagePath = `${import.meta.dirname}/montage.png`,
+    debugImagePath,
   } = options;
 
   if (source.colorModel !== ImageColorModel.GREY) {
@@ -242,6 +242,9 @@ export function getAffineTransform(
 
   // create debug image
   if (debug) {
+    if (!debugImagePath) {
+      throw new RangeError('Debug image file path is not specified.');
+    }
     const montage = new Montage(source, destination, {
       disposition: MontageDisposition.VERTICAL,
     });

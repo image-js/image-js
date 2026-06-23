@@ -89,6 +89,7 @@ test('debug = true', { timeout: 20_000 }, () => {
     maxRansacNbIterations: 1000,
     crosscheck: false,
     debug: true,
+    debugImagePath: new URL('montage.png', import.meta.url),
   });
 
   const transform = result.transform;
