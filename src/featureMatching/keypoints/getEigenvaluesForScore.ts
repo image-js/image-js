@@ -1,8 +1,9 @@
+import { EigenvalueDecomposition, Matrix } from 'ml-matrix';
+
 import type { Image } from '../../Image.ts';
 import { rawDirectConvolution } from '../../filters/convolution.ts';
 import type { Point } from '../../index_full.ts';
 import { SOBEL_X, SOBEL_Y } from '../../utils/constants/kernels.js';
-
 /**
  * A function that calculates eigenvalues to calculate feature score for Harris and Shi-Tomasi algorithms.
  * @param image - Image take data from.
@@ -48,12 +49,10 @@ export function getEigenvaluesForScore(
     }
   }
 
-  const trace = xxSum + yySum;
-  const det = xxSum * yySum - xySum * xySum;
-  const disc = Math.sqrt(Math.max(0, (trace * trace) / 4 - det));
+  const structureTensor = new Matrix([
+    [xxSum, xySum],
+    [xySum, yySum],
+  ]);
 
-  const lambda1 = trace / 2 + disc;
-  const lambda2 = trace / 2 - disc;
-
-  return [lambda1, lambda2];
+  return new EigenvalueDecomposition(structureTensor).realEigenvalues;
 }
