@@ -105,6 +105,31 @@ test('debug = true', { timeout: 20_000 }, () => {
   expect(image).toMatchImageSnapshot();
 });
 
+test('debug = true, no path specified', () => {
+  const data = {
+    message: 'rotation 10 degrees',
+    source: 'polygons/scaleneTriangle',
+    destination: 'polygons/scaleneTriangle10',
+    expected: { row: 195, column: 1 },
+  };
+
+  const source = testUtils.load(
+    `featureMatching/${data.source}.png` as TestImagePath,
+  );
+
+  const destination = testUtils.load(
+    `featureMatching/${data.destination}.png` as TestImagePath,
+  );
+
+  expect(() =>
+    getAffineTransform(source, destination, {
+      maxRansacNbIterations: 1000,
+      crosscheck: false,
+      debug: true,
+    }),
+  ).toThrowError('Debug image file path is not specified.');
+});
+
 test('not enough matches found', () => {
   const source = new Image(50, 50);
   const destination = new Image(50, 50);
