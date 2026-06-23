@@ -1,6 +1,4 @@
-import type { BitDepth } from 'fast-png';
-
-import type { Image } from './Image.js';
+import type { BitDepth, Image } from './Image.js';
 import type { HistogramOptions } from './compute/index.js';
 import {
   histogram,
