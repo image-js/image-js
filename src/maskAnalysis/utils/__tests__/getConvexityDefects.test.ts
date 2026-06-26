@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest';
 
+import type { Point } from '../../../index_full.ts';
 import { getConvexityDefects } from '../../getConvexityDefects.ts';
 
 test('basic test', () => {
@@ -43,6 +44,24 @@ test('carton mask', () => {
     { column: 340, row: 150 },
     { column: 116, row: 475 },
   ]);
+});
+
+test('expect error throw', () => {
+  const borderPoints = [
+    { column: 4, row: 2 },
+    { column: 5, row: 4 },
+    { column: 2, row: 5 },
+    { column: 2, row: 2 },
+  ];
+  const convexHullPoints: Point[] = [];
+
+  expect(() =>
+    getConvexityDefects(borderPoints, convexHullPoints, {
+      depthThreshold: 100,
+    }),
+  ).toThrowError(
+    'No hull points were defined for convexity defects detection.',
+  );
 });
 
 // Current convexity defects implementation doesn't really support contours as
