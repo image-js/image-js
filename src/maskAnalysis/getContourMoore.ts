@@ -56,9 +56,10 @@ export function getContourMoore(mask: Mask): Point[] {
   const [row, col] = getCoordsFromIndex(index, mask.width);
   const startingPoint = { column: col, row };
   let currentPoint = startingPoint;
-
-  visited[index] = 1;
-  contour.push(currentPoint);
+  if (!visited[index]) {
+    visited[index] = 1;
+    contour.push(currentPoint);
+  }
 
   const firstNext = findNextPoint(mask, currentPoint, { column: col - 1, row });
   if (!firstNext) {
