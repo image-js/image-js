@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.6.2](https://github.com/image-js/image-js/compare/v1.6.1...v1.6.2) (2026-06-29)
+
+
+### Bug Fixes
+
+* add resolution to BMP format ([#828](https://github.com/image-js/image-js/issues/828)) ([00e6095](https://github.com/image-js/image-js/commit/00e6095155f3abb5f0280ac1c3bdda2ace5e0b10))
+* fix bit depth import in Stack ([#822](https://github.com/image-js/image-js/issues/822)) ([0d81ae5](https://github.com/image-js/image-js/commit/0d81ae59511f956da5d6fde3aabf41514c22596c))
+* remove node imports from code and parameters ([#821](https://github.com/image-js/image-js/issues/821)) ([ad53bdc](https://github.com/image-js/image-js/commit/ad53bdcdd7bf13a6423bd53ffa4fdb9201fa5681))
+
 ## [1.6.1](https://github.com/image-js/image-js/compare/v1.6.0...v1.6.1) (2026-05-19)
 
 
