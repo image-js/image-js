@@ -28,6 +28,32 @@ test('should decode grey image', () => {
   ]);
 });
 
+test('should decode image resolution', () => {
+  const rgba = decodeBmp(testUtils.loadBuffer('formats/bmp/2x2RGBA.bmp'));
+
+  expect(rgba.originalResolution).toStrictEqual({
+    x: 2835,
+    y: 2835,
+    unit: 'meter',
+  });
+  expect(rgba.normalizedResolution).toStrictEqual({
+    x: 28.35,
+    y: 28.35,
+  });
+
+  const grey = decodeBmp(testUtils.loadBuffer('formats/bmp/gray5x5.bmp'));
+
+  expect(grey.originalResolution).toStrictEqual({
+    x: 11811,
+    y: 11811,
+    unit: 'meter',
+  });
+  expect(grey.normalizedResolution).toStrictEqual({
+    x: 118.11,
+    y: 118.11,
+  });
+});
+
 test('decode 5x5 mask', () => {
   const mask = testUtils.createGreyImage([
     [0, 0, 0, 0, 0],
