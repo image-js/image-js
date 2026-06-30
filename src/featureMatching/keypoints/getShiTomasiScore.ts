@@ -7,7 +7,7 @@ export interface GetShiTomasiScoreOptions {
   /**
    * Size of the window to compute the Harris score.
    * Should be an odd number so that the window can be centered on the corner.
-   * @default `7`
+   * @default `5`
    */
   windowSize?: number;
 }
@@ -28,7 +28,7 @@ export function getShiTomasiScore(
   origin: Point,
   options: GetShiTomasiScoreOptions = {},
 ): number {
-  const { windowSize } = options;
+  const { windowSize = 5 } = options;
 
   const eigenValues = getEigenvaluesForScore(image, origin, windowSize);
   return Math.min(eigenValues[0], eigenValues[1]);

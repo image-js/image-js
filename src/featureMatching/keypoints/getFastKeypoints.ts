@@ -42,6 +42,10 @@ export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
    */
   scoreAlgorithm?: 'HARRIS' | 'FAST' | 'TOMASI';
   /**
+   * Value between 0 and 1 that signifies a percentage from maximum score found in the image. Points can be filtered based on this relative maximum score.
+   */
+  qualityThreshold?: number;
+  /**
    * Options for the Harris score computation.
    */
   scoreOptions?: GetHarrisScoreOptions | GetShiTomasiScoreOptions;
@@ -72,7 +76,7 @@ export function getFastKeypoints(
   options: GetFastKeypointsOptions = {},
 ): FastKeypoint[] {
   const { fastRadius = 3, scoreAlgorithm = 'FAST', scoreOptions } = options;
-
+  const windowSize = scoreOptions?.windowSize ?? 7;
   const circlePoints = getCirclePoints(fastRadius);
   const compassPoints = getCompassPoints(fastRadius);
 
@@ -81,6 +85,7 @@ export function getFastKeypoints(
     nbContiguousPixels = (3 / 4) * circlePoints.length,
     threshold = 20,
     nonMaxSuppression = true,
+    qualityThreshold = 0,
   } = options;
 
   checkProcessable(image, {
@@ -108,13 +113,14 @@ export function getFastKeypoints(
     .with('TOMASI', () => tomasiScore)
     .exhaustive();
 
+  const padding = scoreAlgorithm === 'FAST' ? 0 : (windowSize + 1) / 2;
   const allKeypoints: FastKeypoint[] = [];
 
   const scoreArray = new Float64Array(image.size).fill(
     Number.NEGATIVE_INFINITY,
   );
-  for (let row = 0; row < image.height; row++) {
-    for (let column = 0; column < image.width; column++) {
+  for (let row = padding; row < image.height - padding; row++) {
+    for (let column = padding; column < image.width - padding; column++) {
       const corner = { row, column };
       if (
         isFastKeypoint(corner, image, circlePoints, compassPoints, {
@@ -157,8 +163,18 @@ export function getFastKeypoints(
       }
     }
   }
+  let maxScore = -Infinity;
+  for (const k of keypoints) {
+    if (k.score > maxScore) maxScore = k.score;
+  }
+  let filtered = keypoints;
+  if (qualityThreshold) {
+    filtered = filtered.filter((k) => k.score / maxScore >= qualityThreshold);
+  }
 
-  keypoints.sort((a, b) => b.score - a.score);
+  filtered = filtered
+    .map((k) => ({ origin: k.origin, score: k.score / maxScore }))
+    .toSorted((a, b) => b.score - a.score);
 
-  return keypoints.slice(0, maxNbFeatures);
+  return filtered.slice(0, maxNbFeatures);
 }
