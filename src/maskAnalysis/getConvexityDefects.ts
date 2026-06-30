@@ -78,7 +78,7 @@ export function getConvexityDefects(
       }
     }
     if (!reached) {
-      throw new Error(
+      throw new RangeError(
         'Could not reach the next hull point while scanning border points; hull and border may be inconsistent.',
       );
     }

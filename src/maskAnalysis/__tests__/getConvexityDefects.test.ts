@@ -105,6 +105,29 @@ test('expect error throw for no match between border and last hull point', () =>
   );
 });
 
+test('expect error throw if next hull point was not reached', () => {
+  const borderPoints: Point[] = [
+    { column: 4, row: 2 },
+    { column: 5, row: 4 },
+    { column: 2, row: 5 },
+    { column: 2, row: 2 },
+  ];
+  const convexHullPoints: Point[] = [
+    { column: 4, row: 2 },
+    { column: 5, row: 4 },
+    { column: 11, row: 11 },
+    { column: 2, row: 2 },
+  ];
+
+  expect(() =>
+    getConvexityDefects(borderPoints, convexHullPoints, {
+      depthThreshold: 100,
+    }),
+  ).toThrowError(
+    'Could not reach the next hull point while scanning border points; hull and border may be inconsistent.',
+  );
+});
+
 // Current convexity defects implementation doesn't really support contours as
 // masks.
 test.todo('contour test', () => {
