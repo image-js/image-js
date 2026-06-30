@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import type { Point } from '../../../index_full.ts';
-import { getConvexityDefects } from '../../getConvexityDefects.ts';
+import type { Point } from '../../index_full.ts';
+import { getConvexityDefects } from '../getConvexityDefects.ts';
 
 test('basic test', () => {
   const mask = testUtils.createMask([
