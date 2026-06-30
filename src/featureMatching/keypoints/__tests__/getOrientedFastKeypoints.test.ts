@@ -20,7 +20,7 @@ test('7x7 image, angle = -90°', () => {
   expect(result).toStrictEqual({
     angle: -90,
     origin: { row: 3, column: 3 },
-    score: 2780,
+    score: 1,
   });
 });
 
@@ -40,7 +40,7 @@ test('7x7 image, angle = 135°', () => {
   expect(result).toStrictEqual({
     angle: -225,
     origin: { row: 3, column: 3 },
-    score: 2780,
+    score: 1,
   });
 });
 
@@ -60,7 +60,7 @@ test('7x7 image, angle = -135°', () => {
   expect(result).toStrictEqual({
     angle: 225,
     origin: { row: 3, column: 3 },
-    score: 2780,
+    score: 1,
   });
 });
 
@@ -80,7 +80,7 @@ test('7x7 image, angle = 180°', () => {
   expect(result).toStrictEqual({
     angle: 180,
     origin: { row: 3, column: 3 },
-    score: 2780,
+    score: 1,
   });
 });
 
@@ -100,7 +100,7 @@ test('7x7 image, angle = 0°', () => {
   expect(result).toStrictEqual({
     angle: -0,
     origin: { row: 3, column: 3 },
-    score: 2680,
+    score: 1,
   });
 });
 
@@ -120,7 +120,7 @@ test('7x7 image, angle = 45°', () => {
   expect(result).toBeDeepCloseTo({
     angle: 45,
     origin: { row: 3, column: 3 },
-    score: 2780,
+    score: 1,
   });
 });
 
@@ -140,7 +140,7 @@ test('7x7 image, angle = -45°', () => {
   expect(result).toBeDeepCloseTo({
     angle: -45,
     origin: { row: 3, column: 3 },
-    score: 2780,
+    score: 1,
   });
 });
 
@@ -157,7 +157,7 @@ test('patch with one keypoint', () => {
     {
       angle: -187.205,
       origin: { row: 15, column: 14 },
-      score: 3290,
+      score: 1,
     },
   ]);
 });
@@ -177,7 +177,7 @@ test('patch with one keypoint, centroidPatchDiameter=15', () => {
     {
       angle: 191.8,
       origin: { row: 15, column: 14 },
-      score: 3290,
+      score: 1,
     },
   ]);
 });

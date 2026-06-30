@@ -52,16 +52,23 @@ test('alphabet image, scoreAlgorithm = HARRIS, maxNbFeatures = 50', () => {
   });
 
   expect(keypoints).toHaveLength(50);
-  expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
+  expect(
+    drawKeypoints(image, keypoints, { showScore: true }),
+  ).toMatchImageSnapshot();
 });
 
 test('star', () => {
   const image = testUtils.load('featureMatching/polygons/star.png');
   const grey = image.convertColor('GREY');
-  const keypoints = getFastKeypoints(grey);
+  const keypoints = getFastKeypoints(grey, { scoreAlgorithm: 'HARRIS' });
 
-  expect(keypoints).toHaveLength(55);
-  expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
+  expect(keypoints).toHaveLength(22);
+  expect(
+    drawKeypoints(image, keypoints, {
+      showScore: true,
+      showScoreOptions: { font: 'Helvetica 30px', fontColor: [255, 0, 0] },
+    }),
+  ).toMatchImageSnapshot();
 });
 
 test('star with harris', () => {

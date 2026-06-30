@@ -18,22 +18,67 @@ test('7x7 image, full of zeros', () => {
   expect(result).toBe(0);
 });
 
-test('7x7 image with horizontal line', () => {
+test('7x7 image with one point', () => {
   const image = testUtils.createGreyImage([
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-    [255, 255, 255, 255, 255, 255, 255],
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 255, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
 
-  const origin = { row: fastRadius, column: fastRadius };
+  const point1 = { column: 4, row: 4 };
+  const score1 = getHarrisScore(image, point1, { windowSize: 5 });
 
-  const result = getHarrisScore(image, origin, { windowSize: 5 });
+  expect(score1).toBeCloseTo(511449195600);
+});
 
-  expect(result).toBeCloseTo(-4329728640000);
+test('7x7 image with horizontal line', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 55, 0, 0, 0, 0, 0, 0],
+    [0, 0, 55, 55, 0, 0, 0, 0, 0],
+    [0, 0, 55, 0, 55, 0, 0, 0, 0],
+    [0, 0, 55, 0, 0, 55, 0, 0, 0],
+    [0, 0, 55, 55, 55, 55, 55, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  ]);
+
+  const point1 = { column: 6, row: 6 };
+  const score1 = getHarrisScore(image, point1, { windowSize: 3 });
+  const point2 = { column: 2, row: 2 };
+  const score2 = getHarrisScore(image, point2, { windowSize: 3 });
+
+  expect(score1).toBeCloseTo(9452229600.000002);
+  expect(score1).toBeCloseTo(score2);
+});
+
+test('9x9 image with triangle', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 55, 0, 0, 0, 0, 0],
+    [0, 0, 0, 55, 0, 55, 0, 0, 0, 0],
+    [0, 0, 55, 55, 55, 55, 55, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  ]);
+
+  const origin2 = { row: 6, column: 6 };
+  const origin3 = { row: 6, column: 2 };
+  const windowSize = 3;
+  const result2 = getHarrisScore(image, origin2, { windowSize });
+  const result3 = getHarrisScore(image, origin3, { windowSize });
+
+  expect(result2).toBeCloseTo(result3);
 });
 
 test('7x7 image with corner 90 degrees, bottom-right', () => {
@@ -45,6 +90,24 @@ test('7x7 image with corner 90 degrees, bottom-right', () => {
     [0, 0, 0, 255, 0, 0, 0],
     [0, 0, 0, 255, 0, 0, 0],
     [0, 0, 0, 255, 0, 0, 0],
+  ]);
+
+  const origin = { row: fastRadius, column: fastRadius };
+
+  const result = getHarrisScore(image, origin);
+
+  expect(result).toBeCloseTo(18079323152400);
+});
+
+test('7x7 image with corner 90 degrees, top-right', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 255, 0, 0, 0],
+    [0, 0, 0, 255, 0, 0, 0],
+    [0, 0, 0, 255, 0, 0, 0],
+    [0, 0, 0, 255, 255, 255, 255],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
   ]);
 
   const origin = { row: fastRadius, column: fastRadius };
@@ -72,6 +135,24 @@ test('7x7 image with corner 90 degrees, bottom-left', () => {
   expect(result).toBeCloseTo(18079323152400);
 });
 
+test('7x7 image with corner 90 degrees, top-left', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 255, 0, 0, 0],
+    [0, 0, 0, 255, 0, 0, 0],
+    [0, 0, 0, 255, 0, 0, 0],
+    [255, 255, 255, 255, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+  ]);
+
+  const origin = { row: fastRadius, column: fastRadius };
+
+  const result = getHarrisScore(image, origin);
+
+  expect(result).toBeCloseTo(18079323152400);
+});
+
 test('7x7 image with other corner', () => {
   const image = testUtils.createGreyImage([
     [0, 0, 0, 0, 0, 0, 0],
@@ -88,6 +169,23 @@ test('7x7 image with other corner', () => {
   const result = getHarrisScore(image, origin);
 
   expect(result).toBeCloseTo(6404000000);
+});
+
+test('x-mark', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 50, 0, 50, 0, 0],
+    [0, 0, 0, 50, 0, 0, 0],
+    [0, 0, 50, 0, 50, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+  ]);
+
+  const origin = { row: 3, column: 3 };
+  const result = getHarrisScore(image, origin, { windowSize: 3 });
+
+  expect(result).toBeCloseTo(756000000);
 });
 
 test('7x7 image with darker and lighter areas', () => {

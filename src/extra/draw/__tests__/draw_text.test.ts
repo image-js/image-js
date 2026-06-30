@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { Image, fromMask } from '../../../index_full.ts';
+import { Image, fromMask } from '../../../index.ts';
 import type { DrawTextLabel } from '../draw_text.ts';
 import { drawText } from '../draw_text.ts';
 

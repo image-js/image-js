@@ -1,5 +1,7 @@
 import type { Image } from '../../Image.js';
 import type { Point } from '../../geometry/index.js';
+import type { DrawTextOptions } from '../../index_full.ts';
+import { drawText } from '../../index_full.ts';
 import { sum } from '../../utils/geometry/points.js';
 import { getOutputImage } from '../../utils/getOutputImage.js';
 import type { GetColorsOptions } from '../featureMatching.types.js';
@@ -47,7 +49,7 @@ export interface DrawKeypointsOptions {
   /**
    * Options for the coloring of the keypoints depending on their score (useful if showScore = true).
    */
-  showScoreOptions?: GetColorsOptions;
+  showScoreOptions?: GetColorsOptions & DrawTextOptions;
 }
 
 export interface DrawOrientedKeypointsOptions extends DrawKeypointsOptions {
@@ -89,7 +91,8 @@ export function drawKeypoints(
   } = options;
   let { maxNbKeypoints = keypoints.length } = options;
   const { strokeColor = [255, 0, 0] } = options;
-
+  const fontColor = showScoreOptions?.fontColor ?? [0, 0, 255];
+  const font = showScoreOptions?.font ?? 'Helvetica 20px';
   if (maxNbKeypoints > keypoints.length) {
     maxNbKeypoints = keypoints.length;
   }
@@ -118,6 +121,18 @@ export function drawKeypoints(
       strokeColor: keypointColor,
       out: newImage,
     });
+    if (showScore) {
+      drawText(
+        newImage,
+        {
+          content: keypoint.score.toFixed(3).replace(/^0/, ''),
+          position: absoluteOrigin,
+          font,
+          fontColor,
+        },
+        { out: newImage },
+      );
+    }
     if (
       isOrientedFastKeypoint(keypoint) &&
       (options as DrawOrientedKeypointsOptions).showOrientation
