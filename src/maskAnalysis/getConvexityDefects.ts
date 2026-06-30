@@ -28,12 +28,23 @@ export function getConvexityDefects(
       'No hull points were defined for convexity defects detection.',
     );
   }
+  if (borderPoints.length === 0) {
+    throw new RangeError(
+      'No border points were defined for convexity defects detection.',
+    );
+  }
 
   const lastHullPoint = hullPoints.at(-1) as Point;
 
   let currBorderIndex = borderPoints.findIndex((bp) =>
     limitReached(bp, lastHullPoint),
   );
+
+  if (currBorderIndex === -1) {
+    throw new RangeError(
+      'Could not find a border point matching the convex hull endpoint.',
+    );
+  }
   for (let i = hullPoints.length - 1; i >= 0; i--) {
     const currHullPoint = hullPoints.at(i);
     const nextHullPoint = hullPoints.at(i - 1);
@@ -42,13 +53,15 @@ export function getConvexityDefects(
     const v0y = nextHullPoint.row - currHullPoint.row;
     const edgeLenSq = v0x * v0x + v0y * v0y;
     let maxDepth = 0;
-    let maxDepthIndex = currBorderIndex;
+    let maxDepthIndex = -1;
     const segmentStart = currBorderIndex;
+    let reached = false;
     for (let j = 0; j < borderPoints.length; j++) {
-      let checkIndex = (segmentStart + j) % borderPoints.length;
+      const checkIndex = (segmentStart + j) % borderPoints.length;
       const bp = borderPoints[checkIndex];
-      if (!bp || limitReached(bp, nextHullPoint)) {
-        currBorderIndex = ++checkIndex;
+      if (limitReached(bp, nextHullPoint)) {
+        currBorderIndex = (checkIndex + 1) % borderPoints.length;
+        reached = true;
         break;
       }
 
@@ -64,6 +77,11 @@ export function getConvexityDefects(
         maxDepthIndex = checkIndex;
       }
     }
+    if (!reached) {
+      throw new Error(
+        'Could not reach the next hull point while scanning border points; hull and border may be inconsistent.',
+      );
+    }
     if (maxDepth > depthThreshold) {
       const defectPoint = borderPoints[maxDepthIndex];
       if (defectPoint) defects.push(defectPoint);
@@ -76,14 +94,10 @@ export function getConvexityDefects(
  * Checks if borderPoint reached convex hull's point.
  * @param borderPoint - Border point.
  * @param hullPoint - Endpoint of convex hull segment.
- * @param tolerance - Distance threshold before limit is reached.
  * @returns whether endpoint is reached.
  */
-function limitReached(
-  borderPoint: Point,
-  hullPoint: Point,
-  tolerance = 1,
-): boolean {
+function limitReached(borderPoint: Point, hullPoint: Point): boolean {
+  const tolerance = 1;
   return (
     Math.abs(borderPoint.column - hullPoint.column) <= tolerance &&
     Math.abs(borderPoint.row - hullPoint.row) <= tolerance
