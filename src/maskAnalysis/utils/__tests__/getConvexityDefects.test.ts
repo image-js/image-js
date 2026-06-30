@@ -46,7 +46,7 @@ test('carton mask', () => {
   ]);
 });
 
-test('expect error throw', () => {
+test('expect error throw for hull points', () => {
   const borderPoints = [
     { column: 4, row: 2 },
     { column: 5, row: 4 },
@@ -61,6 +61,47 @@ test('expect error throw', () => {
     }),
   ).toThrowError(
     'No hull points were defined for convexity defects detection.',
+  );
+});
+
+test('expect error throw for border points', () => {
+  const borderPoints: Point[] = [];
+  const convexHullPoints: Point[] = [
+    { column: 4, row: 2 },
+    { column: 5, row: 4 },
+    { column: 2, row: 5 },
+    { column: 2, row: 2 },
+  ];
+
+  expect(() =>
+    getConvexityDefects(borderPoints, convexHullPoints, {
+      depthThreshold: 100,
+    }),
+  ).toThrowError(
+    'No border points were defined for convexity defects detection.',
+  );
+});
+
+test('expect error throw for no match between border and last hull point', () => {
+  const borderPoints: Point[] = [
+    { column: 4, row: 2 },
+    { column: 5, row: 4 },
+    { column: 2, row: 5 },
+    { column: 2, row: 2 },
+  ];
+  const convexHullPoints: Point[] = [
+    { column: 4, row: 2 },
+    { column: 5, row: 4 },
+    { column: 2, row: 5 },
+    { column: 11, row: 11 },
+  ];
+
+  expect(() =>
+    getConvexityDefects(borderPoints, convexHullPoints, {
+      depthThreshold: 100,
+    }),
+  ).toThrowError(
+    'Could not find a border point matching the convex hull endpoint.',
   );
 });
 
