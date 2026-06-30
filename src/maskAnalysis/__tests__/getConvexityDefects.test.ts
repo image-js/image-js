@@ -1,0 +1,157 @@
+import { expect, test } from 'vitest';
+
+import type { Point } from '../../index_full.ts';
+import { getConvexityDefects } from '../getConvexityDefects.ts';
+
+test('basic test', () => {
+  const mask = testUtils.createMask([
+    [0, 0, 1, 1, 1, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 1, 1, 1, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0],
+  ]);
+
+  const borderPoints = mask.getExternalContour();
+  const convexHull = mask.getConvexHull();
+  const defects = getConvexityDefects(borderPoints, convexHull.points, {
+    depthThreshold: 1,
+  });
+
+  expect(defects).toHaveLength(4);
+  expect(defects).toStrictEqual([
+    { column: 4, row: 2 },
+    { column: 5, row: 4 },
+    { column: 2, row: 5 },
+    { column: 2, row: 2 },
+  ]);
+});
+
+test('carton mask', () => {
+  const image = testUtils.load('various/carton.png');
+  const mask = image.threshold();
+  const borderPoints = mask.getExternalContour();
+  const convexHull = mask.getConvexHull();
+  const defects = getConvexityDefects(borderPoints, convexHull.points, {
+    depthThreshold: 100,
+  });
+
+  expect(defects).toHaveLength(3);
+  expect(defects).toStrictEqual([
+    { column: 226, row: 146 },
+    { column: 340, row: 150 },
+    { column: 116, row: 475 },
+  ]);
+});
+
+test('expect error throw for hull points', () => {
+  const borderPoints = [
+    { column: 4, row: 2 },
+    { column: 5, row: 4 },
+    { column: 2, row: 5 },
+    { column: 2, row: 2 },
+  ];
+  const convexHullPoints: Point[] = [];
+
+  expect(() =>
+    getConvexityDefects(borderPoints, convexHullPoints, {
+      depthThreshold: 100,
+    }),
+  ).toThrowError(
+    'No hull points were defined for convexity defects detection.',
+  );
+});
+
+test('expect error throw for border points', () => {
+  const borderPoints: Point[] = [];
+  const convexHullPoints: Point[] = [
+    { column: 4, row: 2 },
+    { column: 5, row: 4 },
+    { column: 2, row: 5 },
+    { column: 2, row: 2 },
+  ];
+
+  expect(() =>
+    getConvexityDefects(borderPoints, convexHullPoints, {
+      depthThreshold: 100,
+    }),
+  ).toThrowError(
+    'No border points were defined for convexity defects detection.',
+  );
+});
+
+test('expect error throw for no match between border and last hull point', () => {
+  const borderPoints: Point[] = [
+    { column: 4, row: 2 },
+    { column: 5, row: 4 },
+    { column: 2, row: 5 },
+    { column: 2, row: 2 },
+  ];
+  const convexHullPoints: Point[] = [
+    { column: 4, row: 2 },
+    { column: 5, row: 4 },
+    { column: 2, row: 5 },
+    { column: 11, row: 11 },
+  ];
+
+  expect(() =>
+    getConvexityDefects(borderPoints, convexHullPoints, {
+      depthThreshold: 100,
+    }),
+  ).toThrowError(
+    'Could not find a border point matching the convex hull endpoint.',
+  );
+});
+
+test('expect error throw if next hull point was not reached', () => {
+  const borderPoints: Point[] = [
+    { column: 4, row: 2 },
+    { column: 5, row: 4 },
+    { column: 2, row: 5 },
+    { column: 2, row: 2 },
+  ];
+  const convexHullPoints: Point[] = [
+    { column: 4, row: 2 },
+    { column: 5, row: 4 },
+    { column: 11, row: 11 },
+    { column: 2, row: 2 },
+  ];
+
+  expect(() =>
+    getConvexityDefects(borderPoints, convexHullPoints, {
+      depthThreshold: 100,
+    }),
+  ).toThrowError(
+    'Could not reach the next hull point while scanning border points; hull and border may be inconsistent.',
+  );
+});
+
+// Current convexity defects implementation doesn't really support contours as
+// masks.
+test.todo('contour test', () => {
+  const mask = testUtils.createMask([
+    [0, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0],
+    [1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0],
+  ]);
+
+  const borderPoints = mask.getExternalContour();
+  const convexHull = mask.getConvexHull();
+  const defects = getConvexityDefects(borderPoints, convexHull.points, {
+    depthThreshold: 1,
+  });
+
+  expect(defects).toHaveLength(4);
+  expect(defects).toStrictEqual([
+    { column: 2, row: 3 },
+    { column: 3, row: 2 },
+    { column: 4, row: 3 },
+    { column: 3, row: 4 },
+  ]);
+});
