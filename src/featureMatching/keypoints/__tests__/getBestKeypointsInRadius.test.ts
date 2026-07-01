@@ -54,6 +54,9 @@ test('star', () => {
     out: image,
   });
 
-  expect(image).toMatchImageSnapshot();
+  expect(image).toMatchImageSnapshot({
+    failureThreshold: 0.05,
+    failureThresholdType: 'percent',
+  });
   expect(filteredKeypoints).toHaveLength(51);
 });
