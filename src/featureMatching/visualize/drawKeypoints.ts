@@ -121,18 +121,7 @@ export function drawKeypoints(
       strokeColor: keypointColor,
       out: newImage,
     });
-    if (showScore) {
-      drawText(
-        newImage,
-        {
-          content: keypoint.score.toFixed(3).replace(/^0/, ''),
-          position: absoluteOrigin,
-          font,
-          fontColor,
-        },
-        { out: newImage },
-      );
-    }
+
     if (
       isOrientedFastKeypoint(keypoint) &&
       (options as DrawOrientedKeypointsOptions).showOrientation
@@ -150,7 +139,20 @@ export function drawKeypoints(
       });
     }
   }
-
+  if (showScore) {
+    drawText(
+      newImage,
+      keypoints.map((k) => ({
+        content: k.score.toFixed(3).replace(/^0/, ''),
+        position: k.origin,
+        font,
+        fontColor,
+      })),
+      {
+        out: newImage,
+      },
+    );
+  }
   return newImage;
 }
 
