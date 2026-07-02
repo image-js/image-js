@@ -144,7 +144,7 @@ export function drawKeypoints(
       newImage,
       keypoints.map((k) => ({
         content: k.score.toFixed(3).replace(/^0/, ''),
-        position: k.origin,
+        position: sum(k.origin, origin),
         font,
         fontColor,
       })),
