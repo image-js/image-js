@@ -113,10 +113,7 @@ test('destination rotated +10°', () => {
     origin: montage.destinationOrigin,
   });
 
-  expect(montage.image).toMatchImageSnapshot({
-    failureThreshold: 0.05,
-    failureThresholdType: 'percent',
-  });
+  expect(montage.image).toMatchImageSnapshot();
 });
 
 test('showDistance = true', () => {

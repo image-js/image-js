@@ -55,7 +55,7 @@ test('alphabet image, scoreAlgorithm = HARRIS, maxNbFeatures = 50', () => {
   expect(
     drawKeypoints(image, keypoints, { showScore: true }),
   ).toMatchImageSnapshot({
-    failureThreshold: 0.05,
+    failureThreshold: 0.025,
     failureThresholdType: 'percent',
   });
 });
@@ -71,10 +71,7 @@ test('star', () => {
       showScore: true,
       showScoreOptions: { font: 'Helvetica 30px', fontColor: [255, 0, 0] },
     }),
-  ).toMatchImageSnapshot({
-    failureThreshold: 0.05,
-    failureThresholdType: 'percent',
-  });
+  ).toMatchImageSnapshot();
 });
 
 test('star with harris', () => {
@@ -86,6 +83,25 @@ test('star with harris', () => {
   });
 
   expect(keypoints).toHaveLength(22);
+  expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
+});
+
+test('star with harris and quality threshold', () => {
+  // It's a basic test is to check that we get the same keypoints as
+  // opencv implementation with the same parameters.
+  const image = testUtils.load('featureMatching/checkerboard.jpg');
+  const grey = image.convertColor('GREY');
+  const keypoints = getFastKeypoints(grey, {
+    scoreAlgorithm: 'HARRIS',
+    nonMaxSuppression: false,
+    fastRadius: 3,
+    nbContiguousPixels: 0,
+    qualityThreshold: 0.01,
+    maxNbFeatures: 3600,
+    scoreOptions: { windowSize: 7, harrisConstant: 0.01 },
+  });
+
+  expect(keypoints).toHaveLength(3600);
   expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
 });
 
