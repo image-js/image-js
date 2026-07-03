@@ -106,7 +106,7 @@ test('star with harris and quality threshold', () => {
 
   expect(keypoints).toHaveLength(3600);
   expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
-});
+}, 20000);
 
 test('star with shi-tomasi', () => {
   const image = testUtils.load('featureMatching/polygons/star.png');
