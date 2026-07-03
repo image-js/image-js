@@ -20,7 +20,6 @@ export type TestImagePath =
   | 'featureMatching/alphabetTranslated10.jpg'
   | 'featureMatching/alphabetTranslated20.jpg'
   | 'featureMatching/alphabetTranslated50.jpg'
-  | 'featureMatching/checkerboard.jpg'
   | 'featureMatching/id-crops/crop1.png'
   | 'featureMatching/id-crops/crop2.png'
   | 'featureMatching/id-crops/crop3.png'
