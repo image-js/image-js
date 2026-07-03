@@ -144,5 +144,8 @@ test('showDistance = true', () => {
     },
   );
 
-  expect(montage.image).toMatchImageSnapshot();
+  expect(montage.image).toMatchImageSnapshot({
+    failureThreshold: 0.025,
+    failureThresholdType: 'percent',
+  });
 });

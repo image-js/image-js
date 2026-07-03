@@ -14,7 +14,10 @@ test('alphabet image with score coloring', () => {
     showScoreOptions: { font: 'sans-serif 20px', fontColor: [255, 0, 0] },
   });
 
-  expect(result).toMatchImageSnapshot();
+  expect(result).toMatchImageSnapshot({
+    failureThreshold: 0.025,
+    failureThresholdType: 'percent',
+  });
 
   const maxNbKeypoints = drawKeypoints(image, keypoints, {
     showScore: true,

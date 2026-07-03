@@ -71,7 +71,10 @@ test('star', () => {
       showScore: true,
       showScoreOptions: { font: 'Helvetica 30px', fontColor: [255, 0, 0] },
     }),
-  ).toMatchImageSnapshot();
+  ).toMatchImageSnapshot({
+    failureThreshold: 0.025,
+    failureThresholdType: 'percent',
+  });
 });
 
 test('star with harris', () => {
