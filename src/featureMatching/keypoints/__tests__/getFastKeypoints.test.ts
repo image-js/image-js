@@ -97,7 +97,7 @@ test('star with harris and quality threshold', () => {
   const keypoints = getFastKeypoints(grey, {
     scoreAlgorithm: 'HARRIS',
     nonMaxSuppression: false,
-    fastRadius: 3,
+    fastRadius: 0,
     nbContiguousPixels: 0,
     qualityThreshold: 0.01,
     maxNbFeatures: 3600,
