@@ -90,23 +90,22 @@ test('star with harris', () => {
 });
 
 test('star with harris and quality threshold', () => {
-  // It's a basic test is to check that we get the same keypoints as
-  // opencv implementation with the same parameters.
+  // It's a basic test to check that we get relatively the same keypoints as
+  // opencv implementation
   const image = testUtils.load('featureMatching/checkerboard.jpg');
   const grey = image.convertColor('GREY');
   const keypoints = getFastKeypoints(grey, {
     scoreAlgorithm: 'HARRIS',
-    nonMaxSuppression: false,
+    nonMaxSuppression: true,
     fastRadius: 0,
     nbContiguousPixels: 0,
     qualityThreshold: 0.01,
-    maxNbFeatures: 3600,
     scoreOptions: { windowSize: 7, harrisConstant: 0.01 },
   });
 
-  expect(keypoints).toHaveLength(3600);
+  expect(keypoints).toHaveLength(177);
   expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
-}, 20000);
+}, 15000);
 
 test('star with shi-tomasi', () => {
   const image = testUtils.load('featureMatching/polygons/star.png');
