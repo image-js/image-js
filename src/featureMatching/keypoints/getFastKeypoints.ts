@@ -168,7 +168,7 @@ export function getFastKeypoints(
     if (k.score > maxScore) maxScore = k.score;
   }
   let filtered = keypoints;
-  if (qualityThreshold) {
+  if (qualityThreshold > 0) {
     filtered = filtered.filter((k) => k.score / maxScore >= qualityThreshold);
   }
 
