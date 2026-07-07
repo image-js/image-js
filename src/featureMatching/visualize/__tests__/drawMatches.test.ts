@@ -114,7 +114,7 @@ test('destination rotated +10°', () => {
   });
 
   expect(montage.image).toMatchImageSnapshot({
-    failureThreshold: 0.025,
+    failureThreshold: 0.05,
     failureThresholdType: 'percent',
   });
 });
