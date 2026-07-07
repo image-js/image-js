@@ -92,7 +92,7 @@ export function drawKeypoints(
   let { maxNbKeypoints = keypoints.length } = options;
   const { strokeColor = [255, 0, 0] } = options;
   const fontColor = showScoreOptions?.fontColor ?? [0, 0, 255];
-  const font = showScoreOptions?.font ?? 'Helvetica 20px';
+  const font = showScoreOptions?.font ?? '20px Helvetica';
   if (maxNbKeypoints > keypoints.length) {
     maxNbKeypoints = keypoints.length;
   }
@@ -143,10 +143,10 @@ export function drawKeypoints(
     drawText(
       newImage,
       keypoints.map((k) => ({
-        content: k.score.toFixed(3).replace(/^0/, ''),
+        content: (k.score * 100).toFixed(2),
         position: sum(k.origin, origin),
         font,
-        fontColor,
+        fontColor: [...fontColor, 255],
       })),
       {
         out: newImage,

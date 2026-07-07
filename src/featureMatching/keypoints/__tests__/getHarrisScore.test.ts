@@ -50,30 +50,39 @@ test('7x7 image with horizontal line', () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
 
-  const point1 = { column: 6, row: 6 };
-  const score1 = getHarrisScore(image, point1, { windowSize: 3 });
-  const point2 = { column: 2, row: 2 };
-  const score2 = getHarrisScore(image, point2, { windowSize: 3 });
+  const matrixSize = 5;
+  const matrix = Array.from({ length: matrixSize }, () =>
+    new Array(matrixSize).fill(0),
+  );
+  for (let i = 0; i < matrixSize; i++) {
+    for (let j = 0; j < matrixSize; j++) {
+      const point = { column: j + 2, row: i + 2 };
+      matrix[i][j] = getHarrisScore(image, point, { windowSize: 3 });
+    }
+  }
 
-  expect(score1).toBeCloseTo(9452229600.000002);
-  expect(score1).toBeCloseTo(score2);
+  expect(matrix).toBeDeepCloseTo([
+    [9452229600.000004, 4405476900, -60028100, -52707600, -1464099.9999999998],
+    [12468275600, 6242922399.999999, 2915023100.0000014, -177156100, -52707600],
+    [4603130399.999998, 4392300000.000001, 6279524900, 2915023100, -60028100],
+    [5972063899.999995, 3074610000, 4392300000.000001, 6242922400, 4405476900],
+    [8976397100, 5972063900.000001, 4603130400, 12468275600, 9452229600.000002],
+  ]);
 });
 
 test('9x9 image with triangle', () => {
   const image = testUtils.createGreyImage([
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 55, 0, 0, 0, 0, 0],
-    [0, 0, 0, 55, 0, 55, 0, 0, 0, 0],
-    [0, 0, 55, 55, 55, 55, 55, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 55, 0, 0, 0, 0],
+    [0, 0, 0, 55, 0, 55, 0, 0, 0],
+    [0, 0, 55, 55, 55, 55, 55, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
 
-  const origin2 = { row: 6, column: 6 };
-  const origin3 = { row: 6, column: 2 };
+  const origin2 = { row: 4, column: 6 };
+  const origin3 = { row: 4, column: 2 };
   const windowSize = 3;
   const result2 = getHarrisScore(image, origin2, { windowSize });
   const result3 = getHarrisScore(image, origin3, { windowSize });

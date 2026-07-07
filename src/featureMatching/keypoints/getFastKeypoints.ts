@@ -167,14 +167,16 @@ export function getFastKeypoints(
   for (const k of keypoints) {
     if (k.score > maxScore) maxScore = k.score;
   }
-  let filtered = keypoints;
-  if (qualityThreshold > 0) {
-    filtered = filtered.filter((k) => k.score / maxScore >= qualityThreshold);
+  const filtered: FastKeypoint[] = [];
+  // threshold by default negative infinity
+  const filterThreshold = qualityThreshold * maxScore;
+
+  for (const k of keypoints) {
+    if (k.score >= filterThreshold) {
+      k.score /= maxScore;
+      filtered.push(k);
+    }
   }
 
-  filtered = filtered
-    .map((k) => ({ origin: k.origin, score: k.score / maxScore }))
-    .toSorted((a, b) => b.score - a.score);
-
-  return filtered.slice(0, maxNbFeatures);
+  return filtered.toSorted((a, b) => b.score - a.score).slice(0, maxNbFeatures);
 }
