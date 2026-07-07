@@ -15,9 +15,9 @@ test('7x7 image with darker and lighter areas', () => {
 
   const origin = { row: 3, column: 3 };
 
-  const result = getShiTomasiScore(image, origin, { windowSize: 7 });
+  const result = getShiTomasiScore(image, origin);
 
-  expect(result).toBeCloseTo(-446378, 0);
+  expect(result).toBeCloseTo(487099.36, 0);
 });
 
 test('7x7 image with other corner', () => {
@@ -34,7 +34,7 @@ test('7x7 image with other corner', () => {
   const origin = { row: 3, column: 3 };
   const result = getShiTomasiScore(image, origin);
 
-  expect(result).toBeCloseTo(-22742, 0);
+  expect(result).toBeCloseTo(70000, 0);
 });
 
 test('7x7 image with corner 90 degrees, bottom-right', () => {
@@ -52,7 +52,25 @@ test('7x7 image with corner 90 degrees, bottom-right', () => {
 
   const result = getShiTomasiScore(image, origin);
 
-  expect(result).toBeCloseTo(130050);
+  expect(result).toBeCloseTo(3641400, 0);
+});
+
+test('7x7 image with corner 90 degrees, bottom-left', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [255, 255, 255, 255, 0, 0, 0],
+    [0, 0, 0, 255, 0, 0, 0],
+    [0, 0, 0, 255, 0, 0, 0],
+    [0, 0, 0, 255, 0, 0, 0],
+  ]);
+
+  const origin = { row: 3, column: 3 };
+
+  const result = getShiTomasiScore(image, origin);
+
+  expect(result).toBeCloseTo(3641400, 0);
 });
 
 test('windowSize error', () => {

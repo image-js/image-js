@@ -24,7 +24,7 @@ export function getHarrisScore(
   origin: Point,
   options: GetHarrisScoreOptions = {},
 ): number {
-  const { harrisConstant = 0.04, windowSize } = options;
+  const { harrisConstant = 0.04, windowSize = 5 } = options;
   const eigenValues = getEigenvaluesForScore(image, origin, windowSize);
 
   return (

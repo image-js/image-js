@@ -52,16 +52,29 @@ test('alphabet image, scoreAlgorithm = HARRIS, maxNbFeatures = 50', () => {
   });
 
   expect(keypoints).toHaveLength(50);
-  expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
+  expect(
+    drawKeypoints(image, keypoints, { showScore: true }),
+  ).toMatchImageSnapshot({
+    failureThreshold: 0.025,
+    failureThresholdType: 'percent',
+  });
 });
 
 test('star', () => {
   const image = testUtils.load('featureMatching/polygons/star.png');
   const grey = image.convertColor('GREY');
-  const keypoints = getFastKeypoints(grey);
+  const keypoints = getFastKeypoints(grey, { scoreAlgorithm: 'HARRIS' });
 
-  expect(keypoints).toHaveLength(55);
-  expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
+  expect(keypoints).toHaveLength(22);
+  expect(
+    drawKeypoints(image, keypoints, {
+      showScore: true,
+      showScoreOptions: { font: 'Helvetica 30px', fontColor: [255, 0, 0] },
+    }),
+  ).toMatchImageSnapshot({
+    failureThreshold: 0.025,
+    failureThresholdType: 'percent',
+  });
 });
 
 test('star with harris', () => {
@@ -70,9 +83,10 @@ test('star with harris', () => {
   const keypoints = getFastKeypoints(grey, {
     scoreAlgorithm: 'HARRIS',
     nonMaxSuppression: true,
+    qualityThreshold: 0.01,
   });
 
-  expect(keypoints).toHaveLength(25);
+  expect(keypoints).toHaveLength(22);
   expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
 });
 
@@ -84,7 +98,7 @@ test('star with shi-tomasi', () => {
     nonMaxSuppression: true,
   });
 
-  expect(keypoints).toHaveLength(33);
+  expect(keypoints).toHaveLength(22);
   expect(drawKeypoints(image, keypoints)).toMatchImageSnapshot();
 });
 

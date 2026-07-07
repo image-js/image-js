@@ -1,51 +1,53 @@
-import { EigenvalueDecomposition, Matrix, WrapperMatrix1D } from 'ml-matrix';
+import { EigenvalueDecomposition, Matrix } from 'ml-matrix';
 
 import type { Image } from '../../Image.ts';
+import { rawDirectConvolution } from '../../filters/convolution.ts';
 import type { Point } from '../../index_full.ts';
 import { SOBEL_X, SOBEL_Y } from '../../utils/constants/kernels.js';
-
 /**
  * A function that calculates eigenvalues to calculate feature score for Harris and Shi-Tomasi algorithms.
  * @param image - Image take data from.
  * @param origin - Center of the window, where the corner should be.
- * @param windowSize - Size of the window, where data should be scanned.
+ * @param cropSize - Size of the window, where data should be scanned.
  * @returns Array of two eigenvalues.
  */
 export function getEigenvaluesForScore(
   image: Image,
   origin: Point,
-  windowSize = 7,
+  cropSize = 5,
 ) {
-  if (!(windowSize % 2)) {
+  if (!(cropSize % 2)) {
     throw new TypeError('windowSize must be an odd integer');
   }
-
+  const kernelRadius = (SOBEL_X.length - 1) / 2;
+  const windowRadius = (cropSize - 1) / 2;
+  const padded = cropSize + 2 * kernelRadius;
   const cropOrigin = {
-    row: origin.row - (windowSize - 1) / 2,
-    column: origin.column - (windowSize - 1) / 2,
+    row: origin.row - windowRadius - kernelRadius,
+    column: origin.column - windowRadius - kernelRadius,
   };
   const window = image.crop({
     origin: cropOrigin,
-    width: windowSize,
-    height: windowSize,
+    width: padded,
+    height: padded,
   });
-  const xDerivative = window.gradientFilter({ kernelX: SOBEL_X });
-  const yDerivative = window.gradientFilter({ kernelY: SOBEL_Y });
+  const xDerivative = rawDirectConvolution(window, SOBEL_X);
+  const yDerivative = rawDirectConvolution(window, SOBEL_Y);
 
-  const xMatrix = new WrapperMatrix1D(xDerivative.getRawImage().data, {
-    rows: xDerivative.height,
-  });
-  const yMatrix = new WrapperMatrix1D(yDerivative.getRawImage().data, {
-    rows: yDerivative.height,
-  });
+  let xxSum = 0;
+  let xySum = 0;
+  let yySum = 0;
 
-  const xx = xMatrix.mmul(xMatrix);
-  const xy = yMatrix.mmul(xMatrix);
-  const yy = yMatrix.mmul(yMatrix);
-
-  const xxSum = xx.sum();
-  const xySum = xy.sum();
-  const yySum = yy.sum();
+  for (let i = kernelRadius; i < window.height - kernelRadius; i++) {
+    for (let j = kernelRadius; j < window.width - kernelRadius; j++) {
+      const idx = i * window.width + j;
+      const gx = xDerivative[idx];
+      const gy = yDerivative[idx];
+      xxSum += gx * gx;
+      xySum += gx * gy;
+      yySum += gy * gy;
+    }
+  }
 
   const structureTensor = new Matrix([
     [xxSum, xySum],

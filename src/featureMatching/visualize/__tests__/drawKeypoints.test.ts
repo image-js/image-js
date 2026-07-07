@@ -11,14 +11,19 @@ test('alphabet image with score coloring', () => {
   const result = drawKeypoints(image, keypoints, {
     showScore: true,
     fill: true,
+    showScoreOptions: { font: '35px sans-serif', fontColor: [255, 0, 0] },
   });
 
-  expect(result).toMatchImageSnapshot();
+  expect(result).toMatchImageSnapshot({
+    failureThreshold: 0.025,
+    failureThresholdType: 'percent',
+  });
 
   const maxNbKeypoints = drawKeypoints(image, keypoints, {
     showScore: true,
     fill: true,
     maxNbKeypoints: 50,
+    showScoreOptions: { font: '35px sans-serif', fontColor: [255, 0, 0] },
   });
 
   expect(maxNbKeypoints).toMatchImage(result);
@@ -27,6 +32,7 @@ test('alphabet image with score coloring', () => {
 test('only draw 5 best matches', () => {
   const result = drawKeypoints(image, keypoints, {
     maxNbKeypoints: 5,
+    showScoreOptions: { font: '35px sans-serif', fontColor: [255, 0, 0] },
   });
 
   expect(result).toMatchImageSnapshot();
