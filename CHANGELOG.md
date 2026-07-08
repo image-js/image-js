@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0](https://github.com/image-js/image-js/compare/v1.6.2...v1.7.0) (2026-07-08)
+
+
+### Features
+
+* add convexitydefects ([#825](https://github.com/image-js/image-js/issues/825)) ([2993eab](https://github.com/image-js/image-js/commit/2993eabc9f5016742a3f0b53b4dea9396734b271))
+
+
+### Bug Fixes
+
+* bug in getFastKeypoints ([#819](https://github.com/image-js/image-js/issues/819)) ([e09b623](https://github.com/image-js/image-js/commit/e09b6234e7c034f8167ad400e9ac80488abcbf04))
+
 ## [1.6.2](https://github.com/image-js/image-js/compare/v1.6.1...v1.6.2) (2026-06-29)
 
 
