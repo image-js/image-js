@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import type { Image, Point, Roi } from '../src/index.js';
-import { fromMask, readSync } from '../src/index.js';
+import { fromMask, read, readSync } from '../src/index.js';
 
 import type { TestImagePath } from './TestImagePath.js';
 import type { CreateImageOptions } from './createImageFromData.js';
@@ -175,7 +175,16 @@ declare global {
     getInt16Array: typeof getInt16Array;
     getInt32Array: typeof getInt32Array;
     createPoints: typeof createPoints;
+    loadDemoImage: typeof loadDemoImage;
   };
 }
 
 export { createMask } from './createMask.js';
+
+/**
+ * Load an image from the demo dataset
+ * @param filename - Image path from the demo dataset root
+ */
+export function loadDemoImage(filename: string) {
+  return read(join(import.meta.dirname, `../demo-images/${filename}`));
+}

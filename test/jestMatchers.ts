@@ -21,6 +21,10 @@ export interface JestMatcherOptions {
   error?: number;
 }
 
+export type JestMatcherImageData = number[][] | string;
+
+export type JestMatcherImage = Image | TestImagePath;
+
 /**
  * Match a received image to an expected image.
  * @param received - Received image.
@@ -31,7 +35,7 @@ export interface JestMatcherOptions {
 export function toMatchImage(
   this: MatcherState,
   received: Image,
-  expected: Image | TestImagePath,
+  expected: JestMatcherImage,
   options: JestMatcherOptions = {},
 ): MatcherResult {
   const { error = 0 } = options;
@@ -95,7 +99,7 @@ export function toMatchImage(
 export function toMatchImageData(
   this: MatcherState,
   received: Image,
-  expectedData: number[][] | string,
+  expectedData: JestMatcherImageData,
   options: JestMatcherOptions = {},
 ): MatcherResult {
   const expectedImage = createImageFromData(expectedData, received.colorModel, {
@@ -149,7 +153,7 @@ export function toMatchMask(
 export function toMatchMaskData(
   this: MatcherState,
   received: Mask,
-  expectedData: number[][] | string,
+  expectedData: JestMatcherImageData,
 ): MatcherResult {
   const expectedMask = createImageFromData(expectedData, 'BINARY');
   return toMatchMask.call(this, received, expectedMask);
@@ -179,6 +183,5 @@ export function toMatchImageSnapshot(
   }
 
   const buffer = Buffer.from(png.buffer, png.byteOffset, png.byteLength);
-  // @ts-expect-error The public types doesn't correspond to the implementation.
   return toMatchImageFileSnapshot.call(this, buffer, options);
 }

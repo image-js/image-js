@@ -42,14 +42,8 @@ To run benchmarks, start by downloading the demo image dataset:
 
 `node scripts/fetch_image_dataset.ts`
 
-Then run one of the benchmarks:
+Then run the benchmarks:
 
-`node scripts/benchmark/threshold.benchmark.ts`
-
-Benchmarks load the built image-js library, so make sure to run `npm run build` to execute an up-to-date version of the code.
-
-### Writing benchmarks
-
-The `mitata` library should be used to run benchmarks. When implementing a new benchmark, make sure it supports the `--format` option.
-
-`node scripts/benchmark/threshold.benchmark.ts --format=markdown`
+```bash
+npm run bench
+```

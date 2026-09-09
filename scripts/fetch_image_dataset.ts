@@ -5,7 +5,7 @@ import path from 'node:path';
 
 import { fetchURL, write } from '../lib/index.js';
 
-const dir = path.join(import.meta.dirname, './images');
+const dir = path.join(import.meta.dirname, '../demo-images');
 
 const demoUrl = 'https://demo-dataset.image-js.org/';
 const response = await fetch(demoUrl);

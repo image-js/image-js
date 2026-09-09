@@ -1,4 +1,4 @@
-import { toBeDeepCloseTo, toMatchCloseTo } from 'jest-matcher-deep-close-to';
+import { toBeDeepCloseTo } from 'jest-matcher-deep-close-to';
 import { expect } from 'vitest';
 
 import {
@@ -12,7 +12,6 @@ import * as testUtils from './test/testUtils.js';
 
 expect.extend({
   toBeDeepCloseTo,
-  toMatchCloseTo,
   toMatchImage,
   toMatchImageData,
   toMatchImageSnapshot,
