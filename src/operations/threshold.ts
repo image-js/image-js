@@ -129,11 +129,11 @@ export function threshold(image: Image, options: ThresholdOptions = {}): Mask {
     thresholdValue = computeThreshold(image, options);
   }
   const result = imageToOutputMask(image, options);
-  for (let i = 0; i < image.size; i++) {
-    result.setBitByIndex(
-      i,
-      image.getValueByIndex(i, 0) > thresholdValue ? 1 : 0,
-    );
+  const inputData = image.getRawImage().data;
+  const outputData = result.getRawImage().data;
+  const { size, channels } = image;
+  for (let i = 0; i < size; i++) {
+    outputData[i] = inputData[i * channels] > thresholdValue ? 1 : 0;
   }
   return result;
 }
