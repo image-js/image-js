@@ -43,7 +43,7 @@ export function invert(
     const newImage = maskToOutputMask(image, options);
 
     for (let i = 0; i < newImage.size; i++) {
-      newImage.setBitByIndex(i, !image.getBitByIndex(i));
+      newImage.setBitByIndex(i, image.getBitByIndex(i) ? 0 : 1);
     }
     return newImage;
   }

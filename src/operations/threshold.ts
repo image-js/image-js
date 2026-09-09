@@ -68,8 +68,7 @@ export interface ThresholdOptionsAlgorithm extends ThresholdOptionsBase {
 }
 
 export type ThresholdOptions =
-  | ThresholdOptionsThreshold
-  | ThresholdOptionsAlgorithm;
+  ThresholdOptionsThreshold | ThresholdOptionsAlgorithm;
 
 /**
  * Compute threshold value for an image using the specified algorithm.
@@ -129,11 +128,12 @@ export function threshold(image: Image, options: ThresholdOptions = {}): Mask {
     thresholdValue = computeThreshold(image, options);
   }
   const result = imageToOutputMask(image, options);
-  const inputData = image.getRawImage().data;
-  const outputData = result.getRawImage().data;
-  const { size, channels } = image;
+  const { size } = image;
   for (let i = 0; i < size; i++) {
-    outputData[i] = inputData[i * channels] > thresholdValue ? 1 : 0;
+    result.setBitByIndex(
+      i,
+      image.getValueByIndex(i, 0) > thresholdValue ? 1 : 0,
+    );
   }
   return result;
 }

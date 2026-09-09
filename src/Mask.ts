@@ -176,7 +176,7 @@ export class Mask {
     if (data === undefined) {
       this.data = new Uint8Array(this.size);
     } else {
-      const expectedLength = this.size * this.channels;
+      const expectedLength = this.size;
       if (data.length !== expectedLength) {
         throw new RangeError(
           `incorrect data size: ${data.length}. Expected ${expectedLength}`,
@@ -316,7 +316,7 @@ export class Mask {
    * @returns Value of the bit.
    */
   public getBitByIndex(index: number): number {
-    return this.data[index * this.channels];
+    return this.data[index];
   }
 
   /**
@@ -325,7 +325,8 @@ export class Mask {
    * @param value - Value to set.
    */
   public setBitByIndex(index: number, value: BitValue): void {
-    this.data[index * this.channels] = boolToNumber(value);
+    // @ts-expect-error Passing true / false actually does what is expected
+    this.data[index] = value;
   }
 
   /**
