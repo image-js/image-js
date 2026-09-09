@@ -100,6 +100,7 @@
     "immer": "^11.0.1",
     "jest-image-snapshot": "^6.5.1",
     "jest-matcher-deep-close-to": "^3.0.2",
+    "mitata": "^1.0.34",
     "postcss": "^8.5.6",
     "prettier": "^3.7.4",
     "react": "^19.2.3",
