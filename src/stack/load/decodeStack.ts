@@ -1,10 +1,10 @@
 import imageType from 'image-type';
 import { match } from 'ts-pattern';
 
-import type { Stack } from '../../Stack.js';
+import type { Stack } from '../../Stack.ts';
 
 import { decodeStackFromApng } from './decodeApng.ts';
-import { decodeStackFromTiff } from './decodeTiff.js';
+import { decodeStackFromTiff } from './decodeTiff.ts';
 
 /**
  * Decode input data and create stack. Data format is automatically detected.

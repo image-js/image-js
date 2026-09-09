@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import type { Match } from '../../matching/bruteForceMatch.js';
-import { getColors } from '../getColors.js';
-import { getMatchColor } from '../getMatchColor.js';
+import { Image } from '../../../Image.ts';
+import type { Match } from '../../matching/bruteForceMatch.ts';
+import { getColors } from '../getColors.ts';
+import { getMatchColor } from '../getMatchColor.ts';
 
 test('matches should all have a different color', () => {
   const image = new Image(5, 5);

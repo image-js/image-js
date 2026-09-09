@@ -1,6 +1,6 @@
-import { Mask } from '../Mask.js';
+import { Mask } from '../Mask.ts';
 
-import type { Roi } from './Roi.js';
+import type { Roi } from './Roi.ts';
 
 export interface GetMaskOptions {
   /**

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { merge } from '../merge.js';
+import { merge } from '../merge.ts';
 
 test('merge into RGB', () => {
   const img = testUtils.createRgbImage([[0, 1, 2, 253, 254, 255]]);

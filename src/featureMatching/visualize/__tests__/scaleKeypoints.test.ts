@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import type { FastKeypoint } from '../../keypoints/getFastKeypoints.js';
-import { scaleKeypoints } from '../scaleKeypoints.js';
+import type { FastKeypoint } from '../../keypoints/getFastKeypoints.ts';
+import { scaleKeypoints } from '../scaleKeypoints.ts';
 
 test('scale = 1', () => {
   const keypoints: FastKeypoint[] = [

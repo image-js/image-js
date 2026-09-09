@@ -1,11 +1,11 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
+import { Image } from '../../../Image.ts';
 import {
   getCirclePoints,
   getCompassPoints,
-} from '../../../utils/geometry/getCirclePoints.js';
-import { isFastKeypoint } from '../isFastKeypoint.js';
+} from '../../../utils/geometry/getCirclePoints.ts';
+import { isFastKeypoint } from '../isFastKeypoint.ts';
 
 const fastRadius = 3;
 const fastDiameter = 2 * fastRadius + 1;

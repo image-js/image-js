@@ -1,6 +1,6 @@
-import type { Image } from '../../Image.js';
+import type { Image } from '../../Image.ts';
 
-import type { Point } from './points.js';
+import type { Point } from './points.ts';
 
 export interface RemoveClosePointsOptions {
   /**

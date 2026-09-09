@@ -1,7 +1,7 @@
-import { Image } from '../Image.js';
-import type { Mask } from '../Mask.js';
-import { checkKernel } from '../utils/validators/checkKernel.js';
-import checkProcessable from '../utils/validators/checkProcessable.js';
+import { Image } from '../Image.ts';
+import type { Mask } from '../Mask.ts';
+import { checkKernel } from '../utils/validators/checkKernel.ts';
+import checkProcessable from '../utils/validators/checkProcessable.ts';
 
 export interface OpenOptions {
   /**

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getPatchIntensityMoment } from '../getPatchIntensityMoment.js';
+import { getPatchIntensityMoment } from '../getPatchIntensityMoment.ts';
 
 test('5x5 image, 01, radius = 1', () => {
   const image = testUtils.createGreyImage([

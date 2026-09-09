@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { extractSquareImage } from '../extractSquareImage.js';
+import { extractSquareImage } from '../extractSquareImage.ts';
 
 test('7x7 image, first origin', () => {
   const image = testUtils.createGreyImage([

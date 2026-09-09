@@ -1,24 +1,24 @@
 import { match } from 'ts-pattern';
 
-import type { Image } from '../Image.js';
-import type { Mask } from '../Mask.js';
-import { imageToOutputMask } from '../utils/getOutputImage.js';
+import type { Image } from '../Image.ts';
+import type { Mask } from '../Mask.ts';
+import { imageToOutputMask } from '../utils/getOutputImage.ts';
 
-import huang from './thresholds/huang.js';
-import intermodes from './thresholds/intermodes.js';
-import isodata from './thresholds/isodata.js';
-import li from './thresholds/li.js';
-import maxEntropy from './thresholds/maxEntropy.js';
-import mean from './thresholds/mean.js';
-import minError from './thresholds/minError.js';
-import minimum from './thresholds/minimum.js';
-import moments from './thresholds/moments.js';
-import { otsu } from './thresholds/otsu.js';
-import percentile from './thresholds/percentile.js';
-import renyiEntropy from './thresholds/renyiEntropy.js';
-import shanbhag from './thresholds/shanbhag.js';
-import { triangle } from './thresholds/triangle.js';
-import yen from './thresholds/yen.js';
+import huang from './thresholds/huang.ts';
+import intermodes from './thresholds/intermodes.ts';
+import isodata from './thresholds/isodata.ts';
+import li from './thresholds/li.ts';
+import maxEntropy from './thresholds/maxEntropy.ts';
+import mean from './thresholds/mean.ts';
+import minError from './thresholds/minError.ts';
+import minimum from './thresholds/minimum.ts';
+import moments from './thresholds/moments.ts';
+import { otsu } from './thresholds/otsu.ts';
+import percentile from './thresholds/percentile.ts';
+import renyiEntropy from './thresholds/renyiEntropy.ts';
+import shanbhag from './thresholds/shanbhag.ts';
+import { triangle } from './thresholds/triangle.ts';
+import yen from './thresholds/yen.ts';
 
 export const ThresholdAlgorithm = {
   HUANG: 'huang',

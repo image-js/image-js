@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import type { Match } from '../../matching/bruteForceMatch.js';
-import { sortByDestSource, sortBySourceDest } from '../sortBySourceDest.js';
+import type { Match } from '../../matching/bruteForceMatch.ts';
+import { sortByDestSource, sortBySourceDest } from '../sortBySourceDest.ts';
 
 test('should sort by source then dest', () => {
   const matches: Match[] = [

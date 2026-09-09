@@ -1,5 +1,5 @@
-import type { Stack } from '../../Stack.js';
-import { format } from '../../utils/validators/checkProcessable.js';
+import type { Stack } from '../../Stack.ts';
+import { format } from '../../utils/validators/checkProcessable.ts';
 
 interface CheckStackOptions {
   /**

@@ -3,7 +3,7 @@ import { EigenvalueDecomposition, Matrix } from 'ml-matrix';
 import type { Image } from '../../Image.ts';
 import { rawDirectConvolution } from '../../filters/convolution.ts';
 import type { Point } from '../../index_full.ts';
-import { SOBEL_X, SOBEL_Y } from '../../utils/constants/kernels.js';
+import { SOBEL_X, SOBEL_Y } from '../../utils/constants/kernels.ts';
 /**
  * A function that calculates eigenvalues to calculate feature score for Harris and Shi-Tomasi algorithms.
  * @param image - Image take data from.

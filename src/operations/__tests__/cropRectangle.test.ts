@@ -1,8 +1,8 @@
 import { assert, expect, test } from 'vitest';
 
-import type { Image } from '../../Image.js';
-import { rotatePoint } from '../../point/operations.js';
-import type { Point } from '../../utils/geometry/points.js';
+import type { Image } from '../../Image.ts';
+import { rotatePoint } from '../../point/operations.ts';
+import type { Point } from '../../utils/geometry/points.ts';
 
 test('straight rectangle top left', () => {
   const image = testUtils.createGreyImage([

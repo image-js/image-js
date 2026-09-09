@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { computeThreshold } from '../../operations/index.js';
-import { waterShed } from '../waterShed.js';
+import { computeThreshold } from '../../operations/index.ts';
+import { waterShed } from '../waterShed.ts';
 
 describe('Test WaterShed Roi generation', () => {
   it('test 1,basic test without parameters/options', () => {

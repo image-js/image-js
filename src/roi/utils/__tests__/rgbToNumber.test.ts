@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { rgbToNumber } from '../rgbToNumber.js';
+import { rgbToNumber } from '../rgbToNumber.ts';
 
 test('white', () => {
   const rgb = new Uint8Array([255, 255, 255]);

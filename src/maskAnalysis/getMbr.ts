@@ -1,9 +1,9 @@
-import type { Mask } from '../Mask.js';
+import type { Mask } from '../Mask.ts';
 
-import type { Mbr } from './maskAnalysis.types.js';
-import { getExtendedBorderPoints } from './utils/getExtendedBorderPoints.js';
-import { getMbrFromPoints } from './utils/getMbrFromPoints.js';
-import { monotoneChainConvexHull } from './utils/monotoneChainConvexHull.js';
+import type { Mbr } from './maskAnalysis.types.ts';
+import { getExtendedBorderPoints } from './utils/getExtendedBorderPoints.ts';
+import { getMbrFromPoints } from './utils/getMbrFromPoints.ts';
+import { monotoneChainConvexHull } from './utils/monotoneChainConvexHull.ts';
 
 /**
  * Get the four corners of the minimum bounding rectangle of an ROI.

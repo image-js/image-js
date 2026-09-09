@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { Mask } from '../../Mask.js';
+import { Mask } from '../../Mask.ts';
 
 test('6x5 mask with hole, no inner borders', () => {
   const roi = testUtils.createRoi([

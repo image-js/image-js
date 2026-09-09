@@ -1,4 +1,4 @@
-import type { Point } from './points.js';
+import type { Point } from './points.ts';
 
 export interface Line {
   /**

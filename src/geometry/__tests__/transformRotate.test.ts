@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { encodePng } from '../../save/index.js';
-import { transformRotate } from '../transformRotate.js';
+import { encodePng } from '../../save/index.ts';
+import { transformRotate } from '../transformRotate.ts';
 
 test('rotate + scale compared to opencv (nearest)', () => {
   const img = testUtils.load('opencv/test.png');

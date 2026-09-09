@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { monotoneChainConvexHull as mcch } from '../monotoneChainConvexHull.js';
+import { monotoneChainConvexHull as mcch } from '../monotoneChainConvexHull.ts';
 
 test('basic square', () => {
   const result = mcch([

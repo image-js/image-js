@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../Image.js';
-import { divide } from '../divide.js';
+import { Image } from '../../Image.ts';
+import { divide } from '../divide.ts';
 
 test('divide by 2', () => {
   let image = testUtils.createRgbaImage([

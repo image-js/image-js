@@ -1,5 +1,5 @@
-import type { BitDepth, Image } from '../Image.js';
-import { getOutputImage } from '../utils/getOutputImage.js';
+import type { BitDepth, Image } from '../Image.ts';
+import { getOutputImage } from '../utils/getOutputImage.ts';
 
 export interface ConvertBitDepthOptions {
   /**

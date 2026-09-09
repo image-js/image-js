@@ -1,8 +1,8 @@
-import type { CreateFromOptions } from '../Image.js';
-import { Image } from '../Image.js';
-import { Mask } from '../Mask.js';
+import type { CreateFromOptions } from '../Image.ts';
+import { Image } from '../Image.ts';
+import { Mask } from '../Mask.ts';
 
-import { copyData } from './copyData.js';
+import { copyData } from './copyData.ts';
 
 export interface OutOptions {
   /**

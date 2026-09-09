@@ -1,26 +1,26 @@
 import { getAffineTransform as matrixGetAffineTransform } from 'ml-affine-transform';
 import { ransac } from 'ml-ransac';
 
-import type { Image } from '../../Image.js';
-import { getBrief } from '../../featureMatching/descriptors/getBrief.js';
-import type { Match } from '../../featureMatching/index.js';
+import type { Image } from '../../Image.ts';
+import { getBrief } from '../../featureMatching/descriptors/getBrief.ts';
+import type { Match } from '../../featureMatching/index.ts';
 import {
   Montage,
   MontageDisposition,
   bruteForceOneMatch,
   getCrosscheckMatches,
-} from '../../featureMatching/index.js';
-import { filterEuclideanDistance } from '../../featureMatching/matching/filterEuclideanDistance.js';
-import type { Point } from '../../geometry/index.js';
-import { writeSync } from '../../save/index.js';
-import { ImageColorModel } from '../../utils/constants/colorModels.js';
-import { getMinMax } from '../../utils/getMinMax.js';
+} from '../../featureMatching/index.ts';
+import { filterEuclideanDistance } from '../../featureMatching/matching/filterEuclideanDistance.ts';
+import type { Point } from '../../geometry/index.ts';
+import { writeSync } from '../../save/index.ts';
+import { ImageColorModel } from '../../utils/constants/colorModels.ts';
+import { getMinMax } from '../../utils/getMinMax.ts';
 
-import { affineFitFunction } from './affineFitFunction.js';
-import { createAffineTransformModel } from './createAffineTransformModel.js';
-import { getEuclideanDistance } from './getEuclideanDistance.js';
-import { getMatrixFromPoints } from './getMatrixFromPoints.js';
-import { getSourceWithoutMargins } from './utils/getSourceWithoutMargins.js';
+import { affineFitFunction } from './affineFitFunction.ts';
+import { createAffineTransformModel } from './createAffineTransformModel.ts';
+import { getEuclideanDistance } from './getEuclideanDistance.ts';
+import { getMatrixFromPoints } from './getMatrixFromPoints.ts';
+import { getSourceWithoutMargins } from './utils/getSourceWithoutMargins.ts';
 
 export interface GetAffineTransformOptions {
   /**

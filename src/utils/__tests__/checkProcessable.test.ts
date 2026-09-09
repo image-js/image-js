@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import checkProcessable from '../validators/checkProcessable.js';
+import checkProcessable from '../validators/checkProcessable.ts';
 
 test('wrong bit depth', () => {
   const img = testUtils.createGreyImage([

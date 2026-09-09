@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../Image.js';
-import { copyData } from '../copyData.js';
+import { Image } from '../../Image.ts';
+import { copyData } from '../copyData.ts';
 
 test('2x3 GREY image', () => {
   const source = testUtils.createGreyImage([

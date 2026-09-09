@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { decodeBmp } from '../decodeBmp.js';
+import { decodeBmp } from '../decodeBmp.ts';
 
 test('should decode RGBA image', () => {
   const result = decodeBmp(testUtils.loadBuffer('formats/bmp/2x2RGBA.bmp'));

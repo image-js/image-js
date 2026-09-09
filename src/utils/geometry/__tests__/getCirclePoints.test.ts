@@ -1,12 +1,12 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
+import { Image } from '../../../Image.ts';
 import {
   getCirclePoints,
   getCompassPoints,
   getFilledCirclePoints,
   getLinePoints,
-} from '../getCirclePoints.js';
+} from '../getCirclePoints.ts';
 
 test('circle with radius 1', () => {
   expect(getCirclePoints(1)).toStrictEqual([

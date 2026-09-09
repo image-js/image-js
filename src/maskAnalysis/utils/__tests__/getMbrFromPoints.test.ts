@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getMbrFromPoints } from '../getMbrFromPoints.js';
+import { getMbrFromPoints } from '../getMbrFromPoints.ts';
 
 test.each([
   [

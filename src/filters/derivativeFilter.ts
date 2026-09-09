@@ -1,6 +1,6 @@
 import { match } from 'ts-pattern';
 
-import type { BitDepth, Image } from '../Image.js';
+import type { BitDepth, Image } from '../Image.ts';
 import {
   PREWITT_X,
   PREWITT_Y,
@@ -8,8 +8,8 @@ import {
   SCHARR_Y,
   SOBEL_X,
   SOBEL_Y,
-} from '../utils/constants/kernels.js';
-import type { BorderType } from '../utils/interpolateBorder.js';
+} from '../utils/constants/kernels.ts';
+import type { BorderType } from '../utils/interpolateBorder.ts';
 
 export const DerivativeFilter = {
   SOBEL: 'sobel',

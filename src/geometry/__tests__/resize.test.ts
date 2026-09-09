@@ -2,8 +2,8 @@ import path from 'node:path';
 
 import { expect, test } from 'vitest';
 
-import type { Image } from '../../Image.js';
-import { write } from '../../save/index.js';
+import type { Image } from '../../Image.ts';
+import { write } from '../../save/index.ts';
 
 async function writeDebug(resized: Image, type: string) {
   // @ts-expect-error Dynamic string.

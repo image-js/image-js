@@ -1,4 +1,4 @@
-import type { Point } from '../../geometry/index.js';
+import type { Point } from '../../geometry/index.ts';
 
 /**
  * Compute the distance between point 1 and point 2.

@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../Image.js';
-import { drawPolylineOnImage } from '../drawPolylineOnImage.js';
+import { Image } from '../../Image.ts';
+import { drawPolylineOnImage } from '../drawPolylineOnImage.ts';
 
 test('RGB image', () => {
   const image = testUtils.createRgbImage([

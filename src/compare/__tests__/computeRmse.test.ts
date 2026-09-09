@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { computeMse, computeRmse } from '../computeRmse.js';
+import { computeMse, computeRmse } from '../computeRmse.ts';
 
 test('twice the same image', () => {
   const image = testUtils.createRgbImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);

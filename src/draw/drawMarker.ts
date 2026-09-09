@@ -1,9 +1,9 @@
-import type { Image } from '../Image.js';
-import type { Point } from '../geometry/index.js';
-import { getDefaultColor } from '../utils/getDefaultColor.js';
-import { getOutputImage } from '../utils/getOutputImage.js';
-import checkProcessable from '../utils/validators/checkProcessable.js';
-import { validateColor } from '../utils/validators/validators.js';
+import type { Image } from '../Image.ts';
+import type { Point } from '../geometry/index.ts';
+import { getDefaultColor } from '../utils/getDefaultColor.ts';
+import { getOutputImage } from '../utils/getOutputImage.ts';
+import checkProcessable from '../utils/validators/checkProcessable.ts';
+import { validateColor } from '../utils/validators/validators.ts';
 
 export interface DrawMarkerOptions {
   /**

@@ -1,4 +1,4 @@
-import type { ArrayPoint, Point } from './geometry/points.js';
+import type { ArrayPoint, Point } from './geometry/points.ts';
 
 /**
  * Convert object points into array points.

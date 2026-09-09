@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import { round, sum } from '../../../utils/geometry/points.js';
-import { getPatchIntensityCentroid } from '../getPatchIntensityCentroid.js';
+import { Image } from '../../../Image.ts';
+import { round, sum } from '../../../utils/geometry/points.ts';
+import { getPatchIntensityCentroid } from '../getPatchIntensityCentroid.ts';
 
 test('3x3 empty image', () => {
   const image = new Image(7, 7, { colorModel: 'GREY' });

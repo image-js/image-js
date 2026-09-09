@@ -1,9 +1,9 @@
-import type { Image } from '../Image.js';
-import type { Mask } from '../Mask.js';
-import type { GaussianBlurOptions } from '../filters/index.js';
-import { getIndex } from '../utils/getIndex.js';
-import { imageToOutputMask } from '../utils/getOutputImage.js';
-import checkProcessable from '../utils/validators/checkProcessable.js';
+import type { Image } from '../Image.ts';
+import type { Mask } from '../Mask.ts';
+import type { GaussianBlurOptions } from '../filters/index.ts';
+import { getIndex } from '../utils/getIndex.ts';
+import { imageToOutputMask } from '../utils/getOutputImage.ts';
+import checkProcessable from '../utils/validators/checkProcessable.ts';
 
 export interface CannyEdgeOptions {
   /**

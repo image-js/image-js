@@ -1,6 +1,6 @@
 import { describe, expect, it, test } from 'vitest';
 
-import { pixelate } from '../pixelate.js';
+import { pixelate } from '../pixelate.ts';
 
 describe('pixelization of images', () => {
   it('pixelate a simple grey image', () => {

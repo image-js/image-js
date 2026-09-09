@@ -1,5 +1,5 @@
-import type { Mask } from '../Mask.js';
-import { maskToOutputMask } from '../utils/getOutputImage.js';
+import type { Mask } from '../Mask.ts';
+import { maskToOutputMask } from '../utils/getOutputImage.ts';
 
 export interface AndOptions {
   /**

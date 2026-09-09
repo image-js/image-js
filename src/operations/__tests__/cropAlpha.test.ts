@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { cropAlpha } from '../cropAlpha.js';
+import { cropAlpha } from '../cropAlpha.ts';
 
 test('GREYA, no crop', () => {
   const image = testUtils.createGreyaImage([

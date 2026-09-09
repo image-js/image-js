@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import { Stack } from '../../../Stack.js';
-import { checkProcessable } from '../checkProcessable.js';
+import { Image } from '../../../Image.ts';
+import { Stack } from '../../../Stack.ts';
+import { checkProcessable } from '../checkProcessable.ts';
 
 test('should throw if images have different sizes', () => {
   const image1 = testUtils.createGreyImage([[1, 2, 3, 4]]);

@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { decodeJpeg } from '../decodeJpeg.js';
-import { decodeTiff } from '../decodeTiff.js';
+import { decodeJpeg } from '../decodeJpeg.ts';
+import { decodeTiff } from '../decodeTiff.ts';
 
 test('without metadata', () => {
   const buffer = testUtils.loadBuffer(`various/without-metadata.jpg`);

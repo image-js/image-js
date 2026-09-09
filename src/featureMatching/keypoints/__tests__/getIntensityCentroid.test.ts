@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import { getIntensityCentroid } from '../getIntensityCentroid.js';
+import { Image } from '../../../Image.ts';
+import { getIntensityCentroid } from '../getIntensityCentroid.ts';
 
 test('3x3 empty image', () => {
   const image = new Image(3, 3, { colorModel: 'GREY' });

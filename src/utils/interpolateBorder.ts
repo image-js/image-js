@@ -1,8 +1,8 @@
 import { match } from 'ts-pattern';
 
-import type { Image } from '../Image.js';
+import type { Image } from '../Image.ts';
 
-import type { BorderInterpolationFunction } from './utils.types.js';
+import type { BorderInterpolationFunction } from './utils.types.ts';
 
 export const BorderType = {
   CONSTANT: 'constant',

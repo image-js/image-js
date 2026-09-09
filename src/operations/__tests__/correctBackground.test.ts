@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest';
 
-import type { Point } from '../../geometry/index.js';
-import { sampleBackgroundPoints } from '../../utils/sampleBackgroundPoints.js';
-import { correctBackground } from '../correctBackground.js';
-import { getMaskFromCannyEdge } from '../getMaskFromCannyEdge.js';
+import type { Point } from '../../geometry/index.ts';
+import { sampleBackgroundPoints } from '../../utils/sampleBackgroundPoints.ts';
+import { correctBackground } from '../correctBackground.ts';
+import { getMaskFromCannyEdge } from '../getMaskFromCannyEdge.ts';
 
 test('basic test', () => {
   const image = testUtils.createGreyImage([

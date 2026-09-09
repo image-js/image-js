@@ -1,6 +1,6 @@
-import type { BitDepth, Image } from '../../Image.js';
-import type { Mask } from '../../Mask.js';
-import type { ImageColorModel } from '../constants/colorModels.js';
+import type { BitDepth, Image } from '../../Image.ts';
+import type { Mask } from '../../Mask.ts';
+import type { ImageColorModel } from '../constants/colorModels.ts';
 
 const formatter = new Intl.ListFormat('en', { type: 'disjunction' });
 

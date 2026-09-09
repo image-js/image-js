@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { decodeJpeg } from '../decodeJpeg.js';
+import { decodeJpeg } from '../decodeJpeg.ts';
 
 const tests = [['grey6'], ['grey12'], ['rgb6'], ['rgb12']] as const;
 

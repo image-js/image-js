@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { encodeBmp } from '../encodeBmp.js';
+import { encodeBmp } from '../encodeBmp.ts';
 
 test('encode 5x5 mask', () => {
   const image = testUtils.createGreyImage([

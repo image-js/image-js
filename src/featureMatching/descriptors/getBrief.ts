@@ -1,9 +1,9 @@
-import type { Image } from '../../Image.js';
-import { getBestKeypointsInRadius } from '../keypoints/getBestKeypointsInRadius.js';
-import { getOrientedFastKeypoints } from '../keypoints/getOrientedFastKeypoints.js';
+import type { Image } from '../../Image.ts';
+import { getBestKeypointsInRadius } from '../keypoints/getBestKeypointsInRadius.ts';
+import { getOrientedFastKeypoints } from '../keypoints/getOrientedFastKeypoints.ts';
 
-import type { Brief } from './getBriefDescriptors.js';
-import { getBriefDescriptors } from './getBriefDescriptors.js';
+import type { Brief } from './getBriefDescriptors.ts';
+import { getBriefDescriptors } from './getBriefDescriptors.ts';
 
 export interface GetBriefOptions {
   centroidPatchDiameter?: number;

@@ -3,19 +3,19 @@ import {
   DirectConvolution,
 } from 'ml-convolution';
 
-import { Image } from '../Image.js';
-import { extendBorders } from '../operations/extendBorders.js';
-import { getClamp } from '../utils/clamp.js';
+import { Image } from '../Image.ts';
+import { extendBorders } from '../operations/extendBorders.ts';
+import { getClamp } from '../utils/clamp.ts';
 import { getDefaultColor } from '../utils/getDefaultColor.ts';
-import { getIndex } from '../utils/getIndex.js';
-import { getOutputImage } from '../utils/getOutputImage.js';
-import type { BorderType } from '../utils/interpolateBorder.js';
-import { getBorderInterpolation } from '../utils/interpolateBorder.js';
-import { round } from '../utils/round.js';
+import { getIndex } from '../utils/getIndex.ts';
+import { getOutputImage } from '../utils/getOutputImage.ts';
+import type { BorderType } from '../utils/interpolateBorder.ts';
+import { getBorderInterpolation } from '../utils/interpolateBorder.ts';
+import { round } from '../utils/round.ts';
 import type {
   BorderInterpolationFunction,
   ClampFunction,
-} from '../utils/utils.types.js';
+} from '../utils/utils.types.ts';
 import { validateColor } from '../utils/validators/validators.ts';
 
 export interface ConvolutionOptions {

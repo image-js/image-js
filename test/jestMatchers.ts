@@ -1,12 +1,12 @@
 import type { MatcherState } from '@vitest/expect';
 import type { MatchImageSnapshotOptions } from 'jest-image-snapshot';
-import { configureToMatchImageSnapshot } from 'jest-image-snapshot';
+import JIS from 'jest-image-snapshot';
 
-import type { Image } from '../src/index.js';
-import { Mask, encodePng } from '../src/index.js';
+import type { Image } from '../src/index.ts';
+import { Mask, encodePng } from '../src/index.ts';
 
-import type { TestImagePath } from './TestImagePath.js';
-import { createImageFromData } from './createImageFromData.js';
+import type { TestImagePath } from './TestImagePath.ts';
+import { createImageFromData } from './createImageFromData.ts';
 
 interface MatcherResult {
   message: () => string;
@@ -159,7 +159,7 @@ export function toMatchMaskData(
   return toMatchMask.call(this, received, expectedMask);
 }
 
-const toMatchImageFileSnapshot = configureToMatchImageSnapshot({});
+const toMatchImageFileSnapshot = JIS.configureToMatchImageSnapshot({});
 
 /**
  * Snapshot matching with Image objects.

@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { decode } from '../../load/decode.js';
-import { encodePng } from '../encodePng.js';
+import { decode } from '../../load/decode.ts';
+import { encodePng } from '../encodePng.ts';
 
 test('should encode what it decoded', () => {
   const buffer = testUtils.loadBuffer('formats/grey8.png');

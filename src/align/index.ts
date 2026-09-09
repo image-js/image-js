@@ -1,2 +1,2 @@
-export * from './affineTransfrom/getAffineTransform.js';
-export * from './alignMinDifference.js';
+export * from './affineTransfrom/getAffineTransform.ts';
+export * from './alignMinDifference.ts';

@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { drawKeypoints } from '../../visualize/drawKeypoints.js';
-import { getFastKeypoints } from '../getFastKeypoints.js';
+import { drawKeypoints } from '../../visualize/drawKeypoints.ts';
+import { getFastKeypoints } from '../getFastKeypoints.ts';
 
 test('alphabet image, default options', () => {
   const image = testUtils.load('various/alphabet.jpg');

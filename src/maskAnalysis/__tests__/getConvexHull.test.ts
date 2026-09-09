@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getConvexHull } from '../getConvexHull.js';
+import { getConvexHull } from '../getConvexHull.ts';
 
 test('cross', () => {
   const mask = testUtils.createMask([

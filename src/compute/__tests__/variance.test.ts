@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import type { Point } from '../../geometry/index.js';
-import { variance } from '../variance.js';
+import type { Point } from '../../geometry/index.ts';
+import { variance } from '../variance.ts';
 
 test('1x1 RGB image', () => {
   const image = testUtils.createGreyImage([[1, 2, 3]]);

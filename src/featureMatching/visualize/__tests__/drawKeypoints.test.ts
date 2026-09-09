@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
-import { drawKeypoints } from '../drawKeypoints.js';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.ts';
+import { drawKeypoints } from '../drawKeypoints.ts';
 
 const image = testUtils.load('various/alphabet.jpg');
 const grey = image.convertColor('GREY');

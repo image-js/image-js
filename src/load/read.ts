@@ -1,7 +1,7 @@
-import type { Image } from '../Image.js';
-import { getNodeApiOrThrow } from '../utils/cross_platform.js';
+import type { Image } from '../Image.ts';
+import { getNodeApiOrThrow } from '../utils/cross_platform.ts';
 
-import { decode } from './decode.js';
+import { decode } from './decode.ts';
 
 /**
  * Read an image from the disk.

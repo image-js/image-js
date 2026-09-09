@@ -1,8 +1,8 @@
 import type { PngEncoderOptions } from 'fast-png';
 import { encode } from 'fast-png';
 
-import type { Image } from '../Image.js';
-import { Mask } from '../Mask.js';
+import type { Image } from '../Image.ts';
+import { Mask } from '../Mask.ts';
 
 export type EncodePngOptions = PngEncoderOptions;
 

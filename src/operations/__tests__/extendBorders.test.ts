@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { extendBorders } from '../extendBorders.js';
+import { extendBorders } from '../extendBorders.ts';
 
 test('grey image with basic value', () => {
   const image = testUtils.createGreyImage(`

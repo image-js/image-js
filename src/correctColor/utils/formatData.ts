@@ -2,7 +2,7 @@ import type { RgbColor } from 'colord';
 import { colord, extend } from 'colord';
 import labPlugin from 'colord/plugins/lab';
 
-import { getRegressionVariables } from '../correctColor.js';
+import { getRegressionVariables } from '../correctColor.ts';
 
 import type { ColorCard } from './referenceColorCard.ts';
 

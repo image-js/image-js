@@ -1,7 +1,7 @@
-import type { Image } from '../Image.js';
-import checkProcessable from '../utils/validators/checkProcessable.js';
+import type { Image } from '../Image.ts';
+import checkProcessable from '../utils/validators/checkProcessable.ts';
 
-import type { CropAlphaOptions } from './operations.types.js';
+import type { CropAlphaOptions } from './operations.types.ts';
 
 /**
  * Crops the image based on the alpha channel

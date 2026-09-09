@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import { getColors } from '../getColors.js';
-import { getKeypointColor } from '../getKeypointColor.js';
+import { Image } from '../../../Image.ts';
+import { getColors } from '../getColors.ts';
+import { getKeypointColor } from '../getKeypointColor.ts';
 
 const origin = { column: 0, row: 0 };
 

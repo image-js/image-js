@@ -1,6 +1,6 @@
 import type { ModelFunction } from 'ml-ransac';
 
-import type { Point } from '../../geometry/index.js';
+import type { Point } from '../../geometry/index.ts';
 
 /**
  * Generate a function that applies the given transformation parameters to a point.

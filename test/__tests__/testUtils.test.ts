@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { Image } from '../../src/index.js';
+import { Image } from '../../src/index.ts';
 
 describe('load', () => {
   it('should load the image synchronously', () => {

@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { RoiMapManager } from '../RoiMapManager.js';
-import { fromMask } from '../fromMask.js';
+import { RoiMapManager } from '../RoiMapManager.ts';
+import { fromMask } from '../fromMask.ts';
 
 test('should work with crop', () => {
   const image = testUtils.createGreyImage([

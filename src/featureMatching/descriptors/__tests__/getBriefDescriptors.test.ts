@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
-import { getBriefDescriptors } from '../getBriefDescriptors.js';
+import { Image } from '../../../Image.ts';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.ts';
+import { getBriefDescriptors } from '../getBriefDescriptors.ts';
 
 test('count occurences of 1 and 0 with default options', () => {
   const image = testUtils.load('various/alphabet.jpg');

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { fromMask } from '../fromMask.js';
+import { fromMask } from '../fromMask.ts';
 
 describe('ROI sphericity', () => {
   it('sphericity 1', () => {

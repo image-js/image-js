@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { computeThreshold } from '../../threshold.js';
+import { computeThreshold } from '../../threshold.ts';
 
 test('Huang should work similarily to ImageJ', () => {
   const img = testUtils.load('various/grayscale_by_zimmyrose.png');

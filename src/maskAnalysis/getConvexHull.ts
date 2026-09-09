@@ -1,12 +1,12 @@
-import type { Mask } from '../Mask.js';
+import type { Mask } from '../Mask.ts';
 import {
   getPolygonArea,
   getPolygonPerimeter,
-} from '../utils/geometry/polygons.js';
+} from '../utils/geometry/polygons.ts';
 
-import type { ConvexHull } from './maskAnalysis.types.js';
-import { getExtendedBorderPoints } from './utils/getExtendedBorderPoints.js';
-import { monotoneChainConvexHull as mcch } from './utils/monotoneChainConvexHull.js';
+import type { ConvexHull } from './maskAnalysis.types.ts';
+import { getExtendedBorderPoints } from './utils/getExtendedBorderPoints.ts';
+import { monotoneChainConvexHull as mcch } from './utils/monotoneChainConvexHull.ts';
 
 /**
  * Get the vertices of the convex Hull polygon of a mask.

@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
 import { Mask } from '../../Mask.ts';
-import { getExternalContour } from '../getExternalContour.js';
+import { getExternalContour } from '../getExternalContour.ts';
 
 test('square', () => {
   const testMask = testUtils.createMask([

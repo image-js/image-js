@@ -1,10 +1,10 @@
-import { Image } from '../Image.js';
-import type { Mask } from '../Mask.js';
-import type { Point } from '../utils/geometry/points.js';
-import { getDefaultColor } from '../utils/getDefaultColor.js';
-import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage.js';
-import { setBlendedVisiblePixel } from '../utils/setBlendedVisiblePixel.js';
-import checkProcessable from '../utils/validators/checkProcessable.js';
+import { Image } from '../Image.ts';
+import type { Mask } from '../Mask.ts';
+import type { Point } from '../utils/geometry/points.ts';
+import { getDefaultColor } from '../utils/getDefaultColor.ts';
+import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage.ts';
+import { setBlendedVisiblePixel } from '../utils/setBlendedVisiblePixel.ts';
+import checkProcessable from '../utils/validators/checkProcessable.ts';
 import { validateColor } from '../utils/validators/validators.ts';
 
 export interface DrawRectangleOptions<OutType> {

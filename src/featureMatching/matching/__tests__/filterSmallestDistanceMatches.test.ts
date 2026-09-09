@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import type { Match } from '../bruteForceMatch.js';
-import { filterSmallestDistanceMatches } from '../filterSmallestDistanceMatches.js';
+import type { Match } from '../bruteForceMatch.ts';
+import { filterSmallestDistanceMatches } from '../filterSmallestDistanceMatches.ts';
 
 test('3 matches', () => {
   const matches: Match[] = [

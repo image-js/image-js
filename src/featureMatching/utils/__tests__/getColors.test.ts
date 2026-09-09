@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import { getColors } from '../getColors.js';
+import { Image } from '../../../Image.ts';
+import { getColors } from '../getColors.ts';
 
 test('generate 10 blue shades', () => {
   const side = 100;

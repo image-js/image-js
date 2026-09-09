@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../Image.js';
+import { Image } from '../../Image.ts';
 import {
   getBorderInterpolation,
   interpolateConstantPoint,
@@ -8,7 +8,7 @@ import {
   interpolateReflectPoint,
   interpolateReplicatePoint,
   interpolateWrapPoint,
-} from '../interpolateBorder.js';
+} from '../interpolateBorder.ts';
 
 test('in range', () => {
   expect(interpolateReflectPoint(0, 10)).toBe(0);

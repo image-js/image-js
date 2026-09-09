@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../Image.js';
-import { ImageColorModel } from '../../utils/constants/colorModels.js';
-import { computeThreshold, threshold } from '../threshold.js';
+import { Image } from '../../Image.ts';
+import { ImageColorModel } from '../../utils/constants/colorModels.ts';
+import { computeThreshold, threshold } from '../threshold.ts';
 
 test('threshold with a fixed value of 100', () => {
   const testImage = testUtils.load('opencv/test.png');

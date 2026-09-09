@@ -1,12 +1,12 @@
 import robustPointInPolygon from 'robust-point-in-polygon';
 
-import type { Mask } from '../Mask.js';
-import { arrayPointsToObjects } from '../utils/arrayPointsToObjects.js';
-import type { Point } from '../utils/geometry/points.js';
-import { maskToOutputMask } from '../utils/getOutputImage.js';
+import type { Mask } from '../Mask.ts';
+import { arrayPointsToObjects } from '../utils/arrayPointsToObjects.ts';
+import type { Point } from '../utils/geometry/points.ts';
+import { maskToOutputMask } from '../utils/getOutputImage.ts';
 
-import type { DrawPolylineOnMaskOptions } from './drawPolylineOnMask.js';
-import { deleteDuplicates } from './utils/deleteDuplicates.js';
+import type { DrawPolylineOnMaskOptions } from './drawPolylineOnMask.ts';
+import { deleteDuplicates } from './utils/deleteDuplicates.ts';
 
 export interface DrawPolygonOnMaskOptions extends DrawPolylineOnMaskOptions {
   /**

@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { decode } from '../../load/decode.js';
-import { encodeJpeg } from '../encodeJpeg.js';
+import { decode } from '../../load/decode.ts';
+import { encodeJpeg } from '../encodeJpeg.ts';
 
 test('encode an 8-bit rgba image', () => {
   const image = testUtils.createRgbaImage([

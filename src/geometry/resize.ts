@@ -1,9 +1,9 @@
-import type { Image } from '../Image.js';
-import type { BorderType } from '../utils/interpolateBorder.js';
-import type { InterpolationType } from '../utils/interpolatePixel.js';
-import { assert } from '../utils/validators/assert.js';
+import type { Image } from '../Image.ts';
+import type { BorderType } from '../utils/interpolateBorder.ts';
+import type { InterpolationType } from '../utils/interpolatePixel.ts';
+import { assert } from '../utils/validators/assert.ts';
 
-import { transform } from './transform.js';
+import { transform } from './transform.ts';
 
 export interface ResizeOptions {
   /**

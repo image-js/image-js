@@ -1,6 +1,6 @@
 import { Matrix, SingularValueDecomposition } from 'ml-matrix';
 
-import type { Point } from '../utils/geometry/points.js';
+import type { Point } from '../utils/geometry/points.ts';
 
 /**
  * Options for getPerspectiveWarp function.

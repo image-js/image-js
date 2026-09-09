@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import type { TestImagePath } from '../../../../test/TestImagePath.js';
-import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.js';
-import { getBestKeypointsInRadius } from '../../keypoints/getBestKeypointsInRadius.js';
-import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
-import { Montage } from '../../visualize/Montage.js';
-import type { Match } from '../bruteForceMatch.js';
-import { crosscheck, getCrosscheckMatches } from '../getCrosscheckMatches.js';
+import type { TestImagePath } from '../../../../test/TestImagePath.ts';
+import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.ts';
+import { getBestKeypointsInRadius } from '../../keypoints/getBestKeypointsInRadius.ts';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.ts';
+import { Montage } from '../../visualize/Montage.ts';
+import type { Match } from '../bruteForceMatch.ts';
+import { crosscheck, getCrosscheckMatches } from '../getCrosscheckMatches.ts';
 
 describe('crosscheck', () => {
   it('all matches are common', () => {

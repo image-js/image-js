@@ -1,4 +1,4 @@
-import type { Match } from './bruteForceMatch.js';
+import type { Match } from './bruteForceMatch.ts';
 
 /**
  * Use this function to only keep the match from source to destination with

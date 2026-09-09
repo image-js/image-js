@@ -1,10 +1,10 @@
 import type { DecodedPng } from 'fast-png';
 import { decode } from 'fast-png';
 
-import type { BitDepth } from '../Image.js';
-import { Image } from '../Image.js';
-import type { ImageColorModel } from '../utils/constants/colorModels.js';
-import { assert } from '../utils/validators/assert.js';
+import type { BitDepth } from '../Image.ts';
+import { Image } from '../Image.ts';
+import type { ImageColorModel } from '../utils/constants/colorModels.ts';
+import { assert } from '../utils/validators/assert.ts';
 
 import type { Resolution } from './load.types.ts';
 

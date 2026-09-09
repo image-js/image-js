@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { computePsnr } from '../computePsnr.js';
+import { computePsnr } from '../computePsnr.ts';
 
 test('twice the same image', () => {
   const image = testUtils.createRgbImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);

@@ -3,8 +3,8 @@ import { expect, test } from 'vitest';
 import type {
   GaussianBlurOptions,
   GaussianBlurSigmaOptions,
-} from '../gaussianBlur.js';
-import { gaussianBlur } from '../gaussianBlur.js';
+} from '../gaussianBlur.ts';
+import { gaussianBlur } from '../gaussianBlur.ts';
 
 test('symmetrical kernel, should return the kernel itself', () => {
   const image = testUtils.createGreyImage([

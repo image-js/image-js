@@ -1,21 +1,21 @@
 import type { RgbColor } from 'colord';
 import { match } from 'ts-pattern';
 
-import type { Mask } from './Mask.js';
-import type { DivideOptions } from './compare/divide.js';
-import { divide } from './compare/divide.js';
-import type { SubtractImageOptions } from './compare/index.js';
-import { add, subtract } from './compare/index.js';
-import type { MultiplyOptions } from './compare/multiply.js';
-import { multiply } from './compare/multiply.js';
+import type { Mask } from './Mask.ts';
+import type { DivideOptions } from './compare/divide.ts';
+import { divide } from './compare/divide.ts';
+import type { SubtractImageOptions } from './compare/index.ts';
+import { add, subtract } from './compare/index.ts';
+import type { MultiplyOptions } from './compare/multiply.ts';
+import { multiply } from './compare/multiply.ts';
 import type {
   HistogramOptions,
   MeanOptions,
   MedianOptions,
   VarianceOptions,
-} from './compute/index.js';
-import { histogram, mean, median, variance } from './compute/index.js';
-import { correctColor } from './correctColor/index.js';
+} from './compute/index.ts';
+import { histogram, mean, median, variance } from './compute/index.ts';
+import { correctColor } from './correctColor/index.ts';
 import type {
   DrawCircleOnImageOptions,
   DrawLineOnImageOptions,
@@ -24,7 +24,7 @@ import type {
   DrawPolygonOnImageOptions,
   DrawPolylineOnImageOptions,
   DrawRectangleOptions,
-} from './draw/index.js';
+} from './draw/index.ts';
 import {
   drawCircleOnImage,
   drawLineOnImage,
@@ -34,7 +34,7 @@ import {
   drawPolygonOnImage,
   drawPolylineOnImage,
   drawRectangle,
-} from './draw/index.js';
+} from './draw/index.ts';
 import type {
   BlurOptions,
   ConvolutionOptions,
@@ -48,7 +48,7 @@ import type {
   LevelOptions,
   MedianFilterOptions,
   PixelateOptions,
-} from './filters/index.js';
+} from './filters/index.ts';
 import {
   blur,
   derivativeFilter,
@@ -64,21 +64,21 @@ import {
   pixelate,
   rawDirectConvolution,
   separableConvolution,
-} from './filters/index.js';
+} from './filters/index.ts';
 import type {
   Point,
   ResizeOptions,
   RotateAngle,
   TransformOptions,
   TransformRotateOptions,
-} from './geometry/index.js';
+} from './geometry/index.ts';
 import {
   resize,
   rotate,
   transform,
   transformRotate,
-} from './geometry/index.js';
-import type { ImageMetadata, Resolution } from './load/load.types.js';
+} from './geometry/index.ts';
+import type { ImageMetadata, Resolution } from './load/load.types.ts';
 import type {
   BottomHatOptions,
   CannyEdgeOptions,
@@ -88,7 +88,7 @@ import type {
   MorphologicalGradientOptions,
   OpenOptions,
   TopHatOptions,
-} from './morphology/index.js';
+} from './morphology/index.ts';
 import {
   bottomHat,
   cannyEdgeDetector,
@@ -98,7 +98,7 @@ import {
   morphologicalGradient,
   open,
   topHat,
-} from './morphology/index.js';
+} from './morphology/index.ts';
 import type {
   ConvertBitDepthOptions,
   ConvertColorOptions,
@@ -110,7 +110,7 @@ import type {
   GreyOptions,
   PaintMaskOnImageOptions,
   ThresholdOptions,
-} from './operations/index.js';
+} from './operations/index.ts';
 import {
   convertBitDepth,
   convertColor,
@@ -123,14 +123,14 @@ import {
   paintMaskOnImage,
   split,
   threshold,
-} from './operations/index.js';
-import type { ImageColorModel } from './utils/constants/colorModels.js';
-import { colorModels } from './utils/constants/colorModels.js';
-import { getMinMax } from './utils/getMinMax.js';
+} from './operations/index.ts';
+import type { ImageColorModel } from './utils/constants/colorModels.ts';
+import { colorModels } from './utils/constants/colorModels.ts';
+import { getMinMax } from './utils/getMinMax.ts';
 import {
   validateChannel,
   validateValue,
-} from './utils/validators/validators.js';
+} from './utils/validators/validators.ts';
 
 export type ImageDataArray = Uint8Array | Uint16Array | Uint8ClampedArray;
 

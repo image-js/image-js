@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest';
 
-import { drawKeypoints } from '../../visualize/drawKeypoints.js';
-import { getBestKeypointsInRadius } from '../getBestKeypointsInRadius.js';
-import type { OrientedFastKeypoint } from '../getOrientedFastKeypoints.js';
-import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints.js';
+import { drawKeypoints } from '../../visualize/drawKeypoints.ts';
+import { getBestKeypointsInRadius } from '../getBestKeypointsInRadius.ts';
+import type { OrientedFastKeypoint } from '../getOrientedFastKeypoints.ts';
+import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints.ts';
 
 test('array of 3 keypoints', () => {
   const keypoints: OrientedFastKeypoint[] = [

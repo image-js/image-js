@@ -7,8 +7,8 @@ import {
   toMatchImageSnapshot,
   toMatchMask,
   toMatchMaskData,
-} from './test/jestMatchers.js';
-import * as testUtils from './test/testUtils.js';
+} from './test/jestMatchers.ts';
+import * as testUtils from './test/testUtils.ts';
 
 expect.extend({
   toBeDeepCloseTo,

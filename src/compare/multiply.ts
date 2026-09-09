@@ -1,6 +1,6 @@
-import type { Image } from '../Image.js';
-import { getOutputImage } from '../utils/getOutputImage.js';
-import { validateChannels } from '../utils/validators/validators.js';
+import type { Image } from '../Image.ts';
+import { getOutputImage } from '../utils/getOutputImage.ts';
+import { validateChannels } from '../utils/validators/validators.ts';
 
 export interface MultiplyOptions {
   /**

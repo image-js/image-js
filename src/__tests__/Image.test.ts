@@ -2,9 +2,9 @@ import { inspect } from 'node:util';
 
 import { describe, expect, it, test } from 'vitest';
 
-import type { ImageCoordinates } from '../Image.js';
-import { Image } from '../Image.js';
-import type { Point } from '../geometry/index.js';
+import type { ImageCoordinates } from '../Image.ts';
+import { Image } from '../Image.ts';
+import type { Point } from '../geometry/index.ts';
 
 describe('create new images', () => {
   it('should create a 8-bit image', () => {

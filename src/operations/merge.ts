@@ -1,5 +1,5 @@
-import { Image } from '../Image.js';
-import type { ImageColorModel } from '../utils/constants/colorModels.js';
+import { Image } from '../Image.ts';
+import type { ImageColorModel } from '../utils/constants/colorModels.ts';
 
 /**
  * Inverse of split. Merges multiple single-channel images into one.

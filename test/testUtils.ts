@@ -2,13 +2,13 @@ import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import type { Image, Point, Roi } from '../src/index.js';
-import { fromMask, read, readSync } from '../src/index.js';
+import type { Image, Point, Roi } from '../src/index.ts';
+import { fromMask, read, readSync } from '../src/index.ts';
 
-import type { TestImagePath } from './TestImagePath.js';
-import type { CreateImageOptions } from './createImageFromData.js';
-import { createImageFromData } from './createImageFromData.js';
-import { createMask } from './createMask.js';
+import type { TestImagePath } from './TestImagePath.ts';
+import type { CreateImageOptions } from './createImageFromData.ts';
+import { createImageFromData } from './createImageFromData.ts';
+import { createMask } from './createMask.ts';
 
 /**
  * Return the path to a given image.
@@ -179,7 +179,7 @@ declare global {
   };
 }
 
-export { createMask } from './createMask.js';
+export { createMask } from './createMask.ts';
 
 /**
  * Load an image from the demo dataset

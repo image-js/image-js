@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { fromMask } from '../../roi/index.js';
-import { angle } from '../../utils/geometry/angles.js';
-import { getMbr } from '../getMbr.js';
+import { fromMask } from '../../roi/index.ts';
+import { angle } from '../../utils/geometry/angles.ts';
+import { getMbr } from '../getMbr.ts';
 
 test('verify that angle is correct', () => {
   const mask = testUtils.createMask(`

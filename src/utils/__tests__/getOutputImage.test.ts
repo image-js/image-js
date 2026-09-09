@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { Image } from '../../Image.js';
-import { Mask } from '../../Mask.js';
-import { ImageColorModel } from '../constants/colorModels.js';
+import { Image } from '../../Image.ts';
+import { Mask } from '../../Mask.ts';
+import { ImageColorModel } from '../constants/colorModels.ts';
 import {
   getOutputImage,
   imageToOutputMask,
   maskToOutputImage,
   maskToOutputMask,
-} from '../getOutputImage.js';
+} from '../getOutputImage.ts';
 
 describe('getOutputImage', () => {
   it('should default to creating an empty image', () => {

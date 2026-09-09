@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Mask } from '../../Mask.js';
-import { copyTo } from '../copyTo.js';
+import { Mask } from '../../Mask.ts';
+import { copyTo } from '../copyTo.ts';
 
 test('default options', () => {
   const source = testUtils.createGreyImage([[100, 0]]);

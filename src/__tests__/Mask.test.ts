@@ -2,8 +2,8 @@ import util from 'node:util';
 
 import { describe, expect, it, test } from 'vitest';
 
-import { Mask } from '../Mask.js';
-import type { Point } from '../utils/geometry/points.js';
+import { Mask } from '../Mask.ts';
+import type { Point } from '../utils/geometry/points.ts';
 
 describe('create new masks', () => {
   it('should create a mask', () => {

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { checkKernel } from '../validators/checkKernel.js';
+import { checkKernel } from '../validators/checkKernel.ts';
 
 test('should throw', () => {
   const kernel = [

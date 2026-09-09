@@ -1,5 +1,5 @@
-import { Roi } from './Roi.js';
-import type { RoiMapManager } from './RoiMapManager.js';
+import { Roi } from './Roi.ts';
+import type { RoiMapManager } from './RoiMapManager.ts';
 
 /**
  * Generate an array of ROIs based on an ROI map manager.

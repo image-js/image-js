@@ -4,8 +4,8 @@ import { pathToFileURL } from 'node:url';
 
 import { afterEach, beforeEach, expect, test } from 'vitest';
 
-import { read, readSync } from '../../load/index.js';
-import { write, writeSync } from '../write.js';
+import { read, readSync } from '../../load/index.ts';
+import { write, writeSync } from '../write.ts';
 
 let tmpDir: string;
 

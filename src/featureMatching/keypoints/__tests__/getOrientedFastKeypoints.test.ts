@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import type { TestImagePath } from '../../../../test/TestImagePath.js';
-import { drawKeypoints } from '../../visualize/drawKeypoints.js';
-import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints.js';
+import type { TestImagePath } from '../../../../test/TestImagePath.ts';
+import { drawKeypoints } from '../../visualize/drawKeypoints.ts';
+import { getOrientedFastKeypoints } from '../getOrientedFastKeypoints.ts';
 
 test('7x7 image, angle = -90°', () => {
   const image = testUtils.createGreyImage([

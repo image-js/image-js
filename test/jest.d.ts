@@ -1,10 +1,10 @@
 import type { MatchImageSnapshotOptions } from 'jest-image-snapshot';
 
-import type { Mask } from '../src/Mask.js';
-import type { Image } from '../src/index.js';
+import type { Mask } from '../src/Mask.ts';
+import type { Image } from '../src/index.ts';
 
-import type { TestImagePath } from './TestImagePath.js';
-import type { JestMatcherOptions } from './jestMatchers.js';
+import type { TestImagePath } from './TestImagePath.ts';
+import type { JestMatcherOptions } from './jestMatchers.ts';
 
 declare global {
   namespace jest {

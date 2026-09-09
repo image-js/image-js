@@ -1,7 +1,7 @@
 import { describe, expect, it, test } from 'vitest';
 
-import { Image } from '../Image.js';
-import { Stack } from '../Stack.js';
+import { Image } from '../Image.ts';
+import { Stack } from '../Stack.ts';
 
 describe('Stack constructor', () => {
   it('create a stack containing one image', () => {

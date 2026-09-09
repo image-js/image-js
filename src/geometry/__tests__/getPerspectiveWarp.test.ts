@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { Image } from '../../Image.js';
-import { getPerspectiveWarp, order4Points } from '../getPerspectiveWarp.js';
+import { Image } from '../../Image.ts';
+import { getPerspectiveWarp, order4Points } from '../getPerspectiveWarp.ts';
 
 describe('4 points sorting', () => {
   it('basic sorting test', () => {

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { add } from '../add.js';
+import { add } from '../add.ts';
 
 test('add image to itself', () => {
   const image = testUtils.createRgbImage([[5, 5, 5, 10, 10, 10, 15, 15, 15]]);

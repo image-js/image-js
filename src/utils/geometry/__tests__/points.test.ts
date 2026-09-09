@@ -1,6 +1,6 @@
 import { describe, expect, it, test } from 'vitest';
 
-import { normalize, sortByColumnRow } from '../points.js';
+import { normalize, sortByColumnRow } from '../points.ts';
 
 describe('normalize', () => {
   it('simple numbers', () => {

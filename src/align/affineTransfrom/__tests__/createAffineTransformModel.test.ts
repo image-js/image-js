@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { createAffineTransformModel } from '../createAffineTransformModel.js';
+import { createAffineTransformModel } from '../createAffineTransformModel.ts';
 
 test('wrong nb of parameters', () => {
   expect(() => {

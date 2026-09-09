@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import { compareIntensity } from '../compareIntensity.js';
+import { Image } from '../../../Image.ts';
+import { compareIntensity } from '../compareIntensity.ts';
 
 test('verify descriptor is correct (descriptorLength = 10)', () => {
   const size = 5;

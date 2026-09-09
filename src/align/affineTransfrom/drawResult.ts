@@ -1,7 +1,7 @@
-import { Image } from '../../Image.js';
-import { Mask } from '../../Mask.js';
-import type { Point } from '../../geometry/index.js';
-import { ImageColorModel } from '../../utils/constants/colorModels.js';
+import { Image } from '../../Image.ts';
+import { Mask } from '../../Mask.ts';
+import type { Point } from '../../geometry/index.ts';
+import { ImageColorModel } from '../../utils/constants/colorModels.ts';
 
 /**
  * Draw source, destination and transformed points on an image.

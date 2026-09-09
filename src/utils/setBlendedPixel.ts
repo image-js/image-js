@@ -1,8 +1,8 @@
-import { Image } from '../Image.js';
-import type { Mask } from '../Mask.js';
+import { Image } from '../Image.ts';
+import type { Mask } from '../Mask.ts';
 
-import { getDefaultColor } from './getDefaultColor.js';
-import { assert } from './validators/assert.js';
+import { getDefaultColor } from './getDefaultColor.ts';
+import { assert } from './validators/assert.ts';
 
 /**
  * Blend the given pixel with the pixel at the specified location in the image.

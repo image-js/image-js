@@ -1,4 +1,4 @@
-import { Mask } from '../src/Mask.js';
+import { Mask } from '../src/Mask.ts';
 
 /**
  * Create a new Mask object from mask data.

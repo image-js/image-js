@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { getMaskFromCannyEdge } from '../../operations/getMaskFromCannyEdge.js';
-import { sampleBackgroundPoints } from '../sampleBackgroundPoints.js';
+import { getMaskFromCannyEdge } from '../../operations/getMaskFromCannyEdge.ts';
+import { sampleBackgroundPoints } from '../sampleBackgroundPoints.ts';
 
 test('basic test', () => {
   const image = testUtils.createGreyImage([

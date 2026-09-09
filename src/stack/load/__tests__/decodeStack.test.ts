@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import type { TestImagePath } from '../../../../test/TestImagePath.js';
-import { decodeStack } from '../decodeStack.js';
+import type { TestImagePath } from '../../../../test/TestImagePath.ts';
+import { decodeStack } from '../decodeStack.ts';
 
 test.each([
   {

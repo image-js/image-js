@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { createImageFromData } from '../../../test/createImageFromData.js';
+import { createImageFromData } from '../../../test/createImageFromData.ts';
 
 test('RGBA image - channel 0', () => {
   const image = testUtils.createRgbaImage([

@@ -1,12 +1,12 @@
 import { match } from 'ts-pattern';
 
-import type { Image } from '../Image.js';
+import type { Image } from '../Image.ts';
 
-import { round } from './round.js';
+import { round } from './round.ts';
 import type {
   BorderInterpolationFunction,
   ClampFunction,
-} from './utils.types.js';
+} from './utils.types.ts';
 
 export const InterpolationType = {
   NEAREST: 'nearest',

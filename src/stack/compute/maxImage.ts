@@ -1,6 +1,6 @@
-import { Image } from '../../Image.js';
-import type { Stack } from '../../Stack.js';
-import { checkProcessable } from '../utils/checkProcessable.js';
+import { Image } from '../../Image.ts';
+import type { Stack } from '../../Stack.ts';
+import { checkProcessable } from '../utils/checkProcessable.ts';
 
 /**
  *  Returns a new image with the maximum values of each pixel from the stack.

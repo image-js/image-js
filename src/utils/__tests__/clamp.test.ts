@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../Image.js';
-import { getClamp } from '../clamp.js';
+import { Image } from '../../Image.ts';
+import { getClamp } from '../clamp.ts';
 
 test("clamp 65'536", () => {
   const image = new Image(2, 1, {

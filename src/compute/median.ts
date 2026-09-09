@@ -1,8 +1,8 @@
 // @ts-expect-error: median-quisckselect has no types
 import quickMedian from 'median-quickselect';
 
-import type { Image } from '../Image.js';
-import type { Point } from '../geometry/index.js';
+import type { Image } from '../Image.ts';
+import type { Point } from '../geometry/index.ts';
 
 export interface MedianOptions {
   /**

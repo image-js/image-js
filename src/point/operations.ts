@@ -1,4 +1,4 @@
-import type { Point } from '../utils/geometry/points.js';
+import type { Point } from '../utils/geometry/points.ts';
 
 /**
  * Rotate a point around a center by a given angle.

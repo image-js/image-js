@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { Image } from '../../Image.js';
-import { Mask } from '../../Mask.js';
+import { Image } from '../../Image.ts';
+import { Mask } from '../../Mask.ts';
 
 describe('image is an Image', () => {
   it('invert an RGB image', () => {

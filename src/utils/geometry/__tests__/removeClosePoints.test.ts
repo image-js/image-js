@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { getExtrema } from '../../../compute/getExtrema.js';
-import { removeClosePoints } from '../removeClosePoints.js';
+import { getExtrema } from '../../../compute/getExtrema.ts';
+import { removeClosePoints } from '../removeClosePoints.ts';
 
 test('combine minimum points on 5x5 image', () => {
   const image = testUtils.createGreyImage([

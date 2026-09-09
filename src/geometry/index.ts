@@ -1,6 +1,6 @@
-export * from './resize.js';
-export * from './rotate.js';
-export * from './transform.js';
-export * from './transformRotate.js';
-export * from './getPerspectiveWarp.js';
-export type { Point } from '../utils/geometry/points.js';
+export * from './resize.ts';
+export * from './rotate.ts';
+export * from './transform.ts';
+export * from './transformRotate.ts';
+export * from './getPerspectiveWarp.ts';
+export type { Point } from '../utils/geometry/points.ts';

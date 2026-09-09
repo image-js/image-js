@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { Mask } from '../../src/Mask.js';
-import { Image } from '../../src/index.js';
+import { Mask } from '../../src/Mask.ts';
+import { Image } from '../../src/index.ts';
 
 describe('toMatchImage', () => {
   it('should load and match', () => {
@@ -50,9 +50,7 @@ describe('toMatchImage', () => {
     const image1 = new Image(1, 1, { colorModel: 'GREY' });
     const image2 = new Image(1, 1, { colorModel: 'RGB' });
 
-    expect(() => expect(image1).toMatchImage(image2)).toThrow(
-      /color model/,
-    );
+    expect(() => expect(image1).toMatchImage(image2)).toThrow(/color model/);
   });
 
   it('should throw if data is different', () => {
@@ -72,9 +70,7 @@ describe('toMatchImage', () => {
     expected.setValue(0, 1, 0, 128);
     expected.setValue(0, 1, 0, 255);
 
-    expect(() =>
-      expect(received).toMatchImage(expected, { error: 1 }),
-    ).toThrow(
+    expect(() => expect(received).toMatchImage(expected, { error: 1 })).toThrow(
       /Expected value at \(3, 0\) to be in range \[49,51\], but got 4/,
     );
   });

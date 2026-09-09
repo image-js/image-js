@@ -1,7 +1,7 @@
-import type { Point } from '../../geometry/index.js';
-import type { FastKeypoint } from '../keypoints/getFastKeypoints.js';
+import type { Point } from '../../geometry/index.ts';
+import type { FastKeypoint } from '../keypoints/getFastKeypoints.ts';
 
-import type { Match } from './bruteForceMatch.js';
+import type { Match } from './bruteForceMatch.ts';
 
 export interface FilterEuclideanDistanceMatchesOptions {
   /**

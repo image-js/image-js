@@ -1,8 +1,8 @@
-import type { Mask } from '../Mask.js';
-import type { Point } from '../geometry/index.js';
-import { getIndex } from '../utils/getIndex.js';
+import type { Mask } from '../Mask.ts';
+import type { Point } from '../geometry/index.ts';
+import { getIndex } from '../utils/getIndex.ts';
 
-import { multipleFloodFill } from './multipleFloodFill.js';
+import { multipleFloodFill } from './multipleFloodFill.ts';
 
 export interface FloodFillOptions {
   /**

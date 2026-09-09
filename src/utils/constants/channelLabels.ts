@@ -1,4 +1,4 @@
-import type { ImageColorModel } from './colorModels.js';
+import type { ImageColorModel } from './colorModels.ts';
 
 export const channelLabels = {
   GREY: ['Grey'],

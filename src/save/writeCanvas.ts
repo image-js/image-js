@@ -1,6 +1,6 @@
-import { Image } from '../Image.js';
-import type { Mask } from '../Mask.js';
-import { assert } from '../utils/validators/assert.js';
+import { Image } from '../Image.ts';
+import type { Mask } from '../Mask.ts';
+import { assert } from '../utils/validators/assert.ts';
 
 export interface WriteCanvasOptions {
   /**

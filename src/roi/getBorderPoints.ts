@@ -1,7 +1,7 @@
-import type { GetBorderPointsOptions } from '../maskAnalysis/index.js';
-import type { Point } from '../utils/geometry/points.js';
+import type { GetBorderPointsOptions } from '../maskAnalysis/index.ts';
+import type { Point } from '../utils/geometry/points.ts';
 
-import type { Roi } from './Roi.js';
+import type { Roi } from './Roi.ts';
 
 /**
  * Return an array with the coordinates of the pixels that are on the border of the ROI.

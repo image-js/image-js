@@ -1,8 +1,8 @@
-import type { Image } from '../Image.js';
-import { getClamp } from '../utils/clamp.js';
-import { getOutputImage } from '../utils/getOutputImage.js';
-import checkProcessable from '../utils/validators/checkProcessable.js';
-import { validateChannels } from '../utils/validators/validators.js';
+import type { Image } from '../Image.ts';
+import { getClamp } from '../utils/clamp.ts';
+import { getOutputImage } from '../utils/getOutputImage.ts';
+import checkProcessable from '../utils/validators/checkProcessable.ts';
+import { validateChannels } from '../utils/validators/validators.ts';
 
 export interface LevelOptions {
   /**

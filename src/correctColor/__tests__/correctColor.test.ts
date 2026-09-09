@@ -1,11 +1,11 @@
 import { expect, test } from 'vitest';
 
-import { correctColor } from '../correctColor.js';
-import { getMeasuredColors, getReferenceColors } from '../utils/formatData.js';
-import { getImageColors } from '../utils/getImageColors.js';
+import { correctColor } from '../correctColor.ts';
+import { getMeasuredColors, getReferenceColors } from '../utils/formatData.ts';
+import { getImageColors } from '../utils/getImageColors.ts';
 import { referenceColorCard } from '../utils/referenceColorCard.ts';
 
-import { polish } from './testUtils/imageColors.js';
+import { polish } from './testUtils/imageColors.ts';
 
 test('RGB image should not change', () => {
   const image = testUtils.createRgbImage([[0, 0, 0, 10, 10, 10, 20, 20, 20]]);

@@ -1,22 +1,22 @@
-import type { Mask } from '../Mask.js';
-import { getConvexHull } from '../maskAnalysis/getConvexHull.js';
+import type { Mask } from '../Mask.ts';
+import { getConvexHull } from '../maskAnalysis/getConvexHull.ts';
 import type { GetExternalContourOptions } from '../maskAnalysis/getExternalContour.ts';
-import { getFeret } from '../maskAnalysis/getFeret.js';
-import { getMbr } from '../maskAnalysis/getMbr.js';
+import { getFeret } from '../maskAnalysis/getFeret.ts';
+import { getMbr } from '../maskAnalysis/getMbr.ts';
 import type {
   Feret,
   GetBorderPointsOptions,
   Mbr,
-} from '../maskAnalysis/index.js';
-import type { Point } from '../utils/geometry/points.js';
+} from '../maskAnalysis/index.ts';
+import type { Point } from '../utils/geometry/points.ts';
 
-import type { RoiMap } from './RoiMapManager.js';
-import { getBorderPoints } from './getBorderPoints.js';
+import type { RoiMap } from './RoiMapManager.ts';
+import { getBorderPoints } from './getBorderPoints.ts';
 import { getExternalContour } from './getExternalContour.ts';
-import type { GetMaskOptions } from './getMask.js';
-import { getMask } from './getMask.js';
-import { getEllipse } from './properties/getEllipse.js';
-import type { Border, Ellipse } from './roi.types.js';
+import type { GetMaskOptions } from './getMask.ts';
+import { getMask } from './getMask.ts';
+import { getEllipse } from './properties/getEllipse.ts';
+import type { Border, Ellipse } from './roi.types.ts';
 
 interface Computed {
   perimeter: number;

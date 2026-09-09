@@ -1,4 +1,4 @@
-import type { FastKeypoint } from '../keypoints/getFastKeypoints.js';
+import type { FastKeypoint } from '../keypoints/getFastKeypoints.ts';
 
 /**
  * Get the shade the keypoint with given index should have (the color is an indicator

@@ -1,7 +1,7 @@
-import type { Mask } from '../Mask.js';
-import type { Point } from '../utils/geometry/points.js';
+import type { Mask } from '../Mask.ts';
+import type { Point } from '../utils/geometry/points.ts';
 
-import type { GetBorderPointsOptions } from './maskAnalysis.types.js';
+import type { GetBorderPointsOptions } from './maskAnalysis.types.ts';
 
 // TODO: This function could be optimised by following the contour instead of scanning all pixels.
 /**

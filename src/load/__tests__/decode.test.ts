@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { decode } from '../decode.js';
+import { decode } from '../decode.ts';
 
 test('auto decode png', () => {
   const buffer = testUtils.loadBuffer('formats/grey8.png');

@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest';
 
-import type { TestImagePath } from '../../../../test/TestImagePath.js';
-import { Image } from '../../../Image.js';
-import { overlapImages } from '../../../featureMatching/index.js';
-import { getAffineTransform } from '../getAffineTransform.js';
+import type { TestImagePath } from '../../../../test/TestImagePath.ts';
+import { Image } from '../../../Image.ts';
+import { overlapImages } from '../../../featureMatching/index.ts';
+import { getAffineTransform } from '../getAffineTransform.ts';
 
 test('RGB images', () => {
   const data = {

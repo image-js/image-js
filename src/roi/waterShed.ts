@@ -1,12 +1,12 @@
 import PriorityQueue from 'js-priority-queue';
 
-import type { Image } from '../Image.js';
-import type { Mask } from '../Mask.js';
-import { getExtrema } from '../compute/index.js';
-import type { Point } from '../geometry/index.js';
-import checkProcessable from '../utils/validators/checkProcessable.js';
+import type { Image } from '../Image.ts';
+import type { Mask } from '../Mask.ts';
+import { getExtrema } from '../compute/index.ts';
+import type { Point } from '../geometry/index.ts';
+import checkProcessable from '../utils/validators/checkProcessable.ts';
 
-import { RoiMapManager } from './RoiMapManager.js';
+import { RoiMapManager } from './RoiMapManager.ts';
 
 /**
  * Point interface that is used in the queue data structure.

@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import type { Point } from '../../geometry/index.js';
-import { mean } from '../mean.js';
+import type { Point } from '../../geometry/index.ts';
+import { mean } from '../mean.ts';
 
 test('5x1 RGB image', () => {
   const image = testUtils.createRgbImage([

@@ -1,12 +1,12 @@
 import imageType from 'image-type';
 import { match } from 'ts-pattern';
 
-import type { Image } from '../Image.js';
+import type { Image } from '../Image.ts';
 
 import { decodeBmp } from './decodeBmp.ts';
-import { decodeJpeg } from './decodeJpeg.js';
-import { decodePng } from './decodePng.js';
-import { decodeTiff } from './decodeTiff.js';
+import { decodeJpeg } from './decodeJpeg.ts';
+import { decodePng } from './decodePng.ts';
+import { decodeTiff } from './decodeTiff.ts';
 /**
  * Decode input data. Data format is automatically detected.
  * Possible formats: png, jpeg and tiff.

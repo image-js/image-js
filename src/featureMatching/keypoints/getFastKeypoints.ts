@@ -1,22 +1,22 @@
 import { match } from 'ts-pattern';
 
-import type { Image } from '../../Image.js';
-import type { Point } from '../../geometry/index.js';
+import type { Image } from '../../Image.ts';
+import type { Point } from '../../geometry/index.ts';
 import {
   getCirclePoints,
   getCompassPoints,
-} from '../../utils/geometry/getCirclePoints.js';
-import { getIndex } from '../../utils/getIndex.js';
-import { surroundingPixels } from '../../utils/surroundingPixels.js';
-import checkProcessable from '../../utils/validators/checkProcessable.js';
-import type { GetHarrisScoreOptions } from '../featureMatching.types.js';
+} from '../../utils/geometry/getCirclePoints.ts';
+import { getIndex } from '../../utils/getIndex.ts';
+import { surroundingPixels } from '../../utils/surroundingPixels.ts';
+import checkProcessable from '../../utils/validators/checkProcessable.ts';
+import type { GetHarrisScoreOptions } from '../featureMatching.types.ts';
 
-import { getFastScore } from './getFastScore.js';
-import { getHarrisScore } from './getHarrisScore.js';
+import { getFastScore } from './getFastScore.ts';
+import { getHarrisScore } from './getHarrisScore.ts';
 import type { GetShiTomasiScoreOptions } from './getShiTomasiScore.ts';
 import { getShiTomasiScore } from './getShiTomasiScore.ts';
-import type { IsFastKeypointOptions } from './isFastKeypoint.js';
-import { isFastKeypoint } from './isFastKeypoint.js';
+import type { IsFastKeypointOptions } from './isFastKeypoint.ts';
+import { isFastKeypoint } from './isFastKeypoint.ts';
 
 export interface GetFastKeypointsOptions extends IsFastKeypointOptions {
   /**

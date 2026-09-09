@@ -1,5 +1,5 @@
-import type { Image } from '../Image.js';
-import { validateChannel } from '../utils/validators/validators.js';
+import type { Image } from '../Image.ts';
+import { validateChannel } from '../utils/validators/validators.ts';
 
 export interface HistogramOptions {
   /**

@@ -1,7 +1,7 @@
-import { Image } from '../Image.js';
-import { getClamp } from '../utils/clamp.js';
-import checkProcessable from '../utils/validators/checkProcessable.js';
-import { validateForComparison } from '../utils/validators/validators.js';
+import { Image } from '../Image.ts';
+import { getClamp } from '../utils/clamp.ts';
+import checkProcessable from '../utils/validators/checkProcessable.ts';
+import { validateForComparison } from '../utils/validators/validators.ts';
 /**
  *
  * Calculate a new image that is the sum between the current image and the otherImage.

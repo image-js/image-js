@@ -1,4 +1,4 @@
-import { Image } from '../Image.js';
+import { Image } from '../Image.ts';
 
 /**
  * Create an array of single-channel images based on a multi-channel image.

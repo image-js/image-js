@@ -1,12 +1,12 @@
 import { Matrix } from 'ml-matrix';
 import { describe, expect, it } from 'vitest';
 
-import { getClamp } from '../../utils/clamp.js';
-import { getBorderInterpolation } from '../../utils/interpolateBorder.js';
+import { getClamp } from '../../utils/clamp.ts';
+import { getBorderInterpolation } from '../../utils/interpolateBorder.ts';
 import {
   computeConvolutionValue,
   rawDirectConvolution,
-} from '../convolution.js';
+} from '../convolution.ts';
 
 describe('convolution functions', () => {
   it('separable convolution compared to opencv', () => {
