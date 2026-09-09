@@ -1,18 +1,20 @@
+import { mkdir } from 'node:fs/promises';
+import { join } from 'node:path';
 import util from 'node:util';
 
-import type { GetBriefOptions } from '../../src/featureMatching/descriptors/getBrief.js';
-import { getBrief } from '../../src/featureMatching/descriptors/getBrief.js';
+import type { GetBriefOptions } from '../../src/featureMatching/descriptors/getBrief.ts';
+import { getBrief } from '../../src/featureMatching/descriptors/getBrief.ts';
 import type {
   DrawKeypointsOptions,
   GetColorsOptions,
-} from '../../src/index.js';
+} from '../../src/index.ts';
 import {
   Montage,
   getCrosscheckMatches,
   readSync,
   writeSync,
-} from '../../src/index.js';
-import { getMinMax } from '../../src/utils/getMinMax.js';
+} from '../../src/index.ts';
+import { getMinMax } from '../../src/utils/getMinMax.ts';
 
 util.inspect.defaultOptions.depth = 5;
 
@@ -26,7 +28,10 @@ const firstNumber = 1;
 const secondNumber = 2;
 
 const source = readSync(
-  `../../test/img/featureMatching/id-crops/crop${firstNumber}.png`,
+  join(
+    import.meta.dirname,
+    `../../test/img/featureMatching/id-crops/crop${firstNumber}.png`,
+  ),
 ).convertColor('GREY');
 // fix contrast
 const sourceExtremums = getMinMax(source);
@@ -37,7 +42,10 @@ source.level({
 });
 
 const destination = readSync(
-  `../../test/img/featureMatching/id-crops/crop${secondNumber}.png`,
+  join(
+    import.meta.dirname,
+    `../../test/img/featureMatching/id-crops/crop${secondNumber}.png`,
+  ),
 ).convertColor('GREY');
 
 // fix contrast
@@ -123,6 +131,14 @@ montage.drawKeypoints(destinationBrief.keypoints, {
   origin: montage.destinationOrigin,
 });
 
-writeSync(`./results/result-${firstNumber}-${secondNumber}.png`, montage.image);
+await mkdir(join(import.meta.dirname, './results'), { recursive: true });
+
+writeSync(
+  join(
+    import.meta.dirname,
+    `./results/result-${firstNumber}-${secondNumber}.png`,
+  ),
+  montage.image,
+);
 
 console.log('IMAGE WRITTEN TO DISK');

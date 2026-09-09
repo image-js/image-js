@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 
-import { readSync, writeSync } from '../src/index.js';
+import { readSync, writeSync } from '../src/index.ts';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const disk12 = [
@@ -35,11 +35,12 @@ const square = new Array(side).fill(new Array(side).fill(1));
 
 const kernel = square;
 
-const image = readSync('./background.jpg');
+const image = readSync(
+  join(import.meta.dirname, '../demo-images/standard/mandrill.png'),
+);
 
 const grey = image.grey().invert();
 
-console.log('glaargh');
 const topHat = grey.topHat({ kernel });
 console.log('tophat succeeded');
 

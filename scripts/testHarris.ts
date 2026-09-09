@@ -1,5 +1,5 @@
-import { Image } from '../src/Image.js';
-import { getHarrisScore } from '../src/featureMatching/keypoints/getHarrisScore.js';
+import { Image } from '../src/Image.ts';
+import { getHarrisScore } from '../src/featureMatching/keypoints/getHarrisScore.ts';
 
 const fastRadius = 3;
 
