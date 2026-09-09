@@ -46,9 +46,7 @@ export interface GradientFilterXYOptions extends GradientFilterBaseOptions {
 }
 
 export type GradientFilterOptions =
-  | GradientFilterXOptions
-  | GradientFilterYOptions
-  | GradientFilterXYOptions;
+  GradientFilterXOptions | GradientFilterYOptions | GradientFilterXYOptions;
 
 /**
  * Apply a gradient filter to an image.

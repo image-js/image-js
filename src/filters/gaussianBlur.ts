@@ -50,8 +50,7 @@ export interface GaussianBlurXYOptions extends GaussianBlurBaseOptions {
 }
 
 export type GaussianBlurOptions =
-  | GaussianBlurSigmaOptions
-  | GaussianBlurXYOptions;
+  GaussianBlurSigmaOptions | GaussianBlurXYOptions;
 
 /**
  * Apply a gaussian filter to an image.

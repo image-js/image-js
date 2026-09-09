@@ -100,11 +100,7 @@ export function getFastKeypoints(
     return getFastScore(image, corner, threshold, circlePoints);
   }
   function tomasiScore(image: Image, corner: Point) {
-    return getShiTomasiScore(
-      image,
-      corner,
-      scoreOptions,
-    );
+    return getShiTomasiScore(image, corner, scoreOptions);
   }
 
   const getScore = match(scoreAlgorithm)

@@ -11,8 +11,7 @@ import SnapshotImage from './SnapshotImage.js';
 import UnavailableCamera from './UnavailableCamera.js';
 
 export type TransformFunction =
-  | ((image: Image) => Image)
-  | ((image: Image, snapshot: Image | null) => Image);
+  ((image: Image) => Image) | ((image: Image, snapshot: Image | null) => Image);
 
 interface CameraTransformProps {
   transform: TransformFunction;
