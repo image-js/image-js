@@ -3,7 +3,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import { fetchURL, write } from '../lib/index.js';
+import { fetchURL, write } from '../src/index.ts';
 
 const dir = path.join(import.meta.dirname, '../demo-images');
 
