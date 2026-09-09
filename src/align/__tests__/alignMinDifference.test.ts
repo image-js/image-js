@@ -59,7 +59,7 @@ test('source too big', () => {
 
   expect(() => {
     alignMinDifference(source, destination);
-  }).toThrowError('Source image must fit entirely in destination image');
+  }).toThrow('Source image must fit entirely in destination image');
 });
 
 test('larger image and crop', () => {

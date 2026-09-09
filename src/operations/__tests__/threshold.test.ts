@@ -93,7 +93,7 @@ test('threshold in percents', () => {
 test('error too many channels', () => {
   const testImage = testUtils.load('opencv/test.png');
 
-  expect(() => threshold(testImage, { algorithm: 'otsu' })).toThrowError(
+  expect(() => threshold(testImage, { algorithm: 'otsu' })).toThrow(
     /threshold can only be computed on images with one channel/,
   );
 });
@@ -101,7 +101,7 @@ test('error too many channels', () => {
 test('error threshold out of range', () => {
   const testImage = testUtils.load('opencv/test.png');
 
-  expect(() => threshold(testImage, { threshold: 450 })).toThrowError(
+  expect(() => threshold(testImage, { threshold: 450 })).toThrow(
     /threshold must be a value between 0 and 1/,
   );
 });

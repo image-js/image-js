@@ -94,7 +94,7 @@ export function getFastKeypoints(
   });
 
   function harrisScore(image: Image, corner: Point) {
-    return getHarrisScore(image, corner, scoreOptions as GetHarrisScoreOptions);
+    return getHarrisScore(image, corner, scoreOptions);
   }
   function fastScore(image: Image, corner: Point) {
     return getFastScore(image, corner, threshold, circlePoints);
@@ -103,7 +103,7 @@ export function getFastKeypoints(
     return getShiTomasiScore(
       image,
       corner,
-      scoreOptions as GetShiTomasiScoreOptions,
+      scoreOptions,
     );
   }
 

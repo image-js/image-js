@@ -27,5 +27,5 @@ test('different size error', () => {
 
   expect(() => {
     image.or(other);
-  }).toThrowError('both masks must have the same size');
+  }).toThrow('both masks must have the same size');
 });

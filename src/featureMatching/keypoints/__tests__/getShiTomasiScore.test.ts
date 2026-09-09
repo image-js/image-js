@@ -86,7 +86,7 @@ test('windowSize error', () => {
 
   const origin = { row: 3, column: 3 };
 
-  expect(() =>
-    getShiTomasiScore(image, origin, { windowSize: 6 }),
-  ).toThrowError('windowSize must be an odd integer');
+  expect(() => getShiTomasiScore(image, origin, { windowSize: 6 })).toThrow(
+    'windowSize must be an odd integer',
+  );
 });

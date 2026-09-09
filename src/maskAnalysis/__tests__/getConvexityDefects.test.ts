@@ -59,9 +59,7 @@ test('expect error throw for hull points', () => {
     getConvexityDefects(borderPoints, convexHullPoints, {
       depthThreshold: 100,
     }),
-  ).toThrowError(
-    'No hull points were defined for convexity defects detection.',
-  );
+  ).toThrow('No hull points were defined for convexity defects detection.');
 });
 
 test('expect error throw for border points', () => {
@@ -77,9 +75,7 @@ test('expect error throw for border points', () => {
     getConvexityDefects(borderPoints, convexHullPoints, {
       depthThreshold: 100,
     }),
-  ).toThrowError(
-    'No border points were defined for convexity defects detection.',
-  );
+  ).toThrow('No border points were defined for convexity defects detection.');
 });
 
 test('expect error throw for no match between border and last hull point', () => {
@@ -100,9 +96,7 @@ test('expect error throw for no match between border and last hull point', () =>
     getConvexityDefects(borderPoints, convexHullPoints, {
       depthThreshold: 100,
     }),
-  ).toThrowError(
-    'Could not find a border point matching the convex hull endpoint.',
-  );
+  ).toThrow('Could not find a border point matching the convex hull endpoint.');
 });
 
 test('expect error throw if next hull point was not reached', () => {
@@ -123,7 +117,7 @@ test('expect error throw if next hull point was not reached', () => {
     getConvexityDefects(borderPoints, convexHullPoints, {
       depthThreshold: 100,
     }),
-  ).toThrowError(
+  ).toThrow(
     'Could not reach the next hull point while scanning border points; hull and border may be inconsistent.',
   );
 });

@@ -127,7 +127,7 @@ test('debug = true, no path specified', () => {
       crosscheck: false,
       debug: true,
     }),
-  ).toThrowError('Debug image file path is not specified.');
+  ).toThrow('Debug image file path is not specified.');
 });
 
 test('not enough matches found', () => {
@@ -139,7 +139,7 @@ test('not enough matches found', () => {
       maxRansacNbIterations: 1000,
       crosscheck: true,
     });
-  }).toThrowError(
+  }).toThrow(
     'Insufficient number of matches found to compute affine transform (less than 2).',
   );
 });

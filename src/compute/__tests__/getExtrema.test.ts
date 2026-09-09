@@ -114,7 +114,7 @@ test('testing for error handling', () => {
   ]);
 
   //@ts-expect-error error testing
-  expect(() => getExtrema(image, { algorithm: 'blah' })).toThrowError(
+  expect(() => getExtrema(image, { algorithm: 'blah' })).toThrow(
     /unreachable: blah/,
   );
 });

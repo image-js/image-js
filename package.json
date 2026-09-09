@@ -28,7 +28,7 @@
     "cheminfo-build": "cheminfo-build --entry lib/index_browser.js --root IJS",
     "clean": "rimraf coverage dist dist-types lib",
     "demo": "vite --open",
-    "eslint": "eslint . --cache",
+    "eslint": "eslint . --cache --max-warnings=17",
     "eslint-fix": "eslint . --cache --fix",
     "prepack": "npm run tsc && npm run cheminfo-build && npm run api-extractor",
     "prettier": "prettier --check .",

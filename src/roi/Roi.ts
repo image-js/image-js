@@ -629,7 +629,7 @@ export class Roi {
       this.#computed[property] = result;
       return result;
     }
-    return this.#computed[property] as Computed[T];
+    return this.#computed[property];
   }
   //TODO Make this private.
 
