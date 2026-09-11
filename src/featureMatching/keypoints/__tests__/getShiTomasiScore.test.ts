@@ -73,20 +73,14 @@ test('7x7 image with corner 90 degrees, bottom-left', () => {
   expect(result).toBeCloseTo(3641400, 0);
 });
 
-test('windowSize error', () => {
-  const image = testUtils.createGreyImage([
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 200, 0, 0, 0],
-    [0, 0, 0, 100, 0, 0, 0],
-    [0, 0, 0, 100, 0, 0, 0],
-    [0, 0, 0, 100, 0, 0, 0],
+test('throws with RGB image', () => {
+  const image = testUtils.createRgbImage([
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
   ]);
 
-  const origin = { row: 3, column: 3 };
-
-  expect(() => getShiTomasiScore(image, origin, { windowSize: 6 })).toThrow(
-    'windowSize must be an odd integer',
+  expect(() => getShiTomasiScore(image, { row: 1, column: 1 })).toThrow(
+    'image channels must be 1 to apply this algorithm',
   );
 });

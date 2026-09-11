@@ -250,3 +250,15 @@ test('windowSize error', () => {
     'windowSize must be an odd integer',
   );
 });
+
+test('throws with RGB image', () => {
+  const image = testUtils.createRgbImage([
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ]);
+
+  expect(() => getHarrisScore(image, { row: 1, column: 1 })).toThrow(
+    'image channels must be 1 to apply this algorithm',
+  );
+});
