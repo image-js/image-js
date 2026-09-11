@@ -90,20 +90,66 @@ test('threshold in percents', () => {
   expect(th).toMatchMask(expected);
 });
 
-test('error too many channels', () => {
+test('error too many components with algorithm', () => {
+  const testImage = testUtils.load('opencv/test.png');
+  const message =
+    'image components must be 1 to apply this algorithm. The image can be converted using "image.grey()"';
+
+  expect(() => threshold(testImage, { algorithm: 'otsu' })).toThrow(message);
+  expect(() => computeThreshold(testImage)).toThrow(message);
+});
+
+test('error too many components with numeric threshold', () => {
   const testImage = testUtils.load('opencv/test.png');
 
-  expect(() => threshold(testImage, { algorithm: 'otsu' })).toThrow(
-    /threshold can only be computed on images with one channel/,
+  expect(() => threshold(testImage, { threshold: 0.5 })).toThrow(
+    'image components must be 1 to apply this algorithm. The image can be converted using "image.grey()"',
   );
 });
 
 test('error threshold out of range', () => {
-  const testImage = testUtils.load('opencv/test.png');
+  const testImage = testUtils.createGreyImage([
+    [1, 2],
+    [3, 4],
+  ]);
 
   expect(() => threshold(testImage, { threshold: 450 })).toThrow(
     /threshold must be a value between 0 and 1/,
   );
+});
+
+test('threshold GREYA image with a fixed value', () => {
+  const image = testUtils.createGreyaImage([
+    [1, 255, 2, 0, 3, 128],
+    [10, 255, 20, 0, 30, 255],
+    [50, 0, 60, 255, 70, 0],
+  ]);
+
+  const th = threshold(image, { threshold: 0.1 });
+
+  const expected = testUtils.createMask([
+    [0, 0, 0],
+    [0, 0, 1],
+    [1, 1, 1],
+  ]);
+
+  expect(th).toMatchMask(expected);
+});
+
+test('computeThreshold on GREYA uses the grey component', () => {
+  const grey = testUtils.createGreyImage([
+    [1, 2, 3],
+    [10, 20, 30],
+    [50, 60, 70],
+  ]);
+  const greya = testUtils.createGreyaImage([
+    [1, 255, 2, 0, 3, 128],
+    [10, 255, 20, 0, 30, 255],
+    [50, 0, 60, 255, 70, 0],
+  ]);
+
+  expect(computeThreshold(greya)).toBe(computeThreshold(grey));
+  expect(threshold(greya)).toMatchMask(threshold(grey));
 });
 
 test('16 bits image simple', () => {

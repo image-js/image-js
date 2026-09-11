@@ -3,6 +3,7 @@ import { match } from 'ts-pattern';
 import type { Image } from '../Image.ts';
 import type { Mask } from '../Mask.ts';
 import { imageToOutputMask } from '../utils/getOutputImage.ts';
+import checkProcessable from '../utils/validators/checkProcessable.ts';
 
 import huang from './thresholds/huang.ts';
 import intermodes from './thresholds/intermodes.ts';
@@ -81,12 +82,8 @@ export function computeThreshold(
   options: ThresholdOptionsAlgorithm = {},
 ): number {
   const { algorithm = 'otsu', slots } = options;
-  if (image.channels !== 1) {
-    throw new TypeError(
-      'threshold can only be computed on images with one channel',
-    );
-  }
-  const histogram = image.histogram({ slots });
+  checkProcessable(image, { components: 1 });
+  const histogram = image.histogram({ slots, channel: 0 });
   const scale = slots ? 2 ** image.bitDepth / slots : 1;
 
   return match(algorithm)
@@ -116,6 +113,7 @@ export function computeThreshold(
  * @returns The resulting mask.
  */
 export function threshold(image: Image, options: ThresholdOptions = {}): Mask {
+  checkProcessable(image, { components: 1 });
   let thresholdValue: number;
 
   if ('threshold' in options) {
