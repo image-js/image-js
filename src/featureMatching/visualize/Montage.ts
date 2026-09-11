@@ -1,13 +1,13 @@
-import { Image } from '../../Image.js';
-import type { Point } from '../../geometry/index.js';
-import type { FastKeypoint } from '../keypoints/getFastKeypoints.js';
-import type { Match } from '../matching/bruteForceMatch.js';
+import { Image } from '../../Image.ts';
+import type { Point } from '../../geometry/index.ts';
+import type { FastKeypoint } from '../keypoints/getFastKeypoints.ts';
+import type { Match } from '../matching/bruteForceMatch.ts';
 
-import type { DrawKeypointsOptions } from './drawKeypoints.js';
-import { drawKeypoints } from './drawKeypoints.js';
-import type { DrawMatchesOptions } from './drawMatches.js';
-import { drawMatches } from './drawMatches.js';
-import { scaleKeypoints } from './scaleKeypoints.js';
+import type { DrawKeypointsOptions } from './drawKeypoints.ts';
+import { drawKeypoints } from './drawKeypoints.ts';
+import type { DrawMatchesOptions } from './drawMatches.ts';
+import { drawMatches } from './drawMatches.ts';
+import { scaleKeypoints } from './scaleKeypoints.ts';
 
 export const MontageDisposition = {
   HORIZONTAL: 'horizontal',

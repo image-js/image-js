@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getDirection } from '../cannyEdgeDetector.js';
+import { getDirection } from '../cannyEdgeDetector.ts';
 
 describe('cannyEdgeDetector', () => {
   it('5x5 grey image with dot', () => {

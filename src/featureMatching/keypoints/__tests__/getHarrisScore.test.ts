@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import { getHarrisScore } from '../getHarrisScore.js';
+import { Image } from '../../../Image.ts';
+import { getHarrisScore } from '../getHarrisScore.ts';
 
 const fastRadius = 3;
 const fastDiameter = 2 * fastRadius + 1;
@@ -246,7 +246,7 @@ test('windowSize error', () => {
 
   const origin = { row: fastRadius, column: fastRadius };
 
-  expect(() => getHarrisScore(image, origin, { windowSize: 6 })).toThrowError(
+  expect(() => getHarrisScore(image, origin, { windowSize: 6 })).toThrow(
     'windowSize must be an odd integer',
   );
 });

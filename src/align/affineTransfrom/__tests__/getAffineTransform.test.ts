@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest';
 
-import type { TestImagePath } from '../../../../test/TestImagePath.js';
-import { Image } from '../../../Image.js';
-import { overlapImages } from '../../../featureMatching/index.js';
-import { getAffineTransform } from '../getAffineTransform.js';
+import type { TestImagePath } from '../../../../test/TestImagePath.ts';
+import { Image } from '../../../Image.ts';
+import { overlapImages } from '../../../featureMatching/index.ts';
+import { getAffineTransform } from '../getAffineTransform.ts';
 
 test('RGB images', () => {
   const data = {
@@ -127,7 +127,7 @@ test('debug = true, no path specified', () => {
       crosscheck: false,
       debug: true,
     }),
-  ).toThrowError('Debug image file path is not specified.');
+  ).toThrow('Debug image file path is not specified.');
 });
 
 test('not enough matches found', () => {
@@ -139,7 +139,7 @@ test('not enough matches found', () => {
       maxRansacNbIterations: 1000,
       crosscheck: true,
     });
-  }).toThrowError(
+  }).toThrow(
     'Insufficient number of matches found to compute affine transform (less than 2).',
   );
 });

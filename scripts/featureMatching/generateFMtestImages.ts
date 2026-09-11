@@ -1,16 +1,16 @@
 // generate some variations of the alphabet image for feature matching
 import { join } from 'node:path';
 
-import { readSync, writeSync } from '../../src/index.js';
+import { readSync, writeSync } from '../../src/index.ts';
 
 const basePath = join(
   import.meta.dirname,
-  '../test/img/featureMatching/polygons',
+  '../../test/img/featureMatching/polygons',
 );
 
 console.log(basePath);
 
-const original = readSync(`${basePath}/betterScaleneTriangle.png`);
+const original = readSync(`${basePath}/scaleneTriangle.png`);
 
 const angles = [2, 10, 90, 180];
 for (const angle of angles) {

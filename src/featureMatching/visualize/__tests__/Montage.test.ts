@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.js';
-import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
-import { bruteForceOneMatch } from '../../matching/bruteForceMatch.js';
-import { Montage } from '../Montage.js';
+import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.ts';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.ts';
+import { bruteForceOneMatch } from '../../matching/bruteForceMatch.ts';
+import { Montage } from '../Montage.ts';
 
 const source = testUtils.load('featureMatching/alphabet.jpg');
 const grey = source.convertColor('GREY');
@@ -17,14 +17,14 @@ describe('constructor', () => {
   it('should error when scale is not an integer', () => {
     expect(() => {
       return new Montage(source, source, { scale: 1.5 });
-    }).toThrowError('scale must be an integer');
+    }).toThrow('scale must be an integer');
   });
 
   it('invalid disposition type', () => {
     expect(() => {
       // @ts-expect-error: invalid disposition type
       return new Montage(source, source, { disposition: 'test' });
-    }).toThrowError('invalid disposition type: test');
+    }).toThrow('invalid disposition type: test');
   });
 });
 

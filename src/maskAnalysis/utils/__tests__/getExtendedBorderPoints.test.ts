@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Mask } from '../../../Mask.js';
-import { getExtendedBorderPoints } from '../getExtendedBorderPoints.js';
+import { Mask } from '../../../Mask.ts';
+import { getExtendedBorderPoints } from '../getExtendedBorderPoints.ts';
 
 test('one pixel', () => {
   const mask = testUtils.createMask([[1]]);

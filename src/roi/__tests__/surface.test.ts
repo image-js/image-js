@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { fromMask } from '../fromMask.js';
+import { fromMask } from '../fromMask.ts';
 
 describe('ROI surface', () => {
   it('surface of a figure with a hole', () => {

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../Image.js';
+import { Image } from '../../Image.ts';
 
 test('cross', () => {
   const image = testUtils.createGreyImage([

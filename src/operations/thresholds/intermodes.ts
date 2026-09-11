@@ -6,7 +6,7 @@
  *
  */
 
-import { assert } from '../../utils/validators/assert.js';
+import { assert } from '../../utils/validators/assert.ts';
 
 /**
  * Return a threshold for a histogram using Intermodes algorithm.

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { cropAlpha } from '../cropAlpha.js';
+import { cropAlpha } from '../cropAlpha.ts';
 
 test('GREYA, no crop', () => {
   const image = testUtils.createGreyaImage([
@@ -72,7 +72,5 @@ test('should throw if result is empty', () => {
 
   expect(() => {
     image.cropAlpha();
-  }).toThrowError(
-    /could not find new dimensions. Threshold may be too high: 255/,
-  );
+  }).toThrow(/could not find new dimensions. Threshold may be too high: 255/);
 });

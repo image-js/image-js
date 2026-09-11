@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { hsvToRgb } from '../hsvToRgb.js';
+import { hsvToRgb } from '../hsvToRgb.ts';
 
 test('black', () => {
   const rgb = new Uint8Array([0, 0, 0]);

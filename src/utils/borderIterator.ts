@@ -1,5 +1,5 @@
-import type { Image } from '../Image.js';
-import type { Mask } from '../Mask.js';
+import type { Image } from '../Image.ts';
+import type { Mask } from '../Mask.ts';
 
 /**
  * Create function that allows to iterate on the pixels of the border of an image.

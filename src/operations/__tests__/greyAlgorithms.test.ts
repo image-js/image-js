@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../Image.js';
-import { hue } from '../greyAlgorithms.js';
+import { Image } from '../../Image.ts';
+import { hue } from '../greyAlgorithms.ts';
 
 test('hue is zero', () => {
   const image = new Image(1, 1, { colorModel: 'RGBA' });

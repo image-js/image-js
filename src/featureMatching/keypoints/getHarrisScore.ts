@@ -1,8 +1,8 @@
-import type { Image } from '../../Image.js';
-import type { Point } from '../../geometry/index.js';
-import type { GetHarrisScoreOptions } from '../featureMatching.types.js';
+import type { Image } from '../../Image.ts';
+import type { Point } from '../../geometry/index.ts';
+import type { GetHarrisScoreOptions } from '../featureMatching.types.ts';
 
-import { getEigenvaluesForScore } from './getEigenvaluesForScore.js';
+import { getEigenvaluesForScore } from './getEigenvaluesForScore.ts';
 
 /**
  * Get the Harris score of a corner. The idea behind the algorithm is that a

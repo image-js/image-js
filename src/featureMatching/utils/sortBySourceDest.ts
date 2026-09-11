@@ -1,4 +1,4 @@
-import type { Match } from '../matching/bruteForceMatch.js';
+import type { Match } from '../matching/bruteForceMatch.ts';
 
 /**
  * Sort array of matches by source index and then destination index.

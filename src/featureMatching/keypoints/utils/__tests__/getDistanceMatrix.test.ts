@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import type { OrientedFastKeypoint } from '../../getOrientedFastKeypoints.js';
-import { getDistanceMatrix } from '../getDistanceMatrix.js';
+import type { OrientedFastKeypoint } from '../../getOrientedFastKeypoints.ts';
+import { getDistanceMatrix } from '../getDistanceMatrix.ts';
 
 test('array of 3 keypoints', () => {
   const keypoints: OrientedFastKeypoint[] = [

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { copyAlpha } from '../convertColor.js';
+import { copyAlpha } from '../convertColor.ts';
 
 test('source and dest different sizes', () => {
   const source = testUtils.createRgbaImage([[10, 20, 30, 40, 60, 70, 80, 90]]);
@@ -8,7 +8,7 @@ test('source and dest different sizes', () => {
 
   expect(() => {
     copyAlpha(source, dest);
-  }).toThrowError(/source and destination have different sizes/);
+  }).toThrow(/source and destination have different sizes/);
 });
 
 test('source has no alpha', () => {
@@ -17,7 +17,7 @@ test('source has no alpha', () => {
 
   expect(() => {
     copyAlpha(source, dest);
-  }).toThrowError(/source image does not have alpha/);
+  }).toThrow(/source image does not have alpha/);
 });
 
 test('dest has no alpha', () => {
@@ -26,5 +26,5 @@ test('dest has no alpha', () => {
 
   expect(() => {
     copyAlpha(source, dest);
-  }).toThrowError(/destination does not have alpha/);
+  }).toThrow(/destination does not have alpha/);
 });

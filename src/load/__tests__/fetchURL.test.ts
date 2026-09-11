@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { fetchURL } from '../fetchURL.js';
+import { fetchURL } from '../fetchURL.ts';
 
 test('decodes image from data URL', async () => {
   const image = await fetchURL(

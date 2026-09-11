@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Mask } from '../../Mask.js';
-import { copyTo } from '../copyTo.js';
+import { Mask } from '../../Mask.ts';
+import { copyTo } from '../copyTo.ts';
 
 test('default options', () => {
   const source = testUtils.createGreyImage([[100, 0]]);
@@ -154,7 +154,7 @@ test('origin coordinates are floating values', () => {
 
   expect(() => {
     source.copyTo(target, { origin: { row: 0.99, column: 0 } });
-  }).toThrowError('Origin row and column must be integers');
+  }).toThrow('Origin row and column must be integers');
 });
 
 test('testing out option', () => {
@@ -255,7 +255,7 @@ test('incompatible image types', () => {
   const source = testUtils.createGreyImage([[100, 255]]);
   const target = testUtils.createGreyaImage([[50, 0]]);
 
-  expect(() => source.copyTo(target)).toThrowError(
+  expect(() => source.copyTo(target)).toThrow(
     /source and target must have the same color model/,
   );
 });

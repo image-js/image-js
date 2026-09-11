@@ -1,7 +1,7 @@
-import { Image } from '../Image.js';
+import { Image } from '../Image.ts';
 import { getDefaultColor } from '../utils/getDefaultColor.ts';
-import type { BorderType } from '../utils/interpolateBorder.js';
-import { getBorderInterpolation } from '../utils/interpolateBorder.js';
+import type { BorderType } from '../utils/interpolateBorder.ts';
+import { getBorderInterpolation } from '../utils/interpolateBorder.ts';
 import { validateColor } from '../utils/validators/validators.ts';
 
 export interface ExtendBordersOptions {

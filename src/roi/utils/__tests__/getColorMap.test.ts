@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { getBinaryMap } from '../colorMaps/getBinaryMap.js';
-import { getColorMap } from '../getColorMap.js';
+import { getBinaryMap } from '../colorMaps/getBinaryMap.ts';
+import { getColorMap } from '../getColorMap.ts';
 
 test('default options', () => {
   const colorMap = getBinaryMap({ nbNegative: 1, nbPositive: 1 });

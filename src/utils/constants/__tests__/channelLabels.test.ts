@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import { channelLabels } from '../channelLabels.js';
-import { ImageColorModel } from '../colorModels.js';
+import { Image } from '../../../Image.ts';
+import { channelLabels } from '../channelLabels.ts';
+import { ImageColorModel } from '../colorModels.ts';
 
 test.each([
   {

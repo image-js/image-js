@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getMatrixFromPoints } from '../getMatrixFromPoints.js';
+import { getMatrixFromPoints } from '../getMatrixFromPoints.ts';
 
 test('4 points', () => {
   const side = 3;

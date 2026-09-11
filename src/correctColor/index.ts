@@ -1,1 +1,1 @@
-export * from './correctColor.js';
+export * from './correctColor.ts';

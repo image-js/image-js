@@ -1,5 +1,5 @@
-import type { Mask } from '../../Mask.js';
-import type { Point } from '../../utils/geometry/points.js';
+import type { Mask } from '../../Mask.ts';
+import type { Point } from '../../utils/geometry/points.ts';
 import { getExternalContour } from '../getExternalContour.ts';
 
 /**

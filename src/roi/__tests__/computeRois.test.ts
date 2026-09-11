@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest';
 
-import { RoiMapManager } from '../RoiMapManager.js';
-import { computeRois } from '../computeRois.js';
-import { fromMask } from '../fromMask.js';
-import { waterShed } from '../waterShed.js';
+import { RoiMapManager } from '../RoiMapManager.ts';
+import { computeRois } from '../computeRois.ts';
+import { fromMask } from '../fromMask.ts';
+import { waterShed } from '../waterShed.ts';
 
 test('3x3 mask', () => {
   const mask = testUtils.createMask([

@@ -1,8 +1,8 @@
-import type { Image } from '../Image.js';
-import { getRadius } from '../utils/getRadius.js';
-import type { BorderType } from '../utils/interpolateBorder.js';
+import type { Image } from '../Image.ts';
+import { getRadius } from '../utils/getRadius.ts';
+import type { BorderType } from '../utils/interpolateBorder.ts';
 
-import { separableConvolution } from './convolution.js';
+import { separableConvolution } from './convolution.ts';
 
 interface GaussianBlurBaseOptions {
   /**
@@ -50,8 +50,7 @@ export interface GaussianBlurXYOptions extends GaussianBlurBaseOptions {
 }
 
 export type GaussianBlurOptions =
-  | GaussianBlurSigmaOptions
-  | GaussianBlurXYOptions;
+  GaussianBlurSigmaOptions | GaussianBlurXYOptions;
 
 /**
  * Apply a gaussian filter to an image.

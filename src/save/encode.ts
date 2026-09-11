@@ -1,13 +1,13 @@
 import { P, match } from 'ts-pattern';
 
-import type { Image } from '../Image.js';
-import type { Mask } from '../Mask.js';
+import type { Image } from '../Image.ts';
+import type { Mask } from '../Mask.ts';
 
-import { encodeBmp } from './encodeBmp.js';
-import type { EncodeJpegOptions } from './encodeJpeg.js';
-import { encodeJpeg } from './encodeJpeg.js';
-import type { EncodePngOptions } from './encodePng.js';
-import { encodePng } from './encodePng.js';
+import { encodeBmp } from './encodeBmp.ts';
+import type { EncodeJpegOptions } from './encodeJpeg.ts';
+import { encodeJpeg } from './encodeJpeg.ts';
+import type { EncodePngOptions } from './encodePng.ts';
+import { encodePng } from './encodePng.ts';
 
 export const ImageFormat = {
   PNG: 'png',

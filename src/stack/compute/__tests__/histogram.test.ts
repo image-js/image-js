@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { Stack } from '../../../Stack.js';
+import { Stack } from '../../../Stack.ts';
 
 test('two grey images, bitsDepth = 8', () => {
   const image = testUtils.createGreyImage([[1, 2, 3, 4]]);

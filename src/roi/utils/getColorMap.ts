@@ -1,11 +1,11 @@
 import { match } from 'ts-pattern';
 
-import type { RoisColorMode } from '../colorRois.js';
-import type { RoiKind } from '../getRois.js';
+import type { RoisColorMode } from '../colorRois.ts';
+import type { RoiKind } from '../getRois.ts';
 
-import { getBinaryMap } from './colorMaps/getBinaryMap.js';
-import { getRainbowMap } from './colorMaps/getRainbowMap.js';
-import { getSaturationMap } from './colorMaps/getSaturationMap.js';
+import { getBinaryMap } from './colorMaps/getBinaryMap.ts';
+import { getRainbowMap } from './colorMaps/getRainbowMap.ts';
+import { getSaturationMap } from './colorMaps/getSaturationMap.ts';
 
 export interface GetColorMapOptions {
   /**

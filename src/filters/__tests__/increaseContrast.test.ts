@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { increaseContrast } from '../increaseContrast.js';
+import { increaseContrast } from '../increaseContrast.ts';
 
 test('3x1 rgba image, custom output min and max', () => {
   const image = testUtils.createRgbaImage([

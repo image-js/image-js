@@ -1,11 +1,11 @@
 import { ransac } from 'ml-ransac';
 import { describe, expect, it } from 'vitest';
 
-import { affineFitFunction } from '../affineFitFunction.js';
-import { applyAffineTransfom } from '../applyAffineTransform.js';
-import { createAffineTransformModel } from '../createAffineTransformModel.js';
-import { drawResult } from '../drawResult.js';
-import { getEuclideanDistance } from '../getEuclideanDistance.js';
+import { affineFitFunction } from '../affineFitFunction.ts';
+import { applyAffineTransfom } from '../applyAffineTransform.ts';
+import { createAffineTransformModel } from '../createAffineTransformModel.ts';
+import { drawResult } from '../drawResult.ts';
+import { getEuclideanDistance } from '../getEuclideanDistance.ts';
 
 describe('2D data (points)', () => {
   it('6 points perfectly aligned', () => {

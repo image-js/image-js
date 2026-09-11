@@ -1,7 +1,7 @@
 import { describe, expect, it, test } from 'vitest';
 
-import { Image } from '../Image.js';
-import { Stack } from '../Stack.js';
+import { Image } from '../Image.ts';
+import { Stack } from '../Stack.ts';
 
 describe('Stack constructor', () => {
   it('create a stack containing one image', () => {
@@ -28,7 +28,7 @@ describe('Stack constructor', () => {
 
     expect(() => {
       return new Stack([image1, image2]);
-    }).toThrowError('images must all have the same bit depth and color model');
+    }).toThrow('images must all have the same bit depth and color model');
   });
 
   it('should throw if bit depths different', () => {
@@ -37,7 +37,7 @@ describe('Stack constructor', () => {
 
     expect(() => {
       return new Stack([image1, image2]);
-    }).toThrowError('images must all have the same bit depth and color model');
+    }).toThrow('images must all have the same bit depth and color model');
   });
 });
 

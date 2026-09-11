@@ -1,2 +1,2 @@
-export * from './maskAnalysis.types.js';
+export * from './maskAnalysis.types.ts';
 export * from './getConvexityDefects.ts';

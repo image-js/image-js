@@ -1,9 +1,9 @@
-import type { Image } from '../Image.js';
-import type { TransformOptions } from '../geometry/index.js';
-import { transform } from '../geometry/index.js';
-import { getAngle } from '../maskAnalysis/utils/getAngle.js';
-import { rotatePoint } from '../point/operations.js';
-import type { Point } from '../utils/geometry/points.js';
+import type { Image } from '../Image.ts';
+import type { TransformOptions } from '../geometry/index.ts';
+import { transform } from '../geometry/index.ts';
+import { getAngle } from '../maskAnalysis/utils/getAngle.ts';
+import { rotatePoint } from '../point/operations.ts';
+import type { Point } from '../utils/geometry/points.ts';
 
 export type CropRectangleOptions = Omit<
   TransformOptions,

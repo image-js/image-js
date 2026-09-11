@@ -1,8 +1,8 @@
-import type { Image } from '../../../Image.js';
-import { getRadius } from '../../../utils/getRadius.js';
-import type { OrientedFastKeypoint } from '../../keypoints/getOrientedFastKeypoints.js';
-import { checkBorderDistance } from '../../utils/checkBorderDistance.js';
-import { extractSquareImage } from '../../utils/extractSquareImage.js';
+import type { Image } from '../../../Image.ts';
+import { getRadius } from '../../../utils/getRadius.ts';
+import type { OrientedFastKeypoint } from '../../keypoints/getOrientedFastKeypoints.ts';
+import { checkBorderDistance } from '../../utils/checkBorderDistance.ts';
+import { extractSquareImage } from '../../utils/extractSquareImage.ts';
 
 export interface GetKeypointPatchOptions {
   /**

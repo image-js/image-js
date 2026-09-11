@@ -1,8 +1,8 @@
 import { match } from 'ts-pattern';
 
-import type { Roi } from './Roi.js';
-import type { RoiMapManager } from './RoiMapManager.js';
-import { computeRois } from './computeRois.js';
+import type { Roi } from './Roi.ts';
+import type { RoiMapManager } from './RoiMapManager.ts';
+import { computeRois } from './computeRois.ts';
 
 export const RoiKind = {
   BLACK: 'black',

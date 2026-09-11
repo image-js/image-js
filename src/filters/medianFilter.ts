@@ -1,10 +1,10 @@
 import { xMedian } from 'ml-spectra-processing';
 
-import { Image } from '../Image.js';
+import { Image } from '../Image.ts';
 import { getDefaultColor } from '../utils/getDefaultColor.ts';
-import type { BorderType } from '../utils/interpolateBorder.js';
-import { getBorderInterpolation } from '../utils/interpolateBorder.js';
-import checkProcessable from '../utils/validators/checkProcessable.js';
+import type { BorderType } from '../utils/interpolateBorder.ts';
+import { getBorderInterpolation } from '../utils/interpolateBorder.ts';
+import checkProcessable from '../utils/validators/checkProcessable.ts';
 
 export interface MedianFilterOptions {
   /**

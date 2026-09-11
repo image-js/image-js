@@ -1,11 +1,11 @@
 import { expect, test } from 'vitest';
 
-import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.js';
-import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
-import { bruteForceOneMatch } from '../../matching/bruteForceMatch.js';
-import { Montage } from '../Montage.js';
-import type { DrawKeypointsOptions } from '../drawKeypoints.js';
-import { drawMatches } from '../drawMatches.js';
+import { getBriefDescriptors } from '../../descriptors/getBriefDescriptors.ts';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.ts';
+import { bruteForceOneMatch } from '../../matching/bruteForceMatch.ts';
+import { Montage } from '../Montage.ts';
+import type { DrawKeypointsOptions } from '../drawKeypoints.ts';
+import { drawMatches } from '../drawMatches.ts';
 
 test('alphabet image as source and destination, nbKeypoint = 10', () => {
   const source = testUtils.load('various/alphabet.jpg');

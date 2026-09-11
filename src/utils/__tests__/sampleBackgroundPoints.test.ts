@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { getMaskFromCannyEdge } from '../../operations/getMaskFromCannyEdge.js';
-import { sampleBackgroundPoints } from '../sampleBackgroundPoints.js';
+import { getMaskFromCannyEdge } from '../../operations/getMaskFromCannyEdge.ts';
+import { sampleBackgroundPoints } from '../sampleBackgroundPoints.ts';
 
 test('basic test', () => {
   const image = testUtils.createGreyImage([
@@ -120,5 +120,5 @@ test('throw an error', () => {
 
   expect(() =>
     sampleBackgroundPoints(image, { mask, gridWidth: -3, gridHeight: 3 }),
-  ).toThrowError(`The grid has bigger width than the image. Grid's width: -3`);
+  ).toThrow(`The grid has bigger width than the image. Grid's width: -3`);
 });

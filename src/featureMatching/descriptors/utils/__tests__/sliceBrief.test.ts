@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { getOrientedFastKeypoints } from '../../../keypoints/getOrientedFastKeypoints.js';
-import { getBriefDescriptors } from '../../getBriefDescriptors.js';
-import { sliceBrief } from '../sliceBrief.js';
+import { getOrientedFastKeypoints } from '../../../keypoints/getOrientedFastKeypoints.ts';
+import { getBriefDescriptors } from '../../getBriefDescriptors.ts';
+import { sliceBrief } from '../sliceBrief.ts';
 
 test('default options', () => {
   const image = testUtils
@@ -44,7 +44,7 @@ test('range error', () => {
 
   const brief = getBriefDescriptors(image, keypoints);
 
-  expect(() => sliceBrief(brief, { start: -1 })).toThrowError(
+  expect(() => sliceBrief(brief, { start: -1 })).toThrow(
     'start or end are out of range',
   );
 });

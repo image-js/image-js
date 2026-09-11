@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getExtrema } from '../getExtrema.js';
+import { getExtrema } from '../getExtrema.ts';
 
 test('minimum of grey image from legacy code', () => {
   const image = testUtils.createGreyImage([
@@ -114,7 +114,7 @@ test('testing for error handling', () => {
   ]);
 
   //@ts-expect-error error testing
-  expect(() => getExtrema(image, { algorithm: 'blah' })).toThrowError(
+  expect(() => getExtrema(image, { algorithm: 'blah' })).toThrow(
     /unreachable: blah/,
   );
 });

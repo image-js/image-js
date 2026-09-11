@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import type { Point } from '../../../geometry/index.js';
-import { checkBorderDistance } from '../checkBorderDistance.js';
+import { Image } from '../../../Image.ts';
+import type { Point } from '../../../geometry/index.ts';
+import { checkBorderDistance } from '../checkBorderDistance.ts';
 
 test('should be true', () => {
   const size = 7;

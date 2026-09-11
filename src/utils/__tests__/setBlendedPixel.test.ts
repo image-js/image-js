@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { setBlendedPixel } from '../setBlendedPixel.js';
+import { setBlendedPixel } from '../setBlendedPixel.ts';
 
 test('GREYA image, default options', () => {
   const image = testUtils.createGreyaImage([

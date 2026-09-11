@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getDefaultColor } from '../getDefaultColor.js';
+import { getDefaultColor } from '../getDefaultColor.ts';
 
 test('GREY', () => {
   const image = testUtils.createGreyImage([

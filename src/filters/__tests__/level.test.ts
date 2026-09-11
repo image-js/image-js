@@ -187,5 +187,5 @@ test('parameters array length error', () => {
     image.level({
       inputMin: [0],
     });
-  }).toThrowError('array length is not compatible with channel option');
+  }).toThrow('array length is not compatible with channel option');
 });

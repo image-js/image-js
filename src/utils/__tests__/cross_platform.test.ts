@@ -19,7 +19,7 @@ describe('getCanvasContext', () => {
     vi.resetModules();
     const { getCanvasContext } = await import('../cross_platform.ts');
 
-    expect(() => getCanvasContext(100, 100)).toThrowError(
+    expect(() => getCanvasContext(100, 100)).toThrow(
       'drawText on Node.js requires the optional "skia-canvas" package',
     );
 

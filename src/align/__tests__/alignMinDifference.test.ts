@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { overlapImages } from '../../featureMatching/index.js';
-import { alignMinDifference } from '../alignMinDifference.js';
+import { overlapImages } from '../../featureMatching/index.ts';
+import { alignMinDifference } from '../alignMinDifference.ts';
 
 test('1 pixel source', () => {
   const source = testUtils.createGreyImage([[255]]);
@@ -59,7 +59,7 @@ test('source too big', () => {
 
   expect(() => {
     alignMinDifference(source, destination);
-  }).toThrowError('Source image must fit entirely in destination image');
+  }).toThrow('Source image must fit entirely in destination image');
 });
 
 test('larger image and crop', () => {

@@ -1,7 +1,7 @@
-import { Image, ImageCoordinates } from '../../Image.js';
-import type { Point } from '../../geometry/index.js';
-import { merge } from '../../operations/index.js';
-import { ImageColorModel } from '../../utils/constants/colorModels.js';
+import { Image, ImageCoordinates } from '../../Image.ts';
+import type { Point } from '../../geometry/index.ts';
+import { merge } from '../../operations/index.ts';
+import { ImageColorModel } from '../../utils/constants/colorModels.ts';
 
 export interface OverlapImageOptions {
   /**

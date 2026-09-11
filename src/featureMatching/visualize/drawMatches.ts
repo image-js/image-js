@@ -1,13 +1,13 @@
-import type { Image } from '../../Image.js';
-import type { GetColorsOptions } from '../featureMatching.types.js';
-import type { FastKeypoint } from '../keypoints/getFastKeypoints.js';
-import type { Match } from '../matching/bruteForceMatch.js';
-import { getColors } from '../utils/getColors.js';
-import { getMatchColor } from '../utils/getMatchColor.js';
-import { sortByDistance } from '../utils/sortByDistance.js';
+import type { Image } from '../../Image.ts';
+import type { GetColorsOptions } from '../featureMatching.types.ts';
+import type { FastKeypoint } from '../keypoints/getFastKeypoints.ts';
+import type { Match } from '../matching/bruteForceMatch.ts';
+import { getColors } from '../utils/getColors.ts';
+import { getMatchColor } from '../utils/getMatchColor.ts';
+import { sortByDistance } from '../utils/sortByDistance.ts';
 
-import type { Montage } from './Montage.js';
-import { scaleKeypoints } from './scaleKeypoints.js';
+import type { Montage } from './Montage.ts';
+import { scaleKeypoints } from './scaleKeypoints.ts';
 
 export interface DrawMatchesOptions {
   /**

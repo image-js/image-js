@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getPatchIntensityMoment } from '../getPatchIntensityMoment.js';
+import { getPatchIntensityMoment } from '../getPatchIntensityMoment.ts';
 
 test('5x5 image, 01, radius = 1', () => {
   const image = testUtils.createGreyImage([
@@ -52,5 +52,5 @@ test('too close to border error', () => {
 
   expect(() => {
     getPatchIntensityMoment(image, 0, 1);
-  }).toThrowError('desired patch is too close to image border');
+  }).toThrow('desired patch is too close to image border');
 });

@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest';
 
-import { createAffineTransformModel } from '../createAffineTransformModel.js';
+import { createAffineTransformModel } from '../createAffineTransformModel.ts';
 
 test('wrong nb of parameters', () => {
   expect(() => {
     createAffineTransformModel([1, 1, 1, 1, 1]);
-  }).toThrowError('Transform had wrong number of parameters');
+  }).toThrow('Transform had wrong number of parameters');
 });

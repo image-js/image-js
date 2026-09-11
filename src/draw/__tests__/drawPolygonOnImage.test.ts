@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../Image.js';
-import { drawPolygonOnImage } from '../drawPolygonOnImage.js';
+import { Image } from '../../Image.ts';
+import { drawPolygonOnImage } from '../drawPolygonOnImage.ts';
 
 test('RGB image', () => {
   const image = testUtils.createRgbImage([
@@ -285,7 +285,7 @@ test('stroke color not compatible with image', () => {
       strokeColor: [1],
       fillColor: [2, 5],
     });
-  }).toThrowError(
+  }).toThrow(
     'invalid channel: 1. It must be a positive integer smaller than 1',
   );
 });

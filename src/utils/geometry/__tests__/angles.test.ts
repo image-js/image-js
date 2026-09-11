@@ -1,7 +1,7 @@
 import { describe, expect, it, test } from 'vitest';
 
-import { toDegrees } from '../angles.js';
-import { rotate } from '../points.js';
+import { toDegrees } from '../angles.ts';
+import { rotate } from '../points.ts';
 
 test('toDegrees', () => {
   expect(toDegrees(Math.PI / 2)).toBe(90);

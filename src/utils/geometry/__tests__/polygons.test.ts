@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getPolygonArea, getPolygonPerimeter } from '../polygons.js';
+import { getPolygonArea, getPolygonPerimeter } from '../polygons.ts';
 
 describe('getPolygonPerimeter', () => {
   it('perimeter zero', () => {

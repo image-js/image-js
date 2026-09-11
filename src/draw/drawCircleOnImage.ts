@@ -1,14 +1,14 @@
 import { circle } from 'bresenham-zingl';
 
-import type { Image } from '../Image.js';
-import type { Point } from '../utils/geometry/points.js';
-import { getDefaultColor } from '../utils/getDefaultColor.js';
-import { getOutputImage } from '../utils/getOutputImage.js';
-import { setBlendedVisiblePixel } from '../utils/setBlendedVisiblePixel.js';
-import checkProcessable from '../utils/validators/checkProcessable.js';
-import { validateColor } from '../utils/validators/validators.js';
+import type { Image } from '../Image.ts';
+import type { Point } from '../utils/geometry/points.ts';
+import { getDefaultColor } from '../utils/getDefaultColor.ts';
+import { getOutputImage } from '../utils/getOutputImage.ts';
+import { setBlendedVisiblePixel } from '../utils/setBlendedVisiblePixel.ts';
+import checkProcessable from '../utils/validators/checkProcessable.ts';
+import { validateColor } from '../utils/validators/validators.ts';
 
-import { roundPoint } from './utils/roundPoint.js';
+import { roundPoint } from './utils/roundPoint.ts';
 
 // Inspired by https://www.geeksforgeeks.org/bresenhams-circle-drawing-algorithm/
 

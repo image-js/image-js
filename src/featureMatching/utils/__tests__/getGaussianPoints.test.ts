@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import type { Point } from '../../../geometry/index.js';
-import { getGaussianPoints, getGaussianValues } from '../getGaussianPoints.js';
+import { Image } from '../../../Image.ts';
+import type { Point } from '../../../geometry/index.ts';
+import { getGaussianPoints, getGaussianValues } from '../getGaussianPoints.ts';
 
 function drawGaussianPoints(image: Image, points: Point[]): Image {
   const center = image.getCoordinates('center');

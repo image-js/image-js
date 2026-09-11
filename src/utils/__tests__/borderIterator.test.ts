@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../Image.js';
-import type { Mask } from '../../Mask.js';
-import { borderIterator } from '../borderIterator.js';
+import { Image } from '../../Image.ts';
+import type { Mask } from '../../Mask.ts';
+import { borderIterator } from '../borderIterator.ts';
 
 test('3x4 image', () => {
   const image = new Image(4, 3);

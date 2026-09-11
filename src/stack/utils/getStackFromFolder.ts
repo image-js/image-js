@@ -1,8 +1,8 @@
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { Stack } from '../../Stack.js';
-import { readSync } from '../../load/index.js';
+import { Stack } from '../../Stack.ts';
+import { readSync } from '../../load/index.ts';
 
 /**
  * Create a stack with all images at a given path.

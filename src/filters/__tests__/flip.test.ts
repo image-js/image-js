@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../Image.js';
+import { Image } from '../../Image.ts';
 
 test('invert with out parameter', () => {
   const out = new Image(2, 2);

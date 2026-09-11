@@ -1,8 +1,8 @@
 import { getAffineTransform } from 'ml-affine-transform';
 
-import type { Point } from '../../geometry/index.js';
+import type { Point } from '../../geometry/index.ts';
 
-import { getMatrixFromPoints } from './getMatrixFromPoints.js';
+import { getMatrixFromPoints } from './getMatrixFromPoints.ts';
 
 /**
  * The fit function for an affine transformation.

@@ -2,9 +2,9 @@ import { join } from 'node:path';
 
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import { Stack } from '../../../Stack.js';
-import { getStackFromFolder } from '../../utils/getStackFromFolder.js';
+import { Image } from '../../../Image.ts';
+import { Stack } from '../../../Stack.ts';
+import { getStackFromFolder } from '../../utils/getStackFromFolder.ts';
 
 test('2 grey images', () => {
   const image1 = testUtils.createGreyImage([[1, 2, 3, 4]]);
@@ -41,7 +41,7 @@ test('should throw if 16 bits depth', () => {
 
   expect(() => {
     return stack.sum();
-  }).toThrowError('image bitDepth must be 8 to apply this algorithm');
+  }).toThrow('image bitDepth must be 8 to apply this algorithm');
 });
 
 test('should throw if too many images in stack', () => {
@@ -51,5 +51,5 @@ test('should throw if too many images in stack', () => {
 
   expect(() => {
     return stack.sum();
-  }).toThrowError('Maximal valid stack size is 257');
+  }).toThrow('Maximal valid stack size is 257');
 });

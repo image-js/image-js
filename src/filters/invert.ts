@@ -1,7 +1,7 @@
-import { Image } from '../Image.js';
-import type { Mask } from '../Mask.js';
-import { copyAlpha } from '../operations/index.js';
-import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage.js';
+import { Image } from '../Image.ts';
+import type { Mask } from '../Mask.ts';
+import { copyAlpha } from '../operations/index.ts';
+import { getOutputImage, maskToOutputMask } from '../utils/getOutputImage.ts';
 
 export interface InvertOptions {
   /**
@@ -43,7 +43,7 @@ export function invert(
     const newImage = maskToOutputMask(image, options);
 
     for (let i = 0; i < newImage.size; i++) {
-      newImage.setBitByIndex(i, !image.getBitByIndex(i));
+      newImage.setBitByIndex(i, image.getBitByIndex(i) ? 0 : 1);
     }
     return newImage;
   }

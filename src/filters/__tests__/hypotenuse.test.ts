@@ -24,7 +24,7 @@ test('different size error', () => {
 
   expect(() => {
     image.hypotenuse(otherImage);
-  }).toThrowError('both images must have the same size');
+  }).toThrow('both images must have the same size');
 });
 
 test('different bit depth or alpha error', () => {
@@ -33,7 +33,7 @@ test('different bit depth or alpha error', () => {
 
   expect(() => {
     image.hypotenuse(otherImage);
-  }).toThrowError('both images must have the same alpha and bitDepth');
+  }).toThrow('both images must have the same alpha and bitDepth');
 });
 
 test('different number of channels', () => {
@@ -42,7 +42,7 @@ test('different number of channels', () => {
 
   expect(() => {
     image.hypotenuse(otherImage);
-  }).toThrowError('both images must have the same number of channels');
+  }).toThrow('both images must have the same number of channels');
 });
 
 test('testing with a custom channel', () => {

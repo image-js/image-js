@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../Image.js';
-import { divide } from '../divide.js';
+import { Image } from '../../Image.ts';
+import { divide } from '../divide.ts';
 
 test('divide by 2', () => {
   let image = testUtils.createRgbaImage([
@@ -25,7 +25,7 @@ test('error when dividing by 0', () => {
 
   expect(() => {
     divide(image, 0);
-  }).toThrowError('Cannot divide by 0');
+  }).toThrow('Cannot divide by 0');
 });
 
 test('divide by decimal', () => {

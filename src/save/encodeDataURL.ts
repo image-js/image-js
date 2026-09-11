@@ -1,13 +1,13 @@
 import { encode as uint8encode } from 'uint8-base64';
 
-import type { Image } from '../Image.js';
+import type { Image } from '../Image.ts';
 
 import type {
   EncodeOptionsBmp,
   EncodeOptionsJpeg,
   EncodeOptionsPng,
-} from './encode.js';
-import { defaultPng, encode } from './encode.js';
+} from './encode.ts';
+import { defaultPng, encode } from './encode.ts';
 /**
  * Converts image into Data URL string.
  * @param image - Image to get base64 encoding from.

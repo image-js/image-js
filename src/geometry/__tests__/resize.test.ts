@@ -2,8 +2,8 @@ import path from 'node:path';
 
 import { expect, test } from 'vitest';
 
-import type { Image } from '../../Image.js';
-import { write } from '../../save/index.js';
+import type { Image } from '../../Image.ts';
+import { write } from '../../save/index.ts';
 
 async function writeDebug(resized: Image, type: string) {
   // @ts-expect-error Dynamic string.
@@ -193,7 +193,7 @@ test('should throw no parameter', () => {
 
   expect(() => {
     img.resize({});
-  }).toThrowError(
+  }).toThrow(
     'at least one of the width, height, xFactor or yFactor options must be passed',
   );
 });
@@ -203,5 +203,5 @@ test('should throw factor and size used at the same time', () => {
 
   expect(() => {
     img.resize({ yFactor: 2, height: 50 });
-  }).toThrowError('factor and size cannot be passed together');
+  }).toThrow('factor and size cannot be passed together');
 });

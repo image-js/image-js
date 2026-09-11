@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { encode } from '../encode.js';
-import { encodeDataURL } from '../encodeDataURL.js';
+import { encode } from '../encode.ts';
+import { encodeDataURL } from '../encodeDataURL.ts';
 
 test('basic image (png)', () => {
   const image = testUtils.createGreyImage([

@@ -3,8 +3,8 @@ import { expect, test } from 'vitest';
 import type {
   GaussianBlurOptions,
   GaussianBlurSigmaOptions,
-} from '../gaussianBlur.js';
-import { gaussianBlur } from '../gaussianBlur.js';
+} from '../gaussianBlur.ts';
+import { gaussianBlur } from '../gaussianBlur.ts';
 
 test('symmetrical kernel, should return the kernel itself', () => {
   const image = testUtils.createGreyImage([
@@ -53,7 +53,7 @@ test('size error', () => {
 
   expect(() => {
     image.gaussianBlur(options);
-  }).toThrowError('size must be positive and odd');
+  }).toThrow('size must be positive and odd');
 });
 
 test('x and y kernels', () => {
@@ -108,7 +108,7 @@ test('x and y kernels 2', () => {
 
   expect(() => {
     return image.gaussianBlur(options);
-  }).toThrowError(
+  }).toThrow(
     'you must either define sigma or sigmaX and sigmaY in the options argument',
   );
 });

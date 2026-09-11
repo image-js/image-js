@@ -1,7 +1,7 @@
 import { match } from 'ts-pattern';
 
-import type { Image } from '../Image.js';
-import type { Mask } from '../Mask.js';
+import type { Image } from '../Image.ts';
+import type { Mask } from '../Mask.ts';
 
 /**
  * Get the default color for a given color model.

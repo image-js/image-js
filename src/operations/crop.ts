@@ -1,7 +1,7 @@
-import { Image } from '../Image.js';
-import type { Point } from '../utils/geometry/points.js';
-import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger.js';
-import checkProcessable from '../utils/validators/checkProcessable.js';
+import { Image } from '../Image.ts';
+import type { Point } from '../utils/geometry/points.ts';
+import { checkPointIsInteger } from '../utils/validators/checkPointIsInteger.ts';
+import checkProcessable from '../utils/validators/checkProcessable.ts';
 
 export interface CropOptions {
   /**

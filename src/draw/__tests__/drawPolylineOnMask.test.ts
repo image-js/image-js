@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Mask } from '../../Mask.js';
-import { drawPolylineOnMask } from '../drawPolylineOnMask.js';
+import { Mask } from '../../Mask.ts';
+import { drawPolylineOnMask } from '../drawPolylineOnMask.ts';
 
 test('3x3 mask', () => {
   const image = new Mask(3, 3);

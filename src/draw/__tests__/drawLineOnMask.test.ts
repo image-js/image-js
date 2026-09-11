@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Mask } from '../../Mask.js';
-import { drawLineOnMask } from '../drawLineOnMask.js';
+import { Mask } from '../../Mask.ts';
+import { drawLineOnMask } from '../drawLineOnMask.ts';
 
 test('3x3 mask, diagonal', () => {
   const mask = testUtils.createMask([

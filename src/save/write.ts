@@ -1,13 +1,13 @@
-import type { Image } from '../Image.js';
-import { Mask } from '../Mask.js';
-import { getNodeApiOrThrow } from '../utils/cross_platform.js';
+import type { Image } from '../Image.ts';
+import { Mask } from '../Mask.ts';
+import { getNodeApiOrThrow } from '../utils/cross_platform.ts';
 
 import type {
   EncodeOptionsBmp,
   EncodeOptionsJpeg,
   EncodeOptionsPng,
-} from './encode.js';
-import { encode } from './encode.js';
+} from './encode.ts';
+import { encode } from './encode.ts';
 
 export interface WriteOptions {
   /**

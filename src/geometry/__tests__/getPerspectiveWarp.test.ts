@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { Image } from '../../Image.js';
-import { getPerspectiveWarp, order4Points } from '../getPerspectiveWarp.js';
+import { Image } from '../../Image.ts';
+import { getPerspectiveWarp, order4Points } from '../getPerspectiveWarp.ts';
 
 describe('4 points sorting', () => {
   it('basic sorting test', () => {
@@ -222,7 +222,7 @@ describe('error testing', () => {
   it("should throw if there aren't 4 points", () => {
     expect(() => {
       getPerspectiveWarp([{ column: 1, row: 1 }]);
-    }).toThrowError(
+    }).toThrow(
       'The array pts must have four elements, which are the four corners. Currently, pts have 1 elements',
     );
   });
@@ -238,7 +238,7 @@ describe('error testing', () => {
         ],
         { width: 10 },
       );
-    }).toThrowError(
+    }).toThrow(
       'Invalid dimensions: `height` is missing. Either provide both width and height, or omit both to auto-calculate dimensions.',
     );
   });

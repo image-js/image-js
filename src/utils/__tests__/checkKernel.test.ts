@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { checkKernel } from '../validators/checkKernel.js';
+import { checkKernel } from '../validators/checkKernel.ts';
 
 test('should throw', () => {
   const kernel = [
@@ -10,5 +10,5 @@ test('should throw', () => {
 
   expect(() => {
     checkKernel(kernel);
-  }).toThrowError(/the number of rows and columns of the kernel must be odd/);
+  }).toThrow(/the number of rows and columns of the kernel must be odd/);
 });

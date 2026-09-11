@@ -1,12 +1,12 @@
 import { Matrix, inverse } from 'ml-matrix';
 
-import { Image } from '../Image.js';
-import { getClamp } from '../utils/clamp.js';
+import { Image } from '../Image.ts';
+import { getClamp } from '../utils/clamp.ts';
 import { getDefaultColor } from '../utils/getDefaultColor.ts';
-import type { BorderType } from '../utils/interpolateBorder.js';
-import { getBorderInterpolation } from '../utils/interpolateBorder.js';
-import type { InterpolationType } from '../utils/interpolatePixel.js';
-import { getInterpolationFunction } from '../utils/interpolatePixel.js';
+import type { BorderType } from '../utils/interpolateBorder.ts';
+import { getBorderInterpolation } from '../utils/interpolateBorder.ts';
+import type { InterpolationType } from '../utils/interpolatePixel.ts';
+import { getInterpolationFunction } from '../utils/interpolatePixel.ts';
 import { validateColor } from '../utils/validators/validators.ts';
 
 export interface TransformOptions {

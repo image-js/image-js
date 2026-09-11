@@ -33,3 +33,17 @@ To run the generation script, use the following steps:
   - `.venv/Scripts/Activate.ps1` (Windows)
 - Run `pip install opencv-python`
 - Run `python test/img/opencv/generate.py`
+
+## Benchmarks
+
+### Running benchmarks
+
+To run benchmarks, start by downloading the demo image dataset:
+
+`node scripts/fetch_image_dataset.ts`
+
+Then run the benchmarks:
+
+```bash
+npm run bench
+```

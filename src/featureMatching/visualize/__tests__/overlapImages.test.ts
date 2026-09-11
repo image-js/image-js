@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { overlapImages } from '../overlapImages.js';
+import { overlapImages } from '../overlapImages.ts';
 
 test('two triangles', () => {
   const source = testUtils.load('featureMatching/polygons/scaleneTriangle.png');
@@ -21,5 +21,5 @@ test('scale cannot be zero', () => {
 
   expect(() => {
     overlapImages(source, destination, { scale: 0 });
-  }).toThrowError('Scale cannot be 0');
+  }).toThrow('Scale cannot be 0');
 });

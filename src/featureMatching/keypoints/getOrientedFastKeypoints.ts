@@ -1,15 +1,15 @@
-import type { Image } from '../../Image.js';
-import { getClockwiseAngle } from '../../maskAnalysis/utils/getAngle.js';
-import { toDegrees } from '../../utils/geometry/angles.js';
-import { getRadius } from '../../utils/getRadius.js';
-import { checkBorderDistance } from '../utils/checkBorderDistance.js';
+import type { Image } from '../../Image.ts';
+import { getClockwiseAngle } from '../../maskAnalysis/utils/getAngle.ts';
+import { toDegrees } from '../../utils/geometry/angles.ts';
+import { getRadius } from '../../utils/getRadius.ts';
+import { checkBorderDistance } from '../utils/checkBorderDistance.ts';
 
 import type {
   FastKeypoint,
   GetFastKeypointsOptions,
-} from './getFastKeypoints.js';
-import { getFastKeypoints } from './getFastKeypoints.js';
-import { getPatchIntensityCentroid } from './getPatchIntensityCentroid.js';
+} from './getFastKeypoints.ts';
+import { getFastKeypoints } from './getFastKeypoints.ts';
+import { getPatchIntensityCentroid } from './getPatchIntensityCentroid.ts';
 
 export interface GetOrientedFastKeypointsOptions extends GetFastKeypointsOptions {
   /**

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getAngle, getClockwiseAngle } from '../getAngle.js';
+import { getAngle, getClockwiseAngle } from '../getAngle.ts';
 
 test.each([
   [

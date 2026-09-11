@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { Mask } from '../../Mask.js';
+import { Mask } from '../../Mask.ts';
 
 test('mask 5x5, default options', () => {
   const image = testUtils.createMask([

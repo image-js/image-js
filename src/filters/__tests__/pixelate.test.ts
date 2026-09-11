@@ -1,6 +1,6 @@
 import { describe, expect, it, test } from 'vitest';
 
-import { pixelate } from '../pixelate.js';
+import { pixelate } from '../pixelate.ts';
 
 describe('pixelization of images', () => {
   it('pixelate a simple grey image', () => {
@@ -126,7 +126,7 @@ describe('pixelization of images', () => {
 
     expect(() => {
       img.pixelate({ cellSize: 1 });
-    }).toThrowError(new RangeError('cellSize must be greater than 1'));
+    }).toThrow(new RangeError('cellSize must be greater than 1'));
   });
 
   it('throws a Type error', () => {
@@ -140,7 +140,7 @@ describe('pixelization of images', () => {
 
     expect(() => {
       img.pixelate({ cellSize: 2.3 });
-    }).toThrowError(new TypeError('cellSize must be an integer'));
+    }).toThrow(new TypeError('cellSize must be an integer'));
   });
 });
 
@@ -156,5 +156,5 @@ test('throws a Type error', () => {
   expect(() => {
     //@ts-expect-error error testing
     img.pixelate({ cellSize: 2, algorithm: 'test' });
-  }).toThrowError(new Error(`unreachable: test`));
+  }).toThrow(new Error(`unreachable: test`));
 });

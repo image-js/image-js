@@ -3,8 +3,8 @@ import type {
   ImageColorModel,
   ImageDataArray,
   ImageOptions,
-} from '../src/index.js';
-import { Image, colorModels } from '../src/index.js';
+} from '../src/index.ts';
+import { Image, colorModels } from '../src/index.ts';
 
 export type CreateImageOptions = Pick<ImageOptions, 'bitDepth'>;
 

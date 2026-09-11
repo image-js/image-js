@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import type { Match } from '../bruteForceMatch.js';
-import { filterEuclideanDistance } from '../filterEuclideanDistance.js';
+import type { Match } from '../bruteForceMatch.ts';
+import { filterEuclideanDistance } from '../filterEuclideanDistance.ts';
 
 test('3 matches', () => {
   const matches: Match[] = [

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { Mask } from '../../Mask.js';
+import { Mask } from '../../Mask.ts';
 
 test('3x3 mask', () => {
   const mask = testUtils.createMask([

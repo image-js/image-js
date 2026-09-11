@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import type { Point } from '../../geometry/index.js';
-import { median } from '../median.js';
+import type { Point } from '../../geometry/index.ts';
+import { median } from '../median.ts';
 
 test('5x1 RGB image', () => {
   const image = testUtils.createRgbImage([
@@ -83,7 +83,7 @@ test('must throw if array is empty', () => {
   expect(() => {
     const result = image.median({ points });
     return result;
-  }).toThrowError('Array of coordinates is empty.');
+  }).toThrow('Array of coordinates is empty.');
 });
 
 test("must throw if point's row is invalid", () => {
@@ -96,7 +96,7 @@ test("must throw if point's row is invalid", () => {
   expect(() => {
     const result = image.median({ points });
     return result;
-  }).toThrowError('Invalid coordinate: {column: 0, row: 2}');
+  }).toThrow('Invalid coordinate: {column: 0, row: 2}');
 });
 
 test("must throw if point's column is invalid", () => {
@@ -109,7 +109,7 @@ test("must throw if point's column is invalid", () => {
   expect(() => {
     const result = image.median({ points });
     return result;
-  }).toThrowError('Invalid coordinate: {column: 4, row: 1}');
+  }).toThrow('Invalid coordinate: {column: 4, row: 1}');
 });
 
 test('must throw if point has negative values.', () => {
@@ -122,5 +122,5 @@ test('must throw if point has negative values.', () => {
   expect(() => {
     const result = image.mean({ points });
     return result;
-  }).toThrowError('Invalid coordinate: {column: -14, row: 0}');
+  }).toThrow('Invalid coordinate: {column: -14, row: 0}');
 });

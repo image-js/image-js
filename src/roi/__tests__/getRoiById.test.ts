@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { fromMask } from '../fromMask.js';
+import { fromMask } from '../fromMask.ts';
 
 test('should throw error', () => {
   const mask = testUtils.createMask([
@@ -14,7 +14,7 @@ test('should throw error', () => {
 
   expect(() => {
     roiMapManager.getRoiById(4);
-  }).toThrowError(`invalid ID: 4`);
+  }).toThrow(`invalid ID: 4`);
 });
 
 test('should give ROI of id = 1', () => {

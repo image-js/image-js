@@ -1,10 +1,10 @@
-import type { Mask } from '../Mask.js';
-import type { Point } from '../geometry/index.js';
-import { toDegrees } from '../utils/geometry/angles.js';
-import { rotate } from '../utils/geometry/points.js';
+import type { Mask } from '../Mask.ts';
+import type { Point } from '../geometry/index.ts';
+import { toDegrees } from '../utils/geometry/angles.ts';
+import { rotate } from '../utils/geometry/points.ts';
 
-import type { Feret, FeretDiameter } from './maskAnalysis.types.js';
-import { getAngle } from './utils/getAngle.js';
+import type { Feret, FeretDiameter } from './maskAnalysis.types.ts';
+import { getAngle } from './utils/getAngle.ts';
 
 /**
  * Computes the Feret diameters.

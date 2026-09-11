@@ -1,6 +1,6 @@
-import type { BriefDescriptor } from '../descriptors/getBriefDescriptors.js';
+import type { BriefDescriptor } from '../descriptors/getBriefDescriptors.ts';
 
-import { getHammingDistance } from './getHammingDistance.js';
+import { getHammingDistance } from './getHammingDistance.ts';
 
 // todo: implement bruteForceManyMatches -> N best matches for each source descriptor
 

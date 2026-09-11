@@ -1,5 +1,5 @@
-import type { BitDepth, Image } from './Image.js';
-import type { HistogramOptions } from './compute/index.js';
+import type { BitDepth, Image } from './Image.ts';
+import type { HistogramOptions } from './compute/index.ts';
 import {
   histogram,
   maxImage,
@@ -7,12 +7,12 @@ import {
   medianImage,
   minImage,
   sum,
-} from './stack/index.js';
+} from './stack/index.ts';
 import {
   checkImagesValid,
   verifySameDimensions,
-} from './stack/utils/checkImagesValid.js';
-import type { ImageColorModel } from './utils/constants/colorModels.js';
+} from './stack/utils/checkImagesValid.ts';
+import type { ImageColorModel } from './utils/constants/colorModels.ts';
 
 export class Stack {
   /**

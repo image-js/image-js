@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getLineLength } from '../lines.js';
+import { getLineLength } from '../lines.ts';
 
 describe('getLineLength', () => {
   it('length zero', () => {

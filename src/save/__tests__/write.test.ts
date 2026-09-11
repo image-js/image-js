@@ -4,8 +4,8 @@ import { pathToFileURL } from 'node:url';
 
 import { afterEach, beforeEach, expect, test } from 'vitest';
 
-import { read, readSync } from '../../load/index.js';
-import { write, writeSync } from '../write.js';
+import { read, readSync } from '../../load/index.ts';
+import { write, writeSync } from '../write.ts';
 
 let tmpDir: string;
 
@@ -164,14 +164,14 @@ test('unknown format error', () => {
   expect(() => {
     // @ts-expect-error test invalid format
     writeSync(destination, img, { format: 'foo' });
-  }).toThrowError(/foo/);
+  }).toThrow(/foo/);
 });
 
 test('image extension error', async () => {
   const img = testUtils.load('opencv/test.png');
   const destination = path.join(tmpDir, 'image.tiff');
 
-  await expect(write(destination, img)).rejects.toThrowError(
+  await expect(write(destination, img)).rejects.toThrow(
     'image format could not be determined from file extension. Use a supported extension or specify the format option',
   );
 });

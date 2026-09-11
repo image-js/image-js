@@ -1,34 +1,34 @@
-import type { BitDepth, Image } from './Image.js';
-import type { SubtractImageOptions } from './compare/index.js';
-import { subtract } from './compare/index.js';
+import type { BitDepth, Image } from './Image.ts';
+import type { SubtractImageOptions } from './compare/index.ts';
+import { subtract } from './compare/index.ts';
 import type {
   DrawLineOnMaskOptions,
   DrawPointsOptions,
   DrawPolygonOnMaskOptions,
   DrawPolylineOnMaskOptions,
   DrawRectangleOptions,
-} from './draw/index.js';
+} from './draw/index.ts';
 import {
   drawLineOnMask,
   drawPoints,
   drawPolygonOnMask,
   drawPolylineOnMask,
   drawRectangle,
-} from './draw/index.js';
-import type { AndOptions, InvertOptions, OrOptions } from './filters/index.js';
-import { and, invert, or } from './filters/index.js';
-import { getBorderPoints } from './maskAnalysis/getBorderPoints.js';
-import { getConvexHull } from './maskAnalysis/getConvexHull.js';
+} from './draw/index.ts';
+import type { AndOptions, InvertOptions, OrOptions } from './filters/index.ts';
+import { and, invert, or } from './filters/index.ts';
+import { getBorderPoints } from './maskAnalysis/getBorderPoints.ts';
+import { getConvexHull } from './maskAnalysis/getConvexHull.ts';
 import type { GetExternalContourOptions } from './maskAnalysis/getExternalContour.ts';
 import { getExternalContour } from './maskAnalysis/getExternalContour.ts';
-import { getFeret } from './maskAnalysis/getFeret.js';
-import { getMbr } from './maskAnalysis/getMbr.js';
+import { getFeret } from './maskAnalysis/getFeret.ts';
+import { getMbr } from './maskAnalysis/getMbr.ts';
 import type {
   ConvexHull,
   Feret,
   GetBorderPointsOptions,
   Mbr,
-} from './maskAnalysis/index.js';
+} from './maskAnalysis/index.ts';
 import type {
   BottomHatOptions,
   ClearBorderOptions,
@@ -40,7 +40,7 @@ import type {
   OpenOptions,
   SolidFillOptions,
   TopHatOptions,
-} from './morphology/index.js';
+} from './morphology/index.ts';
 import {
   bottomHat,
   clearBorder,
@@ -52,16 +52,16 @@ import {
   open,
   solidFill,
   topHat,
-} from './morphology/index.js';
+} from './morphology/index.ts';
 import type {
   CopyToOptions,
   PaintMaskOnMaskOptions,
-} from './operations/index.js';
-import { convertColor, copyTo, paintMaskOnMask } from './operations/index.js';
-import { boolToNumber } from './utils/boolToNumber.js';
-import type { ImageColorModel } from './utils/constants/colorModels.js';
-import { colorModels } from './utils/constants/colorModels.js';
-import type { Point } from './utils/geometry/points.js';
+} from './operations/index.ts';
+import { convertColor, copyTo, paintMaskOnMask } from './operations/index.ts';
+import { boolToNumber } from './utils/boolToNumber.ts';
+import type { ImageColorModel } from './utils/constants/colorModels.ts';
+import { colorModels } from './utils/constants/colorModels.ts';
+import type { Point } from './utils/geometry/points.ts';
 
 export type BitValue = 1 | 0 | boolean;
 
@@ -176,7 +176,7 @@ export class Mask {
     if (data === undefined) {
       this.data = new Uint8Array(this.size);
     } else {
-      const expectedLength = this.size * this.channels;
+      const expectedLength = this.size;
       if (data.length !== expectedLength) {
         throw new RangeError(
           `incorrect data size: ${data.length}. Expected ${expectedLength}`,
@@ -316,7 +316,7 @@ export class Mask {
    * @returns Value of the bit.
    */
   public getBitByIndex(index: number): number {
-    return this.data[index * this.channels];
+    return this.data[index];
   }
 
   /**
@@ -325,7 +325,8 @@ export class Mask {
    * @param value - Value to set.
    */
   public setBitByIndex(index: number, value: BitValue): void {
-    this.data[index * this.channels] = boolToNumber(value);
+    // @ts-expect-error Passing true / false actually does what is expected
+    this.data[index] = value;
   }
 
   /**

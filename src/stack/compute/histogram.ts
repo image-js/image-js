@@ -1,6 +1,6 @@
-import type { Stack } from '../../Stack.js';
-import type { HistogramOptions } from '../../compute/index.js';
-import { checkProcessable } from '../utils/checkProcessable.js';
+import type { Stack } from '../../Stack.ts';
+import type { HistogramOptions } from '../../compute/index.ts';
+import { checkProcessable } from '../utils/checkProcessable.ts';
 
 /**
  * Get the sum of all the histograms of the stack's images. If no channel is specified in the options, the images must be GREY.

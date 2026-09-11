@@ -2,8 +2,8 @@ import util from 'node:util';
 
 import { describe, expect, it, test } from 'vitest';
 
-import { Mask } from '../Mask.js';
-import type { Point } from '../utils/geometry/points.js';
+import { Mask } from '../Mask.ts';
+import type { Point } from '../utils/geometry/points.ts';
 
 describe('create new masks', () => {
   it('should create a mask', () => {
@@ -24,19 +24,19 @@ describe('create new masks', () => {
   });
 
   it('should throw on wrong width', () => {
-    expect(() => new Mask(0, 1)).toThrowError(
+    expect(() => new Mask(0, 1)).toThrow(
       /width must be an integer and at least 1. Received 0/,
     );
-    expect(() => new Mask(0.5, 1)).toThrowError(
+    expect(() => new Mask(0.5, 1)).toThrow(
       /width must be an integer and at least 1. Received 0.5/,
     );
   });
 
   it('should throw on wrong height', () => {
-    expect(() => new Mask(1, 0)).toThrowError(
+    expect(() => new Mask(1, 0)).toThrow(
       /height must be an integer and at least 1. Received 0/,
     );
-    expect(() => new Mask(1, 0.5)).toThrowError(
+    expect(() => new Mask(1, 0.5)).toThrow(
       /height must be an integer and at least 1. Received 0.5/,
     );
   });
@@ -44,7 +44,7 @@ describe('create new masks', () => {
   it('should throw on wrong data size', () => {
     const data = new Uint8Array(2);
 
-    expect(() => new Mask(2, 2, { data })).toThrowError(
+    expect(() => new Mask(2, 2, { data })).toThrow(
       /incorrect data size: 2. Expected 4/,
     );
   });
@@ -110,7 +110,7 @@ describe('get and set value', () => {
 
     expect(() => {
       mask.getValue(2, 1, 2);
-    }).toThrowError(/channel value must be 0 on type Mask. Received 2/);
+    }).toThrow(/channel value must be 0 on type Mask. Received 2/);
   });
 });
 

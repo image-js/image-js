@@ -1,4 +1,4 @@
-import { decode } from './decode.js';
+import { decode } from './decode.ts';
 
 /**
  * Fetches image URL and decodes it.

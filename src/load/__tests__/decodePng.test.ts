@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { decodePng } from '../decodePng.js';
+import { decodePng } from '../decodePng.ts';
 
 const tests = [
   // ['name', components, alpha, bitDepth]

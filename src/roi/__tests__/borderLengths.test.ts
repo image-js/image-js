@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { fromMask } from '../fromMask.js';
-import { RoiKind } from '../getRois.js';
+import { fromMask } from '../fromMask.ts';
+import { RoiKind } from '../getRois.ts';
 
 test('border lengths property 5x5', () => {
   const mask = testUtils.createMask([

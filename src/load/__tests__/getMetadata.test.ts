@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { decodeJpeg } from '../decodeJpeg.js';
-import { decodeTiff } from '../decodeTiff.js';
+import { decodeJpeg } from '../decodeJpeg.ts';
+import { decodeTiff } from '../decodeTiff.ts';
 
 test('without metadata', () => {
   const buffer = testUtils.loadBuffer(`various/without-metadata.jpg`);
@@ -21,5 +21,5 @@ test('with metadata 2', () => {
   expect(() => {
     const buffer = testUtils.loadBuffer(`formats/tif/grey32.tif`);
     decodeTiff(buffer);
-  }).toThrowError('Float TIFF data is not supported.');
+  }).toThrow('Float TIFF data is not supported.');
 });

@@ -2,9 +2,9 @@ import { join } from 'node:path';
 
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import { Stack } from '../../../Stack.js';
-import { getStackFromFolder } from '../../utils/getStackFromFolder.js';
+import { Image } from '../../../Image.ts';
+import { Stack } from '../../../Stack.ts';
+import { getStackFromFolder } from '../../utils/getStackFromFolder.ts';
 
 test('3 grey images', () => {
   const image1 = testUtils.createGreyImage([[1, 2, 3, 4]]);

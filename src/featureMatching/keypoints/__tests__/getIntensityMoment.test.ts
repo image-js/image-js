@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import { getIntensityMoment } from '../getIntensityMoment.js';
+import { Image } from '../../../Image.ts';
+import { getIntensityMoment } from '../getIntensityMoment.ts';
 
 test('3x3 empty image, 00', () => {
   const image = new Image(3, 3, { colorModel: 'GREY' });

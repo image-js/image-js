@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import flipX from '../flipX.js';
+import flipX from '../flipX.ts';
 
 test('should flip pixels horizontally of all RGBA components for a [2,1] image', () => {
   const image = testUtils.createRgbaImage([[1, 2, 3, 4, 5, 6, 7, 8]]);

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { boolToNumber } from '../boolToNumber.js';
+import { boolToNumber } from '../boolToNumber.ts';
 
 test('convert number to number', () => {
   expect(boolToNumber(1)).toBe(1);

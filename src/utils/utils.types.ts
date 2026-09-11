@@ -1,4 +1,4 @@
-import type { Image } from '../Image.js';
+import type { Image } from '../Image.ts';
 
 export type ClampFunction = (value: number) => number;
 

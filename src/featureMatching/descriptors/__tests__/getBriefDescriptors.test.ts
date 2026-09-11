@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../../Image.js';
-import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.js';
-import { getBriefDescriptors } from '../getBriefDescriptors.js';
+import { Image } from '../../../Image.ts';
+import { getOrientedFastKeypoints } from '../../keypoints/getOrientedFastKeypoints.ts';
+import { getBriefDescriptors } from '../getBriefDescriptors.ts';
 
 test('count occurences of 1 and 0 with default options', () => {
   const image = testUtils.load('various/alphabet.jpg');
@@ -28,9 +28,9 @@ test('patch size error', () => {
 
   const keypoint = getOrientedFastKeypoints(grey, { maxNbFeatures: 1 });
 
-  expect(() =>
-    getBriefDescriptors(grey, keypoint, { patchSize: 4 }),
-  ).toThrowError('patchSize must be an odd integer');
+  expect(() => getBriefDescriptors(grey, keypoint, { patchSize: 4 })).toThrow(
+    'patchSize must be an odd integer',
+  );
 });
 
 test('alphabet image should work', () => {
@@ -39,7 +39,7 @@ test('alphabet image should work', () => {
 
   const sourceKeypoints = getOrientedFastKeypoints(grey);
 
-  expect(() => getBriefDescriptors(grey, sourceKeypoints)).not.toThrowError();
+  expect(() => getBriefDescriptors(grey, sourceKeypoints)).not.toThrow();
 
   const result = getBriefDescriptors(grey, sourceKeypoints);
 
@@ -50,7 +50,7 @@ test('image too small for patchsize', () => {
   const image = new Image(5, 5, { colorModel: 'GREY' });
   const sourceKeypoints = getOrientedFastKeypoints(image);
 
-  expect(() => getBriefDescriptors(image, sourceKeypoints)).toThrowError(
+  expect(() => getBriefDescriptors(image, sourceKeypoints)).toThrow(
     'image is too small for patchSize = 31',
   );
 });

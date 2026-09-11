@@ -1,7 +1,7 @@
 import * as bmp from 'fast-bmp';
 
-import { Image } from '../Image.js';
-import type { Mask } from '../Mask.js';
+import { Image } from '../Image.ts';
+import type { Mask } from '../Mask.ts';
 
 /**
  * Creates a BMP buffer from a mask.

@@ -1,4 +1,4 @@
-import type { BitValue } from '../Mask.js';
+import type { BitValue } from '../Mask.ts';
 
 /**
  * Converts a bit value to the corresponding number.

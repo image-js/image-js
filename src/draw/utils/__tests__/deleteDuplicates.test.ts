@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { deleteDuplicates } from '../deleteDuplicates.js';
+import { deleteDuplicates } from '../deleteDuplicates.ts';
 
 test('should remove duplicate points', () => {
   const points = [

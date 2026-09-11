@@ -1,4 +1,4 @@
-import type { Image } from '../Image.js';
+import type { Image } from '../Image.ts';
 
 /**
  * Find the min and max values of each channel of the image.

@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
 
-import { Image } from '../../Image.js';
-import { Mask } from '../../Mask.js';
-import { getIndex } from '../getIndex.js';
+import { Image } from '../../Image.ts';
+import { Mask } from '../../Mask.ts';
+import { getIndex } from '../getIndex.ts';
 
 test('mask, index should increment regularly', () => {
   const mask = new Mask(3, 4);

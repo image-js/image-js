@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { getMinMax } from '../getMinMax.js';
+import { getMinMax } from '../getMinMax.ts';
 
 test('grey image', () => {
   const image = testUtils.createGreyImage([[1, 2, 3, 4, 5, 7, 4, 9, 6]]);

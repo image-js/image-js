@@ -1,7 +1,7 @@
-import { Image } from '../Image.js';
-import type { Mask } from '../Mask.js';
-import type { ImageColorModel } from '../utils/constants/colorModels.js';
-import { getOutputImage, maskToOutputImage } from '../utils/getOutputImage.js';
+import { Image } from '../Image.ts';
+import type { Mask } from '../Mask.ts';
+import type { ImageColorModel } from '../utils/constants/colorModels.ts';
+import { getOutputImage, maskToOutputImage } from '../utils/getOutputImage.ts';
 
 export interface ConvertColorOptions {
   /**
