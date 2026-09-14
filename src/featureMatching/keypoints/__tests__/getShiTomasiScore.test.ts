@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest';
 
+import { getHarrisScore } from '../getHarrisScore.ts';
 import { getShiTomasiScore } from '../getShiTomasiScore.ts';
 
 test('7x7 image with darker and lighter areas', () => {
@@ -82,5 +83,23 @@ test('throws with RGB image', () => {
 
   expect(() => getShiTomasiScore(image, { row: 1, column: 1 })).toThrow(
     'image channels must be 1 to apply this algorithm',
+  );
+});
+
+test('windowSize error', () => {
+  const image = testUtils.createGreyImage([
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 200, 0, 0, 0],
+    [0, 0, 0, 100, 0, 0, 0],
+    [0, 0, 0, 100, 0, 0, 0],
+    [0, 0, 0, 100, 0, 0, 0],
+  ]);
+
+  const origin = { row: 3, column: 3 };
+
+  expect(() => getHarrisScore(image, origin, { windowSize: 6 })).toThrow(
+    'windowSize must be an odd integer',
   );
 });
