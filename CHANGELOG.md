@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/image-js/image-js/compare/v1.7.0...v1.7.1) (2026-09-14)
+
+
+### Bug Fixes
+
+* check processable on keypoints and improve score computation performance ([#843](https://github.com/image-js/image-js/issues/843)) ([b2ac2ee](https://github.com/image-js/image-js/commit/b2ac2ee19b5921ac47a13afc771accb4e35955db))
+
 ## [1.7.0](https://github.com/image-js/image-js/compare/v1.6.2...v1.7.0) (2026-07-08)
 
 
