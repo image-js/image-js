@@ -89,6 +89,14 @@ export function computeThreshold(
   const histogram = image.histogram({ slots });
   const scale = slots ? 2 ** image.bitDepth / slots : 1;
 
+  // With only two grey levels, every algorithm should split them. Some of
+  // them return a value outside of the two levels (or throw) on such a
+  // histogram, so handle it before, like ImageJ's AutoThresholder does.
+  const upperLevel = getUpperLevelOfTwo(histogram);
+  if (upperLevel !== -1) {
+    return upperLevel * scale - 1;
+  }
+
   return match(algorithm)
     .with('huang', () => huang(histogram) * scale)
     .with('intermodes', () => intermodes(histogram) * scale)
@@ -106,6 +114,24 @@ export function computeThreshold(
     .with('triangle', () => triangle(histogram) * scale)
     .with('yen', () => yen(histogram, image.size) * scale)
     .exhaustive();
+}
+
+/**
+ * Find the upper level of a histogram that has exactly two non-empty bins.
+ * @param histogram - The histogram.
+ * @returns The index of the second non-empty bin, or -1 if the histogram does not have exactly two non-empty bins.
+ */
+function getUpperLevelOfTwo(histogram: Uint32Array): number {
+  let levels = 0;
+  let upperLevel = -1;
+  for (let i = 0; i < histogram.length; i++) {
+    if (histogram[i] > 0) {
+      levels++;
+      if (levels > 2) return -1;
+      upperLevel = i;
+    }
+  }
+  return levels === 2 ? upperLevel : -1;
 }
 
 // See: https://docs.opencv.org/4.0.1/d7/d1b/group__imgproc__misc.html#gaa9e58d2860d4afa658ef70a9b1115576

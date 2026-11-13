@@ -2,7 +2,11 @@ import { expect, test } from 'vitest';
 
 import { Image } from '../../Image.ts';
 import { ImageColorModel } from '../../utils/constants/colorModels.ts';
-import { computeThreshold, threshold } from '../threshold.ts';
+import {
+  ThresholdAlgorithm,
+  computeThreshold,
+  threshold,
+} from '../threshold.ts';
 
 test('threshold with a fixed value of 100', () => {
   const testImage = testUtils.load('opencv/test.png');
@@ -149,4 +153,41 @@ test('16 bits image simple with custom number of slots 2**8', () => {
   const defaultSlotsThreshold = image.threshold();
 
   expect(threshold).toStrictEqual(defaultSlotsThreshold);
+});
+
+test.each(Object.values(ThresholdAlgorithm))(
+  'image with two grey levels is split between the levels (%s)',
+  (algorithm) => {
+    const image = new Image(5, 1, {
+      colorModel: ImageColorModel.GREY,
+      data: new Uint8Array([50, 50, 200, 200, 200]),
+    });
+
+    expect(computeThreshold(image, { algorithm })).toBe(199);
+    expect(image.threshold({ algorithm })).toMatchImageData([[0, 0, 1, 1, 1]]);
+  },
+);
+
+test.each(Object.values(ThresholdAlgorithm))(
+  'black and white image does not throw (%s)',
+  (algorithm) => {
+    const image = new Image(4, 1, {
+      colorModel: ImageColorModel.GREY,
+      data: new Uint8Array([0, 255, 0, 255]),
+    });
+
+    expect(image.threshold({ algorithm })).toMatchImageData([[0, 1, 0, 1]]);
+  },
+);
+
+test('image with two grey levels and custom number of slots', () => {
+  const image = new Image(4, 1, {
+    colorModel: ImageColorModel.GREY,
+    data: new Uint8Array([6, 7, 8, 9]),
+  });
+
+  expect(computeThreshold(image, { algorithm: 'yen', slots: 128 })).toBe(7);
+  expect(image.threshold({ algorithm: 'yen', slots: 128 })).toMatchImageData([
+    [0, 0, 1, 1],
+  ]);
 });
